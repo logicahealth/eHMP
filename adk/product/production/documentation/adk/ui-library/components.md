@@ -337,7 +337,8 @@ showModal: function(event) {
     //Note: passing in modalOptions is optional
     var modalOptions = {
         'title': this.model.get('name'),
-        'size': "medium",
+        'size': 'medium',
+        'wrapperClasses': ['special-class-1', 'special-class-2']
         'backdrop': true,
         'keyboard': true,
         'callShow': true,
@@ -348,6 +349,15 @@ showModal: function(event) {
     modalView.show();
 }
 ```
+::: side-note
+**Note**: When a modal is created, it saves the last focused element that has triggered to open up the modal.  When the modal is closed, the element gets focused automatically. Optionally modalView's show function can take a parameter to override last focused element.  See this example that makes the last focused element to be shared,
+```JavaScript
+var showOptions = {triggerElement: $(':focus')};
+modal.show(showOptions);
+...
+anotherModal.show(showOptions); // this closes the first modal.
+```
+:::
 
 ### Options ###
 _*Note:_ The **ADK.UI.Modal** constructor can take in one options object that contains two attributes.
@@ -357,16 +367,17 @@ _*Note:_ The **ADK.UI.Modal** constructor can take in one options object that co
 
 The following are the available options/attributes for the _options_ object:
 
-| Required  | Option          | Type                                | Description                                                      |
-|:---------:|-----------------|-------------------------------------|------------------------------------------------------------------|
-|           | **title**       | string                              | displays a string as the title to the modal |
-|           | **size**        | string                              | valid modal widths include: "xlarge" / "large" / "medium" / "small" <br />**default**: _"medium"_ |
-|           | **backdrop**    | boolean / "static"                  | Includes a modal-backdrop element. Alternatively, specify static for a backdrop which doesn't close the modal on click. <br />**default**: _true_ |
-|           | **draggable**   | boolean                             | Makes modal draggable. <br />**default**: _true_ |
-|           | **keyboard**    | boolean                             | closes the modal when escape key is pressed <br />**default**: _true_ |
-|           | **callShow**    | boolean                             | Shows the modal when initialized <br />**default**: "true" <br />**Note:** If the developer wishes to issue $("#mainModal").modal('show') or use data-toggle this MUST be set to _false_ |
-|           | **footerView**  | Marionette view definition / string | overwrites the default modal footer (close button) with a specified view <br />**Note:** if set to _'none'_ no footer region will be shown |
-|           | **headerView**  | Marionette view definition          | overwrites the default modal header (x-close button and title) with a specified view |
+| Required  | Option             | Type                                | Description                                                      |
+|:---------:|--------------------|-------------------------------------|------------------------------------------------------------------|
+|           | **title**          | string                              | displays a string as the title to the modal |
+|           | **size**           | string                              | valid modal widths include: 'xlarge' / 'large' / 'medium' / 'small' <br />**default**: _'medium'_ |
+|           | **wrapperClasses** | string / array of strings           | classes to add the the top level wrapping element of the modal.  This can be used to help style the modal container or any content inside the modal. <br />**default**: _[ ] (empty array)_ |
+|           | **backdrop**       | boolean / "static"                  | Includes a modal-backdrop element. Alternatively, specify static for a backdrop which doesn't close the modal on click. Notice that _true_ **draggable** option disables backdrop. <br />**default**: _true_ |
+|           | **draggable**      | boolean                             | Makes modal draggable. <br />**default**: _true_ |
+|           | **keyboard**       | boolean                             | closes the modal when escape key is pressed <br />**default**: _true_ |
+|           | **callShow**       | boolean                             | Shows the modal when initialized <br />**default**: _true_ <br />**Note:** If the developer wishes to issue $("#mainModal").modal('show') or use data-toggle this MUST be set to _false_ |
+|           | **footerView**     | Marionette view definition / string | overwrites the default modal footer (close button) with a specified view <br />**Note:** if set to _'none'_ no footer region will be shown |
+|           | **headerView**     | Marionette view definition          | overwrites the default modal header (x-close button and title) with a specified view |
 
 ::: side-note
 
@@ -382,7 +393,7 @@ There are two ways to terminate a modal. A developer can apply 'data-dismiss="mo
 ## Notification  ##
 
 ### Overview ###
-**ADK.UI.Notification** provides a standard approach for generating and showing a growl-type alert that is 508 compliant and has consistent HTML styling. _ADK.UI.Notification_ should be used for notifications of actions completed, such as successfully submitting a form.
+**ADK.UI.Notification** provides a standard approach for generating and showing a growl-type alert that is 508 compliant and has consistent HTML styling. _ADK.UI.Notification_ should be used for notifications of actions completed, such as successfully submitting a form.  Optically a callback function can be invoked on click event.  Also it can become sticky to remain on the screen where sticky growl alert remains unique by preventing another sticky growl alert with same message from being displayed.  See the options below.
 
 ### Basic Usage ###
 _ADK.UI.Notification_ is an object constructor. The following is an example of creating and showing a new _ADK.UI.Notification_:
@@ -405,7 +416,11 @@ var exampleView = Backbone.Marionette.ItemView.extend({
             title: "Example Alert",
             icon: "fa-check", // only matters if type: "basic"
             message: SimpleAlertItemView,
-            type: "basic"
+            type: "basic",
+            autoClose: false, // prevents from closing automatically after 10 seconds
+            onClick: function () { // an optional callback function to be invoked on click event
+                ADK.Messaging.getChannel('notification-demo').trigger('alert-dropdown.show'); 
+            }
         });
     }
 })
@@ -419,6 +434,9 @@ The following are the available options to pass to the _ADK.UI.Notification_ con
 |                                  | **icon**        | string                     | font awesome class to use on the icon<br />**Note**: only used if _type_ is `"basic"`, otherwise will be determined by _type_ <br />**Example**: `icon: "fa-info"` |
 |                                  | **message**        | string                     | message to be displayed in the "body" of the notification<br />**Example**: `message: "This is an example of notification text"` |
 |                                  | **type**        | string                     | determines color and icon of notification (specifying _"basic"_ will allow icon to be specified) <br />**Options**: _"basic"_(default), _"success"_, _"info"_, _"warning"_, and _"danger"_<br />**Example**: `type: "success"`|
+|                                  | **autoClose**  | boolean  | If true, growl alert disappears after 10 seconds. If false, growl alert becomes sticky where the sticky growl alert remains unique on the screen by preventing another sticky growl alert with same message from being displayed.<br />**default**: `autoClose: true` |
+|                                  | **onClick**  | function |  a callback function to be invoked on click event that closes growl alert.<br /> |
+
 
 ### Methods ###
 The following are methods available to call upon the ADK.UI.Notification constructor:
@@ -525,7 +543,9 @@ var trayView = ADK.UI.Tray.extend({
 ### Options ###
 | Required                          | Option                  | Type            | Description                                                       |
 |:---------------------------------:|-------------------------|-----------------|-------------------------------------------------------------------|
-|<i class="fa fa-check-circle"></i> | **buttonLabel**         | string          | The title or name of the button |
+|<i class="fa fa-check-circle"></i> | **buttonLabel**         | string          | The title or name of the button (only required if `buttonView` isn't defined) |
+|                                   | **iconClass**           | string          | Sets classes in icon.  No icon will be rendered if option not provided |
+|                                   | **buttonView**          | Marionette View | Contents of button container.  Will override `iconClass` and `buttonLabel` |
 |                                   | **buttonClass**         | string          | CSS classes to add to the button |
 |                                   | **tray**                | Marionette View | Contents of tray; can be set after invocation but should usually be set in options |
 |                                   | **position**            | string          | Valid options are "left" or "right"; defaults to "right" |
@@ -555,7 +575,9 @@ var MyView = Marionette.ItemView.extend({
 var TrayView = ADK.UI.Tray({
     options: {
         tray: ADK.Views.Loading.create(), //start out with a loading view
-        buttonLabel: 'Open Tray',
+        buttonView: Backbone.Marionette.ItemView.extend({ //to specify the buttonView
+            template: Handlebars.compile('Open Tray')
+        }),
         position: 'right'
     },
     initialize: function() {
@@ -599,6 +621,17 @@ A listener is configured to look for **tray.close** on the global Messaging chan
 ```JavaScript
 ADK.Messaging.trigger('tray.close'); //close all trays
 ADK.Messaging.trigger('tray.close', view.cid); //close all but this view
+```
+
+Alternatively, a single tray can be closed if executed from a descendant of the tray view using DOM eventing. The descendant view can simply trigger a **tray.hide** event on its DOM element. This works well even with code normally subject to race conditions (i.e. an asynchronous success callback that closes the tray but the user manually clicks the tray button to close the tray).
+
+```JavaScript
+// only an example
+events: {
+    'click button.close-btn': function() {
+        this.$el.trigger('tray.hide');
+    }
+}
 ```
 
 #### Changing the tray's contents dynamically ####
@@ -868,6 +901,160 @@ ADK.Messaging.trigger('register:component', {
 | Component    | Description |
 |--------------|-------------|
 | Workflow     | The workflow component supports showing all available sub-tray components registered to the ADK under the provided group string. <br /> _[(More details)](#Workflow-Inter-Component-Functionality-Support-SubTray)_ |
+
+## Alert Dropdown ##
+
+### Overview ###
+The alert dropdown component is a dropdown container which resides in the navigation header.  Like trays, the alert dropdown is registered to the component registry.  The dropdown consists of a button and container.  The user may use options provided or may supply custom views for both the button and dropdown container.
+
+```JavaScript
+var AlertDropdown = ADK.UI.AlertDropdown.extend({});
+ADK.Messaging.trigger('register:component', {
+    type: 'applicationHeaderItem', //the component subset which is filtered out for display
+    title: 'Press enter to view notifications.', //508 title for the button in the global header
+    orderIndex: 1, //the order in which this particular item appears in the list
+    key: 'notification-demo', //the channel on which global events will be broadcasted
+    group: 'user-nav-alerts', //visual group of items
+    view: AlertDropdown //view definition, not instance
+});
+```
+
+::: callout
+**Note:** Anything passed into the options above will be available in the AlertDropdown view, and it's children.
+:::
+
+
+### Basic Usage ###
+
+The component will automatically create a model to contain it's options if one is not provided.  All configuration options attached to the view object will be automatically set on the model to be aviailble for template control logic on the button and dropdown views.  Additionally, custom views can be configured on the component.
+
+A basic alert dropdown view would be configured as follows:
+```Javascript
+var AlertDropdown = ADK.UI.AlertDropdown.extend({
+    //which icon to display
+    icon: 'fa-folder-open',
+    dropdownTitle: 'Notifications For User',
+    //omit backdrop to prevent backdrop from appearing on show of dropdown
+    backdrop: true,
+    //omit footerButton to prevent a footer from being rendered
+    footerButton: {
+        eventName: 'all-notification',
+        title: 'Press enter to view all notifications.',
+        label: 'View All Notifications'
+    },
+    onBeforeInitialize: function() {
+        //fired after the custom options and model have been set but
+        //before view logic is configured
+        //this will also be triggered on the view as 'before:initialize'
+        this.collection = new Backbone.Collection([{
+            'title': 'First Item',
+            'label': 'Hello'
+        }, {
+            'title': 'Second Item',
+            'label': 'I am a label'
+        }]);
+    },
+    onInitialize: function() {
+        //fired after initialize finishes
+        //also triggered on the view as 'initialize'
+    }
+});
+```
+
+The three view definitions used to build the component can be sourced from the component abstract.  In addition, the alignment, container, and button's templates can be configured.
+The footer button, if optioned, will trigger an event `eventName` on the channel `key`.  These options can be set on the component definition, or on the DropdownListView definition.
+
+```JavaScript
+var AlertDropdown = ADK.UI.AlertDropdown.extend({
+    //in most cases, this is the only view that will need to be configured
+    //the RowView is going to be each row item within the dropdown container
+    RowView: ADK.UI.AlertDropdown.RowView.extend({
+        template: SomeTemplate,
+        //[data-dimiss=dropdown] will close the dropdown when the row is clicked
+        attributes: {
+            'data-dismiss': 'dropdown'
+        }
+        events: {'click': function(e) { //communicate back with your applet
+            ADK.Messaging.getChannel(this.getOption('key')).trigger('openDetails', this.model);
+        }},
+        onBeforeInitialize: {},
+        onInitialize: {}
+    }),
+    DropdownListView: ADK.UI.AlertDropdown.DropdownListView.extend({}),
+    ButtonView: ADK.UI.AlertDropdown.ButtonView.extend({}),
+
+    position: 'auto', //top | bottom | auto (defaults to bottom),
+    align: 'left', //left | right | middle
+    ButtonTemplate: Handlebars.compile('<i class="fa {{icon}}"></i>')
+})
+```
+
+In some cases, logic will need to be driven on the button view to determine what icons, and what colors are displayed.  This can be accomplished by configuring the `getTemplate` method on the `ButtonView`.  The collection that will populate the dropdown container will be available here so counting logic can occur as thus:
+```JavaScript
+ButtonView: ADK.UI.AlertDropdown.ButtonView.extend({
+    getTemplate: function() {
+        var subset = this.collection.where({'severity': 'high', 'unread': true});
+        if(subset.length)
+            return Handlebars.compile([
+                '<i class="fa danger {{icon}"}></i>',
+                '<i class="badge">' + subset.length + '</i>'
+            ].join('\n'));
+        else return this.getOption('template');
+    }
+})
+```
+
+In some cases, logic will need to be driven on the dropdown header to determine what count is displayed.  This can be accomplished by overriding `serializeModel` on the `DropdownListView` and setting the `count` attribute against the view's model.
+```Javascript
+DropdownListView: ADK.UI.AlertDropdown.DropdownListView.extend({
+    serializeModel: function(model) {
+        model.set('count', this.collection.where({'severity': 'hight', 'unread': true}));
+        return model.toJSON();
+    }
+}
+})
+
+```
+
+### Options ###
+
+Options can be set in the constructor options, or on the view definition.
+| Required                          | Option                  | Type            | Description                                                       |
+|:---------------------------------:|-------------------------|-----------------|-------------------------------------------------------------------|
+|                                   | ButtonTemplate          | method          |  Configures the template for the ButtonView.  If a template is defined on the ButtonView, this option will be ignored |
+|                                   | position                | string          |  Determines whether the dialog appears above or below the trigger element.  Options are `top`, `bottom`, and `auto`. <br> **Default**: `bottom` |
+|                                   | align                   | string          |  Horizonatally aligns dialog to trigger element.  Options are `left`, `right`, and `middle`.
+|                                   | backdrop                | boolean         |  Determines whether a backdrop should be displayed when the dropdown menu is shown. <br> **Default**: `false`
+|                                   | icon                    | string          |  Sets an attribute on the comopnent model to be used for setting the icon in the template. |
+|                                   | ButtonView              | view            |  Configures the ButtonView.  The ButtonView definition can be accessed via `ADK.UI.AlertDrodpown.ButtonView`. |
+|                                   | DropdownListView        | view            |  Configures a menu view.  This is the view assigned to DropdownView by default.  The DropdownListView definition can be accessed via `ADK.UI.AlertDropdown.DropdownListView`.  A list view will be a navigation menu.|
+|                                   | DropdownView            | view            |  Overrides the selection of DropdownListView should a different view type, such as DropdownFormView need to be utilized. The DropdownFormView definition can be accessed via `ADK.UI.AlertDropdown.DropdownFormView`.  The DropdownFormView implies the dropdown contains a writeback feature.|
+|                                   | RowView                 | view            |  Configures the childView on a DropdownListView. The RowView definition can be accessed via `ADK.UI.AlertDropdown.RowView`.|
+|                                   | RowContentTemplate      | string          |  Use this options to set the contents of the RowView, but not override the RowView's template. |
+
+
+### Events ###
+All events are broadcasted both on the parent element with class **alert-dropdown** and on the AlertDropdown view.  Triggering **dropdown.show** or **dropdown.hide** on the DOM element with the class **alert-dropdown** will activate the corresponding behavior.  When a dropdown is open, the parent element will have the class **open** applied.
+
+| Event             | Description                              |
+|:-----------------:|------------------------------------------|
+| dropdown.show     | fired when show is called                |
+| dropdown.shown    | fired after dropdown is added to DOM     |
+| dropdown.hide     | fired when hide is called                |
+| dropdown.hidden   | fired after dropdown is removed from DOM |
+
+### Listeners ###
+Listeners are available to show and hide the component.
+```Javascript
+//key is the same string as the one passed into the component registration options
+ADK.Messaging.getChannel(key).trigger('alert-dropdown.show');
+ADK.Messaging.getChannel(key).trigger('alert-dropdown.hide');
+```
+
+A global listener will close all dropdowns which extend from `ADK.UI.Dropdown` including this component.
+```Javascript
+ADK.Messaging.trigger('dropdown.close');
+```
 
 ## Workflow ##
 ### Overview ###

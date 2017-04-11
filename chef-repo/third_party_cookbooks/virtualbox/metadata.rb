@@ -1,5 +1,5 @@
 name             "virtualbox"
-maintainer       "Bradley D      "
+maintainer       "Bradley D Smith"
 maintainer_email "bradleydsmith@gmail.com"
 license          "Apache 2.0"
 description      "Installs virtualbox"

@@ -1,0 +1,21 @@
+<div class="col-xs-12">
+	<h5 class="bottom-border-grey-light">Current Appointment Info</h5>
+	{{#if appointment}}
+		<div class="row">
+			<div class="col-xs-4">
+				<p><strong>Scheduled Date</strong><br />
+				{{formatDate appointment.date "MM/DD/YYYY"}}</p>
+			</div>
+			<div class="col-xs-4">
+				<p><strong>Clinic</strong><br />
+				{{appointment.clinic}}</p>
+			</div>
+			<div class="col-xs-4">
+				<p><strong>Provider</strong><br />
+				{{appointment.provider}}</p>
+			</div>
+		</div>
+	{{else}}
+		<p>Unscheduled<p>
+	{{/if}}
+</div>

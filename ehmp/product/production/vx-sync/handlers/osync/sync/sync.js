@@ -81,14 +81,24 @@ function confirmSyncSuccess(log, response) {
  * Syncs a patient with vxsync.
  *
  * @param log The logger.
- * @param syncUrl The url to append the ien to for syncing this patient.
- * @param ien The ien of the patient about to be synced.
+ * @param config Contains the url to append the ien to for syncing this patient.
+ * @param patientIdentifier The patientIdentifier of the patient about to be synced.
  * @param callback The callback method you want invoked when either an error occurs or processing has finished
  * with syncing this specific patient.  If an error occurs, the first parameter of the callback will be populated with
  * a non-null value.
  */
-function syncPatient(log, syncUrl, callback) {
-    request.get(syncUrl, function(error, response, body) {
+function syncPatient(log, config, patientIdentifier, callback) {
+    var options = {
+        url: config.syncUrl,
+        method: 'GET',
+        json: true,
+        qs: {}
+    };
+
+    options.qs[patientIdentifier.type] = patientIdentifier.value;
+    options.qs['priority'] = config.syncPriority > 100 ? 100 : config.syncPriority < 1 ? 1 : config.syncPriority || 50;
+
+    request.get(options, function(error, response) {
         if (error) {
             log.error('error in sync.syncPatient: ' + error);
             return callback(error);
@@ -102,6 +112,54 @@ function syncPatient(log, syncUrl, callback) {
     }).on('error', function(error) {
         log.error('sync.syncPatient: ' + error);
         return callback(error);
+    });
+}
+
+//Stable - all domains synced for all sites (syncStatus.inProgress is undefined) and
+//         no open jobs in progress (jobStatus array empty)
+//Stable - all domains synced for all sites (syncStatus.inProgress is undefined) and
+//         jobs in error status only (jos in jobStatus with error status)
+//Unstable - one or more domain syncs still in progress (syncStatus.inProgress is NOT undefined) and/ or
+//           there are open jobs (jobs in jobStatus with status other than error)
+function syncUnstable(statusResponse) {
+    if (!_.isUndefined(statusResponse.syncStatus.inProgress)) {
+        return true;
+    }
+
+    var inProcessJob = _.find(statusResponse.jobStatus, function(jobStatus) {
+        return jobStatus.status !== 'error';
+    });
+
+    return !_.isUndefined(inProcessJob);
+}
+
+function checkPatientSyncStatus(logger, syncConfig, patientIdentifier, callback) {
+    logger.debug('sync.checkPatientSyncStatus: Checking sync status for patient id %s.', patientIdentifier.value);
+
+    var options = {
+        url: syncConfig.statusUrl,
+        method: 'GET',
+        json: true,
+        qs: {}};
+
+    options.qs[patientIdentifier.type] = patientIdentifier.value;
+
+    request.get(options, function(error, response, body) {
+        if (error)  {
+            logger.error('sync.checkPatientSyncStatus: Resync handler encountered an error trying to access sync endpoint: %s.', error);
+            return callback(error);
+        }
+
+        if (response.statusCode === 200 && syncUnstable(body)) {
+            logger.debug('sync.checkPatientSyncStatus: Sync for patient id %s still in progress.', patientIdentifier.value);
+            return  callback('Sync still in progress.');
+        } else if (response.statusCode !== 200 && !(response.statusCode === 404 && body.lastIndexOf('Patient identifier not found', 0) === 0)) {
+            logger.error('sync.checkPatientSyncStatus: Error trying to access sync endpoint: %s.', body);
+            return  callback('Error calling sync status endpoint. Status code: ' + response.statusCode + ' Error: ' + body);
+        } else {
+            logger.debug('sync.checkPatientSyncStatus: Patient sync complete for patient id %s.', patientIdentifier.value);
+            return callback();
+        }
     });
 }
 
@@ -123,25 +181,38 @@ function handle(log, config, environment, job, handlerCallback) {
         return handlerCallback(error);
     }
 
-    var syncUrl = config.syncUrl;
+    var patientIdentifier = {};
+
     if (jdsUtil.isIcn(job.patient.ien)) {
-        syncUrl = syncUrl + 'icn=' + job.patient.ien;
+        patientIdentifier.type = 'icn';
+        patientIdentifier.value = job.patient.ien;
     } else {
-        syncUrl = syncUrl + 'pid=' + job.siteId + ';' + job.patient.dfn;
-        job.patient.siteId = job.siteId;
+        patientIdentifier.type = 'pid';
+        patientIdentifier.value = job.siteId + ';' + job.patient.dfn;
     }
-    syncPatient(log, syncUrl, function(err) {
-        if (err) {
-            return handlerCallback(err);
+
+    checkPatientSyncStatus(log, config, patientIdentifier, function(error) {
+        if (error) {
+            if (error === 'Sync still in progress.') {
+                return handlerCallback(null, 'already started');
+            } else {
+                return handlerCallback(error);
+            }
         }
 
-        var storeJob = _.cloneDeep(job);
-        storeJob.jobId = undefined;
-        storeJob.jpid = undefined;
+        syncPatient(log, config, patientIdentifier, function(err) {
+            if (err) {
+                return handlerCallback(err);
+            }
 
-        var jobToPublish = jobUtil.createStoreJobStatusJob(log, config, environment, storeJob);
-        environment.publisherRouter.publish(jobToPublish, handlerCallback);
-    });
+            var storeJob = _.cloneDeep(job);
+            storeJob.jobId = undefined;
+            storeJob.jpid = undefined;
+
+            var jobToPublish = jobUtil.createStoreJobStatusJob(log, config, environment, storeJob);
+            environment.publisherRouter.publish(jobToPublish, handlerCallback);
+        });
+    })
 }
 
 module.exports = handle;

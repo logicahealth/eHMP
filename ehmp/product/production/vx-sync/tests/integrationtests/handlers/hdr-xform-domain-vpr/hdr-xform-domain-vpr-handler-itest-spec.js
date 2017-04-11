@@ -23,7 +23,7 @@ var wConfig = require(global.VX_ROOT + 'worker-config');
 var config = {
     jds: _.defaults(wConfig.jds, {
         protocol: 'http',
-        host: 'IPADDRESS ',
+        host: 'IP_ADDRESS',
         port: 9080
     })
 };
@@ -70,7 +70,7 @@ describe('hdr-xfom-domain-vpr-handler integration test', function() {
             domains: ['allergy']
         };
 
-        var matchingJobTypes = [jobUtil.recordEnrichmentType()];
+        var matchingJobTypes = [jobUtil.eventPrioritizationRequestType()];
         testHandler(handler, logger, localConfig, environment, host, port, tubename, job, matchingJobTypes);
     });
 

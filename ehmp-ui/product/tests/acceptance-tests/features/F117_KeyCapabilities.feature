@@ -3,7 +3,7 @@ Feature: F117 provides cross cutting UI concerns including: displaying the curre
 
 # POC: Team Mercury
 Background:
-	Given user is logged into eHMP-UI
+#	Given user is logged into eHMP-UI
 	And user searches for and selects "Ten,Patient"
 	Then Cover Sheet is active
 

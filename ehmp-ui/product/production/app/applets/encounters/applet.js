@@ -20,8 +20,10 @@ define([
     "app/applets/encounters/appUtil",
     "app/applets/encounters/gistConfig",
     "app/applets/encounters/writeback/encounterForm",
-    'app/applets/encounters/writeback/modelUtil'
-], function(Handlebars, _, Backbone, Marionette, Crossfilter, GistView, CONFIG, util, gistConf, WritebackForm, formUtil) {
+    'app/applets/encounters/writeback/modelUtil',
+    'app/applets/encounters/tray/trayView',
+    'app/applets/encounters/writeback/showEncounter'
+], function(Handlebars, _, Backbone, Marionette, Crossfilter, GistView, CONFIG, util, gistConf, WritebackForm, formUtil, trayView, showEncounter) {
     'use strict';
     // Switch ON/OFF debug info
     var DEBUG = CONFIG.debug;
@@ -32,7 +34,7 @@ define([
     // Top tile ordering & injection
     var TOP_ORDER = CONFIG.eventOrder;
     if (DEBUG) console.log("EncGist initialization ----->>Start");
-    var ENCOUNTER_FORM_ERROR_MSG = '<h3>There was an error retreiving the encounter form. Try again in a couple of minutes.</h3>';
+    var ENCOUNTER_FORM_ERROR_MSG = '<p><strong>There was an error retrieving the encounter form. Try again in a couple of minutes.</strong></p>';
     var ENCOUNTER_FORM_ERROR_TITLE = 'Encounter Form Error';
     var ENCOUNTER_FORM_ERROR_ICON = 'fa fa-exclamation-triangle font-size-18 color-red';
     var _super;
@@ -191,8 +193,8 @@ define([
                 searchQuery = obj.filterView.getFilterRegExp();
             }
             var GDate = ADK.SessionStorage.getModel('globalDate');
-            //if(GDate.get('selectedId') === "all-range-global"){ // add 6 month ahead if selected All
-            if (GDate.get('selectedId') === "all-range-global") { // add 6 month ahead if selected All
+            //if(GDate.get('selectedId') === "allRangeGlobal"){ // add 6 month ahead if selected All
+            if (GDate.get('selectedId') === "allRangeGlobal") { // add 6 month ahead if selected All
                 toDate = moment().add(6, 'M').format('MM/DD/YYYY');
                 timeRange = obj.buildJdsDateFilter('dateTime', {
                     isOverrideGlobalDate: true,
@@ -213,6 +215,7 @@ define([
                 filterEnabled: true,
                 viewModel: viewParseModel,
                 cache: true,
+                allowAbort: true,
                 criteria: {
                     filter: 'or(eq(kind, "Visit"),eq(kind, "Admission"),eq(kind, "Procedure"),eq(kind, "DoD Appointment"),eq(kind, "Appointment"),eq(kind, "DoD Encounter")),' + 'and(' + timeRange + ')',
                     order: 'dateTime DESC'
@@ -460,8 +463,6 @@ define([
                 if (DEBUG) console.log(result);
                 dimKind.filterAll();
             }
-            // Add empty top level tiles
-            util.addEmptyTiles(coll,FirstEventForPatient);
             // Clear all dimentions and filters
             arrData = null;
             encEventCF = null;
@@ -547,176 +548,15 @@ define([
             util.showDetailView(params, "documents");
         },
         onBeforeDestroy: function() {
-
             delete this.dataGridOptions.refresh;
-
             delete this.dataGridOptions.shadowCollection;
 
-            if (typeof _super.onBeforeDestroy === 'function') {
-                _super.onBeforeDestroy.apply(this, this.arguments);
-            }
         }
     });
 
     var encounterChannel = ADK.Messaging.getChannel('encounterFormRequestChannel');
-    encounterChannel.comply('openEncounterForm', handleChannel);
+    encounterChannel.comply('openEncounterForm', showEncounter);
 
-    function handleChannel(appletKey) {
-        var writebackView = ADK.utils.appletUtils.getAppletView('encounters', 'writeback');
-        //Construct our model
-        var FormModel = Backbone.Model.extend({
-            defaults: {}
-        });
-        var formModel = new FormModel({
-            //Service Connected Section
-            serviceConnected: '%',
-            ratedDisabilities: '',
-            //Visit Type Section
-            providerList: new ADK.UIResources.Picklist.Encounters.Providers(),
-            availableVisitModifiers: new ADK.UIResources.Picklist.Encounters.CptModifiers(),
-            visitTypeSelection: '',
-            visitCollection: new ADK.UIResources.Picklist.Encounters.VisitType(),
-            selectedModifiersForVisit: '',
-            //Diagnoses Section
-            diagnosesSection: '',
-            addOtherDiagnosisSearchString: '',
-            addOtherDiagnosisPicklist: new Backbone.Collection(),
-            DiagnosisCollection: new ADK.UIResources.Picklist.Encounters.Diagnoses(),
-            //Procedure Section
-            procedureSection: '',
-            addOtherProcedureSearchString: '',
-            addOtherProcedurePicklist: new ADK.UIResources.Picklist.Encounters.OtherProcedures(),
-            ProcedureCollection: new ADK.UIResources.Picklist.Encounters.Procedures()
-        });
-
-        //Construct the workflow
-        var workflowOptions = {
-            title: 'Encounter Form',
-            size: 'large',
-            showProgress: false,
-            keyboard: true,
-            steps: [{
-                view: writebackView,
-                viewModel: formModel,
-                stepTitle: 'Encounter Form'
-            }]
-        };
-        // Set modal title
-        var patient = ADK.PatientRecordService.getCurrentPatient();
-        var visit = patient.get('visit');
-        var datetime = '';
-        if (!_.isUndefined(visit)) {
-            workflowOptions.title = workflowOptions.title + ' for ' + patient.get('displayName');
-            if (!_.isUndefined(visit.formatteddateTime) && visit.formateddateTime !== '') {
-                datetime = ' (' + visit.formatteddateTime + ')';
-            } else if (!_.isUndefined(visit.dateTime) && visit.dateTime !== '') {
-                datetime = ' (' + visit.dateTime + ')';
-            }
-            if (datetime !== '') {
-                workflowOptions.title = workflowOptions.title + datetime;
-            }
-        }
-        // Loading modal
-        var modal = new ADK.UI.Modal({
-            view: ADK.Views.Loading.create(),
-            options: {
-                backdrop: false,
-                size: "large",
-                title: workflowOptions.title
-            }
-        });
-        // Show loading modal
-        modal.show();
-        // Prepopulate all the picklists.
-        $.when(
-            formModel.get('DiagnosisCollection').fetch({
-                dateTime: visit.visitDateTime,
-                clinicIen: visit.locationIEN
-            }),
-            formModel.get('providerList').fetch({
-                dateTime: visit.visitDateTime
-            }),
-            formUtil.retrieveRatedDisabilties(formModel),
-            formModel.get('visitCollection').fetch({
-                dateTime: visit.visitDateTime,
-                clinicIen: visit.locationIEN
-            }),
-            formModel.get('ProcedureCollection').fetch({
-                dateTime: visit.visitDateTime,
-                clinicIen: visit.locationIEN
-            })
-        ).done(function() {
-            //Set up and clear out the OTHER sections
-            formModel.get('ProcedureCollection').add({
-                categoryName: 'OTHER PROCEDURES'
-            });
-            formModel.get('ProcedureCollection').get('OTHER PROCEDURES').get('cptCodes').reset();
-            formModel.get('DiagnosisCollection').add({
-                categoryName: 'OTHER DIAGNOSES'
-            });
-            formModel.get('DiagnosisCollection').get('OTHER DIAGNOSES').get('values').reset();
-            var deferredExisting = $.Deferred();
-            //Set up parsing existing data.
-            formModel.listenToOnce(formModel, 'change:encounterResults', function() {
-                var result = formModel.get('encounterResults');
-                formUtil.parseEncounterDataProvider(result, formModel);
-                formUtil.parseEncounterDataVisitAndProcedures(result, formModel);
-                formUtil.parseEncounterDataDiagnosis(result, formModel);
-                formUtil.parseEncounterDataVisitRelated(result, formModel);
-                //We finished so let the form load up.
-                deferredExisting.resolve();
-            });
-            //Pull existing data
-            formUtil.retrieveEncounterData(formModel);
-
-            //Once existing is finished being loaded into the model load the form.
-            deferredExisting.done(function() {
-                //Pre-select initial fields in drilldown select components.
-                if (formModel.get('DiagnosisCollection').length > 0) {
-                    formModel.set('diagnosesSection', formModel.get('DiagnosisCollection').models[0].get('categoryName'));
-                }
-                if (formModel.get('visitCollection').length > 0 && _.isEmpty(formModel.get('visitTypeSelection'))) {
-                    formModel.set('visitTypeSelection', formModel.get('visitCollection').models[0].get('categoryName'));
-                }
-                if (formModel.get('ProcedureCollection').length > 0) {
-                    formModel.set('procedureSection', formModel.get('ProcedureCollection').models[0].get('categoryName'));
-                }
-                //Hide the loading modal
-                ADK.UI.Modal.hide();
-                var workflowController = new ADK.UI.Workflow(workflowOptions);
-                //Show the encounter form.
-                workflowController.show();
-            });
-        //If we had an error pulling in picklist data.
-        }).fail(function(child, response) {
-            ADK.UI.Modal.hide();
-            // Alert the user
-            var SimpleAlertItemView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile([
-                    ENCOUNTER_FORM_ERROR_MSG + '<div><strong>Error:</strong> ' + response.status + ' - ' + response.statusText + '<br><strong>Error Response: </strong>' + response.responseText + '</div>'
-                ].join('\n'))
-            });
-            var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile([
-                    '{{ui-button "OK" classes="btn-primary alert-continue" title="Press enter to continue."}}'
-                ].join('\n')),
-                events: {
-                    'click button': function() {
-                        ADK.UI.Alert.hide();
-                    }
-                }
-            });
-            var alertView = new ADK.UI.Alert({
-                title: ENCOUNTER_FORM_ERROR_TITLE,
-                icon: ENCOUNTER_FORM_ERROR_ICON,
-                messageView: SimpleAlertItemView,
-                footerView: SimpleAlertFooterItemView
-            });
-            alertView.show();
-            console.log('Error retreiving encounter form:');
-            console.log(response);
-        });
-    }
 
     var applet = {
         id: "encounters",

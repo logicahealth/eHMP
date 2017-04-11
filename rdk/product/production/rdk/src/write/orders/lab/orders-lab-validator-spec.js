@@ -3,13 +3,13 @@
 var validator = require('./orders-lab-validator');
 
 describe('write-back orders lab validator', function() {
-    var createWritebackContext;
-    var updateWritebackContext;
-    var discontinueWritebackContext;
+    var createLabWritebackContext;
+    var updateLabWritebackContext;
+    var discontinueLabWritebackContext;
 
     beforeEach(function() {
-        createWritebackContext = {};
-        createWritebackContext.model = {
+        createLabWritebackContext = {};
+        createLabWritebackContext.model = {
             "dfn": "100615",
             "provider": "10000000231",
             "location": "285",
@@ -40,10 +40,24 @@ describe('write-back orders lab validator', function() {
             }],
             "localId": "12519",
             "uid": "urn:va:order:9E7A:100615:12519",
-            "kind": "Laboratory"
+            "kind": "Laboratory",
+            "clinicalObject": {
+                "patientUid": "9E7A;100615",
+                "authorUid": "urn:va:user:9E7A:10000000238",
+                "domain": "ehmp-order",
+                "subDomain": "laboratory",
+                "visit": {
+                    "location": "285",
+                    "serviceCategory": "PSB",
+                    "dateTime": "20160102123040"
+                },
+                "data": {
+                    "pastDueDate": "20160101"
+                }
+            }
         };
-        updateWritebackContext = {};
-        updateWritebackContext.model = {
+        updateLabWritebackContext = {};
+        updateLabWritebackContext.model = {
             "dfn": "100615",
             "provider": "10000000231",
             "location": "285",
@@ -78,10 +92,25 @@ describe('write-back orders lab validator', function() {
             }],
             "localId": "12519",
             "uid": "urn:va:order:9E7A:100615:12519",
-            "kind": "Laboratory"
+            "kind": "Laboratory",
+            "clinicalObject": {
+                "uid": "urn:va:ehmp:9E7A:100615:foobar",
+                "patientUid": "9E7A;100615",
+                "authorUid": "urn:va:user:9E7A:10000000238",
+                "domain": "ehmp-order",
+                "subDomain": "laboratory",
+                "visit": {
+                    "location": "285",
+                    "serviceCategory": "PSB",
+                    "dateTime": "20160102123040"
+                },
+                "data": {
+                    "pastDueDate": "20160101"
+                }
+            }
         };
-        discontinueWritebackContext = {};
-        discontinueWritebackContext.model = {
+        discontinueLabWritebackContext = {};
+        discontinueLabWritebackContext.model = {
             'dfn': '100716',
             'orderId': '38479;1',
             'provider': '10000000231',
@@ -92,45 +121,45 @@ describe('write-back orders lab validator', function() {
     });
 
     it('identifies good creates', function(done) {
-        validator.create(createWritebackContext, function(err) {
+        validator.create(createLabWritebackContext, function(err) {
             expect(err).to.be.falsy();
             done();
         });
     });
 
     it('identifies bad creates', function(done) {
-        delete createWritebackContext.model['dfn'];
-        validator.create(createWritebackContext, function(err) {
+        delete createLabWritebackContext.model['dfn'];
+        validator.create(createLabWritebackContext, function(err) {
             expect(err).to.be.truthy();
             done();
         });
     });
 
     it('identifies good updates', function(done) {
-        validator.update(updateWritebackContext, function(err) {
+        validator.update(updateLabWritebackContext, function(err) {
             expect(err).to.be.falsy();
             done();
         });
     });
 
     it('identifies bad updates', function(done) {
-        delete updateWritebackContext.model['orderId'];
-        validator.update(updateWritebackContext, function(err) {
+        delete updateLabWritebackContext.model['orderId'];
+        validator.update(updateLabWritebackContext, function(err) {
             expect(err).to.be.truthy();
             done();
         });
     });
 
     it('identifies good discontinue', function(done) {
-        validator.discontinue(discontinueWritebackContext, function(err) {
+        validator.discontinueLab(discontinueLabWritebackContext, function(err) {
             expect(err).to.be.falsy();
             done();
         });
     });
 
     it('identifies bad discontinue', function(done) {
-        delete discontinueWritebackContext.model.dfn;
-        validator.discontinue(discontinueWritebackContext, function(err) {
+        delete discontinueLabWritebackContext.model.dfn;
+        validator.discontinueLab(discontinueLabWritebackContext, function(err) {
             expect(err).to.be.truthy();
             done();
         });

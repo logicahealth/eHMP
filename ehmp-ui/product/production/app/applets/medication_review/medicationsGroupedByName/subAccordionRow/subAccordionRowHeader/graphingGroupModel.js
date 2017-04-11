@@ -14,7 +14,7 @@ define([
             };
 
             try {
-                var date = ADK.utils.getTimeSince(latestMed.get('stopped'), true);
+                var date = ADK.utils.getTimeSince(moment(latestMed.getEarlierStopAsMoment()).format("YYYYMMDDHHmmssSSS"), true);
                 var userSiteCode = ADK.UserService.getUserSession().get('site');
                 result.uidUnderscored = latestMed.getUid();
                 result.name = latestMed.get('name');

@@ -6,6 +6,7 @@ define([
 
     var screenConfig = {
         id: 'reports-full',
+        context: 'patient',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

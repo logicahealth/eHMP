@@ -8,11 +8,11 @@ var log = sinon.stub(require('bunyan').createLogger({ name: 'encounters-procedur
 var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
-    host: 'IP        ',
+    host: 'IP_ADDRESS',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'PW',
+    verifyCode: 'PW',
+    localIP: 'IPADDRES',
     localAddress: 'localhost'
 };
 
@@ -23,9 +23,9 @@ describe('encounters-procedure-types resource integration test', function() {
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, {ien: 195, visitDate: '20131001'});
+        }, {locationUid: 'urn:va:location:9E7A:195', visitDate: '20131001'});
     });
-    it('will return an error if ien is missing', function (done) {
+    it('will return an error if locationIEN is missing', function (done) {
         this.timeout(8000);
         fetchList(log, configuration, function (err, result) {
             expect(err).to.be.truthy();
@@ -39,6 +39,6 @@ describe('encounters-procedure-types resource integration test', function() {
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, {ien: 195});
+        }, {locationUid: 'urn:va:location:9E7A:195'});
     });
 });

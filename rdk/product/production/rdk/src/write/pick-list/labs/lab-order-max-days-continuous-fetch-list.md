@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Lab order max days continuous [/lab-order-max-days-continuous{?site}{&location}{&schedule}{&fields}]
+## Lab order max days continuous [/lab-order-max-days-continuous{?site}{&location}{&schedule}]
 
 Returns the maximum number of days for a continuous lab order.
 
@@ -15,8 +15,6 @@ ORWDLR32 MAXDAYS
     + location: `11` (string, required) - The location of the lab order
 
     + schedule: `0` (string, required) - The schedule of the lab order
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

@@ -1,43 +1,49 @@
 'use strict';
 
 module.exports.create = function(writebackContext, callback) {
-    var error = null; // set if there is an error validating
-    if (writebackContext) {
-        var model = writebackContext.model;
-        if (model) {
-            if (!model.dfn || !model.provider || !model.location || !model.orderDialog || !model.displayGroup ||
-                !model.quickOrderDialog || !model.inputList || (model.inputList.length < 1) || !model.kind) {
-                error = 'Missing input parameter';
-            }
-        } else {
-            error = 'Invalid create request';
-        }
-    } else {
-        error = 'Invalid create request';
-    }
-    return setImmediate(callback, error);
+    validateSave(false, writebackContext, callback);
 };
 
 module.exports.update = function(writebackContext, callback) {
+    validateSave(true, writebackContext, callback);
+};
+
+/**
+ * Validate create or update request
+ */
+function validateSave(update, writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
         var model = writebackContext.model;
         if (model) {
-            if (!model.dfn || !model.provider || !model.location || !model.orderDialog || !model.displayGroup ||
-                !model.quickOrderDialog || !model.inputList || (model.inputList.length < 1) || !model.kind ||
-                !model.orderId) {
+            if (update && !model.orderId) {
+                error = 'Missing order ID';
+            } else if (!model.dfn || !model.provider || !model.location || !model.orderDialog || !model.displayGroup ||
+                !model.quickOrderDialog || !model.inputList || (model.inputList.length < 1) || !model.kind) {
                 error = 'Missing input parameter';
+            } else if (!model.clinicalObject) {
+                error = 'Missing Clinical Object';
+            } else if (!model.clinicalObject.data || (model.clinicalObject.data.pastDueDate == null)) {  //empty string pastDueDate is allowed
+                error = 'Missing Past Due Date field';
             }
         } else {
-            error = 'Invalid update request';
+            if (update) {
+                error = 'Invalid update request';
+            } else {
+                error = 'Invalid create request';
+            }
         }
     } else {
-        error = 'Invalid update request';
+        if (update) {
+            error = 'Invalid update request';
+        } else {
+            error = 'Invalid create request';
+        }
     }
     return setImmediate(callback, error);
 };
 
-module.exports.discontinue = function(writebackContext, callback) {
+module.exports.discontinueLab = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
         if (!writebackContext.model.dfn) {
@@ -47,7 +53,7 @@ module.exports.discontinue = function(writebackContext, callback) {
             error = 'Missing provider';
         }
         if (!writebackContext.model.location) {
-            error = 'Missing location';
+            error = 'Missing location from Discontinue Lab';
         }
         if (!writebackContext.model.orderList || writebackContext.model.orderList.length < 1) {
             error = 'Missing Order list';

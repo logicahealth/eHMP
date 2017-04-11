@@ -25,17 +25,20 @@ define([
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-4'
         }),
+        sortType: 'cycle',
         hoverTip: 'conditions_description'
     }, {
         name: 'acuityName',
         label: 'Acuity',
         cell: 'handlebars',
+        sortType: 'cycle',
         template: Handlebars.compile('<span class="acuityType">{{acuityName}}</span>'),
         hoverTip: 'conditions_acuity'
     }, {
         name: 'statusName',
         label: 'Status',
         cell: 'string',
+        sortType: 'cycle',
         hoverTip: 'conditions_status'
     }, ];
 
@@ -47,6 +50,7 @@ define([
             cell: Backgrid.StringCell.extend({
                 className: 'string-cell flex-width-2'
             }),
+            sortType: 'cycle',
             sortValue: function(model, sortKey) {
                 return model.get("onset");
             },
@@ -58,6 +62,7 @@ define([
             cell: Backgrid.StringCell.extend({
                 className: 'string-cell flex-width-2'
             }),
+            sortType: 'cycle',
             sortValue: function(model, sortKey) {
                 return model.get("updated");
             },
@@ -69,11 +74,13 @@ define([
             cell: Backgrid.StringCell.extend({
                 className: 'string-cell flex-width-2'
             }),
+            sortType: 'cycle',
             hoverTip: 'conditions_provider'
         }, {
             name: 'facilityMoniker',
             label: 'Facility',
             cell: 'string',
+            sortType: 'cycle',
             hoverTip: 'conditions_facility'
         }, {
             name: 'comments',
@@ -102,12 +109,13 @@ define([
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-4'
         }),
+        sortType: 'cycle',
         hoverTip: 'conditions_standardizeddescription'
     });
 
     var viewParseModel = {
         parse: function(response) {
-
+            var crsUtil = ADK.utils.crsUtil;
             response = Util.getStandardizedDescription(response);
             response = Util.getStatusName(response);
             response = Util.getServiceConnected(response);
@@ -122,6 +130,8 @@ define([
             response = Util.getICDName(response);
             response = Util.getTimeSince(response);
             response = Util.getStatusName(response);
+            response[crsUtil.crsAttributes.CRSDOMAIN] = crsUtil.domain.PROBLEM;
+            response.applet_id = 'problems';
 
             return response;
         }
@@ -158,8 +168,18 @@ define([
             var self = this;
 
             self.getExposure();
-            dataGridOptions.toolbarOptions = true; //temporary until the toolbar refactor is complete
+
+            dataGridOptions.toolbarOptions = {
+                buttonTypes: ['infobutton', 'detailsviewbutton']
+            };
+            if (ADK.UserService.hasPermission('edit-condition-problem') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
+                dataGridOptions.toolbarOptions.buttonTypes.push('editviewbutton');
+                dataGridOptions.toolbarOptions.disableNonLocal = true;
+            }
+            dataGridOptions.toolbarOptions.buttonTypes.push('crsbutton');
+            
             dataGridOptions.showLinksButton = true;
+            dataGridOptions.toolbarOptions.buttonTypes.push('submenubutton');
 
             this.dataGridOptions = dataGridOptions;
 
@@ -168,6 +188,13 @@ define([
             });
 
             dataGridOptions.collection = ADK.PatientRecordService.fetchCollection(this.fetchOptions);
+
+            this.listenTo(dataGridOptions.collection, 'sync', function(collection){
+                collection.each(function(model){
+                    model.set('instanceId', self.options.appletConfig.instanceId);
+                });
+            });
+
             dataGridOptions.collection.comparator = function(a, b) {
                 var statusNameA = a.get('statusName') || '';
                 var statusNameB = b.get('statusName') || '';
@@ -175,38 +202,24 @@ define([
                     return -statusNameB.localeCompare(statusNameA);
                 }
             };
-            dataGridOptions.onClickRow = function(model, event, gridView) {
+           this.listenTo(problemChannel, 'detailView', function(channelObject) {
+                var model = channelObject.model;
                 model.attributes.exposure = self.exposure;
                 var view = new ModalView({
                     model: model,
                     collection: dataGridOptions.collection
                 });
-                var siteCode = ADK.UserService.getUserSession().get('site'),
-                    pidSiteCode = model.get('pid') ? model.get('pid').split(';')[0] : '';
+
                 var modalOptions;
                 modalOptions = {
                     'title': Util.getModalTitle(model),
-                    'size': 'large',
+                    'size': 'normal',
                     'headerView': modalHeader.extend({
                         model: model,
                         theView: view
                     }),
                     'footerView': modalFooter.extend({
-                        model: model,
-                        onRender: function() {
-                            this.$el.find('.problemsTooltip').tooltip();
-                        },
-                        templateHelpers: function() {
-                            if ((ADK.UserService.hasPermission('edit-condition-problem') || ADK.UserService.hasPermission('remove-patient-problem')) && pidSiteCode === siteCode) {
-                                return {
-                                    data: true
-                                };
-                            } else {
-                                return {
-                                    data: false
-                                };
-                            }
-                        }
+                        model: model
                     }),
                 };
 
@@ -215,7 +228,7 @@ define([
                     options: modalOptions
                 });
                 modal.show();
-            };
+            });
 
             if (ADK.UserService.hasPermission('add-condition-problem') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
                 dataGridOptions.onClickAdd = function(e) {
@@ -224,25 +237,26 @@ define([
                 };
             }
 
-            problemChannel.comply('editProblem', function(model) {
-                onEditProblems(model);
+            this.listenTo(ADK.Messaging.getChannel('problems'), 'editView', function(channelObj) {
+                var existingProblemModel = channelObj.model;
+                if(existingProblemModel.get('instanceId') === self.options.appletConfig.instanceId){
+                    ADK.UI.Modal.hide();
+                    WorkflowUtils.startEditProblemsWorkflow(AddEditProblemsView, existingProblemModel);
+                }
             });
 
-            this._super.initialize.apply(this, arguments);
 
-            // add model to list after writeback.
-            problemChannel.comply('addProblemListModel', this.handleAddProblemModel, this);
+            this._super.initialize.apply(this, arguments);
         },
         onBeforeDestroy: function() {
             problemChannel.stopComplying('addProblemListModel');
-            problemChannel.stopComplying('editProblem');
             this.dataGridOptions.collection.off('sync');
             this.dataGridOptions.collection.comparator = null;
             this.dataGridOptions.onClickRow = null;
             this.dataGridOptions.onClickAdd = null;
         },
-        handleAddProblemModel: function(appletKey, addedProblemModel) {
-            //this.dataGridOptions.collection.push(addedProblemModel);
+        onDestroy: function() {
+            ADK.utils.crsUtil.removeStyle(this);
         },
         exposure: '',
         getExposure: function() {
@@ -276,8 +290,6 @@ define([
         var data = ADK.PatientRecordService.fetchCollection(fetchOptions);
         data.on('sync', function() {
             var detailModel = data.first();
-            var siteCode = ADK.UserService.getUserSession().get('site'),
-                pidSiteCode = detailModel.get('pid') ? detailModel.get('pid').split(';')[0] : '';
             response.resolve({
                 view: new ModalView({
                     model: detailModel,
@@ -285,21 +297,7 @@ define([
                 }),
                 title: Util.getModalTitle(detailModel),
                 footerView: modalFooter.extend({
-                    model: detailModel,
-                    onRender: function() {
-                        this.$el.find('.problemsTooltip').tooltip();
-                    },
-                    templateHelpers: function() {
-                        if ((ADK.UserService.hasPermission('edit-patient-problem') || ADK.UserService.hasPermission('remove-patient-problem')) && pidSiteCode === siteCode) {
-                            return {
-                                data: true
-                            };
-                        } else {
-                            return {
-                                data: false
-                            };
-                        }
-                    }
+                    model: detailModel
                 })
 
             });
@@ -316,10 +314,6 @@ define([
 
     function onAddProblems() {
         WorkflowUtils.startAddProblemsWorkflow(AddEditProblemsView);
-    }
-
-    function onEditProblems(model) {
-        console.log(' in onEditProblems');
     }
 
     var applet = {

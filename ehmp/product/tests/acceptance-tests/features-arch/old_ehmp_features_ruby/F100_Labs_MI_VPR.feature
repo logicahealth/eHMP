@@ -222,7 +222,7 @@ Scenario: Client can request lab (MI) results in VPR format
 @f93_7_labs_mi_neg_vpr	
 Scenario: Negative scenario.  Client can request lab results in VPR format
 Given a patient with "No lab results" in multiple VistAs
-Given a patient with pid "xxxxxxxxxxV088473" has been synced through Admin API
-When the client requests labs for the patient "xxxxxxxxxxV088473" in VPR format
+Given a patient with pid "1006184063V088473" has been synced through Admin API
+When the client requests labs for the patient "1006184063V088473" in VPR format
 Then a successful response is returned
 Then corresponding matching records totaling "0" are displayed

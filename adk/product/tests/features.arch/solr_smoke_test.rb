@@ -10,7 +10,7 @@ require 'CommonDriver.rb'
 require 'SeleniumCommand.rb'
 
 When(/^user lunch Apache Solr$/) do
-  @base_url = 'http://IP            /solr/#/'
+  @base_url = 'http://IPADDRESS:PORT/solr/#/'
   SeleniumCommand.navigate_to_url(@base_url)
 end
 

@@ -4,7 +4,7 @@ def discover_item_id(domain, patient)
   #query_allergy.add_parameter("start", 0) 
   #query_allergy.add_parameter("limit", 1) 
   path = query_allergy.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
   expect(@response.code).to eq(200), "response code was #{@response.code}: response body #{@response.body}"
 
   @json_object = JSON.parse(@response.body)
@@ -31,7 +31,7 @@ When(/^the client requests that item for the patient "(.*?)" in RDK format$/) do
   temp.add_parameter("pid", patient)
   temp.add_parameter("uid", @discovered_item_uid)
   path = temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the VPR results contain the correct uid for that item$/) do
@@ -55,7 +55,7 @@ When(/^the client requests item "(.*?)" for the patient "(.*?)" in RDK format$/)
   temp.add_parameter("pid", patient)
   temp.add_parameter("uid", uid)
   path = temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the response contains error message$/) do |table|

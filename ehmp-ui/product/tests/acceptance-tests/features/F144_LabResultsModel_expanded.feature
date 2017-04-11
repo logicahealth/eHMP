@@ -3,8 +3,8 @@ Feature: F144 - eHMP Viewer GUI - Numeric Lab Results in expanded view
 
 # Team: Andromeda, inherited by Team Venus
 
-Background:
-  Given user is logged into eHMP-UI
+#Background:
+  # Given user is logged into eHMP-UI
 
 @f144_numeric_lab_results_graph @US2213 @TA6055 @modal_test @debug @DE1142
 Scenario: Lab History modal graph.

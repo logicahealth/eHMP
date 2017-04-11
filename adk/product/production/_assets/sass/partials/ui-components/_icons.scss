@@ -1,5 +1,140 @@
-.help-icon-link{
-	i {
-		color: $primary;
-	}
+.icon-action-arrow:before {
+    content: "\e900";
+}
+.icon-concept-relationship:before {
+    content: "\e90f";
+}
+.icon-crs-header {
+    // this hex is used for the 508 implementation of the CRS highlighting,
+    // thus we cannot use it anywhere else as it would compromise the functioning of the js methods.
+    background-color: #F4FFAB;
+    display: inline-block;
+    border-radius: 50%;
+    color: $primary-dark !important;
+    height: 1.5em;
+    width: 1.5em;
+    line-height: 1.7em;
+    text-align: center;
+    font-size: 0.8em;
+    &:before {
+        content: "\e90f";
+    }
+}
+.icon-radiology:before {
+    content: "\e910";
+}
+.icon-signed:before {
+    content: "\e911";
+}
+.icon-ccow-connected .path1:before {
+    content: "\e901";
+    color: rgb(154, 154, 153);
+}
+.icon-ccow-connected .path2:before {
+    content: "\e902";
+    margin-left: -1em;
+    color: rgb(34, 64, 133);
+}
+.icon-ccow-connected .path3:before {
+    content: "\e903";
+    margin-left: -1em;
+    color: rgb(255, 255, 255);
+}
+.icon-ccow-connected .path4:before {
+    content: "\e904";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+.icon-ccow-connected .path5:before {
+    content: "\e905";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+.icon-ccow-connected .path6:before {
+    content: "\e906";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+.icon-ccow-disconnected .path1:before {
+    content: "\e907";
+    color: rgb(154, 154, 153);
+}
+.icon-ccow-disconnected .path2:before {
+    content: "\e908";
+    margin-left: -1em;
+    color: rgb(34, 64, 133);
+}
+.icon-ccow-disconnected .path3:before {
+    content: "\e909";
+    margin-left: -1em;
+    color: rgb(126, 21, 24);
+}
+.icon-ccow-disconnected .path4:before {
+    content: "\e90a";
+    margin-left: -1em;
+    color: rgb(5, 6, 6);
+}
+.icon-ccow-disconnected .path5:before {
+    content: "\e90b";
+    margin-left: -1em;
+    color: rgb(255, 255, 255);
+}
+.icon-ccow-disconnected .path6:before {
+    content: "\e90c";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+.icon-ccow-disconnected .path7:before {
+    content: "\e90d";
+    margin-left: -1em;
+    color: rgb(255, 255, 255);
+}
+.icon-ccow-disconnected .path8:before {
+    content: "\e90e";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+
+
+// this is a compendium of icon classes to be used in the alerts within the application
+
+.icon-warning, .icon-cancel {
+    &:before {
+        content: "\f071";
+        font-family: FontAwesome;
+    }
+    color: $orange-dark;
+    font-size: 18px;
+}
+.icon-warning-severe, .icon-delete {
+    &:before {
+        content: "\f071";
+        font-family: FontAwesome;
+    }
+    color: $red;
+    font-size: 18px;
+}
+.icon-error {
+    &:before{
+        content: "\f06a";
+        font-family: FontAwesome;
+    }
+    color: $red;
+    font-size: 18px;
+}
+.icon-information {
+    &:before {
+        content: "\f05a";
+        font-family: FontAwesome;
+    }
+    color: $primary-dark;
+    font-size: 18px;
+}
+.icon-success {
+    &:before {
+        content: "\f058";
+        font-family: FontAwesome;
+    }
+    color: $secondary;
+    font-size: 18px;
 }

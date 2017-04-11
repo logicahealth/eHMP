@@ -8,8 +8,8 @@ Scenario: Search for existing patient by full name through RDK
 	And the client receives 2 RDK VistA result(s)
 	And the RDK search results contain
 	|field 			| value 			  |
-	|displayName 	| Eight,Imagepatient  |
-	|genderCode 	| urn:va:pat-gender:M |
+	|displayName 	| Eight, Imagepatient |
+	|genderCode 	| M 				  |
 	
 @US1123_oneresponse_summary
 Scenario: Search for existing patient by full name through RDK
@@ -18,14 +18,14 @@ Scenario: Search for existing patient by full name through RDK
 	And the client receives 2 RDK VistA result(s)
 	And the RDK search results contain
 	  | field       | value                             |
-      | displayName | Eight,Imagepatient                |
-      | birthDate   | 19530415                          |
+      | displayName | Eight, Imagepatient               |
+      | birthDate   | 04/15/1953                        |
       | familyName  | EIGHT                             |
-      | genderName  | MALE                              |
+      | genderName  | Male                              |
       | givenNames  | IMAGEPATIENT                      |
       | icn         | 5000000317V387446                 |
       | pid         | 9E7A;100816                       |
-      | ssn         |  *****1008                         |
+      | ssn         |  ***-**-1008                      |
 
 
 @US1123_zeroreponses
@@ -55,29 +55,35 @@ Scenario: Search for multiple patients by name through RDK
 	When the client performs a fullName summary search through RDK API with search term "Seven"
 	Then a successful response is returned
 	And the client receives 38 RDK VistA result(s)
-	And the RDK results contain the substring "Seven,Imagepatient"
-	And the RDK results contain the substring "Seven,Patient"
+	And the RDK search results contain 
+		|displayName|"Seven, Imagepatient"|
+	And the RDK search results contain 
+		|displayName|"Seven, Patient"|
 	
 @US1123_casecheck
 Scenario: Search for multiple patients by name through RDK
 	When the client performs a fullName search through RDK API with search term "SEVEN,PATIENT"
 	Then a successful response is returned
-	And the RDK results contain the substring "Seven,Patient"
+	And the RDK search results contain 
+		|displayName|"Seven, Patient"|
 	And the client receives 12 RDK VistA result(s)
 	When the client performs a fullName search through RDK API with search term "seven,patient"
 	Then a successful response is returned
-	And the RDK results contain the substring "Seven,Patient"
+	And the RDK search results contain 
+		|displayName|"Seven, Patient"|
 	And the client receives 12 RDK VistA result(s)
 	
 @US1123_casecheck_summary
 Scenario: Search for multiple patients by name through RDK
 	When the client performs a fullName summary search through RDK API with search term "SEVEN,PATIENT"
 	Then a successful response is returned
-	And the RDK results contain the substring "Seven,Patient"
+	And the RDK search results contain 
+		|displayName|"Seven, Patient"|
 	And the client receives 12 RDK VistA result(s)
 	When the client performs a fullName search through RDK API with search term "seven,patient"
 	Then a successful response is returned
-	And the RDK results contain the substring "Seven,Patient"
+	And the RDK search results contain 
+		|displayName|"Seven, Patient"|
 	And the client receives 12 RDK VistA result(s)
 	
 @US1123_startIndex

@@ -10,11 +10,11 @@ And(/^a request data was sent with pid "(.*?)"$/) do |arg1|
   query.add_acknowledge('true')
   path = query.path
   #p path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
   # puts JSON.pretty_generate(@response)
 end
 
-Then(/^authentication error returned$/) do
+Then(/^authentication error returned for an unauthenticated user$/) do
   #path = QueryRDKHS.new("").path
   query = RDKQuery.new('healthsummaries-getSitesInfoFromPatientData')
   query.add_parameter("pid", '')
@@ -23,7 +23,7 @@ Then(/^authentication error returned$/) do
   #p path
   user = ""
   pass = "bad"
-  @response = HTTPartyWithBasicAuth.get_with_authorization_for_user(path, user, pass)
+  @response = HTTPartyRDK.get_as_user(path, user, pass)
   result_array = JSON.parse(@response.body)
   expect(@response.code).to eq(400), "response code was #{@response.code}: response body #{@response.body}"
   #puts JSON.pretty_generate(@response)
@@ -39,7 +39,7 @@ When(/^a request data was sent without pid$/) do
   query.add_acknowledge('true')
   path = query.path
   #p path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
   @json_object = JSON.parse(@response.body)
   p @json_object
   result_array = @json_object
@@ -91,7 +91,7 @@ Given(/^a request data was sent with bad pid "(.*?)"$/) do |arg1|
   query.add_acknowledge('true')
   path = query.path
 
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
   @json_object = JSON.parse(@response.body)
   result_array = @json_object["data"]
   #puts JSON.pretty_generate(@json_object)
@@ -153,8 +153,8 @@ Given(/^a HS report request was sent with patientID "(.*?)", siteID "(.*?)", rep
   query.add_acknowledge('true')
   path = query.path
   p path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
-  #@response = HTTPartyWithBasicAuth.get_with_authorization_for_user(path, '9E7A;PW    ', 'PW    !!')
+  @response = HTTPartyRDK.get(path)
+  #@response = HTTPartyRDK.get_with_authorization_for_user(path, '9E7A;pu1234', 'pu1234!!')
   #p @response
   expect(@response.code).to eq(200)
 end
@@ -166,7 +166,7 @@ Given(/^a HS report request was sent with reportID "(.*?)", siteID "(.*?)"$/) do
   query.add_acknowledge('true')
   path = query.path
 
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 
   @json_object = JSON.parse(@response.body)
   result_array = @json_object
@@ -179,7 +179,7 @@ Given(/^a HS report request was sent with reportID "(.*?)", patientID "(.*?)"$/)
   query.add_parameter("id", reportId)
   query.add_acknowledge('true')
   path = query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
   @json_object = JSON.parse(@response.body)
   result_array = @json_object
   #puts JSON.pretty_generate(@json_object)
@@ -191,7 +191,7 @@ Given(/^a HS report request was sent with siteID "(.*?)", patientID "(.*?)"$/) d
   query.add_parameter("site.code", site)
   query.add_acknowledge('true')
   path = query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
   @json_object = JSON.parse(@response.body)
   result_array = @json_object
   #puts JSON.pretty_generate(@json_object)
@@ -254,7 +254,7 @@ Given(/^a HS report request was sent with siteID "(.*?)", patientID "(.*?)", and
   query.add_parameter("id", reportID)
   query.add_acknowledge('true')
   path = query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the report title missing error message returned$/) do

@@ -42,7 +42,7 @@ config should be worker-config.json 'config' object.
 function createErrorRecordWriter(logger, config) {
     if (arguments.length === 1) {
         config = arguments[0];
-        logUtil.initialize(config.loggers);
+        logUtil.initialize(config);
         logger = logUtil.get('jds-error-writer');
     }
 

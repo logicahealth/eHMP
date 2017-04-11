@@ -23,7 +23,7 @@ test = DomainsView.new
 # Info here ---> https://medsphere.org/docs/DOC-1003
 
 
-  # broker = VistaRPC4r::RPCBrokerConnection.new('IPADDRESS ', 9210, 'PW    ', 'PW    !!')
+  # broker = VistaRPC4r::RPCBrokerConnection.new('IP_ADDRESS', 9210, 'PW', 'PW')
   # broker.connect
   
   # p "The RPC Broker Connection status is #{broker.isConnected}"

@@ -35,7 +35,7 @@ class TabActive
   end
 
   def verify(html_element, expect_active)
-    has_focus = html_element.attribute('class').include?('active')    
+    has_focus = html_element.attribute('class').include?('active')
     p "#{has_focus} vs #{expect_active}"
     return has_focus == expect_active
   end
@@ -60,24 +60,24 @@ class MyCprsListTab < AccessBrowserV2
     add_verify(CucumberLabel.new('clinics_tab'), TabActive.new, AccessHtmlElement.new(:id, 'clinics'))
     add_verify(CucumberLabel.new('wards_tab'), TabActive.new, AccessHtmlElement.new(:id, 'wards'))
 
-    add_action(CucumberLabel.new('my_cprs_list_link'), ClickAction.new, AccessHtmlElement.new(:css, '#myCprsList a'))
-    add_action(CucumberLabel.new('clinics_link'), ClickAction.new, AccessHtmlElement.new(:css, '#clinics a'))
-    add_action(CucumberLabel.new('wards_link'), ClickAction.new, AccessHtmlElement.new(:css, '#wards a'))
+    add_action(CucumberLabel.new('my_cprs_list_link'), ClickAction.new, AccessHtmlElement.new(:css, '#myCprsList'))
+    add_action(CucumberLabel.new('clinics_link'), ClickAction.new, AccessHtmlElement.new(:css, '#clinics'))
+    add_action(CucumberLabel.new('wards_link'), ClickAction.new, AccessHtmlElement.new(:css, '#wards'))
     #a(:nationwide_link, css: '#global a')
-    add_action(CucumberLabel.new('nationwide_link'), ClickAction.new, AccessHtmlElement.new(:css, '#global a'))
-    add_verify(CucumberLabel.new('nationwide_tab'), TabActive.new, AccessHtmlElement.new(:id, 'global'))
+    add_action(CucumberLabel.new('nationwide_link'), ClickAction.new, AccessHtmlElement.new(:css, '#global'))
+    add_verify(CucumberLabel.new('nationwide_tab'), TabActive.new, AccessHtmlElement.new(:css, '#global'))
 
-    add_action(CucumberLabel.new('mysite_link'), ClickAction.new, AccessHtmlElement.new(:css, '#mySite a'))
-    add_verify(CucumberLabel.new('mysite_tab'), TabActive.new, AccessHtmlElement.new(:id, 'mySite'))
+    add_action(CucumberLabel.new('mysite_link'), ClickAction.new, AccessHtmlElement.new(:css, '#mySite'))
+    add_verify(CucumberLabel.new('mysite_tab'), TabActive.new, AccessHtmlElement.new(:css, '#mySite'))
 
-    add_verify(CucumberLabel.new('patient_name'), VerifyContainsText.new, AccessHtmlElement.new(:css, '.list-group a:nth-of-type(1) div .col-md-6.no-padding-right'))
-    add_verify(CucumberLabel.new('patient_SSN'), VerifyContainsText.new, AccessHtmlElement.new(:css, '.list-group a:nth-of-type(1) div .ssn'))
-    add_verify(CucumberLabel.new('patient_DOB'), VerifyContainsText.new, AccessHtmlElement.new(:css, '.list-group a:nth-of-type(1) div .dob'))
-    add_verify(CucumberLabel.new('patient_gender'), VerifyText.new, AccessHtmlElement.new(:css, '.list-group a:nth-of-type(1) div .col-md-2 span'))
+    add_verify(CucumberLabel.new('patient_name'), VerifyContainsText.new, AccessHtmlElement.new(:css, '#patient-search-main .patient-search-results .list-group-item'))
+    add_verify(CucumberLabel.new('patient_SSN'), VerifyContainsText.new, AccessHtmlElement.new(:css, '.list-group-item-text .ssn'))
+    add_verify(CucumberLabel.new('patient_DOB'), VerifyContainsText.new, AccessHtmlElement.new(:css, '.list-group-item-text .dob'))
+    add_verify(CucumberLabel.new('patient_gender'), VerifyText.new, AccessHtmlElement.new(:css, '.list-group-item-text div:nth-of-type(4)'))
   
-    patient_search_tabs = AccessHtmlElement.new(:css, '#patient-search-tab li a')
+    patient_search_tabs = AccessHtmlElement.new(:css, '#center .patient-search-sidebar ul li.flex-item-fixed:not(sub) button, #myCprsList')
     add_verify(CucumberLabel.new('Patient Search Tabs'), VerifyXpathCount.new(patient_search_tabs), patient_search_tabs)
-    patient_search_pills = AccessHtmlElement.new(:css, '#patient-search-pills li a')
+    patient_search_pills = AccessHtmlElement.new(:css, '#center .patient-search-sidebar ul li.sub button')
     add_verify(CucumberLabel.new('Patient Search Pills'), VerifyXpathCount.new(patient_search_pills), patient_search_pills)
   end
 
@@ -91,7 +91,7 @@ class MyCprsListTab < AccessBrowserV2
 end
 
 Given(/^the call to my cprs list is completed$/) do
-  patient_search = PatientSearch2.instance  
+  patient_search = PatientSearch2.instance
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { !patient_search.am_i_visible?("Active MyCPRSList") }
 end

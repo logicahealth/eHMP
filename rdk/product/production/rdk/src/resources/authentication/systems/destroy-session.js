@@ -12,7 +12,7 @@ function destroySession(req, res) {
 
     req.session.destroy(function(err) {
         if (err) {
-            req.logger.error('Error destroying session: ' + err.toString());
+            req.logger.error({error: err}, 'Error destroying session');
             return res.status(rdk.httpstatus.internal_server_error).rdkSend();
         }
         req.logger.debug('Destroyed session.');

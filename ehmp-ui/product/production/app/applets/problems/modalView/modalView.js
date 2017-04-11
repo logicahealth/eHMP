@@ -76,18 +76,7 @@ define([
                     theView: view
                 }),
                 'footerView': modalFooter.extend({
-                    model: model,
-                    templateHelpers: function() {
-                        if ((ADK.UserService.hasPermission('edit-condition-problem') || ADK.UserService.hasPermission('remove-patient-problem')) && pidSiteCode === siteCode) {
-                            return {
-                                data: true
-                            };
-                        } else {
-                            return {
-                                data: false
-                            };
-                        }
-                    }
+                    model: model
                 })
             };
 

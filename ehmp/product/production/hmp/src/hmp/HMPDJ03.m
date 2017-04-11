@@ -1,10 +1,12 @@
-HMPDJ03 ;ASMR/MKB - Consults,ClinProcedures,CLiO ;6/25/12  16:11
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 3
+HMPDJ03 ;SLC/MKB,ASMR/RRB,JD - Consults,ClinProcedures,CLiO ;4/4/16  15:33
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ ; DE4173 - JD - 3/30/16: Send consult notes for "activities" and "results".
  ;
  ; External References          DBIA#
  ; -------------------          -----
- ; ^SC                          10040
+ ; ^SC(                         10040
  ; ^TIU(8925.1                   5677
  ; ^VA(200                      10060
  ; %DT                          10003
@@ -39,14 +41,14 @@ GMRC1(ID) ; -- consult/request HMPX=^TMP("GMRCR",$J,"CS",HMPN,0)
  S ORDER=+$P(HMPX,U,8),CONS("orderName")=$P($$OI^ORX8(ORDER),U,2)
  S CONS("orderUid")=$$SETUID^HMPUTILS("order",DFN,ORDER)
  D GET^GMRCAPI(.HMPD,+HMPX) S X0=$G(HMPD(0)) ;=^GMR(123,ID,0)
- S X=$P(X0,U,6) S:X CONS("fromService")=$P($G(^SC(+X,0)),U)
+ S X=$P(X0,U,6) S:X CONS("fromService")=$$GET1^DIQ(44,X_",",.01)  ;DE2818
  S X=$P(X0,U,9) S:X]"" CONS("urgency")=X
  S X=$P(X0,U,10) S:X]"" CONS("place")=X
- S X=$P(X0,U,11) S:X CONS("attention")=$P($G(^VA(200,+X,0)),U)
+ S X=$P(X0,U,11) S:X CONS("attention")=$$GET1^DIQ(200,X_",",.01)  ;DE2818
  S X=$P(X0,U,13) S:X]"" CONS("lastAction")=X
  S X=$P(X0,U,14) I X D  ;ordering provider
  . S CONS("providerUid")=$$SETUID^HMPUTILS("user",,+X)
- . S CONS("providerName")=$P($G(^VA(200,+X,0)),U)
+ . S CONS("providerName")=$$GET1^DIQ(200,X_",",.01)  ;DE2818
  S X=$P(X0,U,18) I $L(X) D
  . S CONS("patientClassCode")="urn:va:patient-class:"_$S(X="I":"IMP",1:"AMB")
  . S CONS("patientClassName")=$S(X="I":"Inpatient",1:"Ambulatory")
@@ -76,17 +78,32 @@ GMRC1(ID) ; -- consult/request HMPX=^TMP("GMRCR",$J,"CS",HMPN,0)
  . S:$L($P(ACT2,U,3)) ACT("timeZone")=$P(ACT2,U,3)
  . I $L(ACT2) S ACT("enteredBy")=$P(ACT2,U),ACT("responsible")=$P(ACT2,U,2)
  . E  D  ;remote vs. local users
- .. S X=+$P(ACT0,U,4) S:X ACT("responsible")=$P($G(^VA(200,X,0)),U)
- .. S X=+$P(ACT0,U,5) S:X ACT("enteredBy")=$P($G(^VA(200,X,0)),U)
+ .. S X=+$P(ACT0,U,4) S:X ACT("responsible")=$$GET1^DIQ(200,X_",",.01)  ;DE2818
+ .. S X=+$P(ACT0,U,5) S:X ACT("enteredBy")=$$GET1^DIQ(200,X_",",.01)  ;DE2818
  . S X=$S($L(ACT3):ACT3,1:$P(ACT0,U,6)) S:$L(X) ACT("forwardedFrom")=X
- . S X=$P(ACT0,U,7) S:X ACT("previousAttention")=$P($G(^VA(200,X,0)),U)
+ . S X=$P(ACT0,U,7) S:X ACT("previousAttention")=$$GET1^DIQ(200,X_",",.01)  ;DE2818
  . S X=$P(ACT0,U,8) S:X ACT("device")=$$GET1^DIQ(3.5,X_",",.01)
- . S X=$P(ACT0,U,9) I X,X["TIU" S ACT("resultUid")=$$SETUID^HMPUTILS("document",DFN,+X)
+ . S X=$P(ACT0,U,9) I X,X["TIU" D
+ .. S ACT("resultUid")=$$SETUID^HMPUTILS("document",DFN,+X)
+ .. ;=== Start DE4173 for "activity" attribute
+ .. N HMP92,HMPNI
+ .. S HMPNI=$P($P(ACT0,U,9),";")  ;Note (document) IEN --> ^TIU(8925,HMPNI
+ .. I HMPNI'>0 Q
+ .. D SETTEXT^HMPUTILS($NA(^TIU(8925,HMPNI,"TEXT")),"HMP92")  ;Format a word processing field
+ .. M ACT("note","\")=HMP92
+ .. ;=== End DE4173 for "activity" attribute
  . I $D(HMPA(DA,1)) M HMPEASON=HMPA(DA,1) S ACT("comment")=$$STRING^HMPD(.HMPEASON)
  . M CONS("activity",DA)=ACT
  ;
  S HMPJ=0 F  S HMPJ=$O(HMPD(50,HMPJ)) Q:HMPJ<1  S X=$G(HMPD(50,HMPJ)) D
  . Q:'$D(@(U_$P(X,";",2)_+X_")"))  ;text deleted
+ . ;=== Start DE4173 for "results" attribute
+ . N HMP92,HMPNI
+ . S HMPNI=$P(X,";")  ;Note (document) IEN --> ^TIU(8925,HMPNI
+ . I HMPNI>0 D
+ .. D SETTEXT^HMPUTILS($NA(^TIU(8925,HMPNI,"TEXT")),"HMP92")  ;Format a word processing field
+ .. M CONS("results",HMPJ,"note","\")=HMP92
+ . ;=== End DE4173 for "results" attribute
  . S CONS("results",HMPJ,"uid")=$$SETUID^HMPUTILS("document",DFN,+X)
  . D EXTRACT^TIULQ(+X,"HMPTIU",,.01)
  . S CONS("results",HMPJ,"localTitle")=$G(HMPTIU(+X,.01,"E"))
@@ -95,7 +112,7 @@ GMRC1(ID) ; -- consult/request HMPX=^TMP("GMRCR",$J,"CS",HMPN,0)
  S CONS("lastUpdateTime")=$$EN^HMPSTMP("consult")
  S CONS("stampTime")=CONS("lastUpdateTime") ; RHL 20141231
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("consult",CONS("uid"),CONS("stampTime")) Q:HMPMETA=1  ;US6734
+ I $G(HMPMETA) D ADD^HMPMETA("consult",CONS("uid"),CONS("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("CONS","consult")
  Q
  ;
@@ -139,19 +156,20 @@ MC1(ID) ; -- clinical procedure HMPX=^TMP("MDHSP",$J,HMPN)
  . S:$P(TIUN,U,11) PROC("hasImages")="true"
  . K HMPT D EXTRACT^TIULQ(+TIUN,"HMPT",,".03;.05;1211",,,"I")
  . S X=+$G(HMPT(+TIUN,.03,"I")),PROC("encounterUid")=$$SETUID^HMPUTILS("visit",DFN,X)
- . S LOC=+$G(HMPT(+TIUN,1211,"I")) I LOC S LOC=LOC_U_$P($G(^SC(LOC,0)),U)
- . E  S X=$P(TIUN,U,6) S:$L(X) LOC=+$O(^SC("B",X,0))_U_X
+ . S LOC=+$G(HMPT(+TIUN,1211,"I")) I LOC S LOC=LOC_U_$$GET1^DIQ(44,LOC_",",.01)  ;DE2818
+ . E  S X=$P(TIUN,U,6) S:$L(X) LOC=+$O(^SC("B",X,0))_U_X  ; DE2818, ICR 10040
  . S:LOC PROC("locationUid")=$$SETUID^HMPUTILS("location",,+LOC),PROC("locationName")=$P(LOC,U,2),FAC=$$FAC^HMPD(+LOC)
  . I '$D(PROC("statusName")) S X=+$G(HMPT(+TIUN,.05,"I")),PROC("statusName")=$S(X<6:"PARTIAL RESULTS",1:"COMPLETE")
  . I '$G(PROC("results",+TIUN)) D NOTE(+TIUN)
  ; if no consult or note/visit ...
+ I 'CONS,'TIUN,RTN'="PR702^MDPS1" S PROC("results",1,"uid")=$$SETUID^HMPUTILS("document",DFN,GBL) ;DE1977 add link to report document
  S:'$D(PROC("statusName")) PROC("statusName")="COMPLETE"
  I '$D(FAC) S X=$P(X0,U,21),FAC=$S(X:$$STA^XUAF4(X)_U_$P($$NS^XUAF4(X),U),1:$$FAC^HMPD)
  D FACILITY^HMPUTILS(FAC,"PROC")
  S PROC("lastUpdateTime")=$$EN^HMPSTMP("procedure")
  S PROC("stampTime")=PROC("lastUpdateTime") ; RHL 20141231
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("procedure",PROC("uid"),PROC("stampTime")) Q:HMPMETA=1  ;US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("procedure",PROC("uid"),PROC("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("PROC","procedure")
  Q
  ;
@@ -207,6 +225,6 @@ MDC1(ID) ; -- clinical observation
  S CLIO("lastUpdateTime")=$$EN^HMPSTMP("obs") ; RHL 20141231
  S CLIO("stampTime")=CLIO("lastUpdateTime") ; RHL 20141231
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("obs",CLIO("uid"),CLIO("stampTime")) Q:HMPMETA=1  ;US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("obs",CLIO("uid"),CLIO("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("CLIO","obs")
  Q

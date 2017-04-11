@@ -7,32 +7,32 @@ var _ = require('underscore');
 
 require('../../../../env-setup');
 
-var uuid = require('node-uuid');
 var logger = require(global.VX_DUMMIES + 'dummy-logger');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
 var testHandler = require(global.VX_INTTESTS + 'framework/handler-test-framework').testHandler;
 var patientIdUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 var handler = require(global.VX_HANDLERS + 'enterprise-sync-request/enterprise-sync-request-handler');
 var VistaClient = require(global.VX_SUBSYSTEMS + 'vista/vista-client');
-// var queueConfig = require(global.VX_JOBFRAMEWORK + 'queue-config');
+// var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
 var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 
-// var PublisherRouter = require(global.VX_JOBFRAMEWORK + 'publisherRouter');
+// var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 var MviClient = require(global.VX_SUBSYSTEMS + 'mvi/mvi-client');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
-var JobStatusUpdater = require(global.VX_JOBFRAMEWORK + 'JobStatusUpdater');
+var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 var wConfig = require(global.VX_ROOT + 'worker-config');
 
 // logger = require('bunyan').createLogger({
-//     name: 'enterprise-sync-request-handler',
+//     name: 'dummy-log',
 //     level: 'debug'
 // });
 
 describe('enterprise-sync-request-handler.js', function() {
-    var patientIdentifier = patientIdUtil.create('icn', '5000000126V406128');
-    var job = jobUtil.createEnterpriseSyncRequest(patientIdentifier, uuid.v4(), false);
+    var patientIdentifier = patientIdUtil.create('icn', '5000000123V015819');
+    var jpid;
+    var job;
     var host = vx_sync_ip;
     var PORT       ;
     var tubename = 'vx-sync-test';
@@ -60,8 +60,8 @@ describe('enterprise-sync-request-handler.js', function() {
 
             'vista-9E7A-subscribe-request': {},
             'vista-C877-subscribe-request': {},
-            'vistahdr-2939-subscribe-request' :{},
-            'vistahdr-FFC7-subscribe-request' :{},
+            'vistahdr-2939-subscribe-request': {},
+            'vistahdr-FFC7-subscribe-request': {},
 
             'hdr-sync-request': {},
             'vler-sync-request': {},
@@ -109,7 +109,7 @@ describe('enterprise-sync-request-handler.js', function() {
 
             'record-enrichment': {},
             'store-record': {},
-            'vista-prioritization-request': {},
+            'event-prioritization-request': {},
             'operational-store-record': {},
             'publish-data-change-event': {},
             'patient-data-state-checker': {}
@@ -120,37 +120,39 @@ describe('enterprise-sync-request-handler.js', function() {
         'vistaSites': {
             '9E7A': _.defaults(wConfig.vistaSites['9E7A'], {
                 'name': 'panorama',
-                'host': 'IPADDRESS ',
+                'host': 'IP_ADDRESS',
                 'port': 9210,
-                'accessCode': 'PW    ',
-                'verifyCode': 'PW    !!',
+                'accessCode': 'PW',
+                'verifyCode': 'PW',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
-                'sendTimeout': 10000
+                'sendTimeout': 10000,
+                'stationNumber': 500
             }),
             'C877': _.defaults(wConfig.vistaSites.C877, {
                 'name': 'kodak',
-                'host': 'IPADDRESS ',
+                'host': 'IP_ADDRESS',
                 'port': 9210,
-                'accessCode': 'PW    ',
-                'verifyCode': 'PW    !!',
+                'accessCode': 'pu1234',
+                'verifyCode': 'pu1234!!',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
-                'sendTimeout': 10000
+                'sendTimeout': 10000,
+                'stationNumber':507
             })
         },
         beanstalkConfig: beanstalkConfig,
         mvi: {
             protocol: 'http',
             host: vx_sync_ip,
-            port: 54000,
+            port: 5400,
             path: '/mvi/correspondingIds'
         },
         jds: _.defaults(wConfig.jds, {
             protocol: 'http',
-            host: 'IPADDRESS ',
+            host: 'IP_ADDRESS',
             port: 9080
         }),
         rules: {
@@ -164,11 +166,75 @@ describe('enterprise-sync-request-handler.js', function() {
         },
         synchronizationRules: ['accept-all-rule'],
         'hdr': {
-            'operationMode' : 'PUB/SUB',
-            'hdrSites' : {
-                'FFC7': { 'stationNumber': '536' },
-                '2939': { 'stationNumber': '551' },
-                '76C6': { 'stationNumber': '547' }
+            'operationMode': 'PUB/SUB',
+            'hdrSites': {
+                'FFC7': {
+                    'stationNumber': '536'
+                },
+                '2939': {
+                    'stationNumber': '551'
+                },
+                '76C6': {
+                    'stationNumber': '547'
+                }
+            }
+        },
+        'vistaSitesByStationCombined': {
+            '500': _.defaults(wConfig.vistaSites['9E7A'], {
+                'name': 'panorama',
+                'host': 'IP_ADDRESS',
+                'port': 9210,
+                'accessCode': 'PW',
+                'verifyCode': 'PW',
+                'localIP': '127.0.0.1',
+                'localAddress': 'localhost',
+                'connectTimeout': 3000,
+                'sendTimeout': 10000,
+                'stationNumber': 500,
+                'siteHash': '9E7A'
+            }),
+            '507': _.defaults(wConfig.vistaSites.C877, {
+                'name': 'kodak',
+                'host': 'IP_ADDRESS',
+                'port': 9210,
+                'accessCode': 'pu1234',
+                'verifyCode': 'pu1234!!',
+                'localIP': '127.0.0.1',
+                'localAddress': 'localhost',
+                'connectTimeout': 3000,
+                'sendTimeout': 10000,
+                'stationNumber':507,
+                'siteHash': 'C877'
+            }),
+            '536': _.defaults(wConfig.hdr.hdrSites.FFC7, {
+                'name': 'panorama',
+                'host': 'IP_ADDRESS',
+                'port': 9210,
+                'accessCode': 'pu1234',
+                'verifyCode': 'pu1234!!',
+                'localIP': '127.0.0.1',
+                'localAddress': 'localhost',
+                'connectTimeout': 3000,
+                'sendTimeout': 10000,
+                'stationNumber': 536,
+                'siteHash': 'FFC7'
+            }),
+            '551': _.defaults(wConfig.hdr.hdrSites['2939'], {
+                'name': 'panorama',
+                'host': 'IP_ADDRESS',
+                'port': 9210,
+                'accessCode': 'PW',
+                'verifyCode': 'PW',
+                'localIP': '127.0.0.1',
+                'localAddress': 'localhost',
+                'connectTimeout': 3000,
+                'sendTimeout': 10000,
+                'stationNumber': 551,
+                'siteHash': '2939'
+            }),
+            '547': {
+                'stationNumber': 547,
+                'siteHash': '76C6'
             }
         }
     };
@@ -191,58 +257,78 @@ describe('enterprise-sync-request-handler.js', function() {
         jobUtil.vistahdrSubScribeRequestType('76C6'),
         // jobUtil.pgdSyncRequestType(),
         jobUtil.vlerSyncRequestType(),
-        // jobUtil.jmeadowsSyncRequestType()    //5000000126V406128 does not have a DOD record
+        // jobUtil.jmeadowsSyncRequestType()    //5000000123V015819 does not have a DOD record
     ];
 
-    testHandler(handler, logger, vistaHdrConfig, vistaHdrEnvironment, host, port, tubename, job, vistaHdrMatchingJobTypes, 90000, function(result) {
-        expect(result).toBeTruthy();
-    });
+    it('Set up and run test', function() {
 
-    describe('tests handler for storing patient identifiers', function() {
-        it('verify JDS has stored patient identifiers', function() {
-            var done = false;
-            // var expectedPatientIdentifierValues = [ '5000000126V406128', '9E7A;100625', 'C877;100625', 'HDR;5000000126V406128', 'DAS;5000000126V406128', 'VLER;5000000126V406128' ];
-            var expectedPatientIdentifierValues = ['2939;261', '5000000126V406128', '76C6;271', '9E7A;100625', 'C877;100625', 'FFC7;252', 'VHICID;1325', 'VLER;5000000126V406128'];
-            var jdsError, jdsResponse;
-            runs(function() {
-                vistaHdrEnvironment.jds.getPatientIdentifier(job, function(error, response) {
-                    done = true;
-                    jdsError = error;
-                    jdsResponse = response;
-                });
-            });
+        var setUpDone = false;
 
-            waitsFor(function() {
-                return done;
-            }, 'response from JDS', 10000);
+        runs(function() {
+            vistaHdrEnvironment.jds.storePatientIdentifier({
+                patientIdentifiers: [patientIdentifier.value]
+            }, function(error, response) {
+                expect(error).toBeFalsy();
 
-            runs(function() {
-                expect(jdsError).toBeFalsy();
-                expect(jdsResponse).toBeTruthy();
-                expect(val(jdsResponse, 'statusCode')).toEqual(200);
+                jpid = val(response, ['headers', 'location']).replace(/(^http:\/\/.*\/vpr\/jpid\/)/, '');
+                job = jobUtil.createEnterpriseSyncRequest(patientIdentifier, jpid, false);
 
-                var body;
-                try {
-                    body = JSON.parse(jdsResponse.body);
-                } catch (error) {
-                    // Do nothing
-                }
-
-                expect(val(body, 'patientIdentifiers')).toEqual(expectedPatientIdentifierValues);
+                setUpDone = true;
             });
         });
 
-        afterEach(function() {
-            //Clean up the patient we created for the test
-            var done = false;
-            runs(function() {
-                vistaHdrEnvironment.jds.deletePatientByPid('9E7A;100625', function() {
-                    done = true;
-                });
-            });
-            waitsFor(function() {
-                return done;
+        waitsFor(function() {
+            return setUpDone;
+        }, 'set up', 20000);
+
+        runs(function() {
+            testHandler(handler, logger, vistaHdrConfig, vistaHdrEnvironment, host, port, tubename, job, vistaHdrMatchingJobTypes, 90000, function(result) {
+                expect(result).toBeTruthy();
             });
         });
+
     });
+
+    afterEach(function() {
+        var checkIdentifiersDone = false;
+        // var expectedPatientIdentifierValues = [ '5000000123V015819', '9E7A;100625', 'C877;100625', 'HDR;5000000123V015819', 'DAS;5000000123V015819', 'VLER;5000000123V015819' ];
+        var expectedPatientIdentifierValues = ['2939;258', '5000000123V015819', '76C6;268', '9E7A;100622', 'C877;100622', 'FFC7;249', 'JPID;' + jpid, 'VLER;5000000123V015819'];
+        var jdsError, jdsResponse;
+        runs(function() {
+            vistaHdrEnvironment.jds.getPatientIdentifier(job, function(error, response) {
+                checkIdentifiersDone = true;
+                jdsError = error;
+                jdsResponse = response;
+            });
+        });
+
+        waitsFor(function() {
+            return checkIdentifiersDone;
+        }, 'response from JDS', 10000);
+
+        var teardownDone = false;
+
+        runs(function() {
+            expect(jdsError).toBeFalsy();
+            expect(jdsResponse).toBeTruthy();
+            expect(val(jdsResponse, 'statusCode')).toEqual(200);
+
+            var body;
+            try {
+                body = JSON.parse(jdsResponse.body);
+            } catch (error) {
+                // Do nothing
+            }
+
+            expect(val(body, 'patientIdentifiers')).toEqual(expectedPatientIdentifierValues);
+            vistaHdrEnvironment.jds.deletePatientByPid(patientIdentifier.value, function() {
+                teardownDone = true;
+            });
+        });
+
+        waitsFor(function() {
+            return teardownDone;
+        }, 'clear test patient from JDS');
+    });
+
 });

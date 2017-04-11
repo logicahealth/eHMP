@@ -15,8 +15,8 @@ Requires the authentication interceptor to run in order to add the user to the s
     + Body
 
             {
-                "accessCode": "PW    ",
-                "verifyCode": "PW    !!",
+                "accessCode": "pu1234",
+                "verifyCode": "pu1234!!",
                 "site": "9E7A"
             }
 
@@ -69,10 +69,10 @@ Requires the authentication interceptor to run in order to add the user to the s
                             "INFECTIOUS DISEASE"
                         ],
                         "team": [
-                            "TEAM1",
+                            "TEAM1"
                         ],
                         "roles": [
-                            "NURSE (RN)",
+                            "NURSE (RN)"
                         ]
                     }],
                     "requiresReset": false,
@@ -103,18 +103,13 @@ Requires the authentication interceptor to run in order to add the user to the s
             :[Schema]({{{common}}}/schemas/authentication-401.jsonschema)
 
 
-### Refresh Token [GET {{{path}}}{?fields}]
+### Refresh Token [GET {{{path}}}]
 
 Refreshes the current user session
 
 #### Notes
 
 Expects a session to already occur or it returns a blank object.
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 
@@ -142,10 +137,10 @@ Expects a session to already occur or it returns a blank object.
                             "INFECTIOUS DISEASE"
                         ],
                         "team": [
-                            "TEAM1",
+                            "TEAM1"
                         ],
                         "roles": [
-                            "NURSE (RN)",
+                            "NURSE (RN)"
                         ]
                     }],
                     "requiresReset": false,
@@ -208,18 +203,13 @@ Expects a session to exist else it returns nothing.
             :[Schema]({{{common}}}/schemas/message.jsonschema)
 
 
-### List VistA Instances [GET {{{path}}}/list{?fields}]
+### List VistA Instances [GET {{{path}}}/list]
 
 Return the list of vistas available
 
 #### Notes
 
 Is a readonly resource that returns an array.
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 
@@ -247,9 +237,9 @@ Is a readonly resource that returns an array.
 
             :[Schema]({{{common}}}/schemas/authentication_list-GET-200.jsonschema)
 
-### System Authenticate [POST {{{path}}}/systems]
+### Internal System Authenticate [POST {{{path}}}/systems/internal]
 
-Login to create a system session
+Login to create an internal system session
 
 The Authorization header will be the name of the system asking for access
 
@@ -298,9 +288,9 @@ Requires the system-authentication interceptor to run in order to add the system
 
             :[Schema]({{{common}}}/schemas/authentication-401.jsonschema)
 
-### System Authenticate [GET {{{path}}}/systems]
+### Internal System Authenticate [GET {{{path}}}/systems/internal]
 
-Request to refresh the expiration on a system session
+Request to refresh the expiration on an internal system session
 
 #### Notes
 
@@ -340,9 +330,131 @@ Requires the system-authentication interceptor to run in order to add the system
 
             :[Schema]({{{common}}}/schemas/authentication-status.jsonschema)
 
-### System Authenticate [DELETE {{{path}}}/systems]
+### Internal System Authenticate [DELETE {{{path}}}/systems/internal]
 
-Request to delete the system session
+Request to delete the internal system session
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "status": 200
+            }
+
+    + Schema
+
+            :[Schema]({{{common}}}/schemas/authentication-status.jsonschema)
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "status": 401
+            }
+
+    + Schema
+
+            :[Schema]({{{common}}}/schemas/authentication-status.jsonschema)
+
+
+### External System Authenticate [POST {{{path}}}/systems/external]
+
+Login to create an external system session
+
+The Authorization header will be the name of the system asking for access
+
+#### Notes
+
+Requires the system-authentication interceptor to run in order to add the system user to the session for returning data.
+
++ Request JSON Message (application/json)
+
+    + Headers
+
+            Authorization: CDS
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "data": {
+                    "name": "CDS",
+                    "permissions": [
+                        "read-patient-record",
+                        "read-active-medication"
+                    ],
+                    "permissionSets": ["read-access"],
+                    "expires": ""
+                },
+                "status": 200
+            }
+
+    + Schema
+
+            :[Schema]({{{common}}}/schemas/authentication_systems-200.jsonschema)
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error": "No DUZ returned from login request",
+                "message": "Not a valid ACCESS CODE/VERIFY CODE pair.",
+                "status": 401
+            }
+
+    + Schema
+
+            :[Schema]({{{common}}}/schemas/authentication-401.jsonschema)
+
+### External System Authenticate [GET {{{path}}}/systems/external]
+
+Request to refresh the expiration on an external system session
+
+#### Notes
+
+Requires the system-authentication interceptor to run in order to add the system user to the session for returning data.
+
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "data": {
+                    "name": "CDS",
+                    "permissions": [
+                        "read-patient-record",
+                        "read-active-medication"
+                    ],
+                    "permissionSets": ["read-access"],
+                    "expires": "2015-12-18T13:59:00.834Z"
+                },
+                "status": 200
+            }
+
+    + Schema
+
+            :[Schema]({{{common}}}/schemas/authentication_systems-200.jsonschema)
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "status": 401
+            }
+
+    + Schema
+
+            :[Schema]({{{common}}}/schemas/authentication-status.jsonschema)
+
+### External System Authenticate [DELETE {{{path}}}/systems/external]
+
+Request to delete the external system session
 
 + Response 200 (application/json)
 

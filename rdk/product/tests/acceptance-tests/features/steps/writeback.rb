@@ -3,7 +3,7 @@ When(/^the client requests for the patient param"(.*?)" and pid "(.*?)"$/) do |a
   query.add_parameter("param", arg1) 
   query.add_parameter("pid", arg2) 
   path = query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^wait (\d+) seconds$/) do |seconds|

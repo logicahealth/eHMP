@@ -1,5 +1,5 @@
-HMPDJ08 ;ASMR/MKB - Documents ;6/25/12  16:11
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 3
+HMPDJ08 ;SLC/MKB,ASMR/RRB,ASF,HM - TIU Documents;May 15, 2016 14:15
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ;11/19/14 - Fix missing MCAR documents tag EN1+4, EN1+13  js
@@ -61,7 +61,7 @@ EN1(HMPX,TIU,OUTPUT) ; -- document
  S DOC("localTitle")=$P(HMPX,U,2)
  S DOC("referenceDateTime")=$$JSONDT^HMPUTILS($P(HMPX,U,3))
  S X=$P(HMPX,U,6) D  ;S:$L(X) DOC("location")=X
- . N LOC,FAC S LOC=$S($L(X):+$O(^SC("B",X,0)),1:0)
+ . N LOC,FAC S LOC=$S($L(X):+$O(^SC("B",X,0)),1:0) ;ICR 10040 DE2818 ASF 11/10/15
  . S X=$$FAC^HMPD(LOC)
  . S DOC("facilityCode")=$P(X,U),DOC("facilityName")=$P(X,U,2)
  S X=$P(HMPX,U,7) I $L(X) S DOC("status")=$$UP^XLFSTR(X)
@@ -71,10 +71,11 @@ EN1(HMPX,TIU,OUTPUT) ; -- document
 B ; other TIU data
  D:TIU EXTRACT^TIULQ(IEN,"HMPTIU",,,,1,,1) ;".01:.04;1501:1508")
  S X=$G(HMPTIU(IEN,.01,"I")) S:X DOC("documentDefUid")=$$SETUID^HMPUTILS("doc-def",,X)
- S NT=$S(X:+$G(^TIU(8925.1,X,15)),1:$P(HMPX,U,10)) I NT D
+ S NT=$S(X:+$G(^TIU(8925.1,X,15)),1:$P(HMPX,U,10)) I NT D  ;ICR 2321 DE2818 ASF 11/10/15
  . S DOC("nationalTitle","vuid")="urn:va:vuid:"_$$VUID^HMPD(NT,8926.1)
  . S DOC("nationalTitle","name")=$$GET1^DIQ(8926.1,NT_",",.01)
  S X=$G(HMPTIU(IEN,1201,"I")) S:X DOC("entered")=$$JSONDT^HMPUTILS(X)
+ S X=$G(HMPTIU(IEN,1601,"I")) S:X DOC("amended")=$$JSONDT^HMPUTILS(X) ;amended date #DE5456
  S X=$G(HMPTIU(IEN,.09,"E")) S:$L(X) DOC("urgency")=X
  S X=TIU I TIU S X=+$G(HMPTIU(IEN,.01,"I")),X=$$CATG^HMPDTIU(X) ;2U type code
  S DOC("documentTypeCode")=X,DOC("documentTypeName")=$$TYPE(X)
@@ -90,12 +91,15 @@ C ; text blocks, signatures
  I X D USER(.I,+X,$P(X,";",3),"AU")    ;author
  M ES=HMPTIU(IEN) S X=$P(HMPX,"//",2) ;non-TIU, put into ES for use:
  I $L(X) S ES(1502,"I")=+X,ES(1502,"E")=$P(X,";",2),ES(1501,"I")=$P(X,";",3)
+ ; USER API calling convention
+ ; USER(Incrementer,UserIEN,UserDisplayName,UserRole,SignedByDate,SignedByName,SignedByTitle)
  I $G(ES(1501,"I")) D USER(.I,ES(1502,"I"),ES(1502,"E"),"S",ES(1501,"I"),$G(ES(1503,"E")),$G(ES(1504,"E")))
  I $G(ES(1507,"I")) D USER(.I,ES(1508,"I"),ES(1508,"E"),"C",ES(1507,"I"),$G(ES(1509,"E")),$G(ES(1510,"E")))
  I $G(ES(1204,"I")) D USER(.I,ES(1204,"I"),ES(1204,"E"),"ES")    ;expected signer
  I $G(ES(1208,"I")) D USER(.I,ES(1208,"I"),ES(1208,"E"),"EC")    ;expected cosigner
  I $G(ES(1302,"I")) D USER(.I,ES(1302,"I"),ES(1302,"E"),"E")     ;entered
  I $G(ES(1209,"I")) D USER(.I,ES(1209,"I"),ES(1209,"E"),"ATT")   ;attending
+ I $G(ES(1601,"I")) D USER(.I,ES(1602,"I"),ES(1602,"E"),"AM",ES(1603,"I"),$G(ES(1604,"E")),$G(ES(1605,"E"))) ;amended by #DE5456
  I $G(HMPTEXT) D
  . S X=$S(TIU:$NA(HMPTIU(IEN,"TEXT")),1:$NA(^TMP("HMPTEXT",$J,IEN)))
  . K ^TMP($J,"HMP TIU TEXT")
@@ -115,6 +119,9 @@ D ; addenda
  . I $G(HMPADD(1208,"I")) D USER(.I,HMPADD(1208,"I"),HMPADD(1208,"E"),"EC")
  . I $G(HMPADD(1209,"I")) D USER(.I,HMPADD(1209,"I"),HMPADD(1209,"E"),"ATT")
  . Q:'$G(HMPTEXT)  K ^TMP($J,"HMP TIU TEXT")
+ . D  ; DE3153, replace "not PRINT" with "not VIEW" MARCH 17, 2016 HM
+ ..  N V,X,T,R,L S V="HMPTIU",T=" You may not PRINT",R=" You may not VIEW",L=$L(T)
+ ..  F  S V=$Q(@V) Q:V=""  S X=@V S:$E(X,1,L)=T @V=R_$E(X,L+1,$L(X))
  . S X=$NA(HMPTIU(IEN,"ZADD",HMPA,"TEXT"))
  . D SETTEXT^HMPUTILS(X,$NA(^TMP($J,"HMP TIU TEXT")))
  . M DOC("text",HMPT,"content","\")=^TMP($J,"HMP TIU TEXT")
@@ -123,7 +130,7 @@ ENQ ; end
  S DOC("lastUpdateTime")=$$EN^HMPSTMP("document") ;RHL 20150102
  S DOC("stampTime")=DOC("lastUpdateTime") ; RHL 20150102
  ;US6734 - pre-compile metastamp
- I '$D(OUTPUT),$G(HMPMETA) D ADD^HMPMETA("document",DOC("uid"),DOC("stampTime")) Q:HMPMETA=1  ;US11019/US6734
+ I '$D(OUTPUT),$G(HMPMETA) D ADD^HMPMETA("document",DOC("uid"),DOC("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  I '$D(OUTPUT) D ADD^HMPDJ("DOC","document") Q
  M OUTPUT=DOC
  Q
@@ -131,7 +138,7 @@ ENQ ; end
 USER(N,IEN,NAME,ROLE,DATE,SBN,SBT) ; -- set author, signer(s)
  Q:'$G(IEN)  S N=+$G(N)+1
  S DOC("text",HMPT,"clinicians",N,"uid")=$$SETUID^HMPUTILS("user",,IEN)
- S DOC("text",HMPT,"clinicians",N,"name")=$S($L($G(NAME)):NAME,1:$P($G(^VA(200,IEN,0)),U))
+ S DOC("text",HMPT,"clinicians",N,"name")=$S($L($G(NAME)):NAME,1:$P($G(^VA(200,IEN,0)),U)) ;ICR 10060 DE2818 ASF 11/10/15
  S DOC("text",HMPT,"clinicians",N,"role")=$G(ROLE)
  Q:'$G(DATE)  ;not co/signed
  S DOC("text",HMPT,"clinicians",N,"signedDateTime")=$$JSONDT^HMPUTILS(DATE)
@@ -149,6 +156,7 @@ SETUP ; -- convert FILTER("attribute") = value to TIU criteria
  ;          FILTER("status")   = 'signed','unsigned','all'
  ; Returns: CLASS,[SUBCLASS,STATUS]
  ;
+ K CLASS,SUBCLASS,STATUS
  N TYPE,STS,CP
  S TYPE=$$UP^XLFSTR($G(FILTER("category")))
  S CLASS=0,(SUBCLASS,STATUS)=""
@@ -183,7 +191,7 @@ SETUP ; -- convert FILTER("attribute") = value to TIU criteria
  Q
  ;
 LR() ; -- Return ien of Lab class
- N Y S Y=+$O(^TIU(8925.1,"B","LR LABORATORY REPORTS",0))
+ N Y S Y=+$O(^TIU(8925.1,"B","LR LABORATORY REPORTS",0)) ;ICR 2321 DE2818 ASF 11/10/15
  I Y>0,$S($P($G(^TIU(8925.1,Y,0)),U,4)="CL":0,$P($G(^(0)),U,4)="DC":0,1:1) S Y=0
  Q Y
  ;

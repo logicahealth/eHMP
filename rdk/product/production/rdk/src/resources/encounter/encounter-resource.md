@@ -2,7 +2,7 @@
 
 ## Encounter encounter Info [{{{path}}}]
 
-### Get [GET {{{path}}}/info{?pid}{&dateTime}{&locationUid}{&fields}]
+### Get [GET {{{path}}}/info{?pid}{&dateTime}{&locationUid}]
 
 Get encounter info for specific location and datetime
 
@@ -13,8 +13,6 @@ Get encounter info for specific location and datetime
     + dateTime (string, required) - Datetime of location
 
     + locationUid (string, required) - Location uid
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

@@ -1,66 +1,64 @@
-<div class="result-doc" data-doc-uid="{{ uid }}">
-	<div class="row">
-		<div class="col-xs-2">
-			<p class="text-right all-margin-no">
-				<span class="color-grey-darker">Local Title:</span>
-			</p>
+<div class="detail-modal-content">
+	<div class="result-doc bottom-margin-lg left-margin-sm" data-doc-uid="{{ uid }}">
+		<hr aria-hidden="true">
+		<div class="row top-margin-sm bottom-margin-xs">
+			<div class="col-xs-3">
+				<p>
+					<span><strong>Local Title</strong></span><br />
+					<span>{{localTitle}}</span>
+				</p>
+			</div>
+			<div class="col-xs-3">
+				<p>
+					<span><strong>Date Of Note</strong></span><br />
+					<span>
+					{{#if radiologyReportBool}}
+						{{formatDate referenceDateTime "MM/DD/YYYY - HH:mm"}}
+					{{else}}
+						{{formatDate entered "MM/DD/YYYY - HH:mm"}}
+					{{/if}}
+					</span>
+				</p>
+			</div>
+			<div class="col-xs-3">
+				<p>
+					<span><strong>Author</strong></span><br />
+					{{#if radiologyReportBool}}
+					<span data-toggle="tooltip" data-placement="right" title="Signed: {{formatDate signedDateTime 'MM/DD/YYYY - HH:mm'}}">
+						{{authorDisplayName}}<i class="left-padding-xs icon-signed"></i>
+					</span>
+					{{else}}
+					<span class="all-margin-no">{{authorDisplayName}}</span>
+					{{/if}}
+				</p>
+			</div>
+			<div class="col-xs-3">
+				<p>
+					<span><strong>Status</strong></span><br />
+					<span class="{{statusDisplayClass}}">
+                    {{#if statusDisplayName}}
+                        {{statusDisplayName}}
+                    {{else if statusName}}
+                        {{statusName}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                    </span>
+				</p>
+			</div>
 		</div>
-		<div class="col-xs-8" >
-			<p class="all-margin-no">{{localTitle}}</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-2">
-			<p class="text-right all-margin-no">
-				<span class="color-grey-darker">Date Of Note:</span>
-			</p>
-		</div>
-		<div class="col-xs-8">
-			<p class="all-margin-no">
-			{{#if radiologyReportBool}}
-				{{formatDate referenceDateTime "MM/DD/YYYY - HH:mm"}}
-			{{else}}
-				{{formatDate entered "MM/DD/YYYY - HH:mm"}}
-			{{/if}}
-			</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-2">
-			<p class="text-right all-margin-no">
-				<span class="color-grey-darker">Author:</span>
-			</p>
-		</div>
-		<div class="col-xs-8">
-			{{#if radiologyReportBool}}
-				<span data-toggle="tooltip" data-placement="right" title="Signed: {{formatDate signedDateTime 'MM/DD/YYYY - HH:mm'}}">{{authorDisplayName}}<i class="fa fa-pencil"></i></span>
-			{{else}}
-				<p class="all-margin-no">{{authorDisplayName}}</p>
-			{{/if}}
-		</div>
-	</div>
-	<div class="row bottom-margin-lg">
-		<div class="col-xs-2">
-			<p class="text-right all-margin-no">
-				<span class="color-grey-darker">Status:</span>
-			</p>
-		</div>
-		<div class="col-xs-8 {{statusDisplayClass}}">
-			<p class="all-margin-no">{{statusDisplayName}}</p>
-		</div>
-	</div>
-
-	{{#if dodPdfDocumentUri}}
-		<object class="dod-content pdf" data="{{dodPdfDocumentUri}}" type="application/pdf">
-			A PDF plugin is required to display DoD documents. Please contact your system administrator for support.
-		</object>
-	{{else}}
-		{{#if dodComplexNoteContent}}
-			<iframe id="dodContent" class="dod-content" seamless sandbox="allow-same-origin" src="#"></iframe>
+		{{#if dodComplexNotePdf}}
+		<div class="pdf-viewer-container dod-content"></div>
+		<!--<div id="pdf">
+          <iframe src="pdf.html" style="width: 100%; height: 100%;" frameborder="0" scrolling="no">
+               <p>It appears your web browser doesn't support iframes.</p>
+          </iframe>
+   		</div>-->
+		{{else}} {{#if dodComplexNoteContent}}
+		<iframe id="dodContent" class="dod-content" seamless sandbox="allow-same-origin" src="#"></iframe>
 		{{else}}
-			<pre class="font-size-12">{{content}}</pre>
-		{{/if}}
-	{{/if}}
-
-	<div class="document-detail-addenda-region"></div>
+			<pre>{{content}}</pre>
+		{{/if}} {{/if}}
+		<div class="document-detail-addenda-region"></div>
+	</div>
 </div>

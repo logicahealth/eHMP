@@ -9,6 +9,8 @@ define([
     var medication;
     var el;
     var noData = "No Data";
+    var todayDayLightSetting = moment().isDST();
+    var lastFilledDayLightSetting;
 
     beforeEach(function() {
         medication = MedicationOrderModel.create();
@@ -1874,33 +1876,33 @@ define([
         });
     });
 
-    describe("Ensure getEarlierStop().stoppedMoment handles unexpected dates appropriately", function() {
+    describe("Ensure getEarlierStopAsMoment() handles unexpected dates appropriately", function() {
         it("Should NOT return a valid moment when stopped and overallStop are undefined", function() {
             medication.set("overallStop", "");
             medication.set("stopped", "");
-            expect(medication.getEarlierStop().stoppedMoment.isValid()).toBe(false);
+            expect(medication.getEarlierStopAsMoment().isValid()).toBe(false);
         });
         it("Should return a valid moment when stopped is undefined and overallStop is defined", function() {
             medication.set("stopped", "");
             medication.set("overallStop", "19061023");
-            expect(medication.getEarlierStop().stoppedMoment.isValid()).toBe(true);
+            expect(medication.getEarlierStopAsMoment().isValid()).toBe(true);
             var expectedOverallStop = moment("19061023", "YYYYMMDD");
-            var earlierIsSameAsExpectedOverallStop = medication.getEarlierStop().stoppedMoment.isSame(expectedOverallStop);
+            var earlierIsSameAsExpectedOverallStop = medication.getEarlierStopAsMoment().isSame(expectedOverallStop);
             expect(earlierIsSameAsExpectedOverallStop).toBe(true);
         });
         it("Should return a valid moment when overallStop is undefined and stopped is defined", function() {
             medication.set("overallStop", "");
             medication.set("stopped", "19061023");
-            expect(medication.getEarlierStop().stoppedMoment.isValid()).toBe(true);
+            expect(medication.getEarlierStopAsMoment().isValid()).toBe(true);
             var expectedStopped = moment("19061023", "YYYYMMDD");
-            var earlierIsSameAsExpectedStopped = medication.getEarlierStop().stoppedMoment.isSame(expectedStopped);
+            var earlierIsSameAsExpectedStopped = medication.getEarlierStopAsMoment().isSame(expectedStopped);
             expect(earlierIsSameAsExpectedStopped).toBe(true);
         });
         it("Should return overallStop when stopped is before overallStart and overallStop is after overallStart", function() {
             medication.set("stopped", "20090711");
             medication.set("overallStart", "20090712");
             medication.set("overallStop", "20090713");
-            var earlier = medication.getEarlierStop().stoppedMoment;
+            var earlier = medication.getEarlierStopAsMoment();
             var overallStop = medication.getOverallStopAsMoment();
             expect(earlier.isSame(overallStop)).toBe(true);
         });
@@ -1908,7 +1910,7 @@ define([
             medication.set("overallStop", "20090711");
             medication.set("overallStart", "20090712");
             medication.set("stopped", "20090713");
-            var earlier = medication.getEarlierStop().stoppedMoment;
+            var earlier = medication.getEarlierStopAsMoment();
             var stopped = medication.getStoppedAsMoment();
             expect(earlier.isSame(stopped)).toBe(true);
         });
@@ -2257,20 +2259,32 @@ define([
     });
 
     describe("Fillable test suite - active medications", function() {
-        it("Confirm 1h fillable time displays as hours, not minutes", function() {
+        it("Confirm 1h fillable time displays as days", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 1;
 
-            medication.set("lastFilled", moment().subtract(23, 'hours'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(23, 'hours').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(23, 'hours').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(23, 'hours').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(23, 'hours');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
-            expect(result.date).toBe("1h");
-            expect(result.description).toBe('This medication is active and fillable for 1 hour.');
+            expect(result.date).toBe("1d");
+            expect(result.description).toBe('This medication is active and fillable for 1 day.');
         });
         it("Confirm 18d fillable time displays as days", function() {
             var timeSinceDate = {};
@@ -2278,29 +2292,53 @@ define([
             orders[0].fillsRemaining = 3;
             orders[0].daysSupply = 7;
 
-            medication.set("lastFilled", moment().subtract(3, 'days').add(26, 'minutes'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(3, 'days').add(26, 'minutes').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(3, 'days').add(26, 'minutes').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(3, 'days').add(26, 'minutes').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(3, 'days').add(26, 'minutes');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
             expect(result.date).toBe("18d");
             expect(result.description).toBe('This medication is active and fillable for 18 days.');
         });
-        it("Confirm 47h fillable time displays as hours, not days", function() {
+        it("Confirm 47h fillable time displays as days", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 2;
 
-            medication.set("lastFilled", moment().subtract(1, 'hours').add(10, 'minutes'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(1, 'hours').add(10, 'minutes').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(1, 'hours').add(10, 'minutes').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(1, 'hours').add(10, 'minutes').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(1, 'hours').add(10, 'minutes');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
-            expect(result.date).toBe("47h");
-            expect(result.description).toBe('This medication is active and fillable for 47 hours.');
+            expect(result.date).toBe("2d");
+            expect(result.description).toBe('This medication is active and fillable for 2 days.');
         });
         //-------- Start Kyle's scenarios-------------------------------------------------------------------------------
         it("Confirm 18d fillable time when both time are at midnight", function() {
@@ -2312,6 +2350,8 @@ define([
             medication.set("lastFilled", moment("01/29/2016 12:00", "MM/DD/YYYY HH:mm"));
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate, moment("02/01/2016 12:00", "MM/DD/YYYY HH:mm"));
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
@@ -2327,6 +2367,8 @@ define([
             medication.set("lastFilled", moment("01/29/2016 12:00", "MM/DD/YYYY HH:mm"));
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate, moment("02/01/2016 12:01", "MM/DD/YYYY HH:mm"));
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
@@ -2342,6 +2384,8 @@ define([
             medication.set("lastFilled", moment("01/29/2016 00:00", "MM/DD/YYYY HH:mm"));
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate, moment("02/01/2016 11:59", "MM/DD/YYYY HH:mm"));
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
@@ -2357,6 +2401,8 @@ define([
             medication.set("lastFilled", moment("01/29/2016 00:00", "MM/DD/YYYY HH:mm"));
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate, moment("01/31/2016 23:59", "MM/DD/YYYY HH:mm"));
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
@@ -2364,125 +2410,212 @@ define([
             expect(result.description).toBe('This medication is active and fillable for 18 days.');
         });
         //-------- End Kyle's scenarios---------------------------------------------------------------------------------
-        it("Confirm 47h fillable time displays as hours when last filled is 15 minutes pass the hour", function() {
+        it("Confirm 47h fillable time displays as days when last filled is 15 minutes pass the hour", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 2;
 
-            medication.set("lastFilled", moment().subtract(1, 'hours').add(15, 'minutes'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(1, 'hours').add(15, 'minutes').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(1, 'hours').add(15, 'minutes').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(1, 'hours').add(15, 'minutes').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(1, 'hours').add(15, 'minutes');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
-            expect(result.date).toBe("47h");
-            expect(result.description).toBe('This medication is active and fillable for 47 hours.');
+            expect(result.date).toBe("2d");
+            expect(result.description).toBe('This medication is active and fillable for 2 days.');
         });
-        it("Confirm 48h fillable time displays as hours when last filled is 30 minutes pass the hour", function() {
+        it("Confirm 48h fillable time displays as days when last filled is 30 minutes pass the hour", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 2;
 
-            medication.set("lastFilled", moment().subtract(30, 'minutes'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(30, 'minutes').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(30, 'minutes').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(30, 'minutes').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(30, 'minutes');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
-            expect(result.date).toBe("48h");
-            expect(result.description).toBe('This medication is active and fillable for 48 hours.');
+            expect(result.date).toBe("2d");
+            expect(result.description).toBe('This medication is active and fillable for 2 days.');
         });
-        it("Confirm 35h fillable time displays as hours when last filled is 32 minutes pass the hour", function() {
+        it("Confirm 35h fillable time displays as days when last filled is 32 minutes pass the hour", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 2;
 
-            medication.set("lastFilled", moment().subtract(13, 'hours').add(32, 'minutes'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(13, 'hours').add(32, 'minutes').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(13, 'hours').add(32, 'minutes').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(13, 'hours').add(32, 'minutes').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(13, 'hours').add(32, 'minutes');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
-            expect(result.date).toBe("36h");
-            expect(result.description).toBe('This medication is active and fillable for 36 hours.');
+            expect(result.date).toBe("1d");
+            expect(result.description).toBe('This medication is active and fillable for 1 day.');
         });
-        it("Confirm 35h fillable time displays as hours when last filled is 45 minutes pass the hour", function() {
+        it("Confirm 35h fillable time displays as days when last filled is 45 minutes pass the hour", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 2;
 
-            medication.set("lastFilled", moment().subtract(14, 'hours').add(45, 'minutes'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(14, 'hours').add(45, 'minutes').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(14, 'hours').add(45, 'minutes').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(14, 'hours').add(45, 'minutes').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(14, 'hours').add(45, 'minutes');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
-            expect(result.date).toBe("35h");
-            expect(result.description).toBe('This medication is active and fillable for 35 hours.');
+            expect(result.date).toBe("1d");
+            expect(result.description).toBe('This medication is active and fillable for 1 day.');
         });
-        it("Confirm 33h fillable time displays as hours when last filled is 59 minutes pass the hour", function() {
+        it("Confirm 33h fillable time displays as days when last filled is 59 minutes pass the hour", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 2;
 
-            medication.set("lastFilled", moment().subtract(16, 'hours').add(59, 'minutes'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(16, 'hours').add(59, 'minutes').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(16, 'hours').add(59, 'minutes').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(16, 'hours').add(59, 'minutes').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(16, 'hours').add(59, 'minutes');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
-            expect(result.date).toBe("33h");
-            expect(result.description).toBe('This medication is active and fillable for 33 hours.');
+            expect(result.date).toBe("1d");
+            expect(result.description).toBe('This medication is active and fillable for 1 day.');
         });
-        it("Confirm 0 refills displays when lastFilled is undefined ", function() {
+        it("Confirm 'No Data' when medication is missing data to determine fillable status (lastFilled, fillsRemaining, fills)", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
-            orders[0].fillsRemaining = 1;
+            orders[0].fillsRemaining = "";
             orders[0].daysSupply = 30;
 
-            medication.set("lastFilled", undefined);
+            medication.set("lastFilled", "");
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("fills", []);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate);
-            expect(result.display).toBe("0 Refills");
+            expect(result.display).toBe("No Data");
             expect(result.label).toBe("label label-danger");
             expect(result.date).toBe(undefined);
-            expect(result.description).toBe("This medication is active with no refills remaining.");
+            expect(result.description).toBe('This medication was not filled or missing data to determine its status.');
         });
-        it("Confirm 59m fillable time displays as minutes, not hours", function() {
+        it("Confirm 59m fillable time displays as days", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 1;
 
-            medication.set("lastFilled", moment().subtract(23, 'hours').subtract(10, 'minutes'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(23, 'hours').subtract(10, 'minutes').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(23, 'hours').subtract(10, 'minutes').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(23, 'hours').subtract(10, 'minutes').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(23, 'hours').subtract(10, 'minutes');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
-            expect(result.date).toBe("50'");
-            expect(result.description).toBe("This medication is active and fillable for 50'.");
+            expect(result.date).toBe("1d");
+            expect(result.description).toBe("This medication is active and fillable for 1 day.");
         });
-        it("Confirm 36h fillable time displays", function() {
+        it("Confirm 2d fillable time displays", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 2;
 
-            medication.set("lastFilled", moment().subtract(12, 'hours'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(12, 'hours').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(12, 'hours').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(12, 'hours').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(12, 'hours');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
-            expect(result.date).toBe("36h");
-            expect(result.description).toBe('This medication is active and fillable for 36 hours.');
+            expect(result.date).toBe("2d");
+            expect(result.description).toBe('This medication is active and fillable for 2 days.');
         });
         it("Confirm 2d fillable time displays as days, not hours", function() {
             var timeSinceDate = {};
@@ -2490,9 +2623,21 @@ define([
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 30;
 
-            medication.set("lastFilled", moment().subtract(28, 'days'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(28, 'days').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(28, 'days').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(28, 'days').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(28, 'days');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
@@ -2505,10 +2650,21 @@ define([
             orders[0].fillsRemaining = 3;
             orders[0].daysSupply = 30;
 
-            medication.set("lastFilled", moment().subtract(30, 'days'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(30, 'days').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(30, 'days').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(30, 'days').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(30, 'days');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
             medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
 
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
@@ -2522,10 +2678,21 @@ define([
             orders[0].fillsRemaining = 3;
             orders[0].daysSupply = 30;
 
-            medication.set("lastFilled", moment().subtract(29, 'days'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(29, 'days').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(29, 'days').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(29, 'days').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(29, 'days');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
             medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
 
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
@@ -2539,10 +2706,21 @@ define([
             orders[0].fillsRemaining = 25;
             orders[0].daysSupply = 30;
 
-            medication.set("lastFilled", moment().subtract(20, 'days'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(20, 'days').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(20, 'days').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(20, 'days').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(20, 'days');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
             medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
 
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
@@ -2556,10 +2734,21 @@ define([
             orders[0].fillsRemaining = 25;
             orders[0].daysSupply = 30;
 
-            medication.set("lastFilled", moment().subtract(19, 'days'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(19, 'days').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(19, 'days').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(19, 'days').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(19, 'days');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
             medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
 
             var result = medication.getNextMedication(timeSinceDate);
             expect(result.display).toBe("Fillable for ");
@@ -2593,7 +2782,7 @@ define([
             expect(result.description).toBe('This medication was discontinued 10 days ago.');
         });
         //--------------------------------- Begin edge cases --------------------------------------
-        it("Confirm active with no refills when stopped date is same as overallStop date", function() {
+        it("Confirm active with not refillable when stopped date is same as overallStop date", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 6;
@@ -2607,12 +2796,12 @@ define([
             medication.set("stopped", '20161102');
 
             var result = medication.getNextMedication(timeSinceDate, moment('11/02/2016 00:00', 'MM/DD/YYYY HH:mm'));
-            expect(result.display).toBe("0 Refills");
-            expect(result.label).toBe("label label-danger");
+            expect(result.display).toBe("Not Refillable");
+            expect(result.label).toBe("label label-warning");
             expect(result.date).toBe(undefined);
-            expect(result.description).toBe('This medication is active with no refills remaining.');
+            expect(result.description).toBe('This medication is active but expiration date has passed.');
         });
-        it("Confirm active and fillable for 24 hours when stopped is one day before overallStop date", function() {
+        it("Confirm active and fillable for 1 day when stopped is one day before overallStop date", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 1;
@@ -2628,10 +2817,10 @@ define([
             var result = medication.getNextMedication(timeSinceDate, moment('02/01/2017 00:00', 'MM/DD/YYYY HH:mm'));
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
-            expect(result.date).toBe("24h");
-            expect(result.description).toBe('This medication is active and fillable for 24 hours.');
+            expect(result.date).toBe("1d");
+            expect(result.description).toBe('This medication is active and fillable for 1 day.');
         });
-        it("Confirm 0 refills when stopped date is future and overallStop is in the past", function() {
+        it("Confirm 41d fillable time when stopped date is future and overallStop is in the past", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 11;
@@ -2644,13 +2833,13 @@ define([
             medication.set("overallStop", "20150605");
             medication.set("stopped", "20160605");
 
-            var result = medication.getNextMedication(timeSinceDate);
-            expect(result.display).toBe("0 Refills");
-            expect(result.label).toBe("label label-danger");
-            expect(result.date).toBe(undefined);
-            expect(result.description).toBe('This medication is active with no refills remaining.');
+            var result = medication.getNextMedication(timeSinceDate, moment('04/25/2016 12:00', 'MM/DD/YYYY HH:mm'));
+            expect(result.display).toBe("Fillable for ");
+            expect(result.label).toBe("label label-warning");
+            expect(result.date).toBe("41d");
+            expect(result.description).toBe('This medication is active and fillable for 41 days.');
         });
-        it("Confirm active and fillable for 24 hours, uses overallStop date when stopped date is undefined", function() {
+        it("Confirm active and fillable for 1 day, uses overallStop date when stopped date is undefined", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 1;
@@ -2666,10 +2855,10 @@ define([
             var result = medication.getNextMedication(timeSinceDate, moment('02/01/2017 00:00', 'MM/DD/YYYY HH:mm'));
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
-            expect(result.date).toBe("24h");
-            expect(result.description).toBe('This medication is active and fillable for 24 hours.');
+            expect(result.date).toBe("1d");
+            expect(result.description).toBe('This medication is active and fillable for 1 day.');
         });
-        it("Confirm active and fillable for 24 hours, uses stopped date when overallStop date is undefined", function() {
+        it("Confirm active and fillable for 1 day, uses stopped date when overallStop date is undefined", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 1;
@@ -2685,8 +2874,8 @@ define([
             var result = medication.getNextMedication(timeSinceDate, moment('02/01/2017 00:00', 'MM/DD/YYYY HH:mm'));
             expect(result.display).toBe("Fillable for ");
             expect(result.label).toBe("label label-warning");
-            expect(result.date).toBe("24h");
-            expect(result.description).toBe('This medication is active and fillable for 24 hours.');
+            expect(result.date).toBe("1d");
+            expect(result.description).toBe('This medication is active and fillable for 1 day.');
         });
         it("Confirm active and fillable for 60 days, when overallStop and stopped date are undefined", function() {
             var timeSinceDate = {};
@@ -2721,12 +2910,12 @@ define([
             medication.set("stopped", undefined);
 
             var result = medication.getNextMedication(timeSinceDate, moment('02/01/2017 00:00', 'MM/DD/YYYY HH:mm'));
-            expect(result.display).toBe("0 Refills");
-            expect(result.label).toBe("label label-danger");
+            expect(result.display).toBe("Not Refillable");
+            expect(result.label).toBe("label label-warning");
             expect(result.date).toBe(undefined);
-            expect(result.description).toBe('This medication is active with no refills remaining.');
+            expect(result.description).toBe('This medication is active but expiration date has passed.');
         });
-        it("Confirm no refills when stopped and overallStop dates are in the past and medication status is active", function() {
+        it("Confirm not refillable when stopped and overallStop dates are in the past and medication status is active", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 11;
@@ -2740,29 +2929,44 @@ define([
             medication.set("stopped", "20150605");
 
             var result = medication.getNextMedication(timeSinceDate);
-            expect(result.display).toBe("0 Refills");
-            expect(result.label).toBe("label label-danger");
+            expect(result.display).toBe("Not Refillable");
+            expect(result.label).toBe("label label-warning");
             expect(result.date).toBe(undefined);
-            expect(result.description).toBe('This medication is active with no refills remaining.');
+            expect(result.description).toBe('This medication is active but expiration date has passed.');
         });
-        it("Confirm ??", function() {
-            var timeSinceDate = {};
-            var orders = medication.get('orders');
-            orders[0].fillsRemaining = 11;
-            orders[0].daysSupply = 30;
-
-            medication.set("lastFilled", "20140604");
-            medication.set("vaStatus", 'active');
-            medication.set("orders", orders);
-            medication.set("overallStart", '201602020000');
-            medication.set("overallStop", "20150605");
-            medication.set("stopped", "20150605");
+        it("Confirm 'Expired ??' when expiration date is 10 Days in the future and medication status is 'Expired'", function() {
+            var timeSinceDate = {
+                count: -10,
+                isRecent: false,
+                isValid: true,
+                timeSince: "",
+                timeSinceDescription: "10 Days",
+                timeUnits: "d"
+            };
+            medication.set("vaStatus", 'expired');
 
             var result = medication.getNextMedication(timeSinceDate);
-            expect(result.display).toBe("0 Refills");
+            expect(result.display).toBe("expired");
             expect(result.label).toBe("label label-danger");
-            expect(result.date).toBe(undefined);
-            expect(result.description).toBe('This medication is active with no refills remaining.');
+            expect(result.date).toBe("??");
+            expect(result.description).toBe('This medication is listed as expired but expiration date has not yet passed.');
+        });
+        it("Confirm 'Discontinued ??' when discontinue date is 10 Days in the future and medication status is 'Discontinued'", function() {
+            var timeSinceDate = {
+                count: -10,
+                isRecent: false,
+                isValid: true,
+                timeSince: "",
+                timeSinceDescription: "10 Days",
+                timeUnits: "d"
+            };
+            medication.set("vaStatus", 'discontinued');
+
+            var result = medication.getNextMedication(timeSinceDate);
+            expect(result.display).toBe("discontinued");
+            expect(result.label).toBe("label label-default");
+            expect(result.date).toBe("??");
+            expect(result.description).toBe('This medication is listed as discontinued but discontinue date has not yet passed.');
         });
         //---------------------------------- End of edge cases ------------------------------------
         it("Should be fillable for 5m", function() {
@@ -2774,7 +2978,8 @@ define([
             medication.set("lastFilled", moment());
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
-            // medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
 
             var result = medication.getNextMedication(timeSinceDate);
             medication.set("vaStatus", 'active');
@@ -2791,7 +2996,17 @@ define([
             orders[0].fillsRemaining = 0;
             orders[0].daysSupply = 30;
 
-            medication.set("lastFilled", moment().subtract(30, 'days'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(30, 'days').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(30, 'days').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(30, 'days').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(30, 'days');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
             medication.set("stopped", moment().add(1095, 'days'));
@@ -2808,7 +3023,17 @@ define([
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 30;
 
-            medication.set("lastFilled", moment().subtract(10, 'days'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(10, 'days').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(10, 'days').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(10, 'days').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(10, 'days');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'pending');
             medication.set("orders", orders);
             medication.set("stopped", moment().add(1095, 'days'));
@@ -2834,7 +3059,17 @@ define([
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 30;
 
-            medication.set("lastFilled", moment().subtract(10, 'days'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(10, 'days').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(10, 'days').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(10, 'days').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(10, 'days');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'discontinued');
             medication.set("orders", orders);
             medication.set("stopped", moment().add(365, 'days'));
@@ -2860,6 +3095,16 @@ define([
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 30;
 
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(10, 'days').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(10, 'days').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(10, 'days').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(10, 'days');
+            }
+
             medication.set("lastFilled", moment().subtract(10, 'days'));
             medication.set("vaStatus", 'expired');
             medication.set("orders", orders);
@@ -2879,10 +3124,21 @@ define([
             orders[0].fillsRemaining = 2;
             orders[0].daysSupply = 90;
 
-            medication.set("lastFilled", moment().subtract(30, 'days'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(30, 'days').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(30, 'days').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(30, 'days').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(30, 'days');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
             medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
 
             var result = medication.getNextMedication(timeSinceDate);
             medication.set("vaStatus", 'active');
@@ -2897,10 +3153,21 @@ define([
             orders[0].fillsRemaining = 1;
             orders[0].daysSupply = 90;
 
-            medication.set("lastFilled", moment().subtract(30, 'days'));
+            var lastFilled;
+            lastFilledDayLightSetting = moment().subtract(30, 'days').isDST();
+            if (todayDayLightSetting === false && lastFilledDayLightSetting === true) {
+                lastFilled = moment().subtract(30, 'days').add(60, 'minutes');
+            } else if (todayDayLightSetting === true && lastFilledDayLightSetting === false) {
+                lastFilled = moment().subtract(30, 'days').subtract(60, 'minutes');
+            } else {
+                lastFilled = moment().subtract(30, 'days');
+            }
+
+            medication.set("lastFilled", lastFilled);
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
             medication.set("stopped", moment().add(1095, 'days'));
+            medication.set("overallStop", moment().add(1095, 'days'));
 
             medication.set("vaStatus", 'active');
             var result = medication.getNextMedication(timeSinceDate);

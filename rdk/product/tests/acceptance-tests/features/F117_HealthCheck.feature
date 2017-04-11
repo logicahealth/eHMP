@@ -117,7 +117,15 @@ Scenario: Request healthcheck details
 		|field	  |value     |		
 		|healthy  |true      |
 		|type     |resource |
-   And the RDK healthcheck response "patient-record-labsbytype" contains
+   And the RDK healthcheck response "patient-record-searchbytype-lab" contains
+		|field	  |value     |
+		|healthy  |true      |
+		|type     |resource |
+   And the RDK healthcheck response "patient-record-searchbytype-immunization" contains
+		|field	  |value     |
+		|healthy  |true      |
+		|type     |resource |
+   And the RDK healthcheck response "patient-record-searchbytype-vital" contains
 		|field	  |value     |
 		|healthy  |true      |
 		|type     |resource |
@@ -322,9 +330,17 @@ Scenario: Request healthcheck checks
 		|field	  |value     |
 		| name	  |allergy-op-data-symptoms |
 		|type     |resource |
-   And the RDK healthcheck response "patient-record-labsbytype" contains
+   And the RDK healthcheck response "patient-record-searchbytype-lab" contains
 		|field	  |value     |
-		| name	  |patient-record-labsbytype |
+		| name	  |patient-record-searchbytype-lab |
+		|type     |resource |
+   And the RDK healthcheck response "patient-record-searchbytype-immunization" contains
+		|field	  |value     |
+		| name	  |patient-record-searchbytype-immunization |
+		|type     |resource |
+   And the RDK healthcheck response "patient-record-searchbytype-vital" contains
+		|field	  |value     |
+		| name	  |patient-record-searchbytype-vital |
 		|type     |resource |
    And the RDK healthcheck response "med-op-data-search" contains
 		|field	  |value     |
@@ -524,7 +540,15 @@ Scenario: Request healthcheck noupdate
 		|field	  |value     |		
 		|healthy  |true      |
 		|type     |resource |
-   And the RDK healthcheck response "patient-record-labsbytype" contains
+   And the RDK healthcheck response "patient-record-searchbytype-lab" contains
+		|field	  |value     |
+		|healthy  |true      |
+		|type     |resource |
+   And the RDK healthcheck response "patient-record-searchbytype-immunization" contains
+		|field	  |value     |
+		|healthy  |true      |
+		|type     |resource |
+   And the RDK healthcheck response "patient-record-searchbytype-vital" contains
 		|field	  |value     |
 		|healthy  |true      |
 		|type     |resource |

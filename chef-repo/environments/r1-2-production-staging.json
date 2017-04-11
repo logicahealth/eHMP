@@ -1,0 +1,20 @@
+{
+  "name": "r1-2-production-staging",
+  "description": "r1.2 production staging chef environment",
+  "override_attributes": {
+    "external_data_bag_nodes": {
+      "production-staging-deploy-r1-2": [
+        "hdr_2939",
+        "hdr_FFC7",
+        "jmeadows",
+        "mvi",
+        "pgd",
+        "vhic",
+        "vista-kodak",
+        "vista-panorama",
+        "vler"
+      ]
+    },
+    "mocked_data_servers": "true"
+  }
+}

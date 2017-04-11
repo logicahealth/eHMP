@@ -147,7 +147,7 @@ MATCH ;; match query (DISABLED for NOW)
  D ASSERT(1,$G(ARY("data","totalItems")))
  D ASSERT("urn:vadc:BL110",$G(ARY("data","items",1,"products",1,"drugClassCode")))
  Q
-TALLY ;; @TEST tally items
+TALLY ;; @TEST tally items by PID
  N HTTPERR
  K ^TMP($J)
  D QTALLY^VPRJPQ(VPRJTPID,"kind")
@@ -156,6 +156,16 @@ TALLY ;; @TEST tally items
  D ASSERT(0,$G(ERR(0),0),"JSON conversion error")
  D ASSERT(2,ARY("data","totalItems"))
  D ASSERT(4,ARY("data","items",2,"count"))
+ Q
+TALLY2 ;; @TEST get tally items by JPID
+ N HTTPERR,RESULT,ARGS,ARY
+ K ^TMP($J)
+ S ARGS("pid")=VPRJTPID
+ S ARGS("countName")="collection"
+ D COUNT^VPRJPR(.RESULT,.ARGS)
+ D DECODE^VPRJSON(RESULT,"ARY","ERR")
+ I $D(ERR) D ASSERT(0,$D(ERR),"JSON conversion error") ZWRITE ERR Q
+ D ASSERT(3,$G(ARY("data","items",3,"count")),"count not found or wrong")
  Q
 UID ;; @TEST get uid
  N HTTPERR

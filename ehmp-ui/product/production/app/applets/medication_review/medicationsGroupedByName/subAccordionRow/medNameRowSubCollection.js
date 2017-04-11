@@ -15,7 +15,7 @@ define([
             }
         },
         comparator: function(med) {
-            return -1 * med.getEarlierStop().stoppedMoment.valueOf();
+            return -1 * med.getEarlierStopAsMoment().valueOf();
         }
     });
 });

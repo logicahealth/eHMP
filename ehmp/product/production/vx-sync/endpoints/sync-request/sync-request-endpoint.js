@@ -23,17 +23,50 @@ var healthcheckUtil = require(global.VX_UTILS + 'healthcheck-utils');
 function registerSyncAPI(log, config, environment, app) {
     var jobFactory = function (req) {
         var forcedSync = [];
+        var priority = 1 ; // level one is the hightest priority and it is the default value
         if (req && _.isFunction(req.param)) {
-            forcedSync = req.param('forcedSync');
-        }
-        if (forcedSync !== true) {
-            try {
-                forcedSync = JSON.parse(forcedSync);
-            } catch (e) {
-                forcedSync = [];
+            if (!_.isUndefined(req.param('forcedSync'))) {
+                var forceSyncParam = req.param('forcedSync');
+                if (forceSyncParam !== true) {
+                    try {
+                        forcedSync = JSON.parse(forceSyncParam);
+                    } catch (e) {
+                        log.warn('Error parsing forcedSync : %s, %s', forceSyncParam, e);
+                    }
+                }
+                else {
+                    forcedSync = forceSyncParam;
+                }
+            }
+            if (!_.isUndefined(req.param('priority'))){
+                try {
+                    var priParam = parseInt(req.param('priority'), 10); // use 10 based.
+                    if (isNaN(priParam)) {
+                        log.warn('invalid priority value: %s, not a valid number', priParam);
+                    }
+                    else if (!_.isNumber(priParam)) {
+                        log.warn('invalid priority value: %s, not a valid number', priParam);
+                    }
+                    else if (priParam < 1) {
+                        log.warn('priority value: %s is less than 1, reset to 1', priParam);
+                        priority = 1;
+                    }
+                    else if (priParam > 100) {
+                        log.warn('priority value: %s is greater than 100, reset to 100', priParam);
+                        priority = 100;
+                    }
+                    else {
+                        priority = priParam;
+                    }
+                }
+                catch(err) {
+                    log.warn('error parsing priority parameter: %s, %s', priParam, err);
+                }
             }
         }
-        return jobUtil.createEnterpriseSyncRequest(req.patientIdentifier, req.jpid, forcedSync, req.body.demographics);
+
+        // validate the prioroty paramenter
+        return jobUtil.createEnterpriseSyncRequest(req.patientIdentifier, req.jpid, forcedSync, req.body.demographics, priority);
     };
     var jobMiddleware = new JobAPI(log, config, environment);
     var idMiddleware = new PatientIdentifierAPI(log, config, environment.jds, environment.mvi);
@@ -46,8 +79,8 @@ function registerSyncAPI(log, config, environment, app) {
 
     var doLoadMethods = [
         idMiddleware.validatePatientIdentifier.bind(idMiddleware),
+        idMiddleware.verifyPatientExists,
         idMiddleware.resolveJPID,
-        idMiddleware.createJPID,
         jobMiddleware.buildJob.bind(jobMiddleware, jobFactory),
         logSyncMetrics,
         jobMiddleware.getJobHistory,
@@ -179,11 +212,11 @@ function registerSyncAPI(log, config, environment, app) {
             if(nullUtil.isNullish(req.body.demographics,'ssn')) {
                 log.warn('No ssn found in demographic record');
             }
-            if(nullUtil.isNullish(req.body.demographics,'birthdate')) {
+            if(nullUtil.isNullish(req.body.demographics,'birthDate')) {
                 if(!nullUtil.isNullish(req.body.demographics,'dob')) {
-                    req.body.demographics.birthdate = req.body.demographics.dob;
+                    req.body.demographics.birthDate = req.body.demographics.dob;
                 } else {
-                    log.warn('No birthdate found in demographic record');
+                    log.warn('No birthDate found in demographic record');
                 }
             }
 
@@ -199,7 +232,7 @@ function registerSyncAPI(log, config, environment, app) {
                 req.body.demographics.icn = req.body.icn;
             }
         }
-        req.body.demographics = _.pick(req.body.demographics, 'icn','displayName','fullname','givenNames','familyName','genderCode','genderName','birthdate','ssn','address','telecom');
+        req.body.demographics = _.pick(req.body.demographics, 'icn','displayName','fullname','givenNames','familyName','genderCode','genderName','birthDate','ssn','address','telecom');
         if(!nullUtil.isNullish(req.body, 'icn')) {
             req.patientIdentifier = idUtil.create('icn', req.body.icn);
         } else if (!nullUtil.isNullish(req.body, 'edipi')) {
@@ -285,7 +318,7 @@ function registerSyncAPI(log, config, environment, app) {
     function getStatusJob(req, res, next) {
         log.debug('sync-request-endpoint.getStatus() : Enter');
         if (req.jpid === false) {
-            return res.status(404).send('Patient identifier not found [' + req.patientIdentifier.value + ']');
+            return res.status(404).send('Patient identifier not found ');
         }
         res.job = {
             'jpid': req.jpid

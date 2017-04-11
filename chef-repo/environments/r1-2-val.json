@@ -1,0 +1,9 @@
+{
+  "name": "r1-2-val",
+  "description": "r1.2 Val chef environment",
+  "override_attributes": {
+    "ehmp_provision": {
+      "jds": { "aws": { "instance_type": "m3.large" }}
+    }
+  }
+}

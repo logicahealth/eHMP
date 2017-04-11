@@ -1,4 +1,4 @@
-# Author::     ua Timberman (<joshua@opscode.com>)
+# Author:: Joshua Timberman (<joshua@opscode.com>)
 # Cookbook Name:: java
 # Recipe:: ibm
 #

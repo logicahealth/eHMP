@@ -73,7 +73,7 @@ function getTimeline(req, res) {
 function getData(req, callback) {
     var pid = req.param('pid');
 
-    //encounter: http://IP             /vpr/10108V420871/index/encounter
+    //encounter: http://IP_ADDRESS:PORT/vpr/10108V420871/index/encounter
 
     async.parallel({
             encounters: function(callback) {
@@ -220,11 +220,7 @@ function sortInpatientOutpatient(results, logger) {
 
                     break;
                 default:
-                    logger.error('Unparseable encounter encountered: ' + util.inspect(encounter, {
-                        showHidden: true,
-                        depth: null,
-                        colors: true
-                    }));
+                    logger.error({encounter: encounter}, 'Unparseable encounter encountered');
                     //  noop - exclude from results if no kind
             }
         });

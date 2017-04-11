@@ -9,7 +9,7 @@ action :execute do
   nexus = ChefVault::Item.load(
     "jenkins", "nexus",
     node_name: "jenkins",
-    client_key_path: "/jenkins.pem"
+    client_key_path: "/etc/chef/host_key.pem"
   ).to_hash
   nexus_creds = nexus['credentials']
 
@@ -18,7 +18,7 @@ action :execute do
       upload_yum_cache(new_resource.yum_cache_path, new_resource.upload_url, nexus_creds["username"], nexus_creds["password"])
     end
   end
-  
+
 end
 
 def upload_yum_cache(folder, nexus_url, username, password)

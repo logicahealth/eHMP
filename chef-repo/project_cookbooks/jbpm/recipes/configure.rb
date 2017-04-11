@@ -5,7 +5,7 @@
 
 rdknode = find_node_by_role("resource_server", node[:stack])
 cdsinvocation = find_optional_node_by_role("cdsinvocation", node[:stack])
-admin_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_admin_password", 'n25q2mp#h4')["password"]
+admin_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_admin_password", node[:data_bag_string])["password"]
 
 jbpm_check_war_deployment "business-central"
 
@@ -21,6 +21,11 @@ end
 
 template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/cdsconfig.properties" do
   variables(:cdsinvocation => cdsinvocation)
+  notifies :restart, "service[jboss]"
+end
+
+template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/rdkwritebackconfig.properties" do
+  variables(:rdknode => rdknode)
   notifies :restart, "service[jboss]"
 end
 
@@ -55,22 +60,20 @@ execute "Set configuration for authentication in standalone.xml" do
   notifies :stop, "service[jboss]", :immediately
 end
 
-cookbook_file "#{Chef::Config['file_cache_path']}/multiple_last_resources_config.xml"
-
-# Using sed to insert lines in the configuration file, since the file is modified by the jbpm installation and therefore can't be a template
-execute "Set configuration for multiple last resources in standalone.xml" do
-  command "sed -i '/<system-properties>/r multiple_last_resources_config.xml' #{node[:jbpm][:home]}/configuration/standalone.xml"
-  cwd "#{Chef::Config[:file_cache_path]}"
-  not_if "grep com.arjuna.ats.arjuna.allowMultipleLastResources #{node[:jbpm][:home]}/configuration/standalone.xml"
-  notifies :stop, "service[jboss]", :immediately
-end
-
 # suppress warnings because they are shown every second and fill up the log file
 cookbook_file "#{Chef::Config['file_cache_path']}/suppress_jbpm_warnings.xml"
 execute "Limit jbpm log warning messages in standalone.xml" do
   command "sed -i '/periodic-rotating-file-handler>/r suppress_jbpm_warnings.xml' #{node[:jbpm][:home]}/configuration/standalone.xml"
   cwd "#{Chef::Config[:file_cache_path]}"
   not_if "grep org.hibernate.loader #{node[:jbpm][:home]}/configuration/standalone.xml"
+  notifies :stop, "service[jboss]", :immediately
+end
+
+cookbook_file "#{Chef::Config['file_cache_path']}/system_properties.xml"
+execute "Disable demo repository in standalone.xml" do
+  command "sed -i '/<system-properties>/r system_properties.xml' #{node[:jbpm][:home]}/configuration/standalone.xml"
+  cwd "#{Chef::Config[:file_cache_path]}"
+  not_if "grep 'property name=\"org.kie.demo\" value=\"false\"' #{node[:jbpm][:home]}/configuration/standalone.xml"
   notifies :stop, "service[jboss]", :immediately
 end
 
@@ -108,11 +111,39 @@ remote_file "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/
    notifies :restart, "service[jboss]"
 end
 
+remote_file "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/EhmpServices.jar" do
+   owner 'jboss'
+   mode   '0755'
+   source node[:jbpm_ehmpservices_artifacts][:source]
+   use_conditional_get true
+   notifies :restart, "service[jboss]"
+end
+
 remote_file "#{node[:jbpm][:home]}/deployments/tasksservice.war" do
    owner 'jboss'
    mode   '0755'
    source node[:jbpm_tasksservice_artifacts][:source]
    use_conditional_get true
+end
+
+jbpm_check_war_deployment "business-central"
+
+template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/classes/META-INF/persistence.xml" do
+  variables(:dialect => "Oracle10gDialect",
+            :base_route_entity => node[:jbpm][:configure][:base_route_entity],
+            :task_instance_entity => node[:jbpm][:configure][:task_instance_entity],
+            :process_instance_entity => node[:jbpm][:configure][:process_instance_entity],
+            :task_route_entity => node[:jbpm][:configure][:task_route_entity],
+            :process_route_entity => node[:jbpm][:configure][:process_route_entity],
+            :event_listener_entity => node[:jbpm][:configure][:event_listener_entity],
+            :event_match_action_entity => node[:jbpm][:configure][:event_match_action_entity],
+            :event_match_criteria_entity => node[:jbpm][:configure][:event_match_criteria_entity],
+            :simple_match_entity => node[:jbpm][:configure][:simple_match_entity],
+            :signal_instance_entity => node[:jbpm][:configure][:signal_instance_entity],
+            :processed_event_state_entity => node[:jbpm][:configure][:processed_event_state_entity]
+
+    )
+  notifies :stop, "service[jboss]", :immediately
 end
 
 template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/classes/META-INF/kie-wb-deployment-descriptor.xml" do

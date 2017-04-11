@@ -2,7 +2,7 @@
 
 ## Condition get Problems [{{{path}}}]
 
-### Fhir patient condition [GET {{{path}}}{?limit}{&date-asserted}{&onset}{&fields}]
+### Fhir patient condition [GET {{{path}}}{?limit}{&date-asserted}{&onset}]
 
 Converts a vpr 'Problem' resource into a FHIR 'Condition' resource.
 
@@ -15,8 +15,6 @@ Converts a vpr 'Problem' resource into a FHIR 'Condition' resource.
     + date-asserted (string, optional) - date-asserted date/time (e.g. date-asserted=>2015/01/15)
 
     + onset (string, optional) - onset date/time (e.g. onset=>2015/01/15)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

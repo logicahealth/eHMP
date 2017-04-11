@@ -18,3 +18,4 @@ default[:ehmp_balancer][:token] = "NSS FIPS 140-2 Certificate DB"
 
 default[:ehmp_balancer][:lb_method] = "byrequests"
 default[:ehmp_balancer][:sticky_session] = "JSESSIONID" # NOTE: Set to 'DISABLED' to turn off sticky-session support
+default[:ehmp_balancer][:rdk_timeout] = 480 # 7 minutes rdk timeout + 1 = 8 min

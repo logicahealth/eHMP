@@ -8,7 +8,7 @@ include_recipe "apache2_wrapper"
 # Fix for https://bugzilla.redhat.com/show_bug.cgi?id=1182337
 yum_package "nss-softokn-freebl >= 3.14.3-19.el6_6"
 
-directory node[:ehmp_balancer][:ssl_dir] do 
+directory node[:ehmp_balancer][:ssl_dir] do
   recursive true
 end.run_action(:delete)
 
@@ -46,7 +46,8 @@ template "#{node[:apache][:dir]}/sites-available/proxy_balancer.conf" do
     lazy {
       {
         :ehmp_ui_members => find_multiple_nodes_by_role("ehmp-ui", node[:stack]),
-        :rdk_members => find_multiple_nodes_by_role("resource_server", node[:stack])
+        :rdk_members => find_multiple_nodes_by_role("resource_server", node[:stack]),
+        :ssoi_members => find_optional_node_by_role("ssoi", node[:stack])
       }
     }
   )
@@ -87,50 +88,40 @@ fqdn = node[:ehmp_balancer][:fqdn]
 certs = nil
 begin
   cert_data_bag_item_name = fqdn.gsub(/\.+/, '')
-  certs = Chef::EncryptedDataBagItem.load("certs", cert_data_bag_item_name, 'n25q2mp#h4')
-  Chef::Log.debug  "#{cert_data_bag_item_name} data bag found"
+  certs = Chef::EncryptedDataBagItem.load("certs", cert_data_bag_item_name, node[:data_bag_string])
 rescue
   Chef::Log.warn "Did not find data bag item 'certs' #{cert_data_bag_item_name}, this could be okay, we will proceed to make a self-singed cert instead."
 end
 
 if certs.nil?
-  Chef::Log.warn "Searching for wildcard cert..."
   begin
     # certificate chain file
-    certs = Chef::EncryptedDataBagItem.load("certs", "wildcard", 'n25q2mp#h4')
-    Chef::Log.warn "wildcard cert found"
+    certs = Chef::EncryptedDataBagItem.load("certs", "wildcard", node[:data_bag_string])
   rescue
     Chef::Log.warn "Did not find data bag item 'certs' 'wildcard', this could be okay, we will proceed to for a server specific cert instead."
   end
 end
 
 if certs.nil?
-  puts "*** create temporary certs"
-  puts "***     private key"
   execute "create-private-key" do
     command "openssl genrsa > #{node[:ehmp_balancer][:ssl_cert_key_file]}"
     not_if "test -f #{node[:ehmp_balancer][:ssl_cert_key_file]}"
   end
 
-  puts "***     certificate"
   execute "create-certificate" do
     command "openssl req -new -x509 -key #{node[:ehmp_balancer][:ssl_cert_key_file]} -out #{node[:ehmp_balancer][:ssl_cert_file]} -days 365 <<EOF
 US
 VA
 Chantilly
-Agilex
+Vistacore
 Healthcare
 #{node[:ehmp_balancer][:fqdn]}
-jay.flowers@agilex.com
+vistacore@vistacore.us
 EOF"
     only_if { IO.popen("openssl x509 -text -in #{node[:ehmp_balancer][:ssl_cert_file]}").grep(/#{fqdn}/).size == 0 }
   end
 else
-  puts "certs were retrieved... creating/appending certificate files"
   %w(ssl_cert_file ssl_cert_key_file ssl_cert_chain_file).each do |cert_name|
-    puts "cert_name:  #{cert_name}"
-    puts "data: #{certs[cert_name]}"
-
     file node[:ehmp_balancer][cert_name] do
       action :create
       content Array(certs[cert_name]).join("\n")
@@ -140,15 +131,13 @@ else
 end
 
 # Export server certificate file to pkcs12 formatted file
-p "/usr/bin/openssl pkcs12 -export -in #{node[:ehmp_balancer][:ssl_cert_file]} -inkey #{node[:ehmp_balancer][:ssl_cert_key_file]} -out #{node[:ehmp_balancer][:ssl_cert_file]}.p12 -name Server-Cert"
 execute "convert-key" do
-  command "/usr/bin/openssl pkcs12 -export -in #{node[:ehmp_balancer][:ssl_cert_file]} -inkey #{node[:ehmp_balancer][:ssl_cert_key_file]} -out #{node[:ehmp_balancer][:ssl_cert_file]}.p12 -name 'Server-Cert' -password pass:" 
+  command "/usr/bin/openssl pkcs12 -export -in #{node[:ehmp_balancer][:ssl_cert_file]} -inkey #{node[:ehmp_balancer][:ssl_cert_key_file]} -out #{node[:ehmp_balancer][:ssl_cert_file]}.p12 -name 'Server-Cert' -password pass:"
 end
 
-nss_keystore_password = Chef::EncryptedDataBagItem.load("credentials", "ehmp_balancer_nss_keystore_password", 'n25q2mp#h4')["password"]
+nss_keystore_password = Chef::EncryptedDataBagItem.load("credentials", "ehmp_balancer_nss_keystore_password", node[:data_bag_string])["password"]
 
 # Create a temporary password file for use by the certificate keystore utilities
-p "tmp pw file:  #{node[:ehmp_balancer][:ssl_dir]}/password-file"
 template "#{node[:ehmp_balancer][:ssl_dir]}/password-file" do
   source "password-file.erb"
   owner node[:apache][:user]
@@ -159,7 +148,6 @@ template "#{node[:ehmp_balancer][:ssl_dir]}/password-file" do
 end
 
 # Create a working script file to create and load the keystore database
-p "generate keystore script:  #{node[:ehmp_balancer][:ssl_dir]}/keystore.sh"
 template "#{node[:ehmp_balancer][:ssl_dir]}/keystore.sh" do
   source "keystore.sh.erb"
   owner node[:apache][:user]
@@ -169,14 +157,12 @@ template "#{node[:ehmp_balancer][:ssl_dir]}/keystore.sh" do
 end
 
 # Create the certificate database, enable FIPS and load the certificates
-p "create and load keystore"
 execute "create-keystore" do
   command "#{node[:ehmp_balancer][:ssl_dir]}/keystore.sh"
   not_if { File.exists?("#{node[:ehmp_balancer][:ssl_dir]}/cert8.db") }
 end
 
 # The following should probably go in a data bag:  FIPS passphrase file
-p "pw conf:  #{node[:ehmp_balancer][:ssl_dir]}/password.conf"
 template "#{node[:ehmp_balancer][:ssl_dir]}/password.conf" do
   source "password.conf.erb"
   owner node[:apache][:user]
@@ -198,8 +184,7 @@ end
 
 # Set proper permissons on certificates and keystore files
 # Can this be replaced with a file or directory resource?
-p "set proper permissions"
 execute "set-perms" do
   command "/bin/chmod 600 #{node[:ehmp_balancer][:ssl_dir]}/*"
   command "/bin/chown #{node[:apache][:user]}:#{node[:apache][:group]} #{node[:ehmp_balancer][:ssl_dir]}/*"
-end 
+end

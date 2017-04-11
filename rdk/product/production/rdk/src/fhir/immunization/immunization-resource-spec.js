@@ -3,99 +3,38 @@
 var _ = require('lodash');
 var ImmunizationResource = require('./immunization-resource');
 var fhirUtils = require('../common/utils/fhir-converter');
+var immunization = require('./immunization-resource');
+var immunizationIn = require('./immunization-resource-spec-data');
+
+
+describe('Immunization Conformance Statement', function() {
+
+    var testConformance = immunizationIn.conformanceData;
+    var builtConformance = immunization.createConformanceData();
+
+    it('verifies that a generated conformance statement exists', function() {
+        expect(builtConformance).not.to.be.undefined();
+    });
+
+    describe('Immunization Conformance Details', function() {
+        it('verifies metadata are valid', function() {
+            expect(builtConformance.type).to.eql(testConformance.rest[0].resource[0].type);
+            expect(builtConformance.profile.reference).to.eql(testConformance.rest[0].resource[0].profile.reference);
+            expect(builtConformance.interaction[0].code).to.eql('read');
+            expect(builtConformance.interaction[1].code).to.eql('search-type');
+        });
+
+        it('verifies conformance search parameters are valid', function() {
+            expect(builtConformance.searchParam[0].name).to.eql('subject.identifier');
+            expect(builtConformance.searchParam[1].name).to.eql('start');
+            expect(builtConformance.searchParam[2].name).to.eql('limit');
+        });
+    });
+});
+
 
 describe('Immunization FHIR Resource', function() {
-    var inputValue = {
-        'apiVersion': '1.0',
-        'data': {
-            'updated': 20141014050323,
-            'totalItems': 2,
-            'currentItemCount': 2,
-            'items': [{
-                'facilityCode': '888',
-                'facilityName': 'FT. LOGAN',
-                'administeredDateTime': '200004061200',
-                'cptCode': 'urn:cpt:90732',
-                'cptName': 'PNEUMOCOCCAL VACCINE',
-                'performerUid': 'urn:va:user:9E7A:11623',
-                'encounterUid': 'urn:va:visit:9E7A:253:2035',
-                'kind': 'Immunization',
-                'uid': 'urn:va:immunization:9E7A:253:60',
-                'summary': 'PNEUMOCOCCAL',
-                'pid': '9E7A;253',
-                'localId': '60',
-                'name': 'PNEUMOCOCCAL',
-                'contraindicated': false,
-                'seriesName': 'BOOSTER',
-                'comment': 'test comment',
-                'reactionCode': 'urn:va:reaction:9E7A:8:0',
-                'reactionName': 'TEST REACTION',
-                'codes': [{
-                    'code': '33',
-                    'system': 'urn:oid:2.16.840.1.113883.12.292',
-                    'display': 'pneumococcal polysaccharide vaccine, 23 valent'
-                }],
-                'performerName': 'STUDENT,SEVEN',
-                'locationUid': 'urn:va:location:9E7A:32',
-                'seriesCode': 'urn:va:series:9E7A:253:BOOSTER',
-                'locationName': 'PRIMARY CARE',
-                'encounterName': 'PRIMARY CARE Apr 06, 2000'
-            }, {
-                'facilityCode': '888',
-                'facilityName': 'FT. LOGAN',
-                'administeredDateTime': '200004061200',
-                'cptCode': 'urn:cpt:90732',
-                'cptName': 'PNEUMOCOCCAL VACCINE',
-                'performerUid': 'urn:va:user:C877:11623',
-                'encounterUid': 'urn:va:visit:C877:253:2035',
-                'kind': 'Immunization',
-                'uid': 'urn:va:immunization:C877:253:60',
-                'summary': 'PNEUMOCOCCAL',
-                'pid': '9E7A;253',
-                'localId': '60',
-                'name': 'PNEUMOCOCCAL',
-                'contraindicated': false,
-                'seriesName': 'BOOSTER',
-                'comment': 'test comment',
-                'reactionCode': 'urn:va:reaction:9E7A:8:0',
-                'reactionName': 'TEST REACTION',
-                'codes': [{
-                    'code': '33',
-                    'system': 'urn:oid:2.16.840.1.113883.12.292',
-                    'display': 'pneumococcal polysaccharide vaccine, 23 valent'
-                }],
-                'performerName': 'STUDENT,SEVEN',
-                'locationUid': 'urn:va:location:C877:32',
-                'seriesCode': 'urn:va:series:C877:253:BOOSTER',
-                'locationName': 'PRIMARY CARE',
-                'encounterName': 'PRIMARY CARE Apr 06, 2000'
-            },{
-                //INCLUDING A TEST ENTRY WITH NO codes .. cptCode ONLY
-                'facilityCode': '888',
-                'facilityName': 'FT. LOGAN',
-                'administeredDateTime': '200004061200',
-                'cptCode': 'urn:cpt:90739',
-                'cptName': 'PNEUMOCOCCAL VACCINE',
-                'performerUid': 'urn:va:user:9E7A:11623',
-                'encounterUid': 'urn:va:visit:9E7A:253:2035',
-                'kind': 'Immunization',
-                'uid': 'urn:va:immunization:9E7A:253:69',
-                'summary': 'PNEUMOCOCCAL',
-                'pid': '9E7A;253',
-                'localId': '60',
-                'name': 'PNEUMOCOCCAL',
-                'contraindicated': false,
-                'seriesName': 'BOOSTER',
-                'comment': 'Immune test entry with ONLY cptCode',
-                //'reactionName': 'TEST REACTION',
-                'performerName': 'STUDENT,SEVEN',
-                'locationUid': 'urn:va:location:9E7A:32',
-                'seriesCode': 'urn:va:series:9E7A:253:BOOSTER',
-                'locationName': 'PRIMARY CARE',
-                'encounterName': 'PRIMARY CARE Apr 06, 2000'
-            }]
-        }
-    };
+
     var req = {
         '_pid': '9E7A;253',
         query: '/fhir/diagnosticreport?subject.identifier=9E7A;253&domain=rad',
@@ -104,8 +43,8 @@ describe('Immunization FHIR Resource', function() {
         },
         protocol: 'http'
     };
-    var vprImmunizations = inputValue.data.items;
-    var fhirEntries = ImmunizationResource.getFhirItems(inputValue, req);
+    var vprImmunizations = immunizationIn.inputValue.data.items;
+    var fhirEntries = ImmunizationResource.getFhirItems(immunizationIn.inputValue, req);
 
     it('verifies that given a valid VPR Immunization Resource converts to a defined FHIR Immunization Resource object', function() {
         expect(fhirEntries).not.to.be.undefined();
@@ -144,7 +83,7 @@ function checkImmuneResource(fhirIEntry, vprI) {
             });
 
             it('verifies that the administered date time from VPR Immunization Resource coresponds to the one from the FHIR Immunization Resource', function() {
-                expect(fhirI.date).to.equal(fhirUtils.convertToFhirDateTime(vprI.administeredDateTime));
+                expect(fhirI.date).to.equal(fhirUtils.convertToFhirDateTime(vprI.administeredDateTime, fhirUtils.getSiteHash(vprI.uid)));
             });
 
 
@@ -254,7 +193,7 @@ function checkImmuneResource(fhirIEntry, vprI) {
                     expect(fhirUtils.removeDivFromText(reaction.text.div)).to.equal(vprI.reactionName);
                 });
             }
-        })//end-describe
+        });//end-describe
     }
 }
 

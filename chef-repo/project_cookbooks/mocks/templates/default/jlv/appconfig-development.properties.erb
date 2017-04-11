@@ -1,8 +1,8 @@
-grails.jmeadowsURL = <%= node[:mocks][:jmeadows_application_url]%>
-#http://IPADDRESS   /jMeadows/JMeadowsDataService?wsdl
+grails.jmeadowsURL = <%= jmeadows[:jmeadows][:application][:protocol]%>://<%= jmeadows[:jmeadows][:ipaddress]%><%= jmeadows[:jmeadows][:application][:path]%>?<%= jmeadows[:jmeadows][:application][:path_query]%>
+#http://IP___ADDRESS/jMeadows/JMeadowsDataService?wsdl
 
-grails.jmeadowsUsername = OPW         
-grails.jmeadowsPassword = BPW                     
+grails.jmeadowsUsername        UN
+grails.jmeadowsPassword       PW
 
 grails.smartCardBypass = true
 grails.testSmartCard = 987654322

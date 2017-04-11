@@ -194,8 +194,6 @@ define([
             this._super.initialize.apply(this, arguments);
         },
         setupGlobalDateListener: function() {
-            var self = this;
-
             this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
                 var options = {};
                 if (dateModel !== undefined) {
@@ -206,16 +204,13 @@ define([
                 options.customFilter = 'or(' + this.buildJdsDateFilter('administeredDateTime', options) + ',' + this.buildJdsDateFilter('observed', options) + ')';
                 options.operator = 'or';
 
-                self.dateRangeRefresh('dateTime', options);
+                this.dateRangeRefresh('dateTime', options);
 
             });
 
         },
         setupGDTListener: function() {
-            var self = this;
-
             this.listenTo(ADK.Messaging, 'globalDate:updateTimelineSummaryViewOnly', function(dateModel) {
-
                 var options = {};
                 if (dateModel !== undefined) {
                     options.isOverrideGlobalDate = true;
@@ -224,9 +219,9 @@ define([
                 }
                 options.customFilter = 'or(' + this.buildJdsDateFilter('administeredDateTime', options) + ',' + this.buildJdsDateFilter('observed', options) + ')';
                 options.operator = 'or';
-                options.instanceId = self.appletOptions.instanceId;
+                options.instanceId = this.appletOptions.instanceId;
 
-                self.dateRangeRefresh('dateTime', options);
+                this.dateRangeRefresh('dateTime', options);
             });
         },
         onRender: function() {

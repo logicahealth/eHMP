@@ -2,7 +2,9 @@
 
 require('../../../../env-setup');
 var _ = require('underscore');
-var realConfig = require(global.VX_ROOT + 'worker-config');
+var wConfig = require(global.VX_ROOT + 'worker-config');
+var realConfig = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
+
 var fsUtil = require(global.VX_UTILS + 'fs-utils');
 var jobUtils = require(global.VX_UTILS + 'job-utils');
 var testHandler = require(global.VX_INTTESTS + 'framework/handler-test-framework').testHandler;

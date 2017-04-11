@@ -36,7 +36,8 @@ define([
             this.searchView.selectedLocationModel = currentLocation;
             this.searchApplet.selectedLocationModel = currentLocation;
             this.locationCollectionView.$el.find("a.activeItem").removeClass('activeItem');
-            $(event.currentTarget).addClass('activeItem');
+            event.currentTarget.classList.add('activeItem');
+            this.$el.closest('.patient-search-wrapper').removeClass('confirmation');
         }
     });
 

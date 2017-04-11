@@ -7,12 +7,14 @@
 <VirtualHost *:<%= node[:ehmp_balancer][:incoming_port]%>>
 
         Header always set Strict-Transport-Security "max-age=31536000"
-        Header always set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none'; style-src 'self'; img-src 'self' data:; media-src 'none'; frame-src 'none'; font-src 'self'; connect-src 'self'"
-        Header always set X-Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none'; style-src 'self'; img-src 'self' data:; media-src 'none'; frame-src 'none'; font-src 'self'; connect-src 'self'"
-        Header always set X-WebKit-CSP-Report-Only "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none'; style-src 'self'; img-src 'self' data:; media-src 'none'; frame-src 'none'; font-src 'self'; connect-src 'self'"
+        Header always set Content-Security-Policy-Report-Only " script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none'; img-src 'self' data:; media-src 'none'; frame-src 'none'; connect-src 'self'"
+        Header always set X-Content-Security-Policy-Report-Only "script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none';  img-src 'self' data:; media-src 'none'; frame-src 'none'; connect-src 'self'"
+        Header always set X-WebKit-CSP-Report-Only " script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none'; img-src 'self' data:; media-src 'none'; frame-src 'none'; connect-src 'self'"
 
-        Options None
-        
+        <IfModule mod_autoindex.c>
+            Options -Indexes
+        </IfModule>
+
         # TODO: mod_gzip instead?
         <IfModule mod_deflate.c>
             # Compress HTML, CSS, JavaScript, Text, XML and fonts
@@ -48,7 +50,7 @@
 
         # Configure proxy-balancer
         ProxyRequests off
-        
+
         ServerName <%= node[:ehmp_balancer][:fqdn]%>
 
         <Proxy balancer://web-cluster>
@@ -82,8 +84,8 @@
 
         <Proxy balancer://rdk-cluster>
             <% @rdk_members.each do |member| %>
-                <% member['rdk']['fetch_server']['processes'].times do |index| %>
-                    BalancerMember <%= member['rdk']['protocol']%>://<%= member['ipaddress']%>:<%= (member['rdk']['fetch_server']['port']+index)%>
+                <% member['rdk']['services']['fetch_server']['processes'].times do |index| %>
+                    BalancerMember <%= member['rdk']['protocol']%>://<%= member['ipaddress']%>:<%= (member['rdk']['services']['fetch_server']['port']-index)%>
                 <% end %>
             <% end %>
 
@@ -100,18 +102,13 @@
                 # that all webheads take an equal share of
                 # of the load.
                 <%= "# stickysession=#{node[:ehmp_balancer][:sticky_session]}" %>
-                <% if node[:ehmp_balancer][:sticky_session] == "DISABLED" %>
-                    ProxySet lbmethod=<%= node[:ehmp_balancer][:lb_method]%>
-                <% else %>
-                    ProxySet lbmethod=<%= node[:ehmp_balancer][:lb_method]%> stickysession=<%= node[:ehmp_balancer][:sticky_session]%>
-                <% end %>
-
+                ProxySet lbmethod=<%= node[:ehmp_balancer][:lb_method] %> timeout=<%= node[:ehmp_balancer][:rdk_timeout] %> <%= node[:ehmp_balancer][:sticky_session] != "DISABLED" ? "stickysession=#{node[:ehmp_balancer][:sticky_session]}" : ''%>
         </Proxy>
 
         <Proxy balancer://write-back-cluster>
             <% @rdk_members.each do |member| %>
-                <% member['rdk']['write_back']['processes'].times do |index| %>
-                    BalancerMember <%= member['rdk']['protocol']%>://<%= member['ipaddress']%>:<%= (member['rdk']['write_back']['port']+index)%>
+                <% member['rdk']['services']['write_back']['processes'].times do |index| %>
+                    BalancerMember <%= member['rdk']['protocol']%>://<%= member['ipaddress']%>:<%= (member['rdk']['services']['write_back']['port']-index)%>
                 <% end %>
             <% end %>
 
@@ -138,8 +135,8 @@
 
         <Proxy balancer://pick-list-cluster>
             <% @rdk_members.each do |member| %>
-                <% member['rdk']['pick_list']['processes'].times do |index| %>
-                    BalancerMember <%= member['rdk']['protocol']%>://<%= member['ipaddress']%>:<%= (member['rdk']['pick_list']['port']+index)%>
+                <% member['rdk']['services']['pick_list']['processes'].times do |index| %>
+                    BalancerMember <%= member['rdk']['protocol']%>://<%= member['ipaddress']%>:<%= (member['rdk']['services']['pick_list']['port']-index)%>
                 <% end %>
             <% end %>
 
@@ -163,7 +160,7 @@
                 <% end %>
 
         </Proxy>
-        
+
         # allow access to the uri's representing each component
         <Location /write-pick-list>
                 Order deny,allow
@@ -181,11 +178,16 @@
                 Order deny,allow
                 Allow from all
         </Location>
-        <Location /resource/authentication/systems>
+        <Location /resource/authentication/systems/internal>
                 Order deny,allow
                 Deny from all
         </Location>
-
+        <Location /resource/authentication/systems/external>
+                NSSVerifyClient require
+                NSSRequireSSL
+                NSSOptions +FakeBasicAuth +ExportCertData +CompatEnvVars +StrictRequire
+                NSSUserName SSL_CLIENT_S_DN_UID
+        </Location>
 
         # Point of Balance
         # This setting will allow to explicitly name the
@@ -200,16 +202,20 @@
 
         # traffic to rdk
         ProxyPass /resource balancer://rdk-cluster/resource
+
+        # Reference ssoi-config.erb
+        <%= render "ssoi-config.erb", :variables => {:ssoi_host => @ssoi_members}  unless @ssoi_members.nil? %>
+
         # send the rest to static ehmp web
         ProxyPass / balancer://web-cluster/
 
         <IfModule mod_headers.c>
-                Header always edit Set-Cookie ^(.*)$ "$1; Secure"
-                Header edit Set-Cookie ^(.*)$ "$1; Secure"
+            Header always edit Set-Cookie ^(.*)$ "$1; Secure"
+            Header edit Set-Cookie ^(.*)$ "$1; Secure"
         </IfModule>
 
         # SSL VirtualHost directives
-        
+
         DocumentRoot /var/www
 
         # mod_nss can log to separate log files, you can choose to do that if you'd like
@@ -243,7 +249,7 @@
         #   is identical to the entry "NSSProtocol SSLv3,TLSv1.0,TLSv1.1".
         NSSProtocol TLSv1.1,TLSv1.2
 
-        #   SSL Certificate     name:
+        #   SSL Certificate Nickname:
         #   The nickname of the RSA server certificate you are going to use.
         NSSNickname Server-Cert
         
@@ -270,4 +276,3 @@
                   "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
 
 </VirtualHost>
-

@@ -7,6 +7,7 @@ var parse = require('./lab-future-lab-collects-parser').parseFutureLabCollects;
 var RpcClient = require('vista-js').RpcClient;
 var validate = require('./../../../pick-list/utils/validation-util');
 
+
 /**
  * Calls the RPC 'ORWDLR33 FUTURE LAB COLLECTS' and parses out the data.<br/>
  * Returns the number of days in the future to allow Lab Collects.<br/><br/>
@@ -17,10 +18,10 @@ var validate = require('./../../../pick-list/utils/validation-util');
  * @param callback This will be called with the data retrieved from the RPC (or if there's an error).
  */
 module.exports.getFutureLabCollects = function(logger, configuration, location, callback) {
-    if (!validate.isWholeNumber(location)) {
+
+     if (!validate.isWholeNumber(location)) {
         return callback('location cannot be empty and must be a whole number');
     }
-
     return RpcClient.callRpc(logger, configuration, 'ORWDLR33 FUTURE LAB COLLECTS', location, function(err, rpcData) {
         if (err) {
             return callback(err.message);

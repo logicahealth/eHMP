@@ -4,10 +4,8 @@ Feature: F140 – All Patient Search
 #This feature will allow a user to search for patients globally in eHMP through a global patient search feature MVI.  Once the search criteria is entered, a maximum of 10 results will be shown. If there are more than 10 results, than no results will be returned.  This also searches for sensitive patient.
 
 # Team Andromeda
-
 @f140_1_lastNameSSNSearch @US1977 @base @DE3047
 Scenario: search with full last name and ssn
-    Given user is logged into eHMP-UI
     And the patient search screen is displayed
     When the User selects All Patient
     Then the user is on all patient tab "Nationwide"
@@ -23,17 +21,17 @@ Scenario: search with full last name and ssn
         | dob           | 04/07/1935                 |
         | age           | FORMATTED                  |
         | gender        | Male                       |
-        | ssn           | ***-**-0008                |
+        | ssn           | DISPLAYED                  |
     When the user click on Confirm Selection
     And the user clears though the Confirm Flag
-    Then Default Screen is active
+    Then Overview is active
     And the "patient identifying traits" is displayed with information
         | field         | value                      |
         | patient name  | Eight,Patient              |
 
 @f140_2_firstLastNameSearch @US1977 @DE3047
 Scenario: search with first name and full last name
-    Given user is logged into eHMP-UI
+#    Given user is logged into eHMP-UI
     And the patient search screen is displayed
     When the User selects All Patient
     Then the user is on all patient tab "Nationwide"
@@ -49,7 +47,7 @@ Scenario: search with first name and full last name
         | dob           | 04/07/1935                 |
         | age           | FORMATTED                  |
         | gender        | Male                       |
-        | ssn           | ***-**-0008                |
+        | ssn           | DISPLAYED                  |
     When the user click on Confirm Selection
     And the user clears though the Confirm Flag
     Then Default Screen is active
@@ -59,7 +57,7 @@ Scenario: search with first name and full last name
 
 @f140_3_lastNameDOBSearch @US1977 @DE3047
 Scenario: search with full last name and date of birth
-    Given user is logged into eHMP-UI
+#    Given user is logged into eHMP-UI
     And the patient search screen is displayed
     When the User selects All Patient
     Then the user is on all patient tab "Nationwide"
@@ -75,7 +73,7 @@ Scenario: search with full last name and date of birth
         | dob           | 04/07/1935                 |
         | age           | FORMATTED                  |
         | gender        | Male                       |
-        | ssn           | ***-**-0008                |
+        | ssn           | DISPLAYED                  |
     When the user click on Confirm Selection
     And the user clears though the Confirm Flag
     Then Default Screen is active
@@ -85,7 +83,7 @@ Scenario: search with full last name and date of birth
 
 @f140_4_firstLastNameDOBSearch @US1977 @DE3047
 Scenario: search with first name, full last name and date of birth
-    Given user is logged into eHMP-UI
+#    Given user is logged into eHMP-UI
     And the patient search screen is displayed
     When the User selects All Patient
     Then the user is on all patient tab "Nationwide"
@@ -102,7 +100,7 @@ Scenario: search with first name, full last name and date of birth
         | dob           | 04/07/1935                 |
         | age           | FORMATTED                  |
         | gender        | Male                       |
-        | ssn           | ***-**-0008                |
+        | ssn           | DISPLAYED                  |
     When the user click on Confirm Selection
     And the user clears though the Confirm Flag
     Then Default Screen is active
@@ -112,7 +110,7 @@ Scenario: search with first name, full last name and date of birth
 
 @f140_5_firstLastNameDOBSSNSearch @US1977 @DE1807 @DE3047
 Scenario: search with first name, full last name, date of birth and SSN
-    Given user is logged into eHMP-UI
+#    Given user is logged into eHMP-UI
     And the patient search screen is displayed
     When the User selects All Patient
     Then the user is on all patient tab "Nationwide"
@@ -130,7 +128,7 @@ Scenario: search with first name, full last name, date of birth and SSN
         | dob           | 04/07/1935                 |
         | age           | FORMATTED                  |
         | gender        | Male                       |
-        | ssn           | ***-**-0008                |
+        | ssn           | DISPLAYED                  |
     When the user click on Confirm Selection
     And the user clears though the Confirm Flag
     Then Default Screen is active
@@ -140,7 +138,7 @@ Scenario: search with first name, full last name, date of birth and SSN
 
 @f140_6_ssnSearchError @US1977
 Scenario: search with SSN only and get an error msg
-    Given user is logged into eHMP-UI
+#    Given user is logged into eHMP-UI
     And the patient search screen is displayed
     When the User selects All Patient
     Then the user is on all patient tab "Nationwide"
@@ -151,7 +149,7 @@ Scenario: search with SSN only and get an error msg
 
 @f140_7_searchCountError @US1977
 Scenario: search count is more than 10 results, so no results will be returned.
-    Given user is logged into eHMP-UI
+#    Given user is logged into eHMP-UI
     And the patient search screen is displayed
     When the User selects All Patient
     Then the user is on all patient tab "Nationwide"
@@ -163,7 +161,7 @@ Scenario: search count is more than 10 results, so no results will be returned.
 
 @f140_8_searchNoResultError @US1977
 Scenario: search count is 0 results and get an error msg.
-    Given user is logged into eHMP-UI
+#    Given user is logged into eHMP-UI
     And the patient search screen is displayed
     When the User selects All Patient
     Then the user is on all patient tab "Nationwide"
@@ -174,7 +172,7 @@ Scenario: search count is 0 results and get an error msg.
 
 @f140_9_sensitivePatientSearch @US2438 @debug @DE3248
 Scenario: user searches and selects sensitive patient
-    Given user is logged into eHMP-UI
+#    Given user is logged into eHMP-UI
     And the patient search screen is displayed
     When the User selects All Patient
     Then the user is on all patient tab "Nationwide"
@@ -200,7 +198,7 @@ Scenario: user searches and selects sensitive patient
 
 @f140_10_KodakOnlyPatient_1 @DE271 @debug @DE3047
 Scenario: All Patient search with first name and full last name that is in Kodak only and is not in Panorama. User logs on as panorama
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
     Then the patient search screen is displayed
     And the User selects All Patient
     Then the user is on all patient tab "Nationwide"
@@ -225,7 +223,7 @@ Scenario: All Patient search with first name and full last name that is in Kodak
 
 @f140_11_PatientNotInAnyVistaSearch @DE271 @US5857 @US6769 @DE2937 @DE3148 @debug @DE3660
 Scenario: All Patient search with first name and full last name that is not in Kodak or Panorama (JDS)
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
     Then the patient search screen is displayed
     And the User selects All Patient
     Then the user is on all patient tab "Nationwide"
@@ -256,8 +254,8 @@ Scenario: All Patient search with first name and full last name that is in Kodak
     When user attempts login
         | field      | value    |
         | Facility   | Kodak    |
-        | AccessCode | PW       |
-        | VerifyCode | PW    !! |
+        | AccessCode | pu1234   |
+        | VerifyCode | pu1234!! |
         | SignIn     |          |
     Then the patient search screen is displayed
     And the User selects All Patient
@@ -283,7 +281,7 @@ Scenario: All Patient search with first name and full last name that is in Kodak
 
 @f140_13_firstLastNameSearch @DE220 @DE3047
 Scenario: search with first name and full last name with white spaces in beginning and end
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
     Then the patient search screen is displayed
     And the User selects All Patient
     Then the user is on all patient tab "Nationwide"

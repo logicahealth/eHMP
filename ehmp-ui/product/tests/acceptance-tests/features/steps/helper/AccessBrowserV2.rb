@@ -222,7 +222,9 @@ class AccessBrowserV2
     what = get_what(map_key)
     begin
       html_element = find_dom_element(how, what)
-    rescue
+    rescue => found_error
+      # p "static_dom_element_exists: #{found_error}"
+      # p "looking for map_key #{map_key}"
       html_element = nil
     end
     return !html_element.nil?

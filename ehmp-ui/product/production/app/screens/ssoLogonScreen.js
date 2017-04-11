@@ -5,7 +5,7 @@ define(function () {
         contentRegionLayout: "gridOne",
         appCenterLayout: 'fullScreenAppletCenterLayout',
         id: "sso",
-        appHeader: "none",
+        context: 'logon',
         applets: [{
             id: "ssoLogon",
             title: "Auto Signing In",

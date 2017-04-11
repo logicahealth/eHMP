@@ -8,11 +8,11 @@ var log = sinon.stub(require('bunyan').createLogger({ name: 'medication-defaults
 var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
-    host: 'IP        ',
+    host: 'IP_ADDRESS',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'PW',
+    verifyCode: 'PW',
+    localIP: 'IPADDRES',
     localAddress: 'localhost'
 };
 
@@ -23,6 +23,6 @@ describe('medication-defaults resource integration test', function() {
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, {pharmacyType: 'O', outpatientDfn: '100615', locationIen: '64'});
+        }, {pharmacyType: 'O', outpatientDfn: '100615', locationUid: 'urn:va:location:9E7A:64'});
     });
 });

@@ -2,9 +2,8 @@ define([
     'underscore',
     'backbone',
     'marionette',
-    'main/backgrid/customFilter',
-    'api/SessionStorage'
-], function(_, Backbone, Marionette, CustomFilter, SessionStorage) {
+    'main/backgrid/customFilter'
+], function(_, Backbone, Marionette, CustomFilter) {
     'use strict';
     return Backbone.Marionette.Controller.extend({
         initialize: function(options) {
@@ -17,9 +16,6 @@ define([
         },
         onUpdateDateFilteredCollection: function() {
             this.filterView.doSearch();
-        },
-        onResetDateFilteredCollection: function() {
-            this.textFilteredCollection.reset(this.dateFilteredCollection.models);
         },
         initializeFilterView: function(appletConfig) {
             this.appletFilterInstanceId = appletConfig.instanceId;
@@ -37,10 +33,10 @@ define([
             this.expandedAppletId = this.view.options.appletConfig.instanceId;
             if (appletConfig.fullScreen) {
                 this.parentWorkspace = ADK.Messaging.request('get:current:workspace');
-                var expandedModel = SessionStorage.get.sessionModel('expandedAppletId');
+                var expandedModel = ADK.SessionStorage.get.sessionModel('expandedAppletId');
                 if (!_.isUndefined(expandedModel) && !_.isUndefined(expandedModel.get('id'))) {
                     this.expandedAppletId = expandedModel.get('id');
-                    SessionStorage.set.sessionModel('expandedAppletId', new Backbone.Model({
+                    ADK.SessionStorage.set.sessionModel('expandedAppletId', new Backbone.Model({
                         'id': undefined
                     }));
                 }
@@ -48,9 +44,9 @@ define([
 
             //Set applet's fullScreen option in session
             if (appletConfig.fullScreen) {
-                SessionStorage.setAppletStorageModel(appletConfig.instanceId, 'fullScreen', true);
+                ADK.SessionStorage.setAppletStorageModel(appletConfig.instanceId, 'fullScreen', true);
             } else {
-                SessionStorage.setAppletStorageModel(appletConfig.instanceId, 'fullScreen', false);
+                ADK.SessionStorage.setAppletStorageModel(appletConfig.instanceId, 'fullScreen', false);
             }
 
             // Used for template
@@ -84,8 +80,12 @@ define([
 
                 this.filterView = CustomFilter.doFilter(filterOptions);
 
-                this.appletOptions.appletId = appletConfig.id;
-                this.appletOptions.instanceId = appletConfig.instanceId;
+                this.appletOptions = {
+                    appletId : appletConfig.id,
+                    instanceId : appletConfig.instanceId
+                };
+
+
             }
         }
     });

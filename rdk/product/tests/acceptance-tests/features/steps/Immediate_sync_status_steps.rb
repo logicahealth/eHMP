@@ -6,7 +6,7 @@ class SiteInitialize
 end
 
 When(/^the client requests sync with immediate response within (\d+) second for the patient "(.*?)" in RDK format$/) do |time_out, pid|
-  # "http://IP             /sync/load?pid=11016V630869&immediate=true"
+  # "http://IP_ADDRESS:PORT/sync/load?pid=11016V630869&immediate=true"
   # path = QueryRDKSync.new("load", pid).add_parameter("immediate", "true")
   temp = RDKQuery.new('synchronization-load')
   temp.add_parameter("pid", pid)
@@ -15,7 +15,7 @@ When(/^the client requests sync with immediate response within (\d+) second for 
   @response = nil
 
   begin
-    @response = HTTPartyWithBasicAuth.get_with_authorization(path, time_out.to_i)
+    @response = HTTPartyRDK.get(path, time_out.to_i)
   rescue Exception => e
     p "Time out; " + e 
   end

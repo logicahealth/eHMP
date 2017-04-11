@@ -33,7 +33,7 @@ Beanstalk.prototype.openConnection = function(callback) {
             return callback(null, self);
         })
         .on('error', function (err) {
-            self.logger.error('Unable to create Beanstalk connection. ' + err);
+            self.logger.error({error: err}, 'Unable to create Beanstalk connection.');
             return callback(err, this);
         })
         .on('close', function () {

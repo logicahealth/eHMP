@@ -1,6 +1,6 @@
 # Group Patient
 
-## Patient record labsbyorder [{{{path}}}{?pid}{&uid}{&start}{&limit}{&order}{&fields}]
+## Patient record labsbyorder [{{{path}}}{?pid}{&uid}{&start}{&limit}{&order}]
 
 + Parameters
 
@@ -13,8 +13,6 @@
     :[limit]({{{common}}}/parameters/limit.md)
 
     :[order]({{{common}}}/parameters/order.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Get [GET]

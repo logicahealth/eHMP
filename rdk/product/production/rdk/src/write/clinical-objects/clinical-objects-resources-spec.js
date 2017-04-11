@@ -7,13 +7,12 @@ describe('Unit tests for write-back clinical object resources', function() {
     var resources = clinicalObjectsResources.getResourceConfig();
 
     it('should show that getResourceConfig() is functioning correctly', function() {
-        expect(resources.length).to.equal(6);
+        expect(resources.length).to.equal(5);
         var findResource = resources[0];
         var getListResource = resources[1];
         var createResource = resources[2];
         var updateResource = resources[3];
         var readResource = resources[4];
-        var deleteResource = resources[5];
 
         expect(findResource.name).to.be('clinical-object-find');
         expect(findResource.path).to.be('/find-clinical-object');
@@ -56,16 +55,5 @@ describe('Unit tests for write-back clinical object resources', function() {
         expect(readResource.requiredPermissions).to.be.an.array();
         expect(readResource.requiredPermissions).to.be.empty();
         expect(readResource.get).not.to.be.undefined();
-
-
-        expect(deleteResource.name).to.be('clinical-object-delete');
-        expect(deleteResource.path).to.be('/:resourceId');
-        expect(deleteResource.interceptors).to.eql({
-            operationalDataCheck: false,
-            synchronize: false
-        });
-        expect(deleteResource.requiredPermissions).to.be.an.array();
-        expect(deleteResource.requiredPermissions).to.be.empty();
-        expect(deleteResource.delete).not.to.be.undefined();
     });
 });

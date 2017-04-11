@@ -4,7 +4,7 @@ Feature: F277 - CDS Rules Results List
 # This feature covers existance of Rules Results applet on Coversheet
 
 Background:
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
     And user searches for and selects "Eight,Patient"
     
 @US3119_RulesResultsApplet @future

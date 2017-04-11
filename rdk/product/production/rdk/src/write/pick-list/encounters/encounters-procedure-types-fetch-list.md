@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Encounters procedure types [/encounters-procedure-types{?site}{&ien}{&visitDate}{&fields}]
+## Encounters procedure types [/encounters-procedure-types{?site}{&ien}{&visitDate}]
 
 Retrieve Procedure Types and Associated CPTCodes w/names
 
@@ -15,8 +15,6 @@ ORWPCE PROC
     + ien: `195` (string, required) - The ien of the clinic for which to find procedure types
 
     :[visitDate]({{{common}}}/parameters/visitDate.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

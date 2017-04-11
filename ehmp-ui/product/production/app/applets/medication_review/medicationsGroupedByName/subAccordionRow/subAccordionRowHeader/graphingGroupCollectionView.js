@@ -9,7 +9,7 @@ define([
 
     var med = Backbone.Marionette.ItemView.extend({
         template: GraphingGroupRow,
-        className: "repeatedSig col-sm-12 left-padding-no right-padding-no",
+        className: "repeated-sig col-xs-12 left-padding-no right-padding-no",
         ui: {
             graphDiv: '.chart'
         },
@@ -19,22 +19,36 @@ define([
         onRender: function(options) {
             var meds = options.model.get('medications');
             var vaType = meds.at(0).get("vaType").toLowerCase();
-            if (!this.model.get('badGraphingData') && vaType !== "i" && vaType !== "v") {
+            if (!this.model.get('badGraphingData') && (vaType !== "i" && vaType !== "v")) {
                 if (!(meds.length === 1 && meds.at(0).getModifiedVaStatus() === 'pending')) {
                     this.listenTo(ADK.Messaging, 'medication_review:superAccordionClicked', function() {
                         this.reflowGraph();
                     });
+                    this.setHighChartsOptions(false);
                     this.listenTo(ADK.Messaging, 'meds-review-date-change', function(dateModel) {
+                        this.setHighChartsOptions(false);
                         this.drawGraph();
+                        this.setHighChartsOptions(true);
                     });
                     this.drawGraph();
                 }
-            } else {
+            } else if (vaType === "i" || vaType === "v") {
                 this.$('.chart').html("Graphs for Inpatient Medications are not available at this time");
+            } else {
+                this.$('.chart').html("Data not graphable");
             }
         },
         onAttach: function() {
             this.reflowGraph();
+            this.setHighChartsOptions(true);
+        },
+        setHighChartsOptions: function(useUTC) {
+            Highcharts.setOptions({
+                global: {
+                    //Switch whether highcharts is using UTC or local browser time.
+                    useUTC: useUTC
+                }
+            });
         },
         onBeforeDestroy: function() {
             if (this.hasGraph) {
@@ -51,6 +65,8 @@ define([
                 var medChartConfig = new HighchartConfig(buildchart);
                 this.ui.graphDiv.highcharts(medChartConfig);
                 this.hasGraph = true;
+                this.$el.find('svg').attr('focusable', false);
+                this.$el.find('svg').attr('aria-hidden', true);
             }, this);
             if (window.requestAnimationFrame) {
                 window.requestAnimationFrame(draw);
@@ -69,18 +85,18 @@ define([
                     var ivSig = "";
                     if (this.ivProducts) {
                         if (this.ivProducts.length === 1) {
-                            ivSig = "<div>" + this.ivProducts[0] + "</div>";
+                            ivSig = "<span>" + this.ivProducts[0] + "</span>";
                         } else {
                             for (var i = 0; i < this.ivProducts.length; i++) {
                                 if (i === this.ivProducts.length - 1) {
-                                    ivSig = ivSig + "<div class='leftPadding'>" + this.ivProducts[i] + "</div>";
+                                    ivSig = ivSig + "<div class='left-padding-sm'>" + this.ivProducts[i] + "</div>";
                                 } else {
-                                    ivSig = ivSig + "<div>" + this.ivProducts[i] + "</div>";
+                                    ivSig = ivSig + "<span>" + this.ivProducts[i] + "</span>";
                                 }
                             }
                         }
                     } else {
-                        ivSig = "<div class='ellipsisFormat'>" + this.computedSig + "</div>";
+                        ivSig = "<span>" + this.computedSig + "</span>";
                     }
                     return ivSig.trim();
                 }
@@ -89,7 +105,7 @@ define([
     });
 
     return Backbone.Marionette.CollectionView.extend({
-        className: "repeatedSigDiv col-sm-12",
+        className: "repeated-sigdiv col-xs-12",
         childView: med
     });
 });

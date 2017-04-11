@@ -7,10 +7,20 @@ define([
     'use strict';
 
     var Input = PuppetForm.InputControl = PuppetForm.DefaultInputControl.extend({
+        templateHelpers: function() {
+            var self = this;
+            return {
+                'passwordType': function() {
+                    if (self.field.get('type') === 'password') {
+                        return true;
+                    }
+                }
+            };
+        },
         getTemplate: function() {
             var isUnitsArray = _.isArray(this.field.get('units'));
 
-            var characterCount = '{{#if maxlength}}{{#if charCount}}<span><span class="input-char-count top-margin-xs left-margin-xs"></span> character<span class="char-count-plural"></span> remaining</span>{{/if}}{{/if}}';
+            var characterCount = '{{#if maxlength}}{{#if charCount}}<span class="font-size-11"><span class="input-char-count top-margin-xs left-margin-xs"></span> character<span class="char-count-plural"></span> remaining</span>{{/if}}{{/if}}';
             var helpMessage = '{{#if helpMessage}} <span {{#if (has-puppetForm-prop "helpMessageClassName")}}class="{{PuppetForm "helpMessageClassName"}}"{{/if}}>{{helpMessage}}</span>{{/if}}';
 
             var singleUnitString = '{{#if units}}<span class="input-group-addon">{{units}}</span></div>{{/if}}',
@@ -19,26 +29,28 @@ define([
             var unitsAsString = [
                 '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
                 '{{#if units}}<div class="input-group">{{/if}}',
-                '<input type="{{type}}" class="{{PuppetForm "controlClassName"}}" id="{{clean-for-id name}}" name="{{name}}" maxlength="{{maxlength}}"{{#if value}} value="{{value}}"{{/if}}{{#if title}} title="{{title}}"{{/if}}{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}{{#if readonly}} readonly{{/if}}/>',
+                '<input type="{{type}}" {{#if passwordType}}autocomplete="off"{{/if}} class="{{PuppetForm "controlClassName"}}" id="{{clean-for-id name}}" name="{{name}}" maxlength="{{maxlength}}"{{#if value}} value="{{value}}"{{/if}}{{#if title}} title="{{title}}"{{/if}}{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}{{#if readonly}} readonly{{/if}}/>',
             ].join("\n");
 
             var unitsAsArray_2_Elements = Handlebars.compile([
-                '<div class="col-xs-7 left-padding-no bottom-margin-xs">',
+                '<div class="col-xs-8 all-padding-no">',
                 '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
                 '<input type="{{type}}" class="{{PuppetForm "controlClassName"}}" id="{{clean-for-id name}}" name="{{name}}" maxlength="{{maxlength}}"{{#if value}} value="{{value}}"{{/if}}{{#if title}} title="{{title}}"{{/if}}{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}{{#if readonly}} readonly{{/if}}/>',
                 '</div>',
                 '{{#if units}}',
-                '<div class="col-xs-5 radio radio-and-input right-padding-no top-margin-md bottom-margin-lg">',
+                '<fieldset class="col-xs-4 radio radio-and-input all-padding-no left-padding-xs top-margin-sm">',
+                '<legend class="sr-only">{{label}} Units</legend>',
                 '{{#each units}}',
                 Handlebars.helpers['ui-form-label'].apply(this, ["{{label}}", {
                     hash: {
                         forID: "{{../name}}-{{clean-for-id value}}-radio-{{value}}",
                         classes: PuppetForm.radioLabelClassName + ' radio-units radio-inline',
-                        content: '<input type="radio" id="{{../name}}-{{clean-for-id value}}-radio" name="{{../name}}-radio-units" {{#if title}}title="{{title}}"{{/if}} value="{{formatter-from-raw ../formatter value}}" {{#compare value ../rawValueUnits}}checked="checked"{{/compare}}{{#if disabled}} disabled{{else}}{{#if ../../disabled}} disabled{{/if}}{{/if}}/>'
+                        extraClassLogic: '{{#if disabled}}disabled {{else}}{{#if ../disabled}}disabled {{/if}}{{/if}}',
+                        content: '<input type="radio" id="{{../name}}-{{clean-for-id value}}-radio" name="{{../name}}-radio-units" {{#if title}}title="{{title}}"{{/if}} value="{{formatter-from-raw ../formatter value}}" {{#compare value ../rawValueUnits}}checked="checked"{{/compare}}{{#if disabled}} disabled{{else}}{{#if ../disabled}} disabled{{/if}}{{/if}}/>'
                     }
                 }]),
                 '{{/each}}',
-                '</div>',
+                '</fieldset>',
                 '{{/if}}',
                 characterCount,
                 helpMessage
@@ -50,7 +62,7 @@ define([
                 '<input type="{{type}}" class="{{PuppetForm "controlClassName"}}" id="{{clean-for-id name}}" name="{{name}}" maxlength="{{maxlength}}"{{#if value}} value="{{value}}"{{/if}}{{#if title}} title="{{title}}"{{/if}}{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}{{#if readonly}} readonly{{/if}}/>',
                 '<div class="input-group-btn">',
                 '<label for="{{clean-for-id name}}-unit-select" class="sr-only">{{label}} Unit</label>',
-                '<select class="form-control btn-form-control" title="Please select from the list" id="{{clean-for-id name}}-unit-select"{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}>',
+                '<select class="form-control btn-form-control" title="Select from the list" id="{{clean-for-id name}}-unit-select"{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}>',
                 '{{#each units}}',
                 '<option value={{value}}{{#if selected}} selected="selected"{{/if}}>{{label}}</option>',
                 '{{/each}}',
@@ -85,7 +97,10 @@ define([
         },
         events: _.defaults({
             "input": "countChar",
-            "change select": "onChange",
+            "change select": function() {
+                this.onChange.apply(this, arguments);
+                this.onUserInput.apply(this, arguments);
+            },
             //Events to be Triggered By User
             "control:required": function(event, booleanValue) {
                 this.setBooleanFieldOption("required", booleanValue, event);
@@ -150,7 +165,7 @@ define([
             return this.formatter.toRaw(this.$el.find("input").val(), this.model);
         },
         serializeModel: function(model) {
-            var field = _.defaults(this.field.toJSON(), this.defaults),
+            var field = _.defaultsDeep(this.field.toJSON(), this.defaults),
                 attributes = model.toJSON(),
                 attrArr = field.name.split('.'),
                 name = attrArr.shift(),

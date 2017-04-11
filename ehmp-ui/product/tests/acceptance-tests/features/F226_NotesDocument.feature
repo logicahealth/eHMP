@@ -3,7 +3,7 @@ Feature: Enter Plain Text Basic Progress Notes  (TIU)
 
 @US8033 @TC999_1
 Scenario: Launch the notes form from the documents applet - applet allows
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "eight,patient"
   And Overview is active
   When user navigates to Documents Applet
@@ -14,7 +14,7 @@ Scenario: Launch the notes form from the documents applet - applet allows
 
 @US8033 @TC999_2 @DE3036 @future
 Scenario: Launch the notes form from the documents applet - preset current encounter
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "eight,patient"
   And Overview is active
   When user navigates to Documents Applet

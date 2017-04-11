@@ -1,5 +1,5 @@
 #
-# Author:: Nathan L       (nlloyds@gmail.com)
+# Author:: Nathan L Smith (nlloyds@gmail.com)
 # Author:: Marius Ducea (marius@promethost.com)
 # Cookbook Name:: nodejs
 # Recipe:: package

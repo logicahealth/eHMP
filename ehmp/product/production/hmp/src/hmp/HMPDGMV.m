@@ -1,6 +1,6 @@
-HMPDGMV ;SLC/MKB -- Vitals extract ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDGMV ;SLC/MKB,ASMR/RRB,ASMR/ASF - Vitals extract;8/2/11  15:29
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -12,7 +12,7 @@ HMPDGMV ;SLC/MKB -- Vitals extract ;8/2/11  15:29
  ; GMVGETVT                      5047
  ; GMVRPCM                       5702
  ; GMVUTL                        5046
- ;
+ Q
  ; ------------ Get vitals from VistA ------------
  ;
 EN(DFN,BEG,END,MAX,IFN) ; -- find patient's vitals
@@ -87,12 +87,19 @@ UNIT(X) ; -- Return unit for vital type X
  ;
 USER(X) ; -- Return ien^name for person# X
  N Y S X=+$G(X)
- S Y=$S(X:X_U_$P($G(^VA(200,X,0)),U),1:"^")
+ S Y=$S(X:X_U_$P($G(^VA(200,X,0)),U),1:"^") ; IA 10060, DE2818 ASF 11/4/15
  Q Y
  ;
 LOC(X) ; -- Return ien^name for hospital location X
  N Y S X=+$G(X)
- S Y=$S(X:X_U_$P($G(^SC(X,0)),U),1:"^")
+ ; DE2818 begin change ASF 11/4/15
+ ;S Y=$S(X:X_U_$P($G(^SC(X,0)),U),1:"^")
+ N DA,DIC,DIQ,DR,R  ; FileMan variables
+ S DIC=44,DR=.01,DA=X,DIQ="R"
+ D EN^DIQ1
+ S Y="^"
+ S:$D(R(44,DA,.01)) Y=DA_U_R(44,DA,.01)
+ ; DE2818 end change
  Q Y
  ;
 RANGE(TYPE) ; -- return high^low range of values for TYPE

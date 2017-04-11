@@ -2,7 +2,7 @@
 # Cookbook:: runit
 # Libraries:: helpers
 #
-# Author:     ua Timberman <joshua@getchef.com>
+# Author: Joshua Timberman <joshua@getchef.com>
 # Copyright (c) 2014, Chef Software, Inc. <legal@getchef.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

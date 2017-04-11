@@ -1,24 +1,15 @@
-HMPDJFS ;SLC/KCM,ASMR/RRB -- Asynchronous Extracts and Freshness via stream;Feb 10, 2016 16:22:51
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 62
+HMPDJFS ;SLC/KCM,ASMR/RRB,JD,CK,CPC -- Asynchronous Extracts and Freshness via stream;Apr 27, 2016 10:35:07
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; JD - 1/14/15 - Removed "+" from "$$GETICN^MPIF001(DFN)" so that the
  ;                full value of icn (<icn>V<checksum>) could be captured. US4194.
  ; JD - 3/16/15 - Added checks to prevent restaging of data if the data has
  ;                already been staged.  US4304
+ ; CPC - 3/4/16 - Prevent dual execution. DE3411
  ;
  ; PUT/POST   call $$TAG^ROUTINE(.args,.body)
  ; GET/DELETE call   TAG^ROUTINE(.response,.args)
- ;
- ; TODO: create function to build ARGS from PATH
- ; TODO: create function to return TAG^ROUTINE from MTHD,PATH
- ;
- ; todo: get the big sync working
- ; todo: change to use RPC calls
- ; todo: add in freshness 
- ;
- ; DE2818/RRB SQA findings 1st 2 lines of code
- ; DE3411 prevent dual execution
  ;
  Q
  ;
@@ -29,7 +20,7 @@ API(HMPFRSP,ARGS) ;
  S HMPFRSP=$NA(^TMP("HMPF",$J))
  S HMPFLOG=+$$GET^XPAR("ALL","HMP LOG LEVEL")
  I HMPFLOG D LOGREQ(HMPFHMP,.ARGS)
- S HMPSYS=$$GET^XPAR("SYS","HMP SYSTEM NAME")
+ S HMPSYS=$$SYS^HMPUTILS
  I '$L(HMPFHMP) D SETERR("Missing HMP Server ID") QUIT
  I '$O(^HMP(800000,"B",HMPFHMP,0)) D SETERR("HMP Server not registered") QUIT
  ;
@@ -43,8 +34,12 @@ API(HMPFRSP,ARGS) ;
  . S ARGS("localId")="OPD"  ; use OPD to indicate "sync operational"
  . ; Next 2 lines added for US4304
  . S HMPX2="HMPFX~"_$G(HMPFHMP)_"~OPD"
- . I $D(^XTMP(HMPX2)) S LOC="/hmp/subscription/operational data/"
- . E  S LOC=$$PUTSUB^HMPDJFSP(.ARGS) ; Added ELSE for US4304
+ . D  ;DE5181 submit ODS only if not already run or running
+ ..  N HMPUID
+ ..  I $D(^XTMP(HMPX2)) S LOC="/hmp/subscription/operational data/" Q
+ ..  S HMPUID=$O(^HMP(800000,"B",HMPFHMP,0))
+ ..  I HMPUID,$P($G(^HMP(800000,HMPUID,0)),U,3)=2 S LOC="/hmp/subscription/operational data/" Q
+ ..  S LOC=$$PUTSUB^HMPDJFSP(.ARGS)
  . I $L(LOC) S ^TMP("HMPF",$J,1)="{""apiVersion"":""1.0"",""location"":"""_LOC_"""}"
  I ARGS("command")="getPtUpdates" D  G XAPI
  . L +^TMP("HMPDJFSG "_$G(HMPFHMP)):2 E  D SETERR^HMPDJFS("Only one extract can run for a single server") Q  ;DE3411
@@ -157,7 +152,7 @@ PIDS(DFN) ; return string containing patient id's ready for JSON
  ;
 PID(DFN) ; return most likely PID (ICN or SYS;DFN)
  Q:'DFN ""
- I '$D(HMPSYS) S HMPSYS=$$GET^XPAR("SYS","HMP SYSTEM NAME")
+ I '$D(HMPSYS) S HMPSYS=$$SYS^HMPUTILS
  Q HMPSYS_";"_DFN            ; otherwise use SysId;DFN
  ;
 DFN(PID) ; return the DFN given the PID (ICN or SYS;DFN)
@@ -167,7 +162,7 @@ DFN(PID) ; return the DFN given the PID (ICN or SYS;DFN)
  . S DFN=$$GETDFN^MPIF001(PID)
  . I DFN<0 D SETERR($P(DFN,"^",2))
  ; otherwise
- I $P(PID,";")'=$$GET^XPAR("SYS","HMP SYSTEM NAME") D SETERR("DFN unknown to this system") Q 0
+ I $P(PID,";")'=$$SYS^HMPUTILS D SETERR("DFN unknown to this system") Q 0
  Q $P(PID,";",2)
  ;
 PROGRESS(LASTITM) ; set the node in REF with progress properties
@@ -207,8 +202,8 @@ SETERR(MSG) ; create error object in ^TMP("HMPFERR",$J) and set HMPFERR
  ;
 DEBUG(MSG) ;
  S ^TMP("HMPDEBUG",$J,0)=$G(^TMP("HMPDEBUG",$J,0),0)+1
- I $D(MSG)'=1 M ^TMP("HMPDEBUG",$J,^TMP("HMPDEBUG",$J,0))=MSG
- E  S ^TMP("HMPDEBUG",$J,^TMP("HMPDEBUG",$J,0))=MSG
+ I $D(MSG)'=1 M ^TMP("HMPDEBUG",$J,^TMP("HMPDEBUG",$J,0))=MSG Q
+ S ^TMP("HMPDEBUG",$J,^TMP("HMPDEBUG",$J,0))=MSG
  Q
 RESETSVR(ARGS) ;
  N DA,DIE,DIK,DR,IEN,SRV,SRVIEN,X

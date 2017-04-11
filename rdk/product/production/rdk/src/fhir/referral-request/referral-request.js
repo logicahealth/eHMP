@@ -33,7 +33,7 @@ function convertToFhir(result, req) {
     _.forEach(items, function(item) {
         entry.push(new fhirResource.Entry(convertToReferralRequest(item, req)));
     });
-    return new fhirResource.Bundle2(link, entry, result.data.totalItems);
+    return new fhirResource.Bundle(link, entry, result.data.totalItems);
 }
 
 function convertToReferralRequest(jdsItem, req) {
@@ -56,7 +56,7 @@ function convertToReferralRequest(jdsItem, req) {
     setRecipients(fhirItem, jdsItem);
 
     if (nullchecker.isNotNullish(jdsItem.dateTime)) {
-        fhirItem.dateSent = fhirUtils.convertToFhirDateTime(jdsItem.dateTime);
+        fhirItem.dateSent = fhirUtils.convertToFhirDateTime(jdsItem.dateTime, fhirUtils.getSiteHash(jdsItem.uid));
     }
     if (nullchecker.isNotNullish(jdsItem.reason)) {
         fhirItem.reason = new fhirResource.CodeableConcept(jdsItem.reason);

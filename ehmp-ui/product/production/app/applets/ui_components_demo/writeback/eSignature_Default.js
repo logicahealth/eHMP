@@ -73,7 +73,7 @@ define([
                 e.preventDefault();
                 var cancelAlertView = new ADK.UI.Alert({
                     title: 'Special Alert',
-                    icon: 'fa-bell-o',
+                    icon: 'icon-warning',
                     message: 'You will lose progress if you cancel this lab order. Would you like to proceed?',
                     buttons: [cancelButton, continueButton]
                 });

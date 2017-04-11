@@ -14,11 +14,11 @@ describe('lab-time-valid-immediate-collect-time resource integration test', func
         var configuration = {
             environment: 'development',
             context: 'OR CPRS GUI CHART',
-            host: 'IP        ',
+            host: 'IP_ADDRESS',
             port: 9210,
-            accessCode: 'PW    ',
-            verifyCode: 'PW    !!',
-            localIP: 'IP      ',
+            accessCode: 'PW',
+            verifyCode: 'PW',
+            localIP: 'IPADDRES',
             localAddress: 'localhost'
         };
 
@@ -36,11 +36,11 @@ describe('lab-time-valid-immediate-collect-time resource integration test', func
         var configuration = {
             environment: 'development',
             context: 'OR CPRS GUI CHART',
-            host: 'IP        ',
+            host: 'IP_ADDRESS',
             port: 9210,
-            accessCode: 'PW    ',
-            verifyCode: 'PW    !!',
-            localIP: 'IP      ',
+            accessCode: 'PW',
+            verifyCode: 'PW',
+            localIP: 'IPADDRES',
             localAddress: 'localhost'
         };
 

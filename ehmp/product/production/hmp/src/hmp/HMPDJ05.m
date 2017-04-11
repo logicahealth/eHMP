@@ -1,8 +1,9 @@
-HMPDJ05 ;ASMR/MKB - Medications by order ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 3
+HMPDJ05 ;SLC/MKB,ASMR/RRB,CPC - Medications by order;Jun 28, 2016 15:12:10
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References: see HMPDJ05V for DBIA list
+ ; ^OR(100) references - ICR 5771
  ;
  ; All tags expect DFN, ID, [HMPSTART, HMPSTOP, HMPMAX, HMPTEXT]
  Q
@@ -20,6 +21,7 @@ PS1(ID) ; -- med order
  S CLS=$S("RSN"[X:"O","UV"[X:"I",1:$$GET1^DIQ(100,ID_",",10,"I"))
  S MED("uid")=$$SETUID^HMPUTILS("med",DFN,ID)
  S MED("orders",1,"orderUid")=$$SETUID^HMPUTILS("order",DFN,ID)
+ D KIN(ID) ;DE5462 add parent/child structure
  S X=$$GET1^DIQ(100,ID_",",9,"I") S:X MED("orders",1,"predecessor")=$$SETUID^HMPUTILS("med",DFN,+X)
  S X=$$GET1^DIQ(100,ID_",",9.1,"I") S:X MED("orders",1,"successor")=$$SETUID^HMPUTILS("med",DFN,+X)
  S:ORPK MED("localId")=ORPK_";"_CLS
@@ -28,7 +30,7 @@ PS1(ID) ; -- med order
  S:$G(ORNP) MED("orders",1,"providerUid")=$$SETUID^HMPUTILS("user",,+ORNP),MED("orders",1,"providerName")=$P(ORNP,U,2)
  S LOC=+$G(ORL),FAC=$$FAC^HMPD(LOC) I LOC D
  . S MED("orders",1,"locationUid")=$$SETUID^HMPUTILS("location",,LOC)
- . S MED("orders",1,"locationName")=$P(^SC(LOC,0),U)
+ . S MED("orders",1,"locationName")=$$GET1^DIQ(44,LOC_",",.01)  ;DE2818, ICR 10040
  D FACILITY^HMPUTILS(FAC,"MED")
  S:$G(ORSTRT) MED("overallStart")=$$JSONDT^HMPUTILS(ORSTRT)
  S:$G(ORSTOP) (MED("stopped"),MED("overallStop"))=$$JSONDT^HMPUTILS(ORSTOP)
@@ -36,8 +38,8 @@ PS1(ID) ; -- med order
  S MED("medStatusName")=$$STATUS^HMPDPSOR(+$G(ORSTS))
  S MED("medStatus")=$$MEDSTAT^HMPDJ05V(MED("medStatusName"))
  I CLS="I" D
- . S:$P($G(^SC(+$G(LOC),0)),U,25) MED("IMO")="true"
- . S X=$P($G(^OR(100,ID,3)),U,9) S:X MED("parent")=X
+ . S:$$GET1^DIQ(44,LOC_",",2802,"I") MED("IMO")="true"  ;DE2818, ICR 10040, (#2802) ADMINISTER INPATIENT MEDS? [25S]
+ . S X=$$GET1^DIQ(100,ID_",",36) S:X MED("parent")=X  ;DE2818, ICR 5771, (#36) PARENT
  I ORPK D OEL^PSOORRL(DFN,ORPK_";"_CLS)
  S X=$S(ORPK["N":"N",1:CLS),MED("vaType")=X,MED("medType")=$$TYPE^HMPDJ05V(X)
  I CLS="O" S MED("type")=$S(ORPK["N":"OTC",1:"Prescription")
@@ -57,6 +59,7 @@ A ; - Get order responses
  I CLS="O",'$L($G(HMPESP("SIG",1))),'$D(HMPESP("INSTR")) S MED("sig")=$G(HMPESP("COMMENT",1)) ;old Rx
  ;
 B ; - Get dosages
+ ;DE2818 begin, ^OR(100) references - ICR 5771
  I '$O(^OR(100,ID,2,0)) D  ;single dose or OP
  . N HMPY,START,STOP,DUR,CONJ,MIN
  . S START=$G(ORSTRT),STOP=$G(ORSTOP),MIN=0
@@ -93,6 +96,7 @@ B ; - Get dosages
  . S DD=$O(DD(0)) I DD,'$O(DD(DD)) S DRUG=DD Q    ;1 drug for order
  . S (DD,CNT)=0 F  S DD=$O(DD(DD)) Q:DD<1  S DA=0 F  S DA=$O(DD(DD,DA)) Q:DA<1  S CNT=CNT+1 D NDF(DD,CNT,DA)
  ;
+ ;DE2818 end
 C ; - Get OP data
  I CLS="O",ORPK'["N" D
  . S MED("orders",1,"quantityOrdered")=$G(HMPESP("QTY",1))
@@ -130,15 +134,22 @@ PSQ ; finish
  D:DRUG NDF(+DRUG)
  S MED("qualifiedName")=$G(MED("name"))
  S X=+$P($G(^TMP("PS",$J,"RXN",0)),U,5)
- S:X MED("orders",1,"pharmacistUid")=$$SETUID^HMPUTILS("user",,X),MED("orders",1,"pharmacistName")=$P($G(^VA(200,X,0)),U)
+ S:X MED("orders",1,"pharmacistUid")=$$SETUID^HMPUTILS("user",,X),MED("orders",1,"pharmacistName")=$$GET1^DIQ(200,X_",",.01)  ;DE2818, ICR 10035
  K ^TMP("PS",$J),^TMP($J,"PSOI"),^TMP("PSOR",$J)
  S MED("lastUpdateTime")=$$EN^HMPSTMP("med") ;RHL 20150102
  S MED("stampTime")=MED("lastUpdateTime") ; RHL 20150102
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("med",MED("uid"),MED("stampTime")) Q:HMPMETA=1  ;US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("med",MED("uid"),MED("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("MED","med")
  Q
  ;
+KIN(IFN) ; DE5462 - Add parents/children (kin) to order
+ N HMPNOJS,HMPORKIN,I
+ S HMPNOJS=1 D RELATED^HMPORRPC(.HMPORKIN,IFN)
+ S:$D(@HMPORKIN@("parent")) MED("orders",1,"parentOrderUid")=$$SETUID^HMPUTILS("order",DFN,+@HMPORKIN@("parent"))
+ S I="" F  S I=$O(@HMPORKIN@("children",I)) Q:I=""  D
+ . S MED("orders",1,"childrenOrderUids",I)=$$SETUID^HMPUTILS("order",DFN,+@HMPORKIN@("children",I))
+ Q
 DOSE(Y,N) ; -- return dosage data from HMPESP(ID,N) to Y("name")
  N X,DOSE,DUR,CONJ S N=+$G(N,1) K Y
  S Y("instructions")=$G(HMPESP("INSTR",N))

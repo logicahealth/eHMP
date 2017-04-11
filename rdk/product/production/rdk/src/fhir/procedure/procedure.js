@@ -8,13 +8,7 @@ var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
 var errors = require('../common/errors');
-
-//// ++
-//// used with order data
-////
-//var async = require('async');
-//var asyncQueue = null;
-//// --
+var fhirConstants = require('../common/utils/constants');
 
 var jdsToFHIRStatusMap = {
     'COMPLETE': 'completed',
@@ -38,38 +32,93 @@ var jdsToFHIRDiagnosticStatus = {
     }
 };
 
-var fhirToJDSMap = {
-    //date       date        Date/Period the procedure was performed Procedure.performedDateTime
-    date: 'dateTime',
-    //encounter  reference   The encounter when procedure performed  Procedure.encounter(Encounter)
-    encounter: 'encounterUid',
-    //location   reference   Where the procedure happened    Procedure.location    (Location)
-    location: 'locationName',
-    //patient    reference   The identity of a patient to list procedures for    Procedure.patient     (Patient)
-    patient: 'pid', // the subject that the procedure is about (if patient)
-    //performer  reference   The reference to the practitioner   Procedure.performer.person     (Patient, Practitioner, RelatedPerson)
-    performer: 'facilityName', // Who performed the observation, contained in Order - SUPPORTED As Facility
-    //type       token       Type of procedure   Procedure.type.coding.display
-    type: 'name'
-        // other possible search params....
-        //_id: 'uid', // The unique Id for a particular procedure
-};
+var fhirToJDSAttrMap = [{
+    fhirName: 'subject.identifier', // Note this attribute is a app-defined search param, not a Fhir specified attribute.
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier - note that this patient identifier will override any patient identifier that is in the URI of this endpoint.',
+    searchable: true
+}, {
+    fhirName: 'pid',  // Note this attribute is a app-defined search param, not a Fhir specified attribute.
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier - note that this patient identifier will override any patient identifier that has been specified in the URI of this endpoint, as well as any subject.identifier in the query string.',
+    searchable: true
+}, {
+    fhirName: 'date',
+    vprName: 'dateTime',
+    dataType: 'dateTime',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#dateTime',
+    description: 'Date/Period the procedure was performed Procedure.performedDateTime. The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. date=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. date=2015-01-26T08:30:00) or an implicit range (e.g. date=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=).',
+    searchable: true,
+    sortable: true
+}, {
+    fhirName: 'encounter',
+    vprName: 'encounterUid',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'The encounter when procedure performed.',
+    searchable: false,
+    sortable: true
+}, {
+    fhirName: 'location',
+    vprName: 'locationName',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Where the procedure happened.',
+    searchable: false,
+    sortable: true
+}, {
+    fhirName: 'patient',
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'The patient identifier (or subject) for which to retrieve the associated list of procedures.',
+    searchable: false,
+    sortable: true
+}, {
+    fhirName: 'performer',
+    vprName: 'facilityName',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'The reference to the practitioner.',
+    searchable: false,
+    sortable: true
+}, {
+    fhirName: 'type',
+    vprName: 'name',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Type of procedure.',
+    searchable: false,
+    sortable: true
+}];
+
+/**
+ * To contain a simplified object (from fhirToJDSAttrMap) of
+ * only sortable fhirName:vprName  attributes for easier processing.
+ */
+var fhirToJDSSortMap;
+
 
 function buildJDSPath(pid, params) {
     var basePath = '/vpr/' + pid + '/find/procedure';
     var searchQuery = buildSearchQuery(params);
-    return fhirToJDSSearch.buildJDSPath(basePath, searchQuery, params, fhirToJDSMap);
+    return fhirToJDSSearch.buildJDSPath(basePath, searchQuery, params, fhirToJDSSortMap);
 }
-
 
 function buildSearchQuery(params) {
     var query = [];
     var dateQuery;
 
-    // system & code
-    if (nullchecker.isNotNullish(params.code)) {
-        query.push(fhirToJDSSearch.buildCodeAndSystemQuery(params.code));
-    }
+    // TODO-FUTURE
+    // system & code - Not yet truely supported at JDS data level , since codes are not given back up
+    // if (nullchecker.isNotNullish(params.code)) {
+    //     query.push(fhirToJDSSearch.buildCodeAndSystemQuery(params.code));
+    // }
+
     // date
     if (nullchecker.isNotNullish(params.date)) {
         dateQuery = fhirToJDSSearch.buildDateQuery(params.date, 'dateTime');
@@ -80,25 +129,19 @@ function buildSearchQuery(params) {
     return fhirToJDSSearch.buildSearchQueryString(query);
 }
 
-function getJDSErrorMessage(error) {
-    var msg = '';
-
-    if (nullchecker.isNotNullish(error.errors)) {
-        msg = _.reduce(error.errors, function(memo, e) {
-            if (!_.isEmpty(memo)) {
-                memo += ', ';
-            }
-            memo += e.domain + ' :: ' + e.message;
-            return memo;
-        }, '');
-    }
-    return msg;
-}
-
 function getData(appConfig, logger, pid, params, callback) {
+
+    fhirToJDSSortMap = fhirToJDSSearch.getSimplifiedSortArray(params, fhirToJDSAttrMap);
+
+    // check suport for specific user given sort params
+    if (!fhirToJDSSearch.isSortCriteriaValid(params, fhirToJDSSortMap)) {
+        var errMsg = 'Unsupported _sort criteria. Supported attributes are: ' + fhirToJDSSearch.getAllowableSortFhirValueString(fhirToJDSAttrMap) ;
+        return callback(new errors.HTTPError(rdk.httpstatus.internal_server_error, errMsg));
+    }
+
     // check for required pid param
     if (nullchecker.isNullish(pid)) {
-        return callback(new Error('Missing required parameter: pid'));
+        return callback(new errors.HTTPError(rdk.httpstatus.internal_server_error, 'Missing required parameter: pid'));
     }
 
     var jdsPath = buildJDSPath(pid, params);
@@ -119,7 +162,7 @@ function getData(appConfig, logger, pid, params, callback) {
             return callback(null, body);
         }
         if ('error' in body) {
-            logger.error('Procedure::getData: ' + body.error.code + ' - ' + getJDSErrorMessage(body.error));
+            logger.error('Procedure::getData: ' + body.error.code + ' - ' + errors.getJDSErrorMessage(body.error));
             return callback(new errors.HTTPError(rdk.httpstatus.internal_server_error, internalError));
         }
         logger.error('Procedure::getData: Empty response from JDS.');
@@ -127,140 +170,29 @@ function getData(appConfig, logger, pid, params, callback) {
     });
 }
 
-//// ++
-//// Uncomment this when Order data used   ////
-////
-//
-//  These methods used to retrieve and process referenced Order data
-//
-// url to retrieve order
-//  {{rdk}} /resource/patient/record/domain/order?pid=9E7A;100599&uid=urn:va:order:9E7A:100599:15748
-//  {{jds}} http://IP             /vpr/9E7A;100599/index/order?start=0&filter=like('uid','urn:va:order:9E7A:100599:15748')
-//function getOrderData(properties, callback) {
-//    var pid = properties.pid;
-//    var orderUid = properties.uid;
-//    var fhirItem = properties.item;
-//    var req = properties.req;
-//    var params = {
-//        domain: 'order',
-//        filter: 'like(uid,' + orderUid + ')'
-//    };
-//    if (nullchecker.isNullish(orderUid)) {
-//        return callback();
-//    }
-//    getData(req.app.config, req.logger, pid, params, null, function(err, result) {
-//
-//        if (nullchecker.isNotNullish(err)) {
-//            return callback(err);
-//        }
-//        var order = result.data.items[0];
-//        if (nullchecker.isNotNullish(order.oiCode)) {
-//            var coding = new fhirResource.Coding(order.oiCode, order.oiName, 'oi-code');
-//            if (nullchecker.isNotNullish(order.oiPackageRef)) {
-//                coding.extension = [createExtension('oiPackageRef', order.oiPackageRef)];
-//            }
-//            fhirItem.type = [{
-//                code: new fhirResource.CodeableConcept(undefined, coding)
-//            }];
-//        }
-//        // clinicians...
-//        fhirItem.performer = [];
-//        _.forEach(order.clinicians, function(clinician) {
-//            fhirItem.performer.push(createPerformer(clinician));
-//        });
-//        callback();
-//    });
-//}
-
-
-//var out1 = null;
-//var cb1 = null;
-//
-//function processFhirWithOrders(result, req, done) {
-//
-//    asyncQueue = async.queue(function(properties, callback) {
-//        getOrderData(properties, function(err) {
-//            if (err) {
-//                req.app.logger.error(err);
-//            } else {
-//                req.app.logger.info('done');
-//                callback();
-//            }
-//        });
-//    }, 5);
-//    asyncQueue.pause();
-//
-////    Can use either waterfall or parallel
-////    parallel should be faster....
-////
-////    async.waterfall([
-////        function(callback) {
-////            var items = convertToFhir(result, req);
-////            callback(null, items);
-////        },
-////        function(result, callback) {
-////            out1 = result;
-////            cb1 = callback;
-////            asyncQueue.drain = function() {
-////                cb1(null, out1);
-////            }
-////            asyncQueue.resume();
-////        }
-////        ],
-////        function (err, result) {
-////            done(result);
-////        }
-////    );
-//    async.parallel([
-//        function(callback) {
-//            var items = convertToFhir(result, req);
-//            callback(null, items);
-//        },
-//        function(callback) {
-//            var callback1 = callback;
-//            asyncQueue.drain = function() {
-//                callback1();
-//            };
-//            asyncQueue.resume();
-//        }
-//        ],
-//        function (err, results) {
-//        done(results[0]);
-//    }
-//    );
-//}
-//// --
-
-function convertToFhir(result, req) {
-    var link = [new fhirResource.Link(req.protocol + '://' + req.headers.host + req.originalUrl, 'self')];
-    var entry = [];
-    var items = result.data.items;
-
-    _.forEach(items, function(item) {
-        var procedures = createProcedure(req, item, item.pid);
-        entry = entry.concat(_.map(procedures, function(procedure) {
-            return new fhirResource.Entry(procedure);
-        }));
+function convertToFhir(items, req) {
+    return _.map(items, function(item) {
+        return createProcedure(req, item, item._pid);
     });
-    return new fhirResource.Bundle2(link, entry, result.data.totalItems);
 }
 
 function createProcedure(req, jdsItem, pid) {
     var fhirItem = new fhirResource.Procedure(helpers.generateUUID(), pid);
-    var results = [fhirItem];
 
     fhirItem.text = new fhirResource.Narrative('<div>' + _.escape(jdsItem.oiName || jdsItem.name) + '</div>');
     fhirItem.status = jdsToFHIRStatusMap.get(jdsItem.statusName);
-    fhirItem.identifier = [new fhirResource.Identifier(jdsItem.uid, 'urn:oid:2.16.840.1.113883.6.233')];
+    fhirItem.identifier = [new fhirResource.Identifier(jdsItem.uid, fhirConstants.procedure.PROCEDURE_UID_IDENTIFIER_SYSTEM)];
     fhirItem.patient = new fhirResource.ReferenceResource('Patient/' + jdsItem.pid); // REQUIRED
 
-    fhirItem.type = {};
-    fhirItem.type.coding = [];
-    fhirItem.type.coding.push({
-        system: 'gov.va.fileman697-2:9E7A',
-        display: jdsItem.name,
-        primary: true
-    });
+
+    fhirItem.type = {
+        coding: [{
+            system: fhirConstants.procedure.NONEDUCATION_TYPECODE_SYSTEM,
+            code: encodeURI(jdsItem.name),
+            display: jdsItem.name,
+            primary: true
+        }]
+    };
 
     if (nullchecker.isNotNullish(jdsItem.results)) {
         fhirItem.contained = [];
@@ -274,7 +206,7 @@ function createProcedure(req, jdsItem, pid) {
     }
 
     if (nullchecker.isNotNullish(jdsItem.dateTime)) {
-        fhirItem.performedDateTime = fhirUtils.convertToFhirDateTime(jdsItem.dateTime);
+        fhirItem.performedDateTime = fhirUtils.convertToFhirDateTime(jdsItem.dateTime, fhirUtils.getSiteHash(jdsItem.uid));
     }
 
     if (nullchecker.isNotNullish(jdsItem.encounterUid)) {
@@ -287,26 +219,17 @@ function createProcedure(req, jdsItem, pid) {
     }
     fhirItem.extension = createExtensions(jdsItem);
 
-    //// ++
-    //// Uncomment this for retrieving the referenced order
-    ////
-    //  // queue to process referenced Order
-    //  if (nullchecker.isNotNullish(jdsItem.orderUid)) {
-    //      asyncQueue.push({pid: pid, uid: jdsItem.orderUid, item: fhirItem, req: req}, function(err) {
-    //          req.app.logger.error(err);
-    //      });
-    //  }
-    //// --
-    return results;
+    return fhirItem;
 }
 
 function createReport(jdsItem, item) {
+    var siteHash = fhirUtils.getSiteHash(jdsItem.uid);
     var result = {
         resourceType: 'DiagnosticReport',
         id: helpers.generateUUID(),
         text: {
             status: 'generated',
-            div: '<div>' + item.localTitle + '</div>'
+            div: '<div>' + _.escape(item.localTitle) + '</div>'
         },
         identifier: [{
             value: item.uid,
@@ -318,9 +241,9 @@ function createReport(jdsItem, item) {
                 primary: true
             }]
         },
-        diagnosticDateTime: fhirUtils.convertToFhirDateTime(jdsItem.dateTime),
+        diagnosticDateTime: fhirUtils.convertToFhirDateTime(jdsItem.dateTime, siteHash),
         status: jdsToFHIRDiagnosticStatus.get(jdsItem.statusName),
-        issued: fhirUtils.convertToFhirDateTime(jdsItem.dateTime),
+        issued: fhirUtils.convertToFhirDateTime(jdsItem.dateTime, siteHash),
         subject: new fhirResource.ReferenceResource('Patient/' + jdsItem.pid),
         performer: {
             reference: item.summary
@@ -363,10 +286,6 @@ function createExtensions(jdsItem) {
     return _.compact(ext);
 }
 
-function isSortCriteriaValid(params) {
-    return fhirToJDSSearch.isSortCriteriaValid(params, fhirToJDSMap);
-}
-
 // for testing.
 function getFhirItems(result, req) {
     var fhirResult = {};
@@ -379,9 +298,8 @@ function getFhirItems(result, req) {
 
 
 module.exports.getFhirItems = getFhirItems;
-module.exports.isSortCriteriaValid = isSortCriteriaValid;
+module.exports.jdsToFHIRStatusMap = jdsToFHIRStatusMap;
+module.exports.fhirToJDSAttrMap = fhirToJDSAttrMap;
 module.exports.getData = getData;
 module.exports.convertToFhir = convertToFhir;
 module.exports.createProcedure = createProcedure;
-//module.exports.processFhirWithOrders = processFhirWithOrders;
-module.exports.fhirToJDSMap = fhirToJDSMap;

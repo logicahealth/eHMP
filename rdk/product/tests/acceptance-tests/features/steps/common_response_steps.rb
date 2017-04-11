@@ -54,6 +54,14 @@ Then(/^a internal server error response is returned$/) do
   expect(@response.code).to eq(500), "response code was #{@response.code}: response body #{@response.body}"
 end
 
+Then(/^a internal server error response or a bad request response is returned$/) do
+  valid_error_code = false
+  if @response.code == 400 || @response.code == 500
+    valid_error_code = true
+  end
+  expect(valid_error_code).to eq(true), "response code was #{@response.code}: response body #{@response.body}"
+end
+
 Then(/^the VPR results contain$/) do |table|
   @json_object = JSON.parse(@response.body)
   json_verify = JsonVerifier.new

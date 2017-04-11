@@ -1,24 +1,10 @@
 Given(/^the On-line Help icon on login page of eHMP\-UI$/) do
-  p "running test #{TestSupport.test_counter} #{TestSupport.test_counter % 20}"
-  if ENV.keys.include?('LOCAL') || TestSupport.test_counter % 20 == 0
-    p 'refresh the app'
-    TestSupport.navigate_to_url(DefaultLogin.ehmpui_url)
-  else
-    TestSupport.navigate_to_url(DefaultLogin.ehmpui_url + "/#patient-search-screen")
-  end
-
-  begin
-    TestSupport.driver.manage.window.maximize
-  rescue
-    p "Unable to maximize window - continuing anyway"
-  end
-
-  wait_until_dom_has_signin_or_signout
-
-  login_elements = LoginHTMLElements.instance
-  if login_elements.static_dom_element_exists?("Signout")
-    perform_signout_steps login_elements
-  end
+  step 'POB log me out'
+  @ehmp = PobLoginPage.new
+  @ehmp.load
+  TestSupport.driver.manage.window.resize_to(1280, 800)
+  p @ehmp.url
+  @ehmp.wait_for_ddl_facility(240)
   driver = TestSupport.driver
   expect(driver.find_element(:id, "linkHelp-logon")).to be_true
 end
@@ -81,37 +67,67 @@ And(/^selects it$/) do
   wait_until_dom_has_confirmflag_or_patientsearch
 end
 
-Then(/^the On-line Help icon is present on "(.*?)" page$/) do |panel|
-  driver = TestSupport.driver
+def verify_common_help_buttons
+  PobProblemsApplet.new.wait_for_btn_applet_help
+  expect(PobProblemsApplet.new).to have_btn_applet_help, "help icon not present on Problmes Applet"
+  PobActiveRecentMedApplet.new.wait_for_btn_applet_help
+  expect(PobActiveRecentMedApplet.new).to have_btn_applet_help, "help icon not present on ActiveMeds Applet"
+  PobVitalsApplet.new.wait_for_btn_applet_help
+  expect(PobVitalsApplet.new).to have_btn_applet_help, "help icon not present on Vitals Applet"
+  PobImmunizationsApplet.new.wait_for_btn_applet_help
+  expect(PobImmunizationsApplet.new).to have_btn_applet_help, "help icon not present on Immunization Applet"
+  PobAllergiesApplet.new.wait_for_btn_applet_help
+  expect(PobAllergiesApplet.new).to have_btn_applet_help, "help icon not present on Allergies Applet"
+  PobNumericLabApplet.new.wait_for_btn_applet_help
+  expect(PobNumericLabApplet.new).to have_btn_applet_help, "help icon not present on Numeric Labs Applet"
 
-  if panel == "Overview"
-    expect(driver.find_element(:css, '[data-appletid=cds_advice] button.applet-help-button')).to be_true
-    expect(driver.find_element(:css, '[data-appletid=encounters] button.applet-help-button')).to be_true
-    expect(driver.find_element(:css, '[data-appletid=reports] button.applet-help-button')).to be_true
-  else
-    expect(driver.find_element(:css, '[data-appletid=ccd_grid] button.applet-help-button')).to be_true
-    expect(driver.find_element(:css, '[data-appletid=appointments] button.applet-help-button')).to be_true
-    expect(driver.find_element(:css, '[data-appletid=orders] button.applet-help-button')).to be_true
-  end
+  @ehmp = PobCommonElements.new
+  @ehmp.wait_for_fld_online_help_status_bar(30)
+  expect(@ehmp.has_fld_online_help_status_bar?).to eq(true)
+  
+  @ehmp = PobOverView.new
+  @ehmp.wait_for_fld_link_help_ehmp_header
+  expect(@ehmp.has_fld_link_help_ehmp_header?).to eq(true)
+end
 
-  expect(driver.find_element(:css, '[data-appletid=problems] button.applet-help-button')).to be_true
-  expect(driver.find_element(:css, '[data-appletid=activeMeds] button.applet-help-button')).to be_true
-  expect(driver.find_element(:css, '[data-appletid=vitals] button.applet-help-button')).to be_true
-  expect(driver.find_element(:css, '[data-appletid=immunizations] button.applet-help-button')).to be_true
-  expect(driver.find_element(:id, "linkHelp-status_bar")).to be_true
-  expect(driver.find_element(:id, "linkHelp-patient_search_button")).to be_true
-  expect(driver.find_element(:id, "linkHelp-user_info")).to be_true
-  expect(driver.find_element(:id, "linkHelp-coversheet")).to be_true
+Then(/^the On\-line Help icon is present on Overview page$/) do
+  PobEncountersApplet.new.wait_for_btn_applet_help
+  expect(PobEncountersApplet.new).to have_btn_applet_help, "help icon not present on Encounters Applet"
+  PobClinicalRemindersApplet.new.wait_for_btn_applet_help
+  expect(PobClinicalRemindersApplet.new).to have_btn_applet_help, "help icon not present on Clincal Reminders Applet"
+  PobReportsApplet.new.wait_for_btn_applet_help
+  expect(PobReportsApplet.new).to have_btn_applet_help, "help icon not present on Reports Applet"
+
+  verify_common_help_buttons
+end
+
+Then(/^the On\-line Help icon is present on Coversheet page$/) do
+  PobCommunityHealthApplet.new.wait_for_btn_applet_help
+  expect(PobCommunityHealthApplet.new).to have_btn_applet_help, "help icon not present on Health Summary Applet"
+  PobAppointmentsApplet.new.wait_for_btn_applet_help
+  expect(PobAppointmentsApplet.new).to have_btn_applet_help, "help icon not present on Appointments Applet"
+  PobOrdersApplet.new.wait_for_btn_applet_help
+  expect(PobOrdersApplet.new).to have_btn_applet_help, "help icon not present on Orders Applet"
+
+  verify_common_help_buttons
 end
 
 Then(/^the On-line Help icon is present on Documents page$/) do
-  driver = TestSupport.driver
-  expect(driver.find_element(:css, '[data-appletid=documents] button.applet-help-button')).to be_true
+  @ehmp = PobDocumentsList.new
+  @ehmp.wait_for_btn_applet_help
+  expect(@ehmp).to have_btn_applet_help, "help icon not present on Documents Applet"
 end
 
 Then(/^the On-line Help icon is present on Timeline page$/) do
-  driver = TestSupport.driver
-  expect(driver.find_element(:css, '[data-appletid=newsfeed] button.applet-help-button')).to be_true
+  @ehmp = PobTimeline.new
+  @ehmp.wait_for_btn_applet_help
+  expect(@ehmp).to have_btn_applet_help, "help icon not present on timline Applet"
+end
+
+Then(/^the On-line Help icon is present on Meds Review page$/) do
+  @ehmp = PobMedsReview.new
+  @ehmp.wait_for_btn_applet_help
+  expect(@ehmp).to have_btn_applet_help, "help icon not present on MedsReview Applet"
 end
 
 Then(/^the On-line Help page is opened by clicking on the On-line Help icon$/) do

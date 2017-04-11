@@ -347,9 +347,9 @@ $('.close').removeAttr('aria-hidden').wrapInner('<span aria-hidden="true"></span
         $options.each(function () {
           var item = $(this)
           if(item.hasClass('active')){
-            item.attr({ 'aria-selected': 'true', 'tabindex' : '0' })
+            item.attr({ 'aria-selected': 'true'})//, 'tabindex' : '0' })
           }else{
-            item.attr({ 'aria-selected': 'false', 'tabindex' : '-1' })
+            item.attr({ 'aria-selected': 'false'})//, 'tabindex' : '-1' })
           }
         })
       })
@@ -363,8 +363,8 @@ $('.close').removeAttr('aria-hidden').wrapInner('<span aria-hidden="true"></span
 
       $active
         .one($.support.transition.end, function () {
-        $active.attr({'aria-selected':false, 'tabIndex': '-1'})
-        $next.attr({'aria-selected':true, 'tabIndex': '0'})
+        $active.attr({'aria-selected':false})//, 'tabIndex': '-1'})
+        $next.attr({'aria-selected':true})//, 'tabIndex': '0'})
         //.focus()
        })
       }

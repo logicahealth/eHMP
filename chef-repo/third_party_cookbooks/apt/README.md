@@ -260,7 +260,7 @@ If you want to cleanup unused packages, there is also the `apt-get autoclean` an
 
 License & Authors
 -----------------
-- Author::     ua Timberman (joshua@chef.io)
+- Author:: Joshua Timberman (joshua@chef.io)
 - Author:: Matt Ray (matt@chef.io)
 - Author:: Seth Chisamore (schisamo@chef.io)
 

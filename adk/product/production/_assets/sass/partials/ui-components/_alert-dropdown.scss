@@ -1,0 +1,30 @@
+html {
+    #center-region,
+    #center-region .more-info,
+    #bottom-region footer,
+    #header-region .application-header-items-left,
+    #header-region .navbar-right > :not(.application-user-icons),
+    #header-region .application-user-icons ul li:not(.blur-none){
+        -webkit-transition: 250ms -webkit-opacity linear;
+        transition: 250ms opacity linear;
+    }
+    body, nav.navbar.navbar-default {
+        -webkit-transition: 250ms background-color linear;
+        transition: 250ms background-color linear;
+    }
+    &.page-blur {
+        #center-region,
+        #center-region .more-info,
+        #bottom-region footer,
+        #header-region .application-header-items-left,
+        #header-region .navbar-right > :not(.application-user-icons),
+        #header-region .application-user-icons ul li:not(.blur-none){
+            opacity: 0.15;
+            -webkit-opacity: 0.15;
+            -ms-opacity: 0.15;
+        }
+        body, nav.navbar.navbar-default {
+            background-color: #eee;
+        }
+    }
+}

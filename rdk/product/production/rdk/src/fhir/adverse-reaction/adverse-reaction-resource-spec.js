@@ -122,7 +122,7 @@ describe('AdverseReactions FHIR Resource Collection', function() {
                                 return ext.url === 'http://vistacore.us/fhir/profiles/@main#entered-datetime';
                             });
 
-                            expect(extDateTime.valueDateTime).to.equal(fhirUtils.convertToFhirDateTime(vprAR.entered));
+                            expect(extDateTime.valueDateTime).to.equal(fhirUtils.convertToFhirDateTime(vprAR.entered, fhirUtils.getSiteHash(fhirAR.subject.reference)));
                         });
 
                         it('verifies that the ReactionNature extension exists in the FHIR AdverseReactions Resource', function() {
@@ -237,7 +237,7 @@ describe('AdverseReactions FHIR Resource Collection', function() {
 
                     if (vprAR.observations !== undefined && vprAR.observations.length > 0) {
                         it('verifies that the date from the first observation of VPR AdverseReaction Resource coresponds to the date from the FHIR AdverseReaction Resource', function() {
-                            expect(fhirAR.date).to.equal(fhirUtils.convertToFhirDateTime(vprAR.observations[0].date));
+                            expect(fhirAR.date).to.equal(fhirUtils.convertToFhirDateTime(vprAR.observations[0].date, fhirUtils.getSiteHash(fhirAR.subject.reference)));
                         });
                     }
 

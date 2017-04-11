@@ -815,7 +815,7 @@ define([
 
             var orderCollection = new MedNameRowSubCollection([med8, med2, med3, med4, med5, med7, med6, med1], {
                 comparator: function(med) {
-                    return -1 * med.getEarlierStop().stoppedMoment.valueOf();
+                    return -1 * med.getEarlierStopAsMoment().valueOf();
                 }
             });
             graphingGroupCollection = new GraphingGroupCollection(orderCollection, {
@@ -979,7 +979,7 @@ define([
 
             var orderCollection = new MedNameRowSubCollection([med9, med8, med2, med3, med4, med5, med7, med6, med1], {
                 comparator: function(med) {
-                    return -1 * med.getEarlierStop().stoppedMoment.valueOf();
+                    return -1 * med.getEarlierStopAsMoment().valueOf();
                 }
             });
             graphingGroupCollection = new GraphingGroupCollection(orderCollection, {

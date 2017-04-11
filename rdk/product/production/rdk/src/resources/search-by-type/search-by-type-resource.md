@@ -2,7 +2,7 @@
 
 ## Patient record search by type [{{{path}}}]
 
-### Patient record search by type {domain} [GET {{{path}}}/{domain}{?pid}{&type}{&date.start}{&date.end}{&start}{&limit}{&order}{&fields}]
+### Patient record search by type {domain} [GET {{{path}}}/{domain}{?pid}{&type}{&date.start}{&date.end}{&start}{&limit}{&order}]
 
 + Parameters
 
@@ -27,8 +27,6 @@
     :[limit]({{{common}}}/parameters/limit.md)
 
     :[order]({{{common}}}/parameters/order.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

@@ -1,0 +1,143 @@
+import org.drools.core.process.core.datatype.impl.type.StringDataType;
+import org.drools.core.process.core.datatype.impl.type.ObjectDataType;
+
+[
+  [
+    "name" : "Email",
+    "parameters" : [
+      "From" : new StringDataType(),
+      "To" : new StringDataType(),
+      "Subject" : new StringDataType(),
+      "Body" : new StringDataType()
+    ],
+    "displayName" : "Email",
+    "icon" : "defaultemailicon.gif"
+  ],
+
+  [
+    "name" : "Log",
+    "parameters" : [
+      "Message" : new StringDataType()
+    ],
+    "displayName" : "Log",
+    "icon" : "defaultlogicon.gif"
+  ],
+
+  [
+    "name" : "WebService",
+    "parameters" : [
+        "Url" : new StringDataType(),
+         "Namespace" : new StringDataType(),
+         "Interface" : new StringDataType(),
+         "Operation" : new StringDataType(),
+         "Parameter" : new StringDataType(),
+         "Endpoint" : new StringDataType(),
+         "Mode" : new StringDataType()
+    ],
+    "results" : [
+        "Result" : new ObjectDataType(),
+    ],
+    "displayName" : "WS",
+    "icon" : "defaultservicenodeicon.png"
+  ],
+
+  [
+    "name" : "Rest",
+    "parameters" : [
+        "Url" : new StringDataType(),
+        "Method" : new StringDataType(),
+        "ConnectTimeout" : new StringDataType(),
+        "ReadTimeout" : new StringDataType(),
+        "Username" : new StringDataType(),
+        "Password" : new StringDataType()
+    ],
+    "results" : [
+        "Result" : new ObjectDataType(),
+    ],
+    "displayName" : "REST",
+    "icon" : "defaultservicenodeicon.png"
+  ],
+[
+    "name" : "ClinicalObjectWriteService",
+    "parameters" : [
+        "pid" : new StringDataType(),
+        "uid" : new StringDataType(),
+        "clinicalObject" : new StringDataType()
+    ],
+    "results" : [
+        "ServiceResponse" : new StringDataType(),
+    ],
+    "displayName" : "ClinicalObjectWriteService",
+    "icon" : "defaultservicenodeicon.png",
+    "category": "Vistacore"
+  ],
+[
+    "name" : "ClinicalObjectReadService",
+    "parameters" : [
+        "pid" : new StringDataType(),
+        "uid" : new StringDataType()
+    ],
+    "results" : [
+        "ServiceResponse" : new StringDataType(),
+    ],
+    "displayName" : "ClinicalObjectReadService",
+    "icon" : "defaultservicenodeicon.png",
+    "category": "Vistacore"
+  ],
+[
+    "name" : "SignalRegistrationService",
+    "parameters" : [
+           "signalName" : new StringDataType(),
+        "signalContent" : new StringDataType(),
+        "matchObject" : new StringDataType(),
+        "eventDescription" : new StringDataType(),
+        "eventName" : new StringDataType()
+    ],
+    "results" : [
+        "ServiceResponse" : new StringDataType(),
+    ],
+    "displayName" : "SignalRegistrationService",
+    "icon" : "defaultservicenodeicon.png",
+    "category": "Vistacore"
+  ],
+[
+    "name" : "SignalWriteService",
+    "parameters" : [
+        "name" : new StringDataType(),
+        "action" : new StringDataType(),
+        "owner" : new StringDataType(),
+        "history" : new StringDataType()
+    ],
+    "results" : [
+        "ServiceResponse" : new StringDataType(),
+    ],
+    "displayName" : "SignalWriteService",
+    "icon" : "defaultservicenodeicon.png",
+    "category": "Vistacore"
+],
+[
+    "name" : "NotificationsWriteService",
+    "parameters" : [
+        "notification" : new StringDataType()
+    ],
+    "results" : [
+        "ServiceResponse" : new StringDataType(),
+    ],
+    "displayName" : "NotificationsWriteService",
+    "icon" : "defaultservicenodeicon.png",
+    "category": "Vistacore"
+],
+[
+    "name" : "EventStateWriteService",
+    "parameters" : [
+        "clinicalObjectUid" : new StringDataType(),
+        "listenerId" : new StringDataType()
+    ],
+    "results" : [
+        "ServiceResponse" : new StringDataType(),
+    ],
+    "displayName" : "EventStateWriteService",
+    "icon" : "defaultservicenodeicon.png",
+    "category": "Vistacore"
+]
+]

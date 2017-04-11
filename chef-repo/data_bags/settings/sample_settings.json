@@ -3,33 +3,33 @@
   "ssh_username" : "vagrant",
   "ssh_key" : "~/Projects/vistacore/.vagrant.d/insecure_private_key",
   "jds" : {
-    "ip_address" : "172.16.2.110"
+    "ip_address" : "IP_ADDRESS"
   },
   "solr" : {
-    "ip_address" :"172.16.3.10"
+    "ip_address" : "IPADDRESS"
   },
   "mocks" : {
-    "ip_address" : "172.16.4.205"
+    "ip_address" : "IP_ADDRESS"
   },
   "vista-panorama" : {
-    "ip_address" : "172.16.2.101"
+    "ip_address" : "IP_ADDRESS"
   },
   "vista-kodak" : {
-    "ip_address" : "172.16.2.102"
+    "ip_address" : "IP_ADDRESS"
   },
   "vxsync" : {
-    "ip_address" : "172.16.3.6"
+    "ip_address" : "IPADDRES"
   },
   "rdk" : {
-    "ip_address" : "172.16.4.105"
+    "ip_address" : "IP_ADDRESS"
   },
   "jbpm" : {
-    "ip_address" : "172.16.4.208"
+    "ip_address" : "IP_ADDRESS"
   },
   "ehmp-ui" : {
-    "ip_address" : "172.16.1.150"
+    "ip_address" : "IP_ADDRESS"
   },
   "ehmp-balancer" : {
-    "ip_address" : "172.16.1.150"
+    "ip_address" : "IP_ADDRESS"
   }
 }

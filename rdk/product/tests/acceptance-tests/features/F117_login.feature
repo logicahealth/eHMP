@@ -31,4 +31,4 @@ Scenario: Client will not be able to access restricted resources after a session
 	And the client has verified it can access a restricted resource
 	When the client destroys the sesion
 	And the client has requested a restricted resource
-	And a bad request response is returned
+	And an unauthorized response is returned

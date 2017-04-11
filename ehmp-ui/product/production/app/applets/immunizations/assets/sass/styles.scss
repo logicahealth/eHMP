@@ -1,3 +1,13 @@
 [data-appletid="immunizations"] {
 
 }
+
+.immunization-type-container .loading {
+	position: absolute;
+	top: 28px;
+	left: 17px;
+	z-index: 9;
+}
+#patientDemographic-newObservation .form-group {
+    min-height: 50px;
+}

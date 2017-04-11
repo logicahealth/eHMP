@@ -44,6 +44,7 @@ Scenario: Client can request clinical notes results in FHIR format
       | resource.contained.text.status  | generated           |
       | resource.contained.status       | current             |
       | resource.contained.mode         | working             |
+      And FHIR date and time conver to Zulu format for clinical note
 
 @F138_2_fhir_clinicalnote @fhir @9E7A100615 @DE1367 @US8574 
 Scenario: Client can request clinical notes results in FHIR format

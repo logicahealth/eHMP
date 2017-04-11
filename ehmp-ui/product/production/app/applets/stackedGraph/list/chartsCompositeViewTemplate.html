@@ -1,24 +1,23 @@
 <div class="container-fluid">
-    <!-- <div class="row"> -->
-    <div class="graphContainer col-sm-12">
-        <div class="row topTimeLine">
-            <div class="col-sm-3 height-40-pixels">Concept</div>
-            <div class="col-sm-1 height-40-pixels">Last</div>
-            <div class="pointerContainer"><span class="stackedGraphPointer top"></span>
-                <div class="col-sm-8 header-placeholder height-40-pixels"></div>
+    <div class="row" role="grid" aria-label="Stacked Graphs Grid">
+        <div class="col-xs-12" role="row">
+            <div class="col-xs-3 top-padding-xs" role="columnheader">Concept</div>
+            <div class="col-xs-1 top-padding-xs" role="columnheader">Last</div>
+            <div class="pointer-container">
+                <span class="stacked-graph-pointer top"></span>
+                <div class="col-xs-8 header-placeholder" role="columnheader" aria-label="Heading graph showing the date range represented in the graphs below."></div>
             </div>
         </div>
-        <div class="collectionContainer">
-            <div class="noGraph noGraphDrop">
-                <p>Drop +</p>
+        <div class="col-xs-12 collection-container" role="presentation">
+            <div class="no-graph" role="row">
+                <p role="gridcell"><strong>Drop +</strong></p>
             </div>
         </div>
-        <div class="row">
-            <div class="pointerContainer bottomTimeLine">
-                <span class="stackedGraphPointer bottom"></span>
-                <div class="footerplaceholder col-sm-8 col-sm-offset-4 height-40-pixels"></div>
+        <div class="col-xs-12">
+            <div class="pointer-container">
+                <span class="stacked-graph-pointer bottom"></span>
+                <div class="footer-placeholder col-xs-8 col-xs-offset-4"></div>
             </div>
         </div>
     </div>
-    <!-- </div> -->
 </div>

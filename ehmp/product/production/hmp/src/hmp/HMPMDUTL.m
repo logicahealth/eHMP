@@ -1,21 +1,27 @@
-HMPMDUTL ;HINES OIFO/BLJ - FileMan JSON utilities for HMP;02 April 2013
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ; Per VHA Directive 2004-038, this routine should not be modified.
+HMPMDUTL ;DSS/BLJ,ASMR/RRB - FileMan JSON utilities for HMP;4 November 2015 @16:51:35
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ ;DE2818 SQA findings Newed HMPCNT, HMPFINI, HMPLAST, TERMCHLD, TERMUNIT, and TERMQUAL ASMR/RRB
+ ;
+ Q
  ;
 EN Q  ; Only call via linetag.
 TERM ; Retrieves list of terms
-  ; NOTE: we're not gonna support paged retrieves with this unless we have to.  Do not count on
-  ; them being there.
+  ; NOTE: This tag will NOT support paged retrieves unless necessary.
+  ;         Do not expect them.
+  ;
+  ; DE2818 SQA findings HMPCNT, HMPFINI, HMPLAST
   ;
   ; Gets terminology.
-  N TERMIENS,TERMCNT,X
+  N HMPFINI,TERMIENS,TERMCNT,X
   D LIST^DIC("704.101",,,,,,,,"I $P(^(0),U,5)=1")
   M TERMIENS=^TMP("DILIST",$J,2)
   S TERMCNT=$P($G(^TMP("DILIST",$J,0)),U,1)
   K ^TMP("DILIST",$J)
   ;
   F X=0:0 S X=$O(TERMIENS(X)) Q:'X  D
-  . N RESULT
+  . N HMPCNT,HMPLAST,RESULT
   . ; term
   . D ONETERM($G(TERMIENS(X)),"RESULT")
   . ;
@@ -23,8 +29,8 @@ TERM ; Retrieves list of terms
   . S HMPCNT=X,HMPLAST=X
   I 'X S HMPFINI=1
   Q
-ONETERM(ID,TARGET) ; loads one term
-  Q:+ID<1  ; Gotta be a valid integer/id
+ONETERM(ID,TARGET) ; load one term
+  Q:+ID<1  ; Validate integer/id.
   N $ES,$ET,ERRMSG
   S ERRMSG=$$ERRMSG^HMPEF("CLiO Term",ID)
   S $ET="D ERRHDLR^HMPDERRH"
@@ -52,8 +58,8 @@ ONETERM(ID,TARGET) ; loads one term
   S @TARGET@("VUID")="urn:va:vuid:"_$$SANITIZE($G(@TRM@(99.99,"E")))
   ; term -> child terms
   ;
-  ; Note, for right now this is a little odd: the initial load is done off of DFN.  This load
-  ; is done off of UID.  We'll probably change that to UID or IFN for both at some point.
+  ; NOTE: As coded, the initial load is a function of DFN. But this load
+  ;        is a function of UID. May become normed either to UID or IFN.
   ;
   D TERMCHLD($G(@TRM@(.01,"E")),.TARGET)
   ;
@@ -64,33 +70,33 @@ ONETERM(ID,TARGET) ; loads one term
   ;
   D TERMQUAL($G(@TRM@(.01,"E")),.TARGET,ID)
   ;
-  ; term -> unit conversion - for right now, we're not going to pull term -> unit conversions.  We will need to do so at some point
-  ; though.
+  ; NOTE: As coded, term -> unit conversions are not retrieved.
+  ;        That will be part of future development.
+  ;
   K TERMTYPE,TRM
   Q
   ;
-TERMTYPE(ID,TARGET) ;Loads term types.
+TERMTYPE(ID,TARGET) ; Load term types.
   ;
-  ; TARGET passed by reference.  
+  ; TARGET is passed by reference.  
   ;
-  ; Sanity checks first
-  ; 
-  Q:+ID<1  ; Gotta be a number, we're doing a direct IFN lookup.
+  Q:+ID<1  ; Validate for direct IFN lookup.
   N TERMTYPE
-  D GETS^DIQ("704.102",ID_",","*","E","TERMTYPE")
+  D GETS^DIQ("704.102",ID_",","*","E","TERMTYPE") ;ICR 5748 DE2818 ASF 11/25/15
   N HMPNAME S HMPNAME=$T(TTFLDS+1)
   ;
   N HMPEPLAC S HMPEPLAC("""")="\"""
   S @TARGET@("termType",$P(HMPNAME,";",3))=ID
-  S @TARGET@("termType",$P(HMPNAME,";",4))=$$SANITIZE($$REPLACE^XLFSTR(TERMTYPE("704.102",ID_",",.01,"E"),.HMPEPLAC))
+  S @TARGET@("termType",$P(HMPNAME,";",4))=$$SANITIZE($$REPLACE^XLFSTR(TERMTYPE("704.102",ID_",",.01,"E"),.HMPEPLAC)) ;ICR 5748 DE2818 ASF 11/25/15
   S @TARGET@("termType",$P(HMPNAME,";",5))=$$SANITIZE($$REPLACE^XLFSTR(TERMTYPE("704.102",ID_",",.02,"E"),.HMPEPLAC))
   S @TARGET@("termType",$P(HMPNAME,";",6))=$$SANITIZE($$REPLACE^XLFSTR(TERMTYPE("704.102",ID_",",.03,"E"),.HMPEPLAC))
   K TERMTYPE
   Q
 TERMCHLD(ID,TARGET) ;Loads child terms for a term
   ;
-  ;
-  N MSGROOT S MSGROOT="TERMCHLD("""_ID_""")"
+  ;DE2818 SQA findings Newed TERMCHLD
+  N MSGROOT,TERMCHLD
+  S MSGROOT="TERMCHLD("""_ID_""")"
   D FIND^DIC("704.106",,".02E;.03I;.04I;.05E;.06E;.07E;.08E;.09E","M",ID,,,,,MSGROOT)
   ; Check to see if we actually have any children.
   I +$P(TERMCHLD(ID,"DILIST",0),U,1)<1 K @MSGROOT Q
@@ -109,7 +115,9 @@ TERMCHLD(ID,TARGET) ;Loads child terms for a term
   Q
 TERMUNIT(ID,TARGET) ;Loads Units for a term.
  ;
- N MSGROOT S MSGROOT="TERMUNIT("""_ID_""")"
+ ;DE2818 SQA findings Newed TERMUNIT
+ N MSGROOT,TERMUNIT
+ S MSGROOT="TERMUNIT("""_ID_""")"
  D FIND^DIC("704.105",,".02I;.03E;.04E;.05E;.06E;.07E","M",ID,,,,,MSGROOT)
  ; Check to see if we actually have any children.
  I +$P(TERMUNIT(ID,"DILIST",0),U,1)<1 K @MSGROOT Q
@@ -127,7 +135,9 @@ TERMUNIT(ID,TARGET) ;Loads Units for a term.
  Q
 TERMQUAL(ID,TARGET,IFN) ;Loads Qualifiers for a term
  ;
- N MSGROOT S MSGROOT="TERMQUAL("""_ID_""")"
+ ;DE2818 SQA findings Newed TERQUAL
+ N MSGROOT,TERMQUAL
+ S MSGROOT="TERMQUAL("""_ID_""")"
  D FIND^DIC("704.103",,".02E;.03I;.04E","M",ID,,,,,MSGROOT)
  ; Check to see if we actually have any qualifiers.
  I +$P(TERMQUAL(ID,"DILIST",0),U,1)<1 K @MSGROOT Q

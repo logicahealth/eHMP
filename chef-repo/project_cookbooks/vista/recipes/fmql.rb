@@ -11,9 +11,10 @@ vista_install_distribution "fmql_patches" do
   patch_list "fmql_patches"
   manifest_path "#{Chef::Config[:file_cache_path]}/kids-manifest.json"
   log node[:vista][:chef_log]
+  run_checksums node[:vista][:run_checksums]
 end
 
-fmql_credentials = Chef::EncryptedDataBagItem.load("credentials", "vista_fmql_credentials", 'n25q2mp#h4')
+fmql_credentials = Chef::EncryptedDataBagItem.load("credentials", "vista_fmql_credentials", node[:data_bag_string])
 
 vista_new_person "create_fmql_user" do
   log node[:vista][:chef_log]
@@ -26,7 +27,7 @@ vista_new_person "create_fmql_user" do
 end
 
 # Download FMQL server components
-fmql_url = "#{node[:nexus_url]}/nexus/content/repositories/ehmp/filerepo/third-party/project/caregraf/cgfmql/1.0/cgfmql-1.0.zip"
+fmql_url = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/caregraf/cgfmql/1.0/cgfmql-1.0.zip"
 
 remote_file "#{Chef::Config[:file_cache_path]}/CGFMQL1_0.zip" do
   source fmql_url

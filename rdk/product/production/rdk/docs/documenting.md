@@ -82,7 +82,7 @@ As with example bodies (and as shown in the example above), schemas need to be i
 
 You should always create a schema for requests that have a body, such as POST and PUT requests. It's also a good idea to make schemas for your responses.
 
-You can use a tool like [jsonschema.net](http://jsonschema.net) to generate a schema from a JSON object. If you use that tool you should probably choose the "Single schema (list validation)" option under Arrays.
+If you have your resource running in a development environment you can generate a schema from your response by calling it with a `spy-for-versioning=true` query parameter. Or you can use a tool like [jsonschema.net](http://jsonschema.net) to generate a schema from a JSON object. If you use that tool you should probably choose the "Single schema (list validation)" option under Arrays.
 
 You can put your schemas in `rdk/src/core/api-blueprint/schemas`.
 

@@ -19,7 +19,6 @@ define([
         className: "group-by-header",
         toggleRows: function (event) {
             event.preventDefault();
-            this.$el.nextUntil('.group-by-header').toggle();
         },
         onEnter: function (event) {
             if (event.which === 13 || event.which === 32) {
@@ -41,14 +40,26 @@ define([
             return this;
         },
         toggleRowItems: function () {
-            this.$el.toggleClass('fa-caret-right');
-            this.$el.toggleClass('fa-caret-down');
-            this.$el.find('.group-by-count-badge').toggleClass('hidden');
-            if (this.$('.group-by-count-badge').hasClass('hidden')) {
-                this.$('a').attr('aria-expanded', 'true');
-            } else {
-                this.$('a').attr('aria-expanded', 'false');
+            var button = this.$('button');
+            var el = this.$el;
+            var badge = el.find('.group-by-count-badge');
+            var ariaValue = button.attr('aria-expanded');
+
+            el.toggleClass('fa-caret-right').toggleClass('fa-caret-down');
+            if (ariaValue ==='true') { 
+                badge.removeClass('hidden');
+                button.attr({
+                    'aria-expanded' : 'false',
+                    'title' : 'Press enter to expand ' + this.model.get('title') + ' accordion.'
+                }).find('.sr-only').attr('aria-hidden', 'false');
+            } else { 
+                badge.addClass('hidden');
+                button.attr({
+                    'aria-expanded' : 'true',
+                    'title' : 'Press enter to collapse ' + this.model.get('title') + ' accordion.'
+                }).find('.sr-only').attr('aria-hidden', 'true');
             }
+            button.blur().focus(); //Doing this so that JAWS Screen Reader will properly read the aria and title attributes
         },
         keydown: function(event) {
             if (event.which === 13 || event.which === 32) {
@@ -84,6 +95,7 @@ define([
             this._super = Backgrid.Body.prototype;
             this._super.initialize.apply(this, arguments);
             this.listenTo(this.collection, "backgrid:groupBy", this.sortForGroupBy);
+            this.sortForGroupBy(this.primaryColumn);
         },
         render: function () {
             this.$el.empty();
@@ -247,7 +259,7 @@ define([
                     if (column.get('groupableOptions').groupByDate) {
                         this.collection.fullCollection.comparator = refDateComparator;
                     } else {
-                        this.collection.fullCollection.comparator = comparator;
+                        this.collection.fullCollection.comparator = column.get('groupableOptions').comparator || comparator;
                     }
 
                     this.collection.fullCollection.sort();
@@ -263,7 +275,9 @@ define([
 
                 if (column.get('groupableOptions').groupByDate) {
                     this.collection.comparator = refDateComparator;
-                } else {
+                } else if (_.isUndefined(direction) || _.isNull(direction)){
+                    this.collection.comparator = column.get('groupableOptions').comparator || comparator;
+                }else{
                     this.collection.comparator = comparator;
                 }
                 //calling the sort function here will automatically trigger a Body.refresh call, which will call the render method which does the grouping.

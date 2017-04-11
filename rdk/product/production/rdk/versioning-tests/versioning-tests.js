@@ -29,7 +29,7 @@ describe('For API version stability,', function() {
     mockHttp();
     mockVistaJS();
     app = createApp();
-    user = JSON.parse(fs.readFileSync('versioning-tests/PW    .json', {encoding: 'utf8'}));
+    user = JSON.parse(fs.readFileSync('versioning-tests/pu1234.json', {encoding: 'utf8'}));
     versioningConfig = loadVersioningConfig();
 
     // TODO: get rid of this skip list
@@ -317,7 +317,7 @@ function inheritClone(item) {
 function prepareResponse(resource, done) {
     var response = httpMocks.createResponse();
 
-    response.type = function() {};
+    response.type = function() {return response;};
 
     var fakeapp = {
         use: function(next) {
@@ -382,6 +382,8 @@ function checkResponse(response, request, resource) {
                             throw e;
                         }
                         validateAgainstSchema(schema, response, resource);
+                        checkSchema = false;
+                    } else if (statusCode === 204) {
                         checkSchema = false;
                     } else {
                         var contentType = (_.find(exampleResponse.headers, function(header) {

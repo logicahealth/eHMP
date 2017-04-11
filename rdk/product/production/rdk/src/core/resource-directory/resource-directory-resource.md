@@ -1,12 +1,8 @@
 # Group Resource Directory
 
-## Resource Directory [{{{path}}}{?fields}]
+## Resource Directory [{{{path}}}]
 
 List the resources that the RDK exposes. Clients should generally refer to resources by their title and use this resource directory to look up the corresponding href.
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### List [GET]
 

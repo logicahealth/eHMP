@@ -16,7 +16,7 @@ if [[ $PATH == *"chef"* ]]; then
   exit -1
 fi
 
-curl -o aidk_workspace_setup.sh -L "<%= node[:nexus_url] %>/nexus/service/local/artifact/maven/redirect?r=ehmp&g=filerepo.vistacore.workspace-setup&a=aidk_workspace_setup&v=LATEST&e=sh"
+curl -o aidk_workspace_setup.sh -L "<%= node[:nexus_url] %>/nexus/service/local/artifact/maven/redirect?r=filerepo&g=vistacore.workspace-setup&a=aidk_workspace_setup&v=LATEST&e=sh"
 
 sh aidk_workspace_setup.sh
 rm aidk_workspace_setup.sh

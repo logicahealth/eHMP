@@ -19,6 +19,9 @@ var dd = require('drilldown');
 var Handlebars = require('handlebars');
 var fs = require('fs');
 var fspath = require('path');
+var rdkJwt = require('./factory-components/rdk-jwt');
+var onFinished = require('on-finished');
+var onHeaders = require('on-headers');
 
 function AppFactory() {
     if (!(this instanceof AppFactory)) {
@@ -85,7 +88,6 @@ var buildApp = function(config, argv, defaultConfigFilename) {
 
     metrics.initialize(app);
     pidValidator.initialize(app);
-    setHttpMaxSockets();
 
     app.auditer = {};
     app.auditer.logger = app.loggingservice.get('audit');
@@ -121,18 +123,28 @@ var buildApp = function(config, argv, defaultConfigFilename) {
     app.register(/\/docs\/vx-api.*/, './api-blueprint/api-blueprint-resource');
     registerExternalApiDocumentation(app);
 
+    app.register('/version', './version/version-resource');
+
     useStaticDocumentation(app);
     app.use(dd(app)('config')('rootPath').val, app.appRouter);
 
+    addRdkListen(app);
     return app;
 };
 
-/**
- * JDS seems to have connection issues if many requests are made at once.
- * Before removing this, verify that the vx-api documentation loads.
- */
-function setHttpMaxSockets() {
-    http.globalAgent.maxSockets = Infinity;
+function addRdkListen(app) {
+    app.rdkListen = function (port, callback) {
+        var rdkServer = app.listen(port, function() {
+            if (_.isFunction(callback)) {
+                callback.call(app);
+            }
+        });
+        rdkServer.on('close', function() {
+            app.logger.info('express server received close event');
+        });
+        logKill(app, rdkServer);
+        return rdkServer;
+    };
 }
 
 function processAppConfig(config, argv) {
@@ -160,14 +172,20 @@ function createRouter(app) {
 }
 
 function useStaticDocumentation(app) {
+    rdkJwt.updatePublicRoutes(app, {
+        bypassCsrf: true,
+        rel: 'vha.read',
+        path: new RegExp('^' + app.config.rootPath + '/docs($|/.*)')
+    });
     app.appRouter.use('/docs/', express.static(__dirname + '/../../docs'));
 }
 
 function logCrashes(app) {
     process.on('uncaughtException', function(err) {
-        console.error((new Date()).toUTCString() + 'uncaughtException: ' + err.message);
+        var date = (new Date()).toISOString();
+        console.error(date + ' uncaughtException: ' + err.message);
         console.error(err.stack);
-        console.log((new Date()).toUTCString() + 'uncaughtException: ' + err.message);
+        console.log(date + ' uncaughtException: ' + err.message);
         console.log(err.stack);
         app.logger.fatal(err);
         process.exit(1);
@@ -186,6 +204,56 @@ function reloadConfig(app) {
             pidValidator.initialize(app);
         }
     });
+}
+
+function logKill(app, server) {
+    var serverClosed = false;
+    process.on('SIGQUIT', function() {
+        safeLog('Received SIGQUIT. Attempting graceful exit.');
+        server.getConnections(function (err, count) {
+            safeLog('Closing ' + count + ' TCP connection(s)');
+            if (!serverClosed) {
+                serverClosed = true;
+                server.close(function() {
+                    safeLog('All TCP connections closed');
+                    process.exit(131);
+                });
+            }
+        });
+    });
+    process.on('SIGTERM', function() {
+        safeLog('Received SIGTERM. Attempting graceful exit.');
+        var timeout = 10000;  // TODO: replace with config app.config variable
+        server.getConnections(function (err, count) {
+            safeLog('Closing ' + count + ' TCP connection(s)');
+            if (!serverClosed) {
+                serverClosed = true;
+                server.close(function() {
+                    safeLog('All TCP connections closed');
+                    process.exit(143);
+                });
+            }
+        });
+        setTimeout(function() {
+            server.getConnections(function (err, count) {
+                safeLog('Could not close sockets in time. ' + count + ' connection(s) left. Waited ' + timeout + 'ms');
+                process.exit(143);
+            });
+        }, timeout);
+    });
+    process.on('SIGINT', function() {
+        safeLog('Received SIGINT. Not attempting graceful exit');
+        process.exit(130);
+    });
+    function consoleErrorTimestamp() {
+        Array.prototype.unshift.call(arguments, (new Date()).toISOString());
+        console.error.apply(console, arguments);
+    }
+
+    function safeLog(message) {
+        app.logger.info(message);
+        consoleErrorTimestamp(message);
+    }
 }
 
 function recordRequestsForContractTests(app) {
@@ -210,10 +278,16 @@ function registerAppSubsystems(app) {
     var mviSubsystem = require('../subsystems/mvi-subsystem');
     var vxSyncSubsystem = require('../subsystems/vx-sync-subsystem');
     var asuSubsystem= require('../subsystems/asu/asu-subsystem');
-    var jbpmSubsystem = require('../subsystems/jbpm-subsystem');
+    var jbpmSubsystem = require('../subsystems/jbpm/jbpm-subsystem');
+    var pcmmSubsystem = require('../subsystems/jbpm/pcmm-subsystem');
     var pjdsSubsystem = require('../subsystems/pjds/pjds-subsystem');
     var cdsSubsystem = require('../subsystems/cds/cds-subsystem');
     var pepSubsystem = require('../subsystems/pep/pep-subsystem');
+    var quickorderSubsystem = require('../subsystems/orderables/quickorder-subsystem');
+    var ordersetSubsystem = require('../subsystems/orderables/orderset-subsystem');
+    var favoriteOrderableSubsystem = require('../subsystems/orderables/favorite-orderable-subsystem');
+    var enterpriseOrderableSubsystem = require('../subsystems/orderables/enterprise-orderable-subsystem');
+    var vistaReadOnlySubsystem = require('../subsystems/vista-read-only-subsystem');
 
     app.subsystems.register('jds', jdsSubsystem);
     app.subsystems.register('jdsSync', jdsSyncSubsystem);
@@ -225,8 +299,14 @@ function registerAppSubsystems(app) {
     app.subsystems.register('authorization', pepSubsystem);
     if(dd(app)('config')('jbpm').exists) {
         app.subsystems.register('jbpm', jbpmSubsystem);
+        app.subsystems.register('pcmm', pcmmSubsystem);
     }
     app.subsystems.register('pjds', pjdsSubsystem);
+    app.subsystems.register('quickorder', quickorderSubsystem);
+    app.subsystems.register('orderset', ordersetSubsystem);
+    app.subsystems.register('favoriteOrderable', favoriteOrderableSubsystem);
+    app.subsystems.register('enterpriseOrderable', enterpriseOrderableSubsystem);
+    app.subsystems.register('vistaReadOnly', vistaReadOnlySubsystem);
     if(dd(app)('config')('cdsInvocationServer').exists || dd(app)('config')('cdsMongoServer').exists) {
         app.subsystems.register('cds', cdsSubsystem);
     }
@@ -244,7 +324,7 @@ function setupAppEdition(app) {
 
 function setupTrustProxy(app) {
     app.use(function(req, res, next) {
-        var clientIsBalancer = (req.headers['x-forwarded-host'] === 'IP        ');
+        var clientIsBalancer = (req.headers['x-forwarded-host'] === 'IP_ADDRESS');
         if (app.config.environment === 'development') {
             app[clientIsBalancer ? 'enable' : 'disable']('trust proxy');
         } else {
@@ -259,6 +339,7 @@ function setupAppMiddleware(app) {
     setupCors(app);
     enableHelmet(app);
     addAppToRequest(app);
+    addRdkSendToResponse(app);
     addInterceptorRequestObject(app);
     addLoggerToRequest(app);
     setAppTimeout(app);
@@ -266,7 +347,7 @@ function setupAppMiddleware(app) {
     enableSession(app);
     enableBodyParser(app);
     initializeHttpWrapper(app);
-    addRdkSendToResponse(app);
+    rdkJwt.enableJwt(app);
 }
 
 function enableBodyParser(app) {
@@ -275,33 +356,38 @@ function enableBodyParser(app) {
 
 function initializeHttpWrapper(app) {
     httpUtil.initializeTimeout(app.config.timeoutMillis);
+    httpUtil.setMaxSockets(app.config.maxSockets);
 }
 
 function addRdkSendToResponse(app) {
     app.use(function(req, res, next) {
         res.rdkSend = function(body) {
-            if (body === null || body === undefined) {
-                body = {};
-            } else if (_.isObject(body) || this.get('Content-Type') === 'application/json') {
-                if (_.isString(body)) {
-                    try {
-                        body = JSON.parse(body);
-                    } catch (e) {
-                        body = {message: body};
+            if (res.statusCode === 204) {
+                body = undefined;
+            } else {
+                if (body === null || body === undefined) {
+                    body = {};
+                } else if (_.isObject(body) || this.get('Content-Type') === 'application/json') {
+                    if (_.isString(body)) {
+                        try {
+                            body = JSON.parse(body);
+                        } catch (e) {
+                            body = {message: body};
+                        }
                     }
+                    if ((!_.has(body, 'data') || !_.isObject(body.data)) &&
+                        !_.has(body, 'message') &&
+                        (_.isArray(body) || !_.isEmpty(body))) {
+                        body = {data: body};
+                    }
+                } else {
+                    body = {message: String(body)};
                 }
-                if ((!_.has(body, 'data') || !_.isObject(body.data)) &&
-                    !_.has(body, 'message') &&
-                    (_.isArray(body) || !_.isEmpty(body))) {
-                    body = {data: body};
+                if (res.statusCode) {
+                    body.status = res.statusCode;
+                } else {
+                    body.status = 200;
                 }
-            } else {
-                body = {message: String(body)};
-            }
-            if (res.statusCode) {
-                body.status = res.statusCode;
-            } else {
-                body.status = 200;
             }
             req._rdkSendUsed = true;
             return this.send(body);
@@ -322,6 +408,16 @@ function enableHelmet(app) {
 }
 
 function enableSession(app) {
+
+    function getCookieName(config){
+        var prefix = _.result(config, 'cookiePrefix', null);
+        var cookieName = 'rdk.sid';
+        if(prefix){
+            cookieName = prefix + '.' + cookieName;
+        }
+        return cookieName;
+    }
+
     app.use(function(req, res, next) {
         session({
             store: new JDSStore({
@@ -331,7 +427,7 @@ function enableSession(app) {
                 }, req.logger, req.app
             ),
             secret: app.config.secret,
-            name: 'rdk.sid',
+            name: getCookieName(app.config),
             cookie: {
                 maxAge: app.config.sessionLength
             },
@@ -430,16 +526,52 @@ function enableMorgan(app) {
 
 function morganBunyanLogger(req, res, next) {
     var logger = req.logger || req.app.logger;
-    var morganFormat = req.app.config.morganFormat || 'dev';
-    var morganToBunyan = morgan({
-        format: morganFormat,
-        stream: {
-            write: function(string) {
-                logger.info(string);
+    var morganFormat = req.app.config.morganFormat || 'bunyan';
+    if (morganFormat === 'bunyan') {
+        // Make bunyan a special case instead of morgan.format('bunyan') to avoid extra JSON.parse
+        req._remoteAddress = getIp(req);
+        recordStartTime.call(req);
+        onHeaders(res, recordStartTime);
+        onFinished(res, function() {
+            var responseInfo = {
+                remoteAddress: getIp(req),
+                remoteUser: _.get(req, 'session.user.accessCode'),
+                method: req.method,
+                path: req.originalUrl,
+                httpVersion: req.httpVersion,
+                status: res.statusCode,
+                contentLength: res.getHeader('content-length'),
+                referer: req.get('referer'),
+                userAgent: req.get('user-agent')
+            };
+            if (req._startAt && res._startAt) {
+                responseInfo.responseTimeMs = (
+                    (res._startAt[0] - req._startAt[0]) * 1e3 +  // seconds
+                    (res._startAt[1] - req._startAt[1]) * 1e-6  // nanoseconds
+                );
+                logger.info({responseInfo: responseInfo});
             }
-        }
-    });
-    return morganToBunyan (req, res, next);
+        });
+        return next();
+    } else {
+        var morganToBunyan = morgan(morganFormat, {
+            stream: {
+                write: function(string) {
+                    logger.info(string);
+                }
+            }
+        });
+        return morganToBunyan(req, res, next);
+    }
+
+    function getIp(req) {
+        return req.ip || req._remoteAddress || (req.connection && req.connection.remoteAddress);
+    }
+
+    function recordStartTime() {
+        this._startAt = process.hrtime();  // jshint ignore:line
+        this._startTime = new Date();  // jshint ignore:line
+    }
 }
 
 function registerDefaultOuterceptors(app) {
@@ -489,6 +621,7 @@ function registerResourceFamily(app, mountpoint, resourcePath) {
 
         processConfigItem(configItem, mountpoint);
 
+        rdkJwt.updatePublicRoutes(app, configItem);
         logPepPermissions(app, configItem);
 
         addResourceConfigToRequest(app, configItem);
@@ -604,7 +737,7 @@ function registerPathOuterceptors(app, configItem) {
     app.outerceptorPathRegistry = app.outerceptorPathRegistry || {};
     _.each(configItem.outerceptors, function(outerceptorName) {
         if (!(outerceptorName in app.outerceptors)) {
-            app.logger.warn('No interceptor named %s exists in the app object. Unable to register outerceptor for resource %s', outerceptorName, configItem.name);
+            app.logger.warn('No outerceptor named %s exists in the app object. Unable to register outerceptor for resource %s', outerceptorName, configItem.name);
             return;
         }
         app.outerceptorPathRegistry[configItem.path] = app.outerceptorPathRegistry[configItem.path] || [];
@@ -743,7 +876,7 @@ function registerExternalApiDocumentation(app) {
         rdk.apiBlueprint.registerExternalUrlOnPrefix(entry.baseUrl, entry.prefix);
 
         var options = {
-            url: entry.indexUrl,
+            uri: entry.indexUrl,
             json: true,
             logger: app.logger
         };
@@ -753,11 +886,14 @@ function registerExternalApiDocumentation(app) {
                 return;
             }
             _.each(body.data, function(url) {
+                if (!_.contains(url, '://')) {
+                    url = _.trimRight(entry.baseUrl, '/') + '/' + _.trimLeft(url, '/');
+                }
                 var mountpoint = url.substring(entry.baseUrl.length);
                 mountpoint = _.trimRight(entry.prefix, '/') + '/' + _.trimLeft(mountpoint, '/');
                 rdk.apiBlueprint.registerResource(mountpoint, url, logApiBlueprintIssues.bind(null, app, null, url));
             });
-        })
+        });
     });
 }
 

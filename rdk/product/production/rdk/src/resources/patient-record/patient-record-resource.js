@@ -8,6 +8,7 @@ var nullchecker = rdk.utils.nullchecker;
 var async = require('async');
 var immunizationDupes = require('./patient-record-immunization-dupes');
 var querystring = require('querystring');
+var documentSignatures = require('./patient-record-document-view-signatures');
 
 var getResourceConfig = function() {
 
@@ -126,7 +127,17 @@ function getDomain(index, name, req, res) {
 
         response = removeDuplicates(index, req, response);
 
-        return res.status(statusCode).rdkSend(response);
+        if (index === 'docs-view' || index === 'document') {
+            documentSignatures.processAddenda(req, response, function(error, result) {
+                if (error) {
+                    res.status(500).rdkSend(error);
+                }
+
+                return res.status(statusCode).rdkSend(result);
+            });
+        } else {
+            return res.status(statusCode).rdkSend(response);
+        }
 
     });
 }

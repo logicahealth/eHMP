@@ -1,0 +1,16 @@
+/target
+/.externalToolBuilders
+/build
+/.metadata
+/RemoteSystemsTempFiles
+/Servers
+/build
+/Servers
+/.settings
+.project
+.classpath
+/war
+/.gwt
+/bin
+/gwt-unitCache
+/test-classes

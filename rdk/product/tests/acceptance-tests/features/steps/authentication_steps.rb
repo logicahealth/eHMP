@@ -5,13 +5,11 @@ $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 #require 'VerifyJsonRuntimeValue.rb'
 
 When(/^the client requests authentication with accessCode "(.*?)" and verifyCode "(.*?)" and site "(.*?)" and contentType "(.*?)"$/) do |accessCode, verifyCode, site, _contentType|
-  query = RDKQuery.new('authentication-authentication')
-  path = query.path
-  jsonreq = { "accessCode"=> accessCode, "verifyCode" => verifyCode, "site" => site } 
-
-  reqjson = jsonreq.to_json
-  # path = resource_query.path
-  @response = HTTPartyWithBasicAuth.post_json_with_authorization(path, reqjson, { 'Content-Type' => 'application/json' })
+  auth_details = {}
+  auth_details[:site] = site
+  auth_details[:accessCode] = accessCode
+  auth_details[:verifyCode] = verifyCode
+  @response = HTTPartyRDK.acquire_tokens(auth_details)
 end
 
 Then(/^the authentication result contains$/) do |table|

@@ -1,9 +1,11 @@
 define([], function() {
 
     var Clinic = ADK.Resources.Picklist.Model.extend({
-        idAttribute: 'ien',
+        idAttribute: 'uid',
         label: 'name',
-        value: 'ien',
+        value: function(){
+            return this.get('uid').split(':').pop();
+        },
         defaults: {}
     });
 

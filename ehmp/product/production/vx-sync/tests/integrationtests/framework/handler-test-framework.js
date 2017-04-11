@@ -4,13 +4,14 @@ require('../../../env-setup');
 
 var util = require('util');
 var _ = require('underscore');
+var async = require('async');
 
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
-var queueConfig = require(global.VX_JOBFRAMEWORK + 'queue-config');
+var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
 var grabJobs = require('./job-grabber');
-var PublisherRouter = require(global.VX_JOBFRAMEWORK + 'publisherRouter');
+var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 
-var counter = 1;
+var counter = 0;
 /*
 Note that using this framework only tests that when called, the handler creates
 the correct number and types of jobs and verifies that they are all pushed onto
@@ -27,7 +28,7 @@ for your handler. Note that you should NOT include the beanstalk publisher
 properties, but may include a beanstalkConfig object for the queue-config factory,
 or if none is provided the default will be used.
 
-host: the server where beanstalk is running. This will usually be 'IPADDRESS or '127.0.0.1'.
+host: the server where beanstalk is running. This will usually be 'IPADDRES' or '127.0.0.1'.
 
 port: the port on which beanstalk is running. This will usually be 5000.
 
@@ -44,23 +45,133 @@ waitTimeout: the tiemout in millis to wait for the response from the handler. De
 to 10000 (10 seconds).
 */
 function testHandler(handler, logger, config, environment, host, port, tubePrefix, job, jobTypes, waitTimeout, handlerCallback) {
+    logger.debug('handler-test-framework.testHandler() %s:%s from %s -> %s', host, port, job.type, jobTypes);
+
     waitTimeout = _.isNumber(waitTimeout) ? waitTimeout : 10000;
-    var tubename = tubePrefix + '-' + job.type + '-' + counter;
+    jobTypes = _.isArray(jobTypes) ? jobTypes : [jobTypes];
     counter++;
-    logger.debug('handler-test-framework.testHandler() %s:%s/%s from %s -> %s', host, port, tubename, job.type, jobTypes);
-    var describeText = util.format('tests handler for "%s" job on tube "%s"', job && job.type, tubename);
-    var itText = util.format('verify the correct %s jobs are put on tube "%s" for jobType "%s", jobs: ', _.size(jobTypes), tubename, job && job.type);
+
+    var beanstalkConfig = getBeanstalkConfig(config, host, port, tubePrefix + '-' + job.type);
+    updateTubenames(beanstalkConfig);
+    logger.debug(beanstalkConfig);
+
+    var tubenames = getTubenames(beanstalkConfig, jobTypes);
+
+    var describeText = util.format('tests handler for "%s" job on tube(s) "%s"', job && job.type, tubenames);
+    var itText = util.format('verify the correct %s jobs are put on tube(s) "%s" for jobType "%s", jobs: ', _.size(jobTypes), tubenames, job && job.type);
     itText = _.reduce(jobTypes, function(memo, jobType) {
         return memo + '\n\t\t"' + jobType + '"';
     }, itText);
+
+    describe(describeText, function() {
+        var callback;
+        var jobStatusUpdater;
+        var called;
+        var calledError;
+        var calledResult;
+
+        beforeEach(function() {
+            logger.debug('handler-test-framework: **** Entered beforeEach.');
+            called = false;
+
+            config.beanstalk = beanstalkConfig;
+
+            jobStatusUpdater = {
+                createJobStatus: function(job, callback) {
+                    callback();
+                },
+                errorJobStatus: function(job, error, callback) {
+                    callback();
+                }
+            };
+
+            if (!environment) {
+                environment = {
+                    publisherRouter: new PublisherRouter(logger, config, logger, jobStatusUpdater),
+                    metrics: logger
+                };
+            } else if (!environment.publisherRouter) {
+                if (!environment.jobStatusUpdater) {
+                    environment.jobStatusUpdater = jobStatusUpdater;
+                }
+
+                environment.publisherRouter = new PublisherRouter(logger, config, logger, environment.jobStatusUpdater);
+            }
+
+            callback = function(error, result) {
+                called = true;
+                calledError = error;
+                calledResult = result;
+            };
+        });
+
+        afterEach(function() {
+            environment.publisherRouter.close();
+
+            var cleared = false;
+
+            grabJobs(logger, host, port, tubenames, 0, function(error) {
+                cleared = true;
+                logger.debug('handler-test-framework: **** clearTube callback was called.');
+            });
+
+            clearTubes(logger, host, port, tubenames, function() {
+                cleared = true;
+                logger.debug('handler-test-framework: **** clearTube callback was called.');
+            });
+
+            waitsFor(function() { return cleared; }, 'clear jobs timed out', waitTimeout);
+
+            runs(function() {
+                logger.debug('handler-test-framework: **** test complete.');
+            });
+        });
+
+        it(itText, function() {
+            logger.debug('handler-test-framework: **** Initiating call to handler.');
+            handler(logger, config, environment, job, function(error) {
+                if (error) {
+                    calledError = error;
+                    called = true;
+                    return;
+                }
+
+                logger.debug('handler-test-framework: **** Initiating call to grabJobs.');
+                grabJobs(logger, host, port, tubenames, 2, function(error, result) {
+                    calledError = error;
+                    calledResult = result;
+                    called = true;
+                });
+            }, function() {});
+
+            waitsFor(function() { return called; }, 'beanstalk jobs returned', waitTimeout);
+
+            runs(function() {
+                expect(calledError).toBeNull();
+
+                var resultJobTypes = _.chain(calledResult).map(function(result) { return result.jobs; }).flatten().pluck('type').value();
+
+                expect(val(resultJobTypes, 'length')).toBe(jobTypes.length);
+                _.each(jobTypes, function(match) {
+                    expect(resultJobTypes).toContain(match);
+                });
+                // handler post-publish callback
+                if (_.isFunction(handlerCallback)) {
+                    handlerCallback(calledResult);
+                }
+            });
+        });
+    });
+}
+
+function getBeanstalkConfig(config, host, port, defaultTubename) {
     var beanstalkConfig;
 
-    jobTypes = _.isArray(jobTypes) ? jobTypes : [jobTypes];
     if (!_.isUndefined(config.beanstalkConfig)) {
         // console.log('using handler integration test config');
         // the handler framework is responsible for configuring the beanstalk tubes, but the queueConfig module's
         // factory method for the beanstalk config can be called on a customized outline or use the default
-        config.beanstalkConfig.repoDefaults.tubename = tubename;
+        config.beanstalkConfig.repoDefaults.tubename = defaultTubename;
         beanstalkConfig = queueConfig.createFullBeanstalkConfig(config.beanstalkConfig);
     } else {
         // console.log('using default test config');
@@ -77,7 +188,7 @@ function testHandler(handler, logger, config, environment, host, port, tubePrefi
             repoDefaults: {
                 host: host,
                 port: port,
-                tubename: tubename,
+                tubename: defaultTubename,
                 tubePrefix: 'vxs-',
                 jobTypeForTube: false
             },
@@ -179,133 +290,57 @@ function testHandler(handler, logger, config, environment, host, port, tubePrefi
 
                 'record-enrichment': {},
                 'store-record': {},
-                'vista-prioritization-request': {},
+                'event-prioritization-request': {},
                 'operational-store-record': {},
                 'publish-data-change-event': {},
-                'activity-management-event': {},
                 'patient-data-state-checker': {}
             }
         });
     }
 
-    logger.debug(beanstalkConfig);
+    return beanstalkConfig;
+}
 
-    describe(describeText, function() {
-        var callback;
-        var jobStatusUpdater;
-        var called;
-        var calledError;
-        var calledResult;
+function updateTubenames(beanstalkConfig) {
+    beanstalkConfig.repoDefaults.tubename = beanstalkConfig.repoDefaults.tubename + '-' + counter;
 
-        beforeEach(function() {
-            logger.debug('handler-test-framework: **** Entered beforeEach.');
-            called = false;
-
-            config.beanstalk = beanstalkConfig;
-
-            jobStatusUpdater = {
-                createJobStatus: function(job, callback) {
-                    callback();
-                },
-                errorJobStatus: function(job, error, callback) {
-                    callback();
-                }
-            };
-
-            if (!environment) {
-                environment = {
-                    publisherRouter: new PublisherRouter(logger, config, logger, jobStatusUpdater),
-                    metrics: logger
-                };
-            } else if (!environment.publisherRouter) {
-                if (!environment.jobStatusUpdater) {
-                    environment.jobStatusUpdater = jobStatusUpdater;
-                }
-
-                environment.publisherRouter = new PublisherRouter(logger, config, logger, environment.jobStatusUpdater);
-            // } else {
-            //     var oldPublisherRouter = environment.publisherRouter;
-            //     environment.publisherRouter = new PublisherRouter(oldPublisherRouter.logger, config, environment.jobStatusUpdater);
-            }
-
-            callback = function(error, result) {
-                called = true;
-                calledError = error;
-                calledResult = result;
-            };
-
-            var cleared = false;
-            clearTube(logger, host, port, tubename, function() {
-                cleared = true;
-                logger.debug('handler-test-framework: **** clearTube callback was called.');
-            });
-
-            waitsFor(function() {
-                return cleared;
-            }, 'clear jobs timedout', waitTimeout);
-
-            runs(function() {
-                logger.debug('handler-test-framework: **** exit beforeEach.');
-            });
-
-        });
-
-        it(itText, function() {
-            logger.debug('handler-test-framework: **** Initiating call to handler.');
-            handler(logger, config, environment, job, function(error) {
-                if (error) {
-                    calledError = error;
-                    called = true;
-                    return;
-                }
-
-                logger.debug('handler-test-framework: **** Initiating call to grabJobs.');
-                grabJobs(logger, host, port, tubename, 2, function(error, jobs) {
-                    calledError = error;
-                    calledResult = jobs;
-                    called = true;
-                });
-            }, function() {});
-
-            waitsFor(function() {
-                return called;
-            }, 'beanstalk jobs returned', waitTimeout);
-
-            runs(function() {
-                expect(calledError).toBeNull();
-
-                var resultJobTypes = _.pluck(calledResult, 'type');
-                expect(val(resultJobTypes, 'length')).toBe(jobTypes.length);
-                _.each(jobTypes, function(match) {
-                    expect(resultJobTypes).toContain(match);
-                });
-                // handler post-publish callback
-                if (_.isFunction(handlerCallback)) {
-                    handlerCallback(calledResult);
-                }
-            });
-        });
-
-        afterEach(function() {
-            environment.publisherRouter.close();
-        });
+    _.each(beanstalkConfig.jobTypes, function(jobType) {
+        jobType.tubename = jobType.tubename + '-' + counter;
     });
 }
 
-function clearTube(logger, host, port, tubename, callback) {
+function getTubenames(beanstalkConfig, jobTypes) {
+    var tubenames = _.chain(jobTypes)
+                        .map(function(jobType) {
+                            if (!_.isUndefined(beanstalkConfig.jobTypes[jobType]) && _.isArray(beanstalkConfig.jobTypes[jobType].tubeDetails)) {
+                                var baseTubename = beanstalkConfig.jobTypes[jobType].tubename;
+                                return _.map(_.range(beanstalkConfig.jobTypes[jobType].tubeDetails.length), function(num) {
+                                    return baseTubename + (num + 1);
+                                });
+                            } else {
+                                return beanstalkConfig.jobTypes[jobType] ? beanstalkConfig.jobTypes[jobType].tubename : undefined;
+                            }
+                        })
+                        .compact()
+                        .flatten()
+                        .uniq()
+                        .value();
+
+    return tubenames.length > 0 ? tubenames : [beanstalkConfig.repoDefaults.tubename];
+}
+
+function clearTubes(logger, host, port, tubenames, callback) {
     logger.debug('handler-test-framework: **** Entered clearTube.');
 
     var called = false;
     var calledError;
 
-    grabJobs(logger, host, port, tubename, 0, function(error) {
+    grabJobs(logger, host, port, tubenames, 0, function(error) {
         called = true;
         calledError = error;
     });
 
-    waitsFor(function() {
-        return called;
-    }, 'should be called', 2000);
+    waitsFor(function() { return called; }, 'should be called', 2000);
 
     runs(function() {
         expect(calledError).toBeNull();
@@ -315,4 +350,3 @@ function clearTube(logger, host, port, tubename, callback) {
 }
 
 module.exports.testHandler = testHandler;
-module.exports.clearTube = clearTube;

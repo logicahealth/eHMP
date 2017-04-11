@@ -1,6 +1,8 @@
-HMPDJ08A ;SLC/MKB -- Documents cont ;6/25/12  16:11
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDJ08A ;SLC/MKB,ASMR/RRB - TIU Documents continued;10/29/2015 12:08:30
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ ; Called by HMPDJ08
  ;
  ;pass HMPXX from CP1 section 12.2.14 agilex/js
  ;
@@ -29,7 +31,7 @@ HMPDJ08A ;SLC/MKB -- Documents cont ;6/25/12  16:11
  ; nationalTitle = 4696566^PROCEDURE REPORT
  ;       Service = 4696471^PROCEDURE
  ;          Type = 4696123^REPORT
- ;
+ Q
  ;
 CP(DFN,BEG,END,MAX) ; -- Medicine reports
  N HMPN,HMPX,RTN,TIUN,CONS,HMPD,I,DA,X,Y,%DT,DATE,GBL
@@ -55,9 +57,10 @@ CP(DFN,BEG,END,MAX) ; -- Medicine reports
  . I GBL S X=$$CP1(DFN,GBL)
  . I $G(HMPXX)]"" D EN1^HMPDJ08(HMPXX,"CP") ;  pass HMPXX from CP1 section 12.2.14 js
  K ^TMP("MDHSP",$J),^TMP("HMPTEXT",$J)
+ K HMPXX
  Q
  ;
-CP1(DFN,ID) ; -- return report data as TIU string [$$RESOLVE]
+CP1(DFN,ID) ; -- return report data as TIU string [$$RESOLVE] /DE2818
  S DFN=+$G(DFN),ID=$G(ID) I DFN<1!'$L(ID) Q ""
  N Y,HMPY,HMPFN,X,NAME,DATE,STS,USER,SIGN,TEXT
  S HMPFN=+$P(ID,"(",2) ; example 699.5
@@ -67,9 +70,9 @@ CP1(DFN,ID) ; -- return report data as TIU string [$$RESOLVE]
  S X=$$GET1^DIQ(HMPFN,+ID_",",1506)
  S STS=$S($L(X):X,1:"COMPLETED")
  S X=+$$GET1^DIQ(HMPFN,+ID_",",701,"I"),(USER,SIGN)=""
- S:X USER=X_";;"_$P($G(^VA(200,X,0)),U)
+ S:X USER=X_";;"_$P($G(^VA(200,X,0)),U) ;ICR 10060 DE2818 ASF 11/10/15
  S X=+$$GET1^DIQ(HMPFN,+ID_",",1503,"I")
- S:X SIGN="//"_X_";"_$P($G(^VA(200,X,0)),U)_";"_$$GET1^DIQ(HMPFN,+ID_",",1505,"I")
+ S:X SIGN="//"_X_";"_$P($G(^VA(200,X,0)),U)_";"_$$GET1^DIQ(HMPFN,+ID_",",1505,"I") ;ICR 10060 DE2818 ASF 11/10/15
  ; VST=$$GET1^DIQ(HMPFN,+ID_",",900,"I")
  S Y=ID_U_NAME_U_DATE_U_U_USER_U_U_STS_"^^^2461^"_SIGN
  S HMPXX=ID_U_NAME_U_DATE_U_U_USER_U_U_STS_"^^^2461^"_SIGN ; 12.2.14 js
@@ -106,18 +109,18 @@ LR1(DFN,ID) ; -- return report data as TIU string [$$RESOLVE]
  S DFN=+$G(DFN),ID=$G(ID) I DFN<1!'$L(ID) Q ""
  N Y,SUB,IDT,LRDFN,LR,NAME,LOC,USER,VST,SIGN,TEXT
  K ^TMP("HMPTEXT",$J,ID)
- S SUB=$P(ID,";"),IDT=+$P(ID,";",2),LRDFN=$G(^DPT(DFN,"LR"))
+ S SUB=$P(ID,";"),IDT=+$P(ID,";",2),LRDFN=$G(^DPT(DFN,"LR")) ;ICR 10035 DE 2818 ASF 11/10/15
  S LR=$S(SUB="AU":$G(^LR(LRDFN,"AU")),1:$G(^LR(LRDFN,SUB,IDT,0)))
  S NAME="LR "_$$NAME^HMPDLRA(SUB)_" REPORT"
  S LOC=$P(LR,U,$S(SUB="AU":5,1:8)) D  ;look-up visit
  . N CDT,SC S CDT=9999999-IDT,SC="",X=0
- . S:$L(LOC) SC=+$O(^SC("B",LOC,0))
+ . S:$L(LOC) SC=+$O(^SC("B",LOC,0)) ;ICR 10040 DE2818 ASF 11/10/15
  . I CDT,LOC S X=$$GETENC^PXAPI(DFN,CDT,SC)
  . S:X VST=+X
  S X=+$P(LR,U,$S(SUB="AU":10,SUB="MI":4,1:2)) ;pathologist[author]
- S USER=$S(X:X_";;"_$P($G(^VA(200,X,0)),U),1:""),SIGN=""
+ S USER=$S(X:X_";;"_$P($G(^VA(200,X,0)),U),1:""),SIGN="" ;ICR 10060 DE2818 ASF 11/10/15
  S X=$S(SUB="AU":$P(LR,U,15,16),SUB="MI":$P(LR,U,3,4),1:$P(LR,U,11)_U_$P(LR,U,13)) ;released
- S:X SIGN="//"_+$P(X,U,2)_";"_$P($G(^VA(200,+$P(X,U,2),0)),U)_";"_+X
+ S:X SIGN="//"_+$P(X,U,2)_";"_$P($G(^VA(200,+$P(X,U,2),0)),U)_";"_+X ;ICR 10060 DE2818 ASF 11/10/15
  S Y=ID_U_NAME_U_(9999999-IDT)_U_U_USER_U_LOC_"^COMPLETED^"_$G(VST)_"^^2753^"_SIGN
  S:$G(HMPTEXT) TEXT=$$TEXT^HMPDLRA(DFN,SUB,IDT) ;^TMP("HMPTEXT",$J,ID)
  Q Y
@@ -160,9 +163,9 @@ RA1(DFN,ID) ; -- return report data as TIU string [$$RESOLVE]
  S IENS=$P(ID,"-",2)_","_+ID_","_DFN_","
  S VST=$$GET1^DIQ(70.03,IENS,27,"I")
  S X=+$G(^TMP($J,"RAE2",DFN,CASE,PROC,"P")),(USER,SIGN)=""
- S:X USER=X_";;"_$P($G(^VA(200,X,0)),U)
+ S:X USER=X_";;"_$P($G(^VA(200,X,0)),U) ;ICR 10060 DE2818 ASF 11/10/15
  S X=$G(^TMP($J,"RAE2",DFN,CASE,PROC,"V"))
- S:X SIGN="//"_+X_";"_$P($G(^VA(200,+X,0)),U)_";"_$$GET1^DIQ(74,+$P(RAE1,U,5)_",",7,"I")
+ S:X SIGN="//"_+X_";"_$P($G(^VA(200,+X,0)),U)_";"_$$GET1^DIQ(74,+$P(RAE1,U,5)_",",7,"I") ;ICR 10060 DE2818 ASF 11/10/15
  I $D(^TMP($J,"RAE3",DFN,"PRINT_SET")) S PROC=$G(^("ORD")) ;use parent, if printset
  S Y=ID_U_PROC_U_DATE_U_U_USER_U_LOC_U_STS_U_VST_"^^1901^"_SIGN
  K ^TMP($J,"RAE3",DFN),^TMP($J,"RAE2",DFN)

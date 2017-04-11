@@ -169,7 +169,7 @@ function getLabs(labUids, pid, req, orderCallback) {
                     items: consolidatedLabs
                 }
             };
-            req.logger.debug('responseObject = ' + JSON.stringify(labData, null, 2));
+            req.logger.debug({labData: labData}, 'responseObject');
             return orderCallback(null, labData);
         }
     );

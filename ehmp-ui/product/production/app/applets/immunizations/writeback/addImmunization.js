@@ -22,16 +22,17 @@ define([
                 options: [{
                     value: 'administered',
                     label: 'Administered',
-                    title: 'Please choose an option.',
+                    title: 'Choose an option.',
                 }, {
                     value: 'historical',
                     label: 'Historical',
-                    title: 'Please choose an option.',
+                    title: 'Choose an option.',
                 }]
             }]
         }, {
             control: 'container',
-            extraClasses: ['col-xs-6'],
+            extraClasses: ['col-xs-7', 'immunization-type-container', 'bottom-margin-sm'],
+            template: Handlebars.compile('<i class="loading fa fa-spinner fa-spin"></i>'),
             items: [{
                 control: 'select',
                 name: 'immunizationType',
@@ -57,12 +58,12 @@ define([
             }]
         }, {
             control: 'container',
-            extraClasses: ['col-xs-6'],
+            extraClasses: ['col-xs-5', 'left-padding-no'],
             items: [{
                 control: 'select',
                 name: 'informationSource',
                 label: 'Information Source',
-                title: 'To select an option, use the up and down arrow keys then press enter to select.',
+                title: 'Use up and down arrows to view options and then press enter to select.',
                 pickList: []
             }]
         }, {
@@ -79,7 +80,7 @@ define([
                 control: 'select',
                 name: 'lotNumberAdministered',
                 label: 'Lot Number',
-                title: 'To select an option, use the up and down arrow keys then press enter to select.',
+                title: 'Use up and down arrows to view options and then press enter to select.',
                 pickList: []
             }, {
                 control: 'input',
@@ -99,7 +100,7 @@ define([
                 control: 'datepicker',
                 name: 'expirationDateHistorical',
                 label: 'Expiration Date',
-                title: 'Please enter in a date in the following format, MM/DD/YYYY'
+                title: 'Enter in a date in the following format, MM/DD/YYYY'
             }]
         }, {
             control: 'container',
@@ -129,16 +130,20 @@ define([
             control: 'container',
             extraClasses: ['col-xs-6'],
             items: [{
+                control: 'container',
+                extraClasses: ['administrationDate', 'form-group'],
+                template: Handlebars.compile('<p class="faux-label bottom-margin-xs">Administration Date *</p><p>{{administrationDate}}</p>'),
+                modelListeners: ['administrationDate']
+            },{
                 control: 'datepicker',
-                name: 'administrationDate',
+                name: 'administrationDateHistorical',
                 label: 'Administration Date',
-                title: 'Please enter in a date in the following format, MM/DD/YYYY',
+                title: 'Enter in a date in the following format, MM/DD/YYYY',
                 options: {
                     endDate: '0d'
                 },
-                flexible: true,
-                required: true
-            }]
+                flexible: true
+            },]
         }, {
             control: 'container',
             extraClasses: ['col-xs-6'],
@@ -158,15 +163,31 @@ define([
             items: [{
                 control: 'input',
                 name: 'administeredLocation',
-                label: 'Administered Location',
-                title: 'Please enter the location of administration',
+                label: 'Outside Location',
+                title: 'Enter the location of administration',
             }]
-        }, {
+        },
+        {
+            control: 'container',
+            extraClasses: ['col-xs-6'],
+            items: [{
+                control: 'select',
+                name: 'orderedByAdministered',
+                showFilter: true,
+                label: 'Ordering Provider',
+                title: 'Start typing to retrieve providers and use the arrow keys to select.',
+                pickList: [],
+                options: {
+                    minLength: 3
+                }
+            }]
+        },
+        {
             control: 'container',
             extraClasses: ['col-xs-6'],
             items: [{
                 control: 'typeahead',
-                name: 'orderedBy',
+                name: 'orderedByHistorical',
                 label: 'Ordering Provider',
                 title: 'Start typing to retrieve providers and use the arrow keys to select.',
                 pickList: [],
@@ -186,7 +207,7 @@ define([
             items: [{
                 control: 'select',
                 name: 'routeOfAdministration',
-                title: 'To select an option, use the up and down arrow keys then press enter to select.',
+                title: 'Use up and down arrows to view options and then press enter to select.',
                 label: 'Route of Administration',
                 pickList: []
             }]
@@ -196,7 +217,7 @@ define([
             items: [{
                 control: 'select',
                 name: 'anatomicLocation',
-                title: 'To select an option, use the up and down arrow keys then press enter to select.',
+                title: 'Use up and down arrows to view options and then press enter to select.',
                 label: 'Anatomic Location',
                 pickList: []
             }]
@@ -216,7 +237,7 @@ define([
             items: [{
                 control: 'select',
                 name: 'series',
-                title: 'To select an option, use the up and down arrow keys then press enter to select.',
+                title: 'Use up and down arrows to view options and then press enter to select.',
                 label: 'Series',
                 pickList: []
             }]
@@ -230,10 +251,11 @@ define([
             control: 'container',
             extraClasses: ['col-xs-12'],
             items: [{
-                control: 'select',
+                control: 'checklist',
                 multiple: true,
                 name: 'informationStatement',
                 label: 'Vaccine Information Statement(s) (VIS)',
+                selectedCountName: 'visCount',
                 pickList: [],
                 size: 5
             }]
@@ -244,7 +266,10 @@ define([
                 control: "datepicker",
                 name: "visDateOffered",
                 label: "VIS Date Offered",
-                title: 'Please enter in a date in the following format, MM/DD/YYYY'
+                title: 'Enter in a date in the following format, MM/DD/YYYY',
+                options: {
+                    endDate: '0d'
+                }
             }]
         }]
     };
@@ -288,15 +313,15 @@ define([
                 items: [{
                     control: "button",
                     id: 'form-cancel-btn',
-                    extraClasses: ["btn-primary", "btn-sm", "left-margin-xs"],
+                    extraClasses: ["btn-default", "btn-sm", "left-margin-xs"],
                     type: "button",
                     label: "Cancel",
                     title: "Press enter to cancel"
                 }, {
                     control: "button",
                     extraClasses: ["btn-primary", "btn-sm", "left-margin-xs"],
-                    label: "Add",
-                    title: "Press enter to add",
+                    label: "Accept",
+                    title: "Press enter to accept",
                     name: 'addBtn',
                     disabled: true
                 }]
@@ -314,7 +339,7 @@ define([
     });
 
     var ErrorMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('Unable to save your data at this time due to a system error. Please try again later.'),
+        template: Handlebars.compile('Unable to save your data at this time due to a system error. Try again later.'),
         tagName: 'p'
     });
 
@@ -340,12 +365,15 @@ define([
             this.lotNumberRequestCompleted = false;
             this.informationStatementRequestCompleted = false;
             this._super.initialize.apply(this, arguments);
+
+            this.configurePicklistResources();
         },
         fields: AddImmunizationFields,
         ui: {
             'administeredHistorical': '.administeredHistorical',
             'informationSource': '.informationSource',
             'immunizationType': '.immunizationType',
+            'immunizationTypeContainer': '.immunization-type-container',
             'lotNumberAdministered': '.lotNumberAdministered',
             'lotNumberHistorical': '.lotNumberHistorical',
             'expirationDateAdministered': '.expirationDateAdministered',
@@ -353,9 +381,12 @@ define([
             'manufacturerAdministered': '.manufacturerAdministered',
             'manufacturerHistorical': '.manufacturerHistorical',
             'administrationDate': '.administrationDate',
+            'administrationDateHistorical': '.administrationDateHistorical',
             'administeredBy': '.administeredBy',
             'administeredByInput': '#administeredBy',
-            'orderedBy': '.orderedBy',
+            'orderedByHistorical': '.orderedByHistorical',
+            'orderedByInputHistorical': '#orderedByHistorical',
+            'orderedByAdministered': '.orderedByAdministered',
             'administeredLocation': '.administeredLocation',
             'routeOfAdministration': '.routeOfAdministration',
             'anatomicLocation': '.anatomicLocation',
@@ -365,6 +396,102 @@ define([
             'visDateOffered': '.visDateOffered',
             'comments': '.comments',
             'addBtn': '.addBtn'
+        },
+        lotNumbersEvents: {
+            'read:success': function(collection, response) {
+                var filteredItems = _.filter(collection.models, function(item) {
+                    var expirationDate = item.get('expirationDate');
+                    return _.isUndefined(expirationDate) || !expirationDate || moment(expirationDate).isBefore(moment(), 'day');
+                });
+                collection.remove(filteredItems);
+
+                _.each(collection.models, function(model) {
+                    model.set('label', model.get('lotNumber'));
+                    model.set('value', model.get('lotNumber') + ';' + model.get('ien'));
+                });
+                handleOperationalDataRetrievalComplete(this, 'lotNumbers');
+            }
+        },
+        informationStatementsEvents: {
+            'read:success': function(collection, response) {
+                _.each(collection.models, function(model) {
+                    model.set('label', ParseUtil.getFormattedVisName(model));
+                    model.set('value', model.get('ien'));
+                });
+                handleOperationalDataRetrievalComplete(this, 'informationStatements');
+            }
+        },
+        immunizationTypesEvents: {
+            'read:success': function(collection, response) {
+                _.each(collection.models, function(model) {
+                    model.set('label', model.get('name'));
+                    model.set('value', model.get('ien'));
+                });
+                this.ui.immunizationType.trigger('control:picklist:set', collection);
+                handleOperationalDataRetrievalComplete(this, 'immunizationTypes');
+            }
+        },
+        informationSourcesEvents: {
+            'read:success': function(collection, response) {
+                this.ui.informationSource.trigger('control:picklist:set', [ParseUtil.getInformationSourceList(collection.toPicklist())]);
+            }
+        },
+        manufacturersEvents: {
+            'read:success': function(collection, response) {
+                this.ui.manufacturerHistorical.trigger('control:picklist:set', [collection.toPicklist()]);
+            }
+        },
+        orderingProvidersEvents: {
+            'read:success': function(collection, response) {
+                var orderingProviderList = [ParseUtil.getOrderingProviderList(response)];
+                this.ui.orderedByAdministered.trigger('control:picklist:set', orderingProviderList);
+                this.ui.orderedByHistorical.trigger('control:picklist:set', orderingProviderList);
+                updateOrderedBy(this);
+            }
+        },
+        administeredByCollectionEvents: {
+            'read:success': function(collection, response) {
+                this.ui.administeredBy.trigger('control:picklist:set', [collection.toPicklist()]);
+
+                var currentUser = ParseUtil.findUser(collection, ADK.UserService.getUserSession());
+                if (currentUser) {
+                    this.$(this.ui.administeredByInput.selector).typeahead('val', currentUser.get('name'));
+                    this.model.set('administeredBy', currentUser.get('code') + ';' + currentUser.get('name'), {
+                        silent: true
+                    });
+                }
+            }
+        },
+        anatomicLocationsEvents: {
+            'read:success': function(collection, response) {
+                this.ui.anatomicLocation.trigger('control:picklist:set', [collection.toPicklist()]);
+            }
+        },
+        routesOfAdministrationEvents: {
+            'read:success': function(collection, response) {
+                this.ui.routeOfAdministration.trigger('control:picklist:set', [collection.toPicklist()]);
+            }
+        },
+        configurePicklistResources: function() {
+            this.lotNumbers = new ADK.UIResources.Picklist.Immunizations.LotNumbers();
+            this.informationStatements = new ADK.UIResources.Picklist.Immunizations.InformationStatements();
+            this.immunizationTypes = new ADK.UIResources.Picklist.Immunizations.Data();
+            this.informationSources = new ADK.UIResources.Picklist.Immunizations.InformationSources();
+            this.manufacturers = new ADK.UIResources.Picklist.Immunizations.Manufacturers();
+            this.orderingProviders = new Backbone.Collection();
+            this.administeredByCollection = new ADK.UIResources.Picklist.Encounters.NewPersons();
+            this.anatomicLocations = new ADK.UIResources.Picklist.Immunizations.AnatomicLocations();
+            this.routesOfAdministration = new ADK.UIResources.Picklist.Immunizations.RoutesOfAdministration();
+
+            this.bindEntityEvents(this.lotNumbers, this.lotNumbersEvents);
+            this.bindEntityEvents(this.informationStatements, this.informationStatementsEvents);
+            this.bindEntityEvents(this.immunizationTypes, this.immunizationTypesEvents);
+            this.bindEntityEvents(this.informationSources, this.informationSourcesEvents);
+            this.bindEntityEvents(this.manufacturers, this.manufacturersEvents);
+            this.bindEntityEvents(this.orderingProviders, this.orderingProvidersEvents);
+            this.bindEntityEvents(this.administeredByCollection, this.administeredByCollectionEvents);
+            this.bindEntityEvents(this.anatomicLocations, this.anatomicLocationsEvents);
+            this.bindEntityEvents(this.routesOfAdministration, this.routesOfAdministrationEvents);
         },
         onRender: function() {
             this.initDefaultFields();
@@ -378,18 +505,43 @@ define([
             }else {
                 formInstance.handlePreselectedVisit();
             }
+
             retrievePickListData(this);
-            ADK.Navigation.registerCheck(new ADK.Navigation.PatientContextCheck({
+            this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
+        },
+        onAttach:function(){
+            if (this.$('#immunizationType').is(':visible')){
+                this.$el.trigger('tray.loaderShow',{
+                    loadingString:'Loading immunization types'
+                });
+            }
+        },
+        registerChecks: function() {
+            var checkOptions = {
                 id: 'immunization-writeback-in-progress',
+                label: 'Immunization',
                 failureMessage: 'Immunization Writeback Workflow In Progress! Any unsaved changes will be lost if you continue.',
-                onCancel: _.bind(function() {
-                    this.$el.trigger('tray.show');
+                onContinue: _.bind(function(model) {
+                    this.workflow.close();
                 }, this)
-            }));
+            };
+            ADK.Checks.register([new ADK.Navigation.PatientContextCheck(checkOptions),
+                new ADK.Checks.predefined.VisitContextCheck(checkOptions)]);
         },
         onDestroy: function(){
             var PatientModel = ADK.PatientRecordService.getCurrentPatient();
             PatientModel.off('change:visit');
+            WritebackUtil.unregisterChecks();
+
+            this.unbindEntityEvents(this.lotNumber, this.lotNumbersEvents);
+            this.unbindEntityEvents(this.informationStatements, this.informationStatementsEvents);
+            this.unbindEntityEvents(this.immunizationTypes, this.immunizationTypesEvents);
+            this.unbindEntityEvents(this.informationSources, this.informationSourcesEvents);
+            this.unbindEntityEvents(this.manufacturers, this.manufacturersEvents);
+            this.unbindEntityEvents(this.orderingProviders, this.orderingProvidersEvents);
+            this.unbindEntityEvents(this.administeredByCollection, this.administeredByCollectionEvents);
+            this.unbindEntityEvents(this.anatomicLocations, this.anatomicLocationsEvents);
+            this.unbindEntityEvents(this.routesOfAdministration, this.routesOfAdministrationEvents);
         },
         initDefaultFields: function() {
             this.ui.immunizationType.trigger('control:disabled', true);
@@ -407,10 +559,15 @@ define([
             this.ui.manufacturerHistorical.trigger('control:disabled', true);
             this.ui.manufacturerAdministered.trigger('control:hidden', true);
             this.ui.manufacturerHistorical.trigger('control:hidden', false);
-            this.ui.administrationDate.trigger('control:disabled', true);
+            this.ui.administrationDateHistorical.trigger('control:disabled', true);
+            this.ui.administrationDateHistorical.trigger('control:hidden', true);
+            this.ui.administrationDateHistorical.trigger('control:required', false);
             this.ui.administeredBy.trigger('control:disabled', true);
             this.ui.administeredBy.trigger('control:required', false);
-            this.ui.orderedBy.trigger('control:disabled', true);
+            this.ui.orderedByHistorical.trigger('control:disabled', true);
+            this.ui.orderedByHistorical.trigger('control:hidden', true);
+            this.ui.orderedByAdministered.trigger('control:disabled', true);
+            this.ui.orderedByAdministered.trigger('control:hidden', false);
             this.ui.administeredLocation.trigger('control:disabled', true);
             this.ui.administeredLocation.trigger('control:hidden', false);
             this.ui.routeOfAdministration.trigger('control:disabled', true);
@@ -424,13 +581,17 @@ define([
             this.ui.comments.trigger('control:disabled', true);
             this.model.set('administeredHistorical', '');
 
+            var site = ADK.UserService.getUserSession().get('site');
+            var user = ADK.UserService.getUserSession().get('duz')[site];
+            this.model.set('authorUid', 'urn:va:user:' + site + ':' + user);
+
         },
         events: {
             'click #form-cancel-btn': function(e) {
                 e.preventDefault();
                 var closeAlertView = new ADK.UI.Alert({
-                    title: 'Are you sure you want to delete?',
-                    icon: 'fa-exclamation-triangle font-size-18 color-red',
+                    title: 'Cancel',
+                    icon: 'icon-cancel',
                     messageView: CloseMessageView,
                     footerView: CloseFooterView,
                     workflow: this.workflow
@@ -445,10 +606,15 @@ define([
                         message: this.model.validationError
                     });
                 else {
+                    this.$el.trigger('tray.loaderShow',{
+                        loadingString:'Adding Immunization'
+                    });
                     this.model.unset("formStatus");
+                    this.ui.addBtn.trigger('control:disabled', true);
                     var self = this;
                     WritebackUtil.addImmunization(this.model,
                         function() {
+                            self.$el.trigger('tray.loaderHide');
                             var saveAlertView = new ADK.UI.Notification({
                                 title: 'Immunization Added',
                                 icon: 'fa-check',
@@ -458,15 +624,17 @@ define([
                             });
                             saveAlertView.show();
                             self.workflow.close();
-                            WritebackUtil.unregisterNavigationCheck();
+                            WritebackUtil.unregisterChecks();
 
                             ADK.ResourceService.clearAllCache('immunization');
                             ADK.Messaging.getChannel('immunization').trigger('refreshGridView');
                         },
                         function(error) {
+                            self.$el.trigger('tray.loaderHide');
+                            self.ui.addBtn.trigger('control:disabled', false);
                             var errorAlertView = new ADK.UI.Alert({
                                 title: 'Save Failed (System Error)',
-                                icon: 'fa-exclamation-circle font-size-18 color-red',
+                                icon: 'icon-error',
                                 messageView: ErrorMessageView,
                                 footerView: ErrorFooterView
                             });
@@ -480,18 +648,15 @@ define([
             var enableAddButton = false;
             if(this.model.get('administeredHistorical') === 'administered'){
                 if(this.model.get('immunizationType') && this.model.get('lotNumberAdministered') && this.model.get('administeredBy') &&
-                    this.model.get('administrationDate') && this.model.get('routeOfAdministration') && this.model.get('anatomicLocation') &&
+                    this.model.get('routeOfAdministration') && this.model.get('anatomicLocation') &&
                     this.model.get('dosage')){
 
-                    var informationStatementArray = this.model.get('informationStatement');
-                    if(!informationStatementArray || (informationStatementArray.length === 1 && informationStatementArray[0] === '') ||
-                        (informationStatementArray.length >= 1 && informationStatementArray[0] !== '' && this.model.get('visDateOffered')) ||
-                        (informationStatementArray.length > 1 && this.model.get('visDateOffered'))){
+                    if(this.model.get('visCount') === 0 || (this.model.get('visCount') > 0 && this.model.get('visDateOffered'))){
                         enableAddButton = true;
                     }
                 }
             } else {
-                if(this.model.get('immunizationType') && this.model.get('informationSource') && this.model.get('administrationDate')){
+                if(this.model.get('immunizationType') && this.model.get('informationSource') && this.model.get('administrationDateHistorical')){
                     enableAddButton = true;
                 }
             }
@@ -509,7 +674,9 @@ define([
                 imunizationTypePrompt();
 
                 if (value === 'administered') {
-                    this.ui.immunizationType.trigger('control:disabled', false);
+                    if(this.operationalDataComplete){
+                        this.ui.immunizationType.trigger('control:disabled', false);
+                    }
                     this.ui.informationSource.trigger('control:hidden', true);
                     this.ui.informationSource.trigger('control:required', false);
                     this.ui.lotNumberAdministered.trigger('control:hidden', false);
@@ -520,18 +687,32 @@ define([
                     this.ui.manufacturerAdministered.trigger('control:hidden', false);
                     this.ui.manufacturerHistorical.trigger('control:hidden', true);
                     this.ui.administeredBy.trigger('control:required', true);
+                    this.ui.orderedByHistorical.trigger('control:hidden', true);
+                    this.ui.orderedByAdministered.trigger('control:hidden', false);
+                    this.ui.orderedByAdministered.trigger('control:required', true);
                     this.ui.administeredLocation.trigger('control:hidden', true);
                     this.ui.routeOfAdministration.trigger('control:required', true);
                     this.ui.anatomicLocation.trigger('control:required', true);
                     this.ui.dosage.trigger('control:required', true);
-                    this.ui.informationStatement.trigger('control:hidden', false);
-                    this.ui.visDateOffered.trigger('control:hidden', false);
-                    this.model.trigger('change:informationStatement');
+
+                    if(this.model.get('informationStatement').length > 0){
+                        this.ui.informationStatement.trigger('control:hidden', false);
+                        this.ui.visDateOffered.trigger('control:hidden', false);
+                    }
+
+
+                    this.model.trigger('change:visCount');
                     this.$(this.ui.administeredBy.selector).parent().removeClass('col-xs-3').addClass('col-xs-5');
-                    this.$(this.ui.orderedBy.selector).parent().removeClass('col-xs-3').addClass('col-xs-5');
                     this.handleAdministrationDate(true);
+
+                    if(_.isEmpty(this.model.get('orderedByAdministered'))){
+                        updateOrderedBy(this);
+                    }
+
                 } else if (value === 'historical'){
-                    this.ui.immunizationType.trigger('control:disabled', false);
+                    if(this.operationalDataComplete){
+                        this.ui.immunizationType.trigger('control:disabled', false);
+                    }
                     this.ui.informationSource.trigger('control:hidden', false);
                     this.ui.informationSource.trigger('control:required', true);
                     this.ui.lotNumberAdministered.trigger('control:hidden', true);
@@ -543,6 +724,9 @@ define([
                     this.ui.manufacturerHistorical.trigger('control:hidden', false);
                     this.ui.administeredBy.trigger('control:required', false);
                     this.ui.administeredLocation.trigger('control:hidden', false);
+                    this.ui.orderedByAdministered.trigger('control:required', false);
+                    this.ui.orderedByAdministered.trigger('control:hidden', true);
+                    this.ui.orderedByHistorical.trigger('control:hidden', false);
                     this.ui.routeOfAdministration.trigger('control:required', false);
                     this.ui.anatomicLocation.trigger('control:required', false);
                     this.ui.dosage.trigger('control:required', false);
@@ -550,14 +734,12 @@ define([
                     this.ui.visDateOffered.trigger('control:hidden', true);
                     this.ui.visDateOffered.trigger('control:required', false);
 
+                    this.model.unset('orderedByAdministered');
                     if($(this.ui.informationSource).find('#informationSource').is(':disabled')){
                         this.ui.administrationDate.trigger('control:disabled', true);
                     }else {
                         this.ui.administrationDate.trigger('control:disabled', false);
                     }
-
-                    this.$(this.ui.administeredBy.selector).parent().removeClass('col-xs-5').addClass('col-xs-3');
-                    this.$(this.ui.orderedBy.selector).parent().removeClass('col-xs-5').addClass('col-xs-3');
                     this.handleAdministrationDate(false);
                 }
 
@@ -580,13 +762,12 @@ define([
                 }
                 this.handleEnableAddButton();
             },
-            'change:informationStatement': function() {
-                var informationStatementArray = this.model.get('informationStatement');
+            'change:visCount': function() {
                 if(this.model.get('administeredHistorical') === 'administered'){
-                    if (_.isUndefined(informationStatementArray) || (informationStatementArray.length === 1 && informationStatementArray[0] === '')) {
-                        this.ui.visDateOffered.trigger('control:required', false);
-                    } else {
+                    if(this.model.get('visCount') > 0){
                         this.ui.visDateOffered.trigger('control:required', true);
+                    } else {
+                        this.ui.visDateOffered.trigger('control:required', false);
                     }
                     this.handleEnableAddButton();
                 }
@@ -600,7 +781,7 @@ define([
             'change:administeredBy': function(){
                 this.handleEnableAddButton();
             },
-            'change:administrationDate': function(){
+            'change:administrationDateHistorical': function(){
                 this.handleEnableAddButton();
             },
             'change:routeOfAdministration': function(){
@@ -631,7 +812,23 @@ define([
                 }
                 this.model.set('inactiveFlag', immunization.get('inactiveFlag'));
                 self.ui.series.trigger('control:picklist:set', [ParseUtil.getSeriesList(immunization.get('maxInSeries'))]);
-                self.ui.informationStatement.trigger('control:picklist:set', [ParseUtil.getInformationStatementList(immunization.get('vaccineInfoStmt'), self.informationStatements)]);
+                this.model.get('informationStatement').reset();
+                var matchedInformationStatements = new Backbone.Collection(ParseUtil.getInformationStatementList(immunization.get('vaccineInfoStmt'), self.informationStatements));
+
+                if(matchedInformationStatements.length > 0){
+                    matchedInformationStatements.each(function(infoStatement){
+                        self.model.get('informationStatement').add(infoStatement);
+                    });
+
+                    if(this.model.get('administeredHistorical') === 'administered'){
+                        this.ui.informationStatement.trigger('control:hidden', false);
+                        this.ui.visDateOffered.trigger('control:hidden', false);
+                    }
+                } else {
+                    this.ui.informationStatement.trigger('control:hidden', true);
+                    this.ui.visDateOffered.trigger('control:hidden', true);
+                }
+
                 this.handleEnableAddButton();
             }
         },
@@ -642,7 +839,8 @@ define([
             this.ui.expirationDateHistorical.trigger('control:disabled', disabled);
             this.ui.manufacturerHistorical.trigger('control:disabled', disabled);
             this.ui.administeredBy.trigger('control:disabled', disabled);
-            this.ui.orderedBy.trigger('control:disabled', disabled);
+            this.ui.orderedByAdministered.trigger('control:disabled', disabled);
+            this.ui.orderedByHistorical.trigger('control:disabled', disabled);
             this.ui.administeredLocation.trigger('control:disabled', disabled);
             this.ui.routeOfAdministration.trigger('control:disabled', disabled);
             this.ui.anatomicLocation.trigger('control:disabled', disabled);
@@ -651,55 +849,67 @@ define([
             this.ui.informationStatement.trigger('control:disabled', disabled);
             this.ui.visDateOffered.trigger('control:disabled', disabled);
             this.ui.comments.trigger('control:disabled', disabled);
+            this.ui.administrationDateHistorical.trigger('control:disabled', disabled);
 
             if(this.model.get('administeredHistorical') === 'historical'){
                 this.ui.administrationDate.trigger('control:disabled', disabled);
             }
         },
         handlePreselectedVisit: function(){
-            var visit = ADK.PatientRecordService.getCurrentPatient().get('visit');
 
-            if(!visit.existingVisit && visit.newVisit && visit.newVisit.isHistorical){
+            var visit = ADK.PatientRecordService.getCurrentPatient().get('visit'); 
+
+            if(!visit.existingVisit && visit.isHistorical){
                 this.model.set('administeredHistorical', 'historical');
                 this.ui.administeredHistorical.trigger('control:disabled', true);
             }
+
+            if(this.model.get('administeredHistorical') === 'administered'){
+                this.handleAdministrationDate(true);
+            }
+
+            updateOrderedBy(this);
         },
         handleAdministrationDate: function(isAdministered){
             if(isAdministered){
-                this.model.set('previousHistoricalAdministrationDate', this.model.get('administrationDate'));
+                this.model.set('previousHistoricalAdministrationDate', this.model.get('administrationDateHistorical'));
                 var visit = ADK.PatientRecordService.getCurrentPatient().get('visit');
-                var unformattedDate = !visit.existingVisit && visit.newVisit ? visit.newVisit.dateTime : visit.dateTime;
 
-                if(unformattedDate){
-                    var visitDate = moment(unformattedDate.substring(0, 8), 'YYYYMMDDhhmm').format('MM/DD/YYYY');
+                if(visit.dateTime){
+                    var visitDate = moment(visit.dateTime.substring(0, 8), 'YYYYMMDDhhmm').format('MM/DD/YYYY');
                     this.model.set('administrationDate', visitDate);
                 }
 
-                this.ui.administrationDate.trigger('control:disabled', true);
+                this.ui.administrationDateHistorical.trigger('control:hidden', true);
+                this.ui.administrationDateHistorical.trigger('control:required', false);
+                this.ui.administrationDate.trigger('control:hidden', false);
             } else {
+                this.ui.administrationDate.trigger('control:hidden', true);
+                this.ui.administrationDateHistorical.trigger('control:hidden', false);
+                this.ui.administrationDateHistorical.trigger('control:required', true);
+
                 if(this.model.get('histCancel')){
-                    this.model.set('administrationDate', formModel.get('previousHistoricalAdministrationDate'));
+                    this.model.set('administrationDateHistorical', formModel.get('previousHistoricalAdministrationDate'));
                     this.model.set('histCancel', false);
-                }else if(this.model.get('administrationDate')){
-                    this.model.unset('administrationDate', {silent: true});
-                    $(this.ui.administrationDate).find('#administrationDate').data('datepicker').clearDates();
+                }else if(this.model.get('administrationDateHistorical')){
+                    this.model.unset('administrationDateHistorical');
                 }
             }
         }
     });
 
     var CloseMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('You will lose all work in progress if you close this task. Would you like to proceed?'),
+        template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
         tagName: 'p'
     });
 
     var CloseFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "Cancel" classes="btn-default" title="Press enter to cancel."}}{{ui-button "Continue" classes="btn-primary" title="Press enter to continue."}}'),
+        template: Handlebars.compile('{{ui-button "No" classes="btn-default" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary" title="Press enter to cancel."}}'),
         events: {
             'click .btn-primary': function() {
                 ADK.UI.Alert.hide();
                 this.getOption('workflow').close();
-                WritebackUtil.unregisterNavigationCheck();
+                WritebackUtil.unregisterChecks();
             },
             'click .btn-default': function() {
                 ADK.UI.Alert.hide();
@@ -721,6 +931,7 @@ define([
                 if(formModel.get('inactiveFlag') === "1"){
                     clearForm();
                 }else{
+                    formModel.errorModel.clear();
                     select2_search($('#immunizationType'), formModel.get('_labelsForSelectedValues').get('immunizationType').substring(0, 5));                    
                 }
             },
@@ -748,19 +959,21 @@ define([
             'click #hist-preserve': function() {
                 ADK.UI.Alert.hide();
 
-                 var orderedBy = formModel.get('orderedBy');
-                 if(orderedBy){
-                    var validProvider = orderingProviders.findWhere({uid: orderedBy});
+                formModel.errorModel.clear();
 
-                    if(!validProvider){
-                        formModel.unset('orderedBy');
-                    }
-                 }
+                if(formModel.has('orderedByHistorical') && formModel.get('orderedByHistorical').indexOf('urn:va:user') > -1){
+                    formModel.set('orderedByAdministered', formModel.get('orderedByHistorical'));
+                } else {
 
+                }
+
+                formModel.unset('orderedByHistorical');
                 formModel.unset('lotNumberAdministered');
                 formModel.unset('lotNumberHistorical');
                 formModel.unset('visDateOffered');
-                formModel.unset('informationStatement');
+                formModel.get('informationStatement').each(function(infoStatement){
+                    infoStatement.set('value', false);
+                });
                 formModel.unset('informationSource');
                 formModel.unset('manufacturerHistorical');
                 formModel.unset('expirationDateHistorical');
@@ -774,6 +987,7 @@ define([
             },
             'click #hist-discard': function() {
                 ADK.UI.Alert.hide();
+                formInstance.ui.informationStatement.trigger('control:hidden', true);
                 clearForm();
             },
             'click #hist-cancel': function() {
@@ -794,16 +1008,16 @@ define([
         if(prevValue && !formModel.get('preserveCancel') && formModel.get('immunizationType') && isDirtyForm()){
             if(prevValue === 'administered'){
                 var preserveAdmView = new ADK.UI.Alert({
-                    title: 'What would you prefer?',
-                    icon: 'fa-exclamation-triangle font-size-18 color-red',
+                    title: 'Attention',
+                    icon: 'icon-warning',
                     messageView: preserveAdmMessageView,
                     footerView: preserveAdmFooterView
                 });
                 preserveAdmView.show();
             }else{
                 var preserveHistView = new ADK.UI.Alert({
-                    title: 'What would you prefer?',
-                    icon: 'fa-exclamation-triangle font-size-18 color-red',
+                    title: 'Attention',
+                    icon: 'icon-warning',
                     messageView: preserveHistMessageView,
                     footerView: preserveHistFooterView
                 });
@@ -830,24 +1044,26 @@ define([
         formModel.unset('lotNumberAdministered');
         formModel.unset('lotNumberHistorical');
         formModel.unset('visDateOffered');
-        formModel.unset('informationStatement');
+        formModel.get('informationStatement').reset();
         formModel.unset('administeredLocation');
         formModel.unset('comments');
         formModel.unset('series');
         formModel.unset('routeOfAdministration');
-        formModel.unset('orderedBy');
         formModel.unset('anatomicLocation');
         formModel.unset('dosage');
         formModel.unset('informationSource');
         formModel.unset('manufacturerHistorical');
         formModel.unset('expirationDateHistorical');
+        formModel.unset('orderedByHistorical');
+        formModel.errorModel.clear();
     }
 
     function isDirtyForm(){
 
         var isDirty =   (!_.isUndefined(formModel.get('comments')) && (formModel.get('comments') !== "") ) ||
                         (!_.isUndefined(formModel.get('routeOfAdministration')) && (formModel.get('routeOfAdministration') !== "") ) ||
-                        (!_.isUndefined(formModel.get('orderedBy')) && (formModel.get('orderedBy') !== "") ) ||
+                        (!_.isUndefined(formModel.get('orderedByAdministered')) && (formModel.get('orderedByAdministered') !== "") ) ||
+                        (!_.isUndefined(formModel.get('orderedByHistorical')) && (formModel.get('orderedByHistorical') !== '')) ||
                         (!_.isUndefined(formModel.get('anatomicLocation')) && (formModel.get('anatomicLocation') !== "") ) ||
                         (!_.isUndefined(formModel.get('series')) && (formModel.get('series') !== "") ) || 
                         (!_.isUndefined(formModel.get('informationSource')) && (formModel.get('informationSource') !== "") ) ||
@@ -859,7 +1075,28 @@ define([
         return isDirty;
     }
 
+    function updateOrderedBy(form){
+
+        var visit = ADK.PatientRecordService.getCurrentPatient().get('visit'); 
+        if(!_.isUndefined(form.orderingProviders)){
+            var selectedProvider = visit.selectedProvider;
+            var validProvider = form.orderingProviders.findWhere({name: selectedProvider.name.toUpperCase()});
+            if(!_.isUndefined(validProvider)){
+                //form.$(form.ui.orderedByInput.selector).typeahead('val', validProvider.get('name'));    
+
+                form.model.set({
+                    'orderedByAdministered' :  validProvider.get('uid')
+                });
+            }
+        }
+
+    }
+
     function handleOperationalDataRetrievalComplete(form, type){
+
+        // remove loading cover
+        form.$el.trigger('tray.loaderHide');
+
         if(type === 'informationStatements'){
             form.informationStatementRequestCompleted = true;
         } else if(type === 'lotNumbers'){
@@ -869,6 +1106,7 @@ define([
         }
 
         if(form.informationStatementRequestCompleted && form.lotNumberRequestCompleted && form.immunizationTypeRequestCompleted){
+            form.operationalDataComplete = true;
             // Handle pre-selected immunization type
             var cvxCode = form.model.get('cvxCode');
             if(!cvxCode && form.model.get('codes') && form.model.get('codes').length > 0 && form.model.get('codes')[0].code){
@@ -896,100 +1134,44 @@ define([
 
             }
         }
+
+        form.$(form.ui.immunizationTypeContainer).find('i').detach();
+
+        if(form.model.get('administeredHistorical')){
+            form.ui.immunizationType.trigger('control:disabled', false);
+        }
     }
 
     function select2_search ($el, term) {
-      $el.select2('open', {term: term, skipFetch: true});
+      $el.select2({skipFetch: true});
+      $el.select2('open');
+
+      var $search = $el.data('select2').dropdown.$search;
+      $search.val(term);
     }
 
-    var orderingProviders;
-
     function retrievePickListData(form) {
-        var lotNumbers = new ADK.UIResources.Picklist.Immunizations.LotNumbers();
-        form.listenTo(lotNumbers, 'read:success', function(collection, response){
-            _.each(collection.models, function(model){
-                model.set('label', model.get('lotNumber'));
-                model.set('value', model.get('lotNumber') + ';' + model.get('ien'));
-            });
-            form.lotNumbers = collection;
-            handleOperationalDataRetrievalComplete(form, 'lotNumbers');
-        });
-        lotNumbers.fetch();
-
-        var informationStatements = new ADK.UIResources.Picklist.Immunizations.InformationStatements();
-        form.listenTo(informationStatements, 'read:success', function(collection, response){
-            _.each(collection.models, function(model){
-                model.set('label', ParseUtil.getFormattedVisName(model));
-                model.set('value', model.get('ien'));
-            });
-            form.informationStatements = collection;
-            handleOperationalDataRetrievalComplete(form, 'informationStatements');
-        });
-        informationStatements.fetch();
-
-        var immunizationTypes = new ADK.UIResources.Picklist.Immunizations.Data();
-        form.listenTo(immunizationTypes, 'read:success', function(collection, response){
-            _.each(collection.models, function(model){
-                model.set('label', model.get('name'));
-                model.set('value', model.get('ien'));
-            });
-            form.ui.immunizationType.trigger('control:picklist:set', collection);
-            handleOperationalDataRetrievalComplete(form, 'immunizationTypes');
-        });
-        immunizationTypes.fetch();
-        form.immunizationTypes = immunizationTypes;
-
-        var informationSources = new ADK.UIResources.Picklist.Immunizations.InformationSources();
-        form.listenTo(informationSources, 'read:success', function(collection, response){
-            form.ui.informationSource.trigger('control:picklist:set', [ParseUtil.getInformationSourceList(collection.toPicklist())]);
-        });
-        informationSources.fetch();
-
-        var manufacturers = new ADK.UIResources.Picklist.Immunizations.Manufacturers();
-        form.listenTo(manufacturers, 'read:success', function(collection, response){
-            form.ui.manufacturerHistorical.trigger('control:picklist:set', [collection.toPicklist()]);
-        });
-        manufacturers.fetch();
+        form.lotNumbers.fetch();
+        form.informationStatements.fetch();
+        form.informationStatements.fetch();
+        form.immunizationTypes.fetch();
+        form.informationSources.fetch();
+        form.manufacturers.fetch();
+        form.administeredByCollection.fetch();
+        form.anatomicLocations.fetch();
+        form.routesOfAdministration.fetch();
 
         var site = ADK.UserService.getUserSession().get('site');
         var providersfetchOptions = {
             resourceTitle: "visits-providers",
             onSuccess: function(collection, response) {
-                orderingProviders = collection;
-                form.ui.orderedBy.trigger('control:picklist:set', [ParseUtil.getOrderingProviderList(response)]);
+                collection.trigger('read:success', collection, response);
             },
             criteria: {
                 "facility.code": site
             }
         };
-        ADK.ResourceService.fetchCollection(providersfetchOptions);
-
-        var administeredByCollection = new ADK.UIResources.Picklist.Encounters.NewPersons();
-        form.listenTo(administeredByCollection, 'read:success', function(collection, response){
-            form.administeringProviderList = collection.toPicklist();
-            form.ui.administeredBy.trigger('control:picklist:set', [form.administeringProviderList]);
-
-            var currentUser = ParseUtil.findUser(collection, ADK.UserService.getUserSession());
-            if (currentUser) {
-                form.$(form.ui.administeredByInput.selector).typeahead('val', currentUser.get('name'));
-                form.model.set('administeredBy', currentUser.get('code') + ';' + currentUser.get('name'), {
-                    silent: true
-                });
-            }
-        });
-        administeredByCollection.fetch();
-
-        var anatomicLocations = new ADK.UIResources.Picklist.Immunizations.AnatomicLocations();
-        form.listenTo(anatomicLocations, 'read:success', function(collection, response){
-            form.ui.anatomicLocation.trigger('control:picklist:set', [collection.toPicklist()]);
-        });
-        anatomicLocations.fetch();
-
-        var routesOfAdministration = new ADK.UIResources.Picklist.Immunizations.RoutesOfAdministration();
-        form.listenTo(routesOfAdministration, 'read:success', function(collection, response){
-            form.ui.routeOfAdministration.trigger('control:picklist:set', [collection.toPicklist()]);
-        });
-        routesOfAdministration.fetch();
+        ADK.ResourceService.fetchCollection(providersfetchOptions, form.orderingProviders);
     }
 
     return formView;

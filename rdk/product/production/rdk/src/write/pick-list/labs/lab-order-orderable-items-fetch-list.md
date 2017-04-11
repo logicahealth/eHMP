@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Lab order orderable items [/lab-order-orderable-items{?site}{&labType}{&searchString}{&fields}]
+## Lab order orderable items [/lab-order-orderable-items{?site}{&labType}{&searchString}]
 
 Large Pick List - Get list of orderable Lab Orders
 
@@ -22,8 +22,6 @@ ORWDX ORDITM
         This is not a filter - it is a search string.  For example, searching for RAD may return RADIACARE;
         however, searching for DIA will not return RADIACARE.  Also, the search term may not always be the
         first 3 characters.  For example, DIA will also return "CONTRAST MEDIA <DIAGNOSTIC DYES>".
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

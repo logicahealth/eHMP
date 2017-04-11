@@ -1,26 +1,22 @@
-
 <VirtualHost *:80>
   DocumentRoot <%= @params[:document_root] %>
   ServerName <%= @params[:server_name] %>  
 
-  <% unless @params[:local] %>
-    <IfModule mod_autoindex.c>
-      Options -Indexes
+  <IfModule mod_autoindex.c>
+    Options -Indexes
+  </IfModule>
+  <Files "index.html">
+    FileETag None
+    <IfModule mod_headers.c>
+       Header unset ETag
+       Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+       Header set Pragma "no-cache"
+       Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+       Header always set Content-Security-Policy-Report-Only " script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none'; img-src 'self' data:; media-src 'none'; frame-src 'none'; connect-src 'self'"
+      Header always set X-Content-Security-Policy-Report-Only "script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none';  img-src 'self' data:; media-src 'none'; frame-src 'none'; connect-src 'self'"
+      Header always set X-WebKit-CSP-Report-Only " script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none'; img-src 'self' data:; media-src 'none'; frame-src 'none'; connect-src 'self'"
+
     </IfModule>
-    # must prevent the AppCache manifest from being cached with no-cache, no-store, and expires
-    # must set MIME type, else AppCache breaks in IE
-    <Files "cache.appcache">
-      FileETag None
-      <IfModule mod_headers.c>
-         Header unset ETag
-         Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
-         Header set Pragma "no-cache"
-         Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
-      </IfModule>
-    </Files>
+  </Files>
   EnableSendfile Off
-  AddType text/cache-manifest .appcache
-  <% end %>
 </VirtualHost>
-
-

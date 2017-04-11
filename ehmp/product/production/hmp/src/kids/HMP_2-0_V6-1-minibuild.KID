@@ -681,9 +681,9 @@ patch is available.
 "BLD",9078,1,336,0)
 The preferred method is to FTP the files from
 "BLD",9078,1,337,0)
-ftp://ftp.ftpsrv.domain.ext/. Directory [EHMP]
+ftp://ftp.DNS   .DNS       /. Directory [EHMP]
 "BLD",9078,1,338,0)
-Username: EHMP Password: EHMP$STORE
+Username: EHMP Password: PW
 "BLD",9078,1,339,0)
  
 "BLD",9078,1,340,0)
@@ -4063,7 +4063,7 @@ DFN example:   100000511^PI^USVHA^500
 "KRN",8994,3494,3,5,0)
 AssigningFacility is a hashed value based on facility domain,
 "KRN",8994,3494,3,6,0)
-using $$BASE^XLFUTL($$CRC16^XLFCRC("DOMAIN.DOMAIN.EXT"),10,16)
+using $$BASE^XLFUTL($$CRC16^XLFCRC("DOMAINDNS        "),10,16)
 "KRN",8994,3494,3,7,0)
  
 "KRN",8994,3494,3,8,0)
@@ -4871,9 +4871,9 @@ patch is available.
 "PKG",578,22,1,1,336,0)
 The preferred method is to FTP the files from
 "PKG",578,22,1,1,337,0)
-ftp://ftp.ftpsrv.domain.ext/. Directory [EHMP]
+ftp://ftp.DNS   .DNS       /. Directory [EHMP]
 "PKG",578,22,1,1,338,0)
-Username: EHMP Password: EHMP$STORE
+Username: EHMP Password: PW
 "PKG",578,22,1,1,339,0)
  
 "PKG",578,22,1,1,340,0)

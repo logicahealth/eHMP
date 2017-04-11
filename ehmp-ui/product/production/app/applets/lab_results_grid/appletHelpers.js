@@ -197,7 +197,7 @@ define([
                 var temp = response.interpretationCode.split(":").pop();
 
                 var flagTooltip = "";
-                var labelClass = "label-danger";
+                var labelClass = "applet-badges label-critical";
 
                 if (temp === "HH") {
                     temp = "H*";

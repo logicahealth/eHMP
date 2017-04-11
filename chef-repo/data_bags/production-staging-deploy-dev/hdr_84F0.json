@@ -1,7 +1,7 @@
 {
   "id": "hdr_84F0",
   "normal": {
-    "ipaddress": "172.16.16.242",
+    "ipaddress": "IP__ADDRESS",
     "stack": "production-staging-deploy-dev",
     "hdr": {
       "hdr_sites": [

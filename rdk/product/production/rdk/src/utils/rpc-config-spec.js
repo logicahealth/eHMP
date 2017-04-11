@@ -10,22 +10,22 @@ var config = {
         '9E7A': {
             name: 'PANORAMA',
             division: '500',
-            host: 'IP        ',
+            host: 'IP_ADDRESS',
             port: 9210,
             production: false,
-            accessCode: 'PW    ',
-            verifyCode: 'PW    !!',
+            accessCode: 'PW',
+            verifyCode: 'PW',
             localIP: '127.0.0.1',
             localAddress: 'localhost'
         },
         'C877': {
             name: 'KODAK',
             division: '500',
-            host: 'IP        ',
+            host: 'IP_ADDRESS',
             port: 9210,
             production: false,
-            accessCode: 'PW    ',
-            verifyCode: 'PW    !!',
+            accessCode: 'PW',
+            verifyCode: 'PW',
             localIP: '127.0.0.1',
             localAddress: 'localhost'
         }
@@ -39,11 +39,11 @@ describe('getVistaRpcConfig', function() {
             context: 'HMP UI CONTEXT',
             name: 'PANORAMA',
             division: '500',
-            host: 'IP        ',
+            host: 'IP_ADDRESS',
             port: 9210,
             production: false,
-            accessCode: 'PW    ',
-            verifyCode: 'PW    !!',
+            accessCode: 'PW',
+            verifyCode: 'PW',
             localIP: '127.0.0.1',
             localAddress: 'localhost'
         });

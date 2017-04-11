@@ -59,6 +59,8 @@ define([
 
                 var data = ADK.PatientRecordService.fetchCollection(this.fetchOptions);
 
+            } else {
+                self.render();
             }
         },
         regions: {
@@ -67,8 +69,10 @@ define([
         onRender: function () {
 
         },
-        onShow: function () {
-            this.reportDetail.show(this.reportDetailLoadingView);
+        onShow: function() {
+            if(!this.model.get('detail')){
+                this.reportDetail.show(this.reportDetailLoadingView);
+            }
         }
     });
     return ModalView;

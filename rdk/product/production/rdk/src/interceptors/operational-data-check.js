@@ -28,11 +28,10 @@ module.exports = function(req, res, next) {
         }
 
         if (err || !result) {
+            req.logger.error({error: err}, 'Error getting operational status');
             res.status(500).rdkSend('There was an error processing your request. The error has been logged.');
         } else if (!('status' in result) || result.status === 500) {
-            req.logger.error('fetchoOperationalStatus error with result: ' + util.inspect(result, {
-                depth: null
-            }));
+            req.logger.error({result: result}, 'fetchoOperationalStatus error with result');
             res.status(500).rdkSend('There was an error processing your request. The error and result have been logged.');
         } else {
             if (result.data && result.data.inProgress) {
@@ -40,7 +39,7 @@ module.exports = function(req, res, next) {
                 res.status(503).rdkSend('Operational data has not been fully synchronized for this site.');
             } else {
                 if (req.app.config.environment !== 'development') {
-                    req.logger.debug('Operational data for ' + req.site + ' has been loaded.');
+                    req.logger.debug('Operational data for %s has been loaded.', req.site);
                     operationDataLoaded[req.site] = true;
                 }
                 next();

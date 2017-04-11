@@ -27,3 +27,4 @@ default[:apache][:default_modules] = [
   "log_config",
   "logio"
 ]
+default[:apache][:serversignature] = 'Off'

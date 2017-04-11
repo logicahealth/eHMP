@@ -1,8 +1,16 @@
 'use strict';
 var _ = require('lodash');
 var moment = require('moment');
+var rdk = require('../../core/rdk');
+var pidValidator = rdk.utils.pidValidator;
+var maskSsn = require('./search-mask-ssn').maskSsn;
+var SOCIAL_NINE_NUMBERS = 9;
+var SOCIAL_ELEVEN_NUMBERS = 11;
 
-module.exports.transformPatient = function(patient) {
+module.exports.formatSinglePatientSearchCommonFields = formatSinglePatientSearchCommonFields;
+module.exports.formatName = formatName;
+
+module.exports.transformPatient = function(patient, fromJDS) {
     //identify data source
     //looking for local, non-local, vista, or dod as values
     if (patient.id) {
@@ -21,7 +29,7 @@ module.exports.transformPatient = function(patient) {
                 patient.pid = patient.id;
         }
         patient.idClass = determineIDType(patient.id);
-        if(patient.idClass === 'DFN') {
+        if (patient.idClass === 'DFN') {
             patient.pid = patient.facility + ';' + patient.pid;
         }
     }
@@ -37,7 +45,7 @@ module.exports.transformPatient = function(patient) {
         }
         patient.fullName = patient.familyName + ',' + patient.givenNames;
     }
-    if(patient.fullName && !patient.displayName) {
+    if (patient.fullName && !patient.displayName) {
         patient.displayName = patient.fullName;
     }
 
@@ -45,7 +53,17 @@ module.exports.transformPatient = function(patient) {
         //calculate age
         patient.age = moment().diff(moment(patient.birthDate, 'YYYYMMDD'), 'years');
     }
-
+    if (!_.isUndefined(fromJDS) && fromJDS === true && patient.pid) {
+        patient.summary = patient.displayName;
+        if (!pidValidator.isIcn(patient.pid) &&
+            !pidValidator.isPidEdipi(patient.pid) &&
+            !pidValidator.isEdipi(patient.pid)) {
+            var pidParts = patient.pid.split(';');
+            if (pidValidator.isIcn(pidParts[1])) {
+                patient.pid = pidParts[1];
+            }
+        }
+    }
     if (patient.genderCode) {
         if (patient.genderCode.length > 2) {
             var genderParts = patient.genderCode.split(':');
@@ -67,6 +85,8 @@ module.exports.transformPatient = function(patient) {
                 default:
                     patient.genderName = 'Unknown';
             }
+        } else if (patient.genderName && patient.genderName.length > 1) {
+            patient.genderName = patient.genderName.substring(0, 1) + patient.genderName.slice(1).toLowerCase();
         }
     }
 
@@ -88,6 +108,69 @@ module.exports.transformPatient = function(patient) {
 
     return patient;
 };
+
+module.exports.formatPatientSearchCommonFields = function(patients, hasDGAccess) {
+    var items = ((patients || {}).data || {}).items || patients || [];
+    _.each(items, function(item) {
+        formatSinglePatientSearchCommonFields(item, hasDGAccess);
+    });
+    return patients;
+};
+
+function formatSinglePatientSearchCommonFields(patient, hasDGAccess, forceFormatting) {
+    if (_.isUndefined(forceFormatting)) {
+        forceFormatting = false;
+    }
+    patient.displayName = formatName(patient.displayName, ',', ', ');
+    //Don't format "*SENSITIVE*" values (User with DGSensitiveAccess with cause sensitive patient ssn and birthDate to not have "*SENSITIVE*" values)
+    if (!patient.ssn || typeof patient.ssn !== 'string' || (patient.sensitive && !hasDGAccess && !forceFormatting)) {
+        return patient;
+    }
+    patient.age = getAge(patient.birthDate);
+    patient.ssn = formatSSN(patient.ssn);
+    patient.birthDate = formatDate(patient.birthDate);
+    var maskedSsn = maskSsn(patient.ssn);
+    patient.ssn = maskedSsn;
+    return patient;
+};
+
+function formatSSN(ssn) {
+    if (ssn) {
+        var returnSSN = ssn;
+        if (ssn.length == SOCIAL_NINE_NUMBERS || ssn.length == SOCIAL_ELEVEN_NUMBERS) {
+            returnSSN = ssn.replace('-', '');
+            returnSSN = returnSSN.substring(0, 3).concat('-').concat(returnSSN.substring(3, 5)).concat('-').concat(returnSSN.substring(5));
+        }
+        return returnSSN;
+    }
+    return '';
+}
+
+function formatDate(date) {
+    var displayFormat = "MM/DD/YYYY";
+    if (date) {
+        return moment(date).format(displayFormat);
+    }
+    return '';
+}
+
+function getAge(dob) {
+    if (dob) {
+        var dobString = moment(dob);
+        return moment().diff(dobString, 'years');
+    }
+    return '';
+}
+
+function formatName(nameString, character, replaceCharacter) {
+    if (nameString && character) {
+        if (replaceCharacter) {
+            return nameString.replace(character, replaceCharacter);
+        }
+        return nameString.replace(character, character + ' ');
+    }
+    return '';
+}
 
 function retrieveObjFromTree(obj, path) {
     var objRef = obj;
@@ -140,12 +223,12 @@ module.exports.getResponseCode = function(obj) {
     return retrieveObjFromTree(obj, responseCodePath);
 };
 
-var typeCodePath = ['acknowledgement', 0, 'typeCode', 0,  '$', 'code'];
+var typeCodePath = ['acknowledgement', 0, 'typeCode', 0, '$', 'code'];
 module.exports.getTypeCode = function(obj) {
     return retrieveObjFromTree(obj, typeCodePath);
 };
 
-var acknowledgementDetailPath = ['acknowledgement', 0, 'acknowledgementDetail', 0,  'text', 0];
+var acknowledgementDetailPath = ['acknowledgement', 0, 'acknowledgementDetail', 0, 'text', 0];
 module.exports.getAcknowledgementDetail = function(obj) {
     return retrieveObjFromTree(obj, acknowledgementDetailPath);
 };
@@ -191,8 +274,7 @@ function determineIDType(mviID) {
     var dfnType = /PI\^[A-Z0-9]{4}\^USVHA/g;
     if (idParts[3] && idParts[3] === 'USSSA' && idParts[0].length === 9) {
         return 'SSN';
-    }
-    else if (mviID.match(dfnType)) {
+    } else if (mviID.match(dfnType)) {
         return 'DFN';
     } else if (idParts[1] && idParts[1] === 'NI') {
         if (idParts[3] && idParts[3] === 'USVHA') {
@@ -205,8 +287,7 @@ function determineIDType(mviID) {
     } else if (idParts[1] && idParts[1] === 'PI') {
         if (idParts[3] && idParts[3] === 'USVHA' && idParts[2] === '742V1') {
             return 'VHIC';
-        }
-        else {
+        } else {
             return 'Unknown';
         }
     } else {

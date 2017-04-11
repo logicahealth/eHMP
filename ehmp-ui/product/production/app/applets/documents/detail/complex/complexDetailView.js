@@ -3,41 +3,54 @@ define([
     'marionette',
     'underscore',
     'handlebars',
+    'app/applets/documents/debugFlag',
     'app/applets/documents/appletHelper',
     'app/applets/documents/detail/addendaView',
     'hbs!app/applets/documents/detail/complex/complexDetailWrapperTemplate',
     'hbs!app/applets/documents/detail/complex/resultsTemplate',
     'hbs!app/applets/documents/detail/complex/resultDocTemplate',
     'app/applets/documents/detail/dodComplexNoteUtil'
-], function(Backbone, Marionette, _, Handlebars, appletHelper, AddendaView, complexDetailWrapperTemplate, resultsTemplate, resultDocTemplate, dodComplexNoteUtil) {
+], function(Backbone, Marionette, _, Handlebars, DEV, appletHelper, AddendaView, complexDetailWrapperTemplate, resultsTemplate, resultDocTemplate, dodComplexNoteUtil) {
     'use strict';
+
+    var DEBUG = DEV.flag;
 
     // An item view representing a shortcut link to a child/result document
     var ResultLinkItemView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('<button type="button" class="detail-result-link btn btn-link" data-doc-uid="{{uid}}" title="Press enter to view results">{{localTitle}}</button>'),
+        template: Handlebars.compile('<button type="button" class="detail-result-link btn btn-link btn-sm" data-doc-uid="{{uid}}" title="Press enter to view results">{{localTitle}}</button>'),
     });
 
     // An item view representing a single child/result document, of which there may be several
     var ResultDocItemView = Backbone.Marionette.LayoutView.extend({
         template: resultDocTemplate,
         regions: {
-            addendaView: '.document-detail-addenda-region'
+            addendaView: '.document-detail-addenda-region',
+            pdfViewer: '.pdf-viewer-container'
         },
-        onRender: function() {
-            this.addendaView.show(new AddendaView({ model: this.model }));
+        onBeforeShow: function() {
+            this.addendaView.show(new AddendaView({
+                model: this.model
+            }));
+            if (this.model.has('dodComplexNotePdf'))
+                this.pdfViewer.show(new ADK.UI.PdfViewer({
+                    model: this.model,
+                }));
         }
     });
 
     // A view representing the children/results portion of the detail view (the child/result documents and the corresponding shortcut links)
     var ResultLinksCollectionView = Backbone.Marionette.CollectionView.extend({
-        childView: ResultLinkItemView,
+        childView: ResultLinkItemView
     });
 
     // A collection view for the child/result documents
     var ResultDocsCollectionView = Backbone.Marionette.CollectionView.extend({
         childView: ResultDocItemView
     });
-
+    // Not available results view
+    var NA_View = Backbone.Marionette.ItemView.extend({
+        template: Handlebars.compile('<div class="row top-margin-sm"><div class="col-xs-12"><h5 class="bottom-border-grey-dark">Results</h5></div></div><p>N/A</p>')
+    });
     // A mid-level view representing the results or child docs area, including shortcut links, document content, and header
     var ResultsView = Backbone.Marionette.LayoutView.extend({
         template: resultsTemplate,
@@ -50,6 +63,7 @@ define([
             resultDocsRegion: '.result-docs-region'
         },
         initialize: function(options) {
+            if (DEBUG) console.log("complexDetailView with %d items", options.resultDocCollection.length);
             this.resultDocCollection = options.resultDocCollection;
         },
         onEnter: function(keyEvent) {
@@ -92,14 +106,12 @@ define([
             childrenRegion: '.children-region'
         },
         initialize: function(options) {
-            this.childDocCollection = options.childDocCollection;
-            this.resultDocCollection = options.resultDocCollection;
             if (this.hasChildDocuments()) {
-                this.listenToOnce(this.childDocCollection, 'all', this.onChildDocsReady);
+                this.listenToOnce(this.childDocCollection, 'fetch:success', this.onChildDocsReady);
                 this.listenToOnce(this.childDocCollection, 'error', this.onChildDocsError);
             }
             if (this.hasResultDocuments()) {
-                this.listenToOnce(this.resultDocCollection, 'all', this.onResultDocsReady);
+                this.listenToOnce(this.resultDocCollection, 'fetch:success', this.onResultDocsReady);
                 this.listenToOnce(this.resultDocCollection, 'error', this.onResultDocsError);
             }
         },
@@ -138,7 +150,8 @@ define([
         onResultDocsReady: function() {
             if (this.resultDocCollection.isEmpty()) {
                 // if there were no results, hide the loading view and show nothing
-                this.resultsRegion.reset();
+                //this.resultsRegion.reset();
+                this.resultsRegion.show(new NA_View());
             } else {
                 if (this.isError(this.resultDocCollection)) {
                     // show the error view 
@@ -162,13 +175,15 @@ define([
                 // if there were no child documents, hide the loading view and show nothing
                 this.childrenRegion.reset();
             } else {
+
                 if (this.isError(this.childDocCollection)) {
-                    // show the error view 
+                    // show the error view
                     this.resultsRegion.show(ADK.Views.Error.create({
                         model: this.childDocCollection.at(0)
                     }));
                 } else {
                     // otherwise show the child documents
+                    if (DEBUG) console.log("complexDetailView with %d items", this.childDocCollection.length);
                     this.childrenRegion.show(new ResultsView({
                         resultDocCollection: this.childDocCollection,
                         model: new Backbone.Model({
@@ -184,16 +199,28 @@ define([
 
             // if we're waiting for child documents to be fetched, show a loading view
             if (this.hasChildDocuments()) {
-                this.childrenRegion.show(ADK.Views.Loading.create());
+                if(!this.childDocCollection.xhr) {
+                    this.onChildDocsReady();
+                } else {
+                    this.childrenRegion.show(ADK.Views.Loading.create());
+                }
             }
             // if we're waiting for result documents to be fetched, show a loading view
             if (this.hasResultDocuments()) {
-                this.resultsRegion.show(ADK.Views.Loading.create());
+                if(!this.resultDocCollection.xhr) {
+                    this.onChildDocsReady();
+                }
+                else {
+                    this.resultsRegion.show(ADK.Views.Loading.create());
+                }
+            } else {
+                // RESULTS N/A
+                this.resultsRegion.show(new NA_View());
             }
         },
         onShow: function() {
             if (this.model.get('dodComplexNoteContent')) {
-                dodComplexNoteUtil.showContent(this.model);
+                dodComplexNoteUtil.showContent.call(this, this.model);
             }
         }
     });

@@ -22,16 +22,18 @@ define([
         'widthScale': 1 / 3,
         'iconClass': null,
         'buttonClass': null,
-        'listenToWindowResize': true
+        'listenToWindowResize': true,
+        'containerHeightDifference': 0
     };
 
     var TRANSITION_SPEED = 200;
+    var TRAY_LOADER_CLASS = 'tray-loader';
 
     var TrayView = Backbone.Marionette.LayoutView.extend({
         _eventPrefix: 'tray',
         template: Handlebars.compile([
-            '<button type="button" id={{tray_id}} class="btn btn-default{{#if buttonClass}} {{buttonClass}}{{/if}}" data-toggle="sidebar-tray" title="Press enter to activate menu" aria-expanded="false">{{#if iconClass}}<i class="{{iconClass}}" aria-hidden="true"></i> {{/if}}{{buttonLabel}}</button>',
-            '<div role="document" class="sidebar-tray {{position}}" aria-labelledby="{{tray_id}}" aria-hidden="true" tabindex="-1"/>'
+            '<button type="button" id={{tray_id}} class="btn btn-default{{#if buttonClass}} {{buttonClass}}{{/if}}" data-toggle="sidebar-tray" title="Press enter to activate menu" aria-expanded="false">{{#if iconClass}}<i class="{{iconClass}}" aria-hidden="true"></i> {{/if}}{{buttonLabel}} <i class="icon fa fa-angle-double-{{position}}"></i></button>',
+            '<div role="region" class="sidebar-tray {{position}}" aria-labelledby="{{tray_id}}" aria-hidden="true" tabindex="-1" data-tray-width-scale="{{widthScale}}"/>'
         ].join('\r\n')),
         options: defaultOptions,
         attributes: function(e) {
@@ -54,7 +56,8 @@ define([
             'TrayContainer': '.sidebar-tray'
         },
         regions: {
-            'TrayRegion': '@ui.TrayContainer'
+            'TrayRegion': '@ui.TrayContainer',
+            'ButtonRegion': '@ui.ButtonContainer'
         },
         behaviors: {
             KeySelect: {}
@@ -96,6 +99,12 @@ define([
             };
 
             //listen to the dom events and broadcast at the view level
+            eventsHash[prefix + '.loaderShow'] = function(thisE, options) {
+                this.loaderShow(thisE, options);
+            };
+            eventsHash[prefix + '.loaderHide'] = function(thisE) {
+                this.loaderHide(thisE);
+            };
             eventsHash[prefix + '.show'] = function(thisE, e) {
                 this.trigger(prefix + '.show', e);
                 if (!this.isOpen()) {
@@ -139,11 +148,123 @@ define([
                         this.TrayRegion.show(viewToShow, {
                             preventDestroy: true
                         });
+                        this.configureDateTimepickerEvents(this.TrayRegion.currentView);
                         this.setFocusToFirstMenuItem();
                     }
                 }
             };
             return eventsHash;
+        },
+        _loaderTimeout: null,
+        _loaderFocusedElement: null,
+        loaderShow: function(tray, options) {
+            // set default args and merge custom ones
+            var args = _.extend({
+                loadingString: 'Loading',
+                delayString: 'Still loading, please wait',
+                extraClasses: null,
+                delayTimeout: null
+            }, options);
+            // verify if there's an active loader
+            var loadingDiv = this.$('.' + TRAY_LOADER_CLASS);
+            // the function to change the current message within an active loader
+            var changeLoaderMessage = function(loader, message) {
+                loader.find('.tray-loader-message').html(message);
+            };
+            // create/change the loader
+            if (loadingDiv.length) {
+                // if there's an active loader, just change the message
+                changeLoaderMessage(loadingDiv, args.loadingString);
+            } else {
+                // create a new loader
+                var loaderClass = TRAY_LOADER_CLASS;
+                if (args.extraClasses) {
+                    if (_.isString(args.extraClasses)) {
+                        loaderClass += ' ' + args.extraClasses;
+                    } else if (_.isArray(args.extraClasses)) {
+                        loaderClass += (args.extraClasses.length ? ' ' : '') + args.extraClasses.join(' ');
+                    }
+                }
+                var trayDiv = this.$('.sidebar-tray');
+                loadingDiv = $('<div class="' + loaderClass + '" tabindex="0"><span class="tray-loader-animation"><i class="fa fa-spinner fa-spin loader-spinner" aria-hidden="true"></i> <span class="tray-loader-message" aria-live="polite"></span></span></div>');
+                // check if the focused element is within the tray and hold it in the model to send focus back to it once loading has finished.
+                this._loaderFocusedElement = this.$(':focus');
+                // insert loader in the document
+                trayDiv.append(loadingDiv);
+                // prevent the tray/writeback elements from being focused by tabbing when loader in place
+                trayDiv.on('keydown.trayFocusAction', function(e) {
+                    // skip the tray and focus the loader directly if tab goes forward
+                    if (e.keyCode === 9 && !e.shiftKey && !loadingDiv.is(':focus')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        loadingDiv.focus();
+                    }
+                });
+                loadingDiv.on('keydown.loaderFocusHolder', function(e) {
+                    //skip the tray elements and focus the tray element itself if tabbing backwards
+                    if (e.keyCode === 9 && e.shiftKey) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        trayDiv.focus();
+                    }
+                });
+                var loadingMessageSpan = this.$el.find('.tray-loader-message');
+                // show the loader and focus it if the focus was within the area to be loaded
+                if (this._loaderFocusedElement.length) {
+                    loadingMessageSpan.removeAttr('aria-live');
+                    loadingDiv.focus();
+                    loadingMessageSpan.html(args.loadingString);
+                    loadingMessageSpan.attr('aria-live', 'polite');
+                } else {
+                    loadingMessageSpan.html(args.loadingString);
+                }
+                loadingDiv.animate({
+                    opacity: '1'
+                }, 300);
+            }
+            // if there's a delay value, set the timeout to express that the loading is taking longer than expected
+            if (args.delayTimeout) {
+                this._loaderTimeout = setTimeout(function() {
+                    changeLoaderMessage(loadingDiv, args.delayString);
+                }, args.delayTimeout);
+            }
+        },
+        loaderHide: function(tray) {
+            // loader removal function
+            // remove loader delay timeout
+            clearTimeout(this._loaderTimeout);
+            // instantiate the loader element
+            var theLoader = this.$('.' + TRAY_LOADER_CLASS);
+            theLoader.off('**');
+            // remove the tab interception from the tray
+            var theTray = this.$('.sidebar-tray');
+            theTray.off('keydown.trayFocusAction');
+            // remove the loader
+            theLoader.animate({
+                opacity: '0'
+            }, 300, function() {
+                $(this).remove();
+            });
+            if (this.isOpen()) {
+                // if we took the focus from somewhere, send it back
+                if (this._loaderFocusedElement && this._loaderFocusedElement.length) {
+                    this._loaderFocusedElement.focus();
+                } else {
+                    // send it back to the tray, where it defaults to.
+                    theTray.focus();
+                }
+            }
+        },
+        configureDateTimepickerEvents: function(view) {
+            this.disableDateTimepickerEvents(view);
+            view.$('form, .modal-body').on('scroll.datepicker', _.throttle(_.bind(function() {
+                //these elements belong to children of the region's view so we can't listen to their events to set the state
+                this.$('.datepicker-input').datepicker('hide');
+                this.$('.bootstrap-timepicker > input').timepicker('hideWidget');
+            }, this), 1000));
+        },
+        disableDateTimepickerEvents: function(view) {
+            view.$('form, .modal-body').off('scroll.datepicker');
         },
         isFocusInside: function(view, target) {
             var isSame = view.el === target, //same container as the parent view
@@ -165,11 +286,14 @@ define([
                 isIn = !!view.ui.TrayContainer.find(target).length;
             return isSame || isIn;
         },
+        isFocusInsideGrowl: function(target) {
+            return (/growl-alert/).test(target.className) || !!$('.growl-alert').find(target).length;
+        },
         documentHandler: function(e) {
             //safer than using stopPropagation since stopProp would prevent the click from bubbling and wouldn't trigger the close
             //if another tray recieves focus or click
             var view = e.data.view;
-            if (view.isFocusInside(view, e.target) || (!view.tabOut && view.getOption('preventFocusoutClose'))) return;
+            if (view.isFocusInside(view, e.target) || (!view.tabOut && view.getOption('preventFocusoutClose')) || view.isFocusInsideGrowl(e.target)) return;
             view.stopListening(view, this._eventPrefix + '.hidden.' + view.cid);
             view.$el.trigger(this._eventPrefix + '.hide');
             delete view.tabOut;
@@ -213,7 +337,7 @@ define([
             if ((!isActive && e.which != 27) || (isActive && e.which == 27)) {
                 if (e.which == 27)
                     return this.ui.ButtonContainer.trigger('focus').trigger('click');
-                return $this.trigger('click');
+                if (/(13|32)/.test(e.which)) return $this.trigger('click');
             }
         },
         initialize: function() {
@@ -224,30 +348,23 @@ define([
                 'buttonLabel': this.options.buttonLabel,
                 'position': this.options.position,
                 'iconClass': this.options.iconClass,
-                'buttonClass': this.options.buttonClass
+                'buttonClass': this.options.buttonClass,
+                'widthScale': _.round(this.options.widthScale, 2)
             });
             this.tray = (this.options.tray instanceof Backbone.Marionette.View) ? this.options.tray : (typeof this.options.tray === 'function') ? new this.options.tray() : undefined;
 
             var self = this;
 
-            //TODO:  factor this out and use a global timing event
             //resize the tray if the window size changes
             //resize gets issued continuously while dragging the size grip so a timer stops the calculations
             if (this.getOption('listenToWindowResize')) {
-                var resizer;
-                $(window).on('resize.' + this.cid, function() {
-                    if (!self.isOpen()) return;
-                    if (resizer) clearTimeout(resizer); //prevent resize from going crazy
-                    resizer = setTimeout(function() {
-                        self.resetBounds();
-                        self.resetContainerPosition();
-                    }, 100);
-                });
+                this.listenTo(ResizeUtils.dimensions.contentRegion, 'change:width', function(model, value) {
+                    this.resetContainerWidth(model.get('width'));
+                    this.resetBounds();
+                    this.resetContainerPosition();
+                    this.$('.bootstrap-timepicker > input').timepicker('place');
+                }, this);
             }
-
-            this.listenTo(ResizeUtils.dimensions.centerRegion, 'change:width', function(model) {
-                this.resetContainerWidth(model.get('width'));
-            }, this);
 
             //Close if I'm not the droid you are looking for
             this.listenTo(Messaging, this._eventPrefix + '.close', function(cid) {
@@ -268,14 +385,29 @@ define([
             if (_.isFunction(this.onEndOfInitialize)) {
                 this.onEndOfInitialize();
             }
+            $(document).on('show.bs.modal.' + this.cid, '.modal', _.bind(function(event) {
+                this.modalShowHandler();
+            }, this));
         },
-        onRender: function() {
+        onBeforeShow: function() {
             if (this.tray) {
                 this.showChildView('TrayRegion', this.tray);
             }
-            this.resetContainerWidth(ResizeUtils.dimensions.centerRegion.get('width'));
+            var ButtonView = this.getOption('buttonView');
+            if (_.isFunction(ButtonView)) {
+                ButtonView = ButtonView.extend({
+                    templateHelpers: {
+                        buttonLabel: this.getOption('buttonLabel')
+                    }
+                });
+                this.showChildView('ButtonRegion', new ButtonView());
+            }
+        },
+        onRender: function() {
+            this.resetContainerWidth();
         },
         onAttach: function() {
+            this.resetContainerWidth();
             this.resetBounds();
             this.resetContainerPosition();
         },
@@ -285,7 +417,7 @@ define([
                 this.containerBounds = _.pick($(this.options.viewport)[0].getBoundingClientRect(), ['bottom', 'height', 'left', 'right', 'top', 'width']);
             } else {
                 //if viewport isn't specified, extend the tray from the bottom of the button to the bottom of the center region
-                this.containerBounds = _.pick($('#center-region')[0].getBoundingClientRect(), ['bottom', 'height', 'left', 'right', 'top', 'width']);
+                this.containerBounds = _.pick($('#content-region')[0].getBoundingClientRect(), ['bottom', 'height', 'left', 'right', 'top', 'width']);
                 var buttonBounds = this.ui.ButtonContainer[0].getBoundingClientRect(),
                     ext = {
                         top: buttonBounds.bottom,
@@ -294,17 +426,35 @@ define([
                 _.extend(this.containerBounds, ext);
             }
         },
-        resetContainerWidth: function(regionWidth) {
-            regionWidth = regionWidth * (this.getOption('widthScale'));
-            if (regionWidth < 450) {
-                regionWidth = 450;
+        resetContainerWidth: function() {
+            var regionWidth = 0;
+            if (this.getOption('viewport') && $(this.getOption('viewport'))[0]) {
+                regionWidth = $(this.getOption('viewport'))[0].getBoundingClientRect().width;
+            } else {
+                regionWidth = ResizeUtils.dimensions.contentRegion.get('width');
             }
-            this.ui.TrayContainer.width(regionWidth);
+            regionWidth = regionWidth - 5;
+            regionWidth = regionWidth * (this.getOption('widthScale'));
+            if (regionWidth < 363) {
+                regionWidth = 363;
+            }
+            this.ui.TrayContainer.width(regionWidth).find('>').outerWidth(regionWidth).attr('data-tray-width', regionWidth);
         },
         resetContainerPosition: function() {
-            this.ui.TrayContainer.offset({
-                top: this.containerBounds.top,
-            }).height(this.containerBounds.height).width();
+            var offset = 0;
+            if (_.isEqual(this.options.position, 'right')) {
+                offset = ResizeUtils.dimensions.viewport.get('width') - this.containerBounds.right || 0;
+                this.ui.TrayContainer.css({
+                    top: this.containerBounds.top,
+                    right: offset
+                }).height(this.containerBounds.height - this.options.containerHeightDifference).width();
+            } else {
+                offset = this.containerBounds.left || 0;
+                this.ui.TrayContainer.css({
+                    top: this.containerBounds.top,
+                    left: offset
+                }).height(this.containerBounds.height - this.options.containerHeightDifference).width();
+            }
         },
         toggle: function(e) {
             var el = this.$el;
@@ -375,12 +525,31 @@ define([
             this.TrayRegion.show(view);
         },
         onBeforeDestroy: function() {
+            clearTimeout(this._loaderTimeout);
+            if (_.has(this, 'TrayRegion') && this.TrayRegion.hasView()) this.disableDateTimepickerEvents(this.TrayRegion.currentView);
             this.tray.destroy();
+        },
+        modalShowHandler: function(showEvent) {
+            var previousPreventFocustoutClose = this.getOption('preventFocusoutClose');
+            var tabOutEnabled = _.isBoolean(this.tabOut) && this.tabOut;
+            this.options.preventFocusoutClose = true;
+            delete this.tabOut;
+            $(document).one('hidden.bs.modal.' + this.cid, '.modal', _.bind(function(hiddenEvent) {
+                this.modalHiddenHandler(hiddenEvent, previousPreventFocustoutClose, tabOutEnabled);
+            }, this));
+        },
+        modalHiddenHandler: function(event, previousPreventFocustoutClose, tabOutEnabled) {
+            this.options.preventFocusoutClose = previousPreventFocustoutClose;
+            if (tabOutEnabled) {
+                this.tabOut = tabOutEnabled;
+            }
         },
         onDestroy: function() {
             $(document).off(this.eventString(), 'body');
             $(document).off('focusin.buttoncontainer.' + this.tray_id, 'body');
             $(window).off('resize.' + this.cid);
+            $(document).off('show.bs.modal.' + this.cid);
+            $(document).off('hidden.bs.modal.' + this.cid);
         }
     });
 

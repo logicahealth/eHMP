@@ -1,5 +1,5 @@
 {
-  "VXSYNC_IP": "IPADDRESS,
+  "VXSYNC_IP": "IPADDRES",
   "vxsync": {
     "configRefresh": 0,
     "rules": {
@@ -18,10 +18,10 @@
     "vistaSites": {
         "9E7A": {
           "name": "PANORAMA",
-          "host": "IPADDRESS    ",
+          "host": "IP____ADDRESS",
           "port": 9210,
-          "accessCode": "PW    ",
-          "verifyCode": "PW    !!",
+          "accessCode": "ep1234",
+          "verifyCode": "ep1234!!",
           "localIP": "127.0.0.1",
           "stationNumber": "500",
           "localAddress": "localhost",
@@ -30,10 +30,10 @@
       },
         "C877": {
           "name": "KODAK",
-          "host": "IPADDRESS  ",
+          "host": "IP__ADDRESS",
           "port": 9210,
-          "accessCode": "PW    ",
-          "verifyCode": "PW    !!",
+          "accessCode": "ep1234",
+          "verifyCode": "ep1234!!",
           "localIP": "127.0.0.1",
           "stationNumber": "507",
           "localAddress": "localhost",
@@ -43,7 +43,7 @@
     },
     "syncRequestApi": {
         "protocol": "http",
-        "host": "IPADDRESS    ",
+        "host": "IP____ADDRESS",
         "port": 8080,
         "patientSyncPath": "/sync/load",
         "patientUnsyncPath": "/sync/clearPatient",
@@ -73,8 +73,8 @@
             "vital"
         ],
         "defaults": {
-            "host": "IPADDRESS    ",
-            "port": 54000,
+            "host": "IP____ADDRESS",
+            "port": 5400,
             "method": "GET",
             "timeout": 60000
         },
@@ -153,8 +153,8 @@
         },
         "operationMode": "REQ/RES",
         "defaults": {
-            "host": "IPADDRESS    ",
-            "port": 54000,
+            "host": "IP____ADDRESS",
+            "port": 5400,
             "method": "GET",
             "timeout": 60000
         },
@@ -254,8 +254,8 @@
             "vlerdocument"
         ],
         "defaults": {
-            "host": "IPADDRESS    ",
-            "port": 54000,
+            "host": "IP____ADDRESS",
+            "port": 5400,
             "method": "GET",
             "timeout": 60000
         },
@@ -497,7 +497,7 @@
         "incMillis": 1000
     },
     "repoDefaults": {
-        "host": "IPADDRESS   ",
+        "host": "IP___ADDRESS",
         "port": 5000,
         "tubename": "vx-sync",
         "tubePrefix": "vxs-",
@@ -667,15 +667,15 @@
         "pgd-xform-vpr": {
         },
         "record-enrichment": {
-          "host": "IPADDRESS    ",
+          "host": "IP____ADDRESS",
           "port": 5001
         },
         "store-record": {
-          "host": "IPADDRESS    ",
+          "host": "IP____ADDRESS",
           "port": 5002
         },
         "operational-store-record": {
-          "host": "IPADDRESS    ",
+          "host": "IP____ADDRESS",
           "port": 5002
         },
         "vista-prioritization-request": {
@@ -688,13 +688,13 @@
 
         "jds": {
             "protocol": "http",
-            "host": "IPADDRESS     ",
+            "host": "IP_____ADDRESS",
             "port": "9082",
             "timeout": 300000
         },
 
         "solrClient": {
-            "host": "IPADDRESS   ",
+            "host": "IP___ADDRESS",
             "port": 8983,
             "path": "/solr",
             "core": "vpr"
@@ -702,16 +702,16 @@
 
         "mvi": {
             "protocol": "http",
-            "host": "IPADDRESS    ",
-            "port": 54000,
+            "host": "IP____ADDRESS",
+            "port": 5400,
             "path": "/mvi/correspondingIds",
             "timeout": 60000
         },
 
         "terminology": {
             "protocol": "http",
-            "host": "IPADDRESS    ",
-            "port": 54000,
+            "host": "IP____ADDRESS",
+            "port": 5400,
             "timeout": 60000,
             "lncPath": "/term/lnc",
             "drugPath": "/term/drug",
@@ -727,7 +727,7 @@
         "path": "/var/vxsync/documents/published",
         "permissions": "400"
       },
-      "uriRoot": "http://IPADDRESS    :8080/documents"
+      "uriRoot": "http://IP____ADDRESS:PORT/documents"
     },
 
     "error-handling": {

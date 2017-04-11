@@ -116,7 +116,7 @@ class RDClass
 end
 
 # class QuerySingleItem < BuildQuery
-#   #http://IP             /patientrecord/domain?pid=10108&uid=uid
+#   #http://IP_ADDRESS:PORT/patientrecord/domain?pid=10108&uid=uid
 #   def initialize(pid, uid)
 #     super()
 #     title = "uid"
@@ -155,7 +155,7 @@ class QueryRDKVisitAPI < BuildQuery
 end # class
 
 class QueryGenericRDK < BuildQuery
-  # http://IP             /visits/providers
+  # http://IP_ADDRESS:PORT/visits/providers
   def initialize(command, pid = nil, action = nil)
     super()
     @number_parameters = 0
@@ -195,7 +195,7 @@ class QueryGenericRDK < BuildQuery
   end
 end # class
 
-#http://IP             /patientrecord/search/text?query=document&pid=9E7A;100022
+#http://IP_ADDRESS:PORT/patientrecord/search/text?query=document&pid=9E7A;100022
 class QueryRDK < BuildQuery
   p "inside class QueryRDK"
   def initialize(pid, type)
@@ -208,7 +208,7 @@ class QueryRDK < BuildQuery
   end
 end
 
-#http://IP             /fhir/patient/urn:va:patient:9E7A:100716:100716
+#http://IP_ADDRESS:PORT/fhir/patient/urn:va:patient:9E7A:100716:100716
 class QueryRDKDemographics < BuildQuery
   def initialize(type, uid)
     super()
@@ -221,7 +221,7 @@ class QueryRDKDemographics < BuildQuery
   end
 end
 
-#http://IP             /resource/fhir/patient/9E7A;253/observation
+#http://IP_ADDRESS:PORT/resource/fhir/patient/9E7A;253/observation
 class QueryRDKFhir < BuildQuery
   def initialize(uid, domain)
     super()
@@ -234,7 +234,7 @@ class QueryRDKFhir < BuildQuery
   end
 end
 
-#http://IP           /fhir/***/?subject.identifier=C877;100033
+#http://IPADDRESS:POR/fhir/***/?subject.identifier=C877;100033
 # class QueryRDKAll < BuildQuery
 #   def initialize(type)
 #     super()
@@ -246,7 +246,7 @@ end
 #   end
 # end
 
-#http://IP           /resource/vler/9E7A;8/toc?encounterUid=urn:va:visit:9E7A:8:1218
+#http://IPADDRESS:POR/resource/vler/9E7A;8/toc?encounterUid=urn:va:visit:9E7A:8:1218
 class QueryRDKVler < BuildQuery
   def initialize(type)
     super()
@@ -269,7 +269,7 @@ if __FILE__ == $PROGRAM_NAME
   p QueryRDKAPI.new("uid", "3", "false").path
 end
 
-#http://IP             /patientrecord/domain/document?pid=10108V420871&filter=eq(kind,"Progress Note")
+#http://IP_ADDRESS:PORT/patientrecord/domain/document?pid=10108V420871&filter=eq(kind,"Progress Note")
 class QueryRDKFilterBySummary < BuildQuery
   p "inside class QueryRDKFilterBySummary"
   def initialize(pid = nil, filter = nil)
@@ -313,7 +313,7 @@ end
 #   end
 # end
 
-#http://IP             /resource/user/set/this?pid=10108V420871&accessCode=PW    &verifyCode=PW    !!&site=9E7A
+#http://IP_ADDRESS:PORT/resource/user/set/this?pid=10108V420871&accessCode=pu1234&verifyCode=pu1234!!&site=9E7A
 class RDKDelWorkspaceContent< BuildQuery
   def initialize(pid = nil)
     super()
@@ -325,8 +325,8 @@ class RDKDelWorkspaceContent< BuildQuery
   end
 end
 
-#http://IP             /resource/tasks/startprocess?deploymentId=All&processDefId=project1.FollowUpWorkflow&
-#patientid=1234567&patientname=EightPatient&description=FirstHumanTask&where=VA&when=date&site=9E7A&accessCode=PW    &verifyCode=PW    !!
+#http://IP_ADDRESS:PORT/resource/tasks/startprocess?deploymentId=All&processDefId=project1.FollowUpWorkflow&
+#patientid=1234567&patientname=EightPatient&description=FirstHumanTask&where=VA&when=date&site=9E7A&accessCode=pu1234&verifyCode=pu1234!!
 class RDKStartProcess< BuildQuery
   def initialize(pDefId = nil, pid = nil, pname = nil, description = nil, pwhere = nil, pwhen = nil)
     super()
@@ -343,7 +343,7 @@ class RDKStartProcess< BuildQuery
 end
 
 class QueryGenericVISTA < BuildQuery
-  # http://IP             /visits/providers
+  # http://IP_ADDRESS:PORT/visits/providers
   def initialize(command, pid = nil, action = nil)
     super()
     @number_parameters = 0
@@ -359,7 +359,7 @@ class QueryGenericVISTA < BuildQuery
   end
 end
 
-#http://IP             /resource/patient/record/domain/vital?filter=and(DATEFILTER)&pid=10107V395912
+#http://IP_ADDRESS:PORT/resource/patient/record/domain/vital?filter=and(DATEFILTER)&pid=10107V395912
 class QueryRDKCCB < BuildQuery
   def initialize(type)
     super()
@@ -375,7 +375,7 @@ class QueryCDSInvocation < BuildQuery
   end
 end
 
-#http://IP             /resource/user/list?accessCode=PW    &verifyCode=PW    !!&site=9E7A
+#http://IP_ADDRESS:PORT/resource/user/list?accessCode=pu1234&verifyCode=pu1234!!&site=9E7A
 class QueryUserList < BuildQuery
   def initialize
     super()

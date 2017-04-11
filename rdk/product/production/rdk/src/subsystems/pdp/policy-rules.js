@@ -1,5 +1,17 @@
 module.exports = {
     rules: [{
+        'name': 'systemUserPolicy',
+        'on': true,
+        'condition': function(R) {
+            R.when(this.consumerType === 'system');
+        },
+        'consequence': function(R) {
+            this.result = {
+                code: 'Permit'
+            };
+            R.stop();
+        }
+    }, {
         'name': 'cprsUserPolicy',
         'on': true,
         'condition': function(R) {

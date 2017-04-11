@@ -68,7 +68,7 @@ See bluepill's documentation for more information on creating pill templates.
 
 License & Authors
 -----------------
-- Author::     ua Timberman (<joshua@opscode.com>)
+- Author:: Joshua Timberman (<joshua@opscode.com>)
 
 ```text
 Copyright 2010-2013, Opscode, Inc.

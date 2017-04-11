@@ -1,5 +1,5 @@
 name              'logrotate'
-maintainer        '     n Danna'
+maintainer        'Steven Danna'
 maintainer_email  'steve@chef.io'
 license           'Apache 2.0'
 description       'Installs logrotate package and provides a definition for logrotate configs'

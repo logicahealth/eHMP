@@ -27,17 +27,27 @@
             "paramNameForStringToSearchFor": "searchString"
         }
     }, {
+        "name": "clinics-newloc-fetch-list",
+        "modulePath": "locations/clinics/clinics-newloc-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000
+    }, {
+        "name": "clinics-fetch-list",
+        "modulePath": "locations/clinics/clinics-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000
+    }, {
         "name": "encounters-diagnosis-codes-for-clinic",
         "modulePath": "encounters/encounters-diagnosis-codes-for-clinic-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
         "dataNeedsRefreshAfterMinutes": 3000,
-        "requiredParams": ["clinic"]
+        "requiredParams": ["locationUid"]
     }, {
         "name": "encounters-procedure-types",
         "modulePath": "encounters/encounters-procedure-types-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
         "dataNeedsRefreshAfterMinutes": 3000,
-        "requiredParams": ["ien"],
+        "requiredParams": ["locationUid"],
         "optionalParams": ["visitDate"]
     }, {
         "name": "encounters-procedures-cpt-modifier",
@@ -51,7 +61,7 @@
         "modulePath": "encounters/encounters-visit-categories-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
         "dataNeedsRefreshAfterMinutes": 3000,
-        "requiredParams": ["ien"],
+        "requiredParams": ["locationUid"],
         "optionalParams": ["visitDate"]
     }, {
         "name": "encounters-visit-disabilities",
@@ -137,11 +147,13 @@
         "dataNeedsRefreshAfterMinutes": 3000,
         "requiredParams": ["labType"],
         "largePickListRetry": 65,
-        "initialLoadDefaultParams" : [
-            { "labType": "S.LAB" },
-            { "labType": "S.IVA RX" },
-            { "labType": "S.IVB RX" }
-        ],
+        "initialLoadDefaultParams": [{
+            "labType": "S.LAB"
+        }, {
+            "labType": "S.IVA RX"
+        }, {
+            "labType": "S.IVB RX"
+        }],
         "filterForEntireRecursiveCollection": {
             "fieldToCheckAgainst": "synonym",
             "paramNameForStringToSearchFor": "searchString"
@@ -230,9 +242,36 @@
         "vistaContext": "OR CPRS GUI CHART",
         "dataNeedsRefreshAfterMinutes": 3000
     }, {
+        "name": "radiology-orderables",
+        "modulePath": "radiology/radiology-orderables-fetch-list",
+        "vistaContext": "HMP UI CONTEXT",
+        "requiredParams": ["imgType"],
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "largePickListRetry": 65,
+        "initialLoadDefaultParams": [{
+            "imgType": "9"
+        }]
+    }, {
         "name": "vitals",
         "modulePath": "vitals/vitals-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
         "dataNeedsRefreshAfterMinutes": 3000
+    }, {
+        "name": "wards-fetch-list",
+        "modulePath": "locations/wards/wards-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000
+    }, {
+        "name": "people-for-facility",
+        "modulePath": "team-management/people-for-facility-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "needsFullConfig": true,
+        "requiredParams": ["facilityID"],
+        "optionalParams": ["searchString"],
+        "initialLoadDefaultParams": [{
+            "facilityID": "500"
+        }, {
+            "facilityID": "507"
+        }]
     }]
 }

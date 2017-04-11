@@ -88,8 +88,8 @@ License and Author
 ==================
 
 Author:: Adam Jacob <adam@chef.io>
-Author::     ua Timberman <joshua@chef.io>
-Author:: Tim       <tsmith84@gmail.com>
+Author:: Joshua Timberman <joshua@chef.io>
+Author:: Tim Smith <tsmith84@gmail.com>
 
 Copyright:: 2008-2015, Chef Software, Inc.
 

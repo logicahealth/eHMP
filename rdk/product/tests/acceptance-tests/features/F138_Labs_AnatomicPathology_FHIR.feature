@@ -38,6 +38,7 @@
        | resource.contained.status                       | final                             |
        | resource.contained.reliability                  | ok                                |
        | resource.contained.valueString                  | CONTAINS Procedure:CYTOLOGIC GYN  |
+    And FHIR date and time conver to Zulu format for Labs Anatomic Pathology
 
  @F138_2_Labs_pathology_fhir @fhir @10110V004877
  Scenario: Client can request lab anatomic pathology results in FHIR format
@@ -51,8 +52,6 @@
        | resource.issued                                 | IS_FHIR_FORMATTED_DATE         |
        | resource.name.text                              | LR ANATOMIC PATHOLOGY REPORT |
 #Test DoD data no longer includes terminology codes
-#       | resource.name.coding.code                       | 719                          |
-#       | resource.name.coding.system                     | DOD_NCID                     |
        | resource.status                                 | final                        |
        | resource.subject.reference                      | Patient/9E7A;8         |
        #Organization
@@ -68,8 +67,6 @@
        | resource.contained.resourceType                 | Observation                       |
        | resource.contained.code.text                    | LR ANATOMIC PATHOLOGY REPORT      |
 #Test DoD data no longer includes terminology codes
-#       | resource.contained.code.coding.code             | 719                               |
-#       | resource.contained.code.coding.system           | DOD_NCID                          |
        | resource.contained.status                       | final                             |
        | resource.contained.reliability                  | ok                                |
        | resource.contained.valueString               | 080523 CN 19                      |
@@ -89,8 +86,6 @@
        | resource.issued                                 | IS_FHIR_FORMATTED_DATE         |
        | resource.name.text                              | LR ANATOMIC PATHOLOGY REPORT |
 #Test DoD data no longer includes terminology codes
-#       | resource.name.coding.system                     | DOD_NCID                     |
-#       | resource.name.coding.code                       | 2000                          |
        | resource.status                                 | final                        |
        | resource.subject.reference                      | Patient/9E7A;8         |
        #Organization
@@ -105,8 +100,6 @@
        | resource.contained.resourceType                 | Observation                       |
        | resource.contained.code.text                    | LR ANATOMIC PATHOLOGY REPORT      |
 #Test DoD data no longer includes terminology codes
-#       | resource.contained.code.coding.code             | 2000                               |
-#       | resource.contained.code.coding.system           | DOD_NCID                          |
        | resource.contained.status                       | final                             |
        | resource.contained.reliability                  | ok                                |
        | resource.contained.valueString                  | 080523 CN 19                      |
@@ -114,9 +107,6 @@
        | resource.identifier.value                       | urn:va:lab:DOD:0000000008:1000001200|
        | resource.serviceCategory.text                   | Other                        |
 #Test DoD data no longer includes terminology codes
-#       | resource.serviceCategory.coding.code            | OTH                          |
-#       | resource.serviceCategory.coding.system          | http://hl7.org/fhir/v2/0074  |
-#       | resource.serviceCategory.coding.display         | Other                        |
        | resource.diagnosticDateTime                     | IS_FHIR_FORMATTED_DATE         |
        | resource.result.display | LR ANATOMIC PATHOLOGY REPORT |
        | resource.text.status | generated |
@@ -143,7 +133,7 @@
        | resource.extension.url                          | http://vistacore.us/fhir/extensions/lab#groupName   |
        | resource.extension.valueString                  | CY 99 1                                             |
        | resource.extension.url                          | http://vistacore.us/fhir/extensions/lab#report      |
-       | resource.extension.valueResource.reference      | Composition/urn:va:document:9E7A:428:CY;7009895 |
+       | resource.extension.valueReference.reference      | Composition/urn:va:document:9E7A:428:CY;7009895 |
        | resource.identifier.system                      | urn:oid:2.16.840.1.113883.6.233                 |
        | resource.identifier.value                       | urn:va:lab:9E7A:428:CY;7009895                  |
        | resource.specimen.display                       | NEC                                             |
@@ -178,7 +168,7 @@
        | resource.extension.url                          | http://vistacore.us/fhir/extensions/lab#groupName   |
        | resource.extension.valueString                  | CY 99 1                                             |
        | resource.extension.url                          | http://vistacore.us/fhir/extensions/lab#report      |
-       | resource.extension.valueResource.reference      | Composition/urn:va:document:C877:428:CY;7009895 |
+       | resource.extension.valueReference.reference      | Composition/urn:va:document:C877:428:CY;7009895 |
        | resource.identifier.system                      | urn:oid:2.16.840.1.113883.6.233                 |
        | resource.identifier.value                       | urn:va:lab:C877:428:CY;7009895                  |
        | resource.specimen.display                       | NEC                                             |
@@ -220,7 +210,7 @@
        | resource.extension.url                          | http://vistacore.us/fhir/extensions/lab#groupName   |
        | resource.extension.valueString                  | SP 98 8                                             |
        | resource.extension.url                          | http://vistacore.us/fhir/extensions/lab#report      |
-       | resource.extension.valueResource.reference      | Composition/urn:va:document:C877:301:SP;7019484.83  |
+       | resource.extension.valueReference.reference      | Composition/urn:va:document:C877:301:SP;7019484.83  |
        | resource.identifier.system                      | urn:oid:2.16.840.1.113883.6.233                     |
        | resource.identifier.value                       | urn:va:lab:C877:301:SP;7019484.83                   |
        | resource.specimen.display                       | PROSTATE CHIPS                                      |

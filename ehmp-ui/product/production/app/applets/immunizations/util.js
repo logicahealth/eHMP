@@ -6,9 +6,21 @@ define([
 ], function(Backbone, Marionette, _, Util) {
     "use strict";
 
+    Util.getTimeSinceDate = function(response){
+        if(response.administeredDateTime) {
+            var timeSinceDate = response.administeredDateTime;
+            while(timeSinceDate.length > 4 && timeSinceDate.substring(timeSinceDate.length - 2, timeSinceDate.length) === '00'){
+                timeSinceDate = timeSinceDate.substring(0, timeSinceDate.length - 2);
+            }
+            response.timeSinceDate = timeSinceDate;
+        }
+
+        return response;
+    };
+
     Util.getAdministeredFormatted = function(response) {
         if (response.administeredDateTime) {
-            response.administeredFormatted = ADK.utils.formatDate(response.administeredDateTime);
+            response.administeredFormatted = ADK.utils.formatDate(response.administeredDateTime).replace(/00\//g,"");
         }
         return response;
     };

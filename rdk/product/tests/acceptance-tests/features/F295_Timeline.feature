@@ -2,34 +2,34 @@
 
 Feature: F295 - Encounters Applet 
 
-@f295_1_timeline @VPR @US2845 @9E7A164
+@f295_1_timeline @VPR @US2845 @9E7A;100022
 
 Scenario: Timeline: Add additional data types Appointment and Lab results
-Given a patient with pid "9E7A;164" has been synced through the RDK API
-When the client requests timeline for the patient "9E7A;164" in RDK format
+Given a patient with pid "9E7A;100022" has been synced through the RDK API
+When the client requests timeline for the patient "9E7A;100022" in RDK format
 Then a successful response is returned
-And the client receives 14 result(s)
-And the VPR results contain
+And the client receives 101 result(s)
+Then the VPR results contain
 
       | field                               | value                         |
-      | uid                                 | urn:va:visit:9E7A:164:H918    |
+      | uid                                 | urn:va:visit:9E7A:100022:H3419|
       | current                             | false                         |
       | facilityCode                        | 500                           |
       | facilityName                        | CAMP MASTER                   |
       | patientClassName                    | Inpatient                     |
-      | dateTime                            | 199305201000                  |
+      | dateTime                            | 20020130114524                |
       | service                             | MEDICINE                      |
-      | locationUid                         | urn:va:location:9E7A:3        |
-      | locationName                        | DRUGSTER                      |
-      | shortLocationName                   | DRUGS                         |
-      | locationDisplayName                 | Drugster                      |
-      | movements.dateTime                  | 199305201300                  |
-      | movements.localId                   | 920                           |
+      | locationUid                         | urn:va:location:9E7A:11		|
+      | locationName                        | BCMA                      	|
+      | shortLocationName                   | BCMA                         	|
+      | locationDisplayName                 | Bcma                      	|
+      | movements.dateTime                  | 20140115095259                |
+      | movements.localId                   | 4602                          |
       | movements.movementType              | DISCHARGE                     |
       | movements.summary                   | CONTAINS EncounterMovement    |
       | kind                                | Admission                     |
-      | pid                                 | 9E7A;164                      |
-      | localId                             | H918                          |
+      | pid                                 | 9E7A;100022                   |
+      | localId                             | H3419                         |
       | typeName                            | HOSPITALIZATION               |
       | typeDisplayName                     | Hospitalization               |
       | patientClassCode                    | urn:va:patient-class:IMP      |
@@ -37,63 +37,57 @@ And the VPR results contain
       | categoryName                        | Admission                     |
       | specialty                           | GENERAL MEDICINE              |
       | providers.role                      | A                             |
-      | providers.providerUid               | urn:va:user:9E7A:1039         |
-      | providers.providerName              | PROVIDER,TWENTYNINE           |
-      | providers.providerDisplayName       | Provider,Twentynine           |
-      | providers.summary                   | EncounterProvider{uid=''} |
-      | stay.arrivalDateTime                | 199305201000                  |
-      | stay.dischargeDateTime              | 199305201300                  |
-      | primaryProvider.primary             | true                          |
-      | primaryProvider.role                | P                             |
-      | primaryProvider.providerUid         | urn:va:user:9E7A:1039         |
-      | primaryProvider.providerName        | PROVIDER,TWENTYNINE           |
-      | primaryProvider.providerDisplayName | Provider,Twentynine           |
-      | primaryProvider.summary             | EncounterProvider{uid=''} |
-      | reasonName                          | OBSERVATION	                |
+      | providers.providerUid               | urn:va:user:9E7A:11815        |
+      | providers.providerName              | RADTECH,THIRTYNINE           	|
+      | providers.providerDisplayName       | Radtech,Thirtynine           	|
+      | providers.summary                   | EncounterProvider{uid=''} 	|
+      | stay.arrivalDateTime                | 20020130114524                |
+      | stay.dischargeDateTime              | 20140115095259                |
+      | reasonName                          | ILL	                		|
      
 
 @f295_2_timeline @VPR @US2845 @9E7A164
 
 Scenario: Timeline: Add additional data types Appointment and Lab results
-Given a patient with pid "9E7A;164" has been synced through the RDK API
-When the client requests timeline for the patient "9E7A;164" in RDK format
+Given a patient with pid "9E7A;100022" has been synced through the RDK API
+When the client requests timeline for the patient "9E7A;100022" in RDK format
 Then a successful response is returned
-And the client receives 14 result(s)
-And the VPR results contain
+And the client receives 101 result(s)
+Then the VPR results contain
       | field            | value                                                                    |
-      | uid              | urn:va:lab:9E7A:164:CH;7039894.9085;80                                   |
+      | uid              | urn:va:lab:9E7A:100022:CH;6849395.8546;386                               |
       | facilityCode     | 500                                                                      |
       | facilityName     | CAMP MASTER                                                              |
-      | groupName        | CH 0104 20                                                               |
-      | activityDateTime | 199601040915                                                             |
-      | groupUid         | urn:va:accession:9E7A:164:CH;7039894.9085                                |
+      | groupName        | HE 0603 1                                                               	|
+      | activityDateTime | 20150603145400                                                             |
+      | groupUid         | urn:va:accession:9E7A:100022:CH;6849395.8546                             |
       | categoryCode     | urn:va:lab-category:CH                                                   |
       | categoryName     | Laboratory                                                               |
-      | observed         | 199601040915                                                             |
-      | resulted         | 199601041129                                                             |
-      | specimen         | SERUM                                                                    |
-      | comment          | CONTAINS AMYLASE reported incorrectly as 55 Ordering Provider: Twentytwo |
-      | typeCode         | urn:va:ien:60:244:72                                                     |
-      | displayName      | HDL                                                                      |
-      | result           | 50                                                                       |
-      | units            | MG/DL                                                                    |
-      | low              | 40                                                                       |
-      | high             | 59                                                                       |
+      | observed         | 20150603145400                                                             |
+      | resulted         | 20150603145400                                                             |
+      | specimen         | BLOOD                                                                    |
+      | comment          | CONTAINS Ordering Provider: Thirty Provider Report Released Date/Time:   |
+      | typeCode         | urn:lnc:718-7                                                        	|
+      | displayName      | HGB                                                                      |
+      | result           | 6.0                                                                      |
+      | units            | g/dL                                                                    	|
+      | low              | 14                                                                       |
+      | high             | 18                                                                       |
       | kind             | Laboratory                                                               |
-      | resultNumber     | 50                                                                       |
-      | abnormal         | false                                                                    |
+      | resultNumber     | 6                                                                       	|
+      | abnormal         | true                                                                    	|
       | micro            | false                                                                    |
-      | qualifiedName    | HDL (SERUM)                                                              |
-      | summary          | HDL (SERUM) 50 MG/DL                                                     |
-      | pid              | 9E7A;164                                                                 |
-      | localId          | CH;7039894.9085;80                                                       |
-      | typeName         | HDL                                                                      |
+      | qualifiedName    | HGB (BLOOD)                                                             	|
+      | summary          | HGB (BLOOD) 6.0<em>L</em> g/dL	                                        |
+      | pid              | 9E7A;100022                                                              |
+      | localId          | CH;6849395.8546;386                                                      |
+      | typeName         | HGB                                                                      |
       | statusCode       | urn:va:lab-status:completed                                              |
       | statusName       | completed                                                                |
-      | displayOrder     | 3.9                                                                      |
-      | typeId           | 244                                                                      |
-      | sample           |                                                                          |
-      | lnccodes         | urn:va:ien:60:244:72                                                     |
+      | displayOrder     | 20.2                                                                     |
+      | typeId           | 3                                                                      	|
+      | sample           | CONTAINS BLOOD                                                           |
+      | lnccodes         | urn:lnc:718-7                                                         	|
 
 	
 	

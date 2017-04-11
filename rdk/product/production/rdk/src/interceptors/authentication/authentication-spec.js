@@ -118,6 +118,11 @@ describe('authentication', function() {
         dd(req)('session')('destroy').set(_.noop);
         dd(req)('app')('config')('rpcConfig')('context').set('CONTEXT');
         dd(req)('app')('config')('vistaSites')('9E7A')('name').set('PANORAMA');
+        dd(req)('_resourceConfigItem')('title').set('authentication-authentication');
+        dd(req)('_resourceConfigItem')('rel').set('vha.create');
+        dd(req)('body')('accessCode').set('fakeAccess');
+        dd(req)('body')('verifyCode').set('fakeVerify');
+        dd(req)('body')('site').set('fakeSite');
         var response = {
             statusCode: 200,
             body: {}
@@ -136,6 +141,44 @@ describe('authentication', function() {
                 expect(req.logger.info.calledWith(
                     sinon.match(/DOING LOGIN/)
                 )).to.be.true();
+                done();
+            }
+        };
+        auth(req, res);
+    });
+
+    it('does not attempt login if the request was not with the login resource', function(done) {
+        var site = '9E7A';
+        req.audit = {};
+        req.param = function(param) {
+            if (param === 'site') {
+                return site;
+            }
+            return param;
+        };
+        dd(req)('session')('destroy').set(_.noop);
+        dd(req)('app')('config')('rpcConfig')('context').set('CONTEXT');
+        dd(req)('app')('config')('vistaSites')('9E7A')('name').set('PANORAMA');
+        dd(req)('_resourceConfigItem')('title').set('not-login-resource');
+        dd(req)('_resourceConfigItem')('rel').set('vha.read');
+        var response = {
+            statusCode: 200,
+            body: {}
+        };
+        dd(response)('body')('completedStamp')('sourceMetaStamp')(site)('syncCompleted').set(true);
+
+        sinon.stub(rdk.utils.http, 'get', function(options, callback) {
+            return callback(null, response, response.body);
+        });
+
+        var res = {
+            status: function(status) {
+                this.status = status;
+                return this;
+            },
+            rdkSend: function(response) {
+                expect(response).to.match(/Unauthorized. Please log in/);
+                expect(this.status).to.be(401);
                 done();
             }
         };

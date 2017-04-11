@@ -3,15 +3,13 @@ define([
     'marionette',
     'underscore',
     'jquery',
-    'main/components/adk_nav/navView',
     'main/Session',
     'main/ComponentLoader',
-    'main/components/patient/patientHeaderView',
     'main/components/views/ccowObjectsView',
     'main/ADKApp',
     'main/Utils',
     'api/Messaging',
-    'api/ResourceService',
+    'api/PatientRecordService',
     'api/SessionStorage',
     'api/UserDefinedScreens',
     'main/components/applets/view_switchboard/optionsSelectionView',
@@ -21,76 +19,139 @@ define([
     'handlebars',
     'main/api/WorkspaceFilters',
     'hbs!main/components/applet_chrome/templates/containerTemplate',
-    'api/UserService'
-], function(Backbone, Marionette, _, $, Nav, session, ComponentLoader, PatientHeaderView, CCOWObjectsView, ADKApp, Utils, Messaging, ResourceService, SessionStorage, UserDefinedScreens, ViewSwitchboard, Highcharts, ChromeView, AppletControllerView, Handlebars, WorkspaceFilters, chromeContainerTemplate, UserService) {
+    'main/layouts/centerRegionLayouts/default_fullWidth',
+    'api/UserService',
+    'api/WorkspaceContextRepository'
+], function(Backbone, Marionette, _, $, session, ComponentLoader, CCOWObjectsView, ADKApp, Utils, Messaging, PatientRecordService, SessionStorage, UserDefinedScreens, ViewSwitchboard, Highcharts, ChromeView, AppletControllerView, Handlebars, WorkspaceFilters, chromeContainerTemplate, DefaultCenterRegionLayout, UserService, WorkspaceContextRepository) {
     'use strict';
 
     var ScreensManifest = Messaging.request('ScreensManifest');
     var ScreenDisplay = {};
+    var pendingPromises = [];
 
-    ScreenDisplay.createScreen = function(screenModule, screenName, routeOptions, ADKApp, extraScreenDisplayOptions) {
-        if (screenModule) {
-            if (typeof OWA !== "undefined") {
-                try {
-                    var OWATracker = new OWA.tracker();
-                    OWATracker.setSiteId('f6eca28945621473f2cbd850e859ab74');
-                    var screenChange = OWATracker.makeEvent();
-                    screenChange.setEventType("screenChange");
-                    screenChange.set("screenChange", screenName);
-                    screenChange.getProperties();
-                    OWATracker.trackEvent(screenChange);
-                    OWATracker.trackPageView();
-                    OWATracker.trackDomStream();
-                    // this capability is going to be made available in a future sprint
-                    //OWATracker.trackClicks();
-                } catch (err) {
-                    console.log("OWA error:  " + err);
+    ScreenDisplay.createScreen = function(screenModule, screenName, contextId, workspaceModel, contextModel, ADKApp, options) {
+        Messaging.trigger("load.ehmp.workspace");
+        session.allUIResourcesLoadedPromise.done(function() {
+            _.each(pendingPromises, function(promise) {
+                promise.reject();
+            });
+            options = options || {};
+            // e.g. options
+            // {
+            //   route: true,
+            //   extraScreenDisplay: {
+            //     dontLoadApplets: true
+            //   },
+            //   callback: function () {...}
+            // }
+
+            if (screenModule) {
+                if (typeof OWA !== "undefined") {
+                    try {
+                        var OWATracker = new OWA.tracker();
+                        OWATracker.setSiteId('f6eca28945621473f2cbd850e859ab74');
+                        var screenChange = OWATracker.makeEvent();
+                        screenChange.setEventType("screenChange");
+                        screenChange.set("screenChange", screenName);
+                        screenChange.getProperties();
+                        OWATracker.trackEvent(screenChange);
+                        OWATracker.trackPageView();
+                        OWATracker.trackDomStream();
+                        // this capability is going to be made available in a future sprint
+                        //OWATracker.trackClicks();
+                    } catch (err) {
+                        console.log("OWA error:  " + err);
+                    }
                 }
-            }
-            if (ADKApp.currentScreen && ADKApp.currentScreen.config && ADKApp.currentScreen.config.onStop) {
-                ADKApp.currentScreen.config.onStop();
-            }
-            ADKApp.currentScreen = screenModule;
-            var lastWorkspace = SessionStorage.get.sessionModel('lastWorkspace').get('workspace');
-            if (_.isUndefined(lastWorkspace)){
-                ADKApp.currentWorkspace = screenModule.config.id;
-            } else {
-                ADKApp.currentWorkspace = lastWorkspace;
-            }
-
-            screenModule.buildPromise.done(function() {
-                extraScreenDisplayOptions = _.defaults(extraScreenDisplayOptions, {'dontLoadApplets': false}) || {};
-                // Only show CCOW ActiveX controls in IE & if we have a session already
-                if ("ActiveXObject" in window && (screenName !== ScreensManifest.logonScreen)) {
-                    var ccowView = new CCOWObjectsView();
-                    ADKApp.ccowRegion.show(ccowView);
+                if (ADKApp.currentScreen && ADKApp.currentScreen.config && ADKApp.currentScreen.config.onStop) {
+                    ADKApp.currentScreen.config.onStop();
                 }
+                ADKApp.currentScreen = screenModule;
+                var lastWorkspace = SessionStorage.get.sessionModel('lastWorkspace').get('workspace');
+                if (_.isUndefined(lastWorkspace)) {
+                    ADKApp.currentWorkspace = screenModule.config.id;
+                } else {
+                    ADKApp.currentWorkspace = lastWorkspace;
+                }
+                var screenShowPromise = $.Deferred();
+                pendingPromises.push(screenShowPromise);
+                screenModule.buildPromise.done(function() {
+                    if (screenShowPromise.state() === 'pending') {
+                        screenShowPromise.resolve();
+                    }
+                });
+                screenShowPromise.always(function() {
+                    _.remove(pendingPromises, function(promise) {
+                        return promise === screenShowPromise;
+                    });
+                }).done(function() {
+                    var extraScreenDisplayOptions = _.extend({
+                        'dontLoadApplets': false
+                    }, options.extraScreenDisplay);
 
-                var contentRegion_layoutView, topRegion_layoutView, centerRegion_layoutView;
-                screenModule.topRegion_layoutPromise.done(function() {
-                    topRegion_layoutView = ADKApp.topRegion.currentView;
-                    if (!(topRegion_layoutView instanceof screenModule.topRegion_layoutView)) {
-                        topRegion_layoutView = new screenModule.topRegion_layoutView();
-                        ADKApp.topRegion.show(topRegion_layoutView);
+                    // Only show CCOW ActiveX controls in IE & if we have a session already
+                    if ("ActiveXObject" in window && (screenName === WorkspaceContextRepository.getDefaultScreenOfContext('staff'))) {
+                       //Launch of CCOW
+                        Messaging.on('ccow:init', function () {
+                                var ccowView = new CCOWObjectsView();
+                                ADKApp.ccowRegion.show(ccowView);
+                        });
                     }
 
-                    screenModule.centerRegion_layoutPromise.done(function() {
+                    var contentRegion_layoutView, topRegion_layoutView, centerRegion_layoutView;
+                    var componentShowPromise = $.Deferred();
+                    pendingPromises.push(componentShowPromise);
+                    screenModule.topRegion_layoutPromise.done(function() {
+                        if (componentShowPromise.state() === 'pending') {
+                            componentShowPromise.resolve();
+                        }
+                    });
+                    componentShowPromise.always(function() {
+                        _.remove(pendingPromises, function(promise) {
+                            return promise === componentShowPromise;
+                        });
+                    }).done(function() {
+                        topRegion_layoutView = ADKApp.topRegion.currentView;
+                        if (!(topRegion_layoutView instanceof screenModule.topRegion_layoutView)) {
+                            topRegion_layoutView = new screenModule.topRegion_layoutView();
+                            ADKApp.topRegion.show(topRegion_layoutView);
+                        }
+
                         centerRegion_layoutView = ADKApp.centerRegion.currentView;
-                        if (!(centerRegion_layoutView instanceof screenModule.centerRegion_layoutView)) {
-                            centerRegion_layoutView = new screenModule.centerRegion_layoutView();
+                        var CenterRegionLayout = null;
+                        var contextLayout = contextModel.get('layout');
+                        contextLayout = _.isFunction(contextLayout) ? contextLayout(workspaceModel) : contextLayout;
+                        contextLayout = contextLayout || null;
+                        if (!_.isNull(contextLayout)) {
+                            CenterRegionLayout = contextLayout;
+                        } else {
+                            CenterRegionLayout = DefaultCenterRegionLayout;
+                        }
+                        if (!(centerRegion_layoutView instanceof CenterRegionLayout)) {
+                            centerRegion_layoutView = new CenterRegionLayout();
                             ADKApp.centerRegion.show(centerRegion_layoutView);
                         }
 
-                        var currentPatient = ResourceService.patientRecordService.getCurrentPatient();
+                        var currentPatient = PatientRecordService.getCurrentPatient();
                         if (currentPatient.has('pid')) {
-                            ResourceService.patientRecordService.refreshCurrentPatient();
+                            PatientRecordService.refreshCurrentPatient();
                         }
-                        ComponentLoader.load(ADKApp, topRegion_layoutView, centerRegion_layoutView, screenModule.config, currentPatient);
+                        ComponentLoader.load(ADKApp, topRegion_layoutView, screenModule.config, currentPatient, contextId);
 
-                        // Call containerResize to force resizeUtils.dimensions model to update
-                        Utils.resize.containerResize();
-
+                        var layoutShowPromise = $.Deferred();
+                        pendingPromises.push(layoutShowPromise);
                         screenModule.contentRegion_layoutPromise.done(function() {
+                            if (layoutShowPromise.state() === 'pending') {
+                                layoutShowPromise.resolve();
+                            }
+                        });
+                        layoutShowPromise.always(function() {
+                            _.remove(pendingPromises, function(promise) {
+                                return promise === layoutShowPromise;
+                            });
+                        }).done(function() {
+                            // Call containerResize to force resizeUtils.dimensions model to update
+                            Utils.resize.containerResize();
                             if (screenModule.patientRequired) {
                                 WorkspaceFilters.retrieveWorkspaceFilters(screenName);
                             }
@@ -103,13 +164,13 @@ define([
                                     contentRegion_layoutView = new screenModule.contentRegion_layoutView({
                                         //template: _.template(template),
                                         template: Handlebars.compile(template),
-                                        className: function() {
-                                            var classString = 'contentPadding';
+                                        className: (function() {
+                                            var classString = screenModule.contentRegion_layoutView.prototype.className;
                                             var predefinedBoolean = screenModule.config.predefined;
                                             if (!_.isUndefined(predefinedBoolean) && !predefinedBoolean) classString += ' user-defined-workspace';
                                             predefinedBoolean = null;
                                             return classString;
-                                        },
+                                        })(),
                                         freezeApplets: screenModule.config.freezeApplets
                                     });
                                     centerRegion_layoutView.content_region.show(contentRegion_layoutView);
@@ -122,52 +183,70 @@ define([
                             }
                             //TEMPORARY FIX FOR LOGIN BACKGROUND IMAGE TO NOT DISPLAY IN APP
                             $('body').removeClass();
-                            $('body').addClass('' + screenName);
+                            $('body').addClass(contextId + '-context ' + screenName);
                             if (!extraScreenDisplayOptions.dontLoadApplets) {
-                                _.each(screenModule.applets, function (currentApplet) {
-                                    if (typeof currentApplet.setDefaultView === 'function') {
-                                        currentApplet.setDefaultView();
-                                    }
+                                _.each(screenModule.applets, function(currentApplet) {
+                                    var showPromise = $.Deferred();
+                                    pendingPromises.push(showPromise);
                                     var appletModule = ADKApp[currentApplet.id];
-                                    var userNotAllowed;
-                                    if (_.isUndefined(appletModule)) {
-                                        ScreenDisplay.addEmptyAppletToScreen(currentApplet, screenModule);
-                                    } else {
-                                        $.when(screenModule.contentRegion_layoutPromise,
-                                            screenModule.centerRegion_layoutPromise,
-                                            screenModule.topRegion_layoutPromise,
-                                            appletModule.buildPromise).then(function () {
-                                                if (appletModule.permissions) {
-                                                    _.each(appletModule.permissions, function (permission) {
-                                                        if (!UserService.hasPermission(permission)) {
-                                                            userNotAllowed = true;
-                                                            return false;
-                                                        }
-                                                    });
+                                    appletModule.buildPromise.done(function() {
+                                        if (typeof currentApplet.setDefaultView === 'function') {
+                                            currentApplet.setDefaultView();
+                                        }
+                                        var userNotAllowed;
+                                        if (_.isUndefined(appletModule)) {
+                                            ScreenDisplay.addEmptyAppletToScreen(currentApplet, screenModule);
+                                        } else {
+                                            $.when(screenModule.contentRegion_layoutPromise,
+                                                screenModule.centerRegion_layoutPromise,
+                                                screenModule.topRegion_layoutPromise,
+                                                appletModule.buildPromise).then(function() {
+                                                if (showPromise.state() === 'pending') {
+                                                    showPromise.resolve();
+                                                }
+                                            });
+                                            showPromise.done(function() {
+                                                if (WorkspaceContextRepository.currentWorkspaceAndContext.get('workspace') === screenModule.id) {
+                                                    if (appletModule.permissions) {
+                                                        _.each(appletModule.permissions, function(permission) {
+                                                            if (!UserService.hasPermission(permission)) {
+                                                                userNotAllowed = true;
+                                                                return false;
+                                                            }
+                                                        });
+                                                    }
+                                                    if (!userNotAllowed && !_.isEmpty(appletModule.appletConfig.context)) {
+                                                        userNotAllowed = !ADK.utils.contextUtils.includesContext(appletModule.appletConfig.context);
+                                                    }
                                                     if (userNotAllowed) {
                                                         ScreenDisplay.addEmptyAppletToScreen(currentApplet, screenModule, userNotAllowed);
                                                         return;
                                                     }
+                                                    ScreenDisplay.addAppletToScreen(appletModule, currentApplet, screenModule, options);
                                                 }
-                                                ScreenDisplay.addAppletToScreen(appletModule, currentApplet, screenModule, routeOptions);
+                                            }).always(function() {
+                                                _.remove(pendingPromises, function(promise) {
+                                                    return promise === showPromise;
+                                                });
                                             });
-                                    }
-
+                                        }
+                                    });
                                 });
-                                if (screenModule.moduleName) {
-                                    ADK.utils.resize.filteredView(screenModule.moduleName);
-                                }
+                            }
+                            Messaging.trigger("loaded.ehmp.workspace");
+                            // Execute user provided optional callback function
+                            if (_.isFunction(options.callback)) {
+                                options.callback();
                             }
                         });
                     });
+                    if (screenModule.config.onStart) {
+                        screenModule.config.onStart();
+                        $('#screen-reader-screen-description').html('You have navigated to ' + screenName + '. Skip to main content.').focus();
+                    }
                 });
-
-                if (screenModule.config.onStart) {
-                    screenModule.config.onStart();
-                    $('#screen-reader-screen-description').html('You have navigated to ' + screenName + '. Skip to main content.').focus();
-                }
-            });
-        }
+            }
+        });
     };
     ScreenDisplay.addEmptyAppletToScreen = function(currentApplet, screenModule, userNotAllowed) {
         var appletModel = new Backbone.Model({
@@ -195,7 +274,7 @@ define([
                 'data-instanceId': currentApplet.instanceId
             },
             regions: {
-                message: '.appletDiv_ChromeContainer'
+                message: '.applet-div-chrome-container'
             },
             onBeforeShow: function() {
                 this.showChildView('message', new MessageView());
@@ -214,22 +293,26 @@ define([
         }
     };
 
-    ScreenDisplay.addAppletToScreen = function(appletModule, appletConfig, screenModule, routeOptions) {
-        if (appletModule && appletModule.hasPermission) {
+    ScreenDisplay.addAppletToScreen = function(appletModule, appletConfig, screenModule, screenOptions) {
+        var routeOptions = screenOptions.route;
+
+        if (appletModule) {
             var regionName = appletConfig.region;
             if (_.isUndefined(appletConfig.instanceId) || _.isNull(appletConfig.instanceId)) {
                 appletConfig.instanceId = appletConfig.id;
             }
 
-            var viewType = appletModule.defaultViewType || "",
-                AppletView,
-                options = {
+            var viewType = appletModule.defaultViewType || "";
+            var AppletView;
+            var options = {
                     appletConfig: appletConfig,
                     routeParam: routeOptions,
                     viewTypes: appletModule.appletConfig.viewTypes,
                     defaultViewType: appletModule.appletConfig.defaultViewType,
-                    screenModule: screenModule
-                };
+                    screenModule: screenModule,
+                    fromMinimizedToMaximized: screenOptions.fromMinimizedToMaximized
+            };
+
             if (appletConfig.viewType !== undefined && appletConfig.viewType !== "undefined") {
                 viewType = appletConfig.viewType;
             }
@@ -253,7 +336,7 @@ define([
                     }).extend({
                         attributes: {
                             'data-appletid': appletConfig.id,
-                            'data-instanceId': appletConfig.instanceId,
+                            'data-instanceId': appletConfig.instanceId
                         }
                     });
                 }
@@ -262,7 +345,7 @@ define([
                 AppletView = appletModule.getRootView(viewType).extend({
                     attributes: {
                         'data-appletid': appletConfig.id,
-                        'data-instanceId': appletConfig.instanceId,
+                        'data-instanceId': appletConfig.instanceId
                     }
                 });
             }
@@ -272,7 +355,15 @@ define([
                     contentRegion_layoutView.addRegion(regionName, '#' + regionName);
                 }
                 options.region = contentRegion_layoutView[regionName];
-                contentRegion_layoutView[regionName].show(new AppletView(options));
+                try {
+                    contentRegion_layoutView[regionName].show(new AppletView(options));
+                } catch (e) {
+                    // Changing the workspace before all the applets have finished loading can cause
+                    // contentRegion_layoutView[regionName] to be undefined.  In the cases I have seen, the call for
+                    // the show is no longer necessary because the region does not need to be displayed any longer.
+                    console.warn('Possible error: ', e);
+                }
+
             }
 
             if (appletModule.displayApplet) {

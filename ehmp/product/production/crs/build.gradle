@@ -1,0 +1,18 @@
+ext.set('repo', 'releases')
+ext.set('groupId', 'us.vistacore.ehmp')
+ext.set('artifactId', 'crs')
+
+task tarCRS(type: Tar) {
+  compression = Compression.GZIP
+  baseName = 'crs'
+  version = getVersionByCommitCountForProject(":production:crs")
+  destinationDir buildDir
+  from "${projectDir}/src"
+}
+
+build.dependsOn tarCRS
+uploadArchives.dependsOn tarCRS
+
+artifacts {
+  archives tarCRS
+}

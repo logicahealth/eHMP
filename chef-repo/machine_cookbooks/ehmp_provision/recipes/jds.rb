@@ -6,16 +6,6 @@
 chef_gem "chef-provisioning-ssh"
 require 'chef/provisioning/ssh_driver'
 
-
-_host_path_private_licenses = "#{ENV['HOME']}/Projects/vistacore/private_licenses"
-node.default[:ehmp_provision][:jds][:vagrant][:shared_folders].push(
-  {
-    :host_path => _host_path_private_licenses,
-    :guest_path => "/opt/private_licenses",
-    :create => true
-  }
-)
-
 ############################################## Staging Artifacts #############################################
 if ENV.has_key?('JDS_LOCAL_FILE')
   node.default[:ehmp_provision][:jds][:copy_files].merge!({
@@ -49,8 +39,11 @@ r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]
 r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access]
 r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
 r_list << "role[jds]"
+if node[:machine][:driver] == "vagrant" and !ENV.has_key?("NO_RESET")
+  r_list << "recipe[jds::reset_sync@#{ehmp_deps["jds"]}]"
+end
 r_list << "recipe[jds@#{ehmp_deps["jds"]}]"
-r_list << "recipe[jds::jds_data@#{ehmp_deps["jds"]}]" if node[:machine][:driver] == "vagrant"
+r_list << "recipe[jds::pjds@#{ehmp_deps["jds"]}]" if node[:machine][:driver] == "vagrant"
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
 
 machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} environment" do
@@ -86,14 +79,15 @@ machine machine_name do
   attributes(
     stack: node[:machine][:stack],
     nexus_url: node[:common][:nexus_url],
+    data_bag_string: node[:common][:data_bag_string],
     jds: {
       source: jds_source,
       jds_data: {
         source: node[:machine][:driver] == "vagrant" ? jds_data_source : ""
-      },
-      data_store: {
-        team_list: node[:machine][:driver] == "vagrant" ? "teamlist" : ""
       }
+    },
+    beats: {
+      logging: node[:machine][:logging]
     }
   )
   files lazy { node[:ehmp_provision][:jds][:copy_files] }

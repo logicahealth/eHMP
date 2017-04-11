@@ -10,31 +10,39 @@ define([
 //things are sequential so if no month, no day
     var searchUtil = {
         doDatetimeConversion: function(datetimeNum) {
-            if(!datetimeNum) return "Unknown";
-            var dateLength = datetimeNum.length;
-            if(dateLength === 4) {
-                // YYYY -> YYYY
-                return datetimeNum;
-            } else if(dateLength === 6) {
-                // YYYYMM -> MM/YYYY
-                return [datetimeNum.slice(4), datetimeNum.slice(0,4)].join('/');
-            } else if(dateLength === 7) {
-                // YYYYMMD -> MM/15/YYYY   (if the day is weird, default to the 15th)
-                return [datetimeNum.substr(4,2), '15', datetimeNum.slice(0,4)].join('/');
-            } else if(dateLength === 8) {
-                // YYYYMMDD -> MM/DD/YYYY
-                return [datetimeNum.substr(4,2), datetimeNum.substr(6,2), datetimeNum.substr(0,4)].join('/');
-            } else if(dateLength >= 10) {
-                // YYYYMMDDHHmm -> MM/DD/YYYY - HH:mm
-                if (dateLength === 10) {
-                    datetimeNum = [datetimeNum, '00'].join('');
+            if(!_.isUndefined(datetimeNum)) {
+                var frmt,parseFrmt,
+                    dtLen = datetimeNum.length;
+                switch(true) {
+                    case (dtLen === 4):
+                        parseFrmt = 'YYYY';
+                        frmt = 'YYYY';
+                        break;
+                    case (dtLen < 8 && dtLen >= 6):
+                        parseFrmt = 'YYYYMM';
+                        frmt = 'MM/YYYY';
+                        //if the day is wierd, default to the 15th
+                        if(dtLen === 7) {
+                            datetimeNum = datetimeNum.substring(0,(dtLen - 1)) + '15';
+                            parseFrmt = 'YYYYMMDD';
+                            frmt = 'MM/DD/YYYY';
+                        }
+                        break;
+                    case (dtLen === 8):
+                        parseFrmt = 'YYYYMMDD';
+                        frmt = 'MM/DD/YYYY';
+                        break;
+                    case (dtLen >= 10):
+                        parseFrmt = 'YYYYMMDDHHmm';
+                        frmt = 'MM/DD/YYYY - HH:mm';
+                        break;
                 }
-                var date = [datetimeNum.substr(4,2), datetimeNum.substr(6,2), datetimeNum.substr(0,4)].join('/');
-                var time = [datetimeNum.substr(8, 2), datetimeNum.substr(10, 2)].join(':');
-                return [date, time].join(' - ');
-            } else {
-                return "Unknown";
+                if(moment(datetimeNum,parseFrmt).isValid()){
+                    return moment(datetimeNum,parseFrmt).format(frmt);
+                }
             }
+            //return date as UNKOWN if year is invalid or undefined
+            return "Unknown";
         }
     };
     return searchUtil;

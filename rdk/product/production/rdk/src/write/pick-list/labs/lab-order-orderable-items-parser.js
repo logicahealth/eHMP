@@ -45,7 +45,6 @@ module.exports.parse = function(logger, rpcData) {
     var retValue = [];
 
     if(!rpcData){
-        logger.error('lab-order-orderable-items-parser.parse(): rpcData was empty, null, or undefined');
         return retValue;
     }
 

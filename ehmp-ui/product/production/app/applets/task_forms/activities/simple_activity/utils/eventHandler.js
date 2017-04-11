@@ -13,7 +13,7 @@ define([
             var self = this;
             var newDueDate, followup, fetchOptions, newStartDate, startinterval;
             fetchOptions = {
-                resourceTitle: 'tasks-changestate',
+                resourceTitle: 'tasks-update',
                 fetchType: 'POST',
                 criteria: {
                     taskid: this.model.get('id')
@@ -116,7 +116,7 @@ define([
                 var formInfo = this.parentView.formModel.toJSON(true);
                 delete formInfo.componentList;
                 var fetchOptions = {
-                    resourceTitle: 'tasks-startprocess',
+                    resourceTitle: 'activities-start',
                     fetchType: 'POST',
                     criteria: {
                         deploymentId: 'All',
@@ -146,8 +146,8 @@ define([
                     });
 
                     new ADK.UI.Alert({
-                        title: 'Alert!',
-                        icon: 'fa-exclamation-triangle',
+                        title: 'Alert',
+                        icon: 'icon-information',
                         messageView: MessageView,
                         footerView: FooterView
                     }).show();

@@ -38,6 +38,12 @@ define([], function() {
 			categoryName: 'OTHER PROCEDURES',
 			cptCodes: new Backbone.Collection()
 		},
+        parse: function(response) {
+            if (_.isEmpty(response.cptCodes)) {
+                response.cptCodes = [];
+            }
+            return response;
+        },
 		initialize: function() {
 			this.listenTo(this.get('cptCodes'), 'change:value', function(changed) {
 				this.trigger('procedure:change', changed);
@@ -53,7 +59,7 @@ define([], function() {
 				type: 'encounters-procedure-types',
 				visitDate: options.dateTime || '',
 				site: this.user.get('site'),
-				ien: options.clinicIen || ''
+				locationUid: options.locationUid || ''
 			};
 		}
 	});

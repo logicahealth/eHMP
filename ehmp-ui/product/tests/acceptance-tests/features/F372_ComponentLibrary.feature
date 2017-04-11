@@ -2,7 +2,7 @@
 Feature: F372 - UI Component Library - Patient Selection Box (Component)
 
 Background: 
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
     And the user has navigated to the patient search screen
         And the User selects mysite
     And the User click on MySiteSearch
@@ -10,7 +10,7 @@ Background:
     
 @US4982
 Scenario: 
-  When the user select patient name "EIGHT, PATIENT"
+  When the user select patient name "Eight, Patient"
   Then the all patient "patient identifying name" is displayed on confirm section header
         | field                     | value                      |
         | patient identifying name  | EIGHT, PATIENT              |

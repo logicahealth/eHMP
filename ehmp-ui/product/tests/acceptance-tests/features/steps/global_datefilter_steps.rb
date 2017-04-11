@@ -11,12 +11,12 @@ class GlobalDateFilter < AccessBrowserV2
     add_action(CucumberLabel.new("Control - Overview - Date Filter"), ClickAction.new, date_filter)
     add_action(CucumberLabel.new("Control - Coversheet - Date Filter Toggle"), ClickAction.new, date_filter)
 
-    apply_button = AccessHtmlElement.new(:id, "custom-range-apply-global")
+    apply_button = AccessHtmlElement.new(:id, "customRangeApplyGlobal")
     add_action(CucumberLabel.new("Control - Coversheet - Apply"), ClickAction.new, apply_button)
     add_action(CucumberLabel.new("Control - Overview - Apply"), ClickAction.new, apply_button)
 
-    from_date =  AccessHtmlElement.new(:id, "filter-from-date-global")
-    to_date = AccessHtmlElement.new(:id, "filter-to-date-global")
+    from_date =  AccessHtmlElement.new(:id, "filterFromDateGlobal")
+    to_date = AccessHtmlElement.new(:id, "filterToDateGlobal")
     add_action(CucumberLabel.new("Control - Coversheet - From Date"), SendKeysAction.new, from_date)
     add_action(CucumberLabel.new("Control - Coversheet - To Date"), SendKeysAction.new, to_date)
     add_action(CucumberLabel.new("Control - Overview - From Date"), SendKeysAction.new, from_date)
@@ -26,17 +26,17 @@ class GlobalDateFilter < AccessBrowserV2
     #add_action(CucumberLabel.new("Control - Coversheet - Date Filter Toggle"), ClickAction.new, AccessHtmlElement.new(:id, "date-region-minimized"))
     add_action(CucumberLabel.new("Control - Coversheet - Date Filter Close"), ClickAction.new, AccessHtmlElement.new(:css, "#navigation-date #close-global-date-view"))
     add_verify(CucumberLabel.new("Element - Date Filter"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#navigation-date .grid-filter-daterange"))
-    add_verify(CucumberLabel.new("Element - Range Text"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#date-region-minimized > div > span:nth-child(2)"))
+    add_verify(CucumberLabel.new("Element - Range Text"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#date-region-minimized span"))
     
-    add_action(CucumberLabel.new("Control - Coversheet - Cancel"), ClickAction.new, AccessHtmlElement.new(:id, "cancel-global"))
-    add_action(CucumberLabel.new("Control - Coversheet - All"), ClickAction.new, AccessHtmlElement.new(:id, 'all-range-global'))
-    add_action(CucumberLabel.new("Control - Coversheet - 24hr"), ClickAction.new, AccessHtmlElement.new(:id, '24hr-range-global'))
+    add_action(CucumberLabel.new("Control - Coversheet - Cancel"), ClickAction.new, AccessHtmlElement.new(:id, "cancelGlobal"))
+    add_action(CucumberLabel.new("Control - Coversheet - All"), ClickAction.new, AccessHtmlElement.new(:id, 'allRangeGlobal'))
+    add_action(CucumberLabel.new("Control - Coversheet - 24hr"), ClickAction.new, AccessHtmlElement.new(:id, '24hrRangeGlobal'))
 
-    add_verify(CucumberLabel.new('Trend History Chart'), VerifyContainsText.new, AccessHtmlElement.new(:id, 'trend-history-chart'))
-    add_verify(CucumberLabel.new('Empty Row'), VerifyContainsText.new, AccessHtmlElement.new(:css, '#globalDate-region #data-grid-newsfeed tr.empty'))
+    add_verify(CucumberLabel.new('Trend History Chart'), VerifyContainsText.new, AccessHtmlElement.new(:id, 'trendHistoryChart'))
+    add_verify(CucumberLabel.new('Empty Row'), VerifyContainsText.new, AccessHtmlElement.new(:css, '#globalDate-region #data-grid-newsfeed-gdt tr.empty'))
 
     add_verify(CucumberLabel.new('All Activities Title'), VerifyText.new, AccessHtmlElement.new(:id, 'allActivitiesTitle'))
-    add_verify(CucumberLabel.new('GDF Panel Title'), VerifyText.new, AccessHtmlElement.new(:css, '#timeline-summary h5.panel-title-label'))
+    add_verify(CucumberLabel.new('GDF Panel Title'), VerifyText.new, AccessHtmlElement.new(:css, '#timelineSummary h5.panel-title-label'))
 
     add_verify(CucumberLabel.new('Header - Date & Time'), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-newsfeed-gdt [data-header-instanceid=newsfeed-activityDateTime]"))
     add_verify(CucumberLabel.new('Header - Activity'), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-newsfeed-gdt [data-header-instanceid=newsfeed-activity]"))
@@ -360,11 +360,13 @@ Given(/^the user has selected All within the global date picker$/) do
   expect(@cc.perform_action('Control - Coversheet - Date Filter Toggle')).to be_true, "Was not able to select Control - Coversheet - Date Filter Toggle"
   @cc.wait_until_action_element_visible 'Trend History Chart'
 
-  # deliberate use of sleep
-  sleep 5
+  @ehmp = PobGlobalDateFilter.new
+  @ehmp.wait_until_btn_all_range_visible
   # And the user clicks the date control "All" on the "Coversheet"
   expect(@cc.perform_action('Control - Coversheet - All')).to be_true, "Was not able select Control - Coversheet - All"
   # And the user clicks the control "Apply" on the "Coversheet"
+  # @ehmp.wait_until_btn_Apply_dates_visible
+  
   expect(@cc.perform_action('Control - Coversheet - Apply')).to be_true, "was not able to select Global Date Filter: Apply button"
   @cc.wait_until_action_element_invisible 'Trend History Chart'
 
@@ -377,11 +379,12 @@ Given(/^the user has selected 24h within the global date picker$/) do
   expect(@cc.perform_action('Control - Coversheet - Date Filter Toggle')).to be_true, "Was not able to select Control - Coversheet - Date Filter Toggle"
   @cc.wait_until_action_element_visible 'Trend History Chart'
 
-  # deliberate use of sleep
-  sleep 5
+  @ehmp = PobGlobalDateFilter.new
+  @ehmp.wait_until_btn_24hr_range_visible
   # And the user clicks the date control "All" on the "Coversheet"
   expect(@cc.perform_action('Control - Coversheet - 24hr')).to be_true, "Was not able select Control - Coversheet - 24hr"
   # And the user clicks the control "Apply" on the "Coversheet"
+  @ehmp.wait_until_btn_Apply_dates_visible
   expect(@cc.perform_action('Control - Coversheet - Apply')).to be_true, "was not able to select Global Date Filter: Apply button"
   @cc.wait_until_action_element_invisible 'Trend History Chart'
 
@@ -423,4 +426,102 @@ end
 Then(/^a Timeline detail displays$/) do
   # #modal-body div.row
   expect(@cc.wait_until_xpath_count_greater_than('GDF summary detail rows', 0)).to eq(true)
+end
+
+When(/^the Global Date Filter contains expected buttons$/) do
+  @ehmp = PobGlobalDateFilter.new
+  @ehmp.wait_until_btn_all_range_visible
+  expect(@ehmp).to have_btn_all_range
+  expect(@ehmp).to have_btn_2yr_range
+  expect(@ehmp).to have_btn_1yr_range
+  expect(@ehmp).to have_btn_3mo_range
+  expect(@ehmp).to have_btn_1mo_range
+  expect(@ehmp).to have_btn_7d_range
+  expect(@ehmp).to have_btn_72hr_range
+  expect(@ehmp).to have_btn_24hr_range
+end
+
+When(/^the user clicks the Global Date Filter All button$/) do 
+  @ehmp = PobGlobalDateFilter.new
+  expect(@ehmp).to have_btn_all_range
+  @ehmp.btn_all_range.click
+end
+
+When(/^the user clicks the Global Date Filter 2yr button$/) do 
+  @ehmp = PobGlobalDateFilter.new
+  expect(@ehmp).to have_btn_2yr_range
+  @ehmp.btn_2yr_range.click
+end
+
+When(/^the user clicks the Global Date Filter Apply button$/) do
+  apply_gdf_and_close
+end
+
+When(/^the user clicks the Global Date Filter 1yr button$/) do 
+  @ehmp = PobGlobalDateFilter.new
+  expect(@ehmp).to have_btn_1yr_range
+  @ehmp.btn_1yr_range.click
+end
+
+When(/^the user clicks the Global Date Filter 3mo button$/) do 
+  @ehmp = PobGlobalDateFilter.new
+  expect(@ehmp).to have_btn_3mo_range
+  @ehmp.btn_3mo_range.click
+end
+
+When(/^the user clicks the Global Date Filter 1mo button$/) do 
+  @ehmp = PobGlobalDateFilter.new
+  expect(@ehmp).to have_btn_1mo_range
+  @ehmp.btn_1mo_range.click
+end
+
+When(/^the user clicks the Global Date Filter 7d button$/) do 
+  @ehmp = PobGlobalDateFilter.new
+  expect(@ehmp).to have_btn_7d_range
+  @ehmp.btn_7d_range.click
+end
+
+When(/^the user clicks the Global Date Filter 72hr button$/) do
+  @ehmp = PobGlobalDateFilter.new
+  expect(@ehmp).to have_btn_72hr_range
+  @ehmp.btn_72hr_range.click
+end
+
+When(/^the user clicks the Global Date Filter 24hr button$/) do
+  @ehmp = PobGlobalDateFilter.new
+  expect(@ehmp).to have_btn_24hr_range
+  @ehmp.btn_24hr_range.click
+end
+
+Then(/^the From Date is set to the patient's birth date$/) do
+  demo = PobDemographicsElements.new
+  birth_date = demo.birth_date
+  @ehmp = PobGlobalDateFilter.new
+  @ehmp.fld_from_date.value
+  expect(@ehmp.fld_from_date.value).to eq(birth_date)
+end
+
+Then(/^the Global Date Filter displays an Inpatient legend$/) do
+  @ehmp = PobGlobalDateFilter.new unless @ehmp.is_a? PobGlobalDateFilter
+  expect(@ehmp).to have_fld_inpatient_legend_label
+  expect(@ehmp).to have_fld_inpatient_legend_color
+end
+
+Then(/^the Global Date Filter displays Inpatient bins$/) do
+  @ehmp = PobGlobalDateFilter.new unless @ehmp.is_a? PobGlobalDateFilter
+  sleep 2
+  legend_color = @ehmp.legend_color(@ehmp.fld_inpatient_legend_color)
+  expect(@ehmp.bins_with_color(legend_color).length).to be > 0
+end
+
+Then(/^the Global Date Filter displays an Outpatient legend$/) do
+  @ehmp = PobGlobalDateFilter.new unless @ehmp.is_a? PobGlobalDateFilter
+  expect(@ehmp).to have_fld_outpatient_legend_label
+  expect(@ehmp).to have_fld_outpatient_legend_color
+end
+
+Then(/^the Global Date Filter displays Outpatient bins$/) do
+  @ehmp = PobGlobalDateFilter.new unless @ehmp.is_a? PobGlobalDateFilter
+  legend_color = @ehmp.legend_color(@ehmp.fld_outpatient_legend_color)
+  expect(@ehmp.bins_with_color(legend_color).length).to be > 0
 end

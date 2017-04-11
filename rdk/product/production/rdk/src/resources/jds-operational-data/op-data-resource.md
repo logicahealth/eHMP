@@ -2,7 +2,7 @@
 
 ## Operational data type [{{{path}}}]
 
-### Operational data type {type} [GET {{{path}}}/{type}{?limit}{&fields}]
+### Operational data type {type} [GET {{{path}}}/{type}{?limit}]
 
 Get a list of valid names by type
 
@@ -21,8 +21,6 @@ Returns a list of valid names of requested type
 
 
     :[limit]({{{common}}}/parameters/limit.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

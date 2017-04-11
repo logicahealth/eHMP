@@ -389,6 +389,60 @@ var jdsInput = {
     }
 };
 
+var conformanceData =
+{
+  'resourceType': 'Conformance',
+  'id': '8cb17388-e6c8-4313-9a4e-3a78802b0ff2',
+  'url': 'http://hl7.org/fhir/Conformance/ehmp',
+  'version': '0.0.1',
+  'name': 'EHMP FHIR Conformance Statement',
+  'description': 'This is a Conformance Statement for available ehmp FHIR Resources.',
+  'status': 'draft',
+  'date': '2016-06-24T22:44:05.283Z',
+  'fhirVersion': '0.5.0',
+  'acceptUnknown': false,
+  'format': [
+    'json'
+  ],
+  'rest': [
+    {
+      'mode': 'server',
+      'documentation': 'A conformance statement',
+      'resource': [
+        {
+          'type': 'medicationadministration',
+          'profile': {
+            'reference': 'http://www.hl7.org/FHIR/2015May/medicationadministration.html'
+          },
+          'interaction': [
+            {
+              'code': 'read'
+            },
+            {
+              'code': 'search-type'
+            }
+          ],
+          'searchParam': [
+            {
+              'name': 'subject.identifier',
+              'type': 'string',
+              'definition': 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+              'documentation': 'Patient indentifier.'
+            },
+            {
+              'name': 'limit',
+              'type': 'integer',
+              'definition': 'http://www.hl7.org/FHIR/2015May/datatypes.html#integer',
+              'documentation': 'This indicates the total number of resources that will be fetched.'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
 module.exports.data = {
-    jdsData: jdsInput
+    jdsData: jdsInput,
+    conformanceData: conformanceData
 };

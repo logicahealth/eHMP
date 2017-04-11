@@ -6,7 +6,7 @@ Feature: F159 CPOE - Outpatient Medications (ONC)
 # Team Andromeda
 
 Background:
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
     #Zzzretiredfortyeight,Patient can be used too
 	And user searches for and selects "Onehundred,Patient"
 	Then Cover Sheet is active

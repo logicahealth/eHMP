@@ -249,7 +249,6 @@ function signOrderSend(writebackContext, callback) {
 }
 
 function getSignOrderSendParameters(model) {
-
     var SS_ESIGNED = '1';
     var RS_RELEASE = '1';
     var NO_PROVIDER = 'E';

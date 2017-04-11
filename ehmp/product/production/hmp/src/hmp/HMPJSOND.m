@@ -1,5 +1,8 @@
-HMPJSOND ;SLC/KCM -- Decode JSON
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
+HMPJSOND ;SLC/KCM,ASMR/RRB - Decode JSON;9/25/2015 10:16
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ Q
  ;
 DECODE(VVJSON,VVROOT,VVERR) ; Set JSON object into closed array ref VVROOT
  ;
@@ -171,7 +174,7 @@ SETNUM(VVDIGIT) ; Set numeric along with any necessary modifier
  I +VVX'=VVX S @$$CURNODE()@("\n")=VVX
  Q
 NUMPARS(VVDIGIT) ; Return parsed number, advancing index past end of number
- ; VVIDX intially references the second digit
+ ; VVIDX initially references the second digit
  N VVDONE,VVNUM
  S VVDONE=0,VVNUM=VVDIGIT
  F  D  Q:VVDONE  Q:VVERRORS
@@ -205,7 +208,7 @@ CURNODE() ; Return a global/local variable name based on VVSTACK
  N VVI,VVSUBS
  S VVSUBS=""
  F VVI=1:1:VVSTACK S:VVI>1 VVSUBS=VVSUBS_"," D
- . I VVSTACK(VVI)=+VVSTACK(VVI) S VVSUBS=VVSUBS_VVSTACK(VVI) ; VEN/SMH Fix psudo array bug.
+ . I VVSTACK(VVI)=+VVSTACK(VVI) S VVSUBS=VVSUBS_VVSTACK(VVI) ; VEN/SMH Fix pseudo array bug.
  . E  S VVSUBS=VVSUBS_""""_VVSTACK(VVI)_""""
  Q VVROOT_VVSUBS_")"
  ;

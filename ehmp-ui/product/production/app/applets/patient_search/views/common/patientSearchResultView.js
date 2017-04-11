@@ -25,16 +25,16 @@ define([
      */
     var PatientSearchResultView = Backbone.Marionette.ItemView.extend({
         source: '',
-        tagName: "a",
         className: "list-group-item row-layout",
         template: singleSearchResultTemplate,
         attributes: {
-            onclick: "return false",
-            href: ""
+            'role': 'option',
+            'aria-selected': 'false',
+            'tabindex': '-1'
         },
         events: {
             "click": "selectPatient",
-            "keyup": "selectPatient"
+            "keydown": "selectPatient"
         },
         initialize: function(options) {
             this.searchApplet = options.searchApplet;
@@ -79,64 +79,23 @@ define([
          *
          */
         selectPatient: function(event) {
+            if (/(37|38|39|40)/.test(event.which)) {
+                this.triggerMethod('child:keyhander');
+                return;
+            }
             if (event.keyCode !== undefined && (event.keyCode != ENTER_KEY && event.keyCode != SPACE_KEY)) {
                 return;
             }
             var currentPatient = this.model;
-            if (this.source === 'global') {
-                this.mviGetCorrespondingIds();
-            }
-            $(".patient-search-results a.active").removeClass('active');
-            $("#patient-search-confirmation").removeClass('hide');
-            $("#global-search-results a.active").removeClass('active');
-            $("#global-search-confirmation").removeClass('hide');
-
-            $(event.currentTarget).siblings('.active').removeClass('active');
-            $(event.currentTarget).addClass('active');
-             this.searchApplet.patientSelected(this.model);
-        },
-        /**
-         *
-         * Grab the corresponding patient ids from the MVI (Master Veteran Index) for a
-         * given patient.
-         *
-         */
-        mviGetCorrespondingIds: function() {
-            var response = $.Deferred();
-
-            var dataToBeSent = this.model.attributes;
-            dataToBeSent.dob = dataToBeSent.birthDate;
-
-            var PostModel;
-            if (dataToBeSent.idClass === 'EDIPI') {
-                var siteEdipi = 'DOD;' + dataToBeSent.pid;
-                PostModel = Backbone.Model.extend({
-                    url: ADK.ResourceService.buildUrl('search-mvi-patient-sync'),
-                    defaults: {
-                        pid: siteEdipi,
-                        edipi: dataToBeSent.pid,
-                        demographics: dataToBeSent
-                    }
-                });
-            } else {
-                PostModel = Backbone.Model.extend({
-                    url: ADK.ResourceService.buildUrl('search-mvi-patient-sync'),
-                    defaults: {
-                        pid: dataToBeSent.pid,
-                        icn: dataToBeSent.pid,
-                        demographics: dataToBeSent
-                    }
-                });
-            }
-
-            var postModel = new PostModel();
-            postModel.save({}, {
-                success: function(model, resp, options) {
-                    response.resolve(resp);
-                }
-            });
-
-            return response.promise();
+            // find all the selections in list and un-highlight the active one (even in other search types)
+            this.$el.closest("#patient-search-main").find('.list-group-item.active').removeClass('active').attr('aria-selected', 'false');
+            // add class confirmation to the wrapper to avoid IE messing everything up
+            this.$el.closest('.patient-search-wrapper').addClass('confirmation');
+            //since what was passed is an event, just add class active to the target, also there's no need of jquery here
+            event.currentTarget.classList.add('active');
+            event.currentTarget.setAttribute('aria-selected', 'true');
+            // set the adequate value to the model
+            this.searchApplet.patientSelected(this.model);
         }
     });
 

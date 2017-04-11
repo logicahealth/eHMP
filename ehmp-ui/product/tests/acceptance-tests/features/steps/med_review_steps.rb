@@ -26,10 +26,10 @@ class MedReviewApplet < AllApplets
 
     add_action(CucumberLabel.new("Clinic Order Meds Group"), ClickAction.new, AccessHtmlElement.new(:css, "[data-type-row='clinical']"))
     add_verify(CucumberLabel.new("Clinic Order Meds Group"), VerifyText.new, AccessHtmlElement.new(:css, "[data-type-row='clinical']"))
-    add_action(CucumberLabel.new("Inpatient Meds Group"), ClickAction.new, AccessHtmlElement.new(:css, "[id^='accordion'] [href^='#inpatient'] b"))
-    add_verify(CucumberLabel.new("Inpatient Meds Group"), VerifyText.new, AccessHtmlElement.new(:css, "[id^='accordion'] [href^='#inpatient'] b"))
-    add_action(CucumberLabel.new("Outpatient Meds Group"), ClickAction.new, AccessHtmlElement.new(:css, "[id^='accordion'] [href^='#outpatient'] b"))
-    add_verify(CucumberLabel.new("Outpatient Meds Group"), VerifyText.new, AccessHtmlElement.new(:css, "[id^='accordion'] [href^='#outpatient'] b"))
+    add_action(CucumberLabel.new("Inpatient Meds Group"), ClickAction.new, AccessHtmlElement.new(:css, "[id^='accordion'] [data-type-row='inpatient']"))
+    add_verify(CucumberLabel.new("Inpatient Meds Group"), VerifyText.new, AccessHtmlElement.new(:css, "[id^='accordion'] [data-type-row='inpatient']"))
+    add_action(CucumberLabel.new("Outpatient Meds Group"), ClickAction.new, AccessHtmlElement.new(:css, "[id^='accordion'] [data-type-row='outpatient']"))
+    add_verify(CucumberLabel.new("Outpatient Meds Group"), VerifyText.new, AccessHtmlElement.new(:css, "[id^='accordion'] [data-type-row='outpatient']"))
     add_verify(CucumberLabel.new("Applet Title"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] .panel-title-label"))
 
     warfarin_tab_id = 'medication_name_urn_va_med_9E7A_271_17220'
@@ -52,10 +52,10 @@ class MedReviewApplet < AllApplets
     add_action(CucumberLabel.new("Meds Review Filter input"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "input[name='q-8afd050c9965']"))
     add_action(CucumberLabel.new("Meds Review Search Filter"), ClickAction.new, AccessHtmlElement.new(:id, "grid-filter-button-8afd050c9965"))
 
-    inpatient_med_rows = AccessHtmlElement.new(:css, "[id^='inpatient'] [class='panel-heading medsItem']")
+    inpatient_med_rows = AccessHtmlElement.new(:css, "[id^='inpatient'] [class='panel-heading meds-item']")
     add_verify(CucumberLabel.new('Inpatient Med Rows'), VerifyXpathCount.new(inpatient_med_rows), inpatient_med_rows)
 
-    outpatient_med_rows = AccessHtmlElement.new(:css, "[id^='outpatient'] [class='panel-heading medsItem']")
+    outpatient_med_rows = AccessHtmlElement.new(:css, "[id^='outpatient'] [class='panel-heading meds-item']")
     add_verify(CucumberLabel.new('Outpatient Med Rows'), VerifyXpathCount.new(outpatient_med_rows), outpatient_med_rows)
 
     add_action(CucumberLabel.new('Control - applet - Text Filter'), SendKeysAction.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] .form-search input"))
@@ -89,18 +89,18 @@ class MedReviewAppletSummaryDetailsHeader < ADKContainer
   include Singleton
   def initialize
     super
-    add_verify(CucumberLabel.new("Outpatient Name Header"), VerifyText.new, AccessHtmlElement.new(:css, "[id^='outpatient'] [sortkey='medicationName']"))
-    add_verify(CucumberLabel.new("Outpatient Sig Header"), VerifyText.new, AccessHtmlElement.new(:css, "[id^='outpatient'] [sortkey='sig']"))
+    add_verify(CucumberLabel.new("Outpatient Name Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[id^='outpatient'] [sortkey='medicationName']"))
+    add_verify(CucumberLabel.new("Outpatient Sig Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[id^='outpatient'] [sortkey='sig']"))
     add_verify(CucumberLabel.new("Outpatient Last Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #OUTPATIENT-time-header"))
-    add_verify(CucumberLabel.new("Outpatient Status/Fillable Header"), VerifyText.new, AccessHtmlElement.new(:css, "[id^='outpatient'] [sortkey='']"))
+    add_verify(CucumberLabel.new("Outpatient Status/Fillable Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[id^='outpatient'] [sortkey='status']"))
 
-    add_verify(CucumberLabel.new("Inpatient Name Header"), VerifyText.new, AccessHtmlElement.new(:css, ".col-sm-12.selectable.header"))
-    add_verify(CucumberLabel.new("Inpatient Sig Header"), VerifyText.new, AccessHtmlElement.new(:css, ".col-sm-4.selectable.header"))
+    add_verify(CucumberLabel.new("Inpatient Name Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] button[sortkey='medicationName']"))
+    add_verify(CucumberLabel.new("Inpatient Sig Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] button[sortkey='sig']"))
     add_verify(CucumberLabel.new("Inpatient Last Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #INPATIENT-time-header"))
-    add_verify(CucumberLabel.new("Inpatient Status/Next Header"), VerifyText.new, AccessHtmlElement.new(:css, ".col-sm-3.selectable.header.centerText"))
+    add_verify(CucumberLabel.new("Inpatient Status/Next Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] div.text-center button"))
 
-    add_action(CucumberLabel.new("Outpatient Name Header Sort"), ClickAction.new, AccessHtmlElement.new(:css, ".col-sm-12.selectable.header"))
-    add_action(CucumberLabel.new("Outpatient Sig Header Sort"), ClickAction.new, AccessHtmlElement.new(:css, ".col-sm-4.selectable.header"))
+    add_action(CucumberLabel.new("Outpatient Name Header Sort"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] button[sortkey='medicationName']"))
+    add_action(CucumberLabel.new("Outpatient Sig Header Sort"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] button[sortkey='sig']"))
     add_action(CucumberLabel.new("Outpatient Last Header Sort"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #OUTPATIENT-time-header"))
   end
 end
@@ -190,9 +190,9 @@ class MedReviewDateFilter < ADKContainer
   def initialize
     super
     add_action(CucumberLabel.new("Control - Applet - Date Filter"), ClickAction.new, AccessHtmlElement.new(:css, "#navigation-date #date-region-minimized"))
-    add_action(CucumberLabel.new("Control - Applet - From Date"), SendKeysAction.new, AccessHtmlElement.new(:css, "#globalDate-region #filter-from-date-global"))
-    add_action(CucumberLabel.new("Control - Applet - To Date"), SendKeysAction.new, AccessHtmlElement.new(:id, "filter-to-date-global"))
-    add_action(CucumberLabel.new("Control - Applet - Apply"), ClickAction.new, AccessHtmlElement.new(:id, "custom-range-apply-global"))
+    add_action(CucumberLabel.new("Control - Applet - From Date"), SendKeysAction.new, AccessHtmlElement.new(:css, "#globalDate-region #filterFromDateGlobal"))
+    add_action(CucumberLabel.new("Control - Applet - To Date"), SendKeysAction.new, AccessHtmlElement.new(:id, "filterToDateGlobal"))
+    add_action(CucumberLabel.new("Control - Applet - Apply"), ClickAction.new, AccessHtmlElement.new(:id, "customRangeApplyGlobal"))
   end
 end
 
@@ -247,7 +247,7 @@ Then(/^"(.*?)" summary view contains headers in Meds Review Applet$/) do |med_gr
   p patient_type[0]
   expected_headers = table.headers
   for i in 0...expected_headers.length
-    expect(aa.perform_verification(patient_type[0] + " " + expected_headers[i] + " Header", expected_headers[i], DefaultTiming.default_table_row_load_time)).to be_true, "#{expected_headers[i]} header does not exist"
+    expect(aa.perform_verification(patient_type[0] + " " + expected_headers[i] + " Header", expected_headers[i].upcase, DefaultTiming.default_table_row_load_time)).to be_true, "#{expected_headers[i]} header does not exist"
   end
 end
 
@@ -493,7 +493,7 @@ end
 
 When(/^the Meds Review Applet contains data rows$/) do
   meds_review = MedReviewApplet.instance
-  med_items = AccessHtmlElement.new(:css, "[data-appletid='medication_review'] [class='panel-heading medsItem']")
+  med_items = AccessHtmlElement.new(:css, "[data-appletid='medication_review'] [class='panel-heading meds-item']")
   meds_review.add_verify(CucumberLabel.new("Number of Medications"), VerifyXpathCount.new(med_items), med_items)
   expect(meds_review.wait_until_xpath_count_greater_than("Number of Medications", 0)).to be_true
 end
@@ -520,9 +520,15 @@ When(/^the user views the details of an inpatient med$/) do
   @ehmp.wait_for_fld_inpatient_meds_rows
   @ehmp.fld_inpatient_meds_rows.first.click
   @ehmp.wait_for_btn_toolbar_popover
-  expect(@ehmp).to have_btn_toolbar_popover
-  @ehmp.btn_toolbar_popover.click
-  # meds_review = MedReviewApplet.instance
+  attempt = 3
+  begin
+    expect(@ehmp).to have_btn_toolbar_popover
+    @ehmp.btn_toolbar_popover.click
+  rescue
+    attempt -=1
+    retry if attempt > 1
+  end
+ # meds_review = MedReviewApplet.instance
  # meds_review.add_action(CucumberLabel.new('First Row'), ClickAction.new, AccessHtmlElement.new(:css, '.panel-heading.medsItem'))
  #  # meds_review.add_action(CucumberLabel.new('First Row'), ClickAction.new, AccessHtmlElement.new(:css, "[title='ibuprofen']"))
  #  meds_review.add_action(CucumberLabel.new('Active Toolbar'), ClickAction.new, AccessHtmlElement.new(:css, '#medsReviewMainGroup_INPATIENT div.toolbarActive'))
@@ -536,8 +542,14 @@ When(/^the user views the details of an outpatient med$/) do
   @ehmp.wait_for_fld_outpatient_med_rows
   @ehmp.fld_outpatient_med_rows.first.click
   @ehmp.wait_for_btn_toolbar_popover
-  expect(@ehmp).to have_btn_toolbar_popover
-  @ehmp.btn_toolbar_popover.click
+  attempt = 3
+  begin
+    expect(@ehmp).to have_btn_toolbar_popover
+    @ehmp.btn_toolbar_popover.click
+  rescue
+    attempt -= 1
+    retry if attempt > 1
+  end
 end
 
 Then(/^the detail view displays$/) do |table|

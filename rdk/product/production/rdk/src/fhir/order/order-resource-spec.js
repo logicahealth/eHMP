@@ -57,15 +57,16 @@ describe('Order Resource FHIR conversion methods', function() {
             expect(fhirItem.id).to.not.be.undefined();
         });
 
+        var siteHash = fhirUtils.getSiteHash(singleRecord.data.items[0].uid);
         it('sets dateWritten correctly', function() {
-            expect(fhirItem.date).to.equal(fhirUtils.convertToFhirDateTime(singleRecord.data.items[0].entered));
+            expect(fhirItem.date).to.equal(fhirUtils.convertToFhirDateTime(singleRecord.data.items[0].entered, siteHash));
         });
 
         it('sets text correctly', function() {
             expect(fhirItem.text).to.not.be.undefined();
             expect(fhirItem.text.status).to.equal('generated');
 
-            var t = '<div>Request for ' + (singleRecord.data.items[0].kind || '') + ' (on patient \'' + (singleRecord.data.items[0].pid || '@null') + '\' @ ' + (singleRecord.data.items[0].providerDisplayName || '') + ')\r\n' + (_.escape(singleRecord.data.items[0].summary) || '') + '</div>';
+            var t = '<div>Request for ' + _.escape((singleRecord.data.items[0].kind || '') + ' (on patient \'' + (singleRecord.data.items[0].pid || '@null') + '\' @ ' + (singleRecord.data.items[0].providerDisplayName || '') + ')\r\n' + (singleRecord.data.items[0].summary || '')) + '</div>';
 
             expect(fhirItem.text.div).to.equal(t);
         });
@@ -90,8 +91,8 @@ describe('Order Resource FHIR conversion methods', function() {
             var start = fhirItem.when.schedule.repeat.bounds.start;
             var end = fhirItem.when.schedule.repeat.bounds.end;
 
-            expect(start).to.equal(fhirUtils.convertToFhirDateTime(singleRecord.data.items[0].start));
-            expect(end).to.equal(fhirUtils.convertToFhirDateTime(singleRecord.data.items[0].stop));
+            expect(start).to.equal(fhirUtils.convertToFhirDateTime(singleRecord.data.items[0].start, siteHash));
+            expect(end).to.equal(fhirUtils.convertToFhirDateTime(singleRecord.data.items[0].stop, siteHash));
         });
 
         it('sets detail correctly', function() { //for this data, a diagnostic order reference.
@@ -117,13 +118,13 @@ describe('Order Resource FHIR conversion methods', function() {
                 expect(diagnosticOrder).to.not.be.undefined();
 
                 expect(diagnosticOrder.status).to.not.be.undefined();
-                expect(diagnosticOrder.status).to.equal(statusDiagOrderMap[singleRecord.data.items[0].statusName])
+                expect(diagnosticOrder.status).to.equal(statusDiagOrderMap[singleRecord.data.items[0].statusName]);
                 expect(fhirItem.detail[0].reference).to.equal('#' + diagnosticOrder.id);
 
                 expect(diagnosticOrder.subject).to.not.be.undefined();
                 expect(diagnosticOrder.subject.reference).to.not.be.undefined();
                 var pid = singleRecord.data.items[0].pid || req._pid;
-                expect(diagnosticOrder.subject.reference).to.equal('Patient/' + pid)
+                expect(diagnosticOrder.subject.reference).to.equal('Patient/' + pid);
 
                 expect(diagnosticOrder.orderer).to.not.be.undefined();
                 expect(diagnosticOrder.orderer.reference).to.not.be.undefined();
@@ -167,7 +168,7 @@ describe('Order Resource FHIR conversion methods', function() {
                 expect(practitioner.text.status).to.not.be.undefined();
                 expect(practitioner.text.status).to.equal('generated');
                 expect(practitioner.text.div).to.not.be.undefined();
-                var div = '<div>' + singleRecord.data.items[0].providerDisplayName + '</div>'
+                var div = '<div>' + singleRecord.data.items[0].providerDisplayName + '</div>';
                 expect(practitioner.text.div).to.equal(div);
 
                 //we could optionally include the name parsing logic here,
@@ -211,7 +212,7 @@ describe('Order Resource FHIR conversion methods', function() {
                 expect(practitioner.text.status).to.not.be.undefined();
                 expect(practitioner.text.status).to.equal('generated');
                 expect(practitioner.text.div).to.not.be.undefined();
-                var div = '<div>' + singleRecord.data.items[0].clinicians[0].name + '</div>'
+                var div = '<div>' + singleRecord.data.items[0].clinicians[0].name + '</div>';
                 expect(practitioner.text.div).to.equal(div);
 
                 expect(practitioner.name.family).to.not.be.undefined();

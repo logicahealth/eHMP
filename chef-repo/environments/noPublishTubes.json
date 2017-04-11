@@ -1,0 +1,9 @@
+{
+  "name": "noPublishTubes",
+  "description": "disable publishing of vx-data-change-event jobs to other tubes",
+  "override_attributes": {
+    "vxsync": {
+      "publish_tubes": false
+    }
+  }
+}

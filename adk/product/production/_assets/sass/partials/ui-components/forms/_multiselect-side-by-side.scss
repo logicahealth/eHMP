@@ -1,20 +1,23 @@
 .control.multiselectSideBySide-control {
-    $error-color: #a94442;
     &.has-error {
         .available-region .faux-table {
-            border-left: 1px solid $error-color;
+            border-left: 2px solid $red-dark;
         }
         .selected-region .faux-table {
-            border-right: 1px solid $error-color;
+            border-right: 2px solid $red-dark;
             .form-control {
-                border-color: #ccc;
+                border-color: $grey;
             }
         }
         .header {
-            border-top-color: $error-color;
+            border-top: 2px solid $red-dark;
         }
         .body {
-            border-bottom-color: $error-color;
+            border-bottom: 2px solid $red-dark;
+        }
+        .help-block.error {
+            font-size: 13px;
+            font-weight: 600;
         }
     }
     .table-cell {
@@ -30,8 +33,22 @@
             background-color: $pure-white;
             .control {
                 position: relative;
+                .fa-filter {
+                    position: absolute;
+                    top: 6px;
+                    left: 5px;
+                }
                 .filter {
                     padding-right: 20px;
+                    padding-left: 15px;
+                    &::-ms-clear {
+                        display: none;
+                    }
+                }
+                .clear-input {
+                    position: absolute;
+                    top: -1px;
+                    right: 2px;
                 }
                 .loading {
                     position: absolute;
@@ -47,6 +64,14 @@
     .selected-region {
         .body.scrolling-content {
             height: calc(156px + 32px);
+            .table-row .table-cell .control .input-group {
+                .input-group-addon {
+                    padding: 2px;
+                }
+                .clone-input {
+                    left: 16px;
+                }
+            }
         }
     }
     .total-selected-input {

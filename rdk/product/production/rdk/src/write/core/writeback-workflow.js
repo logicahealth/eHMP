@@ -5,6 +5,8 @@ var _ = require('lodash');
 var dd = require('drilldown');
 var jdsDirectWriter = require('./jds-direct-writer');
 var rpcClientFactory = require('./rpc-client-factory');
+var readOnlyRpcClientFactory = require('./../../subsystems/vista-read-only-subsystem');
+var pjdsWriter = require('../orders/common/orders-common-pjds-writer');
 
 function getVistaConfig(logger, appConfig, user) {
     var site = dd(user)('site').val;
@@ -41,9 +43,12 @@ module.exports = function writebackWorkflow(req, res, tasks) {
         audit: req.audit,
         vistaConfig: getVistaConfig(req.logger, req.app.config, req.session.user),
         siteHash: req.session.user.site,
+        siteParam: req.param('site'),  //used to pass in site.  e.g. lab order detail site
         duz: req.session.user.duz,
         cookie: req.headers.cookie,
+        authorization: req.headers.authorization,
         appConfig: req.app.config,
+        app: req.app,
         model: req.body,
         interceptorResults: req.interceptorResults,
         pid: req.param('pid'),
@@ -53,19 +58,21 @@ module.exports = function writebackWorkflow(req, res, tasks) {
         vprModel: null,
         vprResponse: null,
         vprResponseStatus: 200,
-        rpcClient: null
+        rpcClient: null,
+        vistaUserClass: req.session.user.vistaUserClass
     };
-    var vxSyncResponse = {};
-    var elevatedTasks = [jdsDirectWriter];
+    var elevatedTaskResponse = {};
+    var elevatedTasks = [jdsDirectWriter, pjdsWriter];
     tasks = _.map(tasks, function(task) {
         if(_.contains(elevatedTasks, task)) {
-            return task.bind(null, writebackContext, vxSyncResponse);
+            return task.bind(null, writebackContext, elevatedTaskResponse);
         }
         return task.bind(null, writebackContext);
     });
 
     async.series(tasks, function(err) {
         rpcClientFactory.closeRpcClient(writebackContext);
+        readOnlyRpcClientFactory.closeAllRpcSystemClients(writebackContext);
         if(err) {
             req.logger.error(err);
             return res.status(500).rdkSend(err);
@@ -79,7 +86,7 @@ module.exports = function writebackWorkflow(req, res, tasks) {
         return res.status(writebackContext.vprResponseStatus).rdkSend(_.extend({
             status: writebackContext.vprResponseStatus,
             data: writebackContext.vprResponse
-        }, vxSyncResponse));
+        }, elevatedTaskResponse));
     });
 };
 

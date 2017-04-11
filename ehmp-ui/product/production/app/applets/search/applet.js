@@ -1,40 +1,41 @@
 define([
-    "backbone",
-    "marionette",
-    "underscore",
-    "app/applets/search/searchView",
-    "hbs!app/applets/search/templates/searchTemplate",
-    "app/applets/search/eventHandlers"
-], function(Backbone, Marionette, _, SearchView, searchTemplate, eventHandlers) {
+    'backbone',
+    'marionette',
+    'underscore',
+    'handlebars',
+    'app/applets/search/textSearchInput/view',
+    'app/applets/search/searchView',
+], function(Backbone, Marionette, _, Handlebars, TextSearchInputView, SearchView) {
     "use strict";
 
-    var SearchModel = Backbone.Model.extend({
-        defaults: {
-
-        }
-    });
-
-    var searchModel = new SearchModel();
-
     var AppletLayoutView = Backbone.Marionette.LayoutView.extend({
+        template: Handlebars.compile('<div class="search-applet-container"><div>'),
+        ui: {
+            'SearchAppletRegion': '.search-applet-container'
+        },
+        regions: {
+            MainAppletRegion: "@ui.SearchAppletRegion"
+        },
         initialize: function() {
             this.searchView = new SearchView();
         },
-        onRender: function() {
-            this.appletMain.show(this.searchView);
-        },
-        template: searchTemplate,
-        model: searchModel,
-        regions: {
-            appletMain: ".search-applet-main"
+        onBeforeShow: function() {
+            this.MainAppletRegion.show(this.searchView);
         }
     });
 
     var applet = {
         id: "search",
-        getRootView: function() {
-            return AppletLayoutView;
-        }
+        viewTypes: [{
+            type: 'expanded',
+            view: AppletLayoutView,
+            chromeEnabled: false
+        }, {
+            type: 'input',
+            view: TextSearchInputView,
+            chromeEnabled: false
+        }],
+        defaultViewType: 'expanded'
     };
 
     return applet;

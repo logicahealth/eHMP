@@ -12,7 +12,8 @@ function getResourceConfig() {
             synchronize: false
         },
         requiredPermissions: [],
-        isPatientCentric: false
+        isPatientCentric: false,
+        bypassCsrf: true
     }];
 }
 

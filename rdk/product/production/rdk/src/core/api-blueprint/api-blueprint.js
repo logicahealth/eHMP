@@ -19,6 +19,7 @@ module.exports.jsonDocumentationForPath = jsonDocumentationForPath;
 module.exports.jsonDocumentationFromFile = jsonDocumentationFromFile;
 module.exports.loadFullMarkdown = loadFullMarkdown;
 module.exports.mergeJsonDocumentation = mergeJsonDocumentation;
+module.exports.preparsedJsonPath = preparsedJsonPath;
 module.exports.matchAction = matchAction;
 
 var domains = {
@@ -38,7 +39,7 @@ var paramTypeOrder = {
     'path': 1,
     'query': 2,
     'fragment': 4
-}
+};
 
 function registerExternalUrlOnPrefix(url, prefix) {
     prefix = _.trim(prefix, '/');
@@ -69,7 +70,7 @@ function registerResource(mountpoint, markdownPath, preload) {
 
     if (_.isUndefined(preload) || preload) {
         var callback = _.isFunction(preload) ? preload : function(){};
-        jsonDocumentationForResource(resource, callback);
+        jsonDocumentationFromFile(resource.markdownPath, resource.mountpoint, callback);
     }
 }
 
@@ -90,21 +91,22 @@ function getAllJsonDocumentation(callback) {
     var resources = domains[prefix].resources;
     var fullJson = createEmptyJsonDocumentation();
     async.eachSeries(resources, function(resource, done) {
-        jsonDocumentationForResource(resource, function mergeJson(error, json) {
+        jsonDocumentationFromFile(resource.markdownPath, resource.mountpoint, function mergeJson(error, json) {
             if (error && error.code === 'ENOENT') {
                 var markdown = '\n\n# Group Undocumented\n\n## ' +
                     fspath.basename(resource.markdownPath, '.md') + ' [' + resource.mountpoint + ']\n\n' +
                     '(No documentation found)\n\n';
                 parseApiBlueprint(markdown, function(error, json) {
                     fullJson = mergeJsonDocumentation(fullJson, json);
-                    done(error);
+                    setImmediate(done, error);
                 });
             } else {
                 fullJson = mergeJsonDocumentation(fullJson, json);
-                done(error);
+                setImmediate(done, error);
             }
         });
     }, function(error) {
+        decorateExternalPrefix(fullJson, prefix);
         callback(error, fullJson);
     });
 }
@@ -123,9 +125,9 @@ function jsonDocumentationForPath(path, callback) {
 
     var fullJson = createEmptyJsonDocumentation();
     async.eachSeries(resources, function(resource, done) {
-        jsonDocumentationForResource(resource, function mergeJson(error, json) {
+        jsonDocumentationFromFile(resource.markdownPath, resource.mountpoint, function mergeJson(error, json) {
             fullJson = mergeJsonDocumentation(fullJson, json, resource.markdownPath);
-            done();
+            setImmediate(done);
         });
     }, function(error) {
         callback(error, fullJson);
@@ -134,7 +136,7 @@ function jsonDocumentationForPath(path, callback) {
 
 function prefixForPath(path) {
     var prefix = _.find(_.keys(domains), function(prefix) {
-        return new RegExp('^/?' + prefix + '/').test(path);
+        return new RegExp('^/?' + prefix + '\\b').test(path);
     });
     return prefix || localPrefix;
 }
@@ -144,8 +146,10 @@ function resourcesForPath(path, resources) {
         if (resource.mountpoint.length <= 1) {
             return path === resource.mountpoint;
         }
-// TODO: what about matching path parameters???
-        return path.indexOf(resource.mountpoint) !== -1;
+        // support colon-prefixed path parameters
+        resource.mountpointRegex = resource.mountpointRegex ||
+            new RegExp(resource.mountpoint.replace(/\/:\w+(\/|$)/g, '/[^/]+$1'));
+        return resource.mountpointRegex.test(path);
     });
 }
 
@@ -158,32 +162,61 @@ function createEmptyJsonDocumentation() {
     };
 }
 
-function jsonDocumentationForResource(resource, callback) {
-    if (resource.json) {
-        return callback(null, resource.json);
-    }
-
-    jsonDocumentationFromFile(resource.markdownPath, resource.mountpoint,
-        function (error, json) {
-            resource.json = json;
-            callback(error, json);
+function jsonDocumentationFromFile(markdownPath, mountpoint, callback) {
+    loadPreparsedDocumentation(markdownPath, function (error, json) {
+        if (json) {
+            return callback(null, json);
         }
-    );
+
+        var warnings = [];
+        var context = {};
+        async.waterfall([
+            loadFullMarkdown.bind(null, markdownPath, mountpoint, warnings),
+            function grabMarkdown(markdown, done) {
+                context.markdown = markdown;
+                done(null, markdown);
+            },
+            parseApiBlueprint,
+            decorateWarnings.bind(null, context, markdownPath),
+            prependWarnings.bind(null, warnings),
+            function writeParsedJson(json, done) {
+                fs.writeFile(preparsedJsonPath(markdownPath), JSON.stringify(json), function (error) {
+                    done(null, json);
+                });
+            }
+        ], callback);
+    });
 }
 
-function jsonDocumentationFromFile(markdownPath, mountpoint, callback) {
-    var warnings = [];
-    var context = {};
-    async.waterfall([
-        loadFullMarkdown.bind(null, markdownPath, mountpoint, warnings),
-        function grabMarkdown(markdown, done) {
-            context.markdown = markdown;
-            done(null, markdown);
-        },
-        parseApiBlueprint,
-        decorateWarnings.bind(null, context, markdownPath),
-        prependWarnings.bind(null, warnings)
-    ], callback);
+function preparsedJsonPath(markdownPath) {
+    return markdownPath + '-preparsed.json';
+}
+
+function loadPreparsedDocumentation(markdownPath, callback) {
+    fs.stat(preparsedJsonPath(markdownPath), function (error, preparsedStats) {
+        if (error) {
+            return callback(error);
+        }
+        fs.stat(markdownPath, function (error, markdownStats) {
+            if (error) {
+                return callback(error);
+            }
+            if (preparsedStats.mtime.getTime() > markdownStats.mtime.getTime()) {
+                fs.readFile(preparsedJsonPath(markdownPath), {encoding: 'utf8'}, function (error, content) {
+                    if (error) {
+                        return callback(error);
+                    }
+                    try {
+                        return callback(null, JSON.parse(content));
+                    } catch (e) {
+                        return callback(e);
+                    }
+                });
+            } else {
+                return callback();
+            }
+        });
+    });
 }
 
 function loadFullMarkdown(markdownPath, mountpoint, warnings, callback) {
@@ -197,7 +230,7 @@ function loadFullMarkdown(markdownPath, mountpoint, warnings, callback) {
         transclude.bind(null, null),
         replaceTemplateVariables.bind(null, resource),
         transclude.bind(null, warnings),
-        replaceTabs
+        cleanWhitespace
     ], callback);
 }
 
@@ -237,8 +270,9 @@ function transclude(warnings, markdown, done) {
     hercule.transcludeString(markdown, logger, done.bind(null, null));
 }
 
-function replaceTabs(markdown, done) {
+function cleanWhitespace(markdown, done) {
     markdown = markdown.replace(/\t/g, '    ');
+    markdown = markdown.replace(/\r\n?/g, '\n');
     done(null, markdown);
 }
 
@@ -268,7 +302,7 @@ function decorateWarnings(context, markdownPath, json, done) {
         _.each(warning.location, function(location) {
             location.file = markdownPath;
             if (location.index) {
-                location.line = findKey(location.index, lineStarts) || lineStarts.length;
+                location.line = Number(findKey(location.index, lineStarts) || lineStarts.length);
                 location.column = location.index - lineStarts[location.line - 1] + 1;
                 location.resourceId = findKey(location.index, resourceEnds);
             }
@@ -310,7 +344,7 @@ function buildResourceRegExp(resource) {
     if (resource.name) {
         header += resource.name + ' +\\[ *';
     }
-    header += '([A-Z]+ +)?'
+    header += '([A-Z]+ +)?';
     header += resource.uriTemplate;
     if (resource.name) {
         header += resource.name + ' *\\]';
@@ -347,7 +381,24 @@ function mergeJsonDocumentation(targetJson, json) {
     return targetJson;
 }
 
+function decorateExternalPrefix(json, prefix) {
+    if (json && prefix !== localPrefix) {
+        json.__domain = prefix;
+        json.ast.metadata = json.ast.metadata || [];
+        if (!_.find(json.ast.metadata, {name: 'HOST'})) {
+            json.ast.metadata.push({
+                name: 'HOST',
+                value: domains[prefix].url
+            });
+        }
+    }
+}
+
 function matchAction(jsonDocumentation, path, method) {
+    if (!jsonDocumentation || !path || !method) {
+        return undefined;
+    }
+
     var result;
     _.each(jsonDocumentation.ast.resourceGroups, function(resourceGroup) {
         _.each(resourceGroup.resources, function(resource) {

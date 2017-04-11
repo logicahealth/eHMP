@@ -8,7 +8,6 @@ define([
     var detailCommunicator = {
 
         initialize: function(appletId) {
-
             // expose detail view through messaging
             var channel = ADK.Messaging.getChannel(appletId);
             channel.reply('detailView', function(params) {
@@ -25,13 +24,15 @@ define([
                     viewModel: {
                         parse: AppletHelper.parseDocResponse
                     },
-                    onError: function(model, response) {
-                        if (ERROR_LOG) console.log("Documents: detail communicator fetch Error");
+                    onError: function(model, resp) {
+                        if (ERROR_LOG) {
+                            response.reject(resp);
+                        }
                     },
                     cache: true
                 };
-
                 var data = ADK.PatientRecordService.fetchCollection(fetchOptions);
+
                 data.on('sync', function() {
                     var detailModel = data.first();
                     if (detailModel) {
@@ -48,7 +49,6 @@ define([
                             response.reject(results);
                         });
                     } else {
-
                         // we didn't find the document in document-view, so check in the uid resource
                         var uidFetchOptions = {
                             criteria: {
@@ -61,13 +61,12 @@ define([
                             },
                             onError: function(model, response) {
                                 if (ERROR_LOG) console.log("Documents detail communicator fetch Error");
-                            },                            
+                            },
                             cache: true
                         };
                         uidFetchOptions.onSuccess = function(uidData) {
                             var uidDetailModel = uidData.first();
 
-                            // console.log("got uid model: " + JSON.stringify(uidDetailModel.attributes));
                             var docType = uidDetailModel.get('kind');
                             var resultDocCollection = AppletHelper.getResultsFromUid(uidDetailModel);
                             var childDocCollection = AppletHelper.getChildDocs(uidDetailModel);

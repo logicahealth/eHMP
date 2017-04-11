@@ -4,34 +4,32 @@ VPRJCONFIG ;KRM/CJE -- Set up JDS configuration
 SETUP ;
  ; Add default route/url map and default generic data stores
  N SEQ,STORE,DONE,URLMAP
- ; Clear out the VPRCONFIG global to pickup changes coded in this routine
- K ^VPRCONFIG
  ; Set default timeouts
  ; Global timeout
- S ^VPRCONFIG("timeout")=30
+ S:'$G(^VPRCONFIG("timeout")) ^VPRCONFIG("timeout")=30
  ; Section specific timeouts
  ;
  ; Operational Data
- S ^VPRCONFIG("timeout","odindex")=30
- S ^VPRCONFIG("timeout","odbuild")=30
- S ^VPRCONFIG("timeout","odclear")=30
- S ^VPRCONFIG("timeout","odconvert")=30
- S ^VPRCONFIG("timeout","odstore")=30
- S ^VPRCONFIG("timeout","oddelete")=30
- S ^VPRCONFIG("timeout","odhash")=1
+ S:'$G(^VPRCONFIG("timeout","odindex")) ^VPRCONFIG("timeout","odindex")=30
+ S:'$G(^VPRCONFIG("timeout","odbuild")) ^VPRCONFIG("timeout","odbuild")=30
+ S:'$G(^VPRCONFIG("timeout","odclear")) ^VPRCONFIG("timeout","odclear")=30
+ S:'$G(^VPRCONFIG("timeout","odconvert")) ^VPRCONFIG("timeout","odconvert")=30
+ S:'$G(^VPRCONFIG("timeout","odstore")) ^VPRCONFIG("timeout","odstore")=30
+ S:'$G(^VPRCONFIG("timeout","oddelete")) ^VPRCONFIG("timeout","oddelete")=30
+ S:'$G(^VPRCONFIG("timeout","odhash")) ^VPRCONFIG("timeout","odhash")=1
  ;
  ; Patient Data
- S ^VPRCONFIG("timeout","ptindex")=30
- S ^VPRCONFIG("timeout","ptbuild")=30
- S ^VPRCONFIG("timeout","ptclear")=30
- S ^VPRCONFIG("timeout","ptconvert")=30
- S ^VPRCONFIG("timeout","ptstore")=30
- S ^VPRCONFIG("timeout","ptdelete")=30
- S ^VPRCONFIG("timeout","pthash")=1
- S ^VPRCONFIG("timeout","jpid")=30
+ S:'$G(^VPRCONFIG("timeout","ptindex")) ^VPRCONFIG("timeout","ptindex")=30
+ S:'$G(^VPRCONFIG("timeout","ptbuild")) ^VPRCONFIG("timeout","ptbuild")=30
+ S:'$G(^VPRCONFIG("timeout","ptclear")) ^VPRCONFIG("timeout","ptclear")=30
+ S:'$G(^VPRCONFIG("timeout","ptconvert")) ^VPRCONFIG("timeout","ptconvert")=30
+ S:'$G(^VPRCONFIG("timeout","ptstore")) ^VPRCONFIG("timeout","ptstore")=30
+ S:'$G(^VPRCONFIG("timeout","ptdelete")) ^VPRCONFIG("timeout","ptdelete")=30
+ S:'$G(^VPRCONFIG("timeout","pthash")) ^VPRCONFIG("timeout","pthash")=1
+ S:'$G(^VPRCONFIG("timeout","jpid")) ^VPRCONFIG("timeout","jpid")=30
  ;
  ; Generic Data Store
- S ^VPRCONFIG("timeout","gds")=30
+ S:'$G(^VPRCONFIG("timeout","gds")) ^VPRCONFIG("timeout","gds")=30
  ;
  ; Add default generic data stores
  F SEQ=1:1 S STORE=$P($T(DEFAULTSTORE+SEQ),";;",2) Q:STORE="zzzzz"  D
@@ -84,6 +82,7 @@ ADDSTORE(DB,GLOBAL,VER)
  ; CRUD Operations
  D ADDURL("GET",DB_"/{uid}","GET^VPRJGDS",DB) ; Return given document
  D ADDURL("PUT",DB_"/{uid}","SET^VPRJGDS",DB) ; Set given document - UID provided
+ D ADDURL("PATCH",DB_"/{uid}","SET^VPRJGDS",DB) ; update a given document - UID provided
  D ADDURL("DELETE",DB_"/{uid}","DEL^VPRJGDS",DB) ; Delete given document
  ; Index Operations
  D ADDURL("GET",DB_"/index/{indexName}","INDEX^VPRJGDS",DB) ; Retrieve using index
@@ -188,6 +187,7 @@ URLMAP ; map URLs to entry points (HTTP methods handled within entry point)
  ;;POST;vpr/jpid;ASSOCIATE^VPRJPR
  ;;DELETE;vpr/jpid/{jpid};DISASSOCIATE^VPRJPR
  ;;DELETE;vpr/jpid/clear;CLEAR^VPRJPR
+ ;;POST;vpr/jpid/query/;JPIDQUERY^VPRJPR
  ;;POST;session/set/this;SET^VPRJSES
  ;;PUT;session/set/this;SET^VPRJSES
  ;;GET;session/get/{_id};GET^VPRJSES
@@ -252,5 +252,9 @@ URLMAP ; map URLs to entry points (HTTP methods handled within entry point)
  ;;DELETE;error/clear/this;CLR^VPRJERR
  ;;GET;error/clear/this;CLR^VPRJERR
  ;;PUT;{store};CREATEDB^VPRJCONFIG
+ ;;GET;documentation;DATA^VPRJDOCS
+ ;;GET;documentation/index;INDEX^VPRJDOCS
+ ;;GET;documentation/parameters/{parameter};PARAMETERS^VPRJDOCS
+ ;;GET;sync/combinedstat/{icnpidjpid};COMBINED^VPRJPSTATUS
  ;;zzzzz
  Q

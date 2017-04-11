@@ -49,11 +49,11 @@ function signOrder(req, res) {
     var signatureCode = input.signatureCode;
     var orders = input.orders;
     var pid = input.patientIEN;
-    var locationId = input.locationIEN;
+    var locationIEN = input.locationIEN;
     var rpcConfig = getVistaRpcConfiguration(req.app.config, req.session.user.site, userSession);
     // rpcConfig.context = 'OR CPRS GUI CHART';
 
-    if (isNullish(pid) || isNullish(locationId) || isNullish(signatureCode) || isNullish(orders) || _.isEmpty(orders) || ('' in orders)) {
+    if (isNullish(pid) || isNullish(locationIEN) || isNullish(signatureCode) || isNullish(orders) || _.isEmpty(orders) || ('' in orders)) {
         var error = {
             message: 'REQUEST NOT VALID'
         };
@@ -66,7 +66,7 @@ function signOrder(req, res) {
     async.series([
             function sendOrders(callback) {
                 var args = [];
-                args.push(pid, duz, locationId, signatureCode, orders);
+                args.push(pid, duz, locationIEN, signatureCode, orders);
                 RpcClient.callRpc(req.logger, rpcConfig, 'HMP WRITEBACK SIGN ORDERS', args, function(error, result) {
                     var parsedError = {},
                         parsedResult = {};

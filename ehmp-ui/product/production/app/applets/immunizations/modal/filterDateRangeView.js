@@ -65,14 +65,18 @@ define([
         },
         setDatePickers: function(fromDate, toDate) {
             this.$('.input-group.date#customDateRange1').datepicker({
-                format: 'mm/dd/yyyy'
+                format: 'mm/dd/yyyy',
+                todayBtn: 'linked',
+                todayHighlight: true
             });
             if (fromDate !== null) {
                 this.$('.input-group.date#customDateRange1').datepicker('update', fromDate);
             }
 
             this.$('.input-group.date#customDateRange2').datepicker({
-                format: 'mm/dd/yyyy'
+                format: 'mm/dd/yyyy',
+                todayBtn: 'linked',
+                todayHighlight: true
             });
             if (toDate !== null) {
                 this.$('.input-group.date#customDateRange2').datepicker('update', toDate);

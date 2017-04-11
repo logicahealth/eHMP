@@ -10,9 +10,12 @@ require('../../../../env-setup');
 var _ = require('underscore');
 
 var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
-var config = require(global.VX_ROOT + 'worker-config');
+var wConfig = require(global.VX_ROOT + 'worker-config');
+var config = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
+
 config.terminology.host = vx_sync_ip;
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
+var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
 
 var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
 var xformer = require(global.VX_HANDLERS + 'record-enrichment-request/record-enrichment-allergy-xformer');
@@ -109,6 +112,7 @@ var terminologyUtil = new TerminologyUtil(log, log, config);
 //-----------------------------------------------------------------
 var jdsCodedDodValue = { system : 'urn:oid:2.16.840.1.113883.6.86', code : 'C0030842', display : 'Penicillins' };
 
+var terminologyUtil = new TerminologyUtil(log, log, config);
 describe('record-enrichment-allergy-xformer.js', function() {
     describe('transformAndEnrichRecord()', function() {
         it('Happy Path with VA Allergy', function() {

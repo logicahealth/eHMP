@@ -177,6 +177,13 @@ define([
             }
         });
 
+        Messaging.on('app:logged-in', function(){
+            if (UserService.getStatus() === UserService.STATUS.LOGGEDIN) {
+                logoutWarning = 3;
+                resetLogoutTimeout();
+            }
+        });
+        
         Messaging.on('app:start app:logged-in screen:display user:sessionRefresh', function() {
             if (UserService.getStatus() === UserService.STATUS.LOGGEDIN) {
                 resetLogoutTimeout();

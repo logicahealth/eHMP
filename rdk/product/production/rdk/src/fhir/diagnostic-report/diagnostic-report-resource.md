@@ -2,7 +2,7 @@
 
 ## Diagnosticreport diagnosticreport [{{{path}}}]
 
-### Fhir diagnosticreport [GET {{{path}}}{?limit}{&service}{&domain}{&date}{&fields}]
+### Fhir diagnosticreport [GET {{{path}}}{?limit}{&service}{&domain}{&date}]
 
 Converts 'laboratory' 'imaging' or 'accession' vpr resource into a FHIR diagnostic resport.
 
@@ -23,8 +23,6 @@ Converts 'laboratory' 'imaging' or 'accession' vpr resource into a FHIR diagnost
 
 
     + date (string, optional) - Obtained date/time (e.g. date=>2015/01/15)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

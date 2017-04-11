@@ -2,14 +2,21 @@ define([
     'backbone',
     'marionette',
     'jquery',
+    'underscore',
     'main/Session',
     'api/Messaging'
-], function(Backbone, Marionette, $, session, Messaging) {
+], function(Backbone, Marionette, $, _, session, Messaging) {
     'use strict';
 
     var APPLET_STORAGE_KEY = 'appletStorage';
 
+    function buildAppletStorageName(context) {
+        context = context || ADK.WorkspaceContextRepository.currentContext.get('id');
+        return context + '-' + APPLET_STORAGE_KEY;
+    }
+
     var Storage = {
+
         check: {
             supportsSessionStorage: function() {
                 if (typeof(window.sessionStorage) === 'undefined') {
@@ -29,11 +36,11 @@ define([
                 }
                 return true;
             },
-            appletHasSessionStorage: function(appletId, model) {
+            appletHasSessionStorage: function(appletModelName, model, context) {
                 if (!model) {
-                    model = Storage.get.sessionModel(APPLET_STORAGE_KEY);
+                    model = Storage.get.sessionModel(buildAppletStorageName(context));
                 }
-                if (!(model.has(appletId))) {
+                if (!(model.has(appletModelName))) {
                     return false;
                 }
                 return true;
@@ -42,20 +49,28 @@ define([
         set: {
             sessionModel: function(key, value, preference) {
                 if (Storage.check.supportsSessionStorage()) {
-                    window.sessionStorage.setItem(key, JSON.stringify(value.toJSON()));
+                    window.sessionStorage.setItem(key, JSON.stringify(value));
                 }
                 if ((!preference || preference === 'session') && Storage.check.existsInMemory(key)) {
                     session[key].set(value.toJSON());
                 }
             },
-            appletStorageModel: function(workspaceId, appletId, key, value) {
-                var appletKey = Storage.getAppletStorageKey(workspaceId, appletId);
-                var model = Storage.get.appletStorageModel(workspaceId, appletId, key);
-                model.get(appletKey)[key] = value;
-                Storage.set.sessionModel(APPLET_STORAGE_KEY, model);
+            appletStorageModel: function(workspaceId, appletId, appletAttribute, value, context) {
+                var model = Storage.get.appletStorageModel(workspaceId, appletId, context);
+                var appletModelName = Storage.getAppletStorageModelName(workspaceId, appletId);
+                model.get(appletModelName)[appletAttribute] = value;
+                Storage.set.sessionModel(buildAppletStorageName(context), model);
             }
         },
         get: {
+            sessionCollection: function(key, preference) {
+                if ((!preference || preference === 'session') && Storage.check.existsInMemory(key)) {
+                    return session[key];
+                } else if (Storage.check.supportsSessionStorage()) {
+                    return new Backbone.Collection(window.sessionStorage.getItem(key));
+                }
+                return null;
+            },
             sessionModel: function(key, preference) {
                 if ((!preference || preference === 'session') && Storage.check.existsInMemory(key)) {
                     return session[key];
@@ -64,30 +79,39 @@ define([
                 }
                 return null;
             },
-            appletStorageModel: function(workspaceId, appletId) {
-                var key = Storage.getAppletStorageKey(workspaceId, appletId);
-                var model = Storage.get.sessionModel(APPLET_STORAGE_KEY);
-                if (!Storage.check.appletHasSessionStorage(key, model)) {
-                    model.set(key, {});
+            sessionObject: function(key, preference) {
+                if ((!preference || preference === 'session') && Storage.check.existsInMemory(key)) {
+                    return session[key];
+                } else if (Storage.check.supportsSessionStorage()) {
+                    return JSON.parse(window.sessionStorage.getItem(key));
+                }
+                return null;
+            },
+            appletStorageModel: function(workspaceId, appletId, context) {
+                var model = Storage.get.sessionModel(buildAppletStorageName(context));
+                var appletModelName = Storage.getAppletStorageModelName(workspaceId, appletId);
+                if (!Storage.check.appletHasSessionStorage(appletModelName, model, context)) {
+                    model.set(appletModelName, {});
                 }
                 return model;
             }
         },
         delete: {
-            sessionModel: function(key, setDefault) {
+            sessionModel: function(key, setDefault, options) {
                 if (Storage.check.existsInMemory(key)) {
-                    session.clearSessionModel(key, setDefault);
+                    session.clearSessionModel(key, setDefault, options);
                 } else if (Storage.check.supportsSessionStorage()) {
                     window.sessionStorage.removeItem(key);
                 }
             },
-            appletStorageModel: function(workspaceId, appletId) {
-                var key = Storage.getAppletStorageKey(workspaceId, appletId);
-                var model = Storage.get.sessionModel(APPLET_STORAGE_KEY);
+            appletStorageModel: function(workspaceId, appletId, context) {
+                var appletModelName = Storage.getAppletStorageModelName(workspaceId, appletId);
+                var appletStorageName = buildAppletStorageName(context);
+                var model = Storage.get.sessionModel(appletStorageName);
 
-                if (Storage.check.appletHasSessionStorage(key, model)) {
-                    model.unset(key);
-                    Storage.set.sessionModel(APPLET_STORAGE_KEY, model);
+                if (Storage.check.appletHasSessionStorage(appletModelName, model)) {
+                    model.unset(appletModelName);
+                    Storage.set.sessionModel(appletStorageName, model);
                 }
             },
             all: function() {
@@ -109,10 +133,10 @@ define([
         getModel_SessionStoragePreference: function(key) {
             return this.get.sessionModel(key);
         },
-        getAppletStorageKey: function(workspaceId, appletId) {
+        getAppletStorageModelName: function(workspaceId, appletId) {
             return workspaceId + '$' + appletId;
         },
-        setAppletStorageModel: function(appletId, key, value, bindToWorkspace, customWorkspace) {
+        setAppletStorageModel: function(appletId, appletAttribute, value, bindToWorkspace, customWorkspace, context) {
             var workspaceId;
             if (!_.isUndefined(customWorkspace)) {
                 workspaceId = customWorkspace;
@@ -122,9 +146,9 @@ define([
             if (!_.isUndefined(bindToWorkspace) && !bindToWorkspace) {
                 workspaceId = 'unbound-' + appletId;
             }
-            this.set.appletStorageModel(workspaceId, appletId, key, value);
+            this.set.appletStorageModel(workspaceId, appletId, appletAttribute, value, context);
         },
-        getAppletStorageModel: function(appletId, key, boundToWorkspace, customWorkspace) {
+        getAppletStorageModel: function(appletId, appletAttribute, boundToWorkspace, customWorkspace, context) {
             var workspaceId;
             if (!_.isUndefined(customWorkspace)) {
                 workspaceId = customWorkspace;
@@ -134,23 +158,31 @@ define([
             if (!_.isUndefined(boundToWorkspace) && !boundToWorkspace) {
                 workspaceId = 'unbound-' + appletId;
             }
-            var appletKey = this.getAppletStorageKey(workspaceId, appletId);
-            return this.get.appletStorageModel(workspaceId, appletId).get(appletKey)[key];
+            var appletModelName = this.getAppletStorageModelName(workspaceId, appletId);
+            return this.get.appletStorageModel(workspaceId, appletId, context).get(appletModelName)[appletAttribute];
         },
-        clearAppletStorageModel: function(appletId, customWorkspace) {
+        clearAppletStorageModel: function(appletId, customWorkspace, context) {
             var workspaceId;
             if (!_.isUndefined(customWorkspace)) {
                 workspaceId = customWorkspace;
             } else {
                 workspaceId = Messaging.request('get:current:screen').id;
             }
-            this.delete.appletStorageModel(workspaceId, appletId);
+            this.delete.appletStorageModel(workspaceId, appletId, context);
         }
     };
 
-    session.user.on('change', Storage.set.sessionModel('user', session.user, 'sessionStorage'));
-    session.patient.on('change', Storage.set.sessionModel('patient', session.patient, 'sessionStorage'));
-    session.globalDate.on('change', Storage.set.sessionModel('globalDate', session.globalDate, 'sessionStorage'));
+    Storage.set.sessionObject = Storage.set.sessionModel;
+
+    session.user.on('change', function() {
+        Storage.set.sessionModel('user', session.user, 'sessionStorage');
+    });
+    session.patient.on('change', function() {
+        Storage.set.sessionModel('patient', session.patient, 'sessionStorage');
+    });
+    session.globalDate.on('change', function() {
+        Storage.set.sessionModel('globalDate', session.globalDate, 'sessionStorage');
+    });
 
     return Storage;
 });

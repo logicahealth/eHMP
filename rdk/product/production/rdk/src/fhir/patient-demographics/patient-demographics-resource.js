@@ -3,8 +3,24 @@ var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
 var localPath = {};
-var errors = require('../common/errors.js');
-var helpers = require('../common/utils/helpers.js');
+var errors = require('../common/errors');
+var helpers = require('../common/utils/helpers');
+var confUtils = require('../conformance/conformance-utils');
+var conformance = require('../conformance/conformance-resource');
+
+var fhirToJDSAttrMap = [];
+
+//Issue call to Conformance registration
+conformance.register(confUtils.domains.PATIENT, createConformanceData());
+
+function createConformanceData() {   
+    var resourceType = confUtils.domains.PATIENT;
+    var profileReference = 'http://www.hl7.org/FHIR/2015May/patient.html';
+    var interactions = [ 'read' ];
+
+    return confUtils.createConformanceData(resourceType, profileReference,
+            interactions, fhirToJDSAttrMap);
+}
 
 var getResourceConfig = function() {
     return [{
@@ -17,7 +33,6 @@ var getResourceConfig = function() {
         permitResponseFormat: true
     }];
 };
-
 
 function getPatientDemographics(req, res) {
     //res.send(convertToFhir(result));
@@ -134,7 +149,7 @@ function convertToFhir(result) {
         }],
         'text': {
             'status': 'generated',
-            'div': '<div>' + (data.fullName || '') + '. SSN: ' + (data.ssn || '') + '</div>'
+            'div': '<div>' + _.escape((data.fullName || '') + '. SSN: ' + (data.ssn || '')) + '</div>'
         },
         'identifier': [{
             'use': 'official',
@@ -377,3 +392,4 @@ function convertToFhir(result) {
 
 module.exports.getResourceConfig = getResourceConfig;
 module.exports.convertToFhir = convertToFhir;
+module.exports.createConformanceData = createConformanceData;

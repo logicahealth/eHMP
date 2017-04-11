@@ -253,11 +253,11 @@ This section details "quick development" steps. For a detailed explanation, see 
 
 License & Authors
 -----------------
-- Author::     ua Timberman (<joshua@opscode.com>)
+- Author:: Joshua Timberman (<joshua@opscode.com>)
 - Contributor:: Eric G. Wolfe (<wolfe21@marshall.edu>)
 - Contributor:: Fletcher Nichol (<fletcher@nichol.ca>)
-- Contributor:: Tim       (<tsmith@limelight.com>)
-- Contributor::                 (<charles@opscode.com>)
+- Contributor:: Tim Smith (<tsmith@limelight.com>)
+- Contributor:: Charles Johnson (<charles@opscode.com>)
 - Contributor:: Brad Knowles (<bknowles@momentumsi.com>)
 
 ```text

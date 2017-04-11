@@ -1,0 +1,43 @@
+DLW - This is adapted from Charles Hellige's (author of the tools in sync-tools) email
+
+Tools Directory
+All the scripts we use are located in /opt/vxsync/tools/sync-tools. They are found on the vxSync server for each environment.
+
+Help/Usage
+Most of the scripts have a help feature:   ./scriptname.sh --help
+(the only one attached that does not is disk-stats.sh)
+
+tools.properties
+This is a configuration file that is used by many of the scripts. It's environment specific. The one here is for dev.
+
+email-sysadmin.sh
+This is the script that sends the hourly System Status report. It call several other scripts to generate the content of the email. The cron job that runs this script in prod looks like:
+MAILTO=""
+3,33 * * * * /opt/tools/beanstalk-tool.sh -history &>/dev/null 2>&1
+1,31 * * * * /opt/tools/beanstalk-tool.sh -n "vxs-hdr" -history &>/dev/null 2>&1
+0 6-21 * * * source /opt/tools/email-sysadmin.sh &>/dev/null 2>&1
+0 0 * * *    /opt/tools/beanstalk-tool.sh -delete &>/dev/null 2>&1
+
+disk-stats.sh
+This is the script that checks the disk usage on each server.
+
+beanstalk-tool.sh
+This is the script that generates the "Buried Jobs Report" section of the email. It can be used to obtain a variety of beanstalk information as well as kicking buried jobs. See the Cron job above for how its used in prod.
+
+log-report.sh & log-report-conf.sh
+This is the script used to parse and analyze logs. "log-report.sh" is the primary script and is the same for all environments, "log-report-conf.sh" is the configuration file so it will be different for each environment. The version here is the configuration file for dev.
+
+Prerequisites
+Additional open source tools used in the above scripts.
+
+JQ
+JQ is a lightweight and flexible command-line JSON processor. Project home is at https://stedolan.github.io/jq/. The Redhat Enterprise Linux RPM for JQ version 1.4 is in the rpm directory.
+
+AnsiFilter
+Ansifilter converts ANSI terminal escape codes into HTML format. This is used when preparing script output for the HTML email report. The Redhat Enterprise Linux RPM for Ansi Filter version 1.11 is in the rpm directory.
+
+Postfix
+Postfix is a mail server created by IBM as an alternative to Sendmail program. This is pre-installed on our servers but needs to be configured before mail can be sent. Running the install.sh script will configure postfix to work okay for the dev environment.
+
+install.sh
+This is a script that was added to install the jq and ansifilter programs in the vxsync VM in dev. It also will make a change to postfix that should allow the email-sysadmin.sh script to work from the vxsync VM in dev.

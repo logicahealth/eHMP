@@ -37,20 +37,24 @@ EVALEXPR(CLAUSE,UID) ; evaluate expression in a clause
  I $G(HTTPREQ("store"))'="",$D(^VPRCONFIG("store",$G(HTTPREQ("store")))) G EVALEXGDS
  I $G(HTTPREQ("store"))="xvpr" N PID S PID=$O(^VPRPTJ("KEY",UID,""))
  ;
+ N JPID
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERR(222) Q 0
+ ;
  ; get the value or values to be evaluated & go to appropriate evaluator
  N VALUE
  ; get based latest stamp time
  N STAMP
- S STAMP=$O(^VPRPT(PID,UID,""),-1)
+ S STAMP=$O(^VPRPT(JPID,PID,UID,""),-1)
  ; case TYPE begin
- I CLAUSE("type")=1 S VALUE=$G(^VPRPT(PID,UID,STAMP,CLAUSE("field"))) Q $$EVALONE
- I CLAUSE("type")=2 S VALUE=$G(^VPRPT(PID,UID,STAMP,CLAUSE("field"),CLAUSE("sub"))) Q $$EVALONE
+ I CLAUSE("type")=1 S VALUE=$G(^VPRPT(JPID,PID,UID,STAMP,CLAUSE("field"))) Q $$EVALONE
+ I CLAUSE("type")=2 S VALUE=$G(^VPRPT(JPID,PID,UID,STAMP,CLAUSE("field"),CLAUSE("sub"))) Q $$EVALONE
  N INST,RSLT
  S INST="",RSLT=0
  ; return try if -any- of the values evaluate to true
- F  S INST=$O(^VPRPT(PID,UID,STAMP,CLAUSE("mult"),INST)) Q:'INST  D  Q:RSLT
- . I CLAUSE("type")=3 S VALUE=$G(^VPRPT(PID,UID,STAMP,CLAUSE("mult"),INST,CLAUSE("field"))) S RSLT=$$EVALONE Q
- . I CLAUSE("type")=4 S VALUE=$G(^VPRPT(PID,UID,STAMP,CLAUSE("mult"),INST,CLAUSE("field"),CLAUSE("sub"))) S RSLT=$$EVALONE Q
+ F  S INST=$O(^VPRPT(JPID,PID,UID,STAMP,CLAUSE("mult"),INST)) Q:'INST  D  Q:RSLT
+ . I CLAUSE("type")=3 S VALUE=$G(^VPRPT(JPID,PID,UID,STAMP,CLAUSE("mult"),INST,CLAUSE("field"))) S RSLT=$$EVALONE Q
+ . I CLAUSE("type")=4 S VALUE=$G(^VPRPT(JPID,PID,UID,STAMP,CLAUSE("mult"),INST,CLAUSE("field"),CLAUSE("sub"))) S RSLT=$$EVALONE Q
  Q RSLT
  ;
 EVALEXJD ; come here to evaluate non-patient data
@@ -93,11 +97,28 @@ EVALEXGDS ; come here to evaluate generic data store filters
  Q RSLT
  ;
 EVALONE() ; perform operation on a single value
+ ; Normalize dates for a proper comparison, supports numeric and string date comparisons
+ I $E(CLAUSE)="d" D
+ . I CLAUSE="dbegins" S $E(CLAUSE)="" Q  ; dbegins should behave like begins
+ . N VLEN,CLEN
+ . S VLEN=14-$L(VALUE)
+ . S VALUE=VALUE_$E("00000000000000",1,VLEN)
+ . I CLAUSE="dbetween" D
+ . . S CLEN=14-$L($G(CLAUSE("low")))
+ . . S CLAUSE("low")=$G(CLAUSE("low"))_$E("00000000000000",1,CLEN)
+ . . S CLEN=14-$L($G(CLAUSE("high")))
+ . . S CLAUSE("high")=$G(CLAUSE("high"))_$E("00000000000000",1,CLEN)
+ . E  D
+ . . S CLEN=14-$L($G(CLAUSE("value")))
+ . . S CLAUSE("value")=$G(CLAUSE("value"))_$E("00000000000000",1,CLEN)
+ . S $E(CLAUSE)=""
+ ;
  I CLAUSE="eq" Q (VALUE=CLAUSE("value"))
  I CLAUSE="in" Q:'$L(VALUE) 0  Q $D(CLAUSE("list",VALUE))
  I CLAUSE="ne" Q (VALUE'=CLAUSE("value"))
  I CLAUSE="exists" Q (($L(VALUE)>0)=$G(CLAUSE("value"),1))
  I CLAUSE="nin" Q:'$L(VALUE) 0  Q '$D(CLAUSE("list",VALUE))
+ I CLAUSE="begins" Q ($E(VALUE,1,$L(CLAUSE("value")))=CLAUSE("value"))
  ;
  I $L(VALUE),(+VALUE=VALUE),'$D(CLAUSE("asString")) G EVALNUM
 EVALSTR ; use ] to evaluate string values
@@ -142,6 +163,7 @@ PARSE(IN,OUT) ; parse filter syntax
  . . I STACK(LEVEL)=2 D
  . . . I TOKEN="""" S @$$CURREF(LEVEL-1,"asString")=""
  . . . I @$$CURREF(LEVEL-1)="between" S @$$CURREF(LEVEL-1,"low")=ITEM Q
+ . . . I @$$CURREF(LEVEL-1)="dbetween" S @$$CURREF(LEVEL-1,"low")=ITEM Q
  . . . I @$$CURREF(LEVEL-1)="like" S @$$CURREF(LEVEL-1,"pattern")=$$MAKEPAT(ITEM,0) Q
  . . . I @$$CURREF(LEVEL-1)="ilike" S @$$CURREF(LEVEL-1,"pattern")=$$MAKEPAT(ITEM,1) Q
  . . . I @$$CURREF(LEVEL-1)="exists" S @$$CURREF(LEVEL-1,"value")=$S(ITEM="false":0,1:1) Q
@@ -168,7 +190,7 @@ CURREF(TO,PROP,ITEM) ; Set current global reference based on stack
  ;
 SETOPER(ITEM) ; Set operation
  S ITEM=$$LOW^XLFSTR(ITEM)
- I ",or,and,not,eq,ne,gt,lt,gte,lte,in,between,like,ilike,exists,nin,"[(","_ITEM_",") S @$$CURREF(LEVEL)=ITEM I 1
+ I ",or,and,not,eq,ne,gt,lt,gte,lte,deq,dne,dgt,dlt,dgte,dlte,in,between,dbetween,like,ilike,begins,dbegins,exists,nin,"[(","_ITEM_",") S @$$CURREF(LEVEL)=ITEM I 1
  E  D SETERR(106,"unsupported operator")
  Q
 SETFLD(FIELD) ; Classify the field into its type and parts
@@ -228,10 +250,11 @@ CHKOUT(CLAUSES) ; check the output of parse for errors in initial statement
  ;
 CHKONE(CLAUSE) ; check and individual clause for errors
  I ",and,or,not,"[(","_CLAUSE_",")  Q $$CHKOUT(.CLAUSE)
- I ",or,and,not,eq,ne,gt,lt,gte,lte,in,between,like,ilike,exists,nin,"'[(","_CLAUSE_",") D SETERR(106,"unsupported operator") Q 0
+ I ",or,and,not,eq,ne,gt,lt,gte,lte,deq,dne,dgt,dlt,dgte,dlte,in,between,dbetween,like,ilike,begins,dbegins,exists,nin,"'[(","_CLAUSE_",") D SETERR(106,"unsupported operator") Q 0
  I CLAUSE="between",('$D(CLAUSE("low"))!'$D(CLAUSE("high"))) D SETERR(106,"missing low or high") Q 0
+ I CLAUSE="dbetween",('$D(CLAUSE("low"))!'$D(CLAUSE("high"))) D SETERR(106,"missing low or high") Q 0
  I (CLAUSE="in"!(CLAUSE="nin")),($D(CLAUSE("list"))'>1) D SETERR(106,"missing list for in operation") Q 0
- I ",eq,ne,gt,lt,gte,lte,"[(","_CLAUSE_","),'$D(CLAUSE("value")) D SETERR(106,"missing value") Q 0
+ I ",begins,dbegins,eq,ne,gt,lt,gte,lte,deq,dne,dgt,dlt,dgte,dlte"[(","_CLAUSE_","),'$D(CLAUSE("value")) D SETERR(106,"missing value") Q 0
  I (CLAUSE="like"!(CLAUSE="ilike")),'$D(CLAUSE("pattern")) D SETERR(106,"missing like pattern") Q 0
  I '$D(CLAUSE("field")) D SETERR(106,"missing field") Q 0
  I CLAUSE("type")=2,'$D(CLAUSE("sub")) D SETERR(106,"missing sub-field") Q 0

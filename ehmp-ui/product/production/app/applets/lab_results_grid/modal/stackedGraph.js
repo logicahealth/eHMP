@@ -206,10 +206,10 @@ define([
                 this.resetSharedModalDateRangeOptions();
             }
 
-            this.fetchOptions.resourceTitle = "patient-record-labsbytype";
+            this.fetchOptions.resourceTitle = "patient-record-searchbytype-lab";
             var fetchName = this.model.attributes.typeName;
             this.fetchOptions.criteria = {
-                'type.name': this.model.attributes.typeName,
+                'type': this.model.attributes.typeName,
                 'date.end': moment().format('YYYYMMDD')
             };
             this.fetchOptions.viewModel = {
@@ -256,7 +256,8 @@ define([
                 }
 
                 ADK.Messaging.getChannel('stackedGraph').trigger('readyToChart', {
-                    response: self
+                    response: self,
+                    requestParams: self.options.requestParams
                 });
 
             }, this);

@@ -10,7 +10,7 @@ $icon-font-path: '../../bower_components/bootstrap-sass/vendor/assets/fonts/boot
 //  --------------------------------------------------
 @import '../libs/bower/bootstrap/css/bootstrap.min.css';
 @import '../libs/bower/bootstrap/bootstrap-datepicker/bootstrap-datepicker3.css';
-@import '../libs/bower/bootstrap/bootstrap-timepicker/bootstrap-timepicker.css';
+@import '../libs/custom/bootstrap/bootstrap-timepicker/timepicker.scss';
 @import '../libs/custom/bootstrap/accessibility/bootstrap-accessibility.css';
 
 //
@@ -19,7 +19,7 @@ $icon-font-path: '../../bower_components/bootstrap-sass/vendor/assets/fonts/boot
 @import '../libs/bower/backgrid/backgrid.min.css';
 @import '../libs/bower/backgrid/backgrid-filter/backgrid-filter.min.css';
 @import '../libs/custom/backgrid/backgrid-paginator-master/backgrid-paginator-custom.css';
-@import '../libs/bower/gridster/jquery.gridster.min.css';
+@import '../libs/custom/gridster/jquery.gridster.min.css';
 
 //
 //  ui plugins
@@ -27,3 +27,4 @@ $icon-font-path: '../../bower_components/bootstrap-sass/vendor/assets/fonts/boot
 @import '../libs/bower/nouislider/jquery.nouislider.min.css';
 @import '../libs/bower/nouislider/jquery.nouislider.pips.min.css';
 @import '../libs/custom/select2/select2.css';
+@import '../libs/bower/jScrollPane/jquery.jscrollpane.css';

@@ -1,0 +1,33 @@
+{  
+   "resourceType":"Observation",
+   "code":{  
+      "coding":[  
+         {  
+            "code":"77089006",
+            "display":"Rheumatoid Factor",
+            "system":"http://snomed.org"
+         }
+      ]
+   },
+   "identifier":[  
+      {  
+         "system":"http://snomed.org",
+         "value":"77089006"
+      }
+   ],
+   "comments":"Rheumatoid Factor",
+   "modifierExtension":[  
+      {  
+         "url":"http://org.cognitive.cds.invocation.fhir.datanature.duration",
+         "valueCode":"60d"
+      },
+      {  
+         "url":"http://org.cognitive.cds.invocation.fhir.datanature",
+         "valueCode":"Output"
+      },
+      {  
+         "url":"http://org.cognitive.cds.invocation.fhir.datanature.status",
+         "valueCode":"Failed"
+      }
+   ]
+}

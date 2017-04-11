@@ -1,3 +1,12 @@
+dependencies {
+    compile group: 'joda-time', name: 'joda-time', version: '2.9'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.6.2'
+}
+
+repositories {
+    maven {url "https://store.vistacore.us/nexus/content/groups/public"}
+}
+
 jar {
     baseName "Order"
 }

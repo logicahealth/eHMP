@@ -11,7 +11,7 @@
                 <label for="calendar">Calendar</label>
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar color-primary"></i></span>
-                    <input type="text" id="calendar" class="form-control" title="Please enter in a date in the following format, MM/DD/YYYY" placeholder="MM/DD/YYYY" />
+                    <input type="text" id="calendar" class="form-control" title="Enter in a date in the following format, MM/DD/YYYY" placeholder="MM/DD/YYYY" />
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
                 <label for="calendartooltip">Calendar With Tooltip</label>
                 <p class="help-block">Date format examples: "Today", "T+1month", "01/01/2015".</p>
                 <div class="input-group date">
-                    <input type="text" id="calendartooltip" class="form-control" data-toggle="tooltip" data-placement="top" data-trigger="focus" title="Please enter date in text or numerical format" />
+                    <input type="text" id="calendartooltip" class="form-control" data-toggle="tooltip" data-placement="top" data-trigger="focus" title="Enter date in text or numerical format" />
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                         </ul>
                     </div>
                     <span class="input-group-addon date-format" aria-hidden="true"><i class="fa fa-calendar color-primary"></i></span>
-                    <input type="text" id="calendar2" class="form-control" title="Please enter in a date in the following format, MM/DD/YYYY" placeholder="MM/DD/YYYY" />
+                    <input type="text" id="calendar2" class="form-control" title="Enter in a date in the following format, MM/DD/YYYY" placeholder="MM/DD/YYYY" />
                 </div>
             </div>
         </div>
@@ -72,7 +72,7 @@
     &lt;label for=&quot;calendar&quot;&gt;Calendar&lt;/label&gt;
     &lt;div class=&quot;input-group date&quot;&gt;
         &lt;span class=&quot;input-group-addon&quot;&gt;&lt;i class=&quot;fa fa-calendar color-primary&quot;&gt;&lt;/i&gt;&lt;/span&gt;
-        &lt;input type=&quot;text&quot; id=&quot;calendar&quot; class=&quot;form-control&quot; title=&quot;Please enter in a date in the following format, MM/DD/YYYY&quot; placeholder=&quot;MM/DD/YYYY&quot; /&gt;
+        &lt;input type=&quot;text&quot; id=&quot;calendar&quot; class=&quot;form-control&quot; title=&quot;Enter in a date in the following format, MM/DD/YYYY&quot; placeholder=&quot;MM/DD/YYYY&quot; /&gt;
     &lt;/div&gt;
 &lt;/div&gt;
             </pre>
@@ -113,7 +113,7 @@ $(function() {
                         &lt;/ul&gt;
                     &lt;/div&gt;
                     &lt;span class="input-group-addon date-format" aria-hidden="true"&gt;&lt;i class="fa fa-calendar color-primary"&gt;&lt;/i&gt;&lt;/span&gt;
-                    &lt;input type="text" id="calendar2" class="form-control" title="Please enter in a date in the following format, MM/DD/YYYY" placeholder="MM/DD/YYYY" /&gt;
+                    &lt;input type="text" id="calendar2" class="form-control" title="Enter in a date in the following format, MM/DD/YYYY" placeholder="MM/DD/YYYY" /&gt;
                 &lt;/div&gt;
             &lt;/div&gt;
         &lt;/div&gt;
@@ -174,13 +174,13 @@ $(function() {
     var dateFormat = function(f) {
         if (f == "MM/YYYY") {
             $("#calendar2").attr("placeholder", "MM/YYYY");
-            $("#calendar2").attr("title", "Please enter in a date in the following format, MM/YYYY");
+            $("#calendar2").attr("title", "Enter in a date in the following format, MM/YYYY");
         } else if (f == "YYYY") {
             $("#calendar2").attr("placeholder", "YYYY");
-            $("#calendar2").attr("title", "Please enter in a date in the following format, YYYY");
+            $("#calendar2").attr("title", "Enter in a date in the following format, YYYY");
         } else {
             $("#calendar2").attr("placeholder", "MM/DD/YYYY");
-            $("#calendar2").attr("title", "Please enter in a date in the following format, MM/DD/YYYY");
+            $("#calendar2").attr("title", "Enter in a date in the following format, MM/DD/YYYY");
         }
         $("#calendar2").focus();
     }

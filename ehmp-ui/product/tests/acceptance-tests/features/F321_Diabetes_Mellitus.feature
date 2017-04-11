@@ -1,4 +1,4 @@
-@F321 @US6173 @TC302 @regression @US7259 @test_no_logout
+@F321 @US6173 @TC302 @regression @US7259 @test_no_logout @future @US146753
 Feature: Condition-based Analysis Workspaces - Immutable Diabetes Workspace
 
 # Filter tests based off of steps in eHMP_Regression Test Procedures for IOC Release 1.2.1_v1.0_08192015dia
@@ -8,7 +8,7 @@ Background:
 
 # @US6173 
 # Scenario: User performs pre steps
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	And user searches for and selects "Eight,Patient"
 	And Default Screen is active
 
@@ -22,7 +22,7 @@ Scenario: Diabetes Mellitus CBW  displays expected applets
 	When the user navigates to the Diabetes Mellitus CBW
 	And the applets are displayed on the Diabetes Mellitus CBW
       | applet                 |
-      | CONDITIONS             |
+      | PROBLEMS               |
       | STACKED GRAPHS         |
       | APPOINTMENTS & VISITS  |
       | CLINICAL REMINDERS     |
@@ -32,12 +32,12 @@ Scenario: Diabetes Mellitus CBW  displays expected applets
       | DOCUMENTS              |
       | VISTA HEALTH SUMMARIES |
 
-@US6173 @TC302_13 @DE3079 @debug @DE3444
+@US6173 @TC302_13 @DE3079 @DE3444 @future @US13456
 Scenario: Verify the Diabetes Mellitus CBW has the correct Filters applied for Documents
       When the user navigates to the Diabetes Mellitus CBW
       Then the Documents applet reports filtered "Filtered Diabetes"
 		
-@US6173 @TC302_13 @debug @DE3444
+@US6173 @TC302_13 @DE3444
 Scenario: Verify the Diabetes Mellitus CBW has the correct Filters applied for Documents
 	When the user navigates to the Diabetes Mellitus CBW
 	# Then the Documents applet reports filtered "Filtered Diabetes"
@@ -77,12 +77,12 @@ Scenario: Verify the Diabetes Mellitus CBW has the correct Filters applied for D
       | Wound           |
 	
 
-@US6173 @TC302_14 @DE3079 @debug @DE3444
+@US6173 @TC302_14 @DE3079 @DE3444 @future @US13456
 Scenario: Verify the Diabetes Mellitus CBW has the correct Filters applied for Appt/Visit
       When the user navigates to the Diabetes Mellitus CBW
       Then the Appointment & Visit applet reports filtered "Filtered Diabetes"
 
-@US6173 @TC302_14 @debug @DE3444
+@US6173 @TC302_14 @DE3444
 Scenario: Verify the Diabetes Mellitus CBW has the correct Filters applied for Appt/Visit
 	When the user navigates to the Diabetes Mellitus CBW
 	# Then the Appointment & Visit applet reports filtered "Filtered Diabetes"
@@ -106,12 +106,12 @@ Scenario: Verify the Diabetes Mellitus CBW has the correct Filters applied for A
       | Wound           |
 
 
-@US6173 @TC302_15 @DE3079 @debug @DE3444
+@US6173 @TC302_15 @DE3079 @DE3444 @future @US13456
 Scenario: Verify the Diabetes Mellitus CBW has the correct Filters applied for Timeline
       When the user navigates to the Diabetes Mellitus CBW
       Then the Timeline applet reports filtered "Filtered Diabetes"
 
-@US6173 @TC302_15 @debug @DE3444
+@US6173 @TC302_15 @DE3444
 Scenario: Verify the Diabetes Mellitus CBW has the correct Filters applied for Timeline
       When the user navigates to the Diabetes Mellitus CBW
       # Then the Timeline applet reports filtered "Filtered Diabetes"
@@ -126,12 +126,12 @@ Scenario: Verify the Diabetes Mellitus CBW has the correct Filters applied for T
       | Surgery |
       | Visit |
 
-@US6173 @TC302_16 @DE3079 @debug @DE3444
+@US6173 @TC302_16 @DE3079 @DE3444 @future @US13456
 Scenario: Verify the Diabetes Mellitus CBW has the correct Filters applied for Meds
       When the user navigates to the Diabetes Mellitus CBW
       Then the Meds Review applet reports filtered "Filtered Diabetes"
 
-@US6173 @TC302_16 @debug @DE3444
+@US6173 @TC302_16 @DE3444
 Scenario: Verify the Diabetes Mellitus CBW has the correct Filters applied for Meds
       When the user navigates to the Diabetes Mellitus CBW
       # Then the Meds Review applet reports filtered "Filtered Diabetes"

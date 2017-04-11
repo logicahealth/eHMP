@@ -12,14 +12,13 @@ define([
             form.model.unset('labTestText');
             //reset collection sample
             form.model.unset('collectionSample');
-            form.model.unset('collectionSampleText');
             form.model.unset('collectionSampleListCache');
             form.ui.collectionSample.trigger('control:picklist:set', []);
             form.model.unset('otherCollectionSample');
             form.model.unset('collectionSampleDisabled');
             //reset specimen
             form.model.unset('specimen');
-            form.model.unset('specimenListCache');
+            form.model.unset('labSpecimenListCache');
             form.ui.specimen.trigger('control:picklist:set', []);
             form.model.unset('otherSpecimen');
             form.model.unset('specimenText');
@@ -29,11 +28,6 @@ define([
             form.model.unset('addToNoteUrgencyText');
             form.model.unset('urgencyDisabled');
             form.ui.urgency.trigger('control:picklist:set', []);
-            //reset howOften, howLong
-            form.model.unset('howOften');
-            form.model.unset('howLong');
-            form.model.unset('howOftenText');
-            form.ui.howOften.trigger('control:picklist:set', []);
             //reset collectionType
             form.model.unset('collectionType');
             form.model.unset('collectionTypeText');
@@ -59,7 +53,6 @@ define([
             form.model.unset('forTest');
 
             form.model.unset('labCollSampDefault');
-            form.model.unset('labCanCollect');
             form.model.unset('alertMessage');
             form.model.unset('errorMessage');
             form.model.unset('savedTime');
@@ -69,7 +62,6 @@ define([
             form.model.unset('problemRelationship');
             form.model.unset('annotation');
             form.ui.activity.trigger('control:picklist:set', []);
-            form.ui.acceptDrpDwnContainer.trigger('control:disable', true);
             form.enableFooterButtons(false);
             this.setInitialCollectionDateTimeValues(form);
             form.hideDynamicFields();
@@ -82,6 +74,7 @@ define([
             form.model.unset('collectionTime');
         },
         handleSpecimen: function(form) {
+            form.model.unset('otherSpecimen');
             if (form.model.get('specimen') === '0') {
                 form.ui.otherSpecimenContainer.trigger('control:hidden', false);
                 form.ui.otherSpecimen.trigger('control:required', true);
@@ -90,6 +83,9 @@ define([
                 form.ui.otherSpecimenContainer.trigger('control:hidden', true);
                 form.ui.otherSpecimen.trigger('control:required', false);
             }
+            this.updateSpecimenText(form);
+        },
+        handleOtherSpecimen: function(form) {
             this.updateSpecimenText(form);
         },
         handleReqCom: function(form, reqCom) {
@@ -142,28 +138,6 @@ define([
             }
             form.model.set('doseDrawText', doseText + drawText);
         },
-        handleDoseDate: function(form) {
-            var doseDate = form.model.get('doseDate');
-            if (doseDate !== moment().format('MM/DD/YYYY')) {
-                form.model.set('doseTime', '00:00');
-            }
-        },
-        handleDoseTime: function(form) {
-            if (form.model.get('doseTime') && form.model.get('doseTime') !== '00:00' && form.model.get('doseTime') !== '0:00') {
-                form.model.set('doseDate', moment().format('MM/DD/YYYY'));
-            }
-        },
-        handleDrawDate: function(form) {
-            var drawDate = form.model.get('drawDate');
-            if (drawDate !== moment().format('MM/DD/YYYY')) {
-                form.model.set('drawTime', '00:00');
-            }
-        },
-        handleDrawTime: function(form) {
-            if (form.model.get('drawTime') && form.model.get('drawTime') !== '00:00' && form.model.get('drawTime') !== '0:00') {
-                form.model.set('drawDate', moment().format('MM/DD/YYYY'));
-            }
-        },
         handleOrderComment: function(form) {
             form.model.set({
                 forTest: '~For Test: ' + form.model.get('labTestText'),
@@ -179,9 +153,10 @@ define([
                 anticoagulantText: '~ANTICOAGULANT: ' + form.model.get('anticoagulant')
             });
         },
-        handleAlertMessage: function(form, message) {
-            if (message) {
-                form.model.set('alertMessage', message);
+        handleAlertMessage: function(form, messages) {
+            if (!_.isEmpty(messages)) {
+                var alertMessage = _.pluck(messages, 'text').join(' ');
+                form.model.set('alertMessage', alertMessage);
             }
         },
         handleActivity: function(form) {
@@ -189,66 +164,18 @@ define([
         },
         updateSpecimenText: function(form) {
             if (form.model.get('specimen') && form.model.get('specimen') !== '0') {
-                var filteredSpecimenListCache = _.filter(form.model.get('specimenListCache'), function(item) {
-                   return item.ien === form.model.get('specimen');
-                }, this);
+                var filteredSpecimenListCache = _.filter(form.model.get('labSpecimenListCache'), {'ien': form.model.get('specimen')});
                 if (filteredSpecimenListCache.length > 0) {
                     form.model.set('specimenText', filteredSpecimenListCache[0].name);
                 }
             } else {
-                var filteredOtherSpecimenListCache = _.filter(form.model.get('otherSpecimenListCache'), function(item) {
-                   return item.ien === form.model.get('otherSpecimen');
-                }, this);
+                var filteredOtherSpecimenListCache = _.filter(form.model.get('allSpecimensListCache'), {'value': form.model.get('otherSpecimen')});
                 if (filteredOtherSpecimenListCache.length > 0) {
-                    form.model.set('specimenText', filteredOtherSpecimenListCache[0].name);
+                    form.model.set('specimenText', filteredOtherSpecimenListCache[0].label);
                 }
                 else {
                     form.model.unset('specimenText');
                 }
-            }
-        },
-        updateCollectionSampleText: function(form) {
-            if (form.model.get('collectionSample') && form.model.get('collectionSample') !== '0') {
-                var collectionSampleListCache = form.model.get('collectionSampleListCache');
-                var selectedCollectionSample = _.filter(collectionSampleListCache, function(e) {
-                    return e.ien == form.model.get('collectionSample');
-                });
-                if (selectedCollectionSample.length > 0) {
-                    form.model.set('collectionSampleText', selectedCollectionSample[0].name);
-                }
-            } else {
-                var otherCollectionSampleListCache = form.model.get('otherCollectionSampleListCache');
-                var selectedOtherCollectionSample = _.filter(otherCollectionSampleListCache, function(e) {
-                    return e.ien == form.model.get('otherCollectionSample');
-                });
-                if (selectedOtherCollectionSample.length > 0) {
-                    form.model.set('collectionSampleText', selectedOtherCollectionSample[0].name);
-                    var otherSpecimenListCache = form.model.get('otherSpecimenListCache');
-                    if (selectedOtherCollectionSample[0].specPtr){
-                        var otherSpecimenToSelect = [];
-                        if (otherSpecimenListCache) {
-                            otherSpecimenToSelect = _.filter(otherSpecimenListCache, function(e) {
-                                return e.ien == selectedOtherCollectionSample[0].specPtr;
-                            });
-                        }
-                        if (otherSpecimenListCache && otherSpecimenToSelect.length > 0) {
-                            form.ui.otherSpecimen.trigger('control:picklist:set', [otherSpecimenListCache]);
-                        } else {
-                            form.ui.otherSpecimen.trigger('control:picklist:set', [{ien: selectedOtherCollectionSample[0].specPtr, name: selectedOtherCollectionSample[0].specName}]);
-                        }
-                        form.model.set('otherSpecimen', selectedOtherCollectionSample[0].specPtr);
-                        form.ui.otherSpecimen.trigger('control:disabled', true);
-                    }
-                    else {
-                        form.model.unset('otherSpecimen');
-                        form.ui.otherSpecimen.trigger('control:picklist:set', [otherSpecimenListCache]);
-                        form.ui.otherSpecimen.trigger('control:disabled', false);
-                    }
-                }
-                else {
-                    form.model.unset('collectionSampleText');
-                }
-                this.updateSpecimenText(form);
             }
         },
         handleCollectionType: function(form) {
@@ -259,6 +186,8 @@ define([
             form.ui.collectionTime.trigger('control:hidden', true);
             form.ui.collectionDate.trigger('control:required', false);
             form.ui.collectionDateTimePicklist.trigger('control:required', false);
+            form.ui.futureLabCollectDate.trigger('control:required', false);
+            form.ui.futureLabCollectTime.trigger('control:required', false);
             form.ui.futureLabCollectTimesContainer.trigger('control:hidden', true);
             switch (form.model.get('collectionType')) {
                 case 'WC':
@@ -271,7 +200,9 @@ define([
                 case 'LC':
                     if (form.model.get('collectionDateTimeLC') && form.model.get('collectionDateTimeLC').length > 0) {
                         form.ui.collectionDateTimePicklist.trigger('control:picklist:set', [form.model.get('collectionDateTimeLC')]);
-                        form.model.set('collectionDateTimePicklist', form.model.get('collectionDateTimeLC')[0].code);
+                        if (_.isEmpty(form.model.get('collectionDateTimePicklist'))) {
+                            form.model.set('collectionDateTimePicklist', form.model.get('collectionDateTimeLC')[0].code);
+                        }
                     }
                     form.ui.collectionDateTimePicklist.trigger('control:hidden', false);
                     form.ui.collectionDateTimePicklist.trigger('control:disabled', false);
@@ -289,8 +220,17 @@ define([
                     form.ui.immediateCollection.trigger('control:disabled', false);
                     form.ui.immediateCollectionDate.trigger('control:disabled', false);
                     form.ui.immediateCollectionTime.trigger('control:disabled', false);
+                    this.setDefaultImmediateCollectionDateTime(form);
                     break;
             }
+        },
+        setDefaultImmediateCollectionDateTime: function(form) {
+            var serverTimeDifference = form.model.get('serverTimeDifference');
+            var serverTime = moment().add(serverTimeDifference, 'milliseconds');
+            form.model.set({
+                immediateCollectionDate: moment().format('MM/DD/YYYY'),
+                immediateCollectionTime: serverTime.add(5, 'minutes').format('HH:mm')
+            });
         },
         handleCollectionDateTime: function(form) {
             var collectionDate = form.model.get('collectionDate');
@@ -359,7 +299,7 @@ define([
             var siteCode = ADK.UserService.getUserSession().get('site');
             var location;
             if (ADK.PatientRecordService.getCurrentPatient().get('visit')) {
-                location = ADK.PatientRecordService.getCurrentPatient().get('visit').localId;
+                location = ADK.PatientRecordService.getCurrentPatient().get('visit').locationUid.split(':').pop();
             }
             var pid = ADK.PatientRecordService.getCurrentPatient().get("pid");
             var modelUrl = '/resource/write-health-data/labSupportData?site=' + siteCode + '&type=lab-collect-times&dateSelected=' + dateSelected.toString('yyyyMMddHHmmss') + '&location=' + location + '&pid=' + pid;
@@ -391,12 +331,9 @@ define([
                 });
                 var selectedUrgencyName = (!_.isEmpty(selectedUrgency) ? selectedUrgency[0].name : undefined);
                 if (selectedUrgencyName) {
-                    form.model.unset('urgencyText');
+                    form.model.set('urgencyText', selectedUrgencyName, {silent: true});
                     form.model.unset('addToNoteUrgencyText');
                     var selectedUrgencyNameLowerCase = selectedUrgencyName.toLowerCase();
-                    if (selectedUrgencyNameLowerCase === 'stat') {
-                        form.model.set('urgencyText', selectedUrgencyName);
-                    }
                     if (selectedUrgencyNameLowerCase !== "routine") {
                         form.model.set('addToNoteUrgencyText', selectedUrgencyName);
                     }
@@ -404,24 +341,27 @@ define([
             }
         },
         handleCollectionSample: function(form) {
+            form.model.unset('otherCollectionSample');
             form.model.unset('specimen');
+            form.model.unset('otherSpecimen');
+            form.ui.specimen.trigger('control:disabled', true);
             if (form.model.get('collectionSample') === '0') {
-                form.ui.otherCollectionSampleContainer.trigger('control:hidden', false);
+                form.ui.otherCollectionSample.trigger('control:hidden', false);
                 form.ui.otherCollectionSample.trigger('control:required', true);
                 this.setSpecimenToOther(form);
             }
             else {
-                form.ui.otherCollectionSampleContainer.trigger('control:hidden', true);
+                form.ui.otherCollectionSample.trigger('control:hidden', true);
                 form.ui.otherCollectionSample.trigger('control:required', false);
                 var collectionSampleListCache = form.model.get('collectionSampleListCache');
-                var specimenListCache = form.model.get('specimenListCache');
+                var labSpecimenListCache = form.model.get('labSpecimenListCache');
                 if (collectionSampleListCache) {
                     var selectedCollectionSample = _.filter(collectionSampleListCache, function(e) {
                         return e.ien == form.model.get('collectionSample');
                     });
                     if (selectedCollectionSample.length > 0) {
                         if (selectedCollectionSample[0].text) {
-                            form.model.set('alertMessage', selectedCollectionSample[0].text);
+                            this.handleAlertMessage(form, selectedCollectionSample);
                         }
                         if (selectedCollectionSample[0].unused1 && selectedCollectionSample[0].unused1 !== '') {
                             this.handleReqCom(form, selectedCollectionSample[0].unused1);
@@ -435,38 +375,68 @@ define([
                         form.ui.otherSpecimen.trigger('control:required', false);
 
                         if (selectedCollectionSample[0].specPtr === '') {
-                            this.setSpecimenToOther(form);
+                            form.ui.specimen.trigger('control:picklist:set', [labSpecimenListCache]);
+                            form.model.set('specimen', '0');
+                            form.ui.specimen.trigger('control:disabled', false);
+                            form.ui.otherSpecimen.trigger('control:disabled', false);
+                            form.model.unset('otherSpecimen');
                         }
                         else {
                             var specimen = { ien: selectedCollectionSample[0].specPtr, name: selectedCollectionSample[0].specName };
                             this.selectSpecimen(form, specimen);
+                            form.ui.specimen.trigger('control:disabled', true);
                         }
                     }
-                } else if (specimenListCache) {
-                    form.ui.specimen.trigger('control:picklist:set', [specimenListCache]);
+                } else if (labSpecimenListCache) {
+                    form.ui.specimen.trigger('control:picklist:set', [labSpecimenListCache]);
                 }
                 else {
                     this.setSpecimenToOther(form);
                 }
             }
-            this.updateCollectionSampleText(form);
+            this.builCollectionTypeList(form);
+        },
+        handleOtherCollectionSample: function(form) {
+            var otherCollectionSampleListCache = form.model.get('otherCollectionSampleListCache');
+            var selectedOtherCollectionSample = _.filter(otherCollectionSampleListCache, function(e) {
+                return e.ien == form.model.get('otherCollectionSample');
+            });
+            if (!_.isEmpty(selectedOtherCollectionSample)) {
+                form.model.unset('specimen');
+                if (selectedOtherCollectionSample[0].specPtr){
+                    form.ui.specimen.trigger('control:picklist:set', [{ien: selectedOtherCollectionSample[0].specPtr, name: selectedOtherCollectionSample[0].specName}]);
+                    form.ui.specimen.trigger('control:disabled', true);
+                    form.model.set('specimen', selectedOtherCollectionSample[0].specPtr);
+                    form.ui.otherSpecimen.trigger('control:hidden', true);
+                }
+                else {
+                    form.ui.specimen.trigger('control:picklist:set', [form.model.get('otherSpecimenCache')]);
+                    form.model.set('specimen', '0');
+                    form.ui.specimen.trigger('control:disabled', false);
+                    form.ui.otherSpecimen.trigger('control:hidden', false);
+                    form.ui.otherSpecimen.trigger('control:disabled', false);
+                    form.model.unset('otherSpecimen');
+                }
+            }
+            var modifiedCollectionTypes = this.getLimitedCollectionTypes(form.model.get('collectionTypeListCache'));
+            form.ui.collectionType.trigger('control:picklist:set', [modifiedCollectionTypes]);
         },
         setSpecimenToOther: function(form) {
             form.ui.specimen.trigger('control:picklist:set', [{ien: '0', name: 'Other'}]);
+            form.ui.otherSpecimen.trigger('control:disabled', true);
             form.model.set('specimen', '0');
             form.model.unset('otherSpecimen');
-            form.ui.otherSpecimen.trigger('control:picklist:set', [form.model.get('otherSpecimenListCache')]);
         },
         selectSpecimen: function(form, specimen) {
-            var specimenListCache = form.model.get('specimenListCache');
+            var labSpecimenListCache = form.model.get('labSpecimenListCache');
             var specimenToSelect = [];
-            if (specimenListCache) {
-                specimenToSelect = _.filter(specimenListCache, function(e) {
+            if (labSpecimenListCache) {
+                specimenToSelect = _.filter(labSpecimenListCache, function(e) {
                     return e.ien == specimen.ien;
                 });
             }
-            if (specimenListCache && specimenToSelect.length > 0) {
-                form.ui.specimen.trigger('control:picklist:set', [specimenListCache]);
+            if (labSpecimenListCache && specimenToSelect.length > 0) {
+                form.ui.specimen.trigger('control:picklist:set', [labSpecimenListCache]);
             } else {
                 form.ui.specimen.trigger('control:picklist:set', [{ien: specimen.ien, name: specimen.name}]);
             }
@@ -476,8 +446,6 @@ define([
                 specimenText:specimen.name
             });
         },
-
-
         getSelectControlSorter: function(data, params) {
             var filterText = params.term;
             if (filterText) {
@@ -503,7 +471,7 @@ define([
             var collectionSampleList = [];
             var previousEntry = null;
             var text = '';
-            collSamp.values.forEach(function(entry) {
+            _.each(collSamp, function(entry) {
                 if (!_.isUndefined(entry.text)) {
                     text += entry.text;
                 } else if (!_.isUndefined(entry.ien)) {
@@ -521,7 +489,7 @@ define([
                 previousEntry.text = text;
             }
             collectionSampleList.push(previousEntry);
-            collectionSampleList.forEach(function(collectionSample){
+            _.each(collectionSampleList, function(collectionSample){
                 if (!_.isUndefined(collectionSample.tubeTop) && collectionSample.tubeTop !== '') {
                     collectionSample.displayName = collectionSample.name + ' (' + collectionSample.tubeTop + ')';
                 }
@@ -531,20 +499,115 @@ define([
             });
             return collectionSampleList;
         },
-        labCanCollect: function(labCollSampDefault, collSampList) {
-            var labCanCollect = false;
+        builCollectionTypeList: function(form) {
+            var collectionTypes = form.model.get('collectionTypeListCache');
+            var collectionSample = form.model.get('collectionSample');
+            var labCanCollect = form.model.labCanCollect();
+            form.model.unset('collectionType');
 
-            if (!_.isUndefined(collSampList)){
-                var selectedCollectionSample = _.filter(collSampList, function(e) {
-                    return e.n == labCollSampDefault;
-                });
-                if (!_.isEmpty(selectedCollectionSample)) {
-                    labCanCollect = true;
+            if (collectionSample !== '0' && !labCanCollect) {
+                collectionTypes = this.getLimitedCollectionTypes(collectionTypes);
+            }
+            form.ui.collectionType.trigger('control:picklist:set', [collectionTypes]);
+            if (form.model.get('collectionTypeDefault') === 'LC' || form.model.get('collectionTypeDefault') === 'I') {
+                if (labCanCollect) {
+                    form.model.set('collectionType', form.model.get('collectionTypeDefault'));
+                }
+                else {
+                    form.model.set('collectionType', 'WC');
                 }
             }
-            return labCanCollect;
-        }
+            else {
+                form.model.set('collectionType', form.model.get('collectionTypeDefault'));
+            }
+        },
+        getLimitedCollectionTypes: function(collectionTypes) {
+            var modifiedCollectionTypes = [];
+            if (!_.isEmpty(collectionTypes)) {
+                collectionTypes.forEach(function(entry) {
+                    if (entry.code !== 'LC' && entry.code !== 'I') {
+                        modifiedCollectionTypes.push(entry);
+                    }
+                });
+            }
+            else {
+                form.model.set('serverSideError', 'invalid-response');
+                return;
+            }
+            return modifiedCollectionTypes;
+        },
+        handleEnableActivity: function() {
+            var notificationDate = '';
 
+            // If we're enabling the activity reporting, we set the default date to a week after the current
+            // collection date if it's defined, otherwise, set it to a week from today.
+            var isEnabled = this.model.get('isActivityEnabled');
+            if (isEnabled) {
+                var collectionMoment = FormUtils.getCollectionMoment.apply(this);
+                var startMoment = collectionMoment.isValid() ? collectionMoment : moment();
+                notificationDate = startMoment.add(7, 'days').format('MM/DD/YYYY');
+            }
+            if (!this.isDraftLoading) {
+                this.model.set('notificationDate', notificationDate);
+            }
+            this.ui.notificationDate.trigger('control:disabled', !isEnabled);
+        },
+        handleNotificationDate: function() {
+            if (this.isDraftLoading) {
+                return;
+            }
+            var pastDueDate = '';
+
+            var notificationMoment = moment(this.model.get('notificationDate'), 'MM/DD/YYYY');
+            if (notificationMoment.isValid()) {
+
+                // Validate the current notification date. If the values are different, we defer a re-set of the
+                // 'notificationDate' to update the control with the valid date.
+                var validNotificationMoment = FormUtils.validateNotificationMoment.call(this, notificationMoment);
+                if (!notificationMoment.isSame(validNotificationMoment, 'day')) {
+                    _.defer(function(model, notificationDate) {
+                        model.set('notificationDate', notificationDate);
+                    }, this.model, validNotificationMoment.format('MM/DD/YYYY'));
+                }
+                pastDueDate = notificationMoment.format('YYYYMMDD');
+            }
+
+            // Pass the notification date, in the correct format ('YYYYMMDD') to the 'pastDueDate' attribute.
+            this.model.set('pastDueDate', pastDueDate, {silent: true});
+        },
+        validateNotificationMoment: function(notificationMoment) {
+
+            // The notification date cannot be before either the collection date or today, whichever is later.
+            var collectionMoment = FormUtils.getCollectionMoment.apply(this);
+            var todayMoment = moment();
+
+            var earliestMoment = collectionMoment.isAfter(todayMoment) ? collectionMoment : todayMoment;
+            return notificationMoment.isBefore(earliestMoment) ? earliestMoment : notificationMoment;
+        },
+        getCollectionMoment: function() {
+            return moment(this.model.get('collectionDate'), 'MM/DD/YYYY');
+        },
+
+        //====================== DRAFT UTILITY FUNCTIONS ======================
+        onBeforeDraftEvent: function(action, option) {
+            this.showInProgress(action + ' draft...');
+            this.enableInputFields(false);
+            this.enableFooterButtons(false);
+        },
+        onDraftSuccessEvent: function(options) {
+            this.hideInProgress();
+            this.$el.trigger('tray.reset');
+        },
+        onDraftErrorEvent: function(options) {
+            this.hideInProgress();
+            this.enableInputFields(true);
+            this.enableFooterButtons(true);
+        },
+        onDraftReadSuccess: function(options) {
+            this.hideInProgress();
+            this.isDraftLoaded = true;
+            this.model.trigger('draft:getData');
+        }
     };
 
     return FormUtils;

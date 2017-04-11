@@ -1,9 +1,10 @@
-@Access_Pjds_stores @F799
+@Access_Pjds_stores @F799 @DE4201
 
 Feature: F799 - View PJDS Stores
 
 @F799_Get_Permission_Sets_List
 Scenario: View array of permission sets
+When the client requests authentication with accessCode "vk1234" and verifyCode "vk1234!!" and site "9E7A" and contentType "application/json"
 When the client requests to view all user permission sets
 Then a successful response is returned
 And the permission sets results contain more than 0 records
@@ -19,9 +20,3 @@ Scenario: View listing of Active and Inactive Users
 When the client requests to view list Active and Inactive users with name search criteria "seven","labtech"
 Then a successful response is returned
 Then the results contains all required fields
-
-@F799_Get_Teams_List
-Scenario: View listing of Teams
-When the client requests to view all teams
-Then a successful response is returned
-And the teams results contain more than 0 records

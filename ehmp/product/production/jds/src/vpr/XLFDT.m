@@ -1,4 +1,4 @@
-XLFDT ;DNS SF/STAFF - Date/Time Functions ;03/27/2003  14:09
+XLFDT ;ISC-SF/STAFF - Date/Time Functions ;03/27/2003  14:09
  ;;8.0;KERNEL;**71,120,166,168,179,280**;Jul 10, 1995
  ;VA FileMan uses 2400 as midnight, many other system use 0000.
  ;This is true for $H and HL7, so a conversion has to adjust

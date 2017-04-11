@@ -179,8 +179,8 @@ run_performance_tests() {
 
 run_test_runner_on_1() {
     #cd $PROJECT_ROOT/product/tests/performance-tests/results/REST_Load_Test_managed/scripts/REST_Load_Test_managed/test_client_1
-    #ssh -F sshconfig_test_client_1 PW      @test_client_1 pwd
-    #ssh -F sshconfig_test_client_1 PW      @test_client_1 /var/scripts/testrunner.sh
+    #ssh -F sshconfig_test_client_1 ec2-user@test_client_1 pwd
+    #ssh -F sshconfig_test_client_1 ec2-user@test_client_1 /var/scripts/testrunner.sh
     
     #cd $PROJECT_ROOT/infrastructure/vagrant/managed/managed-vista-exchange
     cd /var/lib/jenkins/workspace/ehmp-performance-test-build-managed-next/infrastructure/vagrant/managed/managed-vista-exchange

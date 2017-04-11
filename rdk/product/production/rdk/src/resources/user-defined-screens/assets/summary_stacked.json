@@ -1,0 +1,20 @@
+{
+    "_id": "summary_stacked",
+    "userdefinedgraphs": {
+        "applets": [
+            {
+                "graphs": [
+                    {
+                        "graphType": "Lab Tests",
+                        "typeName": "CREATININE"
+                    },
+                    {
+                        "graphType": "Vitals",
+                        "typeName": "BLOOD PRESSURE"
+                    }
+                ],
+                "instanceId": "applet-9"
+            }
+        ]
+    }
+}

@@ -38,21 +38,21 @@ init_script = template tomcat_version do
   variables( :name => tomcat_version)
 end
 
-service tomcat_version do
-  supports :restart => true, :reload => true, :status => true, :start => true, :stop => true
-  action [:enable, :start]
-  notifies :run, "execute[wait for tomcat]", :immediately
-end
-
-execute "wait for tomcat" do
-  command "sleep 5"
-  action :nothing
-end
-
 cookbook_file "#{node['tomcat']['home']}/bin/catalina.sh" do
   source "catalina.sh"
   owner node['tomcat']['user']
   mode "0755"
+end
+
+service tomcat_version do
+  supports :restart => true, :status => true, :start => true, :stop => true
+  action [:enable, :start]
+  notifies :run, "execute[wait for 5]", :immediately
+end
+
+execute "wait for 5" do
+  command "sleep 5"
+  action :nothing
 end
 
 template "/etc/default/#{tomcat_version}" do

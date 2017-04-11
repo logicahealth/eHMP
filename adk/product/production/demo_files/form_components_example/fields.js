@@ -224,7 +224,7 @@ define([
                 control: "select",
                 name: "bp-location-po",
                 label: "Location",
-                title: "To select an option, use the up and down arrow keys then press enter to select",
+                title: "Use up and down arrows to view options and then press enter to select",
                 extraClasses: ["col-xs-6"],
                 disabled: true,
                 pickList: [{
@@ -241,7 +241,7 @@ define([
                 control: "select",
                 name: "bp-method-po",
                 label: "Method",
-                title: "To select an option, use the up and down arrow keys then press enter to select",
+                title: "Use up and down arrows to view options and then press enter to select",
                 extraClasses: ["col-xs-6"],
                 disabled: true,
                 pickList: [{
@@ -257,7 +257,7 @@ define([
             }, {
                 control: "select",
                 label: "Cuff Size",
-                title: "To select an option, use the up and down arrow keys then press enter to select",
+                title: "Use up and down arrows to view options and then press enter to select",
                 name: "bp-cuff-size-po",
                 extraClasses: ["col-xs-6"],
                 disabled: true,
@@ -274,7 +274,7 @@ define([
             }, {
                 control: "select",
                 label: "Position",
-                title: "To select an option, use the up and down arrow keys then press enter to select",
+                title: "Use up and down arrows to view options and then press enter to select",
                 name: "bp-position-po",
                 extraClasses: ["col-xs-6"],
                 disabled: true,
@@ -940,6 +940,16 @@ define([
             options: {
                 minimumInputLength: 1
             }
+        }, {
+            control: "select",
+            name: "select15",
+            label: "select (filter & array & group & highlight)",
+            pickList: timeZonesArray,
+            showFilter: true,
+            groupEnabled: true,
+            options: {
+                minimumInputLength: 1
+            }
         }],
         checkbox: [{
             control: "checkbox",
@@ -997,7 +1007,8 @@ define([
             name: "textarea4",
             label: "textarea (with height set to 5 rows)",
             placeholder: "Enter text...",
-            rows: 5
+            rows: 5,
+            maxlength: 600
         }, {
             control: "textarea",
             name: "textarea5",
@@ -1025,13 +1036,19 @@ define([
         }, {
             control: "container",
             tagName: "p",
-            template: "<hr aria-hidden='true'><p><b>Note:</b> textarea has a default maxlength of '4000'</p>"
+            template: "<hr aria-hidden='true'><p><b>Note:</b> textarea has a default maxlength of 200</p>"
         }, {
             control: "textarea",
             name: "textarea1",
             label: "textarea with sr-only label",
             placeholder: "Enter text...",
             srOnlyLabel: true
+        }, {
+            control: "textarea",
+            name: "textarea10.text",
+            label: "textarea without character count",
+            placeholder: "Enter text...",
+            charCount: false
         }],
         typeahead: [{
             control: "typeahead",
@@ -1399,6 +1416,142 @@ define([
                 value: null
             }]
         }],
+        selectList: [{
+            name: "selectListError",
+            label: "Select List (with error message)",
+            control: "selectList",
+            options: [{
+                label: "Option 1",
+                value: "opt1"
+            }, {
+                label: "Option 2",
+                value: "opt2"
+            }, {
+                label: "Undefined",
+                value: null
+            }]
+        }, {
+            name: "selectList",
+            label: "Select List (sr-only label)",
+            control: "selectList",
+            options: [{
+                label: "Yes",
+                value: true
+            }, {
+                label: "No",
+                value: false
+            }],
+            srOnlyLabel: true
+        }, {
+            name: "selectList_required",
+            label: "Select List (required)",
+            control: "selectList",
+            options: [{
+                label: "Option 1",
+                value: "opt1"
+            }, {
+                label: "Option 2",
+                value: "opt2"
+            }, {
+                label: "Undefined",
+                value: null
+            }],
+            required: true
+        }, {
+            name: "selectList_disabled",
+            label: "Select List (disabled)",
+            control: "selectList",
+            options: [{
+                label: "Option 1",
+                value: "opt1"
+            }, {
+                label: "Option 2",
+                value: "opt2"
+            }, {
+                label: "Undefined",
+                value: null
+            }],
+            disabled: true
+        }, {
+            name: "selectList_disabled_option",
+            label: "Select List (disabled option)",
+            control: "selectList",
+            options: [{
+                label: "Option 1",
+                value: "opt1"
+            }, {
+                label: "Option 2",
+                value: "opt2",
+                disabled: true
+            }, {
+                label: "Undefined",
+                value: null
+            }]
+        }, {
+            name: "selectList_disabled_item",
+            label: "Select List (disabled item)",
+            control: "selectList",
+            options: [{
+                label: "Option 1",
+                value: "opt1"
+            }, {
+                label: "Option 2",
+                value: "opt2"
+            }, {
+                label: "Undefined",
+                value: null
+            }]
+        }, {
+            name: "selectList_required_item",
+            label: "Select List (Required item)",
+            control: "selectList",
+            options: [{
+                label: "Option 1",
+                value: "opt1"
+            }, {
+                label: "Option 2",
+                value: "opt2"
+            }, {
+                label: "Undefined",
+                value: null
+            }]
+        }, {
+            name: "selectList_custom_templates",
+            label: "Select List (with custom templates)",
+            labelTemplate: '<p>{{label}}</p>',
+            valueTemplate: Handlebars.compile('{{selectedLabel this}}'),
+            control: "selectList",
+            options: [{
+                label: "Option 1",
+                value: "opt1"
+            }, {
+                label: "Option 2",
+                value: "opt2"
+            }, {
+                label: "Undefined",
+                value: null
+            }]
+        }, {
+            name: "selectList_template_functions",
+            label: "Select List (with custom template functions)",
+            getLabelTemplate: function(model, index) {
+                return index % 2 ? '<p>{{label}}</p>' : undefined;
+            },
+            getValueTemplate: function(model, index) {
+                return model.get('value') ? Handlebars.compile('Prefilled: {{selectedLabel this}}') : undefined;
+            },
+            control: "selectList",
+            options: [{
+                label: "Option 1",
+                value: "opt1"
+            }, {
+                label: "Option 2",
+                value: "opt2"
+            }, {
+                label: "Undefined",
+                value: null
+            }]
+        }],
         toggleOptionsChecklist: [{
             name: 'toggleOptionsChecklist_v2',
             label: 'toggle options checklist',
@@ -1667,8 +1820,7 @@ define([
                 control: "commentBox",
                 name: "commentCollection2",
                 allowEdit: function(model) {
-                    var currentUser = UserService.getUserSession();
-                    return model.get('author').duz[currentUser.get('site')] === currentUser.get('duz')[currentUser.get('site')];
+                    return true;
                 },
                 allowDelete: function(model) {
                     return true;
@@ -1703,12 +1855,12 @@ define([
                 control: "commentBox",
                 name: "commentCollection3",
                 allowEdit: function(model) {
-                    var currentUser = UserService.getUserSession();
-                    return model.get('author').duz[currentUser.get('site')] === currentUser.get('duz')[currentUser.get('site')];
+                    return false;
                 },
                 allowDelete: function(model) {
                     return true;
                 },
+                required: true,
                 commentTemplate: Handlebars.compile('<strong>{{name}}</strong> {{timeStamp}}<br />{{comment}}'),
                 maxComments: 4,
                 addCommentPosition: 'top',

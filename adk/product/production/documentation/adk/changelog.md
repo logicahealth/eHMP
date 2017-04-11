@@ -16,6 +16,140 @@ Changes that will **NOT** be reflected:
 
 <!-- Update categories: Additions, Changes, Removals, and Fixes -->
 
+## 2016-06-21 (June 21st, 2016) ##
+### Changes ###
+-  [Modal](ui-library/components.md#Modal)'s show function takes a parameter to override the last focused element that has triggered to open the modal instance.  See an example in the doc.
+
+## 2016-06-02 (June 2nd, 2016) ##
+### Changes ###
+- The [Datepicker Control](ui-library/form-controls.md#Utility-Datepicker) now supports dyncamically changing date ranges through trigger events. Example: `$().trigger('control:startDate', '01/01/2016');` and `$().trigger('control:endDate', new Moment());`
+
+## 2016-05-11 (May 11th, 2016) ##
+### Changes ###
+- [ADK.PatientRecordService](using-adk.md#ADK-Services-PatientRecordService)'s setCurrentPatient api has 'navigation' option to skip the navigation. By default the navigation option is set to true to navigate to an appropriate workspace.
+
+## 2016-04-25 (April 25th, 2016) ##
+### Changes ###
+- [ADK.UI.AlertDropdown](ui-library/components.md#Alert-Dropdown-Options) supports having a `backdrop` when the dropdown menu is shown.
+
+## 2016-04-18 (April 18th, 2016) ##
+### Changes ###
+- [ADK.UI.Notification](ui-library/components.md#Notification) supports sticky growl alert and onClick callback. See the api documentation for more info.
+
+## 2016-03-31 (March 31th, 2016) ##
+### Additions ###
+- [How-to-build-Applets](getting-started.md#How-to-build-Applets) section has an example of specifying a list of contexts.
+
+### Changes ###
+- [ADK.PatientRecordService](using-adk.md#ADK-Services-PatientRecordService)'s setCurrentPatient api does navigation checking prior to displaying modal. By default it always asks to confirm, and this can be overwritten by an option **reconfirm**.
+
+## 2016-03-31 (March 31th, 2016) ##
+### Additions ###
+- [ADK.PatientRecordService](using-adk.md#ADK-Services-PatientRecordService)'s setCurrentPatient api has a callback example.
+### Changes ###
+- [ADK.Navigation](using-adk.md#Navigation)'s navigate api has optional parameter.
+- [Comment Box Form Control](ui-library/form-controls.md#Special-Comment-Box) now supports a `disabled` boolean and the corresponding `control:disabled` event.
+- [Tray](ui-library/components.md#Tray) now supports `buttonView` which will override the `buttonLabel` and `iconClass` options and inject a view into (not replace) the button.
+
+## 2016-03-30 (March 30th, 2016) ##
+### Additions ###
+- [ADK.Checks](using-adk.md#Checks) now available for use. This generalizes the concept of [Navigation Checks](using-adk.md#Navigation-Navigation-Checks), which are now considered deprecated. Please register any and all checks through `ADK.Checks.register`.
+
+## 2016-03-23 (March 23rd, 2016) ##
+### Additions ###
+- ADK now supports [Modal](ui-library/components.md#Modal-Options) config option `wrapperClasses` where its value is a string or an array of strings to be used as classes that get added to the top level wrapping element of the modal component.  This option can be used in conjunction with custom css, to apply a unique look to the modal's container or elements.
+
+## 2015-03-22 (March 22st, 2016) ##
+### Additions ###
+- [WorkspaceContextRepository](using-adk.md#ADK-Services-WorkspaceContextRepository) is added to ADK documentation.
+- [Chrome Notifications](using-adk#Applet-Chrome-Adding-Notifications-to-Chrome-Container) allow the injection of one or more notification badges into the chrome header.
+
+## 2016-03-21 (March 21st, 2016) ##
+### Additions ###
+- The [Tray Summary List View](using-adk.md#ADK-Views-Tray-Summary-List-View) now supports the `attributeMapping.nodes` option. Collections with additional nodes will create a nested accordion.
+    - Default: "nodes"
+    - Example:
+        ```JavaScript
+        ADK.Views.TraySummaryList.extend({
+            initialize: function() {
+                // place where collection can be created
+            },
+            options: {
+                label: 'ITEMS',
+                onClick: function(model) {
+                    //...
+                },
+                attributeMapping: {
+                    nodes: 'addenda'
+                }
+            }
+        });
+        ```
+
+## 2015-03-21 (March 21st, 2016) ##
+### Additions ###
+- [Sub Tray Button View](using-adk.md#ADK-Views-Sub-Tray-Button-View) is available to be used as a button view that resembles a workflow sub-tray component.
+
+## 2015-03-18 (March 18th, 2016) ##
+### Changes ###
+- [Select Form Control](ui-library/form-controls.md#Basic-Select)
+  upgraded select2 from 4.0.1 to 4.0.2, and listens to "change selected" instead of "change select".
+- [Modal component](ui-library/components.md#Modal-Options) uses starting z-index of 1111 instead of 10,000.
+
+## 2015-03-16 (March 16th, 2016) ##
+### Changes ###
+- [ADK.PatientRecordService](using-adk.md#ADK-Services-PatientRecordService)'s setCurrentPatient api skips patient confirmation modal screen if the given patient is same as the current patient.
+
+### Additions ###
+- Added a [Select List Form Control](ui-library/form-controls.md#Utility-Select-List).
+    ![selectList](ui-library/assets/selectList.png "SelectList Basic Example")
+
+## 2015-03-15 (March 15th, 2016) ##
+### Changes ###
+- [ADK.PatientRecordService](using-adk.md#ADK-Services-PatientRecordService) is pointing to api/PatientRecordService, and ResourceService.patientRecordService was removed.
+### Additions ###
+- [ADK.PatientRecordService](using-adk.md#ADK-Services-PatientRecordService) has new API 'setCurrentPatient' to bypass patient search screen and and to go straight to a patient confirmation modal from anywhere.
+
+## 2016-03-14 (March 14th, 2016) ##
+### Additions ###
+- The [Tray Summary List View](using-adk.md#ADK-Views-Tray-Summary-List-View) now supports `itemTemplate`, `getItemTemplate`, and `emptyViewTemplate` options. These allow for more flexibility in the content and layout / styling of the individual rows.
+    - `itemTemplate` should be used when the layout needs to change from the default AND there is not a lot of conditional logic required. Can be either a string or Handlebars.compile template. The row's model is available in the template. Example: `itemTemplate: '<p>{{myAttribute}}</p>'`
+    - `getItemTemplate` should be used when different states of the view / model result in substantially different templates (i.e. after the view logic.). This option should be defined as an function that returns a Handlebars.compile template.
+        - Example:
+            ```JavaScript
+            getItemTemplate: function() {
+                if (this.model.get('different')) {
+                    return Handlebars.compile('<button>Different Template</button>');
+                }
+                return Handlebars.compile('<p>Default Template!</p>');
+            }
+            ```
+    - `emptyViewTemplate` can be used to overwrite the default empty view template. Current default is "This patient currently has no [label]." where [label] is set by the `label` option. Can be either a string or Handlebars.compile template. Example: `emptyViewTemplate: '<p>No Items :(</p>'`
+
+## 2015-03-11 (March 11th, 2016) ##
+### Additions ###
+- [Alert Dropdown Component](ui-library/components.md#Alert-Dropdown) is available to inject alert dropdowns into the navigation header.
+
+## 2016-03-02 (March 2nd, 2016) ##
+### Additions ###
+- ADK now supports [Checklist](ui-library/form-controls.md#Utility-Checklist) config option `filterChecked` where 'true' shows only checked items and 'false' shows only unchecked items.
+
+## 2016-02-29 (February 29th, 2016) ##
+### Changes ###
+- The [Textarea](ui-library/form-controls.md#Basic-Textarea) control now supports dynamically inserting text at the last caret position. See [Textarea Dynamic Events](ui-library/form-controls.md#Basic-Textarea-Dynamic-Events) at `control:insert:string`
+    - Example:
+        ```JavaScript
+        // No options
+        this.ui.textarea.trigger('control:insert:string', 'String to insert');
+        // With options
+        this.ui.textarea.trigger('control:insert:string', ['String to insert', {
+            prependWith: "<block>",
+            appendWith: "</block>"
+        }]);
+        ```
+- The [Textarea](ui-library/form-controls.md#Basic-Textarea) control now supports a `charCount` option which determines whether the remaining characters allowed before reaching the textarea's **maxlength**  is displayed to the user. This must be used in conjunction with the `maxlength` option.
+    - Example: `charCount: true`.
+
 ## 2016-02-12 (February 12th, 2016) ##
 ### Changes ###
 - The [Comment Box](ui-library/form-controls.md#Special-Comment-Box) control now supports a `addCommentPosition` option which determines the position of the add comment area relative to the list of comments.

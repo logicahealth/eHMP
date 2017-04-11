@@ -9,9 +9,9 @@ var argv = require('yargs')
   .demand(['host', 'port'])
   .describe('host', 'IP Address of the VistA host')
   .describe('port', 'Port of the VistA host')
-  .describe('accessCode', 'Value to use for accessCode for validation. Defaults to PW    ')
-  .describe('verifyCode', 'Value to use for verifyCode for validation. Defaults to PW    !!')
-  .describe('context', 'Context to set for running the RPC. Defaults to VPR SYNCHRONIZATION CONTEXT or HMP SYNCHRONIZATION CONTEXT')
+  .describe('accessCode', 'Value to use for accessCode for validation. Defaults to ep1234')
+  .describe('verifyCode', 'Value to use for verifyCode for validation. Defaults to ep1234!!')
+  .describe('context', 'Context to set for running the RPC. Defaults to HMP SYNCHRONIZATION CONTEXT')
   .describe('rpc', 'Name of rpc to call.')
   .describe('parameters', 'Parameters to pass to rpc client.')
   .describe('logLevel', 'bunyan log levels, one of: trace, debug, info, warn, error, fatal. Defaults to error.')
@@ -25,11 +25,11 @@ var logger = require('bunyan').createLogger({
 var config = {
   host: argv.host,
   port: argv.port,
-  accessCode: argv.accessCode || 'PW    ',
-  verifyCode: argv.verifyCode || 'PW    !!',
+  accessCode: argv.accessCode || 'ep1234',
+  verifyCode: argv.verifyCode || 'ep1234!!',
   localIP: '127.0.0.1',
   localAddress: 'localhost',
-  context: argv.context || 'HMP UI CONTEXT',
+  context: argv.context || 'HMP SYNCHRONIZATION CONTEXT',
   connectTimeout: 3000,
   sendTimeout: 10000
 };

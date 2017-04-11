@@ -31,7 +31,7 @@ define([
                 return differenceBetweenStarts;
             } else {
                 // IMPORTANT - We want to sort in DESCENDING order. Thus we do second minus first.
-                var differenceBetweenStops = secondMed.getEarlierStop().stoppedMoment.valueOf() - firstMed.getEarlierStop().stoppedMoment.valueOf();
+                var differenceBetweenStops = secondMed.getEarlierStopAsMoment().valueOf() - firstMed.getEarlierStopAsMoment().valueOf();
                 if (differenceBetweenStops !== 0) {
                     return differenceBetweenStops;
                 }
@@ -163,7 +163,7 @@ define([
                     var differenceBetweenStarts = secondMed.getOverallStartAsMoment().valueOf() - firstMed.getOverallStartAsMoment().valueOf();
                     if (firstGraphingPriority === ACTIVE_EXPIRED_DISCONTINUED_OTHER) {
                         // IMPORTANT - We want to sort in DESCENDING order. Thus we do second minus first.
-                        var differenceBetweenStops = secondMed.getEarlierStop().stoppedMoment.valueOf() - firstMed.getEarlierStop().stoppedMoment.valueOf();
+                        var differenceBetweenStops = secondMed.getEarlierStopAsMoment().valueOf() - firstMed.getEarlierStopAsMoment().valueOf();
                         if (differenceBetweenStops !== 0) {
                             return differenceBetweenStops;
                         }

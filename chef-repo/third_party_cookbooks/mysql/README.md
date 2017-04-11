@@ -550,12 +550,12 @@ Please refer to the HACKING.md
 
 License & Authors
 -----------------
-- Author::     ua Timberman (<joshua@chef.io>)
+- Author:: Joshua Timberman (<joshua@chef.io>)
 - Author:: AJ Christensen (<aj@chef.io>)
 - Author:: Seth Chisamore (<schisamo@chef.io>)
 - Author:: Brian Bianco (<brian.bianco@gmail.com>)
 - Author:: Jesse Howarth (<him@jessehowarth.com>)
-- Author::        Crump (<andrew@kotirisoftware.com>)
+- Author:: Andrew Crump (<andrew@kotirisoftware.com>)
 - Author:: Christoph Hartmann (<chris@lollyrock.com>)
 - Author:: Sean OMeara (<sean@chef.io>)
 

@@ -21,7 +21,7 @@ define([
                 r = right.get('entered') * 1;
             }
             return r - l;
-        }
+        },
     });
 
     return notes;

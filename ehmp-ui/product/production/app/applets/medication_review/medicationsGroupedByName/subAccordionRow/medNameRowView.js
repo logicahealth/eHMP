@@ -13,8 +13,17 @@ define([
         className: 'medication-layout-view panel panel-default',
         ui: {
             collapse_container: '.collapse',
-            medsItemRow: '.medsItem',
-            medicationNameLayoutRow: '.medicationNameLayoutRow'
+            medsItemRow: '.meds-item',
+            medicationNameLayoutRow: '[data-medication-container=medication-list]',
+            medNameListToolabr: '[data-toolbar=appletToolbar]'
+        },
+        attributes: function() {
+            var dataCode = this.model.has('dataCode') ? this.model.get('dataCode') : '';
+            return {
+                role: 'presentation',
+                tabindex: '0',
+                'data-code': dataCode
+            };
         },
         events: {
             'click .panel-heading > .row': 'onClick',
@@ -27,9 +36,9 @@ define([
             'otherChildClicked': 'onOtherChildClicked'
         },
         regions: {
-            medicationGroup: '.medicationGroup',
+            medicationGroup: '.medication-group',
             medicationDetailPanel: '.panel-collapse',
-            medNameList: '.medNameList'
+            medNameList: '[data-toolbar=appletToolbar]'
         },
         initialize: function(options) {
             this.model = options.model;
@@ -48,6 +57,7 @@ define([
             var self = this;
             if (!this.toolbarView) {
                 this.toolbarView = new ADK.Views.AppletToolbarView({
+                    targetView: self,
                     targetElement: {
                         model: self.model.get('medications').at(0)
                     },
@@ -63,8 +73,31 @@ define([
             }
             this.medNameList.show(this.toolbarView);
             this.toolbarView.show();
+            this.ui.medNameListToolabr.attr('tabindex', '0');
+            this.ui.medNameListToolabr.focus();
         },
         onClick: function(event) {
+            function isScrolledIntoView(el) {
+                var $el = $(el);
+                var $container = $('.grid-applet-panel');
+
+                var containerViewTop = $container.scrollTop();
+                var containerViewBottom = containerViewTop + $container.height();
+
+                if (!$el.offset()) return;
+                var elTop = $el.offset().top;
+                var elBottom = elTop + $el.height();
+
+                return ((containerViewTop < elTop) && (containerViewBottom > elBottom));
+            }
+            $(this.medicationDetailPanel.$el.selector).on('hide.bs.collapse', function(e) {
+                if (event.currentTarget !== e.currentTarget) {
+                    if (isScrolledIntoView(event.currentTarget) === false) {
+                        event.currentTarget.scrollIntoView(false);
+                    }
+                }
+            });
+
             this.trigger('toolbar');
             if (!this.panelOpen) {
                 if (this.showingToolbar) {
@@ -72,8 +105,8 @@ define([
                 } else {
                     this.addToolbar();
                     this.showingToolbar = true;
-                    this.ui.medsItemRow.addClass('activeRow');
-                    this.ui.medsItemRow.removeClass('medsItem');
+                    this.ui.medsItemRow.addClass('activerow');
+                    this.ui.medsItemRow.removeClass('meds-item');
                 }
             }
 
@@ -86,8 +119,8 @@ define([
             if (this.showingToolbar) {
                 this.toolbarView.hide();
                 this.showingToolbar = false;
-                this.ui.medsItemRow.removeClass('activeRow');
-                this.ui.medsItemRow.addClass('medsItem');
+                this.ui.medsItemRow.removeClass('activerow');
+                this.ui.medsItemRow.addClass('meds-item');
             }
             if (this.panelOpen) {
                 this.ui.collapse_container.collapse('toggle');

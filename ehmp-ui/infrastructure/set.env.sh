@@ -10,13 +10,13 @@ set +xe
 
 project_name=ehmp-ui
 
-jdk_version="jdk1.8.0_66"
+jdk_version="jdk1.8.0_92"
 
 export VAGRANT_BIN=/usr/bin/vagrant
 
 export GRADLE_HOME=/usr/local/gradle/gradle-2.4
 export GROOVY_HOME=/usr/local/groovy/groovy-2.0.6
-export GRADLE_OPTS="-Xmx1G -Xms256m -Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4"
+export GRADLE_OPTS="-Xmx1G -Xms256m -Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=1"
 export PATH=$GROOVY_HOME/bin:$GRADLE_HOME/bin:$PATH
 
 export CONFIGURE_ARGS="--with-ldflags='-Wno-error=unused-command-line-argument-hard-error-in-future'"

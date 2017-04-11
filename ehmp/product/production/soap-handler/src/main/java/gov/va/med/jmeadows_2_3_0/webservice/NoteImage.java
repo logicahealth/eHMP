@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "noteImage", namespace = "http://webservice.bhie.domain.ext/", propOrder = {
+@XmlType(name = "noteImage", namespace = "http://webservice.bhie.DNS       /", propOrder = {
     "contentDisposition",
     "contentType",
     "noteBytes"

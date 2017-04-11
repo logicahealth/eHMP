@@ -18,6 +18,11 @@ class Appointments
         console << "n\n"
       end
 
+
+      console.on(:output, /Are you sure you want to continue connecting/i) do |process, match_data|
+        console << "YES\n"
+      end
+
       # console.on(:output, /WANT TO PRINT THE PRE-APPOINTMENT LETTER?/i) do |process, match_data|
       #   console << "n\n"
       # end
@@ -64,8 +69,10 @@ class Appointments
 
       console.start!
 
-      console.wait_for(:output, /password:/i)
-      console << "#{options[:password]}\n"
+      unless options[:ssh_key]
+        console.wait_for(:output, /password:/i)
+        console << "#{options[:password]}\n"
+      end
 
       console.wait_for(:output, /$/i)
       if options[:sudo]

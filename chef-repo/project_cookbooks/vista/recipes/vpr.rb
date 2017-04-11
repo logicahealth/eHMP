@@ -69,6 +69,7 @@ vista_install_distribution "vista_patches" do
   patch_list "vista_patches"
   manifest_path "#{Chef::Config[:file_cache_path]}/kids-manifest.json"
   log node[:vista][:chef_log]
+  run_checksums node[:vista][:run_checksums]
 end
 
 vista_ro_install "hmp.ro" do
@@ -81,6 +82,7 @@ vista_install_distribution "vista-#{node[:vista][:site].downcase}_patches" do
   patch_list "vista-#{node[:vista][:site].downcase}_patches"
   manifest_path "#{Chef::Config[:file_cache_path]}/kids-manifest.json"
   log node[:vista][:chef_log]
+  run_checksums node[:vista][:run_checksums]
 end
 
 # Install test data patches
@@ -88,6 +90,7 @@ vista_install_distribution "test_data_patches" do
   patch_list "test_data_patches"
   manifest_path "#{Chef::Config[:file_cache_path]}/kids-manifest.json"
   log node[:vista][:chef_log]
+  run_checksums node[:vista][:run_checksums]
 end
 
 # Load test data globals

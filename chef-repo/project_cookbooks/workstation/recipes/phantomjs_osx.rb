@@ -21,14 +21,13 @@ execute 'unzip phantomjs' do
   action :run
 end
 
-if node['platform_version'].to_f < 10.11
-  link '/usr/bin/phantomjs' do 
-    to "/opt/phantomjs-#{version}-macosx/bin/phantomjs"
-    link_type :symbolic
-  end
-else
-  link '/usr/local/bin/phantomjs' do
-    to "/opt/phantomjs-#{version}-macosx/bin/phantomjs"
-    link_type :symbolic
-  end
+link '/usr/local/bin/phantomjs' do
+  to "/opt/phantomjs-#{version}-macosx/bin/phantomjs"
+  link_type :symbolic
 end
+
+link '/usr/bin/phantomjs' do
+  action :delete
+  only_if { ::File.exists?('/usr/local/bin/phantomjs') }
+end
+

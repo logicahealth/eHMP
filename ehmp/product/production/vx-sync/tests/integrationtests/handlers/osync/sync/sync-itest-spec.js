@@ -8,11 +8,11 @@ var handler = require(global.VX_HANDLERS + 'osync/sync/sync');
 var mockConfig = {
     jds: {
         protocol: 'http',
-        host: 'IPADDRESS ',
+        host: 'IP_ADDRESS',
         port: 9080,
         osyncjobfrequency: 172800000
     },
-    syncUrl: "http://IPADDRESS8080/sync/doLoad?icn=",
+    syncUrl: "http://IPADDRESS:POR/sync/doLoad?icn=",
 };
 
 var mockHandlerCallback = {

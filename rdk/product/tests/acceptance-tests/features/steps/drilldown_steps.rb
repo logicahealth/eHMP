@@ -16,7 +16,7 @@ When(/^the client searches$/) do |table|
   end
   path = build_query.path
   p path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the response contains (\d+) results$/) do |total|

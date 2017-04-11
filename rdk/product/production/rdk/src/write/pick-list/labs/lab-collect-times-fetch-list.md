@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Lab collect times [/lab-collect-times{?site}{&fields}]
+## Lab collect times [/lab-collect-times{?site}]
 
 Returns help text showing lab immediate collect times for the user's division.
 
@@ -11,8 +11,6 @@ ORWDLR32 IMMED COLLECT
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

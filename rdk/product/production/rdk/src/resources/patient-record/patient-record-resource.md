@@ -2,7 +2,7 @@
 
 ## Patient record [{{{path}}}]
 
-### Patient record {domain} [GET {{{path}}}/domain/{domain}{?pid}{&uid}{&start}{&limit}{&filter}{&order}{&callType}{&vler_uid}{&fields}]
+### Patient record {domain} [GET {{{path}}}/domain/{domain}{?pid}{&uid}{&start}{&limit}{&filter}{&order}{&callType}{&vler_uid}]
 
 Get record data of one domain for a patient
 
@@ -65,8 +65,6 @@ Get record data of one domain for a patient
             + `vler_modal`
 
     + vler_uid (string, optional) - VLER uid to filter only one item for modal
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

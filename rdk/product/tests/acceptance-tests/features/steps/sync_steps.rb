@@ -1,3 +1,8 @@
+# Edmund Hillary user is used for patient sync load and clear based on having required permissions to access resource/sync/load and resource/sync/clear endpoints by default
+
+sync_user = '9E7A;edm1234'
+sync_pass = 'edm1234!!'
+
 Then(/^the patient with pid "(.*?)" is synced through the RDK API(?: within ?(\d+) seconds)?$/) do |pid, seconds|
   seconds = seconds.to_i
   seconds = seconds == 0 ? 300 : seconds
@@ -9,7 +14,7 @@ Then(/^the patient with pid "(.*?)" is synced through the RDK API(?: within ?(\d
   temp.add_parameter("pid", pid)
   statuspath = temp.path
   (0..Integer(time_out)/wait_time).each do
-    @response = HTTPartyWithBasicAuth.get_with_authorization(statuspath)
+    @response = HTTPartyRDK.get_as_user(statuspath, sync_user, sync_pass)
     if @response.code == 200 && sync_complete
       is_synced = true
       break
@@ -29,7 +34,7 @@ Then(/^the patient with pid "(.*?)" is cleared throught the RDK API within (\d+)
   temp.add_parameter("pid", pid)
   statuspath = temp.path
   (0..Integer(time_out)/wait_time).each do
-    @response = HTTPartyWithBasicAuth.get_with_authorization(statuspath)
+    @response = HTTPartyRDK.get_as_user(statuspath, sync_user, sync_pass)
     if contains_expected_error_code
       is_synced = false
       break
@@ -72,7 +77,7 @@ Given(/^a patient with pid "(.*?)" has not been synced through the RDK API$/) do
   temp = RDKQuery.new('synchronization-clear')
   temp.add_parameter("pid", pid)
   statuspath = temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(statuspath)
+  @response = HTTPartyRDK.get_as_user(statuspath, sync_user, sync_pass)
   expect(@response.code).to eq(200), "code: #{@response.code}, body: #{@response.body}"
 
   time_out = 120
@@ -81,7 +86,7 @@ Given(/^a patient with pid "(.*?)" has not been synced through the RDK API$/) do
   statuspath = QueryRDKSync.new("status", pid).path
 
   (0..Integer(time_out)/wait_time).each do
-    @response = HTTPartyWithBasicAuth.get_with_authorization(statuspath)
+    @response = HTTPartyRDK.get_as_user(statuspath, sync_user, sync_pass)
 
     if contains_expected_error_code
       is_synced = false
@@ -98,10 +103,10 @@ When(/^the client requests that the patient with pid "(.*?)" be synced through R
   temp = RDKQuery.new('synchronization-status')
   temp.add_parameter("pid", pid)
   statuspath = temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(statuspath)
+  @response = HTTPartyRDK.get_as_user(statuspath, sync_user, sync_pass)
   unless sync_complete
     path = QueryRDKSync.new("load", pid).path
-    @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+    @response = HTTPartyRDK.get_as_user(path, sync_user, sync_pass)
   end
 end
 
@@ -112,12 +117,12 @@ When(/^the client requests that the MVI patient be synced through RDK API$/) do
   json = JSON.parse(@response.body)
   pid = json["data"]["items"][0]["pid"]
   json = { "pid"=>pid, "demographics" => json["data"]["items"][0] }.to_json
-  @response = HTTPartyWithBasicAuth.post_json_with_authorization(statuspath, json, { "Content-Type"=>"application/json" })
+  @response = HTTPartyRDK.post(statuspath, json)
 end
 
 When(/^the client requests syncing a patient by demographics with content "(.*?)"$/) do |content|
   path = RDKQuery.new('synchronization-demographics-load').path
-  @response = HTTPartyWithBasicAuth.post_json_with_authorization(path, content, { "Content-Type" => "application/json" })
+  @response = HTTPartyRDK.post(path, content, { 'Content-Type' => 'application/json' })
 end
 
 def sync_complete
@@ -147,17 +152,17 @@ Given(/^a patient with pid "(.*?)" has been synced through the RDK API$/) do |pi
   temp = RDKQuery.new('synchronization-status')
   temp.add_parameter("pid", pid)
   statuspath = temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(statuspath)
+  @response = HTTPartyRDK.get_as_user(statuspath, sync_user, sync_pass)
   unless sync_complete
     path = QueryRDKSync.new("load", pid).path
-    @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+    @response = HTTPartyRDK.get_as_user(path, sync_user, sync_pass)
     expect(@response.code).to be_between(200, 201), "code: #{@response.code}, body: #{@response.body}"
 
     time_out = 300
     wait_time = 10
     is_synced = false
     (0..Integer(time_out)/wait_time).each do
-      @response = HTTPartyWithBasicAuth.get_with_authorization(statuspath)
+      @response = HTTPartyRDK.get_as_user(statuspath, sync_user, sync_pass)
       if sync_complete
         is_synced = true
         break
@@ -174,10 +179,10 @@ Given(/^a visit patient with pid "(.*?)" has been synced through the RDK API$/) 
   temp = RDKQuery.new('synchronization-status')
   temp.add_parameter("pid", pid)
   statuspath = temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(statuspath)
+  @response = HTTPartyRDK.get_as_user(statuspath, sync_user, sync_pass)
   unless sync_complete
     path = QueryRDKSync.new("load", pid).path
-    @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+    @response = HTTPartyRDK.get_as_user(path, sync_user, sync_pass)
     expect(@response.code).to be_between(200, 201), "code: #{@response.code}, body: #{@response.body}"
 
     time_out = 300
@@ -185,7 +190,7 @@ Given(/^a visit patient with pid "(.*?)" has been synced through the RDK API$/) 
     is_synced = false
     statuspath = QueryRDKSync.new("status", pid).path
     (0..Integer(time_out)/wait_time).each do
-      @response = HTTPartyWithBasicAuth.get_with_authorization(statuspath)
+      @response = HTTPartyRDK.get_as_user(statuspath, sync_user, sync_pass)
       if sync_complete
         is_synced = true
         break
@@ -202,70 +207,70 @@ When(/^the client requests that the patient with pid "(.*?)" be cleared through 
   temp = RDKQuery.new('synchronization-clear')
   temp.add_parameter("pid", pid)
   statuspath = temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(statuspath)
+  @response = HTTPartyRDK.get_as_user(statuspath, sync_user, sync_pass)
 end
 
 When(/^the client requests allergies for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("allergy", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests vitals for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("vital", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests demographics for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("patient", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests orders for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("order", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests medications for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("med", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests problem list for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("problem", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests discharge summary for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("document", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests immunizations for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("immunization", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests labs for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("lab", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests consults for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("consult", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests radiology for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("rad", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests anatomic pathology for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("accession", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests clinical notes for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("document", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end

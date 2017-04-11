@@ -10,11 +10,15 @@ define([
         id: 'todo_list',
         viewTypes: [{
             type: 'summary',
-            view: TodoListView,
+            view: TodoListView.extend({
+                columnsViewType: "summary"
+            }),
             chromeEnabled: true
-        },{
+        }, {
             type: 'expanded',
-            view: TodoListView,
+            view: TodoListView.extend({
+                columnsViewType: "expanded"
+            }),
             chromeEnabled: true
         }],
 

@@ -54,17 +54,6 @@ define([], function() {
             return url.replace(/\/+/g, '/').replace(/\?$/, ''); //replace multiple /'s with one and remove trailing '?'
         },
         setFields: function() {
-            var visit = this.patient.get('visit'),
-                visitData = {};
-            if (!_.isUndefined(visit)) {
-                visit.formattedDate = moment(visit.dateTime, "YYYYMMDDhhmm").format('MM/DD/YYYY HH:mm');
-                visitData = {
-                    'encounterName': visit.formatteddateTime && visit.locationDisplayName + visit.formatteddateTime || visit.locationDisplayName,
-                    'encounterServiceCategory': visit.serviceCategory,
-                    'locationIEN': visit.locationIEN,
-                    'encounterDateTime': visit.visitDateTime || ''
-                };
-            }
             var site = this.user.get('site');
             //var authorUid = this.user.get('duz') && this.user.get('duz')[this.user.get('site')];
             var authorUid = 'urn:va:user:' +site+ ':' +this.user.get('duz')[this.user.get('site')];
@@ -88,24 +77,25 @@ define([], function() {
                 'dateTime': moment().format(),
             };
 
-            _.extend(this.attributes, preSaveItems, visitData);
+            _.extend(this.attributes, preSaveItems);
             _.extend(this.get('text')[0], textData);
 
         },
         defaults: function() {
             return {
                 'author': null,
-                'authorDisplayName': null,
+                'authorDisplayName': (ADK.UserService.getUserSession().get('lastname') + ',' + ADK.UserService.getUserSession().get('firstname')).replace(/\w*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}),
                 'authorUid': null,
                 'documentClass': 'PROGRESS NOTES',
                 'documentDefUid': null,
                 'documentTypeName': 'Progress Note',
                 'encounterName': null,
                 'encounterServiceCategory': null,
-                'locationIEN': null,
+                'locationUid': null,
                 'encounterDateTime': null,
-                'patientStatus': (ADK.PatientRecordService.getCurrentPatient().get('patientStatusClass') === 'Inpatient') ? 'INPATIENT' : 'OUTPATIENT',
+                'patientStatus': (ADK.PatientRecordService.getCurrentPatient().patientStatusClass() === 'Inpatient') ? 'INPATIENT' : 'OUTPATIENT',
                 'entered': null,
+                'facilityName': (ADK.PatientRecordService.getCurrentPatient().get('homeFacility')) ? ADK.PatientRecordService.getCurrentPatient().get('homeFacility').name : 'None',
                 'formUid': '' + formUidCounter++,
                 'isInterdisciplinary': 'false',
                 'lastUpdateTime': null,
@@ -154,13 +144,13 @@ define([], function() {
             }
 
             if (!_.isEmpty(this.errorModel.toJSON())) {
-                return 'Please correct validation errors before saving.';
+                return 'Correct validation errors before saving.';
             }
         },
         validateTitle: function(attributes) {
             if (_.isEmpty(attributes.documentDefUid)) {
                 this.errorModel.set({
-                    documentDefUidUnique: 'Please enter in a Note Title'
+                    documentDefUidUnique: 'Enter in a Note Title'
                 });
                 return false;
             }
@@ -172,14 +162,14 @@ define([], function() {
 
             if (inputTime === null || inputTime === undefined || inputTime === '') {
                 this.errorModel.set({
-                    derivReferenceTime: 'Please enter a time.'
+                    derivReferenceTime: 'Enter a time.'
                 });
                 return false;
             }
 
             if (!this.isTime(inputTime)) {
                 this.errorModel.set({
-                    derivReferenceTime: 'Please enter a valid time.'
+                    derivReferenceTime: 'Enter a valid time.'
                 });
                 return false;
             }
@@ -193,7 +183,7 @@ define([], function() {
                 var inputMinutes = inputTime[1] * 1;
                 if (inputHours > currentHours || (inputHours === currentHours && inputMinutes > currentMinutes)) {
                     this.errorModel.set({
-                        derivReferenceTime: 'Time must not be in the future'
+                        derivReferenceTime: 'Time cannot be in the future'
                     });
                     return false;
                 }
@@ -204,13 +194,13 @@ define([], function() {
             var inputDate = attributes.derivReferenceDate;
             if (!inputDate) {
                 this.errorModel.set({
-                    derivReferenceDate: 'Please enter a date'
+                    derivReferenceDate: 'Enter a date'
                 });
                 return false;
             }
             if (!this.isDate(inputDate)) {
                 this.errorModel.set({
-                    derivReferenceDate: 'Please enter a valid date'
+                    derivReferenceDate: 'Enter a valid date'
                 });
                 return false;
             }

@@ -1,5 +1,5 @@
-HMPDJ02 ;ASMR/MKB/JD - Problems,Allergies,Vitals ;Feb 1, 2016@13:22:48
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 3
+HMPDJ02 ;ASMR/MKB/JD,CK - Problems,Allergies,Vitals ;July 1, 2016 09:56:26
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 3
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -24,7 +24,7 @@ HMPDJ02 ;ASMR/MKB/JD - Problems,Allergies,Vitals ;Feb 1, 2016@13:22:48
  Q
  ;
 GMPL1(ID,POVLST) ; -- problem
- N HMPL,PROB,X,I,DATE,USER,FAC
+ N HMPL,PROB,X,I,DATE,USER,FAC,LEXS
  D DETAIL^GMPLUTL2(ID,.HMPL) Q:'$D(HMPL)  ;doesn't exist
  N $ES,$ET,ERRPAT,ERRMSG
  S $ET="D ERRHDLR^HMPDERRH",ERRPAT=DFN
@@ -35,7 +35,7 @@ GMPL1(ID,POVLST) ; -- problem
  S DATE=$P($G(HMPL("ENTERED")),U)
  S:$L(DATE) DATE=$$DATE^HMPDGMPL(DATE),PROB("entered")=$$JSONDT^HMPUTILS(DATE)
  S X=$G(HMPL("DIAGNOSIS")) I $L(X) D
- . N ICD9ZN,DIAG
+ . N ICD9ZN,DIAG,SCTCODE
  . I DATE'>0 S DATE=DT
  . S ICD9ZN=$$ICDDX^ICDCODE(X,DATE),DIAG=$S($P($G(ICD9ZN),U,4)'="":$P(ICD9ZN,U,4),1:X)
  . ; BEGIN MOD ASF 09/8/15 US 9239 DE 2082
@@ -56,21 +56,26 @@ GMPL1(ID,POVLST) ; -- problem
  . ; END MOD ASF US 9239 DE 2082
  ;Get the internal date from ^AUPNPROB so the imprecise date can be converted properly
  ;JD - 2/1/16 - DE3548
+ S X=$$GET1^DIQ(9000011,ID_",",.01,"I") S:$L(X) PROB("lexiconCode")=X  ; DE4680 May 11, 2016 - added lexiconCode to JDS
  S X=$$GET1^DIQ(9000011,ID_",",.13,"I") S:$L(X) PROB("onset")=$$JSONDT^HMPUTILS(X)
  S X=$G(HMPL("MODIFIED")) S:$L(X) X=$$DATE^HMPDGMPL(X),PROB("updated")=$$JSONDT^HMPUTILS(X)
  S X=$G(HMPL("STATUS")) I $L(X) D
  . S PROB("statusName")=X,X=$E(X)
  . S X=$S(X="A":55561003,X="I":73425007,1:"")
  . S PROB("statusCode")=$$SETNCS^HMPUTILS("sct",X)
- S X=$G(HMPL("PRIORITY")) I X]"" D
- . S X=$$LOW^XLFSTR(X),PROB("acuityName")=X
- . S PROB("acuityCode")=$$SETVURN^HMPUTILS("prob-acuity",$E(X))
+ ;S X=$G(HMPL("PRIORITY")) I X]"" D
+ S X=$$GET1^DIQ(9000011,ID_",",1.14,"I") I X]"" D  ;DE3988 take directly from the file regardless of status
+ . S X=$S(X="C":"chronic",X="A":"acute",1:"")
+ . I X'="" S PROB("acuityName")=X,PROB("acuityCode")=$$SETVURN^HMPUTILS("prob-acuity",$E(X))
  S X=$$GET1^DIQ(9000011,ID_",",1.07,"I") S:X PROB("resolved")=$$JSONDT^HMPUTILS(X)
+ S X=$$GET1^DIQ(9000011,ID_",",1.03,"E") S:$L(X) PROB("enteredBy")=X  ; DE5096 June 24, 2016 - add addt'l problem fields to JDS
+ S X=$$GET1^DIQ(9000011,ID_",",1.04,"E") S:$L(X) PROB("recordedBy")=X  ; DE5096 June 24, 2016
+ S X=$$GET1^DIQ(9000011,ID_",",1.09,"I") S:$L(X) PROB("recordedOn")=$$JSONDT^HMPUTILS(X)  ; DE5096 July 1, 2016 
  S X=$$GET1^DIQ(9000011,ID_",",1.02,"I")
  S:X="P" PROB("unverified")="false",PROB("removed")="false"
  S:X="T" PROB("unverified")="true",PROB("removed")="false"
  S:X="H" PROB("unverified")="false",PROB("removed")="true"
- S X=$G(HMPL("SC")),X=$S(X="YES":"",X="NO":"false",1:"")
+ S X=$G(HMPL("SC")),X=$S(X="YES":"true",X="NO":"false",1:"")  ; DE3918, Mar 2, 2016
  S:$L(X) PROB("serviceConnected")=X
  S X=$G(HMPL("PROVIDER")) I $L(X) D
  . S PROB("providerName")=X,X=$$GET1^DIQ(9000011,ID_",",1.05,"I")
@@ -87,6 +92,7 @@ GMPL1(ID,POVLST) ; -- problem
  S I=0 F  S I=$O(HMPL("COMMENT",I)) Q:I<1  D
  . S X=$G(HMPL("COMMENT",I))
  . S USER=$$VA200^HMPDGMPL($P(X,U,2)),DATE=$$DATE^HMPDGMPL($P(X,U))
+ . S PROB("comments",I,"noteCounter")=I  ; Feb 24, 2016 - US12724
  . S PROB("comments",I,"enteredByCode")=$$SETUID^HMPUTILS("user",,+USER)
  . S PROB("comments",I,"enteredByName")=$P(X,U,2)
  . S PROB("comments",I,"entered")=$$JSONDT^HMPUTILS(DATE)
@@ -310,7 +316,7 @@ GMV1(ID) ; -- vital/measurement ^UTILITY($J,"GMRVD",HMPIDT,HMPTYP,ID)
  F I=1:1:$L(HMPY(5),U) S X=$P(HMPY(5),U,I) I X D
  . S VIT("qualifiers",I,"name")=$$FIELD^GMVGETQL(X,1)
  . S VIT("qualifiers",I,"vuid")=$$FIELD^GMVGETQL(X,3)
- ;US4338 - add pulse ox qualifier if it exists. name component is required. vuid is not per        Loth
+ ;US4338 - add pulse ox qualifier if it exists. name component is required. vuid is not per Thomas Loth
  I $P(X0,U,10) S VIT("qualifiers",I+1,"name")=$P(X0,U,10)
  I $G(HMPY(2)) D
  . S VIT("removed")="true"        ;entered in error

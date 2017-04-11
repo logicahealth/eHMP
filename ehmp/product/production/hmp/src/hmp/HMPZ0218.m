@@ -1,5 +1,6 @@
-HMPZ0218 ;AGILEX/hrubovcak - Clinical Procedures failing TIU patch quick fix ;Feb 18, 2015@14:29:52
- ;;2.0;HEALTH MANAGEMENT PLATFORM;**1**;18 February 2015;Build 1
+HMPZ0218 ;ASMR/JCH - Clinical Procedures failing TIU patch quick fix ;Feb 18, 2015@14:29:52
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Feb 18, 2015;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q
  ;

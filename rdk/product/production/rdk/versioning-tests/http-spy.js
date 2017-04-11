@@ -4,6 +4,7 @@ var _ = require('lodash');
 var rdk = require('../src/core/rdk');
 var recordResponse = require('./recorded-response-repository').recordResponse;
 
+module.exports.enabled = true;
 module.exports.startSpying = startSpying;
 module.exports.stopSpying = stopSpying;
 
@@ -37,14 +38,16 @@ function stopSpying() {
 }
 
 function spyOn(name, originalFunction, options, callback) {
-    originalFunction(options, function(error, response, body) {
+    return originalFunction(options, function(error, response, body) {
         if (name === 'post' && hasNoContent(options)) {
             // ignore empty POSTs; they're for pings
             return callback(error, response, body);
         }
 
-        var recordOptions = _.extend({method: name.toUpperCase()}, options);
-        recordResponse(recordOptions, response, error);
+        if (module.exports.enabled) {
+            var recordOptions = _.extend({method: name.toUpperCase()}, options);
+            recordResponse(recordOptions, response, error);
+        }
 
         if (callback) {
             callback(error, response, body);

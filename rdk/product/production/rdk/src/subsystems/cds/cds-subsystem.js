@@ -8,6 +8,8 @@ var async = require('async');
 var mongo = require('mongoskin');
 var ObjectId = mongo.ObjectID;
 var cdsAgenda = require('./cds-subsystem-agenda');
+var cdsDBUtil = require('./cds-db-util');
+
 
 var mongoServerConfigured = false;
 var invocationConfigured = false;
@@ -122,15 +124,14 @@ function getCDSDB(dbName, callback) {
         return callback(null, cdsdbConnections[dbName]);
     }
 
+    var connectionString = cdsDBUtil.getMongoDBConnectionString(dbName, cdsMongoServer, logger);
+
     // if we don't already have a connection open to that db, lets try to make one and return that...
-    var db = mongo.db('mongodb://' + cdsMongoServer.host + ':' + cdsMongoServer.port + '/' +
-        dbName + '?auto_reconnect=true', {
-            safe: true
-        });
+    var db = mongo.db(connectionString, { safe: true });
 
     db.open(function(err) {
         if (err) {
-            logger.error('error: cds-work-product unable to connect to \'' + dbName + '\' database' + ' Error was: ' + err);
+            logger.error({error: err}, 'error: cds-work-product unable to connect to \'' + dbName + '\' database');
             return callback(err, null);
         }
 

@@ -11,10 +11,10 @@ var HdrClient = require(global.VX_SUBSYSTEMS + 'hdr/hdr-client');
 var config = {
     hdr: {
         pubsubConfig: {
-            host: 'IPADDRESS ',
+            host: 'IP_ADDRESS',
             port: 8999,
             protocol: 'http',
-            path: 'repositories.domain.ext/fpds/vpr/',
+            path: 'repositories.DNS       /fpds/vpr/',
             server: 'HMPTest',
             clientName: 'eHMP',
             _type: 'json',
@@ -54,7 +54,7 @@ describe('hdr-client.js', function() {
     });
 
     it('construct HDR Base URL', function() {
-        var expectedUrl = 'http://IPADDRESS :8999/repositories.domain.ext/fpds/vpr/';
+        var expectedUrl = 'http://IP_ADDRESS:PORT/repositories.DNS       /fpds/vpr/';
         var resolvedUrl = hdrClient._getHDRBaseUrl();
         expect(resolvedUrl).toEqual(expectedUrl);
 

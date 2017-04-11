@@ -1,0 +1,25 @@
+{
+  "name": "sample-new-environment",
+  "description": "new environment for overriding attributes",
+  "override_attributes": {
+    "external_data_bag_nodes": {
+      "data_bag_name": [ "data_bag_item" ]
+    },
+    "mocked_data_servers": "true",
+    "rdk_config": {
+      "rdk-0": {
+        "processes": 2
+      },
+      "rdk-1": {
+        "processes": 2
+      }
+    },
+    "vxsync": {
+      "processes": {
+        "subscriber_storage": {
+          "number_of_copies": 7
+        }
+      }
+    }
+  }
+}

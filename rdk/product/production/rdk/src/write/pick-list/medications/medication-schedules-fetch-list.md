@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Medication schedules [/medication-schedules{?site}{&fields}]
+## Medication schedules [/medication-schedules{?site}]
 
 Outpatient medication schedules
 
@@ -11,8 +11,6 @@ ORWDPS1 SCHALL
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

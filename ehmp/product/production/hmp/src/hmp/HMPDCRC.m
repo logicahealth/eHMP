@@ -1,6 +1,6 @@
-HMPDCRC ;SLC/MKB,AGP -- Compute CRC32 for VistA data ;7/26/13 11:09am
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDCRC ;SLC/MKB,AGP,ASMR/RRB,CK - Compute CRC32 for VistA data;Apr 27, 2016 10:35:07
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -9,6 +9,7 @@ HMPDCRC ;SLC/MKB,AGP -- Compute CRC32 for VistA data ;7/26/13 11:09am
  ; MPIF001                       2701
  ; XLFCRC                        3156
  ; XLFDT                        10103
+ Q
  ;
 CHECK(HMPCRC,FILTER) ; -- Return CRC32 checksums of VistA data
  ; RPC = HMP GET CHECKSUM
@@ -29,7 +30,7 @@ CHECK(HMPCRC,FILTER) ; -- Return CRC32 checksums of VistA data
  S QUEUED=$G(FILTER("queued"))
  S NODE="HMPDCRC "_SYS_"-"_"-"_DFN
  S FILTER("node")=NODE
- S HMPSYS=$$GET^XPAR("SYS","HMP SYSTEM NAME")
+ S HMPSYS=$$SYS^HMPUTILS
  ;
  ; - if not queued, generate checksums and exit w/values in ^TMP
  I QUEUED'="true" D  Q
@@ -70,7 +71,7 @@ EN1 ;           [entry point for queued job]
  S DFN=$G(FILTER("patientId")),HMPCRC=""
  S ICN=+$P($G(DFN),";",2),DFN=+$G(DFN)
  I DFN<1,ICN S DFN=+$$GETDFN^MPIF001(ICN)
- Q:DFN<1!'$D(^DPT(DFN))
+ Q:DFN<1!'$D(^DPT(DFN))  ;ICR 10035 DE 2818 ASF 11/2/15
  S NODE=$G(FILTER("node")) I NODE="" S NODE="HMPDCRC"
  ;
  S HMPMAX=9999,HMPI=0                                ;for HMPDJ0

@@ -21,7 +21,7 @@ function buildRequest(systemUser) {
 
     var request = httpMocks.createRequest({
         method: 'POST',
-        url: '/authenticate/system'
+        url: '/authentication/systems/internal'
     });
 
     request.get = function(header) {
@@ -53,6 +53,10 @@ function buildRequest(systemUser) {
         },
         expires: expires
     };
+
+    request._resourceConfigItem = {};
+    request._resourceConfigItem.title = 'authentication-internal-systems-authenticate';
+    request._resourceConfigItem.rel = 'vha.create';
 
     return request;
 }
@@ -87,6 +91,24 @@ describe('System Authentication', function(){
     it('tests that passing no Authorization Header will return unauthorized', function(done){
         var next = sinon.spy();
         var req = buildRequest();
+        var res = {
+            status: function(status){
+                expect(status).to.be(rdk.httpstatus.unauthorized);
+                return this;
+            },
+            rdkSend: function(data) {
+                expect(next.called).to.be.false();
+                done();
+            }
+        };
+
+        sysAuth(req, res, next);
+    });
+    it('does not login if the request was not with the a system login resource', function(done){
+        var next = sinon.spy();
+        var req = buildRequest();
+        req._resourceConfigItem.title = 'not-system-login';
+        req._resourceConfigItem.rel = 'vha.create';
         var res = {
             status: function(status){
                 expect(status).to.be(rdk.httpstatus.unauthorized);
@@ -139,6 +161,38 @@ describe('System Authentication', function(){
            ]
         }]);
 
+        var auth = sysAuth(req, res, next);
+    });
+    it('attempts to login if the request was with the internal system authentication resource', function(){
+        var next = sinon.spy();
+        var req = buildRequest();
+        req._resourceConfigItem.title = 'authentication-internal-systems-authenticate';
+        req._resourceConfigItem.rel = 'vha.create';
+        var res = {};
+        res.status = function(status) {
+            this.status = status;
+            return this;
+        };
+        res.rdkSend = function(body) {
+            expect(body.message).to.match(/No Credentials/);
+            expect(this.status).to.equal(401);
+        };
+        var auth = sysAuth(req, res, next);
+    });
+    it('attempts to login if the request was with the external system authentication resource', function(){
+        var next = sinon.spy();
+        var req = buildRequest();
+        req._resourceConfigItem.title = 'authentication-external-systems-authenticate';
+        req._resourceConfigItem.rel = 'vha.create';
+        var res = {};
+        res.status = function(status) {
+            this.status = status;
+            return this;
+        };
+        res.rdkSend = function(body) {
+            expect(body.message).to.match(/No Credentials/);
+            expect(this.status).to.equal(401);
+        };
         var auth = sysAuth(req, res, next);
     });
 });

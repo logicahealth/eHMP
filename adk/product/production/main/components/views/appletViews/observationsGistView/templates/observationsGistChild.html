@@ -1,11 +1,11 @@
-<div role="presentation" class="toolbar-container"/>
 <div role="row" class="table-row" {{#if userWorkspace}}draggable="true"{{/if}}>
 {{#if vitalColumns}}
-    <div role="presentation" class="selectable info-display">
-        <span class="sr-only">Press enter to open or close the toolbar menu.</span>
+    <div role="presentation" class="selectable">
         <div role="gridcell" class="table-cell problem-name border-vertical">
+            <span class="sr-only toolbar-instructions">Press enter to open the toolbar menu.</span>
+            <div role="presentation" class="toolbar-container"></div>
             <span class="sr-only">{{fullName}}</span>
-            <span data-cell-instanceid="problem_name_{{displayName}}">{{{descriptionColumn}}}</span>
+            <span data-cell-instanceid="problem_name_{{displayName}}" data-cell-tilesort="tilesort">{{{descriptionColumn}}}</span>
         </div>
     </div>
     <div data-group-instanceid="quickDraw_{{displayName}}" role="presentation" class="selectable flex-width-2" data-toggle="popover" data-content="{{tooltip}}" tabindex="0" aria-label="Press enter to open or close the quicklook table for {{fullName}}. Button.">
@@ -27,17 +27,18 @@
                 <span class="sr-only">{{numericTime}}</span>
                 {{timeSince}}</div>
             <div data-cell-instanceid="graph_{{displayName}}" role="gridcell" class="table-cell text-center">
-                {{{sparkline graphOptions result previousResult low high interpretationCode previousInterpretationCode standardDeviation}}}
+                {{{sparkline graphOptions result previousResult low high interpretationCode previousInterpretationCode standardDeviation uniqueName}}}
             </div>
         {{else}}
             <span role="gridcell" class="table-cell no-record">No record</span>
         {{/if}}
     </div>
 {{else}}
-    <div role="presentation" class="selectable info-display">
-        <span class="sr-only">Press enter to open or close the toolbar menu.</span>
+    <div role="presentation" class="selectable">
         <div role="gridcell" class="table-cell problem-name border-vertical">
-            <span data-cell-instanceid="problem_name_{{displayName}}">{{typeName}} {{#if specimenForTrend}} - {{/if}} {{specimenForTrend}}</span>
+            <span class="sr-only toolbar-instructions">Press enter to open the toolbar menu.</span>
+            <div role="presentation" class="toolbar-container"></div>
+            <span data-cell-instanceid="problem_name_{{displayName}}" data-cell-tilesort="tilesort">{{typeName}} {{#if specimenForTrend}} - {{/if}} {{specimenForTrend}}</span>
         </div>
     </div>
     <div data-group-instanceid="quickDraw_{{displayName}}" role="presentation" class="selectable flex-width-2" data-toggle="popover" data-content="{{tooltip}}" tabindex="0" aria-label="Press enter to open or close the quicklook table for {{typeName}}. Button.">
@@ -48,7 +49,7 @@
                 {{timeSince}}
             </div>
             <div data-cell-instanceid="graph_{{displayName}}" role="gridcell" class="table-cell text-center">
-                {{{sparkline graphOptions result previousResult low high interpretationCode previousInterpretationCode standardDeviation}}}
+                {{{sparkline graphOptions result previousResult low high interpretationCode previousInterpretationCode standardDeviation uniqueName}}}
             </div>
         {{else}}
             <span role="gridcell" class="table-cell no-record">No record</span>

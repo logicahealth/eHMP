@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Encounters diagnosis codes for clinic [/encounters-diagnosis-codes-for-clinic{?site}{&clinic}{&fields}]
+## Encounters diagnosis codes for clinic [/encounters-diagnosis-codes-for-clinic{?site}{&locationUid}]
 
 Retrieve list of Diagnostic Codes for a clinic location.
 
@@ -12,9 +12,7 @@ ORWPCE DIAG
 
     :[site]({{{common}}}/parameters/site.md)
 
-    + clinic: `195` (string, required) - The clinic to get diagnostic code for
-
-    :[fields]({{{common}}}/parameters/fields.md)
+    + locationUid: `195` (string, required) - The locationUid to get diagnostic code for
 
 ### GET
 

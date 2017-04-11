@@ -21,9 +21,11 @@ gulp.task('vendorjs', function() {
         'bower_components/bootstrap/dist/js/bootstrap.js',
         'bower_components/markdown-it/dist/markdown-it.js',
         'bower_components/markdown-it-container/dist/markdown-it-container.js',
+        'bower_components/markdown-it-attrs/markdown-it-attrs.browser.js',
         'bower_components/prism/prism.js',
         'bower_components/prism/components/prism-handlebars.js',
-        'bower_components/q/q.js'
+        'bower_components/q/q.js',
+        'bower_components/clipboard/dist/clipboard.min.js'
     ])
         .pipe(concat('vendor.js'))
         .pipe(gulp.dest('dist/js'))

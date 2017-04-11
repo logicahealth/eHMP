@@ -13,6 +13,7 @@ function listResource(req, res) {
             {siteCode: vistaSite}
         ));
     });
+    result.data.items = _.sortBy(result.data.items, 'name');
     return res.status(200).rdkSend(result);
 }
 

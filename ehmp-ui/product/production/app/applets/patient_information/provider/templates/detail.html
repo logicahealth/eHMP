@@ -1,0 +1,301 @@
+<div class="row panel-heading flex-width-none">
+    <div class="col-xs-12">
+        <h4 class="panel-title">Provider Information</h4>
+    </div>
+</div>
+<div class="row panel-body flex-width-1">
+    <div class="col-xs-12 demographic-group-wrapper">
+        <div class="demographic-group-header">
+            <h5>Primary Care Provider</h5>
+            {{#if primaryProvider.diff}}
+            <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapsePrimaryCareProvider" aria-expanded="false" aria-controls="discrepanciesCollapsePrimaryCareProvider" tooltip-data-key="patient_information_deatils_discrepancies">
+                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <span class="sr-only">Press enter to view different data found at other sites</span>
+            </button>
+            {{/if}}
+        </div>
+        <div class="demographic-group-content card-style" data-diff="{{primaryProvider.diff}}">
+            <dl class="dl-horizontal">
+                <dt>Name</dt>
+                <dd class="demographic-data">{{toTitleCase primaryProvider.name true 'Unassigned'}}</dd>
+                <dt>Analog Pager</dt>
+                <dd class="demographic-data">{{formatPhone primaryProvider.analogPager 'not specified'}}</dd>
+                <dt>Digital Pager</dt>
+                <dd class="demographic-data">{{formatPhone primaryProvider.digitalPager 'not specified'}}</dd>
+                <dt>Office Phone</dt>
+                <dd class="demographic-data">{{formatPhone primaryProvider.officePhone 'not specified'}}</dd>
+            </dl>
+            <!-- Show the different data from the external sites as their own primary provider card-->
+            {{#if primaryProvider.diff}}
+            <div class="collapse" id="discrepanciesCollapsePrimaryCareProvider">
+                <div class="well">
+                    <p>Other Sites</p>
+                    <dl data-diff="{{primaryProvider.diff}}" class="discrepancy-group">
+                    {{#each items}}
+                    {{#if primaryProvider.diff}}
+                        <dt>{{facilityName}}</dt>
+                        <dd>
+                            <dl class="dl-horizontal">
+                                <dt>Name</dt>
+                                <dd class="demographic-data">{{toTitleCase primaryProvider.name true 'Unassigned'}}</dd>
+                                <dt>Analog Pager</dt>
+                                <dd class="demographic-data">{{formatPhone primaryProvider.analogPager 'not specified'}}</dd>
+                                <dt>Digital Pager</dt>
+                                <dd class="demographic-data">{{formatPhone primaryProvider.digitalPager 'not specified'}}</dd>
+                                <dt>Office Phone</dt>
+                                <dd class="demographic-data">{{formatPhone primaryProvider.officePhone 'not specified'}}</dd>
+                            </dl>
+                        </dd>
+                    {{/if}}
+                    {{/each}}
+                    </dl>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    <div class="col-xs-12 demographic-group-wrapper">
+        <div class="demographic-group-header">
+            <h5>Primary Care Assoc Provider</h5>
+            {{#if associateProvider.diff}}
+            <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapsePrimaryCarAssocProvider" aria-expanded="false" aria-controls="discrepanciesCollapsePrimaryCarAssocProvider" tooltip-data-key="patient_information_deatils_discrepancies">
+                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <span class="sr-only">Press enter to view different data found at other sites</span>
+            </button>
+            {{/if}}
+        </div>
+        <div class="demographic-group-content card-style" data-diff="{{associateProvider.diff}}">
+            <dl class="dl-horizontal">
+                <dt>Name</dt>
+                <dd class="demographic-data">{{toTitleCase associateProvider.name true 'Unassigned'}}</dd>
+                <dt>Analog Pager</dt>
+                <dd class="demographic-data">{{formatPhone associateProvider.analogPager 'not specified'}}</dd>
+                <dt>Digital Pager</dt>
+                <dd class="demographic-data">{{formatPhone associateProvider.digitalPager 'not specified'}}</dd>
+                <dt>Office Phone</dt>
+                <dd class="demographic-data">{{formatPhone associateProvider.officePhone 'not specified'}}</dd>
+            </dl>
+            <!-- Show the different data from the external sites as their own primary provider card-->
+            {{#if associateProvider.diff}}
+            <div class="collapse" id="discrepanciesCollapsePrimaryCarAssocProvider">
+                <div class="well">
+                    <p>Other Sites</p>
+                    <dl data-diff="{{associateProvider.diff}}" class="discrepancy-group">
+                    {{#each items}}
+                    {{#if associateProvider.diff}}
+                        <dt>{{facilityName}}</dt>
+                        <dd>
+                            <dl class="dl-horizontal">
+                                <dt>Name</dt>
+                                <dd class="demographic-data">{{toTitleCase associateProvider.name true 'Unassigned'}}</dd>
+                                <dt>Analog Pager</dt>
+                                <dd class="demographic-data">{{formatPhone associateProvider.analogPager 'not specified'}}</dd>
+                                <dt>Digital Pager</dt>
+                                <dd class="demographic-data">{{formatPhone associateProvider.digitalPager 'not specified'}}</dd>
+                                <dt>Office Phone</dt>
+                                <dd class="demographic-data">{{formatPhone associateProvider.officePhone 'not specified'}}</dd>
+                            </dl>
+                        </dd>
+                    {{/if}}
+                    {{/each}}
+                    </dl>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    {{#if isInpatient}}
+    <div class="col-xs-12 demographic-group-wrapper">
+        <div class="demographic-group-header">
+            <h5>Inpatient Attending Provider</h5>
+            {{#if attendingProvider.diff}}
+            <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseInpatientAttendingProvider" aria-expanded="false" aria-controls="discrepanciesCollapseInpatientAttendingProvider" tooltip-data-key="patient_information_deatils_discrepancies">
+                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <span class="sr-only">Press enter to view different data found at other sites</span>
+            </button>
+            {{/if}}
+        </div>
+        <div class="demographic-group-content card-style" data-diff="{{attendingProvider.diff}}">
+            <dl class="dl-horizontal">
+                <dt>Name</dt>
+                <dd class="demographic-data">{{toTitleCase attendingProvider.name true 'Unassigned'}}</dd>
+                <dt>Analog Pager</dt>
+                <dd class="demographic-data">{{formatPhone attendingProvider.analogPager 'not specified'}}</dd>
+                <dt>Digital Pager</dt>
+                <dd class="demographic-data">{{formatPhone attendingProvider.digitalPager 'not specified'}}</dd>
+                <dt>Office Phone</dt>
+                <dd class="demographic-data">{{formatPhone attendingProvider.officePhone 'not specified'}}</dd>
+            </dl>
+            <!-- Show the different data from the external sites as their own primary provider card-->
+            {{#if attendingProvider.diff}}
+            <div class="collapse" id="discrepanciesCollapseInpatientAttendingProvider">
+                <div class="well">
+                    <p>Other Sites</p>
+                    <dl data-diff="{{attendingProvider.diff}}" class="discrepancy-group">
+                    {{#each items}}
+                    {{#if attendingProvider.diff}}
+                        <dt>{{facilityName}}</dt>
+                        <dd>
+                            <dl class="dl-horizontal">
+                                <dt>Name</dt>
+                                <dd class="demographic-data">{{toTitleCase attendingProvider.name true 'Unassigned'}}</dd>
+                                <dt>Analog Pager</dt>
+                                <dd class="demographic-data">{{formatPhone attendingProvider.analogPager 'not specified'}}</dd>
+                                <dt>Digital Pager</dt>
+                                <dd class="demographic-data">{{formatPhone attendingProvider.digitalPager 'not specified'}}</dd>
+                                <dt>Office Phone</dt>
+                                <dd class="demographic-data">{{formatPhone attendingProvider.officePhone 'not specified'}}</dd>
+                            </dl>
+                        </dd>
+                    {{/if}}
+                    {{/each}}
+                    </dl>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    <div class="col-xs-12 demographic-group-wrapper">
+        <div class="demographic-group-header">
+            <h5>Inpatient Provider</h5>
+            {{#if inpatientProvider.diff}}
+            <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseInpatientProvider" aria-expanded="false" aria-controls="discrepanciesCollapseInpatientProvider" tooltip-data-key="patient_information_deatils_discrepancies">
+                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <span class="sr-only">Press enter to view different data found at other sites</span>
+            </button>
+            {{/if}}
+        </div>
+        <div class="demographic-group-content card-style" data-diff="{{inpatientProvider.diff}}">
+            <dl class="dl-horizontal">
+                <dt>Name</dt>
+                <dd class="demographic-data">{{toTitleCase inpatientProvider.name true 'Unassigned'}}</dd>
+                <dt>Analog Pager</dt>
+                <dd class="demographic-data">{{formatPhone inpatientProvider.analogPager 'not specified'}}</dd>
+                <dt>Digital Pager</dt>
+                <dd class="demographic-data">{{formatPhone inpatientProvider.digitalPager 'not specified'}}</dd>
+                <dt>Office Phone</dt>
+                <dd class="demographic-data">{{formatPhone inpatientProvider.officePhone 'not specified'}}</dd>
+            </dl>
+            <!-- Show the different data from the external sites as their own primary provider card-->
+            {{#if inpatientProvider.diff}}
+            <div class="collapse" id="discrepanciesCollapseInpatientProvider">
+                <div class="well">
+                    <p>Other Sites</p>
+                    <dl data-diff="{{inpatientProvider.diff}}" class="discrepancy-group">
+                    {{#each items}}
+                    {{#if inpatientProvider.diff}}
+                        <dt>{{facilityName}}</dt>
+                        <dd>
+                            <dl class="dl-horizontal">
+                                <dt>Name</dt>
+                                <dd class="demographic-data">{{toTitleCase inpatientProvider.name true 'Unassigned'}}</dd>
+                                <dt>Analog Pager</dt>
+                                <dd class="demographic-data">{{formatPhone inpatientProvider.analogPager 'not specified'}}</dd>
+                                <dt>Digital Pager</dt>
+                                <dd class="demographic-data">{{formatPhone inpatientProvider.digitalPager 'not specified'}}</dd>
+                                <dt>Office Phone</dt>
+                                <dd class="demographic-data">{{formatPhone inpatientProvider.officePhone 'not specified'}}</dd>
+                            </dl>
+                        </dd>
+                    {{/if}}
+                    {{/each}}
+                    </dl>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    {{/if}}
+    <div class="col-xs-12 demographic-group-wrapper">
+        <div class="demographic-group-header">
+            <h5>MH Treatment Team</h5>
+            {{#if mhCoordinator.diff}}
+            <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseMHTreatmentTeam" aria-expanded="false" aria-controls="discrepanciesCollapseMHTreatmentTeam" tooltip-data-key="patient_information_deatils_discrepancies">
+                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <span class="sr-only">Press enter to view different data found at other sites</span>
+            </button>
+            {{/if}}
+        </div>
+        <div class="demographic-group-content card-style" data-diff="{{mhCoordinator.diff}}">
+            <dl class="dl-horizontal">
+                <dt>Name</dt>
+                <dd class="demographic-data">{{toTitleCase mhCoordinator.mhTeam true 'Unassigned'}}</dd>
+                <dt>Office Phone</dt>
+                <dd class="demographic-data">{{formatPhone mhCoordinator.mhTeamOfficePhone 'not specified'}}</dd>
+            </dl>
+            <!-- Show the different data from the external sites as their own primary provider card-->
+            {{#if mhCoordinator.diff}}
+            <div class="collapse" id="discrepanciesCollapseMHTreatmentTeam">
+                <div class="well">
+                    <p>Other Sites</p>
+                    <dl data-diff="{{mhCoordinator.diff}}" class="discrepancy-group">
+                    {{#each items}}
+                    {{#if mhCoordinator.diff}}
+                        <dt class="bold-font">{{facilityName}}</xt>
+                        <dd>
+                            <dl class="dl-horizontal">
+                                <dt>Name</dt>
+                                <dd class="demographic-data">{{toTitleCase mhCoordinator.mhTeam true 'Unassigned'}}</dd>
+                                <dt>Office Phone</dt>
+                                <dd class="demographic-data">{{formatPhone mhCoordinator.mhTeamOfficePhone 'not specified'}}</dd>
+                            </dl>
+                        </dd>
+                    {{/if}}
+                    {{/each}}
+                    </dl>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    <div class="col-xs-12 demographic-group-wrapper">
+        <div class="demographic-group-header">
+            <h5>MH Treatment Coordinator</h5>
+            {{#if mhCoordinator.diff}}
+            <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseMHTreatmentCoordinator" aria-expanded="false" aria-controls="discrepanciesCollapseMHTreatmentCoordinator" tooltip-data-key="patient_information_deatils_discrepancies">
+                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <span class="sr-only">Press enter to view different data found at other sites</span>
+            </button>
+            {{/if}}
+        </div>
+        <div class="demographic-group-content card-style" data-diff="{{mhCoordinator.diff}}">
+            <dl class="dl-horizontal">
+                <dt>Name</dt>
+                <dd class="demographic-data">{{toTitleCase mhCoordinator.name true 'Unassigned'}}</dd>
+                <dt>Analog Pager</dt>
+                <dd class="demographic-data">{{formatPhone mhCoordinator.analogPager 'not specified'}}</dd>
+                <dt>Digital Pager</dt>
+                <dd class="demographic-data">{{formatPhone mhCoordinator.digitalPager 'not specified'}}</dd>
+                <dt>Office Phone</dt>
+                <dd class="demographic-data">{{formatPhone mhCoordinator.officePhone 'not specified'}}</dd>
+            </dl>
+            <!-- Show the different data from the external sites as their own primary provider card-->
+            {{#if mhCoordinator.diff}}
+            <div class="collapse" id="discrepanciesCollapseMHTreatmentCoordinator">
+                <div class="well">
+                    <p>Other Sites</p>
+                    <dl data-diff="{{mhCoordinator.diff}}" class="discrepancy-group">
+                    {{#each items}}
+                    {{#if mhCoordinator.diff}}
+                        <dt>{{facilityName}}</dt>
+                        <dd>
+                            <dl class="dl-horizontal">
+                                <dt>Name</dt>
+                                <dd class="demographic-data">{{toTitleCase mhCoordinator.name true 'Unassigned'}}</dd>
+                                <dt>Analog Pager</dt>
+                                <dd class="demographic-data">{{formatPhone mhCoordinator.analogPager 'not specified'}}</dd>
+                                <dt>Digital Pager</dt>
+                                <dd class="demographic-data">{{formatPhone mhCoordinator.digitalPager 'not specified'}}</dd>
+                                <dt>Office Phone</dt>
+                                <dd class="demographic-data">{{formatPhone mhCoordinator.officePhone 'not specified'}}</dd>
+                            </dl>
+                        </dd>
+                    {{/if}}
+                    {{/each}}
+                    </dl>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>

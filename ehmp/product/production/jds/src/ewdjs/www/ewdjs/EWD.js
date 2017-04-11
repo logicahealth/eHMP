@@ -153,7 +153,7 @@ var EWD = {
   },
   utils: {
     addOptions: function(options, selectTagId) {
-      // EWD.utils.addOptions([{value: 'John', text: 'John      '}], 'doctor');
+      // EWD.utils.addOptions([{value: 'John', text: 'John Smith'}], 'doctor');
       if (options instanceof Array) {
         var selectTag = document.getElementById(selectTagId);
         for (var i = 0; i < options.length; i++) {

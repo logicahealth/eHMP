@@ -2,7 +2,29 @@
 Feature: F144 - eHMP viewer GUI - Allergies
 #Team Neptune
 
-
+@US2801 @F144_3_allergy_applet_modal_detail_display @modal_test @DE549 @triage @data_check @DE3709
+Scenario: User views the modal details when a particular allergy pill is chosen
+	# Given user is logged into eHMP-UI
+	And user searches for and selects "BCMA,Eight"
+	Then Cover Sheet is active
+	And user sees the allergy applet on the coversheet page
+	When the user clicks on the allergy pill "ERYTHROMYCIN"
+	Then the modal is displayed
+  	And the modal's title is "Allergen - ERYTHROMYCIN"
+  	And the allergy applet modal detail contains
+  	| field					| value									|
+  	| Symptoms				| ANOREXIA; DIARRHEA; DROWSINESS; HIVES	|
+  	| Entered By			| DOCWITH,POWER							|
+  	| Nature of Reaction	| Allergy						|
+  	| Drug Classes			|ERYTHROMYCINS/MACROLIDES, PHARMACEUTICAL AIDS/REAGENTS, ANTIBACTERIALS,TOPICAL OPHTHALMIC, ANTIACNE AGENTS,TOPICAL|
+  	| Originated			| 12/19/2013 - 16:18					|
+  	| Observed/Historical	| Observed								|
+  	| Observed Date			| 12/19/2013         					|
+  	| Verified				| N/A									|
+	| Obs dates/severity	| MODERATE								|
+	| Site  				| CAMP MASTER							|
+	And the user clicks the modal "Close Button"
+  	And the modal is closed
     
 @US2801a 
 Scenario: User uses the Allergy applet coversheet to open and close the modal view

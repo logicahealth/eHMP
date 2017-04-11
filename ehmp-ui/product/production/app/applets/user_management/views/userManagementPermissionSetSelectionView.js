@@ -201,7 +201,7 @@ define([
                 },
                 onRender: function() {
                     var self = this;
-                    //self.updatePermissions();
+                    self.updatePermissions();
                     var session = ADK.UserService.getUserSession();
                     var currentUserDuz = session.get('duz')[session.get('site')];
                     this.editingSelf = false;
@@ -213,7 +213,7 @@ define([
                             var changedModel = new Backbone.Model(permissionModel.attributes);
                             changedModel.set('selected', true);
                             self.ui.PermissionsAlertControl.trigger('control:icon', 'fa-exclamation-triangle').trigger('control:type', 'warning').trigger('control:title', 'Error Editing Additional Permissions');
-                            self.model.set('permissionsAlertMessage', "You are not allowed to remove '" + permissionModel.get('label') + "' from your Permissions");
+                            self.model.set('permissionsAlertMessage', "You are not allowed to remove '" + permissionModel.get('label') + "' from your Permissions. See another Access Control Coordinator to remove them.");
                             self.model.get('permissions').remove(permissionModel);
                             self.model.get('permissions').add(changedModel);
 
@@ -232,7 +232,6 @@ define([
                                     var permissionToRemove = self.model.get('permissions').where({
                                         value: permission
                                     })[0];
-                                    console.log(permissionToRemove);
                                     if(!_.isUndefined(permissionToRemove)){
                                         self.model.get('permissions').remove(permissionToRemove);
                                     }
@@ -245,9 +244,9 @@ define([
                         var checkEditOwnPermission = self.model.get('permissions').where({
                             value: 'edit-own-permissions'
                         })[0].get('selected');
-                        var alertMessage = "You are not allowed to remove '" + permissionSetModel.get('label') + "' from your assigned Permission Sets";
+                        var alertMessage = "You are not allowed to remove '" + permissionSetModel.get('label') + "' from the assigned Permission Sets";
                         if (checkEditOwnPermission && permissionSetModel.get('val') === 'acc') {
-                            alertMessage = alertMessage + " until you remove 'Edit Own Permissions' from the additional permissions";
+                            alertMessage = alertMessage + " until 'Edit Own Permissions' is removed from Additional Permissions.";
                         }
                         var autoselectACCPermissionSet = (checkEditOwnPermission && permissionSetModel.get('val') === 'acc' && permissionSetModel.get('selected') === false);
                         var keepPermissionSetSelected = (permissionSetModel.get('keepSelected') && permissionSetModel.get('keepSelected') === true);
@@ -320,6 +319,7 @@ define([
                 events: {
                     'click @ui.CancelButton': function(e) {
                         ADK.UI.Workflow.hide();
+                        appletUtil.focusPreviousTarget();
                     },
                     'submit': function(e) {
                         e.preventDefault();
@@ -398,6 +398,7 @@ define([
                         },
 
                         onSuccess: function(permissionSetsCollection, permissionSetsArray) {
+                            ADK.UI.Workflow.hide();
                             var value = '';
                             var alertMessage = '';
                             if (permissionSetsArray && permissionSetsArray.data && permissionSetsArray.data.val) {
@@ -430,14 +431,13 @@ define([
 
                             } else {
                                 alertMessage = 'An error occurred while updating user permissions. ' +
-                                    'Please try again. If problem persists, please contact the Help Desk for assistance.';
+                                    'Try again. If problem persists, contact the Help Desk for assistance.';
                                 appletUtil.appletAlert.warning(model.collection, 'Error Editing Permission Sets', alertMessage);
                             }
-                            ADK.UI.Workflow.hide();
                         },
                         onError: function(error, response) {
                             var alertMessage = 'An error occurred while updating user permissions. ' +
-                                'Please try again. If problem persists, please contact the Help Desk for assistance.';
+                                'Try again. If problem persists, contact the Help Desk for assistance.';
                             appletUtil.appletAlert.warning(model.collection, 'Error Editing Permission Sets', alertMessage);
                         }
                     };
@@ -447,13 +447,21 @@ define([
 
             var workflowOptions = {
                 size: "large",
-                title: "Select Permission Sets for " + ADK.UserService.getUserSession().get('facility').toUpperCase() + " User: " + model.get("lname") + ", " + model.get("fname"),
+                title: "Select Permissions for " + ADK.UserService.getUserSession().get('facility').toUpperCase() + " User: " + model.get("lname") + ", " + model.get("fname"),
                 showProgress: false,
                 backdrop: true,
                 keyboard: true,
                 steps: [{
                     view: FormView,
-                    viewModel: new FormModel()
+                    viewModel: new FormModel(),
+                    onBeforeShow: function() {
+                        workflow.changeHeaderCloseButtonOptions({
+                            onClick: function(e) {
+                                ADK.UI.Workflow.hide();
+                                appletUtil.focusPreviousTarget();
+                            }
+                        });
+                    }
                 }]
             };
             var workflow = new ADK.UI.Workflow(workflowOptions);

@@ -17,13 +17,14 @@ define([
             var self = this;
             this.listenTo(this.searchedUsersCollection, 'bulk-edit-reset',
                 function(models) {
+                    self.enableSearchForm();
                     self.setPaging();
                     var cleanedModels = self.cleanSearchResults(new Backbone.Collection(models));
 
                     var resetParrentCollectionWithoutDuplicates = appletUtil.removeDuplicatesFromCollection(self.currentSelectedUsers, new Backbone.Collection(cleanedModels), 'duz');
                     var resetParrentCollectionWithoutDuplicatesModels = resetParrentCollectionWithoutDuplicates.models;
                     self.model.get('usersListResults').reset(resetParrentCollectionWithoutDuplicatesModels.concat(self.currentSelectedUsers));
-                    self.model.get('usersListResults').trigger('add remove');
+                    self.model.get('usersListResults').trigger('update');
                     self.hideLoadingView();
                     if (cleanedModels.length !== models.length) {
                         self.setPaging(' with myself removed from the list of available users to select');
@@ -70,10 +71,9 @@ define([
                 if (!_.isUndefined(paging_data)) {
                     this.model.set('resultCount', message);
                     this.model.set('resultCountLabel', message.replace('-', 'through'));
-                    this.currentStartIndex = paging_data.currentStart;
-                    this.nextPageStartIndex = paging_data.nextStart;
-                    this.previousPageStartIndex = paging_data.previousStart;
-                    if (paging_data.nextStart === 0 && paging_data.previousStart === 0 && this.currentStartIndex === 0) {
+                    this.nextPage = paging_data.nextPage;
+                    this.previousPage = paging_data.previousPage;
+                    if (paging_data.nextPage === 1 && paging_data.previousPage === 1 && paging_data.currentPage === 1) {
                         this.disablePagingButtons();
                     } else {
                         this.enablePagingButtons();
@@ -102,7 +102,9 @@ define([
                 type: "button",
                 label: "Clear All",
                 id: 'clear-permissions-button',
-                extraClasses: ['btn-default', "removeFromClone", "disableOnWarning"]
+                extraClasses: ['btn-default', 'btn-sm', "remove-from-clone", "disable-on-warning"],
+                title: 'Press enter to clear all filters.',
+                disabled: true
             };
             this.ui.editUsersAdditionalPermissionsContainer.trigger('control:items:update',
                 userManagementMultiUserEditForms.getPermissionsSelect(appletUtil.getPermissions()));
@@ -121,8 +123,8 @@ define([
             });
             this.hideEditUsersView();
             this.resetAdditionalPermissionsSelect();
-            this.ui.disableOnWarningControls = this.$el.find('.disableOnWarning');
-            this.ui.removeFromClone = this.$el.find(".removeFromClone");
+            this.ui.disableOnWarningControls = this.$el.find('.disable-on-warning');
+            this.ui.removeFromClone = this.$el.find(".remove-from-clone");
             this.updateEditUsersSelectedUsersTextArea();
             if (this.model.get('initialAlert') !== '' && this.model.get('initialAlert') !== null) {
                 appletUtil.appletAlert.warning(this.searchedUsersCollection, 'Removed User Warning', this.model.get('initialAlert'), true);
@@ -144,30 +146,32 @@ define([
             items: userManagementMultiUserEditForms.searchForm
         }],
         ui: {
-            "searchButtonControl": ".mainSearchForm .Search",
-            "allControls": ".searchForm.control",
-            "mainSearchFormControls": ".mainSearchForm",
-            "loadingViewControl": ".loadingView",
+            "searchButtonControl": ".main-search-form .Search",
+            "allControls": ".search-form .control",
+            "mainSearchFormControls": ".main-search-form",
+            "loadingViewControl": ".loading-view",
             "editUsersPermissionSets": ".editUsersPermissionSets",
             "editUsersAdditionalPermissions": ".editUsersAdditionalPermissions",
-            "editUsersAdditionalPermissionsContainer": ".editUsersAdditionalPermissionsContainer",
+            "editUsersAdditionalPermissionsContainer": ".edit-users-additional-permissions-container",
             "alertBannerControl": "div.control.alertBanner-control",
-            "editUsersFormControl": ".editUsersForm",
+            "editUsersFormControl": ".edit-users-form",
             "allEditUsersSelectedUsersTextAreas": ".editUsersSelectedUsersTextArea",
-            "editUserCloneControls": ".editUserClone",
-            "editUserCloneAlertControl": ".editUsersForm div.control.alertBanner-control",
+            "editUserCloneControls": ".edit-user-clone",
+            "editUserCloneAlertControl": ".edit-users-form div.control.alertBanner-control",
             "editUsersCloneUsersSelect": ".editUsersCloneUsersSelect",
-            "selectableUsersTableContainer": ".selectableUsersTableContainer",
-            "editActionAlertMessageContainer": ".editActionAlertMessageContainer",
+            "selectableUsersTableContainer": ".selectable-users-table-container",
+            "editActionAlertMessageContainer": ".edit-action-alert-message-container",
             "selectedUserTemplatePermissionSets": ".selectedUserTemplatePermissionSets",
             "selectedUserTemplateAdditionalPermissions": ".selectedUserTemplateAdditionalPermissions",
-            "nextPageButton": "#next-page-button",
-            "previousPageButton": "#previous-page-button",
-            "removeFromClone": ".removeFromClone",
-            "permissionSetsPicklist": ".permissionSetsPicklist",
-            "permissionSetsForSearchPicklist": ".permissionSetsForSearchPicklist",
-            "additionalPermissionsPickList": ".additionalPermissionsPickList",
-            "disableOnWarningControls": ".disableOnWarning",
+            "nextPageButton": ".next-page-button",
+            "previousPageButton": ".previous-page-button",
+            "removeFromClone": ".remove-from-clone",
+            "permissionSetsPicklist": ".permission-sets-picklist",
+            "permissionSetsForSearchPicklist": ".permission-sets-for-search-picklist",
+            "additionalPermissionsPickList": ".additional-permissions-pickList",
+            "disableOnWarningControls": ".disable-on-warning",
+            "clearPermissionSetsButton":"#clear-permission-sets-button",
+            "clearPermissionsButton":"#clear-permissions-button",
             /*footer view controls*/
             'backButtonControl': '#back-button',
             'editUsersButton': '#edit-users-button',
@@ -177,10 +181,12 @@ define([
             'bulkEditButtonsControl': '.bulk-edit-btn'
         },
         enableForm: function(e) {
+            this.ui.allControls = this.$el.find('.search-form .control').not('.popover-control');
             this.ui.allControls.trigger('control:disabled', false);
             this.setPaging();
         },
         disableForm: function(e) {
+            this.ui.allControls = this.$el.find('.search-form .control').not('.popover-control');
             this.ui.allControls.trigger('control:disabled', true);
         },
         enableBulkEditButtons: function(e) {
@@ -227,10 +233,10 @@ define([
             ]);
             this.ui.permissionSetsForSearchPicklist.trigger('control:items:update',
                 userManagementMultiUserEditForms.getPermissionSetsSearchSelect(appletUtil.getUnduplicatedPermissionSets()));
-            this.ui.removeFromClone = this.$el.find(".removeFromClone");
+            this.ui.removeFromClone = this.$el.find(".remove-from-clone");
             var selectedUsers = this.getSelectedUsers();
             this.ui.editUsersAdditionalPermissions = this.$el.find('.editUsersAdditionalPermissions');
-            this.ui.editUsersFormControl = this.$el.find('.editUsersForm');
+            this.ui.editUsersFormControl = this.$el.find('.edit-users-form');
             _.each(selectedUsers, function(selectedUser) {
                 selectedUser.set('newFormattedPermissionSetsString', selectedUser.get('formattedPermissionSets'));
                 selectedUser.set('newAdditionalPermissionsLabelsFormatted', selectedUser.get('additionalPermissionsLabels'));
@@ -250,6 +256,7 @@ define([
             this.model.set('editUsersAdditionalPermissions', this['editUsersAdditionalPermissions-' + this.model.get('editMode')] || []);
 
             this.ui.editUsersAdditionalPermissions.trigger('control:hidden', false);
+            this.updateSelectedUsersTable(selectedUsers);
             if (this.model.get('editMode') === 'clone-permissions') {
                 appletUtil.appletAlert.warning(this.searchedUsersCollection, 'Cloning User Warning', 'All existing permission sets and permissions will be replaced for all selected users.', true);
                 this.ui.editUsersCloneUsersSelect.trigger('control:hidden', false);
@@ -261,8 +268,7 @@ define([
                 }
                 this.$el.find('#editUsersCloneUsersSelect').focus();
             } else {
-                this.$el.find('.permissionSetsPicklist').find('.select2-selection').focus();
-                this.updateSelectedUsersTable(selectedUsers);
+                this.$el.find('.permission-sets-picklist').find('.select2-selection').focus();
             }
         },
         events: {
@@ -289,10 +295,10 @@ define([
                     appletUtil.appletAlert.warning(this.searchedUsersCollection, 'Remove User Permissions Warning', 'You may want to remove the following users: ' + this.usersWithRetainedPermissionsString, true);
                 }
                 this.model.set('workflowTitle', 'BULK EDIT: SEARCH AND SELECT USERS');
-                this.$el.find('.disableOnWarning').trigger('control:disabled', false);
+                this.$el.find('.disable-on-warning').trigger('control:disabled', false);
                 this.showSearchView();
                 this.hideEditUsersView();
-                this.$el.find('#lastNameValue').focus();
+                this.$el.find('#lastNameValueBulkEdit').focus();
             },
             'click #cancelActionReturnButton': function(e) {
                 e.preventDefault();
@@ -309,10 +315,10 @@ define([
                     appletUtil.appletAlert.warning(this.searchedUsersCollection, 'Remove User Permissions Warning', 'You may want to remove the following users: ' + this.usersWithRetainedPermissionsString, true);
                 }
                 this.model.set('workflowTitle', 'BULK EDIT: SEARCH AND SELECT USERS');
-                this.$el.find('.disableOnWarning').trigger('control:disabled', false);
+                this.$el.find('.disable-on-warning').trigger('control:disabled', false);
                 this.showSearchView();
                 this.hideEditUsersView();
-                this.$el.find('#lastNameValue').focus();
+                this.$el.find('#lastNameValueBulkEdit').focus();
             },
             'click #confirmActionButton': function(e) {
                 e.preventDefault();
@@ -321,6 +327,7 @@ define([
             'click #cancel-button': function(e) {
                 e.preventDefault();
                 ADK.UI.Workflow.hide();
+                appletUtil.focusPreviousTarget();
             },
             'click #edit-users-button': function(e) {
                 e.preventDefault();
@@ -342,7 +349,11 @@ define([
                 this.hideSearchView();
                 this.showEditUsersView();
                 this.onSelectUserTemplate();
-                this.ui.editUsersCloneUsersSelect.trigger('control:picklist:set', new Backbone.Collection(this.getSelectedUsers()));
+                var newPicklist = new Backbone.Collection(this.getSelectedUsers());
+                this.ui.editUsersCloneUsersSelect.trigger('control:picklist:set', newPicklist);
+                this.model.set('editUsersCloneUsersSelect','');
+                this.onChangeEditUsersAdditionalPermissions();
+                this.onChangeEditUsersPermissionSets();
                 this.updateEditUsersSelectedUsersTextArea();
             },
             'click .next-page-button button': function(e) {
@@ -350,14 +361,14 @@ define([
                 this.clearAlert();
                 this.disableForm(e);
                 this.showLoadingView();
-                this.searchUsers(e, this.nextPageStartIndex);
+                this.searchUsers(e, this.nextPage);
             },
             'click .previous-page-button button': function(e) {
                 e.preventDefault();
                 this.clearAlert();
                 this.disableForm(e);
                 this.showLoadingView();
-                this.searchUsers(e, this.previousPageStartIndex);
+                this.searchUsers(e, this.previousPage);
             },
             'click #clone-permissions-button': function(e) {
                 e.preventDefault();
@@ -365,7 +376,7 @@ define([
                 if (this.usersWithLostPermissions.length > 0) {
                     this.saveSelectforms();
                     this.disableBulkEditButtons();
-                    this.$el.find('.disableOnWarning').trigger('control:disabled', true);
+                    this.$el.find('.disable-on-warning').trigger('control:disabled', true);
                     this.ui.editActionAlertMessageContainer.trigger('control:items:update',
                         userManagementMultiUserEditForms.getBeforeCloneAlert(this.usersWithLostPermissions));
                     this.$el.find('#cancelActionReturnButton').focus();
@@ -421,7 +432,7 @@ define([
 
                 if (this.usersWithRetainedPermissions.length > 0) {
                     this.saveSelectforms();
-                    this.ui.additionalPermissionsPickList = this.$el.find('.additionalPermissionsPickList');
+                    this.ui.additionalPermissionsPickList = this.$el.find('.additional-permissions-pickList');
                     this.ui.additionalPermissionsPickList.trigger('control:picklist:set', [
                         []
                     ]);
@@ -429,7 +440,7 @@ define([
                         []
                     ]);
                     this.disableBulkEditButtons();
-                    this.$el.find('.disableOnWarning').trigger('control:disabled', true);
+                    this.$el.find('.disable-on-warning').trigger('control:disabled', true);
                     this.ui.editActionAlertMessageContainer.trigger('control:items:update',
                         userManagementMultiUserEditForms.getBeforeRemoveAlert(this.usersWithRetainedPermissions));
                     this.$el.find('#cancelActionReturnButton').focus();
@@ -448,11 +459,13 @@ define([
                 e.preventDefault();
                 this.clearAlert();
                 this.model.set('editUsersPermissionSets', []);
+                this['editUsersPermissionSets-' + this.previousEditMode] = [];
             },
             'click #clear-permissions-button': function(e) {
                 e.preventDefault();
                 this.clearAlert();
                 this.model.set('editUsersAdditionalPermissions', []);
+                this['editUsersAdditionalPermissions-' + this.previousEditMode] = [];
             }
         },
         clearAlert: function() {
@@ -468,13 +481,33 @@ define([
         },
         modelEvents: {
             'change:resultCount': 'updateResultCount',
-            'change:firstNameValue': 'enableSearchButton',
-            'change:lastNameValue': 'enableSearchButton',
-            'change:permissionSetValue': 'enableSearchButton',
-            'change:duzValue': 'enableSearchButton',
+            'change:firstNameValueBulkEdit': 'enableSearchButton',
+            'change:lastNameValueBulkEdit': 'enableSearchButton',
+            'change:permissionSetValueBulkEdit': 'enableSearchButton',
+            'change:duzValueBulkEdit': 'enableSearchButton',
             'change:editUsersCloneUsersSelect': 'onSelectUserTemplate',
             'change:editMode': 'onChangeEditMode',
-            'change:workflowTitle': 'onChangeWorkflowTitle'
+            'change:workflowTitle': 'onChangeWorkflowTitle',
+            'change:editUsersAdditionalPermissions': 'onChangeEditUsersAdditionalPermissions',
+            'change:editUsersPermissionSets': 'onChangeEditUsersPermissionSets'
+        },
+        onChangeEditUsersAdditionalPermissions: function(){
+            this.ui.clearPermissionsButton = this.$el.find('#clear-permissions-button');
+            if(this.model.get('editUsersAdditionalPermissions') === null || this.model.get('editUsersAdditionalPermissions') === [] || this.model.get('editUsersAdditionalPermissions').length === 0){
+                this.ui.clearPermissionsButton.trigger('control:disabled', true);
+            }else{
+                this.ui.clearPermissionsButton.trigger('control:disabled', false);
+            }
+            this.ui.clearPermissionsButton = this.$el.find('#clear-permissions-button');
+        },
+        onChangeEditUsersPermissionSets: function(){
+            this.ui.clearPermissionSetsButton = this.$el.find('#clear-permission-sets-button');
+            if(this.model.get('editUsersPermissionSets') === null || this.model.get('editUsersPermissionSets') === [] || this.model.get('editUsersPermissionSets').length === 0){
+                this.ui.clearPermissionSetsButton.trigger('control:disabled', true);
+            }else{
+                this.ui.clearPermissionSetsButton.trigger('control:disabled', false);
+            }
+            this.ui.clearPermissionSetsButton = this.$el.find('#clear-permission-sets-button');
         },
         onChangeWorkflowTitle: function() {
             this.workflowParent.changeHeaderTitle(ADK.UserService.getUserSession().get('facility').toUpperCase() + ' USERS ' + this.model.get('workflowTitle'));
@@ -490,7 +523,7 @@ define([
         onChangeEditMode: function() {
             this.enableDisableEditUsersButton();
             if (this.model.get('editMode') === 'clone-permissions') {
-                appletUtil.appletAlert.warning(this.searchedUsersCollection, 'Cloning User Warning', 'All existing permission sets and permissions will be replaced for all selected users. Please include the user you would like to clone from in the list of selected users.', true);
+                appletUtil.appletAlert.warning(this.searchedUsersCollection, 'Cloning User Warning', 'All existing permission sets and permissions will be replaced for all selected users. Include the user you would like to clone from in the list of selected users.', true);
             }
             this.saveSelectforms();
         },
@@ -517,17 +550,21 @@ define([
         updateResultCount: function() {
             var newCount = this.model.get('resultCount');
             appletUtil.setStorageModel('resultCount', newCount);
-            this.$el.find('#resultcountlabel').text(newCount);
-            this.$el.find('#resultcountlabel').attr('title', 'Table is now ' + newCount + '');
+            var resultCountLabelBulkEdit = this.$el.find('#resultCountLabelBulkEdit');
+            resultCountLabelBulkEdit.text(newCount);
+            resultCountLabelBulkEdit.attr('title', 'Table is now ' + newCount + '');
             //appletUtil.setStorageModel('bulkEditFormModel', this.model.attributes);
         },
         onSelectUserTemplate: function() {
+            var selectedUser;
             var self = this;
             this.ui['clone-permissions-button'] = this.$el.find('#clone-permissions-button');
-            var selectedUserDuz = this.model.get('editUsersCloneUsersSelect');
-            var selectedUser = new Backbone.Collection(this.getSelectedUsers()).where({
-                duz: parseInt(selectedUserDuz)
-            })[0];
+            if (!_.isUndefined(this.model.get('editUsersCloneUsersSelect'))) {
+                this.selectedUserDuz = this.model.get('editUsersCloneUsersSelect');
+                selectedUser = new Backbone.Collection(this.getSelectedUsers()).where({
+                    duz: parseInt(this.selectedUserDuz)
+                })[0];
+            }
             var nextUsersForTable = this.getSelectedUsers();
             if (!_.isUndefined(selectedUser)) {
                 this.ui['clone-permissions-button'].trigger('control:disabled', false);
@@ -580,6 +617,7 @@ define([
         showAlert: function(icon, type, title, message) {
             this.ui.alertBannerControl.trigger('control:icon', icon).trigger('control:type', type).trigger('control:title', title);
             this.model.set('alertMessage', message);
+            this.ui.alertBannerControl.find('button.close').focus();
         },
         enableSearchButton: function(e) {
             this.clearAlert();
@@ -598,18 +636,18 @@ define([
         getEditMode: function(e) {
             return this.model.get('editMode');
         },
-        searchUsers: function(e, startIndex) {
-            var start = startIndex || 0;
+        searchUsers: function(e, startPage) {
+            var page = startPage || 1;
             this.currentSelectedUsers = this.getSelectedUsers();
 
             var filterParameters;
-            if (startIndex !== null && !_.isUndefined(this.currentFilterParameters)) {
+            if (startPage !== null && !_.isUndefined(this.currentFilterParameters)) {
                 filterParameters = this.currentFilterParameters;
             } else {
                 filterParameters = appletUtil.getFormFieldsValues(this.model, true);
                 this.currentFilterParameters = filterParameters;
             }
-            var query = appletUtil.createUserSearchFilter(filterParameters, start);
+            var query = appletUtil.createUserSearchFilter(filterParameters, page);
 
             eventHandler.createUserList(false, query, this.model.attributes, this.searchedUsersCollection, this);
         },
@@ -626,9 +664,9 @@ define([
         },
         callEditUsersEndpoint: function() {
             var editModeMap = {
-                'add-permissions': 'ADD',
-                'remove-permissions': 'REMOVE',
-                'clone-permissions': 'CLONE'
+                'add-permissions': 'add',
+                'remove-permissions': 'remove',
+                'clone-permissions': 'clone'
             };
             var usersToEdit = this.getCondensedUsers(this.getSelectedUsers());
             var selectedPermissionSetsValues = this['editUsersPermissionSets-' + this.model.get('editMode')];
@@ -668,7 +706,7 @@ define([
                 },
                 onError: function(error, response) {
                     var alertMessage = 'An error occurred while updating user permissions. ' +
-                        'Please try again. If problem persists, please contact the Help Desk for assistance.';
+                        'Try again. If problem persists, contact the Help Desk for assistance.';
                     appletUtil.appletAlert.warning(self.searchedUsersCollection, 'Error Editing Permission Sets', alertMessage);
                 }
             };

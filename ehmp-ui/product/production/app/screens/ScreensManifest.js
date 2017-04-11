@@ -1,11 +1,7 @@
 define(function() {
     'use strict';
     var screensManifest = {
-        predefinedDefaultScreen: 'overview',
-        logonScreen: 'logon-screen',
-        patientSearchScreen: 'patient-search-screen',
-        ssoLogonScreen: 'sso',
-        providerDefaultScreen: 'provider-centric-view'
+        ssoLogonScreen: 'sso'
     };
 
     var screens = [];
@@ -110,28 +106,16 @@ define(function() {
         fileName: 'Overview'
     });
     screens.push({
+        routeName: 'summary',
+        fileName: 'Summary'
+    });
+    screens.push({
         routeName: 'cds-advice-full',
         fileName: 'CDSAdviceFull'
     });
     screens.push({
         routeName: 'sso',
         fileName: 'ssoLogonScreen'
-    });
-    screens.push({
-        routeName: 'depression-cbw',
-        fileName: 'DepressionCBW'
-    });
-    screens.push({
-        routeName: 'diabetes-mellitus-cbw',
-        fileName: 'DiabetesMellitusCBW'
-    });
-    screens.push({
-        routeName: 'hypertension-cbw',
-        fileName: 'HypertensionCBW'
-    });
-    screens.push({
-        routeName: 'pre-procedure-cbw',
-        fileName: 'PreProcedureCBW'
     });
     screens.push({
         routeName: 'ehmp-administration',
@@ -166,6 +150,14 @@ define(function() {
     screens.push({
         routeName: 'notifications-full',
         fileName: 'NotificationsFull'
+    });
+    screens.push({
+        routeName: 'activities-patient-full',
+        fileName: 'ActivitiesPatientFull'
+    });
+    screens.push({
+        routeName: 'activities-staff-full',
+        fileName: 'ActivitiesStaffFull'
     });
 
 

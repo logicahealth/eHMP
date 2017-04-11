@@ -1,5 +1,6 @@
 module.exports = function (grunt) {
     'use strict';
+    var buildStamp = new Date().getTime();
     var pkg = grunt.file.readJSON('package.json');
     grunt.initConfig({
         pkg : grunt.file.readJSON('package.json'),
@@ -68,7 +69,8 @@ module.exports = function (grunt) {
                     data: {
                         debug: false,
                         adkMin: false,
-                        owa:false
+                        owa: false,
+                        buildStamp: buildStamp
                     },
                     pretty: true
                 },
@@ -87,7 +89,8 @@ module.exports = function (grunt) {
                     data: {
                         debug: false,
                         adkMin: true,
-                        owa:false
+                        owa: false,
+                        buildStamp: buildStamp
                     },
                     pretty: true
                 },
@@ -210,7 +213,7 @@ module.exports = function (grunt) {
                     archive: 'build/<%= pkg["artifact-name"] %>.tgz'
                 },
                 files: [
-                    { expand: true, src: ['**/*', '!**/node_modules/**', '!build/**', '!applets/**', '!**/test/**', '!*SpecRunner.html', '!README.md', '!.gitignore', '!**/package.json', '!**/Gruntfile.js', '!**/*.groovy', '!**/*config.rb', '!build.gradle', '!**/*.jade', '!**/*.scss', '!graph/**', '!gems/**', '!**/*.gem', '!Gemfile', '!app/**', '!Gemfile.lock'] }
+                    { expand: true, src: ['**/*', '!**/documentation/**', '!**/node_modules/**', '!build/**', '!applets/**', '!**/test/**', '!*SpecRunner.html', '!README.md', '!.gitignore', '!**/package.json', '!**/Gruntfile.js', '!**/*.groovy', '!**/*config.rb', '!build.gradle', '!**/*.jade', '!**/*.scss', '!graph/**', '!gems/**', '!**/*.gem', '!Gemfile', '!app/**', '!Gemfile.lock'] }
                 ]
             }
         },

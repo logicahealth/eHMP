@@ -1,6 +1,6 @@
 When(/^the client "(.*?)" requests user info$/) do |client|
   path = RDClass.resourcedirectory_fetch.get_url("user-service-userinfo")
-  @response = HTTPartyWithBasicAuth.get_with_authorization_for_user(path, client, TestClients.password_for(client))
+  @response = HTTPartyRDK.get_as_user(path, client, TestClients.password_for(client))
 end
 
 def search_json(result_array, table, dateformat = DefaultDateFormat.format)

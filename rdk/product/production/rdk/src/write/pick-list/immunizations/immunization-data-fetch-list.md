@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Immunization data [/immunization-data{?site}{&brief}{&activeOnly}{&selectableForHistoric}{&fields}]
+## Immunization data [/immunization-data{?site}{&brief}{&activeOnly}{&selectableForHistoric}]
 
 Return an array of the entries from the IMMUNIZATION file (9999999.14)
 
@@ -17,8 +17,6 @@ PXVIMM IMMDATA
     + activeOnly (boolean, required) - A value of true indicates that only active immunizations should be returned.
 
     + selectableForHistoric (boolean, required) - A value of true indicates that records marked as SELECTABLE FOR HISTORIC `8803` should also be returned along with the active immunizations. This only has meaning if the activeOnly parameter is also set to true. Otherwise all records will be returned whether or not the SELECTABLE FOR HISTORIC flag is true.
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

@@ -4,48 +4,40 @@
 #
 
 oracle_connector_home = "#{node['jboss-eap']['install_path']}/#{node['jboss-eap']['symlink']}/modules/system/layers/base/com/oracle/ojdbc6/main"
-datasource_password = Chef::EncryptedDataBagItem.load("oracle", "oracle_password", 'n25q2mp#h4')["password"]
-jbpm_schema_password = Chef::EncryptedDataBagItem.load("jbpm", "jbpm_schema_password", 'n25q2mp#h4')["password"]
-activitydb_schema_password = Chef::EncryptedDataBagItem.load("jbpm", "activitydb_schema_password", 'n25q2mp#h4')["password"]
+jbpm_schema_password = Chef::EncryptedDataBagItem.load("jbpm", "jbpm_schema_password", node[:data_bag_string])["password"]
+activitydb_schema_password = Chef::EncryptedDataBagItem.load("jbpm", "activitydb_schema_password", node[:data_bag_string])["password"]
 
-#Create jBPM schema
-cookbook_file "#{Chef::Config[:file_cache_path]}/create_jbpm_schema.sql"
-
-as_oracle = "sudo -Eu oracle PATH=$PATH"
-
-execute "Create jbpm oracle schema" do
-  command "#{as_oracle} echo exit | sqlplus sys/#{datasource_password} as sysdba@connect @#{Chef::Config[:file_cache_path]}/create_jbpm_schema.sql"
-  # this command has a password in it - we don't want it to show up in logs
-  sensitive true
+remote_file "#{Chef::Config.file_cache_path}/sql_config.tgz" do
+  use_conditional_get true
+  source node[:jbpm_sql_config_artifacts][:source]
+  mode   "0755"
+  notifies :delete, "directory[#{node[:jbpm][:oracle_config][:sql_config_dir]}]", :immediately
 end
 
-#Create activitydb schema
-cookbook_file "#{Chef::Config[:file_cache_path]}/create_jbpm_activitydb_schema.sql"
-
-execute "Create activitydb oracle schema" do
-  command "#{as_oracle} echo exit | sqlplus sys/#{datasource_password} as sysdba@connect @#{Chef::Config[:file_cache_path]}/create_jbpm_activitydb_schema.sql"
-  sensitive true
+directory node[:jbpm][:oracle_config][:sql_config_dir] do
+  owner  'root'
+  group  'root'
+  mode "0755"
+  recursive true
+  action :create
 end
 
-#Create pcmm schema
-cookbook_file "#{Chef::Config[:file_cache_path]}/create_jbpm_pcmm_schema.sql"
-
-execute "Create pcmm oracle schemas" do
-  command "#{as_oracle} echo exit | sqlplus sys/#{datasource_password} as sysdba@connect @#{Chef::Config[:file_cache_path]}/create_jbpm_pcmm_schema.sql"
-  sensitive true
+execute "extract_sql_config.tgz" do
+  cwd node[:jbpm][:oracle_config][:sql_config_dir]
+  command "tar -zxvf #{Chef::Config.file_cache_path}/sql_config.tgz"
+  notifies :execute, "jbpm_sql_config[configure_sql]", :immediately
+  only_if { (Dir.entries(node[:jbpm][:oracle_config][:sql_config_dir]) - %w{ . .. }).empty? }
 end
 
-#Create pcmm schema
-cookbook_file "#{Chef::Config[:file_cache_path]}/create_jbpm_all_schemas.sql"
-
-execute "Create remaining oracle schemas" do
-  command "#{as_oracle} echo exit | sqlplus sys/#{datasource_password} as sysdba@connect @#{Chef::Config[:file_cache_path]}/create_jbpm_all_schemas.sql"
-  sensitive true
+jbpm_sql_config "configure_sql" do
+  config_dir node[:jbpm][:oracle_config][:sql_config_dir]
+  action :nothing
 end
 
 # Install oracle connector in jboss
-directory "#{oracle_connector_home}" do
-  user node['jboss-eap'][:jboss_user]
+common_directory "#{oracle_connector_home}" do
+  owner node['jboss-eap'][:jboss_user]
+  mode 755
   recursive true
   action :create
 end
@@ -69,6 +61,7 @@ template "#{Chef::Config['file_cache_path']}/jbpm_oracle_datasource.xml" do
     :jbpm_schema_password => jbpm_schema_password,
     :activitydb_schema_password => activitydb_schema_password
   )
+  notifies :run, "execute[Set jta flag to true in standalone.xml]", :immediately
 end
 
 template "#{Chef::Config['file_cache_path']}/jbpm_oracle_driver.xml" do
@@ -90,9 +83,9 @@ execute "Add oracle datasource to standalone.xml" do
   notifies :stop, "service[jboss]", :immediately
 end
 
-jbpm_check_war_deployment "business-central"
-
-template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/classes/META-INF/persistence.xml" do
-  variables(:dialect => "Oracle10gDialect")
-  notifies :stop, "service[jboss]", :immediately
+# This is for updating jta flag in existing jbpm deployments
+execute "Set jta flag to true in standalone.xml" do
+  command "sed -i 's/jta=\"false\"/jta=\"true\"/' #{node[:jbpm][:home]}/configuration/standalone.xml"
+  action :nothing
 end
+

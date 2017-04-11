@@ -9,7 +9,7 @@ Then(/^the VPR results contain "(.*?)"$/) do |_arg1, table|
   result_array = @json_object["data"]["items"]
 
   json_verify = VerifyJsonRuntimeValue.new
-  json_verify.verify_json_runtime_vlaue(result_array, table)
+  json_verify.verify_json_runtime_value(result_array, table)
 end
 
 Then(/^the FHIR results contain "(.*?)"$/) do |_arg1, table|
@@ -17,7 +17,7 @@ Then(/^the FHIR results contain "(.*?)"$/) do |_arg1, table|
   result_array = @json_object["entry"]
 
   json_verify = VerifyJsonRuntimeValue.new
-  json_verify.verify_json_runtime_vlaue(result_array, table)
+  json_verify.verify_json_runtime_value(result_array, table)
 end
 
 Then(/^the VPR results contain data from multiple VistAs should be greater than$/) do |table|

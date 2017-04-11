@@ -8,7 +8,7 @@ define([
     //=============================================================================================================
     // PLEASE DO NOT COPY AND PASTE THIS FULL FILE. PLEASE JUST USE AS A REFERENCE AND COPY PARTS THAT ARE NEEDED
     // for more information on how to layout this form for your applet please checkout the following link:
-    // http://IP        /documentation/#/adk/conventions#Writeback
+    // http://IP_ADDRESS/documentation/#/adk/conventions#Writeback
     //=============================================================================================================
 
     var F457 = {
@@ -177,7 +177,7 @@ define([
                     facility: "TST01 - Las Vegas",
                     phone1: "(702) 321-4567",
                     phone2: "none",
-                    email1: "PII               ",
+                    email1: PII                ",
                     email2: "clark.bravo@asmr.com"
                 }
             });

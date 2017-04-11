@@ -1,7 +1,7 @@
 {
   "id": "vista-kodak",
   "normal": {
-    "ipaddress": "172.16.80.5",
+    "ipaddress": "IPADDRESS",
     "vista": {
       "domain_name": "KODAK.VISTACORE.US",
       "site_recipe": "panorama",
@@ -9,8 +9,8 @@
       "site_id": "C877",
       "site": "KODAK",
       "station_number": "507",
-      "access_code": "PW    ",
-      "verify_code": "PW    !!",
+      "access_code": "ep1234",
+      "verify_code": "ep1234!!",
       "division": "500",
       "clinics_osync_appointment_request": [
         {

@@ -1,0 +1,25 @@
+{
+  "id": "vista-kodak",
+  "normal": {
+    "ipaddress": "IP__ADDRESS",
+    "vista": {
+      "domain_name": "KODAK.VISTACORE.US",
+      "site_recipe": "panorama",
+      "import_recipe": "kodak",
+      "site_id": "C877",
+      "site": "KODAK",
+      "station_number": "507",
+      "access_code": "ep1234",
+      "verify_code": "ep1234!!",
+      "connect_timeout": 3000,
+      "send_timeout": 20000,
+      "division": "500",
+      "rpc_port": 9210,
+      "clinics_osync_appointment_request": null
+    },
+    "stack": "production-staging-deploy-r1-2-conversion",
+    "roles": [
+      "vista-kodak"
+    ]
+  }
+}

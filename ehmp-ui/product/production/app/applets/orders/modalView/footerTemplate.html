@@ -1,12 +1,6 @@
-{{#if loading_progress}}
-<div class="pull-left">
-    <i class="fa fa-spinner fa-spin pull-left"></i>Loading...
-</div>
-{{/if}}
-<div class="pull-right">
-    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" title="Press enter to close.">Close</button>
+<div>
     {{#hasPermission 'discontinue-lab-order'}}
-    <button type="button" class="btn btn-default btn-sm" id="ordersDiscontinueOrder" title="Press enter to cancel." {{getDiscontinueBtnStatus}}>{{#if discontinueBtnLabel}}{{discontinueBtnLabel}}{{else}}Cancel{{/if}}</button>
+    <button type="button" class="btn btn-danger btn-sm pull-left" id="ordersDiscontinueOrder" title="Press enter to {{toLowerCase discontinueBtnLabel}}." {{getDiscontinueBtnStatus}}>{{#if discontinueBtnLabel}}{{discontinueBtnLabel}}{{else}}Cancel Order{{/if}}</button>
     {{/hasPermission}}
     {{#hasPermission 'edit-lab-order'}}
     <button type="button" class="btn btn-icon btn-sm hidden" id="ordersChangeOrder" data-dismiss="modal" title="Press enter to edit."><i class="fa fa-pencil-square-o font-size-18 hidden"></i></button>
@@ -14,4 +8,5 @@
     {{#hasPermission 'sign-lab-order'}}
     <button type="button" class="btn btn-primary btn-sm " id="ordersSignOrder" title="Press enter to sign." {{getSignBtnStatus}}>Sign</button>
     {{/hasPermission}}
+    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" title="Press enter to close.">Close</button>
 </div>

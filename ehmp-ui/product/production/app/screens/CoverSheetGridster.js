@@ -9,6 +9,7 @@ define([
     };
     var config = {
         id: 'cover-sheet-gridster',
+        context: 'patient',
         contentRegionLayout: 'gridster',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

@@ -1,116 +1,54 @@
-<div class="search-applet-main">
-    <div id="search-result-header" class="row top-padding-md left-padding-md">
-        <div id="search-results-message" class="col-xs-1"><strong id="numberOfResults">0</strong>&nbsp;results</div>
-        <div class="col-xs-8 col-xs-offset-3">
-            <form class="form-inline" role="form">
-                <div class="left-margin-sm bottom-margin-lg">
-                    <fieldset>
-                        <legend class="sr-only">Date Range Filter</legend>
-                        <div class="btn-group btn-group-xs">
-                            <button id="all-range-text-search" name="all-range-search-record" type="button" class="btn btn-default active-range" title="Press enter to select all.">All</button>
-                            <button id="2yr-range-text-search" name="2yr-range-search-record" type="button" class="btn btn-default" title="Press enter to select last 2 years.">2yr</button>
-                            <button id="1yr-range-text-search" name="1yr-range-search-record" type="button" class="btn btn-default" title="Press enter to select last year.">1yr</button>
-                            <button id="3mo-range-text-search" name="3mo-range-search-record" type="button" class="btn btn-default" title="Press enter to select last 3 months.">3m</button>
-                            <button id="1mo-range-text-search" name="1mo-range-search-record" type="button" class="btn btn-default" title="Press enter to select last month.">1m</button>
-                            <button id="7d-range-text-search" name="7d-range-search-record" type="button" class="btn btn-default" title="Press enter to select last 7 days.">7d</button>
-                            <button id="72hr-range-text-search" name="72hr-range-search-record" type="button" class="btn btn-default" title="Press enter to select last 72 hours.">72hr</button>
-                            <button id="24hr-range-text-search" name="24hr-range-search-record" type="button" class="btn btn-default" title="Press enter to select last 24 hours.">24hr</button>
-                        </div>
-                        <div class="left-padding-md input-group date" id="custom-date-range1-search-record">
-                            <label for="fromDateText" class="sr-only">Start Date</label>
-                            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="fromDateText" name="filter-from-date-search-record" title="Please enter start of date range." />
-                            <span id="fromCalendar" class="input-group-addon" aria-hidden="true" for="fromDateText"><i class="fa fa-calendar color-primary"></i></span>
-                        </div>
-                        <span class="all-padding-xs">to</span>
-                        <div class="right-padding-xs input-group date" id="custom-date-range2-search-record">
-                            <label for="toDateText" class="sr-only">End Date</label>
-                            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="toDateText" name="filter-to-date-search-record" title="Please enter end of date range." />
-                            <span id="toCalendar" class="input-group-addon" aria-hidden="true" for="toDateText"><i class="fa fa-calendar color-primary"></i></span>
-                        </div>
-                        <button id="custom-range-apply" name="custom-range-apply-search-record" type="submit" class="btn btn-primary" title="Press enter to apply custom date range." disabled>Apply</button>
-                    </fieldset>
-                </div>
-            </form>
+<div class="search-applet-main left-padding-md right-padding-md" tabindex="0">
+    <div class="row search-result-header all-padding-sm background-color-pure-white bottom-border-grey-light">
+        <div class="col-xs-1 background-color-primary all-padding-xs font-size-14 badge">
+            <span class="number-of-results">0 results</span>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12"><p>Search is still under development and may not return all expected results. Please review the patient record manually to ensure accuracy.</p></div>
-        <div id="searchSpinner" class="col-sm-12">
-            <p>
-                <i class="fa fa-spinner fa-spin"></i>
-                Loading...
-            </p>
-        </div>
-        <div id="searchResults" class="col-sm-12 panel-group"></div>
-    </div>
-</div>
-
-
-
-
-
-
-<!-- <div class="search-applet-main col-sm-12">
-
-    <div id="search-result-header" class="row">
-
-        <div class="grid-filter-daterange col-sm-12">
+        <div class="col-xs-10 search-results-filter btn-date-range">
             <form class="form-inline">
-                <div id="search-results-message" class="col-sm-1">
-                    <b id="numberOfResults">0</b>&nbsp;results
-                </div>
-                <div class="pull-right">
-                    <button id="all-range-text-search" name="all-range-search-record" type="button" class="daterange btn btn-info btn-sm default-range active-range" title="All range">All</button>
-                    <button id="2yr-range-text-search" name="2yr-range-search-record" type="button" class="daterange btn btn-info btn-sm default-range" title="2 years range">
-                        <span class="sr-only">2 years date range.</span>2yr</button>
-                    <button id="1yr-range-text-search" name="1yr-range-search-record" type="button" class="daterange btn btn-info btn-sm default-range" title="1 year range">
-                        <span class="sr-only">1 year date range.</span>1yr</button>
-                    <button id="3mo-range-text-search" name="3mo-range-search-record" type="button" class="daterange btn btn-info btn-sm default-range" title="3 months range">
-                        <span class="sr-only">3 months date range.</span>3m</button>
-                    <button id="1mo-range-text-search" name="1mo-range-search-record" type="button" class="daterange btn btn-info btn-sm default-range" title="1 month range">
-                        <span class="sr-only">1 month date range.</span>1m</button>
-                    <button id="7d-range-text-search" name="7d-range-search-record" type="button" class="daterange btn btn-info btn-sm default-range" title="7 days range">
-                        <span class="sr-only">7 days date range.</span>7d</button>
-                    <button id="72hr-range-text-search" name="72hr-range-search-record" type="button" class="daterange btn btn-info btn-sm default-range" title="72 hours range">
-                        <span class="sr-only">72 hours date range.</span>72hr</button>
-                    <button id="24hr-range-text-search" name="24hr-range-search-record" type="button" class="daterange btn btn-info btn-sm default-range" title="24 hours range">
-                        <span class="sr-only">24 hours date range.</span>24hr</button>
-
-                    &nbsp;
-
-                    <div class="input-group date" id="custom-date-range1-search-record">
-                        <input type="text" autocomplete="off" class="form-control input-sm" id="fromDateText" name="filter-from-date-search-record" size="11" title="Enter or pick the first custom range date.">
-                        <span id="fromCalendar" class="input-group-addon"><i class="fa fa-calendar color-primary"></i>
-                        </span>
+                <fieldset>
+                    <legend class="sr-only">Date Range Filter</legend>
+                    <div class="btn-group btn-group-xs right-margin-md">
+                        <button id="all-range-text-search" name="all-range-search-record" type="button" class="btn btn-sm btn-default active-range" title="Press enter to select all years">All</button>
+                        <button id="2yr-range-text-search" name="2yr-range-search-record" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 2 years">2yr</button>
+                        <button id="1yr-range-text-search" name="1yr-range-search-record" type="button" class="btn btn-sm btn-default" title="Press enter to select last year">1yr</button>
+                        <button id="3mo-range-text-search" name="3mo-range-search-record" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 3 months">3m</button>
+                        <button id="1mo-range-text-search" name="1mo-range-search-record" type="button" class="btn btn-sm btn-default" title="Press enter to select last month">1m</button>
+                        <button id="7d-range-text-search" name="7d-range-search-record" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 7 days">7d</button>
+                        <button id="72hr-range-text-search" name="72hr-range-search-record" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 72 hours">72hr</button>
+                        <button id="24hr-range-text-search" name="24hr-range-search-record" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 24 hours">24hr</button>
                     </div>
-
-                    <span class="add-on">to</span>&nbsp;
-
-                    <div class="input-group date" id="custom-date-range2-search-record">
-                        <input type="text" autocomplete="off" class="form-control input-sm" id="toDateText" name="filter-to-date-search-record" size="11" title="Enter or pick the second custom range date.">
-                        <span id="toCalendar" class="input-group-addon"><i class="fa fa-calendar color-primary"></i>
-                        </span>
+                    <div class="form-group">
+                        <label for="fromDateText">From</label>
+                        <div id="custom-date-range1-search-record" class="input-group date">
+                            <span id="fromCalendar" class="input-group-addon" aria-hidden="true">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+                            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="fromDateText" name="filter-from-date-search-record" title="Enter start of date range in MM/DD/YYYY format" />
+                        </div>
                     </div>
-
-                    &nbsp;
-                    <button id="custom-range-apply" name="custom-range-apply-search-record" type="button" class="btn btn-primary btn-sm" title="Apply custom date range filtering." disabled="">Apply</button>
-                </div>
+                    <div class="form-group">
+                        <label for="toDateText">To</label>
+                        <div id="custom-date-range2-search-record" class="input-group date">
+                            <span id="toCalendar" class="input-group-addon" aria-hidden="true">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+                            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="toDateText" name="filter-to-date-search-record" title="Enter end of date range in MM/DD/YYYY format" />
+                        </div>
+                    </div>
+                    <button id="custom-range-apply" name="custom-range-apply-search-record" type="submit" class="btn btn-sm btn-primary left-margin-sm" title="Press enter to apply custom date range" disabled>Apply</button>
+                </fieldset>
             </form>
         </div>
     </div>
-    <div id="searchResultsArea" class="row">
-        <div class="col-sm-12"><p>Search is still under development and may not return all expected results. Please review the patient record manually to ensure accuracy.</p></div>
-        <div id="searchSpinner" class="col-sm-12">
+    <div class="row top-padding-sm auto-overflow">
+        <div class="col-xs-12">
+            <p>Search is still under development and may not return all expected results. Review the patient record manually to ensure accuracy.</p>
+        </div>
+        <div class="col-xs-12 search-spinner">
             <p>
-                <i class="fa fa-spinner fa-spin"></i>
-                Loading...
+                <i class="fa fa-spinner fa-spin right-padding-xs"></i> Loading...
             </p>
         </div>
-        <div id="searchResults" class="col-sm-12 panel-group"></div>
-
+        <div class="search-results col-xs-12 panel-group"></div>
     </div>
-
-
-
 </div>
- -->

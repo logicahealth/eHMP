@@ -10,35 +10,15 @@ var testHandler = require(global.VX_INTTESTS + 'framework/handler-test-framework
 var jobUtil = require(global.VX_UTILS + 'job-utils');
 var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 var wConfig = require(global.VX_ROOT + 'worker-config');
-var grabJobs = require(global.VX_INTTESTS + 'framework/job-grabber');
-var queueConfig = require(global.VX_JOBFRAMEWORK + 'queue-config');
 var VistaClient = require(global.VX_SUBSYSTEMS + 'vista/vista-client');
-var PublisherRouter = require(global.VX_JOBFRAMEWORK + 'publisherRouter');
-var JobStatusUpdater = require(global.VX_JOBFRAMEWORK + 'JobStatusUpdater');
+var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
+var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
+
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
-var format = require('util').format;
 
 var host = require(global.VX_INTTESTS + 'test-config');
 var PORT       ;
 var tubename = 'vx-resync-test';
-
-function clearTube(logger, host, port, tubename) {
-    var called = false;
-    var calledError;
-
-    grabJobs(logger, host, port, tubename, 0, function(error) {
-        calledError = error;
-        called = true;
-    });
-
-    waitsFor(function() {
-        return called;
-    }, 'should be called', 20000);
-
-    runs(function() {
-        expect(calledError).toBeNull();
-    });
-}
 
 function clearTestPatient(config, patientIdentifierValue) {
     var completed = false;
@@ -59,7 +39,7 @@ function clearTestPatient(config, patientIdentifierValue) {
 
     waitsFor(function() {
         return completed;
-    }, 'Timed out waiting for jds.deletePatientByPid.', 20000);
+    }, 'Timed out waiting for clear patient REST call.', 20000);
 
     runs(function() {
         expect(actualError).toBeFalsy();
@@ -82,7 +62,7 @@ function retrieveSyncStatus(patientIdentifier, environment, callback) {
 
     waitsFor(function() {
         return completed;
-    }, 'Timed out waiting for jds.clearTestPatient.', 20000);
+    }, 'Timed out waiting for jds.getSyncStatus.', 20000);
 
     runs(function() {
         expect(actualError).toBeNull();
@@ -105,6 +85,7 @@ describe('resync-request-handler', function() {
                     patientSyncPath: '/sync/doLoad',
                     patientUnsyncPath: '/sync/clearPatient',
                     patientStatusPath: '/sync/status',
+                    patientDemoSyncPath: '/sync/demographicSync',
                     method: 'POST'
                 },
                 vistaSites: {
@@ -113,7 +94,7 @@ describe('resync-request-handler', function() {
                 },
                 jds: _.defaults(wConfig.jds, {
                     protocol: 'http',
-                    host: 'IPADDRESS ',
+                    host: 'IP_ADDRESS',
                     port: 9080
                 })
             };
@@ -129,8 +110,7 @@ describe('resync-request-handler', function() {
             environment.jobStatusUpdater = new JobStatusUpdater(dummyLogger, config, environment.jds);
             environment.publisherRouter = new PublisherRouter(dummyLogger, config, dummyLogger, environment.jobStatusUpdater);
 
-            clearTestPatient(config.syncRequestApi, '9E7A;3');
-            clearTube(dummyLogger, host, port, tubename);
+            clearTestPatient(config.syncRequestApi, '9E7A;1');
         });
 
         afterEach(function() {
@@ -142,7 +122,7 @@ describe('resync-request-handler', function() {
                 type: 'resync-request',
                 patientIdentifier: {
                     type: 'pid',
-                    value: '9E7A;3'
+                    value: '9E7A;1'
                 },
                 rootJobId: '1',
                 jobId: '1'
@@ -176,7 +156,7 @@ describe('resync-request-handler', function() {
                 type: 'resync-request',
                 patientIdentifier: {
                     type: 'pid',
-                    value: '9E7A;8'
+                    value: '9E7A;1'
                 },
                 rootJobId: '2',
                 jobId: '2'

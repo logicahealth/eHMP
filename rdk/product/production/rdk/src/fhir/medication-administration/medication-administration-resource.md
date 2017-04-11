@@ -1,14 +1,12 @@
 # Group FHIR
 
-## Medicationadministration medication Administration [{{{path}}}{?subject.identifier}{&limit}{&fields}]
+## Medicationadministration medication Administration [{{{path}}}{?subject.identifier}{&limit}]
 
 + Parameters
 
     :[subject.identifier]({{{common}}}/parameters/subject.identifier.md)
 
     :[limit]({{{common}}}/parameters/limit.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Fhir medicationadministration [GET]

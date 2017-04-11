@@ -2,7 +2,7 @@
 
 ## Cds engine cds engine [{{{path}}}]
 
-### Get [GET {{{path}}}/registry{?id}{&name}{&filter}{&fields}]
+### Get [GET {{{path}}}/registry{?id}{&name}{&filter}]
 
 Engine Registry resource
 
@@ -17,8 +17,6 @@ Get engine registry
     + name (string, optional) - name of engine registry
 
     + filter (string, optional) - match filter
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

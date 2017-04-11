@@ -44,7 +44,7 @@ define([
         name: 'observed',
         label: 'Date Observed',
         flexWidth: 'flex-width-date-time',
-        cell: Backgrid.HandlebarsCell.extend ({
+        cell: Backgrid.HandlebarsCell.extend({
             className: 'handlebars-cell flex-width-date-time'
         }),
         template: observedTemplate,
@@ -56,10 +56,10 @@ define([
         cell: 'string'
     };
     var facilityCodeCol = {
-        name: 'facilityMoniker',
+        name: 'facilityName',
         label: 'Facility',
         flexWidth: 'flex-width-date',
-        cell: Backgrid.StringCell.extend ({
+        cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-date'
         }),
         hoverTip: 'vitals_facility'
@@ -79,17 +79,16 @@ define([
         name: 'resulted',
         label: 'Date Entered',
         flexWidth: 'flex-width-date-time',
-        cell: Backgrid.HandlebarsCell.extend ({
+        cell: Backgrid.HandlebarsCell.extend({
             className: 'handlebars-cell flex-width-date-time'
         }),
         template: Handlebars.compile('{{resultedFormatted}}'),
         hoverTip: 'vitals_dateentered'
     };
     var qualifierCol = {
-        name: 'qualifiers',
+        name: 'qualifiersNames',
         label: 'Qualifiers',
-        cell: 'handlebars',
-        template: qualifierTemplate,
+        cell: 'string',
         hoverTip: 'vitals_qualifiers'
     };
 
@@ -99,14 +98,15 @@ define([
 
     var gridCollectionStore;
     //Collection fetchOptions
-    var fetchOptions = {
+    var _fetchOptions = {
         resourceTitle: 'patient-record-vital',
         pageable: false,
         cache: true,
+        allowAbort: true,
         criteria: {}
     };
 
-    fetchOptions.viewModel = {
+    _fetchOptions.viewModel = {
         parse: function(response) {
             return response;
         }
@@ -162,6 +162,9 @@ define([
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
         initialize: function(options) {
+
+            var fetchOptions = _.clone(_fetchOptions);
+
             var viewType = 'summary';
             var self = this;
             this._super = ADK.Applets.BaseGridApplet.prototype;
@@ -334,24 +337,36 @@ define([
                 showModal(model, event, this.appletConfig.instanceId);
             };
 
+            dataGridOptions.toolbarOptions = {
+                buttonTypes: ['infobutton', 'detailsviewbutton'],
+            };
+
             var VitalsItemView = Backbone.Marionette.ItemView.extend({
                 tagName: 'tr',
+                initialize: function() {
+                    var crsUtil = ADK.utils.crsUtil;
+                    this.model.set(crsUtil.crsAttributes.CRSDOMAIN, crsUtil.domain.VITAL);
+                },
                 attributes: function() {
+                    ADK.utils.crsUtil.applyConceptCodeId(this.model);
+
                     if (this.model.get('observedDateLatest') !== undefined) {
                         return {
                             'tabindex': '0',
-                            'class': this.model.get('observedDateLatest') + ' clickable'
+                            'class': this.model.get('observedDateLatest') + ' clickable',
+                            'data-code': this.model.get('dataCode')
                         };
                     } else {
                         return {
-                            'class': this.model.get('observedDateLatest') + ''
+                            'class': this.model.get('observedDateLatest') + '',
+                            'data-code': this.model.get('dataCode')
                         };
                     }
                 },
                 template: Handlebars.compile(['<td>{{displayName}}{{#if vitalsRecord}}<span class="sr-only"> vital. Press enter to view additional details.</span>{{/if}}</td>',
-                                              '<td>{{resultUnitsMetricResultUnits}}</td>',
-                                              '<td>{{observedFormattedCover}}</td>'
-                                              ].join('\n')),
+                    '<td>{{resultUnitsMetricResultUnits}}</td>',
+                    '<td>{{observedFormattedCover}}</td>'
+                ].join('\n')),
                 templateHelpers: function() {
                     if (this.model.get('resultUnitsMetricResultUnits') === "No Record") {
                         return {
@@ -365,14 +380,7 @@ define([
                 },
                 events: {
                     'click td': function(e) {
-
-                        ADK.utils.infoButtonUtils.onClickFunc(this, e, baseOnClickRow);
-
-                        function baseOnClickRow(that, event) {
-                            if (that.model.get('resultUnitsMetricResultUnits') !== "No Record") {
-                                showModal(that.model, event);
-                            }
-                        }
+                        dataGridOptions.onClickRow(this.model, event, this);
                     }
                 }
             });
@@ -399,7 +407,7 @@ define([
                 template: Handlebars.compile([
                     '<div class="a-table"></div>',
                     '<div class="b-table"></div>'
-                    ].join("\n")),
+                ].join("\n")),
                 onRender: function() {
                     var count = this.collection.length;
                     var middle = Math.floor(count / 2);
@@ -478,7 +486,7 @@ define([
         }
 
         var siteCode = ADK.UserService.getUserSession().get('site'),
-                    pidSiteCode = params.model.get('pid') ? params.model.get('pid').split(';')[0] : '';
+            pidSiteCode = params.model.get('pid') ? params.model.get('pid').split(';')[0] : '';
         // todo need to check that I merge conflicted this properly
         var modal = new ADK.UI.Modal({
             view: new ModalView({
@@ -490,31 +498,31 @@ define([
                 size: "xlarge",
                 title: vitalsTitle,
                 footerView: Backbone.Marionette.ItemView.extend({
-                        template: detailsFooterTemplate,
-                        events: {
-                            'click #error': 'enteredInError'
-                        },
-                        templateHelpers: function() {
-                            if (pidSiteCode === siteCode) {
-                                return {
-                                    isLocalSite: true
-                                };
-                            } else {
-                                return {
-                                    isLocalSite: false
-                                };
-                            }
-                        },
-                        enteredInError: function(event) {
-                            ADK.UI.Modal.hide();
-                            var blah = this;
-                            var filteredModels = params.model.collection.where({
-                                observedFormatted: params.model.get('observedFormatted')
-                            });
-
-                            EnteredInErrorView.createAndShowEieView(filteredModels, params.model.get('observedFormatted'), params.model);
+                    template: detailsFooterTemplate,
+                    events: {
+                        'click #error': 'enteredInError'
+                    },
+                    templateHelpers: function() {
+                        if (pidSiteCode === siteCode) {
+                            return {
+                                isLocalSite: true
+                            };
+                        } else {
+                            return {
+                                isLocalSite: false
+                            };
                         }
-                    })
+                    },
+                    enteredInError: function(event) {
+                        ADK.UI.Modal.hide();
+                        var blah = this;
+                        var filteredModels = params.model.collection.where({
+                            observedFormatted: params.model.get('observedFormatted')
+                        });
+
+                        EnteredInErrorView.createAndShowEieView(filteredModels, params.model.get('observedFormatted'), params.model);
+                    }
+                })
             }
         });
         modal.show();
@@ -581,7 +589,8 @@ define([
 
         var stackedGraph = new StackedGraph({
             model: vitalModel,
-            target: null
+            target: null,
+            requestParams: params
         });
 
         response.resolve({

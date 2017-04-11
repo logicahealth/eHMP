@@ -7,6 +7,8 @@ var _ = require('lodash');
 var rpcClientFactory = require('../core/rpc-client-factory');
 var filemanDateUtil = require('../../utils/fileman-date-converter');
 var nullChecker = require('../../utils/nullchecker');
+var rdk = require('../../core/rdk');
+var locationUtil = rdk.utils.locationUtil;
 var paramUtil = require('../../utils/param-converter');
 
 function getVitals(model) {
@@ -59,7 +61,7 @@ function getVitals(model) {
 
         vitalRPCDelimitedStr += reading + ';' + flowRate + o2Concentration;
         rpcArray.push(vitalRPCDelimitedStr);
-        rpcArray.push(model.locIEN);
+        rpcArray.push(locationUtil.getLocationIEN(model.locationUid));
 
         var qualifiersRPCDelimitedStr = model.enterdByIEN + '*';
         qualifiersRPCDelimitedStr += paramUtil.convertArrayToRPCParameters(vital.qualifiers, ':');

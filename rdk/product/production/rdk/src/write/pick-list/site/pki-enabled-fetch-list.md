@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Pki enabled [/pki-enabled{?site}{&fields}]
+## Pki enabled [/pki-enabled{?site}]
 
 Determines if the PKI Digital Signature is enabled on the site
 
@@ -11,8 +11,6 @@ ORWOR PKISITE
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

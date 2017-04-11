@@ -35,35 +35,38 @@ public class HdrSoapHandler {
     private static final Logger LOG = LoggerFactory.getLogger(HdrSoapHandler.class);
 
     //array of hdr domains
-    private String[] hdrDomains={"med",
-            "treatment",
-            "diagnosis",
-            "visit",
-            "education",
-            "pov",
-            "lab",
-            "vlerdocument",
-            "skin",
-            "surgery",
-            "immunization",
-            "obs",
-            "document",
-            "order",
-            "auxiliary",
-            "mh",
-            "consult",
-            "procedure",
-            "vital",
-            "task",
-            "cpt",
-            "image",
-            "problem",
-            "factor",
-            "roadtrip",
-            "appointment",
-            "ptf",
-            "exam",
-            "allergy"};
+    private String[] hdrDomains = {
+        "med",
+        "treatment",
+        "diagnosis",
+        "visit",
+        "education",
+        "pov",
+        "lab",
+        "vlerdocument",
+        "skin",
+        "surgery",
+        "immunization",
+        "obs",
+        "document",
+        "order",
+        "auxiliary",
+        "mh",
+        "consult",
+        "procedure",
+        "vital",
+        "task",
+        "cpt",
+        "image",
+        "problem",
+        "factor",
+        "roadtrip",
+        "appointment",
+        "ptf",
+        "exam",
+        "allergy"
+    };
+
     private List<String> hdrDomainList = Arrays.asList(hdrDomains);
     public HdrSoapHandler(String template, String defaultName) {
         this.template = template;
@@ -80,21 +83,20 @@ public class HdrSoapHandler {
     @Path("/getAllDomainData")
     @GET
     @Timed
-    public String getHdrDataAllDomains(@QueryParam("icn")String icn) throws IOException
-    {
-    	if(icn == null || !Icn.isIdType(icn)) {
+    public String getHdrDataAllDomains(@QueryParam("icn")String icn, @QueryParam("excludeIdentifier")List<String> excludeIdentifiers) throws IOException {
+    	if (icn == null || !Icn.isIdType(icn)) {
     		throw new BadRequestException("ICN is not valid");
     	}
+
         HttpURLConnection conn = null;
-        InputStream inputstream=null;
+        InputStream inputstream =  null;
         BufferedReader reader = null;
 
         try {
-            StringBuffer hdrOutput=new StringBuffer("[");
+            StringBuffer hdrOutput = new StringBuffer("[");
 
-            for(String domain : hdrDomainList)
-            {
-                URL url = new URL(HdrConnection.getURL(icn, domain));
+            for (String domain : hdrDomainList) {
+                URL url = new URL(HdrConnection.getURL(icn, domain, excludeIdentifiers));
                 conn = HdrConnection.createConnection(url);
                 if (conn.getResponseCode() != HttpsURLConnection.HTTP_OK) {
                     LOG.warn("getHdrData: unexpected response code from HDR connection: " + conn.getResponseCode() +
@@ -108,48 +110,49 @@ public class HdrSoapHandler {
                 while ((line = reader.readLine()) != null) {
                     hdrOutput.append(line);
                 }
-                hdrOutput.append(",");
 
+                hdrOutput.append(",");
             }
-            hdrOutput.deleteCharAt(hdrOutput.length()-1);
+
+            hdrOutput.deleteCharAt(hdrOutput.length() - 1);
             hdrOutput.append("]");
-            if(inputstream!=null){
+
+            if (inputstream != null) {
                 inputstream.close();
             }
-            if(conn!=null){
+
+            if (conn != null) {
                 conn.disconnect();
             }
+
             String hdrJSONString = hdrOutput.toString();
-            if(!DataConverter.isValidJSON(hdrJSONString)) {
+            if (!DataConverter.isValidJSON(hdrJSONString)) {
             	throw new ServerException("Receieved invalid response format from data source");
             }
-            return(hdrJSONString);
-        }
-		catch(javax.xml.ws.WebServiceException e)
-		{
-			LOG.error("Error getting HDR Data for all hdr domains - icn "+icn+" "+e);
-		    Throwable cause = e; 
-		    while ((cause = cause.getCause()) != null)
-		    {
-		        if(cause instanceof SocketTimeoutException)
-		        {
+
+            return hdrJSONString;
+        } catch(javax.xml.ws.WebServiceException e) {
+			LOG.error("Error getting HDR Data for all hdr domains - icn " + icn + " " + e);
+		    Throwable cause = e;
+		    while ((cause = cause.getCause()) != null) {
+		        if (cause instanceof SocketTimeoutException) {
 					throw new ConnectionException("Error reported from JMeadows");
 		        }
 		    }
 			throw new ServerException("Error reported from JMeadows");
-		}
-		catch (Exception e) {
-			LOG.error("Error getting HDR Data for all hdr domains - icn "+icn+" "+e);
+		} catch (Exception e) {
+			LOG.error("Error getting HDR Data for all hdr domains - icn " + icn + " " + e);
 			throw new ServerException("Error reported from JMeadows");
-		}
-        finally{
-        	if(reader!=null){
+		} finally {
+        	if (reader != null) {
         		reader.close();
         	}
-        	if(inputstream!=null){
+
+        	if (inputstream != null) {
         		inputstream.close();
         	}
-        	if(conn!=null){
+
+        	if (conn != null) {
         		conn.disconnect();
         	}
         }
@@ -165,9 +168,8 @@ public class HdrSoapHandler {
     @Path("/getData")
     @GET
     @Timed
-    public String getHdrData(@QueryParam("icn")String icn,@QueryParam("domain")String domain) throws IOException
-    {
-    	if(icn == null || !Icn.isIdType(icn)) {
+    public String getHdrData(@QueryParam("icn")String icn, @QueryParam("domain")String domain, @QueryParam("excludeIdentifier")List<String> excludeIdentifiers) throws IOException {
+    	if (icn == null || !Icn.isIdType(icn)) {
     		throw new BadRequestException("ICN is not valid");
     	}
 
@@ -178,11 +180,12 @@ public class HdrSoapHandler {
     			break;
     		}
     	}
-    	if(!validDomain) {
+
+    	if (!validDomain) {
     		throw new BadRequestException("Domain is not valid");
     	}
 
-    	URL url = new URL(HdrConnection.getURL(icn, domain));
+    	URL url = new URL(HdrConnection.getURL(icn, domain, excludeIdentifiers));
         HttpURLConnection conn = HdrConnection.createConnection(url);
 
         try(InputStream inputstream = conn.getInputStream();
@@ -198,27 +201,26 @@ public class HdrSoapHandler {
             }
 
             String line;
-            while ((line = reader.readLine()) != null)
-            {
+            while ((line = reader.readLine()) != null) {
                 hdrOutput.append(line);
             }
+
             inputstream.close();
             conn.disconnect();
             String hdrJSONString = hdrOutput.toString();
-            if(!DataConverter.isValidJSON(hdrJSONString)) {
+
+            if (!DataConverter.isValidJSON(hdrJSONString)) {
             	throw new ServerException("Receieved invalid response format from data source");
             }
-            return(hdrJSONString);
-        }
-		catch(javax.xml.ws.WebServiceException e)
-		{
-			LOG.error("Error getting HDR Data for domain "+domain+" icn "+icn+" "+e);
-		    Throwable cause = e; 
-		    while ((cause = cause.getCause()) != null)
-		    {
-		        if(cause instanceof SocketTimeoutException)
-		        {
-					throw new ConnectionException("Error reported from JMeadows");
+
+            return hdrJSONString ;
+        } catch (javax.xml.ws.WebServiceException e) {
+			LOG.error("Error getting HDR Data for domain " + domain + " icn " + icn + " " + e);
+		    Throwable cause = e;
+
+		    while ((cause = cause.getCause()) != null) {
+		        if (cause instanceof SocketTimeoutException) {
+					throw new ConnectionException("Error reported from HDR");
 		        }
 		    }
 			throw new ServerException("Error reported from JMeadows");
@@ -226,6 +228,6 @@ public class HdrSoapHandler {
 		catch (Exception e) {
 			LOG.error("Error getting HDR Data for domain "+domain+" icn "+icn+" "+e);
 			throw new ServerException("Error reported from JMeadows");
-		} 
+		}
     }
 }

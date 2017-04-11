@@ -7,7 +7,7 @@ var config = require(global.VX_ROOT + 'worker-config');
 var JdsClient = require(global.VX_DUMMIES + 'jds-client-dummy');
 var handler = require(global.VX_HANDLERS + 'vista-subscribe-request/vista-subscribe-request-handler');
 var VistaClient = require(global.VX_SUBSYSTEMS + 'vista/vista-client');
-var JobStatusUpdater = require(global.VX_JOBFRAMEWORK + 'JobStatusUpdater');
+var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 // logger = require('bunyan').createLogger({
 //     name: 'vista-subscribe-request-handler',
 //     level: 'debug'
@@ -35,7 +35,7 @@ describe('vista-subscribe-request-handler', function(){
         environment.jds._setResponseData(['200'],[null],[]);
         var complete = false;
         runs(function(){
-            handler('9E7A', logger, config, environment, invalidIDSampleJob, function(error, result) {
+            handler('9E7A', logger, config, environment, invalidIDSampleJob, function(error) {
 
                 if(!error) {
                     environment.vistaClient.unsubscribe(invalidIDSampleJob.patientIdentifier.value,function(){});

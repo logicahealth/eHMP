@@ -61,7 +61,7 @@ define(['moment'], function() {
         var earliestStartAsEpoch = medicationChannel.request('earliestStartAsEpoch');
         var oldest;
 
-        if (dateModel.get('selectedId') === 'all-range-global') {
+        if (dateModel.get('selectedId') === 'allRangeGlobal') {
             oldest = earliestStartAsEpoch;
         } else {
             oldest = moment(dateModel.get("fromDate"), "MM/DD/YYYY").valueOf(); //788936400000;
@@ -93,7 +93,7 @@ define(['moment'], function() {
             var overallStop = moment(medication.get('overallStop'), 'YYYYMMDD').valueOf();
             var stopped = moment(medication.get('stopped'), 'YYYYMMDD').valueOf();
             var vaType = medication.get('vaType').toLowerCase();
-            var calculatedStopDate = medication.getEarlierStop().stoppedMoment.valueOf();
+            var calculatedStopDate = medication.getEarlierStopAsMoment().valueOf();
 
             if (medication.getCanBeGraphed()) {
 

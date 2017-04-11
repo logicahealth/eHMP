@@ -5,7 +5,7 @@ require('../../../env-setup');
 var async = require('async');
 var _ = require('underscore');
 
-var BeanstalkClient = require(global.VX_JOBFRAMEWORK + 'beanstalk-client.js');
+var BeanstalkClient = require(global.VX_JOBFRAMEWORK).BeanstalkClient;
 
 
 var defaultConfig = {
@@ -45,6 +45,7 @@ any jobs grabbed before the error occurred.
 */
 function grabJobsFromTubes(logger, host, port, tubenames, reserveTimeout, callback) {
 	logger.debug('job-grabber.grabJobsFromTubes() %s:%s [%s]', host, port, tubenames);
+
 	var config = {};
 
 	if(arguments.length === 2) {
@@ -79,44 +80,7 @@ function grabJobsFromTubes(logger, host, port, tubenames, reserveTimeout, callba
 		config.tubenames = [config.tubenames];
 	}
 
-	var gotJob;
-	var jobs = [];
 	var client = new BeanstalkClient(logger, config.host, config.port);
-
-	function notEmpty() {
-		return gotJob;
-	}
-
-	function grabJob(callback) {
-		var job;
-
-		gotJob = false;
-		client.reserve_with_timeout(config.reserveTimeout, function(error, jobId, payload) {
-			if (error && error !== 'TIMED_OUT') {
-				logger.warn('job-grabber.grabJob() error trying to reserve job with timeout. ERROR: %j', error);
-				return callback(error);
-			}
-
-			if (error === 'TIMED_OUT') {
-				logger.info('job-grabber.grabJob() Timeout trying to reserve job');
-				return callback();
-			}
-
-			job = parseJob(payload);
-			logger.debug('job-grabber.grabJob() %s:%s [%s] -> %j', host, port, tubenames, job);
-			jobs.push(job);
-			gotJob = true;
-
-			client.destroy(jobId, function(error) {
-				if (error) {
-					logger.warn('job-grabber.grabJob() error trying to destroy job: %s', jobId);
-					return callback(error);
-				}
-
-				callback();
-			});
-		});
-	}
 
 	client.connect(function(error) {
 		if (error) {
@@ -130,21 +94,106 @@ function grabJobsFromTubes(logger, host, port, tubenames, reserveTimeout, callba
 			callback(error);
 		});
 
-		async.eachSeries(config.tubenames, client.watch.bind(client), function(error) {
-			if (error) {
-				logger.warn('job-grabber.grabJobsFromTubes() error trying to watch tubes: %j', config.tubenames);
-				client.end();
-				return callback(error);
-			}
-
-			logger.debug('job-grabber.grabJobsFromTubes() Watching tubes: %j', config.tubenames);
-
-			async.doWhilst(grabJob, notEmpty, function(error) {
-				client.end();
-				callback(error || null, jobs);
-			});
-		});
+        return processTubes(client, logger, config.tubenames, callback);
 	});
+}
+function processTubes(client, logger, tubenames, callback) {
+    var previousTubeName = null;
+    var results =[];
+
+    async.eachSeries(tubenames,
+        function(tubename, eachCallback) {
+            async.series([
+                    watchTube.bind(null, client, logger, tubename),
+                    ignoreTube.bind(null, client, logger, previousTubeName),
+                    retrieveJobs.bind(null, client, logger, tubename)],
+                function(error, result) {
+                    if (error) {
+                        logger.warn('job-grabber.processTubes() Unable to process tubes. ERROR: %j', error);
+                        return setTimeout(eachCallback, 0, error);
+                    }
+
+                    if (result[2]) {
+                        results.push(result[2]);
+                    }
+
+                    previousTubeName = tubename;
+                    setTimeout(eachCallback, 0);
+                }
+            )
+        },
+        function(error) {
+            client.end();
+            callback(error || null, results);
+        }
+    );
+}
+
+function watchTube(client, logger, tubename, callback) {
+    logger.debug('job-grabber.watchTube() Watching tube %s.', tubename);
+
+    client.watch(tubename, function(error) {
+        if (error) {
+            logger.warn('job-grabber.watchTube() Unable to watch tube. ERROR: %j', error);
+            return callback(error);
+        }
+
+        return callback();
+    });
+}
+
+function ignoreTube(client, logger, tubename, callback) {
+    if (_.isNull(tubename)) {
+        return callback();
+    }
+
+    logger.debug('job-grabber.ignoreTube() Ignoring tube %s.', tubename);
+
+    client.ignore(tubename, function() {
+        callback();
+    });
+}
+
+function retrieveJobs(client, logger, tubename, callback) {
+    var done = true;
+
+    var result = {tubename: tubename, jobs: []};
+
+    async.whilst(
+        function () { return done; },
+        function (loopCallback) {
+            client.reserve_with_timeout(0, function(error, beanstalkJobId, beanstalkJobPayload) {
+                if (error && error !== 'TIMED_OUT' && error !== 'DEADLINE_SOON') {
+                    logger.warn('job-grabber.retrieveJobs(): Error trying to retrieve message from tube. ERROR: %j', error);
+
+                    done = false;
+                    return setTimeout(loopCallback, 0, error);
+                }
+
+                if (error === 'TIMED_OUT') {
+                    done = false;
+                    return setTimeout(loopCallback, 0);
+                }
+
+                var job = parseJob(beanstalkJobPayload);
+                logger.debug('job-grabber.retrieveJobs() %j', job);
+
+                result.jobs.push(job);
+
+                client.destroy(beanstalkJobId, function(error) {
+                    if (error) {
+                        logger.warn('job-grabber.retrieveJobs(): Error trying to remove message from tube. ERROR: %j', error);
+                        return setTimeout(loopCallback, 0, error);
+                    }
+
+                    return setTimeout(loopCallback, 0);
+                });
+            });
+        },
+        function (error) {
+            return setTimeout(callback, 0, error, result);
+        }
+    );
 }
 
 function parseJob(payload) {

@@ -11,7 +11,7 @@ raise "ENV must include SLAVE_NAME to boot a slave" unless ENV.has_key?('SLAVE_N
 
 node.default[:machine][:stack] = ENV['SLAVE_NAME']
 
-instance_type = ENV["INSTANCE_TYPE"] || "m3.medium"
+instance_type = ENV["INSTANCE_TYPE"] || "m3.xlarge"
 
 node.default[:machine][:convergence_options].merge! ({
   install_sh_url: "#{node[:common][:nexus_url]}/nexus/content/repositories/filerepo/vistacore/chef-install/slave/install/1.0.slave/install-1.0.slave.sh"
@@ -25,16 +25,17 @@ machine_options = {
     :security_group_ids => ["sg-a06097c6", "sg-2946b14f"]
   },
   :image_id => "ami-2f5f134a",
-  :ssh_username => "PW      ",
+  :ssh_username => "ec2-user",
   :aws_tags => set_ec2_tags,
   :convergence_options => node[:machine][:convergence_options]
 }
 
 chef_repo_deps = parse_dependency_versions "chef-repo_provision"
+machine_deps = parse_dependency_versions "machine"
 
 r_list = []
-r_list << "recipe[packages::enable_internal_sources@#{chef_repo_deps["packages"]}]"
-r_list << "recipe[role_cookbook::aws@#{chef_repo_deps["role_cookbook"]}]"
+r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
+r_list << "recipe[role_cookbook::aws@#{machine_deps["role_cookbook"]}]"
 r_list << "recipe[workstation::slave@#{chef_repo_deps["workstation"]}]"
 r_list << "recipe[workstation@#{chef_repo_deps["workstation"]}]"
 
@@ -44,9 +45,10 @@ machine "#{node[:machine][:stack]}" do
   attributes(
     stack: node[:machine][:stack],
     nexus_url: node[:common][:nexus_url],
+    data_bag_string: node[:common][:data_bag_string],
     jenkins: {
       master: {
-        endpoint: "https://build.vistacore.us"
+        endpoint: "#{node[:'chef-repo_provision'][:slave][:jenkins_url]}"
       }
     },
     workstation: {
@@ -56,11 +58,6 @@ machine "#{node[:machine][:stack]}" do
   )
   file "/#{::Chef::Config.client_key.split("/")[-1]}", ::Chef::Config.client_key
   chef_environment "_default"
-  run_list [
-    "packages::enable_internal_sources@#{node[:machine][:cookbook_versions][:packages]}",
-    "role_cookbook::aws@#{node[:machine][:cookbook_versions][:role_cookbook]}",
-    "workstation::slave@#{node[:'chef-repo_provision'][:cookbook_versions][:workstation]}",
-    "workstation@#{node[:'chef-repo_provision'][:cookbook_versions][:workstation]}"
-  ]
+  run_list r_list
   action node[:machine][:action]
 end

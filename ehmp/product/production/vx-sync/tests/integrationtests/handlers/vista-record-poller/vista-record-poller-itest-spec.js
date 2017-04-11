@@ -14,9 +14,9 @@
 require('../../../../env-setup');
 var _ = require('underscore');
 
-var queueConfig = require(global.VX_JOBFRAMEWORK + 'queue-config');
+var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
 var VistaClient = require(global.VX_SUBSYSTEMS + 'vista/vista-client');
-var PublisherRouter = require(global.VX_JOBFRAMEWORK + 'publisherRouter');
+var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 var grabJobs = require(global.VX_INTTESTS + 'framework/job-grabber');
 var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 // var log = require(global.VX_UTILS + 'log');
@@ -29,9 +29,11 @@ var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 
 var Poller = require(global.VX_HANDLERS + 'vista-record-poller/vista-record-poller');
-var JobStatusUpdater = require(global.VX_JOBFRAMEWORK + 'JobStatusUpdater');
+var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var wConfig = require(global.VX_ROOT + 'worker-config');
+var realConfig = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
+
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
 var host = vx_sync_ip;
@@ -108,8 +110,8 @@ var beanstalkConfig = queueConfig.createFullBeanstalkConfig({
 
         'record-enrichment': {},
         'store-record': {},
-        'vista-prioritization-request': {},
-        'vista-record-processor-request': {},
+        'event-prioritization-request': {},
+        'event-record-processor-request': {},
         'operational-store-record': {},
         'publish-data-change-event': {},
         'patient-data-state-checker': {}
@@ -122,7 +124,7 @@ var config = {
         'C877': {}
     },
 // remove this if it has not caused an integration test build to fail
-    // mvi: _.defaults(wConfig.mvi, {
+    // mvi: _.defaults(realConfig.mvi, {
     //     protocol: 'http',
     //     host: '127.0.0.1',
     //     port: 54000,
@@ -130,7 +132,7 @@ var config = {
     // }),
     jds: _.defaults(wConfig.jds, {
         protocol: 'http',
-        host: 'IPADDRESS ',
+        host: 'IP_ADDRESS',
         port: 9080
     }),
     beanstalk: beanstalkConfig
@@ -140,6 +142,9 @@ var environment = {
     vistaClient: new VistaClient(dummyLogger, dummyLogger, config),
     jobStatusUpdater: {},
     publisherRouter: {},
+    errorPublisher: {
+        publishPollerError: function() {}
+    },
     metrics: dummyLogger,
     jds: new JdsClient(dummyLogger, dummyLogger, config)
 };
@@ -203,10 +208,10 @@ var vistaFullMessage = {
                                 stampTime: 20141031094920,
                                 itemMetaStamp: {
                                     'urn:va:asu-class:CCCC:19': {
-                                        'stampTime': 20141031094920,
+                                        'stampTime': 20141031094920
                                     },
                                     'urn:va:asu-class:CCCC:31': {
-                                        'stampTime': 20141031094920,
+                                        'stampTime': 20141031094920
                                     }
                                 }
                             }
@@ -370,7 +375,7 @@ var vistaFullMessage = {
                                 eventMetaStamp: {
                                     'urn:va:allergy:CCCC:3:753': {
                                         stampTime: '20150119135618'
-                                    },
+                                    }
                                 }
                             }
                         }
@@ -793,15 +798,16 @@ describe('vista-record-poller.js', function() {
 
             // Verify that the jobs were published
             //-------------------------------------
-            expect(actualResponse).toBeTruthy();
-            expect(val(actualResponse, 'length')).toEqual(1);
+            var jobs = _.chain(actualResponse).map(function(response) {return response.jobs}).flatten().value();
+            expect(jobs).toBeTruthy();
+            expect(val(jobs, 'length')).toEqual(1);
 
-            var resultJobTypes = _.pluck(actualResponse, 'type');
+            var resultJobTypes = _.pluck(jobs, 'type');
             var operationalStoreJobs = _.filter(resultJobTypes, function(job) {
                 return (job === 'operational-store-record');
             });
             var prioritizationJobs = _.filter(resultJobTypes, function(job) {
-                return (job === 'vista-prioritization-request');
+                return (job === 'event-prioritization-request');
             });
             var vistaRecordProcessorJobs = _.filter(resultJobTypes, function(job) {
                 return (job === 'vista-record-processor-request');

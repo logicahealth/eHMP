@@ -14,7 +14,7 @@ esac
 ping -c 3 $IPaddr > /dev/null
 if [ $? -eq 0 ]
 then
-	TCPPORT     
+	TCPport=8080
 	targetURL=http://$IPaddr:$TCPport/cds-results-service/rest/invokeRulesForPatient
 	jsonPayload=/tmp/jasonPayload.$$
 

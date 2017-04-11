@@ -9,11 +9,11 @@ var async = require('async');
 var discontinueWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP        ',
+        host: 'IP_ADDRESS',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'PW',
+        verifyCode: 'PW',
+        localIP: 'IPADDRES',
         localAddress: 'localhost',
         noReconnect: true
     },
@@ -32,18 +32,18 @@ var discontinueWritebackContext = {
 var saveWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP        ',
+        host: 'IP_ADDRESS',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'PW',
+        verifyCode: 'PW',
+        localIP: 'IPADDRES',
         localAddress: 'localhost',
         noReconnect: true
     },
     model: {
         'dfn': '100716',
         'provider': '10000000271',
-        'location': '129',
+        'location': '285',
         'orderDialog': 'LR OTHER LAB TESTS',
         'displayGroup': '5',
         'quickOrderDialog': '2',

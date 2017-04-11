@@ -16,13 +16,6 @@
 			"values": [
 			]
 		},
-		"fields": {
-			"name": "fields",
-			"paramType": "query",
-			"type": "string",
-			"values": [
-			]
-		},
 		"roleNames": {
 			"name": "roleNames",
 			"paramType": "query",

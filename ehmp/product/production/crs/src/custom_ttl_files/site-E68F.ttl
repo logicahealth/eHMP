@@ -1,0 +1,26 @@
+@prefix snomed: <http://snomed.info/id/> .
+@prefix loinc:  <http://purl.bioontology.org/ontology/LNC/> .
+@prefix oi:     <urn:va:oi:>
+@prefix ien:    <urn:va:ien:>
+
+# San Diego - Test site
+
+# VA enterprise rheumatoid factor orderable concept mapped to site specific order code
+# RF
+snomed:415301001 oi:isPreferredOrderable oi:9221  .
+
+# C Reactive Protein -  we need to get this from VA
+# snomed:415301001 oi:isPreferredOrderable oi: .
+
+
+# Mapping VA enterprise laboratory result concepts to local code
+# Rheumatoid Factor
+snomed:415301001 snomed:isA ien:60:136 .
+snomed:415301001 snomed:isA ien:60:5707 .
+snomed:415301001 snomed:isA ien:60:1557 .
+
+# C Reactive Protein
+snomed:55235003 snomed:isA ien:60:5714 .
+snomed:55235003 snomed:isA ien:60:5715 .
+snomed:55235003 snomed:isA ien:60:5165 .
+snomed:55235003 snomed:isA ien:60:1584 .

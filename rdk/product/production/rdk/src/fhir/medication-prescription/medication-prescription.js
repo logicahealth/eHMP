@@ -11,7 +11,30 @@ var helpers = require('../common/utils/helpers');
 var errors = require('../common/errors.js');
 var domains = require('../common/domain-map.js');
 var fhirToJDSSearch = require('../common/utils/fhir-to-jds-search');
+var fhirResource = require('../common/entities/fhir-resource');
+var confUtils = require('../conformance/conformance-utils');
+var conformance = require('../conformance/conformance-resource');
 
+var fhirToJDSAttrMap = [{
+    fhirName: 'dateWritten',
+    vprName: 'dateWritten',
+    dataType: 'dateTime',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#dateTime',
+    description: 'When prescription was authorized.',
+    searchable: true
+}];
+
+// Issue call to Conformance registration
+conformance.register(confUtils.domains.MEDICATION_PRESCRIPTION, createMedicationPrescriptionConformanceData());
+
+function createMedicationPrescriptionConformanceData() {   
+   var resourceType = confUtils.domains.MEDICATION_PRESCRIPTION;
+   var profileReference = 'http://www.hl7.org/FHIR/2015May/medicationprescription.html';
+   var interactions = [ 'read', 'search-type' ];
+
+   return confUtils.createConformanceData(resourceType, profileReference,
+           interactions, fhirToJDSAttrMap);
+}
 
 /**
  * FHIR to JDS mapping table for sortable FHIR parameters
@@ -81,14 +104,7 @@ function getData(req, pid, params, callback) {
 }
 
 function convertToFhir(result, req) {
-    var fhirResult = {};
-    fhirResult.resourceType = 'Bundle';
-    fhirResult.type = 'collection';
-    fhirResult.id = 'urn:uuid:' + helpers.generateUUID();
-    fhirResult.link = [{
-        'rel': 'self',
-        'href': 'http://' + req._remoteAddress + req.url
-    }];
+    var fhirResult = new fhirResource.Bundle([new fhirResource.Link('http://' + req._remoteAddress + req.url, 'self')]);
 
     var now = new Date();
     fhirResult.meta = {
@@ -133,7 +149,7 @@ function convertToMedicationPrescription(item, pid) {
     if (nullchecker.isNotNullish(item.orders) && item.orders.length > 0) {
         var order = item.orders[0];
         if (nullchecker.isNotNullish(order.ordered)) {
-            mp.dateWritten = fhirUtils.convertToFhirDateTime(order.ordered);
+            mp.dateWritten = fhirUtils.convertToFhirDateTime(order.ordered, fhirUtils.getSiteHash(item.uid));
         }
         if (nullchecker.isNotNullish(order.providerUid)) {
             mp.prescriber = new fhirResource.ReferenceResource(constants.medPrescription.PRESCRIBER_PREFIX + order.providerUid);
@@ -143,7 +159,9 @@ function convertToMedicationPrescription(item, pid) {
     setDosageInstruction(mp, item);
     setDispense(mp, item);
     setExtensions(mp, item);
-    return mp;
+    return {
+        resource: mp
+    };
 }
 
 function createMedication(item) {
@@ -212,11 +230,12 @@ function createDosageInstruction(text, dosage) {
 }
 
 function setDispense(mp, item) {
+    var siteHash = fhirUtils.getSiteHash(item.uid);
     var d = {
         medication: mp.medication,
         validityPeriod: new fhirResource.Period(
-            fhirUtils.convertToFhirDateTime(item.overallStart),
-            fhirUtils.convertToFhirDateTime(item.overallStop)),
+            fhirUtils.convertToFhirDateTime(item.overallStart, siteHash),
+            fhirUtils.convertToFhirDateTime(item.overallStop, siteHash)),
     };
     if (!_.isEmpty(item.orders)) {
         var order = item.orders[0];

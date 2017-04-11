@@ -19,7 +19,7 @@ Scenario: Search Domain lab #2
 @F664_PatientRecord_Search_By_Type_Domain_Scenario_3
 Scenario: Search Domain vital
   Given a patient with pid "9E7A;253" has been synced through the RDK API
-  When the client searches domain "vital" by type for pid = "9E7A;253" and type = "TEMPERATURE"
+  When the client searches domain "vital" by type for pid = "9E7A;253" and type = "TEMPERATURE" and date.start = "20150101"
   Then a successful response is returned
   And the response contains at least 2 items
 

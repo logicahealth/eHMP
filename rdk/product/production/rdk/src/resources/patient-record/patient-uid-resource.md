@@ -1,14 +1,12 @@
 # Group Patient
 
-## Uid [{{{path}}}{?pid}{&uid}{&fields}]
+## Uid [{{{path}}}{?pid}{&uid}]
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
 
     :[uid]({{{common}}}/parameters/uid.md example:"urn:va:problem:C877:3:747" required:"required")
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Get [GET]

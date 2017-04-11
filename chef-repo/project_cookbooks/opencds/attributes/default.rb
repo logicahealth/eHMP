@@ -14,7 +14,7 @@ default[:opencds][:deploy_war][:app_dir] = "#{node[:tomcat][:webapp_dir]}/#{node
 default[:opencds][:deploy_war][:deployed_war_file] = "#{node[:tomcat][:webapp_dir]}/#{node[:opencds][:deploy_war][:app_name]}.war"
 default[:opencds][:deploy_war][:downloaded_war_file] = "#{Chef::Config[:file_cache_path]}/#{node[:opencds][:deploy_war][:app_name]}.war"
 default[:opencds][:deploy_war][:version] = "2.0.0.90"
-default[:opencds][:deploy_war][:source] = "#{node[:nexus_url]}/repositories/ehmp/filerepo/third-party/project/opencds/opencds/#{default[:opencds][:deploy_war][:version]}/opencds-#{default[:opencds][:deploy_war][:version]}.war"
+default[:opencds][:deploy_war][:source] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/opencds/opencds/#{default[:opencds][:deploy_war][:version]}/opencds-#{default[:opencds][:deploy_war][:version]}.war"
 
 # DEPLOY_KNOW_REPO:
 default[:opencds][:deploy_knowledge_repo][:app_home] = "#{node[:tomcat][:user_home]}/OpenCDS"

@@ -53,6 +53,7 @@
        | resource.contained.text.div                               | <div>HEPATITIS C ANTIBODY</div>                        |
        | resource.contained.identifier.value                       | urn:va:order:9E7A:100022:21142                         |
        | resource.detail.display                                   | HEPATITIS C ANTIBODY                                   |
+  And FHIR date and time conver to Zulu format for Orders
 
  @F138_2_fhir_orders @fhir @10104V248233
  Scenario: Client can request orders results in FHIR format
@@ -77,7 +78,7 @@
        #Practitioner
        | resource.contained.resourceType     | Practitioner                            |
        | resource.contained.text.status      | generated                               |
-       | resource.contained.text.div         | <div>Provider,Onehundredninetyone</div> |
+       | resource.contained.text.div         | <div>Three,Therapist</div>              |
        | resource.contained.identifier.value | urn:va:user:9E7A:11531                  |
        #Location
        | resource.contained.resourceType     | Location                 |

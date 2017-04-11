@@ -1,7 +1,6 @@
 define([
-    "app/applets/medication_review_v2/views/appletView",
     "app/applets/medication_review_v2/detailController/detailController"
-], function(AppletView, DetailController) {
+], function( DetailController) {
     "use strict";
 
     var applet = {
@@ -9,7 +8,6 @@ define([
         hasCSS: true,
         viewTypes: [{
             type: 'expanded',
-            view: AppletView,
             chromeEnabled: true
         }],
         defaultViewType: 'expanded'

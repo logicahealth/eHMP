@@ -59,61 +59,58 @@ function createSorting(req, res) {
 
     //Get UserScreensConfig and update with new or updated graphs
     uds.getScreenData(screenId, req, function(err, data) {
-        req.logger.debug('getting data in createStackedGraph for screenID: ' + screenId + ' and data returned is this: ' + data);
+        req.logger.debug({data: data}, 'getting data in createStackedGraph for screenID: ' + screenId);
         if (err) {
             req.logger.error('Unable to save custom filter due to error retrieving UserScreensConfig data');
             req.logger.error(err);
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
-        } else {
-            var udsData = {};
-            var userDefinedSortData = [];
-            var count;
-            var sortId = req.param('id');
-            var sortData = {};
-            var found;
+        }
+        var udsData = {};
+        var userDefinedSortData = [];
+        var count;
+        var sortId = req.param('id');
+        var sortData = {};
+        var found;
 
-            userDefinedSortData = dd(data)('userDefinedSorts').val;
+        userDefinedSortData = dd(data)('userDefinedSorts').val;
 
-            if(nullchecker.isNotNullish(userDefinedSortData)) {
-                for (count = 0; count < userDefinedSortData.length; count++) {
-                    if (userDefinedSortData[count].id === sortId) {
-                        sortData = userDefinedSortData[count];
-                        count = userDefinedSortData.length;
-                        found = true;
-                        sortData = processDataForCreate(sortId, input, sortData);
-                    }
-                }
-
-                if(!found) {
+        if(_.isObject(userDefinedSortData)) {
+            for (count = 0; count < userDefinedSortData.length; count++) {
+                if (userDefinedSortData[count].id === sortId) {
+                    sortData = userDefinedSortData[count];
+                    count = userDefinedSortData.length;
+                    found = true;
                     sortData = processDataForCreate(sortId, input, sortData);
-                    userDefinedSortData = userDefinedSortData.concat(sortData);
                 }
-            } else {
-                userDefinedSortData = [];
-                sortData = processDataForCreate(sortId, input, sortData);
-                userDefinedSortData.push(sortData);
             }
 
-            data.userDefinedSorts = userDefinedSortData;
-
-            udsData = data;
-
-            //The UI is coded to expect strings, store it as such
-            var content = JSON.stringify(udsData);
-
-            req.logger.debug('Inside userDefinedFilters createFilter filter data before post: ' + JSON.stringify(content));
-
-            postSortData(data, req, function(err) {
-                if (err) {
-                    req.logger.error(err);
-                    res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
-                } else {
-                    res.status(rdk.httpstatus.ok).rdkSend(data);
-                }
-            });
+            if(!found) {
+                sortData = processDataForCreate(sortId, input, sortData);
+                userDefinedSortData = userDefinedSortData.concat(sortData);
+            }
+        } else {
+            userDefinedSortData = [];
+            sortData = processDataForCreate(sortId, input, sortData);
+            userDefinedSortData.push(sortData);
         }
-    });
 
+        data.userDefinedSorts = userDefinedSortData;
+
+        udsData = _.defaults(data, {'_id': screenId});
+
+        //The UI is coded to expect strings, store it as such
+        var content = JSON.stringify(udsData);
+
+        req.logger.debug({content: content}, 'Inside userDefinedFilters createFilter filter data before post');
+
+        postSortData(data, req, function(err) {
+            if (err) {
+                req.logger.error(err);
+                return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
+            }
+            return res.status(rdk.httpstatus.ok).rdkSend(data);
+        });
+    });
 }
 
 function verifyInput(input) {
@@ -221,10 +218,12 @@ function removeSort(req, res) {
         var sortData = {};
         var count = 0;
 
-        for (count = 0; count < userDefinedSortData.length; count++) {
-            if (userDefinedSortData[count].id === sortId) {
-                sortData = userDefinedSortData[count];
-                break;
+        if (_.isObject(userDefinedSortData)) {
+            for (count = 0; count < userDefinedSortData.length; count++) {
+                if (userDefinedSortData[count].id === sortId) {
+                    sortData = userDefinedSortData[count];
+                    break;
+                }
             }
         }
 
@@ -250,10 +249,9 @@ function removeSort(req, res) {
             postSortData(data, req, function(err) {
                 if (err) {
                     req.logger.error(err);
-                    res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
-                } else {
-                    res.status(rdk.httpstatus.ok).rdkSend(data);
+                    return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
                 }
+                return res.status(rdk.httpstatus.ok).rdkSend(data);
             });
         } else {
             //no matching applet id
@@ -274,7 +272,7 @@ function postSortData(content, req, callback) {
     httpUtil.post(options,
         function(err, response, data) {
             if (err) {
-                options.logger.error('Unable to POST sorting data. Error: ' + err);
+                options.logger.error({error: err}, 'Unable to POST sorting data.');
                 if (callback) {
                     callback(err);
                 }

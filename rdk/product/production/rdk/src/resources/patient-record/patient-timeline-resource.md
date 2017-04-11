@@ -1,6 +1,6 @@
 # Group Patient
 
-## Patient record timeline [{{{path}}}{?pid}{&uid}{&start}{&limit}{&filter}{&order}{&fields}]
+## Patient record timeline [{{{path}}}{?pid}{&uid}{&start}{&limit}{&filter}{&order}]
 
 + Parameters
 
@@ -15,8 +15,6 @@
     :[filter]({{{common}}}/parameters/filter.md)
 
     :[order]({{{common}}}/parameters/order.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Get [GET]

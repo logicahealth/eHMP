@@ -33,9 +33,9 @@ var getResourceConfig = function() {
         path: '/set-recent-patients',
         interceptors: {
             operationalDataCheck: false,
-            synchronize: false
+            synchronize: false,
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,
         put: require('./set-recent-patients'),
         healthcheck: {}
@@ -44,9 +44,10 @@ var getResourceConfig = function() {
         path: '/get-recent-patients',
         interceptors: {
             operationalDataCheck: false,
+            jdsFilter: true,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,
         get: require('./get-recent-patients'),
         healthcheck: {}

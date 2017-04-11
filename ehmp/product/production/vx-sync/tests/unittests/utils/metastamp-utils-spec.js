@@ -123,6 +123,34 @@ describe('metastamp.js', function() {
             var retValue = metastamp.metastampDomain(allergySubset);
             expect(retValue).toBeDefined();
         });
+
+        it('event has stampTime', function() {
+            var now = '20160505193046';
+            var eventStampTime = '20160505120056';
+            var uid = 'urn:va:allergy:9E7A:8:753';
+            var batch = {
+                'apiVersion': '1.0',
+                'data': {
+                    'updated': 20141215144035,
+                    'totalItems': 32,
+                    'currentItemCount': 32,
+                    'items': [{
+                        'entered': '200503172015',
+                        'verified': '20050317201533',
+                        'uid': uid,
+                        'pid': '9E7A;8',
+                        'localId': '753',
+                        'typeName': 'DRUG',
+                        'stampTime': eventStampTime
+                    }]
+                }
+            };
+
+            var stamp = metastamp.metastampDomain(batch, now, null);
+            expect(stamp.sourceMetaStamp['9E7A'].stampTime).toEqual(now);
+            expect(stamp.sourceMetaStamp['9E7A'].domainMetaStamp['allergy'].stampTime).toEqual(now);
+            expect(stamp.sourceMetaStamp['9E7A'].domainMetaStamp['allergy'].eventMetaStamp[uid].stampTime).toEqual(eventStampTime);
+        });
     });
 
     describe('getDomainFromMetastamp()', function() {
@@ -136,6 +164,10 @@ describe('metastamp.js', function() {
             }
         };
 
+        it('Error path: no metaStamp', function() {
+            var getDomain = metastamp.getDomainFromMetastamp(null, 'AAAA');
+            expect(getDomain).toBeUndefined();
+        });
         it('Error path: no sourceMetaStamp', function() {
             var getDomain = metastamp.getDomainFromMetastamp({}, 'AAAA');
             expect(getDomain).toBeUndefined();

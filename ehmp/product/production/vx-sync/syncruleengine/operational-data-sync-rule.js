@@ -3,6 +3,8 @@
 var _ = require('underscore');
 var async = require('async');
 var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
+var objUtil = require(global.VX_UTILS + 'object-utils');
+var uidUtil = require(global.VX_UTILS + 'uid-utils');
 
 function operationalDataSyncRule(log, config, environment, patientIdentifiers, exceptions, callback) {
     log.debug('operational-data-sync-rule.operationalDataSyncRule: Running...');
@@ -41,7 +43,14 @@ function operationalDataSyncRule(log, config, environment, patientIdentifiers, e
 
     log.debug('operational-data-sync-rule.operationalDataSyncRule: Verifying with JDS that operational data has been synced for %s', patientVistaSites.toString());
     async.each(patientVistaSites, function(site, asyncCallback) {
-        environment.jds.getOperationalSyncStatus(site, function(error, response, result) {
+        var dfn = idUtil.extractDfnFromPid(patientVistaSitesToPids[site].value);
+        var ptselectUID = uidUtil.getUidForOperationalDomain('pt-select', site, dfn);
+        log.trace('operational-data-sync-rule.operationalDataSyncRule: ptLocalId %j ptselectUID %j', dfn, ptselectUID);
+        var opdataFilter = {
+            detailed: true,
+            filter: 'eq(uid,' + '"' + ptselectUID +'")'
+        };
+        environment.jds.getOperationalSyncStatusWithParams(site, opdataFilter, function(error, response, result) {
             if (error) {
                 log.error('operational-data-sync-rule.operationalDataSyncRule:Got error from JDS: %j', error);
                 asyncCallback('FailedJdsError');
@@ -54,12 +63,43 @@ function operationalDataSyncRule(log, config, environment, patientIdentifiers, e
             } else if (response.statusCode !== 200 && response.statusCode !== 404) {
                 log.error('operational-data-sync-rule.operationalDataSyncRule: Unexpeceted statusCode %s received from JDS', response.statusCode);
                 asyncCallback('FailedJdsWrongStatusCode');
-            } else if (response.statusCode === 200 && result.completedStamp && !result.inProgress) {
-                log.debug('operational-data-sync-rule.operationalDataSyncRule: Operational data has already been synced for site ' + site);
+            // Only add patient to sync list if the following condtions are met:
+            // Operational Data synced once (Checked using syncCompleteAsOf - which won't exist if it never synced)
+            // The pt-select data item for the patient is stored
+            } else if (response.statusCode === 200 &&
+                ((objUtil.getProperty(result,'completedStamp','sourceMetaStamp',site,'syncCompleteAsOf') &&
+                objUtil.getProperty(result,'completedStamp','sourceMetaStamp',site,'domainMetaStamp','pt-select','itemMetaStamp',ptselectUID,'stored')) ||
+                (objUtil.getProperty(result,'inProgress','sourceMetaStamp',site,'syncCompleteAsOf') &&
+                objUtil.getProperty(result,'inProgress','sourceMetaStamp',site,'domainMetaStamp','pt-select','itemMetaStamp',ptselectUID,'stored')))) {
+
+                log.trace('operational-data-sync-rule.operationalDataSyncRule: objUtil results: completed-syncCompleteAsOf %j completed-Stored %j inProgress-syncCompleteAsOf %j inProgress-Stored %j',
+                    objUtil.getProperty(result,'completedStamp','sourceMetaStamp',site,'syncCompleteAsOf'),
+                    objUtil.getProperty(result,'completedStamp','sourceMetaStamp',site,'domainMetaStamp','pt-select','itemMetaStamp',ptselectUID,'stored'),
+                    objUtil.getProperty(result,'inProgress','sourceMetaStamp',site,'syncCompleteAsOf'),
+                    objUtil.getProperty(result,'inProgress','sourceMetaStamp',site,'domainMetaStamp','pt-select','itemMetaStamp',ptselectUID,'stored'));
+                // Operational Data Completed at least once and item is stored
+                log.debug('operational-data-sync-rule.operationalDataSyncRule: Operational data competed once and pt-select is complete for patient ' + site);
+                // Get operational data with filter for pt-select
+                log.trace('operational-data-sync-rule.operationalDataSyncRule: Added patient to sync: %j', patientVistaSitesToPids[site].value);
                 patientIdentifiersToSync.push(patientVistaSitesToPids[site]);
                 asyncCallback();
+            // Only pt-select for this patient hasn't completed, tell the log about it
+            } else if (response.statusCode === 200 &&
+                ((objUtil.getProperty(result,'completedStamp','sourceMetaStamp',site,'syncCompleteAsOf') &&
+                !objUtil.getProperty(result,'completedStamp','sourceMetaStamp',site,'domainMetaStamp','pt-select','itemMetaStamp',ptselectUID,'stored')) ||
+                (objUtil.getProperty(result,'inProgress','sourceMetaStamp',site,'syncCompleteAsOf') &&
+                !objUtil.getProperty(result,'inProgress','sourceMetaStamp',site,'domainMetaStamp','pt-select','itemMetaStamp',ptselectUID,'stored')))) {
+
+                log.warn('operational-data-sync-rule.operationalDataSyncRule: patient %j for site %j not added to sync list due to pt-select not complete', patientVistaSitesToPids[site].value, site);
+                log.warn('operational-data-sync-rule.operationalDataSyncRule: checked values: completed-syncCompleteAsOf %j completed-Stored %j inProgress-syncCompleteAsOf %j inProgress-Stored %j',
+                    objUtil.getProperty(result,'completedStamp','sourceMetaStamp',site,'syncCompleteAsOf'),
+                    objUtil.getProperty(result,'completedStamp','sourceMetaStamp',site,'domainMetaStamp','pt-select','itemMetaStamp',ptselectUID,'stored'),
+                    objUtil.getProperty(result,'inProgress','sourceMetaStamp',site,'syncCompleteAsOf'),
+                    objUtil.getProperty(result,'inProgress','sourceMetaStamp',site,'domainMetaStamp','pt-select','itemMetaStamp',ptselectUID,'stored'));
+                asyncCallback();
+            // operational data sync never completed
             } else {
-                log.debug('operational-data-sync-rule.operationalDataSyncRule: Operational data has not yet been synced for site ' + site);
+                log.debug('operational-data-sync-rule.operationalDataSyncRule: Operational data has not yet been synced for site: %j patient: ', site, patientVistaSitesToPids[site].value);
                 asyncCallback();
             }
         });
@@ -71,7 +111,7 @@ function operationalDataSyncRule(log, config, environment, patientIdentifiers, e
         } else if (_.isEmpty(patientIdentifiersToSync)) {
             //Operational data not synced for the patient's sites; Reject patient sync
             log.error('operational-data-sync-rule.operationalDataSyncRule: Patient sync rejected because operational data has not been synced for any of the primary site(s) associated with this patient: %s', patientVistaSites.toString());
-            setTimeout(callback, 0, null, patientIdentifiersToSync);
+            setTimeout(callback, 0, 'NO_OPDATA', patientIdentifiersToSync);
         } else {
             //Continue as normal
             log.debug('operational-data-sync-rule.operationalDataSyncRule: Operational data for at least one pimary site associated with this patient has been synced. Continuing...');

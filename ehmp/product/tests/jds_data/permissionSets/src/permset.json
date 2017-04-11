@@ -1,7 +1,7 @@
 [{
-   "uid": "acc",
-   "label": "Access Control Coordinator",
-   "permissions": [
+    "uid": "acc",
+    "label": "Access Control Coordinator",
+    "permissions": [
         "access-stack-graph",
         "add-user-permission-set",
         "edit-user-permission-set",
@@ -23,13 +23,13 @@
         "read-vista-health-summary",
         "read-vital",
         "remove-user-permission-set"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "anesthesiologist",
-   "label": "Anesthesiologist",
-   "permissions": [
+    "uid": "anesthesiologist",
+    "label": "Anesthesiologist",
+    "permissions": [
         "access-stack-graph",
         "add-active-medication",
         "add-allergy",
@@ -47,6 +47,7 @@
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
         "cosign-lab-order",
         "cosign-med-order",
         "cosign-note",
@@ -93,32 +94,40 @@
         "release-med-order",
         "release-radiology-order",
         "remove-condition-problem",
+        "review-result-consult-order",
+        "schedule-consult-order",
         "sign-consult-order",
         "sign-lab-order",
         "sign-med-order",
         "sign-note",
         "sign-note-addendum",
         "sign-radiology-order",
-         
+        "track-lab-order",
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "chief",
-   "label": "Chief",
-   "permissions": [
+    "uid": "chief",
+    "label": "Chief",
+    "permissions": [
         "access-stack-graph",
+        "add-consult-order",
         "add-encounter",
         "add-note",
         "add-patient-history",
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
+        "discontinue-consult-order",
+        "edit-consult-order",
         "edit-encounter-form",
         "edit-patient-history",
         "edit-task",
@@ -139,17 +148,22 @@
         "read-vista-health-summary",
         "read-vital",
         "retract-note",
-         
+        "review-result-consult-order",
+        "schedule-consult-order",
+        "sign-consult-order",
+        "track-lab-order",
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "dentist",
-   "label": "Dentist",
-   "permissions": [
+    "uid": "dentist",
+    "label": "Dentist",
+    "permissions": [
         "access-stack-graph",
         "add-active-medication",
         "add-allergy",
@@ -167,6 +181,7 @@
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
         "cosign-lab-order",
         "cosign-med-order",
         "cosign-note",
@@ -213,25 +228,29 @@
         "release-med-order",
         "release-radiology-order",
         "remove-condition-problem",
+        "review-result-consult-order",
+        "schedule-consult-order",
         "sign-consult-order",
         "sign-lab-order",
         "sign-med-order",
         "sign-note",
         "sign-note-addendum",
         "sign-radiology-order",
-         
+        "track-lab-order",
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "intern",
-   "label": "Intern",
-   "permissions": [
+    "uid": "intern",
+    "label": "Intern",
+    "permissions": [
         "access-stack-graph",
         "add-active-medication",
         "add-allergy",
@@ -248,11 +267,13 @@
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
         "cosign-lab-order",
         "cosign-med-order",
         "cosign-radiology-order",
         "delete-note",
         "discontinue-active-medication",
+        "discontinue-consult-order",
         "edit-active-medication",
         "edit-allergy",
         "edit-condition-problem",
@@ -284,22 +305,27 @@
         "read-vista-health-summary",
         "read-vital",
         "remove-condition-problem",
+        "review-result-consult-order",
+        "schedule-consult-order",
+        "sign-consult-order",
         "sign-lab-order",
         "sign-note",
         "sign-radiology-order",
-         
+        "track-lab-order",
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "iso",
-   "label": "Information Security Officer",
-   "permissions": [
+    "uid": "iso",
+    "label": "Information Security Officer",
+    "permissions": [
         "access-stack-graph",
         "add-encounter",
         "add-patient-history",
@@ -322,22 +348,25 @@
         "read-task",
         "read-vista-health-summary",
         "read-vital",
-         
+
         "edit-encounter"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "lab-tech",
-   "label": "Lab Technician",
-   "permissions": [
+    "uid": "lab-tech",
+    "label": "Lab Technician",
+    "permissions": [
         "access-stack-graph",
+        "add-consult-order",
         "add-encounter",
         "add-immunization",
         "add-lab-order",
         "add-task",
+        "complete-consult-order",
         "cosign-lab-order",
         "cosign-med-order",
+        "discontinue-consult-order",
         "edit-consult-order",
         "edit-encounter-form",
         "edit-lab-order",
@@ -359,17 +388,22 @@
         "read-task",
         "read-vista-health-summary",
         "read-vital",
-         
+        "review-result-consult-order",
+        "schedule-consult-order",
+        "sign-consult-order",
+        "track-lab-order",
+        "triage-consult-order",
+
         "edit-encounter",
         "eie-encounter",
         "edit-immunization"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "licensed-practicing-nurse",
-   "label": "Licensed Practicing Nurse",
-   "permissions": [
+    "uid": "licensed-practicing-nurse",
+    "label": "Licensed Practicing Nurse",
+    "permissions": [
         "access-stack-graph",
         "add-allergy",
         "add-condition-problem",
@@ -408,19 +442,21 @@
         "release-lab-order",
         "sign-note",
         "sign-note-addendum",
-         
+        "track-lab-order",
+
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "medical-technician",
-   "label": "Medical Technician",
-   "permissions": [
+    "uid": "medical-technician",
+    "label": "Medical Technician",
+    "permissions": [
         "access-stack-graph",
+        "add-consult-order",
         "add-encounter",
         "add-immunization",
         "add-med-order",
@@ -430,6 +466,8 @@
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
+        "discontinue-consult-order",
         "edit-consult-order",
         "edit-encounter-form",
         "edit-lab-order",
@@ -456,19 +494,24 @@
         "read-task",
         "read-vista-health-summary",
         "read-vital",
+        "review-result-consult-order",
+        "schedule-consult-order",
+        "sign-consult-order",
+        "track-lab-order",
+        "triage-consult-order",
 
         "abort-task",
         "edit-encounter",
         "edit-immunization",
         "edit-vital",
         "eie-encounter"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "mis",
-   "label": "Medical Information Section",
-   "permissions": [
+    "uid": "mis",
+    "label": "Medical Information Section",
+    "permissions": [
         "access-stack-graph",
         "add-encounter",
         "add-task",
@@ -491,24 +534,28 @@
         "read-vista-health-summary",
         "read-vital",
         "retract-note",
-         
+
         "abort-task",
         "edit-encounter"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "mso",
-   "label": "Medical Service Officer",
-   "permissions": [
+    "uid": "mso",
+    "label": "Medical Service Officer",
+    "permissions": [
         "access-stack-graph",
+        "add-consult-order",
         "add-encounter",
         "add-note",
         "add-note-addendum",
         "add-patient-history",
         "add-task",
         "cancel-task",
+        "complete-consult-order",
         "delete-note",
+        "discontinue-consult-order",
+        "edit-consult-order",
         "edit-encounter-form",
         "edit-note",
         "edit-note-addendum",
@@ -530,20 +577,25 @@
         "read-task",
         "read-vista-health-summary",
         "read-vital",
+        "review-result-consult-order",
+        "schedule-consult-order",
+        "sign-consult-order",
         "sign-note-addendum",
-         
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "nurse-manager",
-   "label": "Nurse Manager",
-   "permissions": [
+    "uid": "nurse-manager",
+    "label": "Nurse Manager",
+    "permissions": [
         "access-stack-graph",
         "add-allergy",
         "add-condition-problem",
+        "add-consult-order",
         "add-encounter",
         "add-immunization",
         "add-lab-order",
@@ -555,9 +607,12 @@
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
         "delete-note",
+        "discontinue-consult-order",
         "edit-allergy",
         "edit-condition-problem",
+        "edit-consult-order",
         "edit-encounter-form",
         "edit-lab-order",
         "edit-med-order",
@@ -586,21 +641,26 @@
         "read-vital",
         "release-lab-order",
         "release-radiology-order",
+        "review-result-consult-order",
+        "schedule-consult-order",
+        "sign-consult-order",
         "sign-note",
         "sign-note-addendum",
-         
+        "track-lab-order",
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "nurse-practitioner",
-   "label": "Nurse Practitioner",
-   "permissions": [
+    "uid": "nurse-practitioner",
+    "label": "Nurse Practitioner",
+    "permissions": [
         "access-stack-graph",
         "add-active-medication",
         "add-allergy",
@@ -618,6 +678,7 @@
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
         "delete-note",
         "discontinue-active-medication",
         "discontinue-consult-order",
@@ -657,28 +718,35 @@
         "release-lab-order",
         "release-med-order",
         "release-radiology-order",
+        "review-result-consult-order",
+        "schedule-consult-order",
         "sign-consult-order",
         "sign-lab-order",
         "sign-med-order",
         "sign-note",
         "sign-note-addendum",
-         
+        "track-lab-order",
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "pharmacist",
-   "label": "Pharmacist",
-   "permissions": [
+    "uid": "pharmacist",
+    "label": "Pharmacist",
+    "permissions": [
         "access-stack-graph",
+        "add-consult-order",
         "add-encounter",
         "add-immunization",
         "add-task",
+        "complete-consult-order",
+        "discontinue-consult-order",
         "edit-consult-order",
         "edit-encounter-form",
         "edit-lab-order",
@@ -701,29 +769,38 @@
         "read-vista-health-summary",
         "read-vital",
         "release-med-order",
+        "review-result-consult-order",
+        "schedule-consult-order",
+        "sign-consult-order",
+        "track-lab-order",
+        "triage-consult-order",
 
         "add-med-order",
         "edit-encounter",
         "edit-immunization",
         "eie-encounter"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "physician-assistant",
-   "label": "Physician Assistant",
-   "permissions": [
+    "uid": "physician-assistant",
+    "label": "Physician Assistant",
+    "permissions": [
         "access-stack-graph",
         "add-allergy",
         "add-condition-problem",
+        "add-consult-order",
         "add-encounter",
         "add-immunization",
         "add-note",
         "add-patient-history",
         "add-task",
         "add-vital",
+        "complete-consult-order",
+        "discontinue-consult-order",
         "edit-allergy",
         "edit-condition-problem",
+        "edit-consult-order",
         "edit-encounter-form",
         "edit-note",
         "edit-patient-history",
@@ -744,19 +821,24 @@
         "read-vista-health-summary",
         "read-vital",
         "remove-condition-problem",
+        "review-result-consult-order",
+        "schedule-consult-order",
+        "sign-consult-order",
         "sign-note",
-         
+        "track-lab-order",
+        "triage-consult-order",
+
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "psychiatrist",
-   "label": "Psychiatrist",
-   "permissions": [
+    "uid": "psychiatrist",
+    "label": "Psychiatrist",
+    "permissions": [
         "access-stack-graph",
         "add-active-medication",
         "add-allergy",
@@ -774,6 +856,7 @@
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
         "cosign-lab-order",
         "cosign-med-order",
         "cosign-note",
@@ -820,25 +903,29 @@
         "release-med-order",
         "release-radiology-order",
         "remove-condition-problem",
+        "review-result-consult-order",
+        "schedule-consult-order",
         "sign-consult-order",
         "sign-lab-order",
         "sign-med-order",
         "sign-note",
         "sign-note-addendum",
         "sign-radiology-order",
-         
+        "track-lab-order",
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "psychologist",
-   "label": "Psychologist",
-   "permissions": [
+    "uid": "psychologist",
+    "label": "Psychologist",
+    "permissions": [
         "access-stack-graph",
         "add-active-medication",
         "add-allergy",
@@ -856,6 +943,7 @@
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
         "cosign-lab-order",
         "cosign-med-order",
         "cosign-note",
@@ -902,33 +990,40 @@
         "release-med-order",
         "release-radiology-order",
         "remove-condition-problem",
+        "review-result-consult-order",
+        "schedule-consult-order",
         "sign-consult-order",
         "sign-lab-order",
         "sign-med-order",
         "sign-note",
         "sign-note-addendum",
         "sign-radiology-order",
-         
+        "track-lab-order",
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "rad-tech",
-   "label": "Radiology Technician",
-   "permissions": [
+    "uid": "rad-tech",
+    "label": "Radiology Technician",
+    "permissions": [
         "access-stack-graph",
+        "add-consult-order",
         "add-encounter",
         "add-immunization",
         "add-lab-order",
         "add-task",
+        "complete-consult-order",
         "cosign-lab-order",
         "cosign-med-order",
         "cosign-radiology-order",
+        "discontinue-consult-order",
         "edit-consult-order",
         "edit-encounter-form",
         "edit-lab-order",
@@ -949,17 +1044,22 @@
         "read-task",
         "read-vista-health-summary",
         "read-vital",
-         
+        "review-result-consult-order",
+        "schedule-consult-order",
+        "sign-consult-order",
+        "track-lab-order",
+        "triage-consult-order",
+
         "edit-encounter",
         "eie-encounter",
         "edit-immunization"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "radiologist",
-   "label": "Radiologist",
-   "permissions": [
+    "uid": "radiologist",
+    "label": "Radiologist",
+    "permissions": [
         "access-stack-graph",
         "add-active-medication",
         "add-allergy",
@@ -977,6 +1077,7 @@
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
         "cosign-lab-order",
         "cosign-med-order",
         "cosign-note",
@@ -1023,25 +1124,29 @@
         "release-med-order",
         "release-radiology-order",
         "remove-condition-problem",
+        "review-result-consult-order",
+        "schedule-consult-order",
         "sign-consult-order",
         "sign-lab-order",
         "sign-med-order",
         "sign-note",
         "sign-note-addendum",
         "sign-radiology-order",
-         
+        "track-lab-order",
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "read-access",
-   "label": "Read Access",
-   "permissions": [
+    "uid": "read-access",
+    "label": "Read Access",
+    "permissions": [
         "read-active-medication",
         "read-allergy",
         "read-clinical-reminder",
@@ -1061,16 +1166,17 @@
 
         "read-stack-graph",
         "read-timeline"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "registered-nurse",
-   "label": "Registered Nurse",
-   "permissions": [
+    "uid": "registered-nurse",
+    "label": "Registered Nurse",
+    "permissions": [
         "access-stack-graph",
         "add-allergy",
         "add-condition-problem",
+        "add-consult-order",
         "add-encounter",
         "add-immunization",
         "add-lab-order",
@@ -1081,8 +1187,11 @@
         "add-radiology-order",
         "add-task",
         "add-vital",
+        "complete-consult-order",
+        "discontinue-consult-order",
         "edit-allergy",
         "edit-condition-problem",
+        "edit-consult-order",
         "edit-encounter-form",
         "edit-lab-order",
         "edit-med-order",
@@ -1107,20 +1216,25 @@
         "read-vital",
         "release-lab-order",
         "release-radiology-order",
+        "review-result-consult-order",
+        "schedule-consult-order",
+        "sign-consult-order",
         "sign-note",
         "sign-note-addendum",
-         
+        "track-lab-order",
+        "triage-consult-order",
+
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "resident",
-   "label": "Resident",
-   "permissions": [
+    "uid": "resident",
+    "label": "Resident",
+    "permissions": [
         "access-stack-graph",
         "add-active-medication",
         "add-allergy",
@@ -1138,6 +1252,7 @@
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
         "delete-note",
         "discontinue-active-medication",
         "discontinue-consult-order",
@@ -1180,29 +1295,34 @@
         "release-med-order",
         "release-radiology-order",
         "remove-condition-problem",
+        "review-result-consult-order",
+        "schedule-consult-order",
         "sign-consult-order",
         "sign-lab-order",
         "sign-med-order",
         "sign-note",
         "sign-note-addendum",
         "sign-radiology-order",
-         
+        "track-lab-order",
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital",
         "retract-note"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "scheduler",
-   "label": "Scheduler",
-   "permissions": [
+    "uid": "scheduler",
+    "label": "Scheduler",
+    "permissions": [
         "access-stack-graph",
         "add-encounter",
         "add-task",
+        "discontinue-consult-order",
         "edit-encounter-form",
         "edit-task",
         "read-active-medication",
@@ -1220,22 +1340,28 @@
         "read-task",
         "read-vista-health-summary",
         "read-vital",
-         
+        "schedule-consult-order",
+        "track-lab-order",
+
         "edit-encounter"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "service-chief",
-   "label": "Service Chief",
-   "permissions": [
+    "uid": "service-chief",
+    "label": "Service Chief",
+    "permissions": [
         "access-stack-graph",
+        "add-consult-order",
         "add-encounter",
         "add-note",
         "add-patient-history",
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
+        "discontinue-consult-order",
+        "edit-consult-order",
         "edit-encounter-form",
         "edit-patient-history",
         "edit-task",
@@ -1256,17 +1382,22 @@
         "read-vista-health-summary",
         "read-vital",
         "retract-note",
-         
+        "review-result-consult-order",
+        "schedule-consult-order",
+        "sign-consult-order",
+        "track-lab-order",
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "standard-doctor",
-   "label": "Standard Doctor",
-   "permissions": [
+    "uid": "standard-doctor",
+    "label": "Standard Doctor",
+    "permissions": [
         "access-stack-graph",
         "add-active-medication",
         "add-allergy",
@@ -1284,6 +1415,7 @@
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
         "cosign-lab-order",
         "cosign-med-order",
         "cosign-note",
@@ -1330,25 +1462,29 @@
         "release-med-order",
         "release-radiology-order",
         "remove-condition-problem",
+        "review-result-consult-order",
+        "schedule-consult-order",
         "sign-consult-order",
         "sign-lab-order",
         "sign-med-order",
         "sign-note",
         "sign-note-addendum",
         "sign-radiology-order",
-         
+        "track-lab-order",
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "student",
-   "label": "Student",
-   "permissions": [
+    "uid": "student",
+    "label": "Student",
+    "permissions": [
         "access-stack-graph",
         "add-allergy",
         "add-condition-problem",
@@ -1378,17 +1514,18 @@
         "read-vista-health-summary",
         "read-vital",
         "remove-condition-problem",
-         
+        "track-lab-order",
+
         "cosign-radiology-order",
         "edit-encounter",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "surgeon",
-   "label": "Surgeon",
-   "permissions": [
+    "uid": "surgeon",
+    "label": "Surgeon",
+    "permissions": [
         "access-stack-graph",
         "add-active-medication",
         "add-allergy",
@@ -1406,6 +1543,7 @@
         "add-task",
         "add-vital",
         "cancel-task",
+        "complete-consult-order",
         "cosign-lab-order",
         "cosign-med-order",
         "cosign-note",
@@ -1452,25 +1590,29 @@
         "release-med-order",
         "release-radiology-order",
         "remove-condition-problem",
+        "review-result-consult-order",
+        "schedule-consult-order",
         "sign-consult-order",
         "sign-lab-order",
         "sign-med-order",
         "sign-note",
         "sign-note-addendum",
         "sign-radiology-order",
-         
+        "track-lab-order",
+        "triage-consult-order",
+
         "abort-task",
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "system-administrator",
-   "label": "System Administrator",
-   "permissions": [
+    "uid": "system-administrator",
+    "label": "System Administrator",
+    "permissions": [
         "access-stack-graph",
         "clear-patient-sync",
         "load-patient-sync",
@@ -1489,13 +1631,13 @@
         "read-task",
         "read-vista-health-summary",
         "read-vital"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "transcriptionist",
-   "label": "Transcriptionist",
-   "permissions": [
+    "uid": "transcriptionist",
+    "label": "Transcriptionist",
+    "permissions": [
         "access-stack-graph",
         "add-active-medication",
         "add-allergy",
@@ -1515,7 +1657,6 @@
         "cancel-task",
         "delete-note",
         "discontinue-active-medication",
-        "discontinue-consult-order",
         "discontinue-lab-order",
         "discontinue-med-order",
         "discontinue-radiology-order",
@@ -1555,20 +1696,20 @@
         "release-med-order",
         "release-radiology-order",
         "remove-condition-problem",
-         
+
         "abort-task",
         "edit-encounter",
         "eie-encounter",
         "edit-immunization",
         "edit-vital",
         "retract-note"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }, {
-   "uid": "ward-clerk",
-   "label": "Ward Clerk",
-   "permissions": [
+    "uid": "ward-clerk",
+    "label": "Ward Clerk",
+    "permissions": [
         "access-stack-graph",
         "add-allergy",
         "add-encounter",
@@ -1578,6 +1719,7 @@
         "add-task",
         "add-vital",
         "cancel-task",
+        "discontinue-consult-order",
         "edit-allergy",
         "edit-encounter-form",
         "edit-note",
@@ -1599,6 +1741,8 @@
         "read-task",
         "read-vista-health-summary",
         "read-vital",
+        "schedule-consult-order",
+        "track-lab-order",
 
         "abort-task",
         "add-condition-problem",
@@ -1608,7 +1752,7 @@
         "edit-vital",
         "eie-encounter",
         "remove-condition-problem"
-   ],
-   "version": "1.3.1",
-   "status": "active"
+    ],
+    "version": "1.3.1",
+    "status": "active"
 }]

@@ -114,7 +114,7 @@ function buildBundle(results, req, total) {
     for (var i = 0; i < results.length; i++) {
         entry.push(new fhirResource.Entry(results[i]));
     }
-    return (new fhirResource.Bundle2(link, entry, total));
+    return (new fhirResource.Bundle(link, entry, total));
 }
 
 function convertToFhir(items, req) {
@@ -155,23 +155,24 @@ function buildMedicationStatement(item) {
 //SET NOTE
 //-------------------------------------------------------
 function setNote(md, item) {
-        md.note = item.summary;
-    }
-    //-------------------------------------------------------
-    //SET EFFECTIVEPERIOD
-    //-------------------------------------------------------
+    md.note = item.summary;
+}
+//-------------------------------------------------------
+//SET EFFECTIVEPERIOD
+//-------------------------------------------------------
 function setEffective(md, item) {
 
     if (nullchecker.isNotNullish(item.dosages) && item.dosages.length > 0) {
 
         md.effectivePeriod = {};
 
+        var siteHash = fhirUtils.getSiteHash(item.uid);
         if (nullchecker.isNotNullish(item.dosages[0].start)) {
-            md.effectivePeriod.start = fhirUtils.convertToFhirDateTime(item.dosages[0].start);
+            md.effectivePeriod.start = fhirUtils.convertToFhirDateTime(item.dosages[0].start, siteHash);
         }
 
         if (nullchecker.isNotNullish(item.dosages[0].stop)) {
-            md.effectivePeriod.end = fhirUtils.convertToFhirDateTime(item.dosages[0].stop);
+            md.effectivePeriod.end = fhirUtils.convertToFhirDateTime(item.dosages[0].stop, siteHash);
         }
     }
 }
@@ -181,40 +182,40 @@ function setEffective(md, item) {
 //-------------------------------------------------------
 function setWasNotGiven(md, item) {
 
-        md.wasNotGiven = true;
-        if (nullchecker.isNotNullish(item.dosages) && item.dosages.length > 0) {
-            md.wasNotGiven = false;
-        }
+    md.wasNotGiven = true;
+    if (nullchecker.isNotNullish(item.dosages) && item.dosages.length > 0) {
+        md.wasNotGiven = false;
     }
-    //-------------------------------------------------------
-    //SET IDENTIFIER
-    //-------------------------------------------------------
+}
+//-------------------------------------------------------
+//SET IDENTIFIER
+//-------------------------------------------------------
 function setIdentifier(md, item) {
-        if (nullchecker.isNotNullish(item.uid)) {
-            md.identifier = new fhirResource.Identifier(item.uid, constants.medDispense.MED_DISPENSE_UID_IDENTIFIER_SYSTEM);
-        }
+    if (nullchecker.isNotNullish(item.uid)) {
+        md.identifier = new fhirResource.Identifier(item.uid, constants.medDispense.MED_DISPENSE_UID_IDENTIFIER_SYSTEM);
     }
-    //-------------------------------------------------------
-    //SET STATEMENT STATUS
-    //-------------------------------------------------------
+}
+//-------------------------------------------------------
+//SET STATEMENT STATUS
+//-------------------------------------------------------
 function setStatus(md, item) {
-        if (nullchecker.isNotNullish(item.medStatusName)) {
-            md.status = map.getmedStatusName(item.medStatusName);
-        }
+    if (nullchecker.isNotNullish(item.medStatusName)) {
+        md.status = map.getmedStatusName(item.medStatusName);
     }
-    //-------------------------------------------------------
-    //SET PATIENT
-    //-------------------------------------------------------
+}
+//-------------------------------------------------------
+//SET PATIENT
+//-------------------------------------------------------
 function setPatient(md, item) {
-        var value = item.pid;
+    var value = item.pid;
 
-        if (nullchecker.isNotNullish(value)) {
-            md.patient = new fhirResource.ReferenceResource('Patient/' + value);
-        }
+    if (nullchecker.isNotNullish(value)) {
+        md.patient = new fhirResource.ReferenceResource('Patient/' + value);
     }
-    //-------------------------------------------------------
-    //SET INFORMATIONSOURCE
-    //-------------------------------------------------------
+}
+//-------------------------------------------------------
+//SET INFORMATIONSOURCE
+//-------------------------------------------------------
 function setInformationSource(md, item) {
 
     if (nullchecker.isNotNullish(item.orders[0]) && nullchecker.isNotNullish(item.orders[0].providerUid)) {
@@ -313,7 +314,7 @@ function createSubstance(p) {
 //-------------------------------------------------------
 // function setWhenPrepared(md, item) {
 //     if (nullchecker.isNotNullish(item.lastFilled)) {
-//         md.whenPrepared = fhirUtils.convertToFhirDateTime(item.lastFilled);
+//         md.whenPrepared = fhirUtils.convertToFhirDateTime(item.lastFilled, fhirUtils.getSiteHash(item.uid));
 //     }
 // }
 //-------------------------------------------------------
@@ -322,18 +323,18 @@ function createSubstance(p) {
 //-------------------------------------------------------
 // function setWhenHandedOver(md, item) {
 //     if (nullchecker.isNotNullish(item.lastFilled)) {
-//         md.whenPrepared = fhirUtils.convertToFhirDateTime(item.lastFilled);
+//         md.whenPrepared = fhirUtils.convertToFhirDateTime(item.lastFilled, fhirUtils.getSiteHash(item.uid));
 //     }
 // }
 //-------------------------------------------------------
 // SET NOTE
 //-------------------------------------------------------
 function setNote(md, item) {
-        md.note = item.summary;
-    }
-    //-------------------------------------------------------
-    // SET DOSAGEINSTRUCTION
-    //-------------------------------------------------------
+    md.note = item.summary;
+}
+//-------------------------------------------------------
+// SET DOSAGEINSTRUCTION
+//-------------------------------------------------------
 function setDosage(md, item) {
 
     if (nullchecker.isNotNullish(item.dosages) && item.dosages.length > 0) {

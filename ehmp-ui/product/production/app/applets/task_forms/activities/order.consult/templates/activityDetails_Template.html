@@ -1,0 +1,31 @@
+<div class="row">
+	<div class="col-xs-6">
+		<p><strong>Ordering Provider</strong><br />
+		{{orderingProvider}} on {{formatDate orderDateRequested "MM/DD/YYYY HH:mm"}}</p>
+	</div>
+	<div class="col-xs-6">
+		<p><strong>Facility Requested</strong><br />
+		{{facilityRequestedName}}</p>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-6">
+		<p><strong>Earliest Date</strong><br />
+		{{formatDate earliestDate "MM/DD/YYYY HH:mm"}}</p>
+	</div>
+	<div class="col-xs-6">
+		<p><strong>Latest Date</strong><br />
+		{{formatDate latestDate "MM/DD/YYYY HH:mm"}}</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<p><strong>Condition Related to: {{relatedCondition}}</strong></p>
+	</div>
+</div>
+
+<div class="row" id="currentAppointmentRegion"></div>
+<div class="row" id="associatedNotesRegion"></div>
+<div class="row" id="requestRegion"></div>
+<div class="row" id="prerequisitesRegion"></div>

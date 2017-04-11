@@ -14,7 +14,7 @@ define([], function() {
 		model: Provider,
 		params: function(method, options) {
             return {
-            	type: 'new-persons',
+            	type: 'new-persons-direct',
                 newPersonsType: 'PROVIDER',
                 date: options.dateTime || '',
                 site: this.user.get('site')

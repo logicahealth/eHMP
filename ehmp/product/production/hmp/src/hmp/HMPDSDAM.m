@@ -1,6 +1,6 @@
-HMPDSDAM ;SLC/MKB -- Appointment extract ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDSDAM ;SLC/MKB,ASMR/RRB - Appointment extract;8/2/11  15:29
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -10,7 +10,7 @@ HMPDSDAM ;SLC/MKB -- Appointment extract ;8/2/11  15:29
  ; ^VA(200                      10060
  ; DIQ                           2056
  ; SDAMA301                      4433
- ;
+ Q
  ; ------------ Get appointment(s) from VistA ------------
  ;
 EN(DFN,BEG,END,MAX,ID) ; -- find patient's [future] appointments
@@ -37,7 +37,7 @@ EN(DFN,BEG,END,MAX,ID) ; -- find patient's [future] appointments
  K ^TMP($J,"SDAMA301",DFN)
  ;
  ; get scheduled admissions
- S HMPA=0 F  S HMPA=$O(^DGS(41.1,"B",DFN,HMPA)) Q:HMPA<1  D  Q:HMPCNT'<MAX
+ S HMPA=0 F  S HMPA=$O(^DGS(41.1,"B",DFN,HMPA)) Q:HMPA<1  D  Q:HMPCNT'<MAX  ;ICR 3796 DE2818 ASF 11/20/15
  . S HMPX=$G(^DGS(41.1,HMPA,0))
  . Q:$P(HMPX,U,13)  Q:$P(HMPX,U,17)  ;cancelled or admitted
  . S X=$P(HMPX,U,2) Q:X<BEG!(X>END)  ;out of date range
@@ -63,7 +63,7 @@ EN1(DATE,APPT) ; -- return an appointment in APPT("attribute")=value
  .. S FIRST=$O(HMPP(44.1,"")),I=""
  .. F  S I=$O(HMPP(44.1,I)) Q:I=""  I $G(HMPP(44.1,I,.02,"I")) S PRV=$G(HMPP(44.1,I,.01,"I")) Q
  .. I 'PRV,FIRST S PRV=$G(HMPP(44.1,FIRST,.01,"I"))
- . I PRV S APPT("provider")=PRV_U_$P($G(^VA(200,PRV,0)),U) Q
+ . I PRV S APPT("provider")=PRV_U_$P($G(^VA(200,PRV,0)),U) Q  ;ICR 10060 DEE2818 ASF 11/20/15
  S APPT("facility")=$$FAC^HMPD(+HLOC)
  S APPT("patientClass")=$S(CLS="I":"IMP",1:"AMB")
  S APPT("serviceCategory")=$S(CLS="I":"I^INPATIENT VISIT",1:"A^AMBULATORY")
@@ -78,16 +78,16 @@ SERV(FTS) ; -- Return #42.4 Service for a Facility Treating Specialty
  ;
 DGS(IFN,ADM) ; -- return a scheduled admission in ADM("attribute")=value
  N X0,DATE,HLOC,SV,X K ADM
- S X0=$G(^DGS(41.1,+$G(IFN),0)) Q:X0=""  ;deleted
- S DATE=+$P(X0,U,2),HLOC=+$G(^DIC(42,+$P(X0,U,8),44))
+ S X0=$G(^DGS(41.1,+$G(IFN),0)) Q:X0=""  ;deleted ICR 3796 DE2818 ASF 11/20/15
+ S DATE=+$P(X0,U,2),HLOC=+$G(^DIC(42,+$P(X0,U,8),44)) ;ICR 10039 DE2818 ASF 11/20/15
  S ADM("id")="H;"_DATE,ADM("dateTime")=DATE I HLOC D
  . S ADM("id")=ADM("id")_";"_HLOC,ADM("visitString")=HLOC_";"_DATE_";H"
- . S ADM("location")=HLOC_U_$P($G(^SC(HLOC,0)),U)
+ . S ADM("location")=HLOC_U_$P($G(^SC(HLOC,0)),U) ;ICR 10040 DE2818 ASF 11/20/15
  . S X=$$GET1^DIQ(44,HLOC_",",8,"I"),ADM("clinicStop")=$$AMIS^HMPDVSIT(X)
  . S SV=$$GET1^DIQ(44,HLOC_",",9.5,"I")
  . I SV S ADM("service")=$$SERV(SV)
  S ADM("facility")=$$FAC^HMPD(HLOC)
- S X=$P(X0,U,5) I X S ADM("provider")=X_U_$P($G(^VA(200,X,0)),U)
+ S X=$P(X0,U,5) I X S ADM("provider")=X_U_$P($G(^VA(200,X,0)),U) ;ICR 10060 DEE2818 ASF 11/20/15
  S ADM("patientClass")="IMP",ADM("serviceCategory")="H^HOSPITALIZATION"
  S ADM("apptStatus")=$S($P(X0,U,17):"ADMITTED",$P(X0,U,13):"CANCELLED",1:"SCHEDULED")
  Q

@@ -27,11 +27,12 @@ class ActiveMedications < AllApplets
     
     # Modal elements
     add_verify(CucumberLabel.new('Modal Title'), VerifyContainsText.new, AccessHtmlElement.new(:id, 'mainModalLabel'))
-    add_verify(CucumberLabel.new('Order Hx'), VerifyText.new, AccessHtmlElement.new(:css, 'div.orderHistory b'))
-    add_verify(CucumberLabel.new('Order Detail Panel'), VerifyText.new, AccessHtmlElement.new(:css, 'div.medicationDetail'))
+    add_verify(CucumberLabel.new('Order Hx'), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@class='order-historylist']/preceding-sibling::*"))
+    add_verify(CucumberLabel.new('Order Detail Panel'), VerifyText.new, AccessHtmlElement.new(:css, 'div.medication-detail'))
 
     add_applet_buttons appletid_css  
     add_applet_title appletid_css
+    add_toolbar_buttons
 
     add_verify(CucumberLabel.new("Header - Medication"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-activeMeds [data-header-instanceid=activeMeds-name] a"))
     add_verify(CucumberLabel.new("Header - Status"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-activeMeds [data-header-instanceid=activeMeds-vaStatus] a"))
@@ -90,7 +91,8 @@ end
 When(/^the user views the details for the first Active & Recent Medications$/) do
   active_medications = ActiveMedications.instance
   expect(active_medications.perform_action('first row')).to eq(true)
-  expect(active_medications.perform_action('Applet Toolbar Detail')).to eq(true)
+  #expect(active_medications.perform_action('Applet Toolbar Detail')).to eq(true)
+  expect(active_medications.perform_action('Detail View Button')).to eq(true)
 end
 
 Then(/^the modal title starts with "([^"]*)"$/) do |arg1|
@@ -136,4 +138,18 @@ Then(/^the Active & Recent Medications Applet table contains headers$/) do |tabl
     header = row
     expect(active_medications.perform_verification("Header - #{header}", header)).to eq(true)
   end
+end
+
+When(/^the user navigates to the expanded Active Medications Applet$/) do
+  navigate_in_ehmp "#medication-review"
+end
+
+When(/^the user expands the Active & Recent Medications applet$/) do
+  active_medications = ActiveMedications.instance
+  expect(active_medications.perform_action('Control - applet - Expand View')).to eq(true)
+end
+
+When(/^the user minimizes the Meds Review applet$/) do
+  med_review = MedReviewAppletAll.instance
+  expect(med_review.perform_action('Control - applet - Minimize View')).to eq(true)
 end

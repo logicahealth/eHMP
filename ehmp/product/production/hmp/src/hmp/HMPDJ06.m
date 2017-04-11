@@ -1,10 +1,10 @@
-HMPDJ06 ;ASMR/MKB - Laboratory ;6/25/12  16:11
+HMPDJ06 ;ASMR/MKB,ASMR/RRB/MBS - Laboratory ; 5/10/16 8:41am
  ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 3
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
- ; ^LAB(60                      10054
+ ; ^LAB(60                         91
  ; ^LR                            525
  ; ^PXRMINDX                     4290
  ; ^TMP("LRRR" [LR7OR1]          2503
@@ -30,8 +30,9 @@ CH1 ; -- lab ID = CH;HMPIDT;HMPN
  S LAB("categoryCode")="urn:va:lab-category:CH"
  S LAB("categoryName")="Laboratory"
  S LAB("displayOrder")=HMPP
- S LRI=$G(^LR(LRDFN,"CH",HMPIDT,HMPN))
+ S LRI=$G(^LR(LRDFN,"CH",HMPIDT,HMPN))  ;DE2818, ^LR( - ICR525
  S X0=$G(^TMP("LRRR",$J,DFN,"CH",HMPIDT,HMPP)),SPC=+$P(X0,U,19)
+ ;DE2818 - ^LAB(60) references - ICR 91
  S LAB("typeId")=+X0,LAB("typeName")=$P($G(^LAB(60,+X0,0)),U)
  S:$L($P(X0,U,2)) LAB("result")=$P(X0,U,2)
  S:$L($P(X0,U,4)) LAB("units")=$P(X0,U,4)
@@ -43,7 +44,8 @@ CH1 ; -- lab ID = CH;HMPIDT;HMPN
  S LAB("displayName")=$S($L($P(X0,U,15)):$P(X0,U,15),1:LAB("test"))
  S ORD=+$P(X0,U,17) S:ORD LAB("labOrderId")=ORD
  S X=$$ORDER^HMPDLR(ORD,+X0) S:X LAB("orderUid")=$$SETUID^HMPUTILS("order",DFN,X)
- S LOINC=$P($P(LRI,U,3),"!",3) ;S:'LOINC LOINC=$$LOINC^HMPDJ06X(+X0,SPC)
+ ;DE4624 - If no LOINC code in the lab data, check in the LABRATORY TEST (#60) file
+ S LOINC=$P($P(LRI,U,3),"!",3) S:'LOINC LOINC=$$LOINC^HMPDJ06(+X0,SPC)
  I LOINC S LAB("typeCode")="urn:lnc:"_$$GET1^DIQ(95.3,+LOINC_",",.01),LAB("vuid")="urn:va:vuid:"_$$VUID^HMPD(+LOINC,95.3)
  I 'LOINC S LAB("typeCode")="urn:va:ien:60:"_+X0_":"_SPC
  I $D(^TMP("LRRR",$J,DFN,"CH",HMPIDT,"N")) M CMMT=^("N") S LAB("comment")=$$STRING^HMPD(.CMMT)
@@ -51,13 +53,13 @@ CH1 ; -- lab ID = CH;HMPIDT;HMPN
  S LAB("lastUpdateTime")=$$EN^HMPSTMP("lab") ;RHL 20150102
  S LAB("stampTime")=LAB("lastUpdateTime") ; RHL 20150102
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("lab",LAB("uid"),LAB("stampTime")) Q:HMPMETA=1  ;US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("lab",LAB("uid"),LAB("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("LAB","lab")
  Q
  ;
 ACC ; -- put accession-level data in HMPACC("attribute")
  N LR0,CDT,SPC,X K HMPACC
- S LR0=$G(^LR(LRDFN,HMPSUB,HMPIDT,0))
+ S LR0=$G(^LR(LRDFN,HMPSUB,HMPIDT,0))  ;DE2818, ^LR( - ICR525
  S CDT=9999999-HMPIDT,HMPACC("observed")=$$DATE(CDT)
  S HMPACC("resulted")=$$DATE($P(LR0,U,3)),SPC=+$P(LR0,U,5) I SPC D
  . N IENS,HMPY S IENS=SPC_","
@@ -82,7 +84,7 @@ MI ; -- microbiology accession ID = MI;HMPIDT
  S LAB("categoryName")="Microbiology"
  S LAB("statusCode")="urn:va:lab-status:completed",LAB("statusName")="completed"
  S CDT=9999999-HMPIDT,LAB("observed")=$$DATE(CDT)
- S LR0=$G(^LR(LRDFN,"MI",HMPIDT,0))
+ S LR0=$G(^LR(LRDFN,"MI",HMPIDT,0))  ; DE2818, ^LR( - ICR525
  S:$P(LR0,U,3) LAB("resulted")=$$DATE($P(LR0,U,3))
  S X=+$P(LR0,U,5) I X D  ;specimen
  . N IENS,HMPY S IENS=X_","
@@ -121,11 +123,11 @@ MI ; -- microbiology accession ID = MI;HMPIDT
  S LAB("results",1,"uid")=ACC
  S LAB("results",1,"resultUid")=$$SETUID^HMPUTILS("document",DFN,ACC)
  S LAB("results",1,"localTitle")="LR MICROBIOLOGY REPORT"
- I $L($G(^LR(LRDFN,"MI",HMPIDT,99))) S LAB("comment")=^(99)
+ I $L($G(^LR(LRDFN,"MI",HMPIDT,99))) S LAB("comment")=^(99)  ; DE2818, ^LR( - ICR525
  S LAB("lastUpdateTime")=$$EN^HMPSTMP("lab") ;RHL 20150102
  S LAB("stampTime")=LAB("lastUpdateTime") ; RHL 20150102
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("lab",LAB("uid"),LAB("stampTime")) Q:HMPMETA=1  ;US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("lab",LAB("uid"),LAB("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("LAB","lab")
  Q
  ;
@@ -147,6 +149,7 @@ AP ; -- pathology ID = HMPSUB;HMPIDT
  S LAB("categoryName")=$S(HMPSUB="BB":"Blood Bank",HMPSUB="SP":"Surgical Pathology",1:"Pathology")
  S LAB("statusCode")="urn:va:lab-status:completed",LAB("statusName")="completed"
  S CDT=9999999-HMPIDT,LAB("observed")=$$DATE(CDT)
+ ;DE2818 begin, ^LR( references - ICR525
  S LR0=$G(^LR(LRDFN,HMPSUB,HMPIDT,0))
  S LAB("resulted")=$$DATE($P(LR0,U,11)),LAB("groupName")=$P(LR0,U,6)
  S X="",I=0 F  S I=$O(^LR(LRDFN,HMPSUB,HMPIDT,.1,I)) Q:I<1  S X=X_$S($L(X):", ",1:"")_$P($G(^(I,0)),U)
@@ -162,10 +165,11 @@ AP ; -- pathology ID = HMPSUB;HMPIDT
  . S LAB("results",1,"uid")=LAB("uid")
  . S LAB("results",1,"resultUid")=$$SETUID^HMPUTILS("document",DFN,ID)
  . S LAB("results",1,"localTitle")="LR "_$$NAME^HMPDLRA(HMPSUB)_" REPORT"
+ ; ;DE2818 end, ^LR( references - ICR525
  S LAB("lastUpdateTime")=$$EN^HMPSTMP("lab") ;RHL 20150102
  S LAB("stampTime")=LAB("lastUpdateTime") ; RHL 20150102
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("lab",LAB("uid"),LAB("stampTime")) Q:HMPMETA=1  ;US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("lab",LAB("uid"),LAB("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("LAB","lab")
  ;
 DATE(X) ; -- strip off seconds, return JSON format
@@ -173,3 +177,7 @@ DATE(X) ; -- strip off seconds, return JSON format
  I $L($P(Y,".",2))>4 S Y=$P(Y,".")_"."_$E($P(Y,".",2),1,4) ;strip seconds
  S:Y Y=$$JSONDT^HMPUTILS(Y)
  Q Y
+LOINC(LTEST,SPC) ;DE4624 - Gets LOINC code from Lab Test/Specimin
+ I '$D(^LAB(60,LTEST)) Q ""
+ I '$D(^LAB(60,LTEST,1,SPC)) Q ""
+ Q +$G(^LAB(60,LTEST,1,SPC,95.3))

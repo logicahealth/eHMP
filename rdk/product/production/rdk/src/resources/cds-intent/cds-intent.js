@@ -46,7 +46,7 @@ function initDb(app) {
         unique: true
     }, function(error) {
         if (error) {
-            app.logger.error('error ensuring ' + intentCollection + ' index: ' + error);
+            app.logger.error({error: error}, 'error ensuring ' + intentCollection + ' index');
         }
     });
 }
@@ -65,7 +65,7 @@ function initDb(app) {
  * use this method to either get a single entity or return a list of entities which might be useful for testing
  * or other future uses.
  * @apiExample {js} Example usage:
- * curl -i http://IP             /resource/cds/intent/registry?name=FirstEngine&scope=Enterprise
+ * curl -i http://IP_ADDRESS:PORT/resource/cds/intent/registry?name=FirstEngine&scope=Enterprise
  * @apiSuccess {json} payload Json object containing a list of all datapoint values for the given uri parameters.
  * @apiSuccessExample {json} GetIntent-Response
  * HTTP/1.1 200 OK

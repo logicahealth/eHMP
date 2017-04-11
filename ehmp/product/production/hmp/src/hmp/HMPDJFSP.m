@@ -1,7 +1,9 @@
-HMPDJFSP ;SLC/KCM -- PUT/POST for Extract and Freshness Stream;Oct 01, 2015 18:56:12
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 3
- ;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDJFSP ;SLC/KCM,ASMR/RRB,CK,CPC -- PUT/POST for Extract and Freshness Stream;Apr 27, 2014 10:35:07
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
+ ; DE2818/RRB: SQA findings 1st 3 lines
+ Q
  ;
  ; --- create a new patient subscription
  ;
@@ -15,7 +17,7 @@ PUTSUB(ARGS) ; return location after creating a new subscription
  ;
  I '$$TM^%ZTLOAD D SETERR^HMPDJFS("Taskman not running") Q ""
  ;
- N HMPSRV,HMPFDFN,HMPBATCH,HMPFERR,I,NEWSUB,DOMAINS,HMPSVERS,HMPSTMP
+ N HMPSRV,HMPFDFN,HMPBATCH,HMPFERR,I,NEWSUB,DOMAINS,HMPSVERS,HMPSTMP,HMPPRITY,HMPQBTCH ;US13442
  ;
  ; make sure we can identify the patient ("OPD" signals sync operational)
  S HMPFDFN=$G(ARGS("localId"))
@@ -23,7 +25,7 @@ PUTSUB(ARGS) ; return location after creating a new subscription
  I HMPFDFN'="OPD" D  Q:$G(HMPFERR) ""
  . I '$L(HMPFDFN),$L(ARGS("icn")) S HMPFDFN=+$$GETDFN^MPIF001(ARGS("icn"))
  . I 'HMPFDFN D SETERR^HMPDJFS("No patient specified") Q
- . I '$D(^DPT(HMPFDFN)) D SETERR^HMPDJFS("Patient not found")
+ . I '$D(^DPT(HMPFDFN)) D SETERR^HMPDJFS("Patient not found")  ; IA 10035, DE2818
  ;
  ; make sure server is known and create batch id
  S HMPSRV=HMPFHMP  ; TODO: switch to HMPFHMP as server ien
@@ -31,6 +33,7 @@ PUTSUB(ARGS) ; return location after creating a new subscription
  S HMPSRV("ien")=$O(^HMP(800000,"B",HMPSRV,0))
  I 'HMPSRV("ien") D SETERR^HMPDJFS("HMP Server not registered") Q ""
  S HMPBATCH="HMPFX~"_HMPSRV_"~"_HMPFDFN
+ S HMPQBTCH="HMPFS~"_HMPSRV_"~queue"
  ;
  ; set up domains to extract
  D @($S(HMPFDFN="OPD":"OPDOMS",1:"PTDOMS")_"^HMPDJFSD(.DOMAINS)")
@@ -58,23 +61,32 @@ PUTSUB(ARGS) ; return location after creating a new subscription
  . N EMPB S EMPB="jobDomainId-" ;US11019
  . F  S EMPB=$O(ARGS(EMPB)) Q:EMPB=""  Q:EMPB'["jobDomainId-"  S:'HMPSVERS HMPSVERS=1 S ^XTMP(HMPBATCH,"JOBID",$P(EMPB,"jobDomainId-",2))=ARGS(EMPB) ; US11019 3rd version
  . S ^XTMP(HMPBATCH,"HMPSVERS")=HMPSVERS ;US11019 store sync version
- . I $G(ARGS("jobId"))]"" S ^XTMP(HMPBATCH,"JOBID")=ARGS("jobId")  ;US3907 /US11019
- . I $G(ARGS("rootJobId"))]"" S ^XTMP(HMPBATCH,"ROOTJOBID")=ARGS("rootJobId")  ;US3907
+ . I $G(ARGS("jobId"))]"" S ^XTMP(HMPBATCH,"JOBID")=ARGS("jobId") ;US3907 /US11019
+ . I $G(ARGS("rootJobId"))]"" S ^XTMP(HMPBATCH,"ROOTJOBID")=ARGS("rootJobId") ;US3907
  . S ^XTMP(HMPBATCH,0,"time")=$H
  . ; US6734 - setting of syncStart for OPD only
  . I HMPFDFN="OPD" D SETMARK("Start",HMPFDFN,HMPBATCH),INIT^HMPMETA(HMPBATCH,HMPFDFN,.ARGS) ; US6734 
  L -^XTMP(HMPBATCH)
  ;cpc US11019 end moved code
+ ;US13442
+ S HMPPRITY=1 S:+$G(ARGS("HMPPriority")) HMPPRITY=+ARGS("HMPPriority")
+ I '$D(^XTMP(HMPQBTCH,0)) D  ;check basic controls exist
+ . S ^XTMP(HMPQBTCH,0)=$$HTFM^XLFDT(+$H+5)_U_$$HTFM^XLFDT(+$H)_U_"HMP task queue"
+ . S ^XTMP(HMPQBTCH,0,0)=2 ;default concurrent patients
+ ;put task onto task queue if new subscription for patient
+ I NEWSUB,+HMPFDFN D SAVETASK^HMPDJFSQ Q "/hmp/subscription/"_HMPSRV_"/patient/"_$$PID^HMPDJFS(HMPFDFN)
+ ;
+QREJOIN ; And come back in from queue
  ;Every Domain in it's own task (unless running in original mode)
  I NEWSUB D  Q:$G(HMPFERR) ""
  . ; if patient's extracts are held (version mismatch), put DFN on wait list
  . I +HMPFDFN,$G(^XTMP("HMPFS~"_HMPSRV("ien"),"waiting")) S ^XTMP("HMPFS~"_HMPSRV("ien"),"waiting",HMPFDFN)="" QUIT
  . D UPDSTS(HMPFDFN,$P(HMPBATCH,"~",2),1) ;moved from background job to once in foreground 12/17/2015
- . I 'HMPSVERS N HMPFDOM M HMPFDOM=DOMAINS D QUINIT(HMPBATCH,HMPFDFN,.HMPFDOM) Q  ;US11019 Enable previous behavior
+ . I 'HMPSVERS N HMPFDOM M HMPFDOM=DOMAINS D QUINIT^HMPDJFSQ(HMPBATCH,HMPFDFN,.HMPFDOM) Q  ;US11019 Enable previous behavior
  . S I="" F  S I=$O(DOMAINS(I)) Q:'I  D
  ..  N HMPFDOM
  ..  S HMPFDOM(1)=DOMAINS(I)
- ..  D QUINIT(HMPBATCH,HMPFDFN,.HMPFDOM)
+ ..  D QUINIT^HMPDJFSQ(HMPBATCH,HMPFDFN,.HMPFDOM)
  ;===JD START===
  ; For patient resubscribes, need to send demographics ONLY
  I 'NEWSUB,HMPFDFN'="OPD",'$D(^XTMP(HMPBATCH,0,"status")) D  ;DE3331 check expanded to ensure not current
@@ -82,39 +94,12 @@ PUTSUB(ARGS) ; return location after creating a new subscription
  . M HMPDSAVE=DOMAINS ;DE3331
  . K DOMAINS S DOMAINS(1)="patient"
  . M HMPFDOM=DOMAINS
- . D QUINIT(HMPBATCH,HMPFDFN,.HMPFDOM)
+ . D QUINIT^HMPDJFSQ(HMPBATCH,HMPFDFN,.HMPFDOM)
  . I $G(HMPSVERS) S I="" F  S I=$O(HMPDSAVE(I)) Q:'I  D  ;DE3331 create empty metastamp entries for remaining domains
  ..  I HMPDSAVE(I)'="patient" D SETMARK("Meta",HMPFDFN,HMPDSAVE(I))
  ;===JD END===
  Q "/hmp/subscription/"_HMPSRV_"/patient/"_$$PID^HMPDJFS(HMPFDFN)
  ;
-QUINIT(HMPBATCH,HMPFDFN,HMPFDOM) ; Queue the initial extracts for a patient
- ; HMPBATCH="HMPFX~hmpsrvid~dfn"  example: HMPFX~hmpXYZ~229
- ; HMPFDOM(n)="domainName"
- ; 
- ; ^XTMP("HMPFX~hmpsrvid~dfn",0)=expires^created^HMP Patient Extract
- ;                           ,0,"status",domain)=0:waiting;1:ready
- ;                           ,0,"task",taskIen)=""
- ;                           ,taskIen,domain,... (extract data)
- ;
- ;
- ; set up the domains to be done by this task
- N I S I=0 F  S I=$O(HMPFDOM(I)) Q:'I  D SETDOM("status",HMPFDOM(I),0)
- ;
- ; create task for this set of domains within the batch
- N ZTRTN,ZTDESC,ZTDTH,ZTIO,ZTSAVE,ZTSK
- S ZTRTN="DQINIT^HMPDJFSP",ZTIO="HMP EXTRACT RESOURCE",ZTDTH=$H
- S ZTSAVE("HMPBATCH")="",ZTSAVE("HMPFDFN")="",ZTSAVE("HMPFDOM(")=""
- S ZTSAVE("HMPENVIR(")=""  ; environment information
- S ZTSAVE("HMPSTMP")="" ; Operational data stamptime US6734
- S ZTSAVE("HMPSVERS")="" ;sync version US11019
- S ZTDESC="Build HMP domains for a patient"
- D ^%ZTLOAD
- ; 
- I $G(ZTSK) S ^XTMP(HMPBATCH,0,"task",ZTSK)="" Q
- ;
- D SETERR^HMPDJFS("Task not created")
- Q
 SETDOM(ATTRIB,DOMAIN,VALUE,HMPMETA) ; Set value for a domain ; cpc TA41760
  ; ATTRIB: "status" or "count" attribute
  ; for status, VALUE: 0=waiting, 1=ready
@@ -126,7 +111,7 @@ SETDOM(ATTRIB,DOMAIN,VALUE,HMPMETA) ; Set value for a domain ; cpc TA41760
 SETMARK(TYPE,HMPFDFN,HMPBATCH) ; Post markers for begin and end of initial synch
  ; ^XTMP("HMPFP","tidy",hmpServer,fmDate,sequence)=batch
  Q:$G(HMPENVIR("converting"))  ; don't set markers during conversion
- N HPMSRV,NODES,X
+ N HMPSRV,NODES,X
  S HMPSRV=$P(HMPBATCH,"~",2)
  D POST^HMPDJFS(HMPFDFN,"sync"_TYPE,HMPBATCH,"",HMPSRV,.NODES)
  Q:TYPE="Start"!(TYPE="Meta")  ; US11019
@@ -139,18 +124,16 @@ DQINIT ; Dequeue initial extracts
  F COUNT=1:1:10 Q:$D(^XTMP(HMPBATCH,0,"task",ZTSK))  H .5 ;cpc 9/18/2015 In case job running too quickly
  I '$D(^XTMP(HMPBATCH,0,"task",ZTSK)) Q  ; extract was superceded
  K ^TMP("HMPERR",$J)
- S HMPFSYS=$$GET^XPAR("SYS","HMP SYSTEM NAME")
+ S HMPFSYS=$$SYS^HMPUTILS
  S HMPFZTSK=ZTSK ; just in case the unexpected happens to ZTSK
  S ^XTMP(HMPBATCH,0,"task",ZTSK,"job")=$J
  S ^XTMP(HMPBATCH,0,"task",ZTSK,"wait")=$$HDIFF^XLFDT($H,$G(^XTMP(HMPBATCH,0,"time")),2)
  ;
- ;  S68 check space
- D CHKSP^HMPUTILS($P(HMPBATCH,"~",2)) ; US8228
+ D CHKSP^HMPUTILS($P(HMPBATCH,"~",2)) ; US8228 check space
  N HMPMETA ; US6734
- F HMPMETA=$S(HMPSVERS:2,1:1):-1:0 D  Q:HMPMETA=2  ;
+ F HMPMETA=$S(HMPSVERS:2,1:1):-1:0 D  Q:HMPMETA=2
  . I HMPMETA=0,+HMPFDFN D SETMARK("Start",HMPFDFN,HMPBATCH) ; US6734
- . S HMPFDOMI=""
- . F  S HMPFDOMI=$O(HMPFDOM(HMPFDOMI)) Q:'HMPFDOMI  D
+ . S HMPFDOMI="" F  S HMPFDOMI=$O(HMPFDOM(HMPFDOMI)) Q:'HMPFDOMI  D
  ..  D SETDOM("status",HMPFDOM(HMPFDOMI),0,HMPMETA) ; cpc TA41760
  ..  I HMPFDFN="OPD" D
  ...   D DOMOPD(HMPFDOM(HMPFDOMI))
@@ -169,10 +152,12 @@ DQINIT ; Dequeue initial extracts
  ; if superceded, remove extracts produced by this task
  I '$D(^XTMP(HMPBATCH,0,"task",HMPFZTSK)) K ^XTMP(HMPBATCH,HMPFZTSK) Q
  ; don't assume initialized, since we may split domains to other tasks
+ I $G(HMPQREF)'="" S @HMPQREF=$P($H,",",2) ;US13442 update heartbeat
  I $$INITDONE(HMPBATCH) D  ; if all domains extracted
  . S COUNT=$O(^TMP("HMPERR",$J,"")) I COUNT>0 D POSTERR(COUNT,HMPFDFN)
  . D SETMARK("Done",HMPFDFN,HMPBATCH) ; - add updated syncStatus
  . D MVFRUPD(HMPBATCH,HMPFDFN)        ; - move freshness updates over
+ . I $G(HMPQREF)'="" K @HMPQREF ;US13442 remove completed entry from queue
  ;
  K ^XTMP(HMPBATCH,0,"task",HMPFZTSK)  ; this task is done
  Q
@@ -189,7 +174,6 @@ DOMPT(HMPFADOM) ; Load a patient domain
  I $G(HMPMETA)=1 D SETDOM("status",HMPFADOM,1,1) Q  ;US11019/US6734 - do not update stream if compiling metastamp ; CPC TA41760
  ; add to HMPFS queue if total>0 OR this is the first chunck (#0) section  *S68-JCH*
  I ($G(@RSLT@("total"),0)>0)!($P(HMPCHNK,"#",2)=0) D CHNKFIN  ; *S68-JCH*
- ;D SETDOM("status",HMPFADOM,1,$G(HMPMETA)) ; ready ;moved cpc 9/29/15 ; cpc TA41760
  Q
  ;
 DOMOPD(HMPFADOM) ; Load an operational domain in smaller batches
@@ -217,7 +201,6 @@ DOMOPD(HMPFADOM) ; Load an operational domain in smaller batches
  . S NEXTID=$G(^XTMP(HMPBATCH,HMPFZTSK,HMPFADOM,"last"),0)
  . S HMPFSEC=HMPFSEC+1
  . S $P(HMPFADOM,"#",2)=HMPFSEC
- ;
  Q
  ;
 CHNKCNT(DOMAIN) ; -- get patient object chunk count trigger                        *BEGIN*S68-JCH*
@@ -242,23 +225,16 @@ CHNKCHK(HMP,HMPI) ; -- check if chunk should be queued callback *BEGIN*S68-JCH*
  ;               HMPI := number of objects in @HMP
  ; quit if not in chunking mode
  Q:'$D(HMPCHNK)
- ;
- ; execute 'whether to chunk' criteria
- Q:HMPI<HMPCHNK("trigger count")
- ; -- add tail to json to section
- D GTQ^HMPDJ
- ; -- finish section and put on HMPFS~ queue
- D CHNKFIN
+ Q:HMPI<HMPCHNK("trigger count")  ; execute 'whether to chunk' criteria
+ D GTQ^HMPDJ ; -- add tail to json to section
+ D CHNKFIN ; -- finish section and put on HMPFS~ queue
  ; -- check ^XTMP size before continuing; may have to HANG if too big
  D CHKXTMP(HMPBATCH,HMPFZTSK)  ; US5074 disable loopback
- ; -- initialize for next section
- D CHNKINIT(.HMP,.HMPI)
+ D CHNKINIT(.HMP,.HMPI) ; -- initialize for next section
  Q  ; *END*S68-JCH*
  ;
 CHNKFIN ; -- finish chunk section callback *BEGIN*S68-JCH*
- ; -- quit if not in chunking mode
- Q:'$D(HMPCHNK)
- ;
+ Q:'$D(HMPCHNK)  ; quit if not in chunking mode
  D MOD4STRM(HMPCHNK)
  ; -- domain#number, <no estimated do> , chunk trigger count for domain
  D POSTSEC(HMPCHNK,,HMPCHNK("trigger count"))
@@ -273,7 +249,6 @@ MOD4STRM(DOMAIN) ; modify extract to be ready for stream
  S DFN=$P(HMPBATCH,"~",3),HMPSRV=$P(HMPBATCH,"~",2)
  S COUNT=+$G(^XTMP(HMPBATCH,HMPFZTSK,DOMAIN,"total"),0)
  I COUNT=0 S ^XTMP(HMPBATCH,HMPFZTSK,DOMAIN,1,1)="null"
- ;
  S ^XTMP(HMPBATCH,HMPFZTSK,DOMAIN,"total")=COUNT  ; include errors and/or empty
  D SETDOM("count",DOMONLY,$G(^XTMP(HMPBATCH,0,"count",DOMONLY),0)+COUNT)
  Q
@@ -287,6 +262,7 @@ POSTSEC(DOMAIN,ETOTAL,SECSIZE) ; post domain section to stream and set tidy node
  S HMPSRV=$P(HMPBATCH,"~",2)
  D POST^HMPDJFS(DFN,"syncDomain",DOMAIN_":"_HMPFZTSK_":"_COUNT_":"_ETOTAL_":"_SECSIZE,"",HMPSRV,.NODES)
  D SETTIDY(DOMAIN,.NODES)
+ I $G(HMPQREF)'="" S @HMPQREF=$P($H,",",2) ;update heartbeat US13442
  Q
  ;
 SETTIDY(DOMAIN,NODES) ; Set tidy nodes for clean-up of the extracts in ^XTMP
@@ -358,7 +334,6 @@ SETPAT(DFN,SRV,NEWSUB) ; Add patient to 800000 if not there
  . S NEWSUB='$L($P($G(^HMP(800000,IEN,0)),U,3))
  . I NEWSUB D UPDOPD(IEN,1) ; set to subscribed
  . L -^HMP(800000,IEN)
- ;
  ; for patient, check subscribed and get the PID
  L +^HMP(800000,IEN,1,DFN):5 E  D SETERR^HMPDJFS("Unable to lock patient: "_DFN) Q
  S NEWSUB='$D(^HMP(800000,IEN,1,DFN))
@@ -384,19 +359,16 @@ ADDPAT(DFN,SRV) ; Add a patient as subscribed for server
  I $D(ERR) D SETERR^HMPDJFS("Error adding patient subscription")
  D CLEAN^DILF
  Q
- ;
 UPDSTS(DFN,SRVNM,STS) ; Update the sync status
  N SRV,ERR ;US11019
  S SRV=$O(^HMP(800000,"B",SRVNM,0)) I 'SRV D SETERR^HMPDJFS("Missing Server") Q
  I DFN="OPD" D UPDOPD(SRV,STS) QUIT
- ;
  S FDA(800000.01,DFN_","_SRV_",",2)=STS
  S FDA(800000.01,DFN_","_SRV_",",3)=$$NOW^XLFDT
  D FILE^DIE("","FDA","ERR")
  I $D(ERR) D SETERR^HMPDJFS("Error updating patient sync status")
  D CLEAN^DILF
  Q
- ;
 UPDPAT(DFN,SRV,STS) ; DEPRECATED?
  N ERR,FDA,IEN
  S IEN=$O(^HMP(800000,"B",SRV,"")) I +IEN'>0 Q
@@ -408,7 +380,6 @@ UPDPAT(DFN,SRV,STS) ; DEPRECATED?
  .S FDA(800000.01,"?"_DFN_","_IEN_",",2)=STS
  D UPDATE^DIE("","FDA","","ERR")
  Q
- ;
 TOTAL(DOMAIN) ; return size total
  N I,X,SIZE,ROOT
  S SIZE=0
@@ -419,10 +390,9 @@ TOTAL(DOMAIN) ; return size total
  . I $L(ROOT) S SIZE=$P($G(@ROOT@(0)),U,4)
  Q $S(SIZE:SIZE,1:9999)
  ;
- ;
 OKTORUN(HMPTTYPE) ;execute 'ok to run' strategy
  ; input: HMPTTYPE := type of task [ 'redoer' | 'extractor' | 'hangLoop']
- ;          - currently not used but may become useful for strategy algorithms
+ ;  currently not used but may become useful for strategy algorithms
  ; returns: 1 - ok to run task | 0 - do not run task
  Q $$CHKSIZE
  ;
@@ -438,6 +408,7 @@ CHKXTMP(HMPBATCH,HMPFZTSK) ; -- ^XTMP check at end each domain loop iteration ; 
  . ; -- if ok to run, continue
  . I $$OKTORUN("hangLoop") K ^XTMP(HMPBATCH,0,"task",HMPFZTSK,"hanging") S HMPOK=1 Q
  . S ^("hanging")=$G(^XTMP(HMPBATCH,0,"task",HMPFZTSK,"hanging"))+1
+ . I $G(HMPQREF)'="" S @HMPQREF=$P($H,",",2) ;update heartbeat US13442
  . H $$GETSECS
  Q
  ;
@@ -451,7 +422,7 @@ GETSECS() ; return default # of seconds to requeue in future or hang when proces
  S SECS=+$$GET^XPAR("SYS","HMP EXTRACT TASK REQUEUE SECS")
  Q $S(SECS:SECS,1:10)   ; not set, wait 10 seconds
  ;
-DTH(SECS) ; -- generate new date/time for requeues
+DTH(SECS) ; generate new date/time for requeues
  I '$G(SECS) S SECS=$$GETSECS()+$R(5) ; random for stagger
  Q $$HADD^XLFDT($H,0,SECS\3600,(SECS#3600)\60,(SECS#3600)#60)  ; *END*S68-JCH*
  ;

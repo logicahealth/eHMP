@@ -54,7 +54,7 @@ function saveUserDefinedScreens(req, res) {
     var input = '';
     var screenId = '';
     input = req.body.param;
-    req.logger.debug('Inside saveUserDefinedScreens writeuserdefinedscreens input: ' + JSON.stringify(input));
+    req.logger.debug({input: input}, 'Inside saveUserDefinedScreens writeuserdefinedscreens input');
 
     screenId = createScreenIdFromRequest(req, USER_SCREENS_CONFIG);
 
@@ -62,7 +62,7 @@ function saveUserDefinedScreens(req, res) {
 
     //Get USER_SCREENS_CONFIG for update or for create if it's empty
     uds.getScreenData(screenId, req, function(err, data) {
-        req.logger.debug('getting data for screenID: ' + screenId + ' and data returned is this: ' + JSON.stringify(data));
+        req.logger.debug({data: data}, 'getting data for screenID: ' + screenId + ' and data returned');
         if (err) {
             req.logger.error(err);
             res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
@@ -207,11 +207,11 @@ function copyUserDefinedWorkspace(req, res) {
                         if (err) {
                             req.logger.error(err);
                         } else {
-                            req.logger.debug('filterData before copied filterData: ' + filterData);
+                            req.logger.debug({filterData: filterData}, 'filterData before copied');
                             if(nullchecker.isNotNullish(filterData)) {
                                 filterData.id = toId;
                                 userDefinedFiltersData.push(filterData);
-                                req.logger.debug('userDefinedScreens before copied filterData: ' + userDefinedFiltersData);
+                                req.logger.debug({userDefinedFiltersData: userDefinedFiltersData}, 'userDefinedScreens before copied filterData');
                             }
                         }
                         callback();
@@ -223,11 +223,11 @@ function copyUserDefinedWorkspace(req, res) {
                         if (err) {
                             req.logger.error(err);
                         } else {
-                            req.logger.debug('filterData before copied filterData: ' + graphData);
+                            req.logger.debug({graphData: graphData}, 'filterData before copied filterData');
                             if(nullchecker.isNotNullish(graphData)) {
                                 graphData.id = toId;
                                 userDefinedGraphsData.push(graphData);
-                                req.logger.debug('userDefinedScreens after copied graphData: ' + userDefinedGraphsData);
+                                req.logger.debug({userDefinedGraphsData: userDefinedGraphsData}, 'userDefinedScreens after copied graphData');
                             }
                         }
                         callback();
@@ -252,7 +252,7 @@ function copyUserDefinedWorkspace(req, res) {
                             res.status(rdk.httpstatus.ok).rdkSend(content);
                         }
                     });
-                    callback();
+                    setImmediate(callback);
                 });
 
                 async.series(tasks, function () {
@@ -415,7 +415,7 @@ function postScreenData (content, req, callback) {
     httpUtil.post(conf_options,
         function(err, response, data) {
             if (err) {
-                conf_options.logger.error('Unable to POST UDS data. Error: ' + err);
+                conf_options.logger.error({error: err}, 'Unable to POST UDS data.');
                 if (callback) {
                     callback(err);
                 }

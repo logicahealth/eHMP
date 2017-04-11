@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "narrativeV4", namespace = "http://webservice.bhie.domain.ext/", propOrder = {
+@XmlType(name = "narrativeV4", namespace = "http://webservice.bhie.DNS       /", propOrder = {
     "narrativeAssigningAuthorityIdentifier",
     "narrativeHomeCommunityIdentifier",
     "narrativeIdentifier",

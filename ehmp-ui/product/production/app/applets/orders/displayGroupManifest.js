@@ -205,6 +205,11 @@ define(function() {
             mixedName: 'Consults',
             members: []
         }, {
+            name: 'Consult-eHMP',
+            shortName: 'eHMP CSLT',
+            mixedName: 'Consult-eHMP',
+            members: []
+        }, {
             name: 'VITALS/MEASUREMENTS',
             shortName: 'V/M',
             mixedName: 'Vitals',

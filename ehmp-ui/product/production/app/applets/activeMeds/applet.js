@@ -29,7 +29,7 @@ define([
                     view: ADK.Views.Loading.create(),
                     options: {
                         size: "large",
-                        title: "Loading..."
+                        title: 'Medication - '+clickedResult.model.get('qualifiedName')
                     }
                 });
                 modal.show();

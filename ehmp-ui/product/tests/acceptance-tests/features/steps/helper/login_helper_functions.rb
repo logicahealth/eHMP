@@ -46,6 +46,7 @@ def perform_signout_steps(login_elements)
   expect(login_elements.wait_until_element_present('Signout')).to be_true
   expect(login_elements.perform_action('Signout')).to be_true, "Could not find the Signout button"
   fail unless login_elements.wait_until_element_present('SignIn')
+  DefaultLogin.logged_in = false
 rescue Exception => e 
   p "COULD NOT SIGN OUT: #{e}"
   timestamp = Time.new
@@ -53,4 +54,5 @@ rescue Exception => e
   take_screenshot screenshot_name
   TestSupport.close_old_open_new_browser
   # hope the next text can perform signout in its background step
+  DefaultLogin.logged_in = false
 end

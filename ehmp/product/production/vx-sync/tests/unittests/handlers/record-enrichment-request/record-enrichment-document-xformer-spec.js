@@ -25,6 +25,7 @@ var originalVaDocumentRecord = {
     'documentTypeName': 'Advance Directive',
     'encounterName': '20 MINUTE May 16, 2007',
     'encounterUid': 'urn:va:visit:9E7A:3:5670',
+    'amended': 20070516095030,
     'entered': 20070516095030,
     'facilityCode': 500,
     'facilityName': 'CAMP MASTER',
@@ -301,6 +302,7 @@ describe('record-enrichment-document-xformer.js', function() {
                     expect(typeof record.cosignedDateTime).toEqual('string');
                     expect(typeof record.signedDateTime).toEqual('string');
                     expect(typeof record.entered).toEqual('string');
+                    expect(typeof record.amended).toEqual('string');
                     expect(typeof record.referenceDateTime).toEqual('string');
                     expect(typeof record.localId).toEqual('string');
                     expect(typeof record.facilityCode).toEqual('string');

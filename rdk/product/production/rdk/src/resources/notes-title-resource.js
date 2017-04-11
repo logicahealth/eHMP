@@ -6,6 +6,8 @@ var rdk = require('../core/rdk');
 var jdsFilter = require('jds-filter');
 var querystring = require('querystring');
 var async = require('async');
+var clincialObjectsSubsystem = require('../subsystems/clinical-objects/clinical-objects-subsystem');
+var clincialObjectsWrapperNote = require('../subsystems/clinical-objects/clinical-objects-wrapper-note');
 
 module.exports.getResourceConfig = function() {
     return [{
@@ -26,7 +28,9 @@ module.exports.getResourceConfig = function() {
 };
 
 function getUserLastTitle(req, res) {
-    req.logger.debug('user = ' + JSON.stringify(req.session.user));
+    var logger = req.logger;
+    var appConfig = req.app.config;
+    logger.debug({user: user}, 'user');
     var user = req.session.user;
     var userUid = 'urn:va:user:' + user.site + ':' + user.duz[user.site];
     var jdsResource = '/vpr/all/index/document-author';
@@ -34,7 +38,8 @@ function getUserLastTitle(req, res) {
         //order: 'lastUpdateTime desc',
         filter: jdsFilter.build([
             ['eq', 'authorUid', userUid],
-            ['eq', 'documentClass', 'PROGRESS NOTES']
+            ['eq', 'documentClass', 'PROGRESS NOTES'],
+            ['not', ['exists', 'parentUid']]
         ])
     };
     var jdsPath = jdsResource + '?' + querystring.stringify(jdsQuery);
@@ -45,20 +50,12 @@ function getUserLastTitle(req, res) {
         json: true
     });
 
-    var pjdsQuery = {
-        filter: jdsFilter.build([
-            //['eq', 'authorUid', user.duz[user.site]],
-            ['eq', 'authorUid', userUid],
-            ['eq', 'siteHash', user.site]
-        ])
+    var clinicalObjFilter = {
+        'authorUid': userUid,
+        'domain': 'ehmp-note',
+        'subDomain': 'tiu',
+        'ehmpState': 'draft'
     };
-    var pjdsPath = '/notes/?' + querystring.stringify(pjdsQuery);
-
-    var pjdsoptions = _.extend({}, req.app.config.jdsServer, {
-        url: pjdsPath,
-        logger: req.logger,
-        json: true
-    });
 
     async.parallel({
         jds: function(callback) {
@@ -76,17 +73,37 @@ function getUserLastTitle(req, res) {
             );
         },
         pjds: function(callback) {
-            rdk.utils.http.get(pjdsoptions,
-                function(err, response, data) {
-                    if (err) {
-                        return callback(err);
+            clincialObjectsSubsystem.find(logger, appConfig, clinicalObjFilter, false, function(err, response) {
+                logger.info('clinical object response', response);
+                if (err) {
+                    if (err[0].toLowerCase().indexOf('not found') > -1) {
+                        return callback(null, []);
                     }
-                    if (data.items) {
-                        return callback(null, data.items);
-                    }
-                    return callback(null, []);
+                    logger.warn({
+                        clincialObjectsSubsystem: err
+                    }, 'Error reading notes from pJDS');
+
+                    logger.warn('Failed to read the notes from pJDS.');
+                    return callback(err);
                 }
-            );
+
+                var items = response.items;
+
+                if (!items) {
+                    return callback(null, {
+                        notes: []
+                    });
+                }
+
+                var errorMessages = [];
+                items = clincialObjectsWrapperNote.returnClinicialObjectData(errorMessages, items);
+
+                if (!_.isEmpty(errorMessages) || !items) {
+                    return callback(new Error(errorMessages.toString()));
+                }
+
+                return callback(null, items);
+            });
         }
     }, function(err, results) {
         if (err) {

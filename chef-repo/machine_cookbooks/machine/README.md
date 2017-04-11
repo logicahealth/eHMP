@@ -24,12 +24,12 @@ This cookbook depends only on the common cookbook, but is a dependency of all pr
 ```json
   {
     "machine-1": {
-      "ip_address": "IPADDRESS,
+      "ip_address": "IPADDRES",
       "ssh_username": "vagrant",
       "ssh_keyname": "~/.vagrant.d/insecure_private_key" 
     },
     "machine-2": {
-      "ip_address": "IPADDRESS,
+      "ip_address": "IPADDRES",
       "ssh_username": "vagrant",
       "ssh_keyname": "~/.vagrant.d/insecure_private_key" 
     }

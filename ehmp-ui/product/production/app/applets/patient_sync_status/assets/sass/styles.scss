@@ -1,0 +1,82 @@
+[data-appletid="patient-sync-status"] {
+
+}
+#patientSyncStatusRegion {
+	.btn-xs {
+		font-size: 11px;
+	}
+	.help-icon-link {
+	    i {
+	        color: $primary-light;
+	        &:hover {
+	        	color: darken($primary-light, 10%);
+	        }
+	    }
+	}
+}
+#sync-status-modal {
+    margin: -15px;
+    .fa-exclamation-circle,
+    .sync-failed-text {
+        color: $red-dark;
+    }
+    .source-list-panel {
+        #sync-source-sites {
+            list-style-type: none;
+            padding-left: 0;
+            li {
+                cursor: pointer;
+                padding: 5px;
+                line-height: 1;
+                .fa-check-circle {
+                    color: green;
+                }
+                button {
+                    padding-left: 5px;
+                }
+                p {
+                    margin-bottom: 4px;
+                }
+                .source-sync-details {
+                    padding-left: 20px;
+                }
+            }
+            li:hover,
+            li.selected {
+                color: $primary;
+                background-color: $primary-lighter;
+            }
+        }
+    }
+    .sync-site-detail {
+        padding: 0;
+        border-left: 1px solid $grey-lighter;
+        .row {
+            margin: 0;
+        }
+        #force-site-sync-status p {
+            margin: 5px;
+            padding: 5px
+        }
+        table {
+            width: 100%;
+            font-size: 12px;
+            thead {
+                border-top: 2px solid $grey-lighter;
+                border-bottom: 2px solid $grey-lighter;
+                th {
+                    cursor: pointer;
+                }
+            }
+            th,
+            td {
+                width: 25%;
+                padding-left: 15px;
+            }
+        }
+        .sync-site-detail-header .force-source-sync {
+            float: right;
+            margin: 13px 10px 13px 0;
+        }
+    }
+}

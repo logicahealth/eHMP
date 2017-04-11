@@ -1,7 +1,10 @@
 'use strict';
 var inspect = require(global.VX_UTILS + 'inspect');
 var pidUtils = require(global.VX_UTILS + 'patient-identifier-utils');
+var uidUtils = require(global.VX_UTILS + 'uid-utils');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
+var actUtils = require(global.VX_UTILS + 'activity-management-utils');
+
 var _ = require('underscore');
 
 function registerAMEAPI(log, config, environment, app) {
@@ -13,13 +16,16 @@ function handleActivityManagementPost(log, config, environment, request, respons
 	var reqBody = request.body;
 	log.debug(inspect(reqBody));
 
-	_validateRequest(reqBody, function(isValid, errMsg) {
-		if (!isValid) {
-			return response.status(400).send(errMsg);
-		}
-	});
+	var result = _validateRequest(reqBody);
+	if (!result.isValid) {
+		return response.status(400).send(result.errMsg);
+	}
+
+	//extract pid based on uid
+    var uidParts = uidUtils.extractPiecesFromUID(reqBody.patientUid);
+   	var pid = uidParts.site + ';'+ uidParts.patient;
+	var patientIdentifier = pidUtils.create('pid', pid);
 	// create job and publish it
-	var patientIdentifier = pidUtils.create('pid', reqBody.pid);
 	var job = jobUtil.createActivityManagementEvent(patientIdentifier, reqBody.domain, reqBody);
 	environment.publisherRouter.publish(job, function(error){
 		if (!error) {
@@ -32,28 +38,33 @@ function handleActivityManagementPost(log, config, environment, request, respons
 }
 
 // utility function
-function _validateRequest(postData, callback) {
+function _validateRequest(postData) {
 	var errorMsg;
-	var requiredFields = ['uid', 'pid', 'domain', 'encounter-uid'];
 	if (_.isUndefined(postData)) {
 		errorMsg = 'post data is undefined!';
-		return callback(false, errorMsg);
+		return {
+			isValid: false,
+			errMsg: errorMsg
+		};
 	}
 	if (_.isEmpty(postData)) {
 		errorMsg = 'post data is empty';
-		return callback(false, errorMsg);
+		return {
+			isValid: false,
+			errMsg: errorMsg
+		};
 	}
-	var missingField = _.find(requiredFields, function(field){
-		return _.isUndefined(postData[field]);
-	});
-	if (missingField) {
-		return callback(false, 'missing required field ' + missingField);
+
+	var result = actUtils.isValidClinicalObject(postData);
+	if (!result.isValid) {
+		return {
+			isValid: false,
+			errMsg: result.errMsg
+		};
 	}
-	// make sure pid is a valid pid format
-	if (!pidUtils.isPid(postData.pid)) {
-		return callback(false, 'invalid pid format');
-	}
-	return callback(true);
+	return {isValid: true};
 }
+
+
 
 module.exports = registerAMEAPI;

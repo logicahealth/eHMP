@@ -1,4 +1,4 @@
-XLFSTR ;DNS SF/STAFF - String Functions ;12/19/06  09:45
+XLFSTR ;ISC-SF/STAFF - String Functions ;12/19/06  09:45
  ;;8.0;KERNEL;**112,120,400,437**;Jul 10, 1995;Build 2
  ;
 UP(X) Q $TR(X,"abcdefghijklmnopqrstuvwxyz","ABCDEFGHIJKLMNOPQRSTUVWXYZ")

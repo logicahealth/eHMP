@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Encounters diagnosis lexicon lookup [/encounters-diagnosis-lexicon-lookup{?site}{&searchString}{&fields}]
+## Encounters diagnosis lexicon lookup [/encounters-diagnosis-lexicon-lookup{?site}{&searchString}]
 
 DIRECT RPC CALL - Diagnosis Lexicon Lookup - calls orwpce4-lex-lookup with a value of ICD
 
@@ -13,8 +13,6 @@ ORWPCE4 LEX
     :[site]({{{common}}}/parameters/site.md)
 
     + searchString (string, required) - A string that is the closest match to the index you want to start returning data from
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

@@ -1,0 +1,3257 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "id": "e1ec4071-ff9d-4499-871d-5991b48f31fe",
+  "link": [
+    {
+      "relation": "self",
+      "url": "http://IPADDRES/fhir/patient/9E7A:149/observation?code=8302-2,29463-7&amp;_sort:dsc=date&amp;_count=1&amp;_tag=vital-signs"
+    }
+  ],
+  "total": 54,
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 70 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 70,
+          "units": "in"
+        },
+        "appliesDateTime": "2004-03-31T02:31:00Z",
+        "issued": "2004-03-31T02:56:38Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:12521"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "4159a3ea-d4b7-45c2-b694-cbdc0d46f32f",
+            "display": "ABILENE (CAA)"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "4159a3ea-d4b7-45c2-b694-cbdc0d46f32f",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "998"
+              }
+            ],
+            "name": "ABILENE (CAA)"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 185 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 185,
+          "units": "lb"
+        },
+        "appliesDateTime": "2004-03-31T02:31:00Z",
+        "issued": "2004-03-31T02:56:38Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:12522"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "915ae294-188e-4826-81df-b59b44aec786",
+            "display": "ABILENE (CAA)"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "915ae294-188e-4826-81df-b59b44aec786",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "998"
+              }
+            ],
+            "name": "ABILENE (CAA)"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2005-03-15T16:30:00Z",
+        "issued": "2005-03-15T16:42:21Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:13455"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "480cfadb-7a87-4c8d-a5b8-a0964afac6f1",
+            "display": "ABILENE (CAA)"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "480cfadb-7a87-4c8d-a5b8-a0964afac6f1",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "998"
+              }
+            ],
+            "name": "ABILENE (CAA)"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 199 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 199,
+          "units": "lb"
+        },
+        "appliesDateTime": "2005-03-15T16:30:00Z",
+        "issued": "2005-03-15T16:42:21Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:13456"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "332a428e-cc40-4e7d-872e-b13e92c298b8",
+            "display": "ABILENE (CAA)"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "332a428e-cc40-4e7d-872e-b13e92c298b8",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "998"
+              }
+            ],
+            "name": "ABILENE (CAA)"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 196 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 196,
+          "units": "lb"
+        },
+        "appliesDateTime": "2007-03-15T12:00:00Z",
+        "issued": "2007-05-08T17:53:12Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:15519"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "51c8c065-2f73-4c87-ab8f-e1561b5571c0",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "51c8c065-2f73-4c87-ab8f-e1561b5571c0",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 184 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 184,
+          "units": "lb"
+        },
+        "appliesDateTime": "2007-04-11T11:45:00Z",
+        "issued": "2007-05-08T17:54:53Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:15882"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "7956c8bf-a228-43f4-a493-174d85be053c",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "7956c8bf-a228-43f4-a493-174d85be053c",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 175 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 175,
+          "units": "lb"
+        },
+        "appliesDateTime": "2007-04-24T12:00:00Z",
+        "issued": "2007-05-08T17:56:24Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:16245"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "7515380b-ef0a-4dc9-9b0e-fb50b9fb8953",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "7515380b-ef0a-4dc9-9b0e-fb50b9fb8953",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2007-11-28T13:00:00Z",
+        "issued": "2008-02-06T22:41:57Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:16634"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "ac14e76c-f196-4e61-902b-bdde17d0592e",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "ac14e76c-f196-4e61-902b-bdde17d0592e",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 168 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 168,
+          "units": "lb"
+        },
+        "appliesDateTime": "2007-11-28T13:00:00Z",
+        "issued": "2008-02-06T22:41:57Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:16635"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "b74bae7a-48f8-4939-9224-75ecba933e90",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "b74bae7a-48f8-4939-9224-75ecba933e90",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2007-12-28T14:00:00Z",
+        "issued": "2008-02-06T22:43:58Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:17341"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "8ed9f522-75dd-43ae-a615-774bbdc4b3d5",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "8ed9f522-75dd-43ae-a615-774bbdc4b3d5",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 166 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 166,
+          "units": "lb"
+        },
+        "appliesDateTime": "2007-12-28T14:00:00Z",
+        "issued": "2008-02-06T22:43:58Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:17342"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "82fee7ff-7205-4890-8542-131a7e752d8e",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "82fee7ff-7205-4890-8542-131a7e752d8e",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2008-05-06T14:00:00Z",
+        "issued": "2008-02-06T22:49:23Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:18553"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "e595b91d-fe19-4cee-b12c-df4ccb9ac526",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "e595b91d-fe19-4cee-b12c-df4ccb9ac526",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 174 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 174,
+          "units": "lb"
+        },
+        "appliesDateTime": "2008-05-06T14:00:00Z",
+        "issued": "2008-02-06T22:49:23Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:18554"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "d10497d7-45d3-44ec-a2fe-c0d4d9693cad",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "d10497d7-45d3-44ec-a2fe-c0d4d9693cad",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2008-05-20T15:00:00Z",
+        "issued": "2008-02-06T22:50:53Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:19260"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "5322d87f-febd-4b27-8bf7-e6f9ce14b304",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "5322d87f-febd-4b27-8bf7-e6f9ce14b304",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 170 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 170,
+          "units": "lb"
+        },
+        "appliesDateTime": "2008-05-20T15:00:00Z",
+        "issued": "2008-02-06T22:50:53Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:19261"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "8507161a-8caa-4996-a715-c08893fabc75",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "8507161a-8caa-4996-a715-c08893fabc75",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2008-06-10T15:00:00Z",
+        "issued": "2008-02-06T22:52:48Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:19967"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "72016a64-604f-4412-b89f-5829765682b4",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "72016a64-604f-4412-b89f-5829765682b4",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 172 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 172,
+          "units": "lb"
+        },
+        "appliesDateTime": "2008-06-10T15:00:00Z",
+        "issued": "2008-02-06T22:52:48Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:19968"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "ac2d5899-1d19-4c11-ad8a-763e282a10d1",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "ac2d5899-1d19-4c11-ad8a-763e282a10d1",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 180 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 180,
+          "units": "lb"
+        },
+        "appliesDateTime": "2008-11-10T13:00:00Z",
+        "issued": "2016-05-05T15:47:44Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:20675"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "48610d9d-ac4f-49b8-9c8a-59dc3066e1ed",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "48610d9d-ac4f-49b8-9c8a-59dc3066e1ed",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 185 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 185,
+          "units": "lb"
+        },
+        "appliesDateTime": "2009-04-17T16:00:00Z",
+        "issued": "2010-03-05T15:49:30Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:21382"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "47a10b21-92eb-4294-8969-79a19d71ceb9",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "47a10b21-92eb-4294-8969-79a19d71ceb9",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2009-08-24T18:00:00Z",
+        "issued": "2010-03-05T15:51:11Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:22095"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "1a7dbdbd-c44d-457b-bec0-2c1d4ce20956",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "1a7dbdbd-c44d-457b-bec0-2c1d4ce20956",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 190 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 190,
+          "units": "lb"
+        },
+        "appliesDateTime": "2009-08-24T18:00:00Z",
+        "issued": "2010-03-05T15:51:11Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:22096"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "6a78ed76-1596-403a-9f18-f6d7e4a81d10",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "6a78ed76-1596-403a-9f18-f6d7e4a81d10",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 182 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 182,
+          "units": "lb"
+        },
+        "appliesDateTime": "2009-12-01T13:53:00Z",
+        "issued": "2010-03-05T15:52:44Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:22890"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "b82ee41a-edd4-46dd-b8b4-c2d23c0aaf62",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "b82ee41a-edd4-46dd-b8b4-c2d23c0aaf62",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 178 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 178,
+          "units": "lb"
+        },
+        "appliesDateTime": "2010-03-05T14:00:00Z",
+        "issued": "2010-03-05T15:53:50Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:23490"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "eda9740a-1b8f-45a5-bb21-29e22a280c82",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "eda9740a-1b8f-45a5-bb21-29e22a280c82",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 187 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 187,
+          "units": "lb"
+        },
+        "appliesDateTime": "2001-04-09T17:09:00Z",
+        "issued": "2001-04-09T17:10:18Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:2357"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "cd9a4f62-f0ab-41f0-947f-52ea0daaccc8",
+            "display": "CAMP MASTER"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "cd9a4f62-f0ab-41f0-947f-52ea0daaccc8",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "500"
+              }
+            ],
+            "name": "CAMP MASTER"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 70 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 70,
+          "units": "in"
+        },
+        "appliesDateTime": "2003-04-05T20:15:00Z",
+        "issued": "2003-04-15T19:59:14Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:4538"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "d199d0cf-4a2e-420a-b2d2-aaf34a0bf40a",
+            "display": "TROY"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "d199d0cf-4a2e-420a-b2d2-aaf34a0bf40a",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "515.6"
+              }
+            ],
+            "name": "TROY"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 172 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 172,
+          "units": "lb"
+        },
+        "appliesDateTime": "2003-04-05T20:15:00Z",
+        "issued": "2003-04-15T19:59:14Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:4539"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "c9ca50af-d179-4445-883c-d2cab8d31348",
+            "display": "TROY"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "c9ca50af-d179-4445-883c-d2cab8d31348",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "515.6"
+              }
+            ],
+            "name": "TROY"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 174 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 174,
+          "units": "lb"
+        },
+        "appliesDateTime": "2003-04-15T20:05:00Z",
+        "issued": "2003-04-15T20:05:45Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:9E7A:149:8780"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "d2e6c775-8205-47e2-8d5d-cf3c7dfce6e3",
+            "display": "TROY"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "d2e6c775-8205-47e2-8d5d-cf3c7dfce6e3",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "515.6"
+              }
+            ],
+            "name": "TROY"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 70 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 70,
+          "units": "in"
+        },
+        "appliesDateTime": "2004-03-31T02:31:00Z",
+        "issued": "2004-03-31T02:56:38Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:12521"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "fc3ced2c-6fc2-479f-b023-650eb488c11b",
+            "display": "ABILENE (CAA)"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "fc3ced2c-6fc2-479f-b023-650eb488c11b",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "998"
+              }
+            ],
+            "name": "ABILENE (CAA)"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 185 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 185,
+          "units": "lb"
+        },
+        "appliesDateTime": "2004-03-31T02:31:00Z",
+        "issued": "2004-03-31T02:56:38Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:12522"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "5af45f05-0f80-437b-a1de-31378167cff1",
+            "display": "ABILENE (CAA)"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "5af45f05-0f80-437b-a1de-31378167cff1",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "998"
+              }
+            ],
+            "name": "ABILENE (CAA)"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2005-03-15T16:30:00Z",
+        "issued": "2005-03-15T16:42:21Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:13455"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "14fa7a11-db52-4fc1-92e8-e0c8d5aaa9f4",
+            "display": "ABILENE (CAA)"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "14fa7a11-db52-4fc1-92e8-e0c8d5aaa9f4",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "998"
+              }
+            ],
+            "name": "ABILENE (CAA)"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 199 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 199,
+          "units": "lb"
+        },
+        "appliesDateTime": "2005-03-15T16:30:00Z",
+        "issued": "2005-03-15T16:42:21Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:13456"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "5e50cec7-4916-49a6-af2f-7891c3dfa2ed",
+            "display": "ABILENE (CAA)"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "5e50cec7-4916-49a6-af2f-7891c3dfa2ed",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "998"
+              }
+            ],
+            "name": "ABILENE (CAA)"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 196 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 196,
+          "units": "lb"
+        },
+        "appliesDateTime": "2007-03-15T12:00:00Z",
+        "issued": "2007-05-08T17:53:12Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:15519"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "ff2c56e0-1b38-44b3-8c97-2966927f9084",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "ff2c56e0-1b38-44b3-8c97-2966927f9084",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 184 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 184,
+          "units": "lb"
+        },
+        "appliesDateTime": "2007-04-11T11:45:00Z",
+        "issued": "2007-05-08T17:54:53Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:15882"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "b6eecd4a-be86-4d9b-a78b-9c9dd3bcc258",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "b6eecd4a-be86-4d9b-a78b-9c9dd3bcc258",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 175 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 175,
+          "units": "lb"
+        },
+        "appliesDateTime": "2007-04-24T12:00:00Z",
+        "issued": "2007-05-08T17:56:24Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:16245"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "e61ff213-e4e8-4c47-8d44-d02df38bf78e",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "e61ff213-e4e8-4c47-8d44-d02df38bf78e",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2007-11-28T13:00:00Z",
+        "issued": "2008-02-06T22:41:57Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:16634"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "43491fe4-a829-4bb5-8374-8bea74b4f867",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "43491fe4-a829-4bb5-8374-8bea74b4f867",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 168 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 168,
+          "units": "lb"
+        },
+        "appliesDateTime": "2007-11-28T13:00:00Z",
+        "issued": "2008-02-06T22:41:57Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:16635"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "1ac8a35e-104a-43d5-97c8-2c43a872c1c0",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "1ac8a35e-104a-43d5-97c8-2c43a872c1c0",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2007-12-28T14:00:00Z",
+        "issued": "2008-02-06T22:43:58Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:17341"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "5ea6e48b-eff9-40e9-a613-30f526677c27",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "5ea6e48b-eff9-40e9-a613-30f526677c27",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 166 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 166,
+          "units": "lb"
+        },
+        "appliesDateTime": "2007-12-28T14:00:00Z",
+        "issued": "2008-02-06T22:43:58Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:17342"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "0274bc50-f3a3-47c2-a410-752b790f8239",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "0274bc50-f3a3-47c2-a410-752b790f8239",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2008-05-06T14:00:00Z",
+        "issued": "2008-02-06T22:49:23Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:18553"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "e9acb737-67bb-4123-86a3-424581eeb8db",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "e9acb737-67bb-4123-86a3-424581eeb8db",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 174 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 174,
+          "units": "lb"
+        },
+        "appliesDateTime": "2008-05-06T14:00:00Z",
+        "issued": "2008-02-06T22:49:23Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:18554"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "293d3d1c-d60e-44d2-aa17-f9de5c59b1b5",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "293d3d1c-d60e-44d2-aa17-f9de5c59b1b5",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2008-05-20T15:00:00Z",
+        "issued": "2008-02-06T22:50:53Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:19260"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "e10366fe-ad9d-485f-bebe-f39c3b5e42c8",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "e10366fe-ad9d-485f-bebe-f39c3b5e42c8",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 170 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 170,
+          "units": "lb"
+        },
+        "appliesDateTime": "2008-05-20T15:00:00Z",
+        "issued": "2008-02-06T22:50:53Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:19261"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "f07f2824-a28d-431a-98c5-52c4b63bf7b6",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "f07f2824-a28d-431a-98c5-52c4b63bf7b6",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2008-06-10T15:00:00Z",
+        "issued": "2008-02-06T22:52:48Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:19967"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "228d38ff-ebd1-4cbe-936e-902b175275b8",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "228d38ff-ebd1-4cbe-936e-902b175275b8",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 172 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 172,
+          "units": "lb"
+        },
+        "appliesDateTime": "2008-06-10T15:00:00Z",
+        "issued": "2008-02-06T22:52:48Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:19968"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "9e848dff-0f3c-42eb-9449-051005ed30a9",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "9e848dff-0f3c-42eb-9449-051005ed30a9",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 180 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 180,
+          "units": "lb"
+        },
+        "appliesDateTime": "2008-11-10T13:00:00Z",
+        "issued": "2010-03-05T15:47:44Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:20675"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "80afdc96-3ccf-4a62-879f-4ce0720a355f",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "80afdc96-3ccf-4a62-879f-4ce0720a355f",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 185 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 185,
+          "units": "lb"
+        },
+        "appliesDateTime": "2009-04-17T16:00:00Z",
+        "issued": "2010-03-05T15:49:30Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:21382"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "12b5ee2e-8e56-475b-9ee6-bf6dd3016eff",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "12b5ee2e-8e56-475b-9ee6-bf6dd3016eff",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 71 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 71,
+          "units": "in"
+        },
+        "appliesDateTime": "2009-08-24T18:00:00Z",
+        "issued": "2010-03-05T15:51:11Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:22095"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "b5bdf049-e2b1-49fd-95e3-e148b16375e2",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "b5bdf049-e2b1-49fd-95e3-e148b16375e2",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 190 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 190,
+          "units": "lb"
+        },
+        "appliesDateTime": "2009-08-24T18:00:00Z",
+        "issued": "2010-03-05T15:51:11Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:22096"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "4ffd41d9-533c-4da8-b709-86f5499b9845",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "4ffd41d9-533c-4da8-b709-86f5499b9845",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 182 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 182,
+          "units": "lb"
+        },
+        "appliesDateTime": "2009-12-01T13:53:00Z",
+        "issued": "2010-03-05T15:52:44Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:22890"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "c17b6b7b-f0cf-4023-8dc8-7b2eea47dd1f",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "c17b6b7b-f0cf-4023-8dc8-7b2eea47dd1f",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 178 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 178,
+          "units": "lb"
+        },
+        "appliesDateTime": "2010-03-05T14:00:00Z",
+        "issued": "2010-03-05T15:53:50Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:23490"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "76c734d5-5175-4b34-a259-7efc79b7c428",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "76c734d5-5175-4b34-a259-7efc79b7c428",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 187 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 187,
+          "units": "lb"
+        },
+        "appliesDateTime": "2001-04-09T17:09:00Z",
+        "issued": "2001-04-09T17:10:18Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:2357"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "79ea22a0-2141-46c5-a312-08ce97dbcdcd",
+            "display": "CAMP BEE"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "79ea22a0-2141-46c5-a312-08ce97dbcdcd",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "507"
+              }
+            ],
+            "name": "CAMP BEE"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>HEIGHT 70 in</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4688724",
+              "display": "HEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "BODY HEIGHT (MEASURED)"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 70,
+          "units": "in"
+        },
+        "appliesDateTime": "2003-04-05T20:15:00Z",
+        "issued": "2003-04-15T19:59:14Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:4538"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "42314198-eed5-4dc1-ae49-64c46965420f",
+            "display": "TROY"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "42314198-eed5-4dc1-ae49-64c46965420f",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "515.6"
+              }
+            ],
+            "name": "TROY"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 172 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 172,
+          "units": "lb"
+        },
+        "appliesDateTime": "2003-04-05T20:15:00Z",
+        "issued": "2003-04-15T19:59:14Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:4539"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "d2f8ddf8-2431-4508-9132-e35f441f4596",
+            "display": "TROY"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "d2f8ddf8-2431-4508-9132-e35f441f4596",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "515.6"
+              }
+            ],
+            "name": "TROY"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div>WEIGHT 174 lb</div>"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:vuid:4500639",
+              "display": "WEIGHT"
+            },
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 174,
+          "units": "lb"
+        },
+        "appliesDateTime": "2003-04-15T20:05:00Z",
+        "issued": "2003-04-15T20:05:45Z",
+        "status": "final",
+        "reliability": "unknown",
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:vital:C877:149:8780"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/149"
+        },
+        "performer": [
+          {
+            "reference": "d876ec1c-3d4f-44a2-a616-bb98c0d11f11",
+            "display": "TROY"
+          }
+        ],
+        "contained": [
+          {
+            "resourceType": "Organization",
+            "id": "d876ec1c-3d4f-44a2-a616-bb98c0d11f11",
+            "identifier": [
+              {
+                "system": "urn:oid:2.16.840.1.113883.6.233",
+                "value": "515.6"
+              }
+            ],
+            "name": "TROY"
+          }
+        ]
+      }
+    }
+  ],
+  "meta": {
+    "lastUpdated": "2016-06-16T16:00:03.800Z"
+  }
+}

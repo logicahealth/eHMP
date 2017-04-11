@@ -11,7 +11,7 @@ action :execute do
 
   require 'greenletters'
 
-  cache_key_pw = Chef::EncryptedDataBagItem.load("credentials", "vista_cache_key_password", 'n25q2mp#h4')["password"]
+  cache_key_pw = Chef::EncryptedDataBagItem.load("credentials", "vista_cache_key_password", node[:data_bag_string])["password"]
 
   ruby_block "key_block:execute:#{new_resource.command.hash}" do
     block do

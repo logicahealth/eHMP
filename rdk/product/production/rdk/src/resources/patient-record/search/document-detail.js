@@ -49,16 +49,24 @@ function getDocumentDetail(req, res) {
                     return callback(jdsResponse.data.error);
                 }
 
-                var pids = _.pluck(jdsResponse.data.data.items, 'pid');
-                var grouping = util.format('%s:"%s"', group_field, group_value);
+                 var grouping = util.format('%s:"%s"', group_field, group_value);
+
+                var patientPIDList = [];
+                _.each(req.interceptorResults.patientIdentifiers.allSites, function(pid){
+                    patientPIDList.push(pid);
+                });
+
+                req.logger.debug({patientPIDList: patientPIDList}, 'document-details.js patientPIDList');
 
                 var fq = [
-                    'pid:(' + pids.join(' OR ') + ')',
+                    'pid:(' + patientPIDList.join(' OR ') + ')',
                     grouping
                 ];
                 if (group_field === 'local_title') {
                     fq.push('domain: document');
                 }
+
+                req.logger.debug('document-details.js fq: %j', fq);
 
                 var queryParameters = {
                     q: util.format('%s', query),

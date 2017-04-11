@@ -19,7 +19,7 @@ define([
                 label: "Select Encounter Provider",
                 srOnlyLabel: false,
                 name: "selectEncounterProvider",
-                placeholder: "Please wait while the list is loading.",
+                placeholder: "Wait while the list is loading.",
                 disabled: true,
                 pickList: providerspickListArray,
                 showFilter: true,
@@ -34,8 +34,8 @@ define([
             extraClasses: ["row"],
             items: [{
                 control: "container",
-                extraClasses: ["col-md-12", "marginTopButtom"],
-                template: '<span class="sr-only">{{preSelectSRText}}</span><span>Viewing {{clinicAppointmentsFromDate}} to {{clinicAppointmentsThroughDate}}<span>'
+                extraClasses: ["col-xs-12"],
+                template: '<p>Viewing {{clinicAppointmentsFromDate}} to {{clinicAppointmentsThroughDate}}<p>'
             }]
         }, {
             control: "container",
@@ -49,7 +49,7 @@ define([
                 },
                 columns: [{
                     title: "Date",
-                    id: "formatteddateTime"
+                    id: "formattedDateTime"
                 }, {
                     title: "Details",
                     id: "summary"
@@ -71,7 +71,7 @@ define([
             extraClasses: ["row"],
             items: [{
                 control: "container",
-                extraClasses: ["col-md-12", "marginTopButtom"],
+                extraClasses: ["col-md-12"],
                 template: '<span>Viewing {{hospitalAdmissionFromDate}} to {{hospitalAdmissionThroughDate}}</span>'
             }]
         }, {
@@ -85,7 +85,7 @@ define([
                   return admissionsArray;
                 },columns: [{
                     title: "Date",
-                    id: "formatteddateTime"
+                    id: "formattedDateTime"
                 }, {
                     title: "Details",
                     id: "reasonName"
@@ -209,16 +209,11 @@ define([
             control: "container",
             extraClasses: ["form-group"],
             items: [{
-                control: "checkbox",
-                id: "viewEncounters-checkbox",
-                label: "View encounter form after setting",
-                extraClasses: ["checkbox-inline", "right-margin-xs"],
-                name: "viewEncounter"
-            }, {
                 control: "button",
                 type: "submit",
                 id: "cancel-btn",
                 label: "Cancel",
+                title: "Press enter to cancel.",
                 disabled: false,
                 extraClasses: ["btn-default", "btn-sm"],
                 name: "cancel"
@@ -227,8 +222,9 @@ define([
                 type: "submit",
                 id: "viewEncounters-btn",
                 label: "Set",
+                title: "Press enter to confirm.",
                 disabled: true,
-                extraClasses: ["btn-default", "btn-sm", "left-margin-xs"],
+                extraClasses: ["btn-primary", "btn-sm", "left-margin-xs"],
                 name: "set"
             }]
         }]

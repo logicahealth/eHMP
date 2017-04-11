@@ -34,14 +34,14 @@ if [[ ( $* != *--nodeploy* ) || ( -n "$ehmpUpdated" ) ]]; then
 		cd ./production/vx-sync
 		./scripts/vmKick.sh
 		popd
-		curl -s "http://IPADDRESS8080/data/doLoad?sites=9E7A,C877"
+		curl -s "http://IPADDRESS:POR/data/doLoad?sites=9E7A,C877"
 		gradle deployvxsyncdev
 	fi
 else
 	pushd .
 	cd ./production/vx-sync
 	./scripts/vmKick.sh
-	curl -s "http://IPADDRESS8080/data/doLoad?sites=9E7A,C877"
+	curl -s "http://IPADDRESS:POR/data/doLoad?sites=9E7A,C877"
 	popd
 fi
 mkdir ~/Projects/vistacore/ehmp/product/production/vx-sync/scripts/testLogs
@@ -50,7 +50,7 @@ date "+%T Running VX Sync Unit Tests"
 npm test > ~/Projects/vistacore/ehmp/product/production/vx-sync/scripts/testLogs/vxSyncUnitTests.log
 popd
 
-url="http://IPADDRESS :9080/statusod/9E7A"
+url="http://IP_ADDRESS:PORT/statusod/9E7A"
 timeout=0
 curl -f -v -s $url --raw &> ~/Projects/vistacore/ehmp/product/production/vx-sync/scripts/testLogs/source.html
 teststring=$(awk '/inProgress|404/' ~/Projects/vistacore/ehmp/product/production/vx-sync/scripts/testLogs/source.html)

@@ -13,7 +13,7 @@ When(/^the client requests global patient search with lname "(.*?)" and fname "(
   jsonreq["date.birth"] = dob unless dob.eql? "NOT DEFINED"
   reqjson = jsonreq.to_json
   path = resource_query.path
-  @response = HTTPartyWithBasicAuth.post_json_with_authorization(path, reqjson, { 'Content-Type' => content_type })
+  @response = HTTPartyRDK.post(path, reqjson, { 'Content-Type' => content_type })
 end
 
 Then(/^the global patient result contains$/) do |table|
@@ -38,7 +38,7 @@ end
 When(/^the client queries the patientSync RDK API for pid "(.*?)"$/) do |pid|
   QueryRDKPatientSync.new(pid)
   path = QueryRDKPatientSync.new(pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^patient sync status says true$/) do
@@ -57,4 +57,12 @@ Then(/^patient sync status says false$/) do
     success = true
   end
   expect(success).to be_true, "Patient PID is synced"
+end
+
+Then(/^the global patient result contains an age$/) do
+  @json_object = JSON.parse(@response.body)
+  result_array = @json_object['data']['items']
+  age = result_array[0]['age']
+  expect(age).to_not be_nil, "Expected age to not be nil"
+  expect(age).to be_kind_of(Fixnum), "Expected age to be of type Fixnum: age is #{age}"
 end

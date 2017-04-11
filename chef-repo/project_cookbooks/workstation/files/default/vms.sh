@@ -6,12 +6,12 @@ action=$2
 usage() {
   echo
   echo "Usage: ./vms.sh <stack> <action>"
-  echo "  stack:    r1.3 or master"
+  echo "  stack:    r1.2, r1.3, or master"
   echo "  action:   stopAll or startAll"
   echo
 }
 
-if [ "$stack" != "r1.3" ] && [ "$stack" != "master" ]; then
+if [ "$stack" != "r1.2" ] && [ "$stack" != "r1.3" ] && [ "$stack" != "master" ]; then
   echo "Invalid stack specified."
   usage
   exit

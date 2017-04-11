@@ -24,7 +24,7 @@ var mockConfig = {
     },
     jds: {
         protocol: 'http',
-        host: 'IPADDRESS ',
+        host: 'IP_ADDRESS',
         port: 9080
     }
 };
@@ -480,7 +480,7 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
                     //Get jobs published and compare them to expected jobs
                     var jobsPublished = publishCalls[0].args[0];
                     var expectedJobs = [{
-                        'type': 'record-enrichment',
+                        'type': 'event-prioritization-request',
                         'patientIdentifier': {
                             'type': 'pid',
                             'value': 'DOD;00001'
@@ -507,7 +507,7 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
                             'stampTime': '20140102120059.000'
                         }
                     }, {
-                        'type': 'record-enrichment',
+                        'type': 'event-prioritization-request',
                         'patientIdentifier': {
                             'type': 'pid',
                             'value': 'DOD;00001'
@@ -538,7 +538,7 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
                             'stampTime': '20140102120059.000'
                         }
                     }, {
-                        'type': 'record-enrichment',
+                        'type': 'event-prioritization-request',
                         'patientIdentifier': {
                             'type': 'pid',
                             'value': 'DOD;00001'
@@ -591,7 +591,7 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: 'IPADDRESS ',
+                    host: 'IP_ADDRESS',
                     port: 9080
                 }
             };
@@ -675,7 +675,7 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
                     //Get jobs published and compare them to expected jobs
                     var jobsPublished = publishCalls[0].args[0];
                     expect(jobsPublished).toBeTruthy();
-                    expect(jobsPublished[0].type).toEqual('record-enrichment');
+                    expect(jobsPublished[0].type).toEqual('event-prioritization-request');
                     expect(jobsPublished[0].record).toBeTruthy();
 
                     //This is how we know _getDemographicsIcnFromJds was called

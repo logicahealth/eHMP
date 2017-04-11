@@ -23,7 +23,7 @@ define([
         this.showModal = function() {
             var errorView = new ADK.UI.Alert({
                 title: 'Error',
-                icon:  'fa-exclamation-triangle font-size-18 color-red',
+                icon:  'icon-error',
                 messageView: errorBodyView,
                 footerView: errorFooterView
             });

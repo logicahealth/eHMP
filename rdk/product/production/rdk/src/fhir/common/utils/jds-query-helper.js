@@ -62,6 +62,18 @@ function gte(prop, value) {
     return _binaryOp('gte', prop, value);
 }
 
+function dlt(prop, value) {
+    return _binaryOp('dlt', prop, value);
+}
+
+function dgte(prop, value) {
+    return _binaryOp('dgte', prop, value);
+}
+
+function dgt(prop, value) {
+    return _binaryOp('dgt', prop, value);
+}
+
 module.exports.or = or;
 module.exports.and = and;
 module.exports.eq = eq;
@@ -72,3 +84,6 @@ module.exports.lt = lt;
 module.exports.lte = lte;
 module.exports.gt = gt;
 module.exports.gte = gte;
+module.exports.dlt = dlt;
+module.exports.dgte = dgte;
+module.exports.dgt = dgt;

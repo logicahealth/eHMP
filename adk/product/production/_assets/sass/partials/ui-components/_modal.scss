@@ -1,197 +1,160 @@
-.modal-header {
+.modal-backdrop {
     background-color: $pure-white;
-    padding: 0px;
-    margin-bottom: 0px;
-    border-radius: 6px 6px 0px 0px;
-    .close {
-        color: inherit;
-        opacity: 1;
-        &:hover {
-            color: $primary;
-            outline: none;
-        }
-    }
-}
-
-.modal-dialog {
-    &.modal-sm {
-        width: 365px;
-    }
-    &.modal-liquid {
-        /*we set a fallback height and width for phantom unawerness of calc*/
-        height: 90%;
-        height: calc(100vh - 60px);
-        width: 90%;
-        width: calc(100vw - 60px);
-        &.modal-lg {
-            width: 900px;
-        }
-        &.modal-md {
-            width: 600px;
-        }
-        &.modal-sm {
-            width: 300px;
-        }
-        .modal-content {
-            .modal-header {
-                border-radius: 6px 6px 0px 0px;
-            }
-            .modal-body {
-                height: 100%;
-                max-height: calc(100vh - 270px);
-                margin-bottom: 0;
-            }
-            /* if the modal-body is the first-child or the last-child it must mean there is either no .modal-header or .modal-footer */
-            .modal-body:first-child,
-            .modal-body:last-child {
-                height: 90%;
-                height: calc(100% - 55px);
-            }
-            /* if the modal-body is the only-child there is no .modal-header AND no .modal-footer */
-            .modal-body:only-child {
-                height: 100%;
-            }
-        }
-    }
-}
-
-.modal-title {
-    color: $grey-darkest;
-    font-weight: 600;
-}
-
-.modal-body {
-    padding-bottom: 20px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    #lr-data-table-view {
-        .data-grid {
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-    }
-}
-
-.modal-footer {
-    padding: 7px 14px;
-    .btn-default {
-        background: none;
-        color: $primary;
-        &:hover,
-        &:focus,
-        &:active {
-            background-color: $primary-lighter;
-            color: $primary-dark;
-        }
-    }
-    .btn-danger {
-        background: none;
-        color: $red;
-        &:hover,
-        &:focus,
-        &:active {
-            background-color: $red-lightest;
-            color: $red;
-        }
-    }
-    .btn-muted {
-        background: none;
-        color: $grey-darker;
-        &:hover,
-        &:focus,
-        &:active {
-            background-color: $primary-lighter;
-            color: $grey-darkest;
-        }
-    }
-    p {
-        text-align: left;
-        margin: 0px;
-    }
 }
 
 .modal {
+    outline: none;
     &.ui-draggable {
         bottom: inherit;
+        box-shadow: 0 5px 15px rgba(0,0,0,.5);
+        border-radius: 6px;
         .draggable-handle {
             cursor: move;
+            background-color: $grey-lightest;
+            border-radius: 6px 6px 0 0;
         }
     }
-    outline: none;
-    top: 43px;
+    .modal-dialog {
+        margin: calc(28px + 58px) auto 0;
+        &.draggable {
+            margin: 0px;
+        }
+        &.modal-sm {
+            width: 365px;
+        }
+        &.modal-lg {
+            width: 900px;
+        }
+        &.modal-xl {
+            width: 85%; // phantomjs fallback
+            width: calc(100vw - 191px);
+        }
+        .modal-body {
+            height: 100%;
+            max-height: calc(100vh - 160px);
+            margin-bottom: 0;
+            word-wrap: break-word;
+        }
+    }
 }
 
-/*----------These styles pertain only to the sync status modal, and need to be cleaned up --------*/
+.modal-open .modal {
+    overflow-y: hidden;
+}
 
-#sync-status-modal {
-    margin: -15px;
-    height: 350px;
-    background-color: $pure-white;
-    #sync-site-detail-header {
-        background-color: #e7ebf0;
-    }
-    .fa-exclamation-circle,
-    .sync-failed-text {
-        color: #CC0000;
-    }
-    #source-list-panel {
-        p {
-            padding: 5px;
+//  leave this outside of .modal since some components only have .modal-content
+.modal-content {
+    background-color: $grey-lightest;
+    .modal-header {
+        padding: 0px;
+        margin-bottom: 0px;
+        border-radius: 6px 6px 0px 0px;
+        .modal-title {
+            color: $grey-darkest;
+            font-weight: 600;
+            text-transform: capitalize;
         }
-        #sync-source-sites {
-            list-style-type: none;
-            padding-left: 0;
-            .fa-check-circle {
-                color: green;
+        .close {
+            color: inherit;
+            opacity: 1;
+            &:hover {
+                color: $primary;
+                outline: none;
             }
-            li {
-                cursor: pointer;
-                padding: 5px 5px 5px 5px;
-                .source-sync-details {
-                    padding-left: 20px;
+        }
+    }
+    .modal-body {
+        padding-bottom: 20px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        font-size: 12px;
+        background-color: $pure-white;
+        .detail-modal-content {
+            word-wrap: break-word;
+            text-transform: capitalize;
+            h5 {
+                text-transform: uppercase;
+                padding: 0px 0px 5px;
+                margin: 0px 0px 10px;
+                &.bottom-border-grey-dark {
+                    border-bottom: 1px solid $grey-dark;
                 }
             }
-            li:hover,
-            li.selected {
+            h6 {
+                text-transform: uppercase;
+                padding: 0px 0px 5px;
+                margin: 0px 0px 10px;
+                &.bottom-border-grey-dark {
+                    border-bottom: 1px solid $grey-dark;
+                }
+                color: $grey-darker;
+                font-weight: bold;
+            }
+            hr {
+                border-color: $grey-dark;
+            }
+            pre {
+                font-size: 12px;
+                font-family: inherit;
+                margin: 5px;
+                text-transform: none;
+            }
+            strong {
+                color: $grey-darker;
+            }
+            .detail-modal-text-transform-none {
+                text-transform: none;
+            }
+            .detail-modal-comment {
+                text-transform: none;
+                margin: 0px 10px;
+            }
+        }
+    }
+    .modal-footer {
+        padding: 7px;
+        border-radius: 0 0 6px 6px;
+        background-color: $grey-lightest;
+        .btn {
+            &.btn-primary, &.btn-danger, &.btn-default {
+                background: $pure-white;
                 color: $primary;
-                background-color: $primary-lighter;
+                &:hover,
+                &:focus,
+                &:active {
+                    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.5);
+                    color: $primary-dark;
+                }
             }
+            &.disabled,
+            &[disabled] {
+                background: none;
+            }
+        }
+        p {
+            text-align: left;
+            margin: 0px;
+        }
+        &.footer-extended {
+            height: 55px;
         }
     }
-    #sync-site-detail {
-        height: auto;
-        padding: 0px 0 10px 0;
-        border-left: 1px solid #e5e5e5;
-        background-color: $pure-white;
-        .row {
-            margin: 0;
-        }
-        #force-site-sync-status p {
-            margin: 5px;
-            padding: 5px
-        }
-        table {
-            width: 100%;
-            thead {
-                border-top: 2px solid #e5e5e5;
-                border-bottom: 2px solid #e5e5e5;
-            }
-            th {
-                cursor: pointer;
-            }
-            th,
-            td {
-                width: 25%;
-                padding-left: 15px;
-            }
-        }
-        #force-source-sync {
-            float: right;
-            margin: 3px 5px 0 0;
-            p {
-                margin: 0 15px 15px 15px;
-                padding: 5px;
-            }
-        }
+}
+
+/* used for the workspace manager overlay */
+#modal-region {
+    .overlay {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1050;
     }
+}
+
+/* Miscellaneous */
+#mainOverlayRegion {
+    height: 100%;
 }

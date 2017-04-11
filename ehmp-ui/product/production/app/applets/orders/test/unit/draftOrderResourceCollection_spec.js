@@ -7,8 +7,9 @@ require.config({
 });
 
 define([
-    'app/resources/writeback/orders/draft/collection'
-], function(Drafts) {
+    'app/resources/writeback/orders/draft/collection',
+    'app/applets/orders/test/unit/specHelper'
+], function(Drafts, SpecHelper) {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -24,8 +25,8 @@ define([
     //     pid: '1234567890',
     //     visit: {
     //         serviceCategory: 'PSB',
-    //         visitDateTime: '201603290000',
-    //         uid: '0987654321'
+    //         dateTime: '201603290000',
+    //         locationIEN: '0987654321'
     //     }
     // });
     //
@@ -33,7 +34,7 @@ define([
 
     'use strict';
 
-    describe('Functionality related to the Orders:Draft ADK Resource Collection class', function() {
+    SpecHelper.describe('Functionality related to the Orders:Draft ADK Resource Collection class', function() {
 
         var drafts = null;
         var testFetchAttributes = null;
@@ -52,7 +53,7 @@ define([
                             anticoagulant: '',
                             availableLabTests: '480',
                             collectionDate: '02/16/2016',
-                            collectionDateTime: '3160216.0000',
+                            collectionTime: '3160216.0000',
                             collectionSample: '1',
                             collectionType: 'SP',
                             defaultCollSamp: '1',
@@ -73,14 +74,14 @@ define([
                             urgency: '9'
                         },
                         displayName: '',
-                        domain: 'order',
+                        domain: 'ehmp-order',
                         ehmpState: 'draft',
                         patientUid: '9E7A;8',
                         subDomain: 'laboratory',
                         uid: testUids[0],
                         visit: {
                             dateTime: '201602160950',
-                            location: 'urn:va:location:9E7A:195',
+                            location: '195',
                             serviceCategory: 'I'
                         }
                     }, {
@@ -92,7 +93,7 @@ define([
                             anticoagulant: '',
                             availableLabTests: '480',
                             collectionDate: '02/12/2016',
-                            collectionDateTime: '3160212.0000',
+                            collectionTime: '3160212.0000',
                             collectionSample: '1',
                             collectionType: 'LC',
                             defaultCollSamp: '1',
@@ -113,14 +114,14 @@ define([
                             urgency: '9'
                         },
                         displayName: '',
-                        domain: 'order',
+                        domain: 'ehmp-order',
                         ehmpState: 'draft',
                         patientUid: '9E7A;8',
                         subDomain: 'laboratory',
                         uid: testUids[1],
                         visit: {
                             dateTime: '201602122140',
-                            location: 'urn:va:location:9E7A:195',
+                            location: '195',
                             serviceCategory: 'I'
                         }
                     }
@@ -132,7 +133,7 @@ define([
             contentType: 'application/json',
             type: 'POST',
             data: {
-                domain: 'order',
+                domain: 'ehmp-order',
                 ehmpState: 'draft',
                 patientUid: '1234567890'
             }
@@ -142,7 +143,7 @@ define([
             contentType: 'application/json',
             type: 'POST',
             data: {
-                domain: 'order',
+                domain: 'ehmp-order',
                 subDomain: 'laboratory',
                 ehmpState: 'draft',
                 patientUid: '1234567890',
@@ -173,7 +174,7 @@ define([
             expect(data).toEqual(expectedSelectAllAttributes.data);
         });
 
-        xit('should properly handle selectWhere calls', function() {
+        it('should properly handle selectWhere calls', function() {
             drafts.selectWhere({
                 subDomain: 'laboratory',
                 authorUid: 'urn:va:user:9E7A:10000000271'

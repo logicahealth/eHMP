@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Progress notes titles flags [/progress-notes-titles-flags{?site}{&ien}{&fields}]
+## Progress notes titles flags [/progress-notes-titles-flags{?site}{&ien}]
 
 Returns the flags for a Progress Note Title
 
@@ -13,8 +13,6 @@ Returns the flags for a Progress Note Title
     :[site]({{{common}}}/parameters/site.md)
 
     + ien: `1354` (number, required) - The progress note title ien.
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

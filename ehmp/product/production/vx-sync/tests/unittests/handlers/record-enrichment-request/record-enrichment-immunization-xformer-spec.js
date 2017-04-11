@@ -41,7 +41,18 @@ var originalVaImmunizationRecord = {
     'performer': {
         'name': 'DOE,JOHN',
         'uid': 'urn:va:user:9E7A:1111'
-    }
+    },
+    'vis': [{
+        'visName': 'MMR INFO SHEET',
+        'editionDate': 19940801,
+        'language': 'ENGLISH',
+        'offeredDate': 19950718
+    },{
+        'visName': 'MMR INFO SHEET',
+        'editionDate': 19940827,
+        'language': 'SPANISH',
+        'offeredDate': 19950718
+    }]
 };
 var originalVaImmunizationJob = {
     record: originalVaImmunizationRecord
@@ -131,6 +142,10 @@ describe('record-enrichment-immunizaation-xformer.js', function() {
                     expect(typeof record.facilityCode).toEqual('string');
                     expect(typeof record.dosage).toEqual('string');
                     expect(typeof record.expirationDate).toEqual('string');
+                    expect(typeof record.vis[0].editionDate).toEqual('string');
+                    expect(typeof record.vis[0].offeredDate).toEqual('string');
+                    expect(typeof record.vis[1].editionDate).toEqual('string');
+                    expect(typeof record.vis[1].offeredDate).toEqual('string');
 
                     // Verify that the code was inserted.
                     //-----------------------------------

@@ -1,0 +1,32 @@
+{
+  "name": "r1-3-performance",
+  "description": "r1.3 performance chef environment",
+  "override_attributes": {
+    "rdk_config": {
+      "rdk-0": {
+        "aws_instance_type": "c3.8xlarge",
+        "write_back": { "processes": 2 },
+        "fetch_server": { "processes": 2 },
+        "pick_list": { "processes": 2 }
+      },
+      "rdk-1": {
+        "aws_instance_type": "c3.8xlarge",
+        "write_back": { "processes": 2 },
+        "fetch_server": { "processes": 2 },
+        "pick_list": { "processes": 2 }
+      }
+    },
+    "ehmp_provision": {
+      "vxsync": { "aws": { "instance_type": "c3.8xlarge" }},
+      "jds": { "aws": { "instance_type": "c3.8xlarge" }},
+      "pjds": { "aws": { "instance_type": "m3.2xlarge" }},
+      "solr": { "aws": { "instance_type": "c3.4xlarge" }},
+      "vista-kodak": { "aws": { "instance_type": "m3.large" }},
+      "vista-panorama": { "aws": { "instance_type": "m3.large" }}
+    },
+    "ehmp-ui_provision": {
+      "ehmp-ui": { "aws": { "instance_type": "m3.xlarge" }},
+      "ehmp-balancer": { "aws": { "instance_type": "m3.xlarge" }}
+    }
+  }
+}

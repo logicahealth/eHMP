@@ -3,9 +3,9 @@ Feature: F144 - eHMP viewer GUI - Documents
 
 # This test replaces the Documents Display test in ehmp-ui
 @F144_Documents_Display1 @US1914 @DE2307
-Scenario: Verify Documents will display all Consult, Imaging, Surgery, Advance Directive and Procedure for a given patient
-Given a patient with pid "9E7A;100012" has been synced through the RDK API
-When the client requests the DOCUMENTS for the patient "9E7A;100012" with starting at "19350407"
+Scenario: Verify Documents will display all Consult, Imaging, Surgery, Advance Directive, Procedure and Crisis Note for a given patient
+Given a patient with pid "9E7A;229" has been synced through the RDK API
+When the client requests the DOCUMENTS for the patient "9E7A;229" with starting at "19350407"
 Then a successful response is returned
 #And the VPR results for Documents contain
 And the VPR results contain
@@ -16,20 +16,20 @@ And the VPR results contain
       | name            | LAPARASCOPY           |
 And the VPR results contain
       | field               | value                                 |
-      | dateTime            | 200704050730                          |
-      | facilityName        | CAMP MASTER                           |
+      | dateTime            | 20061208073000                          |
+      | facilityName        | CAMP MASTER                        |
       | kind                | Surgery                               |
       | typeName            | LEFT INGUINAL HERNIA REPAIR WITH MESH |
       | summary             | LEFT INGUINAL HERNIA REPAIR WITH MESH |
       | providerDisplayName | Provider,One                          |
 And the VPR results contain
       | field               | value                     |
-      | dateTime            | 20040402023152            |
+      | dateTime            | 19970515            		|
       | facilityName        | CAMP MASTER               |
       | kind                | Consult                   |
-      | typeName            | AUDIOLOGY OUTPATIENT Cons |
-      | summary		    | AUDIOLOGY OUTPATIENT Cons |
-      | providerDisplayName | Pathology,One             |
+      | typeName            | CARDIOLOGY Cons 			|
+      | summary		    	| CARDIOLOGY Cons			|
+      | place				| Consultant's choice		|
 And the VPR results contain
       | field               | value                                  |
       | dateTime            | 199702261300                           |
@@ -40,36 +40,29 @@ And the VPR results contain
       | providerDisplayName | Wardclerk,Sixtythree                   |
 And the VPR results contain
       | field               | value                 |
-      | referenceDateTime   | 200403311609          |
-      | facilityName        | CAMP MASTER           |
+      | referenceDateTime   | 20000404105506        |
+      | facilityName        | ABILENE (CAA)         |
       | kind                | Progress Note         |
-      | summary             | GENERAL MEDICINE NOTE |
-      | authorDisplayName   | Labtech,Special       |
+      | summary             | CARDIOLOGY ATTENDING CONSULT |
+      | authorDisplayName   | Wardclerk,Sixtyeight  |
 And the VPR results contain
       | field               | value                 |
-      | referenceDateTime   | 20040325192854        |
+      | referenceDateTime   | 20040325191633        |
       | facilityName        | ABILENE (CAA)         |
       | kind                | Discharge Summary     |
       | documentTypeName    | Discharge Summary     |
-      | authorDisplayName   | Vehu,Ninetynine       |
+      | authorDisplayName   | Vehu,Four       		|
 And the VPR results contain
       | field               | value                 |
-      | referenceDateTime   | 200705170933          |
-      | facilityName        | CAMP MASTER           |
+      | referenceDateTime   | 20070516090400        |
+      | facilityName        | CAMP BEE              |
       | kind                | Advance Directive     |
       | documentTypeName    | Advance Directive     |
       | summary             | ADVANCE DIRECTIVE COMPLETED |
       | authorDisplayName   | Labtech,Fiftynine     |
-
-@F144_Documents_Display2 @US1914 @DE2307
-Scenario: Verify Documents will display all Crisis Notes for a given patient
-Given a patient with pid "9E7A;100012" has been synced through the RDK API
-When the client requests the DOCUMENTS for the patient "9E7A;231" with starting at "19941130"
-Then a successful response is returned
-#And the VPR results for Documents contain
 And the VPR results contain
       | field                 | value             |
-      | referenceDateTime     | 20000521115817    |
+      | referenceDateTime     | 20000521094900    |
       | facilityName          | ABILENE (CAA)     |
       | kind                  | Crisis Note       |
       | summary               | CRISIS NOTE       |
@@ -77,17 +70,17 @@ And the VPR results contain
 
 @F144_Documents_Display3 @US1914 @DE2307
 Scenario: Verify Documents will display all Laboratory Report for a given patient
-Given a patient with pid "9E7A;17" has been synced through the RDK API
-When the client requests the DOCUMENTS for the patient "9E7A;17" with starting at "19950306"
+Given a patient with pid "9E7A;100022" has been synced through the RDK API
+When the client requests the DOCUMENTS for the patient "9E7A;100022" with starting at "19950306"
 Then a successful response is returned
 #And the VPR results for Documents contain
 And the VPR results contain
       | field                 | value                        |
-      | referenceDateTime     | 199503061452                 |
-      | facilityName          | TROY                         |
+      | referenceDateTime     | 20000804000000               |
+      | facilityName          | DOD                          |
       | kind                  | Laboratory Report            |
-      | summary               | LR SURGICAL PATHOLOGY REPORT |
-      | authorDisplayName     | Provider,Sixteen             |
+      | summary               | PATHOLOGY REPORT			 |
+      | localTitle		      | PATHOLOGY REPORT             |
 
 @F144_Documents_Display4 @US2592 @DE2307
 Scenario: Verify Documents will display all Administrative Note from DoD for a given patient
@@ -104,22 +97,22 @@ And the VPR results contain
       | authorDisplayName     | LANF, THREE          |
 
 @F144_Documents_Custom_Date_Range @US2594
-Scenario: Verify Documents will display all date between specific date range for a given patient
-Given a patient with pid "9E7A;65" has been synced through the RDK API
-When the client requests the DOCUMENTS for the patient "9E7A;65" with GDF set to custom date range between "19980101" and "20151010235959"
+Scenario: Verify Documents will display all data between specific date range for a given patient
+Given a patient with pid "9E7A;100022" has been synced through the RDK API
+When the client requests the DOCUMENTS for the patient "9E7A;100022" with GDF set to custom date range between "20140101" and "20151010235959"
 Then a successful response is returned
 #And the VPR results for Documents contain
 And the VPR results contain
       | field                 | value                         |
-      | referenceDateTime     | 199904211210                  |
+      | referenceDateTime     | 20140127180000                  |
       | facilityName          | CAMP MASTER                   |
       | kind                  | Progress Note                 |
       | summary               | ASI-ADDICTION SEVERITY INDEX  |
-      | authorDisplayName     | Radtech,Twenty                |
+      | authorDisplayName     | Programmer,One                |
 And the VPR results contain
       | field                 | value                                                 |
-      | referenceDateTime     | 19980427110542                                        |
-      | facilityName          | CAMP MASTER                                           |
+      | referenceDateTime     | 20140127180900                                          |
+      | facilityName          | CAMP MASTER                                        	  |
       | kind                  | Progress Note                                         |
-      | summary               | RMS-OCCUPATIONAL THERAPY <OCCUPATIONAL THERAPY NOTE>  |
-      | authorDisplayName     | Provider,Prf                                          |
+      | summary               | CONTAINS NURSING ADMISSION ASSESSMENT				  |
+      | authorDisplayName     | Programmer,One                                        |

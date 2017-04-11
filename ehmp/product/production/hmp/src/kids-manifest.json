@@ -4,10 +4,11 @@
     "zrpcdie.kid"
   ],
   "vista_patches": [
+    "HMP_PREREQ_BUNDLE_2-0_V2-9.KID",
+    "PSB3_0P94T2.KID",
     "HMP1_S60.KID"
   ],
   "vista-panorama_patches": [
-    "HMP_PREREQ_BUNDLE_2-0_V2-9.KID",
     "OR_3-0_421.KID",
     "IMMUN_1_3.KID",
     "HMP_2-0_V6-0-minibuild.KID",
@@ -28,18 +29,27 @@
     "HMP_2-0_V6-0-MBS-US11249.KID",
     "HMP_MBS_US12195.KID",
     "HMP_UI_CONTEXT.KID",
+    "HMP_SYNCHRONIZATION_CONTEXT.KID",
     "ZZ_US11894-10045_2016-01-11.KID",
     "ZZ_DE3504_2016-01-20.KID",
     "TMP_GMV.KID",
     "HMP_PB_6.KID",
     "ZZDE3584.KID",
-    "ZZDE3731-DE3734.KID"
+    "ZZDE3731-DE3734.KID",
+    "MD1-0_46.KID",
+    "DG_5-3_921.KID",
+    "HMP_2.0_15658.KID"
   ],
   "vista-panorama_test_data": [
+    "ZZPANORAMA_1_1.KID",
+    "ZZPANORAMA-MASK_1_1.KID",
     "HMP_PATIENT_TEST_DATA.KID",
     "ZZMOVDT.KID",
     "ZZUS9184-1.KID",
-    "ZZUS12085.KID"
+    "ZZUS12085.KID",
+    "ZZUS13708-PANORAMA.KID",
+    "ZZUS15337.KID",
+    "ZZUS15198-PANORAMA.KID"
   ],
   "vista-kodak_patches": [
     "HMP_PREREQ_BUNDLE_2-0_V2-9.KID",
@@ -63,18 +73,27 @@
     "HMP_2-0_V6-0-MBS-US11249.KID",
     "HMP_MBS_US12195.KID",
     "HMP_UI_CONTEXT.KID",
+    "HMP_SYNCHRONIZATION_CONTEXT.KID",
     "ZZ_US11894-10045_2016-01-11.KID",
     "ZZ_DE3504_2016-01-20.KID",
     "TMP_GMV.KID",
     "HMP_PB_6.KID",
     "ZZDE3584.KID",
-    "ZZDE3731-DE3734.KID"
+    "ZZDE3731-DE3734.KID",
+    "MD1-0_46.KID",
+   "DG_5-3_921.KID",
+    "HMP_2.0_15658.KID"
   ],
   "vista-kodak_test_data": [
+    "ZZKODAK_1_1.KID",
+    "ZZKODAK-MASK_1_1.KID",
     "HMP_PATIENT_TEST_DATA_KODAK.KID",
     "ZZMOVDT.KID",
     "ZZUS9184-2.KID",
-    "ZZUS12085.KID"
+    "ZZUS12085.KID",
+    "ZZUS13708-KODAK.KID",
+    "ZZUS15337.KID",
+    "ZZUS15198-KODAK.KID"
   ],
   "vista-polaroid_patches": [
     "HMP_PREREQ_BUNDLE_2-0_V2-9.KID",
@@ -103,7 +122,10 @@
     "TMP_GMV.KID",
     "HMP_PB_6.KID",
     "ZZDE3584.KID",
-    "ZZDE3731-DE3734.KID"
+    "ZZDE3731-DE3734.KID",
+    "MD1-0_46.KID",
+    "HMP-DE4778.KID",
+    "DG_5-3_921.KID"
   ],
   "test_data_patches": [
     "ZZECTL.KID"

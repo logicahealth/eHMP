@@ -1,8 +1,9 @@
 define([
     "api/ResourceService",
+    'api/PatientRecordService',
     "api/Messaging",
     'api/UserDefinedScreens'
-], function(ResourceService, Messaging, UserDefinedScreens) {
+], function(ResourceService, PatientRecordService, Messaging, UserDefinedScreens) {
     'use strict';
 
     var TileSortManager = {};
@@ -71,7 +72,7 @@ define([
 
     };
 
-    TileSortManager.reorderRows = function(reorderObj, collection, sortId, sortKey, unsortedModels, successCallback) {
+    TileSortManager.reorderRows = function(reorderObj, collection, sortId, sortKey, successCallback) {
         if(_.isUndefined(sortKey)){
             sortKey = 'uid';
         }
@@ -211,7 +212,7 @@ define([
             }
         };
 
-        ResourceService.patientRecordService.fetchCollection(fetchOptions);
+        PatientRecordService.fetchCollection(fetchOptions);
 
     };
 

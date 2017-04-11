@@ -1,9 +1,10 @@
-@UserPermissionSets @F457 @DE2244
+@UserPermissionSets @F457 @DE2244 @DE4201
 
 Feature: F457 - View and update user permission sets
 
 @F457_Get_Permission_Sets_List
 Scenario: View array of permission sets
+When the client requests authentication with accessCode "vk1234" and verifyCode "vk1234!!" and site "9E7A" and contentType "application/json"
 When the client requests to view all user permission sets
 Then a successful response is returned
 And the permission sets results contain more than 0 records

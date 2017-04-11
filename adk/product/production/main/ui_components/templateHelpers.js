@@ -48,10 +48,10 @@ define([
 
             var htmlString = '<div class="btn-group">';
 
-            var mainButtonClasses = ['btn-primary', 'btn-sm'];
+            var mainButtonClasses = ['btn-divider', 'btn-primary', 'btn-sm'];
             var mainButton = Handlebars.helpers['ui-button'].apply(this, [displayText, {
                 hash: {
-                    classes: options.split ? mainButtonClasses.concat('btn-divider') : mainButtonClasses,
+                    classes: options.split ? mainButtonClasses.concat('right-padding-xs') : mainButtonClasses,
                     id: options.id,
                     icon: options.icon,
                     type: options.type,
@@ -60,7 +60,7 @@ define([
                 }
             }]);
 
-            var dropdownToggleClasses = ['dropdown-toggle', 'btn-sm'];
+            var dropdownToggleClasses = ['dropdown-toggle', 'dropup', 'btn-sm', 'btn-icon'];
             var dropdownToggle = Handlebars.helpers['ui-button'].apply(this, [options.split ? '' : displayText, {
                 hash: {
                     classes: options.icon && _.isEmpty(displayText) ? dropdownToggleClasses.concat('btn-icon') : (options.split ? dropdownToggleClasses.concat('btn-primary') : dropdownToggleClasses.concat(['btn-primary', 'btn-caret'])),

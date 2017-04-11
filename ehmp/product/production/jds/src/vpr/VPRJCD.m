@@ -91,7 +91,7 @@ FLDSPEC(FLD,SPEC,TYPE) ; convert field assignment descriptor to .SPEC
  N I,X,ISARY,ARYCNT,OREF,NODE,COLLECT,TMPLT
  S ARYCNT=0,COLLECT=""
  S OREF=$S(TYPE="tgt":"TARGET(",1:"OBJECT(")
- I TYPE="vpr" S TYPE="src",OREF="^VPRPT(PID,KEY,"
+ I TYPE="vpr" S TYPE="src",OREF="^VPRPT(JPID,PID,KEY,"
  I TYPE="data" S TYPE="src",OREF="^VPRJD(KEY,"
  ; Add support for Generic Data Store (GDS)
  ; All Generic Data stores are listed in ^VPRCONFIG

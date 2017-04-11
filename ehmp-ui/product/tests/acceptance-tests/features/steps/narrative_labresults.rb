@@ -15,14 +15,13 @@ class NarrativeLabResults < AllApplets
     # NarrativeLabResults Applet buttons
     add_applet_buttons appletid_css  
     add_applet_title appletid_css
+    add_toolbar_buttons
     
     # HEADERS
     add_verify(CucumberLabel.new("Date"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-observed]"))
-    add_verify(CucumberLabel.new("Lab Test"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-typeName]"))
-    add_verify(CucumberLabel.new("Flag"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-flag]"))
-    add_verify(CucumberLabel.new("Result"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-result]"))
-    add_verify(CucumberLabel.new("Unit"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-units]"))
-    add_verify(CucumberLabel.new("Ref Range"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-referenceRange]"))
+    add_verify(CucumberLabel.new("Description"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-description]"))
+    add_verify(CucumberLabel.new("Type"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-type]"))
+    add_verify(CucumberLabel.new("Author or Verifier"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-author]"))
     add_verify(CucumberLabel.new("Facility"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-facilityMoniker]"))
 
     row_count = AccessHtmlElement.new(:css, "#{appletid_css} table tr.selectable")
@@ -31,7 +30,7 @@ class NarrativeLabResults < AllApplets
 
   def applet_loaded?
     return true if am_i_visible? 'Empty Record'
-    return TestSupport.driver.find_elements(:css, "##{@table_id} tbody tr.selectable").length > 0
+    return TestSupport.driver.find_elements(:css, "[data-appletid=narrative_lab_results_grid] tbody tr.selectable").length > 0
   rescue => e 
     # p e
     false
@@ -83,6 +82,12 @@ When(/^the user views the first narrative lab result in a modal$/) do
   narrative_labresults = NarrativeLabResults.instance
   driver = TestSupport.driver
   expect(narrative_labresults.perform_action('First Row')).to eq(true)
-  driver.find_element(:id, "info-button-sidekick-detailView").click
+  expect(narrative_labresults.perform_action('Detail View Button')).to eq(true)
   modal_open = @uc.wait_until_element_present("Modal", 15)
+end
+
+When(/^the user expands\/maximizes the Narrative Lab Results applet$/) do
+  # Control - Applet - Expand View
+  narrative_labresults = NarrativeLabResults.instance
+  expect(narrative_labresults.perform_action('Control - Applet - Expand View')).to eq(true)
 end

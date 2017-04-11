@@ -1,0 +1,110 @@
+{
+    "data": [{
+            "categories": ["419772000"],
+            "context": {
+                "location": {
+                    "codeSystem": null,
+                    "entityType": "Location",
+                    "id": null,
+                    "name": null,
+                    "type": null
+                },
+                "specialty": {
+                    "codeSystem": null,
+                    "entityType": "Specialty",
+                    "id": null,
+                    "name": null,
+                    "type": null
+                },
+                "subject": {
+                    "codeSystem": null,
+                    "entityType": "Subject",
+                    "id": "9E7A;100184",
+                    "name": "",
+                    "type": null
+                },
+                "user": {
+                    "codeSystem": "VA:DUZ",
+                    "entityType": "User",
+                    "id": "9E7A:10000000237",
+                    "name": "USER PANORAMA",
+                    "type": "provider"
+                }
+            },
+            "duplicateCheckKey": {
+                "checkSum": "",
+                "subject": {
+                    "codeSystem": null,
+                    "entityType": "Subject",
+                    "id": "9E7A;100184",
+                    "name": "",
+                    "type": null
+                },
+                "type": "advice"
+            },
+            "expirationDate": null,
+            "generationDate": 1435795024215,
+            "id": "55947e50ae04fe531920e8e5",
+            "invocationInfo": {
+                "callId": "9d3fa964-7c64-4da9-95cb-abffa8b2656f",
+                "generatedBy": "OpenCDS",
+                "targetInfo": {
+                    "intentsSet": ["HTN"],
+                    "mode": "Normal",
+                    "perceivedExecutionTime": null,
+                    "supplementalMappings": null,
+                    "type": "Background"
+                }
+            },
+            "payload": [{
+                    "data": {
+                        "resourceType": "CommunicationRequest",
+                        "category": {
+                            "coding": [{
+                                    "system": "SNOMED",
+                                    "code": "419772000",
+                                    "display": "Family Medicine"
+                                }],
+                            "text": "Family Medicine"
+                        },
+                        "payload": [{
+                                "contentString": "The most recent recorded BP was elevated. Satisfying this reminder requires addressing medication issues and/or education issues. The patient's last recorded BP is 146/92 mmHg and their BMI is 24.96 kg/m^2."
+                            }],
+                        "reason": [{
+                                "coding": [{
+                                        "system": "SNOMED",
+                                        "code": "419772000",
+                                        "display": "Hypertension Screening NCR."
+                                    }]
+                            }],
+                        "priority": {
+                            "coding": [{
+                                    "system": "CDS-System",
+                                    "code": "50",
+                                    "display": "Routine"
+                                }]
+                        }
+                    },
+                    "type": "FHIR-CommunicationRequest"
+                }, {
+                    "data": {
+                        "details": {
+                            "detail": "The most recent recorded BP was elevated. Satisfying this reminder requires addressing medication issues and/or education issues. The patient's last recorded BP is 146/92 mmHg and their BMI is 24.96 kg/m^2.",
+                            "provenance": "Provenance detail was not provided"
+                        },
+                        "doneDate": null,
+                        "dueDate": null,
+                        "generatedBy": "OpenCDS",
+                        "id": "9d3fa964-7c64-4da9-95cb-abffa8b2656f-2",
+                        "pid": "9E7A;100184",
+                        "priority": 50,
+                        "provider": "9E7A:10000000237",
+                        "title": "Hypertension Screening NCR.",
+                        "type": "advice"
+                    },
+                    "type": "advice"
+                }],
+            "priority": 50,
+            "type": "advice"
+        }]
+}

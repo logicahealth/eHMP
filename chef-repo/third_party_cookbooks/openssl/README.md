@@ -19,7 +19,7 @@ set_unless[:my_password] = secure_password
 
 License & Authors
 -----------------
-- Author::     ua Timberman (<joshua@opscode.com>)
+- Author:: Joshua Timberman (<joshua@opscode.com>)
 
 ```text
 Copyright:: 2009-2011, Opscode, Inc

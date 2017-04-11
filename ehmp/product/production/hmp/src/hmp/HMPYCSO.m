@@ -1,8 +1,11 @@
-HMPYCSO ;SLC/MJK -- Convert system objects utility ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 14
+HMPYCSO ;SLC/MJK,ASMR/RRB - Convert system objects utility ;8/2/11  15:29
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; *S68-JCH* This routine introduced with S68
-CONV(HMPDATA,HMPCNTS) ; -- execute conversion over a syetem object type
+ Q
+ ;
+CONV(HMPDATA,HMPCNTS) ; -- execute conversion over a system object type
  ; input: HMPDATA("type") := object type
  ;                             - [ OPD - operational (file #800000.11) | PT - HMP (file #800000.1) / default ]
  ;
@@ -17,11 +20,11 @@ CONV(HMPDATA,HMPCNTS) ; -- execute conversion over a syetem object type
  ;                                   - 1 : update converted object
  ;                                   - 0 : stop processing this object; no conversion needed
  ;
- ;         HMPCNTS : returns array of counts related to converison [optional]
+ ;         HMPCNTS : returns array of counts related to conversion [optional]
  ;                    - closed array reference 
  ;                    - Counts:
  ;                        - HMPTALLY("converted") -> conversion performed
- ;                                  ("errored")   -> errored at somep point in process
+ ;                                  ("errored")   -> errored at some point in process
  ;                                  ("passed")    -> no conversion needed
  ;                                  ("reviewed")  -> count of objects reviewed for conversion
  ;
@@ -120,9 +123,6 @@ TASKCONV ; -- convert patient task objects
  ;               - converts 'pid' property to SYSID;DFN (ex. F484;237)
  ;               - removes 'patientId' property if it exists
  ;
- ;ZBreak UPDATE+1^HMPYCSO:"N":: "W !!,""Update: "" ZW @JSON" 
- ;ZBreak TASKCB+1^HMPYCSO:"N":: "K HMPB4 M HMPB4=@OBJREF"
- ;ZBreak TASKCB+17^HMPYCSO:"N":: "I HMPOK W !!,""Before:"",! ZW HMPB4 W !,""After:"",! ZW @OBJREF"
  N HMPAMS,HMPSTATS
  S HMPAMS("type")="PT"
  S HMPAMS("collection")="task"
@@ -133,13 +133,10 @@ TASKCONV ; -- convert patient task objects
  D MES^XPDUTL("    Passed: "_$J($G(HMPSTATS("passed")),8))
  D MES^XPDUTL(" Converted: "_$J($G(HMPSTATS("converted")),8))
  D MES^XPDUTL("   Errored: "_$J($G(HMPSTATS("errored")),8))
- ;ZBreak --UPDATE+1^HMPYCSO
- ;ZBreak --TASKCB+1^HMPYCSO
- ;ZBreak --TASKCB+17^HMPYCSO
  K HMPB4
  Q
  ;
-TASKCB(OBJREF,IEN) ; -- callback that converts a 'task' object's if neccessary
+TASKCB(OBJREF,IEN) ; -- callback that converts a 'task' object's if necessary
  ;                       - converts 'pid' property to SYSID;DFN (ex. F484;237)
  ;                       - removes 'patientId' property if it exists
  ;

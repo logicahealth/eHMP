@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Immunization manufacturer [/immunization-manufacturer{?site}{&filter}{&date}{&fields}]
+## Immunization manufacturer [/immunization-manufacturer{?site}{&filter}{&date}]
 
 Returns information from the IMM MANUFACTURER file (#9999999.04).
 
@@ -15,8 +15,6 @@ PXVIMM IMM MAN
     :[filter]({{{common}}}/parameters/immunization-filter.md)
 
     :[date]({{{common}}}/parameters/date.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

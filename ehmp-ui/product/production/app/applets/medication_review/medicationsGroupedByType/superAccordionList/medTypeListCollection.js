@@ -22,7 +22,7 @@ define([
         parse: function(incomingCollection, options) {
             var groupArrays;
             var self = this;
-            if (this.earliestStartAsEpoch === Number.POSITIVE_INFINITY && ADK.SessionStorage.getModel('globalDate').get('selectedId') === 'all-range-global') {
+            if (this.earliestStartAsEpoch === Number.POSITIVE_INFINITY && ADK.SessionStorage.getModel('globalDate').get('selectedId') === 'allRangeGlobal') {
                 groupArrays = incomingCollection.groupBy(function(medModel) {
                     var overallStart = medModel.getOverallStartAsMoment();
                     if (overallStart.isValid() && overallStart.valueOf() < self.earliestStartAsEpoch) {

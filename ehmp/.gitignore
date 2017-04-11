@@ -64,6 +64,8 @@ Thumbs.db
 /product/build
 /product/out
 
+/product/environment/
+
 # chef/vagrant generated files #
 ################################
 /product/.metadata

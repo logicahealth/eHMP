@@ -86,30 +86,9 @@ function buildBundle(results, req, total) {
     for (var i = 0; i < results.length; i++) {
         entry.push(new fhirResource.Entry(results[i]));
     }
-    return (new fhirResource.Bundle2(link, entry, total));
+    return (new fhirResource.Bundle(link, entry, total));
 }
 
-//function convertToFhir(result, req) {
-//    var link = 'http://' + req._remoteAddress + req.url;
-//
-//    var fhirResult = {};
-//    fhirResult.resourceType = 'Bundle';
-//    fhirResult.type = 'collection';
-//    fhirResult.id = helpers.generateUUID(); //'urn:uuid:' + helpers.generateUUID(); --> this old pattern violates DSTU2 "id" type
-//    fhirResult.link = [{
-//        'rel': 'self',
-//        'href': link
-//    }];
-//
-//    fhirResult.entry = [];
-//
-//    var items = result.data.items;
-//    for (var i = 0; i < items.length; i++) {
-//        createItem(items[i], fhirResult.entry, req._remoteAddress, fhirResult.updated);
-//    }
-//
-//    fhirResult.total = fhirResult.entry.length;
-//    return fhirResult;
 function convertToFhir(items, req) {
     var fhirItems = [];
     for (var i = 0; i < items.length; i++) {
@@ -131,10 +110,12 @@ function createItem(jdsItem, pid) {
     fhirItem.resource = {};
     fhirItem.resource.resourceType = 'Procedure';
 
-    fhirItem.resource.text = {
-        'status': 'generated',
-        'div': '<div>' + jdsItem.summary + '</div>'
-    };
+    if (jdsItem.summary) {
+        fhirItem.resource.text = {
+            'status': 'generated',
+            'div': '<div>' + _.escape(jdsItem.summary) + '</div>'
+        };
+    }
 
     var orgUid = helpers.generateUUID();
     fhirItem.resource.contained = [{
@@ -205,7 +186,7 @@ function createItem(jdsItem, pid) {
     //---------------------------------------------------------------------
     // performed[x]: Date/Period the procedure was performed. One of these 2:
     if (jdsItem.entered !== undefined) {
-        fhirItem.resource.performedDateTime = fhirUtils.convertToFhirDateTime(jdsItem.entered);
+        fhirItem.resource.performedDateTime = fhirUtils.convertToFhirDateTime(jdsItem.entered, fhirUtils.getSiteHash(jdsItem.uid));
     }
 
     //---------------------------------------------------------------------

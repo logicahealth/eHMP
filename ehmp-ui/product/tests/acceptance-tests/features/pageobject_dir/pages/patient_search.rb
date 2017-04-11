@@ -8,7 +8,7 @@ class PobPatientSearch < SitePrism::Page
   element :ctn_fluid, "div[class='container-fluid']"
 
   # *****************  All_Logo_Elements  ******************* #
-  element :img_patient, "[src^='data:image/jpeg']"
+  element :img_patient, "#patient-image-container .patient-image"
   element :img_eight_patient, "#patient-image-container [src$='eRPUkf/2Q==']"
 
   # *****************  All_Field_Elements  ******************* #
@@ -24,11 +24,14 @@ class PobPatientSearch < SitePrism::Page
   element :fld_global_Search_dob, "#globalSearchDob"
   element :fld_confirm_header, "div[id='confirmSection'] .patientName"
   element :fld_patient_search_confirmation_info, "div[class='fixedHeightZone']"
+  element :fld_nav_bar, "#header-region .navbar"
 
   element :fld_sensitive_patient_ssn, "#patient-search-main .ssn"
   element :fld_sensitive_patient_dob, "#patient-search-main .dob"
 
   elements :fld_patient_records, "a.row-layout"
+  elements :fld_clinics_list_items, "#clinics-location-list-results span"
+  element :chk_previous_workspace, "#previousWorkspace"
 
   # *****************  All_Button_Elements  ******************* #
   element :btn_search, "#globalSearchButton"
@@ -40,12 +43,16 @@ class PobPatientSearch < SitePrism::Page
   element :btn_nationwide, "li[id='global'] a"
   element :btn_global_Search, "#globalSearchButton"
   element :btn_confirmFlagged, "button[id='confirmFlaggedPatinetButton']"
+  element :btn_patient_search, "#patientSearchButton"
+  element :btn_my_workspace, "#current-staff-nav-header-tab"
+  element :btn_my_notifications, "#myNotificationsButton"
+  element :btn_my_site, "#mySite"
   
    # *****************  All_Error_Text_Elements  ******************* #
   element :err_message1, "p[class='error-message padding']"
 
   # *****************  All_Drop_down_Elements  ******************* #
-  element :ddl_ehmp_current_user, "a[id='eHMP-CurrentUser']"
+  element :ddl_ehmp_current_user, "#eHMPCurrentUser"
 
   # *****************  All_Table_Elements  ******************* #
   element :tbl_patient_info, "div[class='patientInfo row']"
@@ -55,4 +62,17 @@ class PobPatientSearch < SitePrism::Page
   element :dlg_wand_panel, "div[id='ackMessagePanel_WANDERER']"
 
   # *****************  Local_Methods  *************#
+
+  def screen_loaded?
+    return false unless has_btn_patient_search?
+    return false unless has_btn_my_workspace?
+    return false unless has_btn_my_notifications?
+    return false unless has_fld_patient_search?
+    return false unless has_btn_my_site?
+    return false unless btn_my_site['class'].include? 'active'
+    true
+  rescue => e
+    p "Screen still loading: #{e}"
+    return false
+  end
 end

@@ -1,0 +1,73 @@
+#!/bin/bash
+
+usage() {
+    echo "curl-rdk: send authenticated requests to RDK-based servers"
+    echo "Usage: curl-rdk [-s 9E7A] [-u pu1234] [-p 'pu1234!!'] <url> [CURL-ARGS...]"
+    exit 1
+}
+
+TOKEN_FILE=~/jwts
+OTHER_ARGUMENTS=()
+
+parse_arguments() {
+    while [[ $# -gt 0 ]]; do
+        key="$1"
+        case $key in
+        -s|--site)
+            SITE="$2"
+            shift
+            ;;
+        -u|--accessCode)
+            ACCESS_CODE="$2"
+            shift
+            ;;
+        -p|--verifyCode)
+            VERIFY_CODE="$2"
+            shift
+            ;;
+        http*)
+            URL="$1"
+            HOST="$(echo "$URL" | sed 's|\(.*//[^/]*\).*|\1|')"
+            ;;
+        *)
+            OTHER_ARGUMENTS+=("$1")
+            ;;
+        esac
+        shift
+    done
+    SITE="${SITE:-9E7A}"
+    ACCESS_CODE="${ACCESS_CODE:-pu1234}"
+    VERIFY_CODE="${VERIFY_CODE:-pu1234!!}"
+    [[ -z "$URL" ]] && usage
+}
+
+parse_arguments "$@"
+
+get_session() {
+    [[ -f "$TOKEN_FILE" ]] && eval "$( awk -F'\t' -v host="$HOST"  -v site="$SITE"  -v access="$ACCESS_CODE"  -v verify="$VERIFY_CODE"  '$1 ~ host && $2 ~ site && $3 ~ access && $4 ~ verify { printf "JWT=%s COOKIE=%s EXPIRES=%s", $5, $6, $7 }' "$TOKEN_FILE")"
+}
+get_session
+
+acquire_tokens() {
+    auth_url="$HOST/resource/authentication"
+    auth_response=$(curl -vs -X POST -k "$auth_url" -H 'Content-Type: application/json' -d '{"site":"'"$SITE"'","accessCode":"'"$ACCESS_CODE"'","verifyCode":"'"$VERIFY_CODE"'"}' &> /dev/stdout)
+    EXPIRES=$(gdate -d "$(echo -n "$auth_response" | grep '< set-cookie' | sed 's/.*Expires=\([^;]*\).*/\1/')" +%s)
+    COOKIE=$(echo -n "$auth_response" | grep '< set-cookie' | sed 's/.* \(.*.sid=[^;]*\).*/\1/')
+    JWT=$(echo -n "$auth_response" | grep '< X-Set-JWT' | cut -c 14- | sed 's/[[:space:]]*$//')
+    save_tokens
+}
+
+save_tokens() {
+    [[ -f "$TOKEN_FILE" ]] && grep -v "$HOST\t$SITE\t$ACCESS_CODE\t$VERIFY_CODE" "$TOKEN_FILE" > "${TOKEN_FILE}.new"
+    echo -e "$HOST\t$SITE\t$ACCESS_CODE\t$VERIFY_CODE\t$JWT\t$COOKIE\t$EXPIRES" >> "${TOKEN_FILE}.new"
+    mv "${TOKEN_FILE}.new" "$TOKEN_FILE"
+}
+
+tokens_ready() {
+    [[ $(( ${EXPIRES:-0} - $(date +%s) )) -ge 60 ]]
+}
+
+tokens_ready || acquire_tokens
+
+curl "${OTHER_ARGUMENTS[@]/#/}" --cookie "$COOKIE" -H "Authorization: Bearer $JWT" "$URL"
+echo

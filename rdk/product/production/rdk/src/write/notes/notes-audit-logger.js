@@ -21,14 +21,38 @@ module.exports.create = function(writebackContext, callback) {
     return setImmediate(callback, error);
 };
 
+module.exports.createAddendum = function(writebackContext, callback) {
+    setAuditInfo(writebackContext, 'ADD_ADDENDUM');
+    var error = null;
+    return setImmediate(callback, error);
+};
+
 module.exports.update = function(writebackContext, callback) {
     setAuditInfo(writebackContext, 'UPDATE_NOTE');
     var error = null;
     return setImmediate(callback, error);
 };
 
+module.exports.deleteAddendum = function(writebackContext, callback) {
+    setAuditInfo(writebackContext, 'DELETE_UNSIGNED_NOTE_ADDENDUM');
+    var error = null;
+    return setImmediate(callback, error);
+};
+
+module.exports.updateAddendum = function(writebackContext, callback) {
+    setAuditInfo(writebackContext, 'UPDATE_ADDENDUM');
+    var error = null;
+    return setImmediate(callback, error);
+};
+
 module.exports.sign = function(writebackContext, callback) {
     setAuditInfo(writebackContext, 'SIGN_NOTE');
+    var error = null;
+    return setImmediate(callback, error);
+};
+
+module.exports.signAddendum = function(writebackContext, callback) {
+    setAuditInfo(writebackContext, 'SIGN_ADDENDUM');
     var error = null;
     return setImmediate(callback, error);
 };

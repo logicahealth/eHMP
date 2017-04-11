@@ -1,14 +1,14 @@
 'use strict';
 
-var pjds = require('./orders-common-save-draft-write');
+var saveDraftOrder = require('./orders-common-save-draft-write');
 
-var updateDraft = {
+var createDraft = {
     model: {
-        uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
+        uid: 'urn:va:ehmp-order:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
         patientUid: '9E7A;3',
         ehmpState: 'draft',
         authorUid: 'urn:va:user:9E7A:123',
-        domain: 'ehmpOrder',
+        domain: 'ehmp-order',
         subDomain: 'laboratory',
         visit: {
             location: 'urn:va:location:9E7A:1',
@@ -24,11 +24,73 @@ var updateDraft = {
         }
     },
     logger: sinon.stub(require('bunyan').createLogger({
-        name: 'lab-save-draft'
+        name: 'orders-common-save-draft-write'
     })),
     appConfig: {
         generalPurposeJdsServer: {
-            baseUrl: 'http://IP             /resource/write-health-data/patient/:pid/orders/saveLabObject'
+            baseUrl: 'http://IP_ADDRESS:PORT/resource/write-health-data/patient/:pid/orders/save-draft'
+        }
+    }
+};
+
+var updateDraft = {
+    model: {
+        uid: 'urn:va:ehmp-order:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
+        patientUid: '9E7A;3',
+        ehmpState: 'draft',
+        authorUid: 'urn:va:user:9E7A:123',
+        domain: 'ehmp-order',
+        subDomain: 'laboratory',
+        visit: {
+            location: 'urn:va:location:9E7A:1',
+            serviceCategory: 'PSB',
+            dateTime: '20160101120000'
+        },
+        referenceId: '',
+        data: {
+            labTestText: 'Gas Panel - Arterial Cord',
+            labCollSamp: '999',
+             location: '32',
+            specimen: '8759',
+        }
+    },
+    logger: sinon.stub(require('bunyan').createLogger({
+        name: 'orders-common-save-draft-write'
+    })),
+    appConfig: {
+        generalPurposeJdsServer: {
+            baseUrl: 'http://IP_ADDRESS:PORT/resource/write-health-data/patient/:pid/orders/save-draft'
+        }
+    }
+};
+
+var deleteDraft = {
+    model: {
+        uid: 'urn:va:ehmp-order:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
+        patientUid: '9E7A;3',
+        ehmpState: 'deleted',
+        authorUid: 'urn:va:user:9E7A:123',
+        domain: 'ehmp-order',
+        subDomain: 'laboratory',
+        visit: {
+            location: 'urn:va:location:9E7A:1',
+            serviceCategory: 'PSB',
+            dateTime: '20160101120000'
+        },
+        referenceId: '',
+        data: {
+            labTestText: 'Gas Panel - Arterial Cord',
+            labCollSamp: '999',
+            location: '32',
+            specimen: '8759',
+        }
+    },
+    logger: sinon.stub(require('bunyan').createLogger({
+        name: 'orders-common-save-draft-write'
+    })),
+    appConfig: {
+        generalPurposeJdsServer: {
+            baseUrl: 'http://IP_ADDRESS:PORT/resource/write-health-data/patient/:pid/orders/save-draft'
         }
     }
 };
@@ -39,7 +101,7 @@ var updateDraftStateError = {
         patientUid: '9E7A;3',
         ehmpState: 'error',
         authorUid: 'urn:va:user:9E7A:123',
-        domain: 'ehmpOrder',
+        domain: 'ehmp-order',
         subDomain: 'laboratory',
         visit: {
             location: 'urn:va:location:9E7A:1',
@@ -55,108 +117,86 @@ var updateDraftStateError = {
         }
     },
     logger: sinon.stub(require('bunyan').createLogger({
-        name: 'lab-save-draft'
+        name: 'orders-common-save-draft-write'
     })),
     appConfig: {
         generalPurposeJdsServer: {
-            baseUrl: 'http://IP             /resource/write-health-data/patient/:pid/orders/save-draft'
+            baseUrl: 'http://IP_ADDRESS:PORT/resource/write-health-data/patient/:pid/orders/save-draft'
         }
     }
 };
 
-var updateDraftError = {
-    model: {
-        uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-        ehmpState: 'draft',
-        patientUid: '9E7A;3',
-        authorUid: 'urn:va:user:9E7A:123',
-        domain: 'ehmpOrder',
-        subDomain: 'laboratory',
-        visit: {
-            location: 'urn:va:location:9E7A:1',
-            serviceCategory: 'PSB',
-            dateTime: '20160101120000'
-        },
-        referenceId: '',
-        data: {
-            labTestText: 'Gas Panel - Arterial Cord',
-            labCollSamp: '999',
-            location: '32',
-            specimen: '8759',
-        }
-    },
-    logger: sinon.stub(require('bunyan').createLogger({
-        name: 'lab-save-draft'
-    })),
-    appConfig: {
-        generalPurposeJdsServer: {
-            baseUrl: 'http://IP             /resource/write-health-data/patient/:pid/orders/save-draft'
-        }
-    }
-};
+// var updateDraftError = {
+//     model: {
+//         uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
+//         ehmpState: 'draft',
+//         patientUid: '9E7A;3',
+//         authorUid: 'urn:va:user:9E7A:123',
+//         domain: 'ehmp-order',
+//         subDomain: 'laboratory',
+//         visit: {
+//             location: 'urn:va:location:9E7A:1',
+//             serviceCategory: 'PSB',
+//             dateTime: '20160101120000'
+//         },
+//         referenceId: '',
+//         data: {
+//             labTestText: 'Gas Panel - Arterial Cord',
+//             labCollSamp: '999',
+//             location: '32',
+//             specimen: '8759',
+//         }
+//     },
+//     logger: sinon.stub(require('bunyan').createLogger({
+//         name: 'orders-common-save-draft-write'
+//     })),
+//     appConfig: {
+//         generalPurposeJdsServer: {
+//             baseUrl: 'http://IP_ADDRESS:PORT/resource/write-health-data/patient/:pid/orders/save-draft'
+//         }
+//     }
+// };
 
-var createDraft = {
-    model: {
-        patientUid: '9E7A;3',
-        ehmpState: 'draft',
-        authorUid: 'urn:va:user:9E7A:123',
-        domain: 'ehmpOrder',
-        subDomain: 'laboratory',
-        visit: {
-            location: 'urn:va:location:9E7A:1',
-            serviceCategory: 'PSB',
-            dateTime: '20160101120000'
-        },
-        referenceId: '',
-        data: {
-            labTestText: 'Gas Panel - Arterial Cord',
-            labCollSamp: '999',
-            location: '32',
-            specimen: '8759',
-        }
-    },
-    logger: sinon.stub(require('bunyan').createLogger({
-        name: 'lab-save-draft'
-    })),
-    appConfig: {
-        generalPurposeJdsServer: {
-            baseUrl: 'http://IP             /resource/write-health-data/patient/:pid/orders/save-draft'
-        }
-    }
-};
+describe('Saving a Draft Order', function() {
 
-describe('Creating and updating a draft order', function() {
-    it('tests the update a draft functionality', function(done) {
+    it('creates a draft order on save if the corresponding clinical object "uid" attribute is undefined', function(done) {
         this.timeout(5000);
-        pjds(updateDraft, function(err) {
-            expect(err).to.be.null;
+        saveDraftOrder(createDraft, function(err, resp) {
+            expect(err).to.be.falsy();
             done();
         });
     });
 
-    it('tests the update a draft functionality fails if ehmpState is not set to draft', function(done) {
+    it('updates a draft order on save if the corresponding clinical object "uid" attribute is valid', function(done) {
         this.timeout(5000);
-        pjds(updateDraftStateError, function(err) {
+        saveDraftOrder(updateDraft, function(err, resp) {
+            expect(err).to.be.falsy();
+            done();
+        });
+    });
+
+    it('performs a logical deletion of a draft order on save if the "ehmpState" attribute is set to "deleted"', function(done) {
+        this.timeout(5000);
+        saveDraftOrder(deleteDraft, function(err, resp) {
+            expect(err).to.be.falsy();
+            done();
+        });
+    });
+
+    it('generates an error if "ehmpState" is not set to a valid value ("draft", "deleted")', function(done) {
+        this.timeout(5000);
+        saveDraftOrder(updateDraftStateError, function(err) {
             expect(err).to.eql('Error: ehmpState is set as ' + updateDraftStateError.model.ehmpState);
             done();
         });
     });
 
-    //it('tests that an error occurs when resourceId does not match the uid', function(done) {
-    //    this.timeout(5000);
-    //    pjds(updateDraftError, function(err, result) {
-    //    expect(err).to.eql('Error: The resourceId is ' + updateDraftError.resourceId + 
-    //        ' and does not match the uid which is ' + updateDraftError.model.uid);
-    //    expect(result).to.be.null; 
-    //    done();
+    // it('tests that an error occurs when resourceId does not match the uid', function(done) {
+    //     this.timeout(5000);
+    //     saveDraftOrder(updateDraftError, function(err, result) {
+    //         expect(err).to.be.truthy();
+    //         expect(result).to.be.falsy();
+    //         done();
     //    });
-    //}); 
-
-    it('tests the create a draft functionality', function(done) {
-        this.timeout(5000);
-        pjds(createDraft, function(err) {
-            expect(err).to.be.null;
-            done();
-        });
-    });
+    // });
 });

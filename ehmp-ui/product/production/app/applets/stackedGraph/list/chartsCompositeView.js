@@ -9,10 +9,9 @@ define([
     'app/applets/medication_review_v2/medicationResourceHandler',
     'app/applets/medication_review_v2/medicationCollectionHandler',
     'app/applets/medication_review_v2/charts/stackedGraph',
-    'app/applets/lab_results_grid/applet',
-    'app/applets/vitals/applet',
     'typeahead',
-    'highcharts-more'
+    'highcharts-more',
+    'app/applets/lab_results_grid/applet'
 ], function(Backbone, Marionette, _, Highcharts, ChartsCompositeViewTemplate, Utils, RowItemView, MedsResource, CollectionHandler) {
     "use strict";
 
@@ -38,10 +37,10 @@ define([
 
     var ChartsCompositeView = Backbone.Marionette.CompositeView.extend({
         template: ChartsCompositeViewTemplate,
-        childViewContainer: '.collectionContainer',
+        childViewContainer: '.collection-container',
         childView: RowItemView,
         events: {
-            'reorder': 'reorderRows',
+            'reorder': 'reorderRows'
         },
         eventString: function() {
             return [
@@ -50,23 +49,10 @@ define([
             ].join(' ');
         },
         childEvents: {
-            'before:showtoolbar': function(e) {
-                this.hidePopovers();
-                this.closeToolbar();
-            },
-            'after:showtoolbar': function(e, view) {
-                this.activeToolbar = view;
-                this.setDocHandler();
-            },
-            'after:hidetoolbar': function(e) {
-                this.activeToolbar = '';
-                this.hidePopovers();
-                $(document).off(this.eventString());
-            },
             'toggle:quicklook': function(e) {
-                var el = $(e.ui.popoverEl);
+                var el = e.ui.popoverEl;
                 this.setDocHandler();
-                Messaging.getChannel('gists').trigger('close:quicklooks', el);
+                ADK.Messaging.getChannel('gists').trigger('close:quicklooks', el);
                 el.popup('toggle');
             }
         },
@@ -81,20 +67,17 @@ define([
             if (view.$(e.target).length || view.options.preventFocusoutClose) {
                 return;
             }
-            ADK.Messaging.getChannel('gists').trigger('close:gists').trigger('close:quicklooks');
+            ADK.Messaging.getChannel('gists').trigger('close:quicklooks');
             $(document).off(view.eventString());
         },
         initialize: function(options) {
             this.instanceId = options.instanceId;
-            this.allReadyAdded = options.options.allReadyAdded;
+            this.isAdded = options.options.isAdded;
             this.childViewOptions = {
                 activeCharts: options.activeCharts,
                 timeLineCharts: options.timeLineCharts
             };
 
-            this.listenTo(ADK.Messaging.getChannel('gists'), 'close:gists', function(e) {
-                this.closeToolbar();
-            });
             this.listenTo(ADK.Messaging.getChannel('gists'), 'close:quicklooks', function(el) {
                 this.$('[data-toggle=popover]').not(el).popup('hide');
             });
@@ -102,37 +85,44 @@ define([
         reorderRows: function(target, reorderObj) {
             var self = this;
             if (reorderObj.oldIndex !== reorderObj.newIndex) {
+                // Remove the selected model from the collection so that i can be inserted into the new location.
                 var temp = this.collection.at(reorderObj.oldIndex);
-                this.collection.remove(temp);
+                this.collection.remove(temp, {removeIndex: reorderObj.oldIndex});
+                // Add the graph back to the correct location.
                 this.collection.add(temp, {
-                    at: reorderObj.newIndex
+                    at: reorderObj.newIndex,
+                    sort: false //this moves the model to new location overriding sort. We reset position for all models to reflect new position next.
+                });
+                // Update the stackedGraphPosition for each graph to insure future addition/deletions/remove on this session work correctly
+                // for simplicity, we iterate over each one and assign them current index
+                this.collection.each(function(graph, index) {
+                    graph.set('stackedGraphPosition', index, {
+                        silent: true
+                    });
                 });
                 var model = Utils.buildUpdateModel(ADK.ADKApp.currentScreen.config.id, self.instanceId, self.collection);
+                model.reorderObj = reorderObj;
                 model.save(null, {
-                    success:function(model, response) {
+                    success: function(model, response) {
+                        var newActiveChartIndex = self.childViewOptions.activeCharts.length - (model.reorderObj.newIndex+1);
                         var screenId = ADK.ADKApp.currentScreen.config.id;
-                        var screenObject = _.findWhere(response.data.userDefinedGraphs, {id: screenId});
-                        if(screenObject){
-                            var appletsObject = _.findWhere(screenObject.applets, {instanceId: self.instanceId});
-                            if(appletsObject && appletsObject.graphs){
+                        var screenObject = _.findWhere(response.data.userDefinedGraphs, {
+                            id: screenId
+                        });
+                        if (screenObject) {
+                            var appletsObject = _.findWhere(screenObject.applets, {
+                                instanceId: self.instanceId
+                            });
+                            if (appletsObject && appletsObject.graphs) {
                                 ADK.UserDefinedScreens.reorderStackedGraphsInSession(screenId, self.instanceId, appletsObject.graphs);
                             }
                         }
+                        // Since the updated graph gets unshifted to position 0, reorder the activeCharts to match.
+                        self.childViewOptions.activeCharts.splice(newActiveChartIndex, 0, self.childViewOptions.activeCharts.splice(0,1)[0]);
                     },
-                    error: function(model) {
-                    }
+                    error: function(model) {}
                 });
             }
-
-            this.closeToolbar();
-        },
-        closeToolbar: function(e) {
-            var childView = this.$childViewContainer;
-            if (childView && this.activeToolbar) {
-                this.activeToolbar.hide();
-                childView.find('.toolbarActive').removeClass('toolbarActive');
-            }
-            this.activeToolbar = null;
         },
         hidePopovers: function(e) {
             this.$('[data-toggle=popover]').popup('hide');
@@ -144,7 +134,7 @@ define([
         },
         onShow: function() {
             var self = this;
-            $(this.el).find('.collectionContainer').append('<div class="placeholder-tile-sort hidden"/>');
+            $(this.el).find('.collection-container').append('<div class="placeholder-tile-sort hidden"></div>');
             $(this.el).find('.placeholder-tile-sort').on('dragover', function(e) {
                 e.preventDefault();
             });
@@ -166,7 +156,7 @@ define([
                 self.reorderRows(e, reorder);
             });
 
-            this.$noGraph = self.$('.noGraph');
+            this.$noGraph = self.$('.no-graph');
             if (!ADK.UserService.hasPermission('access-stack-graph')) {
                 return;
             }
@@ -174,9 +164,9 @@ define([
             var currentScreen = ADK.Messaging.request('get:current:screen');
 
             var interval = setInterval(function() {
-                if (self.$el.parents('.panel.panel-primary').find('.pickList').find('.typeahead').length > 0) {
+                if (self.$el.parents('.panel.panel-primary').find('.picklist').find('.typeahead').length > 0) {
                     clearInterval(interval);
-                    var theTypeahead = self.$el.parents('.panel.panel-primary').find('.pickList').find('.typeahead');
+                    var theTypeahead = self.$el.parents('.panel.panel-primary').find('.picklist').find('.typeahead');
                     var substringMatcher = function(strs, type) {
                         return function findMatches(q, cb) {
                             var matches, substrRegex;
@@ -196,7 +186,7 @@ define([
                                     var match = {
                                         value: str,
                                         type: type
-                                            // displayKey: capitalize(str)
+                                        // displayKey: capitalize(str)
                                     };
                                     var displayValue = str;
                                     if (str === 'LDL CHOLESTEROL') {
@@ -205,10 +195,10 @@ define([
                                         displayValue = titleize(str);
                                     }
                                     match.displayValue = displayValue;
-                                    if (_.indexOf(self.allReadyAdded, (str.toUpperCase() + '-' + type.toUpperCase())) === -1) {
-                                        match.allReadyAdded = false;
+                                    if (_.indexOf(self.isAdded, (str.toUpperCase() + '-' + type.toUpperCase())) === -1) {
+                                        match.isAdded = false;
                                     } else {
-                                        match.allReadyAdded = true;
+                                        match.isAdded = true;
                                     }
 
                                     if (!currentScreen.config.predefined) {
@@ -220,6 +210,9 @@ define([
                                 }
                             });
 
+                            if (matches.length > 0) {
+                                $(self.$el).closest('.panel-primary').find('.dropdown .sr-only[aria-live]').text(matches.length + ' results found for ' + this.query + ' under ' + matches[0].type);
+                            }
                             cb(matches);
                         };
                     };
@@ -250,21 +243,21 @@ define([
 
                     ADK.ResourceService.fetchCollection(labFetchOptions);
 
-                        var medFetchOptions = {
-                            resourceTitle: 'operational-data-type-medication',
-                            onSuccess: function(collection) {
-                                medDeferred.resolve({
-                                    coll: collection
-                                });
-                            }
-                        };
-                        CollectionHandler.fetchAllMeds(false, function(collection) {
-                            var groupNames = MedsResource.getMedicationGroupNames(collection);
+                    var medFetchOptions = {
+                        resourceTitle: 'operational-data-type-medication',
+                        onSuccess: function(collection) {
                             medDeferred.resolve({
-                                coll: groupNames,
-                                collection: collection
+                                coll: collection
                             });
+                        }
+                    };
+                    CollectionHandler.fetchAllMeds(false, function(collection) {
+                        var groupNames = MedsResource.getMedicationGroupNames(collection);
+                        medDeferred.resolve({
+                            coll: groupNames,
+                            collection: collection
                         });
+                    });
 
                     // ADK.ResourceService.fetchCollection(medFetchOptions);
 
@@ -295,64 +288,83 @@ define([
                             medPickList = medPickListCollection.coll;
                             medPickList.sort(sortFunc);
 
-
-                            var pickListItemTemplate = '<% if(allReadyAdded && predefined){ %><%} else if((!allReadyAdded && !predefined)  || (!allReadyAdded && predefined)) { %><div style="margin: 0px -15px; width: 271px; display: flex;"><div style="width: 228px"><p class="text-capitalize" style="white-space:normal;"><%= displayValue %> <i class="text-muted"><%= type %></i></p></div><div style="width: 42px"><span class="text-muted small"><i class="fa fa-plus"></i> Add</span></div></div><% } else if(allReadyAdded && !predefined) { %><div style="margin: 0px -15px; width: 271px; display: flex;"><div style="width: 228px"><p class="text-capitalize" style="white-space:normal;"><%= displayValue %> <i class="text-muted"><%= type %></i></p></div><div style="width: 42px"><span class="text-muted small"><i class="fa fa-minus"></i> Delete</span></div></div><% } %>';
-                            var emptyItemTemplate = '<div class="empty-container"> No results found for&nbsp;<strong><%= query %></strong>&nbsp;under';
+                            var pickListItemTemplate = '<% if(isAdded && predefined){ %><% } '+
+                                                        'else if((!isAdded && !predefined)  || (!isAdded && predefined)) { %>'+
+                                                            '<p><%= displayValue %> <i><%= type %></i> <span class="small pull-right"><i class="fa fa-plus"></i> Add</span></p><% } '+
+                                                        'else if(isAdded && !predefined) { %>'+
+                                                            '<p><%= displayValue %> <i><%= type %></i> <span class="small pull-right"><i class="fa fa-minus"></i> Delete</span></p><% } %>';
+                            var emptyItemTemplate = '<div class="left-margin-sm right-margin-sm" aria-live="assertive" aria-atomic="true"> No results found for <strong><%= query %></strong> under';
+                            theTypeahead.off();
                             theTypeahead.typeahead({
-                                    hint: false,
-                                    highlight: true,
-                                    minLength: 3
-                                }, {
-                                    name: 'vitals',
-                                    displayKey: 'displayValue',
-                                    source: substringMatcher(vitalPickList, 'Vitals'),
-                                    templates: {
-                                        suggestion: _.template(pickListItemTemplate),
-                                        empty: _.template(emptyItemTemplate + ' Vitals </div>')
-                                    }
-                                }, {
-                                    name: 'labs',
-                                    displayKey: 'displayValue',
-                                    source: substringMatcher(labPickList, 'Lab Tests'),
-                                    templates: {
-                                        suggestion: _.template(pickListItemTemplate),
-                                        empty: _.template(emptyItemTemplate + ' Lab Tests </div>')
-                                    }
-                                }, {
-                                    name: 'meds',
-                                    displayKey: 'displayValue',
-                                    source: substringMatcher(medPickList, 'Medications'),
-                                    templates: {
-                                        suggestion: _.template(pickListItemTemplate),
-                                        empty: _.template(emptyItemTemplate + ' Medications </div>')
-                                    }
-                                })
+                                hint: false,
+                                highlight: true,
+                                minLength: 3
+                            }, {
+                                name: 'vitals',
+                                displayKey: 'displayValue',
+                                source: substringMatcher(vitalPickList, 'Vitals'),
+                                templates: {
+                                    suggestion: _.template(pickListItemTemplate),
+                                    empty: _.template(emptyItemTemplate + ' Vitals </div>')
+                                }
+                            }, {
+                                name: 'labs',
+                                displayKey: 'displayValue',
+                                source: substringMatcher(labPickList, 'Lab Tests'),
+                                templates: {
+                                    suggestion: _.template(pickListItemTemplate),
+                                    empty: _.template(emptyItemTemplate + ' Lab Tests </div>')
+                                }
+                            }, {
+                                name: 'meds',
+                                displayKey: 'displayValue',
+                                source: substringMatcher(medPickList, 'Medications'),
+                                templates: {
+                                    suggestion: _.template(pickListItemTemplate),
+                                    empty: _.template(emptyItemTemplate + ' Medications </div>')
+                                }
+                            })
                                 .on('typeahead:opened', function() {
                                     var ttDrop = theTypeahead.parents('.twitter-typeahead').find('.tt-dropdown-menu');
-                                    if (ttDrop.find('.youTyped').length === 0) {
+                                    if (ttDrop.find('.user-input').length === 0) {
                                         ttDrop.prepend($('<p/>', {
-                                            'class': 'youTyped',
+                                            'class': 'user-input',
                                             'text': 'Hello'
                                         }));
                                     }
                                 })
+                                .on('typeahead:cursorchanged', function(e, suggestion) {
+                                    var screenReaderText = (suggestion.isAdded ? 'Delete graph by pressing enter' : 'Add graph by pressing enter');
+                                    $(this).closest('.dropdown').find('.sr-only[aria-live]').text(screenReaderText);
+                                })
                                 .on('typeahead:selected', function(e, suggestion, dataset) {
 
-                                    if (suggestion.allReadyAdded) {
+                                    if (suggestion.isAdded) {
 
                                         var model = self.collection.find(function(model) {
-                                            return (model.get('typeName') === suggestion.value.toUpperCase() && model.get('graphType') === suggestion.type);
+                                            return (model.get('stackedGraphTypeName') === suggestion.value.toUpperCase() && model.get('stackedGraphType') === suggestion.type);
                                         });
 
-                                        ADK.Messaging.getChannel('stackedGraph').trigger('delete', {
-                                            model: model
-                                        });
+                                        if (!_.isUndefined(model)) {
+                                            var pickListBtn = $(event.target).closest('.picklist').find('[data-toggle="dropdown"]');
+                                            model.set('picklistBtnEl', pickListBtn);
+                                            ADK.Messaging.getChannel('stackedGraph').trigger('delete', {
+                                                model: model
+                                            });
+                                        }
 
                                     } else {
+                                        suggestion.isAdded = true;
+
+                                        //new graph always goes first so we give it a value one more than the one at index 0
+                                        //when its added, collection will automatically add it at index 0
+                                        var position = self.collection.length === 0 ? 0 : self.collection.at(0).get('stackedGraphPosition') - 1;
+
                                         var params = {
                                             typeName: suggestion.value,
                                             instanceId: self.instanceId,
-                                            graphType: suggestion.type
+                                            graphType: suggestion.type,
+                                            graphPosition: position
                                         };
 
                                         if (!ADK.ADKApp.currentScreen.config.predefined) {
@@ -377,7 +389,6 @@ define([
                                                 suggestion.value.toUpperCase());
 
                                         }
-
 
                                         $(this).typeahead('val', '');
 
@@ -406,10 +417,12 @@ define([
                                 })
                                 .on('keyup', function(e) {
                                     var val = $(this).val();
-                                    theTypeahead.parents('.twitter-typeahead').find('.tt-dropdown-menu .youTyped').text('Search for ' + val);
+                                    theTypeahead.parents('.twitter-typeahead').find('.tt-dropdown-menu .user-input').text('Search for ' + val);
                                 });
                         });
-                    theTypeahead.parents('.dropdown').on('hidden.bs.dropdown', function() {
+
+                    //The dropdown closes everytime the input box looses focus, but hidden.bs.dropdown isn't always triggered, so we're using 'focusout' instead
+                    theTypeahead.parents('.dropdown-menu').on('focusout', function() {
                         theTypeahead.typeahead('val', '');
                     });
 
@@ -418,7 +431,6 @@ define([
                             theTypeahead[0].focus();
                         });
                     });
-
                 }
 
             }, 500);

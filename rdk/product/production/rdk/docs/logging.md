@@ -41,24 +41,46 @@ Debug messages should be logged at developer discretion. Err on the side of caut
 
 ## Writing Useful Log Messages
 The logger functions can take multiple arguments.
-If the first argument is an object, that object is merged into the Bunyan log object, making it more easily machine-readable.
 
-For example:
-```JavaScript
-req.logger.info({syncStatus: 'in progress'}, 'Sync in progress');
-```
-creates the following log line:
-```
-{"name":"res-server","hostname":"AdertondMBP.local","pid":70765,"requestId":"2fdd54eb-a73d-49bb-8436-b6cac588a41c","level":30,"syncStatus":"in progress","msg":"Sync in progress","time":"2015-03-31T03:59:15.133Z","v":0}
-```
-Note how "syncStatus" is a top-level element and the string argument is placed into the "msg" element.
+### Do:
 
-::: side-note
-This example log message is redundant for the sake of demonstration. Avoid unnecessary redundancy in your log messages.
-:::
+* Log variables in the first argument. If the first argument is an object, that object is merged into the Bunyan log object, making it more easily machine-readable.
+
+    For example:
+    ```JavaScript
+    req.logger.info({syncStatus: 'in progress'}, 'Sync in progress');
+    ```
+    creates the following log line:
+    ```
+    {"name":"res-server","hostname":"AdertondMBP.local","pid":70765,"requestId":"2fdd54eb-a73d-49bb-8436-b6cac588a41c","level":30,"syncStatus":"in progress","msg":"Sync in progress","time":"2015-03-31T03:59:15.133Z","v":0}
+    ```
+    Note how "syncStatus" is a top-level element and the string argument is placed into the "msg" element.
+
+    ::: side-note
+    This example log message is redundant for the sake of demonstration. Avoid unnecessary redundancy in your log messages.
+    :::
+
+* Log errors in the first argument, like:
+
+    ```JavaScript
+    req.logger.error(error, 'Something bad happened here');
+    ```
+    or
+    ```JavaScript
+    req.logger.error({err: error}, 'Something bad happened here');
+    ```
+    This allows Bunyan to friendly-format the error.
+
+
+
+### Don't:
+
+* Use `JSON.stringify` on JSON objects. Instead make them fields of the first argument.
 
 ## RDK Logging Enhancements
-The RDK adds a requestId to each log message which corresponds to the requestId response header that a client receives.
+The RDK adds a `requestId` to each log message which corresponds to the requestId response header that a client receives, and a `pid` when a request is patient-centric.
+
+If the logging level is configured to `debug` or higher, the RDK only logs partial versions of objects like `req`, `res` and `session`. Set the level to `trace` to log the full objects.
 
 <br />
 ---

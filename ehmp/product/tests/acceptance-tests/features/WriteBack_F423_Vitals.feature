@@ -1,4 +1,4 @@
-@writeback 
+@writeback
 Feature: F423/F170 - Enter and Store Vitals and F170 - Vitals Write-Back EIE
 
 
@@ -64,7 +64,7 @@ Scenario: Client can write to the VistA and add Vital records - adding TEMPERATU
 	
 @vital_writeback 
 Scenario: Client can write to the VistA and add Vital records - TEMPERATURE - Patient with ICN
-  Given a patient with pid "C877;253" has been synced through VX-Sync API for "9E7A;C877;2939;FFC7;VLER" site(s)
+  Given a patient with pid "C877;253" has been synced through VX-Sync API for "9E7A;C877;HDR;VLER" site(s)
   And the client requests "VITALS" for the patient "C877;253" in VPR format
   And save the totalItems
   And a client connect to VistA using "Kodak"

@@ -11,7 +11,7 @@ var pollerUtils = require(global.VX_UTILS + 'poller-utils');
 var config = require('./worker-config');
 var moment = require('moment');
 var logUtil = require(global.VX_UTILS + 'log');
-logUtil.initialize(config.loggers);
+logUtil.initialize(config);
 
 var healthcheckUtils = require(global.VX_UTILS + 'healthcheck-utils');
 

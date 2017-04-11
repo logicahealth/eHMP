@@ -194,8 +194,8 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
                     expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toContainText('Remove');
                     //Check to see if this item is muted color sinice it is already added
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toHaveClass('color-primary-lighter');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toHaveClass('color-primary-lighter');
+                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
                     //second check if it is on the selected side
                     expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
                     expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2)')).toContainText('Remove');
@@ -312,8 +312,8 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
                     expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toContainText('Remove');
                     //Check to see if this item is muted color sinice it is already added
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toHaveClass('color-primary-lighter');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toHaveClass('color-primary-lighter');
+                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
                     //second check if it is on the selected side
                     expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
                     expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2)')).toContainText('Remove');
@@ -428,8 +428,8 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
                     expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toContainText('Remove');
                     //Check to see if this item is muted color sinice it is already added
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toHaveClass('color-primary-lighter');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toHaveClass('color-primary-lighter');
+                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
                     //second check if it is on the selected side
                     expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
                     expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) input').val()).toBe('1.0');
@@ -440,8 +440,8 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(1)')).toContainText('Item 02');
                     expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(2) button')).toContainText('Remove');
                     //Check to see if this item is muted color sinice it is already added
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(1)')).toHaveClass('color-primary-lighter');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(2) button')).toHaveClass('color-primary-lighter');
+                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
                     //second check if it is on the selected side
                     expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(1)')).toContainText('Item 02');
                     expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(2) input').val()).toBe('2.0');
@@ -452,8 +452,8 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(1)')).toContainText('Item 03');
                     expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Remove');
                     //Check to see if this item is muted color sinice it is already added
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(1)')).toHaveClass('color-primary-lighter');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toHaveClass('color-primary-lighter');
+                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
                     //second check if it is on the selected side
                     expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(1)')).toContainText('Item 03');
                     expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(2) input').val()).toBe('3.0');
@@ -522,6 +522,28 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                 it("expect the the count to be updated", function() {
                     $testPage.find("button[title='Press enter to remove Item 01.']").focus().click();
                     expect(formModel_1.get('msbs-count')).toBe(2);
+                });
+            });
+            describe("using trigger to dynamically change attributes", function() {
+                beforeEach(function() {
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: formModel_1,
+                            fields: [msbs_definition_basic]
+                        })
+                    });
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
+                });
+
+                it("disabled", function() {
+                    $testPage.find('.multiselectSideBySide-control').trigger("control:disabled", true);
+                    expect($testPage.find('.control input')).toHaveProp('disabled', true);
+                    expect($testPage.find('.control button')).toHaveProp('disabled', true);
+                    $testPage.find('.multiselectSideBySide-control').trigger("control:disabled", false);
+                    expect($testPage.find('.control input')).toHaveProp('disabled', false);
+                    expect($testPage.find('.control button')).toHaveProp('disabled', false);
                 });
             });
         });

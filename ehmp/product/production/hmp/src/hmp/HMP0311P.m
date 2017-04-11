@@ -1,5 +1,5 @@
-HMP0311P ; Agilex/hrubovcak ;Mar 20, 2015@14:34:08
- ;;2.0;Health Management Platform;****;;Build 8
+HMP0311P ;ASMR/hrubovcak - HMP DGPF ASSIGN FLAG Protocol to ITEM;Mar 20, 2015@14:34:08
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;November 30,2015;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q

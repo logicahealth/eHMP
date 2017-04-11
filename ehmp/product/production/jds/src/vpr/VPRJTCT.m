@@ -19,14 +19,15 @@ ASSERT(EXPECT,ACTUAL) ; convenience
  Q
  ;
 ONSAVE ;; @TEST template creation on save
- N TAGS
+ N TAGS,VPRJPID
  S TAGS(1)="DATA1^VPRJTP03"
  D ADDDATA^VPRJTX(.TAGS,VPRJTPID)
- D ASSERT(10,$D(^VPRPTJ("TEMPLATE",VPRJTPID,"urn:va:utesta:93EF:-7:1","unit-test-general")))
- D ASSERT(10,$D(^VPRPTJ("TEMPLATE",VPRJTPID,"urn:va:utesta:93EF:-7:1","unit-test-exclude")))
- D ASSERT(10,$D(^VPRPTJ("TEMPLATE",VPRJTPID,"urn:va:utesta:93EF:-7:1","unit-test-instance")))
+ S VPRJPID=$$JPID4PID^VPRJPR(VPRJTPID)
+ D ASSERT(10,$D(^VPRPTJ("TEMPLATE",VPRJPID,VPRJTPID,"urn:va:utesta:93EF:-7:1","unit-test-general")))
+ D ASSERT(10,$D(^VPRPTJ("TEMPLATE",VPRJPID,VPRJTPID,"urn:va:utesta:93EF:-7:1","unit-test-exclude")))
+ D ASSERT(10,$D(^VPRPTJ("TEMPLATE",VPRJPID,VPRJTPID,"urn:va:utesta:93EF:-7:1","unit-test-instance")))
  N JSON,OBJ
- M JSON=^VPRPTJ("TEMPLATE",VPRJTPID,"urn:va:utesta:93EF:-7:1","unit-test-general")
+ M JSON=^VPRPTJ("TEMPLATE",VPRJPID,VPRJTPID,"urn:va:utesta:93EF:-7:1","unit-test-general")
  D DECODE^VPRJSON("JSON","OBJ")
  D ASSERT("Welby,Marcus/John,Trapper",$G(OBJ("clinicians")))
  D ASSERT(20121229103022,$G(OBJ("dateTime")))
@@ -34,7 +35,7 @@ ONSAVE ;; @TEST template creation on save
  D ASSERT("Dragon Hair",$G(OBJ("ingredients",2,"name")))
  D ASSERT(60,$G(OBJ("lastFill","quantity")))
  K JSON,OBJ
- M JSON=^VPRPTJ("TEMPLATE",VPRJTPID,"urn:va:utesta:93EF:-7:1","unit-test-exclude")
+ M JSON=^VPRPTJ("TEMPLATE",VPRJPID,VPRJTPID,"urn:va:utesta:93EF:-7:1","unit-test-exclude")
  D DECODE^VPRJSON("JSON","OBJ")
  D ASSERT(10,$D(OBJ("dosages")))
  D ASSERT(10,$D(OBJ("authors")))
@@ -43,7 +44,7 @@ ONSAVE ;; @TEST template creation on save
  D ASSERT(0,$D(OBJ("products",1,"drugClass")))
  D ASSERT(1,$D(OBJ("products",1,"ingredient")))
  K JSON,OBJ
- M JSON=^VPRPTJ("TEMPLATE",VPRJTPID,"urn:va:utesta:93EF:-7:1","unit-test-instance")
+ M JSON=^VPRPTJ("TEMPLATE",VPRJPID,VPRJTPID,"urn:va:utesta:93EF:-7:1","unit-test-instance")
  D DECODE^VPRJSON("JSON","OBJ")
  ;W ! ZW OBJ
  ;B   check to see that the appropriate JSON objects exist
@@ -52,8 +53,9 @@ EXP1 ;; @TEST expanding fields in template
  N I,TAGS
  F I=2:1:5 S TAGS(I)="DATA"_I_"^VPRJTP03"
  D ADDDATA^VPRJTX(.TAGS,VPRJTPID)
- N JSON,OBJ
- M JSON=^VPRPTJ("TEMPLATE",VPRJTPID,"urn:va:utestc:93EF:-7:23","unit-test-expand-1")
+ N JSON,OBJ,VPRJPID
+ S VPRJPID=$$JPID4PID^VPRJPR(VPRJTPID)
+ M JSON=^VPRPTJ("TEMPLATE",VPRJPID,VPRJTPID,"urn:va:utestc:93EF:-7:23","unit-test-expand-1")
  D DECODE^VPRJSON("JSON","OBJ")
  D ASSERT(10,$D(OBJ("from")))
  D ASSERT(20111229103022,$G(OBJ("from","dateTime")))
@@ -61,8 +63,9 @@ EXP1 ;; @TEST expanding fields in template
  D ASSERT("urn:va:utesta:93EF:-7:2",$G(OBJ("from","uid")))
  Q
 EXP2 ;; @TEST expanding fields in template
- N JSON,OBJ
- M JSON=^VPRPTJ("TEMPLATE",VPRJTPID,"urn:va:utestc:93EF:-7:23","unit-test-expand-2")
+ N JSON,OBJ,VPRJPID
+ S VPRJPID=$$JPID4PID^VPRJPR(VPRJTPID)
+ M JSON=^VPRPTJ("TEMPLATE",VPRJPID,VPRJTPID,"urn:va:utestc:93EF:-7:23","unit-test-expand-2")
  D DECODE^VPRJSON("JSON","OBJ")
  D ASSERT("urn:va:utesta:93EF:-7:1",$G(OBJ("items",1,"uid")))
  D ASSERT("urn:va:utestb:93EF:-7:3",$G(OBJ("items",2,"uid")))
@@ -73,7 +76,9 @@ EXP2 ;; @TEST expanding fields in template
  Q
 QUERY ;; @TEST query type template
  K ^TMP
- D ASSERT(0,$D(^VPRPTJ("TEMPLATE",VPRJTPID,"urn:va:utestc:93EF:-7:23","unit-test-query")))
+ N VPRJPID
+ S VPRJPID=$$JPID4PID^VPRJPR(VPRJTPID)
+ D ASSERT(0,$D(^VPRPTJ("TEMPLATE",VPRJPID,VPRJTPID,"urn:va:utestc:93EF:-7:23","unit-test-query")))
  N ROOT,OBJS,HTTPERR
  ; /vpr/{pid}/index/{indexName}/{template}
  D SETGET^VPRJTX("/vpr/"_VPRJTPID_"/index/utest-c/unit-test-query")

@@ -5,8 +5,8 @@ Feature:  The UI needs to be updated to include patient flag data returned from 
 #POC: Team Mercury
 # There is no data for this test to run in jenkins
 
-Background:
-    Given user is logged into eHMP-UI
+#Background:
+    # Given user is logged into eHMP-UI
 
 @select_behavioral_patient
 Scenario: user selects patient with behavioral flags

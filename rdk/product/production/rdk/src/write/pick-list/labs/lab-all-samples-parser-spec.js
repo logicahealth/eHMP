@@ -23,7 +23,12 @@ describe('verify lab all samples parser', function() {
 
     it('parse field data with blank group name', function () {
         var result = parse(log, '~\r\ni^65^CAPILLARY TUBE^70^BLUE STRIPE^^^^^BLOOD');
-        expect(result).to.eql([{categoryName: '', values: [{ien: '65', name: 'CAPILLARY TUBE', specPtr: '70', tubeTop: 'BLUE STRIPE', labCollect: '', specName: 'BLOOD'}]}]);
+        expect(result).to.eql([{categoryName: '', values: [{ien: '65', name: 'CAPILLARY TUBE', specPtr: '70', tubeTop: 'BLUE STRIPE', specName: 'BLOOD'}]}]);
+    });
+
+    it('parse field data with blank sepcPtr name', function () {
+        var result = parse(log, '~\r\nii^67^BLOOD BANK^^RED & LAV^^^1');
+        expect(result).to.eql([{categoryName: '', values: [{ien: '67', name: 'BLOOD BANK', tubeTop: 'RED & LAV', labCollect: '1'}]}]);
     });
 
     it('parse data with group name only', function () {
@@ -43,11 +48,11 @@ describe('verify lab all samples parser', function() {
 
     it('parse data with 10 fields', function () {
         var result = parse(log, '~CollSamp\r\ni^13^SYNOVIAL^78^^^^^^SYNOVIAL FLUID');
-        expect(result).to.eql([{categoryName: 'CollSamp', values: [{ien: '13', name: 'SYNOVIAL', specPtr: '78', tubeTop: '', labCollect: '', specName: 'SYNOVIAL FLUID'}]}]);
+        expect(result).to.eql([{categoryName: 'CollSamp', values: [{ien: '13', name: 'SYNOVIAL', specPtr: '78', specName: 'SYNOVIAL FLUID'}]}]);
     });
 
     it('parse data with with multiple collection times', function () {
         var result = parse(log, '~CollSamp\r\ni^68^24 HR URINE^8755^NONE^^^^^24 HR URINE\r\ni^24^ABSCESS^^^^^');
-        expect(result).to.eql([{categoryName: 'CollSamp', values: [{ien: '68', name: '24 HR URINE', specPtr: '8755', tubeTop: 'NONE', labCollect: '', specName: '24 HR URINE'},{ien: '24', name: 'ABSCESS'}]}]);
+        expect(result).to.eql([{categoryName: 'CollSamp', values: [{ien: '68', name: '24 HR URINE', specPtr: '8755', tubeTop: 'NONE', specName: '24 HR URINE'},{ien: '24', name: 'ABSCESS'}]}]);
     });
 });

@@ -14,7 +14,7 @@ When(/^the client requests lab "(.*?)" results for that patient "(.*?)"$/) do |_
   base_url = DefaultLogin.rdk_fetch_url
   path = "#{base_url}/resource/fhir/patient/#{pid}/DiagnosticReport?domain=lab&_ack=true"
   p path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the lab field\(s\) just contain "(.*?)"$/) do |expected_value, table|
@@ -30,26 +30,26 @@ Then(/^the results contain lab "(.*?)" results$/) do |_not_used, table|
   result_array = @json_object["entry"]
 
   json_verify = VerifyJsonRuntimeValue.new
-  json_verify.verify_json_runtime_vlaue(result_array, table)
+  json_verify.verify_json_runtime_value(result_array, table)
 end
 
 When(/^the client requests "(.*?)" results for that patient "(.*?)"$/) do |_not_used, pid|
   base_url = DefaultLogin.rdk_fetch_url
   path = "#{base_url}/resource/fhir/patient/#{pid}/DiagnosticReport?service=SP,CP,OTH&_ack=true"
   p path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests "(.*?)" "(.*?)" results for that patient "(.*?)" in FHIR format$/) do |limit, _not_used, pid|
   base_url = DefaultLogin.rdk_fetch_url
   path = "#{base_url}/resource/fhir/patient/#{pid}/DiagnosticReport?service=SP,CP,OTH&_ack=true&_count=" + limit
   p path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests "(.*?)" lab "(.*?)" results for that patient "(.*?)" in FHIR format$/) do |limit, _not_used, pid|
   base_url = DefaultLogin.rdk_fetch_url
   path = "#{base_url}/resource/fhir/patient/#{pid}/DiagnosticReport?domain=lab&_ack=true&_count=" + limit
   p path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end

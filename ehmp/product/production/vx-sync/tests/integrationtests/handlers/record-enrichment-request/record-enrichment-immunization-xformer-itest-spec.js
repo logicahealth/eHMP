@@ -23,8 +23,11 @@ var log = require(global.VX_DUMMIES + '/dummy-logger');
 
 var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 
-var config = require(global.VX_ROOT + 'worker-config');
+var wConfig = require(global.VX_ROOT + 'worker-config');
+var config = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
 config.terminology.host = vx_sync_ip;
+
+var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
 
 var originalVaImmunizationRecord = {
     'administeredDateTime': 19950718091835,

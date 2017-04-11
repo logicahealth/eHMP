@@ -69,9 +69,13 @@ machine machine_name do
   attributes(
     stack: node[:machine][:stack],
     nexus_url: node[:common][:nexus_url],
+    data_bag_string: node[:common][:data_bag_string],
     opencds: {
       zip_source: opencds_knowledge_repository_data_source,
       cds_engine_agent_source: cds_engine_agent_source
+    },
+    beats: {
+      logging: node[:machine][:logging]
     }
   )
   files lazy { node[:cds_provision][:opencds][:copy_files] }

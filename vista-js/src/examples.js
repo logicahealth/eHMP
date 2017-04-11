@@ -55,11 +55,11 @@ var context = 'OR CPRS GUI CHART';
 
 var configuration = {
     context: 'VPR UI CONTEXT',
-    host: 'IPADDRESS ',
+    host: 'IP_ADDRESS',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IPADDRESS,
+    accessCode: 'PW',
+    verifyCode: 'PW',
+    localIP: 'IPADDRES',
     localAddress: 'localhost'
 };
 

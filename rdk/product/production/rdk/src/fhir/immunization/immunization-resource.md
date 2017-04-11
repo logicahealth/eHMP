@@ -1,6 +1,6 @@
 # Group FHIR
 
-## Immunization [{{{path}}}{?subject.identifier}{&start}{&limit}{&fields}]
+## Immunization [{{{path}}}{?subject.identifier}{&start}{&limit}]
 
 + Parameters
 
@@ -9,8 +9,6 @@
     :[start]({{{common}}}/parameters/start.md)
 
     :[limit]({{{common}}}/parameters/limit.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Fhir immunization [GET]

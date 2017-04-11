@@ -125,6 +125,9 @@ define([
             },
             HT: function() {
                 return graphOptions_HT;
+            },
+            WT: function() {
+                return graphOptions_WT;
             }
         },
     };
@@ -333,7 +336,42 @@ define([
             positionValues: 'center'
         }]
     });
-
+    var graphOptions_WT = _.extend(_.clone(gistConfiguration.graphOptions), {
+        ranges: [{
+            high: 0,
+            includeHigh: true,
+            interpretations: [{
+                flag: 'L',
+                valueClass: 'abnormalValue',
+                description: 'abnormal height'
+            }],
+            width: gistConfiguration.graphOptions.abnormalRangeWidth,
+            rangeClass: 'abnormalRange lowRange hashedRange',
+            positionValues: 'center'
+        }, {
+            low: 0,
+            high: 1501,
+            interpretations: [{
+                flag: 'N',
+                valueClass: 'normalValue',
+                description: 'normal'
+            }],
+            width: gistConfiguration.graphOptions.width - 2 * gistConfiguration.graphOptions.abnormalRangeWidth,
+            rangeClass: 'normalRange',
+            positionValues: 'scaled'
+        }, {
+            low: 1501,
+            includeLow: true,
+            interpretations: [{
+                flag: 'H',
+                valueClass: 'abnormalValue',
+                description: 'giant'
+            }],
+            width: gistConfiguration.graphOptions.abnormalRangeWidth ,
+            rangeClass: 'abnormalRange criticalHighRange hashedRange',
+            positionValues: 'center'
+        }]
+    });
 
 
     return gistConfiguration;

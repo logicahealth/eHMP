@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Immunization types [/immunization-types{?site}{&fields}]
+## Immunization types [/immunization-types{?site}]
 
 Returns a list of active immunizations.
 
@@ -11,8 +11,6 @@ ORWPCE GET IMMUNIZATION TYPE
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

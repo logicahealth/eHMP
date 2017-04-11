@@ -9,6 +9,7 @@ define([
     };
     var config = {
         id: 'pre-procedure-cbw',
+        context: 'patient',
         contentRegionLayout: 'gridster',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',
@@ -27,7 +28,7 @@ define([
             "dataRow": "9",
             "dataSizeX": "4",
             "dataSizeY": "4",
-            "filterName": "Filtered Preprocedure",
+            "filterName": "Preprocedure",
             "maximizeScreen": "allergy-grid-full",
             "viewType": "gist"
         },
@@ -44,7 +45,7 @@ define([
             "dataRow": "1",
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Preprocedure",
+            "filterName": "Preprocedure",
             "maximizeScreen": "appointments-full",
             "viewType": "summary"
         },
@@ -61,7 +62,7 @@ define([
             "dataRow": "7",
             "dataSizeX": "8",
             "dataSizeY": "6",
-            "filterName": "Filtered Preprocedure",
+            "filterName": "Preprocedure",
             "viewType": "expanded",
             "maximizeScreen": "documents-list"
         },
@@ -78,13 +79,13 @@ define([
             "dataRow": "1",
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Preprocedure",
+            "filterName": "Preprocedure",
             "maximizeScreen": "lab-results-grid-full",
             "viewType": "gist"
         },
         {
             "id": "problems",
-            "title": "Conditions",
+            "title": "Problems",
             "instanceId": "ppcbw-problems-1",
             "region": "ppcbw-problems-1",
             "dataCol": "1",
@@ -95,7 +96,7 @@ define([
             "dataRow": "1",
             "dataSizeX": "4",
             "dataSizeY": "4",
-            "filterName": "Filtered Preprocedure",
+            "filterName": "Preprocedure",
             "maximizeScreen": "problems-full",
             "viewType": "gist"
         },
@@ -112,7 +113,7 @@ define([
             "dataRow": "5",
             "dataSizeX": "4",
             "dataSizeY": "4",
-            "filterName": "Filtered Preprocedure",
+            "filterName": "Preprocedure",
             "viewType": "summary",
             "maximizeScreen": "news-feed"
         },
@@ -129,7 +130,7 @@ define([
             "dataRow": "1",
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Preprocedure",
+            "filterName": "Preprocedure",
             "maximizeScreen": "vitals-full",
             "viewType": "gist"
         },
@@ -146,7 +147,7 @@ define([
             "dataRow": "1",
             "dataSizeX": "8",
             "dataSizeY": "6",
-            "filterName": "Filtered Preprocedure",
+            "filterName": "Preprocedure",
             "maximizeScreen": "orders-full",
             "viewType": "summary"
         },
@@ -163,7 +164,7 @@ define([
             "dataRow": "7",
             "dataSizeX": "8",
             "dataSizeY": "6",
-            "filterName": "Filtered Preprocedure",
+            "filterName": "Preprocedure",
             "viewType": "expanded",
             "maximizeScreen": "medication-review"
         }],

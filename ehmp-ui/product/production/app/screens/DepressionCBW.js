@@ -8,6 +8,7 @@ define([
     };
     var config = {
         id: 'depression-cbw',
+        context: 'patient',
         contentRegionLayout: 'gridster',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',
@@ -15,7 +16,7 @@ define([
         freezeApplets: true, //if true, applets won't be draggable and resizable by gridster
         applets: [{
             "id": "problems",
-            "title": "Conditions",
+            "title": "Problems",
             "instanceId": "dpcbw-problems-1",
             "region": "dpcbw-problems-1",
             "dataCol": "1",
@@ -26,7 +27,7 @@ define([
             "dataRow": "1",
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Depression",
+            "filterName": "Depression",
             "maximizeScreen": "problems-full",
             "viewType": "gist"
         }, {
@@ -42,7 +43,7 @@ define([
             "dataRow": "7",
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Depression",
+            "filterName": "Depression",
             "viewType": "summary",
             "maximizeScreen": "news-feed"
         }, {
@@ -58,7 +59,7 @@ define([
             "dataRow": "1",
             "dataSizeX": "8",
             "dataSizeY": "6",
-            "filterName": "Filtered Depression",
+            "filterName": "Depression",
             "viewType": "summary",
             "maximizeScreen": "documents-list"
         }, {
@@ -74,7 +75,7 @@ define([
             "dataRow": "1",
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Depression",
+            "filterName": "Depression",
             "maximizeScreen": "orders-full",
             "viewType": "summary"
         }, {
@@ -90,7 +91,7 @@ define([
             "dataRow": "7",
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Depression",
+            "filterName": "Depression",
             "maximizeScreen": "lab-results-grid-full",
             "viewType": "gist"
         }, {
@@ -106,7 +107,7 @@ define([
             "dataRow": "1",
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Depression",
+            "filterName": "Depression",
             "maximizeScreen": "appointments-full",
             "viewType": "summary"
         }, {
@@ -122,7 +123,7 @@ define([
             "dataRow": "7",
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Depression",
+            "filterName": "Depression",
             "maximizeScreen": "cds-advice-full",
             "viewType": "summary"
         },
@@ -139,7 +140,7 @@ define([
             "dataRow": "7",
             "dataSizeX": "8",
             "dataSizeY": "6",
-            "filterName": "Filtered Depression",
+            "filterName": "Depression",
             "viewType": "expanded",
             "maximizeScreen": "medication-review"
         }],

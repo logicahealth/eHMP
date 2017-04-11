@@ -37,7 +37,7 @@ Scenario: Limiting the number of results with the 'start', 'limit', 'observedFro
     | pid              | _ack     | observedFrom | observedTo | start | limit |
     | 9E7A;3     | true     | 2007         | 2008       | 10    | 14    |
     Then a successful response is returned
-    And the client receives "446" total items but only "14" current items with a start index of "10"
+    And the client receives "453" total items but only "14" current items with a start index of "10"
 
 @US2034 @DE377 @labsByPanel_anatomic_pathology
 Scenario: Show the anatomic pathology results from labs applet
@@ -81,7 +81,7 @@ Scenario: Show the microbiology results from labs applet
   And the VPR results contain
       | field           | value        |
       | pid             | 9E7A;9       |
-      | observed        | 199309112315 |
+      | observed        | 19930911231500 |
       | kind            | Microbiology |
       | sample          | URINE        |
       | specimen        | URINE        |

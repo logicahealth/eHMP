@@ -6,7 +6,7 @@ require 'VerifyJsonRuntimeValue.rb'
 
 When(/^the user searches "(.*?)" for the patient "(.*?)" in VPR format$/) do |domain, pid|
   path = QueryRDK.new(pid, domain).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the corresponding number of groups displayed is "(.*?)"/) do |total|
@@ -27,5 +27,5 @@ When(/^the client requests a text search for term "([^"]*)" for the patient "([^
   request.add_parameter('query', term)
   p request.path
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end

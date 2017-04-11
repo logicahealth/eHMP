@@ -22,7 +22,7 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'moment', 'testUtil
         function getCurrentPatient(){
             var patient = new Backbone.Model();
             patient.set('pid', '9E7A;1234');
-            patient.set('visit', {uid: 'urn:va:user:1234'});
+            patient.set('visit', {locationUid: 'urn:va:location:9E7A:195'});
             return patient;
         }
 
@@ -47,7 +47,7 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'moment', 'testUtil
                 var vitalsModel = WritebackUtil.buildSaveVitalsModel(model, false, getIENMap(), getUser(), getCurrentPatient(), saveVitalsModel);
                 expect(vitalsModel.get('dateTime')).toEqual('201312011212');
                 expect(vitalsModel.get('dfn')).toEqual('1234');
-                expect(vitalsModel.get('locIEN')).toEqual('urn:va:user:1234');
+                expect(vitalsModel.get('locationUid')).toEqual('urn:va:location:9E7A:195');
                 expect(vitalsModel.get('enterdByIEN')).toEqual('1234');
                 expect(vitalsModel.get('vitals').length).toEqual(0);
             });

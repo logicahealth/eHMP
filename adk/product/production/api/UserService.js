@@ -7,15 +7,17 @@ define([
     'moment',
     'api/Messaging',
     'api/Navigation',
+    'api/Checks',
     'api/SessionStorage',
     'api/ResourceService',
     'main/components/views/popupView'
-], function(Backbone, $, _, UrlBuilder, sessionStorage, moment, Messaging, Navigation, SessionStorage, ResourceService, popupView) {
+], function(Backbone, $, _, UrlBuilder, sessionStorage, moment, Messaging, Navigation, Checks, SessionStorage, ResourceService, popupView) {
     'use strict';
 
     var USERKEY = 'user';
     var LOCALEXPIRATION = 'localExpiration';
     var AVGRESPONSETRAVELTIME = 250; //in milliseconds
+    var JWTSESSION = 'X-Set-JWT'; //same as in main/Init
 
     var UserService = {
 
@@ -62,9 +64,20 @@ define([
         authenticate: function(userName, password, facility) {
             var resourceTitle = "authentication-authentication";
             var userSession = this.getUserSession();
+            userSession.clear({
+                silent: true
+            });
             userSession.url = UrlBuilder.buildUrl(resourceTitle);
             var deferred = $.Deferred();
-
+            userSession.listenToOnce(userSession, 'request', function(model) {
+                this.set({
+                    accessCode: '',
+                    verifyCode: ''
+                }, {
+                    unset: true,
+                    silent: true
+                });
+            });
             userSession.save({
                 'accessCode': userName,
                 'verifyCode': password,
@@ -72,29 +85,37 @@ define([
             }, {
                 type: 'POST',
                 contentType: 'application/json',
-                success: function(response, xhr) {
-                    if (xhr.data) {
-                        userSession = new Backbone.Model(xhr.data);
-                    } else {
-                        userSession = new Backbone.Model(xhr);
+                success: function(model, response, xhrObj) {
+                    var newJwt = xhrObj.xhr.getResponseHeader(JWTSESSION);
+                    //if we get a jwt header we should set it for reuse during this client session
+                    if (!newJwt) {
+                        return deferred.reject({
+                            status: 403,
+                            responseText: '{"message": "No jwt token returned"}'
+                        });
                     }
-                    userSession.set('status', UserService.STATUS.LOGGEDIN);
-                    UserService.setLocalExpiration(userSession);
+                    SessionStorage.set.sessionModel(JWTSESSION, new Backbone.Model({
+                        jwt: newJwt
+                    }));
+
+                    model.set('status', UserService.STATUS.LOGGEDIN);
+                    UserService.setLocalExpiration(model);
+
                     //for demo purposes
-                    if (userSession.get('facility') === 'PANORAMA') {
-                        userSession.set('infobutton-oid', '1.3.6.1.4.1.3768.86'); //Portland
-                    } else if (userSession.get('facility') === 'KODAK') {
-                        userSession.set('infobutton-oid', '1.3.6.1.4.1.3768.97'); //Utah
+                    if (model.get('facility') === 'PANORAMA') {
+                        model.set('infobutton-oid', '1.3.6.1.4.1.3768.86'); //Portland
+                    } else if (model.get('facility') === 'KODAK') {
+                        model.set('infobutton-oid', '1.3.6.1.4.1.3768.97'); //Utah
                     } else {
-                        userSession.set('infobutton-oid', '1.3.6.1.4.1.3768'); //default
+                        model.set('infobutton-oid', '1.3.6.1.4.1.3768'); //default
                     }
-                    userSession.set('infobutton-site', 'http://service.oib.utah.edu:8080/infobutton-service/infoRequest?');
-                    SessionStorage.delete.sessionModel(USERKEY);
-                    UserService.setUserSession(userSession);
+                    model.set('infobutton-site', 'http://service.oib.utah.edu:8080/infobutton-service/infoRequest?');
+
+                    UserService.setUserSession(model);
                     Messaging.trigger('app:logged-in');
                     deferred.resolve();
                 },
-                error: function(model, response) {
+                error: function(model, response, xhrObj) {
                     console.log("Failed to authenticate with error response status: " + response.status);
                     UserService.clearUserSession();
                     deferred.reject(response);
@@ -102,19 +123,19 @@ define([
             });
 
             return deferred.promise();
-
         },
 
         /**
          * Destroys the session on the RDK server
          * @return {undefined}
          */
-        clearUserSession: function() {
+        clearUserSession: function(shouldNavigate) {
+            var userSession = SessionStorage.get.sessionModel(USERKEY);
+            var status = userSession.get('status');
+            if (_.isUndefined(status)) return;
             Messaging.trigger('user:beginSessionEnd');
             var resourceTitle = "authentication-destroySession";
-            var userSession = SessionStorage.get.sessionModel(USERKEY);
             userSession.url = UrlBuilder.buildUrl(resourceTitle);
-            var status = userSession.get('status');
 
             if (status && status !== UserService.STATUS.LOGGEDOUT) {
 
@@ -126,11 +147,10 @@ define([
                     },
                     error: function(model, response, options) {
                         console.log(response + ' Error: Could not destroy user session');
-                    },
-                    async: true
+                    }
                 });
 
-                UserService.endClientSession(userSession);
+                UserService.endClientSession(userSession, shouldNavigate);
             }
         },
 
@@ -138,12 +158,17 @@ define([
          * Destroys the user session on the client
          * @return undefined
          */
-        endClientSession: function() {
+        endClientSession: function(shouldNavigate) {
             //This clears the ADK Session storage and the browser session storage
-            Navigation._navigationChecks.reset();
+            Checks._checkCollection.reset();
             SessionStorage.delete.all();
             Backbone.fetchCache._cache = {};
             Messaging.trigger('user:sessionEnd');
+
+            shouldNavigate = _.isBoolean(shouldNavigate) ? shouldNavigate : true;
+            if (shouldNavigate) {
+                Navigation.navigate();
+            }
         },
 
         /**
@@ -179,7 +204,6 @@ define([
                     timeLeft = 0;
                 }
             }
-
             return timeLeft;
         },
 
@@ -190,49 +214,42 @@ define([
          * @return {undefined}
          */
         refreshUserToken: function(callback) {
-            var resourceTitle = "authentication-refreshToken";
-            var userSession = this.getUserSession();
-            userSession.url = UrlBuilder.buildUrl(resourceTitle);
+            if (UserService.getUserSession() !== UserService.STATUS.LOGGEDOUT) {
+                var resourceTitle = "authentication-refreshToken";
+                var userSession = this.getUserSession();
+                userSession.url = UrlBuilder.buildUrl(resourceTitle);
 
-            userSession.fetch({
-                success: function(model, response, options) {
-                    if (_.has(response, 'data') && !_.isEmpty(response.data)) {
+                userSession.fetch({
+                    success: function(model, response, options) {
                         var expires = _.result(response.data, 'expires', model.get('expires'));
                         model.set('expires', moment(expires).utc().format(), {
                             silent: true
                         });
-                    }
-                    model.set('status', UserService.STATUS.LOGGEDIN, {
-                        silent: true
-                    });
-                    UserService.setUserSession(model);
-                    UserService.setLocalExpiration(userSession);
-                    Messaging.trigger('user:sessionRefresh');
-                },
-                error: function(model, response, options) {
-                    if (response.status == '401') {
-                        var logId = response.getResponseHeader('logId');
-                        console.log(response.status + ' Error: User Session has been cleared by the server.');
-                        var userSession = SessionStorage.get.sessionModel(USERKEY);
-                        var status = userSession.get('status');
-                        if (status && status === UserService.STATUS.LOGGEDIN) {
+                        model.set('status', UserService.STATUS.LOGGEDIN, {
+                            silent: true
+                        });
+                        UserService.setLocalExpiration(model);
+                        UserService.setUserSession(model);
+                        Messaging.trigger('user:sessionRefresh');
+                    },
+                    error: function(model, response, options) {
+                        if (response.status == '401') {
+                            var logId = response.getResponseHeader('requestId');
+                            var userSession = SessionStorage.get.sessionModel(USERKEY);
+                            var status = userSession.get('status');
                             var popupModel = popupView.extendDefaultModel({
                                 title: 'Warning: Server Session Ended.',
                                 header: 'You have been logged out due to a server session issue.',
-                                footer: 'The session has ended on the server. Please log in again to continue. If the problem persists please contact your IT department and provide them with the following logId: ' + logId + '.',
+                                footer: 'The session has ended on the server. Log in again to continue. If the problem persists contact your IT department and provide them with the following requestId: ' + requestId + '.',
                                 buttons: false
                             });
                             popupView.setModel(popupModel, false);
-                            popupView.logout();
+                            return UserService.clearUserSession();
                         }
-                        return UserService.clearUserSession();
+                        Messaging.trigger('user:sessionRefresh');
                     }
-
-                    console.log(response.status + ' Error: Could not refresh user session');
-                    Messaging.trigger('user:sessionRefresh');
-                },
-                async: true
-            });
+                });
+            }
         },
 
         getStatus: function() {
@@ -250,13 +267,19 @@ define([
         },
 
         /**
-         * A method to check a user permission given a string of permissions
+         * A method to check a user permission given a string of permissions or an array of permissions.
          * @return {boolean}
          */
         hasPermissions: function(args) {
-            var permissions = args.split(/[|&]/);
+            var permissions;
 
-            if (args.match(/&/)) {
+            if (_.isString(args)) {
+                permissions = args.split(/[|&]/);
+            } else if (_.isArray(args)) {
+                permissions = args;
+            }
+
+            if (_.isArray(args) || args.match(/&/)) {
                 return _.all(permissions, function(permission) {
                     return this.hasPermission(permission);
                 }, this);

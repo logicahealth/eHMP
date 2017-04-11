@@ -44,7 +44,7 @@ define([], function() {
             	type: 'encounters-visit-categories',
                 visitDate: options.dateTime || '',
                 site: this.user.get('site'),
-                ien: options.clinicIen || ''
+                locationUid: options.locationUid || ''
             };
         }    });
 

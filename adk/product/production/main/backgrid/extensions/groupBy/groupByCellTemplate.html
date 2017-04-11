@@ -1,4 +1,6 @@
-<a class="group-by-header inline-block-display left-margin-xs" href="#" aria-label="{{title}}. Number of items: {{count}}" aria-expanded="true" role="button">
-	<strong>{{title}}</strong>
-	<span class="group-by-count-badge badge hidden left-margin-xs" data-group-instanceid="{{id}}_groupCount">{{count}}</span>
-</a>
+<button class="left-margin-xs btn btn-accordion" aria-expanded="true" type="button" title="Press enter to collapse {{title}} accordion.">
+	<span class="sr-only" aria-hidden="true">{{count}} results in</span>
+	{{title}}
+	<span class="group-by-count-badge badge hidden left-margin-xs" data-group-instanceid="{{id}}_groupCount" aria-hidden="true">{{count}}</span>
+
+</button>

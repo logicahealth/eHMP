@@ -24,13 +24,13 @@ define([
 
             if (_.isEmpty(this.get('signatureCode'))) {
                 this.errorModel.set({
-                    signatureCode: "Please enter a valid signature"
+                    signatureCode: "Enter a valid signature"
                 });
             }
             var selectedItems = this.getSelected();
             if (selectedItems.length === 0) {
                 this.errorModel.set({
-                    itemChecklist: "Please select at least one item."
+                    itemChecklist: "Select at least one item."
                 });
             }
             if (!_.isEmpty(this.errorModel.toJSON())) {

@@ -1,7 +1,6 @@
 path = File.expand_path '..', __FILE__
 $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 require 'DefaultLogin.rb'
-require 'HTTPartyWithAuthorization.rb'
 require 'JsonVerifier.rb'
 
 class PatientCache
@@ -15,7 +14,7 @@ class PatientCache
     path.concat("&row.start=0")
     path.concat("&row.count=1000")
     #p path
-    @response = HTTPartyWithAuthorization.get_with_authorization(path)
+    @response = HTTPartyRDK.get(path)
     return @response
   end
 
@@ -105,12 +104,12 @@ if __FILE__ == $PROGRAM_NAME
 
   base_url = DefaultLogin.hmp_url
   path = "#{base_url}/sync/load?dfn=#{dfn}"
-  @response = HTTPartyWithAuthorization.post_with_authorization(path)
+  @response = HTTPartyRDK.post(path)
   fail "sync dfn #{dfn} failed" unless @response.code == 200
 
   base_url = DefaultLogin.hmp_url
   path = "#{base_url}/sync/load?icn=#{icn}"
-  @response = HTTPartyWithAuthorization.post_with_authorization(path)
+  @response = HTTPartyRDK.post(path)
   fail "sync icn #{dfn} failed" unless @response.code == 200
 
   sleep 5

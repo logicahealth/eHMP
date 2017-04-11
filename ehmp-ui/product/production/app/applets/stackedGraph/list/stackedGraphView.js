@@ -4,64 +4,61 @@ define([
     'underscore',
     'highcharts',
     'hbs!app/applets/stackedGraph/list/stackedGraphViewTemplate',
-    'app/applets/stackedGraph/list/deleteConfirmationView',
     'app/applets/stackedGraph/list/chartsCompositeView',
     'app/applets/medication_review_v2/medicationCollectionHandler',
     'app/applets/medication_review_v2/medicationResourceHandler',
     'app/applets/stackedGraph/utils/utils',
-    'app/applets/lab_results_grid/applet',
-    'app/applets/vitals/applet',
     'typeahead',
-    'highcharts-more'
-], function(Backbone, Marionette, _, Highcharts, StackedGraphViewTemplate, ConfirmationView, ChartsCompositeView, CollectionHandler, MedsResource, Utils) {
+    'highcharts-more',
+    'app/applets/medication_review_v2/applet',
+    'app/applets/lab_results_grid/applet'
+], function(Backbone, Marionette, _, Highcharts, StackedGraphViewTemplate, ChartsCompositeView, CollectionHandler, MedsResource, Utils) {
     "use strict";
-
-
-    // var FilterView = Backbone.Marionette.ItemView.extend({
-    //     template: _.template("I am a filter view!")
-    // });
 
     return Backbone.Marionette.LayoutView.extend({
         template: StackedGraphViewTemplate,
         initialize: function(options) {
             var self = this;
+            this.appletOptions = options;
             this.predefined = ADK.ADKApp.currentScreen.config.predefined;
-            this.allReadyAdded = [];
+            this.isAdded = [];
             this.activeCharts = [];
             this.timeLineCharts = [];
             this.instanceId = options.appletConfig.instanceId;
-            this.chartOptionsCollection = new Backbone.Collection();
-            this.chartOptionsCollection.on('remove', function(model, collection, options) {
-                self.activeCharts.splice(options.index, 1);
-                var index = _.indexOf(self.allReadyAdded, (model.get('typeName').toUpperCase() + '-' + model.get('graphType').toUpperCase()));
-                if (index !== -1) {
-                    self.allReadyAdded.splice(index, 1);
-                }
-                if (collection.length === 0) {
-                    self.chartsCompositeView.$noGraph.show();
+            this.chartOptionsCollection = new Backbone.Collection(null, {
+                comparator: function(graph) {
+                    return graph.get('stackedGraphPosition');
                 }
             });
-            // this.filterView = new FilterView();
-            this.chartsCompositeView = new ChartsCompositeView({
-                collection: this.chartOptionsCollection,
-                instanceId: this.instanceId,
-                options: {
-                    appletId: options.appletConfig.id,
-                    allReadyAdded: self.allReadyAdded
-                },
-                activeCharts: this.activeCharts,
-                timeLineCharts: this.timeLineCharts
-            });
-            var readyToChart = true;
-            this.stackedGraphChannel = ADK.Messaging.getChannel('stackedGraph');
 
-            
+            this.listenTo(this.chartOptionsCollection, 'remove', function(model, collection, options) {
+                if (!_.isUndefined(options.removeIndex)) {
+                    // Remove the reordered chart from the activeCharts array.
+                    self.activeCharts.splice(self.activeCharts.length - (options.removeIndex+1), 1);
+                }
+            });
+            this.stackedGraphChannel = ADK.Messaging.getChannel('stackedGraph');
             this.listenTo(this.stackedGraphChannel, 'readyToChart', function(response) {
                 if (response.response.requesterInstanceId === self.instanceId) {
-                    self.chartsCompositeView.$noGraph.hide();
-                    self.chartOptionsCollection.unshift(response.response);
-                    self.allReadyAdded.unshift((response.response.typeName + '-' + response.response.graphType.toUpperCase()));
-                    readyToChart = true;
+                    if (!_.isUndefined(self.chartsCompositeView)) {
+                        //Need this for when adding new graphs
+                        self.chartsCompositeView.$noGraph.hide();
+                    }
+                    //we need to map this model to the original response's graphType and typeName
+                    //incoming graphType and typeName on response may not necessarily be the same that we sent on request
+                    //example: The vitals stacked graph changes Blood Pressure to Blood Pressure Systolic on the response. This breaks deleting the graph when mismatch occurs
+                    response.response.stackedGraphType = response.requestParams.graphType;
+                    response.response.stackedGraphTypeName = response.requestParams.typeName;
+                    response.response.stackedGraphPosition = response.requestParams.graphPosition;
+
+                    self.chartOptionsCollection.add(response.response);
+                    self.isAdded.unshift((response.requestParams.typeName + '-' + response.requestParams.graphType.toUpperCase()));
+                    var persistedPickList = ADK.UserDefinedScreens.getStackedGraphForOneAppletFromSession(ADK.ADKApp.currentScreen.config.id, self.instanceId);
+                    if (_.isUndefined(persistedPickList) || persistedPickList.length === self.isAdded.length) {
+                        this.showDefaultScreen(self);
+                        self.chartsCompositeView.$noGraph.hide();
+                        self.isLoading = false;
+                    }
                 }
             });
 
@@ -86,25 +83,42 @@ define([
                     return;
                 }
 
-                //display confirmation view
-                var ConfirmView = new ConfirmationView({
-                    graphTitle: response.model.attributes.typeName,
-                    callback: function() {
+                var bodyView = Backbone.Marionette.ItemView.extend({
+                    template: _.template('<p><strong>Are you sure you want to remove the ' + response.model.attributes.typeName + ' graph?</strong></p>')
+                });
+
+                var footerView = Backbone.Marionette.ItemView.extend({
+                    template: _.template('<button type="button" class="btn btn-default" title="Press enter to cancel and close this dialog" data-dismiss="modal">Cancel</button>' +
+                        '<button type="button" class="btn btn-danger" title="Press enter to delete this stacked graph" data-dismiss="modal">Delete</button>'),
+                    events: {
+                        'click .btn-danger': 'deleteGraph',
+                        'click .btn-default': 'cancelDelete'
+                    },
+                    deleteGraph: function() {
+                        var focusEl = this.findFocusEl();
                         var pickListPersistanceFetchOptions = {
                             resourceTitle: 'user-defined-stack',
                             fetchType: 'DELETE',
                             criteria: {
                                 id: ADK.ADKApp.currentScreen.config.id,
                                 instanceId: self.instanceId,
-                                graphType: response.model.attributes.graphType,
-                                typeName: response.model.attributes.typeName.toUpperCase()
+                                graphType: response.model.attributes.stackedGraphType,
+                                typeName: response.model.attributes.stackedGraphTypeName.toUpperCase()
                             },
 
                             onSuccess: function() {
                                 var filter = self.chartOptionsCollection.filter(function(model) {
-                                    return (model.get('typeName').toUpperCase() + '-' + model.get('graphType').toUpperCase()) === (response.model.get('typeName').toUpperCase() + '-' + response.model.get('graphType').toUpperCase());
+                                    return (model.get('stackedGraphTypeName').toUpperCase() + '-' + model.get('stackedGraphType').toUpperCase()) === (response.model.get('stackedGraphTypeName').toUpperCase() + '-' + response.model.get('stackedGraphType').toUpperCase());
                                 });
                                 self.chartOptionsCollection.remove(filter);
+                                var index = _.indexOf(self.isAdded, (filter[0].get('stackedGraphTypeName').toUpperCase() + '-' + filter[0].get('stackedGraphType').toUpperCase()));
+                                if (index !== -1) {
+                                    self.isAdded.splice(index, 1);
+                                }
+                                // Reset the applet graph view if all charts are removed.
+                                if (self.chartOptionsCollection.length === 0) {
+                                    self.chartsCompositeView.$noGraph.show();
+                                }
                             }
                         };
 
@@ -113,25 +127,48 @@ define([
                         ADK.UserDefinedScreens.removeOneStackedGraphFromSession(
                             ADK.ADKApp.currentScreen.config.id,
                             self.instanceId,
-                            response.model.attributes.graphType,
-                            response.model.attributes.typeName.toUpperCase());
-
+                            response.model.attributes.stackedGraphType,
+                            response.model.attributes.stackedGraphTypeName
+                        );
+                        ADK.UI.Alert.hide();
+                        focusEl.focus();
+                    },
+                    cancelDelete: function() {
+                        ADK.UI.Alert.hide();
+                        if (this.model.get('activeEl').length === 0) {
+                            this.model.get('picklistBtnEl').focus();
+                        } else {
+                            this.model.get('activeEl').focus();
+                        }
+                    },
+                    findFocusEl: function() {
+                        var activeRow = this.model.get('activeEl');
+                        var nextRow = activeRow.next();
+                        if (activeRow.siblings('[tabindex]').length === 0) {
+                            return this.model.get('picklistBtnEl');
+                        } else if (nextRow.attr('tabindex') === '0') {
+                            return nextRow;
+                        } else {
+                            return activeRow.prev();
+                        }
                     }
                 });
-                var modalOptions = {
-                    'size': "medium",
-                    'backdrop': true,
-                    'keyboard': true,
-                    'callShow': true,
-                    'footerView': 'none'
-                };
 
-                var modal = new ADK.UI.Modal({
-                    view: ConfirmView,
-                    options: modalOptions
+                var footerModel = new Backbone.Model({
+                    activeEl: this.$('.toolbar-active'),
+                    picklistBtnEl: this.$el.closest('[data-appletid="stackedGraph"]').find('[data-toggle="dropdown"]')
+                });
+
+                var modal = new ADK.UI.Alert({
+                    title: 'Remove Graph',
+                    icon: 'icon-delete',
+                    messageView: bodyView,
+                    footerView: footerView.extend({
+                        model: footerModel
+                    })
+
                 });
                 modal.show();
-
             });
 
             var persistedPickList = ADK.UserDefinedScreens.getStackedGraphForOneAppletFromSession(ADK.ADKApp.currentScreen.config.id, self.instanceId);
@@ -140,10 +177,13 @@ define([
                 populateApplet(persistedPickList);
             }
 
-            ADK.Messaging.on('refresh:applet', function(instanceId) {
+            this.listenTo(ADK.Messaging, 'refresh:applet', function(instanceId) {
                 if (self.instanceId !== instanceId) {
                     return;
                 }
+                // Clear out activeCharts to prevent memory leak
+                self.activeCharts = [];
+                self.isAdded.length = 0; //this clears the array without breaking reference on chartsCompositeView
                 var persistedPickList = ADK.UserDefinedScreens.getStackedGraphForOneAppletFromSession(ADK.ADKApp.currentScreen.config.id, self.instanceId);
                 if (persistedPickList) {
                     populateApplet(persistedPickList);
@@ -152,65 +192,72 @@ define([
             });
 
             function populateApplet(persistedPickList) {
+                self.isLoading = true;
+                if (self.isRendered) {
+                    self.collectionViewRegion.show(ADK.Views.Loading.create());
+                }
 
-                var ind = 0;
-                var interval = setInterval(function() {
-                    if (persistedPickList.length === ind) {
-                        clearInterval(interval);
+                //separate function as lint would not allow anonymous function in callbacks inside a loop.
+                var requestGraphInfo = function(index) {
 
-                    } else {
-                        if (readyToChart) {
-                            readyToChart = false;
-                            var persistedPickListItem = persistedPickList[ind];
-                            var params = {
-                                typeName: persistedPickListItem.typeName,
-                                instanceId: self.instanceId,
-                                graphType: persistedPickListItem.graphType
+                    var persistedPickListItem = persistedPickList[index];
+                    var params = {
+                        typeName: persistedPickListItem.typeName,
+                        instanceId: self.instanceId,
+                        graphType: persistedPickListItem.graphType,
+                        graphPosition: persistedPickList.length - index //last graph on list must be shown first an so on.
 
-                            };
-                            var channel;
-                            var $deferred = $.Deferred();
+                    };
 
-                            if (persistedPickListItem.graphType === 'Vitals') {
-                                channel = ADK.Messaging.getChannel('vitals');
-                                $deferred.resolve({
-                                    collection: null
-                                });
+                    var channel;
+                    var $deferred = $.Deferred();
+
+                    if (persistedPickListItem.graphType === 'Vitals') {
+                        channel = ADK.Messaging.getChannel('vitals');
+                        $deferred.resolve({
+                            collection: null
+                        });
 
 
-                            } else if (persistedPickListItem.graphType === 'Lab Tests') {
-                                channel = ADK.Messaging.getChannel('lab_results_grid');
-                                $deferred.resolve({
-                                    collection: null
-                                });
-                            } else if (persistedPickListItem.graphType === 'Medications') {
-                                channel = ADK.Messaging.getChannel('meds_review');
-                                CollectionHandler.fetchAllMeds(false, function(collection) {
-                                    var groupNames = MedsResource.getMedicationGroupNames(collection);
-                                    $deferred.resolve({
-                                        collection: collection
-                                    });
-                                });
-                            }
-
-                            $deferred.done(function(response) {
-                                params.collection = response.collection;
-                                channel.request('chartInfo', params);
-                                ind = ind + 1;
+                    } else if (persistedPickListItem.graphType === 'Lab Tests') {
+                        channel = ADK.Messaging.getChannel('lab_results_grid');
+                        $deferred.resolve({
+                            collection: null
+                        });
+                    } else if (persistedPickListItem.graphType === 'Medications') {
+                        channel = ADK.Messaging.getChannel('meds_review');
+                        CollectionHandler.fetchAllMeds(false, function(collection) {
+                            $deferred.resolve({
+                                collection: collection
                             });
-
-
-                        }
+                        });
                     }
 
-                }, 100);
+                    $deferred.done(function(response) {
+                        params.collection = response.collection;
+                        channel.request('chartInfo', params);
+                    });
+                };
+
+
+                for (var ind = 0; ind < persistedPickList.length; ind++) {
+                    requestGraphInfo(ind);
+                }
 
             }
 
-            //end of intialize
         },
-        onShow: function() {
-            var self = this;
+        showDefaultScreen: function(self) {
+            self.chartsCompositeView = new ChartsCompositeView({
+                collection: self.chartOptionsCollection,
+                instanceId: self.instanceId,
+                options: {
+                    appletId: self.appletOptions.appletConfig.id,
+                    isAdded: self.isAdded
+                },
+                activeCharts: self.activeCharts,
+                timeLineCharts: self.timeLineCharts
+            });
 
             var sessionGlobalDate = ADK.SessionStorage.getModel_SessionStoragePreference('globalDate');
             var fromDate = moment(sessionGlobalDate.get('fromDate'), 'MM/DD/YYYY');
@@ -236,12 +283,12 @@ define([
 
             // Same as above
             window.requestAnimationFrame(function() {
-                var timeLineChart2 = self.$('.footerplaceholder').highcharts(self.pChartOptions).highcharts();
+                var timeLineChart2 = self.$('.footer-placeholder').highcharts(self.pChartOptions).highcharts();
                 timeLineChart2.xAxis[0].setExtremes(Date.UTC(fromDate.year(), fromDate.month(), fromDate.date()), Date.UTC(toDate.year(), toDate.month(), toDate.date()));
                 self.timeLineCharts.push(timeLineChart2);
             });
 
-            this.collectionViewRegion.show(this.chartsCompositeView);
+            self.collectionViewRegion.show(self.chartsCompositeView);
 
             function onMouseLeaveHitArea(evt) {
                 $.each(self.activeCharts, function(i, obj) {
@@ -249,10 +296,9 @@ define([
                 });
             }
 
-            var cr = self.$('.crosshairs');
-            var pointers = self.$('.stackedGraphPointer');
+            var pointers = self.$('.stacked-graph-pointer');
 
-            self.$('*').not('.collectionContainer .renderTo, .highcharts-container').on('mouseover.stackedGraph', function(e) {
+            self.$('*').not('.collection-container .render-to, .highcharts-container').on('mouseover.stackedGraph', function(e) {
                 pointers.css({
                     visibility: 'hidden'
                 });
@@ -273,7 +319,7 @@ define([
 
             });
 
-            self.$('.collectionContainer').on({
+            self.$('.collection-container').on({
                 'mouseover.stackedGraph': function(evt) {
                     evt.stopPropagation();
                     if (self.activeCharts.length < 1) {
@@ -316,7 +362,7 @@ define([
 
                     pointers.text(moment(self.activeCharts[0].xAxis[0].toValue(chartX.chartX)).format('M/D/YY'));
 
-                    var offSet = self.$('.pointerContainer').offset();
+                    var offSet = self.$('.pointer-container').offset();
                     var mouseX = (evt.pageX - offSet.left);
                     pointers.css({
                         left: mouseX - pointers.eq(0).width(),
@@ -326,7 +372,15 @@ define([
                 }
 
             }, '.highcharts-container');
-
+        },
+        onShow: function() {
+            var self = this;
+            if (!this.isLoading) {
+                this.showDefaultScreen(self);
+            } else {
+                //If we have charts to load, show loading screen.
+                this.collectionViewRegion.show(ADK.Views.Loading.create());
+            }
         },
         pChartOptions: {
             chart: {
@@ -378,12 +432,11 @@ define([
             ADK.Messaging.trigger('refresh:applet', this.instanceId);
         },
         regions: {
-            collectionViewRegion: '.grid-container' //,
+            collectionViewRegion: '.grid-container'
         },
         onDestroy: function() {
-            ADK.Messaging.off('refresh:applet');
-            this.$('.collectionContainer').off('.stackedGraph');
-            this.$('*').not('.collectionContainer .renderTo, .highcharts-container').off('.stackedGraph');
+            this.$('.collection-container').off('.stackedGraph');
+            this.$('*').not('.collection-container .render-to, .highcharts-container').off('.stackedGraph');
 
             _.each(this.activeCharts, function(e, i) {
                 e.destroy();

@@ -1,6 +1,6 @@
 # Group Patient
 
-## Patient self assessment [{{{path}}}{?subject.identifier}{&type}{&start}{&limit}{&fields}]
+## Patient self assessment [{{{path}}}{?subject.identifier}{&type}{&start}{&limit}]
 
 + Parameters
 
@@ -11,8 +11,6 @@
     :[start]({{{common}}}/parameters/start.md)
 
     :[limit]({{{common}}}/parameters/limit.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Patient assessment [GET]

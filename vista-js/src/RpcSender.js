@@ -189,7 +189,7 @@ RpcSender.prototype.close = function() {
 
 RpcSender.prototype.setSocketTimeout = function(timeoutMillis) {
     this.logger.debug('RpcSender.setSocketTimeout(%s) on %s:%s', timeoutMillis, this.config.host, this.config.port);
-    if (this.socket) {
+    if (this.socket && parseInt(timeoutMillis)) {
         this.socket.setTimeout(timeoutMillis);
     }
 };

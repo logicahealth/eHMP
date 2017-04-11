@@ -3,17 +3,19 @@
 require('../../../env-setup');
 
 var request = require('request');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
 var querystring = require('querystring');
 var util = require('util');
-var logger = require(global.VX_DUMMIES + 'dummy-logger');
-var config = require(global.VX_ROOT + 'worker-config');
-var Terminology = require(global.VX_SUBSYSTEMS + '/terminology/terminology-utils');
-var terminology = new Terminology(logger, logger, config);
+var wConfig = require(global.VX_ROOT + 'worker-config');
+var config = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
+
+var TerminologyUtil = require(global.VX_SUBSYSTEMS + '/terminology/terminology-utils');
 var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
 config.terminology.host = vx_sync_ip;
 
+var terminologyUtil = new TerminologyUtil(log, log, config);
 describe('terminology subsystem', function() {
     var jlvParams = {
         type: 'AllergyVUIDtoUMLSCui',
@@ -148,7 +150,7 @@ describe('terminology subsystem', function() {
     it('terminology subsystem drug lookup', function() {
         var finished = false;
         runs(function() {
-            terminology.getVADrugConcept(drugParams.concept, function(error, concept) {
+            terminologyUtil.getVADrugConcept(drugParams.concept, function(error, concept) {
                 expect(concept).toBeDefined();
                 expect(error).toBeFalsy();
                 expect(val(concept, 'code')).toBeDefined();
@@ -165,7 +167,7 @@ describe('terminology subsystem', function() {
     it('terminology subsystem jlv lookup', function() {
         var finished = false;
         runs(function() {
-            terminology.getJlvMappedCode(jlvParams.type, jlvParams.code, function(error, concept) {
+            terminologyUtil.getJlvMappedCode(jlvParams.type, jlvParams.code, function(error, concept) {
                 expect(concept).toBeDefined();
                 expect(error).toBeFalsy();
                 expect(val(concept, 'code')).toBeDefined();
@@ -182,7 +184,7 @@ describe('terminology subsystem', function() {
     it('terminology subsystem jlv lookup no content', function() {
         var finished = false;
         runs(function() {
-            terminology.getJlvMappedCode('AllergyCHCSIenToUMLSCui', '1825400', function(error, concept) {
+            terminologyUtil.getJlvMappedCode('AllergyCHCSIenToUMLSCui', '1825400', function(error, concept) {
                 expect(concept).toBeNull();
                 expect(error).toBeFalsy();
                 finished = true;
@@ -195,7 +197,7 @@ describe('terminology subsystem', function() {
     it('terminology subsystem lnc lookup', function() {
         var finished = false;
         runs(function() {
-            terminology.getVALoincConcept(lncParams.concept, function(error, concept) {
+            terminologyUtil.getVALoincConcept(lncParams.concept, function(error, concept) {
                 expect(error).toBeFalsy();
                 expect(concept).toBeDefined();
                 expect(val(concept, 'codeSystem')).toBeDefined();
@@ -213,7 +215,7 @@ describe('terminology subsystem', function() {
     it('terminology subsystem drug getConceptMappingTo()', function() {
         var finished = false;
         runs(function() {
-            terminology.getVADrugConcept('urn:vandf:4000624', function(error, concept) {
+            terminologyUtil.getVADrugConcept('urn:vandf:4000624', function(error, concept) {
                 expect(concept).toBeDefined();
                 expect(error).toBeFalsy();
                 expect(val(concept, 'code')).toBeDefined();
@@ -221,7 +223,7 @@ describe('terminology subsystem', function() {
                 expect(val(concept, 'description')).toBeDefined();
                 expect(val(concept, 'sameas')).toBeDefined();
 
-                terminology.getVAConceptMappingTo(concept, 'rxnorm', function(error, mappedConcept) {
+                terminologyUtil.getVAConceptMappingTo(concept, 'rxnorm', function(error, mappedConcept) {
                     expect(error).toBeFalsy();
                     expect(mappedConcept).toBeDefined();
                     expect(val(mappedConcept, 'urn')).toEqual('urn:rxnorm:1190692');

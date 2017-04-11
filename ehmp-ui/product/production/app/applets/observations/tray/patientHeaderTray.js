@@ -21,7 +21,8 @@ define([
         options: {
             tray: ObservationsTray,
             position: 'right',
-            buttonLabel: 'Observations'
+            buttonLabel: 'Observations',
+            iconClass: 'icon icon-icon_observations'
         }
     });
 
@@ -29,7 +30,7 @@ define([
         type: "tray",
         key: "observations",
         group: "writeback",
-        orderIndex: 10,
+        orderIndex: 20,
         view: trayView,
         shouldShow: function() {
             return ADK.PatientRecordService.isPatientInPrimaryVista() && ADK.UserService.hasPermissions('add-immunization|add-allergy|add-vital|add-condition-problem');

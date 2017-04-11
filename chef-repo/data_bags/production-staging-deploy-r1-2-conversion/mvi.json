@@ -1,0 +1,22 @@
+{
+  "id": "mvi",
+  "normal": {
+    "ipaddress": "IP___ADDRESS",
+    "stack": "production-staging-deploy-r1-2-conversion",
+    "roles": [
+      "mvi"
+    ],
+    "mvi": {
+      "sync_path": "/mvi",
+      "port": 8896,
+      "protocol": "http",
+      "agent_options": {
+        "key": null,
+        "reject_unauthorized": null,
+        "request_cert": null,
+        "ca": null,
+        "passphrase": null
+      }
+    }
+  }
+}

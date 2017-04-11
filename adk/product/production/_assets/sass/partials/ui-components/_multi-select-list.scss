@@ -44,18 +44,21 @@
         margin: 0;
     }
     > ul > li {
+        background-color: $pure-white;
         border-top: 1px solid $grey-light;
         cursor: pointer;
         list-style: none;
-        padding: 0 !important;
+        margin-right: 0px;
+        padding: 0;
         a {
-            color: inherit;
+            color: $primary;
             display: inline-flex;
             padding: 10px 0;
             text-decoration: none;
             width: 100%;
             &:hover {
                 text-decoration: none;
+                color: $primary-dark;
             }
         }
         &:hover {

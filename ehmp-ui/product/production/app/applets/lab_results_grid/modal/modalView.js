@@ -56,13 +56,14 @@ define([
     gridOptions.columns = columns;
     gridOptions.appletConfig = {
         name: 'lab_results_modal',
-        id: 'lab_results_grid-modalView'
+        id: 'lab_results_grid-modalView',
+        simpleGrid: true
     };
 
     var DateRangeModel = Backbone.Model.extend({
         defaults: {
-            fromDate: null, // moment().subtract('years', 1).format("YYYY-MM-DD"),
-            toDate: null, // moment().add('months', 6).format("YYYY-MM-DD"),
+            fromDate: moment().subtract('years', 2).format(ADK.utils.dateUtils.defaultOptions().placeholder),
+            toDate: moment().format(ADK.utils.dateUtils.defaultOptions().placeholder),
             customFromDate: null,
             customToDate: null,
             selectedId: null // '1yr-range'
@@ -163,10 +164,13 @@ define([
                 var mo = moment(categories[i]);
                 if (e) {
                     var bkColor = labelClass[i];
+                    var textColor;
                     if (bkColor.match('warning')) {
-                        bkColor = '#f0ad4e';
+                        bkColor = '#FD9827';
+                        textColor = '#000000';
                     } else {
-                        bkColor = '#d9534f';
+                        bkColor = '#EB1700';
+                        textColor = '#ffffff';
                     }
                     self.chartOptions.series[0].data.push({
                         y: data[i],
@@ -174,13 +178,13 @@ define([
                             enabled: true,
                             useHTML: false,
                             backgroundColor: bkColor,
-                            borderRadius: 2.25,
+                            borderRadius: 5,
                             formatter: function() {
                                 return interpretationCode[i];
                             },
                             style: {
-                                color: '#ffffff',
-                                fontSize: "9px",
+                                color: textColor,
+                                fontSize: "11px",
                                 padding: '1.8px 5.4px 2.7px 5.4px'
                             }
                         },
@@ -274,6 +278,8 @@ define([
             Chart = new Highcharts.Chart(this.chartOptions);
             $body.on('mouseover.modalChart', '#data-grid-lab_results_grid-modalView tbody tr', this.highLightChartPoint);
             $body.on('mouseout.modalChart', '#data-grid-lab_results_grid-modalView tbody tr', this.highLightChartPoint);
+            this.$el.find('svg').attr('focusable', false);
+            this.$el.find('svg').attr('aria-hidden', true);
         },
         onBeforeDestroy: function() {
             $('body').off('.modalChart');
@@ -351,7 +357,7 @@ define([
             if (this.model.attributes.facilityCode === 'DOD' && self.model.attributes.codes[0].code) {
                 this.fetchOptions.criteria.filter = 'eq("codes[].code",' + self.model.attributes.codes[0].code + ')';
             } else {
-                this.fetchOptions.criteria.filter = 'eq(typeName,"' + self.model.attributes.typeName + '")';
+                this.fetchOptions.criteria.filter = 'eq(typeName,"' + self.model.attributes.typeName + '"), eq(specimen,"' + self.model.attributes.specimen + '")';
             }
 
 
@@ -364,6 +370,8 @@ define([
 
             this.fetchOptions.pageable = true;
             this.fetchOptions.cache = false;
+
+            gridOptions.appletConfig.gridTitle = 'This table represents the selected numeric lab result, ' + this.model.attributes.qualifiedName;
 
             this.fetchOptions.onSuccess = function(collection, response) {
                 self.collection = collection;
@@ -383,20 +391,21 @@ define([
                     self.model.attributes.navHeader = true;
                 }
 
-
-                if (self.chart !== undefined && self.chart !== null) {
+                if (!_.isEmpty(self.chart)) {
                     self.chart.reset();
                 }
 
                 if (collection.length !== 0 && (tempCollection.length !== self.collection.fullCollection.length)) {
                     self.$('#lrDataTableView').removeClass('col-md-12').addClass('col-md-5');
                     self.$('#lrGraph').removeClass('hidden');
-                    self.chart.show(new ChartView({
-                        chartOptions: AppletHelper.chartOptions,
-                        model: self.model,
-                        data: data,
-                        collection: self.collection
-                    }));
+                    if (!_.isEmpty(self.chart)) {
+                        self.chart.show(new ChartView({
+                            chartOptions: AppletHelper.chartOptions,
+                            model: self.model,
+                            data: data,
+                            collection: self.collection
+                        }));
+                    }
                 } else {
                     self.$('#lrDataTableView').removeClass('col-md-5').addClass('col-md-12');
                     self.$('#lrGraph').addClass('hidden');
@@ -419,7 +428,6 @@ define([
                     self.leftColumn.reset();
                     self.leftColumn.show(self.dataGrid);
                 }
-
 
                 gridOptions.collection = self.collection;
                 if (collection.length !== 0) {
@@ -472,6 +480,8 @@ define([
             this.totalTests.show(new TotalView({
                 model: totalTestModel
             }));
+
+            self.collection = ADK.PatientRecordService.fetchCollection(this.fetchOptions);
         }
     });
 

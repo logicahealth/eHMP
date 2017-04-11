@@ -66,6 +66,23 @@ describe('uid-utils', function() {
         });
     });
 
+    describe('Is Valid Uid Format', function(){
+        it('valid uid format', function(){
+            var validUid = 'urn:va:allergy:ABCD:1234:5678';
+            uidUtil.isValidUidFormat(validUid, function(error, uidParts){
+                expect(error).toBeUndefined();
+                expect(uidParts).toBeDefined();
+            });
+        });
+        it('Invalid uid format', function(){
+            var validUid = 'urn:va:allergy:ABCD;3456';
+            uidUtil.isValidUidFormat(validUid, function(error, uidParts){
+                expect(error).toBeDefined();
+                expect(uidParts).toBeUndefined();
+            });
+        });
+    });
+
     describe('get uid for domain', function() {
         var dummySite = 'ABCD';
         var dummyLocalPatientId = 1234;

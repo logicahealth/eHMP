@@ -67,15 +67,13 @@ Get an ICN given a site and DFN
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Site Info [GET {{{path}}}/getSiteInfo{?site}{&fields}]
+### Site Info [GET {{{path}}}/getSiteInfo{?site}]
 
 Get information about a site
 
 + Parameters
 
     + site (string, required) - The site to return information about
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

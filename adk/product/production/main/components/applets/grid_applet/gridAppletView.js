@@ -10,7 +10,8 @@ define([
     'main/components/views/errorView',
     'main/components/applets/grid_applet/views/filterDateRangeView',
     'hbs!main/components/applets/grid_applet/templates/containerTemplate',
-], function($, _, utils, DataGrid, CollectionFilter, ResourceService, SessionStorage, LoadingView, ErrorView, FilterDateRangeView, containerTemplate) {
+    'main/adk_utils/crsUtil'
+], function($, _, utils, DataGrid, CollectionFilter, ResourceService, SessionStorage, LoadingView, ErrorView, FilterDateRangeView, containerTemplate, CrsUtil) {
     'use strict';
 
     var SCROLL_TRIGGERPOINT = 40;
@@ -25,7 +26,7 @@ define([
         }
     }
 
-    return Backbone.Marionette.LayoutView.extend({
+    var GridAppletView = Backbone.Marionette.LayoutView.extend({
 
         initialize: function(options) {
             if (this.options.appletConfig && _.isUndefined(this.options.appletConfig.instanceId)) {
@@ -69,7 +70,6 @@ define([
             if (this.dataGridOptions.filterEnabled === undefined) {
                 this.dataGridOptions.filterEnabled = true;
             }
-
             //Set Data Grid Columns
             if (appletConfig.fullScreen) {
                 dataGridOptions.columns = dataGridOptions.fullScreenColumns || dataGridOptions.summaryColumns || dataGridOptions.columns;
@@ -80,7 +80,22 @@ define([
             }
 
             appletConfig.workspaceId = ADK.Messaging.request('get:current:screen').config.id;
+
             this.model = new Backbone.Model(appletConfig);
+            this.model.set('filterName', this.model.get('filterName'));
+
+            if (this.model.get('filterName') || !ADK.ADKApp.currentScreen.config.predefined) {
+                this.model.set('hasSubHeader', true);
+            } else {
+                this.model.set('hasSubHeader', false);
+            }
+
+            if (ADK.ADKApp.currentScreen.config.predefined) {
+                this.model.set('isPredefined', true);
+            } else {
+                this.model.set('isPredefined', false);
+            }
+
 
             this.initFilterView();
             if (this.dataGridOptions.hasOwnProperty('onClickAdd') && !_.isUndefined(this.dataGridOptions.onClickAdd)) {
@@ -131,8 +146,25 @@ define([
             }
 
             this.createDataGridView();
-
+            this.listenTo(ADK.Messaging, 'adk:globalDate:selected', this.abort);
         },
+
+        /**
+         * Cancel the active requests to the RDK.
+         */
+        abort: function() {
+            var gridView = this.dataGridView.collection;
+            var gridOptions = this.dataGridOptions.collection;
+
+            if ((gridView && gridView.fetchOptions.allowAbort) || (gridOptions && gridOptions.fetchOptions.allowAbort)) {
+                if (gridView && gridView.xhr) {
+                    gridView.xhr.abort();
+                } else if (gridOptions && gridOptions.xhr) {
+                    gridOptions.xhr.abort();
+                }
+            }
+        },
+
         initFilterView: function() {
             //Create Filter and Filter Button View
             if (this.dataGridOptions.filterEnabled === true) {
@@ -203,7 +235,7 @@ define([
                     SessionStorage.setAppletStorageModel(self.expandedAppletId, 'filterText', $(this).val(), true, this.parentWorkspace);
                 });
 
-                this.filterView.$el.find('a[data-backgrid-action=clear]').on('click', function() {
+                this.filterView.$el.find('button[data-backgrid-action=clear]').on('click', function() {
                     SessionStorage.setAppletStorageModel(self.expandedAppletId, 'filterText', $(this).val(), true, this.parentWorkspace);
                 });
 
@@ -216,6 +248,32 @@ define([
             if (this.dataGridOptions.collection instanceof Backbone.PageableCollection) {
                 this.dataGridOptions.collection.setClientInfinite(true);
             }
+            this.$el.find('.edit-filter-name').on('click', function(evt) {
+                var appletInstanceId = self.appletConfig.instanceId;
+                var filterArea = $('#grid-filter-' + appletInstanceId);
+                var filterButton = this.$el;
+
+                if (filterArea.hasClass('in')) {
+                    filterArea.one('hidden.bs.collapse', function() {
+
+                        var filterText = SessionStorage.getAppletStorageModel(appletInstanceId, 'filterText');
+                        if (filterText !== undefined && filterText !== null && filterText.trim().length > 0) {
+                            var queryInputSelector = 'input[name=\'q-' + appletInstanceId + '\']';
+                            $(queryInputSelector).val('').change().keydown();
+                        }
+                    });
+
+                    var filterName = ADK.SessionStorage.getAppletStorageModel(appletInstanceId, 'filterName', true) || '';
+                    filterArea.collapse('hide');
+                } else {
+                    filterArea.one('shown.bs.collapse', function() {
+                        filterArea.find('input.filter-title-input').focus();
+                    });
+
+                    filterArea.collapse('show');
+                }
+                filterArea.collapse('toggle');
+            });
         },
         onShow: function() {
             this.showFilterView();
@@ -234,19 +292,34 @@ define([
             'add': 'onClickAdd'
         },
         ui: {
-            'GroupHeader': 'tr.groupByHeader'
+            'GroupHeader': 'tr.group-by-header'
         },
         events: {
             'click @ui.GroupHeader': 'fetchRowsOnClick'
         },
         fetchRowsOnClick: function(event) {
             event.preventDefault();
+            if (this.dataGridOptions.collection instanceof Backbone.PageableCollection) {
+                var $target = this.$(event.currentTarget);
 
-            var e = this.$(event.currentTarget).nextUntil('tr.groupByHeader');
-            e = $(e.get(e.length-1));
+                // Find the last item
+                var _group = $target.nextUntil('tr.group-by-header');
+                var _lastInGroup = _group.last();
 
-            this.fetchRows(event);
-            e.nextUntil('.groupByHeader').toggle();
+                var _collection = this.dataGridOptions.collection;
+                var _fullCollection = this.dataGridOptions.collection.fullCollection;
+
+                while (!_lastInGroup.hasClass('group-by-header') && _collection.length !== _fullCollection.length) {
+                    this.dataGridOptions.collection.getNextPage({});
+
+                    // This would be faster if there was away to append to group instead of remaking it
+                    _group = $target.nextUntil('tr.group-by-header');
+                    _lastInGroup = _group.last();
+                }
+                _group.toggle();
+                return;
+            }
+            this.$(event.currentTarget).nextUntil('tr.group-by-header').toggle();
         },
         fetchRows: function(event) {
             var e = event.currentTarget;
@@ -277,7 +350,7 @@ define([
             if (this.filterView) {
                 var searchText = SessionStorage.getAppletStorageModel(this.expandedAppletId, 'filterText', true, this.parentWorkspace);
                 if (this.filterView.userDefinedFilters.length > 0 || (searchText !== undefined && searchText !== null && searchText.trim().length > 0)) {
-                    this.filterView.search();
+                    this.filterView.applyFilters();
                 }
             }
 
@@ -301,8 +374,8 @@ define([
                         this.dataGridView.collection = this.dataGridOptions.collection.models;
                     }
                 } else {
-                    if (this.dataGridView instanceof Backbone.Marionette.View && this.dataGridView.gridView.collection !== this.dataGridOptions.collection) {
-                        this.dataGridView.gridView.collection = this.dataGridOptions.collection;
+                    if (this.dataGridView instanceof Backbone.Marionette.View && this.dataGridView.collection !== this.dataGridOptions.collection) {
+                        this.dataGridView.collection = this.dataGridOptions.collection;
                     }
                 }
             }
@@ -330,6 +403,10 @@ define([
                 elementToScroll.off('scroll.infinite');
                 elementToScroll.on('scroll.infinite', function(event) {
                     self.fetchRows(event);
+                    var newItems = CrsUtil.findCurrentCRSItems('gridAppletView');
+                    if (newItems) {
+                        $('#aria-live-assertive-region p').replaceWith('<p>' + CrsUtil.screenReaderFeedback.FOUND_RELATED_CONCEPT + '</p>');
+                    }
                 });
                 this.listenTo(this, 'destroy', function() {
                     elementToScroll.off('scroll.infinite');
@@ -349,12 +426,16 @@ define([
                     var $el = this.$(el);
                     $el.attr({
                         'data-infobutton': $el.find('td:first').text(),
-                        'title': 'Press enter to open applet toolbar.'
-                    });
+                    }).find('td:first-child').prepend("<span class='sr-only toolbar-instructions'>Press enter to open the toolbar menu.</span>");
                 }, this);
             }
         },
         onError: function(collection, resp) {
+            if (resp.statusText === "abort") {
+                // This can not be handled at the Resource Service level because it is fired off
+                // a listenTo(collection, 'error', ...)
+                return;
+            }
             var errorModel = new Backbone.Model(resp);
             var errorView = ErrorView.create({
                 model: errorModel
@@ -379,7 +460,6 @@ define([
                 this.dataGridOptions.refresh(this);
                 return;
             }
-            //var collection = this.dataGridOptions.collection;
             this.loading();
             //ResourceService.clearCache(collection.url);
             if (this.dataGridOptions.filterEnabled !== true) {
@@ -389,6 +469,7 @@ define([
                     this.trigger('sort');
                 });
             }
+            collection.comparator = null;  // disable automatic sort on applet refresh
             this.fetchData({
                 silent: true
             });
@@ -450,6 +531,7 @@ define([
             return dateFilter;
         },
         dateRangeRefresh: function(filterParameter, options) {
+            this.abort();
             this.dataGridOptions.collection.fetchOptions.criteria.filter =
                 this.buildJdsDateFilter(filterParameter, options);
 
@@ -488,9 +570,7 @@ define([
             }
         },
         onBeforeDestroy: function() {
-            if(this.dataGridOptions.collection.hasOwnProperty('originalModels')) {
-                delete this.dataGridOptions.collection.originalModels;
-            }
+            this.abort();
         },
         onDestroy: function() {
             if (this.filterView) {
@@ -498,8 +578,10 @@ define([
                 this.filterView.$el.find('a[data-backgrid-action=clear]').off('click');
             }
 
-            this.dataGridOptions.collection.stopListening();
-            this.dataGridOptions.collection.reset();
+            delete this.dataGridOptions.collection.markInfobutton;
+
+            this.dataGridOptions.collection.cleanUp();
+
             try {
                 if (this.loadingView && !this.loadingView.isDestroyed) {
                     this.loadingView.destroy();
@@ -515,9 +597,43 @@ define([
                 }
                 delete this.dataGridView;
                 delete this.dataGridOptions;
+
             } catch (e) {
                 console.error('Error destroying dataGridView in applet:', this.appletConfig.id, e);
             }
         }
     });
+
+    //DE3878: Applets extending BaseGridApplet not running base destroy methods
+    //this piece will insure any methods defined here are run on both the base and extended view.
+    var Orig = GridAppletView,
+        Modified = Orig.extend({
+            constructor: function() {
+                if (!this.options) this.options = {};
+                var args = Array.prototype.slice.call(arguments),
+                    onDestroy = this.onDestroy,
+                    onBeforeDestroy = this.onBeforeDestroy;
+
+                this.onDestroy = function() {
+                    var args = Array.prototype.slice.call(arguments);
+                    Orig.prototype.onDestroy.apply(this, args);
+                    if (Orig.prototype.onDestroy === onDestroy) return;
+                    onDestroy.apply(this, args);
+                };
+
+                this.onBeforeDestroy = function() {
+                    var args = Array.prototype.slice.call(arguments);
+                    Orig.prototype.onBeforeDestroy.apply(this, args);
+                    if (Orig.prototype.onBeforeDestroy === onBeforeDestroy) return;
+                    onBeforeDestroy.apply(this, args);
+                };
+
+                Orig.prototype.constructor.apply(this, args);
+            }
+        });
+    GridAppletView = Modified;
+
+    return GridAppletView;
+
+
 });

@@ -1,4 +1,4 @@
-@F664 @F664_PatientRecord_Search_Suggest @US10697 @debug @DE3815
+@F664 @F664_PatientRecord_Search_Suggest @US10697 @DE3815 @debug @US14684
 Feature: F664 RDK Enhancements - PSI 9
 # RDK resource: patient-record-search-suggest
 

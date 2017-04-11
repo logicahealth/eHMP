@@ -247,6 +247,7 @@ define([
         // This starts the code only for the demo e-Signatue -----------------------------------------------------
         events: {
             'click #growlBasic': 'growlAlert',
+            'click #growlBasicNoAutoClose': 'growlAlert',
             'click #growlBasicIcon': 'growlAlert',
             'click #growlInfo': 'growlAlert',
             'click #growlWarning': 'growlAlert',
@@ -258,11 +259,26 @@ define([
             var buttonClicked = this.$(e.currentTarget);
             var icon = buttonClicked.attr('data-icon');
             var type = buttonClicked.attr('data-type');
+            var autoClose = buttonClicked.data('auto-close');
+            var message = 'Growl alert body text.';
+            var callback;
+
+            if (_.isBoolean(autoClose)) {
+                message = 'Growl alert body text. Sticky.';
+                callback = function() {
+                    console.log('growl callback invoked');
+                };
+            } else {
+                autoClose = true;
+            }
+
             var saveAlertView = new ADK.UI.Notification({
                 title: 'Growl Alert Title',
                 icon: icon,
-                message: 'Growl alert body text.',
-                type: type
+                message: message,
+                type: type,
+                autoClose: autoClose,
+                onClick: callback
             });
             saveAlertView.show();
         },
@@ -346,6 +362,51 @@ define([
         },
         onBeforeDestroy: function() {
             $('html').removeClass('comet');
+        }
+    });
+
+    var AlertDropdown = ADK.UI.AlertDropdown.extend({
+        icon: 'fa-folder-open',
+        dropdownTitle: 'Notifications For User',
+        RowContentTemplate: '<p class="bottom-margin-no"><strong>{{label}}</strong></p><p class="bottom-margin-no">{{notificationStatus}}</p><p class="bottom-margin-no">{{notificationDue}}</p>',
+        onBeforeInitialize: function() {
+            this.collection = new Backbone.Collection([{
+                'title': 'First Item. Press enter to view notification',
+                'label': 'Eight, Patient (1234)',
+                'notificationStatus': 'Triage - Rheumatology General',
+                'notificationDue': 'Task is more than 7 days Past Due'
+            }, {
+                'title': 'Second Item. Press enter to view notification',
+                'label': 'Smith, John-Henkinheimer (1234)',
+                'notificationStatus': 'Scheduling - Physical Therapy',
+                'notificationDue': 'Task is more than 7 days Past Due'
+            }]);
+        }
+    });
+
+    ADK.Messaging.trigger('register:component', {
+        type: 'applicationHeaderItem',
+        title: 'Press enter to view notifications',
+        orderIndex: 1,
+        key: 'notification-demo',
+        group: 'user-nav-alerts',
+        view: AlertDropdown,
+        shouldShow: function() {
+            return ADK.Messaging.request('get:current:screen').config.id === 'ui-components-demo';
+        }
+    });
+    ADK.Messaging.trigger('register:component', {
+        type: 'applicationHeaderItem',
+        title: 'Press enter to view notifications',
+        orderIndex: 1,
+        key: 'notification-demo-1',
+        group: 'patient-nav-alerts',
+        view: AlertDropdown.extend({
+            dropdownTitle: 'Notifications For Patient',
+            icon: 'fa-bell',
+        }),
+        shouldShow: function() {
+            return ADK.Messaging.request('get:current:screen').config.id === 'ui-components-demo';
         }
     });
 

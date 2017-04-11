@@ -7,7 +7,7 @@ define([
 
     var orderFields = [{
         control: "container",
-        template: Handlebars.compile('<strong>Duplicate Order:</strong>{{#each orderCheckResponse}}<div>{{this}}</div>{{/each}}'),
+        template: Handlebars.compile('<strong>Duplicate Order:</strong>{{#each orderCheckResponse}}<div>{{this.orderCheck}}</div>{{/each}}'),
         modelListeners: ["orderCheckResponse"],
     }];
 

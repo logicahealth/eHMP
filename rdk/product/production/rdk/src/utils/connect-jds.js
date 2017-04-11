@@ -18,7 +18,7 @@ var httpUtil = rdk.utils.http;
  */
 var defaultOptions = {
     jdsServer: {
-        baseUrl: 'http://IP             '
+        baseUrl: 'http://IP_ADDRESS:PORT'
     },
     defaultExpirationTime: 1000 * 60 * 60 * 24 * 14
 };
@@ -82,11 +82,11 @@ module.exports = function(session) {
             logger: mylogger,
             json: true
         });
-        mylogger.debug({sid: sid}, 'In connect-jds.get method with passed in sid:' + sid + '. Before httpUtil.get call');
+        mylogger.debug({sid: sid}, 'In connect-jds.get method with passed in sid: %s. Before httpUtil.get call', sid);
         httpUtil.get(jdsOptions,
             function(err, response, body) {
                 if (err) {
-                    mylogger.debug({sid: sid, error: err}, 'In connect-jds.get method with passed in sid:' + sid + '. After httpUtil.get call with err:' + err);
+                    mylogger.debug({sid: sid, error: err}, 'In connect-jds.get method with passed in sid: %s. After httpUtil.get call with error', sid);
                     if (callback) {
                         callback(err, null);
                     }
@@ -94,10 +94,10 @@ module.exports = function(session) {
                 }
                 if (body.session) {
                     //Always return the session. We will leave it up to the calling app to call destroy if session has expired.
-                    mylogger.debug({sid: sid, body: body}, 'In connect-jds.get method with passed in sid:' + sid + '. After httpUtil.get call with returned session:' + JSON.stringify(body, null, '\t'));
+                    mylogger.debug({sid: sid, body: body}, 'In connect-jds.get method with passed in sid: %s. After httpUtil.get call with returned session.', sid);
                     callback(null, body.session);
                 } else {
-                    mylogger.debug({sid: sid, body: body, response: response}, 'In connect-jds.get method with passed in sid:' + sid + '. After httpUtil.get call without returned session.');
+                    mylogger.debug({sid: sid, response: response}, 'In connect-jds.get method with passed in sid: %s. After httpUtil.get call without returned session.', sid);
                     if (callback) {
                         callback();
                     }
@@ -147,11 +147,11 @@ module.exports = function(session) {
             logger: mylogger,
             body: content
         });
-        mylogger.debug({sid: sid, session: s}, 'In connect-jds.set method with passed in sid:' + sid + ' and session: ' + JSON.stringify(s, null, '\t') + '. Before httpUtil.post call');
+        mylogger.debug({sid: sid, session: s}, 'In connect-jds.set method with passed in sid:' + sid + ' and session. Before httpUtil.post call');
         httpUtil.post(jdsOptions,
             function(err, response, data) {
                 if (err) {
-                    mylogger.debug({sid: sid, error: err}, 'In connect-jds.set method with passed in sid:' + sid + '. Error on postJSONObject err:' + err);
+                    mylogger.debug({sid: sid, error: err}, 'In connect-jds.set method with passed in sid:' + sid + '. Error on postJSONObject');
                     if (callback) {
                         callback(err);
                     }
@@ -190,7 +190,7 @@ module.exports = function(session) {
         httpUtil.get(jdsOptions,
             function(err) {
                 if (err) {
-                    mylogger.debug({sid: sid, error: err}, 'In connect-jds.destroy method with passed in sid:' + sid + '. After httpUtil.get call with err:' + err);
+                    mylogger.debug({sid: sid, error: err}, 'In connect-jds.destroy method with passed in sid:' + sid + '. After httpUtil.get call with error');
                     if (callback) {
                         callback(err);
                     }
@@ -225,7 +225,7 @@ module.exports = function(session) {
         httpUtil.get(jdsOptions,
             function(err, response, length) {
                 if (err) {
-                    mylogger.debug({error: err}, 'In connect-jds.length method. After httpUtil.get call with err:' + err);
+                    mylogger.debug({error: err}, 'In connect-jds.length method. After httpUtil.get call with error');
                     if (callback) {
                         callback(err, null);
                     }
@@ -260,7 +260,7 @@ module.exports = function(session) {
         httpUtil.get(jdsOptions,
             function(err) {
                 if (err) {
-                    mylogger.debug({error: err}, 'In connect-jds.clear method. After httpUtil.get call with err:' + err);
+                    mylogger.debug({error: err}, 'In connect-jds.clear method. After httpUtil.get call with error');
                     if (callback) {
                         callback(err);
                     }

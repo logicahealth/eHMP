@@ -93,6 +93,7 @@ function createAndPublishStoreRecordJob(log, environment, job, record, handlerCa
     var meta = {
         jpid: job.jpid,
         rootJobId: job.rootJobId,
+        priority: job.priority,
         param: job.param
     };
     var jobToPublish = jobUtil.createStoreRecord(job.patientIdentifier, job.dataDomain, record, meta);

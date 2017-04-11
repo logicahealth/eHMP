@@ -206,4 +206,54 @@ var inputValue = {
         }]
     }
 };
+
+var conformanceData =
+{
+  'resourceType': 'Conformance',
+  'id': 'f2c8d9a0-6dd1-4b7a-8107-e9c79fa1a71c',
+  'url': 'http://hl7.org/fhir/Conformance/ehmp',
+  'version': '0.0.1',
+  'name': 'EHMP FHIR Conformance Statement',
+  'description': 'This is a Conformance Statement for available ehmp FHIR Resources.',
+  'status': 'draft',
+  'date': '2016-06-24T20:03:28.840Z',
+  'fhirVersion': '0.5.0',
+  'acceptUnknown': false,
+  'format': [
+    'json'
+  ],
+  'rest': [
+    {
+      'mode': 'server',
+      'documentation': 'A conformance statement',
+      'resource': [
+        {
+          'type': 'medicationdispense',
+          'profile': {
+            'reference': 'http://www.hl7.org/FHIR/2015May/medicationdispense.html'
+          },
+          'interaction': [
+            {
+              'code': 'read'
+            },
+            {
+              'code': 'search-type'
+            }
+          ],
+          'searchParam': [
+            {
+              'name': 'subject.identifier',
+              'type': 'string',
+              'definition': 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+              'documentation': 'Patient indentifier.'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
 module.exports.inputValue = inputValue;
+module.exports.conformanceData = conformanceData;
+

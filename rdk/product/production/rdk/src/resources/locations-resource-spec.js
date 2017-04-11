@@ -2,9 +2,10 @@
 
 var _ = require('lodash');
 var rdk = require('../core/rdk');
-var httpUtil = rdk.utils.http;
 var locationsResource = require('./locations-resource');
 var jdsFilterInterceptor = require('../interceptors/jds-filter-interceptor');
+
+var patientSelect = require('./patient-search/hmp-patient-select');
 
 var logger = {
     trace: function() {},
@@ -36,13 +37,18 @@ function createReqWithParam(map) {
             }
         },
         query: map,
-        interceptorResults: {jdsFilter: {filter: []}},
+        interceptorResults: {
+            jdsFilter: {
+                filter: []
+            }
+        },
         logger: logger,
         app: {
             config: {
                 jdsServer: {
                     baseUrl: ''
-                }
+                },
+                rpcConfig: {}
             }
         }
     };
@@ -88,7 +94,9 @@ describe('createReqWithParam() tester', function() {
 describe('locationsResource tester', function() {
     it('tests that handleError() correctly handles and logs an error', function() {
         var res = {
-            status: sinon.spy(function() {return res;}),
+            status: sinon.spy(function() {
+                return res;
+            }),
             rdkSend: sinon.spy()
         };
         var error = {
@@ -106,12 +114,12 @@ describe('locationsResource tester', function() {
         expect(res.rdkSend.calledWith('There was an error processing your request. The error has been logged.')).to.be.true();
     });
 
-    it('tests that getResourceConfig() is setup for wards properly', function() {
+    it('tests that getResourceConfig() is setup for clinics properly', function() {
         var resources = locationsResource.getResourceConfig();
-        expect(resources.length).to.equal(4);
+        expect(resources.length).to.equal(2);
 
-        expect(resources[0].name).to.equal('locations-wards');
-        expect(resources[0].path).to.equal('wards');
+        expect(resources[0].name).to.equal('locations-wards-search');
+        expect(resources[0].path).to.equal('wards/patients');
         expect(resources[0].interceptors).to.eql({
             jdsFilter: true,
             synchronize: false
@@ -121,41 +129,15 @@ describe('locationsResource tester', function() {
 
     it('tests that getResourceConfig() is setup for clinics properly', function() {
         var resources = locationsResource.getResourceConfig();
-        expect(resources.length).to.equal(4);
+        expect(resources.length).to.equal(2);
 
-        expect(resources[1].name).to.equal('locations-clinics');
-        expect(resources[1].path).to.equal('clinics');
+        expect(resources[1].name).to.equal('locations-clinics-search');
+        expect(resources[1].path).to.equal('clinics/patients');
         expect(resources[1].interceptors).to.eql({
             jdsFilter: true,
             synchronize: false
         });
         expect(resources[1].subsystems).not.to.be.undefined();
-    });
-
-    it('tests that getResourceConfig() is setup for clinics properly', function() {
-        var resources = locationsResource.getResourceConfig();
-        expect(resources.length).to.equal(4);
-
-        expect(resources[2].name).to.equal('locations-wards-search');
-        expect(resources[2].path).to.equal('wards/patients');
-        expect(resources[2].interceptors).to.eql({
-            jdsFilter: true,
-            synchronize: false
-        });
-        expect(resources[2].subsystems).not.to.be.undefined();
-    });
-
-    it('tests that getResourceConfig() is setup for clinics properly', function() {
-        var resources = locationsResource.getResourceConfig();
-        expect(resources.length).to.equal(4);
-
-        expect(resources[3].name).to.equal('locations-clinics-search');
-        expect(resources[3].path).to.equal('clinics/patients');
-        expect(resources[3].interceptors).to.eql({
-            jdsFilter: true,
-            synchronize: false
-        });
-        expect(resources[3].subsystems).not.to.be.undefined();
     });
 });
 
@@ -178,96 +160,66 @@ describe('extractDfnsFromRpc', function() {
     });
     it('should return a list of patients with room/bed numbers when given a patient for a ward', function() {
         var rpcResponse = '100708^ONE,INPATIENT^722-^3130830.1\r\n100710^TWO,INPATIENT^722-^3131002.13\r\n100711^THREE,INPATIENT^724-^3131003.13\r\n100712^FOUR,INPATIENT^724-^3131010.13\r\n100713^FIVE,INPATIENT^724-^3131202.13\r\n';
-        var expectedDfns = [ { dfn : '100708', roomBed : '722-' }, { dfn : '100710', roomBed : '722-' }, { dfn : '100711', roomBed : '724-' }, { dfn : '100712', roomBed : '724-' }, { dfn : '100713', roomBed : '724-' }];
+        var expectedDfns = [{
+            dfn: '100708',
+            roomBed: '722-'
+        }, {
+            dfn: '100710',
+            roomBed: '722-'
+        }, {
+            dfn: '100711',
+            roomBed: '724-'
+        }, {
+            dfn: '100712',
+            roomBed: '724-'
+        }, {
+            dfn: '100713',
+            roomBed: '724-'
+        }];
         locationsResource._extractDfnsFromRpc(null, 'ward', rpcResponse, callback);
         expect(callback.calledWith(null, expectedDfns)).to.be.true();
     });
     it('should consolidate dfns for a ward', function() {
         var rpcResponse = '100708^ONE,INPATIENT^722-^3130830.1\r\n100708^ONE,INPATIENT^723-^3130830.1\r\n';
-        var expectedDfns = [ {dfn: '100708', roomBed : '722-' }];
+        var expectedDfns = [{
+            dfn: '100708',
+            roomBed: '722-'
+        }];
         locationsResource._extractDfnsFromRpc(null, 'ward', rpcResponse, callback);
         expect(callback.calledWith(null, expectedDfns)).to.be.true();
     });
-        it('should return a list of patients with appointment times when given a patient for a clinic', function() {
+    it('should return a list of patients with appointment times when given a patient for a clinic', function() {
         var rpcResponse = '100708^ONE,INPATIENT^722-^3130830.1\r\n100710^TWO,INPATIENT^722-^3131002.13\r\n100711^THREE,INPATIENT^724-^3131003.13\r\n100712^FOUR,INPATIENT^724-^3131010.13\r\n100713^FIVE,INPATIENT^724-^3131202.13\r\n';
-        var expectedDfns = [ { dfn : '100708', appointmentTime : '20130830100000' }, { dfn : '100710', appointmentTime : '20131002130000' }, { dfn : '100711', appointmentTime : '20131003130000' }, { dfn : '100712', appointmentTime : '20131010130000' }, { dfn : '100713', appointmentTime : '20131202130000' }];
+        var expectedDfns = [{
+            dfn: '100708',
+            appointmentTime: '20130830100000'
+        }, {
+            dfn: '100710',
+            appointmentTime: '20131002130000'
+        }, {
+            dfn: '100711',
+            appointmentTime: '20131003130000'
+        }, {
+            dfn: '100712',
+            appointmentTime: '20131010130000'
+        }, {
+            dfn: '100713',
+            appointmentTime: '20131202130000'
+        }];
         locationsResource._extractDfnsFromRpc(null, 'clinic', rpcResponse, callback);
         expect(callback.calledWith(null, expectedDfns)).to.be.true();
     });
     it('should not consolidate dfns for a clinic', function() {
         var rpcResponse = '100708^ONE,INPATIENT^722-^3130830.1\r\n100708^ONE,INPATIENT^723-^3130830.1\r\n';
-        var expectedDfns = [ { dfn : '100708', appointmentTime : '20130830100000' }, { dfn : '100708', appointmentTime : '20130830100000' }];
+        var expectedDfns = [{
+            dfn: '100708',
+            appointmentTime: '20130830100000'
+        }, {
+            dfn: '100708',
+            appointmentTime: '20130830100000'
+        }];
         locationsResource._extractDfnsFromRpc(null, 'clinic', rpcResponse, callback);
         expect(callback.calledWith(null, expectedDfns)).to.be.true();
-    });
-});
-
-describe('The parameters filter', function() {
-    describe('applies the order parameter', function() {
-        var itemone = {name: 'c', num: 1};
-        var itemtwo = {name: 'a', num: 2};
-        var itemthree = {name: 'b', num: 3};
-        var items = [itemone, itemtwo, itemthree];
-
-        it('correctly ascending', function() {
-            var results = locationsResource._applyOrderParam(items, 'name (asc)');
-            expect(results.length).to.eql(3);
-            expect(results[0]).to.eql(itemtwo);
-            expect(results[1]).to.eql(itemthree);
-            expect(results[2]).to.eql(itemone);
-        });
-
-        it('correctly descending', function() {
-            var results = locationsResource._applyOrderParam(items, 'name (desc)');
-            expect(results.length).to.eql(3);
-            expect(results[2]).to.eql(itemtwo);
-            expect(results[1]).to.eql(itemthree);
-            expect(results[0]).to.eql(itemone);
-        });
-
-        it('correctly for a non-string field', function() {
-            var results = locationsResource._applyOrderParam(items, 'num (asc)');
-            expect(results.length).to.eql(3);
-            expect(results[1]).to.eql(itemtwo);
-            expect(results[2]).to.eql(itemthree);
-            expect(results[0]).to.eql(itemone);
-        });
-    });
-
-    describe('applies the name parameter', function() {
-        it('correctly', function() {
-            var items = [{name: 'aaa', num: 1}, {name: 'aaaa', num: 2}, {name: 'b', num: 3}, {name: 'aa', num: 4}, {name: 'c', num: 5}, {num: 7}, {name: 'AaAAa', num: 8}];
-            var results = locationsResource._applyNameParam(items, 'aaa');
-            expect(_.pluck(results, 'num')).to.eql([1, 2, 8]);
-        });
-    });
-
-    describe('applies the start and limit parameters', function() {
-        it('correctly for just start', function() {
-            expect(locationsResource._applyStartParam([1, 2, 3, 4, 5], 3)).to.eql([4, 5]);
-        });
-
-        it('correctly for just limit', function() {
-            expect(locationsResource._applyLimitParam([1, 2, 3, 4, 5], 3)).to.eql([1, 2, 3]);
-        });
-
-        it('correctly for both', function() {
-            expect(locationsResource._applyLimitParam(locationsResource._applyStartParam([1, 2, 3, 4, 5], 1), 2)).to.eql([2, 3]);
-        });
-    });
-
-    describe('applies the facilityCode parameter', function() {
-        it('correctly', function() {
-            var items = [{facilityCode: 'aaa', num: 1}, {facilityCode: 'aaaa', num: 2}, {facilityCode: 'b', num: 3}, {facilityCode: 'aa', num: 4}, {facilityCode: 'c', num: 5}, {num: 7}, {facilityCode: 'AaAAa', num: 8}];
-            var results = locationsResource._applyFacilityCodeParam(items, 'aaaa');
-            expect(_.pluck(results, 'num')).to.eql([2]);
-        });
-
-        it('with case-sensitivity', function() {
-            var items = [{facilityCode: 'aaa', num: 1}, {facilityCode: 'aaaa', num: 2}, {facilityCode: 'b', num: 3}, {facilityCode: 'aa', num: 4}, {facilityCode: 'c', num: 5}, {num: 7}, {facilityCode: 'AaAAa', num: 8}];
-            var results = locationsResource._applyFacilityCodeParam(items, 'aaaaa');
-            expect(results.length).to.eql(0);
-        });
     });
 });
 
@@ -280,26 +232,46 @@ describe('selectPatientsFromDfnsInBatches', function() {
 
     it('calls selectPatientsFromDfns', function() {
         var mockResponses = [
-            [{localId: '4', familyName: 'EIGHT', givenName: 'IMAGEPATIENT', sensitive: true}], // Marking these as 'sensitive' so it won't try to check JDS for sensitivity.
-            [{localId: '222', familyName: 'EIGHT', givenName: 'PATIENT', sensitive: true}],
+            [{
+                localId: '4',
+                familyName: 'EIGHT',
+                givenName: 'IMAGEPATIENT',
+                sensitive: true
+            }], // Marking these as 'sensitive' so it won't try to check JDS for sensitivity.
+            [{
+                localId: '222',
+                familyName: 'EIGHT',
+                givenName: 'PATIENT',
+                sensitive: true
+            }],
             []
         ];
         var jdsCalls = 0;
-        sinon.stub(httpUtil, 'get', function(options, callback) {
+
+        sinon.stub(patientSelect, 'fetch', function(req, params, site, callback) {
             ++jdsCalls;
-            callback(undefined, {}, mockResponses.pop());
+            callback(undefined, mockResponses.pop());
         });
 
         var dfns = [];
         for (var i = 0; i < 3; i++) {
-            dfns.push({dfn: String(i)});
+            dfns.push({
+                dfn: String(i)
+            });
         }
         var expectedPatientItems = {
             data: {
-                items: [
-                    {localId: '222', familyName: 'EIGHT', givenName: 'PATIENT', sensitive: true},
-                    {localId: '4', familyName: 'EIGHT', givenName: 'IMAGEPATIENT', sensitive: true},
-                ]
+                items: [{
+                    localId: '222',
+                    familyName: 'EIGHT',
+                    givenName: 'PATIENT',
+                    sensitive: true
+                }, {
+                    localId: '4',
+                    familyName: 'EIGHT',
+                    givenName: 'IMAGEPATIENT',
+                    sensitive: true
+                }, ]
             }
         };
         locationsResource._selectPatientsFromDfnsInBatches(req, 'clinic', '9E7A', dfns, function(err, patientItems) {

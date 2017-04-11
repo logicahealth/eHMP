@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Allergies symptoms top ten [/allergies-symptoms-top-ten{?site}{&fields}]
+## Allergies symptoms top ten [/allergies-symptoms-top-ten{?site}]
 
 Top 10 Symptoms for Allergies
 
@@ -11,8 +11,6 @@ ORWDAL32 DEF
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 
@@ -48,7 +46,6 @@ ORWDAL32 DEF
                     }
                   ]
                 }
-               }
               ],
               "status": 200
             }

@@ -13,7 +13,7 @@ describe('jmeadows-pdf-request-handler', function() {
         jmeadows:{
             defaults: {
                 host: 'localhost',
-                port: 54000,
+                port: 5400,
                 method: 'GET'
             },
             document: {

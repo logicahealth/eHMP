@@ -1,0 +1,7 @@
+<button class="btn btn-xs" title="Press enter to update visit information" type="button" id="current-visit-context-button">
+    <h5 class="all-margin-no all-padding-no">Current Encounter:</h5>
+    <div class="encounter-location-provider">
+    	<span class="right-padding-xs pull-left">{{ifnull visit.locationDisplayName 'No visit set'}} {{ifnull visit.formattedDateTime ''}}</span>
+    	<span class="pull-left">Provider: {{ifnull visit.selectedProvider.name 'unassigned'}}</span>
+    </div>
+</button>

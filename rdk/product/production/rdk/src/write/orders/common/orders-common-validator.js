@@ -1,9 +1,14 @@
 'use strict';
 
-module.exports.edit = function(writebackContext, callback) {
+var moment = require('moment');
+var _ = require('lodash');
+
+var UTC_STANDARD = module.exports.UTC_STANDARD = 'YYYYMMDDHHmmss+0000';
+
+module.exports.editLab = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
-        if (!writebackContext.resourceId) {
+        if (_.isEmpty(writebackContext.resourceId)) {
             error = 'Missing Resource ID';
         }
     } else {
@@ -12,11 +17,14 @@ module.exports.edit = function(writebackContext, callback) {
     return setImmediate(callback, error);
 };
 
-module.exports.detail = function(writebackContext, callback) {
+module.exports.detailLab = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
-        if (!writebackContext.resourceId) {
+        if (_.isEmpty(writebackContext.resourceId)) {
             error = 'Missing Resource ID';
+        }
+        if (_.isEmpty(writebackContext.siteParam)) {
+            error = 'Missing site parameter';
         }
     } else {
         error = 'Invalid detail request';
@@ -24,16 +32,16 @@ module.exports.detail = function(writebackContext, callback) {
     return setImmediate(callback, error);
 };
 
-module.exports.discontinueDetails = function(writebackContext, callback) {
+module.exports.discontinueDetailsLab = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
-        if (!writebackContext.model.dfn) {
+        if (_.isEmpty(writebackContext.model.dfn)) {
             error = 'Missing dfn';
         }
-        if (!writebackContext.model.provider) {
+        if (_.isEmpty(writebackContext.model.provider)) {
             error = 'Missing provider';
         }
-        if (!writebackContext.model.orderIds || writebackContext.model.orderIds.length < 1) {
+        if (_.isEmpty(writebackContext.model.orderIds) || writebackContext.model.orderIds.length < 1) {
             error = 'Missing Order ID(s)';
         }
     } else {
@@ -42,16 +50,16 @@ module.exports.discontinueDetails = function(writebackContext, callback) {
     return setImmediate(callback, error);
 };
 
-module.exports.signDetails = function(writebackContext, callback) {
+module.exports.signDetailsLab = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
-        if (!writebackContext.model.dfn) {
+        if (_.isEmpty(writebackContext.model.dfn)) {
             error = 'Missing dfn';
         }
-        if (!writebackContext.model.provider) {
+        if (_.isEmpty(writebackContext.model.provider)) {
             error = 'Missing provider';
         }
-        if (!writebackContext.model.orderIds || writebackContext.model.orderIds.length < 1) {
+        if (_.isEmpty(writebackContext.model.orderIds) || writebackContext.model.orderIds.length < 1) {
             error = 'Missing Order ID(s)';
         }
     } else {
@@ -60,17 +68,17 @@ module.exports.signDetails = function(writebackContext, callback) {
     return setImmediate(callback, error);
 };
 
-module.exports.signOrders = function(writebackContext, callback) {
+module.exports.signOrdersLab = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
-        if (!writebackContext.model.dfn) {
+        if (_.isEmpty(writebackContext.model.dfn)) {
             error = 'Missing dfn';
         }
-        if (!writebackContext.model.provider) {
+        if (_.isEmpty(writebackContext.model.provider)) {
             error = 'Missing provider';
         }
-        if (!writebackContext.model.location) {
-            error = "Missing location";
+        if (_.isEmpty(writebackContext.model.location)) {
+            error = 'Missing location For Sing Order Lab';
         }
         if (!writebackContext.model.orderList || writebackContext.model.orderList.length < 1) {
             error = 'Missing Order List';
@@ -78,19 +86,21 @@ module.exports.signOrders = function(writebackContext, callback) {
             for (var i = 0; i < writebackContext.model.orderList.length; i++) {
                 var orderData = writebackContext.model.orderList[i];
                 if (!orderData.orderId) {
-                    error = "Missing orderId in Order List at index " + i;
+                    error = 'Missing orderId in Order List at index ' + i;
                 } else if (!orderData.orderDetailHash) {
-                    error = "Missing orderDetailHash in Order List at index " + i;
+                    error = 'Missing orderDetailHash in Order List at index ' + i;
                 }
             }
         }
 
-        if (writebackContext.model.orderCheckList && writebackContext.model.orderCheckList.length > 0) {
-            for (var j = 0; j < writebackContext.model.orderCheckList.length; j++) {
-                var orderCheck = writebackContext.model.orderCheckList[j];
+        if (!_.isEmpty(writebackContext.model.orderCheckList)) {
+            if (writebackContext.model.orderCheckList.length > 0) {
+                for (var j = 0; j < writebackContext.model.orderCheckList.length; j++) {
+                    var orderCheck = writebackContext.model.orderCheckList[j];
 
-                if (!orderCheck.orderCheck) {
-                    error = "Missing orderCheck in Order Check List at index " + j;
+                    if (_.isEmpty(orderCheck.orderCheck)) {
+                        error = 'Missing orderCheck in Order Check List at index ' + j;
+                    }
                 }
             }
         }
@@ -101,36 +111,57 @@ module.exports.signOrders = function(writebackContext, callback) {
     return setImmediate(callback, error);
 };
 
-module.exports.saveDraftOrder = function(writebackContext, callback) {
+module.exports.saveDraftLabOrder = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
-        if (!writebackContext.model.patientUid) {
+        if (_.isEmpty(writebackContext.model.patientUid)) {
             error = 'Missing patientUid';
         }
-        if (!writebackContext.model.authorUid) {
+        if (_.isEmpty(writebackContext.model.authorUid)) {
             error = 'Missing authorUid';
         }
-        if (!writebackContext.model.domain) {
-            error = "Missing domain";
+        if (_.isEmpty(writebackContext.model.domain)) {
+            error = 'Missing domain';
         }
-        if (!writebackContext.model.subDomain) {
-            error = "Missing subDomain";
+        if (_.isEmpty(writebackContext.model.subDomain)) {
+            error = 'Missing subDomain';
         }
-        if (!writebackContext.model.ehmpState) {
-            error = "Missing ehmpState";
+        if (_.isEmpty(writebackContext.model.ehmpState)) {
+            error = 'Missing ehmpState';
         }
-        if (!writebackContext.model.visit) {
+        if (_.isEmpty(writebackContext.model.visit)) {
             error = 'Missing Visit Context';
         } else {
-            if (!writebackContext.model.visit.location) {
-                error = "Missing location";
+             if (_.isEmpty(writebackContext.model.visit.location)) {
+                error = 'Missing location for  Save Draft Lab Order';
             }
-            if (!writebackContext.model.visit.serviceCategory) {
-                error = "Missing serviceCategory";
+            if (_.isEmpty(writebackContext.model.visit.serviceCategory)) {
+                error = 'Missing serviceCategory';
             }
-            if (!writebackContext.model.visit.dateTime) {
-                error = "Missing dateTime";
+            if (_.isEmpty(writebackContext.model.visit.dateTime)) {
+                error = 'Missing dateTime';
             }
+        }
+        switch (writebackContext.model.ehmpState) {
+            case 'draft':
+                if (!_.isEmpty(writebackContext.model.data)) {
+                    if (writebackContext.model.subDomain === 'laboratory') {
+                        if (_.isEmpty(writebackContext.model.data.labTestText)) {
+                            error = 'Missing Lab Text';
+                        }
+                    }
+                }
+                if (!_.isEmpty(writebackContext.model.referenceId)) {
+                    error = 'Draft Order should not have a referenceId';
+                }
+                break;
+            case 'deleted':
+                if (_.isEmpty(writebackContext.model.uid)) {
+                    error = 'Deleted Order should have a uid';
+                }
+                break;
+            default:
+                break;
         }
     } else {
         error = 'Invalid save draft order request';
@@ -138,13 +169,13 @@ module.exports.saveDraftOrder = function(writebackContext, callback) {
     return setImmediate(callback, error);
 };
 
-module.exports.findDraftOrders = function(writebackContext, callback) {
+module.exports.findDraftLabOrders = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
-        if (!writebackContext.model.patientUid) {
+        if (_.isEmpty(writebackContext.model.patientUid)) {
             error = 'Missing patientUid';
         }
-        if (!writebackContext.model.authorUid) {
+        if (_.isEmpty(writebackContext.model.authorUid)) {
             error = 'Missing authorUid';
         }
     } else {

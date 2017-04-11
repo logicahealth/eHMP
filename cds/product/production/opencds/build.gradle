@@ -1,0 +1,34 @@
+def repoCommitCountClosure = {
+  def proc1 = ['sh', '-c', "git rev-list --full-history --all ${commitCountDir}"].execute()
+  def proc2 = 'wc -l'.execute()
+  proc1 | proc2
+  return proc2.text.trim()
+}
+def repoCommitCount = "${->repoCommitCountClosure()}"
+def version = "${->repoVersion + '.' + repoCommitCount}"
+
+allprojects {
+  ext.set('groupId', 'us.vistacore.opencds')
+  ext.set('repoVersion', getRepoVersion())
+  ext.set('commitCountDir', projectDir)
+  apply plugin: 'java'
+  apply plugin: 'maven'
+
+  repositories {
+    maven {
+      url 'https://store.vistacore.us/nexus/content/groups/public'
+    }
+  }
+ 
+ uploadArchives {
+    repositories.mavenDeployer {
+      pom.groupId = "${groupId}"
+      pom.version = "${version}"
+      repository(url: "https://store.vistacore.us/nexus/content/repositories/${->repo}/") {
+        authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
+      }
+    }
+  }
+}
+
+project(':production:opencds').build.dependsOn(project(':production:opencds:opencds-knowledge-repository-data').build)

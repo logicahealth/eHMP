@@ -6,7 +6,7 @@ Feature: F338 - Meds Review Sparkline 2 -  Med Review applet display
 
 @f338_1_medReviewApplet_navigation_thro_dropdown @US5421
 Scenario: User navigates to Meds Review Applet from default screen.
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "fourteen,Patient"
   Then Overview is active
   When user selects Meds Review from drop down menu
@@ -14,7 +14,7 @@ Scenario: User navigates to Meds Review Applet from default screen.
 
 @F338-1.7 @f338_2_medication_grouping @US5421
 Scenario: Display of medication grouping by medication type for inpatient and outpatient
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "fourteen,Patient"
   When user navigates to Meds Review Applet
   Then "Meds Review" is active
@@ -23,7 +23,7 @@ Scenario: Display of medication grouping by medication type for inpatient and ou
 
 @F338-1 @F338-1.6 @F338-1.9 @F1.16 @f338_3_medication_summary_outpatient_meds @US5421 @US4608 @US5429 @US8844
 Scenario: Display of medication summary for outpatient medications
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "fourteen,Patient"
   When user navigates to Meds Review Applet
   Then "Meds Review" is active
@@ -35,7 +35,7 @@ Scenario: Display of medication summary for outpatient medications
 
 @F338-8 @f338_4_medication_detail_outpatient_meds @US5421 @DE1421 @DE1564 @DE1983
 Scenario: Display of medication details for outpatient medications
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "fourteen,Patient"
   When user navigates to Meds Review Applet
   Then "Meds Review" is active
@@ -65,7 +65,7 @@ Scenario: Display of medication details for outpatient medications
 #
 @f338_5_medication_column_default_and_sorting_name @US5903 @DE1479  @triage
 Scenario: Med Review Applet is sorted by the status first and then by name in alpha order.
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   Given user searches for and selects "fourteen,Patient"
   When user navigates to Meds Review Applet
   Then "Meds Review" is active
@@ -79,7 +79,7 @@ Scenario: Med Review Applet is sorted by the status first and then by name in al
 
 @f338_6_medication_column_sorting_sig @US5421
 Scenario: Med Review Applet is sorted by the column header Sig.
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   Given user searches for and selects "FOURTEEN,PATIENT"
   When user navigates to Meds Review Applet
   Then "Meds Review" is active
@@ -94,7 +94,7 @@ Scenario: Med Review Applet is sorted by the column header Sig.
 
 @F338-2 @F338-2.1 @f338_8_medication_summary_inpatient_meds @US5421 @US8844
 Scenario: Display of medication summary for inpatient medications
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "Ten,Inpatient"
   When user navigates to Meds Review Applet
   Then "Meds Review" is active
@@ -105,7 +105,7 @@ Scenario: Display of medication summary for inpatient medications
 
 @f338_9_medication_detail_inpatient_meds @US5421 @DE1421 @DE1564 @DE1983
 Scenario: Display of medication details for inpatient medications
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "Ten,Inpatient"
   When user navigates to Meds Review Applet
   Then "Meds Review" is active
@@ -117,7 +117,7 @@ Scenario: Display of medication details for inpatient medications
 
 @f338_11_medication_filtering @US5421 @DE2666
 Scenario: Display of medication summary for outpatient medications after searching for a specific string
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "fourteen,Patient"
   When user navigates to Meds Review Applet
   Then "Meds Review" is active
@@ -128,7 +128,7 @@ Scenario: Display of medication summary for outpatient medications after searchi
 
 @f144_meds_review_refresh
 Scenario: Meds Review Applet displays all of the same details after applet is refreshed
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "fourteen,Patient"
   When user navigates to Meds Review Applet
   Then "Meds Review" is active

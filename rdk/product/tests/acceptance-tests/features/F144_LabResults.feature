@@ -6,7 +6,7 @@ F144 will provide an authorized user the ability to access information through t
 Scenario: Multiple results should be returned - using only observed from date.
  	Given a patient with pid "9E7A;3" has been synced through the RDK API
   	When the client requests a response in VPR format from RDK API with the parameters
- 		| pid 		   | type.name           				   | date.start | date.end | start | limit |
+ 		| pid 		   | type           				   | date.start | date.end | start | limit |
  		| 9E7A;3 | Calcium, Serum or Plasma Quantitative | 2013         |            |       |       |
   	Then a successful response is returned
   	#And the client receives 4 result(s)
@@ -30,7 +30,7 @@ Scenario: Multiple results should be returned - using only observed from date.
 Scenario: Zero results should be returned.
  	Given a patient with pid "9E7A;3" has been synced through the RDK API
   	When the client requests a response in VPR format from RDK API with the parameters
- 		| pid 		   | type.name           | date.start | date.end | start | limit |
+ 		| pid 		   | type           | date.start | date.end | start | limit |
  		| 9E7A;3 | Incorrect Lab Type | 2007         |            |       |       |
   	Then a successful response is returned
   	And the client receives 0 result(s)
@@ -38,7 +38,7 @@ Scenario: Zero results should be returned.
 @f144_labs_results_rdk_api_unfound_pid @US1538c
 Scenario: PID that doesn't exist.
   	When the client requests a response in VPR format from RDK API with the parameters
- 		| pid 	    | type.name | date.start | date.end | start | limit |
+ 		| pid 	    | type | date.start | date.end | start | limit |
  		| 9E7A;0000 | HDL      | 2013         |            |       |       |
   	Then a non-found response is returned
 
@@ -46,12 +46,12 @@ Scenario: PID that doesn't exist.
 Scenario: Limiting the number of results with the 'start' parameter.
  	Given a patient with pid "9E7A;3" has been synced through the RDK API
  	When the client requests a response in VPR format from RDK API with the parameters
- 		| pid 		   | type.name | date.start | date.end | start | limit |
+ 		| pid 		   | type | date.start | date.end | start | limit |
  		| 9E7A;3 | HDL      | 2007         |            |       |       |
   	Then a successful response is returned
   	And the client receives 22 result(s)
   	When the client requests a response in VPR format from RDK API with the parameters
- 		| pid 		   | type.name | date.start | date.end | start | limit |
+ 		| pid 		   | type | date.start | date.end | start | limit |
  		| 9E7A;3 | HDL      | 2007         |            | 7     |       |
   	Then a successful response is returned
   	And the client receives "22" total items but only "15" current items
@@ -60,12 +60,12 @@ Scenario: Limiting the number of results with the 'start' parameter.
 Scenario: Limiting the number of results with the 'limit' parameter.
  	Given a patient with pid "9E7A;3" has been synced through the RDK API
  	When the client requests a response in VPR format from RDK API with the parameters
- 		| pid 		   | type.name | date.start | date.end | start | limit |
+ 		| pid 		   | type | date.start | date.end | start | limit |
  		| 9E7A;3 | HDL      | 2007         |            |       |       |
   	Then a successful response is returned
   	And the client receives 22 result(s)
   	When the client requests a response in VPR format from RDK API with the parameters
- 		| pid 		   | type.name | date.start | date.end | start | limit |
+ 		| pid 		   | type | date.start | date.end | start | limit |
  		| 9E7A;3 | HDL      | 2007         |            |       | 13    |
   	Then a successful response is returned
     And the client receives "22" total items but only "13" current items
@@ -74,12 +74,12 @@ Scenario: Limiting the number of results with the 'limit' parameter.
 Scenario: Limiting the number of results with the 'start' and 'limit' parameters.
  	Given a patient with pid "9E7A;3" has been synced through the RDK API
  	When the client requests a response in VPR format from RDK API with the parameters
- 		| pid 		   | type.name | date.start | date.end | start | limit |
+ 		| pid 		   | type | date.start | date.end | start | limit |
  		| 9E7A;3 | HDL      | 2007         |            |       |       |
   	Then a successful response is returned
   	And the client receives 22 result(s)
  	When the client requests a response in VPR format from RDK API with the parameters
- 		| pid 		   | type.name | date.start | date.end | start | limit |
+ 		| pid 		   | type | date.start | date.end | start | limit |
  		| 9E7A;3 | HDL      | 2007         |            | 7     | 10    |
   	Then a successful response is returned
   	And the client receives "22" total items but only "10" current items with a start index of "7"
@@ -88,7 +88,7 @@ Scenario: Limiting the number of results with the 'start' and 'limit' parameters
 Scenario: Limiting the number of results with the 'observedTo' parameter.
  	Given a patient with pid "9E7A;3" has been synced through the RDK API
  	When the client requests a response in VPR format from RDK API with the parameters
- 		| pid 		   | type.name | date.start | date.end | start | limit |
+ 		| pid 		   | type | date.start | date.end | start | limit |
  		| 9E7A;3 | HDL      |              | 2013       |       |       |
   	Then a successful response is returned
   	And the client receives 24 result(s)
@@ -97,12 +97,12 @@ Scenario: Limiting the number of results with the 'observedTo' parameter.
 Scenario: Limiting the number of results with the 'observedFrom' and 'observedTo' parameters.
  	Given a patient with pid "9E7A;3" has been synced through the RDK API
  	When the client requests a response in VPR format from RDK API with the parameters
- 		| pid 		   | type.name | date.start | date.end | start | limit |
+ 		| pid 		   | type | date.start | date.end | start | limit |
  		| 9E7A;3 | HDL      | 2007         |            |       |       |
   	Then a successful response is returned
   	And the client receives 22 result(s)
   	When the client requests a response in VPR format from RDK API with the parameters
- 		| pid 		   | type.name | date.start | date.end | start | limit |
+ 		| pid 		   | type | date.start | date.end | start | limit |
  		| 9E7A;3 | HDL      | 2007         | 2008       |       |       |
   	Then a successful response is returned
   	And the client receives 10 result(s)
@@ -111,7 +111,7 @@ Scenario: Limiting the number of results with the 'observedFrom' and 'observedTo
 Scenario: Limiting the number of results with all the parameters.
  	Given a patient with pid "9E7A;3" has been synced through the RDK API
  	When the client requests a response in VPR format from RDK API with the parameters
- 		| pid 		   | type.name | date.start | date.end | start | limit |
+ 		| pid 		   | type | date.start | date.end | start | limit |
  		| 9E7A;3 | HDL      | 2007         | 2008       | 3     | 10    |
  	Then a successful response is returned
   	And the client receives "10" total items but only "7" current items with a start index of "3"

@@ -17,10 +17,10 @@ var RpcClient = require('./RpcClient').RpcClient;
 var RpcParameter = require('./RpcParameter').RpcParameter;
 
 var defaultConfig = {
-    // host: 'IPADDRESS ',
+    // host: 'IP_ADDRESS',
     // port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
+    accessCode: 'PW',
+    verifyCode: 'PW',
     context: 'VPR UI CONTEXT',
     localIP: '127.0.0.1',
     localAddress: 'localhost',

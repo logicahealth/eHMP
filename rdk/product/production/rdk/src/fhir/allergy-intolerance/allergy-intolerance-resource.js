@@ -1,7 +1,7 @@
 'use strict';
 //var ao = require('../common/entities/allergy-objects.js');
-var errors = require('../common/errors.js');
-var helpers = require('../common/utils/helpers.js');
+var errors = require('../common/errors');
+var helpers = require('../common/utils/helpers');
 var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
@@ -9,9 +9,45 @@ var querystring = require('querystring');
 var fhirUtils = require('../common/utils/fhir-converter');
 var fhirResource = require('../common/entities/fhir-resource');
 var constants = require('../common/utils/constants');
-var i;
+var conformanceUtils = require('../conformance/conformance-utils');
+var conformance = require('../conformance/conformance-resource');
 
-//TO DO:
+var fhirToJDSAttrMap = [{
+    fhirName: 'subject.identifier',
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier - note that this patient identifier will overrule any patient identifier that is in the URI of this endpoint.',
+    searchable: true
+},{
+    fhirName: 'pid',
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier - note that this patient identifier will overrule any patient identifier that has been specified in the URI of this endpoint as well as the subject.identifier on the query string.',
+    searchable: true
+},{
+    fhirName: 'identifier.value',
+    vprName: 'uid',
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'The uid of the allergy.',
+    searchable: true
+}];
+
+// Issue call to Conformance registration
+conformance.register(conformanceUtils.domains.ALLERGY_INTOLERANCE, createAllergyIntoleranceConformanceData());
+
+function createAllergyIntoleranceConformanceData() {   
+   var resourceType = conformanceUtils.domains.ALLERGY_INTOLERANCE;
+   var profileReference = 'http://hl7.org/fhir/2015MAY/allergyintolerance.html';
+   var interactions = [ 'read', 'search-type' ];
+
+   return conformanceUtils.createConformanceData(resourceType, profileReference,
+           interactions, fhirToJDSAttrMap);
+}
+
+// TODO-FUTURE:
 // As JSON.parse and JSON.stringify work in a blocking manner perhaps we should switch to a streaming parser as this one:
 // https://github.com/dominictarr/JSONStream
 
@@ -46,10 +82,9 @@ function getAllergyIntolerances(req, res) {
             res.status(200).send(processJSON(inputJSON, req));
         }
     });
-
 }
 
-function getFhirItems(inputJSON,req) {
+function getFhirItems(inputJSON, req) {
 
     var fhirResult = {};
     fhirResult = processJSON(inputJSON, req);
@@ -63,29 +98,15 @@ function getFhirItems(inputJSON,req) {
 function processJSON(inputJSON, req) {
 
     var link = req.protocol + '://' + req.headers.host + req.originalUrl;
-    var fhirResult = {};
-    fhirResult.resourceType = 'Bundle';
-    fhirResult.type = 'collection';
-    //    fhirResult.title = 'Allergyintolerance with subject identifier \'' + pid + '\'';
-    fhirResult.id = helpers.generateUUID();
-    fhirResult.link = [{
-        'rel': 'self',
-        'href': link
-    }];
-
-    //    var now = new Date();
-    //    fhirResult.updated = fhirUtils.convertDate2FhirDateTime(now);
-    //    fhirResult.author = [{
-    //        'name': 'eHMP',
-    //        'uri': 'https://ehmp.vistacore.us'
-    //    }];
+    var fhirResult = new fhirResource.Bundle([new fhirResource.Link(link, 'self')]);
 
     fhirResult.entry = [];
     var items = inputJSON.data.items;
 
-    for (var i = 0; i < items.length; i++) {
-        fhirResult.entry.push(createIntolerance(items[i], req, fhirResult.updated));
-    }
+    _.forEach(items, function(item, index) {
+        fhirResult.entry.push(createIntolerance(item, req, fhirResult.updated));
+    });
+
     fhirResult.total = inputJSON.data.totalItems;
     return fhirResult;
 }
@@ -214,7 +235,7 @@ function createIntolerance(item) {
     fhirItem.resource.resourceType = 'AllergyIntolerance';
     fhirItem.resource.text = {
         'status': 'generated',
-        'div': '<div>' + item.summary + '</div>'
+        'div': '<div>' + _.escape(item.summary) + '</div>'
     };
     //var orgUid = helpers.generateUUID();
 
@@ -225,7 +246,7 @@ function createIntolerance(item) {
         'value': item.uid
     }];
 
-    fhirItem.resource.recordedDate = fhirUtils.convertToFhirDateTime(item.entered); // "<dateTime>", // When recorded
+    fhirItem.resource.recordedDate = fhirUtils.convertToFhirDateTime(item.entered, fhirUtils.getSiteHash(item.uid)); // "<dateTime>", // When recorded
     //  "recorder" : { Reference(Practitioner|Patient) }, // Who recorded the sensitivity
     //  {
     //   "reference" : "<string>", // C? Relative, internal or absolute URL reference
@@ -264,9 +285,9 @@ function createIntolerance(item) {
     if (nullchecker.isNotNullish(item.products)) {
         coding = [];
         fhirItem.resource.event[0].substance = {};
-        for (i = 0; i < item.products.length; i++) {
-            coding.push(new fhirResource.Coding(item.products[i].vuid, item.products[i].name, 'urn:oid:2.16.840.1.113883.6.233'));
-        }
+        _.forEach(item.products, function(product, index) {
+            coding.push(new fhirResource.Coding(product.vuid, product.name, 'urn:oid:2.16.840.1.113883.6.233'));
+        });
         fhirItem.resource.event[0].substance.coding = coding;
     }
     fhirItem.resource.event[0].certainty = 'likely'; //  : "<code>", // unlikely | likely | confirmed - clinical certainty about the specific substance
@@ -274,9 +295,9 @@ function createIntolerance(item) {
     if (nullchecker.isNotNullish(item.reactions)) {
         coding = [];
         fhirItem.resource.event[0].manifestation = {};
-        for (i = 0; i < item.reactions.length; i++) {
-            coding.push(new fhirResource.Coding(item.reactions[i].vuid, item.reactions[i].name, 'urn:oid:2.16.840.1.113883.6.233'));
-        }
+        _.forEach(item.reactions, function(reaction, index) {
+            coding.push(new fhirResource.Coding(reaction.vuid, reaction.name, 'urn:oid:2.16.840.1.113883.6.233'));
+        });
         fhirItem.resource.event[0].manifestation.coding = coding;
     }
 
@@ -295,3 +316,4 @@ function createIntolerance(item) {
 module.exports.getResourceConfig = getResourceConfig;
 module.exports.convertToFhir = processJSON;
 module.exports.getFhirItems = getFhirItems;
+module.exports.createAllergyIntoleranceConformanceData = createAllergyIntoleranceConformanceData;

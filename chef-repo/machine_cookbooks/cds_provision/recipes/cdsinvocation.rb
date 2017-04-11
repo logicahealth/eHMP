@@ -75,6 +75,7 @@ machine machine_name do
   attributes(
     stack: node[:machine][:stack],
     nexus_url: node[:common][:nexus_url],
+    data_bag_string: node[:common][:data_bag_string],
     cdsinvocation: {
       metrics: {
         source: cdsi_metrics_source
@@ -82,6 +83,9 @@ machine machine_name do
       results: {
         source: cdsi_results_source
       }
+    },
+    beats: {
+      logging: node[:machine][:logging]
     }
   )
   files lazy { node[:cds_provision][:cdsinvocation][:copy_files] }

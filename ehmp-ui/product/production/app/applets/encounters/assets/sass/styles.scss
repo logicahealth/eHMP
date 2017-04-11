@@ -1,58 +1,87 @@
 [data-appletid="encounters"] {
-    .faux-table {
-        .header {
-            background-color: $pure-white;
-        }
-    }
-    [data-group-instanceid] {
-        a {
-            color: inherit;
-            line-height: 20px;
-            text-decoration: none;
-            .caret-placer {
-                display: inline-block;
-                margin-right: 3px;
-                opacity: 0.3;
-                &.caret {
-                    border-left: 4px solid transparent;
-                    border-right: 4px solid transparent;
-                    border-top: 4px solid $pure-black;
-                }
-                &.right-caret {
-                    border-bottom: 4px solid transparent;
-                    border-top: 4px solid transparent;
-                    border-left: 4px solid $pure-black;
-                }
-                &.empty-caret {
-                    border-bottom: 4px solid transparent;
-                    border-top: 4px solid transparent;
-                    border-left: 4px solid $pure-black;
-                    opacity: 0;
+    .grid-container {
+        .faux-table {
+            div {
+                &.table-row {
+                    &.header {
+                        background-color: $pure-white;
+                    }
                 }
             }
         }
+    }
+    .enc-gist-list .table-row > .flex-width-2, .enc-gist-list .table-row > .flex-width-1 {
+        padding-right: 15px;
+    }
+    [data-group-instanceid] {
         .panel-collapse {
-            background-color: #cfd8dc;
-            padding: 0 6px 6px;
+            background-color: $grey-lightest;
+            padding: 6px;
             [gistviewtype] {
-                box-shadow: 0 -0px 3px 0 rgba(0,0,0,.4);
-                -webkit-box-shadow: 0 -0px 3px 0 rgba(0,0,0,.4);
-                -moz-box-shadow: 0 -0px 3px 0 rgba(0,0,0,.4);
+                box-shadow: 0 -0px 3px 0 rgba(0, 0, 0, .4);
             }
         }
     }
 }
-.modal-body {
+.modal-body.encounter-form-modal {
+    .procedure-section-container .drilldown-select-region,
+    .visit-type-container .drilldown-select-region {
+        width: 44%;
+    }
+    .procedure-section-container .drilldown-checklist-region,
+    .visit-type-container .drilldown-checklist-region {
+        width: 56%;
+    }
+    .additional-comment-button, .cancel-edit-comment-button {
+        background-color: $pure-white;
+    }
+    .drilldownChecklist-control {
+        .drilldown-checklist-region {
+            .read-only-well {
+                height: calc((11 * 15px) + 12px);
+            }
+        }
+    }
+}
+.visit-loading {
+    left: 23px;
+    position: absolute;
+    top: 30px;
+}
+#selectableTableAdmissions, #selectableTableAppointments {
+    .table-cell {
+        padding: 2px 6px;
+    }
+}
 
-    .drilldown-invisible {
-        select option,
-        .checklist-control {
-            visibility: hidden;
+form.form-container .form-group {
+    .add-other-diagnosis-popover {
+        &.searchbar-control {
+            margin-bottom: 0;
+        }
+        &.treepicker-control {
+            margin-bottom: 0;
+            label {
+                display:none;
+            }
         }
     }
-    .fieldset-invisible {
-        fieldset {
-            visibility: hidden;
-        }
+}
+.add-other-diagnosis-popover, .add-other-procedure-popover {
+    .popover .popover-content {
+        padding:0;
+        overflow:hidden;
     }
+}
+.encounters-diagnosis-container .tree-region {
+    height: 178px;
+    min-height: 170px;
+    margin-bottom: 0;
+    padding: 0 10px;
+}
+.ncb-comment-collapse-container {
+    border-top: 1px solid $grey;
+}
+.ncb-comment-container-region {
+    background-color: transparent;
 }

@@ -6,7 +6,7 @@
 #
 # Assumptions: Distribution has not been previously loaded and waiting install
 #
-# see: http://www.domain/vdl/documents/Clinical/virtual_patient_record/vpr_ig.pdf for VPR install guide
+# see: http://www.DNS   /vdl/documents/Clinical/virtual_patient_record/vpr_ig.pdf for VPR install guide
 #
 #
 

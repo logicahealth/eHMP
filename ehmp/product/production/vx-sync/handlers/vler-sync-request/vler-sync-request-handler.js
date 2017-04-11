@@ -87,7 +87,7 @@ function handle(log, config, environment, job, handlerCallback) {
                     icn: idUtil.extractIcnFromPid(job.patientIdentifier.value, config),
                     document: document
                 };
-                return jobUtil.createVlerXformVpr(job.patientIdentifier, 'vlerdocument', record, requestStampTime, job);
+                return jobUtil.createVlerXformVpr(job.patientIdentifier, 'vlerdocument', record, requestStampTime, job, job.priority);
             });
 
             // If we have no data coming back - then there is no need to create a meta-stamp or go any further on this one.

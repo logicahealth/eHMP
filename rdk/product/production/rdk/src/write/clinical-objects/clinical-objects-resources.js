@@ -55,16 +55,6 @@ module.exports.getResourceConfig = function() {
         },
         requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
         isPatientCentric: true
-    }, {
-        name: 'clinical-object-delete',
-        path: '/:resourceId',
-        delete: deleteClinicalObject,
-        interceptors: {
-            operationalDataCheck: false,
-            synchronize: false
-        },
-        requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
-        isPatientCentric: true
     }];
 };
 
@@ -80,11 +70,6 @@ function updateClinicalObject(req, res) {
 
 function getClinicalObject(req, res) {
     var tasks = [clinicalObjectsTasks.read];
-    writebackWorkflow(req, res, tasks);
-}
-
-function deleteClinicalObject(req, res) {
-    var tasks = [clinicalObjectsTasks.delete];
     writebackWorkflow(req, res, tasks);
 }
 

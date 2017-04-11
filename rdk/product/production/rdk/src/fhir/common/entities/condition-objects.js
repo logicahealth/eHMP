@@ -28,16 +28,17 @@ FactoryObject.prototype = {
 
 function BuildConditionItem(item) {
     var contained_and_refs = new BuildContained_and_refs(item);
+    var siteHash = fhirUtils.getSiteHash(item.uid);
     var ret = {
         //_id: item.uid,
         resourceType: 'Condition',
-//        status: 'confirmed',
+        //        status: 'confirmed',
         category: new BuildCategory(item),
         stage: new BuildStage(item),
         patient: {
             reference: item.pid
         },
-//        text: item.problemText,
+        //        text: item.problemText,
         code: new BuildCode(item),
         asserter: {
             reference: '#' + _.findWhere(contained_and_refs, {
@@ -45,20 +46,20 @@ function BuildConditionItem(item) {
             })._id,
             display: item.providerName
         },
-        dateAsserted: fhirUtils.convertToFhirDateTime(item.entered),
-        onsetDateTime: fhirUtils.convertToFhirDateTime(item.onset),
+        dateAsserted: fhirUtils.convertToFhirDateTime(item.entered, siteHash),
+        onsetDateTime: fhirUtils.convertToFhirDateTime(item.onset, siteHash),
         contained: contained_and_refs,
         clinicalStatus: 'confirmed',
         extension: new BuildExtensions(item)
     };
 
-//    if (nullchecker.isNotNullish(item.locationUid)) {
-//        ret.provider = {
-//            reference: '#' + item.locationUid
-//        };
-//    }
+    //    if (nullchecker.isNotNullish(item.locationUid)) {
+    //        ret.provider = {
+    //            reference: '#' + item.locationUid
+    //        };
+    //    }
     if (nullchecker.isNotNullish(item.resolved)) {
-        ret.abatementDate = fhirUtils.convertToFhirDateTime(item.resolved);
+        ret.abatementDate = fhirUtils.convertToFhirDateTime(item.resolved, siteHash);
     }
     return ret;
 }
@@ -91,16 +92,16 @@ function BuildEncounter(item) {
         resourceType: 'Encounter',
         text: {
             status: 'generated',
-            div: '<div>Encounter with patient ' + item.pid + '</div>'
+            div: '<div>Encounter with patient ' + _.escape(item.pid) + '</div>'
         },
         location: [{
             resourceType: 'Location',
             _id: item.locationUid,
-//            Name: item.facilityName,
-//            identifier: {
-//                value: item.facilityCode,
-//                system: 'urn:oid:2.16.840.1.113883.6.233'
-//            }
+            //            Name: item.facilityName,
+            //            identifier: {
+            //                value: item.facilityCode,
+            //                system: 'urn:oid:2.16.840.1.113883.6.233'
+            //            }
         }]
 
     };
@@ -158,7 +159,7 @@ function buildCommentExtension(item) {
     var div = '<div><ul>';
     if (item && (item instanceof Array) && item.length > 0) {
         for (var i = 0, k = Object.keys(item[0]); i < k.length; i++) {
-            div += '<li>' + k[i] + ':' + item[0][k[i]] + '</li>';
+            div += '<li>' + _.escape(k[i] + ':' + item[0][k[i]]) + '</li>';
         }
 
     }
@@ -174,7 +175,8 @@ function Extension(item, key) {
             break;
         case 'updated':
             this.url = 'http://vistacore.us/fhir/extensions/condition#' + key;
-            this.valueDateTime = fhirUtils.convertToFhirDateTime(item[key]);
+
+            this.valueDateTime = fhirUtils.convertToFhirDateTime(item[key], fhirUtils.getSiteHash(item.uid));
             break;
         case 'comments':
             this.url = 'http://vistacore.us/fhir/extensions/condition#' + key;

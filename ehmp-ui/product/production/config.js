@@ -1,47 +1,20 @@
 require.config({
     paths: {
-        // custom libraries (don't do this)
-        'hbs': '_assets/libs/custom/handlebars/hbs-0.4.0-custom',
-        'handlebars': '_assets/libs/custom/handlebars/handlebars.min',
-        'i18nprecompile': '_assets/libs/custom/handlebars/i18nprecompile',
-        'json2': '_assets/libs/custom/handlebars/json2',
-        'underscore': 'node_modules/lodash/dist/lodash.underscore.min',
-        'jquery': 'empty:',
-        'jquery.inputmask': 'empty:',
-        'async': 'empty:',
-        'backbone': 'empty:',
-        'marionette': 'empty:',
-        'moment': 'empty:',
-        'gridster': 'empty:',
-        'crossfilter': 'empty:',
-        'highcharts': 'empty:',
-        'highcharts-more': 'empty:',
-        'bootstrap-datepicker': 'empty:',
-        'pattern-fill': 'empty:',
-        'grouped_categories': 'empty:',
-        'backgrid': 'empty:',
-        'typeahead': 'empty:',
+        'hbs': '_assets/libs/custom/hbs/hbs',
+        'handlebars': '_assets/libs/custom/hbs/handlebars',
+        'jquery': 'node_modules/jquery/jquery',
+        'underscore': 'node_modules/lodash/index', // 3.10.1
+        'backbone': 'node_modules/backbone/backbone', // previousFragment
+        'marionette': 'node_modules/backbone.marionette/lib/backbone.marionette', // 2.4.1
+        'jasmine': 'node_modules/grunt-contrib-jasmine/vendor/jasmine-2.0.1/jasmine',
+        'jasmine-html': 'node_modules/grunt-contrib-jasmine/vendor/jasmine-2.0.1/jasmine-html',
+        'moment': 'moment/moment-2.7.0.min',
+        'highcharts': 'highcharts/highstock.src',
+        'highcharts-more': 'highcharts/highcharts-more.src',
+        'pattern-fill': 'highcharts/pattern-fill',
 
-        // Add the handlebars helpers as stubs to fix the requirement of having them in ADK
-        // TODO: find a way to allow these to be wrapped completely and used via handlbars
-        // instead of requireing them in the ADK helper file
-        '_assets/templates/helpers/hasPermission': 'empty:',
-        '_assets/templates/helpers/helpIconLink': 'empty:',
-        '_assets/templates/helpers/isInArray': 'empty:',
-        '_assets/templates/helpers/separateString': 'empty:',
-        '_assets/templates/helpers/getSum': 'empty:',
-
-        'text': '_assets/libs/custom/require/plugins/text',
-        'resources': 'app/resources/resources'
-    },
-    // hbs config - must duplicate in Gruntfile.js Require build
-    'hbs': {
-        'templateExtension': 'html',
-        'disableHelpers': false,
-        'disableI18n': true,
-        'compileOptions': {
-            'il8nDirectory': '_assets/templates/i18n/',
-            'helperDirectory': '_assets/templates/helpers/'
-        }
+        // Plugins
+        'jasminejquery': 'node_modules/jasmine-jquery/lib/jasmine-jquery',
+        'testUtil': 'test/testUtil'
     }
 });

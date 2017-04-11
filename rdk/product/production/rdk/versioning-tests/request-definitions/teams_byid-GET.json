@@ -7,13 +7,6 @@
 			"values": [
 			]
 		},
-		"fields": {
-			"name": "fields",
-			"paramType": "query",
-			"type": "string",
-			"values": [
-			]
-		},
 		"teamId": {
 			"name": "teamId",
 			"paramType": "query",

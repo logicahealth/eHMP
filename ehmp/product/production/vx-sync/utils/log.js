@@ -29,9 +29,15 @@ function createLogger(config) {
     return log;
 }
 
-function initialize(loggerConfigurations) {
+function initialize(config, subConfig) {
     defaultLog.debug('initialize logger');
-    convertStreamConfigsToStreams(loggerConfigurations);
+    var loggerConfig = subConfig?config[subConfig].loggers:config.loggers;
+    convertStreamConfigsToStreams(loggerConfig);
+    if (_.isFunction(config.addChangeCallback)) {
+        config.addChangeCallback('log.js', updateConfig.bind(null, config, subConfig));
+    } else {
+        throw 'addChangeCallback is not a function.  call initialize with the primary config module object';
+    }
 
     if (_.isEmpty(loggers.root)) {
         var rootLog = defaultLog.child;
@@ -43,6 +49,13 @@ function initialize(loggerConfigurations) {
 
     return module.exports;
 }
+
+function updateConfig(config, subConfig) {
+        var loggerConfig = subConfig?config[subConfig].loggers:config.loggers;
+        _.each(loggers, function(logger) {
+            logger.level(loggerConfig[0].level);
+        });
+    }
 
 function convertStreamConfigsToStreams(loggerConfigurations) {
     _.each(loggerConfigurations, function(singleLoggerConfig) {
@@ -182,7 +195,6 @@ function getLogName(log) {
 
     return 'root';
 }
-
 
 module.exports.initialize = initialize;
 module.exports.get = get;

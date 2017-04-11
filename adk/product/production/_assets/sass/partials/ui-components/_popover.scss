@@ -1,13 +1,19 @@
 .popover {
-	min-width: 475px;
+	min-width: 400px;
 	font-size: inherit;
+	font-family: 'Source Sans Pro', sans-serif;
     &.popover-sm {
         min-width: 100px;
         text-align: center;
     }
 	.popover-title {
 		font-size: 14px;
-		padding-left: 10px;
-		margin-bottom: 5px;
+		padding: 10px;
+	}
+	.popover-content {
+		max-height: 300px;
+		overflow-y: auto;
+		overflow-x: hidden;
+		padding:10px;
 	}
 }

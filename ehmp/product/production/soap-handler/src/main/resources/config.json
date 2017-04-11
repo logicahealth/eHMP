@@ -10,13 +10,13 @@
     "applicationConnectors": [
       {
         "type": "http",
-        "port": 54000
+        "port": 5400
       }
     ],
     "adminConnectors": [
       {
         "type": "http",
-        "port": 54001
+        "port": 5401
       }
     ]
   },
@@ -44,17 +44,17 @@
   },
   "hdr" :
   {
-    "uri" : "IPADDRESS :8896",
-    "path": "/repositories.domain.ext/fpds/",
+    "uri" : "IP_ADDRESS:PORT",
+    "path": "/repositories.DNS       /fpds/",
     "protocol": "http"
   },
   "pgd" : {
-    "uri" : "IPADDRESS ",
+    "uri" : "IP_ADDRESS",
     "retry" : 3,
     "protocol": "http"
   },
   "vler" : {
-    "host" : "IPADDRESS ",
+    "host" : "IP_ADDRESS",
     "port": 80,
     "protocol": "http",
     "docquerypath": "/VLERMockDocQuery/NHINAdapterGatewayDocQuery/EntityDocQuery",
@@ -68,7 +68,7 @@
   },
   "jmeadows-version": "2.3.3.0.2",
   "jmeadows-v2.3.0" : {
-    "host" : "IPADDRESS ",
+    "host" : "IP_ADDRESS",
     "port": 80,
     "protocol": "http",
     "retry" : 3,
@@ -82,7 +82,7 @@
     "parallelismmin" : 4
   },
   "jmeadows-v2.3.1" : {
-    "host" : "IPADDRESS ",
+    "host" : "IP_ADDRESS",
     "port": 80,
     "protocol": "http",
     "retry" : 3,
@@ -96,7 +96,7 @@
     "parallelismmin" : 4
   },
   "jmeadows-v2.3.3.0.2" : {
-    "host" : "IPADDRESS ",
+    "host" : "IP_ADDRESS",
     "port": 80,
     "protocol": "http",
     "retry" : 3,
@@ -110,7 +110,7 @@
     "parallelismmin" : 4
   },
   "mvi" : {
-    "host" : "IPADDRESS ",
+    "host" : "IP_ADDRESS",
     "path" : "/mvi",
     "port" : 8896,
     "protocol" : "http",

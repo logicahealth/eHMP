@@ -7,20 +7,99 @@ define([
 ], function(Backbone, Marionette, $, Handlebars, Messaging) {
     'use strict';
 
-    var getUID = $.prototype.tooltip.Constructor.prototype.getUID; //grab this from the bootstrap tooltip
-
     var defaultOptions = {
         //'container': 'body', //if it's not defined, it will be inside of the view's .dropdown
         //'DropdownView': dropdownView, //some view definition
         //'ButtonView': dropdownView, //some view definition
         //'ButtonTemplate': 'This is what my button says',
-        'position': 'bottom', //bottom | top
-        'align': 'left', //left | right | middle
-        'preventFocusoutClose': false
+        //'position': 'bottom', //bottom | top
+        //'align': 'left', //left | right | middle
+        //'preventFocusoutClose': false,
+        'component': 'applet-dropdown'
     };
 
+    var ButtonView = Marionette.ItemView.extend({
+        tagName: 'button',
+        className: 'btn btn-sm btn-link',
+        attributes: function(){
+            return {
+                'aria-haspopup': 'true',
+                'aria-expanded': 'false',
+                'title': this.model.get('title'),
+                'type': 'button'
+            };
+        }
+    });
+
+    var RowView = Marionette.ItemView.extend({
+        tagName: 'li',
+        template: Handlebars.compile('<a>{{label}}</a>'),
+        attributes: function() {
+            return {
+                'title': this.model.get('title')
+            };
+        }
+    });
+
+    var DropdownListView = Marionette.CompositeView.extend({
+        attributes: {
+            role: 'menu'
+        },
+        template: Handlebars.compile([
+            '{{#if dropdownTitle}}<div class="dropdown-header">',
+            '<p>',
+            '<strong>{{dropdownTitle}}</strong>',
+            '</p>',
+            '</div>{{/if}}',
+            '<ul class="dropdown-body list-group"></ul>',
+        ].join('\n')),
+        className: function() {
+            var classes = ['dropdown-menu', this.getOption('component') + '-menu'],
+                rowClass = this.getOption('rowClass');
+
+            if (rowClass) classes.push(rowClass);
+            return classes.join(' ');
+        },
+        initialize: function() {
+            this.model = new Backbone.Model();
+
+            var dropdownTitle = this.getOption('dropdownTitle');
+            if (dropdownTitle && !this.model.get('dropdownTitle')) { //in case it's already set on the model
+                this.model.set({
+                    dropdownTitle: (_.isFunction(dropdownTitle)) ? dropdownTitle.call(this) : dropdownTitle
+                });
+                this.$el.addClass('dropdown-complex');
+            }
+        },
+        childViewContainer: '.dropdown-body',
+        childView: Marionette.ItemView.extend({
+            tagName: 'li',
+            className: 'list-group-item',
+            template: Handlebars.compile('<a href="{{url}}">{{displayText}}</a>')
+        })
+    });
+
+    var DropdownFormView = Marionette.LayoutView.extend({
+        tagName: 'form',
+        regions: {
+            'Form': 'form'
+        },
+        className: function() {
+            var classes = ['dropdown-menu', this.getOption('component') + '-menu'],
+                rowClass = this.getOption('rowClass');
+
+            if (rowClass) classes.push(rowClass);
+            return classes.join(' ');
+        }
+    });
+
     var dropdownView = Marionette.LayoutView.extend({
-        template: Handlebars.compile('<div class="dropdown-toggle" data-toggle="applet-dropdown" />'),
+        template: function(options) {
+            var type = options.component || defaultOptions.component;
+            return Handlebars.compile('<div class="dropdown-toggle" data-toggle="' + type + '" />');
+        },
+        position: 'botton',
+        align: 'left',
         options: defaultOptions,
         attributes: function(e) {
             return {
@@ -28,72 +107,38 @@ define([
                 'role': 'group'
             };
         },
-        className: 'btn-group dropdown applet-dropdown',
+        className: function() {
+            return 'btn-group dropdown ' + this.getOption('component');
+        },
         isOpen: function() {
-            return this.$el.hasClass('open');
+            return this.getRegion('DropdownRegion').hasView();
         },
         eventString: function() {
             return [
-                'focusin.' + this.cid,
-                'click.' + this.cid
+                'focusin.' + this.getOption('drodown_id'),
+                'click.' + this.getOption('drodown_id')
             ].join(' ');
         },
         regions: {
             'ButtonRegion': '@ui.ButtonContainer'
         },
-        ButtonView: Marionette.ItemView.extend({
-            tagName: 'a',
-            className: 'btn btn-default',
-            attributes: {
-                'aria-haspopup': "true",
-                'tabindex': '0'
-            }
-        }),
-        DropdownListView: Marionette.CollectionView.extend({
-            tagName: 'ul',
-            className: function() {
-                var classes = ['dropdown-menu', 'applet-dropdown-menu'],
-                    rowClass = this.getOption('rowClass');
-
-                if (rowClass) classes.push(rowClass);
-                return classes.join(' ');
-            },
-            childView: Marionette.ItemView.extend({
-                tagName: 'li',
-                template: Handlebars.compile('<a>{{label}}</a>'),
-                attributes: function() {
-                    return {
-                        'title': this.model.get('title')
-                    };
-                }
-            })
-        }),
-        DropdownFormView: Marionette.LayoutView.extend({
-            tagName: 'form',
-            regions: {
-                'Form': 'form'
-            },
-            className: function() {
-                var classes = ['dropdown-menu', 'applet-dropdown-menu'],
-                    rowClass = this.getOption('rowClass');
-
-                if (rowClass) classes.push(rowClass);
-                return classes.join(' ');
-            }
-        }),
+        ButtonView: ButtonView,
+        RowView: RowView,
+        DropdownListView: DropdownListView,
+        DropdownFormView: DropdownFormView,
         events: {
             'show': function(e) {
-                this.$el.trigger('dropdown.show', e);
+                this.$el.trigger('dropdown.show', e, this.$el);
             },
             'hide': function(e) {
-                this.$el.trigger('dropdown.hide', e);
+                this.$el.trigger('dropdown.hide', e, this.$el);
             },
             'toggle': function() {
                 this.$el.toggle.apply(this, arguments);
             },
             //listen to the dom events and broadcast at the view level
             'dropdown.show': function(thisE, e) {
-                this.trigger('dropdown.show', e);
+                this.trigger('dropdown.show', e, this);
                 if (!this.isOpen()) {
                     this.open(e);
                 }
@@ -107,10 +152,10 @@ define([
                         view: this
                     }, this.documentHandler);
                 }
-                this.trigger('dropdown.shown', e);
+                this.trigger('dropdown.shown', e, this);
             },
             'dropdown.hide': function(thisE, e) {
-                this.trigger('dropdown.hide', e);
+                this.trigger('dropdown.hide', e, this);
                 if (this.isOpen()) {
                     this.close(e);
                 }
@@ -118,26 +163,24 @@ define([
             'dropdown.hidden': function(thisE, e) {
                 $(document).off(this.eventString(), 'body');
                 this.ui.ButtonContainer.off('focusin');
-                this.trigger('dropdown.hidden', e);
+                this.trigger('dropdown.hidden', e, this);
             },
             //action events
             'click @ui.ButtonContainer': function(e) {
                 this.toggle(e);
             },
             'keydown @ui.ButtonContainer': function(e) {
+                if (/(13|32)/.test(e.which)) this.$(e.target).trigger('click');
                 this.keyHandler(e, this.ui.ButtonContainer);
-            },
-            'click [data-dismiss=dropdown]': function(e) {
-                this.$el.trigger('dropdown.hide', e);
             },
             'select2:open': function(e) {
                 //when a select2 is attached to body, we don't want to lose the dropdown until the select2
                 //operation finishes
                 if (!!this.getOption('preventFocusoutClose')) return;
-                this.options.preventFocusoutClose = true;
+                this.preventFocusoutClose = true;
                 $(e.target).off('select2:close');
                 $(e.target).one('select2:close', _.bind(function() {
-                    this.options.preventFocusoutClose = false;
+                    this.preventFocusoutClose = false;
                 }, this));
             }
         },
@@ -174,8 +217,11 @@ define([
             if (view.isFocusInside(view, e.target)) {
                 return;
             }
+
             view.stopListening(view, 'dropdown.hidden.' + view.cid);
-            view.$el.trigger('dropdown.hide');
+            delete view.triggerEl;
+
+            view.$el.trigger('dropdown.hide', e);
         },
         keyHandler: function(e, el) {
             //This closely copied from the Bootstrap dropdown lib.  It has been very slightly modified to work with Marionette.
@@ -199,33 +245,31 @@ define([
                     if (e.shiftKey) {
                         //if it's active, shift key is pressed, and we are inside the dropdown container, or focused on the dropdown container itself
                         //when the button is in the same container as the dropdown, this method will close it
-                        $(document).one('focusin.buttoncontainer.' + this.dropdown_id, 'body', {
-                            button: this.ui.ButtonContainer[0],
-                            external: this.getOption('container'),
-                            '$el': this.$el
-                        }, function(e) {
-                            if (e.data.external) { //if focus has left the dropdown and the dropdown isn't inside this.$el
-                                var $el = e.data.$el;
-                                if (!$el.find(e.target).length) { //focus has left our container
-                                    e.target = $el.find('a, button').first();
+                        $(document).one('focusin.buttoncontainer.' + this.getOption('dropdown_id'), 'body', _.bind(function() {
+                            if (this.getOption('container')) { //if focus has left the dropdown and the dropdown isn't inside this.$el
+                                if (!this.$(e.target).length) { //focus has left our container
+                                    this.$('a, button').focus();
                                 }
                                 return;
                             }
 
                             //if focus lands on the button--will only happen when focus returns to the button
-                            if (!!$(e.data.button).find(e.target).length || e.target === e.data.button) {
-                                $(e.data.button).trigger('dropdown.hide');
+                            if (!!this.ui.ButtonContainer.find(e.target).length || e.target === this.ui.ButtonContainer[0]) {
+                                this.ui.ButtonContainer.trigger('dropdown.hide');
                             }
-                        });
+                        }, this));
                     } else {
-                        $(document).one('focusin.buttoncontainer.' + this.dropdown_id, 'body', {
-                            '$el': this.$el
-                        }, function(e) {
-                            var $el = e.data.$el;
-                            if (!$el.find(e.target).length) { //focus has left our container
-                                e.target = $el.find('a, button').first();
+                        $(document).one('focusin.buttoncontainer.' + this.getOption('dropdown_id'), 'body', _.bind(function(e) {
+                            var inputs = $(':input, a, [tabindex]').filter(function() {
+                                var tabindex = this.attributes.tabindex;
+                                if (!tabindex) return true;
+                                return tabindex >= 0;
+                            });
+                            var nextInput = inputs.get(inputs.index(this.$('a, button').first()[0]) + 1);
+                            if (nextInput) {
+                                nextInput.focus();
                             }
-                        });
+                        }, this));
                     }
                 }
                 return;
@@ -241,9 +285,9 @@ define([
                 return $this.trigger('click');
             }
 
-            var desc = ' li:not(.disabled):visible a';
+            var desc = ' li:not(.disabled):visible a, li:not(.disabled):visible button';
             var role = $dropdown.attr('role'),
-                $items;
+                $items = [];
 
             if (role === 'menu' || role === 'listbox') {
                 $items = $dropdown.find(desc);
@@ -259,22 +303,21 @@ define([
 
             $items.eq(index).trigger('focus');
         },
+        getMenu: function(view) {
+            return (view.$el.is('ul')) ? view.$el : view.$('ul');
+        },
         menuHandler: function(view, region, options) {
             //508 -- Bootstrap sets events on document that look for certain patterns.  If these patterns exist keyboard arrow nav is applied
-            var menu = view.$el;
+            var menu = this.getMenu(view);
             if (!menu.is('ul')) {
                 return;
             }
             menu.attr('role', 'menu');
             menu.attr('tabindex', '-1'); //required to hard set focus on this element
-            menu.children().not('.dropdown-header').attr('role', 'presentation');
+            menu.children().not('.dropdown-header, .dropdown-footer').attr('role', 'presentation');
             menu.find('[role=presentation]').children()
                 .attr('role', 'menuitem')
-                .attr('tabindex', '-1').on('keydown', function(e) {
-                    var k = e.which || e.keycode;
-                    if (!/(13|32)/.test(k)) return;
-                    this.click();
-                });
+                .attr('tabindex', '-1');
         },
         startResizer: function() {
             this.stopResizer();
@@ -287,7 +330,7 @@ define([
                     if (resizing === true) {
                         resizing = false;
                         drawing = true;
-                        setTimeout(function() {
+                        _.delay(function() {
                             positionDropdown(view);
                         }, ms_delay); //for Chrome
                         requestAnimationFrame(update);
@@ -306,7 +349,7 @@ define([
             $(window).off('resize.' + this.cid);
         },
         initialize: function(opts) {
-            this.options.dropdown_id = getUID('dropdown');
+            this.options.dropdown_id = this.cid;
             var config = {
                     'dropdown_id': this.getOption('dropdown_id'),
                     'icon': this.getOption('icon') || 'fa-share-alt',
@@ -315,29 +358,22 @@ define([
                 },
                 OptionsDropdownView,
                 OptionsButtonView,
-                options,
-                collection;
+                options;
 
             if (!this.model) this.model = new Backbone.Model(config);
             else _.defaults(this.model.attributes, config);
+            this.triggerMethod('before:initialize', opts);
 
             OptionsDropdownView = this.getOption('DropdownView');
             OptionsButtonView = opts.ButtonView || this.getOption('ButtonView').extend({
-                template: this.getOption('ButtonTemplate') || Handlebars.compile('<i class="fa {{icon}}"></i>'),
+                template: this.getOption('ButtonView').prototype.template || this.getOption('ButtonTemplate') || Handlebars.compile('<i class="fa {{icon}}"></i>'),
                 model: this.model
             });
 
             options = _.defaults(opts, this.options, this.model.attributes);
-            collection = options.collection || this.collection;
 
             this.DropdownView = OptionsDropdownView || this.DropdownListView;
             this.ButtonView = OptionsButtonView;
-
-            this.DropdownView = this.DropdownView.extend({
-                collection: (_.isArray(collection)) ? new Backbone.Collection(collection) : collection,
-                options: _.omit(this.options, 'model'),
-                childViewOptions: options.childViewOptions || _.omit(this.options, 'model')
-            });
 
             //Close if I'm not the droid you are looking for
             this.listenTo(Messaging, 'dropdown.close', function(cid) {
@@ -345,6 +381,38 @@ define([
                     this.close(this, true);
                 }
             });
+
+            var key = this.getOption('key'),
+                component = this.getOption('component'),
+                channel;
+            if(key && component) {
+                channel = Messaging.getChannel(key);
+                this.listenTo(channel, component + '.hide', function() {
+                    this.$el.trigger('hide');
+                });
+                this.listenTo(channel, component + '.show', function() {
+                    this.$el.trigger('show');
+                });
+            }
+
+            return options;
+        },
+        configureDropdownView: function(options) {
+            var collection = this.getOption('collection');
+            this.DropdownView = this.DropdownView.extend({
+                collection: (_.isArray(collection)) ? new Backbone.Collection(collection) : collection,
+                options: _.omit(this.options, 'model'),
+                childViewOptions: options.childViewOptions || _.omit(this.options, 'model', 'tagName'),
+                'events': {
+                    'click [data-dismiss=dropdown]': _.bind(function(e) {
+                        this.$el.trigger('dropdown.hide', e, this.$el);
+                    }, this)
+                }
+            });
+        },
+        onBeforeRender: function() {
+            if (this.getRegion('DropdownRegion'))
+                this.removeRegion('DropdownRegion');
         },
         onRender: function() {
             if (this.getRegion('DropdownRegion')) return;
@@ -372,11 +440,12 @@ define([
                 }
             });
 
+            this.ui.ButtonContainer.attr('data-target', this.getOption('dropdown_id'));
             this.$el.dropdown = this.$el.trigger;
         },
         onBeforeShow: function() {
             if (this.ButtonView) {
-                this.showChildView('ButtonRegion', new this.ButtonView());
+                this.showChildView('ButtonRegion', new this.ButtonView(_.omit(this.options, 'tagName')));
             }
         },
         setupDropdown: function(view, region) {
@@ -409,10 +478,10 @@ define([
 
             switch (view.getOption('align')) { //handle horizontal
                 case 'right':
-                    config.left = buttonBounds.right;
+                    config.left = buttonBounds.right - dropdownBounds.width;
                     break;
                 case 'middle':
-                    config.left = buttonBounds.left + buttonBounds.width / 2;
+                    config.left = buttonBounds.left - (dropdownBounds.width/2 - buttonBounds.width/2);
                     break;
                 default:
                     config.left = buttonBounds.left;
@@ -432,16 +501,17 @@ define([
         },
         open: function(e, preventShiftFocus) {
             var View = this.DropdownView.extend({
+                    $controller: this.$el,
                     keyHandler: _.bind(this.keyHandler, this),
-                    events: {
+                    events: _.extend({
                         'keydown': function(e) {
                             this.keyHandler(e, this.$el);
                         }
-                    }
+                    }, this.DropdownView.prototype.events)
                 }),
                 dropdownView = new View();
 
-            this.triggerEl = e.target;
+            this.triggerEl = (e) ? e.target || this.ui.ButtonContainer : this.ui.ButtonContainer;
 
             this.listenToOnce(dropdownView, 'attach', function(view, region) {
                 //sets this.ui.DropdownContainer and calculates position
@@ -452,18 +522,19 @@ define([
                 Messaging.trigger('dropdown.close', this.cid); //close the other dropdowns
 
                 //set focus to the first menu item once the dropdown is open
-                if (!preventShiftFocus) {
-                    this.listenToOnce(this, 'dropdown.shown', function() {
-                        if (!!firstmenuitem.length) firstmenuitem.focus();
-                        else view.el.focus();
-                    });
-                }
+                this.$el.one('dropdown.shown', function() {
+                    if (!!firstmenuitem.length) firstmenuitem.focus();
+                    else view.el.focus();
+                });
 
-                this.ui.ButtonContainer.attr('aria-expanded', true);
-                this.$el.addClass('open').trigger('dropdown.shown');
+                this.ui.ButtonContainer.children('button').attr('aria-expanded', true);
+                this.$el.addClass('open').trigger('dropdown.shown', e);
             });
 
-            this.showChildView('DropdownRegion', dropdownView);
+            //required to allow show to execute in closure while allowing events to bubble
+            _.delay(_.bind(function() {
+                this.getRegion('DropdownRegion').show(dropdownView);
+            }, this));
             this.startResizer();
         },
         close: function(e, preventShiftFocus) {
@@ -478,8 +549,8 @@ define([
             var region = this.getRegion('DropdownRegion');
             if (region.currentView) region.empty();
 
-            this.ui.ButtonContainer.attr('aria-expanded', false);
-            this.$el.removeClass('open').trigger('dropdown.hidden');
+            this.ui.ButtonContainer.children('button').attr('aria-expanded', false);
+            this.$el.removeClass('open').trigger('dropdown.hidden', e);
             this.stopResizer();
         },
         setDropdownView: function(view) {
@@ -489,7 +560,7 @@ define([
             this.ButtonRegion.show(view);
         },
         onDestroy: function() {
-            $(document).off(this.eventString(), 'body').off('focusin.buttoncontainer.' + this.dropdown_id, 'body');
+            $(document).off(this.eventString(), 'body').off('focusin.buttoncontainer.' + this.getOption('dropdown_id'), 'body');
             this.stopResizer();
         }
     });
@@ -509,9 +580,11 @@ define([
                     events = this.events,
                     argEvents = (args[0]) ? _.extend({}, this.options.events || {}, args[0].events) : _.extend({}, this.options.events);
                 this.initialize = function() {
-                    Orig.prototype.initialize.apply(this, arguments);
-                    if (Orig.prototype.initialize === init) return;
-                    init.apply(this, arguments);
+                    var opts = Orig.prototype.initialize.apply(this, arguments);
+                    if (Orig.prototype.initialize !== init)
+                        init.apply(this, arguments);
+                    this.triggerMethod('initialize', opts);
+                    this.configureDropdownView(opts);
                 };
                 this.onRender = function() {
                     Orig.prototype.onRender.apply(this, arguments);
@@ -543,6 +616,12 @@ define([
             }
         }),
         DropdownView = Modified;
+
+    //attach these as options for the end user
+    DropdownView.DropdownListView = DropdownListView;
+    DropdownView.DropdownFormView = DropdownFormView;
+    DropdownView.ButtonView = ButtonView;
+    DropdownView.RowView = RowView;
 
     return DropdownView;
 });

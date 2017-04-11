@@ -12,7 +12,7 @@ module.exports.buildDescription = buildDescription;
 
 /**
  * Load resources defined in server files.
- * @param {Object} app - The app.
+ * @param {Object} app - The app. If not provided a mock app is created.
  * @param {string[]} [serverFiles] - An array of server file names in `bin` to register resources from.
  *   Default value is all .js files in `bin`.
  * @returns {Object} Each property of the return value has the resource's file path as its key and
@@ -21,6 +21,9 @@ module.exports.buildDescription = buildDescription;
  */
 function loadResources(app, serverFiles) {
     var resources = {};
+    if (!app) {
+        app = mockApp();
+    }
     if (!serverFiles) {
         serverFiles = loadServerFiles();
     }
@@ -35,6 +38,28 @@ function loadResources(app, serverFiles) {
         }
     });
     return resources;
+}
+
+function mockApp() {
+    return {
+        config: {
+            cdsMongoServer: {
+                host: 'foo',
+                port: '42'
+            },
+            cdsInvocationServer: {
+                host: 'bar',
+                port: '47'
+            }
+        },
+        logger: {
+            trace: function() {},
+            debug: function() {},
+            info: function() {},
+            warn: function() {},
+            error: function() {}
+        }
+    };
 }
 
 function loadServerFiles() {
@@ -57,9 +82,12 @@ function addResource(app, resources, filePath, mountpoint) {
     resources[filePath] = resourceConfigs;
 }
 
-function buildDescription(resource, resourceConfigs, filePath) {
+function buildDescription(resource, resourceConfigs, filePath, method) {
     var description = filePath.replace(/.*\/src\//, '') + '.js';
     if (resourceConfigs.length > 1) {
+        if (method) {
+            description += ' ' + method;
+        }
         var base = findBasePath(_.pluck(resourceConfigs, 'path'));
         if (resource.path.length > base.length) {
             description += ' at path ' + resource.path.substring(base.length);

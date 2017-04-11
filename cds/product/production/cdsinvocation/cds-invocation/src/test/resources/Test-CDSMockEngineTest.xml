@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+	http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:annotation-config />
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:test-cognitive.cds.config.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="propjectProperties" class="com.cognitive.cds.invocation.ProjectProperties">
+		<property name="propertyName"
+			value="classpath:test-cognitive.cds.config.properties" />
+	</bean>
+
+	<!--bean id="OpenCDS" class="com.cognitive.cds.invocation.engineplugins.OpenCDS"/ -->
+	<bean id="engineInstanceStateManager"
+		class="com.cognitive.cds.invocation.engineplugins.OpenCDSMockEngineInstanceStateManager" />
+
+	<bean id="engineOne" class="com.cognitive.cds.invocation.engineplugins.MockEngine">
+	</bean>
+
+	<bean id="engineTwo" class="com.cognitive.cds.invocation.engineplugins.MockEngine">
+	</bean>
+
+	<!-- The Default Data handler -->
+	<bean id="fhirDataHandler"
+		class="com.cognitive.cds.invocation.fhir.FHIRJSONDataModelHandler">
+		<lookup-method name="createFhirDataRetriever" bean="retrieveFhirData" />
+	</bean>
+
+	<bean id="retrieveFhirData" class="com.cognitive.cds.invocation.fhir.FhirDataRetriever"
+		scope="prototype">
+
+		<property name="baseUrl" value="${RDK-fhir-server}" />
+		<property name="authUrl" value="${RDK-auth-server}" />
+
+		<property name="defaultAuth">
+			<bean class="com.cognitive.cds.invocation.fhir.model.Authentication">
+				<constructor-arg name="accessCode" value="pu1234" />
+				<constructor-arg name="verifyCode" value="pu1234!!" />
+				<constructor-arg name="site" value="9E7A" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- Add as a bean reference for Mongo DB access -->
+	<bean id="mongoDbDao" class="com.cognitive.cds.invocation.mongo.MongoDbDao">
+		<constructor-arg name="mongoDbUrl" value="${mongo-db-url}" />
+	</bean>
+
+	<bean id="engineInfoDao" class="com.cognitive.cds.invocation.mongo.EngineInfoDao">
+		<property name="mongoDbDao" ref="mongoDbDao" />
+	</bean>
+
+	<bean id="patientLookup" class="com.cognitive.cds.invocation.mongo.PatientListDao">
+		<property name="mongoDbDao" ref="mongoDbDao" />
+	</bean>
+
+	<bean id="intentLookup" class="com.cognitive.cds.invocation.mongo.IntentMappingDao">
+		<property name="mongoDbDao" ref="mongoDbDao" />
+	</bean>
+
+	<bean id="repositoryLookup" class="com.cognitive.cds.invocation.RepositoryLookup">
+		<property name="intentMappingAgent" ref="intentLookup" />
+		<property name="engineInfoAgent" ref="engineInfoDao" />
+	</bean>
+
+	<bean id="cdsInvoker" class="com.cognitive.cds.invocation.CDSInvoker">
+		<property name="repositoryLookupAgent" ref="repositoryLookup" />
+		<property name="dataModelHandlerBeanName" value="fhirDataHandler" />
+		<property name="enginesMap">
+			<map>
+				<entry key="engineOne">
+					<bean class="com.cognitive.cds.invocation.model.EngineInfo">
+						<constructor-arg name="engine" ref="engineOne" />
+						<property name="name" value="engineOne" />
+						<property name="type" value="Mock" />
+						<property name="version" value="1" />
+						<property name="environment" value="" />
+					</bean>
+				</entry>
+				<entry key="engineTwo">
+					<bean class="com.cognitive.cds.invocation.model.EngineInfo">
+						<constructor-arg name="engine" ref="engineTwo" />
+						<property name="name" value="engineTwo" />
+						<property name="type" value="Mock" />
+						<property name="version" value="1" />
+						<property name="environment" value="" />
+					</bean>
+				</entry>
+			</map>
+		</property>
+		<property name="intentsMap">
+			<map>
+				<entry key="FirstEngine">
+					<bean class="com.cognitive.cds.invocation.model.IntentMapping">
+						<property name="name" value="FirstEngine"></property>
+						<property name="description" value="A Mock Intent"></property>
+						<property name="scope" value="Enterprise" />
+						<property name="invocations">
+							<list>
+								<bean class="com.cognitive.cds.invocation.model.InvocationMapping">
+									<property name="engineName" value="engineOne"></property>
+									<property name="rules">
+										<list>
+											<bean class="com.cognitive.cds.invocation.model.Rule">
+												<property name="id" value="genderAgeRule"></property>
+												<property name="properties">
+													<props>
+														<prop key="delay">10</prop>
+													</props>
+												</property>
+											</bean>
+										</list>
+									</property>
+								</bean>
+							</list>
+						</property>
+					</bean>
+				</entry>
+				<entry key="SecondEngine">
+					<bean class="com.cognitive.cds.invocation.model.IntentMapping">
+						<property name="invocations">
+							<list>
+								<bean class="com.cognitive.cds.invocation.model.InvocationMapping">
+									<property name="engineName" value="engineTwo"></property>
+									<property name="rules">
+										<list>
+											<bean class="com.cognitive.cds.invocation.model.Rule">
+												<property name="id" value="agentOrangeRule"></property>
+												<property name="properties">
+													<props>
+														<prop key="delay">10</prop>
+													</props>
+												</property>
+											</bean>
+										</list>
+									</property>
+								</bean>
+							</list>
+						</property>
+					</bean>
+				</entry>
+				<entry key="Merge">
+					<bean class="com.cognitive.cds.invocation.model.IntentMapping">
+						<property name="invocations">
+							<list>
+								<bean class="com.cognitive.cds.invocation.model.InvocationMapping">
+									<property name="engineName" value="engineTwo"></property>
+									<property name="rules">
+										<list>
+											<bean class="com.cognitive.cds.invocation.model.Rule">
+												<property name="id" value="agentOrangeRule"></property>
+												<property name="properties">
+													<props>
+														<prop key="delay">10</prop>
+													</props>
+												</property>
+											</bean>
+										</list>
+									</property>
+								</bean>
+								<bean class="com.cognitive.cds.invocation.model.InvocationMapping">
+									<property name="engineName" value="engineOne"></property>
+									<property name="rules">
+										<list>
+											<bean class="com.cognitive.cds.invocation.model.Rule">
+												<property name="id" value="agentOrangeRule"></property>
+												<property name="properties">
+													<props>
+														<prop key="delay">10</prop>
+													</props>
+												</property>
+											</bean>
+										</list>
+									</property>
+								</bean>
+							</list>
+						</property>
+					</bean>
+				</entry>
+			</map>
+		</property>
+		<property name="metricCollectors">
+			<list>
+				<bean class="com.cognitive.cds.invocation.metricsplugins.DoNothing" />
+			</list>
+		</property>
+	</bean>
+</beans>

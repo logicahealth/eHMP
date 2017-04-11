@@ -6,7 +6,7 @@ define([
 
     var SignModel = (function() {
 
-        //============================= CONSTANTS =============================        
+        //============================= CONSTANTS =============================
         var DEFAULT_ATTRIBUTES = {
             contentType: 'application/json',
             success: function() {},
@@ -36,7 +36,7 @@ define([
             }
             if (signatureCode.length < 6) {
                 this.errorModel.set({
-                    signature_code: 'Signature code must be at least 6 characters long.'
+                    signature_code: 'Must be at least 6 characters long.'
                 });
             }
             if (!this.errorModel.isEmpty()) {
@@ -50,7 +50,12 @@ define([
                 pid: this.get('pid'),
                 site: this.user.get('site')
             };
-            var url = ADK.ResourceService.buildUrl(resource);
+            var criteria = options.criteria || {};
+
+            if (this.patient.has("acknowledged")) {
+                criteria._ack = true;
+            }
+            var url = ADK.ResourceService.buildUrl(resource, criteria);
             return ADK.ResourceService.replaceURLRouteParams(unescape(url), params);
         };
 
@@ -66,19 +71,23 @@ define([
             var jdsStatus = this.get('statusName');
 
             //There may be multiple signature activities in the detail summary, so we make sure we account for that possibility
-            var modifiedStatus = result.detailSummary.replace(/Signature:/g,"Signature:|").replace(/\r/g,"|").split('|');
+            var modifiedStatus = result.detailSummary.replace(/Signature:/g, "Signature:|").replace(/\r/g, "|").split('|');
             var vistaSignatureStatus = _.chain(modifiedStatus)
-                .filter(function(status, index) {return ((index > 0) && (!_.isUndefined(status)) && (this[index - 1].trim() === 'Signature:'));}, modifiedStatus)
-                .map(function(value) {return value.trim();})
+                .filter(function(status, index) {
+                    return ((index > 0) && (!_.isUndefined(status)) && (this[index - 1].trim() === 'Signature:'));
+                }, modifiedStatus)
+                .map(function(value) {
+                    return value.trim();
+                })
                 .last()
                 .value();
 
             // [Mike F]: The JDS sync for discontinued, unsigned orders isn't *quite* working like it's supposed to. Currently, discontinued, unsigned order
-            // JDS status will show as 'DISCONTINUED', while VistA status will show as 'PENDING'.  In this special case, we adjust the JDS status to equal
+            // JDS status will show as 'UNRELEASED', while VistA status will show as 'PENDING'.  In this special case, we adjust the JDS status to equal
             // the VistA status to pass the test case.  Eventually, this should be fixed when the issue is resolved.
-            if ((jdsStatus === 'DISCONTINUED') && (vistaStatus === 'PENDING')) {
-                vistaStatus = 'DISCONTINUED';
-            } 
+            if ((jdsStatus === 'UNRELEASED') && (vistaStatus === 'PENDING')) {
+                vistaStatus = 'UNRELEASED';
+            }
 
             if ((jdsStatus !== vistaStatus) || (vistaSignatureStatus !== 'NOT SIGNED')) {
                 if ((vistaStatus !== 'CANCELLED') && (vistaSignatureStatus !== '') && (vistaSignatureStatus !== 'NOT SIGNED') && (vistaSignatureStatus !== 'NOT REQUIRED DUE TO SERVICE CANCEL/LAPSE')) {
@@ -88,9 +97,9 @@ define([
                 } else {
                     result.errorMessage = 'Inconsistent versions exist for this order';
                 }
-            }
-            else {
+            } else {
                 result.showOverride = false;
+                result.originalOrderCheckList = signOrders.orderCheckList;
                 result.orderCheckList = _.map(signOrders.orderCheckList, function(oc) {
                     //[Edison T]: if any of the order check severity is 1, override reason is required
                     if (oc.orderCheck.split('^')[2] === '1') {
@@ -103,11 +112,22 @@ define([
 
                 var detailSummaryLines = result.detailSummary.split('\r');
                 result.summary = detailSummaryLines[0];
+
+                if (!_.isEmpty(result.orderCheck)) {
+                    result.orderCheckData = _.map(result.orderCheck, function(orderCheck, index, orderChecks) {
+                        return {
+                            label: orderCheck.substring(1),
+                            warning: (orderCheck.substring(0, 1) === '1') ? '* Order Check requires Reason for Override' : '',
+                            index: index + 1,
+                            count: orderChecks.length,
+                        };
+                    });
+                }
             }
 
             return result;
         };
-        
+
         //========================= UTILITY FUNCTIONS =========================
         var getDefaults = function() {
             if (_.isUndefined(this.patient)) {
@@ -119,17 +139,21 @@ define([
                 return;
             }
 
-            this.unset('errorMessage', {silent: true});
-            
+            this.unset('errorMessage', {
+                silent: true
+            });
+            var location = _.get(this.patient.get('visit'), 'locationUid').split(':').pop();
             var siteCode = this.user.get('site');
             this.set({
                 pid: this.patient.get('pid'),
                 dfn: this.patient.get('localId'),
-                location: _.get(this.patient.get('visit'), 'localId'),
+                location: location,
                 siteCode: siteCode,
                 provider: _.get(this.user.get('duz'), siteCode || '')
-            }, {silent: true});
-        };        
+            }, {
+                silent: true
+            });
+        };
 
         var getOrderList = function() {
             var orderList = [];
@@ -144,16 +168,21 @@ define([
                 if (isDiscontinuedOrder) {
                     orderId = orderId.replace(';1', ';2');
                 }
-                orderList.push({'orderId': orderId, 'orderDetailHash': hash});
+                orderList.push({
+                    'orderId': orderId,
+                    'orderDetailHash': hash
+                });
             });
 
             return orderList;
         };
 
-        var getOrderCheckList = function() {            
-            var orderCheckList = this.get('orderCheck');
+        var getOrderCheckList = function() {
+            var orderCheckList = this.get('originalOrderCheckList');
             var orderCheckArray = _.map(orderCheckList, function(orderCheck) {
-                return {orderCheck: orderCheck};
+                return {
+                    orderCheck: orderCheck.orderCheck
+                };
             });
             return orderCheckArray;
         };
@@ -162,7 +191,7 @@ define([
         var getDetails = function() {
             this.parse = parseDetails;
             this.validate = validateDetails;
-            this.getUrl = _.partial(getUrl, 'orders-sign-details');
+            this.getUrl = _.partial(getUrl, 'orders-lab-sign-details');
             getDefaults.apply(this);
 
             this.save();
@@ -170,7 +199,7 @@ define([
 
         var execute = function(options) {
             this.validate = validateExecute;
-            this.getUrl = _.partial(getUrl, 'orders-sign');
+            this.getUrl = _.partial(getUrl, 'orders-lab-sign');
             getDefaults.apply(this);
 
             // Perform manual validation, since calling 'sync' directly doesn't do it for us
@@ -190,7 +219,9 @@ define([
 
             data.eSig = this.get('signature_code');
             data.overrideReason = (this.get('reason_for_override') || '').replace(/\^/g, ' ');
-            this.set(data, {silent: true});
+            this.set(data, {
+                silent: true
+            });
 
             // Use the custom 'sign' method (which maps to 'create') to perform the sign
             var attributes = _.extend({}, DEFAULT_ATTRIBUTES, options);
@@ -200,16 +231,22 @@ define([
         var addOrderId = function(orderId) {
             var orderIds = this.get('orderIds') || [];
             orderIds.push(orderId);
-            this.set('orderIds', orderIds, {silent: true});
+            this.set('orderIds', orderIds, {
+                silent: true
+            });
         };
 
         var clearOrderIds = function() {
-            this.set('orderIds', [], {silent: true});
+            this.set('orderIds', [], {
+                silent: true
+            });
         };
 
         var setDiscontinuedOrder = function(isDiscontinuedOrder) {
             if (isDiscontinuedOrder === true) {
-                this.set('isDiscontinued', true, {silent: true});
+                this.set('isDiscontinued', true, {
+                    silent: true
+                });
             }
         };
 

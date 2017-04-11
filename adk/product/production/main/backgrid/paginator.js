@@ -40,17 +40,26 @@ define([
                 elem = document.createElement("span");
                 elem.title = this.title;
                 elem.innerHTML = this.label;
+                elem.setAttribute("aria-hidden","true");
               }else {
                 elem = document.createElement("button");
                 elem.type = 'button';
                 if (this.title === 'Next') {
                   elem.className = 'btn btn-icon nextPaginator';
-                  elem.title = 'Press enter to access next data.';
-                  elem.innerHTML = '<i class="fa fa-caret-right fa-lg"></i>';
+                  if(this.collection.state.currentPage !== this.collection.state.totalPages) {
+                    elem.title = 'Press enter to load the next page, page ' + (this.collection.state.currentPage + 1) + ', and then press ALT + R to view the table';
+                  } else {
+                    elem.title = 'This is the last page.';
+                  }
+                  elem.innerHTML = '<i class="fa fa-chevron-right fa-lg"></i>';
                 } else if (this.title === 'Previous') {
-                  elem.className = 'btn btn-icon previousPaginator';
-                  elem.title = 'Press enter to access previous data.';
-                  elem.innerHTML = '<i class="fa fa-caret-left fa-lg"></i>';
+                  elem.className = 'btn btn-icon previousPaginator left-margin-xs';
+                  if((this.collection.state.currentPage - 1) !== 0) {
+                    elem.title = 'Press enter to load the previous page, page' + (this.collection.state.currentPage - 1) + ', and then press ALT + R to view the table';
+                  } else {
+                    elem.title = 'This is the first page.';
+                  }
+                  elem.innerHTML = '<i class="fa fa-chevron-left fa-lg"></i>';
                 }
               }
 

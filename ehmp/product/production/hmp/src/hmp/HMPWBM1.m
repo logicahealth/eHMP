@@ -1,5 +1,5 @@
 HMPWBM1 ;ASMR/RRB - Medication Order Writeback ;Jul 02, 2015@10:22:02
- ;;2.0;HEALTH MANAGEMENT PLATFORM;**1**;Oct 10, 2014;Build 7
+ ;;2.0;HEALTH MANAGEMENT PLATFORM;**;Oct 10, 2014;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
 ORCHECK(HMPOUT,DFN,FID,STRT,ORL,OIL,ORIFN,ORREN) ; Wraps for order checking

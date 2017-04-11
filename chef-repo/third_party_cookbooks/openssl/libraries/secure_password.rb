@@ -1,7 +1,7 @@
 #
 # Cookbook Name:: openssl
 # Library:: secure_password
-# Author::     ua Timberman <joshua@opscode.com>
+# Author:: Joshua Timberman <joshua@opscode.com>
 #
 # Copyright 2009, Opscode, Inc.
 #

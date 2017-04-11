@@ -5,6 +5,7 @@ var path = require('path');
 var nullUtil = require('../core/null-utils');
 var pickListDirectRpcCall = require('./pick-list-direct-rpc-call');
 var pickListInMemoryRpcCall = require('./pick-list-in-memory-rpc-call');
+var pickListGroups = require('./pick-list-groups');
 
 
 var interceptors = {
@@ -25,6 +26,7 @@ module.exports.getResourceConfig = function(/*app*/) {
 
     registerPickLists(pickListDirectRpcCall.config, resourceConfig);
     registerPickLists(pickListInMemoryRpcCall.config, resourceConfig);
+    registerPickLists(pickListGroups.config, resourceConfig);
 
     return resourceConfig;
 };
@@ -79,16 +81,23 @@ function fetchWritePickList(req, res) {
         }
     };
 
-//----------------------------------------------------------------------------------------------------------------------
-//                 RPC's called directly - there is no in-memory solution for them.
-//----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+    //                 Pick-list groups (collections)
+    //----------------------------------------------------------------------------------------------------------------------
+    if (pickListGroups.getPickListGroup(req, site, type, serverSend)) {
+        return;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------
+    //                 RPC's called directly - there is no in-memory solution for them.
+    //----------------------------------------------------------------------------------------------------------------------
     if (pickListDirectRpcCall.directRpcCall(req, site, type, serverSend)) {
         return;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-//                 Cached In-Memory RPC's.
-//----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+    //                 Cached In-Memory RPC's.
+    //----------------------------------------------------------------------------------------------------------------------
     pickListInMemoryRpcCall.inMemoryRpcCall(req, site, type, serverSend);
 }
 
@@ -97,3 +106,4 @@ function fetchIndividualPickList(name, req, res) {
     req.query.type = name;
     fetchWritePickList(req, res);
 }
+module.exports.fetchIndividualPickList = fetchIndividualPickList;

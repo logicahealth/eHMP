@@ -15,7 +15,7 @@ define([
             }
         };
 
-        var validateExecute = function(attributes, options) {            
+        var validateExecute = function(attributes, options) {
             if (this.errorModel) {
                 this.errorModel.clear();
             }
@@ -34,21 +34,22 @@ define([
         var getUrl = function(method, options) {
             var resource = '';
             var params = this.pick('pid');
-            var queryParams = null;
+            var queryParams = options.criteria || {};
+            if (this.patient.has("acknowledged")) {
+                queryParams._ack = true;
+            }
 
             switch (method) {
                 case 'read':
                     resource = 'lab-support-data';
-                    queryParams = {
-                        site: this.user.get('site'),
-                        type: 'discontinue-reason'
-                    };
+                    queryParams.site = this.user.get('site');
+                    queryParams.type = 'discontinue-reason';
                     break;
                 case 'create':
-                    resource = 'orders-discontinue-details';
+                    resource = 'orders-lab-discontinue-details';
                     break;
                 case 'delete':
-                    resource = 'orders-discontinue';
+                    resource = 'orders-lab-discontinue';
                     break;
             }
             var url = ADK.ResourceService.buildUrl(resource, queryParams);
@@ -71,11 +72,10 @@ define([
                 result.errorMessage = 'The order cannot be discontinued. ';
                 if (vistaStatus === 'CANCELLED') {
                     result.errorMessage += 'This order has been deleted.';
-                } else {
-                    result.errorMessage += 'Lab orders that have been collected may not be discontinued!';
+                } else if (vistaStatus === 'DISCONTINUED') {
+                    result.errorMessage += 'This order has been discontinued!';
                 }
-            }
-            else {
+            } else {
                 //[Edison] parsing out order check from the detail
                 var orderChecksArray = detailSummary.substring(detailSummary.search('Order Checks:'), detailSummary.length);
                 orderChecksArray = orderChecksArray.replace(/HIGH:/g, '|HIGH:').replace(/MODERATE:/g, '|MODERATE:').replace(/LOW:/g, '|LOW:').split('|');
@@ -110,14 +110,17 @@ define([
                 reasonListItems: [resp.data]
             };
         };
-        
+
         //========================= UTILITY FUNCTIONS =========================
         var getOrderList = function() {
             var orderList = [];
             var orderIds = this.get('orderIds');
             var hash = this.get('hash');
             _.each(orderIds, function(orderId) {
-                orderList.push({'orderId': orderId, 'hash': hash});
+                orderList.push({
+                    'orderId': orderId,
+                    'hash': hash
+                });
             });
             return orderList;
         };
@@ -132,26 +135,35 @@ define([
                 return;
             }
 
-            this.unset('errorMessage', {silent: true});
-            
+            this.unset('errorMessage', {
+                silent: true
+            });
+
+            var location = _.get(this.patient.get('visit'), 'locationUid').split(':').pop();
             var siteCode = this.user.get('site');
             this.set({
                 pid: this.patient.get('pid'),
                 dfn: this.patient.get('localId'),
-                location: _.get(this.patient.get('visit'), 'localId'),
+                location: location,
                 siteCode: siteCode,
                 provider: _.get(this.user.get('duz'), siteCode || '')
-            }, {silent: true});
+            }, {
+                silent: true
+            });
         };
 
         var addOrderId = function(orderId) {
             var orderIds = this.get('orderIds') || [];
             orderIds.push(orderId);
-            this.set('orderIds', orderIds, {silent: true});
+            this.set('orderIds', orderIds, {
+                silent: true
+            });
         };
 
         var clearOrderIds = function() {
-            this.set('orderIds', [], {silent: true});
+            this.set('orderIds', [], {
+                silent: true
+            });
         };
 
         //=========================== API FUNCTIONS ===========================
@@ -159,7 +171,9 @@ define([
             this.parse = parseDetails;
             this.validate = validateDetails;
             getDefaults.apply(this);
-            this.unset('uid', {silent: true});
+            this.unset('uid', {
+                silent: true
+            });
 
             this.save();
         };
@@ -179,7 +193,9 @@ define([
             this.set({
                 uid: 1,
                 orderList: getOrderList.apply(this)
-            }, {silent: true});
+            }, {
+                silent: true
+            });
 
             // Perform manual validation, since calling 'destroy' directly doesn't do it for us
             if (!this.isValid()) {

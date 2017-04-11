@@ -42,24 +42,24 @@ Add a new immunization for a patient in a single Vista
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
                 "required": [
-                      "encounterInpatient":"ssss",
-                      "encounterLocation":"ssss",
-                      "encounterServiceCategory":"ssss",
-                      "encounterDateTime":"ssss",
-                      "eventDateTime":"ssss",
-                      "providerName":"ssss",
-                      "encounterProviderIEN":"ssss",
-                      "encounterPatientDFN":"ssss",
-                      "immunizationIEN":"ssss",
-                      "route":"ssss",
-                      "dose":"ssss",
-                      "cvxCode":"ssss",
-                      "immunizationNarrative":"ssss",
-                      "adminSite":"ssss",
-                      "informationSource":"ssss",
-                      "lotNumber":"ssss",
-                      "manufacturer":"ssss",
-                      "expirationDate":"ssss"
+                      "encounterInpatient",
+                      "encounterLocation",
+                      "encounterServiceCategory",
+                      "encounterDateTime",
+                      "eventDateTime",
+                      "providerName",
+                      "encounterProviderIEN",
+                      "encounterPatientDFN",
+                      "immunizationIEN",
+                      "route",
+                      "dose",
+                      "cvxCode",
+                      "immunizationNarrative",
+                      "adminSite",
+                      "informationSource",
+                      "lotNumber",
+                      "manufacturer",
+                      "expirationDate"
                 ],
                 "properties": {
                     "encounterInpatient": {
@@ -134,7 +134,29 @@ Add a new immunization for a patient in a single Vista
                         "type": "string",
                         "description": "expiration date for the immunization"
                     }
+                }
             }
+
++ Response 200 (application/json)
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+
+### Set Entered In Error [PUT {{{path}}}/{resourceId}]
+
+Mark an immunization as entered in error.
+
++ Parameters
+
+    + pid (string, required) - patient id
+
+    + resourceId (string, required) - ID of the immunization
+
++ Request JSON Message (application/json)
 
 + Response 200 (application/json)
 

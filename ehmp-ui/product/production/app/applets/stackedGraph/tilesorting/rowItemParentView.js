@@ -2,44 +2,27 @@ define([
     'backbone',
     'marionette',
     'underscore',
-    'main/components/appletToolbar/appletToolbarView'
-], function(Backbone, Marionette, _, ToolbarView) {
+], function(Backbone, Marionette, _) {
     "use strict";
 
     var dragged;
-    var TileSortRowItemView = Backbone.Marionette.LayoutView.extend({
-        regions: {
-            toolbarView: '.toolbar-container'
+    var TileSortRowItemView = Backbone.Marionette.ItemView.extend({
+        behaviors: {
+            FloatingToolbar: {
+                DialogContainer: '.toolbar-container'
+            }
         },
         ui: {
             popoverEl: '[data-toggle=popover]',
             toolbarToggler: '.selectable:not([data-toggle=popover])'
         },
         events: {
-            'click .selectable:not([data-toggle=popover])': function(e) {
-                this.toggleToolbar();
-            },
-            'keydown': function(e) {
-                var k = e.which || e.keyCode;
-                if (!/(13|32)/.test(k)) return;
-                this.ui.toolbarToggler.trigger('click');
-                e.preventDefault();
-                e.stopPropagation();
-            },
-            'keydown [data-toggle=popover]': function(e) {
-                var k = e.which || e.keyCode;
-                if (!/(13|32)/.test(k)) return;
-                $(e.target).trigger('click');
-                e.preventDefault();
-                e.stopPropagation();
-            },
             'dragstart': function(event) {
-                var index = $(this.el).parent().find('.row').index(this.el).toString();
+                var index = $(this.el).parent().find('.row').index(this.el);
                 if(event.originalEvent){
                     dragged = event.currentTarget;
                     // IE requires the first parameter to be text or URL. You can't give it a custom name.
                     event.originalEvent.dataTransfer.setData('text', index);
-
                 } else {
                     this.performManualDragStart(index);
                 }
@@ -64,12 +47,10 @@ define([
                 event.stopImmediatePropagation();
                 var originalIndex = Number(this.manualOriginalIndex);
                 var targetIndex = $(this.el).parent().find('.row').index(this.el);
-
                 var reorder = {
                     oldIndex: originalIndex,
                     newIndex: targetIndex
                 };
-
                 $(this.el).trigger('reorder', reorder);
             },
             'dragend': function (event) {
@@ -79,24 +60,22 @@ define([
                 dragged.style.display = 'block';
             }
         },
+        initialize: function() {
+            if (_.result(_.get(this, 'toolbarOptions'), 'buttonTypes') && !_.get(ADK.Messaging.request('get:current:screen'), 'config.predefined')) {
+                this.toolbarOptions.buttonTypes.unshift('tilesortbutton');
+                this.toolbarOptions.isStackedGraph = true;
+            }
+        },
         onRender: function(){
             var currentScreen = ADK.Messaging.request('get:current:screen');
             var isUserWorkspace = !(currentScreen.config.predefined);
-            $(this.el).attr('draggable', isUserWorkspace);
+            this.$el.attr('draggable', isUserWorkspace);
 
-            if(isUserWorkspace){
-                if(this.tlbrOpts && this.tlbrOpts.buttonTypes && isUserWorkspace){
-                   this.tlbrOpts.buttonTypes.unshift('tilesortbutton');
-                   this.tlbrOpts.isStackedGraph = true;
-                }
-            } else {
+            if(!isUserWorkspace) {
                 $(this.el).unbind('dragstart');
                 $(this.el).unbind('drop');
                 $(this.el).unbind('dragover');
             }
-
-            var toolbarView = new ToolbarView(this.tlbrOpts);
-            this.toolbarView.show(toolbarView);
         },
         performManualDragStart: function(originalIndex){
             this.manualOriginalIndex = originalIndex;
@@ -113,28 +92,6 @@ define([
                 placement: 'bottom',
                 referenceEl: this.$el
             });
-        },
-        toggleToolbar: function() {
-            var toolbarView = this.toolbarView.currentView;
-            if (this.$el.hasClass('toolbarActive')) {
-                this.hideToolbar();
-            } else {
-                this.showToolbar();
-            }
-        },
-        showToolbar: function() {
-            var toolbarView = this.toolbarView.currentView;
-            this.trigger('before:showtoolbar');
-            toolbarView.show();
-            this.$el.addClass('toolbarActive');
-            this.trigger('after:showtoolbar', toolbarView);
-        },
-        hideToolbar: function() {
-            var toolbarView = this.toolbarView.currentView;
-            this.trigger('before:hidetoolbar');
-            toolbarView.hide();
-            this.$el.removeClass('toolbarActive');
-            this.trigger('after:hidetoolbar');
         }
     });
 

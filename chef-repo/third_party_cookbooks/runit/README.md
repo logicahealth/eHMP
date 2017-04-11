@@ -402,7 +402,7 @@ For more examples, see the `runit_test` cookbook's `service` recipe in the [git 
 License & Authors
 -----------------
 - Author:: Adam Jacob <adam@chef.io>
-- Author::     ua Timberman <joshua@chef.io>
+- Author:: Joshua Timberman <joshua@chef.io>
 
 ```text
 Copyright:: 2008-2013, Chef Software, Inc

@@ -17,8 +17,6 @@ include_recipe "workstation::git"
 
 include_recipe "build-essential"
 
-include_recipe "firefox_wrapper"
-
 include_recipe "xvfb_wrapper"
 
 include_recipe "nodejs_wrapper"

@@ -9,7 +9,7 @@ var pollerUtils = require(global.VX_UTILS + 'poller-utils');
 var config = require(global.VX_ROOT + 'worker-config');
 var logUtil = require(global.VX_UTILS + 'log');
 var moment = require('moment');
-logUtil.initialize(config.loggers);
+logUtil.initialize(config);
 
 var logger = logUtil.get('errorProcessorHost', 'host');
 var healthcheckUtils = require(global.VX_UTILS + 'healthcheck-utils');
@@ -23,16 +23,22 @@ var startup = null;
 var processName = process.env.VXSYNC_LOG_SUFFIX;
 var processStartTime = moment().format('YYYYMMDDHHmmss');
 
-config.addChangeCallback(function() {
-    logger.info('errorProcessorHost  config change detected. Stopping workers');
-    _.each(processors, function(processor) {
-        processor.stop();
-    });
-    logger.info('errorProcessorHost  starting new workers');
-    if (startup) {
-        startup();
-    }
-}, false);
+// COMMENT OUT NOTE:   This was commented our rather than deleted.   Currently we do not want this module to
+//                     be watching and handling config notification events.   Any change to config should
+//                     be handled by a start and stop of this system.   But in the future if it was determined
+//                     that this module shouild monitor for on the fly changes in config - the uncomment out
+//                     this code.
+//---------------------------------------------------------------------------------------------------------------
+// config.addChangeCallback('errorProcessorHost.js', function() {
+//     logger.info('errorProcessorHost  config change detected. Stopping workers');
+//     _.each(processors, function(processor) {
+//         processor.stop();
+//     });
+//     logger.info('errorProcessorHost  starting new workers');
+//     if (startup) {
+//         startup();
+//     }
+// }, false);
 
 process.on('SIGURG', function() {
     logger.debug('errorProcessorHost process id ' + process.pid + ': Got SIGURG.');

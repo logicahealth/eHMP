@@ -26,7 +26,7 @@ define([
             saveVitalsModel.set('dfn', dfn);
 
             if (visit) {
-                saveVitalsModel.set('locIEN', visit.uid);
+                saveVitalsModel.set('locationUid', visit.locationUid);
             }
 
             var userId = user.get('duz')[user.get('site')] ? user.get('duz')[user.get('site')] : user.get('duz')[0];
@@ -184,8 +184,8 @@ define([
 
             return collection;
         },
-        unregisterNavigationCheck: function() {
-            ADK.Navigation.unregisterCheck({
+        unregisterChecks: function() {
+            ADK.Checks.unregister({
                 id: 'vitals-writeback-in-progress'
             });
         }

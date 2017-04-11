@@ -6,38 +6,36 @@ var _ = require('lodash');
 var patientSearchResource = require('./patient-search/patient-search-resource');
 
 function getResourceConfig() {
-    return [
-        {
-            name: 'vergencevaultproxy-geticnforccow',
-            path: '/getICNForCCOW',
-            post: getICNForCCOW,
-            permitResponseFormat: true,
-            interceptors: {
-                authentication: false,
-                operationalDataCheck: false,
-                synchronize: false
-            },
-            requiredPermissions: [],
-            isPatientCentric: false
+    return [{
+        name: 'vergencevaultproxy-geticnforccow',
+        path: '/getICNForCCOW',
+        post: getICNForCCOW,
+        permitResponseFormat: true,
+        interceptors: {
+            authentication: false,
+            operationalDataCheck: false,
+            synchronize: false
+        },
+        requiredPermissions: [],
+        isPatientCentric: false
     }, {
-            name: 'vergencevaultproxy-getSiteInfo',
-            path: '/getSiteInfo',
-            get: getSiteInfo,
-            permitResponseFormat: true,
-            interceptors: {
-                authentication: false,
-                operationalDataCheck: false,
-                synchronize: false
-            },
-            requiredPermissions: [],
-            isPatientCentric: false
+        name: 'vergencevaultproxy-getSiteInfo',
+        path: '/getSiteInfo',
+        get: getSiteInfo,
+        permitResponseFormat: true,
+        interceptors: {
+            authentication: false,
+            operationalDataCheck: false,
+            synchronize: false
+        },
+        requiredPermissions: [],
+        isPatientCentric: false
     }];
 }
 
 function getSiteInfo(req, res) {
     var vistaSiteCollection = req.app.config.vistaSites;
     var site = req.param('site');
-    req.logger.info('SITE PARAMS2', req, _.isUndefined(site));
     if (_.isUndefined(site)) {
         return res.status(rdk.httpstatus.bad_request).json({
             msg: 'Site Id is missing'
@@ -69,8 +67,12 @@ function getICNForCCOW(req, res, next) {
 
 function ensureICNforSelectedPatient(req, props, callback) {
     props.pid = props.site + ';' + props.pid;
-
-    patientSearchResource.callVxSyncPatientSearch(req.logger, 'vergence-vault-proxy', req.app.config.vxSyncServer, req.app.config.jdsServer, props.site, 'PID', props.pid, function(error, result) {
+    var searchOptions = {
+        site: props.site,
+        searchType: 'PID',
+        searchString: props.pid
+    };
+    patientSearchResource.callPatientSearch(req, 'vergence-vault-proxy', req.app.config.jdsServer, searchOptions, function(error, result) {
         if (error) {
             return callback(error);
         }

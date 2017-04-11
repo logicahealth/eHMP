@@ -1,14 +1,14 @@
 'use strict';
 
 var fhirResource = require('../../common/entities/fhir-resource');
-var fhirConverter = require('../../common/utils/fhir-converter');
+var fhirUtils = require('../../common/utils/fhir-converter');
 var helpers = require('../../common/utils/helpers');
 var rdk = require('../../../core/rdk');
 var constants = require('../../common/utils/constants');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
-var errors = require('../../common/errors.js');
-var helpers = require('../../common/utils/helpers.js');
+var errors = require('../../common/errors');
+var helpers = require('../../common/utils/helpers');
 var fhirToJDSSearch = require('../../common/utils/fhir-to-jds-search');
 
 var jdsToFHIRStatusMap = {
@@ -148,7 +148,7 @@ function convertToFhir(result, req) {
             return new fhirResource.Entry(order);
         }));
     });
-    return new fhirResource.Bundle2(link, entry, result.data.totalItems);
+    return new fhirResource.Bundle(link, entry, result.data.totalItems);
 }
 
 function createDiagnosticOrder(jdsItem, pid) {
@@ -169,10 +169,10 @@ function createDiagnosticOrder(jdsItem, pid) {
     fhirItem.event = [{
         status: fhirItem.status,
         description: jdsItem.content,
-        dateTime: fhirConverter.convertToFhirDateTime(jdsItem.entered)
+        dateTime: fhirUtils.convertToFhirDateTime(jdsItem.entered, fhirUtils.getSiteHash(jdsItem.uid))
     }];
     if (nullchecker.isNotNullish(jdsItem.oiCode)) {
-        var coding = new fhirResource.Coding(jdsItem.oiCode, jdsItem.oiName, 'oi-code');
+        var coding = new fhirResource.Coding(jdsItem.oiCode, jdsItem.oiName, constants.fhir.VHA_SYSTEM);
         if (nullchecker.isNotNullish(jdsItem.oiPackageRef)) {
             coding.extension = [createExtension('oiPackageRef', jdsItem)];
         }
@@ -207,7 +207,7 @@ function createDiagnosticOrder(jdsItem, pid) {
 function createOrderer(jdsItem) {
     var orderer = new fhirResource.Practitioner(helpers.generateUUID());
     if (nullchecker.isNotNullish(jdsItem.providerDisplayName)) {
-        orderer.text = new fhirResource.Narrative('<div>' + jdsItem.providerDisplayName + '</div>', 'generated');
+        orderer.text = new fhirResource.Narrative('<div>' + _.escape(jdsItem.providerDisplayName) + '</div>', 'generated');
     }
     if (nullchecker.isNotNullish(jdsItem.providerName)) {
         orderer.name = new fhirResource.HumanName(jdsItem.providerName);
@@ -219,7 +219,7 @@ function createOrderer(jdsItem) {
 function createSourcePractitioner(clinician) {
     var practitioner = new fhirResource.Practitioner(helpers.generateUUID());
     if (nullchecker.isNotNullish(clinician.name)) {
-        practitioner.text = new fhirResource.Narrative('<div>' + clinician.name + '</div>', 'generated');
+        practitioner.text = new fhirResource.Narrative('<div>' + _.escape(clinician.name) + '</div>', 'generated');
         practitioner.name = new fhirResource.HumanName(clinician.name);
     }
     practitioner.identifier = [new fhirResource.Identifier(clinician.uid, constants.fhir.UID_IDENTIFIER_SYSTEM)];
@@ -232,14 +232,14 @@ function createSourcePractitioner(clinician) {
 
 function createOrganization(jdsItem) {
     var organization = new fhirResource.Organization(helpers.generateUUID());
-    organization.text = new fhirResource.Narrative('<div>' + jdsItem.facilityName + '</div>', 'generated');
+    organization.text = new fhirResource.Narrative('<div>' + _.escape(jdsItem.facilityName) + '</div>', 'generated');
     organization.identifier = [new fhirResource.Identifier(jdsItem.facilityCode, constants.fhir.FACILITIES_IDENTIFIER_SYSTEM)];
     return organization;
 }
 
 function createLocation(jdsItem) {
     var location = new fhirResource.Location(helpers.generateUUID());
-    location.text = new fhirResource.Narrative('<div>' + jdsItem.locationName + '</div>', 'generated');
+    location.text = new fhirResource.Narrative('<div>' + _.escape(jdsItem.locationName) + '</div>', 'generated');
     location.identifier = [new fhirResource.Identifier(jdsItem.locationUid, constants.fhir.FACILITIES_IDENTIFIER_SYSTEM)];
     return location;
 }

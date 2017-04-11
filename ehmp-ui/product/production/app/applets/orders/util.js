@@ -1,8 +1,9 @@
 define([
     "backbone",
     "marionette",
-    "underscore"
-], function(Backbone, Marionette, _) {
+    "underscore",
+    "main/ADK"
+], function(Backbone, Marionette, _, ADK) {
     "use strict";
 
     var Util = {};
@@ -231,6 +232,9 @@ define([
         response = Util.splitLongSummaryText(response);
         response = Util.getOrdersFlag(response);
 
+        if(response.statusName === 'DISCONTINUED'){
+            response.isDiscontinuedOrder = true;
+        }
         //DE448 - Fix the Stop and Start dates for order display
         if (response.stop) {
             response.stop = Util.parseForOrderStopStartDate(response.stop);
@@ -252,13 +256,13 @@ define([
     };
 
     Util.getOrdersFlag = function (response) {
-        response.isFlagged = false;
+        response.isFlagged = '';
         if(response.orderFlags){
             if(_.size(response.orderFlags) > 0){
                 var orderFlagsCol = response.orderFlags;
                 var lastElement = _.last(orderFlagsCol);
                 if(lastElement.orderFlaggedBy)
-                    response.isFlagged = true;
+                    response.isFlagged = '1';
             }
         }
         return response;
@@ -282,6 +286,16 @@ define([
         return signatureDetails;
     };
 
+    Util.getSiteCodeFromUid = function(uid) {
+        var siteCode = '';
+        if (_.isString(uid)) {
+            if (uid.split(':').length == 6) {
+                siteCode = uid.split(':')[3];
+            }
+        }
+        return siteCode;
+    };
+
     Util.parseForOrderNumber = function(dataStr, isLab) {
 
         var balStr = '';
@@ -299,8 +313,8 @@ define([
 
     // The state of the "discontinue/cancel" and "sign" controls are based on the corresponding order state.
     Util.isDiscontinued = function(model) {
-        var status = (model.get('statusName') || model.get('vistaStatus') || '');
-        return (status === 'DISCONTINUED');
+        var detailSummary = (model.get('detailSummary') || '').toUpperCase();
+        return (detailSummary.indexOf('REASON FOR DC') >= 0);
     };
     Util.isUnsigned = function(model) {
         var detailSummary = (model.get('detailSummary') || '').toUpperCase();
@@ -339,6 +353,11 @@ define([
         return (hasPermissions && isWritebackOrderType);
     };
 
+    //Disable buttons for discontinue/cancel/sign due to writeback limitation for orders created from remote site
+    Util.isRemoteSiteMatch = function(model) {
+        return (this.getSiteCodeFromUid(model.get('uid')) === ADK.UserService.getUserSession().get('site'));
+    };
+
     Util.getDiscontinueBtnStatus = function(model) {
 
         //An order can be canceled/discontinued if it's new (cancel) or signed (discontinue)
@@ -346,9 +365,9 @@ define([
         var orderState = (this.isNewOrder(model) || this.isSignedOrder(model));
 
         //The button label should be "Discontinue" if the order is signed or discontinued, otherwise it should be "Cancel".
-        var label = ((this.isSignedOrder(model) || this.isDiscontinued(model)) ? 'Discontinue' : 'Cancel');
+        var label = ((this.isSignedOrder(model) || this.isDiscontinued(model)) ? 'Discontinue Order' : 'Cancel Order');
 
-        var response = ((basicState && orderState) ? '' : 'disabled');
+        var response = ((basicState && orderState && this.isRemoteSiteMatch(model)) ? '' : 'disabled');
         model.set({
             getDiscontinueBtnStatus: response,
             discontinueBtnLabel: label
@@ -362,7 +381,7 @@ define([
         var basicState = this.getGenericOrderState(model, 'sign-lab-order');
         var orderState = (this.isNewOrder(model) || this.isDiscontinuedUnsignedOrder(model));
 
-        var response = ((basicState && orderState) ? '' : 'disabled');
+        var response = ((basicState && orderState && this.isRemoteSiteMatch(model)) ? '' : 'disabled');
         model.set({
             getSignBtnStatus: response
         }, {silent: true});

@@ -112,7 +112,7 @@ define([
             var AllDateModel = ADK.SessionStorage.getModel('globalDate');
             var filteredModels = medSubGroupModel.get('submeds').models;
 
-            if (AllDateModel.get('selectedId') !== 'all-range-global' && useGlobalDateFilter) {
+            if (AllDateModel.get('selectedId') !== 'allRangeGlobal' && useGlobalDateFilter) {
 
                 filteredModels = _.filter(medSubGroupModel.get('submeds').models, function(model) {
                     var dateModel = ADK.SessionStorage.getModel('globalDate');
@@ -125,8 +125,8 @@ define([
                     if (dateModel.get('fromDate') && (dateModel.get('fromDate') !== 'null')) {
                         var filter1 = (overallStart >= GDFStart || lastFilled >= GDFStart || lastAdmin >= GDFStart || overallStop >= GDFStart);
                         return filter1;
-                    } else if (dateModel.get('selectedId') === 'custom-range-apply-global' ||
-                        dateModel.get('selectedId') === 'custom-range-apply-global') {
+                    } else if (dateModel.get('selectedId') === 'customRangeApplyGlobal' ||
+                        dateModel.get('selectedId') === 'customRangeApplyGlobal') {
                         var startCustom = moment(dateModel.get('customFromDate'), 'MM/DD/YYYY');
                         var stopCustom = moment(dateModel.get('customToDate'), 'MM/DD/YYYY');
 

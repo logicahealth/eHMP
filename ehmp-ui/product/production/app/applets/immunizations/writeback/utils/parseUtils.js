@@ -12,15 +12,18 @@ define([
 
                 _.each(splitStatementList, function(statement){
                     var statementSplit = statement.split('~');
-                    var formattedStatementSplit = statementSplit[1].split('  ');
-
                     var matchedStatements = informationStatementList.where({
-                        name: formattedStatementSplit[0],
+                        ien: statementSplit[0],
                         editionStatus: 'CURRENT'
                     });
 
                     _.each(matchedStatements, function(item){
-                        informationStatements.push(item);
+                        informationStatements.push({
+                            value: false,
+                            ien: item.get('ien'),
+                            label: item.get('label'),
+                            name: item.get('ien')
+                        });
                     });
                 });
             }
@@ -95,7 +98,7 @@ define([
 
             if(maxInSeries){
                 var maxInSeriesNum = Number(maxInSeries);
-                for(var i = 0; i <= maxInSeriesNum; i++){
+                for(var i = 1; i <= maxInSeriesNum; i++){
                     pickList.push({label: i.toString(), value: i.toString()});
                 }
             }

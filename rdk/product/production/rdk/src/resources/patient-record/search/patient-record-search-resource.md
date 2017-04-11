@@ -2,7 +2,7 @@
 
 ## Patient record search [{{{path}}}]
 
-### Text [GET {{{path}}}/text{?pid}{&query}{&types*}{&start}{&limit}{&fields}]
+### Text [GET {{{path}}}/text{?pid}{&query}{&types*}{&start}{&limit}]
 
 Perform a text search on records for a patient
 
@@ -27,8 +27,6 @@ Perform a text search on records for a patient
     :[start]({{{common}}}/parameters/start.md)
 
     :[limit]({{{common}}}/parameters/limit.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -84,7 +82,7 @@ Perform a text search on records for a patient
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Suggest [GET {{{path}}}/suggest{?pid}{&query}{&fields}]
+### Suggest [GET {{{path}}}/suggest{?pid}{&query}]
 
 Get text search suggestions
 
@@ -96,8 +94,6 @@ Get text search suggestions
 
         Pattern: `.{3,}`
 
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -144,7 +140,7 @@ Get text search suggestions
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Detail trend [GET {{{path}}}/detail/trend{?pid}{&uid}{&fields}]
+### Detail trend [GET {{{path}}}/detail/trend{?pid}{&uid}]
 
 Get text search result detail where the items in a group are data points that should be graphed
 
@@ -153,8 +149,6 @@ Get text search result detail where the items in a group are data points that sh
     :[pid]({{{common}}}/parameters/pid.md)
 
     :[uid]({{{common}}}/parameters/uid.md example:"urn:va:med:9E7A:8:35739" required:"required")
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -183,7 +177,7 @@ Get text search result detail where the items in a group are data points that sh
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Detail document [GET {{{path}}}/detail/document{?pid}{&query}{&group.field}{&group.value}{&fields}]
+### Detail document [GET {{{path}}}/detail/document{?pid}{&query}{&group.field}{&group.value}]
 
 Get text search result detail where the items in a group are text documents
 
@@ -196,8 +190,6 @@ Get text search result detail where the items in a group are text documents
     + group.field (string, required)
 
     + group.value (string, required)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -223,9 +215,12 @@ Get text search result detail where the items in a group are text documents
     + Body
 
             {
-                "data": [
-                    "The required parameter \"pid\" is missing."
-                ],
+                "data": {
+                    "error": {
+                        "code": 500,
+                        "message": "The required parameter \"pid\" is missing."
+                    }
+                },
                 "status": 400
             }
 

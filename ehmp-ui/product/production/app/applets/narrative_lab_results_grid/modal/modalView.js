@@ -272,6 +272,8 @@ define([
                     Chart = new Highcharts.Chart(self.chartOptions);
                     $('body').on('mouseover.modalChart', '#data-grid-narrative_lab_results_grid-modalView tbody tr', self.highLightChartPoint);
                     $('body').on('mouseout.modalChart', '#data-grid-narrative_lab_results_grid-modalView tbody tr', self.highLightChartPoint);
+                    this.$el.find('svg').attr('focusable', false);
+                    this.$el.find('svg').attr('aria-hidden', true);
                 }
 
             }, 500);

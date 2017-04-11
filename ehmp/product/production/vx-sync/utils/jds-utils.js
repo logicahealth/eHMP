@@ -62,15 +62,11 @@ function getFromJDS(log, config, key, cb) {
 }
 
 function isIcn(pid) {
-    if (nullUtil.isNotNullish(pid) && S(pid).contains(';')) {
+    if (nullUtil.isNotNullish(pid) && pid.indexOf(';') > -1) {
         return false;
     }
 
-    if (nullUtil.isNotNullish(pid)) {
-        return true;
-    } else {
-        return false;
-    }
+    return nullUtil.isNotNullish(pid);
 }
 
 var blacklist = {

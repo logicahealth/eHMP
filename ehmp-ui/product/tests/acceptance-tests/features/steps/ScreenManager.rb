@@ -17,7 +17,6 @@ class ScrnManager < AccessBrowserV2
     add_action(CucumberLabel.new("workspace1 description field"), ClickAction.new, AccessHtmlElement.new(:css, "#user-defined-workspace-1 > div > div.col-xs-7 > div.col-xs-6 > input"))
     add_verify(CucumberLabel.new("workspace1 title"), VerifyText.new, AccessHtmlElement.new(:css, "#user-defined-workspace-1 > div > div.col-xs-7 > div.col-xs-5.editor-title > input"))
     add_verify(CucumberLabel.new("workspace1 description"), VerifyText.new, AccessHtmlElement.new(:css, "#user-defined-workspace-1 > div > div.col-xs-7 > div.col-xs-6 > input"))
-    add_action(CucumberLabel.new("Done editing"), ClickAction.new, AccessHtmlElement.new(:id, "doneEditing"))
     add_verify(CucumberLabel.new("workspace1 Author"), VerifyText.new, AccessHtmlElement.new(:css, "#user-defined-workspace-1 > div > div.col-xs-5 > div.col-xs-5"))
     add_action(CucumberLabel.new("Overview Menu"), ClickAction.new, AccessHtmlElement.new(:css, "#navigation-navbar > ul > li.btn-group > button.btn.btn-default.dropdown-toggle"))
     add_action(CucumberLabel.new("workspace2 flyout"), ClickAction.new, AccessHtmlElement.new(:css, "#user-defined-workspace-2 > div > div.col-xs-5 > div.col-xs-1 > i"))

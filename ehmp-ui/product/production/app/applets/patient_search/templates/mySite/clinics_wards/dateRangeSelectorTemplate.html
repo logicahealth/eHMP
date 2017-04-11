@@ -1,27 +1,37 @@
-<form class="form-inline top-padding-xs bottom-padding-xs left-padding-xs" role="form">
-    <fieldset>
-        <legend class="sr-only">Date Range Filter</legend>
-        <div class="top-padding-xs bottom-padding-xs">
-            <div class="btn-group btn-group-xs">
-                <button id="past-month-clinicDate" name="past-month-clinicDate" type="button" class="btn btn-default" title="Press enter to select last 30 Days.">Last 30d</button>
-                <button id="past-week-clinicDate" name="past-week-clinicDate" type="button" class="btn btn-default" title="Press enter to select last 7 Days.">Last 7d</button>
-                <button id="yesterday-clinicDate" name="yesterday-clinicDate" type="button" class="btn btn-default" title="Press enter to select Yesterday.">Yesterday</button>
-                <button id="today-clinicDate" name="today-clinicDate" type="button" class="btn btn-default active-range" title="Press enter to select Today.">Today</button>
-                <button id="tomorrow-clinicDate" name="tomorrow-clinicDate" type="button" class="btn btn-default" title="Press enter to select Tomorrow.">Tomorrow</button>
-                <button id="next-week-clinicDate" name="next-week-clinicDate" type="button" class="btn btn-default" title="Press enter to select  Next 7 Days.">Next 7d</button>
+<div class="location-list-filter-input clinics-date-range">
+    <form class="form-inline">
+        <fieldset>
+            <legend class="sr-only">Date Range Filter</legend>
+            <div class="flex-display flex-wrap-wrap">
+                <div class="flex-grow-loose bottom-margin-sm">
+                    <div class="btn-group btn-group-xs">
+                        <button id="past-30days-clinicDate" name="past-30days-clinicDate" type="button" class="daterange btn btn-default btn-sm transform-none" title="Press enter to select last 30 days"><span aria-hidden="true">-30d</span></button>
+                        <button id="past-week-clinicDate" name="past-week-clinicDate" type="button" class="daterange btn btn-default btn-sm transform-none" title="Press enter to select last 7 days"><span aria-hidden="true">-7d</span></button>
+                        <button id="yesterday-clinicDate" name="yesterday-clinicDate" type="button" class="daterange btn btn-default btn-sm transform-none" title="Press enter to select yesterday"><span aria-hidden="true">-1d</span></button>
+                        <button id="today-clinicDate" name="today-clinicDate" type="button" class="daterange btn btn-default btn-sm transform-none flex-grow-1 active-range" title="Press enter to select today"><span aria-hidden="true">Today</span></button>
+                        <button id="tomorrow-clinicDate" name="tomorrow-clinicDate" type="button" class="daterange btn btn-default btn-sm transform-none" title="Press enter to select tomorrow"><span aria-hidden="true">+1d</span></button>
+                        <button id="next-week-clinicDate" name="next-week-clinicDate" type="button" class="daterange btn btn-default btn-sm transform-none" title="Press enter to select next 7 days"><span aria-hidden="true">+7d</span></button>
+                    </div>
+                </div>
+                <div class="flex-display">
+                    <label for="filter-from-date-clinic" class="right-padding-xs top-padding-sm">From</label>
+                    <div class="input-group input-group-sm date right-padding-sm" id="custom-date-from-clinic">
+                        <span class="input-group-addon background-color-grey-lightest"><i class="fa fa-calendar"></i></span>
+                        <input type="text" class="form-control" id="filter-from-date-clinic" name="filter-from-date-clinic" title="Enter start of date range" placeholder="MM/DD/YYYY">
+                    </div>
+                    <label for="filter-to-date-clinic" class="right-padding-xs top-padding-sm">To</label>
+                    <div class="input-group input-group-sm date right-padding-sm" id="custom-date-to-clinic">
+                        <span class="input-group-addon background-color-grey-lightest"><i class="fa fa-calendar"></i></span>
+                        <input type="text" class="form-control" id="filter-to-date-clinic" name="filter-to-date-clinic" title="Enter end of date range" placeholder="MM/DD/YYYY">
+                    </div>
+                    <div>
+                        <button id="custom-range-apply" name="custom-range-apply-location" type="submit" class="btn btn-primary btn-sm btn-filter default-range daterange apply-range" title="Press enter to apply search filters and then press tab to review results">Apply</button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="input-group date" id="custom-date-from-clinic">
-            <label for="filter-from-date-clinic" class="sr-only">Start Date</label>
-            <input type="text" class="form-control input-sm" placeholder="MM/DD/YYYY"  id="filter-from-date-clinic" name="filter-from-date-clinic" title="Please enter start of date range." />
-            <span class="input-group-addon" aria-hidden="true" for="filter-from-date-clinic"><i class="fa fa-calendar color-primary"></i></span>
-        </div>
-        <span class="all-padding-xs">to</span>
-        <div class="right-padding-xs input-group date" id="custom-date-to-clinic">
-            <label for="filter-to-date-clinic" class="sr-only">End Date</label>
-            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="filter-to-date-clinic" name="filter-to-date-clinic" title="Please enter end of date range." />
-            <span class="input-group-addon" aria-hidden="true" for="filter-to-date-clinic"><i class="fa fa-calendar color-primary"></i></span>
-        </div>
-        <button id="custom-range-apply" name="custom-range-apply-location" type="submit" class="btn btn-primary" title="Press enter to apply search filters and then press tab to review results.">Apply</button>
-    </fieldset>
-</form>
+            <div class="clinics-date-range-error-container">
+                <p class="text-danger hidden" id="date-picker-error-field">From date must occur before To date.</p>
+            </div>
+        </fieldset>
+    </form>
+</div>

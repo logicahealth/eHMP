@@ -29,39 +29,56 @@ define([
             this.$el.attr('aria-sort', 'none');
             this.column.set("direction", null);
         },
+        sortedSR: function(header, dir) {
+            if (header.parent().find('[aria-live]').length < 1) {
+                header.parent().prepend('<div aria-live="polite" aria-atomic="true" class="sr-only applet-sorting"></div>');
+            }
+            var ariaRegion = header.parent().find('[aria-live]');
+            if(dir === "asc") {
+                ariaRegion.text('Sorted ascending. Press enter to sort descending');
+                header.find('span').text("Sorted ascending. Press enter to sort descending");
+            } else if (dir === "desc") {
+                ariaRegion.text('Sorted descending. Press enter to sort ascending');
+                header.find('span').text("Sorted descending. Press enter to sort ascending");
+            } else {
+                ariaRegion.text('Press enter to sort');
+                header.find('span').text("Press enter to sort");
+            }
+            header.siblings().find('span').text('Press enter to sort');
+        },
         onClick: function(e) {
             e.preventDefault();
+            var self = this;
             var column = this.column;
             var collection = this.collection;
             var event = "backgrid:groupBy";
-            if (Backbone.PageableCollection && this.collection instanceof Backbone.PageableCollection) {
-                if (collection.state.pageSize < this.collection.fullCollection.length) {
-                    collection.state.pageSize = this.collection.fullCollection.length;
-                    collection.reset(this.collection.fullCollection.models,{silent:true});
-                } 
-            }
             function cycleDirectionIndicator(header, col) {
                 if (column.get("direction") === "ascending") {
                     collection.trigger(event, col, "descending");
                     header.$el.attr('aria-sort', "descending");
+                    self.sortedSR(header.$el, "desc");
                 }
                 else if (column.get("direction") === "descending") {
                     collection.trigger(event, col, null);
                     header.$el.attr('aria-sort', 'none');
+                    self.sortedSR(header.$el, "none");
                 }
                 else {
                     collection.trigger(event, col, "ascending");
                     header.$el.attr('aria-sort', "ascending");
+                    self.sortedSR(header.$el, "asc");
                 }
             }
             function toggleSort(header, col) {
                 if (column.get("direction") === "ascending") {
                     collection.trigger(event, col, "descending");
                     header.$el.attr('aria-sort', "descending");
+                    self.sortedSR(header.$el, "desc");
                 }
                 else {
                     collection.trigger(event, col, "ascending");
                     header.$el.attr('aria-sort', "ascending");
+                    self.sortedSR(header.$el, "asc");
                 }
             }
             var groupable = Backgrid.callByNeed(column.groupable(), column, collection);

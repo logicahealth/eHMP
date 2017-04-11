@@ -79,7 +79,7 @@ print_start_success() {
     <% if node['platform_family'] == 'rhel' %>
     action $"Starting <%= @mysql_name %>: " /bin/true
     <% else %>
-    echo "Staring MySQ   n t nce <%= @mysql_name %>"
+    echo "Staring MySQL instance <%= @mysql_name %>"
     <% end %>
     return 0;
 }
@@ -88,7 +88,7 @@ print_start_failure() {
     <% if node['platform_family'] == 'rhel' %>
     action $"Starting <%= @mysql_name %>: " /bin/false
     <% else %>
-    echo "Could not start MySQ   n t nce <%= @mysql_name %>"
+    echo "Could not start MySQL instance <%= @mysql_name %>"
     <% end %>
     return 0;
 }
@@ -115,7 +115,7 @@ print_stop_success() {
     <% if node['platform_family'] == 'rhel' %>
     action $"Stopping <%= @mysql_name %>: " /bin/true
     <% else %>
-    echo "Stopping MySQ   n t nce <%= @mysql_name %>"
+    echo "Stopping MySQL instance <%= @mysql_name %>"
     <% end %>
     return 0;
 }
@@ -124,14 +124,14 @@ print_stop_failure() {
     <% if node['platform_family'] == 'rhel' %>
     action $"Stopping <%= @mysql_name %>: " /bin/false
     <% else %>
-    echo "Could not stop MySQ   n t nce <%= @mysql_name %>"
+    echo "Could not stop MySQL instance <%= @mysql_name %>"
     <% end %>
     return 0;
 }
 
 start_command() {
     # Attempt to start <%= @mysql_name %>
-    echo "Starting MySQ   n t nce <%= @mysql_name %>"
+    echo "Starting MySQL instance <%= @mysql_name %>"
 
     local scl_name="<%= @scl_name %>"
 
@@ -232,7 +232,7 @@ status() {
 # Stop <%= @mysql_name %>
 stop() {
     if running; then
-        echo "Stopping MySQ   n t nce <%= @mysql_name %>"
+        echo "Stopping MySQL instance <%= @mysql_name %>"
         if [ -f <%= @pid_file %> ]; then
             /bin/kill `cat <%= @pid_file %> 2>/dev/null`
             kstat=$?
@@ -249,7 +249,7 @@ stop() {
 
         return $kstat
     else
-        echo "MySQ   n t nce <%= @mysql_name %> Stopped."
+        echo "MySQL instance <%= @mysql_name %> Stopped."
         return 0
     fi
 }

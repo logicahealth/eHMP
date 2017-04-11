@@ -80,3 +80,7 @@ product/production/rdk/logs
 
 /product/tests/**/.bundle/
 /product/tests/rdk_config_files/
+product/production/rdk/config/activity_handler-1.json
+product/production/rdk/config/activity_handler.json
+
+*-preparsed.json

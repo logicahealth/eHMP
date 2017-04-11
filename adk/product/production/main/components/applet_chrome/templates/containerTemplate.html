@@ -1,19 +1,21 @@
 <div class="panel panel-primary">
-  <div class="panel-heading grid-applet-heading" title="{{title}}">
-    <span class="pull-left panel-title center-block">
-      <h5 class="panel-title-label">
-        {{title}}
-      </h5>
-      <input type="text" class="form-control input-sm center-block hidden panel-title-textbox text-align-center" value="{{title}}" maxlength="30" />
-    </span>
-
-    <span class="pull-right right-button-region"></span>
-  </div>
-
-  <div class="appletDiv_ChromeContainer"></div>
-  <div class="switchboard-container hide"></div>
-
-  <div class="grid-footer">
-    <span class="gs-resize-handle gs-resize-handle-both"></span>
-  </div>
+    <div class="panel-heading grid-applet-heading" title="{{title}}">
+        <div class="pull-left panel-title left-padding-xs">
+            <i class="fa icon-crs-header btn-icon hide" tooltip-data-key="toolbar_crs_icon" aria-hidden="true"></i>
+            <h5 class="panel-title-label">
+                {{title}}
+            </h5>
+            <form>
+                <label for="customAppletHeader-{{cid}}" class="sr-only">Workspace Filter</label>
+                <input type="text" id="customAppletHeader-{{cid}}" class="form-control input-sm hidden panel-title-textbox pixel-height-18" value="{{title}}" maxlength="30"/>
+            </form>
+        </div>
+        <div class="pull-left panel-title-notification"></div>
+        <div class="pull-right right-button-region"></div>
+    </div>
+    <div class="applet-div-chrome-container"></div>
+    <div class="switchboard-container hide"></div>
+    <div class="grid-footer">
+        <span class="gs-resize-handle gs-resize-handle-both"></span>
+    </div>
 </div>

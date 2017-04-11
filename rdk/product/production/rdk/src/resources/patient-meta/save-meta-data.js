@@ -9,10 +9,9 @@ module.exports = saveMetaData;
 
 function saveMetaData(req, res, next) {
     req.logger.debug('editMetaData resource called');
-    var pid = (req.interceptorResults.patientIdentifiers.dfn) ? req.interceptorResults.patientIdentifiers.dfn : req.interceptorResults.patientIdentifiers.edipi;
-
-    if (_.isUndefined(pid)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing pid');
+    var uid = req.interceptorResults.patientIdentifiers.uid;
+    if (_.isUndefined(uid)) {
+        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing uid');
     }
     var currentModifyingUser = req.session.user;
 
@@ -34,16 +33,23 @@ function saveMetaData(req, res, next) {
 
     var pjdsOptions = {
         store: 'pidmeta',
-        key: pid
+        key: req.interceptorResults.patientIdentifiers.uids
     };
-
-    pjdsOptions.data = updatedMetadata;
-    pjds.put(req, res, pjdsOptions, function(error, response) {
-        if (error) {
-            return res.status(dd(response)('statusCode').val || rdk.httpstatus.bad_request).rdkSend(error.message);
+    pjds.get(req, res, pjdsOptions, function(error, response) {
+        var dataItems = _.result(response, 'data.items', []);
+        if (error || _.isEmpty(dataItems)) {
+            pjdsOptions.key = uid;
+        } else {
+            pjdsOptions.key = response.data.items[0].uid;
         }
-        var resultObj = {};
-        resultObj.data = pjdsOptions.data;
-        res.status(rdk.httpstatus.ok).rdkSend(resultObj);
+        pjdsOptions.data = updatedMetadata;
+        pjds.put(req, res, pjdsOptions, function(error, response) {
+            if (error) {
+                return res.status(dd(response)('statusCode').val || rdk.httpstatus.bad_request).rdkSend(error.message);
+            }
+            var resultObj = {};
+            resultObj.data = pjdsOptions.data;
+            return res.status(rdk.httpstatus.ok).rdkSend(resultObj);
+        });
     });
 }

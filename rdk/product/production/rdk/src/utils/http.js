@@ -5,6 +5,8 @@ var request = require('request');
 var metrics = require('./metrics/metrics');
 var cache = require('memory-cache');
 var now = require('performance-now');
+var http = require('http');
+var https = require('https');
 var _ = require('lodash');
 
 /**
@@ -37,17 +39,29 @@ var _ = require('lodash');
  *      further if desired.
  */
 
-module.exports = wrapRequest(withLogging, withMetrics, withJSON);
-module.exports.get = wrapRequest(withMethod('GET'), withLogging, withCaching, withMetrics);
-module.exports.post = wrapRequest(withMethod('POST'), withLogging, withMetrics, withJSON);
-module.exports.put = wrapRequest(withMethod('PUT'), withLogging, withMetrics, withJSON);
-module.exports.delete = wrapRequest(withMethod('DELETE'), withLogging, withMetrics);
+module.exports = wrapRequest(withLogging, withMetrics, withJSON, withForever);
+module.exports.get = wrapRequest(withMethod('GET'), withLogging, withCaching, withMetrics, withForever);
+module.exports.post = wrapRequest(withMethod('POST'), withLogging, withMetrics, withJSON, withForever);
+module.exports.put = wrapRequest(withMethod('PUT'), withLogging, withMetrics, withJSON, withForever);
+module.exports.delete = wrapRequest(withMethod('DELETE'), withLogging, withMetrics, withForever);
 module.exports.initializeTimeout = initializeTimeout;
+module.exports.setMaxSockets = setMaxSockets;
 
 var defaultTimeout = 120000;
 
 function initializeTimeout(timeout) {
     defaultTimeout = timeout;
+}
+
+/**
+ * @param {Number} maxSockets -1 will be treated as Infinity
+ */
+function setMaxSockets(maxSockets) {
+    if (maxSockets === -1) {
+        maxSockets = Infinity;
+    }
+    http.globalAgent.maxSockets = maxSockets || http.globalAgent.maxSockets;
+    https.globalAgent.maxSockets = maxSockets || https.globalAgent.maxSockets;
 }
 
 function wrapRequest() {

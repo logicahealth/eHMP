@@ -12,7 +12,7 @@ configurations {
 
 buildscript {
   repositories {
-    maven { url "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp-public/" }
+    maven { url "https://store.vistacore.us/nexus/content/groups/public" }
   }
 
   dependencies {
@@ -47,9 +47,10 @@ def projectInfoCollection = [
     partOfBackend : true,
     devDeploy : true,
     testDeploy : true,
+    environment: "_default",
     provisioner : "ehmp_provision"
   ],
-	[
+  [
     taskNamePart : 'Panorama',
     dependsOn : [':production:hmp:build'],
     machineName: "vista-panorama",
@@ -71,6 +72,7 @@ def projectInfoCollection = [
     partOfBackend : true,
     devDeploy : true,
     testDeploy : true,
+    environment: "_default",
     provisioner : "ehmp_provision"
   ],
   [
@@ -78,7 +80,7 @@ def projectInfoCollection = [
     dependsOn : [':production:hmp:build'],
     machineName: "vista-panorama",
     vagrantDir : "${rootDir}/../../.chef/vms",
-vagrantEnvVarsLocal :
+    vagrantEnvVarsLocal :
     [
       "HMP_LOCAL_FILE": "${-> project(':production:hmp').zipHmp.outputs.files.singleFile.getCanonicalPath()}",
       "CACHE_LOCAL_FILE": "true",
@@ -95,6 +97,34 @@ vagrantEnvVarsLocal :
     partOfBackend : true,
     devDeploy : true,
     testDeploy : true,
+    environment: "_default",
+    provisioner : "ehmp_provision"
+  ],
+  [
+    taskNamePart : 'PanoramaSQA',
+    dependsOn : [':production:hmp:build'],
+    machineName: "vista-panorama",
+    vagrantDir : "${rootDir}/../../.chef/vms",
+    vagrantEnvVarsLocal :
+    [
+      "HMP_LOCAL_FILE": "${-> project(':production:hmp').zipHmp.outputs.files.singleFile.getCanonicalPath()}",
+      "CACHE_VERSION" : "${new File("$rootDir/production/cache/cacheVersion").text.trim()}",
+      "RUN_CHECKSUMS": "true",
+      "CORRELATED_IDS_LOCAL_FILE" : "${-> project(':production:correlated_ids').id_json}",
+      "DEV_DEPLOY": "true"
+    ],
+    vagrantEnvVarsVersion :
+    [
+      'HMP_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','HMP_VERSION')}",
+      'CACHE_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','CACHE_VERSION')}",
+      "RUN_CHECKSUMS": "true",
+      'CORRELATED_IDS_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','CORRELATED_IDS_VERSION')}"
+    ],
+    partOfTestEnv : true,
+    partOfBackend : true,
+    devDeploy : true,
+    testDeploy : true,
+    environment: "_default",
     provisioner : "ehmp_provision"
   ],
   [
@@ -119,6 +149,7 @@ vagrantEnvVarsLocal :
     partOfBackend : true,
     devDeploy : true,
     testDeploy : true,
+    environment: "_default",
     provisioner : "ehmp_provision"
   ],
   [
@@ -143,6 +174,34 @@ vagrantEnvVarsLocal :
     partOfBackend : true,
     devDeploy : true,
     testDeploy : true,
+    environment: "_default",
+    provisioner : "ehmp_provision"
+  ],
+  [
+    taskNamePart : 'KodakSQA',
+    dependsOn : [':production:hmp:build'],
+    machineName: "vista-kodak",
+    vagrantDir : "${rootDir}/../../.chef/vms",
+    vagrantEnvVarsLocal :
+    [
+      "HMP_LOCAL_FILE": "${-> project(':production:hmp').zipHmp.outputs.files.singleFile.getCanonicalPath()}",
+      "CACHE_VERSION" : "${new File("$rootDir/production/cache/cacheVersion").text.trim()}",
+      "RUN_CHECKSUMS": "true",
+      "CORRELATED_IDS_LOCAL_FILE" : "${-> project(':production:correlated_ids').id_json}",
+      "DEV_DEPLOY": "true"
+    ],
+    vagrantEnvVarsVersion :
+    [
+      'HMP_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','HMP_VERSION')}",
+      'CACHE_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','CACHE_VERSION')}",
+      "RUN_CHECKSUMS": "true",
+      'CORRELATED_IDS_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','CORRELATED_IDS_VERSION')}"
+    ],
+    partOfTestEnv : true,
+    partOfBackend : true,
+    devDeploy : true,
+    testDeploy : true,
+    environment: "_default",
     provisioner : "ehmp_provision"
   ],
   [
@@ -168,6 +227,7 @@ vagrantEnvVarsLocal :
     ],
     devDeploy : true,
     testDeploy : true,
+    environment: "_default",
     provisioner : "ehmp_provision"
   ],
   [
@@ -194,11 +254,41 @@ vagrantEnvVarsLocal :
     ],
     devDeploy : true,
     testDeploy : true,
+    environment: "_default",
+    provisioner : "ehmp_provision"
+  ],
+  [
+    taskNamePart : 'VXSyncNoPublish',
+    dependsOn : [':production:vx-sync:zipVXSync', ':production:soap-handler:build', ':production:asu:zipAsu'],
+    machineName: "vxsync",
+    vagrantDir : "${rootDir}/../../.chef/vms",
+    partOfTestEnv : true,
+    partOfBackend : true,
+    vagrantEnvVarsLocal :
+    [
+      "DEV_DEPLOY": "true",
+      'VX_SYNC_LOCAL_FILE': "${-> project(':production:vx-sync').zipVXSync.outputs.files.singleFile.getCanonicalPath()}",
+      'SOAP_HANDLER_LOCAL_FILE': "${-> project(':production:soap-handler').fatJar.outputs.files.singleFile.getCanonicalPath()}",
+      'ASU_LOCAL_FILE': "${-> project(':production:asu').zipAsu.outputs.files.singleFile.getCanonicalPath()}",
+      //'OSYNC_LOCAL_FILE': "${-> project(':production:osync').ziposync.outputs.files.singleFile.getCanonicalPath()}"
+      'CHEF_ENV': "noPublishTubes"
+    ],
+    vagrantEnvVarsVersion :
+    [
+      'VX_SYNC_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','VX_SYNC_VERSION')}",
+      'SOAP_HANDLER_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','SOAP_HANDLER_VERSION')}",
+      'ASU_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','ASU_VERSION')}",
+      'CHEF_ENV': "noPublishTubes"
+    ],
+    devDeploy : true,
+    testDeploy : true,
+    environment: "noPublishTubes",
     provisioner : "ehmp_provision"
   ],
   [
     taskNamePart : 'Mocks',
-    dependsOn : [':production:NodeMockServices:zipNodeMockServices', ':production:MockMVI:packageMockMVI', ':production:health-time:health-time-core:build', ':production:health-time:health-time-solr:build', ':production:vpr:packageVPR'],
+    dependsOn : [':production:NodeMockServices:zipNodeMockServices',
+    ':production:health-time:health-time-core:build', ':production:health-time:health-time-solr:build', ':production:vpr:packageVPR'],
     machineName: "mocks",
     vagrantDir : "${rootDir}/../../.chef/vms",
     vagrantEnvVarsLocal :
@@ -208,7 +298,7 @@ vagrantEnvVarsLocal :
       "HEALTH_TIME_CORE_LOCAL_FILE": "${-> project(':production:health-time:health-time-core').jar.outputs.files.singleFile.getCanonicalPath()}",
       "HEALTH_TIME_SOLR_LOCAL_FILE": "${-> project(':production:health-time:health-time-solr').jar.outputs.files.singleFile.getCanonicalPath()}",
       'VPR_LOCAL_FILE': "${-> project(':production:vpr').packageVPR.outputs.files.singleFile.getCanonicalPath()}",
-      "CORRELATED_IDS_LOCAL_FILE" : "${-> project(':production:correlated_ids').id_json}",
+      "CORRELATED_IDS_LOCAL_FILE" : "${-> project(':production:correlated_ids').id_json}"
     ],
     vagrantEnvVarsVersion :
     [
@@ -223,6 +313,45 @@ vagrantEnvVarsLocal :
     partOfVE2 : false,
     devDeploy : true,
     testDeploy : true,
+    environment: "_default",
+    provisioner : "ehmp_provision"
+  ],
+  [
+    taskNamePart : 'Mocks-SSOi',
+    dependsOn : [':production:NodeMockServices:zipNodeMockServices',
+    ':production:mockssoiservlet:build', ':production:mocktokengenerator:build',
+    ':production:health-time:health-time-core:build', ':production:health-time:health-time-solr:build', ':production:vpr:packageVPR'],
+    machineName: "mocks",
+    vagrantDir : "${rootDir}/../../.chef/vms",
+    vagrantEnvVarsLocal :
+    [
+      "DEV_DEPLOY": "true",
+      'NODEMOCKSERVICES_LOCAL_FILE': "${-> project(':production:NodeMockServices').zipNodeMockServices.outputs.files.singleFile.getCanonicalPath()}",
+      "HEALTH_TIME_CORE_LOCAL_FILE": "${-> project(':production:health-time:health-time-core').jar.outputs.files.singleFile.getCanonicalPath()}",
+      "HEALTH_TIME_SOLR_LOCAL_FILE": "${-> project(':production:health-time:health-time-solr').jar.outputs.files.singleFile.getCanonicalPath()}",
+      'VPR_LOCAL_FILE': "${-> project(':production:vpr').packageVPR.outputs.files.singleFile.getCanonicalPath()}",
+      "CORRELATED_IDS_LOCAL_FILE" : "${-> project(':production:correlated_ids').id_json}",
+      'MOCKSSOISERVLET_LOCAL_FILE': "${-> project(':production:mockssoiservlet').war.outputs.files.singleFile.getCanonicalPath()}",
+      'MOCKTOKENGENERATOR_LOCAL_FILE': "${-> project(':production:mocktokengenerator').war.outputs.files.singleFile.getCanonicalPath()}",
+      'MOCKSSOI_USERS_LOCAL_FILE': "${-> project(':production:mockssoi-users').ssoiUsersJson}"
+    ],
+    vagrantEnvVarsVersion :
+    [
+      'NODEMOCKSERVICES_VERSION': "${-> chooseStableBuild('ehmp','acceptance-test','NODEMOCKSERVICES_VERSION')}",
+      'VPR_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','VPR_VERSION')}",
+      'HEALTH_TIME_CORE_VERSION': "${-> chooseStableBuild('ehmp','acceptance-test','HEALTH_TIME_CORE_VERSION')}",
+      'HEALTH_TIME_SOLR_VERSION': "${-> chooseStableBuild('ehmp','acceptance-test','HEALTH_TIME_SOLR_VERSION')}",
+      'CORRELATED_IDS_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','CORRELATED_IDS_VERSION')}",
+      'MOCKSSOISERVLET_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','MOCKSSOISERVLET_VERSION')}",
+      'MOCKTOKENGENERATOR_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','MOCKTOKENGENERATOR_VERSION')}",
+      'MOCKSSOI_USERS_VERSION' : "${-> chooseStableBuild('ehmp','acceptance-test','MOCKSSOI_USERS_VERSION')}"
+    ],
+    partOfTestEnv : true,
+    partOfBackend : true,
+    partOfVE2 : false,
+    devDeploy : true,
+    testDeploy : true,
+    environment: "_default",
     provisioner : "ehmp_provision"
   ],
   [
@@ -235,6 +364,27 @@ vagrantEnvVarsLocal :
     testDeploy: true,
     vagrantEnvVarsLocal : ["DEV_DEPLOY": "true"],
     vagrantEnvVarsVersion : [],
+    environment: "_default",
+    provisioner : "ehmp_provision"
+  ],
+  [
+    taskNamePart : 'CRS',
+    dependsOn : [':production:crs:tarCRS'],
+    machineName: "crs",
+    vagrantDir : "${rootDir}/../../.chef/vms",
+    partOfTestEnv : true,
+    partOfBackend : true,
+    vagrantEnvVarsLocal :
+    [
+      'CRS_LOCAL_FILE': "${-> project(':production:crs').tarCRS.outputs.files.singleFile.getCanonicalPath()}"
+    ],
+    vagrantEnvVarsVersion :
+    [
+      'CRS_VERSION' : "${-> chooseStableBuild('ehmp','dev','CRS_VERSION')}"
+    ],
+    devDeploy : true,
+    testDeploy : true,
+    environment: "_default",
     provisioner : "ehmp_provision"
   ],
   [
@@ -243,7 +393,7 @@ vagrantEnvVarsLocal :
       ':production:jds:build', ':tests:jds_data:zipData', // JDS artifacts
       ':production:hmp:build', // Vista artifacts
       ':production:vx-sync:zipVXSync', ':production:soap-handler:build', ':production:asu:zipAsu',  // VxSync artifacts
-      ':production:NodeMockServices:zipNodeMockServices', ':production:MockMVI:packageMockMVI', // Mocks artifacts
+      ':production:NodeMockServices:zipNodeMockServices', // Mocks artifacts
       ':production:health-time:health-time-core:build', ':production:health-time:health-time-solr:build', ':production:vpr:packageVPR' // Solr artifacts
     ],
     machineName: "all-machines",
@@ -270,6 +420,7 @@ vagrantEnvVarsLocal :
     partOfVE2 : false,
     devDeploy : true,
     testDeploy : true,
+    environment: "_default",
     provisioner : "ehmp_provision"
   ]
 ]
@@ -311,16 +462,12 @@ allprojects  {
           doLast {
             if (rootProject."deploy${projectInfo['taskNamePart']}DevFlag" == false) {
               rootProject."deploy${projectInfo['taskNamePart']}DevFlag" = true
-              executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], projectInfo['vagrantEnvVarsLocal'], "converge", projectInfo['provisioner'])
+              executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], projectInfo['vagrantEnvVarsLocal'], "converge", projectInfo['provisioner'], projectInfo['environment'])
 
               FileTree tree = fileTree(dir: new File(project(':').projectDir.parentFile, 'infrastructure/chef/cookbooks'))
 
               if (projectInfo['taskNamePart'] == "Solr") {
                 ant.touch(file: new File(project(":production:health-time:health-time-core").buildDir, "${projectInfo['taskNamePart']}Dev.last_successful.flag"))
-              }
-
-              if (projectInfo['taskNamePart'] == "MockMVI") {
-                ant.touch(file: new File(project(":production:MockMVI").buildDir, "${projectInfo['taskNamePart']}Dev.last_successful.flag"))
               }
             }
           }
@@ -335,7 +482,7 @@ allprojects  {
           doLast {
             if (rootProject."deploy${projectInfo['taskNamePart']}Flag" == false) {
               rootProject."deploy${projectInfo['taskNamePart']}Flag" = true
-              executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], projectInfo['vagrantEnvVarsVersion'], "converge", projectInfo['provisioner'])
+              executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], projectInfo['vagrantEnvVarsVersion'], "converge", projectInfo['provisioner'], projectInfo['environment'])
             }
           }
         }
@@ -388,7 +535,7 @@ allprojects  {
         doLast {
           if (rootProject."destroy${projectInfo['taskNamePart']}Flag" == false) {
             rootProject."destroy${projectInfo['taskNamePart']}Flag" = true
-            executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], projectInfo['vagrantEnvVarsLocal'], 'destroy', projectInfo['provisioner'])
+            executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], projectInfo['vagrantEnvVarsLocal'], 'destroy', projectInfo['provisioner'], projectInfo['environment'])
           }
         }
       }
@@ -400,16 +547,14 @@ task "resetSync" {
   description "Clears the locally deployed JDS cache."
   ext{}
   doLast {
-    executeChefClient("vxsync","${rootDir}/../../.chef/vms",['RESET_SYNC': true], 'converge', "ehmp_provision")
+    executeChefClient("vxsync","${rootDir}/../../.chef/vms",['RESET_SYNC': true], 'converge', "ehmp_provision", "_default")
   }
 }
 
 def executeVagrant(vagrantDir, command) {
   exec {
-    // executable = '/usr/bin/vagrant'
-    executable = 'bash'
-    // args = command
-    args = ['-c', 'vagrant ' + command.join(' ')]
+    executable = '/usr/bin/vagrant'
+    args = command
     workingDir vagrantDir
   }
 }
@@ -423,20 +568,26 @@ def vxSyncShutdown(vagrantDir) {
 }
 
 def startVM(vagrantMachine, vagrantDir) {
-  executeVagrant(vagrantDir, ["up", "${vagrantMachine}-${stackName()}"])
+  if(vagrantMachine == "cprs"){
+    executeVagrant(vagrantDir, ["up", "${vagrantMachine}-${System.getenv()['USER'].replaceAll('_','-')}"])
+  } else {
+    executeVagrant(vagrantDir, ["up", "${vagrantMachine}-${stackName()}"])
+  }
 }
 
 def stopVM(vagrantMachine, vagrantDir, provisioner) {
-  executeChefClient(vagrantMachine, vagrantDir, [], 'stop', provisioner)
+  executeChefClient(vagrantMachine, vagrantDir, [], 'stop', provisioner, "_default")
 }
 
-def executeChefClient(vagrantMachine, vagrantDir, envVars, String action = 'converge', provisioner) {
+def executeChefClient(vagrantMachine, vagrantDir, envVars, String action = 'converge', provisioner, env) {
   def newVars = envVars
   if (newVars == ""){
     newVars = getVersionParams("ehmp", "acceptance-test")
   }
   def logLevel = (System.getenv()['LOG_LEVEL'] == null || "") ? "warn" : System.getenv()['LOG_LEVEL']
+  def chefEnv = (System.getenv()['CHEF_ENV'] == null || "") ? env : System.getenv()['CHEF_ENV']
   println "LOG_LEVEL: ${logLevel}"
+  println "Chef Environment: ${chefEnv}"
   newVars << ['MACHINE_NAME':"${vagrantMachine}", 'DRIVER': 'vagrant', 'ACTION': "${action}",'ALLOW_WEB_ACCESS':'true','PATH':'/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin']
 
   def knife_path = "${System.getenv()['WORKSPACE']}/.chef/knife.rb"
@@ -444,16 +595,15 @@ def executeChefClient(vagrantMachine, vagrantDir, envVars, String action = 'conv
 
   syncNodesBetweenChefServerAndChefZero(vagrantMachine)
   if(System.getenv()['CHEF_REPO']){
-    chefArgs = ['-z', '-o', "${provisioner}", "--environment", "_default", "--config", knife_path, '--force-formatter', '-l', logLevel]
+    chefArgs = ['-z', '-o', "${provisioner}", "--environment", chefEnv, "--config", knife_path, '--force-formatter', '-l', logLevel]
   } else if(newVars["DEV_DEPLOY"]){
-    chefArgs = ['-o', "${provisioner}@${local_provision_version()}", "--environment", "_default", "--config", knife_path, '--force-formatter', '-l', logLevel]
+    chefArgs = ['-o', "${provisioner}@${local_provision_version()}", "--environment", chefEnv, "--config", knife_path, '--force-formatter', '-l', logLevel]
   } else {
-    chefArgs = ['-o', "${provisioner}@${chooseStableBuild(provisionerRepo(provisioner),'acceptance-test',provisioner)}", "--environment", "_default", "--config", knife_path, '--force-formatter', '-l', logLevel]
+    chefArgs = ['-o', "${provisioner}@${chooseStableBuild(provisionerRepo(provisioner),'acceptance-test',provisioner)}", "--environment", chefEnv, "--config", knife_path, '--force-formatter', '-l', logLevel]
   }
   exec {
-    executable = "sh"
-    def myChefArgs = "chef-client " + chefArgs.join(" ")
-    args = ["-c", myChefArgs]
+    executable = '/opt/chefdk/bin/chef-client'
+    args = chefArgs
     environment(newVars)
   }
   reconcileDelete(vagrantMachine, action)
@@ -462,17 +612,17 @@ def executeChefClient(vagrantMachine, vagrantDir, envVars, String action = 'conv
 
 def reconcileDelete(String vagrantMachine, String action){
   exec{
-    executable = "sh"
-    args = ["-c", "rake reconcile_delete[${vagrantMachine},${stackName()},${action}]"]
+    executable = "rake"
+    args = ["reconcile_delete[${vagrantMachine},${stackName()},${action}]"]
     workingDir "${rootDir}/../infrastructure/gradle"
   }
 }
 
 def syncNodesBetweenChefServerAndChefZero(String machine = '*'){
   exec{
+    executable = "rake"
+    args = ["sync_nodes_between_chef_server_and_chef_zero[${machine},${stackName()}]"]
     workingDir "${rootDir}/../infrastructure/gradle"
-    executable = "sh"
-    args = ["-c", "rake sync_nodes_between_chef_server_and_chef_zero[${machine},${stackName()}]"]   
   }
 }
 
@@ -492,37 +642,39 @@ def provisionerRepo(String provisioner){
 }
 
 def chooseStableBuild(String repoName, String buildType, String artifactVersionName) {
-  return local_provision_version()
-  // def protocol = 'https://'
-  // def serverName = 'build.vistacore.us'
-  // def port = ''
-  // def branchName = new File('../infrastructure/properties/releaseVersion').text.trim()
-  // def jobName = "${repoName}-${buildType}-build-${branchName}"
-  // def formatted_artifact = artifactVersionName.replace("-","_").toUpperCase()
-  // def restEndPointBuildList = "${protocol}${serverName}${port}/job/${jobName}/lastStableBuild/api/xml"
-  // def slurper = new XmlSlurper() 
-  // def buildResult = slurper.parseText(restEndPointBuildList.toURL().text)
-  // def buildNumber = buildResult.action.parameter.find{ param -> param.name.text() == formatted_artifact }.value.text()
-  // return buildNumber
+  def protocol = 'https://'
+  def serverName = 'ci.vistacore.us'
+  def port = ''
+  def branchName = new File('../infrastructure/properties/jenkinsVersion').text.trim()
+  def jobName = "${repoName}-${buildType}-build-${branchName}"
+  def formatted_artifact = artifactVersionName.replace("-","_").toUpperCase()
+  def restEndPointBuildList = "${protocol}${serverName}${port}/job/${jobName}/lastStableBuild/api/xml"
+  def conn = restEndPointBuildList.toURL().openConnection()
+  def auth = 'build:38dfad82cfdffe645bb67df1253a3baf'.getBytes().encodeBase64().toString()
+  conn.setRequestProperty('Authorization', "Basic ${auth}")
+  def buildResult = new XmlSlurper().parseText(conn.content.text)
+  def buildNumber = buildResult.action.parameter.find{ param -> param.name.text() == formatted_artifact }.value.text()
+  return buildNumber
 }
 
 def getVersionParams(String repoName, String buildType) {
-  return local_provision_version()
-  // def protocol = 'https://'
-  // def serverName = 'build.vistacore.us'
-  // def branchName = new File('../infrastructure/properties/releaseVersion').text.trim()
-  // def jobName = "${repoName}-${buildType}-build-${branchName}"
-  // def restEndPointBuildList = "${protocol}${serverName}/job/${jobName}/api/xml?depth=1&xpath=(/*/build[result='SUCCESS'])[position()=1]/action/parameter&wrapper=versions"
-  // def slurper = new XmlSlurper()
-  // def versionParamsXml = slurper.parse(restEndPointBuildList)
-  // def versionParamsMap = [:]
-  // versionParamsXml.parameter.each { parameter ->
-  //   println "${parameter.name} : ${parameter.value}"
-  //   versionParamsMap["${parameter.name}"] = "${parameter.value}"
-  // }
-  // return versionParamsMap
+  def protocol = 'https://'
+  def serverName = 'ci.vistacore.us'
+  def branchName = new File('../infrastructure/properties/releaseVersion').text.trim()
+  def jobName = "${repoName}-${buildType}-build-${branchName}"
+  def restEndPointBuildList = "${protocol}${serverName}/job/${jobName}/lastStableBuild/api/xml"
+  def conn = restEndPointBuildList.toURL().openConnection()
+  def auth = 'build:38dfad82cfdffe645bb67df1253a3baf'.getBytes().encodeBase64().toString()
+  conn.setRequestProperty('Authorization', "Basic ${auth}")
+  def versionParamsXml = new XmlSlurper().parseText(conn.content.text)
+  def versionParamsMap = [:]
+  versionParamsXml.action.parameter.each { parameter ->
+    println "${parameter.name} : ${parameter.value}"
+    versionParamsMap["${parameter.name}"] = "${parameter.value}"
+  }
+  return versionParamsMap
 }
 
 repositories {
-  maven { url "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp-public" }
+  maven { url "https://store.vistacore.us/nexus/content/groups/public" }
 }

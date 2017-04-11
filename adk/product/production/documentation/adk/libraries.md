@@ -4,43 +4,57 @@ Which libraries are available with sample implementations
 :::
 
 ## 3rd Party Libraries ##
-
-| Library                                                                                       | Require shortcut           | Version | License    |
-|-----------------------------------------------------------------------------------------------|----------------------------|---------|------------|
-| **Backbone** <br/> _http://backbonejs.org/_                                                   | backbone                   | 1.1.2   | MIT        |
-| **Backbone Fetch Cache** <br/> _https://github.com/mrappleton/backbone-fetch-cache.git_       | backbone.fetch-cache       | 1.4.0   | MIT        |
-| **Backbone Local Storage** <br/> _https://github.com/jeromegn/Backbone.localStorage_          | localstorage               | 1.1.5   | MIT        |
-| **Backbone Paginator** <br/> _https://github.com/backbone-paginator/backbone.paginator_       | backbone.paginator         | 2.0.0   | MIT        |
-| **Backbone Radio** <br/> _https://github.com/marionettejs/backbone.radio_                     | backbone.radio             | 0.6.0   | MIT        |
-| **Backbone Session Storage** <br/> _https://gist.github.com/davemo/3875274_                   | sessionstorage             |         |            |
-| **Backbone Sorted Collection** <br/> _https://github.com/jmorrell/backbone-sorted-collection_ | backbone-sorted-collection | 0.3.8   | MIT        |
-| **Backgrid** <br/> _http://backgridjs.com/_                                                   | backgrid                   | 0.3.5   | MIT        |
-| **Backgrid Filter** <br/> _http://backgridjs.com/ref/extensions/filter.html_                  | backgrid.filter            | 0.3.5   | MIT        |
-| **Backgrid Moment Cell** <br/> _https://github.com/wyuenho/backgrid-moment-cell_              | backgrid-moment-cell       | 0.3.5   | MIT        |
-| **Backgrid Paginator** <br/> _http://backgridjs.com/ref/extensions/paginator.html_            | backgrid.paginator         |         | MIT        |
-| **Bootstrap** <br/> _http://getbootstrap.com/getting-started_                                 | bootstrap                  | 3.2.0   | MIT        |
-| **Bootstrap-Datepicker** <br/> _http://bootstrap-datepicker.readthedocs.org/en/release/_      | bootstrap-datepicker       | 1.4.0   | Apache 2.0 |
-| **Bootstrap-Timepicker** <br/> _http://jdewit.github.io/bootstrap-timepicker/_                | bootstrap-timepicker       | 0.2.5   | MIT        |
-| **Bootstrap-Accessibility** <br/> _http://paypal.github.io/bootstrap-accessibility-plugin/_   | bootstrap-accessibilty     | 3.1.1   | PayPal     |
-| **Crossfilter** <br/> _https://github.com/square/crossfilter/wiki/API-Reference_              | crossfilter                | 1.3.11  | MIT        |
-| **Fastclick** <br/> _https://github.com/ftlabs/fastclick_                                     | fastclick                  | 0.6.11  | MIT        |
-| **Font-Awesome** <br/> _http://fortawesome.github.io/Font-Awesome/examples/_                  |                            | ~4.3.0  | MIT        |
-| **Font-Google** <br/> _https://developers.google.com/fonts/docs/developer_api_                |                            |         | Apache 2.0 |
-| **Gridster** <br/> _http://gridster.net/#documentation_                                       | gridster                   | 0.5.9   | MIT        |
-| **Handlebars** <br/> _http://handlebarsjs.com/_                                               | handlebars                 | 2.0.0   | MIT        |
-| **Highcharts/Highstock** <br/> _http://www.highcharts.com/docs_                               | highcharts                 | 2.0.4   | Commerical |
-| **Jasmine** <br/> _http://jasmine.github.io/1.3/introduction.html_                            | jasmine                    | 2.1.0  | MIT        |
-| **JQuery** <br/> _http://jquery.com/_                                                         | jquery                     | 1.9.1  | MIT        |
-| **jQuery Inputmask** <br/> _https://github.com/RobinHerbots/jquery.inputmask_                 | jquery.inputmask           | 3.1.25  | MIT        |
-| **libphonenumber** <br/> _https://github.com/googlei18n/libphonenumber_                       | libphonenumber             |         | Apache 2.0 |
-| **Lodash** <br/> _https://github.com/lodash/lodash/blob/1.3.1/doc/README.md_                  | underscore                 | 1.3.1   |            |
-| **Marionette** <br/> _http://marionettejs.com/_                                               | marionette                 | 2.4.1   | MIT        |
-| **Moment** <br/> _http://momentjs.com/_                                                       | moment                     | 2.7.0   | MIT        |
-| **Placeholders** <br/> _https://github.com/jamesallardice/Placeholders.js_                    | placeholders               | 3.0.2   | MIT        |
-| **Typeahead** <br/> _https://github.com/twitter/typeahead.js/_                                | typeahead                  | 0.10.5  | MIT        |
-| **Bowser** <br/> _https://github.com/ded/bowser_                                | bowser                  | 0.7.2  | MIT        |
-| **Marionette Accessibility**                                                                  | backbone.paginator         | 0.0.1   |            |
-
+updated Apr 05, 2016
+| Library                                                           | Version            | Require shortcut                    | License      | Documentation                         |
+|-------------------------------------------------------------------|--------------------|-------------------------------------|--------------|---------------------------------------|
+|**async**                                                          |0.2.9              |async                                 |MIT           |_https://github.com/caolan/async_
+|**handlebars**                                                     |2.0.0              |handlebars                            |MIT           |_http://handlebarsjs.com/_
+|**lodash**                                                         |1.3.1              |underscore                            |MIT           |_https://github.com/lodash/lodash/blob/1.3.1/doc/README.md_
+|**moment**                                                         |2.7.0              |moment                                |MIT           |_http://momentjs.com/_
+|**jquery**                                                         |1.9.1              |jquery                                |MIT           |_http://jquery.com/_
+|**gridster**                                                       |0.5.8 custom       |gridster                              |MIT           |_http://gridster.net/#documentation_
+|**hbs**                                                            |2.0.0 custom       |hbs                                   |MIT           |_https://github.com/SlexAxton/require-handlebars-plugin_
+|**backbone.fetch-cache**                                           |1.4.0 custom       |backbone.fetch-cache                  |MIT           |_https://github.com/mrappleton/backbone-fetch-cache.git_
+|**backbone-marionette-accessibility**                              |Unversioned custom |backbone-marionette-accessibility     |MIT           |
+|**backgrid.paginator**                                             |Unversioned custom |backgrid.paginator                    |MIT           |_http://backgridjs.com/ref/extensions/paginator.html_
+|**bootstrap-accessibility**                                        |1.0.2 custom       |bootstrap-accessibility               |PayPal        |_http://paypal.github.io/bootstrap-accessibility-plugin/_
+|**modernizr**                                                      |2.6.2 custom       |modernizr                             |MIT           |_https://modernizr.com/docs_
+|**jquery.inputmask**                                               |3.2.2 custom       |jquery.inputmask                      |MIT           |_https://github.com/RobinHerbots/jquery.inputmask_
+|**typeahead.js**                                                   |0.10.5             |typeahead                             |MIT           |_https://github.com/twitter/typeahead.js/_
+|**select2**                                                        |4.0.2              |select2                               |MIT           |_https://select2.github.io/examples.html_
+|**jquery.form**                                                    |20130616           |jquery.form                           |MIT           |_http://malsup.com/jquery/form/#ajaxForm_
+|**jquery.formparams**                                              |Unversioned        |jquery.formparams                     |MIT           |_https://github.com/tinganho/jquery.formParams_
+|**jquery.datatable**                                               |1.9.4              |jquery-datatable                      |MIT           |_https://datatables.net/_
+|**jquery.scroll**                                                  |Unversioned        |jquery-scroll                         |MIT           |_http://james.padolsey.com/javascript/special-scroll-events-for-jquery/_
+|**Marionette**                                                     |2.4.3              |marionette                            |MIT           |_http://marionettejs.com/_
+|**backbone-sessionStorage**                                        |Unversioned        |sessionstorage                        |MIT           |_https://gist.github.com/davemo/3875274_
+|**backbone.paginator**                                             |2.0.0              |backbone.paginator                    |MIT           |_https://github.com/backbone-paginator/backbone.paginator_
+|**jasmine-jquery**                                                 |2.1.1              |jasminejquery                         |MIT           |_http://jasmine.github.io/1.3/introduction.html_
+|**fastclick**                                                      |0.6.11             |fastclick                             |MIT           |_https://github.com/ftlabs/fastclick_
+|**backgrid**                                                       |0.3.5              |backgrid                              |MIT           |_http://backgridjs.com/_
+|**backgrid-filter**                                                |0.3.x              |backgrid.filter                       |MIT           |_http://backgridjs.com/ref/extensions/filter.html_
+|**backgrid-moment-cell**                                           |0.3.x              |backgrid-moment-cell                  |MIT           |_https://github.com/wyuenho/backgrid-moment-cell_
+|**bootstrap**                                                      |3.3.5              |bootstrap                             |MIT           |_http://getbootstrap.com/getting-started_
+|**bootstrap-timepicker**                                           |0.2.x              |bootstrap-timepicker                  |MIT           |_http://jdewit.github.io/bootstrap-timepicker/_
+|**bootstrap-datepicker**                                           |1.4.x              |bootstrap-datepicker                  |Apache 2.0    |_http://bootstrap-datepicker.readthedocs.org/en/release/_
+|**font-awesome**                                                   |4.3.x              |                                      |MIT           |_http://fortawesome.github.io/Font-Awesome/examples/_
+|**backbone**                                                       |1.2.3              |backbone                              |MIT           |_http://backbonejs.org/_
+|**backbone-sorted-collection**                                     |0.3.8              |backbone-sorted-collection            |MIT           |_https://github.com/jmorrell/backbone-sorted-collection_
+|**backbone.radio**                                                 |0.6.0              |backbone.radio                        |MIT           |_https://github.com/marionettejs/backbone.radio_
+|**crossfilter**                                                    |1.3.x              |crossfilter                           |MIT           |_https://github.com/square/crossfilter/wiki/API-Reference_
+|**highcharts**                                                     |2.0.4              |highcharts                            |Commercial    |_http://www.highcharts.com/docs_
+|**pattern-fill**                                                   |2.0.2              |pattern-fill                          |MIT           |_http://www.highcharts.com/plugin-registry/single/9/Pattern-Fill_
+|**bowser**                                                         |0.7.2              |bowser                                |MIT           |_https://github.com/ded/bowser_
+|**grouped_categories**                                             |1.0.13             |grouped_categories                    |MIT           |_https://github.com/blacklabel/grouped_categories_
+|**libphonenumber**                                                 |7.2.4              |libphonenumber                        |Apache 2.0    |_https://github.com/googlei18n/libphonenumber_
+|**backbone_component**                                             |0.2.3              |backbone.component                    |MIT           |_https://github.com/malroc/backbone-component_
+|**query-string**                                                   |1.0.0              |queryString                           |MIT           |_https://github.com/sindresorhus/query-string_
+|**nouislider**                                                     |7.0.x              |nouislider                            |MIT           |_http://refreshless.com/nouislider/_
+|**remarkable-bootstrap-notify**                                    |3.1.x              |bootstrap-notify                      |MIT           |_http://bootstrap-notify.remabledesigns.com/_
+|**datejs**                                                         |1.0.x              |datejs                                |MIT           |_http://www.datejs.com/_
+|**requirejs-text**                                                 |2.0.14             |                                      |MIT           |_https://github.com/requirejs/text/_
+|**requirejs-plugins**                                              |1.0.3              |                                      |MIT           |_http://requirejs.org/docs/plugins.html_
+|**require-css**                                                    |0.1.8              |                                      |MIT           |_https://github.com/guybedford/require-css_
 
 > **Note:** Highcharts is not free, but is redistributed under the [terms of non-commerical use](http://shop.highsoft.com/faq/non-commercial#non-commercial-redistribution).
 

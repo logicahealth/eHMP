@@ -9,19 +9,19 @@ describe('When filtering communication request', function() {
 
     var messages = [
         {identifier: {value: 'a435'}, category: {coding: [{code: 'dark'}]}, priority: {coding: [{code: 'low'}]}, status: 'open',
-            recipient: [{reference: 'provider/PW    '}, {reference: 'patient/9E7A;10045'}],
+            recipient: [{reference: 'provider/pu1234'}, {reference: 'patient/9E7A;10045'}],
             payload: [{contentReference: {reference: 'patient/9E7A;10045/lab/123'}}],
             subject: {reference: 'subject1'}},
         {identifier: {value: '5645654645'}, category: {coding: [{code: 'light'}]}, priority: {coding: [{code: 'low'}]}, status: 'close',
-            recipient: [{reference: 'provider/PW    '}, {reference: 'patient/9E7A;10045'}],
+            recipient: [{reference: 'provider/pu1234'}, {reference: 'patient/9E7A;10045'}],
             payload: [{contentReference: {reference: 'patient/9E7A;10045/lab/123'}}],
             subject: {reference: 'subject2'}},
         {identifier: {value: MESSAGE_UNIQUE_ID}, category: {coding: [{code: 'dark'}]}, priority: {coding: [{code: 'high'}]}, status: 'in-progress',
-            recipient: [{reference: 'provider/PW    '}, {reference: 'patient/9E7A;10045'}],
+            recipient: [{reference: 'provider/pu1234'}, {reference: 'patient/9E7A;10045'}],
             payload: [{contentReference: {reference: 'patient/9E7A;10045/lab/123'}}],
             subject: {reference: 'subject3'}},
         {identifier: {value: '3453423'},
-            recipient: [{reference: 'provider/PW    '}, {reference: 'patient/9E7A;10045'}],
+            recipient: [{reference: 'provider/pu1234'}, {reference: 'patient/9E7A;10045'}],
             payload: [{contentReference: {reference: 'patient/9E7A;10045/lab/123'}}],
             subject: {reference: 'subject4'}}
     ];

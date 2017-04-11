@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h5 class="cwad-title">
+            <strong class="right-padding-xs">{{#each products}}{{name}}{{/each}}</strong>
+            {{#each reactions}}{{name}}{{#unless @last}},{{/unless}}{{/each}}
+        </h5>
+    </div>
+    <div class="col-xs-12">
+        <dl class="dl-horizontal bottom-margin-sm">
+            <dt>Drug Classes</dt>
+            <dd>{{#each drugClasses}}{{name}}{{/each}}</dd>
+        </dl>
+    </div>
+    <div class="col-xs-6">
+        <dl class="dl-horizontal">
+            <dt>Nature of reaction</dt>
+            <dd>{{ifnull mechanism 'N/A'}}</dd>
+            <dt>Entered By</dt>
+            <dd>{{#if originatorName}}{{formatName originatorName ',' ', '}}{{else}}N/A{{/if}}</dd>
+            <dt>Verified</dt>
+            <dd>{{#if verified}}{{formatDate verified "MM/DD/YYYY - HH:mm"}}{{else}}N/A{{/if}}</dd>
+            <dt>Facility</dt>
+            <dd>{{ifnull facilityName 'N/A'}}</dd>
+        </dl>
+    </div>
+    <div class="col-xs-6">
+        <dl class="dl-horizontal">
+            <dt>Severity</dt>
+            <dd>{{ifnull severity 'Severity Not Noted'}}</dd>
+            <dt>Originated</dt>
+            <dd>{{#if entered}}{{formatDate entered "MM/DD/YYYY - HH:mm"}}{{else}}N/A{{/if}}</dd>
+            <dt>Observed / Historical</dt>
+            <dd>{{#if historical}}{{#compare historical true}}Historical{{/compare}}{{#compare historical false}}Observed{{/compare}}{{else}}Observed{{/if}}</dd>
+            <dt>Observed Date</dt>
+            <dd>{{ifnull observedDate 'N/A'}}</dd>
+        </dl>
+    </div>
+    {{#each comments}} {{#if comment}}
+    <div class="col-xs-12">
+        <dl>
+            <dt>Comments</dt>
+            <dd class="content">{{comment}}</dd>
+        </dl>
+    </div>
+    {{/if}} {{/each}}
+</div>

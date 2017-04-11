@@ -1,0 +1,17 @@
+<div class="row">
+	<div class="col-xs-3">
+		<p><strong>Created By</strong><br />
+		{{clinicalObject.data.authorDisplayName}}</p>
+	</div>
+	<div class="col-xs-3">
+		<p><strong>Date Created</strong><br />
+		{{formatDate clinicalObject.data.entered "MM/DD/YYYY HH:mm"}}</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<p><strong>Note</strong><br />
+		{{noteBody}}</p>
+	</div>
+</div>

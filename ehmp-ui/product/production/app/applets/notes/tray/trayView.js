@@ -4,29 +4,46 @@ define([
     'backbone',
     'marionette',
     'app/applets/notes/writeback/formUtil',
-    'app/applets/notes/writeback/errorView'
-], function(_, Handlebars, Backbone, Marionette, FormUtil, ErrorView) {
+    'app/applets/notes/writeback/errorView',
+    'app/applets/notes/subtray/noteSubtray',
+    'app/applets/notes/subtray/noteObjectsSubtray',
+    'app/applets/notes/subtray/consultSubtray',
+    'hbs!app/applets/notes/tray/addendumTileTemplate',
+    'hbs!app/applets/notes/tray/noteTileTemplate'
+], function(_, Handlebars, Backbone, Marionette, FormUtil, ErrorView, NoteSubtray, NoteObjectsSubtray, ConsultSubtray, addendumTileTemplate, noteTileTemplate) {
     'use strict';
-    var titleFetchDone = false;
-    var fetchAttempts = 0;
     var titlePicklistOptions = {
         roleNames: 'AUTHOR/DICTATOR',
         actionNames: 'ENTRY'
     };
+
+    function ascSortCollection(addendums) {
+        return _.sortBy(addendums, function(addendum) {
+            var val;
+            if (addendum.referenceDateTime) {
+                val = moment(addendum.referenceDateTime, 'YYYYMMDDHHmmss').format('YYYYMMDDHHmmss') * 1;
+            }
+            return val;
+        }, null);
+    }
 
     var NotesTraySummaryView = ADK.Views.TraySummaryList.extend({
         selectedNoteUid: null,
         initialize: function() {
             var self = this;
             this.loading(true);
-            //ititialize titles for the picklist. This currently takes about
-            //40 seconds for first fetch/filter.
-            this.initTitles();
+
 
             this.collection = new ADK.UIResources.Writeback.Notes.AllNotes();
             this.deferred = this.collection.fetch();
             this.deferred.done(function() {
                 self.collection.each(function(model) {
+                    var subcollection = model.get('notes');
+                    if (subcollection) {
+                        for (var i = 0; i < subcollection.length; i++) {
+                            if (subcollection.models[i].get('addenda')) subcollection.models[i].get('addenda').comparator = ascSortCollection;
+                        }
+                    }
                     switch (model.get('id')) {
                         case 'unsigned':
                             self.unsignedCollection = model.get('notes');
@@ -43,7 +60,7 @@ define([
             });
             this.deferred.fail(function() {
                 var errorView = new ErrorView({
-                    message: 'There was an error retrieving some of your notes. Please contact your System Administrator for assistance.'
+                    message: 'There was an error retrieving some of your notes. Contact your System Administrator for assistance.'
                 });
                 errorView.showModal();
             });
@@ -64,30 +81,42 @@ define([
                     self.unsignedCollection.remove(model);
                 });
             });
-            this.listenTo(ADK.Messaging.getChannel('notes'), 'note:signed', function(collection) {
-                this.deferred.done(function() {
-                    self.unsignedCollection.remove(collection.pluck('oldUid'));
-                    self.signedCollection.add(collection.toJSON());
-                });
+
+            this.listenTo(ADK.Messaging.getChannel('notes'), 'note:signed', function(response) {
+                if (response.data.failedConsults) {
+                    var alertView = new ADK.UI.Notification({
+                        title: 'Consult Failed',
+                        icon: 'icon-error',
+                        message: 'One or more consults failed to complete.'
+                    });
+                    alertView.show();
+                    console.error('Failed to complete consults. Failed consults object array:');
+                    console.error(response.data.failedConsults);
+                }
             });
 
-            // Open tray when form/preview is closed
-            this.listenTo(ADK.Messaging.getChannel('notes'), 'tray:open', function(model) {
+            // Open tray on 'tray:display' event
+            this.listenTo(ADK.Messaging.getChannel('notes'), 'tray:display', function(model) {
                 setTimeout(function() {
                     self.$el.trigger('tray.show');
                 }, 500);
             });
+            this.listenTo(ADK.Messaging.getChannel('notes'), 'tray:focus', function(model) {
+                setTimeout(function() {
+                    self.$el.trigger('focus');
+                }, 500);
+            });
+
+            this.listenTo(ADK.Messaging.getChannel('notes'), 'addendum:added', function(event) {
+                this.collection.fetch();
+            });
+            this.listenTo(ADK.Messaging.getChannel('notes'), 'addendum:signed', function(event) {
+                this.collection.fetch();
+            });
 
             this.listenTo(ADK.Messaging.getChannel('notes'), 'tray.show', function(event) {
                 if (!_.isUndefined(event) && !_.isUndefined(event.currentTarget) && event.currentTarget.tagName === "BUTTON") {
-                    this.collection.fetch({
-                        silent: true,
-                        success: function() {
-                            self.unsignedCollection.trigger('change');
-                            self.uncosignedCollection.trigger('change');
-                            self.signedCollection.trigger('change');
-                        }
-                    });
+                    this.collection.fetch();
                 }
             });
 
@@ -105,6 +134,79 @@ define([
             this.listenTo(ADK.Messaging.getChannel('notes'), 'note:selected', function(model) {
                 this.selectedNoteUid = model.get('itemUniqueId');
             });
+
+            var noteEdit = function(objNoteUid) {
+                var errMessage;
+                if (_.isObject(objNoteUid)) {
+                    if (objNoteUid.clinicalObjectUid) {
+                        var possibleNotes;
+                        self.collection.each(function(model) {
+                            if (model.get('id') === 'unsigned') {
+                                possibleNotes = model.get('notes').clone();
+                            }
+                        });
+
+                        var isAddendum = false;
+                        var parentNoteModel = null;
+
+                        var model = possibleNotes.findWhere({
+                            'uid': objNoteUid.clinicalObjectUid
+                        });
+
+                        if (!model) {
+                            _.each(possibleNotes.models, function(note) {
+                                var addenda = note.get('addenda');
+                                var addendum = _.findWhere(addenda, {
+                                    uid: objNoteUid.clinicalObjectUid
+                                });
+                                if (addendum) {
+                                    model = new Backbone.Model(addendum);
+                                    isAddendum = true;
+                                    model.set('noteModel', note);
+                                }
+                            });
+                            if (!model) {
+                                var err = 'Note edit: Could not find model with uid of ' + objNoteUid.clinicalObjectUid;
+                                throw new Error(err);
+                            }
+                        }
+
+                        var perms = model.get('asuPermissions');
+                        if (model.get('app').toLowerCase() === 'vista' || !_.contains(perms, 'EDIT RECORD')) {
+                            throw new Error('Note edit: Unable to edit this note.');
+                        }
+
+                        var notesFormOptions = {
+                            model: model,
+                            isEdit: true,
+                            showVisit: false,
+                            openTrayOnDestroy: true
+                        };
+                        ADK.Messaging.trigger('tray.close');
+                        this.selectedNoteUid = objNoteUid.clinicalObjectUid;
+                        if (isAddendum) {
+                            FormUtil.launchAddendumForm(notesFormOptions);
+                        } else {
+                            FormUtil.launchNoteForm(notesFormOptions);
+                        }
+                    } else {
+                        errMessage = "Notes appet: note:edit event --------->>> Error: clinicalObjectUid property of object is undefined";
+                    }
+                } else {
+                    errMessage = "Notes appet: note:edit event --------->>> Error: parameter is not an object";
+                }
+                if (errMessage) throw new Error(errMessage);
+            };
+
+            this.listenTo(ADK.Messaging.getChannel('notes'), 'note:edit', function(objNoteUid) {
+                if (!_.has(this, 'unsignedCollection')) {
+                    if (this.collection.pendingFetch) {
+                        this.listenToOnce(this.collection, 'sync', _.bind(noteEdit, this, objNoteUid));
+                    }
+                } else {
+                    noteEdit.apply(this, arguments);
+                }
+            });
             this.listenTo(ADK.Messaging.getChannel('notes'), 'note:deselected', function() {
                 this.selectedNoteUid = null;
             });
@@ -116,61 +218,76 @@ define([
                     this.selectedNoteUid = null;
                 }
             });
-        },
-        initTitles: function() {
-            fetchAttempts = 0;
-            titleFetchDone = false;
-            var cachedTitlesPicklist = new ADK.UIResources.Picklist.Notes.Titles();
-            this.listenTo(cachedTitlesPicklist, 'read:error', function() {
-                //only show error if all attempts failed
-                if(fetchAttempts === 150) {
-                    FormUtil.showTitleError();
+            this.listenTo(ADK.Messaging.getChannel('notes'), 'note:consult', function(objClinicalObjUid) {
+                var errMessage;
+                if (_.isObject(objClinicalObjUid)) {
+                    if (objClinicalObjUid.clinicalObjectUid) {
+                        var patientContext = ADK.PatientRecordService.getCurrentPatient();
+                        var url = ADK.ResourceService.buildUrl('patient-record-note-by-consult-uid', {
+                            pid: patientContext.get('pid'),
+                            consultUid: objClinicalObjUid.clinicalObjectUid
+                        });
+                        var urlFetch = new Backbone.Collection();
+                        urlFetch.url = url;
+                        urlFetch.fetch({
+                            error: function(collection, res) {
+                                throw new Error(res);
+                            },
+                            success: function(result) {
+                                var model = result.at(0);
+                                var noteClinicalObjectUid = model.get("noteClinicalObjectUid");
+                                if (noteClinicalObjectUid) {
+                                    ADK.Messaging.getChannel('notes').trigger('note:edit', {
+                                        clinicalObjectUid: noteClinicalObjectUid
+                                    });
+                                    return;
+                                } // note not exist, open note tray
+                                ADK.Messaging.getChannel('notes').trigger('tray:display');
+                            }
+                        });
+                    } else {
+                        ADK.Messaging.getChannel('notes').trigger('tray:display');
+                    }
+                } else {
+                    errMessage = "Notes appet: note:consult event --------->>> Error: parameter is not an object";
                 }
+                if (errMessage) throw new Error(errMessage);
             });
-            //temporary until we have new resource that returns all titles at once
-            this.listenTo(cachedTitlesPicklist, 'read:incomplete', function(collection) {
-                titleFetchDone = false;
-                if (fetchAttempts <= 150) {
-                    var self = this;
-                    setTimeout(function(){
-                        self.prefetchTitles(cachedTitlesPicklist);
-                    }, 10000);
-                }
-            });
-            this.listenTo(cachedTitlesPicklist, 'read:complete', function(collection) {
-                titleFetchDone = true;
-                //console.log('  done fetching titles');
-            });
-            this.prefetchTitles(cachedTitlesPicklist);
         },
-        prefetchTitles: function(picklist) {
-            if (ADK.UserService.getUserSession() && ADK.UserService.getUserSession().get('site')) {
-                fetchAttempts += 1;
-                //console.log('prefetchTitles ' +fetchAttempts);
-                picklist.fetch(titlePicklistOptions);
+        getItemTemplate: function() {
+            if (this.model.get('noteType')) {
+                if (this.model.get('noteType').toLowerCase() === "addendum") {
+                    return addendumTileTemplate;
+                }
             }
+            return noteTileTemplate;
         },
         options: {
             label: "Notes",
             onClick: function(model) {
                 ADK.Messaging.getChannel('notes').trigger('note:selected', model);
                 var perms = model.get('asuPermissions');
+                var isAddendum = false;
+                var parentNoteModel = null;
+                if (model.get('parentUid')) {
+                    isAddendum = true;
+                    parentNoteModel = _.find(this.collection.models, {
+                        attributes: {
+                            uid: model.get('parentUid')
+                        }
+                    });
+                    model.set('noteModel', parentNoteModel);
+                }
                 if (model.get('status') === 'COMPLETED' || model.get('app').toLowerCase() === 'vista' || !_.contains(perms, 'EDIT RECORD')) {
-                    FormUtil.launchPreviewForm(model);
-                    //this.$el.trigger('tray.swap');
-                } else {
-                    if (titleFetchDone) {
-                        var notesFormOptions = {
-                            model: this.model,
-                            isEdit: true,
-                            showVisit: false,
-                            openTrayOnDestroy: true
-                        };
-                        ADK.Messaging.trigger('tray.close');
-                        FormUtil.launchNoteForm(notesFormOptions);
-                   } else {
-                        FormUtil.showTitleWait();
+                    if (isAddendum) {
+                        FormUtil.launchDraggablePreview(parentNoteModel);
+                    } else {
+                        FormUtil.launchDraggablePreview(model);
                     }
+                } else {
+                    ADK.Messaging.getChannel('notes').trigger('note:edit', {
+                        clinicalObjectUid: model.get('uid')
+                    });
                 }
             },
             attributeMapping: {
@@ -179,7 +296,8 @@ define([
                 itemUniqueId: 'itemUniqueId',
                 itemLabel: 'localTitle',
                 itemStatus: 'statusDisplayName',
-                itemDateTime: 'referenceDateTime'
+                itemDateTime: 'referenceDateTime',
+                nodes: 'addenda'
             }
         }
     });
@@ -199,6 +317,7 @@ define([
             }),
             position: 'right',
             buttonLabel: 'Notes',
+            iconClass: 'icon icon-icon_notes'
         }
     });
 
@@ -207,7 +326,7 @@ define([
         group: "writeback",
         key: "notes",
         view: TrayView,
-        orderIndex: 21,
+        orderIndex: 40,
         shouldShow: function() {
             return (ADK.PatientRecordService.isPatientInPrimaryVista() && ADK.UserService.hasPermissions('sign-note&add-encounter'));
         }
@@ -216,23 +335,96 @@ define([
     ADK.Messaging.trigger('register:component:item', {
         type: "tray",
         key: 'notes',
-
         label: 'Note',
         onClick: function() {
-            if (titleFetchDone) {
-                    ADK.Messaging.getChannel('notes').trigger('note:deselected');
-                    var notesFormOptions = {
-                        openTrayOnDestroy: true
-                    };
-                    ADK.Messaging.trigger('tray.close');
-                    FormUtil.launchNoteForm(notesFormOptions);
-                } else {
-                    FormUtil.showTitleWait();
-                }
+            ADK.Messaging.getChannel('notes').trigger('note:deselected');
+            var notesFormOptions = {
+                openTrayOnDestroy: true
+            };
+            ADK.Messaging.trigger('tray.close');
+            FormUtil.launchNoteForm(notesFormOptions);
         },
         shouldShow: function() {
             return true;
         }
+    });
+
+    ADK.Messaging.trigger('register:component', {
+        type: "sub-tray",
+        group: ["note-edit-subtray"],
+        key: "note-objects-subtray",
+        view: ADK.UI.SubTray.extend({
+            options: {
+                tray: NoteObjectsSubtray,
+                view: NoteObjectsSubtray,
+                position: 'left',
+                buttonLabel: 'Note Objects',
+                eventChannelName: 'note-subtray'
+            },
+            events: {
+                'subTray.shown': function() {
+                    ADK.Messaging.getChannel('note-subtray').trigger('subTray:opened');
+                },
+                'subTray.hidden': function() {
+                    ADK.Messaging.getChannel('note-subtray').trigger('subTray:closed');
+                }
+            }
+        }),
+        shouldShow: function() {
+            return true;
+        },
+    });
+
+    ADK.Messaging.trigger('register:component', {
+        type: "sub-tray",
+        group: ["note-addendum-subtray"],
+        key: "note-addendum-subtray",
+        view: ADK.UI.SubTray.extend({
+            options: {
+                tray: NoteSubtray,
+                view: NoteSubtray,
+                position: 'left',
+                buttonLabel: 'Current Note',
+                eventChannelName: 'note-addendum'
+            },
+            events: {
+                'subTray.shown': function() {
+                    ADK.Messaging.getChannel('note-addendum').trigger('subTray:opened');
+                },
+                'subTray.hidden': function() {
+                    ADK.Messaging.getChannel('note-addendum').trigger('subTray:closed');
+                }
+            }
+        }),
+        shouldShow: function() {
+            return true;
+        },
+    });
+
+    ADK.Messaging.trigger('register:component', {
+        type: "sub-tray",
+        group: ["note-edit-subtray"],
+        key: "consult-subtray",
+        view: ADK.UI.SubTray.extend({
+            options: {
+                tray: ConsultSubtray,
+                view: ConsultSubtray,
+                position: 'left',
+                buttonLabel: 'Open Consults',
+                eventChannelName: 'consult-subtray'
+            },
+            events: {
+                'subTray.shown': function() {
+                    ADK.Messaging.getChannel('consult-subtray').trigger('subTray:opened');
+                },
+                'subTray.hidden': function() {
+                    ADK.Messaging.getChannel('consult-subtray').trigger('subTray:closed');
+                }
+            }
+        }),
+        shouldShow: function() {
+            return ADK.UserService.hasPermission('complete-consult-order');
+        },
     });
 
     return NotesTraySummaryView;

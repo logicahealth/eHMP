@@ -9,7 +9,7 @@ Scenario: Client can request operational sync status from multiple sites and dom
   When the client requests operational sync status for "9E7A" site
   Then the operational data results contain different domains from "9E7A"
       | field     			|
-      | asu-class			| 
+      | asu-class			|
       | asu-rule			|
       | doc-def				|
       | immunization	|
@@ -19,7 +19,6 @@ Scenario: Client can request operational sync status from multiple sites and dom
       | orderable			|
       | pt-select			|
       | qo					|
-      | roster				|
       | route				|
       | schedule			|
       | sign-symptom	|
@@ -27,11 +26,11 @@ Scenario: Client can request operational sync status from multiple sites and dom
       | vital-category	|
       | vital-qualifier	|
       | vital-type		|
-      
+
   When the client requests operational sync status for "C877" site
   Then the operational data results contain different domains from "C877"
       | field     			|
-      | asu-class			| 
+      | asu-class			|
       | asu-rule			|
       | doc-def				|
       | immunization    	|
@@ -41,7 +40,6 @@ Scenario: Client can request operational sync status from multiple sites and dom
       | orderable			|
       | pt-select			|
       | qo					|
-      | roster				|
       | route				|
       | schedule			|
       | sign-symptom       	|

@@ -4,6 +4,7 @@ default[:vista][:cache_version] = "2014.1.3.775.0-1.rh"
 default[:vista][:cache_arch] = "x86_64"
 default[:vista][:existing_version] = nil
 default[:vista][:install_method] = "upgrade"
+default[:vista][:production] = "false"
 
 default[:vista][:hmp_path] = "#{Chef::Config[:file_cache_path]}/hmp.zip"
 default[:vista][:hmp_manifest_name] = "kids-manifest.json"
@@ -18,6 +19,9 @@ default[:vista][:cache_user] =   "cacheserver"
 default[:vista][:cache_dir] =    "/usr/cachesys"
 default[:vista][:cache_mgr_dir] =    "/usr/cachesys/mgr"
 default[:vista][:vista_dir] =    "/usr/cachesys/mgr/VISTA"
+
+default[:vista][:cache_license_data_bag] = "cache_license"
+default[:vista][:cache_license_item] = "license"
 
 default[:vista][:cache_key_file] =     "key1"
 default[:vista][:cache_key_user] =  "UNKNOWNUSER"
@@ -58,4 +62,9 @@ default[:vista][:site_id] = nil
 default[:vista][:station_number] = nil
 default[:vista][:access_code] = nil
 default[:vista][:verify_code] = nil
+default[:vista][:abbreviation] = nil
 
+default[:vista][:connect_timeout] = 3000
+default[:vista][:send_timeout] = 20000
+
+default[:vista][:ua_tracker] = true

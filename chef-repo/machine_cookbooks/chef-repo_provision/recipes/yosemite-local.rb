@@ -7,14 +7,14 @@ require 'chef/provisioning/vagrant_driver'
 with_driver 'vagrant'
  
 vagrant_box 'osx-10.10.1' do
-  url "#{node[:common][:nexus_url]}/nexus/content/repositories/ehmp/filerepo/third-party/program/vagrant/basebox/osx/10.10.1/osx-10.10.1.box"
+  url "#{node[:common][:nexus_url]}/nexus/content/repositories/filerepo/third-party/program/vagrant/basebox/osx/10.10.1/osx-10.10.1.box"
 end
 
 osx_opts = {}
 osx_opts[:box_name] = 'osx-10.10.1'
 osx_opts[:network] = {
   :network_type => node[:machine][:network_type],
-  :ip_address => "172.16.2.76"
+  :ip_address => "IPADDRESS"
 }
 osx_opts[:provider_config] = {
   :provider_name => node[:machine][:provider_name],
@@ -39,7 +39,8 @@ machine "yosemite-#{node[:machine][:stack]}" do
   chef_environment node[:machine][:environment]
   attributes(
     stack: node[:machine][:stack],
-    nexus_url: node[:common][:nexus_url]
+    nexus_url: node[:common][:nexus_url],
+    data_bag_string: node[:common][:data_bag_string]
   )
   role 'workstation'
   action node[:machine][:action]

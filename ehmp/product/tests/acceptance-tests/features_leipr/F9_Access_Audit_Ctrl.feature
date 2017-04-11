@@ -47,8 +47,8 @@ Scenario: Request to MVI with invalid ICN is audited
 
 @US449
 Scenario: Require user authentication to allow access to the VistA Exchange patient record retrieval API
-#PW    @kodak PW    !!
-	Given user logs in with username "PW    ", password "PW    !!", and sitecode "200"
+#lu1234@kodak lu1234!!
+	Given user logs in with username "lu1234", password "lu1234!!", and sitecode "200"
 	When an auth client requests the patient resource directory for patient with id "E1"
 	Then the endpoint responds back with a json object
     And a successful authenticated response is returned within "30" seconds
@@ -65,9 +65,9 @@ Scenario Outline: User attempts to access the API with invalid credentials
 
     Examples:
     |username|password  |sitecode   |
-    |baduid  |PW    !!  |200|
-    |PW      |badpw     |200|
-    |PW      |PW    !!  |badsite    |
+    |baduid  |lu1234!!  |200|
+    |lu1234  |badpw     |200|
+    |lu1234  |lu1234!!  |badsite    |
 
 @US449
 Scenario: User attempts to access the API without login information
@@ -94,21 +94,21 @@ Scenario Outline: User can access data from multiple VistA hosts after single si
 
 Examples:
     |username		|password	|sitecode	    |
-    |PW    			|PW    !!	|200	|
-    |PW    			|PW    !!	|542GA |
+    |lu1234			|lu1234!!	|200	|
+    |lu1234			|lu1234!!	|542GA |
 
 
 @US449
 Scenario: Require user authentication to command all endpoints
 	Given a patient with id "E1" has not been synced
-	Given user logs in with username "PW    ", password "badpassword", and sitecode "doesnotexist"
+	Given user logs in with username "lu1234", password "badpassword", and sitecode "doesnotexist"
     When an auth client commands clear cache for patient with id "E1"
     Then the endpoint responds back with an error message
     And an unauthorized response is returned within "10" seconds
 
 @US449
 Scenario Outline: Require user authentication to allow access to all endpoints
-	Given user logs in with username "PW    ", password "badpassword", and sitecode "doesnotexist"
+	Given user logs in with username "lu1234", password "badpassword", and sitecode "doesnotexist"
     When an authenticated client requests "<endpoint>" for patient with id "E1"
     Then the endpoint responds back with an error message
     And an unauthorized response is returned within "10" seconds
@@ -125,14 +125,14 @@ Examples:
 @US449 @US449_allergysummary
 Scenario:Require user authentication to allow access for allergy summary
     Given a patient with id "E1" has not been synced
-    Given user logs in with username "PW    ", password "badpassword", and sitecode "doesnotexist"
+    Given user logs in with username "lu1234", password "badpassword", and sitecode "doesnotexist"
     When a client requests an allergy summary for patient with id "E1"
     Then the endpoint responds back with an error message
     And an unauthorized response is returned within "10" seconds
 
 @US449 @US449_FHIR
 Scenario Outline: Require user authentication to allow access to all fhir endpoints
-    Given user logs in with username "PW    ", password "badpassword", and sitecode "doesnotexist"
+    Given user logs in with username "lu1234", password "badpassword", and sitecode "doesnotexist"
     When I search for JSON "<endpoint>" Resources with a "identifier" of "E1"
     Then the endpoint responds back with an error message
     And an unauthorized response is returned within "10" seconds
@@ -146,7 +146,7 @@ Examples:
     
 @US451 @US451_on
 Scenario: Data retrieval option is turned on
-    Given user logs in with username "PW    ", password "PW    !!", and sitecode "200"
+    Given user logs in with username "pu1234", password "pu1234!!", and sitecode "200"
     #Given a patient has not been synced
     And a patient with id "E1" has not been synced
     And data retrieval option is turned on
@@ -163,7 +163,7 @@ Scenario: Data retrieval option is turned on
         
 @US451 @US451_off
 Scenario: Data retrieval option is turned off
-    Given user logs in with username "PW    ", password "PW    !!", and sitecode "200"
+    Given user logs in with username "pu1234", password "pu1234!!", and sitecode "200"
     #Given a patient has not been synced
     And a patient with id "E1" has not been synced
     And data retrieval option is turned off
@@ -182,13 +182,13 @@ Scenario: Data retrieval option is turned off
 @US450 @USHERE
 Scenario: User's attempt to authenticate with valid credentials is audited
 	Given the soap cache is cleared
-	Given user logs in with username "PW    ", password "PW    !!", and sitecode "200"
+	Given user logs in with username "pu1234", password "pu1234!!", and sitecode "200"
 	And a patient with id "E1" has been synced
-	And number of user audit logs is known for "PW    "
+	And number of user audit logs is known for "pu1234"
     When an authenticated client requests "vital" for patient with id "E1"
     Then a successful authenticated response is returned within "30" seconds
     And the endpoint responds back with a json object
-    And the authentication request is audited as "true" for "PW    "
+    And the authentication request is audited as "true" for "pu1234"
 
 
 @US450
@@ -205,12 +205,12 @@ Scenario: User's attempt to authenticate with invalid credentials is audited
 
 @US450
 Scenario Outline: User's request for patient information is audited
-	Given user logs in with username "PW    ", password "PW    !!", and sitecode "542GA"
+	Given user logs in with username "lu1234", password "lu1234!!", and sitecode "542GA"
 	And a patient with id "E1" has been synced
     When an authenticated client requests "<dataRequest>" for patient with id "E1"
     Then a successful authenticated response is returned within "30" seconds
     And the endpoint responds back with a json object
-    And the audit log saves datatype "<dataRequest>" for patient "E1" for "PW    "
+    And the audit log saves datatype "<dataRequest>" for patient "E1" for "lu1234"
 
     Examples:
     |dataRequest	|

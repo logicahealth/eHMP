@@ -11,8 +11,59 @@ var fhirToJDSSearch = require('../common/utils/fhir-to-jds-search');
 var diagnosticReportSortUtils = require('./diagnostic-report-sort-utils');
 var constants = require('../common/utils/constants');
 var jds = require('../common/utils/jds-query-helper');
+var confUtils = require('../conformance/conformance-utils');
+var conformance = require('../conformance/conformance-resource');
 
-//TO DO:
+var fhirToJDSAttrMap = [{
+    fhirName: 'domain', // Note this attribute is a app-defined search param, not a Fhir specified attribute.
+    vprName: '',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'This will specify which types of Diagnostic Reports to return. \'lab\' for all types of labs (\'LAB\', \'CH\', \'MB\'),  \'rad\' for all radiology, \'ap\' for all types of accession (\'LAB\', \'OTH\', \'SP\', \'CP\', \'AP\').  Usage example: domain=lab . Note: if both domain and service is specified, then service will take precedent.' ,
+    searchable: true
+},{
+    fhirName: 'service', // Note this attribute is a app-defined search param, not a Fhir specified attribute.
+    vprName: '',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'This will specify which categories of Diagnostic Reports to return. \'lab\', \'ch\', \'mb\', \'rad\', \'oth\', \'sp\', \'cp\', \'ap\'. Usage example: service=lab . Note: if both domain and service is specified, then service will take precedent.' ,
+    searchable: true
+},{
+    fhirName: 'subject.identifier', // Note this attribute is a app-defined search param, not a Fhir specified attribute.
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier - note that this patient identifier will override any patient identifier that is in the URI of this endpoint.',
+    searchable: true
+},{
+    fhirName: 'pid',  // Note this attribute is a app-defined search param, not a Fhir specified
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier - note that this patient identifier will override any patient identifier that has been specified in the URI of this endpoint, as well as any subject.identifier in the query string.',
+    searchable: true
+},{
+    fhirName: 'date',
+    vprName: 'observed',
+    dataType: 'dateTime',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#dateTime',
+    description: 'This is the date/time the diagnostic was done.  The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. date=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. date=2015-01-26T08:30:00) or an implicit range (e.g. date=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=).',
+    searchable: true
+}];
+
+// Issue call to Conformance registration
+conformance.register(confUtils.domains.DIAGNOSTIC_REPORT, createConformanceData());
+
+function createConformanceData() {
+   var resourceType = confUtils.domains.DIAGNOSTIC_REPORT;
+   var profileReference = 'http://www.hl7.org/FHIR/2015May/diagnosticreport.html';
+   var interactions = [ 'read', 'search-type' ];
+
+   return confUtils.createConformanceData(resourceType, profileReference,
+           interactions, fhirToJDSAttrMap);
+}
+
+//TODO-FUTURE
 // As JSON.parse and JSON.stringify work in a blocking manner perhaps we should switch to a streaming parser as this one:
 // https://github.com/dominictarr/JSONStream
 
@@ -60,7 +111,6 @@ function validateParams(params, onSuccess, onError) {
                 onError(['Unsupported _sort criteria. Supported attributes are: date, identifier, issued, performer, result, specimen and status']);
             }
         }, onError);
-        // TODO: add validation for code param
     }, onError);
 }
 
@@ -72,40 +122,40 @@ function validateParams(params, onSuccess, onError) {
  * @apiParam {String} [service] The diagnostic discipline/department which created the report
  * @apiParam {Number} [_count] The number of results to show.
  * @apiParam {String} [date] Obtained date/time. The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. date=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. date=2015-01-26T08:30:00) or an implicit range (e.g. date=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=). Consult the <a href="http://www.hl7.org/FHIR/2015May/search.html#date">FHIR DSTU2 API</a> documentation for more information.
- * @apiParam {String} [_sort] Sort criteria. Ascending order by default, order is specified with the following variants:  _sort:asc (ascending), _sort:dsc (descending). Supported sort properties: date, identifier, issued, performer, result, service, specimen, status.
+ * @apiParam {String} [_sort] Sort criteria. Ascending order by default, order is specified with the following variants:  _sort:asc (ascending), _sort:desc (descending). Supported sort properties: date, identifier, issued, performer, result, service, specimen, status.
  *
  * @apiDescription Converts vpr \'labratory,\' \'imaging\' and \'accession\' resources into a FHIR \'diagnosticreport\' resource.
  *
  * @apiExample {js} Request Examples:
  *      // DiagnosticReport limiting results count
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_count=1
+ *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?_count=1
  *
  *      // DiagnosticReport exact date search
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26T13:45:00
+ *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26T13:45:00
  *
  *      // DiagnosticReport on a day
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26
+ *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26
  *
  *      // DiagnosticReport on a month
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01
+ *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01
  *
  *      // DiagnosticReport on a year
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015
+ *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?date=2015
  *
  *      // DiagnosticReport outside a date range (e.g. DiagnosticReports not occuring on January 2015)
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=!=2015-01
+ *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?date=!=2015-01
  *
  *      // DiagnosticReport Explicit date range
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=>=2014-06&date=<=2014-09-20
+ *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?date=>=2014-06&date=<=2014-09-20
  *
  *      // DiagnosticReport sorted by date (sorts by DiagnosticReport.appliesDateTime)
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_sort=date
+ *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?_sort=date
  *
  *      // DiagnosticReport sorted by date in descending order
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_sort:dsc=date
+ *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?_sort:desc=date
  *
  *      // DiagnosticReport sorted by performer (sorts by DiagnosticReport.performer.display)
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_sort=performer
+ *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?_sort=performer
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/diagnosticreport.html">DiagnosticReport FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
@@ -129,7 +179,7 @@ function validateParams(params, onSuccess, onError) {
  *          "text": "POTASSIUM",
  *          "coding": [
  *            {
- *              "system": "urn:oid:2.16.840.1.113883.4.642.2.58",
+ *              "system": "urn:oid:2.16.840.1.113883.6.233",
  *              "code": "urn:va:ien:60:177:72",
  *              "display": "POTASSIUM"
  *            }
@@ -194,7 +244,7 @@ function validateParams(params, onSuccess, onError) {
  *              "text": "POTASSIUM",
  *              "coding": [
  *                {
- *                  "system": "urn:oid:2.16.840.1.113883.4.642.2.58",
+ *                  "system": "urn:oid:2.16.840.1.113883.6.233",
  *                  "code": "urn:va:ien:60:177:72",
  *                  "display": "POTASSIUM"
  *                }
@@ -458,7 +508,7 @@ function getDiagnosticReportsImpl(pid, req, res, params, serviceCategories) {
                     };
                 } else {
                     result = labResults.convertToFhir(inputJSON, req);
-                    if(!stopAggregating){
+                    if (!stopAggregating) {
                         accumulator.results = accumulator.results.concat(result);
                     }
                     accumulator.totalItems += inputJSON.data.totalItems;
@@ -518,7 +568,7 @@ function getDiagnosticReportsImpl(pid, req, res, params, serviceCategories) {
                     };
                 } else {
                     result = labResults.convertToFhir(inputJSON, req);
-                    if(!stopAggregating){
+                    if (!stopAggregating) {
                         accumulator.results = accumulator.results.concat(result);
                     }
                     accumulator.totalItems += inputJSON.data.totalItems;
@@ -567,7 +617,7 @@ function getDiagnosticReportsImpl(pid, req, res, params, serviceCategories) {
                     };
                 } else {
                     result = radReports.convertToFhir(inputJSON, req);
-                    if(!stopAggregating){
+                    if (!stopAggregating) {
                         accumulator.results = accumulator.results.concat(result);
                     }
                     accumulator.totalItems += inputJSON.data.totalItems;
@@ -590,7 +640,6 @@ function getDiagnosticReportsImpl(pid, req, res, params, serviceCategories) {
 }
 
 function buildBundle(results, req, total) {
-    // var b = new fhirResource.Bundle2();
     var entry = [];
     var link = [];
 
@@ -609,7 +658,7 @@ function buildBundle(results, req, total) {
 
     //DiagnosticReport is an aggregate of multiple reports, its results must be sorted after all VPR calls
     entry = diagnosticReportSortUtils.sortEntries(req, entry);
-    return (new fhirResource.Bundle2(link, entry, total));
+    return (new fhirResource.Bundle(link, entry, total));
 }
 
 /**
@@ -644,12 +693,12 @@ function buildNameCodeQuery(name) {
         if (nullchecker.isNotNullish(system)) {
             // ** System & Code **
 
-            // LAB_RESULTS_UID_IDENTIFIER_SYSTEM and DIAGNOSTIC_REPORTS_SYSTEM hold currently the same value
+            // LAB_RESULTS_UID_IDENTIFIER_SYSTEM and VHA_SYSTEM hold currently the same value
             // but that doesn't have to be always the case. We don't use if-elseif for that reason.
-            if (system === constants.labResultsFhir.LAB_RESULTS_UID_IDENTIFIER_SYSTEM || system === constants.labResultsFhir.DIAGNOSTIC_REPORTS_SYSTEM) {
+            if (system === constants.labResultsFhir.LAB_RESULTS_UID_IDENTIFIER_SYSTEM || system === constants.labResultsFhir.VHA_SYSTEM) {
                 // LAB_RESULTS_UID_IDENTIFIER_SYSTEM does not exist in VPR, FHIR mapping associates the code with VPR record's vuid
                 queries.push(jds.eq('vuid', '\"' + code + '\"'));
-                // DIAGNOSTIC_REPORTS_SYSTEM does not exist in VPR, FHIR mapping associates the code with VPR record's typeCode
+                // VHA_SYSTEM does not exist in VPR, FHIR mapping associates the code with VPR record's typeCode
                 queries.push(jds.eq('typeCode', '\"' + code + '\"'));
                 // FHIR mapping associates the display value for these systems to VPR record's typeName
                 queries.push(jds.eq('typeName', '\"' + code + '\"'));
@@ -744,3 +793,5 @@ module.exports.getResourceConfig = getResourceConfig;
 module.exports.buildBundle = buildBundle;
 module.exports.validateParams = validateParams;
 module.exports.buildJDSPath = buildJDSPath;
+module.exports.createConformanceData = createConformanceData;
+

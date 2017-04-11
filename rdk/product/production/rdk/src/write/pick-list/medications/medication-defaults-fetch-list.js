@@ -2,6 +2,8 @@
 var parse = require('./medication-defaults-parser').parse;
 var validate = require('./../utils/validation-util');
 var rpcUtil = require('./../utils/rpc-util');
+var rdk = require('../../../core/rdk');
+var locationUtil = rdk.utils.locationUtil;
 var _ = require('lodash');
 
 
@@ -40,16 +42,13 @@ var _ = require('lodash');
 module.exports.fetch = function(logger, configuration, callback, params) {
     var pharmacyType = _.get(params, 'pharmacyType');
     var outpatientDfn = _.get(params, 'outpatientDfn');
-    var locationIen = _.get(params, 'locationIen');
+    var locationIen = locationUtil.getLocationIEN( _.get(params, 'locationUid'));
 
-    if (validate.isStringNullish(pharmacyType)) {
+   if (validate.isStringNullish(pharmacyType)) {
         return callback('pharmacyType cannot be empty and it must be \'U\', \'F\', or \'O\'');
     }
     if (validate.isStringNullish(outpatientDfn)) {
         outpatientDfn = null;
-    }
-    if (!validate.isWholeNumber(locationIen)) {
-        locationIen = null;
     }
 
     pharmacyType = pharmacyType.toUpperCase();

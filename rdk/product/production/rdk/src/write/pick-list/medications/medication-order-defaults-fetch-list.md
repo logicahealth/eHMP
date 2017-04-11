@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Medication order defaults [/medication-order-defaults{?site}{&pharmacyType}{&ien}{&outpatientDfn}{&needPatientInstructions}{&pkiEnabled}{&fields}]
+## Medication order defaults [/medication-order-defaults{?site}{&pharmacyType}{&ien}{&outpatientDfn}{&needPatientInstructions}{&pkiEnabled}]
 
 Outpatient medication dosages, dispense, route, schedule, guideline, message, DEA schedule.
 
@@ -27,8 +27,6 @@ ORWDPS2 OISLCT
     + needPatientInstructions (boolean, optional) - boolean for whether you need patient instructions
 
     + pkiEnabled (boolean, optional) - boolean for whether pki is enabled on this server - You must call pki-enabled — ORWOR PKISITE — in order to retrieve the value for this parameter.
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

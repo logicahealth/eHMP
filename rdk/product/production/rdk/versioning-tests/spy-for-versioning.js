@@ -7,23 +7,48 @@ var vistajsSpy = require('./vistajs-spy');
 var repository = require('./recorded-response-repository');
 var recordSchemas = require('./record-schemas-outerceptor');
 
-// Turn on spying if the --spy-for-versioning command-line argument is present.
+var spying = 0;
 
 module.exports = function(app) {
-    if (argv['spy-for-versioning']) {
-        createRecordToDirectory();
+    if (app.config.environment === 'development') {
+        createRecordToDirectory(app.logger);
         httpSpy.startSpying();
         vistajsSpy.startSpying();
         recordSchemas.startRecording(app);
 // TODO: start spying on mongodb
-        return false;
+
+        var alwaysEnabled = !!argv['spy-for-versioning'];
+        enable(alwaysEnabled);
+
+        app.use(function (req, res, next) {
+            if (req.query['spy-for-versioning']) {
+                spying++;
+                enable(alwaysEnabled || spying > 0);
+            }
+
+            res.on('finish', onFinish);
+
+            function onFinish(params) {
+                res.removeListener('finish', onFinish);
+                spying--;
+                enable(alwaysEnabled || spying > 0);
+            }
+
+            next();
+        });
     }
 };
 
-function createRecordToDirectory() {
+function createRecordToDirectory(logger) {
     fs.mkdir(repository.recordToDirectory, function(error) {
         if (error && error.code !== 'EEXIST') {
-            console.log('spy-for-versioning.js: unable to create the directory for spying: ' + error);
+            logger.error({error: error}, 'spy-for-versioning.js: unable to create the directory for spying');
         }
     });
+}
+
+function enable(enabled) {
+    httpSpy.enabled = enabled;
+    vistajsSpy.enabled = enabled;
+    recordSchemas.enabled = enabled;
 }

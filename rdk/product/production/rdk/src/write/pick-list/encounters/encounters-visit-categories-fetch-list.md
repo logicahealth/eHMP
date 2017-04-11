@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Encounters visit categories [/encounters-visit-categories{?site}{&ien}{&visitDate}{&fields}]
+## Encounters visit categories [/encounters-visit-categories{?site}{&ien}{&visitDate}]
 
 Retrieves Visit Category (Type) and associated CPT (procedure) Codes.
 
@@ -15,8 +15,6 @@ ORWPCE VISIT
     + ien: `195` (string, required) - The ien of the clinic for which to find visit categories
 
     :[visitDate]({{{common}}}/parameters/visitDate.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

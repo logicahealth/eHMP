@@ -5,20 +5,50 @@ define([
 ], function(LabTrayView, LabFormModel, Utils) {
     'use strict';
 
-    return (function() {
-
-        var launchLabForm = function() {
-            var formModel = new LabFormModel();
-            var options = {
-                onBeforeShow: function() {
-                    ADK.Messaging.getChannel('addOrders').trigger('visit:ready');
-                }
-            };
-            Utils.launchWorkflow(formModel, LabTrayView, options, 'Order a Lab Test', 'actions');
+    var launchLabTrayForm = function(options) {
+        var formModel = new LabFormModel(options);
+        var workflowOptions = {
+            onBeforeShow: function() {
+                ADK.Messaging.getChannel('addOrders').trigger('visit:ready');
+            }
         };
+        Utils.launchWorkflow(formModel, LabTrayView, workflowOptions, 'Order a Lab Test', 'actions');
+    };
 
-        return {
-            launchLabForm: launchLabForm
-        };
-    })();
+    /**
+     * Launch the lab order tray UI form for a new lab order.
+     */
+    var launchLabForm = function() {
+        launchLabTrayForm();
+    };
+
+    /**
+     * Launch the lab order tray UI form with the lab context preselected.
+     */
+    var launchContextLabOrderForm = function(context) {
+        if (context.cdsModel) {
+            launchLabTrayForm({
+                'contextIen': context.cdsModel.get('data').ien
+            });
+        }
+    };
+
+    /**
+     * Launch the lab order tray UI form for the draft order. This function will use workflow options
+     * that will load the draft order associated with the 'draftUid' parameter from the RDK Clinical Object
+     * subsystem and pre-populate the fields with the draft order information.
+     *
+     * @param {string} draftUid  Unique ID of the Clinical Object associated with the draft lab order of interest.
+     */
+    var launchDraftLabOrderForm = function(draftUid) {
+        launchLabTrayForm({
+            'draft-uid': draftUid
+        });
+    };
+
+    return {
+        launchLabForm: launchLabForm,
+        launchDraftLabOrderForm: launchDraftLabOrderForm,
+        launchContextLabOrderForm: launchContextLabOrderForm
+    };
 });

@@ -3,6 +3,7 @@ define(function() {
 
     var addVitalsConfig = {
         id: "add-vitals",
+        context: 'patient',
         contentRegionLayout: "gridOne",
         appletHeader: "patient",
         applets: [{

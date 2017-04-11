@@ -6,7 +6,7 @@ var constants = require('../../common/utils/constants');
 var _ = require('lodash');
 var diagnosticOrderResource = require('./diagnostic-order-resource');
 var diagnosticOrder = require('./diagnostic-order');
-var fhirConversion = require('../../common/utils/fhir-converter');
+var fhirUtils = require('../../common/utils/fhir-converter');
 var input = require('./diagnostic-order-resource-spec-data').inputValue;
 var singleRecord = input.data.items[0];
 
@@ -169,7 +169,7 @@ function testDiagnosticOrderConversion(vprItem, fhirItem, fhirBundle) {
         expect(fhirItem.event.length).to.equal(1);
         expect(fhirItem.event[0].status).to.equal(fhirItem.status);
         expect(fhirItem.event[0].description).to.equal(vprItem.content);
-        expect(fhirItem.event[0].dateTime).to.equal(fhirConversion.convertToFhirDateTime(vprItem.entered));
+        expect(fhirItem.event[0].dateTime).to.equal(fhirUtils.convertToFhirDateTime(vprItem.entered, fhirUtils.getSiteHash(vprItem.uid)));
     });
     it('sets item correctly', function() {
         expect(fhirItem.item).to.not.be.undefined();
@@ -180,7 +180,7 @@ function testDiagnosticOrderConversion(vprItem, fhirItem, fhirBundle) {
             expect(fhirItem.item[0].code).to.not.be.undefined();
             expect(fhirItem.item[0].code.coding).to.not.be.undefined();
             expect(fhirItem.item[0].code.coding.length).to.equal(1);
-            expect(fhirItem.item[0].code.coding[0].system).to.equal('oi-code');
+            expect(fhirItem.item[0].code.coding[0].system).to.equal('urn:oid:2.16.840.1.113883.6.233');
             expect(fhirItem.item[0].code.coding[0].code).to.equal(vprItem.oiCode);
             expect(fhirItem.item[0].code.coding[0].display).to.equal(vprItem.oiName);
             expect(fhirItem.item[0].code.coding[0].extension).to.not.be.undefined();
@@ -289,3 +289,39 @@ function testDiagnosticOrderConversion(vprItem, fhirItem, fhirBundle) {
         });
     });
 }
+
+describe('Condition FHIR conformance', function() {
+
+    var conformanceData = diagnosticOrderResource.createDiagnosticOrderConformanceData();
+
+    it('conformance data is returned', function() {
+        expect(conformanceData.type).to.equal('diagnosticOrder');
+        expect(conformanceData.profile.reference).to.equal('http://hl7.org/fhir/2015MAY/diagnosticorder.html');
+
+        expect(conformanceData.interaction.length).to.equal(2);
+        expect(conformanceData.interaction[0].code).to.equal('read');
+        expect(conformanceData.interaction[1].code).to.equal('search-type');
+    });
+
+    it('conformance data searchParam is returned', function() {
+
+        expect(conformanceData.searchParam.length).to.equal(4);
+
+        expect(conformanceData.searchParam[0].name).to.equal('subject.identifier');
+        expect(conformanceData.searchParam[0].type).to.equal('string');
+        expect(conformanceData.searchParam[0].definition).to.equal('http://hl7.org/FHIR/2015May/datatypes.html#string');
+
+        expect(conformanceData.searchParam[1].name).to.equal('pid');
+        expect(conformanceData.searchParam[1].type).to.equal('string');
+        expect(conformanceData.searchParam[1].definition).to.equal('http://hl7.org/FHIR/2015May/datatypes.html#string');
+
+        expect(conformanceData.searchParam[2].name).to.equal('event-date');
+        expect(conformanceData.searchParam[2].type).to.equal('date');
+        expect(conformanceData.searchParam[2].definition).to.equal('http://hl7.org/fhir/2015MAY/datatypes.html#date');
+
+        expect(conformanceData.searchParam[3].name).to.equal('code');
+        expect(conformanceData.searchParam[3].type).to.equal('string');
+        expect(conformanceData.searchParam[3].definition).to.equal('http://hl7.org/FHIR/2015May/datatypes.html#string');
+
+    });
+});

@@ -15,13 +15,6 @@
 			"values": [
 			]
 		},
-		"fields": {
-			"name": "fields",
-			"paramType": "query",
-			"type": "string",
-			"values": [
-			]
-		},
 		"order": {
 			"name": "order",
 			"paramType": "query",

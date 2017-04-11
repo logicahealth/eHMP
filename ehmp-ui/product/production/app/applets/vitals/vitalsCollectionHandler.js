@@ -20,10 +20,13 @@ define([
                         attr.moreresultsCount = attr.oldValues.length - attr.limitedoldValues.length;
                     }
                 }
-                collection.models[i].set('tooltip', tooltip(attr),{silent: true});
+                collection.models[i].set('tooltip', tooltip(attr), {
+                    silent: true
+                });
             }
         },
         parseModel: function(response) {
+            var crsUtil = ADK.utils.crsUtil;
             response = Util.getObservedFormatted(response);
             response = Util.getFacilityColor(response);
             response = Util.getObservedFormattedCover(response);
@@ -38,21 +41,23 @@ define([
             response = Util.getReferenceRange(response);
             response = Util.getFormattedWeight(response);
             response = Util.getMetricResult(response);
+            response[crsUtil.crsAttributes.CRSDOMAIN] = crsUtil.domain.VITAL;
+            response = Util.getQualifiersNames(response);
             ADK.Enrichment.addFacilityMoniker(response);
             return response;
         },
         filterCollection: function(coll) {
             var KnownTypes = {
                 expanded: ['BP', 'P', 'R', 'T', 'PO2', 'PN', 'WT', 'HT', 'BMI', 'CG'],
-                summary: ['BP', 'P', 'R', 'T', 'PO2', 'PN', 'WT', 'BMI'],
-                gist: ['BPS', 'BPD', 'P', 'R', 'T', 'PO2', 'PN', 'WT', 'HT', 'BMI']
+                summary: ['BP', 'P', 'R', 'T', 'PO2', 'PN', 'WT', 'BMI', 'HT', 'CG'],
+                gist: ['BPS', 'BPD', 'P', 'R', 'T', 'PO2', 'PN', 'WT', 'HT', 'BMI', 'CG']
 
             };
             var _self = this;
             var resultColl = [];
             var knownTypes = KnownTypes[this.appletConfig.viewType];
 
-            if (coll.length === 0 && _self.dataGridOptions.appletConfig.viewType !== 'expanded'){
+            if (coll.length === 0 && _self.dataGridOptions.appletConfig.viewType !== 'expanded') {
                 return Util.setNoRecords(resultColl, knownTypes, knownTypes);
             }
 
@@ -76,8 +81,8 @@ define([
                 return allTypes.indexOf(el) != -1;
             });
 
-            if(_self.dataGridOptions.appletConfig.viewType === 'expanded'){
-                resultColl = _.sortBy(coll.models, function(model){
+            if (_self.dataGridOptions.appletConfig.viewType === 'expanded') {
+                resultColl = _.sortBy(coll.models, function(model) {
                     return model.get('observed');
                 });
                 resultColl = resultColl.reverse();
@@ -97,7 +102,7 @@ define([
                         _.each(newColl.models, function(model) {
                             var def = Util.defaults[type];
                             if (def) {
-                                model.set('observationType',model.get('observationType') || def.observationType);
+                                model.set('observationType', model.get('observationType') || def.observationType);
                             }
                         });
 
@@ -118,7 +123,7 @@ define([
                         }
                         switch (type) {
                             case 'WT':
-                                displayModel.set('graphOptions', gistConfiguration.graphOptions.BMI());
+                                displayModel.set('graphOptions', gistConfiguration.graphOptions.WT());
                                 break;
                             case 'BMI':
                                 displayModel.set('graphOptions', gistConfiguration.graphOptions.BMI());

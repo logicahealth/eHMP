@@ -1,5 +1,11 @@
-HMPEVNT ;SLC/MKB -- VistA event listeners
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;;Sep 01, 2011;Build 62
+HMPEVNT ;SLC/MKB,ASMR/JD,RRB,CPC -- VistA event listeners;May 31, 2016 14:15
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ ; DE2818 - SQA findings.
+ ;          1) Correct unkilled variables by modifying line tags to accept variables as
+ ;          parameters and modifying associated protocol routine calls to pass variables
+ ;          as parameters. RRB - 10/28/2015
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -25,10 +31,17 @@ HMPEVNT ;SLC/MKB -- VistA event listeners
  ; VASITE                       10112
  ; XLFDT                        10103
  ; XTHC10                        5515
+ Q
  ;
  ;Oct 15, 2015 - PB - modified to trigger an unsolicited sync action when an order is discontinued and the patient is subscribed to eHMP
+ ;DE3327 - 5/4/16 - JD - Removed the server hardcoding (hmp-development-box).
+ ;                       *** NOTE ***
+ ;                       It is understood that as of the date of modifying this code (5/4/16), there
+ ;                       is one AND ONLY one server entry in the HMP Subscription file (#800000)
+ ;                       per site.  This will be fixed in future releases to accommodate multiple
+ ;                       servers per site.
  ;
-DG ; -- DG FIELD MONITOR protocol listener
+DG(DGDA,DGFIELD,DGFILE) ; -- DG FIELD MONITOR protocol listener  /DE2818 
  Q:$G(DGFILE)'=2         ;Patient file only
  N DFN S DFN=+$G(DGDA)
  ; operational pt-select - *s68 BEGIN
@@ -46,9 +59,16 @@ FLD(X) ; --Return 1 or 0, if X is a field tracked by HMP
  I "^.111^.1112^.112^.113^.114^.115^.131^.132^.134^"[X Q 1  ;addr/phone
  I "^.211^.212^.213^.214^.216^.217^.218^.219^"[X Q 1        ;NOK
  I "^.301^.302^1901^.32102^.32103^.32201^.5295^"[X Q 1      ;serv conn
+ ;New fields.  JD - 9/24/15
+ I "^.133^"[X Q 1                                           ;email address
+ I "^.1211^.1212^.1213^.1214^.1215^.1216^"[X Q 1            ;temporary address
+ I "^.331^.332^.333^.334^.335^.336^.337^.338^.339^.33011^"[X Q 1  ;emergency contact addr/phone
+ I "^.215^.21011^"[X Q 1                                    ;NOK addr line 3 and work phone
+ I "^.3731^"[X Q 1                                          ;service connected conditions
+ I "^.18^3^8^16^"[X Q 1                                     ;insurance  
  Q 0
  ;
-DGPM ; -- DGPM MOVEMENT EVENTS protocol listener
+DGPM(DGPMA,DGPMDA,DGPMP,DGPMT) ; -- DGPM MOVEMENT EVENTS protocol listener  /DE2818
  ;    [expects DFN,DGPM* variables]
  N ADM,ACT S ADM=DGPMDA
  I DGPMT'=1 S ADM=$S(DGPMA:$P(DGPMA,U,14),1:$P(DGPMP,U,14)) Q:ADM<1
@@ -84,21 +104,22 @@ NEWINPT() ; -- is DFN newly admitted?
  I DGPMT=1,DGPMA,'DGPMP,+$G(^DPT(DFN,.105))=DGPMDA S Y=1 ;new admission
  Q Y
  ;
-PCMMT ; -- SCMC PATIENT TEAM CHANGES protocol listener
+PCMMT(SCPTTMAF,SCPTTMB4) ; -- SCMC PATIENT TEAM CHANGES protocol listener /DE2818
  I '$P($G(SCPTTMB4),U,8),'$P($G(SCPTTMAF),U,8) Q  ;not pc change
  N DFN S DFN=$S($G(SCPTTMAF):+SCPTTMAF,1:+$G(SCPTTMB4)) Q:'DFN
  D POST(DFN,"patient",DFN)
  Q
  ;
-PCMMTP ; -- SCMC PATIENT TEAM POSITION CHANGES protocol listener
+PCMMTP(SCPTTPAF,SCPTTPB4) ; -- SCMC PATIENT TEAM POSITION CHANGES protocol listener /DE2818
  I '$P($G(SCPTTPB4),U,5),'$P($G(SCPTTPAF),U,5) Q  ;not pc change
  N TM,DFN
  S TM=$S($G(SCPTTPAF):+SCPTTPAF,1:+$G(SCPTTPB4)) Q:'TM
- S DFN=+$G(^SCPT(404.42,+TM,0)) ;$$GET1^DIQ(404.42,TM_",",.01,"I")
+ ;DE2818
+ S DFN=$$GET1^DIQ(404.42,+TM_",",.01,"I")  ;ICR 1922
  D POST(DFN,"patient",DFN)
  Q
  ;
-SDAM ; -- SDAM APPOINTMENT EVENTS protocol listener
+SDAM(SDATA) ; -- SDAM APPOINTMENT EVENTS protocol listener /DE2818
  I $G(SDATA) D  Q  ;appointments
  . N DFN,DATE,HLOC,STS,REASON,PROV
  . S DFN=+$P(SDATA,U,2) Q:DFN<1
@@ -110,18 +131,27 @@ SDAM ; -- SDAM APPOINTMENT EVENTS protocol listener
  Q
  ;
 PCE ; -- PXK VISIT DATA EVENT protocol listener
- N IEN,PX0A,PX0B,DFN,DA,ACT
+ N IEN,PX0A,PX0B,DFN,DA,ACT,HMPPXK,ZTRTN,ZTDESC,ZTDTH,ZTIO,ZTSAVE,ZTSK ;DE4195
  S IEN=+$O(^TMP("PXKCO",$J,0)) Q:IEN<1
  S PX0A=$G(^TMP("PXKCO",$J,IEN,"VST",IEN,0,"AFTER")),PX0B=$G(^("BEFORE"))
  S DFN=$S($L(PX0A):+$P(PX0A,U,5),1:+$P(PX0B,U,5))
  Q:DFN<1  Q:'$D(^HMP(800000,"AITEM",DFN))
  ; Visit file
  S ACT=$S(PX0A="":"@",1:"")
+ ;DE4195 - put subsequent processing into taskman
+ M HMPPXK=^TMP("PXKCO",$J)
+ S ZTRTN="PCE2^HMPEVNT",ZTDTH=$H
+ S ZTSAVE("HMPPXK(")="",ZTSAVE("DFN")="",ZTSAVE("IEN")="",ZTSAVE("ACT")=""
+ S ZTDESC="HMP PXK VISIT EVENT HANDLER"
+ D ^%ZTLOAD
+ Q
+PCE2 ; DE4195 - run in taskman
+ N DA,SUB
  D POST(DFN,"visit",IEN,ACT)
  ; check V-files
  F SUB="HF","IMM","XAM","CPT","PED","POV","SK" D
- . S DA=0 F  S DA=$O(^TMP("PXKCO",$J,IEN,SUB,DA)) Q:DA<1  D
- .. S ACT=$S($G(^TMP("PXKCO",$J,IEN,SUB,DA,0,"AFTER"))="":"@",1:"")
+ . S DA=0 F  S DA=$O(HMPPXK(IEN,SUB,DA)) Q:DA<1  D
+ .. S ACT=$S($G(HMPPXK(IEN,SUB,DA,0,"AFTER"))="":"@",1:"")
  .. D POST(DFN,$$NAME(SUB),DA,ACT)
  Q
  ;
@@ -263,6 +293,7 @@ MDC(OBS) ; -- MDC OBSERVATION UPDATE protocol listener
  ;
 CP(DFN,ID,ACT) ; -- CP Transaction file #702 AHMP index
  S DFN=+$G(DFN),ID=$G(ID)
+ D POST(DFN,"document",ID,$G(ACT)) ;de3944 also need to generate document for procedure to link results to
  D POST(DFN,"procedure",ID,$G(ACT))
  Q
  ;
@@ -276,19 +307,18 @@ TIU(DFN,IEN) ; -- TIU Document file #8925 AHMP index
  S DFN=+$G(DFN),IEN=+$G(IEN),ACT=""
  S STS=$G(X(2)),DAD=$G(X(3)) ;X = FM data array for index
  S:DAD IEN=DAD I 'DAD D      ;if addendum, repull entire note
- . I STS=15 S ACT="@"        ;retracted
+ . ;I STS=15 S ACT="@"       ;retracted; DE3693 - do not delete note from JDS if retracted, March 18, 2016
  . I $G(X2(1))="" S ACT="@"  ;deleted (new title = null)
  D POST(DFN,"document",IEN,ACT)
  ;DE3241 - If TIU update changes CWADF values, trigger patient update so change get in fresh. stream
  ;If this note has a parent document type of "CLINICAL WARNING", "CRISIS NOTE", or "ADVANCE DIRECTIVE"...
  ;parent document type is "Document Class"...
  ;AND this note's status is COMPLETED or AMENDED
- ;THEN this document updates the C, W, or D CWADF values and patient fresh. stream update needs to be triggered
+ ;THEN this document may update the C, W, or D CWADF values and patient fresh. stream update needs to be triggered
  N DADTYPE,DADNAME,STATUS
  S DADTYPE=$$GET1^DIQ(8925,IEN_",",".04","I") Q:'DADTYPE  Q:$$GET1^DIQ(8925.1,DADTYPE_",",".04","I")'="DC"
  S DADNAME=$$GET1^DIQ(8925.1,DADTYPE_",",".01")
  I $S(DADNAME="CLINICAL WARNING":0,DADNAME="CRISIS NOTE":0,DADNAME="ADVANCE DIRECTIVE":0,1:1) Q
- S STATUS=$$GET1^DIQ(8925,IEN_",",".05","I") Q:'(STATUS=7!(STATUS=8))
  D POST(DFN,"patient",DFN)
  Q
  ; Deprecated calls
@@ -297,7 +327,7 @@ DOCITEM ;
 USR ;
  Q
  ; *s68 - END
-PSB ; -- HMP PSB EVENTS protocol listener (BCMA)
+PSB(PSBIEN) ; -- HMP PSB EVENTS protocol listener (BCMA) /DE2818
  N IEN,DFN,ORPK,TYPE,ORIFN
  S IEN=$S($P($G(PSBIEN),",",2)'="":+$P(PSBIEN,",",2),$G(PSBIEN)="+1":+$G(PSBIEN(1)),1:+$G(PSBIEN))
  S DFN=+$G(^PSB(53.79,IEN,0)),ORPK=$P($G(^(.1)),U)
@@ -362,7 +392,9 @@ DGREG ; register a newly registered patient in eHMP during the initial registrat
  I $G(X)'=1 D POSTX(DFN,"patient",DFN) Q  ; Do pt-select
  I $G(X)=1 D
  .Q:$D(^HMP(800000,"AITEM",DFN))  ; Quit if the patient has already been added to the eHMP subscription
- .S ARGS("command")="putPtSubscription",ARGS("server")="hmp-development-box",ARGS("localId")=$G(DFN)
+ .S ARGS("command")="putPtSubscription",ARGS("localId")=$G(DFN)
+ .;DE3327
+ .I '$L($G(ARGS("server"))) S ARGS("server")=$P($G(^HMP(800000,1,0)),"^")  ; See comments at the top
  .D API^HMPDJFS(.RSLT,.ARGS) D POSTX(DFN,"patient",DFN)  ; add patient to HMP(800000 and if patient is added, add patient to the freshness stream
  .K ARGS,RSLT
  K X

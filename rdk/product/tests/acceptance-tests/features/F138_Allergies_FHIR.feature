@@ -37,8 +37,8 @@ Scenario: Client can request free text allergies in FHIR format
             | content.contained.type.coding.code    | urn:va:vuid:                                     |
             | content.contained.type.coding.display | MILK, ICE CREAM, YOGURT ( FREE TEXT )            |
             | content.contained.type.text           | MILK, ICE CREAM, YOGURT ( FREE TEXT )            |
-
-
+        And FHIR date and time conver to Zulu format for Allergies
+      
 @US2345_fhir_observed @fhir @5000000341V359724
 Scenario: Client can request observed allergies in FHIR format
       Given a patient with "allergies" in multiple VistAs

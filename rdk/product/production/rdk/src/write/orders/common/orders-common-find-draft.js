@@ -7,7 +7,7 @@ var clinicalObject = require('../../../subsystems/clinical-objects/clinical-obje
  */
 module.exports = function(writebackContext, callback) {
 
-    writebackContext.model.domain = 'ehmpOrder';
+    writebackContext.model.domain = 'order';
     writebackContext.model.ehmpState = 'draft';
 
     clinicalObject.find(writebackContext.logger, writebackContext.appConfig,

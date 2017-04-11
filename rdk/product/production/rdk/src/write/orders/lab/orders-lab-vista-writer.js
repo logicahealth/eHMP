@@ -181,7 +181,9 @@ function saveOrder(updateJds, writebackContext, rpcClient, callback) {
                     msg = err.message;
                 }
 
-                writebackContext.vprResponse = JSON.stringify({data:msg});
+                writebackContext.vprResponse = JSON.stringify({
+                    data: msg
+                });
                 return callback(null);
             }
 
@@ -206,7 +208,7 @@ function getParameters(model) {
     if (model && model.dfn && model.provider && model.location && model.inputList) {
         parameters.push(model.dfn);
         parameters.push(model.provider);
-        parameters.push(model.location);
+        parameters.push(model.location.split(':').pop());
         parameters.push(model.orderDialog);
         parameters.push(model.displayGroup);
         parameters.push(model.quickOrderDialog);

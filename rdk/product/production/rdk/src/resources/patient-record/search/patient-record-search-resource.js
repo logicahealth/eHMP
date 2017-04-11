@@ -10,6 +10,7 @@ module.exports.getResourceConfig = function () {
         {
             name: 'patient-record-search-text',
             path: '/text',
+            interceptors: {convertPid: true},
             get: textSearch,
             description: textSearch.description,
             subsystems: ['authorization','jds','solr','jdsSync'],

@@ -49,7 +49,7 @@ Scenario: Client should get error message when invalid EIE Reason entered for Vi
   
 # @vital_writeback 
 # Scenario: Client can mark a Vital record as Entered in Error in the VistA
-  # Given a patient with pid "C877;253" has been synced through VX-Sync API for "9E7A;C877;2939;FFC7;VLER" site(s)
+  # Given a patient with pid "C877;253" has been synced through VX-Sync API for "9E7A;C877;HDR;VLER" site(s)
   # And the client requests "VITALS" for the patient "C877;253" in VPR format
   # And save the totalItems
   # And a client connect to VistA using "Kodak"

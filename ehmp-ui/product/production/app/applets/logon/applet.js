@@ -65,8 +65,9 @@ define([
             if (fp.facility && fp.accessCode && fp.verifyCode && (fp.facility !== "noneSelected")) {
 
                 var onSuccessfulLogin = function() {
+
                     ADK.ADKApp.initAllRouters();
-                    ADK.Navigation.navigate(ADK.ADKApp.userSelectedDefaultScreen);
+                    ADK.Navigation.navigate(ADK.WorkspaceContextRepository.userDefaultScreen);
                 };
 
                 var thisItemView = this;
@@ -75,7 +76,7 @@ define([
                         console.log('Error logging in', error);
                     }
                     if (error) {
-                        switch (error.status) {
+                        switch (error.status) { 
                             case 303:
                             case 401:
                                 if (error.responseText) {
@@ -88,8 +89,8 @@ define([
                                 } else {
                                     thisItemView.$el.find('#errorMessage').html('Authentication error.');
                                 }
-
                                 thisItemView.$el.find('form').addClass('has-error');
+                                thisItemView.$el.find('#accessCode').focus();
                                 break;
                             case 403:
                                 if (error.responseText) {
@@ -100,12 +101,12 @@ define([
                                         errorMessageForbidden = errorMessageForbidden.errorMessage;
                                     thisItemView.$el.find('#errorMessage').html(errorMessageForbidden);
                                 } else {
-                                    thisItemView.$el.find('#errorMessage').html('You are not an authorized user of eHMP. Please contact your local access control coordinator (ACC) for assistance.');
+                                    thisItemView.$el.find('#errorMessage').html('You are not an authorized user of eHMP. Contact your local access control coordinator (ACC) for assistance.');
                                 }
                                 thisItemView.$el.find('form').addClass('has-error');
                                 break;
                             case 503:
-                                thisItemView.$el.find('#errorMessage').html('SYNC NOT COMPLETE. Please try again in a few minutes.');
+                                thisItemView.$el.find('#errorMessage').html('SYNC NOT COMPLETE. Try again in a few minutes.');
                                 thisItemView.$el.find('#errorMessage').addClass('alert-info text-info');
                                 break;
                             default:
@@ -127,7 +128,7 @@ define([
 
             } else {
                 this.$el.find('form').addClass('has-error');
-                this.$el.find('#errorMessage').html("Please ensure all fields have been entered");
+                this.$el.find('#errorMessage').html("Ensure all fields have been entered");
                 //enable login button
                 login.button('reset');
 

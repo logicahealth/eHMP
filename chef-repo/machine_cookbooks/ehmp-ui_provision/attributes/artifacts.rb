@@ -5,7 +5,7 @@
 
 default[:'ehmp-ui_provision'][:artifacts] = {
 	:'ehmp-ui' => {
-		:repo => "ehmp",
+		:repo => "releases",
   	:group => "us.vistacore.ehmp-ui",
   	:artifact => "ehmp-ui",
   	:extension => "zip",
@@ -13,7 +13,7 @@ default[:'ehmp-ui_provision'][:artifacts] = {
     :release => true
   },
   :adk => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.adk",
     :artifact => "adk",
     :extension => "tgz",

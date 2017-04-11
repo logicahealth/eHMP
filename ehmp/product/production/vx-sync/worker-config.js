@@ -2,7 +2,8 @@
 var nconf = require('nconf');
 require('./env-setup');
 var _ = require('underscore');
-var queueConfig = require(global.VX_JOBFRAMEWORK + 'queue-config.js');
+var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
+var workerConfigUtil = require(global.VX_UTILS + 'worker-config-utils');
 
 nconf
 	.argv()
@@ -10,6 +11,12 @@ nconf
 	.file('conf', './worker-config.json');
 
 var config = nconf.get('vxsync');
+
+
+// Create an index to VistA Sites via station number.
+//----------------------------------------------------
+config = workerConfigUtil.createVistaSitesByStationCombined(config);
+
 var cachedConfig = JSON.stringify(config);
 var configChangeCallback = null;
 
@@ -27,56 +34,66 @@ if(config.configRefresh && config.configRefresh > 0) {
 }
 
 function reloadConfig() {
-    var newconfig;
-    nconf.remove('conf');
-    nconf.add('conf', {type:'file', file: './worker-config.json'});
-    newconfig = nconf.get('vxsync');
-    var refreshTime = config.configRefresh;
-    var vistaSitesChanged = false;
-    // console.log('refreshing config');
-    //if file refresh changed, redo the file polling
-    if(newconfig.configRefresh !== config.configRefresh) {
-        console.log('updating refresh timer');
-        clearInterval(reloadTimer);
-        reloadTimer = setInterval(reloadConfig, newconfig.configRefresh);
-    }
-    if( JSON.stringify(newconfig.vistaSites) !== JSON.stringify(config.vistaSites) ) {
-        console.log('vista site change found');
-        vistaSitesChanged = true;
-    }
-    //update configuration with new settings
-    var newConfigString = JSON.stringify(newconfig);
-    if(cachedConfig !== newConfigString) {
-        console.log('updating config');
-        var keys = _.keys(newconfig);
-        _.each(keys, function(key){
-            config[key] = newconfig[key];
-        });
-        config.beanstalk = queueConfig.createFullBeanstalkConfig(config.beanstalk);
-        cachedConfig = newConfigString;
-    }
-    //run any registered callbacks
-    if(configChangeCallback !== null) {
-        if(vistaSitesChanged) {
-            console.log('running callbacks');
-            _.each(configChangeCallback, function(callbackConfig){
-                    var delay = refreshTime; //use the old refresh time to ensure cross process coordination
-                    if(!callbackConfig.useDelay) {
-                        delay = 0;
-                    }
-                    setTimeout(callbackConfig.function, delay);
-                }
-            );
+    try {
+        if(config.configOverride){
+            console.log('Config overridden. Cancelling refresh.');
+            clearInterval(reloadTimer);
+            return;
         }
-    }
+
+        var newconfig;
+        nconf.remove('conf');
+        nconf.add('conf', {type:'file', file: './worker-config.json'});
+        newconfig = nconf.get('vxsync');
+
+        // Create an index to VistA Sites via station number.
+        //----------------------------------------------------
+        newconfig = workerConfigUtil.createVistaSitesByStationCombined(newconfig);
+
+        var refreshTime = config.configRefresh;
+        var configChange = false;
+        // console.log('refreshing config');
+        //if file refresh changed, redo the file polling
+        if(newconfig.configRefresh !== config.configRefresh) {
+            console.log('updating refresh timer');
+            clearInterval(reloadTimer);
+            reloadTimer = setInterval(reloadConfig, newconfig.configRefresh);
+        }
+        //update configuration with new settings
+        var newConfigString = JSON.stringify(newconfig);
+        if(cachedConfig !== newConfigString) {
+            console.log('Config changed - updating in-memory instances of config');
+            var keys = _.keys(newconfig);
+            _.each(keys, function(key){
+                config[key] = newconfig[key];
+            });
+            config.beanstalk = queueConfig.createFullBeanstalkConfig(config.beanstalk);
+            cachedConfig = newConfigString;
+            configChange = true;
+        }
+        //run any registered callbacks
+        if(configChangeCallback !== null) {
+            if(configChange) {
+                console.log('running callbacks');
+                _.each(configChangeCallback, function(callbackConfig){
+                        var delay = refreshTime; //use the old refresh time to ensure cross process coordination
+                        if(!callbackConfig.useDelay) {
+                            delay = 0;
+                        }
+                        setTimeout(callbackConfig.function, delay);
+                    }
+                );
+            }
+        }
+    } catch (e) {}
 }
 
-function addChangeCallback(callback , useDelay) {
+function addChangeCallback(requesterName, callback , useDelay) {
     if(configChangeCallback === null) {
         configChangeCallback = [];
     }
-    // console.log('registering config change callback');
-    configChangeCallback.push({function: callback, delay: (useDelay || true)});
+    console.log('Registering config change callback: requesterName: %s', requesterName);
+    configChangeCallback.push({requesterName: requesterName, function: callback, delay: (useDelay || true)});
 }
 
 

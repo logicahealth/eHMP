@@ -2,15 +2,13 @@
 
 ## Visit service category [{{{path}}}]
 
-### Get [GET {{{path}}}/serviceCategory{?locationIEN}{&patientStatus}{&fields}]
+### Get [GET {{{path}}}/serviceCategory{?locationIEN}{&patientStatus}]
 
 + Parameters
 
     + locationIEN (string, required) - Location IEN
 
     + patientStatus (string, required) - Patient status
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

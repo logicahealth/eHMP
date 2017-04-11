@@ -59,3 +59,4 @@ Feature: F361 FHIR Domain - MedicationDispense
          | resource.dosageInstruction.route.coding.display               | Oral |
          | resource.dosageInstruction.doseQuantity.value                 | 50   |
          | resource.dosageInstruction.doseQuantity.units                 | MG   |
+         And FHIR date and time conver to Zulu format for Medication Dispense

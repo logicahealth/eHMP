@@ -17,6 +17,7 @@ define([
     var allEncounterDateArray = [];
     var viewParseModel = {
         parse: function(response) {
+
             response = Util.getStandardizedDescription(response);
             response = Util.getStatusName(response);
             response = Util.getServiceConnected(response);
@@ -38,7 +39,7 @@ define([
             resourceTitle: 'patient-record-problem',
             pageable: false,
             criteria: {
-                filter: 'ne(removed, true),eq(statusName,"ACTIVE")'
+                filter: 'ne(removed, true)'
             },
             cache: true,
             viewModel: viewParseModel
@@ -47,12 +48,27 @@ define([
         transformCollection: function(collection) {
             var ProblemGroupModel = Backbone.Model.extend({});
             var problemGroupsCollection = collection;
-            problemGroupsCollection.comparator = function(problem) {
-                return -problem.get("timeSinceDate");
+            var instanceId = this.options.instanceId;
+            problemGroupsCollection.comparator = function(problemOne, problemTwo) {
+                if (problemOne.get('statusName') === problemTwo.get('statusName')) {
+                    if (problemOne.get('timeSinceDate') > problemTwo.get('timeSinceDate')) {
+                        return -1;
+                    } else if (problemOne.get('timeSinceDate') < problemTwo.get('timeSinceDate')) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    if (problemOne.get('statusName') === 'Active') {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                }
             };
             var encounterDateArray, problemGroup_EncounterCount;
             //group collection of models by standardizedDescription
-            var groups = collection.groupBy(function(problem) {
+            var groups = problemGroupsCollection.groupBy(function(problem) {
                 return Util.getProblemGroupByData(problem).groupbyValue;
             });
             //map grouped problems and return the models
@@ -62,6 +78,19 @@ define([
                 return new ProblemGroupModel({
                     groupName: groupName,
                     probs: problems,
+                    serviceConnected: problems[0].get('serviceConnected'),
+                    militarySexualTrauma: problems[0].get('militarySexualTrauma'),
+                    militarySexualTraumaBool: problems[0].get('militarySexualTrauma') === 'YES',
+                    persianGulfExposure: problems[0].get('persianGulfExposure'),
+                    persianGulfExposureBool: problems[0].get('persianGulfExposure') === 'YES',
+                    radiationExposure: problems[0].get('radiationExposure'),
+                    radiationExposureBool: problems[0].get('radiationExposure') === 'YES',
+                    shipboardHazard: problems[0].get('shipboardHazard'),
+                    shipboardHazardBool: problems[0].get('shipboardHazard') === 'YES',
+                    headNeckCancer: problems[0].get('headNeckCancer'),
+                    headNeckCancerBool: problems[0].get('headNeckCancer') === 'YES',
+                    agentOrangeExposure: problems[0].get('agentOrangeExposure'),
+                    agentOrangeExposureBool: problems[0].get('agentOrangeExposure') === 'YES',
                     allGroupedComments: [],
                     acuityName: problems[0].get('acuityName'),
                     statusName: problems[0].get('statusDisplayName'),
@@ -76,20 +105,28 @@ define([
                     encounters: problems[0].get('encounters'),
                     problemText: problems[0].get('problemText'),
                     locationName: problems[0].get('locationName'),
+                    service: problems[0].get('service'),
+                    providerUid: problems[0].get('providerUid'),
                     facilityMoniker: problems[0].get('facilityMoniker'),
                     pid: problems[0].get('pid'),
                     summary: problems[0].get('summary'),
                     icdCode: problems[0].get('icdCode'),
                     snomedCode: problems[0].get('snomedCode'),
+                    onset: problems[0].get('onset'),
                     onsetFormatted: problems[0].get('onsetFormatted'),
                     providerDisplayName: problems[0].get('providerDisplayName'),
                     facilityName: problems[0].get('facilityName'),
+                    locationUid: problems[0].get('locationUid'),
                     locationDisplayName: problems[0].get('locationDisplayName'),
                     updated: problems[0].get('updated'),
                     comments: problems[0].get('comments'),
                     timeSinceDate: problems[0].get('timeSinceDate'),
+                    codes: problems[0].get('codes'),
                     applet_id: "problems",
-                    allGroupedEncounters: []
+                    instanceId: instanceId,
+                    allGroupedEncounters: [],
+                    crsDomain: ADK.utils.crsUtil.domain.PROBLEM,
+                    lexiconCode: problems[0].get('lexiconCode')
                 });
             });
             problemGroupsCollection.reset(problemGroups);
@@ -129,7 +166,7 @@ define([
                         for (var s = 0; s < problem.get('encounters').length; s++) {
                             var encounter = problem.get('encounters')[s];
 
-                            var _date  = encounter.dateTime + '';
+                            var _date = encounter.dateTime + '';
                             _date = _date.substr(0, 8);
                             var _slashDate = _date.replace(/(\d{4})(\d{2})(\d{2})/, "$2/$3/$1");
 
@@ -149,7 +186,7 @@ define([
                         allEncounterDateArray.push(moment(problemGroup.get('timeSinceDate'), "YYYYMMDD").format("YYYYMMDD"));
                         problemGroup.get('allGroupedEncounters').push({
                             dateTime: moment(problemGroup.get('timeSinceDate'), "YYYYMMDD").format("MM/DD/YYYY"),
-                            stopCodeName: problemGroup.get('facilityMoniker'),
+                            stopCodeName: problem.get('facilityMoniker'),
                             problemText: problemGroup.get('problemText'),
                             acuity: problemGroup.get('acuityName')
                         });
@@ -274,6 +311,7 @@ define([
                 binningOptions: gistConfiguration.binningOptions,
                 onClickRow: this.onClickRow,
                 showLinksButton: true,
+                showCrsButton: true,
                 AppletView: ExtendedGistView
             };
 
@@ -282,7 +320,21 @@ define([
                     event.preventDefault();
                     onAddProblems();
                 };
+
             }
+
+            if (ADK.UserService.hasPermission('edit-condition-problem') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
+                this.appletOptions.showEditButton = true;
+                this.appletOptions.disableNonLocal = true;
+            }
+
+            this.listenTo(ADK.Messaging.getChannel('problems'), 'editView', function(channelObj) {
+                var existingProblemModel = channelObj.model;
+                if (existingProblemModel.get('instanceId') === this.options.appletConfig.instanceId) {
+                    ADK.UI.Modal.hide();
+                    WorkflowUtils.startEditProblemsWorkflow(AddEditProblemsView, existingProblemModel);
+                }
+            });
 
             ADK.Messaging.getChannel('problems').on('detailView', function(params) {
                 var model = params.model;
@@ -303,27 +355,13 @@ define([
                 var response = $.Deferred();
                 var modalOptions = {
                     'title': Util.getModalTitle(model),
-                    'size': 'large',
+                    'size': 'normal',
                     'headerView': modalHeader.extend({
                         model: model,
                         theView: view
                     }),
                     'footerView': modalFooter.extend({
-                        model: model,
-                        onRender: function() {
-                            this.$el.find('.problemsTooltip').tooltip();
-                        },
-                        templateHelpers: function() {
-                            if ((ADK.UserService.hasPermission('edit-patient-problem') || ADK.UserService.hasPermission('remove-patient-problem')) && pidSiteCode === siteCode) {
-                                return {
-                                    data: true
-                                };
-                            } else {
-                                return {
-                                    data: false
-                                };
-                            }
-                        }
+                        model: model
                     })
                 };
                 var modal = new ADK.UI.Modal({
@@ -340,9 +378,21 @@ define([
 
             this._super.initialize.apply(this, arguments);
         },
-
+        events: {
+            'toolbar.show': function(event) {
+                ADK.utils.crsUtil.removeStyle(this);
+            },
+            'toolbar.hide': function(event) {
+                if (this.$(event.target).closest('.table-row-toolbar').data('code') === this.$(document.activeElement).closest('.table-row-toolbar').data('code')) {
+                    ADK.utils.crsUtil.removeStyle(this);
+                }
+            }
+        },
         onBeforeDestroy: function() {
             ADK.Messaging.getChannel('problems').off('detailView');
+        },
+        onDestroy: function() {
+            ADK.utils.crsUtil.removeStyle(this);
         }
     });
 

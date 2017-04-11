@@ -2,7 +2,7 @@
 
 var _ = require('underscore');
 
-var inspect = require(global.VX_UTILS + 'inspect');
+// var inspect = require(global.VX_UTILS + 'inspect');
 
 var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
@@ -54,9 +54,14 @@ SourceSyncJobFactory.prototype.createVerifiedJobs = function(patientIdentifiers,
     self.log.debug('source-sync-job-factory.createVerifiedJobs: SourceSyncJobFactory.createVerifiedJobs().  patientIdentifiers that we are starting with.  patientIdentifiers: %j', patientIdentifiers);
 
     self.engine.getSyncPatientIdentifiers(patientIdentifiers, self.job.forceSync, function(err, patientIdentifiers){
-        self.log.debug('source-sync-job-factory.createVerifiedJobs: patientIdentifiers returned from rules engine.  patientIdentifiers: %j', patientIdentifiers);
-        var jobsToPublish = createJobsToPublish(self, patientIdentifiers);
-        callback(null, jobsToPublish);
+        self.log.debug('source-sync-job-factory.createVerifiedJobs: patientIdentifiers returned from rules engine.  patientIdentifiers: %j, error: %j', patientIdentifiers, err);
+        if (_.isEmpty(err)) {
+            var jobsToPublish = createJobsToPublish(self, patientIdentifiers);
+            self.log.debug('source-sync-job-factory.createVerifiedJobs: jobsToPublish: %j', jobsToPublish);
+            callback(null, jobsToPublish);
+        } else if (err === 'NO_OPDATA') {
+            callback(err);
+        }
     });
 };
 
@@ -188,10 +193,7 @@ function createVistaJobs(self, patientIdentifiers) {
     return _.map(patientIdentifiers, function(patientId) {
         var meta;
         if (self.job) {
-            meta = {
-                jpid: self.job.jpid,
-                rootJobId: self.job.rootJobId
-            };
+            meta = _createMetaForJob(self.job);
         }
         var newJob = jobUtil.createVistaSubscribeRequest(idUtil.extractSiteFromPid(patientId.value), patientId, meta);
         return newJob;
@@ -209,10 +211,7 @@ function createVistaHdrJobs(self, patientIdentifiers) {
     return _.map(patientIdentifiers, function(patientId) {
         var meta;
         if (self.job) {
-            meta = {
-                jpid: self.job.jpid,
-                rootJobId: self.job.rootJobId
-            };
+            meta = _createMetaForJob(self.job);
         }
         var newJob = jobUtil.createVistaHdrSubscribeRequest(idUtil.extractSiteFromPid(patientId.value), patientId, meta);
         return newJob;
@@ -229,10 +228,7 @@ function createVistaHdrJobs(self, patientIdentifiers) {
 function createVlerJob(self, patientIdentifier) {
     var meta;
     if (self.job) {
-        meta = {
-            jpid: self.job.jpid,
-            rootJobId: self.job.rootJobId
-        };
+        meta = _createMetaForJob(self.job);
     }
     var vler = jobUtil.createVlerSyncRequest(patientIdentifier, meta);
     self.log.debug('createVlerJob: sync request: %j with pid: %j', vler, patientIdentifier);
@@ -249,10 +245,7 @@ function createVlerJob(self, patientIdentifier) {
 function createPgdJob(self, patientIdentifier) {
     var meta;
     if (self.job) {
-        meta = {
-            jpid: self.job.jpid,
-            rootJobId: self.job.rootJobId
-        };
+        meta = _createMetaForJob(self.job);
     }
     var pgd = jobUtil.createPgdSyncRequest(patientIdentifier, meta);
     return pgd;
@@ -268,10 +261,7 @@ function createPgdJob(self, patientIdentifier) {
 function createHdrJob(self, patientIdentifier) {
     var meta;
     if (self.job) {
-        meta = {
-            jpid: self.job.jpid,
-            rootJobId: self.job.rootJobId
-        };
+        meta = _createMetaForJob(self.job);
     }
     var hdr = jobUtil.createHdrSyncRequest(patientIdentifier, meta);
     return hdr;
@@ -287,10 +277,7 @@ function createHdrJob(self, patientIdentifier) {
 function createJmeadowsJob(self, patientIdentifier) {
     var meta;
     if (self.job) {
-        meta = {
-            jpid: self.job.jpid,
-            rootJobId: self.job.rootJobId
-        };
+        meta = _createMetaForJob(self.job);
     }
     var jMeadows = jobUtil.createJmeadowsSyncRequest(patientIdentifier, meta);
     return jMeadows;
@@ -308,6 +295,18 @@ function isSecondarySiteDisabled(config, siteName) {
         return true;
     }
     return false;
+}
+
+//-----------------------------------------------------------------------------------------------
+// This utility function to create meta data based on job passed in
+//
+//-----------------------------------------------------------------------------------------------
+function _createMetaForJob(job) {
+    return {
+        jpid: job.jpid,
+        priority: job.priority || 1,
+        rootJobId: job.rootJobId
+    };
 }
 
 module.exports = SourceSyncJobFactory;

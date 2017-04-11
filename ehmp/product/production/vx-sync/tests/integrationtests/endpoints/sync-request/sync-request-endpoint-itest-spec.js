@@ -14,12 +14,11 @@ var log = require(global.VX_DUMMIES + '/dummy-logger');
 // Uncomment the following to see the logging out on the screen.
 //--------------------------------------------------------------
 // var logUtil = require(global.VX_UTILS + 'log');
-// logUtil.initialize([{
-//     name: 'root',
-//     stream: process.stdout,
-//     level: 'debug'
-// }]);
-// log = logUtil.get('test', 'debug');
+// log = logUtil._createLogger({
+//     name: 'test',
+//     level: 'debug',
+//     child: logUtil._createLogger
+// });
 //------------------------------------------
 // End of logging stuff to comment out....
 //------------------------------------------
@@ -36,6 +35,7 @@ var config = {
 		patientSyncDemoPath: '/sync/demographicSync',
 		patientUnsyncPath: '/sync/clearPatient',
 		patientStatusPath: '/sync/status',
+        patientSyncPath: '/sync/doLoad',
 		method: 'POST'
 	}
 };
@@ -146,10 +146,13 @@ describe('sync-request-endpoint-itest-spec.js', function() {
 			};
 
 			log.debug('sync-request-endpoint-itest-spec: Sync Request.  options: %j', options);
-			request.post(options, function(error, response) {
-				log.debug('sync-request-endpoint-itest-spec: Sync Request call back called.  error: %j; response: %j', error, response);
+			request.post(options, function(error, response, body) {
+				log.debug('sync-request-endpoint-itest-spec: Sync Request call back called.  error: %j; response: %j, body: %j', error, response, body);
 				syncRequestError = error;
 				syncRequestResponse = response;
+				expect(response.statusCode).toBe(202);
+	            expect(body.priority).toBeTruthy();
+	            expect(body.priority).toBe(1);
 				syncRequestComplete = true;
 			});
 		});
@@ -197,9 +200,6 @@ describe('sync-request-endpoint-itest-spec.js', function() {
 				testError = error;
 				testResponse = response;
 				testBody = body;
-				// expect(response).toBeTruthy();
-				// expect(response.statusCode).toBe(400);
-				// expect(body).toBeTruthy();
 
 				syncRequestComplete = true;
 			});
@@ -218,4 +218,41 @@ describe('sync-request-endpoint-itest-spec.js', function() {
 			expect(testBody).toBeTruthy();
 		});
 	});
+
+    it('Sync not started for pid not in jds', function() {
+        var syncRequestComplete = false;
+        var testResponse;
+        var testBody;
+        var testError;
+
+        runs(function() {
+            var options = {
+                url: config.syncRequestApi.protocol + '://' + config.syncRequestApi.host + ':' + config.syncRequestApi.port + config.syncRequestApi.patientSyncPath + '?pid=9E7A;99999999999999999',
+                method: 'GET'
+            };
+
+            request.get(options, function(error, response, body) {
+                log.debug('sync-request-endpoint-itest-spec.checkSyncComplete: Retrieving status - Call back called: error: %j, response: %j, body: %j', error, response, body);
+                testError = error;
+                testResponse = response;
+                testBody = body;
+
+                syncRequestComplete = true;
+            });
+        });
+
+        waitsFor(function() {
+            return syncRequestComplete;
+        }, 'Timed out waiting for syncRequest.', 5000);
+
+        runs(function() {
+            expect(testError).not.toBeTruthy();
+            expect(testResponse).toBeTruthy();
+            if(testResponse) {
+                expect(testResponse.statusCode).toBe(400);
+            }
+            expect(testBody).toBeTruthy();
+            expect(testBody).toBe('Patient does not exist in Jds.');
+        });
+    });
 });

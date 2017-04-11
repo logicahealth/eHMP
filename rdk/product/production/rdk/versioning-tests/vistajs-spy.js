@@ -4,6 +4,7 @@ var _ = require('lodash');
 var RpcClient = require('vista-js').RpcClient;
 var recordResponse = require('./recorded-response-repository').recordResponse;
 
+module.exports.enabled = true;
 module.exports.startSpying = startSpying;
 module.exports.stopSpying = stopSpying;
 module.exports.buildUrl = buildUrl;
@@ -75,8 +76,10 @@ function spyOnCallRpc() {
 
 function createSpyCallback(configuration, rpcName, params, callback) {
     return function(error, result) {
-        var recordOptions = {url: buildUrl(configuration, rpcName, params)};
-        recordResponse(recordOptions, result, error);
+        if (module.exports.enabled) {
+            var recordOptions = {url: buildUrl(configuration, rpcName, params)};
+            recordResponse(recordOptions, result, error);
+        }
         callback(error, result);
     };
 }

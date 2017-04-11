@@ -14,7 +14,6 @@ describe('jdsSync\'s', function() {
     var req;
     var log;
     var httpExpected;
-
     beforeEach(function() {
         pid = 'test;patientId';
 
@@ -43,6 +42,8 @@ describe('jdsSync\'s', function() {
     describe('getPatientStatus', function() {
         it('should add the pid to the path', function(done) {
             expectHttpFetch('vxSyncServer', '/sync/status?pid=test;patientId');
+
+
             req.app.subsystems.jdsSync.getPatientStatus(pid, req, expectSuccess(done));
         });
 
@@ -233,29 +234,6 @@ describe('jdsSync\'s', function() {
         });
     });
 
-    describe('getPatient', function() {
-        it('should use the pid path', function(done) {
-            expectHttpFetch('jdsServer', '/patient-select/get-patients?site=9E7A&searchType=PID&searchString=test;patientId');
-            req.app.subsystems.jdsSync.getPatient(pid, req, expectSuccess(done));
-        });
-
-        it('should use the icn path', function(done) {
-            pid = 'testicn';
-            expectHttpFetch('jdsServer', '/patient-select/get-patients?site=9E7A&searchType=ICN&searchString=testicn');
-            req.app.subsystems.jdsSync.getPatient(pid, req, expectSuccess(done));
-        });
-
-        it('should return success when the status is 202', function(done) {
-            expectHttpFetch('jdsServer', '/patient-select/get-patients?site=9E7A&searchType=PID&searchString=test;patientId', 202);
-            req.app.subsystems.jdsSync.getPatient(pid, req, expectSuccess(done));
-        });
-
-        it('should return a standard error result for errors', function(done) {
-            expectHttpFetch('jdsServer', '/patient-select/get-patients?site=9E7A&searchType=PID&searchString=test;patientId', 407);
-            req.app.subsystems.jdsSync.getPatient(pid, req, expectError(done, 407));
-        });
-    });
-
     describe('getPatientAllSites', function() {
         it('should add the pid to the path', function(done) {
             expectHttpFetch('jdsServer', '/vpr/mpid/test;patientId');
@@ -399,7 +377,7 @@ describe('jdsSync\'s', function() {
                     host: 'hmphost',
                     port: 3,
                     accessCode: '9E7A;500',
-                    verifyCode: 'PW    ;PW    !!'
+                    verifyCode: 'ep1234;ep1234!!'
                 },
                 jdsSync: {
                     settings: {

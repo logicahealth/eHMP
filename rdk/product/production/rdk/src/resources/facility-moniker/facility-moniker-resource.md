@@ -1,11 +1,6 @@
 # Group Locations
 
-## Locations facility monikers [{{{path}}}{?fields}]
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
+## Locations facility monikers [{{{path}}}]
 
 ### Get [GET]
 

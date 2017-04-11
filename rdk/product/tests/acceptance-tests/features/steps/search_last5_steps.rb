@@ -6,7 +6,7 @@ When(/^the client requests for the patient "(.*?)" starting with "(.*?)" and lim
   build_path.add_parameter("start", start)
   build_path.add_parameter("limit", limit)
   path = build_path.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the client receives( at least)? (\d+) RDK result\(s\) with start index of (\d+) and results limit of (\d+) per page$/) do |at_least, num_results, start_index, limit|
@@ -38,7 +38,7 @@ When(/^the client sends a request for the patient "(.*?)" starting with "(.*?)"$
   build_path.add_parameter("last5", arg1)
   build_path.add_parameter("start", arg2)
   path = build_path.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the client receives( at least)? (\d+) RDK result\(s\) with start index of (\d+)$/) do |at_least, result_count, start|

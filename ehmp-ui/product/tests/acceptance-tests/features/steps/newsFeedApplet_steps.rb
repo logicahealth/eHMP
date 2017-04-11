@@ -33,7 +33,7 @@ class NewsFeedApplet < ADKContainer
     super
     add_action(CucumberLabel.new("Coversheet Dropdown"), ClickAction.new, AccessHtmlElement.new(:id, "screenName"))
     add_verify(CucumberLabel.new("Drop Down Menu"), VerifyText.new, AccessHtmlElement.new(:class, "dropdown-menu"))
-    add_action(CucumberLabel.new("Timeline"), ClickAction.new, AccessHtmlElement.new(:link_text, "Timeline"))
+    add_action(CucumberLabel.new("Timeline"), ClickAction.new, AccessHtmlElement.new(:css, "a[href$='news-feed']"))
     add_verify(CucumberLabel.new("TIMELINE"), VerifyText.new, AccessHtmlElement.new(:css, "span.center-block.text-center.panel-title"))    
     add_verify(CucumberLabel.new("NewsFeed Page Title"), VerifyText.new, AccessHtmlElement.new(:css, "span.center-block.text-center.panel-title"))    
     add_verify(CucumberLabel.new("isTableVisible"), VerifyText.new, AccessHtmlElement.new(:id, "data-grid-newsfeed"))
@@ -65,13 +65,14 @@ class NewsFeedApplet < ADKContainer
     add_verify(CucumberLabel.new("title1"), VerifyText.new, AccessHtmlElement.new(:id, "tl_time_title"))
     add_verify(CucumberLabel.new("title2"), VerifyText.new, AccessHtmlElement.new(:id, "tl_time_range"))
     add_verify(CucumberLabel.new("No Records Found"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'No Records Found')]"))
-    add_action(CucumberLabel.new("Search Spinner"), ClickAction.new, AccessHtmlElement.new(:id, "searchSpinner")) 
+    add_action(CucumberLabel.new("Search Spinner"), ClickAction.new, AccessHtmlElement.new(:class, "searchSpinner")) 
     add_action(CucumberLabel.new("DoD Appointment"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::*[@data-row-instanceid='urn-va-appointment-DOD-0000000011-1000000717']/td[2]"))
     add_action(CucumberLabel.new("Lab 1998"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::*[@data-row-instanceid='urn-va-lab-9E7A-17-CH-7018878-8366-7']/td[2]"))
     add_action(CucumberLabel.new("DoD Encounter 2012"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::*[@data-row-instanceid='urn-va-visit-DOD-0000000011-1000000721']/td[2]"))
     add_verify(CucumberLabel.new("Newsfeed Modal Details"), VerifyContainsText.new, AccessHtmlElement.new(:id, "modal-body"))
       
-    @@newsfeed_applet_data_grid_rows = AccessHtmlElement.new(:xpath, "//table[@id='data-grid-newsfeed']/descendant::tr")
+    #@@newsfeed_applet_data_grid_rows = AccessHtmlElement.new(:xpath, "//table[@id='data-grid-newsfeed']/descendant::tr")
+    @@newsfeed_applet_data_grid_rows = AccessHtmlElement.new(:css, "#data-grid-newsfeed > tbody > tr")
     add_verify(CucumberLabel.new("Number of Newsfeed Applet Rows"), VerifyXpathCount.new(@@newsfeed_applet_data_grid_rows), @@newsfeed_applet_data_grid_rows)
     add_verify(CucumberLabel.new('Empty Row'), VerifyText.new, AccessHtmlElement.new(:css, '#content-region #data-grid-newsfeed tr.empty'))
   end
@@ -105,10 +106,18 @@ class NewsFeedApplet < ADKContainer
 
     
     #Close the filter
-    perform_action(html_action_element)
+    max_attempt = 2
+    begin
+      perform_action(html_action_element)
 
-    wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-    wait.until { !am_i_visible?('NewsFeed Filter input') }
+      wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+      wait.until { !am_i_visible?('NewsFeed Filter input') }
+    rescue => e
+      p "#{e}"
+      max_attempt -= 1
+      retry if max_attempt > 0
+      raise e if max_attempt <= 0
+    end
     # wait_until_action_element_invisible('NewsFeed Filter input')
     p "clear filter should be false: #{am_i_visible?('NewsFeed Filter input')}"
   end
@@ -140,9 +149,9 @@ class NewsFeedDateFilter < ADKContainer
   def initialize
     super 
     add_action(CucumberLabel.new("Control - Applet - Date Filter"), ClickAction.new, AccessHtmlElement.new(:css, "#navigation-date #date-region-minimized"))
-    add_action(CucumberLabel.new("Control - Applet - From Date"), SendKeysAction.new, AccessHtmlElement.new(:css, "#globalDate-region #filter-from-date-global"))
-    add_action(CucumberLabel.new("Control - Applet - To Date"), SendKeysAction.new, AccessHtmlElement.new(:id, "filter-to-date-global"))
-    add_action(CucumberLabel.new("Control - Applet - Apply"), ClickAction.new, AccessHtmlElement.new(:id, "custom-range-apply-global"))
+    add_action(CucumberLabel.new("Control - Applet - From Date"), SendKeysAction.new, AccessHtmlElement.new(:css, "#globalDate-region #filterFromDateGlobal"))
+    add_action(CucumberLabel.new("Control - Applet - To Date"), SendKeysAction.new, AccessHtmlElement.new(:id, "filterToDateGlobal"))
+    add_action(CucumberLabel.new("Control - Applet - Apply"), ClickAction.new, AccessHtmlElement.new(:id, "customRangeApplyGlobal"))
   end
 end
 
@@ -175,13 +184,13 @@ class NewsFeedGroup < ADKContainer
     super
     #add_verify(CucumberLabel.new("date_group1"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@id='data-grid-newsfeed']/descendant::td[contains(string(),'May 1996')]"))
 
-    add_verify(CucumberLabel.new("date_group1"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'May 1996')]"))
-    add_verify(CucumberLabel.new("date_group2"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'December 1995')]")) 
-    add_verify(CucumberLabel.new("date_group3"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'September 1995')]"))
-    add_verify(CucumberLabel.new("date_group4"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'July 1995')]")) 
-    add_verify(CucumberLabel.new("date_group5"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'June 1995')]"))
-    add_verify(CucumberLabel.new("date_group6"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'January 1995')]"))
-    add_verify(CucumberLabel.new("date_group7"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'May 1993')]"))
+    add_verify(CucumberLabel.new("date_group1"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'May 1996')]"))
+    add_verify(CucumberLabel.new("date_group2"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'December 1995')]"))
+    add_verify(CucumberLabel.new("date_group3"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'September 1995')]"))
+    add_verify(CucumberLabel.new("date_group4"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'July 1995')]"))
+    add_verify(CucumberLabel.new("date_group5"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'June 1995')]"))
+    add_verify(CucumberLabel.new("date_group6"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'January 1995')]"))
+    add_verify(CucumberLabel.new("date_group7"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'May 1993')]"))
     add_verify(CucumberLabel.new("row_first"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'November 2006')]/b"))
     add_verify(CucumberLabel.new("row_last"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'February 2005')]/b"))  
       
@@ -200,6 +209,9 @@ When(/^user selects Timeline from Coversheet dropdown$/) do
   expect(aa.wait_until_action_element_visible("Coversheet Dropdown", DefaultLogin.wait_time)).to be_true
   expect(aa.perform_action("Coversheet Dropdown", "")).to be_true, "Could not click on Dropdown menu"
   expect(aa.wait_until_element_present("Drop Down Menu", 60)).to be_true, "Could not see the drop down menu"
+
+  script = "a[href$='news-feed']"
+  TestSupport.driver.execute_script("$(\"#{script}\").focus()")
   expect(aa.perform_action("Timeline", "")).to be_true, "Could not click on Timeline link form drop down menu"
 end
 
@@ -353,7 +365,7 @@ end
 
 Then(/^the default sorting by Date\/Time is in descending in Newsfeed Applet$/) do
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time * 2)
-  wait.until { VerifyTableValue.verify_date_sort_selectable('content-region #data-grid-newsfeed', 1, true, "%m/%d/%Y - %H:%M") }
+  wait.until { VerifyTableValue.verify_date_time_sort_selectable('content-region #data-grid-newsfeed', 1, true) }
   # expect(VerifyTableValue.verify_date_sort_selectable('data-grid-newsfeed', 1, true, "%m/%d/%Y - %H:%M")).to eq(true)
 end
 
@@ -471,7 +483,7 @@ end
 Then(/^the Newsfeed table only diplays rows including text "([^"]*)"$/) do |input_text|
   upper = input_text.upcase
   lower = input_text.downcase
-  newsfeed_grid_xpath = "//div[@id='content-region']/descendant::table[@id='data-grid-newsfeed']"
+  newsfeed_grid_xpath = "//*[@id='content-region']/descendant::table[@id='data-grid-newsfeed']"
   path =  "#{newsfeed_grid_xpath}/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
   p path
   row_count = TableContainer.instance.get_elements('Rows - Newsfeed Applet data').size 
@@ -517,6 +529,8 @@ Then(/^the Timeline table diplays Type "([^"]*)" rows$/) do |input_text|
 end
 
 Then(/^the NewsFeed Applet table contains rows of type "([^"]*)"$/) do |arg1|
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until { infiniate_scroll("#data-grid-newsfeed tbody") }
   xpath = "//table[@id='data-grid-newsfeed']/descendant::td[contains(string(), '#{arg1}')]"
   p xpath
   applet = NewsFeedApplet.instance

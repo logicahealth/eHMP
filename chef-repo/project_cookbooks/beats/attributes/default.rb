@@ -1,0 +1,1 @@
+default['beats']['logging'] = false

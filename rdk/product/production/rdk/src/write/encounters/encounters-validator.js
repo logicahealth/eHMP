@@ -17,8 +17,8 @@ function validateInput(model, logger, errors) {
             errors.push('The field isInpatient is required');
         }
 
-        if (nullChecker.isNullish(model.locationIEN)) {
-            errors.push('The field locationIEN is required');
+        if (nullChecker.isNullish(model.locationUid)) {
+            errors.push('The field locationUid is required');
         }
 
         if (nullChecker.isNullish(model.encounterDateTime)) {

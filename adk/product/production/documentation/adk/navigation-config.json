@@ -24,8 +24,15 @@
             "url": "./#/adk/ui-library/template-helpers"
         }]
     }, {
-        "name": "CSS",
-        "url": "./#/adk/css-standards"
+        "name": "Styles",
+        "subItems": [{
+            "name": "Style Guide",
+            "url": "./style-guide/",
+            "newTab": true
+        }, {
+            "name": "CSS",
+            "url": "./#/adk/css-standards"
+        }]
     }],
     "right_nav_items": [{
         "name": "Libraries",

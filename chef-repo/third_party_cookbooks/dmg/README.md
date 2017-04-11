@@ -124,10 +124,10 @@ end
 
 License & Authors
 -----------------
-- Author::     ua Timberman (joshua@opscode.com)
+- Author:: Joshua Timberman (joshua@opscode.com)
 
 ```text
-Copyright 2011,     ua Timberman <cookbooks@housepub.org>
+Copyright 2011, Joshua Timberman <cookbooks@housepub.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

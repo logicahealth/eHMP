@@ -37,16 +37,16 @@ var hmpServer = 'TheHmpServer';
 var config = {
 	jds: {
 		protocol: 'http',
-		host: 'IPADDRESS ',
+		host: 'IP_ADDRESS',
 		port: 9080
 	},
 	'vistaSites': {
 		'9E7A': {
 			'name': 'panorama',
-			'host': 'IPADDRESS ',
+			'host': 'IP_ADDRESS',
 			'port': 9210,
-			'accessCode': 'PW    ',
-			'verifyCode': 'PW    !!',
+			'accessCode': 'PW',
+			'verifyCode': 'PW',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -54,10 +54,10 @@ var config = {
 		},
 		'C877': {
 			'name': 'kodak',
-			'host': 'IPADDRESS ',
+			'host': 'IP_ADDRESS',
 			'port': 9210,
-			'accessCode': 'PW    ',
-			'verifyCode': 'PW    !!',
+			'accessCode': 'PW',
+			'verifyCode': 'PW',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -76,16 +76,16 @@ var config = {
 var vistaHdrConfig = {
 	jds: {
 		protocol: 'http',
-		host: 'IPADDRESS ',
+		host: 'IP_ADDRESS',
 		port: 9080
 	},
 	'vistaSites': {
 		'9E7A': {
 			'name': 'panorama',
-			'host': 'IPADDRESS ',
+			'host': 'IP_ADDRESS',
 			'port': 9210,
-			'accessCode': 'PW    ',
-			'verifyCode': 'PW    !!',
+			'accessCode': 'PW',
+			'verifyCode': 'PW',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -93,10 +93,10 @@ var vistaHdrConfig = {
 		},
 		'C877': {
 			'name': 'kodak',
-			'host': 'IPADDRESS ',
+			'host': 'IP_ADDRESS',
 			'port': 9210,
-			'accessCode': 'PW    ',
-			'verifyCode': 'PW    !!',
+			'accessCode': 'PW',
+			'verifyCode': 'PW',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -286,14 +286,11 @@ describe('ptdemographics-utils.js', function() {
 				}
 			};
 			var environment = createEnvironment(vistaClient, config);
-			var expectedJdsError = [null, null];
+			var expectedJdsError = [null];
 			var expectedJdsResponse = [{
 				statusCode: 200
-			}, {
-				statusCode: 200
 			}];
-			var expectedJdsResult = [null,
-				{
+			var expectedJdsResult = [{
 					'data' : {
 						items: [demographicsFromVista]}
 				}];
@@ -338,17 +335,15 @@ describe('ptdemographics-utils.js', function() {
 				}
 			};
 			var environment = createEnvironment(vistaClient, config);
-			var expectedJdsError = [null, null];
+			var expectedJdsError = [null];
 			var expectedJdsResponse = [{
 				statusCode: 200
-			}, {
-				statusCode: 200
 			}];
-			var expectedJdsResult = [null,
-				{
-					'data' : {
-						items: [demographicsFromVista]}
-				}];
+			var expectedJdsResult = [{
+    				'data' : {
+    					items: [demographicsFromVista]
+                    }
+                }];
 			environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 			var ptDemographicsUtil = new PtDemographicsUtil(log, config, environment);
 			var icn = '100';
@@ -1652,7 +1647,7 @@ describe('ptdemographics-utils.js', function() {
                     'items': [demographicsDod]
                 }
             };
-            var metastamp = metastampUtil.metastampDomain(record, demographicsDod.stampTime,'');
+            var metastamp = metastampUtil.metastampDomain(record, PtDemographicsUtil.BASIS_STAMPTIME,'');
 
 			environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 
@@ -1818,7 +1813,7 @@ describe('ptdemographics-utils.js', function() {
                     'items': [demographicsDod]
                 }
             };
-            var metastamp = metastampUtil.metastampDomain(record, demographicsDod.stampTime,'');
+            var metastamp = metastampUtil.metastampDomain(record, PtDemographicsUtil.BASIS_STAMPTIME,'');
 
             environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 
@@ -1858,7 +1853,7 @@ describe('ptdemographics-utils.js', function() {
                     'items': [demographicsDod]
                 }
             };
-            var metastamp = metastampUtil.metastampDomain(record, demographicsDod.stampTime,'');
+            var metastamp = metastampUtil.metastampDomain(record, PtDemographicsUtil.BASIS_STAMPTIME,'');
 
 			environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 
@@ -1898,7 +1893,7 @@ describe('ptdemographics-utils.js', function() {
                     'items': [demographicsDod]
                 }
             };
-            var metastamp = metastampUtil.metastampDomain(record, demographicsDod.stampTime,'');
+            var metastamp = metastampUtil.metastampDomain(record, PtDemographicsUtil.BASIS_STAMPTIME,'');
 
             environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 
@@ -1936,7 +1931,7 @@ describe('ptdemographics-utils.js', function() {
                     'items': [demographicsDod]
                 }
             };
-            var metastamp = metastampUtil.metastampDomain(record, demographicsDod.stampTime,'');
+            var metastamp = metastampUtil.metastampDomain(record, PtDemographicsUtil.BASIS_STAMPTIME,'');
 
 			environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 
@@ -1978,7 +1973,7 @@ describe('ptdemographics-utils.js', function() {
                     'items': [demographicsDod]
                 }
             };
-            var metastamp = metastampUtil.metastampDomain(record, demographicsDod.stampTime,'');
+            var metastamp = metastampUtil.metastampDomain(record, PtDemographicsUtil.BASIS_STAMPTIME,'');
 
             environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 
@@ -2018,7 +2013,7 @@ describe('ptdemographics-utils.js', function() {
                     'items': [demographicsDod]
                 }
             };
-            var metastamp = metastampUtil.metastampDomain(record, demographicsDod.stampTime,'');
+            var metastamp = metastampUtil.metastampDomain(record, PtDemographicsUtil.BASIS_STAMPTIME,'');
 
 			environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 
@@ -2028,7 +2023,7 @@ describe('ptdemographics-utils.js', function() {
 					expect(error).toEqual('FailedJdsWrongStatusCode');
 					expect(ptDemographics).toBeNull();
                     expect(environment.jds.saveSyncStatus.calls.length).toEqual(1);
-                    expect(environment.jds.saveSyncStatus).toHaveBeenCalledWith(jasmine.objectContaining(metastamp), jasmine.objectContaining({value: demographicsDod.pid}), jasmine.any(Function));
+                    expect(environment.jds.saveSyncStatus).toHaveBeenCalledWith(jasmine.objectContaining(metastamp), jasmine.objectContaining({type: 'pid', value: demographicsDod.pid}), jasmine.any(Function));
                     expect(environment.jds.storePatientData.calls.length).toEqual(1);
                     expect(environment.jds.storePatientData).toHaveBeenCalledWith(jasmine.objectContaining(demographicsDod), jasmine.any(Function));
                     expect(environment.jds.storePatientData).toHaveBeenCalledWith(jasmine.objectContaining({
@@ -2155,7 +2150,7 @@ describe('ptdemographics-utils.js', function() {
                     'items': [demographicsDod]
                 }
             };
-            var metastamp = metastampUtil.metastampDomain(record, demographicsDod.stampTime,'');
+            var metastamp = metastampUtil.metastampDomain(record, PtDemographicsUtil.BASIS_STAMPTIME,'');
 
 			environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 
@@ -2201,7 +2196,7 @@ describe('ptdemographics-utils.js', function() {
                     'items': [demographicsHdrSecondary]
                 }
             };
-            var metastamp = metastampUtil.metastampDomain(record, demographicsHdrSecondary.stampTime,'');
+            var metastamp = metastampUtil.metastampDomain(record, PtDemographicsUtil.BASIS_STAMPTIME,'');
 
 			environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 
@@ -2247,7 +2242,7 @@ describe('ptdemographics-utils.js', function() {
                     'items': [demographicsVistaHdr]
                 }
             };
-            var metastamp = metastampUtil.metastampDomain(record, demographicsVistaHdr.stampTime,'');
+            var metastamp = metastampUtil.metastampDomain(record, PtDemographicsUtil.BASIS_STAMPTIME,'');
 
 			environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 

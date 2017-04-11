@@ -1,5 +1,6 @@
-HMPEQLM1 ;SLC/MJK -- HMP Freshness Report ; 02-JUL-2014
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
+HMPEQLM1 ;SLC/MJK,ASMR/RRB - HMP Freshness Report;02-JUL-2014
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q
  ;

@@ -1,8 +1,11 @@
-HMPCRPC1 ; SLC/AGP - Patient and User routine. ; 05/01/14
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 1
+HMPCRPC1 ;SLC/AGP,ASMR/RRB,CK - Patient and User routine;Apr 27, 2016 10:35:07
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
  Q
  ;
 GETADD(VALUES,DFN) ;
+ K VAPA
  D ADD^VADPT
  N INC,NUM,TEMP
  I VAPA(12)=1 D
@@ -67,6 +70,7 @@ GETKEYS(VALUES,USER) ;
  Q
  ;
 GETNOK(VALUES,DFN,TYPE) ;
+ K VAOA
  S VAOA("A")=TYPE
  N CNT,CONTACT
  S CONTACT=$S(TYPE=3:"secondary",1:"primary")
@@ -86,6 +90,7 @@ GETNOK(VALUES,DFN,TYPE) ;
  Q
  ;
 GETMEANS(VALUES,DFN) ;
+ K VAEL
  D ELIG^VADPT
  I VAEL(9)]"" S VALUES("meanStatus")=$P(VAEL(9),U,2)
  D KVAR^VADPT
@@ -93,7 +98,7 @@ GETMEANS(VALUES,DFN) ;
  ;
 GETPATI(RESULT,DFN) ;
  N TYPE,VALUES,HMPERR,Y,HMPODEM,HMPSYS
- S HMPSYS=$$GET^XPAR("SYS","HMP SYSTEM NAME")
+ S HMPSYS=$$SYS^HMPUTILS
  D DPT1OD^HMPDJ00(.VALUES)
  G GPQ
  S VALUES("pid")=$$PID^HMPDJFS(DFN)
@@ -131,32 +136,32 @@ GETPATIP(VALUES,DFN) ;
  I $P($G(^DPT(DFN,.101)),U)'="" S VALUES("roomBed")=$P($G(^DPT(DFN,.101)),U)
  Q
  ;
-GETPATVI(VALUES,DFN) ;
- N BMI,DAS,HT,LDATE,HMPTEMP,WT
- ;get weight
- S LDATE=$O(^PXRMINDX(120.5,"PI",DFN,9,""),-1)
- I LDATE>0 D
- .S DAS=$O(^PXRMINDX(120.5,"PI",DFN,9,LDATE,""))
- .I DAS']"" Q
- .D GETDATA^PXRMVITL(DAS,.HMPTEMP)
- .S WT=HMPTEMP("VALUE")
- .S VALUES("lastVitals","weight","value")=WT
- .S VALUES("lastVitals","weight","lastDone")=$$FMTE^XLFDT(LDATE,"D")
- ;get height
- K LDATE,DAS
- S LDATE=$O(^PXRMINDX(120.5,"PI",DFN,8,""),-1)
- I LDATE>0 D
- .S DAS=$O(^PXRMINDX(120.5,"PI",DFN,8,LDATE,""))
- .I DAS']"" Q
- .D GETDATA^PXRMVITL(DAS,.HMPTEMP)
- .S HT=HMPTEMP("VALUE")
- .S VALUES("lastVitals","height","value")=HT
- .S VALUES("lastVitals","height","lastDone")=$$FMTE^XLFDT(LDATE,"D")
- S BMI=$$GETBMI(DFN)
- I BMI>0 S VALUES("lastVitals","bmi")=BMI
- S BSA=$$GETBSA(DFN)
- I BSA>0 S VALUES("lastVitals","bsa")=BSA
- Q
+GETPATVI(VALUES,DFN) ;  DE2818 - PB - Code commented out during SQA review/modifications
+ ;N BMI,DAS,HT,LDATE,HMPTEMP,WT,BSA
+ ;;get weight
+ ;S LDATE=$O(^PXRMINDX(120.5,"PI",DFN,9,""),-1)
+ ;I LDATE>0 D
+ ;.S DAS=$O(^PXRMINDX(120.5,"PI",DFN,9,LDATE,""))
+ ;.I DAS']"" Q
+ ;.D GETDATA^PXRMVITL(DAS,.HMPTEMP)
+ ;.S WT=HMPTEMP("VALUE")
+ ;.S VALUES("lastVitals","weight","value")=WT
+ ;.S VALUES("lastVitals","weight","lastDone")=$$FMTE^XLFDT(LDATE,"D")
+ ;;get height
+ ;K LDATE,DAS
+ ;S LDATE=$O(^PXRMINDX(120.5,"PI",DFN,8,""),-1)
+ ;I LDATE>0 D
+ ;.S DAS=$O(^PXRMINDX(120.5,"PI",DFN,8,LDATE,""))
+ ;.I DAS']"" Q
+ ;.D GETDATA^PXRMVITL(DAS,.HMPTEMP)
+ ;.S HT=HMPTEMP("VALUE")
+ ;.S VALUES("lastVitals","height","value")=HT
+ ;.S VALUES("lastVitals","height","lastDone")=$$FMTE^XLFDT(LDATE,"D")
+ ;S BMI=$$GETBMI(DFN)
+ ;I BMI>0 S VALUES("lastVitals","bmi")=BMI
+ ;S BSA=$$GETBSA(DFN)
+ ;I BSA>0 S VALUES("lastVitals","bsa")=BSA
+ ;Q
  ;
 GETPATTM(VALUES,DFN) ; -- returns treating team info
  N CNT,PROV,TEAM,MH,HMPTEAM,MHTEAM
@@ -248,7 +253,7 @@ GETUCPAR(VALUES,ID,CNT,ARRAY) ;
  Q
  ;
 GETUSERI(RESULT,USER) ;
- N RPCOPT,VALUES,HMPERR,HMPLIST
+ N RPCOPT,VALUES,HMPERR,HMPLIST,CPRSPATH
  D BUILDUID^HMPPARAM(.VALUES,"user",USER)
  S VALUES("timeout")=$$GET^XPAR("USR^SYS","ORWOR TIMEOUT CHART",1,"I")
  S VALUES("timeoutCounter")=$$GET^XPAR("USR^SYS^PKG","ORWOR TIMEOUT COUNTDOWN",1,"I")

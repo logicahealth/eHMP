@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var rdk = require('../../../core/rdk');
 var pjds = rdk.utils.pjdsStore;
-var orderset = require('./order-set');
+var orderset = require('../../../subsystems/orderables/orderset-subsystem');
 
 var logger = {
     trace: function() {},
@@ -154,7 +154,11 @@ function createReqWithParam(map) {
         logger: logger,
         audit: {},
         app: {
-            config: {}
+            config: {
+                subsystems: {
+                    orderset: orderset
+                }
+            }
         },
         session: {
             user: {

@@ -1,0 +1,287 @@
+<div id="sync-status-modal" class="row">
+  <div id="source-list-panel" class="source-list-panel col-xs-3">
+    <h5>Source</h5>
+    <ul id="sync-source-sites" role="list">
+    {{#if mySite}}
+      <li role="list-item" data-source="mySite" class="{{#compare selectedSource.sourceName 'mySite'}}selected{{/compare}}">
+        <div>
+          {{#compare mySite.status 'completed'}}
+              {{#if mySite.newDataSince}}
+                <i class="fa fa-refresh"></i>
+              {{else}}
+                <i class="fa fa-check-circle"></i>
+              {{/if}}
+          {{/compare}}
+          {{#compare mySite.status 'inProgress'}}
+              <i class="fa fa-spinner fa-spin"></i>
+          {{/compare}}
+          {{#compare mySite.status 'needsRefresh'}}
+              <i class="fa fa-clock-o color-primary"></i>
+          {{/compare}}
+          {{#compare mySite.status 'error'}}
+              <i class="fa fa-exclamation-circle"></i>
+          {{/compare}}
+          <button class="btn btn-link" type="button" title="Press enter to access my site sources" accesskey="m">My Site
+            <span class="sr-only">New data since {{#if mySite.newDataSince}} {{mySite.newDataSince}} {{else}} Current {{/if}}</span>
+          </button>
+          <p class="source-sync-details">
+          {{#compare mySite.status 'completed'}}
+              {{#if mySite.newDataSince}}
+                <div>New data is loading</div>
+               {{else}}
+                <div>No new data since last upload</div>
+              {{/if}}
+          {{/compare}}
+          {{#compare mySite.status 'inProgress'}}
+               <div>New data is loading</div>
+          {{/compare}}
+          {{#compare mySite.status 'error'}}
+              <div>Error loading new data.  Report this error to your IT support</div>
+          {{/compare}}</p>
+        </div>
+      </li>
+    {{/if}}
+    {{#if allVa}}
+     <li role="list-item" data-source="allVa" class="{{#compare selectedSource.sourceName 'allVa'}}selected{{/compare}}">
+        <div>
+          {{#compare allVa.status 'completed'}}
+              {{#if allVa.newDataSince}}
+                <i class="fa fa-clock-o color-primary"></i>
+              {{else}}
+                <i class="fa fa-check-circle"></i>
+              {{/if}}
+          {{/compare}}
+          {{#compare allVa.status 'inProgress'}}
+              <i class="fa fa-spinner fa-spin"></i>
+          {{/compare}}
+          {{#compare allVa.status 'needsRefresh'}}
+              <i class="fa fa-clock-o color-primary"></i>
+          {{/compare}}
+          {{#compare allVa.status 'error'}}
+              <i class="fa fa-exclamation-circle"></i>
+          {{/compare}}
+          <button class="btn btn-link" title="Press enter to access all V A sources" type="button">All VA
+            <span class="sr-only">{{#if allVa.mostRecentTime}} Last refresh {{allVa.mostRecentTime}} {{#if allVa.leastRecentTime}} - {{allVa.leastRecentTime}}{{/if}} ago{{/if}}</span>
+            <span class="sr-only">New data since {{#if allVa.newDataSince}} {{allVa.newDataSince}} {{else}} Current {{/if}}</span>
+          </button>
+          <p class="source-sync-details">
+            {{#compare allVa.status 'completed'}}
+                {{#if allVa.newDataSince}}
+                  <div>New data is loading</div>
+                 {{else}}
+                  <div>No new data since last upload</div>
+                  <div>{{#if allVa.mostRecentTime}}{{allVa.mostRecentTime}} ago{{/if}}</div>
+                {{/if}}
+            {{/compare}}
+            {{#compare allVa.status 'inProgress'}}
+                 <div>Data is loading</div>
+            {{/compare}}
+            {{#compare allVa.status 'error'}}
+                <div>Error loading data.  Report this error to your IT support</div>
+            {{/compare}}
+          </p>
+         </div>
+      </li>
+    {{/if}}
+    {{#if dod}}
+      <li role="list-item" data-source="dod" class="{{#compare selectedSource.sourceName 'dod'}}selected{{/compare}}">
+        <div>
+          {{#compare dod.status 'completed'}}
+              <i class="fa fa-check-circle"></i>
+          {{/compare}}
+          {{#compare dod.status 'inProgress'}}
+              <i class="fa fa-spinner fa-spin"></i>
+          {{/compare}}
+          {{#compare dod.status 'error'}}
+              <i class="fa fa-exclamation-circle"></i>
+          {{/compare}}
+          <button class="btn btn-link" title="Press enter to access D O D sources" type="button">DoD
+            <span class="sr-only">Last refresh {{#if dod.mostRecentTime}}{{dod.mostRecentTime}} ago{{/if}}<span>
+          </button>
+          <p class="source-sync-details">
+            {{#compare dod.status 'completed'}}
+                {{#if dod.newDataSince}}
+                  <div>New data is loading</div>
+                 {{else}}
+                  <div>No new data since last upload</div>
+                  <div>{{#if dod.mostRecentTime}}{{dod.mostRecentTime}} ago{{/if}}</div>
+                {{/if}}
+            {{/compare}}
+            {{#compare dod.status 'inProgress'}}
+                 <div>New data is loading</div>
+            {{/compare}}
+            {{#compare dod.status 'error'}}
+                <div>Error loading new data.  Report this error to your IT support</div>
+            {{/compare}}
+          <p>
+        </div>
+      </li>
+    {{/if}}
+    {{#if communities}}
+      <li role="list-item" data-source="communities" class="{{#compare selectedSource.sourceName 'communities'}}selected{{/compare}}">
+        <div>
+          {{#compare communities.status 'completed'}}
+              <i class="fa fa-check-circle"></i>
+          {{/compare}}
+          {{#compare communities.status 'inProgress'}}
+              <i class="fa fa-spinner fa-spin"></i>
+          {{/compare}}
+          {{#compare communities.status 'error'}}
+              <i class="fa fa-exclamation-circle"></i>
+          {{/compare}}
+          <button class="btn btn-link" title="Press enter to access communities sources" type="button">Communities
+            <span class="sr-only">Last refresh {{#if communities.mostRecentTime}}{{communities.mostRecentTime}} ago{{/if}}</span>
+          </button>
+          <p class="source-sync-details">
+            {{#compare communities.status 'completed'}}
+                {{#if communities.newDataSince}}
+                  <div>New data is loading</div>
+                 {{else}}
+                  <div>No new data since last upload</div>
+                  <div>{{#if communities.mostRecentTime}}{{communities.mostRecentTime}} ago{{/if}}</div>
+                {{/if}}
+            {{/compare}}
+            {{#compare communities.status 'inProgress'}}
+                 <div>New data is loading</div>
+            {{/compare}}
+            {{#compare communities.status 'error'}}
+                <div>Error loading new data.  Report this error to your IT support</div>
+            {{/compare}}
+          </p>
+        </div>
+      </li>
+    {{/if}}
+    </ul>
+  </div>
+  <div id="sync-site-detail" class="sync-site-detail col-xs-9" tabindex="0">
+    <span class="sr-only">Press alt + m to return to source menu</span>
+    <div id="force-site-sync-status" class="row">
+      {{#if msgSuccessfulSync}}
+        <p id="force-site-sync-status-success" class="bg-danger"><strong>{{currentDateTime}} - Refresh was successful</strong><button id="msg-successful-sync" type="button" class="btn close" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>
+      {{/if}}
+      {{#if msgFailedSync}}
+        <p id="force-site-sync-status-error" class="bg-danger"><strong>{{currentDateTime}} - Error detected during sync</strong><button id="msg-failed-sync" type="button" class="btn close" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>
+      {{/if}}
+    </div>
+    <div id="sync-site-detail-header" class="sync-site-detail-header row">
+      <h4 class="col-xs-4">{{selectedSource.sourceDisplayName}}</h4>
+      <button type="button" class="force-source-sync btn btn-primary" id="force-source-sync" title="Press enter to refresh data"
+      {{#compare forceSyncStatus 'inProgress'}}
+         disabled="disabled"><span><i class="fa fa-spinner fa-spin"></i> Refreshing</span>
+      {{/compare}}
+      {{#compare forceSyncStatus 'completed'}}
+        >Refresh {{selectedSource.sourceDisplayName}}
+      {{/compare}}
+      </button>
+    </div>
+    <table>
+      <caption class="sr-only">This table represents data for {{selectedSource.sourceDisplayName}} data categorized by {{#compare selectedSource.sourceName 'allVa'}} site, {{/compare}} domain, {{#compare selectedSource.sourceType 'primary' operator='!='}}and{{/compare}} last refresh{{#compare selectedSource.sourceType 'primary'}}, and new data since.{{/compare}}</caption>
+      <thead>
+        <tr>
+          {{#compare selectedSource.sourceName 'allVa'}}
+          <th scope="col" class="sortable renderable site" id="sync-detail-header-site" >
+            <a href="#" role="button" sortable="true" sorttype="alphabetical" sortdirection="none" class="color-grey-darkest">Site
+            {{#compare sortColumn 'siteDisplayName'}}
+              <i class="fa 
+              {{#compare sortOrder 'asc'}}
+                fa-caret-up"></i>
+                <span class="sr-only">Press enter to sort. Sorted ascending</span>
+              {{/compare}}
+              {{#compare sortOrder 'desc'}}
+                fa-caret-down"></i>
+                <span class="sr-only">Press enter to sort. Sorted descending</span>
+              {{/compare}}
+            {{else}}
+             <span class="sr-only">Press enter to sort.</span>
+            {{/compare}}
+            </span>
+           </a>
+          </th>
+          {{/compare}}
+          <th scope="col" class="sortable renderable domain" id="sync-detail-header-domain">
+            <a href="#" role="button" sortable="true" sorttype="alphabetical" sortdirection="none" class="color-grey-darkest">Domain
+            {{#compare sortColumn 'domainDisplayName'}}
+              <i class="fa 
+              {{#compare sortOrder 'asc'}}
+                fa-caret-up"></i>
+                <span class="sr-only">Press enter to sort. Sorted ascending</span>
+              {{/compare}}
+              {{#compare sortOrder 'desc'}}
+                fa-caret-down"></i>
+                <span class="sr-only">Press enter to sort. Sorted descending</span>
+              {{/compare}}
+            {{else}}
+             <span class="sr-only">Press enter to sort.</span>
+            {{/compare}}
+            </a>
+          </th>
+          <th scope="col" class="sortable renderable last-synced" id="sync-detail-header-last-synced">
+            <a href="#" role="button" sortable="true" sorttype="alphabetical" sortdirection="none" class="color-grey-darkest">Last Refresh
+            {{#compare sortColumn 'stampTime'}}
+              <i class="fa 
+              {{#compare sortOrder 'asc'}}
+                fa-caret-up"></i>
+                <span class="sr-only">Press enter to sort. Sorted ascending</span>
+              {{/compare}}
+              {{#compare sortOrder 'desc'}}
+                fa-caret-down"></i>
+                <span class="sr-only">Press enter to sort. Sorted descending</span>
+              {{/compare}}
+            {{else}}
+             <span class="sr-only">Press enter to sort.</span>
+            {{/compare}}
+            </a>
+          </th>
+          {{#compare selectedSource.sourceType 'primary'}}
+          <th scope="col" class="sortable renderable new-data-since" id="sync-detail-header-new-data-since">
+            <a href="#" role="button" sortable="true" sorttype="alphabetical" sortdirection="none" class="color-grey-darkest">New Data Since
+            {{#compare sortColumn 'newDataSince'}}
+              <i class="fa 
+              {{#compare sortOrder 'asc'}}
+                fa-caret-up"></i>
+                <span class="sr-only">Press enter to sort. Sorted ascending</span>
+              {{/compare}}
+              {{#compare sortOrder 'desc'}}
+                fa-caret-down"></i>
+                <span class="sr-only">Press enter to sort. Sorted descending</span>
+              {{/compare}}
+            {{else}}
+             <span class="sr-only">Press enter to sort.</span>
+            {{/compare}}
+            </a>
+          </th>
+          {{/compare}}
+        </tr>
+      </thead>
+      <tbody>
+      {{#each selectedSource.allDomains}}
+          <tr>
+            {{#compare ../selectedSource.sourceName 'allVa'}}
+              <td class="handlebars-cell sortable renderable">{{this.siteDisplayName}}</td>
+            {{/compare}}
+            <td class="handlebars-cell sortable renderable">{{this.domainDisplayName}}</td>
+            <td class="handlebars-cell sortable renderable">
+              {{#compare this.status 'completed'}}
+                {{#compare this.siteType 'secondary'}}
+                  {{this.displayTime}} ago
+                {{/compare}}
+                {{#compare this.siteType 'primary'}}
+                  Current
+                {{/compare}}
+              {{/compare}}
+              {{#compare this.status 'inProgress'}}
+                <span><i class="fa fa-spinner fa-spin"></i> Refreshing</span>
+              {{/compare}}
+              {{#compare this.status 'error'}}
+                  <span class="sync-failed-text"><i class="fa fa-exclamation-circle"></i> Refresh failed</span>
+              {{/compare}}
+            </td>
+            {{#compare ../selectedSource.sourceType 'primary'}}
+              <td class="handlebars-cell sortable renderable">{{#if this.newDataSince}}{{this.displayNewDataSince}}{{else}}Current{{/if}}</td>
+            {{/compare}}
+          </tr>
+      {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>

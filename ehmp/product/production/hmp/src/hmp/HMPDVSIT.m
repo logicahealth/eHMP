@@ -1,6 +1,6 @@
-HMPDVSIT ;SLC/MKB -- Visit/Encounter extract ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDVSIT ;SLC/MKB,ASMR/RRB - Visit/Encounter extract;8/2/11  15:29
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -22,7 +22,7 @@ HMPDVSIT ;SLC/MKB -- Visit/Encounter extract ;8/2/11  15:29
  ; VADPT                        10061
  ; VADPT2                         325
  ; XUAF4                         2171
- ;
+ Q
  ; ------------ Get encounter(s) from VistA ------------
  ;
 EN(DFN,BEG,END,MAX,ID) ; -- find patient's visits and appointments
@@ -37,7 +37,7 @@ EN(DFN,BEG,END,MAX,ID) ; -- find patient's visits and appointments
  I END,END'["." S END=END_".24" ;assume end of day
  S HMPCNT=0
  ;F  S IDX=$Q(@IDX,-1) Q:DFN'=$P(IDX,",",2)  Q:$P(IDX,",",3)<BEG  I $P(IDX,",",5)["P" D
- S HMPDT=END F  S HMPDT=$O(^AUPNVSIT("AET",DFN,HMPDT),-1)  Q:HMPDT<BEG  D  Q:HMPCNT'<MAX
+ S HMPDT=END F  S HMPDT=$O(^AUPNVSIT("AET",DFN,HMPDT),-1)  Q:HMPDT<BEG  D  Q:HMPCNT'<MAX  ;ICR 2028 DE2818 ASF 11/21/15
  . S HMPLOC=0 F  S HMPLOC=$O(^AUPNVSIT("AET",DFN,HMPDT,HMPLOC)) Q:HMPLOC<1  D
  .. S HMPDA=0 F  S HMPDA=$O(^AUPNVSIT("AET",DFN,HMPDT,HMPLOC,"P",HMPDA)) Q:HMPDA<1  D
  ... K HMPITM D EN1(HMPDA,.HMPITM) Q:'$D(HMPITM)
@@ -52,7 +52,7 @@ ENAA(DFN,BEG,END,MAX,ID) ; -- find patient's visits and appointments [AA]
  S BEG=$G(BEG,1410101),END=$G(END,4141015),MAX=$G(MAX,9999)
  I $G(ID) D EN1(ID,.HMPITM),XML(.HMPITM) Q  ;one visit
  D IDT S HMPCNT=0
- S IDT=BEG F  S IDT=$O(^AUPNVSIT("AA",DFN,IDT)) Q:IDT<1!(IDT>END)  D  Q:HMPCNT'<MAX
+ S IDT=BEG F  S IDT=$O(^AUPNVSIT("AA",DFN,IDT)) Q:IDT<1!(IDT>END)  D  Q:HMPCNT'<MAX  ;ICR 2028 DE2818 ASF 11/21/15
  . S DA=0 F  S DA=$O(^AUPNVSIT("AA",DFN,IDT,DA)) Q:DA<1  D
  .. K HMPITM D EN1(DA,.HMPITM) Q:'$D(HMPITM)
  .. D XML(.HMPITM) S HMPCNT=HMPCNT+1
@@ -80,17 +80,17 @@ EN1(IEN,VST) ; -- return a visit in VST("attribute")=value
  S VST("visitString")=LOC_";"_+X0_";"_CATG
  S INPT=$P(X15,U,2) S:INPT="" INPT=$S("H^I^R^D"[CATG:1,1:0)
  S X=$$CPT(IEN) S:X VST("type")=$P($$CPT^ICPTCOD(X),U,2,3)
- I 'X S VST("type")=U_$S('INPT&LOC:$P($G(^SC(LOC,0)),U)_" VISIT",1:$$CATG(CATG))
+ I 'X S VST("type")=U_$S('INPT&LOC:$P($G(^SC(LOC,0)),U)_" VISIT",1:$$CATG(CATG)) ;ICR 10040 DE2818 ASF 11/21/15
  S VST("patientClass")=$S(INPT:"IMP",1:"AMB")
  S X=$P(X0,U,8) S:X VST("stopCode")=$$AMIS(X) I LOC D
- . N L0 S L0=$G(^SC(LOC,0))
+ . N L0 S L0=$G(^SC(LOC,0)) ;ICR 10040 DE2818 ASF 11/21/15
  . I 'X S VST("stopCode")=$$AMIS($P(L0,U,7))
  . S VST("location")=$P(L0,U),VST("service")=$$SERV($P(L0,U,20))
  . S X=$P(L0,U,18) S:X VST("creditStopCode")=$$AMIS(X)
  S VST("reason")=$$POV(IEN)
  ; provider(s)
  S DA=0 F  S DA=$O(^TMP("PXKENC",$J,IEN,"PRV",DA)) Q:DA<1  S X0=$G(^(DA,0)) D
- . S VST("provider",DA)=+X0_U_$P($G(^VA(200,+X0,0)),U)_$S($P(X0,U,4)="P":"^P^1",1:"^S^")
+ . S VST("provider",DA)=+X0_U_$P($G(^VA(200,+X0,0)),U)_$S($P(X0,U,4)="P":"^P^1",1:"^S^") ;ICR 10060 DE2818 ASF 11/21/15
  ; note(s)
  D TIU(IEN)
  K ^TMP("PXKENC",$J,IEN)
@@ -131,7 +131,7 @@ CPT(VISIT) ; -- Return CPT code of encounter type
  ;
 AMIS(X) ; -- return the AMIS code^name of Credit Stop X
  N Y,X0 S Y=""
- S X0=$G(^DIC(40.7,+$G(X),0)) S:$L(X0) Y=$P(X0,U,2)_U_$P(X0,U)
+ S X0=$G(^DIC(40.7,+$G(X),0)) S:$L(X0) Y=$P(X0,U,2)_U_$P(X0,U) ;ICR 557 DE2818 ASF 11/21/15
  Q Y
  ;
 CATG(X) ; -- Return name of visit Service Category code X
@@ -159,7 +159,7 @@ ADM(IEN,DATE,ADM) ; -- return an admission in ADM("attribute")=value
  N VAINDT,VADMVT,VAIP,VAIN,VAERR,HLOC,ICD,I K ADM
  S IEN=+$G(IEN),DATE=+$G(DATE) Q:IEN<1  Q:DATE<1
  S VAINDT=DATE D ADM^VADPT2 Q:VADMVT<1
- I VADMVT=$G(^DPT(DFN,.105)) D INPT Q  ;current inpatient
+ I VADMVT=$G(^DPT(DFN,.105)) D INPT Q  ;current inpatient ICR 10035 DE2818 ASF 11/21/15
  S VAIP("E")=VADMVT D IN5^VADPT Q:'$G(VAIP(1))  ;deleted
  S ADM("id")=IEN,ADM("patientClass")="IMP"
  ; ADM("admitType")=$P($G(VAIP(4)),U,2)
@@ -170,8 +170,8 @@ ADM(IEN,DATE,ADM) ; -- return an admission in ADM("attribute")=value
  S X=$$SERV(+$G(VAIP(8))),ADM("service")=X
  S ICD=$$POV(IEN) S:'ICD ICD=$$PTF(DFN,VAIP(12)) ;PTF>ICD
  S ADM("reason")=ICD_U_$G(VAIP(9)) ;ICD code^description^Dx text
- S HLOC=+$G(^DIC(42,+$G(VAIP(5)),44))
- S:HLOC ADM("location")=$P($G(^SC(HLOC,0)),U)
+ S HLOC=+$G(^DIC(42,+$G(VAIP(5)),44)) ;ICR 10039 DE2818 ASF 11/21/15
+ S:HLOC ADM("location")=$P($G(^SC(HLOC,0)),U) ;ICR 10040 DE2818 ASF 11/21/15
  S ADM("facility")=$$FAC^HMPD(+HLOC),ADM("roomBed")=$P(VAIP(6),U,2)
  S ADM("serviceCategory")="H^HOSPITALIZATION"
  S X=$$CPT(IEN),ADM("type")=$S(X:$P($$CPT^ICPTCOD(X),U,2,3),1:U_$$CATG("H"))
@@ -193,8 +193,8 @@ INPT ; -- return current admission in ADM("attribute")=value [from ADM]
  S X=$$SERV(+$G(VAIN(3))),ADM("service")=X
  S ICD=$$POV(IEN) S:'ICD ICD=$$PTF(DFN,VAIN(10)) ;PTF>ICD
  S ADM("reason")=ICD_U_$G(VAIN(9)) ;ICD code^description^Dx text
- S HLOC=+$G(^DIC(42,+$G(VAIN(4)),44))
- S:HLOC ADM("location")=$P($G(^SC(HLOC,0)),U)
+ S HLOC=+$G(^DIC(42,+$G(VAIN(4)),44)) ;ICR 10039 DE2818 ASF 11/21/15
+ S:HLOC ADM("location")=$P($G(^SC(HLOC,0)),U) ;ICR 10040 DE2818 ASF 11/21/15
  S ADM("facility")=$$FAC^HMPD(+HLOC),ADM("roomBed")=$P(VAIN(5),U,2)
  S ADM("serviceCategory")="H^HOSPITALIZATION"
  S X=$$CPT(IEN),ADM("type")=$S(X:$P($$CPT^ICPTCOD(X),U,2,3),1:U_$$CATG("H"))
@@ -213,10 +213,10 @@ PTF(DFN,PTF) ; -- return ICD code^description for a PTF record
 ENC(IEN,ENC) ; -- return an encounter in ENC("attribute")=value
  N X0,DATE,HLOC,TYPE,STS,X,Y K ENC
  S IEN=+$G(IEN) Q:IEN<1  ;invalid ien
- S ENC("id")="E"_IEN,X0=$$GETOE^SDOE(IEN) ;^SCE(IEN,0) node
+ S ENC("id")="E"_IEN,X0=$$GETOE^SDOE(IEN) ;^SCE(IEN,0) node ICR 10040 DE2818 ASF 11/21/15
  S DATE=+X0,ENC("dateTime")=DATE
  S HLOC=+$P(X0,U,4) I HLOC D
- . S HLOC=HLOC_U_$P($G(^SC(HLOC,0)),U)
+ . S HLOC=HLOC_U_$P($G(^SC(HLOC,0)),U) ;ICR 10040 DE2818 ASF 11/21/15
  . S ENC("location")=$P(HLOC,U,2)
  . S X=$$GET1^DIQ(44,+HLOC_",",9.5,"I")
  . I X S ENC("service")=$$SERV(X)

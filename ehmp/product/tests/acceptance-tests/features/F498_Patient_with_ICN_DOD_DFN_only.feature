@@ -22,9 +22,9 @@ Scenario: Client can request sync for a patient on one VistA with a single PID (
 	
 @sync_icn
 Scenario: Client can request sync for a patient for multiple VistAs and secondary sites with the ICN (Panorama, Kodak, DoD, HDR, and VLER)	
-	Given a patient with pid "11016V630869" has been synced through VX-Sync API for "9E7A;C877;DOD;2939;FFC7;VLER" site(s) 
+	Given a patient with pid "11016V630869" has been synced through VX-Sync API for "9E7A;C877;DOD;HDR;VLER" site(s) 
 	When the client requests sync status for patient with pid "11016V630869"
-	Then the client recieved data just for site(s) "9E7A;C877;DOD;2939;FFC7;VLER"
+	Then the client recieved data just for site(s) "9E7A;C877;DOD;HDR;VLER"
 	And the job status array and inProgress array are empty
 
 
@@ -32,17 +32,17 @@ Scenario: Client can request sync for a patient for multiple VistAs and secondar
 Scenario: Client can request sync for a patient for secondary sites with the ICN (ICN only)
 	When a patient with icn "4325679V4325679" has no demographics we should receive an error message
 	Then insert demographics for patient ICNONLY, PATIENT (with icn 4325679V4325679)
-	When a patient with pid "4325679V4325679" has been synced through VX-Sync API for "2939;FFC7;VLER" site(s) 
+	When a patient with pid "4325679V4325679" has been synced through VX-Sync API for "HDR;VLER" site(s) 
 	And the client requests sync status for patient with pid "4325679V4325679"
-	Then the client recieved data just for site(s) "2939;FFC7;VLER"
+	Then the client recieved data just for site(s) "HDR;VLER"
 	And the job status array and inProgress array are empty
 		
 	
 @sync_dod_only @future
 Scenario: Client can request sync for a patient for secondary sites with the ICN (DoD only)
-	Given a patient with pid "4325678V4325678" has been synced through VX-Sync API for "DoD;2939;FFC7;VLER" site(s) 
+	Given a patient with pid "4325678V4325678" has been synced through VX-Sync API for "DoD;HDR;VLER" site(s) 
 	When the client requests sync status for patient with pid "4325678V4325678"
-	Then the client recieved data just for site(s) "DoD;2939;FFC7;VLER"
+	Then the client recieved data just for site(s) "DoD;HDR;VLER"
 	And the job status array and inProgress array are empty
 	
 	

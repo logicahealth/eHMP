@@ -133,7 +133,7 @@ function isSiteSynced(syncStatus, site, req) {
         return false;
     }
     if (siteInfo.syncCompleted === true) {
-        if (!_hasOngoingJobForSite(syncStatus, site)) {
+        if (!_hasOngoingJobForSite(syncStatus, site, req)) {
             return true;
         }
     }
@@ -155,7 +155,7 @@ function _isValidJobArrayOrSite(syncStatus, site) {
 }
 
 /// Check to see if there is an ongoing job for a specific site
-function _hasOngoingJobForSite(syncStatus, site) {
+function _hasOngoingJobForSite(syncStatus, site, req) {
     if (!_isValidJobArrayOrSite(syncStatus, site)){
         return false;
     }
@@ -165,7 +165,15 @@ function _hasOngoingJobForSite(syncStatus, site) {
     }
     var jobStatus = syncStatus.data.jobStatus;
     var ongoing = _.find(jobStatus, function(jobData){
-        var jobType = jobData.type.toLowerCase();
+        var jobType = (jobData || {}).type;
+        if (_.isString(jobType)) {
+            jobType = jobType.toLowerCase();
+        } else {
+            if (req && req.logger) {
+                req.logger.warn({ syncStatus: syncStatus, jobType: jobType }, 'Wrong type for jobStatus');
+            }
+            jobType = '';
+        }
         if (jobType === 'enterprise-sync-request') {// return true if we have an entry of enterprise-sync-request
             return true;
         }
@@ -187,12 +195,22 @@ function getSiteSyncDataStatus(syncStatus, site, req) {
     }
     var syncStatusData = syncStatus.data.syncStatus;
     req.logger.debug(syncStatusData);
+    var hasError = hasSyncStatusErrorForSite(syncStatus, site);
+    if (hasError) { // make sure we do not have any errors
+        dataStatusRet.hasError = true;
+        dataStatusRet.isSyncCompleted = false;
+        return dataStatusRet;
+    }
+    // if site has ongoing jobs, then return inProgress.
+    if (_hasOngoingJobForSite(syncStatusData, site)) {
+        dataStatusRet.isSyncCompleted = false;
+        return dataStatusRet;
+    }
     if (_.isUndefined(syncStatusData.completedStamp) ||
         _.isUndefined(syncStatusData.completedStamp.sourceMetaStamp) ||
         _.isUndefined(syncStatusData.completedStamp.sourceMetaStamp[site])) {
         dataStatusRet.isSyncCompleted = false;
-        // check to see if there is any error related to job status
-        dataStatusRet.hasError = hasSyncStatusErrorForSite(syncStatus, site);
+        dataStatusRet.hasError = false;
     }
     else {
         var siteInfo = syncStatusData.completedStamp.sourceMetaStamp[site];
@@ -201,6 +219,27 @@ function getSiteSyncDataStatus(syncStatus, site, req) {
             dataStatusRet.completedStamp = siteInfo.stampTime;
         }
     }
+    return dataStatusRet;
+}
+
+// THis function will convert JDS simplified version sync status for a site to the format that UI wants.
+function getSiteSyncDataStatusSimple(siteSyncStatus) {
+    var dataStatusRet = {};
+    if (!siteSyncStatus || _.isEmpty(siteSyncStatus)) {
+        return dataStatusRet;
+    }
+    if (siteSyncStatus.hasError) {
+        dataStatusRet.hasError = true;
+        dataStatusRet.isSyncCompleted = false;
+        return dataStatusRet;
+    }
+    if (siteSyncStatus.syncCompleted) {
+        dataStatusRet.isSyncCompleted = true;
+        dataStatusRet.completedStamp =  siteSyncStatus.sourceStampTime;
+        return dataStatusRet;
+    }
+    dataStatusRet.isSyncCompleted = false;
+    dataStatusRet.hasError = false;
     return dataStatusRet;
 }
 
@@ -232,6 +271,7 @@ module.exports.getVistaSites = getVistaSites;
 module.exports.isSyncMarkedCompleted = isSyncMarkedCompleted;
 module.exports.isSyncCompleted = isSyncCompleted;
 module.exports.getSiteSyncDataStatus = getSiteSyncDataStatus;
+module.exports.getSiteSyncDataStatusSimple = getSiteSyncDataStatusSimple;
 
 // Exports for unit testing
 

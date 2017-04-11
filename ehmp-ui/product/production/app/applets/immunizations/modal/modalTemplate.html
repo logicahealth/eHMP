@@ -1,48 +1,125 @@
-<table class="table bottom-margin-xs">
-    <caption class="sr-only">This table represents selected immunization categorized by name, reaction, series, repeat contraindicated, date, facility, and site.</caption>
-    <thead>
-        <tr>
-            <th scope="col" data-detail-label="name">Name</th>
-            <th scope="col" data-detail-label="series">Reaction</th>
-            <th scope="col" data-detail-label="result">Series</th>
-            <th scope="col" data-detail-label="contraDisplay">Repeat Contraindicated</th>
-            <th scope="col" data-detail-label="administeredDate">Date</th>
-            <th scope="col" data-detail-label="facilityCode">Facility</th>
-            <th scope="col" data-detail-label="siteCode">Site</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{name}}</td>
-            <td>{{reactionName}}</td>
-            <td>{{seriesName}}</td>
-            <td>{{contraindicatedDisplay}}</td>
-            <td>{{formatDate administeredDateTime}}</td>
-            <td class="color-grey-dark">{{facilityName}}</td>
-            <td>{{facilityMoniker}}</td>
-        </tr>
-    </tbody>
-</table>
-<br>
-<form class="form-inline">
+    <div class="row">
+        <div class="col-xs-12">
+            <h5 class="all-margin-no all-padding-no">Name</h5>
+            <p>
+{{#if cdcFullVaccineName}}
+            {{cdcFullVaccineName}}
+{{else if standardizedName}}
+            {{standardizedName}}
+{{else}}
+            {{qualifiedName}}
+{{/if}}
+            </p>
+        </div>
+    </div>
+
+<div class="row">
+    {{#if administeredDateTime}}
+    <div class="col-xs-3">
+        <h5 class="all-margin-no all-padding-no">Date Administered</h5>
+        <p>{{administeredFormatted}}</p>
+    </div>
+    {{/if}}
+    {{#if seriesName}}
+    <div class="col-xs-3">
+        <h5 class="all-margin-no all-padding-no">Series</h5>
+        <p>{{seriesName}}</p>
+    </div>
+    {{/if}}
+</div>
+<div class="row">
+    {{#if manufacturer}}
+    <div class="col-xs-3">
+        <h5 class="all-margin-no all-padding-no">Manufacturer</h5>
+        <p>{{manufacturer}}</p>
+    </div>
+    {{/if}}
+    {{#if lotNumber}}
+    <div class="col-xs-3">
+        <h5 class="all-margin-no all-padding-no">Lot #</h5>
+        <p>{{lotNumber}}</p>
+    </div>
+    {{/if}}
+    {{#if expirationDate}}
+    <div class="col-xs-3">
+        <h5 class="all-margin-no all-padding-no">Expiration Date</h5>
+        <p>{{formatDate expirationDate "MM/DD/YYYY"}}</p>
+    </div>
+    {{/if}}
+</div>
+<div class="row">
+    {{#if locationName}}
+    <div class="col-xs-3">
+        <h5 class="all-margin-no all-padding-no">Location</h5>
+        <p>{{locationName}}</p>
+    </div>
+    {{/if}}
+    {{#if dosage}}
+    <div class="col-xs-3">
+        <h5 class="all-margin-no all-padding-no">Dosage/Unit</h5>
+        <p>{{dosage}}{{dosageUnits}}</p>
+    </div>
+    {{/if}}
+    {{#ifExp routeOfAdministration "||" siteOfAdministration}}
+    <div class="col-xs-3">
+        <h5 class="all-margin-no all-padding-no">Admin Route/Site</h5>
+        <p>{{routeOfAdministration}} {{siteOfAdministration}}</p>
+    </div>
+    {{/ifExp}}
+</div>
+{{#if vis}}
+<div class="row">
+    <div class="col-xs-12">
+        <h5 class="all-margin-no all-padding-no">Vaccine Information Statement(s) (VIS)</h5>
+        {{#each vis}}
+            <div>{{visName}} - Edition Date: {{formatDate editionDate}} ({{language}})</div>
+        {{/each}}
+        <p></p>
+    </div>
+</div>
+{{/if}}
+{{#if performerName}}
+<div class="row">
+    <div class="col-xs-3">
+        <h5 class="all-margin-no all-padding-no">Administered By</h5>
+        <p>{{performerName}}</p>
+    </div>
+</div>
+{{/if}}
+{{#if orderingProvider}}
+<div class="row">
+    <div class="col-xs-3">
+        <h5 class="all-margin-no all-padding-no">Ordering Provider</h5>
+        <p>{{orderingProvider}}</p>
+    </div>
+</div>
+{{/if}}
+{{#if eventInformationSource}}
+<div class="row">
+    <div class="col-xs-12">
+        <h5 class="all-margin-no all-padding-no">Information Source</h5>
+        <p>{{eventInformationSource}}</p>
+    </div>
+</div>
+{{/if}}
+{{#if comment}}
+<div class="row">
+    <div class="col-xs-12">
+        <h5 class="all-margin-no all-padding-no">Comment</h5>
+        <p>{{comment}}</p>
+    </div>
+</div>
+{{/if}}
+<hr aria-hidden="true" />
+<form class="form-inline top-margin-sm">
     <div id="dateRangeFilter"></div>
 </form>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12" id="lrDataTableView">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h5 class="panel-title">{{name}}</h5>
-                    <div class="row">
-                        <p class="col-md-12 small">Immunizations:<span class="left-padding-xs" id="totalTests"></span></p>
-                    </div>
-                </div>
+<div class="row">
+    <div class="col-md-12" id="lrDataTableView" accesskey="r">
+        <div class="panel panel-primary">
+            <div class="table-responsive">
                 <div class="js-backgrid"></div>
             </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <h6 class="col-md-12">Comment:</h6>
-    <div class="col-md-12">{{comment}}</div>
 </div>

@@ -71,7 +71,7 @@ define([
                                 control: "button",
                                 name: "note-preview-close",
                                 id: "preview-form-close-btn",
-                                title: "Press enter to close preview",
+                                title: "Press enter to close.",
                                 extraClasses: ["btn-default", "btn-sm"]
                                 }]
                         }]
@@ -114,9 +114,9 @@ define([
             channel.trigger('note:sign', this.model, "preview");
         },
         onDestroy: function() {
-            if (this.model.openTrayOnDestroy) {
-                channel.trigger('tray:open');
-            }
+            // if (this.model.openTrayOnDestroy) {
+            //     channel.trigger('tray:open');
+            // }
         }
     });
 

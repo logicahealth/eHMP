@@ -12,7 +12,8 @@ var data_path = '/data/hdr/';
 var data_file_extension = '.json';
 var no_content = 204;
 
-function fetchHdrData(pid, domain, res, actualpid) {
+function fetchHdrData(pid, domain, excludeIdentifier, res, actualpid) {
+    logger.debug('mockHdrProcess.fetchHdrData() pid=%s domain=%s excludeIdentifier=%s', pid, domain, excludeIdentifier);
     if (!actualpid) {
         actualpid = pid;
     }
@@ -22,7 +23,7 @@ function fetchHdrData(pid, domain, res, actualpid) {
         if (!exists) {
             if (pid != 'default') {
                 logger.trace('No ' + domain + ' data found for ' + pid + '; checking for default ' + domain + ' data');
-                fetchHdrData('default', domain, res, pid);
+                fetchHdrData('default', domain, excludeIdentifier, res, pid);
                 return;
             } else {
                 logger.debug('No ' + domain + ' data found for ' + actualpid);

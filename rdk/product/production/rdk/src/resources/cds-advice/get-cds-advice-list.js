@@ -21,6 +21,36 @@ var cdsWorkProduct = require('../cds-work-product/cds-work-product');
 // Cache
 var adviceCache = require('./advice-cache');
 
+/**
+ * Advice Priority
+ *      Critical:   80+
+ *      High:       80-61
+ *      Moderate:   60-41
+ *      Low:        40-21
+ *      Very Low:   20-0
+ *      None:       0-
+ *
+ * Reminder Priority
+ *      High:       1 (advice-80/High)
+ *      Normal:     2 (advice-60/Moderate)
+ *      Low:        3 (advice-40/Low)
+ */
+var ReminderToAdvicePriorityMap = {
+    '1': 80,
+    '2': 60,
+    '3': 40
+};
+
+/**
+ * Maps a reminder's priority value to match the scale of the advice priority values.
+ *
+ * param Number reminderPriority
+ * returns Number Priority value mapped to Advice priority range.
+ */
+function mapToAdvicePriority(reminderPriority) {
+    return ReminderToAdvicePriorityMap[reminderPriority];
+}
+
 /*
  * Transform the data returned from rules invocation into a UI usable common form
  *
@@ -83,7 +113,7 @@ function transformReminders(reminders, common) {
     _.forEach(reminders, function(reminder) {
         var item = {};
         item.id = reminder.reminderId;
-        item.priority = 0; // None
+        item.priority = mapToAdvicePriority(reminder.priority); // Priority
         item.title = reminder.title;
         item.details = null;
         item.type = 'reminder'; // Reminder
@@ -143,10 +173,24 @@ function getClinicalRemindersList(req, res, next, pid, callback) {
             }
             // Reminders coming from Vista have the following pattern: {id}^{title}^{dueDate|'DUE NOW'}^{doneDate}....
             // ex.  500047^Hepatitis C risk Factor Screening^DUE NOW^^2^1^1^^^^0
+
+            /**
+             * ActiveReminder string format:
+             *
+             * IEN^PRINT NAME^DUE DATE/TIME^LAST OCCURENCE DATE/TIME^PRIORITY^DUE^DIALOG
+             *
+             * where    PRIORITY 1=High, 2=Normal, 3=Low
+             *          DUE      0=Applicable, 1=Due, 2=Not Applicable
+             *
+             * ex. 500047^Hepatitis C risk Factor Screening^DUE NOW^^2^1^1^^^^0
+             *
+             * Source: CPRS code analysis by Seth Gainey
+             */
             var reminderParts = reminder.split('^');
             var item = {
                 reminderId: reminderParts[0],
-                title: reminderParts[1]
+                title: reminderParts[1],
+                priority: reminderParts[4]
             };
 
             var dueDateStr = reminderParts[2];
@@ -302,7 +346,12 @@ function getCDSAdviceList(req, res, next) {
     var cachedObj = adviceCache.get(req.session.id, pid, use);
 
     if (useCachedValue === 'true' && cachedObj && cachedObj.readStatus === readStatus) {
-        req.logger.debug('CDS Advice cache hit for sessionId/pid/use: ' + req.session.id + '/' + pid + '/' + use + ' value: ' + cachedObj.data);
+        req.logger.debug({
+            sessionId: req.session.id,
+            pid: pid,
+            use: use,
+            value: cachedObj.data
+        }, 'CDS Advice cache hit');
         return res.status(rdk.httpstatus.ok).rdkSend(cachedObj.data);
     }
     async.parallel([

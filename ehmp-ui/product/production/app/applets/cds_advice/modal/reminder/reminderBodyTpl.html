@@ -1,23 +1,39 @@
-<div class="row">
-    <div class="col-xs-12">
-    	<h5 class="bottom-border-grey-light">{{title}}</h5>
+<div class="detail-modal-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <h5 class="bottom-border-grey-dark">{{title}}</h5>
+        </div>
     </div>
-</div>
-{{#if dueDateFormatted}}
-<div class="row top-margin-sm">
-	<div class="col-xs-12"><strong>Due Date:</strong><span class="left-padding-sm">{{dueDateFormatted}}</span></div>
-</div>
-{{/if}}
-{{#if doneDateFormatted}}
-<div class="row top-margin-sm">
-    <div class="col-xs-12"><strong>Done Date:</strong><span class="left-padding-sm">{{doneDateFormatted}}</span></div>
-</div>
-{{/if}}
-<div class="row top-margin-sm">
-	<div class="col-xs-12 left-padding-sm"><strong>Detail</strong></div>
-	{{#if details.detail}}
-	<div class="col-xs-12 pre-wrap">{{details.detail}}</div>
-	{{else}}
-	<div class="col-xs-12">[This reminder has no details.]</div>
-	{{/if}}
+    <div class="row">
+        {{#if dueDateFormatted}}
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Due Date:</strong></span><br />
+                <span>{{dueDateFormatted}}</span>
+            </p>
+        </div>
+        {{/if}}
+        {{#if doneDateFormatted}}
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Done Date:</strong></span><br />
+                <span>{{doneDateFormatted}}</span>
+            </p>
+        </div>
+        {{/if}}
+    </div>
+    <div class="row top-margin-sm">
+        <div class="col-xs-12">
+            <h6 class="bottom-border-grey-dark">Details</h6>
+        </div>
+    </div>
+    {{#if details.detail}}
+    <pre>{{details.detail}}</pre>
+    {{else}}
+    <div class="row detail-modal-text-transform-none">
+        <div class="col-xs-12">
+            <p>Details not available for this reminder.</p>
+        </div>
+    </div>
+    {{/if}}
 </div>

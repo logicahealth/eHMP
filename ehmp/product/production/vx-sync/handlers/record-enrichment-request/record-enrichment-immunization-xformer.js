@@ -32,11 +32,17 @@ function transformAndEnrichRecord(log, config, environment, record, callback) {
 		return setTimeout(callback, 0, null, null);
 	}
 
+    var metrics = null;
+    if (environment) {
+        metrics = environment.metrics;
+    }
+
 	var terminologyUtils;
 	if (environment.terminologyUtils) {
 		terminologyUtils = environment.terminologyUtils;
 	} else {
-		terminologyUtils = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
+        var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
+        terminologyUtils = new TerminologyUtil(log, metrics, config);
 	}
 
 	fixFieldDataTypes(record);			// Since we are going to be copying objects around - lets fix the types before we copy them.
@@ -110,6 +116,16 @@ function fixFieldDataTypes(record) {
     }
     if ((record.expirationDate !== null) && (record.expirationDate !== undefined)) {
         record.expirationDate = String(record.expirationDate);
+    }
+    if (!_.isEmpty(record.vis)) {
+        _.each(record.vis, function(visItem) {
+            if ((visItem.editionDate !== null) && (visItem.editionDate !== undefined)) {
+                visItem.editionDate = String(visItem.editionDate);
+            }
+            if ((visItem.offeredDate !== null) && (visItem.offeredDate !== undefined)) {
+                visItem.offeredDate = String(visItem.offeredDate);
+            }
+        });
     }
 }
 

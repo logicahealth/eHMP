@@ -1,11 +1,13 @@
-@f423_vitals_write_back @regression
+@f423_vitals_write_back_errmsgs @regression @future
 Feature: F423 : Enter and Store Vitals
 
+# US7939, TC993: cannot automate
+
 Background:
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "twenty,patient"
   Then Cover Sheet is active
-  And user selects and sets new encounter
+  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   Then user adds a new vitals
   And user chooses to "Expand All" on add vitals modal detail screen
 

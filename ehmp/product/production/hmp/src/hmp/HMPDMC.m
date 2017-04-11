@@ -1,7 +1,8 @@
-HMPDMC ;SLC/MKB -- Clinical Procedures (Medicine) ;3/14/12  09:03
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDMC ;SLC/MKB,ASMR/RRB,CPC - Clinical Procedures (Medicine);May 31, 2016 19:31:41
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
+ ; DE2818, ^SC and ^VA(200) references supprted
  ; External References          DBIA#
  ; -------------------          -----
  ; ^SC                          10040
@@ -18,7 +19,7 @@ HMPDMC ;SLC/MKB -- Clinical Procedures (Medicine) ;3/14/12  09:03
  ; TIULQ                         2693
  ; TIUSRVLO                      2834
  ; XUAF4                         2171
- ;
+ Q
  ; ------------ Get procedures from VistA ------------
  ;
 EN(DFN,BEG,END,MAX,ID) ; -- find patient's procedures
@@ -154,7 +155,7 @@ RPT1(DFN,ID,RPT) ; -- return report as a TIU document
  Q
  ;
 TEXT(DFN,ID,NAME) ; -- Get report text, return temp array name
- N MCARGDA,MCPRO,MDALL,I,X
+ N MCARGDA,MCPRO,MDALL,I,X,Y ;de3944
  S MCARGDA=+$G(ID),MCPRO=NAME,MDALL=1 D PR690^MDPS1
  K ^TMP("HMPTEXT",$J,ID)
  S I=0 F  S I=$O(^TMP("MDPTXT",$J,MCARGDA,MCPRO,I)) Q:I<1  S X=$G(^(I,0)),^TMP("HMPTEXT",$J,ID,I)=X

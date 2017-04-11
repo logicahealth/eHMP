@@ -30,8 +30,16 @@ describe('write-back orders common check vista writer', function() {
     });
 
     it('tests that getParameters returns correct parameters array w/ order ID', function() {
-        model.orderId = '38888;1'
+        model.orderId = '38888;1';
         var expectedArray = ['3', 'LR', 'TODAY', '285', {'1': '350^LR^72'}, '38888;1', '0'];
+        var parameters = resource._getParameters(model);
+        expect(parameters).to.eql(expectedArray);
+    });
+
+    it('tests that getParameters returns correctly converted collection date time in parameters array', function() {
+        delete(model.orderId);
+        model.inputList[0].inputValue = '20160101123456';
+        var expectedArray = ['3', 'LR', '3160101.123456', '285', {'1': '350^LR^72'}, '', '0'];
         var parameters = resource._getParameters(model);
         expect(parameters).to.eql(expectedArray);
     });

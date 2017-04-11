@@ -1,12 +1,13 @@
 defaultTasks 'acceptanceTest'
 
+// add dummy test task so java plugin doesn't have to be applied
+task test {}
+
 task bundleInstall{
   doLast{
     exec {
-      //executable = "bundle"
-      executable = "sh"
-      //args = ['install']
-      args = ['-c', "bundle install"]
+      executable = "bundle"
+      args = ['install']
     }
   }
 }
@@ -16,10 +17,8 @@ task acceptanceTest(dependsOn: bundleInstall){
   description "Runs the acceptance tests for eHMP"
   doLast{
     exec {
-      //executable = "bundle"
-      executable = "sh"
-      //args = ['exec', 'rake']
-      args = ['-c', "bundle exec rake"]
+      executable = "bundle"
+      args = ['exec', 'rake']
     }
   }
 }
@@ -29,10 +28,19 @@ task syncCache(dependsOn: bundleInstall){
   description "Runs the acceptance tests for eHMP"
   doLast{
     exec {
-      //executable = "bundle"
-      //args = ['exec', 'rake', 'syncCache']
-      executable = "sh"
-      args = ['-c', "bundle exec rake syncCache"]
+      executable = "bundle"
+      args = ['exec', 'rake', 'syncCache']
+    }
+  }
+}
+
+task crsTest(dependsOn: bundleInstall){
+  group test.group
+  description "Runs the CRS tests"
+  doLast{
+    exec {
+      executable = "bundle"
+      args = ['exec', 'rake', 'crsTest']
     }
   }
 }

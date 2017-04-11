@@ -1,13 +1,15 @@
 name             "mocks"
-maintainer       "Agilex"
-maintainer_email "jay.flowers@agilex.com"
+maintainer       "Vistacore"
+maintainer_email "vistacore@vistacore.us"
 license          "All rights reserved"
 description      "Installs/Configures ehmp"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.0.11"
+version          "2.0.35"
 
 supports "mac_os_x"
 supports "centos"
+
+depends "common", "2.0.10"
 
 #############################
 # 3rd party
@@ -19,7 +21,7 @@ depends "apache2", "=3.0.1"
 #############################
 # wrapper_cookbook
 #############################
-depends "java_wrapper", "2.0.2"
-depends "nodejs_wrapper", "2.0.2"
-depends "bluepill_wrapper", "2.0.2"
-depends "apache2_wrapper", "2.0.2"
+depends "java_wrapper", "2.0.5"
+depends "nodejs_wrapper", "2.0.3"
+depends "bluepill_wrapper", "2.0.4"
+depends "apache2_wrapper", "2.0.4"

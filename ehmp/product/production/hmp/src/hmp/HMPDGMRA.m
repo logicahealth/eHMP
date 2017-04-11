@@ -1,6 +1,9 @@
-HMPDGMRA ;SLC/MKB -- Allergy/Reaction extract ;Jun 10, 2015@15:13:03
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 2
+HMPDGMRA ;SLC/MKB,ASMR/RRB,JD - Allergy/Reaction extract ;May 15, 2016 14:15
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ ;DE4220 - JD - 4/1/16: Fixed the date function so that seconds are considered for
+ ;                      Origination Date/Time field (^DD(120.8,4)).
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -10,7 +13,7 @@ HMPDGMRA ;SLC/MKB -- Allergy/Reaction extract ;Jun 10, 2015@15:13:03
  ; EN1^GMRAOR2                   2422
  ; PSN50P41                      4531
  ; PSN50P65                      4543
- ;
+ Q
  ; ------------ Get reactions from VistA ------------
  ;
 EN(DFN,BEG,END,MAX,IFN) ; -- find patient's allergies/reactions
@@ -75,12 +78,12 @@ EN1(ID,REAC) ; -- return a reaction in REAC("attribute")=value
  ;
 VA200(NAME) ; -- Return ien^name from #200
  N Y S NAME=$G(NAME),Y="^"
- I $L(NAME) S Y=+$O(^VA(200,"B",NAME,0))_U_NAME
+ I $L(NAME) S Y=+$O(^VA(200,"B",NAME,0))_U_NAME  ; IA 10060, DE2818
  Q Y
  ;
-DATE(X) ; Return FileMan format of external date format in X, must be eXact date
+DATE(X) ; -- Return internal form of date X
  N %DT,Y
- S %DT="STX" D ^%DT
+ S %DT="STX" D ^%DT  ;Added the "S" to allow for seconds.  DE4220
  Q Y
  ;
 DFO(X) ; -- Return 'DFO' string for mechanism name(s)

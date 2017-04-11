@@ -5,14 +5,14 @@ $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 require 'VerifyJsonRuntimeValue.rb'
 
 When(/^the user searches for a patient "(.*?)" in VPR format$/) do |last_name|
-# https://IPADDRESSvpr/search/Patient/?name=EIGHT
+# https://IPADDRES/vpr/search/Patient/?name=EIGHT
   path = QuerySearch.new("fullName", last_name).path
   p path
   @response = HTTPartyWithBasicAuth.get_with_authorization(path)
 end
 
 When(/^the user searches in summary results for a patient "(.*?)" in VPR format$/) do |last_name|
-# https://IPADDRESSvpr/search/Patient/?name=EIGHT&resultsRecordType=summary
+# https://IPADDRES/vpr/search/Patient/?name=EIGHT&resultsRecordType=summary
   path = QuerySearch.new("fullName", last_name).add_parameter("resultsRecordType", "summary")
   p path
   @response = HTTPartyWithBasicAuth.get_with_authorization(path)

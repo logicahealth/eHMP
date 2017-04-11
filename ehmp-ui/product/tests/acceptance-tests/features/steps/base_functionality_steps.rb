@@ -52,7 +52,7 @@ Then(/^the Orders Summary applet is displayed$/) do
   wait.until { @oc.applet_loaded }
 end
 
-Then(/^the Conditions Summary applet is displayed$/) do
+Then(/^the Problems Summary applet is displayed$/) do
   # @active_problems
   verify_applet_exists(@active_problems.appletid)
   verify_applet_view_type('summary', @active_problems.appletid)
@@ -78,7 +78,7 @@ end
 
 def verify_no_error_messages
   driver = TestSupport.driver
-  applets = driver.find_elements(:css, ".fa-exclamation-circle")
+  applets = driver.find_elements(:css, "i:not([class='sidebar']) .fa-exclamation-circle")
   expect(applets.size).to eq(0), "There should not be any error message, there is #{applets.size}"
 end
 
@@ -122,7 +122,7 @@ Then(/^the Active Medications Trend applet is displayed$/) do
   wait.until { @mg.applet_loaded? }
 end
 
-Then(/^the Conditions Trend applet is displayed$/) do
+Then(/^the Problems Trend applet is displayed$/) do
   verify_applet_exists(@cg.appletid)
   verify_applet_view_type('gist', @cg.appletid)
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
@@ -168,4 +168,18 @@ Then(/^the Med Review applet is displayed$/) do
   verify_applet_view_type('expanded', med_review.appletid)
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { med_review.applet_loaded }
+end
+
+Then(/^the Immunizations Trend applet is displayed$/) do
+  immunizations = ImmunizationGist.instance
+  verify_applet_exists(immunizations.appletid)
+  verify_applet_view_type('gist', immunizations.appletid)
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { immunizations.applet_loaded? }
+end
+
+Then(/^the Stacked Graph Expanded applet is displayed$/) do
+  stacked_graph = StackedGraph.instance
+  verify_applet_exists(stacked_graph.appletid)
+  verify_applet_view_type('expanded', stacked_graph.appletid)
 end

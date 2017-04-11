@@ -30,12 +30,12 @@ class CoverSheet < AccessBrowserV2
   include Singleton
   def initialize
     super
-    add_verify(CucumberLabel.new("patient identifying traits"), VerifyText.new, AccessHtmlElement.new(:id, "patientDemographic-patientInfo"))
-    add_verify(CucumberLabel.new("patient name"), VerifyContainsText.new, AccessHtmlElement.new(:id, "patientDemographic-patientInfo"))
-    add_verify(CucumberLabel.new("SSN"), VerifyContainsText.new, AccessHtmlElement.new(:id, "patientDemographic-patientInfo"))
-    dob_age_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4} \\(\\d+\\y\\)")
-    add_verify(CucumberLabel.new("DOB"), VerifyTextFormat.new(dob_age_format), AccessHtmlElement.new(:id, "patientDemographic-patientInfo-dob"))
-    add_verify(CucumberLabel.new("Gender"), VerifyContainsText.new, AccessHtmlElement.new(:id, "patientDemographic-patientInfo"))
+    add_verify(CucumberLabel.new("patient identifying traits"), VerifyText.new, AccessHtmlElement.new(:id, "patientDemographic"))
+    add_verify(CucumberLabel.new("patient name"), VerifyContainsText.new, AccessHtmlElement.new(:class, "patient-info"))
+    add_verify(CucumberLabel.new("SSN"), VerifyContainsText.new, AccessHtmlElement.new(:class, "patient-info"))
+    dob_age_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4} \\(\\d+\\y")
+    add_verify(CucumberLabel.new("DOB"), VerifyTextFormat.new(dob_age_format), AccessHtmlElement.new(:css, "div.patient-info p:first-of-type"))
+    add_verify(CucumberLabel.new("Gender"), VerifyContainsText.new, AccessHtmlElement.new(:class, "patient-info"))
     add_verify(CucumberLabel.new("Provider"), VerifyContainsText.new, AccessHtmlElement.new(:id, "UNKNOWN_ID"))
     add_verify(CucumberLabel.new("Ward"), VerifyContainsText.new, AccessHtmlElement.new(:id, "UNKNOWN_ID"))
     add_verify(CucumberLabel.new("Primary Care Team"), VerifyContainsText.new, AccessHtmlElement.new(:id, "UNKNOWN_ID"))
@@ -66,25 +66,58 @@ Then(/^the "(.*?)" is displayed with information$/) do |arg1, table|
 end
 
 Then(/^Cover Sheet is active$/) do
-  browser_access = CoverSheet.instance  
+  browser_access = CoverSheet.instance
   navigate_in_ehmp '#cover-sheet'
+
+  expect(browser_access.wait_until_element_present("Cover Sheet Pill", 60)).to be_true
+  expect(browser_access.perform_verification("Cover Sheet Pill", "Coversheet")).to be_true
+
+  # increased the timeout as coversheet applets are taking longer to load
+  max_attempt = 2
+  begin
+    time_to_load = 90
+    expect(browser_access.wait_until_xpath_count("Number of Applets", 9, time_to_load)).to be_true
+  rescue => e
+    TestSupport.driver.navigate.refresh
+    max_attempt -= 1
+    retry if max_attempt > 0
+    raise e if max_attempt <= 0
+  end
+  wait = Selenium::WebDriver::Wait.new(:timeout => time_to_load) 
+  begin
+    wait.until { CoverSheetApplets.instance.applets_loaded? }
+  rescue
+    expect(CoverSheetApplets.instance.applets_loaded? true).to eq(true)
+  end
+  @ehmp = PobHeaderFooter.new
+  @ehmp.wait_until_header_footer_elements_loaded
+end
+
+Then(/^the user is returned to the coversheet$/) do
+  # step needs to verify where the user ends up, but do not navigate to that page
+
+  browser_access = CoverSheet.instance  
   # deliberate use of wait time other then the DefaultLogin.wait_time
   # This is for tests that don't use
   # Given(/^user searches for and selects "(.*?)"$/)
   expect(browser_access.wait_until_element_present("Cover Sheet Pill", 60)).to be_true  
   expect(browser_access.perform_verification("Cover Sheet Pill", "Coversheet")).to be_true
-  #wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   # increased the timeout as coversheet applets are taking longer to load
-  wait = Selenium::WebDriver::Wait.new(:timeout => 90)
-  wait.until { CoverSheetApplets.instance.applets_loaded? }
-  expect(browser_access.wait_until_xpath_count("Number of Applets", 9)).to be_true
+  time_to_load = 90
+  expect(browser_access.wait_until_xpath_count("Number of Applets", 9, time_to_load)).to be_true
+  wait = Selenium::WebDriver::Wait.new(:timeout => time_to_load)
+  begin
+    wait.until { CoverSheetApplets.instance.applets_loaded? }
+  rescue
+    expect(CoverSheetApplets.instance.applets_loaded? true).to eq(true)
+  end
 end
 
 class CoverSheetApplets < AccessBrowserV2
   include Singleton
   def initialize
     super
-    add_verify(CucumberLabel.new("CONDITIONS"), VerifyContainsText.new, applet_panel_title("problems"))
+    add_verify(CucumberLabel.new("PROBLEMS"), VerifyContainsText.new, applet_panel_title("problems"))
     add_verify(CucumberLabel.new("NUMERIC LAB RESULTS"), VerifyContainsText.new, applet_panel_title("lab_results_grid"))
     add_verify(CucumberLabel.new("VITALS"), VerifyContainsText.new, applet_panel_title("vitals"))
     add_verify(CucumberLabel.new("Active & Recent MEDICATIONS"), VerifyContainsText.new, applet_panel_title("activeMeds"))
@@ -109,7 +142,7 @@ class CoverSheetApplets < AccessBrowserV2
     return panel_title_accesser
   end
 
-  def applets_loaded?
+  def applets_loaded?(print_checks = false)
     # | Active & Recent MEDICATIONS   |
     # | COMMUNITY HEALTH SUMMARIES|
     allergy_gist_applet = AllergiesGist.instance
@@ -119,14 +152,23 @@ class CoverSheetApplets < AccessBrowserV2
     vitals = VitalsCoversheet.instance
     immunizations = ImmunizationsCoverSheet.instance
     appointments = AppointmentsCoverSheet.instance
-    return false unless allergy_gist_applet.applet_loaded?
-    return false unless order_applet.applet_loaded
-    return false unless conditions.applet_grid_loaded
-    return false unless numeric_lab.applet_loaded?
-    return false unless vitals.applet_loaded
-    return false unless immunizations.applet_loaded?
-    return false unless appointments.applet_loaded?
+    active_meds = ActiveMedications.instance
+    health_summaries = CommunityHealthSummariesCoverSheet.instance
+    return false unless print_applet_loading_outcome("Conditions/Problems", conditions.applet_grid_loaded, print_checks)
+    return false unless print_applet_loading_outcome("Vitals", vitals.applet_loaded, print_checks)
+    return false unless print_applet_loading_outcome("Allergy Gist", allergy_gist_applet.applet_loaded?, print_checks)
+    return false unless print_applet_loading_outcome("Appointments", appointments.applet_loaded?, print_checks)
+    return false unless print_applet_loading_outcome("Numeric Lab Results", numeric_lab.applet_loaded?, print_checks)
+    return false unless print_applet_loading_outcome("Community Health Summaries", health_summaries.applet_loaded?, print_checks)
+    return false unless print_applet_loading_outcome("Immunizations", immunizations.applet_loaded?, print_checks)
+    return false unless print_applet_loading_outcome("Active Meds", active_meds.applet_loaded?, print_checks)
+    return false unless print_applet_loading_outcome("Order", order_applet.applet_loaded, print_checks)
     return true
+  end
+
+  def print_applet_loading_outcome(applet, result, print_checks)
+    p "#{applet} loaded? #{result}" if print_checks
+    result
   end
 end
 

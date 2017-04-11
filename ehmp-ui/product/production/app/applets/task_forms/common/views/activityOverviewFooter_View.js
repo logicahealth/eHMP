@@ -22,7 +22,6 @@ define([
         },
         initialize: function(options) {
             this.formModel = options.formModel;
-            this.taskListView = options.taskListView;
             this.discontinueEvent = options.discontinueEvent;
             this.optionButtonEvent = options.optionButtonEvent;
         },

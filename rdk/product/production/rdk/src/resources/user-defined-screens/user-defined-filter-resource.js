@@ -109,7 +109,7 @@ function createFilter(req, res) {
 
     //Get UserScreensConfig and update with new or updated filter
     uds.getScreenData(screenId, req, function(err, data) {
-        req.logger.debug('getting data in createFilter for screenID: ' + screenId + ' and data returned is this: ' + data);
+        req.logger.debug({data: data}, 'getting data in createFilter for screenID: ' + screenId + ' and data returned');
         if (err) {
             req.logger.error('Unable to save custom filter due to error retrieving UserScreensConfig data');
             req.logger.error(err);
@@ -124,7 +124,7 @@ function createFilter(req, res) {
 
             userDefinedFilterData = dd(data)('userDefinedFilters').val;
 
-            if(nullchecker.isNotNullish(userDefinedFilterData)) {
+            if (nullchecker.isNotNullish(userDefinedFilterData)) {
                 for (count = 0; count < userDefinedFilterData.length; count++) {
                     if (userDefinedFilterData[count].id === filterId) {
                         filterData = userDefinedFilterData[count];
@@ -134,7 +134,7 @@ function createFilter(req, res) {
                     }
                 }
 
-                if(!found) {
+                if (!found) {
                     filterData = processDataForCreate(filterId, instanceId, filterName, filterData);
                     var updatedFilterData = userDefinedFilterData.concat(filterData);
                     userDefinedFilterData = updatedFilterData;
@@ -150,9 +150,9 @@ function createFilter(req, res) {
             udsData = data;
 
             //The UI is coded to expect strings, store it as such
-            var content = JSON.stringify(udsData);
+            var content = udsData;
 
-            req.logger.debug('Inside userDefinedFilters createFilter filter data before post: ' + JSON.stringify(content));
+            req.logger.debug({content: content}, 'Inside userDefinedFilters createFilter filter data before post');
 
             postFilterData(content, req, function(err) {
                 if (err) {
@@ -363,7 +363,9 @@ function removeAllFilters(req, res) {
         }
 
         userDefinedFilterData = dd(data)('userDefinedFilters').val;
-        var filterData = _.findWhere(userDefinedFilterData, {id: filterId}) || {};
+        var filterData = _.findWhere(userDefinedFilterData, {
+            id: filterId
+        }) || {};
 
         var appletResult = findApplet(filterData, instanceId, req);
         if (appletResult.err) {
@@ -371,12 +373,14 @@ function removeAllFilters(req, res) {
         }
 
         filterData = removeDataFilters(appletResult.appletIndex, filterData);
-
-        if(userDefinedFilterData[count].applets.length === 0) {
+        var count = _.findIndex(userDefinedFilterData, function(udf) {
+            return udf.id === filterId;
+        });
+        if (userDefinedFilterData[count].applets.length === 0) {
             userDefinedFilterData.splice(count, 1);
         }
 
-        req.logger.debug('About to overwrite data with: ' + JSON.stringify(data));
+        req.logger.debug({data: data}, 'About to overwrite data with');
 
         //updateOrDeleteApplet(data, screenId, req, res);
 
@@ -432,7 +436,7 @@ function removeAllFilters(req, res) {
         }
 
         data = removeDataFilters(appletResult.appletIndex, data);
-        req.logger.debug('About to overwrite data with: ' + JSON.stringify(data));
+        req.logger.debug({data: data}, 'About to overwrite data with');
 
         updateOrDeleteApplet(data, filterId, req, res);
     });
@@ -493,7 +497,9 @@ function removeFilter(req, res) {
         }
 
         userDefinedFilterData = dd(data)('userDefinedFilters').val;
-        var filterData = _.findWhere(userDefinedFilterData, {id: filterId}) || {};
+        var filterData = _.findWhere(userDefinedFilterData, {
+            id: filterId
+        }) || {};
 
         var appletResult = findApplet(filterData, instanceId, req);
         if (appletResult.err) {
@@ -501,7 +507,7 @@ function removeFilter(req, res) {
         }
 
         filterData = removeDataFilter(filterName, appletResult.appletIndex, filterData);
-        req.logger.debug('About to overwrite data with: ' + JSON.stringify(data));
+        req.logger.debug({data: data}, 'About to overwrite data with');
 
         //updateOrDeleteApplet(data, screenId, req, res);
 
@@ -616,14 +622,14 @@ function getPredefinedFilterData(req, screenId, callback) {
     var filename;
 
     filename = './src/resources/user-defined-screens/assets/' + screenId + '_filter.json';
-    filterData = cbwFilters.filter(function (el) {
+    filterData = cbwFilters.filter(function(el) {
         return (el._id.indexOf(screenId) >= 0);
     });
     if (filterData.length === 0) {
         //just in case there were more matches than one, ignore it
         fs.exists(filename, function(exists) {
-            if(exists) {
-                fs.readFile(filename, 'utf8', function (err, result) {
+            if (exists) {
+                fs.readFile(filename, 'utf8', function(err, result) {
                     if (err) {
                         req.logger.error(err.message);
                         callback(err);
@@ -640,7 +646,7 @@ function getPredefinedFilterData(req, screenId, callback) {
 
                     filterData = dd(result)('userdefinedfilters').val;
 
-                    if(!_.isUndefined(filterData)) {
+                    if (!_.isUndefined(filterData)) {
                         filterData.id = screenId;
                     }
                     callback(null, filterData);
@@ -664,7 +670,7 @@ function getFilterData(predefinedScreensIdsArray, filterId, req, callback) {
     });
 
     _.each(predefinedScreensIdsArray, function(pdsId) {
-        if(screenName === pdsId) {
+        if (screenName === pdsId) {
             predefined = 'true';
         }
     });
@@ -674,7 +680,7 @@ function getFilterData(predefinedScreensIdsArray, filterId, req, callback) {
         req.logger.debug('predefined and -cbw: ' + screenName + ' predefined: ' + predefined);
         var returnedData;
         var filename = __dirname + '/assets/' + screenName + '_filter.json';
-        returnedData = cbwFilters.filter( function(el) {
+        returnedData = cbwFilters.filter(function(el) {
             return (el._id.indexOf(screenName) >= 0);
         });
         if (returnedData.length > 0) {
@@ -682,8 +688,8 @@ function getFilterData(predefinedScreensIdsArray, filterId, req, callback) {
             callback(null, returnedData[0]);
         } else {
             fs.exists(filename, function(exists) {
-                if(exists) {
-                    fs.readFile(filename, 'utf8', function (err, result) {
+                if (exists) {
+                    fs.readFile(filename, 'utf8', function(err, result) {
                         if (err) {
                             options.logger.error(err.message);
                             callback(err);
@@ -731,7 +737,7 @@ function postFilterData(content, req, callback) {
     httpUtil.post(options,
         function(err, response, data) {
             if (err) {
-                options.logger.error('Unable to POST filter data. Error: ' + err);
+                options.logger.error({error: err}, 'Unable to POST filter data.');
                 if (callback) {
                     callback(err);
                 }
@@ -784,7 +790,7 @@ function createScreenIdFromRequest(req, screenType) {
     var site = dd(userSession)('site').val;
     var ien = dd(userSession)('duz')(site).val;
 
-    if(!_.isUndefined(site) && !_.isUndefined(ien)) {
+    if (!_.isUndefined(site) && !_.isUndefined(ien)) {
         uid = site.concat(';').concat(ien);
         uid = uid.concat('_').concat(screenType);
     }

@@ -118,6 +118,7 @@ function _createNewJobStatus(vistaId, domain, pidSite, pid, job, pollerJobId, jo
 	var meta = {
 		rootJobId: job.rootJobId,
 		jpid: job.jpid,
+		priority: job.priority,
 		jobId: pollerJobId
 	};
 	var isHdr = jobUtil.isVistAHdrSubscribeRequestType(job.type);
@@ -160,13 +161,13 @@ function _createNewJobStatus(vistaId, domain, pidSite, pid, job, pollerJobId, jo
 function _subscribePatientToVistA(vistaId, pidSite, pid, job, pollerJobId, vistaClient, log, callback) {
 	log.debug('vista-subscribe-request-handler._subscribePatientToVistA: Entering method. vistaId: %s; pidSite: %s for pid: %s', vistaId, pidSite, pid);
 	// TODO:  Pass in the pollerJobId so that VistA will send it back to us when it sends the data.
-	vistaClient.subscribe(vistaId, job.patientIdentifier, job.rootJobId, pollerJobId, callback);
+	vistaClient.subscribe(vistaId, job.patientIdentifier, job.rootJobId, pollerJobId, job.priority, callback);
 }
 
 function _subscribePatientToVistAHdr(siteId, pidSite, pid, job, pollerJobId, hdrClient, log, callback) {
 	log.debug('vista-subscribe-request-handler._subscribePatientToVistAHdr: Entering method. siteId: %s; pidSite: %s for pid: %s', siteId, pidSite, pid);
 	// TODO:  Pass in the pollerJobId so that VistA will send it back to us when it sends the data.
-	hdrClient.subscribe(siteId, job.patientIdentifier, job.rootJobId, pollerJobId, callback);
+	hdrClient.subscribe(siteId, job.patientIdentifier, job.rootJobId, pollerJobId, job.priority, callback);
 }
 //------------------------------------------------------------------------------------------------------
 // Export public artifacts.

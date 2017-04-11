@@ -10,11 +10,11 @@ end
 
 task :sync_nodes_between_chef_server_and_chef_zero, [:machine_name, :stack_name,] do |t,args|
   if ENV.has_key?("CHEF_REPO")
-    upload_to_server(args[:machine], args[:stack_name])
-    download_to_zero(args[:machine], args[:stack_name])
+    upload_to_server(args[:machine_name], args[:stack_name])
+    download_to_zero(args[:machine_name], args[:stack_name])
   else
-    download_to_zero(args[:machine], args[:stack_name])
-    upload_to_server(args[:machine], args[:stack_name])
+    download_to_zero(args[:machine_name], args[:stack_name])
+    upload_to_server(args[:machine_name], args[:stack_name])
   end
 end
 
@@ -28,7 +28,7 @@ end
 
 def upload_to_server(machine, stack_name)
   nodes = "*-#{stack_name}*"
-  nodes = machine unless machine.nil? || machine.eql?("") || machine.eql?("all-machines")
+  nodes = "#{machine}-#{stack_name}*" unless machine.nil? || machine.eql?("") || machine.eql?("all-machines")
   node_folder = "#{ENV['WORKSPACE']}/chef-repo/nodes"
   if File.directory?(node_folder)
     begin

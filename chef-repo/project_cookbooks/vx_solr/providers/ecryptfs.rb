@@ -1,7 +1,7 @@
 def get_password(data_bag_item_name)
   mounts_passwords = nil
   begin
-    mounts_passwords = Chef::EncryptedDataBagItem.load("credentials", "#{data_bag_item_name}", 'n25q2mp#h4')
+    mounts_passwords = Chef::EncryptedDataBagItem.load("credentials", "#{data_bag_item_name}", node[:data_bag_string])
   rescue 
     Chef::Log.warn "Did not find data bag item 'credentials' '#{data_bag_item_name}'"
   end

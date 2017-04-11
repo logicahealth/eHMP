@@ -41,7 +41,7 @@ class EncountersGist <  AllApplets
     add_verify(CucumberLabel.new("Appointments"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-group-instanceid=panel-Appointments]"))
     add_verify(CucumberLabel.new("Admissions"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-group-instanceid=panel-Admissions]"))
     add_verify(CucumberLabel.new("Procedures"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-group-instanceid=panel-Procedures]"))
-    
+
     add_verify(CucumberLabel.new("Visits Occurance"), VerifyEncounterHxOccuranceFormat.new, AccessHtmlElement.new(:css, "[data-group-instanceid=panel-Visits] .flex-width-2 div.table-cell:nth-of-type(2)"))
     add_verify(CucumberLabel.new("Appointments Occurance"), VerifyEncounterHxOccuranceFormat.new, AccessHtmlElement.new(:css, "[data-group-instanceid=panel-Visits] .flex-width-2 div.table-cell:nth-of-type(2)"))
     add_verify(CucumberLabel.new("Admissions Occurance"), VerifyEncounterHxOccuranceFormat.new, AccessHtmlElement.new(:css, "[data-group-instanceid=panel-Admissions] .flex-width-2 div.table-cell:nth-of-type(2)"))
@@ -50,20 +50,21 @@ class EncountersGist <  AllApplets
     # add actions for applet buttons, ex refresh, filter, maximize
     add_applet_buttons appletid_css  
     add_applet_title appletid_css
+    add_toolbar_buttons
 
     #Expand encounter objects
-    add_action(CucumberLabel.new("Expand_Visits"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Visits'] .caret-placer"))
-    add_action(CucumberLabel.new("Expand_Procedures"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Procedures'] .caret-placer"))
-    add_action(CucumberLabel.new("Expand_Appointments"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Appointments'] .caret-placer"))
-    add_action(CucumberLabel.new("Expand_Admissions"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Admissions'] .caret-placer"))
+    add_action(CucumberLabel.new("Expand_Visits"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Visits'] i"))
+    add_action(CucumberLabel.new("Expand_Procedures"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Procedures'] i"))
+    add_action(CucumberLabel.new("Expand_Appointments"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Appointments'] i"))
+    add_action(CucumberLabel.new("Expand_Admissions"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Admissions'] i"))
     #expand collapse timeline  
     add_action(CucumberLabel.new("Close-Timeline"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=newsfeed] .applet-minimize-button"))
     #text filter  
     #Quick View
     add_verify(CucumberLabel.new("Quick View Table Title"), VerifyText.new, AccessHtmlElement.new(:css, ".overview .popover-title"))
     #menu
-    add_action(CucumberLabel.new("Quick View Icon"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] div.toolbarActive [button-type=quick-look-button-toolbar]"))
-    add_action(CucumberLabel.new("Detail View Icon"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] div.toolbarActive [button-type=detailView-button-toolbar]"))
+    # add_action(CucumberLabel.new("Quick View Icon"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] div.toolbarActive [button-type=quick-look-button-toolbar]"))
+    # add_action(CucumberLabel.new("Detail View Icon"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] div.toolbarActive [button-type=detailView-button-toolbar]"))
     #modal title
     add_verify(CucumberLabel.new("Main Modal Label"), VerifyContainsText.new, AccessHtmlElement.new(:id, "mainModalLabel"))
     add_verify(CucumberLabel.new("Modal Details"), VerifyContainsText.new, AccessHtmlElement.new(:id, "modal-body"))
@@ -88,11 +89,11 @@ class VisitObject <  ADKContainer
     add_verify(CucumberLabel.new("Last Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Visits'] [data-header-instanceid='count-header2']"))
     
     #Visit expand view details  
-    add_verify(CucumberLabel.new("GENERAL INTERNAL MEDICINE"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid='event_name_encounters-Visit-GENERALINTERNALMEDICINE']"))
+    add_verify(CucumberLabel.new("GENERAL INTERNAL MEDICINE"), VerifyText.new, AccessHtmlElement.new(:css, '[data-cell-instanceid="event_name_encounters-Visit-GENERALINTERNALMEDICINE"] span:nth-of-type(2)'))
     add_verify(CucumberLabel.new("GENERAL INTERNAL MEDICINE Hx Occurrence"), VerifyEncounterHxOccuranceFormat.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=encounter_count_encounters-Visit-GENERALINTERNALMEDICINE]"))
     add_verify(CucumberLabel.new("GENERAL INTERNAL MEDICINE Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=time_since_encounters-Visit-GENERALINTERNALMEDICINE]"))
-      
-    add_verify(CucumberLabel.new("CARDIOLOGY"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=event_name_encounters-Visit-CARDIOLOGY]"))
+
+    add_verify(CucumberLabel.new("CARDIOLOGY"), VerifyText.new, AccessHtmlElement.new(:css, '[data-cell-instanceid="event_name_encounters-Visit-CARDIOLOGY"] span:nth-of-type(2)'))
     add_verify(CucumberLabel.new("CARDIOLOGY Hx Occurrence"), VerifyEncounterHxOccuranceFormat.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=encounter_count_encounters-Visit-CARDIOLOGY]"))
     add_verify(CucumberLabel.new("CARDIOLOGY Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=time_since_encounters-Visit-CARDIOLOGY]"))
       
@@ -128,11 +129,11 @@ class ProcedureObject <  ADKContainer
     add_verify(CucumberLabel.new("Last Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Procedures'] [data-header-instanceid='count-header2']"))
     
     #Procedures expand view details  
-    add_verify(CucumberLabel.new("PULMONARY FUNCTION INTERPRET"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=event_name_encounters-Procedure-PULMONARYFUNCTIONINTERPRET]"))
+    add_verify(CucumberLabel.new("PULMONARY FUNCTION INTERPRET"), VerifyText.new, AccessHtmlElement.new(:css, '[data-cell-instanceid="event_name_encounters-Procedure-PULMONARYFUNCTIONINTERPRET"] span:nth-of-type(2)'))
     add_verify(CucumberLabel.new("PULMONARY FUNCTION INTERPRET Hx Occurrence"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=encounter_count_encounters-Procedure-PULMONARYFUNCTIONINTERPRET]"))
     add_verify(CucumberLabel.new("PULMONARY FUNCTION INTERPRET Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=time_since_encounters-Procedure-PULMONARYFUNCTIONINTERPRET]"))
-      
-    add_verify(CucumberLabel.new("PULMONARY FUNCTION TEST"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=event_name_encounters-Procedure-PULMONARYFUNCTIONTEST]"))
+
+    add_verify(CucumberLabel.new("PULMONARY FUNCTION TEST"), VerifyText.new, AccessHtmlElement.new(:css, '[data-cell-instanceid="event_name_encounters-Procedure-PULMONARYFUNCTIONTEST"] span:nth-of-type(2)'))
     add_verify(CucumberLabel.new("PULMONARY FUNCTION TEST Hx Occurrence"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=encounter_count_encounters-Procedure-PULMONARYFUNCTIONTEST]"))
     add_verify(CucumberLabel.new("PULMONARY FUNCTION TEST Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=time_since_encounters-Procedure-PULMONARYFUNCTIONTEST] .eventsTimeSince"))
       
@@ -160,7 +161,7 @@ class AppointmentObject <  ADKContainer
     add_verify(CucumberLabel.new("Last Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Appointments'] [data-header-instanceid='count-header2']"))
       
     #Appointments expand view details  
-    add_verify(CucumberLabel.new("GENERAL INTERNAL MEDICINE"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=event_name_encounters-Appointment-GENERALINTERNALMEDICINE]"))
+    add_verify(CucumberLabel.new("GENERAL INTERNAL MEDICINE"), VerifyText.new, AccessHtmlElement.new(:css, '[data-cell-instanceid="event_name_encounters-Appointment-GENERALINTERNALMEDICINE"] span:nth-of-type(2)'))
     add_verify(CucumberLabel.new("GENERAL INTERNAL MEDICINE Hx Occurrence"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=encounter_count_encounters-Appointment-GENERALINTERNALMEDICINE]"))
     add_verify(CucumberLabel.new("GENERAL INTERNAL MEDICINE Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=encounters] [data-cell-instanceid=time_since_encounters-Appointment-GENERALINTERNALMEDICINE]"))
       
@@ -188,11 +189,11 @@ class AdmissionObject <  ADKContainer
     add_verify(CucumberLabel.new("Last Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Admissions'] [data-header-instanceid='count-header2']"))
       
     #Admissions expand view details  
-    add_verify(CucumberLabel.new("SLKJFLKSDJF"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-cell-instanceid=event_name_encounters-Admission-SLKJFLKSDJF]"))
+    add_verify(CucumberLabel.new("SLKJFLKSDJF"), VerifyText.new, AccessHtmlElement.new(:css, '[data-cell-instanceid="event_name_encounters-Admission-SLKJFLKSDJF"] span:nth-of-type(2)'))
     add_verify(CucumberLabel.new("SLKJFLKSDJF Hx Occurrence"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-cell-instanceid=encounter_count_encounters-Admission-SLKJFLKSDJF]"))
     add_verify(CucumberLabel.new("SLKJFLKSDJF Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-cell-instanceid=time_since_encounters-Admission-SLKJFLKSDJF] .eventsTimeSince"))
       
-    add_verify(CucumberLabel.new("OBSERVATION"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-cell-instanceid=event_name_encounters-Admission-OBSERVATION]"))
+    add_verify(CucumberLabel.new("OBSERVATION"), VerifyText.new, AccessHtmlElement.new(:css, '[data-cell-instanceid="event_name_encounters-Admission-OBSERVATION"] span:nth-of-type(2)'))
     add_verify(CucumberLabel.new("OBSERVATION Hx Occurrence"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-cell-instanceid=encounter_count_encounters-Admission-OBSERVATION]"))
     add_verify(CucumberLabel.new("OBSERVATION Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-cell-instanceid=time_since_encounters-Admission-OBSERVATION]"))
       
@@ -232,6 +233,12 @@ Then(/^the Encounters Gist Applet detail view contains$/) do |table|
   end
 end
 
+Then(/^the Encounters Gist Applet detail view contains "(.*?)"$/) do |value|
+  @ehmp = PobEncountersApplet.new
+  @ehmp.wait_until_fld_applet_title_visible
+  expect(@ehmp.fld_empty_gist.text.include? value).to eq(true), "Actual: #{@ehmp.fld_empty_gist.text}, Expected: #{value}"
+end
+
 Then(/^user sees Encounters Gist$/) do 
   aa = EncountersGist.instance 
   expect(aa.wait_until_action_element_visible("Title", DefaultLogin.wait_time)).to be_true
@@ -252,7 +259,7 @@ Then(/^there is a dynamic arrow next to visits in Encounters Gist Applet$/) do
   
   expect(aa.wait_until_action_element_visible("Title", DefaultLogin.wait_time)).to be_true
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { arrow_position "[data-appletid='encounters'] [data-group-instanceid='panel-Visits'] .caret-placer", 'right' }
+  wait.until { arrow_position "[data-appletid='encounters'] [data-group-instanceid='panel-Visits'] i", 'right' }
 end
 
 When(/^the user expands "(.*?)" in Encounters Gist Applet$/) do |element|
@@ -375,8 +382,10 @@ end
 
 Then(/^a Menu appears on the Encounters Gist$/) do
   aa = EncountersGist.instance
-  expect(aa.wait_until_action_element_visible("Quick View Icon", DefaultLogin.wait_time)).to be_true, "Menu with Quick View icon is not displayed"
-  expect(aa.wait_until_action_element_visible("Detail View Icon", DefaultLogin.wait_time)).to be_true, "Menu Detail View icon is not displayed"    
+  # expect(aa.wait_until_action_element_visible("Quick View Icon", DefaultLogin.wait_time)).to be_true, "Menu with Quick View icon is not displayed"
+  # expect(aa.wait_until_action_element_visible("Detail View Icon", DefaultLogin.wait_time)).to be_true, "Menu Detail View icon is not displayed"    
+  expect(aa.wait_until_action_element_visible("Quick View Button", DefaultLogin.wait_time)).to be_true, "Menu with Quick View icon is not displayed"
+  expect(aa.wait_until_action_element_visible("Detail View Button", DefaultLogin.wait_time)).to be_true, "Menu Detail View icon is not displayed"    
 end
 
 When(/^user select the menu "(.*?)" in Encounters Gist$/) do |icon_type|
@@ -539,14 +548,18 @@ Then(/^a Menu appears on the Encounters Gist for the item "(.*?)"$/) do |arg1|
   expect(aa.wait_until_action_element_visible("EncountersGridVisible", DefaultLogin.wait_time)).to be_true
   ser = SpecificEncounterRows.instance
   #  expect(ser.wait_until_action_element_visible("#{arg1} Info View Icon", DefaultLogin.wait_time)).to be_true, "Info view icon is not displayed"
-  expect(ser.wait_until_action_element_visible("#{arg1} Detail View Icon", DefaultLogin.wait_time)).to be_true, "Detail view icon is not displayed"
-  expect(ser.wait_until_action_element_visible("#{arg1} Quick View Icon", DefaultLogin.wait_time)).to be_true, "Quick view icon is not displayed"    
+  # expect(ser.wait_until_action_element_visible("#{arg1} Detail View Icon", DefaultLogin.wait_time)).to be_true, "Detail view icon is not displayed"
+  # expect(ser.wait_until_action_element_visible("#{arg1} Quick View Icon", DefaultLogin.wait_time)).to be_true, "Quick view icon is not displayed"    
+  expect(aa.wait_until_action_element_visible("Detail View Button")).to eq(true)
+  expect(aa.wait_until_action_element_visible("Quick View Button")).to eq(true)
+
 end
 
 Then(/^user selects the "(.*?)" detail icon in Encounters Gist$/) do |arg1|
-  ser = SpecificEncounterRows.instance
-  label = "#{arg1} Detail View Icon"
-  expect(ser.perform_action(label)).to be_true
+  # ser = SpecificEncounterRows.instance
+  # label = "#{arg1} Detail View Icon"
+  # expect(ser.perform_action(label)).to be_true
+  expect(EncountersGist.instance.perform_action("Detail View Button")).to eq(true)
 end
 
 Then(/^user selects the "(.*?)" quick view icon in Encounters Gist$/) do |arg1|
@@ -618,13 +631,7 @@ Then(/^the Encounters Gist Quick View \- Appointments table contains rows$/) do
   rows = driver.find_elements(:css, "#{css} td:nth-child(1)")
   date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4}")
   rows.each do | row |
-    # p row.text
-    expect(( date_format.match(text)).nil?).to eq(false), "#{row.text} does not match expected data format"
-  end
-  rows = driver.find_elements(:css, "#{css} td:nth-child(4)")
-  age_format = Regexp.new("\\d+y")
-  rows.each do | row |
-    # p row.text
-    expect(( age_format.match(text)).nil?).to eq(false), "#{row.text} does not match expected data format"
+    p row.text
+    expect(( date_format.match(row.text)).nil?).to eq(false), "#{row.text} does not match expected data format"
   end
 end

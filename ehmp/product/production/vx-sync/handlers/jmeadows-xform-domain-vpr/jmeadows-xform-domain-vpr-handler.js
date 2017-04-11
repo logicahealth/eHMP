@@ -124,6 +124,7 @@ function transformRecord(job, log, environment, patientDemographicsIcn, callback
             var meta = {
                 jpid: job.jpid,
                 rootJobId: job.rootJobId,
+                priority: job.priority,
                 param: job.param
             };
             if (_.contains(['consult', 'progressNote', 'dischargeSummary'], job.dataDomain)) {
@@ -137,7 +138,7 @@ function transformRecord(job, log, environment, patientDemographicsIcn, callback
                 //-----------------------
                 var vprDataDomain = uidUtil.extractDomainFromUID(item.uid);
 
-                return jobUtil.createRecordEnrichment(job.patientIdentifier, vprDataDomain, item, meta);
+                return jobUtil.createEventPrioritizationRequest(job.patientIdentifier, vprDataDomain, item, meta);
             }
         });
 

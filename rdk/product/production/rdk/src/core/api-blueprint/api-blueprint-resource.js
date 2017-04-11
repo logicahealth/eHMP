@@ -17,6 +17,7 @@ var development = false;
 var fullHtml;
 var renderedHtml = {};
 var rootDir = 'src/';
+var markdownPath = '/markdown';
 var sourceCodeTemplate;
 
 function getResourceConfig(app) {
@@ -34,6 +35,7 @@ function getResourceConfig(app) {
         },
         requiredPermissions: [],
         isPatientCentric: false,
+        bypassCsrf: true,
         permitResponseFormat: true,
         get: renderDocumentation,
         undocumented: true
@@ -54,8 +56,8 @@ function renderDocumentation(req, res) {
 
     if (mountpoint.length <= 1) {
         renderAllResources(req, res);
-    } else if (development && _.endsWith(req.path, '.md')) {
-        renderMarkdownSource(mountpoint, req, res);
+    } else if (development && _.endsWith(req.path, markdownPath)) {
+        renderMarkdownSource(req, res);
     } else {
         renderSingleResource(mountpoint, req, res);
     }
@@ -65,6 +67,8 @@ function renderAllResources(req, res) {
     if (fullHtml) {
         return sendHtml(res, null, fullHtml);
     }
+
+    fullHtml = fs.readFileSync(fspath.resolve(__dirname, './loading.html'), {encoding: 'utf8'});
 
     apiBlueprint.getAllJsonDocumentation(function(error, json) {
         if (error) {
@@ -79,6 +83,9 @@ function renderAllResources(req, res) {
                 callback(null, indexJson);
             },
             prependResourcesUri,
+            addFieldsParameter,
+            addSpyForVersioningParameter,
+            addMissingExampleWarnings,
             displayWarnings,
             renderHtml
         ], function(error, html) {
@@ -99,6 +106,10 @@ function renderSingleResource(mountpoint, req, res) {
     async.waterfall([
         apiBlueprint.jsonDocumentationForPath.bind(null, mountpoint),
         prependResourcesUri,
+        addFieldsParameter,
+        addSpyForVersioningParameter,
+        addMissingExampleWarnings,
+        displayWarnings,
         renderHtml
     ], function cacheHtml(error, html) {
         renderedHtml[mountpoint] = html;
@@ -106,11 +117,11 @@ function renderSingleResource(mountpoint, req, res) {
     });
 }
 
-function renderMarkdownSource(path, req, res) {
-    var markdownPath = path;
-    if (!_.startsWith(path, 'http')) {
+function renderMarkdownSource(req, res) {
+    var markdownPath = req.query.source;
+    if (!_.startsWith(markdownPath, 'http')) {
         var rootPath = __dirname.substring(0, __dirname.indexOf(rootDir) + rootDir.length);
-        markdownPath = rootPath + path;
+        markdownPath = rootPath + markdownPath;
     }
     var mountpoint = req.query.mountpoint;
     apiBlueprint.loadFullMarkdown(markdownPath, mountpoint, null, function(error, markdown) {
@@ -118,7 +129,7 @@ function renderMarkdownSource(path, req, res) {
             apiBlueprint.jsonDocumentationForPath(mountpoint, function(docsError, json) {
                 var html;
                 var context = {
-                    filename: fspath.basename(path),
+                    filename: fspath.basename(req.query.source),
                     lines: markdown.split(/\r?\n/g)
                 };
                 if (json) {
@@ -144,6 +155,10 @@ function renderMarkdownSource(path, req, res) {
 }
 
 function prependResourcesUri(json, done) {
+    if (json.__domain && json.__domain !== 'local') {
+        return done(null, json);
+    }
+
     var prefix = _.trimRight(module.exports.resourcesUri, '/');
     async.each(json.ast.resourceGroups, function(resourceGroup, groupDone) {
         async.each(resourceGroup.resources, function(resource, resourceDone) {
@@ -155,12 +170,156 @@ function prependResourcesUri(json, done) {
                 if (uriTemplate && !_.startsWith(uriTemplate, prefix)) {
                     action.attributes.uriTemplate = prefix + uriTemplate;
                 }
-                actionDone();
+                setImmediate(actionDone);
             }, resourceDone);
         }, groupDone);
     }, function(error) {
         done(error, json);
     });
+}
+
+function addFieldsParameter(json, done) {
+    addQueryParameter({
+        name: 'fields',
+        description: 'Define which fields to return using:\n\n`a,b,c` comma-separated list to select multiple fields.\n\n`a/b/c` path to select a field from its parent.\n\n`a(b,c)` sub-selection to select many fields from a parent.\n\nReference: [json-mask](https://github.com/nemtsov/json-mask)',
+        type: 'string',
+        required: false,
+        default: '',
+        example: '',
+        values: []
+    }, hasJsonResponse, json, done);
+}
+
+function addSpyForVersioningParameter(json, done) {
+    addQueryParameter({
+        name: 'spy-for-versioning',
+        description: '**DEVELOPMENT ONLY:** when `true`, generate a schema from this resource\'s response, and capture responses from external systems like JDS and VistA.\n\nSchemas are generated under `src/core/api-blueprint/schemas`, and external responses are captured under `versioning-tests/recorded-responses`.',
+        type: 'boolean',
+        required: false,
+        default: '',
+        example: '',
+        values: []
+    }, function (action) {
+        return development && hasJsonResponse(action);
+    }, json, done);
+}
+
+function addQueryParameter(parameter, checkFunction, json, done) {
+    if (json.__domain && json.__domain !== 'local') {
+        return done(null, json);
+    }
+
+    async.each(json.ast.resourceGroups, function(resourceGroup, groupDone) {
+        async.each(resourceGroup.resources, function(resource, resourceDone) {
+            var applies = false;
+            _.each(resource.actions, function(action) {
+                if (!checkFunction(action)) {
+                    return;
+                }
+
+                applies = true;
+                var uriTemplate = dd(action)('attributes')('uriTemplate').val;
+                if (uriTemplate) {
+                    action.parameters.push(parameter);
+                    action.attributes.uriTemplate = appendQueryParameter(uriTemplate, parameter);
+                }
+            });
+
+            if (applies && resource.uriTemplate) {
+                resource.parameters.push(parameter);
+                resource.uriTemplate = appendQueryParameter(resource.uriTemplate, parameter);
+            }
+            setImmediate(resourceDone);
+        }, groupDone);
+    }, function(error) {
+        done(error, json);
+    });
+
+    function appendQueryParameter(uriTemplate, parameter) {
+        uriTemplate += _.contains(uriTemplate, '{?') ? '{&' : '{?';
+        uriTemplate += parameter.name;
+        return uriTemplate + '}';
+    }
+}
+
+function hasJsonResponse(action) {
+    return !!_.find(action.examples, function(example) {
+        return _.find(example.responses, function(response) {
+            var statusCode = parseInt(response.name, 10);
+            return (isNaN(statusCode) || statusCode < 300) &&
+                _.find(response.headers, {name: 'Content-Type', value: 'application/json'});
+        });
+    });
+}
+
+function addMissingExampleWarnings(json, done) {
+    if (!development) {
+        return done(null, json);
+    }
+
+    _.each(json.ast.resourceGroups, function(resourceGroup) {
+        _.each(resourceGroup.resources, function(resource) {
+            _.each(resource.actions, function(action) {
+                _.each(action.examples, function (example) {
+                    var requests = _.map(example.requests, withType.bind(null, 'request'));
+                    var responses = _.map(example.responses, withType.bind(null, 'response'));
+
+                    _.each(requests.concat(responses), function (item) {
+                        if (!item.example.body || !item.example.schema) {
+                            var contentType = (_.find(item.example.headers, function (header) {
+                                return header.name === 'Content-Type';
+                            }) || {}).value;
+                            if (contentType && _.contains(contentType, 'json')) {
+                                addWarning(item.example, item.type, resource, action);
+                            }
+                            return;
+                        }
+                    });
+                });
+            });
+        });
+    });
+
+    return done(null, json);
+
+    function withType(type, item) {
+        return {
+            example: item,
+            type: item.name + ' ' + type
+        };
+    }
+
+    var nextResourceId;
+
+    function addWarning(example, type, resource, action) {
+        if (!resource.__id) {
+            if (!nextResourceId) {
+                nextResourceId = 1;
+                while (findResourceById(nextResourceId, json)) {
+                    ++nextResourceId;
+                }
+            }
+            resource.__id = String(++nextResourceId);
+        }
+
+        var message = 'Please write an example ' + type;
+        if (!example.body && !example.schema) {
+            message += ' and schema';
+        } else if (!example.schema) {
+            message = 'Please write a schema for the ' + type;
+        }
+        var title = action.name || resource.name;
+        if (action.method.toUpperCase() !== title.toUpperCase()) {
+            title = action.method + ' ' + title;
+        }
+        json.warnings.push({
+            code: -1,
+            message: message + ' for endpoint *' + title + '*',
+            location: [{
+                resourceId: resource.__id
+            }]
+        });
+    }
 }
 
 function displayWarnings(json, done) {
@@ -176,23 +335,27 @@ function displayWarnings(json, done) {
             var resource = findResourceById(location.resourceId, json);
             if (resource) {
                 var text = '::: warning\n<i class="fa fa-warning" title="API Blueprint parse warning"></i> ';
-                text += warning.message + '\n  (';
-                if (location.file) {
-                    var index = location.file.indexOf(rootDir);
-                    var file = _.trimLeft(index ? location.file.substring(index + rootDir.length) : location.file, '/');
-                    var line = location.line ? '#' + (location.line - 1) : '';
-                    // uriTemplate without query and fragment parameters
-                    var mountpoint = resource.uriTemplate.replace(/\{[\?&#][^\}]+\}/g, '');
-                    index = mountpoint.indexOf(module.exports.resourcesUri);
-                    mountpoint = (index !== -1) ? mountpoint.substring(index + module.exports.resourcesUri.length) : mountpoint;
-                    text += 'in [' + file + '](' + prefix + '/' + file + '?mountpoint=' + encodeURIComponent(mountpoint) + line + ') ';
+                text += warning.message + '\n';
+                if (location.file || location.line || location.index) {
+                    text += ' (';
+                    if (location.file) {
+                        var index = location.file.indexOf(rootDir);
+                        var file = _.trimLeft(index > 0 ? location.file.substring(index + rootDir.length) : location.file, '/');
+                        var line = location.line ? '#' + (location.line - 1) : '';
+                        // uriTemplate without query and fragment parameters
+                        var mountpoint = resource.uriTemplate.replace(/\{[\?&#][^\}]+\}/g, '');
+                        index = mountpoint.indexOf(module.exports.resourcesUri);
+                        mountpoint = (index !== -1) ? mountpoint.substring(index + module.exports.resourcesUri.length) : mountpoint;
+                        text += 'in [' + file + '](' + prefix + markdownPath + '?source=' + encodeURIComponent(file) + '&mountpoint=' + encodeURIComponent(mountpoint) + line + ') ';
+                    }
+                    if (location.line) {
+                        text += 'line ' + location.line;
+                    } else {
+                        text += 'index ' + location.index;
+                    }
+                    text += ')';
                 }
-                if (location.line) {
-                    text += 'line ' + location.line;
-                } else  {
-                    text += 'index ' + location.index;
-                }
-                text += ')\n:::\n\n';
+                text += '\n:::\n\n';
                 resource.description += text;
             }
         }

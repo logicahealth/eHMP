@@ -1,0 +1,212 @@
+~Format=5.S~
+15 Apr 2016   4:18 PM   Cache
+^PS(55,100863,0)
+100863^0^1^0^^2^3150424.1102^A
+^PS(55,100863,"NVA",0)
+^55.05P^1^1
+^PS(55,100863,"NVA",1,0)
+2758^3082^1 TAB^MOUTH^EVERY DAY^^^38450^^{today-451}.175946^992^32
+^PS(55,100863,"NVA",1,"DSC",0)
+^55.052^1^1^{today-451}^^^^
+^PS(55,100863,"NVA",1,"DSC",1,0)
+Non-VA medication not recommended by VA provider.  
+^PS(55,100863,"NVA",1,"OCK",0)
+^55.051^1^1
+^PS(55,100863,"NVA",1,"OCK",1,0)
+Remote Order Checking not available - checks done on local data only^992
+^PS(55,100863,"NVA",1,"OCK","B","Remote Order Checking not avai",1)
+
+^PS(55,100863,"NVA","B",2758,1)
+
+^PS(55,100863,"P",0)
+^55.03PA^3^3
+^PS(55,100863,"P",1,0)
+404240
+^PS(55,100863,"P",2,0)
+404263
+^PS(55,100863,"P",3,0)
+404297
+^PS(55,100863,"P","A",{today-269},404240)
+
+^PS(55,100863,"P","A",{today-20},404263)
+
+^PS(55,100863,"P","A",{today+193},404297)
+
+^PS(55,100863,"PS")
+6
+^PSRX(404240,0)
+501014^100863^6^992^32^872^30^30^5^^W^^{today+98}^^^992^0.0039^1^2
+^PSRX(404240,1,0)
+^52.1D^5^5
+^PSRX(404240,1,1,0)
+{today-426}^W^^30^0^^^{today-515}^^30^^^^^^^^{today-426}^{today-515}
+^PSRX(404240,1,1,1)
+^^00603-0025-32
+^PSRX(404240,1,2,0)
+{today-390}^W^^30^0^^^{today-390}^^30^^^^^^^^{today-390}^{today-390}
+^PSRX(404240,1,2,1)
+^^00603-0025-32
+^PSRX(404240,1,3,0)
+{today-358}^W^^30^0^^^{today-358}^^30^^^^^^^^{today-358}^{today-358}
+^PSRX(404240,1,3,1)
+^^00603-0025-32
+^PSRX(404240,1,4,0)
+{today-333}^W^^30^0^^^{today-333}^^30^^^^^^^^{today-333}^{today-333}
+^PSRX(404240,1,4,1)
+^^00603-0025-32
+^PSRX(404240,1,5,0)
+{today-305}^W^^30^0^^^{today-305}^^30^^^^^^^^{today-305}^{today-305}
+^PSRX(404240,1,5,1)
+^^00603-0025-32
+^PSRX(404240,1,"B",{today-426},1)
+
+^PSRX(404240,1,"B",{today-390},2)
+
+^PSRX(404240,1,"B",{today-358},3)
+
+^PSRX(404240,1,"B",{today-333},4)
+
+^PSRX(404240,1,"B",{today-305},5)
+
+^PSRX(404240,2)
+{today+98}.175946^{today-451}^^^{today+113}^{today-269}^00603-0025-32^^2^^^^{today-451}.180221
+^PSRX(404240,3)
+{today-451}^{today+133}^^{today-333}
+^PSRX(404240,6,0)
+^52.0113^1^1
+^PSRX(404240,6,1,0)
+81^1^20^TABLET^^^1^QDAY^TAKE
+^PSRX(404240,"A",0)
+^52.3DA^1^1
+^PSRX(404240,"A",1,0)
+{today+113}^G^^0^Patient Instructions Not Sent By Provider.
+^PSRX(404240,"ICD",0)
+^52.052311P^1^1
+^PSRX(404240,"ICD",1,0)
+^^^^^^^^
+^PSRX(404240,"L",0)
+^52.032DA^1^1
+^PSRX(404240,"L",1,0)
+{today+113}.110239^0^From RX number 501014^119
+^PSRX(404240,"MP")
+WINDOW
+^PSRX(404240,"OR1")
+1667^38449^^^119^^^{today-451}.180221
+^PSRX(404240,"PC")
+0
+^PSRX(404240,"PI",0)
+^^1^1^{today+113}^
+^PSRX(404240,"PI",1,0)
+TAKE ONE TABLET PO QDAY
+^PSRX(404240,"POE")
+1
+^PSRX(404240,"SIG")
+^1
+^PSRX(404240,"SIG1",0)
+^52.04A^1^1
+^PSRX(404240,"SIG1",1,0)
+TAKE ONE TABLET BY MOUTH EVERY DAY
+^PSRX(404240,"STA")
+11
+^PSRX(404240,"TYPE")
+0
+^PSRX(404263,0)
+501037^100863^6^988^426^1368^42^14^0^^W^^{today+119}^^1^988^0.0243^1^2
+^PSRX(404263,2)
+{today+119}.143254^{today-50}.1037^20122^^{today+119}^{today-20}^50111-0563-03^^2^^^^{today-50}.1037^^^2
+^PSRX(404263,3)
+{today-50}.1037^^^^^^Administered in Clinic.
+^PSRX(404263,6,0)
+^52.0113^1^1
+^PSRX(404263,6,1,0)
+10^1^20^TABLET^^^1^TID PRN^TAKE
+^PSRX(404263,"A",0)
+^52.3DA^1^1
+^PSRX(404263,"A",1,0)
+{today+119}^G^^0^Patient Instructions Not Sent By Provider.
+^PSRX(404263,"ICD",0)
+^52.052311P^1^1
+^PSRX(404263,"ICD",1,0)
+^^^^^^^^
+^PSRX(404263,"L",0)
+^52.032DA^1^1
+^PSRX(404263,"L",1,0)
+{today+119}.143429^0^From RX number 501037^119
+^PSRX(404263,"MP")
+CLINIC
+^PSRX(404263,"OR1")
+1940^38556^^^119^^^{today-50}.1037
+^PSRX(404263,"PC")
+0
+^PSRX(404263,"PI",0)
+^^1^1^{today+119}^
+^PSRX(404263,"PI",1,0)
+TAKE ONE TABLET PO TID PRN
+^PSRX(404263,"POE")
+1
+^PSRX(404263,"SIG")
+^1
+^PSRX(404263,"SIG1",0)
+^52.04A^1^1
+^PSRX(404263,"SIG1",1,0)
+TAKE ONE TABLET BY MOUTH THREE TIMES A DAY AS NEEDED   
+^PSRX(404263,"STA")
+11
+^PSRX(404263,"TYPE")
+0
+^PSRX(404297,0)
+501053^100863^6^988^32^92^60^30^6^^W^^{today+124}^^^988^0.5000^1^2
+^PSRX(404297,2)
+{today+124}.141042^{today-17}^^^{today+124}^{today+193}^00087-6063-13^^2^^^^{today-17}.1159
+^PSRX(404297,3)
+{today-17}^{today+144}
+^PSRX(404297,6,0)
+^52.0113^1^1
+^PSRX(404297,6,1,0)
+1000^2^20^TABLETS^^^1^QDAY^TAKE
+^PSRX(404297,"A",0)
+^52.3DA^1^1
+^PSRX(404297,"A",1,0)
+{today+124}^G^^0^Patient Instructions Not Sent By Provider.
+^PSRX(404297,"ICD",0)
+^52.052311P^1^1
+^PSRX(404297,"ICD",1,0)
+^^^^^^^^
+^PSRX(404297,"INS")
+for diabetes
+^PSRX(404297,"INS1",0)
+^52.0115^1^1^{today+124}^^
+^PSRX(404297,"INS1",1,0)
+for diabetes
+^PSRX(404297,"L",0)
+^52.032DA^1^1
+^PSRX(404297,"L",1,0)
+{today+124}.165825^0^From RX number 501053^119
+^PSRX(404297,"MP")
+WINDOW
+^PSRX(404297,"OR1")
+1326^38598^^^119^^^{today-17}.1159
+^PSRX(404297,"PC")
+0
+^PSRX(404297,"PI",0)
+^^1^1^{today+124}^
+^PSRX(404297,"PI",1,0)
+TAKE TWO TABLETS PO QDAY
+^PSRX(404297,"POE")
+1
+^PSRX(404297,"PRC",0)
+^^1^1^{today+124}^
+^PSRX(404297,"PRC",1,0)
+for diabetes
+^PSRX(404297,"SIG")
+^1
+^PSRX(404297,"SIG1",0)
+^52.04A^1^1
+^PSRX(404297,"SIG1",1,0)
+TAKE TWO TABLETS MOUTH EVERY DAY FOR DIABETES
+^PSRX(404297,"STA")
+11
+^PSRX(404297,"TYPE")
+0
+
+

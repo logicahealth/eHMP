@@ -1,0 +1,45 @@
+{  
+   "resourceType":"Observation",
+   "code":{  
+      "coding":[  
+         {  
+            "code":"18184-2",
+            "display":"Erythrocyte sedimentation rate - Prefered name",
+            "system":"http://loinc.org"
+         }
+      ],
+      "text":"Erythrocyte sedimentation rate"
+   },
+   "id":"#83bd2c9a-7322-412a-923c-2d8d059f088b",
+   "identifier":[  
+      {  
+         "system":"http://loinc.org",
+         "value":"18184-2"
+      }
+   ],
+   "comments":"Erythrocyte Sedimentation Rate",
+   "interpretation":{  
+      "coding":[  
+         {  
+            "code":"HH",
+            "display":"Above upper panic limits",
+            "system":"http://hl7.org/fhir/vs/observation-interpretation"
+         }
+      ]
+   },
+   "issued":"2004-03-30T21:54:42-00:00",
+   "modifierExtension":[  
+      {  
+         "url":"http://org.cognitive.cds.invocation.fhir.datanature.duration",
+         "valueCode":"60d"
+      },
+      {  
+         "url":"http://org.cognitive.cds.invocation.fhir.datanature",
+         "valueCode":"Output"
+      },
+      {  
+         "url":"http://org.cognitive.cds.invocation.fhir.datanature.status",
+         "valueCode":"Passed"
+      }
+   ]
+}

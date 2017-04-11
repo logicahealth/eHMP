@@ -68,75 +68,29 @@
   src: url('../fonts/sourcesanspro-boldit.eot');
   src: url('../fonts/sourcesanspro-boldit.eot?#iefix') format('embedded-opentype'), url('../fonts/sourcesanspro-boldit.ttf') format('truetype');
 }
-/* open sans light */
+//Sidebar custom icons//
 @font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 300;
-  src: url('../fonts/opensans-light.eot');
-  src: url('../fonts/opensans-light.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/opensans-light.ttf') format('truetype');
+    font-family: 'icomoon';
+    src:    url('../fonts/icomoon.eot?x3bbuk');
+    src:    url('../fonts/icomoon.eot?x3bbuk#iefix') format('embedded-opentype'),
+        url('../fonts/icomoon.ttf?x3bbuk') format('truetype'),
+        url('../fonts/icomoon.woff?x3bbuk') format('woff'),
+        url('../fonts/icomoon.svg?x3bbuk#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
-/* open sans light italic */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: italic;
-  font-weight: 300;
-  src: url('../fonts/opensans-lightitalic.eot');
-  src: url('../fonts/opensans-lightitalic.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/opensans-lightitalic.ttf') format('truetype');
-}
-/* open sans normal */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: url('../fonts/opensans-regular.eot');
-  src: url('../fonts/opensans-regular.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/opensans-regular.ttf') format('truetype');
-}
-/* open sans normal italic */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: italic;
-  font-weight: 400;
-  src: url('../fonts/opensans-italic.eot');
-  src: url('../fonts/opensans-italic.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/opensans-italic.ttf') format('truetype');
-}
-/* open sans semibold */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: url('../fonts/opensans-semibold.eot');
-  src: url('../fonts/opensans-semibold.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/opensans-semibold.ttf') format('truetype');
-}
-/* open sans semibold italic */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: italic;
-  font-weight: 600;
-  src: url('../fonts/opensans-semibolditalic.eot');
-  src: url('../fonts/opensans-semibolditalic.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/opensans-semibolditalic.ttf') format('truetype');
-}
-/* open sans bold */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: url('../fonts/opensans-bold.eot');
-  src: url('../fonts/opensans-bold.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/opensans-bold.ttf') format('truetype');
-}
-/* open sans bold italic */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: italic;
-  font-weight: 700;
-  src: url('../fonts/opensans-bolditalic.eot');
-  src: url('../fonts/opensans-bolditalic.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/opensans-bolditalic.ttf') format('truetype');
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }

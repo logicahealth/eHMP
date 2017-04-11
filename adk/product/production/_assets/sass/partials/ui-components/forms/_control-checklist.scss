@@ -27,10 +27,11 @@
         .form-group {
             background-color: $pure-white;
             border: 1px solid $grey;
+            border-radius: 4px;
             margin: 2px 0;
-            padding: 0 3px;
+            padding: 5px 3px;
             .checkbox {
-                margin-left: 5px;
+                margin: 5px;
             }
         }
     }

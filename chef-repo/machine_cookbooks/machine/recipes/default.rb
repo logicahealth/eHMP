@@ -11,16 +11,18 @@ require_relative "ssh_aws_chef_install" if node[:machine][:driver] == "aws" || n
 
 #Load Nexus URL from common cookbook
 include_recipe "common::load_nexus_url"
+include_recipe "common::load_string"
 
 node.default[:machine][:convergence_options] = {} if node.default[:machine][:convergence_options].nil?
 node.default[:machine][:convergence_options].merge! ({
-  install_sh_url: "#{node[:common][:nexus_url]}/nexus/content/repositories/environment/vistacore/chef-install/install/1.0.2/install-1.0.2.sh"
+  install_sh_url: "#{node[:common][:nexus_url]}/nexus/content/repositories/environment/vistacore/chef-install/install/1.0.3/install-1.0.3.sh",
+  install_sh_path: "/etc/chef/install.sh"
 })
 
 if ENV.has_key?("PRODUCTION_DATA_BAG")
   node.default[:machine][:production_settings].merge! (
-    data_bag_item('production_settings', ENV['PRODUCTION_DATA_BAG']).to_hash
-  )
+    Chef::EncryptedDataBagItem.load("production_settings", ENV['PRODUCTION_DATA_BAG'], node[:common][:data_bag_string]).to_hash
+)
 end
 if ENV.has_key?("CERT_PATH")
   node.default[:machine][:copy_files].merge! (

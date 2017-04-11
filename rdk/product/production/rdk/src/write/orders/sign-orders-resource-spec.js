@@ -6,8 +6,8 @@ var RpcClient = require('vista-js').RpcClient;
 
 var mock_session = {
     user: {
-        username: '9E7A;PW    ',
-        password: 'PW    !!',
+        username: 'PW',
+        password: 'PW',
         duz: {
             '9E7A': '10000000257'
         },
@@ -59,20 +59,20 @@ describe('writebackorder_signOrder:', function() {
                             '9E7A': {
                                 name: 'PANORAMA',
                                 division: '500',
-                                host: 'IP        ',
+                                host: 'IP_ADDRESS',
                                 port: 9210,
                                 production: false,
-                                accessCode: 'PW    ',
-                                verifyCode: 'PW    !!'
+                                accessCode: 'PW',
+                                verifyCode: 'PW'
                             },
                             'C877': {
                                 name: 'KODAK',
                                 division: '500',
-                                host: 'IP        ',
+                                host: 'IP_ADDRESS',
                                 port: 9210,
                                 production: false,
-                                accessCode: 'PW    ',
-                                verifyCode: 'PW    !!'
+                                accessCode: 'PW',
+                                verifyCode: 'PW'
                             }
                         }
                     }

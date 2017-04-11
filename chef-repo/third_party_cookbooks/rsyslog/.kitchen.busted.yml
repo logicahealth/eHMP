@@ -17,7 +17,7 @@ platforms:
 #   driver_plugin: ec2
 #   driver_config:
 #     image_id: ami-35eb835c
-#     username: root
+#     username      UN
 
 - name: centos-5.8
   driver_plugin: digitalocean
@@ -39,7 +39,7 @@ platforms:
 #   driver_plugin: ec2
 #   driver_config:
 #     image_id: ami-3be4bc52
-#     username: PW      
+#     username       UN
 
 - name: ubuntu-1004
   driver_plugin: digitalocean
@@ -80,7 +80,7 @@ suites:
       - recipe[rsyslog::client]
     attributes:
       rsyslog:
-        server_ip: IP       
+        server_ip: IPADDRESS
   - name: server
     run_list:
       - recipe[rsyslog::server]

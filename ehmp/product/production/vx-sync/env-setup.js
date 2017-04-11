@@ -8,9 +8,10 @@ global.VX_HANDLERS = global.VX_ROOT + 'handlers/';
 global.OSYNC_HANDLERS = global.VX_HANDLERS + 'osync/';
 global.VX_ENDPOINTS = global.VX_ROOT + 'endpoints/';
 global.VX_SUBSYSTEMS = global.VX_ROOT + 'subsystems/';
-global.VX_JOBFRAMEWORK = global.VX_ROOT + 'jobframework/';
+global.VX_JOBFRAMEWORK = 'job-framework';
 global.VX_SYNCRULES = global.VX_ROOT + 'syncruleengine/';
 global.VX_UNSYNCRULES = global.VX_ROOT + 'unsyncruleengine/';
+global.VX_EVENTPRIORITYRULES = global.VX_ROOT + 'eventpriorityruleengine/';
 global.VX_TOOLS = global.VX_ROOT + 'tools/';
 
 global.VX_ERROR_PROCESSING = global.VX_ROOT + 'error-processing/';

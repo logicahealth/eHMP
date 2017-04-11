@@ -51,6 +51,18 @@ define([
             //this takes the item returned by the groupByFunction
             groupByRowFormatter: function(item) {
                 return item;
+            },
+            comparator: function(modelOne, modelTwo){
+                var userSite = ADK.UserService.getUserSession().get('site');
+                if(modelOne.get('siteKey') === modelTwo.get('siteKey')){
+                    return modelOne.get('hsReport').localeCompare(modelTwo.get('hsReport'));
+                } else if(modelOne.get('siteKey') === userSite){
+                    return -1;
+                } else if(modelTwo.get('siteKey') === userSite){
+                    return 1;
+                } else {
+                    return modelOne.get('siteKey').localeCompare(modelTwo.get('siteKey'));
+                }
             }
         }
 	};
@@ -83,7 +95,7 @@ define([
             primary: true,
             innerSort: "facilityMoniker",
             groupByFunction: function(collectionElement) {
-                var reportName = collectionElement.model.get("hsReport");
+                var reportName = collectionElement.model.get("hsReport").toLowerCase();
 
                 if (reportName) {
                     if (reportName.toLowerCase().indexOf('remote') === 0) {
@@ -120,11 +132,6 @@ define([
 
     // define grid view applet
     var GridView = ADK.AppletViews.GridView.extend({
-        collapseGroups : function() {
-            this.$el.find('.group-by-count-badge').toggleClass('hidden');
-            this.$el.find('tr.selectable').slideToggle(0);
-            this.$el.find('td.group-by-header.selectable').toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
-        },
         initialize: function(options) {
 
             this._super = ADK.AppletViews.GridView.prototype;
@@ -136,16 +143,6 @@ define([
                     event.preventDefault();
                     AppletUiHelper.getDetailView(model, event.currentTarget, appletOptions.collection, true, AppletUiHelper.showModal);
                 }
-            };
-
-            var self = this;
-
-            fetchOptions.onSuccess = function(collection) {
-                window.requestAnimationFrame(function() {
-                    self.$('.group-by-count-badge').toggleClass('hidden');
-                    self.$('tr.selectable').slideToggle(0);
-                    self.$('td.group-by-header.selectable').toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
-                });
             };
 
             this.gridCollection = ADK.PatientRecordService.fetchCollection(fetchOptions);

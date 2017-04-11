@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Lab time valid immediate collect time [/lab-time-valid-immediate-collect-time{?site}{&time}{&fields}]
+## Lab time valid immediate collect time [/lab-time-valid-immediate-collect-time{?site}{&time}]
 
 DIRECT RPC CALL - Determines whether the supplied time is a valid lab immediate collect time.
 
@@ -13,8 +13,6 @@ ORWDLR32 IC VALID
     :[site]({{{common}}}/parameters/site.md)
 
     + time (string, required) - Determines whether the supplied time is a valid lab immediate collect time.
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

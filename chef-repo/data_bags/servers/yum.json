@@ -1,5 +1,5 @@
 {
   "id": "yum",
-  "fqdn": "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp/yum-repo",
+  "fqdn": "https://store.vistacore.us/nexus/content/repositories/yum-repo",
   "ip": "52.21.133.61"
 }

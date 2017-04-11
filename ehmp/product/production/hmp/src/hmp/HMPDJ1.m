@@ -1,7 +1,8 @@
-HMPDJ1 ;SLC/MKB -- HMP Patient Object RPCs ; 11/2/12 5:45pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDJ1 ;SLC/MKB,ASMR/RRB,CK - HMP Patient Object RPCs;Jun 22, 2016 17:23:52
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
+ Q
  ;
 PUT(HMP,PAT,TYPE,JSON) ; -- Save/update JSON OBJECT in ^HMP(800000.1), return UID if successful
  ; RPC = HMP PUT PATIENT DATA
@@ -22,7 +23,7 @@ PUT(HMP,PAT,TYPE,JSON) ; -- Save/update JSON OBJECT in ^HMP(800000.1), return UI
  . M HMP(1)=ARRAY
  . S HMP(2)="}}"
  ;
- S UID=$G(ARRAY("uid")),HMPSYS=$$GET^XPAR("SYS","HMP SYSTEM NAME")
+ S UID=$G(ARRAY("uid")),HMPSYS=$$SYS^HMPUTILS
  I $L(UID) S DA=+$O(^HMP(800000.1,"B",UID,0)) I DA<1 S ERR=$$ERR(3,UID) G PTQ
  I '$L(UID) D  G:$D(ERR) PTQ Q:$D(HMPERR)
  . D NEW Q:$D(ERR)
@@ -52,9 +53,9 @@ NEW ; -- create new entry in ^HMP(800000.1) from PAT,TYPE,HMPSYS
  ;  Return UID & DA, or ERR
  N DFN,ICN
  S DFN=+$G(PAT),ICN="",TYPE=$G(TYPE)
- I DFN<1,DFN[";" S ICN=+$P($G(DFN),";",2),DFN=+$G(DFN)
- I DFN<1,ICN S DFN=+$$GETDFN^MPIF001(ICN)
- I DFN<1!'$D(^DPT(DFN)) S ERR=$$ERR(1,DFN) Q
+ I 'DFN,DFN[";" S ICN=+$P($G(DFN),";",2),DFN=+$G(DFN)
+ I 'DFN,ICN S DFN=+$$GETDFN^MPIF001(ICN)
+ I 'DFN!'$L($G(^DPT(DFN,0))) S ERR=$$ERR(1,DFN) Q  ; IA 10035, DE2818
  I TYPE="" S ERR=$$ERR(2,"null") Q
  ;
  S DA=$$NEXTIFN I DA<1 S ERR=$$ERR(4) Q
@@ -84,11 +85,11 @@ ERR(X,VAL) ; -- return error message
  Q MSG
  ;
 HL7NOW() ; -- Return current time in HL7 format
- Q $P($$FMTHL7^XLFDT($$NOW^XLFDT),"-")
+ Q $$FMTHL7^HMPSTMP($$NOW^XLFDT)  ; DE5016
  ;
 CONV ; -- convert uid format
  N DA,X0,UID,HMPSYS,DFN,COLL,NEW,I,JSON,HMPY,ERR,CNT
- S HMPSYS=$$GET^XPAR("SYS","HMP SYSTEM NAME")
+ S HMPSYS=$$SYS^HMPUTILS
  S DA=0 F  S DA=$O(^HMP(800000.1,DA)) Q:DA<1  D
  . S X0=$G(^HMP(800000.1,DA,0)),UID=$P(X0,U)
  . K ^HMP(800000.1,"B",UID,DA),JSON

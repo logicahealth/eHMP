@@ -23,11 +23,10 @@ Scenario: Create a fitlab process, then claim and complete that process
       | data.items.DESCRIPTION              | Provide Veteran with a FIT/FOBT test kit and instructions on how to collect the stool sample as well as instructions on how to RETURN the sample.                          |
       | data.items.STATUS                   | Ready                                                  |
       | data.items.PRIORITY                 | 0                                                      |
-      | data.items.SKIPPABLE                | 1                                                      |
       | data.items.ACTUALOWNERID            |                                                        |
       | data.items.ACTUALOWNERNAME          |                                                        |
-      | data.items.CREATEDBYID              | 9E7A;PW                                                |
-      | data.items.CREATEDBYNAME            | 9E7A;PW                                                |
+      | data.items.CREATEDBYID              | 9E7A;pu1234                                            |
+      | data.items.CREATEDBYNAME            | 9E7A;pu1234                                            |
       | data.items.TASKCREATEDON            | IS_SET                                                 |
       | data.items.EXPIRATIONTIME           |                                                        |
       | data.items.PROCESSINSTANCEID        | IS_SET                                                 |

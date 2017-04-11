@@ -263,7 +263,7 @@ function addMicrobiologyProvider(req, res, responseData) {
                 }
             });
         } else {
-            callbackasync(null);
+            setImmediate(callbackasync);
         }
     }, function(error) {
         if (!error) {
@@ -285,49 +285,57 @@ function cpVisitProp(from, to){
     to.visitInfo = from;
   }
 }
-// Converts events from CPT domain to Procedure domain and implements GDF
- function cptToProcedure(to,from) {
-  from.forEach(function(cptRecord) {
-    var fError = false;
-    var fLaborotry = false;
-    var visit;
-    // Filter out Labs from procedures
-    if(_.isUndefined(cptRecord.encounterName) || !(cptRecord.encounterName.indexOf('LAB') === 0)) {
-        if(!_.isUndefined(cptRecord.entered)){
-          cptRecord.dateTime = cptRecord.entered;
-          cptRecord.activityDateTime = cptRecord.entered;
-        }else{
-          fError = true;
+
+
+function cptToProcedure(to, from) {
+    var visitsMap = {};
+    _.each(to, function (item) {
+        if (item.kind === 'Visit') {
+            visitsMap[item.uid] = item;
         }
-        cptRecord.isCPTdomain = true;
-        if(!_.isUndefined(cptRecord.uid)){
-          cptRecord.original_uid = cptRecord.uid;
-          }else{
-          fError = true;
-        }
-        if(!_.isUndefined(cptRecord.encounterUid)){
-          cptRecord.uid = cptRecord.encounterUid;
-          }else{
-          fError = true;
-        }
-        cptRecord.kind = "Procedure";
-        if(!fError){
-          visit = _.findWhere(to, {kind: "Visit", uid: cptRecord.encounterUid});
-          if(!_.isUndefined(visit)){
-            if(!_.isUndefined(visit.stopCodeName)){
-              if(visit.stopCodeName === "LABORATORY") fLaborotry = true;
+    });
+    from.forEach(function (cptRecord) {
+        var fError = false;
+        var fLaborotry = true;
+        var visit;
+        // Filter out Labs from procedures
+        if (_.isUndefined(cptRecord.encounterName) || !(cptRecord.encounterName.indexOf('LAB') === 0)) {
+            if (!_.isUndefined(cptRecord.entered)) {
+                cptRecord.dateTime = cptRecord.entered;
+                cptRecord.activityDateTime = cptRecord.entered;
+            } else {
+                fError = true;
             }
-          }
-          if((!fLaborotry)&(!isInExcludeList(cptRecord.cptCode))&(!_.isUndefined(visit))){
-            cpVisitProp(visit,cptRecord);
-            for(var ind=0; ind<cptRecord.quantity; ind++){ // if CPT record contains more than one procedure
-              to.push(cptRecord);
+            cptRecord.isCPTdomain = true;
+            if (!_.isUndefined(cptRecord.uid)) {
+                cptRecord.original_uid = cptRecord.uid;
+            } else {
+                fError = true;
             }
-          }
+            if (!_.isUndefined(cptRecord.encounterUid)) {
+                cptRecord.uid = cptRecord.encounterUid;
+            } else {
+                fError = true;
+            }
+            cptRecord.kind = "Procedure";
+            if (!fError) {
+                visit = visitsMap[cptRecord.encounterUid];
+                if (_.get(visit, 'stopCodeName') && visit.stopCodeName !== "LABORATORY") {
+                    fLaborotry = false;
+                }
+                if (fLaborotry && (!isInExcludeList(cptRecord.cptCode)) && (!_.isUndefined(visit))) {
+                    cpVisitProp(visit, cptRecord);
+                    for (var ind = 0; ind < cptRecord.quantity; ind++) { // if CPT record contains more than one procedure
+                        to.push(cptRecord);
+                    }
+                }
+            }
         }
-    }
-  });
+    });
 }
+
+
+
 function excludeListBuilder(arrRules){
   var result = [];
   if((_.isUndefined(arrRules))||(!_.isArray(arrRules))){
@@ -382,89 +390,68 @@ function isInExcludeList(cptcode){
   }
   return false;
 }
-/**
- * Combines JDS results from multiple collections into one big sorted collection.
- */
+
+
 function mergeResults(allResults, order) {
-    // extract PTF data from allResults
-    var ptf = _.where(allResults, {domain: "visittreatment"});
-    // extract CPT data from allResults
-    var cpt = _.where(allResults, {domain: "visitcptcode"});
-    // extract Visit data from allResults
-    var visit = _.where(allResults, {domain: "encounter"});
-    // flatten the PTF result set
-    ptf = _.map(ptf, function(indexResults) {
-        return indexResults.data.items;
-    });
-    var arrPTF = _.flatten(ptf, true);
-   // flatten the CPT result set
-    cpt = _.map(cpt, function(indexResults) {
-        return indexResults.data.items;
-    });
-    var arrCPT = _.flatten(cpt, true);
-   // flatten the Visit result set
-    visit = _.map(visit, function(indexResults) {
-        return indexResults.data.items;
-    });
-    var arrVisit = _.flatten(visit, true);
-    // filter out PTF from allResults
-    allResults = _.reject(allResults, function(resultItem){
-        return resultItem.domain === "visittreatment";
-    });
-    // filter out CPT from allResults
-    allResults = _.reject(allResults, function(resultItem){
-        return resultItem.domain === "visitcptcode";
-    });
-    // filter out Visits from allResults
-    /*allResults = _.reject(allResults, function(resultItem){
-        return resultItem.domain === "encounter";
-    });*/
+    var arrPTF = [];
+    var arrCPT = [];
+    var preMergedResults = [];
+    var index = 0;
+    var mergedMap = {};
+    var mergedResults = [];
 
-    // flatten the result sets
-    allResults = _.map(allResults, function(indexResults) {
-        return indexResults.data.items;
+    _.each(allResults, function(val) {
+        if (val.domain === "visittreatment") {
+            arrPTF.push(val.data.items);
+        } else if (val.domain === "visitcptcode") {
+            arrCPT.push(val.data.items);
+        } else {
+            preMergedResults.push(val.data.items);
+        }
     });
 
-    // merge results into a single array
-    var mergedResults = _.flatten(allResults, true);
+    preMergedResults = _.flatten(preMergedResults, true);
+    arrPTF = _.flatten(arrPTF, true);
+    arrCPT = _.flatten(arrCPT, true);
 
-    // remove duplicate uids
-    mergedResults = _.uniq(mergedResults, false, function(resultItem) {
-        return resultItem.uid;
+    _.each(preMergedResults, function(item) {
+        if(!mergedMap.hasOwnProperty(item.uid)) {
+            mergedMap[item.uid] = index;
+            mergedResults.push(item);
+            index++;
+        }
     });
 
-    // enrich admission events with discharge diagnosis from PTF
-    var indResults =-1;
-    for(var indPTF=0; indPTF < arrPTF.length; indPTF++){
-        if(!_.isUndefined(arrPTF[indPTF].admissionUid)){
-            indResults = array.findIndex(mergedResults,{uid: arrPTF[indPTF].admissionUid});
-            if(indResults != -1){
-                if(_.isUndefined(mergedResults[indResults].dischargeDiagnoses)){
-                    mergedResults[indResults].dischargeDiagnoses = [];
+    for (var i = 0; i < arrPTF.length; i++) {
+        if (!_.isUndefined(arrPTF[i].admissionUid)) {
+            index = mergedMap[arrPTF[i].admissionUid];
+            if (index){
+                if(_.isUndefined(mergedResults[index].dischargeDiagnoses)) {
+                    mergedResults[index].dischargeDiagnoses = [];
                 }
-                mergedResults[indResults].dischargeDiagnoses.push(arrPTF[indPTF]);
+                mergedResults[index].dischargeDiagnoses.push(arrPTF[i]);
             }
         }
     }
-   // enrich visit events with CPT information
-    indResults =-1;
-    for(var indCPT=0; indCPT < arrCPT.length; indCPT++){
-        if(!_.isUndefined(arrCPT[indCPT].encounterUid)){
-            indResults = array.findIndex(mergedResults,{uid: arrCPT[indCPT].encounterUid});
-            if(indResults != -1){
-                if(_.isUndefined(mergedResults[indResults].cptInfo)){
-                    mergedResults[indResults].cptInfo = [];
+
+    for (var j = 0; j < arrCPT.length; j++) {
+        if (!_.isUndefined(arrCPT[j].encounterUid)) {
+            index = mergedMap[arrCPT[j].encounterUid];
+            if (index) {
+                if (_.isUndefined(mergedResults[index].cptInfo)) {
+                    mergedResults[index].cptInfo = [];
                 }
-                mergedResults[indResults].cptInfo.push(arrCPT[indCPT]);
+                mergedResults[index].cptInfo.push(arrCPT[j]);
             }
         }
     }
-    // add procedure events to procedure
-    cptToProcedure(mergedResults,JSON.parse(JSON.stringify(arrCPT))); //arrVisit,
+
+    cptToProcedure(mergedResults,JSON.parse(JSON.stringify(arrCPT)));
     mergedResults = resultUtils.sortResults(mergedResults, order);
 
     return mergedResults;
 }
+
 
 function getActivityDateTime(resultItem) {
     if (isVisit(resultItem)) {

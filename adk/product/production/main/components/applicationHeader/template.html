@@ -1,0 +1,33 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid left-padding-sm right-padding-sm">
+        <div class="application-header-items-left"></div>
+        <div class="application-patient-icons"></div>
+        <div class="navbar-right pull-right flex-display">
+            <div class="application-header-items-right"></div>
+            <div class="application-user-icons"></div>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" id="eHMPCurrentUser" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Press enter to activate user menu">
+                       <i class="fa fa-user-md font-size-15"></i> {{lastname}}, {{firstname}} <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu left-padding-sm right-padding-sm">
+                        <li class="color-grey-darkest">{{facility}}</li>
+                        <li>{{title}}</li>
+                        <li role="separator" class="divider"></li>
+                        {{#each pages}}
+                        <li role="presentation">
+                            <a href="#{{pageName}}">{{pageName}}</a>
+                        </li>
+                        {{/each}}
+                        <li>
+                            <a href="#" id="logoutButton" class="pull-left" title="Press enter to sign out"><i class="right-padding-xs fa fa-power-off"></i>Sign Out</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="divider-left">
+                    {{{helpIconLink 'ehmp_header'}}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

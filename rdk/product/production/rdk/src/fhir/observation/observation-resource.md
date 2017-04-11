@@ -2,7 +2,7 @@
 
 ## Vitals observation [{{{path}}}]
 
-### Fhir patient observation [GET {{{path}}}{?limit}{&code}{&date}{&fields}]
+### Fhir patient observation [GET {{{path}}}{?limit}{&code}{&date}]
 
 Converts a vpr 'vitals' resource into a FHIR 'observation' resource.
 
@@ -15,8 +15,6 @@ Converts a vpr 'vitals' resource into a FHIR 'observation' resource.
     + code (string, optional) - Code and/or system of the observation type (e.g. http://loinc.org|8310-5)
 
     + date (string, optional) - Obtained date/time (e.g. date=>2015/01/15)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

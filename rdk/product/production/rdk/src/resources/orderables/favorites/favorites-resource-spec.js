@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var rdk = require('../../../core/rdk');
 var pjds = rdk.utils.pjdsStore;
-var favorites = require('./favorites');
+var favorites = require('../../../subsystems/orderables/favorite-orderable-subsystem');
 
 var logger = {
     trace: function() {},

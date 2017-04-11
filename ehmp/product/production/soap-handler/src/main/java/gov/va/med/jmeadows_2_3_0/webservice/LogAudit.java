@@ -177,7 +177,7 @@ public class LogAudit {
      *     
      */
     public void setUserName(String value) {
-        this.userName = value;
+        this.VsID        alue;
     }
 
     /**

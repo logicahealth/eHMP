@@ -700,4 +700,77 @@ var inputValue =
     }
 
 };
+
+var conformanceData =
+{
+  'resourceType': 'Conformance',
+  'id': 'fbdb321b-7710-4800-bd46-bfc2ccc4d997',
+  'url': 'http://hl7.org/fhir/Conformance/ehmp',
+  'version': '0.0.1',
+  'name': 'EHMP FHIR Conformance Statement',
+  'description': 'This is a Conformance Statement for available ehmp FHIR Resources.',
+  'status': 'draft',
+  'date': '2016-06-24T23:07:36.950Z',
+  'fhirVersion': '0.5.0',
+  'acceptUnknown': false,
+  'format': [
+    'json'
+  ],
+  'rest': [
+    {
+      'mode': 'server',
+      'documentation': 'A conformance statement',
+      'resource': [
+        {
+          'type': 'diagnosticreport',
+          'profile': {
+            'reference': 'http://www.hl7.org/FHIR/2015May/diagnosticreport.html'
+          },
+          'interaction': [
+            {
+              'code': 'read'
+            },
+            {
+              'code': 'search-type'
+            }
+          ],
+          'searchParam': [
+            {
+              'name': 'domain',
+              'type': 'string',
+              'definition': 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+              'documentation': 'This will specify which types of Diagnostic Reports to return. \'lab\' for all types of labs (\'LAB\', \'CH\', \'MB\'),  \'rad\' for all radiology, \'ap\' for all types of accession (\'LAB\', \'OTH\', \'SP\', \'CP\', \'AP\').  Usage example: domain=lab . Note: if both domain and service is specified, then service will take precedent.'
+            },
+            {
+              'name': 'service',
+              'type': 'string',
+              'definition': 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+              'documentation': 'This will specify which categories of Diagnostic Reports to return. \'lab\', \'ch\', \'mb\', \'rad\', \'oth\', \'sp\', \'cp\', \'ap\'. Usage example: service=lab . Note: if both domain and service is specified, then service will take precedent.'
+            },
+            {
+              'name': 'subject.identifier',
+              'type': 'string',
+              'definition': 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+              'documentation': 'Patient indentifier - note that this patient identifier will override any patient identifier that is in the URI of this endpoint.'
+            },
+            {
+              'name': 'pid',
+              'type': 'string',
+              'definition': 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+              'documentation': 'Patient indentifier - note that this patient identifier will override any patient identifier that has been specified in the URI of this endpoint, as well as any subject.identifier in the query string.'
+            },
+            {
+              'name': 'date',
+              'type': 'dateTime',
+              'definition': 'http://www.hl7.org/FHIR/2015May/datatypes.html#dateTime',
+              'documentation': 'This is the date/time the diagnostic was done.  The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. date=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. date=2015-01-26T08:30:00) or an implicit range (e.g. date=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=).'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
 module.exports.inputValue = inputValue;
+module.exports.conformanceData = conformanceData;

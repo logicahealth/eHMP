@@ -8,8 +8,8 @@ Scenario: Login to ADK
     And user attempts login
         |field | value|
         |Facility|Panorama|
-        |AccessCode|PW    |
-        |VerifyCode|PW    !!|
+        |AccessCode|lu1234|
+        |VerifyCode|lu1234!!|
         |SignIn||
     And the main page displays
     Then the user attempts signout
@@ -20,8 +20,8 @@ Scenario: Test logout after successful login
     And user attempts login
         |field | value|
         |Facility|Panorama|
-        |AccessCode|PW    |
-        |VerifyCode|PW    !!|
+        |AccessCode|lu1234|
+        |VerifyCode|lu1234!!|
         |SignIn||
     Then the user attempts signout
 
@@ -55,14 +55,14 @@ Scenario:Test valid login (VerifyCode  is obfuscated, accesscode is case sensiti
         |field | value|
         |Facility|Panorama|
         |AccessCode|Lu1234|
-        |VerifyCode|PW    !!|
+        |VerifyCode|lu1234!!|
         |SignIn||
     Then the page displays "Login Error Message"
      And user attempts login
         |field | value|
         |Facility|Panorama|
         |AccessCode|Lu1234|
-        |VerifyCode|PW|
+        |VerifyCode|Lu1234!!|
         |SignIn||
     Then the page displays "Login Error Message" 
         And user attempts login
@@ -80,13 +80,13 @@ Scenario:Test valid login when felled is blank
         |field | value|
         |Facility|Panorama|
         |AccessCode||
-        |VerifyCode|PW    !!|
+        |VerifyCode|lu1234!!|
         |SignIn||
     Then the page displays "Login Error Message" 
      And user attempts login
         |field | value|
         |Facility|Panorama|
-        |AccessCode|PW    |
+        |AccessCode|lu1234|
         |VerifyCode||
         |SignIn||
     Then the page displays "Login Error Message"

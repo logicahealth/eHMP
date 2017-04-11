@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Printer devices [/printer-devices{?site}{&fields}]
+## Printer devices [/printer-devices{?site}]
 
 List of printer devices
 
@@ -11,8 +11,6 @@ ORWU DEVICE
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

@@ -79,10 +79,7 @@ function getReportListForAllSites(req, res, sites, callbackObj) {
 
                     if (error) {
 
-                        req.logger.error(error);
-                        req.logger.debug('Error during Health Summaries Report List Request: ' + util.inspect(error, {
-                            depth: null
-                        }));
+                        req.logger.error({error: error}, 'Error during Health Summaries Report List Request');
                         errorObj = {
                             'statuscode': rdk.httpstatus.internal_server_error,
                             'error': error.toString()
@@ -245,9 +242,7 @@ function getReportContentByReportID(req, res) {
 
             if (error) {
 
-                req.logger.debug('Error during Health Summaries Report Content Request: ' + util.inspect(error, {
-                    depth: null
-                }));
+                req.logger.debug({error: error}, 'Error during Health Summaries Report Content Request');
                 errorObj = {
                     'statuscode': rdk.httpstatus.internal_server_error,
                     'error': 'Error Getting Report Content'

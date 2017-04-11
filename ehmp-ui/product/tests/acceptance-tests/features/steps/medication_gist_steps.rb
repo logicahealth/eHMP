@@ -9,13 +9,10 @@ class MedicationGistContainer <  AllApplets
 
     add_verify(CucumberLabel.new("MedicationGistVisible"), VerifyText.new, AccessHtmlElement.new(:id, "activeMeds-interventions-gist-items"))
     add_verify(CucumberLabel.new("Medication Details"), VerifyContainsText.new, AccessHtmlElement.new(:id, 'activeMeds-interventions-gist-items'))
-    #add_action(CucumberLabel.new("Control - applet - Filter Toggle"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] #grid-filter-button-activeMeds"))
-    #add_action(CucumberLabel.new("Control - applet - Text Filter"), SendKeysAction.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] .form-search input"))
     add_action(CucumberLabel.new("Amoxapine Tablet"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[text() = 'Amoxapine 150 MG Oral Tablet']"))
     add_action(CucumberLabel.new("Medication Header"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] [data-header-instanceid='name-header']"))
     add_action(CucumberLabel.new("Last Header"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] [data-header-instanceid='age-header']"))
     add_action(CucumberLabel.new("Refills Header"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] [data-header-instanceid='severity-header']"))
-    #add_action(CucumberLabel.new("Control - applet - Expand View"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] .applet-maximize-button"))
     add_verify(CucumberLabel.new("Medication Gist Title"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] .panel-title")) 
     add_action(CucumberLabel.new("Filter input"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#grid-filter-activeMeds input"))
     add_verify(CucumberLabel.new("Name"), VerifyContainsText.new, AccessHtmlElement.new(:id, 'name'))  
@@ -37,10 +34,7 @@ class MedicationGistContainer <  AllApplets
     add_verify(CucumberLabel.new('Header Medication'), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] [data-header-instanceid='name-header']"))
     add_verify(CucumberLabel.new('Header Refills'), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] [data-header-instanceid='severity-header']"))
   
-    #add_action(CucumberLabel.new("Control - applet - Expand View"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] .applet-maximize-button"))
-    #add_action(CucumberLabel.new("Control - applet - Refresh"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] .applet-refresh-button"))
-    #add_action(CucumberLabel.new("Control - applet - Help"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] .applet-help-button"))
-    add_action(CucumberLabel.new('Active Detail View Icon'), ClickAction.new, AccessHtmlElement.new(:css, 'div.toolbarActive [button-type=detailView-button-toolbar]'))
+    add_toolbar_buttons
   end
 
   def applet_loaded?
@@ -165,22 +159,25 @@ Then(/^the Medications Gist table only diplays rows including text "([^"]*)"$/) 
   upper = input_text.upcase
   lower = input_text.downcase
   text_check = "descendant::div[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]"
-  path = "//div[@id='activeMeds-interventions-gist-items']/#{text_check}/ancestor::div[contains(@class, 'gist-item')]"
+  path = "//div[@data-appletid='activeMeds']/#{text_check}/ancestor::div[contains(@class, 'table-row-toolbar')]"
   p path
-  row_count = TableContainer.instance.get_elements('Rows - Active Medications Applet').size 
+  @ehmp = PobActiveRecentMedApplet.new
+  row_count = @ehmp.fld_active_meds_gist.length 
   rows_containing_filter_text = TestSupport.driver.find_elements(:xpath, path).size
   expect(row_count).to eq(rows_containing_filter_text), "Only #{rows_containing_filter_text} rows contain the filter text but #{row_count} rows are visible"
 end
 
 When(/^the user filters the Medications Gist Applet by text "([^"]*)"$/) do |search_field|
-  sleep 2 # passes locally, fails in pipeline, maybe sleep will help
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  row_count = TableContainer.instance.get_elements('Rows - Active Medications Applet').size
+  @ehmp = PobActiveRecentMedApplet.new
+  row_count = @ehmp.fld_active_meds_gist.length
+  p "before filter: #{row_count}"
   aa = MedicationGistContainer.instance
   expect(aa.wait_until_action_element_visible("Filter input", DefaultLogin.wait_time)).to be_true
   expect(aa.perform_action("Filter input", search_field)).to be_true
-  wait.until { row_count != TableContainer.instance.get_elements('Rows - Active Medications Applet').size }
-  p "After filtering, result count is #{TableContainer.instance.get_elements('Rows - Active Medications Applet').size}"
+  # wait.until { row_count != TableContainer.instance.get_elements('Rows - Active Medications Applet').size }
+  wait.until { row_count != @ehmp.fld_active_meds_gist.length }
+  p "After filtering, result count is #{@ehmp.fld_active_meds_gist.length }"
 end
 
 Then(/^the medication gist view displays at least (\d+) result$/) do |num_result|
@@ -193,5 +190,5 @@ When(/^user views the details for a medication in Medications Gist$/) do
   expect(meds.length).to be > (0), 'Test needs at least 1 medication to test medication detail view'
   @mg.add_action(CucumberLabel.new('first med'), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] div.gist-item-list div.table-row [role=presentation]:nth-child(1)"))
   expect(@mg.perform_action('first med')).to eq(true)
-  expect(@mg.perform_action('Active Detail View Icon')).to be_true
+  expect(@mg.perform_action('Detail View Button')).to be_true
 end

@@ -31,6 +31,10 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * This code will eventually be merged into EhmpServices.  There is a class in there called RdkResourceUtil
+ * that this class will eventually be replaced with.  It is more generic and provides better error handling.
+ */
 public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 		Cacheable {
 
@@ -38,14 +42,20 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 	}
 
 	/** The lab result resource. */
-	protected static String labResultResource = "resource/fhir/patient/{pid}/diagnosticreport?domain=lab&name=OCCULT BLOOD&_sort:dsc=date&_count=1";
-	protected static String authenticationResource = "resource/authentication/systems";
+	protected static String labResultResource = "resource/fhir/patient/{pid}/diagnosticreport?domain=lab&name=OCCULT BLOOD&_sort:desc=date&_count=1";
+	protected static String authenticationResource = "resource/authentication/systems/internal";
 
 	/** The lab result query string. */
 	protected static String queryString = "&_ack=true";
-	protected static String rdkSessionCookieId = "rdk.sid";
+	protected static String RDK_SESSION_COOKIE_ID = "rdk.sid";
 
+	/** JSON Web Token implementation */
+	protected static String rdkJwtId = "X-Set-JWT";
+	protected static String rdkJwtPrepend = "Bearer ";
+
+	private static String rdkSessionCookieId = null;
 	private static String sessionId = null;
+	private static String jwt = null;
 
 	protected static String getSessionId() {
 		return sessionId;
@@ -54,6 +64,15 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 	protected static void setSessionId(String sid) {
 		System.out.println("SessionId was set to " + sid);
 		sessionId = sid;
+	}
+
+	protected static String getJwt() {
+		return jwt;
+	}
+
+	protected static void setJwt(String jwtToSet) {
+		System.out.println("JWT was set to " + jwtToSet);
+		jwt = jwtToSet;
 	}
 
 	protected static HttpHeaders getJbpmAuthenticationHeader() {
@@ -74,24 +93,37 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 				Collection<String> cookies = result.getHeaders().get(
 						"Set-Cookie");
 
+				Boolean success = false;
+
 				for (String cookie : cookies) {
 					// System.out.println(cookie);
-					if (cookie.contains(rdkSessionCookieId)) {
+					if (cookie.contains(RDK_SESSION_COOKIE_ID)) {
 						String[] cookieCrumbles = cookie.split(";");
 						if (cookieCrumbles.length > 0) {
 							for (String crumble : cookieCrumbles) {
-								if (crumble.contains(rdkSessionCookieId)) {
+								if (crumble.contains(RDK_SESSION_COOKIE_ID)) {
 									String[] sessionIdParts = crumble.split(
 											"=", 2);
 									if (sessionIdParts.length > 0) {
+										rdkSessionCookieId = sessionIdParts[0];
 										setSessionId(sessionIdParts[1]);
-										return true;
+										success = true;
 									}
 								}
 							}
 						}
 					}
 				}
+
+				Collection<String> jwtHeaders = result.getHeaders().get(rdkJwtId);
+				//detect JWT value
+				for (String jwtHeader : jwtHeaders) {
+					if (jwtHeader.length() > 0) {
+						setJwt(jwtHeader);
+						return success;
+					}
+				}
+
 			}
 		} catch (RestClientException rce) {
 			rce.printStackTrace();
@@ -100,6 +132,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 		}
 
 		setSessionId(null);
+		setJwt(null);
 		return false;
 	}
 
@@ -163,13 +196,13 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 		return rdkResourceEndpoint;
 	}
 
-	protected String getRdkResponse(String resourceUrl, Boolean isRetry) {
+	protected String getRdkResponse(String resourceUrl, boolean isRetry) {
 
-		System.out.println("getRdkResponse");
+		System.out.println("getRdkResponse" + (isRetry ? " (retry): " : ": ") + resourceUrl);
 
 		String response = new String();
 
-		if (getSessionId() == null) {
+		if (getSessionId() == null || getJwt() == null) {
 			if (!establishSession()) {
 				// couldn't establish a session..
 				return response;
@@ -183,8 +216,8 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 			// response = getRestTemplate().getForObject(resourceUrl,
 			// String.class);
 			HttpHeaders headers = new HttpHeaders();
-			headers.set("Cookie",
-					rdkSessionCookieId.concat("=").concat(getSessionId()));
+			headers.set("Cookie", rdkSessionCookieId.concat("=").concat(getSessionId()));
+			headers.set("Authorization", rdkJwtPrepend.concat(getJwt()));
 			HttpEntity<String> request = new HttpEntity<String>(headers);
 			result = getRestTemplate().exchange(resourceUrl, HttpMethod.GET,
 					request, String.class);
@@ -196,15 +229,19 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 		} catch (HttpClientErrorException hce) {
 			resultStatus = hce.getStatusCode();
 
-			if (resultStatus.equals(HttpStatus.BAD_REQUEST)) {
-				// if 400 bad request our auth token was likely expired,
+			if (resultStatus.equals(HttpStatus.UNAUTHORIZED)) {
+				// if 401 UNAUTHORIZED our auth token was likely expired,
 				// try to refresh it and give another shot
 				// do this only once to avoid an infinite loop
 				if (!isRetry) {
 					setSessionId(null);
+					setJwt(null);
+					System.out.println("getRdkResponse received an Unauthorized status, going to establish a new session and invoke again");
 					return getRdkResponse(resourceUrl, true);
 				}
 			} else {
+				String messageBody = hce.getResponseBodyAsString();
+				System.out.println("ERROR: " + messageBody);
 				hce.printStackTrace();
 			}
 		} catch (RestClientException rce) {
@@ -215,13 +252,13 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 
 	/**
 	 * Poll JDS for Lab results
-	 * 
+	 *
 	 * @return a string
 	 */
 	public String pollJDSResults(String pid, String orderId) {
 
 		System.out.println("pollJDSResults");
-		
+
 		if((orderId != null) && (orderId.trim().length() > 0)) {
 			queryString = queryString.concat("&orderId=").concat(orderId);
 		}
@@ -282,19 +319,19 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 		String pid = (String) workItem.getParameter("pid");
 		String orderId = (String) workItem.getParameter("orderId");
 		//String orderId = getOrderId();
-		
+
 		//site is for future use
 		@SuppressWarnings("unused")
 		String site = (String) workItem.getParameter("site");
-		
+
 		String result = pollJDSResults(pid, orderId);
-						
-		Map<String, Object> serviceResult = new HashMap<String, Object>();	
+
+		Map<String, Object> serviceResult = new HashMap<String, Object>();
 		serviceResult.put("ServiceResponse", result);
 		manager.completeWorkItem(workItem.getId(), serviceResult);
 
 	}
-	
+
 	String getOrderId() {
 		String orderId = null;
 		//TODO retrieve oderId from vxSync //

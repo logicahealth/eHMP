@@ -18,7 +18,7 @@ define([
             chromeEnabled: true,
             chromeOptions: {
                 additionalButtons: [{
-                    'id': 'drop3',
+                    'id': 'addGraphs',
                     'view': PickListView
                 }]
             }

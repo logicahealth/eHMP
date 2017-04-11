@@ -1,8 +1,8 @@
-@F144 @F144_numericlabresults @regression @triages
+@F144 @F144_numericlabresults @regression @triages @DE4084
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 Background:
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   Given user searches for and selects "Seven,Patient"
   Then Cover Sheet is active
   And user navigates to expanded Numeric Lab Results Applet
@@ -15,13 +15,13 @@ Scenario: Expanded Numeric Lab results applet contains expected buttons
     | buttons  |
     | Refresh  |
     | Filter Toggle   |
-    | Minimize View |
+#    | Minimize View |
 
 @F144_numericlabresults_2
 Scenario: Expanded Numeric Lab results applet displays expected headers	
   When the user is viewing the expanded Numeric Lab Results Applet
   And the "Numeric Lab Results Applet" table has headers
-    | DATE | LAB TEST | FLAG | RESULT | UNIT | REF RANGE | FACILITY |
+    | Date | Lab Test | Flag | Result | Unit | Ref Range | Facility |
 
 @F144_numericlabresults_4
 Scenario: Expanded Numeric Lab results applet has infinite scroll

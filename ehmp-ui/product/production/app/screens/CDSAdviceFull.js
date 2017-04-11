@@ -2,6 +2,7 @@ define(function() {
     'use strict';
     var screenConfig = {
         id: 'cds-advice-full',
+        context: 'patient',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

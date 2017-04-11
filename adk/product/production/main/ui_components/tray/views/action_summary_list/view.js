@@ -68,7 +68,7 @@ define([
             };
         },
         template: Handlebars.compile([
-            'New {{label}} <i class="fa fa-plus pull-right"></i>'
+            'New {{label}} <i class="fa fa-plus font-size-10 pull-right"></i>'
         ].join('\n')),
         events: {
             'click': function(e) {
@@ -83,7 +83,7 @@ define([
 
     var ActionListItemView = Backbone.Marionette.ItemView.extend({
         tagName: 'li',
-        className: 'list-group-item all-padding-no all-border-no',
+        className: 'list-group-item all-padding-no bottom-padding-xs all-border-no',
         template: Handlebars.compile([
             '<a href="#" class="add-new all-padding-sm" title="Press enter to add New {{label}}">',
             '{{label}}',
@@ -111,10 +111,10 @@ define([
             }
             return Handlebars.compile([
                 '<button type="button" class="btn btn-default btn-block dropdown-toggle" title="Press enter to open {{dropdownLabel}} menu" data-toggle="dropdown" aria-expanded="false">',
-                '{{dropdownLabel}} <span class="caret"></span>',
+                '{{dropdownLabel}} <i class="fa fa-caret-down color-pure-white pull-right"></i>',
                 '</button>',
                 '<ul class="dropdown dropdown-menu btn-block action-list-child-container top-padding-no">' +
-                '<li class="all-padding-sm background-color-grey-light">Create a new...</li>',
+                '<li class="all-padding-sm bottom-border-grey-light">Create a New...</li>',
                 '</ul>'
             ].join("\n"));
         },
@@ -212,11 +212,16 @@ define([
     };
 
     var ActionSummaryListView = Backbone.Marionette.LayoutView.extend({
+        behaviors:{
+            FlexContainer: {
+                direction: 'column'
+            }
+        },
         className: "container-fluid panel panel-default",
         template: Handlebars.compile([
             '<div class="header-container row panel-heading all-padding-no left-padding-md"></div>',
-            '<div class="action-list-container row panel-body"></div>',
-            '<div class="summary-list-container row panel-body all-padding-no"></div>',
+            '<div class="action-list-container row panel-body bottom-border-grey-light"></div>',
+            '<div data-flex-width="1" class="summary-list-container row panel-body all-padding-no auto-overflow-y"></div>',
             '<div class="loading-container"></div>'
         ].join("\n")),
         ui: {

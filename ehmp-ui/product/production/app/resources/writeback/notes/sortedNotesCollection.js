@@ -28,6 +28,7 @@ define([
                 } else {
                     item.itemUniqueID = item.uid.replace(/\:/g, '_') + '_' + item.displayGroup;
                 }
+                delete item._labelsForSelectedValues;
             });
             return items;
         }

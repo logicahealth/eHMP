@@ -30,10 +30,10 @@ var logger = require('bunyan').createLogger({
 
 var config = {
 	// host: '101.2.2.102',
-	host: 'IPADDRESS ',
+	host: 'IP_ADDRESS',
 	port: 9210,
-	accessCode: 'PW    ',
-	verifyCode: 'PW    !!',
+	accessCode: 'PW',
+	verifyCode: 'PW',
 	context: 'VPR UI CONTEXT',
 	localIP: '127.0.0.1',
 	localAddress: 'localhost',
@@ -74,10 +74,10 @@ var config = {
 
 // var config = {
 // 	// host: '101.2.2.102',
-// 	host: 'IPADDRESS ',
+// 	host: 'IP_ADDRESS',
 // 	port: 9210,
-// 	accessCode: 'PW    ',
-// 	verifyCode: 'PW    !!',
+// 	accessCode: 'PW',
+// 	verifyCode: 'PW',
 // 	context: 'VPR SYNCHRONIZATION CONTEXT',
 // 	localIP: '127.0.0.1',
 // 	localAddress: 'localhost',
@@ -157,10 +157,10 @@ var config = {
 
 // config = {
 // 	// host: '101.2.2.102',
-// 	host: 'IPADDRESS ',
+// 	host: 'IP_ADDRESS',
 // 	port: 99210,
-// 	accessCode: 'PW    ',
-// 	verifyCode: 'PW    !!',
+// 	accessCode: 'PW',
+// 	verifyCode: 'PW',
 // 	context: 'VPR UI CONTEXT',
 // 	localIP: '127.0.0.1',
 // 	localAddress: 'localhost',

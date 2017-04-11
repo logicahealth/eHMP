@@ -2,7 +2,7 @@
 
 ## Synchronization [{{{path}}}]
 
-### Load [GET {{{path}}}/load{?pid}{&forcedSite}{&prioritySite}{&immediate}{&fields}]
+### Load [GET {{{path}}}/load{?pid}{&forcedSite}{&prioritySite}{&immediate}]
 
 Synchronize a patient's data
 
@@ -15,9 +15,6 @@ Synchronize a patient's data
     + prioritySite (string, optional) - When this site has finished synchronizing, return the results even if a full synchronization has not completed. Ignored if forcedSite is provided.
 
     + immediate (boolean, optional) - Whether to return immediately, before the sync has completed. Ignored if prioritySite is provided.
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 
@@ -61,13 +58,9 @@ Synchronize a patient's data
             :[Schema]({{{common}}}/schemas/sync_load-GET-404.jsonschema)
 
 
-### Demographics Load [POST {{{path}}}/demographics-load{?fields}]
+### Demographics Load [POST {{{path}}}/demographics-load]
 
 Synchronize a patient's data by demographics
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 + Request JSON Message (application/json)
 
@@ -143,9 +136,12 @@ Synchronize a patient's data by demographics
     + Body
 
             {
-                "data": [
-                    "A dod pid is invalid, please use an edipi or icn."
-                ],
+                "data": {
+                    "error": {
+                        "code": 500,
+                        "message": "A dod pid is invalid, please use an edipi or icn."
+                    }
+                },
                 "status": 400
             }
 
@@ -190,15 +186,13 @@ Synchronize a patient's data by demographics
             :[Schema]({{{common}}}/schemas/sync_status-GET-500.jsonschema)
 
 
-### Clear [GET {{{path}}}/clear{?pid}{&fields}]
+### Clear [GET {{{path}}}/clear{?pid}]
 
 Clear the patient's synchronized data
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -238,15 +232,13 @@ Clear the patient's synchronized data
             :[Schema]({{{common}}}/schemas/sync_clear-GET-404.jsonschema)
 
 
-### Status [GET {{{path}}}/status{?pid}{&fields}]
+### Status [GET {{{path}}}/status{?pid}]
 
 Return the synchronization status for the patient as returned by JDS
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -276,9 +268,12 @@ Return the synchronization status for the patient as returned by JDS
     + Body
 
             {
-                "data": [
-                    "The required parameter \"pid\" is missing."
-                ],
+                "data": {
+                    "error": {
+                        "code": 500,
+                        "message": "The required parameter \"pid\" is missing."
+                    }
+                },
                 "status": 400
             }
 
@@ -323,15 +318,13 @@ Return the synchronization status for the patient as returned by JDS
             :[Schema]({{{common}}}/schemas/sync_status-GET-500.jsonschema)
 
 
-### Datastatus [GET {{{path}}}/data-status{?pid}{&fields}]
+### Datastatus [GET {{{path}}}/data-status{?pid}]
 
 Return the synchronization status for the patient, processed to be simpler to digest
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -367,9 +360,12 @@ Return the synchronization status for the patient, processed to be simpler to di
     + Body
 
             {
-                "data": [
-                    "The required parameter \"pid\" is missing."
-                ],
+                "data": {
+                    "error": {
+                        "code": 500,
+                        "message": "The required parameter \"pid\" is missing."
+                    }
+                },
                 "status": 400
             }
 
@@ -414,15 +410,13 @@ Return the synchronization status for the patient, processed to be simpler to di
             :[Schema]({{{common}}}/schemas/sync_data-status-GET-500.jsonschema)
 
 
-### Sync Status Detail [GET {{{path}}}/status-detail{?pid}{&fields}]
+### Sync Status Detail [GET {{{path}}}/status-detail{?pid}]
 
 Return a detailed synchronization status for the patient
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -460,9 +454,12 @@ Return a detailed synchronization status for the patient
     + Body
 
             {
-                "data": [
-                    "The required parameter \"pid\" is missing."
-                ],
+                "data": {
+                    "error": {
+                        "code": 500,
+                        "message": "The required parameter \"pid\" is missing."
+                    }
+                },
                 "status": 400
             }
 
@@ -507,14 +504,9 @@ Return a detailed synchronization status for the patient
             :[Schema]({{{common}}}/schemas/sync_status-detail-GET-500.jsonschema)
 
 
-### Operationalstatus [GET {{{path}}}/operational-status{?fields}]
+### Operationalstatus [GET {{{path}}}/operational-status]
 
 Return the operational status of the logged-in user's site
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 

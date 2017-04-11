@@ -71,12 +71,16 @@ UID2JSN(UID,JSON,TLTNM) ; get JSON for object using optional template
  ;
  I $G(HTTPREQ("store"))="data" G UID2JSND ; jump to use non-patient globals
  ;
- N STAMP,NAME
- S STAMP=$O(^VPRPTJ("JSON",PID,UID,""),-1)
- I STAMP'="" S NAME=$NA(^VPRPTJ("JSON",PID,UID,STAMP))
- I STAMP="" S NAME=$NA(^VPRPTJ("JSON",PID,UID))
+ N STAMP,NAME,JPID
+ ;
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" Q
+ ;
+ S STAMP=$O(^VPRPTJ("JSON",JPID,PID,UID,""),-1)
+ I STAMP'="" S NAME=$NA(^VPRPTJ("JSON",JPID,PID,UID,STAMP))
+ I STAMP="" S NAME=$NA(^VPRPTJ("JSON",JPID,PID,UID))
  I '$L($G(TLTNM)) M JSON=@NAME I 1
- E  M JSON=^VPRPTJ("TEMPLATE",PID,UID,TLTNM) ; save-time template
+ E  M JSON=^VPRPTJ("TEMPLATE",JPID,PID,UID,TLTNM) ; save-time template
  I '$D(JSON) S JSON="{""unknownUid"":"""_UID_"""}"
  ;TODO: handle query time templates here
  Q

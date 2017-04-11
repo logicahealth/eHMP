@@ -2,8 +2,17 @@ define([
     'underscore',
     'backbone',
     'marionette',
-    'app/applets/workspaceManager/appletLayoutView'
-], function(_, Backbone, Marionette, AppletLayoutView) {
+    'app/applets/workspaceManager/appletLayoutView',
+    'app/applets/workspaceManager/selector/view',
+    'app/applets/workspaceManager/navigationButton'
+], function(
+    _,
+    Backbone,
+    Marionette,
+    AppletLayoutView,
+    WorkspaceSelector,
+    NavigationButton
+) {
     'use strict';
 
     var RootView = Backbone.Marionette.LayoutView.extend({
@@ -21,10 +30,22 @@ define([
 
     var applet = {
         id: 'workspaceManager',
-        getRootView: function() {
-            return RootView;
-        }
+        viewTypes: [{
+            type: 'expanded',
+            view: RootView,
+            chromeEnabled: false
+        }, {
+            type: 'selector',
+            view: WorkspaceSelector,
+            chromeEnabled: false
+        }, {
+            type: 'button',
+            view: NavigationButton,
+            chromeEnabled: false
+        }],
+        defaultViewType: 'expanded'
     };
+
 
     (function initMessaging() {
         var channel = ADK.Messaging.getChannel('workspaceManagerChannel');

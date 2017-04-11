@@ -1,8 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
-var rdk = require('../core/rdk');
-var nullchecker = rdk.utils.nullchecker;
+var nullchecker = require('./nullchecker');
 var S = require('string');
 
 var fromUri = function(uri) {

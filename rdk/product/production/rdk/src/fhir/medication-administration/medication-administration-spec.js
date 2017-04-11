@@ -5,6 +5,33 @@ var MedAdmin = require('./medication-administration-resource');
 var MedAdminIn = require('./medication-administration-spec-data').data;
 var jdsInput = MedAdminIn.jdsData;
 
+
+
+describe('Medication Administration Conformance Statement', function() {
+
+    var testConformance = MedAdminIn.conformanceData;
+    var builtConformance = MedAdmin.createConformanceData();
+
+    it('verifies that a generated conformance statement exists', function() {
+        expect(builtConformance).not.to.be.undefined();
+    });
+
+    describe('Medication Administration Conformance Details', function() {
+        it('verifies metadata are valid', function() {
+            expect(builtConformance.type).to.eql(testConformance.rest[0].resource[0].type);
+            expect(builtConformance.profile.reference).to.eql(testConformance.rest[0].resource[0].profile.reference);
+            expect(builtConformance.interaction[0].code).to.eql('read');
+            expect(builtConformance.interaction[1].code).to.eql('search-type');
+        });
+
+        it('verifies conformance search parameters are valid', function() {
+            expect(builtConformance.searchParam[0].name).to.eql('subject.identifier');
+            expect(builtConformance.searchParam[1].name).to.eql('limit');
+        });
+    });
+});
+
+
 // Test for the mappings of the common elements from:
 // http://www.hl7.org/FHIR/2015May/medicationadministration.html
 
@@ -113,21 +140,22 @@ describe('Medication Administration FHIR conversion methods', function() {
         expect(fhirItem.reasonNotGiven[0].coding[0].display).to.eql('None');
     }
 
+    var siteHash = fhirUtils.getSiteHash(jdsItem.uid);
     it('sets effectiveTime or period correctly', function() {
         //effectiveTime - check and verify it if the data is present.
         if (fhirItem.effectiveTimePeriod) {
             expect(fhirItem.effectiveTimePeriod.start).to.eql(fhirUtils.convertToFhirDateTime(
-                jdsItem.dosages[0].start));
+                jdsItem.dosages[0].start, siteHash));
             expect(fhirItem.effectiveTimePeriod.end).to.eql(fhirUtils.convertToFhirDateTime(
-                jdsItem.dosages[0].stop));
+                jdsItem.dosages[0].stop, siteHash));
         }
         if (fhirItem.effectiveTimeDateTime) {
             if (jdsItem.dosages[0].start) {
                 expect(fhirItem.effectiveTimeDateTime).to.eql(fhirUtils.convertToFhirDateTime(
-                    jdsItem.dosages[0].start));
+                    jdsItem.dosages[0].start, siteHash));
             } else {
                 expect(fhirItem.effectiveTimeDateTime).to.eql(fhirUtils.convertToFhirDateTime(
-                    jdsItem.overallStart));
+                    jdsItem.overallStart, siteHash));
             }
         }
     });
@@ -178,7 +206,7 @@ describe('Medication Administration FHIR conversion methods', function() {
         });
 
         it('sets dateWritten correctly', function() {
-            expect(medPres.dateWritten).to.eql(fhirUtils.convertToFhirDateTime(jdsItem.orders[0].ordered));
+            expect(medPres.dateWritten).to.eql(fhirUtils.convertToFhirDateTime(jdsItem.orders[0].ordered, siteHash));
         });
 
         it('sets dosageInstruction correctly', function() {
@@ -204,8 +232,8 @@ describe('Medication Administration FHIR conversion methods', function() {
             expect(medPres.dispense).to.not.be.undefined();
             //Medication is not currently mapped to this, but likely should be.
             //expect(medPres.dispense.medication.reference).to.equal('#' + med.id);
-            expect(medPres.dispense.validityPeriod.start).to.equal(fhirUtils.convertToFhirDateTime(jdsItem.overallStart));
-            expect(medPres.dispense.validityPeriod.end).to.equal(fhirUtils.convertToFhirDateTime(jdsItem.overallStop));
+            expect(medPres.dispense.validityPeriod.start).to.equal(fhirUtils.convertToFhirDateTime(jdsItem.overallStart, siteHash));
+            expect(medPres.dispense.validityPeriod.end).to.equal(fhirUtils.convertToFhirDateTime(jdsItem.overallStop, siteHash));
             expect(medPres.dispense.quantity.value).to.equal(parseFloat(jdsItem.orders[0].quantityOrdered));
             expect(medPres.dispense.expectedSupplyDuration.value).to.equal(jdsItem.orders[0].daysSupply);
             expect(medPres.dispense.expectedSupplyDuration.units).to.equal('days');

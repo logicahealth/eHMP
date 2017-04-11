@@ -2,15 +2,13 @@
 
 ## Cds patient list cds [{{{path}}}]
 
-### Criteria get [GET {{{path}}}/criteria{?id}{&name}{&fields}]
+### Criteria get [GET {{{path}}}/criteria{?id}{&name}]
 
 + Parameters
 
     + id (string, optional) -  id
 
     + name (string, optional) - name of definition
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -91,15 +89,13 @@
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Definition get [GET {{{path}}}/definition{?id}{&name}{&fields}]
+### Definition get [GET {{{path}}}/definition{?id}{&name}]
 
 + Parameters
 
     + id (string, optional) -  id
 
     + name (string, optional) - name of definition
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -122,7 +118,7 @@
                 "name": "ssss",
                 "description": "ssss",
                 "expression": "ssss",
-                "scope": "ssss",
+                "scope": "private",
                 "owner": "ssss"
             }
 
@@ -211,15 +207,13 @@
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Patientlist get [GET {{{path}}}/list{?id}{&name}{&fields}]
+### Patientlist get [GET {{{path}}}/list{?id}{&name}]
 
 + Parameters
 
     + id (string, optional) -  id
 
     + name (string, optional) - name of Patientlist
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -244,11 +238,11 @@
                     "name": "ssss",
                     "description": "ssss",
                     "expression": "ssss",
-                    "scope": "ssss",
+                    "scope": "site",
                     "owner": "ssss"
                 },
                 "patients": [],
-                "scope": "ssss",
+                "scope": "private",
                 "owner": "ssss",
                 "_id": "ssss"
             }
@@ -390,15 +384,13 @@
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Patientlist status [GET {{{path}}}/list/status{?id}{&name}{&fields}]
+### Patientlist status [GET {{{path}}}/list/status{?id}{&name}]
 
 + Parameters
 
     + id (string, optional) -  id
 
     + name (string, optional) - name of Patientlist
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

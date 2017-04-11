@@ -53,7 +53,7 @@ function init(app) {
  *                    this definition template", "expression": "{and: [ {or:
  *                    ['A.A','B.B'], {'A.A'} ]}", "date":
  *                    "2015-03-10T12:54:54.035Z", "scope": "private", "owner":
- *                    "9E7A;PW    ", "_id": "54fee99e1e3bdef211534bbb" } ] }
+ *                    "9E7A;pu1234", "_id": "54fee99e1e3bdef211534bbb" } ] }
  * @apiError (Error 404) . Definition not found
  * @apiErrorExample Error-Response: HTTP/1.1 404 Not Found { status: 404
  *                  message: Definition not found }
@@ -124,7 +124,7 @@ module.exports.getDefinition = function(req, res) {
  *                    this definition template", "expression": "{and: [ {or:
  *                    ['A.A','B.B'], {'A.A'} ]}", "date":
  *                    "2015-03-10T12:54:54.035Z", "scope": "private", "owner":
- *                    "9E7A;PW    ", "_id": "54fee99e1e3bdef211534bbb" } }
+ *                    "9E7A;pu1234", "_id": "54fee99e1e3bdef211534bbb" } }
  *
  * @apiError (Error 400) {json} error Definition document (request body) must be
  *           defined
@@ -300,7 +300,7 @@ module.exports.deleteDefinition = function(req, res) {
  *    "expression": "{and: [ {or: ['A.A','B.B'], {'A.A'} ]}",
  *    "date":"2015-03-10T12:54:54.035Z",
  *    "scope": "private",
- *    "owner": "9E7A;PW    ",
+ *    "owner": "9E7A;pu1234",
  *    "_id": "54fee99e1e3bdef211534bbb" }
  * }
  *

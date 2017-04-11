@@ -12,20 +12,42 @@ define([
             var patientIEN = currentPatient.get('localId');
             var fullName = currentPatient.get('fullName');
             var problem = model.get('problemResults');
+            var recordingProviderIEN, recordingProvider, dateRecorded;
+
+            var visit = currentPatient.get('visit');
+
+            if(!_.isUndefined(visit) && !_.isUndefined(visit.selectedProvider)){
+                recordingProvider = visit.selectedProvider.name;
+                recordingProviderIEN = visit.selectedProvider.code;
+                dateRecorded = visit.dateTime;
+            }
 
             var onsetDate = model.get('onset-date');
             if(onsetDate){
                 saveProblemModel.set('dateOfOnset', writebackUtils.buildDateForVista(onsetDate));
             }
 
-            if(problem instanceof Backbone.Model){
+            if(!model.get('isFreeTextProblem') && (problem instanceof Backbone.Model)){
                 if(problem.get('lexIen')){
                     saveProblemModel.set('problemNumber', problem.get('lexIen'));                
-                }
+                }                
 
                 if(problem.get('conceptId')){
                     saveProblemModel.set('snomedCode', problem.get('conceptId'));
                 }                
+
+                if(problem.get('codeIen')){
+                    saveProblemModel.set('lexiconCode', problem.get('codeIen'));                
+                }   
+
+                if(problem.get('code')){
+                    saveProblemModel.set('code', problem.get('code'));                
+                }                             
+            }else{
+                saveProblemModel.set({
+                    'code': '',
+                    'lexiconCode': ''
+                });     
             }
 
             saveProblemModel.set({
@@ -34,24 +56,18 @@ define([
                 'patientIEN': patientIEN,   
                 'patientName': fullName,             
                 'dateLastModified': dateLastModified,
-                'dateRecorded': dateLastModified,    
+                'dateRecorded': dateRecorded,
                 'enteredBy': userSession.get('lastname') + ',' + userSession.get('firstname'),
                 'enteredByIEN': userId,
                 'status': model.get('statusRadioValue'),
                 'acuity': model.get('immediacyRadioValue'),
                 'responsibleProviderIEN': model.get('resProvider').split(';')[0],
-                'responsibleProvider': model.get('resProvider').split(';')[1]
+                'responsibleProvider': model.get('resProvider').split(';')[1],
+                'recordingProvider': recordingProvider,
+                'recordingProviderIEN': recordingProviderIEN
             });
 
-            if(!_.isUndefined(model.get('clinic')) && !_.isUndefined(model.get('_labelsForSelectedValues')) && model.get('_labelsForSelectedValues') instanceof Backbone.Model){
-                var clinicOrServiceValue = model.get('clinic') + '^' +  model.get('_labelsForSelectedValues').get('clinic');
-
-                if(model.get('clinicOrService') === 'clinic'){
-                    saveProblemModel.set('clinic', clinicOrServiceValue);
-                } else {
-                    saveProblemModel.set('service', clinicOrServiceValue);
-                }
-            }
+            this.saveClinicOrService(model, saveProblemModel);
 
             if(model.get('isFreeTextProblem') && model.get('freeTxtTxtArea')){
                 saveProblemModel.set('newTermText', model.get('freeTxtTxtArea'));                
@@ -66,6 +82,25 @@ define([
                 saveProblemModel.set('comments', comments);
             }
 
+            var tfObj = this.buildTreatmentFactorsObject(model);
+            if(!_.isEmpty(tfObj)){
+                saveProblemModel.set(tfObj);
+            }
+
+            return saveProblemModel;
+        },
+        saveClinicOrService: function(formModel, saveModel){
+            if(!_.isUndefined(formModel.get('clinic')) && !_.isNull(formModel.get('clinic')) && !_.isUndefined(formModel.get('_labelsForSelectedValues')) && formModel.get('_labelsForSelectedValues') instanceof Backbone.Model){
+                var clinicOrServiceValue = formModel.get('clinic') + '^' +  formModel.get('_labelsForSelectedValues').get('clinic');
+
+                if(formModel.get('clinicOrService') === 'clinic'){
+                    saveModel.set('clinic', clinicOrServiceValue);
+                } else {
+                    saveModel.set('service', clinicOrServiceValue);
+                }
+            }
+        },
+        buildTreatmentFactorsObject: function(model){
             var tfObj = {};
             if(model.get('noTreatmentFactors') !== 'true'){
 
@@ -94,7 +129,7 @@ define([
                     tfObj.MST =  mst.get('value') ? '1' : '0';                    
                 }
 
-                var shipboard = model.get('treatmentFactors').findWhere({name: 'shipboard'});
+                var shipboard = model.get('treatmentFactors').findWhere({name: 'shipboard-hazard'});
                 if(shipboard){
                     tfObj.shipboard =  shipboard.get('value') ? '1' : '0';
                 }
@@ -105,11 +140,69 @@ define([
                 }
             }
 
-            if(!_.isEmpty(tfObj)){
-                saveProblemModel.set(tfObj);                
+            return tfObj;
+        },
+        buildEditProblemsModel: function(model, userSession, editProblemModel){
+            var editObject = {};
+            editObject.problemIEN = model.get('problemIEN');
+            editObject.dateLastModified = moment().format('YYYYMMDD');
+
+            var onsetDate = model.get('onset-date');
+            if(_.isString(onsetDate)){
+                editObject.dateOfOnset = writebackUtils.buildDateForVista(onsetDate);
             }
 
-            return saveProblemModel;
+            editObject.problemText = model.get('problemText');
+            editObject.problemName = model.get('problemText');
+
+            if(!_.isUndefined(model.get('snomedCode'))){
+                editObject.snomedCode = model.get('snomedCode');
+            }
+
+            if (!_.isUndefined(model.get('lexiconCode'))) {
+                editObject.lexiconCode = model.get('lexiconCode');
+            } else {
+                editObject.lexiconCode = '';
+            }
+
+            if (_.isArray(model.get('codes'))) {
+                editObject.code = model.get('codes')[0].code;
+            } else {
+                editObject.code = '';
+            }
+
+            editObject.status = model.get('statusRadioValue');
+            editObject.acuity = model.get('immediacyRadioValue');
+
+            if(!_.isUndefined(model.get('resProvider'))){
+                editObject.responsibleProviderIEN = model.get('resProvider').split(';')[0];
+                editObject.responsibleProvider = model.get('resProvider').split(';')[1];
+            }
+
+            this.saveClinicOrService(model, editProblemModel);
+
+            var tfObj = this.buildTreatmentFactorsObject(model);
+            if(!_.isEmpty(tfObj)){
+                editProblemModel.set(tfObj);
+            }
+
+            var userIEN = userSession.get('duz')[userSession.get('site')] ? userSession.get('duz')[userSession.get('site')] : userSession.get('duz')[0];
+            editObject.userIEN = userIEN;
+
+            var originalCommentsArray = [];
+            var originalComments = model.get('originalComments');
+            if(!_.isUndefined(originalComments)){
+                originalComments.each(function(originalComment){
+                    if(writebackUtils.isCommentByLoggedInUser(userSession, originalComment)){
+                        originalCommentsArray.push(originalComment.get('commentString'));
+                    }
+                });
+            }
+
+            editObject.originalComments = originalCommentsArray;
+            editObject.incomingComments = this.buildIncomingComments(model.get('originalComments'), model.get('annotations'), userSession);
+
+            editProblemModel.set(editObject);
         },
         addProblem: function(model, successCallback, errorCallback){
             var saveProblemModel = new ADK.UIResources.Writeback.Problems.Model();
@@ -126,6 +219,49 @@ define([
                 }
             });
         },
+        editProblem: function(model, successCallback, errorCallback){
+            var editProblemModel = new ADK.UIResources.Writeback.Problems.Model();
+            var userSession = editProblemModel.user;
+
+            this.buildEditProblemsModel(model, userSession, editProblemModel);
+            editProblemModel.save(null, {
+                success: function(){
+                    successCallback();
+                },
+                error: function(model, error) {
+                    errorCallback(error);
+                }
+            });
+        },
+        buildIncomingComments: function(originalCommentCollection, newCommentCollection, userSession){
+            var incomingCommentCollection = [];
+
+            if(!_.isUndefined(originalCommentCollection) && originalCommentCollection.length > 0){
+                originalCommentCollection.each(function(originalComment){
+                    var noteCounter = originalComment.get('noteCounter');
+
+                    var newComment = newCommentCollection.findWhere({'noteCounter': noteCounter});
+
+                    if(writebackUtils.isCommentByLoggedInUser(userSession, originalComment)){
+                        if(!_.isUndefined(newComment)){
+                            incomingCommentCollection.push(newComment.get('commentString'));
+                        } else {
+                            // Signifies a deleted comment
+                            incomingCommentCollection.push('');
+                        }
+                    }
+                });
+            }
+
+            //Add new comments
+            newCommentCollection.each(function(newComment){
+                if(_.isUndefined(newComment.get('noteCounter'))){
+                    incomingCommentCollection.push(newComment.get('commentString'));
+                }
+            });
+
+            return incomingCommentCollection;
+        },
         buildDateForVista: function(date){
             var dateTaken;
 
@@ -141,6 +277,26 @@ define([
             }
 
             return dateTaken;
+        },
+        unregisterChecks: function() {
+            ADK.Checks.unregister({
+                id: 'problem-writeback-in-progress'
+            });
+        },
+        isCommentByLoggedInUser: function(loggedInUser, comment){
+            var isUserSame = false;
+            var loggedInUserSite = loggedInUser.get('site');
+            var loggedInUserDuz = loggedInUser.get('duz');
+
+            if(!_.isUndefined(loggedInUserSite) && !_.isUndefined(loggedInUser.get('duz'))){
+                var userIen = loggedInUserDuz[loggedInUserSite];
+
+                if(!_.isUndefined(comment.get('author')) && !_.isUndefined(comment.get('author').duz[loggedInUserSite]) && userIen === comment.get('author').duz[loggedInUserSite]){
+                    isUserSame = true;
+                }
+            }
+
+            return isUserSame;
         }
     };
 

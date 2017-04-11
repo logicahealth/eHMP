@@ -47,7 +47,7 @@ define([
                 regex: "[^^\"\\\\`~!@#$%&*()_+=|}{/?:;.<>0-9\\[\\]]+"
             });
             this.$el.find('#globalSearchDob').inputmask("m/d/y");
-            this.$el.find('#globalSearchSsn').inputmask("999[-]99[-]9999");
+            this.$el.find('#globalSearchSsn').inputmask("999-99-9999");
 
         },
         updateSearchInputView: function() {

@@ -54,7 +54,7 @@ define([
             '<div class="alert-container modal-dialog">',
             '<div class="modal-content">',
             '<div class="modal-header">',
-            '<h4 class="modal-title" id="newNotesModalLabel"><i class="fa {{icon}} left-padding-sm"></i> {{title}}</h4>',
+            '<h4 class="modal-title" id="newActionsModalLabel"><i class="fa {{icon}} left-padding-sm"></i> {{title}}</h4>',
             '</div>',
             '<div class="modal-body"></div>',
             '<div class="modal-footer"></div>',
@@ -65,6 +65,9 @@ define([
             var ADK_AlertRegion = Messaging.request('get:adkApp:region', 'alertRegion');
             if (!_.isUndefined(ADK_AlertRegion) && !_.isUndefined(this)) {
                 var $triggerElem = $(':focus');
+                if (ADK_AlertRegion.hasView()) {
+                    ADK_AlertRegion.currentView.$el.modal('hide');
+                }
                 ADK_AlertRegion.show(this);
 
                 ADK_AlertRegion.currentView.$el.one('hidden.bs.modal', function(e) {
@@ -79,7 +82,13 @@ define([
                     $('.modal-backdrop').css('z-index', '1030');
                 });
 
-                ADK_AlertRegion.currentView.$el.modal('show').css('z-index', '1053');
+                var zIndex = 1053;
+                if ($('.modal:visible').length >= 1) {
+                    zIndex = Math.max.apply(null, Array.prototype.map.call($('.modal:visible'), function(el) {
+                        return +el.style.zIndex;
+                    })) + 1111;
+                }
+                ADK_AlertRegion.currentView.$el.modal('show').css('z-index', zIndex);
 
                 return ADK_AlertRegion.currentView;
             }

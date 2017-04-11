@@ -16,6 +16,20 @@ define([
     // Switch ON/OFF debug info
     var DEBUG = CONFIG.debug;
     //Data Grid Columns
+
+    var summaryAdminDateCol = {
+        name: 'administeredFormatted',
+        label: 'Administered Date',
+        flexWidth: 'flex-width-2',
+        cell: Backgrid.StringCell.extend({
+            className: 'string-cell flex-width-2'
+        }),
+        sortValue: function(model, sortKey) {
+            return model.get("administeredDateTime");
+        },
+        hoverTip: 'immuninizations_date'
+    };
+
     var summaryColumns = [{
         name: 'name',
         label: 'Vaccine Name',
@@ -30,19 +44,8 @@ define([
         cell: 'handlebars',
         template: Handlebars.compile('<p><em>{{reactionName}}</em></p>'),
         hoverTip: 'immunizations_reaction'
-    }, {
-        name: 'administeredFormatted',
-        label: 'Date',
-        flexWidth: 'flex-width-date',
-        cell: Backgrid.StringCell.extend({
-            className: 'string-cell flex-width-date'
-        }),
-        sortValue: function(model, sortKey) {
-            return model.get("administeredDateTime");
-        },
-        hoverTip: 'immuninizations_date'
-    }, {
-        name: 'facilityMoniker',
+    }, summaryAdminDateCol, {
+        name: 'facilityName',
         label: 'Facility',
         cell: 'string',
         hoverTip: 'immuninizations_facility'
@@ -55,7 +58,7 @@ define([
             flexWidth: 'flex-width-comment ',
             sortable: false,
             srOnlyLabel: 'Comments',
-            cell: Backgrid.HandlebarsCell.extend ({
+            cell: Backgrid.HandlebarsCell.extend({
                 className: 'handlebars-cell flex-width-comment'
             }),
             template: Handlebars.compile([
@@ -88,13 +91,19 @@ define([
         name: 'contraindicatedDisplay',
         label: 'Repeat Contraindicated',
         flexWidth: 'flex-width-3',
-        cell: Backgrid.StringCell.extend ({
+        cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-3'
         }),
         hoverTip: 'immuninizations_repeatcontraindicated'
     });
 
-
+    fullScreenColumns.splice(5, 1, _.extend({},summaryAdminDateCol, {
+        flexWidth: 'flex-width-3',
+        cell: Backgrid.StringCell.extend({
+            className: 'string-cell flex-width-3'
+        })
+    }));
+        
     var PanelModel = Backbone.Model.extend({
         defaults: {
             type: 'panel'
@@ -109,8 +118,13 @@ define([
         }
     };
 
+    var comparator = function(modelOne, modelTwo){
+        return -modelOne.get('administeredDateTime').localeCompare(modelTwo.get('administeredDateTime'));
+    };
+
     var gistConfiguration = {
         transformCollection: function(collection) {
+            collection.comparator = comparator;
             if (DEBUG) console.log("ImmunGist ----->> preare collection (grouping)");
             var shallowCollection = collection.clone();
             var i_group = [];
@@ -121,8 +135,8 @@ define([
             for (i = 0; i < shallowCollection.length; i++) {
                 // model parsing
                 collection.at(i).set({
-                    administeredFormatted: ADK.utils.formatDate(shallowCollection.at(i).get("administeredDateTime")),
-                    timeSince: shallowCollection.at(i).get("administeredDateTime"),
+                    administeredFormatted: shallowCollection.at(i).get("administeredFormatted"),
+                    timeSince: shallowCollection.at(i).get("timeSinceDate"),
                     isReaction: gUtil.isReaction(shallowCollection.at(i).get("reactionName")),
                     seriesNorm: gUtil.seriesNormalization(shallowCollection.at(i).get("seriesName"))
                 });
@@ -146,9 +160,9 @@ define([
             // remove groupped models
             shallowCollection.remove(remove);
             collection.reset(shallowCollection.models, {
-                reindex: true
+                reindex: true,
+                silent: true
             });
-
 
             _.each(collection.models, function(model) {
                 model.set('tooltip', tooltip(model.attributes));
@@ -172,11 +186,15 @@ define([
     var viewParseModel = {
         parse: function(response) {
             response = Util.getAdministeredFormatted(response);
+            response = Util.getTimeSinceDate(response);
             response = Util.getContraindicated(response);
             response = Util.getFacilityColor(response);
             response = Util.getStandardizedName(response);
             response = Util.getCommentBubble(response);
             return response;
+        },
+        defaults: {
+            'applet_id': 'immunizations'
         }
     };
 
@@ -187,12 +205,12 @@ define([
             pageable: true,
             viewModel: viewParseModel,
             criteria: {
-            filter: 'ne(removed, true)'
+                filter: 'ne(removed, true)'
             },
             cache: true
         }
     };
-    var fetchOptions = {
+    var _fetchOptions = {
         resourceTitle: 'patient-record-immunization',
         pageable: true,
         viewModel: viewParseModel,
@@ -207,18 +225,19 @@ define([
                 triggerAddImmunization();
             };
             // handles row item add(+)
-            if (!(channel._events && channel._events.addView)) {
-                channel.on('addView', function(channelObj) {
+            if (!(channel._events && channel._events.addItem)) {
+                channel.on('addItem', function(channelObj) {
                     triggerAddImmunization(channelObj);
                 });
             }
         } else {
-            channel.off('addView');
+            channel.off('addItem');
         }
     }
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
         initialize: function(options) {
+            var fetchOptions = _.clone(_fetchOptions);
             if (DEBUG) console.log("Immunizations initialization ----->>");
             this._super = ADK.Applets.BaseGridApplet.prototype;
             var dataGridOptions = {};
@@ -236,6 +255,18 @@ define([
 
             dataGridOptions.tblRowSelector = '#data-grid-' + this.options.appletConfig.instanceId + ' tbody tr';
             var self = this;
+
+            var buttonTypes = ['infobutton', 'detailsviewbutton'];
+
+            if(ADK.UserService.hasPermissions('add-immunization')){
+                buttonTypes.push('additembutton');
+            }
+
+            dataGridOptions.toolbarOptions = {
+                buttonTypes: buttonTypes,
+                triggerSelector: '[data-infobutton]',
+                position: 'top'
+            };
 
             dataGridOptions.onClickRow = function(model, event, gridView) {
                 event.preventDefault();
@@ -275,7 +306,7 @@ define([
 
                     var modalOptions = {
                         'title': Util.getModalTitle(model),
-                        'size': 'large',
+                        'size': 'xlarge',
                         'headerView': modalHeader.extend({
                             model: model,
                             theView: view
@@ -301,6 +332,12 @@ define([
             };
 
             dataGridOptions.collection = (_.isUndefined(dataGridOptions.collection)) ? new Backbone.Collection() : dataGridOptions.collection;
+            dataGridOptions.collection.model = dataGridOptions.collection.model.extend({
+                defaults: {
+                    'applet_id': 'immunizations'
+                }
+            });
+            dataGridOptions.collection.comparator = comparator;
             dataGridOptions.collection.fetchOptions = fetchOptions;
             this.dataGridOptions = dataGridOptions;
 
@@ -317,26 +354,27 @@ define([
             this._super.onRender.apply(this, arguments);
         },
         onBeforeDestroy: function() {
-            channel.off('addView');
+            channel.off('addItem');
         }
 
     });
     // expose gist detail view through messaging
     var channel = ADK.Messaging.getChannel('immunizations');
 
-    channel.on('getDetailView', function(params) {
+
+    channel.on('detailView', function(params) {
         if (DEBUG) console.log("Immunizations gistDetailView ----->>");
         var view = new ModalView({
             model: params.model,
             navHeader: true,
-            gridCollection: params.collection
+            gridCollection: params.collection || params.model.collection
         });
 
         view.resetSharedModalDateRangeOptions();
 
         var modalOptions = {
             'title': Util.getModalTitle(params.model),
-            'size': 'large',
+            'size': 'xlarge',
             'headerView': modalHeader.extend({
                 model: params.model,
                 theView: view
@@ -382,11 +420,21 @@ define([
         initialize: function(options) {
             var self = this;
             this._super = ADK.AppletViews.PillsGistView.prototype;
+            var buttonTypes = ['infobutton', 'detailsviewbutton', 'quicklookbutton'];
+
+            if(ADK.UserService.hasPermissions('add-immunization')){
+                buttonTypes.push('additembutton');
+            }
+
             this.appletOptions = {
                 filterFields: ["name"],
                 collectionParser: gistConfiguration.transformCollection,
                 gistModel: gistConfiguration.gistModel,
-                collection: ADK.PatientRecordService.fetchCollection(fetchOptions)
+                collection: ADK.PatientRecordService.fetchCollection(_fetchOptions),
+                toolbarOptions: {
+                    buttonTypes: buttonTypes,
+                    triggerSelector: '[data-infobutton]'
+                },
             };
 
             setupAddHandler(this.appletOptions);
@@ -398,13 +446,13 @@ define([
             this._super.initialize.apply(this, arguments);
         },
         onBeforeDestroy: function() {
-            channel.off('addView');
+            channel.off('addItem');
         }
     });
 
     function triggerAddImmunization(channelObj) {
         var workflowOptions = {
-            size: "large",
+            size: "xlarge",
             title: "Enter Immunization",
             showProgress: false,
             keyboard: false,

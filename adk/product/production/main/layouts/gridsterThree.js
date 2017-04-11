@@ -22,7 +22,7 @@ define([
             center4: "#center4",
             right4: "#right4"
         },
-        className: "contentPadding",
+        className: "contentPadding hidden-overflow",
         //onRender: function() {
         //    console.log('intitializing gridster');
         //    var gridster = this.$el.find('.gridster ul').gridster({

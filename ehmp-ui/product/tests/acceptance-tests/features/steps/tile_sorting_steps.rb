@@ -107,7 +107,7 @@ Given(/^the user is viewing the applet titled Conditions$/) do
   driver = TestSupport.driver
   text = driver.find_element(:xpath, "//*[@id='applet-1']/div/div/div[1]/span[3]/span").text
   # puts text
-  if text.eql? "CONDITIONS"
+  if text.eql? "PROBLEMS"
   else fail("the test failed")  
   end
 end

@@ -1,12 +1,10 @@
 # Group FHIR
 
-## Educations educations [{{{path}}}{?subject.identifier}{&fields}]
+## Educations educations [{{{path}}}{?subject.identifier}]
 
 + Parameters
 
     :[subject.identifier]({{{common}}}/parameters/subject.identifier.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Get [GET]

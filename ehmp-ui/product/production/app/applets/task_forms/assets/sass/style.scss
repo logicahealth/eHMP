@@ -1,3 +1,16 @@
 [data-appletid="task_list"] {
 
 }
+#nameStatusRegion {
+	position: relative;
+	top: -15px;
+}
+#consultAction {
+	left: -186%; //temp solution TT//
+}
+
+.request-activity-footer .menu-item-width-120 {
+	width: 120px !important;
+    max-width: 120px !important;
+    min-width: 120px !important;
+}

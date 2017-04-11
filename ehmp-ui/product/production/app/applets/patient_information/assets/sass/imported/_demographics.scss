@@ -1,0 +1,123 @@
+.patient-demographic {
+    background: $primary;
+    margin-bottom: 48px;
+    width: 100%;
+    &:after {
+        content: "";
+        border-top: 39px solid $primary;
+        border-left: 79px solid transparent;
+        border-right: 79px solid transparent;
+        position: relative;
+        float: left;
+        z-index: 0;
+        top: 0px;
+        width: 100%;
+        height: 0;
+        left: 1px;
+    }
+    #patientDemographic {
+        cursor: pointer;
+    }
+    .profile-img {
+        background: $primary-dark;
+        display: inline-block;
+        height: 18px;
+        margin-bottom: 106px;
+        position: relative;
+        width: 100%;
+        &:after {
+            content: "";
+            border-top: 22px solid $primary-dark;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            position: absolute;
+            top: 18px;
+            left: 0;
+            width: 100%;
+            height: 0;
+        }
+        img,
+        .loading {
+            border: 6px solid $pure-white;
+            border-radius: 50%;
+            left: 18px;
+            position: absolute;
+            top: 15px;
+            z-index: 1;
+        }
+        .loading {
+            width: 120px;
+            height: 120px;
+            background: $grey-lighter;
+            color: $grey-darkest;
+            padding-top: calc(60px - 11px);
+            text-align: center;
+        }
+        &.warning {
+            img,
+            .loading {
+                border-color: $red-dark;
+            }
+        }
+        &.ccow-connected {
+            img,
+            .loading {
+                border-color: $secondary;
+            }
+        }
+    }
+    .patient-info {
+        color: $pure-white;
+        padding: 12px 20px 0;
+        z-index: 1;
+        strong {
+            font-weight: 600;
+        }
+        .small {
+            color: $pure-white;
+            margin: 5px 0 10px 0;
+            display: block;
+        }
+    }
+    #ccowStatus {
+        margin: -34px 20px 0 0;
+        position: relative;
+        z-index: 1;
+        border: 3px solid $pure-white;
+        border-radius:10%;
+        padding:2px 2px;
+        background-color:#9a9a99;
+        &.icon-ccow-connected-border {
+            border-color: $secondary;
+            background-color: $secondary;
+            border-radius: 20px;
+        }
+        &.icon-ccow-disconnected-border {
+            border-color: $red-dark;
+            background-color: $red-dark;
+            border-radius: 20px;
+        }
+    }
+    .sidebar {
+        > button {
+            color: $pure-white;
+            position: absolute;
+            z-index: 3;
+            margin: 4px 0 -15px 65px;
+            box-shadow: none;
+            .fa-inverse {
+                color: $primary;
+            }
+        }
+    }
+}
+.patient-provider {
+    .more {
+        height: 1px;
+        background: $grey-light;
+        margin: 15px;
+        button.more-info {
+            margin: -15px 0 0 50px;
+        }
+    }
+}

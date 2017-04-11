@@ -11,14 +11,14 @@ Feature: F117 provides cross cutting UI concerns including: displaying the curre
 #  This is the Prototype scenario: How to mix and match both framework Steps !!!
 
   Scenario: Verify current patient identifying traits
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
     And user searches for and selects "Ten,Patient"
     And Overview is active
-    When POB the user selects All within the global date picker
+    When the user has selected All within the global date picker
     Then POB "Ten,Patient" information is displayed in overview
       | field       | value         |
       | DOB         | 04/07/1935    |
-      | Age         | 79y           |
+      #| Age         | 79y           |
       | Gender      | Male          |
       | SSN         | ***-**-0010   |
     And "Bottom Region" contains "eHMP version"

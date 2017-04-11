@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "keyValuePair", namespace = "http://webservice.vds.domain.ext/", propOrder = {
+@XmlType(name = "keyValuePair", namespace = "http://webservice.vds.DNS       /", propOrder = {
     "key",
     "value"
 })

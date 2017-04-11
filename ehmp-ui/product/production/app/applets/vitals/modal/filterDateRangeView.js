@@ -47,7 +47,7 @@ define([
         events: {
             'click button': 'applyDateRange',
             'keydown button': 'handleEnterOrSpaceBar',
-            'keyup input': 'monitorCustomDateRange',
+            'input input': 'monitorCustomDateRange',
             'blur input': 'monitorCustomDateRange',
             'change input': 'monitorCustomDateRange'
         },
@@ -58,14 +58,12 @@ define([
             return this.sharedDateRange;
         },
         monitorCustomDateRange: function(event) {
-
             if(event.currentTarget.id === 'filterFromDate'){
                 var customFromDateStr = this.$el.find('#filterFromDate').val();
                 var customFromDate = moment(customFromDateStr, 'MM/DD/YYYY', true);
 
                 if (customFromDate.isValid()) {
                     this.$('.input-group.date#customDateRange1').datepicker('hide');
-                    this.$('.input-group.date#customDateRange2').datepicker('setStartDate', customFromDateStr);
                 }
             }
 
@@ -89,14 +87,18 @@ define([
             var fromDateEl = this.$('#filterFromDate'),
                 toDateEl = this.$('#filterToDate');
             this.$('.input-group.date#customDateRange1').datepicker({
-                format: 'mm/dd/yyyy'
+                format: 'mm/dd/yyyy',
+                todayBtn: 'linked',
+                todayHighlight: true
             });
             if (fromDate !== null) {
                 this.$('.input-group.date#customDateRange1').datepicker('update', fromDate);
             }
 
             this.$('.input-group.date#customDateRange2').datepicker({
-                format: 'mm/dd/yyyy'
+                format: 'mm/dd/yyyy',
+                todayBtn: 'linked',
+                todayHighlight: true
             });
             if (toDate !== null) {
                 this.$('.input-group.date#customDateRange2').datepicker('update', toDate);
@@ -217,14 +219,8 @@ define([
             }
 
             if (customToDate.isValid()) {
-                if (customToDate < customFromDate) {
-                    this.$el.find('#filterToDate').attr('data-toggle', 'tooltip').attr('data-placement', 'bottom').tooltip('enable').tooltip('show').val('');
-                    hasCustomRangeValuesBeenSetCorrectly = false;
-                }else{
-                    this.$('#filterToDate').removeAttr('data-toggle').tooltip('hide').tooltip('disable');
                     this.model.set('customToDate', customToDateStr);
                     this.sharedDateRange.set('toDate', customToDateStr);
-                }
             } else {
                 hasCustomRangeValuesBeenSetCorrectly = false;
             }
@@ -274,7 +270,7 @@ define([
                         customToDate = this.sharedDateRange.get('customToDate');
                     }
                     else {
-                        selectedId = $('[data-appletid=\'vitals\'] .grid-filter-daterange .active-range').attr('id') || 'custom-range-apply';
+                        selectedId = $('[data-appletid=\'vitals\'] .grid-filter-daterange .active-range').attr('id') || 'custom-range-apply-vitals';
                         customFromDate = $('[data-appletid=\'vitals\'] .grid-filter-daterange #filter-from-date-vitals').val();
                         customToDate = $('[data-appletid=\'vitals\'] .grid-filter-daterange #filter-to-date-vitals').val();
                     }

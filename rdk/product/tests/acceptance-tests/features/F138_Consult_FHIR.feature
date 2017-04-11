@@ -64,6 +64,7 @@
        | resource.extension.valueString | 380                                                          |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#orderUid         |
        | resource.extension.valueString | urn:va:order:9E7A:253:15478                                  |
+     And FHIR date and time conver to Zulu format for Consult
 
  @F138_2_fhir_consult @fhir @5000000116V912836 @US8577 @F202-21
  Scenario: Client can request consult results in FHIR format
@@ -78,18 +79,18 @@
        | resource.patient.reference     | Patient/9E7A;100615     |
        | resource.requester.reference   | Provider/undefined     |
        | resource.identifier.system     | urn:oid:2.16.840.1.113883.6.233   |
-       | resource.identifier.value      | urn:va:consult:2939:242:82         |
+       | resource.identifier.value      | urn:va:consult:ABCD:5000000116V912836:82         |
        | resource.type.text             | COLONOSCOPY                       |
        | resource.specialty.text       | GASTROENTEROLOGY                  |
        | resource.serviceRequested.text | GASTROENTEROLOGY                  |
        | resource.dateSent              | IS_FHIR_FORMATTED_DATE               |
        #extension
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#facilityCode |
-       | resource.extension.valueInteger | 536 |
+       | resource.extension.valueInteger | 561 |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#localId  |
        | resource.extension.valueString | 82                                                   |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#orderUid |
-       | resource.extension.valueString | urn:va:order:2939:242:5389.1                          |
+       | resource.extension.valueString | urn:va:order:ABCD:12:5389.1                          |
 
  @F138_3_fhir_consult @fhir @5000000217V519385 @US8577 @F202-21
  Scenario: Client can request consult results in FHIR format
@@ -104,7 +105,7 @@
        | resource.patient.reference     | Patient/9E7A;100716     |
        | resource.requester.reference   | Provider/undefined     |
        | resource.identifier.system     | urn:oid:2.16.840.1.113883.6.233   |
-       | resource.identifier.value      | urn:va:consult:2939:343:82         |
+       | resource.identifier.value      | urn:va:consult:ABCD:5000000217V519385:82         |
        | resource.type.text             | COLONOSCOPY                       |
        | resource.specialty.text       | GASTROENTEROLOGY                  |
        | resource.serviceRequested.text | GASTROENTEROLOGY                  |
@@ -113,7 +114,7 @@
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#localId  |
        | resource.extension.valueString | 82                                                   |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#orderUid |
-       | resource.extension.valueString | urn:va:order:2939:343:5389.1                          |
+       | resource.extension.valueString | urn:va:order:ABCD:12:5389.1                          |
 
  @F138_4_fhir_consult @fhir @10104V248233 @US8577 @F202-21
  Scenario: Client can request consult results in FHIR format

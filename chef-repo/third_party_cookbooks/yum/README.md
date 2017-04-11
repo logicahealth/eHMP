@@ -257,7 +257,7 @@ License & Authors
 -----------------
 - Author:: Eric G. Wolfe
 - Author:: Matt Ray (<matt@chef.io>)
-- Author::     ua Timberman (<joshua@chef.io>)
+- Author:: Joshua Timberman (<joshua@chef.io>)
 - Author:: Sean OMeara (<someara@chef.io>)
 
 ```text

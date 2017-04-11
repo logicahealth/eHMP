@@ -72,8 +72,21 @@ define([
     };
     Util.getResultUnits = function(response) {
         response.resultUnits = '';
+
         if (response.result) {
             response.resultUnits = response.result;
+            if (response.typeName.toLowerCase() === 'pain') {
+                var resultNumber = parseInt(response.result);
+                // fix for de3511
+                // in the case of DOD data, the data is different than Vista
+                // parse out the number from the incoming data.
+                if (!_.isNumber(resultNumber)){
+                    var parts = response.result.split('/');
+                    if (!_.isEmpty(parts)) {
+                        response.result = parts[0];
+                    }
+                }
+            }
         }
         if (response.units && (response.result !== 'Pass' && response.result !== 'Refused' && response.result !== 'Unavailable')) {
             response.resultUnits += ' ' + response.units;
@@ -180,6 +193,13 @@ define([
             }
         }
 
+        return response;
+    };
+
+    Util.getQualifiersNames = function(response) {
+        if (response.qualifiers && response.qualifiers.length > 0) {
+            response.qualifiersNames = _.pluck(response.qualifiers,'name').join(",");
+        }
         return response;
     };
 

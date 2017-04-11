@@ -48,6 +48,7 @@ r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]
 r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access]
 r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
 r_list << "role[solr]"
+r_list << "recipe[vx_solr::zookeeper@#{ehmp_deps["vx_solr"]}]"
 r_list << "recipe[vx_solr@#{ehmp_deps["vx_solr"]}]"
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
 
@@ -84,12 +85,20 @@ machine machine_name do
   attributes(
     stack: node[:machine][:stack],
     nexus_url: node[:common][:nexus_url],
+    data_bag_string: node[:common][:data_bag_string],
     vx_solr: {
       ehmp: {
         vpr: vpr_source,
         health_time_core: health_time_core_source,
-        health_time_solr: health_time_solr_source
+        health_time_solr: health_time_solr_source,
+        collection: {
+          # by default, only allow recreating solr collections when not using ssh driver
+          allow_recreate: node[:machine][:driver] != "ssh"
+        }
       }
+    },
+    beats: {
+      logging: node[:machine][:logging]
     }
   )
   files lazy { node[:ehmp_provision][:solr][:copy_files] }

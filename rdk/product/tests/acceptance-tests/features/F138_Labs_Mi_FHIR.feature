@@ -47,11 +47,12 @@
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#groupUid       |
        | resource.extension.valueString             | urn:va:accession:9E7A:227:MI;7048982.848075            |
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#report         |
-       | resource.extension.valueResource.reference | Composition/urn:va:document:9E7A:227:MI;7048982.848075 |
+       | resource.extension.valueReference.reference | Composition/urn:va:document:9E7A:227:MI;7048982.848075 |
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#localId        |
        | resource.extension.valueString             | MI;7048982.848075                                      |
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#urineScreen    |
        | resource.extension.valueString             | Positive                                               |
+    And FHIR date and time conver to Zulu format for Labs Mi
 
  @F138_2_labs_mi_fhir @fhir @10104V248233
  Scenario: Client can request lab (MI) results in FHIR format
@@ -66,7 +67,7 @@
        | resource.specimen.display                       | SERUM                        |
        | resource.result.display                         | HDL                          |
        | resource.text.status                            | generated                    |
-       | resource.text.div                               | CONTAINS <div>Collected: 2010-03-05T12:00:00 |
+       | resource.text.div                               | CONTAINS <div>Collected: 2010-03-05T17:00:00Z |
        | resource.contained.resourceType                 | Specimen                     |
        | resource.contained.type.text                    | SERUM                        |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE         |
@@ -101,7 +102,7 @@
        | resource.text.status                            | generated                                                  |
        | resource.name.text                              | AFB CULTURE & SMEAR                                        |
        | resource.name.coding.display                    | AFB CULTURE & SMEAR                                        |
-       | resource.name.coding.system                     | urn:oid:2.16.840.1.113883.4.642.2.58                       |
+       | resource.name.coding.system                     | urn:oid:2.16.840.1.113883.6.233                       |
        | resource.status                                 | final                                                      |
        | resource.issued                                 | IS_FHIR_FORMATTED_DATE                                       |
        | resource.subject.reference                      | Patient/9E7A;227                                       |
@@ -115,7 +116,7 @@
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#groupUid       |
        | resource.extension.valueString             | Microbiology            |
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#report         |
-       | resource.extension.valueResource.reference | Composition/urn:va:document:9E7A:227:MI;7048982.848075 |
+       | resource.extension.valueReference.reference | Composition/urn:va:document:9E7A:227:MI;7048982.848075 |
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#localId        |
        | resource.extension.valueString             | MI;7048982.848075                                      |
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#urineScreen    |
@@ -186,7 +187,7 @@
        Given a patient with "No lab results" in multiple VistAs
        When the client requests labs for the patient "9E7A;100125" in FHIR format
        Then a successful response is returned
-       Then corresponding matching FHIR records totaling "2" are displayed
+       Then corresponding matching FHIR records totaling "1" are displayed
 
  @F138_8_labs_mi_fhir @fhir @11016V630869 @DE974
  Scenario: Client can request lab (MI) results in FHIR format

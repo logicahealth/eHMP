@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Immunization lot [/immunization-lot{?site}{&filter}{&date}{&fields}]
+## Immunization lot [/immunization-lot{?site}{&filter}{&date}]
 
 Returns information from the IMMUNIZATION LOT file (#9999999.41).
 
@@ -15,8 +15,6 @@ PXVIMM IMM LOT
     :[filter]({{{common}}}/parameters/immunization-filter.md)
 
     :[date]({{{common}}}/parameters/date.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

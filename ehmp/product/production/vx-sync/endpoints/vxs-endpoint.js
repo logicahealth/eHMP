@@ -9,10 +9,11 @@ var port = require('yargs')
 require('../env-setup');
 var bodyParser = require('body-parser');
 var multer = require('multer');
+require('http').globalAgent.maxSockets = Infinity;
 
 var config = require(global.VX_ROOT + 'worker-config');
 var logUtil = require(global.VX_UTILS + 'log');
-var log = logUtil.initialize(config.loggers).get('sync-endpoint');
+var log = logUtil.initialize(config).get('sync-endpoint');
 var pollerUtils = require(global.VX_UTILS + 'poller-utils');
 var environment = pollerUtils.buildEnvironment(log, config);
 var registerSyncAPI = require(global.VX_ENDPOINTS + 'sync-request/sync-request-endpoint');
@@ -20,7 +21,6 @@ var registerOPDAPI = require(global.VX_ENDPOINTS + 'operational/operational-sync
 var registerDocAPI = require(global.VX_ENDPOINTS + 'documents/document-retrieval-endpoint');
 var registerErrorAPI = require(global.VX_ENDPOINTS + 'error-handling/error-endpoint');
 var registerAMEAPI = require(global.VX_ENDPOINTS + 'activity-management/activity-management-endpoint');
-var registerPatientSelectAPI = require(global.VX_ENDPOINTS + 'patient-select/patient-select-endpoint');
 
 process.on('uncaughtException', function(err){
     console.log(err);
@@ -39,7 +39,6 @@ registerDocAPI(log,config,environment, app);
 registerOPDAPI(log,config,environment, app);
 registerErrorAPI(log,config,environment, app);
 registerAMEAPI(log, config, environment, app);
-registerPatientSelectAPI(log,config,environment, app);
 app.get('/ping', function(req, res) {
         res.send('ACK');
     });

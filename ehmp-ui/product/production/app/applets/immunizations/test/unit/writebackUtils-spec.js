@@ -1,5 +1,5 @@
 /*jslint node: true, nomen: true, unparam: true */
-/*global jquery, $, _, define, Marionette, jqm, describe, it, expect, beforeEach, spyOn */
+/*global jquerys, $, _, define, Marionette, jqm, describe, it, expect, beforeEach, spyOn */
 
 'use strict';
 
@@ -18,8 +18,6 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
 
             if(hasLocationUid){
                 visit.locationUid = 'uid:location:9E7A:27';
-            }else {
-                visit.refId = '30';
             }
 
             if(hasCategoryCode){
@@ -28,9 +26,7 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
 
             if(isNewVisit){
                 visit.existingVisit = false;
-                visit.newVisit = {
-                    dateTime: '20151031'
-                };
+                visit.dateTime = '20151031';
             }else {
                 visit.existingVisit = true;
                 visit.dateTime = '20151101';
@@ -47,25 +43,24 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
                 var immunizationModel = WritebackUtil.buildSaveImmunizationModel(model, getPatient(true, true, true, true), new Backbone.Model());
                 expect(immunizationModel.get('encounterPatientDFN')).toEqual('3');
                 expect(immunizationModel.get('encounterInpatient')).toEqual('1');
-                expect(immunizationModel.get('encounterLocation')).toEqual('27');
+                expect(immunizationModel.get('encounterLocation')).toEqual('uid:location:9E7A:27');
                 expect(immunizationModel.get('encounterServiceCategory')).toEqual('A');
                 expect(immunizationModel.get('encounterDateTime')).toEqual('20151031');
                 expect(immunizationModel.get('eventDateTime')).toEqual('20151031');
             });
-
+         
             it('Test visit model properties - second case', function(){
                 var model = new Backbone.Model({administeredHistorical: 'administered', administeredBy: '99;TEST PROVIDER'});
                 var immunizationModel = WritebackUtil.buildSaveImmunizationModel(model, getPatient(false, false, true, false), new Backbone.Model());
                 expect(immunizationModel.get('encounterPatientDFN')).toEqual('3');
                 expect(immunizationModel.get('encounterInpatient')).toEqual('0');
-                expect(immunizationModel.get('encounterLocation')).toEqual('30');
                 expect(immunizationModel.get('encounterServiceCategory')).toEqual('A');
                 expect(immunizationModel.get('encounterDateTime')).toEqual('20151101');
                 expect(immunizationModel.get('eventDateTime')).toEqual('20151101');
             });
 
             it('Test visit model properties - year fuzzy date', function(){
-                var model = new Backbone.Model({administeredHistorical: 'historical', administrationDate: '2015'});
+                var model = new Backbone.Model({administeredHistorical: 'historical', administrationDateHistorical: '2015'});
                 var immunizationModel = WritebackUtil.buildSaveImmunizationModel(model, getPatient(false, false, true, false), new Backbone.Model());
                 expect(immunizationModel.get('encounterServiceCategory')).toEqual('E');
                 expect(immunizationModel.get('encounterDateTime')).toEqual('20150000');
@@ -73,7 +68,7 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
             });
 
             it('Test visit model properties - year and month fuzzy date', function(){
-                var model = new Backbone.Model({administeredHistorical: 'historical', administrationDate: '08/2015'});
+                var model = new Backbone.Model({administeredHistorical: 'historical', administrationDateHistorical: '08/2015'});
                 var immunizationModel = WritebackUtil.buildSaveImmunizationModel(model, getPatient(false, false, true, false), new Backbone.Model());
                 expect(immunizationModel.get('encounterServiceCategory')).toEqual('E');
                 expect(immunizationModel.get('encounterDateTime')).toEqual('20150800');
@@ -83,10 +78,10 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
             it('Test administered immunization model properties', function(){
                 var formModel = new Backbone.Model();
                 formModel.set('administeredHistorical', 'administered');
-                formModel.set('administrationDate', '10/18/2015');
+                formModel.set('administrationDateHistorical', '10/18/2015');
                 formModel.set('immunizationType', '21');
                 formModel.set('series', 'B');
-                formModel.set('orderedBy', 'uid:provider:9E7A:1234');
+                formModel.set('orderedByAdministered', 'uid:provider:9E7A:1234');
                 formModel.set('routeOfAdministration', 'TEST ROUTE;1');
                 formModel.set('dosage', '33');
                 formModel.set('cvxCode', '789654');
@@ -97,7 +92,7 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
                 formModel.set('manufacturerAdministered', 'ABBOTT LABORATORIES');
                 formModel.set('administeredBy', '99;TEST PROVIDER');
                 formModel.set('visDateOffered', '10/31/2015');
-                formModel.set('informationStatement', ['1', '2']);
+                formModel.set('informationStatement', new Backbone.Collection([{ien: '1', value: true}, {ien:'2', value: false}]));
                 formModel.set('expirationDateAdministered', '12/31/2017');
 
                 var immunizationModel = WritebackUtil.buildSaveImmunizationModel(formModel, getPatient(true, true, false, true), new Backbone.Model());
@@ -116,7 +111,7 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
                 expect(immunizationModel.get('manufacturer')).toEqual('ABBOTT LABORATORIES');
                 expect(immunizationModel.get('encounterProviderIEN')).toEqual('99');
                 expect(immunizationModel.get('providerName')).toEqual('TEST PROVIDER');
-                expect(immunizationModel.get('VIS')).toEqual('1/201510310000;2/201510310000');
+                expect(immunizationModel.get('VIS')).toEqual('1/20151031000000');
                 expect(immunizationModel.get('expirationDate')).toEqual('20171231');
                 expect(immunizationModel.get('encounterServiceCategory')).toEqual('O');
             });
@@ -138,7 +133,8 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
                 formModel.set('expirationDateHistorical', '12/31/2017');
                 formModel.set('informationSource', 'From patient recall;3');
                 formModel.set('administeredLocation', 'Walgreens');
-                formModel.set('administrationDate', '10/18/2015');
+                formModel.set('administrationDateHistorical', '10/18/2015');
+                formModel.set('orderedByHistorical', 'Walgreens Pharmacist');
 
                 var immunizationModel = WritebackUtil.buildSaveImmunizationModel(formModel, getPatient(true, true, false, true), new Backbone.Model());
 
@@ -149,7 +145,7 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
                 expect(immunizationModel.get('cvxCode')).toEqual('789654');
                 expect(immunizationModel.get('immunizationNarrative')).toEqual('HEP A-HEP B');
                 expect(immunizationModel.get('adminSite')).toEqual('TEST LOCATION;3');
-                expect(immunizationModel.get('comment')).toEqual('Test comments - Lot Number: EHMP00001, Manufacturer: ABBOTT LABORATORIES, Expiration Date: 12/31/2017');
+                expect(immunizationModel.get('comment')).toEqual('Test comments - Lot Number: EHMP00001, Manufacturer: ABBOTT LABORATORIES, Expiration Date: 12/31/2017, Ordering Provider: Walgreens Pharmacist');
                 expect(immunizationModel.get('informationSource')).toEqual('From patient recall;3');
                 expect(immunizationModel.get('encounterServiceCategory')).toEqual('E');
                 expect(immunizationModel.get('encounterDateTime')).toEqual('20151018');

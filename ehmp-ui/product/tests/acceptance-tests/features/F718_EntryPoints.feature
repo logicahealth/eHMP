@@ -1,8 +1,8 @@
-@F718 @regression @triage
+@F718 @regression @triage @future @US11272
 Feature: Invoke Outpatient Lab Order Form
 
 Background:
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "twenty,patient"
   Then Default Screen is active
   And user selects and sets new encounter
@@ -39,7 +39,7 @@ Scenario: Verify Lab Order Form can be accessed from all entry points - Numeric 
   Then add order modal detail title says "Order a Lab Test"
 
 
-@US6777 @TC968_4 @debug @DE3715
+@US6777 @TC968_4 @DE3715
 Scenario: Verify Lab Order Form can be accessed from all entry points - Orders Summary View
 	Given Cover Sheet is active
 	And the "Orders" applet is displayed
@@ -49,7 +49,7 @@ Scenario: Verify Lab Order Form can be accessed from all entry points - Orders S
   When user adds a new order
   Then add order modal detail title says "Order a Lab Test"
 
-@US6777 @TC968_5 @debug @DE3715
+@US6777 @TC968_5 @DE3715
 Scenario: Verify Lab Order Form can be accessed from all entry points - Orders Expanded View
   When the user navigates to Orders Expanded
   And the "Orders" applet is displayed

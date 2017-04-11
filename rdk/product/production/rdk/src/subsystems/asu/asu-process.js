@@ -7,7 +7,6 @@ var S = require('string');
 var dd = require('drilldown');
 var http = rdk.utils.http;
 var nullchecker = require('../../utils/nullchecker');
-var dd = require('drilldown');
 
 function asuProcessor(params) {
     var jsonResult;
@@ -27,7 +26,7 @@ function evaluate(jsonParams, config, httpConfig, res, logger, outerceptor) {
     async.series([function (callback) {
             // call the java ASU rules service (an external POST call)
             http.post(httpConfig, function (err, response, data) {
-                logger.debug({response:response, 'data':data}, 'asuProcess.evaluate results');
+                logger.debug({response:response}, 'asuProcess.evaluate results');
                 if (err) {
                     logger.info(err);
                     return callback(err);
@@ -359,11 +358,80 @@ function getAsuPermissionForActionNames(req, details, callback) {
     });
 }
 
+/**
+ * This is a modified getAsuPermission and getAsuPermissionForActionNames that depends on the default user information
+ * already being passed to it. This will result in less request being made to the asu when batches of document permissions
+ * are being requested.  It can handle both cases: with and without action names.
+ *
+ * @Note: asu-utils.js -  applyAsuRules() and applyAsuRulesWithActionNames() have been modified to use this code.
+ *
+ * @param req
+ * @param details
+ * @param {Object} items - The parsed results of getDefaultUserClass
+ * @param {Function} callback
+ */
+function getPermission(req, details, items, callback) {
+    var result = {};
+    var userDetails = details.userdetails;
+
+    if (nullchecker.isNullish(userDetails)) {
+        userDetails = req.session.user;
+    }
+    var logger = req.logger;
+
+    logger.debug({details: details}, 'asu-process.getPermission details');
+    logger.debug({userDetails: userDetails}, 'asu-process.getPermission userDetails');
+
+    if (_.isEmpty(dd(details)('data')('items').val)) {
+        return callback('Document details cannot be empty.');
+    }
+
+    if (details.error) {
+        return callback('Cannot check ASU permissions on a document that has an error', details);
+    }
+
+    result = populateEndPointInput(details, logger, userDetails);
+    if (details.hasOwnProperty('actionNames')) {
+        result.actionNames = details.actionNames;
+    }
+
+    logger.debug({result: result}, 'asu-process.getPermission. populateEndPointInput');
+
+    var configVistaSites = req.app.config.vistaSites;
+    var sites = _.keys(configVistaSites);
+
+    logger.info('asuProcess.getPermission: get user class for all sites from config');
+
+    if (_.isEmpty(userDetails.vistaUserClass)) {
+        result.userClassUids = [];
+    }
+
+    _.each(items, function (item) {
+        var add = false;
+        if (S(item.uid).contains(userDetails.site)) {
+            add = true;
+        } else {
+            _.each(sites, function (site) {
+                if (S(item.uid).contains(site)) {
+                    add = true;
+                }
+            });
+        }
+        if (!_.contains(result.userClassUids, item.uid) && add) {
+            result.userClassUids.push(item.uid);
+        }
+    });
+
+    callback(null, result);
+}
+
+
 module.exports._evaluateFinished = _evaluateFinished;
 module.exports.asuProcessor = asuProcessor;
 module.exports.evaluate = evaluate;
 module.exports.getAsuPermission = getAsuPermission;
 module.exports.getAsuPermissionForActionNames = getAsuPermissionForActionNames;
+module.exports.getPermission = getPermission;
 
 module.exports.getDefaultUserClass = getDefaultUserClass;
 

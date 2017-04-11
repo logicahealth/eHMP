@@ -2,14 +2,9 @@
 
 ## Immunization crud [{{{path}}}]
 
-### Immunization Types [GET {{{path}}}/immunization-types{?fields}]
+### Immunization Types [GET {{{path}}}/immunization-types]
 
 List immunization types
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 
@@ -25,15 +20,13 @@ List immunization types
             :[Schema]({{{common}}}/schemas/immunizations_immunization-types-GET-200.jsonschema)
 
 
-### Lot Numbers [GET {{{path}}}/lot-numbers{?uri}{&fields}]
+### Lot Numbers [GET {{{path}}}/lot-numbers{?uri}]
 
 List lot numbers for an immunization type
 
 + Parameters
 
     + uri (string, required) - The URI value of the immunization type
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -56,14 +49,9 @@ List lot numbers for an immunization type
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Anatomical Locations [GET {{{path}}}/anatomical-locations{?fields}]
+### Anatomical Locations [GET {{{path}}}/anatomical-locations]
 
 List anatomical locations for immunizations
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 
@@ -79,14 +67,9 @@ List anatomical locations for immunizations
             :[Schema]({{{common}}}/schemas/immunizations_anatomical-locations-GET-200.jsonschema)
 
 
-### Manufacturers [GET {{{path}}}/manufacturers{?fields}]
+### Manufacturers [GET {{{path}}}/manufacturers]
 
 List manufacturers for immunizations
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 
@@ -102,14 +85,9 @@ List manufacturers for immunizations
             :[Schema]({{{common}}}/schemas/immunizations_manufacturers-GET-200.jsonschema)
 
 
-### Information Sources [GET {{{path}}}/information-sources{?fields}]
+### Information Sources [GET {{{path}}}/information-sources]
 
 List information sources for immunizations
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 
@@ -125,14 +103,9 @@ List information sources for immunizations
             :[Schema]({{{common}}}/schemas/immunizations_information-sources-GET-200.jsonschema)
 
 
-### Route Of Administration [GET {{{path}}}/route-of-administration{?fields}]
+### Route Of Administration [GET {{{path}}}/route-of-administration]
 
 List administration routes for immunizations
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 

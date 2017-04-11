@@ -15,11 +15,11 @@ var log = sinon.stub(require('bunyan').createLogger({
 var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
-    host: 'IP        ',
+    host: 'IP_ADDRESS',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'PW',
+    verifyCode: 'PW',
+    localIP: 'IPADDRES',
     localAddress: 'localhost'
 };
 
@@ -43,8 +43,8 @@ describe('lab-order-orderable-items resource integration test', function() {
     it('fetchDirectRpcCall will have no data returned on invalid labType', function(done) {
         this.timeout(120000);
         fetchDirectRpcCall(log, configuration, function(err, result) {
-            expect(err).to.be.truthy();
-            expect(result).to.be.falsy();
+            expect(err).to.be.falsy();
+            expect(result).to.eql([]);
             done();
         }, {searchString: 'ABC', labType: 'A'});
     });
@@ -69,8 +69,8 @@ describe('lab-order-orderable-items resource integration test', function() {
     it('fetch will have no data returned on invalid labType', function(done) {
         this.timeout(120000);
         fetch(log, configuration, function(err, result) {
-            expect(err).to.be.truthy();
-            expect(result).to.be.falsy();
+            expect(err).to.be.falsy();
+            expect(result).to.eql([]);
             done();
         }, {searchString: 'ABC', labType: 'A'});
     });

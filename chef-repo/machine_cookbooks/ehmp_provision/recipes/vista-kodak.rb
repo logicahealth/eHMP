@@ -6,15 +6,6 @@
 chef_gem "chef-provisioning-ssh"
 require 'chef/provisioning/ssh_driver'
 
-_host_path_private_licenses = "#{ENV['HOME']}/Projects/vistacore/private_licenses"
-node.default[:ehmp_provision][:'vista-kodak'][:vagrant][:shared_folders].push(
-  {
-    :host_path => _host_path_private_licenses,
-    :guest_path => "/opt/private_licenses",
-    :create => true
-  }
-)
-
 ############################################## Staging Artifacts #############################################
 if ENV.has_key?('HMP_LOCAL_FILE')
   node.default[:ehmp_provision][:'vista-kodak'][:copy_files].merge!({
@@ -95,8 +86,10 @@ machine machine_name do
     {
       stack: node[:machine][:stack],
       nexus_url: node[:common][:nexus_url],
+      data_bag_string: node[:common][:data_bag_string],
       vista: {
         no_reset: ENV['NO_RESET'] || false,
+        run_checksums: ENV.has_key?('RUN_CHECKSUMS'),
         cache: {
           source: cache_source
         },
@@ -111,9 +104,10 @@ machine machine_name do
         import_recipe: "kodak",
         site_id: "C877",
         site: "KODAK",
-        access_code: "PW    ",
-        verify_code: "PW    !!",
-        division: "500",
+        abbreviation: "KDK",
+        access_code: "ep1234",
+        verify_code: "ep1234!!",
+        division: "507",
         station_number: "507",
         region: "us-east",
         clinics_osync_appointment_request: [
@@ -129,6 +123,9 @@ machine machine_name do
             minutes: 38
           }
         ]
+      },
+      beats: {
+        logging: node[:machine][:logging]
       }
     }
   )

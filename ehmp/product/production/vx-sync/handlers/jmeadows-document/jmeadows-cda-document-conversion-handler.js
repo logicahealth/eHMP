@@ -135,7 +135,7 @@ function handle(log, config, environment, job, handlerCallback) {
                 var vprDataDomain = uidUtil.extractDomainFromUID(job.record.uid);
 
                 //Create next job
-                var jobToPublish = jobUtil.createRecordEnrichment(job.patientIdentifier, vprDataDomain, job.record, job);
+                var jobToPublish = jobUtil.createEventPrioritizationRequest(job.patientIdentifier, vprDataDomain, job.record, job);
                 environment.publisherRouter.publish(jobToPublish, handlerCallback);
                 //Done!!!
                 log.debug('jmeadows-cda-document-conversion-handler.handle for patient %s: Conversion process completed with warning (see above).', logPatientIdentifier);
@@ -159,7 +159,7 @@ function handle(log, config, environment, job, handlerCallback) {
         var vprDataDomain = uidUtil.extractDomainFromUID(job.record.uid);
 
         //Create next job
-        var jobToPublish = jobUtil.createRecordEnrichment(job.patientIdentifier, vprDataDomain, job.record, job);
+        var jobToPublish = jobUtil.createEventPrioritizationRequest(job.patientIdentifier, vprDataDomain, job.record, job);
         environment.publisherRouter.publish(jobToPublish, handlerCallback);
         //Done!!!
         log.debug('jmeadows-cda-document-conversion-handler.handle for patient %s: Conversion process completed.', logPatientIdentifier);

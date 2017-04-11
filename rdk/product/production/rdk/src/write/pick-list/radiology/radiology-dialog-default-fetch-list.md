@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Radiology dialog default [/radiology-dialog-default{?site}{&patientDFN}{&imagingType}{&anEventDiv}{&fields}]
+## Radiology dialog default [/radiology-dialog-default{?site}{&patientDFN}{&imagingType}{&anEventDiv}]
 
 DIRECT RPC CALL - Loads dialog data (lists & defaults) for a radiology order.
 
@@ -17,8 +17,6 @@ ORWDRA32 DEF
     + imagingType: `35` (number, required) - he imaging type
 
     + anEventDiv (string, optional) - An Event Div
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

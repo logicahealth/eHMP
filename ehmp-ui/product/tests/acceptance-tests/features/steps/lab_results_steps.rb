@@ -19,13 +19,13 @@ class LabResultsSpecificRows < AccessBrowserV2
     add_action(CucumberLabel.new('First Numeric Lab Result Row'), ClickAction.new, AccessHtmlElement.new(:css, "#data-grid-lab_results_grid tbody tr.selectable:nth-child(1)"))
     
     add_action(CucumberLabel.new("Sodium, Blood Quantitative - PLASMA"), ClickAction.new, AccessHtmlElement.new(:id, 'urn-va-lab-DOD-0000000003-20130507104300_130507-BCH-1662-CH_6951'))
-    add_action(CucumberLabel.new('Toolbar Detail View Icon'), ClickAction.new, AccessHtmlElement.new(:id, 'info-button-sidekick-detailView'))
+    add_action(CucumberLabel.new('Toolbar Detail View Icon'), ClickAction.new, AccessHtmlElement.new(:css, '[button-type=detailView-button-toolbar]'))
   
     add_action(CucumberLabel.new("05/23/2008 - 16:00 - Pathology - BONE MARROW (DOD)"), ClickAction.new, AccessHtmlElement.new(:id, 'urn-va-lab-DOD-0000000010-20080523160000_080523-BM-15-'))
   end
 end
 
-class LabResultsModal < AccessBrowserV2
+class LabResultsModal < AllApplets
   include Singleton
 
   def initialize
@@ -33,7 +33,10 @@ class LabResultsModal < AccessBrowserV2
     ########################### Modal ###########################
     add_action(CucumberLabel.new("Control - modal - From Date"), SendKeysAction.new, AccessHtmlElement.new(:css, "#modal-body #filterFromDate"))
     add_action(CucumberLabel.new("Control - modal - To Date"), SendKeysAction.new, AccessHtmlElement.new(:css, "#modal-body #filterToDate"))
-    add_action(CucumberLabel.new("Control - modal - Apply"), ClickAction.new, AccessHtmlElement.new(:css, "#modal-body #custom-range-apply"))
+    
+    add_action(CucumberLabel.new("Control - modal - Apply"), ClickAction.new, AccessHtmlElement.new(:css, "#modal-body button[id='customRangeApply']"))
+    
+
     add_action(CucumberLabel.new("Control - modal - History - Next Page Arrow"), ClickAction.new, AccessHtmlElement.new(:css, "#modal-body .backgrid-paginator li [title=\"Next\"]"))
     add_action(CucumberLabel.new("Control - modal - History - Previous Page Arrow"), ClickAction.new, AccessHtmlElement.new(:css, "#modal-body .backgrid-paginator li [title=\"Previous\"]"))
     add_action(CucumberLabel.new("Control - modal - Next Button"), ClickAction.new, AccessHtmlElement.new(:css, "#modal-header #labssNext"))
@@ -60,6 +63,7 @@ class LabResultsModal < AccessBrowserV2
     add_verify(CucumberLabel.new("modal - Numeric Lab Results Graph Loading Indicator"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body .panel-info h5"))
     add_verify(CucumberLabel.new("modal - Graph Points"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body .highcharts-markers path"))
     add_verify(CucumberLabel.new("modal - Date Range labels"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body #chartContainer .highcharts-axis-labels text[text-anchor=middle]"))
+    add_modal_date_filter_ids
   end
 end
 
@@ -68,6 +72,8 @@ class LabResultsContainer < LabResultsModal
 
   def initialize
     super
+
+    add_toolbar_buttons
     add_verify(CucumberLabel.new("Numeric Lab Results single page"), VerifyContainsText.new, AccessHtmlElement.new(:css, ".lab-results-grid-full"))
 
     ########################### Applet ###########################
@@ -262,11 +268,6 @@ Then(/^the "(.*?)" is "(.*?)"$/) do |element_name, expected_value|
   verify_elements_equal(expected_value, actual_value)
 end
 
-Then(/^the "Total Tests" label has the value "(.*?)"$/) do |expected_total_tests|
-  wait = Selenium::WebDriver::Wait.new(:timeout => 60)
-  wait.until { @lr.get_element("modal - Number Of Total Tests").text == expected_total_tests }
-end
-
 Then(/the loading indicators are "(.*?)" in the Numeric Lab Results modal/) do |displayed_or_hidden|
   history_table_key = "modal - Numeric Lab Results History Table Loading Indicator"
   graph_key = "modal - Numeric Lab Results Graph Loading Indicator"
@@ -390,7 +391,7 @@ end
 When(/^the user views the first non-panel lab result in a modal$/) do
   driver = TestSupport.driver
   click_numeric_lab_results_applet_row(false)
-  driver.find_element(:id, "info-button-sidekick-detailView").click
+  expect(@lr.perform_action('Detail View Button')).to eq(true)
   @uc.wait_until_action_element_visible("Modal", 15)
 end
 
@@ -402,7 +403,7 @@ When(/^the user views the "(.*?)" lab result in a modal$/) do |arg1|
   loop do
     counter += 1
     button_pushed =LabResultsSpecificRows.instance.perform_action(arg1)
-    driver.find_element(:id, "info-button-sidekick-detailView").click
+    expect(@lr.perform_action('Detail View Button')).to eq(true)
     modal_open = @uc.wait_until_element_present("Modal", 15)
     break if counter > 3
     break if button_pushed && modal_open
@@ -460,10 +461,10 @@ When(/^the user scrolls to the bottom of the Numeric Lab Results Applet$/) do
   wait.until { infiniate_scroll('#data-grid-lab_results_grid tbody') }
 end
 
-def verify_lab_test_column(expected_text)
+def verify_lab_test_column(expected_text, column = '2')
   #  lab_tests = driver.find_elements(:css, '#data-grid-lab_results_grid tbody td:nth-child(2)')
   driver = TestSupport.driver
-  lab_tests = driver.find_elements(:css, '#data-grid-lab_results_grid tbody td:nth-child(2)')
+  lab_tests = driver.find_elements(:css, "#data-grid-lab_results_grid tbody td:nth-child(#{column})")
   lab_tests.each do |lab|
     #expect(lab.text.downcase.include? arg2.downcase).to be_true, "#{lab.text} did not contain #{arg2}"
     lab.location_once_scrolled_into_view
@@ -479,14 +480,21 @@ Then(/^the Lab Test column in the Numeric Lab Results Applet contains "(.*?)"$/)
   wait.until { verify_lab_test_column arg2 }
 end
 
-Then(/^the Lab History table contains rows$/) do |table|
+Then(/^the Result column in the Numeric Lab Results Applet contains "(.*?)"$/) do |arg2|
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  driver = TestSupport.driver
-  con = VerifyTableValue.new 
-  wait.until { 
-    browser_elements_list = driver.find_elements(:css, "#modal-body .data-grid table tbody tr")
-    con.perform_table_verification(browser_elements_list, "#modal-body .data-grid table", table)
-  }
+  wait.until { verify_lab_test_column(arg2, '4') }
+end
+
+Then(/^the Lab History table contains rows with data in correct format$/) do
+  @ehmp = NumericLabResultsModal.new
+  
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until { @ehmp.all_there? }
+
+  expect(@ehmp.tbl_date_columns.length).to be > 0
+  expect(@ehmp.date_column_correct_format?).to eq(true), "All of the values in the date column do not match the acceptable format"
+
+  expect(@ehmp.facility_column_allowed_names?).to eq(true), "All the facilities do not match allowable values"
 end
 
 def perform_table_verification_exception_handling(table_id, table)
@@ -563,4 +571,37 @@ end
 Then(/^the Total Tests label displays a number$/) do
   elements = LabResultsContainer.instance
   expect(elements.perform_verification('modal - Total Tests', '')).to eq(true)
+end
+
+Then(/^the active date control in the Numeric Lab Results applet is the 2yr button$/) do
+  @ehmp = PobNumericLabApplet.new
+  expect(@ehmp).to have_btn_2yr_range
+  expect(@ehmp.range_is_active? @ehmp.btn_2yr_range).to eq(true), 'Expected 2yr button to be active'
+end
+
+Then(/^the user clicks the date control All in the Numeric Lab Results modal$/) do
+  modal = LabResultsModal.instance
+  expect(modal.perform_action('Modal Date Filter All')).to eq(true)
+end
+
+Then(/^the Lab History table contains rows with data$/) do
+  @ehmp = NumericLabResultsModal.new
+  
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until { @ehmp.all_there? }
+
+  @ehmp.wait_for_tbl_data_rows minimum: 1
+  @ehmp.wait_for_tbl_facility_columns minimum: 1
+  expect(@ehmp.tbl_facility_columns.length).to be > 0
+end
+
+Then(/^the Total Tests label matches number of rows$/) do
+  @ehmp = NumericLabResultsModal.new
+  @ehmp.wait_for_tbl_data_rows minimum: 1
+  @ehmp.wait_for_tbl_facility_columns minimum: 1
+
+  number_of_tests = @ehmp.tbl_data_rows.length
+  expect(@ehmp).to have_fld_total_tests_label
+  expect(@ehmp).to have_fld_total_tests
+  expect(@ehmp.fld_total_tests.text).to eq(number_of_tests.to_s)
 end

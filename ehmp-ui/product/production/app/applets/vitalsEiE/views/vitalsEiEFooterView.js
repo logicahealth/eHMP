@@ -138,6 +138,8 @@ define([
                 //marked in error
                 view.showLoadingTextOnButton(e, false);
                 if (errors.length <= 0) {
+                    //uncheck register
+                    ADK.Checks.unregister('vitals-eie-form-id');
                     //set the button back and flag error
                     ADK.UI.Modal.hide();
                     //refresh gridview that was passed in from the extend on the bodyView

@@ -53,44 +53,30 @@ execute "delete existing cache instance" do
   only_if { Dir.exists?(node[:jds][:cache_dir]) }
 end
 
-#remote_file "#{node[:jds][:installer_dir]}/cache.tar.gz" do
-#  source node[:jds][:cache_source]
-#  notifies :stop, "service[#{node[:jds][:cache_service]}]", :immediately
-#  notifies :run, "execute[delete existing cache instance]", :immediately
-#end
+remote_file "#{node[:jds][:installer_dir]}/cache.tar.gz" do
+  source node[:jds][:cache_source]
+  notifies :stop, "service[#{node[:jds][:cache_service]}]", :immediately
+  notifies :run, "execute[delete existing cache instance]", :immediately
+end
 
-#file "#{Chef::Config[:file_cache_path]}/jds.ro" do
-#  action :nothing
-#end
-
-#execute "extract cache tar" do
-#  cwd node[:jds][:installer_dir]
-#  command "tar -zxvf cache.tar.gz"
-#  action :run
-#  notifies :run, "execute[install cache tar]", :immediately
-#  notifies :delete, "file[#{Chef::Config[:file_cache_path]}/jds.ro]", "immediately"
-#  not_if { Dir.exists?(node[:jds][:cache_dir]) }
-#end
-
-#execute "install cache tar" do
-#  cwd node[:jds][:installer_dir]
-#  command "./cinstall_silent"
-#  environment node[:jds][:cache_parameter]
-#  action :nothing
-#  notifies :enable, "service[#{node[:jds][:cache_service]}]", :immediately
-#  notifies :start, "service[#{node[:jds][:cache_service]}]", :immediately
-#end
-
-execute :modify_cache_owner do
-  command "chown -R #{node[:jds][:jds_user]}:#{node[:jds][:cache_user]}  #{node[:jds][:cache_dir]}"
+file "#{Chef::Config[:file_cache_path]}/jds.ro" do
   action :nothing
 end
 
-yum_package node[:jds][:cache_package] do
-  version node[:jds][:cache_version]
-  arch node[:jds][:cache_arch]
+execute "extract cache tar" do
+  cwd node[:jds][:installer_dir]
+  command "tar -zxvf cache.tar.gz"
+  action :run
+  notifies :run, "execute[install cache tar]", :immediately
+  notifies :delete, "file[#{Chef::Config[:file_cache_path]}/jds.ro]", "immediately"
+  not_if { Dir.exists?(node[:jds][:cache_dir]) }
+end
+
+execute "install cache tar" do
+  cwd node[:jds][:installer_dir]
+  command "./cinstall_silent"
+  environment node[:jds][:cache_parameter]
+  action :nothing
   notifies :enable, "service[#{node[:jds][:cache_service]}]", :immediately
   notifies :start, "service[#{node[:jds][:cache_service]}]", :immediately
-  notifies :run, "execute[modify_cache_owner]", :immediately
-  source node[:jds][:cache_source]
 end

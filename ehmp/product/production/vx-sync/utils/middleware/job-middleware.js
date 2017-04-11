@@ -7,7 +7,7 @@ var format = require('util').format;
 var logUtil = require('../log');
 var inspect = require('../inspect');
 
-var JobStatusUpdater = require(global.VX_JOBFRAMEWORK + 'JobStatusUpdater');
+var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 
 /**
  * Configure Job Middleware to save a logger and a config, initializes a JDS client and a JobStatusUpdater

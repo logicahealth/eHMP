@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var rpcCategoryTransformer = require('../utils/rpc-categories-tilde-transformer');
-var rpcUtil = require('../utils/rpc-util');
+var rpcUtil = require('./../utils/rpc-util');
 
 /**
  * ~Priority<br/>

@@ -56,7 +56,11 @@ machine machine_name do
   }
   attributes(
     stack: node[:machine][:stack],
-    nexus_url: node[:common][:nexus_url]
+    nexus_url: node[:common][:nexus_url],
+    data_bag_string: node[:common][:data_bag_string],
+    beats: {
+      logging: node[:machine][:logging]
+    }
   )
   files lazy { node[:cds_provision][:cdsdb][:copy_files] }
   chef_environment node[:machine][:environment]
@@ -64,7 +68,7 @@ machine machine_name do
   action node[:machine][:action]
 end
 
-chef_node "#{machine_ident}-#{node[:machine][:stack]}" do
+chef_node machine_name do
   action :delete
   only_if {
     node[:machine][:action].eql?("destroy") && node[:machine][:driver].eql?("vagrant")

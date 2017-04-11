@@ -1,121 +1,98 @@
 .search-applet-main {
+    height: calc(90vh - 78px);
+    display: flex;
+    flex-direction: column;
     background-color: $pure-white;
-    border-radius: 3px;
-    .searchGroupTitle {
-        margin-right: 0px;
-        margin-left: 0px;
-        .groupName {
-            color:#3D5157;
+    padding-bottom: 10px;
+    .panel-group {
+        .panel {
+            border: none;
+            box-shadow: none;
+        }
+        .btn {
+            &.btn-accordion {
+                border: 1px solid $grey-light;
+                background-color: $primary-lightest;
+                &:hover {
+                    background-color: $primary-lighter;
+                }
+            }
+        }
+        .panel-collapse {
+            >.list-group {
+                border-top: none !important;
+                margin-top: 5px;
+                .search-group {
+                    margin-left: 15px;
+                }
+            }
         }
     }
-    .searchGroupTitleArrow {
-        width: 1%;
-        margin-top: 7px;
+    .search-result-header {
+        flex-grow: 0;
+        flex-shrink: 0;
+
+        .search-results-filter {
+            text-align: right;
+            padding: 0;
+            .input-group-addon {
+                padding: 1px 8px;
+            }
+        }
     }
-    .subGroupHeader:hover {
-        background-color: #e8e8e8;
+    .search-results .search-group {
+        .search-result-item {
+            border-bottom: 1px solid $grey-lighter;
+            cursor: pointer;
+            &:hover, &:focus {
+                background-color: $primary-lightest;
+            }
+            .datetime-highlights {
+                padding-left: 50px;
+            }
+        }
     }
-    .subgroupTitle {
-        margin-left: -30px;
-    }
-    #suggestListDiv .dropdown-menu {
-        overflow: auto;
-        margin-left: 15px;
-        width: 850px;
+}
+.text-search-input-container {
+    flex: 1 3 30%;
+    padding-left: 5px;
+    max-width: 200px;
+    .dropdown-menu, .suggest-list-container{
         max-height: 300px;
-    }
-    #search-result-header {
-        background-color: $pure-white;
-        #search-results-message {
-            padding: 4px 3px;
-            background-color: #628896;
-            border-radius: 15px;
-            width: 90px;
-            text-align: center;
-            color: white;
-        }
-    }
-    .searchResultItem {
-        cursor: pointer;
-        padding: 3px;
-        &:hover {
-            background-color: $primary-lightest;
-        }
-    }
-    .subgroupItem:nth-child(odd){
-        background-color: $pure-white;
-        &:hover {
-            background-color: $primary-lightest;
-        }
-    }
-    .subgroupItem:nth-child(even){
-        background-color: white;
-        &:hover {
-            background-color: $primary-lightest;
-        }
-    }
-    .topLevelItem:nth-child(even){
-        background-color: $pure-white;
-        &:hover {
-            background-color: $primary-lightest;
-        }
-    }
-    .result-summary {
-        font-weight: bold;
-    }
-    .cpe-search-term-match {
-        background-color: rgba(255, 255, 0, .6);
-        box-shadow: inset 0 1px 1px rgba(0,0,0, .075), 0 0 8px rgba(255, 255, 0, .6);
-    }
-    .suggest-label {
-        font-size: 90%;
-    }
-    .input-group-addon {
-        padding: 1px 8px;
-    }
-    .datePicker {
-        width: 15%;
-        padding-right: 5px;
-        padding-left: 5px;
-    }
-    .datePickerToLabel {
-        width: 1%;
-        padding-left:5px;
-        margin-right:3px;
-    }
-    .datePickerLabelArea {
-        display: table-cell;
-    }
-    .datePickerText {
-        margin-top: -4px;
-        margin-bottom: -4px;
-    }
-    .datePickerLabel {
-        vertical-align: 10px;
-        padding-top: 0.29em;
-        padding-bottom: 0.29em;
-        border-top-right-radius: 0.0em;
-        border-bottom-right-radius: 0.0em;
-        border: 1px solid #CCC;
-    }
-    .datetime:hover {
-        text-shadow: 0 0 10px #fff;
-        text-decoration: underline;
-    }
-    #searchSpinner {
+        min-width: 469px;
         display: none;
+        #suggestList {
+            margin: 0px;
+            li {
+                a {
+                    border-bottom: 1px solid $grey-lighter;
+                    text-decoration: none;
+                }
+                &:last-of-type {
+                    border-bottom: none;
+                }
+            }
+        }
     }
-    #suggestSpinner {
-        display: none;
-        padding: 0 10px;
-    }
-    .subgroupBadge{
-        margin-top: 3px;
-        margin-left: -60px;
-        background-color: #628896;
-    }
-    .singleResultBadge{
-        background-color: #628896;
-        transform: translateY(50%);
+    .form-group {
+        margin-bottom: 0px;
+        input {
+            border-radius: 20px;
+            min-width:80px;
+            height: 25px;
+        }
+        .form-control {
+            padding: 0px 24px 0px 12px;
+            &::-ms-clear {
+                display: none;
+                width:0;
+                height:0;
+            }
+        }
+        .form-control-feedback {
+            right: -3px;
+            top: -5px !important;
+            font-size: 16px;
+        }
     }
 }

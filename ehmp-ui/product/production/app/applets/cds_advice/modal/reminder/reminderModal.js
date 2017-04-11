@@ -26,7 +26,6 @@ define([
             var view = createBodyView(model);
             var modalOptions = {
                 title: 'Reminder',
-                size: 'large'
             };
             var modal = new ADK.UI.Modal({
                 view: view,

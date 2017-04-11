@@ -32,11 +32,17 @@ function transformAndEnrichRecord(log, config, environment, record, callback) {
 		return setTimeout(callback, 0, null, null);
 	}
 
+    var metrics = null;
+    if (environment) {
+        metrics = environment.metrics;
+    }
+
 	var terminologyUtils;
 	if (environment.terminologyUtils) {
 		terminologyUtils = environment.terminologyUtils;
 	} else {
-		terminologyUtils = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
+        var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
+        terminologyUtils = new TerminologyUtil(log, metrics, config);
 	}
 
 	fixFieldDataTypes(record);			// Since we are going to be copying objects around - lets fix the types before we copy them.
@@ -316,6 +322,9 @@ function fixFieldDataTypes(record) {
 	if ((record.facilityCode !== null) && (record.facilityCode !== undefined)) {
 		record.facilityCode = String(record.facilityCode);
 	}
+    if ((record.amended !== null) && (record.amended !== undefined)) {
+        record.amended = String(record.amended);
+    }
 
 	// Fix items in DocumentText
 	//--------------------------

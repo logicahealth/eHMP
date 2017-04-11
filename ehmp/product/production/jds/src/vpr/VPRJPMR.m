@@ -56,12 +56,14 @@ LINKED ;; describes relationships (linkages) between collection types
  ;
  ;
 BROKEN(LINK) ;
- N LINKEE,LINKER,PID
- S PID="" F  S PID=$O(^VPRPTI(PID)) Q:'$L(PID)  D
- . S LINKEE="" F  S LINKEE=$O(^VPRPTI(PID,"rev",LINKEE)) Q:'$L(LINKEE)  D
- . . Q:'$D(^VPRPTI(PID,"rev",LINKEE,LINK))
- . . I '$D(^VPRPT(PID,LINKEE)) W !,"Missing: ",LINKEE I 1
- . . E  W !,"Good: ",LINKEE
+ N LINKEE,LINKER,PID,JPID
+ ;
+ S JPID="" F  S JPID=$O(^VPRPTI(JPID)) Q:'$L(JPID)  D
+ . S PID="" F  S PID=$O(^VPRPTI(JPID,PID)) Q:'$L(PID)  D
+ . . S LINKEE="" F  S LINKEE=$O(^VPRPTI(JPID,PID,"rev",LINKEE)) Q:'$L(LINKEE)  D
+ . . . Q:'$D(^VPRPTI(JPID,PID,"rev",LINKEE,LINK))
+ . . . I '$D(^VPRPT(JPID,PID,LINKEE)) W !,"Missing: ",LINKEE I 1
+ . . . E  W !,"Good: ",LINKEE
  Q
  ;N SPEC,CLTN
  ;S CLTN="" F  S CLTN=$O(^VPRMETA("link",LINK,"collection",CLTN)) Q:CLTN=""  D

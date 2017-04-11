@@ -704,7 +704,7 @@ License and Authors
 ===================
 
 * Author:: Adam Jacob <adam@opscode.com>
-* Author::     ua Timberman <joshua@opscode.com>
+* Author:: Joshua Timberman <joshua@opscode.com>
 * Author:: Bryan McLellan <bryanm@widemile.com>
 * Author:: Dave Esposito <esposito@espolinux.corpnet.local>
 * Author:: David Abdemoulaie <github@hobodave.com>
@@ -725,7 +725,7 @@ License and Authors
 * Copyright:: 2011, CustomInk, LLC.
 * Copyright:: 2013-2014, OneHealth Solutions, Inc.
 * Copyright:: 2014, Viverae, Inc.
-* Copyright:: 2015,           van Zoest
+* Copyright:: 2015, Alexander van Zoest
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

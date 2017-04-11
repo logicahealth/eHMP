@@ -11,16 +11,6 @@ adk_version = ENV['ADK_VERSION']
 
 ############################################## Dev Shared Folders #############################################
 if ENV['DEV_DEPLOY']
-
-  _host_path_private_licenses = "#{ENV['HOME']}/Projects/vistacore/private_licenses"
-  node.default[:'ehmp-ui_provision'][:'ehmp-ui'][:vagrant][:shared_folders].push(
-    {
-      :host_path => _host_path_private_licenses,
-      :guest_path => "/opt/private_licenses",
-      :create => true
-    }
-  )
-
   node.default[:'ehmp-ui_provision'][:'ehmp-ui'][:copy_files] = {
     "#{node[:'ehmp-ui_provision'][:'ehmp-ui'][:adk_home]}/app.json" => {
       :local_path => "#{ENV['HOME']}/Projects/vistacore/ehmp-ui/product/production/app.json"
@@ -105,10 +95,14 @@ machine machine_name do
   attributes(
     stack: node[:machine][:stack],
     nexus_url: node[:common][:nexus_url],
+    data_bag_string: node[:common][:data_bag_string],
     ehmp_ui: {
       home_dir: node[:'ehmp-ui_provision'][:'ehmp-ui'][:ui_home],
       source: artifact_url(node[:'ehmp-ui_provision'][:artifacts][:'ehmp-ui']),
-      manifest_path: "/tmp/manifest.json"
+      manifest: {
+        versions: node[:'ehmp-ui_provision'][:manifest][:versions],
+        overall_version: node[:'ehmp-ui_provision'][:manifest][:overall_version]
+      }
     },
     adk: {
       source: artifact_url(node[:'ehmp-ui_provision'][:artifacts][:adk]),
@@ -118,10 +112,11 @@ machine machine_name do
     },
     apache: {
       listen_ports: [
-        "80",
-        "8080",
-        "8888"
+        "80"
       ]
+    },
+    beats: {
+      logging: node[:machine][:logging]
     }
   )
   files lazy { node[:'ehmp-ui_provision'][:'ehmp-ui'][:copy_files] }

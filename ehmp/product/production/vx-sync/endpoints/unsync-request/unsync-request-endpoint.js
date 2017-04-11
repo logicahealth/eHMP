@@ -12,7 +12,7 @@ var cron = require('node-schedule');
 var logUtil = require(global.VX_UTILS + 'log');
 var config = require(global.VX_ROOT + 'worker-config');
 var pollerUtils = require(global.VX_UTILS + 'poller-utils');
-var log = logUtil.initialize(config.loggers).get('unsync');
+var log = logUtil.initialize(config).get('unsync');
 var environment = pollerUtils.buildEnvironment(log, config);
 
 var handler = require(global.VX_HANDLERS + 'unsync-request/unsync-handler');

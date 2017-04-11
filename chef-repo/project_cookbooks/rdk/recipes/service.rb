@@ -3,35 +3,41 @@
 # Recipe:: service
 #
 
-rdk_node_cluster node[:rdk][:fetch_server][:service] do
-  processes node[:rdk][:fetch_server][:processes]
-  port node[:rdk][:fetch_server][:port]
-  deploy_path node[:rdk][:fetch_server][:deploy_path]
-  config_file node[:rdk][:fetch_server][:config_file]
-  working_directory node[:rdk][:home_dir]
-  dev_deploy node[:rdk][:dev_deploy]
-  debug_port node[:rdk][:fetch_server][:debug_port]
-  action [:create,:restart]
-end
+# Iterate over every service
+node[:rdk][:services].each do |name, config|
 
-rdk_node_cluster node[:rdk][:write_back][:service] do
-  processes node[:rdk][:write_back][:processes]
-  port node[:rdk][:write_back][:port]
-  deploy_path node[:rdk][:write_back][:deploy_path]
-  config_file node[:rdk][:write_back][:config_file]
-  working_directory node[:rdk][:home_dir]
-  dev_deploy node[:rdk][:dev_deploy]
-  debug_port node[:rdk][:write_back][:debug_port]
-  action [:create,:restart]
-end
+  # Create a template for upstart
+  template "/etc/init/#{config[:service]}.conf" do
+    variables(
+      :name => config[:service],
+      :level =>  config[:service_run_level],
+      :deploy_path => config[:deploy_path]
+    )
+    source "#{config[:service_template_source]}"
+    notifies :restart, "service[#{config[:service]}]"
+  end
 
-rdk_node_cluster node[:rdk][:pick_list][:service] do
-  processes node[:rdk][:pick_list][:processes]
-  port node[:rdk][:pick_list][:port]
-  deploy_path node[:rdk][:pick_list][:deploy_path]
-  config_file node[:rdk][:pick_list][:config_file]
-  working_directory node[:rdk][:home_dir]
-  dev_deploy node[:rdk][:dev_deploy]
-  debug_port node[:rdk][:pick_list][:debug_port]
-  action [:create,:restart]
+  #Create a template for bluepill
+  template "/etc/bluepill/#{config[:service]}.pill" do
+    source config[:bluepill_template_source]
+    variables(
+      :name => config[:service],
+      :working_directory => node[:rdk][:home_dir],
+      :deploy_path => config[:deploy_path],
+      :config_file => config[:config_destination],
+      :port => config[:port] == 0 ? nil : config[:port],
+      :dev_deploy => node[:rdk][:dev_deploy] || false,
+      :debug_port => config[:debug_port],
+      :processes => config[:processes],
+      :log_directory => node[:rdk][:log_dir]
+    )
+    notifies :restart, "service[#{config[:service]}]"
+  end
+
+  # Define service to be enabled on restart of instance
+  service "#{config[:service]}" do
+    provider Chef::Provider::Service::Upstart
+    restart_command "/sbin/stop #{config[:service]}; /sbin/start #{config[:service]}"
+    action :enable
+  end
 end

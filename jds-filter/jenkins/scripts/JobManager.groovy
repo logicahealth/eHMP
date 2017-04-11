@@ -54,7 +54,7 @@ class JobManager {
     }
 
     @GrabResolver(name = "nexus", root = "https://dl.vistacore.us/nexus/content/groups/public")
-    @Grab('jenkins:jenkins-cli:1.499')
+    @Grab('jenkins:jenkins-cli:1.642.1')
     def runCliCommand(List<String> args, InputStream input = System.in,
         OutputStream output = System.out, OutputStream err = System.err)
     {

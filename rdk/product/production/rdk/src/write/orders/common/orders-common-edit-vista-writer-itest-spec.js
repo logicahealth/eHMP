@@ -7,11 +7,11 @@ var rpcClientFactory = require('./../../core/rpc-client-factory');
 var editWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP        ',
+        host: 'IP_ADDRESS',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'PW',
+        verifyCode: 'PW',
+        localIP: 'IPADDRES',
         localAddress: 'localhost',
         noReconnect: true
     },
@@ -21,11 +21,11 @@ var editWritebackContext = {
 var saveWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP        ',
+        host: 'IP_ADDRESS',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'PW',
+        verifyCode: 'PW',
+        localIP: 'IPADDRES',
         localAddress: 'localhost'
     },
     model: {

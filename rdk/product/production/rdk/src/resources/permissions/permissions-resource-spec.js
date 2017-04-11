@@ -27,6 +27,12 @@ describe('Permissions resource calls', function() {
             host: 'dummy',
             port: 0
         };
+        req.parameters = {
+            'testdata': false
+        };
+        req.param = function(param) {
+            return req.parameters[param] || undefined;
+        };
         res = httpMocks.createResponse();
         spyStatus = sinon.spy(res, 'status');
     });

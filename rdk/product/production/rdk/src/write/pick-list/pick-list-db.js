@@ -44,7 +44,7 @@ function retrieveDataFromDB(logger, dataNeedsRefreshAfterMinutes, query, callbac
     var refreshIntervalInMilliseconds = 1000 * 60 * dataNeedsRefreshAfterMinutes;
     db.find(query, function(err, res) {
         if (err) {
-            logger.error('pick-list-db.retrieveDataFromDB error finding data: ' + err);
+            logger.error({error: err}, 'pick-list-db.retrieveDataFromDB error finding data');
             return callback(err);
         }
 
@@ -53,11 +53,11 @@ function retrieveDataFromDB(logger, dataNeedsRefreshAfterMinutes, query, callbac
             status: REFRESH_STATE_NOT_LOADED
         };
         if (nullUtil.isNullish(res)) {
-            logger.warn('pick-list-db.retrieveDataFromDB warning res was nullish: ' + err);
+            logger.warn({error: err}, 'pick-list-db.retrieveDataFromDB warning res was nullish');
             return callback(null, {});
         }
         else if (res.length < 1) {
-            logger.debug('pick-list-db.retrieveDataFromDB res.length < 1: ' + JSON.stringify(result, null, 2));
+            logger.debug({result: result}, 'pick-list-db.retrieveDataFromDB res.length < 1');
             return callback(null, result);
         }
         else {
@@ -80,7 +80,7 @@ function retrieveDataFromDB(logger, dataNeedsRefreshAfterMinutes, query, callbac
                 result.status = REFRESH_STATE_STALE;
             }
 
-            logger.debug('pick-list-db.retrieveDataFromDB result: ' + JSON.stringify(result, null, 2));
+            logger.debug({result: result}, 'pick-list-db.retrieveDataFromDB result');
             return callback(null, result);
         }
     });
@@ -128,11 +128,11 @@ function updateDatabase(logger, params, timeStamp, data, callback) {
         isHeapSizeExceeded(logger);
 
         if (err) {
-            logger.error('pick-list-db.updateDatabase error updating data: ' + err);
+            logger.error({error: err}, 'pick-list-db.updateDatabase error updating data');
             return callback(err);
         }
         if (numReplaced === 0) {
-            logger.error('pick-list-db.updateDatabase error no records were stored in-memory: ' + err);
+            logger.error({error: err}, 'pick-list-db.updateDatabase error no records were stored in-memory');
             return callback('No records were stored in-memory');
         }
         if (nullUtil.isNullish(newDoc) || nullUtil.isNullish(newDoc.data)) {
@@ -141,7 +141,7 @@ function updateDatabase(logger, params, timeStamp, data, callback) {
                 return callback(null, {});
             }
             else {
-                logger.debug('pick-list-db.updateDatabase newDoc or newDoc.data was nullish - data contained: ' + JSON.stringify(data, null, 2));
+                logger.debug({data: data}, 'pick-list-db.updateDatabase newDoc or newDoc.data was nullish - data contained');
                 return callback(null, data);
             }
         }
@@ -149,8 +149,8 @@ function updateDatabase(logger, params, timeStamp, data, callback) {
         //Uncomment for testing - shows you everything in the database after your update.
         //db.find({}, function (error, results) {
         //    console.log(results);
-            logger.debug('pick-list-db.updateDatabase data: ' + JSON.stringify(data, null, 2));
-            logger.debug('pick-list-db.updateDatabase newDoc.data: ' + JSON.stringify(newDoc.data, null, 2));
+            logger.debug({data: data}, 'pick-list-db.updateDatabase data');
+            logger.debug({data: newDoc.data}, 'pick-list-db.updateDatabase newDoc.data');
             callback(null, newDoc.data);
         //});
     });
@@ -168,7 +168,7 @@ function updateDatabase(logger, params, timeStamp, data, callback) {
 function loadPickList(logger, siteConfig, params, modulePath, callback) {
     require(pickListRoot + modulePath).fetch(logger, siteConfig, function(err, result) {
         if (err) {
-            logger.error('pick-list-db.loadPickList error loading pick list: ' + err);
+            logger.error({error: err}, 'pick-list-db.loadPickList error loading pick list');
             return callback(err);
         }
         if (!result) {
@@ -190,11 +190,11 @@ module.exports.initialLoadPickList = function(logger, siteConfig, params, module
         loading.splice(loading.indexOf(params.pickList), 1); //Remove this entry from our list of things being loaded.
 
         if (error) {
-            logger.error('pick-list-db.initialLoadPickList error loading pick list: ' + error);
+            logger.error({error: error}, 'pick-list-db.initialLoadPickList error loading pick list:');
             return callback(error);
         }
 
-        logger.debug('pick-list-db.initialLoadPickList result: ' + JSON.stringify(result, null, 2));
+        logger.debug({result: result}, 'pick-list-db.initialLoadPickList result');
         return callback(null, result);
     });
 };
@@ -231,14 +231,14 @@ module.exports.refresh = function refresh(app, forcedRefresh, callback) {
         }), function (err, results) {
             if (err) {
                 refreshInProgress = false;
-                app.logger.error('pick-list-db.refresh error retrieving data: ' + err);
+                app.logger.error({error: err}, 'pick-list-db.refresh error retrieving data');
                 callback(err);
             }
             else {
                 processedData.push(results);
                 if (i === (siteNames.length - 1)) {
                     refreshInProgress = false;
-                    app.logger.debug('pick-list-db.refresh processedData: ' + JSON.stringify(processedData, null, 2));
+                    app.logger.debug({data: processedData}, 'pick-list-db.refresh processedData');
                     callback(null, processedData);
                 }
             }
@@ -304,7 +304,7 @@ function filterResults(data, filters) {
 module.exports.retrievePickList = function retrievePickList(logger, siteConfig, params, filters, modulePath, dataNeedsRefreshAfterMinutes, callback) {
     retrieveDataFromDB(logger, dataNeedsRefreshAfterMinutes, params, function(err, res) {
         if (err) {
-            logger.error('pick-list-db.retrievePickList error retrieving data: ' + err);
+            logger.error({error: err}, 'pick-list-db.retrievePickList error retrieving data');
             return callback(err);
         }
 
@@ -333,7 +333,7 @@ module.exports.retrievePickList = function retrievePickList(logger, siteConfig, 
 
             loadPickList(logger, siteConfig, params, modulePath, function(error, result) {
                 if (error) {
-                    logger.error('pick-list-db.retrievePickList error loading pick list' + error);
+                    logger.error({error: error}, 'pick-list-db.retrievePickList error loading pick list');
                 }
 
                 //If we were a large pick-list, we notified the user that it would take some time to load this pick-list.
@@ -345,28 +345,28 @@ module.exports.retrievePickList = function retrievePickList(logger, siteConfig, 
                 }
 
                 if (error && allowCallback) {
-                    logger.error('pick-list-db.retrievePickList error loading pick list and allowCallback is true: ' + error);
+                    logger.error({error: error}, 'pick-list-db.retrievePickList error loading pick list and allowCallback is true:');
                     return callback(error);
                 }
 
                 if (allowCallback) {
                     var retValue = filterResults(result, filters);
-                    logger.debug('pick-list-db.retrievePickList: retValue: ' + JSON.stringify(retValue, null, 2));
+                    logger.debug({retValue: retValue}, 'pick-list-db.retrievePickList: retValue');
                     return callback(null, retValue);
                 }
             });
         } else {
-            logger.debug('pick-list-db.retrievePickList: res.data: ' + JSON.stringify(res.data, null, 2));
+            logger.debug({data: res.data}, 'pick-list-db.retrievePickList: res.data');
 
             var retValue = filterResults(res.data, filters);
-            logger.debug('pick-list-db.retrievePickList: retValue filtered: ' + JSON.stringify(retValue, null, 2));
+            logger.debug({retValue: retValue}, 'pick-list-db.retrievePickList: retValue filtered');
             callback(null, retValue);
 
             //Purposefully done after the callback so it can reload new data after the stale data is returned.
             if (res.status === REFRESH_STATE_STALE) {
                 loadPickList(logger, siteConfig, params, modulePath, function(error/*, result*/) {
                     if (error) {
-                        logger.error('pick-list-db.retrievePickList error occurred trying to refresh stale data: ' + error);
+                        logger.error({error: error}, 'pick-list-db.retrievePickList error occurred trying to refresh stale data:');
                     }
                 });
             }

@@ -1,11 +1,10 @@
-HMPDLRA ;SLC/MKB -- Laboratory extract by accession ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDLRA ;SLC/MKB,ASMR/RRB - Laboratory extract by accession;Nov 05, 2015 19:21:53
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
  ; ^DPT                         10035
- ; ^LAB(60                      10054
  ; ^LAB(61                        524
  ; ^LRO(68                       1963
  ; ^LRO(69                       2407
@@ -20,14 +19,14 @@ HMPDLRA ;SLC/MKB -- Laboratory extract by accession ;8/2/11  15:29
  ; ORX8                          2467
  ; PXAPI                         1894
  ; XUAF4                         2171
- ;
+ Q
  ; ------------ Get results from VistA ------------
  ;
 EN(DFN,BEG,END,MAX,ID) ; -- find patient's lab results
  N HMPSUB,HMPIDT,HMPN,HMPITM,LRDFN,LR0,ORD,X
  S DFN=+$G(DFN) Q:$G(DFN)<1
  S BEG=$G(BEG,1410101),END=$G(END,4141015),MAX=$G(MAX,9999)
- S LRDFN=$G(^DPT(DFN,"LR")),HMPSUB=$G(FILTER("type"))
+ S HMPSUB=$G(FILTER("type")),LRDFN=$$LRDFN^HMPXGLAB(DFN)  ;DE2818, (#63) LABORATORY REFERENCE
  K ^TMP("LRRR",$J,DFN)
  ;
  ; get result(s)
@@ -68,7 +67,7 @@ CH() ; -- return a Chemistry result as:
  ;   Expects ^TMP("LRRR",$J,DFN,"CH",HMPIDT,HMPN),LRDFN
  N X,Y,X0,NODE,CMMT,LOINC
  S X0=$G(^TMP("LRRR",$J,DFN,"CH",HMPIDT,HMPN)),NODE=$G(^LR(LRDFN,"CH",HMPIDT,HMPN))
- S X=$P($G(^LAB(60,+X0,0)),U)
+ S X=$$LABTSTNM^HMPXGLAB(+X0)  ; DE2818
  S Y="CH;"_HMPIDT_";"_HMPN_U_X_U_$P(X0,U,2,4)
  S X=$P(X0,U,5) I $L(X),X["-" S X=$TR(X,"- ","^"),$P(Y,U,6,7)=X
  S $P(Y,U,8)=$P(X0,U,15) ;test short name
@@ -138,7 +137,7 @@ RPTS(DFN,BEG,END,MAX) ; -- find patient's lab reports
  N HMPSUB,HMPIDT,HMPITM,HMPTIU,HMPXID,LRDFN,HMPN,DA
  S DFN=+$G(DFN) Q:$G(DFN)<1
  S BEG=$G(BEG,1410101),END=$G(END,4141015),MAX=$G(MAX,9999)
- S LRDFN=$G(^DPT(DFN,"LR"))
+ S LRDFN=$$LRDFN^HMPXGLAB(DFN)  ;DE2818, (#63) LABORATORY REFERENCE
  K ^TMP("LRRR",$J,DFN) D RR^LR7OR1(DFN,,BEG,END,"AP",,,MAX)
  S HMPSUB="" F  S HMPSUB=$O(^TMP("LRRR",$J,DFN,HMPSUB)) Q:HMPSUB=""  D
  . S HMPIDT=0 F  S HMPIDT=$O(^TMP("LRRR",$J,DFN,HMPSUB,HMPIDT)) Q:HMPIDT<1  I $O(^(HMPIDT,0)) D
@@ -155,7 +154,7 @@ RPT1(DFN,ID,RPT) ; -- return report as a TIU document
  S DFN=+$G(DFN),ID=$G(ID) Q:DFN<1  Q:'$L(ID)
  N SUB,IDT,LRDFN,LR0,X,LOC
  K RPT,^TMP("HMPTEXT",$J)
- S SUB=$P(ID,";"),IDT=+$P(ID,";",2),LRDFN=$G(^DPT(DFN,"LR"))
+ S SUB=$P(ID,";"),IDT=+$P(ID,";",2),LRDFN=$$LRDFN^HMPXGLAB(DFN)  ;DE2818, (#63) LABORATORY REFERENCE
  S LR0=$S(SUB="AU":$G(^LR(LRDFN,"AU")),1:$G(^LR(LRDFN,SUB,IDT,0)))
  S RPT("id")=ID,RPT("referenceDateTime")=9999999-IDT
  S RPT("localTitle")="LR "_$$NAME(SUB)_" REPORT"
@@ -165,17 +164,18 @@ RPT1(DFN,ID,RPT) ; -- return report as a TIU document
  S RPT("nationalTitleType")="4696120^NOTE"
  S RPT("type")="LR",RPT("status")="COMPLETED"
  S:$G(FILTER("loinc")) RPT("loinc")=$P(FILTER("loinc"),U)
- S X=$P(LR0,U,$S(SUB="AU":5,1:8)),LOC="" S:$L(X) LOC=+$O(^SC("B",X,0))
+ S X=$P(LR0,U,$S(SUB="AU":5,1:8)),LOC="" S:$L(X) LOC=+$O(^SC("B",X,0))  ;DE2818, ***fix needed to get location IEN***
  S RPT("facility")=$$FAC^HMPD(LOC)
  I LOC D  ;look-up visit
  . N CDT S CDT=9999999-IDT
  . S X=$$GETENC^PXAPI(DFN,CDT,LOC)
  . S:X RPT("encounter")=+X
  S X=+$P(LR0,U,$S(SUB="AU":10,1:2)) ;pathologist
- S:X RPT("clinician",1)=X_U_$P($G(^VA(200,X,0)),U)_"^A"
+ S:X RPT("clinician",1)=X_U_$$GET1^DIQ(200,X_",",.01)_"^A"  ;DE2818, changed global read to FileMan
  S X=$S(SUB="AU":$P(LR0,U,15,16),1:$P(LR0,U,11)_U_$P(LR0,U,13)) I X D
  . N Y S Y=$P(X,U,2)
- . S RPT("clinician",2)=Y_U_$P($G(^VA(200,+Y,0)),U)_"^S^"_+X_U_$P($G(^VA(200,+Y,20)),U,2)
+ . ;DE2818, changed global read to FileMan - (#.01) NAME and (#1) INITIAL
+ . S RPT("clinician",2)=Y_U_$$GET1^DIQ(200,+Y_",",.01)_"^S^"_+X_U_$$GET1^DIQ(200,+Y_",",1)
  S:$G(HMPTEXT) RPT("content")=$$TEXT(DFN,SUB,IDT)
  Q
  ;

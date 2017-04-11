@@ -11,5 +11,5 @@ define([
         return new Handlebars.SafeString(text);
     });
 
-    return Handlebars.compile('{{#if errorMessage}}<div class="alert alert-warning alert-dismissible" role="alert"><div>{{errorMessage}}</div></div>{{/if}}<div><div>{{breaklines detailSummary}}</div>');
+    return Handlebars.compile('{{#if errorMessage}}<div class="alert alert-warning alert-dismissible" role="alert"><div>{{errorMessage}}</div></div>{{/if}}<div class="detail-modal-content"><pre>{{breaklines detailSummary}}</pre></div>');
 });

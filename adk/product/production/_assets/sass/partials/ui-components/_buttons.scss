@@ -1,16 +1,24 @@
 // button drop down
 .btn-group {
-    > .btn {
-        border-left: 1px solid $grey;
-        border-right: 1px solid $grey;
-        text-transform: capitalize;
-        &:hover,
-        &:focus,
-        &:active,
-        &.active-range {
-            border-left: 1px solid $grey;
-            border-right: 1px solid $grey;
+    &.btn-group-xs {
+        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+        border-radius: 3px;
+        > .btn {
+            padding: 6px 9px;
+            box-shadow: none;
+            border-left: 1px solid $pure-white;
+            margin-left: 0;
+            &:first-child {
+                border-left: none;
+            }
+            &.btn-default {
+                &:active:focus {
+                    border-left: 1px solid $pure-white;
+                }
+            }
         }
+    }
+    > .btn {
         &:focus {
             outline: 1px dotted;
         }
@@ -27,36 +35,10 @@
         &.dropdown-toggle {
             background-color: $primary;
             color: $pure-white;
+            font-weight: 600;
             &:focus {
                 outline: 1px dotted;
             }
-        }
-        &.btn-divider {
-            border-right: 1px solid $pure-white;
-            margin-right: 1px;
-        }
-    }
-    .dropdown-menu li a {
-        background-color: $pure-white;
-        background-image: none;
-        font-size: 11px;
-        &:hover {
-            background-color: $primary;
-            color: $pure-white;
-        }
-    }
-}
-.btn-group.btn-group-xs > .btn {
-    padding: 3px 5px;
-}
-
-//I don't know where to put this, this is an icon button that is a drop down
-.dropdown-menu li {
-    font-size: 11px;
-    a {
-        &:hover, &:focus {
-            background-color: $primary;
-            color: $pure-white;
         }
     }
 }
@@ -90,12 +72,47 @@
         vertical-align: bottom;
     }
 }
-// Button styling from workspace dropdown button
-.open>.dropdown-toggle.btn-success {
-    background-color: $primary;
-    border-color: $primary;
-    &:hover {
-        background-color: $primary-dark;
-        border-color: $primary-dark;
+
+// buttons for triggering accordion - adjusting styles
+.btn.btn-accordion {
+    // needed bc of the rows having font awesome font family
+    font-family: 'Source Sans Pro', sans-serif;
+    padding: 0;
+    text-transform: capitalize;
+    color: $grey-darkest;
+    font-size: 11px;
+    text-align: left;
+    box-shadow: none;
+    width: initial;
+    &:hover,
+    &:focus,
+    &:active {
+        text-decoration: none;
+    }
+}
+
+.panel-group {
+    .btn.btn-accordion {
+        width: 100%;
+    }
+}
+
+// Date Ranger Filter buttons
+.btn-date-range {
+    margin-right: 20px;
+    .btn-default {
+        text-transform: none;
+    }
+    label {
+        margin: 0 5px 0 10px
+    }
+    .input-group-addon {
+        padding: 5px 10px;
+    }
+    input {
+        max-width: 85px;
+        &.input-sm {
+            height: 28px;
+        }
     }
 }

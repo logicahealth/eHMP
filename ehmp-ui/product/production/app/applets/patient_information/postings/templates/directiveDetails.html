@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h5 class="cwad-title">
+            <strong class="right-padding-xs">{{kind}}</strong>
+            {{formatDate entered "MM/DD/YYYY"}}
+        </h5>
+    </div>
+    <div class="col-xs-6">
+        <dl class="dl-horizontal">
+            <dt>Local Title</dt>
+            <dd>{{localTitle}}</dd>
+            <dt>Date of Note</dt>
+            <dd>{{formatDate referenceDateTime "MM/DD/YYYY HH:mm"}}</dd>
+            <dt>Author</dt>
+            <dd>{{formatName authorDisplayName ',' ', '}}</dd>
+            <dt>Urgency</dt>
+            <dd><!-- urgency to go here --></dd>
+        </dl>
+    </div>
+    <div class="col-xs-6">
+        <dl class="dl-horizontal">
+            <dt>Standard Title</dt>
+            <dd>{{standardTitle}}</dd>
+            <dt>Entry Date</dt>
+            <dd>{{formatDate entered "MM/DD/YYYY HH:mm"}}</dd>
+            <dt>Exp. Cosigner</dt>
+            <dd>{{formatName cosignerDisplayName ',' ', '}}</dd>
+            <dt>Status</dt>
+            <dd>{{statusDisplayName}}</dd>
+        </dl>
+    </div>
+    {{#each text}} {{#if content}}
+    <div class="col-xs-12">
+        <dl>
+            <dt>Comments</dt>
+            <dd class="content">{{stringCleanUp content}}</dd>
+        </dl>
+    </div>
+    {{/if}} {{/each}}
+</div>

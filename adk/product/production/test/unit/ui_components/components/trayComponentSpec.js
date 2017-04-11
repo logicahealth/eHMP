@@ -59,7 +59,7 @@ define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/co
                     it('with correct structure and attributes and is closed', function() {
                         expect(trayTestPage.TestRegion.currentView.$el).toHaveClass('sidebar');
                         expect(trayTestPage.$('.btn[type=button][data-toggle=sidebar-tray][aria-expanded=false]')).toHaveLength(1);
-                        expect(trayTestPage.$('.sidebar-tray.right[aria-hidden=true][tabindex=-1]')).toHaveLength(1);
+                        expect(trayTestPage.$('.sidebar-tray.right[aria-hidden=true][tabindex=-1][data-tray-width-scale="0.33"]')).toHaveLength(1);
                     });
 
                     it('with correct labels and content', function() {

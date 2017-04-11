@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="debug">
+	<Properties>
+		<Property name="log-path">./logs</Property>
+	</Properties>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+		<RollingFile name="CDS" fileName="${log-path}/CDSResults.log"
+			filePattern="${log-path}/myexample-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<Pattern>%d{dd/MMM/yyyy HH:mm:ss,SSS}- %c{1}: %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="1000 KB" />
+			</Policies>
+			<DefaultRolloverStrategy max="4" />
+		</RollingFile>
+
+	</Appenders>
+	<Loggers>
+		<Logger name="com.cognitive.cds" level="debug" additivity="false">
+			<AppenderRef ref="CDS" />
+		</Logger>
+		<Root level="error">
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</configuration>

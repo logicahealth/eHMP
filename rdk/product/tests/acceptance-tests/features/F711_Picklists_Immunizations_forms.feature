@@ -76,9 +76,9 @@ Scenario: Endpoint for Immunization Manufacturers File (PXVIMM IMM MAN)
   When the client requests picklist with the parameters and site "9E7A"
       | paramter name | value                     |
       | type          | immunization-manufacturer |
-      
+
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field        | value                                   |
       | record       | 1 OF 71                                 |
       | ien          | 1                                       |
@@ -94,15 +94,15 @@ Scenario: | Endpoint for Immunization Lot File (PXVIMM IMM LOT)
   When the client requests picklist with the parameters and site "9E7A"
       | paramter name | value            |
       | type          | immunization-lot |
-      
+
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field          | value                                              |
-      | record         | 1 OF 20                                            |
+      | record         | 1 OF 67                                            |
       | ien            | 15                                                 |
       | lotNumber      | A0430EE                                            |
       | manufacturer   | CSL BEHRING, INC                                   |
-      | status         | ACTIVE                                             |
+      | status         | INACTIVE                                           |
       | vaccine        | INFLUENZA, SEASONAL, INJECTABLE, PRESERVATIVE FREE |
       | expirationDate | EMPTY                                              |
       | dosesUnused    | 300                                                |
@@ -115,9 +115,9 @@ Scenario: | Endpoint for Immunization Data (PXVIMM IMMDATA)
   When the client requests picklist with the parameters and site "9E7A"
       | paramter name | value             |
       | type          | immunization-data |
-      
+
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field              | value                       |
       | ien                | 1                           |
       | name               | VACCINIA (SMALLPOX)         |
@@ -129,7 +129,7 @@ Scenario: | Endpoint for Immunization Data (PXVIMM IMMDATA)
       | mnemonic           | EMPTy                       |
       | acronym            | EMPTY                       |
       | selectableHistoric | Y                           |
-      | cdcFullVaccineName | Vaccinia (smallpox) vaccine |
+      | cdcFullVaccineName | VACCINIA (SMALLPOX) VACCINE |
       | codingSystem       | EMPTY                       |
       | vaccineInfoStmt    | EMPTY                       |
       | cdcProductName     | CONTAINS ACAM2000           |

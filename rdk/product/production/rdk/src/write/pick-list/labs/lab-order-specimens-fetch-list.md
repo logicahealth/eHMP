@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Lab order specimens [/lab-order-specimens{?site}{&fields}]
+## Lab order specimens [/lab-order-specimens{?site}]
 
 Returns a list of specimens from the TOPOGRAPHY FIELD file (#61).
 
@@ -11,8 +11,6 @@ ORWDLR32 ALLSPEC
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

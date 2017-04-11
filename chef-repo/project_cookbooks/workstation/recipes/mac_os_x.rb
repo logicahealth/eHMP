@@ -26,8 +26,6 @@ include_recipe "workstation::git"
 
 include_recipe 'build-essential'
 
-include_recipe 'firefox'
-
 include_recipe 'chrome'
 
 include_recipe 'workstation::nodejs_osx'

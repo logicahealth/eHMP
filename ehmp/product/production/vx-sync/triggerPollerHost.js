@@ -10,7 +10,7 @@ var TriggerPoller = require(global.VX_HANDLERS + 'appointment-trigger-poller/app
 var pollerUtils = require(global.VX_UTILS + 'poller-utils');
 var config = require('./worker-config');
 var logUtil = require(global.VX_UTILS + 'log');
-logUtil.initialize(config.loggers);
+logUtil.initialize(config);
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -36,25 +36,31 @@ _.each(pollers, function(poller) {
     });
 });
 
-config.addChangeCallback(function() {
-    var configVistaSites = _.keys(config.vistaSites);
-    var newSites = _.difference(configVistaSites, options.sites);
-    if(_.isArray(newSites) && newSites.length > 0) {
-        logger.info('triggerPollerHost  config file has new vista sites');
-        _.each(newSites, function(site) {
-            logger.info('triggerPollerHost  adding poller for site ' + site);
-            options.sites.push(site);
-            var newPoller = new TriggerPoller(logUtil.getAsChild(site, logger), site, config, environment, true);
-            newPoller.start(function(error) {
-                if (error) {
-                    logger.error('Failed to start poller for site: %s; error: %s.', newPoller.vistaId, error);
-                } else {
-                    logger.debug('Started poller for site: %s.', newPoller.vistaId);
-                }
-            });
-        });
-    }
-}, false);
+// COMMENT OUT NOTE:   This was commented our rather than deleted.   Currently we do not want this module to
+//                     be watching and handling config notification events.   Any change to config should
+//                     be handled by a start and stop of this system.   But in the future if it was determined
+//                     that this module shouild monitor for on the fly changes in config - the uncomment out
+//                     this code.
+//---------------------------------------------------------------------------------------------------------------
+// config.addChangeCallback('triggerPollerHost.js', function() {
+//     var configVistaSites = _.keys(config.vistaSites);
+//     var newSites = _.difference(configVistaSites, options.sites);
+//     if(_.isArray(newSites) && newSites.length > 0) {
+//         logger.info('triggerPollerHost  config file has new vista sites');
+//         _.each(newSites, function(site) {
+//             logger.info('triggerPollerHost  adding poller for site ' + site);
+//             options.sites.push(site);
+//             var newPoller = new TriggerPoller(logUtil.getAsChild(site, logger), site, config, environment, true);
+//             newPoller.start(function(error) {
+//                 if (error) {
+//                     logger.error('Failed to start poller for site: %s; error: %s.', newPoller.vistaId, error);
+//                 } else {
+//                     logger.debug('Started poller for site: %s.', newPoller.vistaId);
+//                 }
+//             });
+//         });
+//     }
+// }, false);
 
 //////////////////////////////////////////////////////////////////////////////
 // This starts an endpoint to allow pause, resume, reset, etc.

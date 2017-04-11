@@ -1,0 +1,15 @@
+PREFIX snomed: <http://snomed.info/id/> 
+PREFIX loinc:  <http://purl.bioontology.org/ontology/LNC/>  
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX oi:     <urn:va:oi:> 
+PREFIX loinc:  <http://purl.bioontology.org/ontology/LNC/> 
+PREFIX skos:   <http://www.w3.org/2004/02/skos/core#> 
+PREFIX ehmp:   <http://localhost:3030/ehmp/> 
+            
+   SELECT ?siteOrderCode ?conceptLabel 
+   FROM  ehmp:site-%s  
+   WHERE { 
+      ?labConcept ?orderable ?siteOrderCode  . 
+      FILTER( ?labConcept = snomed:%s ) . 
+      FILTER( ?orderable = oi:isPreferredOrderable ) . 
+   }

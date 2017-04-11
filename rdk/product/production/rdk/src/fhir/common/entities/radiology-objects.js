@@ -2,6 +2,7 @@
 var helpers = require('../utils/helpers.js');
 var rdk = require('../../../core/rdk');
 var utils = require('../utils/fhir-converter.js');
+var fhirResource = require('../entities/fhir-resource');
 var _ = require('lodash');
 
 function examstatusMap(jdsstatus) {
@@ -76,12 +77,12 @@ function BuildName(item) {
 }
 
 function BuildIssued(item) {
-    this.issued = utils.convertToFhirDateTime(item.dateTime);
+    this.issued = utils.convertToFhirDateTime(item.dateTime, utils.getSiteHash(item.uid));
     return this;
 }
 
 function BuildDiagnosticDateTime(item) {
-    this.diagnosticDateTime = utils.convertToFhirDateTime(item.dateTime);
+    this.diagnosticDateTime = utils.convertToFhirDateTime(item.dateTime, utils.getSiteHash(item.uid));
     return this;
 }
 
@@ -130,81 +131,66 @@ function BuildContained_and_ref(obj) {
 }
 
 function BuildText(obj) {
-    var div = [],
-        od = '<div>',
-        cd = '</div>';
+    var div = [];
     this.status = 'generated';
-    div.push(od);
-    div.push(od + 'Name: ' + obj.name.text + cd);
-    div.push(od + 'Status: ' + obj.status + cd);
-    div.push(od + 'Report Released: ' + obj.issued + cd);
-    div.push(od + 'Subject: ' + obj.subject.reference + cd);
-    div.push(od + 'Performer: ' + obj.performer.display + cd);
+    div.push('Name: ' + _.escape(obj.name.text));
+    div.push('Status: ' + _.escape(obj.status));
+    div.push('Report Released: ' + _.escape(obj.issued));
+    div.push('Subject: ' + _.escape(obj.subject.reference));
+    div.push('Performer: ' + _.escape(obj.performer.display));
 
     var org_ident = _.findWhere(obj.contained, {
         resourceType: 'Organization'
     }).identifier;
-    div.push(od + 'Organization Identifier System: ' + org_ident.system + cd);
-    div.push(od + 'Organization Identifier Value: ' + org_ident.value + cd);
-    div.push(od + 'Identifier System: ' + obj.identifier.system + cd);
-    div.push(od + 'Identifier Value: ' + obj.identifier.value + cd);
+    div.push('Organization Identifier System: ' + _.escape(org_ident.system));
+    div.push('Organization Identifier Value: ' + _.escape(org_ident.value));
+    div.push('Identifier System: ' + _.escape(obj.identifier.system));
+    div.push('Identifier Value: ' + _.escape(obj.identifier.value));
     var sc_coding = (obj.serviceCategory.coding[0] || {
         system: '',
         code: '',
         display: ''
     });
-    div.push(od + 'Service Category System: ' + sc_coding.system + cd);
-    div.push(od + 'Service Category Code: ' + sc_coding.code + cd);
-    div.push(od + 'Service Category Display: ' + sc_coding.display + cd);
-    div.push(od + 'Diagnostic Date: ' + obj.diagnosticDateTime + cd);
+    div.push('Service Category System: ' + _.escape(sc_coding.system));
+    div.push('Service Category Code: ' + _.escape(sc_coding.code));
+    div.push('Service Category Display: ' + _.escape(sc_coding.display));
+    div.push('Diagnostic Date: ' + _.escape(obj.diagnosticDateTime));
 
     for (var i = 0, l = obj.extension.length; i < l; i++) {
-        div.push(od + 'Extension Url: ' + obj.extension[i].url);
-        div.push(od + 'Extension Value: ' + obj.extension[i].valueString);
+        div.push('Extension Url: ' + _.escape(obj.extension[i].url));
+        div.push('Extension Value: ' + _.escape(obj.extension[i].valueString));
     }
 
-    div.push(od + 'Result Text: ' + (obj.result[0] || {
+    div.push('Result Text: ' + (_.escape(obj.result[0]) || {
         display: ''
-    }).display + cd);
+    }).display);
     var obs_coding = (_.findWhere(obj.contained, {
         resourceType: 'Observation'
-    }).name.coding[0] || {
+    }).code.coding[0] || {
         system: '',
         code: '',
         display: ''
     });
-    div.push(od + 'Result Name System: ' + obs_coding.system + cd);
-    div.push(od + 'Name Code: ' + obs_coding.code + cd);
-    div.push(od + 'Name Display: ' + obs_coding.display + cd);
-    div.push(od + 'Conclusion:' + cd);
-    div.push(od + 'Coded Diagnostic Text: ' + (obj.codedDiagnosis[0] || {
+    div.push('Result Name System: ' + _.escape(obs_coding.system));
+    div.push('Name Code: ' + _.escape(obs_coding.code));
+    div.push('Name Display: ' + _.escape(obs_coding.display));
+    div.push('Conclusion:');
+    div.push('Coded Diagnostic Text: ' + (_.escape(obj.codedDiagnosis[0]) || {
         text: ''
-    }).text + cd);
-    this.div = div.join('');
+    }).text);
+    this.div = '<div>' + div.join('</div><div>') + '</div>';
     return this;
 }
 
 function CItemObservation(obj) {
     this.resourceType = 'Observation';
     this._id = helpers.generateUUID();
-    this.name = {
-        coding: [{
-            system: 'CPT OID: 2.16.840.1.113883.6.12',
-            code: 'None',
-            display: obj.typeName
-        }],
-        text: obj.name
-    };
-    /*    this.item = [{
-        code: {
-            coding: [{
-                system: 'CPT OID: 2.16.840.1.113883.6.12',
-                code: 'None',
-                display: obj.typeName
-            }],
-            text: obj.name
-        }
-    }];*/
+
+    this.code = new fhirResource.CodeableConcept(obj.typeName, [new fhirResource.Coding('None', obj.typeName, 'CPT OID: 2.16.840.1.113883.6.12')]);
+    
+    this.issued = utils.convertToFhirDateTime(obj.dateTime, utils.getSiteHash(obj.uid));
+    this.appliesDateTime = utils.convertToFhirDateTime(obj.stampTime, utils.getSiteHash(obj.uid));
+    
     return this;
 }
 

@@ -1,12 +1,13 @@
-HMPEFX ;SLC/MKB -- Reference data update ; 7/19/12 2:26pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPEFX ;SLC/MKB,ASMR/RRB - Reference data update;7/19/12 2:26pm
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
  ; ^DPT                         10035
  ; MPIF001                       2701
  ; XLFSTR                       10104
+ Q
  ;
 EN(LAST,MAX) ; -- get data from ^XTMP("HMPEF-<date>",n)
  ;[MAX not used yet]

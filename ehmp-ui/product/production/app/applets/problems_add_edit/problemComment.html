@@ -3,12 +3,12 @@
 <input class="pull-left commentText" maxlength="60" value="{{comment}}" {{#unless edit-mode}} disabled {{/unless}}/>
 <div class="problem-comment-actions pull-right hidden">
     <div {{#if edit-mode}}class="hidden" aria-hidden="true"{{/if}}>
-        <span class="edit-comment"><b class="fa fa-pencil"></b></span>
-        <span class="remove-comment"><b class="fa fa-times"></b></span>
+        <span class="edit-comment"><i class="fa fa-pencil"></i></span>
+        <span class="remove-comment"><i class="fa fa-times"></i></span>
     </div>
     <div {{#unless edit-mode}}class="hidden" aria-hidden="true" {{/unless}}>
-        <span class="save-comment"><b class="fa fa-check"></b></span>
-        <span class="cancel-comment"><b class="fa fa-times"></b></span>
+        <span class="save-comment"><i class="fa fa-check"></i></span>
+        <span class="cancel-comment"><i class="fa fa-times"></i></span>
     </div>
 </div>
 {{#if edit-mode}}

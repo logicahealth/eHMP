@@ -5,7 +5,7 @@
 # Provider:: zipfile
 #
 # Copyright:: 2010, VMware, Inc.
-# Copyright:: 2011-2015, Chef Software, Inc.
+# Copyright:: 2011, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-use_inline_resources if defined?(use_inline_resources)
 
 include Windows::Helper
 
@@ -33,7 +32,7 @@ action :unzip do
     zip.each do |entry|
       path = ::File.join(@new_resource.path, entry.name)
       FileUtils.mkdir_p(::File.dirname(path))
-      if @new_resource.overwrite && ::File.exist?(path) && !::File.directory?(path)
+      if @new_resource.overwrite && ::File.exists?(path) && !::File.directory?(path)
         FileUtils.rm(path)
       end
       zip.extract(entry, path)
@@ -49,11 +48,13 @@ action :zip do
   @new_resource.path.downcase.gsub!(::File::SEPARATOR, ::File::ALT_SEPARATOR)
   Chef::Log.debug("zip #{@new_resource.source} => #{@new_resource.path} (overwrite=#{@new_resource.overwrite})")
 
-  if @new_resource.overwrite == false && ::File.exist?(@new_resource.path)
+  if @new_resource.overwrite == false && ::File.exists?(@new_resource.path)
     Chef::Log.info("file #{@new_resource.path} already exists and overwrite is set to false, exiting")
   else
     # delete the archive if it already exists, because we are recreating it.
-    ::File.unlink(@new_resource.path) if ::File.exist?(@new_resource.path)
+    if ::File.exists?(@new_resource.path)
+      ::File.unlink(@new_resource.path)
+    end
     # only supporting compression of a single directory (recursively).
     if ::File.directory?(@new_resource.source)
       z = Zip::File.new(@new_resource.path, true)
@@ -78,14 +79,15 @@ action :zip do
 end
 
 private
-
 def ensure_rubyzip_gem_installed
-  require 'zip'
-rescue LoadError
-  Chef::Log.info("Missing gem 'rubyzip'...installing now.")
-  chef_gem 'rubyzip' do
-    version node['windows']['rubyzipversion']
-    action :install
+  begin
+    require 'zip'
+  rescue LoadError
+    Chef::Log.info("Missing gem 'rubyzip'...installing now.")
+    chef_gem "rubyzip" do
+      version node['windows']['rubyzipversion']
+      action :install
+    end
+    require 'zip'
   end
-  require 'zip'
 end

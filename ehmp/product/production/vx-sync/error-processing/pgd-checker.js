@@ -5,8 +5,7 @@ var request = require('request');
 function check(logger, config, callback) {
 	logger.debug('pgd-checker.check()');
 
-	var host = config.jmeadows.defaults.host;
-	var url = 'http://' + host + ':' + 54001 + '/ping';
+    var url = 'http://' + config.jmeadows.defaults.host + ':' + config.jmeadows.defaults.adminPort + '/ping';
 	request(url, function(error, response, body) {
 		if (error) {
 			logger.info('pgd-checker.check() Error attempting to connect to "%s": %s', url, error);

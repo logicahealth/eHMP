@@ -2,7 +2,7 @@
 Feature: Enhance the Patient Selection Process - Clinic time frame search
 
 Background: 
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
     When the patient search screen is displayed
 
 @TC774
@@ -42,7 +42,7 @@ Scenario: Verify order of the colomn heading When the user clicks on the Clinics
     # |Patient Name | SSN | Clinic Name| Appt Date/Time  | Date of Birth | Gender |
     | Appt Date/Time| Clinic Name|Patient Name|SSN | Date of Birth | Gender |
 
-@US7830 @TC399 @TC985 
+@US7830 @TC399 @TC985
 Scenario: Verify the Custom date Clinic search displays correct results
 	Given the call to my cprs list is completed
 	When the user clicks the Clinics pill
@@ -70,7 +70,7 @@ Scenario: Verify the Custom date Clinic search displays no results for different
 	Given the call to my cprs list is completed
 	When the user clicks the Clinics pill
 	And the user clicks Today
-	And the user selects Clinic "Cwt Clinic"
+	And the user selects Clinic "CWT CLINIC"
 	Then the clinic results displays No results found.
 
 @TC770 @DE2304
@@ -85,7 +85,7 @@ Scenario: Verify the Apply button is always enabled
 	Then the Apply button is enabled
 
 
-@TC773
+@TC773 @debug @DE5314
 Scenario: Verify the custom filter resets when a user clicks on one of the other date range button
    Given the call to my cprs list is completed
 	When the user clicks the Clinics pill

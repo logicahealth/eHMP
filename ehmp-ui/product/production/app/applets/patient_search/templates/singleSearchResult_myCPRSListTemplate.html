@@ -1,41 +1,35 @@
 <div class="list-group-item-text row cursor-hand">
-	<div class="col0 data col-md-2 no-padding-right">
+	<div class="col0 data all-padding-no all-margin-no col-xs-2">
 		<span class="sr-only">. Appointment Date and Time</span>
 		{{formatDate appointment "MM/DD/YYYY HH:mm"}}
 	</div>
-	<div class="col1 data col-md-2 no-padding-right">
+	<div class="col1 data left-padding-no col-xs-1">
 		<span class="sr-only">. Location</span>
 		{{locationName}}
 	</div>
-	<div class="col2 data col-md-2 no-padding-right patientDisplayName">
+	<div class="col2 data col-xs-3 patientDisplayName">
 		<span class="sr-only">. Patient record, name</span>
-		{{formatName fullName ',' ', '}}
+		{{displayName}}
 	</div>
-	<div class="col3 data col-md-2 no-padding-right ssn">
+	<div class="col3 data left-padding-no col-xs-2 ssn">
 		<span class="sr-only">. Social security number</span>
-		{{#if sensitive}}
-			{{ssn}}
-		{{else}}
-			{{formatSSN ssn}}
-		{{/if}}
+		{{ssn}}
 	</div>
-	<div class="col4 data col-md-2 no-padding-right dob">
+	<div class="col4 data left-padding-no col-xs-1 dob">
 		<span class="sr-only">. Date of birth</span>
-		{{#if sensitive}}
-			{{birthDate}}
-		{{else}}
-			{{formatDate birthDate "MM/DD/YYYY"}}
-			<span class="sr-only">Age</span>
-			({{getAge birthDate}}y)
+		{{birthDate}}
+		{{#if age }}
+		<span class="sr-only">. Age</span>
+		({{age}}y)
 		{{/if}}
 	</div>
-	<div class="col5 data col-md-1 no-padding-right">
+	<div class="col5 data left-padding-xl col-xs-1">
 		<span class="sr-only">. Gender</span>
 		{{genderName}}
 	</div>
-	<div class="col6 data col-md-1 no-padding-right">
+	<div class="col6 data left-padding-xl col-xs-2">
 		<span class="sr-only">. Room-Bed</span>
 		{{roomBed}}
 	</div>
-	<span class="sr-only">Press enter to select this patient.</span>
+	<span class="sr-only">Press enter to activate patient, then tab to the patient confirmation. To search for a new patient press ALT + E.</span>
 </div>

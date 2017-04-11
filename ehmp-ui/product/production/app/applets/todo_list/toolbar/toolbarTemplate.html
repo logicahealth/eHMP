@@ -1,0 +1,25 @@
+<form class="top-padding-xs bottom-padding-xs left-padding-xs">
+    <div class="form-group">
+        <label for="{{instanceId}}-assigned-to-options">Assigned to:</label>
+        <select id="{{instanceId}}-assigned-to-options" name="assignedTo" title="Use up and down arrows to view options and then press enter to select.">
+            {{#each assignedTo}}
+            {{#if show}}
+            <option value="{{value}}">{{displayText}}</option>
+            {{/if}}
+            {{/each}}
+        </select>
+        {{#if isSummaryView}}
+        <p class="inline-block-display left-margin-xs">Displaying only Due tasks</p>
+        {{else}}
+        <span class="left-margin-xs divider-vertical"></span>
+        <label for="{{instanceId}}-status-options" class="left-margin-xs right-margin-xs">Display:</label>
+        <select id="{{instanceId}}-status-options" name="status" title="Use up and down arrows to view options and then press enter to select.">
+            {{#each status}}
+                {{#if show}}
+                    <option value="{{value}}">{{displayText}}</option>
+                {{/if}}
+            {{/each}}
+        </select>
+        {{/if}}
+    </div>
+</form>

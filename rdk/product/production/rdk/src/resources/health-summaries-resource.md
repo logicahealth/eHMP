@@ -2,13 +2,11 @@
 
 ## Healthsummaries get [{{{path}}}]
 
-### Sites Info From Patient Data [GET {{{path}}}/sites{?pid}{&fields}]
+### Sites Info From Patient Data [GET {{{path}}}/sites{?pid}]
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -47,7 +45,7 @@
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Report Content By Report ID [GET {{{path}}}/reports{?pid}{&id}{&site.code}{&fields}]
+### Report Content By Report ID [GET {{{path}}}/reports{?pid}{&id}{&site.code}]
 
 + Parameters
 
@@ -56,8 +54,6 @@
     + id (string, required) - report id
 
     :[site.code]({{{common}}}/parameters/site.code.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

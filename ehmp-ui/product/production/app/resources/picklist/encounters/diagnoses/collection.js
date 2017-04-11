@@ -51,7 +51,7 @@ define([], function() {
             	type: 'encounters-diagnosis-codes-for-clinic',
                 dateTime: options.dateTime || '',
                 site: this.user.get('site'),
-                clinic: options.clinicIen || ''
+                locationUid: options.locationUid || ''
             };
         }    });
 

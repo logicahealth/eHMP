@@ -27,6 +27,33 @@
     <Name>%Service_ECP</Name>
   </Services>
 </ServicesExport>
+<ApplicationsExport>
+  <Applications>
+    <AutheEnabled>32</AutheEnabled>
+    <AutoCompile>false</AutoCompile>
+    <CookiePath>/csp/sys/</CookiePath>
+    <CSPZENEnabled>true</CSPZENEnabled>
+    <Description>System Management Portal</Description>
+    <Enabled>true</Enabled>
+    <GroupById>%ISCMgtPortal</GroupById>
+    <HyperEvent>0</HyperEvent>
+    <InbndWebServicesEnabled>true</InbndWebServicesEnabled>
+    <IsNameSpaceDefault>true</IsNameSpaceDefault>
+    <LockCSPName>true</LockCSPName>
+    <Name>/csp/sys</Name>
+    <NameSpace>%SYS</NameSpace>
+    <Package>%cspapp</Package>
+    <Path>/usr/cachesys/csp/sys/</Path>
+    <Recurse>true</Recurse>
+    <ServeFiles>2</ServeFiles>
+    <ServeFilesTimeout>3600</ServeFilesTimeout>
+    <SuperClass>%CSP.Util.Domain</SuperClass>
+    <Timeout>28800</Timeout>
+    <TwoFactorEnabled>false</TwoFactorEnabled>
+    <Type>3</Type>
+    <UseCookies>2</UseCookies>
+  </Applications>
+</ApplicationsExport>
 <EventsExport>
   <Events>
     <Description>Audit unsuccessful login events</Description>

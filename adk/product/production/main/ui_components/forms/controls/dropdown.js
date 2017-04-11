@@ -16,6 +16,7 @@ define([
             icon: '',
             id: '',
             type: 'button',
+            disabled: false,
             extraClasses: [],
             items: [],
             title: ''
@@ -27,7 +28,7 @@ define([
             'click a': function(e) {
                 e.preventDefault();
             },
-            'control:disable': function(e, disableOption) {
+            'control:disabled': function(e, disableOption) {
                 if (_.isBoolean(disableOption)) {
                     this.$('button').prop('disabled', disableOption);
                 }
@@ -37,7 +38,12 @@ define([
                 }
                 e.stopPropagation();
             }
-        }, PuppetForm.CommonPrototype.events)
+        }, PuppetForm.CommonPrototype.events),
+        onRender: function() {
+            PuppetForm.Control.prototype.onRender.apply(this, arguments);
+            var field = this.getOption('field') || {};
+            this.$el.trigger('control:disabled', field.get('disabled'));
+        }
     };
 
     var Dropdown = PuppetForm.DropdownControl = PuppetForm.Control.extend(DropdownPrototype);

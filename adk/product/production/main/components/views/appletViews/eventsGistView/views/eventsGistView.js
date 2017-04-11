@@ -33,7 +33,9 @@ define([
             this.chartPointer.highcharts(chartConfig);
 
             // needed to disable ie11 508 tab focus on svg in gistItem
-            this.$('svg').attr('focusable', 'false');
+            this.$el.find('svg').attr('focusable', 'false');
+            this.$el.find('svg').attr('aria-hidden', 'true');
+            this.$el.find('svg desc').empty();
         },
         onBeforeDestroy: function() {
             if (this.chartPointer && this.chartPointer.length > 0) {
@@ -45,9 +47,9 @@ define([
         },
         initialize: function() {
             var buttonTypes = [];
-            var tlbrOpts = {
-                targetElement: this,
-            };
+
+            var tlbrOpts = {};
+
             var toolbarView;
 
             if (this._enableTileSorting) {
@@ -55,7 +57,11 @@ define([
             }
 
             if (this.options.showInfoButton) {
-                buttonTypes.push('infobutton'); //'infobutton'
+                buttonTypes.push('infobutton');
+            }
+
+            if(this.options.showCrsButton){
+                buttonTypes.push('crsbutton');
             }
 
             buttonTypes.push('detailsviewbutton');
@@ -73,6 +79,11 @@ define([
                 }
             }
 
+            if (this.options.showEditButton) {
+                buttonTypes.push('editviewbutton');
+                tlbrOpts.disableNonLocal = this.options.disableNonLocal;
+            }
+
             tlbrOpts.buttonTypes = buttonTypes;
             this.toolbarOptions = tlbrOpts;
         },
@@ -82,7 +93,7 @@ define([
                     var currentScreen = Messaging.request('get:current:screen');
                     var models = [];
                     _.each(filteredScreenList, function(filteredScreen) {
-                        if(filteredScreen.id !== currentScreen.id){
+                        if (filteredScreen.id !== currentScreen.id) {
                             var scrnObj = {
                                 displayText: filteredScreen.title,
                                 url: ('#' + filteredScreen.routeName)
@@ -109,6 +120,11 @@ define([
             };
         },
         template: eventsGistLayoutTemplate,
+        events: {
+            'after:hidetoolbar': function(e) {
+                this.$el.find('.dragging-row').removeClass('dragging-row');
+            }
+        },
         childView: EventGistItem.extend({}),
         childViewContainer: ".gist-item-list",
         initialize: function(options) {
@@ -117,7 +133,10 @@ define([
                 binningOptions: options.binningOptions,
                 appletOptions: options,
                 showInfoButton: options.showInfoButton === false ? false : true,
-                showLinksButton: options.showLinksButton || false
+                showLinksButton: options.showLinksButton || false,
+                showEditButton: options.showEditButton || false,
+                disableNonLocal: options.disableNonLocal || false,
+                showCrsButton: options.showCrsButton || false
             };
             this.collectionParser = options.collectionParser || function(collection) {
                 return collection;

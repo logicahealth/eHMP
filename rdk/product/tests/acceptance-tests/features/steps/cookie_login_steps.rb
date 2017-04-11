@@ -26,22 +26,11 @@ end
 Given(/^the client has logged in with a cookie$/) do
   # The code used in this function was pulled from an example 
   # https://github.com/jnunemaker/httparty/blob/master/examples/tripit_sign_in.rb
-  default_auth = HTTPartyWithBasicAuth.auth
-  
-  access_code = default_auth['accessCode']
-  verify_code = default_auth['verifyCode']
-  site = default_auth['site']
-  jsonreq = { "accessCode"=> access_code, "verifyCode" => verify_code, "site" => site } 
-  reqjson = jsonreq.to_json
-
-  authentication_path = RDKQuery.new('authentication-authentication').path
-  authentication_response = HTTParty.get(authentication_path)
-  @response = HTTPartyWithBasicAuth.post_json_with_authorization(authentication_path, reqjson, { 'Content-Type' => 'application/json', 'Cookie' => authentication_response.headers['Set-Cookie'] })
-
-  @cookie = @response.request.options[:headers]['Cookie']
+  p "Client session started"
+  @response = HTTPartyRDK.acquire_tokens
 end
 
-def request_restricted_resource_with_cookie(cookie)
+def request_restricted_resource
   # the 'restricted resource' choosen was patient-search-pid because it was 
   # identified as a low cost request
   # pid = 10108V420871, was choosen because it is a common patient used in testing
@@ -51,26 +40,26 @@ def request_restricted_resource_with_cookie(cookie)
   query = BuildQueryWithTitle.new(title)
   query.add_parameter('pid', pid)
   path = query.path
-  return HTTParty.get path, headers: { 'Cookie' => cookie }
+  return HTTPartyRDK.wrap_httparty('get', path)
 end
 
 Given(/^the client has requested a restricted resource$/) do
-  @response = request_restricted_resource_with_cookie @cookie
+  @response = request_restricted_resource
 end
 
 When(/^the client refreshes the session$/) do
   path = RDClass.resourcedirectory_fetch.get_url('authentication-refreshToken')
-  p path
-  @response = HTTParty.get path, headers: { 'Cookie' => @cookie }
+  p "Client session refreshed at #{path}"
+  @response = HTTPartyRDK.wrap_httparty('get', path)
 end
 
 Given(/^the client has verified it can access a restricted resource$/) do
-  @response = request_restricted_resource_with_cookie @cookie
+  @response = request_restricted_resource
   expect(@response.code).to eq(200), "response code was #{@response.code}: response body #{@response.body}"
 end
 
 When(/^the client destroys the sesion$/) do
   path = RDClass.resourcedirectory_fetch.get_url('authentication-destroySession')
-  p path
-  @response = HTTParty.delete path, headers: { 'Cookie' => @cookie }
+  p "Client session destroyed at #{path}"
+  @response = HTTPartyRDK.wrap_httparty('delete', path)
 end

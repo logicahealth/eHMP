@@ -1,0 +1,26 @@
+body.patient-context {
+	#center-region {
+	    background: $primary-light; /* For browsers that do not support gradients */
+	    background: linear-gradient(to bottom, $pure-white  10%, $primary-light 25%, $primary-light 100%); /* Standard syntax */
+	}
+	.navbar.navbar-default {
+	    // background-color: $primary-lighter;
+	    background-color: $primary-light;
+	}
+	#navigation-region{
+		> div {
+			-ms-flex-pack: space-between;
+			justify-content: space-between;
+			.context-navigation-bar{
+				&.right{
+					flex-grow: 1;
+					flex-shrink: 0;
+					> .nav{
+						max-width:1000px;
+						margin: 0 0 0 auto;
+					}
+				}
+			}
+		}
+	}
+}

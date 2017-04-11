@@ -1,5 +1,5 @@
 HMPUTIL2 ; Agilex/hrubovcak -- HMP utilities routine ;Jun 10, 2015@15:13:03
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 2
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 2
  ;Per VA Directive 6402, this routine should not be modified.
  ;
 ADHOC(HMPDMN,HMPFCNT,DFN,UID,STMPTM,DLTFLG) ; Add syncStart metastamp and syncStatus to unsolicited updates

@@ -1,6 +1,6 @@
 # Group FHIR
 
-## Referralrequest get Referral Request [{{{path}}}{?subject.identifier}{&start}{&limit}{&fields}]
+## Referralrequest get Referral Request [{{{path}}}{?subject.identifier}{&start}{&limit}]
 
 + Parameters
 
@@ -9,8 +9,6 @@
     :[start]({{{common}}}/parameters/start.md)
 
     :[limit]({{{common}}}/parameters/limit.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Fhir referralrequest [GET]

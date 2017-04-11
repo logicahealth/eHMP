@@ -12,7 +12,7 @@ Scenario: Search Detail Trend med
 @F664_PatientRecord_Search_Detail_Trend_Scenario_2
 Scenario: Search Detail Trend
   Given a patient with pid "9E7A;100125" has been synced through the RDK API
-  When the client searches detailed trends for pid "9E7A;100125" with uid "urn:va:med:2939:135:5587940"
+  When the client searches detailed trends for pid "9E7A;100125" with uid "urn:va:med:9016:5000000009V082878:5587940"
   Then a successful response is returned
   And the response contains at least 1 item
 

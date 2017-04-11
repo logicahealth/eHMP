@@ -1,25 +1,38 @@
 'use strict';
 
-var favorites = require('./favorites');
-
 module.exports.getResourceConfig = function() {
     return [{
         name: 'favorites-get',
         path: '',
-        get: favorites.getFavorites,
+        get: callGet,
         requiredPermissions: [],
-        isPatientCentric: false
+        isPatientCentric: false,
+        subsystems: ['pjds', 'favoriteOrderable']
     },{
         name: 'favorites-add',
         path: '',
-        post: favorites.addFavorites,
+        post: callAdd,
         requiredPermissions: [],
-        isPatientCentric: false
+        isPatientCentric: false,
+        subsystems: ['pjds', 'favoriteOrderable']
     },{
         name: 'favorites-delete',
         path: '',
-        delete: favorites.deleteFavorites,
+        delete: callDelete,
         requiredPermissions: [],
-        isPatientCentric: false
+        isPatientCentric: false,
+        subsystems: ['pjds', 'favoriteOrderable']
     }];
 };
+
+function callGet(req, res) {
+    req.app.subsystems.favoriteOrderable.getFavorites(req, res);
+}
+
+function callAdd(req, res) {
+    req.app.subsystems.favoriteOrderable.addFavorites(req, res);
+}
+
+function callDelete(req, res) {
+    req.app.subsystems.favoriteOrderable.deleteFavorites(req, res);
+}

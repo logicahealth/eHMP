@@ -57,15 +57,16 @@ function asuFilter(logger, configuration, userClassUid, roleNames, docStatus, ac
         //console.log(JSON.stringify(jsonParams, null, 2));
         asuProcess.evaluate(jsonParams, null, httpConfig, null, logger, function (error, asuResponses) {
             if (error) {
-                logger.error('progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint ERROR asuProcess.evaluate error occurred: ' + error);
+                logger.error({error: error}, 'progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint ERROR asuProcess.evaluate error occurred');
                 return callback('progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint ERROR asuProcess.evaluate error occurred: ' + error);
             }
             if (typeof asuResponses !== 'object') {
                 logger.error('progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint ERROR asuProcess.evaluate did not return a JSON String: ' + asuResponses);
                 return callback('progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint asuProcess.evaluate did not return a JSON String: ' + asuResponses);
             }
-            //logger.debug(asuResponses);
+
             var asuApproved = false;
+            var myErrorMessage = undefined;
             _.each(asuResponses, function (asuResponse) {
                 if (asuResponse.hasPermission === false) {
                     asuApproved = false;
@@ -75,8 +76,9 @@ function asuFilter(logger, configuration, userClassUid, roleNames, docStatus, ac
                     asuApproved = true;
                 }
                 else {
-                    logger.error('progress-notes-titles-endpoint.asuFilter ERROR asuProcess.evaluate.asuResponse didn\'t include a hasPermission: ' + asuResponses);
-                    return callback('progress-notes-titles-endpoint.asuFilter ERROR asuProcess.evaluate.asuResponse didn\'t include a hasPermission: ' + asuResponse);
+                    myErrorMessage = 'progress-notes-titles-endpoint.asuFilter ERROR asuProcess.evaluate.asuResponse didn\'t include a hasPermission: ' + JSON.stringify(asuResponse);
+                    asuApproved = undefined;
+                    return false;
                 }
             });
 
@@ -88,12 +90,12 @@ function asuFilter(logger, configuration, userClassUid, roleNames, docStatus, ac
             //
             //progressNote.response = asuResponses;
             progressNote.asuApproved = asuApproved;
-            callback();
+            callback(myErrorMessage);
         });
     }, function(err) {
         logger.debug('progress-notes-titles-endpoint.asuFilter asu approved finished calling asu');
         if (err) {
-            logger.error('progress-notes-titles-endpoint.asuFilter ERROR asu error occurred: ' + err);
+            logger.error({error: err}, 'progress-notes-titles-endpoint.asuFilter ERROR asu error occurred');
             return finished(err);
         }
 
@@ -117,6 +119,7 @@ function asuFilter(logger, configuration, userClassUid, roleNames, docStatus, ac
             });
     });
 }
+module.exports._asuFilter = asuFilter;
 
 module.exports.getResourceConfig = function(/*app*/) {
     var resourceConfig = [{
@@ -165,7 +168,7 @@ function getDefaultUserClass(req, callback) {
 function updateDatabase(req, query, progressNotes, error, callback) {
     dbList.updateDatabase(req.logger, query, new Date(), progressNotes, function (dbError, dbDataUpdated) {
         if (dbError) {
-            req.logger.error('progress-notes-titles-endpoint...updateDatabase ERROR from asuFilter: ' + error);
+            req.logger.error({error: error}, 'progress-notes-titles-endpoint...updateDatabase ERROR from asuFilter');
             return callback(dbError);
         }
 
@@ -180,7 +183,7 @@ function asuFilterAndUpdateDB(req, userClassUid, roleNames, docStatus, actionNam
 
     asuFilter(req.logger, req.app.config, userClassUid, roleNames, docStatus, actionNames, site, retValue, function (error, progressNotes) {
         if (error) {
-            req.logger.error('progress-notes-titles-endpoint...asuFilter ERROR from asuFilter: ' + error);
+            req.logger.error({error: error}, 'progress-notes-titles-endpoint...asuFilter ERROR from asuFilter');
             return callback(error);
         }
 
@@ -222,14 +225,14 @@ function fetchProgressNotes(req, res) {
     getDefaultUserClass(req,function(errorDUC, response, body) {
         var errorStatus = (response || {}).statusCode || 500;
         if (errorDUC) {
-            req.logger.debug('progress-notes-titles-endpoint...getDefaultUserClass ERROR Could not obtain default user class: ' + errorDUC);
+            req.logger.debug({error: errorDUC}, 'progress-notes-titles-endpoint...getDefaultUserClass ERROR Could not obtain default user class');
             return serverSend(res, 'progress-notes-titles-endpoint...getDefaultUserClass ERROR Could not obtain default user class: ' + errorDUC, null, errorStatus);
         }
         try {
             req.logger.debug({parsing: body});
             body = JSON.parse(body);
         } catch (e) {
-            req.logger.error('progress-notes-titles-endpoint...getDefaultUserClass ERROR parsing data: ' + e);
+            req.logger.error({error: e}, 'progress-notes-titles-endpoint...getDefaultUserClass ERROR parsing data');
             return serverSend(res, 'progress-notes-titles-endpoint...getDefaultUserClass ERROR parsing data: ' + e, null, errorStatus);
         }
 
@@ -262,7 +265,7 @@ function fetchProgressNotes(req, res) {
 
         dbList.retrieveDataFromDB(req.logger, pickListConfig[i].asuDataNeedsRefreshAfterMinutes, query, function(errorDB, dbData) {
             if (errorDB) {
-                req.logger.debug('progress-notes-titles-endpoint...retrieveDataFromDB Data didn\'t exist in db yet: ' + errorDB);
+                req.logger.debug({error: errorDB}, 'progress-notes-titles-endpoint...retrieveDataFromDB Data didn\'t exist in db yet');
                 return serverSend(res, errorDB);
             }
 
@@ -284,7 +287,7 @@ function fetchProgressNotes(req, res) {
 
             pickListInMemoryRpcCall.inMemoryRpcCall(req, site, 'progress-notes-titles', function(err, retValue, statusCode, headers) {
                 if (err) {
-                    req.logger.error('progress-notes-titles-endpoint...inMemoryRpcCall ERROR: ' + err);
+                    req.logger.error({error: err}, 'progress-notes-titles-endpoint...inMemoryRpcCall ERROR');
 
                     return serverSend(res, err);
                 }

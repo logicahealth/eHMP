@@ -54,24 +54,24 @@ SET(ARGS,BODY) ; Store patient metastamps from a source
  ; Overall stampTime
  S SOURCESTAMP=$G(@OBJECT@("sourceMetaStamp",SOURCE,"stampTime"))
  ; Ensure overall stampTime is valid
- I '$$ISSTMPTM^VPRSTMP(SOURCESTAMP) D SETERROR^VPRJRER(228,"Invalid Source stampTime passed") Q ""
+ I '$$ISSTMPTM^VPRSTMP(SOURCESTAMP) D SETERROR^VPRJRER(228,"Invalid Source stampTime passed: "_SOURCESTAMP) Q ""
  ; Loop through the sourceMetaStamp
  S DOMAIN=""
  S ERR=0
  F  S DOMAIN=$O(@OBJECT@("sourceMetaStamp",SOURCE,"domainMetaStamp",DOMAIN)) Q:DOMAIN=""  Q:ERR  D
  . ; Ensure Domain stampTimes is valid
  . S DOMAINSTAMP=$G(@OBJECT@("sourceMetaStamp",SOURCE,"domainMetaStamp",DOMAIN,"stampTime"))
- . I '$$ISSTMPTM^VPRSTMP(DOMAINSTAMP) D SETERROR^VPRJRER(228,"Invalid Domain stampTime passed") S ERR=1 Q
+ . I '$$ISSTMPTM^VPRSTMP(DOMAINSTAMP) D SETERROR^VPRJRER(228,"Invalid Domain "_DOMAIN_" stampTime passed: "_DOMAINSTAMP) S ERR=1 Q
  . ; Ensure Event stampTimes is valid
  . S EVENT=""
  . F  S EVENT=$O(@OBJECT@("sourceMetaStamp",SOURCE,"domainMetaStamp",DOMAIN,"eventMetaStamp",EVENT)) Q:EVENT=""  Q:ERR  D
  . . S EVENTSTAMP=$G(@OBJECT@("sourceMetaStamp",SOURCE,"domainMetaStamp",DOMAIN,"eventMetaStamp",EVENT,"stampTime"))
- . . I '$$ISSTMPTM^VPRSTMP(EVENTSTAMP) D SETERROR^VPRJRER(228,"Invalid event stampTime passed") S ERR=1 Q
+ . . I '$$ISSTMPTM^VPRSTMP(EVENTSTAMP) D SETERROR^VPRJRER(228,"Invalid event "_EVENT_" stampTime passed: "_EVENTSTAMP) S ERR=1 Q
  I ERR Q ""
  ;
  ; Everything is ok, store the metastamp
  ; If this is the first metastamp stored, update lastAccessTime
- I $D(^VPRSTATUS(PID))=0,$G(^VPRMETA("JPID",JPID,"lastAccessTime"))="" D
+ I $D(^VPRSTATUS(JPID,PID))=0,$G(^VPRMETA("JPID",JPID,"lastAccessTime"))="" D
  . S LASTTIME=$$CURRTIME^VPRJRUT
  . S ^VPRMETA("JPID",JPID,"lastAccessTime")=LASTTIME
  ;
@@ -80,9 +80,9 @@ SET(ARGS,BODY) ; Store patient metastamps from a source
  ; Use locking to ensure no one else is modifying the metastamp when a new one is stored
  ;
  ; ** Begin Critical Section **
- L +^VPRSTATUS(PID,SSOURCE):$G(^VPRCONFIG("timeout"),5) E  D SETERROR^VPRJRER(502) K @OBJECT Q ""
+ L +^VPRSTATUS(JPID,PID,SSOURCE):$G(^VPRCONFIG("timeout"),5) E  D SETERROR^VPRJRER(502) K @OBJECT Q ""
  ; Set sourcestamp
- S ^VPRSTATUS(PID,SSOURCE,"stampTime")=SOURCESTAMP
+ S ^VPRSTATUS(JPID,PID,SSOURCE,"stampTime")=SOURCESTAMP
  ; foreach domain
  S DOMAIN=""
  F  S DOMAIN=$O(@OBJECT@("sourceMetaStamp",SOURCE,"domainMetaStamp",DOMAIN)) Q:DOMAIN=""  D
@@ -92,7 +92,7 @@ SET(ARGS,BODY) ; Store patient metastamps from a source
  . ; Store the domain stampTime
  . S DOMAINSTAMP=$G(@OBJECT@("sourceMetaStamp",SOURCE,"domainMetaStamp",DOMAIN,"stampTime"))
  . ; We are guaranteed that DOMAINSTAMP exists and is valid since we checked it already
- . S ^VPRSTATUS(PID,SSOURCE,DOMAIN,DOMAINSTAMP)=""
+ . S ^VPRSTATUS(JPID,PID,SSOURCE,DOMAIN,DOMAINSTAMP)=""
  . ;
  . ; foreach event
  . S EVENT=""
@@ -100,10 +100,10 @@ SET(ARGS,BODY) ; Store patient metastamps from a source
  . . ; Store the event stampTime
  . . ; We are guaranteed that the EVENTSTAMP exists and is valid since we checked it already
  . . S EVENTSTAMP=$G(@OBJECT@("sourceMetaStamp",SOURCE,"domainMetaStamp",DOMAIN,"eventMetaStamp",EVENT,"stampTime"))
- . . S ^VPRSTATUS(PID,SSOURCE,DOMAIN,EVENT,EVENTSTAMP)=""
+ . . S ^VPRSTATUS(JPID,PID,SSOURCE,DOMAIN,EVENT,EVENTSTAMP)=""
  . . ; check to see if the old data was stored
- . . I $G(^VPRSTATUS(PID,SSOURCE,DOMAIN,EVENT,EVENTSTAMP,"stored"))=1 S ^VPRSTATUS(PID,SSOURCE,DOMAIN,EVENT,EVENTSTAMP,"stored")=1
-  L -^VPRSTATUS(PID,SSOURCE)
+ . . I $G(^VPRSTATUS(JPID,PID,SSOURCE,DOMAIN,EVENT,EVENTSTAMP,"stored"))=1 S ^VPRSTATUS(JPID,PID,SSOURCE,DOMAIN,EVENT,EVENTSTAMP,"stored")=1
+  L -^VPRSTATUS(JPID,PID,SSOURCE)
  ; ** End of Critical Section **
  ;
  K @OBJECT
@@ -140,11 +140,12 @@ GET(RETURN,ARGS) ; Return patient sync status based on metastamps
  I $D(ERR) D SETERROR^VPRJRER(202) Q
  Q
  ;
-PATIENT(RESULT,PID,DETAILED,CLAUSES) ; GET Patient Sync Status algorithm
+PATIENT(RESULT,PID,DETAILED,CLAUSES,MINIMAL) ; GET Patient Sync Status algorithm
  N SOURCE,SSOURCE,DOMAINCOMPLETE,BUILD,DOMAIN,DOMAINSTAMP,EVENTSCOMPLETE,EVENT
- N EVENTSTORED,EVENTSTAMP,COMPLETE,TOTAL,DOMAINARRAY,EVENTARRAY
+ N EVENTSTORED,EVENTSTAMP,COMPLETE,TOTAL,DOMAINARRAY,EVENTARRAY,JPID,DOMAINSTORED
  ; Ensure Detailed flag exists
  S DETAILED=$G(DETAILED)
+ S MINIMAL=$G(MINIMAL)
  ; Quit if PID doesn't exist
  I $G(PID)="" Q
  S SOURCE=$P(PID,";",1)
@@ -164,35 +165,38 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES) ; GET Patient Sync Status algorithm
  I SOURCE=+SOURCE S SSOURCE=""""_SOURCE_""
  E  S SSOURCE=SOURCE
  ;
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(224,"Unable to acquire JPID for PID: "_PID) Q
+ ;
  ; Check to see if we have a metastamp for this source
- I '$G(^VPRSTATUS(PID,SOURCE,"stampTime")) Q
+ I '$G(^VPRSTATUS(JPID,PID,SOURCE,"stampTime")) Q
  ; Set BUILD up to use as a target for indirection
  S BUILD=$NA(^TMP($J,"RESULT","BUILD"))
  K @BUILD
  ;
  ; This may be blank if no ICN is on file, if it is blank only primary site data is on file
- S @BUILD@("icn")=$$ICN4JPID^VPRJPR(JPID)
+ S:'MINIMAL @BUILD@("icn")=$$ICN4JPID^VPRJPR(JPID)
  ;
  ; Get time this patient has been accessed
- S @BUILD@("lastAccessTime")=$G(^VPRMETA("JPID",JPID,"lastAccessTime"))
+ S:'MINIMAL @BUILD@("lastAccessTime")=$G(^VPRMETA("JPID",JPID,"lastAccessTime"))
  ;
  ; sourceMetaStamp object
  S @BUILD@("sourceMetaStamp",SSOURCE,"pid")=PID
- S @BUILD@("sourceMetaStamp",SSOURCE,"localId")=$P(PID,";",2)
- S @BUILD@("sourceMetaStamp",SSOURCE,"stampTime")=$G(^VPRSTATUS(PID,SOURCE,"stampTime"))
+ S:'MINIMAL @BUILD@("sourceMetaStamp",SSOURCE,"localId")=$P(PID,";",2)
+ S @BUILD@("sourceMetaStamp",SSOURCE,"stampTime")=$G(^VPRSTATUS(JPID,PID,SOURCE,"stampTime"))
  ;
  ; domainMetaStamp object
  ; foreach domain
  S DOMAIN=""
  ;
- F  S DOMAIN=$O(^VPRSTATUS(PID,SOURCE,DOMAIN)) Q:DOMAIN=""  D
+ F  S DOMAIN=$O(^VPRSTATUS(JPID,PID,SOURCE,DOMAIN)) Q:DOMAIN=""  D
  . ; skip non domain subscripts
- . I DOMAIN="stampTime" Q
+ . I DOMAIN="stampTime"!(DOMAIN="syncCompleteAsOf") Q
  . ;
  . ; Set the domain stampTime
  . ; A is the first character after numerics so we can run the $O backwards
  . S DOMAINSTAMP="A"
- . S DOMAINSTAMP=$O(^VPRSTATUS(PID,SOURCE,DOMAIN,DOMAINSTAMP),-1)
+ . S DOMAINSTAMP=$O(^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,DOMAINSTAMP),-1)
  . ;
  . ; Flag if all domains are complete
  . ; If a domainstamp doesn't exist domain can never be complete
@@ -205,7 +209,7 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES) ; GET Patient Sync Status algorithm
  . S EVENTSCOMPLETE=1
  . S EVENT="urn"
  . S COMPLETE=0
- . F TOTAL=1:1 S EVENT=$O(^VPRSTATUS(PID,SOURCE,DOMAIN,EVENT)) Q:EVENT=""  D
+ . F TOTAL=1:1 S EVENT=$O(^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,EVENT)) Q:EVENT=""  D
  . . I EVENT="stampTime" Q
  . . ; Flag if all events are complete within a domain
  . . S EVENTSTORED=0
@@ -213,10 +217,10 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES) ; GET Patient Sync Status algorithm
  . . ; Get the event stampTime
  . . ; A is the first character after numerics so we can run the $O backwards
  . . S EVENTSTAMP="A"
- . . S EVENTSTAMP=$O(^VPRSTATUS(PID,SOURCE,DOMAIN,EVENT,EVENTSTAMP),-1)
+ . . S EVENTSTAMP=$O(^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,EVENT,EVENTSTAMP),-1)
  . . ;
  . . ; Get the stored flag
- . . I $G(^VPRSTATUS(PID,SOURCE,DOMAIN,EVENT,EVENTSTAMP,"stored")) S EVENTSTORED=1
+ . . I $G(^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,EVENT,EVENTSTAMP,"stored")) S EVENTSTORED=1
  . . E  S EVENTSCOMPLETE=0
  . . ;
  . . I EVENTSTORED S COMPLETE=COMPLETE+1
@@ -235,6 +239,15 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES) ; GET Patient Sync Status algorithm
  . . I DETAILED S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"eventMetaStamp",EVENT,"stampTime")=EVENTSTAMP
  . . ;
  . . I DETAILED,EVENTSTORED S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"eventMetaStamp",EVENT,"stored")="true"
+ . ;
+ . ; Set the flags to control syncCompleted for the domain and inProgress/completedStamp for the entire site
+ . I EVENTSCOMPLETE,DOMAINSTAMP'="" D
+ . . ; domain is complete
+ . . S DOMAINSTORED=1
+ . E  D
+ . . ; set entire site inProgress - domain is not complete
+ . . S DOMAINCOMPLETE=0
+ . ;
  . ; TOTAL will be one extra from the loop before it quits at end of data
  . S TOTAL=TOTAL-1
  . ; Filters for domain data when not in detailed mode
@@ -247,27 +260,28 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES) ; GET Patient Sync Status algorithm
  . ; All clauses are wrapped in an implicit AND
  . I 'DETAILED,$D(CLAUSES),'$$EVALAND^VPRJGQF(.CLAUSES,$NA(DOMAINARRAY)) Q
  . ;
- . ; Set the stored flag if all of the events are complete and DOMAINSTAMP isn't null
- . I EVENTSCOMPLETE,DOMAINSTAMP'="" D
- . . S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"syncCompleted")="true"
- . . S DOMAINSTORED=1
- . E  D
- . . S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"syncCompleted")="false"
- . . S DOMAINCOMPLETE=0
+ . ; If we pass the filter add the syncCompleted for the domain
+ . S:'MINIMAL @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"syncCompleted")=$S(DOMAINSTORED:"true",1:"false")
  . ;
  . ; If domainstamp is null set the domain stampTime to the latest event stamp
  . I DOMAINSTAMP="",EVENTSTAMP>DOMAINSTAMP D
- . . S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"stampTime")=EVENTSTAMP
- . E  S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"stampTime")=DOMAINSTAMP
+ . . S:'MINIMAL @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"stampTime")=EVENTSTAMP
+ . E  S:'MINIMAL @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"stampTime")=DOMAINSTAMP
  . ;
- . S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"domain")=DOMAIN
+ . S:'MINIMAL @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"domain")=DOMAIN
  . ;
  . ; Add event counts to output
- . S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"eventCount")=TOTAL
- . S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"storedCount")=COMPLETE
+ . S:'MINIMAL @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"eventCount")=TOTAL
+ . S:'MINIMAL @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"storedCount")=COMPLETE
  ; Set the complete flag if all of the domains were complete
- I $G(DOMAINCOMPLETE) S @BUILD@("sourceMetaStamp",SSOURCE,"syncCompleted")="true" M @RESULT@("completedStamp")=@BUILD
- E  M @RESULT@("inProgress")=@BUILD
+ I $G(DOMAINCOMPLETE) D
+ . S @BUILD@("sourceMetaStamp",SSOURCE,"syncCompleted")="true"
+ . S ^VPRSTATUS(JPID,PID,SOURCE,"syncCompleteAsOf")=$$CURRTIME^VPRJRUT
+ . S:'MINIMAL @BUILD@("sourceMetaStamp",SSOURCE,"syncCompleteAsOf")=$G(^VPRSTATUS(JPID,PID,SOURCE,"syncCompleteAsOf"))
+ . M @RESULT@("completedStamp")=@BUILD
+ E  D
+ . S:$G(^VPRSTATUS(JPID,PID,SOURCE,"syncCompleteAsOf"))'=""&('MINIMAL) @BUILD@("sourceMetaStamp",SSOURCE,"syncCompleteAsOf")=$G(^VPRSTATUS(JPID,PID,SOURCE,"syncCompleteAsOf"))
+ . M @RESULT@("inProgress")=@BUILD
  K @BUILD
  Q
  ;
@@ -275,23 +289,339 @@ CLEAR(RESULT,ARGS) ; Delete all sync status data
  K ^VPRSTATUS
  Q
 DELSS(PID) ; Delete a patient's sync status
- K ^VPRSTATUS(PID)
+ N JPID
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(224,"Unable to acquire JPID for PID: "_PID) Q
+ ;
+ K ^VPRSTATUS(JPID,PID)
  Q
 DELSITE(SITE) ; Delete a site's sync status
- N PID
- S PID=SITE
- F  S PID=$O(^VPRPT(PID)) Q:PID=""!($P(PID,";")'=SITE)  D
- . K ^VPRSTATUS(PID)
+ N PID,JPID
+ S JPID=""
+ F  S JPID=$O(^VPRPT(JPID)) Q:JPID=""  D
+ . S PID=SITE
+ . F  S PID=$O(^VPRPT(JPID,PID)) Q:PID=""!($P(PID,";")'=SITE)  D
+ . . K ^VPRSTATUS(JPID,PID)
  Q
 STORERECORD(RESULT,BODY)
  ; Testing endpoint
- N OBJECT,ERR,PID,SOURCE,DOMAIN,UID,EVENTSTAMP
+ N OBJECT,ERR,PID,SOURCE,DOMAIN,UID,EVENTSTAMP,JPID
  D DECODE^VPRJSON("BODY","OBJECT","ERR")
  S PID=$G(OBJECT("pid"))
  S SOURCE=$G(OBJECT("source"))
  S UID=$G(OBJECT("uid"))
  S DOMAIN=$G(OBJECT("domain"))
  S EVENTSTAMP=$G(OBJECT("eventStamp"))
- I $D(^VPRSTATUS(PID,SOURCE,DOMAIN,UID,EVENTSTAMP)) S ^VPRSTATUS(PID,SOURCE,DOMAIN,UID,EVENTSTAMP,"stored")="1"
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(224,"Unable to acquire JPID for PID: "_PID) Q
+ I $D(^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,EVENTSTAMP)) S ^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,EVENTSTAMP,"stored")="1"
  Q ""
  ;
+COMBINED(RETURN,ARGS) ; Return patient sync status with job status
+ N RESULT,DETAILED,JPID,PIDS,ID,RESULT,ERR,FILTER,CLAUSES,ALLCOMPLETE,SITES,SITELIST
+ S RESULT=$NA(^TMP($J,"RESULT","syncStatus"))
+ K ^TMP($J,"RESULT")
+ ; Ensure we don't have any unknown arguments
+ I $$UNKARGS^VPRJCU(.ARGS,"icnpidjpid,sites") Q
+ ; Set sites list
+ S SITELIST=0
+ S SITES=$G(ARGS("sites"))
+ I $L(SITES) S SITELIST=1
+ ; If we don't have a site list set the global syncStatus to true
+ S:'SITELIST ^TMP($J,"RESULT","return","syncCompleted")="true"
+ ;
+ ; Get the JPID based on passed patient identifier
+ S JPID=""
+ S JPID=$$JPID4PID^VPRJPR(ARGS("icnpidjpid")) I JPID="" D SETERROR^VPRJRER(224) Q
+ ; Get all PIDs for JPID
+ D PID4JPID^VPRJPR(.PIDS,JPID)
+ ;
+ ; Loop through identifiers for patient
+ S ID=""
+ F  S ID=$O(PIDS(ID)) Q:ID=""  D
+ . N SITE
+ . S SITE=$P(PIDS(ID),";",1)
+ . ; Only include real sites - JPID and ICNs are not real sites
+ . I (PIDS(ID)'[";")!(SITE="JPID") Q
+ . ; If we have a site list and this identifier isn't in it go to the next one
+ . I SITELIST&(SITES'[SITE) Q
+ . ;
+ . ; Get jobs that are used across all sites
+ . ; Currently this is just the enterprise-sync-request
+ . N ESR,ESRJOB
+ . S ESR=$$GETJOBBYINDEX(.ESRJOB,JPID,"enterprise-sync-request")
+ . ;
+ . ; We always want to report the last time an enterprise-sync-request was created for the patient
+ . S ^TMP($J,"RESULT","return","latestEnterpriseSyncRequestTimestamp")=$G(ESRJOB("timestamp"))
+ . ;
+ . ; Global enterprise-sync-request rules
+ . ; If enterprise-sync-request is in error the site can never be complete
+ . ; Set the hasError flag and set syncComplete=false
+ . I $G(ESRJOB("status"))="error" D BLDRESULT(PIDS(ID),"false",$G(ESRJOB("timestamp")),1) Q
+ . ;
+ . ; Always get the patient meta-stamp
+ . D PATIENT(RESULT,PIDS(ID),"",.CLAUSES,1)
+ . ;
+ . ; VistA Primary Site and VistA/HDR Pub/Sub Checks
+ . ; These checks are combined as there is no way to tell via PID which is which
+ . ; VistA Primary Site checks take presidence over VistA/HDR Pub/Sub
+ . ;
+ . I SITE'="DOD"&(SITE'="HDR")&(SITE'="VLER") D
+ . . ; VistA Primary Site
+ . . ; VistA HDR Pub/Sub
+ . . ;
+ . . ; Get jobs
+ . . N VSR,VSRJOB,VDJOBS
+ . . N VHSR,VHSRJOB,VHDJOBS
+ . . S VSR=$$GETJOBBYINDEX(.VSRJOB,JPID,"vista-"_SITE_"-subscribe-request")
+ . . D GETDOMAINJOBS(.VDJOBS,JPID,"vista-"_SITE_"-data-")
+ . . S VHSR=$$GETJOBBYINDEX(.VHSRJOB,JPID,"vistahdr-"_SITE_"-subscribe-request")
+ . . D GETDOMAINJOBS(.VHDJOBS,JPID,"vistahdr-"_SITE_"-data-")
+ . . ;
+ . . ; Overwrite latestJobTimestamp to include other jobs that aren't data jobs
+ . . I $G(VSRJOB("timestamp"))>$G(VDJOBS("latestTimestamp")) S VDJOBS("latestTimestamp")=VSRJOB("timestamp")
+ . . I $G(ESRJOB("timestamp"))>$G(VDJOBS("latestTimestamp")) S VDJOBS("latestTimestamp")=ESRJOB("timestamp")
+ . . ; vistahdr
+ . . I $G(VHSRJOB("timestamp"))>$G(VHDJOBS("latestTimestamp")) S VHDJOBS("latestTimestamp")=VHSRJOB("timestamp")
+ . . I $G(ESRJOB("timestamp"))>$G(VHDJOBS("latestTimestamp")) S VHDJOBS("latestTimestamp")=ESRJOB("timestamp")
+ . . ;
+ . . ; Determine if Jobs are in error
+ . . I $G(VSRJOB("status"))="error" S VDJOBS("hasError")=1
+ . . I $G(VDJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",VDJOBS("latestTimestamp"),1) Q
+ . . ; vistahdr
+ . . I $G(VHSRJOB("status"))="error" S VHDJOBS("hasError")=1
+ . . I $G(VHDJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",VHDJOBS("latestTimestamp"),1) Q
+ . . ;
+ . . ; Save jobs off to global for debugging
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"ESR")=ESRJOB
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"VSR")=VSRJOB
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"VDJOBS")=VDJOBS
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"VHSR")=VHSRJOB
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"VHDJOBS")=VHDJOBS
+ . . ;
+ . . ; 1. If vista-{SiteHash}-subscribe-request OR vista-{SiteHash}-data-{domain}-poller jobs are OPEN or ERROR: syncComplete = false
+ . . I (($G(VSRJOB("status"))'="completed")!('VDJOBS("allJobsComplete")))&(('VHSR)&('VHDJOBS("numberOfJobs"))) S ^TMP($J,"RESULT","RULES",SITE)="VISTA RULE 1 FALSE" D BLDRESULT(PIDS(ID),"false",VDJOBS("latestTimestamp")) Q
+ . . ;
+ . . ; 2. If vista-{SiteHash}-subscribe-request AND vista-{SiteHash}-data-{domain}-poller are COMPLETED syncComplete = meta-stamp status
+ . . I ($G(VSRJOB("status"))="completed")&(VDJOBS("allJobsComplete")) D  Q
+ . . . I $D(^TMP($J,"RESULT","syncStatus","inProgress","sourceMetaStamp",$P(PIDS(ID),";",1))) S ^TMP($J,"RESULT","RULES")="VISTA RULE 2 FALSE" D BLDRESULT(PIDS(ID),"false",VDJOBS("latestTimestamp"))
+ . . . E  I $D(^TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",$P(PIDS(ID),";",1))) S ^TMP($J,"RESULT","RULES",SITE)="VISTA RULE 2 TRUE" D BLDRESULT(PIDS(ID),"true",VDJOBS("latestTimestamp"))
+ . . . E  I '$D(^TMP($J,"RESULT","syncStatus")) S ALLCOMPLETE=0
+ . . ;
+ . . ; 3. If vista-{SiteHash}-subscribe-request OR vista-{SiteHash}-data-{domain}-poller don't exist AND enterprise-sync-request is OPEN or ERROR: syncComplete = false
+ . . I (('VSR)!('VDJOBS("numberOfJobs")))&('VHSR)&('VHDJOBS("numberOfJobs"))&(($G(ESRJOB("status"))="open")) S ^TMP($J,"RESULT","RULES",SITE)="VISTA RULE 3 FALSE" D BLDRESULT(PIDS(ID),"false",VDJOBS("latestTimestamp")) Q
+ . . ;
+ . . ; VistA HDR Pub/Sub
+ . . ; 1. If vistahdr-{SiteHash}-subscribe-request OR vistahdr-{SiteHash}-data-{domain}-poller jobs are OPEN or ERROR: syncComplete = false
+ . . I (($G(VHSRJOB("status"))'="completed")!('VHDJOBS("allJobsComplete"))) S ^TMP($J,"RESULT","RULES",SITE)="VISTAHDR RULE 1 FALSE" D BLDRESULT(PIDS(ID),"false",VHDJOBS("latestTimestamp")) Q
+ . . ;
+ . . ; 2. If vistahdr-{SiteHash}-subscribe-request OR vistahdr-{SiteHash}-data-{domain}-poller are COMPLETE: syncComplete = meta-stamp status
+ . . I ($G(VHSRJOB("status"))="completed")&(VHDJOBS("allJobsComplete")) D  Q
+ . . . I $D(^TMP($J,"RESULT","syncStatus","inProgress","sourceMetaStamp",$P(PIDS(ID),";",1))) S ^TMP($J,"RESULT","RULES")="VISTAHDR RULE 2 FALSE" D BLDRESULT(PIDS(ID),"false",VHDJOBS("latestTimestamp"))
+ . . . E  I $D(^TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",$P(PIDS(ID),";",1))) S ^TMP($J,"RESULT","RULES",SITE)="VISTAHDR RULE 2 TRUE" D BLDRESULT(PIDS(ID),"true",VHDJOBS("latestTimestamp"))
+ . . ;
+ . . ; 3. If vistahdr-{SiteHash}-subscribe-request OR vistahdr-{SiteHash}-data-{domain}-poller don't exist AND enterprise-sync-request is OPEN or ERROR: syncComplete = false
+ . . I (('VHSR)!('VHDJOBS("numberOfJobs")))&('VSR)&('VDJOBS("numberOfJobs"))&(($G(ESRJOB("status"))="open")) S ^TMP($J,"RESULT","RULES",SITE)="VISTAHDR RULE 3 FALSE" D BLDRESULT(PIDS(ID),"false",VHDJOBS("latestTimestamp")) Q
+ . ;
+ . E  I SITE="HDR" D
+ . . ; HDR Req/Res
+ . . N HSR,HSRJOB,HXJOBS,HDJOBS
+ . . ;
+ . . ; Get jobs
+ . . S HSR=$$GETJOBBYINDEX(.HSRJOB,JPID,"hdr-sync-request")
+ . . D GETDOMAINJOBS(.HDJOBS,JPID,"hdr-sync-")
+ . . D GETDOMAINJOBS(.HXJOBS,JPID,"hdr-xform-")
+ . . ;
+ . . ; Overwrite latestJobTimestamp to include other jobs that aren't data jobs
+ . . I $G(HSRJOB("timestamp"))>$G(HDJOBS("latestTimestamp")) S HDJOBS("latestTimestamp")=HSRJOB("timestamp")
+ . . I $G(HXJOBS("latestTimestamp"))>$G(HDJOBS("latestTimestamp")) S HDJOBS("latestTimestamp")=HXJOBS("latestTimestamp")
+ . . I $G(ESRJOB("timestamp"))>$G(HDJOBS("latestTimestamp")) S HDJOBS("latestTimestamp")=ESRJOB("timestamp")
+ . . ;
+ . . ; Determine if Jobs are in error
+ . . I $G(HSRJOB("status"))="error" S HDJOBS("hasError")=1
+ . . I $G(HXJOBS("hasError")) S HDJOBS("hasError")=1
+ . . I $G(HDJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",HDJOBS("latestTimestamp"),1) Q
+ . . ;
+ . . ; Save jobs off to global for debugging
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"ESR")=ESRJOB
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"HSR")=HSRJOB
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"HSDR")=HDJOBS
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"HX")=HXJOBS
+ . . ;
+ . . ; 1. If hdr-subscribe-request OR hdr-sync-{domain}-request OR hdr-xform-{domain}-vpr jobs are OPEN or ERROR: syncComplete = false
+ . . I ($G(HSRJOB("status"))'="completed")!('HDJOBS("allJobsComplete"))!((HXJOBS("numberOfJobs"))&('HXJOBS("allJobsComplete"))) S ^TMP($J,"RESULT","RULES",SITE)="HDR RULE 1 FALSE" D BLDRESULT(PIDS(ID),"false",HDJOBS("latestTimestamp")) Q
+ . . ;
+ . . ; 2. If enterprise-sync-request AND hdr-subscribe-request AND hdr-sync-{domain}-request AND hdr-xform-{domain}-vpr are COMPLETE: syncComplete = meta-stamp status
+ . . I ($G(ESRJOB("status"))="completed")&($G(HSRJOB("status"))="completed")&(HDJOBS("allJobsComplete"))&(('HXJOBS("numberOfJobs"))!(HXJOBS("allJobsComplete"))) D  Q
+ . . . I $D(^TMP($J,"RESULT","syncStatus","inProgress","sourceMetaStamp",$P(PIDS(ID),";",1))) S ^TMP($J,"RESULT","RULES",SITE)="HDR RULE 2 FALSE" D BLDRESULT(PIDS(ID),"false",HDJOBS("latestTimestamp"))
+ . . . E  I $D(^TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",$P(PIDS(ID),";",1))) S ^TMP($J,"RESULT","RULES",SITE)="HDR RULE 2 TRUE" D BLDRESULT(PIDS(ID),"true",HDJOBS("latestTimestamp"))
+ . . ;
+ . . ; 3. If hdr-subscribe-request AND hdr-sync-{domain}-request AND hdr-xform-{domain}-vpr don't exist AND enterprise-sync-request is OPEN or ERROR: syncComplete = false
+ . . I ('HSR)&('HDJOBS("numberOfJobs"))&('HXJOBS("numberOfJobs"))&(($G(ESRJOB("status"))="open")) S ^TMP($J,"RESULT","RULES",SITE)="HDR RULE 3 FALSE" D BLDRESULT(PIDS(ID),"false",HDJOBS("latestTimestamp")) Q
+ . ;
+ . E  I SITE="DOD" D
+ . . ; DOD Req/Res
+ . . ;
+ . . ; Get jobs
+ . . N JSR,JSRJOB,JDR,JDRJOB,JPDT,JPDTJOB,JXJOBS,JCDC,JCDCJOB,JJOBS
+ . . S JSR=$$GETJOBBYINDEX(.JSRJOB,JPID,"jmeadows-sync-request")
+ . . S JDR=$$GETJOBBYINDEX(.JDRJOB,JPID,"jmeadows-document-retrieval",)
+ . . S JPDT=$$GETJOBBYINDEX(.JPDTJOB,JPID,"jmeadows-pdf-document-transform",)
+ . . S JCDC=$$GETJOBBYINDEX(.JCDCJOB,JPID,"jmeadows-cda-document-conversion")
+ . . D GETDOMAINJOBS(.JJOBS,JPID,"jmeadows-sync-")
+ . . D GETDOMAINJOBS(.JXJOBS,JPID,"jmeadows-xform-")
+ . . ;
+ . . ; Overwrite latestJobTimestamp to include other jobs that aren't data jobs
+ . . I $G(JSRJOB("timestamp"))>$G(JJOBS("latestTimestamp")) S JJOBS("latestTimestamp")=JSRJOB("timestamp")
+ . . I $G(JDRJOB("timestamp"))>$G(JJOBS("latestTimestamp")) S JJOBS("latestTimestamp")=JDRJOB("timestamp")
+ . . I $G(JPDTJOB("timestamp"))>$G(JJOBS("latestTimestamp")) S JJOBS("latestTimestamp")=JPDTJOB("timestamp")
+ . . I $G(JXJOBS("latestTimestamp"))>$G(JJOBS("latestTimestamp")) S JJOBS("latestTimestamp")=JXJOBS("latestTimestamp")
+ . . I $G(JCDCJOB("timestamp"))>$G(JJOBS("latestTimestamp")) S JJOBS("latestTimestamp")=JCDCJOB("timestamp")
+ . . I $G(ESRJOB("timestamp"))>$G(JJOBS("latestTimestamp")) S JJOBS("latestTimestamp")=ESRJOB("timestamp")
+ . . ;
+ . . ; Determine if Jobs are in error
+ . . I $G(JSRJOB("status"))="error" S JJOBS("hasError")=1
+ . . I $G(JDRJOB("status"))="error" S JJOBS("hasError")=1
+ . . I $G(JPDTJOB("status"))="error" S JJOBS("hasError")=1
+ . . I $G(JCDCJOB("status"))="error" S JJOBS("hasError")=1
+ . . I $G(JXJOBS("hasError")) S JJOBS("hasError")=1
+ . . I $G(JJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",JJOBS("latestTimestamp"),1) Q
+ . . ;
+ . . ; Save jobs off to global for debugging
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"ESR")=ESRJOB
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"JS")=JSRJOB
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"JJOBS")=JJOBS
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"JDR")=JDRJOB
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"JPDT")=JPDTJOB
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"JX")=JXJOB
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"JCDC")=JCDCJOB
+ . . ;
+ . . ; 1. If jmeadows-sync-request OR jmeadows-sync-{domain}-request OR jmeadows-document-retrieval OR jmeadows-pdf-document-transform OR jmeadows-xform-{domain}-vpr
+ . . ;    OR jmeadows-cda-document-conversion jobs are OPEN or ERROR: syncComplete = false
+ . . I ($G(JSRJOB("status"))'="completed")!('JJOBS("allJobsComplete"))!((JDR)&($G(JDRJOB("status"))'="completed"))!((JPDT)&($G(JPDTJOB("status"))'="completed"))!((JXJOBS("numberOfJobs"))&('JXJOBS("allJobsComplete")))!((JCDC)&($G(JCDCJOB("status"))'="completed")) S ^TMP($J,"RESULT","RULES",SITE)="DOD RULE 1 FALSE" D BLDRESULT(PIDS(ID),"false",JJOBS("latestTimestamp")) Q
+ . . ;
+ . . ; 2. If enterprise-sync-request AND jmeadows-sync-request AND jmeadows-sync-{domain}-request AND jmeadows-document-retrieval AND jmeadows-pdf-document-transform
+ . . ;    AND jmeadows-xform-{domain}-vpr AND jmeadows-cda-document-conversion are COMPLETE: syncComplete = meta-stamp status
+ . . I ($G(ESRJOB("status"))="completed")&($G(JSRJOB("status"))="completed")&(JJOBS("allJobsComplete"))&(('JDR)!($G(JDRJOB("status"))="completed"))&(('JPDT)!($G(JPDTJOB("status"))="completed"))&(('JXJOBS("numberOfJobs"))!(JXJOBS("allJobsComplete")))&(('JCDC)!($G(JCDCJOB("status"))="completed")) D  Q
+ . . . I $D(^TMP($J,"RESULT","syncStatus","inProgress","sourceMetaStamp",$P(PIDS(ID),";",1))) S ^TMP($J,"RESULT","RULES",SITE)="DOD RULE 2 FALSE" D BLDRESULT(PIDS(ID),"false",JJOBS("latestTimestamp"))
+ . . . E  I $D(^TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",$P(PIDS(ID),";",1))) S ^TMP($J,"RESULT","RULES",SITE)="DOD RULE 2 TRUE" D BLDRESULT(PIDS(ID),"true",JJOBS("latestTimestamp"))
+ . . ;
+ . . ; 3. If jmeadows-sync-request AND jmeadows-sync-{domain}-request AND jmeadows-document-retrieval AND jmeadows-pdf-document-transform
+ . . ;    AND jmeadows-xform-{domain}-vpr AND jmeadows-cda-document-conversion don't exist AND enterprise-sync-request is OPEN or ERROR: syncComplete = false
+ . . I ('JSR)&('JJOBS("numberOfJobs"))&('JXJOBS("numberOfJobs"))&('JDR)&('JPDT)&('JCDC)&(($G(ESRJOB("status"))="open")) S ^TMP($J,"RESULT","RULES",SITE)="DOD RULE 3 FALSE" D BLDRESULT(PIDS(ID),"false",JJOBS("latestTimestamp")) Q
+ . ;
+ . E  I SITE="VLER" D
+ . . ; VLER Req/Res
+ . . ;
+ . . ; Get jobs
+ . . N VSR,VSRJOB,VXV,VXVJOB,VJOBS
+ . . S VSR=$$GETJOBBYINDEX(.VSRJOB,JPID,"vler-sync-request")
+ . . S VXV=$$GETJOBBYINDEX(.VXVJOB,JPID,"vler-xform-vpr")
+ . . S VJOBS("latestTimestamp")=$S($G(VSRJOB("timestamp"))>$G(VXVJOB("timestamp")):VSRJOB("timestamp"),1:$G(VSRJOB("timestamp")))
+ . . I $G(ESRJOB("timestamp"))>$G(VJOBS("latestTimestamp")) S VJOBS("latestTimestamp")=ESRJOB("timestamp")
+ . . ;
+ . . ; Determine if Jobs are in error
+ . . I $G(VSRJOB("status"))="error" S VJOBS("hasError")=1
+ . . I $G(VXVJOB("status"))="error" S VJOBS("hasError")=1
+ . . I $G(VJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",VJOBS("latestTimestamp"),1) Q
+ . . ;
+ . . ; Save jobs off to global for debugging
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"ESR")=ESRJOB
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"VSR")=VSRJOB
+ . . ;M ^TMP($J,"RESULT","JOBS",SITE,"VXV")=VXVJOB
+ . . ;
+ . . ; 1. If vler-sync-request OR vler-xform-vpr jobs are OPEN or ERROR: syncComplete = false
+ . . I ($G(VSRJOB("status"))'="completed")!((VXV)&($G(VXVJOB("status"))'="completed")) S ^TMP($J,"RESULT","RULES",SITE)="VLER RULE 1 FALSE" D BLDRESULT(PIDS(ID),"false",VJOBS("latestTimestamp")) Q
+ . . ;
+ . . ; 2. If enterprise-sync-request AND vler-sync-request AND vler-xform-vpr are COMPLETE: syncComplete = meta-stamp status
+ . . I ($G(ESRJOB("status"))="completed")&($G(VSRJOB("status"))="completed")&(('VXV)!($G(VXVJOB("status"))="completed")) D  Q
+ . . . I $D(^TMP($J,"RESULT","syncStatus","inProgress","sourceMetaStamp",$P(PIDS(ID),";",1))) S ^TMP($J,"RESULT","RULES",SITE)="VLER RULE 2 FALSE" D BLDRESULT(PIDS(ID),"false",VJOBS("latestTimestamp"))
+ . . . E  I $D(^TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",$P(PIDS(ID),";",1))) S ^TMP($J,"RESULT","RULES",SITE)="VLER RULE 2 TRUE" D BLDRESULT(PIDS(ID),"true",VJOBS("latestTimestamp"))
+ . . ;
+ . . ; 3. If vler-sync-request AND vler-xform-vpr don't exist AND enterprise-sync-request is OPEN or ERROR: syncComplete = false
+ . . I ('VSR)&('VXV)&(($G(ESRJOB("status"))="open")) S ^TMP($J,"RESULT","RULES",SITE)="VLER RULE 3 FALSE" D BLDRESULT(PIDS(ID),"false",VJOBS("latestTimestamp")) Q
+ ;
+ ; Build Return
+ S ^TMP($J,"RESULT","return","icn")=$$ICN4JPID^VPRJPR(JPID)
+ ;
+ S RETURN=$NA(^TMP($J,"RETURN"))
+ K @RETURN ; Clear the output global array, avoid subtle bugs
+ D ENCODE^VPRJSON($NA(^TMP($J,"RESULT","return")),RETURN,"ERR") ; From an array to JSON
+ K @RESULT
+ I $D(ERR) D SETERROR^VPRJRER(202) Q
+ Q
+ ;
+BLDRESULT(PID,STATUS,TIMESTAMP,ERROR)
+ S ^TMP($J,"RESULT","return","sites",$P(PID,";",1),"pid")=PID
+ S ^TMP($J,"RESULT","return","sites",$P(PID,";",1),"syncCompleted")=STATUS
+ ;
+ ; Set Site sourceStampTime (either from inProgress or completedStamp)
+ I $G(^TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",$P(PID,";",1),"stampTime")) D
+ . S ^TMP($J,"RESULT","return","sites",$P(PID,";",1),"sourceStampTime")=$G(^TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",$P(PID,";",1),"stampTime"))
+ E  D
+ . S ^TMP($J,"RESULT","return","sites",$P(PID,";",1),"sourceStampTime")=$G(^TMP($J,"RESULT","syncStatus","inProgress","sourceMetaStamp",$P(PID,";",1),"stampTime"))
+ ;
+ ; Set Site latestJobTimestamp
+ S ^TMP($J,"RESULT","return","sites",$P(PID,";",1),"latestJobTimestamp")=TIMESTAMP
+ ;
+ ; Set Site & Global hasError flag
+ I $G(ERROR) D
+ . S ^TMP($J,"RESULT","return","sites",$P(PID,";",1),"hasError")="true"
+ . S ^TMP($J,"RESULT","return","hasError")="true"
+ ;
+ ; Set Global syncStatus
+ I 'SITELIST&(STATUS="false") S ^TMP($J,"RESULT","return","syncCompleted")="false"
+ ;
+ ; Set Global latestSourceStampTime
+ I 'SITELIST&($G(^TMP($J,"RESULT","return","latestSourceStampTime"))<^TMP($J,"RESULT","return","sites",$P(PID,";",1),"sourceStampTime")) D
+ . S ^TMP($J,"RESULT","return","latestSourceStampTime")=^TMP($J,"RESULT","return","sites",$P(PID,";",1),"sourceStampTime")
+ ;
+ ; Set Global latestJobTimestamp
+ I 'SITELIST&($G(^TMP($J,"RESULT","return","latestJobTimestamp"))<TIMESTAMP) S ^TMP($J,"RESULT","return","latestJobTimestamp")=TIMESTAMP
+ Q
+ ;
+GETJOBBYINDEX(RJOB,JPID,JOBNAME,SITE)
+ ; RJOB will contain the matching JOB
+ N JOB,RETURN,TIMESTAMP,JOBNUM
+ ; default return
+ S RETURN=0
+ ; Ensure SITE exists
+ S SITE=$G(SITE)
+ ;
+ ; site specific job
+ I SITE'="" D  Q:RETURN RETURN
+ . S JOB=$O(^VPRJOB("D",JPID,JOBNAME))
+ . I JOB'=""&(JOB[SITE) D
+ . . S RETURN=1
+ . . S TIMESTAMP=$O(^VPRJOB("D",JPID,JOB,""),-1)
+ . . S JOBNUM=$O(^VPRJOB("D",JPID,JOB,TIMESTAMP,""),-1)
+ . . M RJOB=^VPRJOB(JOBNUM)
+ ;
+ ; non-site specific job
+ E  D
+ . S JOB=$O(^VPRJOB("D",JPID,JOBNAME,""),-1)
+ . I JOB'="" D
+ . . S RETURN=1
+ . . S JOBNUM=$O(^VPRJOB("D",JPID,JOBNAME,JOB,""),-1)
+ . . M RJOB=^VPRJOB(JOBNUM)
+ Q RETURN
+ ;
+GETDOMAINJOBS(DJOBS,JPID,BASEJOBNAME)
+ N JOBNAME,JOB,LATEST,NUMJOBS
+ S JOBNAME=BASEJOBNAME
+ S DJOBS("latestTimestamp")=""
+ S DJOBS("allJobsComplete")=1
+ S NUMJOBS=0
+ F  S JOBNAME=$O(^VPRJOB("D",JPID,JOBNAME)) Q:JOBNAME=""  Q:JOBNAME'[BASEJOBNAME  D
+ . I JOBNAME=(BASEJOBNAME_"request") Q ; jmeadows mixes a sync-request with the domain sync-requests
+ . S NUMJOBS=NUMJOBS+1
+ . ; Get the latest version of the job
+ . S LATEST=$O(^VPRJOB("D",JPID,JOBNAME,""),-1)
+ . S JOB=$O(^VPRJOB("D",JPID,JOBNAME,LATEST,""),-1)
+ . M DJOBS(JOBNAME,"status")=^VPRJOB(JOB,"status")
+ . I DJOBS("latestTimestamp")<^VPRJOB(JOB,"timestamp") S DJOBS("latestTimestamp")=^VPRJOB(JOB,"timestamp")
+ . I ^VPRJOB(JOB,"status")'="completed" S DJOBS("allJobsComplete")=0
+ . I ^VPRJOB(JOB,"status")="error" S DJOBS("hasError")=1
+ S DJOBS("numberOfJobs")=NUMJOBS
+ I NUMJOBS=0 S DJOBS("allJobsComplete")=0
+ Q

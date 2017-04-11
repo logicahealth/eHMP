@@ -41,7 +41,7 @@ function createParam(propName, value) {
 function vaStatusToFhirStatus(vaStatus) {
     var jdsRecord = _.clone(singleRecord);
     jdsRecord.vaStatus = vaStatus;
-    return medicationPrescription.convertToMedicationPrescription(jdsRecord, '123456').status;
+    return medicationPrescription.convertToMedicationPrescription(jdsRecord, '123456').resource.status;
 }
 
 function testJDSPath(params, queryStr) {
@@ -80,8 +80,8 @@ describe('medicationPrescription FHIR API parameters', function() {
         testJDSPath(createParam('_sort', 'patient'), '&order=pid');
     });
     it('calls JDS correctly - combined parameters', function() {
-        testJDSPath(createParams('10', 'patient', '2015'), encodeURIComponent(',gte(\"orders[].ordered\",201501010000),lt(\"orders[].ordered\",201601010000)') + '&limit=10&order=pid');
-        testJDSPath(createParams('1', 'identifier', '2015-02-03'), encodeURIComponent(',gte(\"orders[].ordered\",201502030000),lt(\"orders[].ordered\",201502040000)') + '&limit=1&order=uid');
+        testJDSPath(createParams('10', 'patient', '2015'), encodeURIComponent(',dgte(\"orders[].ordered\",\"201501010000\"),dlt(\"orders[].ordered\",\"201601010000\")') + '&limit=10&order=pid');
+        testJDSPath(createParams('1', 'identifier', '2015-02-03'), encodeURIComponent(',dgte(\"orders[].ordered\",\"201502030000\"),dlt(\"orders[].ordered\",\"201502040000\")') + '&limit=1&order=uid');
     });
 });
 
@@ -109,7 +109,8 @@ describe('medicationPrescription FHIR conversion methods', function() {
     });
 
     describe(':: medicationPrescription', function() {
-        var fhirItem = medicationPrescription.convertToMedicationPrescription(singleRecord, req._pid);
+        var fhirItem = medicationPrescription.convertToMedicationPrescription(singleRecord, req._pid).resource;
+        var siteHash = fhirUtils.getSiteHash(singleRecord.uid);
 
         it('sets the id and resourceType correctly', function() {
             expect(fhirItem.resourceType).to.equal('MedicationPrescription');
@@ -140,7 +141,7 @@ describe('medicationPrescription FHIR conversion methods', function() {
             expect(fhirItem.identifier[0].system).to.equal('urn:oid:2.16.840.1.113883.6.233');
         });
         it('sets dateWritten correctly', function() {
-            expect(fhirItem.dateWritten).to.equal(fhirUtils.convertToFhirDateTime(singleRecord.orders[0].ordered));
+            expect(fhirItem.dateWritten).to.equal(fhirUtils.convertToFhirDateTime(singleRecord.orders[0].ordered, siteHash));
         });
         it('sets patient reference correctly', function() {
             expect(fhirItem.patient.reference).to.equal('Patient/' + req._pid);
@@ -224,15 +225,15 @@ describe('medicationPrescription FHIR conversion methods', function() {
             });
             expect(fhirItem.dispense).to.not.be.undefined();
             expect(fhirItem.dispense.medication.reference).to.equal('#' + med.id);
-            expect(fhirItem.dispense.validityPeriod.start).to.equal(fhirUtils.convertToFhirDateTime(singleRecord.overallStart));
-            expect(fhirItem.dispense.validityPeriod.end).to.equal(fhirUtils.convertToFhirDateTime(singleRecord.overallStop));
+            expect(fhirItem.dispense.validityPeriod.start).to.equal(fhirUtils.convertToFhirDateTime(singleRecord.overallStart, siteHash));
+            expect(fhirItem.dispense.validityPeriod.end).to.equal(fhirUtils.convertToFhirDateTime(singleRecord.overallStop, siteHash));
             expect(fhirItem.dispense.quantity.value).to.equal(parseFloat(singleRecord.orders[0].quantityOrdered));
             expect(fhirItem.dispense.expectedSupplyDuration.value).to.equal(singleRecord.orders[0].daysSupply);
             expect(fhirItem.dispense.expectedSupplyDuration.units).to.equal('days');
             expect(fhirItem.dispense.numberOfRepeatsAllowed).to.equal(singleRecord.orders[0].fillsAllowed);
         });
         it('omits dispense.numberOfRepeatsAllowed when the JDS object has fillsAllowed set to 0', function() {
-            var fhir = medicationPrescription.convertToMedicationPrescription(singleRecordNoFills, req._pid);
+            var fhir = medicationPrescription.convertToMedicationPrescription(singleRecordNoFills, req._pid).resource;
             expect(fhir.dispense.numberOfRepeatsAllowed).to.be.undefined();
         });
     });

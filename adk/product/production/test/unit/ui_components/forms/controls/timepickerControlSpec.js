@@ -29,7 +29,6 @@ define([
         label: 'timepicker',
         control: 'timepicker',
         options: {
-            showMeridian: true,
             defaultTime: false,
             minuteStep: 1
         }
@@ -76,9 +75,25 @@ define([
         timePicker0: '14:05'
     });
 
+    var clickOnSpanTag = function(){
+        $form.find('span.input-group-addon').focus().click();
+    };
+    var getTimepickerHour = function(){
+        return $('body > .bootstrap-timepicker-widget .bootstrap-timepicker-hour');
+    };
+    var getTimepickerMinute = function(){
+        return $('body > .bootstrap-timepicker-widget .bootstrap-timepicker-minute');
+    };
+    var useArrowToIncrementTime = function(range){
+        $('body > .bootstrap-timepicker-widget a[data-action=increment'+range+']').focus().click();
+    };
+    var useArrowToDecrementTime = function(range){
+        $('body > .bootstrap-timepicker-widget a[data-action=decrement'+range+']').focus().click();
+    };
+
     describe('A timepicker', function() {
         afterEach(function() {
-            form.remove();
+            form.destroy();
         });
 
         describe('basic', function() {
@@ -93,17 +108,20 @@ define([
                 $('body').append($form);
             });
 
+
             it('contains an input time field', function() {
                 expect($form.find('#timePicker0').length).toBe(1);
                 expect($form.find('#timePicker0')).toBeVisible();
             });
 
             it('contains an input minute field', function() {
-                expect($form.find('input[name=minute]').length).toBe(1);
+                clickOnSpanTag();
+                expect(getTimepickerMinute().length).toBe(1);
             });
 
             it('contains an input hour field', function() {
-                expect($form.find('input[name=hour]').length).toBe(1);
+                clickOnSpanTag();
+                expect(getTimepickerHour().length).toBe(1);
             });
 
             it('contains a time icon', function() {
@@ -120,7 +138,7 @@ define([
 
             it('opens popup when time icon clicked', function() {
                 $form.find('span.input-group-addon').focus().click()
-                expect($form.find('div.bootstrap-timepicker-widget.dropdown-menu.open').length).toBe(1);
+                expect($('body > div.bootstrap-timepicker-widget.dropdown-menu.open').length).toBe(1);
             });
         });
 
@@ -148,36 +166,35 @@ define([
                 });
                 $form = form.render().$el;
                 $('body').append($form);
-                $form.find('#timePicker0').val('14:05');
-                $form.find('#timePicker0').trigger('change');
+                form.model.set('timePicker0', '14:05');
             });
 
             it('allows hour increment', function() {
-                $form.find('span.input-group-addon').focus().click();
-                $form.find('a[data-action=incrementHour]').focus().click();
+                clickOnSpanTag();
+                useArrowToIncrementTime('Hour');
                 expect(_.isEqual($form.find('#timePicker0').val(), '15:05')).toBe(true);
-                expect(_.isEqual($form.find('input[name=hour]').val(), '15')).toBe(true);
+                expect(_.isEqual(getTimepickerHour().val(), '15')).toBe(true);
             });
 
             it('allows hour decrement', function() {
-                $form.find('span.input-group-addon').focus().click();
-                $form.find('a[data-action=decrementHour]').focus().click();
+                clickOnSpanTag();
+                useArrowToDecrementTime('Hour');
                 expect(_.isEqual($form.find('#timePicker0').val(), '13:05')).toBe(true);
-                expect(_.isEqual($form.find('input[name=hour]').val(), '13')).toBe(true);
+                expect(_.isEqual(getTimepickerHour().val(), '13')).toBe(true);
             });
 
             it('allows minute increment', function() {
-                $form.find('span.input-group-addon').focus().click();
-                $form.find('a[data-action=incrementMinute]').focus().click();
+                clickOnSpanTag();
+                useArrowToIncrementTime('Minute');
                 expect(_.isEqual($form.find('#timePicker0').val(), '14:10')).toBe(true);
-                expect(_.isEqual($form.find('input[name=minute]').val(), '10')).toBe(true);
+                expect(_.isEqual(getTimepickerMinute().val(), '10')).toBe(true);
             });
 
             it('allows minute decrement', function() {
-                $form.find('span.input-group-addon').focus().click();
-                $form.find('a[data-action=decrementMinute]').focus().click();
+                clickOnSpanTag();
+                useArrowToDecrementTime('Minute');
                 expect(_.isEqual($form.find('#timePicker0').val(), '14:00')).toBe(true);
-                expect(_.isEqual($form.find('input[name=minute]').val(), '00')).toBe(true);
+                expect(_.isEqual(getTimepickerMinute().val(), '00')).toBe(true);
             });
 
         });
@@ -190,40 +207,39 @@ define([
                 });
                 $form = form.render().$el;
                 $('body').append($form);
-                $form.find('#timePicker1').val('02:05');
-                $form.find('#timePicker1').trigger('change');
+                form.model.set('timePicker1', '02:05');
             });
 
             it('allows time assignment in meridian', function() {
-                expect(_.isEqual($form.find('#timePicker1').val(), '02:05')).toBe(true);
+                expect(_.isEqual($form.find('#timePicker1').val(), '2:05')).toBe(true);
             });
 
             it('allows hour increment with meridian', function() {
-                $form.find('span.input-group-addon').focus().click();
-                $form.find('a[data-action=incrementHour]').focus().click();
-                expect(_.isEqual($form.find('#timePicker1').val(), '03:05')).toBe(true);
-                expect(_.isEqual($form.find('input[name=hour]').val(), '03')).toBe(true);
+                clickOnSpanTag();
+                useArrowToIncrementTime('Hour');
+                expect(_.isEqual($form.find('#timePicker1').val(), '3:05')).toBe(true);
+                expect(_.isEqual(getTimepickerHour().val(), '3')).toBe(true);
             });
 
             it('allows hour decrement with meridian', function() {
-                $form.find('span.input-group-addon').focus().click();
-                $form.find('a[data-action=decrementHour]').focus().click();
-                expect(_.isEqual($form.find('#timePicker1').val(), '01:05')).toBe(true);
-                expect(_.isEqual($form.find('input[name=hour]').val(), '01')).toBe(true);
+                clickOnSpanTag();
+                useArrowToDecrementTime('Hour');
+                expect(_.isEqual($form.find('#timePicker1').val(), '1:05')).toBe(true);
+                expect(_.isEqual(getTimepickerHour().val(), '1')).toBe(true);
             });
 
             it('allows minute increment with step', function() {
-                $form.find('span.input-group-addon').focus().click();
-                $form.find('a[data-action=incrementMinute]').focus().click();
-                expect(_.isEqual($form.find('#timePicker1').val(), '02:06')).toBe(true);
-                expect(_.isEqual($form.find('input[name=minute]').val(), '06')).toBe(true);
+                clickOnSpanTag();
+                useArrowToIncrementTime('Minute');
+                expect(_.isEqual($form.find('#timePicker1').val(), '2:06')).toBe(true);
+                expect(_.isEqual(getTimepickerMinute().val(), '06')).toBe(true);
             });
 
             it('allows minute decrement with step', function() {
-                $form.find('span.input-group-addon').focus().click();
-                $form.find('a[data-action=decrementMinute]').focus().click();
-                expect(_.isEqual($form.find('#timePicker1').val(), '02:04')).toBe(true);
-                expect(_.isEqual($form.find('input[name=minute]').val(), '04')).toBe(true);
+                clickOnSpanTag();
+                useArrowToDecrementTime('Minute');
+                expect(_.isEqual($form.find('#timePicker1').val(), '2:04')).toBe(true);
+                expect(_.isEqual(getTimepickerMinute().val(), '04')).toBe(true);
             });
         });
 
@@ -348,9 +364,10 @@ define([
                 expect($form.find('span.error')).toHaveText('Example error');
             });
             it("error is removed", function() {
+                form.model.errorModel.set('timePicker0', 'Example error');
                 expect($form.find('span.error')).toHaveText('Example error');
-                $form.find('span.input-group-addon').focus().click();
-                $form.find('.glyphicon-chevron-up').focus().click();
+                clickOnSpanTag();
+                useArrowToIncrementTime('Hour');
                 expect($form.find('span.error')).not.toExist();
             });
         });

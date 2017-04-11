@@ -4,7 +4,7 @@ end
 
 When(/^client requests the healthcheck details in RDK format$/) do
   path = RDClass.resourcedirectory_fetch.get_url("healthcheck-detail")
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the RDK healthcheck response contains$/) do |table|
@@ -31,7 +31,7 @@ end
 
 When(/^client requests the healthcheck healthy flag$/) do
   path = RDClass.resourcedirectory_fetch.get_url("healthcheck-healthy")
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the response is "(.*?)"$/) do |arg1|
@@ -42,7 +42,7 @@ end
 
 When(/^client requests the healthcheck details html in RDK format$/) do
   path = RDClass.resourcedirectory_fetch.get_url("healthcheck-detail-html")
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the response contains html elements$/) do
@@ -63,12 +63,12 @@ end
 
 When(/^client requests the healthcheck noupdate on demand in RDK format$/) do
   path = RDClass.resourcedirectory_fetch.get_url("healthcheck-noupdate")
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^client requests the healthcheck checks in RDK format$/) do
   path = RDClass.resourcedirectory_fetch.get_url("healthcheck-checks")
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the RDK healthcheck checks response for "(.*?)" contains dependencies$/) do |arg1, table|

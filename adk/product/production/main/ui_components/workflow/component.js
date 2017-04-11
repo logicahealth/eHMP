@@ -19,9 +19,13 @@ define([
     });
 
     var SubTrayView = Backbone.Marionette.CompositeView.extend({
-        template: Handlebars.compile('<div class="sub-tray-container all-padding-xs bottom-border-grey-light background-color-grey-lighter"></div>'),
+        template: Handlebars.compile('<div class="sub-tray-container all-padding-sm bottom-border-grey-light"></div>'),
         childViewContainer: '.sub-tray-container',
         getChildView: function(item) {
+            var ButtonView = Backbone.Marionette.ItemView.extend({
+                tagName: 'span',
+                template: Handlebars.compile('<i class="fa fa-chevron-circle-right fa-stack-2x font-size-14"></i> {{buttonLabel}}')
+            });
             var trayViewOptions = _.defaults(item.get('view').prototype.options, {
                 preventFocusoutClose: true,
                 eventChannelName: item.get('key')
@@ -29,9 +33,11 @@ define([
             trayViewOptions = _.defaults({
                 viewport: this.getOption('viewport') || null,
                 buttonClass: 'btn-sm',
+                buttonView: ButtonView,
                 position: 'left',
                 listenToWindowResize: false,
-                additionalTopPadding: 6
+                additionalTopPadding: 11,
+                widthScale: 1
             }, trayViewOptions);
             return item.get('view').extend({
                 options: trayViewOptions
@@ -45,25 +51,28 @@ define([
         },
         updateSubTraysMaxHeight: function(maxHeight) {
             this.children.each(function(view) {
-                view._maxHeight = maxHeight;
-                view.resetContainerPosition();
+                if (_.isFunction(view.resetContainerPosition)) {
+                    view._maxHeight = maxHeight;
+                    view.resetContainerPosition();
+                }
             });
+        },
+        _buildEventString: function (itemKey, key) {
+            return 'subTray:' + itemKey + ':' + key + ':subTrayView';
         },
         onAddChild: function(childView) {
             // work with the childView instance, here
-            var model = childView.model,
-                eventString = "subTray:"+this.options.itemKey+":";
-            if(_.isString(model.get('key'))){
-                eventString = eventString + model.get('key') + ":subTrayView";
-                Messaging.reply(eventString, function(){ return childView;});
+            var key = childView.model.get('key');
+            if(_.isString(key)) {
+                var eventString = this._buildEventString(this.options.itemKey, key);
+                Messaging.reply(eventString, function () { return childView;}, {ready: true});
             }
         },
         onBeforeRemoveChild: function(childView) {
             // work with the childView instance, here
-            var model = childView.model,
-                eventString = "subTray:"+this.options.itemKey+":";
-            if(_.isString(model.get('key'))){
-                eventString = eventString + model.get('key') + ":subTrayView";
+            var key = childView.model.get('key');
+            if(_.isString(key)) {
+                var eventString = this._buildEventString(this.options.itemKey, key);
                 Messaging.stopReplying(eventString, function(){ return childView;});
             }
         }
@@ -361,51 +370,58 @@ define([
             }
         },
         showInTray: function(trayKey) {
-            var TrayView = this.TrayView = Messaging.request("tray:writeback:" + trayKey + ":trayView");
-            if (!_.isUndefined(TrayView)) {
-                var TrayRegion = TrayView.TrayRegion;
-                if (!_.isUndefined(TrayRegion)) {
-                    this.listenTo(ResizeUtils.dimensions.centerRegion, 'change', function(model) {
-                        var $trayRegion = TrayView.TrayRegion.$el;
-                        var centerRegionHeight = model.get('height');
-                        this.adjustFormDimensions($trayRegion, centerRegionHeight);
-                    }, this);
+            var eventString = 'tray:writeback:' + trayKey + ':trayView';
 
-                    var self = this;
-                    if (TrayRegion.currentView instanceof WorkflowView) {
-                        var SimpleAlertItemView = Backbone.Marionette.ItemView.extend({
-                            template: Handlebars.compile([
-                                '<h3>Writeback already in progress!</h3>',
-                                '<p>Please complete the current workflow before starting a new ' + trayKey + ' writeback.</p>'
-                            ].join('\n'))
-                        });
-                        var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
-                            template: Handlebars.compile([
-                                '{{ui-button "OK" classes="btn-primary alert-continue" title="Press enter to continue."}}'
-                            ].join('\n')),
-                            events: {
-                                'click button': function() {
-                                    ADK.UI.Alert.hide();
-                                    self.transferFocusToTrayContainer();
+            Messaging.request(eventString, {
+                eventListener: this,
+                eventSuffix: 'show',
+                eventCallback: function(TrayView) {
+                    this.TrayView = TrayView;
+                    var TrayRegion = this.TrayView.TrayRegion;
+                    var trayKeyString = trayKey.replace(/s$/, '');
+                    if (!_.isUndefined(TrayRegion)) {
+                        this.listenTo(ResizeUtils.dimensions.contentRegion, 'change', function(model) {
+                            var $trayRegion = TrayView.TrayRegion.$el;
+                            var contentRegionHeight = model.get('height');
+                            this.adjustFormDimensions($trayRegion, contentRegionHeight);
+                        }, this);
+
+                        var self = this;
+                        if (TrayRegion.currentView instanceof WorkflowView) {
+                            var SimpleAlertItemView = Backbone.Marionette.ItemView.extend({
+                                template: Handlebars.compile([
+                                    '<h5>'+ trayKeyString + ' already in progress.</h5>',
+                                    '<p>Complete the current workflow before starting a new ' + trayKeyString + '.</p>'
+                                ].join('\n'))
+                            });
+                            var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
+                                template: Handlebars.compile([
+                                    '{{ui-button "OK" classes="btn-primary alert-continue" title="Press enter to continue."}}'
+                                ].join('\n')),
+                                events: {
+                                    'click button': function() {
+                                        ADK.UI.Alert.hide();
+                                        self.transferFocusToTrayContainer();
+                                    }
                                 }
-                            }
-                        });
-                        var alertView = new ADK.UI.Alert({
-                            messageView: SimpleAlertItemView,
-                            footerView: SimpleAlertFooterItemView
-                        });
-                        alertView.show();
-                        TrayView.$el.trigger('tray.show');
+                            });
+                            var alertView = new ADK.UI.Alert({
+                                messageView: SimpleAlertItemView,
+                                footerView: SimpleAlertFooterItemView
+                            });
+                            alertView.show();
+                            TrayView.$el.trigger('tray.show');
+                        } else {
+                            TrayView.$el.trigger('tray.swap', this);
+                            this.headerModel.set('showCloseButton', false);
+                            TrayView.$el.trigger('tray.show');
+                            this.adjustFormDimensionsForTray();
+                        }
                     } else {
-                        TrayView.$el.trigger('tray.swap', this);
-                        this.headerModel.set('showCloseButton', false);
-                        TrayView.$el.trigger('tray.show');
-                        this.adjustFormDimensionsForTray();
+                        console.error("Error when trying to show workflow inside : " + trayKeyString + " tray region.");
                     }
                 }
-            } else {
-                console.error("Error when trying to show workflow inside: " + trayKey + " tray.");
-            }
+            });
         },
         close: function() {
             this.$el.trigger('tray.reset');
@@ -451,19 +467,19 @@ define([
         },
         adjustFormDimensionsForTray: function() {
             var $trayRegion = this.TrayView.TrayRegion.$el;
-            this.adjustFormDimensions($trayRegion, ResizeUtils.dimensions.centerRegion.get('height'));
+            this.adjustFormDimensions($trayRegion, ResizeUtils.dimensions.contentRegion.get('height'));
         },
-        adjustFormDimensions: function($region, centerRegionHeight, centerRegionWidth) {
+        adjustFormDimensions: function($region, contentRegionHeight) {
             var Forms = $region.find('form:not(.hidden)');
             var maxSubTrayHeight = 0;
             _.each(Forms, function(form) {
                 var $form = $(form);
                 var $modalBody = $form.find('.modal-body');
-
                 if (!_.isEmpty($modalBody)) {
-                    var footerHeight = $modalBody.siblings('.modal-footer').outerHeight() || 0;
-                    var subTrayContainerHeight = this.ui.SubTrayRegion.outerHeight() || 0;
-                    var height = centerRegionHeight - footerHeight - subTrayContainerHeight;
+                    var headerHeight = $form.closest('.workflow-controller').siblings('.workflow-header').outerHeight(true) || 0;
+                    var footerHeight = $modalBody.siblings('.modal-footer').outerHeight(true) || 0;
+                    var subTrayContainerHeight = this.ui.SubTrayRegion.outerHeight(true) || 0;
+                    var height = contentRegionHeight - headerHeight - footerHeight - subTrayContainerHeight;
                     if (maxSubTrayHeight === 0 || height < maxSubTrayHeight) {
                         maxSubTrayHeight = height;
                     }
@@ -472,7 +488,6 @@ define([
                     });
                 }
             }, this);
-
             if (this.SubTrayRegion.hasView()) {
                 this.SubTrayRegion.currentView.updateSubTraysMaxHeight(maxSubTrayHeight);
             }

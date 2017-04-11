@@ -40,6 +40,7 @@ def verify_element_displayed(container, map_key, display_state = "Displayed")
   wait = Selenium::WebDriver::Wait.new(:timeout => 60)
 
   if display_state.downcase == "displayed"
+    p "#{container} #{map_key}"
     wait.until { container.get_element(map_key).displayed? }
   else
     # if the element isn't in the DOM, then it's obviously not displayed
@@ -235,7 +236,7 @@ def get_container(key)
     container = DocumentsGistContainer.instance
   when "encounters gist"
     container = EncountersGist.instance
-  when "conditions gist"
+  when "problems gist"
     container = ConditionsGist.instance
   when "reports gist"
     container = ReportsGistContainer.instance
@@ -369,17 +370,29 @@ Then(/^the "(.*?)" applet is finished loading$/) do |expected_applet_title|
 end
 
 Then(/^the modal's title is "(.*?)"$/) do |expected_title|
-  modal_title_key = "Modal Title"
+  # modal_title_key = "Modal Title"
+  # #@uc.wait_until_action_element_visible(modal_title_key, 15)
+  # #wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+  # #wait.until {
+  # #  p "expected: #{expected_title}   -- actual: #{@uc.get_element(modal_title_key).text}"
+  # #  @uc.get_element(modal_title_key).text == expected_title
+  # #}
+  # expect(@uc.perform_verification(modal_title_key, expected_title)).to be_true
 
-  #@uc.wait_until_action_element_visible(modal_title_key, 15)
-
-  #wait = Selenium::WebDriver::Wait.new(:timeout => 15)
-
-  #wait.until {
-  #  p "expected: #{expected_title}   -- actual: #{@uc.get_element(modal_title_key).text}"
-  #  @uc.get_element(modal_title_key).text == expected_title
-  #}
-  expect(@uc.perform_verification(modal_title_key, expected_title)).to be_true
+  @ehmp = PobParentApplet.new
+  
+  max_attempt = 4
+  begin
+    @ehmp.wait_until_fld_modal_title_visible
+    wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+    wait.until { @ehmp.fld_modal_title.text.upcase != "LOADING..." }
+    expect(@ehmp.fld_modal_title.text.upcase).to include(expected_title.upcase)
+  rescue Exception => e
+    p "*** entered rescue block : Modal Title match, going to retry ***"
+    max_attempt-=1
+    retry if max_attempt > 0
+    raise e if max_attempt <= 0
+  end
 end
 
 And(/^the modal's title is displayed$/) do

@@ -1,0 +1,7 @@
+"chef-server-test_slave_setup-build-%branch%" {
+	template = 'templates/chef-server-test_slave_setup-build.tpl'
+	description = "This build is meant to test the slave creation workflow nightly. It should delpoy a slave and then destroy it."
+	
+   gitUrl = 'https://code.vistacore.us/scm/pi/chef-repo.git'
+   gitBranch = '%branch%'
+}

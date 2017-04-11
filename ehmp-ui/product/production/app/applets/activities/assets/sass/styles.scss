@@ -1,0 +1,35 @@
+[data-appletid="activities"] {
+    .grid-toolbar {
+        .toolbar-item {
+            border-radius: 0;
+            padding: 2px 5px;
+            border: 0;
+            border-bottom: 1px solid $grey-light;
+            select {
+                min-width: 160px;
+                background-color: $pure-white;
+                background-clip: padding-box;
+                border: 1px solid $grey;
+            }
+            .divider-vertical {
+                border-left: 1px solid $grey-darkest;
+            }
+        }
+    }
+    .applet-div-chrome-container .gridContainer .grid-container {
+        height: calc(100% - 42px) !important;
+    }
+    .form-group {
+        margin-bottom: 0;
+    }
+    // temp solution
+    .data-grid {
+        height: 71vh;
+        overflow: auto;
+    }
+    .grid-container > div > p:first-child {
+        height: 71vh;
+        overflow: auto;
+        margin: 0;
+    }
+}

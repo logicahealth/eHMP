@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Immunization vaccine info statement [/immunization-vaccine-info-statement{?site}{&filter}{&date}{&fields}]
+## Immunization vaccine info statement [/immunization-vaccine-info-statement{?site}{&filter}{&date}]
 
 This RPC returns information from the VACCINE INFORMATION STATEMENT file (#920).
 
@@ -15,8 +15,6 @@ PXVIMM VIS
     :[filter]({{{common}}}/parameters/immunization-filter.md)
 
     :[date]({{{common}}}/parameters/date.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

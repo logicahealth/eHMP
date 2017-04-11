@@ -140,6 +140,6 @@ Or add packages via attributes (which accept the same attributes as the LWRP abo
 ## AUTHORS
 
 * Marius Ducea (marius@promethost.com)
-* Nathan L       (nlloyds@gmail.com)
+* Nathan L Smith (nlloyds@gmail.com)
 * Guilhem Lettron (guilhem@lettron.fr)
 * Barthelemy Vessemont (bvessemont@gmail.com)

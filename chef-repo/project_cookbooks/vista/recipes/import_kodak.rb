@@ -3,102 +3,6 @@
 # Recipe:: import_kodak
 #
 
-chef_gem 'vistarpc4r' do
-  version '0.3.0'
-end
-
-require 'rubygems'
-require 'vistarpc4r'
-
-remote_directory '/var/data/kodak_data' do
-   source 'kodak_data'
-   owner 'root'
-   group 'root'
-   mode '0755'
-   action :create
-end
-
-ruby_block "import_kodak" do
-  block do
-
-    broker = VistaRPC4r::RPCBrokerConnection.new("127.0.0.1", 9210, "PW    ", "PW    !!", false)
-    broker.connect
-    broker.setContext('OR CPRS GUI CHART')
-
-    Dir.glob("/var/data/kodak_data/*.json") do |json_file|
-      Chef::Log.info("Found vitals data: #{json_file}\n")
-      p = JSON.parse(File.read(File.expand_path(json_file, File.dirname(__FILE__))))
-      if p['vitals'] != nil && p['vitals']['observations'] != nil
-        p['vitals']['observations'].each do |observation|
-          vrpc = VistaRPC4r::VistaRPC.new("GMV ADD VM", VistaRPC4r::RPCResponse::ARRAY)
-          vrpc.params[0] = "#{p['vitals']['date']}.#{p['vitals']['time']}^#{p['vitals']['patientIEN']}^#{observation['VITAL TYPE']};#{observation['result']};^#{p['vitals']['location']}^#{p['vitals']['userIEN']}"
-          broker.execute(vrpc)
-        end
-      elsif p['allergies'] != nil && p['allergies']['list'] != nil
-        third_parameter = []
-        p['allergies']['list'].each do |list|
-          if list['ordinal'] == nil || list['ordinal'] == ""
-            third_parameter << ["\"#{list['key']}\"", list['value']]
-          else
-            third_parameter << ["\"#{list['key']}\", #{list['ordinal']}", list['value']]
-          end
-        end
-        vrpc = VistaRPC4r::VistaRPC.new("ORWDAL32 SAVE ALLERGY", VistaRPC4r::RPCResponse::SINGLE_VALUE)
-        vrpc.params[0] = "0" # first parameter is the allergy IEN to update/insert, if inserting, default to 0
-        vrpc.params[1] = p['allergies']['patientIEN'] # second parameter is the DFN of the patient to insert the allergy for
-        # third parameter is the list of allergy information to insert
-        vrpc.params[2] = third_parameter
-        broker.execute(vrpc)
-      elsif p['notes'] != nil
-        n = p['notes']
-
-
-        vrpc = VistaRPC4r::VistaRPC.new("OOPS NEW PERSON DATA", VistaRPC4r::RPCResponse::ARRAY)
-        vrpc.params = [
-          n["provider"],
-        ]
-
-        resp = broker.execute(vrpc)
-        provider_ien = resp.value.first.split('^').first
-
-        vrpc = VistaRPC4r::VistaRPC.new("TIU CREATE RECORD", VistaRPC4r::RPCResponse::SINGLE_VALUE)
-        vrpc.params = [
-          n["patientIEN"],
-          n["noteType"],
-          "",
-          "",
-          "",
-          [
-            ["1202", provider_ien],
-            ["1201", "T"],
-            ["1205", n["location"]],
-            ["1701",""],
-          ],
-          "#{n["location"]};T;A",
-          "1"
-        ]
-
-        resp = broker.execute(vrpc)
-        id = resp.value
-
-        vrpc = VistaRPC4r::VistaRPC.new("TIU SET DOCUMENT TEXT", VistaRPC4r::RPCResponse::SINGLE_VALUE)
-        vrpc.params = [
-          id,
-          [
-            ["\"TEXT\",1,0", n["text"]],
-            ["\"HDR\"","1^1"]
-          ],
-          "0"
-        ]
-        resp = broker.execute(vrpc)
-      end
-    end
-
-    broker.close
-  end
-  not_if { node[:vista][:no_reset] }
-end
-
 vista_mumps_block "Run MUMPS commands on Kodak" do
   duz       1
   programmer_mode true
@@ -185,6 +89,65 @@ vista_load_global "vista-kodak_test_data" do
   log node[:vista][:chef_log]
 end
 
+vista_mumps_block "Update patient TWOHUNDREDNINE,PATIENT's problems to have one originate in Panorama and one in Kodak" do
+  duz       1
+  programmer_mode true
+  namespace node[:vista][:namespace]
+  command [
+    "K FDA",
+    "S FDA(9000011,\"971,\",.02)=100865",
+    "S FDA(9000011,\"971,\",.06)=507",
+    "S FDA(9000011.11,\"1,971,\",.01)=507",
+    "S FDA(9000011,\"975,\",.02)=100155",
+    "S FDA(9000011,\"975,\",.06)=507",
+    "S FDA(9000011.11,\"1,975,\",.01)=507",
+    "D FILE^DIE(,\"FDA\")"
+  ]
+  log node[:vista][:chef_log]
+end
+
+vista_mumps_block "Move EHMP,SEVEN's problems to TRASH,SCOTT" do
+  duz       1
+  programmer_mode true
+  namespace node[:vista][:namespace]
+  command [
+    "S IEN=0 F  S IEN=$O(^AUPNPROB(\"AC\",100895,IEN)) Q:IEN=\"\"  S DA=IEN,DIE=\"^AUPNPROB(\",DR=\".02///100865\" D ^DIE"
+  ]
+  log node[:vista][:chef_log]
+end
+
+vista_mumps_block "Move EHMP,SEVEN's vitals to TRASH,SCOTT" do
+  duz       1
+  programmer_mode true
+  namespace node[:vista][:namespace]
+  command [
+    "S IEN=0 F  S IEN=$O(^GMR(120.5,\"C\",100895,IEN)) Q:IEN=\"\"  S DA=IEN,DIE=\"^GMR(120.5,\",DR=\".02///100865\" D ^DIE"
+  ]
+  log node[:vista][:chef_log]
+end
+
+vista_mumps_block "Delete EHMP,SEVEN's lab results" do
+  duz       1
+  programmer_mode true
+  namespace node[:vista][:namespace]
+  command [
+    "S LRDFN=693 F SUB=\"CH\",\"MI\",\"SP\",\"BB\",\"EM\",\"CY\",\"AY\" S LABID=0 F  S LABID=$O(^LR(LRDFN,SUB,LABID)) Q:+LABID'=LABID  S DA(1)=LRDFN,DA=LABID,DIK=\"^LR(\"_DA(1)_\",\"\"\"_SUB_\"\"\",\" D ^DIK"
+  ]
+  log node[:vista][:chef_log]
+end
+
+vista_mumps_block "Delete EHMP,SEVEN's medications" do
+  duz       1
+  programmer_mode true
+  namespace node[:vista][:namespace]
+  command [
+    "S DFN=100895 S RXID=0 F  S RXID=$O(^PS(55,DFN,\"P\",RXID)) Q:+RXID'=RXID  S RX=$G(^PS(55,DFN,\"P\",RXID,0)),DA=RX,DIK=\"^PSRX(\" D ^DIK S DA(1)=DFN,DA=RXID,DIK=\"^PS(55,DFN,\"\"P\"\",\" D ^DIK",
+    "S DFN=100895 S RXID=0 F  S RXID=$O(^PS(55,DFN,\"IV\",RXID)) Q:+RXID'=RXID  S DA(1)=DFN,DA=RXID,DIK=\"^PS(55,DFN,\"\"IV\"\",\" D ^DIK",
+    "S DFN=100895 S RXID=0 F  S RXID=$O(^PS(55,DFN,\"IVBCMA\",RXID)) Q:+RXID'=RXID  S DA(1)=DFN,DA=RXID,DIK=\"^PS(55,DFN,\"\"IVBCMA\"\",\" D ^DIK"
+  ]
+  log node[:vista][:chef_log]
+end
+
 vista_mumps_block "Reset all subscriptions on deploy" do
   namespace node[:vista][:namespace]
   command [
@@ -210,4 +173,16 @@ vista_mumps_block "Modify picklist values in Kodak only" do
     "S DA=500001,DIE=\"^AUTTIMM(\",DR=\".07///@\" D ^DIE"
   ]
   log node[:vista][:chef_log]
+end
+
+26.times do |i|
+  alph = ("a".."z").to_a
+
+  number = alph[i]
+  vista_patient "Create a patient" do
+    name "KODAK,#{number}"
+    sex "FEMALE"
+    dob "01/01/1955"
+    not_if { node[:vista][:no_reset] }
+  end
 end

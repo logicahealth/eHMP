@@ -15,7 +15,7 @@ var rules = require('../pdp/permission-rules').rules;
  */
 module.exports = function(req, res, callback) {
     if (!_.isObject(req.session.user)) {
-        return callback({message: 'No user defined for this session.', code: rdk.httpstatus.internal_server_error});
+        return setImmediate(callback, {message: 'No user defined for this session.', code: rdk.httpstatus.internal_server_error});
     }
     var msg = '';
     var permissionsObj = {

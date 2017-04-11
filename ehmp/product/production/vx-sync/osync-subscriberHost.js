@@ -6,14 +6,16 @@ var format = require('util').format;
 var cluster = require('cluster');
 var _ = require('underscore');
 
-var Worker = require(global.VX_JOBFRAMEWORK + 'worker');
-var HandlerRegistry = require(global.VX_JOBFRAMEWORK + 'handlerRegistry');
-var queueConfig = require(global.VX_JOBFRAMEWORK + 'queue-config.js');
+var Worker = require(global.VX_JOBFRAMEWORK).Worker;
+var HandlerRegistry = require(global.VX_JOBFRAMEWORK).HandlerRegistry;
+var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
 var jobUtil = require(global.VX_UTILS + 'osync-job-utils');
 var pollerUtils = require(global.VX_UTILS + 'poller-utils');
 var config = require(global.VX_ROOT + 'worker-config');
 var logUtil = require(global.VX_UTILS + 'log');
-logUtil.initialize(config.osync.loggers);
+var jdsUtil = require(global.VX_UTILS + 'jds-utils');
+
+logUtil.initialize(config, 'osync');
 
 var logger = logUtil.get('subscriberHost', 'host');
 
@@ -25,31 +27,36 @@ var options = pollerUtils.parseSubscriberOptions(logger, config.osync, 8770);
 var workers = [];
 var startup = null;
 
-config.addChangeCallback(function(){
-    logger.info('subscriberHost  config change detected. Stopping workers');
-    _.each(workers, function(worker){
-        worker.stop();
-    });
-    logger.info('subscriberHost  starting new workers');
-    if (startup) {
-        startup();
-    }
-}, false);
+// COMMENT OUT NOTE:   This was commented our rather than deleted.   Currently we do not want this module to
+//                     be watching and handling config notification events.   Any change to config should
+//                     be handled by a start and stop of this system.   But in the future if it was determined
+//                     that this module shouild monitor for on the fly changes in config - the uncomment out
+//                     this code.
+//---------------------------------------------------------------------------------------------------------------
+// config.addChangeCallback('osync-subscriberHost.js', function(){
+//     logger.info('subscriberHost  config change detected. Stopping workers');
+//     _.each(workers, function(worker){
+//         worker.stop();
+//     });
+//     logger.info('subscriberHost  starting new workers');
+//     if (startup) {
+//         startup();
+//     }
+// }, false);
 
 config.beanstalk = queueConfig.createFullBeanstalkConfig(config.osync.beanstalk);
 logger.info('config.beanstalk: ' + JSON.stringify(config.beanstalk));
 
 config.osync.vistaSites = config.vistaSites;
 
-// var app = express();
+//Reset patient list used for duplicate patient sync calls.  This should be done so that osync can re-sync a patient
+//at some later date.
+var patientDupListResetTimer = setInterval(function() {
+    jdsUtil.patientList = [];
+}, config.osync.duplicatePatientListResetMillis || 84600000);
 
 // if only one profile with only one instance, then do not use node.fork:
 if (cluster.isMaster) {
-    // if (options.endpoint) {
-    //     app.listen(options.port);
-    //     logger.info('subscriberEndpoint() endpoint listening on port %s', options.port);
-    // }
-
     if (options.processList.length === 1) {
         startup = startSubscriberHost.bind(null, logger, config.osync, options.port, _.first(options.processList));
         startup();
@@ -70,7 +77,7 @@ if (cluster.isMaster) {
 //////////////////////////////////////////////////////////////////////////////
 // NOTE: this file should not be cleaned out of dead code as there is much
 //       work in progress which should be completed in sprint 7.E or 7.F
-//      n Reich
+// Steven Reich
 
 function startSubscriberHost(logger, config, port, profile) {
     logger.info('starting osync using profile "%s"', profile);
@@ -83,12 +90,6 @@ function startSubscriberHost(logger, config, port, profile) {
     var handlerRegistry = registerHandlers(logger, config, environment);
 
     workers = startWorkers(config, handlerRegistry, environment, profileJobTypes, true);
-
-
-    // This starts an endpoint to allow pause, resume, reset, etc.
-    // if (options.endpoint) {
-    //     pollerUtils.buildSubscriberEndpoint('subscriberHost', app, logger, workers, []);
-    // }
 }
 
 

@@ -7,5 +7,5 @@ require 'VerifyJsonRuntimeValue.rb'
 When(/^the client requests default patient search with accessCode "(.*?)" in VPR format from RDK API$/) do |accessCode|
   query = RDKQuery.new('search-default-search')
   path = query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization_for_user(path, accessCode, TestClients.password_for(accessCode))
+  @response = HTTPartyRDK.get_as_user(path, accessCode, TestClients.password_for(accessCode))
 end

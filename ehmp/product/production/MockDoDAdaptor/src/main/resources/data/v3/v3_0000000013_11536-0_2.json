@@ -86,7 +86,7 @@
           }
         ],
         "facility": {
-          "name": "4th Medical Group^Seymour         Mental Health Clinic"
+          "name": "4th Medical Group^Seymour Johnson Mental Health Clinic"
         },
         "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2155857983",
         "contentType": [
@@ -136,7 +136,7 @@
           }
         ],
         "facility": {
-          "name": "4th Medical Group^Seymour         Mental Health Clinic"
+          "name": "4th Medical Group^Seymour Johnson Mental Health Clinic"
         },
         "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2155900860",
         "contentType": [
@@ -186,7 +186,7 @@
           }
         ],
         "facility": {
-          "name": "4th Medical Group^Seymour         Mental Health Clinic"
+          "name": "4th Medical Group^Seymour Johnson Mental Health Clinic"
         },
         "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2156435123",
         "contentType": [
@@ -236,7 +236,7 @@
           }
         ],
         "facility": {
-          "name": "4th Medical Group^Seymour         Mental Health Clinic"
+          "name": "4th Medical Group^Seymour Johnson Mental Health Clinic"
         },
         "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2156435150",
         "contentType": [

@@ -1,5 +1,5 @@
-HMPDJ ;SLC/MKB -- Serve VistA data as JSON via RPC ;Oct 09, 2015@16:50:59
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;;Sep 01, 2011;Build 63
+HMPDJ ;SLC/MKB,ASMR/RRB,CK -- Serve VistA data as JSON via RPC;Jun 22, 2016 17:23:52
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -9,6 +9,10 @@ HMPDJ ;SLC/MKB -- Serve VistA data as JSON via RPC ;Oct 09, 2015@16:50:59
  ; XLFDT                        10103
  ; XLFSTR                       10104
  ; XUPARAM                       2541
+ ;
+ ; DE2818/RRB - SQA findings 1st 3 lines of code.
+ ;
+ Q
  ;
 GET(HMP,FILTER) ; -- Return search results as JSON in @HMP@(n)
  ; RPC = HMP GET PATIENT DATA JSON
@@ -24,7 +28,7 @@ GET(HMP,FILTER) ; -- Return search results as JSON in @HMP@(n)
  ;
  N ICN,DFN,HMPI,HMPSYS,HMPTYPE,HMPSTART,HMPSTOP,HMPMAX,HMPID,HMPTEXT,HMPP,TYPE,HMPTN,HMPERR
  S HMP=$NA(^TMP("HMP",$J)),HMPI=0 K @HMP
- S HMPSYS=$$GET^XPAR("SYS","HMP SYSTEM NAME")
+ S HMPSYS=$$SYS^HMPUTILS
  S DT=$$DT^XLFDT             ;for crossing midnight boundary
  ;
  ; parse & validate input parameters
@@ -37,7 +41,7 @@ GET(HMP,FILTER) ; -- Return search results as JSON in @HMP@(n)
  ;
  S HMPTYPE=$G(FILTER("domain")) S:HMPTYPE="" HMPTYPE=$$ALL
  I $D(ZTQUEUED) S HMP=$NA(^XTMP(HMPBATCH,HMPFZTSK,HMPTYPE)) K @HMP
- I HMPTYPE'="new",DFN<1!'$D(^DPT(DFN)) S HMPERR=$$ERR(1,DFN) G GTQ
+ I HMPTYPE'="new",DFN<1!'$D(^DPT(DFN)) S HMPERR=$$ERR(1,DFN) G GTQ ;ICR 10035 DE2818 ASF 11/2/15
  ;
  ; -- initialize chunking if from DOMPT^HMPDJFSP ; i.e. HMPCHNK defined *S68-JCH*
  D CHNKINIT^HMPDJFSP(.HMP,.HMPI) ; *S68-JCH*
@@ -121,7 +125,7 @@ ERR(X,VAL) ; -- return error message
  Q MSG
  ;
 HL7NOW() ; -- Return current time in HL7 format
- Q $P($$FMTHL7^XLFDT($$NOW^XLFDT),"-")
+ Q $$FMTHL7^HMPSTMP($$NOW^XLFDT)  ; DE5016
  ;
 ADD(ITEM,COLL) ; -- add ITEM to results
  I $D(HMPCRC),$D(COLL) D ONE^HMPDCRC(ITEM,COLL) Q  ;checksum
@@ -136,7 +140,6 @@ ADD(ITEM,COLL) ; -- add ITEM to results
  . K HMPERR D ENCODE^HMPJSON("HMPTMP","HMPY","HMPERR")
  I $D(HMPY) D
  . S HMPI=HMPI+1
- . ;I HMPI>1,'$G(FILTER("noHead")) S @HMP@(HMPI,.3)=","
  . I HMPI>1 S @HMP@(HMPI,.3)=","
  . M @HMP@(HMPI)=HMPY
  . ;
@@ -146,7 +149,7 @@ ADD(ITEM,COLL) ; -- add ITEM to results
  ;
 TEST(DFN,TYPE,ID,TEXT,IN) ; -- test GET, write results to screen
  N OUT,IDX S U="^"
- S:'$D(IN("systemID")) IN("systemID")=$$GET^XPAR("SYS","HMP SYSTEM NAME")
+ S:'$D(IN("systemID")) IN("systemID")=$$SYS^HMPUTILS
  S IN("patientId")=+$G(DFN)
  S IN("domain")=$G(TYPE)
  S:$D(ID) IN("id")=ID
@@ -156,3 +159,4 @@ TEST(DFN,TYPE,ID,TEXT,IN) ; -- test GET, write results to screen
  S IDX=OUT
  F  S IDX=$Q(@IDX) Q:IDX'?1"^TMP(""HMP"","1.N.E  Q:+$P(IDX,",",2)'=$J  W !,@IDX
  Q
+ ;

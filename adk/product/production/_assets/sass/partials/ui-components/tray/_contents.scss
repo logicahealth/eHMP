@@ -1,0 +1,45 @@
+.sidebar .sidebar-tray {
+    .panel-body {
+        background-color: $pure-white;
+        &.action-list-container {
+            .btn-group {
+                .btn {
+                    color: $grey-darkest;
+                    text-transform: uppercase;
+                    &.btn-default {
+                        background-color: $primary-light;
+                        &:hover {
+                            background-color: darken( $primary-light, 10%);
+                        }
+                        .fa.pull-right {
+                            padding-top: 3px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .workflow-controller .modal-footer,
+    .modal-header,
+    .modal-content {
+        border-radius: 0;
+    }
+    .modal-content, .panel {
+        box-shadow: none;
+        border: none;
+    }
+    .modal-header,
+    .panel-heading {
+        background-color: $primary-dark;
+        border-radius: 0;
+        padding: 0px;
+        h4 {
+            color: $pure-white;
+            display: inline-block;
+            font-size: 12px;
+            line-height: 23px;
+            padding: 4px 0;
+            text-transform: uppercase;
+        }
+    }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "trustsys_ex",
+  "override": [{
+		"uid": "JBPM",
+	    "name": "JBPM",
+		"systemDesignator": "internal",
+	    "permissionSet": {
+	        "val": ["read-access"],
+	        "modifiedBy": "urn:va:user:C877:10000000270",
+	        "modifiedOn": "2015-08-19T19:31:41Z",
+	        "additionalPermissions": []
+	    }
+	}, {
+		"uid": "CDS",
+	    "name": "CDS",
+		"systemDesignator": "internal",
+	    "permissionSet": {
+	        "val": ["read-access"],
+	        "modifiedBy": "urn:va:user:C877:10000000270",
+	        "modifiedOn": "2015-08-19T19:31:41Z",
+	        "additionalPermissions": []
+	    }
+	}]
+}

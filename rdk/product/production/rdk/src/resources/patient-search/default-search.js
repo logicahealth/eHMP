@@ -6,6 +6,7 @@ var searchUtil = require('./results-parser');
 var searchMaskSsn = require('./search-mask-ssn');
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
+var formatSinglePatientSearchCommonFields = searchUtil.formatSinglePatientSearchCommonFields;
 
 module.exports.getMyCPRS = function(req, res) {
     req.logger.debug('default search invoked');
@@ -61,6 +62,7 @@ function parsePatientList(request, response, resultList, callback) {
     var list = resultList.data.patients || [];
     var parsedList = [];
     var callCount = 0;
+    var hasDGAccess = _.result(request, 'session.user.dgSensitiveAccess', 'false') === 'true';
     async.each(list, function(patient, done) {
         var currentCall = ++callCount;
         var patientAttr = patient.pid.split(';');
@@ -75,9 +77,7 @@ function parsePatientList(request, response, resultList, callback) {
                 if (patient.appointment) {
                     result.appointment = patient.appointment;
                 }
-                if(result.ssn) {
-                    result.ssn = searchMaskSsn.maskSsn(result.ssn);
-                }
+                result = formatSinglePatientSearchCommonFields(result, hasDGAccess);
             }
             parsedList[currentCall - 1] = result;
             done();
@@ -98,7 +98,7 @@ function parsePatientList(request, response, resultList, callback) {
 
 function getDemographics(request, patientId, site, callback) {
     if (patientId === null) {
-        return callback(null);
+        return setImmediate(callback);
     }
     request.app.subsystems.jdsSync.getPatient(site + ';' + patientId, request, function(err, data) {
         if (err) {

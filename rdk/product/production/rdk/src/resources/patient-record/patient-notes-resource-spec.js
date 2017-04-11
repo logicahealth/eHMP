@@ -4,6 +4,9 @@ var patientNotesResource = require('./patient-notes-resource');
 var httpUtil = require('../../core/rdk').utils.http;
 var req;
 var sampleNote;
+var sampleNoteWithAddendum;
+var sampleParentWithAddendum;
+var sampleCPRSAddendum;
 
 describe('The patient-notes-resource', function() {
     beforeEach(function() {
@@ -90,19 +93,135 @@ describe('The patient-notes-resource', function() {
                 }],
                 'value': true
             },
-            'domain': 'note',
+            'domain': 'ehmp-note',
             'patientUid': '9E7A;3',
             'referenceId': null,
             'subDomain': 'tiu',
-            'uid': 'urn:va:ehmp:9E7A;3:98a309a4-1b97-4b35-b66a-0d631cac6512',
+            'uid': 'urn:va:ehmp-note:9E7A;3:98a309a4-1b97-4b35-b66a-0d631cac6512',
             'visit': {
                 'dateTime': '20160101080000',
                 'location': 'urn:va:location:9E7A:64',
                 'serviceCategory': 'A'
             }
         };
-    });
 
+        sampleNoteWithAddendum = {
+          'author':'KHAN,VIHAAN',
+          'authorDisplayName':'Khan,Vihaan',
+          'authorUid':'urn:va:user:9E7A:10000000272',
+          'documentClass':'PROGRESS NOTES',
+          'documentDefUid':'urn:va:doc-def:9E7A:20',
+          'documentTypeCode':'C',
+          'documentTypeName':'Crisis Note',
+          'encounterName':'7A GEN MED Aug 14, 2014',
+          'encounterUid':'urn:va:visit:9E7A:3:11420',
+          'entered':'20160224133357',
+          'facilityCode':'998',
+          'facilityName':'ABILENE (CAA)',
+          'isInterdisciplinary':'false',
+          'kind':'Crisis Note',
+          'lastUpdateTime':'20160224133357',
+          'localId':'11685',
+          'localTitle':'CRISIS NOTE',
+          'pid':'9E7A;3',
+          'referenceDateTime':'201602241333',
+          'signedDateTime':'20160224133357',
+          'signer':'KHAN,VIHAAN',
+          'signerDisplayName':'Khan,Vihaan',
+          'signerUid':'urn:va:user:9E7A:10000000272',
+          'stampTime':'20160224133357',
+          'status':'COMPLETED',
+          'statusDisplayName':'Completed',
+          'summary':'CRISIS NOTE',
+          'uid':'urn:va:ehmp-note:9E7A;3:66dda7d5-a67b-4f83-9436-c7315a83e035',
+          'clinicalObject':{
+             'addendum':{
+                'author':'KHAN,VIHAAN',
+                'authorDisplayName':'Khan,Vihaan',
+                'authorUid':'urn:va:user:9E7A:10000000272',
+                'encounterDateTime':'',
+                'encounterName':'7A GEN MED Aug 14, 2014',
+                'encounterServiceCategory':'D',
+                'encounterUid':'urn:va:visit:9E7A:3:11420',
+                'entered':'20150223131640',
+                'isInterdisciplinary':'false',
+                'lastUpdateTime':'20150223131640',
+                'localTitle':'Addendum to: CRISIS NOTE',
+                'locationUid':'urn:va:location:9E7A:38',
+                'noteType':'ADDENDUM',
+                'parentUid':'urn:va:document:9E7A:3:11685',
+                'pid':'9E7A;3',
+                'referenceDateTime':'20160222121938',
+                'status':'UNSIGNED',
+                'statusDisplayName':'Unsigned',
+                'text':[
+                   {
+                      'author':'KHAN,VIHAAN',
+                      'authorDisplayName':'Khan,Vihaan',
+                      'authorUid':'urn:va:user:9E7A:10000000272',
+                      'content':'This is my unsigned addendum\r\n',
+                      'dateTime':'2016-02-02T18:47:36-05:00',
+                      'status':'UNSIGNED'
+                   }
+                ]
+             },
+             'authorUid':'urn:va:user:9E7A:10000000272',
+             'creationDateTime':'20160224191442+0000',
+             'domain':'note',
+             'ehmpState':'draft',
+             'patientUid':'9E7A;3',
+             'referenceId':'urn:va:document:9E7A:3:11685',
+             'subDomain':'addendum',
+             'uid':'urn:va:ehmp-note:9E7A;3:66dda7d5-a67b-4f83-9436-c7315a83e035',
+             'visit':{
+                'dateTime':'20140814130730',
+                'location':'urn:va:location:9E7A:38',
+                'serviceCategory':'D'
+             }
+          }
+       };
+
+        sampleCPRSAddendum = {
+          'author': 'KHAN,VIHAAN',
+          'authorDisplayName': 'Khan,Vihaan',
+          'authorUid': 'urn:va:user:9E7A:10000000272',
+          'clinicians': [
+            {
+              'displayName': 'Vk',
+              'name': 'VK',
+              'role': 'E',
+              'uid': 'urn:va:user:9E7A:10000000272'
+            },
+            {
+              'displayName': 'Khan,Vihaan',
+              'name': 'KHAN,VIHAAN',
+              'role': 'AU',
+              'uid': 'urn:va:user:9E7A:10000000272'
+            },
+            {
+              'displayName': 'Khan,Vihaan',
+              'name': 'KHAN,VIHAAN',
+              'role': 'S',
+              'signature': 'KHAN,VIHAAN',
+              'signedDateTime': '20160228144041',
+              'uid': 'urn:va:user:9E7A:10000000272'
+            },
+            {
+              'displayName': 'Khan,Vihaan',
+              'name': 'KHAN,VIHAAN',
+              'role': 'ES',
+              'uid': 'urn:va:user:9E7A:10000000272'
+            }
+          ],
+          'content': 'This is VKs signed addendum from CPRS.\r\n',
+          'dateTime': '20160228144019',
+          'signer': 'KHAN,VIHAAN',
+          'signerDisplayName': 'Khan,Vihaan',
+          'signerUid': 'urn:va:user:9E7A:10000000272',
+          'status': 'COMPLETED',
+          'uid': 'urn:va:document:9E7A:204:11686'
+        };
+    });
     describe('Verify custom date sort', function() {
         it('works on an empty set', function() {
             var notes = [];
@@ -199,7 +318,7 @@ describe('The patient-notes-resource', function() {
                 return callback(err, fakeResponse, fakeBody);
             });
             patientNotesResource._getDocumentsFromPjds(req, function(error, results) {
-                expect(results.notes[0].uid).to.equal('urn:va:ehmp:9E7A;3:98a309a4-1b97-4b35-b66a-0d631cac6512');
+                expect(results.notes[0].uid).to.equal('urn:va:ehmp-note:9E7A;3:98a309a4-1b97-4b35-b66a-0d631cac6512');
             });
         });
 
@@ -234,4 +353,29 @@ describe('The patient-notes-resource', function() {
             });
         });
     });
+    describe('Verify createModelForUnsignedAddendum', function() {
+        it('returns a model with the expected properties', function() {
+            var result = patientNotesResource._createModelForUnsignedAddendum(req.logger, sampleNoteWithAddendum);
+            expect(result.app).to.equal('ehmp');
+            expect(result.referenceId).to.equal(sampleNoteWithAddendum.clinicalObject.referenceId);
+            expect(result.uid).to.equal(sampleNoteWithAddendum.clinicalObject.uid);
+            expect(result.statusDisplayName).to.equal('Unsigned');
+            expect(result.clinicalObject.uid).to.equal(sampleNoteWithAddendum.clinicalObject.uid);
+        });
+    });
+    describe('Verify createModelForDocumentAddendum', function() {
+        it('returns a model with expected properties', function() {
+            var result = patientNotesResource._createModelForDocumentAddendum(req.logger, sampleCPRSAddendum, sampleNote);
+            expect(result.app).to.equal('vista');
+            expect(result.documentDefUid).to.equal(sampleNote.documentDefUid);
+            expect(result.localTitle).to.equal('Addendum to: ' +sampleNote.localTitle);
+            expect(result.noteType).to.equal('ADDENDUM');
+            expect(result.parentUid).to.equal(sampleNote.uid);
+            expect(result.pid).to.equal(sampleNote.pid);
+            expect(result.referenceDateTime).to.equal(sampleCPRSAddendum.dateTime);
+
+        });
+    });
 });
+
+

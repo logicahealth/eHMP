@@ -6,18 +6,30 @@ var format = require('util').format;
 var cluster = require('cluster');
 var _ = require('underscore');
 
-var Worker = require(global.VX_JOBFRAMEWORK + 'worker');
-var HandlerRegistry = require(global.VX_JOBFRAMEWORK + 'handlerRegistry');
+var Worker = require(global.VX_JOBFRAMEWORK).Worker;
+var HandlerRegistry = require(global.VX_JOBFRAMEWORK).HandlerRegistry;
 var jobUtil = require(global.VX_UTILS + 'job-utils');
 var pollerUtils = require(global.VX_UTILS + 'poller-utils');
 var config = require(global.VX_ROOT + 'worker-config');
 var logUtil = require(global.VX_UTILS + 'log');
 var moment = require('moment');
-logUtil.initialize(config.loggers);
+logUtil.initialize(config);
 
 var logger = logUtil.get('subscriberHost', 'host');
 var healthcheckUtils = require(global.VX_UTILS + 'healthcheck-utils');
 
+
+// var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
+// console.log('JobStatusUpdater')
+// console.log(JobStatusUpdater)
+
+// console.log()
+// console.log('HandlerRegistry')
+// console.log(HandlerRegistry)
+// console.log()
+// console.log('Worker')
+// console.log(Worker)
+// process.exit();
 //////////////////////////////////////////////////////////////////////////////
 //  EXECUTE ON STARTUP
 //////////////////////////////////////////////////////////////////////////////
@@ -29,16 +41,22 @@ var profile = options.profile;
 var processName = process.env.VXSYNC_LOG_SUFFIX;
 var processStartTime = moment().format('YYYYMMDDHHmmss');
 
-config.addChangeCallback(function() {
-    logger.info('subscriberHost  config change detected. Stopping workers');
-    _.each(workers, function(worker) {
-        worker.stop();
-    });
-    logger.info('subscriberHost  starting new workers');
-    if (startup) {
-        startup();
-    }
-}, false);
+// COMMENT OUT NOTE:   This was commented our rather than deleted.   Currently we do not want this module to
+//                     be watching and handling config notification events.   Any change to config should
+//                     be handled by a start and stop of this system.   But in the future if it was determined
+//                     that this module shouild monitor for on the fly changes in config - the uncomment out
+//                     this code.
+//---------------------------------------------------------------------------------------------------------------
+// config.addChangeCallback('subscribeHost.js', function() {
+//     logger.info('subscriberHost  config change detected. Stopping workers');
+//     _.each(workers, function(worker) {
+//         worker.stop();
+//     });
+//     logger.info('subscriberHost  starting new workers');
+//     if (startup) {
+//         startup();
+//     }
+// }, false);
 
 process.on('SIGURG', function() {
     logger.debug('subscriberHost process id ' + process.pid + ': Got SIGURG.');
@@ -73,7 +91,7 @@ if (cluster.isMaster) {
 //////////////////////////////////////////////////////////////////////////////
 // NOTE: this file should not be cleaned out of dead code as there is much
 //       work in progress which should be completed in sprint 7.E or 7.F
-//      n Reich
+// Steven Reich
 
 function startSubscriberHost(logger, config, port, profile) {
     logger.info('starting vx-sync using profile "%s"', profile);
@@ -115,7 +133,6 @@ function registerHandlers(logger, config, environment) {
     handlerRegistry.register(logger, config, environment, jobUtil.pgdSyncRequestType(), require(global.VX_HANDLERS + 'pgd-sync-request/pgd-sync-request-handler'));
     handlerRegistry.register(logger, config, environment, jobUtil.jmeadowsSyncRequestType(), require(global.VX_HANDLERS + 'jmeadows-sync-request/jmeadows-sync-request-handler'));
 
-    handlerRegistry.register(logger, config, environment, jobUtil.hdrXformVprType(), require(global.VX_HANDLERS + 'hdr-to-vpr-xform/hdr-to-vpr-xform-handler'));
     handlerRegistry.register(logger, config, environment, jobUtil.vlerXformVprType(), require(global.VX_HANDLERS + 'vler-to-vpr-xform/vler-to-vpr-xform-handler'));
     handlerRegistry.register(logger, config, environment, jobUtil.pgdXformVprType(), require(global.VX_HANDLERS + 'pgd-to-vpr-xform/pgd-to-vpr-xform-handler'));
 
@@ -136,7 +153,7 @@ function registerHandlers(logger, config, environment) {
 
     handlerRegistry.register(logger, config, environment, jobUtil.recordEnrichmentType(), require(global.VX_HANDLERS + 'record-enrichment-request/record-enrichment-request-handler'));
 
-    handlerRegistry.register(logger, config, environment, jobUtil.vistaPrioritizationRequestType(), require(global.VX_HANDLERS + 'vista-prioritization-request/vista-prioritization-request-handler'));
+    handlerRegistry.register(logger, config, environment, jobUtil.eventPrioritizationRequestType(), require(global.VX_HANDLERS + 'event-prioritization-request/event-prioritization-request-handler'));
 
     handlerRegistry.register(logger, config, environment, jobUtil.vistaRecordProcessorRequestType(), require(global.VX_HANDLERS + 'vista-record-processor/vista-record-processor-handler'));
 
@@ -145,9 +162,9 @@ function registerHandlers(logger, config, environment) {
     handlerRegistry.register(logger, config, environment, jobUtil.storeRecordType(), require(global.VX_HANDLERS + 'store-record-request/store-record-request-handler'));
     handlerRegistry.register(logger, config, environment, 'solr-record-storage', require(global.VX_HANDLERS + 'solr-record-storage/solr-record-storage-handler'));
     handlerRegistry.register(logger, config, environment, jobUtil.publishVxDataChangeType(), require(global.VX_HANDLERS + 'publish-vx-data-change-request/publish-vx-data-change-request-handler'));
-    handlerRegistry.register(logger, config, environment, jobUtil.activityManagementEventType(), require(global.VX_HANDLERS + 'activity-management-event/activity-management-event-handler'));
 
     handlerRegistry.register(logger, config, environment, jobUtil.resyncRequestType(), require(global.VX_HANDLERS + 'resync-request/resync-request-handler'));
+    handlerRegistry.register(logger, config, environment, jobUtil.recordUpdateType(), require(global.VX_HANDLERS + 'record-update/record-update-handler'));
 
     return handlerRegistry;
 }

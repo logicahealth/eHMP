@@ -21,6 +21,7 @@ var originalVaAppointmentRecord = {
     'appointmentStatus': 'SCHEDULED/KEPT',
     'categoryCode': 'urn:va:encounter-category:OV',
     'categoryName': 'Outpatient Visit',
+    'checkIn': 200005210901,
     'checkOut': 200005211314,
     'dateTime': 200005210900,
     'facilityCode': 500,
@@ -132,6 +133,7 @@ describe('record-enrichment-appointment-xformer.js', function() {
                     expect(typeof record.facilityCode).toEqual('string');
                     expect(typeof record.typeCode).toEqual('string');
                     expect(typeof record.checkOut).toEqual('string');
+                    expect(typeof record.checkIn).toEqual('string');
                     expect(typeof record.movements[0].dateTime).toEqual('string');
                     expect(typeof record.movements[0].localId).toEqual('string');
                     expect(typeof record.stay.arrivalDateTime).toEqual('string');

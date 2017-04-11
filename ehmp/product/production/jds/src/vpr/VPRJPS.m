@@ -45,35 +45,40 @@ SAVE(JPID,JSON) ; Save a JSON encoded object
  ; Ensure there is a JPID mapping for the PID
  I '$D(^VPRPTJ("JPID",PID)) D SETERROR^VPRJRER(224) QUIT ""
  ; Ensure the stampTime exists and is valid
- S METASTAMP=$G(OBJECT("stampTime")) I '$$ISSTMPTM^VPRSTMP(METASTAMP) D SETERROR^VPRJRER(221) QUIT ""
+ S METASTAMP=$G(OBJECT("stampTime")) I '$$ISSTMPTM^VPRSTMP(METASTAMP) D SETERROR^VPRJRER(221,"Invalid stampTime passed: "_METASTAMP) QUIT ""
  ; kill the old indexes and object
  S OLDSTAMP=""
- S OLDSTAMP=$O(^VPRPT(PID,UID,""),-1)
- I OLDSTAMP'="",OLDSTAMP<METASTAMP S OLDOBJ="" M OLDOBJ=^VPRPT(PID,UID,OLDSTAMP)
+ S OLDSTAMP=$O(^VPRPT(JPID,PID,UID,""),-1)
+ I OLDSTAMP'="",OLDSTAMP<METASTAMP S OLDOBJ="" M OLDOBJ=^VPRPT(JPID,PID,UID,OLDSTAMP)
  I METASTAMP>OLDSTAMP D BLDTLT^VPRJCT1(COLL,.OBJECT,.TLTARY) Q:$G(HTTPERR) ""
- K ^VPRPT(PID,UID,METASTAMP)
- K ^VPRPTJ("JSON",PID,UID,METASTAMP)
+ K ^VPRPT(JPID,PID,UID,METASTAMP)
+ K ^VPRPTJ("JSON",JPID,PID,UID,METASTAMP)
  ;
  S ^VPRPTJ("KEY",UID,PID,METASTAMP)=""
- M ^VPRPTJ("JSON",PID,UID,METASTAMP)=JSON
- I METASTAMP>OLDSTAMP M ^VPRPTJ("TEMPLATE",PID,UID)=TLTARY
- M ^VPRPT(PID,UID,METASTAMP)=OBJECT
+ M ^VPRPTJ("JSON",JPID,PID,UID,METASTAMP)=JSON
+ I METASTAMP>OLDSTAMP M ^VPRPTJ("TEMPLATE",JPID,PID,UID)=TLTARY
+ M ^VPRPT(JPID,PID,UID,METASTAMP)=OBJECT
  ; Set stored flags
  S SOURCE=$P(PID,";",1)
  S SOURCESTAMP=""
  S DOMAIN=COLL
  ;
  ; ** Begin Critical Section **
- L +^VPRSTATUS(PID,SOURCE,DOMAIN,UID,METASTAMP):$G(^VPRCONFIG("timeout","ptstore"),5) E  D SETERROR^VPRJRER(502,"PID,SOURCE,SOURCESTAMP,DOMAIN,UID,METASTAMP "_$G(PID)_","_$G(SOURCE)_","_$G(SOURCESTAMP)_","_$G(DOMAIN)_","_$G(UID)_","_$G(METASTAMP)) Q
- S ^VPRSTATUS(PID,SOURCE,DOMAIN,UID,METASTAMP,"stored")="1"
- L -^VPRSTATUS(PID,SOURCE,DOMAIN,UID,METASTAMP)
+ L +^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,METASTAMP):$G(^VPRCONFIG("timeout","ptstore"),5) E  D SETERROR^VPRJRER(502,"PID,SOURCE,SOURCESTAMP,DOMAIN,UID,METASTAMP "_$G(PID)_","_$G(SOURCE)_","_$G(SOURCESTAMP)_","_$G(DOMAIN)_","_$G(UID)_","_$G(METASTAMP)) Q
+ S ^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,METASTAMP,"stored")="1"
+ L -^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,METASTAMP)
  ; ** End Critical Section **
- D INDEX^VPRJPX(PID,UID,.OLDOBJ,.OBJECT)
+ ;
+ ; If we have an OLDSTAMP, but no OLDOBJ it means that
+ ; the object on file was newer than the object currently
+ ; stored and we shouldn't update any indexes
+ I '((OLDSTAMP'="")&($D(OLDOBJ)=0)) D INDEX^VPRJPX(PID,UID,.OLDOBJ,.OBJECT)
+ ;
  ; Set time this patient has been accessed for filtering
  S LASTTIME=$$CURRTIME^VPRJRUT
  S ^VPRMETA("JPID",JPID,"lastAccessTime")=LASTTIME
  ; End store using metastamps
- S ^VPRPTI(PID,"every","every")=$H  ; timestamps latest update for this PID
+ S ^VPRPTI(JPID,PID,"every","every")=$H  ; timestamps latest update for this PID
  ;
  Q $$URLENC^VPRJRUT(UID)  ; no errors
  ;
@@ -86,73 +91,79 @@ DELETE(PID,KEY,SITEDEL) ; Delete an object given its UID
  ; must delete entire patient instead, if the SITEDEL flag is not set
  I '$G(SITEDEL,0),COLL="patient" D SETERROR^VPRJRER(213,KEY) QUIT
  ;
- L +^VPRPT(PID,KEY):$G(^VPRCONFIG("timeout","ptdelete"),5) E  D SETERROR^VPRJRER(502) QUIT
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Identifier "_PID) QUIT
+ ;
+ L +^VPRPT(JPID,PID,KEY):$G(^VPRCONFIG("timeout","ptdelete"),5) E  D SETERROR^VPRJRER(502) QUIT
  ; kill the old indexes and object
  S OBJECT=""
  S STAMP=""
- S STAMP=$O(^VPRPT(PID,KEY,STAMP),-1)
- S OLDOBJ="" M OLDOBJ=^VPRPT(PID,KEY,STAMP)
+ S STAMP=$O(^VPRPT(JPID,PID,KEY,STAMP),-1)
+ S OLDOBJ="" M OLDOBJ=^VPRPT(JPID,PID,KEY,STAMP)
  TSTART
- K ^VPRPT(PID,KEY)
+ K ^VPRPT(JPID,PID,KEY)
  K ^VPRPTJ("KEY",KEY,PID)
- K ^VPRPTJ("JSON",PID,KEY)
- K ^VPRPTJ("TEMPLATE",PID,KEY)
+ K ^VPRPTJ("JSON",JPID,PID,KEY)
+ K ^VPRPTJ("TEMPLATE",JPID,PID,KEY)
  D INDEX^VPRJPX(PID,KEY,.OLDOBJ,.OBJECT)
  TCOMMIT
- L -^VPRPT(PID,KEY)
+ L -^VPRPT(JPID,PID,KEY)
  ;
  ; Set time this patient has been accessed for filtering
- S JPID=$$JPID4PID^VPRJPR(PID)
  I JPID'="",$$ISJPID^VPRJPR(JPID) D
  . S LASTTIME=$$CURRTIME^VPRJRUT
  . S ^VPRMETA("JPID",JPID,"lastAccessTime")=LASTTIME
  ;
- S ^VPRPTI(PID,"every","every")=$H ; timestamps latest update for the PID
+ S ^VPRPTI(JPID,PID,"every","every")=$H ; timestamps latest update for the PID
  Q
 DELCLTN(PID,CLTN,SYSID) ; Delete a collection for a patient
  I '$L(CLTN) D SETERROR^VPRJRER(215) QUIT
- N ROOT,LROOT,UID
+ N ROOT,LROOT,UID,JPID
  S ROOT="urn:va:"_CLTN_":"
  I $L($G(SYSID)) S ROOT=ROOT_SYSID_":"
  S LROOT=$L(ROOT)
- L +^VPRPT(PID,ROOT):$G(^VPRCONFIG("timeout","ptdelete"),5) E  D SETERROR^VPRJRER() QUIT
- S UID=ROOT F  S UID=$O(^VPRPT(PID,UID)) Q:$E(UID,1,LROOT)'=ROOT  D DELETE(PID,UID)
- L -^VPRPT(PID,ROOT)
+ ;
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Identifier "_PID) QUIT
+ ;
+ L +^VPRPT(JPID,PID,ROOT):$G(^VPRCONFIG("timeout","ptdelete"),5) E  D SETERROR^VPRJRER(502) QUIT
+ S UID=ROOT F  S UID=$O(^VPRPT(JPID,PID,UID)) Q:$E(UID,1,LROOT)'=ROOT  D DELETE(PID,UID)
+ L -^VPRPT(JPID,PID,ROOT)
  Q
 DELSITE(SITE) ; Delete a site's patient data
  I '$L(SITE) D SETERROR^VPRJRER(208) Q
  ;
  N PID,JPID,UID,PIDS,HASH,KEY,ID,ICN
- D DELSITE^VPRSTATUS(SITE) ; Delete sync status for site
- S PID=SITE ; Speed up the $O, since a PID starts with the site
- S UID=""
- F  S PID=$O(^VPRPT(PID)) Q:PID=""!($P(PID,";")'=SITE)  D
- . F  S UID=$O(^VPRPT(PID,UID)) Q:UID=""  D
- . . D DELETE(PID,UID,1) ; Delete the patient UIDs (pass 1 to delete by site)
- . ;
- . S JPID=$$JPID4PID^VPRJPR(PID)
- . D JPIDDIDX^VPRJPR(JPID,PID) ; Remove JPID indexes for PID
- . ;
- . S HASH="" ; Remove cached queries
- . F  S HASH=$O(^VPRTMP("PID",PID,HASH)) Q:HASH=""  D
- . . K ^VPRTMP(HASH)
- . K ^VPRTMP("PID",PID)
- . ;
- . S KEY="" ; Remove the XREF for UIDs
- . F  S KEY=$O(^VPRPT(PID,KEY)) Q:KEY=""  D
- . . K ^VPRPTJ("KEY",KEY,PID)
- . ;
- . D CLRCODES^VPRJ2P(PID) ; Delete codes in VPRPTX
- . D CLREVIEW^VPRJ2P(PID) ; Delete review dates in VPRPTX
- . D CLRCOUNT^VPRJ2P(PID) ; Decrement the cross-patient totals for PID
- . D CLRXIDX^VPRJ2P(PID) ; Remove cross-patient indexes for PID
- . D DELSITE^VPRJOB(PID) ; Delete job status for site by PID
- . ;
- . D PID4JPID^VPRJPR(.PIDS,JPID)
- . S ID=$O(PIDS(""),-1)
- . I ID=1,$$ISICN^VPRJPR(PIDS(ID)) D  ; Down to ICN only
- . . S ICN=PIDS(ID) ; 
- . . D JPIDDIDX^VPRJPR(JPID,ICN) ; Remove ICN and JPID if no more PIDs exist
+ D DELSITE^VPRJPSTATUS(SITE) ; Delete sync status for site
+ S JPID=""
+ F  S JPID=$O(^VPRPT(JPID)) Q:JPID=""  D
+ . S PID=SITE ; Speed up the $O, since a PID starts with the site
+ . F  S PID=$O(^VPRPT(JPID,PID)) Q:PID=""!($P(PID,";")'=SITE)  D
+ . . S UID=""
+ . . F  S UID=$O(^VPRPT(JPID,PID,UID)) Q:UID=""  D
+ . . . D DELETE(PID,UID,1) ; Delete the patient UIDs (pass 1 to delete by site)
+ . . ;
+ . . S HASH="" ; Remove cached queries
+ . . F  S HASH=$O(^VPRTMP("PID",PID,HASH)) Q:HASH=""  D
+ . . . K ^VPRTMP(HASH)
+ . . K ^VPRTMP("PID",PID)
+ . . ;
+ . . S KEY="" ; Remove the XREF for UIDs
+ . . F  S KEY=$O(^VPRPT(JPID,PID,KEY)) Q:KEY=""  D
+ . . . K ^VPRPTJ("KEY",KEY,PID)
+ . . ;
+ . . D CLRCODES^VPRJ2P(PID) ; Delete codes in VPRPTX
+ . . D CLREVIEW^VPRJ2P(PID) ; Delete review dates in VPRPTX
+ . . D CLRCOUNT^VPRJ2P(PID) ; Decrement the cross-patient totals for PID
+ . . D CLRXIDX^VPRJ2P(PID) ; Remove cross-patient indexes for PID
+ . . D DELSITE^VPRJOB(PID) ; Delete job status for site by PID
+ . . ;
+ . . D JPIDDIDX^VPRJPR(JPID,PID) ; Remove JPID indexes for PID
+ . . D PID4JPID^VPRJPR(.PIDS,JPID)
+ . . S ID=$O(PIDS(""),-1)
+ . . I ID=1,$$ISICN^VPRJPR(PIDS(ID)) D  ; Down to ICN only
+ . . . S ICN=PIDS(ID) ;
+ . . . D JPIDDIDX^VPRJPR(JPID,ICN) ; Remove ICN and JPID if no more PIDs exist
  Q
 CLEARPT(PID) ; -- Clear data for patient
  N PIDS,JPID,ID
@@ -160,6 +171,7 @@ CLEARPT(PID) ; -- Clear data for patient
  N PIDUSED
  S PIDUSED=($D(^VPRPTJ("JPID",PID))>0)
  S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Identifier "_PID) QUIT
  ; Get the PIDS for a JPID
  I $$ISJPID^VPRJPR(JPID) D
  . D PID4JPID^VPRJPR(.PIDS,JPID)
@@ -171,30 +183,26 @@ CLEARPT(PID) ; -- Clear data for patient
  ; Loop through all PIDs associated with a JPID
  F  S ID=$O(PIDS(ID)) Q:ID=""  D
  . S PID=PIDS(ID)
- . L +^VPRPT(PID):$G(^VPRCONFIG("timeout","ptdelete"),5) E  D SETERROR^VPRJRER(502) QUIT
- . ; Begin Remove JPID
- . S JPID=$$JPID4PID^VPRJPR(PID)
- . ; Remove JPID indexes
- . D JPIDDIDX^VPRJPR(JPID,PID)
- . ; End Remove JPID
- . ;
+ . L +^VPRPT(JPID,PID):$G(^VPRCONFIG("timeout","ptdelete"),5) E  D SETERROR^VPRJRER(502) QUIT
  . N HASH ; remove cached queries
  . S HASH="" F  S HASH=$O(^VPRTMP("PID",PID,HASH)) Q:HASH=""  K ^VPRTMP(HASH)
  . K ^VPRTMP("PID",PID)
  . ;
  . N KEY ; remove the xref for UID's
- . S KEY="" F  S KEY=$O(^VPRPT(PID,KEY)) Q:KEY=""  K ^VPRPTJ("KEY",KEY,PID)
+ . S KEY="" F  S KEY=$O(^VPRPT(JPID,PID,KEY)) Q:KEY=""  K ^VPRPTJ("KEY",KEY,PID)
  . ;
  . ;D CLRXIDX^VPRJ2P(PID)  ; clear indexes of type xattr
  . D CLRCODES^VPRJ2P(PID) ; clear codes in VPRPTX
  . D CLREVIEW^VPRJ2P(PID) ; clear review dates in VPRPTX
  . D CLRCOUNT^VPRJ2P(PID) ; decrement the cross patient counts
- . D DELSS^VPRSTATUS(PID) ; Clear Sync Status for PID
+ . D DELSS^VPRJPSTATUS(PID) ; Clear Sync Status for PID
  . D DEL^VPRJOB(JPID) ; Clear Job Status for JPID
  . ;
- . K ^VPRPTI(PID)           ; kill all indexes for the patient
- . K ^VPRPT(PID)            ; kill all the data for the patient
- . K ^VPRPTJ("JSON",PID)     ; kill original JSON objects for the patient
- . K ^VPRPTJ("TEMPLATE",PID) ; kill the pre-compiled JSON objects for the patient
- . L -^VPRPT(PID)
+ . K ^VPRPTI(JPID,PID)           ; kill all indexes for the patient
+ . K ^VPRPT(JPID,PID)            ; kill all the data for the patient
+ . K ^VPRPTJ("JSON",JPID,PID)    ; kill original JSON objects for the patient
+ . K ^VPRPTJ("TEMPLATE",JPID,PID) ; kill the pre-compiled JSON objects for the patient
+ . ; Remove JPID indexes
+ . D JPIDDIDX^VPRJPR(JPID,PID)
+ . L -^VPRPT(JPID,PID)
  Q

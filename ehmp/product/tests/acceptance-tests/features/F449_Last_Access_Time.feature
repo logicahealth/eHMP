@@ -21,7 +21,7 @@ Scenario: The last access time get update when client read a patient record.
   
 @access_time
 Scenario: The last access time get update when client add a new record.
-  Given a patient with pid "9E7A;253" has been synced through VX-Sync API for "9E7A;C877;2939;FFC7;VLER" site(s)
+  Given a patient with pid "9E7A;253" has been synced through VX-Sync API for "9E7A;C877;HDR;VLER" site(s)
   Then the sync status contain lastAccessTime
   And a client connect to VistA using "PANORAMA"
   When the client add new Vital record for patient with DFN "253" 

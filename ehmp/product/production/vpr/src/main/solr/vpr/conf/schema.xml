@@ -16,10 +16,10 @@
  limitations under the License.
 -->
 
-<!--
+<!--  
  This is the Solr schema file. This file should be named "schema.xml" and
  should be in the conf directory under the solr home
- (i.e. ./solr/conf/schema.xml by default)
+ (i.e. ./solr/conf/schema.xml by default) 
  or located where the classloader for the Solr webapp can find it.
 
  This example schema is the recommended starting point for users.
@@ -231,14 +231,14 @@
                 <filter class="solr.LowerCaseFilterFactory"/>
             </analyzer>
         </fieldType>
-
-        <!--
+        
+        <!-- 
         	Working in a text field specialized for clinical documents
-
+        	
         	- trying less aggressive word stemming
         	- additional stemming for plural forms, (some words in kstem do not reduce (peanuts, dogs)
         	- adding stop words
-        	- synonym expansion done by query parser
+        	- synonym expansion done by query parser 
          -->
         <fieldType name="text_clinical" class="solr.TextField" omitNorms="true" positionIncrementGap="100">
         	<analyzer type="index">
@@ -266,7 +266,7 @@
                 <filter class="solr.EnglishMinimalStemFilterFactory"/>
             </analyzer>
         </fieldType>
-
+        
         <!-- used for spell checking and suggestions -->
         <fieldType name="text_suggest" class="solr.TextField" positionIncrementGap="100">
         	<analyzer type="index">
@@ -275,9 +275,9 @@
             <analyzer type="query">
                 <tokenizer class="solr.StandardTokenizerFactory"/>
                 <filter class="solr.TrimFilterFactory"/>
-            </analyzer>
+            </analyzer>        	
         </fieldType>
-
+        
         <fieldType name="text_suggest_shingle" class="solr.TextField" positionIncrementGap="100">
         	<analyzer>
         		<tokenizer class="solr.StandardTokenizerFactory"/>
@@ -295,8 +295,8 @@
                         outputUnigrams="true"
                         outputUnigramsIfNoShingles="true"/>
         	</analyzer>
-        </fieldType>
-
+        </fieldType>        
+        
         <fieldType name="text_suggest_ngram" class="solr.TextField" positionIncrementGap="100">
         	<analyzer type="index">
         		<tokenizer class="solr.StandardTokenizerFactory"/>
@@ -320,11 +320,11 @@
                 <filter class="solr.EnglishPossessiveFilterFactory"/>
         	</analyzer>
         </fieldType>
-
+        
         <!-- A text field with defaults appropriate for English: it
    tokenizes with StandardTokenizer, removes English stop words
    (stopwords_en.txt), down cases, protects words from protwords.txt, and
-   finally applies       's stemming.  The query time analyzer
+   finally applies Porter's stemming.  The query time analyzer
    also applies synonyms from synonyms.txt. -->
         <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
             <analyzer type="index">
@@ -344,7 +344,7 @@
                 <filter class="solr.LowerCaseFilterFactory"/>
                 <filter class="solr.EnglishPossessiveFilterFactory"/>
                 <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
-                <!-- Optionally you may want to use this less aggressive stemmer instead of       StemFilterFactory:
+                <!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
             <filter class="solr.EnglishMinimalStemFilterFactory"/>
         -->
                 <filter class="solr.PorterStemFilterFactory"/>
@@ -360,7 +360,7 @@
                 <filter class="solr.LowerCaseFilterFactory"/>
                 <filter class="solr.EnglishPossessiveFilterFactory"/>
                 <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
-                <!-- Optionally you may want to use this less aggressive stemmer instead of       StemFilterFactory:
+                <!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
             <filter class="solr.EnglishMinimalStemFilterFactory"/>
         -->
                 <filter class="solr.PorterStemFilterFactory"/>
@@ -763,6 +763,8 @@ any data added to them will be ignored outright.  -->
         <field name="allergy_severity" type="string" indexed="false" stored="false"/>
         <field name="allergy_product" type="string" indexed="false" stored="false" multiValued="true"/>
         <field name="allergy_reaction" type="string" indexed="false" stored="false" multiValued="true"/>
+        <field name="drug_class" type="string" indexed="true" stored="true" multiValued="true"/>
+        <field name="originator_name" type="string" indexed="true" stored="true" multiValued="false"/>
 
         <!-- medications -->
         <field name="overall_start" type="hl7date" indexed="false" stored="false"/>
@@ -964,7 +966,7 @@ or to add multiple fields to the same field for easier/faster searching.  -->
 	<copyField source="domain" dest="kind_match"/>
 
 	<copyField source="domain" dest="all"/>
-	<!--<copyField source="kind" dest="all"/>-->
+	<copyField source="kind" dest="all"/>
     <copyField source="summary" dest="all"/>
     <copyField source="facility_name" dest="all"/>
     <copyField source="location" dest="all"/>
@@ -982,6 +984,8 @@ or to add multiple fields to the same field for easier/faster searching.  -->
     <copyField source="product" dest="all"/>
     <copyField source="reaction" dest="all"/>
     <copyField source="immunization_name" dest="all"/>
+    <copyField source="drug_class" dest="all"/>
+    <copyField source="originator_name" dest="all"/>
     <copyField source="med_sig" dest="all"/>
     <copyField source="med_pt_instruct" dest="all"/>
     <copyField source="med_provider" dest="all"/>
@@ -1048,15 +1052,17 @@ or to add multiple fields to the same field for easier/faster searching.  -->
     <copyField source="primary_provider" dest="phrase"/>
     <copyField source="allergy_product" dest="phrase"/>
     <copyField source="allergy_reaction" dest="phrase"/>
+    <copyField source="drug_class" dest="phrase"/>
     <copyField source="immunization_name" dest="phrase"/>
+    <copyField source="originator_name" dest="phrase"/>
     <copyField source="performer" dest="phrase"/>
     <copyField source="problem_text" dest="phrase"/>
     <copyField source="procedure_type" dest="phrase"/>
     <copyField source="order_name" dest="phrase"/>
     <copyField source="health_factor_name" dest="phrase"/>
+    
 
-
-	<!--
+	<!-- 
 		spelling suggestion field, given 2nd precidence, match/suggest individual terms and used for spelling suggestions/corrections
 		general strategy is to use textual/clinical/narative type fields here
 		TODO: any value to having a field be both a phrase and a spell?
@@ -1073,10 +1079,12 @@ or to add multiple fields to the same field for easier/faster searching.  -->
     <copyField source="primary_provider" dest="spell"/>
     <copyField source="allergy_product" dest="spell"/>
     <copyField source="allergy_reaction" dest="spell"/>
+    <copyField source="drug_class" dest="spell"/>
     <copyField source="med_ingredient_name" dest="spell"/>
     <copyField source="med_drug_class_name" dest="spell"/>
     <copyField source="med_supplied_name" dest="spell"/>
     <copyField source="immunization_name" dest="spell"/>
+    <copyField source="originator_name" dest="spell"/>
     <copyField source="performer" dest="spell"/>
     <copyField source="problem_text" dest="spell"/>
     <copyField source="order_name" dest="spell"/>

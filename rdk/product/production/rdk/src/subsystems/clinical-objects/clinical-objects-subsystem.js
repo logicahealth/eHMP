@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var rdk = require('../../core/rdk');
+var uidUtils = require('../../utils/uid-utils');
 var dd = require('drilldown');
 var httpUtil = rdk.utils.http;
 var uuid = require('node-uuid');
@@ -14,15 +15,17 @@ var clinicalObjectsValidator = require('./clinical-objects-validator');
 module.exports.create = createClinicalObject;
 module.exports.read = readClinicalObject;
 module.exports.update = updateClinicalObject;
-module.exports.delete = deleteClinicalObject;
 module.exports.find = findClinicalObject;
 module.exports.getList = getClinicalObjectList;
 module.exports.loadReference = dereferenceClinicalObject;
+module.exports.postActivityManagementEvent = postActivityManagementEvent;
+module.exports.transformPatientUid = transformPatientUid;
 
 var CLINICAL_OBJECT_NOT_FOUND = module.exports.CLINICAL_OBJECT_NOT_FOUND = 'Clinical object not found';
 var REFERENCE_ID_NOT_FOUND = module.exports.REFERENCE_ID_NOT_FOUND = 'Reference ID';
 var PJDS_CONNECTION_ERROR = module.exports.PJDS_CONNECTION_ERROR = 'Unable to reach pJDS';
 var JDS_CONNECTION_ERROR = module.exports.JDS_CONNECTION_ERROR = 'Unable to reach JDS';
+var UTC_STANDARD = module.exports.UTC_STANDARD = 'YYYYMMDDHHmmss+0000';
 
 function getSubsystemConfig(app) {
     return {
@@ -49,35 +52,59 @@ function getSubsystemConfig(app) {
 
 function createClinicalObject(logger, appConfig, model, callback) {
     logger.info('createClinicalObject');
-    var errorMessages = [];
-    clinicalObjectsValidator.validateCreate(errorMessages, model);
-    if (!_.isEmpty(errorMessages)) {
-        logger.info({
-            validationErrors: errorMessages
-        }, 'createClinicalObject');
-        return callback(errorMessages);
-    }
-
-    var clinicObjectCreateTimeUTC = moment().utc().format('YYYYMMDDHHmmss+0000');
-
-    model = _.pick(model, 'authorUid', 'patientUid', 'domain', 'subDomain', 'visit', 'referenceId', 'data', 'ehmpState', 'displayName', 'addendum');
-    model = _.set(model, 'creationDateTime', clinicObjectCreateTimeUTC);
-    model.uid = 'urn:va:ehmp:' + model.patientUid + ':' + uuid.v4();
-
-    var requestConfig = _.extend({}, appConfig.generalPurposeJdsServer, {
-        logger: logger,
-        url: '/clinicobj',
-        body: model,
-        json: true
-    });
-    httpUtil.post(requestConfig, function(err, response, body) {
-        if (err) {
-            logger.error({
-                err: err
-            }, 'Failed to create clinical object.');
-            return callback(err);
+    clinicalObjectsValidator.validateCreate([], model, appConfig, function(errorMessages) {
+        if (!_.isEmpty(errorMessages)) {
+            logger.info({
+                validationErrors: errorMessages
+            }, 'createClinicalObject');
+            return callback(errorMessages);
         }
-        return callback(null, response);
+
+        //replace VLER or HDR site with ICN.
+        transformPatientUid(model);
+
+        var clinicObjectCreateTimeUTC = moment().utc().format(UTC_STANDARD);
+
+        model = _.pick(model, 'authorUid', 'patientUid', 'domain', 'subDomain', 'visit', 'referenceId', 'data', 'ehmpState', 'displayName', 'addendum');
+        model = _.set(model, 'creationDateTime', clinicObjectCreateTimeUTC);
+
+        var site = uidUtils.extractSiteFromUID(model.patientUid, ':');
+        var localId = uidUtils.extractLocalIdFromUID(model.patientUid, ':');
+        model.uid = 'urn:va:' + model.domain + ':' + site + ':' + localId + ':' + uuid.v4();
+
+        var createTask = function(taskCallback) {
+            var requestConfig = _.extend({}, appConfig.generalPurposeJdsServer, {
+                logger: logger,
+                url: '/clinicobj',
+                body: model,
+                json: true
+            });
+
+            httpUtil.post(requestConfig, function(err, response, body) {
+                if (err) {
+                    logger.error({
+                        err: err
+                    }, 'Failed to create clinical object.');
+                    return taskCallback(err);
+                }
+                return taskCallback(null, response);
+            });
+        };
+
+        async.series({
+            createTask: createTask,
+            postActivityManagementEvent: function(callback) {
+                postActivityManagementEvent(logger, appConfig, model, function(err, resp) {
+                    //silent activity management service failure
+                    return callback(null, resp);
+                });
+            }
+        }, function(err, results) {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, results.createTask);
+        });
     });
 }
 
@@ -107,58 +134,51 @@ function readClinicalObject(logger, appConfig, uid, loadReference, callback) {
 
 function updateClinicalObject(logger, appConfig, uid, model, callback) {
     logger.info('updateClinicalObject');
-    var errorMessages = [];
-    clinicalObjectsValidator.validateUpdate(errorMessages, uid, model);
-    if (!_.isEmpty(errorMessages)) {
-        logger.info({
-            validationErrors: errorMessages
-        }, 'updateClinicalObject');
-        return callback(errorMessages);
-    }
-
-    var requestConfig = _.extend({}, appConfig.generalPurposeJdsServer, {
-        logger: logger,
-        url: '/clinicobj/' + uid,
-        body: model,
-        json: true
-    });
-    httpUtil.put(requestConfig, function(err, response, body) {
-        if (err) {
-            logger.error({
-                err: err,
-                uid: uid
-            }, 'Failed to update clinical object');
-            return callback(err);
+    clinicalObjectsValidator.validateUpdate([], uid, model, appConfig, function(errorMessages) {
+        if (!_.isEmpty(errorMessages)) {
+            logger.info({
+                validationErrors: errorMessages
+            }, 'updateClinicalObject');
+            return callback(errorMessages);
         }
-        return callback(null, response);
-    });
-}
 
-function deleteClinicalObject(logger, appConfig, uid, callback) {
-    logger.info('deleteClinicalObject');
-    var errorMessages = [];
-    clinicalObjectsValidator.validateDelete(errorMessages, uid);
-    if (!_.isEmpty(errorMessages)) {
-        logger.info({
-            validationErrors: errorMessages
-        }, 'deleteClinicalObject');
-        return callback(errorMessages);
-    }
+        //replace VLER or HDR site with ICN.
+        transformPatientUid(model);
 
-    var requestConfig = _.extend({}, appConfig.generalPurposeJdsServer, {
-        logger: logger,
-        url: '/clinicobj/' + uid,
-        json: true
-    });
-    httpUtil.delete(requestConfig, function(err, response, body) {
-        if (err) {
-            logger.error({
-                err: err,
-                uid: uid
-            }, 'Failed to delete clinical object');
-            return callback(err);
-        }
-        return callback(null, body);
+        var updateTask = function(taskCallback) {
+            var requestConfig = _.extend({}, appConfig.generalPurposeJdsServer, {
+                logger: logger,
+                url: '/clinicobj/' + uid,
+                body: model,
+                json: true
+            });
+
+            httpUtil.put(requestConfig, function(err, response, body) {
+                if (err) {
+                    logger.error({
+                        err: err,
+                        uid: uid
+                    }, 'Failed to update clinical object');
+                    return taskCallback(err);
+                }
+                return taskCallback(null, response);
+            });
+        };
+
+        async.series({
+            updateTask: updateTask,
+            postActivityManagementEvent: function(callback) {
+                postActivityManagementEvent(logger, appConfig, model, function(err, resp) {
+                    //silent activity management service failure
+                    return callback(null, resp);
+                });
+            }
+        }, function(err, results) {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, results.updateTask);
+        });
     });
 }
 
@@ -173,6 +193,9 @@ function findClinicalObject(logger, appConfig, model, loadReference, callback) {
         }, 'findClinicalObject');
         return callback(errorMessages);
     }
+
+    //replace VLER or HDR site with ICN.
+    transformPatientUid(model);
 
     var jdsQuery = {};
     jdsQuery.filter = createFindQueryString(model);
@@ -253,12 +276,12 @@ function createUidListQueryObject(uidList) {
 function dereferenceClinicalObjects(logger, appConfig, clinicalObjectResponse, callback) {
     async.map(clinicalObjectResponse.items, function(clinicalObject, callback) {
         if (!clinicalObject.referenceId) {
-            return callback(null, clinicalObject);
+            return setImmediate(callback, null, clinicalObject);
         }
         dereferenceClinicalObject(logger, appConfig, clinicalObject, callback);
     }, function handleDereferencedObjects(err, dereferencedObjects) {
         if (err) {
-            callback(err);
+            return callback(err);
         }
         clinicalObjectResponse.items = dereferencedObjects;
         return callback(null, clinicalObjectResponse);
@@ -271,7 +294,7 @@ function dereferenceClinicalObject(logger, appConfig, clinicalObject, callback) 
 
     if (!_.isObject(clinicalObject)) {
         errorMessages.push(CLINICAL_OBJECT_NOT_FOUND);
-        return callback(errorMessages);
+        return setImmediate(callback, errorMessages);
     }
     var referenceId = clinicalObject.referenceId;
     var jdsPath = '/vpr/uid/' + referenceId;
@@ -301,6 +324,9 @@ function dereferenceClinicalObject(logger, appConfig, clinicalObject, callback) 
             errorMessages.push(REFERENCE_ID_NOT_FOUND);
             return callback(errorMessages);
         }
+        if(clinicalObject.data && _.isUndefined(clinicalObject.ehmpData)){
+            clinicalObject.ehmpData = clinicalObject.data;
+        }
         clinicalObject.data = body.data.items[0];
         return callback(null, clinicalObject);
     });
@@ -325,4 +351,46 @@ function getAndDereferenceClinicalObjects(logger, appConfig, jdsQuery, loadRefer
         }
         return callback(null, body);
     });
+}
+
+function postActivityManagementEvent(logger, appConfig, clinicalObject, callback) {
+    var requestConfig = _.extend({}, appConfig.vxSyncServer, {
+        logger: logger,
+        url: '/activity-management-event',
+        body: clinicalObject,
+        json: true
+    });
+
+    httpUtil.post(requestConfig, function(err, resp, body) {
+        var ERR_LOG_MSG = 'Failed to post activity management event.';
+
+        var isErr = err || (resp && resp.statusCode !== 200);
+        if (isErr) {
+            if (!err) {
+                err = new Error(resp ? resp.body : ERR_LOG_MSG);
+            }
+
+            logger.error({
+                err: err
+            }, ERR_LOG_MSG);
+
+            return callback(err);
+        }
+
+        return callback(null, resp);
+    });
+}
+
+/**
+ * Transforms patientUid site piece from VLER or HDR to ICN.
+ *
+ * @param clinicalObj Valid clinical object with patient unique identifier (patientUid).
+ */
+function transformPatientUid(clinicalObj) {
+
+    if (!clinicalObj || !clinicalObj.patientUid) {
+        return;
+    }
+
+    clinicalObj.patientUid = clinicalObj.patientUid.replace(/VLER|HDR/gi, 'ICN');
 }

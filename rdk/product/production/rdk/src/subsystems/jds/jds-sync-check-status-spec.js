@@ -78,6 +78,51 @@ describe('JDS Utils Testing', function() {
             });
         });
     });
+    describe('Tesing getSiteSyncDataStatusSimple', function(){
+        it('Testing with undefined Status', function(){
+            expect(_.isEmpty(jdsUtils.getSiteSyncDataStatusSimple(undefinedStatus))).to.eql(true);
+        });
+        it('Testing with empty Status', function(){
+            expect(_.isEmpty(jdsUtils.getSiteSyncDataStatusSimple(undefinedStatus))).to.eql(true);
+        });
+        it('Testing with sample Sync Status: syncCompleted', function(){
+            var testSiteStatus = {
+              latestJobTimestamp: 1464293174353,
+              pid: '9E7A;3',
+              sourceStampTime: 20160526160604,
+              syncCompleted: true
+            };
+            var retStatus = jdsUtils.getSiteSyncDataStatusSimple(testSiteStatus);
+            expect(retStatus.isSyncCompleted).to.eql(true);
+            expect(retStatus.hasError).to.be.undefined();
+            expect(retStatus.completedStamp).to.eql(testSiteStatus.sourceStampTime);
+        });
+        it('Testing with sample Sync Status: hasError', function(){
+            var testSiteStatus = {
+              hasError: true,
+              latestJobTimestamp: 1464293174353,
+              pid: '9E7A;3',
+              sourceStampTime: 20160526160604,
+              syncCompleted: false
+            };
+            var retStatus = jdsUtils.getSiteSyncDataStatusSimple(testSiteStatus);
+            expect(retStatus.isSyncCompleted).to.eql(false);
+            expect(retStatus.hasError).to.eql(true);
+            expect(retStatus.completedStamp).to.be.undefined();
+        });
+        it('Testing with sample Sync Status: not completed', function(){
+            var testSiteStatus = {
+              latestJobTimestamp: 1464293174353,
+              pid: '9E7A;3',
+              sourceStampTime: 20160526160604,
+              syncCompleted: false
+            };
+            var retStatus = jdsUtils.getSiteSyncDataStatusSimple(testSiteStatus);
+            expect(retStatus.isSyncCompleted).to.eql(false);
+            expect(retStatus.hasError).to.eql(false);
+            expect(retStatus.completedStamp).to.be.undefined();
+        });
+    });
 });
 
 var expectedIsSiteSyncedRetObj = {

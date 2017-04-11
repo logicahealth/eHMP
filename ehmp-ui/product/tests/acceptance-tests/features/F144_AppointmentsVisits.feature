@@ -1,9 +1,9 @@
 #Team Neptune
-@US1847 @regression @appointmentsandvisits @triage
+@US1847 @regression @appointmentsandvisits 
 Feature:F144-eHMP Viewer GUI - Appointments & Visits
 
 Background:
-	Given user is logged into eHMP-UI  
+	# Given user is logged into eHMP-UI
   Given user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
 

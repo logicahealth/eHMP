@@ -60,6 +60,7 @@ A configuration object may contain the following fields:
     * **required**, may be an empty array if all authenticated users are allowed to access a resource
  * `isPatientCentric` : a boolean used to run the sensative patient, break-the-glass policy
     * **required**, set to true unless the resource does not have anything to do with patient data.
+ * `bypassCsrf` : a boolean used to allow the resource to be open to a call that doesn't have a trusted token given to it from the resource server itself. It defaults to false and generally this should NEVER be set to true without an architectural decision.
 
 ::: definition
 #### Resource Name and Path Criteria

@@ -27,6 +27,11 @@ define([
                 componentList: this.componentList
             };
         },
+        collectionEvents: {
+            'change.inputted': function() {
+                this.$el.trigger('dc.change.user.input', arguments);
+            }
+        },
         initialize: function(options) {
             this.checklistOptions = options.checklistOptions;
             this.selectView = options.selectView;
@@ -88,8 +93,8 @@ define([
 
     var DrilldownChecklistMethods = {
         template: Handlebars.compile([
-            '<div class="col-xs-3 left-padding-md right-padding-xs drilldown-select-region"></div>',
-            '<div class="col-xs-9 left-padding-xs drilldown-checklist-region"></div>'
+            '<div class="col-xs-4 left-padding-md right-padding-xs drilldown-select-region"></div>',
+            '<div class="col-xs-8 left-padding-xs drilldown-checklist-region"></div>'
         ].join('\n')),
         ui: {
             'SelectRegion': '.drilldown-select-region',
@@ -99,6 +104,12 @@ define([
             'SelectRegion': '@ui.SelectRegion',
             'ChecklistRegion': '@ui.ChecklistRegion'
         },
+        events: _.defaults({
+            'dc.change.user.input': function(event) {
+                event.stopPropagation();
+                this.onUserInput.apply(this, arguments);
+            }
+        }, PuppetForm.CommonPrototype.events),
         requiredFields: ['selectOptions', 'checklistOptions'],
         initialize: function(options) {
             this.initOptions(options);

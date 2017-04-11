@@ -1,8 +1,8 @@
-@F333 @US6769 @regression @triage
+@F333 @US6769 @regression @triage @DE4426 @debug @DE4767
 Feature: Global search of patients outside local VistA
 
 Background:
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
     When the patient search screen is displayed
     Given the call to my cprs list is completed
     And the User selects All Patient
@@ -19,6 +19,9 @@ Background:
     And the user click on Confirm Selection
     And the user waits 10 seconds for sync to complete
     Then Overview is active
+    Then the "patient identifying traits" is displayed with information
+        | field         | value                      |
+        | patient name  | Icnonly,Patient              |
 
 @TC561
 Scenario: Verify that the Demographic information for secondary patients displays in demographic detail drop-down
@@ -36,9 +39,9 @@ Scenario: Verify that the Write Back is disabled Non-Vista patient in expanded a
     And the New Observation button button is not displayed
 
 @TC560 @TC560_expanded
-Scenario: Verify that the Write Back is disabled Non-Vista patient in expanded applet - Condition
-  When the user clicks the control "Expand View" in the "Conditions Gist applet"
-  Then the expanded Conditions Applet is displayed
+Scenario: Verify that the Write Back is disabled Non-Vista patient in expanded applet - Problems
+  When the user clicks the control "Expand View" in the "Problems Gist applet"
+  Then the expanded Problems Applet is displayed
   And the Add Condition button is not displayed on cover sheet
   And the New Observation button button is not displayed
 

@@ -39,3 +39,5 @@ Feature: F361 FHIR Domain - MedicationAdministration
        | resource.reasonNotGiven.coding.code   | a |
        | resource.reasonNotGiven.coding.display | None |
        | resource.effectiveTimeDateTime        | IS_FHIR_FORMATTED_DATE |
+    And FHIR date and time conver to Zulu format for Medication Administration
+    

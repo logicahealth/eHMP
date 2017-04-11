@@ -165,7 +165,7 @@ function patientStatusEndpoint(app, req, res) {
 
 function patientDataStatusEndpoint(app, req, res) {
     var pid = req.param('pid') || req.param('dfn') || '';
-    app.subsystems.jdsSync.getPatientDataStatus(pid, req, toResponseCallback.bind(null, res));
+    app.subsystems.jdsSync.getPatientDataStatusSimple(pid, req, toResponseCallback.bind(null, res));
 }
 
 function patientSyncStatusDetailEndpoint(app, req, res) {

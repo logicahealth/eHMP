@@ -5,12 +5,13 @@ define([
     'bootstrap-datepicker',
     'moment',
     'hbs!main/components/applets/grid_applet/templates/dateRangePickerTemplate',
-    "api/SessionStorage"
-], function($, _, InputMask, DatePicker, moment, dateRangePickerTemplate, SessionStorage) {
+    "api/SessionStorage",
+    "api/PatientRecordService"
+], function($, _, InputMask, DatePicker, moment, dateRangePickerTemplate, SessionStorage, PatientRecordService) {
     'use strict';
 
-
     var FilterDateRangeView = Backbone.Marionette.ItemView.extend({
+        dateFormat: 'MM/DD/YYYY',
         tagName: 'form',
         className: 'form-inline',
         events: {
@@ -32,8 +33,10 @@ define([
             var hasCustomRangeValuesBeenSetCorrectly = false;
             var filterFromDate = this.$el.find('#filter-from-date-' + this.options.appletId).val();
             var filterToDate = this.$el.find('#filter-to-date-' + this.options.appletId).val();
+            filterFromDate = moment(filterFromDate, this.dateFormat, true);
+            filterToDate = moment(filterToDate, this.dateFormat, true);
 
-            if (moment(filterFromDate, 'MM/DD/YYYY', true).isValid() && moment(filterToDate, 'MM/DD/YYYY', true).isValid()) {
+            if (filterFromDate.isValid() && filterToDate.isValid() && (filterFromDate.isSame(filterToDate) || filterFromDate.isBefore(filterToDate))) {
                 hasCustomRangeValuesBeenSetCorrectly = true;
             }
 
@@ -41,12 +44,16 @@ define([
         },
         enableDatePickers: function() {
             this.$('.input-group.date#custom-date-range1-' + this.options.appletId).datepicker({
-                format: 'mm/dd/yyyy',
-                autoclose: true
+                format: this.dateFormat.toLowerCase(),
+                autoclose: true,
+                todayBtn: 'linked',
+                todayHighlight: true
             });
             this.$('.input-group.date#custom-date-range2-' + this.options.appletId).datepicker({
-                format: 'mm/dd/yyyy',
-                autoclose: true
+                format: this.dateFormat.toLowerCase(),
+                autoclose: true,
+                todayBtn: 'linked',
+                todayHighlight: true
             });
             this.$('#filter-from-date-' + this.options.appletId).datepicker('remove');
             this.$('#filter-to-date-' + this.options.appletId).datepicker('remove');
@@ -81,7 +88,12 @@ define([
             switch (event.currentTarget.id) {
                 case 'all-range-' + appletId:
                     toDate = moment().add('years', 100);
-                    fromDate = moment().subtract('years', 100);
+                    if (PatientRecordService.getCurrentPatient().get('birthDate')) {
+                        fromDate = moment(PatientRecordService.getCurrentPatient().get('birthDate'), 'YYYYMMDD');
+                    }
+                    else {
+                        fromDate = moment().subtract('years', 100);
+                    }
                     allCase = true;
                     break;
                 case '2yr-range-' + appletId:
@@ -111,11 +123,11 @@ define([
                     var filterToDate = this.$el.find('#filter-to-date-' + appletId).val();
 
                     if (filterFromDate !== undefined && filterFromDate !== null && filterFromDate.trim().length > 0) {
-                        fromDate = moment(filterFromDate, 'MM/DD/YYYY');
+                        fromDate = moment(filterFromDate, this.dateFormat);
                     }
 
                     if (filterToDate !== undefined && filterToDate !== null && filterToDate.trim().length > 0) {
-                        toDate = moment(filterToDate, 'MM/DD/YYYY');
+                        toDate = moment(filterToDate, this.dateFormat);
                     }
 
                     if (toDate < fromDate) {
@@ -127,14 +139,15 @@ define([
                     break;
             }
 
-            this.$el.find('#filter-from-date-' + appletId).val(moment(fromDate).format('MM/DD/YYYY'));
+            this.$el.find('#filter-from-date-' + appletId).val(moment(fromDate).format(this.dateFormat));
             if (allCase) {
-                this.$el.find('#filter-to-date-' + appletId).val(moment().add('months', 6).format('MM/DD/YYYY'));
-            }else{
-                this.$el.find('#filter-to-date-' + appletId).val(moment().format('MM/DD/YYYY'));
+                this.$el.find('#filter-to-date-' + appletId).val(moment().add('months', 6).format(this.dateFormat));
+            } else {
+                this.$el.find('#filter-to-date-' + appletId).val(moment(toDate).format(this.dateFormat));
             }
 
-
+            // Check the dates and enable the Apply button if it's valid.
+            this.monitorCustomDateRange(event);
 
             var filterOptions = {
                 isOverrideGlobalDate: true,
@@ -142,23 +155,23 @@ define([
             };
 
             if (fromDate !== null) {
-                filterOptions.fromDate = fromDate.format('MM/DD/YYYY');
+                filterOptions.fromDate = fromDate.format(this.dateFormat);
             }
 
             if (toDate !== null) {
-                filterOptions.toDate = toDate.format('MM/DD/YYYY');
+                filterOptions.toDate = toDate.format(this.dateFormat);
             }
 
             var dateFieldName = this.model.get('filterDateRangeField').name;
             this.options.appletView.dateRangeRefresh(dateFieldName, filterOptions);
-            // ResourceService.patientRecordService.fetchDateFilteredCollection(this.model.get('collection'), filterOptions);
+            // PatientRecordService.fetchDateFilteredCollection(this.model.get('collection'), filterOptions);
         },
         onRender: function(event) {
             this.$('#filter-from-date-' + this.options.appletId).inputmask('m/d/y', {
-                'placeholder': 'MM/DD/YYYY'
+                'placeholder': this.dateFormat
             });
             this.$('#filter-to-date-' + this.options.appletId).inputmask('m/d/y', {
-                'placeholder': 'MM/DD/YYYY'
+                'placeholder': this.dateFormat
             });
 
             this.enableDatePickers();

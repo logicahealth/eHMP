@@ -15,6 +15,7 @@ define([
     'main/ui_components/forms/controls/container',
     'main/ui_components/forms/controls/multiselectSideBySide',
     'main/ui_components/forms/controls/radioList',
+    'main/ui_components/forms/controls/selectList',
     'main/ui_components/forms/controls/typeahead',
     'main/ui_components/forms/controls/datepicker',
     'main/ui_components/forms/controls/datejspicker',
@@ -27,6 +28,7 @@ define([
     'main/ui_components/forms/controls/tabs',
     'main/ui_components/forms/controls/select',
     'main/ui_components/forms/controls/dropdown',
+    'main/ui_components/forms/controls/textarea',
     'main/ui_components/forms/controls/treepicker'
 ], function(PuppetForm, Handlebars, Backbone, _) {
     'use strict';
@@ -127,22 +129,25 @@ define([
     });
 
     PuppetForm.RadioControl = PuppetForm.DefaultRadioControl.extend({
-        template: Handlebars.compile([
-            '<p class="faux-label bottom-margin-xs {{is-sr-only-label srOnlyLabel}}">{{add-required-indicator label required}}</p>',
-            '<div id="{{clean-for-id name}}" class="all-margin-no {{PuppetForm "radioControlsClassName"}}{{#if (has-puppetForm-prop "controlsClassName")}} {{PuppetForm "controlsClassName"}}{{/if}}"{{#if title}} title="{{title}}"{{/if}}>',
-            '{{#each options}}',
-            Handlebars.helpers['ui-form-label'].apply(this, ["{{label}}", {
-                hash: {
-                    forID: "{{@root.name}}-{{clean-for-id value}}",
-                    classes: [PuppetForm.radioLabelClassName],
-                    extraClassLogic: '{{#if disabled}}disabled {{else}}{{#if @root.disabled}}disabled {{/if}}{{/if}}',
-                    content: '<input type="{{@root.type}}" id="{{@root.name}}-{{clean-for-id value}}" name="{{@root.name}}" {{#if title}}title="{{title}}"{{else}}title="Press enter twice to select {{label}} for {{@root.label}}"{{/if}} value="{{formatter-from-raw @root.formatter value}}" {{#compare value @root.rawValue}}checked="checked"{{/compare}}{{#if disabled}} disabled{{else}}{{#if @root.disabled}} disabled{{/if}}{{/if}}{{#if @root.required}} required{{/if}}/>'
-                }
-            }]),
-            '{{/each}}',
-            '{{#if helpMessage}} <span {{#if (has-puppetForm-prop "helpMessageClassName")}}class="{{PuppetForm "helpMessageClassName"}}"{{/if}}>{{helpMessage}}</span>{{/if}}',
-            '</div>'
-        ].join("\n")),
+        getTemplate: function() {
+            return Handlebars.compile([
+                '<p class="faux-label bottom-margin-xs {{is-sr-only-label srOnlyLabel}}">{{add-required-indicator label required}}</p>',
+                '<fieldset id="{{clean-for-id name}}" class="all-margin-no {{PuppetForm "radioControlsClassName"}}{{#if (has-puppetForm-prop "controlsClassName")}} {{PuppetForm "controlsClassName"}}{{/if}}"{{#if title}} title="{{title}}"{{/if}}>',
+                '<legend class="sr-only">{{label}}</legend>',
+                '{{#each options}}',
+                Handlebars.helpers['ui-form-label'].apply(this, ["{{label}}", {
+                    hash: {
+                        forID: "{{@root.name}}-{{clean-for-id value}}",
+                        classes: [PuppetForm.radioLabelClassName],
+                        extraClassLogic: '{{#if disabled}}disabled {{else}}{{#if @root.disabled}}disabled {{/if}}{{/if}}',
+                        content: '<input type="{{@root.type}}" id="{{@root.name}}-{{clean-for-id value}}" name="{{@root.name}}" {{#if title}}title="{{title}}"{{else}}title="Press spacebar to select {{label}} for {{@root.label}}"{{/if}} value="{{formatter-from-raw @root.formatter value}}" {{#compare value @root.rawValue}}checked="checked"{{/compare}}{{#if disabled}} disabled{{else}}{{#if @root.disabled}} disabled{{/if}}{{/if}}{{#if @root.required}} required{{/if}}/>'
+                    }
+                }]),
+                '{{/each}}',
+                '{{#if helpMessage}} <span {{#if (has-puppetForm-prop "helpMessageClassName")}}class="{{PuppetForm "helpMessageClassName"}}"{{/if}}>{{helpMessage}}</span>{{/if}}',
+                '</fieldset>'
+            ].join("\n"));
+        },
         events: _.defaults({
             //Events to be Triggered By User
             "control:disabled": function(event, booleanValue) {
@@ -159,42 +164,6 @@ define([
             }
         }, PuppetForm.DefaultRadioControl.prototype.events),
         formatter: PuppetForm.ControlFormatter
-    });
-
-    PuppetForm.TextareaControl = PuppetForm.DefaultTextareaControl.extend({
-        template: Handlebars.compile([
-            '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
-            '<textarea class="{{PuppetForm "controlClassName"}}"{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if maxlength}} maxlength="{{maxlength}}"{{/if}}{{#if cols}} cols="{{cols}}"{{/if}}{{#if rows}} rows="{{rows}}"{{/if}} name="{{name}}"{{#if title}} title="{{title}}"{{/if}} id={{clean-for-id name}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}>' +
-            '{{value}}' +
-            '</textarea>',
-            '{{#if helpMessage}} <span {{#if (has-puppetForm-prop "helpMessageClassName")}}class="{{PuppetForm "helpMessageClassName"}}"{{/if}}>{{helpMessage}}</span>{{/if}}'
-        ].join("\n")),
-        events: _.defaults({
-            "control:required": function(event, booleanValue) {
-                this.setBooleanFieldOption("required", booleanValue, event);
-            },
-            "control:disabled": function(event, booleanValue) {
-                this.setBooleanFieldOption("disabled", booleanValue, event);
-            },
-            "control:cols": function(event, intValue) {
-                this.setIntegerFieldOption("cols", intValue, event);
-            },
-            "control:rows": function(event, intValue) {
-                this.setIntegerFieldOption("rows", intValue, event);
-            },
-            "control:title": function(event, stringValue) {
-                this.setStringFieldOption("title", stringValue, event);
-            },
-            "control:placeholder": function(event, stringValue) {
-                this.setStringFieldOption("placeholder", stringValue, event);
-            },
-            "control:helpMessage": function(event, stringValue) {
-                this.setStringFieldOption("helpMessage", stringValue, event);
-            },
-            "control:maxlength": function(event, intValue) {
-                this.setIntegerFieldOption("maxlength", intValue, event);
-            }
-        }, PuppetForm.DefaultTextareaControl.prototype.events)
     });
 
     return PuppetForm;

@@ -2,15 +2,13 @@
 
 ## Teams [{{{path}}}]
 
-### List [GET {{{path}}}/list{?facility}{&fields}]
+### List [GET {{{path}}}/list{?facility}]
 
 Get a list of teams
 
 + Parameters
 
     + facility (string, optional) - The facility to get teams for. Defaults to the logged in users selected site.
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -65,7 +63,7 @@ Delete a team by ID
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Get By Team Id [GET {{{path}}}/byid{?facility}{&teamId}{&fields}]
+### Get By Team Id [GET {{{path}}}/byid{?facility}{&teamId}]
 
 Get a team by ID
 
@@ -74,8 +72,6 @@ Get a team by ID
     + facility (string, optional) - The facility to get teams for. Defaults to the logged in users selected site.
 
     + teamId (string, required) - The ID of the team to retrieve
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -111,7 +107,7 @@ Get a team by ID
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### By IC N [GET {{{path}}}/byicn{?facility}{&icn}{&fields}]
+### By IC N [GET {{{path}}}/byicn{?facility}{&icn}]
 
 Get teams that a particular patient is assigned to
 
@@ -120,8 +116,6 @@ Get teams that a particular patient is assigned to
     + facility (string, optional) - The facility to get teams for. Defaults to the logged in users selected site.
 
     + icn (string, required) - The patient ICN for which to retrieve teams
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -144,7 +138,7 @@ Get teams that a particular patient is assigned to
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### By User [GET {{{path}}}/byuser{?facility}{&siteUser}{&fields}]
+### By User [GET {{{path}}}/byuser{?facility}{&siteUser}]
 
 Get teams and positions for logged in user
 
@@ -153,8 +147,6 @@ Get teams and positions for logged in user
     + facility (string, optional) - The facility to get teams for. Defaults to the logged in users selected site.
 
     + siteUser (string, optional) - The user to get positions for at the selected site/facility. Defauls to the currently logged in user. Expects "facility;accesCode" format.
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

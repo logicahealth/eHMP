@@ -16,7 +16,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="procedure">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.domain.ext/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="bodySite" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="code" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -30,7 +30,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="inOutpatient" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="location" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="notes" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="provider" type="{http://webservice.vds.domain.ext/}provider" minOccurs="0"/>
+ *         &lt;element name="provider" type="{http://webservice.vds.DNS       /}provider" minOccurs="0"/>
  *         &lt;element name="qualifiers" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="status" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -42,7 +42,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "procedure", namespace = "http://webservice.vds.domain.ext/", propOrder = {
+@XmlType(name = "procedure", namespace = "http://webservice.vds.DNS       /", propOrder = {
     "bodySite",
     "code",
     "codeSystem",

@@ -52,7 +52,9 @@ function editPermissionSet(req, res, next) {
             var permissionsFromSets = getAllPermissions(permissionSetsMap, userPermissionSetObj.val, []);
             userPermissionSetObj.additionalPermissions = userPermissionSetObj.additionalPermissions.concat(additionalPermissions);
             userPermissionSetObj.additionalPermissions = _.difference(userPermissionSetObj.additionalPermissions, _.uniq(permissionsFromSets));
-
+            if (_.indexOf(additionalPermissions, 'edit-own-permissions') !== -1) {
+                userPermissionSetObj.val.push('acc');
+            }
             userPermissionSetObj.val = _.uniq(userPermissionSetObj.val);
             userPermissionSetObj.additionalPermissions = _.uniq(userPermissionSetObj.additionalPermissions);
             return userPermissionSetObj;
@@ -221,7 +223,7 @@ function editPermissionSet(req, res, next) {
                 pjdsOptions.data.permissionSet = updatedPermissionSets;
                 pjds.put(req, res, pjdsOptions, function(error, response) {
                     if (error) {
-                        req.logger.warn('Error editing permission sets for user ' + uid + '. Error message: ' + error.message);
+                        req.logger.warn({error: error}, 'Error editing permission sets for user ' + uid);
                         res.status(rdk.httpstatus.bad_request).rdkSend(error.message);
                         resultObj.data.failedOnEditUsers.push({
                             uid: uid,

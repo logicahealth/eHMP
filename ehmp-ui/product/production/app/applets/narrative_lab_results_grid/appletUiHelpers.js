@@ -3,16 +3,15 @@ define([
     "backbone",
     "underscore",
     "app/applets/narrative_lab_results_grid/modal/modalView",
-    "app/applets/narrative_lab_results_grid/modal/errorView",
     "app/applets/narrative_lab_results_grid/modal/modalHeaderView",
     "app/applets/narrative_lab_results_grid/modal/modalFooterView"
-], function(require, Backbone, _, ModalView, ErrorView, ModalHeaderViewUndef, modalFooterView) {
+], function(require, Backbone, _, ModalView, ModalHeaderView, modalFooterView) {
     'use strict';
 
     var appletUiHelpers = {
 
 		getDetailView: function(model, target, appletOptions, navHeader, onSuccess, onFail, id) {
-            var dataCollection = appletOptions.collection;
+            var dataCollection = appletOptions.fullCollection;
 
             if (!model.get('pathology')) {
                 // for non panel lab result row
@@ -52,6 +51,7 @@ define([
                     deferredDetailResponse.fail(function(error) {
                         onFail(error, model, dataCollection);
                     });
+
                 } else {
                     onFail("Lab has no link to a result document", model, dataCollection);
                 }
@@ -67,7 +67,6 @@ define([
             detailModel.set('lab_detail_title', detailData.title);
 
             if (navHeader) {
-                var ModalHeaderView = require('app/applets/narrative_lab_results_grid/modal/modalHeaderView');
                 modalOptions.headerView = ModalHeaderView.extend({
                     model: detailModel,
                     theView: detailData.view,
@@ -91,15 +90,13 @@ define([
                 'footerView': modalFooterView.extend()
             };
 
-            var errorMsg = _.isString(error) ? error : error && _.isString(error.statusText) ? error.statusText : "An error occurred";
-            var errorView = new ErrorView({
-                model: new Backbone.Model({ error: errorMsg })
+            var errorView = ADK.Views.Error.create({
+                model: new Backbone.Model(error)
             });
 
-            var ModalHeaderView = require('app/applets/narrative_lab_results_grid/modal/modalHeaderView');
             modalOptions.headerView = ModalHeaderView.extend({
                 model: itemModel,
-                theView: errorView,
+                theView: ModalHeaderView,
                 dataCollection: dataCollection,
                 navHeader: true
             });
@@ -108,6 +105,8 @@ define([
                 view: errorView,
                 options: modalOptions
             });
+
+            ADK.UI.Modal.hide();
             modal.show();
         }
     };

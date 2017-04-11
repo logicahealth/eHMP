@@ -474,7 +474,7 @@ define([
                     },
                     error: function(model, error) {
                         if(error.status === 400){
-                            $('#addEditProblemForm #error-container').text('Save Failed: Please provide all required fields.');
+                            $('#addEditProblemForm #error-container').text('Save Failed: Provide all required fields.');
                             $('#respProviderBlock div').addClass('has-error');
                         }else {
                             $('#addEditProblemForm #error-container').text('Save Failed');

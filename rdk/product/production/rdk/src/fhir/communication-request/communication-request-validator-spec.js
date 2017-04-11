@@ -10,7 +10,7 @@ describe('When validating a communication request message', function() {
         message = {resourceType: 'CommunicationRequest', identifier: {value: 'a435'},
             category: {coding: [{code: 'ehmp/msg/category/administrative'}]}, priority: {coding: [{code: 'ehmp/msg/priority/medium'}]},
             status: 'requested', medium: [{coding: [{code: 'ehmp/msg/medium/ui/todo'}]}],
-            recipient: [{reference: 'provider/PW    '}, {reference: 'patient/9E7A;10045'}],
+            recipient: [{reference: 'provider/pu1234'}, {reference: 'patient/9E7A;10045'}],
             payload: [{contentReference: {reference: 'patient/9E7A;10045/lab/123'}}]};
 
         callback = sinon.spy();

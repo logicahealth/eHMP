@@ -1,0 +1,2 @@
+        <property name="com.arjuna.ats.arjuna.allowMultipleLastResources" value="true"/>
+        <property name="org.kie.demo" value="false"/>

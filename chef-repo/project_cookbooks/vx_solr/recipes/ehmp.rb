@@ -9,6 +9,8 @@ joda_filename = ::File.basename(node[:vx_solr][:ehmp][:joda])
 joda_filepath = "#{Chef::Config[:file_cache_path]}/#{joda_filename}"
 vpr_path = "#{node[:vx_solr][:ehmp][:vpr_data_path]}/vpr/"
 
+directory node[:vx_solr][:ehmp][:vpr_data_path]
+
 remote_file "#{Chef::Config[:file_cache_path]}/vpr.tar.gz" do
   use_conditional_get true
   source node[:vx_solr][:ehmp][:vpr]
@@ -48,7 +50,7 @@ execute 'Unpack_vpr' do
   not_if { Dir.exist? vpr_path }
 end
 
-template "#{node[:vx_solr][:ehmp][:vpr_data_path]}/vpr/conf/solrconfig.xml" do
+solrconfig = template "#{node[:vx_solr][:ehmp][:vpr_data_path]}/vpr/conf/solrconfig.xml" do
   source 'solrconfig.xml.erb'
   owner 'root'
   group 'root'
@@ -89,4 +91,45 @@ end
 execute 'Copy_joda_time' do
   command "cp #{joda_filepath} #{node[:vx_solr][:ehmp][:solr_lib_path]}"
   action :run
+end
+
+ruby_block "remove default Xmx settings" do
+  block do
+    file = Chef::Util::FileEdit.new(node[:vx_solr][:service][:script])
+    file.search_file_replace_line(/SOLR_JAVA_MEM=\('-Xms512m' '-Xmx512m'\)/, "nop='Do Not set Xmx value in Solr 5.1, workaround for Solr defect SOLR-7392'")
+    file.write_file
+  end
+  only_if "cat #{node[:vx_solr][:service][:script]} | grep \"SOLR_JAVA_MEM=\(\'-Xms512m\' \'-Xmx512m\'\)\""
+  notifies :restart, "service[solr]"
+end
+
+zk_config = node[:vx_solr][:zookeeper][:instances].map { |instance| "#{instance[:hostname]}:#{instance[:client_port]}" }.join(",")
+
+# upload configs to zookeeper
+execute "#{node[:vx_solr][:server_dir]}/scripts/cloud-scripts/zkcli.sh -zkhost #{zk_config} -cmd upconfig -n vprConfig -d #{node[:vx_solr][:ehmp][:vpr_data_path]}/vpr/conf" do
+  only_if { solrconfig.updated_by_last_action? }
+end
+
+# link config with collection
+execute "#{node[:vx_solr][:server_dir]}/scripts/cloud-scripts/zkcli.sh -zkhost #{zk_config} -cmd linkconfig -collection vpr -confname vprConfig" do
+  only_if { solrconfig.updated_by_last_action? }
+end
+
+# create the collection, specifiying shards and replications values
+vx_solr_collection "vpr" do
+  num_shards node[:vx_solr][:ehmp][:collection][:num_shards]
+  replication_factor node[:vx_solr][:ehmp][:collection][:replication_factor]
+  max_shards_per_node node[:vx_solr][:ehmp][:collection][:max_shards_per_node]
+  allow_recreate node[:vx_solr][:ehmp][:collection][:allow_recreate]
+end
+
+#cron job to build suggestions
+template "#{node[:vx_solr][:cron_dir]}/solr_build_suggest" do
+  source 'solr_build_suggest.erb'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  variables(
+      :solr_port => node[:solr][:port]
+  )
 end

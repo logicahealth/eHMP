@@ -2,84 +2,52 @@
     .js-has-panel {
         cursor: pointer;
     }
+    .table {
+        tbody {
+            tr {
+                &.active {
+                    td {
+                        background-color: $primary-lightest;
+                    }
+                }
+            }
+        }
+    }
     // flex styling for nested tables in lab results panel
-    .data-grid > table {
+    .applet-div-chrome-container .gridContainer .grid-container>div .data-grid > table {
+        &.backgrid {
+            tr {
+                td.expanded-row {
+                    padding: 0 0 7px 0;
+                }
+            }
+        }
         td.expanded-row {
-            padding: 2px 0 !important;
+            .lab-results-table-container {
+                box-shadow: 0 2px 2px rgba(0,0,0,.12);
+            }
             table.table {
                 thead {
-                    padding: 0 !important;
+                    padding: 0;
                 }
                 tbody {
                     overflow: hidden !important;
                 }
                 tr {
                     th:nth-child(1),
-                    td:nth-child(1),
+                    td:nth-child(1)
                     {
-                        flex: none !important;
-                        width: 70px;
+                        flex: 2;
+                        padding-left: 75px;
                     }
                     th:nth-child(2),
                     td:nth-child(2) {
-                        flex: 2 !important;
+                        flex: none;
+                        width: 31px;
                     }
-                    th:nth-child(3),
-                    td:nth-child(3) {
-                        flex: none !important;
-                        width: 40px;
-                    }
-                    th:nth-child(4),
-                    td:nth-child(4) {
-                        flex: 1.5 !important;
-                    }
-                    th:nth-child(6),
-                    td:nth-child(6) {
-                        flex: 2 !important;
-                    }
-                    th:nth-child(7),
-                    td:nth-child(7) {
-                        display: none;
-                    }
-                }
-            }
-        }
-    }
-}
-
-// flex styling for nested tables in lab results panel
-body.lab-results-grid-full {
-    [data-appletid="lab_results_grid"] {
-        .data-grid > table {
-            td.expanded-row {
-                table.table {
-                    thead {
-                        padding: 0 !important;
-                    }
-                    tbody {
-                        overflow: hidden !important;
-                    }
-                    tr {
-                        th:nth-child(2),
-                        td:nth-child(2) {
-                            flex: 4 !important;
-                        }
-                        th:nth-child(3),
-                        td:nth-child(3) {
-                            flex: 0.5 !important;
-                        }
-                        th:nth-child(4),
-                        td:nth-child(4),
-                        th:nth-child(5),
-                        td:nth-child(5),
-                        th:nth-child(6),
-                        td:nth-child(6) {
-                            flex: 1 !important;
-                        }
-                        th:nth-child(7),
-                        td:nth-child(7) {
-                            display: block;
-                        }
+                    th:nth-child(5),
+                    td:nth-child(5) {
+                        flex: 1.5;
                     }
                 }
             }

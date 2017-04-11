@@ -202,3 +202,55 @@ class VerifyXpathCount
     return @error_message
   end
 end
+
+class VerifyFacility
+  include HTMLVerification
+  def initialize(how_to_access)
+    if how_to_access.class != AccessHtmlElement
+      fail "must initialize with a AccessHtmlElement, was a #{how_to_access.class}"
+    end
+    @access_html_elements = how_to_access
+    @error_message = 'no error message'
+    @known_facilities = ['CAMP MASTER', 'CAMP BEE', 'ABILENE (CAA)']
+  end
+
+  def verify(html_element, value)
+    text = pull_value(html_element, value)
+    @error_message = "Does valid facility list #{@known_facilities} contain #{text}?"
+    return @known_facilities.include? text.upcase
+  end
+
+  def pull_value(html_element, _value)
+    return html_element.text
+  end
+
+  def error_message
+    return @error_message
+  end
+end
+
+class VerifyFacilityMoniker
+  include HTMLVerification
+  def initialize(how_to_access)
+    if how_to_access.class != AccessHtmlElement
+      fail "must initialize with a AccessHtmlElement, was a #{how_to_access.class}"
+    end
+    @access_html_elements = how_to_access
+    @error_message = 'no error message'
+    @known_facilities = ['TST1', 'TST2']
+  end
+
+  def verify(html_element, value)
+    text = pull_value(html_element, value)
+    @error_message = "Does valid facility list #{@known_facilities} contain #{text}?"
+    return @known_facilities.include? text.upcase
+  end
+
+  def pull_value(html_element, _value)
+    return html_element.text
+  end
+
+  def error_message
+    return @error_message
+  end
+end

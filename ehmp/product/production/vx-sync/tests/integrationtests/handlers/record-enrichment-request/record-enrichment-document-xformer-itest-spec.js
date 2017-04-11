@@ -1,6 +1,6 @@
 'use strict';
 //------------------------------------------------------------------------------------
-// This contains a set of integration tests for record-enrichment-allergy-xformer.js.
+// This contains a set of integration tests for record-enrichment-document-xformer.js.
 //
 // Author: Les Westberg
 //------------------------------------------------------------------------------------
@@ -10,7 +10,8 @@ require('../../../../env-setup');
 var _ = require('underscore');
 
 var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
-var config = require(global.VX_ROOT + 'worker-config');
+var wConfig = require(global.VX_ROOT + 'worker-config');
+var config = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
 config.terminology.host = vx_sync_ip;
 
 var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
@@ -31,6 +32,7 @@ var originalVaDocumentRecord = {
     'documentTypeName': 'Advance Directive',
     'encounterName': '20 MINUTE May 16, 2007',
     'encounterUid': 'urn:va:visit:9E7A:3:5670',
+    'amended': 20070516095030,
     'entered': 20070516095030,
     'facilityCode': 500,
     'facilityName': 'CAMP MASTER',
@@ -138,7 +140,7 @@ var jdsCodedDodValue = { system : 'http://loinc.org', code : '11488-4', display 
 var terminologyUtil = new TerminologyUtil(log, log, config);
 describe('record-enrichment-document-xformer.js', function() {
     describe('transformAndEnrichRecord()', function() {
-        it('Happy Path with VA Allergy', function() {
+        it('Happy Path with VA Document', function() {
             var finished = false;
             var environment = {
                 terminologyUtils: terminologyUtil
@@ -163,7 +165,7 @@ describe('record-enrichment-document-xformer.js', function() {
                 return finished;
             }, 'Call failed to return in time.', 10000);
         });
-        it('Happy Path with Dod Allergy', function() {
+        it('Happy Path with Dod Document', function() {
             var finished = false;
             var environment = {
                 terminologyUtils: terminologyUtil

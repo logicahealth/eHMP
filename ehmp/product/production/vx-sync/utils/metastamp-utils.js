@@ -70,7 +70,7 @@ function metastampDomain(record, timestamp, icn) {
         }
 
         site.domainMetaStamp[domain].eventMetaStamp[recordItem.uid] = {
-            'stampTime': metastamp
+            'stampTime': (recordItem.stampTime && !timeStampInvalid(recordItem.stampTime)) ? recordItem.stampTime : metastamp
         };
     });
 
@@ -119,7 +119,7 @@ function getBlankMetastampRecord() {
 }
 
 function getDomainFromMetastamp(metaStamp, sourceSiteHash){
-    if(!metaStamp.sourceMetaStamp || !metaStamp.sourceMetaStamp[sourceSiteHash] || !metaStamp.sourceMetaStamp[sourceSiteHash].domainMetaStamp){
+    if(!metaStamp || !metaStamp.sourceMetaStamp || !metaStamp.sourceMetaStamp[sourceSiteHash] || !metaStamp.sourceMetaStamp[sourceSiteHash].domainMetaStamp){
         return undefined;
     }
 

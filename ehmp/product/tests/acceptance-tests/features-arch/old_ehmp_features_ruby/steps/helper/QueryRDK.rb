@@ -61,7 +61,7 @@ class QueryRDKDomain < BuildQuery
 end
 
 class QueryRDK < BuildQuery
-  # http://IPADDRESS :8888/patientrecord/labsbyorder?pid=11016&orderUid=urn:va:order:9E7A:227:16682
+  # http://IP_ADDRESS:PORT/patientrecord/labsbyorder?pid=11016&orderUid=urn:va:order:9E7A:227:16682
   def initialize(datatype, pid, auto_acknowledge = "true")
     @path = String.new(DefaultLogin.rdk_api_url)
     @path.concat("/patientrecord/labsbyorder?pid=")
@@ -93,7 +93,7 @@ class QueryRDK < BuildQuery
   end
 end # class
 
-#https://IPADDRESSfhir/patient/_search?name=EIGHT,PATIENT&_format=json&_skip=0&_count=20&_ack=true
+#https://IPADDRES/fhir/patient/_search?name=EIGHT,PATIENT&_format=json&_skip=0&_count=20&_ack=true
 class SearchRDK < BuildQuery
   
   def initialize(resultsRecordType = nil)

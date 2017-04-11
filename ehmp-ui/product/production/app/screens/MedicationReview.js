@@ -32,6 +32,7 @@ define([
 
     var medicationReviewConfig = {
         id: "medication-review",
+        context: 'patient',
         contentRegionLayout: "gridster",
         appletHeader: "navigation",
         appLeft: "patientInfo",

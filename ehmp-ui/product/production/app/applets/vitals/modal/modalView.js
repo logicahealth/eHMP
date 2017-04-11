@@ -44,7 +44,7 @@ define([
     }, {
         name: "facilityMoniker",
         label: "Facility",
-        template: Handlebars.compile('<span class="color-grey-dark">{{facilityMoniker}}</span>'),
+        template: Handlebars.compile('<span>{{facilityMoniker}}</span>'),
         cell: "handlebars",
         sortable: false
     }];
@@ -52,7 +52,8 @@ define([
     gridOptions.columns = columns;
     gridOptions.appletConfig = {
         name: 'vitals_modal',
-        id: 'vitals-modalView'
+        id: 'vitals-modalView',
+        simpleGrid: true
     };
 
     var DateRangeModel = Backbone.Model.extend({
@@ -359,6 +360,8 @@ define([
         },
         onShow: function() {
             Chart = new Highcharts.Chart(this.chartOptions);
+            this.$el.find('svg').attr('focusable', false);
+            this.$el.find('svg').attr('aria-hidden', true);
 
             var $tableView = this.$('#lrDataTableView');
             $tableView.on('mouseover', '#data-grid-vitals-modalView tbody tr', this.highLightChartPoint);
@@ -487,10 +490,6 @@ define([
                 this.model.attributes.navHeader = true;
             }
 
-            if (this.showNavHeader) {
-                this.model.attributes.navHeader = true;
-            }
-
             this.fetchOptions.resourceTitle = "patient-record-vital";
             var fetchName = this.model.attributes.typeName;
             if (this.model.attributes.typeName.indexOf("Blood") >= 0) fetchName = 'Blood Pressure';
@@ -502,10 +501,10 @@ define([
 
             typeName = fetchName;
             this.model.attributes.modalTitleName = Util.getVitalLongName(typeName);
-            if (this.model.attributes.displayName.indexOf("BP") >= 0) {
+            if (!_.isUndefined(this.model.get('displayName')) && this.model.get('displayName').indexOf("BP") >= 0) {
                 modalDisplayName = 'BP';
             } else {
-                modalDisplayName = this.model.attributes.displayName;
+                modalDisplayName = this.model.get('displayName');
             }
 
             var self = this;
@@ -515,6 +514,8 @@ define([
             };
 
             this.fetchOptions.pageable = true;
+
+            gridOptions.appletConfig.gridTitle = 'This table represents the selected vitals, ' + this.model.attributes.modalTitleName;
 
             this.fetchOptions.onSuccess = function(collection, response) {
                 self.collection = collection;
@@ -583,12 +584,22 @@ define([
                         collection: gridOptions.collection,
                         windowSize: 4
                     });
-                    $('.js-backgrid').append(self.paginatorView.render().el);
+                    self.$('.js-backgrid').append(self.paginatorView.render().el);
                 } else {
                     //this should just be set on gridOptions.emptyText and shouldn't 
                     //need to do any DOM manipulation for this
                     $('#data-grid-vitals-modalView').find('tbody').append($('<tr><td>No Records Found</td></tr>'));
                 }
+            };
+
+            this.fetchOptions.onError = function(resp) {
+              var errorModel = new Backbone.Model(resp);
+              self.leftColumn.show(ADK.Views.Error.create({
+                model: errorModel
+              }));
+              self.chart.show(ADK.Views.Error.create({
+                model: errorModel
+              }));
             };
         },
         events: {

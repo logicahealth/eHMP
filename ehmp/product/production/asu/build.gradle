@@ -14,17 +14,21 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath "io.spring.gradle:dependency-management-plugin:0.5.0.RELEASE"
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'idea' 
+apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
+
+// Disabled tasks
+distZip.enabled = false
+distTar.enabled = false
 
 jar {
     baseName = 'asu'
@@ -54,7 +58,7 @@ dependencies {
     compile 'org.springframework.data:spring-data-commons'
     compile 'org.springframework:spring-tx'
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    
+
     compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.2.0'
     compile (group: 'com.codahale.metrics', name: 'metrics-json', version: '3.0.1')
     compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '4.0.0'
@@ -65,7 +69,6 @@ dependencies {
     compile 'joda-time:joda-time:2.2'
     compile("org.apache.poi:poi:3.10-FINAL")
     compile("org.apache.poi:poi-ooxml:3.10-FINAL")
-
 
     compile("com.google.guava:guava:14.0.1")
     compile("commons-lang:commons-lang:2.6")
@@ -98,7 +101,7 @@ ext.set('version', asuZipVersion)
 task zipAsu(type: Zip) {
   extension = 'zip'
   baseName = 'asu'
-  version = asuZipVersion 
+  version = asuZipVersion
   destinationDir buildDir
   from ("${buildDir}/libs/asu.war")
 }
@@ -109,4 +112,9 @@ assemble.dependsOn = [bootRepackage, war]
 
 artifacts {
   archives zipAsu
+}
+
+configurations.archives.with {
+  artifacts.remove artifacts.find { it.archiveTask.is distZip }
+  artifacts.remove artifacts.find { it.archiveTask.is distTar }
 }

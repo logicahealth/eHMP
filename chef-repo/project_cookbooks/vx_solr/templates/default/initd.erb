@@ -20,13 +20,25 @@ NAME="Solr"
 DESC="start/stop Solr Server"
 
 start() {
-  action "Starting ${NAME}: " <%= node[:vx_solr][:bin_solr][:script] %> start \
-  <% unless node[:vx_solr][:bin_solr][:jvm_params].nil? then %> -a "<%= node[:vx_solr][:bin_solr][:jvm_params] %>" <% end %> \
-  <% unless node[:vx_solr][:bin_solr][:memory].nil? then %> -m "<%= node[:vx_solr][:bin_solr][:memory] %>" <% end %>
+  action "Starting ${NAME} instance 1: " <%= @script %> start \
+  -cloud -p <%= @solr_port %> -z <%= @zk_config %> -s solr -V \
+  <% unless @jvm_params.nil? then %> -a "<%= @jvm_params %>" <% end %> \
+  <% unless @memory.nil? then %> -m "<%= @memory %>" <% end %>
+
+  <% 2.upto(@solr_instances) do |instance| %>
+    action "Starting ${NAME} instance <%= @instance %>: " <%= @script %> start \
+    -cloud -p <%= @additional_instance_base_port + (instance - 2) %> -z <%= @zk_config %> -s home<%= instance %> -V \
+    <% unless @jvm_params.nil? then %> -a "<%= @jvm_params %>" <% end %> \
+    <% unless @memory.nil? then %> -m "<%= @memory %>" <% end %>
+  <% end %>
 }
 
 stop() {
-  action "Stopping ${NAME}: " <%= node[:vx_solr][:bin_solr][:script] %> stop
+  action "Stopping ${NAME} instance 1: " <%= @script %> stop -p <%= @solr_port %>
+
+  <% 2.upto(@solr_instances) do |instance| %>
+    action "Stopping ${NAME} instance <%= @instance %>: " <%= @script %> stop -p <%= @additional_instance_base_port + (instance - 2) %>
+  <% end %>
 }
 
 case $1 in
@@ -42,7 +54,7 @@ case $1 in
     start
     ;;
   status)
-    <%= node[:vx_solr][:bin_solr][:script] %> status | grep Found
+    <%= @script %> status | grep Found
     ;;
   *)
     echo "Usage: $0 {start|stop|restart}"

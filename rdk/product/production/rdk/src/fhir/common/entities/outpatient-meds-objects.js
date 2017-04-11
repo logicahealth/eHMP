@@ -495,7 +495,7 @@ function BuildEncounter(item) {
         _id: helpers.generateUUID(),
         text: {
             status: 'generated',
-            div: '<div>Encounter with patient ' + item.pid + '</div>'
+            div: '<div>Encounter with patient ' + _.escape(item.pid) + '</div>'
         },
         extension: new BuildExtensions((item.orders && item.orders[0]) ? item.orders[0] : {}, 'location'),
         type: map.vaType[item.vaType],

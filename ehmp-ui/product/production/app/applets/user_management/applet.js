@@ -24,8 +24,12 @@ define([
         events: {
             'click .applet-bulk-user-edit-button': 'onClickBulkEditButton'
         },
+        behaviors: {
+            Tooltip: {}
+        },
         onClickBulkEditButton: function() {
             ADK.Messaging.trigger('users-applet:launch-bulk-edit');
+            appletUtil.elementTarget = '.applet-bulk-user-edit-button';
         }
     });
     var applet = {

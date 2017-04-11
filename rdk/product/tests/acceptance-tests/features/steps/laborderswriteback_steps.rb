@@ -10,13 +10,13 @@ class LabOrdersByTypeQuery < BuildQuery
     base_url = DefaultLogin.rdk_url
     writeback_url= DefaultLogin.rdk_writeback_url
     path = "#{base_url}/resource/resourcedirectory"
-    @response = HTTPartyWithBasicAuth.get_with_authorization(path)
-    # /patient/9E7A;100470/orders?accessCode=PW    &verifyCode=PW    !!&site=9E7A&pid=9E7A;100470"
+    @response = HTTPartyRDK.get(path)
+    # /patient/9E7A;100470/orders?accessCode=mx1234&verifyCode=mx1234!!&site=9E7A&pid=9E7A;100470"
     domain_path = RDClass.resourcedirectory.get_url(title)
     p domain_path
     p "domain path: #{domain_path}"
     #@path.concat(domain_path) 
-    @path = "#{writeback_url}/resource/resourcedirectory/write-health-data/patient/9E7A;100470/orders?accessCode=PW    &verifyCode=PW    !!&site=9E7A&pid=9E7A;100470" 
+    @path = "#{writeback_url}/resource/resourcedirectory/write-health-data/patient/9E7A;100470/orders?accessCode=mx1234&verifyCode=mx1234!!&site=9E7A&pid=9E7A;100470" 
     p "path: #{path}"
     p @path
 
@@ -53,16 +53,16 @@ end
 #  p parameter_hash_table
 #  path = LabOrdersByTypeQuery.new(parameter_hash_table).path
 #  p path
-#  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+#  @response = HTTPartyRDK.get_with_authorization(path)
 #end
 
 When(/^the client request a response in VPR format from RDK API with the parameters$/) do
   #path = LabOrdersByTypeQuery.new(parameter_hash_table).path 
-  #@response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  #@response = HTTPartyRDK.get_with_authorization(path)
   #p Dir.entries './features/steps'
-  HTTParty.post("http://IP             /resource/write-health-data/patient/9E7A;100472/orders?accessCode=PW    &verifyCode=PW    !!&site=9E7A&pid=9E7A;100472",
+  HTTParty.post("http://IP_ADDRESS:PORT/resource/write-health-data/patient/9E7A;100472/orders?accessCode=mx1234&verifyCode=mx1234!!&site=9E7A&pid=9E7A;100472",
                 {
-                  body:       File.read('./features/steps/create_order.json'),
+                  body:       File.read('./features/steps/data/create_order.json'),
                   headers:   
                  { 'Content-Type' => 'application/json', 
                    'Accept' => 'application/json' }     
@@ -70,7 +70,7 @@ When(/^the client request a response in VPR format from RDK API with the paramet
 end
 
 Then(/^the VPR result contain$/) do |table|
-  @response=HTTParty.get("http://IP             /vpr/9E7A;100472/find/order",
+  @response=HTTParty.get("http://IP_ADDRESS:PORT/vpr/9E7A;100472/find/order",
                          {       
                            headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }      
                          })  
@@ -97,8 +97,8 @@ Then(/^the VPR result contain$/) do |table|
 end
 
 When(/^the client updates order in VPR format from RDK API with the parameters$/) do 
-  #@response = HTTPartyWithBasicAuth.get_with_authorization(path)
-  @response=HTTParty.get("http://IP             /vpr/9E7A;100472/find/order",
+  #@response = HTTPartyRDK.get_with_authorization(path)
+  @response=HTTParty.get("http://IP_ADDRESS:PORT/vpr/9E7A;100472/find/order",
                          {       
                            headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
                              
@@ -108,21 +108,21 @@ When(/^the client updates order in VPR format from RDK API with the parameters$/
   last_index = (items_ary.length) - 1
   puts order_id=items_ary[last_index]['localId']
     
-  @object=JSON.parse(File.read('./features/steps/update_order.json'))
+  @object=JSON.parse(File.read('./features/steps/data/update_order.json'))
   @object['orderId'] = order_id
   @object = @object.to_json
-  File.write('./features/steps/update_order.json', @object)
+  File.write('./features/steps/data/update_order.json', @object)
 
-  HTTParty.put("http://IP             /resource/write-health-data/patient/9E7A;100472/orders/order_id;1?accessCode=PW    &verifyCode=PW    !!&site=9E7A&pid=9E7A;100472",
+  HTTParty.put("http://IP_ADDRESS:PORT/resource/write-health-data/patient/9E7A;100472/orders/order_id;1?accessCode=mx1234&verifyCode=mx1234!!&site=9E7A&pid=9E7A;100472",
                { 
-                 body:    File.read('./features/steps/update_order.json'),
+                 body:    File.read('./features/steps/data/update_order.json'),
                  headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }   
                })
 end
 
 When(/^the client discontinues order in VPR format from RDK API with the parameters$/) do 
-  #@response = HTTPartyWithBasicAuth.get_with_authorization(path)
-  @response=HTTParty.get("http://IP             /vpr/9E7A;100472/find/order",
+  #@response = HTTPartyRDK.get_with_authorization(path)
+  @response=HTTParty.get("http://IP_ADDRESS:PORT/vpr/9E7A;100472/find/order",
                          { 
                           
                            headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
@@ -133,27 +133,27 @@ When(/^the client discontinues order in VPR format from RDK API with the paramet
   last_index = (items_ary.length) - 1
   puts order_id=items_ary[last_index]['localId']
     
-  @object=JSON.parse(File.read('./features/steps/discontinue_order.json'))
+  @object=JSON.parse(File.read('./features/steps/data/discontinue_order.json'))
   @object['orderId'] = order_id
   @object = @object.to_json
-  File.write('./features/steps/discontinue_order.json', @object)
+  File.write('./features/steps/data/discontinue_order.json', @object)
   
-  HTTParty.delete("http://IP             /resource/write-health-data/patient/9E7A;100472/orders/order_id;1?accessCode=PW    &verifyCode=PW    !!&site=9E7A&pid=9E7A;100472",
+  HTTParty.delete("http://IP_ADDRESS:PORT/resource/write-health-data/patient/9E7A;100472/orders/order_id;1?accessCode=mx1234&verifyCode=mx1234!!&site=9E7A&pid=9E7A;100472",
                   { 
-                    body:    File.read('./features/steps/discontinue_order.json'),
+                    body:    File.read('./features/steps/data/discontinue_order.json'),
                     headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }     
                   }) 
 end
     
 And(/^the client clears patient with pid "(.*?)" info from vxsync$/) do |_pid|
-  HTTParty.post("http://IP           /sync/clearPatient?pid=9E7A;100472 ",
+  HTTParty.post("http://IPADDRESS:POR/sync/clearPatient?pid=9E7A;100472 ",
                 { 
                  
                 })    
 end
 
 Then(/^the client syncs the patient with pid "(.*?)" in vxsync$/) do |_pid|
-  HTTParty.get("http://IP           /sync/doLoad?pid=9E7A;100472 ",
+  HTTParty.get("http://IPADDRESS:POR/sync/doLoad?pid=9E7A;100472 ",
                { 
                 
                })    

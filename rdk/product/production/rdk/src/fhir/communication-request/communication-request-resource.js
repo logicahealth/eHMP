@@ -18,8 +18,9 @@ var nameFromIcn = require('../common/utils/jds-patientname-fromIcn.js');
 var queue;
 
 function getResourceConfig(app) {
-    queue = queueFactory.create(app);
-
+    queueFactory.create(app, function(q) {
+        queue = q;
+    });
     return [{
         name: 'communicationrequest-add',
         path: '',
@@ -48,18 +49,6 @@ function getResourceConfig(app) {
         name: 'communicationrequest-get',
         path: '/:recipientId/:id',
         get: getCommunicationRequest,
-        interceptors: {
-            operationalDataCheck: false,
-            synchronize: false,
-            validatePid: false
-        },
-        requiredPermissions: [],
-        isPatientCentric: false,
-        permitResponseFormat: true
-    }, {
-        name: 'communicationrequest-delete-all',
-        path: '/:recipientId',
-        delete: deleteAllCommunicationRequests,
         interceptors: {
             operationalDataCheck: false,
             synchronize: false,
@@ -146,9 +135,9 @@ function setPatientName(message, req, callback) {
         if (_.isUndefined(message.subject.display)) {
             return nameFromIcn.get(message.subject.reference.split('/')[1], req, callback);
         }
-        return callback(null, message.subject.display);
+        return setImmediate(callback, null, message.subject.display);
     }
-    return callback(null, null);
+    return setImmediate(callback);
 }
 
 function setstatusCommunicationRequest(req, res) {
@@ -160,41 +149,39 @@ function setstatusCommunicationRequest(req, res) {
     req.body = {
         'status': statuses[req.params.status] ? statuses[req.params.status] : req.params.status
     };
-    updateRequestHandler.handle(queue, req.body, req.params.recipientId, req.params.id, defaultCallback.bind(null, req, res, rdk.httpstatus.ok));
+    updateRequestHandler.handle(queue, req.body, req.params.recipientId, req.params.id, defaultCallback.bind(null, req, res, rdk.httpstatus.ok), req, res);
 }
 
 function updateCommunicationRequest(req, res) {
-    updateRequestHandler.handle(queue, req.body, req.params.recipientId, req.params.id, defaultCallback.bind(null, req, res, rdk.httpstatus.ok));
+    updateRequestHandler.handle(queue, req.body, req.params.recipientId, req.params.id, defaultCallback.bind(null, req, res, rdk.httpstatus.ok), req, res);
 }
 
 function getAllCommunicationRequests(req, res) {
-    getRequestsHandler.handle(queue, req.params.recipientId, req.query, defaultCallback.bind(null, req, res, rdk.httpstatus.ok));
+    getRequestsHandler.handle(queue, req.params.recipientId, req.query, defaultCallback.bind(null, req, res, rdk.httpstatus.ok), req, res);
 }
 
 
 function getCommunicationRequest(req, res) {
-    getRequestsHandler.handle(queue, req.params.recipientId, req.params.id, defaultCallback.bind(null, req, res, rdk.httpstatus.ok));
+    getRequestsHandler.handle(queue, req.params.recipientId, req.params.id, defaultCallback.bind(null, req, res, rdk.httpstatus.ok), req, res);
 }
 
 function addCommunicationRequest(req, res) {
+
     setPatientName(req.body, req, function(err, displayName) {
         if (!_.isUndefined(req.body) && !_.isUndefined(req.body.subject)) {
             req.body.subject.display = displayName;
         }
-        addRequestHandler.handle(queue, req.body, defaultCallback.bind(null, req, res, rdk.httpstatus.accepted));
+        addRequestHandler.handle(queue, req.body, defaultCallback.bind(null, req, res, rdk.httpstatus.accepted), req, res);
     });
 }
 
 function deleteCommunicationRequest(req, res) {
-    deleteRequestHandler.handle(queue, req.params.recipientId, req.params.id, defaultCallback.bind(null, req, res, rdk.httpstatus.no_content));
+    deleteRequestHandler.handle(queue, req.params.recipientId, req.params.id, defaultCallback.bind(null, req, res, rdk.httpstatus.no_content), req, res);
 }
 
-function deleteAllCommunicationRequests(req, res) {
-    deleteRequestHandler.handle(queue, req.params.recipientId, defaultCallback.bind(null, req, res, rdk.httpstatus.no_content));
-}
 
 function watchTube(req, res) {
-    watchRequestHandler.handle('added', queue, req.params.recipientId, defaultCallback.bind(null, req, res, rdk.httpstatus.ok));
+    watchRequestHandler.handle('added', queue, req.params.recipientId, defaultCallback.bind(null, req, res, rdk.httpstatus.ok), req, res);
 }
 
 module.exports.getResourceConfig = getResourceConfig;
@@ -206,4 +193,3 @@ module.exports._getAllCommunicationRequests = getAllCommunicationRequests;
 module.exports._getCommunicationRequest = getCommunicationRequest;
 module.exports._addCommunicationRequest = addCommunicationRequest;
 module.exports._deleteCommunicationRequest = deleteCommunicationRequest;
-module.exports._deleteAllCommunicationRequests = deleteAllCommunicationRequests;

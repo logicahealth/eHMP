@@ -1,6 +1,6 @@
-HMPDTIU ;SLC/MKB -- TIU extract ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDTIU ;SLC/MKB,ASMR/RRB - TIU extract;Nov 23, 2015 18:02:20
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -18,7 +18,7 @@ HMPDTIU ;SLC/MKB -- TIU extract ;8/2/11  15:29
  ; TIUSRVLO                 2834,2865
  ; TIUSRVR1                      2944
  ; XLFSTR                       10104
- ;
+ Q
  ; ------------ Get documents from VistA ------------
  ;
 EN(DFN,BEG,END,MAX,ID) ; -- find patient's documents
@@ -46,7 +46,7 @@ EN(DFN,BEG,END,MAX,ID) ; -- find patient's documents
  . F HMPS=1:1:$L(STATUS,U) S CTXT=$P(STATUS,U,HMPS) D  Q:HMPCNT'<MAX
  .. D CONTEXT^TIUSRVLO(.HMPY,CLS,CTXT,DFN,BEG,END,,MAX,,1)
  .. S HMPN=0 F  S HMPN=$O(@HMPY@(HMPN)) Q:HMPN<1  D  Q:HMPCNT'<MAX
- ... S HMPX=$G(@HMPY@(HMPN)) Q:'$$MATCH(HMPX)
+ ... S HMPX=$G(@HMPY@(HMPN)) Q:'$$MATCH(HMPX,$G(SUBCLASS),$G(SERVICE),$G(SUBJECT),$G(NOTSUBJ))
  ... Q:$D(^TMP("HMPD",$J,+HMPX))  ;already included
  ... K HMPITM D EN1(HMPX,.HMPITM) Q:'$D(HMPITM)
  ... D XML(.HMPITM) S HMPCNT=HMPCNT+1
@@ -80,6 +80,7 @@ EN1(HMPX,DOC) ; -- return a document in DOC("attribute")=value
  S DOC("documentClass")=$S(X="LR":"LR LABORATORY REPORTS",X="SR":"SURGICAL REPORTS",X="CP":"CLINICAL PROCEDURES",X="DS":"DISCHARGE SUMMARY",1:"PROGRESS NOTES")
  S DOC("referenceDateTime")=$P(HMPX,U,3)
  S X=$P(HMPX,U,6) D  ;S:$L(X) DOC("location")=X
+ . ; DE2818, ICR 10040 for ^SC, this doesn't handle duplicate entries and should be corrected
  . N LOC S LOC=$S($L(X):+$O(^SC("B",X,0)),1:0)
  . S DOC("facility")=$$FAC^HMPD(LOC)
  S X=$P(HMPX,U,7) S:$L(X) DOC("status")=X
@@ -115,7 +116,7 @@ CATG(DA) ; -- Return a code for document type #8925.1 DA
  Q ""
  ;
 LR() ; -- Return ien of Lab class
- N Y S Y=+$O(^TIU(8925.1,"B","LR LABORATORY REPORTS",0))
+ N Y S Y=+$O(^TIU(8925.1,"B","LR LABORATORY REPORTS",0))  ;DE2818, ICRs 2700 and 5677
  I Y>0,$S($P($G(^TIU(8925.1,Y,0)),U,4)="CL":0,$P($G(^(0)),U,4)="DC":0,1:1) S Y=0
  Q Y
  ;
@@ -235,22 +236,31 @@ SETUP ; -- convert FILTER("attribute") = value to TIU criteria
  I $L(TYPE)!LOINC S CLASS=0
  Q
  ;
-MATCH(DOC) ; -- Return 1 or 0, if document DA matches search criteria
- N Y,DA,LOCAL,NATL,X0,OK S Y=0
- S DA=+$G(DOC) G:DA<1 MQ
+ ;DE2818 begin, changed function below to use FileMan for ^TIU(8926.1) references, ICR 5678
+MATCH(DOC,SBCLSS,SRVC,SBJCT,NTSBJ) ; Boolean function, Return 1 or 0, if document matches search criteria
+ ; DOC - IEN in TIU DOCUMENT file (#8925)
+ ; SBCLSS - subclass
+ ; SRVC - service
+ ; two pointers to TIU LOINC SUBJECT MATTER DOMAIN (#8926.2):
+ ;    SBJCT - subject to include, NTSUBJ - subject to exclude
+ N DA,HMSBJMD,LOCAL,NATL,OK,Y
+ ; Y is the return value
+ S Y=0,DA=+$G(DOC) G:DA<1 MQ
  ; include addenda if pulling only unsigned items
  I $P(DOC,U,2)?1"Addendum ".E,STATUS'=2 G MQ
  ; TIU unsigned list can include completed parent notes
  I CTXT=2,$P(DOC,U,7)'="unsigned" G MQ
  S LOCAL=$$GET1^DIQ(8925,DA_",",.01,"I") ;local Title 8925.1 ien
- I $L(SUBCLASS) D  G:'OK MQ
+ I $L(SBCLSS) D  G:'OK MQ
  . N I,X S OK=0
- . F I=1:1:$L(SUBCLASS,"^") S X=$P(SUBCLASS,U,I) I $$ISA^TIULX(LOCAL,X) S OK=1 Q
+ . F I=1:1:$L(SBCLSS,U) S X=$P(SBCLSS,U,I) I $$ISA^TIULX(LOCAL,X) S OK=1 Q
  S NATL=+$$GET1^DIQ(8925.1,LOCAL_",",1501,"I") ;Natl Title 8926.1 ien
  I $L(TITLE) G:TITLE'[(U_+NATL_U) MQ
- S X0=$G(^TIU(8926.1,NATL,0))
- I $L(SERVICE) G:SERVICE'[(U_+$P(X0,U,7)_U) MQ
- I $L(SUBJECT) G:SUBJECT'[(U_+$P(X0,U,4)_U) MQ
- I $L(NOTSUBJ) G:NOTSUBJ[(U_+$P(X0,U,4)_U) MQ
+ ;S X0=$G(^TIU(8926.1,NATL,0))
+ I $L(SRVC) G:SRVC'[(U_$$GET1^DIQ(8926.1,NATL_",",.07,"I")_U) MQ  ;(#.07) SERVICE
+ S HMSBJMD=+$$GET1^DIQ(8926.1,NATL_",",.07,"I")  ;(#.04) SUBJECT MATTER DOMAIN
+ I $L(SBJCT) G:SBJCT'[(U_HMSBJMD_U) MQ
+ I $L(NTSBJ) G:NTSBJ[(U_HMSBJMD_U) MQ
  S Y=1
 MQ Q Y
+ ;

@@ -5,20 +5,20 @@ LOG4J_PROPERTIES = log4j.xml
 CHCS_URL = https://localhost:4433/CHCSWS/CHCSDataService?wsdl
 
 # VistaDataService endpoint
-VISTA_URL = <%= node[:mocks][:vds_application_url]%>
+VISTA_URL = <%= node[:mocks][:jmeadows][:vds_endpoint]%>
 
 #PIX service endpoint
-PIX_URL = https://DNS  esbpp.lovell.fhcc.domain:443/PIXServiceWS/PIXManager_Service?wsdl
+PIX_URL = https://vaww.esbpp.lovell.fhcc.DNS   :443/PIXServiceWS/PIXManager_Service?wsdl
 
 # BHIERealyService endpoint
 #BHIE_RELAY_SERVICE_URL = http://localhost:8080/BHIERelayService-2.3.1.0-production/BHIERelayService?wsdl
-BHIE_RELAY_SERVICE_URL = <%= node[:mocks][:bhie_relay_service_url]%>
+BHIE_RELAY_SERVICE_URL = <%= node[:mocks][:jmeadows][:bhie_relay_endpoint]%>
 
 # PDWS endpoint
-PDWS_PS_URL = http://IPADDRESS   /MockPDWS/EntityPatientSearch?wsdl
-PDWS_PR_URL = <%= node[:mocks][:mock_jmeadows_pdws_endpoint]%>
-PDWS_FS_URL = http://IPADDRESS   /MockPDWS/EntityPatientFamilySearch?wsdl
-PDWS_FR_URL = http://IPADDRESS   /MockPDWS/EntityPatientFamilyRetrieve?wsdl
+PDWS_PS_URL = http://IP___ADDRESS/MockPDWS/EntityPatientSearch?wsdl
+PDWS_PR_URL = <%= node[:mocks][:jmeadows][:pwds_endpoint]%>
+PDWS_FS_URL = http://IP___ADDRESS/MockPDWS/EntityPatientFamilySearch?wsdl
+PDWS_FR_URL = http://IP___ADDRESS/MockPDWS/EntityPatientFamilyRetrieve?wsdl
 
 # PDWS HL7 Message Header Processing Code
 PDWS_PROC_CODE = T
@@ -30,7 +30,7 @@ PDWS_SND_DEV_ID = 161841
 DEBUG_SOAP_OUTPUT = false
 
 # MVI endpoint
-MVI_URL = http://IPADDRESS   /MockMVI/IdMWebService?wsdl
+MVI_URL = http://IP___ADDRESS/MockMVI/IdMWebService?wsdl
 #MVI_URL =http://localhost:8088/MVIService?WSDL
 
 # MVI HL7 Message Sender Device ID
@@ -43,13 +43,13 @@ VA_USER_RESTRICT = TRUE
 VA_USER_ALLOW_RESTRICT_ACCESS = TRUE
 
 # CHCSWS encrypted username
-CHCSWS_USERNAME = lcVsOM5WHUw0Y5vIJe+gGA==
+CHCSWS_USERNAME        UN
 
 # CHCSWS ecnrypted password
-CHCSWS_PWD = W0GYBTca9wgkTwy2r5qcbA==
+CHCSWS_PWD = PW
 
 # BHIERealyService encrypted username
-BHIE_RELAY_SERVICE_USERNAME = lcVsOM5WHUw0Y5vIJe+gGA==
+BHIE_RELAY_SERVICE_USERNAME       PW
 
 # BHIERealyService encrypted password
 BHIE_RELAY_SERVICE_PWD = W0GYBTca9wgkTwy2r5qcbA==
@@ -62,11 +62,11 @@ IS_TRUST_ALL_SSL_HOSTNAMES_AND_CERTS = true
 USE_C3PO = false
 
 # SQL server JDBC connection string (for use with C3PO)
-SQL_URL = <%= @sql_url %>
-#SQL_URL: jdbc:oracle:thin:iehrowner/iehr0wner@//r02hindbs01pp.r02.domain.ext:1521/healthpp
+SQL_URL = <%= node[:mocks][:sql_url]%>
+#SQL_URL: jdbc:oracle:thin:iehrowner/iehr0wner@//r02hindbs01pp.r02.DNS       :1521/healthpp
 
 # SQL server JDBC connection string (for use with C3PO)
-SQL_URL_ENCRYPTED = <%= @sql_url %>
+SQL_URL_ENCRYPTED = <%= node[:mocks][:sql_url]%>
 
 # SQL server driver (for use with C3PO)
 SQL_DRIVER = com.microsoft.sqlserver.jdbc.SQLServerDataSource

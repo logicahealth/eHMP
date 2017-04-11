@@ -250,7 +250,7 @@ describe('jds-client.js', function() {
                         finished = true;
                         expect(error).toBeNull();
                         expect(val(response, 'statusCode')).toBe(200);
-                        expect(val(result, 'patientIdentifiers')).toEqual(identifiers);
+                        expect(val(result, 'patientIdentifiers')).toContain(identifiers[0]);
                         expect(val(result, 'jpid')).not.toBeUndefined();
                         expect(val(result, 'jpid', 'length')).not.toBeUndefined();
                         expect(val(result, 'jpid', 'length')).toBe(36);
@@ -291,7 +291,7 @@ describe('jds-client.js', function() {
                             finished = true;
                             expect(error).toBeNull();
                             expect(val(response, 'statusCode')).toBe(200);
-                            expect(val(result, 'patientIdentifiers')).toEqual(identifiers);
+                            expect(val(result, 'patientIdentifiers')).toContain(identifiers[0]);
                             expect(val(result, 'jpid')).not.toBeUndefined();
                             expect(val(result, 'jpid', 'length')).toBe(36);
                         });
@@ -317,6 +317,62 @@ describe('jds-client.js', function() {
                     waitsFor(function() {
                         return finished;
                     }, 10000);
+                });
+            });
+        });
+
+        describe('getJpidFromQuery()', function(){
+            beforeEach(resetPatientIdentifiers);
+
+            it('Gets 200 response for an unknown id', function(){
+                var done = false;
+                var patientIdentifiers = [unknownIdentifier.value];
+                runs(function(){
+                    jdsClient.getJpidFromQuery(patientIdentifiers, function(error, response){
+                        expect(error).toBeFalsy();
+                        expect(response).toBeTruthy();
+                        expect(response.statusCode).toEqual(200);
+                        done = true;
+                    });
+                });
+
+                waitsFor(function(){
+                    return done;
+                });
+            });
+
+            it('Gets 201 response for a known list of ids', function(){
+                var done = false;
+                var patientIdentifiers = identifiers2;
+                runs(function(){
+                    jdsClient.getJpidFromQuery(patientIdentifiers, function(error, response){
+                        expect(error).toBeFalsy();
+                        expect(response).toBeTruthy();
+                        expect(response.statusCode).toEqual(201);
+                        expect(val(response,['headers','location'])).toBeTruthy();
+                        done = true;
+                    });
+                });
+
+                waitsFor(function(){
+                    return done;
+                });
+            });
+
+            it('Gets 400 response for a potentially conflicting list of ids', function(){
+                var done = false;
+                var patientIdentifiers = identifiers2.concat(identifiers);
+                runs(function(){
+                    jdsClient.getJpidFromQuery(patientIdentifiers, function(error, response){
+                        expect(error).toBeFalsy();
+                        expect(response).toBeTruthy();
+                        expect(response.statusCode).toEqual(400);
+                        done = true;
+                    });
+                });
+
+                waitsFor(function(){
+                    return done;
                 });
             });
         });
@@ -424,6 +480,30 @@ describe('jds-client.js', function() {
                 }, 20000);
             });
 
+            it('Can retrieve a job status via patientIdentifier', function() {
+                var finished;
+                runs(function() {
+                    jdsClient.getJobStatus({
+                        'patientIdentifier': {
+                            'type': 'pid',
+                            'value': '9E7A;33333'
+                        }
+                    }, function(error, response, results) {
+                        expect(error).toBeNull();
+                        expect(val(response, 'statusCode')).toBe(200);
+                        expect(results).not.toBeUndefined();
+                        expect(val(results, 'items')).not.toBeUndefined();
+
+                        expect(val(results, 'items', 'length')).toBe(1);
+                        expect(val(results, 'items', 0)).toEqual(createEnterpriseSyncRequestState);
+                        finished = true;
+                    });
+                });
+
+                waitsFor(function() {
+                    return finished;
+                }, 20000);
+            });
 
             it('Can retrieve a filtered results', function() {
                 var finished, filter = {

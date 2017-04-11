@@ -8,5 +8,6 @@
   "resourceDirectoryPathPicklist": "/resource/write-pick-list/resourcedirectory",
   "adk-version": "1.0.0",
   "numMovesBeforeSaveUDSConfig": 6,
-  "saveUDSConfigTimeout": 10000
+  "saveUDSConfigTimeout": 10000,
+  "resourceDirectoryTimeout": 45000
 }

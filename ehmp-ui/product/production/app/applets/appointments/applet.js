@@ -35,9 +35,9 @@ define([
     var categoryCol = {
         name: 'formattedDescription',
         label: 'Description',
-        flexWidth: 'flex-width-2',
+        flexWidth: 'flex-width-2_5',
         cell: Backgrid.StringCell.extend ({
-            className: 'string-cell flex-width-2'
+            className: 'string-cell flex-width-2_5'
         }),
         hoverTip: 'visits_description'
     };
@@ -53,9 +53,9 @@ define([
     var statusCol = {
         name: 'appointmentStatus',
         label: 'Status',
-        flexWidth: 'flex-width-2',
+        flexWidth: 'flex-width-1_5',
         cell: Backgrid.StringCell.extend ({
-            className: 'string-cell flex-width-2'
+            className: 'string-cell flex-width-1_5'
         }),
         hoverTip: 'visits_status'
     };
@@ -71,7 +71,10 @@ define([
     var facilityCol = {
         name: 'facilityMoniker',
         label: 'Facility',
-        cell: 'string',
+        flexWidth: 'flex-width-2',
+        cell: Backgrid.StringCell.extend ({
+            className: 'string-cell flex-width-2'
+        }),
         hoverTip: 'visits_facility'
     };
 
@@ -272,7 +275,7 @@ define([
 
             var modalOptions = {
                 'title': Util.getModalTitle(model),
-                'size': 'large',
+                'size': 'normal',
                 'headerView': modalHeader.extend({
                     model: model,
                     theView: view

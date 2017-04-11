@@ -1,6 +1,6 @@
 <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
     <S:Body>
-        <ns2:getPatientAllergies xmlns:ns2="http://webservice.jmeadows.med.DNS   /">
+        <ns2:getPatientAllergies xmlns:ns2="http://webservice.jmeadows.DNS       /">
             <queryBean>
                 <endDate>2014-05-14T23:59:59.321-10:00</endDate>
                 <patient>

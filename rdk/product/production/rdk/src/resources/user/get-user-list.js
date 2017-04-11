@@ -23,6 +23,7 @@ users.getUserList = function(req, res) {
     /* set paging options */
     var start = null;
     var limit = null;
+    var page = null;
     var usePaging = false;
     if (!_.isUndefined(req.param('start'))) {
         start = parseInt(req.param('start'));
@@ -30,7 +31,10 @@ users.getUserList = function(req, res) {
     if (!_.isUndefined(req.param('limit'))) {
         limit = parseInt(req.param('limit'));
     }
-    if (start !== null && limit !== null) {
+    if (!_.isUndefined(req.param('page'))) {
+        page = parseInt(req.param('page'));
+    }
+    if ((start !== null && limit !== null) || (page !== null && limit !== null)) {
         usePaging = true;
     }
 
@@ -60,8 +64,6 @@ users.getUserList = function(req, res) {
         });
         var USER_LIMIT = req.app.config.userResourceConfig.limit;
         var errorLooping = false;
-        req.logger.info('*****************************');
-        req.logger.info(JSON.stringify(result.data.items));
         _.each(result.data.items, function(user, index) {
             if (errorLooping) {
                 return;
@@ -118,7 +120,30 @@ users.getUserList = function(req, res) {
             var addUserToWhiteList = (showVistaInactive && user.vistaStatus === 'inactive') ||
                 (showEhmpInactive && user.ehmpStatus === 'inactive') ||
                 (user.vistaStatus === 'active' && user.ehmpStatus === 'active');
-
+            var exactMatchCount = 0;
+            if (!_.isUndefined(reqFilterParameters.firstName)) {
+                if (user.fname.toLowerCase() === reqFilterParameters.firstName.toLowerCase()) {
+                    exactMatchCount++;
+                } else if ((user.fname.length > reqFilterParameters.firstName.length) && (user.fname.toLowerCase().substring(0, reqFilterParameters.firstName.length) === reqFilterParameters.firstName.toLowerCase())) {
+                    exactMatchCount += 0.5;
+                }
+            }
+            if (!_.isUndefined(reqFilterParameters.lastName)) {
+                if (user.lname.toLowerCase() === reqFilterParameters.lastName.toLowerCase()) {
+                    exactMatchCount++;
+                } else if ((user.lname.length > reqFilterParameters.lastName.length) && (user.lname.toLowerCase().substring(0, reqFilterParameters.lastName.length) === reqFilterParameters.lastName.toLowerCase())) {
+                    exactMatchCount += 0.5;
+                }
+            }
+            if (!_.isUndefined(reqFilterParameters.permissionSet) &&
+                !_.isUndefined(_.find(user.permissionSets, reqFilterParameters.permissionSet))) {
+                exactMatchCount++;
+            }
+            if (!_.isUndefined(reqFilterParameters.duz) &&
+                user.duz == reqFilterParameters.duz) {
+                exactMatchCount++;
+            }
+            user.exactMatchCount = exactMatchCount;
             if (reqFilterParameters.permissionSet) {
                 if ((_.contains(user.permissionSets.val, reqFilterParameters.permissionSet)) && addUserToWhiteList) {
                     whiteListUsers.push(userUtil.sanitizeUser(user, userUtil.userListWhitelist));
@@ -129,7 +154,33 @@ users.getUserList = function(req, res) {
                 }
             }
         });
+        whiteListUsers = _.sortBy(whiteListUsers, function(user) {
+            return -user.exactMatchCount;
+        });
+        req.logger.trace({
+            users: whiteListUsers
+        }, 'sorted user list');
         if (usePaging === true) {
+            var totalPages = Math.ceil(whiteListUsers.length / limit);
+            if (page > totalPages) {
+                page = totalPages;
+            } else if (page < 1) {
+                page = 1;
+            }
+            if (start === null) {
+                start = limit * (page - 1);
+            }
+            if (page === null) {
+                page = (start / limit) + 1;
+            }
+            var nextPage = page + 1;
+            var previousPage = page - 1;
+            if (nextPage > totalPages) {
+                nextPage = 1;
+            }
+            if (previousPage < 1) {
+                previousPage = totalPages;
+            }
             var nextPageResults = whiteListUsers.slice(start, start + limit);
             var firstUser = nextPageResults[0];
             if (!_.isUndefined(firstUser)) {
@@ -138,7 +189,7 @@ users.getUserList = function(req, res) {
                 var previousStart = start - limit;
                 if (previousStart < 0) {
                     previousStart = Math.floor(whiteListUsers.length / limit) * limit;
-                    if(whiteListUsers.length === limit){
+                    if (whiteListUsers.length === limit) {
                         previousStart = 0;
                     }
                 }
@@ -152,6 +203,10 @@ users.getUserList = function(req, res) {
                     nextStart: nextStart,
                     previousStart: previousStart,
                     currentStart: start,
+                    nextPage: nextPage,
+                    previousPage: previousPage,
+                    currentPage: page,
+                    totalPages: totalPages,
                     message: message
                 };
                 firstUser.has_paging_data = true;
@@ -210,7 +265,8 @@ users.getUserList = function(req, res) {
         }
         var jdsFilterPath = jdsFilter.build(jdsFilterObject);
         var jdsQuery = {
-            filter: jdsFilterPath
+            filter: jdsFilterPath,
+            order: 'name asc'
         };
         var jdsPath = '/data/find/user' + '?' + querystring.stringify(jdsQuery);
         var jdsConfig = req.app.config.jdsServer;

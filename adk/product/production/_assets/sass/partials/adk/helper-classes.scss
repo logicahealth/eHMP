@@ -25,6 +25,16 @@ $class-pixel-height: pixel-height !default;
         min-height: #{$i}#{"px"} !important;
     }
 }
+
+// height and width 100% and auto
+.percent-height-100 {
+    height: 100% !important;
+}
+.auto-width {
+    width: auto !important;
+}
+
+
 // creates class definitions for pixel-width-0 - pixel-width-100 to set pixel based widths | anything over 100px should use % above
 $class-pixel-width: pixel-width !default;
 @for $i from 0 through 100 {
@@ -87,10 +97,46 @@ $class-flex: flex-width !default;
         flex: #{$i+.5} !important;
     }
 }
+.flex-width-none {
+    flex: none !important;
+}
+// this class defines a flex element that does not grow, nor shring compared to its siblings
+.flex-grow-fixed {
+    flex-grow:0 !important;
+    flex-shrink:0 !important;
+}
+/// this class defines a flex element that does grow and shrink within a flexbox definition
+.flex-grow-loose {
+    flex-grow:1 !important;
+    flex-shrink:1 !important;
+}
+.flex-wrap-no {
+    flex-wrap: nowrap !important;
+}
+.flex-wrap {
+    flex-wrap: wrap !important;
+}
+.flex-align-center {
+    align-items:center !important;
+}
+// creates flex-direction classes for each item in the list above e.g. .flex-direction-row has flex-direction: row;
+$flexDirection: row row-reverse column column-reverse;
+@each $direction in $flexDirection {
+    .flex-direction-#{$direction} {
+        flex-direction: #{$direction} !important;
+    }
+}
+// creates order classes e.g. .order-1 has order: 1; order 1 - 10
+$class-order: order !default;
+@for $i from 0 through 10 {
+    .#{$class-order}-#{$i} {
+        order: #{$i} !important;
+    }
+}
 // the below each loop creates css class definitions
 // e.g : .color-primary and .background-color for all colors in our variables 
-$colorListVariables: $primary $primary-dark $primary-light $primary-lighter $primary-lightest $secondary $secondary-dark $tertiary $tertiary-dark $pure-black $pure-white $grey $grey-dark $grey-darker $grey-darkest $grey-light $grey-lighter $red $red-dark $red-lightest;
-$colorlistName: primary primary-dark primary-light primary-lighter primary-lightest secondary secondary-dark tertiary tertiary-dark pure-black pure-white grey grey-dark grey-darker grey-darkest grey-light grey-lighter red red-dark red-lightest;
+$colorListVariables: $primary $primary-dark $primary-light $primary-light-alt $primary-lighter $primary-lightest $secondary $secondary-dark $tertiary $tertiary-dark $tertiary-darker $pure-black $pure-white $grey $grey-dark $grey-darker $grey-darkest $grey-light $grey-lighter $grey-lightest $red $red-dark $red-lightest $pure-yellow $orange-dark;
+$colorlistName: primary primary-dark primary-light primary-light-alt primary-lighter primary-lightest secondary secondary-dark tertiary tertiary-dark tertiary-darker pure-black pure-white grey grey-dark grey-darker grey-darkest grey-light grey-lighter grey-lightest red red-dark red-lightest pure-yellow orange-dark;
 $colorlistProperty: color background-color;
 @each $property in $colorlistProperty {
     @each $item in $colorlistName {
@@ -101,12 +147,36 @@ $colorlistProperty: color background-color;
         }
     }
 }
+.background-color-no {
+    background-color: transparent !important;
+}
 // border
 .all-border-no {
     border: none !important;
 }
+.bottom-border-grey-lightest {
+    border-bottom: 1px solid $grey-lightest !important;
+}
 .bottom-border-grey-light {
     border-bottom: 1px solid $grey-light !important;
+}
+.bottom-border-grey {
+    border-bottom: 1px solid $grey !important;
+}
+.bottom-border-grey-darker {
+    border-bottom: 1px solid $grey-darker !important;
+}
+.top-border-grey-light {
+    border-top: 1px solid $grey-light !important;
+}
+.top-border-grey-lightest {
+    border-top: 1px solid $grey-lightest !important;
+}
+.right-border-grey-light {
+    border-right: 1px solid $grey-light !important;
+}
+.left-border-grey-light {
+    border-left: 1px solid $grey-light !important;
 }
 // display
 .inline-block-display {
@@ -124,6 +194,9 @@ $colorlistProperty: color background-color;
 .display-no {
     display: none !important;
 }
+.box-shadow-no {
+    box-shadow: none !important;
+}
 // faux-table (flex) cell layout
 .valign-middle,
 .valign-bottom {
@@ -131,6 +204,9 @@ $colorlistProperty: color background-color;
 }
 .pre-wrap {
     white-space: pre-wrap !important;
+}
+.white-space {
+    white-space: normal;
 }
 .nowrap {
     overflow: hidden !important;
@@ -148,17 +224,38 @@ $colorlistProperty: color background-color;
 .bold-font {
     font-weight: bold !important;
 }
+.font-size-10 {
+    font-size: 10px !important;
+}
+.font-size-11 {
+    font-size: 11px !important;
+}
 .font-size-12 {
     font-size: 12px !important;
 }
 .font-size-14 {
     font-size: 14px !important;
 }
+.font-size-15 {
+    font-size: 15px !important; //added by TT
+}
 .font-size-16 {
     font-size: 16px !important;
 }
 .font-size-18 {
     font-size: 18px !important;
+}
+.font-size-20 {
+    font-size: 20px !important;
+}
+.font-size-22 {
+    font-size: 22px !important;
+}
+.transform-text-capitalize {
+    text-transform: capitalize !important;
+}
+.transform-none {
+    text-transform: none !important;
 }
 // misc
 .high-chart-placeholder {
@@ -169,24 +266,56 @@ $colorlistProperty: color background-color;
     display: block;
 }
 .scrolling-content {
-    overflow-y: scroll !important;
+    overflow-y: auto !important;
 }
 .full-height {
     height: 100% !important;
+}
+.inherit-height {
+    height: inherit !important;
 }
 // overflows
 .visible-overflow {
     overflow: visible !important;
 }
+.visible-overflow-y {
+    overflow-y: visible !important;
+}
+.visible-overflow-x {
+    overflow-x: visible !important;
+}
 .hidden-overflow {
     overflow: hidden !important;
 }
+.hidden-overflow-y {
+    overflow-y: hidden !important;
+}
+.hidden-overflow-x {
+    overflow-x: hidden !important;
+}
 .auto-overflow {
     overflow: auto !important;
+}
+.auto-overflow-y {
+    overflow-y: auto !important;
+}
+.auto-overflow-x {
+    overflow-x: auto !important;
 }
 .hidden {
     display: none !important;
 }
 .word-wrap-break-word {
     word-wrap: break-word !important;
+}
+.word-break-break-word {
+    word-break: break-word !important;
+}
+//position
+.position-absolute {
+    position: absolute !important;
+}
+// tables
+.table-layout-fixed {
+    table-layout: fixed !important;
 }

@@ -15,7 +15,7 @@ var logger = require('bunyan').createLogger({
 	name: 'waitForBeanstalkToClear',
 	level: 'debug'
 });
-var BeanstalkClient = require(global.VX_JOBFRAMEWORK + 'beanstalk-client');
+var BeanstalkClient = require(global.VX_JOBFRAMEWORK).BeanstalkClient;
 var util = require('util');
 var async = require('async');
 var jobUtil = require(global.VX_UTILS + 'job-utils');

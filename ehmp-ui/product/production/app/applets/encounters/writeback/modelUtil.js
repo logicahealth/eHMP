@@ -1,23 +1,30 @@
 define([
     'backbone',
+    'handlebars',
     'marionette',
     'jquery',
     'underscore',
-    'app/applets/visit/utils/saveUtil'
-], function(Backbone, Marionette, $, _, saveUtil) {
+    'app/applets/encounters/writeback/saveUtil'
+], function(Backbone, Handlebars, Marionette, $, _, saveUtil) {
     'use strict';
     var DEBUG = false;
     var REMOVE_ACTION = '-';
     var ADD_ACTION = '+';
-    var SERVICE_CONNECTED        = 'service-connected',
-        AGENT_ORANGE             = 'agent-orange',
-        IONIZING_RADIATION       = 'ionizing-radiation',
-        SW_ASIA                  = 'sw-asia',
-        MILITARY_SEXUAL_TRAUMA   = 'mst',
-        HEAD_NECK_CANCER         = 'head-neck-cancer',
-        COMBAT_VETERAN           = 'combat-vet',
+    var SERVICE_CONNECTED = 'service-connected',
+        AGENT_ORANGE = 'agent-orange',
+        IONIZING_RADIATION = 'ionizing-radiation',
+        SW_ASIA = 'sw-asia',
+        MILITARY_SEXUAL_TRAUMA = 'mst',
+        HEAD_NECK_CANCER = 'head-neck-cancer',
+        COMBAT_VETERAN = 'combat-vet',
         SHIPBOARD_HAZARD_DEFENSE = 'shad';
-
+    var ENCOUNTER_FORM_ERROR_MSG = '<h3>There was an error retrieving the encounter form. Try again in a couple of minutes.</h3>';
+    var ENCOUNTER_FORM_ERROR_TITLE = 'Encounter Form Error';
+    var ENCOUNTER_FORM_ERROR_ICON = 'icon-error';
+    var ENCOUNTER_FORM_ERROR_NO_RESOURCE_RESPONSE = 'No response was received from the resource server. Contact your System Administrator for assistance.';
+    var OTHER_DIAGNOSIS = 'OTHER DIAGNOSES',
+        OTHER_PROCEDURES = 'OTHER PROCEDURES',
+        CPT_CODES = 'cptCodes';
     var util = {
         retrieveDiagnosisTree: function(form, searchString, context) {
             var url = ADK.ResourceService.buildUrl('write-pick-list', {
@@ -49,7 +56,7 @@ define([
                     /** SUCCESS: Now let's populate the model **/
                     var ary = resp.data;
                     if (ary.serviceConnected === 'NO') {
-                        model.set('ratedDisabilities', ary.disability);
+                        model.set('ratedDisabilities', "<li>"+ary.disability+"</li>");
                     } else {
                         model.set('serviceConnected', ary.scPercent + '%');
                         var tempString = '';
@@ -58,15 +65,13 @@ define([
                         });
                         model.set('ratedDisabilities', tempString);
                     }
-
-                    if(ary.scPercent){
+                    if (ary.scPercent) {
                         model.set('serviceConnected', ary.scPercent + '%');
                     } else {
                         model.set('serviceConnected', 'NO');
                     }
                 }
             };
-
             return ADK.ResourceService.fetchCollection(fetchOptions);
         },
         retrieveServiceRelatedToValues: function(form) {
@@ -76,8 +81,8 @@ define([
                     type: 'encounters-visit-service-connected',
                     site: ADK.UserService.getUserSession().get('site'),
                     dfn: ADK.PatientRecordService.getCurrentPatient().get('localId'),
-                    visitDate: ADK.PatientRecordService.getCurrentPatient().get('visit').visitDateTime || '',
-                    loc: ADK.PatientRecordService.getCurrentPatient().get('visit').locationIEN
+                    visitDate: ADK.PatientRecordService.getCurrentPatient().get('visit').dateTime || '',
+                    locationUid: ADK.PatientRecordService.getCurrentPatient().get('visit').locationUid
                 },
                 onSuccess: function(collection, resp) {
                     /** SUCCESS: Now lets do the un-hiding **/
@@ -108,7 +113,6 @@ define([
                     }
                 }
             };
-
             ADK.ResourceService.fetchCollection(fetchOptions);
         },
         parseEncounterDataDiagnosis: function(encounterResults, model) {
@@ -118,8 +122,7 @@ define([
                 var diagnosisCategory = diagnosisList.get(element.category).get('values');
                 var diagnosis = diagnosisCategory.get(element.code);
                 if (_.isUndefined(diagnosis)) {
-
-                   diagnosis = new Backbone.Model({
+                    diagnosis = new Backbone.Model({
                         icdCode: element.code,
                         name: element.description,
                         label: element.description + '(' + element.code + ')',
@@ -182,7 +185,7 @@ define([
             if (!_.isEmpty(visitCategory)) {
                 model.set('visitTypeSelection', visitCategory);
                 model.set('prevVisitCategory', visitCategory);
-                var item = model.get('visitCollection').get(visitCategory).get('cptCodes').findWhere({
+                var item = model.get('visitCollection').get(visitCategory).get(CPT_CODES).findWhere({
                     name: visitType
                 });
                 model.set('currentVisitType', item);
@@ -197,7 +200,7 @@ define([
                 });
                 var visit = ADK.PatientRecordService.getCurrentPatient().get('visit');
                 modifiers.fetch({
-                    dateTime: visit.visitDateTime,
+                    dateTime: visit.dateTime,
                     cpt: item.get('ien')
                 });
                 item.set('value', true);
@@ -209,10 +212,10 @@ define([
                 _.each(procedureData, function(element) {
                     //Let's see if it's in the pre-existing lists
                     var item;
-                    if (element.category !== 'undefined' && element.category !== 'OTHER PROCEDURES') {
+                    if (element.category !== 'undefined' && element.category !== OTHER_PROCEDURES) {
                         var procedureCat = procedureList.get(element.category);
                         if (!_.isUndefined(procedureCat)) {
-                            item = procedureCat.get('cptCodes').get(element.code);
+                            item = procedureCat.get(CPT_CODES).get(element.code);
                             item.set({
                                 'provider': element.providerIen,
                                 'quantity': element.quantity,
@@ -225,8 +228,8 @@ define([
                         }
                     } else {
                         //Else add it to other.
-                        var list = procedureList.get('OTHER PROCEDURES');
-                        list.get('cptCodes').add({
+                        var list = procedureList.get(OTHER_PROCEDURES);
+                        list.get(CPT_CODES).add({
                             id: element.code,
                             label: element.description + ' (' + element.code + ')',
                             name: element.description,
@@ -239,7 +242,7 @@ define([
                             providerPickList: new Backbone.Collection(),
                             provider: element.providerIen
                         });
-                        item = list.get('cptCodes').get(element.code);
+                        item = list.get(CPT_CODES).get(element.code);
                         if (element.comment && element.comment !== '') {
                             item.get('comments').add({
                                 'commentString': element.comment
@@ -259,7 +262,7 @@ define([
                     item.set('value', true);
                     var visit = ADK.PatientRecordService.getCurrentPatient().get('visit');
                     modifiers.fetch({
-                        dateTime: visit.visitDateTime,
+                        dateTime: visit.dateTime,
                         cpt: item.get('ien')
                     });
                     var providerPickList = item.get('providerPickList');
@@ -301,7 +304,7 @@ define([
                     });
                     model.set('primaryProvider', provider);
                 }
-                if(provider){
+                if (provider) {
                     provider.set('value', true);
                 }
             });
@@ -315,173 +318,134 @@ define([
                 }
             }
         },
-        //the assumption is that the RDK is expecting an array of two visitType
-        //objects that will refect the visitType info before and after the change.
-        //If the array is empty, then there were no changes on the visitType
+        /**
+        *   Calculates the delta between the initial encounter form data and any
+        *   changes the user has made to the encounter form since opening it.
+        *   Returns an array of two Visit Type Section objects: the first object
+        *   represents the data to remove from the form, the second object
+        *   represents the data to add to the form. Returns an empty array if
+        *   no changes were made to the Visit Type Section.
+        *
+        *   Terminology:
+        *       Visit Type Section: The group of data on the encounter form that is
+        *           comprised of Visit Categories, Visit Types, and Visit Type Modifiers.
+        *       Visit Category: the first column in the Visit Type Section that
+        *           represents the broad categories a visit can be grouped in.
+        *           Ex: Audiology, Dental, Medical
+        *       Visit Type: the subcategories of a particular Visit Category.
+        *           Ex: C&P F-T-F Visit, C&P Telehealth Visit, C&P ACE Chart Review
+        *       Visit Type Modifiers: attributes that can be applied to a particular
+        *           Visit Type.
+        *           Ex: Opt Out Phys/Pract Emerg Or Urgent Service, Actual
+        *           Item/Service Ordered
+        */
         createVisitTypeData: function(model) {
-            var visitTypeData = [];
+            var visitTypeSection = [];
             var visitCategoryChanged = false;
-            var visitTypeSelectionChanged = false;
-            var modifiersChanged = false;
+            var visitTypeChanged = false;
+            var visitTypeModifiersChanged = false;
+
             var initialFormModel = model.get('encounterResults');
-            var visitCollection = model.get('visitCollection');
+            var visitCategories = model.get('visitCollection');
 
-            //exit with no changes in visit type
-            if (!(model && visitCollection && initialFormModel)) {
-                return visitTypeData;
+            if (!(model && visitCategories && initialFormModel)) {
+                return visitTypeSection;
             }
 
-            var initialVisitCollection = initialFormModel.visitType;
-            //get changes in the visitType Category
-            var initialVisitCategory = '';
-            var changedVisitCategory = '';
-            if (initialVisitCollection.category) {
-                initialVisitCategory = initialVisitCollection.category;
+            // Grab data from the initial encounter form
+            var initialVisitTypeSection = initialFormModel.visitType;
+            var initialVisitCategory = initialVisitTypeSection.category || '';
+            var initialVisitTypeDescription = initialVisitTypeSection.description || '';
+            var initialVisitTypeCode = initialVisitTypeSection.code || '';
+            var initialVisitTypeModifiers = [];
+            if (initialVisitTypeSection.cptModifiers) {
+                _.each(initialVisitTypeSection.cptModifiers, function(modifier) {
+                    initialVisitTypeModifiers.push(modifier.ien);
+                });
             }
-            if (model.get('visitTypeSelection')) {
-                //prev will always be where the currently selected visit is.
-                changedVisitCategory = model.get('prevVisitCategory');
+            var initialPrimaryProviderIen = initialVisitTypeSection.providerIen || '';
+
+            // Grab data from the updated encounter form
+            var updatedVisitCategory = model.get('visitTypeSelection') || '';
+            var updatedVisitType = model.get('currentVisitType');
+            var updatedVisitTypeDescription = (!_.isUndefined(updatedVisitType)) ? updatedVisitType.get('name') : '';
+            var updatedVisitTypeCode = (!_.isUndefined(updatedVisitType)) ? updatedVisitType.get('ien') : '';
+            var isUpdatedVisitTypeSelected = (!_.isUndefined(updatedVisitType)) ? updatedVisitType.get('value') : false;
+            var selectedVisitTypeModifiers = model.get('selectedModifiersForVisit');
+            var updatedVisitTypeModifiers = [];
+            if (selectedVisitTypeModifiers) {
+                _.each(selectedVisitTypeModifiers, function(modifier) {
+                    updatedVisitTypeModifiers.push(modifier.ien);
+                });
             }
-            if (initialVisitCategory != changedVisitCategory) {
+            var updatedPrimaryProvider = model.get('primaryProvider') || '';
+            var updatedPrimaryProviderIen = updatedPrimaryProvider.get('code');
+
+            // Check to see if Visit Category has been updated
+            if (initialVisitCategory != updatedVisitCategory) {
                 visitCategoryChanged = true;
             }
 
-            // get changes in the visitTypeSelection
-            var changedVisitObj = [];
-            //The form's storing the currently selected so we'll grab that.
-            changedVisitObj = model.get('currentVisitType');
-            var initialDescription = '';
-            var changedDescription = '';
-            var initialCode = '';
-            var changedCode = '';
-            if (!_.isEmpty(initialVisitCollection)) {
-                initialDescription = initialVisitCollection.description;
-                initialCode = initialVisitCollection.code;
-            }
-            if (!_.isUndefined(changedVisitObj)) {
-                changedDescription = changedVisitObj.get('name');
-                changedCode = changedVisitObj.get('ien');
+            // Check to see if Visit Type has been updated
+            if ((initialVisitTypeDescription !== updatedVisitTypeDescription) || (!isUpdatedVisitTypeSelected)) {
+                visitTypeChanged = true;
             }
 
-            //Compared descriptions because the descriptions are unique.
-            if (initialDescription !== changedDescription) {
-                visitTypeSelectionChanged = true;
+            // Check to see if Visit Type Modifiers have been updated
+            var addedVisitTypeModifiers = _.difference(updatedVisitTypeModifiers, initialVisitTypeModifiers);
+            var removedVisitTypeModifiers = _.difference(initialVisitTypeModifiers, updatedVisitTypeModifiers);
+            if (!_.isEmpty(addedVisitTypeModifiers) || !_.isEmpty(removedVisitTypeModifiers)) {
+                visitTypeModifiersChanged = true;
             }
-            //get changes in the modifiers
-            var changedModifiers = model.get('selectedModifiersForVisit');
-            var initialSelectedModifiers = [];
-            var changedSelectedModifiers = [];
-            if (initialVisitCollection.cptModifiers) {
-                _.each(initialVisitCollection.cptModifiers, function(element) {
-                    initialSelectedModifiers.push(element.ien);
-                });
+
+            // If nothing in the Visit Type Section has been updated, return an empty array
+            if (!visitCategoryChanged && !visitTypeChanged && !visitTypeModifiersChanged) {
+                return visitTypeSection;
             }
-            if (changedModifiers) {
-                _.each(changedModifiers, function(element) {
-                    changedSelectedModifiers.push(element.ien);
-                });
-            }
-            var addedModifiers = _.difference(changedSelectedModifiers, initialSelectedModifiers);
-            var removedModifiers = _.difference(initialSelectedModifiers, changedSelectedModifiers);
-            if (!_.isEmpty(addedModifiers) || !_.isEmpty(removedModifiers)) {
-                modifiersChanged = true;
-            }
-            //get the changes in primary provider
-            var initialPrimaryProvider = '';
-            var changedPrimaryProvider = '';
-            initialPrimaryProvider = _.where(initialVisitCollection.providers, {
-                'primary': true
-            });
-            //To protect against it not existing.
-            if (initialPrimaryProvider) {
-                initialPrimaryProvider = initialPrimaryProvider.uid;
-            }
-            //primaryProvider already being stored on the model, so let's grab that.
-            changedPrimaryProvider = model.get('primaryProvider');
-            if (changedPrimaryProvider) {
-                changedPrimaryProvider = changedPrimaryProvider.get('code');
-            }
-            //******************************************
-            //create the object that will be sent to RDK
-            //******************************************
-            //Case 1: If visit type selection did not change, and modifiers were not changed,
-            //then the visit type data should be unchanged (empty array),
-            //no matter if the visitCategory changed or not
-            if (!visitCategoryChanged && !visitTypeSelectionChanged && !modifiersChanged) {
-                return visitTypeData;
-            }
-            //Case 2: If visit type selection is empty, and modifiers were not changed,
-            //then the visit type data should be unchanged (empty array),
-            //no matter if the visitCategory changed or not
-            if ((changedCode === '') && !modifiersChanged) {
-                return visitTypeData;
-            }
+
+            // Build the Visit Type Section data to remove from the form
             var removedVisitData = {};
-            var addedVisitData = {};
-            //removed visit data
             removedVisitData.action = REMOVE_ACTION;
-            removedVisitData.code = initialCode;
+            removedVisitData.code = initialVisitTypeCode;
             removedVisitData.category = initialVisitCategory;
-            removedVisitData.description = initialDescription;
-            removedVisitData.providerIen = initialPrimaryProvider;
+            removedVisitData.description = initialVisitTypeDescription;
+            removedVisitData.providerIen = initialPrimaryProviderIen;
             var removedCptModifiers = [];
-            _.each(initialSelectedModifiers, function(element) {
-                var modifierArray = model.get('availableVisitModifiers').findWhere({
-                    ien: element
+            _.each(model.get('removedCptModifiers'), function(modifier) {
+                removedCptModifiers.push({
+                    code: modifier.get('code'),
+                    ien: modifier.get('ien')
                 });
-                if (!_.isUndefined(modifierArray)) {
-                    removedCptModifiers.push({
-                        code: modifierArray.get('code'),
-                        ien: modifierArray.get('ien')
-                    });
-                }
             });
             removedVisitData.cptModifiers = removedCptModifiers;
-            //Case 3: If the modifiers have changed, but visit type selection is empty (no visit selection),
-            //then the visit type data should be saved with the older visit category and
-            //the older visit type selection, but with the new modifiers
-            if (changedCode === '') {
-                //added visit data
-                addedVisitData.action = ADD_ACTION;
-                addedVisitData.code = initialCode;
-                addedVisitData.category = initialVisitCategory;
-                addedVisitData.description = initialDescription;
-                addedVisitData.providerIen = initialPrimaryProvider;
-            }
-            //In any other case visit type data should be saved with the new information:
-            //new visit category, new visit type selection, new modifiers
-            else {
-                //added visit data
-                addedVisitData.action = ADD_ACTION;
-                addedVisitData.code = changedCode;
-                addedVisitData.category = changedVisitCategory;
-                addedVisitData.description = changedDescription;
-                addedVisitData.providerIen = changedPrimaryProvider;
-            }
-            var addedCptModifiers = [];
-            _.each(changedModifiers, function(element) {
-                addedCptModifiers.push({
-                    code: element.code,
-                    ien: element.ien
-                });
+            visitTypeSection.push(removedVisitData);
 
+            // Build the Visit Type Section data to add to the form
+            var addedVisitData = {};
+            addedVisitData.action = ADD_ACTION;
+            addedVisitData.code = (isUpdatedVisitTypeSelected) ? updatedVisitTypeCode : '';
+            addedVisitData.category = (isUpdatedVisitTypeSelected) ? updatedVisitCategory : '';
+            addedVisitData.description = (isUpdatedVisitTypeSelected) ? updatedVisitTypeDescription : '';
+            addedVisitData.providerIen = updatedPrimaryProviderIen;
+            var addedCptModifiers = [];
+            _.each(selectedVisitTypeModifiers, function(modifier) {
+                addedCptModifiers.push({
+                    code: modifier.code,
+                    ien: modifier.ien
+                });
             });
             addedVisitData.cptModifiers = addedCptModifiers;
+            visitTypeSection.push(addedVisitData);
 
-            if (!_.isEmpty(initialVisitCategory) && !_.isEmpty(initialDescription)) {
-                visitTypeData.push(removedVisitData);
-            }
-            visitTypeData.push(addedVisitData);
-            return visitTypeData;
+            return visitTypeSection;
         },
         createVisitProcedureData: function(model) {
             var originalResults = model.get('encounterResults');
             var orgProcedureResults = originalResults.procedures;
             var procedureCollection = model.get('ProcedureCollection');
             var changedProceduresArray = [];
-
             procedureCollection.each(function(category) {
-                _.each(category.get('cptCodes').where({
+                _.each(category.get(CPT_CODES).where({
                     value: true
                 }), function(model) {
                     var changedProcedureObj = {
@@ -502,6 +466,7 @@ define([
                 });
             });
             changedProceduresArray = util.compareData(orgProcedureResults, changedProceduresArray);
+            model.get('ProcedureCollection').get(OTHER_PROCEDURES).get(CPT_CODES).reset();
             return changedProceduresArray;
         },
         compareData: function(originalData, changedData) {
@@ -559,6 +524,24 @@ define([
             }
             return true;
         },
+        getEncounterDetailTitle: function() {
+            var patient = ADK.PatientRecordService.getCurrentPatient();
+            var visit = patient.get('visit');
+            var datetime = '';
+            var title = '';
+            if (_.isObject(visit)) {
+                title = title + ' for ' + patient.get('displayName');
+                if (!_.isEmpty(visit.formattedDateTime)) {
+                    datetime = ' (' + visit.locationDisplayName + ' ' + visit.formattedDateTime + ')';
+                } else if (!_.isEmpty(visit.dateTime)) {
+                    datetime = ' (' + visit.dateTime + ')';
+                }
+                if (datetime !== '') {
+                    title += datetime;
+                }
+            }
+            return title;
+        },
         findModifiers: function(modifiers) {
             //Finding the Selected Modifiers in the Encounter Form
             var modifiersArray = [];
@@ -614,19 +597,23 @@ define([
             var orgDiagnosisResults = originalResults.diagnoses;
             var diagnosisCollection = model.get('DiagnosisCollection');
             var changedDiagnosisArray = [];
-            diagnosisCollection.each(function(category){
-                _.each(category.get('values').where({value: true}), function(diagnosis){
-                        var changedDiagnosisObj = {
-                            category: category.get('categoryName'),
-                            code: diagnosis.get('icdCode'),
-                            description: diagnosis.get('name'),
-                            primary: diagnosis.get('primary'),
-                            comment: ''
-                        };
-                        changedDiagnosisArray.push(changedDiagnosisObj);
+            diagnosisCollection.each(function(category) {
+                _.each(category.get('values').where({
+                    value: true
+                }), function(diagnosis) {
+                    var changedDiagnosisObj = {
+                        category: category.get('categoryName'),
+                        code: diagnosis.get('icdCode'),
+                        description: diagnosis.get('name'),
+                        primary: diagnosis.get('primary'),
+                        comment: ''
+                    };
+                    changedDiagnosisArray.push(changedDiagnosisObj);
                 });
             });
             changedDiagnosisArray = util.compareDiagnosisData(orgDiagnosisResults, changedDiagnosisArray);
+            //reset other selected daignosis
+            model.get('DiagnosisCollection').get(OTHER_DIAGNOSIS).get('values').reset();
             return changedDiagnosisArray;
         },
         compareDiagnosisData: function(originalData, changedData) {
@@ -664,14 +651,14 @@ define([
             }
             return changedArray;
         },
-        retrieveEncounterData: function(model) {
+        retrieveEncounterData: function(model, workflow) {
+            var encounterDataFetched = new $.Deferred();
             var site = ADK.UserService.getUserSession().get('site');
             var localId = ADK.PatientRecordService.getCurrentPatient().get('localId');
-            var dateTime = ADK.PatientRecordService.getCurrentPatient().get('visit').visitDateTime;
-            var locationUid = ADK.PatientRecordService.getCurrentPatient().get('visit').locationIEN;
+            var dateTime = ADK.PatientRecordService.getCurrentPatient().get('visit').dateTime;
+            var locationUid = ADK.PatientRecordService.getCurrentPatient().get('visit').locationUid;
             //Hard Coded Service Category until us12239 is pushed.
             var serviceCategory = "A";
-
             // Get the encounter data
             var fetchOptions = {
                 resourceTitle: 'encounter-encounterInfo',
@@ -688,33 +675,60 @@ define([
                 onSuccess: function(collection, result) {
                     //Store results for save back purposes.
                     model.set('encounterResults', result.data);
+                    encounterDataFetched.resolve();
                 },
                 onError: function(error, response) {
-                    var saveAlertView = new ADK.UI.Notification({
-                        title: 'Error Loading Encounter Data',
-                        icon: 'fa-exclamation-triangle',
-                        message: 'There was a problem loading the encounter data.',
-                        type: 'warning'
-                    });
-                    saveAlertView.show();
-                    ADK.UI.Workflow.hide();
+                    util.encounterTrayErrorHandler(response, workflow);
+                    encounterDataFetched.reject();
                 }
             };
             ADK.ResourceService.fetchCollection(fetchOptions);
+            return encounterDataFetched;
         },
-        saveEncounterData: function(form) {
+        encounterTrayErrorHandler: function(response, workflow) {
+            response.responseText = !_.isEmpty(response.responseText) ? response.responseText : ENCOUNTER_FORM_ERROR_NO_RESOURCE_RESPONSE;
+            var SimpleAlertItemView = Backbone.Marionette.ItemView.extend({
+                template: Handlebars.compile([
+                    ENCOUNTER_FORM_ERROR_MSG + '<div><strong>Error:</strong> ' + response.status + ' - ' + response.statusText + '<br><strong>Error Response: </strong>' + response.responseText + '</div>'
+                ].join('\n'))
+            });
+            var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
+                template: Handlebars.compile(['{{ui-button "OK" classes="btn-primary alert-continue" title="Press enter to continue."}}'].join('\n')),
+                events: {
+                    'click button': function() {
+                        ADK.UI.Alert.hide();
+                    }
+                }
+            });
+            var alertView = new ADK.UI.Alert({
+                title: ENCOUNTER_FORM_ERROR_TITLE,
+                icon: ENCOUNTER_FORM_ERROR_ICON,
+                messageView: SimpleAlertItemView,
+                footerView: SimpleAlertFooterItemView
+            });
+            // Reset the workflow to ensure data integrity.
+            workflow.close();
+            // Reset the tray.
+            ADK.Messaging.request("tray:writeback:encounters:trayView").$el.trigger('tray.hide');
+            // NOTE: This is a temporary fix to close possible async blocking alerts.
+            // There is a bug with the ADK.UI.Alert that is not clearing out the faded background correctly with multiple alert calls.
+            ADK.UI.Alert.hide();
+            // Show the new encounter adk alert.
+            alertView.show();
+        },
+        saveEncounterData: function(form, workflow) {
             var currentPatient = ADK.PatientRecordService.getCurrentPatient();
             var patientPID = currentPatient.get('pid');
             var patientICN = currentPatient.get('icn');
             var patientDFN = currentPatient.get('localId');
             var isInpatient;
             if (currentPatient.get('visit').newVisit) {
-                isInpatient = (currentPatient.get('patientStatusClass') === 'Inpatient') ? '1' : '0';
+                isInpatient = (currentPatient.patientStatusClass() === 'Inpatient') ? '1' : '0';
             } else {
                 isInpatient = (currentPatient.get('visit').visitType === 'I') ? '1' : '0';
             }
-            var encounterDateTime = currentPatient.get('visit').visitDateTime;
-            var locationIEN = currentPatient.get('visit').locationIEN;
+            var encounterDateTime = currentPatient.get('visit').dateTime;
+            var locationUid = currentPatient.get('visit').locationUid;
             var serviceCategory = currentPatient.get('visit').serviceCategory;
             //If the visit type is an empty array, that means that nothing
             //has changed between the initial encounter and the encounter at saving time
@@ -726,21 +740,19 @@ define([
             function convertSCValueToBoolean(yesNo) {
                 return (yesNo === 'yes') ? '1' : '0';
             }
-
             var saveEncounterModel = {
                 patientPID: patientPID,
                 patientICN: patientICN,
                 patientDFN: patientDFN,
                 isInpatient: isInpatient,
                 serviceCategory: serviceCategory,
-                locationIEN: locationIEN,
+                locationUid: locationUid,
                 encounterDateTime: encounterDateTime,
                 visitTypeData: visitTypeData,
                 procedureData: procedureData,
                 providers: providerData,
                 diagnoses: diagnoses
             };
-
             //Only set visit related if available
             if (!_.isEmpty(form.model.get('service-connected'))) {
                 saveEncounterModel.serviceConnected = convertSCValueToBoolean(form.model.get('service-connected'));
@@ -767,7 +779,7 @@ define([
                 saveEncounterModel.shipboardHazardAndDefense = convertSCValueToBoolean(form.model.get('shad'));
             }
             //Save the encounter
-            saveUtil.save(saveEncounterModel);
+            saveUtil.save(saveEncounterModel, workflow);
         }
     };
     return util;

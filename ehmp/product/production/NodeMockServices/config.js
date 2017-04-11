@@ -13,7 +13,7 @@ module.exports = {
             level: 'debug',
             period: '1d',
             count: 10,
-            path: '/tmp/mock-server.log'
+            path: '/opt/mocks_server/logs/mock-server.log'
         }]
     }
 };

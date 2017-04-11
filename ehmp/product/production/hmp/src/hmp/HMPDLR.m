@@ -1,11 +1,9 @@
-HMPDLR ;SLC/MKB -- Laboratory extract ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDLR ;SLC/MKB,ASMR/RRB - Laboratory extract;Nov 05, 2015 19:21:53
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
- ; ^DPT                         10035
- ; ^LAB(60                      10054
  ; ^LAB(61                        524
  ; ^LRO(69                       2407
  ; ^LR                            525
@@ -13,14 +11,15 @@ HMPDLR ;SLC/MKB -- Laboratory extract ;8/2/11  15:29
  ; DIQ                           2056
  ; LR7OR1,^TMP("LRRR",$J)        2503
  ; XUAF4                         2171
- ;
+ Q
  ; ------------ Get results from VistA ------------
  ;
-EN(DFN,BEG,END,MAX,ID) ; -- find patient's lab results
+EN(DFN,BEG,END,MAX,ID) ; -- find patient's lab results, DE2818
  N HMPSUB,HMPIDT,HMPN,HMPITM,LRDFN,SUB
  S DFN=+$G(DFN) Q:$G(DFN)<1
  S BEG=$G(BEG,1410101),END=$G(END,4141015),MAX=$G(MAX,9999)
- K ^TMP("LRRR",$J,DFN) S LRDFN=$G(^DPT(DFN,"LR")),HMPSUB="CH"
+ K ^TMP("LRRR",$J,DFN)
+ S LRDFN=$$LRDFN^HMPXGLAB(DFN),HMPSUB="CH"  ;DE2818, (#63) LABORATORY REFERENCE
  ;
  ; get result(s)
  I $L($G(ID)) D  Q:HMPN  ;done
@@ -48,7 +47,7 @@ CH(LAB) ; -- return a Chemistry result in LAB("attribute")=value
  S LR0=$G(^LR(LRDFN,"CH",HMPIDT,0)),LRI=$G(^(HMPN))
  S LAB("status")="completed",LAB("resulted")=$P(LR0,U,3)
  S X0=$G(^TMP("LRRR",$J,DFN,"CH",HMPIDT,HMPN))
- S LAB("test")=$P($G(^LAB(60,+X0,0)),U) ;$P(X0,U,10)?
+ S LAB("test")=$$LABTSTNM^HMPXGLAB(+X0)  ; DE2818
  S:$L($P(X0,U,2)) LAB("result")=$P(X0,U,2)
  S:$L($P(X0,U,4)) LAB("units")=$P(X0,U,4)
  S:$L($P(X0,U,3)) LAB("interpretation")=$P(X0,U,3)
@@ -123,3 +122,4 @@ ADD(X) ; -- Add a line @HMP@(n)=X
  S HMPI=$G(HMPI)+1
  S @HMP@(HMPI)=X
  Q
+ ;

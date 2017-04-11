@@ -5,8 +5,7 @@ Feature: F304 - Health Summaries (VistA Web Health Exchange)
 @US4748 @F304-1.6 @F304-3.3 @F304-2.4 @F304-2.5
 Scenario: Authentication error message received when the RDK endpoint URL is not authenticated
 	Given a patient "EIGHTEEN,IMAGEPATIENT"
-	And a request data was sent with pid "5000000327V828570"
-	Then authentication error returned
+	Then authentication error returned for an unauthenticated user
 
 @US4748 @F304-1.6 @F304-3.3 @F304-2.4 @F304-2.5
 Scenario: Error message received when the RDK endpoint URL is without pid

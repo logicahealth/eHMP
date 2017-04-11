@@ -291,8 +291,8 @@ define([], function() {
         },
         validatePulseFields: function(model, value){
             if(value){
-                if(!ValidationUtil.validDecimal(value)){
-                    model.errorModel.set({pulseInputValue: 'Beats must be a numeric value'});
+                if(!ValidationUtil.validWholeNumber(value)){
+                    model.errorModel.set({pulseInputValue: 'Beats must be a whole numeric value'});
                     return;
                 }
 

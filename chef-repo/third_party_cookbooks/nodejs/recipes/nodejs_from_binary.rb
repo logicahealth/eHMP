@@ -1,5 +1,5 @@
 #
-# Author::     an       (jules@jules.com.au)
+# Author:: Julian Wilde (jules@jules.com.au)
 # Cookbook Name:: nodejs
 # Recipe:: install_from_binary
 #

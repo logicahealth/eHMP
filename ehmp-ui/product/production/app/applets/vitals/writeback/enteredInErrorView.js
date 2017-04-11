@@ -7,6 +7,14 @@ define([
     ], function (Backbone, Marionette, $, Handlebars, WritebackUtils) {
     "use strict";
 
+    var VitalsEieModelCheck = ADK.Checks.CheckModel.extend({
+        validate: function(attributes, validationOptions) {
+            ADK.Checks.unregister('vitals-eie-form-id');
+            ADK.UI.Workflow.hide();
+            ADK.UI.Modal.hide();
+        },
+    });
+
     var EnteredInErrorView = {
         createAndShowEieView: function (vitalsCollection, title, checkedVital) {
             var formModel = new Backbone.Model();
@@ -27,6 +35,11 @@ define([
 
             var workflowController = new ADK.UI.Workflow(workflowOptions);
             workflowController.show();
+            ADK.Checks.register(new VitalsEieModelCheck({
+                id: 'vitals-eie-form-id',
+                label: 'Vitals EIE Form',
+                failureMessage: 'Vitals Entered in Error Writeback In Progress! Any unsaved changes will be lost if you continue.'
+            }));
             ADK.utils.writebackUtils.applyModalCloseHandler(workflowController);
         },
         shouldDisableReasonField: function(vitalsCollection){
@@ -161,7 +174,7 @@ define([
                         items: [{
                             control: 'button',
                             id: 'form-cancel-btn',
-                            extraClasses: ['btn-default', 'btn-sm'],
+                            extraClasses: ['btn-default', 'btn-sm', 'pull-left'],
                             type: 'button',
                             label: 'Cancel',
                             title: 'Press enter to leave the form without making any changes'
@@ -179,26 +192,30 @@ define([
                 }];
 
                 var CancelMessageView = Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile('You will lose your progress if you cancel. Would you like to proceed with ending this observation?'),
+                    template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
                     tagName: 'p'
                 });
 
                 var CancelFooterView = Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile('{{ui-button "Cancel" classes="btn-default btn-sm" title="Press enter to cancel."}}{{ui-button "Continue" classes="btn-primary btn-sm" title="Press enter to continue."}}'),
+                    template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary btn-sm" title="Press enter to cancel."}}'),
                     events: {
                         'click .btn-primary': function() {
                             ADK.UI.Alert.hide();
                             ADK.UI.Workflow.hide();
+                            ADK.Checks.unregister('vitals-eie-form-id');
+
                         },
                         'click .btn-default': function() {
                             ADK.UI.Alert.hide();
+                            ADK.Checks.unregister('vitals-eie-form-id');
+
                         }
                     },
                     tagName: 'span'
                 });
 
                 var ErrorMessageView = Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile('Unable to remove this item at this time due to a system error. Please try again later.'),
+                    template: Handlebars.compile('Unable to remove this item at this time due to a system error. Try again later.'),
                     tagName: 'p'
                 });
 
@@ -269,7 +286,7 @@ define([
                     }
 
                     this.ui.vitalsChecklist.trigger('control:item:value', {
-                        booleanValue: this.hasBeenClicked
+                        value: this.hasBeenClicked
                     });
                     this.ui.checkAllControl.trigger('control:label', btnText);
                     this.ui.checkAllControl.trigger('control:title', btnTitle);
@@ -283,8 +300,8 @@ define([
                     'click #form-cancel-btn': function (e) {
                         e.preventDefault();
                         var cancelAlertView = new ADK.UI.Alert({
-                            title: 'Are you sure you want to cancel?',
-                            icon: 'fa-exclamation-triangle font-size-18 color-red',
+                            title: 'Cancel',
+                            icon: 'icon-cancel',
                             messageView: CancelMessageView,
                             footerView: CancelFooterView
                         });
@@ -297,7 +314,7 @@ define([
                         this.ui.submitButton.trigger('control:disabled', true);
 
                         var eieModel = new ADK.UIResources.Writeback.Vitals.Model();
-                        
+
                         var ienList = [];
                         _.each(this.model.get('listOfVitals').models, function (vital) {
                             if (vital.get('itemValue')) {
@@ -320,6 +337,7 @@ define([
                                 });
                                 saveSuccessAlertView.show();
                                 ADK.UI.Workflow.hide();
+                                ADK.Checks.unregister('vitals-eie-form-id');
 
                                 ADK.ResourceService.clearAllCache('vital');
                                 ADK.Messaging.getChannel('vitals').trigger('refreshGridView');
@@ -327,7 +345,7 @@ define([
                             error: function(model, error) {
                                 var errorAlertView = new ADK.UI.Alert({
                                     title: 'Save Failed (System Error)',
-                                    icon: 'fa-exclamation-circle font-size-18 color-red',
+                                    icon: 'icon-error',
                                     messageView: ErrorMessageView,
                                     footerView: ErrorFooterView,
                                     form: self

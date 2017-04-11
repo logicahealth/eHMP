@@ -11,7 +11,7 @@ When(/^the client requests the APPOINTMENTS for the patient "([^"]*)" with param
   end
   p request.path
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests problems\/conditions for the patient "([^"]*)" with parameters$/) do |pid, table|
@@ -22,7 +22,7 @@ When(/^the client requests problems\/conditions for the patient "([^"]*)" with p
   end
   p request.path
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests the timeline for the patient "([^"]*)" with parameters$/) do |pid, table|
@@ -33,12 +33,12 @@ When(/^the client requests the timeline for the patient "([^"]*)" with parameter
   end
   p request.path
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the client recieves (\d+) data points of type "([^"]*)"$/) do |number_of_results, arg2|
   json = JSON.parse(@response.body)
-  p @response.body
+  #p @response.body
   output_string = ""
 
   fieldsource = "data.items.uid"
@@ -65,7 +65,7 @@ end
 
 Then(/^the client recieves (\d+) data points of kind "([^"]*)"$/) do |number_of_results, arg2|
   json = JSON.parse(@response.body)
-  p @response.body
+  #p @response.body
   output_string = ""
 
   fieldsource = "data.items.kind"
@@ -119,7 +119,7 @@ When(/^the client requests the REPORTS for the patient "([^"]*)" with parameters
   request.add_parameter('filter', filter_string)
   request.add_parameter('pid', pid)
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the REPORT results contain$/) do |table|
@@ -127,7 +127,7 @@ Then(/^the REPORT results contain$/) do |table|
   result_array = @json_object["data"]
 
   json_verify = VerifyJsonRuntimeValue.new
-  json_verify.verify_json_runtime_vlaue(result_array, table)
+  json_verify.verify_json_runtime_value(result_array, table)
 end
 
 def build_vital_date_range(string_range)
@@ -149,7 +149,7 @@ When(/^the client requests the VITALS for the patient "([^"]*)" with parameters$
   request.add_parameter('filter', filter_string)
   request.add_parameter('pid', pid)
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the results contain (\d+) totalItems$/) do |arg1|
@@ -167,18 +167,18 @@ When(/^the client requests the TIMELINE for the patient "([^"]*)" with starting 
   request.add_parameter('filter', filter_string)
   request.add_parameter('pid', pid)
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests the TIMELINE for the patient "(.*?)" with GDF set to custom date range between "(.*?)" and "(.*?)"$/) do |pid, start_date, stop_date|
   filter_string = "or(between(dateTime,\"#{start_date}\",\"#{stop_date}\")"
   filter_string << ",or(between(administratedDateTime,\"#{start_date}\",\"#{stop_date}\")"
-  filter_string << ",between(observed,\"#{start_date}\",\"#{stop_date}\")"
+  filter_string << ",between(observed,\"#{start_date}\",\"#{stop_date}\")))"
   request = QueryRDKDomain.new('timeline')
   request.add_parameter('filter', filter_string)
   request.add_parameter('pid', pid)
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 def count_medication_kind(kind)
@@ -227,7 +227,7 @@ When(/^the client requests immunizations for the patient "([^"]*)"$/) do |pid|
   # end
   p request.path
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the Immunization result contain$/) do |table|
@@ -235,7 +235,7 @@ Then(/^the Immunization result contain$/) do |table|
   result_array = @json_object["data"]
 
   json_verify = VerifyJsonRuntimeValue.new
-  json_verify.verify_json_runtime_vlaue(result_array, table)
+  json_verify.verify_json_runtime_value(result_array, table)
 end
 
 When(/^the client requests the DOCUMENTS for the patient "([^"]*)" with starting at "([^"]*)"$/) do |pid, start_date|
@@ -247,7 +247,7 @@ When(/^the client requests the DOCUMENTS for the patient "([^"]*)" with starting
   request.add_parameter('filter', filter_string)
   request.add_parameter('pid', pid)
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests the DOCUMENTS for the patient "(.*?)" with GDF set to custom date range between "(.*?)" and "(.*?)"$/) do |pid, start_date, stop_date|
@@ -258,7 +258,7 @@ When(/^the client requests the DOCUMENTS for the patient "(.*?)" with GDF set to
   request.add_parameter('filter', filter_string)
   request.add_parameter('pid', pid)
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests the ORDERS for the patient "(.*?)" with GDF set to all$/) do |pid|
@@ -268,7 +268,7 @@ When(/^the client requests the ORDERS for the patient "(.*?)" with GDF set to al
   request.add_parameter('filter', filter_string)
   request.add_parameter('pid', pid)
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests the ORDERS for the patient "(.*?)" with GDF set to custom date range between "(.*?)" and "(.*?)"$/) do |pid, start, stop|
@@ -277,7 +277,7 @@ When(/^the client requests the ORDERS for the patient "(.*?)" with GDF set to cu
   request.add_parameter('filter', filter_string)
   request.add_parameter('pid', pid)
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the VPR results for Documents contain$/) do |table|
@@ -294,7 +294,7 @@ When(/^the client requests clinical reminders for the patient "([^"]*)"$/) do |p
   clinical_reminders_query.add_parameter('pid', pid)
   path = clinical_reminders_query.path
   p path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests encounters for the patient "([^"]*)"$/) do |pid|
@@ -318,7 +318,7 @@ When(/^the client requests encounters for the patient "([^"]*)"$/) do |pid|
   request.add_parameter('pid', pid)
   path = request.path
   p path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests medications for Active Medications applet for the patient "([^"]*)"$/) do |pid|
@@ -330,7 +330,7 @@ When(/^the client requests medications for Active Medications applet for the pat
   request.add_parameter('pid', pid)
   path = request.path
   p path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests lab results for Lab Results Gist applet for the patient "([^"]*)"$/) do |pid|
@@ -340,7 +340,7 @@ When(/^the client requests lab results for Lab Results Gist applet for the patie
   request.add_parameter('filter', filter_string)
   p request.path
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests narrative lab results for the patient "([^"]*)"$/) do |pid|
@@ -351,5 +351,5 @@ When(/^the client requests narrative lab results for the patient "([^"]*)"$/) do
   request.add_parameter('filter', filter_string)
   p request.path
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end

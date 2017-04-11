@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'maven'
 apply plugin: 'application'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -18,6 +19,11 @@ ext {
             commons:'3.4'
 	]
 }
+
+// Disabled tasks
+jar.enabled = false
+distZip.enabled = false
+distTar.enabled = false
 
 buildscript {
 	repositories {
@@ -85,4 +91,7 @@ artifacts {
 
 mainClassName = 'us.vistacore.soap-handler'
 
-
+configurations.archives.with {
+  artifacts.remove artifacts.find { it.archiveTask.is distZip }
+  artifacts.remove artifacts.find { it.archiveTask.is distTar }
+}

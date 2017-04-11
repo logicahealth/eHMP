@@ -1,0 +1,67 @@
+.patient-provider{
+    .dl-horizontal {
+        dt {
+            width: 80px;
+            text-align: left;
+        }
+        dd {
+            margin-left: 85px;
+        }
+    }
+}
+.sidebar-tray {
+    .demographic-group-wrapper {
+        padding: 10px;
+        margin-top: 10px;
+        background: $pure-white;
+        border-radius: 2px;
+        &:last-child {
+            margin-bottom: 5px;
+        }
+        .flex-items {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: stretch;
+            .col-xs-6 {
+                &:nth-child(odd){
+                    border-right: 1px solid $grey-lighter;
+                }
+                &:nth-child(n+3){
+                    padding-top: 15px;
+                }
+            }
+        }
+        .demographic-group {
+            text-transform: capitalize;
+        }
+        .demographic-group-content {
+            .collapse {
+                overflow: hidden;
+            }
+            .well {
+                background-color: $primary-lightest;
+                margin: 5px;
+                padding: 5px;
+                p {
+                    font-weight: bold;
+                    color: $grey-darkest;
+                    margin-top: 0px;
+                }
+                .discrepancy-group {
+                    padding: 5px;
+                    dl {
+                        padding: 0 5px;
+                    }
+                    &:nth-of-type(n+2){
+                        border-top: 1px solid $grey-lighter;
+                    }
+                }
+            }
+        }
+        [data-diff="true"] {
+            .demographic-data, &.discrepancy-group dt {
+                color: $primary;
+            }
+        }
+    }
+}

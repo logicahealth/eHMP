@@ -16,10 +16,10 @@ var config = {
     'vistaSites': {
         '9E7A': {
             'name': 'panorama',
-            'host': 'IPADDRESS ',
+            'host': 'IP_ADDRESS',
             'port': 9210,
-            'accessCode': 'PW    ',
-            'verifyCode': 'PW    !!',
+            'accessCode': 'pu1234',
+            'verifyCode': 'pu1234!!',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
@@ -27,10 +27,10 @@ var config = {
         },
         'C877': {
             'name': 'kodak',
-            'host': 'IPADDRESS ',
+            'host': 'IP_ADDRESS',
             'port': 9210,
-            'accessCode': 'PW    ',
-            'verifyCode': 'PW    !!',
+            'accessCode': 'pu1234',
+            'verifyCode': 'pu1234!!',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
@@ -99,10 +99,11 @@ describe('vista-subscribe.js', function() {
             var patientIdentifier = idUtil.create('pid', site + ';' + dfn);
             var rootJobId = '1';
             var jobIds = [{domain:'allergy', jobId:'3'}];
+            var jobPriority = 5;
             var expectedError;
             var expectedResponse;
             var called = false;
-            handler.subscribe('C877', patientIdentifier, rootJobId, jobIds, function(error, response) {
+            handler.subscribe('C877', patientIdentifier, rootJobId, jobIds, jobPriority, function(error, response) {
                 expectedError = error;
                 expectedResponse = response;
                 called = true;
@@ -122,6 +123,7 @@ describe('vista-subscribe.js', function() {
                         '"command"': 'putPtSubscription',
                         '"localId"': dfn,
                         '"rootJobId"': rootJobId,
+                        '"HMPPriority"': jobPriority.toString(),
                         '"jobDomainId-allergy"': jobIds[0].jobId
                     }), jasmine.any(Function));
             });

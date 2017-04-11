@@ -4,20 +4,33 @@ define([], function() {
     var serverLogonPath = "help/eHMP_User Guide for Release 1.3_v1.1_12012015 logon.htm";
     var pageNotFoundPath = "help/eHMP_Page Not Found.htm";
     var helpNotAvailablePath = "help/eHMP_Help Content Not Available.htm";
+    var pdfVersionPath = "eHMP_User Guide for Release 1.3_v1.1_12012015.pdf";
 
     var helpLinks = {
-        "pdf_version": {
-            "url": "eHMP_User Guide for Release 1.3_v1.1_12012015.pdf"
+        "html_version": {
+            "url": serverPath
         },
-        "logon": {
-            "url": serverLogonPath,
-            "tooltip": "Help"
+        "pdf_version": {
+            "url": pdfVersionPath
         },
         "page_not_found": {
             "url": pageNotFoundPath
         },
         "help_unavailable": {
             "url": helpNotAvailablePath,
+            "tooltip": "Help"
+        },
+
+        /****************************************
+        Logon page
+        ****************************************/
+        "logon": {
+            "url": serverLogonPath,
+            "tooltip": "Help"
+        },
+        //TODO: add "#_TOC" when the user manual includes section about Supported VistAs
+        "suported_vistas": {
+            "url": serverPath,
             "tooltip": "Help"
         },
 
@@ -198,13 +211,13 @@ define([], function() {
         Narrative Lab Results
         ****************************************/
         "narrative_lab_results_grid_standard": {
-			"url": serverPath + "#_Toc435776135",
-			"tooltip": "Help"
-		},
-		"narrative_lab_results_grid_expanded": {
-			"url": serverPath + "#_Toc435776136",
-			"tooltip": "Help"
-		},
+            "url": serverPath + "#_Toc435776135",
+            "tooltip": "Help"
+        },
+        "narrative_lab_results_grid_expanded": {
+            "url": serverPath + "#_Toc435776136",
+            "tooltip": "Help"
+        },
 
         /****************************************
         Numeric Lab Results
@@ -239,6 +252,10 @@ define([], function() {
         ****************************************/
         "reports_standard": {
             "url": serverPath + "#_Toc435776148",
+            "tooltip": "Help"
+        },
+        "reports_expanded": {
+            "url": serverPath + "#_Toc435776149",
             "tooltip": "Help"
         },
 
@@ -294,7 +311,7 @@ define([], function() {
         /****************************************
         Workspace Manager
         ****************************************/
-        "todo_list_standard": {
+        "_standard": {
             "url": serverPath + "#_Toc435776183",
             "tooltip": "Help"
         },

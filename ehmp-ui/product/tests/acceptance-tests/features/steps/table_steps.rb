@@ -296,8 +296,8 @@ class TableContainer < AccessBrowserV2
     add_verify(CucumberLabel.new("Rows - Documents Applet data"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#content-region #data-grid-documents tbody tr.selectable"))
     add_verify(CucumberLabel.new("Rows - Documents Applet groups"), VerifyContainsText.new, AccessHtmlElement.new(:css, '#content-region #data-grid-documents tr.groupByHeader'))
   
-    #Conditions
-    add_verify(CucumberLabel.new('Rows - Conditions Gist Applet'), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='problems'] .gist-item"))
+    #Problems
+    add_verify(CucumberLabel.new('Rows - Problems Gist Applet'), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='problems'] .gist-item"))
     add_verify(CucumberLabel.new('Rows - Vitals Applet'), VerifyContainsText.new, AccessHtmlElement.new(:css, '#data-grid-vitals tr.selectable'))
   
     #Appointments

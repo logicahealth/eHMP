@@ -1,9 +1,12 @@
-HMPFPTC ;SLC/MKB,AGP - Patient look-up Utilities at Facility ; 6/06/12
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
+HMPFPTC ;SLC/MKB,AGP,ASMR/RRB - Patient look-up Utilities at Facility;Nov 04, 2015 18:37:39
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ Q
  ;
 CHKS(HMPZ,DFN) ; perform patient select checks
  ;
- N ACCESS,CHKS,CNT,ERR,I,IEN,STR,X,HMPY
+ N ACCESS,CHKS,CNT,DEATHDT,ERR,I,IEN,STR,X,HMPY
  ; check for sensitive record
  S STR="patientChecks"
  S ACCESS=0
@@ -18,9 +21,10 @@ CHKS(HMPZ,DFN) ; perform patient select checks
  .F  S CNT=$O(HMPY(CNT)) Q:CNT'>0  S X=X_$C(13)_$C(10)_$G(HMPY(CNT))
  .S CHKS("sensitive","text")=X
  ;
- ; check for deceased patient
- I +$G(^DPT(DFN,.35)) D
- . S CHKS("deceased","text")="This patient died on "_$$FMTE^XLFDT(^DPT(DFN,.35),"D")_"."_$C(13)_$C(10)_" Do you wish to continue?"
+ ; check for deceased patient, DE2818 changed from direct global reference
+ D TOP^HMPXGDPT("DEATHDT",DFN,.351,"E")
+ D:$L($G(DEATHDT(2,DFN,.351,"E")))
+ . S CHKS("deceased","text")="This patient died on "_DEATHDT(2,DFN,.351,"E")_"."_$C(13)_$C(10)_" Do you wish to continue?"
  ;
  ; check for similar patients
  K HMPY
@@ -81,7 +85,8 @@ ENROS(HMPZ,DFNARRAY) ;PROCESS PATIENTS FROM A ROSTER
  F  S DFN=$O(DFNARRAY(DFN)) Q:DFN'>0  D CHKS(.HMPZ,DFN)
  Q
  ;
-TEST ; 
+TEST ;
+ K EDPSITE
  S EDPSITE=$$IEN^XUAF4(442),NAME="doe,john"
  D CHKS(1,"",NAME)
  ;N PID S EDPSITE=$$IEN^XUAF4(442)

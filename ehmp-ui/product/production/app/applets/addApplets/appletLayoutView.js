@@ -27,6 +27,9 @@ define([
     var AppletLayoutView = Backbone.Marionette.LayoutView.extend({
         template: appletEditor,
         appletUnderSwitchboard: '',
+        modelEvents: {
+            'change:gridsterTemplate': 'render'
+        },
         initialize: function() {
             this.gridster = gridster;
             var self = this;
@@ -49,7 +52,7 @@ define([
             }
 
             this.model = new Backbone.Model();
-            var screenModule = ADK.ADKApp[Backbone.history.fragment];
+            var screenModule = ADK.ADKApp[Backbone.history.fragment.split("/").pop(-1)];
             this.lastSave.currentScreenModule = screenModule;
             var screensConfig = ADK.UserDefinedScreens.getScreensConfigFromSession();
             self.screenConfig = _.findWhere(screensConfig.screens, {
@@ -59,7 +62,6 @@ define([
                 var deferred = ADK.UserDefinedScreens.getGridsterTemplateForEditor(screenModule);
                 deferred.done(function(template) {
                     self.model.set('gridsterTemplate', template);
-                    self.render();
                 });
             });
 
@@ -68,7 +70,7 @@ define([
                 var appletId = params.appletId;
                 var appletTitle = params.appletTitle;
                 var regionId = self.getNextAppletId();
-                var appletHtml = '<li class="new" data-appletid="' + appletId + '" data-instanceid="' + regionId + '" id="' + regionId + '" data-view-type="default" data-min-sizex="4" data-min-sizey="3" data-max-sizex="8" data-max-sizey="12"><div class="edit-applet fa fa-cog"></div><br>' + appletTitle + '</li>';
+                var appletHtml = '<li class="new" data-appletid="' + appletId + '" data-instanceid="' + regionId + '" data-view-type="default" data-min-sizex="4" data-min-sizey="3" data-max-sizex="8" data-max-sizey="12"><button type="button" aria-label="Press enter to open view options." class="btn btn-icon edit-applet applet-options-button"><i class="fa fa-cog"></i></button><br>' + appletTitle + '</li>';
                 if (!isSwitchboardDisplayed()) {
                     window.requestAnimationFrame(function() {
                         var x = params.xPos;
@@ -78,15 +80,7 @@ define([
                         var gridsterDimen = self.getGridsterDimension();
                         var $dragHere =  self.$('.dragHere');
                         if ($dragHere.length !== 0) {
-                            col = $dragHere.attr('data-col');
-                            row = $dragHere.attr('data-row');
                             self.gridster.remove_widget($dragHere);
-                        } else {
-                            //I'm pretty sure this is going to get deprecated
-                            col = Math.ceil((x - Math.floor(x / (gridsterDimen[0] * 4 + 10)) * 5) / (gridsterDimen[0] + 10));
-                            if (col < 1) col = 1;
-                            row = Math.ceil(y / 25);
-                            if (row < 1) row = 1;
                         }
 
                         self.gridster.add_widget(appletHtml, params.sizeX, params.sizeY, col, row);
@@ -110,8 +104,7 @@ define([
             });
 
             addAppletsChannel.reply('addAppletPlaceholder', function(params) {
-                var fontStyle = self.setPlaceholderFontSize();
-                var appletHtml = '<li class="preview-holder dragHere" style="font-size:' + fontStyle + '">Drag Applet Here</li>';
+                var appletHtml = '<li class="preview-holder dragHere">Drag Applet Here</li>';
                 var hoverOverRow = (params.hoverOverRow > 9 ? 9 : params.hoverOverRow);
                 var placeholder_x = 4;
                 var placeholder_y = 4;
@@ -138,7 +131,6 @@ define([
 
                         } else {
                             noCollisionCol = self.get_possible_col_for_placeholder_in_row(topRowPossible, placeholderCol, placeholder_x, placeholder_y);
-
                         }
 
                         placeholderEl.attr('data-row', topRowPossible);
@@ -188,7 +180,6 @@ define([
                     if (cell && !cell.hasClass('dragHere')) {
                         return this.get_possible_col_for_placeholder_in_row(startRow, startCol + 1, placeholder_sizeY, placeholder_sizeX);
                     }
-
                 }
             }
             return startCol;
@@ -196,7 +187,7 @@ define([
         getNextAppletId: function() {
             var nextId = 0;
             this.$el.find('.gridsterContainer ul li').not('.gridsterContainer ul .dragHere, .gridsterContainer ul li li').each(function() {
-                var idStr = $(this).attr('id');
+                var idStr = $(this).attr('data-instanceid');
                 var index = idStr.indexOf('applet-');
                 if (index === 0) {
                     var id = parseInt(idStr.substring(7, idStr.length));
@@ -207,24 +198,16 @@ define([
             ++nextId;
             return 'applet-' + nextId;
         },
-        setPlaceholderFontSize: function() {
-            var styleStr = '';
-            var widgetWidth = this.gridster.min_widget_width;
-            if (widgetWidth >= 45) {
-                styleStr = '2.5rem"';
-            } else if (widgetWidth >= 23) {
-                styleStr = '2rem"';
-            } else if (widgetWidth >= 17) {
-                styleStr = '1.5rem"';
-            } else {
-                styleStr = '1rem';
-            }
-            return styleStr;
-        },
         regions: {
             appletSlider: '.applet-tray'
         },
         events: {
+            'click #editorFilterBtn': function(e){
+                var filterContainer = $(e.currentTarget).closest('.workspace-editor-container');
+                filterContainer.one('shown.bs.collapse', function() {
+                    filterContainer.find('input[type=search]').focus();
+                });
+            },
             'keyup #searchApplets': 'filterApplets',
             'keydown #searchApplets': function(evt) {
                 if (evt.which == 13) {
@@ -232,10 +215,9 @@ define([
                     this.filterApplets();
                 }
             },
-            'click .editorTop .clear': 'clearFilterText',
+            'click #workspace-editor-filter .editor-clear-filter': 'clearFilterText',
             'click #exitEditing': 'hideOverlay',
             'click .edit-applet': 'editClicked',
-            'click .applet-exit-options-button': 'closeSwitchboard',
             'keydown .options-box': 'handleSpacebarOrEnter',
             'keydown .applet-thumbnail': function(evt) {
                 if (evt.which === 13) {
@@ -243,13 +225,20 @@ define([
                     var addAppletsChannel = ADK.Messaging.getChannel('addApplets');
                     var d = addAppletsChannel.request('addAppletToGridster', {
                         appletId: $el.attr('data-appletid'),
-                        appletTitle: $el.text(),
+                        appletTitle: $el.find('.applet-thumbnail-title').text(),
                         sizeX: 4,
                         sizeY: 4,
                         col: 4,
                         row: 4
                     });
                 }
+            }
+        },
+        clearFilterBtnDisplay: function(val) {
+            if (val) {
+                this.$('.editor-clear-filter').show();
+            } else {
+                this.$('.editor-clear-filter').hide();
             }
         },
         handleSpacebarOrEnter: function(e) {
@@ -263,7 +252,8 @@ define([
         hideOverlay: function() {
             this.saveGridsterAppletsConfig(true);
             ADK.UI.FullScreenOverlay.hide();
-            ADK.Navigation.navigate(Backbone.history.fragment);
+            ADK.Navigation.navigate(ADK.ADKApp.currentScreen.id);
+            $('.workspace-editor-trigger-button').focus();
         },
         onBeforeShow: function() {
             if (this.screenConfig) {
@@ -301,21 +291,17 @@ define([
             if (isSwitchboardDisplayed()) {
                 return;
             } else {
-                var gridsterContainer;
-                if ($(e.target).parent().attr('data-appletid') !== undefined) {
-                    gridsterContainer = $(e.target).parent();
-                } else {
-                    gridsterContainer = $(e.target).parent().parent();
-                }
+                var gridsterContainer = $(e.currentTarget).closest('[data-appletid]');
 
                 var appletId = gridsterContainer.attr('data-appletid');
-                var regionId = gridsterContainer.attr('id');
+                var regionId = gridsterContainer.attr('data-instanceid');
                 var appletTitle = gridsterContainer.find('.applet-title').text();
                 var currentView = gridsterContainer.attr('data-view-type');
-                gridsterContainer.addClass("bringToFront");
 
                 this.addRegions({
-                    appletRegion: '#' + regionId
+                    appletRegion: {
+                        selector: '[data-instanceid="' + regionId + '"]'
+                    }
                 });
 
                 Switchboard = this.getSwitchboard(appletId, this.appletRegion, appletTitle, regionId, function() {
@@ -324,40 +310,20 @@ define([
                 }, currentView);
                 this.appletRegion.show(Switchboard);
                 this.fixSwitchboardPosition();
-
-                var $switchBoard = this.$('.view-switchboard');
-                var $switchBoardExpaned = $switchBoard.find("div[data-viewtype='expanded']"),
-                    $switchBoardSummary = $switchBoard.find("div[data-viewtype='summary']"),
-                    $switchBoardGist = $switchBoard.find("div[data-viewtype='gist']");
-
-                $switchBoard.find('.applet-exit-options-button').removeClass('hide');
-
-                if (currentView === 'expanded') {
-                    $switchBoardExpaned.addClass('options-box-focus-expanded selected-view');
-                    $switchBoardSummary.removeClass('options-box-focus-summary');
-                    $switchBoardGist.removeClass('options-box-focus');
-                } else if (currentView === 'summary') {
-                    $switchBoardSummary.addClass('options-box-focus-summary selected-view');
-                    $switchBoardGist.removeClass('options-box-focus');
-                    $switchBoardExpaned.removeClass('options-box-focus-expanded');
-                } else {
-                    $switchBoardExpaned.removeClass('options-box-focus-expanded');
-                    $switchBoardSummary.removeClass('options-box-focus-summary');
-                    $switchBoardGist.addClass('options-box-focus');
-                }
+                this.$('.view-switchboard').find('.applet-exit-options-button').removeClass('hide');
             }
         },
         displaySwitchboard: function(newAppletId, newRegionId, newAppletTitle, onChangeView) {
             this.addRegions({
-                appletRegion: '#' + newRegionId
+                appletRegion: {
+                    selector: '[data-instanceid="' + newRegionId + '"]'
+                }
             });
 
             Switchboard = this.getSwitchboard(newAppletId, this.appletRegion, newAppletTitle, onChangeView);
             this.appletRegion.show(Switchboard);
-            $('#' + newRegionId).addClass("bringToFront");
 
             this.fixSwitchboardPosition();
-
         },
         fixSwitchboardPosition: function() {
             var $switchboard = $('div.view-switchboard');
@@ -373,9 +339,6 @@ define([
                 $switchboard.css('left', '-10px');
             }
         },
-        closeSwitchboard: function(e) {
-            // $(this.appletRegion.el).removeClass('bringToFront');
-        },
         saveGridsterAppletsConfig: function(overrideThrottle) {
             var screen = ADK.ADKApp.currentScreen.id;
             var $gridsterEl = this.$el.find(".gridsterContainer");
@@ -384,7 +347,6 @@ define([
             //check if anything changed from last save
             if (ADK.UserDefinedScreens.getGridsterTemplate(this.lastSave.currentScreenModule) === ADK.UserDefinedScreens.getGridsterTemplate(appletsConfig)) {
                 // nothing changed since last save, reset number of moves, skip save check
-                // console.log("  notthing changed, not saved, resetting moveCount");
                 this.lastSave.numMoves = 0;
                 return;
             }
@@ -402,19 +364,15 @@ define([
             this.lastSave.numMoves++;
             if (this.lastSave.numMoves === 1 && !overrideThrottle) {
                 // This is the first move so let's start a "timer"
-                // console.log("  first, not saved, start timer");
                 this.lastSave.time = currentTime;
             } else if (overrideThrottle || timeDiff > this.gracePeriod || this.lastSave.numMoves >= this.maxMoves) {
                 // Force save, elapsed time longer than grace perieod, or more than enough moves to do the save
-                // so svae and reset the counters/"timer"
+                // so save and reset the counters/"timer"
                 ADK.UserDefinedScreens.saveGridsterConfig(appletsConfig, screen);
                 this.lastSave.time = currentTime;
                 this.lastSave.numMoves = 0;
                 this.lastSave.currentScreenModule = appletsConfig;
-            } else {
-                // console.log("  not saved");
             }
-            // else don't save
         },
         getGridsterDimension: function() {
             var windowWidth = $(window).width();
@@ -436,15 +394,13 @@ define([
                 position: 'relative'
             });
             this.$el.find('#gridster2').css({
-                left: '10px',
                 float: 'left',
-                position: 'fixed'
+                position: 'relative'
             });
             this.$el.find('#gridster2 > ul').css('position', '');
         },
         initGridster: function() {
             var self = this;
-
             function gridsterResizeSnap($widget) {
                 var sizeX = parseInt($widget.attr('data-sizex'));
                 var mod = sizeX % 2;
@@ -474,9 +430,6 @@ define([
                 },
                 draggable: {
                     drag: function(e, ui) {
-                        // if(isSwitchboardDisplayed()) {
-                        // self.fixSwitchboardPosition();
-                        // }
                     },
                     stop: function(e, ui) {
                         self.setGridsterBaseDimension();
@@ -486,13 +439,12 @@ define([
             }).data('gridster');
             if (this.gridster) {
                 this.setGridsterBaseDimension();
-                this.$el.find('.gridsterContainer #gridster2').height('380px');
             }
-
         },
         filterApplets: function() {
             var filterText = this.$el.find('#searchApplets').val();
             this.appletSlider.currentView.filterApplets(filterText);
+            this.clearFilterBtnDisplay(filterText);
         },
         clearFilterText: function() {
             this.$el.find('#searchApplets').val("");
@@ -510,10 +462,11 @@ define([
         setBoundaryIndicator: function() {
             var xSize = ADK.utils.resize.dimensions.gridsterWidget.get('width');
 
-            var workspaceTotalApplets = Math.floor($(window).width() / (xSize * 4));
+            var workspaceTotalApplets = Math.floor(ADK.utils.resize.dimensions.viewport.get('width') / (xSize * 5));
             var workspaceAppletsPerPage = workspaceTotalApplets < 3 ? 3 : workspaceTotalApplets;
-            var workspaceScrollPosition = $('#center-region').scrollLeft();
-            var workspaceWidth = $('#center-region').width() - 20;
+            var workspaceScrollPosition = $('#content-region .jspContainer .jspPane').position();
+            workspaceScrollPosition = _.isUndefined(workspaceScrollPosition) ? 0 : workspaceScrollPosition.left || 0;
+            var workspaceWidth = $('#content-region').width() - 20;
 
             var editorAppletSize = (this.getGridsterDimension()[0] * 4) + 45;
             var editorIndicatorWidth = editorAppletSize * workspaceAppletsPerPage;
@@ -522,8 +475,17 @@ define([
 
             ADK.UserDefinedScreens.saveScrollPositionToSession(workspaceScrollPosition);
 
-            $('#boundaryIndicator').css('width', editorIndicatorWidth + 15 + "px");
-            $('#boundaryIndicator').css('left', (workspaceScrollPosition) * ratio + "px");
+            this.$('.boundary-indicator').css('width', editorIndicatorWidth + "px");
+        },
+        onBeforeDestroy: function(){
+            var addAppletsChannel = ADK.Messaging.getChannel('addApplets');
+            addAppletsChannel.stopReplying('addAppletToGridster');
+            addAppletsChannel.stopReplying('addAppletPlaceholder');
+
+            if(this.gridster){
+                this.gridster.destroy(true);
+            }
+            $(window).off("resize.appletLayoutView");
         }
     });
 

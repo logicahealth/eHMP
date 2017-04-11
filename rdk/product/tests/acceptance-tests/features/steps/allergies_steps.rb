@@ -87,7 +87,7 @@ end
 #   temp.add_parameter("subject.identifier", pid)
 #   temp.add_acknowledge("true")
 #   p temp.path
-#   @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+#   @response = HTTPartyRDK.get_with_authorization(temp.path)
 
 # end
 
@@ -96,7 +96,7 @@ When(/^the client requests allergies for the patient "(.*?)" in FHIR format$/) d
   temp.add_parameter("subject.identifier", pid)
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests "(.*?)" allergies for the patient "(.*?)" in FHIR format$/) do |limit, pid|
@@ -105,7 +105,7 @@ When(/^the client requests "(.*?)" allergies for the patient "(.*?)" in FHIR for
   temp.add_acknowledge("true")
   temp.add_parameter("limit", limit)
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 Then(/^the client receives (\d+) FHIR DoD result\(s\)$/) do |number_of_results|
@@ -379,14 +379,14 @@ end
 
 When(/^the client saves an allergy for patient with content "(.*?)"$/) do |content|
   path = String.new(DefaultLogin.rdk_writeback_url)
-  @response = HTTPartyWithBasicAuth.post_json_with_authorization(path+"/resource/writeback/allergy/save?", content, { "Content-Type"=>"application/json" })
+  @response = HTTPartyRDK.post(path+"/resource/writeback/allergy/save?", content, { "Content-Type"=>"application/json" })
 end
 
 When(/^the client requests allergies for the patient "([^"]*)" in VPR format$/) do |pid|
   request = QueryRDKDomain.new('allergy', pid)
   p request.path
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests allergies for the patient "([^"]*)" with parameters$/) do |pid, table|
@@ -397,5 +397,5 @@ When(/^the client requests allergies for the patient "([^"]*)" with parameters$/
   end
   p request.path
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end

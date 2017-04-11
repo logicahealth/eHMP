@@ -6,13 +6,20 @@ define([
     "hbs!main/components/views/appletViews/sharedTemplates/gistPopover",
     "api/ResourceService",
     "api/Messaging"
-
-
 ], function($, _, Backbone, pillGistChildTemplate, popoverTemplate, ResourceService, Messaging) {
     'use strict';
     var PillGistItem = Backbone.Marionette.ItemView.extend({
         template: pillGistChildTemplate,
         tagName: 'li',
+        behaviors: {
+            FloatingToolbar: {
+                buttonTypes: ['infobutton', 'detailsviewbutton'],
+                triggerSelector: '[data-infobutton]'
+            }
+        },
+        ui: {
+            popoverEl: '[data-toggle=popover]'
+        },
         events: {
             'click button#closeGist': function(event) {
                 event.preventDefault();
@@ -25,42 +32,23 @@ define([
             'hover div.gist-item': function(event) {
                 this.$(event.target).blur();
             },
-            'focus div.gist-item': function(event) {
-                this.$('[data-toggle=popover]').keypress(function(e) {
-                    if (e.which === 13 || e.which === 32) {
-                        gistItem.trigger('click');
-                    }
-                });
-            },
             'click div.gist-item': function(event) {
                 this.$('[data-toggle=popover]').popover('hide');
-
-                ADK.utils.infoButtonUtils.onClickFunc(this, event, baseClickGistItem);
-
-                function baseClickGistItem(that, event) {
-                        event.preventDefault();
-                        event.stopImmediatePropagation();
-                        var currentPatient = ResourceService.patientRecordService.getCurrentPatient();
-                        var channelObject = {
-                            collection: that.collection,
-                            model: that.model,
-                            uid: that.model.get("uid"),
-                            patient: {
-                                icn: currentPatient.attributes.icn,
-                                pid: currentPatient.attributes.pid
-                            }
-                        };
-                        Messaging.getChannel(that.AppletID).trigger('getDetailView', channelObject);
-                    }
+            },
+            'after:hidetoolbar': function() {
+                this.trigger('after:hidetoolbar');
             }
-
         },
         initialize: function(options) {
             this.AppletID = options.AppletID;
+            this.model.set({
+                'applet_id': this.AppletID,
+                'qualifiedName': this.model.get('name')
+            });
         },
         setPopover: function() {
             this.$('[data-toggle=popover]').popover({
-                trigger: 'hover',
+                //trigger: 'hover',
                 html: 'true',
                 container: 'body',
                 template: popoverTemplate(this.model),
@@ -70,7 +58,7 @@ define([
         onRender: function() {
             this.setPopover();
         },
-        onDestroy: function(){
+        onDestroy: function() {
             this.$('[data-toggle=popover]').popover('destroy');
         }
     });
@@ -79,9 +67,23 @@ define([
             'gistviewtype': 'pills'
         },
         childView: PillGistItem,
+        childEvents: {
+            'toggle:quicklook': function(e) {
+                var el = e.ui.popoverEl;
+                Messaging.getChannel('toolbar').trigger('close:quicklooks', el);
+                el.popup('toggle');
+            },
+            'after:hidetoolbar': function(e){
+                Messaging.getChannel('toolbar').trigger('close:quicklooks');
+            }
+        },
         tagName: 'ul',
         emptyView: Backbone.Marionette.ItemView.extend({
-            template: _.template('<div class="empty-gist-list">No Records Found</div>')
+            template: _.template('<div class="empty-gist-list left-padding-no"><p class="color-grey-darkest" role="gridcell">No Records Found</p></div>'),
+            attributes: {
+                "aria-live":"assertive",
+                "role":"row"
+            }
         }),
         initialize: function(options) {
             var appletID = getAppletId(options);
@@ -90,6 +92,13 @@ define([
                 AppletID: appletID,
                 collection: options.collection
             };
+            if (this.getOption('toolbarOptions')) {
+                this.childView = this.childView.extend({
+                    behaviors: _.extend({}, this.childView.prototype.behaviors, {
+                        FloatingToolbar: this.getOption('toolbarOptions')
+                    })
+                });
+            }
             this.gistModel = options.gistModel;
             this.collectionParser = options.collectionParser || function(collection) {
                 return collection;
@@ -100,9 +109,15 @@ define([
             //this is the model for the outer part of the composite view
             this.model = new Backbone.Model();
             this.model.set('instanceid', instanceid);
+
+            this.listenTo(Messaging.getChannel('toolbar'), 'close:quicklooks', function(el) {
+                this.$('[data-toggle=popover]').not(el).popup('hide');
+            });
         },
         onBeforeRender: function() {
-            this.collection.reset(this.collectionParser(this.collection).models);
+            this.collection.reset(this.collectionParser(this.collection).models, {
+                silent: true
+            });
             _.each(this.collection.models, function(item) {
 
                 _.each(this.gistModel, function(object) {

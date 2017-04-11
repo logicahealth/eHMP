@@ -3,6 +3,7 @@ define(function() {
 
     return {
         id: "psa",
+        context: 'patient',
         contentRegionLayout: "gridOne",
         appletHeader: "patient",
         applets: [{

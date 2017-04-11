@@ -3,7 +3,6 @@
 // --------------------------------------------------
 @import "../css/library/animate";
 @import "../css/library/calendar";
-@import "../css/library/timepicker";
 //
 // SCSS Library
 // --------------------------------------------------
@@ -40,9 +39,11 @@
 @import "partials/ui-components/nouislider";
 @import "partials/ui-components/nouislider-pips";
 @import "partials/ui-components/notifications";
+@import "partials/ui-components/pagination";
 @import "partials/ui-components/panel";
 @import "partials/ui-components/panel-list-group";
 @import "partials/ui-components/patient-selection-box";
+@import "partials/ui-components/pdfViewer";
 @import "partials/ui-components/popover";
 @import "partials/ui-components/progress-bar";
 @import "partials/ui-components/search-bar";
@@ -51,12 +52,16 @@
 @import "partials/ui-components/tabs";
 @import "partials/ui-components/timepicker";
 @import "partials/ui-components/tooltip";
-@import "partials/ui-components/tray";
+@import "partials/ui-components/tray/menu";
+@import "partials/ui-components/tray/contents";
 @import "partials/ui-components/tray/sub-tray";
+@import "partials/ui-components/tray/tray";
 @import "partials/ui-components/type-ahead";
 @import "partials/ui-components/type-ahead-select";
 @import "partials/ui-components/well";
 @import "partials/ui-components/workflow";
+@import "partials/ui-components/_alert-dropdown";
+@import "partials/ui-components/_jScrollPane";
 //
 // views
 // --------------------------------------------------
@@ -67,8 +72,6 @@
 @import "partials/views/enhanced-search";
 @import "partials/views/overlapping-orders";
 @import "partials/views/overview";
-@import "partials/views/patient-care-info";
-@import "partials/views/patient-info-bar";
 @import "partials/views/patient-search";
 @import "partials/views/patient-selection-V5";
 @import "partials/views/user-defined-screens";
@@ -82,6 +85,7 @@
 @import "partials/ui-components/forms/control-checkbox";
 @import "partials/ui-components/forms/control-checklist";
 @import "partials/ui-components/forms/control-select";
+@import "partials/ui-components/forms/control-select-list";
 @import "partials/ui-components/forms/control-radio";
 @import "partials/ui-components/forms/control-treepicker";
 @import "partials/ui-components/forms/multiselect-side-by-side";

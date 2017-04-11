@@ -2,7 +2,7 @@
 # Cookbook Name:: runit
 # Provider:: service
 #
-# Copyright 2011,     ua Timberman
+# Copyright 2011, Joshua Timberman
 # Copyright 2011, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

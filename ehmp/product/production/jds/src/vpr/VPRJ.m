@@ -79,7 +79,6 @@ VPRSTAT ; VPR statistics
  Q
 PIDSTAT ; PID statistics
  N PID S PID=$$ASKPID^VPRJ2P Q:'$L(PID)
- S PID=""""_PID_""""
  D STATUS^VPRJ2P(PID)
  Q
 RIDXALL ; Re-index entire VPR
@@ -105,16 +104,17 @@ LISTPTP ; List patients by PID
  D LISTPTS(0)
  Q
 LISTPTS(ALPHA) ; List all the patients in the VPR
- N PID,DFN,UID,NAME,ICN,SSN,LIST,X,STAMP
+ N PID,DFN,UID,NAME,ICN,SSN,LIST,X,STAMP,JPID
  S ALPHA=$G(ALPHA)
- S PID="" F  S PID=$O(^VPRPT(PID)) Q:'$L(PID)  D
- . S UID=$O(^VPRPT(PID,"urn:va:patient:"))
- . S STAMP=$O(^VPRPT(PID,UID,""),-1)
- . I $P(UID,":",3)'="patient" W !,"Missing demographics: ",PID Q
- . S NAME=$G(^VPRPT(PID,UID,STAMP,"fullName")),ICN=$G(^("icn")),SSN=$G(^("ssn"))
- . I NAME="" W !,"Missing patient full name: ",PID Q
- . I ALPHA S LIST(NAME,PID)=SSN_"^"_ICN_"^"_PID Q
- . S LIST(PID,NAME)=SSN_"^"_ICN_"^"_PID
+ S JPID="" F  S JPID=$O(^VPRPT(JPID)) Q:JPID=""  D
+ . S PID="" F  S PID=$O(^VPRPT(JPID,PID)) Q:'$L(PID)  D
+ . . S UID=$O(^VPRPT(JPID,PID,"urn:va:patient:"))
+ . . S STAMP=$O(^VPRPT(JPID,PID,UID,""),-1)
+ . . I $P(UID,":",3)'="patient" W !,"Missing demographics: ",PID Q
+ . . S NAME=$G(^VPRPT(JPID,PID,UID,STAMP,"fullName")),ICN=$G(^("icn")),SSN=$G(^("ssn"))
+ . . I NAME="" W !,"Missing patient full name: ",PID Q
+ . . I ALPHA S LIST(NAME,PID)=SSN_"^"_ICN_"^"_PID Q
+ . . S LIST(PID,NAME)=SSN_"^"_ICN_"^"_PID
  I ALPHA D
  . W !,"Name",?30,"SSN",?40,"ICN",?60,"DFN/PID"
  . S NAME="" F  S NAME=$O(LIST(NAME)) Q:NAME=""  D

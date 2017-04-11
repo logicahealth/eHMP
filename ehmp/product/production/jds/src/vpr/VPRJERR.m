@@ -48,8 +48,14 @@ LEN(RESULT,ARGS)  ; Returns the total number of user data objects
  Q
  ;
 GET(RESULT,ARGS) ; Returns user data object
- N OBJECT,FILTER,CLAUSES,CLAUSE,ERR,BODY,ITEM,VALUE
- I $$UNKARGS^VPRJCU(.ARGS,"id,filter") Q
+ N OBJECT,FILTER,CLAUSES,CLAUSE,ERR,BODY,ITEM,VALUE,STARTID,START,LIMIT
+ I $$UNKARGS^VPRJCU(.ARGS,"id,filter,startid") Q
+ ; STARTID starts at an error id, rather than a position in the error store list
+ S STARTID=$G(ARGS("startid")) S:STARTID<1 STARTID=1
+ ; We don't want to START with 0, as the 0 node holds the count of total errors in the error store, and negative doesn't work
+ ; START starts at a position in the error store list, relative to STARTID
+ S START=$G(ARGS("start"),1) S:START<1 START=1
+ S LIMIT=$G(ARGS("limit"),999999) ; LIMIT works fine if it is 0 or negative
  ; Get any filters and parse them into CLAUSES
  S FILTER=$G(ARGS("filter"))
  I $L(FILTER) D PARSE^VPRJCF(FILTER,.CLAUSES) Q:$G(HTTPERR)
@@ -64,14 +70,18 @@ GET(RESULT,ARGS) ; Returns user data object
  I $D(ERR) D SETERROR^VPRJRER(229,"id "_ARGS("id")_" doesn't exist") Q
  ; Get all objects (or run filter) if no uid passed
  I '$D(@OBJECT) D
- . N UID
- . S UID=""
- . N I
- . F I=0:1 S UID=$O(^VPRJERR(UID)) Q:UID=""  D
+ . N UID,CNT,I
+ . S UID=(STARTID-1) ; UID should start at STARTID, so we need to move it to the previous id number as it is $ORDERed at loop begin
+ . S CNT=0 ; CNT gives us the total items returned (considering filters, start, and limit), not the total in the error store
+ . ; LIMIT is on the returned items length, regardless of the error id of each item
+ . F I=1:1 S UID=$O(^VPRJERR(UID)) Q:UID=""!(CNT'<LIMIT)  D
+ . . I I<START Q  ; Start at the correct position in the error store (relative to the STARTID)
  . . ; All clauses are wrapped in an implicit AND
- . . I $D(CLAUSES) Q:'$$EVALAND^VPRJGQF(.CLAUSES,$NA(^VPRJERR(UID)))
- . . ; Merge the data (will run only if the filter is true or non-existant)
- . . M @OBJECT@("items",I)=^VPRJERR(UID)
+ . . I $D(CLAUSES),'$$EVALAND^VPRJGQF(.CLAUSES,$NA(^VPRJERR(UID))) Q
+ . . E  S CNT=CNT+1 ; Only increment the count for items actually returned after filtering
+ . . ; Merge the data (will run only if the filter is true or non-existent)
+ . . M @OBJECT@("items",CNT)=^VPRJERR(UID)
+ . S @OBJECT@("totalItems")=CNT
  ; Set Result variable to global
  S RESULT=$NA(^TMP($J,"RESULT"))
  K @RESULT

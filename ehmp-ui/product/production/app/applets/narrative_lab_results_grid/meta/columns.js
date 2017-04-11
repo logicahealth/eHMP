@@ -3,34 +3,12 @@ define([
     "marionette",
     'underscore',
     "hbs!app/applets/narrative_lab_results_grid/list/dateTemplate",
-    "hbs!app/applets/narrative_lab_results_grid/list/labTestCoverSheetTemplate",
-    "hbs!app/applets/narrative_lab_results_grid/list/resultTemplate",
     "hbs!app/applets/narrative_lab_results_grid/list/siteTemplate",
-    "hbs!app/applets/narrative_lab_results_grid/list/flagTemplate",
-    "hbs!app/applets/narrative_lab_results_grid/list/referenceRangeTemplate"
-], function(Backbone, Marionette, _, dateTemplate, labTestCSTemplate, resultTemplate, siteTemplate, flagTemplate, referenceRangeTemplate) {
+    "hbs!app/applets/narrative_lab_results_grid/list/descriptionTemplate",
+    "hbs!app/applets/narrative_lab_results_grid/list/authorTemplate",
+    "hbs!app/applets/narrative_lab_results_grid/list/typeTemplate"
+], function(Backbone, Marionette, _, dateTemplate, siteTemplate, descriptionTemplate, authorTemplate, typeTemplate) {
     "use strict";
-
-    function customFlagSort(model, sortKey) {
-        var code = model.attributes.interpretationCode;
-        if (code !== undefined) {
-            var flag = model.attributes.interpretationCode.split(":").pop();
-
-            if (flag === 'H*') {
-                return -4;
-            }
-            if (flag === 'L*') {
-                return -3;
-            }
-            if (flag === 'H') {
-                return -2;
-            }
-            if (flag === 'L') {
-                return -1;
-            }
-        }
-        return 0;
-    }
 
     return {
         //Data Grid Columns
@@ -43,66 +21,40 @@ define([
                 hoverTip: 'labresults_date'
             };
         },
-        testCol: function(){
-            return{
-                name: "typeName",
-                label: "Lab Test",
-                template: labTestCSTemplate,
-                cell: "handlebars",
-                hoverTip: 'labresults_labtest'
-            };
-        },
-        flagCol: function(){
-            return {
-                name: "flag",
-                label: "Flag",
-                template: flagTemplate,
-                cell: "handlebars",
-                sortValue: customFlagSort,
-                hoverTip: 'labresults_flag'
-            };
-        },
-        resultAndUnitCol: function(){
-            return {
-                name: "result",
-                label: "Result",
-                template: resultTemplate,
-                cell: "handlebars",
-                hoverTip: 'labresults_result'
-            };
-        },
-        resultNoUnitCol: function(){
-            return {
-                name: "result",
-                label: "Result",
-                cell: "string",
-                hoverTip: 'labresults_result'
-            };
-        },
-        unitCol: function(){
-            return {
-                name: "units",
-                label: "Unit",
-                cell: "string",
-                hoverTip: 'labresults_unit'
-            };
-        },
-        refCol: function(){
-            return {
-                name: "referenceRange",
-                label: "Ref Range",
-                template: referenceRangeTemplate,
-                cell: "handlebars",
-                hoverTip: 'labresults_refrange'
-            };
-        },
         facilityCol: function(){
             return {
                 name: "facilityMoniker",
                 label: "Facility",
                 template: siteTemplate,
                 cell: "handlebars",
-                hoverTip: 'labrestuls_facility'
+                hoverTip: 'labresults_facility'
+            };
+        },
+        descriptionCol: function(){
+            return {
+                name: "description",
+                label: "Description",
+                template: descriptionTemplate,
+                cell: "handlebars",
+                hoverTip: 'labresults_description'
+            };
+        },
+        authorCol: function(){
+            return {
+                name: "author",
+                label: "Author or Verifier",
+                template: authorTemplate,
+                cell: "handlebars",
+                hoverTip: 'labresults_author'
+            };
+        },
+        typeCol: function(){
+            return {
+                name: "type",
+                label: "Type",
+                template: typeTemplate,
+                cell: "handlebars",
+                hoverTip: 'labresults_type'
             };
         }
     };

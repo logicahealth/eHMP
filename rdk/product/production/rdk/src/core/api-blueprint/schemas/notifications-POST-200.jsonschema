@@ -1,0 +1,127 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "recipients": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "required": ["recipient", "salience"],
+                "properties": {
+                    "recipient": {
+                        "type": "object",
+                        "minProperties": 1,
+                        "properties": {
+                            "userId": {
+                                "type": "string"
+                            },
+                            "teamId":{
+                                "type": "string"
+                            },
+                            "teamType": {
+                                "type": "string"
+                            },
+                            "teamFoci": {
+                                "type": "string"
+                            },
+                            "role": {
+                                "type": "string"
+                            },
+                            "staffRole": {
+                                "type": "string"
+                            },
+                            "facility": {
+                                "type": "string"
+                            },
+                            "patientId": {
+                                "type": "string"
+                            },
+                            "patientAssignment": {
+                                "type": "number",
+                                "default": 0,
+                                "enum": [0, 1]
+                            }
+
+                        },
+                        "anyOf": [
+                            {"required": ["userId"]},
+                            {"required": ["teamId"]},
+                            {"required": ["teamType"]},
+                            {"required": ["teamFoci"]},
+                            {"required": ["role"]},
+                            {"required": ["staffRole"]},
+                            {"required": ["facility"]},
+                            {"required": ["patientId"]}
+                        ],
+                        "dependencies": {
+                            "patientAssignment":["patientId"]
+                        }
+                    },
+                    "salience": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 10
+                    }
+                }
+            }
+        },
+        "producer": {
+            "type": "object",
+            "required": ["description"],
+            "properties": {
+                "userId": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "referenceId": {
+            "type": "string"
+        },
+        "patientId": {
+            "type": "string"
+        },
+        "message": {
+            "type": "object",
+            "required": ["subject", "body"],
+            "properties": {
+                "subject": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "body": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "resolution": {
+            "type": "string"
+        },
+        "navigation": {
+            "type": "object",
+            "properties": {
+                "channel": {
+                    "type": "string"
+                },
+                "event": {
+                    "type": "string"
+                },
+                "parameter": {
+                    "type": "string"
+                }
+            }
+        },
+        "associatedItems": {
+            "type": "array"
+        },
+        "expiration": {
+            "type": ["string", "null"]
+        }
+    },
+    "required": ["recipients", "producer", "message"]
+}

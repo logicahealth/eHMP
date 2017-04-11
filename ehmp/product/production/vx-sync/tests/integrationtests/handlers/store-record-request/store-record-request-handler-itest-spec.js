@@ -19,7 +19,7 @@ describe('store-record-request-handler.js', function() {
     var setUpconfig = {
         jds: _.defaults(wConfig.jds, {
             protocol: 'http',
-            host: 'IPADDRESS ',
+            host: 'IP_ADDRESS',
             port: 9080
         })
     };
@@ -85,7 +85,7 @@ describe('store-record-request-handler.js', function() {
         var config = {
             jds: _.defaults(wConfig.jds, {
                 protocol: 'http',
-                host: 'IPADDRESS ',
+                host: 'IP_ADDRESS',
                 port: 9080
             })
         };

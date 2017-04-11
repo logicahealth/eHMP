@@ -1,8 +1,9 @@
 When(/^the client requests to view all user permission sets$/) do 
   query = RDKQuery.new('permission-sets-list')
+  query.add_parameter('testdata', 'true')
   path = query.path
   p path
-  @response = HTTPartyWithBasicAuth.get_with_authorization_for_user(path, "9E7A;PW    ", "PW    !!")
+  @response = HTTPartyRDK.get_as_user(path, "9E7A;vk1234", "vk1234!!")
 end
 
 When(/^the client requests to view permission sets for a specific user "(.*?)"$/) do |uid|
@@ -10,14 +11,14 @@ When(/^the client requests to view permission sets for a specific user "(.*?)"$/
   query.add_parameter('uid', uid)
   path = query.path
   p path
-  @response = HTTPartyWithBasicAuth.get_with_authorization_for_user(path, "9E7A;PW    ", "PW    !!") 
+  @response = HTTPartyRDK.get_as_user(path, "9E7A;vk1234", "vk1234!!")
 end
 
 When(/^the client requests to update user permission sets with content "(.*?)"$/) do |content|
   query = RDKQuery.new('permission-sets-edit')
   path = query.path
   p path
-  @response = HTTPartyWithBasicAuth.put_json_with_authorization_for_user(path, content, { "Content-Type" => "application/json" }, "9E7A;PW    ", "PW    !!")
+  @response = HTTPartyRDK.put_as_user(path, "9E7A;vk1234", "vk1234!!", content, { "Content-Type" => "application/json" })
 end
 
 Then(/^the permission sets results contain more than (\d+) records$/) do |count|

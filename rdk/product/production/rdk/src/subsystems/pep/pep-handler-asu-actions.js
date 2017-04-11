@@ -17,9 +17,12 @@ var asu = require('../../subsystems/asu/asu-process');
 module.exports = function(req, res, callback) {
     var actions = _.result(req ,'_resourceConfigItem.requiredASUActions');
     if (!_.isObject(req.session.user)) {
-        return callback({message: 'No user defined for this session.', code: rdk.httpstatus.internal_server_error});
+        return setImmediate(callback, {message: 'No user defined for this session.', code: rdk.httpstatus.internal_server_error});
     }
     var item = req.body;
+    if (_.has(item, 'itemChecklist')) {
+        item = item.itemChecklist[0];
+    }
     var asuItem = {
             data: {
                 items: [item]

@@ -82,7 +82,7 @@ When(/^the client requests vler document for the patient "(.*?)" in VPR format$/
   path = "#{base_jds_url}/vpr/#{pid}/find/vlerdocument"
   p path 
   #"{base_jds_url}/vpr/pid/find/vlerdocument"
-  # "http://IPADDRESS :9080/vpr/all/index/pt-name"
+  # "http://IP_ADDRESS:PORT/vpr/all/index/pt-name"
   @response = HTTPartyWithBasicAuth.get_with_authorization(path)
 end
 
@@ -220,7 +220,7 @@ end
 When(/^the client requests data from multiple VistAs$/) do
   base_jds_url = DefaultLogin.jds_url
   p path = "#{base_jds_url}/vpr/all/index/pt-name"
-  # "http://IPADDRESS :9080/vpr/all/index/pt-name"
+  # "http://IP_ADDRESS:PORT/vpr/all/index/pt-name"
   @response = HTTPartyWithBasicAuth.get_with_authorization(path)
 end
 
@@ -233,7 +233,7 @@ end
 When(/^the client requests the sync status for patient with pid "(.*?)"/) do |pid|
   base_fhir_url = DefaultLogin.fhir_url
   p path = "#{base_fhir_url}/admin/sync/#{pid}"
-  # "https://IPADDRESSadmin/sync/10108"
+  # "https://IPADDRES/admin/sync/10108"
   @response = HTTPartyWithBasicAuth.get_with_authorization(path)
 end
 When(/^the client requests pid and dfn for the patient "(.*?)" in VPR format$/) do |pid|
@@ -251,6 +251,6 @@ end
 When(/^the client requests demographics from the multiple system for the patient "(.*?)" in VPR format$/) do |pid|
   base_jds_url = DefaultLogin.jds_url
   p path = "#{base_jds_url}/vpr/mpid/#{pid}"
-  # http://IPADDRESS :9080/vpr/mpid/9E7A;100603
+  # http://IP_ADDRESS:PORT/vpr/mpid/9E7A;100603
   @response = HTTPartyWithBasicAuth.get_with_authorization(path)
 end

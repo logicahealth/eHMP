@@ -1,0 +1,10 @@
+{
+    "name": "Hypertensive Patient QO",
+    "scope": "site",
+    "orderable": "uid:va:orderable:aaaaa",
+    "active": true,
+    "formData": {
+        "button1": "hello",
+        "listBox": ["medA", "medB"]
+    }
+}

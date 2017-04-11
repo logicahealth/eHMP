@@ -1,0 +1,284 @@
+package validateVitalsWithBP;
+
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+import java.util.Date;
+import java.text.DecimalFormat;
+
+import ca.uhn.fhir.model.api.IDatatype;
+import ca.uhn.fhir.model.api.ExtensionDt;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.primitive.CodeDt;
+import ca.uhn.fhir.model.dstu2.composite.QuantityDt;
+import ca.uhn.fhir.model.dstu2.composite.ContainedDt;
+import ca.uhn.fhir.model.dstu2.resource.BaseResource;
+import ca.uhn.fhir.model.dstu2.resource.CommunicationRequest;
+import ca.uhn.fhir.model.dstu2.resource.Provenance;
+import ca.uhn.fhir.model.dstu2.resource.Provenance.Agent;
+import ca.uhn.fhir.model.dstu2.resource.CommunicationRequest.Payload;
+import ca.uhn.fhir.model.dstu2.resource.Observation;
+import ca.uhn.fhir.model.dstu2.resource.Observation.Related;
+import ca.uhn.fhir.model.dstu2.resource.Procedure;
+import ca.uhn.fhir.model.dstu2.resource.Patient;
+import ca.uhn.fhir.model.dstu2.valueset.CommunicationRequestStatusEnum;
+import ca.uhn.fhir.model.primitive.StringDt;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Iterator;
+import java.util.Collections;
+import org.opencds.service.evaluate.ObservationComparator;
+
+import function org.opencds.service.evaluate.FhirUtils.isCodingContains;
+import function org.opencds.service.evaluate.FhirUtils.getValueQuantity;
+import function org.opencds.service.evaluate.FhirUtils.getValueString;
+import function org.opencds.service.evaluate.FhirUtils.createProvenance;
+import function org.opencds.service.evaluate.FhirUtils.createCommunicationRequest;
+import function org.opencds.service.evaluate.FhirUtils.hasInputFlag;
+import function org.opencds.service.evaluate.FhirUtils.createOutputExtension;
+
+global java.lang.String clientLanguage
+global java.lang.String clientTimeZoneOffset
+global java.lang.String focalPersonId
+global java.util.Date evalTime
+global java.util.HashSet assertions
+global java.util.HashMap namedObjects
+ 
+declare VITAL
+    @propertyReactive
+	heightList : ArrayList
+	weightList : ArrayList
+	bpList : ArrayList
+	heightMR : Observation // Most recent height from historical Observation 
+	weightMR : Observation // Most recent weight from historical Observation
+	systolicMR : Observation // Most recent Systolic Observation
+	diastolicMR : Observation // Most recent Diastolic Observation
+	bpMR : Observation // Most recent blood pressure from historical Observation
+	inputHeight : Observation // input height Observation
+	inputWeight : Observation // input weight Observation
+	inputBP : Observation // input blood pressure Observation
+	inputDiastolic : double // input diastolic value
+	inputSystolic : double  // input systolic value
+	diastolic 	: boolean 
+	systolic : boolean 
+end
+
+rule "Initialize"
+	salience 200, no-loop
+	when
+	then
+		insert(new VITAL(new ArrayList(), new ArrayList(), new ArrayList(), null, null, null, null, null, null, null, null, 0.0, 0.0, false, false));	
+end
+ 
+rule "Collect Height Observations"
+	dialect "java"
+	salience 160
+	when
+	    $vital : VITAL()
+        $obs : Observation( isCodingContains(code, "http://loinc.org", "8302-2"))
+        eval(!hasInputFlag($obs)) // filter out the Input ones
+	then
+        modify($vital) { getHeightList( ).add($obs) };   				
+end
+
+rule "Collect Weight Observations"
+	dialect "java"
+	salience 150
+	when
+	    $vital : VITAL()
+        $obs : Observation( isCodingContains(code, "http://loinc.org", "29463-7"))
+        eval(!hasInputFlag($obs)) // filter out the Input ones
+	then
+        modify($vital) { getWeightList( ).add($obs) };    				
+end
+
+rule "Collect Historical Blood Pressure Observations"
+	dialect "java"
+	salience 190
+   when
+     $vital : VITAL()
+     $obs : Observation( isCodingContains(code, "http://loinc.org", "55284-4"))
+     eval(!hasInputFlag($obs)) // filter out the Input parameter
+   then
+   modify($vital) { getBpList().add($obs) };
+   
+end   
+ 
+
+rule "The most recent combined systolic/diastolic Blood Pressure Observation"
+	dialect "java"
+	salience 20
+    when
+	     $vital : VITAL(!bpList.isEmpty())
+	then
+    Collections.sort($vital.getBpList(), ObservationComparator.ISSUED_DATE );
+    Observation o = (Observation)$vital.getBpList().get(0);
+    List<Related> relatedObs = o.getRelated();
+    for (Iterator iterator = relatedObs.iterator(); iterator.hasNext();) {
+        Related related = (Related) iterator.next();
+        Observation obs = (Observation)related.getTarget().getResource();
+        if(obs != null) {
+	        if(obs.getId().getValue().equalsIgnoreCase("#systolic")){
+	            modify($vital) { setSystolicMR( obs ) };
+	            System.out.println(obs);
+	        }
+	         if(obs.getId().getValue().equalsIgnoreCase("#diastolic")){
+	            modify($vital) { setDiastolicMR( obs ) };
+	            System.out.println(obs);
+	        }
+        }
+    }
+end  
+
+rule "More than 20% difference from the previous systolic blood pressure"
+      dialect "java", no-loop
+      salience 10
+      when
+      $vital : VITAL(systolicMR != null, $systolicMR : systolicMR, $inputSystolic:inputSystolic )
+     
+      eval(Math.abs(getValueQuantity($systolicMR.getValue()).getValue().intValue() - $inputSystolic) /
+          getValueQuantity($systolicMR.getValue()).getValue().intValue() >= 0.2 )
+      
+      then
+      modify($vital) { setSystolic( true ) };
+      CommunicationRequest comRequest = createCommunicationRequest("The new systolic blood presure value differs by 20% or more from previous values.");
+      comRequest.setStatus(CommunicationRequestStatusEnum.REJECTED); 
+      comRequest.getReason().add($systolicMR.getCode()); 
+      comRequest.addUndeclaredExtension(createOutputExtension());
+      $systolicMR.addUndeclaredExtension(createOutputExtension());
+      namedObjects.put("systolicComRequest", comRequest); 
+      System.out.println("Input systolic Observation rule fired");
+end 
+
+rule "More than 20% difference from the previous diastolic blood pressure"
+      dialect "java"
+      salience 10
+      when
+   	  $vital : VITAL(diastolicMR != null, $diastolicMR : diastolicMR, $inputDiastolic:inputDiastolic)
+     
+      eval(Math.abs(getValueQuantity($diastolicMR.getValue()).getValue().intValue() - $inputDiastolic) /
+       getValueQuantity($diastolicMR.getValue()).getValue().intValue() >= 0.2 )
+      
+      then
+      modify($vital) { setDiastolic( true ) };
+      
+      CommunicationRequest comRequest = createCommunicationRequest("The new diastolic blood presure value differs by 20% or more from previous values.");
+      comRequest.setStatus(CommunicationRequestStatusEnum.REJECTED); 
+      comRequest.getReason().add($diastolicMR.getCode()); 
+      comRequest.addUndeclaredExtension(createOutputExtension());
+      $diastolicMR.addUndeclaredExtension(createOutputExtension());
+      namedObjects.put("diastolicComRequest", comRequest); 
+      System.out.println("Input diastolic Observation rule fired");
+end 
+
+rule "The most recent weight Observation"
+	dialect "java"
+	salience 20
+    when
+	     $vital : VITAL(!weightList.isEmpty())
+	then
+ 
+    Collections.sort($vital.getWeightList(), ObservationComparator.ISSUED_DATE );
+    Observation o = (Observation)$vital.getWeightList().get(0);
+    modify($vital) { setWeightMR( o ) };
+    System.out.println("Weight = " + getValueQuantity(o.getValue()).getValue());
+end  
+
+rule "The most recent Height Observation"
+	dialect "java"
+	salience 20
+    when
+	     $vital : VITAL(!heightList.isEmpty())
+	then
+ 
+    Collections.sort($vital.getHeightList(), ObservationComparator.ISSUED_DATE );
+    Observation o = (Observation)$vital.getHeightList().get(0);
+    modify($vital) { setHeightMR( o ) };
+    System.out.println("Height = " + getValueQuantity(o.getValue()).getValue());
+end    
+
+rule "Input BP Observation"
+	dialect "java"
+	salience 100
+    when
+    	 $vital : VITAL()
+	     $obs : Observation( isCodingContains(code, "http://loinc.org", "55284-4"))
+	     eval(hasInputFlag($obs)) 
+	then
+ 
+    modify($vital) { setInputBP( $obs ) };
+    System.out.println("Input BP = " + getValueString($obs.getValue()).toString());
+    String inputBP = getValueString($obs.getValue()).toString();
+    if( inputBP != null && inputBP.split("/").length == 2 ) {
+	    String systolic = getValueString($obs.getValue()).toString().split("/")[0];
+	    String diastolic = getValueString($obs.getValue()).toString().split("/")[1];
+	    modify($vital) { setInputSystolic( Double.parseDouble(systolic) ) };
+	    modify($vital) { setInputDiastolic( Double.parseDouble(diastolic) ) };
+   }
+end    
+
+rule "Input Height Observation"
+	dialect "java"
+	salience 20
+    when
+    	 $vital : VITAL()
+	     $obs : Observation( isCodingContains(code, "http://loinc.org", "8302-2"))
+	     eval(hasInputFlag($obs)) 
+	then
+    modify($vital) { setInputHeight( $obs ) };
+    System.out.println("Input Height = " + getValueQuantity($obs.getValue()).getValue());
+end    
+
+rule "Input Weight Observation"
+	dialect "java"
+	salience 20
+    when
+    	 $vital : VITAL()
+	     $obs : Observation( isCodingContains(code, "http://loinc.org", "29463-7"))
+	     eval(hasInputFlag($obs)) 
+	then
+    modify($vital) { setInputWeight( $obs ) };
+    System.out.println("Input Weight = " + getValueQuantity($obs.getValue()).getValue());
+end    
+
+rule "Input Weight greater by 20% Rule"
+      dialect "java"
+      salience 0
+      when
+       $vital : VITAL(weightMR != null, $weightMR:weightMR, inputWeight != null, $inputWeight:inputWeight  )
+      //  if percent difference between inputWeight and weightMR is greater than 20%
+      eval((((getValueQuantity($weightMR.getValue()).getValue().doubleValue() - getValueQuantity($inputWeight.getValue()).getValue().doubleValue()) /
+            getValueQuantity($weightMR.getValue()).getValue().doubleValue()) < -0.20 ) || 
+            (((getValueQuantity($weightMR.getValue()).getValue().doubleValue() - getValueQuantity($inputWeight.getValue()).getValue().doubleValue()) /
+            getValueQuantity($weightMR.getValue()).getValue().doubleValue()) > 0.20 ))
+      then
+      CommunicationRequest comRequest = createCommunicationRequest("The new weight value differs by 20% or more from previous values.");
+      comRequest.setStatus(CommunicationRequestStatusEnum.REJECTED); 
+      comRequest.getReason().add($inputWeight.getCode()); 
+      comRequest.addUndeclaredExtension(createOutputExtension());
+      $weightMR.addUndeclaredExtension(createOutputExtension());
+      namedObjects.put("weightComRequest", comRequest); 
+      System.out.println("Input weight Observation rule fired");
+      
+end 
+
+rule "Input Height less by 10% Rule"
+      dialect "java"
+      salience 0
+      when
+       $vital : VITAL(heightMR != null, $heightMR:heightMR, inputHeight != null, $inputHeight:inputHeight )
+      //  if percent difference between inputHeight and heightMR is greater than 10%
+      eval((((getValueQuantity($heightMR.getValue()).getValue().doubleValue() - getValueQuantity($inputHeight.getValue()).getValue().doubleValue()) /
+            getValueQuantity($heightMR.getValue()).getValue().doubleValue()) < -0.10 ) || 
+            (((getValueQuantity($heightMR.getValue()).getValue().doubleValue() - getValueQuantity($inputHeight.getValue()).getValue().doubleValue()) /
+            getValueQuantity($heightMR.getValue()).getValue().doubleValue()) > 0.10 ))
+      then
+      CommunicationRequest comRequest = createCommunicationRequest("The new height value differs by 10% or more from previous values.");
+      comRequest.setStatus(CommunicationRequestStatusEnum.REJECTED); 
+      comRequest.getReason().add($inputHeight.getCode());
+      comRequest.addUndeclaredExtension(createOutputExtension());
+      $heightMR.addUndeclaredExtension(createOutputExtension());
+      namedObjects.put("heightCommRequest", comRequest); 
+      System.out.println("Input Height Observation rule fired"); 
+      
+end 

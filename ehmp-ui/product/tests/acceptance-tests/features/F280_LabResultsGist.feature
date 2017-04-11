@@ -6,7 +6,7 @@ Feature: F280 - Numeric Lab Results Applet
 
 @F280_0_LabResultGist_View @US4258
 Scenario: Verify Numeric Lab Results Gist applet
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "Five,Patient"
   And Overview is active
   Then verify the Numeric Lab Results Gist title is "LAB RESULTS"
@@ -18,13 +18,13 @@ Scenario: Verify Numeric Lab Results Gist applet
       | expand  |
   And verify the Numeric Lab Results Gist applet has the following headers
       | header   |
-      | Lab Test |
-      | Result   |
-      | Last     |
+      | LAB TEST |
+      | RESULT   |
+      | LAST     |
 
 @F280_3_LabResultsGist_View  @US4258 @DE2903 @DE2969
 Scenario: Verify Numeric Lab Results Gist data display follows format
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "Five,Patient"
   And Overview is active
   When the user has selected All within the global date picker
@@ -36,7 +36,7 @@ Scenario: Verify Numeric Lab Results Gist data display follows format
 
 @F280_1_LabResultsGist_View  @US4258 @DE2476
 Scenario: Verfy numeric lab results for patient using Overview Sheet
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	And user searches for and selects "Five,Patient"
 	Then Overview is active
 	And the user has selected All within the global date picker
@@ -57,7 +57,7 @@ Scenario: Verfy numeric lab results for patient using Overview Sheet
 # This was failing when env was missing DoD data
 @F280_2_LabResultsGist_View @US4258 @future
 Scenario: Verfy numeric lab results for patient using Overview Sheet
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	And user searches for and selects "Ten,Patient"
     Then Overview is active
 	And the user has selected All within the global date picker
@@ -83,7 +83,7 @@ Scenario: Verfy numeric lab results for patient using Overview Sheet
   		
 @f280_labresults_gist_refresh @DE2903 @DE2969
 Scenario: Lab Results Gist displays all of the same details after applet is refreshed
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "Five,patient"
   Then Overview is active
   And user sees Numeric Lab Results Gist
@@ -94,7 +94,7 @@ Scenario: Lab Results Gist displays all of the same details after applet is refr
   
 @f144_labresults_gist_exapnd_view_refresh 
 Scenario: Lab Results Gist displays all of the same details after applet is refreshed
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "Five,patient"
   Then Overview is active
   And user sees Numeric Lab Results Gist
@@ -107,7 +107,7 @@ Scenario: Lab Results Gist displays all of the same details after applet is refr
 
 @f280_labresults_gist_sort
 Scenario: User sorts lab results gist
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "Ten,patient"
   Then Overview is active
   And user sees Numeric Lab Results Gist
@@ -118,19 +118,17 @@ Scenario: User sorts lab results gist
   
 @F280_LabResultsGist_detail_view @DE2903
 Scenario: Verfy details for numeric lab results for patient using Gist view applet
-	Given user is logged into eHMP-UI
-	And user searches for and selects "Five,Patient"
-	Then Overview is active
+	Given user searches for and selects "Five,Patient"
+	And Overview is active
 	And the user has selected All within the global date picker
 	And user sees Numeric Lab Results Gist
 	When the user views the first Numeric Lab Result Gist detail view
-#    Then the modal is displayed
-#    And the modal's title is "HDL"
-    Then the modal's title is displayed
+  Then the modal's title is displayed
+  And the modal's title contains first Numeric Lab Result name
     
 @F280_LabResultsGist_detail_from_expand_view
 Scenario: Verfy details for numeric lab results for patient using expand view applet
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	And user searches for and selects "Five,Patient"
 	Then Overview is active
 	And the user has selected All within the global date picker

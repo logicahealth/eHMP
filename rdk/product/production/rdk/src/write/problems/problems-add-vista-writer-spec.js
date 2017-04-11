@@ -1,14 +1,10 @@
 'use strict';
 
-var _ = require('lodash');
 var moment = require('moment');
 
-var paramUtil = require('../../utils/param-converter');
-var filemanDateUtil = require('../../utils/fileman-date-converter');
 var transformModel = require('./problems-add-vista-writer')._transformModel;
 var constructRpcArgs = require('./problems-add-vista-writer')._constructRpcArgs;
 var problemMatch = require('./problems-add-vista-writer')._problemMatch;
-var getVistaFormattedDateString = require('./problems-add-vista-writer')._getVistaFormattedDateString;
 
 describe('Add new patient problem to Vista', function () {
     var logger;
@@ -63,7 +59,7 @@ describe('Add new patient problem to Vista', function () {
                 'recordingProvider': 'USER,PANORAMA',
                 'responsibleProvider': 'USER,PANORAMA',
                 'responsibleProviderIEN': '10000000226',
-                'serviceConnected': '64^AUDIOLOGY',
+                'service': '64^AUDIOLOGY',
                 'status': 'A^ACTIVE',
                 'radiation': '1^YES'
             };
@@ -71,8 +67,8 @@ describe('Add new patient problem to Vista', function () {
             transformModel(logger, model);
 
             expect(model.patient).eql('229^EIGHT,OUTPATIENT^0008^');
-            expect(model.serviceConnected).eql('64^AUDIOLOGY');
-            expect(model.newComments).eql([]);
+            expect(model.service).eql('64^AUDIOLOGY');
+            expect(model.comments).eql([]);
         });
 
         it('defaulted ones', function () {
@@ -117,7 +113,8 @@ describe('Add new patient problem to Vista', function () {
                 'dateRecorded': '20140102',
                 'enteredBy': 'USER,PANORAMA',
                 'enteredByIEN': '10000000226',
-                'lexiconCode': '9779^784.0',
+                'lexiconCode': '9779',
+                'code':'784.0',
                 'patientIEN': '229',
                 'patientName': 'EIGHT,OUTPATIENT',
                 'problemName': 'Specific problem name',
@@ -153,7 +150,8 @@ describe('Add new patient problem to Vista', function () {
                 'dateRecorded': '20140102',
                 'enteredBy': 'USER,PANORAMA',
                 'enteredByIEN': '10000000226',
-                'lexiconCode': '9779^784.0',
+                'lexiconCode': '9779',
+                'code':'784.0',
                 'patientIEN': '229',
                 'patientName': 'EIGHT,OUTPATIENT',
                 'problemName': 'Specific problem name',
@@ -164,16 +162,16 @@ describe('Add new patient problem to Vista', function () {
                 'serviceConnected': '64^AUDIOLOGY',
                 'status': 'A^ACTIVE',
                 'radiation': '1^YES',
-                "comments": [ "test comment one", "test comment two"],
+                "comments": [ "test comment one", "test comment two"]
             };
 
             transformModel(logger, model);
 
             var rpcParameters = constructRpcArgs(model);
             expect(rpcParameters[0]).eql('GMPFLD(.01)="9779^784.0"');
-            expect(rpcParameters[29]).eql('GMPFLD(10,0)="2"');
-            expect(rpcParameters[30]).eql('GMPFLD(10,"NEW",1)="test comment one"');
-            expect(rpcParameters[31]).eql('GMPFLD(10,"NEW",2)="test comment two"');
+            expect(rpcParameters[30]).eql('GMPFLD(10,0)="2"');
+            expect(rpcParameters[31]).eql('GMPFLD(10,"NEW",1)="test comment one"');
+            expect(rpcParameters[32]).eql('GMPFLD(10,"NEW",2)="test comment two"');
 
         });
 
@@ -189,17 +187,4 @@ describe('Add new patient problem to Vista', function () {
         });
 
     });
-
-    describe('Problems vista formatted date string', function(){
-        it('Should handle fuzzy dates properly', function(){
-            expect(getVistaFormattedDateString('20150000')).to.eql('3150000');
-            expect(getVistaFormattedDateString('20150900')).to.eql('3150900');
-        });
-
-        it('Should handle regular dates properly', function(){
-            expect(getVistaFormattedDateString('20151018')).to.eql('3151018^10 18 2015');
-            expect(getVistaFormattedDateString('201510182359')).to.eql('3151018^10 18 2015');
-        });
-    });
-
 });

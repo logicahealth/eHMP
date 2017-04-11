@@ -88,8 +88,10 @@ service "restart cache" do
   action :restart
 end
 
+clear_jds_journal_action = node[:jds][:clear_jds_journal] ? :create : :delete
 # Copy cron job to clear jds journal entries
 cookbook_file "clear_jds_journal" do
   path "#{node[:jds][:cron_dir]}/clear_jds_journal"
   mode "0644"
+  action clear_jds_journal_action
 end

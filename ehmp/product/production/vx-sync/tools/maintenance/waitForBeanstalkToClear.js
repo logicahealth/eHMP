@@ -19,10 +19,10 @@ var logger = require('bunyan').createLogger({
 	level: 'debug'
 });
 
-var ErrorPublisher = require(global.VX_JOBFRAMEWORK + 'error-publisher');
+var ErrorPublisher = require(global.VX_JOBFRAMEWORK).ErrorPublisher;
 var errorWriter = require(global.VX_HANDLERS + 'error-request/jds-error-writer').createErrorRecordWriter(logger, config);
 var inspect = require(global.VX_UTILS + 'inspect');
-var BeanstalkClient = require(global.VX_JOBFRAMEWORK + 'beanstalk-client');
+var BeanstalkClient = require(global.VX_JOBFRAMEWORK).BeanstalkClient;
 var util = require('util');
 var async = require('async');
 var timeUtil = require(global.VX_UTILS + 'time-utils');

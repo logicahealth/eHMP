@@ -6,7 +6,7 @@ def start_slave_1
   query = ' CHANGE MASTER TO'
   query << " MASTER_HOST='127.0.0.1',"
   query << " MASTER_USER='repl',"
-  query << " MASTER_PASSWORD='PW         ',"
+  query << " MASTER_PASSWORD      PW',"
   query << ' MASTER_PORT     ,'
   query << " MASTER_LOG_POS=#{::File.open('/root/position').read.chomp};"
   query << ' START SLAVE;'
@@ -17,7 +17,7 @@ def start_slave_2
   query = ' CHANGE MASTER TO'
   query << " MASTER_HOST='127.0.0.1',"
   query << " MASTER_USER='repl',"
-  query << " MASTER_PASSWORD='PW         ',"
+  query << " MASTER_PASSWORD      PW',"
   query << ' MASTER_PORT     ,'
   query << " MASTER_LOG_POS=#{::File.open('/root/position').read.chomp};"
   query << ' START SLAVE;'

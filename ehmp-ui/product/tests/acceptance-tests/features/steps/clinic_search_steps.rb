@@ -22,9 +22,9 @@ class ClinicSearch < AccessBrowserV2
     add_verify(CucumberLabel.new('Clinic Placeholder'), VerifyPlaceholder.new, AccessHtmlElement.new(:css, '#clinicFilter'))
     add_action(CucumberLabel.new('Clinic Filter'), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, '#clinicFilter'))
 
-    clinics_list = AccessHtmlElement.new(:css, '#main-search-mySiteClinics #clinics-location-list-results .locationDisplayName')
+    clinics_list = AccessHtmlElement.new(:css, '#clinics-location-list-results .list-group .locationDisplayName')
     add_verify(CucumberLabel.new('Clinic list'), VerifyXpathCount.new(clinics_list), clinics_list)
-    clinic_search_results = AccessHtmlElement.new(:css, '.patient-search-results .list-group a')
+    clinic_search_results = AccessHtmlElement.new(:css, '.patient-search-results .list-group span')
     add_verify(CucumberLabel.new('Clinic Search List'), VerifyXpathCount.new(clinic_search_results), clinic_search_results)
 
     add_action(CucumberLabel.new('Today'), ClickAction.new, AccessHtmlElement.new(:id, 'today-clinicDate'))
@@ -38,14 +38,14 @@ class ClinicSearch < AccessBrowserV2
     add_verify(CucumberLabel.new('To Date value'), VerifyValue.new, AccessHtmlElement.new(:id, 'filter-to-date-clinic'))
 
     add_action(CucumberLabel.new('Apply'), ClickAction.new, AccessHtmlElement.new(:id, 'custom-range-apply'))
-    add_verify(CucumberLabel.new('No Results'), VerifyContainsText.new, AccessHtmlElement.new(:css, '.patient-search-results div.list-group'))
+    add_verify(CucumberLabel.new('No Results'), VerifyContainsText.new, AccessHtmlElement.new(:css, '.patient-search-results .error-message'))
 
-    add_action(CucumberLabel.new('Last 30d'), ClickAction.new, AccessHtmlElement.new(:id, 'past-month-clinicDate'))
+    add_action(CucumberLabel.new('Last 30d'), ClickAction.new, AccessHtmlElement.new(:id, 'past-30days-clinicDate'))
     add_action(CucumberLabel.new('Last 7d'), ClickAction.new, AccessHtmlElement.new(:id, 'past-week-clinicDate'))
     add_action(CucumberLabel.new('Yesterday'), ClickAction.new, AccessHtmlElement.new(:id, 'yesterday-clinicDate'))
     add_action(CucumberLabel.new('Next 7d'), ClickAction.new, AccessHtmlElement.new(:id, 'next-week-clinicDate'))
 
-    add_verify(CucumberLabel.new('Last 30d Active'), VerifyActiveRange.new, AccessHtmlElement.new(:id, 'past-month-clinicDate'))
+    add_verify(CucumberLabel.new('Last 30d Active'), VerifyActiveRange.new, AccessHtmlElement.new(:id, 'past-30days-clinicDate'))
     add_verify(CucumberLabel.new('Last 7d Active'), VerifyActiveRange.new, AccessHtmlElement.new(:id, 'past-week-clinicDate'))
     add_verify(CucumberLabel.new('Yesterday Active'), VerifyActiveRange.new, AccessHtmlElement.new(:id, 'yesterday-clinicDate'))
     add_verify(CucumberLabel.new('Next 7d Active'), VerifyActiveRange.new, AccessHtmlElement.new(:id, 'next-week-clinicDate'))
@@ -94,7 +94,7 @@ Then(/^the Clinics table only diplays rows including text "([^"]*)"$/) do |input
   upper = input_text.upcase
   lower = input_text.downcase
 
-  path =  "//div[@id='main-search-mySiteClinics']/descendant::span[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]"
+  path =  "//*[@id='clinics-location-list-results']/div/a/div/p/span[1][contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]"
 
   row_count = @clinic_search.get_elements("Clinic list").size
   rows_containing_filter_text = TestSupport.driver.find_elements(:xpath, path).size
@@ -123,12 +123,17 @@ Then(/^none of the Predefined date filters are selected$/) do
 end
 
 When(/^the user selects Clinic "([^"]*)"$/) do |arg1|
-  xpath = "//div[@id='main-search-mySiteClinics']/descendant::span[contains(string(), '#{arg1}')]"
-  elements = TestSupport.driver.find_elements(:xpath, xpath)
-  elements.each do | element |
-    next unless element.text.eql? arg1
-    element.click
-    break
+  @ehmp = PobPatientSearch.new
+  max_attempt = 4
+  begin  
+    @ehmp.wait_until_fld_clinics_list_items_visible
+    click_an_object_from_list(@ehmp.fld_clinics_list_items, arg1) 
+  rescue Exception => e
+    p "*** entered rescue block ***"
+    sleep(1)
+    max_attempt-=1
+    retry if max_attempt > 0
+    raise e if max_attempt <= 0
   end
 end
 
@@ -170,7 +175,7 @@ end
 Then(/^the clinic results displays appointments for clinic "([^"]*)"$/) do |arg1|
   elements = TestSupport.driver.find_elements(:css, '.patient-search-results .list-group a div:nth-child(2)')
   elements.each do | element |
-    expect(element.text).to include(arg1)
+    expect(element.text.upcase).to include(arg1.upcase)
   end
 end
 
@@ -179,11 +184,12 @@ When(/^the user clicks Today$/) do
 end
 
 Then(/^the clinic results displays No results found\.$/) do
-  expect(@clinic_search.perform_verification("No Results", 'No results found.')).to eq(true)
+  expect(@clinic_search.perform_verification("No Results", 'No results were found.')).to eq(true)
 end
 
 When(/^a list of clinic results is displayed$/) do
-  expect(@clinic_search.wait_until_xpath_count_greater_than('Clinic Search List', 0)).to eq(true)
+  expect(@clinic_search.wait_until_action_element_visible("Clinic Search List", 30)).to eq(true)
+  expect(@clinic_search.wait_until_xpath_count_greater_than('Clinic Search List', 0, 30)).to eq(true)
 end
 
 Then(/^the Clinic patient name "([^"]*)" is displayed$/) do |arg1|

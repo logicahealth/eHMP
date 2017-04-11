@@ -4,9 +4,13 @@ VPRJPQ ;SLC/KCM -- Query for JSON patient objects
  ;TODO: if desc order, make sure limit starts at the right end
  ;
 QKEY(PID,KEY,TEMPLATE) ; Return an object given the key
- N VPRDATA,ORDER
+ N VPRDATA,ORDER,JPID
  S TEMPLATE=$G(TEMPLATE)
- I '$D(^VPRPTJ("JSON",PID,KEY)) D SETERROR^VPRJRER(104,"Pid:"_PID_" Key:"_KEY) Q
+ ;
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Identifier "_PID) Q
+ ;
+ I '$D(^VPRPTJ("JSON",JPID,PID,KEY)) D SETERROR^VPRJRER(104,"Pid:"_PID_" Key:"_KEY) Q
  K ^TMP("VPRDATA",$J)
  S ^TMP("VPRDATA",$J,KEY,0)=PID,VPRDATA=1,ORDER(0)=0
  D BUILD^VPRJCB
@@ -18,11 +22,37 @@ QTALLY(PID,CNTNM) ; Return a set of counts
  I '$L(CNTNM) D SETERROR^VPRJRER(101) Q
  N BUFFER S BUFFER=""
  ;
- N TOPIC,DATA,COUNT,X
- S DATA=0,TOPIC=""
- F  S TOPIC=$O(^VPRPTI(PID,"tally",CNTNM,TOPIC)) Q:TOPIC=""  D
- . S COUNT=+^VPRPTI(PID,"tally",CNTNM,TOPIC)
- . S X=$S('DATA:"",1:",")_"{""topic"":"""_TOPIC_""",""count"":"_COUNT_"}"
+ N JPID
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Identifier "_PID) Q
+ ; Get a single PID's counts
+ I '$$ISJPID^VPRJPR(PID) D  QUIT
+ . N TOPIC,DATA,COUNT,X
+ . S DATA=0,TOPIC=""
+ . F  S TOPIC=$O(^VPRPTI(JPID,PID,"tally",CNTNM,TOPIC)) Q:TOPIC=""  D
+ . . S COUNT=+^VPRPTI(JPID,PID,"tally",CNTNM,TOPIC)
+ . . S X=$S('DATA:"",1:",")_"{""topic"":"""_TOPIC_""",""count"":"_COUNT_"}"
+ . . S DATA=DATA+1,DATA(DATA)=X
+ . S X=$$BLDHEAD^VPRJCB(DATA) D STAGE^VPRJCB(X)
+ . S DATA=0 F  S DATA=$O(DATA(DATA)) Q:'DATA  D STAGE^VPRJCB(DATA(DATA))
+ . D STAGE^VPRJCB("]}}"),OUT^VPRJCB
+ ;
+ ; Get entire patient count (all associated PIDs)
+ N PIDS,I,TOPIC,DATA,COUNT,JSON
+ S DATA=0,I=0
+ ; Get the identifiers associated with JPID
+ D PID4JPID^VPRJPR(.PIDS,PID)
+ ; Loop through all identifiers
+ F  S I=$O(PIDS(I)) Q:I=""  D
+ . S PID=PIDS(I)
+ . S TOPIC=""
+ . F  S TOPIC=$O(^VPRPTI(JPID,PID,"tally",CNTNM,TOPIC)) Q:TOPIC=""  D
+ . . S JSON("topic",TOPIC,"count")=$G(JSON("topic",TOPIC,"count"))+^VPRPTI(JPID,PID,"tally",CNTNM,TOPIC)
+ ; Hand format return json
+ N JTOPIC,X
+ S JTOPIC=""
+ F  S JTOPIC=$O(JSON("topic",JTOPIC)) Q:JTOPIC=""  D
+ . S X=$S('DATA:"",1:",")_"{""topic"":"""_JTOPIC_""",""count"":"_JSON("topic",JTOPIC,"count")_"}"
  . S DATA=DATA+1,DATA(DATA)=X
  S X=$$BLDHEAD^VPRJCB(DATA) D STAGE^VPRJCB(X)
  S DATA=0 F  S DATA=$O(DATA(DATA)) Q:'DATA  D STAGE^VPRJCB(DATA(DATA))
@@ -80,6 +110,7 @@ QFIND(PID,COLL,ORDER,BAIL,TEMPLATE,FILTER) ; return items from collection withou
  . ; We were handed a JPID convert to PID(s) and add to result
  . N PIDS,ID
  . D PID4JPID^VPRJPR(.PIDS,PID)
+ . N JPID S JPID=PID
  . N PID
  . S ID=""
  . F  S ID=$O(PIDS(ID)) Q:ID=""  D
@@ -87,11 +118,12 @@ QFIND(PID,COLL,ORDER,BAIL,TEMPLATE,FILTER) ; return items from collection withou
  . . S PID=PIDS(ID)
  . . ; Re-initialize KEY with proper value as it gets overwritten in the next loop
  . . S KEY=PREFIX
- . . F  S KEY=$O(^VPRPT(PID,KEY)) Q:$E(KEY,1,$L(PREFIX))'=PREFIX  D
+ . . F  S KEY=$O(^VPRPT(JPID,PID,KEY)) Q:$E(KEY,1,$L(PREFIX))'=PREFIX  D
  . . . D ADDONE^VPRJPQA(KEY,0)
  E  D
  . ; We were handed a real PID
- . F  S KEY=$O(^VPRPT(PID,KEY)) Q:$E(KEY,1,$L(PREFIX))'=PREFIX  D ADDONE^VPRJPQA(KEY,0)
+ . N JPID S JPID=$$JPID4PID^VPRJPR(PID) Q:JPID=""
+ . F  S KEY=$O(^VPRPT(JPID,PID,KEY)) Q:$E(KEY,1,$L(PREFIX))'=PREFIX  D ADDONE^VPRJPQA(KEY,0)
  D BUILD^VPRJCB
  K ^TMP("VPRDATA",$J)
  Q

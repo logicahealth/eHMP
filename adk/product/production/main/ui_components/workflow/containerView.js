@@ -3,8 +3,9 @@ define([
     'marionette',
     'jquery',
     'underscore',
-    'handlebars'
-], function(Backbone, Marionette, $, _, Handlebars) {
+    'handlebars',
+    "api/Messaging",
+], function(Backbone, Marionette, $, _, Handlebars, Messaging) {
     "use strict";
 
     var DivModel = Backbone.Model.extend({
@@ -47,8 +48,7 @@ define([
             }
             this.$el.attr({
                 'data-backdrop': this.model.get('backdrop'),
-                'data-keyboard': this.model.get('keyboard'),
-                'aria-labelledby': 'main-workflow-label-' + Handlebars.helpers['clean-for-id'].apply(this, [this.workflowOptions.title])
+                'data-keyboard': this.model.get('keyboard')
             });
 
             if (this.workflowOptions.size === 'small') {
@@ -56,9 +56,18 @@ define([
             } else if (this.workflowOptions.size === 'large') {
                 this.model.set('sizeClass', 'modal-lg');
             } else if (this.workflowOptions.size === 'xlarge') {
-                this.model.set('sizeClass', 'modal-xlg');
+                this.model.set('sizeClass', 'modal-xl');
             }
             this.showChildView('workflowRegion', this.controllerView);
+            Messaging.getChannel('toolbar').trigger('open:worflow:modal');
+        },
+        onShow: function() {
+            if ($('.modal:visible').length >= 1) {
+                var zIndex = Math.max.apply(null, Array.prototype.map.call($('.modal:visible'), function(el) {
+                    return +el.style.zIndex;
+                })) + 1111;
+                this.$el.css('z-index', zIndex);
+            }
         }
     });
     return WorkflowContainerView;

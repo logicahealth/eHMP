@@ -2,7 +2,7 @@
 
 ## Cds intent cds intent [{{{path}}}]
 
-### Get [GET {{{path}}}/registry{?name}{&scope}{&scopeId}{&fields}]
+### Get [GET {{{path}}}/registry{?name}{&scope}{&scopeId}]
 
 Intent resource
 
@@ -17,8 +17,6 @@ Get intents
     + scope (string, optional) - scope of intent
 
     + scopeId (string, optional) - scopeId of intent
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

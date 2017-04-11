@@ -11,7 +11,7 @@ class ScreenEditor < AccessBrowserV2
     add_action(CucumberLabel.new("Launch"), ClickAction.new, AccessHtmlElement.new(:css, "li.launch-worksheet:nth-child(5)")) 
     add_action(CucumberLabel.new("Delete Workspace"), ClickAction.new, AccessHtmlElement.new(:css, "#user-defined-workspace-1 > div > div.manageOptions.manager-open > ul > li.delete-worksheet > i")) 
     add_action(CucumberLabel.new("Open Menu"), ClickAction.new, AccessHtmlElement.new(:css, "#user-defined-workspace-1 > div > div.col-xs-5 > div.col-xs-1 > i.fa-ellipsis-v")) 
-    add_action(CucumberLabel.new("Plus Button"), ClickAction.new, AccessHtmlElement.new(:id, "plus-button"))
+    add_action(CucumberLabel.new("Plus Button"), ClickAction.new, AccessHtmlElement.new(:css, ".workspace-editor-trigger-button"))
     add_action(CucumberLabel.new("Done"), ClickAction.new, AccessHtmlElement.new(:id, "exitEditing"))
     add_action(CucumberLabel.new("workspace1"), ClickAction.new, AccessHtmlElement.new(:css, "#screens-carousel > div:nth-child(2) > div.carousel-inner > div > div:nth-child(6)")) 
     add_action(CucumberLabel.new("Workspace Manager Delete Button"), ClickAction.new, AccessHtmlElement.new(:css, "#mainOverlayRegion > div > div > div.addEditFormRegion > div > div > div:nth-child(4) > div.col-md-2 > button")) 
@@ -20,7 +20,6 @@ class ScreenEditor < AccessBrowserV2
     #add_action(CucumberLabel.new("Allergies Gist View"), ClickAction.new, AccessHtmlElement.new(:css, "#mainOverlayRegion > div > div > div.applet-gridster > div.gridsterContainer > div > ul > li > div > div > ul > li > div ")) 
     #add_action(CucumberLabel.new("Allergies Gist View"), ClickAction.new, AccessHtmlElement.new(:css, "#mainOverlayRegion .gridsterContainer .options-panel .options-box.gist")) 
     add_action(CucumberLabel.new("Allergies Gist View"), ClickAction.new, AccessHtmlElement.new(:css, "#applet-1 > div > div.options-list > ul > li:nth-child(1) > div.options-box.gist"))
-    add_action(CucumberLabel.new("Workspace Manager Close"), ClickAction.new, AccessHtmlElement.new(:id, "doneEditing")) 
     add_action(CucumberLabel.new("Appointments Summary View"), ClickAction.new, AccessHtmlElement.new(:css, "#mainOverlayRegion > div > div > div.applet-gridster > div.gridsterContainer > div > ul(2) > li > div > div > ul > li > div ")) 
     add_action(CucumberLabel.new("Appointments Summary applet"), ClickAction.new, AccessHtmlElement.new(:css, "#mainOverlayRegion > div > div > div.applet-gridster > div.gridsterContainer > div > ul(2) > li > div > div > ul > li > div ")) 
     add_action(CucumberLabel.new("Numeric Lab Results Expanded View"), ClickAction.new, AccessHtmlElement.new(:css, ".expanded")) 
@@ -30,6 +29,7 @@ class ScreenEditor < AccessBrowserV2
     add_action(CucumberLabel.new("Workspace Test"), ClickAction.new, AccessHtmlElement.new(:id, "user-defined-workspace-1"))
     add_action(CucumberLabel.new("Stacked Graph expanded view"), ClickAction.new, AccessHtmlElement.new(:css, "#gridster2 [data-appletid=stackedGraph] [data-viewtype=expanded]")) 
   
+    add_action(CucumberLabel.new("Applet Swtchboard"), ClickAction.new, AccessHtmlElement.new(:css, ".applet-title-switchboard"))
     add_action(CucumberLabel.new("Expanded View"), ClickAction.new, AccessHtmlElement.new(:css, "#gridster2 .options-list [data-viewtype=expanded]"))
     add_action(CucumberLabel.new("Trend View"), ClickAction.new, AccessHtmlElement.new(:css, "#gridster2 .options-list [data-viewtype=gist]"))
     add_action(CucumberLabel.new("Summary View"), ClickAction.new, AccessHtmlElement.new(:css, "#gridster2 .options-list [data-viewtype=summary]"))
@@ -70,7 +70,11 @@ When(/^delete the test screen$/) do
   screen.wait_until_action_element_visible("Confirm Delete", 40)
   expect(screen.perform_action("Confirm Delete")).to be_true, "Error when attempting to click on Confirm Delete"
   screen.wait_until_action_element_invisible("Workspace Test", 40) 
-  expect(screen.perform_action("Workspace Manager Close")).to be_true, "Workspace Manager Close"
+
+  @ehmp = PobWorkspaceManager.new unless @ehmp.is_a? PobWorkspaceManager
+  @ehmp.btn_close_manager.click
+  @ehmp.wait_until_fld_applet_invisible
+  expect(@ehmp.has_no_fld_applet?).to eq(true)
 end
 
 When(/^user creates a workspace named "(.*?)"$/) do |workspace_name|
@@ -97,7 +101,11 @@ When(/^user deletes workspace named "(.*?)"$/) do |workspace_name|
   screen.wait_until_action_element_visible("Confirm Delete", 40)
   expect(screen.perform_action("Confirm Delete")).to be_true, "Error when attempting to click on Confirm Delete"
   screen.wait_until_action_element_invisible("Workspace Test", 40) 
-  expect(screen.perform_action("Workspace Manager Close")).to be_true, "Workspace Manager Close"
+
+  @ehmp = PobWorkspaceManager.new unless @ehmp.is_a? PobWorkspaceManager
+  @ehmp.btn_close_manager.click
+  @ehmp.wait_until_fld_applet_invisible
+  expect(@ehmp.has_no_fld_applet?).to eq(true)
 end
 
 When(/^user clicks "(.*?)" on the screen editor$/) do |html_action_element|

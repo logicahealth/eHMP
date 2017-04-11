@@ -20,6 +20,7 @@ define([
 
     var dataGridConfig = {
         id: "narrative-lab-results-grid-full",
+        context: 'patient',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

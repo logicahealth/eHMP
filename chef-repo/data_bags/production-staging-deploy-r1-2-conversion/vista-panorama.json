@@ -1,0 +1,25 @@
+{
+  "id": "vista-panorama",
+  "normal": {
+    "ipaddress": "IP_ADDRESS",
+    "vista": {
+      "domain_name": "PANORAMA.VISTACORE.US",
+      "site_recipe": "panorama",
+      "import_recipe": "panorama",
+      "site_id": "9E7A",
+      "site": "PANORAMA",
+      "station_number": "500",
+      "access_code": "ep1234",
+      "verify_code": "ep1234!!",
+      "connect_timeout": 3000,
+      "send_timeout": 20000,
+      "division": "500",
+      "rpc_port": 9210,
+      "clinics_osync_appointment_request": null
+    },
+    "stack": "production-staging-deploy-r1-2-conversion",
+    "roles": [
+      "vista-panorama"
+    ]
+  }
+}

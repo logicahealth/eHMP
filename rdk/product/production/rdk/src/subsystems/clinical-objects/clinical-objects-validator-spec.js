@@ -3,266 +3,249 @@
 var _ = require('lodash');
 var validator = require('./clinical-objects-validator');
 
-var clinicalObjectCleanPass = {
-    uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: '9E7A;3',
+var clinicalObjectCleanForCreate = {
+    patientUid: 'urn:va:patient:9E7A:3:3',
     authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
+    domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test'}
+    data: {labTestText: 'test'}
+};
+
+var clinicalObjectCleanPass = {
+    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:9E7A:3:3',
+    authorUid: 'urn:va:user:9E7A:123',
+    domain: 'ehmp-order',
+    subDomain: 'laboratory',
+    visit: {
+       location: '1',
+       serviceCategory: 'PSB',
+       dateTime: '20160101120000'
+    },
+    referenceId: '',
+    ehmpState: 'draft',
+    data: {labTestText: 'test'}
 };
 
 var clinicalObjectCleanPassNoUiD = {
-    patientUid: '9E7A;3',
+    patientUid: 'urn:va:patient:9E7A:3:3',
     authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
+    domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test'}
+    data: {labTestText: 'test'}
 };
 
 var clinicalObjectMissingState = {
-    uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: '9E7A;3',
+    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:9E7A:3:3',
     authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
+    domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
     referenceId: '',
-    data: {test: 'test'}
+    data: {labTestText: 'test'}
 };
 
 var clinicalObjectMissingDomain = {
-    uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: '9E7A;3',
+    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:9E7A:3:3',
     authorUid: 'urn:va:user:9E7A:123',
     domain: '',
     subDomain: 'laboratory',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test'}
+    data: {labTestText: 'test'}
 };
 
 var clinicalObjectMissingPiD = {
-    uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
     patientUid: '',
     authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
+    domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test', items: 'ok'}
+    data: {labTestText: 'test', items: 'ok'}
 };
 
 var clinicalObjectMissingPiDNoUID = {
     authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
+    domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test', items: 'ok'}
+    data: {labTestText: 'test', items: 'ok'}
 };
 
 var clinicalObjectMissingUID = {
     uid: '',
-    patientUid: '9E7A;3',
+    patientUid: 'urn:va:patient:9E7A:3:3',
     authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
+    domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test'}
+    data: {labTestText: 'test'}
 };
 
 var clinicalObjectMissingAuthorID = {
-    uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: '9E7A;3',
+    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:9E7A:3:3',
     authorUid: '',
-    domain: 'order',
+    domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test'}
+    data: {labTestText: 'test'}
 };
 
 var clinicalObjectMissingAuthorIDNoUID = {
-    patientUid: '9E7A;3',
-    domain: 'order',
+    patientUid: 'urn:va:patient:9E7A:3:3',
+    domain: 'ehmp-order',
     subDomain: 'laboratory',
     authorUid: '',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test'}
+    data: {labTestText: 'test'}
 };
 
 var clinicalObjectMissingSubDomain = {
-    uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: '9E7A;3',
+    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:9E7A:3:3',
     authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
+    domain: 'ehmp-order',
     subDomain: '',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test'}
+    data: {labTestText: 'test'}
 };
 
 var clinicalObjectMissingSubDomainNoUID = {
-    patientUid: '9E7A;3',
+    patientUid: 'urn:va:patient:9E7A:3:3',
     authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
+    domain: 'ehmp-order',
     subDomain: '',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test'}
+    data: {labTestText: 'test'}
 };
 
 var clinicalObjectMissingVisit = {
-    uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: '9E7A;3',
+    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:9E7A:3:3',
     authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
+    domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: '',
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test'}
-};
-
-var clinicalObjectMissingVisitLocation = {
-    uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: '9E7A;3',
-    authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
-    subDomain: 'laboratory',
-    visit: {
-       location: '',
-       serviceCategory: 'PSB',
-       dateTime: '20160101120000'
-    },
-    referenceId: '',
-    ehmpState: 'draft',
-    data: {test: 'test'}
-};
-
-var clinicalObjectMissingVisitService = {
-    uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: '9E7A;3',
-    authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
-    subDomain: 'laboratory',
-    visit: {
-       location: 'urn:va:location:9E7A:1',
-       serviceCategory: '',
-       dateTime: '20160101120000'
-    },
-    referenceId: '',
-    ehmpState: 'draft',
-    data: {test: 'test'}
+    data: {labTestText: 'test'}
 };
 
 var clinicalObjectMissingVisitDateTime = {
-    uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: '9E7A;3',
+    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:9E7A:3:3',
     authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
+    domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: ''
     },
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test'}
+    data: {labTestText: 'test'}
 };
 
 var clinicalObjectBadUID1 = {
-    uid: 'urn:va:ehmp:123412341324',
-    patientUid: '9E7A;3',
+    uid: 'urn:va:ehmp-order:123412341324',
+    patientUid: 'urn:va:patient:9E7A:3:3',
     authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
+    domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test'}
+    data: {labTestText: 'test'}
 };
 
 var clinicalObjectBadUID2 = {
-    uid: 'urn:va:ehmp:9E7A;123123;123412341324',
-    patientUid: '9E7A;3',
+    uid: 'urn:va:ehmp-order:9E7A:123123;123412341324',
+    patientUid: 'urn:va:patient:9E7A:3:3',
     authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
+    domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
-       location: 'urn:va:location:9E7A:1',
+       location: '1',
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
     referenceId: '',
     ehmpState: 'draft',
-    data: {test: 'test'}
+    data: {labTestText: 'test'}
 };
 
 describe('Clinical object validation tests', function() {
@@ -275,50 +258,58 @@ describe('Clinical object validation tests', function() {
             errorMessages = [];
         });
 
-        it('should create a valid clinical object', function(){
-            expect(validator.validateCreate(errorMessages, clinicalObjectCleanPass)).to.be.undefined();
+        it('should create a valid clinical object', function(done) {
+            validator.validateCreate([], clinicalObjectCleanForCreate, null, function(errorMessages) {
+                expect(errorMessages.length).to.be(0);
+                done();
+            });
         });
-        it('should reject missing required ehmpState data for creating a clinical object', function(){
-            validator.validateCreate(errorMessages, clinicalObjectMissingState);
-            expect(errorMessages.pop()).to.be('ehmpState cannot be empty');
+        it('should reject missing required ehmpState data for creating a clinical object', function(done) {
+            validator.validateCreate([], clinicalObjectMissingState, null, function(errorMessages) {
+                expect(_.includes(errorMessages, 'ehmpState cannot be empty')).to.be(true);
+                done();
+            });
         });
-        it('should reject missing required domain data for creating a clinical object', function(){
-            validator.validateCreate(errorMessages, clinicalObjectMissingDomain);
-            expect(errorMessages.pop()).to.be('domain cannot be empty');
+        it('should reject missing required domain data for creating a clinical object', function(done) {
+            validator.validateCreate([], clinicalObjectMissingDomain, null, function(errorMessages) {
+                expect(_.includes(errorMessages, 'domain cannot be empty')).to.be(true);
+                done();
+            });
         });
-        it('should reject missing required patientUid data for creating a clinical object', function(){
-            validator.validateCreate(errorMessages, clinicalObjectMissingPiDNoUID);
-            expect(errorMessages.pop()).to.be('patientUid cannot be empty');
+        it('should reject missing required patientUid data for creating a clinical object', function(done) {
+            validator.validateCreate([], clinicalObjectMissingPiDNoUID, null, function(errorMessages) {
+                expect(_.includes(errorMessages, 'patientUid cannot be empty')).to.be(true);
+                done();
+            });
         });
-        it('should reject missing required authorUiD data for creating a clinical object', function(){
-            validator.validateCreate(errorMessages, clinicalObjectMissingAuthorIDNoUID);
-            expect(errorMessages.pop()).to.be('authorUid cannot be empty');
+        it('should reject missing required authorUiD data for creating a clinical object', function(done) {
+            validator.validateCreate([], clinicalObjectMissingAuthorIDNoUID, null, function(errorMessages) {
+                expect(_.includes(errorMessages, 'authorUid cannot be empty')).to.be(true);
+                done();
+            });
         });
-        it('should reject missing required subDomain data for creating a clinical object', function(){
-            validator.validateCreate(errorMessages, clinicalObjectMissingSubDomainNoUID);
-            expect(errorMessages.pop()).to.be('subDomain cannot be empty');
+        it('should reject missing required subDomain data for creating a clinical object', function(done) {
+            validator.validateCreate([], clinicalObjectMissingSubDomainNoUID, null, function(errorMessages) {
+                expect(_.includes(errorMessages, 'subDomain cannot be empty')).to.be(true);
+                done();
+            });
         });
-        it('should reject missing required visit data for creating a clinical object', function(){
-            validator.validateCreate(errorMessages, clinicalObjectMissingVisit);
-            expect(errorMessages.pop()).to.be('visit.dateTime cannot be empty');
-            expect(errorMessages.pop()).to.be('model does not contain visit.dateTime field');
-            expect(errorMessages.pop()).to.be('visit.serviceCategory cannot be empty');
-            expect(errorMessages.pop()).to.be('model does not contain visit.serviceCategory field');
-            expect(errorMessages.pop()).to.be('visit.location cannot be empty');
-            expect(errorMessages.pop()).to.be('model does not contain visit.location field');
-            expect(errorMessages.pop()).to.be('visit cannot be empty');
+        it('should reject missing required visit data for creating a clinical object', function(done) {
+            validator.validateCreate([], clinicalObjectMissingVisit, null, function(errorMessages) {
+                var expectedErrors = ['visit.dateTime cannot be empty',
+                                      'model does not contain visit.dateTime field',
+                                      'visit cannot be empty'];
+                _.each(expectedErrors, function(msg) {
+                    expect(_.includes(errorMessages, msg)).to.be(true);
+                });
+                done();
+            });
         });
-        it('should reject missing required visit location data for creating a clinical object', function(){
-            validator.validateCreate(errorMessages, clinicalObjectMissingVisitLocation);
-            expect(errorMessages.pop()).to.be('visit.location cannot be empty');
-        });
-        it('should reject missing required visit service data for creating a clinical object', function(){
-            validator.validateCreate(errorMessages, clinicalObjectMissingVisitService);
-            expect(errorMessages.pop()).to.be('visit.serviceCategory cannot be empty');
-        });
-        it('should reject missing required visit date time data for creating a clinical object', function(){
-            validator.validateCreate(errorMessages, clinicalObjectMissingVisitDateTime);
-            expect(errorMessages.pop()).to.be('visit.dateTime cannot be empty');
+        it('should reject missing required visit date time data for creating a clinical object', function(done) {
+            validator.validateCreate([], clinicalObjectMissingVisitDateTime, null, function(errorMessages) {
+                expect(_.includes(errorMessages, 'visit.dateTime cannot be empty')).to.be(true);
+                done();
+            });
         });
     });
 
@@ -347,25 +338,17 @@ describe('Clinical object validation tests', function() {
         beforeEach(function() {
             errorMessages = [];
         });
-        it('should update a valid clinical object', function(){
-            expect(validator.validateUpdate(errorMessages, clinicalObjectCleanPass.uid, clinicalObjectCleanPass)).to.be.undefined();
+        it('should update a valid clinical object', function(done) {
+            validator.validateUpdate([], clinicalObjectCleanPass.uid, clinicalObjectCleanPass, null, function(errorMessages) {
+                expect(errorMessages.length).to.be(0);
+                done();
+            });
         });
-        it('should reject missing required JSON data for updating a clinical object', function(){
-            validator.validateUpdate(errorMessages, clinicalObjectMissingUID.uid, clinicalObjectMissingUID);
-            expect(errorMessages.pop()).to.be('uid not found');
-        });
-    });
-
-    describe('delete a clinical object', function(){
-        beforeEach(function() {
-            errorMessages = [];
-        });
-        it('should delete a valid clinical object', function(){
-            expect(validator.validateDelete(errorMessages, clinicalObjectCleanPass.uid)).to.be.undefined();
-        });
-        it('should reject missing required JSON data for deleting a clinical object', function(){
-            validator.validateDelete(errorMessages, clinicalObjectMissingUID.uid);
-            expect(errorMessages.pop()).to.be('uid not found');
+        it('should reject missing required JSON data for updating a clinical object', function(done) {
+            validator.validateUpdate([], clinicalObjectMissingUID.uid, clinicalObjectMissingUID, null, function(errorMessages) {
+                expect(_.includes(errorMessages, 'uid not found')).to.be(true);
+                done();
+            });
         });
     });
 
@@ -373,11 +356,11 @@ describe('Clinical object validation tests', function() {
         beforeEach(function() {
             errorMessages = [];
         });
-        it('should get a list of valid clinical objects', function(){
-            expect(validator.validateDelete(errorMessages, clinicalObjectCleanPass.uid)).to.be.undefined();
+        xit('should get a list of valid clinical objects', function(){
+            expect(validator.validateGetClinicalObjectList(errorMessages, clinicalObjectCleanPass.uid)).to.be.undefined();
         });
-        it('should reject missing required uid for clinical objects', function(){
-            validator.validateDelete(errorMessages, clinicalObjectMissingUID.uid);
+        xit('should reject missing required uid for clinical objects', function(){
+            validator.validateGetClinicalObjectList(errorMessages, clinicalObjectMissingUID.uid);
             expect(errorMessages.pop()).to.be('uid not found');
         });
     });
@@ -386,11 +369,11 @@ describe('Clinical object validation tests', function() {
         beforeEach(function() {
             errorMessages = [];
         });
-        it('should get a list of valid clinical objects', function(){
-            expect(validator.validateDelete(errorMessages, clinicalObjectCleanPass.uid)).to.be.undefined();
+        xit('should get a list of valid clinical objects', function(){
+            expect(validator.validateFind(errorMessages, clinicalObjectCleanPass.uid)).to.be.undefined();
         });
-        it('should reject missing required fields for clinical objects', function(){
-            validator.validateDelete(errorMessages, clinicalObjectMissingUID.uid);
+        xit('should reject missing required fields for clinical objects', function(){
+            validator.validateFind(errorMessages, clinicalObjectMissingUID.uid);
             expect(errorMessages.pop()).to.be('uid not found');
         });
     });

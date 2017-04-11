@@ -5,6 +5,7 @@
 #.classpath
 #.project
 .settings/
+build.txt
 /extras
 /.chef/berkshelf/cookbooks/
 Berksfile.lock

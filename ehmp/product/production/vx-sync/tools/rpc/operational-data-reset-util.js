@@ -8,7 +8,7 @@ require('../../env-setup');
 var _ = require('underscore');
 var config = require(global.VX_ROOT + 'worker-config');
 var logUtil = require(global.VX_UTILS + 'log');
-logUtil.initialize(config.loggers);
+logUtil.initialize(config);
 var log = logUtil.get('subscriberHost', 'host');
 var rpcUtil = require(global.VX_UTILS + '/rpc-util');
 

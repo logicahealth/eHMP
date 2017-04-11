@@ -3,3 +3,5 @@ modules/**/*.html
 **/templates/appletCSS.html
 **app.min.js**
 cache.appcache
+manifest.json
+app.json

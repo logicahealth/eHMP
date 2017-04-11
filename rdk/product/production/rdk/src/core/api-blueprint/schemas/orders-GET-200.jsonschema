@@ -1,0 +1,66 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "required": ["data", "status"],
+    "properties": {
+        "data": {
+            "type": "object",
+            "required": ["items"],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "patientUid": {
+                                "type": "string",
+                                "description": "Unique patient identifier"
+                            },
+                            "authorUid": {
+                                "type": "string",
+                                "description": "Object creator identifier"
+                            },
+                            "domain": {
+                                "type": "string",
+                                "description": "Resource domain that the clinical object represents (e.g. 'order', 'note')"
+                            },
+                            "subDomain": {
+                                "type": "string",
+                                "description": "Resource subdomain of the clinical object data (e.g. for 'order', subdomain could be 'laboratory', 'radiology', etc.)"
+                            },
+                            "visit": {
+                                "type": "object",
+                                "description": "Visit context information",
+                                "properties": {
+                                    "location": {
+                                        "type": "string",
+                                        "description": "Visit location"
+                                    },
+                                    "serviceCategory": {
+                                        "type": "string",
+                                        "description": "Type of visit"
+                                    },
+                                    "dateTime": {
+                                        "type": "string",
+                                        "description": "Date/Time of visit"
+                                    }
+                                }
+                            },
+                            "referenceId": {
+                                "type": "string",
+                                "description": "Optional JDS URN identifier"
+                            },
+                            "data": {
+                                "type": "object",
+                                "description": "Clinical object domain/sub-domain specific payload and content"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "status": {
+            "type": "integer"
+        }
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "name": "Hypertensive Patient OS2",
+    "scope": "site",
+    "orderList": [
+        {
+            "uid": "urn:va:quickorder:3",
+            "type": "quickorder",
+            "siteId": "9E7A",
+            "createdBy": "urn:va:user:9E7A:10000000238", 
+            "name": "COMPREHENSIVE METABOLIC PANEL",
+            "scope": "enterprise",
+            "active": true
+        },
+        {
+            "uid": "urn:va:lab:9E7A:512",
+            "type": "orderable",
+            "domain": "lab",
+            "siteId": "9E7A",
+            "name": "FASTING GLUCOSE",
+            "scope": "enterprise",
+            "active": true
+        }
+    ],
+    "active": true
+}

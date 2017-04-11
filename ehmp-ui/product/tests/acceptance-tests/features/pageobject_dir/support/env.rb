@@ -4,9 +4,10 @@ require 'capybara'
 require 'site_prism'
 require 'selenium-webdriver'
 require 'capybara/rspec/matchers'
+require_relative '../../steps/helper/DefaultLogin'
 
 Capybara.default_wait_time = 15
-Capybara.app_host = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://IP        "
+Capybara.app_host = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://IP_ADDRESS"
 
 World(Capybara::DSL)
 World(Capybara::RSpecMatchers)
@@ -40,12 +41,11 @@ else
 end
 
 Before do |scenario|
-  # Capybara.current_session.driver.browser.manage.delete_all_cookies
   RecordTime.record_start_time
   TestSupport.increment_counter
-  p 'Before: maximize'
-  Capybara.page.driver.browser.manage.window.maximize
-  p 'Before: use default driver'
+
+  Capybara.page.driver.browser.manage.window.resize_to(1280, 4800)
+
   Capybara.use_default_driver
   scenario.source_tag_names.each do |tag|
     driver_name = tag.sub(/^@/, '').to_sym
@@ -53,6 +53,20 @@ Before do |scenario|
     # p "bob TestBrowser=  #{bob.browser}"
     SeleniumCommand.reuse_driver(bob.browser)
     # p "Before Scenario: #{Capybara.current_driver}"
+  end
+
+  if scenario.test_steps.map(&:name).index { |s| s =~ DefaultLogin.login_step } and !DefaultLogin.logged_in
+    p 'Logging in with non-Standard user!!!'
+
+  elsif !scenario.test_steps.map(&:name).index { |s| s =~ DefaultLogin.login_step } and !DefaultLogin.logged_in
+    p 'Logging in with Standard user!!!'
+    step 'user is logged into eHMP-UI'
+
+  elsif !scenario.test_steps.map(&:name).index { |s| s =~ DefaultLogin.login_step } and DefaultLogin.logged_in
+    p 'User is already Logged in with Standard user!!!'
+
+  elsif scenario.test_steps.map(&:name).index { |s| s =~ DefaultLogin.login_step } and DefaultLogin.logged_in
+    step 'POB log me out'
   end
 end
 
@@ -65,18 +79,32 @@ After do |scenario|
     temp_location = scenario.scenario_outline.location
   end
 
+  p "scenario tags: #{scenario.source_tag_names}"
+  RecordTime.save_test_duration(scenario.source_tag_names, scenario.failed?, temp_location)
+
   if scenario.failed?
+    DefaultLogin.logged_in = false
+
     screenshot_name = "#{temp_location}".gsub! ':', '_'
     take_screenshot screenshot_name
+
+    p "On url: #{TestSupport.driver.current_url}"
     # p "logs through selenium: #{TestSupport.print_logs}"
     console_logs = Capybara.page.driver.browser.manage.logs.get("browser")
-    # if console_logs.to_s.include?('(Bad Request)')
     p "Browser JS Console Logs:--***************-- #{console_logs.to_s}--***************--"
-    # end
-  end #if
+    
+    TestSupport.driver.execute_script("ADK.Checks._checkCollection.reset();")
+    close_any_open_modals #if scenario.source_tag_names.include? '@modal_test'
+    step 'POB log me out'
+  elsif scenario.test_steps.map(&:name).index { |s| s =~ DefaultLogin.login_step } and DefaultLogin.logged_in
 
-  p "scenario tags: #{scenario.source_tag_names}"
-  close_any_open_modals #if scenario.source_tag_names.include? '@modal_test'
-  RecordTime.save_test_duration(scenario.source_tag_names, scenario.failed?, temp_location)
-  step 'POB log me out' unless @skip_login
+    close_any_open_modals #if scenario.source_tag_names.include? '@modal_test'
+    step 'POB log me out'
+  elsif DefaultLogin.logged_in
+    
+    TestSupport.driver.execute_script("ADK.Checks._checkCollection.reset();")
+    close_any_open_modals #if scenario.source_tag_names.include? '@modal_test'
+    TestSupport.driver.execute_script("ADK.Messaging.getChannel('toolbar').trigger('close:toolbar');")
+    step 'Navigate to Patient Search Screen'
+  end
 end

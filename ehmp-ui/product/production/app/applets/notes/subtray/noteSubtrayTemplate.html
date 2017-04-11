@@ -1,0 +1,182 @@
+<div iclass="workflow-header">
+    <div class="modal-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-10">
+                    <h4 class="modal-title">Current Note</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-body">
+    <div>
+        <div class="container-fluid">
+            <div id="note-preview-body" class="subtray-detail-content word-break-break-word">
+                <div class="document-detail">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h5 class="bottom-border-grey-dark">
+                                {{#if localTitle}}
+                                    {{localTitle}} Details
+                                {{else}}
+                                    &lt;No Title&gt; Details
+                                {{/if}}
+                            </h5>
+                        </div>
+                        <div class="col-xs-6">
+                            <p>
+                                <span data-detail-label="facility"><strong>Facility</strong></span>
+                                <br />
+                                <span data-detail="facility">{{facilityName}}</span>
+                            </p>
+                        </div>
+                        <div class="col-xs-6">
+                            <p>
+                                <span data-detail-label="author"><strong>Author</strong></span>
+                                <br />
+                                <span data-detail="author">{{authorDisplayName}}</span>
+                            </p>
+                        </div>
+                        <div class="col-xs-6">
+                            <p>
+                                <span data-detail-label="status"><strong>Status</strong></span>
+                                <br />
+                                <span data-detail="status">{{statusDisplayName}}</span>
+                            </p>
+                        </div>
+                        <div class="col-xs-6">
+                            <p>
+                                <span data-detail-label="date-time"><strong>Date/Time</strong></span>
+                                <br />
+                                <span data-detail="date-time">
+                                    {{#if referenceDateTime}}
+                                        {{formatDateTime referenceDateTime "YYYYMMDDHHmmssSSS" "datetime"}}
+                                    {{else}}
+                                        &lt;No Date&gt;
+                                    {{/if}}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <p class="sr-only">Note:</p>
+                    {{#compare app "vista"}}
+                    <div class="container-fluid background-color-pure-yellow transform-none bottom-margin-sm">
+                        {{#compare displayGroup "unsigned"}} {{#compare status "UNSIGNED"}}
+                        <div class="row left-margin-no">
+                            <div class="col-xs-12 percent-width-95">
+                                <p class="all-margin-no">This unsigned note was created outside of eHMP. Edit the note in CPRS.</p>
+                            </div>
+                        </div>
+                        {{/compare}} {{/compare}}
+                    </div>
+                    {{/compare}} {{#if userCanCosign}} {{#compare app "vista"}}
+                    <div class="container-fluid background-color-pure-yellow transform-none bottom-margin-sm">
+                        <div class="row left-margin-no">
+                            {{#compare displayGroup "uncosigned"}}
+                            <div class="col-xs-12 percent-width-95">
+                                <p class="all-margin-no">This un-cosigned note was created outside of eHMP. Complete the note in CPRS.</p>
+                            </div>
+                            {{/compare}} {{#compare displayGroup "signed"}} {{#compare status "UNCOSIGNED"}}
+                            <div class="col-xs-12 percent-width-95">
+                                <p class="all-margin-no">This un-cosigned note was created outside of eHMP. Complete the note in CPRS.</p>
+                            </div>
+                            {{/compare}} {{/compare}}
+                        </div>
+                    </div>
+                    {{/compare}} {{#compare app "ehmp"}}
+                    <div class="container-fluid background-color-pure-yellow transform-none bottom-margin-sm">
+                        <div class="row left-margin-no">
+                            {{#compare displayGroup "uncosigned"}}
+                            <div class="col-xs-12 percent-width-95">
+                                <p class="all-margin-no">This note was created in eHMP, but must be cosigned in CPRS in v2.0</p>
+                            </div>
+                            {{/compare}} {{#compare displayGroup "signed"}} {{#compare status "UNCOSIGNED"}}
+                            <div class="col-xs-12 percent-width-95">
+                                <p class="all-margin-no">This note was created in eHMP, but must be cosigned in CPRS in v2.0</p>
+                            </div>
+                            {{/compare}} {{/compare}}
+                        </div>
+                    </div>
+                    {{/compare}} {{/if}} {{#if text}}
+                    <pre class="font-size-11 bottom-margin-md left-margin-no all-padding-xs left-padding-sm">{{contentPreview}}{{signaturePreview}}</pre> {{/if}} {{#if addenda}}
+                    <div class="top-margin-lg">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h5 class="bottom-border-grey-dark">Addenda</h5>
+                            </div>
+                        </div>
+                        {{#each addenda}} {{#each text}}
+                        <div class="row">
+                            <div class="col-xs-5">
+                                <p>
+                                    <span><strong>Date of Addendum</strong></span>
+                                    <br />
+                                    <span>{{formatDateTime dateTime "YYYYMMDDHHmmssSSS" "datetime"}}</span>
+                                </p>
+                            </div>
+                            <div class="col-xs-4">
+                                <p>
+                                    <span><strong>Author</strong></span>
+                                    <br />
+                                    <span>{{authorDisplayName}}</span>
+                                </p>
+                            </div>
+                            <div class="col-xs-3 left-padding-no">
+                                <p>
+                                    <span><strong>Status</strong></span>
+                                    <br />
+                                    <span>{{status}}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <p class="sr-only">Addendum:</p>
+                        {{#compare app "vista"}}
+                        <div class="container-fluid background-color-pure-yellow transform-none bottom-margin-sm">
+                            <div class="row left-margin-no">
+                                {{#compare status "UNSIGNED"}} {{#if noPermission}}
+                                <div class="col-xs-12 percent-width-95">
+                                    <p class="all-margin-no">This addendum was created by another user. Contact the author for more information.</p>
+                                </div>
+                                {{/if}}
+                                <div class="col-xs-12 percent-width-95">
+                                    <p class="all-margin-no">This Unsigned addendum was created outside of eHMP. Edit the addendum in CPRS.</p>
+                                </div>
+                                {{/compare}}
+                            </div>
+                        </div>
+                        {{/compare}} {{#compare app "ehmp"}}
+                        <div class="container-fluid background-color-pure-yellow transform-none bottom-margin-sm">
+                            <div class="row left-margin-no">
+                                {{#compare status "UNSIGNED"}} {{#if noPermission}}
+                                <div class="col-xs-12 percent-width-95">
+                                    <p class="all-margin-no">This addendum was created by another user. Contact the author for more information.</p>
+                                </div>
+                                {{/if}} {{/compare}}
+                            </div>
+                        </div>
+                        {{/compare}}
+                        <pre class="font-size-11 bottom-margin-md left-margin-no all-padding-xs left-padding-sm">{{contentPreview}}{{signaturePreview}}</pre>
+                        <hr /> {{/each}} {{/each}}
+                    </div>
+                    {{/if}}
+                    <!-- Removing for now until we have a better way to re-render the template after a model changes.
+                     This is added to the modelUtil.js
+
+                    {{#if signedDateTime}}
+                    <hr aria-hidden="true" />
+                    <div class="row">
+                        <div class="col-xs-12" id="note-preview-signature-date">
+                            Signed: {{formatDateTime signedDateTime "YYYYMMDDHHmmssSSS" "datetime"}}
+                        </div>
+                        <div class="col-xs-12" id="note-preview-signer">
+                            By: {{signerDisplayName}}
+                        </div>
+                    </div>
+                    {{/if}}
+                -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

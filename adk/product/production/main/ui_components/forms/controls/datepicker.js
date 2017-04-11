@@ -33,13 +33,26 @@ define([
         ui: {
             'datepickerInput': 'input.datepicker-input'
         },
+        internalModelEvents: {
+            'change:startDate': function(fieldModel, newStartDate) {
+                this.datepickerOptions.startDate = newStartDate;
+                this.$('input.datepicker-input').datepicker('destroy');
+                this.initializeDatepicker();
+            },
+            'change:endDate': function(fieldModel, newEndDate) {
+                this.datepickerOptions.endDate = newEndDate;
+                this.$('input.datepicker-input').datepicker('destroy');
+                this.initializeDatepicker();
+            }
+        },
         initialize: function(options) {
             this.field = options.field;
             this._datepickerInternalModel = this.getOption('_datepickerInternalModel');
             this.defaults = options.defaults;
+
             this.datepickerOptions = {
                 todayBtn: 'linked',
-                orientation: 'top left',
+                orientation: 'auto bottom',
                 autoclose: true,
                 todayHighlight: true,
                 showOnFocus: false,
@@ -49,16 +62,52 @@ define([
                 showMaskOnHover: false,
                 keyboardNavigation: false
             };
+            Backbone.Marionette.bindEntityEvents(this, this._datepickerInternalModel, this.internalModelEvents);
         },
-        onRender: function() {
-            this.datepickerOptions.container = this.$('.calendar-container');
-            DateUtils.datepicker(this.$('input.datepicker-input'), this.datepickerOptions);
+        onAttach: function() {
+            var container = this.$el.closest('.workflow-container, .modal-content').first();
+            if (!_.isEmpty(container)) {
+                this.datepickerOptions.container = container[0];
+            }
+            this.initializeDatepicker();
             return this;
         },
+        onDomRefresh: function() {
+            this.initializeDatepicker();
+        },
+        initializeDatepicker: function() {
+            DateUtils.datepicker(this.$('input.datepicker-input'), this.datepickerOptions);
+        },
+        keyPathAccessor: function(obj, path) {
+            if (!obj) return undefined;
+            var res = obj;
+            path = path.split('.');
+            for (var i = 0; i < path.length; i++) {
+                if (_.isNull(res)) return null;
+                if (_.isEmpty(path[i])) continue;
+                if (!_.isUndefined(res[path[i]])) res = res[path[i]];
+            }
+            return res;
+        },
         serializeModel: function(model) {
+            var field = _.defaultsDeep(this.field.toJSON(), this.defaults);
+            var attributes = model.toJSON();
+            var attrArr = field.name.split('.');
+            var name = attrArr.shift();
+            var path = attrArr.join('.');
+            var rawValue = this.keyPathAccessor(attributes[name], path);
+            if (field.prependToDomId){
+                field.name = field.prependToDomId + name;
+                if (field.id){
+                    field.id = field.prependToDomId + field.id;
+                }
+            }
             var data = _.defaults({
-                value: this.field.get('value') || this.model.get(this.field.get('name')) || ""
-            }, _.defaults(this.field.toJSON(), _.defaults(model.toJSON(), this.defaults)));
+                rawValue: rawValue,
+                value: rawValue,
+                attributes: attributes,
+                formatter: this.formatter
+            }, field);
             return data;
         },
         getValueFromDOM: function() {
@@ -72,7 +121,7 @@ define([
             'change input': function(event) {
                 var newVal = this.getValueFromDOM();
                 this.currVal = this.currVal || this.model.get(this.field.get('name'));
-                if (this.currVal === newVal && newVal === this.model.get(this.field.get('name'))) {
+                if ((_.isEmpty(newVal) && !_.isString(this.model.get(this.field.get('name')))) || (this.currVal === newVal && newVal === this.model.get(this.field.get('name')))) {
                     event.stopPropagation();
                 } else {
                     this.currVal = newVal;
@@ -104,13 +153,13 @@ define([
             '{{#unless srOnlyLabel}}' +
             '<button type="button" class="btn btn-icon all-padding-no left-margin-xs" data-toggle="tooltip" ' +
             'title="' + ACCEPTABLE_FORMATS + '">' +
-            '<i class="fa fa-question-circle color-primary"></i></button>' +
+            '<i class="fa fa-question-circle color-primary"></i><span class="sr-only">' + ACCEPTABLE_FORMATS + '</span></button>',
             '{{/unless}}',
             '<div class="input-group date calendar-container">',
             '<span class="input-group-addon{{#if disabled}} disabled{{/if}}" aria-hidden="true"' +
             '{{#if srOnlyLabel}} data-toggle="tooltip" title="' + ACCEPTABLE_FORMATS + '"{{/if}}' +
             '><i class="fa fa-calendar color-primary"></i></span>',
-            '<input tabindex="-1" class="clone-input datepicker-input" aria-hidden="true"' +
+            '<input tabindex="-1" id="{{clean-for-id name}}-hidden" class="clone-input datepicker-input" aria-hidden="true"' +
             '{{#if disabled}} disabled{{/if}}' +
             ' name="{{name}}"{{#if maxlength}} maxlength="{{maxlength}}"{{/if}} value="{{value}}"/>',
             '<input type="{{type}}" id="{{clean-for-id name}}" name="{{name}}"{{#if maxlength}} maxlength="{{maxlength}}"{{/if}} value="{{value}}"' +
@@ -166,11 +215,11 @@ define([
             this._flexibleInternalModel = options._flexibleInternalModel;
             this.datepickerExternalModel = options.datepickerExternalModel;
             this.defaults = _.defaults({
-                    title: 'Please enter date in text or numerical format.'
+                    title: 'Enter date in text or numerical format.'
                 },
                 this.defaults);
             this.datepickerOptions = _.defaults({
-                    orientation: 'top left',
+                    orientation: 'auto bottom',
                     inputmask: '',
                     forceParse: false,
                     keyboardNavigation: false
@@ -178,9 +227,11 @@ define([
                 this.datepickerOptions);
         },
         onDomRefresh: function() {
+            CommonInputViewPrototype.onDomRefresh.apply(this, arguments);
             this.initHelpTooltip();
         },
         onAttach: function() {
+            CommonInputViewPrototype.onAttach.apply(this, arguments);
             this.initHelpTooltip();
         },
         initHelpTooltip: function() {
@@ -200,7 +251,7 @@ define([
             var data = _.defaults({
                 value: this.field.get('value') || model.get(this.field.get('name')) || this._flexibleInternalModel.get('parsedDate') || "",
                 label: this.field.get('srOnlyLabel') ? this.field.get('label') + ". Acceptable formats: MM/DD/YYYY or M/D/YY, MM/YYYY or M/YYYY, YYYY, MM/DD or M/D, t, t+x or t-x where x = number of days, t+ym or t-ym where y = number of months, n, yesterday, and tomorrow" : this.field.get('label')
-            }, _.defaults(this.field.toJSON(), _.defaults(model.toJSON(), this.defaults)));
+            }, CommonInputViewPrototype.serializeModel.apply(this, arguments));
             return data;
         },
         onFlexibleInput: function() {
@@ -211,7 +262,7 @@ define([
                     var inputString = this._flexibleInternalModel.get('inputString');
                     if (_.isString(inputString) && inputString.length > 0 && !isOutOfRange && !_.isBoolean(parsedDate)) {
                         this.updateToolTip('Invalid Date');
-                        this.announceParseChange('Invalid Date. Please enter another date.');
+                        this.announceParseChange('Invalid Date. Enter another date.');
                     } else if (isOutOfRange) {
                         this.updateToolTip('Date must be between ' + this._datepickerInternalModel.get('startDate') + ' - ' + this._datepickerInternalModel.get('endDate'));
                         this.announceParseChange('Date out of range. Date must be between ' + this._datepickerInternalModel.get('startDate') + ' - ' + this._datepickerInternalModel.get('endDate'));
@@ -248,8 +299,10 @@ define([
             return value;
         },
         onBeforeDestroy: function() {
+            clearTimeout(this._inputTimeout);
             this.removeTooltip(this.ui.flexibleInput);
             this.removeTooltip(this.ui.helpTooltip);
+            this.ui.datepickerInput.datepicker('destroy');
         }
     }, CommonInputViewPrototype);
 
@@ -405,7 +458,7 @@ define([
             displayFormat: 'MM/DD/YYYY',
             extraClasses: [],
             helpMessage: '',
-            title: 'Please enter in a date in the following format, MM/DD/YYYY',
+            title: 'Enter in a date in the following format, MM/DD/YYYY',
             inputFormatRestriction: /^((?:\d{4}|\d{1,2}\/(\d{4}|\d{1,2})|\d{1,2}\/\d{1,2}\/(?:\d{2}){1,2})|(?:[tn]|(?:today|now))(?:[+-]|[+-]\d{1,3}(?:m)?)?|(?:yesterday|tomorrow))$/,
             flexible: false,
             datepickerOptions: {}
@@ -452,8 +505,28 @@ define([
                 'control:helpMessage': function(event, stringValue) {
                     this.setStringFieldOption('helpMessage', stringValue, event);
                 },
+                'control:startDate': function(event, dateValue) {
+                    var newDateValue = this.formatDate(dateValue);
+                    this._datepickerInternalModel.set('startDate', newDateValue);
+                    this.field.set('startDate', newDateValue, { silent: true });
+                    if (this.isFlexible) {
+                        var outOfRange = this.isConvertedDateOutOfRange(this._flexibleInternalModel.get('parsedDate'));
+                        this._flexibleInternalModel.set('outOfRange', outOfRange);
+                    }
+                    event.stopPropagation();
+                },
+                'control:endDate': function(event, dateValue) {
+                    var newDateValue = this.formatDate(dateValue);
+                    this._datepickerInternalModel.set('endDate', newDateValue);
+                    this.field.set('endDate', newDateValue, { silent: true });
+                    if (this.isFlexible) {
+                        var outOfRange = this.isConvertedDateOutOfRange(this._flexibleInternalModel.get('parsedDate'));
+                        this._flexibleInternalModel.set('outOfRange', outOfRange);
+                    }
+                    event.stopPropagation();
+                },
                 'click .input-group-addon:not(.disabled)': function(event) {
-                    this.$('input.datepicker-input').datepicker('show');
+                    this.$('input.datepicker-input').datepicker('show', this.datepickerOptions);
                 }
             },
             PuppetForm.Control.prototype.events),
@@ -464,19 +537,20 @@ define([
                     inputString: "",
                     outOfRange: false
                 });
-                // FlexibleControlLevelPrototype.onChange.call(this, event);
                 this.onChange(event);
+                this.onUserInput.apply(this, arguments);
             },
             'input:flexible:change': function(child, event) {
                 this.setFlexibleModel();
                 this.onChange(event);
-                // FlexibleControlLevelPrototype.onChange.call(this, event);
+                this.onUserInput.apply(this, arguments);
             },
             'input:flexible:input': function(child, event) {
                 this.setFlexibleModel();
             },
             'input:default:change': function(child, event) {
                 this.onChange(event);
+                this.onUserInput.apply(this, arguments);
             }
         },
         initialize: function(options) {
@@ -535,17 +609,21 @@ define([
                 this._flexibleInternalModel = childOptions._flexibleInternalModel = new Backbone.Model(flexibleModelDefaults);
                 childOptions.datepickerExternalModel = this.datepickerExternalModel;
                 this.flexibleDatepicker = new FlexibleDatepicker(childOptions);
-                this.modelChangeListener = this.fieldChangeListener = this.flexibleDatepicker.render;
-                this.getValueFromDOM = FlexibleControlLevelPrototype.getValueFromDOM;
-                this.listenTo(this.model, 'change:' + this.field.get('name'), function(model, change) {
+                this.fieldChangeListener = this.flexibleDatepicker.render;
+                this.modelChangeListener = _.bind(function(model, change) {
                     if (_.isUndefined(change) || (_.isString(change) && change === "") || _.isNull(change)) {
                         this._flexibleInternalModel.set({
                             parsedDate: null,
                             inputString: null,
                             outOfRange: false
                         });
+                        this.flexibleDatepicker.render.apply(this, arguments);
+                    } else {
+                        this.flexibleDatepicker.render.apply(this, arguments);
+                        this.setFlexibleModel();
                     }
-                });
+                }, this);
+                this.getValueFromDOM = FlexibleControlLevelPrototype.getValueFromDOM;
             } else {
                 this.isOutOfRange = DefaultControlLevelPrototype.isDateOutOfRange;
                 this.defaultDatepicker = new DefaultDatepicker(childOptions);
@@ -566,7 +644,7 @@ define([
                     var isOutOfRange = this._flexibleInternalModel.get('outOfRange');
                     var parsedDateIsFalse = _.isBoolean(parsedDate) && !parsedDate;
                     if ((!_.isString(parsedDate) || (_.isString(parsedDate) && isOutOfRange) || parsedDateIsFalse) && _.isString(selectedDate) && selectedDate.length > 0) {
-                        var invalidDateMessage = isOutOfRange ? 'Please enter a date between ' + this._datepickerInternalModel.get('startDate') + ' and ' + this._datepickerInternalModel.get('endDate') + '.' : parsedDateIsFalse ? 'Please enter a date in a valid format.' : 'Please enter a valid date.';
+                        var invalidDateMessage = isOutOfRange ? 'Date must be between ' + this._datepickerInternalModel.get('startDate') + ' - ' + this._datepickerInternalModel.get('endDate') + '.' : parsedDateIsFalse ? 'Enter a date in a valid format.' : 'Enter a valid date.';
                         this.model.errorModel.set(this.field.get('name'), invalidDateMessage);
                         return formErrorMessage || invalidDateMessage;
                     }
@@ -579,11 +657,11 @@ define([
                     if (_.isString(selectedDate) && selectedDate.length > 0) {
                         var momentSelectedDate = new Moment(selectedDate);
                         if (this.isOutOfRange(selectedDate)) {
-                            var outOfRangeDateMessage = 'Please enter a date between ' + this._datepickerInternalModel.get('startDate') + ' and ' + this._datepickerInternalModel.get('endDate') + '.';
+                            var outOfRangeDateMessage = 'Date must be between ' + this._datepickerInternalModel.get('startDate') + ' - ' + this._datepickerInternalModel.get('endDate') + '.';
                             this.model.errorModel.set(this.field.get('name'), outOfRangeDateMessage);
                             return formErrorMessage || outOfRangeDateMessage;
                         } else if (!momentSelectedDate.isValid()) {
-                            var invalidDefaultDateMessage = 'Please enter a valid date.';
+                            var invalidDefaultDateMessage = 'Invalid date';
                             this.model.errorModel.set(this.field.get('name'), invalidDefaultDateMessage);
                             return formErrorMessage || invalidDefaultDateMessage;
                         }
@@ -613,12 +691,12 @@ define([
             changes[name] = _.isEmpty(path) ? this.datepickerExternalModel.get('formattedDate') || value || inputString : _.clone(model.get(name)) || {};
             changes['_' + name] = _.isEmpty(path) ? this.datepickerExternalModel : _.clone(model.get('_' + name)) || {};
             if (!_.isEmpty(path)) this.keyPathSetter(changes[name], path, this.datepickerExternalModel.get('formattedDate') || value || inputString);
-            this.stopListening(this.model, "change:" + name, this.modelChangeListener || this.render);
+            this.stopListening(this.model, "change:" + name, this.onModelChange);
             if (_.isFunction(this.getSelectedLabelFromDOM)) {
                 this.model.trigger('labelsForSelectedValues:update', name, this.getSelectedLabelFromDOM());
             }
             model.set(changes);
-            this.listenTo(this.model, "change:" + name, this.modelChangeListener || this.render);
+            this.listenTo(this.model, "change:" + name, this.onModelChange);
             if (this.isFlexible && _.isString(parsedDate) && parsedDate != inputString) {
                 this.$('input.flexible-input').val(parsedDate);
             }
@@ -626,11 +704,15 @@ define([
         formatDate: function(date, format) {
             format = format || this.defaults.displayFormat;
             if (date && _.isString(format)) {
-                if (_.isString(date) && date === '0d') {
-                    // though this is not ideal, "0d" was previously supported
-                    date = new Moment();
+                if (_.isString(date)) {
+                    if (date === '0d') {
+                        // though this is not ideal, "0d" was previously supported
+                        date = new Moment();
+                    } else {
+                        date = new Date(date);
+                    }
                 }
-                return (Moment.isMoment(date) ? date.format(format) : (_.isString(date) || date instanceof Date) ? new Moment(date).format(format) : false);
+                return (Moment.isMoment(date) ? date.format(format) : date instanceof Date ? new Moment(date).format(format) : false);
             }
             return false;
         },

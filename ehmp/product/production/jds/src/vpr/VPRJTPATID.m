@@ -6,6 +6,8 @@ VPRJTPATID ;KRM/CJE -- Unit Tests for GET/PUT Patient Identifiers and JPID utils
  ;PUT vpr/jpid/{jpid} ASSOCIATE^VPRJPR
  ;PUT vpr/jpid ASSOCIATE^VPRJPR
  ;DELETE vpr/jpid/{jpid} DISASSOCIATE^VPRJPR
+ ;POST vpr/jpid/query JPIDQUERY^VPRJPR
+ ;
 STARTUP  ; Run once before all tests
  K ^VPRPTJ
  K ^VPRPTJ("JPID")
@@ -48,8 +50,9 @@ NEWJPID ;; @TEST Creating a new JPID
  K ^TMP
  S JPID=$$JPID^VPRJPR
  D NE^VPRJT("",$G(JPID),"JPID not created")
- D ASSERT(1,$D(^VPRPTJ("JPID",JPID)),"JPID existance index not created")
+ D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID existance index not created")
  D ASSERT(1,$G(^VPRPTX("count","patient","patient")),"Patient count index not created")
+ D ASSERT(1,$D(^VPRPTJ("JPID",JPID,"JPID;"_JPID)),"Patient JPID not found in identifier list")
  K ^VPRPTJ("JPID")
  K ^VPRPTX("count","patient","patient")
  K ^TMP
@@ -64,7 +67,9 @@ IDXJPID ;; @TEST Index a new JPID with one identifier
  D NE^VPRJT("",$G(JPID),"JPID not created")
  D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID existance index not created")
  D ASSERT(1,$D(^VPRPTJ("JPID",JPID,"9E7A;3")),"Patient identifier forward (JPID -> PID/ICN) index not updated correctly")
+ D ASSERT(1,$D(^VPRPTJ("JPID",JPID,"JPID;"_JPID)),"Patient identifier forward (JPID -> JPID;{JPID}) index not updated correctly")
  D ASSERT(JPID,$G(^VPRPTJ("JPID","9E7A;3")),"Patient identifier reverse (PID/ICN -> JPID) index not updated correctly")
+ D ASSERT(JPID,$G(^VPRPTJ("JPID","JPID;"_JPID)),"Patient identifier reverse (JPID;{JPID} -> JPID index not updated correctly")
  D ASSERT(1,$G(^VPRPTX("count","patient","patient")),"Patient count index not created")
  K ^VPRPTJ("JPID")
  K ^VPRPTX("count","patient","patient")
@@ -369,7 +374,7 @@ ASSOCNPID ;; @TEST Associate PID with new JPID
  K ^VPRPTX("count","patient","patient")
  K ^TMP
  S BODY(1)="{""patientIdentifiers"": [""9E7A;3""]}"
- S JPID=$$ASSOCIATE^VPRJPR(.ARG,.BODY)
+ S JPID=$P($$ASSOCIATE^VPRJPR(.ARG,.BODY),"/",4)
  D ASSERT(1,$D(JPID),"No return from ASSOCIATE^VPRJPR and there should be")
  D ASSERT(10,$D(^VPRPTJ("JPID")),"JPID index does not exist")
  D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID does not exist")
@@ -385,7 +390,7 @@ ASSOCNICN ;; @TEST Associate ICN with new JPID
  K ^VPRPTX("count","patient","patient")
  K ^TMP
  S BODY(1)="{""patientIdentifiers"": [""1234V4321""]}"
- S JPID=$$ASSOCIATE^VPRJPR(.ARG,.BODY)
+ S JPID=$P($$ASSOCIATE^VPRJPR(.ARG,.BODY),"/",4)
  D ASSERT(1,$D(JPID),"No return from ASSOCIATE^VPRJPR and there should be")
  D ASSERT(10,$D(^VPRPTJ("JPID")),"JPID index does not exist")
  D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID does not exist")
@@ -401,7 +406,7 @@ ASSOCNALL ;; @TEST Associate array of Patient Identifiers with new JPID
  K ^VPRPTX("count","patient","patient")
  K ^TMP
  S BODY(1)="{""patientIdentifiers"": [""1234V4321"",""9E7A;3"",""C877;3"",""DOD;1234V4321""]}"
- S JPID=$$ASSOCIATE^VPRJPR(.ARG,.BODY)
+ S JPID=$P($$ASSOCIATE^VPRJPR(.ARG,.BODY),"/",4)
  D ASSERT(1,$D(JPID),"No return from ASSOCIATE^VPRJPR and there should be")
  D ASSERT(10,$D(^VPRPTJ("JPID")),"JPID index does not exist")
  D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID does not exist")
@@ -424,7 +429,7 @@ ASSOCPID ;; @TEST Associate PID with existing JPID
  K ^TMP
  S BODY(1)="{""patientIdentifiers"": [""DOD;1234V4321""],""jpid"": ""52833885-af7c-4899-90be-b3a6630b2369""}"
  D PATIDS
- S JPID=$$ASSOCIATE^VPRJPR(.ARG,.BODY)
+ S JPID=$P($$ASSOCIATE^VPRJPR(.ARG,.BODY),"/",4)
  D ASSERT(1,$D(JPID),"No return from ASSOCIATE^VPRJPR and there should be")
  D ASSERT(10,$D(^VPRPTJ("JPID")),"JPID index does not exist")
  D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID does not exist")
@@ -447,7 +452,7 @@ ASSOCICN ;; @TEST Associate ICN with existing JPID
  K ^TMP
  S BODY(1)="{""patientIdentifiers"": [""1234V4321""],""jpid"": ""52833885-af7c-4899-90be-b3a6630b2369""}"
  D PATIDSNICN
- S JPID=$$ASSOCIATE^VPRJPR(.ARG,.BODY)
+ S JPID=$P($$ASSOCIATE^VPRJPR(.ARG,.BODY),"/",4)
  D ASSERT(1,$D(JPID),"No return from ASSOCIATE^VPRJPR and there should be")
  D ASSERT(10,$D(^VPRPTJ("JPID")),"JPID index does not exist")
  D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID does not exist")
@@ -468,7 +473,7 @@ ASSOCBID ;; @TEST Associate a Bad patient identifer with existing JPID
  K ^TMP
  S BODY(1)="{""patientIdentifiers"": [""000000003""],""jpid"": ""52833885-af7c-4899-90be-b3a6630b2369""}"
  D PATIDSNICN
- S JPID=$$ASSOCIATE^VPRJPR(.ARG,.BODY)
+ S JPID=$P($$ASSOCIATE^VPRJPR(.ARG,.BODY),"/",4)
  D ASSERT(1,$D(JPID),"No return from ASSOCIATE^VPRJPR and there should be")
  D ASSERT(10,$D(^VPRPTJ("JPID")),"JPID index does not exist")
  D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID does not exist")
@@ -491,7 +496,7 @@ ASSOCBID2 ;; @TEST Associate a Bad patient identifer with existing JPID
  K ^TMP
  S BODY(1)="{""patientIdentifiers"": [""ASDF123"",""112233""],""jpid"": ""52833885-af7c-4899-90be-b3a6630b2369""}"
  D PATIDSNICN
- S JPID=$$ASSOCIATE^VPRJPR(.ARG,.BODY)
+ S JPID=$P($$ASSOCIATE^VPRJPR(.ARG,.BODY),"/",4)
  D ASSERT(1,$D(JPID),"No return from ASSOCIATE^VPRJPR and there should be")
  D ASSERT(10,$D(^VPRPTJ("JPID")),"JPID index does not exist")
  D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID does not exist")
@@ -514,7 +519,7 @@ ASSOCALL ;; @TEST Associate array of Patient Identifiers with existing JPID
  K ^TMP
  S BODY(1)="{""patientIdentifiers"": [""1234V4321"",""DOD;1234V4321"",""VLER;1234V4321""],""jpid"": ""52833885-af7c-4899-90be-b3a6630b2369""}"
  D PATIDSNICN
- S JPID=$$ASSOCIATE^VPRJPR(.ARG,.BODY)
+ S JPID=$P($$ASSOCIATE^VPRJPR(.ARG,.BODY),"/",4)
  D ASSERT(1,$D(JPID),"No return from ASSOCIATE^VPRJPR and there should be")
  D ASSERT(10,$D(^VPRPTJ("JPID")),"JPID index does not exist")
  D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID does not exist")
@@ -540,7 +545,7 @@ ASSOCALLP ;; @TEST Associate array of Patient Identifiers with existing JPID usi
  S BODY(1)="{""patientIdentifiers"": [""1234V4321"",""DOD;1234V4321"",""VLER;1234V4321""]}"
  S ARG("jpid")="9E7A;3"
  D PATIDSNICN
- S JPID=$$ASSOCIATE^VPRJPR(.ARG,.BODY)
+ S JPID=$P($$ASSOCIATE^VPRJPR(.ARG,.BODY),"/",4)
  D ASSERT(1,$D(JPID),"No return from ASSOCIATE^VPRJPR and there should be")
  D ASSERT(10,$D(^VPRPTJ("JPID")),"JPID index does not exist")
  D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID does not exist")
@@ -636,3 +641,91 @@ DISAEJPIDU ;; @TEST Disassociate JPID Unknown error
  K ^VPRPTX("count","patient","patient")
  K ^TMP
  Q
+ ;
+INVJPIDQ ;; @TEST JPID QUERY with an invalid query
+ N RETURN,ARGS,BODY,HTTPERR
+ K ^VPRPTJ("JPID")
+ K ^VPRPTX("count","patient","patient")
+ K ^TMP
+ D PATIDS
+ S BODY="{""TEST"":1}"
+ S RETURN=$$JPIDQUERY^VPRJPR(.ARGS,.BODY)
+ D ASSERT(400,$G(^TMP("HTTPERR",$J,1,"error","code")),"An HTTP 400 error should have occured")
+ D ASSERT(242,$G(^TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 242 reason code should have occurred")
+ Q
+ ;
+KNOWNJPIDQ ;; @TEST JPID Query with all known PIDs
+ N RETURN,ARGS,BODY,HTTPERR
+ K ^VPRPTJ("JPID")
+ K ^VPRPTX("count","patient","patient")
+ K ^TMP
+ D PATIDS
+ S BODY="{""patientIdentifiers"":[""9E7A;3"",""C877;3"",""1234V4321""]}"
+ S RETURN=$$JPIDQUERY^VPRJPR(.ARGS,.BODY)
+ D ASSERT("",$G(^TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should not have occured")
+ D ASSERT("52833885-af7c-4899-90be-b3a6630b2369",$P(RETURN,"/",4),"returned JPID doesn't match expected value")
+ Q
+ ;
+1UNKNOWNJPIDQ ;; @TEST JPID Query with 1 unknown PID
+ N RETURN,ARGS,BODY,HTTPERR
+ K ^VPRPTJ("JPID")
+ K ^VPRPTX("count","patient","patient")
+ K ^TMP
+ D PATIDS
+ S BODY="{""patientIdentifiers"":[""9E7A;3"",""ABCD;3"",""1234V4321""]}"
+ S RETURN=$$JPIDQUERY^VPRJPR(.ARGS,.BODY)
+ D ASSERT("",$G(^TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should not have occured")
+ D ASSERT("52833885-af7c-4899-90be-b3a6630b2369",$P(RETURN,"/",4),"returned JPID doesn't match expected value")
+ Q
+ ;
+ALLUNKNOWNJPIDQ ;; @TEST JPID Query with all unknown PIDs
+ N RETURN,ARGS,BODY,HTTPERR
+ K ^VPRPTJ("JPID")
+ K ^VPRPTX("count","patient","patient")
+ K ^TMP
+ D PATIDS
+ S BODY="{""patientIdentifiers"":[""1234;3"",""ABCD;3"",""4321V1234""]}"
+ S RETURN=$$JPIDQUERY^VPRJPR(.ARGS,.BODY)
+ D ASSERT("",$G(^TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should not have occured")
+ D ASSERT("",RETURN,"should have received an empty string and didn't")
+ Q
+ ;
+1COLJPIDQ ;; @TEST JPID Query with 1 JPID collision
+ N RETURN,ARGS,BODY,HTTPERR,TMP
+ K ^VPRPTJ("JPID")
+ K ^VPRPTX("count","patient","patient")
+ K ^TMP
+ D PATIDS
+ S TMP=$I(^VPRPTX("count","patient","patient"))
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2370")=""
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2370","ASDF;3")=""
+ S ^VPRPTJ("JPID","ASDF;3")="52833885-af7c-4899-90be-b3a6630b2370"
+ ;
+ S BODY="{""patientIdentifiers"":[""9E7A;3"",""ASDF;3"",""C877;3""]}"
+ S RETURN=$$JPIDQUERY^VPRJPR(.ARGS,.BODY)
+ D ASSERT(400,$G(^TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should not have occured")
+ D ASSERT(223,$G(^TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 242 reason code should have occurred")
+ D ASSERT("",RETURN,"should have received an empty string and didn't")
+ Q
+ ;
+ALLCOLJPIDQ ;; @TEST JPID Query with all PIDs colliding
+ N RETURN,ARGS,BODY,HTTPERR,TMP
+ K ^VPRPTJ("JPID")
+ K ^VPRPTX("count","patient","patient")
+ K ^TMP
+ D PATIDS
+ S TMP=$I(^VPRPTX("count","patient","patient"))
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2370")=""
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2370","ASDF;3")=""
+ S ^VPRPTJ("JPID","ASDF;3")="52833885-af7c-4899-90be-b3a6630b2370"
+ S TMP=$I(^VPRPTX("count","patient","patient"))
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2371")=""
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2371","4321V1234")=""
+ S ^VPRPTJ("JPID","4321V1234")="52833885-af7c-4899-90be-b3a6630b2371"
+ ;
+ S BODY="{""patientIdentifiers"":[""9E7A;3"",""ASDF;3"",""4321V1234""]}"
+ S RETURN=$$JPIDQUERY^VPRJPR(.ARGS,.BODY)
+ D ASSERT(400,$G(^TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should not have occured")
+ D ASSERT(223,$G(^TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 242 reason code should have occurred")
+ D ASSERT("",RETURN,"should have received an empty string and didn't") Q
+ ;

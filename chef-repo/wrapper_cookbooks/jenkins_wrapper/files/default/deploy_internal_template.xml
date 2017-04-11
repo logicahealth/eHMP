@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<actions/>
+	<description/>
+	<logRotator class="hudson.tasks.LogRotator">
+		<daysToKeep>-1</daysToKeep>
+		<numToKeep>30</numToKeep>
+		<artifactDaysToKeep>-1</artifactDaysToKeep>
+		<artifactNumToKeep>-1</artifactNumToKeep>
+	</logRotator>
+	<keepDependencies>false</keepDependencies>
+	<properties>
+		<hudson.model.ParametersDefinitionProperty>
+			<parameterDefinitions>
+				<hudson.model.StringParameterDefinition>
+					<name>APP_VERSION</name>
+					<description/>
+					<defaultValue/>
+				</hudson.model.StringParameterDefinition>
+				<hudson.model.StringParameterDefinition>
+					<name>LOG_LEVEL</name>
+					<description/>
+					<defaultValue>warn</defaultValue>
+				</hudson.model.StringParameterDefinition>
+				<hudson.model.StringParameterDefinition>
+					<name>GEM_HOME</name>
+					<description/>
+					<defaultValue>/opt/chefdk/embedded/lib/ruby/gems/2.1.0</defaultValue>
+				</hudson.model.StringParameterDefinition>
+				<hudson.model.StringParameterDefinition>
+					<name>NEXUS_URL</name>
+					<description/>
+					<defaultValue>INSERT_NEXUS_URL_HERE</defaultValue>
+				</hudson.model.StringParameterDefinition>
+				<hudson.model.StringParameterDefinition>
+					<name>CHEF_REPO_PATH</name>
+					<description/>
+					<defaultValue>/var/deployment/chef-repo</defaultValue>
+				</hudson.model.StringParameterDefinition>
+				<hudson.model.StringParameterDefinition>
+					<name>CERT_PATH</name>
+					<description/>
+					<defaultValue>/var/deployment/chef-repo/.chef/trusted_certs/INSERT_CERT_NAME_HERE.crt</defaultValue>
+				</hudson.model.StringParameterDefinition>
+				<hudson.model.StringParameterDefinition>
+					<name>PRODUCTION_DATA_BAG</name>
+					<description/>
+					<defaultValue>SAMPLE_DATABAG</defaultValue>
+				</hudson.model.StringParameterDefinition>
+				<hudson.model.StringParameterDefinition>
+					<name>ENVIRONMENT_FILE</name>
+					<description/>
+					<defaultValue>SAMPLE_ENVIRONMENT_FILE</defaultValue>
+				</hudson.model.StringParameterDefinition>
+			</parameterDefinitions>
+		</hudson.model.ParametersDefinitionProperty>
+	</properties>
+	<scm class="hudson.scm.NullSCM"/>
+	<canRoam>true</canRoam>
+	<disabled>false</disabled>
+	<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+	<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+	<triggers/>
+	<concurrentBuild>false</concurrentBuild>
+	<builders>
+		<hudson.tasks.Shell>
+			<hudson.tasks.Shell>
+			<command>#!/usr/bin/env bash
+curl $NEXUS_URL/nexus/service/local/repositories/releases/content/us/vistacore/artifact-versions-shell/$APP_VERSION/artifact-versions-shell-$APP_VERSION.sh -o artifact_versions.sh
+			</command>
+		</hudson.tasks.Shell>
+		<hudson.tasks.Shell>
+			<command>#!/usr/bin/env bash 
+source artifact_versions.sh 
+MACHINE_NAME=jds DRIVER=ssh chef-client -o ehmp_provision@$EHMP_PROVISION -c $CHEF_REPO_PATH/.chef/knife.rb -l $LOG_LEVEL --force-formatter --environment $ENVIRONMENT_FILE </command>
+		</hudson.tasks.Shell>
+		<hudson.tasks.Shell>
+			<command>#!/usr/bin/env bash 
+source artifact_versions.sh 
+MACHINE_NAME=solr DRIVER=ssh chef-client -o ehmp_provision@$EHMP_PROVISION -c $CHEF_REPO_PATH/.chef/knife.rb -l $LOG_LEVEL --force-formatter --environment $ENVIRONMENT_FILE </command>
+		</hudson.tasks.Shell>
+		<hudson.tasks.Shell>
+			<command>#!/usr/bin/env bash 
+source artifact_versions.sh 
+MACHINE_NAME=pjds DRIVER=ssh chef-client -o ehmp_provision@$EHMP_PROVISION -c $CHEF_REPO_PATH/.chef/knife.rb -l $LOG_LEVEL --force-formatter --environment $ENVIRONMENT_FILE </command>
+		</hudson.tasks.Shell>
+		<hudson.tasks.Shell>
+			<command>#!/usr/bin/env bash 
+source artifact_versions.sh 
+MACHINE_NAME=mocks DRIVER=ssh chef-client -o ehmp_provision@$EHMP_PROVISION -c $CHEF_REPO_PATH/.chef/knife.rb -l $LOG_LEVEL --force-formatter --environment $ENVIRONMENT_FILE </command>
+		</hudson.tasks.Shell>
+		<hudson.tasks.Shell>
+			<command>#!/usr/bin/env bash 
+source artifact_versions.sh 
+MACHINE_NAME=vista-kodak DRIVER=ssh chef-client -o ehmp_provision@$EHMP_PROVISION -c $CHEF_REPO_PATH/.chef/knife.rb -l $LOG_LEVEL --force-formatter --environment $ENVIRONMENT_FILE </command>
+		</hudson.tasks.Shell>
+		<hudson.tasks.Shell>
+			<command>#!/usr/bin/env bash
+source artifact_versions.sh
+MACHINE_NAME=vista-panorama DRIVER=ssh chef-client -o ehmp_provision@$EHMP_PROVISION -c $CHEF_REPO_PATH/.chef/knife.rb -l $LOG_LEVEL --force-formatter --environment $ENVIRONMENT_FILE </command>
+		</hudson.tasks.Shell>
+		<hudson.tasks.Shell>
+			<command>#!/usr/bin/env bash
+source artifact_versions.sh
+MACHINE_NAME=vxsync DRIVER=ssh chef-client -o ehmp_provision@$EHMP_PROVISION -c $CHEF_REPO_PATH/.chef/knife.rb -l $LOG_LEVEL --force-formatter --environment $ENVIRONMENT_FILE </command>
+		</hudson.tasks.Shell>
+		<hudson.tasks.Shell>
+			<command>#!/usr/bin/env bash 
+source artifact_versions.sh 
+MACHINE_NAME=rdk DRIVER=ssh chef-client -o rdk_provision@$RDK_PROVISION -c $CHEF_REPO_PATH/.chef/knife.rb -l $LOG_LEVEL --force-formatter --environment $ENVIRONMENT_FILE </command>
+		</hudson.tasks.Shell>
+		<hudson.tasks.Shell>
+			<command>#!/usr/bin/env bash 
+source artifact_versions.sh 
+MACHINE_NAME=ehmp-ui DRIVER=ssh chef-client -o ehmp-ui_provision@$EHMP_UI_PROVISION -c $CHEF_REPO_PATH/.chef/knife.rb -l $LOG_LEVEL --force-formatter --environment $ENVIRONMENT_FILE </command>
+		</hudson.tasks.Shell>
+		<hudson.tasks.Shell>
+			<command>#!/usr/bin/env bash 
+source artifact_versions.sh 
+MACHINE_NAME=ehmp-balancer DRIVER=ssh chef-client -o ehmp-ui_provision@$EHMP_UI_PROVISION -c $CHEF_REPO_PATH/.chef/knife.rb -l $LOG_LEVEL --force-formatter --environment $ENVIRONMENT_FILE </command>
+		</hudson.tasks.Shell>
+	</builders>
+	<publishers/>
+	<buildWrappers/>
+</project>

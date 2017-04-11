@@ -1,0 +1,47 @@
+{
+    "domains": {
+        "ehmp-activity": {
+            "modulePath": "clinical-objects-validator-activity",
+            "subdomains": {
+                "request": {
+                    "modulePath": "clinical-objects-validator-request"
+                },
+                "consult": {
+                    "modulePath": "clinical-objects-validator-consult"
+                },
+                "laboratory": {
+                    "modulePath": "clinical-objects-validator-order"
+                }
+            }
+        }
+    },
+    "urgencies": {
+        "emergent": 1,
+        "urgent": 7,
+        "routine": 30
+    },
+    "types": {
+        "team": {
+            "table": "PCMM.TEAM",
+            "fields": [{
+                "inDatabase": "TEAM_ID",
+                "inJson": "code"
+            }, {
+                "inDatabase": "TEAM_NAME",
+                "inJson": "name"
+            }]
+        },
+        "role": {
+            "table": "PCMM.PCM_STD_TEAM_ROLE",
+            "fields": [{
+                "inDatabase": "PCM_STD_TEAM_ROLE_ID",
+                "inJson": "code"
+            }, {
+                "inDatabase": "NAME",
+                "inJson": "name"
+            }]
+        }
+    },
+    "displayNameMaxLength": 140,
+    "requestDetailsMaxLength": 200
+}

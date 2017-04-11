@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Problems lexicon extended lookup [/problems-lexicon-extended-lookup{?site}{&searchString}{&date}{&synonym}{&limit}{&fields}]
+## Problems lexicon extended lookup [/problems-lexicon-extended-lookup{?site}{&searchString}{&date}{&synonym}{&limit}]
 
 DIRECT RPC CALL - Problems Lexicon Lookup - calls orqqpl4-lex-lookup with a value of CLF
 
@@ -19,8 +19,6 @@ ORQQPL4 LEX
     + synonym (string, optional) - If not supplied will default to zero, which means exclude synonyms
     
     + limit (string, optional) - If not supplied will default to zero, which means return all records found
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

@@ -8,12 +8,11 @@ define([
     'use strict';
 
     var STRowItemView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile([
-            '<span class="sr-only">{{#if label}}Press enter to set this as the {{label}}.{{else}}Press enter to select this row.{{/if}}</span>',
+        template: Handlebars.compile(
+            '<span class="sr-only">{{#if label}}Press enter to set this as the {{label}}.{{else}}Press enter to select this row.{{/if}}</span>' +
             '{{#each columns}}' +
             '<div class="table-cell"><span>{{value}}</span></div>' + //data
-            '{{/each}}'
-        ].join('\n')),
+            '{{/each}}'),
         tagName: 'a',
         className: 'table-row',
         attributes: {
@@ -50,24 +49,35 @@ define([
     });
 
     var SelectableTablePrototype = {
-        template: Handlebars.compile([
-            '<div class="col-xs-12">', // container
-            '<div id="{{#if id}}{{clean-for-id id}}{{else}}{{clean-for-id name}}{{/if}}" class="faux-table-container">', // wrapper for control
-            '<div class="faux-table">',
-            '<div class="header">',
-            '<div class="table-row">',
-            '{{#each columns}}' +
-            '<div class="table-cell"><div>{{title}}</div></div>' +
-            '{{/each}}',
-            '</div>', // header row
-            '</div>', // header (composite's "item view")
-            '<div class="body"></div>', // body (composite's "collection view")
-            '</div>', // faux-table
-            '</div>', // wrapper for control
-            '</div>' // container
-        ].join('\n')),
+        getTemplate: function() {
+            function wrapTemplate(template, className) {
+                return template ? '<div class="' + className + '">' + template + '</div>' : '';
+            }
+            var defaultEmptyTemplate = '<p class="top-margin-sm">No {{#if label}}{{label}}{{else}}item{{/if}}s found.</p>';
+            var defaultLoadingTemplate = '<p class="top-margin-sm"><i class="fa fa-spinner fa-spin"></i> Loading...</p>';
+
+            return Handlebars.compile(
+                '<div class="col-xs-12">' + // container
+                '<div id="{{#if id}}{{clean-for-id id}}{{else}}{{clean-for-id name}}{{/if}}" class="faux-table-container">' + // wrapper for control
+                '<div class="faux-table">' +
+                '<div class="header">' +
+                '<div class="table-row">' +
+                '{{#each columns}}' +
+                '<div class="table-cell"><div>{{title}}</div></div>' +
+                '{{/each}}' +
+                '</div>' + // header row
+                '</div>' + // header (composite's "item view")
+                '<div class="body"></div>' + // body (composite's "collection view")
+                '</div>' + // faux-table
+                wrapTemplate(this.field.get('loadingTemplate') || defaultLoadingTemplate, 'loading') +
+                wrapTemplate(this.field.get('emptyTemplate') || defaultEmptyTemplate, 'no-results') +
+                '</div>' + // wrapper for control
+                '</div>'); // container
+        },
         ui: {
-            'BodyContainer': '.faux-table-container .body'
+            'BodyContainer': '.faux-table-container .body',
+            'LoadingMessage': '.loading',
+            'EmptyMessage': '.no-results'
         },
         requiredFields: ['name', 'collection', 'columns'],
         initialize: function(options) {
@@ -107,6 +117,27 @@ define([
                 type: 'Assertive',
                 message: (this.field.get("label") ? this.field.get('label') + ' has been set' : 'Row has been selected') + ' with content of:' + currentString
             });
+            this.onUserInput.apply(this, arguments);
+        },
+        onRender: function() {
+            PuppetForm.CommonPrototype.onRender.apply(this);
+            this.toggleEmptyMessage();
+        },
+        collectionEvents: {
+            update: 'toggleEmptyMessage',
+            sync: 'toggleEmptyMessage',
+            reset: 'toggleEmptyMessage'
+        },
+        events: _.defaults({
+            'control:loading': 'toggleLoadingMessage',
+        }, PuppetForm.CommonPrototype.events),
+        toggleLoadingMessage: function(e, booleanValue) {
+            this.ui.EmptyMessage.toggle(!booleanValue && !this.collection.length);
+            this.ui.LoadingMessage.toggle(booleanValue);
+        },
+        toggleEmptyMessage: function() {
+            this.ui.LoadingMessage.hide();
+            this.ui.EmptyMessage.toggle(this.field.get('showEmptyMessage') !== false && !this.collection.length);
         }
     };
 

@@ -9,16 +9,16 @@ var log = sinon.stub(require('bunyan').createLogger({ name: 'lab-order-specimens
 var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
-    host: 'IP        ',
+    host: 'IP_ADDRESS',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'PW',
+    verifyCode: 'PW',
+    localIP: 'IPADDRES',
     localAddress: 'localhost'
 };
 
 describe('lab-order-specimens resource integration test', function() {
-    it('can call the fetch RPC', function (done) {
+    it('can call the fetch RPC function', function (done) {
         this.timeout(200000);
 
         fetch(log, configuration, function(err, result) {
@@ -28,7 +28,7 @@ describe('lab-order-specimens resource integration test', function() {
         }); //No params passed to this
     });
 
-    it('can call the fetch RPC', function (done) {
+    it('can call the fetch direct RPC function', function (done) {
         this.timeout(20000);
 
         fetchDirect(log, configuration, function(err, result) {

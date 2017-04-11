@@ -7,10 +7,10 @@ class AppContainer < AccessBrowserV2
   include Singleton
   def initialize
     super
-    add_action(CucumberLabel.new("Current User Menu"), ClickAction.new, AccessHtmlElement.new(:id, "eHMP-CurrentUser"))
+    add_action(CucumberLabel.new("Current User Menu"), ClickAction.new, AccessHtmlElement.new(:id, "eHMPCurrentUser"))
     add_action(CucumberLabel.new("Help Menu"), ClickAction.new, AccessHtmlElement.new(:id, "eHMP-Help"))
     
-    add_verify(CucumberLabel.new("Current User Menu Text"), VerifyContainsText.new, AccessHtmlElement.new(:id, "eHMP-CurrentUser"))
+    add_verify(CucumberLabel.new("Current User Menu Text"), VerifyContainsText.new, AccessHtmlElement.new(:id, "eHMPCurrentUser"))
   end
 end # 
 

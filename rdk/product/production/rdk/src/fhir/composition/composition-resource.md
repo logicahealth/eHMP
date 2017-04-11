@@ -1,6 +1,6 @@
 # Group FHIR
 
-## Composition [{{{path}}}{?subject.identifier}{&type}{&start}{&limit}{&fields}]
+## Composition [{{{path}}}{?subject.identifier}{&type}{&start}{&limit}]
 
 + Parameters
 
@@ -11,8 +11,6 @@
     :[start]({{{common}}}/parameters/start.md)
 
     :[limit]({{{common}}}/parameters/limit.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Fhir composition [GET]
@@ -26,9 +24,11 @@ Converts a vpr document into a composition FHIR resource.
     + Body
 
             {
-                "data": [
-                    "The required parameter "subject.identifier" is missing."
-                ],
+                "data": {
+                    "errors": [
+                        "The required parameter \"subject.identifier\" is missing."
+                    ]
+                },
                 "status": 400
             }
 

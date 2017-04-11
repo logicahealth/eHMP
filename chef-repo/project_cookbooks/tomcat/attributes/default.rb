@@ -31,7 +31,7 @@ default["tomcat"]["jmx_opts"] = []
 default["tomcat"]["webapp_opts"] = []
 default["tomcat"]["more_opts"] = []
 
-default['tomcat']['8']['url'] = "#{node[:nexus_url]}/nexus/content/repositories/ehmp/filerepo/third-party/project/apache/apache-tomcat/8.0.20/apache-tomcat-8.0.20.tar.gz"
+default['tomcat']['8']['url'] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/apache/apache-tomcat/8.0.20/apache-tomcat-8.0.20.tar.gz"
 # default['tomcat']['8']['checksum'] = "e95a2dc7d9cee82bdf7c019615e203f5730672eb07db7cd2ebe133c893a93b84"
 
 default['tomcat']['user_home'] = "/home/tomcat#{node["tomcat"]["version"]}"

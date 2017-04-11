@@ -18,11 +18,13 @@ var handler = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/jmeadows-x
 var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var wConfig = require(global.VX_ROOT + 'worker-config');
+var realConfig = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
+
 
 var config = {
-    jds: _.defaults(wConfig.jds, {
+    jds: _.defaults(realConfig.jds, {
         protocol: 'http',
-        host: 'IPADDRESS ',
+        host: 'IP_ADDRESS',
         port: 9080
     })
 };
@@ -72,7 +74,7 @@ describe('jmeadows-xfom-domain-vpr-handler integration test', function() {
             domains: ['allergy']
         };
 
-        var matchingJobTypes = [jobUtil.recordEnrichmentType(), jobUtil.recordEnrichmentType(), jobUtil.recordEnrichmentType()];
+        var matchingJobTypes = [jobUtil.eventPrioritizationRequestType(), jobUtil.eventPrioritizationRequestType(), jobUtil.eventPrioritizationRequestType()];
         testHandler(handler, logger, localConfig, environment, host, port, tubename, job, matchingJobTypes);
     });
 

@@ -4,18 +4,10 @@ JSON.create_id = nil
 def knife_search_for_ip(machine_name)
   release = File.read(File.dirname(__FILE__) + "/../../infrastructure/properties/releaseVersion")
   stack = ENV['JOB_NAME'] || "#{ENV['USER']}-#{release}"
-  if Rake::Win32.windows?
-    if ENV.key?('BUNDLE_BIN_PATH')
-      raw_search = Bundler.with_clean_env { `knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config #{ENV['HOME']}/Projects/vistacore/.chef/knife.rb` }
-    else
-      raw_search = `knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config #{ENV['HOME']}/Projects/vistacore/.chef/knife.rb`
-    end
+  if ENV.key?('BUNDLE_BIN_PATH')
+    raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
   else
-    if ENV.key?('BUNDLE_BIN_PATH')
-      raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
-    else
-      raw_search = `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
-    end
+    raw_search = `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
   end
   parsed_search = JSON.parse(raw_search)
   fail "More than one node with that name found" if parsed_search["results"] > 1
@@ -26,18 +18,10 @@ end
 def knife_search_for_attribute(machine_name, attribute, attribute_type)
   release = File.read(File.dirname(__FILE__) + "/../../infrastructure/properties/releaseVersion")
   stack = ENV['JOB_NAME'] || "#{ENV['USER']}-#{release}"
-  if Rake::Win32.windows?
-    if ENV.key?('BUNDLE_BIN_PATH')
-      raw_search = Bundler.with_clean_env { `knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config #{ENV['HOME']}/Projects/vistacore/.chef/knife.rb` }
-    else
-      raw_search = `knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config #{ENV['HOME']}/Projects/vistacore/.chef/knife.rb`
-    end
+  if ENV.key?('BUNDLE_BIN_PATH')
+    raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
   else
-    if ENV.key?('BUNDLE_BIN_PATH')
-      raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
-    else
-      raw_search = `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
-    end
+    raw_search = `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
   end
   parsed_search = JSON.parse(raw_search)
   fail "More than one node with that name found" if parsed_search["results"] > 1
@@ -55,11 +39,7 @@ def knife_search_for_key_name(machine_name, driver)
   release = File.read(File.dirname(__FILE__) + "/../../infrastructure/properties/releaseVersion")
   stack = ENV['JOB_NAME'] || "#{ENV['USER']}-#{release}"
   driver == "aws" ? key_box = "#{machine_name}-#{stack}-noint" : key_box = "#{machine_name}-#{stack}"
-  if Rake::Win32.windows?
-    raw_search = `knife search node \'name:#{key_box}\' -Fj --config #{ENV['HOME']}/Projects/vistacore/.chef/knife.rb`
-  else
-    raw_search = `/opt/chefdk/bin/knife search node \'name:#{key_box}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
-  end
+  raw_search = `/opt/chefdk/bin/knife search node \'name:#{key_box}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
   parsed_search = JSON.parse(raw_search)
   fail "More than one key was found for: #{machine_name}" if parsed_search["results"] > 1
   fail "No key was found for: #{machine_name}" if parsed_search["results"] == 0

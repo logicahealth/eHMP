@@ -2,19 +2,18 @@ define(function() {
     'use strict';
     var screenConfig = {
         id: 'todo-list-provider-full',
+        context: 'staff',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
-        appHeader: 'nav',
         appLeft: 'patientInfo',
         applets: [{
             id: 'todo_list',
-            title: 'My tasks',
+            title: 'Tasks',
             region: 'center',
             fullScreen: true,
             viewType: 'expanded'
         }],
-        patientRequired: false,
-        nonPatientCentricView: true
+        patientRequired: false
     };
 
     return screenConfig;

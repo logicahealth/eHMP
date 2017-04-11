@@ -7,11 +7,13 @@ var errorUtil = require(global.VX_UTILS + 'error');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
 var logUtil = require(global.VX_UTILS + 'log');
 var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
-var patIdCompareUtil = require(global.VX_UTILS + 'patient-id-comparator');
+var patIdCompareUtil = require(global.VX_UTILS + 'resync/patient-id-comparator');
+var jdsIdConflictUtil = require(global.VX_UTILS + 'resync/resync-jds-id-conflicts');
 var PtDemographicsUtil = require(global.VX_UTILS + 'ptdemographics-utils');
 var inspect = require(global.VX_UTILS + 'inspect');
-
+var moment = require('moment');
 var jobValidator = jobUtil.isValid.bind(null, jobUtil.enterpriseSyncRequestType());
+var format = require('util').format;
 
 var SourceSyncJobFactory = require('./source-sync-job-factory');
 
@@ -61,9 +63,39 @@ function handle(log, config, environment, job, handlerCallback, touchBack) {
         options.sourceSyncJobFactory.createVerifiedJobs.bind(options.sourceSyncJobFactory),
         createDemographics.bind(options),
         function(data, callback) { touchBack(); callback(null, data); },
+        writeSyncMetrics.bind(options),
         publishJobs.bind(options),
-    ], options.handlerCallback);
+    ], function(waterfallError, waterfallResult) {
+        if (waterfallError === 'NO_OPDATA') {
+            var odsRule = config.rules['operational-data-sync'];
+            if (!_.isUndefined(job.odsAttempts) && ++job.odsAttempts > odsRule.odsAttempts) {
+                var odsTime = odsRule.odsAttempts * odsRule.odsDelay;
+                var odsError = errorUtil.createTransient('enterprise-sync-request-handler : Operational Data failed after '+odsTime);
+                options.handlerCallback(odsError);
+            } else {
+                if (_.isUndefined(job.odsAttempts)) {
+                    job.odsAttempts = 1;
+                }
+                environment.publisherRouter.publish(job, { 'delay': odsRule.odsDelay }, options.handlerCallback);
+            }
+        } else {
+            options.handlerCallback(waterfallError, waterfallResult);
+        }
+    });
 }
+
+var writeSyncMetrics = function(jobsToPublish, callback) {
+    var self = this;
+    var metricsObj = {
+        'patientIdentifier': self.job.patientIdentifier,
+        'sites': _.map(jobsToPublish, function(job) {
+            return job.patientIdentifier.value.split(';')[0];
+        })
+    };
+
+    self.environment.metrics.warn('Sending synchronization request to sites', metricsObj);
+    callback(null, jobsToPublish);
+};
 
 //-----------------------------------------------------------------------------
 // Ensures that the patient will have a demographic record stored. This only
@@ -113,22 +145,20 @@ var queryMVI = function(callback) {
         }
 
         var jdsPatientIdentifiers = createValidIdentifiers.call(self, mviResponse);
+        var vhicIdEvent = createVhicIdEvent.call(self, mviResponse);
 
-        //**********************************************************************
-        // check for association change here, resync if needed.
-        ///**********************************************************************
-        self.log.debug('enterprise-sync-request-handler.saveMviResults(): Calling patient-id-comparator');
+        self.log.debug('enterprise-sync-request-handler.saveMviResults(): Calling patient-id-comparator to see if resync needed.');
         self.environment.patientIdComparator(self.log, self.environment, self.job, jdsPatientIdentifiers, function(error, result) {
             if (error) {
                 self.log.error('enterprise-sync-request-handler.queryMVI(): Error checking if resync required: %s for patient %j.', error, self.job.patientIdentifier);
             } else if (result === 'RESYNCING') {
-                self.log.info('enterprise-sync-request-handler.queryMVI(): This patient needs to be Resyncd,  a resync request was publised for %j,', self.job.patientIdentifier);
+                self.log.info('enterprise-sync-request-handler.queryMVI(): This patient needs to be resynced, a resync request was published for %j,', self.job.patientIdentifier);
             } else {
-                self.log.debug('enterprise-sync-request-handler.queryMVI(): This patient doe NOT need to be Resyncd id=', self.job.patientIdentifier);
+                self.log.debug('enterprise-sync-request-handler.queryMVI(): This patient identifier %j does NOT need to be resynced.', self.job.patientIdentifier);
             }
 
             self.log.debug('enterprise-sync-request-handler.queryMVI(): Saving identifiers to JDS.  jdsPatientIdentifiers: %j', jdsPatientIdentifiers);
-            return saveMviResults.call(self, jdsPatientIdentifiers, callback);
+            return saveMviResults.call(self, jdsPatientIdentifiers, vhicIdEvent, callback);
         });
     });
 };
@@ -224,11 +254,11 @@ var createValidIdentifiers = function(mviResponse) {
         // patientIdentifiers = patientIdentifiers.concat(idUtil.create('pid', 'DAS;' + icn));
     }
 
-    // Add in the VHIC ID - It is not a site - but we need to put the identifier into JDS as an associated identifier.
+    // Don't add in the VHIC ID; it will be stored in a separate event
     //-----------------------------------------------------------------------------------------------------------------
-    if (vhicid) {
-        patientIdentifiers = patientIdentifiers.concat(idUtil.create('pid', 'VHICID;' + vhicid));
-    }
+    // if (vhicid) {
+    //     patientIdentifiers = patientIdentifiers.concat(idUtil.create('pid', 'VHICID;' + vhicid));
+    // }
 
     self.log.debug('enterprise-sync-request-handler.createValidIdentifiers: returning patientIdentifiers: %j', patientIdentifiers);
 
@@ -249,7 +279,7 @@ var createValidIdentifiers = function(mviResponse) {
 //             patientIdentifiers: The array of patientIdentifier objects that are
 //                                 associated with this patient.
 //--------------------------------------------------------------------------------------
-var saveMviResults = function(patientIdentifiers, callback) {
+var saveMviResults = function(patientIdentifiers, vhicIdEvent, callback) {
     var self = this;
 
     var jdsSave = {
@@ -258,12 +288,113 @@ var saveMviResults = function(patientIdentifiers, callback) {
     };
 
     self.log.debug('enterprise-sync-request-handler.saveMviResults(): Identifiers to pass to JDS: %j', jdsSave);
-    self.environment.jds.storePatientIdentifier(jdsSave, function(error) {
+    self.environment.jds.storePatientIdentifier(jdsSave, function(error, response, results) {
         if (error) {
             self.log.error('enterprise-sync-request-handler.saveMviResults():Error Storing Identifiers %j', error);
             return callback(errorUtil.createTransient(error), patientIdentifiers);
         }
 
+        if (response.statusCode === 400) {
+            self.log.warn('enterprise-sync-request-handler.saveMviResults(): Checking for Id conflict in JDS for %j.', results);
+            jdsIdConflictUtil.resyncJdsIdConflicts(self.log, self.config, self.environment, self.job, results, function(error, results) {
+                if (error) {
+                    self.log.error('enterprise-sync-request-handler.saveMviResults(): Error checking if resync required: %s for patient %j.', error, self.job.patientIdentifier);
+                    return callback(errorUtil.createTransient(error), patientIdentifiers);
+                }
+                if (results === 'RESYNCING') {
+                    self.log.info('enterprise-sync-request-handler.saveMviResults(): Patient identifier conflicts detected, resync request(s) were published related to patient identifier %j,', self.job.patientIdentifier);
+                } else {
+                    self.log.debug('enterprise-sync-request-handler.saveMviResults(): Patient identifier conflicts were NOT detected. This patient identifier %j does NOT need to be resynced.', self.job.patientIdentifier);
+                }
+                return storeVhicIdEvent.call(self, vhicIdEvent, patientIdentifiers, callback);
+            });
+        } else {
+            return storeVhicIdEvent.call(self, vhicIdEvent, patientIdentifiers, callback);
+        }
+    });
+};
+
+//--------------------------------------------------------------------------------------------
+// This method creates an instance of the vhic-id event containing all of the VHIC IDs that
+// were contained in the MVI Reponse {ids: []}
+//
+// mviResponse: What came back from the call to MVI.
+// returns: An instance of the vhid-id event containing the VHIC IDs that were in the
+//          MVI response.  If there were no VHIC IDs then this will return null.
+//--------------------------------------------------------------------------------------------
+var createVhicIdEvent = function(mviResponse) {
+    var self = this;
+    if(!mviResponse || !mviResponse.ids || _.isEmpty(mviResponse.ids)){
+        self.log.error('enterprise-sync-request-handler.createVhicIdEvent: mviResponse missing: %s', mviResponse);
+        return null;
+    }
+
+    var jpid = self.job.jpid;
+    var vhicIds = [];
+
+    _.each(mviResponse.ids, function(patientIdentifier){
+        if(patientIdentifier.type === 'vhicid'){
+            var vhicId = {
+                'vhicId' : patientIdentifier.value
+            };
+            if(patientIdentifier.active){
+                vhicId.active = patientIdentifier.active;
+            }
+            vhicIds.push(vhicId);
+        }
+    });
+
+    var currentTime = moment().format('YYYYMMDDHHmmss');
+
+    var vhicIdEvent = {
+        'lastUpdateTime': currentTime,
+        'localId': jpid,
+        'pid': 'JPID;' + jpid,
+        'stampTime': currentTime,
+        'uid': 'urn:va:vhic-id:JPID:'+jpid+':'+jpid,
+        'vhicIds': vhicIds
+    };
+    return vhicIdEvent;
+};
+
+
+//--------------------------------------------------------------------------------------
+// This method handles storing the vhicIdEvent to JDS. When it is done, it calls the
+// given callback with the array of patientIdentifiers that were stored in
+// the previous step, saveMviResults.
+// vhicIdEvent: The event containing all of the VHIC IDs that needs to be stored. If null, the
+//              storage step will be skipped.
+// patientIdentifiers:  An array of patientIdentifier objects to be returned via the callback
+// callback: function (error, patientIdentifiers) - This is the async.waterfall call
+//            back handler.  The async.waterfall will absorb the error parameter
+//           and if it is null, will pass the next parameter as the first
+//           parameters to the options.sourceSyncJobFactory.createVerifiedJobs method.
+//             error: The error for async.waterfall to trigger it to stop or continue.
+//             patientIdentifiers: The array of patientIdentifier objects that are
+//                                 associated with this patient.
+//--------------------------------------------------------------------------------------
+var storeVhicIdEvent = function(vhicIdEvent, patientIdentifiers, callback){
+    var self = this;
+    if(!vhicIdEvent){
+        self.log.debug('enterprise-sync-request-handler.storeVhicIdEvent(): No vhicIdEvent passed in; Skipping this step.');
+        return callback(null, patientIdentifiers);
+    }
+
+    self.log.debug('enterprise-sync-request-handler.storeVhicIdEvent(): Storing vhicIdEvent to JDS');
+    self.environment.jds.storePatientData(vhicIdEvent, function(error, response){
+        var errorMessage;
+        if(error){
+            errorMessage = format('enterprise-sync-request-handle.storeVhicIdEvent(): Error storing vhicIdEvent to JDS. error: %s, vhicIdEvent %s', inspect(error), inspect(vhicIdEvent));
+            self.log.error(errorMessage);
+            return callback(errorUtil.createTransient(errorMessage), patientIdentifiers);
+        } else if (!response || response.statusCode !== 201){
+            var statusCode = (response)? response.statusCode: null;
+            errorMessage = format('enterprise-sync-request-handle.storeVhicIdEvent(): Unexpected response when storing vhicIdEvent to JDS: response.statusCode: %s, vhicIdEvent %s', inspect(statusCode), inspect(vhicIdEvent));
+            self.log.error(errorMessage);
+            return callback(errorUtil.createTransient(errorMessage), patientIdentifiers);
+        }
+
+        self.log.debug('enterprise-sync-request-handler.storeVhicIdEvent(): vhicIdEvent succesfully stored to JDS');
         return callback(null, patientIdentifiers);
     });
 };
@@ -340,7 +471,9 @@ handle._steps = {
     '_mviSteps': {
         '_queryMVI': queryMVI,
         '_saveMviResults': saveMviResults,
-        '_createValidIdentifiers': createValidIdentifiers
+        '_createValidIdentifiers': createValidIdentifiers,
+        '_createVhicIdEvent': createVhicIdEvent,
+        '_storeVhicIdEvent': storeVhicIdEvent
     },
     '_publishJobs': publishJobs,
     '_createDemographics': createDemographics,

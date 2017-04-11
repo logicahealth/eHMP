@@ -3,7 +3,7 @@ Feature:F172 - User-Definition Screens - Screen Editors
 #Team Neptune
 
 Background: 
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
 	And user searches for and selects "Eight,Patient"
 	And Cover Sheet is active
 

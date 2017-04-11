@@ -1,6 +1,10 @@
 description "<%= @name %> monitoring process"
 
+<% if @using_vagrant %>
+start on vagrant-mounted MOUNTPOINT=<%= Chef::Config[:file_cache_path]  %>
+<% else %>
 start on runlevel [<%= @level %>]
+<% end %>
 stop on runlevel [!<%= @level %>]
 
 expect daemon

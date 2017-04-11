@@ -65,24 +65,20 @@ function performTextSearch(req, res, next) {
                 return res.status(_.isNumber(error.code) ? error.code : 500).rdkSend(error.message || error);
             }
 
-            //console.dir(response.currentPatient.data.data.items);
-            var patientJsonData = response.currentPatient.data.data.items;
-
             var patientPIDList = [];
-            _.each(patientJsonData, function(patient) {
 
-                patientPIDList.push(patient.pid);
+            _.each(req.interceptorResults.patientIdentifiers.allSites, function(pid){
+                patientPIDList.push(pid);
             });
-
+            
             var allPids = patientPIDList.join(' OR ');
+            req.logger.debug('reqQuery.pidJoinedList: ' + allPids);
             reqQuery.pidJoinedList = allPids;
             if (allPids.indexOf('OR') !== -1) {
                 reqQuery.pidJoinedList = '(' + reqQuery.pidJoinedList + ')';
             }
-            //console.log('reqQuery.pidJoinedList: ' + reqQuery.pidJoinedList);
-            //return allPids;
-            //     }
-            // );
+            req.logger.debug('reqQuery.pidJoinedList: ' + reqQuery.pidJoinedList);
+
 
             // TODO: make this more elegant
             req.audit.patientId = reqQuery.pid;

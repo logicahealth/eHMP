@@ -1,11 +1,6 @@
 # Group Authorize
 
-## Authorize authorize [{{{path}}}{?fields}]
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
+## Authorize authorize [{{{path}}}]
 
 ### Get [GET]
 

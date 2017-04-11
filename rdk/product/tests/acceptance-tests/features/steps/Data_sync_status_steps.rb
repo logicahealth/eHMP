@@ -11,7 +11,7 @@ When(/^the client requests sync status for the patient "(.*?)" in RDK format$/) 
   path = temp.path
 
   begin
-    @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+    @response = HTTPartyRDK.get(path)
   rescue Exception => e
     puts "Time out; " + e
   end
@@ -26,7 +26,7 @@ When(/^the client requests sync data status for the patient "(.*?)" in RDK forma
 
   @response = nil
   begin
-    @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+    @response = HTTPartyRDK.get(path)
   rescue Exception => e
     puts "Time out; " + e
   end
@@ -108,7 +108,7 @@ When(/^the client requests load parioitized for the patient "(.*?)" base on prio
   
   @response = nil
   begin
-    @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+    @response = HTTPartyRDK.get(path)
   rescue Exception => e
     puts "Time out; " + e
   end
@@ -154,7 +154,7 @@ end
 #       source_site_name = @define_source_site[site_name]
 #       p jds_sync_complete = check_symc_complete(jds_path, source_site_name)
 #       if jds_sync_complete
-#         rdk_response = HTTPartyWithBasicAuth.get_with_authorization(rdk_path)
+#         rdk_response = HTTPartyRDK.get_with_authorization(rdk_path)
 #         p rdk_sync_complete = check_symc_complete(rdk_path, source_site_name)
 #       end
 #     end
@@ -183,7 +183,7 @@ def check_site_name_match(rdk_json_object, jds_json_object)
 end
 
 def check_symc_complete(path, source_site_name)
-  response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  response = HTTPartyRDK.get(path)
   sync_complete = response["data"]["items"][0]["syncStatusByVistaSystemId"][source_site_name]["syncComplete"]
   return sync_complete
 end
@@ -224,7 +224,7 @@ def jds_call(pid)
   p path = "#{base_url}/data/find/syncstatus?filter=eq(pid,#{pid})"
   @response = nil
   begin
-    @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+    @response = HTTPartyRDK.get(path)
   rescue Exception => e
     puts "Time out; " + e
   end

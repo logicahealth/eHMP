@@ -4,7 +4,7 @@ Feature: F336 -  Admin Auditing Console
 @manual
 Scenario: Manually check that accessed records are flagged as sensitive for certain sites - ensure sensitivity and site code are in each audit entry
     Given a user is logged into EHMP-UI and searches for patient Threehundredeighty,Patient, who has a patient ID of 100379
-    Then to manually confirm the entry is there ssh vagrant@IP        
+    Then to manually confirm the entry is there ssh vagrant@IP_ADDRESS
     And the password is vagrant
     Then cd /tmp
     Then tail audit.log
@@ -14,7 +14,7 @@ Scenario: Manually check that accessed records are flagged as sensitive for cert
 @manual
 Scenario: Manually check that special accounts are denoted with XUPROG and/or XUPROGMODE keys
     Given a user is logged into EHMP-UI as NURSE,EIGHT (access code nur1234, verify code nur1234!!) and searches for patient Threehundredeighty,Patient, who has a patient ID of 100379
-    Then to manually confirm the a GET request entry is there and that the keys are present by doing ssh vagrant@IP        
+    Then to manually confirm the a GET request entry is there and that the keys are present by doing ssh vagrant@IP_ADDRESS
     And the password is vagrant
     Then cd /tmp
     Then tail audit.log
@@ -24,8 +24,8 @@ Scenario: Manually check that special accounts are denoted with XUPROG and/or XU
 
 @manual
 Scenario: A request for resource directory is audited
-    Given a postman request of http://IP             /resourcedirectory as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resourcedirectory as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -42,8 +42,8 @@ Scenario: A request for resource directory is audited
 
 @manual
 Scenario: A request for a patient's record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/patient?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/patient?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -62,8 +62,8 @@ Scenario: A request for a patient's record is audited
 
 @manual
 Scenario: A request for a patient's meds record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/med?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/med?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -82,8 +82,8 @@ Scenario: A request for a patient's meds record is audited
 
 @manual
 Scenario: A request for a patient's consults record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/consult?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/consult?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -102,8 +102,8 @@ Scenario: A request for a patient's consults record is audited
 
 @manual
 Scenario: A request for a patient's vitals record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/vital?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/vital?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -122,8 +122,8 @@ Scenario: A request for a patient's vitals record is audited
 
 @manual
 Scenario: A request for a patient's problems record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/problem?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/problem?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -142,8 +142,8 @@ Scenario: A request for a patient's problems record is audited
 
 @manual
 Scenario: A request for a patient's allergies record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/allergy?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/allergy?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -162,8 +162,8 @@ Scenario: A request for a patient's allergies record is audited
 
 @manual
 Scenario: A request for a patient's orders record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/order?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/order?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -182,8 +182,8 @@ Scenario: A request for a patient's orders record is audited
 
 @manual
 Scenario: A request for a patient's treament record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/treatment?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/treatment?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -202,8 +202,8 @@ Scenario: A request for a patient's treament record is audited
 
 @manual
 Scenario: A request for a patient's procedures record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/procedure?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/procedure?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -222,8 +222,8 @@ Scenario: A request for a patient's procedures record is audited
 
 @manual
 Scenario: A request for a patient's lab record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/lab?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/lab?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -242,8 +242,8 @@ Scenario: A request for a patient's lab record is audited
 
 @manual
 Scenario: A request for a patient's images record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/image?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/image?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -263,8 +263,8 @@ Scenario: A request for a patient's images record is audited
 
 @manual
 Scenario: A request for a patient's surgeries record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/surgery?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/surgery?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -283,8 +283,8 @@ Scenario: A request for a patient's surgeries record is audited
 
 @manual
 Scenario: A request for a patient's documents is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/document?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/document?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -303,8 +303,8 @@ Scenario: A request for a patient's documents is audited
 
 @manual
 Scenario: A request for a patient's mh is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/mh?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/mh?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -323,8 +323,8 @@ Scenario: A request for a patient's mh is audited
 
 @manual
 Scenario: A request for a patient's immunization's is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/immunization?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/immunization?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -344,8 +344,8 @@ Scenario: A request for a patient's immunization's is audited
 
 @manual
 Scenario: A request for a patient's pov is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/pov?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/pov?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -365,8 +365,8 @@ Scenario: A request for a patient's pov is audited
 
 @manual
 Scenario: A request for a patient's dermatology record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/skin?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/skin?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -385,8 +385,8 @@ Scenario: A request for a patient's dermatology record is audited
 
 @manual
 Scenario: A request for a patient's exams is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/exam?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/exam?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -405,8 +405,8 @@ Scenario: A request for a patient's exams is audited
 
 @manual
 Scenario: A request for a patient's cpt is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/cpt?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/cpt?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -425,8 +425,8 @@ Scenario: A request for a patient's cpt is audited
 
 @manual
 Scenario: A request for a patient's education record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/education?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/education?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -445,8 +445,8 @@ Scenario: A request for a patient's education record is audited
 
 @manual
 Scenario: A request for a patient's factor is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/factor?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/factor?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -465,8 +465,8 @@ Scenario: A request for a patient's factor is audited
 
 @manual
 Scenario: A request for a patient's appointments is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/appointment?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/appointment?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -485,8 +485,8 @@ Scenario: A request for a patient's appointments is audited
 
 @manual
 Scenario: A request for a patient's visits is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/visit?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/visit?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -505,8 +505,8 @@ Scenario: A request for a patient's visits is audited
 
 @manual
 Scenario: A request for a patient's ptf record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/ptf?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/ptf?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -525,8 +525,8 @@ Scenario: A request for a patient's ptf record is audited
 
 @manual
 Scenario: A request for a patient's radiology record is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/factor?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/factor?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -545,8 +545,8 @@ Scenario: A request for a patient's radiology record is audited
 
 @manual
 Scenario: A request for a patient's newsfeed is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/newsfeed?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/newsfeed?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -565,8 +565,8 @@ Scenario: A request for a patient's newsfeed is audited
 
 @manual
 Scenario: A request for a patient's document view is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/document-view?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/document-view?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -585,8 +585,8 @@ Scenario: A request for a patient's document view is audited
 
 @manual
 Scenario: A request for a patient's vlerdoc view is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/vlerdocument?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/vlerdocument?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -605,8 +605,8 @@ Scenario: A request for a patient's vlerdoc view is audited
 
 @manual
 Scenario: A request for a patient's parent documents is audited
-    Given a postman request of http://IP             /resource/patientrecord/domain/parent-documents?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/domain/parent-documents?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -625,8 +625,8 @@ Scenario: A request for a patient's parent documents is audited
 
 @manual
 Scenario: A request for a patient record suggested search is audited
-    Given a postman request of http://IP             /resource/patientrecord/search/suggest?pid=9E7A;100022&query=true as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/search/suggest?pid=9E7A;100022&query=true as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -644,8 +644,8 @@ Scenario: A request for a patient record suggested search is audited
 
 @manual
 Scenario: A request for a patient labs by order search is audited
-    Given a postman request of http://IP             /resource/patientrecord/labsbyorder?pid=9E7A;100022&orderUid=urn:va:order:9E7A:253:15477 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/labsbyorder?pid=9E7A;100022&orderUid=urn:va:order:9E7A:253:15477 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -663,8 +663,8 @@ Scenario: A request for a patient labs by order search is audited
 
 @manual
 Scenario: A request for a patient cwad search is audited
-    Given a postman request of http://IP             /resource/patientrecord/cwad?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/cwad?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -682,8 +682,8 @@ Scenario: A request for a patient cwad search is audited
 
 @manual
 Scenario: A request for a patient's timeline is audited
-    Given a postman request of http://IP             /resource/patientrecord/timeline?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/timeline?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -702,8 +702,8 @@ Scenario: A request for a patient's timeline is audited
 
 @manual
 Scenario: A request for a patient complex note is audited
-    Given a postman request of http://IP             /resource/patientrecord/complexnote?pid=9E7A;100022&uid=urn:va:combat-vet:N as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/complexnote?pid=9E7A;100022&uid=urn:va:combat-vet:N as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -711,7 +711,7 @@ Scenario: A request for a patient complex note is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | http://IP             /resource/patientrecord/complexnote?pid=9E7A;100022&uid=urn:va:combat-vet:N     |
+      | request                          | http://IP_ADDRESS:PORT/resource/patientrecord/complexnote?pid=9E7A;100022&uid=urn:va:combat-vet:N     |
       | sensitive                        | false                                                         |
       | patientID                        | 9E7A;100022                                                   |
       | sitecode                         | 9E7A                                                          |
@@ -721,8 +721,8 @@ Scenario: A request for a patient complex note is audited
 
 @manual
 Scenario: A request for a patient full name search is audited
-    Given a postman request of http://IP             /resource/patient-search/full-name?fullName=p0008 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patient-search/full-name?fullName=p0008 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -730,7 +730,7 @@ Scenario: A request for a patient full name search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/patient-search/full-name?fullName=p0008    |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/patient-search/full-name?fullName=p0008    |
       | sensitive                        | false                                                         |
       | patientID                        | 9E7A;100022                                                   |
       | sitecode                         | 9E7A                                                          |
@@ -740,8 +740,8 @@ Scenario: A request for a patient full name search is audited
 
 @manual
 Scenario: A request for a synch of expired patient data is audited
-    Given a postman request of http://IP             /resource/sync/expire?pid=9E7A;3&vistaId="DOD" as a POST is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/sync/expire?pid=9E7A;3&vistaId="DOD" as a POST is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -759,8 +759,8 @@ Scenario: A request for a synch of expired patient data is audited
 
 @manual
 Scenario: A request for user info is audited
-    Given a postman request of http://IP             /resource/user/userinfo as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/user/userinfo as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -768,7 +768,7 @@ Scenario: A request for user info is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/user/userinfo   |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/user/userinfo   |
       | sensitive                        | false                                                         |
       | patientID                        | 9E7A;100022                                                   |
       | sitecode                         | 9E7A                                                          |
@@ -777,8 +777,8 @@ Scenario: A request for user info is audited
 
 @manual
 Scenario: A request for a global search is audited
-    Given a postman request of http://IP             /resource/search/globalsearch?lname=EIght&fname=Patient as a POST is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/search/globalsearch?lname=EIght&fname=Patient as a POST is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -786,7 +786,7 @@ Scenario: A request for a global search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/search/globalsearch?lname=EIght&fname=Patient   |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/search/globalsearch?lname=EIght&fname=Patient   |
       | sensitive                        | false                                                         |
       | patientID                        | 9E7A;100022                                                   |
       | sitecode                         | 9E7A                                                          |
@@ -795,8 +795,8 @@ Scenario: A request for a global search is audited
 
 @manual
 Scenario: A request for a CPRS list search is audited
-    Given a postman request of http://IP             /resource/search/my-cprs-list as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/search/my-cprs-list as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -804,7 +804,7 @@ Scenario: A request for a CPRS list search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/search/my-cprs-list  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/search/my-cprs-list  |
       | sensitive                        | false                                                         |
       | patientID                        | 9E7A;100022                                                   |
       | sitecode                         | 9E7A                                                          |
@@ -813,8 +813,8 @@ Scenario: A request for a CPRS list search is audited
 
 @manual
 Scenario: A request for a MVI patient sync is audited
-    Given a postman request of http://IP             /resource/search/patientSync?id=705025174 as a POST is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/search/patientSync?id=705025174 as a POST is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -822,7 +822,7 @@ Scenario: A request for a MVI patient sync is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/search/patientSync?id=705025174 |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/search/patientSync?id=705025174 |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -830,8 +830,8 @@ Scenario: A request for a MVI patient sync is audited
 
 @manual
 Scenario: A request for a UID is audited
-    Given a postman request of http://IP             /resource/patientrecord/uid?pid=9E7A;100022&uid=urn:va:mst:U as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/uid?pid=9E7A;100022&uid=urn:va:mst:U as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -839,7 +839,7 @@ Scenario: A request for a UID is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/patientrecord/uid?pid=9E7A;100022&uid=urn:va:mst:U  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/patientrecord/uid?pid=9E7A;100022&uid=urn:va:mst:U  |
       | sensitive                        | false                                                         |
       | patientID                        | 9E7A;100022                                                   |
       | sitecode                         | 9E7A                                                          |
@@ -848,8 +848,8 @@ Scenario: A request for a UID is audited
 
 @manual
 Scenario: A request for a allergy op data search is audited
-    Given a postman request of http://IP             /resource/writeback/allergy/search?searchParam=alc as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/allergy/search?searchParam=alc as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -857,7 +857,7 @@ Scenario: A request for a allergy op data search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/writeback/allergy/search?searchParam=alc |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/writeback/allergy/search?searchParam=alc |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -865,8 +865,8 @@ Scenario: A request for a allergy op data search is audited
 
 @manual
 Scenario: A request for a allergy symptoms search is audited
-    Given a postman request of http://IP             /resource/writeback/allergy/symptoms?param={"ien":477} as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/allergy/symptoms?param={"ien":477} as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -874,7 +874,7 @@ Scenario: A request for a allergy symptoms search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/writeback/allergy/symptoms?param={"ien":477} |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/writeback/allergy/symptoms?param={"ien":477} |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -882,8 +882,8 @@ Scenario: A request for a allergy symptoms search is audited
 
 @manual
 Scenario: A request for labs by order is audited
-    Given a postman request of http://IP             /resource/patientrecord/labsbytype?pid=9E7A;100022&typeName=HOSPITALIZATION as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/labsbytype?pid=9E7A;100022&typeName=HOSPITALIZATION as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -891,7 +891,7 @@ Scenario: A request for labs by order is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/patientrecord/labsbytype?pid=9E7A;100022&typeName=HOSPITALIZATION |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/patientrecord/labsbytype?pid=9E7A;100022&typeName=HOSPITALIZATION |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -900,8 +900,8 @@ Scenario: A request for labs by order is audited
 
 @manual
 Scenario: A request for labs by panel is audited
-    Given a postman request of http://IP             /resource/patientrecord/labpanels?pid=9E7A;100022 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/labpanels?pid=9E7A;100022 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -909,7 +909,7 @@ Scenario: A request for labs by panel is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/patientrecord/labpanels?pid=9E7A;100022 |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/patientrecord/labpanels?pid=9E7A;100022 |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -918,8 +918,8 @@ Scenario: A request for labs by panel is audited
 
 @manual
 Scenario: A request for a meds data search is audited
-    Given a postman request of http://IP             /resource/writeback/med/search?searchParam=aspirin as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/med/search?searchParam=aspirin as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -927,7 +927,7 @@ Scenario: A request for a meds data search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/writeback/med/search?searchParam=aspirin |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/writeback/med/search?searchParam=aspirin |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -935,8 +935,8 @@ Scenario: A request for a meds data search is audited
 
 @manual
 Scenario: A request for a meds data schedule search is audited
-    Given a postman request of http://IP             /resource/writeback/med/schedule?dfn=3 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/med/schedule?dfn=3 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -944,7 +944,7 @@ Scenario: A request for a meds data schedule search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/writeback/med/schedule?dfn=3 |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/writeback/med/schedule?dfn=3 |
       | patientID                        | 3                                                             |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -954,8 +954,8 @@ Scenario: A request for a meds data schedule search is audited
 
 @manual
 Scenario: A request for a meds data schedule search is audited
-    Given a postman request of http://IP             /resource/writeback/med/schedule?dfn=3 as a GET is made
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/med/schedule?dfn=3 as a GET is made
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -963,7 +963,7 @@ Scenario: A request for a meds data schedule search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/writeback/med/schedule?dfn=3 |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/writeback/med/schedule?dfn=3 |
       | patientID                        | 3                                                             |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -972,8 +972,8 @@ Scenario: A request for a meds data schedule search is audited
 
 @manual
 Scenario: A request for a meds defaults is audited
-    Given a postman request of http://IP             /resource/writeback/med/defaults?param={"oi":"1348","pstype":"X","orvp": 100695,"needpi":"Y", "pkiactiv":"Y"}
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/med/defaults?param={"oi":"1348","pstype":"X","orvp": 100695,"needpi":"Y", "pkiactiv":"Y"}
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -981,7 +981,7 @@ Scenario: A request for a meds defaults is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/writeback/med/defaults?param={"oi":"1348","pstype":"X","orvp": 100695,"needpi":"Y", "pkiactiv":"Y"} |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/writeback/med/defaults?param={"oi":"1348","pstype":"X","orvp": 100695,"needpi":"Y", "pkiactiv":"Y"} |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -989,8 +989,8 @@ Scenario: A request for a meds defaults is audited
 
 @manual
 Scenario: A request for a meds search is audited
-    Given a postman request of http://IP             /resource/writeback/med/searchlist?filter=name("aspirin")
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/med/searchlist?filter=name("aspirin")
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -998,7 +998,7 @@ Scenario: A request for a meds search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/writeback/med/searchlist?filter=name("aspirin")|
+      | request                          | GET http://IP_ADDRESS:PORT/resource/writeback/med/searchlist?filter=name("aspirin")|
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -1006,8 +1006,8 @@ Scenario: A request for a meds search is audited
 
 @manual
 Scenario: A request for a med data dialog is audited
-    Given a postman request of http://IP             /resource/writeback/med/dialogformat?dlg="PSH OERR"
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/med/dialogformat?dlg="PSH OERR"
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1015,7 +1015,7 @@ Scenario: A request for a med data dialog is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/writeback/med/dialogformat?dlg="PSH OERR" |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/writeback/med/dialogformat?dlg="PSH OERR" |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -1023,8 +1023,8 @@ Scenario: A request for a med data dialog is audited
 
 @manual
 Scenario: A request for a meds discontinued data is audited
-    Given a postman request of http://IP             /resource/writeback/med/discontinuereason
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/med/discontinuereason
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1032,7 +1032,7 @@ Scenario: A request for a meds discontinued data is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/writeback/med/discontinuereason|
+      | request                          | GET http://IP_ADDRESS:PORT/resource/writeback/med/discontinuereason|
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -1040,8 +1040,8 @@ Scenario: A request for a meds discontinued data is audited
 
 @manual
 Scenario: A request for a meds data day to quanity is audited
-    Given a postman request of http://IP             /resource/writeback/med/daytoquantity?param={"supply":30,"dose":"1mg","schedule":"M","duration":"no","patientIEN":3,"drugIEN":3}
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/med/daytoquantity?param={"supply":30,"dose":"1mg","schedule":"M","duration":"no","patientIEN":3,"drugIEN":3}
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1049,7 +1049,7 @@ Scenario: A request for a meds data day to quanity is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/writeback/med/daytoquantity?param={"supply":30,"dose":"1mg","schedule":"M","duration":"no","patientIEN":3,"drugIEN":3}   |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/writeback/med/daytoquantity?param={"supply":30,"dose":"1mg","schedule":"M","duration":"no","patientIEN":3,"drugIEN":3}   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -1058,8 +1058,8 @@ Scenario: A request for a meds data day to quanity is audited
 
 @manual
 Scenario: A request for a meds days supply is audited
-    Given a postman request of http://IP             /resource/writeback/med/dayssupply?param={"patientIEN":3,"drugIEN":3,"medIEN":3}
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/med/dayssupply?param={"patientIEN":3,"drugIEN":3,"medIEN":3}
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1067,7 +1067,7 @@ Scenario: A request for a meds days supply is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/writeback/med/dayssupply?param={"patientIEN":3,"drugIEN":3,"medIEN":3}   |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/writeback/med/dayssupply?param={"patientIEN":3,"drugIEN":3,"medIEN":3}   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -1075,8 +1075,8 @@ Scenario: A request for a meds days supply is audited
 
 @manual
 Scenario: A request for a problems is audited
-    Given a postman request of http://IP             /resource/problems?searchfor=back
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/problems?searchfor=back
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1084,7 +1084,7 @@ Scenario: A request for a problems is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/problems?searchfor=back   |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/problems?searchfor=back   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | logCategory                      | PROBLEMS                                                         |
@@ -1093,8 +1093,8 @@ Scenario: A request for a problems is audited
 
 @manual
 Scenario: A request for a lab search is audited
-    Given a postman request of http://IP             /resource/searchbytype/domain/lab?pid=9E7A;100022&type=influenza
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/searchbytype/domain/lab?pid=9E7A;100022&type=influenza
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1102,7 +1102,7 @@ Scenario: A request for a lab search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/searchbytype/domain/lab?pid=9E7A;100022&type=influenza       |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/searchbytype/domain/lab?pid=9E7A;100022&type=influenza       |
       | sensitive                        | false                                                         |
       | patientID                        | 9E7A;100022                                                   |
       | sitecode                         | 9E7A                                                          |
@@ -1113,8 +1113,8 @@ Scenario: A request for a lab search is audited
 
 @manual
 Scenario: A request for an immunization search is audited
-    Given a postman request of http://IP             /resource/searchbytype/domain/immunization?pid=9E7A;100022&type=influenza
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/searchbytype/domain/immunization?pid=9E7A;100022&type=influenza
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1122,7 +1122,7 @@ Scenario: A request for an immunization search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/searchbytype/domain/immunization?pid=9E7A;100022&type=influenza       |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/searchbytype/domain/immunization?pid=9E7A;100022&type=influenza       |
       | sensitive                        | false                                                         |
       | patientID                        | 9E7A;100022                                                   |
       | sitecode                         | 9E7A                                                          |
@@ -1133,8 +1133,8 @@ Scenario: A request for an immunization search is audited
 
 @manual
 Scenario: A request for a vital search is audited
-    Given a postman request of http://IP             /resource/searchbytype/domain/vital?pid=9E7A;100022&type=pulse
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/searchbytype/domain/vital?pid=9E7A;100022&type=pulse
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1142,7 +1142,7 @@ Scenario: A request for a vital search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/searchbytype/domain/vital?pid=9E7A;100022&type=pulse       |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/searchbytype/domain/vital?pid=9E7A;100022&type=pulse       |
       | sensitive                        | false                                                         |
       | patientID                        | 9E7A;100022                                                   |
       | sitecode                         | 9E7A                                                          |
@@ -1153,8 +1153,8 @@ Scenario: A request for a vital search is audited
 
 @manual
 Scenario: A request for user resources get is audited
-    Given a postman request of http://IP             /resource/user/get
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/user/get
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1162,7 +1162,7 @@ Scenario: A request for user resources get is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/user/get      |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/user/get      |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -1170,8 +1170,8 @@ Scenario: A request for user resources get is audited
 
 @manual
 Scenario: A request for user resources set is audited
-    Given a postman request of http://IP             /resource/user/set/this
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/user/set/this
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1179,7 +1179,7 @@ Scenario: A request for user resources set is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/user/set/this     |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/user/set/this     |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -1187,8 +1187,8 @@ Scenario: A request for user resources set is audited
 
 @manual
 Scenario: A request for resource global timeline is audited
-    Given a postman request of http://IP             /resource/globaltimeline?pid=9E7A;100022
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/globaltimeline?pid=9E7A;100022
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1196,7 +1196,7 @@ Scenario: A request for resource global timeline is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/globaltimeline?pid=9E7A;100022     |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/globaltimeline?pid=9E7A;100022     |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1205,8 +1205,8 @@ Scenario: A request for resource global timeline is audited
 
 @manual
 Scenario: A request for resource global timeline is audited
-    Given a postman request of http://IP             /resource/globaltimeline?pid=9E7A;100022
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/globaltimeline?pid=9E7A;100022
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1214,7 +1214,7 @@ Scenario: A request for resource global timeline is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/globaltimeline?pid=9E7A;100022     |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/globaltimeline?pid=9E7A;100022     |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1223,8 +1223,8 @@ Scenario: A request for resource global timeline is audited
 
 @manual
 Scenario: A request for closest vitals is audited
-    Given a postman request of http://IP             /resource/vitals/closest?pid=9E7A;100022&dfn=3&type=SBP
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vitals/closest?pid=9E7A;100022&dfn=3&type=SBP
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1232,7 +1232,7 @@ Scenario: A request for closest vitals is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/vitals/closest?pid=9E7A;100022&dfn=3&type=SBP    |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/vitals/closest?pid=9E7A;100022&dfn=3&type=SBP    |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1241,8 +1241,8 @@ Scenario: A request for closest vitals is audited
 
 @manual
 Scenario: A request for vitals qualifiers is audited
-    Given a postman request of http://IP             /resource/vitals/qualifiers?pid=9E7A;100022&dfn=3&type=WT,HT,,T
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vitals/qualifiers?pid=9E7A;100022&dfn=3&type=WT,HT,,T
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1250,7 +1250,7 @@ Scenario: A request for vitals qualifiers is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/vitals/qualifiers?pid=9E7A;100022&dfn=3&type=WT,HT,,T   |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/vitals/qualifiers?pid=9E7A;100022&dfn=3&type=WT,HT,,T   |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1259,8 +1259,8 @@ Scenario: A request for vitals qualifiers is audited
 
 @manual
 Scenario: A request for all vitals is audited
-    Given a postman request of http://IP             /resource/vitals/all?pid=9E7A;100022&dfn=3&start=3010101&end=3141030
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vitals/all?pid=9E7A;100022&dfn=3&start=3010101&end=3141030
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1268,7 +1268,7 @@ Scenario: A request for all vitals is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/vitals/all?pid=9E7A;100022&dfn=3&start=3010101&end=3141030   |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/vitals/all?pid=9E7A;100022&dfn=3&start=3010101&end=3141030   |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1277,8 +1277,8 @@ Scenario: A request for all vitals is audited
 
 @manual
 Scenario: A request for writeback vitals error is audited
-    Given a postman request of http://IP             /resource/writeback/vitals/error?ien=30&reason=1
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/vitals/error?ien=30&reason=1
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1286,7 +1286,7 @@ Scenario: A request for writeback vitals error is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/writeback/vitals/error?ien=30&reason=1030   |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/writeback/vitals/error?ien=30&reason=1030   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 403                                                           |
@@ -1294,8 +1294,8 @@ Scenario: A request for writeback vitals error is audited
 
 @manual
 Scenario: A request for visits and providers is audited
-    Given a postman request of http://IP             /resource/visits/providers?fcode=1
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/visits/providers?fcode=1
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1303,7 +1303,7 @@ Scenario: A request for visits and providers is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/visits/providers?fcode=1   |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/visits/providers?fcode=1   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | logCategory                      | VISIT - PROVIDERS                                             |
@@ -1312,8 +1312,8 @@ Scenario: A request for visits and providers is audited
 
 @manual
 Scenario: A request for visits locations is audited
-    Given a postman request of http://IP             /resource/visits/locations
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/visits/locations
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1321,7 +1321,7 @@ Scenario: A request for visits locations is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/visits/locations   |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/visits/locations   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | logCategory                      | VISIT - LOCATIONS                                             |
@@ -1330,8 +1330,8 @@ Scenario: A request for visits locations is audited
 
 @manual
 Scenario: A request for visits appointments is audited
-    Given a postman request of http://IP             /resource/visits/appointments?pid=9E7A;100022
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/visits/appointments?pid=9E7A;100022
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1339,7 +1339,7 @@ Scenario: A request for visits appointments is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/admissions?pid=9E7A;100022  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/admissions?pid=9E7A;100022  |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1349,8 +1349,8 @@ Scenario: A request for visits appointments is audited
 
 @manual
 Scenario: A request for visits admissions is audited
-    Given a postman request of http://IP             /resource/visits/appointments?pid=9E7A;100022
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/visits/appointments?pid=9E7A;100022
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1358,7 +1358,7 @@ Scenario: A request for visits admissions is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/admissions?pid=9E7A;100022  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/admissions?pid=9E7A;100022  |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1368,8 +1368,8 @@ Scenario: A request for visits admissions is audited
 
 @manual
 Scenario: A request for locations wards is audited
-    Given a postman request of http://IP             /resource/locations/wards
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/locations/wards
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1377,7 +1377,7 @@ Scenario: A request for locations wards is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/locations/wards           |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/locations/wards           |
       | dataDomain                       | wards                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1387,8 +1387,8 @@ Scenario: A request for locations wards is audited
 
 @manual
 Scenario: A request for locations clinics is audited
-    Given a postman request of http://IP             /resource/locations/clinics
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/locations/clinics
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1396,7 +1396,7 @@ Scenario: A request for locations clinics is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/locations/clinics           |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/locations/clinics           |
       | dataDomain                       | clinics                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1407,8 +1407,8 @@ Scenario: A request for locations clinics is audited
 
 @manual
 Scenario: A request for wards search is audited
-    Given a postman request of http://IP             /resource/locations/wards/search?locationUid=232&refId=4
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/locations/wards/search?locationUid=232&refId=4
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1416,7 +1416,7 @@ Scenario: A request for wards search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/locations/wards/search?locationUid=232&refId=4         |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/locations/wards/search?locationUid=232&refId=4         |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 404                                                          |
@@ -1424,8 +1424,8 @@ Scenario: A request for wards search is audited
 
 @manual
 Scenario: A request for clinics search is audited
-    Given a postman request of http://IP             /resource/locations/clinics/search?locationUid=232&refId=4
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/locations/clinics/search?locationUid=232&refId=4
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1433,7 +1433,7 @@ Scenario: A request for clinics search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/locations/clinics/search?locationUid=232&refId=4         |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/locations/clinics/search?locationUid=232&refId=4         |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 404                                                          |
@@ -1441,8 +1441,8 @@ Scenario: A request for clinics search is audited
 
 @manual
 Scenario: A request for clinical reminders detail is audited
-    Given a postman request of http://IP             /resource/clinicalreminders/detail?dfn=247&reminderId=33
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/clinicalreminders/detail?dfn=247&reminderId=33
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1450,7 +1450,7 @@ Scenario: A request for clinical reminders detail is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/clinicalreminders/detail?dfn=247&reminderId=33    |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/clinicalreminders/detail?dfn=247&reminderId=33    |
       | patientID                        | 247                                                   |
       | dataDomain                       | clinics                                                   |
       | sensitive                        | false                                                         |
@@ -1461,8 +1461,8 @@ Scenario: A request for clinical reminders detail is audited
 
 @manual
 Scenario: A request for clinical reminders list is audited
-    Given a postman request of http://IP             /resource/clinicalreminders/list?dfn=247&reminderId=33
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/clinicalreminders/list?dfn=247&reminderId=33
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1470,7 +1470,7 @@ Scenario: A request for clinical reminders list is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/clinicalreminders/list?dfn=247&reminderId=33    |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/clinicalreminders/list?dfn=247&reminderId=33    |
       | patientID                        | 247                                                           |
       | dataDomain                       | clinics                                                       |
       | sensitive                        | false                                                         |
@@ -1481,8 +1481,8 @@ Scenario: A request for clinical reminders list is audited
 
 @manual
 Scenario: A request for authentication is audited
-    Given a postman request of http://IP             /resource/auth/authentication
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/auth/authentication
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1490,7 +1490,7 @@ Scenario: A request for authentication is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/auth/authentication   |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/auth/authentication   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -1498,8 +1498,8 @@ Scenario: A request for authentication is audited
 
 @manual
 Scenario: A request for to destroy authenticated session is audited
-    Given a postman request of http://IP             /resource/auth/destroy
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/auth/destroy
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1507,7 +1507,7 @@ Scenario: A request for to destroy authenticated session is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/auth/destroy  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/auth/destroy  |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -1515,8 +1515,8 @@ Scenario: A request for to destroy authenticated session is audited
 
 @manual
 Scenario: A request to list auth resources is audited
-    Given a postman request of http://IP             /resource/auth/list
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/auth/list
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1524,7 +1524,7 @@ Scenario: A request to list auth resources is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/auth/list  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/auth/list  |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -1532,8 +1532,8 @@ Scenario: A request to list auth resources is audited
 
 @manual
 Scenario: A request for fhir patient demographics is audited
-    Given a postman request of http://IP             /resource/fhir/patient?subject.identifier=5000000217V519385
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/fhir/patient?subject.identifier=5000000217V519385
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1541,7 +1541,7 @@ Scenario: A request for fhir patient demographics is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/fhir/patient?subject.identifier=5000000217V519385  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/fhir/patient?subject.identifier=5000000217V519385  |
       | patientID                        | 5000000217V519385                                                  |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1552,7 +1552,7 @@ Scenario: A request for fhir patient demographics is audited
 @manual
 Scenario: A request for fhir patient adverse reaction is audited
     Given a postman request of /fhir/adversereaction?subject.identifier=5000000217V519385
-    When user performs ssh vagrant@IP        
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1569,8 +1569,8 @@ Scenario: A request for fhir patient adverse reaction is audited
 
 @manual
 Scenario: A request for fhir patient diagnostic report is audited
-    Given a postman request of http://IP             /resource/fhir/diagnosticreport?subject.identifier=5000000217V519385
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/fhir/diagnosticreport?subject.identifier=5000000217V519385
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1578,7 +1578,7 @@ Scenario: A request for fhir patient diagnostic report is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/fhir/diagnosticreport?subject.identifier=5000000217V519385 |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/fhir/diagnosticreport?subject.identifier=5000000217V519385 |
       | patientID                        | 5000000217V519385                                                 |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1587,8 +1587,8 @@ Scenario: A request for fhir patient diagnostic report is audited
 
 @manual
 Scenario: A request for patient fhir order is audited
-    Given a postman request of http://IP             /resource/fhir/order?subject.identifier=5000000217V519385
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/fhir/order?subject.identifier=5000000217V519385
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1596,7 +1596,7 @@ Scenario: A request for patient fhir order is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/fhir/order?subject.identifier=5000000217V519385  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/fhir/order?subject.identifier=5000000217V519385  |
       | patientID                        | 5000000217V519385                                                |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1605,8 +1605,8 @@ Scenario: A request for patient fhir order is audited
 
 @manual
 Scenario: A request to get fhir problems is audited
-    Given a postman request of http://IP             /resource/fhir/condition?subject.identifier=5000000217V519385
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/fhir/condition?subject.identifier=5000000217V519385
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1614,7 +1614,7 @@ Scenario: A request to get fhir problems is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/fhir/condition?subject.identifier=5000000217V519385  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/fhir/condition?subject.identifier=5000000217V519385  |
       | patientID                        | 5000000217V519385                                                  |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1623,8 +1623,8 @@ Scenario: A request to get fhir problems is audited
 
 @manual
 Scenario: A request for fhir immunizations is audited
-    Given a postman request of http://IP             /resource/fhir/immunization?subject.identifier=5000000217V519385
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/fhir/immunization?subject.identifier=5000000217V519385
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1632,7 +1632,7 @@ Scenario: A request for fhir immunizations is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/fhir/immunization?subject.identifier=5000000217V519385  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/fhir/immunization?subject.identifier=5000000217V519385  |
       | patientID                        | 5000000217V519385                                                 |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1641,8 +1641,8 @@ Scenario: A request for fhir immunizations is audited
 
 @manual
 Scenario: A request for fhir composition is audited
-    Given a postman request of http://IP             /resource/fhir/composition?subject.identifier=5000000217V519385
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/fhir/composition?subject.identifier=5000000217V519385
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1650,7 +1650,7 @@ Scenario: A request for fhir composition is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/fhir/composition?subject.identifier=5000000217V519385  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/fhir/composition?subject.identifier=5000000217V519385  |
       | patientID                        | 5000000217V519385                                                 |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1659,8 +1659,8 @@ Scenario: A request for fhir composition is audited
 
 @manual
 Scenario: A request for fhir referral request is audited
-    Given a postman request of http://IP             /resource/fhir/referralrequest?subject.identifier=5000000217V519385
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/fhir/referralrequest?subject.identifier=5000000217V519385
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1668,7 +1668,7 @@ Scenario: A request for fhir referral request is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/fhir/referralrequest?subject.identifier=5000000217V519385  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/fhir/referralrequest?subject.identifier=5000000217V519385  |
       | patientID                        | 5000000217V519385                                                 |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1677,8 +1677,8 @@ Scenario: A request for fhir referral request is audited
 
 @manual
 Scenario: A request for fhir medication dispense is audited
-    Given a postman request of http://IP             /resource/fhir/medicationdispense?subject.identifier=5000000217V519385
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/fhir/medicationdispense?subject.identifier=5000000217V519385
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1686,7 +1686,7 @@ Scenario: A request for fhir medication dispense is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/fhir/medicationdispense?subject.identifier=5000000217V519385  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/fhir/medicationdispense?subject.identifier=5000000217V519385  |
       | patientID                        | 5000000217V519385                                             |
       | sensitive                        | false                                                         |
       | dataDomain                       | Medication Dispense                                           |
@@ -1697,8 +1697,8 @@ Scenario: A request for fhir medication dispense is audited
 
 @manual
 Scenario: A request for fhir medication administration is audited
-    Given a postman request of http://IP             /resource/fhir/medicationadministration?subject.identifier=5000000217V519385
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/fhir/medicationadministration?subject.identifier=5000000217V519385
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1706,7 +1706,7 @@ Scenario: A request for fhir medication administration is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/fhir/medicationadministration?subject.identifier=5000000217V519385  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/fhir/medicationadministration?subject.identifier=5000000217V519385  |
       | patientID                        | 5000000217V519385                                             |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1715,8 +1715,8 @@ Scenario: A request for fhir medication administration is audited
 
 @manual
 Scenario: A request for fhir medication administration is audited
-    Given a postman request of http://IP             /resource/fhir/medicationadministration?subject.identifier=5000000217V519385
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/fhir/medicationadministration?subject.identifier=5000000217V519385
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1724,7 +1724,7 @@ Scenario: A request for fhir medication administration is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/fhir/medicationadministration?subject.identifier=5000000217V519385  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/fhir/medicationadministration?subject.identifier=5000000217V519385  |
       | patientID                        | 5000000217V519385                                             |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1733,8 +1733,8 @@ Scenario: A request for fhir medication administration is audited
 
 @manual
 Scenario: A request for fhir medication statement is audited
-    Given a postman request of http://IP             /resource/fhir/medicationstatement?subject.identifier=5000000217V519385
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/fhir/medicationstatement?subject.identifier=5000000217V519385
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1742,7 +1742,7 @@ Scenario: A request for fhir medication statement is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/fhir/medicationstatement?subject.identifier=5000000217V519385  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/fhir/medicationstatement?subject.identifier=5000000217V519385  |
       | patientID                        | 5000000217V519385                                             |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1751,8 +1751,8 @@ Scenario: A request for fhir medication statement is audited
 
 @manual
 Scenario: A request for CDS advice list is audited
-    Given a postman request of http://IP             /resource/cds_advice/list?use=FamilyMedicine&pid=9E7A;100022
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/cds_advice/list?use=FamilyMedicine&pid=9E7A;100022
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1760,7 +1760,7 @@ Scenario: A request for CDS advice list is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/cds_advice/list?use=FamilyMedicine&pid=9E7A;100022  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/cds_advice/list?use=FamilyMedicine&pid=9E7A;100022  |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | dataDomain                       | CDS                                                           |
@@ -1771,8 +1771,8 @@ Scenario: A request for CDS advice list is audited
 
 @manual
 Scenario: A request for CDS advice detail is audited
-    Given a postman request of http://IP             /resource/cds_advice/detail?use=FamilyMedicine&pid=9E7A;100022&adviceid=500074
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/cds_advice/detail?use=FamilyMedicine&pid=9E7A;100022&adviceid=500074
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1780,7 +1780,7 @@ Scenario: A request for CDS advice detail is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/cds_advice/detail?use=FamilyMedicine&pid=9E7A;100022&adviceid=500074  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/cds_advice/detail?use=FamilyMedicine&pid=9E7A;100022&adviceid=500074  |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | dataDomain                       | CDS                                                           |
@@ -1791,8 +1791,8 @@ Scenario: A request for CDS advice detail is audited
 
 @manual
 Scenario: A request for crud immunizations operational data is audited
-    Given a postman request of http://IP             /resource/immunizations/operational_data
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/immunizations/operational_data
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1800,7 +1800,7 @@ Scenario: A request for crud immunizations operational data is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/immunizations/operational_data  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/immunizations/operational_data  |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | dataDomain                       | Immunization                                                  |
@@ -1811,8 +1811,8 @@ Scenario: A request for crud immunizations operational data is audited
 
 @manual
 Scenario: A request to get crud immunizations is audited
-    Given a postman request of http://IP             /resource/immunizations
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/immunizations
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1820,7 +1820,7 @@ Scenario: A request to get crud immunizations is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/immunizations             |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/immunizations             |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | dataDomain                       | Immunization                                                  |
@@ -1831,8 +1831,8 @@ Scenario: A request to get crud immunizations is audited
 
 @manual
 Scenario: A request to add crud immunizations is audited
-    Given a postman request of http://IP             /resource/immunizations
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/immunizations
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1840,7 +1840,7 @@ Scenario: A request to add crud immunizations is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | PUT http://IP             /resource/immunizations             |
+      | request                          | PUT http://IP_ADDRESS:PORT/resource/immunizations             |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | dataDomain                       | Immunization                                                  |
@@ -1851,8 +1851,8 @@ Scenario: A request to add crud immunizations is audited
 
 @manual
 Scenario: A request to get crud immunizations is audited
-    Given a postman request of http://IP             /resource/immunizations
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/immunizations
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1860,7 +1860,7 @@ Scenario: A request to get crud immunizations is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/immunizations             |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/immunizations             |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | dataDomain                       | Immunization                                                  |
@@ -1871,8 +1871,8 @@ Scenario: A request to get crud immunizations is audited
 
 @manual
 Scenario: A request for orders detail is audited
-    Given a postman request of http://IP             /resource/order/detail?orderId=2157546463&dfn=3&pid=9E7A;100022
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/order/detail?orderId=2157546463&dfn=3&pid=9E7A;100022
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1880,7 +1880,7 @@ Scenario: A request for orders detail is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/order/detail?orderId=2157546463&dfn=3&pid=9E7A;100022            |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/order/detail?orderId=2157546463&dfn=3&pid=9E7A;100022            |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1889,8 +1889,8 @@ Scenario: A request for orders detail is audited
 
 @manual
 Scenario: A request for patient record text search is audited
-    Given a postman request of http://IP             /resource/patientrecord/search/text?pid=9E7A;100022&query="Text searching for"
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/search/text?pid=9E7A;100022&query="Text searching for"
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1898,7 +1898,7 @@ Scenario: A request for patient record text search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/patientrecord/search/text?pid=9E7A;100022&query="something here"            |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/patientrecord/search/text?pid=9E7A;100022&query="something here"            |
       | patientPidList                   | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | logCategory                      | SEARCH                                                        |
@@ -1908,8 +1908,8 @@ Scenario: A request for patient record text search is audited
 
 @manual
 Scenario: A request for patient record detail document search is audited
-    Given a postman request of http://IP             /resource/patientrecord/search/detail/document?pid=9E7A;100022&query="Text searching for"&group_value=4&group_field=5
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/search/detail/document?pid=9E7A;100022&query="Text searching for"&group_value=4&group_field=5
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1917,7 +1917,7 @@ Scenario: A request for patient record detail document search is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/patientrecord/search/detail/document?pid=9E7A;100022&query="Something something"&group_value=4&group_field=5            |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/patientrecord/search/detail/document?pid=9E7A;100022&query="Something something"&group_value=4&group_field=5            |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1926,8 +1926,8 @@ Scenario: A request for patient record detail document search is audited
 
 @manual
 Scenario: A patient search using their last 5 is audited
-    Given a postman request of http://IP             /resource/patient-search/last5?last5=E0008
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patient-search/last5?last5=E0008
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1935,7 +1935,7 @@ Scenario: A patient search using their last 5 is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/patient-search/last5?last5=E0008            |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/patient-search/last5?last5=E0008            |
       | logCategory                      | RETRIEVE                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -1944,8 +1944,8 @@ Scenario: A patient search using their last 5 is audited
 
 @manual
 Scenario: A patient sync load is audited
-    Given a postman request of http://IP             /resource/sync/load?pid=9E7A:100022
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/sync/load?pid=9E7A:100022
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1953,7 +1953,7 @@ Scenario: A patient sync load is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/sync/load?pid=9E7A:100022            |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/sync/load?pid=9E7A:100022            |
       | patientID                        | 9E7A;100022                                                   |
       | logCategory                      | SYNC                                                          |
       | sensitive                        | false                                                         |
@@ -1963,8 +1963,8 @@ Scenario: A patient sync load is audited
 
 @manual
 Scenario: A patient sync load is audited
-    Given a postman request of http://IP             /resource/sync/load?pid=9E7A:100022
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/sync/load?pid=9E7A:100022
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1972,7 +1972,7 @@ Scenario: A patient sync load is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/sync/load?pid=9E7A:100022            |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/sync/load?pid=9E7A:100022            |
       | patientID                        | 9E7A;100022                                                   |
       | logCategory                      | SYNC                                                          |
       | sensitive                        | false                                                         |
@@ -1982,8 +1982,8 @@ Scenario: A patient sync load is audited
 
 @manual
 Scenario: A vitals writeback save is audited
-    Given a postman request of http://IP             /resource/writeback/vitals/save?dfn=9E7A;3&duz=10000000224&locIEN=67&vitals=[{"fileIEN":"19","reading":"45"}]&pid=9E7A;3
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/vitals/save?dfn=9E7A;3&duz=10000000224&locIEN=67&vitals=[{"fileIEN":"19","reading":"45"}]&pid=9E7A;3
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -1991,7 +1991,7 @@ Scenario: A vitals writeback save is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/writeback/vitals/save?dfn=9E7A;3&duz=10000000224&locIEN=67&vitals=[{"fileIEN":"19","reading":"45"}]&pid=9E7A;3           |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/writeback/vitals/save?dfn=9E7A;3&duz=10000000224&locIEN=67&vitals=[{"fileIEN":"19","reading":"45"}]&pid=9E7A;3           |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -2000,8 +2000,8 @@ Scenario: A vitals writeback save is audited
 
 @manual
 Scenario: An allergy writeback save is audited
-    Given a postman request of http://IP             /resource/writeback/allergy/save?dfn=9E7A;3&duz=10000000224&locIEN=67&allergy=[{"fileIEN":"19","reading":"45"}]&pid=9E7A;3
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/allergy/save?dfn=9E7A;3&duz=10000000224&locIEN=67&allergy=[{"fileIEN":"19","reading":"45"}]&pid=9E7A;3
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2009,7 +2009,7 @@ Scenario: An allergy writeback save is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/writeback/allergy/save?dfn=9E7A;3&duz=10000000224&locIEN=67&vitals=[{"fileIEN":"19","reading":"45"}]&pid=9E7A;3           |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/writeback/allergy/save?dfn=9E7A;3&duz=10000000224&locIEN=67&vitals=[{"fileIEN":"19","reading":"45"}]&pid=9E7A;3           |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -2018,8 +2018,8 @@ Scenario: An allergy writeback save is audited
 
 @manual
 Scenario: An allergy writeback error permission is audited
-    Given a postman request of http://IP             /resource/writeback/allergy/error
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/allergy/error
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2027,7 +2027,7 @@ Scenario: An allergy writeback error permission is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/writeback/allergy/error   |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/writeback/allergy/error   |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -2036,8 +2036,8 @@ Scenario: An allergy writeback error permission is audited
 
 @manual
 Scenario: An allergy writeback error permission is audited
-    Given a postman request of http://IP             /resource/writeback/allergy/error
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/allergy/error
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2045,7 +2045,7 @@ Scenario: An allergy writeback error permission is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/writeback/allergy/error   |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/writeback/allergy/error   |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -2054,8 +2054,8 @@ Scenario: An allergy writeback error permission is audited
 
 @manual
 Scenario: A request for med op data order presets is audited
-    Given a postman request of http://IP             /resource/writeback/med/orderpresets
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/med/orderpresets
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2063,7 +2063,7 @@ Scenario: A request for med op data order presets is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/writeback/med/orderpresets   |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/writeback/med/orderpresets   |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -2072,8 +2072,8 @@ Scenario: A request for med op data order presets is audited
 
 @manual
 Scenario: A request for a sync load prioritized is audited
-    Given a postman request of http://IP             /resource/sync/loadPrioritized
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/sync/loadPrioritized
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2081,7 +2081,7 @@ Scenario: A request for a sync load prioritized is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/sync/loadPrioritized     |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/sync/loadPrioritized     |
       | logCategory                      | SYNC                                                          |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -2090,8 +2090,8 @@ Scenario: A request for a sync load prioritized is audited
 
 @manual
 Scenario: A request for a sync clear is audited
-    Given a postman request of http://IP             /resource/sync/loadPrioritized
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/sync/loadPrioritized
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2099,7 +2099,7 @@ Scenario: A request for a sync clear is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/sync/loadPrioritized     |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/sync/loadPrioritized     |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 404                                                           |
@@ -2107,8 +2107,8 @@ Scenario: A request for a sync clear is audited
 
 @manual
 Scenario: A request for a sync status is audited
-    Given a postman request of http://IP             /resource/sync/status?pid=9E7A;100022
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/sync/status?pid=9E7A;100022
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2116,7 +2116,7 @@ Scenario: A request for a sync status is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/sync/status?pid=9E7A;100022     |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/sync/status?pid=9E7A;100022     |
       | patientID                        | 9E7A;100022                                                   |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -2125,8 +2125,8 @@ Scenario: A request for a sync status is audited
 
 @manual
 Scenario: A request for datasync status is audited
-    Given a postman request of http://IP             /resource/sync/datastatus?pid=9E7A;100022
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/sync/datastatus?pid=9E7A;100022
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2134,7 +2134,7 @@ Scenario: A request for datasync status is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/sync/datastatus?pid=9E7A;100022     |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/sync/datastatus?pid=9E7A;100022     |
       | logCategory                      | SYNC                                                          |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -2143,8 +2143,8 @@ Scenario: A request for datasync status is audited
 
 @manual
 Scenario: A request for operational status sync is audited
-    Given a postman request of http://IP             /resource/sync/operationalstatus?pid=9E7A;100022
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/sync/operationalstatus?pid=9E7A;100022
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2152,7 +2152,7 @@ Scenario: A request for operational status sync is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/sync/operationalstatus?pid=9E7A;100022    |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/sync/operationalstatus?pid=9E7A;100022    |
       | logCategory                      | SYNC                                                          |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
@@ -2162,8 +2162,8 @@ Scenario: A request for operational status sync is audited
 
 @manual
 Scenario: A request for writeback meds save is audited
-    Given a postman request of http://IP             /resource/writeback/medication/save/nonVA
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/medication/save/nonVA
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2171,7 +2171,7 @@ Scenario: A request for writeback meds save is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/writeback/medication/save/nonVA  |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/writeback/medication/save/nonVA  |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 403                                                           |
@@ -2179,8 +2179,8 @@ Scenario: A request for writeback meds save is audited
 
 @manual
 Scenario: A request for writeback op meds save is audited
-    Given a postman request of http://IP             /resource/writeback/opmed/save
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/opmed/save
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2188,7 +2188,7 @@ Scenario: A request for writeback op meds save is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/writeback/opmed/save  |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/writeback/opmed/save  |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 403                                                           |
@@ -2196,8 +2196,8 @@ Scenario: A request for writeback op meds save is audited
 
 @manual
 Scenario: A request for writeback op meds sign is audited
-    Given a postman request of http://IP             /resource/writeback/opmed/sign
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/writeback/opmed/sign
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2205,7 +2205,7 @@ Scenario: A request for writeback op meds sign is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/writeback/opmed/sign  |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/writeback/opmed/sign  |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 403                                                           |
@@ -2213,8 +2213,8 @@ Scenario: A request for writeback op meds sign is audited
 
 @manual
 Scenario: A request for patient record search trend is audited
-    Given a postman request of http://IP             /resource/patientrecord/search/detail/trend
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/patientrecord/search/detail/trend
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2222,7 +2222,7 @@ Scenario: A request for patient record search trend is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/patientrecord/search/detail/trend  |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/patientrecord/search/detail/trend  |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 403                                                           |
@@ -2230,8 +2230,8 @@ Scenario: A request for patient record search trend is audited
 
 @manual
 Scenario: vergencevaultproxy-stopContext is audited
-    Given a postman request of http://IP             /resource/vergencevaultproxy/stopContext
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vergencevaultproxy/stopContext
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2239,7 +2239,7 @@ Scenario: vergencevaultproxy-stopContext is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/vergencevaultproxy/stopContext |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/vergencevaultproxy/stopContext |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 500                                                           |
@@ -2247,8 +2247,8 @@ Scenario: vergencevaultproxy-stopContext is audited
 
 @manual
 Scenario: vergencevaultproxy-setContext is audited
-    Given a postman request of http://IP             /resource/vergencevaultproxy/setContext
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vergencevaultproxy/setContext
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2256,7 +2256,7 @@ Scenario: vergencevaultproxy-setContext is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/vergencevaultproxy/setContext |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/vergencevaultproxy/setContext |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 500                                                           |
@@ -2264,8 +2264,8 @@ Scenario: vergencevaultproxy-setContext is audited
 
 @manual
 Scenario: vergencevaultproxy-contextparticipant is audited
-    Given a postman request of http://IP             /resource/vergencevaultproxy/contextparticipant
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vergencevaultproxy/contextparticipant
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2273,7 +2273,7 @@ Scenario: vergencevaultproxy-contextparticipant is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/vergencevaultproxy/contextparticipant|
+      | request                          | GET http://IP_ADDRESS:PORT/resource/vergencevaultproxy/contextparticipant|
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |
@@ -2281,8 +2281,8 @@ Scenario: vergencevaultproxy-contextparticipant is audited
 
 @manual
 Scenario: vergencevaultproxy-getNewContext is audited
-    Given a postman request of http://IP             /resource/vergencevaultproxy/getNewContext
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vergencevaultproxy/getNewContext
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2290,7 +2290,7 @@ Scenario: vergencevaultproxy-getNewContext is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/vergencevaultproxy/getNewContext |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/vergencevaultproxy/getNewContext |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 404                                                           |
@@ -2298,8 +2298,8 @@ Scenario: vergencevaultproxy-getNewContext is audited
 
 @manual
 Scenario: vergencevaultproxy-addNewPatient is audited
-    Given a postman request of http://IP             /resource/vergencevaultproxy/addNewPatient
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vergencevaultproxy/addNewPatient
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2307,7 +2307,7 @@ Scenario: vergencevaultproxy-addNewPatient is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/vergencevaultproxy/addNewPatient |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/vergencevaultproxy/addNewPatient |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 404                                                           |
@@ -2315,8 +2315,8 @@ Scenario: vergencevaultproxy-addNewPatient is audited
 
 @manual
 Scenario: vergencevaultproxy-commitContextChange is audited
-    Given a postman request of http://IP             /resource/vergencevaultproxy/commitContextChange
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vergencevaultproxy/commitContextChange
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2324,7 +2324,7 @@ Scenario: vergencevaultproxy-commitContextChange is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/vergencevaultproxy/commitContextChange |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/vergencevaultproxy/commitContextChange |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 500                                                           |
@@ -2332,8 +2332,8 @@ Scenario: vergencevaultproxy-commitContextChange is audited
 
 @manual
 Scenario: vergencevaultproxy-preventContextChange is audited
-    Given a postman request of http://IP             /resource/vergencevaultproxy/preventContextChange
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vergencevaultproxy/preventContextChange
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2341,7 +2341,7 @@ Scenario: vergencevaultproxy-preventContextChange is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/vergencevaultproxy/preventContextChange |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/vergencevaultproxy/preventContextChange |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 500                                                           |
@@ -2349,8 +2349,8 @@ Scenario: vergencevaultproxy-preventContextChange is audited
 
 @manual
 Scenario: vergencevaultproxy-acceptAllContextChange is audited
-    Given a postman request of http://IP             /resource/vergencevaultproxy/acceptAllContextChange
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vergencevaultproxy/acceptAllContextChange
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2358,7 +2358,7 @@ Scenario: vergencevaultproxy-acceptAllContextChange is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | GET http://IP             /resource/vergencevaultproxy/acceptAllContextChange |
+      | request                          | GET http://IP_ADDRESS:PORT/resource/vergencevaultproxy/acceptAllContextChange |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 500                                                           |
@@ -2366,8 +2366,8 @@ Scenario: vergencevaultproxy-acceptAllContextChange is audited
 
 @manual
 Scenario: vergencevaultproxy-suspend is audited
-    Given a postman request of http://IP             /resource/vergencevaultproxy/suspend
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vergencevaultproxy/suspend
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2375,7 +2375,7 @@ Scenario: vergencevaultproxy-suspend is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/vergencevaultproxy/suspend |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/vergencevaultproxy/suspend |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 500                                                           |
@@ -2383,8 +2383,8 @@ Scenario: vergencevaultproxy-suspend is audited
 
 @manual
 Scenario: vergencevaultproxy-resume is audited
-    Given a postman request of http://IP             /resource/vergencevaultproxy/resume
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vergencevaultproxy/resume
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2392,7 +2392,7 @@ Scenario: vergencevaultproxy-resume is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/vergencevaultproxy/resume |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/vergencevaultproxy/resume |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 500                                                           |
@@ -2400,8 +2400,8 @@ Scenario: vergencevaultproxy-resume is audited
 
 @manual
 Scenario: vergencevaultproxy-breakContext is audited
-    Given a postman request of http://IP             /resource/vergencevaultproxy/breakContext
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vergencevaultproxy/breakContext
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2409,7 +2409,7 @@ Scenario: vergencevaultproxy-breakContext is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/vergencevaultproxy/breakContext |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/vergencevaultproxy/breakContext |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 500                                                           |
@@ -2417,8 +2417,8 @@ Scenario: vergencevaultproxy-breakContext is audited
 
 @manual
 Scenario: vergencevaultproxy-ssoprocess is audited
-    Given a postman request of http://IP             /resource/vergencevaultproxy/ssoprocess
-    When user performs ssh vagrant@IP        
+    Given a postman request of http://IP_ADDRESS:PORT/resource/vergencevaultproxy/ssoprocess
+    When user performs ssh vagrant@IP_ADDRESS
     And user enters "vagrant" as the password
     And user cd traverses to the /tmp directory by performing "cd /tmp"
     And user views the audit log by performing the action "tail audit.log"
@@ -2426,7 +2426,7 @@ Scenario: vergencevaultproxy-ssoprocess is audited
       | field                            | value                                                         |
       | authuser                         | 9E7A:10000000227                                              |
       | date                             | IS_FORMATTED_DATE                                             |
-      | request                          | POST http://IP             /resource/vergencevaultproxy/ssoprocess |
+      | request                          | POST http://IP_ADDRESS:PORT/resource/vergencevaultproxy/ssoprocess |
       | sensitive                        | false                                                         |
       | sitecode                         | 9E7A                                                          |
       | status                           | 200                                                           |

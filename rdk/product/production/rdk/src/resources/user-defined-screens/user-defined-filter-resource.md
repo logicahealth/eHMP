@@ -2,15 +2,13 @@
 
 ## User defined filter [{{{path}}}]
 
-### Get [GET {{{path}}}{?id}{&predefined}{&fields}]
+### Get [GET {{{path}}}{?id}{&predefined}]
 
 + Parameters
 
     + id (string, required) - workspace name
 
     + predefined (boolean, optional) - predefined screen flag
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -49,7 +47,6 @@
             {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
-                "id": "Filter",
                 "required": [
                     "id",
                     "filter",
@@ -108,7 +105,6 @@
             {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
-                "id": "Filter",
                 "required": [
                     "id",
                     "filter",
@@ -156,7 +152,6 @@
             {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
-                "id": "Filter",
                 "required": [
                     "fromId",
                     "toId"
@@ -202,7 +197,6 @@
             {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
-                "id": "Filter",
                 "required": [
                     "id",
                     "instanceId"

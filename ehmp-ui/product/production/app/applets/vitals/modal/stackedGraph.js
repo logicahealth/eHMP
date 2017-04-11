@@ -335,8 +335,6 @@ define([
         init: function() {
             var self = this;
 
-            var dateRange;
-
             if (sharedDateRange === undefined || sharedDateRange === null) {
                 this.resetSharedModalDateRangeOptions();
             }
@@ -405,7 +403,8 @@ define([
 
                 ADK.Messaging.getChannel('stackedGraph').trigger('readyToChart', {
                     response: self,
-                    time: moment()
+                    time: moment(),
+                    requestParams: self.options.requestParams
                 });
             }, this);
         },

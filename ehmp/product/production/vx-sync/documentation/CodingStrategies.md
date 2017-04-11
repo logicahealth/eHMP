@@ -1,7 +1,7 @@
 Javascript Coding Strategies
 ============================
 
-#####      n Reich (steven.reich@agilex.com)
+##### Steven Reich (steven.reich@agilex.com)
 
 Looping
 -------

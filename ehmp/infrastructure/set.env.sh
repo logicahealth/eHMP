@@ -21,7 +21,7 @@ export GRADLE_HOME=/usr/local/gradle/gradle-2.4
 export GROOVY_HOME=/usr/local/groovy/groovy-2.0.6
 export PATH=$GROOVY_HOME/bin:$GRADLE_HOME/bin:$PATH
 
-jdk_version="jdk1.8.0_66"
+jdk_version="jdk1.8.0_92"
 
 export destroyAll="destroyAll"
 export startAll="startJDS startMocks startKodak startPanorama startVxSync"
@@ -35,6 +35,7 @@ export CONFIGURE_ARGS="--with-ldflags='-Wno-error=unused-command-line-argument-h
 export deployVE2All="deployVE2JDS deployMssql deployJmeadows deployKodak deployPanorama deployVE2Solr deployVE2Ehmp deployVE2VeApi"
 export deployVE2AllDev="deployVE2JDS deployMssql deployJmeadows deployKodak deployPanorama deployVE2SolrDev deployVE2EhmpDev deployVE2VeApiDev"
 export destroyVE2All="destroyVE2JDS destroyJmeadows destroyKodak destroyMssql destroyPanorama destroyVE2Solr destroyVE2Ehmp destroyVE2VeApi destroyOpeninfobutton"
+export NPM_CONFIG_REGISTRY="https://store.vistacore.us/nexus/content/repositories/npm-all/"
 
 ###########################################################################################################
 #

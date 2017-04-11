@@ -5,11 +5,10 @@ define([
     'marionette',
     'underscore',
     'app/applets/medication_review_v2/medicationResourceHandler',
-    'app/applets/medication_review_v2/medicationCollectionHandler',
     'app/applets/medication_review_v2/charts/chartBuilder',
     'app/applets/medication_review_v2/charts/chartConfig',
     'app/applets/lab_results_grid/appletHelpers',
-], function($, moment, Backbone, Marionette, _, MedsResource, CollectionHandler, ChartBuilder, GraphConfig, AppletHelper) {
+], function($, moment, Backbone, Marionette, _, MedsResource, ChartBuilder, GraphConfig, AppletHelper) {
     'use strict';
 
     var inpatient, outpatient;
@@ -55,7 +54,8 @@ define([
             stackedGraphObject.chart = medicationChartConfig;
             stackedGraphObject.requesterInstanceId = params.instanceId;
             ADK.Messaging.getChannel('stackedGraph').trigger('readyToChart', {
-                response: stackedGraphObject
+                response: stackedGraphObject,
+                requestParams: params
             });
             return stackedGraphObject;
         };
@@ -87,7 +87,8 @@ define([
             stackedGraphObject.chart = AppletHelper.chartOptions;
             stackedGraphObject.requesterInstanceId = params.instanceId;
             ADK.Messaging.getChannel('stackedGraph').trigger('readyToChart', {
-                response: stackedGraphObject
+                response: stackedGraphObject,
+                requestParams: params
             });
         }
     });

@@ -1,0 +1,129 @@
+//created on: Mar 25, 2015
+package AAA
+
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+import java.util.Date;
+import java.text.DecimalFormat;
+
+import ca.uhn.fhir.model.api.IDatatype;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.composite.ContainedDt;
+import ca.uhn.fhir.model.dstu2.resource.CommunicationRequest;
+import ca.uhn.fhir.model.dstu2.resource.Provenance;
+import ca.uhn.fhir.model.dstu2.resource.Provenance.Agent;
+import ca.uhn.fhir.model.dstu2.resource.CommunicationRequest.Payload;
+import ca.uhn.fhir.model.dstu2.resource.Observation;
+import ca.uhn.fhir.model.dstu2.resource.Patient;
+import ca.uhn.fhir.model.primitive.StringDt;
+import java.util.ArrayList;
+import java.util.List;
+
+
+import function org.opencds.service.evaluate.FhirUtils.isCodingContains;
+import function org.opencds.service.evaluate.FhirUtils.getValueQuantity;
+import function org.opencds.service.evaluate.FhirUtils.createProvenance;
+import function org.opencds.service.evaluate.FhirUtils.createCommunicationRequest;
+import function org.opencds.service.evaluate.FhirUtils.hasInputFlag;
+import function org.opencds.service.evaluate.FhirUtils.createOutputExtension;
+
+
+global java.lang.String clientLanguage
+global java.lang.String clientTimeZoneOffset
+global java.lang.String focalPersonId
+global java.util.Date evalTime
+global java.util.HashSet assertions
+global java.util.HashMap namedObjects
+ 
+
+declare AAA_SCREENING_COHORT
+    @propertyReactive
+    inDemographic : boolean @key
+	smokingHistory 	: boolean @key
+	outsideScreening : boolean @key
+end
+
+rule "Initialize"
+	salience 200, no-loop
+	when
+	then
+		insert(new AAA_SCREENING_COHORT(false, false, false));	
+end
+ 
+
+rule "inDemographic"
+			dialect "java"
+			salience 180
+			when
+			    $cohort : AAA_SCREENING_COHORT()
+				$patient : Patient($birthtime : birthDate, gender == "male")
+				$age : Period() from new Period($birthtime.getTime(), new Date().getTime(), PeriodType.years())
+				
+				eval($age.getYears() >= 65 )
+				eval($age.getYears() <= 75 )
+			then
+			modify($cohort) { setInDemographic( true ) };
+			//System.out.println($age.getYears());
+							
+end 
+
+rule "smokingHistory"
+      dialect "java"
+      salience 160
+      when
+       $cohort : AAA_SCREENING_COHORT()
+       $obs : Observation()
+   	   eval(isCodingContains($obs.getCode(), "http://ehmp.DNS   /terminology/1.0", "/concept/HF.HISTORY%20OF%20SMOKING"))
+     
+      then
+      modify($cohort) { setSmokingHistory( true ) };
+
+end
+
+rule "hadOutsideScreening"
+      dialect "java"
+      salience 40
+      when
+       $cohort : AAA_SCREENING_COHORT()
+       $obs : Observation() 
+       eval(isCodingContains($obs.getCode(), "http://ehmp.DNS   /terminology/1.0", "/concept/HF.OUTSIDE%20SCREENING%20FOR%20AAA"))
+      
+      then
+      modify($cohort) { setOutsideScreening( true ) };
+
+end
+
+rule "AAAScreening"
+      dialect "java"
+      salience 0
+      when
+       $cohort : AAA_SCREENING_COHORT( inDemographic == true, smokingHistory ==true, outsideScreening == false)
+      
+      then
+      CommunicationRequest comRequest = createCommunicationRequest("The U.S. Preventive Services Task Force recommends one-time screening for abdominal aortic aneurysm (AAA) for men aged 65-75 who have smoked at least 100 cigarettes in their lifetime.");
+      CodeableConceptDt category = new CodeableConceptDt("SNOMED", "419772000");
+      comRequest.setCategory(category);
+      category.getCodingFirstRep().setDisplay("Family Medicine");
+      category.setText("Family Medicine");
+      
+      CodeableConceptDt reason = new CodeableConceptDt("SNOMED", "419772000");
+      comRequest.getReason().add(reason);
+      reason.getCodingFirstRep().setDisplay("AAA Screening NCR");
+      
+      CodeableConceptDt priority = new CodeableConceptDt("CDS-System", "50");
+      priority.getCodingFirstRep().setDisplay("Routine");
+      comRequest.setPriority(priority);
+      
+      Provenance prov = createProvenance("http://www.uspreventiveservicestaskforce.org/");
+      ContainedDt contained = new ContainedDt();
+	  contained.getContainedResources().add(prov);
+      comRequest.setContained(contained);
+      
+      comRequest.addUndeclaredExtension(createOutputExtension());
+      prov.addUndeclaredExtension(createOutputExtension());
+      System.out.println("AAA Screening Rule Fired");
+     
+      namedObjects.put("communicationRequest", comRequest); 
+      namedObjects.put("provenance", prov);
+end 

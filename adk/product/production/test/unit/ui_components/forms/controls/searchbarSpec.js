@@ -56,31 +56,26 @@ define(['jquery', 'backbone', 'marionette', 'main/ui_components/components', 'ap
                 });
 
                 it('contains a button', function() {
-                    expect($form.find('button').length).toBe(1);
+                    expect($form.find('button').length).toBe(2);
                 });
 
                 it('contains a button with a title', function() {
-                    expect($form.find('button')).toHaveAttr('title', 'Please select the button to submit your search');
+                    expect($form.find('button')[0]).toHaveAttr('title', 'Press enter to clear search text');
+                });
+
+                it('contains a button with a title', function() {
+                    expect($form.find('button')[1]).toHaveAttr('title', 'Press enter to search, then view results below');
                 });
 
                 it('contains a button with an icon', function() {
-                    expect($form.find('button i').length).toBe(1);
+                    expect($form.find('button i').length).toBe(2);
                 });
-
-                it('contains a button with an icon with a title', function() {
-                    expect($form.find('button i')).toHaveAttr('title', 'Submit Search');
-                });
-
-                it('contains a button with text of Submit Search', function() {
-                    expect($form.find('button')).toHaveText('Submit Search');
-                });
-
 
                 it('contains a button that fires a submit handler if it is pressed', function() {
                     expect(mockSubmit).not.toHaveBeenCalled();
                     $form.find('button').trigger('submit');
                     expect(mockSubmit).toHaveBeenCalled();
-                    expect(mockSubmit.calls.count()).toEqual(1);
+                    expect(mockSubmit.calls.count()).toEqual(2);
                 });
 
 

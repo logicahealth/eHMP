@@ -16,7 +16,10 @@ describe('When the communication resource is called', function() {
     beforeEach(function() {
         req = {};
         req.logger = logger;
-        req.params = {resourceId: 1000, recipientId: 'PW    '};
+        req.params = {
+            resourceId: 1000,
+            recipientId: 'pu1234'
+        };
 
         res = httpMocks.createResponse();
         spyStatus = sinon.spy(res, 'status');
@@ -46,7 +49,10 @@ describe('When the communication resource is called', function() {
 
     it('to get a single communication request return a no found error', function(done) {
         mockHandler = sinon.stub(getHandler, 'handle', function(queue, queueName, params, callback) {
-            return callback({code: 404, message: 'no found'});
+            return callback({
+                code: 404,
+                message: 'no found'
+            });
         });
 
 
@@ -80,7 +86,10 @@ describe('When the communication resource is called', function() {
 
     it('to get all communication request return a no found error', function(done) {
         mockHandler = sinon.stub(getHandler, 'handle', function(queue, queueName, params, callback) {
-            return callback({code: 404, message: 'no found'});
+            return callback({
+                code: 404,
+                message: 'no found'
+            });
         });
 
 
@@ -114,7 +123,10 @@ describe('When the communication resource is called', function() {
 
     it('to add a new communication request, the add fails', function(done) {
         mockHandler = sinon.stub(addHandler, 'handle', function(queue, message, callback) {
-            return callback({code: 500, message: 'no found'});
+            return callback({
+                code: 500,
+                message: 'no found'
+            });
         });
 
 
@@ -148,7 +160,10 @@ describe('When the communication resource is called', function() {
 
     it('to delete a communication request, the delete fails', function(done) {
         mockHandler = sinon.stub(deleteHandler, 'handle', function(queue, message, id, callback) {
-            return callback({code: 500, message: 'no found'});
+            return callback({
+                code: 500,
+                message: 'no found'
+            });
         });
 
 
@@ -163,37 +178,4 @@ describe('When the communication resource is called', function() {
         communicationRequestResource._deleteCommunicationRequest(req, res);
     });
 
-    it('to delete all communication requests, the requests are successfully deleted', function(done) {
-        mockHandler = sinon.stub(deleteHandler, 'handle', function(queue, message, callback) {
-            return callback(null, {});
-        });
-
-
-        function tester() {
-            expect(mockHandler.callCount).to.be(1);
-            expect(spyStatus.withArgs(204).called).to.be.true();
-
-            done();
-        }
-        res.send = tester;
-
-        communicationRequestResource._deleteAllCommunicationRequests(req, res);
-    });
-
-    it('to delete all communication requests, the delete fails', function(done) {
-        mockHandler = sinon.stub(deleteHandler, 'handle', function(queue, message, callback) {
-            return callback({code: 500, message: 'no found'});
-        });
-
-
-        function tester() {
-            expect(mockHandler.callCount).to.be(1);
-            expect(spyStatus.withArgs(500).called).to.be.true();
-
-            done();
-        }
-        res.send = tester;
-
-        communicationRequestResource._deleteAllCommunicationRequests(req, res);
-    });
 });

@@ -99,13 +99,13 @@ end
 def get_params(repo, branch)
   # Build URL
   protocol = "https://"
-  server = "build.vistacore.us"
+  server = "ci.vistacore.us"
   port = ""
   job_name = "#{repo}-acceptance-test-build-#{branch}"
   restEndPoint = "#{protocol}#{server}#{port}/job/#{job_name}/lastStableBuild/api/xml"
   
   # Get XML Document from Jenkins
-  xml_doc = Nokogiri::XML(open(restEndPoint).read)
+  xml_doc = Nokogiri::XML(open(restEndPoint, http_basic_authentication: ["build", "38dfad82cfdffe645bb67df1253a3baf"]).read)
 
   # Get environment variable names and values
   names = xml_doc.xpath('//action/parameter/name').collect{|node|
@@ -129,13 +129,15 @@ def set_env_vars(env_vars)
 end
 
 def get_action(action)
-  if action != "destroy"
+  if action.eql?("") || action == nil 
     return "converge"
+  elsif action.eql?("start")
+    return "ready"
   else
-    return "destroy"
+    return action
   end
 end
 
 def execute_chef_client(action, machine, provision)
-  system("MACHINE_NAME=#{machine} DRIVER=vagrant ACTION=#{action} chef-client -o #{provision}@$#{provision.upcase.tr('-','_')} -c ~/Projects/vistacore/.chef/knife.rb", out: $stdout, err: :out)
+  exec "MACHINE_NAME=#{machine} DRIVER=vagrant ACTION=#{action} chef-client -o #{provision}@$#{provision.upcase.tr('-','_')} -c ~/Projects/vistacore/.chef/knife.rb"
 end

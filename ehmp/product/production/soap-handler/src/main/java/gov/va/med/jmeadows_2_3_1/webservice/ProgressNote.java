@@ -16,7 +16,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="progressNote">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.domain.ext/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="amended" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="complexDataUrl" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -29,7 +29,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="noteTitle" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="noteTitleId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="noteType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="provider" type="{http://webservice.vds.domain.ext/}provider" minOccurs="0"/>
+ *         &lt;element name="provider" type="{http://webservice.vds.DNS       /}provider" minOccurs="0"/>
  *         &lt;element name="sensitive" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="status" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="userIen" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -43,7 +43,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "progressNote", namespace = "http://webservice.vds.domain.ext/", propOrder = {
+@XmlType(name = "progressNote", namespace = "http://webservice.vds.DNS       /", propOrder = {
     "amended",
     "complexDataUrl",
     "encounter",

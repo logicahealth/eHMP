@@ -2,7 +2,8 @@
     .tab-content-container {
         border: 1px solid $grey-light;
         border-radius: 0px 0px 4px 4px;
-        border-top: none;
+        border-top: 1px solid $pure-white;
+        background-color: $pure-white;
     }
     ul.nav-tabs {
         border-bottom: 1px solid $grey-light;
@@ -11,26 +12,34 @@
         li {
             border-bottom: 0px solid $grey-light;
             margin-bottom: -1px;
+            margin-right: 0;
             &.active {
                 border-bottom: none;
                 a {
-                    background-color: $primary;
-                    border: 1px solid $primary;
-                    color: $pure-white;
+                    background-color: $pure-white;
+                    border-bottom: 1px solid $pure-white;
+                    color: $primary-dark;
+                    font-weight: 600;
+                    &:focus, &:hover {
+                        background-color: $pure-white;
+                        border-bottom: 1px solid $pure-white;
+                        color: $primary-dark;
+                        font-weight: 600;
+                    }
                 }
             }
             a {
-                background-color: $pure-white;
+                background-color: $primary-lightest;
                 border-color: $grey-light;
                 color: $primary;
                 padding: 6.5px 15px;
                 &:focus{
-                    background-color: $primary;
-                    color: $pure-white;
+                    background-color: $pure-white;
+                    color: $primary-dark;
                 }
                 &:hover {
-                    background-color: $primary;
-                    color: $pure-white;
+                    background-color: $pure-white;
+                    color: $primary-dark;
                     outline: none;
                 }
             }

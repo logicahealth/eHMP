@@ -2,6 +2,7 @@ define(function() {
     'use strict';
     var screenConfig = {
         id: 'appointments-full',
+        context: 'patient',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

@@ -31,7 +31,7 @@ do |pid, query, group_field, group_value, whitelist|
   resource.add_parameter('fields', whitelist) unless whitelist.nil?
 
   path = resource.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 # patient-record-search-suggest
@@ -54,7 +54,7 @@ do |pid, query, whitelist|
   resource.add_parameter('fields', whitelist) unless whitelist.nil?
 
   path = resource.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
   # puts @response.body
 end
 
@@ -78,7 +78,7 @@ do |pid, uid, whitelist|
   resource.add_parameter('fields', whitelist) unless whitelist.nil?
 
   path = resource.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
   # puts @response.body
 end
 
@@ -106,7 +106,7 @@ do |pid, query, types, whitelist|
   resource.add_parameter('fields', whitelist) unless whitelist.nil?
 
   path = resource.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
   # puts @response.body
 end
 
@@ -128,7 +128,7 @@ do |pid, uid, whitelist|
   resource.add_parameter('fields', whitelist) unless whitelist.nil?
 
   path = resource.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
   # puts @response.body
 end
 
@@ -176,7 +176,7 @@ do |domain, pid, type, date_start, date_end, start, endx, limit, order, whitelis
   resource.add_parameter('fields', whitelist) unless whitelist.nil?
 
   path = resource.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
   # puts @response.body
 end
 
@@ -200,7 +200,7 @@ do |pid, whitelist|
   resource.add_parameter('fields', whitelist) unless whitelist.nil?
 
   path = resource.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
   # puts @response.body
 end
 

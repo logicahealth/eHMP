@@ -1,0 +1,24 @@
+{
+  "id": "jmeadows",
+  "normal": {
+    "ipaddress": "IP___ADDRESS",
+    "stack": "production-staging-deploy-r1-2-conversion",
+    "roles": [
+      "jmeadows"
+    ],
+    "jmeadows": {
+      "application": {
+        "protocol": "http",
+        "port": 80,
+        "path": "/jMeadows/JMeadowsDataService",
+        "path_query": "wsdl",
+        "user": {
+          "ien": "20012",
+          "name": "VEHU, TEN",
+          "site_code": 200,
+          "site_name": "CAMP MASTER"
+        }
+      }
+    }
+  }
+}

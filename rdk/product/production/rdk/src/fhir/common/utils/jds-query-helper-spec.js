@@ -39,4 +39,13 @@ describe('JDS Query Helper', function() {
     it('generates a correct JDS query - gte', function() {
         expect(jds.gte('foo', 50)).to.eql('gte(foo,50)');
     });
+    it('generates a correct JDS query - dlt', function() {
+        expect(jds.dlt('foo', 50)).to.eql('dlt(foo,50)');
+    });
+    it('generates a correct JDS query - dgte', function() {
+        expect(jds.dgte('foo', 50)).to.eql('dgte(foo,50)');
+    });
+    it('generates a correct JDS query - dgt', function() {
+        expect(jds.dgt('foo', 50)).to.eql('dgt(foo,50)');
+    });
 });

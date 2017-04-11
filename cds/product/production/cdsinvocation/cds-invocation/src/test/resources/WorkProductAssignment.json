@@ -1,0 +1,13 @@
+{ "dueDate" : 1443989700000,
+  "expirationDate" : 1444076100000,
+  "priority" : 76,
+  "readStatus" : false,
+  "user" : { "codeSystem" : "VA:ProviderId",
+      "entityType" : "User",
+      "id" : "1100032",
+      "name" : "Optional",
+      "type" : "Provider"
+    },
+  "workProductId" : "2929289789573",
+  "workProductType" : "CDSAdvice"
+}

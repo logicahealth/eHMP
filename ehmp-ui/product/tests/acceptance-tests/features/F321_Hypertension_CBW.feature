@@ -1,4 +1,4 @@
-@F321 @US6176 @TC302 @regression @US7259  
+@F321 @US6176 @TC302 @regression @US7259 @future @US146753
 Feature: Condition-based Analysis Workspaces - Immutable Hypertension Workspace
 
 # Filter tests based off of steps in eHMP_Regression Test Procedures for IOC Release 1.2.1_v1.0_08192015dia
@@ -8,7 +8,7 @@ Background:
 
 # @US6176
 # Scenario: User performs pre steps
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	And user searches for and selects "Eight,Patient"
 	And Default Screen is active
 
@@ -22,7 +22,7 @@ Scenario: Hypertension CBW  displays expected applets
 	When the user navigates to the Hypertension CBW
 	And the applets are displayed on the Hypertension CBW
       | applet                 |
-      | CONDITIONS             |
+      | PROBLEMS               |
       | NUMERIC LAB RESULTS    |
       | VITALS                 |
       | TIMELINE               |
@@ -31,12 +31,12 @@ Scenario: Hypertension CBW  displays expected applets
       | APPOINTMENTS & VISITS  |
       | DOCUMENTS              |
 
-@US6176 @US6176_9 @DE3079 @debug @DE3444
+@US6176 @US6176_9 @DE3079 @DE3444 @future @US13456
 Scenario: Verify the Hypertension CBW has the correct Filters applied for Lab Results
       When the user navigates to the Hypertension CBW
       Then the Lab Results applet reports filtered "Filtered Hypertension"
 
-@US6176 @US6176_9 @debug @DE3444
+@US6176 @US6176_9 @DE3444
 Scenario: Verify the Hypertension CBW has the correct Filters applied for Lab Results
 	When the user navigates to the Hypertension CBW
 	# Then the Lab Results applet reports filtered "Filtered Hypertension"
@@ -110,12 +110,12 @@ Scenario: Verify the Hypertension CBW has the correct Filters applied for Lab Re
       | O2HB%(SAT)      |
 
 
-@US6176 @US6176_10 @DE3079 @debug @DE3444
+@US6176 @US6176_10 @DE3079 @DE3444 @future @US13456
 Scenario: Verify the Hypertension CBW has the correct Filters applied for Documents
       When the user navigates to the Hypertension CBW
       Then the Documents applet reports filtered "Filtered Hypertension"
 
-@US6176 @US6176_10 @debug @DE3444
+@US6176 @US6176_10 @DE3444
 Scenario: Verify the Hypertension CBW has the correct Filters applied for Documents
 	When the user navigates to the Hypertension CBW
 	# Then the Documents applet reports filtered "Filtered Hypertension"
@@ -163,12 +163,12 @@ Scenario: Verify the Hypertension CBW has the correct Filters applied for Docume
       | Surgery           |
       | Vascular          |
 
-@US6176 @US6176_11 @DE3079 @debug @DE3444
+@US6176 @US6176_11 @DE3079 @DE3444 @future @US13456
 Scenario: Verify the Hypertension CBW has the correct Filters applied for Appt/Visit
       When the user navigates to the Hypertension CBW
       Then the Appointment & Visit applet reports filtered "Filtered Hypertension"
 
-@US6176 @US6176_11 @debug @DE3444
+@US6176 @US6176_11 @DE3444
 Scenario: Verify the Hypertension CBW has the correct Filters applied for Appt/Visit
 	When the user navigates to the Hypertension CBW
 	# Then the Appointment & Visit applet reports filtered "Filtered Hypertension"
@@ -193,12 +193,12 @@ Scenario: Verify the Hypertension CBW has the correct Filters applied for Appt/V
 |	Work |
 
 
-@US6176 @US6176_12 @DE3079 @debug @DE3444
+@US6176 @US6176_12 @DE3079 @DE3444 @future @US13456
 Scenario: Verify the Hypertension CBW has the correct Filters applied for Timeline
       When the user navigates to the Hypertension CBW
       Then the Timeline applet reports filtered "Filtered Hypertension"
 
-@US6176 @US6176_12 @debug @DE3444
+@US6176 @US6176_12 @DE3444
 Scenario: Verify the Hypertension CBW has the correct Filters applied for Timeline
       When the user navigates to the Hypertension CBW
       # Then the Timeline applet reports filtered "Filtered Hypertension"
@@ -214,12 +214,12 @@ Scenario: Verify the Hypertension CBW has the correct Filters applied for Timeli
       | Visit |
 
 
- @US6176 @US6176_13 @DE3079 @debug @DE3444
+ @US6176 @US6176_13 @DE3079 @DE3444 @future @US13456
 Scenario: Verify the Hypertension CBW has the correct Filters applied for Meds
       When the user navigates to the Hypertension CBW
       Then the Meds Review applet reports filtered "Filtered Hypertension"
 
- @US6176 @US6176_13 @debug @DE3444
+ @US6176 @US6176_13 @DE3444
 Scenario: Verify the Hypertension CBW has the correct Filters applied for Meds
       When the user navigates to the Hypertension CBW
       # Then the Meds Review applet reports filtered "Filtered Hypertension"

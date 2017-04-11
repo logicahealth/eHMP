@@ -1,0 +1,65 @@
+@prefix snomed: <http://snomed.info/id/> .
+@prefix loinc:  <http://purl.bioontology.org/ontology/LNC/> .
+
+
+# RHEUMATOID FACTOR immunoglobulin G measurement (procedure)
+snomed:415301001 snomed:isA loinc:46437-0  .
+snomed:415301001 snomed:isA loinc:43932-3  .
+snomed:415301001 snomed:isA loinc:25746-9  .
+snomed:415301001 snomed:isA loinc:17857-4  .
+snomed:415301001 snomed:isA loinc:5299-3   .
+snomed:415301001 snomed:isA loinc:15204-1  .
+snomed:415301001 snomed:isA loinc:5300-9   .
+snomed:415301001 snomed:isA loinc:13930-3  .
+snomed:415301001 snomed:isA loinc:53924-7  .
+snomed:415301001 snomed:isA loinc:13929-5  .
+snomed:415301001 snomed:isA loinc:33577-8  .
+snomed:415301001 snomed:isA loinc:56977-2  .
+snomed:415301001 snomed:isA loinc:31046-6  .
+snomed:415301001 snomed:isA loinc:45156-7  .
+snomed:415301001 snomed:isA loinc:25745-1  .
+snomed:415301001 snomed:isA loinc:30231-5  .
+snomed:415301001 snomed:isA loinc:17534-9  .
+snomed:415301001 snomed:isA loinc:15203-3  .
+snomed:415301001 snomed:isA loinc:63313-1  .
+snomed:415301001 snomed:isA loinc:29351-4  .
+snomed:415301001 snomed:isA loinc:14034-3  .
+snomed:415301001 snomed:isA loinc:53562-5  .
+snomed:415301001 snomed:isA loinc:33910-1  .
+snomed:415301001 snomed:isA loinc:5297-7   .
+snomed:415301001 snomed:isA loinc:5298-5   .
+snomed:415301001 snomed:isA loinc:6928-6   .
+snomed:415301001 snomed:isA loinc:15205-8  .
+snomed:415301001 snomed:isA loinc:11572-5  .
+snomed:415301001 snomed:isA loinc:6823-9   .
+snomed:415301001 snomed:isA loinc:13634-1  .
+snomed:415301001 snomed:isA loinc:15206-6  .
+snomed:415301001 snomed:isA loinc:46435-4  .
+snomed:415301001 snomed:isA loinc:63314-9  .
+snomed:415301001 snomed:isA loinc:33313-8  .
+snomed:415301001 snomed:isA loinc:33314-6  .
+snomed:415301001 snomed:isA loinc:63315-6  .
+snomed:415301001 snomed:isA loinc:11573-3  .
+snomed:415301001 snomed:isA loinc:9338-5   .
+snomed:415301001 snomed:isA loinc:33648-7  .
+
+
+# C Reactive Protein measurement (procedure)
+snomed:55235003 snomed:isA loinc:11039-5 .
+snomed:55235003 snomed:isA loinc:71426-1 .
+snomed:55235003 snomed:isA loinc:48421-2 .
+snomed:55235003 snomed:isA loinc:16503-5 .
+snomed:55235003 snomed:isA loinc:45062-7 .
+snomed:55235003 snomed:isA loinc:59182-6 .
+snomed:55235003 snomed:isA loinc:1988-5  .
+snomed:55235003 snomed:isA loinc:30522-7 .
+snomed:55235003 snomed:isA loinc:35648-5 .
+snomed:55235003 snomed:isA loinc:14634-0 .
+
+
+# ERYTHROCYTE SEDIMENTATION RATE
+snomed:416838001  snomed:isA  loinc:18184-2 .
+snomed:416838001  snomed:isA  loinc:30341-2 .
+snomed:416838001  snomed:isA  loinc:43402-7 .
+snomed:416838001  snomed:isA  loinc:4537-7  .
+snomed:416838001  snomed:isA  loinc:4538-5  .

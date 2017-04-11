@@ -15,12 +15,12 @@ action :aws do
 
   chef_gem "awscli"
   chef_gem "aws-sdk"
-  
+
   require "aws"
   require "aws-sdk"
   require "json"
 
-  machine_options = { 
+  machine_options = {
       :bootstrap_options => {
         :key_name => ::File.basename(node[:machine][:production_settings]["#{new_resource.machine_name}".to_sym][:ssh_key]),
         :instance_type => new_resource.boot_options[:instance_type],
@@ -32,9 +32,9 @@ action :aws do
   }
 
   if node[:machine][:allow_web_access]
-    machine_options[:bootstrap_options][:security_group_ids] = ["sg-a06097c6"]
+    machine_options[:bootstrap_options][:security_group_ids] = node[:machine][:security_groups][:enable_web_access]
   else
-    machine_options[:bootstrap_options][:security_group_ids] = ["sg-d6dbcbb1"]
+    machine_options[:bootstrap_options][:security_group_ids] = node[:machine][:security_groups][:disable_web_access]
   end
 
   machine_name = "#{new_resource.machine_name}-#{node[:machine][:stack]}-noint"
@@ -65,8 +65,8 @@ action :aws do
       puts "\n Public IP Address: " + node[:machine][:production_settings]["#{new_resource.machine_name}".to_sym][:ip]
     end
     action :run
-    not_if { machine_action.eql?(:destroy) }
-  end  
+    not_if { machine_action.eql?(:destroy) || machine_action.eql?(:stop)}
+  end
 
 end
 
@@ -76,7 +76,7 @@ action :vagrant do
   with_driver "vagrant"
 
   vagrant_box "opscode-centos-6.5" do
-    url lazy { "#{node[:common][:nexus_url]}/nexus/content/repositories/ehmp/filerepo/third-party/program/opscode/centos/6.5/centos-6.5-provisionerless.box" }
+    url lazy { "#{node[:common][:nexus_url]}/repositories/filerepo/third-party/program/opscode/centos/6.5/centos-6.5-provisionerless.box" }
   end
 
   node.default[:machine][:production_settings]["#{new_resource.machine_name}".to_sym] = {
@@ -85,15 +85,9 @@ action :vagrant do
   }
 
   node.default[:machine][:production_settings]["#{new_resource.machine_name}".to_sym][:ssh_username] = "vagrant"
-  # node.default[:machine][:production_settings]["#{new_resource.machine_name}".to_sym][:ssh_key] = "#{ENV['HOME']}/Projects/vistacore/.vagrant.d/insecure_private_key"
+  node.default[:machine][:production_settings]["#{new_resource.machine_name}".to_sym][:ssh_key] = "#{ENV['HOME']}/Projects/vistacore/.vagrant.d/insecure_private_key"
   # For vagrant 1.4.3 and chefdk 0.4.0, the line below had to be changed to the line above
   # node.default[:machine][:production_settings][:ssh_key] = "#{ENV['HOME']}/Projects/vistacore/.chef/vms/.vagrant/machines/#{new_resource.machine_name}-#{node[:machine][:stack]}-noint/virtualbox/private_key"
-  case node[:platform_family]
-    when 'windows'
-      node.default[:machine][:production_settings]["#{new_resource.machine_name}".to_sym][:ssh_key] = "#{ENV['HOME']}/Projects/vistacore/.chef/vms/.vagrant/machines/#{new_resource.machine_name}-#{node[:machine][:stack]}/virtualbox/private_key"
-    else
-      node.default[:machine][:production_settings]["#{new_resource.machine_name}".to_sym][:ssh_key] = "#{ENV['HOME']}/Projects/vistacore/.vagrant.d/insecure_private_key"
-  end
 
   machine_options = {
     :vagrant_options => {
@@ -132,7 +126,7 @@ action :vagrant do
     machine_action = :ready
   end
 
-  chef_node "delete_#{machine_name}_to_clear_attributes" do 
+  chef_node "delete_#{machine_name}_to_clear_attributes" do
     name machine_name
     action :delete
     only_if { Chef::Node.load(machine_name).class.eql?(Chef::Node) rescue false }
@@ -146,7 +140,7 @@ action :vagrant do
     run_list ["placeholder"]
   end
 
-  chef_node "delete_#{machine_name}_on_destroy" do 
+  chef_node "delete_#{machine_name}_on_destroy" do
     name machine_name
     action :delete
     only_if { node[:machine][:action].eql?("destroy") && Chef::Node.load(machine_name).class.eql?(Chef::Node) rescue false }
@@ -164,7 +158,7 @@ end
 
 def get_instance_id(machine_name)
   booted_node = search(:node, "name:#{machine_name}")[0].to_hash
-  begin 
+  begin
     old_instance_id = booted_node["chef_provisioning"]["location"]["instance_id"]
   rescue
     new_instance_id = booted_node["chef_provisioning"]["reference"]["instance_id"]

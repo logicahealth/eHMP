@@ -1,4 +1,4 @@
-if(System.getenv()['CHEF_REPO']){ 
+if(System.getenv()['CHEF_REPO']){
   def commit = "git rev-parse HEAD".execute(null, new File("${rootDir}/../../chef-repo")).text
   println "chef-repo commit hash: ${commit}"
 }
@@ -26,11 +26,15 @@ def projectInfoCollection = [
       ":production:jbpm:FITLabProject:build",
       ":production:jbpm:VistaTasks:build",
       ":production:jbpm:General_Medicine:build",
+      ":production:jbpm:Order:build",
+      ":production:jbpm:Activity:build",
       ":production:jbpm:authentication:build",
       ":production:jbpm:event-listeners:build",
       ":production:jbpm:CDSInvocationService:build",
       ":production:jbpm:FOBTLabService:build",
-      ":production:jbpm:tasksservice:build"
+      ":production:jbpm:tasksservice:build",
+      ":production:jbpm:EhmpServices:build",
+      ":production:jbpm:sql_config:build"
     ],
     machineName: "jbpm",
     vagrantDir : "${rootDir}/../../.chef/vms",
@@ -41,21 +45,29 @@ def projectInfoCollection = [
       "JBPM_PROJECTS_LOCAL_FILE_1": "${-> project(':production:jbpm:VistaTasks').jar.outputs.files.singleFile.getCanonicalPath()}",
       "JBPM_PROJECTS_LOCAL_FILE_2": "${-> project(':production:jbpm:FITLabProject').jar.outputs.files.singleFile.getCanonicalPath()}",
       "JBPM_PROJECTS_LOCAL_FILE_3": "${-> project(':production:jbpm:General_Medicine').jar.outputs.files.singleFile.getCanonicalPath()}",
+      "JBPM_PROJECTS_LOCAL_FILE_4": "${-> project(':production:jbpm:Order').jar.outputs.files.singleFile.getCanonicalPath()}",
+      "JBPM_PROJECTS_LOCAL_FILE_5": "${-> project(':production:jbpm:Activity').jar.outputs.files.singleFile.getCanonicalPath()}",
       "JBPM_AUTH_LOCAL_FILE": "${-> project(':production:jbpm:authentication').jar.outputs.files.singleFile.getCanonicalPath()}",
       "JBPM_EVENT_LISTENERS_LOCAL_FILE": "${-> project(':production:jbpm:event-listeners').jar.outputs.files.singleFile.getCanonicalPath()}",
       "JBPM_CDSINVOCATIONSERVICE_LOCAL_FILE": "${-> project(':production:jbpm:CDSInvocationService').jar.outputs.files.singleFile.getCanonicalPath()}",
       "JBPM_FOBTLABSERVICE_LOCAL_FILE": "${-> project(':production:jbpm:FOBTLabService').jar.outputs.files.singleFile.getCanonicalPath()}",
-      "JBPM_TASKSSERVICE_LOCAL_FILE": "${-> project(':production:jbpm:tasksservice').war.outputs.files.singleFile.getCanonicalPath()}"
+      "JBPM_TASKSSERVICE_LOCAL_FILE": "${-> project(':production:jbpm:tasksservice').war.outputs.files.singleFile.getCanonicalPath()}",
+      "JBPM_EHMPSERVICES_LOCAL_FILE": "${-> project(':production:jbpm:EhmpServices').jar.outputs.files.singleFile.getCanonicalPath()}",
+      "JBPM_SQL_CONFIG_LOCAL_FILE": "${-> project(':production:jbpm:sql_config').tarSQLConfig.outputs.files.singleFile.getCanonicalPath()}"
     ],
     vagrantEnvVarsVersion : [
       'JBPM_VISTATASKS_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_VISTATASKS_VERSION')}",
       'JBPM_FITLABPROJECT_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_FITLABPROJECT_VERSION')}",
       'JBPM_GENERAL_MEDICINE_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_GENERAL_MEDICINE_VERSION')}",
+      'JBPM_ORDER_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_ORDER_VERSION')}",
+      'JBPM_ACTIVITY_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_ACTIVITY_VERSION')}",
       'JBPM_AUTH_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_AUTH_VERSION')}",
       'JBPM_LISTENER_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_LISTENER_VERSION')}",
       'JBPM_CDSINVOCATIONSERVICE_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_CDSINVOCATIONSERVICE_VERSION')}",
       'JBPM_FOBTLABSERVICE_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_FOBTLABSERVICE_VERSION')}",
-      'JBPM_TASKSSERVICE_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_TASKSSERVICE_VERSION')}"
+      'JBPM_TASKSSERVICE_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_TASKSSERVICE_VERSION')}",
+      'JBPM_EHMPSERVICES_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_EHMPSERVICES_VERSION')}",
+      'JBPM_SQL_CONFIG_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_SQL_CONFIG_VERSION')}"
     ],
     cdsDeploy : false,
     provisioner : "rdk_provision"
@@ -70,9 +82,11 @@ def projectInfoCollection = [
     vagrantEnvVarsLocal : [],
     vagrantEnvVarsVersion : [
       'OPENCDS_VERSION' : "${-> chooseStableBuild('rdk', 'acceptance-test', 'OPENCDS_VERSION')}",
+      'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_VERSION' : "${-> chooseStableBuild('cds', 'acceptance-test', 'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_VERSION')}",
       'CDSI_METRICS_VERSION' : "${-> chooseStableBuild('rdk', 'acceptance-test', 'CDSI_METRICS_VERSION')}",
       'CDSI_RESULTS_VERSION' : "${-> chooseStableBuild('rdk', 'acceptance-test', 'CDSI_RESULTS_VERSION')}",
-      'CDSDASHBOARD_VERSION' : "${-> chooseStableBuild('cdsdashboard', 'acceptance-test', 'CDSDASHBOARD_VERSION')}"
+      'CDS_ENGINE_AGENT_VERSION' : "${-> chooseStableBuild('cds', 'acceptance-test', 'CDS_ENGINE_AGENT_VERSION')}",
+      'CDSDASHBOARD_VERSION' : "${-> chooseStableBuild('rdk', 'acceptance-test', 'CDSDASHBOARD_VERSION')}"
     ],
     cdsDeploy: true,
     provisioner : "cds_provision"
@@ -172,7 +186,7 @@ allprojects  {
       doLast {
         if (rootProject."destroy${projectInfo['taskNamePart']}Flag" == false) {
           rootProject."destroy${projectInfo['taskNamePart']}Flag" = true
-          executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], [], 'destroy', projectInfo['provisioner'])
+          executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], [:], 'destroy', projectInfo['provisioner'])
         }
       }
     }
@@ -182,10 +196,8 @@ allprojects  {
 
 def executeVagrant(vagrantDir, command) {
   exec {
-    //executable = '/usr/bin/vagrant'
-    executable = 'bash'
-    //args = command
-    args = ['-c', "vagrant " + command.join(" ")]
+    executable = '/usr/bin/vagrant'
+    args = command
     workingDir vagrantDir
   }
 }
@@ -203,31 +215,29 @@ def startVM(vagrantMachine, vagrantDir) {
 }
 
 def stopVM(vagrantMachine, vagrantDir, provisioner) {
-  executeChefClient(vagrantMachine, vagrantDir, [], 'stop', provisioner)
+  executeChefClient(vagrantMachine, vagrantDir, [:], 'stop', provisioner)
 }
 
 def executeChefClient(vagrantMachine, vagrantDir, envVars, String action = 'converge', provisioner) {
   def newVars = envVars
   def logLevel = (System.getenv()['LOG_LEVEL'] == null || "") ? "warn" : System.getenv()['LOG_LEVEL']
+  def chefEnv = (System.getenv()['CHEF_ENV'] == null || "") ? "_default" : System.getenv()['CHEF_ENV']
   println "LOG_LEVEL: ${logLevel}"
   newVars << ['MACHINE_NAME':"${vagrantMachine}", 'DRIVER': 'vagrant', 'ACTION': "${action}",'ALLOW_WEB_ACCESS':'true','PATH':'/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin']
-  
+
   def knife_path = "${System.getenv()['WORKSPACE']}/.chef/knife.rb"
   def chefArgs = []
-  println envVars
   syncNodesBetweenChefServerAndChefZero(vagrantMachine)
   if(System.getenv()['CHEF_REPO']){
-    chefArgs = ['-z', '-o', "${provisioner}", "--environment", "_default", "--config", knife_path, '--force-formatter', '-l', logLevel]
-  } else if(envVars["DEV_DEPLOY"].equals('true')){
-    chefArgs = ['-o', "${provisioner}@${local_provision_version()}", "--environment", "_default", "--config", knife_path, '--force-formatter', '-l', logLevel]
+    chefArgs = ['-z', '-o', "${provisioner}", "--environment", chefEnv, "--config", knife_path, '--force-formatter', '-l', logLevel]
+  } else if(newVars["DEV_DEPLOY"]){
+    chefArgs = ['-o', "${provisioner}@${local_provision_version()}", "--environment", chefEnv, "--config", knife_path, '--force-formatter', '-l', logLevel]
   } else {
-    chefArgs = ['-o', "${provisioner}@${chooseStableBuild(provisionerRepo(provisioner),'acceptance-test',provisioner)}", "--environment", "_default", "--config", knife_path, '--force-formatter', '-l', logLevel]
+    chefArgs = ['-o', "${provisioner}@${chooseStableBuild(provisionerRepo(provisioner),'acceptance-test',provisioner)}", "--environment", chefEnv, "--config", knife_path, '--force-formatter', '-l', logLevel]
   }
   exec {
-    //executable = '/opt/chefdk/bin/chef-client'
-    executable = "bash"
-    //args = chefArgs
-    args = ["-c", "chef-client " + chefArgs.join(" ")]
+    executable = '/opt/chefdk/bin/chef-client'
+    args = chefArgs
     environment(newVars)
   }
   reconcileDelete(vagrantMachine, action)
@@ -236,20 +246,16 @@ def executeChefClient(vagrantMachine, vagrantDir, envVars, String action = 'conv
 
 def reconcileDelete(String vagrantMachine, String action){
   exec{
-    //executable = "rake"
-    executable = "bash"
-    //args = ["reconcile_delete[${vagrantMachine},${stackName()},${action}]"]
-    args = ["-c", "rake reconcile_delete[${vagrantMachine},${stackName()},${action}]"]
+    executable = "rake"
+    args = ["reconcile_delete[${vagrantMachine},${stackName()},${action}]"]
     workingDir "${rootDir}/../infrastructure/gradle"
   }
 }
 
 def syncNodesBetweenChefServerAndChefZero(machine = '*'){
   exec{
-    //executable = "rake"
-    executable = "bash"
-    //args = ["sync_nodes_between_chef_server_and_chef_zero[${machine}]"]
-    args = ["-c", "rake sync_nodes_between_chef_server_and_chef_zero[${machine}]"]
+    executable = "rake"
+    args = ["sync_nodes_between_chef_server_and_chef_zero[${machine}]"]
     workingDir "${rootDir}/../infrastructure/gradle"
   }
 }
@@ -270,22 +276,23 @@ def stackName(){
 }
 
 def chooseStableBuild(String repoName, String buildType, String artifactVersionName) {
-  return local_provision_version()
-  // def protocol = 'https://'
-  // def serverName = 'build.vistacore.us'
-  // def port = ''
-  // def branchName = new File('../infrastructure/properties/releaseVersion').text.trim()
-  // def jobName = "${repoName}-${buildType}-build-${branchName}"
-  // def formatted_artifact = artifactVersionName.replace("-","_").toUpperCase()
-  // def restEndPointBuildList = "${protocol}${serverName}${port}/job/${jobName}/lastStableBuild/api/xml"
-  // def slurper = new XmlSlurper() 
-  // def buildResult = slurper.parseText(restEndPointBuildList.toURL().text)
-  // def buildNumber = buildResult.action.parameter.find{ param -> param.name.text() == formatted_artifact }.value.text()
-  // return buildNumber
+  def protocol = 'https://'
+  def serverName = 'ci.vistacore.us'
+  def port = ''
+  def branchName = new File('../infrastructure/properties/jenkinsVersion').text.trim()
+  def jobName = "${repoName}-${buildType}-build-${branchName}"
+  def formatted_artifact = artifactVersionName.replace("-","_").toUpperCase()
+  def auth = 'build:38dfad82cfdffe645bb67df1253a3baf'.getBytes().encodeBase64().toString()
+  def restEndPointBuildList = "${protocol}${serverName}${port}/job/${jobName}/lastStableBuild/api/xml"
+  def conn = restEndPointBuildList.toURL().openConnection()
+  conn.setRequestProperty('Authorization', "Basic ${auth}")
+  def buildResult = new XmlSlurper().parseText(conn.content.text)
+  def buildNumber = buildResult.action.parameter.find{ param -> param.name.text() == formatted_artifact }.value.text()
+  return buildNumber
 }
 
 repositories {
-  maven { url "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp-public" }
+  maven { url "https://store.vistacore.us/nexus/content/groups/public" }
 }
 
 
@@ -339,9 +346,4 @@ def writeToFile(File file, String text) {
   w << text
   w.close()
 }
-
-
-
-
-
 

@@ -25,7 +25,7 @@ task packHmpRO (type:Exec) {
 task zipHmp(type: Zip) {
   extension = 'zip'
   baseName = 'hmp'
-  version = getVersionByCommitCountForProject(":production:hmp")  
+  version = getVersionByCommitCountForProject(":production:hmp")
   destinationDir buildDir
   from packHmpRO.outputs.files.singleFile
   from "./src/kids/"

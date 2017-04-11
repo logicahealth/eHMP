@@ -27,14 +27,6 @@ Scenario: Search Text of non-existing pid
   When the client searches text for pid "9E7A;8484" and query "blood"
   Then a non-found response is returned
 
-@F664_PatientRecord_Search_Text_Scenario_5
-Scenario: Search Text of mixed-case words
-  Given a patient with pid "9E7A;253" has been synced through the RDK API
-  When the client searches text for pid "9E7A;253" and query "hEAd ct scAn"
-  Then a successful response is returned
-  And the response contains 17 data rows
-  But the response contains 0 items
-
 @F664_PatientRecord_Search_Text_Scenario_6 @debug @DE2243
 Scenario: Search Text of words with many synonyms
   Given a patient with pid "9E7A;253" has been synced through the RDK API

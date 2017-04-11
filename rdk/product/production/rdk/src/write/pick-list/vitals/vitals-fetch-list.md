@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Vitals [/vitals{?site}{&fields}]
+## Vitals [/vitals{?site}]
 
 Get list of vitals qualifiers/categories
 
@@ -11,8 +11,6 @@ GMV VITALS/CAT/QUAL
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

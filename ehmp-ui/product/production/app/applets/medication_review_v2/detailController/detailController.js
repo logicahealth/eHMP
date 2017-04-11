@@ -2,15 +2,18 @@ define([
     "backbone",
     "marionette",
     "app/applets/medication_review_v2/views/medicationDetailView",
-    "app/applets/medication_review_v2/medicationCollectionHandler",
     "hbs!app/applets/medication_review_v2/templates/detailTemplate",
     "app/applets/medication_review_v2/appletHelper",
     "app/applets/medication_review_v2/medicationCollectionFormatHelper"
-], function(Backbone, Marionette, MedicationView, MedicationCollectionHandler, detailTemplate, AppletHelper, MedicationCollectionFormatHelper) {
+], function(Backbone, Marionette, MedicationView, detailTemplate, AppletHelper, MedicationCollectionFormatHelper) {
     "use strict";
 
     var ExternalDetailView = MedicationView.extend({
-        template: detailTemplate
+        className: 'panel panel-success panel-body',
+        template: detailTemplate,
+        attributes: {
+            'data-appletid': 'medication_review'
+        }
     });
 
     var medicationViewModel = {
@@ -55,102 +58,48 @@ define([
 
 
     var detailController = {
-
-        // expose detail view through messaging
         initialize: function(appletId) {
-            var channel = ADK.Messaging.getChannel(appletId);
-            channel.on('detailView', function(params) {
-                if (!params.applet) {
-                    return;
-                }
+            ADK.Messaging.getChannel(appletId).on('detailView', function(clickedResult) {
+                if (!clickedResult.applet) return;
 
-                // Get the model for the requested medication
+                var modal = new ADK.UI.Modal({
+                    view: ADK.Views.Loading.create(),
+                    options: {
+                        size: 'large',
+                        title: 'Medication - '+clickedResult.model.get('stackedGraphTypeName')
+                    }
+                });
+                modal.show();
+
                 var fetchOptions = {
                     cache: true,
                     criteria: {
-                        "uid": params.uid
+                        uid: clickedResult.uid
                     },
                     resourceTitle: 'patient-record-med',
-                    viewModel: medicationViewModel,
+                    viewModel: medicationViewModel
                 };
-
-                // Once we have the model for this med, get all others that match it
                 fetchOptions.onSuccess = function(collection, resp) {
-                    var matchingMedsDeferredResponse = getMatchingMeds(params, collection.models[0]);
+                    var matchingMedsDeferredResponse = getMatchingMeds(clickedResult, collection.at(0));
 
                     matchingMedsDeferredResponse.done(function(matchingMedsCollection) {
-                        // Now that we have the set of meds for the detail, generate the view
-                        var groupedCollection = matchingMedsCollection.clone();
-                        groupedCollection.reset(MedicationCollectionFormatHelper.removeDuplicateMedsIfPresent(groupedCollection.models));
-                        var groupedModels = MedicationCollectionFormatHelper.groupByFacility(groupedCollection);
+                        var channel = ADK.Messaging.getChannel('medication_review');
+                        var deferredResponse = channel.request('detailView', { uid: matchingMedsCollection.first().get('uid') });
 
-                        groupedCollection.reset(groupedModels);
-
-
-                        var view = new ExternalDetailView({
-                            model: new Backbone.Model({
-                                meds: matchingMedsCollection
-                            })
+                        deferredResponse.done(function(response) {
+                            var modal = new ADK.UI.Modal({
+                                view: response.view,
+                                options: {
+                                    size: "large",
+                                    title: 'Medication - '+clickedResult.model.get('stackedGraphTypeName')
+                                }
+                            });
+                            modal.show();
                         });
-                        new ADK.UI.Modal({
-                            view: view,
-                            options: {
-                                size: "large",
-                                title: "Medication - " + collection.first().get("name"),
-                                groupedMeds: groupedCollection
-                            }
-
-                        }).show();
-
                     });
-
                 };
 
                 ADK.PatientRecordService.fetchCollection(fetchOptions);
-
-
-            });
-
-            channel.reply('detailView', function(params) {
-                var deferredResponse = $.Deferred();
-                // Get the model for the requested medication
-                var fetchOptions = {
-                    cache: true,
-                    criteria: {
-                        "uid": params.uid
-                    },
-                    resourceTitle: 'patient-record-med',
-                    viewModel: medicationViewModel,
-                };
-
-                // Once we have the model for this med, get all others that match it
-                fetchOptions.onSuccess = function(collection, resp) {
-                    var matchingMedsDeferredResponse = getMatchingMeds(params, collection.models[0]);
-
-                    matchingMedsDeferredResponse.done(function(matchingMedsCollection) {
-                        // Now that we have the set of meds for the detail, generate the view
-                        var groupedCollection = matchingMedsCollection.clone();
-                        groupedCollection.reset(MedicationCollectionFormatHelper.removeDuplicateMedsIfPresent(groupedCollection.models));
-                        var groupedModels = MedicationCollectionFormatHelper.groupByFacility(groupedCollection);
-
-                        groupedCollection.reset(groupedModels);
-                        var detailView = new ExternalDetailView({
-                            model: new Backbone.Model({
-                                meds: matchingMedsCollection
-                            })
-                        });
-                        deferredResponse.resolve({
-                            view: detailView,
-                            title: "Medication - " + collection.first().get("name"),
-                            groupedMeds: groupedCollection
-                        });
-                    });
-
-                };
-
-                ADK.PatientRecordService.fetchCollection(fetchOptions);
-
-                return deferredResponse.promise();
             });
         }
     };

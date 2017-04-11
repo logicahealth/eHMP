@@ -3,6 +3,7 @@ define(function() {
 
     return {
         id: "progress-notes-list",
+        context: 'patient',
         contentRegionLayout: "gridOne",
         appletHeader: "patient",
         applets: [{

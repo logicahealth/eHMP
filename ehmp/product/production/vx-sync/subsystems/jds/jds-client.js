@@ -9,8 +9,9 @@ var inspect = require(global.VX_UTILS + 'inspect');
 var errorUtil = require(global.VX_UTILS + 'error');
 var objUtil = require(global.VX_UTILS + 'object-utils');
 var uuid = require('node-uuid');
-var VxSyncForeverAgent = require(global.VX_UTILS+'vxsync-forever-agent');
+var VxSyncForeverAgent = require(global.VX_UTILS + 'vxsync-forever-agent');
 var async = require('async');
+var querystring = require('querystring');
 var sizeof = require('object-sizeof');
 
 function JdsClient(log, metrics, config) {
@@ -80,7 +81,17 @@ JdsClient.prototype.getSyncStatus = function(patientIdentifier, callback) {
     };
     this.metrics.debug('JDS Get Sync Status', metricsObj);
 
+    var args = _.toArray(arguments);
+    callback = args.pop();
+
+
     var path = '/status/' + patientIdentifier.value;
+
+
+    if (arguments.length > 2) {
+         path += arguments[1].filter;
+    }
+
     this.execute(path, null, 'GET', metricsObj, callback);
 };
 
@@ -147,7 +158,10 @@ JdsClient.prototype.getJobStatus = function(job, callback) {
 
     var args = _.toArray(arguments);
     callback = args.pop();
-    var params = arguments[0].jpid;
+
+    // Figure out what identifier we are going to use... jpid or patient identifier.
+    //-------------------------------------------------------------------------------
+    var params = objUtil.getProperty(arguments[0], 'jpid') || objUtil.getProperty(arguments[0], 'patientIdentifier', 'value');
     if (arguments.length > 2) {
         params += arguments[1].filter;
     }
@@ -213,7 +227,28 @@ JdsClient.prototype.getPatientIdentifierByPid = function(pid, callback) {
     this.execute(path, null, 'GET', metricsObj, callback);
 };
 
+//----------------------------------------------------------------------------
+// This method retrieves the patient Identifier list from JDS for the given
+// icn.
 //
+// icn:  The icn for the patient.
+// callback: The handler to call when this request is completed.
+//----------------------------------------------------------------------------
+JdsClient.prototype.getPatientIdentifierByIcn = function(icn, callback) {
+    this.log.debug('jds-client.getPatientIdentifierByIcn() %j', icn);
+    var metricsObj = {
+        'subsystem': 'JDS',
+        'action': 'getPatientIdentifierByIcn',
+        'pid': icn,
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+    this.metrics.debug('JDS Get Corresponding IDs by PID', metricsObj);
+
+    var path = '/vpr/jpid/' + icn;
+    this.execute(path, null, 'GET', metricsObj, callback);
+};
+
 JdsClient.prototype.storePatientIdentifier = function(jdsPatientIdentificationRequest, callback) {
     this.log.debug('jds-client.storePatientIdentifier() %j', jdsPatientIdentificationRequest);
     this.log.debug(jdsPatientIdentificationRequest.jpid || 'No JPID provided.');
@@ -594,6 +629,31 @@ JdsClient.prototype.getOperationalSyncStatus = function(siteId, callback) {
     this.metrics.debug('JDS Get OPD Sync Status', metricsObj);
 
     var path = '/statusod/' + siteId;
+    this.execute(path, null, 'GET', metricsObj, callback);
+};
+
+JdsClient.prototype.getOperationalSyncStatusWithParams = function(siteId, params, callback) {
+    this.log.debug('JdsClient.getOperationalSyncStatusWithParams() %j, %j', siteId, params);
+    var metricsObj = {
+        'subsystem': 'JDS',
+        'action': 'getOperationalSyncStatusWithParams',
+        'site': siteId,
+        'process': uuid.v4(),
+        'params' : params,
+        'timer': 'start'
+    };
+    this.metrics.debug('JDS Get OPD Sync Status With Params', metricsObj);
+
+    if(_.isEmpty(params)) {
+        metricsObj.timer = 'stop';
+        this.metrics.debug('JDS Get Operational Sync Status With Params in Error', metricsObj);
+        return setTimeout(callback, 0, errorUtil.createFatal('No params passed in'));
+    }
+
+    var path = '/statusod/' + siteId;
+    if (_.isObject(params)) {
+        path += '?' + querystring.stringify(params);
+    }
     this.execute(path, null, 'GET', metricsObj, callback);
 };
 
@@ -1214,6 +1274,44 @@ JdsClient.prototype.getPatientList = function(lastAccessTime, callback) {
         path = '/vpr/all/patientlist?filter=lt(lastAccessTime,' + lastAccessTime +')';
     }
     this.execute(path, null, 'GET', metricsObj, callback);
+};
+
+JdsClient.prototype.getPatientListBySite = function(site, callback) {
+    this.log.debug('jds-client.getPatientListBySite() %j', site);
+    var metricsObj = {
+        'subsystem': 'JDS',
+        'action': 'getPatientList',
+        'site': site,
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+    this.metrics.debug('JDS Get Patient List By Site', metricsObj);
+
+    var path = '/vpr/all/pid/pid';
+
+    if (!_.isEmpty(site)) {
+        path = '/vpr/all/index/pid/pid?filter=eq(site,' + site +')';
+    }
+    this.execute(path, null, 'GET', metricsObj, callback);
+};
+
+JdsClient.prototype.getJpidFromQuery = function(patientIdentifiers, callback){
+    this.log.debug('jds-client.getJpidFromQuery() %j', patientIdentifiers);
+    var metricsObj = {
+        'subsystem': 'JDS',
+        'action': 'getJpidFromQuery',
+        'patientIdentifiers': patientIdentifiers,
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+    this.metrics.debug('JDS Get Jpid via query', metricsObj);
+
+    var postBody = {
+        'patientIdentifiers': patientIdentifiers
+    };
+
+    var path = '/vpr/jpid/query/';
+    this.execute(path, postBody, 'POST', metricsObj, callback);
 };
 
 module.exports = JdsClient;

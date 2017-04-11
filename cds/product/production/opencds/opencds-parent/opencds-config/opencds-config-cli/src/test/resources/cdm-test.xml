@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:conceptDeterminationMethods xmlns:ns2="org.opencds.dss.config_rest.v1_0" xmlns:ns3="org.opencds.dss.config.v1_0">
+    <conceptDeterminationMethod code="C3391" displayName="HEDIS 2015" codeSystem="2.16.840.1.113883.3.795.12.1.1" version="1">
+        <conceptMapping>
+            <toConcept codeSystem="2.16.840.1.113883.3.795.12.1.1" codeSystemName="OPENCDS_CONCEPTS" code="C3068" displayName="HEDIS-AMI"/>
+            <fromConcepts codeSystem="ICD10CM" codeSystemName="2.16.840.1.113883.6.90">
+                <concept code="I21.01" displayName="[I21.01] ST elevation (STEMI) myocardial infarction involving left main coronary artery"/>
+                <concept code="I21.02" displayName="[I21.02] ST elevation (STEMI) myocardial infarction involving left anterior descending coronary artery"/>
+                <concept code="I21.09" displayName="[I21.09] ST elevation (STEMI) myocardial infarction involving other coronary artery of anterior wall"/>
+                <concept code="I21.11" displayName="[I21.11] ST elevation (STEMI) myocardial infarction involving right coronary artery"/>
+                <concept code="I21.19" displayName="[I21.19] ST elevation (STEMI) myocardial infarction involving other coronary artery of inferior wall"/>
+                <concept code="I21.21" displayName="[I21.21] ST elevation (STEMI) myocardial infarction involving left circumflex coronary artery"/>
+                <concept code="I21.29" displayName="[I21.29] ST elevation (STEMI) myocardial infarction involving other sites"/>
+                <concept code="I21.3" displayName="[I21.3] ST elevation (STEMI) myocardial infarction of unspecified site"/>
+                <concept code="I21.4" displayName="[I21.4] Non-ST elevation (NSTEMI) myocardial infarction"/>
+            </fromConcepts>
+        </conceptMapping>
+        <conceptMapping>
+            <toConcept codeSystem="2.16.840.1.113883.3.795.12.1.1" codeSystemName="OPENCDS_CONCEPTS" code="C2937" displayName="HEDIS-AOD Dependence"/>
+            <fromConcepts codeSystem="ICD10CM" codeSystemName="2.16.840.1.113883.6.90">
+                <concept code="F10.10" displayName="[F10.10] Alcohol abuse, uncomplicated"/>
+                <concept code="F10.120" displayName="[F10.120] Alcohol abuse with intoxication, uncomplicated"/>
+                <concept code="F10.121" displayName="[F10.121] Alcohol abuse with intoxication delirium"/>
+                <concept code="F10.129" displayName="[F10.129] Alcohol abuse with intoxication, unspecified"/>
+                <concept code="F10.14" displayName="[F10.14] Alcohol abuse with alcohol-induced mood disorder"/>
+                <concept code="F10.150" displayName="[F10.150] Alcohol abuse with alcohol-induced psychotic disorder with delusions"/>
+                <concept code="F10.151" displayName="[F10.151] Alcohol abuse with alcohol-induced psychotic disorder with hallucinations"/>
+                <concept code="F10.159" displayName="[F10.159] Alcohol abuse with alcohol-induced psychotic disorder, unspecified"/>
+                <concept code="F10.180" displayName="[F10.180] Alcohol abuse with alcohol-induced anxiety disorder"/>
+                <concept code="F10.181" displayName="[F10.181] Alcohol abuse with alcohol-induced sexual dysfunction"/>
+                <concept code="F10.182" displayName="[F10.182] Alcohol abuse with alcohol-induced sleep disorder"/>
+                <concept code="F10.188" displayName="[F10.188] Alcohol abuse with other alcohol-induced disorder"/>
+                <concept code="F10.19" displayName="[F10.19] Alcohol abuse with unspecified alcohol-induced disorder"/>
+                <concept code="F10.20" displayName="[F10.20] Alcohol dependence, uncomplicated"/>
+                <concept code="F10.220" displayName="[F10.220] Alcohol dependence with intoxication, uncomplicated"/>
+                <concept code="F10.221" displayName="[F10.221] Alcohol dependence with intoxication delirium"/>
+                <concept code="F10.229" displayName="[F10.229] Alcohol dependence with intoxication, unspecified"/>
+                <concept code="F10.230" displayName="[F10.230] Alcohol dependence with withdrawal, uncomplicated"/>
+                <concept code="F10.231" displayName="[F10.231] Alcohol dependence with withdrawal delirium"/>
+                <concept code="F10.232" displayName="[F10.232] Alcohol dependence with withdrawal with perceptual disturbance"/>
+                <concept code="F10.239" displayName="[F10.239] Alcohol dependence with withdrawal, unspecified"/>
+                <concept code="F10.24" displayName="[F10.24] Alcohol dependence with alcohol-induced mood disorder"/>
+                <concept code="F10.250" displayName="[F10.250] Alcohol dependence with alcohol-induced psychotic disorder with delusions"/>
+                <concept code="F10.251" displayName="[F10.251] Alcohol dependence with alcohol-induced psychotic disorder with hallucinations"/>
+                <concept code="F10.259" displayName="[F10.259] Alcohol dependence with alcohol-induced psychotic disorder, unspecified"/>
+                <concept code="F10.26" displayName="[F10.26] Alcohol dependence with alcohol-induced persisting amnestic disorder"/>
+                <concept code="F10.27" displayName="[F10.27] Alcohol dependence with alcohol-induced persisting dementia"/>
+                <concept code="F10.280" displayName="[F10.280] Alcohol dependence with alcohol-induced anxiety disorder"/>
+                <concept code="F10.281" displayName="[F10.281] Alcohol dependence with alcohol-induced sexual dysfunction"/>
+                <concept code="F10.282" displayName="[F10.282] Alcohol dependence with alcohol-induced sleep disorder"/>
+                <concept code="F10.288" displayName="[F10.288] Alcohol dependence with other alcohol-induced disorder"/>
+                <concept code="F10.29" displayName="[F10.29] Alcohol dependence with unspecified alcohol-induced disorder"/>
+                <concept code="F11.10" displayName="[F11.10] Opioid abuse, uncomplicated"/>
+                <concept code="F11.120" displayName="[F11.120] Opioid abuse with intoxication, uncomplicated"/>
+                <concept code="F11.121" displayName="[F11.121] Opioid abuse with intoxication delirium"/>
+                <concept code="F11.122" displayName="[F11.122] Opioid abuse with intoxication with perceptual disturbance"/>
+                <concept code="F11.129" displayName="[F11.129] Opioid abuse with intoxication, unspecified"/>
+                <concept code="F11.14" displayName="[F11.14] Opioid abuse with opioid-induced mood disorder"/>
+                <concept code="F11.150" displayName="[F11.150] Opioid abuse with opioid-induced psychotic disorder with delusions"/>
+                <concept code="F11.151" displayName="[F11.151] Opioid abuse with opioid-induced psychotic disorder with hallucinations"/>
+                <concept code="F11.159" displayName="[F11.159] Opioid abuse with opioid-induced psychotic disorder, unspecified"/>
+                <concept code="F11.181" displayName="[F11.181] Opioid abuse with opioid-induced sexual dysfunction"/>
+                <concept code="F11.182" displayName="[F11.182] Opioid abuse with opioid-induced sleep disorder"/>
+                <concept code="F11.188" displayName="[F11.188] Opioid abuse with other opioid-induced disorder"/>
+                <concept code="F11.19" displayName="[F11.19] Opioid abuse with unspecified opioid-induced disorder"/>
+                <concept code="F11.20" displayName="[F11.20] Opioid dependence, uncomplicated"/>
+                <concept code="F11.220" displayName="[F11.220] Opioid dependence with intoxication, uncomplicated"/>
+                <concept code="F11.221" displayName="[F11.221] Opioid dependence with intoxication delirium"/>
+                <concept code="F11.222" displayName="[F11.222] Opioid dependence with intoxication with perceptual disturbance"/>
+                <concept code="F11.229" displayName="[F11.229] Opioid dependence with intoxication, unspecified"/>
+                <concept code="F11.23" displayName="[F11.23] Opioid dependence with withdrawal"/>
+                <concept code="F11.24" displayName="[F11.24] Opioid dependence with opioid-induced mood disorder"/>
+                <concept code="F11.250" displayName="[F11.250] Opioid dependence with opioid-induced psychotic disorder with delusions"/>
+                <concept code="F11.251" displayName="[F11.251] Opioid dependence with opioid-induced psychotic disorder with hallucinations"/>
+                <concept code="F11.259" displayName="[F11.259] Opioid dependence with opioid-induced psychotic disorder, unspecified"/>
+                <concept code="F11.281" displayName="[F11.281] Opioid dependence with opioid-induced sexual dysfunction"/>
+                <concept code="F11.282" displayName="[F11.282] Opioid dependence with opioid-induced sleep disorder"/>
+                <concept code="F11.288" displayName="[F11.288] Opioid dependence with other opioid-induced disorder"/>
+                <concept code="F11.29" displayName="[F11.29] Opioid dependence with unspecified opioid-induced disorder"/>
+                <concept code="F12.10" displayName="[F12.10] Cannabis abuse, uncomplicated"/>
+                <concept code="F12.120" displayName="[F12.120] Cannabis abuse with intoxication, uncomplicated"/>
+                <concept code="F12.121" displayName="[F12.121] Cannabis abuse with intoxication delirium"/>
+                <concept code="F12.122" displayName="[F12.122] Cannabis abuse with intoxication with perceptual disturbance"/>
+                <concept code="F12.129" displayName="[F12.129] Cannabis abuse with intoxication, unspecified"/>
+                <concept code="F12.150" displayName="[F12.150] Cannabis abuse with psychotic disorder with delusions"/>
+                <concept code="F12.151" displayName="[F12.151] Cannabis abuse with psychotic disorder with hallucinations"/>
+                <concept code="F12.159" displayName="[F12.159] Cannabis abuse with psychotic disorder, unspecified"/>
+                <concept code="F12.180" displayName="[F12.180] Cannabis abuse with cannabis-induced anxiety disorder"/>
+                <concept code="F12.188" displayName="[F12.188] Cannabis abuse with other cannabis-induced disorder"/>
+                <concept code="F12.19" displayName="[F12.19] Cannabis abuse with unspecified cannabis-induced disorder"/>
+                <concept code="F12.20" displayName="[F12.20] Cannabis dependence, uncomplicated"/>
+                <concept code="F12.220" displayName="[F12.220] Cannabis dependence with intoxication, uncomplicated"/>
+                <concept code="F12.221" displayName="[F12.221] Cannabis dependence with intoxication delirium"/>
+                <concept code="F12.222" displayName="[F12.222] Cannabis dependence with intoxication with perceptual disturbance"/>
+                <concept code="F12.229" displayName="[F12.229] Cannabis dependence with intoxication, unspecified"/>
+                <concept code="F12.250" displayName="[F12.250] Cannabis dependence with psychotic disorder with delusions"/>
+                <concept code="F12.251" displayName="[F12.251] Cannabis dependence with psychotic disorder with hallucinations"/>
+                <concept code="F12.259" displayName="[F12.259] Cannabis dependence with psychotic disorder, unspecified"/>
+                <concept code="F12.280" displayName="[F12.280] Cannabis dependence with cannabis-induced anxiety disorder"/>
+                <concept code="F12.288" displayName="[F12.288] Cannabis dependence with other cannabis-induced disorder"/>
+                <concept code="F12.29" displayName="[F12.29] Cannabis dependence with unspecified cannabis-induced disorder"/>
+                <concept code="F13.10" displayName="[F13.10] Sedative, hypnotic or anxiolytic abuse, uncomplicated"/>
+                <concept code="F13.120" displayName="[F13.120] Sedative, hypnotic or anxiolytic abuse with intoxication, uncomplicated"/>
+                <concept code="F13.121" displayName="[F13.121] Sedative, hypnotic or anxiolytic abuse with intoxication delirium"/>
+                <concept code="F13.129" displayName="[F13.129] Sedative, hypnotic or anxiolytic abuse with intoxication, unspecified"/>
+                <concept code="F13.14" displayName="[F13.14] Sedative, hypnotic or anxiolytic abuse with sedative, hypnotic or anxiolytic-induced mood disorder"/>
+                <concept code="F13.150" displayName="[F13.150] Sedative, hypnotic or anxiolytic abuse with sedative, hypnotic or anxiolytic-induced psychotic disorder with delusions"/>
+                <concept code="F13.151" displayName="[F13.151] Sedative, hypnotic or anxiolytic abuse with sedative, hypnotic or anxiolytic-induced psychotic disorder with hallucinations"/>
+                <concept code="F13.159" displayName="[F13.159] Sedative, hypnotic or anxiolytic abuse with sedative, hypnotic or anxiolytic-induced psychotic disorder, unspecified"/>
+                <concept code="F13.180" displayName="[F13.180] Sedative, hypnotic or anxiolytic abuse with sedative, hypnotic or anxiolytic-induced anxiety disorder"/>
+            </fromConcepts>
+        </conceptMapping>
+        <timestamp>2015-10-12T13:09:13.791-06:00</timestamp>
+        <userId>spec</userId>
+    </conceptDeterminationMethod>
+</ns2:conceptDeterminationMethods>

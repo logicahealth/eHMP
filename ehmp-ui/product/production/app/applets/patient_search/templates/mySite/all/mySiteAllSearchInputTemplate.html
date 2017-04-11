@@ -1,14 +1,10 @@
-<h4 class="title">My Site Search</h4>
-<p class="font-size-12">Please enter either First letter of last name <strong>and</strong> last four of social security number or generic name search</p>
-<div class="text body instructions">
+<p class="search-instructions">Enter either first letter of last name <strong>and</strong> last four of social security number, or generic name search.</p>
+<div class="hidden text body instructions bottom-margin-xs left-margin-xs font-size-12" aria-live="assertive">
     <p class="info-padding">
-        <span class="hidden" aria-live="polite">
-            <span class="fa fa-info-circle fa-lg"></span> Please enter at least 3 characters
-        </span>
+        <i class="fa fa-info-circle fa-lg"></i> Search string must contain at least 3 characters
     </p>
 </div>
-<div class="input-group fullWidth">
-    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-    <label class="sr-only" for="patientSearchInput">Select Patient</label>
-    <input type="text" autocomplete="off" class="form-control" id="patientSearchInput" placeholder="Select Patient" value="{{searchString}}" title="Please enter in text and then press enter. To view search results press ALT + U" accesskey="e">
+<div class="fullWidth">
+    <label class="sr-only" for="patientSearchInput">My Site Search</label>
+    <input type="text" autocomplete="off" class="form-control patient-search-input input-lg" id="patientSearchInput" placeholder="Select Patient" value="{{searchString}}" title="Enter either first letter of last name and last four of social security number or generic name search. Press tab to view results. Press Alt + M to view main menu" accesskey="e">
 </div>

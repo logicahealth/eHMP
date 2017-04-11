@@ -45,7 +45,8 @@ function auditSensitiveDataAccessInVista(req, patient) {
 }
 
 function userIsPatient(req, patients) {
-    var userSSN = _.result(req, 'session.user.ssn', '');
+    //userSSN is returned as a number so we convert to string for comparison.
+    var userSSN = _.result(req, 'session.user.ssn', '').toString();
     var patientSSN = _.result(patients, '[0].ssn', '');
 
     return !_.isEmpty(userSSN) && !_.isEmpty(patientSSN) && userSSN === patientSSN;

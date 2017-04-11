@@ -55,7 +55,7 @@ function getOrderDetail(req, res) {
 
     RpcClient.callRpc(req.logger, vistaConfig, 'ORQOR DETAIL', [orderId, dfn], function(error, result) {
         if (error) {
-            req.logger.error(errorVistaJSCallback + error);
+            req.logger.error({error: error}, errorVistaJSCallback);
             res.status(rdk.httpstatus.internal_server_error).rdkSend(errorMessage);
         } else {
             if (result) {
@@ -69,7 +69,7 @@ function getOrderDetail(req, res) {
                 });
 
             } else {
-                req.logger.error(errorVistaJSCallback + result);
+                req.logger.error({result: result}, errorVistaJSCallback + ' no result');
                 res.status(rdk.httpstatus.internal_server_error).rdkSend(errorMessage);
             }
         }

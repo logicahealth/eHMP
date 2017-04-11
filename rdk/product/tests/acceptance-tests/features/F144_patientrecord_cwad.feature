@@ -10,7 +10,7 @@ Feature: F144 - eHMP Viewer GUI - Crisis Notes, Warnings, Allergies, Directives 
       | field         | value                            |
       |facilityCode   | 507 |
       |facilityName   | CAMP BEE |
-      |entered        |200202131139|
+      |entered        |20020213113900|
       |verified       | 20020213113938|
       |kind           |  Allergy/Adverse Reaction|
       |originatorName |RADTECH,SEVENTEEN|

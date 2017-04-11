@@ -58,6 +58,28 @@ define([
         },
         parse: function(resp, options) {
             return resp.data.items;
+        },
+        initialize: function() {
+            this.pendingFetch = 0;
+        },
+        fetch: function(options) {
+            var self = this;
+            self.pendingFetch += 1;
+            var opts =  {
+                success: function() {
+                    self.pendingFetch -= 1;
+                    if (options && options.success) {
+                        options.success(self);
+                    }
+                },
+                error: function() {
+                    self.pendingFetch -= 1;
+                    if (options && options.error){
+                        options.error(self);
+                    }
+                }
+            };
+            return Backbone.Collection.prototype.fetch.call(this, opts);
         }
     });
 

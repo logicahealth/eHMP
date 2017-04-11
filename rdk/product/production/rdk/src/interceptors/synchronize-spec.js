@@ -1,237 +1,316 @@
+/*jslint node: true */
 'use strict';
 
+var _ = require('lodash');
 var moment = require('moment');
-var synchronize = require('../interceptors/synchronize');
+// var jdsSync = require('../subsystems/jds/jds-sync-subsystem');
+var synchronize = require('./synchronize');
 
-describe('The synchronize interceptor', function() {
-    var req = stubRequest();
-    var res = stubResponse();
-    var jdsSync = req.app.subsystems.jdsSync;
-    var statusStub, clearStub, loadStub, nextStub;
 
-    beforeEach(function() {
-        clearStub = sinon.stub(jdsSync, 'clearPatient', function(pid, req, callback) {
-            callback(undefined, {});
+describe('synchronize.js', function() {
+    describe('isPid()', function() {
+        it('tests that a valid pid passes', function() {
+            expect(synchronize._isPid('9E7A;3')).to.equal(true);
         });
-        loadStub = sinon.stub(jdsSync, 'loadPatientPrioritized', function(pid, prioritySite, req, callback) {
-            callback(undefined, {});
+        it('tests that an invalid pid fails', function() {
+            expect(synchronize._isPid()).to.equal(false);
+            expect(synchronize._isPid(null)).to.equal(false);
+            expect(synchronize._isPid('')).to.equal(false);
+            expect(synchronize._isPid('10108V420871')).to.equal(false);
+            expect(synchronize._isPid('9E7A;')).to.equal(false);
+            expect(synchronize._isPid(';3')).to.equal(false);
+            expect(synchronize._isPid('DOD;1234')).to.equal(false);
         });
-        nextStub = sinon.stub(res, 'next');
     });
 
-    it('does a load when a patient is fully synced', function() {
-        spyOnSyncStatus({
-            data: {
-                syncStatus: {},
-                jobStatus: []
-            },
-            status: 200
+    describe('isIcn()', function() {
+        it('tests that a valid icn passes', function() {
+            expect(synchronize._isIcn('10108V420871')).to.equal(true);
         });
-
-        synchronize(req, res, res.next);
-
-        expectLoad();
+        it('tests that an invalid icn fails', function() {
+            expect(synchronize._isIcn()).to.equal(false);
+            expect(synchronize._isIcn(null)).to.equal(false);
+            expect(synchronize._isIcn('')).to.equal(false);
+            expect(synchronize._isIcn('10108V')).to.equal(false);
+            expect(synchronize._isIcn('V420871')).to.equal(false);
+            expect(synchronize._isIcn('10108420871')).to.equal(false);
+            expect(synchronize._isIcn('9E7A;3')).to.equal(false);
+        });
     });
 
-    // Commented out per comment-out in synchronize.js; see comment there
-    // it('does a clear when there are only error jobs', function() {
-    //     spyOnSyncStatus({
-    //         data: {
-    //             syncStatus: {},
-    //             jobStatus: [{
-    //                 status: 'error',
-    //                 timestamp: '1443808179308'
-    //             }]
-    //         },
-    //         status: 200
-    //     });
-
-    //     synchronize(req, res, res.next);
-
-    //     expectClearAndLoad();
-    // });
-
-    it('does a clear when there are timed out open jobs', function() {
-        spyOnSyncStatus({
-            data: {
-                syncStatus: {},
-                jobStatus: [{
-                    status: 'open',
-                    timestamp: '1443808179308'
-                }]
-            },
-            status: 200
+    describe('isEdipi()', function() {
+        it('tests that a valid edipi passes', function() {
+            expect(synchronize._isEdipi('DOD;1234')).to.equal(true);
         });
-
-        synchronize(req, res, res.next);
-
-        expectClearAndLoad();
+        it('tests that a invalid edipi fails', function() {
+            expect(synchronize._isEdipi()).to.equal(false);
+            expect(synchronize._isEdipi(null)).to.equal(false);
+            expect(synchronize._isEdipi('')).to.equal(false);
+            expect(synchronize._isEdipi('1234')).to.equal(false);
+            expect(synchronize._isEdipi(';1234')).to.equal(false);
+            expect(synchronize._isEdipi('DOD;')).to.equal(false);
+            expect(synchronize._isEdipi('9E7A;3')).to.equal(false);
+            expect(synchronize._isEdipi('10108420871')).to.equal(false);
+        });
     });
 
-    it('does a load when there are recent open jobs', function() {
-        spyOnSyncStatus({
-            data: {
-                syncStatus: {},
-                jobStatus: [{
-                    status: 'open',
-                    timestamp: moment().valueOf()
-                }]
-            },
-            status: 200
+    describe('getMySiteAsList()', function() {
+        it('tests that an empty req returns empty array', function() {
+            var req;
+
+            req = {};
+            expect(synchronize._getMySiteAsList(req)).to.eql([]);
+
+            req.session = {};
+            expect(synchronize._getMySiteAsList(req)).to.eql([]);
+
+            req.session.user = {};
+            expect(synchronize._getMySiteAsList(req)).to.eql([]);
         });
-
-        synchronize(req, res, res.next);
-
-        expectLoad();
-    });
-
-    it('does a clear when there are no open jobs and a timed out stamp', function() {
-        spyOnSyncStatus({
-            data: {
-                syncStatus: {
-                    inProgress: {
-                        sourceMetaStamp: {
-                            VLER: {
-                                stampTime: 20151002134926
-                            }
-                        }
+        it('tests that the user site in req is returned as a list', function() {
+            var req = {
+                session: {
+                    user: {
+                        site: '9E7A'
                     }
-                },
-                jobStatus: []
-            },
-            status: 200
+                }
+            };
+
+            expect(synchronize._getMySiteAsList(req)).to.eql(['9E7A']);
         });
-
-        synchronize(req, res, res.next);
-
-        expectClearAndLoad();
     });
 
-    it('does a load when there are no open jobs and a recent stamp', function() {
-        spyOnSyncStatus({
-            data: {
-                syncStatus: {
-                    inProgress: {
-                        sourceMetaStamp: {
-                            VLER: {
-                                stampTime: Number(moment().format('YYYYMMDDHHmmss'))
-                            }
-                        }
+    describe('minMoment()', function() {
+        var moment1 = moment().subtract(2, 'hour');
+        var moment2 = moment().subtract(1, 'hour');
+        var moment3 = moment();
+
+        var date1 = moment1.toDate();
+        var date2 = moment2.toDate();
+        var date3 = moment3.toDate();
+
+        var timestamp1 = moment1.valueOf();
+        var timestamp2 = moment2.valueOf();
+        var timestamp3 = moment3.valueOf();
+
+        it('tests that empty and invalid values return undefined', function() {
+            expect(synchronize._minMoment()).to.be.undefined();
+            expect(synchronize._minMoment(null)).to.be.undefined();
+            expect(synchronize._minMoment([undefined, null])).to.be.undefined();
+            expect(synchronize._minMoment('test')).to.be.undefined();
+            expect(synchronize._minMoment([])).to.be.undefined();
+        });
+
+        it('tests valid moment values return the earliest moment', function() {
+            expect(synchronize._minMoment(moment1).isSame(moment1)).to.equal(true);
+            expect(synchronize._minMoment([moment1, moment2, moment3]).isSame(moment1)).to.equal(true);
+            expect(synchronize._minMoment([moment3, null, moment2]).isSame(moment2)).to.equal(true);
+            expect(synchronize._minMoment(moment3).isSame(moment3)).to.equal(true);
+        });
+
+        it('tests valid Dates return the earliest moment', function() {
+            expect(synchronize._minMoment([date1, date2, date3]).isSame(moment1)).to.equal(true);
+            expect(synchronize._minMoment([date1, null, date3]).isSame(moment1)).to.equal(true);
+        });
+
+        it('tests valid timestamps return the earliest moment', function() {
+            expect(synchronize._minMoment([timestamp1, timestamp2, timestamp3]).isSame(moment1)).to.equal(true);
+            expect(synchronize._minMoment([timestamp1, null, timestamp3]).isSame(moment1)).to.equal(true);
+        });
+
+        it('tests valid mixed values return the earliest moment', function() {
+            expect(synchronize._minMoment([timestamp1, date2, moment3]).isSame(moment1)).to.equal(true);
+            expect(synchronize._minMoment([moment3, null, date2]).isSame(moment2)).to.equal(true);
+            expect(synchronize._minMoment([moment1, date2, timestamp3]).isSame(moment1)).to.equal(true);
+        });
+    });
+
+    describe('maxMoment()', function() {
+        var moment1 = moment().subtract(2, 'hour');
+        var moment2 = moment().subtract(1, 'hour');
+        var moment3 = moment();
+
+        var date1 = moment1.toDate();
+        var date2 = moment2.toDate();
+        var date3 = moment3.toDate();
+
+        var timestamp1 = moment1.valueOf();
+        var timestamp2 = moment2.valueOf();
+        var timestamp3 = moment3.valueOf();
+
+        it('tests that empty and invalid values return undefined', function() {
+            expect(synchronize._maxMoment()).to.be.undefined();
+            expect(synchronize._maxMoment(null)).to.be.undefined();
+            expect(synchronize._maxMoment([undefined, null])).to.be.undefined();
+            expect(synchronize._maxMoment('test')).to.be.undefined();
+            expect(synchronize._maxMoment([])).to.be.undefined();
+        });
+
+        it('tests valid moment values return the latest moment', function() {
+            expect(synchronize._maxMoment(moment1).isSame(moment1)).to.equal(true);
+            expect(synchronize._maxMoment([moment1, moment2, moment3]).isSame(moment3)).to.equal(true);
+            expect(synchronize._maxMoment([moment3, null, moment2]).isSame(moment3)).to.equal(true);
+            expect(synchronize._maxMoment(moment3).isSame(moment3)).to.equal(true);
+        });
+
+        it('tests valid Dates return the latest moment', function() {
+            expect(synchronize._maxMoment([date1, date2, date3]).isSame(moment3)).to.equal(true);
+            expect(synchronize._maxMoment([date1, null, date3]).isSame(moment3)).to.equal(true);
+        });
+
+        it('tests valid timestamps return the latest moment', function() {
+            expect(synchronize._maxMoment([timestamp1, timestamp2, timestamp3]).isSame(moment3)).to.equal(true);
+            expect(synchronize._maxMoment([timestamp1, null, timestamp3]).isSame(moment3)).to.equal(true);
+        });
+
+        it('tests valid mixed values return the latest moment', function() {
+            expect(synchronize._maxMoment([timestamp1, date2, moment3]).isSame(moment3)).to.equal(true);
+            expect(synchronize._maxMoment([moment3, null, date2]).isSame(moment3)).to.equal(true);
+            expect(synchronize._maxMoment([moment1, date2, timestamp3]).isSame(moment3)).to.equal(true);
+        });
+    });
+
+    describe('isInterceptorDisabled()', function() {
+        it('tests that anything except disabled flag set to true returns false ', function() {
+            var config;
+            expect(synchronize._isInterceptorDisabled(config)).to.equal(false);
+
+            config = {};
+            expect(synchronize._isInterceptorDisabled(config)).to.equal(false);
+
+            config.interceptors = {};
+            expect(synchronize._isInterceptorDisabled(config)).to.equal(false);
+
+            config.interceptors.synchronize = {};
+            expect(synchronize._isInterceptorDisabled(config)).to.equal(false);
+
+            config.interceptors.synchronize.disabled = null;
+            expect(synchronize._isInterceptorDisabled(config)).to.equal(false);
+
+            config.interceptors.synchronize.disabled = 1;
+            expect(synchronize._isInterceptorDisabled(config)).to.equal(false);
+
+            config.interceptors.synchronize.disabled = false;
+            expect(synchronize._isInterceptorDisabled(config)).to.equal(false);
+        });
+
+        it('tests that disabled flag set to true returns true', function() {
+            var config = {
+                interceptors: {
+                    synchronize: {
+                        disabled: true
                     }
-                },
-                jobStatus: []
-            },
-            status: 200
+                }
+            };
+
+            expect(synchronize._isInterceptorDisabled(config)).to.equal(true);
         });
-
-        synchronize(req, res, res.next);
-
-        expectLoad();
     });
 
-    function spyOnSyncStatus(json, error) {
-        statusStub = sinon.stub(jdsSync, 'getPatientStatus', function(pid, req, callback) {
-            callback(error, json);
+    describe('isSyncExistDelayAtTimeout()', function() {
+        it('tests that timeout not exceeded returns false', function() {
+            var startTime = moment().subtract(10, 'minute');
+            var syncExistsWaitDelayMillis = 1000 * 60 * 60;
+            var now = moment();
+
+            expect(synchronize._isSyncExistsDelayAtTimeout(startTime, syncExistsWaitDelayMillis, now)).to.equal(false);
         });
-    }
 
-    function expectClearAndLoad() {
-        expectLoad(true);
-    }
+        it('tests that timeout exceeded returns true', function() {
+            var startTime = moment().subtract(1, 'day');
+            var syncExistsWaitDelayMillis = 1000 * 60 * 60;
+            var now = moment();
 
-    function expectLoad(clear) {
-        if (clear) {
-            expect(clearStub.called).to.be.true();
-        } else {
-            expect(clearStub.called).to.not.be.true();
-        }
-        expect(loadStub.called).to.be.true();
-        expect(nextStub.called).to.be.true();
-    }
+            expect(synchronize._isSyncExistsDelayAtTimeout(startTime, syncExistsWaitDelayMillis, now)).to.equal(true);
+        });
+    });
+
+    describe('isSyncLastUpdateTimeoutExceeded()', function() {
+        var inactivityTimeoutMillis = 1000 * 60 * 60 * 24;
+        var now = Date.now();
+
+        var incomplete_all_sites_1 = {
+            icn: '',
+            latestEnterpriseSyncRequestTimestamp: 1462820945431,
+            latestJobTimestamp: 1462820945431,
+            sites: {
+                '9E7A': {
+                    latestJobTimestamp: 1462820945431,
+                    pid: '9E7A;3',
+                    sourceStampTime: '',
+                    syncCompleted: false
+                }
+            },
+            syncCompleted: false
+        };
+
+        var incomplete_all_sites_2 = {
+            icn: '10108V420871',
+            latestEnterpriseSyncRequestTimestamp: 1462820952440,
+            latestJobTimestamp: 1462820970870,
+            latestSourceStampTime: 20160509150922,
+            sites: {
+                '9E7A': {
+                    latestJobTimestamp: 1462820966830,
+                    pid: '9E7A;3',
+                    sourceStampTime: 20160509150922,
+                    syncCompleted: false
+                },
+                C877: {
+                    latestJobTimestamp: 1462820970870,
+                    pid: 'C877;3',
+                    sourceStampTime: 20160509150917,
+                    syncCompleted: false
+                },
+                DOD: {
+                    latestJobTimestamp: 1462820964909,
+                    pid: 'DOD;0000000003',
+                    sourceStampTime: 20160509150912,
+                    syncCompleted: false
+                },
+                HDR: {
+                    latestJobTimestamp: 1462820953744,
+                    pid: 'HDR;10108V420871',
+                    sourceStampTime: 20160509150912,
+                    syncCompleted: true
+                },
+                VLER: {
+                    latestJobTimestamp: 1462820952743,
+                    pid: 'VLER;10108V420871',
+                    sourceStampTime: 20160509150912,
+                    syncCompleted: false
+                }
+            },
+            syncCompleted: false
+        };
+
+        it('tests that inactivity timeouts return true', function() {
+            expect(synchronize._isSyncLastUpdateTimeoutExceeded(incomplete_all_sites_1, inactivityTimeoutMillis, now)).to.equal(true);
+            expect(synchronize._isSyncLastUpdateTimeoutExceeded(incomplete_all_sites_2, inactivityTimeoutMillis, now)).to.equal(true);
+            // expect(synchronize._isSyncLastUpdateTimeoutExceeded(status, inactivityTimeoutMillis, now)).to.equal(true);
+        });
+
+        it('tests that inactivity period less than timeout returns false', function() {
+            var non_timeout_1 = _.clone(incomplete_all_sites_1);
+            non_timeout_1.latestJobTimestamp = moment(now).subtract(1, 'hour').valueOf();
+
+            var non_timeout_2 = _.clone(incomplete_all_sites_2);
+            non_timeout_2.latestJobTimestamp = moment(now).subtract(1, 'hour').format('YYYYMMDDHHmmss');
+
+            expect(synchronize._isSyncLastUpdateTimeoutExceeded(non_timeout_1, inactivityTimeoutMillis, now)).to.equal(false);
+            expect(synchronize._isSyncLastUpdateTimeoutExceeded(non_timeout_2, inactivityTimeoutMillis, now)).to.equal(false);
+        });
+    });
+
+    xdescribe('clearThenSyncPatient()', function() {
+        it('', function() {});
+    });
+
+    xdescribe('syncPatient()', function() {
+        it('', function() {});
+    });
+
+    xdescribe('waitForFullPatientSync()', function() {
+        it('', function() {});
+    });
 });
-
-function stubRequest() {
-    var logger = {
-        trace: function() {},
-        debug: function() {},
-        info: function() {},
-        warn: function() {},
-        error: function() {},
-        fatal: function() {}
-    };
-    var app = {
-        config: {
-            jdsSync: {
-                settings: {
-                    waitMillis: 1000,
-                    timeoutMillis: 420000
-                },
-                syncPatientLoad: {
-                    timeoutMillis: 420000,
-                    protocol: 'http',
-                    options: {
-                        path: '/sync/load',
-                        method: 'POST',
-                        rejectUnauthorized: false,
-                        requestCert: true,
-                        agent: false
-                    }
-                },
-                syncPatientClear: {
-                    timeoutMillis: 420000,
-                    protocol: 'http',
-                    options: {
-                        path: '/sync/clearPatient',
-                        method: 'POST',
-                        rejectUnauthorized: false,
-                        requestCert: true,
-                        agent: false
-                    }
-                },
-                syncPatientStatus: {
-                    timeoutMillis: 420000,
-                    options: {
-                        path: '/sync/status',
-                        method: 'GET',
-                        rejectUnauthorized: false,
-                        requestCert: true,
-                        agent: false
-                    }
-                },
-            },
-            resync: {
-                openJobsTimeoutMillis: 2222,
-                inProgressTimeoutMillis: 3333
-            }
-        },
-        subsystems: {
-            jdsSync: {
-                getPatientStatus: function() {},
-                clearPatient: function() {},
-                loadPatientPrioritized: function() {}
-            }
-        }
-    };
-    var pid = 1;
-    var req = {
-        app: app,
-        param: function() {
-            // different pids to avoid caching
-            ++pid;
-            return '9E7A;' + pid;
-        },
-        get: function() {},
-        logger: logger,
-        session: {}
-    };
-    return req;
-}
-
-function stubResponse() {
-    var res = {
-        status: function() {},
-        send: function() {},
-        next: function() {}
-    };
-    return res;
-}

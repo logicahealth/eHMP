@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Immunization info source [/immunization-info-source{?site}{&filter}{&date}{&fields}]
+## Immunization info source [/immunization-info-source{?site}{&filter}{&date}]
 
 Returns entries from the IMMUNIZATION INFO SOURCE file (920.1).
 
@@ -15,8 +15,6 @@ PXVIMM INFO SOURCE
     :[filter]({{{common}}}/parameters/immunization-filter.md)
 
     :[date]({{{common}}}/parameters/date.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

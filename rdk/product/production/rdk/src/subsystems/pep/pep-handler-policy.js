@@ -12,7 +12,7 @@ function getPatient(obj, patientCallback) {
     var pid = obj.pid || _.result(obj, 'interceptorResults.patientIdentifiers.originalID', '');
     if (_.isEmpty(pid)) {
         obj.logger.warn('No patient could be identified to authorize against.');
-        return patientCallback({
+        return setImmediate(patientCallback, {
             message: 'PEP: Unable to process request. Pid not found.',
             code: rdk.httpstatus.forbidden
         });
@@ -33,8 +33,8 @@ function getPatient(obj, patientCallback) {
         return patientCallback(null, patients);
     };
     // Trigger the JDS fetch and run the check for sensitive data on a patient and finally run the pep paths can be as follows:
-    // http://IP             /data/index/pt-select-icn/?range=5123456789V027402
-    // http://IP             /data/index/pt-select-pid/?range=9E7A;18
+    // http://IP_ADDRESS:PORT/data/index/pt-select-icn/?range=5123456789V027402
+    // http://IP_ADDRESS:PORT/data/index/pt-select-pid/?range=9E7A;18
     var httpConfig = {
         cacheTimeout: 15 * 60 * 1000,
         timeout: 5000,

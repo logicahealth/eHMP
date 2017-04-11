@@ -1,0 +1,9 @@
+{
+  "id": "git",
+  "credentials": {
+    "encrypted_data": "zDFPwCtsp3FNefQheTVpSQIiraxC/Zs2+fC5n7/J/4R4kyGnwWt3PlS1oYMq\nZpUC/p4X1rP6izgSz3wrQAqONA==\n",
+    "iv": "I2eRIhA7+/UKGysCWwGLFw==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}

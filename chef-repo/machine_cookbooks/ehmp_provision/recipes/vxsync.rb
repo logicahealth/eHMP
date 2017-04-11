@@ -6,14 +6,7 @@
 chef_gem "chef-provisioning-ssh"
 require 'chef/provisioning/ssh_driver'
 
-_host_path_private_licenses = "#{ENV['HOME']}/Projects/vistacore/private_licenses"
-node.default[:ehmp_provision][:vxsync][:vagrant][:shared_folders].push(
-  {
-    :host_path => _host_path_private_licenses,
-    :guest_path => "/opt/private_licenses",
-    :create => true
-  }
-)
+include_asu = find_optional_node_by_criteria(node[:machine][:stack], 'role:asu', 'role:vxsync').nil?
 
 ############################################## Staging Artifacts #############################################
 if ENV.has_key?('VX_SYNC_LOCAL_FILE')
@@ -58,16 +51,26 @@ r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]
 r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access]
 r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
 r_list << "role[vxsync]"
+r_list << "role[asu]" if include_asu
 if ENV.has_key?("RESET_SYNC")
   r_list << "recipe[vxsync::reset_vxsync@#{ehmp_deps["vxsync"]}]"
+  r_list << "recipe[asu::default@#{ehmp_deps["asu"]}]"
 else
   r_list << "recipe[vxsync::clear_logs@#{ehmp_deps["vxsync"]}]" if node[:machine][:driver] == "aws"
   r_list << "recipe[vxsync@#{ehmp_deps["vxsync"]}]"
-  unless node[:machine][:driver] == "ssh" || ENV.has_key?("NO_RESET")
-    r_list << "recipe[vxsync::reset_vxsync@#{ehmp_deps["vxsync"]}]"
-  end
+  r_list << "recipe[vxsync::reset_vxsync@#{ehmp_deps["vxsync"]}]"
+  r_list << "recipe[asu::install@#{ehmp_deps["asu"]}]" if include_asu
+  r_list << "recipe[asu::uninstall@#{ehmp_deps["asu"]}]" unless include_asu
 end
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
+
+if ENV.has_key?("NO_RESET")
+  reset = false
+elsif node[:machine][:driver] == "ssh" && !node[:mocked_data_servers]
+  reset = false
+else
+  reset = true
+end
 
 machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} environment" do
   elastic_ip ENV["ELASTIC_IP"]
@@ -103,17 +106,22 @@ machine machine_name do
   attributes(
     stack: node[:machine][:stack],
     nexus_url: node[:common][:nexus_url],
+    data_bag_string: node[:common][:data_bag_string],
+    reset_vxsync: {
+      reset: reset
+    },
     vxsync: {
-      source: vxsync_source,
-      profile: ENV["VXSYNC_PROFILE"]
+      source: vxsync_source
     },
     soap_handler: {
       source: soap_handler_source
     },
     asu: {
       source: asu_source
+    },
+    beats: {
+      logging: node[:machine][:logging]
     }
-
   )
   files lazy { node[:ehmp_provision][:vxsync][:copy_files] }
   chef_environment node[:machine][:environment]

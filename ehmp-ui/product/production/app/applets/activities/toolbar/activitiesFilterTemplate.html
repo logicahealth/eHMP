@@ -1,0 +1,21 @@
+<form class="top-padding-xs bottom-padding-xs left-padding-xs">
+    <label for="{{instanceId}}-primary-filter-options" class="sr-only">Filter activities by:</label>
+    <select id="{{instanceId}}-primary-filter-options" title="Use up and down arrows to view options and then press enter to select.">
+        {{#each primaryItem}}
+        <option value="{{value}}" {{#if selected}}selected="true"{{/if}}>{{name}}</option>
+        {{/each}}
+	</select>
+
+	{{#if secondaryItem.length}}
+		<span class="left-margin-xs divider-vertical"></span>
+    	<label for="{{instanceId}}-display-only-options" class="color-grey-darkest bottom-margin-no left-margin-xs">Display only:</label>
+	    <select id="{{instanceId}}-display-only-options" title="Use up and down arrows to view options and then press enter to select.">
+	        {{#each secondaryItem}}
+	        <option value="{{value}}" {{#if selected}}selected="true"{{/if}}>{{name}}</option>
+	        {{/each}}
+    	</select>
+    {{else}}
+    	<p class="color-grey-darkest inline-block-display left-margin-xs">Displaying only Open activities</p>
+    {{/if}}
+    <button type="submit" class="sr-only" disabled="" aria-hidden="true">Submit</button>
+</form>

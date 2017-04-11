@@ -1,6 +1,8 @@
-HMPDJ09 ;SLC/MKB,ASMR/RRB,OB,MAT - PCE;Jan 13, 2016 16:04:25
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 62
+HMPDJ09 ;SLC/MKB,ASMR/RRB,OB,MAT,CPC,HM - PCE;Apr 13, 2016 16:04:25
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ ;DE4068 - reworked all PCRMINDX references to include ICD10
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -27,7 +29,7 @@ PX(FNUM) ; -- PCE item(s)
  Q
  ;
 PXA(ID) ; -- find ID in ^PXRMINDX(FNUM), fall thru to PX1 if successful
- N N,ROOT,IDX,P,ITEM,DATE,HMPIDT
+ N N,ROOT,IDX,P,ITEM,DATE,HMPIDT,ICDSYS
  S N=+$P(FNUM,".",2) K ^TMP("HMPPX",$J)
  I N=7!(N=18) S ROOT="^PXRMINDX("_FNUM_",""PPI"","_+$G(DFN)
  E  S ROOT="^PXRMINDX("_FNUM_",""PI"","_+$G(DFN)
@@ -35,6 +37,12 @@ PXA(ID) ; -- find ID in ^PXRMINDX(FNUM), fall thru to PX1 if successful
  . S P=$L(IDX,",") Q:ID'=+$P(IDX,",",P)  ;last subscript
  . S DATE=+$P(IDX,",",P-1),ITEM=+$P(IDX,",",P-2)
  . S HMPIDT=9999999-DATE,^TMP("HMPPX",$J,HMPIDT,ID)=ITEM_U_DATE
+ ;DE4068 also check for ICD10
+ I N=7 S ROOT="^PXRMINDX("_FNUM_",""10D"",""PPI"","_+$G(DFN) D
+ . S IDX=ROOT_")" F  S IDX=$Q(@IDX) Q:$P(IDX,",",1,4)'=ROOT  D
+ ..  S P=$L(IDX,",") Q:ID'=+$P(IDX,",",P)  ;last subscript
+ ..  S DATE=+$P(IDX,",",P-1),ITEM=+$P(IDX,",",P-2)
+ ..  S HMPIDT=9999999-DATE,^TMP("HMPPX",$J,HMPIDT,ID)=ITEM_U_DATE
  Q:'$D(^TMP("HMPPX",$J))  ;not found
 PX1 ; -- PCE ^TMP("HMPPX",$J,HMPIDT,ID)=ITM^DATE for FNUM
  N N,COLL,FAC,FLD,HMPF,I,LOC,LOTIEN,PCE,TAG,TMP,VISIT,X,X0,X12,Y
@@ -51,6 +59,7 @@ PX1 ; -- PCE ^TMP("HMPPX",$J,HMPIDT,ID)=ITM^DATE for FNUM
  ; TAG=$S(N=23:"recorded",N=11:"administeredDateTime",1:"dateTimeEntered")
  S TAG=$S(N=11:"administeredDateTime",1:"entered")
  S PCE(TAG)=$$JSONDT^HMPUTILS($P(TMP,U,2)) I $L(PCE(TAG))<14 S PCE(TAG)=$E(PCE(TAG)_"000000",1,14)
+ I N=7!(N=18) I $G(FILTER("freshnessDateTime")) S PCE(TAG)=$$JSONDT^HMPUTILS(FILTER("freshnessDateTime")) ;DE4068
  S PCE("name")=$$EXTERNAL^DILFD(FNUM,.01,,+TMP)
  S VISIT=+$G(HMPF("VISIT")),PCE("encounterUid")=$$SETUID^HMPUTILS("visit",DFN,VISIT)
  S PCE("encounterName")=$$NAME^HMPDJ04(VISIT)
@@ -116,6 +125,13 @@ IM I FNUM=9000010.11 D  G PXQ ;immunization
  .. N CPT S CPT=$G(@(U_$P(Y,";",2)_+Y_",0)"))
  .. S PCE("cptCode")=$$SETNCS^HMPUTILS("cpt",+CPT)
  .. S (PCE("summary"),PCE("cptName"))=$P(CPT,U,2)
+ . ; US14129 - Add cdc full vaccine name to return
+ . M:$D(HMPF("CDCNAME")) PCE("cdcFullVaccineName","\")=HMPF("CDCNAME")
+ . N I S I="" F  S I=$O(HMPF("VIS",I)) Q:'I  D
+ . . S PCE("vis",I,"visName")=$G(HMPF("VIS",I,"VISNAME"))
+ . . S PCE("vis",I,"editionDate")=$G(HMPF("VIS",I,"EDITIONDATE"))
+ . . S PCE("vis",I,"language")=$G(HMPF("VIS",I,"LANGUAGE"))
+ . . S PCE("vis",I,"offeredDate")=$G(HMPF("VIS",I,"OFFEREDDATE"))
 HF I FNUM=9000010.23 D  G PXQ ;health factor
  . S:$L(X) PCE("severityUid")=$$SETVURN^HMPUTILS("factor-severity",X),PCE("severityName")=$$LOWER^VALM1(Y)
  . S X=$$GET1^DIQ(9999999.64,+TMP_",",.03,"I") I X D
@@ -152,6 +168,13 @@ PPI ; from ^PXRMINDX(FNUM,"PPI",DFN,TYPE,ITEM,DATE,DA)
  .. S DATE=0 F  S DATE=$O(^PXRMINDX(FNUM,"PPI",+$G(DFN),TYPE,ITEM,DATE)) Q:DATE<1  D
  ... Q:DATE<HMPSTART  Q:DATE>HMPSTOP  S IDT=9999999-DATE
  ... S DA=0 F  S DA=$O(^PXRMINDX(FNUM,"PPI",+$G(DFN),TYPE,ITEM,DATE,DA)) Q:DA<1  S ^TMP("HMPPX",$J,IDT,DA)=ITEM_U_DATE
+ Q:FNUM=9000010.18  ;
+ ;for POV also check ICD10 CODES
+ S TYPE="" F  S TYPE=$O(^PXRMINDX(FNUM,"10D","PPI",+$G(DFN),TYPE)) Q:TYPE=""  D
+ . S ITEM="" F  S ITEM=$O(^PXRMINDX(FNUM,"10D","PPI",+$G(DFN),TYPE,ITEM)) Q:ITEM=""  D
+ .. S DATE=0 F  S DATE=$O(^PXRMINDX(FNUM,"10D","PPI",+$G(DFN),TYPE,ITEM,DATE)) Q:DATE<1  D
+ ... Q:DATE<HMPSTART  Q:DATE>HMPSTOP  S IDT=9999999-DATE
+ ... S DA=0 F  S DA=$O(^PXRMINDX(FNUM,"10D","PPI",+$G(DFN),TYPE,ITEM,DATE,DA)) Q:DA<1  S ^TMP("HMPPX",$J,IDT,DA)=ITEM_U_DATE
  Q
 PTF ; from ^PXRMINDX(45,"ICD9","PNI",DFN,TYPE,ITEM,DATE,DA)
  ;Purpose - Build ^TMP("HMPPX") from ^PXRMINDX(45,HMPISYS,"PNI",DFN)
@@ -193,7 +216,8 @@ VIMM(DA,IMDATA,VISIT) ;VIMM2.0 Return data for a specified V IMMUNIZATION entry.
  D GETS^DIQ(9000010.11,IEN,FLDS,FLGS,ARR,ERR)
  ;
  ; Immunization Code
- S IMDATA("IMMCODE")=$G(DATA(9000010.11,IEN,.01,"E"))
+ ;US14129 - This line was causing VIMIMM to be sent the vaccine *name* not IEN. Had to fix it for the story.
+ S IMDATA("IMMCODE")=$G(DATA(9000010.11,IEN,.01,"I"))
  ;
  ; Dosage & Units
  S IMDATA("DOSE")=$G(DATA(9000010.11,IEN,1312,"E"))
@@ -212,10 +236,14 @@ VIMM(DA,IMDATA,VISIT) ;VIMM2.0 Return data for a specified V IMMUNIZATION entry.
  S IMDATA("EVNTDAT")=$G(DATA(9000010.11,IEN,1201,"I"))
  ;
  ; Remarks
- N CT,X,WP
- S X=$$GET1^DIQ(9000010.11,IEN,1101,"","WP")
- I $D(WP(1)) S IMDATA("REMARKS")="",CT="" D
- . F  S CT=$O(WP(CT)) Q:CT=""  S IMDATA("REMARKS")=IMDATA("REMARKS")_WP(CT)_" "
+ ; DE3454 - added logic for word processing field data - HM 
+ N CT,X,WP,COUNT
+ S X=$$GET1^DIQ(9000010.11,IEN,1101,"","WP"),COUNT=0
+ I $D(WP(1)) S CT="" D
+ . F  S CT=$O(WP(CT)) Q:CT=""  S COUNT=COUNT+1 
+ I COUNT>0 S IMDATA("REMARKS")="",CT="" D
+ . F  S CT=$O(WP(CT)) Q:CT=""  D
+ . . S IMDATA("REMARKS")=$S(CT'=COUNT:IMDATA("REMARKS")_WP(CT)_" "_$C(13)_$C(10),CT=COUNT:IMDATA("REMARKS")_WP(CT),1:0)
  ;
  ; Comments
  S IMDATA("COMMENTS")=$G(DATA(9000010.11,IEN,81101,"E"))
@@ -231,15 +259,20 @@ VIMM(DA,IMDATA,VISIT) ;VIMM2.0 Return data for a specified V IMMUNIZATION entry.
  ;
  ; Vaccine Information Statement (VIS)
  S IMDATA("VISDAT")=$$VIMVIS(.DATA)
+ ;US14129 - Add More VIS data to extract
+ D VIMVISNW(.DATA,.IMDATA)
  Q
 VIMIMM(IMMCODE,IMDATA) ;VIMM2.0 Return data for an IMMUNIZATION entry.
  N ARR,DATA,ERR,FLDS,FLGS,IEN
  ; 9999999.14 - Immunization
- S IEN=IMMCODE_",",FLDS=".03;",FLGS="IE",ARR="DATA",ERR="ERR"
+ S IEN=IMMCODE_",",FLDS=".03;2",FLGS="IE",ARR="DATA",ERR="ERR"
  D GETS^DIQ(9999999.14,IEN,FLDS,FLGS,ARR,ERR)
  ;
  ; CVX code
  S IMDATA("CVXCODE")=$G(DATA(9999999.14,IEN,.03,"E"))
+ ; US14129 - Add cdc full vaccine name to return
+ ; Use our existing API to format the Word Processing data for JSON
+ D SETTEXT^HMPUTILS($NA(DATA(9999999.14,IEN,2)),$NA(IMDATA("CDCNAME")))
  Q
 VIMVIS(DATA) ;VIMM2.0 Return an IMMUNIZATION's VACCINE INFORMATION STATEMENT(s).
  N DT,SC,SL,VDX,VIS,VISALL,VISIEN
@@ -249,6 +282,17 @@ VIMVIS(DATA) ;VIMM2.0 Return an IMMUNIZATION's VACCINE INFORMATION STATEMENT(s).
  . I $D(DATA(9000010.112,VISIEN,".02","I")) D
  . . S DT=$G(DATA(9000010.112,VISIEN,".02","I")),DT=$E($$JSONDT^HMPUTILS(DT)_"000000",1,14)
  . I $G(DT),$G(VIS)'="" S VISALL(VIS_SL_DT_SC)=""
- S (VDX,VIS)="" F  S VDX=$O(VISALL(VDX)) Q:VDX=""  S VIS=VIS_VDX
+ S (VDX,VIS)="" F  S VDX=$O(VISALL(VDX)) Q:VDX=""  S VIS=VIS_" "_$C(13)_$C(10)_VDX ; DE3454 - added logic for word processing field data - HM 
  Q VIS
  ;
+VIMVISNW(DATA,IMDATA) ;US14129 - Add VIS data to extract
+ N PTVISIEN,VISIEN,IEN,LANGIEN
+ S PTVISIEN="" F I=1:1 S PTVISIEN=$O(DATA(9000010.112,PTVISIEN)) Q:PTVISIEN=""  D
+ . S VISIEN=$G(DATA(9000010.112,PTVISIEN,".01","I"))_"," Q:'VISIEN
+ . I $D(DATA(9000010.112,PTVISIEN,".01","E")) S IMDATA("VIS",I,"VISNAME")=$G(DATA(9000010.112,PTVISIEN,".01","E"))
+ . S:$G(DATA(9000010.112,PTVISIEN,".02","I")) IMDATA("VIS",I,"OFFEREDDATE")=$$JSONDT^HMPUTILS(DATA(9000010.112,PTVISIEN,".02","I"))
+ . D GETS^DIQ(920,VISIEN,".01;.02;.04","IE","DATA","ERR")
+ . S:$G(DATA(920,VISIEN,".02","I")) IMDATA("VIS",I,"EDITIONDATE")=$$JSONDT^HMPUTILS(DATA(920,VISIEN,".02","I"))
+ . ;Need to pull NAME (#1), not CODE (#.01), field from language file.
+ . S LANGIEN=$G(DATA(920,VISIEN,".04","I")) S:LANGIEN IMDATA("VIS",I,"LANGUAGE")=$$GET1^DIQ(.85,LANGIEN_",",1)
+ Q

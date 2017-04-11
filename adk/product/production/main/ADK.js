@@ -1,6 +1,3 @@
-//ADK is moved to the global namespace in order to facilitate better seperation between ehmp-ui and adk.
-var ADK = {};
-
 define([
     'backbone',
     'marionette',
@@ -8,6 +5,7 @@ define([
     'underscore',
     'api/CCOWService',
     'api/ResourceService',
+    'api/PatientRecordService',
     'api/UserService',
     'main/Session',
     'main/ui_components/components',
@@ -15,13 +13,15 @@ define([
     'main/resources/resources',
     'main/Utils',
     'api/Messaging',
-    'api/Navigation',
     'api/NotificationsManager',
     'api/AutoLogoff',
     'api/NotificationsFetch',
     'api/SessionStorage',
     'api/ErrorMessaging',
     'api/UserDefinedScreens',
+    'api/WorkspaceContextRepository',
+    'api/Navigation',
+    'api/Checks',
     'api/Enrichment',
     'main/backgrid/datagrid',
     'main/backgrid/filter',
@@ -31,9 +31,6 @@ define([
     'main/ui_components/workflow/component',
     'main/components/views/loadingView',
     'main/components/views/errorView',
-    'main/components/views/serverSideErrorView',
-    'main/components/sign/signView',
-    'main/components/sign/signApi',
     'main/components/views/appletViews/eventsGistView/views/eventsGistView',
     'main/components/views/appletViews/pillsGistView/views/pillGistView',
     'main/components/views/appletViews/interventionsGistView/views/interventionsGistView',
@@ -44,25 +41,80 @@ define([
     'main/components/views/appletViews/interventionsGistView/view',
     'main/components/views/appletViews/eventsGistView/view',
     'main/components/views/appletViews/observationsGistView/view',
-    'main/components/appletToolbar/toolbarView',
     "main/components/appletToolbar/appletToolbarView",
     'main/components/applet_chrome/chromeView',
     'main/components/popup/popup',
     'main/components/views/appletViews/TileSortManager',
     'main/ui_components/tray/views/summary/view',
     'main/ui_components/tray/views/action_summary_list/view',
+    'main/ui_components/tray/views/sub_tray_button/view',
     'main/components/behaviors/behaviors',
     'main/ADKApp'
-], function(Backbone, Marionette, $, _, CCOWService, resourceService, userService, session, UIComponents, Accessibility, Resources, utils, messaging, navigation, notificationsManager, autoLogoff, notificationsFetch, sessionStorage, errorMessaging, UserDefinedScreens, Enrichment, DataGrid, Filter, Paginator, AppletControllerView, GridAppletView, Workflow, LoadingView, ErrorView, ServerSideErrorView, SignView, SignApi, EventsGistView, PillGistView, InterventionsGistView, ObservationsGist, baseDisplayApplet, gridView, pillsGistView, interventionsGistView, eventsGistView, ObservationsGistView, ToolbarView, AppletToolbarView, ChromeView, Popup, tileSortManager, SummaryViewType, TrayActionSummaryListView, Behaviors, ADKApp) {
+], function(
+    Backbone,
+    Marionette,
+    $,
+    _,
+    CCOWService,
+    resourceService,
+    patientRecordService,
+    userService,
+    session,
+    UIComponents,
+    Accessibility,
+    Resources,
+    utils,
+    messaging,
+    notificationsManager,
+    autoLogoff,
+    notificationsFetch,
+    sessionStorage,
+    errorMessaging,
+    UserDefinedScreens,
+    WorkspaceContextRepository,
+    navigation,
+    checks,
+    Enrichment,
+    DataGrid,
+    Filter,
+    Paginator,
+    AppletControllerView,
+    GridAppletView,
+    Workflow,
+    LoadingView,
+    ErrorView,
+    EventsGistView,
+    PillGistView,
+    InterventionsGistView,
+    ObservationsGist,
+    baseDisplayApplet,
+    gridView,
+    pillsGistView,
+    interventionsGistView,
+    eventsGistView,
+    ObservationsGistView,
+    AppletToolbarView,
+    ChromeView,
+    Popup,
+    tileSortManager,
+    SummaryViewType,
+    TrayActionSummaryListView,
+    SubTrayButtonView,
+    Behaviors,
+    ADKApp
+) {
     'use strict';
-    ADK = {
+
+    //ADK is moved to the global namespace in order to facilitate better seperation between ehmp-ui and adk.
+    window.ADK = {
         AutoLogoff: autoLogoff,
         NotificationsFetch: notificationsFetch,
         ResourceService: resourceService,
-        PatientRecordService: resourceService.patientRecordService,
+        PatientRecordService: patientRecordService,
         UserService: userService,
         Messaging: messaging,
         Navigation: navigation,
+        Checks: checks,
         Notifications: notificationsManager,
         utils: utils,
         SessionStorage: sessionStorage,
@@ -71,8 +123,8 @@ define([
         ADKApp: ADKApp,
         UserDefinedScreens: UserDefinedScreens,
         CCOWService: CCOWService,
-        SignApi: SignApi,
-        Enrichment: Enrichment
+        Enrichment: Enrichment,
+        WorkspaceContextRepository: WorkspaceContextRepository
     };
 
     ADK.Applets = {
@@ -88,17 +140,15 @@ define([
         Paginator: Paginator,
         Loading: LoadingView,
         Error: ErrorView,
-        ServerSideError: ServerSideErrorView,
-        SignForm: SignView,
         EventGist: EventsGistView,
         PillGist: PillGistView,
         AppletToolbarView: AppletToolbarView,
         InterventionsGist: InterventionsGistView,
         VitalsGist: ObservationsGist,
         LabresultsGist: ObservationsGist,
-        ToolbarView: ToolbarView,
         TrayActionSummaryList: TrayActionSummaryListView,
-        TraySummaryList: SummaryViewType
+        TraySummaryList: SummaryViewType,
+        SubTrayButton: SubTrayButtonView
     };
 
     ADK.AppletViews = {
@@ -121,6 +171,40 @@ define([
         messaging.stopReplying('UIResources');
     });
 
+    var hasPermission = function(permissions) {
+        var hasPermission = true;
+        _.each(permissions, function(permission) {
+            if (!userService.hasPermission(permission)) hasPermission = false;
+        });
+
+        return hasPermission;
+    };
+
+    ADK.getAppletViews = function(moduleName, viewType) {
+        //returns view definition from registry
+        var module = this.ADKApp[moduleName] || [],
+            permissions = module.appletConfig.permissions,
+            obj = {},
+            arr = [];
+
+        //check permissions
+        if (!hasPermission(permissions)) throw new Error('User does not have permissions to access ' + moduleName);
+
+        var results = _.filter(module.appletConfig.viewTypes, (_.isObject(viewType) || !viewType) ? viewType : {
+            'type': viewType
+        });
+        if (results.length === 1) {
+            obj[results[0].type] = results[0].view;
+            return obj;
+        }
+
+        _.each(results, function(val, index) {
+            var obj = {};
+            obj[val.type] = val.view;
+            arr.push(obj);
+        });
+        return arr;
+    };
 
     ADK.getAppletRegionLayoutView = function() {
         return ADK.ADKApp.centerRegion.currentView.appletRegion;

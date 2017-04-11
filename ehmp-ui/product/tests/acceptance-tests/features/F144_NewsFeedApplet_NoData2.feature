@@ -2,7 +2,7 @@
 Feature: F144-eHMP Viewer GUI - Timeline(NewsFeed)
 
 Background:
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "Sixhundred,Patient"
   And the user has selected All within the global date picker
 
@@ -28,7 +28,7 @@ Scenario: News feed applet displays all of the Visits for a given patient in a g
   When user navigates to Timeline Applet
   Then the Timeline table diplays Type "Visit" rows
 
-@f144_newsfeed_sorting_facility  @US2683 @DE776 @debug @DE3810
+@f144_newsfeed_sorting_facility  @US2683 @DE776 @DE3810
 Scenario: Newsfeed applet displays sorting by Facility correctly
   When user navigates to Timeline Applet
   And user clicks on "Facility" column header in Newsfeed Applet

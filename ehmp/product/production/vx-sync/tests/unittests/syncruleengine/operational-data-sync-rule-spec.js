@@ -22,11 +22,13 @@ var sampleOpDataStamp = {
                     'domain': 'doc-def',
                     'stampTime': 20141031094920,
                     'itemMetaStamp': {
-                        'urn:va:doc-def:AAAA:1001': {
+                        'urn:va:doc-def:9E7A:1001': {
                             'stampTime': 20141031094920,
+                            'stored': true
                         },
-                        'urn:va:doc-def:AAAA:1002': {
+                        'urn:va:doc-def:9E7A:1002': {
                             'stampTime': 20141031094920,
+                            'stored': true
                         }
                     }
                 },
@@ -34,15 +36,18 @@ var sampleOpDataStamp = {
                     'domain': 'pt-select',
                     'stampTime': 20141031094920,
                     'itemMetaStamp': {
-                        'urn:va:pt-select:AAAA:1001': {
+                        'urn:va:pt-select:9E7A:3:3': {
                             'stampTime': 20141031094920,
+                            'stored': true
                         },
-                        'urn:va:pt-select:AAAA:1002': {
+                        'urn:va:pt-select:9E7A:1000:1000': {
                             'stampTime': 20141031094920,
+                            'stored': true
                         }
                     }
                 }
-            }
+            },
+            'syncCompleteAsOf': 20141031094921
         }
     }
 };
@@ -57,12 +62,82 @@ var sampleOpDataStamp2 = {
                     'domain': 'pt-select',
                     'stampTime': 20141031094920,
                     'itemMetaStamp': {
-                        'urn:va:pt-select:BBBB:1001': {
+                        'urn:va:pt-select:C877:3:3': {
                             'stampTime': 20141031094920,
+                            'stored': true
+                        },
+                        'urn:va:pt-select:C877:1000:1000': {
+                            'stampTime': 20141031094920,
+                            'stored': true
                         }
                     }
                 }
-            }
+            },
+            'syncCompleteAsOf': 20141031094921
+        }
+    }
+};
+
+var sampleOpDataStamp9E7ApatientIncomplete = {
+    'stampTime': 20141031094920,
+    'sourceMetaStamp': {
+        '9E7A': {
+            'stampTime': 20141031094920,
+            'domainMetaStamp': {
+                'doc-def': {
+                    'domain': 'doc-def',
+                    'stampTime': 20141031094920,
+                    'itemMetaStamp': {
+                        'urn:va:doc-def:9E7A:1001': {
+                            'stampTime': 20141031094920,
+                            'stored': true
+                        },
+                        'urn:va:doc-def:9E7A:1002': {
+                            'stampTime': 20141031094920,
+                            'stored': true
+                        }
+                    }
+                },
+                'pt-select': {
+                    'domain': 'pt-select',
+                    'stampTime': 20141031094920,
+                    'itemMetaStamp': {
+                        'urn:va:pt-select:9E7A:3:3': {
+                            'stampTime': 20141031094920
+                        },
+                        'urn:va:pt-select:9E7A:1000:1000': {
+                            'stampTime': 20141031094920,
+                            'stored': true
+                        }
+                    }
+                }
+            },
+            'syncCompleteAsOf': 20141031094921
+        }
+    }
+};
+
+var sampleOpDataStampC877DifferentPatientIncomplete = {
+    'stampTime': 20141031094920,
+    'sourceMetaStamp': {
+        'C877': {
+            'stampTime': 20141031094920,
+            'domainMetaStamp': {
+                'pt-select': {
+                    'domain': 'pt-select',
+                    'stampTime': 20141031094920,
+                    'itemMetaStamp': {
+                        'urn:va:pt-select:C877:3:3': {
+                            'stampTime': 20141031094920,
+                            'stored': true
+                        },
+                        'urn:va:pt-select:C877:1000:1000': {
+                            'stampTime': 20141031094920
+                        }
+                    }
+                }
+            },
+            'syncCompleteAsOf': 20141031094921
         }
     }
 };
@@ -105,7 +180,7 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: 'IPADDRESS ',
+                host: 'IP_ADDRESS',
                 port: 9080
             },
             rules: {
@@ -125,7 +200,7 @@ describe('operational-data-sync-rule', function() {
         //engine.rules = [rule];
         runs(function() {
             engine.getSyncPatientIdentifiers(mockPatientIds, [], function(err, result) {
-                expect(result.length).toEqual(6);
+                expect(result.length).toEqual(0);
                 done = true;
             });
         });
@@ -142,7 +217,7 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: 'IPADDRESS ',
+                host: 'IP_ADDRESS',
                 port: 9080
             },
             rules: {
@@ -163,7 +238,7 @@ describe('operational-data-sync-rule', function() {
         //engine.rules = [rule];
         runs(function() {
             engine.getSyncPatientIdentifiers(mockPatientIds, [], function(err, result) {
-                expect(result.length).toEqual(6);
+                expect(result.length).toEqual(0);
                 done = true;
             });
         });
@@ -180,7 +255,7 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: 'IPADDRESS ',
+                host: 'IP_ADDRESS',
                 port: 9080
             },
             rules: {
@@ -203,7 +278,7 @@ describe('operational-data-sync-rule', function() {
         //engine.rules = [rule];
         runs(function() {
             engine.getSyncPatientIdentifiers(mockPatientIds, [], function(err, result) {
-                expect(result.length).toEqual(6);
+                expect(result.length).toEqual(0);
                 done = true;
             });
         });
@@ -220,7 +295,7 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: 'IPADDRESS ',
+                host: 'IP_ADDRESS',
                 port: 9080
             },
             rules: {
@@ -243,7 +318,7 @@ describe('operational-data-sync-rule', function() {
         //engine.rules = [rule];
         runs(function() {
             engine.getSyncPatientIdentifiers(mockPatientIds, [], function(err, result) {
-                expect(result.length).toEqual(6);
+                expect(result.length).toEqual(0);
                 done = true;
             });
         });
@@ -260,7 +335,7 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: 'IPADDRESS ',
+                host: 'IP_ADDRESS',
                 port: 9080
             },
             rules: {
@@ -305,7 +380,7 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: 'IPADDRESS ',
+                host: 'IP_ADDRESS',
                 port: 9080
             },
             rules: {
@@ -350,7 +425,7 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: 'IPADDRESS ',
+                host: 'IP_ADDRESS',
                 port: 9080
             },
             rules: {
@@ -374,7 +449,7 @@ describe('operational-data-sync-rule', function() {
         //engine.rules = [rule];
         runs(function() {
             engine.getSyncPatientIdentifiers(mockPatientIds, [], function(err, result) {
-                expect(result.length).toEqual(0);
+                expect(err).toEqual('NO_OPDATA');
                 done = true;
             });
         });
@@ -391,7 +466,7 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: 'IPADDRESS ',
+                host: 'IP_ADDRESS',
                 port: 9080
             },
             rules: {
@@ -415,6 +490,96 @@ describe('operational-data-sync-rule', function() {
         runs(function() {
             engine.getSyncPatientIdentifiers(mockPatientIdsNoPrimary, [], function(err, result) {
                 expect(result.length).toEqual(2);
+                done = true;
+            });
+        });
+        waitsFor(function() {
+            return done;
+        });
+    });
+    it('Normal path: primary site complete once, but pt-select for patient is not', function() {
+        var done = false;
+        var config = {
+            vistaSites: {
+                '9E7A': {},
+                'C877': {}
+            },
+            jds: {
+                protocol: 'http',
+                host: 'IP_ADDRESS',
+                port: 9080
+            },
+            rules: {
+                'operational-data-sync': {}
+            },
+            'hdr': {
+                'operationMode': 'REQ/RES'
+            }
+        };
+        var jdsClientDummy = new JdsClientDummy(log, config);
+        jdsClientDummy._setResponseData(null, [{
+            statusCode: 200
+        }, {
+            statusCode: 200
+        }], [{
+            'inProgress': sampleOpDataStamp9E7ApatientIncomplete
+        }, {
+            'completedStamp': sampleOpDataStamp2
+        }]);
+        var environment = {
+            jds: jdsClientDummy,
+            metrics: log
+        };
+        var engine = new SyncRulesEngine(log, config, environment);
+        //engine.rules = [rule];
+        runs(function() {
+            engine.getSyncPatientIdentifiers(mockPatientIds, [], function(err, result) {
+                expect(result.length).toEqual(5);
+                done = true;
+            });
+        });
+        waitsFor(function() {
+            return done;
+        });
+    });
+    it('Normal path: primary site complete once, but pt-select for different patient is not', function() {
+        var done = false;
+        var config = {
+            vistaSites: {
+                '9E7A': {},
+                'C877': {}
+            },
+            jds: {
+                protocol: 'http',
+                host: 'IP_ADDRESS',
+                port: 9080
+            },
+            rules: {
+                'operational-data-sync': {}
+            },
+            'hdr': {
+                'operationMode': 'REQ/RES'
+            }
+        };
+        var jdsClientDummy = new JdsClientDummy(log, config);
+        jdsClientDummy._setResponseData(null, [{
+            statusCode: 200
+        }, {
+            statusCode: 200
+        }], [{
+            'completedStamp': sampleOpDataStamp
+        }, {
+            'inProgress': sampleOpDataStampC877DifferentPatientIncomplete
+        }]);
+        var environment = {
+            jds: jdsClientDummy,
+            metrics: log
+        };
+        var engine = new SyncRulesEngine(log, config, environment);
+        //engine.rules = [rule];
+        runs(function() {
+            engine.getSyncPatientIdentifiers(mockPatientIds, [], function(err, result) {
+                expect(result.length).toEqual(6);
                 done = true;
             });
         });

@@ -44,11 +44,14 @@ ADK.Messaging.trigger('register:component:item', {
 ```
 
 ## Available Application Components ##
-|Domain/Applet | Component Type | Component Group | Component Key     |Location in Application|
-|--------------|----------------|-----------------|-------------------|-----------------------|
-|observations  |`"tray"`        |`"writeback"`    | `"observations"`  | Patient Header bar    |
-|notes         |`"tray"`        |`"writeback"`    | `"notes"`         | Patient Header bar    |
-|action        |`"tray"`        |`"writeback"`    | `"actions"`       | Patient Header bar    |
+|Domain/Applet | Component Type            | Component Group      | Component Key     |Location in Application|
+|--------------|---------------------------|----------------------|-------------------|-----------------------|
+|observations  |`"tray"`                   |`"writeback"`         | `"observations"`  | Patient Header bar    |
+|notes         |`"tray"`                   |`"writeback"`         | `"notes"`         | Patient Header bar    |
+|action        |`"tray"`                   |`"writeback"`         | `"actions"`       | Patient Header bar    |
+|any           |`"applicationHeaderItem"`  |`"user-nav-alerts"`   | any               | Navigation Header     |
+|any           |`"applicationHeaderItem"`  |`"patient-nav-alerts"`| any               | Navigation Header     |
+
 
 ::: callout
 **Note:** When registering a component of type **"tray"** and group **"writeback"** to be used in the patient header bar, the `viewport` option on the Tray will be overwritten.

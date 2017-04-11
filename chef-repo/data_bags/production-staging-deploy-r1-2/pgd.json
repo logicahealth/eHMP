@@ -1,0 +1,13 @@
+{
+  "id": "pgd",
+  "normal": {
+    "ipaddress": "IP___ADDRESS",
+    "stack": "production-staging-deploy-r1-2",
+    "roles": [
+      "pgd"
+    ],
+    "pgd": {
+      "protocol": "http"
+    }
+  }
+}

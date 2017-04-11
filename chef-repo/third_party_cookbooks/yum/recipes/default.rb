@@ -1,6 +1,6 @@
 #
 # Author:: Sean OMeara (<someara@chef.io>)
-# Author::     ua Timberman (<joshua@chef.io>)
+# Author:: Joshua Timberman (<joshua@chef.io>)
 # Recipe:: yum::default
 #
 # Copyright 2013-2014, Chef Software, Inc (<legal@chef.io>)

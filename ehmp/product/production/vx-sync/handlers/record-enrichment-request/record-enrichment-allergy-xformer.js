@@ -32,7 +32,18 @@ function transformAndEnrichRecord(log, config, environment, record, callback) {
 		return setTimeout(callback, 0, null, null);
 	}
 
-	var terminologyUtils = environment.terminologyUtils;
+    var metrics = null;
+    if (environment) {
+        metrics = environment.metrics;
+    }
+
+	var terminologyUtils;
+	if (environment.terminologyUtils) {
+		terminologyUtils = environment.terminologyUtils;
+	} else {
+        var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
+        terminologyUtils = new TerminologyUtil(log, metrics, config);
+	}
 
 	fixFieldDataTypes(record);
 	addInMissingFields(record);

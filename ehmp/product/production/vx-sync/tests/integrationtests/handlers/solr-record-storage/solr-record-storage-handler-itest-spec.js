@@ -5,18 +5,16 @@ require('../../../../env-setup');
 var handle = require(global.VX_HANDLERS + 'solr-record-storage/solr-record-storage-handler');
 var wConfig = require(global.VX_ROOT + 'worker-config');
 
-var SolrClient = require('solr-client');
+var solrSmartClient = require('solr-smart-client');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
-
-var solrTestClient = SolrClient.createClient(wConfig.solrClient);
-solrTestClient.autoCommit = true;
-solrTestClient.UPDATE_JSON_HANDLER = 'update';
 
 var log = require(global.VX_DUMMIES + 'dummy-logger');
 // log = require('bunyan').createLogger({
 //     name: 'store-record-request-handler',
 //     level: 'debug'
 // });
+
+var solrTestClient = solrSmartClient.initClient(wConfig.solrClient.core, wConfig.solrClient.zooKeeperConnection, log);
 
 describe('solr-record-storage-handler.js', function() {
 
@@ -36,7 +34,7 @@ describe('solr-record-storage-handler.js', function() {
         });
         waitsFor(function() {
             return finished;
-        }, 'tearDownAfterTest to complete', 20000);
+        }, 'tearDownAfterTest to complete', 60000);
     }
 
     describe('handle()', function() {
@@ -100,7 +98,7 @@ describe('solr-record-storage-handler.js', function() {
 
             waitsFor(function() {
                 return finished;
-            }, 'the job to complete and be verified', 20000);
+            }, 'the job to complete and be verified', 60000);
 
             tearDownAfterTest(patientIdentifier);
         });
@@ -166,7 +164,7 @@ describe('solr-record-storage-handler.js', function() {
 
             waitsFor(function() {
                 return finished;
-            }, 'the initial storage job to complete', 10000);
+            }, 'the initial storage job to complete', 60000);
             var deletedAllergyRecord = {
                 'uid': recordUid,
                 'stampTime': 20150421126625,
@@ -193,7 +191,7 @@ describe('solr-record-storage-handler.js', function() {
 
             waitsFor(function() {
                 return finished5;
-            }, 'the deletion storage job to complete', 20000);
+            }, 'the deletion storage job to complete', 60000);
 
             var finished7 = false;
             //Verify old record was updated with deleted record
@@ -206,7 +204,7 @@ describe('solr-record-storage-handler.js', function() {
             });
             waitsFor(function() {
                 return finished7;
-            }, 'the verification check for the removed flag', 20000);
+            }, 'the verification check for the removed flag', 60000);
 
             tearDownAfterTest(patientIdentifier);
         });

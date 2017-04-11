@@ -9,13 +9,17 @@ service 'solr' do
 #   chef rewind is unwinding the solr service definition
 end.run_action(:stop)
 
-# account for different directory structure in solr 4
-glob_solr4 = Dir.glob('/opt/solr/solr-4*')
-if glob_solr4.length > 1
-  raise "More than one solr 4 directory found, cannot proceed with upgrade!"
-elsif glob_solr4.length == 1
-  node.default[:vx_solr][:old_dir] = glob_solr4.first
-  node.default[:vx_solr][:old_server_dir] = "#{node[:vx_solr][:old_dir]}/example"
+# account for different solr directory structure
+glob_solr = Dir.glob('/opt/solr/solr-*')
+if glob_solr.length > 1
+  raise "More than one solr directory found, cannot proceed with upgrade!"
+elsif glob_solr.length == 1
+  node.default[:vx_solr][:old_dir] = glob_solr.first
+  # set server dir based on server version
+  server_dir = if glob_solr.first =~ /solr-5/ then "server" else "example" end
+  node.default[:vx_solr][:old_server_dir] = "#{node[:vx_solr][:old_dir]}/#{server_dir}"
+else
+  raise "A solr installation exists but /opt/solr/solr-*/ does not, cannot proceed with upgrade!"
 end
 
 mount "#{node[:vx_solr][:old_server_dir]}/logs" do

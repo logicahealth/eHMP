@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import us.vistacore.asu.rules.ASURuleEvaluation;
 import us.vistacore.asu.rules.ASUDocumentDetails;
+import us.vistacore.asu.rules.ASUMultiDocumentDetails;
+
 import us.vistacore.asu.rules.DocPermissionResult;
 import us.vistacore.asu.util.NullChecker;
 import java.util.ArrayList;
@@ -55,6 +57,25 @@ public class ASUEndpoint {
         return asu.isRulePresent(documentDetails,ASUEndpoint.ACTION_NAME_VIEW);
     }
 
+
+    @RequestMapping(value = "${uri.multiAccessDocument}",
+            consumes = "application/json",method = RequestMethod.POST
+    )
+    public ArrayList<Boolean> multiAccessDocument(@RequestBody ASUMultiDocumentDetails documentList) throws Exception {
+        if(documentList == null) {
+            throw new Exception("ASUEndPoint.validateRuleEvaluationParameters: ASU rules evaluation - documents cannot be empty.");
+        }
+
+        ArrayList<Boolean> ret = new ArrayList<Boolean>();
+        for(ASUDocumentDetails documentDetails: documentList.getDocuments()) {
+            validateRuleEvaluationParameters(documentDetails.getUserClassUids(), documentDetails.getDocDefUid()
+                    , documentDetails.getDocStatus());
+
+            ret.add(asu.isRulePresent(documentDetails,ASUEndpoint.ACTION_NAME_VIEW));
+        }
+        return ret; 
+    }
+
     /*
    This end point checks if a logged in user in GUI can access a document. This end point
     checks for a list of actionNames (eg: VIEW, EDIT RECORD, AMENDMENT, ENTRY) etc.
@@ -70,6 +91,24 @@ public class ASUEndpoint {
         validateRuleEvaluationParameters(documentDetails.getActionNames());
 
         return asu.isRulePresentForActionNames(documentDetails, documentDetails.getActionNames());
+    }
+
+    @RequestMapping(value = "${uri.getMultiDocPermissions}", 
+        consumes = "application/json", method = RequestMethod.POST
+    )
+    public ArrayList<ArrayList<DocPermissionResult>> getMultiDocPermissions(@RequestBody ASUMultiDocumentDetails documentList) throws Exception {
+        if(documentList == null) {
+            throw new Exception("ASUEndPoint.validateRuleEvaluationParameters: ASU rules evaluation - documents cannot be empty.");
+        }
+
+        ArrayList<ArrayList<DocPermissionResult>> ret = new ArrayList<ArrayList<DocPermissionResult>>();
+        for(ASUDocumentDetails documentDetails: documentList.getDocuments()) {
+            validateRuleEvaluationParameters(documentDetails.getUserClassUids(), documentDetails.getDocDefUid()
+                    , documentDetails.getDocStatus());
+            validateRuleEvaluationParameters(documentDetails.getActionNames());
+            ret.add(asu.isRulePresentForActionNames(documentDetails, documentDetails.getActionNames()));
+        }
+        return ret; 
     }
 
 

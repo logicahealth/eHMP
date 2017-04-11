@@ -25,6 +25,7 @@ var sessionWhitelist = [
     'section',
     'sessionLength',
     'site',
+    'division',
     'title',
     //'vistaKeys',
     'ccowObject',
@@ -43,7 +44,8 @@ var userListWhitelist = [
     'vistaStatus',
     'ehmpStatus',
     'paging_data',
-    'has_paging_data'
+    'has_paging_data',
+    'exactMatchCount'
 ];
 
 

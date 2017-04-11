@@ -6,6 +6,7 @@ var rpcClientFactory = require('./rpc-client-factory');
 //----------------------------------------------------------------------------------------------------------------------
 //                               Calling RPC's in a standard way
 //----------------------------------------------------------------------------------------------------------------------
+
 /**
  * Calls a VistA RPC and returns the data.  parameters can be zero or more arguments.
  *
@@ -16,7 +17,7 @@ var rpcClientFactory = require('./rpc-client-factory');
  * @param parse This will be called with the data retrieved from the RPC to parse into JSON.
  * @param callback This will be called with the parsed json data retrieved from the RPC (or if there's an error).
  */
-module.exports.standardRPCCall = function(logger, configuration, rpcName, parameters, parse, callback) {
+function standardRPCCall(logger, configuration, rpcName, parameters, parse, callback) {
     callback = arguments[arguments.length - 1];
     parse = arguments[arguments.length - 2];
 
@@ -60,30 +61,30 @@ module.exports.standardRPCCall = function(logger, configuration, rpcName, parame
         });
     }
 
-    logger.debug('rpc-util.standardRPCCall RPC (' + rpcName + '): params: ' + JSON.stringify(params, null, 2));
+    logger.debug({params: params}, 'rpc-util.standardRPCCall RPC (' + rpcName + ')');
 
     params = _.flatten(params, true);
     params = _.filter(params, function(param) {
         return param !== null && param !== undefined;
     });
 
-    logger.debug('rpc-util.standardRPCCall RPC (' + rpcName + '): params flattened and filtered: ' + JSON.stringify(params, null, 2));
+    logger.debug({params: params}, 'rpc-util.standardRPCCall RPC (' + rpcName + '): params flattened and filtered');
     //End the following code is a close duplication of the code in VistaJS.callRpc for validation.
 
     var rpcClient = rpcClientFactory.getClient(logger, configuration);
 
     rpcClient.execute(rpcName, params, function(err, rpcData) {
         if (err) {
-            logger.error('rpc-util.standardRPCCall error RPC (' + rpcName + '): ' + err);
+            logger.error({error: err}, 'rpc-util.standardRPCCall error RPC (' + rpcName + ')');
             return callback(err);
         }
 
         var obj;
         try {
-            logger.debug('rpc-util.standardRPCCall RPC (' + rpcName + ') data returned from RPC: ' + rpcData);
+            logger.debug({data: rpcData}, 'rpc-util.standardRPCCall RPC (' + rpcName + ') data returned from RPC');
             obj = parse(logger, rpcData, configuration);
         } catch (parseError) {
-            logger.error('rpc-util.standardRPCCall error parsing RPC (' + rpcName + '): ' + (parseError.message || parseError));
+            logger.error({error: parseError}, 'rpc-util.standardRPCCall error parsing RPC (' + rpcName + ')');
             return callback((parseError.message || parseError));
         }
 
@@ -91,12 +92,97 @@ module.exports.standardRPCCall = function(logger, configuration, rpcName, parame
             logger.info('rpc-util.standardRPCCall RPC (' + rpcName + ') parsed JSON: was nullish');
         }
         else {
-            logger.debug('rpc-util.standardRPCCall RPC (' + rpcName + ') parsed JSON: ' + JSON.stringify(obj, null, 2));
+            logger.debug({json: obj}, 'rpc-util.standardRPCCall RPC (' + rpcName + ') parsed JSON');
         }
 
         callback(null, obj);
     });
-};
+}
+module.exports.standardRPCCall = standardRPCCall;
+module.exports.standardRpcCall = standardRPCCall;
+
+/**
+ * Calls an RPC repeatedly and parses out the data.<br/><br/>
+ *
+ * If there are more than 44 results, we get back exactly 44 records. At that point, we call the exact same RPC call
+ * again passing in the value of the name from the last record (the 44th record).<br/>
+ * This will continue until we receive less than 44 records.<br/><br/>
+ *
+ * FOR MORE INFORMATION ON RPC PAGINATION WITH 44 RECORDS, LOOK AT &quot;rpc-util.removeExistingEntriesFromRPCResult&quot;<br/><br/>
+ *
+ * Because of pagination with this RPC call, it is a recursive function.<br/>
+ * For those worried about recursive functions, it took 2283 recursive calls to an RPC before it blew up
+ * with the Maximum call stack size exceeded on my machine (tested multiple times). That means 100,452 individual records
+ * would need to be coming back to a pick list before you would ever run into an issue (something that would never happen).
+ *
+ * @param logger The logger.
+ * @param configuration This contains the information necessary to connect to the RPC.
+ * @param rpcName The RPC to call.
+ * @param parse The parser function to handle the data returned.
+ * @param retValue An array that will be populated by the recursive function - this array will be passed to the callback.
+ * @param searchString The location to start returning data from - call with an empty String to retrieve all of the data.
+ * @param searchStringFieldName Field name associated with the searchString.
+ * @param callback This will be called with the array of data retrieved from multiple calls to the RPC (or if there's an error).
+ * @param parameters Additional parameters for the RPC (if any).
+ */
+function callRPCRecursively(logger, configuration, rpcName, parse, retValue, searchString, searchStringFieldName, callback, parameters) {
+    logger.trace('callRPCRecursively - entering method for rpc ' + rpcName + ': searchString=' + searchString);
+    var rpcClient = rpcClientFactory.getClient(logger, configuration);
+
+    var rpcCall = [rpcName, searchString, '1'];
+    if (parameters) {
+        if (_.isArray(parameters)) {
+            //parameters contains multiple parameters.
+            _.each(parameters, function(param) {
+                rpcCall.push(param);
+            });
+        } else {
+            //parameters contains (is) only one parameter.
+            rpcCall.push(parameters);
+        }
+    }
+
+    rpcClient.execute(rpcCall, function(err, rpcData) {
+        if (err) {
+            return callback(err.message || err);
+        }
+
+        var MAX_RPC_RESULTS_RETURNED = 44;
+        try {
+            logger.trace(rpcData);
+            var obj;
+            if (parse && _.isFunction(parse)) {
+                obj = parse(logger, rpcData);
+            } else {
+                logger.trace('No parse function for RPC ' + rpcName);
+                obj = rpcData;
+            }
+
+            var localStartName = obj.length > 0 ? _.get(_.last(obj), searchStringFieldName).toUpperCase() : null;
+
+            var callAgain = false;
+            if (obj.length >= MAX_RPC_RESULTS_RETURNED) {
+                callAgain = true;
+            }
+
+            obj = removeExistingEntriesFromRPCResult(logger, retValue, obj);
+
+            retValue = retValue.concat(obj);
+
+            if (callAgain) {
+                callRPCRecursively(logger, configuration, rpcName, parse, retValue, localStartName, searchStringFieldName, callback, parameters);
+                return;
+            }
+        }
+        catch (parseAndRpcUtilError) {
+            return callback(parseAndRpcUtilError.message || parseAndRpcUtilError);
+        }
+
+        callback(null, retValue);
+    });
+}
+module.exports.callRPCRecursively = callRPCRecursively;
+module.exports.callRpcRecursively = callRPCRecursively;
 
 //----------------------------------------------------------------------------------------------------------------------
 //                               Duplicate Entry Removal Functions
@@ -149,7 +235,7 @@ module.exports.standardRPCCall = function(logger, configuration, rpcName, parame
  * @param arrExistingEntries An array with at le
  * @param arrFromRPC
  */
-module.exports.removeExistingEntriesFromRPCResult = function(log, arrExistingEntries, arrFromRPC) {
+function removeExistingEntriesFromRPCResult(log, arrExistingEntries, arrFromRPC) {
     if (nullUtil.isNullish(arrExistingEntries)) {
         throw new Error('arrExistingEntries cannot be null');
     }
@@ -182,7 +268,8 @@ module.exports.removeExistingEntriesFromRPCResult = function(log, arrExistingEnt
         });
         return add;
     });
-};
+}
+module.exports.removeExistingEntriesFromRPCResult = removeExistingEntriesFromRPCResult;
 
 //----------------------------------------------------------------------------------------------------------------------
 //                               Conversion Functions

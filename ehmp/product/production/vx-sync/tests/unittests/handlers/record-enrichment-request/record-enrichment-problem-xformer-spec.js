@@ -33,6 +33,7 @@ var originalVaProblem = {
     'statusName': 'ACTIVE',
     'uid': 'urn:va:problem:9E7A:3:183',
     'unverified': false,
+    'recordedOn': 20040207,
     'updated': 20040330
 };
 
@@ -170,6 +171,7 @@ describe('record-enrichment-problem-xformer', function(){
                     //expect(typeof record.resolved).toEqual('string');
                     expect(typeof record.lastUpdateTime).toEqual('string');
                     expect(typeof record.stampTime).toEqual('string');
+                    expect(typeof record.recordedOn).toEqual('string');
 
                     // Verify that the code was inserted.
                     //-----------------------------------

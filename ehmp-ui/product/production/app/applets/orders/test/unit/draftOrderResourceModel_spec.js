@@ -7,8 +7,9 @@ require.config({
 });
 
 define([
-    'app/resources/writeback/orders/draft/model'
-], function(Draft) {
+    'app/resources/writeback/orders/draft/model',
+    'app/applets/orders/test/unit/specHelper'
+], function(Draft, SpecHelper) {
 
     'use strict';
 
@@ -26,14 +27,14 @@ define([
     //     pid: '1234567890',
     //     visit: {
     //         serviceCategory: 'PSB',
-    //         visitDateTime: '201603290000',
-    //         uid: '0987654321'
+    //         dateTime: '201603290000',
+    //         locationIEN: '0987654321'
     //     }
     // });
     //
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    describe('Functionality related to the Orders:Draft ADK Resource object', function() {
+    SpecHelper.describe('Functionality related to the Orders:Draft ADK Resource object', function() {
 
         var draft = null;
         var testUid = 'urn:va:ehmp:1234567890:a90a38f9-ba31-4098-8222-81a93195485c';
@@ -48,7 +49,7 @@ define([
                 statusCode: 201,
                 headers: {
                     date: 'Tue, 09 Feb 2016 00:02:35 GMT',
-                    location: 'http://IP             /clinicobj/' + testUid,
+                    location: 'http://IP_ADDRESS:PORT/clinicobj/' + testUid,
                     'content-type': 'application/json',
                     'content-length': '0'
                 },
@@ -57,15 +58,15 @@ define([
                         protocol: 'http:',
                         slashes: true,
                         auth: null,
-                        host: 'IP             ',
+                        host: 'IP_ADDRESS:PORT',
                         port: '9080',
-                        hostname: 'IP        ',
+                        hostname: 'IP_ADDRESS',
                         hash: null,
                         search: null,
                         query: null,
                         pathname: '/clinicobj',
                         path: '/clinicobj',
-                        href: 'http://IP             /clinicobj'
+                        href: 'http://IP_ADDRESS:PORT/clinicobj'
                     },
                     method: 'POST',
                     headers: {
@@ -87,13 +88,15 @@ define([
         var testDraftOrderPayload = {
             availableLabTests: '5106',
             labTestText: 'Occult Blood',
-            collectionDateTime: 'TODAY',
+            collectionTime: '00:00',
             collectionDate: '01/05/2016',
             collectionSample: '81',
+            otherCollectionSample: '',
             collectionType: 'SP',
             defaultCollSamp: '3',
             immediateCollectionDate: '01/05/2016',
             immediateCollectionTime: '00:00',
+            collectionDateTimePicklist: '',
             doseDate: '01/05/2016',
             doseTime: '00:00',
             drawDate: '01/05/2016',
@@ -107,18 +110,23 @@ define([
             orderComment: 'testing',
             reqCom: 'ORDER COMMENT',
             specimen: '8759',
+            otherSpecimen: '',
             urgency: '9',
+            urgencyText: 'ROUTINE',
             forTest: '1111',
-            annotation: 'annotation data',
+            urineVolume: '100ml',
+            comments: 'comment data',
             additionalComments: '',
             problemRelationship: 'cough',
-            activity: 'Follow up'
+            activity: 'Follow up',
+            pastDueDate: '20160301'
         };
         var partialDraftOrderPayload = {
             availableLabTests: '5106',
             collectionDate: '01/05/2016',
-            collectionDateTime: 'TODAY',
+            collectionTime: '00:00',
             collectionSample: '81',
+            otherCollectionSample: '',
             collectionType: 'SP',
             defaultCollSamp: '3',
             doseDate: '01/05/2016',
@@ -135,7 +143,7 @@ define([
         var testClinicalObject = {
             patientUid: '1234567890',
             authorUid: 'urn:va:user:9E7A:55555',
-            domain: 'order',
+            domain: 'ehmp-order',
             subDomain: 'laboratory',
             uid: testUid,
             ehmpState: 'draft',
@@ -223,11 +231,11 @@ define([
                 expect(draft.get('authorUid')).toBeDefined();
                 expect(draft.get('authorUid')).toBe('urn:va:user:9E7A:55555');
                 expect(draft.get('domain')).toBeDefined();
-                expect(draft.get('domain')).toBe('order');
+                expect(draft.get('domain')).toBe('ehmp-order');
                 expect(draft.get('subDomain')).toBeDefined();
                 expect(draft.get('subDomain')).toBe('laboratory');
                 expect(draft.get('ehmpState')).toBe('draft');
-                expect(draft.get('displayName')).toBe('Occult Blood');
+                expect(draft.get('displayName')).toBe('Occult Blood - ROUTINE');
 
                 var visit = draft.get('visit');
                 expect(visit).toBeDefined();
@@ -262,7 +270,7 @@ define([
                 expect(draft.get('authorUid')).toBeDefined();
                 expect(draft.get('authorUid')).toBe('urn:va:user:9E7A:55555');
                 expect(draft.get('domain')).toBeDefined();
-                expect(draft.get('domain')).toBe('order');
+                expect(draft.get('domain')).toBe('ehmp-order');
                 expect(draft.get('subDomain')).toBeDefined();
                 expect(draft.get('subDomain')).toBe('laboratory');
                 expect(draft.get('ehmpState')).toBe('draft');
@@ -303,7 +311,7 @@ define([
                 expect(draft.get('authorUid')).toBeDefined();
                 expect(draft.get('authorUid')).toBe('urn:va:user:9E7A:55555');
                 expect(draft.get('domain')).toBeDefined();
-                expect(draft.get('domain')).toBe('order');
+                expect(draft.get('domain')).toBe('ehmp-order');
                 expect(draft.get('subDomain')).toBeDefined();
                 expect(draft.get('subDomain')).toBe('laboratory');
                 expect(draft.get('ehmpState')).toBe('draft');
@@ -370,11 +378,11 @@ define([
                 expect(draft.get('authorUid')).toBeDefined();
                 expect(draft.get('authorUid')).toBe('urn:va:user:9E7A:55555');
                 expect(draft.get('domain')).toBeDefined();
-                expect(draft.get('domain')).toBe('order');
+                expect(draft.get('domain')).toBe('ehmp-order');
                 expect(draft.get('subDomain')).toBeDefined();
                 expect(draft.get('subDomain')).toBe('laboratory');
                 expect(draft.get('ehmpState')).toBe('draft');
-                expect(draft.get('displayName')).toBe('Occult Blood');
+                expect(draft.get('displayName')).toBe('Occult Blood - ROUTINE');
 
                 var visit = draft.get('visit');
                 expect(visit).toBeDefined();
@@ -412,11 +420,11 @@ define([
                 expect(draft.get('authorUid')).toBeDefined();
                 expect(draft.get('authorUid')).toBe('urn:va:user:9E7A:55555');
                 expect(draft.get('domain')).toBeDefined();
-                expect(draft.get('domain')).toBe('order');
+                expect(draft.get('domain')).toBe('ehmp-order');
                 expect(draft.get('subDomain')).toBeDefined();
                 expect(draft.get('subDomain')).toBe('laboratory');
                 expect(draft.get('ehmpState')).toBe('draft');
-                expect(draft.get('displayName')).toBe('Occult Blood');
+                expect(draft.get('displayName')).toBe('Occult Blood - ROUTINE');
 
                 var visit = draft.get('visit');
                 expect(visit).toBeDefined();

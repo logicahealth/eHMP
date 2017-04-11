@@ -73,7 +73,7 @@
       #DiagnosticOrder
        | name                               | value                                           |
        | resource.resourceType              | DiagnosticOrder                                 |
-       | resource.item.code.coding.system   | CONTAINS oi-code                                |
+       | resource.item.code.coding.system   | CONTAINS urn:oid:2.16.840.1.113883.6.233        |
        | resource.item.code.coding.code     | CONTAINS urn:va:oi:357                          |
        | resource.item.code.coding.display  | HDL                                             |
        | resource.subject.reference         | Patient/9E7A;231                                |

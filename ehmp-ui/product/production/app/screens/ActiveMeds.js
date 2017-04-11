@@ -58,6 +58,7 @@ define([
 
     var screenConfig = {
         id: "activeMeds",
+        context: 'patient',
         contentRegionLayout: "gridOne",
         appletHeader: "patient",
         applets: [{

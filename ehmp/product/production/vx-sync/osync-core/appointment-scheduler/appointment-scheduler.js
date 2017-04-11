@@ -1,29 +1,25 @@
 'use strict';
 
-var argv = require('yargs')
-    .usage('Usage: $0 --port <port>')
-    .demand(['port'])
-    .argv;
-
 require('../../env-setup');
 
 var _ = require('lodash');
 var cron = require('node-schedule');
 
-var config = require(global.VX_ROOT + 'worker-config').osync;
-var queueConfig = require(global.VX_JOBFRAMEWORK + 'queue-config.js');
-config.beanstalk = queueConfig.createFullBeanstalkConfig(config.beanstalk);
+var config = require(global.VX_ROOT + 'worker-config');
+var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
+config.beanstalk = queueConfig.createFullBeanstalkConfig(config.osync.beanstalk);
 
 var logUtil = require(global.VX_UTILS + 'log');
 var pollerUtil = require(global.VX_UTILS + 'poller-utils');
-logUtil.initialize(config.loggers);
+logUtil.initialize(config, 'osync');
 var log = logUtil.get('appointment-scheduler');
 var async = require('async');
 var jobUtil = require(global.VX_UTILS + 'osync-job-utils');
 var environment = pollerUtil.buildOsyncEnvironment(log, config);
+var oSyncConfig = config.osync;
 
-var clinicSchedule = config.appointmentsOptions.clinicsList;
-if (config.runOnSchedule && !_.isEmpty(clinicSchedule)) {
+var clinicSchedule = oSyncConfig.appointmentsOptions.clinicsList;
+if (oSyncConfig.runOnSchedule && !_.isEmpty(clinicSchedule)) {
     var sites = _.keys(clinicSchedule);
     _.each(sites, function(site) {
         var clinics = clinicSchedule[site];
@@ -33,7 +29,7 @@ if (config.runOnSchedule && !_.isEmpty(clinicSchedule)) {
             rule.hour = Number(clinic.hour);
             rule.minute = Number(clinic.minutes);
 
-            var job = jobUtil.createAppointmentsJob(log, config, environment);
+            var job = jobUtil.createAppointmentsJob(log, oSyncConfig, environment);
             job.siteId = site;
             job.clinic = clinic.clinic;
 

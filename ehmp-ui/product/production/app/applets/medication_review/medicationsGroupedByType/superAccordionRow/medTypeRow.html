@@ -1,28 +1,44 @@
-<div class="panel-heading mainAccordion bottom-margin-xs" role="tab" tabindex="0">
-    <div class="superAccordion all-padding-xs" data-toggle="collapse" data-parent="#accordion-{{appletInstanceId}}" href="#{{medicationType}}-{{appletInstanceId}}">
-        <span class="right-padding-xs" data-type-row="{{medicationType}}"></span><b>{{medicationDisplayType}}</b>
-    </div>
+<div class="panel-heading bottom-margin-xs" role="tab">
+    <button type="button" class="all-padding-xs btn btn-accordion" data-toggle="collapse" data-parent="#accordion-{{appletInstanceId}}" data-target="#{{medicationType}}-{{appletInstanceId}}" aria-expanded="true" title="Press enter to collapse {{medicationDisplayType}} accordion." data-type-row="{{medicationType}}">
+        <i class="left-padding-sm right-padding-sm" data-type-row="{{medicationType}}"></i>
+        <span class="badge background-color-primary right-margin-sm" aria-hidden="true">{{medications.length}}</span>
+        <span class="sr-only">{{medications.length}} results in</span>
+        <span id="result-group-title-medication-display-type" class="text-uppercase">{{medicationDisplayType}}</span>
+    </button>
 </div>
-<div id="{{medicationType}}-{{appletInstanceId}}" class="panel-body collapse top-padding-no bottom-padding-no" role="tabpanel">
-{{#if hasMeds}}
-    <div class="row header-bar equalHeightsHeader left-margin-no right-margin-no" tabindex="0">
-        <div class="equalHeightsInnerTable">
-            <div class="col-sm-3 left-padding-no right-padding-no">
-                <div class="col-sm-12 selectable header" sortable="true" tooltip-data-key="{{tooltipMedicationName}}" sortDirection="none" sortType="alphabetical" sortKey="medicationName">Name
-                    <span class="sort-caret fa floatRight"></span>
+<div id="{{medicationType}}-{{appletInstanceId}}" class="panel-body all-padding-no collapse" role="tabpanel">
+    <div role="grid">
+        {{#if hasMeds}}
+            <div class="row header-bar left-margin-no right-margin-no" aria-label="{{medicationType}} Meds Grid" role="row">
+                <div class="col-xs-3 left-padding-no right-padding-no" role="gridcell">
+                    <div class="col-xs-12" role="columnheader" aria-sort="none">
+                        <button type="button" class="selectable header btn btn-link" sortable="true" tooltip-data-key="{{tooltipMedicationName}}" sortType="alphabetical" sortKey="medicationName" role="button">Name
+                            <i class="sort-caret fa pull-right"></i>
+                            <span class="sr-only">Press enter to sort.</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-xs-9">
+                    <div role="gridcell">
+                        <div class="col-xs-4" role="columnheader" aria-sort="none">
+                            <button type="button" class="selectable header btn btn-link" sortable="true" tooltip-data-key="{{tooltipSig}}" sortType="alphabetical" sortKey="sig" role="button">Sig
+                                <i class="sort-caret fa pull-right"></i>
+                                <span class="sr-only">Press enter to sort.</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div role="gridcell">
+                        <div class="col-xs-3 text-center" role="columnheader" aria-sort="none">
+                            <button type="button" class="selectable header btn btn-link" sortable="true" tooltip-data-key="{{tooltipFillable}}" sortType="custom" sortKey="status" role="button">{{fillableHeader}}
+                                <i class="sort-caret fa pull-right"></i>
+                                <span class="sr-only">Press enter to sort.</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-xs-5 graph-header"></div>
                 </div>
             </div>
-            <div class="col-sm-9">
-                <div class="col-sm-4 selectable header" sortable="true" tooltip-data-key="{{tooltipSig}}" sortDirection="none" sortType="alphabetical" sortKey="sig">Sig
-                    <span class="sort-caret fa floatRight"></span>
-                </div>
-                <div class="col-sm-3 selectable header centerText" sortKey="" sortable="true" tooltip-data-key="{{tooltipFillable}}" sortDirection="none" sortType="custom">{{fillableHeader}}
-                    <span class="sort-caret fa floatRight"></span>
-                </div>
-                <div class="col-sm-5 graph-header"></div>
-            </div>
-        </div>
+        {{/if}}
+        <div class="medication-item-list-region panel-group" role="rowgroup" id="{{medicationType}}-accordion-{{appletInstanceId}}"></div>
     </div>
-{{/if}}
-    <div class="medicationItemList med-name-row-view-region panel-group" role="tablist" id="{{medicationType}}-accordion-{{appletInstanceId}}" tabindex="0"></div>
 </div>

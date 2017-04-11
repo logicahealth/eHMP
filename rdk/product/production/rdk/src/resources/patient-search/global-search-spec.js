@@ -156,5 +156,64 @@ describe('Global Search', function() {
             })).to.be.falsy();
         });
     });
-
+    describe('Global Query Parameter Validation', function() {
+        it('tests that global search params objects gets set on session', function() {
+            var req = {
+                session: {},
+                query: {
+                    'name.first': 'Test',
+                    'name.last': 'User',
+                    'ssn': '123456789',
+                    'date.birth': '10/09/1969'
+                }
+            };
+            search._getGlobalSearchParams(req);
+            expect(typeof req.session.globalSearchParams).to.equal('object');
+            expect(Object.keys(req.session.globalSearchParams).length).to.be.above(0);
+        });
+        it('tests that global search params objects gets set on session are valid', function() {
+            var req = {
+                session: {
+                    globalSearchParams: {
+                        lname: 'USER',
+                        dob: '10/09/1969'
+                    }
+                },
+                query: {
+                    'name.first': 'u',
+                    'name.last': 'USER',
+                    'date.birth': '10/09/1969',
+                    'ssn': '123456789'
+                }
+            };
+            expect(typeof req.session.globalSearchParams).to.equal('object');
+            expect(Object.keys(req.session.globalSearchParams).length).to.be.above(0);
+            expect(search._checkInvalidGlobalSearchParameters(req.session.globalSearchParams)).to.be.falsy();
+        });
+    });
+    describe('Global Search Patient Demographic With ICN', function() {
+        it('tests that callback function gets invoked with error object when session has no global params', function(done) {
+            var req = {
+                session: {},
+                query: {},
+                logger: sinon.stub(require('bunyan').createLogger({name: 'global-search-spec'}))
+            };
+            var res = {
+                status: function(status) {
+                    res.status = status;
+                    return this;
+                },
+                json: function() {
+                    done();
+                }
+            };
+            var testICN = '4325679V4325679';
+            var cb = function(err, globalPatient) {
+                expect(err).to.match({ 'message': 'Session has no global params', 'patientICN': '4325679V4325679', 'status': 500 });
+                expect(globalPatient).to.equal(null);
+                done();
+            };
+            search._getPatientDemographicWithICN(req, res, testICN, cb);
+        });
+    });
 });

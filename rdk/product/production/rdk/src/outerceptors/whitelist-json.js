@@ -24,7 +24,7 @@ function whitelistJson(req, res, body, callback) {
         responseObject = _.attempt(JSON.parse.bind(null, body));
 
         if (_.isError(responseObject)) {
-            req.logger.error('Unable to parse body. ' + responseObject);
+            req.logger.error({body: responseObject}, 'Unable to parse body.');
             return callback(null, req, res, body);
         }
     }

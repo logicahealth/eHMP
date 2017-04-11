@@ -43,6 +43,16 @@ Object.defineProperty(fhir, 'FACILITIES_IDENTIFIER_SYSTEM', {
         return 'urn:oid:2.16.840.1.113883.6.233';
     }
 });
+/**
+ * vHA System
+ *
+ * Reference: http://oid-info.com/get/2.16.840.1.113883.6.233
+ */
+Object.defineProperty(fhir, 'VHA_SYSTEM', {
+    get: function() {
+        return 'urn:oid:2.16.840.1.113883.6.233';
+    }
+});
 
 var hl7v2 = {};
 Object.defineProperty(hl7v2, 'REG_EXP_DATE_FORMAT', {
@@ -87,11 +97,7 @@ Object.defineProperty(labResults, 'VUID_SYSTEM', {
         return 'urn:oid:2.16.840.1.113883.6.233';
     }
 });
-Object.defineProperty(labResults, 'DIAGNOSTIC_REPORTS_SYSTEM', {
-    get: function() {
-        return 'urn:oid:2.16.840.1.113883.4.642.2.58';
-    }
-});
+
 Object.defineProperty(labResults, 'COMPLETE_STATUS_CODE', {
     get: function() {
         return 'urn:va:lab-status:completed';
@@ -339,6 +345,31 @@ Object.defineProperty(immunization, 'IMMUNIZATION_EXTENSION_URL_PREFIX', {
         return 'http://vistacore.us/fhir/extensions/immunization#';
     }
 });
+//----------------------------
+// PROCEDURE REQUEST CONSTANTS
+//----------------------------
+var procedure = {};
+
+Object.defineProperty(procedure, 'PROCEDURE_UID_IDENTIFIER_SYSTEM', {
+    get: function() {
+        return 'urn:oid:2.16.840.1.113883.6.233';
+    }
+});
+Object.defineProperty(procedure, 'EDUCATION_TYPECODE_SYSTEM', {
+    get: function() {
+        return 'http://ehmp.DNS   /terminology/1.0';
+    }
+});
+Object.defineProperty(procedure, 'NONEDUCATION_TYPECODE_SYSTEM', {
+    get: function() {
+        return 'gov.va.fileman697-2:9E7A';
+    }
+});
+Object.defineProperty(procedure, 'PROCEDURE_OUTCOME_SYSTEM', {
+    get: function() {
+        return '2.16.840.1.113883.4.642.2.1889';
+    }
+});
 
 module.exports.immunization = immunization;
 module.exports.medAdministration = medAdministration;
@@ -353,3 +384,4 @@ module.exports.ordersFhir = orders;
 module.exports.conditionsFhir = conditions;
 module.exports.composition = composition;
 module.exports.referralRequest = referralRequest;
+module.exports.procedure = procedure;

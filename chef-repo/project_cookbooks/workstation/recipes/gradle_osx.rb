@@ -3,7 +3,7 @@
 # Recipe:: gradle_osx
 #
 
-node.default['workstation']['gradle_osx']['source'] = "#{node[:nexus_url]}/nexus/content/repositories/ehmp/filerepo/third-party/program/gradle/gradle/#{node['workstation']['gradle_osx']['version']}/gradle-#{node['workstation']['gradle_osx']['version']}-bin.zip"
+node.default['workstation']['gradle_osx']['source'] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/program/gradle/gradle/#{node['workstation']['gradle_osx']['version']}/gradle-#{node['workstation']['gradle_osx']['version']}-bin.zip"
 
 gradledir = node['workstation']['gradle_osx']['dir']
 file_name = "gradle-#{node['workstation']['gradle_osx']['version']}-bin.zip"

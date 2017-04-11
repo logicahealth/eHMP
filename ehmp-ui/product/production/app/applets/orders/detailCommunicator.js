@@ -1,7 +1,8 @@
 define([
+    'main/ADK',
     'app/applets/orders/util',
     'app/applets/orders/modalView/modalContentView'
-], function(Util, ModalContentView) {
+], function(ADK, Util, ModalContentView) {
     "use strict";
 
     var detailCommunicator = {
@@ -12,31 +13,30 @@ define([
             var channel = ADK.Messaging.getChannel(appletId);
             channel.reply('detailView', function(params) {
 
-                var fetchOptions = {
-                    criteria: {
-                        'uid': params.uid
-                    },
-                    patient: ADK.PatientRecordService.getCurrentPatient(),
-                    resourceTitle: resourceTitle,
-                    viewModel: {
-                        parse: Util.parseOrderResponse
-                    },
-                    cache: true,
-                };
-
                 var response = $.Deferred();
+                var orderId = _.last(_.isString(params.uid) ? params.uid.split(':') : []);
+                var options = _.extend({
+                    orderId: orderId
+                }, _.get(params, 'model.attributes', {}));
 
-                var data = ADK.PatientRecordService.fetchCollection(fetchOptions);
-                data.on('sync', function() {
-                    var detailModel = data.first();
-
-                    response.resolve({
-                        view: new ModalContentView({
-                            model: new Backbone.Model(detailModel.attributes)
-                        }),
-                        title: detailModel.get('summary')
+                var orderDetailModel = new ADK.UIResources.Writeback.Orders.Detail(options);
+                orderDetailModel.on('read:success', function(model) {
+                    this.off();
+                    var detailView = new ModalContentView({
+                        model: new Backbone.Model({
+                            detailSummary: model.get('detail')
+                        })
                     });
-                }, this);
+                    response.resolve({
+                        title: model.get('summary'),
+                        view: detailView
+                    });
+                });
+                orderDetailModel.on('read:error', function(model, resp) {
+                    this.off();
+                    response.reject(resp);
+                });
+                orderDetailModel.execute();
 
                 return response.promise();
             });

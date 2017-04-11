@@ -1,7 +1,7 @@
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" >
     <soapenv:Header/>
     <soapenv:Body>
-        <vaww:PRPA_IN201309UV02 xmlns:vaww="http://DNS  oed.oit.DNS   ">
+        <vaww:PRPA_IN201309UV02 xmlns:vaww="http://URL         .DNS   ">
             <id extension="MCID-%(msgID)s" root="2.16.840.1.113883.4.349"/>
             <creationTime value="%(time)s"/>
             <versionCode code="3.0"/>

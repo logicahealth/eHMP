@@ -1,4 +1,4 @@
-#http://IP             /patientrecord/labpanels?pid=9E7A%3B1&_ack=true&accessCode=PW    &verifyCode=PW    !!&site=9E7A
+#http://10.4.4.105:8888/patientrecord/labpanels?pid=9E7A%3B1&_ack=true&accessCode=pu1234&verifyCode=pu1234!!&site=9E7A
 class LabsByPanel < BuildQuery
   def initialize(parameter_hash_table)
     super()
@@ -17,5 +17,5 @@ end # class
 When(/^the client requests a response in VPR format from RDK API with the labsbypanel parameters$/) do |parameter_table|
   parameter_hash_table = parameter_table.hashes[0]
   path = LabsByPanel.new(parameter_hash_table).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end

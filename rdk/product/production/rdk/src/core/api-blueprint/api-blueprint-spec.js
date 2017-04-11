@@ -4,6 +4,7 @@ var _ = require('lodash');
 var fs = require('fs');
 var fspath = require('path');
 var url = require('url');
+var async = require('async');
 var apiBlueprint = require('./api-blueprint');
 var http = require('../../utils/http');
 
@@ -47,7 +48,7 @@ describe('API Blueprint resource registration', function() {
         expect(apiBlueprint._domains.local.resources[1].mountpoint).to.equal(mountpoint);
     });
 
-    // enable this test to check parsing; it's commented out because it takes a long time
+    // enable this test to check parsing; it's disabled because it takes a long time
     xit('should return JSON documentation for a registered resource', function(done) {
         this.timeout(5000);
 
@@ -61,7 +62,20 @@ describe('API Blueprint resource registration', function() {
         });
     });
 
-    // enable this test to check parsing; it's commented out because it takes a long time
+    // enable this test to check parsing; it's disabled because it takes a long time
+    xit('should return JSON documentation for a registered resource with a path parameter', function(done) {
+        this.timeout(5000);
+
+        apiBlueprint.registerResource('/test/:pid/example', markdownPath, false);
+
+        apiBlueprint.jsonDocumentationForPath('/test/9E7A;123/example', function(error, jsonDocs) {
+            expect(error).to.be.falsy();
+            expect(jsonDocs).to.be.an.object();
+            done();
+        });
+    });
+
+    // enable this test to check parsing; it's disabled because it takes a long time
     xit('should return JSON documentation given an inexact path', function(done) {
         apiBlueprint.registerResource(mountpoint, markdownPath, false);
 
@@ -73,6 +87,71 @@ describe('API Blueprint resource registration', function() {
         });
     });
 
+    // enable this test to check pre-parsing; it's disabled because it takes a long time
+    xit('should cache and reuse pre-parsed JSON documentation', function(done) {
+        this.timeout(5000);
+
+        fs.unlink(apiBlueprint.preparsedJsonPath(markdownPath), function () {
+            var parseStart = new Date();
+
+            apiBlueprint.jsonDocumentationFromFile(markdownPath, mountpoint, function(error, jsonDocs) {
+                expect(error).to.be.falsy();
+                var parseEnd = new Date();
+
+                fs.readFile(apiBlueprint.preparsedJsonPath(markdownPath), { encoding: 'utf8' }, function (error, preparsedJson) {
+                    expect(error).to.be.falsy();
+                    jsonDocs.must.eql(JSON.parse(preparsedJson));
+
+                    apiBlueprint.jsonDocumentationFromFile(markdownPath, mountpoint, function (error, jsonDocs) {
+                        var parseTime = parseEnd.getTime() - parseStart.getTime();
+                        var readTime = new Date().getTime() - parseEnd.getTime();
+                        expect(readTime).to.be.lt(parseTime / 2);
+                        done();
+                    });
+                });
+            });
+        });
+    });
+
+    // enable this test to check pre-parsing; it's disabled because it takes a long time
+    xit('should not use cached JSON documentation when the original markdown is updated', function(done) {
+        this.timeout(5000);
+
+        var tempMarkdownPath = fspath.resolve('./temp-markdown.md');
+        var ws = fs.createWriteStream(tempMarkdownPath);
+        ws.on('close', function () {
+
+            apiBlueprint.jsonDocumentationFromFile(tempMarkdownPath, mountpoint, function(error) {
+                expect(error).to.be.falsy();
+
+                fs.stat(apiBlueprint.preparsedJsonPath(tempMarkdownPath), function (error, firstStats) {
+                    expect(error).to.be.falsy();
+
+                    // change the markdown, triggering a reparse
+                    fs.appendFile(tempMarkdownPath, '\n\n', function (error) {
+                        expect(error).to.be.falsy();
+
+                        apiBlueprint.jsonDocumentationFromFile(tempMarkdownPath, mountpoint, function (error) {
+
+                            fs.stat(apiBlueprint.preparsedJsonPath(tempMarkdownPath), function (error, lastStats) {
+                                expect(error).to.be.falsy();
+                                expect(lastStats.mtime.getTime()).to.be.gte(firstStats.mtime.getTime());
+                                async.parallel([
+                                    fs.unlink.bind(null, tempMarkdownPath),
+                                    fs.unlink.bind(null, apiBlueprint.preparsedJsonPath(tempMarkdownPath))
+                                ], function () {
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        fs.createReadStream(markdownPath).pipe(ws);
+    });
+
     it('should register external resources with a prefix', function() {
         apiBlueprint.registerExternalUrlOnPrefix('http://some.url/path', '/external/');
         apiBlueprint.registerResource(mountpoint, 'http://some.url/path/my/markdown.md', false);
@@ -80,7 +159,7 @@ describe('API Blueprint resource registration', function() {
         apiBlueprint._domains.external.resources.length.must.equal(1);
     });
 
-    // enable this test to check parsing; it's commented out because it takes a long time
+    // enable this test to check parsing; it's disabled because it takes a long time
     xit('should return JSON documentation for an external registered resource', function(done) {
         this.timeout(5000);
 
@@ -267,29 +346,6 @@ describe('API Blueprint matchAction', function() {
             }
         };
         return jsonDocs;
-    }
-
-    function checkAction(done) {
-        return function(error, action) {
-            if (expectedError) {
-                if (expectedError !== true) {
-                    expect(error).to.eql(expectedError);
-                } else {
-                    expect(error).to.be.truthy();
-                }
-            } else if (action) {
-                if (expectedUriTemplate) {
-                    expect(action.actualUriTemplate).to.equal(expectedUriTemplate);
-                }
-                if (expectedParameters) {
-                    expect(action.actualParameters).to.eql(expectedParameters);
-                }
-            } else {
-                expect(expectedUriTemplate).to.be.undefined();
-                expect(expectedParameters).to.be.undefined();
-            }
-            done();
-        };
     }
 
     function expectAction(uriTemplate) {

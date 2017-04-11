@@ -3,6 +3,7 @@ define(function() {
 
     return {
         id: "problems-add-edit",
+        context: 'patient',
         contentRegionLayout: "gridTwo",
         appletHeader: "patient",
         applets: [

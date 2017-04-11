@@ -1,45 +1,60 @@
-<div class="confirmHeader row" accesskey="k">
-    <div class="pull-right all-padding-sm">
+<div class="confirmHeader">
+    <div class="help-icon-div">
         {{{helpIconLink 'patient_search_confirm'}}}
     </div>
-    <div class="patientName">{{formatName displayName ',' ', '}}</div>
+    <button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close.">
+        <i class="fa fa-times fa-lg"></i>
+    </button>
 </div>
-<div class="fixedHeightZone">
+<div class="fixedHeightZone confirmation">
     <div class="patientInfo">
-        <div id="patient-image-container" class="col-md-4 patient-detail-head">
+        <div id="patient-image-container" class="patient-detail-head">
             {{#if patientImage}}
-                <img src='{{patientImage}}' alt="Patient Image"/>
+                <div aria-hidden="true" class="patient-image" style="background-image:url('{{patientImage}}')"></div>
             {{else}}
-                <div id="patient-image"><i class='fa fa-spinner fa-spin'></i> <span class="sr-only"> Retrieving Patient Image...</span></div>
+                <div aria-hidden="true" class="patient-image" id="patient-image"></div>
             {{/if}}
         </div>
-        <div class="col-md-8 patient-detail-body">
-            <div class="col-xs-5 col-md-5 infoLabelStyle">DOB:</div>
-            <div class="col-xs-5 col-md-6" id="confirm_birthDate">{{formatDate birthDate "MM/DD/YYYY"}}</div>
-            <br>
-            <div class="col-xs-5 col-md-5 infoLabelStyle">Age:</div>
-            <div class="col-xs-5 col-md-7" id="confirm_age">{{getAge birthDate}}y</div>
-            <br>
-            <div class="col-xs-5 col-md-5 infoLabelStyle">Gender:</div>
-            <div class="col-xs-5 col-md-7" id="confirm_gender">{{genderName}}</div>
-            <br>
-            <div class="ccol-xs-5 col-md-5 infoLabelStyle">SSN:</div>
-            <div class="col-xs-5 col-md-7" id="confirm_ssn">{{formatSSN ssn false}}</div>
+        <div class="patientName">{{formatName displayName ',' ', '}}</div>
+        <div class="patient-detail-body">
+            <div class="row">
+                <div class="col-xs-6 infoLabelStyle">DOB:</div>
+                <div class="col-xs-6" id="confirm_birthDate">{{formatDate birthDate "MM/DD/YYYY"}}</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 infoLabelStyle">Age:</div>
+                <div class="col-xs-6" id="confirm_age">{{getAge birthDate}}y</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 infoLabelStyle">Gender:</div>
+                <div class="col-xs-6" id="confirm_gender">{{genderName}}</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 infoLabelStyle">SSN:</div>
+                <div class="col-xs-6" id="confirm_ssn">{{formatSSN ssn false}}</div>
+            </div>
             {{#if roomBed}}
-            <br>
-            <div class="col-xs-7 col-md-7 infoLabelStyle">Room-Bed:</div>
-            <div class="col-xs-5 col-md-5">{{roomBed}}</div>
+            <div class="row top-margin-md">
+                <div class="col-xs-6 infoLabelStyle">Room-Bed:</div>
+                <div class="col-xs-6">{{roomBed}}</div>
+            </div>
             {{/if}}
         </div>
     </div>
-    <div class="col-md-12">
-        <button type="button" id="confirmationButton" class="confirm btn btn-primary btn-block bottom-margin-sm top-margin-sm bottom-padding-sm top-padding-sm" data-loading-text="<i class='fa fa-spinner fa-spin'></i> <span> Loading Patient Data...</span>">Confirm Selection
-            <span class="sr-only">Confirm patient {{displayName}}, with social security number {{formatSSN ssn false}}, date of birth {{formatDate birthDate "MM/DD/YYYY"}}, age {{getAge birthDate}}, and gender {{genderName}}? Press enter to select this patient. Confirm.</span>
+    {{#if navigationOn}}
+    {{#if workspaceContext}}
+    <div class="previous-workspace-confirmation">
+        <div class="checkbox">
+            <label for="previousWorkspace">
+                <input type="checkbox" id="previousWorkspace" name="previousWorkspace" title="Press spacebar to toggle checkbox."> Resume most recent workspace for this patient
+            </label>
+        </div>
+    </div>
+    {{/if}}
+    {{/if}}
+    <div class="confirmation-div">
+        <button type="button" id="confirmationButton" class="confirm btn btn-success btn-block btn-lg" data-loading-text="<i class='fa fa-spinner fa-spin'></i> <span aria-live='assertive' role='progressbar'> Loading Patient Data</span>" data-sync-text="<i class='fa fa-spinner fa-spin'></i> <span aria-live='assertive' role='progressbar'> Syncing Patient Data...</span>" title="Press enter to confirm selection">
+            <span aria-hidden="true">Confirm Selection</span>
         </button>
     </div>
-    <div class="hidden" id="screenReaderSyncing">
-        Syncing Patient.
-    </div>
-    <div class="hidden" id="screenReaderLoading">
-        Loading Patient.
-    </div>
+</div>

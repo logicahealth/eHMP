@@ -39,7 +39,7 @@ if certs.nil?
   Chef::Log.debug "Searching for wildcard cert..."
 
   begin
-    certs = Chef::EncryptedDataBagItem.load("certs", "wildcard", 'n25q2mp#h4')
+    certs = Chef::EncryptedDataBagItem.load("certs", "wildcard", node[:data_bag_string])
     node.default[:apache][:ssl_cert_chain_file] = '/etc/httpd/ssl/chain.crt'
     Chef::Log.debug "wildcard cert found"
   rescue

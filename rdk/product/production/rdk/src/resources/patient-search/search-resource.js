@@ -14,8 +14,19 @@ module.exports.getResourceConfig = function() {
         subsystems: ['mvi']
     }, {
         name: 'search-mvi-patient-sync',
-        // path: undefined,
+        path: '/',
         post: require('./patient-sync').getPatient,
+        interceptors: {
+            operationalDataCheck: false,
+            synchronize: false
+        },
+        requiredPermissions: [],
+        isPatientCentric: false,
+        subsystems: ['mvi']
+    }, {
+        name: 'search-mvi-global-patient-sync',
+        path: '/',
+        get: require('./patient-sync').getGlobalPatient,
         interceptors: {
             operationalDataCheck: false,
             synchronize: false

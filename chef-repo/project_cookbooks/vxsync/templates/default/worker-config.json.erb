@@ -1,21 +1,32 @@
 {
-  "VXSYNC_IP": "172.16.3.6",
+  "VXSYNC_IP": "IPADDRES",
   "vxsync": {
-    "configRefresh": 0,
+    "configRefresh": <%= @vxsync['vxsync']['config_refresh'] %>,
     "rules": {
       "accept-all": {
       },
       "rapid-fire": {
       },
       "operational-data-sync": {
+        "odsAttempts": <%= @vxsync['vxsync']['ods_attempts'] %>,
+        "odsDelay": <%= @vxsync['vxsync']['ods_delay'] %>
       },
       "expiration": {
         "default": 3600000,
         "dod": 3600000
       }
     },
+    "eventPrioritizationRules": {
+        "site-type": {},
+        "domain-type": {
+            "consult": 20,
+            "allergy": -20,
+            "order": 40
+        }
+    },
     "retrySync": {"maxRetries": 3},
     "maxMetastampSize": 10485760,
+    "vistaAssigningAuthority": "USVHA",
     "vistaSites": {
       <% is_first_site = true %>
       <% @vista_sites.each do |site_info| %>
@@ -26,14 +37,14 @@
         "<%= site_info['vista']['site_id'] %>": {
           "name": "<%= site_info['vista']['site'] %>",
           "host": "<%= site_info['ipaddress'] %>",
-          "port": 9210,
+          "port": <%= site_info['vista']['rpc_port']%>,
           "accessCode": "<%= site_info['vista']['access_code'] %>",
           "verifyCode": "<%= site_info['vista']['verify_code'] %>",
           "localIP": "127.0.0.1",
           "stationNumber": "<%= site_info['vista']['station_number'] %>",
           "localAddress": "localhost",
-          "connectTimeout": 3000,
-          "sendTimeout": 20000
+          "connectTimeout": <%= site_info['vista']['connect_timeout'] %>,
+          "sendTimeout": <%= site_info['vista']['send_timeout'] %>
       }<% end %>
     },
     "vista": {
@@ -71,8 +82,9 @@
     "syncRequestApi": {
         "protocol": "http",
         "host": "127.0.0.1",
-        "port": 8080,
+        "port": <%= @vxsync['vxsync']['web_service_port'] %>,
         "patientSyncPath": "/sync/doLoad",
+        "patientSyncDemoPath": "/sync/demographicSync",
         "patientUnsyncPath": "/sync/clearPatient",
         "patientStatusPath": "/sync/status",
         "method": "POST"
@@ -84,7 +96,8 @@
     "hmp.extract.schema": "3.001",
 
     "jmeadows": {
-        "version":"2.3.1",
+        "disabled": <%=!@jmeadows_enabled %>,
+        "version": "<%=@jmeadows['jmeadows']['version'] %>",
         "domains": [
             "allergy",
             "appointment",
@@ -103,9 +116,10 @@
         ],
         "defaults": {
             "host": "127.0.0.1",
-            "port": 54000,
+            "port": "<%= @soap_handler['server_port'] %>",
+            "adminPort": "<%= @soap_handler['admin_port'] %>",
             "method": "GET",
-            "timeout": 60000
+            "timeout": <%= @vxsync['vxsync']['jmeadows_timeout'] %>
         },
         "allergy": {
             "path": "/dod/allergy"
@@ -146,6 +160,9 @@
         "progressNote": {
             "path": "/dod/progressNote"
         },
+        "ptf": {
+            "path": "/dod/ptf"
+        },
         "radiology": {
             "path": "/dod/radiology"
         },
@@ -182,25 +199,38 @@
              <% end %>
            <% end %>
         },
-        "operationMode": "PUB/SUB",
+        "operationMode": "REQ/RES",
         "defaults": {
             "host": "localhost",
-            "port": 54000,
+            "port": "<%= @soap_handler['server_port'] %>",
+            "adminPort": "<%= @soap_handler['admin_port'] %>",
             "method": "GET",
-            "timeout": 60000
+            "timeout": <%= @vxsync['vxsync']['hdr_timeout'] %>
         },
+        "blackList": [
+              <% is_first_site = true %>
+              <% @hdr_blacklist_sites.each do |site_info| %>
+                <%if !is_first_site %>,<% end %>
+                <% is_first_site = false %>
+                {
+                   "siteHash": "<%= site_info['site_hash'] %>",
+                   "stationNumber": "<%= site_info['station_number'] %>"
+                }
+              <% end %>
+        ],
+        "disabled": <%=!@hdr_enabled%>,
         "pubsubConfig": {
-          "host": "<%= @hdr_ip %>",
-          "port": 8999,
-          "protocol": "http",
-          "path": "repositories.domain.ext/fpds/vpr/",
+          "host": "<%= @hdr_sites[0]['ipaddress'] %>",
+          "port": <%= @hdr_sites[0]['hdr']['pub_sub']['port'] %>,
+          "protocol": "<%= @hdr_sites[0]['hdr']['pub_sub']['protocol'] %>",
+          "path": "repositories.DNS       /fpds/vpr/",
           "server": "HMPTest",
           "clientName": "eHMP",
           "_type": "json",
           "identifier": "USVHA",
           "extractSchema": "3.001",
           "maxBatchSize": 500,
-          "timeout": 60000
+          "timeout": <%= @hdr_sites[0]['hdr']['pub_sub']['timeout'] %>
         },
         "med": {
             "path": "/hdr/getData?domain=med"
@@ -256,6 +286,9 @@
         "procedure": {
             "path": "/hdr/getData?domain=procedure"
         },
+        "ptf": {
+            "path": "/hdr/getData?domain=ptf"
+        },
         "vital": {
             "path": "/hdr/getData?domain=vital"
         },
@@ -297,11 +330,13 @@
         "domains": [
             "vlerdocument"
         ],
+        "disabled": <%= !@vler_enabled %>,
         "defaults": {
             "host": "localhost",
-            "port": 54000,
+            "port": "<%= @soap_handler['server_port'] %>",
+            "adminPort": "<%= @soap_handler['admin_port'] %>",
             "method": "GET",
-            "timeout": 60000
+            "timeout": <%= @vxsync['vxsync']['vler_timeout'] %>
         },
         "vlerdocument": {
             "documentListPath": "/vler/documentList",
@@ -325,6 +360,7 @@
             "pov",
             "procedure",
             "problem",
+            "ptf",
             "surgery",
             "visit",
             "vital"
@@ -388,7 +424,6 @@
 
 
               "hdr-sync-request",
-              "hdr-xform-vpr",
 
               "hdr-sync-allergy-request",
               "hdr-sync-appointment-request",
@@ -465,7 +500,6 @@
           ],
           "hdr": [
               "hdr-sync-request",
-              "hdr-xform-vpr",
 
               "hdr-sync-allergy-request",
               "hdr-sync-appointment-request",
@@ -537,34 +571,36 @@
               "record-enrichment"
           ],
           "prioritization": [
-              "vista-prioritization-request"
+              "event-prioritization-request"
           ],
           "publish": [
-              "publish-data-change-event",
-              "activity-management-event"
+              "publish-data-change-event"
           ],
           "resync": [
               "resync-request"
+          ],
+          "update": [
+              "record-update"
           ]
       }
     },
     "parallelPublish": 20,
     "beanstalk": {
       "repoUniversal": {
-        "priority": 10,
-        "delay": 0,
-        "ttr": 120,
-        "timeout": 10,
-        "initMillis": 1000,
-        "maxMillis": 15000,
-        "incMillis": 1000
+        "priority": <%= @vxsync['vxsync']['beanstalk_priority'] %>,
+        "delay": <%= @vxsync['vxsync']['beanstalk_delay'] %>,
+        "ttr": <%= @vxsync['vxsync']['beanstalk_ttr'] %>,
+        "timeout": <%= @vxsync['vxsync']['beanstalk_timeout'] %>,
+        "initMillis": <%= @vxsync['vxsync']['beanstalk_init_millis'] %>,
+        "maxMillis": <%= @vxsync['vxsync']['beanstalk_max_millis'] %>,
+        "incMillis": <%= @vxsync['vxsync']['beanstalk_inc_millis'] %>
     },
     "repoDefaults": {
         "host": "127.0.0.1",
-        "port": 5000,
-        "tubename": "vx-sync",
-        "tubePrefix": "vxs-",
-        "jobTypeForTube": true
+        "port": <%= @vxsync['vxsync']['beanstalk_processes']['jobrepo']['config']['port'] %>,
+        "tubename": "<%= @vxsync['vxsync']['beanstalk_processes']['jobrepo']['config']['tube_name'] %>",
+        "tubePrefix": "<%= @vxsync['vxsync']['beanstalk_processes']['jobrepo']['config']['tube_prefix'] %>",
+        "jobTypeForTube": <%= @vxsync['vxsync']['beanstalk_processes']['jobrepo']['config']['job_type'] %>
     },
       "jobTypes": {
         "error-request": {
@@ -648,8 +684,6 @@
         },
         "hdr-sync-request": {
         },
-        "hdr-xform-vpr": {
-        },
         "hdr-sync-allergy-request": {
         },
         "hdr-sync-appointment-request": {
@@ -731,12 +765,13 @@
         "pgd-xform-vpr": {
         },
         "record-enrichment": {
+        	"tubeDetails": [{"ratio": 5000, "priority": {"startValue": 1, "endValue": 20}}, {"ratio": 3000, "priority": {"startValue": 21, "endValue": 40}}, {"ratio": 2000, "priority": {"startValue": 41, "endValue": 60}}, {"ratio": 1000, "priority": {"startValue": 61, "endValue": 80}}, {"ratio": 500, "priority": {"startValue": 81, "endValue": 100}}]
         },
         "store-record": {
         },
         "solr-record-storage": {
         },
-        "vista-prioritization-request": {
+        "event-prioritization-request": {
         },
         <% @hdr_sites.each do |hdr_site| %>
         <% hdr_site['hdr']['hdr_sites'].each do |site| %>
@@ -754,40 +789,43 @@
         },
         "resync-request": {
             "delay": 30
+        },
+        "record-update": {
+            "host": "127.0.0.1",
+            "port": 4999
         }
       }
     },
+    <% if @vxsync['vxsync']['publish_tubes'] %>
     "publishTubes": [
-      "activity-management-event"
+        "activity-management-event"
     ],
-
+    <% end %>
         "jds": {
             "protocol": "http",
-            "host": "<%= @jds_ip %>",
-            "port": "<%= @jds_port %>",
-            "timeout": 300000
+            "host": "<%= @jds['ipaddress'] %>",
+            "port": "<%= @jds['jds']['cache_listener_ports']['vxsync'] %>",
+            "timeout": <%= @vxsync['vxsync']['jds_timeout'] %>
         },
 
         "solrClient": {
-            "host": "<%= @solr_ip %>",
-            "port": 8983,
-            "path": "/solr",
-            "core": "vpr"
+            "core": "vpr",
+            "zooKeeperConnection": "<%= @solr['vx_solr']['zookeeper']['zookeeper_connection'] %>"
         },
 
         "mvi": {
             "protocol": "http",
             "host": "127.0.0.1",
-            "port": 54000,
+            "port": "<%= @soap_handler['server_port'] %>",
             "path": "/mvi/correspondingIds",
-            "timeout": 60000
+            "timeout": <%= @vxsync['vxsync']['mvi_timeout'] %>
         },
 
         "terminology": {
             "protocol": "http",
             "host": "127.0.0.1",
-            "port": 54000,
-            "timeout": 60000,
+            "port": "<%= @soap_handler['server_port'] %>",
+            "timeout": <%= @vxsync['vxsync']['terminology_timeout'] %>,
             "lncPath": "/term/lnc",
             "drugPath": "/term/drug",
             "jlvPath": "/term/jlv",
@@ -806,11 +844,111 @@
     },
 
     "error-processing": {
+      "jdsGetErrorLimit" : 1000,
+      "catastrophic-recovery": {
+        "loopDelayMillis": 30000,
+        "jobTypes": [
+          "error-request",
+          "operational-store-record",
+          "solr-record-storage",
+          "store-record",
+          "record-enrichment",
+          "event-prioritization-request",
+          "vista-record-processor-request",
+          <% @vista_sites.each do |site_info| %>
+          "vista-<%= site_info['vista']['site_id'] %>-data-poller",
+          <% end %>
+          <% @vista_sites.each do |site_info| %>
+          "vista-<%= site_info['vista']['site_id'] %>-subscribe-request",
+          <% end %>
+          "hdr-xform-allergy-vpr",
+          "hdr-xform-appointment-vpr",
+          "hdr-xform-consult-vpr",
+          "hdr-xform-cpt-vpr",
+          "hdr-xform-document-vpr",
+          "hdr-xform-factor-vpr",
+          "hdr-xform-image-vpr",
+          "hdr-xform-immunization-vpr",
+          "hdr-xform-lab-vpr",
+          "hdr-xform-med-vpr",
+          "hdr-xform-order-vpr",
+          "hdr-xform-patient-vpr",
+          "hdr-xform-pov-vpr",
+          "hdr-xform-problem-vpr",
+          "hdr-xform-procedure-vpr",
+          "hdr-xform-surgery-vpr",
+          "hdr-xform-vital-vpr",
+          "hdr-xform-visit-vpr",
+          "hdr-sync-allergy-request",
+          "hdr-sync-appointment-request",
+          "hdr-sync-consult-request",
+          "hdr-sync-cpt-request",
+          "hdr-sync-document-request",
+          "hdr-sync-factor-request",
+          "hdr-sync-image-request",
+          "hdr-sync-immunization-request",
+          "hdr-sync-lab-request",
+          "hdr-sync-med-request",
+          "hdr-sync-order-request",
+          "hdr-sync-patient-request",
+          "hdr-sync-pov-request",
+          "hdr-sync-problem-request",
+          "hdr-sync-procedure-request",
+          "hdr-sync-surgery-request",
+          "hdr-sync-vital-request",
+          "hdr-sync-visit-request",
+          "hdr-sync-request",
+          "jmeadows-cda-document-conversion",
+          "jmeadows-pdf-document-transform",
+          "jmeadows-document-retrieval",
+          "jmeadows-xform-allergy-vpr",
+          "jmeadows-xform-appointment-vpr",
+          "jmeadows-xform-consult-vpr",
+          "jmeadows-xform-demographics-vpr",
+          "jmeadows-xform-dischargeSummary-vpr",
+          "jmeadows-xform-encounter-vpr",
+          "jmeadows-xform-immunization-vpr",
+          "jmeadows-xform-lab-vpr",
+          "jmeadows-xform-medication-vpr",
+          "jmeadows-xform-note-vpr",
+          "jmeadows-xform-order-vpr",
+          "jmeadows-xform-problem-vpr",
+          "jmeadows-xform-progressNote-vpr",
+          "jmeadows-xform-radiology-vpr",
+          "jmeadows-xform-vital-vpr",
+          "jmeadows-sync-allergy-request",
+          "jmeadows-sync-appointment-request",
+          "jmeadows-sync-consult-request",
+          "jmeadows-sync-demographics-request",
+          "jmeadows-sync-dischargeSummary-request",
+          "jmeadows-sync-encounter-request",
+          "jmeadows-sync-immunization-request",
+          "jmeadows-sync-lab-request",
+          "jmeadows-sync-medication-request",
+          "jmeadows-sync-note-request",
+          "jmeadows-sync-order-request",
+          "jmeadows-sync-problem-request",
+          "jmeadows-sync-progressNote-request",
+          "jmeadows-sync-radiology-request",
+          "jmeadows-sync-vital-request",
+          "jmeadows-sync-request",
+          "vler-sync-request",
+          "vler-xform-vpr",
+          "enterprise-sync-request"
+        ]
+      },
       "record-enrichment": {
         "ignoreSeverity": true,
         "loopDelayMillis": 30000,
         "jobTypes": [
           "record-enrichment"
+        ]
+      },
+      "activity-management": {
+        "ignoreSeverity": true,
+        "loopDelayMillis": 30000,
+        "jobTypes": [
+          "activity-management-event"
         ]
       },
       "jmeadows": {
@@ -855,7 +993,6 @@
         "loopDelayMillis": 30000,
         "jobTypes": [
           "hdr-sync-request",
-          "hdr-xform-vpr",
 
           "hdr-sync-allergy-request",
           "hdr-sync-appointment-request",
@@ -921,10 +1058,17 @@
         }
       }
     },
+    "auditPath": "/var/log/vxsync/audit/",
     "loggers": [
       {
         "name": "root",
-        "level": "warn"
+        "streams": [{
+            "level": "warn",
+            "type": "rotating-file",
+            "path": "<%= @vxsync['vxsync']['log_pattern'] %>",
+            "period": "1d",
+            "count": 7
+        }]
       }
     ],
     "metrics": [
@@ -939,14 +1083,17 @@
           "heartbeatStaleAgeMillis": 600000
       },
     "osync": {
+        "syncPriority": 50,
         "runImmediately": false,
         "runOnSchedule": true,
         "delay": 500,
-        "rpcContext": "HMP UI CONTEXT",
-        "configRefresh": 0,
+        "duplicatePatientListResetMillis": 86400000,
+        "rpcContext": "HMP SYNCHRONIZATION CONTEXT",
+        "configRefresh": <%= @vxsync['osync']['config_refresh'] %>,
         "scheduledRunAtHour": 3,
         "scheduledRunAtMinutes": 15,
-        "syncUrl": "http://<%= @vxsync_ip %>:8080/sync/doLoad?",
+        "syncUrl": "http://<%= @vxsync['ipaddress'] %>:<%= @vxsync['vxsync']['web_service_port'] %>/sync/doLoad",
+        "statusUrl": "http://<%= @vxsync['ipaddress'] %>:<%= @vxsync['vxsync']['web_service_port'] %>/sync/status",
         "activeUserThresholdDays": 30,
         "jobs": {
             "activeUsers": true,
@@ -971,7 +1118,7 @@
             "repoUniversal": {
                 "priority": 10,
                 "delay": 0,
-                "ttr": 60,
+                "ttr": <%= @vxsync['osync']['beanstalk_ttr'] %>,
                 "timeout": 10,
                 "initMillis": 1000,
                 "maxMillis": 15000,
@@ -979,7 +1126,7 @@
             },
             "repoDefaults": {
                 "host": "127.0.0.1",
-                "port": 5001,
+                "port": 5000,
                 "tubename": "osync",
                 "tubePrefix": "osync-",
                 "jobTypeForTube": true
@@ -1001,8 +1148,8 @@
         },
         "jds": {
             "protocol": "http",
-            "host": "<%= @jds_ip %>",
-            "port": 9080,
+            "host": "<%= @jds['ipaddress'] %>",
+            "port": <%= @jds['jds']['cache_listener_ports']['general'] %>,
             "timeout": 60000,
             "jdsSaveURI": "/user/set/this",
             "jdsGetURI": "/user/get",
@@ -1050,8 +1197,8 @@
       },
       "vxsync": {
         "protocol": "http",
-        "host": "<%= @vxsync_ip %>",
-        "port": "8080",
+        "host": "<%= @vxsync['ipaddress'] %>",
+        "port": "<%= @vxsync['vxsync']['web_service_port'] %>",
         "timeout": 300000
       },
       "runImmediately": false,

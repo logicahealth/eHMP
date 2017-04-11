@@ -5,12 +5,13 @@ var rdk = require('../../core/rdk');
 var moment = require('moment');
 var pjds = rdk.utils.pjdsStore;
 var _ = require('lodash');
-var VIEWED_PATIENT_CONTEXT_LIST_LIMIT = 5;
+var pidValidator = rdk.utils.pidValidator;
+var VIEWED_PATIENT_CONTEXT_LIST_LIMIT = 20;
 
 module.exports = setEhmpUserContext;
 module.exports.parameters = {
     put: {
-        viewedPatientContext: {
+        workspaceContext: {
             required: true
         }
     }
@@ -27,7 +28,7 @@ function setEhmpUserContext(req, res, next) {
     var hasPreviousPatientListed = function(viewedPatientContext, currentPreviousPatientsList) {
         var hasPreviousPatientListed = false;
         _.each(currentPreviousPatientsList, function(previousPatient) {
-            if (viewedPatientContext.patientPid === previousPatient.patientPid) {
+            if (viewedPatientContext.patientIdentifier === previousPatient.patientIdentifier) {
                 hasPreviousPatientListed = true;
             }
         });
@@ -35,12 +36,13 @@ function setEhmpUserContext(req, res, next) {
     };
     var updatePreviousPatientsList = function(viewedPatientContext, currentPreviousPatientsList) {
         req.logger.debug('setEhmpUserContext resource called');
+        viewedPatientContext.lastAccessed = new moment().format('YYYYMMDDHHmmssSSS');
         var updatedPreviousPatientsList = [];
         var previousPatientContextLimitReached = (currentPreviousPatientsList.length === VIEWED_PATIENT_CONTEXT_LIST_LIMIT);
         var userContextExists = hasPreviousPatientListed(viewedPatientContext, currentPreviousPatientsList);
         if (userContextExists) {
             _.each(currentPreviousPatientsList, function(previousPatient) {
-                if (viewedPatientContext.patientPid !== previousPatient.patientPid) {
+                if (viewedPatientContext.patientIdentifier !== previousPatient.patientIdentifier) {
                     updatedPreviousPatientsList.push(previousPatient);
                 }
             });
@@ -54,21 +56,53 @@ function setEhmpUserContext(req, res, next) {
         }
         return updatedPreviousPatientsList;
     };
-    var viewedPatientContext = req.param('viewedPatientContext');
-    if (!viewedPatientContext) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing viewedPatientContext parameter');
+    var formatPatientIdentifier = function(patientId, patientIdentifier) {
+        if (pidValidator.isIcn(patientId.value)) {
+            patientIdentifier = 'icn:' + patientId.value;
+            patientId.type = 'icn';
+        } else if (pidValidator.isPidEdipi(patientId.value)) {
+            patientIdentifier = 'edipi:' + pid;
+            patientId.type = 'edipi';
+        } else if (pidValidator.isEdipi(patientId.value)) {
+            patientIdentifier = 'edipi:DOD;' + patientId.value;
+            patientId.type = 'edipi';
+        } else if (pidValidator.isSiteDfn(patientId.value)) {
+            patientIdentifier = 'pid:' + patientId.value;
+            patientId.type = 'pid';
+        } else {
+            res.status(rdk.httpstatus.bad_request).rdkSend('Invalid Pid. Please pass either ICN or Primary Site ID.');
+        }
+        return {
+            patientId: patientId,
+            patientIdentifier: patientIdentifier
+        };
+    };
+    var workspaceContext = req.param('workspaceContext');
+    var viewedPatientContext = {};
+    var pid = req.param('pid');
+    var patientId = {
+        value: pid
+    };
+    var patientIdentifier = '';
+    if (_.isUndefined(pid)) {
+        res.status(rdk.httpstatus.bad_request).rdkSend('Missing Pid.');
     }
-    if (_.isString(viewedPatientContext)) {
-        viewedPatientContext = parse(viewedPatientContext);
-        if (_.isUndefined(viewedPatientContext.screenName)) {
-            return res.status(rdk.httpstatus.bad_request).rdkSend('Missing viewedPatientContext.screenName parameter');
+    var formattedPatientIdentifier = formatPatientIdentifier(patientId, patientIdentifier);
+    if (!workspaceContext) {
+        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing workspaceContext parameter');
+    }
+    if (_.isString(workspaceContext)) {
+        workspaceContext = parse(workspaceContext);
+        if (_.isUndefined(workspaceContext.workspaceId)) {
+            return res.status(rdk.httpstatus.bad_request).rdkSend('Missing workspaceContext.workspaceId parameter');
         }
-        if (_.isUndefined(viewedPatientContext.patientPid)) {
-            return res.status(rdk.httpstatus.bad_request).rdkSend('Missing viewedPatientContext.patientPid parameter');
+        if (_.isUndefined(workspaceContext.contextId)) {
+            return res.status(rdk.httpstatus.bad_request).rdkSend('Missing workspaceContext.contextId parameter');
         }
-        if (_.isUndefined(viewedPatientContext.patientDisplayName)) {
-            return res.status(rdk.httpstatus.bad_request).rdkSend('Missing viewedPatientContext.patientDisplayName parameter');
-        }
+        viewedPatientContext.workspaceContext = workspaceContext;
+        viewedPatientContext.patientId = formattedPatientIdentifier.patientId;
+        viewedPatientContext.patientIdentifier = formattedPatientIdentifier.patientIdentifier;
+
     }
     var uid = req.session.user.uid;
     var clearContextHistory = req.param('clear');
@@ -89,6 +123,18 @@ function setEhmpUserContext(req, res, next) {
         if (clearContextHistory === 'true') {
             updatedEHMPUIContext = [];
         } else {
+            _.each(pjdsOptions.data.eHMPUIContext, function(previousPatient) {
+                var nextPatientIdentifier;
+                if (_.isUndefined(previousPatient.patientId)) {
+                    previousPatient.patientId = {
+                        value: previousPatient.patientIdentifier
+                    };
+                    previousPatient.patientIdentifier = '';
+                    nextPatientIdentifier = formatPatientIdentifier(previousPatient.patientId, previousPatient.patientIdentifier);
+                    previousPatient.patientId = nextPatientIdentifier.patientId;
+                    previousPatient.patientIdentifier = nextPatientIdentifier.patientIdentifier;
+                }
+            });
             updatedEHMPUIContext = updatePreviousPatientsList(viewedPatientContext, pjdsOptions.data.eHMPUIContext);
         }
         pjdsOptions.data.eHMPUIContext = updatedEHMPUIContext;

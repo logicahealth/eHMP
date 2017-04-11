@@ -5,8 +5,9 @@ class Navigation < AccessBrowserV2
     initialize_immunizations
     add_action(CucumberLabel.new("Vaccine Name"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@id='immunizations-name']/a"))
     add_action(CucumberLabel.new("Appointments Expand Button"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=appointments] .applet-maximize-button"))
+    add_action(CucumberLabel.new("Orders Expand Button"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=orders] .applet-maximize-button"))
     add_action(CucumberLabel.new("Appointments Filter Button"), ClickAction.new, AccessHtmlElement.new(:id, "grid-filter-button-appointments"))
-    add_action(CucumberLabel.new("CoversheetDropdown Button"), ClickAction.new, AccessHtmlElement.new(:css, "#navigation-navbar span#screenName"))
+    add_action(CucumberLabel.new("CoversheetDropdown Button"), ClickAction.new, AccessHtmlElement.new(:css, "#navigation-region span#screenName"))
     add_action(CucumberLabel.new("Appointments Filter Field"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#grid-filter-appointments #input-filter-search"))
     add_action(CucumberLabel.new("Numeric Lab Results Filter Field"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "[data-appletid=lab_results_grid] .form-search input"))
     add_action(CucumberLabel.new("Problems Overlay Button"), ClickAction.new, AccessHtmlElement.new(:css, "#grid-options-button-"))  
@@ -51,7 +52,6 @@ class Navigation < AccessBrowserV2
     add_action(CucumberLabel.new("24 hr Vitals Range"), ClickAction.new, AccessHtmlElement.new(:id, "24hr-range-vitals"))
     add_action(CucumberLabel.new("24 hr Appointments Range"), ClickAction.new, AccessHtmlElement.new(:id, "24hr-range-appointments"))
     add_action(CucumberLabel.new("Modal X Button"), ClickAction.new, AccessHtmlElement.new(:css, "#modal-header > div > div > div > div.labs-modal-nav-buttons.col-md-6.text-right > button.close > span:nth-child(1)"))   
-    add_action(CucumberLabel.new("Workspace Manager"), ClickAction.new, AccessHtmlElement.new(:id, "workspace-manager-button"))  
   end
 
   def initialize_immunizations

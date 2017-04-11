@@ -26,13 +26,14 @@ SyncRulesEngine.prototype.getSyncPatientIdentifiers = function(patientIdentifier
             rule(self.log, self.config, self.environment, patientIdentifiers, exceptions, function(err, result){
                 if (err) {
                     self.log.error('rules-engine.getSyncPatientIdentifiers: Error returned from rule.  error: %j; patientIdentifiers: %s', err, originalPatientIdentifiers);
+                    patientIdentifiers = [];
                 } else if ((_.isNull(patientIdentifiers)) || (_.isUndefined(patientIdentifiers))) {
                     patientIdentifiers = [];         // Make sure we 
                 } else {
                     patientIdentifiers = result;     // Assign the result from the rule call.
                 }
 
-                return ruleCallback();
+                return ruleCallback(err);
              });
         }
     }, function(err) {

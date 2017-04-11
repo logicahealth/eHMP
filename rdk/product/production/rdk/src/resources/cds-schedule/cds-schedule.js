@@ -68,7 +68,7 @@ function init(app) {
             "data": {
                 "cdsname": "Timeout",
                 "url":
-                        "IP            /cds-results-service/core/executeRulesJob"
+                        "IPADDRESS:PORT/cds-results-service/core/executeRulesJob"
             },
             "type": "normal",
             "priority": 0,

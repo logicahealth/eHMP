@@ -1,6 +1,6 @@
 # Author:: Bryan W. Berry (<bryan.berry@gmail.com>)
 # Author:: Seth Chisamore (<schisamo@opscode.com>)
-# Author::     ua Timberman (<joshua@opscode.com>)
+# Author:: Joshua Timberman (<joshua@opscode.com>)
 #
 # Cookbook Name:: java
 # Recipe:: openjdk

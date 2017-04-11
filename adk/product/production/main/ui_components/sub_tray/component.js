@@ -13,12 +13,16 @@ define([
         _eventPrefix: 'subTray',
         template: Handlebars.compile([
             '<button type="button" id={{tray_id}} class="btn btn-default{{#if buttonClass}} {{buttonClass}}{{/if}}" data-toggle="sidebar-subTray" title="Press enter to activate menu" aria-expanded="false">{{#if iconClass}}<i class="{{iconClass}}" aria-hidden="true"></i> {{/if}}{{buttonLabel}}</button>',
-            '<div role="document" class="sidebar-tray sidebar-sub-tray {{position}}" aria-labelledby="{{tray_id}}" aria-hidden="true" tabindex="-1"/>'
+            '<div role="region" class="sidebar-tray sidebar-sub-tray {{position}}" aria-labelledby="{{tray_id}}" aria-hidden="true" tabindex="-1"/>'
         ].join('\r\n')),
         className: 'sidebar inline-display',
         ui: {
             'ButtonContainer': '[data-toggle=sidebar-subTray]',
-            'TrayContainer': '.sidebar-tray'
+            'TrayContainer': '.sidebar-sub-tray'
+        },
+        regions: {
+            'TrayRegion': '@ui.TrayContainer',
+            'ButtonRegion': '@ui.ButtonContainer'
         },
         onEndOfInitialize: function() {
             this._maxHeight = this.getOption('maxHeight') || null;
@@ -45,14 +49,14 @@ define([
             }
             var buttonBounds = this.ui.ButtonContainer[0].getBoundingClientRect(),
                 ext = {
-                    top: buttonBounds.bottom,
+                    top: buttonBounds.top,
                     height: this.containerBounds.bottom - buttonBounds.bottom
                 };
             _.extend(this.containerBounds, ext);
         },
         resetContainerPosition: function() {
             this.ui.TrayContainer.offset({
-                top: this.containerBounds.top + this._additionalTopPadding
+                top: this.containerBounds.top - this._additionalTopPadding
             }).css('max-height', this._maxHeight || this.containerBounds.height + 'px').width();
         }
     });

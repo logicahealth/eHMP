@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h5 class="cwad-title">
+            <strong class="right-padding-xs">{{name}}</strong>
+            <span class="label label-warning{{#compare category 'I (NATIONAL)'}} label-danger{{/compare}}">Category {{category}}</span>
+        </h5>
+    </div>
+    <div class="col-xs-12 bottom-margin-sm">{{text}}</div>
+    <div class="col-xs-6">
+        <dl class="dl-horizontal">
+            <dt>Initial Assigned Date</dt>
+            <dd>{{formatDate assignTS "MM/DD/YYYY HH:mm"}}</dd>
+            <dt>Approved by</dt>
+            <dd>{{approved}}</dd>
+            <dt>Next Review Date</dt>
+            <dd>{{formatDate nextReviewDT "MM/DD/YYYY"}}</dd>
+        </dl>
+    </div>
+    <div class="col-xs-6">
+        <dl class="dl-horizontal">
+            <dt>Assignment Status</dt>
+            <dd>{{assignmentStatus}}</dd>
+            <dt>Owner Site</dt>
+            <dd>{{ownerSite}}</dd>
+            <dt>Originating Site</dt>
+            <dd>{{originatingSite}}</dd>
+        </dl>
+    </div>
+</div>

@@ -20,7 +20,7 @@ var config = {
         domains: ['allergy'],
         allergy: {
             host: vx_sync_ip,
-            port: 54000,
+            port: 5400,
             path: '/dod/allergy',
             method: 'GET'
         }

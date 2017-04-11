@@ -1,12 +1,10 @@
 # Group User
 
-## User defined screens [{{{path}}}{?predefinedScreens}{&fields}]
+## User defined screens [{{{path}}}{?predefinedScreens}]
 
 + Parameters
 
     + predefinedScreens (string, optional) - Comma-separated ID's of predefined screens to return data for.
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Get [GET]

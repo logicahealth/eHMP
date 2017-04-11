@@ -93,7 +93,7 @@ var config = {
     },
     jds: {
         protocol: 'http',
-        host: 'IPADDRESS ',
+        host: 'IP_ADDRESS',
         port: 9080
     },
     rules: {
@@ -117,7 +117,7 @@ var vistaHdrConfig = {
     },
     jds: {
         protocol: 'http',
-        host: 'IPADDRESS ',
+        host: 'IP_ADDRESS',
         port: 9080
     },
     rules: {

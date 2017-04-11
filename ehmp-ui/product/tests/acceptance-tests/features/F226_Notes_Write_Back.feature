@@ -5,7 +5,7 @@ Feature: F226 : Enter Plain Text Basic Progress Notes  (TIU)
 @f226_notes_applet_form_validation
 Scenario: Validate Notes Applet form fields.
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "eighteen,patient"
   And Overview is active
   And POB user selects and sets new encounter "Cardiology"
@@ -21,7 +21,7 @@ Scenario: Validate Notes Applet form fields.
 @f226_notes_applet_new_note_form_validation
 Scenario: Validate New Notes form field fields.
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "eighteen,patient"
   And Overview is active
   And POB user selects and sets new encounter "Cardiology"
@@ -41,7 +41,7 @@ Scenario: Validate New Notes form field fields.
 @f226_notes_applet_create_new_note
 Scenario: Create new note.
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "eighteen,patient"
   And Overview is active
   And POB user selects and sets new encounter "Cardiology"
@@ -55,7 +55,9 @@ Scenario: Create new note.
 Scenario: Sign a note.
 
   Given user views the login screen
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Then the staff view screen is displayed
+  Then Navigate to Patient Search Screen
   Then the patient search screen is displayed
   And user searches for and selects "eighteen,patient"
   And Overview is active
@@ -63,13 +65,13 @@ Scenario: Sign a note.
   Then POB user opens the Notes applet
   And POB user opens New Note to create a note
   And POB user creates New Note "ADHC SOCIAL WORK"
-  And POB user signs the note "ADHC SOCIAL WORK" as "PW    !!"
+  And POB user signs the note "ADHC SOCIAL WORK" as "vk1234!!"
   And POB user sees the new note "ADHC SOCIAL WORK" under recently signed notes header
   
 @f226_notes_applet_edit_and_preview_note
 Scenario: Edit and preview note.
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "eighteen,patient"
   And Overview is active
   And POB user selects and sets new encounter "Cardiology"
@@ -83,9 +85,9 @@ Scenario: Edit and preview note.
   And POB user saves the note "ADVANCE DIRECTIVE"
   
 @f226_notes_applet_delete_note
-Scenario: Edit and preview note.
+Scenario: Delete all notes.
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "eighteen,patient"
   And Overview is active
   And POB user selects and sets new encounter "Cardiology"

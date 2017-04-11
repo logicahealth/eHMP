@@ -3,21 +3,25 @@ define([
     'backbone',
     'marionette',
     'handlebars',
+    'highcharts',
     'hbs!app/applets/medication_review/medicationsGroupedByType/superAccordionRow/medTypeRow',
     'app/applets/medication_review/medicationsGroupedByType/superAccordionRow/medTypeRowModel',
     'app/applets/medication_review/medicationsGroupedByName/subAccordionList/medNameListCollection',
     'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/medNameRowView',
     'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/graph/highchartConfig'
-], function(_, Backbone, Marionette, Handlebars, MedTypeRow, MedTypeRowModel, MedNameListCollection, MedNameRowView, HighchartConfig) {
+], function(_, Backbone, Marionette, Handlebars, Highcharts, MedTypeRow, MedTypeRowModel, MedNameListCollection, MedNameRowView, HighchartConfig) {
     'use strict';
     var EmptyView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('<p class="emptyMedsList">No Records Found</p>')
+        template: Handlebars.compile('<p class="empty-medlist">No Records Found</p>')
     });
 
     return Backbone.Marionette.CompositeView.extend({
+        reorderOnSort: true,
+        defaultSortColumnName: 'status',
         ui: {
+            accordionButton: '.btn-accordion',
             accordionPanel: '.panel-body',
-            caret: '.right-padding-xs',
+            caret: '.right-padding-sm',
             graphHeader: '.graph-header',
             sortCaret: '.sort-caret',
             columnHeader: '.header'
@@ -38,7 +42,12 @@ define([
                 event.preventDefault();
                 event.stopImmediatePropagation();
                 this.sortCollection($(event.target));
-            }
+            },
+            'keydown .medication-layout-view': function(event) {
+                if(event.which === 13) {
+                    $(event.currentTarget).find('.panel-heading > .row').click();
+                }
+            },
         },
         initialize: function(options) {
             this.model.set("appletInstanceId", options.appletInstanceId);
@@ -61,11 +70,8 @@ define([
                 }
             };
         },
-        className: 'panel panel-default med-type-list-view selectable accordion-toggle',
-        attributes: {
-            'tabindex': 1
-        },
-        childViewContainer: '.med-name-row-view-region',
+        className: 'panel panel-default all-border-no selectable accordion-toggle',
+        childViewContainer: '.medication-item-list-region',
         childView: MedNameRowView,
         childViewOptions: function() {
             return {
@@ -75,48 +81,84 @@ define([
         emptyView: EmptyView,
         setEmptyMessage: function(errorMessage) {
             this.emptyView = Backbone.Marionette.ItemView.extend({
-                template: _.template('<p class="emptyMedsList">No Records Found</p>')
+                template: _.template('<p class="empty-medlist color-grey-darkest" role="cell">No Records Found</p>'),
+                attributes: {
+                    role: 'row'
+                }
             });
         },
         onRender: function() {
             if (this.model.collection && this.model.collection.indexOf(this.model) !== 0) {
-                this.ui.caret.addClass('fa fa-caret-right');
+                this.ui.caret.addClass('fa fa-chevron-right');
+                this.ui.accordionButton.attr("aria-expanded","false");
+                this.ui.accordionButton.attr("title","Press enter to expand " + this.model.get('medicationType') + " accordion.");
             } else {
-                this.ui.caret.addClass('fa fa-caret-down');
+                this.ui.caret.addClass('fa fa-chevron-down');
                 this.ui.accordionPanel.addClass('in');
             }
 
             if (this.model.get('medications').length > 0) {
+                this.setHighChartsOptions(false);
                 this.addHeaderGraph();
-
                 this.listenTo(ADK.Messaging, 'meds-review-date-change', function(dateModel) {
+                    this.setHighChartsOptions(false);
                     if (this.hasGraph) {
                         this.ui.graphHeader.highcharts().destroy();
                     }
                     this.addHeaderGraph();
+
+                    this.setHighChartsOptions(true);
                 });
             }
+            this.$el.find('svg').attr('focusable', false);
+            this.$el.find('svg').attr('aria-hidden', true);
 
             var self = this;
             this.$el.on('shown.bs.collapse', function() {
                 self.redrawGraph();
-                self.ui.caret.removeClass('fa fa-caret-right');
-                self.ui.caret.addClass('fa fa-caret-down');
+                self.ui.caret.removeClass('fa fa-chevron-right');
+                self.ui.caret.addClass('fa fa-chevron-down');
+                self.ui.accordionButton.attr("title","Press enter to collapse " + self.model.get('medicationDisplayType') + " accordion.");
+                if(self.$el.find('.empty-medlist')){
+                    self.ui.accordionPanel.removeAttr('tabindex');
+                }
+
             });
             this.$el.on('hidden.bs.collapse', function() {
-                self.ui.caret.removeClass('fa fa-caret-down');
-                self.ui.caret.addClass('fa fa-caret-right');
+                self.ui.caret.removeClass('fa fa-chevron-down');
+                self.ui.caret.addClass('fa fa-chevron-right');
+                self.ui.accordionButton.attr("title","Press enter to expand " + self.model.get('medicationDisplayType') + " accordion.");
+            });
+        },
+        onBeforeShow: function() {
+            this.resetToDefaultSort();
+        },
+        resetToDefaultSort: function() {
+            var statusColumnHeader = this.$el.find("[sortKey='status']");
+            this.previouslySortedHeader = statusColumnHeader[0];
+            statusColumnHeader.find('.sort-caret').addClass('fa-caret-up');
+            statusColumnHeader.parent().attr('aria-sort', 'ascending');
+        },
+        setHighChartsOptions: function(useUTC) {
+            Highcharts.setOptions({
+                global: {
+                    //Switch whether highcharts is using UTC or local browser time.
+                    useUTC: useUTC
+                }
             });
         },
         redrawGraph: function() {
             if (this.hasGraph) {
+                this.setHighChartsOptions(false);
                 this.ui.graphHeader.highcharts().reflow();
+                this.setHighChartsOptions(true);
             }
             ADK.Messaging.trigger('medication_review:superAccordionClicked');
         },
         onAttach: function() {
             if (this.hasGraph) {
                 this.ui.graphHeader.highcharts().reflow();
+                this.setHighChartsOptions(true);
             }
         },
         onBeforeDestroy: function() {
@@ -125,39 +167,40 @@ define([
             }
         },
         sortCollection: function(headerElement) {
-            /* clear existing collection comparator to allow collection to rerender after sort */
-            this.collection.comparator = null;
             if (headerElement.attr("sortable") === "true") {
-                var nextSortOrder = '';
-                switch (headerElement.attr("sortDirection")) {
-                    case 'asc':
-                        nextSortOrder = 'desc';
-                        break;
-                    case 'desc':
-                        nextSortOrder = 'none';
-                        break;
-                    case 'none':
-                        nextSortOrder = 'asc';
-                        break;
-                }
-                this.ui.columnHeader.attr("sortDirection", 'none');
-                headerElement.attr("sortDirection", nextSortOrder);
-                this.ui.sortCaret.removeClass('fa-caret-up');
-                this.ui.sortCaret.removeClass('fa-caret-down');
+                var currentColumnName = headerElement.attr('sortKey');
+                var shouldResetSort = false;
+                var previouslySortedHeaderWasClicked = this.previouslySortedHeader == headerElement[0];
+                if (!previouslySortedHeaderWasClicked) {
+                    var $previouslySortedHeader = $(this.previouslySortedHeader);
+                    if ($previouslySortedHeader) {
+                        $previouslySortedHeader.parent().attr('aria-sort', 'none');
+                        $previouslySortedHeader.find('.sort-caret').removeClass('fa-caret-up fa-caret-down');
+                    }
 
-                if (nextSortOrder === "asc") {
                     headerElement.find('.sort-caret').addClass('fa-caret-up');
-                } else if (nextSortOrder === "desc") {
-                    headerElement.find('.sort-caret').addClass('fa-caret-down');
+                    headerElement.parent().attr('aria-sort', 'ascending');
+                } else {
+                    if (this.collection.currentSortOrder === this.collection.descending) {
+                        headerElement.find('.sort-caret').removeClass('fa-caret-down');
+                        headerElement.parent().attr('aria-sort', 'none');
+                        shouldResetSort = true;
+                    } else {
+                        headerElement.find('.sort-caret').removeClass('fa-caret-up');
+                        headerElement.find('.sort-caret').addClass('fa-caret-down');
+                        headerElement.parent().attr('aria-sort', 'descending');
+                    }
                 }
 
-                if (nextSortOrder === 'none') {
-                    ADK.utils.CollectionTools.resetSort(this.collection);
+                if (shouldResetSort) {
+                    this.resetToDefaultSort();
+                    this.collection.setUpSortForColumn(this.defaultSortColumnName);
                 } else {
-                    var sortType = headerElement.attr("sortType");
-                    var key = headerElement.attr("sortKey");
-                    ADK.utils.CollectionTools.sort(this.collection, key, nextSortOrder, sortType, this.statusNextOrStatusFillableSort);
+                    this.collection.setUpSortForColumn(currentColumnName);
+                    this.previouslySortedHeader = headerElement[0];                    
                 }
+
+                this.collection.sort();
             }
         },
         addHeaderGraph: function() {
@@ -166,7 +209,7 @@ define([
             var earliestStartAsEpoch = medicationChannel.request('earliestStartAsEpoch');
             var oldest;
 
-            if (dateModel.get('selectedId') === 'all-range-global') {
+            if (dateModel.get('selectedId') === 'allRangeGlobal') {
                 oldest = earliestStartAsEpoch;
             } else {
                 oldest = moment(dateModel.get("fromDate"), "MM/DD/YYYY").valueOf();

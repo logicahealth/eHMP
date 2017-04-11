@@ -36,13 +36,13 @@ var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 // End of code to comment out.
 
 var publisherRouterDummy = new PublisherRouterDummy(dummyLogger, config, PublisherDummy);
-var JobStatusUpdater = require(global.VX_JOBFRAMEWORK + 'JobStatusUpdater');
+var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
 
 var config = {
     jds: {
         protocol: 'http',
-        host: 'IPADDRESS ',
+        host: 'IP_ADDRESS',
         port: 9080
     },
     'hmp.batch.size': 1000,
@@ -467,7 +467,7 @@ describe('VistaRecordProcessor', function() {
                 expect(publisherRouterDummy.publish.calls.length).toEqual(1);
                 expect(publisherRouterDummy.publish).toHaveBeenCalledWith(
                         jasmine.objectContaining({
-                            type: 'vista-prioritization-request',
+                            type: 'event-prioritization-request',
                             patientIdentifier: {
                                 type: 'pid',
                                 value: 'C877;1'
@@ -490,7 +490,7 @@ describe('VistaRecordProcessor', function() {
 
             expect(job).toBeTruthy();
             expect(job).toEqual(jasmine.objectContaining({
-                type: 'vista-prioritization-request',
+                type: 'event-prioritization-request',
                 patientIdentifier: {
                     type: 'pid',
                     value: 'C877;1'

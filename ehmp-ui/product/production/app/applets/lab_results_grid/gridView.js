@@ -15,6 +15,7 @@ define([
         resourceTitle: 'patient-record-labsbypanel',
         pageable: true,
         cache: true,
+        allowAbort: true,
         collectionConfig: {
             comparator: function(model) {
                 var observed = model.get('observed');
@@ -24,10 +25,12 @@ define([
                 if (!observed) {
 
                     for (var key in model.attributes) {
-                        if(model.attributes.hasOwnProperty(key)) {
+                        if (model.attributes.hasOwnProperty(key)) {
                             observed = model.get(key)[0];
                             observed = observed.observed;
-                            model.set('observed', observed, {silent: true});
+                            model.set('observed', observed, {
+                                silent: true
+                            });
                             break;
                         }
                     }
@@ -42,6 +45,7 @@ define([
                 // Check 'codes' for LOINC codes and Standard test name.
                 var lCodes = [];
                 var testNames = [];
+                var crsUtil = ADK.utils.crsUtil;
                 if (response.codes) {
                     response.codes.forEach(function(code) {
                         if (code.system.indexOf("loinc") != -1) {
@@ -52,6 +56,7 @@ define([
                 }
                 response.loinc = lCodes;
                 response.stdTestNames = testNames;
+                response[crsUtil.crsAttributes.CRSDOMAIN] = crsUtil.domain.LABORATORY;
 
                 var low = response.low,
                     high = response.high;
@@ -64,13 +69,13 @@ define([
                     var temp = response.interpretationCode.split(":").pop();
 
                     var flagTooltip = "";
-                    var labelClass = "label-danger";
+                    var labelClass = "applet-badges label-critical";
 
-                    if (temp === "HH") {
+                    if (temp === "HH" || temp === 'H*') {
                         temp = "H*";
                         flagTooltip = "Critical High";
                     }
-                    if (temp === "LL") {
+                    if (temp === "LL" || temp ==='L*') {
                         temp = "L*";
                         flagTooltip = "Critical Low";
                     }
@@ -109,6 +114,9 @@ define([
                 }
 
                 return response;
+            },
+            defaults: {
+                'applet_id': 'lab_results_grid'
             }
         }
     };
@@ -117,15 +125,88 @@ define([
         parse: fetchOptions.viewModel.parse
     });
 
-    var gridView;
     var labResultsView = ADK.AppletViews.GridView.extend({
+        collectionEvents: {
+            'read:success': function(collection) {
+                var self = this;
+                var fullCollection = collection.fullCollection || collection;
+                fullCollection.each(function(result) {
+                    var resultAttributes = _.values(result.attributes);
+                    if (typeof resultAttributes[0][0] === 'object') {
+                        var currentPanel = resultAttributes[0],
+                            currentPanelFirstLab = currentPanel[0],
+                            panelGroupName = _.keys(result.attributes)[0],
+                            group = panelGroupName,
+                            id = group.replace(/\s/g, ''),
+                            tempCode = "",
+                            tempTooltip = "",
+                            labelClass = "",
+                            codes = [];
+                        _.each(currentPanel, function(lab, i) {
+                            lab = new InAPanelModel(InAPanelModel.prototype.parse(lab));
+                            codes.push.apply(codes, lab.get('codes'));
+                            if (lab.attributes.interpretationCode == "H*") {
+                                tempCode = "H*";
+                                tempTooltip = "Critical High";
+                                labelClass = "applet-badges label-critical";
+
+                            } else if (lab.attributes.interpretationCode == "L*") {
+                                if (tempCode == "H" || tempCode == "L" || tempCode === "") {
+                                    tempCode = "L*";
+                                    tempTooltip = "Critical Low";
+                                    labelClass = "applet-badges label-critical";
+                                }
+                            } else if (lab.attributes.interpretationCode == "H") {
+                                if (tempCode == "L" || tempCode === "") {
+                                    tempCode = "H";
+                                    tempTooltip = "Abnormal High";
+                                    labelClass = "label-warning";
+                                }
+                            } else if (lab.attributes.interpretationCode == "L") {
+                                if (tempCode === "") {
+                                    tempCode = "L";
+                                    tempTooltip = "Abnormal Low";
+                                    labelClass = "label-warning";
+                                }
+                            }
+                            currentPanel[i] = lab;
+                        });
+
+                        var tempUid = panelGroupName.replace(/\s/g, '') + "_" + currentPanelFirstLab.groupUid.replace(/\s/g, '') + '-' + self.options.appletConfig.instanceId;
+                        tempUid = tempUid.replace('#', '');
+
+                        result.set({
+                            codes: codes,
+                            labs: new Backbone.Collection(currentPanel),
+                            observed: currentPanelFirstLab.observed,
+                            infobuttonContext: 'LABRREV',
+                            isPanel: 'Panel',
+                            typeName: group,
+                            panelGroupName: panelGroupName,
+                            qualifiedName: panelGroupName,
+                            facilityCode: currentPanelFirstLab.facilityCode,
+                            facilityMoniker: currentPanelFirstLab.facilityMoniker,
+                            interpretationCode: tempCode,
+                            flagTooltip: tempTooltip,
+                            labelClass: labelClass,
+                            uid: tempUid,
+                            excludeToolbar: true,
+                            type: 'panel'
+                        });
+                    } else {
+                        result.set('infobuttonContext', 'LABRREV');
+                    }
+                });
+            }
+        },
         initialize: function(options) {
             this._super = ADK.AppletViews.GridView.prototype;
             this.summaryColumns = [columns.dateCol(), columns.testCol(), columns.flagCol(), columns.resultAndUnitCol()];
             this.fullScreenColumns = [columns.dateCol(), columns.testCol(), columns.flagCol(), columns.resultNoUnitCol(), columns.unitCol(), columns.refCol(), columns.facilityCol()];
             var addPermission = 'add-lab-order';
-            var onClickRow = function(model, event, gridView) {
+            var onClickRow = function(model, event, appletView) {
                 event.preventDefault();
+                appletView.$(event.currentTarget).toggleClass('active');
                 if (options.appletConfig.fullScreen) {
                     model.set('isFullscreen', true);
                 } else {
@@ -151,9 +232,9 @@ define([
                             $(event.currentTarget).data('isOpen', false);
                         }
                     }
-                    gridView.expandRow(model, event);
+                    appletView.expandRow(model, event);
                 } else {
-                    AppletUiHelper.getDetailView(model, event.currentTarget, appletOptions, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
+                    AppletUiHelper.getDetailView(model, event.currentTarget, appletView.options, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
                 }
             };
 
@@ -171,22 +252,6 @@ define([
                     name: "observed",
                     label: "Date",
                     format: "YYYYMMDD"
-                },
-                events: {
-                    'click tr.selectable': function(event) {
-                        var row = $(event.target).closest("tr");
-                        var model = row.data('model');
-                        if (event.target.innerHTML === 'Panel') {
-                            this.options.onClickRow(model, event, this);
-                        }
-                        this.options.AppletView.prototype.onClickRow.apply(this, [event]);
-                    },
-                    'keypress tr.selectable': function(event) {
-                        if (event.which === 13 || event.which ===32) {
-                            this.options.AppletView.prototype.onClickRow.apply(this, [event]);
-
-                        }
-                    }
                 },
                 onClickRow: onClickRow,
                 tblRowSelector: "#data-grid-" + this.options.appletConfig.instanceId + " tbody tr"
@@ -209,71 +274,7 @@ define([
             var self = this;
 
             fetchOptions.onSuccess = function(collection) {
-                var fullCollection = collection.fullCollection || collection;
-                fullCollection.each(function(result) {
-
-                    var resultAttributes = _.values(result.attributes);
-                    if (typeof resultAttributes[0][0] === 'object') {
-                        var currentPanel = resultAttributes[0],
-                            currentPanelFirstLab = currentPanel[0],
-                            panelGroupName = _.keys(result.attributes)[0],
-                            group = panelGroupName,
-                            id = group.replace(/\s/g, ''),
-                            tempCode = "",
-                            tempTooltip = "",
-                            labelClass = "";
-                        _.each(currentPanel, function(lab, i) {
-                            lab = new InAPanelModel(InAPanelModel.prototype.parse(lab));
-
-                            if (lab.attributes.interpretationCode == "H*") {
-                                tempCode = "H*";
-                                tempTooltip = "Critical High";
-                                labelClass = "label-danger";
-
-                            } else if (lab.attributes.interpretationCode == "L*") {
-                                if (tempCode == "H" || tempCode == "L" || tempCode === "") {
-                                    tempCode = "L*";
-                                    tempTooltip = "Critical Low";
-                                    labelClass = "label-danger";
-                                }
-                            } else if (lab.attributes.interpretationCode == "H") {
-                                if (tempCode == "L" || tempCode === "") {
-                                    tempCode = "H";
-                                    tempTooltip = "Abnormal High";
-                                    labelClass = "label-warning";
-                                }
-                            } else if (lab.attributes.interpretationCode == "L") {
-                                if (tempCode === "") {
-                                    tempCode = "L";
-                                    tempTooltip = "Abnormal Low";
-                                    labelClass = "label-warning";
-                                }
-                            }
-                            currentPanel[i] = lab;
-                        });
-
-                        var tempUid = panelGroupName.replace(/\s/g, '') + "_" + currentPanelFirstLab.groupUid.replace(/\s/g, '') + '-' + self.options.appletConfig.instanceId;
-                        tempUid = tempUid.replace('#', '');
-
-                        result.set({
-                            labs: new Backbone.Collection(currentPanel),
-                            observed: currentPanelFirstLab.observed,
-                            infobuttonContext: 'LABRREV',
-                            isPanel: 'Panel',
-                            typeName: group,
-                            panelGroupName: panelGroupName,
-                            facilityCode: currentPanelFirstLab.facilityCode,
-                            facilityMoniker: currentPanelFirstLab.facilityMoniker,
-                            interpretationCode: tempCode,
-                            flagTooltip: tempTooltip,
-                            labelClass: labelClass,
-                            uid: tempUid,
-                            type: 'panel'
-                        });
-                    } else {
-                        result.set('infobuttonContext', 'LABRREV');
-                    }
-                });
+                collection.trigger('read:success', collection);
             };
 
             var numericLabsFilter = 'eq(categoryCode , "urn:va:lab-category:CH")';
@@ -284,24 +285,65 @@ define([
             };
 
             this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
-                self.dateRangeRefresh('observed', {
+                this.dateRangeRefresh('observed', {
                     customFilter: numericLabsFilter
                 });
             });
 
 
-            this.gridCollection = ADK.PatientRecordService.fetchCollection(fetchOptions);
+            this.collection = this.gridCollection = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
+            ADK.PatientRecordService.fetchCollection(fetchOptions, this.gridCollection);
             appletOptions.collection = this.gridCollection;
+
+            appletOptions.toolbarOptions = {
+                buttonTypes: ['infobutton', 'detailsviewbutton', 'notesobjectbutton']
+            };
 
             this.appletOptions = appletOptions;
             this._super.initialize.apply(this, arguments);
+
+            this.listenTo(ADK.Messaging.getChannel('lab_results_grid'), 'detailView', function(params) {
+                this.expandOrOpenDetails(params);
+            });
 
             var message = ADK.Messaging.getChannel('lab_results');
             message.reply('gridCollection', function() {
                 return self.gridCollection;
             });
         },
-        getLoincValues : function(json) {
+        expandOrOpenDetails: function(channelObj) {
+            var model = channelObj.model,
+                currentTarget = channelObj.$el;
+
+            if (!this.$(currentTarget).length) return;
+
+            if (model.get('isPanel')) {
+                if (!this.$(currentTarget).data('isOpen')) {
+                    this.$(currentTarget).data('isOpen', true);
+                } else {
+                    var k = this.$(currentTarget).data('isOpen');
+                    k = !k;
+                    this.$(currentTarget).data('isOpen', k);
+                }
+
+                var i = this.$(currentTarget).find('.js-has-panel i');
+                if (i.length) {
+                    if (i.hasClass('fa-chevron-up')) {
+                        i.removeClass('fa-chevron-up')
+                            .addClass('fa-chevron-down');
+                        this.$(currentTarget).data('isOpen', true);
+                    } else {
+                        i.removeClass('fa-chevron-down')
+                            .addClass('fa-chevron-up');
+                        this.$(currentTarget).data('isOpen', false);
+                    }
+                }
+                this.getRegion('appletContainer').currentView.expandRow(model, event);
+            } else {
+                AppletUiHelper.getDetailView(model, currentTarget, model.collection, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
+            }
+        },
+        getLoincValues: function(json) {
             if (json.codes === undefined) return '';
             var codesWithLoinc = _.filter(json.codes, function(item) {
                 return item.system === 'http://loinc.org';
@@ -316,7 +358,15 @@ define([
         },
 
         events: {
-            'click .js-has-panel': 'togglePanel'
+            'click .js-has-panel': 'togglePanel',
+            'click tr.selectable': function(event) {
+                var row = $(event.target).closest("tr");
+                var model = row.data('model');
+                if (model.get('isPanel')) {
+                    this.appletOptions.onClickRow(model, event, this.displayAppletView);
+                }
+                this.appletOptions.AppletView.prototype.onClickRow.apply(this.displayAppletView, [event]);
+            }
         },
         togglePanel: function() {
             $('#info-button-sidekick-detailView').click();

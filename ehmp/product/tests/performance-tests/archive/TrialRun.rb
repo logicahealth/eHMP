@@ -103,7 +103,7 @@ When /^the load is increased by "([^"]*)" requests per second after "([^"]*)" mi
         @tr.projectRepoURL= "https://code.vistacore.us/scm/app/ehmp.git"
         @tr.projectRepoFQDN= "code.vistacore.us"
         @tr.gitUserid= ENV['GIT_USER']
-        @tr.gitPassword= ENV['GIT_PASSWORD']
+        @tr.gitVsID       NV['GIT_PASSWORD']
 
         
         # The features directory is relative to the local project root.

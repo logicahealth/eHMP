@@ -1,5 +1,5 @@
-HMPUTIL1 ;SLC/AGP,ASMR/RRB - HMP utilities routine ; 11/16/15 7:25pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 62
+HMPUTIL1 ;SLC/AGP,ASMR/RRB,CPC - HMP utilities routine ; 05/10/16 7:25pm
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q
@@ -24,10 +24,12 @@ ADHOC(HMPDMINP,HMPFCNT,DFN) ; Add syncStart metastamp and syncStatus to unsolici
  S HMPDMTOT=0  ; domain total
  ; Save delete date/time for later use.
  I $G(ACT)="@" D
- .S Y=$$FMTH^XLFDT($P(HMPFSTRM,"~",3))  ; Get the date from fresh stream (HMPFS~<server>~<date>)
- .S Y=$$HTFM^XLFDT($P(Y,",")_","_$G(ARGS("hmp-fst"),0))  ; Add delete time stored in ARGS("hmp-fst")
- .S HMPDAT("DELDATE")=$$JSONDT^HMPUTILS(Y)  ; delete date/time into JSON format
- .S DELJSON="{""pid"":"""_$$PID^HMPDJFS(DFN)_""",""removed"":""true"",""stampTime"":"_$$JSONDT^HMPUTILS(Y)_",""uid"":"""_$G(HMP97)_"""}"
+ . D  ;DE4307 get from freshness save if available
+ ..  I +$G(FILTER("freshnessDateTime")) S HMPDAT("DELDATE")=$$JSONDT^HMPUTILS(FILTER("freshnessDateTime")) Q
+ ..  S Y=$$FMTH^XLFDT($P(HMPFSTRM,"~",3))  ; Get the date from fresh stream (HMPFS~<server>~<date>)
+ ..  S Y=$$HTFM^XLFDT($P(Y,",")_","_$G(ARGS("hmp-fst"),0))  ; Add delete time stored in ARGS("hmp-fst")
+ ..  S HMPDAT("DELDATE")=$$JSONDT^HMPUTILS(Y)  ; delete date/time into JSON format
+ . S DELJSON="{""pid"":"""_$$PID^HMPDJFS(DFN)_""",""removed"":""true"",""stampTime"":"_HMPDAT("DELDATE")_",""uid"":"""_$G(HMP97)_"""}"
  ;
  S HMPA4JSN=$NA(^TMP($J,"ARRAY4JSON")) K @HMPA4JSN ; data array for JSON
  S HMPJSON=$NA(^TMP($J,"JSONRESULT")) K @HMPJSON  ; JSON result
@@ -73,14 +75,15 @@ ADHOC(HMPDMINP,HMPFCNT,DFN) ; Add syncStart metastamp and syncStatus to unsolici
  S @HMPA4JSN@("collection")=$S(DFN="OPD":"OPDsyncStart",1:"syncStart")
  I DFN="OPD" S @HMPA4JSN@("systemId")=$P(HMPID,";") ; set systemId for OPD
  S X="" F  S X=$O(HMPID(X)) Q:X=""  S @HMPA4JSN@(X)=HMPID(X)  ; add pid, systemId, localId, icn
- ;
+ ;DE4307 - if stamptime still doesn't exist then get from freshness
+ I '+HMPDAT("STAMPTIME"),+$G(FILTER("freshnessDateTime")) S HMPDAT("STAMPTIME")=$$JSONDT^HMPUTILS(FILTER("freshnessDateTime"))
  ; build metastamp components
  S SUB="metaStamp"
  S X="" F  S X=$O(HMPID(X)) Q:X=""  S @HMPA4JSN@(SUB,X)=HMPID(X)  ; add pid, systemId, localId, icn
  S @HMPA4JSN@(SUB,"stampTime")=HMPDAT("STAMPTIME")
  ;
  S SUB(1)="sourceMetaStamp",X=""
- F  S X=$O(HMPID(X)) Q:X=""  S @HMPA4JSN@(SUB,SUB(1),HMPID,X)=HMPID(X)  ; add pid, systemId, localId, icn
+ F  S X=$O(HMPID(X)) Q:X=""  S @HMPA4JSN@(SUB,SUB(1),HMPJSNSY,X)=HMPID(X)  ; add pid, systemId, localId, icn ;cpc;de4757 use stringed version of system
  S @HMPA4JSN@(SUB,SUB(1),HMPJSNSY,"stampTime")=HMPDAT("STAMPTIME")
  ;
  S SUB(2)="domainMetaStamp"
@@ -127,7 +130,7 @@ ADHOC(HMPDMINP,HMPFCNT,DFN) ; Add syncStart metastamp and syncStatus to unsolici
  S HMPFCNT=$G(HMPFCNT)+1
  M ^TMP("HMPF",$J,HMPFCNT)=@HMPJSON
  ; need a comma if more than one item
- I HMPFCNT>1 S ^TMP("HMPF",$J,HMPFCNT,.3)=$S(HMPLITEM="SYNC":"},",1:",") S HMPLITEM="FRESH" ;de3502
+ I HMPFCNT>1 S ^TMP("HMPF",$J,HMPFCNT,.3)=$S(HMPLITEM="SYNC":"},",1:",") S HMPLITEM="FRESH" ; DE3502
  ;
  ; clean up residual data in ^TMP($J), may be quite a lot
  K @HMPA4JSN,@HMPJSON

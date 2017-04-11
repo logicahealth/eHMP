@@ -137,15 +137,21 @@ class PatientSynchronizer
 
     wait_until = time_start + time_out
 
+    post_body = {:icn => pid}
     sync_url = "#{vxsync_url}/sync/demographicSync"
-    if pid == '4325678V4325678'
+    if pid == '4325678V4325678' or pid == 'DOD;4325678'
+      if pid == 'DOD;4325678'
+        post_body.delete(:icn)
+        post_body[:edipi] = '4325678'
+      end
       demographics = {:givenNames=>"PATIENT",:familyName=>"DODONLY",:genderCode=>"M",:ssn=>"*****1234",:birthDate=>"19670909",:address=>[{:city=>"Norfolk",:line1=>"Lost Street",:state=>"VA",:use=>"H",:zip=>"20152"}],:telecom=>[{:use=>"H",:value=>"301-222-3333"}],:id=>"4325678V4325678^NI^200M^USVHA",:facility=>"200M",:dataSource=>"USVHA",:pid=>"4325678V4325678",:idType=>"NI",:idClass=>"ICN",:fullName=>"DODONLY,PATIENT",:displayName=>"DODONLY,PATIENT",:age=>47,:ssn4=>"1234",:genderName=>"Male",:ageYears=>"Unk",:dob=>"19670909"}
     elsif pid == '4325679V4325679'
       demographics = {:givenNames=>"PATIENT",:familyName=>"ICNONLY",:genderCode=>"M",:ssn=>"*****1235",:birthDate=>"19671010",:address=>[{:city=>"Norfolk",:line1=>"ICN Street",:state=>"VA",:use=>"H",:zip=>"20152"}],:telecom=>[{:use=>"H",:value=>"301-222-3334"}],:id=>"4325679V4325679^NI^200M^USVHA",:facility=>"200M",:dataSource=>"USVHA",:pid=>"4325679V4325679",:idType=>"NI",:idClass=>"ICN",:fullName=>"ICNONLY,PATIENT",:displayName=>"ICNONLY,PATIENT",:age=>47,:ssn4=>"1235",:genderName=>"Male",:ageYears=>"Unk",:dob=>"19671010"}
     end
+    post_body[:demographics] = demographics
 
     response = HTTParty.post(sync_url,
-      :body => { :icn => pid, :demographics => demographics}.to_json,
+      :body => post_body.to_json,
       :headers => { 'Content-Type' => 'application/json' })
 
     if response.code == 202
@@ -200,7 +206,8 @@ class PatientSynchronizer
     time_start = Time.new
     count = 0
     Parallel.each_with_index(pid_list, :in_threads => @num_threads) do | pid |
-      if pid == '4325678V4325678' or pid == '4325679V4325679'
+      if pid == '4325678V4325678' or pid == '4325679V4325679' or pid == 'DOD;4325678'
+        # do the demographic Sync for icn or EDIPI
         seconds = synchronizeNoPrimary(vxsync_url, pid, @max_wait_seconds)
       else
         seconds = synchronize(vxsync_url, pid, @max_wait_seconds)

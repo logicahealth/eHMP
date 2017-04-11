@@ -33,7 +33,8 @@ define([
                 'footerView': '',
                 'keyboard': false,
                 'callShow': true,
-                'draggable': true
+                'draggable': true,
+                'wrapperClasses': []
             };
             var passInModalOptions = userOptions.options || {};
             this.modalOptions = _.defaults(passInModalOptions, modalOptions);
@@ -100,15 +101,19 @@ define([
                 this.showChildView('modalHeaderRegion', this.modalHeaderView);
             }
         },
-        show: function() {
-            var $triggerElem = $(':focus');
-
+        show: function(options) {
+            options = options || {};
+            var $triggerElem = options.triggerElement || $(':focus');
             var ADK_ModalRegion = Messaging.request('get:adkApp:region', 'modalRegion');
-            if (ADK_ModalRegion.$el && ADK_ModalRegion.$el.children().length === 0) {
-                var modalContainerView = new ContainerView({view: this});
+            var modalOptions = {view: this};
+
+            if (!this.draggable || (ADK_ModalRegion.$el && ADK_ModalRegion.$el.children().length === 0)) {
+                var modalContainerView = new ContainerView(modalOptions);
                 ADK_ModalRegion.show(modalContainerView);
             } else {
+                ADK_ModalRegion.currentView.resetOptions(modalOptions);
                 ADK_ModalRegion.currentView.modalDialogRegion.show(this);
+                ADK_ModalRegion.currentView.$el.off('hidden.bs.modal');
             }
 
             ADK_ModalRegion.currentView.$el.one('hidden.bs.modal', function(e) {

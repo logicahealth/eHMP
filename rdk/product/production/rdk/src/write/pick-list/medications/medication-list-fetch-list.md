@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Medication list [/medication-list{?site}{&searchString}{&fields}]
+## Medication list [/medication-list{?site}{&searchString}]
 
 DIRECT RPC CALL - Retrieves Outpatient Medication ORDER QUICK VIEW file #101.44 subset of orderable items or quick orders in alphabetical order to specific sequence numbers
 
@@ -13,8 +13,6 @@ ORWUL FV4DG
     :[site]({{{common}}}/parameters/site.md)
 
     + searchString (string, required) - Examples: `NV RX` or `O RX`; those are the only ones we've seen used so far
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

@@ -28,7 +28,8 @@ describe('jds\'s', function() {
         rdk.utils.http.get.restore(); // Unwraps the spy
         rdk.utils.http.post.restore(); // Unwraps the spy
         if (mockAsu) {
-            asuUtils.applyAsuRules.restore();
+            asuUtils.applyAsuRulesWithActionNames.restore();
+            //asuUtils.applyAsuRules.restore();
             mockAsu = undefined;
         }
     });
@@ -53,10 +54,9 @@ describe('jds\'s', function() {
         });
 
     });
-
     describe('filterAsuDocuments', function() {
         it('asu filters all records', function(done) {
-            mockAsu = sinon.stub(asuUtils, "applyAsuRules", function (req, details, callback) {
+            mockAsu = sinon.stub(asuUtils, "applyAsuRulesWithActionNames", function (req, requiredPermission, allPermissions, details, callback) {
                 return callback(null, []);
             });
             var details = {
@@ -76,7 +76,7 @@ describe('jds\'s', function() {
         });
 
         it('asu returns records', function(done) {
-            mockAsu = sinon.stub(asuUtils, "applyAsuRules", function (req, details, callback) {
+            mockAsu = sinon.stub(asuUtils, "applyAsuRulesWithActionNames", function (req, requiredPermission, allPermissions, details, callback) {
                 return callback(null, [{localTitle: 'two'}]);
             });
             var details = {

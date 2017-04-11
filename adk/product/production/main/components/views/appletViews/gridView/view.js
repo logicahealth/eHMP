@@ -10,11 +10,11 @@ define([
     'main/components/views/loadingView',
     'main/components/views/errorView',
     'main/components/applets/grid_applet/views/filterDateRangeView',
-    'hbs!main/components/applets/grid_applet/templates/containerTemplate'
-], function($, _, utils, BaseDisplayApplet, DataGrid, CollectionFilter, ResourceService, SessionStorage, LoadingView, ErrorView, FilterDateRangeView, containerTemplate) {
+    'main/adk_utils/crsUtil'
+], function($, _, utils, BaseDisplayApplet, DataGrid, CollectionFilter, ResourceService, SessionStorage, LoadingView, ErrorView, FilterDateRangeView, CrsUtil) {
     'use strict';
 
-    var SCROLL_TRIGGERPOINT = 30;
+    var SCROLL_TRIGGERPOINT = 40; 
     var SCROLL_ADDITIONAL_ROWS = 100;
     var INITIAL_NUMBER_OF_ROWS = 30;
 
@@ -79,19 +79,36 @@ define([
             }
         },
         ui: {
-            'GroupHeader': 'tr.groupByHeader'
+            'GroupHeader': 'tr.group-by-header'
         },
         events: {
             'click @ui.GroupHeader': 'fetchRowsOnClick'
         },
         fetchRowsOnClick: function(event) {
             event.preventDefault();
+            if(this.appletOptions.collection instanceof Backbone.PageableCollection) {
 
-            var e = this.$(event.currentTarget).nextUntil('tr.groupByHeader');
-            e = $(e.get(e.length-1));
 
-            this.fetchRows(event);
-            e.nextUntil('.groupByHeader').toggle();
+                var $target = this.$(event.currentTarget);
+
+                // Find the last item
+                var _group = $target.nextUntil('tr.group-by-header');
+                var _lastInGroup = _group.last();
+
+                var _collection = this.appletOptions.collection;
+                var _fullCollection = this.appletOptions.collection.fullCollection;
+
+                while(!_lastInGroup.hasClass('group-by-header') && _collection.length !== _fullCollection.length) {
+                    this.appletOptions.collection.getNextPage({});
+
+                    // This would be faster if there was away to append to group instead of remaking it
+                    _group = $target.nextUntil('tr.group-by-header');
+                    _lastInGroup = _group.last();
+                }
+                _group.toggle();
+                return;
+            }
+            this.$(event.currentTarget).nextUntil('tr.group-by-header').toggle();
         },
 
         fetchRows: function(event) {
@@ -99,10 +116,11 @@ define([
             if ((e.scrollTop + e.clientHeight + SCROLL_TRIGGERPOINT > e.scrollHeight) && this.appletOptions.collection.hasNextPage()) {
                 event.preventDefault();
                 this.appletOptions.collection.getNextPage({});
-                var searchText = SessionStorage.getAppletStorageModel(this.appletConfig.instanceId, 'filterText', true);
+                // DE4343 fix
+                /*var searchText = SessionStorage.getAppletStorageModel(this.appletConfig.instanceId, 'filterText', true);
                 if (this.filterView && (this.filterView.userDefinedFilters.length > 0 || (!_.isUndefined(searchText) && !_.isNull(searchText) && searchText !== ''))) {
                     this.filterView.doSearch();
-                }
+                }*/
                 if (this.appletOptions.collection.length > 0 && !_.isUndefined(this.appletOptions.tblRowSelector)) {
                     $(this.appletOptions.tblRowSelector).each(function() {
                         $(this).attr("data-infobutton", $(this).find('td:nth-child(2)').text().replace('Panel', ''));
@@ -125,6 +143,10 @@ define([
                 elementToScroll.off('scroll.infinite');
                 elementToScroll.on('scroll.infinite', function(event) {
                     self.fetchRows(event);
+                    var newItems = CrsUtil.findCurrentCRSItems('gridView/view');
+                    if(newItems){
+                        $('#aria-live-assertive-region p').replaceWith('<p>' + CrsUtil.screenReaderFeedback.FOUND_RELATED_CONCEPT + '</p>');
+                    }
                 });
                 this.listenTo(this, 'destroy', function() {
                     elementToScroll.off('scroll.infinite');
@@ -133,16 +155,16 @@ define([
             }
         },
         refresh: function(event) {
-            if (this.appletOptions.refresh !== undefined) {
-                this._base.refresh.apply(this, arguments);
-            } else {
-                this._base.refresh.apply(this, arguments);
-            }
+            this._base.refresh.apply(this, arguments);
         },
         dateRangeRefresh: function(filterParameter, options) {
+            if(this.appletOptions.collection.xhr) {
+                this.appletOptions.collection.xhr.abort();
+            }
             this.appletOptions.collection.fetchOptions.criteria.filter = this.buildJdsDateFilter(filterParameter, options);
             var collection = this.appletOptions.collection;
             this.loading();
+            this.displayAppletView.destroy();
             this.displayAppletView = DataGrid.create(this.appletOptions);
             ResourceService.fetchCollection(collection.fetchOptions, collection);
         },

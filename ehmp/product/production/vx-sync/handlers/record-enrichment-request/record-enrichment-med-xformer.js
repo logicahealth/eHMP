@@ -46,10 +46,18 @@ function transformAndEnrichRecord(log, config, environment, record, callback) {
 		return setTimeout(callback, 0, null, null);
 	}
 
-	var terminologyUtils = environment.terminologyUtils;
-    if(environment.terminologyUtils === undefined) {
-        return callback('No terminology utility provided');
+    var metrics = null;
+    if (environment) {
+        metrics = environment.metrics;
     }
+
+	var terminologyUtils;
+	if (environment.terminologyUtils) {
+		terminologyUtils = environment.terminologyUtils;
+	} else {
+        var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
+        terminologyUtils = new TerminologyUtil(log, metrics, config);
+	}
 
 	fixFieldDataTypes(record);
 	addInMissingFields(record, log, terminologyUtils, function(error, recordWithMissingFields) {
@@ -72,6 +80,13 @@ function transformAndEnrichRecord(log, config, environment, record, callback) {
 			}
 			addTerminologyCodeTranslations(recordWithRxnCodes, log, terminologyUtils, function(error, recordWithTerminologyCodes) {
 				log.debug('record-enrichment-med-xformer.transformAndEnrichRecord: Returning error: %s recordWithTerminologyCodes: %j', error, recordWithTerminologyCodes);
+
+				_.each(record.products, function(product) {
+					if (product.codes) {
+						record.codes = record.codes.concat(product.codes);
+					}
+				});
+
 				return callback(error, recordWithTerminologyCodes);
 			});
 		});
@@ -191,6 +206,11 @@ function addInMissingProductFields(product, log, terminologyUtils, callback) {
 				}
 
 				product.ingredientRXNCode = rxnConcept.urn;
+				product.codes = {
+					'code': rxnConcept.code,
+					'display': rxnConcept.description,
+					'system': terminologyUtils.CODE_SYSTEMS.CODE_SYSTEM_RXNORM
+				};
 				return callback(null);
 			});
 		});

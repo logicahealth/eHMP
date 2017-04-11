@@ -1,6 +1,6 @@
-HMPDSR ;SLC/MKB -- Surgical Procedures ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDSR ;SLC/MKB,ASMR/RRB - Surgical Procedures;8/2/11  15:29
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -10,7 +10,7 @@ HMPDSR ;SLC/MKB -- Surgical Procedures ;8/2/11  15:29
  ; ICPTCOD                       1995
  ; ICPTMOD                       1996
  ; SROESTV                       3533
- ;
+ Q
  ; ------------ Get surgery(ies) from VistA ------------
  ;
 EN(DFN,BEG,END,MAX,ID) ; -- find patient's surgeries

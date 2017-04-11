@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Medication orders dispense drug message [/medication-orders-dispense-drug-message{?site}{&ien}{&fields}]
+## Medication orders dispense drug message [/medication-orders-dispense-drug-message{?site}{&ien}]
 
 Return message text that is associated with a dispense drug.
 
@@ -13,8 +13,6 @@ ORWDPS32 DRUGMSG
     :[site]({{{common}}}/parameters/site.md)
 
     + ien: `280` (string, required) - The ien of the drug you want the message for
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

@@ -5,6 +5,7 @@ Feature: F832 - DoD Only Patient Search
 
   @F832_dodonlysearch_1 @US11167
   Scenario Outline: When a user searches for Jones,Fred and gets results back
+    Given the client has logged in with a cookie
     When the client requests global patient search with lname "<lastname>" and fname "<firstname>" and ssn "<ssnumber>" and dob "<dobirth>" and Content-Type "<contenttype>"
     Then a successful response is returned
     # And there are 10 results?
@@ -38,6 +39,8 @@ Feature: F832 - DoD Only Patient Search
 
 @F832_dodonlysearch_5 @US11168
   Scenario: Sync by EDIPI + Demographics with DOB and SSN
-  When the client requests syncing a patient by demographics with content "{"edipi": "4325678","demographics": {"givenNames": "PATIENT","familyName": "DODONLY","ssn": "*****1234","dob": "19670909"}}"
+    When the client requests syncing a patient by demographics with content "{"edipi": "4325678","demographics": {"givenNames": "PATIENT","familyName": "DODONLY","ssn": "*****1234","dob": "19670909"}}"
     Then a created response is returned
     And the patient with pid "DOD;4325678" is synced through the RDK API
+    #And the patient with pid "DOD;4325678" is synced through the RDK API within 60 seconds
+

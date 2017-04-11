@@ -1,6 +1,9 @@
 /*jslint node: true */
 'use strict';
+
 var pickListConfig = require('./config/pick-list-config-in-memory-rpc-call').pickListConfig;
+
+
 var dbList = require('./pick-list-db');
 var async = require('async');
 var nullUtil = require('../core/null-utils');
@@ -21,6 +24,7 @@ module.exports.config = pickListConfig;
  * @returns {boolean} True if this processed the call, false otherwise.
  */
 module.exports.inMemoryRpcCall = function(req, site, type, callback) {
+
     if (type.toLowerCase() === 'refresh') {
         if (dbList.refreshInProgress) {
             return callback(null, 'Refresh in progress');
@@ -38,7 +42,7 @@ module.exports.inMemoryRpcCall = function(req, site, type, callback) {
 
     var i = _.indexOf(_.pluck(pickListConfig, 'name'), type);
     if (i === -1) {
-        return callback('Not yet implemented');
+        return callback(type+ ' Not yet implemented');
     }
 
     // We already checked type and site at the start of this function.
@@ -48,12 +52,18 @@ module.exports.inMemoryRpcCall = function(req, site, type, callback) {
     };
     var filters = null;
     if (_.has(pickListConfig[i], 'requiredParams')) {
+        var aborted = false;
         _.each(pickListConfig[i].requiredParams, function(paramName) {
             if (nullUtil.isNullish(req.param(paramName)) || _.isEmpty(req.param(paramName))) {
-                return callback('Parameter \'' + paramName + '\' cannot be null or empty');
+                callback('Parameter \'' + paramName + '\' cannot be null or empty');
+                aborted = true;
+                return false;//Break out of _.each
             }
             _.set(params, paramName, req.param(paramName).toUpperCase());
         });
+        if (aborted) {
+            return true;//Callback was already called; stop here.
+        }
     }
     if (_.has(pickListConfig[i], 'optionalParams')) {
         _.each(pickListConfig[i].optionalParams, function(paramName) {
@@ -64,6 +74,9 @@ module.exports.inMemoryRpcCall = function(req, site, type, callback) {
             }
         });
     }
+    if (pickListConfig[i].needsFullConfig) {
+        _.set(params, 'fullConfig', req.app.config);
+    }
     if (_.has(pickListConfig[i], 'filterForEntireRecursiveCollection')) {
         if (!validate.isStringNullish(req.param(pickListConfig[i].filterForEntireRecursiveCollection.paramNameForStringToSearchFor))) {
             filters = {};
@@ -72,6 +85,8 @@ module.exports.inMemoryRpcCall = function(req, site, type, callback) {
         }
     }
     var siteConfig = req.app.config.vistaSites[site];
+    siteConfig.jdsServer = req.app.config.jdsServer;
+
     if (nullUtil.isNullish(siteConfig)) {
         return callback('The site (' + site + ') was not found in the configuration');
     }
@@ -121,6 +136,7 @@ module.exports.loadLargePickLists = function(app) {
             return callback('The vistaContext was not found in the pick-list-config-in-memory-rpc-call.json configuration');
         }
         siteConfig.context = pickListConfig[params.index].vistaContext;
+        siteConfig.jdsServer = app.config.jdsServer;
 
         dbList.initialLoadPickList(app.logger, siteConfig, params, pickListConfig[params.index].modulePath, function(error) {
                 if (error) {

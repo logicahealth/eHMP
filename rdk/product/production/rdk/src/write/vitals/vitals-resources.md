@@ -50,7 +50,25 @@ Add one or more new vitals for a patient in a single Vista
                         "type": "array",
                         "description": "one or more vitals",
                         "items": {
-                            "$ref": "Vital"
+                            "type": "object",
+                            "required": ["fileIEN", "reading"],
+                            "properties": {
+                                "fileIEN": {
+                                    "type": "string",
+                                    "description": "vital type"
+                                },
+                                "reading": {
+                                    "type": "string",
+                                    "description": "vital value"
+                                },
+                                "qualifiers": {
+                                    "type": "array",
+                                    "description": "zero or more qualifier IENs",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -65,7 +83,7 @@ Add one or more new vitals for a patient in a single Vista
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Update [PUT]
+### Update [PUT {{{path}}}/{resourceId}]
 
 mark an existing patient vital as entered in error
 

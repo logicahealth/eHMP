@@ -1,28 +1,93 @@
 .applet-chrome {
-	background: $pure-white;
-	.applet-toolbar {
-		overflow: hidden;
-		h4 {
-			border: none;
-			font-size: 12px;
-			margin: 0;
-			padding: 5px 0 0 5px;
-			text-align: center;
-		}
-		ul.tool-icons {
-			float: right;
-			list-style: none;
-			margin: 0;
-    		padding: 0;
-			> li {
-				float: left;
-			}
-		}
-		.popover {
-			min-width: 280px;
-			.popover-title {
-				display: none;
-			}
-		}
-	}
+    background: $pure-white;
+    .applet-toolbar {
+        overflow: hidden;
+        h4 {
+            border: none;
+            font-size: 12px;
+            margin: 0;
+            padding: 5px 0 0 5px;
+            text-align: center;
+        }
+        ul.tool-icons {
+            float: right;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            > li {
+                float: left;
+            }
+        }
+        .popover {
+            min-width: 280px;
+            .popover-title {
+                display: none;
+            }
+        }
+    }
+}
+
+.panel-primary > .panel-heading .panel-title-notification {
+    overflow-y: visible;
+    .applet-chrome-notification > .badge {
+        background: $pure-white;
+        border: 1px solid $primary-dark;
+        color: $primary-dark;
+        font-size: 11px;
+        padding: 4px;
+    }
+}
+
+.panel-heading.grid-applet-heading {
+    border-bottom: 2px solid $primary-lighter;
+    height: 24px;
+    padding: 0;
+    .panel-title-label {
+        color: $primary-dark;
+        display: inline;
+        font-size: 14px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .btn {
+        box-shadow: none;
+        &.btn-icon {
+            padding: 0 4px;
+            margin: 3px 3px 2px -1px;
+        }
+    }
+    &.panel-heading-filtered {
+        background-color: $primary-dark;
+        .panel-title-label {
+            color: $pure-white;
+        }
+        .btn-icon {
+            color: $pure-white;
+            &:hover {
+                color: $grey-light;
+            }
+        }
+    }
+}
+
+.applet-div-chrome-container {
+    height: 80%;
+    height: calc(100% - 24px);
+    height: -webkit-calc(100% - 24px);
+}
+
+.applet-div-chrome-container > div {
+    height: 100%;
+}
+
+.fa-user + .fa-user {
+    font-size: 8px;
+    margin-left: -2px;
+    position: relative;
+    top: -3px;
+}
+
+.fa-user + .fa-user + .fa-pencil {
+    font-size: 9px;
 }

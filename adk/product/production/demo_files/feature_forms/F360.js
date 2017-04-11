@@ -106,7 +106,7 @@ define([
                         name: "informationSource",
                         label: "Information Source",
                         required: true,
-                        title: "To select an option, use the up and down arrow keys then press enter to select",
+                        title: "Use up and down arrows to view options and then press enter to select",
                         pickList: [{
                             value: "opt1",
                             label: "Option 1"
@@ -145,7 +145,7 @@ define([
                                 disabled: true,
                                 name: "lotNumberSelect",
                                 label: "Lot Number",
-                                title: "To select an option, use the up and down arrow keys then press enter to select",
+                                title: "Use up and down arrows to view options and then press enter to select",
                                 required: true,
                                 pickList: [{
                                     value: "opt1",
@@ -166,7 +166,7 @@ define([
                                 disabled: true,
                                 name: "expirationDateInput",
                                 label: "Expiration Date",
-                                title: "Please enter in a date in the following format, MM/DD/YYYY",
+                                title: "Enter in a date in the following format, MM/DD/YYYY",
                                 readonly: true,
                                 required: true,
                             }]
@@ -196,7 +196,7 @@ define([
                                 name: "adminAdministrationDate",
                                 label: "Administration Date",
                                 required: true,
-                                title: "Please enter in a date in the following format, MM/DD/YYYY"
+                                title: "Enter in a date in the following format, MM/DD/YYYY"
                             }]
                         }, {
                             control: "container",
@@ -288,7 +288,7 @@ define([
                                 disabled: true,
                                 name: "historicalAdministrationDate",
                                 label: "Administration Date",
-                                title: "Please enter in a date in the following format, MM/DD/YYYY"
+                                title: "Enter in a date in the following format, MM/DD/YYYY"
                             }]
                         }, {
                             control: "container",
@@ -333,7 +333,7 @@ define([
                                 disabled: true,
                                 name: "routeOfAdministration",
                                 label: "Route of Administration",
-                                title: "To select an option, use the up and down arrow keys then press enter to select",
+                                title: "Use up and down arrows to view options and then press enter to select",
                                 pickList: [{
                                     value: "opt1",
                                     label: "Option 1"
@@ -353,7 +353,7 @@ define([
                                 disabled: true,
                                 name: "anatomicLocation",
                                 label: "Anatomic Location",
-                                title: "To select an option, use the up and down arrow keys then press enter to select",
+                                title: "Use up and down arrows to view options and then press enter to select",
                                 pickList: [{
                                     value: "opt1",
                                     label: "Option 1"
@@ -405,7 +405,7 @@ define([
                                 disabled: true,
                                 name: "series",
                                 label: "Series",
-                                title: "To select an option, use the up and down arrow keys then press enter to select",
+                                title: "Use up and down arrows to view options and then press enter to select",
                                 pickList: [{
                                     value: "opt1",
                                     label: "Option 1"
@@ -430,7 +430,7 @@ define([
                                 disabled: true,
                                 name: "informationStatement",
                                 label: "Vaccine Information Statement (VIS)",
-                                title: "To select an option, use the up and down arrow keys then press enter to select",
+                                title: "Use up and down arrows to view options and then press enter to select",
                                 pickList: generalOptionsArray,
                                 showFilter: false,
                                 groupEnabled: true,
@@ -445,7 +445,7 @@ define([
                                 disabled: true,
                                 name: "visDateOffered",
                                 label: "VIS Date Offered",
-                                title: "Please enter in a date in the following format, MM/DD/YYYY"
+                                title: "Enter in a date in the following format, MM/DD/YYYY"
                             }]
                         }]
                     }, {
@@ -554,7 +554,7 @@ define([
                         e.preventDefault();
                         var deleteAlertView = new ADK.UI.Alert({
                             title: 'Are you sure you want to delete?',
-                            icon: 'fa-warning color-red',
+                            icon: 'icon-delete',
                             messageView: DeleteMessageView,
                             footerView: FooterView
                         });

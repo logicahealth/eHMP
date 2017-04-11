@@ -168,7 +168,7 @@ function findRequestSchemas(action, logger) {
                 try {
                     schemas.push(JSON.parse(request.schema));
                 } catch (e) {
-                    logger.error('Error parsing schema ' + request.schema);
+                    logger.error({schema: request.schema}, 'Error parsing schema');
                 }
             }
         });

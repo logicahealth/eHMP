@@ -1,9 +1,9 @@
 define([
     'main/resources/abstract',
     'api/Messaging',
-    'api/ResourceService',
+    'api/PatientRecordService',
     'api/UserService'
-], function(Abstract, Messaging, ResourceService, UserService) {
+], function(Abstract, Messaging, PatientRecordService, UserService) {
     "use strict";
 
     var wrapError = function(model, options) {
@@ -26,7 +26,7 @@ define([
             }
 
             //keep a pointer to the logged in patient
-            this.patient = ResourceService.patientRecordService.getCurrentPatient();
+            this.patient = PatientRecordService.getCurrentPatient();
             if (_.isUndefined(this.patient.get('pid'))) {
                 throw new Error('No patient has been selected.  Resource model cannot be instanted without patient data available.');
             }
@@ -36,13 +36,13 @@ define([
             }, this);
 
             _.each(this.methodMap, function(val, key) {
-                this.listenTo(this, key + ':success', function(model, resp, options) {
+                this.on(key + ':success', function(model, resp, options) {
                     var vpr = options.vpr || model.vpr;
                     if (vpr) {
                         Messaging.getChannel(vpr).trigger(key + ':success', model, resp, options);
                     }
                 });
-                this.listenTo(this, key + ':error', function(model, resp, options) {
+                this.on(key + ':error', function(model, resp, options) {
                     var vpr = options.vpr || model.vpr;
                     if (vpr) {
                         Messaging.getChannel(vpr).trigger(key + ':error', model, resp, options);
@@ -59,11 +59,10 @@ define([
             options = options ? _.clone(options) : {};
             var model = this;
             var success = options.success;
-            var wait = options.wait;
-
+            var wait = options.wait || true;
             var destroy = function() {
-                model.stopListening();
                 model.trigger('destroy', model, model.collection, options);
+                model.stopListening();
             };
 
             options.success = function(resp) {

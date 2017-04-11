@@ -4,7 +4,7 @@ Feature: F280 - Vitals Applet
 #"As an eHMP  user, I need to view a complete operation gist view to include the Vitals domain that displays all defined panels and data; so that I can access Vitals information for a given patient."
 
 Background:
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	And user searches for and selects "Ten,Patient"
 	Then Overview is active
 	And the user has selected All within the global date picker

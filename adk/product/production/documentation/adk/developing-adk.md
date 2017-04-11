@@ -297,7 +297,7 @@ Your new control is now created and registered, but nothing is using it yet. If 
 :::
 
 ### Demoing Controls ###
-The demo page is available at: [locally deployed app url]/#ui-components-demo <br />(ie. https://IP        /#ui-components-demo)
+The demo page is available at: [locally deployed app url]/#ui-components-demo <br />(ie. https://IP_ADDRESS/#ui-components-demo)
 
 In order for your control to be displayed on the demo page, the following steps must be followed:
 - **Control exists:** The control must be set up as specified in the [Developing Controls](#Developing-Controls) section.
@@ -360,9 +360,9 @@ In order for your control to be displayed on the demo page, the following steps 
         featureNumber: 170,
         title: "Vitals - Entered In Error",
         wireframe: "http://h352jh.axshare.com/#p=f170_vitals_-_entered_in_error_v_2",
-        workflowPath: "http://IP        /ui-components/docs/workflow/psi9/workflow-vital-eie.pdf",
+        workflowPath: "http://IP_ADDRESS/ui-components/docs/workflow/psi9/workflow-vital-eie.pdf",
         workflowSize: "338KB",
-        useCaseScenarioPath: "http://IP        /ui-components/docs/use-case/psi9/Test-Scenario-vitals-ELE.pdf",
+        useCaseScenarioPath: "http://IP_ADDRESS/ui-components/docs/use-case/psi9/Test-Scenario-vitals-ELE.pdf",
         useCaseScenarioSize: "83KB",
         controls: ['input','checklist','radio','button','container_showingModelData', 'newExample'], // here!!!!!
         components: ['workflow','alert','growlNotifications'],

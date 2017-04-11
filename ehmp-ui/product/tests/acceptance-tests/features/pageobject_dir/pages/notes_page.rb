@@ -21,10 +21,11 @@ class PobNotes < SitePrism::Page
   element :fld_note_body, "#text-0-content"
   element :fld_note_title_selection_box, "input[class='select2-search__field']"
   element :fld_unsigned_notes_section, "[aria-labelledby='heading-notes-unsigned']"
-  element :fld_recently_signed_notes_section, "[aria-labelledby='heading-notes-recently-signed']"
+  element :fld_recently_signed_notes_section, "[aria-labelledby^='heading-notes-my-signed']"
   element :fld_signature_input_box, "#signatureCode"
   element :fld_note_preview_title, "#note-preview-title"
   element :fld_note_preview_content, ".note-preview-content"
+  element :fld_note_objects, ".note-object-container"
     
   elements :fld_all_headings, "[class='container-fluid panel panel-default'] .panel-heading"
   elements :fld_unsigned_notes_list, "[id^='unsigned-notes-list-title']"
@@ -41,8 +42,11 @@ class PobNotes < SitePrism::Page
   element :btn_delete_confirmation, "#btn-notes-operation-yes"
   element :btn_preview, "#preview-form-btn"
   element :btn_preview_close, "#preview-form-close-btn"
+  element :btn_view_note_object, "#view-note-object-btn"
+  
   
   elements :btn_all, "form[class='adk-form form-container'] button"
+  elements :btn_obj, "div.sidebar.inline-display button"
 
   # *****************  All_Drop_down_Elements  ******************* #
 

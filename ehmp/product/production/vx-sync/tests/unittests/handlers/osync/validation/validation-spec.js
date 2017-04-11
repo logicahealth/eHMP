@@ -12,7 +12,7 @@ var mockHandlerCallback = {
 var mockConfig = {
     jds: {
         protocol: 'http',
-        host: 'IPADDRESS ',
+        host: 'IP_ADDRESS',
         port: 9080,
         osyncjobfrequency: 172800000
     }

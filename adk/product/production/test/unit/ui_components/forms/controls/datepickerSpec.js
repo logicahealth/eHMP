@@ -237,13 +237,13 @@ define([
                 expect($testPage.find(inputSelector)).toHaveLength(1);
                 $testPage.find(inputSelector).val('11/01/2015').change();
                 $testPage.find('form').trigger('submit');
-                expect($testPage.find('.datepicker-control span.help-block.error')).toContainText('Please enter a date between');
+                expect($testPage.find('.datepicker-control span.help-block.error')).toContainText('Date must be between');
             });
             it('a valid date within the date range will throw no error on submit', function() {
                 expect($testPage.find(inputSelector)).toHaveLength(1);
                 $testPage.find(inputSelector).val('11/02/2015').change();
                 $testPage.find('form').trigger('submit');
-                expect($testPage.find('.datepicker-control')).not.toHaveClass('Please enter a date between');
+                expect($testPage.find('.datepicker-control')).not.toContainText('Date must be between');
             });
         });
 
@@ -265,19 +265,47 @@ define([
                 expect($testPage.find(inputSelector)).toHaveLength(1);
                 $testPage.find(inputSelector).val('11/01/2015').change();
                 $testPage.find('form').trigger('submit');
-                expect($testPage.find('.datepicker-control span.help-block.error')).toContainText('Please enter a date between');
+                expect($testPage.find('.datepicker-control span.help-block.error')).toContainText('Date must be between');
             });
             it('a date after endDate throws an error on submit', function() {
                 expect($testPage.find(inputSelector)).toHaveLength(1);
                 $testPage.find(inputSelector).val(new Moment().add(1, 'days').format('MM/DD/YYYY')).change();
                 $testPage.find('form').trigger('submit');
-                expect($testPage.find('.datepicker-control span.help-block.error')).toContainText('Please enter a date between');
+                expect($testPage.find('.datepicker-control span.help-block.error')).toContainText('Date must be between');
             });
             it('a valid date within the date range will throw no error on submit', function() {
                 expect($testPage.find(inputSelector)).toHaveLength(1);
                 $testPage.find(inputSelector).val('11/02/2015').change();
                 $testPage.find('form').trigger('submit');
-                expect($testPage.find('.datepicker-control')).not.toHaveClass('Please enter a date between');
+                expect($testPage.find('.datepicker-control')).not.toContainText('Date must be between');
+            });
+            it('dynamically changing the startDate to after the value will throw an error on submit ', function() {
+                expect($testPage.find(inputSelector)).toHaveLength(1);
+                $testPage.find(inputSelector).val('11/02/2015').change();
+                $testPage.find(inputSelector).trigger('control:startDate', '11/03/2015');
+                $testPage.find('form').trigger('submit');
+                expect($testPage.find('.datepicker-control span.help-block.error')).toContainText('Date must be between');
+            });
+            it('dynamically changing the endDate to before the value will throw an error on submit ', function() {
+                expect($testPage.find(inputSelector)).toHaveLength(1);
+                $testPage.find(inputSelector).val('11/03/2015').change();
+                $testPage.find(inputSelector).trigger('control:endDate', new Moment('11/02/2015'));
+                $testPage.find('form').trigger('submit');
+                expect($testPage.find('.datepicker-control span.help-block.error')).toContainText('Date must be between');
+            });
+            it('dynamically changing the startDate to before the previously out of range value will NOT throw an error on submit ', function() {
+                expect($testPage.find(inputSelector)).toHaveLength(1);
+                $testPage.find(inputSelector).val('11/01/2015').change();
+                $testPage.find(inputSelector).trigger('control:startDate', '10/31/2015');
+                $testPage.find('form').trigger('submit');
+                expect($testPage.find('.datepicker-control span.help-block.error')).not.toContainText('Date must be between');
+            });
+            it('dynamically changing the endDate to after the previously out of range value will NOT throw an error on submit', function() {
+                expect($testPage.find(inputSelector)).toHaveLength(1);
+                $testPage.find(inputSelector).val(new Moment().add(1, 'days').format('MM/DD/YYYY')).change();
+                $testPage.find(inputSelector).trigger('control:endDate', new Moment().add(2, 'days').format('MM/DD/YYYY'));
+                $testPage.find('form').trigger('submit');
+                expect($testPage.find('.datepicker-control span.help-block.error')).not.toContainText('Date must be between');
             });
         });
 
@@ -437,7 +465,7 @@ define([
         describe("using trigger to dynamically change attributes", function() {
             beforeEach(function() {
                 testPage = new TestView({
-                    view: new UI.Form({
+                    view: new SubmittableForm({
                         model: new FormModelCleanSlate(),
                         fields: [(isFlexible ? _.defaults({
                             flexible: true
@@ -475,6 +503,37 @@ define([
                 $testPage.find('.control.datePicker0').trigger("control:title", '');
                 expect($testPage.find(inputSelector)).not.toHaveAttr('title');
             });
+            it('dynamically changing the startDate to after the value will throw an error on submit', function() {
+                expect($testPage.find(inputSelector)).toHaveLength(1);
+                $testPage.find(inputSelector).trigger('control:startDate', '11/01/2015');
+                $testPage.find(inputSelector).val('11/02/2015').change();
+                $testPage.find(inputSelector).trigger('control:startDate', '11/03/2015');
+                $testPage.find('form').trigger('submit');
+                expect($testPage.find('.datepicker-control span.help-block.error')).toContainText('Date must be between');
+            });
+            it('dynamically changing the endDate to before the value will throw an error on submit', function() {
+                expect($testPage.find(inputSelector)).toHaveLength(1);
+                $testPage.find(inputSelector).val('11/03/2015').change();
+                $testPage.find(inputSelector).trigger('control:endDate', new Moment('11/02/2015'));
+                $testPage.find('form').trigger('submit');
+                expect($testPage.find('.datepicker-control span.help-block.error')).toContainText('Date must be between');
+            });
+            it('dynamically changing the startDate to before the previously out of range value will NOT throw an error on submit ', function() {
+                expect($testPage.find(inputSelector)).toHaveLength(1);
+                $testPage.find(inputSelector).trigger('control:startDate', '11/03/2015');
+                $testPage.find(inputSelector).val('11/01/2015').change();
+                $testPage.find(inputSelector).trigger('control:startDate', '10/31/2015');
+                $testPage.find('form').trigger('submit');
+                expect($testPage.find('.datepicker-control span.help-block.error')).not.toContainText('Date must be between');
+            });
+            it('dynamically changing the endDate to after the previously out of range value will NOT throw an error on submit', function() {
+                expect($testPage.find(inputSelector)).toHaveLength(1);
+                $testPage.find(inputSelector).trigger('control:endDate', new Moment().subtract(1, 'days').format('MM/DD/YYYY'));
+                $testPage.find(inputSelector).val(new Moment().add(1, 'days').format('MM/DD/YYYY')).change();
+                $testPage.find(inputSelector).trigger('control:endDate', new Moment().add(2, 'days').format('MM/DD/YYYY'));
+                $testPage.find('form').trigger('submit');
+                expect($testPage.find('.datepicker-control span.help-block.error')).not.toContainText('Date must be between');
+            });
         });
         describe("with error", function() {
             beforeEach(function() {
@@ -503,8 +562,8 @@ define([
             it("error is removed", function() {
                 testPage.ViewToTest.model.errorModel.set('datepickerError', 'Example error');
                 expect($testPage.find('span.error')).toHaveText('Example error');
-                $testPage.find('.input-group-addon').focus().click();
-                $testPage.find('.day').focus().click();
+                $testPage.find('span.input-group-addon').focus().click();
+                $('body').find('.day').focus().click();
                 expect($testPage.find('span.error')).not.toExist();
             });
         });
@@ -544,23 +603,23 @@ define([
 
                 it('allows valid date from being typed into a date field', function() {
                     var validDate = '12/31/2015';
-                    $testPage.find('input.datepicker-input').val(validDate);
+                    $testPage.find('input.datepicker-input').val(validDate).change();
                     expect(_.isEqual($testPage.find('input.datepicker-input').val(), validDate)).toBe(true);
                 });
 
                 it('prevents invalid date from being typed into a date field', function() {
                     var invalidDate = '12/32/2015';
-                    $testPage.find('input.datepicker-input').val(invalidDate);
+                    $testPage.find('input.datepicker-input').datepicker('update', invalidDate);
                     expect(_.isEqual($testPage.find('input.datepicker-input').val(), invalidDate)).toBe(false);
                 });
 
                 it('sets value in model when input is changed', function() {
-                    $testPage.find('input.datepicker-input').datepicker('update', '05/12/1999');
+                    $testPage.find('input.datepicker-input').val('05/12/1999').change();
                     expect(testPage.ViewToTest.model.get('datePicker0')).toBe('05/12/1999');
                 });
 
                 it('contains a title on the input field', function() {
-                    expect($testPage.find('input.datepicker-input').attr('title')).toBe('Please enter in a date in the following format, MM/DD/YYYY');
+                    expect($testPage.find('input.datepicker-input').attr('title')).toBe('Enter in a date in the following format, MM/DD/YYYY');
                 });
             });
             extensibleDatepickerTests(false, 'input.datepicker-input');
@@ -604,12 +663,12 @@ define([
 
                 it('allows valid date to typed into a date field', function() {
                     var validDate = '12/31/2015';
-                    $testPage.find('input.datepicker-input').val(validDate);
+                    $testPage.find('input.datepicker-input').datepicker('update', validDate);
                     expect(_.isEqual($testPage.find('input.datepicker-input').val(), validDate)).toBe(true);
                 });
 
                 it('contains a title on the input field', function() {
-                    expect($testPage.find('input.flexible-input').attr('title')).toBe('Please enter date in text or numerical format.');
+                    expect($testPage.find('input.flexible-input').attr('title')).toBe('Enter date in text or numerical format.');
                 });
 
                 it('allows free text to be typed into a date field', function() {
@@ -624,12 +683,13 @@ define([
                     expect(testPage.ViewToTest.model.get('_datePicker0').get('formattedDate')).toBe('11/12/2015');
                     testPage.ViewToTest.model.unset('datePicker0');
                     expect(testPage.ViewToTest.model.get('datePicker0')).not.toBe('11/12/2015');
-                    expect(testPage.ViewToTest.model.get('_datePicker0')).not.toBe('11/12/2015');
+                    var externalModel = testPage.ViewToTest.model.get('_datePicker0') || { get: function() {} };
+                    expect(externalModel.get('formattedDate')).not.toBe('11/12/2015');
                     expect($testPage.find('input.flexible-input').val()).not.toBe('11/12/2015');
                 });
 
                 it('sets value in model when input is changed by datepicker and no error is thrown on submit', function() {
-                    $testPage.find('input.flexible-input').datepicker('update', '11/13/2015');
+                    $testPage.find('input.flexible-input').val('11/13/2015').change();
                     expect(testPage.ViewToTest.model.get('datePicker0')).toBe('11/13/2015');
                     $testPage.find('form').trigger('submit');
                     expect($testPage.find('.control.datepicker-control')).not.toHaveClass('has-error');

@@ -169,6 +169,10 @@ define([
             it('contains an input field', function() {
                 expect($testPage.find('.control.comment-box .enter-comment-region input')).toHaveLength(1);
             });
+            it('with no values in add comment input has the add button disabled', function() {
+                expect($testPage.find('.control.comment-box .enter-comment-region button')).toHaveLength(1);
+                expect($testPage.find('.control.comment-box .enter-comment-region button')).toBeDisabled();
+            });
             it('contains no comments with no initial value', function() {
                 expect($testPage.find('.control.comment-box .faux-table-container.comments-container .body .table-row')).toHaveLength(0);
             });
@@ -302,6 +306,44 @@ define([
                 expect($testPage.find('.control.comment-box .faux-table-container.comments-container .body .table-row:last-of-type .comment-text-region')).toHaveText("New comment");
             });
         });
+        describe('with custom disabled option', function() {
+            beforeEach(function() {
+                testPage = new TestView({
+                    view: new UI.Form({
+                        model: new FormModel(),
+                        fields: [_.defaults({
+                            disabled: true
+                        }, commentBoxControlDefinitionBasic)]
+                    })
+                });
+                testPage = testPage.render();
+                $testPage = testPage.$el;
+                $('body').append($testPage);
+            });
+            it('correctly applies the disabled option', function() {
+                expect($testPage.find('.commentCollection1 .enter-comment-region .input-region input')).toHaveProp('disabled', true);
+                expect($testPage.find('.commentCollection1 button')).toHaveProp('disabled', true);
+            });
+        });
+        describe('with custom required option', function() {
+            beforeEach(function() {
+                testPage = new TestView({
+                    view: new UI.Form({
+                        model: new FormModel(),
+                        fields: [_.defaults({
+                            required: true
+                        }, commentBoxControlDefinitionBasic)]
+                    })
+                });
+                testPage = testPage.render();
+                $testPage = testPage.$el;
+                $('body').append($testPage);
+            });
+            it('correctly applies the required option', function() {
+                expect($testPage.find('.commentCollection1 .comment-required')).toHaveText('Write at least one comment.');
+                expect($testPage.find('.commentCollection1 .comment-required input')).toHaveValue('0');
+            });
+        });
 
         describe('with allowEdit and allowDelete options set as bool and func', function() {
             beforeEach(function() {
@@ -347,12 +389,12 @@ define([
                 expect($testPage.find('.control.comment-box .enter-comment-region input')).not.toBeDisabled();
                 expect($testPage.find('.control.comment-box .enter-comment-region input')).not.toHaveProp('readonly', true);
                 expect($testPage.find('.control.comment-box .enter-comment-region input')).not.toHaveProp('placeholder', 'Comment limit exceeded');
-                expect($testPage.find('.control.comment-box .enter-comment-region input')).not.toHaveProp('title', 'The comment limit has exceeded. To enter a new comment, please remove an existing comment.');
+                expect($testPage.find('.control.comment-box .enter-comment-region input')).not.toHaveProp('title', 'The comment limit has exceeded. To enter a new comment, remove an existing comment.');
                 expect($testPage.find('.control.comment-box .enter-comment-region label')).toHaveText('Comment Box');
                 addNewComment();
                 expect($testPage.find('.control.comment-box .enter-comment-region input')).toHaveProp('readonly', true);
                 expect($testPage.find('.control.comment-box .enter-comment-region input')).toHaveProp('placeholder', 'Comment limit exceeded');
-                expect($testPage.find('.control.comment-box .enter-comment-region input')).toHaveProp('title', 'The comment limit has exceeded. To enter a new comment, please remove an existing comment.');
+                expect($testPage.find('.control.comment-box .enter-comment-region input')).toHaveProp('title', 'The comment limit has exceeded. To enter a new comment, remove an existing comment.');
                 expect($testPage.find('.control.comment-box .enter-comment-region label')).toHaveText('Comment Box Disabled');
             });
         });
@@ -453,8 +495,24 @@ define([
                 $testPage.find('.commentCollection1').trigger("control:hidden", true);
                 expect($testPage.find('.commentCollection1')).toHaveClass('hidden');
                 $testPage.find('.commentCollection1').trigger("control:hidden", false);
-                expect($testPage.find('.commentCollection1')).not.toHaveClass('required');
-
+                expect($testPage.find('.commentCollection1')).not.toHaveClass('hidden');
+            });
+            it("disabled", function() {
+                $testPage.find('.commentCollection1 .enter-comment-region .input-region input').val('test').trigger('input').change();
+                $testPage.find('.commentCollection1').trigger("control:disabled", true);
+                expect($testPage.find('.commentCollection1 .enter-comment-region .input-region input')).toHaveProp('disabled', true);
+                expect($testPage.find('.commentCollection1 button')).toHaveProp('disabled', true);
+                $testPage.find('.commentCollection1').trigger("control:disabled", false);
+                expect($testPage.find('.commentCollection1 .enter-comment-region .input-region input')).toHaveProp('disabled', false);
+                expect($testPage.find('.commentCollection1 button')).toHaveProp('disabled', false);
+            });
+            it("required", function() {
+                $testPage.find('.commentCollection1').trigger("control:required", true);
+                expect($testPage.find('.commentCollection1 .comment-required')).toHaveText('Write at least one comment.');
+                expect($testPage.find('.commentCollection1 .comment-required input')).toHaveValue('0');
+                $testPage.find('.commentCollection1').trigger("control:required", false);
+                expect($testPage.find('.commentCollection1 .comment-required')).not.toExist();
+                expect($testPage.find('.commentCollection1 .comment-required input')).not.toExist();
             });
         });
     });

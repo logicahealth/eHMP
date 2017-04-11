@@ -4,7 +4,7 @@ define([], function() {
     var displayNames = {
         //display names by 'name' key
         //'name':'displayName'
-        'Branch of Service': 'Branch(s) of Service',
+        'Branch of Service': 'Branch(es) of Service',
         'Years of Service': 'Service Date(s)',
         'Areas of Service': 'Areas of Service',
         'Occupational Specialties': 'Occupational Specialties'

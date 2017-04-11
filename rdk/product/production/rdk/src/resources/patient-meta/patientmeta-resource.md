@@ -1,12 +1,10 @@
 # Group Patient
 
-## Patient Metadata [{{{path}}}/{?pid}{&fields}]
+## Patient Metadata [{{{path}}}/{?pid}]
 
 + Parameters
 
     + pid (string, required) - the patient's pid
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### GET

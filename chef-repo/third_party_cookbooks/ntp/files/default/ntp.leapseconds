@@ -59,7 +59,7 @@
 #		The Explanatory Supplement to the Astronomical
 #		Ephemeris.
 #	or
-#		Terry      , "The BIPM and the Accurate Measurement
+#		Terry Quinn, "The BIPM and the Accurate Measurement
 #		of Time," Proc. of the IEEE, Vol. 79, pp. 894-905,
 #		July, 1991.
 #
@@ -154,7 +154,7 @@
 #$	 3629404800
 #
 #	The NTP timestamps are in units of seconds since the NTP epoch,
-#	which is 1 January 1900, 00:00:00. The Modified     an Day number
+#	which is 1 January 1900, 00:00:00. The Modified Julian Day number
 #	corresponding to the NTP time stamp, X, can be computed as
 #
 #	X/86400 + 15020

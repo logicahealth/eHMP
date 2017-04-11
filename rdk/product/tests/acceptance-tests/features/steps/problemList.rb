@@ -15,7 +15,7 @@ require 'cgi'
 When(/^client requests problems in RDK format$/) do
   url = QueryGenericRDK.new("problems").path
   url = url.concat("/adk")
-  @response = HTTPartyWithBasicAuth.get_with_authorization(url)
+  @response = HTTPartyRDK.get(url)
   #p @response
   expect(@response.code).to eq(200)
 end
@@ -51,7 +51,7 @@ When(/^the client puts data "(.*?)" using Postman$/) do |arg1|
   request = jsonreq.to_json
   url = QueryGenericRDK.new("problems").path
   url = url.concat("/adk")
-  @response =  HTTPartyWithBasicAuth.put_json_with_authorization(url, request)
+  @response =  HTTPartyRDK.put(url, request)
   #puts @response.code  
 end
 
@@ -69,7 +69,7 @@ When(/^the client checks in JDS$/) do
   urlpath  = path+"/vpr/all/find/problem?filter=like(problemText, \"ATOZ\%\")"
   encoded_url = URI.encode(urlpath)
   #uri = URI.parse(urlpath)
-  @response = HTTPartyWithBasicAuth.get_with_authorization(encoded_url)
+  @response = HTTPartyRDK.get(encoded_url)
   #p @response.body
 end
 
@@ -82,13 +82,13 @@ Then(/^the results contain a problemText with the written value$/) do
   end
 end
 
-#http://IP             /vpr/all/find/problem?filter=like(problemText, "YourKeyWordToCheckFor%25")
-#http://IP             /vpr/all/find/problem?filter=like(problemText, \"ATOZ%25\")"
+#http://IP_ADDRESS:PORT/vpr/all/find/problem?filter=like(problemText, "YourKeyWordToCheckFor%25")
+#http://IP_ADDRESS:PORT/vpr/all/find/problem?filter=like(problemText, \"ATOZ%25\")"
 #@US2679_Problem_List_Search
 When(/^the client searches for problems with search criteria "(.*?)" in VPR format from RDK API$/) do |arg1|
   urlpath = QueryGenericRDK.new("problems")
   urlpath.add_parameter("searchfor", arg1)
-  @response = HTTPartyWithBasicAuth.get_with_authorization(urlpath.path)
+  @response = HTTPartyRDK.get(urlpath.path)
   expect(@response.code).to eq(200)
 end
 
@@ -109,7 +109,7 @@ When(/^the client posts data "(.*?)" using postman$/) do |arg1|
   #puts request
   url = QueryGenericRDK.new("problems").path
   #p url
-  @response =  HTTPartyWithBasicAuth.post_json_with_authorization(url, request, { "Content-Type"=>"application/json" })
+  @response =  HTTPartyRDK.post(url, request, { "Content-Type"=>"application/json" })
   #puts @response.code  
 end
 
@@ -125,7 +125,7 @@ end
 
 Then(/^the results contain the problemText with the written value "(.*?)"$/) do |arg1|
   pelem =  @driver.find_elements(:css, "#results>dl>dd>a") 
-  # @response = HTTPartyWithBasicAuth.get_with_authorization(app_path)
+  # @response = HTTPartyRDK.get_with_authorization(app_path)
   pvalue = pelem[2].text
   presult = pvalue.split('/')
   puts presult[1]
@@ -142,13 +142,13 @@ When(/^the client runs data "(.*?)" using postman$/) do |arg1|
   }
   request = jsonreq.to_json
   urlobj = QueryGenericRDK.new("problems")
-  urlobj.add_parameter("accessCode", "PW    ")
-  urlobj.add_parameter("verifyCode", "PW    !!")
+  urlobj.add_parameter("accessCode", "pu1234")
+  urlobj.add_parameter("verifyCode", "pu1234!!")
   urlobj.add_parameter("site", "9E7A")
   url = urlobj.path
   p url
   puts request
-  @response =  HTTPartyWithBasicAuth.delete_json_with_authorization(url, request, { "Content-Type"=>"application/json" })
+  @response =  HTTPartyRDK.delete(url, request, { "Content-Type"=>"application/json" })
   p "before resp"
   puts @response
 end
@@ -158,7 +158,7 @@ When(/^the client queries JDS$/) do
   urlpath  = path+"/vpr/9E7A;3/find/problem?filter=like(localId,\"499\")"
   encoded_url = URI.encode(urlpath)
   #uri = URI.parse(urlpath)
-  @response = HTTPartyWithBasicAuth.get_with_authorization(encoded_url)
+  @response = HTTPartyRDK.get(encoded_url)
 end
 
 Then(/^the results contain removed with the written value "(.*?)"$/) do |flag|
@@ -174,7 +174,7 @@ end
 
 Then(/^the results will have Condition HIDDEN$/) do
   pelem =  @driver.find_elements(:css, "#results>dl>dd")
-  # @response = HTTPartyWithBasicAuth.get_with_authorization(app_path)
+  # @response = HTTPartyRDK.get_with_authorization(app_path)
   pvalue = pelem[11].text
   puts pvalue
   @driver.quit 

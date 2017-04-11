@@ -8,6 +8,46 @@ var fhirUtils = require('../common/utils/fhir-converter');
 var constants = require('../common/utils/constants');
 var errors = require('../common/errors.js');
 var querystring = require('querystring');
+var fhirResource = require('../common/entities/fhir-resource');
+var confUtils = require('../conformance/conformance-utils');
+var conformance = require('../conformance/conformance-resource');
+
+
+var fhirToJDSAttrMap = [{
+    fhirName: 'subject.identifier', // Note this attribute is a app-defined search param, not a Fhir specified attribute.
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier.',
+    searchable: true
+},{
+    fhirName: 'start', // Note this attribute is a app-defined search param, not a Fhir specified attribute.
+    vprName: '',
+    dataType: 'integer',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#integer',
+    description: 'This indicates the starting index of resources that will be fetched.',
+    searchable: true
+},{
+    fhirName: 'limit', // Note this attribute is a app-defined search param, not a Fhir specified attribute.
+    vprName: '',
+    dataType: 'integer',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#integer',
+    description: 'This indicates the total number of resources that will be fetched.',
+    searchable: true
+}
+];
+
+// Issue call to Conformance registration
+conformance.register(confUtils.domains.IMMUNIZATION, createConformanceData());
+
+function createConformanceData() {
+   var resourceType = confUtils.domains.IMMUNIZATION;
+   var profileReference = 'http://www.hl7.org/FHIR/2015May/immunization.html';
+   var interactions = [ 'read', 'search-type' ];
+
+   return confUtils.createConformanceData(resourceType, profileReference,
+           interactions, fhirToJDSAttrMap);
+}
 
 var getResourceConfig = function() {
     return [{
@@ -95,13 +135,7 @@ function getFhirItems(result, req) {
 function convertToFhir(result, req) {
     var pid = req.query['subject.identifier'];
     var link = req.protocol + '://' + req.headers.host + req.originalUrl;
-    var fhirResult = {};
-    fhirResult.resourceType = 'Bundle';
-    fhirResult.id = 'urn:uuid:' + helpers.generateUUID();
-    fhirResult.link = [{
-        'rel': 'self',
-        'href': link
-    }];
+    var fhirResult = new fhirResource.Bundle([new fhirResource.Link(link, 'self')]);
 
     var now = new Date();
     fhirResult.meta = {
@@ -120,32 +154,27 @@ function convertToFhir(result, req) {
 
 
 function createVaccineType(jdsItem, fhirItem) {
-    if ((jdsItem.codes === undefined) && (jdsItem.cptCode === undefined)) {
-        // IF NO JDS codes OR cptCodes are given, JDS item is invalid since
-        // Fhir DSTU2 requires at least one vaccine code entry.
-        // What should be done in this condition?
+    // IF NO JDS codes OR cptCodes are given, JDS item is invalid since
+    // Fhir DSTU2 requires at least one vaccine code entry.
+    // What should be done in this condition?
+    // (jdsItem.codes === undefined) && (jdsItem.cptCode === undefined)
 
-    } else {
-        var coding;
+    // Prep all JDS.codes
+    var coding = _.map(jdsItem.codes, function(c) {
+        return new fhirResource.Coding(c.code, c.display, c.system);
+    });
 
-        // Prep all JDS.codes
-        var coding = _.each(jdsItem.codes, function(c) {
-            new fhirResource.Coding(c.code, c.display, c.system);
-        });
+    // Prep any CPT codes
+    if ((jdsItem.cptCode !== undefined) && (nullchecker.isNotNullish(jdsItem.cptCode))) {
 
-        // Prep any CPT codes
-        if ((jdsItem.cptCode !== undefined) && (nullchecker.isNotNullish(jdsItem.cptCode))) {
-
-            if (coding === undefined) {
-                var coding = new fhirResource.Coding(jdsItem.cptCode, jdsItem.cptName);
-            } else {
-                coding.push(new fhirResource.Coding(jdsItem.cptCode, jdsItem.cptName));
-            }
+        if (coding === undefined) {
+            coding = new fhirResource.Coding(jdsItem.cptCode, jdsItem.cptName);
+        } else {
+            coding.push(new fhirResource.Coding(jdsItem.cptCode, jdsItem.cptName));
         }
-        // Add all codes to fhir resource
-        fhirItem.resource.vaccineType = new fhirResource.CodeableConcept(null, coding);
-
     }
+    // Add all codes to fhir resource
+    fhirItem.resource.vaccineType = new fhirResource.CodeableConcept(null, coding);
 }
 
 
@@ -199,14 +228,14 @@ function createImmunization(jdsItem, fhirItems, req, updated) {
     fhirItem.resource.resourceType = 'Immunization';
     fhirItem.resource.text = {
         'status': 'generated',
-        'div': '<div>' + jdsItem.summary + '</div>'
+        'div': '<div>' + _.escape(jdsItem.summary) + '</div>'
     };
 
     //================================
     // SET IDENTIFIER
     //================================
     if (nullchecker.isNotNullish(jdsItem.uid)) {
-        fhirItem.resource.identifier = [new fhirResource.Identifier(jdsItem.uid, "urn:oid:2.16.840.1.113883.6.233")];
+        fhirItem.resource.identifier = [new fhirResource.Identifier(jdsItem.uid, 'urn:oid:2.16.840.1.113883.6.233')];
     }
 
     //================================
@@ -216,19 +245,19 @@ function createImmunization(jdsItem, fhirItems, req, updated) {
     var containedOrg = new fhirResource.Organization(helpers.generateUUID());
 
     if (nullchecker.isNotNullish(jdsItem.facilityCode)) {
-        containedOrg.identifier = [new fhirResource.Identifier(jdsItem.facilityCode, "urn:oid:2.16.840.1.113883.6.233")];
+        containedOrg.identifier = [new fhirResource.Identifier(jdsItem.facilityCode, 'urn:oid:2.16.840.1.113883.6.233')];
     }
     containedOrg.name = jdsItem.facilityName;
     containedOrg.text = {
-        'div': '<div>' + jdsItem.facilityName + '</div>',
+        'div': '<div>' + _.escape(jdsItem.facilityName) + '</div>',
         'status': 'generated'
-    }
+    };
 
 
     //================================
     // SET DATE
     //================================
-    fhirItem.resource.date = fhirUtils.convertToFhirDateTime(jdsItem.administeredDateTime);
+    fhirItem.resource.date = fhirUtils.convertToFhirDateTime(jdsItem.administeredDateTime, fhirUtils.getSiteHash(jdsItem.uid));
 
     //================================
     // SET VACCINETYPE
@@ -257,21 +286,22 @@ function createImmunization(jdsItem, fhirItems, req, updated) {
     //================================
     // SET PERFORMER
     //================================
+    var containedPerformer;
     if (jdsItem.performerUid !== undefined) {
         var performerRefId = helpers.generateUUID();
         fhirItem.resource.performer = new fhirResource.ReferenceResource('#' + performerRefId);
 
         // PREP PERFORMER contained node
-        var containedPerformer = new fhirResource.Practitioner(performerRefId, jdsItem.performerUid);
+        containedPerformer = new fhirResource.Practitioner(performerRefId, jdsItem.performerUid);
 
         if (nullchecker.isNotNullish(jdsItem.performerUid)) {
-            containedPerformer.identifier = [new fhirResource.Identifier(jdsItem.performerUid, "http://vistacore.us/fhir/id/uid")];
+            containedPerformer.identifier = [new fhirResource.Identifier(jdsItem.performerUid, 'http://vistacore.us/fhir/id/uid')];
         }
         containedPerformer.name = jdsItem.performerName;
         containedPerformer.text = {
-            'div': '<div>' + jdsItem.performerName + '</div>',
+            'div': '<div>' + _.escape(jdsItem.performerName) + '</div>',
             'status': 'generated'
-        }
+        };
     }
 
     //================================
@@ -282,19 +312,20 @@ function createImmunization(jdsItem, fhirItems, req, updated) {
     //================================
     // SET ENCOUNTER
     //================================
+    var containedEncounter;
     if (jdsItem.encounterUid !== undefined) {
 
         var encounterRefId = helpers.generateUUID();
         fhirItem.resource.encounter = new fhirResource.ReferenceResource('#' + encounterRefId);
 
         // PREP ENCOUNTER contained node
-        var containedEncounter = new fhirResource.Encounter(encounterRefId);
+        containedEncounter = new fhirResource.Encounter(encounterRefId);
         containedEncounter.text = {
-            'div': '<div>' + jdsItem.encounterName + '</div>',
+            'div': '<div>' + _.escape(jdsItem.encounterName) + '</div>',
             'status': 'generated'
-        }
+        };
         containedEncounter.status = 'finished';
-        containedEncounter.identifier = [new fhirResource.Identifier(jdsItem.encounterUid, "http://vistacore.us/fhir/id/uid")];
+        containedEncounter.identifier = [new fhirResource.Identifier(jdsItem.encounterUid, 'http://vistacore.us/fhir/id/uid')];
     }
 
     //================================
@@ -305,14 +336,15 @@ function createImmunization(jdsItem, fhirItems, req, updated) {
     //================================
     // SET LOCATION
     //================================
+    var containedLocation;
     if (jdsItem.locationUid !== undefined) {
         var locationRefId = helpers.generateUUID();
         fhirItem.resource.location = new fhirResource.ReferenceResource('#' + locationRefId);
 
-        var identifier = [new fhirResource.Identifier(jdsItem.locationUid, "http://vistacore.us/fhir/id/uid")];
+        var identifier = [new fhirResource.Identifier(jdsItem.locationUid, 'http://vistacore.us/fhir/id/uid')];
 
         // PREP LOCATION contained node
-        var containedLocation = new fhirResource.Location(locationRefId, jdsItem.locationName, identifier);
+        containedLocation = new fhirResource.Location(locationRefId, jdsItem.locationName, identifier);
     }
 
     //================================
@@ -348,6 +380,7 @@ function createImmunization(jdsItem, fhirItems, req, updated) {
     // SET REACTION
     // Note: SHOULD NOT BE PRESENT if wasNotGiven = true
     //================================
+    var containedReaction;
     if (!fhirItem.resource.wasNotGiven && (jdsItem.reactionName !== undefined)) {
 
         var reactionRefId = helpers.generateUUID();
@@ -359,7 +392,7 @@ function createImmunization(jdsItem, fhirItems, req, updated) {
         var coding = new fhirResource.Coding(jdsItem.reactionCode, jdsItem.reactionName);
         var code = new fhirResource.CodeableConcept(null, coding);
 
-        var containedReaction = new fhirResource.Observation(
+        containedReaction = new fhirResource.Observation(
             reactionRefId,
             code,
             'final',
@@ -367,10 +400,9 @@ function createImmunization(jdsItem, fhirItems, req, updated) {
             jdsItem.reactionName,
             'String');
         containedReaction.text = {
-            'div': '<div>' + jdsItem.reactionName + '</div>',
+            'div': '<div>' + _.escape(jdsItem.reactionName) + '</div>',
             'status': 'generated'
-        }
-
+        };
     }
 
     //================================
@@ -418,3 +450,4 @@ module.exports.convertToFhir = convertToFhir;
 module.exports.getResourceConfig = getResourceConfig;
 module.exports.getImmunization = getImmunization;
 module.exports.getFhirItems = getFhirItems;
+module.exports.createConformanceData = createConformanceData;

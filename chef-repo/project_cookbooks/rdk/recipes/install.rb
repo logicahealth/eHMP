@@ -3,6 +3,8 @@
 # Recipe:: install
 #
 
+include_recipe "rdk::service" # Included due to dependency to service resource
+
 remote_file "#{Chef::Config['file_cache_path']}/rdk.zip" do
   source node[:rdk][:source]
   mode   "0755"
@@ -28,7 +30,7 @@ execute "install modules" do
   cwd node[:rdk][:home_dir]
   command "npm install"
   action :run
-  notifies :restart, "rdk_node_cluster[#{node[:rdk][:fetch_server][:service]}]"
+  notifies :restart, "service[#{node[:rdk][:services][:fetch_server][:service]}]"
   only_if ("mountpoint -q #{node[:rdk][:home_dir]}")
 end
 
@@ -36,8 +38,8 @@ execute "install write modules" do
   cwd node[:rdk][:write_dir]
   command "npm install"
   action :run
-  notifies :restart, "rdk_node_cluster[#{node[:rdk][:write_back][:service]}]"
-  notifies :restart, "rdk_node_cluster[#{node[:rdk][:pick_list][:service]}]"
+  notifies :restart, "service[#{node[:rdk][:services][:write_back][:service]}]"
+  notifies :restart, "service[#{node[:rdk][:services][:pick_list][:service]}]"
   only_if ("mountpoint -q #{node[:rdk][:home_dir]}")
 end
 
@@ -50,14 +52,14 @@ execute 'restart the fetch_server on dev deploys' do
   command 'stop fetch_server ; start fetch_server'
   action :run
   only_if "mountpoint -q #{node[:rdk][:home_dir]}"
-  only_if "/sbin/status #{node[:rdk][:fetch_server][:service]} | grep running", :user => "root"
+  only_if "/sbin/status #{node[:rdk][:services][:fetch_server][:service]} | grep running", :user => "root"
 end
 
 execute "install oracledb module" do
   cwd node[:rdk][:home_dir]
   command "npm install oracledb@#{node[:rdk][:oracledb_module][:version]}"
   action :run
-  notifies :restart, "rdk_node_cluster[#{node[:rdk][:fetch_server][:service]}]"
+  notifies :restart, "service[#{node[:rdk][:services][:fetch_server][:service]}]"
   only_if ("mountpoint -q #{node[:rdk][:home_dir]}")
 end
 
@@ -65,17 +67,19 @@ execute "extract from ZIP" do
   cwd node[:rdk][:home_dir]
   command "unzip #{Chef::Config['file_cache_path']}/rdk.zip"
   action :run
-  notifies :restart, "rdk_node_cluster[#{node[:rdk][:fetch_server][:service]}]"
-  notifies :restart, "rdk_node_cluster[#{node[:rdk][:write_back][:service]}]"
-  notifies :restart, "rdk_node_cluster[#{node[:rdk][:pick_list][:service]}]"
+  notifies :restart, "service[#{node[:rdk][:services][:fetch_server][:service]}]"
+  notifies :restart, "service[#{node[:rdk][:services][:write_back][:service]}]"
+  notifies :restart, "service[#{node[:rdk][:services][:pick_list][:service]}]"
   only_if { (Dir.entries(node[:rdk][:home_dir]) - %w{ . .. }).empty? }
 end
+
+mvi = find_node_by_role("mvi", node[:stack], "mocks")
 
 template "#{node[:rdk][:config][:xml_path]}/1305.xml" do
   source "1305.xml.erb"
   mode "644"
   variables({
-  :processing_code => node[:rdk][:config][:processing_code]
+      :mvi => mvi
   })
   action :create
 end
@@ -84,7 +88,7 @@ template "#{node[:rdk][:config][:xml_path]}/1309.xml" do
   source "1309.xml.erb"
   mode "644"
   variables({
-  :processing_code => node[:rdk][:config][:processing_code]
+      :mvi => mvi
   })
   action :create
 end

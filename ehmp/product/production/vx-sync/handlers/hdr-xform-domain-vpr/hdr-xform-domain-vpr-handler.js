@@ -97,10 +97,11 @@ function handle(log, config, environment, job, handlerCallback) {
             var meta = {
                 jpid: job.jpid,
                 rootJobId: job.rootJobId,
+                priority: job.priority,
                 param: job.param
             };
 
-            return jobUtil.createRecordEnrichment(job.patientIdentifier, job.dataDomain, item, meta);
+            return jobUtil.createEventPrioritizationRequest(job.patientIdentifier, job.dataDomain, item, meta);
         });
 
         log.debug('hdr-xform-domain-vpr-handler.handle: Jobs prepared.  jobsToPublish: %j', jobsToPublish);

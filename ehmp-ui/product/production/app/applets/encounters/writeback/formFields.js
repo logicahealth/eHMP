@@ -15,111 +15,127 @@ define([
     };
     var diagnosesContainer = {
         control: 'container',
-        extraClasses: ['row', 'bottom-padding-xs'],
+        extraClasses: ['row'],
         items: [{
             control: 'container',
-            extraClasses: ['col-xs-11'],
+            extraClasses: ['row', 'col-md-12', 'bottom-padding-xs'],
             items: [{
-                control: 'drilldownChecklist',
-                selectOptions: {
-                    control: 'select',
-                    label: 'Diagnoses Section',
-                    name: 'diagnosesSection',
-                    pickList: 'DiagnosisCollection',
-                    extraClasses: ['items-shown-md'],
-                    size: 10,
-                    srOnlyLabel: true,
-                    attributeMapping: {
-                        id: 'categoryName',
-                        value: 'categoryName',
-                        label: 'categoryName'
-                    }
-                },
-                checklistOptions: {
-                    control: 'checklist',
-                    name: 'values',
-                    extraClasses: ['items-shown-md', 'diagChecklist'],
-                    attributeMapping: {
-                        id: 'icdCode'
-                    }
-                }
-            }]
-        }, {
-            control: 'container',
-            extraClasses: ['col-xs-1'],
-            items: [{
-                control: 'popover',
-                label: 'Add Other',
-                name: 'add-other-diagnosis-popover',
-                header: 'Add Other Diagnosis',
-                title: 'Press enter to add other diagnoses.',
-                size: 'sm',
-                options: {
-                    placement: 'left'
-                },
-                extraClasses: ['btn-default', 'offset-btn-md'],
+                control: 'container',
+                extraClasses: ['col-md-11', 'left-padding-md'],
                 items: [{
                     control: 'container',
-                    extraClasses: ['row', 'section-add-other-diagnosis'],
+                    extraClasses: ['row', 'diagnosis-section-container'],
                     items: [{
-                        control: 'container',
-                        extraClasses: ['col-xs-10', 'bottom-padding-xs'],
-                        items: [{
-                            control: 'input',
-                            name: 'addOtherDiagnosisSearchString',
-                            placeholder: 'Search for diagnosis',
-                            label: 'Search for a diagnosis',
+                        control: 'drilldownChecklist',
+                        selectOptions: {
+                            control: 'select',
+                            label: 'Diagnoses Section',
+                            name: 'diagnosesSection',
+                            pickList: 'DiagnosisCollection',
+                            extraClasses: ['items-shown-md'],
+                            size: 10,
                             srOnlyLabel: true,
-                            title: 'Please enter in text to start searching for a diagnosis, and then press tab to navigate to the search button.'
-                        }]
-                    }, {
-                        control: 'container',
-                        extraClasses: ['col-xs-2', 'bottom-padding-xs'],
-                        items: [{
-                            control: 'button',
-                            type: 'button',
-                            label: '',
-                            size: 'sm',
-                            extraClasses: ['btn-default', 'btn-block'],
-                            icon: 'fa-search',
-                            title: 'Press enter to search based on entered text, and then press tab to view the results listed below.',
-                            id: 'add-other-diagnosis-search-btn'
-                        }]
-                    }, {
-                        control: 'container',
-                        extraClasses: ['col-xs-12'],
-                        items: [{
-                            control: 'treepicker',
-                            name: 'selectAddOtherDiagnosis',
                             attributeMapping: {
-                                href: 'childHref'
-                            },
-                            itemTemplate: '{{preferredText}} ({{icdCode}})'
-                        }]
-                    }, {
-                        control: 'container',
-                        extraClasses: ['col-xs-12'],
-                        items: [{
-                            control: 'container',
-                            extraClasses: ['text-right'],
-                            items: [{
-                                control: 'button',
-                                type: 'button',
-                                label: 'Cancel',
-                                extraClasses: ['btn-default', 'btn-sm'],
-                                title: 'Press enter to cancel.',
-                                id: 'add-other-diagnosis-cancel-btn'
-                            }, {
-                                control: 'button',
-                                type: 'button',
-                                label: 'Add',
-                                extraClasses: ['btn-primary', 'btn-sm'],
-                                title: 'Press enter to add.',
-                                id: 'add-other-diagnosis-add-btn',
-                                disabled: true
-                            }]
-                        }]
+                                id: 'categoryName',
+                                value: 'categoryName',
+                                label: 'categoryName'
+                            }
+                        },
+                        checklistOptions: {
+                            control: 'checklist',
+                            name: 'values',
+                            extraClasses: ['items-shown-md', 'diagChecklist'],
+                            attributeMapping: {
+                                id: 'icdCode'
+                            }
+                        }
                     }]
+                }]
+            }, {
+                control: 'container',
+                extraClasses: ['col-md-1', 'left-padding-sm'],
+                items: [{
+                    control: 'popover',
+                    label: 'Add Other',
+                    name: 'add-other-diagnosis-popover',
+                    header: 'Add Other Diagnosis',
+                    title: 'Press enter to add other diagnoses.',
+                    size: 'sm',
+                    options: {
+                        placement: 'left'
+                    },
+                    extraClasses: ['btn-primary', 'offset-btn-md'],
+                    items: [
+                        {
+                            control:'container',
+                            extraClasses:['flex-display','flex-direction-column','encounters-diagnosis-container'],
+                            items:[
+                                {
+                                    control: 'container',
+                                    extraClasses: ['flex-grow-fixed', 'section-add-other-diagnosis', 'all-padding-sm','bottom-border-grey-lightest'],
+                                    items: [{
+                                        control: 'container',
+                                        extraClasses: [],
+                                        items: [{
+                                            control: 'searchbar',
+                                            name: 'addOtherDiagnosisSearchString',
+                                            id: 'addOtherDiagnosisSearchString',
+                                            placeholder: 'Search for a diagnosis',
+                                            label: 'Search for a diagnosis',
+                                            srOnlyLabel: true,
+                                            title: 'Enter in text to search for a diagnosis.'
+                                        }]
+                                    }]
+                                },
+                                {
+                                    control: 'container',
+                                    extraClasses:['scrolling-content'],
+                                    items:[
+                                        {
+                                            control: 'container',
+                                            extraClasses: [''],
+                                            items: [{
+                                                control: 'treepicker',
+                                                name: 'selectAddOtherDiagnosis',
+                                                attributeMapping: {
+                                                    href: 'childHref'
+                                                },
+                                                itemTemplate: '{{preferredText}} ({{icdCode}})'
+                                            }]
+                                        }
+                                    ]
+                                },
+                                {
+                                    control: 'container',
+                                    extraClasses:['flex-grow-fixed','all-padding-sm','top-border-grey-light','background-color-grey-lightest'],
+                                    items:[{
+                                        control: 'container',
+                                        extraClasses: [],
+                                        items: [{
+                                            control: 'container',
+                                            extraClasses: ['text-right'],
+                                            items: [{
+                                                control: 'button',
+                                                type: 'button',
+                                                label: 'Cancel',
+                                                extraClasses: ['btn-primary', 'btn-sm'],
+                                                title: 'Press enter to cancel.',
+                                                id: 'add-other-diagnosis-cancel-btn'
+                                            }, {
+                                                control: 'button',
+                                                type: 'button',
+                                                label: 'Add',
+                                                extraClasses: ['btn-primary', 'btn-sm'],
+                                                title: 'Press enter to add.',
+                                                id: 'add-other-diagnosis-add-btn',
+                                                disabled: true
+                                            }]
+                                        }]
+                                    }]
+                                }
+                            ]
+                        }
+                    ]
                 }]
             }]
         }]
@@ -167,7 +183,7 @@ define([
             extraClasses: ['row', 'row-eq-height'],
             items: [{
                 control: 'container',
-                extraClasses: ['col-md-6', 'well', 'well-flex'],
+                extraClasses: ['col-md-6', 'well', 'well-flex', 'left-padding-sm', 'right-padding-sm'],
                 modelListeners: ['serviceConnected', 'ratedDisabilities'],
                 template: Handlebars.compile('<p>Service Connected: {{{serviceConnected}}}</p><p>Rated Disabilities: <ul>{{{ratedDisabilities}}}</ul></p>')
             }, {
@@ -179,7 +195,7 @@ define([
                     template: '<legend>Visit Related To</legend>',
                     items: [{
                         control: 'radio',
-                        name: 'service-connected',
+                        name: 'encounterServiceConnected',
                         label: 'Service Connected',
                         value: 'undefined',
                         extraClasses: ['bottom-border-grey-light'],
@@ -316,7 +332,7 @@ define([
         extraClasses: ['row'],
         items: [{
             control: 'container',
-            extraClasses: ['col-md-9'],
+            extraClasses: ['col-md-9', 'visit-type-container', 'right-padding-sm'],
             items: [{
                 control: 'container',
                 extraClasses: ['row'],
@@ -350,7 +366,7 @@ define([
             }]
         }, {
             control: 'container',
-            extraClasses: ['col-md-3', 'modifier-well'],
+            extraClasses: ['col-md-3', 'modifier-well', 'left-padding-no'],
             items: [{
                 control: 'popover',
                 label: 'Add/Remove Modifiers',
@@ -360,7 +376,7 @@ define([
                 options: {
                     placement: 'left'
                 },
-                extraClasses: ['btn-default', 'btn-sm', 'btn-block'],
+                extraClasses: ['btn-primary', 'btn-sm', 'btn-block'],
                 items: [{
                     control: 'container',
                     extraClasses: ['row', 'section-add-modifiers'],
@@ -404,22 +420,30 @@ define([
         }]
     };
     var providersEncounterContainer = {
-        control: 'multiselectSideBySide',
-        name: 'providerList',
-        label: 'Providers',
-        attributeMapping: {
-            id: 'code',
-            name: 'name',
-            label: 'name',
-        },
-        additionalColumns: [{
-            columnClasses: ["text-center"],
-            columnTitle: "Primary Provider *",
-            name: "primaryProviderCheck",
-            extraClasses: ["cell-valign-middle", "bottom-margin-no"],
-            control: 'checkbox',
-            srOnlyLabel: true,
-            label: "Primary Provider"
+        control: 'container',
+        extraClasses: ['row'],
+        items: [{
+            control: 'container',
+            extraClasses: ['col-md-12', 'bottom-margin-sm'],
+            items: [{
+                control: 'multiselectSideBySide',
+                name: 'providerList',
+                label: 'Providers',
+                attributeMapping: {
+                    id: 'code',
+                    name: 'name',
+                    label: 'name',
+                },
+                additionalColumns: [{
+                    columnClasses: ["text-center"],
+                    columnTitle: "Primary Provider *",
+                    name: "primaryProviderCheck",
+                    extraClasses: ["cell-valign-middle", "bottom-margin-no", "pixel-height-13"],
+                    control: 'checkbox',
+                    srOnlyLabel: true,
+                    label: "Primary Provider"
+                }]
+            }]
         }]
     };
     var procedureHeaderContainer = {
@@ -428,120 +452,112 @@ define([
         items: [{
             control: 'container',
             extraClasses: ['col-md-12'],
-            template: '<h5>Procedure</h5></h5>'
+            template: '<h5>Procedure</h5>'
         }]
     };
     var procedureContainer = {
         control: 'container',
-        extraClasses: ['row', 'bottom-padding-xs'],
+        extraClasses: ['row'],
         items: [{
             control: 'container',
-            extraClasses: ['col-md-11'],
+            extraClasses: ['row', 'col-md-12', 'bottom-padding-xs'],
             items: [{
                 control: 'container',
-                extraClasses: ['row', 'procedure-section-container'],
-                items: [{
-                    control: 'drilldownChecklist',
-                    extraClasses: ['drilldownColumnResize-5:7'],
-                    selectOptions: {
-                        control: 'select',
-                        name: 'procedureSection',
-                        label: 'Procedure Section. Use the up and down arrow keys to view the predefined procedure section, then press tab to view the procedures.',
-                        pickList: 'ProcedureCollection',
-                        extraClasses: ['items-shown-md'],
-                        size: 10,
-                        srOnlyLabel: true,
-                        attributeMapping: {
-                            id: 'categoryName',
-                            label: 'categoryName',
-                            value: 'categoryName'
-                        }
-                    },
-                    checklistOptions: {
-                        control: 'checklist',
-                        name: 'cptCodes',
-                        extraClasses: ['items-shown-md'],
-                        attributeMapping: {
-                            id: 'ien'
-                        }
-                    }
-                }]
-            }]
-        }, {
-            control: 'container',
-            extraClasses: ['col-xs-1'],
-            items: [{
-                control: 'popover',
-                label: 'Add Other',
-                name: 'add-other-procedure-popover',
-                header: 'Add Other Procedure',
-                title: 'Press enter to add other procedure.',
-                size: 'sm',
-                options: {
-                    placement: 'left'
-                },
-                extraClasses: ['btn-default', 'offset-btn-md', 'btn-xs'],
+                extraClasses: ['col-md-11', 'left-padding-md'],
                 items: [{
                     control: 'container',
-                    extraClasses: ['row', 'section-add-other-procedure'],
+                    extraClasses: ['row', 'procedure-section-container'],
+                    items: [{
+                        control: 'drilldownChecklist',
+                        extraClasses: ['drilldownColumnResize-5:7'],
+                        selectOptions: {
+                            control: 'select',
+                            name: 'procedureSection',
+                            label: 'Procedure Section. Use the up and down arrow keys to view the predefined procedure section, then press tab to view the procedures.',
+                            pickList: 'ProcedureCollection',
+                            extraClasses: ['items-shown-md'],
+                            size: 10,
+                            srOnlyLabel: true,
+                            attributeMapping: {
+                                id: 'categoryName',
+                                label: 'categoryName',
+                                value: 'categoryName'
+                            }
+                        },
+                        checklistOptions: {
+                            control: 'checklist',
+                            name: 'cptCodes',
+                            extraClasses: ['items-shown-md'],
+                            attributeMapping: {
+                                id: 'ien'
+                            }
+                        }
+                    }]
+                }]
+            }, {
+                control: 'container',
+                extraClasses: ['col-xs-1', 'left-padding-sm'],
+                items: [{
+                    control: 'popover',
+                    label: 'Add Other',
+                    name: 'add-other-procedure-popover',
+                    header: 'Add Other Procedure',
+                    title: 'Press enter to add other procedure.',
+                    size: 'sm',
+                    options: {
+                        placement: 'left'
+                    },
+                    extraClasses: ['btn-primary', 'offset-btn-md'],
                     items: [{
                         control: 'container',
-                        extraClasses: ['col-xs-10', 'bottom-padding-xs'],
-                        items: [{
-                            control: 'input',
-                            name: 'addOtherProcedureSearchString',
-                            placeholder: 'Search for procedure',
-                            label: 'Add Other Procedure Input',
-                            srOnlyLabel: true,
-                            title: 'Please enter in a procedure to filter.'
-                        }]
-                    }, {
-                        control: 'container',
-                        extraClasses: ['col-xs-2', 'bottom-padding-xs'],
-                        items: [{
-                            control: 'button',
-                            type: 'button',
-                            label: '',
-                            size: 'sm',
-                            extraClasses: ['btn-default', 'btn-block'],
-                            icon: 'fa-search',
-                            title: 'Press enter to search',
-                            id: 'add-other-procedure-search-btn'
-                        }]
-                    }, {
-                        control: 'container',
-                        extraClasses: ['col-xs-12'],
-                        items: [{
-                            control: 'select',
-                            name: 'selectAddOtherProcedure',
-                            srOnlyLabel: true,
-                            label: 'Add Other Procedure Selection',
-                            size: 10,
-                            extraClasses: ['items-shown-md'],
-                            title: 'Press enter to browse through select options.',
-                            pickList: 'addOtherProcedurePicklist'
-                        }]
-                    }, {
-                        control: 'container',
-                        extraClasses: ['col-xs-12'],
+                        extraClasses: ['section-add-other-procedure'],
                         items: [{
                             control: 'container',
-                            extraClasses: ['text-right'],
+                            extraClasses: ['all-padding-sm'],
                             items: [{
-                                control: 'button',
-                                type: 'button',
-                                label: 'Cancel',
-                                extraClasses: ['btn-default', 'btn-sm'],
-                                title: 'Press enter to cancel.',
-                                id: 'add-other-procedure-cancel-btn'
-                            }, {
-                                control: 'button',
-                                type: 'button',
-                                label: 'Add',
-                                extraClasses: ['btn-primary', 'btn-sm'],
-                                title: 'Press enter to add.',
-                                id: 'add-other-procedure-add-btn',
-                                disabled: true
+                                control: 'searchbar',
+                                name: 'addOtherProcedureSearchString',
+                                id: 'addOtherProcedureSearchString',
+                                placeholder: 'Search for a procedure',
+                                label: 'Add Other Procedure Input',
+                                srOnlyLabel: true,
+                                title: 'Enter in a procedure to search.'
+                            }]
+                        }, {
+                            control: 'container',
+                            extraClasses: ['left-padding-sm', 'right-padding-sm', 'bottom-padding-sm'],
+                            items: [{
+                                control: 'select',
+                                name: 'selectAddOtherProcedure',
+                                srOnlyLabel: true,
+                                label: 'Add Other Procedure Selection',
+                                size: 10,
+                                extraClasses: ['items-shown-md'],
+                                title: 'Press enter to browse through select options.',
+                                pickList: 'addOtherProcedurePicklist'
+                            }]
+                        }, {
+                            control: 'container',
+                            extraClasses: ['all-padding-sm','background-color-grey-lightest','top-border-grey-light'],
+                            items: [{
+                                control: 'container',
+                                extraClasses: ['text-right'],
+                                items: [{
+                                    control: 'button',
+                                    type: 'button',
+                                    label: 'Cancel',
+                                    extraClasses: ['btn-primary', 'btn-sm'],
+                                    title: 'Press enter to cancel.',
+                                    id: 'add-other-procedure-cancel-btn'
+                                }, {
+                                    control: 'button',
+                                    type: 'button',
+                                    label: 'Add',
+                                    extraClasses: ['btn-primary', 'btn-sm'],
+                                    title: 'Press enter to add.',
+                                    id: 'add-other-procedure-add-btn',
+                                    disabled: true
+                                }]
                             }]
                         }]
                     }]
@@ -560,34 +576,35 @@ define([
                 name: 'ProcedureCollection',
                 label: 'Selected Procedures',
                 extraClasses: ['nested-comment-box', 'nested-comment-box-alt', 'faux-table-row-container'],
+                maxComments: 1,
                 itemColumn: {
                     columnTitle: 'Selected Procedures',
-                    columnClasses: ['flex-width-7']
+                    columnClasses: ['flex-width-4']
                 },
                 commentColumn: {
                     columnTitle: 'Comments',
                     name: 'comments',
-                    columnClasses: ['text-center']
+                    columnClasses: ['percent-width-10']
                 },
                 additionalColumns: [{
                     columnTitle: 'Quantity',
-                    columnClasses: ['text-center'],
+                    columnClasses: ['percent-width-10'],
                     control: 'input',
-                    extraClasses: ['input-sm', 'percent-width-80', 'center-margin'],
+                    extraClasses: ['input-sm', 'percent-width-80', 'center-margin', 'pixel-height-37'],
                     name: 'quantity',
                     placeholder: '1',
                     srOnlyLabel: true,
-                    label: 'Please enter in quantity',
-                    title: 'Please enter in quantity'
+                    label: 'Enter in quantity',
+                    title: 'Enter in quantity'
                 }, {
-                    columnClasses: ['flex-width-2', 'text-center'],
+                    columnClasses: [],
                     columnTitle: 'Provider *',
                     control: 'select',
-                    extraClasses: ['input-sm', 'all-margin-no'],
+                    extraClasses: ['input-sm', 'all-margin-no', 'pixel-height-37'],
                     name: 'provider',
                     srOnlyLabel: true,
-                    label: 'Please enter in provider.',
-                    title: 'Please enter in provider.',
+                    label: 'Enter in provider.',
+                    title: 'Enter in provider.',
                     pickList: 'providerPickList',
                     attributeMapping: {
                         id: 'code',
@@ -596,7 +613,7 @@ define([
                     },
                 }, {
                     columnTitle: 'Add Modifiers',
-                    columnClasses: ['flex-width-2', 'text-center'],
+                    columnClasses: ['text-center'],
                     control: 'popover',
                     extraClasses: ['btn-icon', 'btn-xs', 'procedure-modifier-popover'],
                     name: 'itemModifiers',
@@ -675,25 +692,25 @@ define([
             extraClasses: ['row'],
             items: [{
                 control: 'container',
-                extraClasses: ['col-xs-6'],
-                template: Handlebars.compile('<p aria-hidden="true">(* indicates a required field.)</p>{{#if savedTime}}<p><span id="immunization-historical-saved-at">Saved at: {{savedTime}}</span></p>{{/if}}')
+                extraClasses: ['col-xs-12'],
+                template: Handlebars.compile('{{#if savedTime}}<p><span id="immunization-historical-saved-at">Saved at: {{savedTime}}</span></p>{{/if}}')
             }, {
                 control: 'container',
-                extraClasses: ['col-xs-6'],
+                extraClasses: ['col-xs-12'],
                 items: [{
                     control: 'button',
-                    id: 'cancel-btn',
+                    id: 'cancelEncounterBtn',
                     label: 'Cancel',
                     title: 'Press enter to cancel.',
-                    extraClasses: ['btn-default', 'btn-sm', 'left-margin-xs'],
+                    extraClasses: ['btn-default', 'btn-sm'],
                     name: 'cancel',
                     type: 'button'
                 }, {
                     control: 'button',
                     id: 'ok-btn',
-                    label: 'OK',
+                    label: 'Accept',
                     title: 'Press enter to confirm.',
-                    extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
+                    extraClasses: ['btn-primary', 'btn-sm'],
                     name: 'ok'
                 }]
             }]

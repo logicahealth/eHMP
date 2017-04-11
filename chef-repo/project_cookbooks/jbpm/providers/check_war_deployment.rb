@@ -15,6 +15,7 @@ def check_deploy(war, attempt, max_attempts)
   return false if attempt > max_attempts
   begin
     unless ::File.exists?("#{node[:jbpm][:home]}/deployments/#{war}.war.deployed")
+      raise "#{new_resource.name} failed to deploy! Please check #{node[:jbpm][:home]}/deployments/#{new_resource.name}.war.failed in the JBPM VM" if ::File.exist?("#{new_resource.name}.war.failed")
       sleep(5)
       return check_deploy(war, attempt + 1, max_attempts)
     end

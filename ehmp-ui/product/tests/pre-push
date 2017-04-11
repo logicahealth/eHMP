@@ -1,0 +1,71 @@
+#!/bin/bash
+# Run this file to install the pre-push hook.
+# When updating this file, make sure to update the file in all repositories.
+
+# Keep up-to-date
+if [[ "$3" != "updated" ]]; then
+    pushd "$(dirname "$0")" > /dev/null
+    pre_push_hook_path="$(git rev-parse --git-dir)/hooks/pre-push"
+    git show master:product/tests/pre-push > "$pre_push_hook_path"
+    success="$?"
+    [[ "$success" -eq 0 ]] && chmod 755 "$pre_push_hook_path"
+    popd > /dev/null
+    if [[ -z "$1" ]]; then
+        exit "$success"
+    fi
+    exec "$0" "$@" "updated"
+fi
+
+# This hook is called with the following parameters:
+#
+# $1 -- Name of the remote to which the push is being done
+# $2 -- URL to which the push is being done
+#
+# If pushing without using a named remote those arguments will be equal.
+#
+# Information about the commits which are being pushed is supplied as lines to
+# the standard input in the form:
+#
+#   <local ref> <local sha1> <remote ref> <remote sha1>
+
+jenkins_host='https://ci.vistacore.us'
+# shellcheck disable=SC2001
+jenkins_repository="$(echo "${PWD#*/vistacore/}" | sed 's:/.*::')"
+jenkins_token_file="$HOME/.jenkins_token"
+
+remote_name="$(git rev-parse --symbolic-full-name "HEAD@{upstream}")"
+if [[ "$remote_name" = 'refs/remotes/origin/master' ]]; then
+    [[ -f "$jenkins_token_file" ]] && jenkins_token="$(< "$jenkins_token_file")"
+    if [[ -z "$jenkins_token" ]]; then
+        echo -e "Warning: $jenkins_token_file is empty but should contain username:apitoken. Attempting to use git credentials.\nRead step 2 at https://wiki.vistacore.us/x/Zy-o"
+        git_credentials="$(git credential-osxkeychain get <<<$'host=code.vistacore.us\nprotocol=https\n\n' | sed 's/username=//;s/password=//' | awk '{getline x;print x}1')"
+        jenkins_token="$(echo -n "$git_credentials" | tr '\n' ':')"
+    fi
+    [[ -n "$jenkins_token" ]] && build_status_acceptance="$(curl --silent --user "$jenkins_token" "${jenkins_host}/job/${jenkins_repository}-acceptance-test-build-master/lastCompletedBuild/api/json?tree=result")"
+    [[ -n "$jenkins_token" ]] && build_status_unit="$(curl --silent --user "$jenkins_token" "${jenkins_host}/job/${jenkins_repository}-dev-build-master/lastCompletedBuild/api/json?tree=result")"
+    if [[ "$build_status_unit" =~ FAILURE ]] || [[ "$build_status_acceptance" =~ FAILURE ]]; then
+        echo -e "\033[1;31mJenkins job for $jenkins_repository master is red, not pushing.\nBypass with git push --no-verify\033[0m"
+        exit 1
+    fi
+fi
+
+
+
+# remote="$1"
+# url="$2"
+# z40=0000000000000000000000000000000000000000
+# IFS=' '
+# while read local_ref local_sha remote_ref remote_sha; do
+# 	if [[ "$local_sha" = $z40 ]]; then
+# 	    # Delete branch
+#         true
+#     elif [[ "$remote_sha" = $z40 ]]; then
+#         # New branch
+#         true
+#     else
+#         # Update existing branch
+#         true
+# 	fi
+# done
+
+exit 0

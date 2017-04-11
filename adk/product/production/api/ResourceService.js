@@ -46,6 +46,24 @@ define([
         return this.length;
     };
 
+    //we create cleanup function to clean extraneous properties
+    //that we set on the original backbone collection.
+    //this cleans up potential closures from calling applets (fetchOptions being main problem).
+    Backbone.Collection.prototype.cleanUp = function(){
+
+        if (this.hasOwnProperty('originalModels')) {
+            delete this.originalModels;
+        }
+
+        if(this.fetchOptions){
+            delete this.fetchOptions;
+        }
+
+        this.stopListening();
+        this.reset();
+
+    };
+
     Backbone.PageableCollection.prototype.next = function(model) {
         return this.fullCollection.at(this.index(model) + 1) || model;
     };
@@ -131,6 +149,7 @@ define([
     };
 
     var resourceService = {
+        DomainCollection: DomainCollection,
         createEmptyCollection: function(options) {
             var fetchOptions = {};
             _.extend(fetchOptions, options);
@@ -169,6 +188,9 @@ define([
                     existingCollection.url = UrlBuilder.buildUrl(resourceTitle);
                 } else {
                     existingCollection.url = UrlBuilder.buildUrl(resourceTitle, criteria);
+                }
+                if (options.collectionConfig && options.collectionConfig.comparator && !existingCollection.comparator) {
+                    existingCollection.comparator = options.collectionConfig.comparator;
                 }
                 createdCollection = existingCollection;
             } else {
@@ -211,7 +233,7 @@ define([
             }
 
             if (options.resourceTitle) {
-                createdCollection.fetch({
+                createdCollection.xhr = createdCollection.fetch({
                     data: data,
                     contentType: contentType,
                     cache: cache,
@@ -229,6 +251,7 @@ define([
                             onSuccess(collection, resp);
                         }
                         collection.trigger('fetch:success');
+                        delete collection.xhr;
                     },
                     error: function(collection, resp, options) {
                         setResponseLogId(resp, options);
@@ -236,6 +259,7 @@ define([
                         if (typeof onError == "function") {
                             onError(collection, resp);
                         }
+                        delete collection.xhr;
                     }
                 });
 
@@ -338,27 +362,29 @@ define([
                 };
             }
             _.extend(collectionConfig, options.collectionConfig);
-            createdCollection = new DomainCollection([], collectionConfig);
+            createdCollection = options.domainCollection || new DomainCollection([], collectionConfig);
 
             createdCollection.url = collectionConfig.url;
 
             createdCollection.fetchOptions = options;
             if (options.resourceTitle) {
-                createdCollection.fetch({
+                createdCollection.xhr = createdCollection.fetch({
                     cache: cache,
                     expires: cacheExpiration, //expiration in seconds, default 5 minutes, false never expires
                     success: function(collection, resp) {
                         if (typeof onSuccess == "function") {
-                            onSuccess(resp);
+                            onSuccess(collection, resp);
                         }
+                        delete collection.xhr;
                     },
                     error: function(collection, resp, options) {
                         setResponseLogId(resp, options);
                         if (resp.status == 200 && (typeof onSuccess == "function")) {
-                            onSuccess(resp);
+                            onSuccess(collection, resp);
                         } else if (typeof onError == "function") {
-                            onError(resp);
+                            onError(collection, resp);
                         }
+                        delete collection.xhr;
                     }
                 });
 
@@ -440,78 +466,6 @@ define([
         }
         return options;
     };
-
-    resourceService.patientRecordService = {
-        createEmptyCollection: function(options) {
-            return resourceService.createEmptyCollection(setPatientFetchParams(this.getCurrentPatient(), options));
-        },
-        fetchCollection: function(options, existingCollection) {
-            return resourceService.fetchCollection(setPatientFetchParams(this.getCurrentPatient(), options), existingCollection);
-        },
-        fetchModel: function(options) {
-            return resourceService.fetchModel(setPatientFetchParams(this.getCurrentPatient(), options));
-        },
-        fetchResponseStatus: function(options) {
-            return resourceService.fetchResponseStatus(setPatientFetchParams(this.getCurrentPatient(), options));
-        },
-        getCurrentPatient: function() {
-            return SessionStorage.get.sessionModel('patient');
-        },
-        refreshCurrentPatient: function() {
-            var that = this;
-            var options = {
-                resourceTitle: 'patient-record-patient',
-            };
-            options.success = function(collection, resp) {
-                var modelIndex = _.indexOf(collection.pluck('pid'), that.getCurrentPatient().get('pid')) || 0;
-                that.setPatientStatusClass(collection.models[modelIndex]);
-                that.getCurrentPatient().set(collection.models[modelIndex].attributes);
-            };
-            options.error = function(collection, error) {
-                console.log("ADK refreshCurrentPatient: -------->> Error");
-                console.log(JSON.stringify(error, null, 4));
-            };
-            this.fetchCollection(options).fetch(options);
-        },
-        setPatientStatusClass: function(model) {
-            if(!_.isUndefined(model)){ 
-                if (model.get('admissionUid') && model.get('admissionUid') !== null) {
-                    model.set('patientStatusClass','Inpatient');
-                } else {
-                    model.set('patientStatusClass','Outpatient');   
-                }
-            }
-        },
-        fetchDateFilteredCollection: function(collection, filterOptions) {
-            return resourceService.fetchDateFilteredCollection(collection, filterOptions);
-        },
-        isPatientInPrimaryVista: function() {
-            var domainModel = SessionStorage.get.sessionModel('patient-domain'),
-                domainData = domainModel.get('data'),
-                vistaSites = domainModel.get('sites'),
-                inVista = false;
-
-            _.each(domainData, function(item) {
-                var pidSite = item.pid.split(';')[0];
-                var match = vistaSites.filter(function(a) {
-                    return a.siteCode === pidSite;
-                });
-                if (match.length) {
-                    inVista = true;
-                }
-            });
-            return inVista;
-        },
-        buildUrl: function(resourceTitle, criteria) {
-            var options = {
-                criteria: criteria
-            };
-
-            return resourceService.buildUrl(resourceTitle, setPatientFetchParams(this.getCurrentPatient(), options).criteria);
-        }
-    };
-
-
 
     return resourceService;
 });

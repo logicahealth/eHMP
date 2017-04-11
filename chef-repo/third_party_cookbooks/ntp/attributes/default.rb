@@ -2,9 +2,9 @@
 # Cookbook Name:: ntp
 # Attributes:: default
 #
-# Author::     ua Timberman (<joshua@opscode.com>)
-# Author:: Tim       (<tsmith@limelight.com>)
-# Author::                 (<charles@opscode.com>)
+# Author:: Joshua Timberman (<joshua@opscode.com>)
+# Author:: Tim Smith (<tsmith@limelight.com>)
+# Author:: Charles Johnson (<charles@opscode.com>)
 #
 # Copyright 2009-2013, Opscode, Inc.
 #

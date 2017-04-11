@@ -1,5 +1,5 @@
 {
-  "VXSYNC_IP": "172.16.3.6",
+  "VXSYNC_IP": "IPADDRES",
   "vxsync": {
     "configRefresh": 0,
     "rules": {
@@ -8,35 +8,46 @@
       "rapid-fire": {
       },
       "operational-data-sync": {
+        "odsAttempts": 10,
+        "odsDelay": 30
       },
       "expiration": {
         "default": 3600000,
         "dod": 3600000
       }
     },
+    "eventPrioritizationRules": {
+        "site-type": {},
+        "domain-type": {
+            "consult": 20,
+            "allergy": -20,
+            "order": 40
+        }
+    },
     "retrySync": {"maxRetries": 3},
     "maxMetastampSize": 10485760,
+    "vistaAssigningAuthority": "USVHA",
     "vistaSites": {
-        "9E7A": {
-          "name": "PANORAMA",
-          "host": "172.16.2.101",
+        "C877": {
+          "name": "KODAK",
+          "host": "IP_ADDRESS",
           "port": 9210,
-          "accessCode": "PW    ",
-          "verifyCode": "PW    !!",
+          "accessCode": "PW",
+          "verifyCode": "PW",
           "localIP": "127.0.0.1",
-          "stationNumber": "500",
+          "stationNumber": "507",
           "localAddress": "localhost",
           "connectTimeout": 3000,
           "sendTimeout": 20000
       },
-        "C877": {
-          "name": "KODAK",
-          "host": "172.16.2.102",
+        "9E7A": {
+          "name": "PANORAMA",
+          "host": "IP_ADDRESS",
           "port": 9210,
-          "accessCode": "PW    ",
-          "verifyCode": "PW    !!",
+          "accessCode": "PW",
+          "verifyCode": "PW",
           "localIP": "127.0.0.1",
-          "stationNumber": "507",
+          "stationNumber": "500",
           "localAddress": "localhost",
           "connectTimeout": 3000,
           "sendTimeout": 20000
@@ -79,6 +90,7 @@
         "host": "127.0.0.1",
         "port": 8080,
         "patientSyncPath": "/sync/doLoad",
+        "patientSyncDemoPath": "/sync/demographicSync",
         "patientUnsyncPath": "/sync/clearPatient",
         "patientStatusPath": "/sync/status",
         "method": "POST"
@@ -90,7 +102,8 @@
     "hmp.extract.schema": "3.001",
 
     "jmeadows": {
-        "version":"2.3.3.0.2",
+        "disabled": false,
+        "version": "2.3.3.0.2",
         "domains": [
             "allergy",
             "appointment",
@@ -109,7 +122,7 @@
         ],
         "defaults": {
             "host": "127.0.0.1",
-            "port": 54000,
+            "port": "5400",
             "method": "GET",
             "timeout": 60000
         },
@@ -152,6 +165,9 @@
         "progressNote": {
             "path": "/dod/progressNote"
         },
+        "ptf": {
+            "path": "/dod/ptf"
+        },
         "radiology": {
             "path": "/dod/radiology"
         },
@@ -187,18 +203,31 @@
                  "stationNumber": 551
              }
         },
-        "operationMode": "PUB/SUB",
+        "operationMode": "REQ/RES",
         "defaults": {
             "host": "localhost",
-            "port": 54000,
+            "port": "5400",
             "method": "GET",
             "timeout": 60000
         },
+        "blackList": [
+
+                {
+                   "siteHash": "2927",
+                   "stationNumber": "202"
+                }
+                ,
+                {
+                   "siteHash": "",
+                   "stationNumber": "504"
+                }
+        ],
+        "disabled": false,
         "pubsubConfig": {
-          "host": "172.16.4.205",
+          "host": "IP_ADDRESS",
           "port": 8999,
           "protocol": "http",
-          "path": "repositories.med.DNS   /fpds/vpr/",
+          "path": "repositories.DNS       /fpds/vpr/",
           "server": "HMPTest",
           "clientName": "eHMP",
           "_type": "json",
@@ -261,6 +290,9 @@
         "procedure": {
             "path": "/hdr/getData?domain=procedure"
         },
+        "ptf": {
+            "path": "/hdr/getData?domain=ptf"
+        },
         "vital": {
             "path": "/hdr/getData?domain=vital"
         },
@@ -302,9 +334,10 @@
         "domains": [
             "vlerdocument"
         ],
+        "disabled": false,
         "defaults": {
             "host": "localhost",
-            "port": 54000,
+            "port": "5400",
             "method": "GET",
             "timeout": 60000
         },
@@ -330,6 +363,7 @@
             "pov",
             "procedure",
             "problem",
+            "ptf",
             "surgery",
             "visit",
             "vital"
@@ -342,8 +376,8 @@
           "error-request"
         ],
         "primary": [
-          "vista-9E7A-subscribe-request",
           "vista-C877-subscribe-request",
+          "vista-9E7A-subscribe-request",
           "enterprise-sync-request",
           "vista-operational-subscribe-request"
         ],
@@ -392,7 +426,6 @@
 
 
               "hdr-sync-request",
-              "hdr-xform-vpr",
 
               "hdr-sync-allergy-request",
               "hdr-sync-appointment-request",
@@ -469,7 +502,6 @@
           ],
           "hdr": [
               "hdr-sync-request",
-              "hdr-xform-vpr",
 
               "hdr-sync-allergy-request",
               "hdr-sync-appointment-request",
@@ -538,13 +570,16 @@
               "record-enrichment"
           ],
           "prioritization": [
-              "vista-prioritization-request"
+              "event-prioritization-request"
           ],
           "publish": [
               "publish-data-change-event"
           ],
           "resync": [
               "resync-request"
+          ],
+          "update": [
+              "record-update"
           ]
       }
     },
@@ -574,9 +609,9 @@
         },
         "vista-operational-subscribe-request": {
         },
-        "vista-9E7A-subscribe-request": {
-        },
         "vista-C877-subscribe-request": {
+        },
+        "vista-9E7A-subscribe-request": {
         },
         "jmeadows-sync-request": {
         },
@@ -647,8 +682,6 @@
         "jmeadows-cda-document-conversion": {
         },
         "hdr-sync-request": {
-        },
-        "hdr-xform-vpr": {
         },
         "hdr-sync-allergy-request": {
         },
@@ -731,12 +764,13 @@
         "pgd-xform-vpr": {
         },
         "record-enrichment": {
+        	"tubeDetails": [{"ratio": 5000, "priority": {"startValue": 1, "endValue": 20}}, {"ratio": 3000, "priority": {"startValue": 21, "endValue": 40}}, {"ratio": 2000, "priority": {"startValue": 41, "endValue": 60}}, {"ratio": 1000, "priority": {"startValue": 61, "endValue": 80}}, {"ratio": 500, "priority": {"startValue": 81, "endValue": 100}}]
         },
         "store-record": {
         },
         "solr-record-storage": {
         },
-        "vista-prioritization-request": {
+        "event-prioritization-request": {
         },
         "vistahdr-2939-subscribe-request" :{
         },
@@ -748,31 +782,36 @@
         },
         "publish-data-change-event": {
         },
+        "activity-management-event": {
+        },
         "resync-request": {
             "delay": 30
+        },
+        "record-update": {
+            "host": "127.0.0.1",
+            "port": 4999
         }
       }
     },
-    "publishTubes": [],
+    "publishTubes": [
+    ],
 
         "jds": {
             "protocol": "http",
-            "host": "172.16.2.110",
+            "host": "IP_ADDRESS",
             "port": "9082",
             "timeout": 300000
         },
 
         "solrClient": {
-            "host": "172.16.3.10",
-            "port": 8983,
-            "path": "/solr",
-            "core": "vpr"
+            "core": "vpr",
+            "zooKeeperConnection": "IP_ADDRESS:PORT"
         },
 
         "mvi": {
             "protocol": "http",
             "host": "127.0.0.1",
-            "port": 54000,
+            "port": "5400",
             "path": "/mvi/correspondingIds",
             "timeout": 60000
         },
@@ -780,7 +819,7 @@
         "terminology": {
             "protocol": "http",
             "host": "127.0.0.1",
-            "port": 54000,
+            "port": "5400",
             "timeout": 60000,
             "lncPath": "/term/lnc",
             "drugPath": "/term/drug",
@@ -805,6 +844,13 @@
         "loopDelayMillis": 30000,
         "jobTypes": [
           "record-enrichment"
+        ]
+      },
+      "activity-management": {
+        "ignoreSeverity": true,
+        "loopDelayMillis": 30000,
+        "jobTypes": [
+          "activity-management-event"
         ]
       },
       "jmeadows": {
@@ -849,7 +895,6 @@
         "loopDelayMillis": 30000,
         "jobTypes": [
           "hdr-sync-request",
-          "hdr-xform-vpr",
 
           "hdr-sync-allergy-request",
           "hdr-sync-appointment-request",
@@ -915,10 +960,11 @@
         }
       }
     },
+    "auditPath": "/var/log/vxsync/audit/",
     "loggers": [
       {
         "name": "root",
-        "level": "debug"
+        "level": "warn"
       }
     ],
     "metrics": [
@@ -933,14 +979,17 @@
           "heartbeatStaleAgeMillis": 600000
       },
     "osync": {
+        "syncPriority": 50,
         "runImmediately": false,
         "runOnSchedule": true,
         "delay": 500,
+        "duplicatePatientListResetMillis": 86400000,
         "rpcContext": "HMP UI CONTEXT",
         "configRefresh": 0,
         "scheduledRunAtHour": 3,
         "scheduledRunAtMinutes": 15,
-        "syncUrl": "http://172.16.3.6:8080/sync/doLoad?",
+        "syncUrl": "http://IPADDRESS:POR/sync/doLoad",
+        "statusUrl": "http://IPADDRESS:POR/sync/status",
         "activeUserThresholdDays": 30,
         "jobs": {
             "activeUsers": true,
@@ -973,7 +1022,7 @@
             },
             "repoDefaults": {
                 "host": "127.0.0.1",
-                "port": 5001,
+                "port": 5000,
                 "tubename": "osync",
                 "tubePrefix": "osync-",
                 "jobTypeForTube": true
@@ -995,7 +1044,7 @@
         },
         "jds": {
             "protocol": "http",
-            "host": "172.16.2.110",
+            "host": "IP_ADDRESS",
             "port": 9080,
             "timeout": 60000,
             "jdsSaveURI": "/user/set/this",
@@ -1044,7 +1093,7 @@
       },
       "vxsync": {
         "protocol": "http",
-        "host": "172.16.3.6",
+        "host": "IPADDRES",
         "port": "8080",
         "timeout": 300000
       },

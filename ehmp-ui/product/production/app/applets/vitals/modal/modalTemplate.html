@@ -22,6 +22,8 @@
                 <td id="vitalsModalDisplayName">
                     {{#if tooltipName}}
                         {{tooltipName}}
+                    {{else if typeName}}
+                        {{typeName}}
                     {{else}}
                         {{normalizedName}}
                     {{/if}}
@@ -33,27 +35,27 @@
                         {{result}} {{units}}
                     {{/if}}
                     {{#if metricResult}}
-                        <span class="color-grey-dark">({{metricResult}} {{metricUnits}})</span>
+                        <span>({{metricResult}} {{metricUnits}})</span>
                     {{/if}}
                 </td>
                 <td id="vitalsModalObservedFormatted">
                     {{#if observed}}
-                        {{observedFormatted}}<span class="color-grey-dark">{{observedTimeFormatted}}</span>
+                        {{observedFormatted}}<span>{{observedTimeFormatted}}</span>
                     {{/if}}
                 </td>
-                <td id="vitalsModalFacility"><span class="color-grey-dark">{{facilityMoniker}}</span></td>
+                <td id="vitalsModalFacility"><span>{{facilityMoniker}}</span></td>
                 <td id="vitalsModalType">{{typeName}}</td>
-                <td id="vitalsModalDateEntered">{{resultedFormatted}}<span class="color-grey-dark">{{resultedTimeFormatted}}</span></td>
+                <td id="vitalsModalDateEntered">{{resultedFormatted}}<span>{{resultedTimeFormatted}}</span></td>
             </tr>
         </tbody>
     </table>
 </div>
-<form class="form-inline" role="form">
+<form class="form-inline top-margin-lg">
     <div id="dateRangeFilter"></div>
 </form>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-5" id="lrDataTableView">
+        <div class="col-md-5" id="lrDataTableView" accesskey="r">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <p class="pull-right">Vitals Tests: <span id="totalTests"></span></p>

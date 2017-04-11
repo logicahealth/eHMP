@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Encounters visit service connected [/encounters-visit-service-connected{?site}{&dfn}{&visitDate}{&loc}{&fields}]
+## Encounters visit service connected [/encounters-visit-service-connected{?site}{&dfn}{&visitDate}{&locationUid}]
 
 Returns indicator to allow button selection of Service Connected Related to Items.
 
@@ -16,9 +16,7 @@ ORWPCE SCSEL
 
     :[visitDate]({{{common}}}/parameters/visitDate.md required:"required")
 
-    + loc (string, required) - The loc
-
-    :[fields]({{{common}}}/parameters/fields.md)
+    + locationUid (string, required) - The locationUid
 
 ### GET
 

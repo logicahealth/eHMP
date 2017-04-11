@@ -9,7 +9,7 @@ var _ = require('underscore');
 var uuid = require('node-uuid');
 var config = require(global.VX_ROOT + 'worker-config');
 var logUtil = require(global.VX_UTILS + 'log');
-logUtil.initialize(config.loggers);
+logUtil.initialize(config);
 var log = logUtil.get('subscriberHost', 'host');
 var rpcClient = require('vista-js').RpcClient;
 var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');

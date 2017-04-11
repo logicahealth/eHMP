@@ -1,12 +1,10 @@
 # Group Patient
 
-## Global timeline get Timeline [{{{path}}}{?pid}{&fields}]
+## Global timeline get Timeline [{{{path}}}{?pid}]
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Get [GET]

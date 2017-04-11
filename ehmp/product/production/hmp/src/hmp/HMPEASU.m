@@ -1,6 +1,8 @@
-HMPEASU ;SLC/GRR -- Serve VistA reference data as JSON via RPC ; 10/18/12 6:26pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPEASU ;SLC/GRR,ASMR/RRB - Serve VistA reference data as JSON via RPC;10/18/12 6:26pm
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ Q
  ;
 CLASS ; -- USR Class file #8930
  N PRV S PRV=+$G(HMPLAST)
@@ -67,7 +69,7 @@ DEF ; -- TIU Document Definition file #8925.1
  S HMPCNT=$$TOTAL^HMPEF("^TIU(8925.1)")
  I PRV=0 S PRV=.9
  I $L(HMPID) D DEF1(HMPID) Q
- F  S PRV=$O(^TIU(8925.1,PRV)) Q:PRV'>0  D DEF1(PRV) I HMPMAX,HMPI'<HMPMAX Q
+ F  S PRV=$O(^TIU(8925.1,PRV)) Q:PRV'>0  D DEF1(PRV) I HMPMAX,HMPI'<HMPMAX Q  ;ICR 2700 DE2818 ASF 11/21/15
  I PRV'>0 S HMPFINI=1
  Q
  ;
@@ -95,7 +97,7 @@ DEF1(IEN) ;
  S X=$G(@Y@(.1,"I")) S:X INREC("shared")="true"
  S X=$G(@Y@(.13,"I")) S:X INREC("nationalStandard")="true"
  S X=$G(@Y@(.14,"I")) S:X INREC("postingCode")=$$SETUID^HMPUTILS("doc-posting",,X)
- S I=0 F  S I=$O(^TIU(8925.1,IEN,10,I)) Q:I<1  S X=+$G(^(I,0)) D
+ S I=0 F  S I=$O(^TIU(8925.1,IEN,10,I)) Q:I<1  S X=+$G(^(I,0)) D  ;ICR 2700 DE2818 ASF 11/21/15
  . S INREC("item",I,"uid")=$$SETUID^HMPUTILS("doc-def",,X)
  . S INREC("item",I,"name")=$$GET1^DIQ(8925.1,X_",",.01)
  ; national title info

@@ -1,0 +1,148 @@
+
+package colorectal;
+ 
+import ca.uhn.fhir.model.api.ExtensionDt;
+import ca.uhn.fhir.model.primitive.CodeDt;
+import ca.uhn.fhir.model.primitive.StringDt;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.composite.ContainedDt;
+import ca.uhn.fhir.model.dstu2.resource.CommunicationRequest;
+import ca.uhn.fhir.model.dstu2.resource.Provenance;
+import ca.uhn.fhir.model.dstu2.resource.DiagnosticReport;
+import ca.uhn.fhir.model.dstu2.resource.Observation;
+import ca.uhn.fhir.model.api.IResource;
+
+import java.util.List;
+import java.util.Iterator;
+
+import function org.opencds.service.evaluate.FhirUtils.isCodingContains;
+import function org.opencds.service.evaluate.FhirUtils.getValueString;
+import function org.opencds.service.evaluate.FhirUtils.isCodingStartsWith;
+import function org.opencds.service.evaluate.FhirUtils.createProvenance;
+import function org.opencds.service.evaluate.FhirUtils.createCommunicationRequest;
+import function org.opencds.service.evaluate.FhirUtils.createOutputExtension;
+
+
+global java.lang.String clientLanguage;
+global java.lang.String clientTimeZoneOffset;
+global java.lang.String focalPersonId;
+global java.util.Date evalTime;
+global java.util.HashSet assertions;
+global java.util.HashMap namedObjects;
+
+ 
+ declare INDICATOR
+    @propertyReactive
+	noFitTest	: boolean @key //has no FOBT test from the DiagnosticReport. - default = true
+end
+
+rule "Initialize"
+	salience 100, no-loop
+	when
+	then
+		insert(new INDICATOR(true));
+end
+ 
+ 
+rule "DiagnosticReport Rule"
+     when 
+     	 $fhir  : DiagnosticReport()
+     then
+	  List<? extends IResource> contaned = $fhir.getContained().getContainedResources();
+      for (Iterator iterator2 = contaned.iterator(); iterator2.hasNext();) {
+		IResource iResource = (IResource) iterator2.next();
+		insert(iResource);
+	 }
+end
+
+rule "Fobt Positive Test Result"
+     when 
+         $indicator : INDICATOR()
+     	 $obs  : Observation(isCodingStartsWith(code, "urn:oid:2.16.840.1.113883.6.233", "urn:va:ien:60:1359:"), getValueString(value) != null, $value : value)
+     	 
+     	 eval(getValueString($value).getValue().equals("POS"))
+      then
+      modify($indicator) { setNoFitTest(false) };
+      
+	  System.out.println("The patient has abnormal FIT results.");
+	 
+	  CommunicationRequest comRequest = createCommunicationRequest("The patient has abnormal FIT results.");
+      
+      CodeableConceptDt reason = new CodeableConceptDt("SNOMED", "386344007");
+      comRequest.getReason().add(reason);
+      reason.getCodingFirstRep().setDisplay("Evaluation of Test Results");
+      
+      CodeableConceptDt priority = new CodeableConceptDt("CDS-System", "50");
+      priority.getCodingFirstRep().setDisplay("Routine");
+      comRequest.setPriority(priority);
+      
+      Provenance prov = createProvenance("http://www.cdc.gov/cancer/colorectal/basic_info/screening/guidelines.htm");
+      ContainedDt contained = new ContainedDt();
+	  contained.getContainedResources().add(prov);
+      comRequest.setContained(contained);
+      comRequest.addUndeclaredExtension(createOutputExtension());
+      prov.addUndeclaredExtension(createOutputExtension());
+      namedObjects.put("communicationRequest", comRequest); 
+      namedObjects.put("provenance", prov);
+end
+rule "Fobt Negative Test Result"
+     when 
+         $indicator : INDICATOR()
+     	 $obs  : Observation(isCodingStartsWith(code, "urn:oid:2.16.840.1.113883.6.233", "urn:va:ien:60:1359:"), getValueString(value) != null, $value : value)
+     	 
+     	 eval(getValueString($value).getValue().equals("NEG"))
+      then
+      modify($indicator) { setNoFitTest(false) };
+	 
+	  System.out.println("The patient has normal FIT results.");
+	 
+	  CommunicationRequest comRequest = createCommunicationRequest("The patient has normal FIT results.");
+      
+      CodeableConceptDt reason = new CodeableConceptDt("SNOMED", "386344007");
+      comRequest.getReason().add(reason);
+      reason.getCodingFirstRep().setDisplay("Evaluation of Test Results");
+      
+      CodeableConceptDt priority = new CodeableConceptDt("CDS-System", "50");
+      priority.getCodingFirstRep().setDisplay("Routine");
+      comRequest.setPriority(priority);
+      
+      Provenance prov = createProvenance("http://www.cdc.gov/cancer/colorectal/basic_info/screening/guidelines.htm");
+      ContainedDt contained = new ContainedDt();
+	  contained.getContainedResources().add(prov);
+      comRequest.setContained(contained);
+      comRequest.addUndeclaredExtension(createOutputExtension());
+      prov.addUndeclaredExtension(createOutputExtension());
+      namedObjects.put("communicationRequest", comRequest); 
+      namedObjects.put("provenance", prov);
+end
+
+rule "No Valid Fobt Test Found"
+     when 
+         $indicator : INDICATOR(noFitTest == true)
+     	 
+     then
+      modify($indicator) { setNoFitTest(false) };
+	  
+	  System.out.println("There wasn't a valid fecal occult blood test (FOBT) result found in the diagnostic report.");
+	 
+	  CommunicationRequest comRequest = createCommunicationRequest("There wasn't a fecal occult blood test (FOBT) result found in the diagnostic report. steve");
+      
+      
+      CodeableConceptDt reason = new CodeableConceptDt("SNOMED", "386344007");
+      comRequest.getReason().add(reason);
+      reason.getCodingFirstRep().setDisplay("Evaluation of Test Results");
+      
+      CodeableConceptDt priority = new CodeableConceptDt("CDS-System", "50");
+      priority.getCodingFirstRep().setDisplay("Routine");
+      comRequest.setPriority(priority);
+      
+      Provenance prov = createProvenance("http://www.cdc.gov/cancer/colorectal/basic_info/screening/guidelines.htm");
+      ContainedDt contained = new ContainedDt();
+	  contained.getContainedResources().add(prov);
+      comRequest.setContained(contained);
+      comRequest.addUndeclaredExtension(createOutputExtension());
+      prov.addUndeclaredExtension(createOutputExtension());
+      namedObjects.put("communicationRequest", comRequest); 
+      namedObjects.put("provenance", prov);
+end

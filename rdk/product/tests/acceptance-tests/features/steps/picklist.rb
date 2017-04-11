@@ -19,9 +19,9 @@ When(/^the client requests picklist with the parameters and site "([^"]*)"$/) do
   table.rows.each do |row|
     querypicklist.add_parameter(row[0], row[1])
   end
+  querypicklist.add_parameter('site', site)
   path = querypicklist.path
-  #@response = HTTPartyWithBasicAuth.get_with_authorization(path)
-  @response = HTTPartyWithBasicAuth.get_with_authorization_for_user(path, "#{site};PW    ", "PW    !!")
+  @response = HTTPartyRDK.get_as_user(path, "#{site};vk1234", "vk1234!!")
   @json_object = JSON.parse(@response.body)
 end
 
@@ -31,7 +31,7 @@ When(/^the client requests a picklist with the parameters for "([^"]*)" with the
     querypicklist.add_parameter(row[0], row[1])
   end
   path = querypicklist.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization_for_user(path, username, TestClients.password_for(username))
+  @response = HTTPartyRDK.get_as_user(path, username, TestClients.password_for(username))
   @json_object = JSON.parse(@response.body)
 end
 
@@ -50,5 +50,10 @@ end
 Then(/^the picklist result contains$/) do |table|
   test = VerifyJsonRuntimeValue.new
   result_array = @json_object["data"]
-  test.verify_json_runtime_vlaue(result_array, table)
+  test.verify_json_runtime_value(result_array, table)
+end
+
+Then(/^the picklist result is empty$/) do
+  result_array = @json_object["data"]
+  expect(result_array.length).to eq(0)
 end

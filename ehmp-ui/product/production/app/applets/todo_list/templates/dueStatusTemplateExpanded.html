@@ -1,0 +1,7 @@
+{{#ifExp dueText '&&' ACTIVE}}
+<strong {{#if dueTextClass}} class="{{dueTextClass}}"{{/if}}>{{dueText}}</strong>
+{{else}}
+<span class="sr-only">N/A</span>
+{{/ifExp}}
+
+

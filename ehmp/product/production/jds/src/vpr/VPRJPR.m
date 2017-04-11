@@ -26,7 +26,7 @@ PUTPT(ARGS,BODY) ; PUTs patient demographics into the database
  . D ENCODE^VPRJSON("IDENTIFIERS","ABODY","AERR")
  . S AARGS("jpid")=JPID
  . ; Overwrite IJPID to be the JPID of the associated ICN
- . S IJPID=$$ASSOCIATE(.AARGS,.ABODY)
+ . S IJPID=$P($$ASSOCIATE(.AARGS,.ABODY),"/",4)
  I $G(DEMOG("icn"))'="",JPID'=IJPID D SETERROR^VPRJRER(223,"Identifier "_$G(DEMOG("icn"))_" Associated with "_IJPID) QUIT ""
  ;
  ; Save the data
@@ -129,18 +129,20 @@ GETPT(RESULT,ARGS) ; Returns patient demographics
  . . ; Create a UID
  . . S UID="urn:va:patient:"_$P(PID,";",1)_":"_$P(PID,";",2)_":"_$P(PID,";",2)
  . . ; Check to see if the demographics exist before getting them
- . . I '$D(^VPRPTJ("JSON",PID,UID)) I '$D(^VPRPT(PID,UID)) Q
+ . . I '$D(^VPRPTJ("JSON",JPID,PID,UID)) I '$D(^VPRPT(JPID,PID,UID)) Q
  . . ; Add demographics to result
  . . D QKEY^VPRJPQ(PID,UID)
  E  D
  . ; We are a PID get the requested demographic objects
  . ; Attempt to get the demographic object directly, If not found error
- . ; Format of ^VPRPT(PID): ^VPRPT(PID,"urn:va:patient:site:DFN:DFN")
+ . ; Format of ^VPRPT(JPID,PID): ^VPRPT(JPID,PID,"urn:va:patient:site:DFN:DFN")
  . ; Set the PID to the icndfn, which is what is passed in
  . S PID=$G(ARGS("icndfn"))
  . S UID="urn:va:patient:"_$TR(PID,";",":")_":"_$P(PID,";",2)
+ . S JPID=$$JPID4PID(PID)
+ . I JPID="" D SETERROR^VPRJRER(225,"Identifier "_PID) Q
  . ; Check to see if the demographics exist before getting them
- . I '$D(^VPRPTJ("JSON",PID)) I '$D(^VPRPT(PID,UID)) D SETERROR^VPRJRER(225,"Identifier "_PID) Q
+ . I '$D(^VPRPTJ("JSON",JPID,PID)) I '$D(^VPRPT(JPID,PID,UID)) D SETERROR^VPRJRER(225,"Identifier "_PID) Q
  . ; Add demographics to result
  . D QKEY^VPRJPQ(PID,UID)
  I '$D(^TMP($J,"total")) D SETERROR^VPRJRER(225) Q
@@ -228,9 +230,13 @@ CACHED(PID,INDEX,HASHSTR,HASH,HASHTS) ; return TRUE if query cached and the cach
  ;. I $$ISPID(PIDS(ID)) S CNT=CNT+1 S RPID=PIDS(ID)
  ; Ensure we only have one PID as cross patient isn't supported
  ;Q:CNT>1 0
- N MTHD
+ N MTHD,JPID
+ ;
+ S JPID=$$JPID4PID(ARGS("icndfn"))
+ I JPID="" D SETERROR^VPRJRER(222,"Identifier "_$G(ARGS("icndfn"))) Q
+ ;
  S MTHD=$G(^VPRMETA("index",INDEX,"common","method")) Q:'$L(MTHD) 0
- S HASHTS=$G(^VPRPTI(PID,MTHD,INDEX))
+ S HASHTS=$G(^VPRPTI(JPID,PID,MTHD,INDEX))
  S HASH=$$HASH^VPRJRUT(HASHSTR)
  I '$D(^VPRTMP(HASH,"query"))!'$D(^VPRTMP(HASH,"timestamp")) Q 0  ; no cached data
  I ^VPRTMP(HASH,"query")'=HASHSTR Q 0    ; hash matched, but not original string
@@ -282,8 +288,10 @@ ALLCOUNT(RESULT,ARGS) ; GET for count of objects across patients
  S RESULT=$NA(^TMP($J))
  Q
 ALLPID(RESULT,ARGS) ; GET all PID's
- I $$UNKARGS^VPRJCU(.ARGS,"indexName,template") Q
- D QPID^VPRJAQ
+ I $$UNKARGS^VPRJCU(.ARGS,"indexName,template,filter") Q
+ N FILTER
+ S FILTER=$G(ARGS("filter"))
+ D QPID^VPRJAQ(FILTER)
  S RESULT=$NA(^TMP($J))
  Q
 ALLINDEX(RESULT,ARGS) ; GET for index across patients
@@ -376,6 +384,7 @@ JPID() ; Generate a new JPID
  ; Make sure we don't have a collision
  I $D(^VPRPTJ("JPID",JPID)) D SETERROR^VPRJRER(223,"Collision detected after JPID was generated") L -^VPRPTJ("JPID",JPID) Q
  S ^VPRPTJ("JPID",JPID)=""
+ D JPIDIDX(JPID,"JPID;"_JPID)
  L -^VPRPTJ("JPID",JPID)
  ;
  ; Update patient count
@@ -383,7 +392,7 @@ JPID() ; Generate a new JPID
  S PCNT=$I(^VPRPTX("count","patient","patient"))
  Q JPID
 ISJPID(JPID) ; is the passed string a JPID
- I JPID["-4" Q 1
+ I JPID["-4"&(JPID'[";") Q 1
  Q 0
 ISICN(ICN) ; is the passed string an ICN
  I ICN["V",ICN'[";" Q 1
@@ -448,13 +457,14 @@ ICN4JPID(JPID) ; Return an ICN for a JPID
  F I=1:1 S PID=$O(^VPRPTJ("JPID",JPID,PID)) Q:PID=""  Q:ICN  D
  .I PID'[";" S ICN=PID
  Q ICN
+ ;
  ; ** REST APIs **
 PIDS(RESULT,ARGS) ; Return all patient Identifiers for a JPID
  N PIDS,PID,BODY,JPID,I
  ; ensure we have a JPID argument
  S JPID=$G(ARGS("jpid")) I '$L(JPID) D SETERROR^VPRJRER(222) Q
  ; Perform JPID lookup on passed argument if we aren't handed a JPID
- I JPID'["-" S JPID=$$JPID4PID(JPID)
+ S JPID=$$JPID4PID(JPID)
  I JPID="" D SETERROR^VPRJRER(224) Q
  ; Get the PIDS using internal API
  D PID4JPID(.PIDS,JPID)
@@ -467,6 +477,7 @@ PIDS(RESULT,ARGS) ; Return all patient Identifiers for a JPID
  ; return results global
  S RESULT=$NA(^TMP($J))
  Q
+ ;
 ASSOCIATE(ARGS,BODY) ; Associate a PID/ICN with a JPID
  ; Similar logic to PUTPT^VPRJPR
  N OBJECT,ERR,JPID,UID,PID,ICN,EPID,EJPID,NEWJPID,I,CONFLICTICN,ERR
@@ -512,7 +523,8 @@ ASSOCIATE(ARGS,BODY) ; Associate a PID/ICN with a JPID
  . E  D SETERROR^VPRJRER(230,"Identifier "_OBJECT("patientIdentifiers",EPID)_" is invalid") S ERR=1
  TCOMMIT
  L -^VPRPTJ("JPID",JPID)
- Q JPID
+ Q "/vpr/jpid/"_JPID
+ ;
 DISASSOCIATE(RESULT,ARGS) ;Deassociate a PID/ICN with a JPID
  N JPID,PID,PIDS
  ; Ensure JPID variable exists
@@ -528,8 +540,38 @@ DISASSOCIATE(RESULT,ARGS) ;Deassociate a PID/ICN with a JPID
  D CLEARPT^VPRJPS(JPID)
  ; Remove last time this patient has been accessed
  K ^VPRMETA("JPID",JPID,"lastAccessTime")
- ;
  Q
+ ;
+JPIDQUERY(ARGS,BODY) ; See if list of PIDS map to the same JPID or aren't known to JDS
+ N OBJECT,ERR,JPID,PID,PJPID,I
+ I $G(ARGS("ewdjs"),0)=1 D
+ . M OBJECT=BODY
+ E  D  I $D(ERR) D SETERROR^VPRJRER(202) QUIT ""
+ . ; Decode Body JSON to M object
+ . D DECODE^VPRJSON("BODY","OBJECT","ERR")
+ ;
+ ; Make sure we get a sane query
+ I '$D(OBJECT("patientIdentifiers")) D SETERROR^VPRJRER(242,"patientIdentifiers array doesn't exist")
+ ;
+ ; Check to make sure all patient identifiers map to the same patient or is not mapped
+ S I=""
+ F  S I=$O(OBJECT("patientIdentifiers",I)) Q:I=""  D
+ . S PID=OBJECT("patientIdentifiers",I)
+ . ; Check to see if we have a mismatch for a PJPID for the given data
+ . S PJPID=$$JPID4PID(PID)
+ . ; If PJPID is blank we don't know this PID it is ok
+ . I PJPID="" Q
+ . ; If we don't have a JPID set and one of the PIDs has a JPID set the JPID to it to be used for comparision later
+ . ; There is no need to check for a collision in this case
+ . I $G(JPID)="" S JPID=PJPID Q
+ . ; If we have an JPID we know this PID, ensure it matches the one on file, if it doesn't match error
+ . E  I JPID'=PJPID D SETERROR^VPRJRER(223,"Identifier "_PID_" Associated with "_PJPID) Q
+ ; Found a collision Error out
+ I $G(HTTPERR) S EWDERR=1 Q ""
+ ;
+ Q:$L($G(JPID)) "/vpr/jpid/"_JPID
+ Q ""
+ ;
 CLEAR() ;Clear all patient identifiers and delete all JPIDs
  K ^VPRPTJ("JPID")
  Q

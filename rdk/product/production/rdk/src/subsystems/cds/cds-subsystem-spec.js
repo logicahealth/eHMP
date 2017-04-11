@@ -94,7 +94,10 @@ var _ = require('lodash');
             config: {
                 cdsMongoServer: {
                     host: 'foo',
-                    port: '42'
+                    port: '42',
+                    options: 'ssl=true',
+                    username: 'PW',
+                    password: 'PW'
                 },
                 cdsInvocationServer: {
                     host: 'bar',

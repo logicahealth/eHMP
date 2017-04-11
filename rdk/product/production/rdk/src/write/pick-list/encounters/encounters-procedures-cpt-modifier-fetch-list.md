@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Encounters procedures cpt modifier [/encounters-procedures-cpt-modifier{?site}{&cpt}{&visitDate}{&fields}]
+## Encounters procedures cpt modifier [/encounters-procedures-cpt-modifier{?site}{&cpt}{&visitDate}]
 
 Retrieves CPT Modifiers for a CPTCode.
 
@@ -15,8 +15,6 @@ ORWPCE CPTMODS
     + cpt: `99202` (string, required) - The CPT code you want to look up modifiers for
 
     :[visitDate]({{{common}}}/parameters/visitDate.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

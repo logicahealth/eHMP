@@ -1,59 +1,197 @@
-<div class="row">
-    <div class="col-xs-4 text-right" data-detail-label="Primary_ICD-9-CM_Label">Primary ICD-9-CM:</div>
-    <div class="col-xs-8" data-detail="Primary_ICD-9-CM">{{icdCode}}</div>
-</div>
-<div class="row bottom-padding-lg">
-    <div class="col-xs-4 text-right" data-detail-label="Snomed_Label">SNOMED CT:</div>
-    <div class="col-xs-8" data-detail="Snomed">{{snomedCode}}</div>
-</div>
-<div class="row">
-    <div class="col-xs-4 text-right" data-detail-label="problem_onset_label">Onset:</div>
-    <div class="col-xs-8" data-detail="problem_onset">{{onsetFormatted}}</div>
-</div>
-<div class="row">
-    <div class="col-xs-4 text-right" data-detail-label="problem_acuity_label">Acuity:</div>
-    <div class="col-xs-8" data-detail="problem_acuity">{{acuityName}}</div>
-</div>
-<div class="row">
-    <div class="col-xs-4 text-right" data-detai-label="problem_provider_label">Provider:</div>
-    <div class="col-xs-8" data-detail="problem_provider">{{providerDisplayName}}</div>
-</div>
-<div class="row">
-    <div class="col-xs-4 text-right" data-detail-label="problem_facility_label">Facility:</div>
-    <div class="col-xs-8" data-detail="problem_facility">{{facilityName}}</div>
-</div>
-<div class="row">
-    <div class="col-xs-4 text-right" data-detail-label="problem_location_label">Location:</div>
-    <div class="col-xs-8" data-detail="problem_location">{{locationDisplayName}}</div>
-</div>
-<div class="row bottom-padding-lg">
-    <div class="col-xs-4 text-right" data-detail-label="problem_status_label">Status:</div>
-    <div class="col-xs-8" data-detail="problem_status">{{statusName}}</div>
-</div>
-<div class="row">
-    <div class="col-xs-4 text-right" data-detail-label="problem_entered_label">Entered:</div>
-    <div class="col-xs-8" data-detail="problem_entered">{{formatDate entered}}</div>
-</div>
-<div class="row bottom-padding-lg">
-    <div class="col-xs-4 text-right" data-detail-label="problem_updated_label">Updated:</div>
-    <div class="col-xs-8" data-detail="problem_updated">{{formatDate updated}}</div>
-</div>
-<div class="row">
-    <div class="col-xs-12">
-        <hr>
-        <h5>Comments:</h5>
+<div class="detail-modal-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <h5 class="bottom-border-grey-dark">Details</h5>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="Primary_ICD-9-CM_Label"><strong>Primary ICD-9-CM:</strong></span><br />
+                <span data-detail="Primary_ICD-9-CM">
+                    {{#if icdCode}}
+                        {{icdCode}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="Snomed_Label"><strong>SNOMED CT:</strong></span><br />
+                <span data-detail="Snomed">
+                    {{#if snomedCode}}
+                        {{snomedCode}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="problem_onset_label"><strong>Onset:</strong></span><br />
+                <span data-detail="problem_onset">
+                    {{#if onsetFormatted}}
+                        {{onsetFormatted}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="problem_status_label"><strong>Status:</strong></span><br />
+                <span data-detail="problem_status">
+                    {{#if statusName}}
+                        {{statusName}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="problem_sc_label"><strong>Service Connected:</strong></span><br />
+                <span data-detail="problem_sc">
+                    {{#if serviceConnected}}
+                        Yes
+                    {{else}}
+                        No
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="problem_acuity_label"><strong>Acuity:</strong></span><br />
+                <span data-detail="problem_acuity">
+                    {{#if acuityName}}
+                        {{acuityName}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span data-detai-label="problem_provider_label"><strong>Responsible Provider:</strong></span><br />
+                <span data-detail="problem_provider">
+                    {{#if providerDisplayName}}
+                        {{providerDisplayName}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="problem_facility_label"><strong>Facility:</strong></span><br />
+                <span data-detail="problem_facility">
+                    {{#if facilityName}}
+                        {{facilityName}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="problem_location_label"><strong>Location:</strong></span><br />
+                <span data-detail="problem_location">
+                    {{#if locationDisplayName}}
+                        {{locationDisplayName}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="problem_entered_label"><strong>Entered on:</strong></span><br />
+                <span data-detail="problem_entered">
+                    {{#if entered}}
+                        {{formatDate entered}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="problem_updated_label"><strong>Updated on:</strong></span><br />
+                <span data-detail="problem_updated">
+                    {{#if updated}}
+                        {{formatDate updated}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-xs-12">
-        {{#comments}}
-        <div class="row">
-            <div class="col-xs-2 col-xs-offset-2">{{formatDate entered}}</div>
-            <div class="col-xs-7">{{enteredByName}}</div>
+    <div class="row top-margin-sm">
+        <div class="col-xs-12">
+            <h5 class="bottom-border-grey-dark" data-detail-label="problem_tf_label">Treatment Factors</h5>
         </div>
-        <div class="row bottom-padding-lg">
-            <div class="col-xs-9 col-xs-offset-2">{{comment}}</div>
+        <div class="col-xs-12 all-padding-no">
+            <ul data-detail="problem_tf">
+                {{#ifExp agentOrangeExposure "===" "YES"}}
+                <li>
+                    Agent Orange
+                </li>
+                {{/ifExp}}
+                {{#ifExp radiationExposure "===" "YES"}}
+                <li>
+                    Radiation
+                </li>
+                {{/ifExp}}
+                {{#ifExp headNeckCancer "===" "YES"}}
+                <li>
+                    Head and/or Neck Cancer
+                </li>
+                {{/ifExp}}
+                {{#ifExp persianGulfExposure "===" "YES"}}
+                <li>
+                    Southwest Asia Conditions
+                </li>
+                {{/ifExp}}
+                {{#ifExp militarySexualTrauma "===" "YES"}}
+                <li>
+                    Military Sexual Trauma
+                </li>
+                {{/ifExp}}
+                {{#ifExp shipboardHazard "===" "YES"}}
+                <li>
+                    Shipboard Hazard & Defense
+                </li>
+                {{/ifExp}}
+            </ul>
         </div>
-        {{/comments}}
+    </div>
+    <div class="row top-margin-sm">
+        <div class="col-xs-12">
+            <h5 class="bottom-border-grey-dark" data-detail-label="problem_tf_label">Comments</h5>
+        </div>
+        <div class="col-xs-12 all-padding-no">
+            {{#comments}}
+            <div class="row detail-modal-comment">
+                <div class="col-xs-12">
+                    <p>
+                        <span><strong>{{enteredByName}}</strong></span>
+                        <span>{{formatDate entered}}</span></br>
+                        <span>{{comment}}</span>
+                    <p>
+                    <hr aria-hidden="true">
+                </div>
+            </div>
+            {{/comments}}
+        </div>
     </div>
 </div>

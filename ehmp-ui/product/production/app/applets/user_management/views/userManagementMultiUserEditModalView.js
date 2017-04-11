@@ -10,6 +10,10 @@ define([
         formModelUpdate.vistaCheckboxValueBulkEdit = formModelUpdate.vistaCheckboxValue;
         formModelUpdate.ehmpCheckboxValueBulkEdit = formModelUpdate.ehmpCheckboxValue;
         formModelUpdate.permissionSetsForPicklist = appletUtil.getUnduplicatedPermissionSets();
+        formModelUpdate.lastNameValueBulkEdit = formModelUpdate.lastNameValue;
+        formModelUpdate.firstNameValueBulkEdit = formModelUpdate.firstNameValue;
+        formModelUpdate.duzValueBulkEdit = formModelUpdate.duzValue;
+        formModelUpdate.permissionSetValueBulkEdit = formModelUpdate.permissionSetValue;
         var session = ADK.UserService.getUserSession();
         var currentUserDuz = session.get('duz')[session.get('site')];
         var currentUserInUsersCollection = options.initialUsersCollection.where({
@@ -37,7 +41,15 @@ define([
             showProgress: false,
             steps: [{
                 view: UserManagementMultiUserEditFormView,
-                viewModel: appletUtil.formModel.bulkEditSearch(formModelUpdate)
+                viewModel: appletUtil.formModel.bulkEditSearch(formModelUpdate),
+                onBeforeShow: function() {
+                    workflowController.changeHeaderCloseButtonOptions({
+                        onClick: function(e) {
+                            ADK.UI.Workflow.hide();
+                            appletUtil.focusPreviousTarget();
+                        }
+                    });
+                }
             }]
         };
         var workflowController = new ADK.UI.Workflow(workflowOptions);

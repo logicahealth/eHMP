@@ -4,7 +4,8 @@ require('../../../env-setup');
 
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var MVIClient = require(global.VX_SUBSYSTEMS + 'mvi/mvi-client');
-var config = require(global.VX_ROOT + 'worker-config');
+var wConfig = require(global.VX_ROOT + 'worker-config');
+var config = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
 
 var logger = require(global.VX_DUMMIES + '/dummy-logger');
 //--------------------------------------------------------------
@@ -104,7 +105,40 @@ describe('mvi-client.js', function() {
                 expect(err).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(val(result, 'ids')).toBeDefined();
-                expect(val(result, 'ids', 'length')).toBe(8);
+//                expect(val(result, 'ids', 'length')).toBe(8);
+                // The number is now 7 because one of the IDs is purposely not for a site that is in the HDR or VistA - and so we
+                // cannot obtain a site hash for that site.   It will not be returned anymore.
+                //---------------------------------------------------------------------------------------------------------------
+                expect(val(result, 'ids', 'length')).toBe(7);
+                expect(result.ids).toContain({
+                    type: 'vhicid',
+                    value: '32758',
+                    active: true
+                });
+                expect(result.ids).toContain({
+                    type: 'icn',
+                    value: '10108V420871'
+                });
+                expect(result.ids).toContain({
+                    type: 'edipi',
+                    value: '0000000003'
+                });
+                expect(result.ids).toContain({
+                    type: 'pid',
+                    value: '9E7A;3'
+                });
+                expect(result.ids).toContain({
+                    type: 'pid',
+                    value: 'C877;3'
+                });
+                expect(result.ids).toContain({
+                    type: 'pid',
+                    value: '2939;19'
+                });
+                expect(result.ids).toContain({
+                    type: 'pid',
+                    value: 'FFC7;28'
+                });
                 finished = true;
             });
         });

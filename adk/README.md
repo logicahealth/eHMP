@@ -1,1 +1,1 @@
-[Click here to go to documentation](./product/production/documentation)
+[Click here to go to the documentation](./product/production/documentation)

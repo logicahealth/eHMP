@@ -1,4 +1,15 @@
 <div class="panel-body grid-applet-panel" id="grid-panel-{{instanceId}}">
+	{{#if hasSubHeader}}
+		<div class="sub-header">
+			<i class="fa fa-filter"></i>
+			<span class="applet-filter-title">{{filterName}}</span>
+			{{#unless isPredefined}}
+				<button type="button" class="btn btn-sm btn-icon edit-filter-name" tooltip-data-key="Filter" data-target="#grid-filter-{{instanceId}}" title="Press enter to edit applet filter name">
+					<i class="fa fa-pencil"></i>
+				</button>
+			{{/unless}}
+		</div>
+	{{/if}}
     <div id="grid-filter-{{instanceId}}" class="collapse">
         <div class="grid-filter-daterange"></div>
         <div class="grid-filter"></div>

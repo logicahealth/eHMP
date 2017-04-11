@@ -5,7 +5,7 @@ When(/^the client requests service connected and rated disabilities information 
   resource_query.add_parameter("pid", pid)
   resource_query.add_acknowledge("true")
   resource_query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(resource_query.path)
+  @response = HTTPartyRDK.get(resource_query.path)
 end
 
 Then(/^the response contains a service connected percentage of "(.*?)"$/) do |service_connected_percent|
@@ -48,7 +48,7 @@ When(/^the client requests service connected exposure information for user "(.*?
   resource_query.add_parameter("pid", pid)
   resource_query.add_acknowledge("true")
   p resource_query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(resource_query.path)
+  @response = HTTPartyRDK.get(resource_query.path)
 end
 
 Then(/^the response contains the following exposure$/) do |service_connected_exposure|

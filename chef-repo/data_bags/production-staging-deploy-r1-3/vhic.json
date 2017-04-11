@@ -1,7 +1,7 @@
 {
   "id": "vhic",
   "normal": {
-    "ipaddress": "IPADDRESS  ",
+    "ipaddress": "IP__ADDRESS",
     "stack": "production-staging-deploy-r1-3",
     "roles": [
       "vhic"

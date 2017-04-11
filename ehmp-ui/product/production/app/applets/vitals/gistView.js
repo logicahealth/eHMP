@@ -9,7 +9,7 @@ define([
             initialize: function(options) {
                 var self = this;
                 this._super = ADK.AppletViews.ObservationsGistView.prototype;
-                var patientType = ADK.PatientRecordService.getCurrentPatient().attributes.patientStatusClass;
+                var patientType = ADK.PatientRecordService.getCurrentPatient().patientStatusClass();
 
                 this.appletOptions = {
                     filterFields: GistConfig.filterFields,
@@ -22,7 +22,7 @@ define([
                     onClickRow: function(model, event) {
                         var uid = model.get('uid');
                         var currentPatient = ADK.PatientRecordService.getCurrentPatient();
-                        ADK.Messaging.getChannel("vitals").trigger('getDetailView', {
+                        ADK.Messaging.getChannel("vitals").trigger('detailView', {
                             uid: uid,
                             patient: {
                                 icn: currentPatient.attributes.icn,

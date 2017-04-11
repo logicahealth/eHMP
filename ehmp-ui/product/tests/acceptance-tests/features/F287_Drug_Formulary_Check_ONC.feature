@@ -3,8 +3,8 @@ Feature: F287 - Drug Formulary Check (ONC)
 
 # Team: Andromeda
 
-Background:
-  Given user is logged into eHMP-UI
+#Background:
+  # Given user is logged into eHMP-UI
 
   
   @F287_Preferred_Drug_Formulary_ONC_Meds @US3197 @TA11504 @OBE

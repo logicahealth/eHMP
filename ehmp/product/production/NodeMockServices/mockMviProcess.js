@@ -37,8 +37,8 @@ function getAttribute(xmlDoc, path, namespace) {
 
 function makeFancyMviIdXml(json) {
     var ICN_TEMPLATE = '<id root="2.16.840.1.113883.4.349" extension="ID^NI^200M^USVHA^P"/>';
-    var VHIC_TEMPLATE = '<id root="2.16.840.1.113883.4.349" extension="ID^PI^742V1^USVHA"/>';
-    var DFN_TEMPLATE = '<id root="2.16.840.1.113883.4.349" extension="ID^PI^STATION^USVHA"/>';
+    var VHIC_TEMPLATE = '<id root="2.16.840.1.113883.4.349" extension="ID^PI^742V1^USVHA^A"/>';
+    var DFN_TEMPLATE = '<id root="2.16.840.1.113883.4.349" extension="ID^PI^STATION^USVHA^A"/>';
     var EDIPI_TEMPLATE = '<id root="2.16.840.1.113883.4.349" extension="ID^NI^200DOD^USDOD^P"/>';
 
     var xml = '';
@@ -105,7 +105,7 @@ function fetchMviData(req, res) {
             return;
         }
 
-        var namespace = { soapenv: 'http://schemas.xmlsoap.org/soap/envelope/', vaww: 'http://DNS  oed.oit.domain' };
+        var namespace = { soapenv: 'http://schemas.xmlsoap.org/soap/envelope/', vaww: 'http://URL         .DNS   ' };
         var path1305 = '//soapenv:Envelope/soapenv:Body/vaww:PRPA_IN201305UV02';
         var path1309 = '//soapenv:Envelope/soapenv:Body/vaww:PRPA_IN201309UV02';
 

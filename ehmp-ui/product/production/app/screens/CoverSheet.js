@@ -14,6 +14,7 @@ define([
 
     var config = {
         id: 'cover-sheet',
+        context: 'patient',
         contentRegionLayout: 'gridster',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',
@@ -21,7 +22,7 @@ define([
         freezeApplets: true, //if true, applets won't be draggable and resizable by gridster
         applets: [{
             "id": "problems",
-            "title": "Conditions",
+            "title": "Problems",
             "maximizeScreen": "problems-full",
             "region": "bc2652653929",
             "dataRow": "1",

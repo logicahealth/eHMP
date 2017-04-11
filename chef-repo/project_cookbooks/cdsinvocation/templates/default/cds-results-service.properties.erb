@@ -17,11 +17,13 @@
 #
 # Contributors:
 #     Tadesse Sefer, Jerry Goodnough
-#     
+#
 ###############################################################################
 metricsServiceUrl="http://<%= @cdsinvocation['ipaddress'] %>:8080/cds-metrics-service/rest/updateMetrics"
-patientListServerURL=http://<%= @rdks[0]['ipaddress'] %>:8888/resource/cds/patient/
-RDK-resource-server=http://<%= @rdks[0]['ipaddress'] %>:8888/resource
-authentication-path=authentication/systems
-RDK-auth-server=http://<%= @rdks[0]['ipaddress'] %>:8888/resource/authentication
+patientListServerURL=http://<%= @rdks[0]['ipaddress'] %>:<%= @rdks[0]['rdk']['services']['fetch_server']['port']%>/resource/cds/patient/
+RDK-resource-server=http://<%= @rdks[0]['ipaddress'] %>:<%= @rdks[0]['rdk']['services']['fetch_server']['port']%>/resource
+<% if !@crs.nil? %>
+CRSServer=http://<%= @crs['ipaddress'] %>:<%= @crs['crs']['fuseki']['port'] %>/
+<% end %>
+authentication-path=authentication/systems/internal
 mongo-db-url=mongodb://<%= @cdsdb['ipaddress'] %>:<%= @cdsdb['cdsdb']['config']['port'] %>

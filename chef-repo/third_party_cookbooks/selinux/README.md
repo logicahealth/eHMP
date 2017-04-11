@@ -127,7 +127,7 @@ License and Author
 ==================
 
 - Author:: Sean OMeara (<someara@chef.io>)
-- Author::     ua Timberman (<joshua@chef.io>)
+- Author:: Joshua Timberman (<joshua@chef.io>)
 
 Copyright:: 2011-2012, Chef Software, Inc
 

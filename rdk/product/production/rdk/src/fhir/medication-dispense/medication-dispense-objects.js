@@ -12,18 +12,18 @@ var map = {
     vaStatus: {
         'EXPIRED': 'completed',
         'DISCONTINUED': 'stopped',
-        'HOLD': 'on hold',
-        'FLAGGED': 'on hold',
-        'PENDINNG': 'in progress',
-        'ACTIVE': 'in progress',
-        'DELAYED': 'on hold',
-        'UNRELEASED': 'in progress',
+        'HOLD': 'on-hold',
+        'FLAGGED': 'on-hold',
+        'PENDINNG': 'in-progress',
+        'ACTIVE': 'in-progress',
+        'DELAYED': 'on-hold',
+        'UNRELEASED': 'in-progress',
         'DISCONTINUED/EDIT': 'stopped',
         'CANCELLED': 'stopped',
         'LAPSED': 'stopped',
-        'RENEWED': 'in progress',
-        'NO STATUS': 'on hold',
-        '_default_': 'ccccompleted'
+        'RENEWED': 'in-progress',
+        'NO STATUS': 'on-hold',
+        '_default_': 'completed'
     },
     getvaStatus: function(vaStatus) {
         return this.vaStatus[vaStatus.toUpperCase()] || this.vaStatus._default_;
@@ -114,7 +114,7 @@ function buildBundle(results, req, total) {
     for (var i = 0; i < results.length; i++) {
         entry.push(new fhirResource.Entry(results[i]));
     }
-    return (new fhirResource.Bundle2(link, entry, total));
+    return (new fhirResource.Bundle(link, entry, total));
 }
 
 function convertToFhir(items, req) {
@@ -162,35 +162,35 @@ function buildMedicationDispense(item) {
 //SET IDENTIFIER
 //-------------------------------------------------------
 function setIdentifier(md, item) {
-        if (nullchecker.isNotNullish(item.uid)) {
-            md.identifier = new fhirResource.Identifier(item.uid, constants.medDispense.MED_DISPENSE_UID_IDENTIFIER_SYSTEM);
-        }
+    if (nullchecker.isNotNullish(item.uid)) {
+        md.identifier = new fhirResource.Identifier(item.uid, constants.medDispense.MED_DISPENSE_UID_IDENTIFIER_SYSTEM);
     }
-    //-------------------------------------------------------
-    //SET DISPENSE STATUS
-    //-------------------------------------------------------
+}
+//-------------------------------------------------------
+//SET DISPENSE STATUS
+//-------------------------------------------------------
 function setDispenseStatus(md, item) {
-        if (nullchecker.isNotNullish(item.vaStatus)) {
-            md.status = map.getvaStatus(item.vaStatus);
-        }
-        // FHIR DSTU2 spec does not define what the default status, so we will default the default.
-        //    if (nullchecker.isNullish(md.status)) {
-        //        md.status = fhirResource.MedicationDispenseStatus['completed'];
-        //    }
+    if (nullchecker.isNotNullish(item.vaStatus)) {
+        md.status = map.getvaStatus(item.vaStatus);
     }
-    //-------------------------------------------------------
-    //SET PATIENT
-    //-------------------------------------------------------
+    // FHIR DSTU2 spec does not define what the default status, so we will default the default.
+    //    if (nullchecker.isNullish(md.status)) {
+    //        md.status = fhirResource.MedicationDispenseStatus['completed'];
+    //    }
+}
+//-------------------------------------------------------
+//SET PATIENT
+//-------------------------------------------------------
 function setPatient(md, item) {
-        var value = item.pid;
+    var value = item.pid;
 
-        if (nullchecker.isNotNullish(value)) {
-            md.patient = new fhirResource.ReferenceResource('Patient/' + value);
-        }
+    if (nullchecker.isNotNullish(value)) {
+        md.patient = new fhirResource.ReferenceResource('Patient/' + value);
     }
-    //-------------------------------------------------------
-    //SET DISPENSER
-    //-------------------------------------------------------
+}
+//-------------------------------------------------------
+//SET DISPENSER
+//-------------------------------------------------------
 function setDispenser(md, item) {
     var value = item.orders[0].providerUid;
 
@@ -237,7 +237,7 @@ function createPrescriptionResource(item) { //(md, item) {
     if (nullchecker.isNotNullish(item.orders) && item.orders.length > 0) {
         var order = item.orders[0];
         if (nullchecker.isNotNullish(order.ordered)) {
-            mp.dateWritten = fhirUtils.convertToFhirDateTime(order.ordered);
+            mp.dateWritten = fhirUtils.convertToFhirDateTime(order.ordered, fhirUtils.getSiteHash(item.uid));
         }
         if (nullchecker.isNotNullish(order.providerUid)) {
             mp.prescriber = new fhirResource.ReferenceResource(constants.medPrescription.PRESCRIBER_PREFIX + order.providerUid);
@@ -274,27 +274,27 @@ function createPrescriptionResource(item) { //(md, item) {
 //SET QUANTITYDISPENSED
 //-------------------------------------------------------
 function setQuantityDispensed(md, item) {
-        var value = item.fills[0].quantityDispensed;
-        var units = item.productFormName;
+    var value = item.fills[0].quantityDispensed;
+    var units = item.productFormName;
 
-        if (nullchecker.isNotNullish(value)) {
-            md.quantity = new fhirResource.Quantity(value, units, null, null);
-        }
+    if (nullchecker.isNotNullish(value)) {
+        md.quantity = new fhirResource.Quantity(value, units, null, null);
     }
-    //-------------------------------------------------------
-    //SET DAYS SUPPLY
-    //The amount of medication expressed as a timing amount.
-    //-------------------------------------------------------
+}
+//-------------------------------------------------------
+//SET DAYS SUPPLY
+//The amount of medication expressed as a timing amount.
+//-------------------------------------------------------
 function setDaysSupply(md, item) {
-        var value = item.orders[0].daysSupply;
+    var value = item.orders[0].daysSupply;
 
-        if (nullchecker.isNotNullish(value)) {
-            md.daysSupply = new fhirResource.Quantity(value, 'days', null, null);
-        }
+    if (nullchecker.isNotNullish(value)) {
+        md.daysSupply = new fhirResource.Quantity(value, 'days', null, null);
     }
-    //-------------------------------------------------------
-    //SET MEDICATION as a contained resource, and it's reference
-    //-------------------------------------------------------
+}
+//-------------------------------------------------------
+//SET MEDICATION as a contained resource, and it's reference
+//-------------------------------------------------------
 function setMedication(md, item) {
     var med = createMedicationResource(item);
     md.medication = new fhirResource.ReferenceResource('#' + med.id, item.name);
@@ -376,30 +376,30 @@ function createSubstance(p) {
 //-------------------------------------------------------
 function setWhenPrepared(md, item) {
 
-        if (nullchecker.isNotNullish(item.lastFilled)) {
-            md.whenPrepared = fhirUtils.convertToFhirDateTime(item.lastFilled);
-        }
-
+    if (nullchecker.isNotNullish(item.lastFilled)) {
+        md.whenPrepared = fhirUtils.convertToFhirDateTime(item.lastFilled, fhirUtils.getSiteHash(item.uid));
     }
-    //-------------------------------------------------------
-    //SET WHENHANDEDOVER
-    //NOTE: setting to last fill date since fill/dispenseDate can be multi.
-    //-------------------------------------------------------
+
+}
+//-------------------------------------------------------
+//SET WHENHANDEDOVER
+//NOTE: setting to last fill date since fill/dispenseDate can be multi.
+//-------------------------------------------------------
 function setWhenHandedOver(md, item) {
 
-        if (nullchecker.isNotNullish(item.lastFilled)) {
-            md.whenPrepared = fhirUtils.convertToFhirDateTime(item.lastFilled);
-        }
+    if (nullchecker.isNotNullish(item.lastFilled)) {
+        md.whenHandedOver = fhirUtils.convertToFhirDateTime(item.lastFilled, fhirUtils.getSiteHash(item.uid));
     }
-    //-------------------------------------------------------
-    // SET NOTE
-    //-------------------------------------------------------
+}
+//-------------------------------------------------------
+// SET NOTE
+//-------------------------------------------------------
 function setNote(md, item) {
-        md.note = item.summary;
-    }
-    //-------------------------------------------------------
-    // SET DOSAGEINSTRUCTION
-    //-------------------------------------------------------
+    md.note = item.summary;
+}
+//-------------------------------------------------------
+// SET DOSAGEINSTRUCTION
+//-------------------------------------------------------
 function setDosageInstruction(md, item) {
 
     if (nullchecker.isNotNullish(item.dosages) && item.dosages.length > 0) {
@@ -413,9 +413,10 @@ function setDosageInstruction(md, item) {
         //schedulePeriod
         //if (nullchecker.isNotNullish(item.dosages[0].start)) {
         if (nullchecker.isNotNullish(item.dosages[0].start)) {
+            var siteHash = fhirUtils.getSiteHash(item.uid);
             md.dosageInstruction.schedulePeriod = {};
-            md.dosageInstruction.schedulePeriod.start = fhirUtils.convertToFhirDateTime(item.dosages[0].start);
-            md.dosageInstruction.schedulePeriod.end = fhirUtils.convertToFhirDateTime(item.dosages[0].stop);
+            md.dosageInstruction.schedulePeriod.start = fhirUtils.convertToFhirDateTime(item.dosages[0].start, siteHash);
+            md.dosageInstruction.schedulePeriod.end = fhirUtils.convertToFhirDateTime(item.dosages[0].stop, siteHash);
             //?md.dosageInstruction.schedulePeriod.extension = new Extension((item.dosages[0]), 'scheduleType', 'timing');
         }
         //scheduleTiming

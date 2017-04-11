@@ -9,7 +9,9 @@ define([
         if (response.onset) {
             if (response.onset.toString().length == 4) {
                 response.onsetFormatted = ADK.utils.formatDate(response.onset, 'YYYY');
-            }else {
+            } else if(response.onset.toString().length == 6){
+                response.onsetFormatted = ADK.utils.formatDate(response.onset, 'MM/YYYY');
+            } else {
                 response.onsetFormatted = ADK.utils.formatDate(response.onset);
             }
         } else {

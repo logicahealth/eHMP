@@ -2,46 +2,35 @@ ext.set('repo', 'releases')
 ext.set('groupId', 'us.vistacore.ehmp')
 ext.set('artifactId', 'vxsync')
 
+// add dummy test task so java plugin doesn't have to be applied
+task test {}
 
-task cleanNPM(type: Delete) {
+task pruneNpm(type: Exec) {
   group "VX-Sync Tasks"
-  description "Clean up node_modules"
-  //commandLine "rm -rf ${projectDir}/node_modules"
-  delete "${projectDir}/node_modules"
+  description "prune package(s)"
+  commandLine  "npm", "prune"
 }
 
-task installNpm(type: Exec) {
+clean.dependsOn pruneNpm
+
+task installNpm(type: Exec, dependsOn: pruneNpm) {
   group "VX-Sync Tasks"
   description "installs package(s)"
-  // commandLine "npm", "install"
-  commandLine "bash", "-c", "npm install"
+  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
 }
-installNpm.mustRunAfter cleanNPM
 
-build.dependsOn installNpm
-
-task buildJava(type: Exec) {
+task buildJava(type: Exec, dependsOn: installNpm) {
   group "VX-Sync Tasks"
   description "installs package(s)"
   workingDir "${projectDir}/node_modules/xslt4node/node_modules/java"
-  // commandLine "npm", "run", "install"
-  commandLine "bash", "-c", "npm run install"
+  commandLine "npm", "run", "install"
 }
 
-task npmCheck(type: Exec, dependsOn: [cleanNPM, installNpm]) {
-  group "VX-Sync Tasks"
-  description "installs package(s) and runs jshint"
-  // commandLine "npm", "run-script", "check"
-  commandLine "bash", "-c", "npm run-script check"
-}
-
-task unitTest(type: Exec) {
+task unitTest(type: Exec, dependsOn: installNpm) {
   group "VX-Sync Tasks"
   description "installs package(s) and runs unit tests"
-  // commandLine "npm", "test"
-  commandLine "bash", "-c", "npm test"
+  commandLine "npm", "test"
 }
-unitTest.dependsOn installNpm
 test.dependsOn unitTest
 
 task vxsyncIntTests{
@@ -55,15 +44,22 @@ task vxsyncIntTests{
   }
 }
 
-task vxsyncAllTests(dependsOn: [test, vxsyncIntTests]) {
+task vxsyncAllTests(dependsOn: [unitTest, vxsyncIntTests]) {
   group "VX-Sync Tasks"
   description "runs unit and integration tests"
 }
 
-task zipVXSync(type: Zip) {
+task assemble(dependsOn: [clean, buildJava, installNpm]) {
+  group "VX-Sync Tasks"
+  description "installs package(s)"
+}
+
+build.dependsOn assemble
+
+task zipVXSync(type: Zip, dependsOn: [build]) {
   extension = 'zip'
   baseName = 'vxsync'
-  version = getVersionByCommitCountForProject(":production:vx-sync")  
+  version = getVersionByCommitCountForProject(":production:vx-sync")
   destinationDir buildDir
   from projectDir
   exclude 'build'
@@ -73,14 +69,8 @@ task zipVXSync(type: Zip) {
   exclude 'Gemfile.lock'
 }
 
-buildJava.dependsOn installNpm
-zipVXSync.dependsOn buildJava
-build.dependsOn zipVXSync
 uploadArchives.dependsOn zipVXSync
 
 artifacts {
-  archives zipVXSync.archivePath
+  archives file: zipVXSync.outputs.files.singleFile, name: 'vx-sync', type: 'zip', builtBy: zipVXSync
 }
-
-unitTest.mustRunAfter cleanNPM, installNpm
-vxsyncIntTests.mustRunAfter cleanNPM, installNpm

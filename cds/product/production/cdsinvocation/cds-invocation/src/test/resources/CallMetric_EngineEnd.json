@@ -1,0 +1,35 @@
+{ "callId" : "theCallId",
+  "context" : { "location" : { "codeSystem" : null,
+          "entityType" : "Location",
+          "id" : "10",
+          "name" : "Test Location",
+          "type" : null
+        },
+      "specialty" : { "codeSystem" : "TestCode",
+          "entityType" : "Specialty",
+          "id" : "SpecCodeVal",
+          "name" : "Radiology",
+          "type" : null
+        },
+      "subject" : { "codeSystem" : null,
+          "entityType" : "Subject",
+          "id" : "EA21:200",
+          "name" : "Public,John Q",
+          "type" : null
+        },
+      "user" : { "codeSystem" : null,
+          "entityType" : "User",
+          "id" : "UID:101019",
+          "name" : "Junit",
+          "type" : null
+        }
+    },
+  "event" : "end",
+  "invocation" : "TestUse",
+  "invocationType" : "Direct",
+  "origin" : "Engine1",
+  "time" : 1425426650977,
+  "timings" : {  },
+  "totalResults" : 0,
+  "type" : "engine"
+}

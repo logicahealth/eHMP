@@ -5,6 +5,26 @@ var _ = require('lodash');
 var constants = require('../utils/constants');
 var helpers = require('../utils/helpers');
 
+var ProcedureOutcome = {
+    'GOOD': 'Successful',
+    'REFUSED': 'Unsuccessful',
+    //  XXXX: 'Partially successful'  // as yet unmapped against VPR
+    get: function(outcome) {
+        return this[outcome];
+    }
+};
+module.exports.ProcedureOutcome = ProcedureOutcome;
+
+var ProcedureOutcomeCode = {
+    'Successful': '385669000',
+    'Unsuccessful': '385671000',
+    'Partially successful': '385670004',
+    get: function(outcomeCode) {
+        return this[outcomeCode];
+    }
+};
+module.exports.ProcedureOutcomeCode = ProcedureOutcomeCode;
+
 var MedicationDispenseStatus = {
     'in-progress': 'in-progress',
     'on-hold': 'on-hold',
@@ -75,7 +95,71 @@ var DiagnosticReportStatus = {
 };
 module.exports.DiagnosticReportStatus = DiagnosticReportStatus;
 
-function Bundle2(link, entry, totalResults) {
+//=================================
+function ConformanceResourceHeader(conformanceStatementVersion, name, description, status, date, fhirVersion) {
+    this.resourceType = 'Conformance';
+    this.id = helpers.generateUUID();
+    this.url = 'http://hl7.org/fhir/Conformance/ehmp';
+    this.version = conformanceStatementVersion;
+    this.name = name || 'EHMP FHIR Conformance Statement';
+    this.description = description || 'This is a Conformance Statement for available ehmp FHIR Resources.';
+    this.status = status || 'draft';
+    this.date = date || new Date();
+    this.fhirVersion = fhirVersion || '0.5.0';
+    this.acceptUnknown = false;
+    this.format = [];
+    this.format[0] = 'json';
+    this.rest = [];
+    this.rest[0] = {};
+    this.rest[0].mode = 'server';
+    this.rest[0].documentation = 'A conformance statement';
+    this.rest[0].resource = [];
+}
+module.exports.ConformanceResourceHeader = ConformanceResourceHeader;
+
+function ConformanceResourceItem(resourceType, resourceProfile, interaction, searchParam) {
+    this.type = resourceType;
+    this.profile = resourceProfile || new ReferenceResource();
+    this.interaction = interaction || [];
+    this.searchParam = searchParam || [];
+}
+module.exports.ConformanceResourceItem = ConformanceResourceItem;
+
+function Interaction(code, documentation) {
+    if (nullchecker.isNotNullish(code)) {
+        this.code = code;
+    }
+    if (nullchecker.isNotNullish(documentation)) {
+        this.documentation = documentation;
+    }
+}
+module.exports.Interaction = Interaction;
+
+function SearchParam(name, type, definition, documentation, target, chain) {
+    if (nullchecker.isNotNullish(name)) {
+        this.name = name;
+    }
+    if (nullchecker.isNotNullish(definition)) {
+        this.definition = definition;
+    }
+    if (nullchecker.isNotNullish(type)) {
+        this.type = type;
+    }
+    if (nullchecker.isNotNullish(documentation)) {
+        this.documentation = documentation;
+    }
+    if (nullchecker.isNotNullish(target)) {
+        this.target = target;
+    }
+    if (nullchecker.isNotNullish(chain)) {
+        this.chain = chain;
+    }
+}
+module.exports.SearchParam = SearchParam;
+
+
+//=================================
+function Bundle(link, entry, totalResults) {
     this.resourceType = 'Bundle';
     this.type = 'collection';
     this.id = helpers.generateUUID();
@@ -83,21 +167,7 @@ function Bundle2(link, entry, totalResults) {
     this.total = totalResults || 0;
     this.entry = entry || [];
 }
-
-function Bundle(title, link, entry, author, totalResults, updated) {
-    this.resourceType = 'Bundle';
-
-    this.type = 'collection';
-    this.title = 'Search Result';
-    this.id = 'urn:uuid:' + helpers.generateUUID();
-    this.link = link || [];
-    this.total = 0;
-    this.updated = updated || new Date();
-    this.author = author || [];
-    this.entry = entry || [];
-}
 module.exports.Bundle = Bundle;
-module.exports.Bundle2 = Bundle2;
 
 function MedicationStatement(identifier, status, patient) {
     this.resourceType = 'MedicationStatement';
@@ -141,7 +211,7 @@ function Location(id, name, identifier) {
     this.id = id || '';
     if (nullchecker.isNotNullish(name)) {
         this.name = name;
-        this.text = new Narrative('<div>' + name + '</div>');
+        this.text = new Narrative('<div>' + _.escape(name) + '</div>');
     }
     if (nullchecker.isNotNullish(identifier)) {
         this.identifier = identifier;
@@ -540,7 +610,7 @@ function List(id, status, mode, text) {
     this.mode = mode;
     this.text = {
         status: 'generated',
-        div: '<div>' + text + '</div>'
+        div: '<div>' + _.escape(text) + '</div>'
     };
 }
 module.exports.List = List;

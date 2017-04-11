@@ -3,4 +3,6 @@
 # Recipe:: default
 #
 
+yum_package "xz-devel"
+
 include_recipe "nokogiri"

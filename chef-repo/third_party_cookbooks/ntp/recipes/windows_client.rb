@@ -1,7 +1,7 @@
 #
 # Cookbook Name:: ntp
 # Recipe:: windows_client
-# Author:: Tim       (<tsmith@limelight.com>)
+# Author:: Tim Smith (<tsmith@limelight.com>)
 #
 # Copyright 2012, Webtrends, Inc
 # Copyright 2013, Limelight Networks, Inc

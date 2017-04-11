@@ -221,6 +221,112 @@ define([
                 label: 'Third Thing'
             }]),
 
+            selectListError: new Backbone.Collection([{
+                name: 'first-thing',
+                label: 'First Thing',
+                value: 'opt2'
+            }, {
+                name: 'second-thing',
+                label: 'Second Thing',
+                value: undefined,
+                //required: true
+            }, {
+                name: 'third-thing',
+                label: 'Third Thing',
+                value: 'opt1',
+                //disabled: true
+            }]),
+            selectList: new Backbone.Collection([{
+                name: 'service',
+                label: 'Service Connected Condition, Service Connected Condition, Service Connected Condition, Service Connected Condition, Service Connected Condition, Service Connected Condition',
+                value: true
+            }, {
+                name: 'combat',
+                label: 'Combat Vet (Combat Related)',
+                value: false
+            }, {
+                name: 'orange',
+                label: 'Agent Orange',
+                value: null,
+                srOnlyLabel: true
+            }]),
+            selectList_required: new Backbone.Collection([{
+                name: 'first-thing',
+                label: 'First Thing'
+            }, {
+                name: 'second-thing',
+                label: 'Second Thing'
+            }, {
+                name: 'third-thing',
+                label: 'Third Thing'
+            }]),
+            selectList_disabled: new Backbone.Collection([{
+                name: 'first-thing',
+                label: 'First Thing'
+            }, {
+                name: 'second-thing',
+                label: 'Second Thing'
+            }, {
+                name: 'third-thing',
+                label: 'Third Thing'
+            }]),
+            selectList_disabled_option: new Backbone.Collection([{
+                name: 'first-thing',
+                label: 'First Thing'
+            }, {
+                name: 'second-thing',
+                label: 'Second Thing'
+            }, {
+                name: 'third-thing',
+                label: 'Third Thing'
+            }]),
+            selectList_disabled_item: new Backbone.Collection([{
+                name: 'first-thing',
+                label: 'First Thing'
+            }, {
+                name: 'second-thing',
+                label: 'Second Thing',
+                disabled: true
+            }, {
+                name: 'third-thing',
+                label: 'Third Thing'
+            }]),
+            selectList_required_item: new Backbone.Collection([{
+                name: 'first-thing',
+                label: 'First Thing'
+            }, {
+                name: 'second-thing',
+                label: 'Second Thing',
+                required: true
+            }, {
+                name: 'third-thing',
+                label: 'Third Thing'
+            }]),
+            selectList_custom_templates: new Backbone.Collection([{
+                name: 'first-thing',
+                label: 'First Thing',
+                value: null
+            }, {
+                name: 'second-thing',
+                label: 'Second Thing',
+                value: 'opt1'
+            }, {
+                name: 'third-thing',
+                label: 'Third Thing',
+                value: 'opt2'
+            }]),
+            selectList_template_functions: new Backbone.Collection([{
+                name: 'first-thing',
+                label: 'First Thing'
+            }, {
+                name: 'second-thing',
+                label: 'Second Thing'
+            }, {
+                name: 'third-thing',
+                label: 'Third Thing',
+                value: 'opt2'
+            }]),
+
             checklist_default: new Backbone.Collection([{
                 name: '001',
                 label: 'First Thing',
@@ -249,9 +355,8 @@ define([
             datepickerError: "12/23/2005",
             date1: "05/26/2015",
 
-            timePicker1: "23:30",
-            timePicker2: "23:30",
-            timePicker3: "23:30",
+            timePicker2: "1:30",
+            timePicker3: "01:30",
             timePicker4: "23:30",
 
             alertMessage: "This might be important",

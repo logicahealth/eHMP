@@ -1,53 +1,21 @@
-tr.toolbarActive {
-    outline: 2px solid $pure-white;
-    background-color: #f5f5f5;
-    td {
-        box-shadow:0px 8px 12px -4px #888888;
-        border-collapse: separate;
-    }
-    td:first-child {
-        box-shadow: -8px 5px 10px 1px #888888;
-    }
-    td:last-child {
-        box-shadow: 5px 5px 10px #888888;
-    }
+.toolbar-active:not(tr):not(li) {
+    box-shadow: 3px 3px 4px $grey-dark;
+    margin-bottom: 6px;
 }
-
-ul.applet-dropdown-menu {
-    min-width: 175px;
-    box-shadow: 7px 7px 10px rgba(0,0,0,0.575);
-    li {
-        font-size: 11px;
-        a {
-            padding: 3px 5px;
-            color: #09F;
-            &:hover, &:focus {
-                background-color: #D4E1FC;
-                background-image: none;
-            }
-        }
-    }
-    li.appletToolbar-submenu-title {
-        font-weight: bold;
-        padding: 3px 5px;
-    }
-}
-.toolbarActive {
-    border: 2px solid $pure-white;
-    box-shadow: 5px 5px 10px #888888;
-    margin-bottom: 10px;
-}
-div.appletToolbar {
+.toolbar-container.toolbar-open {
     position: relative;
+}
+div.applet-toolbar {
     display: none;
-    .toolbarPopover {
-        border: none;
-        box-shadow: 5px 0px 10px -1px #888888;
-        z-index: 999;
+    position: relative;
+    .btn-toolbar {
+        box-shadow: 5px 0px 10px -1px $grey-darker;
+        z-index: 2;
         position: absolute;
         top: -25px;
-        left: -2px;
-        .btn-toolbar .btn-group {
+        > .btn-group {
+            background-color: $pure-white;
+            display: inline-flex;
             .btn {
                 border: 1px solid $pure-white;
                 border-right-width: 0;
@@ -59,41 +27,6 @@ div.appletToolbar {
                 &:last-child {
                     border-right-width: 1px;
                 }
-                &[disabled]{
-                    opacity: 1;
-                    background-color: lighten($primary-light, 35%);
-                }
-            }
-            .btn-default:disabled, .btn-default[disabled] {
-                opacity: 0.75;
-                background-color: $grey-dark;
-                color: rgba(132, 132, 132, 1);
-            }
-        }
-        div.dropdown {
-            float: left;
-            ul {
-                min-width: 175px;
-                box-shadow: 7px 7px 10px rgba(0,0,0,0.575);
-                li {
-                    font-size: 11px;
-                    a {
-                        padding: 3px 5px;
-                        color: #09F;
-                        &:hover, &:focus {
-                            background-color: #D4E1FC;
-                            background-image: none;
-                        }
-                    }
-                }
-                li.appletToolbar-submenu-title {
-                    font-weight: bold;
-                    padding: 3px 5px;
-                }
-            }
-            a#submenu-button-toolbar {
-                width: 28px;
-                border-right-width: 1px;
             }
         }
     }

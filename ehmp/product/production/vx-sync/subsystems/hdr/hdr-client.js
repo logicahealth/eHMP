@@ -50,7 +50,7 @@ function HDRClient(log, metrics, config) {
 //         receives the data for this patient.
 // subscribeCallback - The is the function that is called when the HDR rest call is completed.
 //-------------------------------------------------------------------------------------
-HDRClient.prototype.subscribe = function(siteId, patientIdentifier, rootJobId, jobId, subscribeCallback) {
+HDRClient.prototype.subscribe = function(siteId, patientIdentifier, rootJobId, jobId, jobPriority, subscribeCallback) {
     var self = this;
 
     var stationId = self.getStationIdBySiteId(siteId);
@@ -66,25 +66,26 @@ HDRClient.prototype.subscribe = function(siteId, patientIdentifier, rootJobId, j
         'stationId':stationId,
         'jobId':jobId,
         'rootJobId':rootJobId,
+        'priority': jobPriority,
         'process': requestId,
         'timer': 'start'
     };
     self.metrics.debug('HDR Subscribe', metricsObj);
     metricsObj.timer = 'stop';
-    self.log.debug('hdr-client.subscribe: stationId: %s; patient: %j; rootJobId: %s; jobId: %s', stationId, patientIdentifier, rootJobId, jobId);
+    self.log.debug('hdr-client.subscribe: stationId: %s; patient: %j; rootJobId: %s; jobId: %j', stationId, patientIdentifier, rootJobId, jobId);
 
     if (!patientIdentifier) {
-        self.log.error('hdr-client.subscribe, invalid patientIdentifier %s', patientIdentifier);
+        self.log.error('hdr-client.subscribe, invalid patientIdentifier %j', patientIdentifier);
         return subscribeCallback('Invalid Patient Indentifier', null);
     }
     var pid = patientIdentifier.value || patientIdentifier;
     var dfn = idUtil.extractDfnFromPid(pid);
     if (!dfn) {
-        self.log.error('hdr-client.subscribe, invalid patientIdentifier %s', patientIdentifier);
+        self.log.error('hdr-client.subscribe, invalid patientIdentifier %j', patientIdentifier);
         return subscribeCallback('Invalid Patient Indentifier', null);
     }
     if (!rootJobId || !jobId) {
-        self.log.error('hdr-client.subscribe, invalid job ids %s, %s', rootJobId, jobId);
+        self.log.error('hdr-client.subscribe, invalid job ids %j, %j', rootJobId, jobId);
         return subscribeCallback('Invalid Patient Indentifier', null);
     }
 

@@ -3,26 +3,28 @@ define(['backbone', 'underscore', 'handlebars'], function(Backbone, _, Handlebar
 
     var writebackUtils = {};
 
-    writebackUtils.handleVisitWorkflow = function(workflowOptions, addVisitView){
+    writebackUtils.handleVisitWorkflow = function(workflowOptions, addVisitView) {
         var visit = ADK.PatientRecordService.getCurrentPatient().get('visit');
 
-        if (!visit || !visit.selectedProvider || !visit.locationDisplayName) {
+        if (_.isUndefined(visit) || _.isUndefined(visit.selectedProvider) || _.isUndefined(visit.locationUid) || !moment(visit.dateTime, 'YYYYMMDDHHmmss').isValid()) {
             var formModel = new Backbone.Model({
                 encounterProvider: 'Not Specified',
                 encounterLocation: 'Not Specified',
                 visit: {}
             });
-            workflowOptions.steps.push({
-                view: addVisitView,
-                viewModel: formModel,
-                title: 'Step 1'
-            });
+            if (!_.isUndefined(workflowOptions) && !_.isUndefined(workflowOptions.steps)) {
+                workflowOptions.steps.push({
+                    view: addVisitView,
+                    viewModel: formModel,
+                    stepTitle: 'Set Encounter Context'
+                });
+            }
         }
     };
 
     writebackUtils.applyModalCloseHandler = function(workflow){
         var WritebackMessageView = Backbone.Marionette.ItemView.extend({
-            template: Handlebars.compile('You will lose your progress if you cancel. Would you like to proceed with ending this observation?'),
+            template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
             tagName: 'p'
         });
 
@@ -32,7 +34,7 @@ define(['backbone', 'underscore', 'handlebars'], function(Backbone, _, Handlebar
         });
 
         var CancelFooterView = Backbone.Marionette.ItemView.extend({
-            template: Handlebars.compile('{{ui-button "Cancel" classes="btn-default" title="Press enter to cancel."}}{{ui-button "Continue" classes="btn-primary" title="Press enter to continue."}}'),
+            template: Handlebars.compile('{{ui-button "No" classes="btn-default" title="Press enter to cancel."}}{{ui-button "Yes" classes="btn-primary" title="Press enter to continue."}}'),
             events: {
                 'click .btn-primary': function () {
                     ADK.UI.Alert.hide();
@@ -47,20 +49,20 @@ define(['backbone', 'underscore', 'handlebars'], function(Backbone, _, Handlebar
         });
 
         workflow.changeHeaderCloseButtonOptions({
-            title: 'Click or press enter to cancel',
+            title: 'Press enter to cancel',
             onClick: function(){
                 var alertView;
                 if(workflow.model.get('currentIndex') === 0 && workflow.model.get('steps').length > 1){
                      alertView = new ADK.UI.Alert({
-                        title: 'Are you sure you want to cancel?',
-                        icon: 'fa-exclamation-triangle font-size-18 color-red',
+                        title: 'Cancel',
+                        icon: 'icon-cancel',
                         messageView: VisitMessageView,
                         footerView: CancelFooterView
                     });
                 }else {
                     alertView = new ADK.UI.Alert({
-                        title: 'Are you sure you want to cancel?',
-                        icon: 'fa-exclamation-triangle font-size-18 color-red',
+                        title: 'Cancel',
+                        icon: 'icon-cancel',
                         messageView: WritebackMessageView,
                         footerView: CancelFooterView
                     });

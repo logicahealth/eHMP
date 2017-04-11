@@ -1,9 +1,12 @@
 'use strict';
 
-var RpcClient = require('vista-js').RpcClient;
-var filemanDateUtil = require('../../utils/fileman-date-converter');
 var _ = require('lodash');
 var async = require('async');
+var moment = require('moment');
+var rdk = require('../../core/rdk');
+var locationUtil = rdk.utils.locationUtil;
+var RpcClient = require('vista-js').RpcClient;
+var filemanDateUtil = require('../../utils/fileman-date-converter');
 
 var rpcDelimiter = '^';
 var fieldDelimiter = ';';
@@ -55,7 +58,7 @@ function immunizationFromModel(logger, model) {
     model.outsideLocation = model.outsideLocation || '';
     model.immunizationNarrative = model.immunizationNarrative || '';
     model.informationSource = model.informationSource || '';
-    model.encounterLocation = model.encounterLocation || '';
+    model.encounterLocation = locationUtil.getLocationIEN(model.encounterLocation) || '';
     model.providerName = model.providerName || '';
     model.orderingProviderIEN = model.orderingProviderIEN || '';
 
@@ -80,10 +83,10 @@ function constructRpcArgs(immunization) {
     retVal[index++] = 'HDR' +  rpcDelimiter +
         immunization.encounterInpatient + rpcDelimiter +
         immunization.hasCptCodes + rpcDelimiter +
-        immunization.encounterLocation + fieldDelimiter + immunization.encounterDateTime + fieldDelimiter + immunization.encounterServiceCategory;
+        locationUtil.getLocationIEN(immunization.encounterLocation) + fieldDelimiter + immunization.encounterDateTime + fieldDelimiter + immunization.encounterServiceCategory;
     retVal[index++] = 'VST^DT^' + immunization.encounterDateTime;
     retVal[index++] = 'VST^PT^' + immunization.encounterPatientDFN;
-    retVal[index++] = 'VST^HL^' + immunization.encounterLocation;
+    retVal[index++] = 'VST^HL^' + locationUtil.getLocationIEN(immunization.encounterLocation);
     retVal[index++] = 'VST^VC^' + immunization.encounterServiceCategory;
     retVal[index++] = 'VST^OL^^' + immunization.outsideLocation;
     retVal[index++] = 'PRV' + rpcDelimiter +
@@ -131,11 +134,6 @@ function add(writebackContext, passedInCallback) {
     logger.debug({immunizationModel: model});
 
     var rpcParameters = constructRpcArgs(model);
-    //console.log('input----------------------------------------');
-    //console.log(rpcParameters);
-    //console.log('input----------------------------------------');
-
-
     logger.debug({rpcParameters: rpcParameters});
 
     async.waterfall([
@@ -231,6 +229,35 @@ function add(writebackContext, passedInCallback) {
 
         writebackContext.vprResponse = {items: results};
         writebackContext.vprModel = results;
+        writebackContext.encounterServiceCategory = writebackContext.model.encounterServiceCategory;
+
+        // take a snapshot of the model,
+        // needs to be in a format that is validatable by the note creation machinery...
+        // they check size and can only have a set of specific fields :(
+        writebackContext.originalModel = writebackContext.model;
+
+        // construct the note settings...
+        var locationUid = writebackContext.model.location;
+        writebackContext.model = {};
+        writebackContext.model.domain = 'ehmp-observation';
+        writebackContext.model.subDomain = 'immunization';
+        writebackContext.model.visit = {};
+        writebackContext.model.visit.location = locationUid;
+
+        // reuse the original settings...
+        writebackContext.model.visit.serviceCategory = writebackContext.originalModel.encounterServiceCategory;
+        writebackContext.model.visit.dateTime = writebackContext.originalModel.incomingVisitDate;
+
+        writebackContext.model.ehmpState = 'active';
+        writebackContext.model.referenceId = results.uid;
+        writebackContext.model.authorUid = results.performerUid;
+        writebackContext.model.patientUid = writebackContext.pid;
+
+        var userID = writebackContext.pid.split(';');
+        var patientUid = 'urn:va:patient:' + userID[0] + ':' + userID[1] + ':' + userID[1];
+        writebackContext.model.patientUid = writebackContext.pid = patientUid;
+        writebackContext.model.createdDateTime = moment().format('YYYYMMDDhhmmss');
+
         return passedInCallback(null);
     });
 }

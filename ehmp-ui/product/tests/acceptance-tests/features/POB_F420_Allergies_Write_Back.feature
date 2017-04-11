@@ -5,7 +5,7 @@ Feature: F420 : POB - Enter and Store an Allergy including Entered in Error
 @f420_pob_allergies_form_field_title_validation
 Scenario: Validate add allergy form head fields
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "twenty,patient"
   Then Cover Sheet is active
   And POB user selects and sets new encounter "Cardiology"
@@ -32,7 +32,7 @@ Scenario: Validate add allergy form head fields
 @f420_pob_allergies_input_field_validation
 Scenario: Validate add allergy form input field
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "twenty,patient"
   Then Cover Sheet is active
   And POB user selects and sets new encounter "Cardiology"
@@ -51,7 +51,7 @@ Scenario: Validate add allergy form input field
 @f420_pob_add_allergy_historical
 Scenario: Create a new allergy and Save it.
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "twenty,patient"
   Then Cover Sheet is active
   And POB user selects and sets new encounter "Cardiology"

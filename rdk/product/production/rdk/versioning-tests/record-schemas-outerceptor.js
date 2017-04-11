@@ -9,6 +9,7 @@ var generateJsonSchema = require('./generate-json-schema/generate-json-schema');
 
 module.exports = recordSchemas;
 module.exports.recordToDirectory = fspath.resolve(__dirname, '../src/core/api-blueprint/schemas');
+module.exports.enabled = true;
 module.exports.startRecording = startRecording;
 module.exports.readSchema = readSchema;
 module.exports.compareSchemaProperties = compareSchemaProperties;
@@ -23,13 +24,13 @@ function startRecording(app) {
 function createRecordToDirectory(logger) {
     fs.mkdir(module.exports.recordToDirectory, function(error) {
         if (error && error.code !== 'EEXIST') {
-            logger.error('record-schemas-outerceptor.js: unable to create the directory for spying: ' + error);
+            logger.error({error: error}, 'record-schemas-outerceptor.js: unable to create the directory for spying');
         }
     });
 }
 
 function recordSchemas(req, res, body, callback) {
-    if (_.contains(req.path, '/resource/docs/vx-api/')) {
+    if (!module.exports.enabled || _.contains(req.path, '/resource/docs/vx-api/')) {
         return callback(null, req, res, body);
     }
 
@@ -63,7 +64,7 @@ function saveSchema(schema, req, res) {
     var content = stringify(schema, {space: '\t', cmp: compareSchemaProperties});
     fs.writeFile(path, content, function(error) {
         if (error) {
-            req.logger.warn(error, 'record-schemas-outerceptor.js couldn\'t save schema for ' + path);
+            req.logger.warn({error: error, path: path}, 'record-schemas-outerceptor.js couldn\'t save schema');
         }
     });
 }

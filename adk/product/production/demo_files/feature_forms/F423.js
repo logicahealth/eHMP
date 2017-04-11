@@ -19,7 +19,7 @@ define([
                         items: [{
                             control: "datepicker",
                             name: "dateTaken",
-                            title: "Please enter in a date in the following format, MM/DD/YYYY",
+                            title: "Enter in a date in the following format, MM/DD/YYYY",
                             label: "Date Taken",
                             required: true
                         }]
@@ -68,7 +68,7 @@ define([
                     control: "select",
                     name: "bp-location-po",
                     label: "Location",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     extraClasses: ["col-xs-3"],
                     disabled: true,
                     pickList: [{
@@ -85,7 +85,7 @@ define([
                     control: "select",
                     name: "bp-method-po",
                     label: "Method",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     extraClasses: ["col-xs-3"],
                     disabled: true,
                     pickList: [{
@@ -101,7 +101,7 @@ define([
                 }, {
                     control: "select",
                     label: "Cuff Size",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     name: "bp-cuff-size-po",
                     extraClasses: ["col-xs-3"],
                     disabled: true,
@@ -118,7 +118,7 @@ define([
                 }, {
                     control: "select",
                     label: "Position",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     name: "bp-position-po",
                     extraClasses: ["col-xs-3"],
                     disabled: true,
@@ -217,7 +217,7 @@ define([
                 items: [{
                     control: "select",
                     label: "Location",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     name: "temperature-location-po",
                     disabled: true,
                     pickList: [{
@@ -279,7 +279,7 @@ define([
                     control: "select",
                     name: "pulse-method-po",
                     label: "Method",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     extraClasses: ["col-xs-3"],
                     disabled: true,
                     pickList: [{
@@ -296,7 +296,7 @@ define([
                     control: "select",
                     name: "pulse-position-po",
                     label: "Position",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     extraClasses: ["col-xs-3"],
                     disabled: true,
                     pickList: [{
@@ -313,7 +313,7 @@ define([
                     control: "select",
                     name: "pulse-site-po",
                     label: "Site",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     extraClasses: ["col-xs-3"],
                     disabled: true,
                     pickList: [{
@@ -330,7 +330,7 @@ define([
                     control: "select",
                     name: "pulse-location-po",
                     label: "Location",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     extraClasses: ["col-xs-3"],
                     disabled: true,
                     pickList: [{
@@ -392,7 +392,7 @@ define([
                     control: "select",
                     name: "respiration-method-po",
                     label: "Method",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     extraClasses: ["col-xs-6"],
                     disabled: true,
                     pickList: [{
@@ -409,7 +409,7 @@ define([
                     control: "select",
                     name: "respiration-position-po",
                     label: "Position",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     extraClasses: ["col-xs-6"],
                     disabled: true,
                     pickList: [{
@@ -479,7 +479,7 @@ define([
                     control: "select",
                     label: "Method",
                     name: "po-method-po",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     extraClasses: ["col-xs-6"],
                     disabled: true,
                     pickList: [{
@@ -550,7 +550,7 @@ define([
                     control: "select",
                     label: "Quality",
                     name: "height-quality-po",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     disabled: true,
                     pickList: [{
                         label: "Option 1",
@@ -619,7 +619,7 @@ define([
                     control: "select",
                     name: "weight-method-po",
                     label: "Method",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     extraClasses: ["col-xs-6"],
                     disabled: true,
                     pickList: [{
@@ -636,7 +636,7 @@ define([
                     control: "select",
                     name: "weight-quality-po",
                     label: "Quality",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     extraClasses: ["col-xs-6"],
                     disabled: true,
                     pickList: [{
@@ -760,7 +760,7 @@ define([
                     control: "select",
                     name: "cg-site-po",
                     label: "Site",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     extraClasses: ["col-xs-6"],
                     disabled: true,
                     pickList: [{
@@ -777,7 +777,7 @@ define([
                     control: "select",
                     label: "Location",
                     name: "cg-location-po",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                     extraClasses: ["col-xs-6"],
                     disabled: true,
                     pickList: [{
@@ -1021,7 +1021,7 @@ define([
                         e.preventDefault();
                         var deleteAlertView = new ADK.UI.Alert({
                             title: 'Are you sure you want to delete?',
-                            icon: 'fa-warning color-red',
+                            icon: 'icon-delete',
                             messageView: DeleteMessageView,
                             footerView: FooterView
                         });

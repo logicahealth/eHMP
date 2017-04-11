@@ -39,7 +39,7 @@ define([], function() {
 
                 if (symptomDate) {
                     if (self.isFutureDateTime(symptomDate, symptomTime)) {
-                        errorMsg = 'Selected Symptom Date/Time must be in the past.';
+                        errorMsg = 'Selected Symptom Date/Time cannot be in the future';
                     }
                 } else if (symptomTime) {
                     errorMsg = 'Selected Symptom Date is required with Time.';
@@ -83,7 +83,7 @@ define([], function() {
             var errorMsg;
 
             if (this.isFutureDateTime(dateValue)) {
-                errorMsg = 'Reaction Date/Time must be in the past.';
+                errorMsg = 'Reaction Date/Time cannot be in the future.';
             }
 
             return errorMsg;
@@ -93,7 +93,7 @@ define([], function() {
 
             if (dateValue) {
                 if (dateValue.split('/').length > 2 && timeValue && this.isFutureDateTime(dateValue, timeValue)) {
-                    errorMsg = 'Reaction Date/Time must be in the past.';
+                    errorMsg = 'Reaction Date/Time cannot be in the future.';
                 }
             } else if (timeValue) {
                 errorMsg = 'Reaction Date is required with Time.';

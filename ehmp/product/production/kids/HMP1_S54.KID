@@ -19843,7 +19843,7 @@ HTTP(DFN,TYPE,ID) ; -- send message that TYPE/ID has been updated [not in use]
 "RTN","VPREVNT",302,0)
  S DIV=$P($$SITE^VASITE,U,3) ;station number
 "RTN","VPREVNT",303,0)
- S URL="http://serverserv2.vha.domain.ext:8080/vpr/echo?division="_DIV_"&dfn="_+$G(DFN)
+ S URL="http://DNS        .DNS           :8080/vpr/echo?division="_DIV_"&dfn="_+$G(DFN)
 "RTN","VPREVNT",304,0)
  I $L($G(TYPE)) S URL=URL_"&type="_TYPE
 "RTN","VPREVNT",305,0)

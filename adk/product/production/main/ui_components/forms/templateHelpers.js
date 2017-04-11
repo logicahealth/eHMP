@@ -117,19 +117,21 @@ define([
             // placeholder
             // size (bootstrap col width, default: 12)
             // standAloneForm (default false)
+            var root = options.data.root;
             options = options.hash || {};
             var hbEscape = Handlebars.Utils.escapeExpression;
 
-            var title, value, size, id, extraClasses, standAloneForm, required, disabled;
+            var title, value, size, id, extraClasses, standAloneForm, required, disabled, buttonID;
             placeholderText = hbEscape(placeholderText || "");
             title = hbEscape(options.title || placeholderText);
             value = options.value || "";
             size = hbEscape(parseInt(options.size) || 12);
-            id = hbEscape(options.id || "default-responsive-search-bar");
+            id = hbEscape(root.id || "defaultResponsiveSearchBar");
             extraClasses = (_.isArray(options.classes) ? hbEscape(options.classes.toString().replace(/,/g, ' ')) : hbEscape(options.classes || ""));
             standAloneForm = options.standAloneForm || false;
             required = (_.isBoolean(options.required) ? options.required : false);
             disabled = (_.isBoolean(options.disabled) ? options.disabled : false);
+            buttonID = id + "Btn";
 
             var labelOptions = {
                 hash: {
@@ -147,12 +149,15 @@ define([
                 (disabled ? ' disabled' : '') +
                 (required ? ' required' : '') +
                 ' id="' + id + '" value="' + value + '" />',
+                '<button class="clear-input-btn default btn btn-icon btn-sm color-grey-darkest" type="button" title="Press enter to clear search text">',
+                    '<i class="fa fa-times"></i>',
+                '</button>',
                 '<span class="input-group-btn">',
-                '<button type="button" class="text-search-accessible btn btn-default"' +
+                '<button id="' + buttonID + '" type="button" class="box-shadow-no text-search btn btn-primary btn-sm"' +
                 (disabled ? ' disabled' : '') +
                 (required ? ' required' : '') +
-                ' title="Please select the button to submit your search">',
-                '<i class="fa fa-search" title="Submit Search"></i><span class="sr-only">Submit Search</span>',
+                ' title="Press enter to search, then view results below">',
+                '<i class="fa fa-search"></i>',
                 '</button>',
                 '</span>',
                 '</div>',

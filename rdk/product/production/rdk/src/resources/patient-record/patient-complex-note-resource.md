@@ -1,14 +1,12 @@
 # Group Patient
 
-## Patient record complexnote-html [{{{path}}}/html{?pid}{&uid}{&fields}]
+## Patient record complexnote-html [{{{path}}}/html{?pid}{&uid}]
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
 
     :[uid]({{{common}}}/parameters/uid.md example:"urn:va:document:DOD:0000000003:1000000648" required:"required")
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Get DoD Complex Note, HTML [GET]
@@ -36,15 +34,13 @@ Get the DoD complex note represented in HTML for a given document on a patient
 
 :[Response 500]({{{common}}}/responses/500.md)
 
-## Patient record complexnote-pdf [{{{path}}}/pdf{?pid}{&uid}{&fields}]
+## Patient record complexnote-pdf [{{{path}}}/pdf{?pid}{&uid}]
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
 
     :[uid]({{{common}}}/parameters/uid.md example:"urn:va:document:DOD:0000000003:1000000648" required:"required")
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Get DoD Complex Note, PDF [GET]

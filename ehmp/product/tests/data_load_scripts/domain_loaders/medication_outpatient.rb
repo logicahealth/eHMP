@@ -6,7 +6,7 @@ require 'csv'
 
 # options
 #------------------------------------
-serve_ip = "IPADDRESS "
+serve_ip = "IP_ADDRESS"
 meds_amount = 12516
 patient_id = 100841 #alpha test
 #------------------------------------

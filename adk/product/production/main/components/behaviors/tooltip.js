@@ -37,8 +37,14 @@ define([
             return config;
         },
         onRender: function() {
+            if (!this.ui.$tooltip.length) {
+                //the tooltip might be this.$el and not a child, and if so, this.ui.$tooltip will be empty
+                if (!!this.$el.attr('tooltip-data-key') || this.$el.attr('data-toggle') === 'tooltip')
+                    this.ui.$tooltip = this.$el;
+            }
+
             _.each(this.ui.$tooltip, function(tip) {
-                var $tip = this.$(tip);
+                var $tip = (tip === this.el) ? this.$el : this.$(tip);
                 if ($tip.data('bs.tooltip')) return;
                 var config = this.buildConfig($tip);
                 $tip.attr('title', config.title);

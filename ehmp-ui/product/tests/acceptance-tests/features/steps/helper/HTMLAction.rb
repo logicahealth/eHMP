@@ -123,6 +123,20 @@ class ComboSelectAction
   end
 end
 
+class ComboSelectValueAction
+  include HTMLAction
+  def perform_action(html_element, value)
+    driver = TestSupport.driver
+    html_element.click # input
+    temp_xpath = "//option [@value='#{value}']"
+    # wait for a specific element to show up
+    wait = Selenium::WebDriver::Wait.new(:timeout => 10) # seconds # wait until list opens
+    wait.until { driver.find_element(:xpath => temp_xpath).displayed? } # wait until specific list element is shown
+    html_element = driver.find_element(:xpath => temp_xpath) # find specific list element
+    html_element.click # click specific list element
+  end
+end
+
 class FocusInAction
   include HTMLAction
   def initialize(html_id)

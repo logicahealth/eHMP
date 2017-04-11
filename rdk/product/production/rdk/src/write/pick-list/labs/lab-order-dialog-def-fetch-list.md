@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Lab order dialog def [/lab-order-dialog-def{?site}{&fields}]
+## Lab order dialog def [/lab-order-dialog-def{?site}]
 
 Gets Lab Order Dialog Definition
 
@@ -11,8 +11,6 @@ ORWDLR32 DEF
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

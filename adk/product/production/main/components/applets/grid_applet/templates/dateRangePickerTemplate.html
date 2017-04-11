@@ -1,25 +1,32 @@
-<fieldset class="top-padding-sm left-padding-sm bottom-padding-xs">
+<fieldset class="all-margin-sm btn-date-range">
     <legend class="sr-only">Date Range Filter</legend>
-    <div class="btn-group btn-group-xs">
-        <button id="all-range-{{appletId}}" name="allRange" type="button" class="btn btn-default" title="Press enter to select all.">All</button>
-        <button id="2yr-range-{{appletId}}" name="2yrRange" type="button" class="btn btn-default" title="Press enter to select last 2 years.">2yr</button>
-        <button id="1yr-range-{{appletId}}" name="1yrRange" type="button" class="btn btn-default" title="Press enter to select last year.">1yr</button>
-        <button id="3mo-range-{{appletId}}" name="3moRange" type="button" class="btn btn-default" title="Press enter to select last 3 months.">3m</button>
-        <button id="1mo-range-{{appletId}}" name="1moRange" type="button" class="btn btn-default" title="Press enter to select last month.">1m</button>
-        <button id="7d-range-{{appletId}}" name="7dRange" type="button" class="btn btn-default" title="Press enter to select last 7 days.">7d</button>
-        <button id="72hr-range-{{appletId}}" name="72hrRange" type="button" class="btn btn-default" title="Press enter to select last 72 hours.">72hr</button>
-        <button id="24hr-range-{{appletId}}" name="24hrRange" type="button" class="btn btn-default" title="Press enter to select last 24 hours.">24hr</button>
+    <div class="btn-group btn-group-xs right-margin-md">
+        <button id="all-range-{{appletId}}" name="allRange" type="button" class="btn btn-sm btn-default" title="Press enter to select all years">All</button>
+        <button id="2yr-range-{{appletId}}" name="2yrRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 2 years">2yr</button>
+        <button id="1yr-range-{{appletId}}" name="1yrRange" type="button" class="btn btn-sm btn-default" title="Press enter to select last year">1yr</button>
+        <button id="3mo-range-{{appletId}}" name="3moRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 3 months">3m</button>
+        <button id="1mo-range-{{appletId}}" name="1moRange" type="button" class="btn btn-sm btn-default" title="Press enter to select last month">1m</button>
+        <button id="7d-range-{{appletId}}" name="7dRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 7 days">7d</button>
+        <button id="72hr-range-{{appletId}}" name="72hrRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 72 hours">72hr</button>
+        <button id="24hr-range-{{appletId}}" name="24hrRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 24 hours">24hr</button>
     </div>
-    <div class="left-padding-md input-group date" id="custom-date-range1-{{appletId}}">
-        <label for="filter-from-date-{{appletId}}" class="sr-only">Start Date</label>
-        <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="filter-from-date-{{appletId}}" name="filter-from-date-{{appletId}}" title="Please enter start of date range." />
-        <span class="input-group-addon" aria-hidden="true" for="filter-from-date-{{appletId}}"><i class="fa fa-calendar color-primary"></i></span>
+    <div class="form-group">
+        <label for="filter-from-date-{{appletId}}" class="font-size-12">From</label>
+        <div id="custom-date-range1-{{appletId}}" class="input-group date">
+            <span class="input-group-addon" aria-hidden="true" for="filter-from-date-{{appletId}}">
+                <i class="fa fa-calendar"></i>
+            </span>
+            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="filter-from-date-{{appletId}}" name="filter-from-date-{{appletId}}" title="Enter date in MM/DD/YYYY format" />
+        </div>
     </div>
-    <span class="all-padding-xs">to</span>
-    <div class="right-padding-xs input-group date" id="custom-date-range2-{{appletId}}">
-        <label for="filter-to-date-{{appletId}}" class="sr-only">End Date</label>
-        <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="filter-to-date-{{appletId}}" name="filter-to-date-{{appletId}}" title="Please enter end of date range." />
-        <span class="input-group-addon" aria-hidden="true" for="filter-to-date-{{appletId}}"><i class="fa fa-calendar color-primary"></i></span>
+    <div class="form-group">
+        <label for="filter-to-date-{{appletId}}" class="font-size-12">To</label>
+        <div id="custom-date-range2-{{appletId}}" class="input-group date">
+            <span class="input-group-addon" aria-hidden="true" for="filter-to-date-{{appletId}}">
+                <i class="fa fa-calendar"></i>
+            </span>
+            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="filter-to-date-{{appletId}}" name="filter-to-date-{{appletId}}" title="Enter date in MM/DD/YYYY format" />
+        </div>
     </div>
-    <button id="custom-range-apply-{{appletId}}" name="custom-range-apply-{{appletId}}" type="submit" class="btn btn-primary" title="Press enter to apply custom date range." disabled>Apply</button>
+    <button id="custom-range-apply-{{appletId}}" name="custom-range-apply-{{appletId}}" type="submit" class="btn btn-sm btn-primary left-margin-sm" title="Press enter to apply custom date range" disabled>Apply</button>
 </fieldset>

@@ -3,7 +3,7 @@ Feature: Cancel an Unsigned Outpatient Lab Order with lock and order refresh
 
 @US8414 @TC1887
 Scenario Outline: Save the dynamic fields (UI)
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	And user searches for and selects "Twenty,Patient"
     Then Overview is active
     And user selects and sets new encounter

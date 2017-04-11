@@ -1,11 +1,7 @@
 default[:jds][:cache_service] = "cache"
-default[:jds][:cache_package] = "cache-server"
-default[:jds][:cache_arch] = "x86_64"
 default[:jds][:cache_version] = "2014.1.3.775.0"
-#default[:jds][:cache_arch] = "lnxrhx64"
-# default[:jds][:cache_source] = "#{node[:nexus_url]}/nexus/service/local/artifact/maven/redirect?r=ehmp&g=filerepo.third-party.project.intersystems&a=cache&v=#{node[:jds][:cache_version]}&c=#{node[:jds][:cache_arch]}&e=tar.gz"
-#default[:jds][:cache_source] = "file:///opt/private_licenses/cache_server/cache-" + node[:jds][:cache_version] + "-" + node[:jds][:cache_arch] + ".tar.gz"
-default[:jds][:cache_source] = "/opt/private_licenses/cache_server/" + node[:jds][:cache_package] + "-" + node[:jds][:cache_version] + "-1.rh." + node[:jds][:cache_arch] + ".rpm"
+default[:jds][:cache_arch] = "lnxrhx64"
+default[:jds][:cache_source] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/intersystems/cache/#{node[:jds][:cache_version]}/cache-#{node[:jds][:cache_version]}-#{node[:jds][:cache_arch]}.tar.gz"
 default[:jds][:build_jds] = false
 
 default[:jds][:session]  =                 "csession cache"
@@ -24,7 +20,8 @@ default[:jds][:cache_parameter] = {
   'ISC_PACKAGE_INSTANCENAME'=>"#{node[:jds][:cache_service]}",
   'ISC_PACKAGE_INSTALLDIR'=>"#{node[:jds][:cache_dir]}",
   'ISC_PACKAGE_CACHEUSER'=>"#{node[:jds][:cache_user]}",
-  'ISC_PACKAGE_CACHEGROUP'=>"#{node[:jds][:cache_user]}"
+  'ISC_PACKAGE_CACHEGROUP'=>"#{node[:jds][:cache_user]}",
+  'ISC_PACKAGE_UNICODE'=>"Y"
 }
 
 default[:jds][:cache_license_data_bag] = "cache_license"
@@ -60,6 +57,7 @@ default[:jds][:jds_data][:dir] = "/tmp/jds_data"
 default[:jds][:jds_data][:source] = nil
 
 default[:jds][:data_store][:ehmpusers] = "ehmpusers"
+default[:jds][:data_store][:entordrbls] = "entordrbls"
 default[:jds][:data_store][:permission] = "permission"
 default[:jds][:data_store][:permset] = "permset"
 default[:jds][:data_store][:teamlist] = "teamlist"
@@ -70,3 +68,14 @@ default[:jds][:data_store][:clinicobj] = "clinicobj"
 default[:jds][:data_store][:ordersets] = "ordersets"
 default[:jds][:data_store][:quickorders] = "quickorder"
 default[:jds][:data_store][:orderfavorites] = "orderfavs"
+default[:jds][:data_store][:entordrbls] = "entordrbls"
+
+default[:jds][:jds_data][:data_bag][:ehmp_users] = nil
+default[:jds][:jds_data][:data_bag][:permission] = nil
+default[:jds][:jds_data][:data_bag][:permset] = nil
+default[:jds][:jds_data][:data_bag][:teamlist] = nil
+default[:jds][:jds_data][:data_bag][:teamsys] = nil
+default[:jds][:jds_data][:data_bag][:entordrbls] = nil
+
+default[:jds][:jds_data][:delete_stores] = true
+default[:jds][:clear_jds_journal] = true

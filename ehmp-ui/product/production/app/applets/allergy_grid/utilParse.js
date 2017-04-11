@@ -29,11 +29,11 @@ define([
 
     Util.getAcuityName = function(response) {
         response.acuityName = this.toTitleCase(response.acuityName);
-        if (response.acuityName == 'Mild') {
+        if (response.acuityName === 'Mild') {
             response.mild = true;
-        } else if (response.acuityName == 'Moderate') {
+        } else if (response.acuityName === 'Moderate') {
             response.moderate = true;
-        } else {
+        } else if (response.acuityName === 'Severe') {
             response.severe = true;
         }
         return response;

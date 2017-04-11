@@ -1,0 +1,10 @@
+{{#if currentWorkspace}}
+<a href="#{{routeName}}" class="workspace-navigation-link" title="{{title}} workspace is currently active">
+{{else}}
+<a href="#{{routeName}}" class="workspace-navigation-link" title="Press enter to load the {{title}} workspace">
+{{/if}}
+{{#if defaultScreen}}
+    <i class="fa fa-star"></i>
+{{/if}}
+{{title}}
+</a>

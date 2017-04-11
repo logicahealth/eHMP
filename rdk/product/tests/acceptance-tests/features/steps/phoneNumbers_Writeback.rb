@@ -12,7 +12,7 @@ When(/^the client saves homephone \| CellPhone \| WorkPhone \| EmergencyPhone \|
 
   reqjson = jsonreq.to_json
   p reqjson
-  @response =  HTTPartyWithBasicAuth.post_json_with_authorization(url, reqjson)
+  @response =  HTTPartyRDK.post(url, reqjson)
   puts @response
 end
 

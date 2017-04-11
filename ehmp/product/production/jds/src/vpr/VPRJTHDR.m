@@ -133,7 +133,7 @@ GETOBJ ;; @TEST getting an object by PID & UID
  D SETGET^VPRJTX("/vpr/93EF;-7/urn:va:med:93EF:-7:15231")
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
- D ASSERT(1,$D(^VPRMETA("JPID",VPRJTPID,"lastAccessTime")))
+ D ASSERT(1,$D(^VPRMETA("JPID",VPRJPID,"lastAccessTime")))
  K HTTPERR
  S PTIME=TIME
  H 1
@@ -150,7 +150,7 @@ GETOBJ ;; @TEST getting an object by PID & UID
  D SETGET^VPRJTX("/vpr/1HDR;-777V123777/urn:va:med:93EF:-7:15231")
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
- D ASSERT(1,$D(^VPRMETA("JPID",VPRJTPID,"lastAccessTime")))
+ D ASSERT(1,$D(^VPRMETA("JPID",VPRJPID,"lastAccessTime")))
  S PTIME=TIME
  H 1
  S TIME=$G(^VPRMETA("JPID",VPRJPID,"lastAccessTime"))
@@ -177,7 +177,7 @@ GETOBJR ;; @TEST getting an object by PID & UID (HDR then Primary Site)
  D SETGET^VPRJTX("/vpr/1HDR;-777V123777/urn:va:med:93EF:-7:15231")
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
- D ASSERT(1,$D(^VPRMETA("JPID",VPRJTPID,"lastAccessTime")))
+ D ASSERT(1,$D(^VPRMETA("JPID",VPRJPID,"lastAccessTime")))
  K HTTPERR
  S PTIME=TIME
  H 1
@@ -226,8 +226,8 @@ DELUID ;; @TEST deleting an object with primary and HDR data by UID
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
  ; Test data
- D ASSERT(0,$D(^VPRPT(VPRJTPID,"urn:va:med:93EF:-7:15231")))
- D ASSERT(0,$D(^VPRPTI(VPRJTPID,"list","medication",20050331,"urn:va:med:93EF:-7:15231")))
+ D ASSERT(0,$D(^VPRPT(VPRJPID,VPRJTPID,"urn:va:med:93EF:-7:15231")))
+ D ASSERT(0,$D(^VPRPTI(VPRJPID,VPRJTPID,"list","medication",20050331,"urn:va:med:93EF:-7:15231")))
  K HTTPERR
  S PTIME=TIME
  H 1
@@ -253,8 +253,8 @@ DELUID ;; @TEST deleting an object with primary and HDR data by UID
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
  ; Test data
- D ASSERT(0,$D(^VPRPT(VPRJTPID,"urn:va:med:93EF:-7:15231")))
- D ASSERT(0,$D(^VPRPTI(VPRJTPID,"list","medication",20050331,"urn:va:med:93EF:-7:15231")))
+ D ASSERT(0,$D(^VPRPT(VPRJPID,VPRJTPID,"urn:va:med:93EF:-7:15231")))
+ D ASSERT(0,$D(^VPRPTI(VPRJPID,VPRJTPID,"list","medication",20050331,"urn:va:med:93EF:-7:15231")))
  K HTTPERR
  S PTIME=TIME
  H 1

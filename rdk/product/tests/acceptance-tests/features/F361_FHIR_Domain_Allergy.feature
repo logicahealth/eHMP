@@ -24,3 +24,4 @@ Feature: F361 FHIR Domain - AllergyIntolerance
          | resource.event.manifestation.coding.system  | CONTAINS urn:oid:2.16.840.1.113883.6.233 |
          | resource.event.manifestation.coding.code    | CONTAINS urn:va:vuid: |
          | resource.event.manifestation.coding.display | CONTAINS ANOREXIA |
+      And FHIR date and time conver to Zulu format for Allergy F361

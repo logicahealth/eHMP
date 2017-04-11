@@ -1,0 +1,37 @@
+{
+	"handlerProfiles": {
+		"profileCollection": {
+        	"error": [
+          		"error-request"
+        	],
+			"update": [
+				"record-update"
+			]
+		}
+	},
+	"beanstalk": {
+		"repoUniversal": {
+			"priority": 10,
+			"delay": 0,
+			"ttr": 120,
+			"timeout": 10,
+			"initMillis": 1000,
+			"maxMillis": 15000,
+			"incMillis": 1000
+		},
+		"repoDefaults": {
+			"host": "127.0.0.1",
+			"port": 4999,
+			"tubename": "vx-sync",
+			"tubePrefix": "vxs-",
+			"jobTypeForTube": true
+		},
+		"jobTypes": {
+			"error-request": {},
+			"record-update": {},
+            "publish-data-change-event": {
+              "port": 5000
+          }
+        }
+	}
+}

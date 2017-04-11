@@ -2,8 +2,9 @@ define([
     'underscore',
     'backbone',
     'marionette',
-    'app/applets/addApplets/appletLayoutView'
-], function(_, Backbone, Marionette, AppletLayoutView) {
+    'app/applets/addApplets/appletLayoutView',
+    'app/applets/addApplets/navigationButton'
+], function(_, Backbone, Marionette, AppletLayoutView, NavigationButton) {
 
     'use strict';
 
@@ -14,9 +15,16 @@ define([
 
     var applet = {
         id: 'addApplets',
-        getRootView: function() {
-            return RootView;
-        }
+        viewTypes: [{
+            type: 'expanded',
+            view: RootView,
+            chromeEnabled: false
+        }, {
+            type: 'button',
+            view: NavigationButton,
+            chromeEnabled: false
+        }],
+        defaultViewType: 'expanded'
     };
 
     (function initMessaging() {
@@ -30,6 +38,7 @@ define([
                 }
             });
             view.show();
+            view.overlayView.setBoundaryIndicator();
         });
     })();
 

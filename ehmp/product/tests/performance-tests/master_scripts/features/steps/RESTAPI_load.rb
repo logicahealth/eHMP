@@ -100,8 +100,8 @@ When /^for test "([^"]*)" with tag "([^"]*)" the load is increased by "([^"]*)" 
         #setProviderBoxName ProviderBoxName
         #setProviderBoxURL ProviderBoxURL
         setVagrantfileDir VagrantfileDir
-        node 'test_client_1', 'IPADDRESS  '
-        node 'test_client_2', 'IPADDRESS  '
+        node 'test_client_1', 'IP__ADDRESS'
+        node 'test_client_2', 'IP__ADDRESS'
     end
 
 

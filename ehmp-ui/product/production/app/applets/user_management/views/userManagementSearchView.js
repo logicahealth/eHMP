@@ -35,10 +35,10 @@ define([
                 if (!_.isUndefined(paging_data)) {
                     this.model.set('resultCount', paging_data.message);
                     this.model.set('resultCountLabel', paging_data.message.replace('-', 'through'));
-                    this.currentStartIndex = paging_data.currentStart;
-                    this.nextPageStartIndex = paging_data.nextStart;
-                    this.previousPageStartIndex = paging_data.previousStart;
-                    if (paging_data.nextStart === 0 && paging_data.previousStart === 0 && this.currentStartIndex === 0) {
+                    this.currentPage = paging_data.currentPage;
+                    this.nextPage = paging_data.nextPage;
+                    this.previousPage = paging_data.previousPage;
+                    if (paging_data.nextPage === 1 && paging_data.previousPage === 1 && paging_data.currentPage === 1) {
                         this.disablePagingButtons();
                     } else {
                         this.enablePagingButtons();
@@ -50,18 +50,13 @@ define([
             }
         },
         disablePagingButtons: function() {
-            this.ui.nextPageButton = this.$el.find('.next-page-button');
-            this.ui.previousPageButton = this.$el.find('.previous-page-button');
-            this.ui.nextPageButton.trigger('control:disabled', true);
-            this.ui.previousPageButton.trigger('control:disabled', true);
+            this.footerView.disablePagingButtons();
         },
         enablePagingButtons: function() {
-            this.ui.nextPageButton = this.$el.find('.next-page-button');
-            this.ui.previousPageButton = this.$el.find('.previous-page-button');
-            this.ui.nextPageButton.trigger('control:disabled', false);
-            this.ui.previousPageButton.trigger('control:disabled', false);
+            this.footerView.enablePagingButtons();
         },
         onRender: function() {
+            this.footerView.hideFooterContent();
             var self = this;
             appletUtil.getPermissionSets(function(permissionSets, errorMessage) {
                 if (errorMessage) {
@@ -82,29 +77,31 @@ define([
             "searchButton": ".search-btn",
             "searchButtonControl": ".search-btn-container .button-control",
             "allControls": ".control",
-            "mainSearchFormControls": ".mainSearchForm",
+            "mainSearchFormControls": ".main-search-form",
             "resultsViewFormControls": ".resultsViewForm",
-            "loadingViewControl": ".loadingView",
-            "permissionSetsPicklistControl": ".permissionSetsPicklist",
+            "loadingViewControl": ".loading-view",
+            "permissionSetsPicklistControl": ".permission-sets-picklist",
             "bulkEditControl": ".bulk-edit-btn",
-            "alertBannerControl": "div.control.alertBanner-control",
-            "nextPageButton": ".next-page-button",
-            "previousPageButton": ".previous-page-button",
+            "alertBannerControl": "div.control.alertBanner-control"
         },
         enableForm: function(e) {
             this.$el.find(this.ui.allControls).trigger('control:disabled', false);
             this.setPaging();
         },
         disableForm: function(e) {
+            this.disablePagingButtons();
             this.$el.find(this.ui.allControls).trigger('control:disabled', true);
         },
         showSearchView: function() {
+            this.footerView.hideFooterContent();
             this.ui.resultsViewFormControls.trigger('control:hidden', true);
             this.ui.mainSearchFormControls.trigger('control:hidden', false);
+            this.$el.find('.lastNameValue input').focus();
             appletUtil.setStorageModel('inResultsView', false);
             appletUtil.setStorageModel('formModel', this.model.attributes);
         },
         hideSearchView: function() {
+            this.footerView.showFooterContent();
             this.setPaging();
             this.ui.resultsViewFormControls.trigger('control:hidden', false);
             this.ui.mainSearchFormControls.trigger('control:hidden', true);
@@ -127,51 +124,52 @@ define([
         fields: [{
             control: "alertBanner",
             name: "alertMessage",
-            dismissible: true
+            dismissible: true,
+            extraClasses: ["left-margin-md", "right-margin-md", "top-margin-md"]
         }, {
             name: "searchForm",
             control: "container",
-            extraClasses: ["searchForm", "row", "background-color-pure-white", "left-margin-no", "right-margin-no"],
+            extraClasses: ["search-form", "row", "background-color-pure-white", "left-margin-no", "right-margin-no"],
             items: [{
                 control: "container",
-                extraClasses: ["col-md-12", "mainSearchForm"],
-                template: '<p><strong>Fill in at least one field to search for users</strong></p>'
+                extraClasses: ["col-xs-12", "main-search-form", "top-padding-sm", "bototm-padding-sm"],
+                template: '<p>Fill in at least one field to search for users</p>'
             }, {
                 control: "container",
-                extraClasses: ["col-md-12", "mainSearchForm"],
+                extraClasses: ["col-xs-12", "main-search-form", "left-padding-no"],
                 items: [{
                     control: "input",
                     name: "lastNameValue",
                     label: "Last Name",
-                    extraClasses: ["col-md-6"],
+                    extraClasses: ["col-xs-6"],
                     srOnlyLabel: false,
-                    title: "Please enter the Last Name of the user"
+                    title: "Enter the Last Name of the user"
                 }, {
                     control: "input",
                     name: "firstNameValue",
                     label: "First Name",
-                    extraClasses: ["col-md-6"],
+                    extraClasses: ["col-xs-6"],
                     srOnlyLabel: false,
-                    title: "Please enter the First Name of the user"
+                    title: "Enter the First Name of the user"
                 }]
             }, {
                 control: "container",
-                extraClasses: ["col-md-12", "mainSearchForm"],
+                extraClasses: ["col-xs-12", "main-search-form", "left-padding-no"],
                 items: [{
                     control: "select",
                     name: "permissionSetValue",
-                    extraClasses: ["col-md-6", "permissionSetsPicklist"],
+                    extraClasses: ["col-xs-6", "permission-sets-picklist"],
                     pickList: appletUtil.permissionSets,
                     srOnlyLabel: false,
                     label: "Select Permission Set",
-                    title: "To select an option, use the up and down arrow keys then press enter to select",
+                    title: "Use up and down arrows to view options and then press enter to select",
                 }, {
                     control: "input",
                     name: "duzValue",
                     label: "DUZ",
-                    extraClasses: ["col-md-6"],
+                    extraClasses: ["col-xs-6"],
                     srOnlyLabel: false,
-                    title: "Please enter the DUZ of the user"
+                    title: "Enter the D U Z of the user"
                 }]
             }, {
                 name: "checkboxForm",
@@ -180,11 +178,11 @@ define([
                     control: "container",
                     items: [{
                         control: "container",
-                        extraClasses: ["col-md-12", "mainSearchForm", "right-padding-lg"],
+                        extraClasses: ["col-xs-12", "main-search-form", "top-padding-sm"],
                         template: '<p>Default search results will return only users that are active in both eHMP and VistA.</p>'
                     }, {
                         control: "container",
-                        extraClasses: ["col-md-3", "top-margin-xs", "resultsViewForm", "left-padding-xs"],
+                        extraClasses: ["col-xs-3", "top-margin-xs", "resultsViewForm", "left-padding-xs"],
                         items: [{
                             control: "button",
                             extraClasses: ["btn-link", "search-return-link", "left-padding-xs"],
@@ -197,66 +195,40 @@ define([
                         hidden: true
                     }, {
                         control: "container",
-                        extraClasses: ["col-md-7"],
+                        extraClasses: ["col-xs-9", "left-padding-no"],
                         items: [{
                             control: "container",
-                            extraClasses: ["col-md-6"],
+                            extraClasses: ["col-xs-6"],
                             items: [{
                                 control: "checkbox",
                                 label: "Include Inactive VistA Users",
                                 name: "vistaCheckboxValue",
-                                title: "To select this checkbox, press the spacebar",
+                                title: "Press spacebar to toggle checkbox.",
                             }]
                         }, {
                             control: "container",
-                            extraClasses: ["col-md-6"],
+                            extraClasses: ["col-xs-6"],
                             items: [{
                                 control: "checkbox",
                                 label: "Include Inactive eHMP Users",
                                 name: "ehmpCheckboxValue",
-                                title: "To select this checkbox, press the spacebar",
+                                title: "Press spacebar to toggle checkbox.",
                             }]
                         }]
                     }]
                 }, {
                     control: "container",
-                    extraClasses: ["resultsViewForm", "col-md-12"],
+                    extraClasses: ["resultsViewForm", "col-xs-12"],
                     items: [{
                         control: "container",
-                        extraClasses: ["col-md-9", "results-count-container", "bold-font", "bottom-padding-sm", "left-padding-no"],
-                        template: '<span id="resultcountlabel" aria-label="Table is now {{resultCountLabel}}">{{resultCount}}</span>'
-                    }, {
-                        control: "container",
-                        extraClasses: ["col-md-3", "text-right"],
-                        items: [{
-                            control: "button",
-                            extraClasses: ["btn-primary", "btn-sm", "pixel-width-25"],
-                            name: "previous-page-button",
-                            label: "Previous Page",
-                            srOnlyLabel: true,
-                            icon: "fa-caret-left",
-                            disabled: false,
-                            title: "Previous Page",
-                            id: "previous-page-button",
-                            type: "button"
-                        }, {
-                            control: "button",
-                            extraClasses: ["btn-primary", "btn-sm", "pixel-width-25"],
-                            name: "next-page-button",
-                            label: "Next Page",
-                            srOnlyLabel: true,
-                            icon: "fa-caret-right",
-                            disabled: false,
-                            title: "Next Page",
-                            id: "next-page-button",
-                            type: "button"
-                        }]
+                        extraClasses: ["col-xs-9", "results-count-container", "bold-font", "bottom-padding-sm", "left-padding-no"],
+                        template: '<span id="resultCountLabel" aria-label="Table is now {{resultCountLabel}}">{{resultCount}}</span>'
                     }],
                     hidden: true
                 }]
             }, {
                 control: "container",
-                extraClasses: ["col-md-12", "search-btn-container", "mainSearchForm"],
+                extraClasses: ["col-xs-12", "search-btn-container", "main-search-form", "bottom-padding-sm"],
                 items: [{
                     control: "button",
                     extraClasses: ["btn-primary", "btn-sm", "search-btn"],
@@ -269,7 +241,7 @@ define([
                 }]
             }, {
                 control: "container",
-                extraClasses: ["col-md-12", "loadingView"],
+                extraClasses: ["col-xs-12", "loading-view"],
                 template: loadingViewTemplate,
                 hidden: true
             }]
@@ -283,7 +255,7 @@ define([
                 this.disableForm(e);
                 this.showLoadingView();
                 this.ui.alertBannerControl.trigger('control:hidden', true);
-                this.searchUsers(e);
+                this.searchUsers(e, null, '.search-return-link');
             },
             'click .search-return-link': function(e) {
                 e.preventDefault();
@@ -292,11 +264,11 @@ define([
             },
             'click .next-page-button button': function(e) {
                 e.preventDefault();
-                this.disableFormAndSearch(this.nextPageStartIndex);
+                this.disableFormAndSearch(this.nextPage, '.next-page-button button');
             },
             'click .previous-page-button button': function(e) {
                 e.preventDefault();
-                this.disableFormAndSearch(this.previousPageStartIndex);
+                this.disableFormAndSearch(this.previousPage, '.previous-page-button button');
             }
         },
         clearAlert: function() {
@@ -329,8 +301,8 @@ define([
         updateResultCount: function() {
             var newCount = this.model.get('resultCount');
             appletUtil.setStorageModel('resultCount', newCount);
-            this.$el.find('#resultcountlabel').text(newCount);
-            this.$el.find('#resultcountlabel').attr('title', 'Table is now ' + newCount + '');
+            this.$el.find('#resultCountLabel').text(newCount);
+            this.$el.find('#resultCountLabel').attr('title', 'Table is now ' + newCount + '');
             appletUtil.setStorageModel('formModel', this.model.attributes);
         },
         showAlert: function(icon, type, title, message) {
@@ -338,15 +310,22 @@ define([
             this.ui.alertBannerControl.trigger('control:icon', icon).trigger('control:type', type).trigger('control:title', title);
             this.model.set('alertMessage', message);
         },
-        disableFormAndSearch: function(startIndex) {
-            var start = startIndex || 0;
-            if (!_.isNumber(start)) {
-                start = 0;
+        disableFormAndSearch: function(startPage, elementTarget) {
+            var target = elementTarget;
+            var page = startPage || 1;
+            if (!_.isNumber(page)) {
+                page = 1;
             }
             if (appletUtil.getStorageModel('inResultsView') === true) {
                 this.disableForm();
                 this.clearAlert();
-                this.searchUsers(null, start);
+
+                if (this.model.hasChanged('vistaCheckboxValue')) {
+                    elementTarget = '.vistaCheckboxValue input';
+                } else if (this.model.hasChanged('ehmpCheckboxValue')) {
+                    elementTarget = '.ehmpCheckboxValue input';
+                }
+                this.searchUsers(null, page, elementTarget);
             } else {
                 appletUtil.setStorageModel('formModel', this.model.attributes);
             }
@@ -362,8 +341,8 @@ define([
                 this.ui.searchButtonControl.trigger('control:disabled', true);
             }
         },
-        searchUsers: function(e, startIndex) {
-            var start = startIndex || 0;
+        searchUsers: function(e, startPage, elementTarget) {
+            var page = startPage || 1;
             if (this.parentCollection.originalModels) {
                 this.parentCollection.reset(this.parentCollection.originalModels);
             }
@@ -375,9 +354,9 @@ define([
             var previousLastQueryParams = appletUtil.getStorageModel('lastQueryParams');
             appletUtil.setStorageModel('previousLastQueryParams', previousLastQueryParams);
             appletUtil.setStorageModel('formModel', this.model.attributes);
-            var query = appletUtil.createUserSearchFilter(filterParameters, start);
+            var query = appletUtil.createUserSearchFilter(filterParameters, page);
             appletUtil.setStorageModel('lastQueryParams', query);
-            eventHandler.createUserList(false, query, null, this.parentCollection, this);
+            eventHandler.createUserList(false, query, null, this.parentCollection, this, elementTarget);
         },
 
 

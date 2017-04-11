@@ -7,21 +7,6 @@ define([
     'app/applets/user_management/appletUtil'
 ], function(appletUtil) {
 
-    //Test for appletUtil.getColumns()
-    describe("Verify the columns displayed for User Management Summary View:", function() {
-        it("should return true when the Summary View has the expected columns", function() {
-            var expectedColumns = appletUtil.userManagementColumns.summary;
-            var columns = appletUtil.getColumns("summary");
-            expect(columns).toEqual(expectedColumns);
-        });
-
-        it("should return true when the Expanded View has the expected columns", function() {
-            var expectedColumns = appletUtil.userManagementColumns.expanded;
-            var columns = appletUtil.getColumns("expanded");
-            expect(columns).toEqual(expectedColumns);
-        });
-    });
-
     //Test for appletUtil.compareArrays()
     describe("Verify if the comparison of two arrays:", function() {
 

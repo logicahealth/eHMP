@@ -1,5 +1,5 @@
 name 'awscli'
-maintainer '     Downs'
+maintainer 'Nick Downs'
 maintainer_email 'ndowns@amazon.com'
 license 'Apache 2.0'
 description 'Defines a number of LWRP wrapper commands around the awscli command line script'

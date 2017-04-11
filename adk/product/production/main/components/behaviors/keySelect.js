@@ -12,7 +12,7 @@ define([
             if(e.isDefaultPrevented() || !/(13|32)/.test(e.which)) return;
             e.stopImmediatePropagation();
             e.preventDefault();
-            this.$(e.target).trigger('click');
+            e.target.click();
         }
     });
 

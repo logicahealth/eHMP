@@ -1,5 +1,5 @@
-ext.set('repo', 'ehmp')
-ext.set('groupId', 'releases.us.vistacore.rdk')
+ext.set('repo', 'releases')
+ext.set('groupId', 'us.vistacore.rdk')
 ext.set('artifactId', 'rdk')
 ext.set('commitCountDir', projectDir)
 
@@ -17,100 +17,47 @@ uploadArchives {
   repositories.mavenDeployer {
     pom.groupId = "${->groupId}"
     pom.version = "${->version}"
-    repository(url: "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp/${->repo}/") {
+    repository(url: "https://store.vistacore.us/nexus/content/repositories/${->repo}/") {
       authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
     }
   }
 }
 
-// task installNpm(type: Exec) {
-//   group "RDK Tasks"
-//   description "installs package(s)"
-//   commandLine "bash", "-c", "ls -la"
-//   // commandLine "npm", "install", "--registry", "http://nexus.vaftl.us:8081/nexus/content/repositories/npm-all/"
-//   //commandLine "bash", "-c", "npm install --registry http://nexus.vaftl.us:8081/nexus/content/repositories/npm-all/"
-// }
-
-// task installNpmOracleDB(type: Exec) {
-//   group "RDK Tasks"
-//   description "installs the Oracle DB node package"
-//   // commandLine "npm", "install", "oracledb@1.4.0", "--registry", "http://nexus.vaftl.us:8081/nexus/content/repositories/npm-all/"
-//   commandLine "bash", "-c", "npm install oracledb@1.4.0 --registry http://nexus.vaftl.us:8081/nexus/content/repositories/npm-all/"
-// }
-task npmInstallVistaJs(type: Exec) {
- group "RDK tasks"
- description "Installing vista-js node module"
- workingDir "${projectDir}"
- commandLine "bash", "-c", "npm install ../../../../vista-js/"
-}
-
-task npmInstallJdsFilter(type: Exec) {
- group "RDK tasks"
- description "Installing jds-filter node module"
- workingDir "${projectDir}"
- commandLine "bash", "-c", "npm install ../../../../jds-filter/"
-}
-
-task installFakeOracleDB(type: Exec) {
+task installNpm(type: Exec) {
   group "RDK Tasks"
-  description "installs an empty Oracle DB node package for local testing iff none exists"
-  commandLine "sh", "-c", "[ -d \"${projectDir}/node_modules/oracledb\" ] || mkdir -p \"${projectDir}/node_modules/oracledb\" && touch \"${projectDir}/node_modules/oracledb/index.js\""
+  description "installs package(s)"
+  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
 }
 
-// task ccowInstallNpm(type: Exec) {
-//   workingDir './ccow'
-//   group "RDK Tasks"
-//   description "installs package(s) for ccow"
-//   // commandLine "npm", "install", "--registry", "http://nexus.vaftl.us:8081/nexus/content/repositories/npm-all/"
-//   commandLine "bash", "-c", "npm install --registry http://nexus.vaftl.us:8081/nexus/content/repositories/npm-all/"
-// }
-
-// task writeInstallNpm(type: Exec) {
-//   workingDir './src/write'
-//   group "RDK Tasks"
-//   description "installs package(s) for write back"
-//   // commandLine "npm", "install", "--registry", "http://nexus.vaftl.us:8081/nexus/content/repositories/npm-all/"
-//   commandLine "bash", "-c", "npm install --registry http://nexus.vaftl.us:8081/nexus/content/repositories/npm-all/"
-// }
-
-task deleteNodeModulesContent(type: Delete) {
-  group "RDK tasks"
-  description ""
-  delete "${projectDir}/node_modules"
-}
-// task deleteNodeModules(type: Delete) {
-task deleteNodeModules(type: Exec, dependsOn: [deleteNodeModulesContent]) {
+task installNpmOracleDB(type: Exec) {
   group "RDK Tasks"
-  description "Clean up node_modules"
-  commandLine "sh", "-c", "rmdir node_modules"
-  workingDir "${projectDir}"
-  ignoreExitValue true
-  // delete "${projectDir}/node_modules"\
+  description "installs the Oracle DB node package"
+  commandLine "npm", "install", "oracledb@1.9.3", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
 }
 
-// task cleanNPM() {
-//   group "RDK Tasks"
-//   description "Clean up node_modules"
-// }
-
-task restoreBundledNodeModules(type: Exec) {
+task ccowInstallNpm(type: Exec) {
+  workingDir './ccow'
   group "RDK Tasks"
-  description "Restore bundled node_modules"
-  // commandLine "git", "checkout", "${projectDir}/node_modules"
-  commandLine "bash", "-c", "git checkout ${projectDir}/node_modules"
+  description "installs package(s) for ccow"
+  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
 }
 
-// task cleanNPM(dependsOn: [deleteNodeModules, restoreBundledNodeModules]) {
-task cleanNPM(dependsOn: [deleteNodeModules]) {
-// task cleanNPM() {
+task writeInstallNpm(type: Exec) {
+  workingDir './src/write'
   group "RDK Tasks"
-  description "Clean up node_modules"
+  description "installs package(s) for write back"
+  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
 }
-clean.dependsOn cleanNPM
 
-// task build(dependsOn: [clean, installNpm, installFakeOracleDB]) {
-// task build(dependsOn: [clean, installFakeOracleDB]) {
-task build(dependsOn: [npmInstallVistaJs, npmInstallJdsFilter, installFakeOracleDB]) {
+task pruneNpm(type: Exec) {
+  group "RDK Tasks"
+  description "prune package(s)"
+  commandLine  "npm", "prune"
+}
+
+clean.dependsOn pruneNpm
+
+task build(dependsOn: [clean, installNpm]) {
   group "RDK Tasks"
   description "installs package(s)"
 }
@@ -118,37 +65,47 @@ task build(dependsOn: [npmInstallVistaJs, npmInstallJdsFilter, installFakeOracle
 task check(type: Exec, dependsOn: [build]) {
   group "RDK Tasks"
   description "installs package(s) and runs jshint"
-  // commandLine "npm", "run-script", "check"
-  commandLine "bash", "-c", "npm run-script check"
+  commandLine "npm", "run-script", "check"
 }
 
-task test(type: Exec, dependsOn: [build]) {
+task checkApiDocs(type: Exec, dependsOn: [build]) {
+  group "RDK Tasks"
+  description "Checks API Blueprint documentation and pre-parses it into JSON"
+  commandLine "npm", "run-script", "documentation:check"
+}
+
+task test(type: Exec, dependsOn: [build, checkApiDocs]) {
   group "RDK Tasks"
   description "installs package(s) and runs unit tests"
-  // commandLine "npm", "test"
-  commandLine "bash", "-c", "npm test"
+  commandLine "npm", "test"
 }
 
-// task rdkIntTests(type: Exec, dependsOn: [build]) {
-//   group "RDK Tasks"
-//   description "installs package(s) and runs integration tests"
-//   workingDir "${projectDir}/../../tests/"
-//   // commandLine "rake", "inttest"
-//   commandLine "bash", "-c", "rake inttest"
-// }
+task rdkIntTests(type: Exec, dependsOn: [build]) {
+  group "RDK Tasks"
+  description "installs package(s) and runs integration tests"
+  workingDir "${projectDir}/../../tests/"
+  commandLine "rake", "inttest"
+}
 
-// task rdkAllTests(dependsOn: [test, rdkIntTests]) {
-//   group "RDK Tasks"
-//   description "runs unit and integration tests"
-// }
+task rdkAllTests(dependsOn: [test, rdkIntTests]) {
+  group "RDK Tasks"
+  description "runs unit and integration tests"
+}
 
-// task zipRDK(type: Zip, dependsOn: [build, ccowInstallNpm, writeInstallNpm]) {
-task zipRDK(type: Zip, dependsOn: [build]) {  
+task zipRDK(type: Zip, dependsOn: [build, ccowInstallNpm, writeInstallNpm]) {
   extension = 'zip'
   baseName = 'rdk'
   version = version
   destinationDir parent.parent.buildDir
   from projectDir
+  exclude { details -> details.file.name.endsWith('-spec.js') ||
+                       details.file.name.endsWith('-spec-data.js') ||
+                       details.file.name.endsWith('-spec-data.json') ||
+                       details.file.name.endsWith('.gradle') ||
+                       details.file.name.endsWith('.log') ||
+                       details.file.name.equalsIgnoreCase('xunit.xml') ||
+                       details.file.name.endsWith('.sh') ||
+                       details.file.name.startsWith('.') }
 }
 
 uploadArchives.dependsOn zipRDK

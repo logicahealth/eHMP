@@ -1,29 +1,32 @@
 [class$="-full"] {
-    #center-region > div,
-    #content-region-wrapper,
-    #content-region,
-    .contentPadding,
-    .contentPadding > div,
-    .contentPadding > div > div,
-    [data-instanceid],
-    .gridContainer,
-    .grid-container,
-    .gridContainer > div,
-    .grid-container > div,
-    .panel-body,
-    .data-grid {
-        height: 100%;
+    main {
+        .contentPadding,
+        .contentPadding > div,
+        .contentPadding > div > div,
+        [data-instanceid],
+        .gridContainer,
+        .grid-container,
+        .gridContainer > div,
+        .grid-container > div,
+        .panel-body,
+        .data-grid {
+            height: 100%;
+        }
+        div.panel-body {
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+        [data-instanceid] > .panel {
+            height: calc(100% - 10px);
+        }
     }
     #center-region > div {
         height: 100%;
         /* phantomJS fallback */
         height: calc(100% - 15px);
     }
-    div:not(.sidebar-tray) {
-        div.panel-body {
-            overflow-x: hidden;
-            overflow-y: hidden !important;
-        }
+    div.sidebar-tray div.panel-body {
+        overflow: visible;
     }
 }
 
@@ -51,39 +54,7 @@ $rowBorderTop: #e5e5e5;
 $rowBackgroundColor: #fff;
 $rowEmptyRowColor: gray;
 
-/* Why the named color.  should be hex */
-
-.row {
-    /* equalHeights for 23px rows of a single row elements */
-    &.equalHeights {
-        display: table;
-        height: $defaultRowHeight + 10px;
-        line-height: $defaultLineHeight;
-        min-height: $defaultRowHeight +10px;
-        width: 100%;
-        & > *[class*="col-"] {
-            display: table-cell;
-            float: none;
-            line-height: $defaultLineHeight;
-            vertical-align: middle;
-            &.info-display {
-                padding-right: 0;
-            }
-            &:hover {
-                background: $primary-lightest;
-            }
-        }
-        & > .row.equalHeights {
-            padding-left: 10px;
-            margin-left: 0;
-        }
-    }
-}
 /* should be global, not nested? */
-.clearBoth {
-    clear: both;
-}
-
 .backgrid {
     background-color: #FFF;
     -webkit-border-radius: 0;
@@ -92,14 +63,6 @@ $rowEmptyRowColor: gray;
     td {
         border-bottom: none;
     }
-}
-
-.backgrid .ascending .sort-caret {
-    border-bottom: 4px solid #5596C9;
-}
-
-.backgrid .descending .sort-caret {
-    border-top: 4px solid #5596C9;
 }
 
 .backgrid-paginator {
@@ -133,35 +96,13 @@ $rowEmptyRowColor: gray;
 }
 
 
-/*--- Modal Styling ---*/
-
-.modal-xlg {
-    width: 97%;
-}
-
-#mainOverlayRegion {
-    height: 100%;
-}
-
-#mainModalDialog.modal-dialog {
-    padding-top: 50px;
-}
-
-#mainModalDialog.modal-dialog.draggable {
-    padding: 0;
-    margin: 0;
-    &.draggable-handle {
-        cursor: move;
-    }
-}
-
 .cpe-search-term-match {
     background-color: rgba(255, 255, 0, .6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(255, 255, 0, .6);
 }
 
 div.sectionHeader {
-    font-family: "Open Sans", Helvetica, Arial;
+    font-family: 'Source Sans Pro', sans-serif;
     font-weight: 200;
     font-style: normal;
     font-size: 16px;
@@ -173,7 +114,7 @@ div.sectionHeader {
 }
 
 div.dataValue {
-    font-family: "Open Sans", Helvetica, Arial;
+    font-family: 'Source Sans Pro', sans-serif;
     font-weight: 400;
     font-style: normal;
     line-height: 20px;
@@ -187,24 +128,8 @@ div.dataValue {
     padding-right: 8px;
 }
 
-.contentPadding .panel {
-    margin-bottom: 10px;
-}
-
 .appts-filter-bar .btn {
     height: 22px;
-}
-
-// .grid-toolbar .btn {
-//     font-size: 11px;
-//     height: 22px;
-//     line-height: 22px;
-//     padding: 0 5px;
-// }
-
-.dropdown-menu.patient-info-dropdown {
-    background: white;
-    box-shadow: 2px 2px 10px rgba(100, 100, 100, .5);
 }
 
 #ali-span {
@@ -219,6 +144,7 @@ div.dataValue {
 
 .backgrid tbody tr.empty {
     color: $grey-darker;
+    font-style: normal;
 }
 
 #med-review-applet-main {
@@ -256,27 +182,13 @@ div.dataValue {
 
 /*--------- This file removes responsiveness below 1024px -------*/
 
-#applet-nav {
-    min-width: 640px;
-    display: block;
-}
-
-#navigation-region #navigationPanel #navigation-date {
-    float: left;
-}
-
-#navigation-region #navigationPanel .panel-heading {
-    min-width: 1000px;
-    display: block;
-}
-
 #content-region-wrapper {
     display: block;
 }
 
 #center-region {
-    min-width: 995px;
     display: block;
+    min-width: 984px;
 }
 
 .documents-list .data-grid {
@@ -289,7 +201,7 @@ div.dataValue {
 
 
 /* ---- PATIENT SEARCH ------*/
-
+/*
 [data-appletid="patient_search"] .patient-search-output .pillsAndHeader {
     min-width: 700px;
     float: left;
@@ -320,7 +232,7 @@ div.dataValue {
         float: left;
     }
 }
-
+*/
 @media (max-width: 1024px) {
     .col-md-4 {
         width: 331px;
@@ -356,12 +268,6 @@ div.dataValue {
 //     float: left;
 //     }
 // }
-@media (max-width: 1290px) {
-    #patientDemographic-providerInfo .dropdown-menu.patient-info-dropdown {
-        right: 0;
-        left: inherit;
-    }
-}
 .backgrid-filter.form-search {
     height: auto;
     width: 100%;
@@ -369,8 +275,48 @@ div.dataValue {
 }
 
 .backgrid-filter {
+    &.form-search {
+        margin: 0;
+    }
     input[type="search"] {
+        z-index: 0;
         position: inherit;
+        width: 100%;
+        height: 30px;
+        padding: 4px 20px 4px 10px;
+        box-sizing: border-box;
+        &:focus {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+        }
+        &.pixel-height-20 {
+            box-sizing: content-box;
+            &.defined {
+                padding: 2px 20px;
+                width: 100%;
+                box-sizing: border-box;
+                height: 25px;
+            }
+            &:-ms-input-placeholder {
+                color: #999999;
+            }
+            +.clear-input {
+                top: -1px;
+                right: 32px;
+                &.default {
+                    top: -2px;
+                    right: 5px;
+                }
+            }
+        }
+    }
+    .clear-input {
+        display: none;
+        position: absolute;
+        top: 3px;
+        right: 10px;
     }
     .search {
         top: 14px;
@@ -385,69 +331,82 @@ div.dataValue {
     [id^="grid-filter-"] {
         background-color: $pure-white;
     }
-    .backgrid-filter input[type="search"] {
-        position: inherit;
-    }
     .grid-filter {
-        padding: 10px 10px 7px 10px;
+        padding: 6px;
         margin-bottom: 0px;
         overflow-x: auto;
-        border-bottom: 1px solid #818181;
-    }
-    .filter-title-input {
-        height: 16px;
-    }
-    .filter-container {
-        width: 100%;
-    }
-    .filter-wrapper {
-        padding: 5px 0px;
-    }
-    .udaf-border {
-        margin-left: -10px;
-        margin-right: -10px;
-        height: 2px;
-        border-bottom: solid thin #818181;
-        box-shadow: 0 2px 2px #999;
-    }
-    .udaf {
-        display: inline-block;
-        vertical-align: middle;
-        width: 100%;
-        overflow-y: hidden;
-        margin-top: 5px;
-    }
-    .udaf-height {
-        max-height: 83px;
-        overflow: scroll;
-        margin-top: 4px;
-    }
-    .udaf-tag {
-        padding-right: 5px;
-    }
-    .filter-add {
-        display: inline-block;
-        position: absolute;
-        left: 252px;
-        top: 0px;
-        height: 30px;
-        padding: 5px 7px;
-    }
-    .clear-udaf-tag {
-        z-index: 1000;
-        margin-left: 5px;
-        color: gray;
-    }
-    .remove-all-div {
-        float: right;
-    }
-    .filter-name {
-        float: left;
+        background-color: $primary-lightest;
+        .backgrid-filter {
+            .filter-add {
+                height: 22px;
+                padding-top: 3px;
+            }
+            .fa.fa-filter {
+                left: 6px;
+                position: absolute;
+                top: 6px;
+                z-index: 1;
+            }
+            .block-display {
+                .filter-container {
+                    position: relative;
+                    .fa.fa-pencil {
+                        left: 16px;
+                        position: absolute;
+                        top: 6px;
+                    }
+                    .filter-title-input {
+                        padding: 0 10px 0 17px;
+                        height: 27px;
+                    }
+                }
+            }
+            .input-group {
+                // .form-control is being overwritten by backgrid styles (so we need to add styles over it)
+                &.not-udws,
+                &.input-group-sm {
+                    max-width: 284px;
+                }
+                .form-control {
+                    width: calc(100% - 41px);
+                    height: 25px;
+                    padding: 0 48px 0 20px;
+                    border-radius: 4px;
+                    &:focus {
+                        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+                        border-color: #66afe9;
+                        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+                        outline: 0;
+                    }
+                }
+            }
+            .filter-container {
+                .udaf {
+                    overflow-y: auto;
+                    max-height: 70px;
+                }
+                .btn-label {
+                    line-height: 1;
+                    padding: 3px 6px;
+                    text-transform: capitalize;
+                }
+                .remove-all {
+                    background-color: white;
+                    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
+                    color: $red;
+                    font-size: 11px !important; //Added by TT until we clean up this whole file//
+                    &:hover {
+                        background-color: $red-lightest;
+                        color: $red-dark;
+                    }
+                }
+            }
+        }
     }
 }
 
 b {
-    font-family: "Open Sans", Helvetica, Arial;
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 .grid-applet-panel {
@@ -459,13 +418,6 @@ b {
     height: 10px;
     position: relative;
     top: -10px;
-}
-
-.grid-applet-container-2 {
-    background-color: $pure-white;
-    height: 4px;
-    position: relative;
-    top: 0px;
 }
 
 .grid-footer {
@@ -508,10 +460,30 @@ b {
         th {
             background: none;
             color: $grey-darkest;
-            &.sortable a {
-                color: $grey-darkest;
-                text-transform: uppercase;
-                font-weight: bold;
+            &.sortable {
+                a {
+                    color: $grey-darkest;
+                    font-weight: bold;
+                    .sort-caret {
+                        border: none;
+                        font-family: FontAwesome;
+                        vertical-align: baseline;
+                        &::before {
+                            color: $primary;
+                            font-size: 10px;
+                        }
+                    }
+                }
+                &.ascending {
+                    .sort-caret::before {
+                        content: "\f0d8";
+                    }
+                }
+                &.descending {
+                    .sort-caret::before {
+                        content: "\f0d7";
+                    }
+                }
             }
         }
     }
@@ -541,7 +513,21 @@ b {
             background: $primary-lightest;
         }
     }
+
+    //toolbar shift
+    tbody {
+        td.toolbar-cell {
+            overflow: visible;
+        }
+        > tr:first-child {
+            padding-top: 0;
+            &.toolbar-active > td {
+                padding-top: 27px !important;
+            }
+        }
+    }
 }
+
 .gridster .data-grid {
     height: 100%;
 }
@@ -568,8 +554,4 @@ b {
 
 .sign-list-wrapper-container {
     margin-top:-15px;
-}
-
-.font-bold {
-    font-weight:bold;
 }

@@ -1,0 +1,24 @@
+form {
+    .control.selectList-control {
+        .selectList-container {
+            clear: both;
+            overflow: auto;
+            margin-bottom: 5px;
+            padding: 5px;
+            border: 1px solid $grey-light;
+            border-bottom: 0;
+            background: $pure-white;
+            border-radius: 5px;
+            &:last-child {
+                border-bottom: 1px solid $grey-light;
+            }
+
+            div, label, p {
+                display: inline;
+            }
+            div.selectList-value {
+                float: right;
+            }
+        }
+    }
+}

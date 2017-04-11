@@ -1,0 +1,39 @@
+{
+  "name": "ms_dotnet",
+  "description": "Installs/Configures ms_dotnet",
+  "long_description": "ms_dotnet Cookbook\n==================\n[![Cookbook Version][cookbook_version]][cookbook]\n[![Build Status][build_status]][build_status]\n\nInstall the Microsoft .NET Framework.\n\nRequirements\n------------\nThis cookbook supports Chef 11.10.0+\n\n### Platforms\n* Windows XP\n* Windows Vista\n* Windows Server 2003 R2\n* Windows 7\n* Windows Server 2008 (R1, R2)\n* Windows 8 and 8.1\n* Windows Server 2012 (R1, R2)\n\n### Cookbooks\nThe following cookbook is required as noted:\n\n* [windows](windows_cookbook) (> 1.36.1)\n\n    `ms_dotnet::default` include the recipe 'windows::default'\n    `ms_dotnet::ms_dotnet2` and `ms_dotnet::ms_dotnet4` leverage the windows_package LWRP\n    `ms_dotnet::ms_dotnet2`, `ms_dotnet::ms_dotnet3` and `ms_dotnet::ms_dotnet4` leverage the windows_feature LWRP\n\nKnown Issues\n------------\nHere are the known issues you can encounter with ms_dotnet recipes:\n* \"Access denied\" error on windows_package when running chef via WinRM\n  * `Cause`: winrm limitation\n  * `Common environment`: knife windows bootstrap, chef-provisioning, test-kitchen\n  * `Best solution`: your remoting system should try to simulate a local session (psexec or schedule task)\n  * `Other solution`: create your custom wrapper to simulate a local session\n\nAttributes\n----------\n\n#### ms_dotnet::ms_dotnet2\n  * `node['ms_dotnet']['v2']['name']` - used to configure the Windows Package name\n  * `node['ms_dotnet']['v2']['url']` - used to configure the source of the Windows Package\n  * `node['ms_dotnet']['v2']['checksum']` - used to configure the checksum of the Windows Package\n\n#### ms_dotnet::ms_dotnet3\n  * `node['ms_dotnet']['v3']['enable_all_features']` - enable all parent features when installing NetFx3 (only supported on NT Version 6.2 or newer, default to `true`)\n  * `node['ms_dotnet']['v3']['source']` - used to configure the source of the Windows Package (only supported on NT Version 6.2 or newer)\n\n#### ms_dotnet::ms_dotnet4\n  * `node['ms_dotnet']['v4']['version']` - used to configure the desired version of .NET4 ('4.0', '4.5', '4.5.1', '4.5.2')\n  * `node['ms_dotnet']['versions'][desired_version][feature]['name']` - used to configure the Feature name to use instead of a Windows Package for the specified `desired_version`\n  * `node['ms_dotnet']['versions'][desired_version][package]['name']` - used to configure the Windows Package name for the specified `desired_version`\n  * `node['ms_dotnet']['versions'][desired_version][package]['url']` - used to configure the source of the Windows Package for the specified `desired_version`\n  * `node['ms_dotnet']['versions'][desired_version][package]['checksum']` - used to configure the checksum of the Windows Package for the specified `desired_version`\n  * `node['ms_dotnet']['versions'][desired_version][patch]['name']` - used to configure the Windows Package name of the patch to apply for the specified `desired_version`\n  * `node['ms_dotnet']['versions'][desired_version][patch]['url']` - used to configure the source of the Windows Package of the patch to apply for the specified `desired_version`\n  * `node['ms_dotnet']['versions'][desired_version][patch]['checksum']` - used to configure the checksum of the Windows Package of the patch to apply for the specified `desired_version`\n\nUsage\n-----\n\n#### ms_dotnet::ms_dotnet2\nTo install Microsoft .NET Framework 2.0 on your node, just include the recipe `ms_dotnet::ms_dotnet2` in its `run_list`.\nYou can use a custom windows package by specifing the 3 attributes specified in the above section.\n\n#### ms_dotnet::ms_dotnet3\nTo install Microsoft .NET Framework 3.0 on your node, just include the recipe `ms_dotnet::ms_dotnet3` in its `run_list`.\n\n> NB: Starting with NT Version 6.2 (Windows 8/2012) .NET 3 is an _on demand feature_.\n> Meaning that you need either to use the installing media or a custom windows image to enable the feature.\n> See: http://msdn.microsoft.com/library/hh506443\n\n#### ms_dotnet::ms_dotnet4\nTo install Microsoft .NET Framework 4 on your node, just include the recipe `ms_dotnet::ms_dotnet4` in its `run_list`.\nModify the version to install by changing the attribute `node['ms_dotnet']['v4']['version']`.\n\nContributing\n------------\n1. Fork the repository on Github\n2. Create a named feature branch (like `add_component_x`)\n3. Write your change\n4. Write tests for your change (if applicable)\n5. Run the tests, ensuring they all pass\n6. Submit a Pull Request using Github\n\nLicense and Authors\n-------------------\nAuthors: [Baptiste Courtois][annih] (<b.courtois@criteo.com>), [Jeremy Mauro][jmauro] (<j.mauro@criteo.com>)\n\n```text\nCopyright 2014-2015, Criteo.\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n```\n[annih]:                    https://github.com/Annih\n[jmauro]:                   https://github.com/jmauro\n[repository]:               https://github.com/criteo-cookbooks/wsus-client\n[powershell_cookbook]:      https://community.opscode.com/cookbooks/powershell\n[build_status]:             https://api.travis-ci.org/criteo-cookbooks/ms_dotnet.svg?branch=master\n[cookbook_version]:         https://img.shields.io/cookbook/v/ms_dotnet.svg\n[cookbook]:                 https://supermarket.chef.io/cookbooks/ms_dotnet\n",
+  "maintainer": "Criteo",
+  "maintainer_email": "b.courtois@criteo.com",
+  "license": "Apache 2.0",
+  "platforms": {
+    "windows": ">= 0.0.0"
+  },
+  "dependencies": {
+    "windows": ">= 1.36.1"
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "2.6.1"
+}

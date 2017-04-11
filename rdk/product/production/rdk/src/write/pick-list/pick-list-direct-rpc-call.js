@@ -38,12 +38,12 @@ module.exports.directRpcCall = function(req, site, type, callback) {
             if (nullUtil.isNullish(req.param(paramName)) || _.isEmpty(req.param(paramName))) {
                 callback('Parameter \'' + paramName + '\' cannot be null or empty');
                 aborted = true;
-                return false;
+                return false;//Break out of _.each
             }
             _.set(params, paramName, req.param(paramName).toUpperCase());
         });
         if (aborted) {
-            return;
+            return true;//The request was unsuccessful, but this was still the correct function to handle it.
         }
     }
     if (_.has(pickListConfig[i], 'optionalParams')) {
@@ -54,6 +54,15 @@ module.exports.directRpcCall = function(req, site, type, callback) {
                 _.set(params, paramName, null);
             }
         });
+    }
+    if (pickListConfig[i].isUserSpecific) {
+        _.set(params, 'userId', req.session.user.uid);
+    }
+    if (pickListConfig[i].needsPcmm) {
+        _.set(params, 'pcmmDbConfig', req.app.config.jbpm.activityDatabase);
+    }
+    if (pickListConfig[i].needsFullConfig) {
+        _.set(params, 'fullConfig', req.app.config);
     }
 
     var siteConfig = req.app.config.vistaSites[site];
@@ -66,6 +75,7 @@ module.exports.directRpcCall = function(req, site, type, callback) {
     }
     siteConfig.context = pickListConfig[i].vistaContext;
     siteConfig.vxSyncServer = req.app.config.vxSyncServer;
+    siteConfig.generalPurposeJdsServer = req.app.config.generalPurposeJdsServer;
     siteConfig.site = site;
     siteConfig.rootPath = req.app.config.rootPath;
 

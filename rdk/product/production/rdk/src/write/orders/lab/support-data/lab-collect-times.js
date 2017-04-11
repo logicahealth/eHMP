@@ -2,12 +2,10 @@
  * This is temporary until 'ORWDLR32 GET LAB TIMES' is in pick-list resource
  */
 'use strict';
-
 var parse = require('./lab-collect-times-parser').parse;
 var RpcClient = require('vista-js').RpcClient;
 var validate = require('./../../../pick-list/utils/validation-util');
 var filemanDateUtil = require('../../../../utils/fileman-date-converter');
-
 /**
  * Calls the RPC 'ORWDLR32 GET LAB TIMES' and parses out the data.<br/>
  * to retrieve list of lab collect times for a date & location.<br/><br/>
@@ -22,22 +20,19 @@ module.exports.getLabCollectTimes = function(logger, configuration, dateSelected
     if (validate.isStringNullish(dateSelected)) {
         return callback('dateSelected cannot be empty');
     }
+    var filemanDate = filemanDateUtil.getFilemanDateWithArgAsStr(dateSelected);
     if (!validate.isWholeNumber(location)) {
         return callback('location cannot be empty and must be a whole number');
     }
-    var filemanDate = filemanDateUtil.getFilemanDateWithArgAsStr(dateSelected);
-
     return RpcClient.callRpc(logger, configuration, 'ORWDLR32 GET LAB TIMES', filemanDate, location, function(err, rpcData) {
         if (err) {
             return callback(err.message);
         }
-
         try {
             logger.debug(rpcData);
             var obj = parse(logger, rpcData);
             callback(null, obj);
-        }
-        catch (parseError) {
+        } catch (parseError) {
             return callback(parseError.message);
         }
     });

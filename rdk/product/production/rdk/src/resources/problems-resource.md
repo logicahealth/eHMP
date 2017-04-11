@@ -1,6 +1,6 @@
 # Group Problems
 
-## Problems get Problems [{{{path}}}{?query}{&uncoded}{&limit}{&fields}]
+## Problems get Problems [{{{path}}}{?query}{&uncoded}{&limit}]
 
 + Parameters
 
@@ -8,8 +8,6 @@
 
 
     :[limit]({{{common}}}/parameters/limit.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Get [GET]

@@ -13,3 +13,6 @@ execute "install_nodejs_package" do
   not_if "node --version 2> /dev/null | grep #{node[:workstation][:nodejs_osx][:version]}"
 end
 
+execute "add nexus registry" do
+  command "npm config set registry #{node[:nexus_url]}/nexus/content/repositories/npm-all/"
+end

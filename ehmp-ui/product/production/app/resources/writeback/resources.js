@@ -14,11 +14,20 @@ define([
     'app/resources/writeback/problems/model',
     'app/resources/writeback/problems/collection',
     'app/resources/writeback/orders/model',
+    'app/resources/writeback/orders/detail',
     'app/resources/writeback/orders/draft/model',
     'app/resources/writeback/orders/draft/collection',
     'app/resources/writeback/orders/discontinue',
-    'app/resources/writeback/orders/sign'
-], function(Notes, Note, UnsignedNotes, UncosignedNotes, SignedNotes, Allergy, Allergies, Vital, Vitals, Immunization, Immunizations, Esignature, Problem, Problems, Order, DraftOrder, DraftOrders, OrderDiscontinue, OrderSign) {
+    'app/resources/writeback/orders/sign',
+    'app/resources/writeback/orders/labSupportData',
+    'app/resources/writeback/addenda/model',
+    'app/resources/writeback/activities/draft/model',
+    'app/resources/writeback/activities/signal/model',
+    'app/resources/writeback/clinical_objects/model',
+    'app/resources/writeback/clinical_objects/collection',
+    'app/resources/writeback/notes/notesSignModel',
+    'app/resources/writeback/addenda/addendumSignModel'
+], function(Notes, Note, UnsignedNotes, UncosignedNotes, SignedNotes, Allergy, Allergies, Vital, Vitals, Immunization, Immunizations, Esignature, Problem, Problems, Order, OrderDetail, DraftOrder, DraftOrders, OrderDiscontinue, OrderSign, LabSupportData, Addendum, DraftActivity, SignalActivity, ClinicalObject, ClinicalObjects, NotesSignModel, AddendumSignModel) {
     'use strict';
 
     return {
@@ -29,7 +38,8 @@ define([
                 AllNotes: Notes,
                 UnsignedNotes: UnsignedNotes,
                 UncosignedNotes: UncosignedNotes,
-                SignedNotes: SignedNotes
+                SignedNotes: SignedNotes,
+                NotesSignModel: NotesSignModel
             },
             Allergies: {
                 Model: Allergy,
@@ -53,12 +63,31 @@ define([
             },
             Orders: {
                 Model: Order,
+                Detail: OrderDetail,
+                LabSupportData: LabSupportData,
                 Discontinue: OrderDiscontinue,
                 Sign: OrderSign,
                 Draft: {
                     Model: DraftOrder,
                     Collection: DraftOrders
                 }
+            },
+            Addendum: {
+                Model: Addendum,
+                Collection: Backbone.Collection,
+                AddendumSignModel: AddendumSignModel
+            },
+            Activities: {
+                Draft: {
+                    Model: DraftActivity
+                },
+                Signal: {
+                    Model: SignalActivity
+                }
+            },
+            ClinicalObjects: {
+                Model: ClinicalObject,
+                Collection: ClinicalObjects
             }
         }
     };

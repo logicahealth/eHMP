@@ -1,9 +1,11 @@
 define([
-    'app/resources/picklist/notes/titles/collection'
-], function(Titles) {
+    'app/resources/picklist/notes/titles/collection',
+    'app/resources/picklist/notes/problems/collection'
+], function(Titles, Problems) {
     'use strict';
 
     return {
-        Titles: Titles
+        Titles: Titles,
+        Problems: Problems
     };
 });

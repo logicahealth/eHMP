@@ -1,0 +1,83 @@
+#!/opt/chef/embedded/bin/ruby
+#
+# CDSInvocation Smoke Test
+#
+# Team Europa
+#
+# This script checks that the server is up using a developer-provided 
+# Health Check URL
+# 
+require 'open-uri'
+
+#
+# PARAMETERS
+#
+
+# Test Specific Data
+prod_name = "cdsinvocation"
+server_url = "http://SERVERIP:8080/cds-results-service/rest/healthcheck"
+
+server_file = "../../../infrastructure/vagrant/servers.json"
+
+#
+# SUBROUTINES
+#
+
+# Load the IP address of the server
+#
+def parse_server_address(slist, host)
+  flag = false
+  File.open(slist, "r") do |file_handle|
+    file_handle.each_line do |line|
+      line.chop!
+      if (line =~ /#{host}/)
+        flag = true
+        next
+      end
+      if (! flag )
+        next
+      end
+      line =~ /^\s*\"ip\": \"([\d\.]+)\"$/
+      return "#$1"
+    end
+  end
+  abort("CDSI-Smoke-Test: error parsing eddress from servers.json file")
+end
+
+# Check on server
+#
+def server_up(url)
+  options = { :read_timeout => 1 }
+  begin
+    print "server_up: Checking for Server: #{url}\n"
+    true if open(url, options)
+  rescue
+    false
+  end
+end
+
+#
+# ELABORATION
+#
+
+# Grab the server address from disk
+server_address =  parse_server_address(server_file, prod_name)
+
+# parse this ip address into two resources
+server_url.sub!(/SERVERIP/, server_address)
+
+# Check if the server is up
+if (server_up(server_url))
+  print "The CDSInvocation server is up"
+  exit(0)
+else
+  print "ERROR: The CDSInvocation server is DOWN!\n"
+  exit(1)
+end
+
+__END__
+
+timeout(10) do
+  open "www.abc.com"
+end
+

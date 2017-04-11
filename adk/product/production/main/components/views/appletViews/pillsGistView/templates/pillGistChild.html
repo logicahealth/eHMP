@@ -11,12 +11,13 @@
 			mild
  	 	{{/if}}
  	 ">
-    <span>{{name}}</span>
+    <span class="sr-only toolbar-instructions">Press enter to open the toolbar menu.</span>
+    <p>{{name}}{{#if severe}} *{{/if}}</p>
+    <span class="sr-only">{{#if severe}} severe {{else if moderate}} moderate {{else if mild}} mild {{else}} unspecified {{/if}} severity.</span>
     {{#if seriesNorm}}
     <strong class="badge">{{seriesNorm}}</strong>
     {{/if}}
     {{#if age}}
     <span class="age">{{formatTimeSince age}}</span>
     {{/if}}
-    <span class="sr-only">Press enter to open or close the toolbar menu.</span>
 </div>

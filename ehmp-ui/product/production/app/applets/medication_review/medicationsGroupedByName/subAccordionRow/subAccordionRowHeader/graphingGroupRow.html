@@ -1,15 +1,21 @@
-<div class="row equalHeightsHeader">
-    <div class="col-xs-4 medsItemInnerList">
+<div class="row pixel-height-20">
+    <div class="col-xs-4 meds-item-innerlist top-padding-xs">
         <div class="row">
-            <span class="col-xs-1 fa {{userSiteIcon}} three-top-padding"></span>
-            <span class="col-xs-11">
+            <div class="col-xs-1 right-padding-lg">
+                <span class="fa {{userSiteIcon}}"></span>
+            </div>
+            <div class="col-xs-10 all-padding-no no-capatilize">
                 {{{sigColumn}}}
                 {{#if ivDosages}}
-                    <div>{{ivDosages}}</div>
+                    <span>{{ivDosages}}</span>
                 {{/if}}
-            </span>
+            </div>
         </div>
     </div>
-    <div class="col-xs-3 centerText capitalize" title="{{fillableDescription}}"><span class="{{fillableLabel}}">{{fillableDisplay}} {{fillableDate}}</span></div>
-    <div class="col-xs-5 chart"></div>
+    <div class="col-xs-3 text-center">
+        <p class="{{fillableLabel}}" title="{{fillableDescription}}">
+            {{fillableDisplay}} {{fillableDate}}
+        </p>
+    </div>
+    <div class="col-xs-5 chart no-capatilize"></div>
 </div>

@@ -5,7 +5,7 @@ class PreProcedureCBW < CBW
     add_action(CucumberLabel.new("Pre-Procedure"), ClickAction.new, AccessHtmlElement.new(:link_text, "Pre-Procedure"))
 
     # applets
-    add_verify(CucumberLabel.new("CONDITIONS"), VerifyContainsText.new, applet_panel_title("problems"))
+    add_verify(CucumberLabel.new("PROBLEMS"), VerifyContainsText.new, applet_panel_title("problems"))
     add_verify(CucumberLabel.new("VITALS"), VerifyContainsText.new, applet_panel_title("vitals"))
     add_verify(CucumberLabel.new("ORDERS"), VerifyContainsText.new, applet_panel_title("orders"))
     add_verify(CucumberLabel.new("APPOINTMENTS & VISITS"), VerifyContainsText.new, applet_panel_title("appointments"))

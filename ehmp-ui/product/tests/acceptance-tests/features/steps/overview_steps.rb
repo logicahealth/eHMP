@@ -43,7 +43,7 @@ class Overview < GlobalDateFilter
     return false unless print_applet_loading_outcome("Clinical Reminders", clinical_reminders_applet.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Encounters", encounters_gist_applet.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Reports", reports_gist_applet.applet_grid_loaded, print_checks)
-    return false unless print_applet_loading_outcome("Conditions", conditions_applet.applet_loaded?, print_checks)
+    return false unless print_applet_loading_outcome("Problems", conditions_applet.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Allergy", allergy_gist_applet.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Vitals", vitals_applet.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Immunizations", immunizations_applet.applet_loaded?, print_checks)
@@ -60,17 +60,36 @@ class Overview < GlobalDateFilter
 end # 
 
 def verify_on_overview
+  start_verification = Time.now
   browser_access = Overview.instance
   expect(browser_access.wait_until_element_present("Overview Screen", DefaultLogin.wait_time)).to be_true
   expect(browser_access.perform_verification("Overview Screen", "Overview")).to be_true
   # p "DE3055, DE3063: Default screenname is incorrect"
-  expect(browser_access.wait_until_xpath_count("Number of Applets", 9, 60)).to be_true
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+
+  max_attempt = 2
+  begin
+    expect(browser_access.wait_until_xpath_count("Number of Applets", 9, 60)).to be_true
+  rescue => e
+    TestSupport.driver.navigate.refresh
+    max_attempt -= 1
+    retry if max_attempt > 0
+    raise e if max_attempt <= 0
+  end
+
+  applets_screen = sprintf "%.2f", (Time.now - start_verification)
+  timeout = DefaultTiming.default_table_row_load_time
+  wait = Selenium::WebDriver::Wait.new(:timeout => timeout)
   begin
     wait.until { browser_access.overview_applets_loaded? }
   rescue
-    expect(browser_access.overview_applets_loaded? true).to eq(true)
+    expect(browser_access.overview_applets_loaded? true).to eq(true), "applets did not load after #{timeout} sec"
   end
+  applets_loaded = sprintf "%.2f", (Time.now - start_verification)
+
+  p "applets on screen: #{applets_screen} sec"
+  p "applets have data: #{applets_loaded} sec"
+  @ehmp = PobHeaderFooter.new
+  @ehmp.wait_until_header_footer_elements_loaded
 end
 
 Then(/^Default Screen is active$/) do
@@ -78,15 +97,16 @@ Then(/^Default Screen is active$/) do
   patient_search = PatientSearch.instance
   expect(patient_search.wait_until_element_present("patientSearch", 60)).to be_true
   # if the default screen changes, create a new function, do not change verify_on_overview
-  verify_on_overview
+  verify_on_summaryview
 end
 
 Then(/^Overview is active$/) do
   browser_access = Overview.instance
+  #sleep 2
   # at the time of this comment, overview was expected to be default screen
   # if for some reason default screen changes, don't break scenarios that don't care what default screen is
   # they only care that the next step needs  to be on overview
-  navigate_in_ehmp '#overview'
+  navigate_in_ehmp '#/patient/overview'
   verify_on_overview
 end
 
@@ -103,7 +123,7 @@ class OverviewApplets < AccessBrowserV2
     add_verify(CucumberLabel.new("VITALS"), VerifyContainsText.new, applet_panel_title("vitals"))
     add_verify(CucumberLabel.new("REPORTS"), VerifyContainsText.new, applet_panel_title("reports"))
     add_verify(CucumberLabel.new("IMMUNIZATIONS"), VerifyContainsText.new, applet_panel_title("immunizations"))
-    add_verify(CucumberLabel.new("CONDITIONS"), VerifyContainsText.new, applet_panel_title("problems"))
+    add_verify(CucumberLabel.new("PROBLEMS"), VerifyContainsText.new, applet_panel_title("problems"))
     add_verify(CucumberLabel.new("ALLERGIES"), VerifyContainsText.new, applet_panel_title("allergy_grid"))
     add_verify(CucumberLabel.new("CLINICAL REMINDERS"), VerifyContainsText.new, applet_panel_title("cds_advice"))
     add_verify(CucumberLabel.new("Active & Recent MEDICATIONS"), VerifyContainsText.new, applet_panel_title("activeMeds"))

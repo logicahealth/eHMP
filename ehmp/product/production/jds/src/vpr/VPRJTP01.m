@@ -15,6 +15,20 @@ DEMOG9 ;;
  ;;"givenNames":"PATIENT","fullName":"ZZZRETFIVEFIFTYONE,PATIENT","displayName":"Zzzretfivefiftyone,Patient","genderCode":"urn:va:pat-gender:M","genderName":"Male","briefId":"Z3456","sensitive":true,"domainTotals":{},
  ;;"syncErrorCount":0,"religionCode":"urn:va:pat-religion:21","maritalStatuses":[{"code":"urn:va:pat-maritalStatus:M","name":"Married"}],"religionName":"NAZARENE","localId":-9,"stampTime":"9","pid":"93EF;-9"}
  ;;zzzzz
+PTHDRDATA   ; Sample data for patient, urn:va:patient:1HDR:-7
+HDRDEMOG7 ;;
+ ;;{"addresses":[{"city":"Any Town","postalCode":"99998-0071","stateProvince":"WEST VIRGINIAN"}],"aliases":[{"fullName":"P7"}],"briefId":"U7777","dateOfBirth":19350407,"facilities":[{"code":500,"latestDate":20110613,"name":
+ ;;"CAMP MASTER","systemId":"1HDR"}],"familyName":"UTESTPATIENT","gender":"M","givenNames":"SEVEN","icn":"-777V123777","ssn":"-77777777","uid":"urn:va:patient:1HDR:-7:-7","stampTime":"73","pid":"1HDR;-7"}
+ ;;zzzzz
+HDRDEMOG8 ;;
+ ;;{"addresses":[{"city":"Any Town","postalCode":"99998-0071","stateProvince":"WEST VIRGINIAN"}],"aliases":[{"fullName":"P8"}],"briefId":"U7777","dateOfBirth":19350408,"facilities":[{"code":500,"latestDate":20110613,"name":
+ ;;"CAMP MASTER","systemId":"1HDR"}],"familyName":"UTESTPATIENT","gender":"M","givenNames":"EIGHT","icn":"-888V123888","ssn":"-88888888","uid":"urn:va:patient:1HDR:-8:-8","stampTime":"8","pid":"1HDR;-8"}
+ ;;zzzzz
+HDRDEMOG9 ;;
+ ;;{"uid":"urn:va:patient:1HDR:-9:-9","summary":"gov.va.cpe.vpr.Patient{pids=[666223456, 1HDR;-9]}","dateOfBirth":"19350407","ssn":"666223456","last4":"3456","last5":"Z3456","familyName":"ZZZRETFIVEFIFTYONE",
+ ;;"givenNames":"PATIENT","fullName":"ZZZRETFIVEFIFTYONE,PATIENT","displayName":"Zzzretfivefiftyone,Patient","genderCode":"urn:va:pat-gender:M","genderName":"Male","briefId":"Z3456","sensitive":true,"domainTotals":{},
+ ;;"syncErrorCount":0,"religionCode":"urn:va:pat-religion:21","maritalStatuses":[{"code":"urn:va:pat-maritalStatus:M","name":"Married"}],"religionName":"NAZARENE","localId":-9,"stampTime":"9","pid":"1HDR;-9"}
+ ;;zzzzz
 NEWICN9 ;;
  ;;{"uid":"urn:va:patient:93EF:-9:-9","summary":"gov.va.cpe.vpr.Patient{pids=[666223456, 93EF;-9]}","dateOfBirth":"19350407","ssn":"666223456","last4":"3456","last5":"Z3456","familyName":"ZZZRETFIVEFIFTYONE",
  ;;"givenNames":"PATIENT","fullName":"ZZZRETFIVEFIFTYONE,PATIENT","displayName":"Zzzretfivefiftyone,Patient","genderCode":"urn:va:pat-gender:M","genderName":"Male","briefId":"Z3456","sensitive":true,"domainTotals":{},

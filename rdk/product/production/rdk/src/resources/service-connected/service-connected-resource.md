@@ -2,15 +2,13 @@
 
 ## Patient service connected s [{{{path}}}]
 
-### Ervice Connected [GET {{{path}}}/serviceconnectedrateddisabilities{?pid}{&fields}]
+### Ervice Connected [GET {{{path}}}/serviceconnectedrateddisabilities{?pid}]
 
 Populates service connection & rated disabilities for a patient
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -37,15 +35,13 @@ Populates service connection & rated disabilities for a patient
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### C Button Selection [GET {{{path}}}/serviceconnectedserviceexposurelist{?pid}{&fields}]
+### C Button Selection [GET {{{path}}}/serviceconnectedserviceexposurelist{?pid}]
 
 Indicates whether corresponding form fields should be enabled.
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

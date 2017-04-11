@@ -6,7 +6,7 @@ class DepressionCBW < CBW
     add_action(CucumberLabel.new("Depression"), ClickAction.new, AccessHtmlElement.new(:link_text, "Depression"))
 
     # applets
-    add_verify(CucumberLabel.new("CONDITIONS"), VerifyContainsText.new, applet_panel_title("problems"))
+    add_verify(CucumberLabel.new("PROBLEMS"), VerifyContainsText.new, applet_panel_title("problems"))
     add_verify(CucumberLabel.new("DOCUMENTS"), VerifyContainsText.new, applet_panel_title("documents"))
     add_verify(CucumberLabel.new("ORDERS"), VerifyContainsText.new, applet_panel_title("orders"))
     add_verify(CucumberLabel.new("APPOINTMENTS & VISITS"), VerifyContainsText.new, applet_panel_title("appointments"))

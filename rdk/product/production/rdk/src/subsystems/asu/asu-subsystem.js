@@ -7,15 +7,15 @@ var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 
 function evaluateProcessor(req, res, next) {
-    var logger = req.logger;
-    logger.debug('asu-subsystem.evaluateProcessor: Got to evaluate processor');
-    var jsonParams = req.body;
-    var httpConfig = _.clone(req.app.config.asu.evaluateRuleService);
-    var baseUrl = url.parse(req.app.config.vxSyncServer.baseUrl);
-    baseUrl.port = httpConfig.port;
-    //baseUrl.port = '8888';
-    httpConfig.baseUrl = url.format(baseUrl);
-    asuProcess.evaluate(jsonParams, req.app.config, httpConfig, res, logger);
+
+  req.logger.debug('asu-subsystem.evaluateProcessor: Got to evaluate processor');
+  var httpConfig = _.extend({}, req.app.config.asuServer, {
+      url: '/asu/rules/accessDocument',
+      logger: req.logger,
+      json: true
+  });
+
+  asuProcess.evaluate(req.body, req.app.config, httpConfig, res, req.logger);
 }
 
 function evaluateWithActionNames(req, res, next) {
@@ -53,4 +53,3 @@ module.exports.getSubsystemConfig = getSubsystemConfig;
 module.exports.evaluate = evaluateProcessor;
 module.exports.test = testProcessor;
 module.exports.evaluateWithActionNames = evaluateWithActionNames;
-

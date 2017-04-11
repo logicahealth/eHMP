@@ -71,6 +71,9 @@ define([
                     } else {
                         data.text[i].addendaDateTime = false;
                     }
+                    if (data.text[i].status !== 'SIGNED') {
+                        data.text[i].app = 'vista';
+                    }
                     addendaText.push(data.text[i]);
                 }
                 return addendaText;
@@ -96,10 +99,22 @@ define([
                 }
                 callback = undefined;
             }
+            var ResultsDocCollection = Backbone.Collection.extend({
+                model: Backbone.Model.extend({
+                    idAttribute: 'uid',
+                    parse: function(resp) {
+                        appletHelper.parseDocResponse(resp);
+                        if (resp.authorDisplayName.toLowerCase() === 'none' && resp.signerDisplayName) {
+                            resp.authorDisplayName = resp.signerDisplayName;
+                            resp.providerDisplayName = resp.signerDisplayName;
+                        }
+                        return resp;
+                    }
+                })
+            });
+            var resultDocCollection = new ResultsDocCollection();
 
-            var resultDocCollection = new Backbone.Collection();
-
-            if (this.isComplexDoc(data.get('kind')) && data.get('results') && !data.get('dodComplexNoteUri')) {
+            if (appletHelper.isComplexDoc(data.get('kind')) && data.get('results') && !data.get('dodComplexNoteUri')) {
                 if (data.get('results').length > 0) {
                     var resultUids = _.map(data.get('results'), function(result) {
                         return result.uid;
@@ -107,72 +122,49 @@ define([
 
                     var fetchOptions = {
                         resourceTitle: 'patient-record-document',
-                        viewModel: {
-                            parse: function(response) {
-                                return appletHelper.parseDocResponse(response);
-                            }
-                        },
                         criteria: {
                             filter: 'in("uid",' + JSON.stringify(resultUids) + ')',
                             order: DETAIL_CHILD_DOC_SORT_FIELD + ' ASC'
                         },
                         onSuccess: callback || function(response) {
-                            response.each(function(model) {
-                                if (model.get('authorDisplayName').toLowerCase() === 'none' && model.get('signerDisplayName')) {
-                                    model.set('authorDisplayName', model.get('signerDisplayName'));
-                                    model.set('providerDisplayName', model.get('signerDisplayName'));
-                                }
-                            });
-                            resultDocCollection.reset(response.models);
                             if (DEBUG) {
                                 console.log("Fetch Success");
                                 console.log(resultDocCollection);
                             }
-                        },
-                        onError: function(model, resp) {
-                            if (ERROR_LOG) console.log("Documents: resultDocCollection fetch error");
-                            resultDocCollection.trigger('error', resp);
                         }
                     };
-
-                    ADK.PatientRecordService.fetchCollection(fetchOptions);
+                    ADK.PatientRecordService.fetchCollection(fetchOptions, resultDocCollection);
                 }
             }
             return resultDocCollection;
         },
 
         getChildDocs: function(data) {
-            if (this.hasChildDocs(data)) {
-                var childDocCollection = new Backbone.Collection();
-                // query documents index for other docs that have a parentUid equal to this document's UID
+            if (appletHelper.hasChildDocs(data)) {
+                var ChildDocCollection = Backbone.Collection.extend({
+                    model: Backbone.Model.extend({
+                        idAttribute: 'uid',
+                        parse: function(resp) {
+                            return appletHelper.parseDocResponse(resp);
+                        }
+                    })
+                });
+                var childDocCollection = new ChildDocCollection();
                 var fetchOptions = {
                     resourceTitle: 'patient-record-document',
-                    viewModel: {
-                        parse: function(response) {
-                            return appletHelper.parseDocResponse(response);
-                        }
-                    },
                     criteria: {
                         filter: 'eq(parentUid,"' + data.get('uid') + '")',
                         order: DETAIL_CHILD_DOC_SORT_FIELD + ' ASC'
                     },
-                    onSuccess: function(response) {
-                        childDocCollection.reset(response.models);
-                    },
-                    onError: function(model, response) {
-                        if (ERROR_LOG) console.log("Documents: childDocCollection fetch error");
-                        childDocCollection.trigger('error', response);
-                    }
                 };
 
-                ADK.PatientRecordService.fetchCollection(fetchOptions);
+                ADK.PatientRecordService.fetchCollection(fetchOptions, childDocCollection);
                 return childDocCollection;
             }
             return null;
         },
 
         parseDocResponse: function(response) {
-
             if (response.kind) {
                 response.kind = response.kind;
                 response.complexDoc = appletHelper.isComplexDoc(response.kind);
@@ -255,14 +247,18 @@ define([
                             if(!_.isUndefined(objAuthor.displayName)) response.authorDisplayName = objAuthor.displayName;
                             if(!_.isUndefined(objAuthor.uid)) response.authorUid = objAuthor.uid;
                         }
-                    }                  
+                    }
             }
 
             if (response.localTitle) {
                 response.displayTitle = response.localTitle.toLowerCase();
             }
+            if (response.amended) {
+                response.dateDisplay = appletHelper.formatDateTime(response.amended, 'YYYYMMDDHHmmssSSS', 'date');
+                response.dateTimeDisplay = appletHelper.formatDateTime(response.amended, 'YYYYMMDDHHmmssSSS', 'datetime');
+            }
 
-            if (response.referenceDateTime) {
+            else if (response.referenceDateTime) {
                 response.dateDisplay = appletHelper.formatDateTime(response.referenceDateTime, 'YYYYMMDDHHmmssSSS', 'date');
                 response.dateTimeDisplay = appletHelper.formatDateTime(response.referenceDateTime, 'YYYYMMDDHHmmssSSS', 'datetime');
             }
@@ -313,20 +309,6 @@ define([
             response.addendaText = appletHelper.formatAddenda(response);
 
             return response;
-        },
-        globalFilterStatus: function(date) {
-            if ((date.attributes.fromDate !== null) && (date.attributes.toDate !== null)) return true;
-            return false;
-        },
-        hideAppFilter: function() {
-            if ($("#grid-filter-documents").hasClass("collapse in")) {
-                $("#grid-filter-button-documents").click();
-            }
-            $("#grid-filter-button-documents").hide();
-            if ($("form.form-search").find("input").val().length > 0) $("#grid-filter-documents").find(".clear").click();
-        },
-        showAppFilter: function() {
-            $("#grid-filter-button-documents").show();
         },
         scrollToResultDoc: function($clickedLink, $targetResult) {
             var $scrollRegion = this.getScrollParent($clickedLink, false);

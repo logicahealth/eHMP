@@ -1,4 +1,4 @@
-<table id="{{id}}" data-toggle="popover" class="table table-condensed">
+<table id="{{id}}" data-toggle="popover" class="table table-condensed table-layout-fixed">
     <caption class="sr-only">Quicklook Table. This table represents a brief summary for the selected encounter.</caption>
     <thead>
         <tr>
@@ -14,9 +14,9 @@
         {{#each allGroupedEncounters}}
             <tr>
                 <td>{{dateTime}}</td>
-                <td>{{Status}}</td>
+                <td class="word-wrap-break-word">{{Status}}</td>
                 <td>{{Location}}</td>
-                <td>{{Provider}}</td>
+                <td class="word-wrap-break-word">{{Provider}}</td>
                 <td>{{Facility}}</td>
             </tr>
         {{/each}}

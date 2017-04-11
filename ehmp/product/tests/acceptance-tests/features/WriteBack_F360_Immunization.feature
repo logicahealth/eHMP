@@ -1,9 +1,9 @@
 @writeback 
 Feature: F360 - Enter and Store Immunizations
 
-@writeback_immunization @debug @DE2713
+@writeback_immunization
 Scenario: Client can write to the VistA and add Immunizations records
-	Given a patient with pid "C877;253" has been synced through VX-Sync API for "9E7A;C877;2939;FFC7;VLER" site(s)
+	Given a patient with pid "C877;253" has been synced through VX-Sync API for "9E7A;C877;HDR;VLER" site(s)
 	And the client requests "Immunizations" for the patient "C877;253" in VPR format
 	And save the totalItems
 	And a client connect to VistA using "Kodak"
@@ -20,7 +20,6 @@ Scenario: Client can write to the VistA and add Immunizations records
 	And VistA write-back generate a new localId with values record dispaly in VPR format
 		| field 			      | value 					         |
 		| cptName			      | ANTHRAX VACCINE SC OR IM |
-		| seriesName  		  | BOOSTER 					       |
 		| reactionName      | FEVER						         |
 		| contraindicated   | true						         |
 		| comment			      | CONTAINS Test: this patient got ANTHRAX |

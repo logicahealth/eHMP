@@ -69,9 +69,9 @@ define([
             ].join("\n"));
         },
         events: _.defaults({
-            'change input': 'onChange',
+            'change input': 'onSelectionChange',
             'blur input': 'onChange',
-            'typeahead:selected': 'onChange',
+            'typeahead:selected': 'onSelectionChange',
             'click button': 'fetchMore',
             'control:label': function(e, labelString) {
                 e.preventDefault();
@@ -118,6 +118,10 @@ define([
             this.listenToPickList();
             this.listenToFieldOptions();
         },
+        onSelectionChange: function() {
+            this.onChange.apply(this, arguments);
+            this.onUserInput.apply(this, arguments);
+        },
         showLoading: function() {
             this.$el.find('input').addClass('loading');
         },
@@ -156,6 +160,14 @@ define([
         },
         listenToPickList: function() {
             var self = this;
+
+            if (this.field.get('pickList') instanceof Backbone.Collection) {
+                this.listenTo(this.field.get('pickList'), 'add remove reset', function() {
+                    this.setPickList({
+                        pickList: this.field.get('pickList')
+                    });
+                });
+            }
 
             this.pickList.bind('reset',  function () {
                 self.render();

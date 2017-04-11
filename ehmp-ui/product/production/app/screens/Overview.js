@@ -12,10 +12,14 @@ define([
     };
     var config = {
         id: 'overview',
+        context: 'patient',
         contentRegionLayout: 'gridster',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',
         predefined: true,
+        //context: 'patient',
+        //requiredPermissions: [],
+        //showInNav: true/false,
         freezeApplets: true, //if true, applets won't be draggable and resizable by gridster
         applets: [{
             "id": "cds_advice",
@@ -33,7 +37,7 @@ define([
             "viewType": "summary"
         }, {
             "id": "problems",
-            "title": "Conditions",
+            "title": "Problems",
             "maximizeScreen": "problems-full",
             "region": "88c9e691ddef",
             "dataRow": "5",
@@ -146,15 +150,19 @@ define([
         }],
         onResultClicked: function(clickedResult) {
             var domain = clickedResult.uid.split(":")[2],
-                channelName = detailAppletChannels[domain];
+                channelName = detailAppletChannels[domain],
+                loadingTitle;
 
             if (channelName) {
+                if (domain === 'med') {
+                    loadingTitle = 'Medication - '+clickedResult.model.get('qualifiedName');
+                }
                 // display spinner in modal while detail view is loading
                 var modal = new ADK.UI.Modal({
                     view: ADK.Views.Loading.create(),
                     options: {
                         size: "large",
-                        title: "Loading..."
+                        title: loadingTitle || 'Loading...'
                     }
                 });
                 modal.show();

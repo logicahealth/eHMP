@@ -1,23 +1,16 @@
-// TODO: Remove TEMP imports when wireframes are completed
 define([
     'backbone',
     'marionette',
-    'app/applets/task_forms/activities/consults/views/orderEntry_View',
-    'app/applets/task_forms/activities/consults/views/orderEntryFooter_View',
-    'app/applets/task_forms/activities/consults/views/notification_View',
-    'app/applets/task_forms/activities/consults/views/notificationFooter_View',
-    'app/applets/task_forms/activities/consults/views/request_View',
-    'app/applets/task_forms/activities/consults/views/requestFooter_View',
+    'app/applets/task_forms/activities/consults/views/requestView',
     'app/applets/task_forms/common/views/activityOverview_View',
     'app/applets/task_forms/common/views/activityOverviewFooter_View',
-    'app/applets/task_forms/activities/consults/views/temp_View',
-    'app/applets/task_forms/activities/consults/views/tempFooter_View',
+    'app/applets/task_forms/activities/consults/views/signView',
     'app/applets/task_forms/activities/consults/eventHandler',
-    'hbs!app/applets/task_forms/activities/consults/templates/consultOverview_Template'
-], function(Backbone, Marionette,
-    OrderEntryView, OrderEntryFooterView, NotificationView, NotificationFooterView,
-    RequestView, RequestFooterView, ActivityOverviewView, ActivityOverviewFooterView,
-    TempView, TempFooterView, EventHandler, ConsultOverviewTemplate) {
+    'app/applets/task_forms/activities/consults/views/selectConsultType',
+    'app/applets/task_forms/activities/fields',
+    'app/applets/orders/tray/consults/orderEntryUtils'
+], function(Backbone, Marionette, RequestView, ActivityOverviewView, ActivityOverviewFooterView,
+    SignView, EventHandler, SelectConsultType, Fields, OrderEntryUtils) {
     "use strict";
 
     function resolveHelper(response, modalView, footerView, closeOnESC) {
@@ -28,261 +21,189 @@ define([
         });
     }
 
+    function workflowSetup(title, showProgress, steps, trayId, headerOptions) {
+        var workflowOptions = {
+            title: title || '',
+            showProgress: showProgress || false,
+            steps: steps,
+            headerOptions: headerOptions
+        };
+        var workflowController = new ADK.UI.Workflow(workflowOptions);
+
+        var inTray = {};
+        if (trayId) {
+            inTray = {
+                inTray: trayId
+            };
+        }
+        workflowController.show(inTray);
+    }
+
     var viewController = {
         initialize: function(appletId) {
-            var PROCESSID = 'order' + '.';
+            var PROCESSID = 'Consult' + '.';
             var channel = ADK.Messaging.getChannel(appletId);
 
-            // Consult entry form
-            channel.reply(PROCESSID + 'consult-finalize_consult_order', function(params) {
-                var response = $.Deferred();
-                // Pass the model to the view to populate template
-                var modalView = new OrderEntryView({
-                    model: params.model
-                });
-
-                var footerView = new OrderEntryFooterView({
-                    model: params.model,
-                    formModel: modalView.formModel,
-                    taskListView: params.taskListView
-                });
-
-                resolveHelper(response, modalView, footerView, false);
-                return response.promise();
+            channel.on(PROCESSID + 'consult-select_consult_type', function(params) {
+                workflowSetup(
+                    'Consult Order',
+                    'false', [{
+                        view: SelectConsultType,
+                        viewModel: new Backbone.Model()
+                    }],
+                    'actions'
+                );
             });
 
-            // The activity overview modal
-            channel.reply(PROCESSID + 'activity_overview_screen', function(params) {
-                var response = $.Deferred();
+            channel.on('Order.Consult.EDIT', function(params){
+               var screen = ADK.Messaging.request('get:current:screen').id;
+                if (screen === 'provider-centric-view') {
+                    ADK.Navigation.navigate('overview');
+                }
 
-                // Create the specific task view to be inserted in the Activity Overview modal
-                var TaskView = Backbone.Marionette.LayoutView.extend({
-                    template: ConsultOverviewTemplate
-                });
+                OrderEntryUtils.launchOrderEntryForm(params);
+            });
 
-                // Define funtion to be executed upon clicking the Discontinue button
-                var discontinueEvent = function() {
-                    // Set the tray action to discontinue
-                    var actionChannel = ADK.Messaging.getChannel('action');
-                    var action = actionChannel.request('getActionTray');
-                    action.done(function(response2) {
-                        var tray = response2.tray;
-                        tray.$('#action').val('discontinued');
-                        tray.$('#action').change();
-                    });
-                };
+            channel.on(PROCESSID + 'Accept', function(params) {
+                var screen = ADK.Messaging.request('get:current:screen').id;
+                if (screen === 'provider-centric-view') {
+                    ADK.Navigation.navigate('overview');
+                }
 
-                // Pass the model and taskView to the Activity View to populate template
-                var modalView = new ActivityOverviewView({
-                    model: params.model,
-                    taskView: new TaskView({model: params.model})
-                });
-
-                /*
-                 * Uncommenting the below lines will activate the third optional button. 
-                 *  If used, the footer view object will need an optionButtonEvent key 
-                 *  that is set to the buttons clicked event function (defined below)
-                 */
-                // params.model.set('optionButtonLabel', 'your buttons label');
-                // var optionButtonEvent = function(){ **define optional button process here ** };
-                var footerView = new ActivityOverviewFooterView({
-                    model: params.model,
-                    taskListView: params.taskListView,
-                    discontinueEvent: discontinueEvent,
-                    // optionButtonEvent: optionButtonEvent
-                });
-
-                resolveHelper(response, modalView, footerView, false);
-                return response.promise();
+                OrderEntryUtils.launchOrderEntryForm(params);
             });
 
             // Triage consult order form
-            channel.reply(PROCESSID + 'consult-triage_consult_order', function(params) {
-                var response = $.Deferred();
-
+            channel.on(PROCESSID + 'Triage', function(params) {
                 // Populate form with the correct select actions based on form
-                var actions = [
-                    {value: 'triaged', label: 'Send to Scheduling'},
-                    {value: 'clarification', label: 'Return for Clarification'},
-                    {value: 'assigned', label: 'Assign to triage member'},
-                    {value: 'eConsult', label: 'eConsult'},
-                    {value: 'discontinued', label: 'Discontinue Consult'}
-                ];
+                var actions = [{
+                    value: 'triaged',
+                    label: 'Send to Scheduling'
+                }, {
+                    value: 'clarification',
+                    label: 'Return for Clarification'
+                }, {
+                    value: 'assigned',
+                    label: 'Assign to triage member'
+                }, {
+                    value: 'eConsult',
+                    label: 'eConsult'
+                }, {
+                    value: 'communityCare',
+                    label: 'Referred to Community Care'
+                }];
 
-                // Set order state to Active.
-                params.model.get('taskVariables').orderState = 'Active';
+                var formModel = params.formModel.toJSON();
+                var views = [{
+                    view: RequestView.form.extend({
+                        actions: actions
+                    }),
+                    viewModel: new RequestView.model(formModel)
+                }];
 
-                // Pass the model to the view to populate template
-                var modalView = new RequestView({
-                    model: params.model,
-                    actions: actions
-                });
-
-                var footerView = new RequestFooterView({
-                    model: params.model,
-                    formModel: modalView.formModel,
-                    taskListView: params.taskListView
-                });
-
-                resolveHelper(response, modalView, footerView, false);
-                return response.promise();
+                // Send signal to change the state of the consult to Action if opened for the first time
+                if (params.taskDefinitionId === 'Consult.Triage' && formModel.state !== 'Active') {
+                    EventHandler.sendSignal(null, params.formModel, {
+                        signalBody: {
+                            objectType: 'signalBody',
+                            comment: 'order activate',
+                            userId: _.get(formModel, 'orderingProvider.uid')
+                        }
+                    }, 'ORDER.ACTIVATE', function() {
+                        // Set order state to Active
+                        views[0].viewModel.set('state', 'Active');
+                        views[0].viewModel.set('subState', 'Under Review');
+                        workflowSetup('Consult Triage', 'false', views, 'actions');
+                    });
+                } else {
+                    workflowSetup('Consult Triage', 'false', views, 'actions');
+                }
             });
 
-            // Used for multiple processes
-            var formProcess = function(params) {
-                var response = $.Deferred();
-
+            // Consult scheduling form
+            channel.on(PROCESSID + 'Scheduling', function(params) {
                 // Populate form with the correct select actions based on form
-                var actions = [
-                    {value: 'scheduled', label: 'Scheduled'},
-                    {value: 'contacted', label: 'Contact Patient'},
-                    {value: 'discontinued', label: 'Discontinue Consult'}
-                ];
+                var actions = [{
+                    value: 'scheduled',
+                    label: 'Scheduled'
+                }, {
+                    value: 'contacted',
+                    label: 'Contact Patient'
+                }, {
+                    value: 'communityCare',
+                    label: 'Referred to Community Care'
+                }, {
+                    value: 'EWL',
+                    label: 'Electronic Waiting List'
+                }];
 
-                // Pass the model to the view to populate template
-                var modalView = new RequestView({
-                    model: params.model,
-                    actions: actions
-                });
-
-                var footerView = new RequestFooterView({
-                    model: params.model,
-                    formModel: modalView.formModel,
-                    taskListView: params.taskListView
-                });
-
-                resolveHelper(response, modalView, footerView, false);
-                return response.promise();
-            };
-
-            // Consult request form
-            channel.reply(PROCESSID + 'consult-finalize_consult_scheduling', formProcess);
-
-            // Discontinued consult order notification 
-            channel.reply(PROCESSID + 'consult-discontinue_consult_order', function(params) {
-                var response = $.Deferred();
-                // Pass the model to the view to populate template
-                var modalView = new NotificationView({
-                    model: params.model
-                });
-
-                params.model.set('button', 'Complete');
-                var footerView = new NotificationFooterView({
-                    model: params.model,
-                    taskListView: params.taskListView
-                });
-
-                resolveHelper(response, modalView, footerView, false);
-                return response.promise();
+                workflowSetup(
+                    'Scheduling Request',
+                    'false', [{
+                        view: RequestView.form.extend({
+                            actions: actions
+                        }),
+                        viewModel: new RequestView.model(params.formModel.toJSON())
+                    }],
+                    'actions'
+                );
             });
 
-            channel.reply(PROCESSID + 'consult-respond_to_triage_clarification', function(params) {
-                var response = $.Deferred();
-                // Pass the model to the view to populate template
-                var modalView = new TempView({
-                    model: params.model
-                });
-
-                params.model.set('button', 'Respond');
-                params.model.set('form', 'RESPOND TO TRIAGE CLARIFICATION');
-                var footerView = new TempFooterView({
-                    model: params.model,
-                    taskListView: params.taskListView
-                });
-
-                resolveHelper(response, modalView, footerView, false);
-                return response.promise();
+            channel.on(PROCESSID + 'Sign', function(params) {
+                workflowSetup(
+                    'Sign Consult Order',
+                    'false', [{
+                        view: SignView.form.extend({}),
+                        viewModel: new Backbone.Model(params.formModel.toJSON())
+                    }],
+                    ''
+                );
             });
 
-            channel.reply(PROCESSID + 'consult-complete_consult_note', function(params) {
-                var response = $.Deferred();
-                // Claim task to be completed
-                EventHandler.fetchHelper(null, params.model, 'start', null, function() {
-                    resolveHelper(response, null, null, false);
-                });
-
-                // After task is claimed
-                $.when(response).then(function() {
-                    // Complete task
-                    EventHandler.tempTaskProcessing({}, params.model, params.taskListView, 'signed',
-                        function() {
-                            // After task is completed, navigate to overview screen and open Notes tray
-                            ADK.Navigation.displayScreen('overview');
-                            $('#patientDemographic-noteSummary button').click();
-                        }
-                    );
-                });
-
-                return response.promise();
-            });
-
-            channel.reply(PROCESSID + 'consult-complete_econsult_note', function(params) {
-                var response = $.Deferred();
-                // Claim task to be completed
-                EventHandler.fetchHelper(null, params.model, 'start', null, function() {
-                    resolveHelper(response, null, null, false);
-                });
-
-                // After task is claimed
-                $.when(response).then(function() {
-                    // Complete task
-                    EventHandler.tempTaskProcessing({}, params.model, params.taskListView, 'signed',
-                        function() {
-                            // After task is completed, navigate to overview screen and open Notes tray
-                            ADK.Navigation.displayScreen('overview');
-                            $('#patientDemographic-noteSummary button').click();
-                        }
-                    );
-                });
-
-                return response.promise();
-            });
-
-
-            channel.reply(PROCESSID + 'consult-review_consult_note', function(params) {
-                var response = $.Deferred();
-                // Claim task to be completed
-                EventHandler.fetchHelper(null, params.model, 'start', null, function() {
-                    resolveHelper(response, null, null, false);
-                });
-
-                // After task is claimed
-                $.when(response).then(function() {
-                    // Complete task
-                    EventHandler.tempTaskProcessing({}, params.model, params.taskListView, '',
-                        function() {
-                            // After task is completed, navigate to overview screen and open Notes tray
-                            ADK.Navigation.displayScreen('overview');
-                            $('#patientDemographic-noteSummary button').click();
-                        }
-                    );
-                });
-
-                return response.promise();
-            });
-
-            // TODO
             // ======================================================
-            //                      TEMPORARY
-            //          Until the sign process is completed
+            //              REDIRECT TO ANOTHER APPLET
             // ======================================================
 
-            channel.reply(PROCESSID + 'consult-sign_consult_order', function(params) {
+            channel.on(PROCESSID + 'Complete', function(params) {
                 var response = $.Deferred();
-                // Pass the model to the view to populate template
-                var modalView = new TempView({
-                    model: params.model
+                // Claim task to be completed
+                EventHandler.fetchHelper(null, params.model, 'start', null, function() {
+                    resolveHelper(response, null, null, false);
                 });
 
-                params.model.set('button', 'Sign');
-                params.model.set('form', 'SIGN');
-                var footerView = new TempFooterView({
-                    model: params.model,
-                    taskListView: params.taskListView
+                // After task is claimed
+                $.when(response).then(function() {
+                    // Complete task
+                    EventHandler.taskProcessing({}, params.model, 'signed',
+                        function() {
+                            // After task is completed, navigate to overview screen and open Notes tray
+                            ADK.Navigation.displayScreen('overview');
+                            $('#patientDemographic-noteSummary button').click();
+                        }
+                    );
                 });
 
-                resolveHelper(response, modalView, footerView, false);
-                return response.promise();
+                // return response.promise();
+            });
+
+            channel.on(PROCESSID + 'Review', function(params) {
+                var response = $.Deferred();
+                // Claim task to be completed
+                EventHandler.fetchHelper(null, params.model, 'start', null, function() {
+                    resolveHelper(response, null, null, false);
+                });
+
+                // After task is claimed
+                $.when(response).then(function() {
+                    // Complete task
+                    EventHandler.taskProcessing({}, params.model, '',
+                        function() {
+                            // After task is completed, navigate to overview screen and open Notes tray
+                            ADK.Navigation.displayScreen('overview');
+                            $('#patientDemographic-noteSummary button').click();
+                        }
+                    );
+                });
             });
         }
     };

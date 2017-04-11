@@ -380,7 +380,7 @@ License and Author
 
 * Author: Seth Chisamore (<schisamo@opscode.com>)
 * Author: Bryan W. Berry (<bryan.berry@gmail.com>)
-* Author:     ua Timberman (<joshua@opscode.com>)
+* Author: Joshua Timberman (<joshua@opscode.com>)
 * Author: Eric Helgeson (<erichelgeson@gmail.com>)
 
 Copyright: 2014, Agile Orbit, LLC

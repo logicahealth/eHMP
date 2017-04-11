@@ -7,17 +7,20 @@ define([
 ], function(_, Backbone, Marionette, Handlebars, MedTypeRowView) {
     'use strict';
     var LoadingView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('<p class="loading"><i class="fa fa-spinner fa-spin"></i> Loading...</p>')
+        template: Handlebars.compile('<p class="loading" role="tab"><i class="fa fa-spinner fa-spin"></i> Loading...</p>')
     });
     return Backbone.Marionette.CollectionView.extend({
         childView: MedTypeRowView,
         emptyView: LoadingView,
         setEmptyMessage: function(errorMessage) {
             this.emptyView = Backbone.Marionette.ItemView.extend({
-                template: _.template('<p class="emptyMedsList">No Records Found</p>')
+                template: _.template('<p class="empty-medlist">No Records Found</p>')
             });
         },
-        className: "panel-group medsReviewApplet_mainContentArea",
+        className: "panel-group meds-review-container",
+        attributes: {
+            role : 'tablist'
+        },
         childViewOptions: function() {
             return {
                 appletInstanceId: this.appletInstanceId

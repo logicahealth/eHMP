@@ -122,7 +122,7 @@ describe('Problem (Condition List) FHIR Resource', function() {
                                 var updated = _.find(fhirP.extension, function(ext) {
                                     return ext.url === 'http://vistacore.us/fhir/extensions/condition#updated';
                                 });
-                                expect(updated.valueDateTime).to.equal(fhirUtils.convertToFhirDateTime(vprP.updated));
+                                expect(updated.valueDateTime).to.equal(fhirUtils.convertToFhirDateTime(vprP.updated, fhirUtils.getSiteHash(vprP.uid)));
                             });
                         }
                         if (vprP.comments !== undefined) {
@@ -140,14 +140,14 @@ describe('Problem (Condition List) FHIR Resource', function() {
                         }
                     });
                     it('verifies that the entered date from VPR Problem Resource coresponds to the one from the FHIR Problem Resource', function() {
-                        expect(fhirP.dateAsserted).to.equal(fhirUtils.convertToFhirDateTime(vprP.entered));
+                        expect(fhirP.dateAsserted).to.equal(fhirUtils.convertToFhirDateTime(vprP.entered, fhirUtils.getSiteHash(vprP.uid)));
                     });
                     it('verifies that the onset date from VPR Problem Resource coresponds to the one from the FHIR Problem Resource', function() {
-                        expect(fhirP.onsetDate).to.equal(fhirUtils.convertToFhirDateTime(vprP.onset));
+                        expect(fhirP.onsetDate).to.equal(fhirUtils.convertToFhirDateTime(vprP.onset, fhirUtils.getSiteHash(vprP.uid)));
                     });
                     if (vprP.resolved !== undefined) {
                         it('verifies that the resolved from VPR Problem Resource coresponds to the one from the FHIR Problem Resource', function() {
-                            expect(fhirP.abatementDate).to.equal(fhirUtils.convertToFhirDateTime(vprP.resolved));
+                            expect(fhirP.abatementDate).to.equal(fhirUtils.convertToFhirDateTime(vprP.resolved, fhirUtils.getSiteHash(vprP.uid)));
                         });
                     }
                     if (vprP.locationUid !== undefined) {
@@ -159,4 +159,42 @@ describe('Problem (Condition List) FHIR Resource', function() {
             }
         });
     });
+
+describe('Condition FHIR conformance', function() {
+
+    var conformanceData = problemlistResource.createConditionConformanceData();
+
+    it('conformance data is returned', function() {
+        expect(conformanceData.type).to.equal('condition');
+        expect(conformanceData.profile.reference).to.equal('http://hl7.org/fhir/2015MAY/condition.html');
+
+        expect(conformanceData.interaction.length).to.equal(2);
+        expect(conformanceData.interaction[0].code).to.equal('read');
+        expect(conformanceData.interaction[1].code).to.equal('search-type');
+    });
+
+    it('conformance data searchParam is returned', function() {
+
+        expect(conformanceData.searchParam.length).to.equal(4);
+
+        expect(conformanceData.searchParam[0].name).to.equal('subject.identifier');
+        expect(conformanceData.searchParam[0].type).to.equal('string');
+        expect(conformanceData.searchParam[0].definition).to.equal('http://hl7.org/FHIR/2015May/datatypes.html#string');
+
+        expect(conformanceData.searchParam[1].name).to.equal('pid');
+        expect(conformanceData.searchParam[1].type).to.equal('string');
+        expect(conformanceData.searchParam[1].definition).to.equal('http://hl7.org/FHIR/2015May/datatypes.html#string');
+
+        expect(conformanceData.searchParam[2].name).to.equal('date-asserted');
+        expect(conformanceData.searchParam[2].type).to.equal('dateTime');
+        expect(conformanceData.searchParam[2].definition).to.equal('http://hl7.org/fhir/2015MAY/datatypes.html#dateTime');
+
+        expect(conformanceData.searchParam[3].name).to.equal('onset');
+        expect(conformanceData.searchParam[3].type).to.equal('dateTime');
+        expect(conformanceData.searchParam[3].definition).to.equal('http://hl7.org/fhir/2015MAY/datatypes.html#dateTime');
+
+    });
+
+});
+
 });

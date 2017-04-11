@@ -1,0 +1,83 @@
+aside.tray-container {
+    width: 31px;
+    background: white;
+    box-shadow: -4px 0px 10px rgba(0, 0, 0, 0.25);
+    z-index: 9;
+    .tray-menu {
+        margin: 0px;
+        background: $pure-white;
+        border-left: 1px solid $grey;
+        > li {
+            padding: 0px;
+            min-height: 30px; // default fallback
+            width: 30px;
+            margin: 2px 0px 0 0;
+            &:first-child{
+                margin: 0;
+            }
+            > button {
+                -webkit-transform: rotate(90deg);
+                transform: rotate(90deg);
+                -webkit-transform-origin: 15px 15px 0px;
+                transform-origin: 15px 15px 0px;
+                background-color: $primary;
+                border-radius: 0px;
+                color: $pure-white;
+                padding: 2px 5px;
+                text-transform: none;
+                min-width: 31px; // default fallback
+                display: block;
+                line-height: 22px;
+                box-shadow: none;
+                height: 31px;
+                text-transform: uppercase;
+                &:hover,
+                &:active,
+                &:focus {
+                    background-color: $primary-dark;
+                    color: $pure-white;
+                    border-bottom: none;
+                    padding: 1px 4px;
+                    i {
+                        color: $pure-white;
+                    }
+                }
+                i.fa-stack-1x {
+                    color: $primary-dark;
+                    margin-left: -1px;
+                    margin-top: -3px;
+                }
+                .fa-stack, i {
+                    height: 18px;
+                    width: 18px;
+                }
+                .fa-stack {
+                    padding-top: 3px;
+                }
+            }
+            &:not(.open) {
+                button > span {
+                    margin-left: -21px;
+                }
+                .tray-close-icon {
+                    visibility: hidden;
+                }
+            }
+            &.open {
+                > button {
+                    background-color: $primary-dark;
+                    color: $pure-white;
+                    border: none;
+                    &:hover,
+                    &:focus {
+                        padding: 2px 5px;
+                    }
+                }
+                .tray-close-icon {
+                    position: relative;
+                    top: 2px;
+                }
+            }
+        }
+    }
+}

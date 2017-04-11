@@ -14,7 +14,7 @@ var writebackContextFind = {
     })),
     appConfig: {
         generalPurposeJdsServer: {
-            baseUrl: 'http://IP             /resource/write-health-data/patient/:pid/orders/find-draft'
+            baseUrl: 'http://IP_ADDRESS:PORT/resource/write-health-data/patient/:pid/orders/find-draft'
         }
     }
 
@@ -28,7 +28,7 @@ describe('Finding a draft order', function() {
             expect(err).must.be.null();
             expect(response.model.patientUid).to.equal('9E7A;100716');
             expect(response.model.authorUid).to.equal('Something');
-            expect(response.model.domain).to.equal('ehmpOrder');
+            expect(response.model.domain).to.equal('order');
             expect(response.model.ehmpState).to.equal('draft');
             done();
         });

@@ -1,0 +1,64 @@
+{
+    "data_sets": [
+      "ehmp.ttl",
+      "test.ttl"
+    ],
+    "custom_ttl_files": {
+        "concept-highlighting.ttl": {
+            "data_set": "ehmp",
+            "graph": "highlighting"
+        },
+        "synonyms.ttl": {
+            "data_set": "ehmp",
+            "graph": "synonyms"
+        },
+        "site-9E7A.ttl": {
+            "data_set": "ehmp",
+            "graph": "site-9E7A"
+        },
+        "site-46F1.ttl": {
+            "data_set": "ehmp",
+            "graph": "site-46F1"
+        },
+        "site-48B0.ttl": {
+            "data_set": "ehmp",
+            "graph": "site-48B0"
+        },
+        "site-51CF.ttl": {
+            "data_set": "ehmp",
+            "graph": "site-51CF"
+        },
+        "site-95B2.ttl": {
+            "data_set": "ehmp",
+            "graph": "site-95B2"
+        },
+        "site-1158.ttl": {
+            "data_set": "ehmp",
+            "graph": "site-1158"
+        },
+        "site-9946.ttl": {
+            "data_set": "ehmp",
+            "graph": "site-9946"
+        },
+        "site-AB22.ttl": {
+            "data_set": "ehmp",
+            "graph": "site-AB22"
+        },
+        "site-C877.ttl": {
+            "data_set": "ehmp",
+            "graph": "site-C877"
+        },
+        "site-D5B5.ttl": {
+            "data_set": "ehmp",
+            "graph": "site-D5B5"
+        },
+        "site-D5D6.ttl": {
+            "data_set": "ehmp",
+            "graph": "site-D5D6"
+        },
+        "site-E68F.ttl": {
+            "data_set": "ehmp",
+            "graph": "site-E68F"
+        }
+    }
+}

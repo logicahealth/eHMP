@@ -8,5 +8,5 @@ def get_correlated_id_json_path(){
 }
 
 artifacts {
-  archives new File(get_correlated_id_json_path())
+  archives file: new File(get_correlated_id_json_path()), name: 'correlated_ids'
 }

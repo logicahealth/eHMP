@@ -1,7 +1,7 @@
 class LabResultsByTypeQuery < BuildQuery
   def initialize(parameter_hash_table)
     super()
-    title = "patient-record-labsbytype"
+    title = "patient-record-searchbytype-lab"
     domain_path = RDClass.resourcedirectory_fetch.get_url(title)
     @path.concat(domain_path)
     @number_parameters = 0
@@ -44,5 +44,5 @@ end
 When(/^the client requests a response in VPR format from RDK API with the parameters$/) do |parameter_table|
   parameter_hash_table = parameter_table.hashes[0]
   path = LabResultsByTypeQuery.new(parameter_hash_table).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end

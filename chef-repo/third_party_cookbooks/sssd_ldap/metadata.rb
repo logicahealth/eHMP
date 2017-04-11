@@ -1,5 +1,5 @@
 name             'sssd_ldap'
-maintainer       'Tim      '
+maintainer       'Tim Smith'
 maintainer_email 'tsmithi84@gmail.com'
 license          'Apache 2.0'
 description      'Installs/Configures LDAP on RHEL/Ubuntu using SSSD'

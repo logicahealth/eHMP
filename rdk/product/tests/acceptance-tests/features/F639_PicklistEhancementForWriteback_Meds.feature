@@ -13,7 +13,7 @@ Scenario: Create Endpoint for Calculate Days Supply (ORWDPS1 DFLTSPLY) (Medicati
       | drug          | 0                              |
       | oi            | 0                              |
   Then a successful response is returned
-  And the result contains 
+  And the result contains
       | field      | value |
       |defaultDays | 90    |
 
@@ -30,7 +30,7 @@ Scenario: Create Endpoint for Calculate Quantity (ORWDPS2 DAY2QTY) (Medication)
       | drug          | 213                                        |
 
   Then a successful response is returned
-  And the result contains 
+  And the result contains
       | field                 | value |
       | quantityForDaysSupply | 15    |
 
@@ -47,7 +47,7 @@ Scenario: Create Endpoint for Calculate Max Refills (ORWDPS2 MAXREF) Medication)
       | drug          | 1188                               |
 
   Then a successful response is returned
-  And the result contains 
+  And the result contains
       | field      | value |
       | maxRefills | 3     |
 
@@ -68,30 +68,28 @@ Scenario: Create Endpoint for Supplemental Drug Message (ORWDPS32 DRUGMSG) (Medi
 Scenario: Returns Outpatient medication priorities, display messages, refills, and pickup options (ORWDPS1 ODSLCT)
 #Note:  pharmacyType = U/F/O is either U, F, or O - U = Unit Dose, F = IV Fluids, and O = Outpatient) 
   When the client requests picklist with the parameters and site "9E7A"
-      | paramter name | value               |
-      | type          | medication-defaults |
-      | pharmacyType  | O                   |
-      | locationIen   | 3                   |
-      
+      | paramter name | value                  |
+      | type          | medication-defaults    |
+      | pharmacyType  | O                      |
+      | location   | 3 |
+
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field        | value    |
       | categoryName | Priority |
       | values.ien   | 2        |
       | values.name  | ASAP     |
-      | values.ien   | 99       |
-      | values.name  | DONE     |
       | values.ien   | 9        |
       | values.name  | ROUTINE  |
       | values.ien   | 1        |
       | values.name  | STAT     |
-  And the picklist result contains 
+  And the picklist result contains
       | field        | value   |
       | categoryName | DispMsg |
-  And the picklist result contains 
+  And the picklist result contains
       | field        | value   |
       | categoryName | Refills |
-  And the picklist result contains 
+  And the picklist result contains
       | field        | value  |
       | categoryName | Pickup |
 

@@ -1,5 +1,5 @@
 {
   "id": "gem",
-  "fqdn": "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp/hostedgems/",
+  "fqdn": "https://store.vistacore.us/nexus/content/repositories/hostedgems/",
   "ip": "52.21.133.61"
 }

@@ -1,5 +1,5 @@
-HMPDJ00 ;ASMR/MKB - Patient demographics ;8/11/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 3
+HMPDJ00 ;SLC/MKB,ASMR/RRB - Patient demographics;8/11/11  15:29
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -20,6 +20,7 @@ HMPDJ00 ;ASMR/MKB - Patient demographics ;8/11/11  15:29
  ; VAFCTFU1                      2990
  ; VASITE                       10112
  ; XUAF4                         2171
+ ; SECURITY/SENSITIVE RECORD ACC 3027
  ;
  ; All tags expect DFN
  ; [HMPID, HMPSTART, HMPSTOP, HMPMAX, HMPTEXT not currently used here]
@@ -40,7 +41,7 @@ DPT1OD(PAT) ; -- Demographics (data array only)
  S PAT("stampTime")=$S($G(HMPSTMP)]"":HMPSTMP,1:$$EN^HMPSTMP("NOW")) ;US6734
  S PAT("lastUpdateTime")=PAT("stampTime")
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("patient",PAT("uid"),PAT("stampTime")) Q:HMPMETA=1  ;US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("patient",PAT("uid"),PAT("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  Q
  ;
 LKUP ; patient lookup data
@@ -60,11 +61,12 @@ LKUP ; patient lookup data
  S:X>0 PAT("icn")=X
  S PAT("ssn")=$P(X0,U,9)
  S PAT("birthDate")=$$JSONDT^HMPUTILS($P(X0,U,3))
- S PAT("sensitive")=$$BOOL($$SCREEN^DPTLK1(DFN))
  S X=$P($G(^DPT(DFN,.35)),U)
  S:X PAT("deceased")=$$JSONDT^HMPUTILS(X)
+ D PTSEC^DGSEC4(.LST,DFN)  ; DBIA 3027 DE2818 - PB 30 Oct 2015 changed to use a global reference covered by an active ICR
+ S PAT("sensitive")=$$BOOL(LST(1))
  ;US6734 - pre-compile metastamp for OPD
- I $G(HMPMETA),$P($G(HMPFADOM),"#")="pt-select" D ADD^HMPMETA("pt-select",PAT("uid"),$G(HMPSTMP)) Q:HMPMETA=1  ;US11019/US6734
+ I $G(HMPMETA),$P($G(HMPFADOM),"#")="pt-select" D ADD^HMPMETA("pt-select",PAT("uid"),$G(HMPSTMP)) Q:HMPMETA=1  ;US6734,US11019
  I $G(HMPSTMP)]"" S PAT("stampTime")=HMPSTMP ; US6734 - set stamptime as time of subscription
  E  S PAT("stampTime")=$$EN^HMPSTMP("NOW") ; DE2616 - must add stampTime to receive OPD freshness update from ADHOC^HMPUTIL1
  I $D(PAT)>9 D ADD^HMPDJ("PAT")
@@ -83,8 +85,8 @@ DEM ;-demographic data
  S X=$P(VADM(5),U) S:X="" X="UNK"
  S PAT("genderCode")="urn:va:pat-gender:"_X,PAT("genderName")=$$NAME(X,"gender")
  S X=+$P($P(VADM(6),U),".") S:X PAT("deceased")=$$JSONDT^HMPUTILS(X)
- S PAT("sensitive")=$$BOOL($$SCREEN^DPTLK1(DFN))
- ;S X=$$GET1^DIQ(38.1,DFN_",",2,"I") S:$L(X) PAT("sensitive")=$$BOOL(X)
+ D PTSEC^DGSEC4(.LST,DFN)  ; DBIA 3027 DE2818 - PB 30 Oct 2015 changed to use a global reference covered by an active ICR
+ S PAT("sensitive")=$$BOOL(LST(1))
  S X=+VADM(9) S:X PAT("religionCode")="urn:va:pat-religion:"_X,PAT("religionName")=$$NAME(X,"religion")
  S X=$P(VADM(10),U,2) I $L(X) D
  . S X=$E(X),X=$S(X="S":"L",X="N":"S",1:X)
@@ -112,16 +114,26 @@ SVC ;-service data
  I VAEL(9)]"" S PAT("meanStatus")=$P(VAEL(9),U,2)
  ;
  ; exposures
- S AO=VASV(2),IR=VASV(3)
- S PGF=VASV(11)!VASV(12)!VASV(13) ;OIF/OEF
- S X=$$GETCUR^DGNTAPI(DFN,"HNC"),X=+($G(HNC("STAT")))
- S HNC=$S(X=4:1,X=5:1,X=1:0,X=6:0,1:"")
- S X=$P($$GETSTAT^DGMSTAPI(DFN),U,2),MST=$S(X="Y":1,X="N":0,1:"")
- S X=$$CVEDT^DGCV(DFN),CV=$S(+X<0:"",+X=0:0,$P(X,U,3):1,1:0)
- S X=AO_U_IR_U_PGF_U_HNC_U_MST_U_CV
- F P=1:1:6 S I=$P(X,U,P),$P(X,U,P)=$S(I:"Yes",I=0:"No",1:"Unknown")
- S NM="agent-orange^ionizing-radiation^sw-asia^head-neck-cancer^mst^combat-vet"
- F P=1:1:6 S PAT("exposure",P,"uid")="urn:va:"_$P(NM,U,P)_":"_$E($P(X,U,P)),PAT("exposure",P,"name")=$P(X,U,P)
+ ;Agent Orange
+ S EXPVAL=$S(VASV(2):"Yes",VASV(2)=0:"No",1:"Unknown"),PAT("exposure",1,"uid")="urn:va:agent-orange:"_$E(EXPVAL),PAT("exposure",1,"name")=EXPVAL
+ ;Ionizing Radiation
+ S EXPVAL=$S(VASV(3):"Yes",VASV(3)=0:"No",1:"Unknown"),PAT("exposure",2,"uid")="urn:va:ionizing-radiation:"_$E(EXPVAL),PAT("exposure",2,"name")=EXPVAL
+ ;SW Asia/Persian Gulf
+ ;DE3917 - CPRS does not use the OIF/OEF fields to determine PGF/SW Asia exposure, but, instead, per VADPT^GMPLX1
+ ;(called by ORQQPL INIT PT), directly gets the data from the #.32201 (PERSIAN GULF SERVICE?) field in the PATIENT file.
+ S EXPVAL=$$GET1^DIQ(2,DFN_",",".32201","E") S:EXPVAL="" EXPVAL="Unknown"
+ S PAT("exposure",3,"uid")="urn:va:sw-asia:"_$E(EXPVAL),PAT("exposure",3,"name")=EXPVAL
+ ;Head-Neck Cancer
+ S X=$$GETCUR^DGNTAPI(DFN,"HNC"),X=+($G(HNC("STAT"))),X=$S(X=4:1,X=5:1,X=1:0,X=6:0,1:"")
+ S EXPVAL=$S(X:"Yes",X=0:"No",1:"Unknown"),PAT("exposure",4,"uid")="urn:va:head-neck-cancer:"_$E(EXPVAL),PAT("exposure",4,"name")=EXPVAL
+ ;Military Sexual Trauma
+ S X=$P($$GETSTAT^DGMSTAPI(DFN),U,2),EXPVAL=$S(X="Y":"Yes",X="N":"No",1:"Unknown")
+ S PAT("exposure",5,"uid")="urn:va:mst:"_$E(EXPVAL),PAT("exposure",5,"name")=EXPVAL
+ ;Combat Vet
+ S X=$$CVEDT^DGCV(DFN),X=$S(+X<0:"",+X=0:0,$P(X,U,3):1,1:0)
+ S EXPVAL=$S(X:"Yes",X=0:"No",1:"Unknown"),PAT("exposure",6,"uid")="urn:va:combat-vet:"_$E(EXPVAL),PAT("exposure",6,"name")=EXPVAL
+ ;Shipboard Hazard And Defense
+ S EXPVAL=$S(VASV(14):"Yes",VASV(14)=0:"No",1:"Unknown"),PAT("exposure",7,"uid")="urn:va:shipboard-hazard:"_$E(EXPVAL),PAT("exposure",7,"name")=EXPVAL
  ;
  ; rated disabilities [DGRPDB]
  N HMPDIS,DIS,NM,DX

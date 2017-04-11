@@ -13,7 +13,7 @@ describe('encounters writeback validator', function() {
         writebackContext.model = {
             'patientDFN': '3',
             'isInpatient': '0',
-            'locationIEN': '32',
+            'locationUid': 'urn:va:location:9E7A:32',
             'encounterDateTime': '201512061112',
             'primaryProviderIEN': '991',
             'isPrimaryProvider': '0'
@@ -60,8 +60,8 @@ describe('encounters writeback validator', function() {
             done();
         });
     });
-    it('identifies an invalid location IEN', function(done) {
-        writebackContext.model.locationIEN = undefined;
+    it('identifies an invalid location Uid', function(done) {
+        writebackContext.model.locationUid = undefined;
         encountersValidator.save(writebackContext, function(err) {
             expect(err).to.be.truthy();
             done();

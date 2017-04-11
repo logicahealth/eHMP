@@ -1,0 +1,9 @@
+{
+	"sql_order": [
+		"create_jbpm_schema.sql",
+		"create_jbpm_activitydb_schema.sql",
+		"create_jbpm_notifdb_schema.sql",
+		"create_jbpm_pcmm_schema.sql",
+		"create_jbpm_all_schemas.sql"
+	]
+}

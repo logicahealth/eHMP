@@ -1,93 +1,18 @@
 define([
-    'underscore',
-    'handlebars'
-], function(_, Handlebars) {
+    'underscore'
+], function(_) {
     "use strict";
 
     var appletUtil = {};
     //decide if the user collection is pageable or not
     appletUtil.isUserListPageable = false;
 
-    //All possible columns for userManagementView
-    var columns = {
-        lastname: {
-            name: 'lname',
-            label: 'Last Name',
-            cell: 'string'
-        },
-        firstname: {
-            name: 'fname',
-            label: 'First Name',
-            cell: 'string'
-        },
-        permissionSets: {
-            name: 'permissionSets',
-            label: 'Permission Sets',
-            cell: 'handlebars',
-            template: Handlebars.compile('{{#each permissionSets.val}}{{#mapping}}{{this}}{{/mapping}}{{#unless @last}}, {{/unless}}{{/each}}'),
-            sortValue: function(model, string) {
-                return model.get('permissionSetsListString');
-            }
-        },
-        additionalPermissions: {
-            name: 'additionalPermissionsLabelsFormatted',
-            label: 'Additional Individual Permissions',
-            cell: 'string'
-        },
-        duz: {
-            name: 'duz',
-            label: 'DUZ',
-            cell: 'string',
-            sortValue: function(model, string) {
-                return model.get('duz');
-            }
-        },
-        vistaStatus: {
-            name: 'vistaStatus',
-            label: 'VistA Status',
-            cell: 'string'
-        },
-        ehmpStatus: {
-            name: 'ehmpStatus',
-            label: 'eHMP Status',
-            cell: 'string'
-        }
-    };
-
-    appletUtil.userManagementColumns = {
-        //userManagementView Summary Columns
-        summary: [
-            columns.vistaStatus,
-            columns.ehmpStatus,
-            columns.lastname,
-            columns.firstname,
-            columns.permissionSets,
-            columns.duz
-        ],
-        //userManagementView Expanded Columns
-        expanded: [
-            columns.vistaStatus,
-            columns.ehmpStatus,
-            columns.lastname,
-            columns.firstname,
-            columns.permissionSets,
-            columns.additionalPermissions,
-            columns.duz
-        ]
-    };
+    //saves target element of triggering element
+    appletUtil.elementTarget = null;
     appletUtil.emptyCollectionQuery = {
         'fetchEmptyCollection': true,
         'duz': '',
         'user.filter': {}
-    };
-    //Function called by userManagementView
-    //Will return corresponding summary or expanded view columns.
-    appletUtil.getColumns = function(viewType) {
-        var columns = null;
-        if (appletUtil.userManagementColumns.hasOwnProperty(viewType)) {
-            columns = appletUtil.userManagementColumns[viewType];
-        }
-        return columns || appletUtil.userManagementColumns.expanded;
     };
 
     appletUtil.permissionSets = [];
@@ -116,7 +41,7 @@ define([
                         response.checklistValue = false;
                         var formattedPermissions = [];
                         _.each(response.permissions, function(permission) {
-                            formattedPermissions.push(appletUtil.formatPermissionName(permission));
+                            formattedPermissions.push(appletUtil.discretePermissionsLabelMap[permission]);
                         });
                         response.formattedPermissions = formattedPermissions; //appletUtil.getFormattedAdditionalPermissionsString(formattedPermissions);
                         if (appletUtil.permissionSetsMap[response.val] !== response.label) {
@@ -293,12 +218,12 @@ define([
         return isGood;
     };
 
-    appletUtil.createUserSearchFilter = function(filterParameters, start) {
+    appletUtil.createUserSearchFilter = function(filterParameters, page) {
         var searchFilter = {
             'user.filter': {}
         };
-        if (!_.isUndefined(start)) {
-            searchFilter.start = start;
+        if (!_.isUndefined(page)) {
+            searchFilter.page = page;
             searchFilter.limit = 50;
         }
         var userFilter = {};
@@ -400,7 +325,7 @@ define([
                     inResultsView: false
                 },
                 validate: function(attributes, options) {
-                    return appletUtil.validateFormModel(this, attributes, options);
+                    return appletUtil.validateFormModel(this, attributes, options, false);
                 }
             });
             return new FormModel(options);
@@ -408,9 +333,9 @@ define([
         bulkEditSearch: function(options) {
             var FormModel = Backbone.Model.extend({
                 defaults: {
-                    firstNameValue: "",
-                    lastNameValue: "",
-                    permissionSetValue: "",
+                    firstNameValueBulkEdit: "",
+                    lastNameValueBulkEdit: "",
+                    permissionSetValueBulkEdit: "",
                     permissionSetsForPicklist: [],
                     editUsersPermissionSets: [],
                     editUsersAdditionalPermissions: [],
@@ -418,7 +343,7 @@ define([
                     selectedUserTemplatePermissionSets: "",
                     selectedUserTemplateAdditionalPermissions: "",
                     emailValue: "",
-                    duzValue: "",
+                    duzValueBulkEdit: "",
                     vistaCheckboxValueBulkEdit: false,
                     ehmpCheckboxValueBulkEdit: false,
                     resultCount: 'Showing 0 results',
@@ -434,13 +359,13 @@ define([
                     workflowTitle: ADK.UserService.getUserSession().get('facility').toUpperCase() + ' USERS BULK EDIT: SEARCH AND SELECT USERS'
                 },
                 validate: function(attributes, options) {
-                    return appletUtil.validateFormModel(this, attributes, options);
+                    return appletUtil.validateFormModel(this, attributes, options, true);
                 }
             });
             return new FormModel(options);
         }
     };
-    appletUtil.validateFormModel = function(model, attributes, options) {
+    appletUtil.validateFormModel = function(model, attributes, options, fromBulkEdit) {
         model.errorModel.clear();
         var MIN_REQ_TOP_FIELDS = 1;
         var count = 0;
@@ -448,6 +373,13 @@ define([
         var lastName = model.get('lastNameValue').trim();
         var permissionSet = model.get('permissionSetValue').trim();
         var duz = model.get('duzValue').trim();
+
+        if (!_.isUndefined(fromBulkEdit) && fromBulkEdit === true) {
+            firstName = model.get('firstNameValueBulkEdit').trim();
+            lastName = model.get('lastNameValueBulkEdit').trim();
+            permissionSet = model.get('permissionSetValueBulkEdit').trim();
+            duz = model.get('duzValueBulkEdit').trim();
+        }
 
         if (duz.length > 0) {
             count++;
@@ -477,8 +409,14 @@ define([
             duz: model.get('duzValue')
         };
         if (!_.isUndefined(fromBulkEdit) && fromBulkEdit === true) {
-            formSearchValues.showVistaInactive = model.get('vistaCheckboxValueBulkEdit');
-            formSearchValues.showEhmpInactive = model.get('ehmpCheckboxValueBulkEdit');
+            formSearchValues = {
+                showVistaInactive: model.get('vistaCheckboxValueBulkEdit'),
+                showEhmpInactive: model.get('ehmpCheckboxValueBulkEdit'),
+                firstName: model.get('firstNameValueBulkEdit'),
+                lastName: model.get('lastNameValueBulkEdit'),
+                permissionSet: model.get('permissionSetValueBulkEdit'),
+                duz: model.get('duzValueBulkEdit')
+            };
         }
         return formSearchValues;
     };
@@ -536,6 +474,12 @@ define([
             return detailsTable;
         }
         return '';
+    };
+    appletUtil.focusPreviousTarget = function() {
+        if (appletUtil.elementTarget !== null && !_.isUndefined(appletUtil.elementTarget)) {
+            $(appletUtil.elementTarget).focus();
+            this.elementTarget = null;
+        }
     };
     return appletUtil;
 });

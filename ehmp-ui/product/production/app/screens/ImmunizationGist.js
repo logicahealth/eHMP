@@ -16,6 +16,7 @@ define([
 
     var screenConfig = {
         id: 'immunization-gist',
+        context: 'patient',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

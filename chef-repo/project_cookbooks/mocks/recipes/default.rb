@@ -17,5 +17,4 @@ yum_package "expect"
 
 include_recipe "mocks::glassfish"
 include_recipe "mocks::jmeadows"
-
-# include_recipe "mocks::correlated_ids"
+include_recipe "mocks::correlated_ids"

@@ -233,8 +233,12 @@ function filterAsuDocuments(req, details, callback) {
         nullchecker.isNullish(details.data.items) || !details.data.items.length) {
         return callback(null, details);
     }
-
-    asuUtils.applyAsuRules(req, details, function(error, response) {
+    var requiredPermission = 'VIEW';
+    var allPermissions = [
+        'VIEW',
+        'MAKE ADDENDUM'
+    ];
+    asuUtils.applyAsuRulesWithActionNames(req, requiredPermission, allPermissions, details, function(error, response) {
         details.data.items = response;
         return callback(error, details);
     });

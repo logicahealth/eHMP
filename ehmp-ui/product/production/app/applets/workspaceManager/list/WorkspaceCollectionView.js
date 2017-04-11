@@ -52,7 +52,6 @@ define([
         });
     };
 
-
     var toggleDefaultHtml = function(e, defaultButtonHTML) {
         var E = (_.isUndefined(e) ? defaultButtonHTML : $(e.currentTarget));
         var starIcon = E.find('.fa-star, .fa-star-o');
@@ -79,15 +78,14 @@ define([
         attributes: function() {
             if (this.model.get('predefined') === true) {
                 return {
-                    class: 'table-row tableRow predefined-screen-row',
-                    id: this.model.get('id'),
+                    class: 'table-row tableRow predefined-screen-row background-color-primary-lighter',
+                    'data-screen-id': this.model.get('id'),
                     role: 'row',
                 };
             } else {
                 return {
-                    class: 'table-row tableRow user-defined',
+                    class: 'table-row tableRow user-defined background-color-pure-white',
                     'data-screen-id': this.model.get('id'),
-                    id: this.model.get('id'),
                     role: 'row'
                 };
             }
@@ -122,7 +120,6 @@ define([
             if (!_.isUndefined(this.model.get('author'))) {
                 this.screenOptions.author = this.model.get('author');
             }
-
             this.model.set('hasCustomize', this.screenOptions.hasCustomize);
             var id = this.model.get('id');
             var screenId = this.model.get('screenId');
@@ -132,18 +129,14 @@ define([
             if (predefined === true && module.applets && module.applets.length > 0) {
                 this.model.set('hasApplets', true);
             }
-
             if (predefined === false && config && config.applets && config.applets.length > 0) {
                 this.model.set('hasApplets', true);
             }
-
             if (screenId === 'documents-list') {
                 this.model.set('documents-list', true);
             }
-
             // init association counter
             var self = this;
-
             this.listenTo(this.model, 'change', function(model) {
                 if (model.changed.problems) {
                     self.associationCounterRegion.show(new AssociationCounterView({
@@ -159,8 +152,6 @@ define([
                 var defaultButtonHTML = this.$el.find('.default-workspace-btn');
                 toggleDefaultHtml(undefined, defaultButtonHTML);
             }
-            // this.applyInputMasking();
-
             this.associationCounterRegion.show(new AssociationCounterView({
                 model: this.model
             }));
@@ -182,16 +173,15 @@ define([
             };
             var popoverKeyupHandler = function(e) {
                 var isEscKey = (e.type === 'keyup' && e.keyCode === 27 ? true : false);
-                var isCloseBtnClick = (e.type === 'click' && $(e.target).is('#association-manager-close-btn') ? true : false);
+                var isCloseBtnClick = (e.type === 'click' && $(e.target).is('#associationManagerCloseBtn') ? true : false);
                 if ( isCloseBtnClick || isEscKey) {
                     e.stopPropagation();
                     associationsPopoverTrigger.popover('hide');
                     associationsPopoverTrigger.focus();
                 }
             };
-
             associationsPopoverTrigger.popup({
-                container: '#' + self.screenOptions.id,
+                container: '[data-screen-id="' + self.screenOptions.id+'"]',
                 placement: _.bind(this.getPopoverPlacement, this, associationsPopoverTrigger),
                 halign: 'left',
                 // Title is not displayed, but is needed to prevent the content function from being called twice.
@@ -205,7 +195,7 @@ define([
                     self.associationManagerView.render();
                     return self.associationManagerView.$el;
                 },
-                template: '<div class="popover association-manager-popover" aria-live="polite" aria-label="Popup dialog used to search for problems and associate them with this workspace"><div class="popover-content"></div></div>',
+                template: '<div class="popover association-manager-popover" aria-live="polite"><div class="popover-content"></div></div>',
             });
             associationsPopoverTrigger.on('shown.bs.popover', function(e) {
                 self.associationManagerView.trigger('show');
@@ -215,7 +205,7 @@ define([
 
                 // close the popover when escape is pressed
                 $('.association-manager-popover').on('keyup.workspaceCollectionViewPopover', popoverKeyupHandler);
-                $('.association-manager-popover').on('click.association-manager-close-btn', popoverKeyupHandler);
+                $('.association-manager-popover').on('click.associationManagerCloseBtn', popoverKeyupHandler);
 
                 associationsPopoverTrigger.addClass('active')
                     .attr('aria-expanded', true);
@@ -235,17 +225,15 @@ define([
             }
             return placement;
         },
-
         applyInputMasking: function(e) {
-
             $(e.target).inputmask("Regex", {
                 regex: "^[a-zA-Z0-9\\s]*$"
             });
         },
-
         rearrangeWorksheet: function(e) {
             if(this.$el.hasClass('rearrange-row')) {
                 $('.rearrange-row').removeClass('rearrange-row');
+                this.triggerMethod('click:setWorkspaceOrderSR');
             } else {
                 $('.rearrange-row').removeClass('rearrange-row');
                 this.$el.addClass('rearrange-row');
@@ -278,8 +266,10 @@ define([
             if (title && title.val() === '') {
                 return;
             }
-            ADK.Navigation.navigate(this.screenOptions.routeName, {}, {
-                "dontLoadApplets": true
+            ADK.Navigation.navigate(this.screenOptions.routeName, {
+                extraScreenDisplay: {
+                    dontLoadApplets: true
+                }
             });
             var channel = ADK.Messaging.getChannel('addAppletsChannel');
             channel.trigger('addApplets');
@@ -293,7 +283,7 @@ define([
                 currentTarget: $(e.currentTarget).find('input')
             };
             this.saveInlineChange(input);
-            if (input.currentTarget.next().hasClass('glyphicon-ok')) {
+            if (input.currentTarget.next().hasClass('fa-check')) {
                 input.currentTarget.siblings('span.sr-only').focus();
             }
         },
@@ -329,16 +319,14 @@ define([
                     ADK.ADKApp.ScreenPassthrough.editScreen(this.screenOptions, origId);
                     input.attr('origValue', newTitle);
                     this.saveIndicator(input);
-                    var workspaceRow = $('.tableRow#' + origId);
-                    workspaceRow.attr({
-                        id: newScreen.newId,
+                    this.$el.attr({
                         'data-screen-id': newScreen.newId
                     });
-                    workspaceRow.find('.previewWorkspace').attr('title', 'Press enter to preview the applets on the ' + newTitle + ' workspace.');
-                    workspaceRow.find('.default-workspace-btn').attr('title', 'Make default. Press enter to set the ' + newTitle + ' workspace as the default screen to load after logging in.');
+                    this.$el.find('.previewWorkspace').attr('title', 'Press enter to preview the applets on the ' + newTitle + ' workspace.');
+                    this.$el.find('.default-workspace-btn').attr('title', 'Make default. Press enter to set the ' + newTitle + ' workspace as the default screen to load after logging in.');
 
                     if (this.model.get('hasApplets')) {
-                        workspaceRow.find('a').attr('title', 'Press enter to launch the ' + newTitle + ' workspace.');
+                        this.$el.find('.customize-screen').attr('title', 'Press enter to launch the ' + newTitle + ' workspace.');
                     }
                     this.createPopover();
                 }
@@ -356,12 +344,12 @@ define([
             var input = $(e.currentTarget);
             var isTitle = input.parent().hasClass('editor-title');
             input.parent().removeClass('has-success').removeClass('has-error');
-            input.next().removeClass('glyphicon-ok glyphicon-asterisk')
+            input.next().removeClass('fa-check fa-asterisk color-red-dark color-secondary')
                 .siblings('span.sr-only').html('');
 
             if (isTitle && input.val() === '') {
                 input.parent().addClass('has-error');
-                input.next().addClass('glyphicon-asterisk');
+                input.next().addClass('fa-asterisk color-red-dark');
             }
         },
         saveAssociationChange: function() {
@@ -389,7 +377,7 @@ define([
         },
         saveIndicator: function(input) {
             input.parent().addClass('has-success');
-            input.next().addClass('glyphicon-ok');
+            input.next().addClass('fa-check color-secondary');
             input.siblings('span.sr-only').html('Your update has been saved.');
         },
         processTitleChange: function(title) {
@@ -419,7 +407,7 @@ define([
                 self.associationManagerView.destroy();
                 $('html').off('click.workspaceCollectionViewPopover');
                 $('.association-manager-popover').off('keyup.workspaceCollectionViewPopover');
-                $('.association-manager-popover').off('click.association-manager-close-btn');
+                $('.association-manager-popover').off('click.associationManagerCloseBtn');
             }
         },
 
@@ -441,10 +429,22 @@ define([
                     .removeClass('madeDefault fa-star')
                     .siblings('span.sr-only')
                     .html('Make Default.');
+            },
+            'click:setWorkspaceOrderSR': function(currWksp) {
+                currWksp = this.getWorkspaceName(currWksp.$el);
+                this.$('.workspace-manager-rearrangement').text(currWksp + " workspace was successfully set");
             }
         },
         attributes: {
             role: 'presentation'
+        },
+        filter: function(child) {
+            var workspace = ADK.WorkspaceContextRepository.workspaces.get(child.id);
+            if (_.isUndefined(workspace)) {
+                // If something went wrong with WCR, it's better to show it(expose the bug) than to not show it
+                return true;
+            }
+            return workspace.shouldShowInWorkspaceSelector();
         },
         initialize: function() {
             var self = this;
@@ -454,6 +454,7 @@ define([
                 self.collection.reset(screensConfig.screens);
             });
             screenManagerChannel.comply('addNewScreen', this.addNewScreen, self);
+            this.$el.append('<div aria-live="polite" class="sr-only workspace-manager-rearrangement" aria-atomic="true"></div>');
         },
         events: {
             'clone_screen': 'cloneScreen'
@@ -461,34 +462,30 @@ define([
         resetCollection: function() {
             this.collection.reset(ADK.UserDefinedScreens.getScreensConfigFromSession().screens);
         },
-        onRender: function() {
-
-            if (_.isUndefined(this.isConfigured)) {
-                var self = this;
-                self.setUpDrag();
-                //508 functions
-                $(document).bind('keydown.workspaceCollectionView', (function(e) {
-                    var player = self.$el.find('.rearrange-row');
-                    if (player.length === 0) return;
-                    var prev = player.prev();
-                    var next = player.next();
-                    if (e.which === 38 && prev.length > 0) { //up key
-                        e.stopPropagation();
-                        e.preventDefault();
-                        self.moveWorkspaceUp(player, prev);
-                    } else if (e.which === 40 && next.length > 0) { //down key
-                        e.stopPropagation();
-                        e.preventDefault();
-                        self.moveWorkspaceDown(player, next);
-                    } else if (e.which === 9) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                    } else if (e.which === 13) {
-                        self.$el.find('.rearrange-row .rearrange-worksheet').focus();
-                    }
-                }));
-                this.isConfigured = true;
-            }
+        onShow: function() {
+            var self = this;
+            self.setUpDrag();
+            //508 functions
+            $(document).bind('keydown.workspaceCollectionView', (function(e) {
+                var player = self.$el.find('.rearrange-row');
+                if (player.length === 0) return;
+                var prev = player.prev();
+                var next = player.next();
+                if (e.which === 38 && prev.length > 0 && !prev.hasClass('workspace-manager-rearrangement')) { //up key
+                    e.stopPropagation();
+                    e.preventDefault();
+                    self.moveWorkspaceUp(player, prev);
+                } else if (e.which === 40 && next.length > 0) { //down key
+                    e.stopPropagation();
+                    e.preventDefault();
+                    self.moveWorkspaceDown(player, next);
+                } else if (e.which === 9) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                } else if (e.which === 13) {
+                    self.$el.find('.rearrange-row .rearrange-worksheet').focus();
+                }
+            }));
         },
 
         onBeforeDestroy: function() {
@@ -591,16 +588,30 @@ define([
             }));
             this.render();
         },
+        getWorkspaceName: function(wksp) {
+            if (wksp.hasClass('user-defined')) {
+                return wksp.find('.editor-title-element').val();
+            }
+                return wksp.find('.editor-title span').text();
+        },
+        moveWorkspaceSR: function(player, dir, relWkspPosition) {
+            var relativeWorkspace = this.$el.children(':eq('+ relWkspPosition +')');
+            relativeWorkspace = this.getWorkspaceName(relativeWorkspace);
+            var srSentence = "Current workspace moved " + dir + " the " + relativeWorkspace + " workspace";
+            this.$('.workspace-manager-rearrangement').text(srSentence);
+        },
         moveWorkspaceUp: _.throttle(function(player, prev) {
             player.fadeOut(100).insertBefore(prev).fadeIn(100, function() {
                 this.checkScrollPosition(player);
                 this.saveScreensOrders();
+                this.moveWorkspaceSR(player, "above", player.index() + 1);
             }.bind(this));
         }, 250, {leading: true}),
         moveWorkspaceDown: _.throttle(function(player, next) {
             player.fadeOut(100).insertAfter(next).fadeIn(100, function() {
                 this.checkScrollPosition(player);
                 this.saveScreensOrders();
+                this.moveWorkspaceSR(player, "below", player.index() - 1);
             }.bind(this));
         }, 250, {leading: true}),
         checkScrollPosition: function(player) {
@@ -609,7 +620,7 @@ define([
             var playerHeight = player.height();
             var playerPosition = player.offset();
 
-            //Adjust the player position using the offset provided by the 
+            //Adjust the player position using the offset provided by the
             playerPosition.top = playerPosition.top - listGroup.position().top;
             playerPosition.bottom = playerPosition.top + playerHeight;
             var playerPosMargin = playerHeight * 0.25;
@@ -624,8 +635,8 @@ define([
         },
         saveScreensOrders: function() {
             var ids = [];
-            $('#list-group .tableRow').each(function() {
-                var id = $(this).attr('id');
+            this.$('.tableRow').each(function() {
+                var id = $(this).attr('data-screen-id');
                 if (id)
                     ids.push(id);
             });
@@ -664,7 +675,7 @@ define([
 
         },
         setFocusToScreenInput: function(screenId) {
-            var sel = $('#' + screenId + ' input:text:first');
+            var sel = $('[data-screen-id="' + screenId + '"] input:text:first');
             sel.focus();
             sel.val(sel.val());
         },
@@ -680,8 +691,6 @@ define([
         },
         cloneScreen: function(e) {
             var self = this;
-            var screensConfig = ADK.UserDefinedScreens.getScreensConfigFromSession();
-
             var origTitle = $(e.target).find('input')[0];
             origTitle = ($(origTitle).val() === undefined ? $(e.target).find('.predefined-title').text() : $(origTitle).val());
             var cloneTitle = this.generateCloneTitle(origTitle);
@@ -717,8 +726,12 @@ define([
             };
 
             var callBack = function(model, response, options) {
+                // If we don't clone the original screen config applet object array into the new screen config, the
+                // cloned workspace will be empty.
+                var _applets = _.get(ADK.ADKApp, [origModel.get('id'), 'applets'], []);
+                _.set(ADK.ADKApp, [newId, 'applets'], _.clone(_applets));
+
                 if (origModel.get('predefined') === true) {
-                    var _applets = ADK.ADKApp[origModel.get('id')].applets;
                     var predefinedAppletConfig = {
                         applets: _applets,
                         id: clonedScreenOptions.id,

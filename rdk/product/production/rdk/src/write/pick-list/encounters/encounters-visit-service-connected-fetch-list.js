@@ -3,7 +3,10 @@ var parse = require('./encounters-visit-service-connected-parser').parse;
 var validate = require('./../utils/validation-util');
 var rpcUtil = require('./../utils/rpc-util');
 var dateConverter = require('../../../utils/fileman-date-converter');
+var rdk = require('../../../core/rdk');
+var locationUtil = rdk.utils.locationUtil;
 var _ = require('lodash');
+
 
 
 /**
@@ -47,7 +50,7 @@ var _ = require('lodash');
 module.exports.fetch = function(logger, configuration, callback, params) {
     var dfn = _.get(params, 'dfn');
     var visitDate = _.get(params, 'visitDate');
-    var loc = _.get(params, 'loc');
+    var locationIEN =  locationUtil.getLocationIEN(_.get(params, 'locationUid'));
 
     if (validate.isStringNullish(dfn)) {
         return callback('dfn Cannot be Empty');
@@ -55,11 +58,10 @@ module.exports.fetch = function(logger, configuration, callback, params) {
     if (validate.isStringNullish(visitDate)) {
         return callback('visitDate Cannot be Empty');
     }
-    if (validate.isStringNullish(loc)) {
-        return callback('loc Cannot be Empty');
+    if (!locationIEN) {
+        return callback('locationIEN for Encounters Visit Service Cannot be Empty');
     }
-
     visitDate = dateConverter.getFilemanDateWithArgAsStr(visitDate);
 
-    return rpcUtil.standardRPCCall(logger, configuration, 'ORWPCE SCSEL', dfn, visitDate, loc, parse, callback);
+    return rpcUtil.standardRPCCall(logger, configuration, 'ORWPCE SCSEL', dfn, visitDate, locationIEN, parse, callback);
 };

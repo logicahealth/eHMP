@@ -42,38 +42,10 @@ execute "Move app.json to app directory" do
   action :nothing
 end
 
-file 'copy manifest.json' do
-  path "#{dest_dir}/../manifest.json"
-  content IO.read(node[:ehmp_ui][:manifest_path])
-  action :create
-  notifies :delete, "file[#{node[:ehmp_ui][:manifest_path]}]", :immediately
-end
-
-file node[:ehmp_ui][:manifest_path] do
-  action :nothing
-end
-
-# update AppCache manifest with timestamp and .js, .html, .css files under whitelisted paths
-ruby_block "Create appcache file list" do
-  block do
-    whitelist_paths = [ 'app/**/*.{css,js,html}', '_assets/**/*.css', 'main/adk_utils/**/*.{css,js,html}', 'main/layouts/**/*.{css,js,html}' ]
-    whitelist_paths.each do |path|
-      Dir["/var/www/#{node[:adk][:dir]}/#{path}"].select { |e|
-        if File.file?(e)
-          node.default[:ehmp_ui][:appcache_list] = [node[:ehmp_ui][:appcache_list], e.split("/var/www/#{node[:adk][:dir]}")[1]].join("\n")
-        end
-      }
-    end
-  end
-end
-timestamp = Time.now.to_s
-
-template "#{node[:adk][:home_dir]}/cache.appcache" do
-  source "cache.appcache.erb"
-  mode 0755
-    variables(
-      :timestamp => timestamp
+template "#{dest_dir}/../manifest.json" do
+  source 'manifest.json.erb'
+  variables(
+    :overall_version => node[:ehmp_ui][:manifest][:overall_version],
+    :versions => node[:ehmp_ui][:manifest][:versions]
   )
-  action :create
-  not_if ("mountpoint -q #{dest_dir}")
 end

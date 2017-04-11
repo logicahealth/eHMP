@@ -2,69 +2,56 @@
 
 ## Orders Writeback API [{{{path}}}]
 
-This API provides orders writeback resources.  
+This API provides orders writeback resources.
 
-### Create [POST {{{path}}}]
+### Create [POST {{{path}}}/lab]
 
 Create a new order in the VistA.  Request JSON body contains all the user inputs.  Additional fields are required based on the user's order selection.
 
 + Parameters
 
 	+ pid (string, required) - patient ID
-	
-	+ site (string, required) - site hash
 
 + Request JSON Body (application/json)
 
     + Body
 
-                {
-                  "dfn": "100615",
-                  "provider": "10000000238",
-                  "location": "285",
-                  "orderDialog": "LR OTHER LAB TESTS",
-                  "displayGroup": "5",
-                  "quickOrderDialog": "2",
-                  "inputList": [
-                    {
-                      "inputKey": "4",
-                      "inputValue": "548"
-                    },
-                    {
-                      "inputKey": "126",
-                      "inputValue": "7"
-                    },
-                    {
-                      "inputKey": "127",
-                      "inputValue": "73"
-                    },
-                    {
-                      "inputKey": "180",
-                      "inputValue": "9"
-                    },
-                    {
-                      "inputKey": "28",
-                      "inputValue": "SP"
-                    },
-                    {
-                      "inputKey": "6",
-                      "inputValue": "TODAY"
-                    },
-                    {
-                      "inputKey": "29",
-                      "inputValue": "28"
-                    }
-                  ],
-                  "commentList": [
-                    {
-                      "comment": "~For Test: PTT"
-                    },
-                    {
-                      "comment": "~ANTICOAGULANT: foo"
-                    }
-                  ],
-                  "kind": "Laboratory"
-                }
+            {
+            	"dfn": "100615",
+            	"provider": "10000000238",
+            	"location": "285",
+            	"orderDialog": "LR OTHER LAB TESTS",
+            	"displayGroup": "5",
+            	"quickOrderDialog": "2",
+            	"inputList": [{
+            		"inputKey": "4",
+            		"inputValue": "548"
+            	}, {
+            		"inputKey": "126",
+            		"inputValue": "7"
+            	}, {
+            		"inputKey": "127",
+            		"inputValue": "73"
+            	}, {
+            		"inputKey": "180",
+            		"inputValue": "9"
+            	}, {
+            		"inputKey": "28",
+            		"inputValue": "SP"
+            	}, {
+            		"inputKey": "6",
+            		"inputValue": "TODAY"
+            	}, {
+            		"inputKey": "29",
+            		"inputValue": "28"
+            	}],
+            	"commentList": [{
+            		"comment": "~For Test: PTT"
+            	}, {
+            		"comment": "~ANTICOAGULANT: foo"
+            	}],
+            	"kind": "Laboratory"
+            }
 
 + Response 200 (application/json)
 
@@ -83,76 +70,60 @@ Create a new order in the VistA.  Request JSON body contains all the user inputs
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Update [PUT {{{path}}}/:resourceId]
+### Update [PUT {{{path}}}/lab/:resourceId]
 
 Update existing order in the VistA.  Request JSON body contains all the user inputs.  Additional fields are required based on the user's order selection.
 
 + Parameters
 
 	+ pid (string, required) - patient ID
-	
-	+ site (string, required) - site hash
 
 + Request JSON Body (application/json)
 
     + Body
 
-                {
-                  "dfn": "100615",
-                  "provider": "10000000238",
-                  "location": "285",
-                  "orderDialog": "LR OTHER LAB TESTS",
-                  "displayGroup": "5",
-                  "quickOrderDialog": "2",
-                  "orderId": "39208;1",
-                  "inputList": [
-                    {
-                      "inputKey": "4",
-                      "inputValue": "1191"
-                    },
-                    {
-                      "inputKey": "126",
-                      "inputValue": "1"
-                    },
-                    {
-                      "inputKey": "127",
-                      "inputValue": "72"
-                    },
-                    {
-                      "inputKey": "180",
-                      "inputValue": "9"
-                    },
-                    {
-                      "inputKey": "28",
-                      "inputValue": "LC"
-                    },
-                    {
-                      "inputKey": "6",
-                      "inputValue": "TODAY"
-                    },
-                    {
-                      "inputKey": "29",
-                      "inputValue": "28"
-                    }
-                  ],
-                  "commentList": [
-                    {
-                      "comment": "~For Test: AMIKACIN"
-                    },
-                    {
-                      "comment": "~Dose is expected to be at &UNKNOWN level."
-                    },
-                    {
-                      "comment": "additional comment"
-                    }
-                  ],
-                    "orderCheckList": [
-                    {
-                      "orderCheck": "NEW^11^1^Duplicate order: AMIKACIN BLOOD   SERUM SP  [UNRELEASED]"
-                    }
-                  ],
-                  "kind": "Laboratory"
-                }
+            {
+            	"dfn": "100615",
+            	"provider": "10000000238",
+            	"location": "285",
+            	"orderDialog": "LR OTHER LAB TESTS",
+            	"displayGroup": "5",
+            	"quickOrderDialog": "2",
+            	"orderId": "39208;1",
+            	"inputList": [{
+            		"inputKey": "4",
+            		"inputValue": "1191"
+            	}, {
+            		"inputKey": "126",
+            		"inputValue": "1"
+            	}, {
+            		"inputKey": "127",
+            		"inputValue": "72"
+            	}, {
+            		"inputKey": "180",
+            		"inputValue": "9"
+            	}, {
+            		"inputKey": "28",
+            		"inputValue": "LC"
+            	}, {
+            		"inputKey": "6",
+            		"inputValue": "TODAY"
+            	}, {
+            		"inputKey": "29",
+            		"inputValue": "28"
+            	}],
+            	"commentList": [{
+            		"comment": "~For Test: AMIKACIN"
+            	}, {
+            		"comment": "~Dose is expected to be at &UNKNOWN level."
+            	}, {
+            		"comment": "additional comment"
+            	}],
+            	"orderCheckList": [{
+            		"orderCheck": "NEW^11^1^Duplicate order: AMIKACIN BLOOD   SERUM SP  [UNRELEASED]"
+            	}],
+            	"kind": "Laboratory"
+            }
 
 + Response 200 (application/json)
 
@@ -171,15 +142,13 @@ Update existing order in the VistA.  Request JSON body contains all the user inp
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Edit [GET {{{path}}}/:resourceId]
+### Edit [GET {{{path}}}/lab/:resourceId]
 
 Edit order retrieves input selections of existing order from the VistA.
 
 + Parameters
 
 	+ pid (string, required) - patient ID
-	
-	+ site (string, required) - site hash
 
 + Response 200 (application/json)
 
@@ -246,15 +215,13 @@ Edit order retrieves input selections of existing order from the VistA.
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Detail [GET {{{path}}}/detail/:resourceId]
+### Detail [GET {{{path}}}/detail-lab/:resourceId]
 
 Order detail is retrieved from VistA.
 
 + Parameters
 
 	+ pid (string, required) - patient ID
-	
-	+ site (string, required) - site hash
 
 + Response 200 (application/json)
 
@@ -273,27 +240,25 @@ Order detail is retrieved from VistA.
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Sign Details [POST {{{path}}}/sign-details]
+### Sign Details [POST {{{path}}}/sign-details-lab]
 
 Retrieve sign order detail from the VistA.  First, check to see order is still signable.  Next, fetch order details and order checks.
 
 + Parameters
 
 	+ pid (string, required) - patient ID
-	
-	+ site (string, required) - site hash
 
 + Request JSON Body (application/json)
 
     + Body
 
-                {
-                    "dfn": "100716",
-                    "provider": "10000000271",
-                    "orderIds": [
-                	"39028;1"
-                    ]
-                }
+            {
+                "dfn": "100716",
+                "provider": "10000000271",
+                "orderIds": [
+                "39028;1"
+                ]
+            }
 
 
 + Response 200 (application/json)
@@ -316,29 +281,25 @@ Retrieve sign order detail from the VistA.  First, check to see order is still s
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Discontinue Details [POST {{{path}}}/discontinue-details]
+### Discontinue Details [POST {{{path}}}/discontinue-details-lab]
 
 Retrieve discontinue order detail from the VistA.  First, check to see order is still discontinuable.  Next, fetch order details.
 
 + Parameters
 
 	+ pid (string, required) - patient ID
-	
-	+ site (string, required) - site hash
 
 + Request JSON Body (application/json)
 
     + Body
 
-                {
-                    "dfn": "100716",
-                    "provider": "10000000271",
-                    "orderIds": [
-                	"39028;1"
-                    ]
-                }
-
-
+            {
+                "dfn": "100716",
+                "provider": "10000000271",
+                "orderIds": [
+                "39028;1"
+                ]
+            }
 
 + Response 200 (application/json)
 
@@ -360,31 +321,28 @@ Retrieve discontinue order detail from the VistA.  First, check to see order is 
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Discontinue [DELETE {{{path}}}/discontinue]
+### Discontinue [DELETE {{{path}}}/discontinue-lab]
 
 Discontinue order from the VistA.  First, lock patient.  Second, lock orders.  Third, fetch each order detail and compare hash.  Fourth, discontinue orders.  Fifth, unlock orders.  Last, unlock patient.
 
 + Parameters
 
 	+ pid (string, required) - patient ID
-	
-	+ site (string, required) - site hash
 
 + Request JSON Body (application/json)
 
     + Body
 
-                {
-                  "dfn": "100716",
-                  "provider": "10000000271",
-                  "location": "129",
-                  "kind": "Laboratory",
-                  "orderList": [
-                    { "orderId": "39028;1", "hash": "975bfeb2655a73f118465a06f826c4b5"}
-                  ]
-                }
-
-
+            {
+            	"dfn": "100716",
+            	"provider": "10000000271",
+            	"location": "129",
+            	"kind": "Laboratory",
+            	"orderList": [{
+            		"orderId": "39028;1",
+            		"hash": "975bfeb2655a73f118465a06f826c4b5"
+            	}]
+            }
 
 + Response 200 (application/json)
 
@@ -402,35 +360,30 @@ Discontinue order from the VistA.  First, lock patient.  Second, lock orders.  T
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Sign [POST {{{path}}}/sign]
+### Sign [POST {{{path}}}/sign-lab]
 
 Sing order in the VistA.  First, validate signature.  Second, lock patient.  Third, lock orders.  Third, fetch each order detail and compare hash.  Fourth, save order check.  Fifth, sign orders.  Sixth, unlock order.  Last, unlock patient.
 
 + Parameters
 
 	+ pid (string, required) - patient ID
-	
-	+ site (string, required) - site hash
 
 + Request JSON Body (application/json)
 
     + Body
 
-                {
-                  "kind": "Laboratory",
-                  "provider": "10000000271",
-                  "dfn": "100615",
-                  "location": "285",
-                  "eSig":"PW    !!",
-                  "orderList": [{
-                    "orderId": "39209;1",
-                    "orderDetailHash":"2443ff804e510680ab1fae863cb01ae9"
-                  }],
-                  "overrideReason":"override reason"
-                }
-
-
-
+            {
+            	"kind": "Laboratory",
+            	"provider": "10000000271",
+            	"dfn": "100615",
+            	"location": "285",
+            	"eSig": "mx1234!!",
+            	"orderList": [{
+            		"orderId": "39209;1",
+            		"orderDetailHash": "2443ff804e510680ab1fae863cb01ae9"
+            	}],
+            	"overrideReason": "override reason"
+            }
 
 + Response 200 (application/json)
 
@@ -451,43 +404,38 @@ Sing order in the VistA.  First, validate signature.  Second, lock patient.  Thi
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Save Draft [POST {{{path}}}/save-draft]
+### Save Draft [POST {{{path}}}/save-draft-lab]
 
 Save Draft order to pJDS.  Use this resource to create/update draft order.
 
 + Parameters
 
 	+ pid (string, required) - patient ID
-	
-	+ site (string, required) - site hash
 
 + Request JSON Body (application/json)
 
     + Body
 
-                {
-                    "patientUid": "9E7A;100716",
-                    "authorUid": "Something",
-                    "domain": "order",
-                    "ehmpState": "draft", 
-                    "subDomain": "laboratory",
-                    "visit": {
-                        "location": "Ren",
-                        "serviceCategory": "I'm not blank",
-                        "dateTime": "asdfadsfasdf"
-                    },
-                    "data": {
-                        "updated": "201601010111",
-                        "totalItems": "1",
-                        "currentItemCount": "1",
-                        "items": [{
-                            "field1": "field2"
-                        }]
-                    }
+            {
+                "patientUid": "9E7A;100716",
+                "authorUid": "Something",
+                "domain": "order",
+                "ehmpState": "draft",
+                "subDomain": "laboratory",
+                "visit": {
+                    "location": "Ren",
+                    "serviceCategory": "I'm not blank",
+                    "dateTime": "asdfadsfasdf"
+                },
+                "data": {
+                    "updated": "201601010111",
+                    "totalItems": "1",
+                    "currentItemCount": "1",
+                    "items": [{
+                        "field1": "field2"
+                    }]
                 }
-
-
-
+            }
 
 + Response 200 (application/json)
 
@@ -499,7 +447,7 @@ Save Draft order to pJDS.  Use this resource to create/update draft order.
                     "statusCode": 201,
                     "headers": {
                         "date": "Fri, 12 Feb 2016 22:28:31 GMT",
-                        "location": "http://IP             /clinicobj/urn:va:ehmp:9E7A;100716:54a050c5-86e4-44df-a184-ac9d1fb52f7a",
+                        "location": "http://IP_ADDRESS:PORT/clinicobj/urn:va:ehmp:9E7A;100716:54a050c5-86e4-44df-a184-ac9d1fb52f7a",
                         "content-type": "application/json",
                         "content-length": "0"
                     },
@@ -508,15 +456,15 @@ Save Draft order to pJDS.  Use this resource to create/update draft order.
                             "protocol": "http:",
                             "slashes": true,
                             "auth": null,
-                            "host": "IP             ",
+                            "host": "IP_ADDRESS:PORT",
                             "port": "9080",
-                            "hostname": "IP        ",
+                            "hostname": "IP_ADDRESS",
                             "hash": null,
                             "search": null,
                             "query": null,
                             "pathname": "/clinicobj",
                             "path": "/clinicobj",
-                            "href": "http://IP             /clinicobj"
+                            "href": "http://IP_ADDRESS:PORT/clinicobj"
                         },
                         "method": "POST",
                         "headers": {
@@ -532,30 +480,27 @@ Save Draft order to pJDS.  Use this resource to create/update draft order.
 
 :[Response 500]({{{common}}}/responses/500.md)
 
-### Find Draft [POST {{{path}}}/find-draft]
+### Find Draft [POST {{{path}}}/find-draft-lab]
 
 Find Draft orders from pJDS.  Use this resource to find a list of draft orders.
 
 + Parameters
 
-  + pid (string, required) - patient ID
-  
-  + site (string, required) - site hash
+    + pid (string, required) - patient ID
 
 + Request JSON Body (application/json)
 
     + Body
+
             {
                 "patientUid": "9E7A;100600",
                 "authorUid": "Something10"
             }
 
-
-
-
 + Response 200 (application/json)
 
     + Body
+
             {
                 "status": 200,
                 "data": {
@@ -576,7 +521,7 @@ Find Draft orders from pJDS.  Use this resource to find a list of draft orders.
                         "ehmpState": "draft",
                         "patientUid": "9E7A;100600",
                         "subDomain": "laboratory",
-                        "uid": "urn:va:ehmp:9E7A;100600:b3b57db4-0dd4-4aeb-ab8b-9f9b1ae8ea94",
+                        "uid": "urn:va:ehmp-order:9E7A;100600:b3b57db4-0dd4-4aeb-ab8b-9f9b1ae8ea94",
                         "visit": {
                             "dateTime": "asdfadsfasdf",
                             "location": "Ren",

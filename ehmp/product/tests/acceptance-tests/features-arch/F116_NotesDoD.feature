@@ -9,7 +9,7 @@
       | uid              | urn:va:document:DOD:0000000003:1000000648                     |
       | kind             | Procedure Note (Provider) Document                            |
       | author           | BHIE, USERONE                                                 |
-      | dodComplexNoteUri| https://IPADDRESS8443/documents/dod/0000000003/1000000648.html|
+      | dodComplexNoteUri| https://IPADDRESS:POR/documents/dod/0000000003/1000000648.html|
       | facilityCode     | DOD                                                           |
       | facilityName     | DOD                                                           |
       | dateTime         | 20140619031308                                                |
@@ -22,7 +22,7 @@
       | summary          | Progress Note                                                 |
       | uid              | urn:va:document:DOD:0000000003:1000000655                     |
       | kind             | Progress Note                                                 |
-      | dodComplexNoteUri| https://IPADDRESS8443/documents/dod/0000000003/1000000655.html|
+      | dodComplexNoteUri| https://IPADDRESS:POR/documents/dod/0000000003/1000000655.html|
       | facilityCode     | DOD                                                           |
       | facilityName     | DOD                                                           |
       | dateTime         | 20131009045427                                                |

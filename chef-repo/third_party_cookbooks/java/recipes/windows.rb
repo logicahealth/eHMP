@@ -1,5 +1,5 @@
 #
-# Author::          Martin (<kendrick.martin@webtrends.com>)
+# Author:: Kendrick Martin (<kendrick.martin@webtrends.com>)
 # Cookbook Name:: java
 # Recipe:: windows
 #

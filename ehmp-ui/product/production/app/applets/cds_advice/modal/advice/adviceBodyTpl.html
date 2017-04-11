@@ -1,12 +1,47 @@
-<div class="row">
-	<div class="col-xs-12">
-	    <h5>{{title}}</h5>
+<div class="detail-modal-content">
+	<div class="row">
+		<div class="col-xs-12">
+		    <h5 class="bottom-border-grey-dark">{{title}}</h5>
+	    </div>
+	</div>
+	<div class="row">
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Priority:</strong></span><br />
+                <span class="{{priorityCSS}}">
+                    {{#if priorityText}}
+                        {{priorityText}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Provenance:</strong></span><br />
+                <span>
+                    {{#if details.provenance}}
+                        {{details.provenance}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
     </div>
-</div>
-<div class="row">
-	<div class="col-xs-12">
-	    <p>{{details.detail}}</p>
-	    <p>Provenance:<span class="pre-wrap left-padding-sm">{{details.provenance}}</span></p>
-	    <p>Priority:<span class="pre-wrap left-padding-sm">{{priorityText}}</span></p>
+	<div class="row top-margin-sm">
+        <div class="col-xs-12">
+            <h6 class="bottom-border-grey-dark">Details</h6>
+        </div>
     </div>
+    {{#if details.detail}}
+    <pre>{{details.detail}}</pre>
+    {{else}}
+    <div class="row detail-modal-text-transform-none">
+        <div class="col-xs-12">
+            <p>Details not available for this reminder.</p>
+        </div>
+    </div>
+    {{/if}}
 </div>

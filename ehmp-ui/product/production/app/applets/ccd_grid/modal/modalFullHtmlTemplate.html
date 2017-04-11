@@ -1,10 +1,21 @@
-<div class="ccd-modal">
-	{{#if sections}}
-    <ul>
-        {{#each sections}}
-        <li><a href="javascript:document.getElementById('toc_ccd_{{title}}').scrollIntoView();">{{title}}</a></li>
-        {{/each}}
-    </ul>
-    {{/if}}
-    <iframe class="ccd-content" seamless sandbox="allow-same-origin allow-scripts"></iframe>
+<div class="flex-display flex-direction-column">
+	<div class="flex-grow-none">
+		<h5 class="all-padding-no top-margin-no">{{fullName}}, {{formatDate birthDate}}, {{getAge birthDate}}y, {{formatSSN ssn false}}</h5>
+	</div>
+	<div class="flex-grow-loose flex-display flex-direction-column">
+		<div class="ccd-modal flex-display flex-direction-column percent-height-100">
+			{{#if sections}}
+			<div class="flex-grow-fixed">
+			    <ul>
+			        {{#each sections}}
+			        <li><a href="javascript:document.getElementById('toc_ccd_{{title}}').scrollIntoView();">{{title}}</a></li>
+			        {{/each}}
+			    </ul>
+			</div>
+		    {{/if}}
+		    <div class="flex-grow-loose">
+		    	<iframe class="ccd-content" seamless sandbox="allow-same-origin allow-scripts"></iframe>
+		    </div>
+		</div>
+	</div>
 </div>

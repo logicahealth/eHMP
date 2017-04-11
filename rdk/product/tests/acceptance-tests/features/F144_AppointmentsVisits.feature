@@ -12,7 +12,7 @@ Scenario: Verify Appointment/Visits data call without a date filter
   #And the results contain 242 totalItems
   And the VPR results contain
       | field             | value            |
-      | dateTime          | 201312021300     |
+      | dateTime          | 20131202130000   |
       | kind              | Visit            |
       | locationName      | GENERAL MEDICINE |
       | appointmentStatus | NO ACTION TAKEN  |
@@ -30,7 +30,7 @@ Scenario: Verify Appointment/Visits data call with a global date filter all set
   #And the results contain 242 totalItems
   And the VPR results contain
       | field             | value            |
-      | dateTime          | 201312021300     |
+      | dateTime          | 20131202130000   |
       | kind              | Visit            |
       | locationName      | GENERAL MEDICINE |
       | appointmentStatus | NO ACTION TAKEN  |

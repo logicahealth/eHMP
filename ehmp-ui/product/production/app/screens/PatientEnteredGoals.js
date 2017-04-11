@@ -3,6 +3,7 @@ define(function() {
 
     return {
         id: "peg",
+        context: 'patient',
         contentRegionLayout: "gridOne",
         appletHeader: "patient",
         applets: [{

@@ -4,32 +4,13 @@ define([], function() {
     var taskListView;
 
     var eventHandler = {
-        unclaimTask: function(e, parentView) {
-            // TODO: keep or remove function?
-            //
-            // NOTE: This code is needed if it is decided that a task is 'claimed'
-            //  when it is clicked in the todo's applet, and 'released' when the 
-            //  close button is clicked
-            // var taskModel = parentView.model;
-
-            // fetchOptions = {
-            //     resourceTitle: 'tasks-changestate',
-            //     fetchType: 'POST',
-            //     criteria: {
-            //         deploymentid: taskModel.get('deploymentId'),
-            //         taskid: taskModel.get('taskId'),
-            //         state: 'release'
-            //     }
-            // }
-            // ADK.ResourceService.fetchCollection(fetchOptions);
-        },
         completeTask: function(e, parentView, listView) {
             taskListView = listView;
             var self = this;
-            var taskModel = parentView.model;
+            var taskModel = this.taskModel;
 
             var fetchOptions = {
-                resourceTitle: 'tasks-changestate',
+                resourceTitle: 'tasks-update',
                 fetchType: 'POST',
                 criteria: {
                     deploymentid: taskModel.get('DEPLOYMENTID'),
@@ -43,11 +24,11 @@ define([], function() {
                     fetchOptions.criteria.state = 'complete';
                     fetchOptions.criteria.parameter = {};
 
-                    var formModel = this.parentView.formModel;
+                    var formModel = this.model;
                     // Notifications will not have a formModel
                     if (formModel) {
                         // Populate the fetchOptions parameters from the user form
-                        _.each(this.parentView.formModel.attributes, function(attribute, key) {
+                        _.each(formModel.attributes, function(attribute, key) {
                             if (key.indexOf('out_') === 0) {
                                 fetchOptions.criteria.parameter[key] = attribute;
                             }
@@ -66,11 +47,11 @@ define([], function() {
             fetchOptions.onSuccess = function(collection, response) {
                 switch (buttonClicked) {
                     case 'cancel':
-                        ADK.UI.Modal.hide();
+                        ADK.UI.Workflow.hide();
                         break;
                     case 'complete':
-                        self.parentView.model.set('status', 'Complete');
-                        ADK.UI.Modal.hide();
+                        self.taskModel.set('status', 'Complete');
+                        ADK.UI.Workflow.hide();
                         taskListView.refresh();
                         break;
                 }
@@ -80,12 +61,12 @@ define([], function() {
             ADK.ResourceService.fetchCollection(fetchOptions);
         },
         claimAndCompleteTask: function(e, modalFooterView) {
-            var parentView = modalFooterView.parentView;
-            var model = parentView.model;
+            var parentView = null;
+            var model = this.model;
             var self = this;
 
             var fetchOptions = {
-                resourceTitle: 'tasks-changestate',
+                resourceTitle: 'tasks-update',
                 fetchType: 'POST',
                 criteria: {
                     deploymentid: model.get('DEPLOYMENTID'),
@@ -98,14 +79,17 @@ define([], function() {
 
             // On successfuly starting the task, complete it
             fetchOptions.onSuccess = function(collection, response) {
-                self.completeTask.call(modalFooterView, e, parentView, modalFooterView.taskListView);
+                self.completeTask.call(modalFooterView, e, parentView, self.taskListView);
             };
 
             ADK.ResourceService.fetchCollection(fetchOptions);
         },
         fireCloseEvent: function(e) {
-            ADK.Messaging.getChannel('task_forms').trigger('modal:close');
-            ADK.Messaging.trigger('tray.close');
+            var TrayView = ADK.Messaging.request("tray:writeback:actions:trayView");
+            if (TrayView) {
+                TrayView.$el.trigger('tray.reset');
+            }
+            ADK.UI.Workflow.hide() ;
         }
     };
 

@@ -1,5 +1,6 @@
-HMPHTTP ;SLC/MKB -- HTTP interface
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
+HMPHTTP ;SLC/MKB,ASMR/RRB - HTTP interface;Apr 27, 2016 10:35:07
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -11,6 +12,7 @@ HMPHTTP ;SLC/MKB -- HTTP interface
  ; XPAR                          2263
  ; XTHC10                        5515
  ; XUPARAM                       2541
+ Q
  ;
 EN ; -- manage the background job
  N ZTSK,STS
@@ -63,7 +65,7 @@ QUE ; -- create the background task: returns ZTSK
  ;
 POKE ; -- background job to poke the client when new data is available
  ; ^XTMP("HMP",DFN,TYPE,ID) = new data since last update
- N DIV,ID,DFN,DATA,IOP,X,DA,TOKEN,NEW K ZTSTOP
+ N DIV,ID,DFN,DATA,IOP,X,DA,TOKEN,NEW K ZTSTOP,ZTREQ
  S IOP="NULL" D ^%ZIS
  S ID=(+$H)+$P($H,",",2)
  S DFN=0 F  S DFN=$O(^XTMP("HMP",DFN)) Q:DFN<1  I $D(^(DFN))>9 D
@@ -82,16 +84,13 @@ POKE ; -- background job to poke the client when new data is available
  ;
 SEND(LIST) ; send each list ID to its URL
  N SYS,ID,DA,URL,X
- S SYS=$$SYS
+ S SYS=$$SYS^HMPUTILS
  ; DIV=$P($$SITE^VASITE,U,3) ;station#
  S ID="" F  S ID=$O(LIST(ID)) Q:ID=""  D
  . S DA=+ID,URL=$G(^HMP(800000,DA,.1)) Q:URL=""
  . S URL=URL_"?vistaId="_SYS_"&id="_ID
  . S X=$$GETURL^XTHC10(URL,,"HMPX") ;I X>200 = ERROR
  Q
- ;
-SYS() ; -- return hashed system name
- Q $$BASE^XLFUTL($$CRC16^XLFCRC($$KSP^XUPARAM("WHERE")),10,16)
  ;
 HANG ; -- wait #seconds
  N X S X=$$GET^XPAR("ALL","HMP TASK WAIT TIME") S:'X X=99

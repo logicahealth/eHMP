@@ -539,7 +539,7 @@ VistaRecordProcessor.prototype._buildVistaDataJob = function(vistaDataJob) {
         var vistaObjectNode = vistaDataJob.object;
         vistaObjectNode.pid = vistaDataJob.pid;
         self.metrics.trace('vista-record-processor: Build Vista Data', metricObj);
-        return jobUtil.createVistaPrioritizationRequest(patientIdentifier, vistaDataJob.collection, vistaObjectNode, {});
+        return jobUtil.createEventPrioritizationRequest(patientIdentifier, vistaDataJob.collection, vistaObjectNode, {});
     }
 
     if (vistaDataJob.error) {

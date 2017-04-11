@@ -1,0 +1,78 @@
+#!/bin/bash
+# description: Glassfish Init.d Script
+# process: glassfish
+# chkconfig: 234 20 80
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+PROC=glassfish
+PIDFILE=/var/run/glassfish.pid
+LOCKFILE=/var/lock/subsys/glassfish
+DOMAIN=domain1
+
+start() {
+  daemon --user <%= node[:mocks][:glassfish][:user] %> --pidfile $PIDFILE <%= node[:mocks][:glassfish][:asadmin] %> start-domain --domaindir <%= node[:mocks][:glassfish][:domain_dir] %> $DOMAIN
+  RETVAL=$?
+  if [ $RETVAL == 0 ] ; then 
+    touch $LOCKFILE && cp <%= node[:mocks][:glassfish][:domain_dir] %>/$DOMAIN/config/pid $PIDFILE
+  fi
+  echo
+  return $RETVAL
+}
+
+stop() {
+  <%= node[:mocks][:glassfish][:asadmin] %> stop-domain --domaindir <%= node[:mocks][:glassfish][:domain_dir] %> $DOMAIN
+  RETVAL=$?
+  if [ $RETVAL == 0 ] ; then 
+    rm -f $LOCKFILE $PIDFILE
+  else
+    echo "failed to stop glassfish..."
+    echo "cleanup may be required for lockfile: $LOCKFILE and pidfile: $PIDFILE"
+  fi
+  echo
+  return $RETVAL
+}
+
+status() {
+  if [ -f $PIDFILE ] ; then
+    pid=$(cat $PIDFILE)
+    if [ ps -p $pid > /dev/null ] ; then
+      echo "$PROC is running with pid: $pid"
+      RETVAL="0"
+    else
+      echo "pidfile exists at: $PIDFILE, but process: $pid is not running..."
+      RETVAL="1"
+    fi
+  else
+    echo "no pidfile exists at: $PIDFILE, assuming process is stopped..."
+    RETVAL="1"
+  fi
+}
+
+usage()
+{
+   echo "Usage: $0 {start|stop|restart|status}"
+   RETVAL="2"
+}
+
+RETVAL="0"
+case $1 in
+start)
+  start
+  ;;
+stop)
+  stop
+  ;;
+restart)
+  stop
+  start
+  ;;
+status)
+  status
+  ;;
+*)
+  usage
+  ;;
+esac
+exit $RETVAL

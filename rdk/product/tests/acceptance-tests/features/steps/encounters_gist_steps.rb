@@ -9,9 +9,10 @@ When(/^the client requests the Encounters Admission for the patient "([^"]*)"$/)
   filter_string << ",eq(kind, 'DoD Encounter')"
   request = QueryRDKDomain.new('timeline')
   request.add_parameter('filter', filter_string)
-  request.add_parameter('order', "dateTime DESC")
-  request.add_parameter('timerange', "04/07/1935|02/28/2016")
+  #request.add_parameter('order', "dateTime DESC")
+  #request.add_parameter('timerange', "04/07/1935|02/28/2016")
+  #request.add_parameter('timerange', "01/01/2014|02/28/2016")
   request.add_parameter('pid', pid)
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end

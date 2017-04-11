@@ -44,12 +44,12 @@
             "assignedByIEN": "9E7A;1000897",
             "assignedDateTime": 20150101000000,
             "assignedToPosition": "00001",
-            "icn": "10108V429807"
+            "icn": "9E7A;100141"
         }, {
             "assignedByIEN": "9E7A;10008833",
             "assignedDateTime": 20150101000000,
             "assignedToPosition": null,
-            "icn": "10108V420871"
+            "icn": "9E7A;3"
         }],
         "position": [{
             "assignedByIEN": "9E7A;1000897",

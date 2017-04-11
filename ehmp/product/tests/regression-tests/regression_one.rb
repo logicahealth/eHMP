@@ -14,8 +14,8 @@ driver = ARGV[0] || "virtualbox"
 
 options = {
   server: knife_search_for_ip("vista-panorama"),
-  user: driver == "aws" ? "PW      " : "vagrant",
-  password: "vagrant",
+  user: driver == "aws" ? "ec2-user" : "vagrant",
+  password:      PW",
   patient: "regression,female",
   sudo: true,
   ssh_key: true,
@@ -84,5 +84,6 @@ end
 puts "#{count}/10 tests passed"
 
 
-
-
+if count != 10
+	raise RuntimeError, "regression one failed to pass all tests"
+end

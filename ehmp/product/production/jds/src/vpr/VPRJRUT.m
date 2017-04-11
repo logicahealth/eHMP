@@ -89,19 +89,22 @@ TLT4XVPR ;
  ; then drop thru to regular VPR template
 TLT4VPR ;
  ; called from PAGE
- N STAMP
+ N STAMP,JPID
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ ; JPID is required in order to get the latest stamp, otherwise we have to bail
+ I JPID="" Q
  I TEMPLATE="uid" S @ROOT@($J,ITEM,1)="{""uid"":"""_KEY_"""}" Q
  I $E(TEMPLATE,1,4)="rel;" D RELTLTP^VPRJCT1($NA(@ROOT@($J,ITEM)),KEY,.TEMPLATE,PID) Q
  I $E(TEMPLATE,1,4)="rev;" D REVTLTP^VPRJCT1($NA(@ROOT@($J,ITEM)),KEY,.TEMPLATE,PID) Q
  ; query time template
  I $D(TEMPLATE)>1 D APPLYTLT Q
  ; saved template
- I $L(TEMPLATE),$D(^VPRPTJ("TEMPLATE",PID,KEY,TEMPLATE)) M @ROOT@($J,ITEM)=^(TEMPLATE) Q
+ I $L(TEMPLATE),$D(^VPRPTJ("TEMPLATE",JPID,PID,KEY,TEMPLATE)) M @ROOT@($J,ITEM)=^(TEMPLATE) Q
  ; else full object
  ; Add the item to the return
  ; Get the bottom of the tree (latest record)
- S STAMP=$O(^VPRPTJ("JSON",PID,KEY,""),-1)
- M @ROOT@($J,ITEM)=^VPRPTJ("JSON",PID,KEY,STAMP)
+ S STAMP=$O(^VPRPTJ("JSON",JPID,PID,KEY,""),-1)
+ M @ROOT@($J,ITEM)=^VPRPTJ("JSON",JPID,PID,KEY,STAMP)
  Q
 TLT4DATA ;
  ; called from PAGE
@@ -140,20 +143,23 @@ APPLYTLT ; apply query time template
  ; called from TLT4VPR, TLT4XVPR, TLT4DATA
  ; expects TEMPLATE, KEY, KINST, PID, ROOT, ITEM
  ; no PID means use data store
- N OBJECT,JSON,CLTN,SPEC
- I $L(PID) N STAMP S STAMP=$O(^VPRPT(PID,KEY,""),-1) M OBJECT=^VPRPT(PID,KEY,STAMP) S CLTN=$P(KEY,":",3) I 1
+ N OBJECT,JSON,CLTN,SPEC,JPID
+ ;
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I $L(PID),JPID'="" D
+ . N STAMP S STAMP=$O(^VPRPT(JPID,PID,KEY,""),-1) M OBJECT=^VPRPT(JPID,PID,KEY,STAMP) S CLTN=$P(KEY,":",3) I 1
  E  N STAMP S STAMP=$O(^VPRJD(KEY,""),-1) M OBJECT=^VPRJD(KEY,STAMP) S CLTN=$P(KEY,":",3)
  M SPEC=TEMPLATE("collection",CLTN)
  I '$D(SPEC) D  QUIT  ; return whole object if template missing
  . ; Add support for metastamps
- . I $L(PID) N STAMP S STAMP=$O(^VPRPTJ("JSON",PID,KEY,""),-1) M @ROOT@($J,ITEM)=^VPRPTJ("JSON",PID,KEY,STAMP) I 1
+ . I $L(PID),JPID'="" N STAMP S STAMP=$O(^VPRPTJ("JSON",JPID,PID,KEY,""),-1) M @ROOT@($J,ITEM)=^VPRPTJ("JSON",JPID,PID,KEY,STAMP) I 1
  . E  N STAMP S STAMP=$O(VPRJDJ("JSON",KEY,"",-1)) M @ROOT@($J,ITEM)=^VPRJDJ("JSON",KEY,STAMP)
  D APPLY^VPRJCT(.SPEC,.OBJECT,.JSON,KINST)
  M @ROOT@($J,ITEM)=JSON
  Q
 BLDHEAD(TOTAL,COUNT,START,LIMIT) ; Build the object header
  N X,UPDATED
- S UPDATED=$P($$FMTHL7^XLFDT($$NOW^XLFDT),"+")
+ S UPDATED=$$CURRTIME
  S X="{""apiVersion"":""1.0"",""data"":{""updated"":"_UPDATED_","
  S X=X_"""totalItems"":"_TOTAL_","
  S X=X_"""currentItemCount"":"_COUNT_","
@@ -243,7 +249,7 @@ CHKEOF   ; Check for EOF
  ;
 CURRTIME() ; Get last access time
  N TIME,LEN
- S TIME=$P($$FMTHL7^XLFDT($$NOW^XLFDT),"+")
+ S TIME=$P($TR($$FMTHL7^XLFDT($$NOW^XLFDT),"-","+"),"+")
  S LEN=14-$L(TIME)
  S TIME=TIME_$E("00",1,LEN)
  Q TIME

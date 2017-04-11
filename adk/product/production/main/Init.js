@@ -4,17 +4,17 @@ define([
     'jquery',
     'underscore',
     'api/Messaging',
-    'api/UIComponents',
+    'api/SessionStorage',
     'main/AppletsManifest',
     'main/ScreensManifest',
     'main/ResourcesManifest',
+    'main/ContextManifest',
     'main/NewUserScreen',
     'main/PreDefinedScreens',
     '_assets/js/browserDetector/browserDetector',
-    'api/UserService',
-    'api/ResourceService',
+    'main/context/ContextAspectBuilder',
     'moment'
-], function(Backbone, Marionette, $, _, Messaging, UIComponents, AppletsManifest, ScreensManifest, ResourcesManifest, NewUserScreen, PreDefinedScreens, BrowserDetector, UserService, ResourceService, moment) {
+], function(Backbone, Marionette, $, _, Messaging, SessionStorage, AppletsManifest, ScreensManifest, ResourcesManifest, ContextManifest, NewUserScreen, PreDefinedScreens, BrowserDetector, ContextAspectBuilder, moment) {
     'use strict';
 
     var SCREENS_MANIFEST = 'app/screens/ScreensManifest.js';
@@ -22,6 +22,10 @@ define([
     var NEW_USERS_SCREENS = 'app/screens/NewUserScreen.js';
     var APPLETS_MANIFEST = 'app/applets/appletsManifest.js';
     var RESOURCES_MANIFEST = 'app/resources/resourceManifest.js';
+    var WORKSPACE_CONTEXT_MANIFEST = 'app/contexts/ContextManifest.js';
+    var CONFIG_MANIFEST = 'json!manifest.json';
+    var CONFIG_APP = 'json!app.json';
+    var JWTSESSION = 'X-Set-JWT';
 
     /** Start loading the ehmp-ui related files */
     var EhmpUiFilesLoaded = $.Deferred();
@@ -30,15 +34,18 @@ define([
     var NewUserScreenLoaded = $.Deferred();
     var AppletsManifestLoaded = $.Deferred();
     var ResourcesManifestLoaded = $.Deferred();
+    var ContextManifestLoaded = $.Deferred();
+    var ApplicationContextsLoaded = $.Deferred();
 
-    var appManifest = new Backbone.Model();
-    var appConfig = new Backbone.Model();
     var facilityMonikers = new Backbone.Collection();
     var Init = {};
+    //internal function for grabbing the jwt to send to RDK each time if available
+    var getJwt = function(){
+        return SessionStorage.get.sessionModel(JWTSESSION);
+    };
 
     // limit browser to supported browsers
     BrowserDetector.enforceBrowserType();
-
 
     /*
      TODO: This should be a temporary fix and removed at some point!
@@ -54,30 +61,39 @@ define([
     // this allows AJAX to send cookies to a server
     // these cookies are needed for the server's session to run
     $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+        var jwt = getJwt().get('jwt');
+        if (jwt) {
+            jqXHR.setRequestHeader('Authorization', 'Bearer ' + jwt);
+        }
         options.xhrFields = {
             withCredentials: true
         };
     });
 
+    $.ajaxSetup({
+        cache: false
+    });
 
-    $.ajaxSetup({cache: false});
-
-    Array.prototype.equals = function(array) {
-        if (!array)
-            return false;
-        if (this.length != array.length)
-            return false;
-
-        for (var i = 0, l = this.length; i < l; i++) {
-            if (this[i] instanceof Array && array[i] instanceof Array) {
-                if (!this[i].equals(array[i]))
-                    return false;
-            } else if (this[i] != array[i]) {
-                return false;
-            }
-        }
-        return true;
+    Array.prototype.equals = function () {
+        return  _.isEqual.apply(this, arguments);
     };
+
+    // Array.prototype.equals = function(array) {
+    //     if (!array)
+    //         return false;
+    //     if (this.length != array.length)
+    //         return false;
+    //
+    //     for (var i = 0, l = this.length; i < l; i++) {
+    //         if (this[i] instanceof Array && array[i] instanceof Array) {
+    //             if (!this[i].equals(array[i]))
+    //                 return false;
+    //         } else if (this[i] != array[i]) {
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+    // };
 
     Messaging.reply("NewUserScreen", function() {
         return NewUserScreen;
@@ -101,6 +117,10 @@ define([
 
     Messaging.reply("facilityMonikers", function() {
         return facilityMonikers;
+    });
+
+    Messaging.reply('ContextManifest', function() {
+        return ContextManifest;
     });
 
     Init.beforeStart = function() {
@@ -131,13 +151,26 @@ define([
             ResourcesManifestLoaded.resolve();
         });
 
-        $.when(ScreenManifestsLoaded, PreDefinedScreensLoaded, NewUserScreenLoaded, AppletsManifestLoaded, ResourcesManifestLoaded).then(function() {
+        require([WORKSPACE_CONTEXT_MANIFEST], function(data) {
+            _.extend(ContextManifest, data);
+            ContextManifestLoaded.resolve();
+        });
+
+
+        $.when(ContextManifestLoaded).then(function(appConfig) {
+            ContextAspectBuilder.buildAll(function() {
+                ApplicationContextsLoaded.resolve();
+            }, function() {
+                ApplicationContextsLoaded.reject();
+            });
+        }).fail(EhmpUiFilesLoaded.reject);
+
+        $.when(ScreenManifestsLoaded, PreDefinedScreensLoaded, NewUserScreenLoaded, AppletsManifestLoaded, ResourcesManifestLoaded, ContextManifestLoaded, ApplicationContextsLoaded).then(function() {
             EhmpUiFilesLoaded.resolve();
             Init.start();
         }, function() {
             EhmpUiFilesLoaded.reject();
         });
-
 
     };
 
@@ -150,18 +183,19 @@ define([
             require([
                 'main/ADKApp',
                 'main/ResourceDirectory',
-                'main/components/views/globalErrorView'
-            ], function(ADKApp, ResourceDirectory, GlobalErrorView) {
-
+                'main/components/views/globalErrorView',
+                'api/ResourceService',
+                'api/UIComponents',
+                CONFIG_APP,
+                CONFIG_MANIFEST
+            ], function(ADKApp, ResourceDirectory, GlobalErrorView, ResourceService, UIComponents, appConfigJson, appManifestJson) {
+                var appManifest = new Backbone.Model(appManifestJson);
+                var appConfig = new Backbone.Model(appConfigJson);
                 var resourceDirectoryPathFetch = $.Deferred();
                 var resourceDirectoryPathWriteback = $.Deferred();
                 var resourceDirectoryPathPicklist = $.Deferred();
                 var facilityMonikersLoaded = $.Deferred();
 
-                appManifest.fetch({
-                    url: '../manifest.json',
-                    global: false
-                });
                 ADK.Messaging.reply("appManifest", function() {
                     return appManifest;
                 });
@@ -169,23 +203,6 @@ define([
                 ADK.Messaging.reply("appConfig", function() {
                     return appConfig;
                 });
-
-                function fetchAppConfig() {
-                    var deferred = $.Deferred();
-                    appConfig.fetch({
-                            url: '../app.json',
-                            global: false
-                        })
-                        .done(function() {
-                            deferred.resolve(appConfig);
-                        })
-                        .fail(function() {
-                            console.log('Failed to resolve app.json');
-                            deferred.reject();
-                        });
-
-                    return deferred.promise();
-                }
 
                 function onError() {
                     var ModalRegionView = new GlobalErrorView({
@@ -200,59 +217,56 @@ define([
                     });
                 }
 
-                $.when(fetchAppConfig()).then(function(appConfig) {
-                    var resourceDirectory = ResourceDirectory.instance();
-                    resourceDirectory.fetch({
-                        url: appConfig.get('resourceDirectoryPathFetch'),
-                        success: function() {
-                            resourceDirectoryPathFetch.resolve();
-                        },
-                        error: function() {
-                            onError();
-                        },
-                        remove: false
-                    });
-                }).fail(onError);
+                var resourceDirectoryFetch = ResourceDirectory.instance();
+                resourceDirectoryFetch.fetch({
+                    url: appConfig.get('resourceDirectoryPathFetch'),
+                    success: function() {
+                        resourceDirectoryPathFetch.resolve();
+                    },
+                    error: function() {
+                        onError();
+                    },
+                    remove: false,
+                    timeout: appConfig.get('resourceDirectoryTimeout')
+                });
 
-                $.when(fetchAppConfig()).then(function(appConfig) {
-                    var resourceDirectory = ResourceDirectory.instance();
-                    resourceDirectory.fetch({
-                        url: appConfig.get('resourceDirectoryPathWriteback'),
-                        success: function() {
-                            resourceDirectoryPathWriteback.resolve();
-                        },
-                        error: function() {
-                            onError();
-                        },
-                        remove: false
-                    });
-                }).fail(onError);
+                var resourceDirectoryWriteback = ResourceDirectory.instance();
+                resourceDirectoryWriteback.fetch({
+                    url: appConfig.get('resourceDirectoryPathWriteback'),
+                    success: function() {
+                        resourceDirectoryPathWriteback.resolve();
+                    },
+                    error: function() {
+                        onError();
+                    },
+                    remove: false,
+                    timeout: appConfig.get('resourceDirectoryTimeout')
+                });
 
-                $.when(fetchAppConfig()).then(function(appConfig) {
-                    var resourceDirectory = ResourceDirectory.instance();
-                    resourceDirectory.fetch({
-                        url: appConfig.get('resourceDirectoryPathPicklist'),
-                        success: function() {
-                            resourceDirectoryPathPicklist.resolve();
-                        },
-                        error: function() {
-                            onError();
-                        },
-                        remove: false
-                    });
-                }).fail(onError);
+                var resourceDirectoryPickList = ResourceDirectory.instance();
+                resourceDirectoryPickList.fetch({
+                    url: appConfig.get('resourceDirectoryPathPicklist'),
+                    success: function() {
+                        resourceDirectoryPathPicklist.resolve();
+                    },
+                    error: function() {
+                        onError();
+                    },
+                    remove: false,
+                    timeout: appConfig.get('resourceDirectoryTimeout')
+                });
 
                 function fetchFacilityMonikers() {
                     var facilityMonikerUrl = ResourceService.buildUrl('locations-facility-monikers');
                     facilityMonikers.fetch({
-                            url: facilityMonikerUrl,
-                            success: function() {
-                                facilityMonikersLoaded.resolve();
-                            },
-                            error: function() {
-                                console.log('Failed to resolve facility monikers');
-                            }
-                        });
+                        url: facilityMonikerUrl,
+                        success: function() {
+                            facilityMonikersLoaded.resolve();
+                        },
+                        error: function() {
+                            console.log('Failed to resolve facility monikers');
+                        }
+                    });
                 }
 
                 $.when(resourceDirectoryPathFetch, resourceDirectoryPathWriteback, resourceDirectoryPathPicklist).done(function() {
@@ -261,6 +275,7 @@ define([
 
                 ADKApp.on('before:start', function() {
                     $.when(resourceDirectoryPathFetch, resourceDirectoryPathWriteback, resourceDirectoryPathPicklist, EhmpUiFilesLoaded, facilityMonikersLoaded).done(function() {
+                        ADK.WorkspaceContextRepository.onLoad();
                         ADKApp.initAllRouters();
                     });
 

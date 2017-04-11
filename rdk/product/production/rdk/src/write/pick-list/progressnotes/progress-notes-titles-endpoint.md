@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Progress notes titles, ASU filtered [/progress-notes-titles-asu-filtered{?docStatus}{&actionNames}{&roleNames}{&fields}]
+## Progress notes titles, ASU filtered [/progress-notes-titles-asu-filtered{?docStatus}{&actionNames}{&roleNames}]
 
 Large Pick List - Returns a list of Note Titles
 
@@ -15,8 +15,6 @@ HMP TIU LONG LIST OF TITLES
     + actionNames: `VIEW,EDIT RECORD,PRINT RECORD` (string, required) 
 
     + roleNames: `AUTHOR/DICTATOR,EXPECTED SIGNER,EXPECTED COSIGNER,ATTENDING PHYSICIAN` (string, optional) 
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

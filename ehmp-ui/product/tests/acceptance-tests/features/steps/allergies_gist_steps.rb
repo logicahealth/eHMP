@@ -13,17 +13,14 @@ class AllergiesGist <  AllApplets
     add_verify(CucumberLabel.new('Allergy Pills'), VerifyXpathCount.new(pills), pills)
     add_action(CucumberLabel.new('first pill'), ClickAction.new, AccessHtmlElement.new(:xpath, "//div[@data-appletid='allergy_grid']/descendant::div[@data-infobutton-class='info-button-pill'][1]"))
 
-    # Allergy popover menu items
-    add_action(CucumberLabel.new('Applet Toolbar'), ClickAction.new, AccessHtmlElement.new(:id, 'info-button-template'))
-    add_action(CucumberLabel.new('Applet Toolbar Info'), ClickAction.new, AccessHtmlElement.new(:css, '#info-button-template #info-button'))
-    add_action(CucumberLabel.new('Applet Toolbar Detail'), ClickAction.new, AccessHtmlElement.new(:css, '#info-button-template #info-button-sidekick-detailView'))
-
     # Allergy Gist Applet buttons
     add_applet_buttons appletid_css
 
     add_applet_title appletid_css
 
     add_applet_add_button appletid_css
+
+    add_toolbar_buttons
 
     add_action(CucumberLabel.new('Add'), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-add-button"))
   end
@@ -97,16 +94,23 @@ When(/^user clicks an allergy pill$/) do
 end
 
 Then(/^a popover displays with icons$/) do |table|
-  expect(@ag.wait_until_action_element_visible('Applet Toolbar')).to eq(true), "Popover did not display"
-  expect(@ag.am_i_visible?('Applet Toolbar Info')).to eq(true), "Info icon did not display"
-  expect(@ag.am_i_visible?('Applet Toolbar Detail')).to eq(true), "Detail icon did not display"
+#  expect(@ag.wait_until_action_element_visible('Popover Toolbar')).to eq(true), "Popover did not display"
+  expect(@ag.am_i_visible?('Info Button')).to eq(true), "Info icon did not display"
+  expect(@ag.am_i_visible?('Detail View Button')).to eq(true), "Detail icon did not display"
 end
 
 When(/^user views the first allergy details$/) do
   expect(@ag.perform_action('first pill')).to eq(true)
-  expect(@ag.wait_until_action_element_visible('Applet Toolbar')).to eq(true), "Popover did not display"
-  # expect(@ag.am_i_visible?('Applet Toolbar Detail')).to eq(true), "Detail icon did not display"
-  expect(@ag.perform_action('Applet Toolbar Detail')).to eq(true)
+  expect(@ag.wait_until_action_element_visible('Popover Toolbar')).to eq(true), "Popover did not display"
+  expect(@ag.perform_action('Detail View Button')).to eq(true)
+end
+
+Then(/^the modal's title matches the first pill$/) do
+  @ehmp = PobAllergiesApplet.new
+
+  modal = ModalElements.new
+  modal.wait_until_fld_modal_title_visible
+  expect(modal.fld_modal_title.text.upcase).to eq("ALLERGEN - #{@ehmp.first_pill_text.upcase}")
 end
 
 When(/^the Allergies Gist Applet contains data rows$/) do
@@ -128,7 +132,7 @@ end
 When(/^the user views the first Allergies Gist detail view$/) do 
   expect(@ag.wait_until_xpath_count_greater_than('Allergy Pills', 0)).to eq(true), "Test requires at least 1 row to be displayed"
   expect(@ag.perform_action('first pill')).to eq(true)
-  expect(@ag.perform_action('Applet Toolbar Detail')).to eq(true)
+  expect(@ag.perform_action('Detail View Button')).to eq(true)
 end
 
 

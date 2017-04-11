@@ -4,47 +4,32 @@ var _ = require('lodash');
 var addCommunicationRequest = require('./communication-request-add');
 var deleteCommunicationRequest = require('./communication-request-delete');
 var getCommunicationRequest = require('./communication-request-get');
-module.exports.handle = function(queue, message, queueName, resourceId, callback) {
+var pjdsHandler = require('./persistence/pjds-handler.js');
+
+
+module.exports.handle = function(queue, message, queueName, resourceId, callback, req, res) {
 
     async.waterfall([
+
         function(waterCallback) {
 
-            getCommunicationRequest.handle(queue, queueName, resourceId, waterCallback);
+            queue.update(queueName, resourceId, message, waterCallback, req, res);
 
         },
         function(result, waterCallback) {
-            async.series([
-
-                function(waterCallback) {
-                    //strip the recipient (we must preserve the original recipient)
-                    message.recipient = undefined;
-                    //merge objects into one message, overwritting same properties
-                    _.assign(message, result, function(other, value) {
-                        return _.isUndefined(other) ? value : other;
-                    });
-                    //strip the id (not allowed on add)
-                    message.id = undefined;
-                    addCommunicationRequest.handle(queue, message, waterCallback);
-
-                },
-                function(waterCallback) {
-
-                    deleteCommunicationRequest.handle(queue, queueName, resourceId, waterCallback);
-
-                }
-            ], function completionCallback(err, result) {
-
+            pjdsHandler.update(queueName, result, req, res, function(err, results) {
                 if (err) {
                     return callback(err);
                 }
-                return callback(null, result[0]);
+                return callback(err, results.data);
             });
+
         },
-    ], function completionCallback(err, result) {
+    ], function completionCallback(err, results) {
 
         if (err) {
             return callback(err);
         }
-        return callback(null, result);
+        return callback(null, results.data);
     });
 };

@@ -9,6 +9,17 @@ Feature: F299 - Global Timeline Date Filter
 Background:
   Given user is logged into eHMP-UI
 
+
+@F298-13.2 @US4052 @future
+Scenario: Displaying on the coversheet and timeline - assuming the user has logged in and patient has data to display on the  "coversheet and timeline"
+Given the timeline sheet is active
+Then the inline timeline is not display
+And the global data timeline picker is displayed
+When the user clicks the global date picker
+Then the timeline is active
+When the user clicks a time frame on the global data picker
+Then the timeline list is updated to reflect the selected data range
+
 @f299-3.1_to_date_calendar_picker_selection @US4025 @TA13178a @manual 
 Scenario: F299-3.1 To date calendar picker date selection
 
@@ -66,4 +77,17 @@ And the user waits for 5 seconds
 And the user clicks the date control "All" on the "Coversheet"
 Then the "From Date" input should have the value "11/30/1994" on the "Coversheet"
 And the to date displays today's date
+
+@f299-3.5_apply_button_to_close_calender @US4025 @TA13178e @future @manual
+Scenario: F299-3.5 Apply button to close calendar
+
+Given user searches for and selects "Eight,Patient"
+Then Cover Sheet is active
+When the user clicks the control "Date Filter Toggle" on the "Coversheet"
+And the user waits for 5 seconds
+When the user inputs "01/01/2010" in the "From Date" control in the "Coversheet"
+And the user inputs "01/01/2018" in the "To Date" control in the "Coversheet"
+Then the Custom date field "Apply" button should be "enabled" on the "Coversheet"
+And the user clicks the control "Apply" on the "Coversheet"
+Then the date filter closes
 

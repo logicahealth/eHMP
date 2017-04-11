@@ -1,27 +1,27 @@
 When(/^the client requests appointments summary for the patient "(.*?)" in RDK format$/) do |pid|
   apptpath = QueryRDKVisitAPI.new("appointments", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(apptpath)
+  @response = HTTPartyRDK.get(apptpath)
   #p @response
   expect(@response.code).to eq(200)
 end
 
 When(/^the client requests admissions for the patient "(.*?)" in RDK format$/) do |pid|
   apptpath = QueryRDKVisitAPI.new("admissions", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(apptpath)
+  @response = HTTPartyRDK.get(apptpath)
   #p @response
   expect(@response.code).to eq(200)
 end
 
 When(/^client requests providers with facility code "(.*?)"in RDK format$/) do |fcode|
   apptpath = QueryRDKVisitAPI.new("providers", nil, fcode).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(apptpath)
+  @response = HTTPartyRDK.get(apptpath)
   #p @response
   expect(@response.code).to eq(200)
 end
 
 When(/^client requests locations with facility code "(.*?)"in RDK format$/) do |fcode|
   apptpath = QueryRDKVisitAPI.new("locations", nil, fcode).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(apptpath)
+  @response = HTTPartyRDK.get(apptpath)
   expect(@response.code).to eq(200)
 end
 

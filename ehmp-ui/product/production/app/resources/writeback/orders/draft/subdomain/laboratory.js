@@ -7,17 +7,20 @@ define([], function() {
         var LAB_DATA_FIELDS = [
             'availableLabTests',
             'labTestText',
-            'collectionDateTime',
+            'collectionTime',
             'collectionDate',
             'collectionType',
             'collectionSample',
-            'defaultCollSamp',
+            'otherCollectionSample',
             'immediateCollectionDate',
             'immediateCollectionTime',
+            'collectionDateTimePicklist',
             'howOften',
             'howLong',
             'specimen',
+            'otherSpecimen',
             'urgency',
+            'urgencyText',
             'forTest',
             'doseDate',
             'doseTime',
@@ -26,10 +29,15 @@ define([], function() {
             'orderComment',
             'anticoagulant',
             'sampleDrawnAt',
+            'urineVolume',
+            'orderComment',
             'additionalComments',
             'annotation',
             'problemRelationship',
-            'activity'
+            'activity',
+            'notificationDate',
+            'pastDueDate',
+            'isActivityEnabled'
         ];
 
         var LAB_CONTENT_VALIDATION_FIELDS = [
@@ -38,8 +46,11 @@ define([], function() {
 
         var populateModel = function() {
             var data = this.get('data') || {};
+            var labTestText = (data.labTestText || '');
+            var urgencyText = (data.urgencyText || '');
+            var displayName = (labTestText + ' - ' + urgencyText);
             return {
-                displayName: (data.labTestText || '')
+                displayName: displayName
             };
         };
 

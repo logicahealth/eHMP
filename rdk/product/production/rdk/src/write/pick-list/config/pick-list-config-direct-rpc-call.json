@@ -24,7 +24,7 @@
         "name": "lab-times-available",
         "modulePath": "labs/lab-times-available-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["date", "location"]
+        "requiredParams": ["date", "locationUid"]
     }, {
         "name": "medication-list",
         "modulePath": "medications/medication-list-fetch-list",
@@ -55,13 +55,13 @@
         "modulePath": "problems/problems-lexicon-lookup-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
         "requiredParams": ["searchString"],
-        "optionalParams": ["date","synonym", "limit","noMinimumLength"]
+        "optionalParams": ["date", "synonym", "limit", "noMinimumLength"]
     }, {
         "name": "problems-lexicon-extended-lookup",
         "modulePath": "problems/problems-lexicon-extended-lookup-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
         "requiredParams": ["searchString"],
-        "optionalParams": ["date","synonym","limit","noMinimumLength"]
+        "optionalParams": ["date", "synonym", "limit", "noMinimumLength"]
     }, {
         "name": "radiology-dialog-default",
         "modulePath": "radiology/radiology-dialog-default-fetch-list",
@@ -74,19 +74,83 @@
         "vistaContext": "OR CPRS GUI CHART",
         "requiredParams": ["searchString"]
     }, {
-      "name": "services-fetch-list",
-      "modulePath": "services/services-fetch-list",
-      "vistaContext": "OR CPRS GUI CHART"
+        "name": "services-fetch-list",
+        "modulePath": "services/services-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART"
     }, {
-      "name": "clinics-fetch-list",
-      "modulePath": "clinics/clinics-fetch-list",
-      "vistaContext": "OR CPRS GUI CHART",
-      "optionalParams": ["seedString","searchDirection"]
-    },{
         "name": "encounters-visit-service-connected",
         "modulePath": "encounters/encounters-visit-service-connected-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["dfn", "visitDate", "loc"]
+        "requiredParams": ["dfn", "visitDate", "locationUid"]
+    }, {
+        "name": "quick-orders",
+        "modulePath": "orderables/quick-order-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "isUserSpecific": true,
+        "optionalParams": ["searchString", "scope"]
+    }, {
+        "name": "order-sets",
+        "modulePath": "orderables/order-set-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "isUserSpecific": true,
+        "optionalParams": ["searchString", "scope"]
+    }, {
+        "name": "favorite-orderables",
+        "modulePath": "orderables/favorite-orderable-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "isUserSpecific": true
+    }, {
+        "name": "enterprise-orderables",
+        "modulePath": "orderables/enterprise-orderable-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "optionalParams": ["searchString"]
+    }, {
+        "name": "facilities",
+        "modulePath": "team-management/facilities-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "needsFullConfig": true,
+        "needsPcmm": true,
+        "optionalParams": ["teamFocus", "siteCode"]
+    }, {
+        "name": "teams-for-user",
+        "modulePath": "team-management/teams-for-user-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "needsPcmm": true,
+        "needsFullConfig": true,
+        "requiredParams": ["staffIEN"]
+    }, {
+        "name": "teams-for-patient",
+        "modulePath": "team-management/teams-for-patient-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "needsPcmm": true,
+        "needsFullConfig": true,
+        "requiredParams": ["patientID"]
+    },{
+        "name": "teams-for-user-patient-related",
+        "modulePath": "team-management/teams-for-user-patient-related-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "needsPcmm": true,
+        "needsFullConfig": true,
+        "requiredParams": ["staffIEN", "patientID"]
+    }, {
+        "name": "teams-for-facility",
+        "modulePath": "team-management/teams-for-facility-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "needsPcmm": true,
+        "needsFullConfig": true,
+        "requiredParams": ["facilityID"]
+    }, {
+        "name": "teams-for-facility-patient-related",
+        "modulePath": "team-management/teams-for-facility-patient-related-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "needsPcmm": true,
+        "needsFullConfig": true,
+        "requiredParams": ["facilityID", "patientID"]
+    }, {
+        "name": "roles-for-team",
+        "modulePath": "team-management/roles-for-team-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "needsPcmm": true,
+        "requiredParams": ["teamID"]
     }]
 }
-

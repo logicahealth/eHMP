@@ -1,11 +1,12 @@
 define([
-    "jquery",
-    "underscore",
-    "backbone",
-    "api/Messaging",
-    "main/components/appletToolbar/appletToolbarView",
-    "hbs!main/components/views/appletViews/sharedTemplates/gistPopover"
-], function($, _, Backbone, Messaging, ToolbarView, popoverTemplate) {
+    'jquery',
+    'underscore',
+    'backbone',
+    'api/Messaging',
+    'main/components/appletToolbar/appletToolbarView',
+    'hbs!main/components/views/appletViews/sharedTemplates/gistPopover',
+    'main/adk_utils/crsUtil'
+], function($, _, Backbone, Messaging, ToolbarView, popoverTemplate, CrsUtil) {
     'use strict';
 
     var originalDraggedTileAppletId, dragged;
@@ -71,15 +72,21 @@ define([
 
     var BaseAppletItem = Backbone.Marionette.LayoutView.extend({
         className: 'gist-item table-row-toolbar',
-        regions: {
-            toolbarView: '.toolbar-container'
+        behaviors: {
+            FloatingToolbar: {
+                triggerSelector: '.selectable:not([data-toggle=popover])',
+                DialogContainer: '.toolbar-container'
+            }
         },
-        attributes: function(){
+        attributes: function() {
             var rowId = (this.model.has('displayName') ? 'row_' + this.model.get('displayName') : 'row_' + this.model.get('uid'));
+            CrsUtil.applyConceptCodeId(this.model);
+
             return {
                 'role': 'presentation',
                 'tabindex': 0,
-                'data-row-instanceid': rowId
+                'data-row-instanceid': rowId,
+                'data-code': this.model.get('dataCode')
             };
         },
         ui: {
@@ -88,20 +95,9 @@ define([
         },
         chartPointer: null,
         events: {
-            'click @ui.toolbarToggler': function(e) {
-                e.preventDefault();
-                this.toggleToolbar();
-                this.$el.trigger('focus');
-            },
             'click @ui.popoverEl': function(e) {
                 this.trigger('toggle:quicklook');
-            },
-            'keydown': function(e) {
-                var k = e.which || e.keydode;
-                if (!/(13|32)/.test(k)) return;
-                this.ui.toolbarToggler.trigger('click');
-                e.preventDefault();
-                e.stopPropagation();
+                this.ui.popoverEl.focus();
             },
             'keydown @ui.popoverEl': function(e) {
                 var k = e.which || e.keydode;
@@ -109,6 +105,20 @@ define([
                 $(e.target).trigger('click');
                 e.preventDefault();
                 e.stopPropagation();
+            },
+            'before:showtoolbar': function() {
+                this.$el.addClass('toolbar-active');
+                this.trigger('before:showtoolbar');
+            },
+            'before:hidetoolbar': function() {
+                this.$el.removeClass('toolbar-active');
+                this.trigger('before:hidetoolbar');
+            },
+            'after:showtoolbar': function() {
+                this.trigger('after:showtoolbar');
+            },
+            'after:hidetoolbar': function() {
+                this.trigger('after:hidetoolbar');
             }
         },
         initialize: function(options) {
@@ -128,7 +138,7 @@ define([
                 placement: 'bottom',
                 yoffset: function(placement) {
                     if (self.isToolbarActive() && placement === 'top') {
-                        return -self.$('.toolbarPopover').height();
+                        return -self.$('.btn-toolbar').height();
                     }
                     return 0;
                 },
@@ -140,68 +150,31 @@ define([
                 }
             });
 
-            this.ui.popoverEl.on('shown.bs.popover', function() {
-                $(window).one('resize.' + this.cid, function() {
-                    self.ui.popoverEl.popup('hide');
+            this.ui.popoverEl.on('shown.bs.popover', _.bind(function() {
+                $(window).one('resize.popover.' + this.cid, _.bind(function() {
+                    this.ui.popoverEl.popup('hide');
+                }, this));
+                this.listenToOnce(Messaging, 'gridster:resize', function() {
+                    this.ui.popoverEl.popup('hide');
                 });
-            });
-            this.ui.popoverEl.off('hidden.bs.popover', function() {
-                $(window).off('resize.' + this.cid);
-            });
+            }, this));
+            this.ui.popoverEl.on('hidden.bs.popover', _.bind(function() {
+                $(window).off('resize.popover.' + this.cid);
+                this.stopListening(Messaging, 'gridster:resize');
+            }, this));
         },
         isToolbarActive: function() {
-            return this.$el.hasClass('toolbarActive');
-        },
-        toggleToolbar: function() {
-            this.ui.popoverEl.popup('hide');
-            if (this.isToolbarActive()) {
-                this.hideToolbar();
-            } else {
-                this.showToolbar();
-            }
-        },
-        showToolbar: function() {
-            this.trigger('before:showtoolbar');
-            var toolbarView = this.createToolbar();
-            this.$el.addClass('toolbarActive');
-            this.trigger('after:showtoolbar', toolbarView);
-        },
-        hideToolbar: function() {
-            this.trigger('before:hidetoolbar');
-            this.destroyToolbar();
-            this.$el.removeClass('toolbarActive');
-            this.trigger('after:hidetoolbar');
+            return this.$el.hasClass('toolbar-active');
         },
         performManualDragStart: function(originalIndex) {
             this.manualOriginalIndex = originalIndex;
         },
         onDestroy: function() {
+            //likely not required but better safe since we bound the view to the scope
+            this.ui.popoverEl.off('shown.bs.popover');
+            this.ui.popoverEl.off('hidden.bs.popover');
             this.ui.popoverEl.popup('destroy');
-            $(window).off('resize.' + this.cid);
-        },
-        createToolbar: function() {
-            var toolbarView = new ToolbarView(this.toolbarOptions);
-            this.listenTo(toolbarView, 'dropdown.show', function(e) {
-                this.trigger('dropdown.show', e);
-            });
-            this.listenTo(toolbarView, 'dropdown.shown', function(e) {
-                this.trigger('dropdown.shown', e);
-            });
-            this.listenTo(toolbarView, 'dropdown.hide', function(e) {
-                this.trigger('dropdown.hide', e);
-            });
-            this.listenTo(toolbarView, 'dropdown.hidden', function(e) {
-                this.trigger('dropdown.hidden', e);
-            });
-            this.toolbarView.show(toolbarView);
-            toolbarView.show();
-            return toolbarView;
-        },
-        destroyToolbar: function() {
-            var toolbarView = this.toolbarView.currentView;
-            if(!toolbarView) return;
-            toolbarView.hide();
-            this.toolbarView.empty();
+            $(window).off('resize.popover' + this.cid);
         },
         onRender: function() {
             this.createPopover();

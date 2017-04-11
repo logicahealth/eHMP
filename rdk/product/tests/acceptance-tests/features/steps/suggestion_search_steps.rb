@@ -9,7 +9,7 @@ When(/^the user types three letters of "(.*?)" for the patient "(.*?)" in VPR fo
   query_rdk_search_suggestion.add_parameter("pid", pid)
   query_rdk_search_suggestion.add_parameter("query", text)
   path = query_rdk_search_suggestion.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the corresponding total suggested items are "(.*?)"/) do |total_items|

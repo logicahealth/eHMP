@@ -48,7 +48,7 @@ For an example implementation, inspect the ohai_plugin.rb recipe in the nginx co
 
 License & Authors
 -----------------
-- Author::     ua Timberman (<joshua@opscode.com>)
+- Author:: Joshua Timberman (<joshua@opscode.com>)
 - Author:: Seth Chisamore (<schisamo@opscode.com>)
 
 ```text

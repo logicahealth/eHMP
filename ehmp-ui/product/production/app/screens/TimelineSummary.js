@@ -2,7 +2,8 @@ define(function() {
     "use strict";
 
     var timelineSummaryConfig = {
-        id: "timeline-summary",
+        id: "timelineSummary",
+        context: 'patient',
         contentRegionLayout: "gridOne",
         appletHeader: "patient",
         applets: [{

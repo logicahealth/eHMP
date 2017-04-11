@@ -1,6 +1,6 @@
-HMPDRA ;SLC/MKB -- Radiology extract ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDRA ;SLC/MKB,ASMR/RRB - Radiology extract;8/2/11  15:29
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -12,7 +12,7 @@ HMPDRA ;SLC/MKB -- Radiology extract ;8/2/11  15:29
  ; ICPTCOD                       1995
  ; RAO7PC1                  2043,2265
  ; RAO7PC3                       2877
- ;
+ Q
  ; ------------ Get exam(s) from VistA ------------
  ;
 EN(DFN,BEG,END,MAX,ID) ; -- find patient's radiology exams
@@ -45,7 +45,7 @@ EN1(ID,EXAM) ; -- return an exam in EXAM("attribute")=value
  . S:$G(HMPTEXT) EXAM("document",1,"content")=$$TEXT(DFN,ID)
  S:$L($P(X0,U,6)) EXAM("status")=$P($P(X0,U,6),"~",2)
  S X=$P(X0,U,7),LOC="" I $L(X) D
- . S LOC=+$O(^SC("B",X,0)),EXAM("location")=LOC_U_X
+ . S LOC=+$O(^SC("B",X,0)),EXAM("location")=LOC_U_X ;ICR 10040 DE2818 ASF 11/18/15
  S EXAM("facility")=$$FAC^HMPD(LOC)
  I $L($P(X0,U,8)) S X=$TR($P(X0,U,8),"~","^"),EXAM("imagingType")=X
  S IENS=$P(ID,"-",2)_","_+ID_","_DFN_","
@@ -58,7 +58,7 @@ EN1(ID,EXAM) ; -- return an exam in EXAM("attribute")=value
  S EXAM("encounter")=$$GET1^DIQ(70.03,IENS,27,"I")
  S ID=DFN_U_$TR(ID,"-","^") D EN3^RAO7PC1(ID) D  ;get additional values
  . S X=+$G(^TMP($J,"RAE2",DFN,+$P(ID,U,3),PROC,"P"))
- . I X S EXAM("provider")=X_U_$P($G(^VA(200,X,0)),U)
+ . I X S EXAM("provider")=X_U_$P($G(^VA(200,X,0)),U) ;ICR10060 DE2818 ASF 11/18/15
  S EXAM("category")="RA"
  Q
  ;
@@ -115,17 +115,17 @@ RPT1(DFN,ID,RPT) ; -- return report as a TIU document
  S RPT("id")=ID,RPT("status")=$P(RAE3,U)
  S X=9999999.9999-(+ID),RPT("referenceDateTime")=X
  S X=+$G(^TMP($J,"RAE2",DFN,CASE,PROC,"P"))
- I X S RPT("clinician",1)=X_U_$P($G(^VA(200,X,0)),U)_"^A"
+ I X S RPT("clinician",1)=X_U_$P($G(^VA(200,X,0)),U)_"^A" ;ICR10060 DE2818 ASF 11/18/15
  S X=$G(^TMP($J,"RAE2",DFN,CASE,PROC,"V")) I X D
  . N Y S Y=$$GET1^DIQ(74,+$P(RAE1,U,5)_",",7,"I")
- . S RPT("clinician",2)=+X_U_$P($G(^VA(200,+X,0)),U)_"^S^"_Y_U_$P(X,U,2)
+ . S RPT("clinician",2)=+X_U_$P($G(^VA(200,+X,0)),U)_"^S^"_Y_U_$P(X,U,2) ;ICR10060 DE2818 ASF 11/18/15
  I $D(^TMP($J,"RAE3",DFN,"PRINT_SET")) S PROC=$G(^("ORD")) ;use parent, if printset
  S RPT("localTitle")=PROC,RPT("category")="RA"
  S RPT("nationalTitle")="4695068^RADIOLOGY REPORT"
  S RPT("nationalTitleSubject")="4693357^RADIOLOGY"
  S RPT("nationalTitleType")="4696123^REPORT"
  S X=$P(RAE1,U,7),LOC="" I $L(X) D
- . S LOC=+$O(^SC("B",X,0)) ;,EXAM("location")=LOC_U_X
+ . S LOC=+$O(^SC("B",X,0)) ;,EXAM("location")=LOC_U_X ICR 10040 DE2818 ASF 11/18/15
  S RPT("facility")=$$FAC^HMPD(LOC)
  S IENS=$P(ID,"-",2)_","_+ID_","_DFN_","
  S RPT("encounter")=$$GET1^DIQ(70.03,IENS,27,"I")

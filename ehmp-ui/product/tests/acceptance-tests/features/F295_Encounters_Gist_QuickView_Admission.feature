@@ -2,7 +2,7 @@
 Feature: F295 - Encounters Applet
 
 Background:
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   Given user searches for and selects "zzzretiredonenineteen,Patient"
   Then Overview is active
   And user sees Encounters Gist
@@ -35,9 +35,9 @@ Scenario: Encounters Applet Gist - quick view of a particular admission thro' mu
   When the user expands "Admissions" in Encounters Gist Applet
  	When user clicks on the "Left" hand side of the "Diagnosis" "OBSERVATION"
   Then a Menu appears on the Encounters Gist 
-  When user select the menu "Quick View Icon" in Encounters Gist
+  When user select the menu "Quick View Button" in Encounters Gist
   Then the "Encounters Gist Quick View - Diagnosis" table contains headers
     | Date	| Location | Facility |
   And the Encounters Gist Quick View - "Admissions" Type table contains rows
-	When user select the menu "Quick View Icon" in Encounters Gist
+	When user select the menu "Quick View Button" in Encounters Gist
 	Then Quick View draw box for "Diagnosis" closes

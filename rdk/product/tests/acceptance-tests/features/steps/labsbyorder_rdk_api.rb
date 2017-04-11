@@ -5,5 +5,5 @@ When(/^the client requests lab orders for the patient "(.*?)" and order "(.*?)" 
   resource_query.add_parameter("_ack", 'true')
   path = resource_query.path
 
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end

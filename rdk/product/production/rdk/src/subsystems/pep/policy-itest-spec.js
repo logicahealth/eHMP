@@ -13,8 +13,8 @@ function buildRequest() {
         },
         session: {
             user: {
-                accessCode: 'PW    ',
-                verifyCode: 'PW    !!',
+                accessCode: 'pu1234',
+                verifyCode: 'pu1234!!',
                 ssn: '666884833',
                 breakglass: true,
                 sensitive: false,
@@ -51,7 +51,7 @@ function buildRequest() {
                 vistaSites: {
                     '9E7A': {
                         name: 'PANORAMA',
-                        host: 'IP        '
+                        host: 'IP_ADDRESS'
                     }
                 }
             }

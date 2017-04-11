@@ -42,7 +42,7 @@ Roadmap and Bugs
 License and Author
 ==================
 
-- Author::     an         (<jdunn@opscode.com>)
+- Author:: Julian C. Dunn (<jdunn@opscode.com>)
 - Copyright:: 2013, Opscode, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");

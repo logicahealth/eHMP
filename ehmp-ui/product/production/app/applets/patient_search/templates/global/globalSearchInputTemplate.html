@@ -1,25 +1,29 @@
-<form action="#" class="form-container">
+<form action="#" id="nationwideSearchForm" class="form-container nationwide-search">
 	<div title="Global Search Input">
-		<h4 class="title">Nationwide Search</h4>
-		<p class="font-size-12">Enter the patient's last name and at least one other field to enable search.</p>
-		<div class="form-inline" id="globalSearchInputGroup">
-			<div class="control form-group">
+		<div class="global-search-form-title">
+			<h4 class="sr-only">Nationwide Search</h4>
+			<p class="search-instructions">Enter the patient's last name and at least one other field to enable search.<span class="sr-only">Press Alt + M to view main menu</span></p>
+		</div>
+		<div id="globalSearchInputGroup" class="global-search-input-group">
+			<div class="global-search-input-div">
 				<label for="globalSearchLastName" class="sr-only">Last Name</label>
-			    <input type="text" autocomplete="off" class="form-control" id="globalSearchLastName" placeholder="Last Name (required)" title="Please enter in patient's last name" value="{{globalSearchParameters.name.last}}" aria-required="true" />
+			    <input type="text" autocomplete="off" class="form-control input-lg" id="globalSearchLastName" placeholder="Last Name (req)" title="Enter in patient's last name" value="{{globalSearchParameters.name.last}}" aria-required="true" />
 			</div>
-			<div class="control form-group">
+			<div class="global-search-input-div">
 				<label for="globalSearchFirstName" class="sr-only">First Name</label>
-		    	<input type="text" autocomplete="off" class="form-control" id="globalSearchFirstName" onfocus="this.value = this.value;" placeholder="First Name" title="Please enter in patient's first name" value="{{globalSearchParameters.name.first}}" />
+		    	<input type="text" autocomplete="off" class="form-control input-lg" id="globalSearchFirstName" onfocus="this.value = this.value;" placeholder="First Name" title="Enter in patient's first name" value="{{globalSearchParameters.name.first}}" />
 		    </div>
-		    <div class="control form-group">
+		    <div class="global-search-input-div">
 				<label for="globalSearchDob" class="sr-only">Date of Birth</label>
-		    	<input type="text" autocomplete="off" class="form-control" id="globalSearchDob" placeholder="DOB: MM/DD/YYYY" value="{{globalSearchParameters.date.birth}}" title="Please enter in patient's date of birth in the format of MM/DD/YYYY" />
+		    	<input type="text" autocomplete="off" class="form-control input-lg" id="globalSearchDob" placeholder="DOB: MM/DD/YYYY" value="{{globalSearchParameters.date.birth}}" title="Enter in patient's date of birth in the format of MM/DD/YYYY" />
 		    </div>
-		    <div class="control form-group">
+		    <div class="global-search-input-div">
 				<label for="globalSearchSsn" class="sr-only">SSN</label>
-		    	<input type="text" autocomplete="off" class="form-control" id="globalSearchSsn" placeholder="SSN: ###-##-####" value="{{globalSearchParameters.ssn}}" title="Please enter in patient's 9 digit social security number without dashes" />
+		    	<input type="text" autocomplete="off" class="form-control input-lg" id="globalSearchSsn" placeholder="SSN: ###-##-####" value="{{globalSearchParameters.ssn}}" title="Enter in patient's 9 digit social security number without dashes" />
 		    </div>
-		    <button type="button" id="globalSearchButton" class="btn btn-primary" title="Press enter to search and then press ALT + U to view results" disabled="disabled">Search</button>
+		    <div class="global-search-input-button">
+				<button type="button" id="globalSearchButton" class="btn btn-primary btn-lg" title="Press enter to search and then press ALT + U to view results" disabled="disabled">Search</button>
+			</div>
 		</div>
 	</div>
 </form>

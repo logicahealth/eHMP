@@ -12,11 +12,11 @@ describe('The Notes input validator', function () {
             resourceId: '12345',
             duz: {'9E7A': 'duz1', 'C77A': 'duz2'},
             vistaConfig: {
-                host: 'IP        ',
+                host: 'IP_ADDRESS',
                 port: 9210,
-                accessCode: 'PW    ',
-                verifyCode: 'PW    !!',
-                localIP: 'IP      ',
+                accessCode: 'PW',
+                verifyCode: 'PW',
+                localIP: 'IPADDRES',
                 localAddress: 'localhost',
                 context: 'HMP UI CONTEXT'
             },
@@ -29,7 +29,7 @@ describe('The Notes input validator', function () {
                 'encounterDateTime': '199310131400',
                 'encounterCategoryName': 'Appointment',
                 'referenceDateTime': '201507101410',
-                'locationIEN': '32',
+                'locationUid': 'urn:va:location:9E7A:w9',
                 'patientIcn': '10110V004877',
                 'pid': '9E7A;8',
                 'status': 'UNSIGNED'
@@ -56,7 +56,7 @@ describe('The Notes input validator', function () {
         });
 
         it('encrypts the signature code and sets the dfn', function(done) {
-            writebackContext.model.signatureCode = 'PW    !!';
+            writebackContext.model.signatureCode = 'pu1234!!';
             notesValidator.sign(writebackContext, function() {
                 expect(writebackContext.model.signatureCode).to.be.truthy();
                 expect(writebackContext.model.dfn).to.eql('8');

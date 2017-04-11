@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Medication defaults [/medication-defaults{?site}{&pharmacyType}{&outpatientDfn}{&locationIen}{&fields}]
+## Medication defaults [/medication-defaults{?site}{&pharmacyType}{&outpatientDfn}{&locationIen}]
 
 Outpatient medication priorities, display messages, refills, and pickup options
 
@@ -23,8 +23,6 @@ ORWDPS1 ODSLCT
     + outpatientDfn (string, optional) - Patient DFN
 
     + locationIen (string, optional) - Encounter Location
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

@@ -7,7 +7,6 @@ define([
 
     var OrderDetailView = Backbone.Marionette.ItemView.extend({
         template: ordersTemplate,
-        // className: "detail-panel-item row-layout"
     });
 
     return OrderDetailView;

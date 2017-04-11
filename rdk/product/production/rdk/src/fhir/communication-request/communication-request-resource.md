@@ -348,7 +348,7 @@ Add a new communication request for one or more recipients. The message is queue
             :[Schema]({{{common}}}/schemas/message.jsonschema)
 
 
-### Get All Communication Requests [GET {{{path}}}/{recipientId}{?identifier}{&category}{&priority}{&status}{&fields}{&count}{&subject}]
+### Get All Communication Requests [GET {{{path}}}/{recipientId}{?identifier}{&category}{&priority}{&status}{&count}{&subject}]
 
 Get all communication requests for a single recipient. Optional filters supported.
 
@@ -368,13 +368,11 @@ Get all communication requests for a single recipient. Optional filters supporte
 
     + subject (string, optional) - Filter returned communication requests by subject. Can be combined with all filters.
 
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 
 
-### Get Communication Request [GET {{{path}}}/{recipientId}/{id}{?fields}]
+### Get Communication Request [GET {{{path}}}/{recipientId}/{id}]
 
 Get a single communication request for a specific recipient.
 
@@ -383,8 +381,6 @@ Get a single communication request for a specific recipient.
     + recipientId (string, required) - recipient id
 
     + id (string, required) - resource id for a communication request
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -401,17 +397,6 @@ Get a single communication request for a specific recipient.
 
             :[Schema]({{{common}}}/schemas/message.jsonschema)
 
-
-### Delete All Communication Requests [DELETE {{{path}}}/{recipientId}]
-
-Delete all communication request for a single recipient.
-
-+ Parameters
-
-    + recipientId (string, required) - recipient id
-
-
-+ Response 204 (application/json)
 
 
 ### Delete Communication Request [DELETE {{{path}}}/{recipientId}/{id}]
@@ -443,9 +428,9 @@ Update a communication request by merging between the existing request and the p
 
             {
                 "resourceType": "CommunicationRequest",
-                "identifier": {
+                "identifier": [{
                     "value": "a435"
-                },
+                }],
                 "category": {
                     "coding": [{
                         "code": "ehmp/msg/category/clinical"
@@ -456,7 +441,7 @@ Update a communication request by merging between the existing request and the p
                         "code": "ehmp/msg/priority/high"
                     }]
                 },
-                "status": "open",
+                "status": "received",
                 "payload": [{
                     "contentReference": {
                         "reference": "patient/9E7A;10045/lab/123"
@@ -750,19 +735,6 @@ Update a communication request by merging between the existing request and the p
 
 + Response 200 (application/json)
 
-+ Response 422 (application/json)
-
-    + Body
-
-            {
-                "message": "Unprocessible Entity.",
-                "status": 422
-            }
-
-    + Schema
-
-            :[Schema]({{{common}}}/schemas/message.jsonschema)
-
 + Response 404 (application/json)
 
     + Body
@@ -792,19 +764,6 @@ Set status for a Communication Request
 :[Response 400]({{{common}}}/responses/400.md)
 
 + Response 200 (application/json)
-
-+ Response 422 (application/json)
-
-    + Body
-
-            {
-                "message": "Unprocessible Entity.",
-                "status": 422
-            }
-
-    + Schema
-
-            :[Schema]({{{common}}}/schemas/message.jsonschema)
 
 + Response 404 (application/json)
 

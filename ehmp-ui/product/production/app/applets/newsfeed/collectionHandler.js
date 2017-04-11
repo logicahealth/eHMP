@@ -23,17 +23,8 @@ define([
                     filter: 'or(' + context.buildJdsDateFilter('dateTime', options) + ',' + context.buildJdsDateFilter('administeredDateTime', options) + ',' + context.buildJdsDateFilter('observed', options) + ')',
                     order: 'activityDateTime DESC'
                 },
-                collectionConfig: {
-                    comparator: function(model) {
-                        var value =  model.get('activityDateTime') || model.get('resulted');
-                        if(!value) {
-                            // This shouldn't happen
-                            return -1;
-                        }
-                        return value.slice(0, 8) * -1;
-                    }
-                },
                 pageable: true,
+                allowAbort: true,
                 resourceTitle: 'patient-record-timeline',
                 viewModel: {
                     parse: function(response) {

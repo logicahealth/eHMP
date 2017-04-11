@@ -7,8 +7,15 @@ define([
 ], function(Backbone, Marionette, _, rowTemplate, AppletUiHelper) {
     "use strict";
 
-    return Backbone.Marionette.ItemView.extend({
+    return Backbone.Marionette.LayoutView.extend({
         tagName: "tr",
+        AppletID: 'lab_results_grid',
+        behaviors: {
+            FloatingToolbar: {
+                DialogContainer: '.toolbar-container',
+                buttonTypes: ['infobutton', 'detailsviewbutton', 'notesobjectbutton'],
+            }
+        },
         attributes: {
             'tabindex': '0'
         },
@@ -16,41 +23,34 @@ define([
             var listen = ADK.Messaging.getChannel('lab_results');
             this.gridCollection = listen.request('gridCollection');
             this.model.set('isFullscreen', options.isFullscreen);
-            this.$el.data('model', this.model);
+            this.model.set('applet_id', this.AppletID);
+            ADK.utils.crsUtil.applyConceptCodeId(this.model);
+            this.$el.attr('data-code', this.model.get('dataCode'));
         },
         template: rowTemplate,
         events: {
-            'click': 'displayModal',
-            'keyup': 'triggerClick'
-        },
-        triggerClick: function(e) {
-            if (e.keyCode === 13) {
-                this.$el.trigger('click');
+            'before:showtoolbar': function() {
+                this.listenTo(ADK.Messaging.getChannel(this.AppletID), 'detailView', this.displayModal);
+            },
+            'before:hidetoolbar': function() {
+                this.stopListening(ADK.Messaging.getChannel(this.AppletID), 'detailView');
             }
         },
         displayModal: function(e) {
-            var baseDisplayModal = function(that, event) {
-                var self = that;
-                event.preventDefault();
-                if (!self.model.get('pathology')) {
-                    AppletUiHelper.getDetailView(self.model, event.currentTarget, self.gridCollection, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
-                } else {
-                    var uid = model.get('results')[0].resultUid;
-                    var currentPatient = ADK.PatientRecordService.getCurrentPatient();
-                    ADK.Messaging.getChannel('lab_results_grid').trigger('resultClicked', {
-                        uid: uid,
-                        patient: {
-                            icn: currentPatient.attributes.icn,
-                            pid: currentPatient.attributes.pid
-                        }
-                    });
-                }
-            };
-            if (_.isUndefined(this.AppletID)) {
-                this.AppletID = 'lab_results_grid';
+            if (e.model !== this.model) return;
+            if (!this.model.get('pathology')) {
+                AppletUiHelper.getDetailView(this.model, this.el, this.gridCollection, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
+            } else {
+                var uid = this.model.get('results')[0].resultUid;
+                var currentPatient = ADK.PatientRecordService.getCurrentPatient();
+                ADK.Messaging.getChannel(this.AppletID).trigger('resultClicked', {
+                    uid: uid,
+                    patient: {
+                        icn: currentPatient.attributes.icn,
+                        pid: currentPatient.attributes.pid
+                    }
+                });
             }
-            ADK.utils.infoButtonUtils.onClickFunc(this, e, baseDisplayModal);
-
         }
     });
 });

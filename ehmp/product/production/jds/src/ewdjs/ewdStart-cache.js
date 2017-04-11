@@ -32,7 +32,7 @@ var params = {
         protocol: 2
       },
       management: {
-        //password: 'PW             '
+        //password: 'keepThisSecret!'
         password: 'ehmp'
      },
      webservice: { authenticate: false }

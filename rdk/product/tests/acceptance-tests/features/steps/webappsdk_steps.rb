@@ -1,14 +1,14 @@
 When(/^the client performs a fullName search through RDK API with search term "(.*?)"$/) do |name|
   temp = RDKQuery.new('patient-search-full-name')
   temp.add_parameter("name.full", name)
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client performs a fullName search through RDK API with search term "(.*?)" and the startIndex (\d+)$/) do |name, start_index|
   temp = RDKQuery.new('patient-search-full-name')
   temp.add_parameter("name.full", name)
   temp.add_parameter("startIndex", start_index)
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client performs a fullName search through RDK API with search term "(.*?)" and the limit (\d+)$/) do |name, limit|
@@ -16,7 +16,7 @@ When(/^the client performs a fullName search through RDK API with search term "(
   temp.add_parameter("name.full", name)
   temp.add_parameter("itemsPerPage", limit)
 
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client performs a fullName summary search through RDK API with search term "(.*?)" and the startIndex (\d+)$/) do |name, start_index|
@@ -24,7 +24,7 @@ When(/^the client performs a fullName summary search through RDK API with search
   temp.add_parameter("name.full", name)
   temp.add_parameter("startIndex", start_index)
   temp.add_parameter("resultsRecordType", "summary")
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client performs a fullName  summary search through RDK API with search term "(.*?)" and the limit (\d+)$/) do |name, limit|
@@ -33,14 +33,14 @@ When(/^the client performs a fullName  summary search through RDK API with searc
   temp.add_parameter("itemsPerPage", limit)
   temp.add_parameter("resultsRecordType", "summary")
 
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client performs a fullName summary search through RDK API with search term "(.*?)"$/) do |name|
   temp = RDKQuery.new('patient-search-full-name')
   temp.add_parameter("name.full", name)
   temp.add_parameter("resultsRecordType", "summary")
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 Then(/^the RDK results contain (\d+) items per page$/) do |num_items|

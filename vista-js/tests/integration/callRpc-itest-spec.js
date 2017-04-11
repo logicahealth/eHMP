@@ -11,10 +11,10 @@ var wConfig = require('./config');
 var callRpc = require('../../src/RpcClient').RpcClient.callRpc;
 
 var config = _.defaults(wConfig.vistaSites['9E7A'], {
-	host: 'IPADDRESS ',
+	host: 'IP_ADDRESS',
 	port: 9210,
-	accessCode: 'PW    ',
-	verifyCode: 'PW    !!',
+	accessCode: 'PW',
+	verifyCode: 'PW',
 	context: 'HMP SYNCHRONIZATION CONTEXT',
 	localIP: '127.0.0.1',
 	localAddress: 'localhost',

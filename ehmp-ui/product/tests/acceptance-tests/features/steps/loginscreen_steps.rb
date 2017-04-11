@@ -27,6 +27,14 @@ Then(/^the patient search screen is displayed$/) do
 
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { !patient_search.am_i_visible?("Active MyCPRSList") }
+
+  DefaultLogin.logged_in = true
+end
+
+Then(/^staff view screen is displayed$/) do
+  wait_for_staff_view_loaded
+
+  DefaultLogin.logged_in = true
 end
 
 Then(/^the user attempts signout$/) do

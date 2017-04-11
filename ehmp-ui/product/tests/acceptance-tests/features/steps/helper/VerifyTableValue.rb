@@ -1,4 +1,6 @@
 class VerifyTableValue
+  NO_RECORD_FOUND = "No Records Found"
+
   def perform_table_verification(runtime_table_elements, tableIdentifier, table)
     rows_not_matched = []
     matched = false
@@ -151,7 +153,13 @@ class VerifyTableValue
   end
 
   def self.check_data_rows_exist(applet_data_id)
-    return false if no_records_found_text(applet_data_id) == "No Records Found"
+    return false if no_records_found_text(applet_data_id) == NO_RECORD_FOUND
+    return true if total_rows_count(applet_data_id) > 0
+    false
+  end
+
+  def self.check_all_data_loaded(applet_data_id)
+    return true if no_records_found_text(applet_data_id) == NO_RECORD_FOUND
     return true if total_rows_count(applet_data_id) > 0
     false
   end
@@ -241,6 +249,8 @@ class VerifyTableValue
   end
 
   def self.verify_date_sort_selectable(table_id, column_index, reverse_chronilogical, format = "%m/%d/%Y")
+    records = TestSupport.driver.find_element(:css, "##{table_id} tbody tr:nth-of-type(1) > td:nth-of-type(1)").text.strip
+    return false if records == NO_RECORD_FOUND
     for_error_message = reverse_chronilogical ? "is not greater then" : "is not less then"
     driver = TestSupport.driver
     css_string = "##{table_id} tbody tr.selectable td:nth-child(#{column_index})"
@@ -262,6 +272,74 @@ class VerifyTableValue
   rescue Exception => e
     p "verify_date_sort: #{e}"
     driver.save_screenshot('missingdates.png')
+    return false
+  end
+
+  def self.verify_date_only_sort_selectable(table_id, column_index, reverse_chronilogical)
+    format = "%m/%d/%Y"
+    date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4}")
+
+    records = TestSupport.driver.find_element(:css, "##{table_id} tbody tr:nth-of-type(1) > td:nth-of-type(1)").text.strip
+    return false if records == NO_RECORD_FOUND
+    for_error_message = reverse_chronilogical ? "is not greater then" : "is not less then"
+    driver = TestSupport.driver
+    css_string = "##{table_id} tbody tr.selectable td:nth-child(#{column_index})"
+    columns = driver.find_elements(:css, css_string)
+    
+    columns[0].location_once_scrolled_into_view
+    # p "to start: #{columns[0].text}"
+    date_only = date_format.match(columns[0].text).to_s
+    higher = Date.strptime(date_only, format)
+    (1..columns.length-1).each do |i|
+      columns[i].location_once_scrolled_into_view
+
+      date_only = date_format.match(columns[i].text).to_s
+      lower = Date.strptime(date_only, format)
+
+      # lower = Date.strptime(columns[i].text, format)
+      check_alpha = reverse_chronilogical ? ((higher >= lower)) : ((higher <= lower))
+      # p "compare: #{higher} #{lower}"
+      p "#{higher} #{for_error_message} #{lower}" unless check_alpha
+      return false unless check_alpha
+      higher = lower
+    end
+    return true
+  rescue Exception => e
+    p "verify_date_sort: #{e}"
+    return false
+  end
+
+  def self.verify_date_time_sort_selectable(table_id, column_index, reverse_chronilogical)
+    format = "%m/%d/%Y - %H:%M"
+    date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4} - \\d{2}:\\d{2}")
+
+    records = TestSupport.driver.find_element(:css, "##{table_id} tbody tr:nth-of-type(1) > td:nth-of-type(1)").text.strip
+    return false if records == NO_RECORD_FOUND
+    for_error_message = reverse_chronilogical ? "is not greater then" : "is not less then"
+    driver = TestSupport.driver
+    css_string = "##{table_id} tbody tr.selectable td:nth-child(#{column_index})"
+    columns = driver.find_elements(:css, css_string)
+    
+    columns[0].location_once_scrolled_into_view
+    # p "to start: #{columns[0].text}"
+    date_only = date_format.match(columns[0].text).to_s
+    higher = Date.strptime(date_only, format)
+    (1..columns.length-1).each do |i|
+      columns[i].location_once_scrolled_into_view
+
+      date_only = date_format.match(columns[i].text).to_s
+      lower = Date.strptime(date_only, format)
+
+      # lower = Date.strptime(columns[i].text, format)
+      check_alpha = reverse_chronilogical ? ((higher >= lower)) : ((higher <= lower))
+      # p "compare: #{higher} #{lower}"
+      p "#{higher} #{for_error_message} #{lower}" unless check_alpha
+      return false unless check_alpha
+      higher = lower
+    end
+    return true
+  rescue Exception => e
+    p "verify_date_sort: #{e}"
     return false
   end
 end

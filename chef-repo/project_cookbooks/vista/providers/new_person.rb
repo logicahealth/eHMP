@@ -14,6 +14,11 @@ def init_shell(shell)
     process.write("Yes\r")
   end
 
+  # if there are more then one screen of SOUNDEX matches
+  shell.on(:output, /Enter RETURN to continue/) do | process, match |
+    process.write("\r")
+  end
+
   # Change namespace
   shell.wait_for(:output, /USER>/) do | process, match |
     process.write("ZN \"#{node[:vista][:namespace]}\"\n")

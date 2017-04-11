@@ -1,6 +1,6 @@
 # vxapi_utility
 
-VXAPI_URL = 'http://IP             /resource/docs/vx-api/'
+VXAPI_URL = 'http://IP_ADDRESS:PORT/resource/docs/vx-api/'
 
 # Utilities for RDK API tests
 module VxAPIUtility

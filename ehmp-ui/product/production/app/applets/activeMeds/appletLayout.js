@@ -15,12 +15,12 @@ define([
                 parse: function(response) {
                     var name = response.name;
                     var sig = " " + response.sig;
+                    var crsUtil = ADK.utils.crsUtil;
                     response.name = name.concat(sig);
+                    response[crsUtil.crsAttributes.CRSDOMAIN] = crsUtil.domain.MEDICATION;
                     return response;
-
                 }
             }
-
         },
         summaryColumns: [{
             name: 'name',
@@ -53,22 +53,21 @@ define([
         initialize: function(options) {
             this._super = ADK.Applets.BaseGridApplet.prototype;
             var self = this,
-                patientType = ADK.PatientRecordService.getCurrentPatient().attributes.patientStatusClass,
+                patientType = ADK.PatientRecordService.getCurrentPatient().patientStatusClass(),
                 viewType = 'summary';
 
             if (options.appletConfig.viewType !== undefined) {
                 viewType = options.appletConfig.viewType;
             }
 
-            CollectionHandler.initCollections();
             this.appletOptions = {
                 filterEnabled: true, // removed for demo purposes due to it not working well with the timeline
                 summaryColumns: summaryConfiguration.summaryColumns,
                 appletConfiguration: summaryConfiguration,
                 enableModal: true,
                 onClickRow: function(model, event) {
-                    var uid = model.get('uid'),
-                        currentPatient = ADK.PatientRecordService.getCurrentPatient();
+                    var uid = model.get('uid');
+                    var currentPatient = ADK.PatientRecordService.getCurrentPatient();
                     ADK.Messaging.getChannel("activeMeds").trigger('detailView', {
                         uid: uid,
                         patient: {
@@ -85,12 +84,16 @@ define([
                 self.shadowCollection = collection.clone();
             });
 
-
             this.listenTo(this.appletOptions.collection, 'customfilter', this.onCustomFilter);
             this.listenTo(this.appletOptions.collection, 'clear_customfilter', this.onClearCustomFilter);
 
             this.dataGridOptions = this.appletOptions;
             this.dataGridOptions.tblRowSelector = '#data-grid-' + this.options.appletConfig.instanceId + ' tbody tr';
+
+            this.dataGridOptions.toolbarOptions = {
+                buttonTypes: ['infobutton', 'detailsviewbutton']
+            };
+
             this._super.initialize.apply(this, arguments);
         },
         onCustomFilter: function(search) {

@@ -1,5 +1,5 @@
 /*!
- * Select2 4.0.1
+ * Select2 4.0.2
  * https://select2.github.io
  *
  * Released under the MIT license
@@ -751,9 +751,7 @@
                 Utils.statusReader = function(text){
                     var reader = $('#select2StatusReader');
                     if (!reader.length) $('body').append('<span id="select2StatusReader" class="status-reader" aria-live="assertive" aria-atomic="true"></span>');
-                    setTimeout(function(){
-                        $('#select2StatusReader').html(text);
-                    },500);
+                    $('#select2StatusReader').text(text);
                 };
                 Utils.getSelectionText = function(container){
                     var actualSelect = container.data().element;
@@ -952,6 +950,12 @@
                 Results.prototype.option = function(data) {
                     var option = document.createElement('li');
                     option.className = 'select2-results__option';
+                    var emptyOption = false;
+                    
+                    if (data.text === "") {
+                        emptyOption = true;
+                        option.className += " empty-option";
+                    }
 
                     var attrs = {
 //                        'role': 'treeitem',
@@ -975,7 +979,7 @@
                         option.title = data.title;
                     }
 
-                    if (data.children) {
+                    if (data.children & !emptyOption) {
 //                        attrs.role = 'group';
                         attrs['x-is-label'] = data.text;
                         delete attrs['x-is-selected'];
@@ -1179,7 +1183,9 @@
 
                     container.on('results:focus', function(params) {
                         params.element.addClass('select2-results__option--highlighted');
-                        if (params.element.attr('x-is-selected')=="true"){
+                        if (params.element.hasClass('empty-option')){
+                            Utils.statusReader('blank');
+                        } else if (params.element.attr('x-is-selected')=="true"){
                             var addendum = (self.data.options.options.multiple?', press enter to deselect it':'.');
                             Utils.statusReader(params.data.text+' highlighted. ' + params.data.text + ' is already selected' + addendum);
                         } else {
@@ -1195,11 +1201,7 @@
                         this.$results.on('mousewheel', function(e) {
                             var top = self.$results.scrollTop();
 
-                            var bottom = (
-                                self.$results.get(0).scrollHeight -
-                                self.$results.scrollTop() +
-                                e.deltaY
-                            );
+                            var bottom = self.$results.get(0).scrollHeight - top + e.deltaY;
 
                             var isAtTop = e.deltaY > 0 && top - e.deltaY <= 0;
                             var isAtBottom = e.deltaY < 0 && bottom <= self.$results.height();
@@ -1536,7 +1538,7 @@
                     this.$selection.find('.select2-selection__rendered').attr('id', id);
                     this.$selection.attr('x-is-labelledby', id);
 
-                    this.$selection.on('mousedown', function(evt) {
+                    this.$selection.on('click', function(evt) {  // use click event instead of mousedown to prevent select2 closing near bottom of page
                         // Only respond to left clicks
                         if (evt.which !== 1) {
                             return;
@@ -1549,7 +1551,7 @@
 
                     this.$selection.on('focus', function(evt) {
                         // User focuses on the container
-                        Utils.statusReader('Selection box. Please enter in text to filter through options. Use the up and down arrows keys to view and press enter to select. ' + Utils.getSelectionText($container));
+                        Utils.statusReader('Selection box. Enter in text to filter through options. Use the up and down arrows keys to view and press enter to select. ' + Utils.getSelectionText($container));
                     });
 
                     this.$selection.on('blur', function(evt) {
@@ -1912,7 +1914,7 @@
                     });
 
                     container.on('focus', function(evt) {
-                        Utils.statusReader('Multiple selection box. Please enter in text to filter through options. Use the up and down arrows keys to view and press enter to select. ' + Utils.getSelectionText($container));
+                        Utils.statusReader('Multiple selection box. Enter in text to filter through options. Use the up and down arrows keys to view and press enter to select. ' + Utils.getSelectionText($container));
 
                         self.$search.trigger('focus');
                         self.$search.trigger('keydown');
@@ -3414,7 +3416,7 @@
                             var $existingOption = $existing.filter(onlyItem(item));
 
                             var existingData = this.item($existingOption);
-                            var newData = $.extend(true, {}, existingData, item);
+                            var newData = $.extend(true, {}, item, existingData);
 
                             var $newOption = this.option(newData);
 
@@ -3522,7 +3524,9 @@
 
                             callback(results);
                         }, function() {
-                            // TODO: Handle AJAX errors
+                            self.trigger('results:message', {
+                                message: 'errorLoading'
+                            });
                         });
 
                         self._request = $request;
@@ -3552,6 +3556,12 @@
 
                     if (createTag !== undefined) {
                         this.createTag = createTag;
+                    }
+
+                    var insertTag = options.get('insertTag');
+
+                    if (insertTag !== undefined) {
+                        this.insertTag = insertTag;
                     }
 
                     decorated.call(this, $element, options);
@@ -3905,7 +3915,7 @@
 
                     var $search = $(
                         '<span class="select2-search select2-search--dropdown">' +
-                        '<input class="select2-search__field" type="search" tabindex="-1"' +
+                        '<input title="Enter in text to begin filtering results below" class="select2-search__field" type="search" tabindex="-1"' +
                         ' autocomplete="off" autocorrect="off" autocapitalize="off"' +
                         ' spellcheck="false" role="textbox" />' +
                         '</span>'
@@ -4156,6 +4166,11 @@
                                 self._resizeDropdown();
                             });
 
+                            container.on('results:message', function() {
+                                self._positionDropdown();
+                                self._resizeDropdown();
+                            });
+
                             container.on('results:append', function() {
                                 self._positionDropdown();
                                 self._resizeDropdown();
@@ -4257,7 +4272,6 @@
 
                     var newDirection = null;
 
-                    var position = this.$container.position();
                     var offset = this.$container.offset();
 
                     offset.bottom = offset.top + this.$container.outerHeight(false);
@@ -4286,20 +4300,19 @@
                         top: container.bottom
                     };
 
-                    // Fix positioning with static parents
-                    // NOTICE ADK. Fix the lib defect.
-                    if (this.$dropdownParent.css('position') !== 'static' && !!this.$dropdownParent.offset()) {
-                        // this.$dropdownParent[0].style.position !== 'static'
-                        var parentOffset = this.$dropdownParent.offset();
+                    // Determine what the parent element is to use for calciulating the offset
+                    var $offsetParent = this.$dropdownParent;
 
-                        if (!isNaN(parentOffset.top)) {
-                            css.top -= parentOffset.top;
-                        }
-
-                        if (!isNaN(parentOffset.left)) {
-                            css.left -= parentOffset.left;
-                        }
+                    // For statically positoned elements, we need to get the element
+                    // that is determining the offset
+                    if ($offsetParent.css('position') === 'static') {
+                        $offsetParent = $offsetParent.offsetParent();
                     }
+
+                    var parentOffset = $offsetParent.offset();
+
+                    css.top -= parentOffset.top;
+                    css.left -= parentOffset.left;
 
                     if (!isCurrentlyAbove && !isCurrentlyBelow) {
                         newDirection = 'below';
@@ -4474,7 +4487,7 @@
                     inputTooLong: function(args) {
                         var overChars = args.input.length - args.maximum;
 
-                        var message = 'Please delete ' + overChars + ' character';
+                        var message = 'Delete ' + overChars + ' character';
 
                         if (overChars != 1) {
                             message += 's';
@@ -4485,7 +4498,7 @@
                     inputTooShort: function(args) {
                         var remainingChars = args.minimum - args.input.length;
 
-                        var message = 'Please enter ' + remainingChars + ' or more characters';
+                        var message = 'Enter ' + remainingChars + ' or more characters';
 
                         return message;
                     },
@@ -4567,7 +4580,7 @@
                 }
 
                 Defaults.prototype.apply = function(options) {
-                    options = $.extend({}, this.defaults, options);
+                    options = $.extend(true, {}, this.defaults, options);
 
                     if (options.dataAdapter == null) {
                         if (options.ajax != null) {
@@ -4851,8 +4864,8 @@
                             return matcher(params, match);
                         }
 
-                        var original = stripDiacritics(data.text).toUpperCase();
-                        var term = stripDiacritics(params.term).toUpperCase();
+                        var original = stripDiacritics(data.text).toUpperCase().replace(/\s+/g, '');
+                        var term = stripDiacritics(params.term).toUpperCase().replace(/\s+/g, '');
 
                         // Check if the text contains the term
                         if (original.indexOf(term) > -1) {
@@ -5131,6 +5144,7 @@
                         id = Utils.generateChars(4);
                     }
 
+                    id = id.replace(/(:|\.|\[|\]|,)/g, '');
                     id = 'select2-' + id;
 
                     return id;

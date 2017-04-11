@@ -16,10 +16,10 @@ define([
             control: "alertBanner",
             name: "message",
             dismissible: true,
-            extraClasses: ["alertBannerContainer"]
+            extraClasses: ["alert-banner-container"]
         }],
         ui: {
-            "alertBannerControl": ".alertBannerContainer"
+            "alertBannerControl": ".alert-banner-container"
         },
         onRender: function() {
             this.ui.alertBannerControl.trigger('control:icon', this.model.get('icon')).trigger('control:type', this.model.get('type')).trigger('control:title', this.model.get('title')).trigger('control:message', this.model.get('message'));
@@ -59,8 +59,7 @@ define([
                 title: ADK.UserService.getUserSession().get('facility').toUpperCase() + ' User',
                 size: 'medium',
                 backdrop: false,
-                keyboard: true,
-                footerView: 'none'
+                keyboard: true
             };
             var modalView = new ADK.UI.Modal({
                 view: this,

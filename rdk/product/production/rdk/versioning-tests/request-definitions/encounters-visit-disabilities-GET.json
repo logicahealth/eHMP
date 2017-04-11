@@ -8,13 +8,6 @@
 			"values": [
 			]
 		},
-		"fields": {
-			"name": "fields",
-			"paramType": "query",
-			"type": "string",
-			"values": [
-			]
-		},
 		"site": {
 			"name": "site",
 			"paramType": "query",

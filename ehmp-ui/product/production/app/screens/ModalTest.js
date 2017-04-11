@@ -3,6 +3,7 @@ define(function() {
 
     var allergyListConfig = {
         id: "modal-test",
+        context: 'patient',
         contentRegionLayout: "gridOne",
         appletHeader: "patient",
         applets: [{

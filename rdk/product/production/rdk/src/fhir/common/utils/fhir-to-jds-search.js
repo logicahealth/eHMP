@@ -7,10 +7,10 @@ var fhirUtils = require('./fhir-converter');
 var jds = require('./jds-query-helper');
 
 var JDSDateQueryOpMap = {
-    '>': 'gt',
-    '>=': 'gte',
-    '<': 'lt',
-    '<=': 'lte',
+    '>': 'dgt',
+    '>=': 'dgte',
+    '<': 'dlt',
+    '<=': 'dlte',
     get: function(op, forExclusiveDate) {
         var jdsOp = this[op];
 
@@ -22,7 +22,7 @@ var JDSDateQueryOpMap = {
                 jdsOp = this['<'];
             }
         }
-        return jdsOp ? jdsOp : 'eq'; // default to equal op (eq)
+        return jdsOp ? jdsOp : 'deq'; // default to equal op (eq)
     }
 };
 
@@ -92,7 +92,7 @@ function validateCommonParams(params, onSuccess, onError) {
             errors.push(validationErrors.INVALID_COUNT);
         }
     }
-    // FHIR _sort param takes different forms (_sort=propName, _sort:asc=propName, _sort:dsc=propName) // this is reflected in the query as three different query parameters.
+    // FHIR _sort param takes different forms (_sort=propName, _sort:asc=propName, _sort:desc=propName) // this is reflected in the query as three different query parameters.
     if (hasMoreThanOneSortParameter(params)) {
         // FHIR supports multiple _sort parameters but JDS does not, so we allow only one _sort query parameter.
         errors.push(validationErrors.TOO_MANY_SORT_PARAMS);
@@ -107,12 +107,12 @@ function validateCommonParams(params, onSuccess, onError) {
 function hasMoreThanOneSortParameter(params) {
     return hasMoreThanOne(params._sort) ||
         hasMoreThanOne(params['_sort:asc']) ||
-        hasMoreThanOne(params['_sort:dsc']) ||
+        hasMoreThanOne(params['_sort:desc']) ||
         hasMoreThanOneSortVariant(params);
 }
 
 function hasMoreThanOneSortVariant(params) {
-    return _.countBy(_.map([params._sort, params['_sort:asc'], params['_sort:dsc']], function(parameter) {
+    return _.countBy(_.map([params._sort, params['_sort:asc'], params['_sort:desc']], function(parameter) {
         return !!parameter;
     })).true > 1;
 }
@@ -293,7 +293,7 @@ function buildExplicitDateQuery(dateParam, jdsProperty, ignoreTime, includeSecon
         date = new Date(dateStr);
         isExclusiveDate = false;
     }
-    return JDSDateQueryOpMap.get(tokens[0], isExclusiveDate) + '(' + jdsProperty + ',' + fhirUtils.convertDateToHL7V2(date, includeSeconds, ignoreTime) + ')';
+    return JDSDateQueryOpMap.get(tokens[0], isExclusiveDate) + '(' + jdsProperty + ',\"' + fhirUtils.convertDateToHL7V2(date, includeSeconds, ignoreTime) + '\")';
 }
 
 /**
@@ -316,7 +316,7 @@ function buildImplicitDateRangeQuery(dateStr, jdsProperty, isNegated, ignoreTime
 
     if (YYYY_MM_DD_HH_MM_SS_Regex.test(dateStr)) {
         // this is an exact match search
-        query = getExactDateQuery(new Date(dateStr), jdsProperty, isNegated, ignoreTime, includeSeconds);
+        query = getExactDateQuery(new Date(dateStr), jdsProperty, isNegated, ignoreTime, true);
     } else {
         query = getDateRangeQuery(getDateRange(dateStr), jdsProperty, isNegated, ignoreTime, includeSeconds);
     }
@@ -342,18 +342,17 @@ function getDateRange(dateStr) {
 }
 
 function getExactDateQuery(date, jdsProperty, isNegated, ignoreTime, includeSeconds) {
-    var jdsOp = isNegated ? 'ne' : 'eq';
-    return jdsOp + '(' + jdsProperty + ',' + fhirUtils.convertDateToHL7V2(date, includeSeconds, ignoreTime) + ')';
+    var jdsOp = isNegated ? 'dne' : 'deq';
+    return jdsOp + '(' + jdsProperty + ',\"' + fhirUtils.convertDateToHL7V2(date, includeSeconds, ignoreTime) + '\")';
 }
 
 function getDateRangeQuery(range, jdsProperty, isNegated, ignoreTime, includeSeconds) {
-
     if (isNegated) {
         // when searching for a negated range, we search for either below OR above the date range
-        return jds.or(jds.lt(jdsProperty, fhirUtils.convertDateToHL7V2(range.inclusiveStart, includeSeconds, ignoreTime)), jds.gte(jdsProperty, fhirUtils.convertDateToHL7V2(range.exclusiveEnd, includeSeconds, ignoreTime)));
+        return jds.or(jds.dlt(jdsProperty, '\"' + fhirUtils.convertDateToHL7V2(range.inclusiveStart, includeSeconds, ignoreTime) + '\"'),jds.dgte(jdsProperty, '\"' + fhirUtils.convertDateToHL7V2(range.exclusiveEnd, includeSeconds, ignoreTime) + '\"'));
     } else {
         // search within the range
-        return jds.gte(jdsProperty, fhirUtils.convertDateToHL7V2(range.inclusiveStart, includeSeconds, ignoreTime)) + ',' + jds.lt(jdsProperty, fhirUtils.convertDateToHL7V2(range.exclusiveEnd, includeSeconds, ignoreTime));
+       return jds.dgte(jdsProperty, '\"' + fhirUtils.convertDateToHL7V2(range.inclusiveStart, includeSeconds, ignoreTime) + '\"') + ',' + jds.dlt(jdsProperty, '\"' + fhirUtils.convertDateToHL7V2(range.exclusiveEnd, includeSeconds, ignoreTime) + '\"');
     }
 }
 
@@ -426,7 +425,7 @@ function buildCommonQueryParams(params, fhirToJDSSortMap) {
 function buildSortQuery(params, fhirToJDSSortMap) {
     var jdsCriteria;
     var queryStr;
-    // FHIR _sort param takes different forms (_sort=propName, _sort:asc=propName, _sort:dsc=propName)
+    // FHIR _sort param takes different forms (_sort=propName, _sort:asc=propName, _sort:desc=propName)
     // this is reflected in the query as three different query parameters
     if (nullchecker.isNotNullish(params._sort)) {
         jdsCriteria = fhirToJDSSortMap[params._sort];
@@ -434,8 +433,8 @@ function buildSortQuery(params, fhirToJDSSortMap) {
     } else if (nullchecker.isNotNullish(params['_sort:asc'])) {
         jdsCriteria = fhirToJDSSortMap[params['_sort:asc']];
         queryStr = 'order=' + jdsCriteria;
-    } else if (nullchecker.isNotNullish(params['_sort:dsc'])) {
-        jdsCriteria = fhirToJDSSortMap[params['_sort:dsc']];
+    } else if (nullchecker.isNotNullish(params['_sort:desc'])) {
+        jdsCriteria = fhirToJDSSortMap[params['_sort:desc']];
         queryStr = 'order=' + jdsCriteria + '%20DESC';
     }
     return nullchecker.isNullish(jdsCriteria) ? null : queryStr;
@@ -461,8 +460,8 @@ function isSortCriteriaValid(params, fhirToJDSSortMap) {
         return nullchecker.isNotNullish(fhirToJDSSortMap[params._sort]);
     } else if (nullchecker.isNotNullish(params['_sort:asc'])) {
         return nullchecker.isNotNullish(fhirToJDSSortMap[params['_sort:asc']]);
-    } else if (nullchecker.isNotNullish(params['_sort:dsc'])) {
-        return nullchecker.isNotNullish(fhirToJDSSortMap[params['_sort:dsc']]);
+    } else if (nullchecker.isNotNullish(params['_sort:desc'])) {
+        return nullchecker.isNotNullish(fhirToJDSSortMap[params['_sort:desc']]);
     } else {
         return true; // there's no _sort parameter, thus it is not invalid
     }
@@ -486,6 +485,82 @@ function buildJDSPath(basePath, searchQuery, params, fhirToJDSSortMap) {
     return jdsPath;
 }
 
+/**
+ * getAllowableSortFhirValueString
+ * @param {Array} fhirToJDSAttrMap  A defined array of sortable parameters.
+ * @return {String} Comma delimited list of all sortable Fhir attribute for Procedure
+ */
+function getAllowableSortFhirValueString(fhirToJDSAttrMap) {
+    var sortString = _.filter(fhirToJDSAttrMap, function(item) {
+        return item.sortable;
+    }).map(function(item) {
+        return item.fhirName;
+    }).join(', ');
+
+    return sortString;
+}
+
+/**
+ * nonSortableAttr Fixed enumeration of fhir to jds attributes (names) that should not be included in the simplified sort array.
+ * @type {Array}
+ */
+var nonSortableAttr = ['dataType', 'definition', 'description', 'searchable', 'sortable'];
+/**
+ * getSimplifiedParamsArray
+ *     Function will  take in a list of customer given params,
+ *     and an array of defined fhir-to-jds map attributes.
+ *     Function will do a transform that will:
+ *
+ *     1) extract the sortable only attributes
+ *     2) and reformat into a simplified array
+ *     3) and transform simplified array into a flat Object
+ *
+ * @param  {Array}  params an array of customer given params
+ * @param  {Array}  fhirToJDSAttrMap an array defined fhir-to-jds map attributes
+ * @return {Boolean}   true if params list contains all valid sortable parameters, else false.
+ */
+function getSimplifiedSortArray(params, fhirToJDSAttrMap) {
+    //--------------------------------------------------------------
+    // reduce array items to just fhirName and vprName attributes
+    // create a new array of only sortable key/value attributes
+    //--------------------------------------------------------------
+    var results = _.transform(fhirToJDSAttrMap, function(result, n) {
+        if (n.sortable) {
+            n = _.omit(n, nonSortableAttr);
+
+            var obj = {};
+            obj[n.fhirName] = n.vprName;
+
+            result.push(obj);
+        }
+    });
+
+    //--------------------------------------------------------------
+    // transform the array to an object
+    //--------------------------------------------------------------
+    var mapList = _.transform(results, _.ary(_.extend, 2), {});
+    return mapList;
+}
+
+/**
+ * isSortParamsValid
+ *     Function will  take in a list of customer given params,
+ *     and an array of defined fhir-to-jds map attributes.
+ *     Function will do a transform that will:
+ *
+ *     1) extract the sortable only attributes
+ *     2) and reformat into a simplified array
+ *     3) and transform simplified array into a flat Object to check for sortability.
+ *
+ * @param  {Array}  params an array of customer given params
+ * @param  {Array}  fhirToJDSAttrMap an array defined fhir-to-jds map attributes
+ * @return {Boolean}   true if params list contains all valid sortable parameters, else false.
+ */
+function isSortParamsValid(params, fhirToJDSAttrMap) {
+    getSimplifiedSortArray(params, fhirToJDSAttrMap);
+    return isSortCriteriaValid(params, mapList);
+}
+
 module.exports.isDate = isDate;
 module.exports.isDateTime = isDateTime;
 module.exports.getDateParamOp = getDateParamOp;
@@ -500,3 +575,6 @@ module.exports.buildCommonQueryParams = buildCommonQueryParams;
 module.exports.validationErrorsToString = validationErrorsToString;
 module.exports.buildSortQuery = buildSortQuery;
 module.exports.isSortCriteriaValid = isSortCriteriaValid;
+module.exports.getSimplifiedSortArray = getSimplifiedSortArray;
+module.exports.getAllowableSortFhirValueString = getAllowableSortFhirValueString;
+module.exports.isSortParamsValid = isSortParamsValid;

@@ -12,7 +12,7 @@ define([
 
     var deleteMessageItemView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile([
-            '<p>Are you sure you want to delete <b>{{screenTitle}}?</b></p><span class="sr-only">Note that focus will shift to the beginning of the Workspace Manager Screen after deleting a workspace.</span>'
+            '<p>Are you sure you want to delete <strong>{{screenTitle}}?</strong></p><span class="sr-only">Note that focus will shift to the beginning of the Workspace Manager Screen after deleting a workspace.</span>'
         ].join('\n')),
     });
     var deleteFooterItemView = Backbone.Marionette.ItemView.extend({
@@ -26,7 +26,7 @@ define([
                 this.model.get('buttonEl').focus();
             },
             'click .btn-danger': function() {
-                ADK.ADKApp.ScreenPassthrough.deleteUserScreen(this.model.get('tableRow').attr('id'));
+                ADK.ADKApp.ScreenPassthrough.deleteUserScreen(this.model.get('tableRow').attr('data-screen-id'));
                 ADK.UI.Alert.hide();
                 ADK.UI.FullScreenOverlay.hide();
                 var channel = ADK.Messaging.getChannel('workspaceManagerChannel');
@@ -37,7 +37,7 @@ define([
 
     var AppletLayoutView = Backbone.Marionette.LayoutView.extend({
         template: screenEditor,
-        className: 'workspaceManager-applet',
+        className: 'workspaceManager-applet full-height',
         initialize: function() {
             var self = this;
             this.model = new Backbone.Model();
@@ -55,6 +55,12 @@ define([
                     this.filterScreens();
                 }
             },
+            'click #gridFilterButtonWorkspaceManager': function(e){
+                var filterContainer = $(e.currentTarget).closest('.full-height');
+                filterContainer.one('shown.bs.collapse', function() {
+                    filterContainer.find('input[type=search]').focus();
+                });
+            },
             'click .clearSearch': 'clearSearch',
             'click #doneEditing': 'hideOverlay',
             'click .addScreen': 'triggerAddNew',
@@ -65,7 +71,7 @@ define([
         hideOverlay: function() {
             ADK.UI.FullScreenOverlay.hide();
             ADK.Messaging.trigger('close:workspaceManager');
-            $('#workspace-manager-button').focus();
+            $('#workspaceManagerButton').focus();
         },
         onBeforeAttach: function() {
             this.managerRegion.show(new WorkspaceCollectionView());
@@ -104,6 +110,7 @@ define([
             });
             var deleteAlertView = new ADK.UI.Alert({
                 title: 'Delete Workspace',
+                icon:'icon-delete',
                 messageView: deleteMessageItemView.extend({
                     model: deleteMessageModel
                 }),
@@ -121,7 +128,7 @@ define([
             var title = tableRow.find('.editor-input-element').val();
             title = (_.isUndefined(title) ? tableRow.find('.editor-title').text() : title);
             var previewView = PreviewWorkspaceView.extend({
-                screenId: tableRow.attr('id'),
+                screenId: tableRow.attr('data-screen-id'),
                 screenTitle: title
             });
 

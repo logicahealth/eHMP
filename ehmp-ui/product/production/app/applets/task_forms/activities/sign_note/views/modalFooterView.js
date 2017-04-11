@@ -13,11 +13,8 @@ define([
         },
         initialize: function(options){
             this.parentView = options.parentView || null;
-            this.taskListView = options.taskListView || null;
         },
         fireCloseEvent: function(e){
-            // TODO: Uncomment when final decisions are made
-            // EventHandler.unclaimTask.call(this, e, this.parentView);
             EventHandler.fireCloseEvent.call(this, e);
         }
     });

@@ -1,8 +1,9 @@
 'use strict';
 var rdk = require('../../../core/rdk');
-var httpUtil = rdk.utils.http;
 var _ = require('lodash');
 var moment = require('moment');
+var solrSmartClient = require('solr-smart-client');
+var ForeverAgent = require('forever-agent');
 
 module.exports.executeSolrQuery = executeSolrQuery;
 module.exports.compileQueryParameters = compileQueryParameters;
@@ -10,25 +11,30 @@ module.exports.generateFacetMap = generateFacetMap;
 module.exports.emulatedHmpGetRelativeDate = emulatedHmpGetRelativeDate;
 module.exports.escapeQueryChars = escapeQueryChars;
 
+var solrClient = null;
+var foreverAgent = new ForeverAgent();
+
+function initSolr(solrConfig, req) {
+    //initClient only needs to be called once.
+    if (solrClient === null){
+        req.logger.error('SolrSmartClient.InitClient called');
+        solrClient = solrSmartClient.initClient(solrConfig.core, solrConfig.zooKeeperConnection, req.logger, foreverAgent);
+    }
+}
+
 function executeSolrQuery(queryString, method, req, callback) {
-    var config = {
-        baseUrl: req.app.config.solrServer.baseUrl,
-        url: req.app.config.solrServer.url + '/' + method + '?' + queryString,
-        logger: req.logger,
-        json: true
-    };
 
-    req.logger.info('GET ' + config.baseUrl + config.url);
+    var solrConfig = req.app.config.solrClient;
+    initSolr(solrConfig, req);
 
-    httpUtil.get(config, function(error, response, solrResult) {
+    solrClient.get(method, queryString, function(error, solrResult){
         if (error) {
             req.logger.error('Error performing search', (error.message || error));
             return callback(error);
-            //            res.status(500).rdkSend('There was an error processing your request. The error has been logged.');
         } else {
             return callback(null, solrResult);
         }
-    });
+    })
 }
 
 

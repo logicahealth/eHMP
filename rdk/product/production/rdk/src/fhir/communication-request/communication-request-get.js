@@ -2,13 +2,44 @@
 
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
+var async = require('async');
 var communicationRequestFilter = require('./communication-request-filter');
+var pjdsHandler = require('./persistence/pjds-handler.js');
+
+function buildFilter(queueName, id, status) {
+    var filter;
+    filter = 'eq("recipient[].reference",' + queueName + ')';
+    if (!_.isUndefined(id) && !_.isNull(id)) {
+        filter += ',' + 'eq(id,' + id + ')';
+    }
+    if (!_.isUndefined(status) && !_.isNull(status)) {
+        filter += ',' + 'eq(status,' + status + ')';
+    }
+    return filter;
+}
 
 module.exports.handle = function(queue, queueName, params, callback) {
-
+    var jdsQuery = {};
+    var req = arguments[4];
+    var res = arguments[5];
     if (_.isString(params)) {
         //params = resourceId
-        return queue.dequeue(queueName, params, callback);
+        var id = params;
+        return queue.dequeue(queueName, id, function(err, message) {
+            if (err && err.code === 404) {
+                jdsQuery.filter = buildFilter(queueName, id);
+                return pjdsHandler.getAll(req.logger, req.app.config, jdsQuery, function(error, items) {
+                    if (error) {
+                        return callback(error);
+                    }
+                    if (items.length === 0) {
+                        return callback(err, message);
+                    }
+                    return callback(null, items[0]);
+                });
+            }
+            return callback(err, message);
+        });
     }
 
     //params = req.params (possible filter keys)
@@ -16,43 +47,14 @@ module.exports.handle = function(queue, queueName, params, callback) {
         if (err) {
             return callback(err);
         }
-        return callback(err, communicationRequestFilter.filter(params, results));
-    });
-};
-
-module.exports.handleNew = function(queue, queueName, startTime, params, callback) {
-    var response = [];
-    queue.dequeueAll(queueName, function(err, results) {
-        if (err) {
-            return callback(err);
-        }
-        var res = communicationRequestFilter.filter(params, results);
-        for (var i = 0; i < res.length; i++) {
-            if (new Date(startTime).getTime() < new Date(res[i].requestedOn).getTime()) {
-                response.push(res[i]);
+        jdsQuery.filter = buildFilter(queueName, null, 'completed');
+        pjdsHandler.getAll(req.logger, req.app.config, jdsQuery, function(err, pjdsResults) {
+            if (err) {
+                return callback(err);
             }
-        }
-        if (response.length > 0) {
-            return callback(err, response);
-        }
+            var resultsArray = _.union(results,pjdsResults);
+            return callback(err, communicationRequestFilter.filter(params, resultsArray));
+        });
+
     });
-    if (response.length === 0) {
-        var queryTimer = setInterval(function(queue, queueName, startTime, params, callback) {
-            queue.dequeueAll(queueName, function(err, results) {
-                if (err) {
-                    return callback(err);
-                }
-                var res = communicationRequestFilter.filter(params, results);
-                for (var i = 0; i < res.length; i++) {
-                    if (new Date(startTime).getTime() < new Date(res[i].requestedOn).getTime()) {
-                        response.push(res[i]);
-                    }
-                }
-                if (response.length > 0) {
-                    clearInterval(queryTimer);
-                    return callback(err, response);
-                }
-            });
-        }, 3000, queue, queueName, startTime, params, callback);
-    }
 };

@@ -15,21 +15,22 @@ var writeOrderToVista = {};
 writeOrderToVista['Medication, Outpatient'] = require('./med/orders-med-vista-writer');
 writeOrderToVista['Laboratory'] = require('./lab/orders-lab-vista-writer');
 
+var writeToPjds = require('./common/orders-common-pjds-writer');
 
 module.exports.getResourceConfig = function() {
     return [{
-        name: 'orders-create',
-        path: '',
+        name: 'orders-lab-create',
+        path: '/lab',
         post: withOrderType('create'),
         interceptors: {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ['add-lab-order'], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['add-lab-order'],
         isPatientCentric: true
     }, {
-        name: 'orders-update',
-        path: '/:resourceId',
+        name: 'orders-lab-update',
+        path: '/lab/:resourceId',
         put: withOrderType('update'),
         interceptors: {
             operationalDataCheck: false,
@@ -38,9 +39,9 @@ module.exports.getResourceConfig = function() {
         requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
         isPatientCentric: true
     }, {
-        name: 'orders-edit',
-        path: '/:resourceId',
-        get: commonOrder('edit'),
+        name: 'orders-lab-edit',
+        path: '/lab/:resourceId',
+        get: commonOrder('editLab'),
         interceptors: {
             operationalDataCheck: false,
             synchronize: false
@@ -48,9 +49,9 @@ module.exports.getResourceConfig = function() {
         requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
         isPatientCentric: true
     }, {
-        name: 'orders-detail',
-        path: '/detail/:resourceId',
-        get: commonOrder('detail'),
+        name: 'orders-lab-detail',
+        path: '/detail-lab/:resourceId',
+        get: commonOrder('detailLab'),
         interceptors: {
             operationalDataCheck: false,
             synchronize: false
@@ -58,9 +59,9 @@ module.exports.getResourceConfig = function() {
         requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
         isPatientCentric: true
     }, {
-        name: 'orders-sign-details',
-        path: '/sign-details',
-        post: commonOrder('signDetails'),
+        name: 'orders-lab-sign-details',
+        path: '/sign-details-lab',
+        post: commonOrder('signDetailsLab'),
         interceptors: {
             operationalDataCheck: false,
             synchronize: false
@@ -68,9 +69,9 @@ module.exports.getResourceConfig = function() {
         requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
         isPatientCentric: true
     }, {
-        name: 'orders-discontinue-details',
-        path: '/discontinue-details',
-        post: commonOrder('discontinueDetails'),
+        name: 'orders-lab-discontinue-details',
+        path: '/discontinue-details-lab',
+        post: commonOrder('discontinueDetailsLab'),
         interceptors: {
             operationalDataCheck: false,
             synchronize: false
@@ -78,39 +79,40 @@ module.exports.getResourceConfig = function() {
         requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
         isPatientCentric: true
     }, {
-        name: 'orders-discontinue',
-        path: '/discontinue',
-        delete: withOrderType('discontinue'),
+        name: 'orders-lab-discontinue',
+        path: '/discontinue-lab',
+        delete: withOrderType('discontinueLab'),
         interceptors: {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ['discontinue-lab-order'], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['discontinue-lab-order'],
         isPatientCentric: true
     }, {
-        name: 'orders-sign',
-        path: '/sign',
-        post: commonOrder('signOrders'),
+        name: 'orders-lab-sign',
+        path: '/sign-lab',
+        post: commonOrder('signOrdersLab'),
         interceptors: {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ['sign-lab-order'], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['sign-lab-order'],
         isPatientCentric: true
     }, {
-        name: 'orders-save-draft',
-        path: '/save-draft',
-        post: commonOrder('saveDraftOrder'),
+        name: 'orders-lab-save-draft',
+        path: '/save-draft-lab',
+        post: commonOrder('saveDraftLabOrder'),
         interceptors: {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ['add-lab-order'], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['add-lab-order'],
         isPatientCentric: true
-    }, {
-        name: 'orders-find-draft',
-        path: '/find-draft',
-        post: commonOrder('findDraftOrders'),
+    },
+    {
+        name: 'orders-lab-find-draft',
+        path: '/find-draft-lab',
+        post: commonOrder('findDraftLabOrders'),
         interceptors: {
             operationalDataCheck: false,
             synchronize: false
@@ -144,7 +146,8 @@ function withOrderType(action) {
             tasks = [
                 validateOrders[orderType][action],
                 writeOrderToVista[orderType][action],
-                writeVprToJds
+                writeVprToJds,
+                writeToPjds
             ];
         }
         writebackWorkflow(req, res, tasks);

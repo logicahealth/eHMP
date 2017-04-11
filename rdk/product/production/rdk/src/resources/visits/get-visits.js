@@ -13,6 +13,7 @@ var getVistaRpcConfiguration = require('../../utils/rpc-config').getVistaRpcConf
 var nullchecker = rdk.utils.nullchecker;
 var paramUtil = require('../../utils/param-converter');
 var filemanDateUtil = require('../../utils/fileman-date-converter');
+var locationUtil = rdk.utils.locationUtil;
 
 /**
  * Constants
@@ -40,8 +41,8 @@ interceptors.admissions = {
 var permissions = {};
 permissions.providers = [];
 permissions.locations = [];
-permissions.appointments = ['add-encounter', 'edit-encounter', 'read-encounter', 'eie-encounter'];
-permissions.admissions = ['add-encounter', 'edit-encounter', 'read-encounter', 'eie-encounter'];
+permissions.appointments = ['read-encounter'];
+permissions.admissions = ['read-encounter'];
 
 var isPatientCentric = {};
 isPatientCentric.providers = false;
@@ -190,7 +191,7 @@ function getAdmissions(req, res) {
                     var visitType = element[0];
 
                     if (visitType === 'I') {
-                        var visitDateTime = filemanDateUtil.getVprDateTime(element[1]);
+                        var dateTime = filemanDateUtil.getVprDateTime(element[1]);
                         var visitString = element[2];
 
                         if (visitString) {
@@ -199,14 +200,14 @@ function getAdmissions(req, res) {
                                 visitString: visitString
                             });
 
-                            var locationIEN = visitString[0];
+                            var locationUid = locationUtil.getLocationUid(req.session.user.site,'W',visitString[0]);  
                             var locationName = visitString[3];
                             var details = visitString[4];
 
                             var admission = {};
                             admission.visitType = visitType;
-                            admission.dateTime = visitDateTime;
-                            admission.locationIEN = locationIEN;
+                            admission.dateTime = dateTime;
+                            admission.locationUid = locationUid;
                             admission.locationDisplayName = locationName;
                             admission.details = details;
 
@@ -286,20 +287,20 @@ function getAppointments(req, res) {
                     element = element.split(';');
 
                     var visitType = element[0];
-                    var visitDateTime = filemanDateUtil.getVprDateTime(element[1]);
+                    var dateTime = filemanDateUtil.getVprDateTime(element[1]);
                     var visitString = element[2];
 
                     if (visitString) {
                         visitString = visitString.split('^');
 
-                        var locationIEN = visitString[0];
+                        var locationUid = locationUtil.getLocationUid(req.session.user.site,'',visitString[0] ); 
                         var locationDisplayName = visitString[2];
                         var details = visitString[3];
 
                         var appointment = {};
                         appointment.visitType = visitType;
-                        appointment.visitDateTime = visitDateTime;
-                        appointment.locationIEN = locationIEN;
+                        appointment.dateTime = dateTime;
+                        appointment.locationUid = locationUid;
                         appointment.locationDisplayName = locationDisplayName;
                         appointment.details = details;
 

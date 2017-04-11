@@ -1,17 +1,17 @@
-<div role="presentation" class="toolbar-container"/>
 <div role="row" class="table-row" {{#if userWorkspace}} draggable="true" {{/if}}>
-    <div role="presentation" class="selectable info-display flex-width-1">
-        <span class="sr-only">Press enter to open or close the toolbar menu.</span>
-        <div data-cell-instanceid="event_name_{{id}}" role="gridcell" class="table-cell flex-width-2 {{#unless acuityName}}border-vertical {{/unless}}problem-name">
+    <div role="presentation" class="selectable flex-width-1">
+        <div data-cell-instanceid="event_name_{{id}}" role="gridcell" class="table-cell flex-width-2 {{#unless acuityName}}border-vertical {{/unless}}problem-name" data-cell-tilesort="tilesort">
+            <span class="sr-only toolbar-instructions">Press enter to open the toolbar menu.</span>
+            <div role="presentation" class="toolbar-container"></div>
             <span>
             {{formatNewLine groupName}}
             {{#if allGroupedComments}}
                 <sup>
-                    <span data-item-instanceid="comment_{{id}}" class="fa fa-comment"></span>
+                    <i data-item-instanceid="comment_{{id}}" class="fa fa-comment"></i>
                 </sup>
                 {{else}}
                 <sup>
-                    <span data-item-instanceid="transparent_{{id}}" class="fa fa-transparent-comment"></span>
+                    <i data-item-instanceid="transparent_{{id}}" class="fa fa-transparent-comment"></i>
                 </sup>
             {{/if}}
             </span>

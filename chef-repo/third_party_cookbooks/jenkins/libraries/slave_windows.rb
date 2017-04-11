@@ -46,10 +46,10 @@ class Chef
               default: 'C:\jenkins'
     attribute :winsw_url,
               kind_of: String,
-              default: 'http://repo.jenkins-ci.org/releases/com/sun/winsw/winsw/1.16/winsw-1.16-bin.exe'
+              default: 'http://repo.jenkins-ci.org/releases/com/sun/winsw/winsw/1.17/winsw-1.17-bin.exe'
     attribute :winsw_checksum,
               kind_of: String,
-              default: '052f82c167fbe68a4025bcebc19fff5f11b43576a2ec62b0415432832fa2272d'
+              default: '5859b114d96800a2b98ef9d19eaa573a786a422dad324547ef25be181389df01'
     attribute :path,
               kind_of: String
     attribute :pre_run_cmds,
@@ -76,7 +76,12 @@ class Chef
       #  * remote_fs_dir_resource
       #  * slave_jar_resource
       #
-      slave_exe_resource.run_action(:create)
+
+      # The jenkins-slave.exe is needed to get the slave up and running under a windows service.
+      # However, once it is created Jenkins Master wants to control the version.  So we should only
+      # create the file if it is missing.
+      slave_exe_resource.run_action(:create_if_missing)
+
       slave_compat_xml.run_action(:create)
       slave_bat_resource.run_action(:create)
       slave_xml_resource.run_action(:create)
@@ -142,14 +147,15 @@ class Chef
       return @slave_compat_xml if @slave_compat_xml
       slave_compat_xml = ::File.join(new_resource.remote_fs, "#{new_resource.service_name}.exe.config")
       @slave_compat_xml = Chef::Resource::File.new(slave_compat_xml, run_context)
-      @slave_compat_xml.content(<<-EOH.gsub(/ ^{8}/, '')
+      @slave_compat_xml.content(
+        <<-EOH.gsub(/ ^{8}/, '')
         <configuration>
           <startup>
             <supportedRuntime version="v2.0.50727" />
             <supportedRuntime version="v4.0" />
           </startup>
         </configuration>
-      EOH
+        EOH
       )
       @slave_compat_xml
     end

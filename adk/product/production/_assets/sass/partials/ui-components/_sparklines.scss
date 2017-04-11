@@ -32,6 +32,7 @@
     display: inline;
     margin-left: -2px;
     height: 21px;
+    min-width: calc(100% - 2px);
     .outterBorder {
         stroke: none;
         fill: transparent;
@@ -76,9 +77,6 @@
         rect {
             @extend .abnormalRange;
         }
-    }
-    .hashedRange {
-        fill: url(#textureHashed);
     }
     .valueMarker {
         overflow: visible;

@@ -8,6 +8,7 @@ task zipData(type: Zip) {
   version = getVersionByCommitCountForProject(":tests:jds_data")
   destinationDir buildDir
   from "${projectDir}/ehmpusers/src"
+  from "${projectDir}/entordrbls/src"
   from "${projectDir}/permissionSets/src"
   from "${projectDir}/permissions/src"
   from "${projectDir}/teams/src"
@@ -19,5 +20,5 @@ build.dependsOn zipData
 uploadArchives.dependsOn zipData
 
 artifacts {
-  archives zipData.archivePath
+  archives zipData
 }

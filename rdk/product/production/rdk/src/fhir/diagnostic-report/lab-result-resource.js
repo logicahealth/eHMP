@@ -151,21 +151,49 @@ function setSubject(dr, pid) {
     }
 }
 
-function setIssued(dr, item) {
+//---------------------------------------
+//NOTE: For contained Observations
+// Set issued = resulted(if non-null), else issued = observed(if non-null)
+// Set appliesDateTime = observed(if non-null), else appliesDateTime = resulted(if non-null)
+//---------------------------------------
+function setIssuedForObsv(dr, item) {
     if (nullchecker.isNotNullish(item.resulted)) {
-        dr.issued = fhirUtils.convertToFhirDateTime(item.resulted);
+        dr.issued = fhirUtils.convertToFhirDateTime(item.resulted, fhirUtils.getSiteHash(item.uid));
     }
     if (nullchecker.isNullish(dr.issued) && nullchecker.isNotNullish(item.observed)) {
-        dr.issued = fhirUtils.convertToFhirDateTime(item.observed);
+        dr.issued = fhirUtils.convertToFhirDateTime(item.observed, fhirUtils.getSiteHash(item.uid));
+    }
+}
+
+function setApplies_X_(dr, item) {
+    if (nullchecker.isNotNullish(item.observed)) {
+        dr.appliesDateTime = fhirUtils.convertToFhirDateTime(item.observed, fhirUtils.getSiteHash(item.uid));
+    }
+    if (nullchecker.isNullish(dr.appliesDateTime) && nullchecker.isNotNullish(item.resulted)) {
+        dr.appliesDateTime = fhirUtils.convertToFhirDateTime(item.resulted, fhirUtils.getSiteHash(item.uid));
+    }
+}
+
+//---------------------------------------
+//NOTE:
+//Set issued = resulted(if non-null), else issued = observed(if non-null)
+//Set diagnosticDateTime = observed(if non-null), else diagnosticDateTime = resulted(if non-null)
+//---------------------------------------
+function setIssued(dr, item) {
+    if (nullchecker.isNotNullish(item.resulted)) {
+        dr.issued = fhirUtils.convertToFhirDateTime(item.resulted, fhirUtils.getSiteHash(item.uid));
+    }
+    if (nullchecker.isNullish(dr.issued) && nullchecker.isNotNullish(item.observed)) {
+        dr.issued = fhirUtils.convertToFhirDateTime(item.observed, fhirUtils.getSiteHash(item.uid));
     }
 }
 
 function setDiagnostic_X_(dr, item) {
     if (nullchecker.isNotNullish(item.observed)) {
-        dr.diagnosticDateTime = fhirUtils.convertToFhirDateTime(item.observed);
+        dr.diagnosticDateTime = fhirUtils.convertToFhirDateTime(item.observed, fhirUtils.getSiteHash(item.uid));
     }
     if (nullchecker.isNullish(dr.diagnosticDateTime) && nullchecker.isNotNullish(item.resulted)) {
-        dr.diagnosticDateTime = fhirUtils.convertToFhirDateTime(item.resulted);
+        dr.diagnosticDateTime = fhirUtils.convertToFhirDateTime(item.resulted, fhirUtils.getSiteHash(item.uid));
     }
 }
 
@@ -236,10 +264,10 @@ function createOrganization(item) {
     }
     var orgText = '';
     if (nullchecker.isNotNullish(contOrganization.name)) {
-        orgText += contOrganization.name;
+        orgText += _.escape(contOrganization.name);
     }
     if (nullchecker.isNotNullish(orgAddressText)) {
-        orgText += '<br/>' + orgAddressText;
+        orgText += '<br/>' + _.escape(orgAddressText);
     }
     if (nullchecker.isNotNullish(orgText)) {
         contOrganization.text = new fhirResource.Narrative('<div>' + orgText + '</div>');
@@ -267,7 +295,7 @@ function setName(dr, item) {
         name.coding.push(new fhirResource.Coding(item.vuid, item.typeName, constants.labResultsFhir.LAB_RESULTS_UID_IDENTIFIER_SYSTEM));
     }
     if (nullchecker.isNotNullish(item.typeCode)) {
-        name.coding.push(new fhirResource.Coding(item.typeCode, item.typeName, constants.labResultsFhir.DIAGNOSTIC_REPORTS_SYSTEM));
+        name.coding.push(new fhirResource.Coding(item.typeCode, item.typeName, constants.fhir.VHA_SYSTEM));
     }
     //The code information in the codes array will be tagged on the end of the name.coding array
     if (nullchecker.isNotNullish(item.codes)) {
@@ -289,7 +317,7 @@ function setSpecimen(dr, item, pid) {
         if (nullchecker.isNotNullish(pid)) {
             subject = new fhirResource.ReferenceResource(constants.labResultsFhir.PATIENT_PREFIX + pid);
         }
-        var contSpecimen = new fhirResource.Specimen(helpers.generateUUID(), subject, new fhirResource.CodeableConcept(item.specimen), fhirUtils.convertToFhirDateTime(item.observed));
+        var contSpecimen = new fhirResource.Specimen(helpers.generateUUID(), subject, new fhirResource.CodeableConcept(item.specimen), fhirUtils.convertToFhirDateTime(item.observed, fhirUtils.getSiteHash(item.uid)));
         dr.contained.push(contSpecimen);
         var refSpecimen = new fhirResource.ReferenceResource('#' + contSpecimen.id, item.specimen);
         if (!(dr.specimen instanceof Array)) {
@@ -317,7 +345,7 @@ function createCHObservation(dr, item) {
         coding.push(new fhirResource.Coding(item.vuid, item.typeName, constants.labResultsFhir.LAB_RESULTS_UID_IDENTIFIER_SYSTEM));
     }
     if (nullchecker.isNotNullish(item.typeCode)) {
-        coding.push(new fhirResource.Coding(item.typeCode, item.typeName, constants.labResultsFhir.DIAGNOSTIC_REPORTS_SYSTEM));
+        coding.push(new fhirResource.Coding(item.typeCode, item.typeName, constants.fhir.VHA_SYSTEM));
     }
     if (shortCategoryCode !== 'CH') {
         //The code information in the codes array will be tagged on the end of the name.coding array
@@ -341,6 +369,12 @@ function createCHObservation(dr, item) {
         var mapped = interpretationMap.get(item.interpretationCode);
         contCHObservation.interpretation = new fhirResource.CodeableConcept(undefined, [new fhirResource.Coding(mapped.code, mapped.display, constants.labResultsFhir.INTERPRETATION_SYSTEM)]);
     }
+
+    setIssuedForObsv(contCHObservation, item);
+    setApplies_X_(contCHObservation, item);
+    //    contCHObservation.issued = fhirUtils.convertToFhirDateTime(item.resulted, fhirUtils.getSiteHash(item.uid));
+    //    contCHObservation.appliesDateTime = fhirUtils.convertToFhirDateTime(item.observed, fhirUtils.getSiteHash(item.uid));
+
     contCHObservation.status = dr.status;
     contCHObservation.reliability = 'ok';
     if (nullchecker.isNotNullish(dr.specimen)) {
@@ -371,6 +405,12 @@ function setObservations(dr, item) {
             var contMIGSObservation = new fhirResource.Observation(helpers.generateUUID());
             contMIGSObservation.valueString = item.gramStain[gs].result;
             contMIGSObservation.code = new fhirResource.CodeableConcept(constants.labResultsFhir.GRAMSTAIN_DISPLAY, [new fhirResource.Coding(constants.labResultsFhir.GRAMSTAIN_CODE, constants.labResultsFhir.GRAMSTAIN_DISPLAY, constants.labResultsFhir.GRAMSTAIN_SYSTEM)]);
+
+            setIssuedForObsv(contMIGSObservation, item);
+            setApplies_X_(contMIGSObservation, item);
+            //            contMIGSObservation.issued = fhirUtils.convertToFhirDateTime(item.resulted, fhirUtils.getSiteHash(item.uid));
+            //            contMIGSObservation.appliesDateTime = fhirUtils.convertToFhirDateTime(item.observed, fhirUtils.getSiteHash(item.uid));
+
             contMIGSObservation.status = statusMap.completed;
             contMIGSObservation.reliability = 'ok';
             if (nullchecker.isNotNullish(dr.specimen)) {
@@ -388,6 +428,9 @@ function setObservations(dr, item) {
             for (var d in organism.drugs) {
                 if (nullchecker.isNotNullish(organism.drugs[d])) {
                     var contMIOgsmObservation = new fhirResource.Observation(helpers.generateUUID());
+
+                    setIssuedForObsv(contMIOgsmObservation, item);
+                    setApplies_X_(contMIOgsmObservation, item);
 
                     contMIOgsmObservation.status = statusMap.completed;
                     contMIOgsmObservation.reliability = 'ok';
@@ -426,7 +469,7 @@ function setText(dr, item) {
         dr.text = createText(dr);
     } else {
         if (nullchecker.isNotNullish(item.summary)) {
-            dr.text = new fhirResource.Narrative('<div>' + item.summary + '</div>');
+            dr.text = new fhirResource.Narrative('<div>' + _.escape(item.summary) + '</div>');
         }
     }
 }
@@ -475,7 +518,7 @@ function createExtensions(item) {
 
     if (nullchecker.isNotNullish(item.results) && nullchecker.isNotNullish(item.results[0]) && nullchecker.isNotNullish(item.results[0].resultUid)) {
         var extReport = new fhirResource.ReferenceResource(constants.labResultsFhir.COMPOSITION_PREFIX + item.results[0].resultUid);
-        drExtension.push(createExtension('report', extReport, 'Resource'));
+        drExtension.push(createExtension('report', extReport, 'Reference'));
     }
 
     drExtension = _.compact(drExtension); // Remove empty Array items
@@ -570,36 +613,36 @@ function createText(dr) {
 
         text = '<div>';
         if (nullchecker.isNotNullish(dr.diagnosticDateTime)) {
-            text += 'Collected: ' + dr.diagnosticDateTime + '<br/>';
+            text += 'Collected: ' + _.escape(dr.diagnosticDateTime) + '<br/>';
         }
 
         if (nullchecker.isNotNullish(dr.issued)) {
-            text += 'Report Released: ' + dr.issued + '<br/>';
+            text += 'Report Released: ' + _.escape(dr.issued) + '<br/>';
         }
 
         var extensionValue = fhirUtils.getExtensionValue(dr.extension, constants.labResultsFhir.LAB_EXTENSION_URL_PREFIX + 'groupUid');
         if (nullchecker.isNotNullish(extensionValue)) {
-            text += 'Accession: ' + extensionValue + '<br/>';
+            text += 'Accession: ' + _.escape(extensionValue) + '<br/>';
         }
 
         if (nullchecker.isNotNullish(dr.name) && nullchecker.isNotNullish(dr.name.text)) {
-            text += 'Test: ' + dr.name.text + '<br/>';
+            text += 'Test: ' + _.escape(dr.name.text) + '<br/>';
         }
 
         _.each(dr.contained, function(observation) {
             if (observation.resourceType === 'Observation') {
                 if (nullchecker.isNotNullish(observation.valueQuantity)) {
-                    text += 'Result: ' + observation.valueQuantity.value + ' ' + observation.valueQuantity.units + '<br/>';
+                    text += 'Result: ' + _.escape(observation.valueQuantity.value + ' ' + observation.valueQuantity.units) + '<br/>';
                     if (nullchecker.isNotNullish(observation.referenceRange) && nullchecker.isNotNullish(observation.referenceRange[0])) {
                         if (nullchecker.isNotNullish(observation.referenceRange[0].low)) {
-                            text += 'Low: ' + observation.referenceRange[0].low.value + ' ' + observation.referenceRange[0].low.units + '<br/>';
+                            text += 'Low: ' + _.escape(observation.referenceRange[0].low.value + ' ' + observation.referenceRange[0].low.units) + '<br/>';
                         }
                         if (nullchecker.isNotNullish(observation.referenceRange[0].high)) {
-                            text += 'High: ' + observation.referenceRange[0].high.value + ' ' + observation.referenceRange[0].high.units + '<br/>';
+                            text += 'High: ' + _.escape(observation.referenceRange[0].high.value + ' ' + observation.referenceRange[0].high.units) + '<br/>';
                         }
                     }
                 } else if (nullchecker.isNotNullish(observation.valueString)) {
-                    text += 'Result: ' + observation.valueString + '<br/>';
+                    text += 'Result: ' + _.escape(observation.valueString) + '<br/>';
                 }
             }
         });
@@ -607,7 +650,7 @@ function createText(dr) {
         _.each(dr.contained, function(specimen) {
             if (specimen.resourceType === 'Specimen') {
                 if (nullchecker.isNotNullish(specimen.type)) {
-                    text += 'Specimen: ' + specimen.type.text + '<br/>';
+                    text += 'Specimen: ' + _.escape(specimen.type.text) + '<br/>';
                 }
             }
         });
@@ -615,18 +658,16 @@ function createText(dr) {
         _.each(dr.contained, function(performer) {
             if (performer.resourceType === 'Organization') {
                 if (nullchecker.isNotNullish(performer.name)) {
-                    text += 'Performing Lab: ' + performer.name + '<br/>';
+                    text += 'Performing Lab: ' + _.escape(performer.name) + '<br/>';
                     var perfTextLines = fhirUtils.removeDivFromText(performer.text.div).split('<br/>');
                     _.each(perfTextLines, function(l) {
-                        text += '\t\t' + perfTextLines[l] + '<br/>';
+                        text += '\t\t' + _.escape(perfTextLines[l]) + '<br/>';
                     });
                 }
             }
         });
-
         text += '</div>';
     }
-
     return new fhirResource.Narrative(text);
 }
 

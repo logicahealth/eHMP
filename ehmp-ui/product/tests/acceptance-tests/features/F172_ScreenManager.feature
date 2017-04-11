@@ -4,7 +4,7 @@ Feature: F339 - User Defined Work Spaces 2 - Workspace Manager Redesign
 #Team Neptune
 
 Background: 
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
 	And user searches for and selects "Eight,Patient"
 	And Cover Sheet is active
 	And the "patient identifying traits" is displayed with information
@@ -96,7 +96,7 @@ Scenario: Clone a predefined screen
 	And the user clicks "Coversheet Copy Flyout" on the workspace manager
 	And the user clicks "Coversheet Copy Launch" on the workspace manager
 	Then there are 9 applets on the "coversheet check"
-	And drag and drop the conditions copy right by 500 and down by 0
+	And drag and drop the problems copy right by 500 and down by 0
 	And the user clicks the "Workspace Manager"
 	And the user clicks "Coversheet Copy Flyout" on the workspace manager
 	And the user clicks "Coversheet Copy Delete" on the workspace manager

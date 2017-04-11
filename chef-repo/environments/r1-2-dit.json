@@ -1,0 +1,9 @@
+{
+  "name": "r1-2-dit",
+  "description": "r1.2 DIT chef environment",
+  "override_attributes": {
+    "ehmp_provision": {
+      "jds": { "aws": { "instance_type": "m3.large" }}
+    }
+  }
+}

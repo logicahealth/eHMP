@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Services lookup [/services-fetch-list{?site}{&fields}]
+## Services lookup [/services-fetch-list{?site}]
 
 DIRECT RPC CALL - Services lookup - calls ORQQPL SRVC SRCH with null and a 1
 
@@ -12,8 +12,6 @@ ORQQPL SRVC SRCH
 
     :[site]({{{common}}}/parameters/site.md)
 
-    :[fields]({{{common}}}/parameters/fields.md)
-
 ### GET
 
 + Response 200 (application/json)
@@ -23,51 +21,51 @@ ORQQPL SRVC SRCH
             {
               "data": [
                 {
-                  "code": "1000",
+                  "ien": "1000",
                   "name": "AMBULATORY CARE"
                 },
                 {
-                  "code": "1001",
+                  "ien": "1001",
                   "name": "ANESTHESIOLOGY"
                 },
                 {
-                  "code": "11",
+                  "ien": "11",
                   "name": "BLIND REHAB"
                 },
                 {
-                  "code": "1003",
+                  "ien": "1003",
                   "name": "BLIND REHABILITATION"
                 },
                 {
-                  "code": "1008",
+                  "ien": "1008",
                   "name": "DENTAL"
                 },
                 {
-                  "code": "1018",
+                  "ien": "1018",
                   "name": "MEDICAL"
                 },
                 {
-                  "code": "2",
+                  "ien": "2",
                   "name": "MEDICINE"
                 },
                 {
-                  "code": "9",
+                  "ien": "9",
                   "name": "NEUROLOGY"
                 },
                 {
-                  "code": "13",
+                  "ien": "13",
                   "name": "PSYCHIATRY"
                 },
                 {
-                  "code": "1032",
+                  "ien": "1032",
                   "name": "PSYCHOLOGY"
                 },
                 {
-                  "code": "3",
+                  "ien": "3",
                   "name": "SURGERY"
                 },
                 {
-                  "code": "1041",
+                  "ien": "1041",
                   "name": "SURGICAL"
                 }
               ],

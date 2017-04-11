@@ -1,0 +1,246 @@
+~Format=5.S~
+10 Mar 2016   4:09 PM   Cache
+^TIU(8925,11682,0)
+1^100295^11806^569^7^^{today-4}.145208^{today-1}.145714^R^^^^H
+^TIU(8925,11682,12)
+{today-1}.154923^991^^991^129^^^991^991^^129^500
+^TIU(8925,11682,13)
+{today-1}.145714^991^R^{today-1}.154934^^^{today-1}.1456
+^TIU(8925,11682,14)
+4715^19^^2
+^TIU(8925,11682,15)
+{today-1}.160032^991^iF\bCWj itzPb@^<,^E^0
+^TIU(8925,11682,150)
+1JNK-ALN
+^TIU(8925,11682,"TEXT",0)
+^^110^110^{today-1}^^
+^TIU(8925,11682,"TEXT",1,0)
+Admission Diagnosis: 
+^TIU(8925,11682,"TEXT",2,0)
+1) Chest pain
+^TIU(8925,11682,"TEXT",3,0)
+2) Shortness of breath
+^TIU(8925,11682,"TEXT",4,0)
+ 
+^TIU(8925,11682,"TEXT",5,0)
+Discharge Diagnosis:
+^TIU(8925,11682,"TEXT",6,0)
+1) Acute coronary syndromes
+^TIU(8925,11682,"TEXT",7,0)
+2) CHF exacerbation
+^TIU(8925,11682,"TEXT",8,0)
+3) Hyperlipidemia
+^TIU(8925,11682,"TEXT",9,0)
+4) Hypertension
+^TIU(8925,11682,"TEXT",10,0)
+5) Controlled Diabetes Mellitus II:
+^TIU(8925,11682,"TEXT",11,0)
+ 
+^TIU(8925,11682,"TEXT",12,0)
+ 
+^TIU(8925,11682,"TEXT",13,0)
+Home Outpatient Medications:
+^TIU(8925,11682,"TEXT",14,0)
+1)   Metoprolol 50mg PO BID
+^TIU(8925,11682,"TEXT",15,0)
+2)   Metformin HCL 500 mg PO BID
+^TIU(8925,11682,"TEXT",16,0)
+3)   Simvastatin 40mg PO QPM
+^TIU(8925,11682,"TEXT",17,0)
+4)   Asprin 81mg PO QDAY
+^TIU(8925,11682,"TEXT",18,0)
+ 
+^TIU(8925,11682,"TEXT",19,0)
+Discharge Medications:
+^TIU(8925,11682,"TEXT",20,0)
+1)   Metoprolol 50 mg PO BID
+^TIU(8925,11682,"TEXT",21,0)
+2)   Metformin HCL 500 mg PO BID
+^TIU(8925,11682,"TEXT",22,0)
+3)   Simvastatin 40mg PO QPM
+^TIU(8925,11682,"TEXT",23,0)
+ 
+^TIU(8925,11682,"TEXT",24,0)
+Non VA Medications:
+^TIU(8925,11682,"TEXT",25,0)
+1) Aspirin 81mg PO QDAY
+^TIU(8925,11682,"TEXT",26,0)
+ 
+^TIU(8925,11682,"TEXT",27,0)
+I had reviewed and completed medication reconciliation.
+^TIU(8925,11682,"TEXT",28,0)
+ 
+^TIU(8925,11682,"TEXT",29,0)
+Tests: 
+^TIU(8925,11682,"TEXT",30,0)
+1) Transthoracic ECHOcardiogram
+^TIU(8925,11682,"TEXT",31,0)
+Impressions
+^TIU(8925,11682,"TEXT",32,0)
+Mild LVH with significantly reduced LV systolic function. EF visually 
+^TIU(8925,11682,"TEXT",33,0)
+estimated to be 25%.
+^TIU(8925,11682,"TEXT",34,0)
+Summary
+^TIU(8925,11682,"TEXT",35,0)
+A). Indication: Assess left ventricular function. Assess left ventricular 
+^TIU(8925,11682,"TEXT",36,0)
+ejection fraction.
+^TIU(8925,11682,"TEXT",37,0)
+B). Left ventricle: The ventricle was mildly dilated. Systolic function 
+^TIU(8925,11682,"TEXT",38,0)
+was 
+^TIU(8925,11682,"TEXT",39,0)
+moderately to markedly reduced. Ejection fraction was estimated to be 25 
+^TIU(8925,11682,"TEXT",40,0)
+%. 
+^TIU(8925,11682,"TEXT",41,0)
+This study was inadequate for the evaluation of regional wall motion. 
+^TIU(8925,11682,"TEXT",42,0)
+Wall 
+^TIU(8925,11682,"TEXT",43,0)
+thickness was mildly increased. There was mild concentric hypertrophy.
+^TIU(8925,11682,"TEXT",44,0)
+ 
+^TIU(8925,11682,"TEXT",45,0)
+2) ECG
+^TIU(8925,11682,"TEXT",46,0)
+EKG showed 4 mm ST elevation in inferior leads. 
+^TIU(8925,11682,"TEXT",47,0)
+New left axis deviation and inverted T-waves in V3-6 were found.
+^TIU(8925,11682,"TEXT",48,0)
+ 
+^TIU(8925,11682,"TEXT",49,0)
+3) Cardiac catherization.
+^TIU(8925,11682,"TEXT",50,0)
+No significant coronary disease noted.
+^TIU(8925,11682,"TEXT",51,0)
+ 
+^TIU(8925,11682,"TEXT",52,0)
+Reason for Admission:
+^TIU(8925,11682,"TEXT",53,0)
+ 
+^TIU(8925,11682,"TEXT",54,0)
+Patient is 71yo with a history of poorly controlled DM and 
+^TIU(8925,11682,"TEXT",55,0)
+HTN who presented to the ED today with a 5 day history of worsening chest 
+^TIU(8925,11682,"TEXT",56,0)
+pain and shortness of breath with associated dyspnea at rest, PND, and 
+^TIU(8925,11682,"TEXT",57,0)
+orthopnea. Patient reports that beginning 5 days ago experienced a 
+^TIU(8925,11682,"TEXT",58,0)
+feeling of anxiety while laying in bed.   Patient had difficulty 
+^TIU(8925,11682,"TEXT",59,0)
+breathing and chest became tight.  Patient sat up in bed and the feeling 
+^TIU(8925,11682,"TEXT",60,0)
+eased. Since then pateint has had intermittent feelings of pressure, 
+^TIU(8925,11682,"TEXT",61,0)
+patient had resistance on his chest while lying down.  Patient feels like 
+^TIU(8925,11682,"TEXT",62,0)
+he can't catch his breath.  Patient reports R shoulder cramping, left 
+^TIU(8925,11682,"TEXT",63,0)
+lower chest pain. These episodes vary in length of time, but the 
+^TIU(8925,11682,"TEXT",64,0)
+shortness of breath lasts all day. Patient reports thinking the symptoms 
+^TIU(8925,11682,"TEXT",65,0)
+are associated with his taking metoprolol. In the ED the patient sats 
+^TIU(8925,11682,"TEXT",66,0)
+were 88 while lying down. Patient was given lasix and after a while the 
+^TIU(8925,11682,"TEXT",67,0)
+feeling of fullness in chest dissipated. Other associated symptoms: + 
+^TIU(8925,11682,"TEXT",68,0)
+chest pain, duration longer than 10 minutes, + chest pressure, heavy 
+^TIU(8925,11682,"TEXT",69,0)
+quality + discomfort, neck or jaw or shoulder or arm. At last admission 
+^TIU(8925,11682,"TEXT",70,0)
+had metoprolol for his BP control.
+^TIU(8925,11682,"TEXT",71,0)
+Patient was admitted to r/o ischemic event. 
+^TIU(8925,11682,"TEXT",72,0)
+ 
+^TIU(8925,11682,"TEXT",73,0)
+Hospital Course: 
+^TIU(8925,11682,"TEXT",74,0)
+1) Chest pain: Pateint was ruled in for an ischemic event with positive 
+^TIU(8925,11682,"TEXT",75,0)
+serial cardiac 
+^TIU(8925,11682,"TEXT",76,0)
+enzymes and noted ST elevation. Additionally, new left axis deviation and 
+^TIU(8925,11682,"TEXT",77,0)
+inverted T-
+^TIU(8925,11682,"TEXT",78,0)
+waves in V3-6 were found. Patient had persistent but finally resolved 
+^TIU(8925,11682,"TEXT",79,0)
+chest pain over his 
+^TIU(8925,11682,"TEXT",80,0)
+admission. Cardiac catheterization done this admission did not reveal any 
+^TIU(8925,11682,"TEXT",81,0)
+significant coronary disease.  In 2003, pt was found to have non-ischemic 
+^TIU(8925,11682,"TEXT",82,0)
+dilated cardiomyopathy 
+^TIU(8925,11682,"TEXT",83,0)
+with an EF of 35-40% on GXT and Echo. Pt had TTE on 3/12/07 showing an EF 
+^TIU(8925,11682,"TEXT",84,0)
+of 
+^TIU(8925,11682,"TEXT",85,0)
+25%. Pt SOB continued to improve with Lasix.  Sublingual nitroglycerin 
+^TIU(8925,11682,"TEXT",86,0)
+was also provided to patient.
+^TIU(8925,11682,"TEXT",87,0)
+ 
+^TIU(8925,11682,"TEXT",88,0)
+2) Shortness of breath/Non-ischemic Dilated Cardiomyopathy: Patient has 
+^TIU(8925,11682,"TEXT",89,0)
+known EF of 35%. Echo done today to determine if EF is preserved and had 
+^TIU(8925,11682,"TEXT",90,0)
+decreased to 25%.  CXR and symptoms consistent with CHF that improved 
+^TIU(8925,11682,"TEXT",91,0)
+with diuresis.   Patient was started on 
+^TIU(8925,11682,"TEXT",92,0)
+Lasix IV which bumped his Cr from 1.2 to 1.5. Lasix was converted to po. 
+^TIU(8925,11682,"TEXT",93,0)
+Weight counseling provided for CHF;  patient has a scale at home.
+^TIU(8925,11682,"TEXT",94,0)
+ 
+^TIU(8925,11682,"TEXT",95,0)
+3) Hypertension: Patient has controlled hypertension. On last admission, 
+^TIU(8925,11682,"TEXT",96,0)
+pt was 
+^TIU(8925,11682,"TEXT",97,0)
+prescribed Metoprolol.  B/P during this admission and prior to this 
+^TIU(8925,11682,"TEXT",98,0)
+admission are well controlled.  Will continue patient on Metoprolol at 
+^TIU(8925,11682,"TEXT",99,0)
+discharge. 
+^TIU(8925,11682,"TEXT",100,0)
+ 
+^TIU(8925,11682,"TEXT",101,0)
+4) Uncontrolled DM II: Patient continues to have glucose fingersticks in 
+^TIU(8925,11682,"TEXT",102,0)
+150s-175s. Patient is receiving metformin to control diabetes.  Patient 
+^TIU(8925,11682,"TEXT",103,0)
+is compliant with performing and recording his sugars at home.  Spoke in 
+^TIU(8925,11682,"TEXT",104,0)
+great depth about the negative consequence of  persistently elevated 
+^TIU(8925,11682,"TEXT",105,0)
+blood glucose levels with the patient.  Patient agrees to follow diabetic 
+^TIU(8925,11682,"TEXT",106,0)
+management instructions at home.
+^TIU(8925,11682,"TEXT",107,0)
+ 
+^TIU(8925,11682,"TEXT",108,0)
+Disposition:  Patient is being discharged to home today in good 
+^TIU(8925,11682,"TEXT",109,0)
+condition.  Patient has follow-up arranged in the Cardiology clinic. 
+^TIU(8925,11682,"TEXT",110,0)
+Patient also has follow-up scheduled with their primary care provider. 
+^AUPNVSIT(11806,0)
+{today-4}.145208^{today-1}.131924^V^^100295^500^H^^1^^^^{today-1}.154923^^^^^^^^^129^991^10989
+^AUPNVSIT(11806,150)
+1JNK-ALN^1^P
+^AUPNVSIT(11806,800)
+^^^^^^^^^^0^0^0^0^0^0^0^0
+^AUPNVSIT(11806,812)
+^507^19
+
+

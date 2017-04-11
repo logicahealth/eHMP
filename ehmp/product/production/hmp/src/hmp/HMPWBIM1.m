@@ -1,5 +1,5 @@
 HMPWBIM1 ;;OB/JD/CNP - Write back entry points for IMMUNIZATIONS (related to Notes, and Encounters);Sep 2, 2015@08:31:16
- ;;1.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 1
+ ;;1.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q

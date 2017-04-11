@@ -4,7 +4,7 @@ VPRJRCL ;SLC/KCM -- Control the HTTP listener
 GO(PORT) ; start up REST listener with defaults
  I $G(PORT) D SPORT(PORT)
  S PORT=$G(^VPRHTTP(0,"port"),9080)
- D SETUP^VPRJPMD             ; make sure meta data is in place
+ I '$D(^VPRMETA) D SETUP^VPRJPMD             ; make sure meta data is in place
  J START^VPRJREQ(PORT)       ; start the listener
  ;BL HARD CODING MULTI BROKER FOR PERFORMANCE TESTING
  S PORT     

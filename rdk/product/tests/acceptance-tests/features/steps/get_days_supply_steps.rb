@@ -9,6 +9,6 @@ When(/^the client requests default days supply for param"(.*?)" and pid "(.*?)"$
   query.add_parameter("param", arg1) 
   query.add_parameter("pid", arg2) 
   path = query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 

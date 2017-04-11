@@ -1,14 +1,8 @@
-var dependencies = [
-    'main/ADK',
+define([
     'backbone',
     'marionette',
     'underscore'
-
-];
-
-define(dependencies, onResolveDependencies);
-
-function onResolveDependencies(ADK, Backbone, Marionette, _) {
+], function (Backbone, Marionette, _) {
     "use strict";
 
     var params = {
@@ -169,8 +163,8 @@ function onResolveDependencies(ADK, Backbone, Marionette, _) {
             var graphs = [];
             _.each(collection.models, function(graph) {
                 graphs.push({
-                    graphType: graph.get('graphType'),
-                    typeName: graph.get('typeName')
+                    graphType: graph.get('stackedGraphType'),
+                    typeName: graph.get('stackedGraphTypeName')
                 });
             });
 
@@ -180,4 +174,4 @@ function onResolveDependencies(ADK, Backbone, Marionette, _) {
     };
 
     return Utils;
-}
+});

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <env:Header />
+   <env:Body>
+      <idm:PRPA_IN201310UV02 xmlns:idm="http://URL         .DNS   " xmlns="urn:hl7-org:v3" ITSVersion="XML_1.0" xsi:schemaLocation="urn:hl7-org:v3 ../../schema/HL7V3/NE2008/multicacheschemas/PRPA_IN201310UV02.xsd">
+         <id extension="WSDOC1602101409186300564250222" root="2.16.840.1.113883.4.349" />
+         <creationTime value="20160210140918" />
+         <versionCode code="3.0" />
+         <interactionId extension="PRPA_IN201310UV02" root="2.16.840.1.113883.1.6" />
+         <processingCode code="T" />
+         <processingModeCode code="T" />
+         <acceptAckCode code="NE" />
+         <receiver typeCode="RCV">
+            <device determinerCode="INSTANCE" classCode="DEV">
+               <id extension="200EHMP" root="1.2.840.114350.1.13.99997.2.7788" />
+            </device>
+         </receiver>
+         <sender typeCode="SND">
+            <device determinerCode="INSTANCE" classCode="DEV">
+               <id extension="200M" root="2.16.840.1.113883.4.349" />
+            </device>
+         </sender>
+         <acknowledgement>
+            <typeCode code="AA" />
+            <targetMessage>
+               <id extension="MCID-YOUR_IDENTIFIER_001" root="2.16.840.1.113883.4.349" />
+            </targetMessage>
+         </acknowledgement>
+         <controlActProcess classCode="CACT" moodCode="EVN">
+            <code code="PRPA_TE201310UV02" />
+            <subject typeCode="SUBJ">
+               <registrationEvent classCode="REG" moodCode="EVN">
+                  <id nullFlavor="NA" />
+                  <statusCode code="active" />
+                  <subject1 typeCode="SBJ">
+                     <patient classCode="PAT">
+                        <id root="2.16.840.1.113883.4.1" extension="666000008^PI^200SSA^USSSA^A"/>
+                        <id root="2.16.840.1.113883.4.349" extension="0000000003^NI^200DOD^USDOD^P"/>
+                        <id root="2.16.840.1.113883.4.349" extension="3^PI^500^USVHA^A"/>
+                        <id root="2.16.840.1.113883.4.349" extension="3^PI^507^USVHA^A"/>
+                        <id root="2.16.840.1.113883.4.349" extension="19^PI^536^USVHA^A"/>
+                        <id root="2.16.840.1.113883.4.349" extension="28^PI^551^USVHA^A"/>
+                        <id root="2.16.840.1.113883.4.349" extension="00000010108V420871^PI^200ESR^USVHA^H"/>
+                        <id root="2.16.840.1.113883.4.349" extension="00000010108V420871^PI^200ESR^USVHA^PCE"/>
+                        <id root="2.16.840.1.113883.4.349" extension="5000002734V893260^NI^200M^USVHA^P"/>
+                        <id root="2.16.840.1.113883.4.349" extension="33002^PI^742V1^USVHA^A"/>
+                        <statusCode code="active" />
+                        <patientPerson determinerCode="INSTANCE" classCode="PSN">
+                           <name nullFlavor="NA" />
+                        </patientPerson>
+                     </patient>
+                  </subject1>
+                  <custodian typeCode="CST">
+                     <assignedEntity classCode="ASSIGNED">
+                        <id root="2.16.840.1.113883.4.349" />
+                     </assignedEntity>
+                  </custodian>
+                  <replacementOf typeCode="RPLC">
+                     <priorRegistration classCode="REG" moodCode="EVN">
+                        <id extension="5000002734V893260^NI^200M^USVHA" root="2.16.840.1.113883.4.349" />
+                     </priorRegistration>
+                  </replacementOf>
+               </registrationEvent>
+            </subject>
+            <queryAck>
+               <queryId extension="YOUR_IDENTIFIER_001" root="1.2.840.114350.1.13.99999.4567.34" />
+               <queryResponseCode code="OK" />
+            </queryAck>
+            <queryByParameter>
+               <queryId extension="YOUR_IDENTIFIER_001" root="1.2.840.114350.1.13.99999.4567.34" />
+               <statusCode code="new" />
+               <responsePriorityCode code="I" />
+               <parameterList>
+                  <patientIdentifier>
+                     <value extension="5000002734V893260^NI^200M^USVHA" root="2.16.840.1.113883.4.349" />
+                     <semanticsText>Patient.Id</semanticsText>
+                  </patientIdentifier>
+               </parameterList>
+            </queryByParameter>
+         </controlActProcess>
+      </idm:PRPA_IN201310UV02>
+   </env:Body>
+</env:Envelope>

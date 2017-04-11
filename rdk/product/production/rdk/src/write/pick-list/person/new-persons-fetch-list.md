@@ -1,6 +1,6 @@
 # Group Pick List
 
-## New persons [/new-persons{?site}{&date}{&fields}]
+## New persons [/new-persons{?site}{&date}]
 
 Large Pick List - Populates Available Providers pick list and default.
 
@@ -13,8 +13,6 @@ ORWU NEWPERS
     :[site]({{{common}}}/parameters/site.md)
 
     :[date]({{{common}}}/parameters/date.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 
@@ -54,7 +52,7 @@ ORWU NEWPERS
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-## New persons - Direct [/new-persons-direct{?site}{&searchString}{&newPersonsType}{&dateTime}{&fields}]
+## New persons - Direct [/new-persons-direct{?site}{&searchString}{&newPersonsType}{&dateTime}]
 
 Calls the RPC 'ORWU NEWPERS' once and parses out the data to retrieve a list of 44 results at a time.
 
@@ -77,8 +75,6 @@ ORWU NEWPERS
     + dateTime (string, optional) - The date/time in YYYYMMDDHHMMSS format. HHMMSS is 0 by default.
 
         Pattern: `^\d{4}(\d{2})?(\d{2})?(\d{2})?(\d{2})?(\d{2})?$`
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

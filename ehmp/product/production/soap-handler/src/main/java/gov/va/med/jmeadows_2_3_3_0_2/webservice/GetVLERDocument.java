@@ -16,8 +16,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="vDoc" type="{http://webservice.vds.domain.ext/}vlerDocument" minOccurs="0"/>
- *         &lt;element name="queryBean" type="{http://webservice.jmeadows.domain.ext/}jMeadowsQuery" minOccurs="0"/>
+ *         &lt;element name="vDoc" type="{http://webservice.vds.DNS       /}vlerDocument" minOccurs="0"/>
+ *         &lt;element name="queryBean" type="{http://webservice.jmeadows.DNS       /}jMeadowsQuery" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

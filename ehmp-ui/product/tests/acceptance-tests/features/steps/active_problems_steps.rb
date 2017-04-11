@@ -83,8 +83,11 @@ Then(/^the expanded Problem grid is sorted in alphabetic order based on Acuity$/
 end
 
 When(/^the user views a problem applet row's details$/) do
-  expect(@active_problems.perform_action('First Grid Row')).to eq(true)
-  expect(@active_problems.perform_action('Problem detail icon')).to eq(true)
+  @ehmp = PobProblemsApplet.new
+  @ehmp.wait_for_tbl_problems
+  expect(@ehmp.tbl_problems.length).to be > 0
+  @ehmp.tbl_problems[0].click
+  expect(@active_problems.perform_action('Detail View Button')).to eq(true)
   @uc.wait_until_action_element_visible("Modal", 15)
 end
 
@@ -102,15 +105,54 @@ When(/^the user clicks the Problems Expand Button$/) do
   @active_problems.clear_filter('grid-filter-button-problems')
 end
 
-Then(/^the Conditions Applet contains data rows$/) do
+Then(/^the Problems Applet contains data rows$/) do
   compare_item_counts("#data-grid-problems tr")
 end
 
-When(/^user refreshes Conditions Applet$/) do
+When(/^user refreshes Problems Applet$/) do
   applet_refresh_action("problems")
 end
 
-Then(/^the message on the Conditions Applet does not say "(.*?)"$/) do |message_text|
+Then(/^the message on the Problems Applet does not say "(.*?)"$/) do |message_text|
   compare_applet_refresh_action_response("problems", message_text)
+end
+
+Given(/^the user navigates to expanded problems applet$/) do
+  navigate_in_ehmp "#/patient/problems-full"
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { @active_problems.applet_grid_loaded }
+
+  @active_problems.clear_filter('grid-filter-button-problems')
+end
+
+Given(/^the problems applet displays at least (\d+) problem rows$/) do |num_required_problems|
+  @ehmp = PobProblemsApplet.new
+
+  @ehmp.wait_for_tbl_problems
+  expect(@ehmp.tbl_problems.length).to be > num_required_problems.to_i, "Prerequisite for test: num problems >= #{num_required_problems}. Currently there are only #{@ehmp.tbl_problems.length}"
+end
+
+Given(/^the user notes the first (\d+) problems$/) do |num_problems|
+  @ehmp = PobProblemsApplet.new
+  @titles = @ehmp.summary_problem_name
+  expect(@titles.length).to be > num_problems.to_i
+  @titles = @titles[0..num_problems.to_i - 1]
+end
+
+Then(/^the user can step through the problems using the next button$/) do
+  @ehmp = PobProblemsApplet.new
+  @titles.each do |modal_title|
+    expect(@uc.perform_verification("Modal Title", modal_title)).to eq(true), "Expected title to be #{modal_title}"
+    @ehmp.btn_next.click
+  end
+end
+
+Then(/^the user can step through the problems using the previous button$/) do
+  @ehmp = PobProblemsApplet.new
+  @ehmp.btn_previous.click
+  @titles.reverse.each { |val| 
+    expect(@uc.perform_verification("Modal Title", val)).to eq(true), "Expected title to be #{val}"
+    @ehmp.btn_previous.click
+  }
 end
 

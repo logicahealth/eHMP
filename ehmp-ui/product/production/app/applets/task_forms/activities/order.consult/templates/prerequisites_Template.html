@@ -1,0 +1,48 @@
+<div class="top-padding-md left-padding-md right-padding-md row">
+	<div class="col-xs-2 bold-font left-padding-no">Prerequisites</div>
+	<div class="col-xs-2 col-xs-offset-8 text-right">{{prerequisites.totalMet}} of {{prerequisites.totalCount}} met</div>
+	<hr />
+
+	<table class="table ehmp-table-default table-bordered">
+		<caption class="sr-only">This table represents data for consult questions, responses and if the prerequisite was met</caption>
+		<thead>
+			<tr class="color-primary bold-font">
+				<th scope="col">Questions</th>
+				<th scope="col">Response</th>
+				<th scope="col">Met</th>
+			</tr>
+		</thead>
+		<tbody>
+		{{#each prerequisites.questions}}
+			<tr>
+				<td>{{text}}</td>
+				<td>{{response}}</td>
+				<td>{{#if met}}<i class="fa fa-check fa-lg color-primary"></i>{{/if}}</td>
+			</tr>
+		{{/each}}
+		</tbody>
+	</table>
+
+	<table class="table ehmp-table-default table-bordered top-margin-lg">
+		<caption class="sr-only">This table represents data for orders/results, status and if the order/result was met</caption>
+		<thead>
+			<tr class="color-primary bold-font">
+				<th scope="col">Orders/Results</th>
+				<th scope="col">Status</th>
+				<th scope="col">Met</th>
+			</tr>
+		</thead>
+		<tbody>
+		{{#each prerequisites.orderResults}}
+			<tr>
+				<td>{{text}}</td>
+				<td>{{status}}</td>
+				<td>{{#if met}}<i class="fa fa-check fa-lg color-primary"></i>{{/if}}</td>
+			</tr>
+		{{/each}}
+		</tbody>
+	</table>
+
+	<div class="font-bold top-margin-md">Override Comment</div>
+	<p>{{prerequisites.overrideComment}}</p>
+</div>

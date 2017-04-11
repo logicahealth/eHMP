@@ -1,5 +1,5 @@
 class VerifyJsonRuntimeValue
-  def verify_json_runtime_vlaue(jsonObject, table)
+  def verify_json_runtime_value(jsonObject, table)
     @not_exist_or_match_field = []
     @not_exist_or_match_values = []
     @not_exist_or_match_expected = []

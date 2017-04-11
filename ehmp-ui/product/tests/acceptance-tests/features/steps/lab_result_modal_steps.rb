@@ -2,8 +2,8 @@ class NumericPanelLabResults < AllApplets
   include Singleton
   def initialize
     super
+    add_toolbar_buttons
     add_action(CucumberLabel.new('First Panel Row'), ClickAction.new, AccessHtmlElement.new(:xpath, "//table[@id='data-grid-lab_results_grid']/descendant::*[contains(@class, 'js-has-panel')]/ancestor::tr[1]"))
-    add_action(CucumberLabel.new('Detail Icon'), ClickAction.new, AccessHtmlElement.new(:id, 'info-button-sidekick-detailView'))
     add_verify(CucumberLabel.new('Expanded Panel Rows'), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid=lab_results_grid] .lab-results-table-container table tbody'))
     add_action(CucumberLabel.new('First Expanded Panel Row'), ClickAction.new, AccessHtmlElement.new(:css, '[data-appletid=lab_results_grid] .lab-results-table-container table tbody tr:nth-child(1)'))
   end
@@ -37,19 +37,19 @@ end
 
 Then(/^a popover menu is displayed on the first numeric lab result panel row$/) do
   numeric_lr = NumericPanelLabResults.instance
-  numeric_lr.wait_until_action_element_visible('Detail Icon')
+  numeric_lr.wait_until_action_element_visible('Detail View Button')
 end
 
 When(/^the user clicks the details icon in the popover menu$/) do
   numeric_lr = NumericPanelLabResults.instance
-  expect(numeric_lr.perform_action('Detail Icon')).to eq(true)
+  expect(numeric_lr.perform_action('Detail View Button')).to eq(true)
 end
 
 Then(/^the numeric lab result applet displays panel rows$/) do
   numeric_lr = NumericPanelLabResults.instance
   numeric_lr.wait_until_action_element_visible('Expanded Panel Rows')
   numeric_lr.wait_until_action_element_visible('First Expanded Panel Row')
-  expect(numeric_lr.am_i_visible?('Detail Icon')).to eq(false)
+  # expect(numeric_lr.am_i_visible?('Detail View Button')).to eq(false)
 end
 
 When(/^the user clicks a panel row$/) do

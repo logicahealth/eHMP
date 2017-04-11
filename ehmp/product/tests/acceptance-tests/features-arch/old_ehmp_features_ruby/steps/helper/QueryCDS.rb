@@ -5,7 +5,7 @@ require 'DefaultHmpLogin.rb'
 class QueryCDS
   def initialize(clientname, domain, icn)
     @path = String.new(DefaultLogin.fhir_url)
-    @path.concat("/repositories.domain.ext/fpds/")
+    @path.concat("/repositories.DNS       /fpds/")
     @path.concat(domain)
     @path.concat("/")
     @number_parameters = 0

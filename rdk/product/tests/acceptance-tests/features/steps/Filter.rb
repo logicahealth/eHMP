@@ -1,7 +1,7 @@
 
 When(/^the client requests for the patient "(.*?)" and filter value "(.*?)" in RDK format$/) do |pid, filter|
   path = QueryRDKFilterBySummary.new(pid, filter).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests for the patient "(.*?)" and filter value "(.*?)" and order "(.*?)"$/) do |pid, filter, order|
@@ -10,7 +10,7 @@ When(/^the client requests for the patient "(.*?)" and filter value "(.*?)" and 
   query.add_parameter("filter", filter) 
   query.add_parameter("order", order)  
   path = query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the client make sure referenceDateTime is in desc$/) do

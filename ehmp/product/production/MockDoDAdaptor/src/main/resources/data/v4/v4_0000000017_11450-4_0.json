@@ -1,0 +1,99 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 3,
+      "receivedCount": 3
+    }
+  ],
+  "dataList": {
+    "problems": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001048"
+        },
+        "enteredBy": {
+          "name": "MIDT, LANDFONE"
+        },
+        "enteredDate": {
+          "start": "20110519121938",
+          "end": "20110519121938"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0607"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2013-06-03T22:21:18",
+          "end": "2013-06-03T22:21:18"
+        },
+        "onsetDate": {
+          "start": "2011-05-19T11:42:12",
+          "end": "2011-05-19T11:42:12"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "MIGRAINE HEADACHE",
+            "primary": true,
+            "code": "31887",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "MIGRAINE HEADACHE",
+            "primary": false,
+            "code": "346.90",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

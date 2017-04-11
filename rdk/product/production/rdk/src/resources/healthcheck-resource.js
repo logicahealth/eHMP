@@ -134,6 +134,7 @@ module.exports.getResourceConfig = function() {
         interceptors: healthcheckInterceptors,
         requiredPermissions: [],
         isPatientCentric: false,
+        bypassCsrf: true,
         permitResponseFormat: true,
         get: function(req, res) {
             var isHealthy = executeAll(req.logger);
@@ -154,6 +155,7 @@ module.exports.getResourceConfig = function() {
         interceptors: healthcheckInterceptors,
         requiredPermissions: [],
         isPatientCentric: false,
+        bypassCsrf: true,
         get: function(req, res) {
             var result = executeAll(req.logger);
             dd(req)('_resourceConfigItem')('permitResponseFormat').set(true);
@@ -165,6 +167,7 @@ module.exports.getResourceConfig = function() {
         interceptors: healthcheckInterceptors,
         requiredPermissions: [],
         isPatientCentric: false,
+        bypassCsrf: true,
         get: function(req, res) {
             res.rdkSend(healthCheckRegistry);
         }
@@ -174,6 +177,7 @@ module.exports.getResourceConfig = function() {
         interceptors: healthcheckInterceptors,
         requiredPermissions: [],
         isPatientCentric: false,
+        bypassCsrf: true,
         get: function(req, res) {
             resultRegistry.isHealthy = executeAll(req.logger);
             res.rdkSend(resultRegistry);
@@ -184,6 +188,7 @@ module.exports.getResourceConfig = function() {
         interceptors: healthcheckInterceptors,
         requiredPermissions: [],
         isPatientCentric: false,
+        bypassCsrf: true,
         get: function(req, res) {
             res.rdkSend(resultRegistry);
         }

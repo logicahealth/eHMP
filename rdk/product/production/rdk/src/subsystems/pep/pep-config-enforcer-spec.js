@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var dd = require('drilldown');
 var mongo = require('mongoskin');
-var appfactory = require('../../core/app-factory');
 var cdsSpecUtil = require('../../resources/cds-spec-util/cds-spec-util');
 var loadResources = require('../../utils/test-resources-loader');
 var buildDescription = loadResources.buildDescription;
@@ -11,8 +10,7 @@ var enforcedResourcePermissions = require('./enforced-resource-permissions');
 
 describe('To support PEP,', function() {
 
-    var app = createApp();
-    var resources = stubCDSThenLoadResources(app);
+    var resources = stubCDSThenLoadResources();
 
     _.each(resources, function(resourceConfigs, filePath) {
         _.each(resourceConfigs, function(resource) {
@@ -49,31 +47,9 @@ describe('To support PEP,', function() {
     });
 });
 
-function createApp() {
-    return {
-        config: {
-            cdsMongoServer: {
-                host: 'foo',
-                port: '42'
-            },
-            cdsInvocationServer: {
-                host: 'bar',
-                port: '47'
-            }
-        },
-        logger: {
-            trace: function() {},
-            debug: function() {},
-            info: function() {},
-            warn: function() {},
-            error: function() {}
-        }
-    };
-}
-
 // Why do all this? Because if you don't, the CDS unit tests fail after
 // any of their getResourceConfig() method is called.
-function stubCDSThenLoadResources(app) {
+function stubCDSThenLoadResources() {
     var db = cdsSpecUtil.createMockDb({
         find: function(callback) {
             return {
@@ -101,7 +77,7 @@ function stubCDSThenLoadResources(app) {
 
     var sandbox = sinon.sandbox.create();
     sandbox.stub(mongo, 'db').returns(db);
-    var resources = loadResources(app);
+    var resources = loadResources();
     sandbox.restore();
     return resources;
 }

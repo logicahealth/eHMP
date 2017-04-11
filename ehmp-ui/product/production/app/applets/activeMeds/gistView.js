@@ -8,7 +8,7 @@ define([
         initialize: function(options) {
             var self = this;
             this._super = ADK.AppletViews.InterventionsGistView.prototype;
-            var patientType = ADK.PatientRecordService.getCurrentPatient().attributes.patientStatusClass;
+            var patientType = ADK.PatientRecordService.getCurrentPatient().patientStatusClass();
 
             this.appletOptions = {
                 filterFields: GistConfig.filterFields,

@@ -1,0 +1,20 @@
+.backgrid-paginator {
+	height: 23px;
+	 ul {
+		li > span {
+			cursor: default;
+			background: none;
+			float: none;
+		}
+		.active > span {
+		  background-color: transparent;
+		}
+	}
+}
+
+.pagination-container {
+	> div {
+		position:fixed;
+		z-index:3;
+	}
+}

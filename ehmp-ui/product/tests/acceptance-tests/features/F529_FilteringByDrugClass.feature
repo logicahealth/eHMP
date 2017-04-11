@@ -4,9 +4,9 @@ Feature: F353 - Stacked Graph
 # Team: Andromeda
 
 Background:
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "fourteen,Patient"
-  And the user clicks the "Workspace Manager"
+  And the user clicks the Workspace Manager
   When the user clicks "Plus Button"
   And the user clicks "Customize"
 

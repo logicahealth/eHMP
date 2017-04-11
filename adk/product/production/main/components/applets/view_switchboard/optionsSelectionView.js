@@ -51,10 +51,10 @@ define([
 
     var SingleViewType = Backbone.Marionette.ItemView.extend({
         tagName: 'li',
-        className: 'viewType-optionsBox col-xs-3',
+        className: 'viewType-optionsBox col-xs-3 text-center',
         initialize: function() {
             var displayType = getViewTypeDisplay(this.model.get('type'));
-            this.template = Handlebars.compile('<div class="options-box {{type}}" tabindex="0" data-viewtype="{{type}}"></div><div class="formatButtonText">' + displayType + ' View</div>');
+            this.template = Handlebars.compile('<button type="button" aria-label="Press enter to select ' + displayType + ' view." class="btn btn-icon options-box {{type}}" data-viewtype="{{type}}"></button><p class="top-margin-xs">' + _.capitalize(displayType) + ' View</p>');
 
             var offset = this.model.get('paddingOffset');
             if (offset !== 0 && !_.isUndefined(offset)) {
@@ -62,6 +62,7 @@ define([
             }
         }
     });
+
     var OptionsSelectionView = Backbone.Marionette.CollectionView.extend({
         initialize: function(options) {
             this.appletController = options.appletController;
@@ -169,8 +170,7 @@ define([
 
             SessionStorage.clearAppletStorageModel(this.appletConfig.instanceId);
             SessionStorage.clearAppletStorageModel(this.appletConfig.id);
-
-
+            this.options.region.$el.closest(".workspace-editor-container").find('button:first').focus();
         },
         returnGridster: function() {
             if (this.switchOnClick) {
@@ -190,18 +190,18 @@ define([
                 $(this.displayRegion.el).attr('data-view-type', viewType);
             } else {
                 var displayType = getViewTypeDisplay(model.get('type'));
-                var appletHtml = '<div class="edit-applet fa fa-cog"></div><br><div class="formatButtonText"><p class="applet-title">' + this.appletTitle + '</p>' + displayType + '</div>';
+                var appletHtml = '<button type="button" aria-label="Press enter to open view options." class="btn btn-icon edit-applet applet-options-button"><i class="fa fa-cog"></i></button><br><h5 class="applet-title all-margin-no all-padding-no">' + this.appletTitle + '</h5><span class="right-padding-lg">' + _.capitalize(displayType) + '</span>';
                 appletHtml += '<span class="gs-resize-handle gs-resize-handle-both"></span><span class="gs-resize-handle gs-resize-handle-both"></span>';
                 NoSwitchView = NoSwitchView.extend({
                     template: _.template(appletHtml)
                 });
                 this.displayRegion.show(new NoSwitchView());
-                this.displayRegion.$el.removeClass('bringToFront');
             }
             var callback = function() {
                 if (self.onChangeView) {
                     self.onChangeView();
                 }
+                gridster.arrange_widgets_no_vertical_clipping(gridster.$widgets.toArray());
                 saveGridsterAppletsConfig();
             };
             $(this.containerRegion.el).attr('data-view-type', viewType);
@@ -217,21 +217,22 @@ define([
                 gridster.resize_widget($(this.containerRegion.el), 4, 3, callback);
                 gridster.set_widget_max_size($(this.containerRegion.el), regularMaxSize);
             }
+            this.containerRegion.$el.find('.applet-options-button').focus();
         },
         addLi: function(collectionView, buffer, options) {
-            collectionView.$el.append(buffer).append('<li class="col-xs-' + options.width + ' ' + options.divClass + '-box"><div tabstop="0" tabindex="0" role="button" class="options-box ' + options.divClass + '" data-viewtype="' + options.dataViewType + '"><i class="' + options.iconClass + '"></i><span class="sr-only">' + options.buttonText + '</span></div><div class="formatButtonText">' + options.buttonText + '</div></li>');
+            collectionView.$el.append(buffer).append('<li class="col-xs-' + options.width + ' ' + options.divClass + '-box text-center"><button type="button" aria-label="Press enter to remove applet." class="btn btn-icon options-box ' + options.divClass + '" data-viewtype="' + options.dataViewType + '"><i class="' + options.iconClass + '"></i></button><p>' + options.buttonText + '</p></li>');
         },
         attachBuffer: function(collectionView, buffer) {
             this.addLi(collectionView, buffer, {
                 width: 2,
                 divClass: 'remove-applet-option',
                 dataViewType: 'removeApplet',
-                iconClass: 'fa fa-trash-o',
+                iconClass: 'fa fa-trash-o fa-lg',
                 buttonText: 'Remove'
             });
         },
         tagName: 'ul',
-        className: 'options-panel col-xs-12',
+        className: 'options-panel col-xs-12 background-color-pure-white',
         onRender: function() {},
         childView: SingleViewType
     });

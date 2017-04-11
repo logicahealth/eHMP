@@ -1,5 +1,8 @@
-HMPJSON ;SLC/KCM -- Decode/Encode JSON
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
+HMPJSON ;SLC/KCM,ASMR/RRB - Decode/Encode JSON;9/25/2015 10:15
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ Q
  ;
  ; Note:  Since the routines use closed array references, VVROOT and VVERR
  ;        are used to reduce risk of naming conflicts on the closed array.

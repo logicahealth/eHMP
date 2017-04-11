@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Radiology imaging types [/radiology-imaging-types{?site}{&fields}]
+## Radiology imaging types [/radiology-imaging-types{?site}]
 
 Radiology Imaging Types
 
@@ -11,8 +11,6 @@ ORWDRA32 IMTYPSEL
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

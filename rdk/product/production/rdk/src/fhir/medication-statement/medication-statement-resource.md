@@ -1,12 +1,10 @@
 # Group FHIR
 
-## Medicationdstatement get Medication Statement [{{{path}}}{?subject.identifier}{&fields}]
+## Medicationdstatement get Medication Statement [{{{path}}}{?subject.identifier}]
 
 + Parameters
 
     :[subject.identifier]({{{common}}}/parameters/subject.identifier.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Fhir medicationstatement [GET]

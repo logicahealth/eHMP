@@ -43,7 +43,7 @@ function createWatch(context, callback) {
 
     context.client.watch(context.queueName, function(err) {
         if (err) {
-            logger.error('Unable to watch queue ' + context.queueName + '. ' + err);
+            logger.error({error: err}, 'Unable to watch queue %s.', context.queueName);
             return callback(err, context);
         }
 
@@ -56,7 +56,7 @@ function reserveWithZeroTimeout(context, callback) {
 
     context.client.reserveWithTimeout(TIME_WAIT, function(err, jobid, payload) {
         if (err && err !== 'TIMED_OUT') {
-            logger.error('Error reserving message. ' + err);
+            logger.error({error: err}, 'Error reserving message.');
             return callback(err);
         }
 
@@ -68,7 +68,7 @@ function createMessage(payload, jobId) {
     var message = _.attempt(JSON.parse.bind(null, payload));
 
     if (_.isError(message)) {
-        logger.error('Unable to parse message returned from queue. ' + message);
+        logger.error({message: message}, 'Unable to parse message returned from queue.');
     } else {
         message.id = jobId;
     }
@@ -99,7 +99,7 @@ function getAllQueuedMessages(context, jobProcessing, callback) {
                     return jobProcessing(context, payload, whileCallback);
                 }
 
-                return whileCallback();
+                return setImmediate(whileCallback);
             });
         },
         function() {
@@ -107,7 +107,7 @@ function getAllQueuedMessages(context, jobProcessing, callback) {
         },
         function(err) {
             if (err) {
-                logger.error('Error reserving message. ' + err);
+                logger.error({error: err}, 'Error reserving message.');
             }
 
             return callback(err, context);
@@ -133,7 +133,7 @@ function deleteSingleMessage(context, callback) {
 
     context.client.destroy(context.id, function(err) {
         if (err) {
-            logger.error('Unable to delete message with id ' + context.id + ' from queue ' + context.queueName + '. ' + err);
+            logger.error({error: err}, 'Unable to delete message with id %s from queue %s.', context.id, context.queueName);
             return callback(err, context);
         }
         return callback(null, context);
@@ -186,10 +186,10 @@ function releaseAllMessages(context, callback) {
     async.each(context.messages, function(message, eachCallback) {
         client.release(message.id, PRIORITY, DELAY, function(err) {
             if (err) {
-                logger.error('Unable to release a message back into the queue. ' + err);
+                logger.error({error: err}, 'Unable to release a message back into the queue.');
             }
 
-            return eachCallback(err);
+            return setImmediate(eachCallback, err);
         });
     }, function(err) {
         callback(err, context);
@@ -206,13 +206,13 @@ function queueMessages(context, callback) {
                 logger.debug('Queueing message to queue %s for communication request processing.', queueName);
 
                 if (err) {
-                    logger.error('Unable to use queue ' + tubeName + '. ' + err);
+                    logger.error({error: err}, 'Unable to use queue %s. ', tubeName);
                     return eachCallback(err);
                 }
                 //queue takes more than TTR to process then we have a possible infinite loop. make sure TTR is big enough.
                 client.put(PRIORITY, DELAY, TTR, JSON.stringify(context.message), function(err) {
                     if (err) {
-                        logger.error('Unable to put message in queue ' + tubeName + '. ' + err);
+                        logger.error({error: err}, 'Unable to put message in queue %s.', tubeName);
                     }
                     /* listeners firing start */
                     if (_.isUndefined(queues[queueName])) {
@@ -229,7 +229,7 @@ function queueMessages(context, callback) {
                         });
                     }
                     /* listeners firing end */
-                    return eachCallback(err);
+                    return setImmediate(eachCallback, err);
                 });
             });
         },
@@ -296,7 +296,9 @@ module.exports = {
             ],
 
             function completionCallback(err, context) {
-                context.client.closeConnection();
+                if (context && context.client) {
+                    context.client.closeConnection();
+                }
 
                 if (err) {
                     return callback(errHandlerWithNotFound(err));
@@ -349,7 +351,9 @@ module.exports = {
                 releaseAllMessages
             ],
             function completionCallback(err, context) {
-                context.client.closeConnection();
+                if (context && context.client) {
+                    context.client.closeConnection();
+                }
 
                 if (err) {
                     return callback(errHandlerWithNotFound(err));

@@ -1,0 +1,17 @@
+
+def zipName = "opencds-knowledge-repository-data"  //to be honest..I'm not sure where the version comes from. But this works
+
+task makeZipKnowRepo(type: Zip) {
+  from '.'
+  exclude 'package'
+  destinationDir file('./package')
+  baseName zipName
+}
+
+artifacts {
+  archives makeZipKnowRepo.archivePath
+}
+
+
+uploadArchives.dependsOn(makeZipKnowRepo)
+build.dependsOn(makeZipKnowRepo)

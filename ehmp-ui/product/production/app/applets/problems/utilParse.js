@@ -68,6 +68,10 @@ define([
 
     Util.getProblemText = function(response) {
         if (response.problemText) {
+            var icd10Index = response.problemText.indexOf('(ICD-10');
+            if (icd10Index > 0) {
+                response.problemText = response.problemText.substring(0, icd10Index).trim();
+            }            
             var icd9Index = response.problemText.indexOf('(ICD-9');
             if (icd9Index > 0) {
                 response.problemText = response.problemText.substring(0, icd9Index).trim();
@@ -75,6 +79,10 @@ define([
             var sctIndex = response.problemText.indexOf('(SCT');
             if (sctIndex > 0) {
                 response.problemText = response.problemText.substring(0, sctIndex).trim();
+            }
+            var tfMatch = /\(.*(AO|IR|HNC|MST|SHD|EC)\)/.exec(response.problemText);
+            if (tfMatch) {
+                response.problemText = response.problemText.substring(0, tfMatch.index).trim();                
             }
         }
         return response;

@@ -62,7 +62,7 @@ function getUserDefinedScreens(req, res) {
                 });
             });
 
-            req.logger.debug('Inside getUserDefinedScreens returned predefined filter data : ' + JSON.stringify(userDefinedFilters));
+            req.logger.debug({filters: userDefinedFilters}, 'Inside getUserDefinedScreens returned predefined filter data');
         });
 
         tasks.push(function (callback) {
@@ -82,7 +82,7 @@ function getUserDefinedScreens(req, res) {
                 });
             });
 
-            req.logger.debug('Inside getUserDefinedScreens returned predefined stacked graph data : ' + JSON.stringify(userDefinedGraphs));
+            req.logger.debug({graphs: userDefinedGraphs}, 'Inside getUserDefinedScreens returned predefined stacked graph data');
         });
     }
 
@@ -99,14 +99,14 @@ function getUserDefinedScreens(req, res) {
                 //data = JSON.stringify(data.userdefinedscreens);
                 //res.status(rdk.httpstatus.ok).rdkSend(data);
 
-                req.logger.debug('Inside getUserDefinedScreens data: ' + JSON.stringify(data));
+                req.logger.debug({data: data}, 'Inside getUserDefinedScreens data');
 
                 if(_.keys(data).length === 0) {
                     UDSScreensNConfig.userScreensConfig = {screens:[]};
                     UDSScreensNConfig.userDefinedScreens = userDefinedScreens;
                     UDSScreensNConfig.userDefinedFilters = userDefinedFilters;
                     UDSScreensNConfig.userDefinedGraphs = userDefinedGraphs;
-                    req.logger.debug('Inside getUserDefinedScreens UDSScreensNConfig nullish: ' + JSON.stringify(UDSScreensNConfig));
+                    req.logger.debug({UDSScreensNConfig: UDSScreensNConfig}, 'Inside getUserDefinedScreens UDSScreensNConfig nullish');
                     res.status(rdk.httpstatus.ok).rdkSend(UDSScreensNConfig);
                 } else {
                     //Add predefined filters to uderdefined filters
@@ -124,7 +124,7 @@ function getUserDefinedScreens(req, res) {
                     } else {
                         data.userDefinedGraphs = userDefinedGraphs;
                     }
-                    req.logger.debug('Inside getUserDefinedScreens UDSScreensNConfig: ' + JSON.stringify(data));
+                    req.logger.debug({data: data}, 'Inside getUserDefinedScreens UDSScreensNConfig');
                     res.status(rdk.httpstatus.ok).rdkSend(data);
                 }
             }
@@ -162,7 +162,7 @@ function getScreenData(screenId, req, callback) {
     httpUtil.get(conf_options,
         function(err, response, data) {
             if (err) {
-                conf_options.logger.error('userdefinedscreens getScreenData screenId:' + screenId + '. with err:' + err);
+                conf_options.logger.error({error: err}, 'userdefinedscreens getScreenData screenId:' + screenId + ' with err');
                 callback(err);
             } else {
                 req.logger.debug({data: data}, 'Inside Yea userdefinedscreens: ');

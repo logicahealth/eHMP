@@ -1,5 +1,8 @@
-HMPJSONE ;SLC/KCM -- Encode JSON
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;;Sep 01, 2011;Build 62
+HMPJSONE ;SLC/KCM,ASMR/RRB - Encode JSON;9/25/2015 10:17
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ Q
  ;
 ENCODE(VVROOT,VVJSON,VVERR) ; VVROOT (M structure) --> VVJSON (array of strings)
  ;

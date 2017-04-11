@@ -1,12 +1,12 @@
 # Valid Login information to be used for most tests
 class DefaultLoginKodak
-  @@adk_url = ENV.keys.include?('ADK_IP') ? 'http://' + ENV['ADK_IP'] : "http://IP        /"
-  @@ehmpui_url = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://IP        "
+  @@adk_url = ENV.keys.include?('ADK_IP') ? 'http://' + ENV['ADK_IP'] : "http://IP_ADDRESS/"
+  @@ehmpui_url = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://IP_ADDRESS"
   @@default_wait_time = 30
 
   @@facility_name = "KODAK"
-  @@accesscode = "PW    "
-  @@verifycode = "PW    !!"
+  @@accesscode = "PW"
+  @@verifycode = "PW"
 
   @@screenshot_folder = ENV.keys.include?('SCREENSHOT_FOLDER') ? ENV['SCREENSHOT_FOLDER'] : "screenshots"
 

@@ -3,7 +3,7 @@ Feature: Testing Drag and Drop
 #TeamNeptune
 
 Scenario: Demo for the drag and drop testing
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	And user searches for and selects "Eight,Patient"
 	And Cover Sheet is active
 	And the "patient identifying traits" is displayed with information

@@ -17,7 +17,7 @@ export GRADLE_OPTS="-Xmx1G -Xms256m -XX:MaxPermSize=512m -XX:PermSize=256m -Dorg
 
 export CONFIGURE_ARGS="--with-ldflags='-Wno-error=unused-command-line-argument-hard-error-in-future'"
 
-jdk_version="jdk1.8.0_66"
+jdk_version="jdk1.8.0_92"
 
 INSTALL_FOR_USER=$USER
 if [ ! -z "$SUDO_USER" ]; then

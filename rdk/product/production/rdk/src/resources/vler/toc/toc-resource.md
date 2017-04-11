@@ -2,7 +2,7 @@
 
 ## Toc toc [{{{path}}}]
 
-### Get [GET {{{path}}}{?encounterUid}{&date}{&fields}]
+### Get [GET {{{path}}}{?encounterUid}{&date}]
 
 + Parameters
 
@@ -11,8 +11,6 @@
     + encounterUid (false, optional) - Referral encounter UID
 
     + date (string, optional) - reference date - ONLY FOR DEBUG
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

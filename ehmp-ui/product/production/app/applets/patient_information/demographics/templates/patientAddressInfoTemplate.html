@@ -1,0 +1,78 @@
+<div class="demographic-group-header">
+    <h5>Addresses</h5>
+</div>
+<div class="demographic-group-content">
+    <dl>
+        <!-- Home -->
+        <dt>Home
+        {{#if hAddress.diff}}
+            <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseHAddress" aria-expanded="false" aria-controls="discrepanciesCollapseHAddress" tooltip-data-key="patient_information_deatils_discrepancies">
+                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <span class="sr-only">Press enter to view different data found at other sites</span>
+            </button>
+        {{/if}}
+        </dt>
+        <dd data-diff="{{hAddress.diff}}" class="left-padding-xs">
+            <div class="demographic-data"> {{hAddress.line1.value}}</div>
+            {{#if hAddress.line2.value}}<div class="demographic-data">{{hAddress.line2.value}}</div>{{/if}}
+            {{#if hAddress.line3.value}}<div class="demographic-data">{{hAddress.line3.value}}</div>{{/if}}
+            {{#if hAddress.line4.value}}<div class="demographic-data">{{hAddress.line4.value}}</div>{{/if}}
+        </dd>
+
+        {{#if hAddress.diff}}
+        <dd class="collapse" id="discrepanciesCollapseHAddress">
+            <div class="well">
+                <p>Other Sites</p>
+                <dl data-diff="{{hAddress.diff}}" class="discrepancy-group">
+                {{#each items}}
+                    {{#if hAddress.diff}}
+                    <dt>{{facilityName}}</dt>
+                    <dd>
+                        <div class="demographic-data">{{hAddress.line1.value}}</div>
+                        {{#if hAddress.line2.value}}<div class="demographic-data">{{hAddress.line2.value}}</div>{{/if}}
+                        {{#if hAddress.line3.value}}<div class="demographic-data">{{hAddress.line3.value}}</div>{{/if}}
+                        {{#if hAddress.line4.value}}<div class="demographic-data">{{hAddress.line4.value}}</div>{{/if}}
+                    </dd>
+                    {{/if}}
+                {{/each}}
+                </dl>
+            </div>
+        </dd>
+        {{/if}}
+        <!-- Temporary -->
+        <dt>Temporary
+        {{#if tAddress.diff}}
+            <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseTAddress" aria-expanded="false" aria-controls="discrepanciesCollapseTAddress" tooltip-data-key="patient_information_deatils_discrepancies">
+                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <span class="sr-only">Press enter to view different data found at other sites</span>
+            </button>
+        {{/if}}
+        </dt>
+        <dd data-diff="{{tAddress.diff}}" class="left-padding-xs">
+            <div class="demographic-data"> {{tAddress.line1.value}}</div>
+            {{#if tAddress.line2.value}}<div class="demographic-data">{{tAddress.line2.value}}</div>{{/if}}
+            {{#if tAddress.line3.value}}<div class="demographic-data">{{tAddress.line3.value}}</div>{{/if}}
+            {{#if tAddress.line4.value}}<div class="demographic-data">{{tAddress.line4.value}}</div>{{/if}}
+        </dd>
+        {{#if tAddress.diff}}
+        <dd class="collapse" id="discrepanciesCollapseTAddress">
+            <div class="well">
+                <p>Other Sites</p>
+                <dl data-diff="{{tAddress.diff}}" class="discrepancy-group">
+                {{#each items}}
+                    {{#if tAddress.diff}}
+                    <dt>{{facilityName}}</dt>
+                    <dd>
+                        <div class="demographic-data">{{tAddress.line1.value}}</div>
+                        {{#if tAddress.line2.value}}<div class="demographic-data">{{tAddress.line2.value}}</div>{{/if}}
+                        {{#if tAddress.line3.value}}<div class="demographic-data">{{tAddress.line3.value}}</div>{{/if}}
+                        {{#if tAddress.line4.value}}<div class="demographic-data">{{tAddress.line4.value}}</div>{{/if}}
+                    </dd>
+                    {{/if}}
+                {{/each}}
+                </dl>
+            </div>
+        </dd>
+        {{/if}}
+    </dl>
+</div>

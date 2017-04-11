@@ -34,14 +34,18 @@ COUNTS ; set counts for different collection types
  Q
 SCOUNT(GROUP,TOPIC,OBJECT) ; Increment a count index
  Q:$D(OBJECT)<10
- N TALLY
- S TALLY=$I(^VPRPTI(PID,"tally",GROUP,TOPIC)) ; incr count for patient
+ N TALLY,JPID
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
+ S TALLY=$I(^VPRPTI(JPID,PID,"tally",GROUP,TOPIC)) ; incr count for patient
  S TALLY=$I(^VPRPTX("count",GROUP,TOPIC))
  Q
 KCOUNT(GROUP,TOPIC,OBJECT) ; Decrement a count index
  Q:$D(OBJECT)<10
- N TALLY
- S TALLY=$I(^VPRPTI(PID,"tally",GROUP,TOPIC),-1) ; decr count for patient
+ N TALLY,JPID
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
+ S TALLY=$I(^VPRPTI(JPID,PID,"tally",GROUP,TOPIC),-1) ; decr count for patient
  S TALLY=$I(^VPRPTX("count",GROUP,TOPIC),-1)
  Q
  ;
@@ -51,22 +55,29 @@ TALLY ; TALLY index (PID,"tally",group,value)=tally
  ; if FIELD has no value, count is not changed
  D KTALLY(.OLDOBJ)
  D STALLY(.NEWOBJ)
- S ^VPRPTI(PID,"tally",IDXNAME)=$H
+ N JPID
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
+ S ^VPRPTI(JPID,PID,"tally",IDXNAME)=$H
  Q
 STALLY(OBJECT) ; Increment a tally index
  Q:$D(OBJECT)<10
- N VALUES,I,TALLY
+ N VALUES,I,TALLY,JPID
  D IDXVALS^VPRJCV(.OBJECT,.VALUES,.IDXMETA) Q:'$D(VALUES)
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
  S I="" F  S I=$O(VALUES(I)) Q:I=""  D
- . S TALLY=$I(^VPRPTI(PID,"tally",IDXNAME,VALUES(I,1)))
+ . S TALLY=$I(^VPRPTI(JPID,PID,"tally",IDXNAME,VALUES(I,1)))
  Q
 KTALLY(OBJECT) ; Decrement a tally index
  Q:$D(OBJECT)<10
- N VALUES,I,TALLY
+ N VALUES,I,TALLY,JPID
  D IDXVALS^VPRJCV(.OBJECT,.VALUES,.IDXMETA) Q:'$D(VALUES)
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
  S I="" F  S I=$O(VALUES(I)) Q:I=""  D
- . S TALLY=$I(^VPRPTI(PID,"tally",IDXNAME,VALUES(I,1)),-1)
- . I ^VPRPTI(PID,"tally",IDXNAME,VALUES(I,1))=0 K ^VPRPTI(PID,"tally",IDXNAME,VALUES(I,1))
+ . S TALLY=$I(^VPRPTI(JPID,PID,"tally",IDXNAME,VALUES(I,1)),-1)
+ . I ^VPRPTI(JPID,PID,"tally",IDXNAME,VALUES(I,1))=0 K ^VPRPTI(JPID,PID,"tally",IDXNAME,VALUES(I,1))
  Q
  ;
  ; ----- Index Logic: time ranges -----
@@ -76,45 +87,59 @@ TIME ; TIME index   (PID,"time",group,start,key)=stop
  ; expects start to always be something (0 if null), stop is optional
  D KTIME(.OLDOBJ)
  D STIME(.NEWOBJ)
- S ^VPRPTI(PID,"time",IDXNAME)=$H
+ N JPID
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
+ S ^VPRPTI(JPID,PID,"time",IDXNAME)=$H
  Q
 STIME(OBJECT) ; Set a time based index
  Q:$D(OBJECT)<10
  Q:'$$SETIF(.OBJECT)
- N VALUES,I
+ N VALUES,I,JPID
  D IDXVALS^VPRJCV(.OBJECT,.VALUES,.IDXMETA) Q:'$D(VALUES)
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
  S I="" F  S I=$O(VALUES(I)) Q:I=""  D
- . S ^VPRPTI(PID,"time",IDXNAME,VALUES(I,1),KEY,I)=$G(VALUES(I,2))
+ . S ^VPRPTI(JPID,PID,"time",IDXNAME,VALUES(I,1),KEY,I)=$G(VALUES(I,2))
  . Q:'$L($G(VALUES(I,2)))
- . S ^VPRPTI(PID,"stop",IDXNAME,VALUES(I,2),KEY,I)=VALUES(I,1)
+ . S ^VPRPTI(JPID,PID,"stop",IDXNAME,VALUES(I,2),KEY,I)=VALUES(I,1)
  Q
 KTIME(OBJECT) ; Kill a time based index
  Q:$D(OBJECT)<10
- N VALUES,I
+ N VALUES,I,JPID
  D IDXVALS^VPRJCV(.OBJECT,.VALUES,.IDXMETA) Q:'$D(VALUES)
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
  S I="" F  S I=$O(VALUES(I)) Q:I=""  D
- . K ^VPRPTI(PID,"time",IDXNAME,VALUES(I,1),KEY,I)
+ . K ^VPRPTI(JPID,PID,"time",IDXNAME,VALUES(I,1),KEY,I)
  . Q:'$L($G(VALUES(I,2)))
- . K ^VPRPTI(PID,"stop",IDXNAME,VALUES(I,2),KEY,I)
+ . K ^VPRPTI(JPID,PID,"stop",IDXNAME,VALUES(I,2),KEY,I)
  Q
  ;
 REVERSE ; REV index
  ; (PID,"rev",pointedToURN,relName,thisURN)
  D KREVERSE(.OLDOBJ)
  D SREVERSE(.NEWOBJ)
- S ^VPRPTI(PID,"rev",IDXNAME)=$H
+ N JPID
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
+ S ^VPRPTI(JPID,PID,"rev",IDXNAME)=$H
  Q
 SREVERSE(OBJECT) ; Set a relation link index
  Q:$D(OBJECT)<10
- N VALUES,I
+ N VALUES,I,JPID
  D IDXVALS^VPRJCV(.OBJECT,.VALUES,.IDXMETA) Q:'$D(VALUES)
- S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTI(PID,"rev",VALUES(I,1),IDXNAME,KEY,I)=""
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTI(JPID,PID,"rev",VALUES(I,1),IDXNAME,KEY,I)=""
  Q
 KREVERSE(OBJECT) ; Kill a relation link index
  Q:$D(OBJECT)<10
- N VALUES,I
+ N VALUES,I,JPID
  D IDXVALS^VPRJCV(.OBJECT,.VALUES,.IDXMETA) Q:'$D(VALUES)
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTI(PID,"rev",VALUES(I,1),IDXNAME,KEY,I)
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTI(JPID,PID,"rev",VALUES(I,1),IDXNAME,KEY,I)
  Q
 CODES ; code indexes
  D KCODES(.OLDOBJ)

@@ -26,7 +26,7 @@ allprojects {
   version = "${->repoVersion + '.' + repoCommitCount}"
 
   repositories {
-     maven {url "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp-public"}
+    maven {url "https://store.vistacore.us/nexus/content/groups/public"}
   }
 
   task bundleInstall{
@@ -43,7 +43,7 @@ allprojects {
     repositories.mavenDeployer {
       pom.groupId = "${->groupId}"
       pom.version = "${->version}"
-      repository(url: "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp/${->repo}/") {
+      repository(url: "https://store.vistacore.us/nexus/content/repositories/${->repo}/") {
         authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
       }
     }
@@ -180,12 +180,17 @@ task deleteApplet() {
 }
 
 task zipEhmpuiApp(type: Zip) {
-  from('production/min/applets')
+  from('production/app/contexts')
+    {
+      into 'contexts'
+      excludes = ["workspace/demo"]
+    }
+  from('production/app/applets')
     {
       into 'applets'
       excludes = ["*/**/node_modules","*/**/test","*/**/build.gradle","*/**/Gruntfile.js", "ui_components_demo"]
     }
-  from('production/min/screens')
+  from('production/app/screens')
     {
       into 'screens'
     }
@@ -193,11 +198,12 @@ task zipEhmpuiApp(type: Zip) {
     {
       into 'css'
     }
-  from('production/min/resources')
+  from('production/app/resources')
     {
       into 'resources'
     }
   from('production/app.json')
+
   includeEmptyDirs true
   baseName = 'ehmp-ui'
   def version = project(':production').version 
@@ -208,16 +214,6 @@ task bundleInstallAcceptance{
   doLast{
     exec {
       workingDir = "${rootDir}/tests/acceptance-tests"
-      executable = "bundle"
-      args = ['install']
-    }
-  }
-}
-
-task bundleInstallWatir{
-  doLast{
-    exec {
-      workingDir = "${rootDir}/tests/ui-tests/watir"
       executable = "bundle"
       args = ['install']
     }
@@ -235,59 +231,21 @@ task acceptanceTest(dependsOn: bundleInstallAcceptance){
   }
 }
 
-task "ui-acceptance"(dependsOn: [bundleInstallWatir, "ui-rubocop"]){
-  description 'Runs the rspec acceptance tests.'
-  group "UI-tests"
+task "rubocop"(dependsOn: bundleInstallAcceptance){
+  description 'Runs the rubocop tests.'
+  group "test"
   doLast{
     exec {
-      workingDir = "${rootDir}/tests/ui-tests/watir"
+      workingDir = "${rootDir}/tests/acceptance-tests"
       executable = "bundle"
-      args = ['exec', 'rake', 'ui:acceptance','[virtualbox]']
+      args = ['exec', 'rake', 'codequality']
     }
   }
 }
 
-task "ui-broken"(dependsOn: [bundleInstallWatir, "ui-rubocop"]){
-  description 'Runs the rspec broken tests.'
-  group "UI-tests"
-  doLast{
-    exec {
-      workingDir = "${rootDir}/tests/ui-tests/watir"
-      executable = "bundle"
-      args = ['exec', 'rake', 'ui:broken[virtualbox]']
-    }
-  }
-}
-
-task "ui-regression"(dependsOn: [bundleInstallWatir, "ui-rubocop"]){
-  description 'Runs the rspec regression tests.'
-  group "UI-tests"
-  doLast{
-    exec {
-      workingDir = "${rootDir}/tests/ui-tests/watir"
-      executable = "bundle"
-      args = ['exec', 'rake', 'ui:regression','[virtualbox]']
-    }
-  }
-}
-
-task "ui-rubocop"(dependsOn: bundleInstallWatir){
-  description 'Runs the rspec rubocop tests.'
-  group "UI-tests"
-  doLast{
-    exec {
-      workingDir = "${rootDir}/tests/ui-tests/watir"
-      executable = "bundle"
-      args = ['exec', 'rake', 'ui:rubocop']
-    }
-  }
-}
-
-//Duplicate ui-smoke, not sure if any dependencies on ui-smoke exist
-//Named base for clarity and consistency with Jenkins
-task "ui-base"(dependsOn: [bundleInstallWatir, "ui-rubocop"]){
-    description 'Runs the rspec smoke tests.'
-    group "UI-tests"
+task "ui-base"(dependsOn: [bundleInstallAcceptance, "rubocop"]){
+    description 'Runs the base tests.'
+    group "test"
     doLast{
         exec {
             workingDir = "${rootDir}/tests/acceptance-tests"
@@ -297,38 +255,13 @@ task "ui-base"(dependsOn: [bundleInstallWatir, "ui-rubocop"]){
     }
 }
 
-task "ui-smoke"(dependsOn: [bundleInstallWatir, "ui-rubocop"]){
-  description 'Runs the rspec smoke tests.'
-  group "UI-tests"
+task baseTest(dependsOn: bundleInstallAcceptance){
+  group "test"
   doLast{
     exec {
       workingDir = "${rootDir}/tests/acceptance-tests"
       executable = "bundle"
-      args = ['exec', 'rake', 'baseTests[virtualbox]']
-    }
-  }
-}
-
-task "ui-smokeplusacceptance"(dependsOn: [bundleInstallWatir, "ui-rubocop"]){
-  description 'Runs the rspec smokeplusacceptance tests.'
-  group "UI-tests"
-  doLast{
-    exec {
-      workingDir = "${rootDir}/tests/ui-tests/watir"
-      executable = "bundle"
-      args = ['exec', 'rake', 'ui:smokeplusacceptance[virtualbox]']
-    }
-  }
-}
-
-task "ui-spec"(dependsOn: [bundleInstallWatir, "ui-rubocop"]){
-  description 'Runs the rspec spec task.'
-  group "UI-tests"
-  doLast{
-    exec {
-      workingDir = "${rootDir}/tests/ui-tests/watir"
-      executable = "bundle"
-      args = ['exec', 'rake', 'ui:spec[virtualbox]']
+      args = ['exec', 'rake', 'baseTests']
     }
   }
 }
@@ -340,17 +273,6 @@ task smokeTest(dependsOn: bundleInstallAcceptance){
       workingDir = "${rootDir}/tests/acceptance-tests"
       executable = "bundle"
       args = ['exec', 'rake', 'smokeTests']
-    }
-  }
-}
-
-task baseTest(dependsOn: bundleInstallAcceptance){
-  group "test"
-  doLast{
-    exec {
-      workingDir = "${rootDir}/tests/acceptance-tests"
-      executable = "bundle"
-      args = ['exec', 'rake', 'baseTests']
     }
   }
 }

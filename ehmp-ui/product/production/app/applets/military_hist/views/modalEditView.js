@@ -28,7 +28,7 @@ define([
             items: [{
                 control: "button",
                 type: "button",
-                id: "cancel-btn",
+                id: "cancelBtn",
                 label: "Cancel",
                 disabled: false,
                 extraClasses: ["btn-default", "btn-sm"],
@@ -36,7 +36,7 @@ define([
             }, {
                 control: "button",
                 type: "submit",
-                id: "viewEncounters-btn",
+                id: "saveBtn",
                 label: "Save",
                 disabled: false,
                 extraClasses: ["btn-default", "btn-sm", "left-margin-xs"],
@@ -53,7 +53,7 @@ define([
         fields: FormFields,
         events: {
             "submit": "onSubmit",
-            "click #cancel-btn": "onCancel"
+            "click #cancelBtn": "onCancel"
         },
         ui: {
             'descriptionArea': '#description'

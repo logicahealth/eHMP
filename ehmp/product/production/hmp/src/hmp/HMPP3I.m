@@ -1,10 +1,18 @@
-HMPP3I ;SLC/AGP -- HMP patch 3 post install ; 2/18/15 5:43pm
- ;;2.0;HEALTH MANAGEMENT PLATFORM;**1**;Oct 10, 2014;Build 32
+HMPP3I ;SLC/AGP,ASMR/RRB,ASF,SRG - HMP patch 3 post install ; Jan 21, 2015 16:50:00
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Oct 10, 2014;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ ; ^XTV(8989.51 - ICR 2992
+ ; ^XTV(8989.5 - ICR 2682
+ ;
+ Q
  ;
 ENV ; -- environment check to prevent production installation
+ N XPDABORT  ; DE2818 SQA findings ASMR/RRB
  I $$PROD^XUPROD D
- .W !,"You are attempting to install this software into your production account.",!,"At this time, this software is not ready for a production install."
- .W !!,"Please verify the account you're attempting to install into and",!,"if you believe you're correct, contact Ron Massey or Tana Defa.",!!,"INSTALLATION ABORTED!"
+ .W !,"Production account installation is not permitted at this time."
+ .W !!,"Please verify the target installation account is a non-production account."
+ .W !!,"*** INSTALLATION ABORTED! ***"
  .S XPDABORT=1
  Q
  ;
@@ -14,17 +22,10 @@ PRE ; -- clean out HMP SUBSCRIPTION and ^XTMP("HMP") entries for testing
  S HMPDT="HMPEF-1111111"
  F  S HMPDT=$O(^XTMP(HMPDT)) Q:HMPDT'?1"HMPEF-"7N  K ^XTMP(HMPDT)
  K ^XTMP("HMP"),^TMP("HMPX")
- I $$VERCMP($$VERSRV(),"0.7-S54")>0 D  ; if current < S54
- . K ^HMP(800000)
- . S ^HMP(800000,0)="HMP SUBSCRIPTION^800000^^"
+ ;I $$VERCMP($$VERSRV(),"0.7-S54")>0 D  ; if current < S54
+ ;. K ^HMP(800000)
+ ;. S ^HMP(800000,0)="HMP SUBSCRIPTION^800000^^"
  ;D CLEARPAR
- I $D(^DD(800000.04)) D  ;remove old Subscription sub-files
- . N DIU S DIU(0)="S"
- . S DIU=800000.04 D EN^DIU2
- . S DIU=800000.03 D EN^DIU2
- I $D(^DD(800000.01,.03)) D  ; remote old PID field
- . S DIK="^DD(800000.01,",DA=.03,DA(1)=800000.01
- . D ^DIK
  ;D TASKCONV
  D ADDRSRC ; add resource for throttling extract tasks
  S ^XTMP("HMP-LAST-SCHEMA",0)=$$HTFM^XLFDT(+$H+7)_U_$$HTFM^XLFDT(+$H)_U_"JSON schema before install"
@@ -77,13 +78,18 @@ POST ; -- set up new Tx data
  K ^XTMP("HMP-LAST-SCHEMA")
  ;D CREATE^HMPAP1  ;BL;V5-6 Protocols now attached via KIDs build not post routine
  D POST^HMPPRXY2
- D DISABLE^HMPZ0218
+ D DISABLE^HMPZ0218 ;BL;US5021
+ D POST^HMP0311P
+ D POST^HMP0311Q ;DE2393 - Subscribe HMP ADT CLIENT P'cols to VAFC ATD SERVERS
  D SETPARMS ;US7724 - set throttling parameter values
+ D MENUADD  ;NEED TO ADD HMP XU EVENTS OPTION to menu XU USER ADD
  Q
  ;
 VERSION ; -- update V# parameter
+ N HMPSYS
  D PUT^XPAR("PKG","HMP VERSION",1,"2.00")
- D PUT^XPAR("SYS","HMP SYSTEM NAME",1,$$SYS^HMPUTILS)
+ S HMPSYS=$$SYS^HMPUTILS
+ I HMPSYS'=$$SYS^HMPUTILS($$KSP^XUPARAM("WHERE")) D PUT^XPAR("SYS","HMP SYSTEM NAME",1,$$SYS^HMPUTILS($$KSP^XUPARAM("WHERE"))) ;ASF 12/19/15
  Q
  ;
 OBJCNT ; -- create count index for HMP OBJECT file
@@ -193,7 +199,7 @@ CVTSEL ; resend all patient selection objects
  Q
 PARPID ; Loop thru HMP PARAMETERS and switch ICN to qualified DFN
  N PAR,ENT,UID,HMPWP,HMPERR,I,HMPSYS
- S HMPSYS=$$GET^XPAR("SYS","HMP SYSTEM NAME")
+ S HMPSYS=$$SYS^HMPUTILS
  S PAR=$O(^XTV(8989.51,"B","HMP PARAMETERS","")) Q:PAR'>0
  S ENT="" F  S ENT=$O(^XTV(8989.5,"AC",PAR,ENT)) Q:ENT=""  D
  . S UID="" F  S UID=$O(^XTV(8989.5,"AC",PAR,ENT,UID)) Q:UID=""  D  ;INST=UID
@@ -252,6 +258,29 @@ ODCADD ; -- add OPD domain average sizes
  . I $G(ERR) D BMES^XPDUTL("Error: "_ERR)
  D MES^XPDUTL("   o  operational domain sizes added")
  Q
+ ;
+MENUADD  ;BL;Post processor to add option HMP XU EVENTS to Option XU USER ADD
+ N XUMENU,HMPMENU,FDA,QFLG,X
+ ;Get IEN of XU USER ADD
+ S XUMENU="",XUMENU=$O(^DIC(19,"B","XU USER ADD",XUMENU))
+ Q:XUMENU=""
+ ;Get IEN of HMP XU EVENTS
+ S HMPMENU="",HMPMENU=$O(^DIC(19,"B","HMP XU EVENTS",HMPMENU))
+ Q:HMPMENU=""
+ ;Check if already installed
+ S X=0,QFLG=0
+ F  S X=$O(^DIC(19,XUMENU,10,X)) Q:X'=+X  D
+ . I $P(^DIC(19,XUMENU,10,X,0),"^",1)=HMPMENU S QFLG=1
+ Q:QFLG  ;If HMPMENU found silently quit
+ ;Now insert new menu item HMPMENU, into 
+ ; file 19.01  field .01
+ S FDA(1,19.01,"+1,"_XUMENU_",",.01)=HMPMENU
+ D UPDATE^DIE("","FDA(1)","","HMPERR")
+ I $D(HMPERR) D  Q
+ .D EN^DDIOL("XU USER ADD menu not updated, UPDATE^DIE returned the following error message.")
+ .S IC="HMPERR"
+ .F  S IC=$Q(@IC) Q:IC=""  W !,IC,"=",@IC
+ .D EN^DDIOL("Examine the above error message for the reason.") Q
  ;
 PTDOM ; patient domains
  ;;allergy;690

@@ -17,14 +17,14 @@ function handle(log, config, environment, job, handlerCallback, touchBack) {
         log.debug('store-record-request-handler.handle: Valid job received');
     }
 
-    realStoreRecord(log, environment, job.dataDomain, job.patientIdentifier, job.record, handlerCallback, touchBack);
+    realStoreRecord(log, environment, job.dataDomain, job.patientIdentifier, job.record, handlerCallback, touchBack, true);
 }
 
 function storeRecord(log, environment, domain, patientIdentifier, record, callback) {
-    realStoreRecord(log, environment, domain, patientIdentifier, record, callback, function() {});
+    realStoreRecord(log, environment, domain, patientIdentifier, record, callback, function() {}, false);
 }
 
-function realStoreRecord(log, environment, domain, patientIdentifier, record, callback, touchBack) {
+function realStoreRecord(log, environment, domain, patientIdentifier, record, callback, touchBack, calledByHandler) {
     if (_.isUndefined(record)) {
         log.error('store-record-request-handler.handle: Missing record.  Record: %j', record);
         return callback(errorUtil.createFatal('Missing record', record));
@@ -42,53 +42,22 @@ function realStoreRecord(log, environment, domain, patientIdentifier, record, ca
         return callback(errorUtil.createFatal('Missing patient identifier', record));
     }
 
-    log.debug('store-record-request-handler.handle: Storing to JDS: %j', record);
-    async.series({
-        storeJds: function(callback) {
-            var metricsObj = {'uid':record.uid, 'pid':record.pid,'process':uuid.v4(),'timer':'start'};
-            environment.metrics.warn('Store record in JDS', metricsObj);
-            metricsObj.timer = 'stop';
-            environment.jds.storePatientData(record, function(error, response, body) {
-                log.debug('store-record-request-handler.handle: JDS response code: %s', (response ? response.statusCode : undefined));
-                if (error) {
-                    environment.metrics.warn('Store record in JDS in Error', metricsObj);
-                    log.error('store-record-request-handler.handle: Error encountered when storing to JDS. error: %s; response: %j; body: %j', error, response, body);
-                    return callback(error);
-                } else if (response.statusCode !== 201) {
-                    environment.metrics.warn('Store record in JDS in Error', metricsObj);
-                    log.error('store-record-request-handler.handle: Unexpected statusCode received when storing to JDS. error: (no error received); response: %j; body: %j', response, body);
-                } else {
-                    environment.metrics.warn('Store record in JDS', metricsObj);
-                    log.debug('store-record-request-handler.handle: JDS STORED RECORD!  error: (no error received); response: %j; body: %j', response, body);
-                }
+    var tasks = [
+        storeJds.bind(null, log, environment, record),
+        callTouchBack.bind(null, touchBack)
+    ];
 
-                return callback();
-            });
-        },
-        touchBack: function(callback) {
-            if(_.isFunction(touchBack)) {
-                touchBack();
-            }
-            callback();
-        },
-        publish: function(callback) {
-            // var meta = {
-            //     jpid: job.jpid,
-            //     rootJobId: job.rootJobId,
-            //     param: job.param
-            // };
-            var jobsToPublish = [
-                jobUtil.createPublishVxDataChange(patientIdentifier, domain, record),
-                jobUtil.createSolrRecordStorage(patientIdentifier, domain, record)
-            ];
-            environment.publisherRouter.publish(jobsToPublish, callback);
-        }
-    }, function(error) {
+    if(calledByHandler){
+        tasks.push(publish.bind(null, environment, patientIdentifier, domain, record));
+    }
+
+    log.debug('store-record-request-handler.handle: Storing to JDS: %j', record);
+    async.series(tasks, function(error) {
         log.debug('store-record-request-handler.handle: Completed call to async.series.  error: %s', error);
         if (error) {
             if (error.message) {
                 var errorMessage = error.message;
-                if(errorMessage.error){
+                if (errorMessage.error) {
                     errorMessage = errorMessage.error.errors;
                 }
 
@@ -102,6 +71,53 @@ function realStoreRecord(log, environment, domain, patientIdentifier, record, ca
         log.debug('store-record-request-handler.handle: Exiting final callback.');
         callback(null, 'success');
     });
+}
+
+function storeJds(log, environment, record, callback) {
+    var metricsObj = {
+        'uid': record.uid,
+        'pid': record.pid,
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+    environment.metrics.warn('Store record in JDS', metricsObj);
+    metricsObj.timer = 'stop';
+    environment.jds.storePatientData(record, function(error, response, body) {
+        log.debug('store-record-request-handler.handle: JDS response code: %s', (response ? response.statusCode : undefined));
+        if (error) {
+            environment.metrics.warn('Store record in JDS in Error', metricsObj);
+            log.error('store-record-request-handler.handle: Error encountered when storing to JDS. error: %s; response: %j; body: %j', error, response, body);
+            return callback(error);
+        } else if (response.statusCode !== 201) {
+            environment.metrics.warn('Store record in JDS in Error', metricsObj);
+            log.error('store-record-request-handler.handle: Unexpected statusCode received when storing to JDS. error: (no error received); response: %j; body: %j', response, body);
+        } else {
+            environment.metrics.warn('Store record in JDS', metricsObj);
+            log.debug('store-record-request-handler.handle: JDS STORED RECORD!  error: (no error received); response: %j; body: %j', response, body);
+        }
+
+        return callback();
+    });
+}
+
+function callTouchBack(touchBack, callback) {
+    if (_.isFunction(touchBack)) {
+        touchBack();
+    }
+    callback();
+}
+
+function publish(environment, patientIdentifier, domain, record, callback) {
+    // var meta = {
+    //     jpid: job.jpid,
+    //     rootJobId: job.rootJobId,
+    //     param: job.param
+    // };
+    var jobsToPublish = [
+        jobUtil.createPublishVxDataChange(patientIdentifier, domain, record),
+        jobUtil.createSolrRecordStorage(patientIdentifier, domain, record)
+    ];
+    environment.publisherRouter.publish(jobsToPublish, callback);
 }
 
 module.exports = handle;

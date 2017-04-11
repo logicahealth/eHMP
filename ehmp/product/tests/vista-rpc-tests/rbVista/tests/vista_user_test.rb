@@ -6,14 +6,14 @@ require '../vista_user'
 class VistaUserTest < Test::Unit::TestCase
 
   def test_login
-    host = 'IPADDRESS '
+    host = 'IP_ADDRESS'
     PORT       
     cxn = VistaConnection.new host, port
     cxn.connect
     assert_equal true, cxn.is_connected?
     user = VistaUser.new
-    access_code = 'PW    '
-    verify_code = 'PW    !!'
+    access_code = 'PW'
+    verify_code = 'PW'
     context = 'OR CPRS GUI CHART'
     greeting = user.login cxn, access_code, verify_code, context
     cxn.disconnect

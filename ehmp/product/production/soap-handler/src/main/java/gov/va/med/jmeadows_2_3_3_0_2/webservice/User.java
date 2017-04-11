@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="encryptedAvCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="encryptedFederatedUid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="gender" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="hostSite" type="{http://webservice.vds.domain.ext/}site" minOccurs="0"/>
+ *         &lt;element name="hostSite" type="{http://webservice.vds.DNS       /}site" minOccurs="0"/>
  *         &lt;element name="janusGUIConfig" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="janusPermissions" type="{http://webservice.vds.domain.ext/}janusPermission" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="janusPermissions" type="{http://webservice.vds.DNS       /}janusPermission" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="NPI" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="pager" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -50,7 +50,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "user", namespace = "http://webservice.vds.domain.ext/", propOrder = {
+@XmlType(name = "user", namespace = "http://webservice.vds.DNS       /", propOrder = {
     "agency",
     "bseToken",
     "cardId",

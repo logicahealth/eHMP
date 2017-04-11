@@ -18,6 +18,11 @@ module.exports.utils.pjdsStore = require('../utils/pjds-store');
 module.exports.utils.results = require('../utils/result-utils');
 module.exports.utils.sensitivity = require('../utils/sensitivity-utils');
 module.exports.utils.pidValidator = require('../utils/pid-validator');
+module.exports.utils.pooledJbpmDatabase = require('../utils/oracle-connection-pool');
+module.exports.utils.locationUtil = require('../utils/location-util');
+
+module.exports.utils.jwt = {};
+module.exports.utils.jwt.addJwtHeader = require('./factory-components/rdk-jwt').addJwtHeader;
 
 module.exports.node = {};
 module.exports.node.util = require('util');
@@ -27,6 +32,7 @@ module.exports.patientCache = require('memory-cache');
 
 module.exports.rolesConfig = require('../../config/rolesConfig');
 module.exports.patienttimelineResourceConfig = require('../../config/patienttimelineResourceConfig');
+module.exports.siteTimzonesConfig = require('../../config/siteTimezonesConfig');
 
 // TODO decide how to handle subsystem utilities (this code is temporary)
 module.exports.utils.jds = {};

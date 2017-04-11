@@ -11,10 +11,14 @@ class MyWorkspace < AllApplets
   include Singleton
   def initialize
     super
-    add_action(CucumberLabel.new('My Workspace Navigation'), ClickAction.new, AccessHtmlElement.new(:id, 'provider-centric-view-nav-header-tab'))
+    #add_action(CucumberLabel.new('My Workspace Navigation'), ClickAction.new, AccessHtmlElement.new(:id, 'provider-centric-view-nav-header-tab'))
+    add_action(CucumberLabel.new('My Workspace Navigation'), ClickAction.new, AccessHtmlElement.new(:id, 'current--nav-header-tab'))
+    add_action(CucumberLabel.new('Staff View Navigation'), ClickAction.new, AccessHtmlElement.new(:id, 'current-staff-nav-header-tab'))
 
     # applets
-    add_verify(CucumberLabel.new("MY TASKS"), VerifyContainsText.new, applet_panel_title("todo_list"))
+    add_verify(CucumberLabel.new("TASKS"), VerifyContainsText.new, applet_panel_title("todo_list"))
+    add_verify(CucumberLabel.new("Load Carousel"), VerifyContainsText.new, AccessHtmlElement.new(:id, "applets-carousel"))
+    add_action(CucumberLabel.new('Next Workspace'), ClickAction.new, AccessHtmlElement.new(:css, "[data-target='#applets-carousel']"))
 
     todo_list = AccessHtmlElement.new(:css, '#data-grid-todo_list tbody tr.selectable')
     add_verify(CucumberLabel.new('todo list rows'), VerifyXpathCount.new(todo_list), todo_list)
@@ -32,12 +36,16 @@ def verify_on_myworkspace
   expect(browser_access.perform_verification("Screenname", "My Workspace")).to be_true
 end
 
-Then(/^My Workspace Navigation is displayed$/) do
-  expect(MyWorkspace.instance.wait_until_element_present('My Workspace Navigation')).to eq(true)
+Then(/^Staff View Navigation is displayed$/) do
+  @ehmp = PobPatientSearch.new
+  expect(@ehmp).to have_btn_my_workspace
 end
 
-When(/^the user selects My Workspace from the navigation bar$/) do
-  expect(MyWorkspace.instance.perform_action('My Workspace Navigation')).to eq(true)
+When(/^the user selects Staff View from the navigation bar$/) do
+  # expect(MyWorkspace.instance.perform_action('My Workspace Navigation')).to eq(true)
+  @ehmp = PobPatientSearch.new
+  expect(@ehmp).to have_btn_my_workspace
+  @ehmp.btn_my_workspace.click  
 end
 
 Then(/^Provider Centric View is active$/) do
@@ -72,9 +80,10 @@ When(/^the user selects Patient Selection from navigation bar$/) do
   expect(PatientSearch.instance.perform_action('patientSearch')).to eq(true)
 end
 
-When(/^the user selects Search Button closed$/) do
-  # searchClose
-  expect(PatientSearch2.instance.perform_action('searchClose')).to eq(true)
+When(/^the user selects current patient link$/) do
+  expect(PatientSearch2.instance.perform_action('Patient Search Overview Navigation')).to eq(true)
+  expect(PatientSearch2.instance.perform_action('Confirm')).to eq(true)
+  expect(PatientSearch2.instance.perform_action('Confirm Flag')).to eq(true)
 end
 
 When(/^the user copies My Workspace workspace$/) do
@@ -109,6 +118,9 @@ Then(/^the default workspace applet is also listed in the applet selection catal
   elements.add_verify(CucumberLabel.new('Gridster - ToDo List'), VerifyText.new, AccessHtmlElement.new(:css, '.applet-gridster [data-appletid=todo_list]'))
   elements.add_verify(CucumberLabel.new('Applet Carousel - ToDo List'), VerifyText.new, AccessHtmlElement.new(:css, '#applets-carousel [data-appletid=todo_list]'))
   expect(elements.am_i_visible? 'Gridster - ToDo List').to eq(true)
+  expect(MyWorkspace.instance.wait_until_action_element_visible("Load Carousel", 30)).to be_true
+  expect(MyWorkspace.instance.perform_action('Next Workspace')).to eq(true)
+  expect(elements.wait_until_action_element_visible("Applet Carousel - ToDo List", 30)).to be_true
   expect(elements.am_i_visible? 'Applet Carousel - ToDo List').to eq(true)
 end
 

@@ -195,7 +195,7 @@ function discontinue(orderId, rpcClient, writebackContext, callback) {
 
 function getParameters(model, orderId) {
     var parameters = [];
-    if (model && model.provider && model.location && orderId) {
+     if (model && model.provider && model.location && orderId) {
         parameters.push(orderId);
         parameters.push(model.provider);
         parameters.push(model.location);

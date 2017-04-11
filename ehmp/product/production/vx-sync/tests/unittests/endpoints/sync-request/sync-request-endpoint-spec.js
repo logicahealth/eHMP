@@ -9,6 +9,14 @@ var config = require(global.VX_ROOT + 'worker-config');
 var DummyRequest = require(global.VX_ROOT + 'tests/frames/dummy-request');
 var DummyResponse = require(global.VX_ROOT + 'tests/frames/dummy-response');
 
+// NOTE: be sure next lines are commented out before pushing
+// var logUtil = require(global.VX_UTILS + 'log');
+// log = logUtil._createLogger({
+//     name: 'test',
+//     level: 'debug',
+//     child: logUtil._createLogger
+// });
+
 var storedPid;
 var DummyJDS = {
     'getPatientIdentifier': jasmine.createSpy().andCallFake(function(job, callback) {
@@ -21,7 +29,10 @@ var DummyJDS = {
     'storePatientIdentifier': jasmine.createSpy().andCallFake(function(job, callback) {
         var retObj = { 'jpid': '21EC2020-3AEA-4069-A2DD-FFFFFFFFFFFF' };
         storedPid = true;
-        callback(null, { 'statusCode': 200 }, retObj);
+        callback(null, { 'statusCode': 201 }, retObj);
+    }),
+    'getOperationalDataPtSelectByPid': jasmine.createSpy().andCallFake(function(job, callback) {
+        callback(null, { 'statusCode': 201 }, {'data': {'totalItems': 1}});
     })
 };
 var DummyJSU = {
@@ -113,26 +124,28 @@ describe('sync-request-endpoint.js', function() {
                     expect(request.patientIdentifier.type).toEqual('pid');
                     expect(request.patientIdentifier.value).toEqual('9E7A;4');
                     expect(response.statusCode).toBeUndefined();
-                    patientMiddleware.getJPID(request, response, function() {
-                        expect(request.jpid).toBe(false);
-                        expect(response.statusCode).toBeUndefined();
-                        patientMiddleware.createJPID(request, response, function() {
+                    patientMiddleware.verifyPatientExists(request, response, function() {
+                        patientMiddleware.getJPID(request, response, function() {
+                            expect(request.jpid).toBe(false);
                             expect(response.statusCode).toBeUndefined();
-                            expect(request.jpid).toEqual('21EC2020-3AEA-4069-A2DD-FFFFFFFFFFFF');
-                            var jobFactory = function(r) {
-                                return jobUtil.createEnterpriseSyncRequest(r.patientIdentifier, r.jpid, r.force);
-                            };
-                            jobMiddleware.buildJob(jobFactory, request, response, function() {
-                                expect(response.job).toBeDefined();
-                                expect(response.job.type).toEqual('enterprise-sync-request');
-                                expect(response.job.jpid).toEqual('21EC2020-3AEA-4069-A2DD-FFFFFFFFFFFF');
-                                expect(response.job.patientIdentifier).toBeDefined();
-                                expect(response.job.patientIdentifier.type).toEqual('pid');
-                                expect(response.job.patientIdentifier.value).toEqual('9E7A;4');
-                                jobMiddleware.jobVerification([ 'completed' ], request, response, function() {
-                                    expect(response.currentJob).toBeUndefined();
-                                    expect(response.statusCode).toBeUndefined();
-                                    jobMiddleware.publishJob(dummyRouter, request, response, next);
+                            patientMiddleware.createJPID(request, response, function() {
+                                expect(response.statusCode).toBeUndefined();
+                                expect(request.jpid).toEqual('21EC2020-3AEA-4069-A2DD-FFFFFFFFFFFF');
+                                var jobFactory = function(r) {
+                                    return jobUtil.createEnterpriseSyncRequest(r.patientIdentifier, r.jpid, r.force);
+                                };
+                                jobMiddleware.buildJob(jobFactory, request, response, function() {
+                                    expect(response.job).toBeDefined();
+                                    expect(response.job.type).toEqual('enterprise-sync-request');
+                                    expect(response.job.jpid).toEqual('21EC2020-3AEA-4069-A2DD-FFFFFFFFFFFF');
+                                    expect(response.job.patientIdentifier).toBeDefined();
+                                    expect(response.job.patientIdentifier.type).toEqual('pid');
+                                    expect(response.job.patientIdentifier.value).toEqual('9E7A;4');
+                                    jobMiddleware.jobVerification([ 'completed' ], request, response, function() {
+                                        expect(response.currentJob).toBeUndefined();
+                                        expect(response.statusCode).toBeUndefined();
+                                        jobMiddleware.publishJob(dummyRouter, request, response, next);
+                                    });
                                 });
                             });
                         });

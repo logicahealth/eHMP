@@ -4,13 +4,13 @@ var resource = require('./notes-vista-writer');
 
 describe('write-back notes vista writer', function() {
     describe('tests encounterObj()', function() {
-        it('returns expected object when model contains a encounterServiceCategory, encounterDateTime, and locationIEN', function() {
+      it('returns expected object when model contains a category, dateTime, and locationUid', function() {
             var model = {
                 'authorUid': '10000000255',
                 'documentDefUid': 'urn:va:doc-def:9E7A:40',
                 'encounterDateTime': '199310131400',
                 'encounterServiceCategory': 'A',
-                'locationIEN': '32',
+                'locationUid': 'urn:va:location:9E7A:w32',
                 'patientIcn': '10110V004877',
                 'pid': '9E7A;8',
                 'status': 'UNSIGNED'
@@ -27,7 +27,7 @@ describe('write-back notes vista writer', function() {
             var model = {
                 'authorUid': '10000000255',
                 'documentDefUid': 'urn:va:doc-def:9E7A:40',
-                'locationIEN': '32',
+                'locationUid': 'urn:va:location:9E7A:w32',
                 'patientIcn': '10110V004877',
                 'pid': '9E7A;8',
                 'status': 'UNSIGNED'
@@ -40,7 +40,7 @@ describe('write-back notes vista writer', function() {
             var model = {
                 'authorUid': '10000000255',
                 'documentDefUid': 'urn:va:doc-def:9E7A:40',
-                'locationIEN': '32',
+                'locationUid': 'urn:va:location:9E7A:w32',
                 'patientIcn': '10110V004877',
                 'pid': '9E7A;8',
                 'status': 'UNSIGNED'
@@ -49,7 +49,7 @@ describe('write-back notes vista writer', function() {
             var retObj = resource._encounterObj(model);
             expect(retObj).to.eql(expectedObj);
         });
-        it('returns empty object when model is missing locationIEN', function() {
+        it('returns empty object when model is missing locationUid', function() {
             var model = {
                 'authorUid': '10000000255',
                 'documentDefUid': 'urn:va:doc-def:9E7A:40',

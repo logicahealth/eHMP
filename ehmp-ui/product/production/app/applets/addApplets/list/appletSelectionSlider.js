@@ -2,16 +2,17 @@ define([
     'underscore',
     'backbone',
     'marionette',
-    'hbs!app/applets/addApplets/list/appletSlider',
-    'app/applets/appletsManifest'
-], function(_, Backbone, Marionette, appletSlider, appletsManifest) {
-
+    'hbs!app/applets/addApplets/list/appletSlider'
+], function(_, Backbone, Marionette, appletSlider) {
     'use strict';
+
+    var AppletsManifest = ADK.Messaging.request('AppletsManifest');
     var AppletSliderLayoutView = Backbone.Marionette.LayoutView.extend({
         template: appletSlider,
         initialize: function(options) {
-            this.collection = new Backbone.Collection(_.filter(appletsManifest.applets, function(applet) {
-                var permissions = applet.requiredPermissions || [];
+            var appletsInContext = ADK.utils.contextUtils.filterAppletsGivenContext(AppletsManifest.applets);
+            this.collection = new Backbone.Collection(_.filter(appletsInContext, function(applet) {
+                var permissions = applet.permissions || [];
                 var hasPermission = true;
                 _.each(permissions, function(permission) {
                     if (!ADK.UserService.hasPermission(permission)) {
@@ -40,27 +41,33 @@ define([
 
         getNumberPerSlides: function() {
             var windowWidth = $(window).width();
-            return Math.ceil((windowWidth - 300) / 90);
+            return Math.ceil((windowWidth - 400) / 90);
         },
         setModel: function() {
             var appletsPerSlide = this.getNumberPerSlides();
             var slides = Math.ceil(this.collection.length / appletsPerSlide);
-            this.model.set({
-                'paginationHtml': this.getPaginationHtml(slides),
-                'appletItemsHtml': this.getAppletItemsHtml(this.collection, appletsPerSlide)
-            });
+
+            if (this.collection.length === 0) {
+                this.model.set({
+                    'appletItemsHtml': '<div class="item active"><p class="color-pure-white">No Applets Found</p></div>'
+                });
+            } else {
+                this.model.set({
+                    'appletItemsHtml': this.getAppletItemsHtml(this.collection, appletsPerSlide)
+                });
+            }
         },
         onRender: function() {
             var addAppletsChannel = ADK.Messaging.getChannel('addApplets');
 
             var carousel = this.$el.find('.carousel').carousel({
                 interval: false,
-                wrap: true //allows cycle
+                wrap: true
             });
 
             var $el = this.$el;
             //add key listening
-            $el.find('.glyphicon-chevron-right').on('keydown', function(evt) {
+            $el.find('.fa-arrow-right').parent().on('keydown', function(evt) {
                 if (evt.which === 13) {
                     /* after slide, put focus on first item */
                     carousel.on('slid.bs.carousel', function() {
@@ -69,7 +76,7 @@ define([
                     });
                 }
             });
-            $el.find('.glyphicon-chevron-left').on('keydown', function(evt) {
+            $el.find('.fa-arrow-left').parent().on('keydown', function(evt) {
                 if (evt.which === 13) {
                     /* after slide, put focus on first item */
                     carousel.on('slid.bs.carousel', function() {
@@ -80,11 +87,10 @@ define([
             });
 
             //fix display issue when changing win size
-            this.$el.find('.carousel-inner').width($(window).width() - 200);
-            this.$el.find('.pagination').css('top', '60px');
+            this.$el.find('.carousel-inner').width($(window).width() - 300);
 
             //enable drag
-            this.$el.find('.item').drag({
+            var dragObj = this.$el.find('.item').drag({
                 items: '.applet-thumbnail',
                 helper: 'clone',
                 start: function(e) {
@@ -116,28 +122,20 @@ define([
 
                     addAppletsChannel.request('addAppletToGridster', {
                         appletId: $(this).attr('data-appletid'),
-                        appletTitle: $(this).text(),
+                        appletTitle: $(this).find('.applet-thumbnail-title').text(),
                         sizeX: 4,
                         sizeY: 4,
-                        //col: col,
-                        //row: row,
                         xPos: x,
                         yPos: y
                     });
 
                 }
             });
-        },
-        getPaginationHtml: function(slides) {
-            var html = '';
-            for (var i = 0; i < slides; i++) {
-                if (i === 0) {
-                    html += '<li data-target="#applets-carousel" data-slide-to="0" class="active"></li>';
-                } else {
-                    html += '<li data-target="#applets-carousel" data-slide-to="' + i + '"></li>';
-                }
-            }
-            return html;
+
+            // cleanup drag object upon view destruction to clear leak
+            this.listenTo(this, 'destroy', function() {
+                dragObj.destroy();
+            });
         },
         getAppletItemsHtml: function(collection, numberPerSlide) {
             var html = '';
@@ -149,8 +147,8 @@ define([
                     html += '<div class="item">';
                 }
                 var left = (j % (numberPerSlide + 1) * 87 - 50) + 'px';
-                html += '<div class="applet-thumbnail" tabindex=0 data-appletid="' + model.get('id') + '" style="left: ' + left + ';"><p>' + model.get('title') + '</p></div>';
-                if (i % numberPerSlide === 0) {
+                html += '<div class="applet-thumbnail" tabindex=0 data-appletid="' + model.get('id') + '" style="left: ' + left + ';"><span class="applet-thumbnail-title">' + model.get('title') + '</span><span class="sr-only">Press enter to add this applet to the workspace.</span></div>';
+                if (i % numberPerSlide === 0 && i !== collection.length) {
                     html += '</div>';
                     j = 0;
                 }

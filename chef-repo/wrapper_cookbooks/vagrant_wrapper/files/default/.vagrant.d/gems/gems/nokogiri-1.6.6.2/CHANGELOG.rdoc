@@ -237,7 +237,7 @@ mentioned in the notes for v1.5.10.
 
 * Bugfixes
 
-  * (JRuby) Fix EmptyStackException thrown by elements with xlink:href attributes and no base_uri #534, #805. (Thanks, Patrick       and Brian Hoffman!)
+  * (JRuby) Fix EmptyStackException thrown by elements with xlink:href attributes and no base_uri #534, #805. (Thanks, Patrick Quinn and Brian Hoffman!)
   * Fixes duplicate attributes issue introduced in 1.5.7. #865
   * Allow use of a prefixed namespace on a root node using Nokogiri::XML::Builder #868
 
@@ -428,7 +428,7 @@ Repackaging of 1.5.1 with a gemspec that is compatible with older Rubies. #631, 
   * Do not allow multiple root nodes. #550
   * Fixes for custom XPath functions. #605, #606 (thanks, Juan Wajnerman!)
   * Node#to_xml does not override :save_with if it is provided. #505
-  * Node#set is a private method (JRuby). #564 (thanks,      Sieger!)
+  * Node#set is a private method (JRuby). #564 (thanks, Nick Sieger!)
   * C14n cleanup and Node#canonicalize (thanks, Ivan Pirlik!) #563
 
 
@@ -590,7 +590,7 @@ Repackaging of 1.5.1 with a gemspec that is compatible with older Rubies. #631, 
     filename is passed, which is faster and more memory-efficient. GH #219
   * XML::Document#create_entity will create new EntityDecl objects. GH #174
   * JRuby FFI implementation no longer uses ObjectSpace._id2ref,
-    instead using         Nutter's rocking Weakling gem.
+    instead using Charles Nutter's rocking Weakling gem.
   * Nokogiri::XML::Node#first_element_child fetch the first child node that is
     an ELEMENT node.
   * Nokogiri::XML::Node#last_element_child fetch the last child node that is

@@ -79,7 +79,7 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: 'IPADDRESS ',
+                    host: 'IP_ADDRESS',
                     port: 9080
                 }
             };
@@ -109,7 +109,7 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: 'IPADDRESS ',
+                    host: 'IP_ADDRESS',
                     port: 9080
                 }
             };
@@ -139,7 +139,7 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: 'IPADDRESS ',
+                    host: 'IP_ADDRESS',
                     port: 9080
                 }
             };
@@ -171,7 +171,7 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: 'IPADDRESS ',
+                    host: 'IP_ADDRESS',
                     port: 9080
                 }
             };
@@ -203,7 +203,7 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: 'IPADDRESS ',
+                    host: 'IP_ADDRESS',
                     port: 9080
                 }
             };
@@ -259,7 +259,7 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: 'IPADDRESS ',
+                    host: 'IP_ADDRESS',
                     port: 9080
                 }
             };
@@ -305,7 +305,7 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: 'IPADDRESS ',
+                    host: 'IP_ADDRESS',
                     port: 9080
                 }
             };

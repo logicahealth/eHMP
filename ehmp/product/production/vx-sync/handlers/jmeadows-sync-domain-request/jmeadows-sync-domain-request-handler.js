@@ -2,6 +2,7 @@
 
 var _ = require('underscore');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
+var Auditor = require(global.VX_UTILS + 'auditor');
 var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 var request = require('request');
 var errorUtil = require(global.VX_UTILS + 'error');
@@ -26,6 +27,11 @@ function handle(log, config, environment, job, handlerCallback) {
     var metricsObj = {'timer':'start','process':uuid.v4(),'pid':job.patientIdentifier.value,'domain':job.dataDomain,'subsystem':'JMeadows','action':'sync domain','jobId':job.jobId,'rootJobId':job.rootJobId,'jpid':job.jpid};
     environment.metrics.debug('JMeadows domain sync',metricsObj);
     metricsObj.timer='stop';
+
+    var auditor = environment.auditor || new Auditor(config, job.dataDomain);
+    if (auditor.audit(job.patientIdentifier.value) === 'NO_PATH') {
+        log.warn('jmeadows-sync-domain-request-handler.handle: No auditPath configured.  Auditing logs will not be available.');
+    }
 
     log.debug('jmeadows-sync-domain-request-handler.handle: sending domain request to Jmeadows for pid: %s; domain: %s; domainConfig: %j.', job.patientIdentifier.value, job.dataDomain, domainConfig);
     request(domainConfig, function(error, response, body) {

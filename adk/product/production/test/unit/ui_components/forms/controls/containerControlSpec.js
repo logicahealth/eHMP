@@ -175,6 +175,12 @@ define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/co
                     $('form > div').trigger('control:items:update', this.model);
                     expect($form.find('button').length).toBe(1);
                 });
+                it("should hide a container", function() {
+                    $('form > div').trigger("control:hidden", true);
+                    expect($('form > div')).toHaveClass('hidden');
+                    $('form > div').trigger("control:hidden", false);
+                    expect($('form > div')).not.toHaveClass('hidden');
+                });
             });
         });
     });

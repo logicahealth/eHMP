@@ -52,25 +52,32 @@ SET(ARGS,BODY) ; Store job info
  M ^VPRJOB(VPRCNT)=DEMOG
  Q ""
  ;
-GET(RESULT,ARGS) ; Return job info
+GET(RESULT,ARGS,ENCODE,TEMPLATE) ; Return job info
  N DEMOG,ERR,JID,JPID,JTYPE,RJID,VPRA,VPRB,VPRC,VPRD,VPRE,VPRF,VPRJQ,U,FILTER,CLAUSES,CLAUSE,VALUE,BODY,I
  S VPRJQ=""""
  S U="^"
+ ; TEMPLATE contains list of fields to return
+ ;
  ; Verify required arguments exist
  I $$UNKARGS^VPRJCU(.ARGS,"jpid,rootJobId,jobId,filter") Q
  S JPID=$G(ARGS("jpid"))
  S RJID=$G(ARGS("rootJobId"))
  S JID=$G(ARGS("jobId"))
  S FILTER=$G(ARGS("filter"))
+ ;
+ ; Parse filter argument
  I $L(FILTER) D PARSE^VPRJCF(FILTER,.CLAUSES) Q:$G(HTTPERR)
+ ;
  ; If what we are passed isn't a JPID get a JPID
  I '$$ISJPID^VPRJPR(JPID) S JPID=$$JPID4PID^VPRJPR(JPID)
  ; No JPID
  I $G(JPID)']"" D  Q
- .S RESULT="{"_VPRJQ_"message"_VPRJQ_":"_VPRJQ_"JPID is a required field"_VPRJQ_"}"
+ . S RESULT="{"_VPRJQ_"message"_VPRJQ_":"_VPRJQ_"JPID is a required field"_VPRJQ_"}"
+ ;
  ; Ensure jobs exist for a JPID
  I $O(^VPRJOB("A",JPID,""))']"" D  Q
- .S RESULT="[]"
+ . S RESULT="[]"
+ ;
  ; Ensure result variable is empty
  K DEMOG
  ; VPRD=rootJobId-1 or 0
@@ -80,46 +87,56 @@ GET(RESULT,ARGS) ; Return job info
  ; Loop through A index
  ; ^VPRJOB("A",JPID,Job Type,Root Job ID,Job ID,TimeStamp,Status)=Sequential Counter
  F  S JTYPE=$O(^VPRJOB("A",JPID,JTYPE)) Q:JTYPE=""  D
- .; VPRD=Root Job Id
- .F  S VPRD=$O(^VPRJOB("A",JPID,JTYPE,VPRD)) Q:VPRD=""  Q:(VPRD'=VPRD)  D
- ..;VPRE=JobId-1 or 0
- ..S VPRE=$S(JID]"":JID-1,1:0)
- ..F  S VPRE=$O(^VPRJOB("A",JPID,JTYPE,VPRD,VPRE)) Q:VPRE=""  Q:(VPRE'=VPRE)  D
- ...;VPRC=TimeStamp
- ...S VPRC=$O(^VPRJOB("A",JPID,JTYPE,VPRD,VPRE,""),-1)  ; Most recent
- ...;VPRF=Status
- ...S VPRF=$O(^VPRJOB("A",JPID,JTYPE,VPRD,VPRE,VPRC,""))
- ...;VPRA=Sequential Counter for Job
- ...S VPRA=^VPRJOB("A",JPID,JTYPE,VPRD,VPRE,VPRC,VPRF)
- ...;VPRB=JPID^Job Type^Root Job ID^Job ID^TimeStamp^Status
- ...S VPRB=$G(^VPRJOB("B",VPRA))
- ...; Eval filter if clauses exists
- ...; This uses the basics of EVALEXPR^VPRJCF not a complete implementation
- ...; If the clause evaluates to true add it to the return
- ...; EVALONE requires CLAUSE and VALUE
- ...I $D(CLAUSES) D  Q
- ....; Ensure we only run this for the last timestamp for the JPID and job type
- ....I VPRC'=$O(^VPRJOB("D",JPID,JTYPE,""),-1) Q
- ....N I
- ....S I=""
- ....; Loop through all of the clauses we have
- ....F  S I=$O(CLAUSES(I)) Q:I=""  D
- .....M CLAUSE=CLAUSES(I)
- .....I CLAUSE("type")=1 S VALUE=$G(^VPRJOB(VPRA,CLAUSE("field"))) M:$$EVALONE^VPRJCF DEMOG("items",VPRA)=^VPRJOB(VPRA)
- ...; If we have a rootJobId and JobId and TimeStamp and they match return the Job
- ...I $G(RJID)]"",$G(JID)]"",$P(VPRB,U)=JPID,$P(VPRB,U,3)=RJID,$P(VPRB,U,4)=JID,$P(VPRB,U,5)=VPRC M DEMOG("items",VPRA)=^VPRJOB(VPRA) Q
- ...; If we have a rootJobId and TimeStamp and they match return the Job
- ...I $G(RJID)]"",$G(JID)']"",$P(VPRB,U)=JPID,$P(VPRB,U,3)=RJID,$P(VPRB,U,5)=VPRC M DEMOG("items",VPRA)=^VPRJOB(VPRA) Q
- ...; If we have neither just return the latest Job
- ...I $G(RJID)']"",$G(JID)']"",$P(VPRB,U)=JPID,$P(VPRB,U,5)=VPRC M DEMOG("items",VPRA)=^VPRJOB(VPRA) Q
+ . ; VPRD=Root Job Id
+ . F  S VPRD=$O(^VPRJOB("A",JPID,JTYPE,VPRD)) Q:VPRD=""  Q:(VPRD'=VPRD)  D
+ . . ;VPRE=JobId-1 or 0
+ . . S VPRE=$S(JID]"":JID-1,1:0)
+ . . F  S VPRE=$O(^VPRJOB("A",JPID,JTYPE,VPRD,VPRE)) Q:VPRE=""  Q:(VPRE'=VPRE)  D
+ . . . ;VPRC=TimeStamp
+ . . . S VPRC=$O(^VPRJOB("A",JPID,JTYPE,VPRD,VPRE,""),-1)  ; Most recent
+ . . . ;VPRF=Status
+ . . . S VPRF=$O(^VPRJOB("A",JPID,JTYPE,VPRD,VPRE,VPRC,""))
+ . . . ;VPRA=Sequential Counter for Job
+ . . . S VPRA=^VPRJOB("A",JPID,JTYPE,VPRD,VPRE,VPRC,VPRF)
+ . . . ;VPRB=JPID^Job Type^Root Job ID^Job ID^TimeStamp^Status
+ . . . S VPRB=$G(^VPRJOB("B",VPRA))
+ . . . ;
+ . . . ; Eval filter if clauses exists
+ . . . ; This uses the basics of EVALEXPR^VPRJCF not a complete implementation
+ . . . ; If the clause evaluates to true add it to the return
+ . . . ; EVALONE requires CLAUSE and VALUE
+ . . . I $D(CLAUSES) D  Q
+ . . . . ; Ensure we only run this for the last timestamp for the JPID and job type
+ . . . . I VPRC'=$O(^VPRJOB("D",JPID,JTYPE,""),-1) Q
+ . . . . N I
+ . . . . S I=""
+ . . . . ; Loop through all of the clauses we have
+ . . . . F  S I=$O(CLAUSES(I)) Q:I=""  D
+ . . . . . M CLAUSE=CLAUSES(I)
+ . . . . . N FILTERRSLT
+ . . . . . I CLAUSE("type")=1 S VALUE=$G(^VPRJOB(VPRA,CLAUSE("field"))) S FILTERRSLT=$$EVALONE^VPRJCF D:FILTERRSLT
+ . . . . . . M:'$D(TEMPLATE) DEMOG("items",VPRA)=^VPRJOB(VPRA)
+ . . . . . . I $D(TEMPLATE) N FIELD S FIELD="" F  S FIELD=$O(TEMPLATE(FIELD)) Q:FIELD=""  D
+ . . . . . . . I FIELD'["." M DEMOG("items",VPRA,FIELD)=^VPRJOB(VPRA,FIELD)
+ . . . . . . . E  M DEMOG("items",VPRA,$P(FIELD,".",1),$P(FIELD,".",2))=^VPRJOB(VPRA,$P(FIELD,".",1),$P(FIELD,".",2))
+ . . . ;
+ . . . ; Return jobs without filter
+ . . . ; If we have a rootJobId and JobId and TimeStamp and they match return the Job
+ . . . I $G(RJID)]"",$G(JID)]"",$P(VPRB,U)=JPID,$P(VPRB,U,3)=RJID,$P(VPRB,U,4)=JID,$P(VPRB,U,5)=VPRC M DEMOG("items",VPRA)=^VPRJOB(VPRA) Q
+ . . . ; If we have a rootJobId and TimeStamp and they match return the Job
+ . . . I $G(RJID)]"",$G(JID)']"",$P(VPRB,U)=JPID,$P(VPRB,U,3)=RJID,$P(VPRB,U,5)=VPRC M DEMOG("items",VPRA)=^VPRJOB(VPRA) Q
+ . . . ; If we have neither just return the latest Job
+ . . . I $G(RJID)']"",$G(JID)']"",$P(VPRB,U)=JPID,$P(VPRB,U,5)=VPRC M DEMOG("items",VPRA)=^VPRJOB(VPRA) Q
+ ;
  I '$D(DEMOG) D  Q
- .; nothing to return
- .S RESULT="{"_VPRJQ_"message"_VPRJQ_":"_VPRJQ_"Nothing to return!"_VPRJQ_"}"
+ . ; nothing to return
+ . S RESULT="{"_VPRJQ_"message"_VPRJQ_":"_VPRJQ_"Nothing to return!"_VPRJQ_"}"
+ ;
  ; Encode JSON
- D ENCODE^VPRJSON("DEMOG","BODY","ERR") ; From an array to JSON
+ D:'$G(ENCODE) ENCODE^VPRJSON("DEMOG","RESULT","ERR") ; From an array to JSON
+ M:$G(ENCODE) RESULT=DEMOG
  ; If we can't encode the JSON error out
- I $D(ERR) D SETERROR^VPRJRER(202) Q
- M RESULT=BODY
+ I '$G(ENCODE),$D(ERR) D SETERROR^VPRJRER(202) Q
  Q
 CLEAR(RESULT,ARGS) ; Delete all job state data
  K ^VPRJOB

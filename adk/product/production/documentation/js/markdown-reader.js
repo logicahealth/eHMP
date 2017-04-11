@@ -22,6 +22,7 @@ $(function() {
                     return ''; // use external default escaping
                 }
             })
+            .use(window.markdownItAttrs)
             .use(window.markdownitContainer, 'page-description')
             .use(window.markdownitContainer, 'callout')
             .use(window.markdownitContainer, 'side-note')
@@ -248,6 +249,10 @@ $(function() {
                         $tag.attr('id', $tag.attr('id') + '-' + i);
                     }
                     ids.push($tag.attr('id'));
+
+                    if ($tag.hasClass('copy-link')) {
+                        $tag.append('<a class="click-to-copy" data-clipboard-text="' + window.location.href.split('#')[0] + '#/' + self.get('page') + d + $tag.attr('id') + '" data-toggle="tooltip" data-placement="bottom" title="Copy to Clipboard"><i class="fa fa-link" aria-hidden="true"></i></a>');
+                    }
                 }
             }
 
@@ -305,7 +310,25 @@ $(function() {
             this.$el.find('table').addClass('table table-striped table-bordered');
             // avoid race conditions when setting up waypoints
             ReadmeApp.markdownModel.trigger('markdownViewRendered', this.$el);
+            this.enableClipboard();
             this.scrollIntoView();
+        },
+        enableClipboard: function() {
+            this.clipboard = new Clipboard('a.click-to-copy');
+            this.$el.find('a.click-to-copy').tooltip();
+            this.clipboard.on('success', function(e) {
+                e.clearSelection();
+                $(e.trigger).attr('data-original-title', 'Copied!').tooltip('show');
+                setTimeout(function(){
+                    $(e.trigger).attr('data-original-title', 'Copy to Clipboard');
+                }, 1000);
+            });
+            this.clipboard.on('error', function(e) {
+                $(e.trigger).attr('data-original-title', 'Error when trying to copy').tooltip('show');
+                setTimeout(function(){
+                    $(e.trigger).attr('data-original-title', 'Copy to Clipboard');
+                }, 1000);
+            });
         },
         scrollIntoView: function() {
             var id = ReadmeApp.id;
@@ -589,16 +612,16 @@ $(function() {
                 if (_.isArray(navItem.subItems) && navItem.subItems.length > 0) {
                     htmlString += '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' + navItem.name + '<span class="caret"></span></a>';
                     htmlString += '<ul class="dropdown-menu">';
-                    if (_.isString(navItem.url)){
-                        htmlString += '<li><a href="' + navItem.url + '">' + navItem.name + '</a></li>';
+                    if (_.isString(navItem.url)) {
+                        htmlString += '<li><a href="' + navItem.url + '"' + (navItem.newTab ? ' target="_blank"' : '') + '>' + navItem.name + '</a></li>';
                         htmlString += '<li role="separator" class="divider"></li>';
                     }
                     _.each(navItem.subItems, function(subItem) {
-                        htmlString += '<li class="sub-item"><a href="' + subItem.url + '">' + subItem.name + '</a></li>';
+                        htmlString += '<li class="sub-item"><a href="' + subItem.url + '"' + (subItem.newTab ? ' target="_blank"' : '') + '>' + subItem.name + '</a></li>';
                     });
                     htmlString += '</ul></li>';
                 } else {
-                    htmlString += '<li><a href="' + navItem.url + '">' + navItem.name + '</a></li>';
+                    htmlString += '<li><a href="' + navItem.url + '"' + (navItem.newTab ? 'target="_blank"' : '') + '>' + navItem.name + '</a></li>';
                 }
             });
             htmlString += '</ul><ul class="nav navbar-nav navbar-right">';
@@ -606,16 +629,16 @@ $(function() {
                 if (_.isArray(navItem.subItems) && navItem.subItems.length > 0) {
                     htmlString += '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' + navItem.name + '<span class="caret"></span></a>';
                     htmlString += '<ul class="dropdown-menu">';
-                    if (_.isString(navItem.url)){
-                        htmlString += '<li><a href="' + navItem.url + '">' + navItem.name + '</a></li>';
+                    if (_.isString(navItem.url)) {
+                        htmlString += '<li><a href="' + navItem.url + '"' + (navItem.newTab ? ' target="_blank"' : '') + '>' + navItem.name + '</a></li>';
                         htmlString += '<li role="separator" class="divider"></li>';
                     }
                     _.each(navItem.subItems, function(subItem) {
-                        htmlString += '<li class="sub-item"><a href="' + subItem.url + '">' + subItem.name + '</a></li>';
+                        htmlString += '<li class="sub-item"><a href="' + subItem.url + '"' + (subItem.newTab ? ' target="_blank"' : '') + '>' + subItem.name + '</a></li>';
                     });
                     htmlString += '</ul></li>';
                 } else {
-                    htmlString += '<li><a href="' + navItem.url + '">' + navItem.name + '</a></li>';
+                    htmlString += '<li><a href="' + navItem.url + '"' + (navItem.newTab ? ' target="_blank"' : '') + '>' + navItem.name + '</a></li>';
                 }
             });
             htmlString += '</ul></div></div>';

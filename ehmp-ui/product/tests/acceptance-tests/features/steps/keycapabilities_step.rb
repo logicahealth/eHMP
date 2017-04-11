@@ -96,7 +96,7 @@ def wait_until_dom_has_confirmflag_or_patientsearch
   counter = 0
   loop do
     counter = counter+1
-    if patient_search.static_dom_element_exists?("patientSearch")
+    if patient_search.static_dom_element_exists?("patient demographic")
       completed = true
       break
     end
@@ -136,7 +136,8 @@ def enter_search_term(patient_search, search_value)
   expect(patient_search.perform_action("patientSearchInput", search_value)).to be_true
 end
 
-Given(/^user searches for and selects "(.*?)"$/) do |search_value|
+def perform_patient_search_and_selection(search_value)
+  DefaultLogin.logged_in = true
   patient_search = PatientSearch2.instance
   # if patient search button is found, click it to go to patient search
   patient_search.perform_action("patientSearch") if patient_search.static_dom_element_exists? "patientSearch"
@@ -144,25 +145,9 @@ Given(/^user searches for and selects "(.*?)"$/) do |search_value|
   #patient_search.wait_until_element_present("mySite", DefaultLogin.wait_time)
   need_refresh_de2106(patient_search)
 
-  # wiat until myCPRS list is not selected
-  begin
-    wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-    wait.until { !patient_search.am_i_visible?("Active MyCPRSList") }
-  rescue
-    p 'keep going'
-  end
-  # expect(patient_search.perform_action("mySite")).to be_true
-  # sleep 5 # beause of DE2429
-
-  # driver = TestSupport.driver
-  # element = nil
-  # Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time).until {
-  #   element = driver.find_element(:css, "#patientSearchInput")
-  #   element.displayed?
-  # }
-  # element.click
-
-  # expect(patient_search.perform_action("patientSearchInput", search_value)).to be_true
+  @ehmp = PobPatientSearch.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { @ehmp.screen_loaded? }
   enter_search_term(patient_search, search_value)
 
   #----------------------------#
@@ -180,6 +165,31 @@ Given(/^user searches for and selects "(.*?)"$/) do |search_value|
   rescue
     p "DE3576: img doesn't appear, try to continue anyway"
   end
+end
+
+Given(/^user searches for and selects "(.*?)"$/) do |search_value|
+  patient_search = PatientSearch2.instance
+
+  perform_patient_search_and_selection search_value
+  if @ehmp.has_chk_previous_workspace?
+    @ehmp.chk_previous_workspace.click if @ehmp.chk_previous_workspace.checked?
+    p "resume recent workspace checkbox is INCORRECTLY checked.  May cause failure!" if @ehmp.chk_previous_workspace.checked?
+  end
+  expect(patient_search.perform_action("Confirm")).to be_true
+  expect(wait_until_dom_has_confirmflag_or_patientsearch).to be_true, "Patient selection did not complete successfully"
+end
+
+Given(/^user searches for and selects restricted patient "(.*?)"$/) do |search_value|
+  patient_search = PatientSearch2.instance
+  perform_patient_search_and_selection search_value
+
+  expect(patient_search.perform_action('ackButton')).to be_true
+
+  if @ehmp.has_chk_previous_workspace?
+    @ehmp.chk_previous_workspace.click if @ehmp.chk_previous_workspace.checked?
+    p "resume recent workspace checkbox is INCORRECTLY checked.  May cause failure!" if @ehmp.chk_previous_workspace.checked?
+  end
+
   expect(patient_search.perform_action("Confirm")).to be_true
   expect(wait_until_dom_has_confirmflag_or_patientsearch).to be_true, "Patient selection did not complete successfully"
 end
@@ -311,6 +321,7 @@ Then(/^the user is on all patient tab "(.*?)"$/) do |arg1|
   con= PatientSearch.instance
   aa.wait_until_action_element_visible("All Patient")
   expect(aa.perform_verification("All Patient", arg1)).to be_true
+  con.wait_until_action_element_visible('globalSearchFirstName')
   expect(con.wait_until_element_present('globalSearchFirstName')).to eq(true)
   expect(con.wait_until_element_present('globalSearchLastName')).to eq(true)
   expect(con.wait_until_element_present('globalSearchDob')).to eq(true)

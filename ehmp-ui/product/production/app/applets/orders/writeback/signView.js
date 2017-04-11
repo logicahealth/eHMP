@@ -3,28 +3,11 @@ define([
     'backbone',
     'handlebars',
     'app/applets/orders/writeback/writebackUtils',
-], function(ADK, Backbone, Handlebars, Utils) {
+    'app/applets/orders/util'
+], function(ADK, Backbone, Handlebars, Utils, Util) {
     "use strict";
 
-    Handlebars.registerHelper("showOrderCheck", function(str, index, size) {
-        var labelDiv = '';
-        var orderCheckText = str.substring(1);
-        index += 1;
-
-        if (str.substring(0, 1) === '1') {
-            labelDiv = '<div class="text text-danger bold">* Order Check requires Reason for Override</div><div class="text text-info bold">&nbsp;&nbsp;(' + index + ' of ' + size + ')&nbsp;&nbsp;' + orderCheckText + '</div>';
-        } else {
-            labelDiv = '<div>&nbsp;&nbsp;(' + index + ' of ' + size + ')&nbsp;&nbsp;' + orderCheckText + '</div>';
-        }
-        return new Handlebars.SafeString(labelDiv);
-    });
-
     var signFields = [{
-        control: 'container',
-        template: Handlebars.compile([
-            '<div class="modal-header"><h4 class="modal-title all-padding-no"><i class="alert-icon fa fa-exclamation-triangle"></i>&nbsp;&nbsp;ORDER SIGNING</h4></div>',
-        ].join('\n'))
-    }, {
         control: "container",
         extraClasses: ["modal-body"],
         items: [{
@@ -39,26 +22,33 @@ define([
                 dismissible: false
             }, {
                 control: "container",
-                extraClasses: ["order_summary", "col-xs-12"],
-                template: Handlebars.compile('<strong>Order</strong><p class="well all-padding-xs">{{summary}}</p>'),
+                extraClasses: ["order-summary", "col-xs-8"],
+                template: Handlebars.compile('<h5>Order</h5><div class="well all-padding-xs top-margin-xs">{{summary}}</div>')
             }, {
                 control: "container",
-                extraClasses: ["col-xs-12"],
-                template: Handlebars.compile('{{#if orderCheck}}<strong>Order Check</strong></br>{{/if}}{{#each orderCheck}}{{showOrderCheck this @index ../orderCheck.length}}<br/>{{/each}}<hr/>')
+                extraClasses: ["col-xs-12", "order_checks"],
+                hidden: true,
+                items: [{
+                    control: "container",
+                    template: Handlebars.compile([
+                        '<strong>Order Check</strong>',
+                        '{{#each orderCheckData}}',
+                        '  <div class="text-danger bold">{{warning}}</div>',
+                        '  <div class="override-text">({{index}} of {{count}}) {{label}}</div><br/>',
+                        '{{/each}}',
+                    ].join('\n'))
+                }],
             }, {
                 control: "input",
-                extraClasses: ["text-danger", "col-xs-12", "reason-for-override"],
+                extraClasses: ["override-text", "col-xs-12", "reason-for-override"],
                 maxlength: 80,
                 name: "reason_for_override",
-                label: "Reason for Override"
+                label: "Reason for Override",
+                required: true
             }, {
                 control: "container",
                 extraClasses: ["override-text", "col-xs-12"],
-                template: Handlebars.compile('<p>NOTE: The override reason is for tracking purposes and does not change or place a new order.</p><hr/>')
-            }, {
-                control: "container",
-                extraClasses: ["order_summary", "col-xs-8"],
-                template: Handlebars.compile('<br/><b>Sign</b><strong><p class="well all-padding-xs">{{summary}}</p></strong>')
+                template: Handlebars.compile('<p>NOTE: The override reason is for tracking purposes and does not change or place a new order.</p>')
             }, {
                 control: "input",
                 name: "signature_code",
@@ -66,9 +56,10 @@ define([
                 autocomplete: "off",
                 maxlength: 20,
                 disabled: true,
+                required: true,
                 extraClasses: ["col-xs-5", "signature-code"],
                 label: "Enter Electronic Signature Code",
-                title: "Please enter in your electronic signature code."
+                title: "Enter in electronic signature code"
             }]
         }]
     }, {
@@ -76,49 +67,40 @@ define([
         extraClasses: ["modal-footer"],
         items: [{
             control: "container",
-            extraClasses: ["col-sm-12"],
+            extraClasses: ["row"],
             items: [{
                 control: "container",
-                extraClasses: ["col-xs-3"],
-                items: [{
-                    control: "button",
-                    label: "Cancel Order",
-                    type: "button",
-                    title: "Press enter to cancel the order.",
-                    extraClasses: ["btn-default", "alert-discontinue", "pull-left"],
-                    name: "discontinue"
-                }],
-            }, {
-                control: "container",
-                extraClasses: ["col-xs-5", "text-left"],
+                extraClasses: ["col-xs-6"],
                 items: [{
                     control: "container",
-                    extraClasses: ['inProgressContainer'],
-                    template: Handlebars.compile('<i class="fa fa-spinner fa-spin pull-left"></i><span>signing in progress...</span>'),
+                    extraClasses: ["pull-left", "inProgressContainer", "top-padding-xs"],
+                    template: Handlebars.compile('<i class="fa fa-spinner fa-spin pull-left"></i><span>In progress...</span>'),
                     hidden: true
                 }]
-
             }, {
                 control: "container",
-                extraClasses: ["col-xs-1"],
+                extraClasses: ["col-xs-6"],
                 items: [{
                     control: "button",
-                    extraClasses: ["btn-default", "alert-cancel"],
+                    extraClasses: ["btn-danger", "btn-sm", "alert-discontinue"],
+                    label: "Cancel",
                     type: "button",
-                    label: "Close",
-                    title: "Press enter to close.",
+                    title: "Press enter to cancel the order.",
                     name: "cancel"
-                }],
-            }, {
-                control: "container",
-                extraClasses: ["col-xs-3"],
-                items: [{
+                }, {
                     control: "button",
-                    extraClasses: ["btn-primary", "alert-continue", "pull-left"],
+                    extraClasses: ["btn-primary", "btn-sm", "alert-cancel"],
+                    label: "Close",
                     type: "button",
-                    label: "Sign Order",
+                    title: "Press enter to close the form.",
+                    name: "closeModal"
+                }, {
+                    control: "button",
+                    extraClasses: ["btn-primary", "btn-sm", "alert-continue"],
+                    type: "submit",
+                    label: "Sign",
                     title: "Press enter to sign order.",
-                    name: "continue"
+                    name: "sign"
                 }]
             }]
         }]
@@ -135,17 +117,23 @@ define([
             inprogress_container: ".inProgressContainer",
             sign_error_message: ".sign-error-message",
             sign_error_container: ".sign-error-container",
-            alert_continue: ".continue",
-            alert_cancel: ".cancel",
-            alert_discontinue: ".discontinue",
+            order_checks: ".order_checks",
+            sign: ".sign",
+            cancel: ".cancel",
+            close: ".close",
+            closeModal: ".closeModal"
         },
         fields: signFields,
         onRender: function() {
-            var isDiscontinuedOrder = (this.model.get('isDiscontinued') || false);
-            this.ui.alert_discontinue.trigger('control:hidden', isDiscontinuedOrder);
+            var isDiscontinued = Util.isDiscontinuedUnsignedOrder(this.model);
+            this.ui.cancel.trigger('control:hidden', isDiscontinued);
+            this.ui.closeModal.trigger('control:hidden', !isDiscontinued);
+
+            var isOrderCheckEnabled = !!(this.model.get('orderCheckData'));
+            this.ui.order_checks.trigger('control:hidden', !isOrderCheckEnabled);
         },
         showInProgress: function(message) {
-            this.ui.inprogress_label.text(message || 'signing in progress...');
+            this.ui.inprogress_label.text(message || 'In progress...');
             this.ui.inprogress_container.trigger('control:hidden', false);
         },
         hideInProgress: function() {
@@ -158,23 +146,16 @@ define([
             this.model.unset('sign-error-message');
         },
         disabledButton: function() {
-            this.ui.alert_continue.trigger('control:disabled', true);
-            this.ui.alert_cancel.trigger('control:disabled', true);
-            this.ui.alert_discontinue.trigger('control:disabled', true);
+            this.ui.sign.trigger('control:disabled', true);
+            this.ui.cancel.trigger('control:disabled', true);
+            this.ui.signature_code.trigger('control:disabled', true);
+            this.$el.closest('.workflow-container').find('.workflow-header .close').attr('disabled', 'disabled');
         },
         enabledButton: function() {
-            this.ui.alert_continue.trigger('control:disabled', false);
-            this.ui.alert_cancel.trigger('control:disabled', false);
-            this.ui.alert_discontinue.trigger('control:disabled', false);
-        },
-        displayErrorState: function(message) {
-            this.showErrorMessage(message);
-            this.hideInProgress();
-            this.enabledButton();
-        },
-        displayInProgressState: function(message) {
-            this.showInProgress(message);
-            this.disabledButton();
+            this.ui.sign.trigger('control:disabled', false);
+            this.ui.cancel.trigger('control:disabled', false);
+            this.ui.signature_code.trigger('control:disabled', false);
+            this.$el.closest('.workflow-container').find('.workflow-header .close').removeAttr('disabled');
         },
         displaySuccess: function(title, message) {
             this.hideInProgress();
@@ -188,12 +169,20 @@ define([
             });
             signSuccessView.show();
             Utils.refreshApplet();
+            Utils.refreshActionTrayTasks();
         },
         events: {
-            'click .alert-cancel': 'alertCancel',
-            'click .alert-continue': 'alertContinue',
-            'click .alert-discontinue': 'alertDiscontinue',
-            'keyup @ui.reason_for_override': 'toggleSignature'
+            'click @ui.cancel': 'formCloseModal',
+            'click @ui.closeModal': 'formCloseModal',
+            'submit': 'formContinue',
+            'click @ui.discontinue': 'alertDiscontinue',
+            'keyup @ui.reason_for_override': 'toggleSignature',
+            'keydown @ui.signature_code input': function(e) {
+                if (e.which === 13) {
+                    this.$(e.target).trigger('change');
+                    this.$el.trigger('submit');
+                }
+            },
         },
         modelEvents: {
             'sign:success': 'onSuccess',
@@ -207,33 +196,10 @@ define([
                 this.ui.signature_code.trigger('control:disabled', true);
             }
         },
-        alertDiscontinue: function(e) {
-            e.preventDefault();
-            this.displayInProgressState("canceling...");
-
-            var discontinueModel = new ADK.UIResources.Writeback.Orders.Discontinue({
-                hash: this.model.get('orderDetailHash')
-            });
-
-            this.listenTo(discontinueModel, 'delete:success', this.onDiscontinueSuccess);
-            this.listenTo(discontinueModel, 'delete:error', this.onDiscontinueError);
-
-            _.each(this.model.get('orderIds'), function(orderId) {
-                discontinueModel.addOrderId(orderId);
-            });
-            
-            discontinueModel.execute();
-        },
-        onDiscontinueSuccess: function() {
-            this.displaySuccess('Lab Order Cancelled', 'Lab order successfully cancelled.');
-        },
-        onDiscontinueError: function(model, resp) {
-            this.displayErrorState(JSON.parse(resp.responseText).message || "Unknown Server Error");
-        },
-        alertCancel: function() {
+        formCloseModal: function() {
             ADK.UI.Workflow.hide();
         },
-        alertContinue: function(e) {
+        formContinue: function(e) {
             e.preventDefault();
             this.hideErrorMessage();
             this.disabledButton();
@@ -245,12 +211,12 @@ define([
             Utils.refreshApplet();
         },
         onError: function(model, resp) {
-            var errorMessage = _.get(resp, 'responseJSON.message');
-            if (errorMessage === 'The electronic signature code entered is not valid.') {
+            var errorMessage = _.get(resp, 'responseJSON.message', '');
+            if (errorMessage.indexOf('electronic signature') !== -1) {
                 this.model.errorModel.set({
-                    'signature_code': 'The electronic signature code entered is not valid.'
+                    'signature_code': 'Invalid e-signature.'
                 });
-            } else if (!_.isUndefined(errorMessage)) {
+            } else if (!_.isEmpty(errorMessage)) {
                 this.showErrorMessage(errorMessage);
             }
             this.hideInProgress();
@@ -260,6 +226,7 @@ define([
             if (!this.model.get('showOverride')) {
                 this.ui.signature_code.trigger('control:disabled', false);
                 this.ui.reason_for_override.trigger('control:hidden', true);
+                this.ui.reason_for_override.trigger('control:required', false);
                 this.ui.override_text.trigger('control:hidden', true);
                 this.ui.override_label.trigger('control:hidden', true);
             }

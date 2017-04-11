@@ -11,7 +11,7 @@ var lzma = require('lzma');
 var VxSyncForeverAgent = require(global.VX_UTILS+'vxsync-forever-agent');
 
 function handle(log, config, environment, job, handlerCallback) {
-    log.debug('vler-to-vpr-xform-handler.handle : received request to VLER xform %s', job);
+    log.debug('vler-to-vpr-xform-handler.handle : received request to VLER xform %j', job);
     if (!job.patientIdentifier || !job.patientIdentifier.type || job.patientIdentifier.type !== 'pid' || !idUtil.isVler(job.patientIdentifier.value) ||
         !job.record || !job.record.document.documentUniqueId || !job.record.document.homeCommunityId || !job.record.document.repositoryUniqueId) {
         log.error('vler-to-vpr-xform-handler.handle: Missing param(s).');
@@ -52,9 +52,10 @@ function handle(log, config, environment, job, handlerCallback) {
                     var meta = {
                         jpid: job.jpid,
                         rootJobId: job.rootJobId,
-                        param: job.param
+                        param: job.param,
+                        priority: job.priority
                     };
-                    var jobsToPublish = jobUtil.createRecordEnrichment(job.patientIdentifier, 'vlerdocument', vprItem, meta);
+                    var jobsToPublish = jobUtil.createEventPrioritizationRequest(job.patientIdentifier, 'vlerdocument', vprItem, meta);
 
                     log.debug('vler-to-vpr-xform-handler.handle: Jobs prepared.  jobsToPublish: %j', jobsToPublish);
 

@@ -1,0 +1,175 @@
+.sidebar {
+    .tray-loader {
+        width: 100%;
+        height: calc(100% - 31px);
+        position: absolute;
+        background-color: rgba(255,255,255,0.80);
+        top: 0;
+        left: 0;
+        z-index: 50;
+        margin-top: 31px;
+        display: flex;
+        flex-direction: column;
+        .tray-loader-animation {
+            display: flex;
+            background-color: $pure-white;
+            align-self: center;
+            margin: 20px;
+            padding: 2px 9px;
+            font-size: 14px;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+            .loader-spinner {
+                height: 14px;
+                margin: 3px 3px 0 0;
+            }
+        }
+        .tray-loader-message{
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
+    .sidebar-tray {
+        animation-fill-mode: forwards;
+        background: $primary-light;
+        border-radius: 0;
+        box-shadow: -2px 0px 12px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        position: absolute;
+        transition: all 0.2s ease-out;
+        width: 450px;
+        z-index: 3;
+        visibility: hidden;
+        hr {
+            border-color: $grey;
+        }
+        .alert-info {
+            background-color: $pure-white;
+            border-color: $grey-darker;
+        }
+        label, .faux-label, legend {
+            color: $pure-black !important;
+            text-transform: capitalize;
+        }
+        h4, h5 {
+            word-wrap: break-word;
+        }
+        h5 {
+            color: $pure-black;
+        }
+        &.right {
+            right: 0;
+            box-shadow: -6px 0px 12px rgba(0, 0, 0, 0.3);
+        }
+        &.left {
+            left: 0;
+            box-shadow: 6px 0px 12px rgba(0, 0, 0, 0.3);
+        }
+        .fa-caret-down,
+        .fa-caret-right {
+            color: $primary;
+            font-size: 13px;
+        }
+        // Styling content inisde the tray
+        .panel {
+            .ncb-comment-container-region {
+                &.panel-body {
+                    background-color: transparent;
+                }
+            }
+            .treepicker-control {
+                &.panel-body {
+                    background-color: $pure-white;
+                }
+            }
+            .panel-body {
+                background-color: $primary-light;
+                &.action-list-container {
+                    background-color: $primary-light-alt;
+                    .btn-group {
+                        .btn {
+                            color: $pure-white;
+                            text-transform: uppercase;
+                            &.btn-default {
+                                background-color: $primary;
+                                &:hover {
+                                    background-color: $primary-dark;
+                                }
+                                .fa.pull-right {
+                                    padding-top: 3px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .accordion-container {
+            &.panel-group {
+                &.ftar {
+                    .panel {
+                        .ncb-comment-collapse-container {
+                            &.panel-collapse {
+                                background-color: transparent;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .workflow-controller .modal-footer,
+        .modal-header,
+        .modal-content {
+            border-radius: 0;
+        }
+        .modal-body {
+            background-color: $primary-light;
+        }
+        .modal-footer {
+            background-color: $primary-light-alt;
+            min-height: 45px;
+            border-top: 1px solid $pure-white;
+            .btn {
+                background-color: $pure-white;
+                box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15),0px 1px 2px 0px rgba(0,0,0,0.15);
+                &.dropdown-toggle {
+                    padding: 5px;
+                }
+                &.btn-sm {
+                    padding: 5px 5px;
+                }
+            }
+        }
+        .modal-content, .panel {
+            box-shadow: none;
+            border: none;
+        }
+        .modal-header,
+        .panel-heading {
+            background-color: $primary-dark;
+            border-radius: 0;
+            h4 {
+                color: $pure-white;
+                font-size: 12px;
+                line-height: 23px;
+                padding: 4px 0;
+                text-transform: uppercase;
+            }
+        }
+        // for activies radio buttons, should consider making this global for the component
+        .request-assignment .radio-inline+.radio-inline {
+            margin-left: 3px;
+        }
+        // End of: Styling content inisde the tray
+    }
+    &.open > .sidebar-tray {
+        visibility: visible;
+        &.right {
+            overflow: visible;
+        }
+    }
+    &:not(.open) > .sidebar-tray {
+        overflow: hidden;
+        width: 0px !important;
+    }
+}

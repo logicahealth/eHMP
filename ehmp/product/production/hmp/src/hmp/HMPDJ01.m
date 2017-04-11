@@ -1,4 +1,4 @@
-HMPDJ01 ;SLC/MKB -- Orders ;FEB 04, 2016 12:08
+HMPDJ01 ;SLC/MKB/MBS -- Orders ;Apr 15, 2016 09:18:55
  ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
  ;
@@ -25,11 +25,8 @@ HMPDJ01 ;SLC/MKB -- Orders ;FEB 04, 2016 12:08
  Q
  ;
 OR1(ID) ; -- order ID >> ^TMP("ORR",$J,ORLIST,HMPN)
- N ORDER,CHILD,HMPC
+ N ORDER
  D ORX(ID,.ORDER)
- S HMPC=0 F  S HMPC=$O(^OR(100,ID,2,HMPC)) Q:HMPC<1  D
- . K CHILD D ORX(HMPC,.CHILD)
- . M ORDER("children",HMPC)=CHILD
  S ORDER("lastUpdateTime")=$$EN^HMPSTMP("order") ;RHL 20141231
  S ORDER("stampTime")=ORDER("lastUpdateTime") ; RHL 20141231
  ;US6734 - pre-compile metastamp
@@ -39,7 +36,7 @@ OR1(ID) ; -- order ID >> ^TMP("ORR",$J,ORLIST,HMPN)
 ORX(IFN,ORD) ; -- extract order IFN into ORD("attribute")
  N DA,HDFN,I,LOC,ORDSTAT,ORLIST,ORLST,X,X0,X8
  S ORLST=$S(+$G(HMPN):HMPN-1,1:0) S:'$D(ORLIST) ORLIST=$H
- D GET^ORQ12(IFN,ORLIST,1)
+ D GET^ORQ12(IFN,ORLIST,1)  ; this modifies ^TMP("ORR",$J)
  S X0=$G(^TMP("ORR",$J,ORLIST,ORLST))
  N $ES,$ET,ERRPAT,ERRMSG
  S $ET="D ERRHDLR^HMPDERRH",ERRPAT=DFN
@@ -64,13 +61,17 @@ ORX(IFN,ORD) ; -- extract order IFN into ORD("attribute")
  ; US10045 - PB Dec 7, 2015 if ORDER is saved, signed, discontinued, then ORDER is unsigned
  S HDFN=+$P($G(^OR(100,+IFN,0)),U,2)
  S ORDSTAT=$$ORDACT(HDFN,+IFN) I ORDSTAT="DC" D
- . N HDC,HDCR,HPTR,HSIGN
- . S ORD("statusCode")="urn:va:order-status:dc"
- . S ORD("statusName")="DISCONTINUED"
- . S HDC=$O(^OR(100,IFN,8,"C","DC","")),HSIGN=""
- . I $G(HDC)>0 S:$P($G(^OR(100,IFN,8,HDC,0)),U,4)=2 HSIGN="*UNSIGNED*"  ; a
- . S HPTR=$P($G(^OR(100,IFN,6)),U,4),HDCR=$P($G(^ORD(100.03,HPTR,0)),U)
- . S ORD("content","\",2)=" <"_$G(HDCR)_"> "_HSIGN  ; add DC order not signed in JSON object
+ . ; DE3777 - March 15, 2016 - Modified the statusName to "UNRELEASED" for the  order to match the status
+ . ;  that appears in CPRS if the ORDER was DISCONTINUED and is UNSIGNED
+ . N HDC,HDCRSN,HMPORACT,HPTR,HSIGN
+ . S HDC=$O(^OR(100,IFN,8,"C","DC","")),HSIGN="" Q:'(HDC>0)
+ . S HMPORACT=$G(^OR(100,IFN,8,HDC,0))
+ . ; The 15th piece of HMPORACT is the RELEASE STATUS - '11' FOR unreleased
+ . I $P(HMPORACT,U,15)=11 S ORD("statusName")="UNRELEASED",ORD("statusCode")="urn:va:order-status:unr"
+ . S:$P($G(HMPORACT),U,4)=2 HSIGN="*UNSIGNED*"
+ . S HPTR=+$P($G(^OR(100,IFN,6)),U,4),HDCRSN=$P($G(^ORD(100.03,HPTR,0)),U)  ;Combined fixes Mar 16, 2016 DE3777 CK - PB - DE4027
+ . I $L(HDCRSN) S ORD("content","\",2)=" <"_$G(HDCRSN)_"> "_HSIGN  ; add DC order not signed in JSON object
+ . ; DE3777 - end of changes
  ;
  S X=$$GET1^DIQ(100,IFN_",",1,"I") I X D
  . S ORD("providerUid")=$$SETUID^HMPUTILS("user",,+X)
@@ -125,12 +126,6 @@ ORX(IFN,ORD) ; -- extract order IFN into ORD("attribute")
  .. I $P(HX8,U,11) D USER(.I,"C",$P(HX8,U,10),$P(HX8,U,11)) ; verifying clerk and date/time
  .. I $P(HX8,U,19) D USER(.I,"R",$P(HX8,U,18),$P(HX8,U,19)) ; chart reviewed by and date/time
  ;
- Q
- ; acknowledgements
- S DA=0 F  S DA=$O(^ORA(102.4,"B",+IFN,DA)) Q:DA<1  D
- . S X0=$G(^ORA(102.4,DA,0)) Q:'$P(X0,U,3)  ;stub - not ack'd
- . S X=+$P(X0,U,2),X=$S(X:X_U_$P($G(^VA(200,X,0)),U),1:U)
- . S ORD("acknowledgement",DA)=X_U_$P(X0,U,3)
  Q
  ;
 KIN ; US11945 - Add parents/children (kin) to order

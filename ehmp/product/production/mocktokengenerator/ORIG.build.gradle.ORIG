@@ -1,0 +1,105 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'war'
+
+description = """mocktokengenerator"""
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+configurations { providedCompile }
+
+dependencies {
+    providedCompile "javax.servlet:javax.servlet-api:3.+"
+}
+
+sourceSets.main.compileClasspath += configurations.providedCompile
+sourceSets.test.compileClasspath += configurations.providedCompile
+sourceSets.test.runtimeClasspath += configurations.providedCompile
+
+ext.set('repoCommitCount', '0.0.0.0')
+
+groupId = 'us.vistacore.ssoi-mock'
+version = "${->getVersionByCommitCountForProject(':production:mocktokengenerator')}"
+
+uploadArchives {
+   repositories {
+       mavenDeployer {
+       repository(url: "https://dl.vistacore.us/nexus/content/repositories/releases/") {
+         authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
+       }
+       pom.groupId = "${->groupId}"
+       pom.version = "${->version}"
+    }
+   }
+}
+
+task rebuildMetadata(type: Exec) {
+  def artifactId = "mocktokengenerator"  
+  commandLine "bash", "-c", "curl -s -u ${System.getenv()['NEXUS_USER_NAME']}:${System.getenv()['NEXUS_PASSWORD']} -X DELETE https://dl.vistacore.us/nexus/service/local/metadata/repositories/releases/content/${->groupId.replaceAll('\\.','/')}/${->artifactId}/"
+}
+
+uploadArchives.finalizedBy rebuildMetadata
+
+repositories {
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    compile group: 'ch.qos.logback', name: 'logback-classic', version:'1.1.3'
+    compile group: 'com.google.code.gson', name: 'gson', version:'2.3.1'
+    compile group: 'org.apache.commons', name: 'commons-collections4', version:'4.0'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version:'3.4'
+    compile group: 'commons-io', name: 'commons-io', version:'2.4'
+    compile group: 'javax.servlet', name: 'jstl', version:'1.2'
+    compile(group: 'org.springframework', name: 'spring-core', version:'4.1.6.RELEASE') {
+exclude(module: 'commons-logging')
+    }
+    compile(group: 'org.springframework', name: 'spring-web', version:'4.1.6.RELEASE') {
+exclude(module: 'commons-logging')
+    }
+    compile(group: 'org.springframework', name: 'spring-webmvc', version:'4.1.6.RELEASE') {
+exclude(module: 'commons-logging')
+    }
+    compile(group: 'org.springframework.ws', name: 'spring-ws-core', version:'2.2.1.RELEASE') {
+exclude(module: 'commons-logging')
+    }
+    compile group: 'xerces', name: 'xercesImpl', version:'2.11.0'
+    compile group: 'xml-apis', name: 'xml-apis', version:'1.4.01'
+    compile group: 'jstl', name: 'jstl', version:'1.2'
+    compile group: 'org.opensaml', name: 'opensaml', version:'2.6.4'
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.1.0'
+}
+
+def getCurrentBranchName() {
+    def branchName
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        branchName = repoVersion + '.' + 'cmd /C git rev-parse --abbrev-ref HEAD'.execute().text.trim()
+    } else {
+        branchName = ['sh', '-c', 'git rev-parse --abbrev-ref HEAD'].execute().text.trim()
+    }
+    return branchName
+}
+
+def getCurrentCommitHash() {
+    def commitHash
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commitHash = repoVersion + '.' + 'cmd /C git rev-parse HEAD'.execute().text.trim()
+    } else {
+        commitHash = ['sh', '-c', 'git rev-parse HEAD'].execute().text.trim()
+    }
+    return commitHash
+}
+
+//This function is used for getting commit count for a project
+//because the allprojects routine hasn't run yet for any project other than ROOT to
+//set the project.version property correctly
+def getVersionByCommitCountForProject(){
+    // unix processes/commands (proc1, proc2) to be executed
+    def proc1 = ['sh', '-c', "git rev-list --full-history --all"].execute()
+    def proc2 = 'wc -l'.execute()
+    proc1 | proc2
+    version = "${getRepoVersion().trim() + '.' + proc2.text.trim()}"
+    return version
+}
+

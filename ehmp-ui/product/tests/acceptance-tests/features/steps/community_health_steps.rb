@@ -65,7 +65,10 @@ end
 
 When(/^the user clicks the Community Health Summary Minimize Button$/) do
   comm_health = CommunityHealthSummariesCoverSheet.instance
-  expect(comm_health.perform_action('Control - Applet - Minimize View')).to eq(true)
+  wait = Selenium::WebDriver::Wait.new(:timeout => 30)
+  wait.until { comm_health.get_element('Control - Applet - Minimize View').displayed? }
+  expect(comm_health.get_element('Control - Applet - Minimize View').displayed?).to eq(true)
+  comm_health.get_element('Control - Applet - Minimize View').click
 end
 
 Then(/^the user returns to the coversheet$/) do

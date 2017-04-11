@@ -1,0 +1,498 @@
+~Format=5.S~
+02 May 2016   1:11 PM   Cache
+^RADPT(100863,0)
+100863^^^^^119
+^RADPT(100863,"DT",0)
+^70.02DA^6849492.8795^4
+^RADPT(100863,"DT",{today-10I}.889,0)
+{today-10}.1109^4^500^17
+^RADPT(100863,"DT",{today-10I}.889,"P",0)
+^70.03IA^1^1
+^RADPT(100863,"DT",{today-10I}.889,"P",1,0)
+49^544^14^O^^^^32^^N^2781^^1^988^20095^3^595^18^^^3150505^32^^Y^^0^11520^^^Y
+^RADPT(100863,"DT",{today-10I}.889,"P",1,"F",0)
+^70.04PA^1^1
+^RADPT(100863,"DT",{today-10I}.889,"P",1,"F",1,0)
+8
+^RADPT(100863,"DT",{today-10I}.889,"P",1,"L",0)
+^70.07DA^3^3
+^RADPT(100863,"DT",{today-10I}.889,"P",1,"L",1,0)
+3150507.1204^E^119
+^RADPT(100863,"DT",{today-10I}.889,"P",1,"L",2,0)
+3150507.1205^P^119
+^RADPT(100863,"DT",{today-10I}.889,"P",1,"L",3,0)
+3150507.1206^P^119
+^RADPT(100863,"DT",{today-10I}.889,"P",1,"SIUID")
+1.2.840.113754.1.4.500.6849492.8795.1.50715.49
+^RADPT(100863,"DT",{today-10I}.889,"P",1,"T",0)
+^70.05DA^3^3
+^RADPT(100863,"DT",{today-10I}.889,"P",1,"T",1,0)
+3150507.1204^11^119
+^RADPT(100863,"DT",{today-10I}.889,"P",1,"T",2,0)
+3150507.1206^22^119
+^RADPT(100863,"DT",{today-10I}.889,"P",1,"T",3,0)
+3150507.1207^14^119
+^RADPT(100863,"DT",{today-10I}.889,"P",1,"TC",0)
+^70.12PA^1^1
+^RADPT(100863,"DT",{today-10I}.889,"P",1,"TC",1,0)
+10000000020
+^RADPT(100863,"DT",{today-10I}.889,"P","B",49,1)
+
+^RADPT(100863,"DT",{today-50I}.9046,0)
+{today-50}.0953^1^500^7
+^RADPT(100863,"DT",{today-50I}.9046,"P",0)
+^70.03IA^1^1
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,0)
+55^139^2^O^^^^426^^N^2780^^2^988^11717^3^594^^^^3150430^426^^Y^^0^11513^^^Y
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"F",0)
+^70.04PA^1^1
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"F",1,0)
+2^2
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"L",0)
+^70.07DA^2^2
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"L",1,0)
+3150430.1515^E^119
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"L",2,0)
+3150430.1516^P^119
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"M",0)
+^70.1P^1^1
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"M",1,0)
+4
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"M","B",4,1)
+
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"SIUID")
+1.2.840.113754.1.4.500.6849569.8484.1.43015.55
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"T",0)
+^70.05DA^4^4
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"T",1,0)
+3150430.1515^9^119
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"T",2,0)
+3150430.1516^4^119
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"T",3,0)
+3150430.1524^5^119
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"T",4,0)
+3150430.1525^2^119
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"TC",0)
+^70.12PA^1^1
+^RADPT(100863,"DT",{today-50I}.9046,"P",1,"TC",1,0)
+10000000020
+^RADPT(100863,"DT",{today-50I}.9046,"P","B",55,1)
+
+^RADPT(100863,"DT",{today-50I}.9047,0)
+{today-50}.0952^1^500^7
+^RADPT(100863,"DT",{today-50I}.9047,"P",0)
+^70.03IA^1^1
+^RADPT(100863,"DT",{today-50I}.9047,"P",1,0)
+49^58^2^O^^^^426^^N^2779^11711^2^988^11717^3^593^^^^3150430^426^^Y^^0^11512^^^Y
+^RADPT(100863,"DT",{today-50I}.9047,"P",1,"F",0)
+^70.04PA^1^1
+^RADPT(100863,"DT",{today-50I}.9047,"P",1,"F",1,0)
+1^2
+^RADPT(100863,"DT",{today-50I}.9047,"P",1,"L",0)
+^70.07DA^2^2
+^RADPT(100863,"DT",{today-50I}.9047,"P",1,"L",1,0)
+3150430.1514^E^119
+^RADPT(100863,"DT",{today-50I}.9047,"P",1,"L",2,0)
+3150430.1515^P^119
+^RADPT(100863,"DT",{today-50I}.9047,"P",1,"SIUID")
+1.2.840.113754.1.4.500.6849569.8485.1.43015.49
+^RADPT(100863,"DT",{today-50I}.9047,"P",1,"T",0)
+^70.05DA^3^3
+^RADPT(100863,"DT",{today-50I}.9047,"P",1,"T",1,0)
+3150430.1514^9^119
+^RADPT(100863,"DT",{today-50I}.9047,"P",1,"T",2,0)
+3150430.1515^4^119
+^RADPT(100863,"DT",{today-50I}.9047,"P",1,"T",3,0)
+3150430.1522^2^119
+^RADPT(100863,"DT",{today-50I}.9047,"P",1,"TC",0)
+^70.12PA^1^1
+^RADPT(100863,"DT",{today-50I}.9047,"P",1,"TC",1,0)
+10000000020
+^RADPT(100863,"DT",{today-50I}.9047,"P","B",49,1)
+
+^RADPT(100863,"DT",{today-407I}.8345,0)
+{today-407}.1654^1^500^7
+^RADPT(100863,"DT",{today-407I}.8345,"P",0)
+^70.03IA^2^2
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,0)
+49^139^2^O^^^^32^^N^2777^^2^988^11716^3^592^^^^3150424^32^^Y^^0^11484^^^Y
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"F",0)
+^70.04PA^1^1
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"F",1,0)
+4^2
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"H",0)
+^^1^1^3150424
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"H",1,0)
+combat injury
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"L",0)
+^70.07DA^2^2
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"L",1,0)
+3150424.1629^E^119
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"L",2,0)
+3150424.1632^P^119
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"M",0)
+^70.1P^1^1
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"M",1,0)
+4
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"M","B",4,1)
+
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"SIUID")
+1.2.840.113754.1.4.500.6849575.837.1.42415.49
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"T",0)
+^70.05DA^3^3
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"T",1,0)
+3150424.1629^9^119
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"T",2,0)
+3150424.1632^4^119
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"T",3,0)
+3150424.1640^2^119
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"TC",0)
+^70.12PA^1^1
+^RADPT(100863,"DT",{today-407I}.8345,"P",1,"TC",1,0)
+10000000020
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,0)
+55^58^2^O^^^^32^^N^2778^^2^988^11716^3^591^^^^3150424^32^^Y^^0^11484^^^Y
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"F",0)
+^70.04PA^1^1
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"F",1,0)
+1^2
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"H",0)
+^^1^1^3150424
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"H",1,0)
+reports exposure to smoke in Iraq
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"L",0)
+^70.07DA^2^2
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"L",1,0)
+3150424.163^E^119
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"L",2,0)
+3150424.1631^P^119
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"SIUID")
+1.2.840.113754.1.4.500.6849575.837.2.42415.55
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"T",0)
+^70.05DA^3^3
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"T",1,0)
+3150424.163^9^119
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"T",2,0)
+3150424.1631^4^119
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"T",3,0)
+3150424.1636^2^119
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"TC",0)
+^70.12PA^1^1
+^RADPT(100863,"DT",{today-407I}.8345,"P",2,"TC",1,0)
+10000000020
+^RADPT(100863,"DT",{today-407I}.8345,"P","B",49,1)
+
+^RADPT(100863,"DT",{today-407I}.8345,"P","B",55,2)
+
+^RADPT(100863,"DT","AP",58,{today-50I}.9047,1)
+
+^RADPT(100863,"DT","AP",58,{today-407I}.8345,2)
+
+^RADPT(100863,"DT","AP",139,{today-50I}.9046,1)
+
+^RADPT(100863,"DT","AP",139,{today-407I}.8345,1)
+
+^RADPT(100863,"DT","AP",544,{today-10I}.889,1)
+
+^RADPT(100863,"DT","B",{today-407}.1654,{today-407I}.837)
+
+^RADPT(100863,"DT","B",{today-50}.0952,{today-50I}.9047)
+
+^RADPT(100863,"DT","B",{today-50}.0953,{today-50I}.9046)
+
+^RADPT(100863,"DT","B",{today-10}.1109,{today-10I}.889)
+
+^RAO(75.1,2777,0)
+100863^139^1^O^2^9^38484^^^^n^^^988^988^{today-407}.1629^^{today-406}.084^a^7^{today-407}^32^^n
+^RAO(75.1,2777,.1)
+Pain/swelling
+^RAO(75.1,2777,"H",0)
+^^1^1^3150424
+^RAO(75.1,2777,"H",1,0)
+combat injury
+^RAO(75.1,2777,"M",0)
+^75.1125PA^1^1
+^RAO(75.1,2777,"M",1,0)
+4
+^RAO(75.1,2777,"M","B",4,1)
+
+^RAO(75.1,2777,"T",0)
+^75.12DA^4^4
+^RAO(75.1,2777,"T",1,0)
+3150424.122129^5^988
+^RAO(75.1,2777,"T",2,0)
+3150424.1629^8^119
+^RAO(75.1,2777,"T",3,0)
+3150424.163^6^119
+^RAO(75.1,2777,"T",4,0)
+3150424.164^2^119
+^RAO(75.1,2778,0)
+100863^58^1^O^2^9^38483^^^^n^^^988^988^3150424.122129^^3150424.1636^a^7^3150424^32^^n
+^RAO(75.1,2778,.1)
+smoking history, potential burn pit exposure
+^RAO(75.1,2778,"H",0)
+^^1^1^3150424
+^RAO(75.1,2778,"H",1,0)
+reports exposure to smoke in Iraq
+^RAO(75.1,2778,"T",0)
+^75.12DA^4^4
+^RAO(75.1,2778,"T",1,0)
+3150424.122129^5^988
+^RAO(75.1,2778,"T",2,0)
+3150424.1629^8^119
+^RAO(75.1,2778,"T",3,0)
+3150424.163^6^119
+^RAO(75.1,2778,"T",4,0)
+3150424.1636^2^119
+^RAO(75.1,2779,0)
+100863^58^1^O^2^9^38561^^^^n^^^988^988^{today-50}.0952^^{today-50}.1011^a^7^{today-50}^426^^n
+^RAO(75.1,2779,.1)
+CHEST PAIN S/P MVA
+^RAO(75.1,2779,"T",0)
+^75.12DA^3^3
+^RAO(75.1,2779,"T",1,0)
+3150430.151259^5^988
+^RAO(75.1,2779,"T",2,0)
+3150430.1514^6^119
+^RAO(75.1,2779,"T",3,0)
+3150430.1522^2^119
+^RAO(75.1,2780,0)
+100863^139^1^O^2^9^38562^^^^n^^^988^988^{today-50}.0953^^{today-50}.1011^a^7^{today-50}^426^^n
+^RAO(75.1,2780,.1)
+wrist pain s/p MVA
+^RAO(75.1,2780,"M",0)
+^75.1125PA^1^1
+^RAO(75.1,2780,"M",1,0)
+4
+^RAO(75.1,2780,"M","B",4,1)
+
+^RAO(75.1,2780,"T",0)
+^75.12DA^2^2
+^RAO(75.1,2780,"T",1,0)
+3150430.151259^5^988
+^RAO(75.1,2780,"T",2,0)
+3150430.1525^2^119
+^RAO(75.1,2781,0)
+100863^544^4^O^2^9^38601^^^^n^^^988^988^{today-17}.1239^^{today-10}.1204^a^17^{today-17}^32^^n
+^RAO(75.1,2781,.1)
+neck pain r/t MVA {today-50E}
+^RAO(75.1,2781,"T",0)
+^75.12DA^3^3
+^RAO(75.1,2781,"T",1,0)
+3150505.174829^5^988
+^RAO(75.1,2781,"T",2,0)
+3150507.1204^6^119
+^RAO(75.1,2781,"T",3,0)
+3150507.1207^2^119
+^RARPT(591,0)
+042415-55^100863^3150424.1629^55^V^3150424.163316^3150424.1636^3150424^119^2zS-z P?MsGgteN^^^^^^^119
+^RARPT(591,"BA")
+7
+^RARPT(591,"I",0)
+^^1^1^3150424^
+^RARPT(591,"I",1,0)
+1.1cm Perihilar mass unchanged from {today-905E} chest xray.
+^RARPT(591,"L",0)
+^74.01DA^2^2
+^RARPT(591,"L",1,0)
+3150424.1633^I^119
+^RARPT(591,"L",2,0)
+3150424.1636^V^119
+^RARPT(591,"R",0)
+^^5^5^3150424^
+^RARPT(591,"R",1,0)
+Compared to DoD report of chest xray on {today-905E}.  Cardiac 
+^RARPT(591,"R",2,0)
+silhouette appears at the upper limits of normal in size.  1.1cm 
+^RARPT(591,"R",3,0)
+Perihilar mass is unchanged.  There are no infiltrates.  
+^RARPT(591,"R",4,0)
+Coarsened lung markings at the bases compatible with bronchial 
+^RARPT(591,"R",5,0)
+wall thickening.
+^RARPT(591,"T")
+119
+^RARPT(592,0)
+042415-49^100863^{today-407}.1654^49^V^{today-407}.1654^{today-406}.084^{today-406}.084^119^AIn#&'k f-FZm}G^^^^^^^119
+^RARPT(592,"BA")
+7
+^RARPT(592,"I",0)
+^^1^1^3150424^
+^RARPT(592,"I",1,0)
+Arthritic changes in 1st CMC joint.
+^RARPT(592,"L",0)
+^74.01DA^2^2
+^RARPT(592,"L",1,0)
+3150424.164^I^119
+^RARPT(592,"L",2,0)
+3150424.164^V^119
+^RARPT(592,"R",0)
+^^16^16^3150424^
+^RARPT(592,"R",1,0)
+Hand Xray - Abnormal
+^RARPT(592,"R",2,0)
+ 
+^RARPT(592,"R",3,0)
+Technique: 2 views of the L hand.
+^RARPT(592,"R",4,0)
+ 
+^RARPT(592,"R",5,0)
+Clinical information:
+^RARPT(592,"R",6,0)
+Patient complains of pain in the Left hand and wrist, exacerbated
+^RARPT(592,"R",7,0)
+by movement of the thumb.
+^RARPT(592,"R",8,0)
+ 
+^RARPT(592,"R",9,0)
+Comparison: DoD report obtained for Left Hand xray {today-540E}
+^RARPT(592,"R",10,0)
+  
+^RARPT(592,"R",11,0)
+Findings: 
+^RARPT(592,"R",12,0)
+Bones: Normal. No fractures are present.
+^RARPT(592,"R",13,0)
+  
+^RARPT(592,"R",14,0)
+Joints: Arthritic changes in 1st CMC joint. The joint spaces are normal.
+^RARPT(592,"R",15,0)
+  
+^RARPT(592,"R",16,0)
+Soft tissues: Normal.
+^RARPT(592,"T")
+119
+^RARPT(593,0)
+043015-49^100863^{today-50}.0952^49^V^{today-50}.0952^{today-50}.1011^{today-50}.1011^119^@oV2h4p"v3`UW=o^^^^^^^119
+^RARPT(593,"BA")
+7
+^RARPT(593,"I",0)
+^^2^2^3150430^
+^RARPT(593,"I",1,0)
+1.1cm Perihilar mass unchanged from {today-711E} chest xray.  No 
+^RARPT(593,"I",2,0)
+fractures.
+^RARPT(593,"L",0)
+^74.01DA^2^2
+^RARPT(593,"L",1,0)
+3150430.1521^I^119
+^RARPT(593,"L",2,0)
+3150430.1522^V^119
+^RARPT(593,"R",0)
+^^5^5^3150430^
+^RARPT(593,"R",1,0)
+Compared to chest xray on {today-407E}.  Cardiac silhouette 
+^RARPT(593,"R",2,0)
+appears at the upper limits of normal in size.  1.1cm Perihilar 
+^RARPT(593,"R",3,0)
+mass is unchanged.  There are no infiltrates.  Coarsened lung 
+^RARPT(593,"R",4,0)
+markings at the bases compatible with bronchial wall thickening.
+^RARPT(593,"R",5,0)
+No fractures or bony abnormalities. 
+^RARPT(593,"T")
+119
+^RARPT(594,0)
+043015-55^100863^{today-50}.0953^55^V^{today-50}.0953^{today-50}.1011^{today-50}.1011^119^EYWT{E,VhW&rp_*^^^^^^^119
+^RARPT(594,"BA")
+7
+^RARPT(594,"I",0)
+^^1^1^3150430^
+^RARPT(594,"I",1,0)
+Arthritic changes in 1st CMC joint.
+^RARPT(594,"L",0)
+^74.01DA^3^3
+^RARPT(594,"L",1,0)
+3150430.1524^I^119
+^RARPT(594,"L",2,0)
+3150430.1524^E^119
+^RARPT(594,"L",3,0)
+3150430.1525^V^119
+^RARPT(594,"R",0)
+^^15^15^3150430
+^RARPT(594,"R",1,0)
+Hand Xray - Abnormal
+^RARPT(594,"R",2,0)
+ 
+^RARPT(594,"R",3,0)
+Technique: 2 views of the L hand.
+^RARPT(594,"R",4,0)
+ 
+^RARPT(594,"R",5,0)
+Clinical information:
+^RARPT(594,"R",6,0)
+Patient complains of pain in the Left wrist after MVA.
+^RARPT(594,"R",7,0)
+ 
+^RARPT(594,"R",8,0)
+Comparison: Left Hand xray {today-407E}
+^RARPT(594,"R",9,0)
+  
+^RARPT(594,"R",10,0)
+Findings: 
+^RARPT(594,"R",11,0)
+Bones: Normal. No fractures are present.
+^RARPT(594,"R",12,0)
+  
+^RARPT(594,"R",13,0)
+Joints: Arthritic changes in 1st CMC joint. The joint spaces are normal.
+^RARPT(594,"R",14,0)
+  
+^RARPT(594,"R",15,0)
+Soft tissues: Normal.
+^RARPT(594,"T")
+119
+^RARPT(595,0)
+050715-49^100863^{today-10}.1109^49^V^{today-10}.1109^{today-10}.1204^{today-10}.1204^119^:<p<}90'aCZ[zp]^^^^^^^119
+^RARPT(595,"BA")
+17
+^RARPT(595,"I",0)
+^^2^2^3150507^
+^RARPT(595,"I",1,0)
+STRAIGHTENING OF THE NORMAL CERVICAL LORDOSIS, WHICH MAY BE RELATED TO 
+^RARPT(595,"I",2,0)
+POSITIONING, MUSCLE SPASM, OR SPONDYLOSIS.
+^RARPT(595,"L",0)
+^74.01DA^2^2
+^RARPT(595,"L",1,0)
+3150507.1206^I^119
+^RARPT(595,"L",2,0)
+3150507.1207^V^119
+^RARPT(595,"R",0)
+^^16^16^3150507^
+^RARPT(595,"R",1,0)
+Clinical Indication: Neck pain since MVA approximately 6 weeks ago.
+^RARPT(595,"R",2,0)
+ 
+^RARPT(595,"R",3,0)
+Technique: Coronal T1 and T2-weighted sequences, sagittal T1 and T2-
+^RARPT(595,"R",4,0)
+weighted sequences and axial T2 sequence were performed without 
+^RARPT(595,"R",5,0)
+intravenous contrast administration. There are no prior studies available 
+^RARPT(595,"R",6,0)
+for comparison.
+^RARPT(595,"R",7,0)
+ 
+^RARPT(595,"R",8,0)
+Findings:
+^RARPT(595,"R",9,0)
+Straightening on the normal cervical lordosis. Vertebral bodies are 
+^RARPT(595,"R",10,0)
+preserved in signal and height. Intervertebral disc spaces are normal in 
+^RARPT(595,"R",11,0)
+height with mild loss of intervertebral disc space signal at C2/3 through 
+^RARPT(595,"R",12,0)
+C5/6, consistent with desiccation. The facet joints are normal. There is 
+^RARPT(595,"R",13,0)
+no evidence of spinal canal or foraminal stenosis. The visualized spinal 
+^RARPT(595,"R",14,0)
+cord and posterior fossa are normal in signal and contour. There is no 
+^RARPT(595,"R",15,0)
+evidence of intra or extradural mass lesion. Cervical soft tissues are 
+^RARPT(595,"R",16,0)
+normal.
+^RARPT(595,"T")
+119
+
+

@@ -6,18 +6,20 @@ var _ = require('underscore');
 var _s = require('underscore.string');
 
 var VistaClient = require(global.VX_SUBSYSTEMS + 'vista/vista-client');
-var PublisherRouter = require(global.VX_JOBFRAMEWORK + 'publisherRouter');
-var JobStatusUpdater = require(global.VX_JOBFRAMEWORK + 'JobStatusUpdater');
-var ErrorPublisher = require(global.VX_JOBFRAMEWORK + 'error-publisher');
+var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
+var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
+var ErrorPublisher = require(global.VX_JOBFRAMEWORK).ErrorPublisher;
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
-var SolrClient = require('solr-client');
+var solrSmartClient = require('solr-smart-client');
 var Metrics = require(global.VX_UTILS + 'metrics');
+var JobUtils = require(global.VX_UTILS + 'job-utils');
 var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
 var MviClient = require(global.VX_SUBSYSTEMS + 'mvi/mvi-client');
 var HdrClient = require(global.VX_SUBSYSTEMS + 'hdr/hdr-client');
 var logUtil = require(global.VX_UTILS + 'log');
 var yargs = require('yargs');
-var VxSyncForeverAgent = require(global.VX_UTILS+'vxsync-forever-agent');
+var VxSyncForeverAgent = require(global.VX_UTILS + 'vxsync-forever-agent');
+var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
 
 var notEmpty = _.negate(_.isEmpty);
 
@@ -26,23 +28,21 @@ function buildEnvironment(logger, config) {
     var jds = new JdsClient(logger, metricsLog, config);
     var terminology = new TerminologyUtil(logger, metricsLog, config);
     var environment = {
-        vistaClient: new VistaClient(logUtil.getAsChild('vista-client', logger), metricsLog, config, null),
+        vistaClient: new VistaClient(logger, metricsLog, config, null),
         jobStatusUpdater: {},
         publisherRouter: {},
         errorPublisher: {},
-        mvi: new MviClient(logUtil.getAsChild('mvi', logger), metricsLog, config, jds),
+        mvi: new MviClient(logger, metricsLog, config, jds),
         jds: jds,
         metrics: metricsLog,
         terminologyUtils: terminology,
-        solr: SolrClient.createClient(config.solrClient.host, config.solrClient.port, config.solrClient.core, config.solrClient.path, new VxSyncForeverAgent()),
-        hdrClient: new HdrClient(logUtil.getAsChild('hdr', logger), metricsLog, config)
+        solr: solrSmartClient.initClient(config.solrClient.core, config.solrClient.zooKeeperConnection, logger, new VxSyncForeverAgent()),
+        hdrClient: new HdrClient(logger, metricsLog, config)
     };
-    environment.jobStatusUpdater = new JobStatusUpdater(logUtil.getAsChild('JobStatusUpdater', logger), config, environment.jds);
-    environment.publisherRouter = new PublisherRouter(logUtil.getAsChild('router', logger), config, metricsLog, environment.jobStatusUpdater);
-    environment.errorPublisher = new ErrorPublisher(logger, config);
+    environment.jobStatusUpdater = new JobStatusUpdater(logger, config, environment.jds);
+    environment.publisherRouter = new PublisherRouter(logger, config, metricsLog, environment.jobStatusUpdater);
+    environment.errorPublisher = new ErrorPublisher(logger, config, JobUtils.errorRequestType());
     environment.errorPublisher.connect();
-
-    environment.solr.UPDATE_JSON_HANDLER = 'update';
 
     return environment;
 }
@@ -51,23 +51,18 @@ function buildOsyncEnvironment(logger, config) {
     var metricsLog = new Metrics(config);
     var jds = new JdsClient(logger, metricsLog, config);
     var environment = {
-        vistaClient: new VistaClient(logUtil.getAsChild('vista-client', logger), metricsLog, config, null),
+        vistaClient: new VistaClient(logger, metricsLog, config, null),
         jobStatusUpdater: {},
         publisherRouter: {},
         jds: jds,
-        solr: SolrClient.createClient(config.solrClient),
         metrics: metricsLog
     };
 
-    environment.jobStatusUpdater = new JobStatusUpdater(logUtil.getAsChild('JobStatusUpdater', logger), config, environment.jds);
-    environment.publisherRouter = new PublisherRouter(logUtil.getAsChild('router', logger), config, metricsLog, environment.jobStatusUpdater);
+    environment.jobStatusUpdater = new JobStatusUpdater(logger, config, environment.jds);
+    environment.publisherRouter = new PublisherRouter(logger, config, metricsLog, environment.jobStatusUpdater);
 
     environment.validPatientsLog = logUtil.get('valid_patients');
     environment.resultsLog = logUtil.get('results');
-
-    // Hack around solr-client a little so it runs correctly against our instance
-    environment.solr.autoCommit = true;
-    environment.solr.UPDATE_JSON_HANDLER = 'update';
 
     return environment;
 }
@@ -98,15 +93,15 @@ function parseErrorProcessorOptions(logger, config) {
         process.exit(0);
     }
 
-// TODO: if --all-profiles and --profile <option> are both included, then all profiles
-// will be used, and any explicit single profiles will be on regardless of worker-config.json
+    // TODO: if --all-profiles and --profile <option> are both included, then all profiles
+    // will be used, and any explicit single profiles will be on regardless of worker-config.json
     var allProfileList = _.keys(config['error-processing']);
-    var profiles = allProfileList;
+    var profiles = _.without(allProfileList, 'jdsGetErrorLimit');
 
     var ignoreInvalid = parseIgnoreInvalid(argv);
     var autostart = parseAutostart(logger, argv);
 
-    if(!argv['all-profiles'] && argv.profile) {
+    if (!argv['all-profiles'] && argv.profile) {
         profiles = _.isArray(argv.profile) ? _.uniq(argv.profile) : [argv.profile];
     }
 
@@ -169,6 +164,7 @@ function parseSubscriberOptions(logger, config) {
         .describe('job-type <job-type>[:<count>]', 'A job type and number of processes. Note that each job-type will be run in its own process. ' +
             'If it also appears as part of a profile, it will not be run as part of that profile and will run instead as the separate process.')
         .describe('ignore-invalid', 'If a non-existant or invalid profile or job-type is given, it should be ignored.')
+        .describe('config-override', 'Path to an alternate config file. Any values in this config will override the ones in the main worker-config. Used only for the record-update processes.')
         .describe('help', 'This help text.')
         .alias('a', 'autostart')
         .alias('i', 'ignore-invalid')
@@ -210,6 +206,8 @@ function parseSubscriberOptions(logger, config) {
     addJobTypeProfiles(config, profileMap, jobTypeMap);
 
     var processList = buildProcessList(config, profileMap);
+
+    parseAndApplyConfigOverride(logger, argv, config);
 
     return {
         profile: argv.profile,
@@ -349,7 +347,7 @@ function stringToArray(value) {
         var name = entry[0];
         var num = entry[1] || 1;
 
-        if(_.isEmpty(name)) {
+        if (_.isEmpty(name)) {
             return;
         }
 
@@ -433,7 +431,7 @@ function parseIgnoreInvalid(argv) {
 }
 
 function parseIgnoreSeverity(argv) {
-    if(!argv) {
+    if (!argv) {
         return false;
     }
 
@@ -451,6 +449,41 @@ function parseAutostart(logger, argv) {
     return autostart;
 }
 
+function parseAndApplyConfigOverride(logger, argv, config) {
+    if (!argv || !argv['config-override']) {
+        return;
+    }
+
+    var configOverridePath = argv['config-override'];
+    var configOverride = null;
+
+    if (configOverridePath) {
+        logger.debug('poller-utils.parseAndApplyConfigOverride: config override path: %s', configOverridePath);
+        try {
+            configOverride = require(configOverridePath);
+        } catch (e) {
+            logger.error('poller-utils.parseAndApplyConfigOverride: Got path to a config override file that cannot be found.');
+        }
+
+        if (configOverride) {
+            logger.debug('poller-utils.parseAndApplyConfigOverride: Loaded config override file. Applying to config.');
+
+            if(configOverride.beanstalk){
+                configOverride.beanstalk = queueConfig.createFullBeanstalkConfig(configOverride.beanstalk);
+            }
+
+            _.each(_.keys(config), function(key) {
+                if (config[key] && configOverride[key]) {
+                    config[key] = configOverride[key];
+                }
+            });
+
+            config.configOverride = true;
+        }
+    }
+
+    return argv['config-override'];
+}
 
 module.exports.buildEnvironment = buildEnvironment;
 module.exports.buildOsyncEnvironment = buildOsyncEnvironment;

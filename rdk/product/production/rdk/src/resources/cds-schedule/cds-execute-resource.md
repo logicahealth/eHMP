@@ -2,7 +2,7 @@
 
 ## Cds execute cds execute [{{{path}}}]
 
-### Get [GET {{{path}}}/request{?name}{&fields}]
+### Get [GET {{{path}}}/request{?name}]
 
 Execution Request resource
 
@@ -13,8 +13,6 @@ Get execution request(s)
 + Parameters
 
     + name (string, optional) - name of execution request
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

@@ -54,11 +54,13 @@ LEN(RESULT,ARGS) ; Returns the total number of sessions
  Q
  ;
 GET(RESULT,ARGS) ; Returns session info
- N DEMOG,ERR,SID
+ N DEMOG,ERR,SID,BODY
  I $$UNKARGS^VPRJCU(.ARGS,"_id") Q
  I $G(ARGS("_id"))="" D SETERROR^VPRJRER(111,"_id is blank") Q
  S SID=ARGS("_id")
+ L +^VPRJSES(SID):$G(^VPRCONFIG("timeout","gds"),5) E  D SETERROR^VPRJRER(502) Q ""
  M DEMOG=^VPRJSES(SID)
+ L -^VPRJSES(SID)
  D ENCODE^VPRJSON("DEMOG","BODY","ERR") ; From an array to JSON
  I $D(ERR) D SETERROR^VPRJRER(202) Q
  M RESULT=BODY

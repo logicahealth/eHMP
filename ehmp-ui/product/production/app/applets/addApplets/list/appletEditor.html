@@ -1,29 +1,48 @@
-<div>
-    <div class="editorTop">
-        <form class="backgrid-filter form-search top-margin-no left-margin-no bottom-margin-xs">
-            <fieldset>
-                <legend class="sr-only">Find Applet by Name</legend>
-                <label class="sr-only" for="input-filter-search">Enter Filter</label>
-                <span class="search">&nbsp;</span>
-                <input id="searchApplets" type="search" title="Find Applet by Name" placeholder="Find Applet by Name" name="searchApplets">
-                <a class="clear" href="#" onclick="return false;">
-                    <i class="fa fa-times"></i>
-                    <span class="sr-only">Press enter to clear filter text</span>
-                </a>
-                <input type="button" name="doneEditing" id="exitEditing" value="Done">
-            </fieldset>
-        </form>
+<div class="container-fluid workspace-editor-container all-margin-xl" role="application">
+    <div class="row panel-heading left-padding-no">
+        <div class="col-xs-11">
+            <h3 class="all-margin-no all-padding-no">Workspace Editor</h3>
+        </div>
+        <div class="col-xs-1 text-right">
+            <button type="button" id="editorFilterBtn" data-toggle="collapse" data-target="#workspace-editor-filter" class="btn btn-icon collapsed" title="Press enter to expand filter.">
+                <i class="fa fa-filter color-primary"></i>
+            </button>
+        </div>
     </div>
-    <div class="applet-tray">
+    <div class="row">
+        <div id="workspace-editor-filter" class="col-xs-12 grid-filter collapse">
+            <form>
+                <div class="form-group col-xs-3 bottom-margin-no pull-right bottom-padding-sm">
+                    <label class="sr-only" for="searchApplets">Applet Filter</label>
+                    <i class="fa fa-filter"></i>
+                    <input id="searchApplets" type="search" title="Begin typing to search for an applet" class="form-control input-sm left-padding-lg right-padding-lg" placeholder="Filter applets" />
+                    <button type="button" title="Press enter to clear text." class="btn btn-icon pull-right editor-clear-filter">
+                        <i class="fa fa-times fa-lg color-grey-darker font-size-12"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="applet-gridster">
-        <h2 id="screen-title"></h2>
-        <div id="boundaryIndicator">
-            <div class="wireframe">
+    <div class="row">
+        <div class="applet-tray">
+        </div>
+    </div>
+    <div class="row">
+        <div class="applet-gridster">
+            <h4 id="screen-title" class="text-center all-margin-no top-padding-no bottom-padding-xs color-pure-white"></h4>
+            <div class="boundary-indicator">
+                <div class="wireframe">
+                </div>
+                <h5 class="color-pure-white text-capitalize top-margin-no bottom-margin-no top-padding-xs">Current Screen View</h5>
             </div>
-            CURRENT SCREEN VIEW
-        </div>
-        <div class="gridsterContainer">
-            {{{gridsterTemplate}}}
+            <div class="gridsterContainer">
+                {{{gridsterTemplate}}}
+            </div>
         </div>
     </div>
+    <div class="row panel-footer">
+        <div class="col-xs-12">
+            <button type="submit" name="doneEditing" id="exitEditing" title="Press enter to save and close and return to the workspace manager" class="btn btn-primary btn-sm pull-right">Save &amp; Close</button>
+        </div>
+    </div>
+</div>

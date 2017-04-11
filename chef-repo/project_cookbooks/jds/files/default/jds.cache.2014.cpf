@@ -63,7 +63,7 @@ SystemHalt=1
 SystemStart=1
 TempDirectory=Temp
 TerminalPrompt=8,2
-WebServer=1
+WebServer=0
 WebServerName=
 WebServerPORT      
 WebServerURLPrefix=

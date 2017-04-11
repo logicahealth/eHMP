@@ -1,5 +1,6 @@
-HMPTOOLS ;CNP/JD -- More HMP utilities ; 05/28/15 08:23
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 1
+HMPTOOLS ;ASMR/JD - More HMP utilities ; 9/25/15 10:59am
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q
  ;
@@ -25,7 +26,7 @@ CHKXTMP(RSLT) ; RPC(HMP CHKXTMP) to return the state of ^XTMP data
  ; HMPCNT = Domain status (1 = complete; 0 = staging)
  ; HMPDFN = Patient IEN
  ; HMPDOM = Patient domain (e.g. lab, med, allergy, etc.)
- ; HMPST  = Number of patients who are stil in the staging state
+ ; HMPST  = Number of patients who are still in the staging state
  ; HMPSTG = Number of domains that are still staging for a patient
  ; HMPT   = HMPCM+HMPST
  ;
@@ -78,7 +79,7 @@ GETSIZE(HMPMODE,HMPSRVN) ; -- return current aggregate extract size for extracts
  ; input: HMPMODE := [ estimate - use estimated domain average sizes (default) |
  ;                     actual - walk though object nodes to calculate using $LENGTH ]
  ;        HMPSRVN := name of HMP server [optional - defaults to all HMP servers]
- ; return: total size in bytes ^ object count
+ ; returns: total size in bytes ^ object count
  ;
  ; -- loop thru extracts for server(s) 
  N ROOT,BATCH,TASK,DOMAIN,OBJS,OBJCNT,OBJSIZES,TOTAL

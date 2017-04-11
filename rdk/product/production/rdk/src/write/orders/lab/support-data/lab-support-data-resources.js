@@ -6,6 +6,8 @@ var getLabCollectTimes = require('./lab-collect-times').getLabCollectTimes;
 var isValidImmediateCollectTime = require('./lab-valid-immediate-collect-time').isValidImmediateCollectTime;
 var getFutureLabCollects = require('./lab-future-lab-collects').getFutureLabCollects;
 var getDiscontinueReason = require('./lab-discontinue-reason').getDiscontinueReason;
+var getLabSpecimens = require('./lab-specimens').getLabSpecimens;
+var getCurrentTime = require('./lab-current-time').getCurrentTime;
 var nullUtil = require('../../../core/null-utils');
 
 module.exports.getResourceConfig = function(app) {
@@ -16,7 +18,7 @@ module.exports.getResourceConfig = function(app) {
             operationalDataCheck: true,
             synchronize: true
         },
-        requiredPermissions: [],  // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
         isPatientCentric: false,
         get: fetchSupportData
     }];
@@ -52,32 +54,34 @@ function fetchSupportData(req, res) {
     var serverSend = function(error, json) {
         if (error) {
             res.status(500).rdkSend(error);
-        }
-        else {
+        } else {
             res.status(200).rdkSend(json);
         }
     };
 
-    if (type.toLowerCase() === 'lab-default-immediate-collect-time'){
-        getDefaultImmediateCollectTime(log,configuration, serverSend);
+    if (type === 'lab-default-immediate-collect-time') {
+        getDefaultImmediateCollectTime(log, configuration, serverSend);
         return;
-    }
-    if (type.toLowerCase() === 'lab-collect-times'){
-        getLabCollectTimes(log,configuration, req.param('dateSelected'), req.param('location'), serverSend);
+    } else if (type === 'lab-collect-times') {
+        getLabCollectTimes(log, configuration, req.param('dateSelected'), req.param('location'), serverSend);
         return;
-    }
-    if (type.toLowerCase() === 'lab-valid-immediate-collect-time'){
-        isValidImmediateCollectTime(log,configuration, req.param('timestamp'), serverSend);
+    } else if (type === 'lab-valid-immediate-collect-time') {
+        isValidImmediateCollectTime(log, configuration, req.param('timestamp'), serverSend);
         return;
-    }
-    if (type.toLowerCase() === 'lab-future-lab-collects') {
+    } else if (type === 'lab-future-lab-collects') {
         getFutureLabCollects(log, configuration, req.param('location'), serverSend);
         return;
-    }
-    if (type.toLowerCase() === 'discontinue-reason') {
+    } else if (type === 'discontinue-reason') {
         getDiscontinueReason(log, configuration, serverSend);
         return;
+    } else if (type === 'lab-specimens') {
+        getLabSpecimens(log, configuration, serverSend);
+        return;
+    } else if (type === 'lab-current-time') {
+        getCurrentTime(log, configuration, serverSend);
+        return;
+    } else {
+        serverSend('Not yet implemented');
+        return;
     }
-    serverSend('Not yet implemented');
-    return;
 }

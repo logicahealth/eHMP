@@ -1,0 +1,9 @@
+{
+  "id": "nexus",
+  "credentials": {
+    "encrypted_data": "BV4Ub16ymkA7YNCu+FWrvlgJXRAopYifwqa/kL6LxDcp8US7c6cdsovcua6J\n+jWftZxKAyPFqNBdXFep0vgIOiSioAUkar4nlXXvgkLCa1E=\n",
+    "iv": "kgM/oioIpPzEcWgNv3TejQ==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}

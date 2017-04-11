@@ -1,154 +1,87 @@
-@F239_UDAF @future
+@F239_UDAF @regression @triage
 Feature: F239 - User-Defined Applet Filters
 
-# Team: Andromeda
-
 Background:
-  Given user is logged into eHMP-UI
-  And user searches for and selects "Eight,Patient"
-  And the user clicks the "Workspace Manager"
-  When the user clicks "Plus Button"
-  And the user clicks "Customize"
-	
-@F239_create_user_defined_applet_filters @US4424 @US4425 @US5700 @US5507 @future @F239-1.1 @F239-1.2 @F239-1.3 @F239-2.1 @F239-2.2 @F239-3.1 @F239-3.2
-Scenario: Creating, saving and deleting filter tags
-  When drag and drop the Numeric Lab Results right by 0 and down by 10
-  And user clicks "Numeric Lab Results Expanded View" on the screen editor
-  And drag and drop the Orders right by 0 and down by 20
-  And user clicks "Done" on the screen editor
-  And user scrolls the window to bring applets to view
-  And the user has selected All within the global date picker
-  #Scenario F239-1.1, 1.2 (Entering a basic text filter)
-  And user clicks on the control "Lab Result - Text Filter" 
-  And the user enters text "hematocrit" in the "Text Filter" control in the "Numeric Lab Results applet"
-  Then user defined filter "hematocrit" is created 
-  And the "Numeric Lab Results Applet" table contains 1 rows
-  And the "Numeric Lab Results Applet" table contains rows
-    | Date               | Lab Test                                               | Flag | Result | Unit    | Ref Range | Facility |
-    | 06/21/2007 - 10:26 | Hematocrit, Blood Quantitative Automated Count - BLOOD |  L   | 30.0   | %       | 35.5-49.1 | DOD      |
-  # Scenario F239-3.1 (Entering multiple text filters)  
-  And the user enters text "anion" in the "Text Filter" control in the "Numeric Lab Results applet"
-  Then user defined filter "anion" is created 
-  # And the user waits for 5 seconds
-  And the "Numeric Lab Results Applet" table contains 3 rows
-  And the "Numeric Lab Results Applet" table contains rows
-    | Date               | Lab Test                                               | Flag | Result | Unit    | Ref Range | Facility |
-    | 04/09/2013 - 10:08 | Anion Gap, Serum or Plasma Quantitative - PLASMA       |      | 17     | mmol/L  | 8-20      | DOD      |
-    | 03/28/2013 - 14:09 | Anion Gap, Serum or Plasma Quantitative - PLASMA       |      | 20     | mmol/L  | 8-20      | DOD      |
-    | 06/21/2007 - 10:26 | Hematocrit, Blood Quantitative Automated Count - BLOOD |  L   | 30.0   | %       | 35.5-49.1 | DOD      |
-  #Scenario F239-2.1, 2.2 (Delete a text filter)
-  When user clicks on the control "Delete - UDAF - hematocrit" 
-  And the "Numeric Lab Results Applet" table contains 2 rows
-  And the "Numeric Lab Results Applet" table contains rows
-    | Date               | Lab Test                                               | Flag | Result | Unit    | Ref Range | Facility |
-    | 04/09/2013 - 10:08 | Anion Gap, Serum or Plasma Quantitative - PLASMA       |      | 17     | mmol/L  | 8-20      | DOD      |
-    | 03/28/2013 - 14:09 | Anion Gap, Serum or Plasma Quantitative - PLASMA       |      | 20     | mmol/L  | 8-20      | DOD      |
-  # US5507 - verifying remove all filters  
-  And the user enters text "Granulocytes" in the "Text Filter" control in the "Numeric Lab Results applet"
-  Then user defined filter "Granulocytes" is created 
-  And the "Numeric Lab Results Applet" table contains 3 rows
-  And the "Numeric Lab Results Applet" table contains rows
-    | Date               | Lab Test                                                               | Flag | Result | Unit    | Ref Range | Facility |
-    | 04/09/2013 - 10:08 | Anion Gap, Serum or Plasma Quantitative - PLASMA                       |      | 17     | mmol/L  | 8-20      | DOD      |
-    | 03/28/2013 - 14:09 | Anion Gap, Serum or Plasma Quantitative - PLASMA                       |      | 20     | mmol/L  | 8-20      | DOD      |
-    | 06/21/2007 - 10:26 | Granulocytes/100 Leukocytes, Blood Quantitative Automated Count - BLOOD|      | 55.0   | %       | 40.9-74.9 | DOD      |
-  And user clicks on the control "Lab Result - Remove All link" 
-  And the element "UDAF - anion" is not displayed anymore
-  And the element "UDAF - Granulocytes" is not displayed anymore
-  When the user clicks "Workspace Manager Button"
-  And the user clicks "Delete"
-  And the user clicks "Confirm Delete"
-  Then the "User Defined Workspace 1" is not listed in the workspace manager page
-  And the user clicks "Done editing" on the workspace manager
-  
-@F239_group_name_for_udafs @US5352 @future @F239-10.1 @F239-10.2 @F239-10.3 @F239-10.5 @F239-10.6 @F239-10.7 @F239-11.3 
-Scenario: Ability to give a name to the group of filters 
-  When drag and drop the Numeric Lab Results right by 0 and down by 10
-  And user clicks "Numeric Lab Results Expanded View" on the screen editor
-  And drag and drop the Orders right by 0 and down by 20
-  And user clicks "Done" on the screen editor
-  And user scrolls the window to bring applets to view
-  # And user refeshes the app
-  And the user has selected All within the global date picker
-  And user clicks on the control "Lab Result - Text Filter" 
-  And the user enters text "hematocrit" in the "Text Filter" control in the "Numeric Lab Results applet"
-  Then user defined filter "hematocrit" is created
-  And the user waits for 5 seconds
-  And the "Numeric Lab Results Applet" table contains 1 rows 
-  And the user enters text "anion" in the "Text Filter" control in the "Numeric Lab Results applet"
-  And user defined filter "anion" is created 
-  And the user waits for 5 seconds
-  # And the "Numeric Lab Results Applet" table contains 3 rows
-  # Scenario F239-10.3 (Filtered is the default name)
-  Then filter name field displays text "Filtered"
-  And user clicks on the control "Filter Name"
-  When enters "Test" to the filter name field
-  Then filter name field displays text "Test"
-  # Scenario F239-10.5 (The name of the filter will be added to the header of the applet)
-  And applet header displays filter name "Test"
-  # Scenario F239-10.6 (The filter name can have 30 chars)
-  # Scenario F239-10.7 (The filter name supports spaces)
-  And user clicks on the control "Filter Name"
-  When enters "1234567890 1234567890 1234567890" to the filter name field
-  Then applet header displays filter name "1234567890 1234567890 12345678"
-  # Scenario F239-10.3 (The name of the filter will persist on the applet)
-  And the user attempts signout
-  And user is logged into eHMP-UI
-  And user searches for and selects "Eight,Patient"
-  When the user clicks the "CoversheetDropdown Button"
-  And user clicks on the control "New Workspce"
-  And user refeshes the app
-  And user scrolls the window to bring applet 1 to view
-  And user clicks on the control "Lab Result - Text Filter" 
-  Then filter name field displays text "1234567890 1234567890 12345678"
-  # Scenario F239-11.3 (The filter name copies on duplicate/copy workspace)
-  When the user clicks "Workspace Manager Button"
-  And the user clicks "Duplicate" 
-  And user clicks on the control "Lauch duplicated UDS"
-  And user refeshes the app
-  And user scrolls the window to bring applets to view
-  And user clicks on the control "Lab Result - Text Filter" 
-  Then filter name field displays text "1234567890 1234567890 12345678"
-  And the user clicks the "Workspace Manager"
-  And the user clicks "Delete"
-  And the user clicks "Confirm Delete"
-  Then the "User Defined Workspace 1" is not listed in the workspace manager page
-  And the user clicks "Delete User Defined Workspace 1 Copy Link"
-  And the user clicks "Confirm Delete"
-  And the "User Defined Workspace 1 Copy" is not listed in the workspace manager page
-  And the user clicks "Done editing" on the workspace manager
+  #Given user is logged into eHMP-UI
+  And user searches for and selects "eight,patient"
+  Then Default Screen is active
+  When the user clicks the Workspace Manager
+  And the user deletes all user defined workspaces
+  Given the user creates a user defined workspace named "udaffilter"
+  When the user customizes the "udaffilter" workspace
+  And the user adds an summary "lab_results_grid" applet to the user defined workspace
+  And the user selects done to complete customizing the user defined workspace
+  Then the "UDAFFILTER" screen is active
+  And the active screen displays 1 applets
+  Then the applet "1" grid loads without issue
 
-@F239_10_filter_name_is_required_and_other_checks @US5869 @F239-10.8 @future
-Scenario: Required Name for Filters 
-  When drag and drop the Numeric Lab Results right by 0 and down by 10
-  And user clicks "Numeric Lab Results Expanded View" on the screen editor
-  And drag and drop the Orders right by 0 and down by 20
-  And user clicks "Done" on the screen editor
-  And user scrolls the window to bring applets to view
-  # And user refeshes the app
-  And the user has selected All within the global date picker
-  #words separated by space create separate filters
-  And user clicks on the control "Lab Result - Text Filter" 
-  And the user enters text "carbon anion" in the "Text Filter" control in the "Numeric Lab Results applet"
-  Then user defined filter "carbon" is created
-  And user defined filter "anion" is created 
-  And the user waits for 5 seconds
-  And the "Numeric Lab Results Applet" table contains 5 rows
-  Then filter name field displays text "Filtered"
-  #seecial character error message verification
-  And user clicks on the control "Filter Name"
-  When enters "Test/" to the filter name field
-  Then filter name field displays text "Test"
-  And user clicks on the control "Filter Name"
-  #filtername is required
-  When enters "" to the filter name field
-  Then filter name field displays text "Test"
-  And applet header displays filter name "Test"
-  And user clicks on the control "Lab Result - Remove All link" 
-  And the element "Filter Title" is not displayed anymore
-  When the user clicks "Workspace Manager Button"
-  And the user clicks "Delete"
-  And the user clicks "Confirm Delete"
-  Then the "User Defined Workspace 1" is not listed in the workspace manager page
-  And the user clicks "Done editing" on the workspace manager
+@F239_1 @debug @DE4722
+Scenario: Verify elements for UDAF are displayed
+  When the user clicks the Numeric Lab Results Applet Filter button 
+  Then the Numeric Lab Results Applet Text Filter is displayed
+  When the user filters applet "1" grid by text "SERUM"
+  Then a udaf tag is displayed for term "SERUM"
+  And a udaf remove all button is displayed
+  And a udaf filter name input box is displayed
+  And the Numeric Lab Results Filter Title is "FILTERED"
+
+
+@F239_2 @debug @DE4794
+Scenario: Verify within the same applet, multiple text filter words, separated by a space, can be added at one time 
+  When the user clicks the Numeric Lab Results Applet Filter button 
+  Then the Numeric Lab Results Applet Text Filter is displayed 
+  When the user filters applet "1" grid by text "Hemoglobin SERUM"
+  Then a udaf tag is displayed for term "Hemoglobin"
+  And a udaf tag is displayed for term "SERUM"
+
+@F239_3 @US5353 @TC103_1 @debug @DE4722
+Scenario: Verify user can rename UDAF
+  When the user clicks the Numeric Lab Results Applet Filter button 
+  Then the Numeric Lab Results Applet Text Filter is displayed
+  When the user filters applet "1" grid by text "SERUM"
+  And a udaf filter name input box is displayed
+  When the user renames the filter to "SERUM FILTER"
+  Then the Numeric Lab Results Filter Title is "SERUM FILTER"
+
+
+@F239_3 @US5353 @TC103_2 @DE4156 @debug @DE4722
+Scenario: Verify user can rename UDAF
+  When the user clicks the Numeric Lab Results Applet Filter button 
+  Then the Numeric Lab Results Applet Text Filter is displayed
+  When the user filters applet "1" grid by text "SERUM"
+  And a udaf filter name input box is displayed
+  When the user renames the filter to "SERUM FILTER"
+  Then the Numeric Lab Results Filter Title is "SERUM FILTER"
+  When user navigates to Timeline Applet
+  And the user navigates to "#/patient/udaffilter" 
+  Then the "UDAFFILTER" screen is active
+  And the Numeric Lab Results Filter Title is "SERUM FILTER"
+  When the user clicks the Numeric Lab Results Applet Filter button 
+  Then the Numeric Lab Results Applet Text Filter is displayed 
+  And a udaf tag is displayed for term "SERUM"
+  And the user waits 10 seconds for sync to complete
+
+@F239_4 @debug @DE4794
+Scenario: Verify user can remove single UDAF
+  When the user clicks the Numeric Lab Results Applet Filter button 
+  Then the Numeric Lab Results Applet Text Filter is displayed 
+  When the user filters applet "1" grid by text "Hemoglobin SERUM"
+  Then a udaf tag is displayed for term "Hemoglobin"
+  And a udaf tag is displayed for term "SERUM"
+  When the user removes the udaf tag for term "Hemoglobin"
+  Then a udaf tag is displayed for term "SERUM"
+  And a udaf tag is not displayed for term "Hemoglobin"
+
+@F239_5 @debug @DE4794
+Scenario: Verify user can remove all UDAF
+  When the user clicks the Numeric Lab Results Applet Filter button 
+  Then the Numeric Lab Results Applet Text Filter is displayed 
+  When the user filters applet "1" grid by text "Hemoglobin SERUM"
+  Then a udaf tag is displayed for term "Hemoglobin"
+  And a udaf tag is displayed for term "SERUM"
+  When the user removes all udaf tags
+  And a udaf tag is not displayed for term "Hemoglobin"
+  And a udaf tag is not displayed for term "SERUM"
+  
+  
 

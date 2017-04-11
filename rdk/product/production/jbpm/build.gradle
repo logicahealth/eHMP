@@ -17,7 +17,7 @@ subprojects {
 
   repositories {
     maven {
-      url 'http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp-public'
+      url 'https://store.vistacore.us/nexus/content/groups/public'
     }
   }
   
@@ -25,7 +25,7 @@ subprojects {
     repositories.mavenDeployer {
       pom.groupId = "${->groupId}"
       pom.version = "${->version}"
-      repository(url: "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp/${->repo}/") {
+      repository(url: "https://store.vistacore.us/nexus/content/repositories/${->repo}/") {
         authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
       }
     }

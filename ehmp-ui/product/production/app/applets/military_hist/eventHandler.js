@@ -24,7 +24,7 @@ define([
         showDetailsView: function(model) {
             var options = {
                 size: "medium",
-                title: " ",
+                title: model.get('displayName'),
                 showProgress: false,
                 keyboard: true,
                 steps: [{

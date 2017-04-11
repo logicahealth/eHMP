@@ -15,18 +15,21 @@ task installNpm (type: Exec) {
   workingDir "."
 }
 
-task optimizeAppletCss(dependsOn: [installNpm, grunt_optimize]){
-  group "Optimize"
-  description "Minify and concatenate applet CSS files"
-}
-
 task test(dependsOn: [installNpm, grunt_test]) {
   group "Test"
   description "Run test on the applets"
 }
 
-task build {}
-build.dependsOn optimizeAppletCss
+task build(dependsOn: [installNpm]) {}
+if (!hasProperty("type")) {
+  ext.type = "local"
+}
+if (type == "dist") {
+  build.dependsOn grunt_prodOptimize
+} else {
+  build.dependsOn grunt_optimize
+}
+
 test.dependsOn build
 grunt_optimize.mustRunAfter installNpm
-
+grunt_prodOptimize.mustRunAfter installNpm

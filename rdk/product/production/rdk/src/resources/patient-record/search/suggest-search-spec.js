@@ -3,6 +3,10 @@
 var _ = require('lodash');
 var suggestClient = require('./suggest-search');
 var nock = require('nock');
+var sinon = require('sinon');
+var solrSmartClient = require('solr-smart-client');
+var solrClientLib = require('solr-client');
+
 
 nock.cleanAll();
 
@@ -10,7 +14,7 @@ var logger = sinon.stub(require('bunyan').createLogger({
     name: 'suggest-search'
 }));
 
-var solrBaseUrl = 'http://solrserver.com';  //made up value for mocking
+var solrBaseUrl = 'http://solrserver.com:8983';  //made up value for mocking
 
 //disable ontology
 var defaultRequest = {
@@ -24,9 +28,9 @@ var defaultRequest = {
                 "database": "us-edition",
                 "version": "v20150901"
             },
-            solrServer: {
-                baseUrl: solrBaseUrl,
-                url: '/solr/vpr'
+            "solrClient": {
+                "core": "vpr",
+                "zooKeeperConnection": "IPADDRESS:PORT"
             },
         }
     },
@@ -95,6 +99,34 @@ var defaultSolrSuggestResponse = {
     }
 }
 
+
+var stubClient = null;
+var stubInitClient = function(core, connection, logger){
+    stubClient = new solrSmartClient._SolrSmartClient(null);
+    return stubClient;
+};
+sinon.stub(solrSmartClient, "initClient", stubInitClient);
+
+
+var stubGetOptions = function(agent){
+    return {
+        "host": "solrserver.com",
+        "port": "8983",
+        "core": "vpr",
+        "path": "/solr"
+    }
+};
+
+var stubGetValidSolrClient = function(callback, agent){
+    //console.log('stubGetValidSolrClient()');
+    var options = stubGetOptions(null);
+
+    var client = solrClientLib.createClient(options);
+    callback(null, client);
+};
+
+sinon.stub(solrSmartClient, "getValidSolrClient", stubGetValidSolrClient);
+
 describe('suggest-search', function() {
 
     var spies = null;
@@ -147,7 +179,7 @@ describe('suggest-search', function() {
             .get('/solr/vpr/suggest?q=pencollin&wt=json')
             .reply(200, defaultSolrSuggestResponse);
         nock(solrBaseUrl)
-            .get('/solr/vpr/select?fl=qualified_name%2Cmed_drug_class_name&fq=domain%3Amed&q=*pencollin*&rows=0&wt=json&facet=true&facet.pivot=med_drug_class_name%2Cqualified_name&synonyms=true&defType=synonym_edismax')
+            .get('/solr/vpr/select?fl=qualified_name%2Cmed_drug_class_name&fq=domain%3Amed&q=*pencollin*&rows=0&facet=true&facet.pivot=med_drug_class_name%2Cqualified_name&synonyms=true&defType=synonym_edismax&wt=json')
             .reply(200, {});
 
 
@@ -194,7 +226,7 @@ describe('suggest-search', function() {
             .get('/solr/vpr/suggest?q=pencollin&wt=json')
             .reply(200, defaultSolrSuggestResponse);
         nock(solrBaseUrl)
-            .get('/solr/vpr/select?fl=qualified_name%2Cmed_drug_class_name&fq=domain%3Amed&q=*Pencollin*&rows=0&wt=json&facet=true&facet.pivot=med_drug_class_name%2Cqualified_name&synonyms=true&defType=synonym_edismax')
+            .get('/solr/vpr/select?fl=qualified_name%2Cmed_drug_class_name&fq=domain%3Amed&q=*Pencollin*&rows=0&facet=true&facet.pivot=med_drug_class_name%2Cqualified_name&synonyms=true&defType=synonym_edismax&wt=json')
             .reply(200, {});
 
 

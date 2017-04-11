@@ -13,8 +13,9 @@ var async = require('async');
 var vistaJs = require('vista-js');
 var paramUtil = require('../../utils/param-converter');
 var RpcClient = vistaJs.RpcClient;
+var locationUtil = rdk.utils.locationUtil;
 var RpcParameter = vistaJs.RpcParameter;
-var fetchList = require('../../write/pick-list/encounters/encounters-visit-categories-fetch-list');
+var visitCategories = require('../../write/pick-list/encounters/encounters-visit-categories-fetch-list');
 
 var parameters = {
     get: {
@@ -48,15 +49,8 @@ function getResourceConfig() {
 }
 
 function getEncounterData(req, res, next) {
-    //the encounter object that will be added to as the RPC response is parsed
+    //the encounter object that will be added to as the RPC response is parse
     var encounter = {};
-
-    var getLocationIEN = function(locationUid) {
-        var locationElements = locationUid.split(':');
-        var locationIEN = locationElements[locationElements.length - 1];
-        return locationIEN;
-    };
-
     var config = req.app.config;
     var pid = req.param('pid');
     var dateTime = req.param('dateTime');
@@ -68,7 +62,7 @@ function getEncounterData(req, res, next) {
     //NOTE_IEN is an optional parameter for the PCE4NOTE
     var NOTE_IEN = '-2';
     var dfn = req.interceptorResults.patientIdentifiers.dfn;
-    var locationIEN = getLocationIEN(locationUid);
+    var locationIEN = locationUtil.getLocationIEN(locationUid);
     var dateTimeMoment = paramUtil.convertWriteBackInputDate(dateTime);
     var filemanDate = filemanDateUtil.getFilemanDateTimeWithSeconds(dateTimeMoment.toDate());
     //this will be replaced with an RPC call ORWCV VST
@@ -108,19 +102,24 @@ function getEncounterData(req, res, next) {
             verifyCode: req.session.user.verifyCode,
         });
 
-        var fetchListCallback = function(err, fetchResult) {
+        // Since the Visit section and the Procedures section both contain CPT data,
+        // we distinguish them by grabbing a list of Visit Categories. If the data
+        // contains one of the Visit Categories, we can assume we are processing a
+        // Visit. Otherwise, we will process the data as a Procedure.
+        var visitCategoriesCallback = function(err, fetchResult) {
             encounter.visitType = {};
             encounter.procedures = {};
             var categoryArray = [];
-            if (fetchResult !== null || fetchResult !== undefined) {
+            var visitFound = false;
+
+            if (err) {
+                req.logger.error({error: err}, 'An error occurred while retrieving the visit categories pick list');
+            } else if (!_.isUndefined(fetchResult)) {
                 _.each(fetchResult, function(pickListObj) {
                     categoryArray.push(pickListObj.categoryName);
                 });
-            }else{
-                req.logger.error('There was an Error retrieving the Pick List:  ' + err);
             }
 
-            var visitFound = false;
             for (var i = 0; i < categoryArray.length && visitFound === false; ++i) {
                 for (var j = 0; j < encounter.visitAndProcedures.length; ++j) {
                     if (categoryArray[i] === encounter.visitAndProcedures[j].category) {
@@ -133,6 +132,7 @@ function getEncounterData(req, res, next) {
                     }
                 }
             }
+
             if (visitFound === false) {
                 encounter.procedures = encounter.visitAndProcedures;
                 delete encounter.visitAndProcedures;
@@ -144,8 +144,8 @@ function getEncounterData(req, res, next) {
             });
         };
 
-        fetchList.fetch(req.logger, visitConfig, fetchListCallback, {
-            ien: locationIEN,
+        visitCategories.fetch(req.logger, visitConfig, visitCategoriesCallback, {
+            locationUid: locationUid,
             visitDate: dateTime
         });
     });

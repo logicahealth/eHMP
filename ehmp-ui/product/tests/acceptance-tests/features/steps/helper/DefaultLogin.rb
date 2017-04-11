@@ -1,13 +1,16 @@
-require 'DefaultTiming.rb'
+require_relative 'DefaultTiming.rb'
 # Valid Login information to be used for most tests
 class DefaultLogin
-  @@adk_url = ENV.keys.include?('ADK_IP') ? 'http://' + ENV['ADK_IP'] : "http://IP        /"
-  @@ehmpui_url = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://IP        "
+  @@adk_url = ENV.keys.include?('ADK_IP') ? 'http://' + ENV['ADK_IP'] : "http://IP_ADDRESS/"
+  @@ehmpui_url = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://IP_ADDRESS"
+  @@local_testrun = ENV.keys.include?('LOCAL')
 
   @@default_wait_time = DefaultTiming.default_wait_time
   @@facility_name = "PANORAMA"
-  @@accesscode = "PW    "
-  @@verifycode = "PW    !!"
+  @@accesscode = "PW"
+  @@verifycode = "PW"
+  @@logged_in = false
+  @@login_step=/^POB user is logged into EHMP\-UI with facility as  "(.*?)" accesscode as  "(.*?)" verifycode as  "(.*?)"/
 
   ARGV.each do|argument|
     if argument.upcase.include? "IP"
@@ -17,6 +20,18 @@ class DefaultLogin
   end
 
   @@screenshot_folder = ENV.keys.include?('SCREENSHOT_FOLDER') ? ENV['SCREENSHOT_FOLDER'] : "screenshots"
+
+  def self.login_step
+    return @@login_step
+  end
+
+  def self.logged_in
+    return @@logged_in
+  end
+
+  def self.logged_in=(set_to)
+    @@logged_in = set_to
+  end
 
   def self.screenshot_folder
     return @@screenshot_folder
@@ -44,5 +59,9 @@ class DefaultLogin
   
   def self.ehmpui_url
     return @@ehmpui_url
+  end
+
+  def self.local_testrun
+    return @@local_testrun
   end
 end # DefaultLogin

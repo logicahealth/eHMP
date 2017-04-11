@@ -2,7 +2,7 @@ module Parallel
   module Cucumber
     module Rake
       class Task
-        #include Gherkin::Formatter::AnsiEscapes
+        include Gherkin::Formatter::AnsiEscapes
         include ::Rake::DSL if defined?(::Rake::DSL)
 
         class InProcessCucumberRunner #:nodoc:

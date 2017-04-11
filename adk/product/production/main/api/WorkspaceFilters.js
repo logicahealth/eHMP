@@ -7,8 +7,9 @@ define([
     'underscore',
     'jquery',
     'api/Messaging',
-    'api/ResourceService'
-], function(Backbone, Marionette, _, $, Messaging, ResourceService) {
+    'api/ResourceService',
+    'api/PatientRecordService',
+], function(Backbone, Marionette, _, $, Messaging, ResourceService, PatientRecordService) {
     'use strict';
 
     var WorkspaceFilters = {};
@@ -59,16 +60,30 @@ define([
 
     // Deletes a filter from an applet in JDS
     WorkspaceFilters.deleteFilterFromJDS = function(workspaceId, instanceId, filter) {
-        var fetchOptions = {
-            resourceTitle: 'user-defined-filter',
-            fetchType: 'DELETE',
-            criteria: {
-                id: workspaceId,
-                instanceId: instanceId,
+        var deleteFilterModel = new Backbone.Model();
+        deleteFilterModel.url = ResourceService.buildUrl('user-defined-filter', {
+            id: workspaceId, //workspace name
+            instanceId: instanceId, //Applet instance ID for which the filter applies
+            filter: filter
+        });
+        deleteFilterModel.save({}, {
+            url: ResourceService.buildUrl('user-defined-filter', {
+                id: workspaceId, //workspace name
+                instanceId: instanceId, //Applet instance ID for which the filter applies
                 filter: filter
+            }),
+            type: 'DELETE',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                id: workspaceId,
+                'instance-id': instanceId,
+                filter: filter
+            }),
+            success: function(response) {
+                //
             }
-        };
-        var collection = ResourceService.patientRecordService.fetchCollection(fetchOptions);
+        });
         WorkspaceFilters.deleteFilterFromSession(workspaceId, instanceId, filter);
     };
 
@@ -97,23 +112,37 @@ define([
         var save = function() {
             WorkspaceFilters.lastCallSaveFilterToJDSFinished = false;
             var saveFilterModel = new Backbone.Model();
-            saveFilterModel.urlRoot = ResourceService.buildUrl('user-defined-filter', {
+            saveFilterModel.url = ResourceService.buildUrl('user-defined-filter', {
                 id: workspaceId, //workspace name
                 instanceId: instanceId, //Applet instance ID for which the filter applies
                 filter: filter
             });
+            // saveFilterModel.url = ResourceService.buildUrl('user-defined-filter');
             saveFilterModel.save({}, {
-                success: function() {
+                url: ResourceService.buildUrl('user-defined-filter', {
+                    id: workspaceId, //workspace name
+                    instanceId: instanceId, //Applet instance ID for which the filter applies
+                    filter: filter
+                }),
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    id: workspaceId,
+                    'instance-id': instanceId,
+                    filter: filter
+                }),
+                success: function(response) {
                     WorkspaceFilters.lastCallSaveFilterToJDSFinished = true;
                 }
             });
         };
         //fix race condition by synchronizing calls to jds
         var interval = setInterval(function() {
-            if(WorkspaceFilters.lastCallSaveFilterToJDSFinished) {
+            if (WorkspaceFilters.lastCallSaveFilterToJDSFinished) {
                 save();
                 clearInterval(interval);
-            }    
+            }
         }, 50);
 
         WorkspaceFilters.saveFilterToSession(workspaceId, instanceId, filter);
@@ -134,6 +163,7 @@ define([
         } else {
             var appletIndex = findAppletIndex(json.userDefinedFilters[screenIndex], instanceId);
             if (appletIndex === -1) {
+                if (!json.userDefinedFilters[screenIndex].applets) json.userDefinedFilters[screenIndex].applets = [];
                 json.userDefinedFilters[screenIndex].applets.push({
                     filters: [filter],
                     instanceId: instanceId
@@ -153,19 +183,23 @@ define([
         if (!_.isUndefined(maximizedApplet)) {
             var fromWorkspaceId = maximizedApplet.get('workspaceId');
             var fromAppletId = maximizedApplet.get('instanceId');
-            toWorkspaceId = maximizedApplet.get('maximizedScreenId');
-            toAppletId = maximizedApplet.get('maximizedAppletId');
+            toWorkspaceId = screenName;
+            var screenModule = ADK.Messaging.request('get:current:screen');
+            toAppletId = '';
+            if (!_.isUndefined(screenModule.applets) && !_.isUndefined(screenModule.applets[0])) {
+                toAppletId = screenModule.applets[0].instanceId || screenModule.applets[0].id;
+            }
 
             WorkspaceFilters.removeAllFiltersFromAppletFromSession(toWorkspaceId, toAppletId);
             WorkspaceFilters.cloneAppletFiltersToSession(fromWorkspaceId, fromAppletId, toWorkspaceId, toAppletId);
         }
 
-        var json = ADK.UserDefinedScreens.getUserConfigFromSession();
-        var config = _.find(json.userDefinedFilters, function(screen) {
+        var userConfigFromSession = ADK.UserDefinedScreens.getUserConfigFromSession() || {};
+        var config = _.find(userConfigFromSession.userDefinedFilters, function(screen) {
             return screen.id === screenName;
         });
-      // Remove filter from session if the applet maximized
-      if (!_.isUndefined(maximizedApplet)) WorkspaceFilters.removeAllFiltersFromAppletFromSession(toWorkspaceId, toAppletId);
+        // Remove filter from session if the applet maximized
+        if (!_.isUndefined(maximizedApplet)) WorkspaceFilters.removeAllFiltersFromAppletFromSession(toWorkspaceId, toAppletId);
         Messaging.trigger('workspaceFilters:retrieve', config);
         filtersCollection = config;
         return config;
@@ -189,7 +223,7 @@ define([
             Messaging.once('workspaceFilters:retrieve', function(collection) {
                 callOnDone(collection, appletInstanceId, onDone, context);
             }, context);
-            context.listenTo(context, "destroy", function(){
+            context.listenTo(context, "destroy", function() {
                 Messaging.off("workspaceFilters:retrieve");
             });
         }
@@ -204,23 +238,33 @@ define([
         Messaging.on('filters:collectionChanged:' + appletInstanceId, function(args) {
             onDone.call(context || this, args);
         }, this);
-        context.listenTo(context, "destroy", function(){
+        context.listenTo(context, "destroy", function() {
             Messaging.off("filters:collectionChanged:" + appletInstanceId);
         });
     };
     // Sends a request to JDS to remove all filters from an appletxw
     WorkspaceFilters.removeAllFiltersFromApplet = function(workspaceId, appletId) {
-        if (!WorkspaceFilters.hasFiltersForApplet(workspaceId, appletId)) return;
-        var fetchOptions = {
-            resourceTitle: 'user-defined-filter-all',
-            fetchType: 'DELETE',
-            criteria: {
+        var deleteFilterModel = new Backbone.Model();
+        deleteFilterModel.url = ResourceService.buildUrl('user-defined-filter-all', {
+            id: workspaceId, //workspace name
+            instanceId: appletId //Applet instance ID for which the filter applies
+        });
+        deleteFilterModel.save(null, {
+            url: ResourceService.buildUrl('user-defined-filter-all', {
+                id: workspaceId, //workspace name
+                instanceId: appletId //Applet instance ID for which the filter applies
+            }),
+            type: 'DELETE',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
                 id: workspaceId,
                 instanceId: appletId
+            }),
+            success: function(response) {
+                //
             }
-        };
-        ResourceService.fetchCollection(fetchOptions);
-
+        });
         WorkspaceFilters.removeAllFiltersFromAppletFromSession(workspaceId, appletId);
     };
 

@@ -5,9 +5,12 @@ VPRJPXA ;SLC/KCM -- Attribute Style Indexes for patient (VPR) objects
  ; ----- Index Logic: attributes by patient -----
  ;
 ATTRIB ; ATTRIBUTE index (PID,"attr",group,value(s)...,key)
+ N JPID
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
  D KATTRIB(.OLDOBJ)
  D SATTRIB(.NEWOBJ)
- S ^VPRPTI(PID,"attr",IDXNAME)=$H
+ S ^VPRPTI(JPID,PID,"attr",IDXNAME)=$H
  Q
 SATTRIB(OBJECT) ; Set attribute based index
  Q:$D(OBJECT)<10
@@ -19,7 +22,7 @@ SATTRIB(OBJECT) ; Set attribute based index
  I $L(IDXMETA("review")) D
  . N REVIEW,REVTM
  . S REVIEW="S REVTM="_REVIEW_"(.OBJECT)" X REVIEW
- . S ^VPRPTI(PID,"review",KEY,IDXNAME)=REVTM
+ . S ^VPRPTI(JPID,PID,"review",KEY,IDXNAME)=REVTM
  . S ^VPRPTX("review",REVTM,PID,KEY,IDXNAME)=""
  . S ^VPRPTX("pidReview",PID,REVTM)=""
  ;
@@ -36,8 +39,8 @@ KATTRIB(OBJECT) ; Kill attribute based index
  ;
  I $L(IDXMETA("review")) D
  . N REVTM
- . S REVTM=$G(^VPRPTI(PID,"review",KEY,IDXNAME)) Q:'$L(REVTM)
- . K ^VPRPTI(PID,"review",KEY,IDXNAME)
+ . S REVTM=$G(^VPRPTI(JPID,PID,"review",KEY,IDXNAME)) Q:'$L(REVTM)
+ . K ^VPRPTI(JPID,PID,"review",KEY,IDXNAME)
  . K ^VPRPTX("review",REVTM,PID,KEY,IDXNAME)
  . K ^VPRPTX("pidReview",PID,REVTM)
  ;
@@ -50,33 +53,36 @@ KATTRIB(OBJECT) ; Kill attribute based index
  I IDXMETA("levels")=3  D KA3  Q
  Q
 SA0 ; unsorted list set logic
- S ^VPRPTI(PID,"attr",IDXNAME,KEY)=""
+ S ^VPRPTI(JPID,PID,"attr",IDXNAME,KEY)=""
  Q
 KA0 ; unsorted list kill logic
- K ^VPRPTI(PID,"attr",IDXNAME,KEY)
+ K ^VPRPTI(JPID,PID,"attr",IDXNAME,KEY)
  Q
 SA1 ; one attribute set logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTI(PID,"attr",IDXNAME,VALUES(I,1),KEY,I)=""
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),KEY,I)=""
  Q
 KA1 ; one attribute kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTI(PID,"attr",IDXNAME,VALUES(I,1),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),KEY,I)
  Q
 SA2 ; two attributes set logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTI(PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)=""
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)=""
  Q
 KA2 ; two attributes kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTI(PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)
  Q
 SA3 ; three attributes set logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTI(PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)=""
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)=""
  Q
 KA3 ; three attributes kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTI(PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)
  Q
  ;
  ; ----- Index Logic: attributes across patients -----
  ;
 XATTR ; ATTRIBUTE index ("xattr",group,value(s)...,key)
+ N JPID
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
  D KXATTR(.OLDOBJ)
  D SXATTR(.NEWOBJ)
  S ^VPRPTX("xattr",IDXNAME)=$H
@@ -91,7 +97,7 @@ SXATTR(OBJECT) ; Set attribute based index
  I $L(IDXMETA("review")) D
  . N REVIEW,REVTM
  . S REVIEW="S REVTM="_REVIEW_"(.OBJECT)" X REVIEW
- . S ^VPRPTI(PID,"review",KEY,IDXNAME)=REVTM
+ . S ^VPRPTI(JPID,PID,"review",KEY,IDXNAME)=REVTM
  . S ^VPRPTX("review",REVTM,PID,KEY,IDXNAME)=""
  . S ^VPRPTX("pidReview",PID,REVTM)=""
  ;
@@ -108,8 +114,8 @@ KXATTR(OBJECT) ; Set attribute based index
  ;
  I $L(IDXMETA("review")) D
  . N REVTM
- . S REVTM=$G(^VPRPTI(PID,"review",KEY,IDXNAME)) Q:'$L(REVTM)
- . K ^VPRPTI(PID,"review",KEY,IDXNAME)
+ . S REVTM=$G(^VPRPTI(JPID,PID,"review",KEY,IDXNAME)) Q:'$L(REVTM)
+ . K ^VPRPTI(JPID,PID,"review",KEY,IDXNAME)
  . K ^VPRPTX("review",REVTM,PID,KEY,IDXNAME)
  . K ^VPRPTX("pidReview",PID,REVTM)
  ;

@@ -20,32 +20,21 @@ cookbook_file "vprnamespace.mac" do
 end
 
 # Retrieve cache license from encrypted data bag
-# license_item = Chef::EncryptedDataBagItem.load(node[:jds][:cache_license_data_bag], node[:jds][:cache_license_item], 'n25q2mp#h4')
-# license_content = license_item["content"]
+license_item = Chef::EncryptedDataBagItem.load(node[:jds][:cache_license_data_bag], node[:jds][:cache_license_item], node[:data_bag_string])
+license_content = license_item["content"]
 
-
-# file "#{node[:jds][:cache_mgr_dir]}/cache.key" do
-#   content license_content
-#   owner node[:jds][:cache_user]
-#   group node[:jds][:cache_user]
-#   mode "0640"
-#   action :create
-# end
-
-#Retrive cache license from host licenses location
-remote_file "Cache server license key" do
-  path "#{node[:jds][:cache_mgr_dir]}/cache.key"
-  source "file:///opt/private_licenses/cache_server/cache.key"
+file "#{node[:jds][:cache_mgr_dir]}/cache.key" do
+  content license_content
   owner node[:jds][:cache_user]
   group node[:jds][:cache_user]
   mode "0640"
+  action :create
 end
-
 
 # Retrieve database encryption key and details from encrypted data bag
 dbkeys = nil
 begin
-  dbkeys = Chef::EncryptedDataBagItem.load("cache", "db_keys", 'n25q2mp#h4')
+  dbkeys = Chef::EncryptedDataBagItem.load("cache", "db_keys", node[:data_bag_string])
 rescue
   Chef::Log.warn "Did not find data bag item 'db_keys'"
 end
@@ -111,9 +100,10 @@ file "#{node[:jds][:cache_jsonvpr_dir]}/CACHE.DAT" do
   only_if { node[:jds][:build_jds] && File.exists?("/tmp/CACHE.DAT") }
 end
 
+clear_jds_journal_action = node[:jds][:clear_jds_journal] ? :create : :delete
 # Copy cron job to clear jds journal entries
 cookbook_file "clear_jds_journal" do
   path "#{node[:jds][:cron_dir]}/clear_jds_journal"
-  action :create
   mode "0644"
+  action clear_jds_journal_action
 end

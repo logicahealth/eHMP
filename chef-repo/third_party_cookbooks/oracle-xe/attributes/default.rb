@@ -1,5 +1,5 @@
 #
-# Author::     an Dunn (<jdunn@opscode.com>)
+# Author:: Julian Dunn (<jdunn@opscode.com>)
 # Cookbook Name:: oracle-xe
 # Attributes:: default
 #

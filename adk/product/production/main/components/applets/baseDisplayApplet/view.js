@@ -86,8 +86,22 @@ define([
             // Used for template
             this.model = new Backbone.Model({
                 instanceId: this.appletConfig.instanceId,
-                workspaceId: ADK.Messaging.request('get:current:screen').config.id
+                workspaceId: ADK.Messaging.request('get:current:screen').config.id,
+                filterName: this.appletConfig.filterName
             });
+
+            var filterName = this.appletConfig.filterName;
+            if (this.appletConfig.filterName || !ADK.ADKApp.currentScreen.config.predefined) {
+                this.model.set('hasSubHeader', true);
+            } else {
+                this.model.set('hasSubHeader', false);
+            }
+
+            if (ADK.ADKApp.currentScreen.config.predefined) {
+                this.model.set('isPredefined', true);
+            } else {
+                this.model.set('isPredefined', false);
+            }
 
             //Create Filter and Filter Button View
             if (this.appletOptions.filterFields || this.appletOptions.filterDateRangeField) {
@@ -151,7 +165,25 @@ define([
                     this.$('.grid-applet-panel').off('scroll');
                 });
             }
+
+            this.listenTo(ADK.Messaging, 'adk:globalDate:selected', this.abort);
+
         },
+
+        /**
+         * Cancel the active requests to the RDK.
+         */
+        abort: function() {
+            var collection = this.appletOptions.collection;
+            if (collection && collection.fetchOptions.allowAbort) {
+                if (collection.xhr) {
+                    collection.xhr.abort();
+                } else if (collection.fullCollection && collection.fullCollection.xhr) {
+                    collection.fullCollection.xhr.abort();
+                }
+            }
+        },
+
         setAppletView: function() {
             this.displayAppletView = new this.appletOptions.AppletView(this.appletOptions);
         },
@@ -171,7 +203,7 @@ define([
                 this.filterView.$el.find('input[type=search]').on('change', function() {
                     SessionStorage.setAppletStorageModel(self.expandedAppletId, 'filterText', $(this).val(), true);
                 });
-                this.filterView.$el.find('a[data-backgrid-action=clear]').on('click', function() {
+                this.filterView.$el.find('button[data-backgrid-action=clear]').on('click', function() {
                     SessionStorage.setAppletStorageModel(self.expandedAppletId, 'filterText', $(this).val(), true);
                 });
 
@@ -181,6 +213,33 @@ define([
 
                 this.$el.find('.grid-filter input').attr('tabindex', '0');
             }
+
+            this.$el.find('.edit-filter-name').on('click', function(evt) {
+                var appletInstanceId = self.appletConfig.instanceId;
+                var filterArea = $('#grid-filter-' + appletInstanceId);
+                var filterButton = this.$el;
+
+                if (filterArea.hasClass('in')) {
+                    filterArea.one('hidden.bs.collapse', function() {
+
+                        var filterText = SessionStorage.getAppletStorageModel(appletInstanceId, 'filterText');
+                        if (filterText !== undefined && filterText !== null && filterText.trim().length > 0) {
+                            var queryInputSelector = 'input[name=\'q-' + appletInstanceId + '\']';
+                            $(queryInputSelector).val('').change().keydown();
+                        }
+                    });
+
+                    var filterName = ADK.SessionStorage.getAppletStorageModel(appletInstanceId, 'filterName', true) || '';
+                    filterArea.collapse('hide');
+                } else {
+                    filterArea.one('shown.bs.collapse', function() {
+                        filterArea.find('input.filter-title-input').focus();
+                    });
+
+                    filterArea.collapse('show');
+                }
+                filterArea.collapse('toggle');
+            });
         },
         template: containerTemplate,
         regions: {
@@ -203,20 +262,32 @@ define([
                 this.appletToolbar.show(this.toolbarView);
             }
 
+            this.showStandardAppletView();
+
             if (this.filterView) {
                 var searchText = SessionStorage.getAppletStorageModel(this.expandedAppletId, 'filterText', true, this.parentWorkspace);
                 if (this.filterView && (this.filterView.userDefinedFilters.length > 0 || (!_.isUndefined(searchText) && !_.isNull(searchText) && searchText.trim().length > 0))) {
-                    this.filterView.search();
+                    this.filterView.applyFilters();
                 }
             }
-            this.showStandardAppletView();
 
             if (this.appletOptions.collection.length > 0 && !_.isUndefined(this.appletOptions.tblRowSelector)) {
                 _.each(this.$(this.appletOptions.tblRowSelector), function(row) {
-                    this.$(row).attr({
-                        'data-infobutton': this.$(row).find('td:nth-child(2)').text().replace('Panel', ''),
-                        'title': 'Press enter to open applet toolbar.'
-                    });
+                    var dataInfoButton = this.$(row).find('td:nth-child(2)').text();
+                    var attrs = {
+                        'title': '',
+                        'data-infobutton': ''
+                    };
+
+                    if (dataInfoButton.indexOf('Panel') !== -1) {
+                        attrs['aria-expanded'] = 'false';
+                        attrs.title = 'Press enter to expand accordion.';
+                        attrs['data-infobutton'] = dataInfoButton.replace('Panel', '').trim();
+                    } else {
+                        this.$(row).find('td:first-child').prepend("<span class='sr-only toolbar-instructions'>Press enter to open the toolbar menu.</span>");
+                        attrs['data-infobutton'] = dataInfoButton.trim();
+                    }
+                    this.$(row).attr(attrs);
                 }, this);
             }
 
@@ -231,6 +302,9 @@ define([
             });
         },
         onError: function(collection, resp) {
+            if (resp.statusText === "abort") {
+                return;
+            }
             var errorModel = new Backbone.Model(resp);
             var errorView = ErrorView.create({
                 model: errorModel
@@ -261,8 +335,10 @@ define([
 
             if (collection instanceof Backbone.PageableCollection) {
                 collection.fullCollection.reset();
+                collection.fullCollection.comparator = null;  // disable automatic sort on applet refresh
             } else {
                 collection.reset();
+                collection.comparator = null;  // disable automatic sort on applet refresh
             }
 
             ResourceService.clearCache(collection.url);
@@ -322,6 +398,8 @@ define([
             return dateFilter;
         },
         dateRangeRefresh: function(filterParameter, options) {
+            this.abort();
+
             this.appletOptions.collection.fetchOptions.criteria.filter =
                 this.buildJdsDateFilter(filterParameter, options);
 
@@ -351,6 +429,7 @@ define([
             this.showFilterView();
         },
         onDestroy: function() {
+            this.abort();
             try {
                 if (this.toolbarView && !this.toolbarView.isDestroyed) {
                     this.toolbarView.destroy();

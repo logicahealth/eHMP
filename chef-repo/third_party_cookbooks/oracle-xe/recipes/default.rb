@@ -1,7 +1,7 @@
 #
 # Cookbook Name:: oracle-xe
 # Recipe:: default
-# Author::     an         (<jdunn@opscode.com>)
+# Author:: Julian C. Dunn (<jdunn@opscode.com>)
 #
 # Copyright (C) 2013 Opscode, Inc.
 # 

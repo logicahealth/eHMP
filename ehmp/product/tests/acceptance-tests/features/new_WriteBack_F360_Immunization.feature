@@ -149,7 +149,7 @@ Scenario: Client can write to the VistA and add Immunizations records
 # 
 # @writeback_immunization @debug
 # Scenario: Client can write to the VistA and add Immunizations records
-  # Given a patient with pid "C877;253" has been synced through VX-Sync API for "9E7A;C877;2939;FFC7;VLER" site(s)
+  # Given a patient with pid "C877;253" has been synced through VX-Sync API for "9E7A;C877;HDR;VLER" site(s)
   # And the client requests "Immunizations" for the patient "C877;253" in VPR format
   # And save the totalItems
   # And a client connect to VistA using "Kodak"

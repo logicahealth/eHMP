@@ -21,9 +21,8 @@ define([
             });
         },
         updateSearchString: function(event) {
-            var instructions = this.$el.find('.instructions p span');
-
-            var patientSearchText = $(event.currentTarget).val();
+            var instructions = this.$el.find('.instructions');
+            var patientSearchText = this.$el.find(event.currentTarget).val();
 
             if (!instructions.hasClass('hidden') && patientSearchText.length >= 3){
                 instructions.addClass('hidden');
@@ -40,7 +39,7 @@ define([
                 });
             } else {
                 instructions.removeClass('hidden');
-                instructions.html('<span class="fa fa-info-circle fa-lg"></span> Please enter at least 3 characters');
+                instructions.html('<i class="fa fa-info-circle"></i> Search string must contain at least 3 characters');
             }
         }
     });

@@ -119,6 +119,9 @@ define([
             response = Util.getCommentBubble(response);
             //response = Util.getOriginatedFormatted(response);
             return response;
+        },
+        defaults: {
+            'applet_id': 'allergy_grid'
         }
     };
 
@@ -194,7 +197,7 @@ define([
 
         modalOptions[1] = {
             title: Util.getModalTitle(model),
-            size: 'large',
+            size: 'normal',
             headerView: modalHeader.extend({
                 model: model,
                 theView: view
@@ -233,13 +236,6 @@ define([
 
     function handleClickAdd() {
         var formModel = new AddAllergyModel();
-
-        if (gridView.appletOptions) {
-            formModel.set('allergyCollection', gridView.appletOptions.collection);
-        } else {
-            formModel.set('allergyCollection', gridView.dataGridOptions.collection);
-        }
-
         var workflowOptions = {
             size: "large",
             title: "Allergies",
@@ -340,19 +336,27 @@ define([
                 showModal(model, this.collection);
             };
 
+            dataGridOptions.toolbarOptions = {
+                buttonTypes: ['infobutton', 'detailsviewbutton'],
+            };
+
             this.dataGridOptions = dataGridOptions;
             gridView = this;
             this._super.initialize.apply(this, arguments);
         },
         onRender: function() {
             this._super.onRender.apply(this, arguments);
+        },
+        onDestroy: function(){
+            gridView = null; //allow view to be garbage collected.
         }
     });
 
     // expose detail view through messaging
     var searchAppletChannel = ADK.Messaging.getChannel("allergy_grid");
-    searchAppletChannel.on('getDetailView', function(params) {
-        showModal(params.model, params.collection);
+    searchAppletChannel.on('detailView', function(params) {
+        var collection = params.collection || params.model.collection;
+        showModal(params.model, collection);
     });
     var channel = ADK.Messaging.getChannel('allergy_grid');
     channel.reply('detailView', function(params) {
@@ -367,10 +371,9 @@ define([
 
         var response = $.Deferred();
 
-        var data = ADK.PatientRecordService.fetchCollection(fetchOptions),
-            pidSiteCode,
+        var data = new Backbone.Collection(),
             detailModel;
-        data.on('sync', function() {
+        data.once('sync', function() {
             detailModel = data.first();
             var siteCode = ADK.UserService.getUserSession().get('site'),
                 pidSiteCode = detailModel.get('pid') ? detailModel.get('pid').split(';')[0] : '';
@@ -405,6 +408,8 @@ define([
                 })
             });
         }, this);
+
+        ADK.PatientRecordService.fetchCollection(fetchOptions, data);
 
         return response.promise();
     });
@@ -441,6 +446,9 @@ define([
             gridView = this;
 
             this._super.initialize.apply(this, arguments);
+        },
+        onDestroy: function(){
+            gridView = null;
         }
     });
 

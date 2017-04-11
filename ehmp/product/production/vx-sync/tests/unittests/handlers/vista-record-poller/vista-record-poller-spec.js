@@ -9,9 +9,6 @@
 require('../../../../env-setup');
 
 var _ = require('underscore');
-var fs = require('fs');
-var path = require('path');
-var async = require('async');
 var Poller = require(global.VX_HANDLERS + 'vista-record-poller/vista-record-poller');
 var PublisherRouterDummy = require(global.VX_DUMMIES + 'publisherRouterDummy');
 var PublisherDummy = require(global.VX_DUMMIES + 'publisherDummy');
@@ -23,7 +20,7 @@ var publisherRouterDummy = new PublisherRouterDummy(dummyLogger, config, Publish
 //     level: 'debug',
 //     child: log._createLogger
 // });
-var JobStatusUpdater = require(global.VX_JOBFRAMEWORK + 'JobStatusUpdater');
+var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
 var VistaClientDummy = require(global.VX_DUMMIES + 'vista-client-dummy');
 
@@ -33,7 +30,7 @@ var errorPublisher = {
 var config = {
     jds: {
         protocol: 'http',
-        host: 'IPADDRESS ',
+        host: 'IP_ADDRESS',
         port: 9080
     },
     'hmp.batch.size': 1000,
@@ -331,12 +328,11 @@ describe('vista-record-poller', function() {
     beforeEach(function() {
         // Underlying JDS calls to monitor and make sure that they are made.
         //---------------------------------------------------------------------------
-        spyOn(jdsClientDummy, 'storeOperationalDataMutable').andCallThrough();
         spyOn(jdsClientDummy, 'getOperationalDataMutable').andCallThrough();
         spyOn(jdsClientDummy, 'getPatientIdentifierByPid').andCallThrough();
-        spyOn(jdsClientDummy, 'saveJobState').andCallThrough();
 
         spyOn(environment.jobStatusUpdater, 'createJobStatus').andCallThrough();
+        spyOn(environment.errorPublisher, 'publishPollerError').andCallThrough();
 
         spyOn(poller, '_storeLastUpdateTime').andCallThrough();
         spyOn(poller, '_sendToVistaRecordProcessor').andCallThrough();
@@ -421,7 +417,7 @@ describe('vista-record-poller', function() {
                 statusCode: 200
             };
             jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
-
+            spyOn(jdsClientDummy, 'storeOperationalDataMutable').andCallThrough();
             var finished = false;
             var actualError;
             var actualResponse;
@@ -453,7 +449,7 @@ describe('vista-record-poller', function() {
                 statusCode: 200
             };
             jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
-
+            spyOn(jdsClientDummy, 'storeOperationalDataMutable').andCallThrough();
             var finished = false;
             var actualError;
             var actualResponse;
@@ -487,7 +483,7 @@ describe('vista-record-poller', function() {
                 statusCode: 200
             };
             jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
-
+            spyOn(jdsClientDummy, 'storeOperationalDataMutable').andCallThrough();
             var finished = false;
             var actualError;
             var actualResponse;
@@ -519,7 +515,7 @@ describe('vista-record-poller', function() {
                 statusCode: 200
             };
             jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
-
+            spyOn(jdsClientDummy, 'storeOperationalDataMutable').andCallThrough();
             var finished = false;
             var actualError;
             var actualResponse;
@@ -551,7 +547,7 @@ describe('vista-record-poller', function() {
                 statusCode: 200
             };
             jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
-
+            spyOn(jdsClientDummy, 'storeOperationalDataMutable').andCallThrough();
             var finished = false;
             var actualError;
             var actualResponse;
@@ -577,12 +573,7 @@ describe('vista-record-poller', function() {
     describe('_processBatch', function() {
         it('Happy Path', function() {
             dummyLogger.debug('In _processBatch test');
-            var expectedJdsResponse = [{
-                statusCode: 200
-            },{
-                statusCode: 200
-            }];
-            jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
+            spyOn(environment.jds,'storeOperationalDataMutable').andCallFake(function(data, callback){callback(null, {statusCode: 200});});
 
             var finished = false;
             var actualError;
@@ -610,6 +601,33 @@ describe('vista-record-poller', function() {
                 expect(poller._sendToVistaRecordProcessor.calls.length).toEqual(1);
                 expect(poller._storeLastUpdateTime).toHaveBeenCalledWith(dataValue, jasmine.any(Function));
                 expect(poller._sendToVistaRecordProcessor).toHaveBeenCalledWith(dataValue, jasmine.any(Function));
+
+                dummyLogger.debug('End _processBatch test');
+            });
+        });
+        it('Error path: task errors out', function() {
+            spyOn(environment.jds,'storeOperationalDataMutable').andCallFake(function(data, callback){callback(null, {statusCode: 500});});
+
+            var finished = false;
+            var actualError;
+            var actualResponse;
+            runs(function() {
+                poller._processBatch(dataValue, function(error, response) {
+                    actualError = error;
+                    actualResponse = response;
+                    finished = true;
+                });
+            });
+
+            waitsFor(function() {
+                return finished;
+            }, 'Call to _processSyncStartJobs failed to return in time.', 500);
+
+            runs(function() {
+                expect(actualError).toBeTruthy();
+                expect(actualResponse).toBeTruthy();
+
+                expect(environment.errorPublisher.publishPollerError).toHaveBeenCalled();
 
                 dummyLogger.debug('End _processBatch test');
             });
@@ -653,6 +671,7 @@ describe('vista-record-poller', function() {
                     callback('no data');
                 }
             };
+            spyOn(errorPublisher, 'publishPollerError').andCallThrough();
             var rawResponse = '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"C877\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":1000,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}';
             var complete = false;
             pollerFakeInstance.doNext = function() {
@@ -672,6 +691,7 @@ describe('vista-record-poller', function() {
                 expect(pollerFakeInstance.hmpBatchSize).toEqual(200);
                 // expect(pollerFakeInstance.hmpBatchSize).toEqual(config['hmp.batch.size']);
                 expect(pollerFakeInstance._processBatch.calls.length).toEqual(1);
+                expect(errorPublisher.publishPollerError).not.toHaveBeenCalled();
             });
         });
         it('Happy Path - with white space for VistaHdr', function() {
@@ -694,6 +714,7 @@ describe('vista-record-poller', function() {
                     callback('no data');
                 }
             };
+            spyOn(errorPublisher, 'publishPollerError').andCallThrough();
             var rawResponse = '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"RAPHAEL.VISTACORE.US\",\"systemId\":\"84F0\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":1000,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}';
             var complete = false;
             pollerFakeInstance.doNext = function() {
@@ -713,6 +734,7 @@ describe('vista-record-poller', function() {
                 expect(pollerFakeInstance.hmpBatchSize).toEqual(200);
                 // expect(pollerFakeInstance.hmpBatchSize).toEqual(config['hmp.batch.size']);
                 expect(pollerFakeInstance._processBatch.calls.length).toEqual(1);
+                expect(errorPublisher.publishPollerError).not.toHaveBeenCalled();
             });
         });
         it('Non JSON parsing error', function() {
@@ -732,6 +754,8 @@ describe('vista-record-poller', function() {
                 },
                 hmpBatchSize: config['hmp.batch.size']
             };
+            spyOn(errorPublisher, 'publishPollerError').andCallThrough();
+            spyOn(environment.metrics, 'warn').andCallThrough();
             var rawResponse = '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"C877\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":1000,\"lastUpdate\" : \"3150721-11303\"}}';
             var complete = false;
             pollerFakeInstance.doNext = function() {
@@ -747,6 +771,8 @@ describe('vista-record-poller', function() {
                 return complete;
             }, 'Processing VistaHdr Response');
             runs(function() {
+                expect(errorPublisher.publishPollerError).toHaveBeenCalled();
+                expect(environment.metrics.warn).toHaveBeenCalled();
                 expect(pollerFakeInstance.hmpBatchSize).toEqual(config['hmp.batch.size']);
             });
         });
@@ -768,6 +794,7 @@ describe('vista-record-poller', function() {
                 },
                 hmpBatchSize: config.hdr.pubsubConfig.maxBatchSize
             };
+            spyOn(errorPublisher, 'publishPollerError').andCallThrough();
             var rawResponse = '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"RAPHAEL.VISTACORE.US\",\"systemId\":\"84F0\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":1000,\"lastUpdate\" : \"3150721-11303\"}}';
             var complete = false;
             pollerFakeInstance.doNext = function() {
@@ -783,6 +810,7 @@ describe('vista-record-poller', function() {
                 return complete;
             }, 'Processing Vista Response');
             runs(function() {
+                expect(errorPublisher.publishPollerError).toHaveBeenCalled();
                 expect(pollerFakeInstance.hmpBatchSize).toEqual(config.hdr.pubsubConfig.maxBatchSize);
             });
         });
@@ -809,6 +837,7 @@ describe('vista-record-poller', function() {
                 },
                 _extractLastUpdateFromRawResponse: poller._extractLastUpdateFromRawResponse.bind(this)
             };
+            spyOn(errorPublisher, 'publishPollerError').andCallThrough();
             var rawResponse = '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"C877\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":1000,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{\"name\":}]}';
             var complete = 0;
             pollerFakeInstance.doNext = function() {
@@ -824,6 +853,7 @@ describe('vista-record-poller', function() {
                 return complete >= 2;
             }, 'Processing Vista Response');
             runs(function() {
+                expect(errorPublisher.publishPollerError).toHaveBeenCalled();
                 expect(pollerFakeInstance.hmpBatchSize).toEqual(config['hmp.batch.size']);
             });
         });
@@ -851,6 +881,7 @@ describe('vista-record-poller', function() {
                 },
                 _extractLastUpdateFromRawResponse: poller._extractLastUpdateFromRawResponse.bind(this)
             };
+            spyOn(errorPublisher, 'publishPollerError').andCallThrough();
             var rawResponse = '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"RAPHAEL.VISTACORE.US\",\"systemId\":\"84F0\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":1000,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{\"name\":}]}';
             var complete = 0;
             pollerFakeInstance.doNext = function() {
@@ -866,7 +897,50 @@ describe('vista-record-poller', function() {
                 return complete >= 2;
             }, 'Processing Vista Response');
             runs(function() {
+                expect(errorPublisher.publishPollerError).toHaveBeenCalled();
                 expect(pollerFakeInstance.hmpBatchSize).toEqual(config.hdr.pubsubConfig.maxBatchSize);
+            });
+        });
+        it('JSON parsing error AND error storing lastUpdateTime', function() {
+            var pollerFakeInstance = {
+                vistaId: '9E7A',
+                environment: environment,
+                config: config,
+                log: dummyLogger,
+                paused: false,
+                errorPublisher: errorPublisher,
+                pollDelayMillis: 1000,
+                lastUpdateTime: '0',
+                vprUpdateOpData: null,
+                vistaProxy: new VistaClientDummy(dummyLogger, config),
+                hmpBatchSize: config['hmp.batch.size'],
+                _storeLastUpdateTime: function(data, callback){
+                    complete++;
+                    callback('ERROR', null);
+                },
+                getBatchSize: function() {
+                    return config['hmp.batch.size'];
+                },
+                _extractLastUpdateFromRawResponse: poller._extractLastUpdateFromRawResponse.bind(this)
+            };
+            spyOn(errorPublisher, 'publishPollerError').andCallThrough();
+            var rawResponse = '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"C877\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":1000,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{\"name\":}]}';
+            var complete = 0;
+            pollerFakeInstance.doNext = function() {
+                complete++;
+            };
+            runs(function() {
+                Poller.prototype._processResponse.call(pollerFakeInstance, 'parsing error', {
+                    hmpBatchSize: 1,
+                    rawResponse: rawResponse
+                });
+            });
+            waitsFor(function() {
+                return complete >=2;
+            }, 'Processing Vista Response');
+            runs(function(){
+                expect(errorPublisher.publishPollerError.calls.length).toEqual(2);
+                expect(pollerFakeInstance.hmpBatchSize).toEqual(config['hmp.batch.size']);
             });
         });
         it('Reset batch size', function() {
@@ -964,6 +1038,8 @@ describe('vista-record-poller', function() {
             var actualError;
             var actualResponse;
             var called = false;
+            spyOn(jdsClientDummy, 'saveJobState').andCallFake(function(jobState, callback){callback(null, {statusCode:200});});
+
             poller._createUnsolicitedUpdateJobStatus(vistaId, 'allergy', pid, pollerJobId, environment.jobStatusUpdater, dummyLogger, function(error, response) {
                 actualError = error;
                 actualResponse = response;
@@ -995,6 +1071,7 @@ describe('vista-record-poller', function() {
             var actualResponse;
             var called = false;
             var hdrId = '84F0';
+            spyOn(jdsClientDummy, 'saveJobState').andCallFake(function(jobState, callback){callback(null, {statusCode:200});});
             hdrPoller._createUnsolicitedUpdateJobStatus(hdrId, null, hdrPid, pollerJobId, environment.jobStatusUpdater, dummyLogger, function(error, response) {
                 actualError = error;
                 actualResponse = response;
@@ -1050,6 +1127,26 @@ describe('vista-record-poller', function() {
             }
         };
 
+        var unsolicitedUpdateNoMetaStamp = {
+            collection: 'syncStart',
+            pid: vistaIdValue + ';1',
+        };
+
+        var noDomainMetaStamp = {
+            collection: 'syncStart',
+            pid: vistaIdValue + ';1',
+            metaStamp: {
+                stampTime: '20150114115126',
+                sourceMetaStamp: {
+                    'C877': {
+                        pid: vistaIdValue + ';1',
+                        localId: '1',
+                        stampTime: '20150114115126'
+                    }
+                }
+            }
+        };
+
         var batch = {
             items: [syncStartJobsValue[0], unsolicitedUpdateSyncStart2]
         };
@@ -1071,5 +1168,36 @@ describe('vista-record-poller', function() {
                 return done;
             });
         });
+
+        it('Error path: missing metastamp', function(){
+            var done;
+
+            poller._createJobsForUnsolicitedUpdates({items: [unsolicitedUpdateNoMetaStamp]}, function(error, response) {
+                done = true;
+                expect(error).toBeFalsy();
+                expect(environment.errorPublisher.publishPollerError).toHaveBeenCalled();
+                expect(response).toEqual([]);
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+        });
+
+        it('Error path: no domain in metastamp', function(){
+            var done;
+
+            poller._createJobsForUnsolicitedUpdates({items: [noDomainMetaStamp]}, function(error, response) {
+                done = true;
+                expect(error).toBeFalsy();
+                expect(environment.errorPublisher.publishPollerError).toHaveBeenCalled();
+                expect(response).toEqual([]);
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+        });
+
     });
 });

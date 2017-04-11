@@ -8,7 +8,10 @@ var request = require('request');
 var format = require('util').format;
 var inspect = require(global.VX_UTILS + 'inspect');
 var uuid = require('node-uuid');
+var querystring = require('querystring');
 var VxSyncForeverAgent = require(global.VX_UTILS+'vxsync-forever-agent');
+var defaultAssigningAuthority = 'USVHA';
+
 
 function handle(log, config, environment, job, handlerCallback) {
     log.debug('hdr-sync-domain-request-handler.handle: Received request to HDR (%s) %j', job.dataDomain, job);
@@ -84,7 +87,13 @@ function handle(log, config, environment, job, handlerCallback) {
 function getDomainConfiguration(log, config, job) {
     log.debug('hdr-sync-domain-request-handler.getDomainConfiguration: getDomainConfiguration: ');
     var query = {};
+
+    var excludeIdentifier = buildExcludeIdentifierParams(log, config.hdr.blackList, config.vistaSites, config.vistaAssigningAuthority);
     query.icn = idUtil.extractIcnFromPid(job.patientIdentifier.value, config);
+
+    if (!_.isEmpty(excludeIdentifier)) {
+        query.excludeIdentifier = excludeIdentifier;
+    }
 
     log.debug('hdr-sync-domain-request-handler.getDomainConfiguration: value: %s and icn: %s', job.patientIdentifier.value, query.icn);
 
@@ -94,17 +103,81 @@ function getDomainConfiguration(log, config, job) {
     }
 
     var domainConfig = _.extend({
-        'qs': query
+        qs: query,
+        useQueryString: true
     }, config.hdr[job.dataDomain]);
+
     domainConfig = _.defaults(domainConfig, config.hdr.defaults);
     log.debug('domainConfig: %j', domainConfig);
     var url = format('%s://%s:%s%s', domainConfig.protocol || 'http', domainConfig.host, domainConfig.port, domainConfig.path);
     log.debug('URL: %s with query: %j', url, query);
-    domainConfig.url = url;
+    domainConfig.url = url ; //+ '&' + querystring.stringify(query);
+    log.warn('domainConfig: %j', domainConfig);
     domainConfig.agentClass = VxSyncForeverAgent;
 
     return domainConfig;
 }
 
+function buildExcludeIdentifierParams(log, siteBlackList, vistaSiteList, vistaAssigningAuthority) {
+    var joinedSiteList = [];
+    if (!vistaAssigningAuthority) {
+        vistaAssigningAuthority = defaultAssigningAuthority;
+    }
+    if(!_.isArray(siteBlackList)) {
+        log.error('hdr-sync-domain-request-handler.buildExcludeIdentifierParams(): HDR blacklist configuration was invalid, configuration ignored: %j', siteBlackList);
+    }
+    else if (!_.isEmpty(siteBlackList)) {
+        joinedSiteList = _.filter(siteBlackList, function(site) {
+            if (validValue(site.stationNumber) && !_.isEmpty(site.siteHash)) {
+                return true;
+            }
+            else {
+                log.warn('siteBlackList configuration was invalid, site ignored: %j', site);
+                return false;
+            }
+        });
+    }
+
+    if (_.isObject(vistaSiteList) && !_.isEmpty(vistaSiteList)) {
+        // created a new blackSites for quick search
+        var allBlackSites = {};
+         _.each(joinedSiteList, function(site) {
+            allBlackSites[site.stationNumber] = site.siteHash;
+        });
+        var validVistaSites = _.filter(_.map(vistaSiteList, function(value, siteHash){
+            return {
+                    'siteHash': siteHash,
+                    'stationNumber': value.stationNumber
+                };
+            }), function(site) {
+                if (validValue(site.stationNumber) && !_.isEmpty(site.siteHash) ){
+                    if (allBlackSites[site.stationNumber]) {
+                        log.warn('vista station number: %s is already in black list, site ignore: %j', site.stationNumber, site);
+                        return false;
+                    }
+                    return true;
+                }
+                else {
+                    log.warn('vista site configuration was invalid, site ignored: %j', site);
+                    return false;
+                }
+            });
+        joinedSiteList = joinedSiteList.concat(validVistaSites);
+    }
+
+    if (_.isEmpty(joinedSiteList)) {
+        return [];
+    }
+    var resultList = _.map(joinedSiteList, function(site) {
+            return '-' + site.stationNumber + '-' + vistaAssigningAuthority;
+    });
+    return resultList;
+}
+
+function validValue(value) {
+    return _.isNumber(value) || !_.isEmpty(value);
+}
+
 module.exports = handle;
 module.exports._getDomainConfiguration = getDomainConfiguration;
+module.exports._buildExcludeIdentifierParams = buildExcludeIdentifierParams;

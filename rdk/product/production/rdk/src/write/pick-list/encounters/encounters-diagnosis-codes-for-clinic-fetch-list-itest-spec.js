@@ -8,11 +8,11 @@ var log = sinon.stub(require('bunyan').createLogger({ name: 'diagnostic-codes-cl
 var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
-    host: 'IP        ',
+    host: 'IP_ADDRESS',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'PW',
+    verifyCode: 'PW',
+    localIP: 'IPADDRES',
     localAddress: 'localhost'
 };
 
@@ -23,6 +23,14 @@ describe('diagnostic-codes-clinic resource integration test', function() {
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, {clinic: 195});
+        }, {locationUid: 'urn:va:location:9E7A:195'});
+    });
+        it('will return an error if locationUid is missing', function (done) {
+        this.timeout(8000);
+        fetchList(log, configuration, function (err, result) {
+            expect(err).to.be.truthy();
+            expect(result).to.be.falsy();
+            done();
+        }, {});
     });
 });

@@ -49,7 +49,7 @@ define(['jquery',
             });
 
             it('contains correct wrapper', function() {
-                expect($form.find('#popoverContentRegion > .popover1').length).toBe(1);
+                expect($form.find('.popover-content-region > .popover1').length).toBe(1);
             });
 
             it('contains popover trigger', function() {
@@ -58,13 +58,13 @@ define(['jquery',
             });
 
             it('contains hidden popover content container', function() {
-                expect($form.find("#popoverContentRegion").length).toBe(1);
+                expect($form.find(".popover-content-region").length).toBe(1);
                 //Using BS hidden class doesn't register as hidden with jasmine.
-                expect($form.find("#popoverContentRegion > div")).toHaveClass("hidden");
+                expect($form.find(".popover-content-region > div")).toHaveClass("hidden");
             });
 
             it('renders popover content in hidden container div', function() {
-                expect($form.find("#popoverContentRegion")).toContainElement($('input'));
+                expect($form.find(".popover-content-region")).toContainElement($('input'));
             });
 
             it('renders popover on show', function() {
@@ -85,14 +85,14 @@ define(['jquery',
                 expect($('document')).not.toContain('.popover');
 
                 //Expect my popover content container to have what goes in the popover on next show
-                expect($form.find('#popoverContentRegion')).toContainElement($('input'));
+                expect($form.find('.popover-content-region')).toContainElement($('input'));
             });
 
             it('hides and shows popover when popover control events are triggered', function() {
-                $('#popoverButtonRegion').trigger('control:popover:hidden', false);
+                $('.popover-button-region').trigger('control:popover:hidden', false);
                 expect($form).toContainElement('.popover');
 
-                $('#popoverButtonRegion').trigger('control:popover:hidden', true);
+                $('.popover-button-region').trigger('control:popover:hidden', true);
                 expect($('document')).not.toContain('.popover');
             });
         });
@@ -111,22 +111,22 @@ define(['jquery',
                 $('body').append($form);
             });
             it('should correctly add a new control the popover collection', function() {
-                expect($form.find('#popoverContentRegion button').length).toBe(0);
-                $('#popoverContentRegion > ').trigger('control:items:add', this.model);
-                expect($form.find('#popoverContentRegion button').length).toBe(1);
+                expect($form.find('.popover-content-region button').length).toBe(0);
+                $('.popover-content-region > ').trigger('control:items:add', this.model);
+                expect($form.find('.popover-content-region button').length).toBe(1);
             });
             it('should correct remove a control from the popover collection', function() {
-                expect($form.find('#popoverContentRegion button').length).toBe(0);
-                $('#popoverContentRegion > ').trigger('control:items:add', this.model);
-                expect($form.find('#popoverContentRegion button').length).toBe(1);
-                $('#popoverContentRegion > ').trigger('control:items:remove', this.model);
-                expect($form.find('#popoverContentRegion button').length).toBe(0);
+                expect($form.find('.popover-content-region button').length).toBe(0);
+                $('.popover-content-region > ').trigger('control:items:add', this.model);
+                expect($form.find('.popover-content-region button').length).toBe(1);
+                $('.popover-content-region > ').trigger('control:items:remove', this.model);
+                expect($form.find('.popover-content-region button').length).toBe(0);
             });
             it('should correctly reset the popover collection', function() {
-                expect($form.find('#popoverContentRegion input').length).toBe(1);
-                $('#popoverContentRegion > ').trigger('control:items:update', this.model);
-                expect($form.find('#popoverContentRegion input').length).toBe(0);
-                expect($form.find('#popoverContentRegion button').length).toBe(1);
+                expect($form.find('.popover-content-region input').length).toBe(1);
+                $('.popover-content-region > ').trigger('control:items:update', this.model);
+                expect($form.find('.popover-content-region input').length).toBe(0);
+                expect($form.find('.popover-content-region button').length).toBe(1);
             });
         });
     });

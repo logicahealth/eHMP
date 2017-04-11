@@ -4,9 +4,9 @@ class SetupEnv
     # @accesscode = '10VEHU'
     # @verifycode = 'VEHU10'
     # @facility = 'HMP SANDBOX'
-    @url = "https://IPADDRESS8443/"
-    @accesscode = 'PW    '
-    @verifycode = 'PW    !!'
+    @url = "https://IPADDRESS:POR/"
+    @accesscode = 'PW'
+    @verifycode = 'PW'
     @facility = 'CAMP MASTER'
   end
 

@@ -1,6 +1,6 @@
-HMPDGMPL ;SLC/MKB -- Problem extract ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDGMPL ;SLC/MKB,ASMR/RRB - Problem extract;8/2/11  15:29
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -14,7 +14,7 @@ HMPDGMPL ;SLC/MKB -- Problem extract ;8/2/11  15:29
  ; SDUTL3                        1252
  ; XLFDT                        10103
  ; XUAF4                         2171
- ;
+ Q
  ; ------------ Get problems from VistA ------------
  ;
 EN(DFN,BEG,END,MAX,IFN) ; -- find patient's problems
@@ -34,7 +34,7 @@ EN(DFN,BEG,END,MAX,IFN) ; -- find patient's problems
  . S X=+HMPPROB(HMPN) K HMPITM ;ien
  . D EN1(X,.HMPITM),XML(.HMPITM)
  . S HMPCNT=HMPCNT+1
- I $P($G(^DPT(DFN,0)),U,2)="F" D WV(.HMPITM),XML(.HMPITM):$D(HMPITM)
+ I $P($G(^DPT(DFN,0)),U,2)="F" D WV(.HMPITM),XML(.HMPITM):$D(HMPITM) ;ICR 10035 DE2818 ASF 11/2/15
  Q
  ;
 EN1(ID,PROB) ; -- return a problem in PROB("attribute")=value
@@ -76,7 +76,7 @@ CMT ; comments
  ;
 WV(PROB,UPD) ; -- return a pregnancy log entry in PROB("attribute")=value
  N I,X0,Y K PROB
- S I=$O(^WV(790.05,"C",DFN,""),-1) Q:'I    ;last entry
+ S I=$O(^WV(790.05,"C",DFN,""),-1) Q:'I    ;last entry ICR 5772 DE2818 ASF 11/23/15
  S X0=$G(^WV(790.05,I,0)),Y=0
  ; status=YES, future due date (allow past 14 days)
  I $P(X0,U,3),$P(X0,U,4)'<$$FMADD^XLFDT(DT,-14) S Y=1
@@ -97,7 +97,7 @@ DATE(X) ; -- Return internal form of date X
  Q Y
  ;
 VA200(X) ; -- Return ien of New Person X
- N Y S Y=$S($L($G(X)):+$O(^VA(200,"B",X,0)),1:"")
+ N Y S Y=$S($L($G(X)):+$O(^VA(200,"B",X,0)),1:"") ;ICR 10060 DE2818 ASF 11/23/15
  Q Y
  ;
 EXP(X) ; -- Return code for exposure name X

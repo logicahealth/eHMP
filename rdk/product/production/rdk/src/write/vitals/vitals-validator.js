@@ -48,8 +48,8 @@ function validateInput(logger, model, errors){
         errors.push('The entered by IEN is required');
     }
 
-    if (nullChecker.isNullish(model.locIEN)) {
-        errors.push('The location is required');
+    if (nullChecker.isNullish(model.locationUid)) {
+        errors.push('The locationUid is required');
     }
 
     if (nullChecker.isNullish(model.vitals)) {

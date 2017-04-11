@@ -7,12 +7,12 @@ define([
  ], function(Backbone, Marionette, _, SearchResultsCollectionView, myCPRSListResultsTemplate) {
     "use strict";
 
-    var MY_CPRS_LIST_TEMPLATE = 'myCprsList';
+    // constants
+    var MY_CPRS_LIST = 'myCprsList';
     var APPOINTMENT_DATE_FORMAT = 'MMDDYYYYHHmmss';
     var MY_SITE = 'mySite';
-    var MY_CPRS_LIST_TAB = 'myCprsList';
     var NO_TAB = 'none';
-    var NO_RECORD_FOUND_MESSAGE = 'No patient record found. Please make sure your CPRS Default Search is configured properly.';
+    var NO_RECORD_FOUND_MESSAGE = 'No patient record was found. Verify if search criteria is correct.';
 
     /**
     *
@@ -20,13 +20,10 @@ define([
     *
     */
     var MyCPRSListLayoutView = Backbone.Marionette.LayoutView.extend({
-         events: {
-            'click #myCprsList': 'displayTab'
-         },
          searchApplet: undefined,
          template: myCPRSListResultsTemplate,
          regions: {
-             myCPRSSearchResultsRegion: "#my-cprs-search-results"
+             myCPRSSearchResultsRegion: "#myCprsSearchResults"
          },
          initialize: function(options) {
              this.searchApplet = options.searchApplet;
@@ -37,18 +34,10 @@ define([
          displayErrorMessage: function(message) {
              var patientsView = new SearchResultsCollectionView({
                  searchApplet: this.searchApplet,
-                 templateName: MY_CPRS_LIST_TEMPLATE
+                 templateName: MY_CPRS_LIST
              });
              patientsView.setEmptyMessage(message);
              this.myCPRSSearchResultsRegion.show(patientsView);
-         },
-         /**
-         *
-         * Displays the My CPRS List tab.
-         *
-         */
-         displayTab: function() {
-            patientsView.searchApplet.searchMainView.changeView(MY_SITE, MY_CPRS_LIST_TAB);
          },
          /**
          *
@@ -61,7 +50,7 @@ define([
              var self = this;
              var patientsView = new SearchResultsCollectionView({
                  searchApplet: this.searchApplet,
-                 templateName: MY_CPRS_LIST_TEMPLATE
+                 templateName: MY_CPRS_LIST
              });
              this.myCPRSSearchResultsRegion.show(patientsView);
 
@@ -92,12 +81,19 @@ define([
 
                     // If no records are found for the user's My CPRS List and they haven't changed tabs
                     //, display the My Site search view
-                    if(patientsView.searchApplet.mySiteTabsView.getTabType() === 'myCprsList'){
-                        patientsView.searchApplet.searchMainView.changeView(MY_SITE, NO_TAB);
+                    if(patientsView.searchApplet.menuView.getCurrentSelection() === MY_CPRS_LIST){
+
                         // Setup the patient search instead.
-                        patientsView.searchApplet.triggerSearchInput();
+                        patientsView.searchApplet.searchMainView.changeView(MY_SITE);
+                        patientsView.searchApplet.menuView.changePatientSelection(MY_SITE);
                     }
                  } else {
+                    // If records found for the user's My CPRS List and they haven't changed tabs
+                    //, display the My CPRS list view
+                    if (patientsView.searchApplet.model.get('autoNav')){
+                        patientsView.searchApplet.menuView.changePatientSelection(MY_CPRS_LIST);
+                        patientsView.searchApplet.model.set({'autoNav':false});
+                    }
                     patientsCollection.comparator = function(collectionA, collectionB) {
                         var start = moment(collectionA.attributes.appointment, APPOINTMENT_DATE_FORMAT, true);
                         var end = moment(collectionB.attributes.appointment, APPOINTMENT_DATE_FORMAT, true);
@@ -117,17 +113,6 @@ define([
                     patientsView.originalCollection = patientsCollection;
                  }
                  patientsView.render();
-
-                 // this has to be checked after render b/c of element availability
-                 if (patientsCollection.length > 0){
-                    // size the height of the results
-                     self.searchApplet.onResize();
-
-                     // apply scrollbar css to column headers for adjustments.
-                     if (self.searchApplet.hasScrollbars($('#my-cprs-search-results .results-table .list-group')[0]).vertical){
-                        $('#my-cprs-search-results .results-table').toggleClass('data-scroll');
-                     }
-                 }
              };
              var patientsCollection = ADK.ResourceService.fetchCollection(searchOptions);
          },

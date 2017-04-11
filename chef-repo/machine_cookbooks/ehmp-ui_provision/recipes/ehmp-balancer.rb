@@ -55,7 +55,11 @@ machine machine_name do
   }
   attributes(
     stack: node[:machine][:stack],
-    nexus_url: node[:common][:nexus_url]
+    nexus_url: node[:common][:nexus_url],
+    data_bag_string: node[:common][:data_bag_string],
+    beats: {
+      logging: node[:machine][:logging]
+    }
   )
   files lazy { node[:'ehmp-ui_provision'][:'ehmp-balancer'][:copy_files] }
   chef_environment node[:machine][:environment]

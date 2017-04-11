@@ -1,6 +1,6 @@
-HMPDOR ;SLC/MKB -- Orders extract ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDOR ;SLC/MKB,ASMR/RRB - Orders extract;8/2/11  15:29
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -11,7 +11,7 @@ HMPDOR ;SLC/MKB -- Orders extract ;8/2/11  15:29
  ; ORQ1,^TMP("ORR",$J)           3154
  ; ORQ12,^TMP("ORGOTIT",$J)      5704
  ; ORX8                          2467
- ;
+ Q
  ; ------------ Get data from VistA ------------
  ;
 EN(DFN,BEG,END,MAX,IFN) ; -- find a patient's orders
@@ -46,13 +46,13 @@ EN1(NUM,ORD) ; -- return an order in ORD("attribute")=value
  S ORD("status")=$P(X0,U,7)_U_$P(X0,U,6)_U_$$STS($P(X0,U,7))
  M ^TMP("HMPTEXT",$J,IFN)=^TMP("ORR",$J,ORLIST,HMPN,"TX")
  S ORD("content")=$NA(^TMP("HMPTEXT",$J,IFN))
- S X=$$GET1^DIQ(100,IFN_",",1,"I"),ORD("provider")=X_U_$P($G(^VA(200,+X,0)),U)
+ S X=$$GET1^DIQ(100,IFN_",",1,"I"),ORD("provider")=X_U_$P($G(^VA(200,+X,0)),U) ;ICR 10060 DE2818 ASF 11/10/15
  S X=$$GET1^DIQ(100,IFN_",",6),LOC="" I $L(X) D
- . S LOC=+$O(^SC("B",X,0)),ORD("location")=LOC_U_X
+ . S LOC=+$O(^SC("B",X,0)),ORD("location")=LOC_U_X ;ICR 10040 DE2818 ASF 11/9/15
  S ORD("facility")=$$FAC^HMPD(LOC)
  S ORD("service")=$$GET1^DIQ(100,IFN_",","12:1")
  ; acknowledgements
- S DA=0 F  S DA=$O(^ORA(102.4,"B",+IFN,DA)) Q:DA<1  D
+ S DA=0 F  S DA=$O(^ORA(102.4,"B",+IFN,DA)) Q:DA<1  D  ;ICR 5769 DE2818 ASF 11/9/15
  . S X0=$G(^ORA(102.4,DA,0)) Q:'$P(X0,U,3)  ;stub - not ack'd
  . S X=+$P(X0,U,2),X=$S(X:X_U_$P($G(^VA(200,X,0)),U),1:U)
  . S ORD("acknowledgement",DA)=X_U_$P(X0,U,3)

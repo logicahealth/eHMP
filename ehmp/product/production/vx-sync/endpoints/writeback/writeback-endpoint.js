@@ -15,7 +15,7 @@ var config = require(global.VX_ROOT + 'worker-config');
 var logUtil = require(global.VX_UTILS + 'log');
 var pidUtils = require(global.VX_UTILS + 'patient-identifier-utils');
 var uidUtils = require(global.VX_UTILS + 'uid-utils');
-logUtil.initialize(config.loggers);
+logUtil.initialize(config);
 var log = logUtil.get('writeback-endpoint', 'host');
 var pollerUtils = require(global.VX_UTILS + 'poller-utils');
 var moment = require('moment');

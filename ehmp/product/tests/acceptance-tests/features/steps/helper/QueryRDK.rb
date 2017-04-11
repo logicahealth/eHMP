@@ -1,32 +1,7 @@
 path = File.expand_path '..', __FILE__
 $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 require 'DefaultHmpLogin.rb'
-
-class BuildQuery
-  
-  def initialize
-    @path = ''
-    @number_parameters = 0
-    
-  end
-  
-  def add_parameter(param, value)
-    if @number_parameters == 0
-      @path.concat("?")
-    else
-      @path.concat("&")
-    end
-    @number_parameters = @number_parameters + 1
-    @path.concat(param)
-    @path.concat("=")
-    @path.concat(value)
-  end
-  
-  def path
-    p @path
-    return @path
-  end
-end
+require 'BuildQuery.rb'
 
 class QueryRDKAudit < BuildQuery
   def initialize(searchterm, searchvalue)
@@ -61,7 +36,7 @@ class QueryRDKDomain < BuildQuery
 end
 
 class QueryRDK < BuildQuery
-  # http://IPADDRESS :8888/patientrecord/labsbyorder?pid=11016&orderUid=urn:va:order:9E7A:227:16682
+  # http://IP_ADDRESS:PORT/patientrecord/labsbyorder?pid=11016&orderUid=urn:va:order:9E7A:227:16682
   def initialize(datatype, pid, auto_acknowledge = "true")
     @path = String.new(DefaultLogin.rdk_api_url)
     @path.concat("/patientrecord/labsbyorder?pid=")
@@ -93,7 +68,7 @@ class QueryRDK < BuildQuery
   end
 end # class
 
-#https://IPADDRESSfhir/patient/_search?name=EIGHT,PATIENT&_format=json&_skip=0&_count=20&_ack=true
+#https://IPADDRES/fhir/patient/_search?name=EIGHT,PATIENT&_format=json&_skip=0&_count=20&_ack=true
 class SearchRDK < BuildQuery
   
   def initialize(resultsRecordType = nil)

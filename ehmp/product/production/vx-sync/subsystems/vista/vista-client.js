@@ -108,7 +108,7 @@ VistaClient.prototype.status = function(patientIdentifier, statusCallback) {
 //         receives the data for this patient.
 // subscribeCallback - The is the function that is called when the RPC call is completed.
 //-------------------------------------------------------------------------------------
-VistaClient.prototype.subscribe = function(vistaId, patientIdentifier, rootJobId, jobId, subscribeCallback) {
+VistaClient.prototype.subscribe = function(vistaId, patientIdentifier, rootJobId, jobId, priority, subscribeCallback) {
     var self = this;
     var metricsObj = {
         'subsystem':'Vista',
@@ -116,6 +116,7 @@ VistaClient.prototype.subscribe = function(vistaId, patientIdentifier, rootJobId
         'pid':patientIdentifier.value,
         'site':vistaId,
         'jobId':jobId,
+        'priority': priority,
         'rootJobId':rootJobId,
         'process':uuid.v4(),
         'timer': 'start'
@@ -138,12 +139,15 @@ VistaClient.prototype.subscribe = function(vistaId, patientIdentifier, rootJobId
             '"localId"': dfn,
             '"rootJobId"': rootJobId,
             //'"jobId"': jobId,
-            '"HMPSVERS"': 1
+            '"HMPSVERS"': '1'
         };
+        if (priority) {
+            params['\"HMPPriority\"'] = priority.toString();
+        }
         _.each(jobId, function(domainAndJobId){
             params['\"jobDomainId-' + domainAndJobId.domain + '\"']= domainAndJobId.jobId;
         });
-
+        self.log.debug('putPtSubscription param %j', params);
         rpcClient.execute('HMPDJFS API', params, function(error, response) {
             self.log.debug('vista-client.subscribe: Completed calling RPC for pid: %s; error: %s', pid, error);
             var responseWithoutPwd = objUtil.removeProperty(objUtil.removeProperty(response,'accessCode'),'verifyCode');
@@ -423,6 +427,97 @@ VistaClient.prototype.getDemographics = function(vistaId, dfn, callback) {
     }
 };
 
+//-----------------------------------------------------------------------------------------
+// This function retrieves the patient data by domain from a VistA site
+//
+// vistaId: The vistaId of the site.
+// dfn: The dfn of the patient.
+// callback: The handler to call when the data is received.  It will pass the information
+// in the response parameter of the callback.
+//-----------------------------------------------------------------------------------------
+VistaClient.prototype.getPatientDataByDomain = function(vistaId, dfn, domain, callback) {
+    var self = this;
+    var metricsObj = {
+        'subsystem':'Vista',
+        'action':'getPatientDataByDomain',
+        'site':vistaId,
+        'pid': vistaId+';'+dfn,
+        'process':uuid.v4(),
+        'timer': 'start'
+    };
+    self.metrics.debug('Vista Get Patient Data', metricsObj);
+    metricsObj.timer = 'stop';
+    self.log.debug('vista-client.getPatientDataByDomain: vistaId: %s; dfn: %s', vistaId, dfn);
+    var pid = vistaId + ';' + dfn;
+
+    self.log.debug('vista-client.getPatientDataByDomain: rpcConfig for pid: %s;', pid);
+    var rpcClient = this._getRpcClient(vistaId);
+
+    var params;
+
+    if (rpcClient) {
+        params = {
+            '"patientId"': dfn,
+            '"domain"': domain,
+            '"extractSchema"': self.extractSchema
+        };
+        rpcClient.execute('HMP GET PATIENT DATA JSON', params, function(error, response) {
+            self.log.debug('vista-client.getPatientDataByDomain: Completed calling RPC for pid: %s; error: %s', pid, error);
+            self.log.trace('vista-client.getPatientDataByDomain: Completed calling RPC for pid: %s; result: %j', pid, response);
+            if (!error) {
+                return handleSuccessfulResponse(response, pid);
+            } else {
+                return handleFailedRequestResponse(error, response, pid);
+            }
+        });
+
+    } else {
+        return handleFailedRequestResponse('Failed to subscribe patient for pid: ' + pid + ', invalid configuration information', null, pid);
+    }
+
+    //-------------------------------------------------------------------------------------
+    // This function handles calling the callback for a sucessful response from the RPC.
+    //
+    // vistaResponse - the result returned from VistA through the RPC.
+    // pid - The pid that identifies the patient.
+    //-------------------------------------------------------------------------------------
+    function handleSuccessfulResponse(vistaResponse, pid) {
+        self.metrics.debug('Vista Get Patient Data', metricsObj);
+        if (typeof vistaResponse === 'string') {
+            try {
+                self.log.debug('vista-client.getPatientDataByDomain.handleSuccessfulResponse: Response was a string - parse to an object.');
+                vistaResponse = JSON.parse(vistaResponse);
+            } catch (e) {
+                self.log.error('vista-client.getPatientDataByDomain.handleSuccessfulResponse: Failed to parse response for pid: %s; vistaResponse: %s', pid, vistaResponse);
+                return callback('Failed to parse response.', vistaResponse);
+            }
+        }
+
+        // Find the actual data and return that...
+        //-----------------------------------------------------
+        if ((vistaResponse) && (vistaResponse.data) && (vistaResponse.data.totalItems) && (vistaResponse.data.items)) {
+            self.log.debug('vista-client.getPatientDataByDomain.handleSuccessfulResponse: successfully retrieved domain data for patient %s; vistaResponse: %s', pid, vistaResponse);
+            return callback(null, vistaResponse.data.items);
+        }
+
+        self.log.error('vista-client.getPatientDataByDomain.handleSuccessfulResponse:  Response did not contain the expected data.  pid: %s; vistaResponse: %j', pid, vistaResponse);
+        return callback(util.format('Response did not contain the expected data.  pid: %s; vistaResponse: %j', pid, vistaResponse), vistaResponse);
+    }
+
+    //-------------------------------------------------------------------------------------
+    // This function handles calling the callback for a failed response from the RPC.
+    //
+    // error - The error message to be sent - because of the failed rPC call.
+    // vistaResponse - The result returned from VistA through the RPC
+    // pid - The pid that identifies the patient.
+    //-------------------------------------------------------------------------------------
+    function handleFailedRequestResponse(error, vistaResponse, pid) {
+        self.metrics.debug('Vista Get Patient Data in Error', metricsObj);
+        var errorMessage = 'Failed to retrieve patient data for pid: ' + pid + '; error: ' + error;
+        self.log.error('vista-client.getPatientDataByDomain.handleFailedRequestResponse: %s vistaResponse: %j', errorMessage, vistaResponse);
+        return callback(errorMessage, null);
+    }
+};
 
 VistaClient.prototype.fetchAppointment = function(vistaId, batchCallback) {
     var self = this;
@@ -594,6 +689,7 @@ function _createRpcConfigVprContext(config, vistaId) {
 // in the response parameter of the callback.
 // Response is a string such as:
 //      10108V420871^NI^200M^USVHA^A\r\n3^PI^9E7A^USVHA^A\r\n0000000003^NI^200DOD^USDOD^A\r\n
+//        Where this represents the followng:
 //          icn 10108V420871
 //          pid 9E7A;3
 //          edipi 0000000003
@@ -621,7 +717,7 @@ VistaClient.prototype.getIds = function(vistaId, dfn, stationNumber, callback) {
     var params = dfn + '^PI^USVHA^' + stationNumber;
 
     if(rpcClient) {
-        rpcClient.execute('HMP LOCAL GETCORRESPONDINGIDS', params, function(error, response) {
+        rpcClient.execute('VAFC LOCAL GETCORRESPONDINGIDS', params, function(error, response) {
             if (error) {
                 self.metrics.debug('Vista Get IDs in Error', metricsObj);
                 self.log.error('vista-client.getIds: Error received when call RPC for dfn: %s; error: %s', dfn, error);

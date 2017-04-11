@@ -1,5 +1,6 @@
-HMPEQLM ;SLC/MJK -- Event Queue Manager ; 30-JUN-2014
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
+HMPEQLM ;SLC/MJK,ASMR/RRB - Event Queue Manager;30-JUN-2014
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q
  ;
@@ -17,7 +18,7 @@ EN ; -- main entry point for HMPM EVT QUE MGR
  Q
  ;
 HDR ; -- header code
- N X,SRV0,SRVNM,LASTUP,REPEAT,FILLER
+ N X,SRV0,SRVNM,LASTUP,REPEAT,FILLER  K VALMHDR
  S $P(FILLER," ",80)=" "
  S SRV0=$G(^HMP(800000,+$G(HMPSRV),0))
  S SRVNM=$P(SRV0,"^"),LASTUP=$P(SRV0,"^",2),REPEAT=$P(SRV0,"^",4)
@@ -72,11 +73,13 @@ BUILD ; -- build list
  . D SET(X,SEQNODE)
  ;
  I VALMCNT=0 D NOROWS^HMPEQ("No events to display for specified criteria")
+ K VALMBG
  S VALMBG=1
  K @HMPEVTS
  Q
  ;
 SET(X,IDX) ; -- set the ListMan array and indexes
+ K VALMCNT
  S VALMCNT=VALMCNT+1
  S @VALMAR@(VALMCNT,0)=X
  S @VALMAR@("IDX",VALMCNT,HMPCNT)=IDX
@@ -90,6 +93,7 @@ KILL ; -- kill off build data
  Q
  ;
 MSG ; -- set default message
+ K VALMSG
  S VALMSG=$S(HMPWAIT:"   * waiting to be processed",1:"")
  Q
  ;
@@ -261,6 +265,7 @@ DETAIL ; -- detailed display
  . W !!,HMPDASH
  . D PAUSE^VALM1
  ;
+ K VALMBCK
  S VALMBCK="R"
  Q
  ;
@@ -373,7 +378,7 @@ SHOWHMPN ; -- show HMP global nodes
  D REFRESH
  Q
  ;
-FSHRPT ; -- show overall freshnes report
+FSHRPT ; -- show overall freshness report
  ; protocol: HMPM EVT QUE FRESHNESS REPORT
  D FULL^VALM1
  D EN^HMPEQLM1($G(HMPSRV))

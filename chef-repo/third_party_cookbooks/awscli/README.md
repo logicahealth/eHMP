@@ -264,7 +264,7 @@ Contributing
 
 License and Authors
 -------------------
-- Author::      Downs (<ndowns@amazon.com>)
+- Author:: Nick Downs (<ndowns@amazon.com>)
 
 ```
 Copyright 2014 Amazon Web Services

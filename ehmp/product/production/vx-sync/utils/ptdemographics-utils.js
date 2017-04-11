@@ -16,6 +16,15 @@ var inspect = require(global.VX_UTILS + 'inspect');
 var format = require('util').format;
 var metastampUtil = require(global.VX_UTILS + 'metastamp-utils');
 
+/**
+ * Remember, Remember the Fifth of November
+ * The Gunpowder Treason and Plot.
+ * I see no reason The Gunpowder Treason
+ * Should ever be after a real demographics stampTime.
+ * (DE4136)
+ */
+var BASIS_STAMPTIME = '16051105010000';
+
 //-------------------------------------------------------------------------
 // Constructor for this class.
 //
@@ -307,6 +316,10 @@ PtDemographicsUtil.prototype.retrieveOrCreateDemographicsForPrimaryPid = functio
 	var self = this;
 	self.log.debug('ptdemographics-utils.retrieveOrCreateDemographicsForPrimaryPid: Entered method: pid: %s', pid);
 
+    if (!pid) {
+        return callback(null, demographics);
+    }
+
 	self.environment.jds.getPtDemographicsByPid(pid, function(error, response, ptDemographics) {
 		self.log.debug('ptdemographics-utils.retrieveOrCreateDemographicsForPrimaryPid: Returned from call to jds.getPtDemgraphicsByPid: ' +
 			'pid: %s, error: %s; response: %j; ptDemographics: %j', pid, error, response, ptDemographics);
@@ -544,7 +557,7 @@ PtDemographicsUtil.prototype.storeDemographicsInJdsUsingBasisDemographics = func
 	//----------------------------
 	ptDemographics.pid = pid;
 	ptDemographics.uid = 'urn:va:patient:' + siteId + ':' + localId + ':' + localId;
-	ptDemographics.stampTime = timeUtil.createStampTime();
+	ptDemographics.stampTime = BASIS_STAMPTIME;
 
 	// Add in record enrichment information into demographic before we store it.
 	//--------------------------------------------------------------------------
@@ -699,3 +712,4 @@ function _morphToSecondaryDemographics (primaryDemographics) {
 module.exports = PtDemographicsUtil;
 PtDemographicsUtil._demographicsCreationTaskWrapper = _demographicsCreationTaskWrapper;
 PtDemographicsUtil._morphToSecondaryDemographics = _morphToSecondaryDemographics;
+PtDemographicsUtil.BASIS_STAMPTIME = BASIS_STAMPTIME;

@@ -1,60 +1,63 @@
 .tree-region {
-  min-height: 200px;
-  max-height: 300px;
-  overflow: auto;
-  margin-bottom: 10px;
-  ul.tree {
-    list-style-type: none;
-    li {
-      cursor: pointer;
-      padding-top: 1px;
-      padding-bottom: 1px;
-      span {
-        padding-top: 4px;
-        padding-bottom: 4px;
-      }
-      &.tree-node {
-        margin-bottom: 1px;
-        &:before {
-          font-family: "FontAwesome";
-          padding-right: 5px;
-          color: $primary;
-          font-size: medium;
-          position: relative;
-          top: 2px;
-          content: "\f0da";  // fa-caret-right
-        }
-        &.expanded:before {
-          content: "\f0d7";  // fa-caret-down
-        }
-        &.selectable {
-          &:before {
-            pointer-events: auto;  // targets bullet pseudo-element for click event
-            content:"\f0fe";  // fa-plus-square
-          }
-          &.expanded:before {
-            content: "\f147";  // fa-minus-square-o
-          }
-          > span {
-            &:hover {
-              background: $primary-light;
+    margin-bottom: 10px;
+    min-height: 190px;
+    overflow: auto;
+    ul.tree {
+        padding-left: 0px;
+        list-style-type: none;
+        li {
+            cursor: pointer;
+            line-height: 20px;
+            &:hover, &:focus {
+                background-color: $primary-lighter;
+                color: $primary-dark;
+                ul {
+                    color: $grey-darkest;
+                    background-color: $pure-white;
+                    li {
+                        background-color: $pure-white;
+                        &:hover, &:focus {
+                            background-color: $primary-lighter;
+                            color: $primary-dark;
+                        }
+                    }
+                }
             }
-          }
-          &.selected > span {
-            background: $primary-light;
-          }
-        }
-      }
-      &.tree-leaf {
-          > span {
-            &:hover {
-              background: $primary-light;
+            [role=treeitem] {
+                display: inline;
             }
-          }
-        &.selected > span {
-          background: $primary-light;
+            &.tree-node {
+                .node-icon {
+                    font-style: normal;
+                }
+                > .node-icon:before {
+                    content: "\f0da";  // fa-caret-right
+                    color: $primary;
+                    font-family: "FontAwesome";
+                    font-size: 12px;
+                    padding-right: 5px;
+                }
+                &.expanded > .node-icon:before {
+                    content: "\f0d7";  // fa-caret-down
+                }
+                &.selectable {
+                    > .node-icon:before {
+                        content:"\f0fe";  // fa-plus-square
+                    }
+                    &.expanded > .node-icon:before {
+                        content: "\f147";  // fa-minus-square-o
+                    }
+                }
+                .sub-tree {
+                    padding-left: 7px;
+                }
+            }
+            &.tree-leaf {
+                padding-left: 17px;
+                &.selected > div {
+                    background: $primary-lighter;
+                }
+            }
         }
-      }
     }
-  }
 }

@@ -4,7 +4,7 @@ Feature: F172 - User-Defined Screens - Screen Manager
 #Add full screen view test when functionality is implemented 
 
 Background: 
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
 	And user searches for and selects "Eight,Patient"
 	And Cover Sheet is active
 	And the "patient identifying traits" is displayed with information

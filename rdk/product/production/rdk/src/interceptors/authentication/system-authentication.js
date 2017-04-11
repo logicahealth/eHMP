@@ -36,8 +36,9 @@ var processAuthentication = function(req, res, next) {
             req.logger.debug('System Authentication authenticating %s', name);
             var data = {
                 name: name,
+                consumerType: 'system',
                 permissionSets: [],
-                permission: []
+                permissions: []
             };
             //Gets User Permission Sets for User
             var pjdsOptions = {
@@ -47,7 +48,11 @@ var processAuthentication = function(req, res, next) {
 
             pjds.get(req, res, pjdsOptions, function(error, response) {
                 if (error) {
-                    return authenticationCB(error, data);
+                    req.logger.error(error, "ERROR: There was an error finding system user " + name + " in pJDS");
+                    return authenticationCB({
+                        status: rdk.httpstatus.unauthorized,
+                        message: "Error: There was an error logging in. The error has been logged."
+                    }, data);
                 }
                 if (_.result(data, 'name', '') !== name) {
                     var err = {
@@ -57,14 +62,15 @@ var processAuthentication = function(req, res, next) {
                     return authenticationCB(err, data);
                 }
 
-                data.permissionSets = response.data.permissionSet.val;
+                data.permissionSets = _.result(response, 'data.permissionSet.val', []);
+                data.permissions = _.result(response, 'data.permissionSet.additionalPermissions', []);
                 //this system is allowed to see items like a CPRS user would
-                data.corsTabs = true;
-                data.rptTabs = true;
+                data.corsTabs = true; //TODO: remove these in future as they would no longer be needed with new consumerType pdp policy
+                data.rptTabs = true;  //TODO: remove these in future as they would no longer be needed with new consumerType pdp policy
                 //this system is definitely not bound by sensitive access
-                data.dgSensitiveAccess = true;
+                data.dgSensitiveAccess = true; //TODO: remove these in future as they would no longer be needed with new consumerType pdp policy
                 //this system always breaks the glass
-                data.breakglass = true;
+                data.breakglass = true; //TODO: remove these in future as they would no longer be needed with new consumerType pdp policy
 
                 return authenticationCB(null, data);
 
@@ -81,7 +87,7 @@ var processAuthentication = function(req, res, next) {
                     return authorizationCB(error, data);
                 }
 
-                var permissions = [];
+                var permissions = data.permissions;
                 _.each(response.data.items, function(item) {
                     permissions = permissions.concat(item.permissions);
                 });
@@ -99,7 +105,6 @@ var processAuthentication = function(req, res, next) {
         }
         var user = _.result(req, 'session.user', {});
         user = _.extend(user, data);
-
         req.session.user = user;
         return finalizeCall(next);
     });
@@ -109,6 +114,9 @@ var processAuthentication = function(req, res, next) {
 var systemsAuthentication = function(req, res, next) {
     //check to see if we have a valid session
     if (!hasValidSession(req)) {
+        if (!isSystemLoginResource(req)) {
+            return res.status(rdk.httpstatus.unauthorized).rdkSend('Unauthorized. Please log in.');
+        }
         //interogate headers
         req.session.systemName = req.get('Authorization');
         return processAuthentication(req, res, next);
@@ -118,5 +126,10 @@ var systemsAuthentication = function(req, res, next) {
     req.logger.info('System Authentication using found session for %s', req.session.user.name);
     return finalizeCall(next);
 };
+
+function isSystemLoginResource(req) {
+    var authenticateResourceRegex = /^authentication-(internal|external)-systems-authenticate$/;
+    return (authenticateResourceRegex.test(req._resourceConfigItem.title) && req._resourceConfigItem.rel === 'vha.create');
+}
 
 module.exports = systemsAuthentication;

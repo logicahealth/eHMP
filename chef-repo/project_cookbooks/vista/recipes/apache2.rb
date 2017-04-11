@@ -42,7 +42,7 @@ EOF"
   not_if "test -f #{node[:apache][:ssl_cert_file]}"
 end
 
-fmql_credentials = Chef::EncryptedDataBagItem.load("credentials", "vista_fmql_credentials", 'n25q2mp#h4')
+fmql_credentials = Chef::EncryptedDataBagItem.load("credentials", "vista_fmql_credentials", node[:data_bag_string])
 
 web_app "fmql" do
   template "fmql.conf.erb"

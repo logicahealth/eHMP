@@ -1,0 +1,14 @@
+task tarSQLConfig(type: Tar) {
+	compression = Compression.GZIP
+  baseName = 'sql_config'
+  version = getVersionByCommitCountForProject(":production:jbpm:sql_config")  
+  destinationDir buildDir
+  from 'src'
+}
+
+build.dependsOn tarSQLConfig
+uploadArchives.dependsOn tarSQLConfig
+
+artifacts {
+  archives tarSQLConfig.archivePath
+}

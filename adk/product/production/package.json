@@ -5,6 +5,7 @@
   "devDependencies": {
     "async": "~0.2.9",
     "grunt": "~0.4.1",
+    "grunt-cli": "~1.0.0",
     "grunt-contrib-requirejs": "~0.4.4",
     "grunt-contrib-jasmine": "~0.8.2",
     "grunt-contrib-compress": "*",

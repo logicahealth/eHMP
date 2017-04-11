@@ -8,13 +8,6 @@
 			"values": [
 			]
 		},
-		"fields": {
-			"name": "fields",
-			"paramType": "query",
-			"type": "string",
-			"values": [
-			]
-		},
 		"oi": {
 			"name": "oi",
 			"paramType": "query",

@@ -3,7 +3,7 @@ VPRJCB ;SLC/KCM -- Common Utilities for building query results
  ;
 BLDHEAD(CNT) ; Build the object header
  N X,UPDATED
- S UPDATED=$P($$FMTHL7^XLFDT($$NOW^XLFDT),"+")
+ S UPDATED=$$CURRTIME^VPRJRUT
  S X="{""apiVersion"":""1.0"",""data"":{""updated"":"_UPDATED_","
  S X=X_"""totalItems"":"_CNT_",""items"":["
  Q X

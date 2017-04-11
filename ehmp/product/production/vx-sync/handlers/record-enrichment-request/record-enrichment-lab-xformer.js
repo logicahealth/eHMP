@@ -31,9 +31,17 @@ function transformAndEnrichRecord(log, config, environment, record, callback) {
         return setTimeout(callback, 0, null, null);
     }
 
-    var terminologyUtils = environment.terminologyUtils;
-    if(environment.terminologyUtils === undefined) {
-        return callback('No terminology utility provided');
+    var metrics = null;
+    if (environment) {
+        metrics = environment.metrics;
+    }
+
+    var terminologyUtils;
+    if (environment.terminologyUtils) {
+        terminologyUtils = environment.terminologyUtils;
+    } else {
+        var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
+        terminologyUtils = new TerminologyUtil(log, metrics, config);
     }
 
     log.debug('record-enrichment-lab-xformer.transformAndEnrichRecord adding missing fields');

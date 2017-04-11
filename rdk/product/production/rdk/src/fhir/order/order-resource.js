@@ -8,6 +8,37 @@ var helpers = require('../common/utils/helpers');
 var fhirResource = require('../common/entities/fhir-resource');
 var errors = require('../common/errors');
 var order = require('./order');
+var confUtils = require('../conformance/conformance-utils');
+var conformance = require('../conformance/conformance-resource');
+
+var fhirToJDSAttrMap = [{
+    fhirName: 'subject.identifier',
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient this order is about.',
+    searchable: true
+},{
+    fhirName: 'detail.display',
+    vprName: 'detail.display',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'What action is being ordered.  Valid values are: DiagnosticOrder | MedicationPrescription | NutritionOrder | ProcedureRequest | DeviceUse',
+    searchable: true
+}];
+
+// Issue call to Conformance registration
+conformance.register(confUtils.domains.ORDER, createOrderConformanceData());
+
+function createOrderConformanceData() {
+   var resourceType = confUtils.domains.ORDER;
+   var profileReference = 'http://www.hl7.org/FHIR/2015May/order.html';
+   var interactions = [ 'read', 'search-type' ];
+
+   return confUtils.createConformanceData(resourceType, profileReference,
+           interactions, fhirToJDSAttrMap);
+}
+
 //TO DO:
 // As JSON.parse and JSON.stringify work in a blocking manner perhaps we should switch to a streaming parser as this one:
 // https://github.com/dominictarr/JSONStream
@@ -147,7 +178,7 @@ function buildBundle(results, req, total) {
     if (req) {
         link.push(new fhirResource.Link(req.protocol + '://' + req.headers.host + req.originalUrl, 'self'));
     }
-    var b = new fhirResource.Bundle2(link, null, total);
+    var b = new fhirResource.Bundle(link, null, total);
 
     for (var i in results) {
         if (nullchecker.isNotNullish(results[i])) {
@@ -181,11 +212,12 @@ function createOrders(item, req, parentUid) {
         }
     }
 
+    var siteHash = fhirUtils.getSiteHash(item.uid);
     //=========================================================================
     // Every Order.id should be newly generated.
     // Any Child re-refencing should be done via the identifier attribute node
     //=========================================================================
-    var order = new fhirResource.Order(helpers.generateUUID(), fhirUtils.convertToFhirDateTime(item.entered));
+    var order = new fhirResource.Order(helpers.generateUUID(), fhirUtils.convertToFhirDateTime(item.entered, siteHash));
     var childOrders = [];
     order.extension = [];
 
@@ -201,7 +233,7 @@ function createOrders(item, req, parentUid) {
     // text
     // remove any special char from
     //=========================
-    var t = '<div>Request for ' + (item.kind || '') + ' (on patient \'' + (pid || '@null') + '\' @ ' + (item.providerDisplayName || '') + ')\r\n' + (_.escape(item.summary) || '') + '</div>';
+    var t = '<div>Request for ' + _.escape((item.kind || '') + ' (on patient \'' + (pid || '@null') + '\' @ ' + (item.providerDisplayName || '') + ')\r\n' + (item.summary || '')) + '</div>';
     order.text = new fhirResource.Narrative(t);
 
     //============================
@@ -231,7 +263,9 @@ function createOrders(item, req, parentUid) {
 
         if (item.start > item.stop) {
             // BAD DATA VALUES .. MAP TO EXTENSION
-            req.logger.warn({item: _.pick(item, ['uid', 'start', 'stop'])}, 'Bad start date after stop date');
+            req.logger.warn({
+                item: _.pick(item, ['uid', 'start', 'stop'])
+            }, 'Bad start date after stop date');
 
             order.extension.push(new fhirResource.Extension(constants.ordersFhir.ORDER_EXTENSION_URL_PREFIX + 'start', item.start, 'String'));
             order.extension.push(new fhirResource.Extension(constants.ordersFhir.ORDER_EXTENSION_URL_PREFIX + 'stop', item.stop, 'String'));
@@ -239,8 +273,8 @@ function createOrders(item, req, parentUid) {
 
         } else {
             // MAP TO FHIR
-            var period = new fhirResource.Period(fhirUtils.convertToFhirDateTime(item.start),
-                fhirUtils.convertToFhirDateTime(item.stop));
+            var period = new fhirResource.Period(fhirUtils.convertToFhirDateTime(item.start, siteHash),
+                fhirUtils.convertToFhirDateTime(item.stop, siteHash));
             order.when = {
                 schedule: new fhirResource.Schedule()
             };
@@ -262,7 +296,7 @@ function createOrders(item, req, parentUid) {
     if (nullchecker.isNotNullish(item.providerName)) {
         var contPractProvider = new fhirResource.Practitioner(helpers.generateUUID());
         if (nullchecker.isNotNullish(item.providerDisplayName)) {
-            contPractProvider.text = new fhirResource.Narrative('<div>' + item.providerDisplayName + '</div>');
+            contPractProvider.text = new fhirResource.Narrative('<div>' + _.escape(item.providerDisplayName) + '</div>');
         }
         contPractProvider.name = new fhirResource.HumanName(item.providerName);
         if (nullchecker.isNotNullish(item.providerUid)) {
@@ -283,7 +317,7 @@ function createOrders(item, req, parentUid) {
     if (nullchecker.isNotNullish(item.locationUid)) {
         var contLocLocation = new fhirResource.Location(helpers.generateUUID());
         if (nullchecker.isNotNullish(item.locationName)) {
-            contLocLocation.text = new fhirResource.Narrative('<div>' + item.locationName + '</div>');
+            contLocLocation.text = new fhirResource.Narrative('<div>' + _.escape(item.locationName) + '</div>');
         }
         contLocLocation.name = item.locationName;
         contLocLocation.identifier =
@@ -297,7 +331,7 @@ function createOrders(item, req, parentUid) {
     if (nullchecker.isNotNullish(item.facilityCode)) {
         var contOrgFacility = new fhirResource.Organization(helpers.generateUUID());
         if (nullchecker.isNotNullish(item.facilityName)) {
-            contOrgFacility.text = new fhirResource.Narrative('<div>' + item.facilityName + '</div>');
+            contOrgFacility.text = new fhirResource.Narrative('<div>' + _.escape(item.facilityName) + '</div>');
         }
         contOrgFacility.name = item.facilityName;
         contOrgFacility.identifier =
@@ -316,7 +350,7 @@ function createOrders(item, req, parentUid) {
         _.each(item.clinicians, function(clinician) {
             var contPractClinician = new fhirResource.Practitioner(helpers.generateUUID());
             if (nullchecker.isNotNullish(clinician.name)) {
-                contPractClinician.text = new fhirResource.Narrative('<div>' + clinician.name + '</div>');
+                contPractClinician.text = new fhirResource.Narrative('<div>' + _.escape(clinician.name) + '</div>');
             }
             contPractClinician.name = new fhirResource.HumanName(clinician.name);
             contPractClinician.identifier = [new fhirResource.Identifier(clinician.uid, constants.fhir.UID_IDENTIFIER_SYSTEM, undefined, 'uid')];
@@ -327,7 +361,7 @@ function createOrders(item, req, parentUid) {
             if (nullchecker.isNotNullish(clinician.signedDateTime)) {
                 contPractClinician.extension = contPractClinician.extension || [];
                 contPractClinician.extension.push(new fhirResource.Extension(constants.ordersFhir.ORDER_EXTENSION_URL_PREFIX + 'clinicianSignedDateTime',
-                    fhirUtils.convertToFhirDateTime(String(clinician.signedDateTime)), 'DateTime'));
+                    fhirUtils.convertToFhirDateTime(String(clinician.signedDateTime), siteHash), 'DateTime'));
             }
 
             order.contained.push(contPractClinician);
@@ -465,8 +499,8 @@ function createDiagnosticOrder(item, order) {
     //console.log('uid='+item.uid + 'order.sbject='+order.subject.reference + 'item.pid='+ item.pid);
     //fhirItem.subject = new fhirResource.ReferenceResource('Patient/' + pid); // REQUIRED
     var diagOrder = new fhirResource.DiagnosticOrder(helpers.generateUUID(),
-                        new fhirResource.ReferenceResource('Patient/' + item.pid),
-                        statusDiagOrderMap[item.statusName], order.source);
+        new fhirResource.ReferenceResource('Patient/' + item.pid),
+        statusDiagOrderMap[item.statusName], order.source);
 
     diagOrder.text = new fhirResource.Narrative('<div>' + _.escape(item.oiName || item.name) + '</div>');
 

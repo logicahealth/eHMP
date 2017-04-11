@@ -4,7 +4,7 @@ Feature:F172 User-Defined Screens
 	
 @DE949
 Scenario: Users will be able to see dropdown option in coversheet for screen selection
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	And user searches for and selects "Eight,Patient"
 	Then Cover Sheet is active
 	# And the "patient identifying traits" is displayed with information
@@ -12,7 +12,7 @@ Scenario: Users will be able to see dropdown option in coversheet for screen sel
 	# 	| patient name	| Eight,Patient 	    |
 	# And the applets are displayed on the coversheet
 	# 	| applet 					|
-	# 	| CONDITIONS	 			|
+	# 	| PROBLEMS	 			|
 	# 	| NUMERIC LAB RESULTS		|
 	# 	| VITALS 					|
 	# 	| ACTIVE MEDICATIONS		|
@@ -34,7 +34,7 @@ Scenario: Users will be able to see dropdown option in coversheet for screen sel
 
 @US4540a @future
 Scenario: Users will be able to filter in the drop down menu 
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	And user searches for and selects "Eight,Patient"
 	And Cover Sheet is active
 	And the "patient identifying traits" is displayed with information

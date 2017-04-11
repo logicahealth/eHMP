@@ -15,7 +15,7 @@ Create work product
 + Response 200 (application/json)
 
 
-### Cds work product retrieve [GET {{{path}}}/product{?id}{&fields}]
+### Cds work product retrieve [GET {{{path}}}/product{?id}]
 
 Work Product resource
 
@@ -27,8 +27,6 @@ Get work product
 
     + id (string, required) - work product id
 
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 
@@ -37,6 +35,23 @@ Get work product
 :[Response 404]({{{common}}}/responses/404.md)
 
 :[Response 500]({{{common}}}/responses/500.md)
+
+
+### Cds work product update [PUT {{{path}}}/product{?id}]
+
+Work Product resource
+
+#### Notes
+
+Update work product
+
++ Parameters
+
+    + id (string, required) - work product id
+
++ Request JSON Message (application/json)
+
++ Response 200 (application/json)
 
 
 ### Cds work product delete [DELETE {{{path}}}/product{?id}]
@@ -61,18 +76,13 @@ Delete work product
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Cds work product subscription retrieve [GET {{{path}}}/subscriptions{?fields}]
+### Cds work product subscription retrieve [GET {{{path}}}/subscriptions]
 
 Work Product resource
 
 #### Notes
 
 Retrieve subscription for user
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 
@@ -101,18 +111,13 @@ Delete subscription for user
 + Response 200 (application/json)
 
 
-### Inbox [GET {{{path}}}/inbox{?fields}]
+### Inbox [GET {{{path}}}/inbox]
 
 Work Product resource
 
 #### Notes
 
 Get inbox for user
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 

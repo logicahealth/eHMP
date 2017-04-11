@@ -5,19 +5,19 @@ define([
     'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/subAccordionRowPanel/medLeftSideList/medLeftSideListView',
     'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/subAccordionRowPanel/medRightSideDetail/medRightSideDetailView',
     'app/applets/medication_review/medicationsUngrouped/medicationOrderCollection'
-    // 'jdsFilter'
 ], function(Backbone, Marionette, MedNameRowPanel, MedLeftSideListView, MedRightSideDetailView, MedicationOrderCollection) {
     'use strict';
 
     var MedicationPanelLayout = Backbone.Marionette.LayoutView.extend({
         template: MedNameRowPanel,
-        className: 'panel-body top-padding-no bottom-padding-no',
+        className: 'panel-body',
         attributes: {
+            'role' : 'tablist',
             'data-appletid': 'medication_review'
         },
         regions: {
-            orderHistoryList: '.orderHistoryList',
-            medicationDetail: '.medicationDetail',
+            orderHistoryList: '.order-historylist',
+            medicationDetail: '.medication-detail',
         },
         initialize: function(options) {
             this.model = options.model;
@@ -26,7 +26,7 @@ define([
         onBeforeShow: function() {
             var SortedByOverallStopCollection = Backbone.Collection.extend({
                 comparator: function(med) {
-                    return -med.getEarlierStop().stoppedMoment;
+                    return -med.getEarlierStopAsMoment();
                 }
             });
             var self = this;
@@ -44,6 +44,9 @@ define([
         updateDetailView: function(model) {
             this.medRightSideDetailView.model = model;
             this.medRightSideDetailView.render();
+            this.$('[data-detail=content]').focus();
+            this.$(event.currentTarget).find('a').attr('accesskey', 'm');
+            this.$(event.currentTarget).siblings().find('a').removeAttr('accesskey');
         },
         templateHelpers: function() {
             return {
@@ -53,24 +56,10 @@ define([
     });
 
     function getMatchingMeds(params, medModel) {
-        // var filterObject;
-        // var filter;
         var deferredResponse = $.Deferred();
-        // if (medModel.getDisplayName().property === 'name') {
-        // filterObject = ['ilike', 'name', medModel.getDisplayName().value + '%'];
-        //     filter = 'ilike("name","' + medModel.getDisplayName().value + '%")';
-        // } else {
-        // filterObject = ['eq', medModel.getDisplayName().property, medModel.getDisplayName().value];
-        //     filter = 'ilike("' + medModel.getDisplayName().property + '", "' + medModel.getDisplayName().value + '%")';
-        // }
-
         var fetchOptions = {
             cache: true,
             resourceTitle: 'patient-record-med'
-                // criteria: {
-                //     // filter: jdsFilter.build(filterObject)
-                //     filter: filter
-                // },
         };
 
         fetchOptions.onSuccess = function(collection, resp) {
@@ -98,11 +87,10 @@ define([
         fetchOptions.onSuccess = function(collection, resp) {
             var matchingMedsDeferredResponse = getMatchingMeds(params, collection.at(0));
             matchingMedsDeferredResponse.done(function(matchingMeds) {
-
                 deferredResponse.resolve({
                     view: new MedicationPanelLayout({
                         collection: matchingMeds,
-                        model: matchingMeds.at(0)
+                        model: matchingMeds.findWhere({uid: params.uid})
                     }),
                     title: "Medication - " + collection.first().get("name"),
                     groupedMeds: matchingMeds

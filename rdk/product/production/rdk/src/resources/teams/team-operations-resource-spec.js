@@ -33,7 +33,7 @@ var testJson9E7A = {
     'position': [{
         'assignedByIEN': '9E7A;1000897',
         'assignedDateTime': 20150101000000,
-        'ien': '9E7A;PW    ',
+        'ien': '9E7A;pu1234',
         'positionId': '00001',
         'staffName': 'USER,PANORAMA',
         'staffRole': 'Child Psychologist',
@@ -69,7 +69,7 @@ var testJsonC877 = {
     'position': [{
         'assignedByIEN': 'C877;1000897',
         'assignedDateTime': 20150101000000,
-        'ien': 'C877;PW    ',
+        'ien': 'C877;pu1234',
         'positionId': '00001',
         'staffName': 'USER,PANORAMA',
         'staffRole': 'Registered Nurse',
@@ -207,7 +207,7 @@ describe('Team Operations resource', function() {
                     'position': [{
                         'assignedByIEN': '9E7A;1000897',
                         'assignedDateTime': 20150101000000,
-                        'ien': '9E7A;PW    ',
+                        'ien': '9E7A;pu1234',
                         'positionId': '00001',
                         'staffName': 'USER,PANORAMA',
                         'teamRole': 403,

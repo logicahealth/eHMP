@@ -202,8 +202,8 @@ define([
 
             return dateTaken;
         },
-        unregisterNavigationCheck: function() {
-            ADK.Navigation.unregisterCheck({
+        unregisterChecks: function() {
+            ADK.Checks.unregister({
                 id: 'allergy-writeback-in-progress'
             });
         }

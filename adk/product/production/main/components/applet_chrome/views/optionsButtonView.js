@@ -3,9 +3,8 @@ define('main/components/applet_chrome/views/optionsButtonView', [
     'marionette',
     'jquery',
     'underscore',
-    'hbs!main/components/applet_chrome/templates/optionsButtonTemplate',
-    'hbs!main/components/applet_chrome/templates/exitOptionsButtonTemplate',
-], function(Backbone,Marionette,$, _, OptionsButtonTemplate, ExitOptionsButtonTemplate) {
+    'hbs!main/components/applet_chrome/templates/optionsButtonTemplate'
+], function(Backbone,Marionette,$, _, OptionsButtonTemplate) {
     'use strict';
     var OptionsButtonView = Backbone.Marionette.ItemView.extend({
         tagName: 'span',
@@ -13,9 +12,6 @@ define('main/components/applet_chrome/views/optionsButtonView', [
             'change openContext': 'render'
         },
         getTemplate: function() {
-            if (this.model.get('openContext')) {
-                return ExitOptionsButtonTemplate;
-            }
             return OptionsButtonTemplate;
         },
         attributes: function() {

@@ -6,7 +6,12 @@
         "val": ["read-access"],
         "modifiedBy": "urn:va:user:C877:10000000270",
         "modifiedOn": "2015-08-19T19:31:41Z",
-        "additionalPermissions": []
+        "additionalPermissions": [
+            "create-clinical-object",
+            "edit-clinical-object",
+            "delete-clinical-object",
+            "read-clinical-object"
+        ]
     }
 }, {
 	"uid": "CDS",

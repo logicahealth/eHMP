@@ -5,7 +5,7 @@ class HypertensionCBW < CBW
     add_action(CucumberLabel.new("Hypertension"), ClickAction.new, AccessHtmlElement.new(:link_text, "Hypertension"))
 
     # applets
-    add_verify(CucumberLabel.new("CONDITIONS"), VerifyContainsText.new, applet_panel_title("problems"))
+    add_verify(CucumberLabel.new("PROBLEMS"), VerifyContainsText.new, applet_panel_title("problems"))
     add_verify(CucumberLabel.new("NUMERIC LAB RESULTS"), VerifyContainsText.new, applet_panel_title("lab_results_grid"))
     add_verify(CucumberLabel.new("VITALS"), VerifyContainsText.new, applet_panel_title("vitals"))
     add_verify(CucumberLabel.new("TIMELINE"), VerifyContainsText.new, applet_panel_title("newsfeed"))

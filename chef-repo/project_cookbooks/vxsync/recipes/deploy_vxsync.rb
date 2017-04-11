@@ -33,37 +33,42 @@ execute "npm run install on xslt4node java" do
   not_if { "#{node[:vxsync][:source]}".start_with?("http") }
 end
 
-trigger_resources = []
-
-trigger_resources << execute("extract_vxsync") do
+execute "extract_vxsync" do
   cwd node[:vxsync][:home_dir]
   command "unzip #{node[:vxsync][:artifact_path]}"
   action :run
   notifies :run, "execute[install modules]", :immediately
   notifies :run, "execute[npm run install on xslt4node java]", :immediately
+  notifies :execute, "vxsync_reset_sync[reset_vxsync]", :delayed
   only_if { (Dir.entries(node[:vxsync][:home_dir]) - %w{ . .. }).empty? }
 end
 
 sites = find_multiple_nodes_by_role("vista-*", node[:stack])
 jds = find_node_by_role("jds", node[:stack])
 solr = find_node_by_role("solr", node[:stack], "mocks")
+jmeadows = find_node_by_role("jmeadows", node[:stack], "mocks")
 hdr_sites = find_multiple_nodes_by_role("hdr", node[:stack], "mocks")
 vxsync = find_node_by_role("vxsync", node[:stack])
 
-trigger_resources << template("#{node[:vxsync][:home_dir]}/worker-config.json") do
+template "#{node[:vxsync][:home_dir]}/worker-config.json" do
   source 'worker-config.json.erb'
   variables(
     :vista_sites => sites,
-    :vxsync_ip => vxsync['ipaddress'],
-    :jds_ip => jds['ipaddress'],
-    :jds_port => jds['jds']['cache_listener_ports']['vxsync'],
-    :solr_ip => solr['ipaddress'],
-    :hdr_ip => hdr_sites[0]['ipaddress'],
-    :hdr_sites => hdr_sites
+    :vxsync => vxsync,
+    :jds => jds,
+    :solr => solr,
+    :soap_handler => node[:soap_handler],
+    :hdr_sites => hdr_sites,
+    :jmeadows => jmeadows,
+    :hdr_enabled => node[:vxsync][:hdr_enabled],
+    :jmeadows_enabled => node[:vxsync][:jmeadows_enabled],
+    :vler_enabled => node[:vxsync][:vler_enabled],
+    :hdr_blacklist_sites => node[:vxsync][:hdr_blacklist_sites]
   )
   owner 'root'
   group 'root'
   mode '0755'
+  notifies :execute, "vxsync_reset_sync[reset_vxsync]", :delayed
 end
 
 directory "#{node[:vxsync][:log_directory]}" do
@@ -108,15 +113,10 @@ hdr_sites.each do |hdr_site|
   end
 end
 
-unless node[:vxsync][:profile].nil?
-  profile = data_bag_item("vxsync_profile", node[:vxsync][:profile]).to_hash
-  node.normal[:vxsync][:processes].merge!(profile["process_profile"])
-end
-
 node[:vxsync][:processes].each{ |name,process_block|
   1.upto(process_block[:number_of_copies] || 1) do |index|
     if index==1 then suffix = "" else suffix = "_#{index}" end
-    trigger_resources << template("#{node[:vxsync][:home_dir]}/#{name}#{suffix}.sh") do
+    template "#{node[:vxsync][:home_dir]}/#{name}#{suffix}.sh" do
       source process_block[:template]
       variables(
         :name => "#{name}#{suffix}",
@@ -126,19 +126,21 @@ node[:vxsync][:processes].each{ |name,process_block|
       owner 'root'
       group 'root'
       mode '0755'
+      notifies :execute, "vxsync_reset_sync[reset_vxsync]", :delayed
     end
   end
 }
 
-trigger_resources << template("/etc/init/vxsync.conf") do
+template "/etc/init/vxsync.conf" do
   variables(
     :name => "vxsync",
     :level => 2345
   )
   source 'upstart-bluepill-vxsync.erb'
+  notifies :execute, "vxsync_reset_sync[reset_vxsync]", :delayed
 end
 
-trigger_resources << template("/etc/bluepill/vxsync.pill") do
+template "/etc/bluepill/vxsync.pill" do
   source 'bluepill.pill.erb'
   variables(
     :name => "vxsync",
@@ -146,10 +148,11 @@ trigger_resources << template("/etc/bluepill/vxsync.pill") do
     :working_directory => node[:vxsync][:home_dir],
     :log_directory => node[:vxsync][:bluepill_log_dir]
   )
+  notifies :execute, "vxsync_reset_sync[reset_vxsync]", :delayed
 end 
 
 node[:vxsync][:beanstalk_processes].each{ |name, process_block|
-  trigger_resources << template("#{node[:vxsync][:home_dir]}/#{name}.sh") do
+  template "#{node[:vxsync][:home_dir]}/#{name}.sh" do
     source process_block[:template]
     variables(
       :name => name,
@@ -159,18 +162,20 @@ node[:vxsync][:beanstalk_processes].each{ |name, process_block|
     owner 'root'
     group 'root'
     mode '0755'
+    notifies :execute, "vxsync_reset_sync[reset_vxsync]", :delayed
   end
 }
 
-trigger_resources << template("/etc/init/beanstalk.conf") do
+template "/etc/init/beanstalk.conf" do
   variables(
     :name => "beanstalk",
     :level => 2345
   )
   source 'upstart-bluepill.erb'
+  notifies :execute, "vxsync_reset_sync[reset_vxsync]", :delayed
 end
 
-trigger_resources << template("/etc/bluepill/beanstalk.pill") do
+template "/etc/bluepill/beanstalk.pill" do
   source 'bluepill.pill.erb'
   variables(
     :name => "beanstalk",
@@ -178,7 +183,8 @@ trigger_resources << template("/etc/bluepill/beanstalk.pill") do
     :working_directory => node[:vxsync][:home_dir],
     :log_directory => node[:vxsync][:bluepill_log_dir]
   )
-end 
+  notifies :execute, "vxsync_reset_sync[reset_vxsync]", :delayed
+end
 
 service "vxsync" do
   provider Chef::Provider::Service::Upstart
@@ -190,10 +196,4 @@ service "beanstalk" do
   provider Chef::Provider::Service::Upstart
   restart_command "/sbin/stop beanstalk; /sbin/start beanstalk"
   action [:enable]
-end
-
-ruby_block 'check for vxsync updates' do
-  block do
-    node.normal[:vxsync][:force_reset] = true if trigger_resources.any? { |res| res.updated_by_last_action? }
-  end
 end

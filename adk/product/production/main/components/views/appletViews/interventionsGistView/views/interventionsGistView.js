@@ -38,14 +38,14 @@ define([
             var self = this;
             return {
                 isfacilityLabel: function() {
-                    var fillableDaysHasLabel = this.meds[0].get('fillableDays').hasLabel;
+                    var fillableDaysHasLabel = this.fillableDays.hasLabel;
                     if (fillableDaysHasLabel) {
-                        var fillableDaysLabel = this.meds[0].get('fillableDays').label;
+                        var fillableDaysLabel = this.fillableDays.label;
                         return fillableDaysLabel;
                     }
                 },
                 isfacilityDesc: function() {
-                    var fillableDaysHasLabel = this.meds[0].get('fillableDays').description;
+                    var fillableDaysHasLabel = this.fillableDays.description;
                     return fillableDaysHasLabel;
                 },
                 isNotActiveMeds: function() {
@@ -55,27 +55,50 @@ define([
 
                     return true;
                 },
+                modifiedName: function() {
+                    if (self.callingView === 'activeMeds' && this.shortName) {
+                        var fullName = this.normalizedName;
+                        return new Handlebars.SafeString([
+                            this.shortName,
+                            ' <a class="more-name" data-toggle="collapse" href="#'+self.cid+'-name">...</a>',
+                            '<div class="collapse" id="'+self.cid+'-collapse-name">'+fullName.substring(this.shortName.length)+'</div>'
+                        ].join(''));
+                    } else {
+                        return this.normalizedName;
+                    }
+                },
                 modifiedDescription: function() {
-                    if (self.callingView === 'activeMeds' && self.overChars) {
-                        if (this.isShortDescription) {
-                            return new Handlebars.SafeString(self.shortDescription + ' ...<a href="#" class="morelink inline-display" title="Show Full Description">More</a>');
-                        } else {
-                            return new Handlebars.SafeString(self.originalDescription + '&nbsp;&nbsp;&nbsp;<a href="#" class="lesslink inline-display" title="Show Abbreviated Description">Less</a>');
-                        }
+                    if (self.callingView === 'activeMeds' && this.shortDescription) {
+                        var fullDescription = this.description;
+                        return new Handlebars.SafeString([
+                            this.shortDescription,
+                            ' <a class="more-description" data-toggle="collapse" href="#'+self.cid+'-description">...</a>',
+                            '<div class="collapse" id="'+self.cid+'-collapse-description">'+fullDescription.substring(this.shortDescription.length)+'</div>'
+                        ].join(''));
                     } else {
                         return this.description;
                     }
-
-
                 }
             };
         },
         events: {
-            'click .morelink': 'onMoreClicked',
-            'click .lesslink': 'onLessClicked'
+            'click .more-name': 'toggleMore',
+            'click .more-description': 'toggleMore',
+            'show.bs.collapse': 'toggleMoreLinkText',
+            'hide.bs.collapse': 'toggleMoreLinkText'
         },
-        modelEvents: {
-            'change': 'render'
+        toggleMoreLinkText: function(e) {
+            var link = e.target.nextElementSibling || e.target.previousElementSibling;
+            $(link).text(function(i, currentText) {
+                return currentText === '...' ? '<<<' : '...';
+            });
+        },
+        toggleMore: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var collapseElement = this.$el.find('#'+this.cid+'-collapse-'+e.currentTarget.className.split(' ')[0].split('-')[1]);
+            collapseElement.collapse('toggle');
+            $(e.currentTarget).insertAfter(collapseElement);
         },
         initialize: function(options) {
             this.callingView = options.appletOptions.appletId;
@@ -85,39 +108,8 @@ define([
             }
 
             this.toolbarOptions = {
-                targetElement: this,
                 buttonTypes: buttonTypes
             };
-
-            if (this.callingView === 'activeMeds') {
-                var showChar = 100;
-                var medicationName = this.model.get('name');
-                var showLength;
-                this.overChars = 0;
-                this.originalDescription = this.model.get('description');
-                if (this.originalDescription) {
-
-                    this.overChars = (medicationName.length + this.originalDescription.length) - showChar;
-                    // Zero out negative numbers
-                    this.overChars = this.overChars > 0 ? this.overChars : 0;
-
-                    if (this.overChars) {
-                        showLength = this.originalDescription.length - this.overChars;
-                        this.shortDescription = this.originalDescription.substr(0, showLength);
-                        this.model.set('isShortDescription', true);
-                    }
-                }
-            }
-
-
-        },
-        onMoreClicked: function(e) {
-            e.preventDefault();
-            this.model.set('isShortDescription', false);
-        },
-        onLessClicked: function(e) {
-            e.preventDefault();
-            this.model.set('isShortDescription', true);
         },
         onRender: function() {
             //this._base.onRender.apply(this, arguments);
@@ -147,6 +139,11 @@ define([
                 'role': 'grid',
                 'aria-label': gridTitle
             };
+        },
+        events: {
+            'after:hidetoolbar': function(e) {
+                this.$el.find('.dragging-row').removeClass('dragging-row');
+            }
         },
         initialize: function(options) {
             this.callingView = options.appletId;

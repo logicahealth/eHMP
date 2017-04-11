@@ -14,6 +14,8 @@ class AllergiesApplet < AllApplets
     appletid_css = "[data-appletid=allergy_grid]"
     add_applet_buttons appletid_css
     add_applet_title appletid_css
+    add_toolbar_buttons
+
     add_verify(CucumberLabel.new("AllergiesGridVisible"), VerifyText.new, AccessHtmlElement.new(:id, "allergy_grid-pill-gist-items"))
     add_verify(CucumberLabel.new("Allergy Details"), VerifyContainsText.new, AccessHtmlElement.new(:id, 'grid-panel-allergy_grid'))
     add_action(CucumberLabel.new("ERYTHROMYCIN"), ClickAction.new, AccessHtmlElement.new(:xpath, "//span[contains(string(),'ERYTHROMYCIN')]/parent::div"))
@@ -29,7 +31,8 @@ class AllergiesApplet < AllApplets
     add_action(CucumberLabel.new('Add'), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-add-button"))
     
     # First Allergies Row
-    add_action(CucumberLabel.new('First Allergies Row'), ClickAction.new, AccessHtmlElement.new(:css, "#data-grid-allergy_grid tbody tr.selectable:nth-child(1)"))
+    #add_action(CucumberLabel.new('First Allergies Row'), ClickAction.new, AccessHtmlElement.new(:css, "#data-grid-allergy_grid tbody tr.selectable:nth-child(1) td:nth-child(1)"))
+    add_action(CucumberLabel.new('First Allergies Row'), ClickAction.new, AccessHtmlElement.new(:css, "#data-grid-allergy_grid tbody [data-infobutton='CHOCOLATE']"))
     add_action(CucumberLabel.new('Allergy detail icon'), ClickAction.new, AccessHtmlElement.new(:css, "div.appletToolbar #info-button-sidekick-detailView"))
   
     #| Allergen Name | Standardized Allergen | Reaction | Severity | Drug Class | Entered By | Facility | |
@@ -41,6 +44,7 @@ class AllergiesApplet < AllApplets
     add_verify(CucumberLabel.new('Header - Entered By'), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='allergy_grid-originatorName'] a"))
     add_verify(CucumberLabel.new('Header - Facility'), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='allergy_grid-facilityName'] a"))
     add_verify(CucumberLabel.new('Header - Comment'), VerifyTextNotEmpty.new(''), AccessHtmlElement.new(:css, "[data-header-instanceid='allergy_grid-comments']"))
+    #add_action(CucumberLabel.new('Detail View Button'), ClickAction.new, AccessHtmlElement.new(:css, '[button-type=detailView-button-toolbar]'))
   end
 
   def applet_grid_loaded
@@ -69,10 +73,9 @@ Then(/^the Allergies Applet view contains$/) do |table|
 end
 
 When(/^the user clicks on the allergy pill "(.*?)"$/) do |vaccine_name|
-  driver = TestSupport.driver
   aa = AllergiesApplet.instance
   expect(aa.perform_action(vaccine_name, "")).to be_true
-  driver.find_element(:id, "info-button-sidekick-detailView").click
+  expect(aa.perform_action('Detail View Button')).to eq(true)
   expect(aa.wait_until_action_element_visible("Allergy Modal Details", DefaultLogin.wait_time)).to be_true
   TestSupport.wait_for_page_loaded
 end
@@ -235,7 +238,7 @@ When(/^the user views the first Allergies detail view$/) do
   aa = AllergiesApplet.instance
   expect(aa.wait_until_xpath_count_greater_than('Number of Allergies Applet Rows', 0)).to eq(true), "Test requires at least 1 row to be displayed"
   expect(aa.perform_action('First Allergies Row')).to eq(true), "Could not select first allery row"
-  expect(aa.perform_action('Allergy detail icon')).to eq(true), "Could not select toolbar detail icon"
+  expect(aa.perform_action('Detail View Button')).to eq(true), "Could not select toolbar detail icon"
 end
 
 Then(/^the Allergy Applet table contains headers$/) do |table|

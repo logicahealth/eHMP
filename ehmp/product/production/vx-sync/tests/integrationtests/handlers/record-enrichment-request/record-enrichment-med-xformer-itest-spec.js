@@ -13,15 +13,15 @@ var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 var xformer = require(global.VX_HANDLERS + 'record-enrichment-request/record-enrichment-med-xformer');
 var log = require(global.VX_DUMMIES + '/dummy-logger');
-var config = require(global.VX_ROOT + 'worker-config');
-config.terminology.host = vx_sync_ip;
 // NOTE: be sure next line is commented out before pushing
 // log = require('bunyan').createLogger({
 //     name: 'record-enrichment-allergy-xformer-spec',
 //     level: 'debug'
 // });
-var TerminologyUtils = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
-var terminologyUtils = new TerminologyUtils(log, log, config);
+var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
+var wConfig = require(global.VX_ROOT + 'worker-config');
+var config = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
+config.terminology.host = vx_sync_ip;
 
 var originalVaMedRecord = {
     'dosages': [{
@@ -205,6 +205,8 @@ function getVADrugConcept_ReturnNoCode(conceptId, callback) {
     return callback(null, null);
 }
 
+var terminologyUtil = new TerminologyUtil(log, log, config);
+
 //-----------------------------------------------------------------------------
 // This is a stub method that simulates the VA terminology database.  It behaves
 // like no code was found in the database.
@@ -215,25 +217,26 @@ function getVADrugConcept_ReturnNoCode(conceptId, callback) {
 function getVAConceptMappingTo_ReturnNoCode(concept, targetCodeSystem, callback) {
     return callback(null, null);
 }
-function TerminologyUtil(){
-    this.metrics = log;
+function OverrideTerminologyUtil(log, metrics, config){
+    this.log = log;
+    this.metrics = metrics;
+    this.config = config;
 }
-TerminologyUtil.prototype.config = config;
-TerminologyUtil.prototype.CODE_SYSTEMS = terminologyUtils.CODE_SYSTEMS;
-TerminologyUtil.prototype.getJlvMappedCode = terminologyUtils.getJlvMappedCode;
-TerminologyUtil.prototype.getJlvMappedCodeList = terminologyUtils.getJlvMappedCodeList;
-TerminologyUtil.prototype.getVADrugConcept = getVADrugConcept_ReturnNoCode;
-TerminologyUtil.prototype.getVAConceptMappingTo = getVAConceptMappingTo_ReturnNoCode;
-TerminologyUtil.prototype.isMappingTypeValid = terminologyUtils.isMappingTypeValid;
-var goodTerminology = new TerminologyUtil();
-
+// OverrideTerminologyUtil.prototype.config = config;
+OverrideTerminologyUtil.prototype.CODE_SYSTEMS = terminologyUtil.CODE_SYSTEMS;
+OverrideTerminologyUtil.prototype.getJlvMappedCode = terminologyUtil.getJlvMappedCode;
+OverrideTerminologyUtil.prototype.getJlvMappedCodeList = terminologyUtil.getJlvMappedCodeList;
+OverrideTerminologyUtil.prototype.getVADrugConcept = getVADrugConcept_ReturnNoCode;
+OverrideTerminologyUtil.prototype.getVAConceptMappingTo = getVAConceptMappingTo_ReturnNoCode;
+OverrideTerminologyUtil.prototype._isMappingTypeValid = terminologyUtil._isMappingTypeValid;
+var overrideTerminologyUtil = new OverrideTerminologyUtil(log, log, config);
 
 describe('record-enrichment-med-xformer.js', function() {
     describe('transformAndEnrichRecord()', function() {
         it('Happy Path with VA Med', function() {
             var finished = false;
             var environment = {
-                terminologyUtils: goodTerminology
+                terminologyUtils: terminologyUtil
             };
             var config = {};
 
@@ -258,7 +261,7 @@ describe('record-enrichment-med-xformer.js', function() {
         it('Happy Path with VA Med - Force translation through JLV database.', function() {
             var finished = false;
             var environment = {
-                terminologyUtils: goodTerminology
+                terminologyUtils: overrideTerminologyUtil
             };
             var config = {};
 
@@ -280,10 +283,10 @@ describe('record-enrichment-med-xformer.js', function() {
             }, 'Call failed to return in time.', 10000);
         });
 
-        it('Happy Path with Dod Allergy', function() {
+        it('Happy Path with Dod Medication', function() {
             var finished = false;
             var environment = {
-                terminologyUtils: goodTerminology
+                terminologyUtils: terminologyUtil
             };
             var config = {};
 

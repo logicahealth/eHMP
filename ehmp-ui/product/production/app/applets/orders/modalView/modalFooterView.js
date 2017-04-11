@@ -68,7 +68,9 @@ define([
                 return (this.onError(model));
             }
             ADK.UI.Modal.hide();
-            Utils.launchWorkflow(model, DiscontinueView);
+
+            var workflowTitle = (this.model.get('discontinueBtnLabel') || 'Cancel Order');
+            Utils.launchWorkflow(model, DiscontinueView, {size: 'medium'}, workflowTitle);
         },
         signOrder: function(e) {
             e.preventDefault();
@@ -89,7 +91,13 @@ define([
             }
             ADK.UI.Modal.hide();
             model.setDiscontinuedOrder(ordersUtil.isDiscontinuedUnsignedOrder(model));
-            Utils.launchWorkflow(model, SignView, {size: 'large'});
+            var workflowOptions = {
+                size: 'medium',
+                headerOptions: {
+                    closeButtonOptions: {title: 'Press enter to cancel.'}
+                }
+            };
+            Utils.launchWorkflow(model, SignView, workflowOptions, 'Sign Order');
         },
         onError: function(model, resp) {
             var errorMessage = model.get('errorMessage') || resp.statusText || 'Server Error';

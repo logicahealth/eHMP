@@ -223,9 +223,9 @@ This section details "quick development" steps. For a detailed explanation, see 
 
 License & Authors
 -----------------
-- Author::     ua Timberman (<joshua@chef.io>)
+- Author:: Joshua Timberman (<joshua@chef.io>)
 - Author:: Denis Barishev (<denz@twiket.com>)
-- Author:: Tim       (<tsmith84@gmail.com>)
+- Author:: Tim Smith (<tsmith84@gmail.com>)
 
 ```text
 Copyright:: 2009-2015, Chef Software, Inc

@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: cdsinvocation
-# Recipe:: overwrite_artifact_configs
+# Cookbook Name:: opencds
+# Recipe:: configure_war
 #
 
 directory "#{node[:tomcat][:home]}/shared/classes" do
@@ -22,4 +22,3 @@ template("#{node[:tomcat][:home]}/shared/classes/cds-engine-agent.properties") d
   mode "0755"
   notifies :restart, "service[#{node[:tomcat][:service]}]", :delayed
 end
-

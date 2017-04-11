@@ -29,23 +29,27 @@ define('main/components/views/appletViews/observationsGistView/views/observation
         onRender: function() {
             this.disableNoRecordClick();
         },
-        initialize: function() {
+        initialize: function(options) {
             var buttonTypes = ['infobutton', 'detailsviewbutton', 'quicklookbutton'];
+            if (options.AppletID === 'lab_results_grid' || options.AppletID === 'applet-5'){
+                buttonTypes = ['infobutton', 'detailsviewbutton', 'quicklookbutton', 'notesobjectbutton'];
+            }
+
             if (!Messaging.request('get:current:screen').config.predefined) {
                 buttonTypes.unshift('tilesortbutton');
             }
-            // if (this.appletOptions.appletConfig.id === "lab_results_grid") buttonTypes.push('additembutton');
 
             this.toolbarOptions = {
-                targetElement: this,
                 buttonTypes: buttonTypes
             };
             if (this.model.get('displayName')) {
                 this.$el.attr('data-row-instanceid', this.model.get('displayName'));
             }
+            this.model.set('uniqueName', this.model.get('displayName')+'-'+this.cid);
         },
         onDomRefresh: function() {
             this.$('svg.gist-trend-graph').attr('focusable', 'false');
+            this.$('svg.gist-trend-graph').attr('aria-hidden', 'true');
         }
     });
 
@@ -53,6 +57,11 @@ define('main/components/views/appletViews/observationsGistView/views/observation
         template: observationsGistLayoutTemplate,
         childView: ObservationsGistItem,
         className: 'faux-table-container',
+        events: {
+            'after:hidetoolbar': function(e) {
+                this.$el.find('.dragging-row').removeClass('dragging-row');
+            }
+        },
         attributes: function(){
             var gridTitle = '';
             if(this.options) {

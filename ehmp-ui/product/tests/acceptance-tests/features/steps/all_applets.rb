@@ -38,6 +38,17 @@ class AllApplets < AccessBrowserV2
     add_action(CucumberLabel.new("Date Filter 24hr"), ClickAction.new, AccessHtmlElement.new(:id, "24hr-range-#{id}"))
   end
 
+  def add_modal_date_filter_ids
+    add_action(CucumberLabel.new("Modal Date Filter All"), ClickAction.new, AccessHtmlElement.new(:id, "allRange"))
+    add_action(CucumberLabel.new("Modal Date Filter 2yr"), ClickAction.new, AccessHtmlElement.new(:id, "2yrRange"))
+    add_action(CucumberLabel.new("Modal Date Filter 1yr"), ClickAction.new, AccessHtmlElement.new(:id, "1yrRange"))
+    add_action(CucumberLabel.new("Modal Date Filter 3mo"), ClickAction.new, AccessHtmlElement.new(:id, "3moRange"))
+    add_action(CucumberLabel.new("Modal Date Filter 1mo"), ClickAction.new, AccessHtmlElement.new(:id, "1moRange"))
+    add_action(CucumberLabel.new("Modal Date Filter 7d"), ClickAction.new, AccessHtmlElement.new(:id, "7dRange"))
+    add_action(CucumberLabel.new("Modal Date Filter 72hr"), ClickAction.new, AccessHtmlElement.new(:id, "72hrRange"))
+    add_action(CucumberLabel.new("Modal Date Filter 24hr"), ClickAction.new, AccessHtmlElement.new(:id, "24hrRange"))
+  end
+
   def add_text_filter(appletid_css)
     add_action(CucumberLabel.new("Filter Field"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#{appletid_css} [id^=input-filter-search-]"))
   end
@@ -56,6 +67,13 @@ class AllApplets < AccessBrowserV2
 
   def add_applet_add_button(appletid_css)
     add_action(CucumberLabel.new("Control - applet - Add"), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-add-button"))
+  end
+
+  def add_toolbar_buttons
+    add_action(CucumberLabel.new("Popover Toolbar"), ClickAction.new, AccessHtmlElement.new(:css, ".applet-toolbar"))
+    add_action(CucumberLabel.new("Detail View Button"), ClickAction.new, AccessHtmlElement.new(:css, "[button-type=detailView-button-toolbar]"))
+    add_action(CucumberLabel.new("Info Button"), ClickAction.new, AccessHtmlElement.new(:css, "[button-type=info-button-toolbar]"))
+    add_action(CucumberLabel.new("Quick View Button"), ClickAction.new, AccessHtmlElement.new(:css, "[button-type=quick-look-button-toolbar]"))
   end
 
   def clear_filter(filter_button_id = 'unknown')
@@ -81,5 +99,27 @@ class AllApplets < AccessBrowserV2
     #Close the filter
     perform_action('Control - applet - Filter Toggle')
     # end
+  end
+ 
+  def remove_all_filter
+    @ehmp = PobCommonElements.new
+    @ehmp.btn_remove_all_filter.click if @ehmp.has_btn_remove_all_filter?
+
+    wait = Selenium::WebDriver::Wait.new(:timeout => 10)
+    wait.until { @ehmp.fld_clear_udf_tags.length == 0 }
+  end
+
+  def rename_applet(appletid_css, new_name)
+    add_action(CucumberLabel.new('Trigger Rename'), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .panel-title-label"))
+    add_action(CucumberLabel.new('Rename Applet'), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .panel-title input"))
+  
+    wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+    driver = TestSupport.driver
+    
+    return false unless perform_action('Trigger Rename')
+
+    wait.until { (driver.find_element(:css, "#{appletid_css} .panel-title input").attribute('class').include? 'hidden') == false }
+    return false unless perform_action('Rename Applet', new_name)
+    true
   end
 end

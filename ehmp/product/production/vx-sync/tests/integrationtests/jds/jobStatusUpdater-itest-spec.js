@@ -2,8 +2,6 @@
 
 require('../../../env-setup');
 
-var _ = require('underscore');
-
 var logger = require(global.VX_DUMMIES + 'dummy-logger');
 
 // logger = require('bunyan').createLogger({
@@ -17,7 +15,7 @@ var val = require(global.VX_UTILS + 'object-utils').getProperty;
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var jdsClient = new JdsClient(logger, logger, config);
 
-var JobStatusUpdater = require(global.VX_JOBFRAMEWORK + 'JobStatusUpdater');
+var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 var jsu = new JobStatusUpdater(logger, config, jdsClient);
 
 var identifiers = ['9E7A;33333'];

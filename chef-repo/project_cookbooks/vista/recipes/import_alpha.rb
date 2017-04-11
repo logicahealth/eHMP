@@ -13,7 +13,7 @@ require 'vistarpc4r'
 ruby_block "import_alpha" do
   block do
 
-    broker = VistaRPC4r::RPCBrokerConnection.new("127.0.0.1", 9210, "PW    ", "PW    !!", false)
+    broker = VistaRPC4r::RPCBrokerConnection.new("127.0.0.1", 9210, "lu1234", "lu1234!!", false)
     broker.connect
     broker.setContext('OR CPRS GUI CHART')
 

@@ -9,7 +9,7 @@ Scenario: An authorized user can VA access Laboratory Chem and see standardized 
 	Given a patient with "labs" in multiple VistAs
 	And a patient with pid "9E7A;100022" has been synced through the RDK API
 	When the client requests labs for the patient "9E7A;100022" in FHIR format
-	Then a successful response is returned  
+	Then a successful response is returned
     And the FHIR results contain "labs terminology from DOD Ncid and LOINC"
       | field                                 | value                                                             |
       #Loinc code
@@ -21,17 +21,17 @@ Scenario: An authorized user can VA access Laboratory Chem and see standardized 
       | content.contained.name.coding.code    | urn:va:vuid:4655455                                               |
       | content.contained.name.coding.display | HEPATITIS C ANTIBODY                                              |
       #Inc code
-      | content.contained.name.coding.system  | urn:oid:2.16.840.1.113883.4.642.2.58                              |
+      | content.contained.name.coding.system  | urn:oid:2.16.840.1.113883.6.233                              |
       | content.contained.name.coding.code    | urn:lnc:13955-0                                                   |
-      | content.contained.name.coding.display | HEPATITIS C ANTIBODY                                              |	
-		  
+      | content.contained.name.coding.display | HEPATITIS C ANTIBODY                                              |
 
-@terminology_labs_ch @FHIR 
+
+@terminology_labs_ch @FHIR
 Scenario: An authorized user can DoD access Laboratory Chem and see standardized LOINC values when defined through FHIR API
 	Given a patient with "labs" in multiple VistAs
 	And a patient with pid "9E7A;8" has been synced through the RDK API
 	When the client requests labs for the patient "9E7A;8" in FHIR format
-	Then a successful response is returned  
+	Then a successful response is returned
     And the FHIR results contain "labs terminology from DOD Ncid and LOINC"
       | field                                 | value                                                             |
       #Loinc code
@@ -57,7 +57,6 @@ Scenario: An authorized user can DoD access Laboratory Chem and see standardized
       | content.contained.name.coding.code    | 4736                                                   |
 
 
-#TestNote: 
-#	* We could not test Lab MI in VPR format because it's not available through VPR.       
+#TestNote:
+#	* We could not test Lab MI in VPR format because it's not available through VPR.
 #  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
-      

@@ -13,8 +13,7 @@ And the VPR results contain
       | uid                          | urn:va:visit:9E7A:8:H493        |
       | dischargeDiagnoses.admissionUid      | urn:va:visit:9E7A:8:H493        |
       | dischargeDiagnoses.arrivalDateTime   | 19910904094159                  |
-      | dischargeDiagnoses.dischargeDateTime | 199201281600                    |
-      | dischargeDiagnoses.drg               | 999                             |
+      | dischargeDiagnoses.dischargeDateTime | 19920128160000                    |
       | dischargeDiagnoses.facilityCode      | 515.6                           |
       | dischargeDiagnoses.facilityName      | TROY                            |
       | dischargeDiagnoses.icdCode           | urn:icd:305.02                  |

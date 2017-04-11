@@ -160,6 +160,9 @@ function fixFieldDataTypes(record) {
 	if ((record.checkOut !== null) && (record.checkOut !== undefined)) {
 		record.checkOut = String(record.checkOut);
 	}
+	if ((record.checkIn !== null) && (record.checkIn !== undefined)) {
+		record.checkIn = String(record.checkIn);
+	}
 
 	// movements
 	//----------

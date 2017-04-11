@@ -14,6 +14,7 @@ Then(/^the user looks for patientstatus icon site,All VA ,DOD and Externals$/) d
     field_value= field_name[0]
     # table_xpath= "//*[@id='refresh-patient-data']/following-sibling::span[contains(string(), '#{field_value}')]"
     table_xpath = "//div[@id='patientSyncStatusRegion']/descendant::li[@class='patient-status-icon']/descendant::span[contains(string(), '#{field_value}')]"
+    table_xpath = "//div[@id='patientSyncStatusRegion']/descendant::li/descendant::span[string() = '#{field_value}' and contains(@aria-hidden, 'true')]"
     p table_xpath
     element_found = Sync.dynamic_dom_element_exists?("xpath", table_xpath)
     expect(element_found).to be_true, "Did not find #{field_value}"

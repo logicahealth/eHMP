@@ -6,6 +6,7 @@ define([
 
     var dataGridConfig = {
         id: 'immunizations-full',
+        context: 'patient',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

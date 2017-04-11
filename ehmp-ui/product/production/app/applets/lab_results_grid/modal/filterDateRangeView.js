@@ -10,7 +10,6 @@ define([
     'hbs!app/applets/lab_results_grid/modal/dateRangeHeaderTemplate'
 ], function($, InputMask, DatePicker, moment, Backbone, Marionette, _, dateRangeTemplate, dateRangeHeaderTemplate) {
     'use strict';
-
     var fetchCollection = function(fetchOptions) {
         ADK.PatientRecordService.fetchCollection(fetchOptions);
     };
@@ -18,12 +17,13 @@ define([
     var DateRangeHeaderView = Backbone.Marionette.ItemView.extend({
         template: dateRangeHeaderTemplate,
         initialize: function() {
+
             this.listenTo(this.model, 'change', this.render);
-            /* If the Tesxt Search Applet is Active use these Options */
+            /* If the Text Search Applet is Active use these Options */
             if (ADK.SessionStorage.getAppletStorageModel('search', 'useTextSearchFilter')) {
                 var modalOptions = ADK.SessionStorage.getAppletStorageModel('search', 'modalOptions');
                 this.model.set('selectedId', modalOptions.selectedId);
-                if (modalOptions.selectedId === 'custom-range-apply') {
+                if (modalOptions.selectedId === 'customRangeApply') {
                     this.model.set('customFromDate', modalOptions.customFromDate);
                     this.model.set('customToDate', modalOptions.customToDate);
                 }
@@ -46,7 +46,7 @@ define([
         events: {
             'click button': 'applyDateRange',
             'keydown button': 'handleEnterOrSpaceBar',
-            'keyup input': 'monitorCustomDateRange',
+            'input input': 'monitorCustomDateRange',
             'blur input': 'monitorCustomDateRange',
             'change input': 'monitorCustomDateRange'
         },
@@ -57,22 +57,47 @@ define([
             return this.sharedDateRange;
         },
         monitorCustomDateRange: function(event) {
+            if (event.currentTarget.id === 'filterFromDate') {
+                var customFromDateStr = this.$el.find('#filterFromDate').val();
+                var customFromDate = moment(customFromDateStr, 'MM/DD/YYYY', true);
+
+                if (customFromDate.isValid()) {
+                    this.$('.input-group.date#customDateRange1').datepicker('hide');
+                }
+            }
+
+            if (event.currentTarget.id === 'filterToDate') {
+                var customtoDateStr = this.$el.find('#filterToDate').val();
+                var customtoDate = moment(customtoDateStr, 'MM/DD/YYYY', true);
+
+                if (customtoDate.isValid()) {
+                    this.$('.input-group.date#customDateRange2').datepicker('hide');
+                }
+            }
+
+
             if (this.checkCustomRangeCondition()) {
-                this.$el.find('#custom-range-apply').removeAttr('disabled');
+                this.$el.find('#customRangeApply').removeAttr('disabled');
             } else {
-                this.$el.find('#custom-range-apply').prop('disabled', true);
+                this.$el.find('#customRangeApply').prop('disabled', true);
             }
         },
         setDatePickers: function(fromDate, toDate) {
+            var fromDateEl = this.$('#filterFromDate'),
+                toDateEl = this.$('#filterToDate');
             this.$('.input-group.date#customDateRange1').datepicker({
-                format: 'mm/dd/yyyy'
+                format: 'mm/dd/yyyy',
+                todayBtn: 'linked',
+                todayHighlight: true
             });
             if (fromDate !== null) {
                 this.$('.input-group.date#customDateRange1').datepicker('update', fromDate);
             }
 
             this.$('.input-group.date#customDateRange2').datepicker({
-                format: 'mm/dd/yyyy'
+                format: 'mm/dd/yyyy',
+                todayBtn: 'linked',
+                todayHighlight: true
             });
             if (toDate !== null) {
                 this.$('.input-group.date#customDateRange2').datepicker('update', toDate);
@@ -92,30 +117,26 @@ define([
             };
 
             if (event.currentTarget.id.indexOf('Range') !== -1 &&
-                event.currentTarget.id.indexOf('custom-range-apply') === -1) {
+                event.currentTarget.id.indexOf('customRangeApply') === -1) {
                 this.$el.find('#filterFromDate').val('');
                 this.$el.find('#filterToDate').val('');
-                this.$el.find('#custom-range-apply').prop('disabled', true);
+                this.$el.find('#customRangeApply').prop('disabled', true);
             }
 
             switch (event.currentTarget.id) {
-                case 'custom-range-apply':
+                case 'customRangeApply':
                     event.preventDefault();
-                    var filterFromDate = moment(this.$el.find('#filterFromDate').val());
-                    var filterToDate = moment(this.$el.find('#filterToDate').val());
+                    var filterFromDate = this.$el.find('#filterFromDate').val();
+                    var filterToDate = this.$el.find('#filterToDate').val();
 
-                    if (filterFromDate <= filterToDate) {
-                        fromDate = filterFromDate.format('MM/DD/YYYY');
-                        toDate = filterToDate.format('MM/DD/YYYY');
+                    if (moment(filterToDate).isAfter(filterFromDate)) {
+                        fromDate = filterFromDate;
+                        toDate = filterToDate;
                     } else {
-                        toDate = filterFromDate.format('MM/DD/YYYY');
-                        fromDate = filterToDate.format('MM/DD/YYYY');
+                        toDate = filterFromDate;
+                        fromDate = filterToDate;
                     }
-
-                    this.sharedDateRange.set('customFromDate', fromDate);
-                    this.sharedDateRange.set('customToDate', toDate);
-
-                    this.model.set('selectedId', 'custom-range-apply');
+                    this.model.set('selectedId', 'customRangeApply');
                     break;
                 case '2yrRange':
                     this.setDateRangeValues('years', 2, '2yrRange');
@@ -141,40 +162,41 @@ define([
                 case 'allRange':
                     fromDate = null;
                     toDate = moment().format('MM/DD/YYYY');
-                    //toDate = moment().add('years', 100).format('MM/DD/YYYY');
                     this.model.set('selectedId', 'allRange');
                     break;
                 default:
                     break;
             }
-            var start = 'date.start';
-            var end = 'date.end';
-            this.fetchOptions.criteria.filter = this.fetchOptions.criteria.filterHold;
+
             if (fromDate !== undefined && fromDate !== null) {
-                this.fetchOptions.criteria[start] = moment(fromDate).startOf('day').format('YYYYMMDDHHmm');
-                this.fetchOptions.criteria.filter += ',' + 'gt(observed,' + this.fetchOptions.criteria[start] + ')';
+                this.fetchOptions.criteria.observedFrom = moment(fromDate).format('YYYYMMDD');
             } else {
-                delete this.fetchOptions.criteria[start];
+                delete this.fetchOptions.criteria.observedFrom;
             }
 
             if (toDate !== undefined && toDate !== null) {
-                this.fetchOptions.criteria[end] = moment(toDate).endOf('day').format('YYYYMMDDHHmm');
-                this.fetchOptions.criteria.filter += ',' + 'lt(observed,' + this.fetchOptions.criteria[end] + ')';
+                this.fetchOptions.criteria.observedTo = moment(toDate).format('YYYYMMDD');
             } else {
-                delete this.fetchOptions.criteria[end];
+                delete this.fetchOptions.criteria.observedTo;
+            }
+
+            //Replaces existing date filter with updated date filter 
+            if (fromDate !== undefined && fromDate !== null && toDate !== undefined && toDate !== null) {
+                var dateFilterString = ', between(observed,' + moment(fromDate).format('YYYYMMDD') + ',' + moment(toDate).format('YYYYMMDD') + ')';
+                this.fetchOptions.criteria.filter = this.fetchOptions.criteria.filterHold + dateFilterString;
+            } else {
+                this.fetchOptions.criteria.filter = this.fetchOptions.criteria.filterHold;
             }
 
             this.model.set('fromDate', fromDate);
             this.model.set('toDate', toDate);
-
-
             //TODO: Remove this once the new Resource is Created
             this.sharedDateRange.set('fromDate', fromDate);
             this.sharedDateRange.set('toDate', toDate);
 
             this.$el.find('button').removeClass('active-range');
 
-            if (event.currentTarget.id !== 'custom-range-apply') {
+            if (event.currentTarget.id !== 'customRangeApply') {
                 this.$el.find('#' + event.currentTarget.id).addClass('active-range');
             }
 
@@ -188,27 +210,24 @@ define([
             this.sharedDateRange.set('customFromDate', this.model.get('customFromDate'));
             this.sharedDateRange.set('customToDate', this.model.get('customToDate'));
             this.sharedDateRange.set('selectedId', this.model.get('selectedId'));
-            // ADK.SessionStorage.setAppletStorageModel('lab_results_grid', 'modal_selectedId', this.model.get('selectedId'));
-            // ADK.SessionStorage.setAppletStorageModel('lab_results_grid', 'modal_customFromDate', this.model.get('customFromDate'));
-            // ADK.SessionStorage.setAppletStorageModel('lab_results_grid', 'modal_customToDate', this.model.get('customToDate'));
         },
         checkCustomRangeCondition: function() {
             var hasCustomRangeValuesBeenSetCorrectly = true;
-            var customFromDate = this.$el.find('#filterFromDate').val();
-            var customToDate = this.$el.find('#filterToDate').val();
+            var customFromDateStr = this.$el.find('#filterFromDate').val();
+            var customToDateStr = this.$el.find('#filterToDate').val();
+            var customFromDate = moment(customFromDateStr, 'MM/DD/YYYY', true);
+            var customToDate = moment(customToDateStr, 'MM/DD/YYYY', true);
 
-            if (moment(customFromDate, 'MM/DD/YYYY', true).isValid()) {
-                this.$('.input-group.date#customDateRange1').datepicker('hide');
-                this.model.set('customFromDate', customFromDate);
-                this.sharedDateRange.set('fromDate', customFromDate);
+            if (customFromDate.isValid()) {
+                this.model.set('customFromDate', customFromDateStr);
+                this.sharedDateRange.set('fromDate', customFromDateStr);
             } else {
                 hasCustomRangeValuesBeenSetCorrectly = false;
             }
 
-            if (moment(customToDate, 'MM/DD/YYYY', true).isValid()) {
-                this.$('.input-group.date#customDateRange2').datepicker('hide');
-                this.model.set('customToDate', customToDate);
-                this.sharedDateRange.set('toDate', customToDate);
+            if (customToDate.isValid()) {
+                this.model.set('customToDate', customToDateStr);
+                this.sharedDateRange.set('toDate', customToDateStr);
             } else {
                 hasCustomRangeValuesBeenSetCorrectly = false;
             }
@@ -232,7 +251,6 @@ define([
             this.$('#filterToDate').inputmask('m/d/y', {
                 'placeholder': 'MM/DD/YYYY'
             });
-
             this.dateRangeHeaderRegion.show(new DateRangeHeaderView({
                 model: this.model
             }));
@@ -240,23 +258,29 @@ define([
             var selectedId = this.model.get('selectedId');
             var customFromDate = this.model.get('customFromDate');
             var customToDate = this.model.get('customToDate');
-            if (this.parentView.isFromPanel === undefined && this.parentView.isFromNonPanel === undefined) {
-                selectedId = ADK.SessionStorage.getAppletStorageModel('lab_results_grid', 'modal_selectedId');
-                customFromDate = ADK.SessionStorage.getAppletStorageModel('lab_results_grid', 'modal_customFromDate');
-                customToDate = ADK.SessionStorage.getAppletStorageModel('lab_results_grid', 'modal_customToDate');
-            }
 
             if (selectedId !== undefined && selectedId !== null) {
                 this.setDatePickers(customFromDate, customToDate);
                 this.$el.find('#' + selectedId).click();
             } else {
                 if (this.fullScreen) {
-                    selectedId = $('[data-appletid=\'lab_results_grid\'] .grid-filter-daterange .active-range').attr('id') || 'custom-range-apply';
-                    customFromDate = $('[data-appletid=\'lab_results_grid\'] .grid-filter-daterange #filter-from-date-lab_results_grid').val();
-                    customToDate = $('[data-appletid=\'lab_results_grid\'] .grid-filter-daterange #filter-to-date-lab_results_grid').val();
+                    var sharedSelectedId = this.sharedDateRange.get('selectedId');
+                    var sharedCustomFromDate = this.sharedDateRange.get('customFromDate');
+                    var sharedCustomToDate = this.sharedDateRange.get('customToDate');
+
+                    // If custom dates have already been defined by a sibling vital (i.e. a vital accessible
+                    // via the next or previous button), use those dates, otherwise inherit the custom dates
+                    // from the parent modal
+                    if (sharedSelectedId) {
+                        selectedId = this.sharedDateRange.get('selectedId');
+                        customFromDate = this.sharedDateRange.get('customFromDate');
+                        customToDate = this.sharedDateRange.get('customToDate');
+                    } else {
+                        selectedId = $('[data-appletid=\'vitals\'] .grid-filter-daterange .active-range').attr('id') || 'custom-range-apply-vitals';
+                        customFromDate = $('[data-appletid=\'vitals\'] .grid-filter-daterange #filter-from-date-vitals').val();
+                        customToDate = $('[data-appletid=\'vitals\'] .grid-filter-daterange #filter-to-date-vitals').val();
+                    }
                 } else {
-
-
                     var globalDate = ADK.SessionStorage.getModel('globalDate');
                     selectedId = globalDate.get('selectedId');
                     customFromDate = globalDate.get('customFromDate');
@@ -286,9 +310,9 @@ define([
                         this.$el.find('#24hrRange').click();
                     } else if (selectedId.indexOf('allRange') >= 0) {
                         this.$el.find('#allRange').click();
-                    } else if (selectedId.indexOf('custom-range-apply') >= 0) {
-                        if (!this.$el.find('custom-range-apply').prop('disabled')) {
-                            this.$el.find('#custom-range-apply').click();
+                    } else if (selectedId.indexOf('customRangeApply') >= 0) {
+                        if (!this.$el.find('customRangeApply').prop('disabled')) {
+                            this.$el.find('#customRangeApply').click();
                         }
                     }
                 }
@@ -296,8 +320,7 @@ define([
         },
         fetchDateRangeFilteredCollection: function() {
             ADK.PatientRecordService.fetchCollection(this.fetchOptions);
-            this.parentView.leftColumn.show(ADK.Views.Loading.create()); // this.parentView.tableLoadingView);
-            //   this.parentView.chart.show(ADK.Views.Loading.create()); // this.parentView.chartLoadingView);
+            this.parentView.leftColumn.show(ADK.Views.Loading.create());
         },
         setFetchOptions: function(fetchOptions) {
             this.fetchOptions = fetchOptions;

@@ -1,0 +1,28 @@
+<div id="patientProviderInformation">
+    <hr aria-hidden="true">
+    <div class="section-content toggle-details" id="patientInformationProviderInfoSummary">
+        <div class="info">
+            <p><strong>Primary Care Provider:</strong><br />
+            {{toTitleCase teamInfo.team.name true 'Unassigned'}}<br />
+            {{toTitleCase teamInfo.primaryProvider.name true 'Unassigned'}}/{{toTitleCase teamInfo.associateProvider.name true 'Unassigned'}}<br />
+            {{formatPhone teamInfo.team.phone 'Unassigned'}}</p>
+        </div>
+        {{#if isInpatient}}
+        <div class="info">
+            <p><strong>Inpatient Attending:</strong><br />
+            {{toTitleCase teamInfo.attendingProvider.name true 'Unassigned'}}</p>
+        </div>
+        <div class="info">
+            <p><strong>Provider:</strong><br />
+            {{toTitleCase teamInfo.inpatientProvider.name true 'Unassigned'}}</p>
+        </div>
+        {{/if}} {{#if hasMhInfo}}
+        <div class="info">
+            <p><strong>Mental Health:</strong><br />
+            {{toTitleCase teamInfo.mhCoordinator.mhTeam true 'Unassigned'}}<br />
+            {{toTitleCase teamInfo.mhCoordinator.name true 'Unassigned'}}</p>
+        </div>
+        {{/if}}
+    </div>
+    <div id="patient-header-provider-details" class="more"></div>
+</div>

@@ -4,7 +4,7 @@
 Feature: F352 - Tile Sorting
 # Provide the ability to sort tiles within an applet on a user-defined workspace by dragging and dropping tiles in the trend/gist view .
 
-Background: 
+#Background:
 #Tests include background of adding all 4 relevant domain applets on a UDW, and viewing the workspace
     #Given user is logged into eHMP-UI
     #And user searches for and selects "EIGHT,PATIENT"
@@ -18,8 +18,8 @@ Background:
     #And the user creates a new workspace titled "testTiles Workspace" with the description "testTiles Workspace"
     #And sets "testTiles Workspace" as the default workspace
     #And the user clicks "Launch"
-    #And the user drags and drops the Conditions thumbnail right by 5 and down by 400
-    #And user clicks "Trend View" on the workspace editor of Conditions
+    #And the user drags and drops the Problems thumbnail right by 5 and down by 400
+    #And user clicks "Trend View" on the workspace editor of Problems
     #And the user drags and drops the Labs thumbnail right by 15 and down by 400
     #And user clicks "Trend View" on the workspace editor of Labs
     #And the user drags and drops the Meds thumbnail right by 25 and down by 400
@@ -89,8 +89,8 @@ Background:
 @F352-1.7 @debug 
 Scenario: User cannot drag tiles across applets
 Given the user is viewing the workspace titled "testTiles Workspace"
-	And the user is viewing the applet titled "Conditions"
-	And the list of conditions in the applet is as follows
+	And the user is viewing the applet titled "Problems"
+	And the list of problems in the applet is as follows
 	    | vist for: daycare exam    |
 	    | hand joint pain (finding)  |
 	    | shocklike sensation from left elbow to hand |
@@ -109,7 +109,7 @@ Given the user is viewing the workspace titled "testTiles Workspace"
         | cough variant asthma (disorder)                         |
     When the user clicks-and-holds on a tile with the title "hand joint pain (finding)"
 	And the user drags the tile across the workspace to the applet titled "Vitals"
-    Then the tile drops in place on the applet titled "Conditions"
+    Then the tile drops in place on the applet titled "Problems"
 
 
 #Mouse ops:

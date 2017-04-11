@@ -58,9 +58,7 @@
 					"type": "string"
 				},
 				"timestamp": {
-					"type": "object",
-					"properties": {
-					}
+					"type": "string"
 				},
 				"type": {
 					"type": "string"

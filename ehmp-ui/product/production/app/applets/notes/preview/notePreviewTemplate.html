@@ -1,84 +1,206 @@
-<div id="note-preview-body" class="container-fluid">
-	<div class="row">
-		<div class="col-xs-10"></div>
-		<div class="col-xs-2">
-		    {{#if hideEditButtonOnPreview}}
-		    	&nbsp;
-		    {{else}}
-		    	<button id="note-preview-edit-btn" type="button" title="Press enter to edit" class="btn btn-default btn-sm">
-					<span class="sr-only">Edit</span>
-					<i class="fa fa-pencil"></i>
-				</button>
-			{{/if}}
+<div id="note-preview-body" class="detail-modal-content word-break-break-word">
+	<div class="document-detail">
+		<div class="row">
+			<div class="col-xs-12">
+	            <h5 class="bottom-border-grey-dark">
+	            	{{#if localTitle}}
+						{{localTitle}} Details
+					{{else}}
+						&lt;No Title&gt; Details
+					{{/if}}
+				</h5>
+	        </div>
+	        <div class="col-xs-3 left-margin-sm">
+				<p>
+					<span data-detail-label="facility"><strong>Facility</strong></span><br />
+					<span data-detail="facility">{{facilityName}}</span>
+				</p>
+			</div>
+			<div class="col-xs-3">
+				<p>
+					<span data-detail-label="author"><strong>Author</strong></span><br />
+					<span data-detail="author">{{authorDisplayName}}</span>
+				</p>
+			</div>
+			<div class="col-xs-3">
+				<p>
+					<span data-detail-label="status"><strong>Status</strong></span><br />
+					<span data-detail="status">{{statusDisplayName}}</span>
+				</p>
+			</div>
+			<div class="col-xs-3">
+				<p>
+					<span data-detail-label="date-time"><strong>Date/Time</strong></span><br />
+					<span data-detail="date-time">
+						{{#if referenceDateTime}}
+							{{formatDateTime referenceDateTime "YYYYMMDDHHmmssSSS" "datetime"}}
+					    {{else}}
+							&lt;No Date&gt;
+						{{/if}}
+					</span>
+				</p>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12" id="note-preview-title">
-			{{#if localTitle}}
-				{{localTitle}}
-			{{else}}
-				&lt;No Title&gt;
-			{{/if}}
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12" id="note-preview-datetime">
-			{{#if referenceDateTime}}
-				{{formatDateTime referenceDateTime "YYYYMMDDHHmmssSSS" "datetime"}}
-			{{else}}
-				&lt;No Date&gt;
-			{{/if}}
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12" id="note-preview-encounter">{{encounterDisplayName}}</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-9" id="note-preview-author">{{author}}</div>
-		<div class="col-xs-3" id="note-preview-status">{{statusDisplayName}}</div>
-	</div>
+		<p class="sr-only">Note:</p>
 
-	<hr>
+		{{#compare app "vista"}}
+			<div class="container-fluid background-color-pure-yellow transform-none bottom-margin-sm">
+				{{#compare displayGroup "unsigned"}}
+					{{#compare status "UNSIGNED"}}
+						<div class="row left-margin-no">
+							<div class="col-xs-12">
+								<p class="all-margin-xs">This Unsigned note was created outside of eHMP. Edit the note in CPRS.</p>
+							</div>
+						</div>
+					{{/compare}}
+				{{/compare}}
+			</div>
+		{{/compare}}
 
-	{{#compare app "vista"}}
-	<div class="row">
-		{{#compare displayGroup "unsigned"}}
-		<div class="col-xs-12 label-danger">This Unsigned note was created outside of eHMP. Please edit the note in CPRS.</div>
-		{{/compare}}
-		{{#compare displayGroup "uncosigned"}}
-		<div class="col-xs-12 label-danger">This Uncosigned note was created outside of eHMP. Please complete the note in CPRS.</div>
-		{{/compare}}
-		{{#compare displayGroup "signed"}}
-			{{#compare status "UNCOSIGNED"}}
-				<div class="col-xs-12 label-danger">This Uncosigned note was created outside of eHMP. Please complete the note in CPRS.</div>
+		{{#if userCanCosign}}
+			{{#compare app "vista"}}
+				<div class="container-fluid background-color-pure-yellow transform-none bottom-margin-sm">
+					<div class="row left-margin-no">
+						{{#compare displayGroup "uncosigned"}}
+							<div class="col-xs-12">
+								<p class="all-margin-xs">This un-cosigned note was created outside of eHMP. Complete the note in CPRS.</p>
+							</div>
+						{{/compare}}
+						{{#compare displayGroup "signed"}}
+							{{#compare status "UNCOSIGNED"}}
+								<div class="col-xs-12">
+									<p class="all-margin-xs">This un-cosigned note was created outside of eHMP. Complete the note in CPRS.</p>
+								</div>
+							{{/compare}}
+						{{/compare}}
+					</div>
+				</div>
 			{{/compare}}
-		{{/compare}}
-	</div>
-	{{/compare}}
+			{{#compare app "ehmp"}}
+				<div class="container-fluid background-color-pure-yellow transform-none bottom-margin-sm">
+					<div class="row left-margin-no">
+						{{#compare displayGroup "uncosigned"}}
+							<div class="col-xs-12">
+								<p class="all-margin-xs">This note was created in eHMP, but must be cosigned in CPRS in v2.0</p>
+							</div>
+						{{/compare}}
+						{{#compare displayGroup "signed"}}
+							{{#compare status "UNCOSIGNED"}}
+								<div class="col-xs-12">
+									<p class="all-margin-xs">This note was created in eHMP, but must be cosigned in CPRS in v2.0</p>
+								</div>
+							{{/compare}}
+						{{/compare}}
+					</div>
+				</div>
+			{{/compare}}
+		{{/if}}
 
-	{{#if text}}
+		{{#if text}}
+	        <pre class="top-margin-sm">{{contentPreview}}{{signaturePreview}}</pre>
+	    {{/if}}
 
-        <div class='row'>
+	    {{#if addenda}}
+			<div class="row">
+	    		<div class="col-xs-12">
+	        		<h5 class="bottom-border-grey-dark top-margin-md bottom-margin-xl">Addenda</h5>
+	    		</div>
+			</div>
+			{{#each addenda}}
+				{{#each text}}
+					<div class="row">
+					    <div class="col-xs-3 left-margin-sm">
+					    	<p>
+						        <span><strong>Date of Addendum</strong></span><br />
+						        <span>{{formatDateTime dateTime "YYYYMMDDHHmmssSSS" "datetime"}}</span>
+					        </p>
+					    </div>
+					    <div class="col-xs-3">
+					    	<p>
+						        <span><strong>Author</strong></span><br />
+						        <span>{{authorDisplayName}}</span>
+					        </p>
+					    </div>
+						<div class="col-xs-3">
+					    	<p>
+						        <span><strong>Status</strong></span><br />
+						        <span>{{status}}</span>
+					        </p>
+					    </div>
+					</div>
+					<p class="sr-only">Addendum:</p>
+					{{#compare app "vista"}}
+					<div class="container-fluid background-color-pure-yellow transform-none bottom-margin-sm">
+						<div class="row left-margin-no">
+							{{#compare status "UNSIGNED"}}
+								{{#if noPermission}}
+									<div class="col-xs-12">
+										<p class="all-margin-xs">This addendum was created by another user. Contact the author for more information.</p>
+									</div>
+								{{/if}}
 
-                <pre class='col-sm-12 note-preview-content'>{{contentPreview}}</pre>
+								<div class="col-xs-12">
+									<p class="all-margin-xs">This Unsigned addendum was created outside of eHMP. Edit the addendum in CPRS.</p>
+								</div>
+							{{/compare}}
+						</div>
+					</div>
+					{{/compare}}
 
-        </div>
+					{{#compare app "ehmp"}}
+					<div class="container-fluid background-color-pure-yellow transform-none bottom-margin-sm">
+						<div class="row left-margin-no">
+							{{#compare status "UNSIGNED"}}
+								{{#if noPermission}}
+									<div class="col-xs-12">
+										<p class="all-margin-xs">This addendum was created by another user. Contact the author for more information.</p>
+									</div>
+								{{/if}}
+							{{/compare}}
+						</div>
+					</div>
+					{{/compare}}
 
-        {{/if}}
+					{{#if userCanCosignAddendum}}
+						<div class="container-fluid background-color-pure-yellow transform-none bottom-margin-sm">
+							<div class="row left-margin-no">
+								<div class="col-xs-12">
+									<p class="all-margin-xs">This un-cosigned addendum was created outside of eHMP. Complete the note in CPRS.</p>
+								</div>
+							</div>
+						</div>
+					{{/if}}
+					{{#if userAwareOfCosignRequirement}}
+						<div class="container-fluid background-color-pure-yellow transform-none bottom-margin-sm">
+							<div class="row left-margin-no">
+									<div class="col-xs-12">
+										<p class="all-margin-xs">This un-cosigned addendum was created outside of eHMP.</p>
+									</div>
+							</div>
+						</div>
+					{{/if}}
 
-<!-- Removing for now until we have a better way to re-render the template after a model changes.
-     This is added to the modelUtil.js
+					<pre class="top-margin-sm">{{contentPreview}}{{signaturePreview}}</pre>
 
-	{{#if signedDateTime}}
-	<hr>
-	<div class="row">
-		<div class="col-xs-12" id="note-preview-signature-date">
-			Signed: {{formatDateTime signedDateTime "YYYYMMDDHHmmssSSS" "datetime"}}
+					<hr class="all-margin-xl left-margin-sm right-margin-sm" />
+				{{/each}}
+			{{/each}}
+		{{/if}}
+
+	<!-- Removing for now until we have a better way to re-render the template after a model changes.
+	     This is added to the modelUtil.js
+
+		{{#if signedDateTime}}
+		<hr>
+		<div class="row">
+			<div class="col-xs-12" id="note-preview-signature-date">
+				Signed: {{formatDateTime signedDateTime "YYYYMMDDHHmmssSSS" "datetime"}}
+			</div>
+			<div class="col-xs-12" id="note-preview-signer">
+				By: {{signerDisplayName}}
+			</div>
 		</div>
-		<div class="col-xs-12" id="note-preview-signer">
-			By: {{signerDisplayName}}
-		</div>
-	</div>
+		{{/if}}
 	-->
-	{{/if}}
+	</div>
 </div>

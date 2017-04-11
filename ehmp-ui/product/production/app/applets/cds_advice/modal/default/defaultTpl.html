@@ -1,35 +1,75 @@
-<div class="row">
-    <div class="col-xs-12">
-        <h5 class="bottom-border-grey-light">{{title}}</h5>
-    </div>
-</div>
-<div class="row">
-    <div class="col-xs-4 text-right">Priority:</div>
-    <div class="col-xs-8 {{priorityCSS}}">{{priorityText}}</div>
-</div>
-<div class="row">
-    <div class="col-xs-4 text-right">Type:</div>
-    <div class="col-xs-8">{{typeText}}</div>
-</div>
-<div class="row">
-    <div class="col-xs-4 text-right">Detail:</div>
-    <div class="col-xs-8">{{details.detail}}</div>
-</div>
-{{#if details.provenance}}
+<div class="detail-modal-content">
     <div class="row">
-        <div class="col-xs-4 text-right">Provenance:</div>
-        <div class="col-xs-8 provenance">{{details.provenance}}</div>
+        <div class="col-xs-12">
+            <h5 class="bottom-border-grey-dark">{{title}}</h5>
+        </div>
     </div>
-{{/if}}
-{{#if dueDate}}
     <div class="row">
-        <div class="col-xs-4 text-right">Due Date:</div>
-        <div class="col-xs-8">{{dueDate}}</div>
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Priority:</strong></span><br />
+                <span class="{{priorityCSS}}">
+                    {{#if priorityText}}
+                        {{priorityText}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Type:</strong></span><br />
+                <span class="{{priorityCSS}}">
+                    {{#if typeText}}
+                        {{typeText}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        {{#if dueDate}}
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Due Date:</strong></span><br />
+                <span>{{dueDate}}</span>
+            </p>
+        </div>
+        {{/if}}
+        {{#if doneDate}}
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Done Date:</strong></span><br />
+                <span>{{doneDate}}</span>
+            </p>
+        </div>
+        {{/if}}
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Provenance:</strong></span><br />
+                <span>
+                    {{#if details.provenance}}
+                        {{details.provenance}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>
     </div>
-{{/if}}
-{{#if doneDate}}
-    <div class="row">
-        <div class="col-xs-4 text-right">Done Date:</div>
-        <div class="col-xs-8">{{doneDate}}</div>
+    <div class="row top-margin-sm">
+        <div class="col-xs-12">
+            <h6 class="bottom-border-grey-dark">Details</h6>
+        </div>
     </div>
-{{/if}}
+    {{#if details.detail}}
+    <pre>{{details.detail}}</pre>
+    {{else}}
+    <div class="row detail-modal-text-transform-none">
+        <div class="col-xs-12">
+            <p>Details not available for this reminder.</p>
+        </div>
+    </div>
+    {{/if}}
+</div>

@@ -1,8 +1,8 @@
-@F144_allergy_applet @US2801 @DE621 @regression @triage
+@F144_allergy_applet @US2801 @DE621 @regression
 Feature: F144 - eHMP viewer GUI - Allergies Expanded
 
 Background:
- Given user is logged into eHMP-UI
+ # Given user is logged into eHMP-UI
   And user searches for and selects "FORTYSIX,PATIENT"
   Then Overview is active
   And user sees Allergies Gist

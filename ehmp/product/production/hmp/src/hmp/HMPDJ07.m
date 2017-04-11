@@ -1,5 +1,5 @@
-HMPDJ07 ;ASMR/MKB - Radiology,Surgery ;6/25/12  16:11
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 3
+HMPDJ07 ;SLC/MKB,ASMR/RRB - Radiology,Surgery;6/25/12  16:11
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -32,7 +32,7 @@ RA1(ID) ; -- radiology exam ^TMP($J,"RAE1",DFN,ID)
  S:$L($P(X0,U,6)) EXAM("statusName")=$P($P(X0,U,6),"~",2)
  S X=$P(X0,U,7),LOC="" I $L(X) D
  . S EXAM("imageLocation")=X,EXAM("locationName")=X
- . S LOC=+$O(^SC("B",X,0))
+ . S LOC=+$O(^SC("B",X,0)) ;ICR 10040 DE2818 ASF 11/10/15
  . S EXAM("locationUid")=$$SETUID^HMPUTILS("location",,LOC)
  S X=$$FAC^HMPD(LOC) D FACILITY^HMPUTILS(X,"EXAM")
  I $L($P(X0,U,8)) S X=$P($P(X0,U,8),"~",2),EXAM("imagingTypeUid")=$$SETVURN^HMPUTILS("imaging-Type",X)
@@ -53,7 +53,7 @@ RA1(ID) ; -- radiology exam ^TMP($J,"RAE1",DFN,ID)
  . S EXAM("reason")=$G(^TMP($J,"RAE2",DFN,+$P(ID3,U,3),PROC,"RFS"))
  . S X=+$G(^TMP($J,"RAE2",DFN,+$P(ID3,U,3),PROC,"P")) D:X
  .. S EXAM("providers",1,"providerUid")=$$SETUID^HMPUTILS("user",,X)
- .. S EXAM("providers",1,"providerName")=$P($G(^VA(200,X,0)),U)
+ .. S EXAM("providers",1,"providerName")=$P($G(^VA(200,X,0)),U) ;ICR 10060 DE2818 ASF 11/10/15
  . S N=0 F  S N=$O(^TMP($J,"RAE2",DFN,+$P(ID3,U,3),PROC,"D",N)) Q:N<1  S X=$G(^(N)) D
  .. S EXAM("diagnosis",N,"code")=X
  .. S:N=1 EXAM("diagnosis",N,"primary")="true"
@@ -63,7 +63,7 @@ RA1(ID) ; -- radiology exam ^TMP($J,"RAE1",DFN,ID)
  S EXAM("lastUpdateTime")=$$EN^HMPSTMP("image") ;RHL 20150102
  S EXAM("stampTime")=EXAM("lastUpdateTime") ; RHL 20150102
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("image",EXAM("uid"),EXAM("stampTime")) Q:HMPMETA=1  ;US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("image",EXAM("uid"),EXAM("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("EXAM","image")
  Q
  ;
@@ -106,6 +106,6 @@ SR1(ID) ; -- surgery
  S SURG("lastUpdateTime")=$$EN^HMPSTMP("surgery") ;RHL 20150102
  S SURG("stampTime")=SURG("lastUpdateTime") ; RHL 20150102
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("surgery",SURG("uid"),SURG("stampTime")) Q:HMPMETA=1  ;US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("surgery",SURG("uid"),SURG("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("SURG","surgery")
  Q

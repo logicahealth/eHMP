@@ -1,13 +1,13 @@
 When(/^the client requests labs by type for the patient "([^"]*)"$/) do |pid, table|
   # labsbytype
-  request = QueryRDKDomain.new('labsbytype', pid)
+  request = QueryRDKDomain.new('searchbytype-lab', pid)
   
   table.rows.each do |row|
     request.add_parameter(row[0], row[1])
   end
   p request.path
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests vitals type for the patient "([^"]*)"$/) do |pid, table|
@@ -18,5 +18,5 @@ When(/^the client requests vitals type for the patient "([^"]*)"$/) do |pid, tab
   end
   p request.path
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end

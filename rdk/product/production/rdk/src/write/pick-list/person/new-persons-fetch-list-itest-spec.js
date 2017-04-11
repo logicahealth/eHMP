@@ -9,57 +9,46 @@ var log = sinon.stub(require('bunyan').createLogger({ name: 'new-persons-fetch-l
 var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
-    host: 'IP        ',
+    host: 'IP_ADDRESS',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'PW',
+    verifyCode: 'PW',
+    localIP: 'IPADDRES',
     localAddress: 'localhost'
 };
 
-describe('new-persons-fetch-list resource integration test', function() {
-    it('can call the RPC with searchString, no type, and a date', function(done) {
-        this.timeout(20000);
-        fetchDirectRpcCall(log, configuration, function(err, result) {
+describe('new-persons-fetch-list resource', function() {
+    it('can call the RPC with no date', function(done) {
+        this.timeout(120000);
+        fetch(log, configuration, function(err, result) {
             expect(err).to.be.null();
             expect(result).not.to.be.falsy();
             result.must.be.an.array();
-            expect(result.length).to.equal(44);
-            done();
-        }, {searchString: 'PROGRAMMER,OND~', newPersonsType: '', dateTime: '3150710'});
-    });
-
-    it('can call the RPC with no searchString, no type, and a date', function(done) {
-        this.timeout(20000);
-        fetchDirectRpcCall(log, configuration, function(err, result) {
-            expect(err).to.be.null();
-            expect(result).not.to.be.falsy();
-            result.must.be.an.array();
-            expect(result.length).to.equal(44);
-            done();
-        }, {searchString: '', newPersonsType: '', dateTime: '3150710'});
-    });
-
-    it('can call the RPC with searchString, no type, and no date', function(done) {
-        this.timeout(20000);
-        fetchDirectRpcCall(log, configuration, function(err, result) {
-            expect(err).to.be.null();
-            expect(result).not.to.be.falsy();
-            result.must.be.an.array();
-            expect(result.length).to.equal(44);
-            done();
-        }, {searchString: 'KHAN,VIHAAM~'});
-    });
-
-    it('can call the RPC with no searchString, no type, and no date', function(done) {
-        this.timeout(20000);
-        fetchDirectRpcCall(log, configuration, function(err, result) {
-            expect(err).to.be.null();
-            expect(result).not.to.be.falsy();
-            result.must.be.an.array();
-            expect(result.length).to.be.gte(44); //Was 115 at the time this test was written.
+            expect(result.length).to.be.gte(0);
             done();
         });
+    });
+
+    it('can call the RPC with a date that returns results', function(done) {
+        this.timeout(20000);
+        fetch(log, configuration, function(err, result) {
+            expect(err).to.be.null();
+            expect(result).not.to.be.falsy();
+            result.must.be.an.array();
+            expect(result.length).to.be.gte(0);
+            done();
+        }, {date: '20160101'});
+    });
+
+    it('can call the RPC with a date that returns 0 results', function(done) {
+        this.timeout(20000);
+        fetch(log, configuration, function(err, result) {
+            expect(err).to.be.null();
+            expect(result).not.to.be.falsy();
+            result.must.be.an.array();
+            expect(result.length).to.equal(0);
+            done();
+        }, {date: '18000101'});
     });
 
     it('fetch works recursively', function (done) {

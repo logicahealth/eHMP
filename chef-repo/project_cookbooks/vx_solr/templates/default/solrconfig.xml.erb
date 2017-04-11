@@ -16,9 +16,9 @@
  limitations under the License.
 -->
 
-<!-- 
+<!--
      For more details about configurations options that may appear in
-     this file, see http://wiki.apache.org/solr/SolrConfigXml. 
+     this file, see http://wiki.apache.org/solr/SolrConfigXml.
 -->
 <config>
     <lib dir="/opt/solr-5.1.0/server/solr-webapp/webapp/WEB-INF/lib" regex=".*\.jar" />
@@ -32,7 +32,7 @@
        affect both how text is indexed and queried.
     -->
     <luceneMatchVersion>LUCENE_47</luceneMatchVersion>
-    
+
     <!-- Data Directory
 
        Used to specify an alternate directory to hold all index data
@@ -44,7 +44,7 @@
 
 
     <!-- The DirectoryFactory to use for indexes.
-       
+
        solr.StandardDirectoryFactory, the default, is filesystem
        based.  solr.RAMDirectoryFactory is memory based, not
        persistent, and doesn't work with replication.
@@ -206,7 +206,7 @@ Lucene will flush based on whichever limit is hit first.  -->
     </indexConfig>
 
     <!-- JMX
-       
+
        This example enables JMX if and only if an existing MBeanServer
        is found, use this if you want to configure JMX through JVM
        parameters. Remove this to disable exposing Solr configuration
@@ -216,7 +216,7 @@ Lucene will flush based on whichever limit is hit first.  -->
     -->
     <jmx/>
     <!-- If you want to connect to a particular server, specify the
-       agentId 
+       agentId
     -->
     <!-- <jmx agentId="myAgent" /> -->
     <!-- If you want to start a new MBeanServer, specify the serviceUrl -->
@@ -232,9 +232,9 @@ Lucene will flush based on whichever limit is hit first.  -->
              is recommended (see below).
              "dir" - the target directory for transaction logs, defaults to the
                     solr data directory.  -->
-        <!--<updateLog>-->
-            <!--<str name="dir">${solr.ulog.dir:}</str>-->
-        <!--</updateLog>-->
+        <updateLog>
+            <str name="dir">${solr.ulog.dir:}</str>
+        </updateLog>
 
         <!-- AutoCommit
 
@@ -262,8 +262,8 @@ Lucene will flush based on whichever limit is hit first.  -->
         will not immediately be seen.  The autoSoftCommit will make changes visible.  The frequency is set so
         autoSoftcommit is not a multiple of autoCommit, reducing the frequency of both events firing at same time.-->
         <autoCommit>
-            <maxTime>15000</maxTime>
-            <openSearcher>false</openSearcher>
+            <maxTime>2000</maxTime>
+            <openSearcher>true</openSearcher>
         </autoCommit>
 
         <!-- softAutoCommit is like autoCommit except it causes a
@@ -271,9 +271,9 @@ Lucene will flush based on whichever limit is hit first.  -->
              but does not ensure that data is synced to disk.  This is
              faster and more near-realtime friendly than a hard commit.
           -->
-        <autoSoftCommit>
-            <maxTime>65000</maxTime>
-        </autoSoftCommit>
+        <!--<autoSoftCommit>-->
+            <!--<maxTime>65000</maxTime>-->
+        <!--</autoSoftCommit>-->
 
         <!-- Update Related Event Listeners
 
@@ -341,7 +341,7 @@ Lucene will flush based on whichever limit is hit first.  -->
        be specified.
     -->
     <!--
-     <indexReaderFactory name="IndexReaderFactory" 
+     <indexReaderFactory name="IndexReaderFactory"
                          class="solr.StandardIndexReaderFactory">
        <int name="setTermIndexDivisor">12</int>
      </indexReaderFactory >
@@ -529,6 +529,8 @@ Lucene will flush based on whichever limit is hit first.  -->
             <arr name="queries">
                 <lst>
                     <str name="q">static firstSearcher warming in solrconfig.xml</str>
+                    <!--may want to add spellcheck.build here -->
+                    <!-- <str name="spellcheck.build">true</str> -->
                 </lst>
             </arr>
         </listener>
@@ -662,7 +664,7 @@ Lucene will flush based on whichever limit is hit first.  -->
        If a /select request is processed with out a qt param
        specified, the requestHandler that declares default="true" will
        be used.
-       
+
        If a Request Handler is declared with startup="lazy", then it will
        not be initialized until the first request that uses it.
 
@@ -685,6 +687,7 @@ Lucene will flush based on whichever limit is hit first.  -->
             <int name="rows">10</int>
         </lst>
         <arr name="last-components">
+        <!--TODO: Do we utilize spell suggestions in the query, or only via the /suggest?  If not, should remove-->
           <str>suggest_spell_file</str>
         </arr>
     </requestHandler>
@@ -759,18 +762,25 @@ Lucene will flush based on whichever limit is hit first.  -->
     </requestHandler>
 
     <searchComponent class="solr.SpellCheckComponent" name="suggest_spell_file">
-        
+<!--TODO Why is buildOnCommit true for all of these, expensive op  https://wiki.apache.org/solr/SpellCheckComponent -->
+<!--Maybe not as expensive on the FSTLookup which is designed for this use-case (fast prefix based tree)-->
+<!--But should be able to turn off for the file based checker which should never update-->
+
+<!--Note that the filebasedSpellChecker Index has to be built, this is forced by-->
+<!--adding to a query (to the select or suggest endpoints) &spellcheck.build=true-->
+<!--This is expensive, taking 15 seconds on local box, so need to ensure it doesn't get used more than once after install/update-->
+
         <lst name="spellchecker">
-        <str name="name">file</str>
-        <str name="field">spell</str>  
-        <str name="classname">solr.FileBasedSpellChecker</str>
-        <str name="sourceLocation">solr-spell.txt</str>
-        <str name="characterEncoding">UTF-8</str>
-        <str name="spellcheckIndexDir">./spellcheckerFile</str>
-            <str name="buildOnCommit">true</str>
+            <str name="name">file</str>
+            <str name="field">spell</str>   <!-- TODO: misconfiguration, doesn't do anything -->
+            <str name="classname">solr.FileBasedSpellChecker</str>
+            <str name="sourceLocation">solr-spell.txt</str>
+            <str name="characterEncoding">UTF-8</str>
+            <str name="spellcheckIndexDir">./spellcheckerFileSolrSpell</str>
+            <str name="buildOnCommit">false</str>
             <str name="buildOnOptimize">true</str>
-    </lst>
-    <lst name="spellchecker">
+        </lst>
+        <lst name="spellchecker">
             <str name="name">suggest</str>
             <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
             <str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookup</str>
@@ -782,25 +792,25 @@ Lucene will flush based on whichever limit is hit first.  -->
             -->
             <str name="field">phrase</str>  <!-- the indexed field to derive suggestions from -->
             <float name="threshold">0.</float>
-            <str name="buildOnCommit">true</str>
+            <str name="buildOnCommit">false</str>
             <str name="buildOnOptimize">true</str>
+            <str name="storeDir">./spellcheckerSuggesterFSTLookup</str>
         </lst>
-        
-        <lst name="spellchecker">
-        <str name="name">spell</str>
-        <str name="field">spell</str>  
-        <str name="classname">solr.DirectSolrSpellChecker</str>
-        <str name="combineWords">true</str>
-        <str name="breakWords">true</str>
-        <int name="maxChanges">10</int>  
-        <str name="distanceMeasure">internal</str>  
-        <float name="accuracy">0.5</float>
-            <str name="buildOnCommit">true</str>
-            <str name="buildOnOptimize">true</str>
-    </lst>
-
+        <!--TODO: It does not look like this is used anywhere, it is commented out of the suggest handler-->
+        <!--<lst name="spellchecker">-->
+            <!--<str name="name">spell</str>-->
+            <!--<str name="field">spell</str>-->
+            <!--<str name="classname">solr.DirectSolrSpellChecker</str>-->
+            <!--<str name="combineWords">true</str>-->
+            <!--<str name="breakWords">true</str>-->
+            <!--<int name="maxChanges">10</int>-->
+            <!--<str name="distanceMeasure">internal</str>-->
+            <!--<float name="accuracy">0.5</float>-->
+            <!--<str name="buildOnCommit">true</str>-->
+            <!--<str name="buildOnOptimize">true</str>-->
+        <!--</lst>-->
     </searchComponent>
-    
+
     <searchComponent class="solr.SuggestComponent" name="suggester" startup="lazy">
       <lst name="suggester">
         <str name="name">phrase_suggester</str>
@@ -808,11 +818,11 @@ Lucene will flush based on whichever limit is hit first.  -->
         <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
         <str name="field">phrase</str>
         <!--  <str name="weightField">kind</str> -->
-      <str name="payloadField">pid</str>
-          <str name="indexPath">${solr.data.dir:}/suggest_infix</str>
-          <str name="storeDir">${solr.data.dir:}/suggest_infix_dict</str>
+        <str name="payloadField">pid</str>
+        <!--<str name="indexPath">${solr.solr.home:}/suggest_infix</str>-->
+        <!--<str name="storeDir">${solr.solr.home:}/suggest_infix_dict</str>-->
         <str name="suggestAnalyzerFieldType">text_general</str>
-        <str name="buildOnCommit">true</str>
+        <str name="buildOnCommit">false</str>
         <str name="buildOnOptimize">true</str>
       </lst>
       <lst name="suggester">
@@ -822,27 +832,28 @@ Lucene will flush based on whichever limit is hit first.  -->
         <str name="field">spell</str>
         <str name="payloadField">pid</str>
         <str name="suggestFreeTextAnalyzerFieldType">text_general</str>
-        <str name="buildOnCommit">true</str>
-          <str name="buildOnOptimize">true</str>
+        <str name="buildOnCommit">false</str>
+        <str name="buildOnOptimize">true</str>
       </lst>
     </searchComponent>
-    
+
     <!-- a handler for the suggest component -->
     <requestHandler class="solr.SearchHandler" name="/suggest">
-    
+
         <lst name="defaults">
           <str name="indent">false</str>
           <str name="suggest">true</str>
           <str name="suggest.dictionary">phrase_suggester</str>
           <str name="suggest.dictionary">freetext_suggester</str>
           <str name="spellcheck">true</str>
-            <str name="spellcheck.dictionary">file</str>  
+          <str name="spellcheck.dictionary">file</str>
           <str name="spellcheck.dictionary">suggest</str>
           <!--<str name="spellcheck.dictionary">spell</str> -->
-            <str name="spellcheck.onlyMorePopular">false</str>
-            <str name="spellcheck.count">5</str>
-            <str name="spellcheck.collate">true</str>
-            <str name="spellcheck.extendedResults">true</str>
+          <str name="spellcheck.onlyMorePopular">false</str>
+          <str name="spellcheck.count">5</str>
+          <str name="spellcheck.collate">true</str>
+          <str name="spellcheck.extendedResults">true</str>
+          <str name="shards.qt">/suggest</str>
         </lst>
         <arr name="components">
             <str>suggester</str>
@@ -850,7 +861,7 @@ Lucene will flush based on whichever limit is hit first.  -->
         </arr>
     </requestHandler>
 
-    
+
     <!-- Terms Component
 
        http://wiki.apache.org/solr/TermsComponent
@@ -954,29 +965,29 @@ Lucene will flush based on whichever limit is hit first.  -->
 
     <!-- XSLT response writer transforms the XML output by any xslt file found
        in Solr's conf/xslt directory.  Changes to xslt files are checked for
-       every xsltCacheLifetimeSeconds.  
+       every xsltCacheLifetimeSeconds.
     -->
     <queryResponseWriter name="xslt" class="solr.XSLTResponseWriter">
         <int name="xsltCacheLifetimeSeconds">5</int>
     </queryResponseWriter>
 
-  <!-- Main configuration for a synonym-expanding ExtendedDismaxQParserPlugin.  See 
+  <!-- Main configuration for a synonym-expanding ExtendedDismaxQParserPlugin.  See
        https://github.com/healthonnet/hon-lucene-synonyms
        for more info on this plugin.
     -->
   <queryParser name="synonym_edismax" class="solr.SynonymExpandingExtendedDismaxQParserPlugin">
     <!-- You can define more than one synonym analyzer in the following list.
          For example, you might have one set of synonyms for English, one for French,
-         one for Spanish, etc. 
+         one for Spanish, etc.
       -->
     <lst name="synonymAnalyzers">
       <!-- Name your analyzer something useful, e.g. "analyzer_en", "analyzer_fr", "analyzer_es", etc.
-           If you only have one, the name doesn't matter (hence "myCoolAnalyzer"). 
+           If you only have one, the name doesn't matter (hence "myCoolAnalyzer").
         -->
       <lst name="myCoolAnalyzer">
         <!-- We recommend a PatternTokenizerFactory that tokenizes based on whitespace and quotes.
              This seems to work best with most people's synonym files.
-             For details, read the discussion here: http://github.com/healthonnet/hon-lucene-synonyms/issues/26 
+             For details, read the discussion here: http://github.com/healthonnet/hon-lucene-synonyms/issues/26
           -->
         <lst name="tokenizer">
           <str name="class">solr.PatternTokenizerFactory</str>
@@ -985,7 +996,7 @@ Lucene will flush based on whichever limit is hit first.  -->
         <!-- The ShingleFilterFactory outputs synonyms of multiple token lengths (e.g. unigrams, bigrams, trigrams, etc.).
              The default here is to assume you don't have any synonyms longer than 4 tokens.
              You can tweak this depending on what your synonyms look like. E.g. if you only have unigrams, you can remove
-             it entirely, and if your synonyms are up to 7 tokens in length, you should set the maxShingleSize to 7. 
+             it entirely, and if your synonyms are up to 7 tokens in length, you should set the maxShingleSize to 7.
           -->
         <lst name="filter">
           <str name="class">solr.ShingleFilterFactory</str>

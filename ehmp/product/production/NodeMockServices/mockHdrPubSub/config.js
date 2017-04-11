@@ -12,7 +12,7 @@ module.exports = {
             level: 'error',
             period: '1d',
             count: 10,
-            path: '/tmp/mockHdr.log'
+            path: '/opt/mocks_server/logs/mockHdr.log'
         }]
     },
     saveDataPath: '/opt/mocks_server/mockHdrPubSub',

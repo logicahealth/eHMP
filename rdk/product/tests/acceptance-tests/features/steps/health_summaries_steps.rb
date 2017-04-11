@@ -6,7 +6,7 @@ When(/^the client requests health summaries for the patient "([^"]*)"$/) do |pid
 
   p request.path
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the health summaries response contains$/) do |table|
@@ -14,5 +14,5 @@ Then(/^the health summaries response contains$/) do |table|
   result_array = @json_object["data"]
 
   json_verify = VerifyJsonRuntimeValue.new
-  json_verify.verify_json_runtime_vlaue(result_array, table)
+  json_verify.verify_json_runtime_value(result_array, table)
 end

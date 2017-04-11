@@ -171,6 +171,11 @@ this.ui.allButtons.trigger('control:hidden', false);
 |                                  | **disabled**    | boolean    | Makes checkbox disabled <br />**Example:** `disabled: true`|
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
 
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
+
 ::: definition
 #### Events that can be triggered to change control attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
@@ -270,9 +275,13 @@ this.ui.allCheckboxes.trigger('control:hidden', false);
 |                                  | **required**    | boolean    | Makes input required <br /> **Example:** `required: true`|
 |                                  | **helpMessage** | string     | Message to be shown below input <br /> **Example:** `helpMessage: "This is a help message"`|
 |                                  | **maxlength** | integer     | HTML maxlength attribute. Limits input to this many characters <br /> **Example:** `maxlength: 60`|
-|                                  | **units**       | string <br />-- OR --<br /> array of objects | ■ If a string, or an array with 1 element is provided, the value will be used as text to display the units asscoiated with the input field's value <br /> **Example:** `units: "minutes"`<br /><br />■ If an array of objects with 2 elements is provided it will be used to create radio buttons for choosing a unit, and if the array has 3 or more elements a select dropdown will be used <br /> **Example:** `units: [{label: "F",value: "f",title: "F Units"}, {label: "C",value: "c",title: "C Units"}]`<br />**Note:** for an array each should have the required properties of a radio button option [(click here for option attributes)][radioOptions]|
+|                                  | **units**       | string <br />-- OR --<br /> array of objects | ■ If a string, or an array with 1 element is provided, the value will be used as text to display the units associated with the input field's value <br /> **Example:** `units: "minutes"`<br /><br />■ If an array of objects with 2 elements is provided it will be used to create radio buttons for choosing a unit, and if the array has 3 or more elements a select dropdown will be used <br /> **Example:** `units: [{label: "F",value: "f",title: "F Units"}, {label: "C",value: "c",title: "C Units"}]`<br />**Note:** for an array each should have the required properties of a radio button option [(click here for option attributes)][radioOptions]|
 |                                  | **charCount**       | boolean | Turns on a character counter, which displays the difference between the _maxlength_ option specified and the length of the current input value.<br />**Note:** Requires `maxlength` to be specified<br />**Example:** `charCount: true` |
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
 
 ::: definition
 #### Events that can be triggered to change control attributes dynamically ####
@@ -454,6 +463,10 @@ this.ui.allControls.trigger('control:hidden', false)
 |                                  | **options**     | array of objects | A radio button will be created for each object in the array <br /> **Example:** `options: [{label: "Option 1",value: "opt1",title: "Option 1"}, {label: "Option 2",value: "opt2",title: "Option 2"}]`|
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
 
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
+
 ::: definition
 #### Events that can be triggered to change control attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
@@ -615,7 +628,7 @@ this.ui.allRadios.trigger('control:hidden', false);
 |                                  | **extraClasses** | array of strings | Classes to be added to select <br />**Example:** `extraClasses: ["class1", "class2"]`|
 |                                  | **disabled**     | boolean    | Makes select disabled <br />**Example:** `disabled: true`|
 |                                  | **required**     | boolean    | Makes select required <br /> **Example:** `required: true`|
-|<i class="fa fa-check-circle"></i>| **pickList**    | array of objects<br />-- OR --<br />backbone collection<br />-- OR --<br />string value | Array of items that a user has to select from.  <br /> **Example:** `pickList: [{value: 'AL',label: 'Alabama'}, {value: 'AK',label: 'Alaska'}]`<br /><br />**Note:** That if a picklist item does not conatin a label, it's value will be shown as it's label in the list.<br /><br />**Also Note:** Each array object/model must have the attributes of _"value"_ and _"label"_ otherwise the **attributeMapping** property must also be defined to ensure that attribute titles are asscoiated correctly.<br /><br />**Important:** If the attribute's value is of type _string_, it will be used to reference the overall Form's model attribute value.<br />**Example:** `pickList: 'mySelectsPicklist'` and then the Form Model would have the following: `Backbone.Model.extend({defaults: { mySelectsPicklist: [...] }})`|
+|<i class="fa fa-check-circle"></i>| **pickList**    | array of objects<br />-- OR --<br />backbone collection<br />-- OR --<br />string value | Array of items that a user has to select from.  <br /> **Example:** `pickList: [{value: 'AL',label: 'Alabama'}, {value: 'AK',label: 'Alaska'}]`<br /><br />**Note:** That if a picklist item does not conatin a label, it's value will be shown as it's label in the list.<br /><br />**Also Note:** Each array object/model must have the attributes of _"value"_ and _"label"_ otherwise the **attributeMapping** property must also be defined to ensure that attribute titles are associated correctly.<br /><br />**Important:** If the attribute's value is of type _string_, it will be used to reference the overall Form's model attribute value.<br />**Example:** `pickList: 'mySelectsPicklist'` and then the Form Model would have the following: `Backbone.Model.extend({defaults: { mySelectsPicklist: [...] }})`|
 |                                  | **multiple**         | boolean    | Enables multiple selection (**false by default**). It can be used with showFilter/fetchFunction/fetchDelay options. <br />**Example:** `multiple: true`|
 |                                  | **size**         | integer    | Number of rows to be displayed (**1 by default**) <br />**Example:** `size: 6`|
 |                                  | **groupEnabled** | boolean    | A flag to determine whether a given collection or an array has a group structure <br />**Example:** `groupEnabled: true`|
@@ -624,6 +637,10 @@ this.ui.allRadios.trigger('control:hidden', false);
 |                                  | **fetchDelay** | integer | Delay in milliseconds between user's keyboard typing on search input box when fetching is enabled. By default 750.
 |                                  | **options**      | object | Sets options for [Select2 lib](https://select2.github.io). **Example:** `options: {minimumInputLength: 0}` By default the **minimumInputLength** is set to 3 so that it takes at least 3 characters typed by user to kick off filtering/fetching feature. See below for more about **sorter** option property |
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
 
 ::: definition
 #### How to customize the sorting order ####
@@ -855,11 +872,28 @@ this.ui.select2.trigger('control:required', true);
 this.ui.allControls.trigger('control:hidden', false);
 ```
 :::
+::: showcode Example of highlighting first group:
+This code snippet should be places in the applet's styles.scss and selectValue should correspond to the name attribute.
+``` css
+#select2-selectValue-results {
+    > li {
+        &:first-child {
+            background-color: $primary-lighter;
+        }
+        &.select2-results__message, &.loading-results {
+            background-color: $pure-white;
+        }
+    }
+}
+```
+:::
 
 ### Textarea ###
 > control: **'textarea'**
 
 ![textarea](assets/textarea.png "Textarea Basic Example")
+
+#### Options ####
 
 | Required                         | Attribute       | Type       | Description / Example                                                           |
 |:--------------------------------:|:---------------:|:----------:|:--------------------------------------------------------------------------------|
@@ -872,11 +906,16 @@ this.ui.allControls.trigger('control:hidden', false);
 |                                  | **required**    | boolean    | Makes textarea required <br /> **Example:** `required: true`|
 |                                  | **rows**        | integer    | Sets number of rows in textarea <br /> **Example:** `rows: 4`|
 |                                  | **cols**        | integer    | Sets number of columns in textarea <br /> **Example:** `cols: 3`|
-|                                  | **maxlength**   | integer    | Sets character limit of textarea <br /> **Example:** `maxlength: 20`|
+|                                  | **maxlength**   | integer    | Sets character limit of textarea.<br />**Default:** `200` <br /> **Example:** `maxlength: 20`|
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
+|                                  | **charCount**   | boolean    | Displays a count of remaining characters allowed before reaching the maxlength. <br />**Default:** `true` <br />**Note:** requires `maxlength` option to be specified.<br />**Example:** `charCount: false`|
 
-::: definition
-#### Events that can be triggered to change the textarea control's attributes dynamically ####
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
+
+#### Dynamic Events ####
+
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
@@ -888,7 +927,9 @@ this.ui.allControls.trigger('control:hidden', false);
 | **control:maxlength**     | integer   | adds/updates the maxlength attribute of the control <br/>**Example:** `$().trigger('control:maxlength', 15)`|
 | **control:cols**     | integer   | adds/updates the cols attribute of the control <br/>**Example:** `$().trigger('control:cols', 10)`|
 | **control:rows**     | integer   | adds/updates the rows attribute of the control <br/>**Example:** `$().trigger('control:rows', 3)`|
-:::
+| **control:insert:string**     | string (content)<br />object (options)   | Adds specified string to location of last caret position. Additional options can be passed in an object <br/>**Options:** `prependWith` (string) and `appendWith` (string) will both be added to the provided string.<br />**Example:** `$().trigger('control:insert:string', "String to insert")`|
+
+#### Code Examples ####
 
 ::: showcode Backbone Model Used In Examples:
 ```JavaScript
@@ -982,6 +1023,10 @@ ui: {
 ``` JavaScript
 this.ui.textarea1.trigger('control:disabled', false)
 this.ui.textarea2.trigger('control:required', true)
+this.ui.textarea2.trigger('control:insert:string', ["New string!", {
+    prependWith: "<noteobject>",
+    appendWith: "</noteobject>"
+}])
 
 // you can trigger event on multiple at once!!
 // just make sure your UI selector targets all that apply
@@ -1000,6 +1045,8 @@ Commonly utilized controls. These controls will generally have a specific purpos
 
 ![alert](assets/alertBanner.png "Alert Banner Basic Example")
 
+#### Options ####
+
 | Required                         | Attribute       | Type       | Description / Example                                                           |
 |:--------------------------------:|:---------------:|:----------:|:--------------------------------------------------------------------------------|
 |<i class="fa fa-check-circle"></i>| **name**        | string     | Model attribute to be updated. <br />**Example:** `name: "alertMessage"`|
@@ -1008,14 +1055,44 @@ Commonly utilized controls. These controls will generally have a specific purpos
 |                                  | **type**    | string    | bootstrap alert color class to be added to alert<br />**Default:** `info`. <br />**Options:** `info`, `warning`, `danger`, and `warning` <br />**Example:** `type: "success"`|
 |                                  | **icon**    | string    | Font Awesome font to be displayed<br />**Example:** `icon: "fa-check"`|
 |                                  | **title**    | string    | Alert title to be displayed<br />**Example:** `title: "Alert Title"`|
-|                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
 
-::: callout
-The alert banner's message needs to be changed by changing the model value specified by **name**. Setting `dismissible: true` and clicking the close button will unset the message value in the model. NOTE: You can also use a trigger event to change the message; see table below for available events.
-:::
 
-::: definition
-#### Events that can be triggered to change the alertBanner control's attributes dynamically ####
+#### Hiding, Showing, and Changing Content ####
+The Alert Banner's state should be controlled via the [Dynamic Events](#Utility-Alert-Banner-Dynamic-Events) available below.
+
+**Please note that there is no `'control:hidden'` dynamic event.** This is to discourage the creation of multiple alert banner instances (i.e. one instance per desired state) and unnecessary content in the DOM (hidden with ".hidden"). The number of alert banner controls defined in the form should equal the total number that can be shown at one time, and the content and appearance can be changed dynamically.
+
+##### Hiding #####
+Programmatically, this can be achieved by simply setting the message to a blank string.
+```JavaScript
+this.$('.alertBanner-control.alertMessage').trigger('control:message', '');
+//OR
+this.model.unset('alertMessage');
+//OR
+this.model.set('alertMessage', '');
+```
+
+With `dismissible: true`, the user will be provided with a "x" (close) button in the alert banner. Clicking this button will unset the value on the model associated with the `name` option. There is no need to have the form listen for a click event to handle unsetting the value.
+
+##### Showing #####
+Similar to [Hiding](#Utility-Alert-Banner-Hiding--Showing--and-Changing-Content-Hiding), the alert banner can be shown (if currently hidden) by setting the value to a non-empty string.
+```JavaScript
+this.$('.alertBanner-control.alertMessage').trigger('control:message', 'New message body');
+//OR
+this.model.set('alertMessage', 'New message body');
+```
+
+##### Changing #####
+The alert banner control supports changing both the content and appearance dynamically. Leverage this ability to manage the appearance and content as requirements dictate. See [Dynamic Events](#Utility-Alert-Banner-Dynamic-Events) below and cross-reference the [Options](#Utility-Alert-Banner-Options) for available settings.
+
+Changing the text content is as simple as setting the message.
+```JavaScript
+this.$('.alertBanner-control.alertMessage').trigger('control:message', 'Different message body');
+//OR
+this.model.set('alertMessage', 'Different message body');
+```
+
+#### Dynamic Events ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
 | **control:dismissible**      | boolean   | toggles the dismissible state of the control (hides/shows close button) <br/>**Example:** `$().trigger('control:dismissible', true)`|
@@ -1023,9 +1100,8 @@ The alert banner's message needs to be changed by changing the model value speci
 | **control:message**   | string    | adds/updates the message of the control with the provide string <br/>**Example:** `$().trigger('control:message', 'New Message string')`|
 | **control:type**   | string    | updates the Bootstrap color type of the alert with the provided string <br/>**Example:** `$().trigger('control:type', 'success')`|
 | **control:icon**         | string    | adds/updates the icon of the alert with the new one provided <br/>**Example:** `$().trigger('control:icon', 'fa-check')`|
-:::
 
-
+#### Examples ####
 
 ::: showcode Backbone Model Used In Examples:
 ```JavaScript
@@ -1099,15 +1175,20 @@ this.ui.allAlerts.trigger('control:message', 'Same message on two alerts!');
 |                                  | **extraClasses**| array of strings | Classes to be added to control <br />**Example:** `extraClasses: ["class1", "class2"]`|
 |                                  | **srOnlyLabel** | boolean    | Makes label tag for field hidden visually and only available for screen reader |
 |                                  | **attributeMapping**| object | Ensures for flexible naming of control or model attributes<br />**Options:** `name`, `label`, and `value`<br /> **Example:** `attributeMapping: {name: "itemName", label: "itemLabel", value: "itemValue"}`|
-|<i class="fa fa-check-circle note">*</i>| **collection** | array of objects<br />-- OR --<br />backbone collection | Array of items / collection to generate the list of items from. <br />**Example:** <br />`collection: new Backbone.Collection([{name: 'service',label: 'Service Connected Condition',value: true, disabled: true}, {name: 'orange',label: 'Agent Orange',value: false}])`<br />-- OR --<br />``collection: [{name: 'combat',label: 'Combat Vet (Combat Related)',value: true, disabled: true}, {name: 'orange',label: 'Agent Orange',value: false}]`` <br /><br />**Also Note:** Each array object/model must have the attributes of "**value**"" (the true/false/undefined state of the item), "**name**" (unquie identifier string), and "**label**" (string that is displayed to the user) otherwise the attributeMapping property must also be defined to ensure that attribute titles are asscoiated correctly. The "disabled" attribute is optional and triggers that individual list item to be disabled. |
+|<i class="fa fa-check-circle note">*</i>| **collection** | array of objects<br />-- OR --<br />backbone collection | Array of items / collection to generate the list of items from. <br />**Example:** <br />`collection: new Backbone.Collection([{name: 'service',label: 'Service Connected Condition',value: true, disabled: true}, {name: 'orange',label: 'Agent Orange',value: false}])`<br />-- OR --<br />``collection: [{name: 'combat',label: 'Combat Vet (Combat Related)',value: true, disabled: true}, {name: 'orange',label: 'Agent Orange',value: false}]`` <br /><br />**Also Note:** Each array object/model must have the attributes of "**value**" (the true/false/undefined state of the item), "**name**" (unique identifier string), and "**label**" (string that is displayed to the user) otherwise the attributeMapping property must also be defined to ensure that attribute titles are associated correctly. The "disabled" attribute is optional and triggers that individual list item to be disabled. |
 |                                  | **hideCheckboxForSingleItem**| boolean | Hides the input checkbox and enables read only state for when there is only **single** item in the collection <br />**Example:** `hideCheckboxForSingleItem: true`<br />**Default:** `false`|
 |                                  | **selectedCountName**| string | Model attribute to be updated with the live count of items selected in the list <br />**Example:** `selectedCountName: 'checklistCount'`|
+|                                  | **filterChecked**| boolean | Show only checked ('true') or unchecked ('false') items. <br />**Example:** `filterChecked: 'true'`|
 |                                  | **itemTemplate**| string<br />-- OR --<br />Handlebar Template | String to use when creating a Handlebar templete / Handlebar template to use for displaying each item's checkbox label <br />**Example:** `itemTemplate: '<span>{{label}}</span>'` OR `itemTemplate: Handlebars.compile('<span>{{label}}</span>')` |
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
 
 ::: callout
-**<i class="fa fa-check-circle note">\*</i> Note:** _"collection"_ is required if the model attribute asscoiated with the given _"name"_ does not have an initial value.
+**<i class="fa fa-check-circle note">\*</i> Note:** _"collection"_ is required if the model attribute associated with the given _"name"_ does not have an initial value.
 :::
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
 
 ::: definition
 #### Events that can be triggered to change the checklist control's attributes dynamically ####
@@ -1311,15 +1392,21 @@ If your form requires `flexible: true`, it is important to point out that the [e
 
 In order to accommodate this, it is recommended to simply check against the external model's `formattedDate` option. If the value is a string, use the `formattedDate`. If the value is null, then use the external model's `year`, `month`, and/or `day` attributes to construct the date in the required format.
 
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
+
 #### Dynamic Datepicker Control Events ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:disabled**      | boolean   | toggles the disabled state of the control <br/>**Example:** `$().trigger('control:disabled', true)`|
 | **control:required**      | boolean   | toggles the required state of the control <br/>**Example:** `$().trigger('control:required', true)`|
-| **control:placeholder**         | string    | adds/updates the placeholder of the datepicker's input with the provided string <br/>**Example:** `$().trigger('control:placeholder', 'New placeholder text')`|
-| **control:title**          | string    | adds/updates the title attribute of the datepicker's input <br/>**Example:** `$().trigger('control:title', 'New title')`|
-| **control:helpMessage**          | string    | adds/updates the helpMessage shown just beneath the control <br/>**Example:** `$().trigger('control:helpMessage', 'New Help Message')`|
+| **control:placeholder**   | string    | adds/updates the placeholder of the datepicker's input with the provided string <br/>**Example:** `$().trigger('control:placeholder', 'New placeholder text')`|
+| **control:title**         | string    | adds/updates the title attribute of the datepicker's input <br/>**Example:** `$().trigger('control:title', 'New title')`|
+| **control:helpMessage**   | string    | adds/updates the helpMessage shown just beneath the control <br/>**Example:** `$().trigger('control:helpMessage', 'New Help Message')`|
+| **control:startDate**     | string, Date instance, or Moment instance   | adds/updates the lower bounds of the date range <br/>**Example:** `$().trigger('control:startDate', '01/01/2016')`|
+| **control:endDate**       | string, Date instance, or Moment instance   | adds/updates the upper bounds of the date range <br/>**Example:** `$().trigger('control:endDate', new Moment())`|
 
 #### Datepicker Examples ####
 ::: showcode Backbone Model Used In Examples:
@@ -1422,18 +1509,21 @@ this.ui.allDatepickers.trigger('control:hidden', false);
 |                                  | **srOnlyLabel** | boolean    | Makes label tag for field hidden visually and only available for screen reader |
 |                                  | **icon**        | string     | Icon for dropdown <br />**Example:** `icon: "fa-th"`|
 |                                  | **type**        | string     | Dropdown's HTML type <br />**Supported Values:** `button`, `submit` (split dropdown only) <br />**Example:** `type: "button"` <br /><br />**Note:** If type is omitted, default type is "button" |
+|                                  | **title**       | string     | Dropdown's title attribute <br />**Example:** `title: "Example title"`|
 |                                  | **id**          | string     | HTML id attribute <br />**Example:** `id: "dropdown-medications"`|
 |                                  | **extraClasses**| array of strings | Classes to be added to dropdown <br />**Example:** `extraClasses: ["col-md-2"]`|
 |<i class="fa fa-check-circle"></i>| **items**       | array of objects | Items to be added to dropdown <br />**Example:** `items: { label: 'Sub Item 1', id: 'item-1'}, { label: 'Sub Item 2', id: 'item-2'}`|
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
+|                                  | **disabled**    | boolean    | Enables/disables the full control <br />**Example:** `disabled: true`|
+|                                  | **disabled**    | object     | Enables/disables part of split dropdown control <br />**Example:** `disabled: { mainButton: true, dropdownToggle: false }`|
 
 ::: definition
 #### Events that can be triggered to change the dropdown control's attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
-| **control:disable**       | boolean   | enables/disables the full control <br/>**Example:** `$().trigger('control:disable', true)` |
-| **control:disable**       | object    | enables/disables part of split dropdown control <br/>**Example:** `$().trigger('control:disable', { mainButton: true, dropdownToggle: false })` |
+| **control:disabled**      | boolean   | enables/disables the full control <br/>**Example:** `$().trigger('control:disable', true)` |
+| **control:disabled**      | object    | enables/disables part of split dropdown control <br/>**Example:** `$().trigger('control:disable', { mainButton: true, dropdownToggle: false })` |
 :::
 
 ::: showcode Example Form Instance:
@@ -1538,9 +1628,11 @@ this.ui.allControls.trigger('control:hidden', false);
 |<i class="fa fa-check-circle"></i>| **name**        | string     | Model attribute to be updated. <br />**Example:** `name: "multiselectSideBySideValue"`|
 |<i class="fa fa-check-circle"></i>| **label**       | string     | Label text for checkbox. <br />**Example:** `label: "Heading Label For Checklist"`|
 |                                  | **required**    | boolean    | makes sure that there is at least one or more items added to the selected side on submit of the form. <br /> **Example:** `required: true`|
+|                                  | **disabled**    | boolean    | disables the form control. <br /> **Example:** `disabled: true`|
+|                                  | **srOnlyLabel**    | boolean    | Makes label tag for field hidden visually and only available for screen reader <br />**Example:** `srOnlyLabel: true` <br />**Default:** `false`|
 |                                  | **extraClasses**| array of strings | Classes to be added to control <br />**Example:** `extraClasses: ["class1", "class2"]`|
 |                                  | **attributeMapping**| object | Ensures for flexible naming of control or model attributes<br />**Options:** `id`, `label`, and `value`<br /> **Example:** `attributeMapping: {id: "itemName", label: "itemLabel", value: "itemValue"}`|
-|<i class="fa fa-check-circle note">*</i>| **collection** | array of objects<br />-- OR --<br />backbone collection | Array of items / collection to generate the list of items from. <br />**Example:** <br />`collection: new Backbone.Collection([{id: 'service',label: 'Service Connected Condition',value: true}, {id: 'orange',label: 'Agent Orange',value: false}])`<br />-- OR --<br />``collection: [{id: 'combat',label: 'Combat Vet (Combat Related)',value: true}, {id: 'orange',label: 'Agent Orange',value: false}]`` <br /><br />**Also Note:** Each array object/model must have the attributes of: "**value**" (the true/false/undefined state of the item), "**id**" (unquie identifier string), and "**label**" (string that is displayed to the user) otherwise the attributeMapping property must also be defined to ensure that attribute titles are asscoiated correctly. |
+|<i class="fa fa-check-circle note">*</i>| **collection** | array of objects<br />-- OR --<br />backbone collection | Array of items / collection to generate the list of items from. <br />**Example:** <br />`collection: new Backbone.Collection([{id: 'service',label: 'Service Connected Condition',value: true}, {id: 'orange',label: 'Agent Orange',value: false}])`<br />-- OR --<br />``collection: [{id: 'combat',label: 'Combat Vet (Combat Related)',value: true}, {id: 'orange',label: 'Agent Orange',value: false}]`` <br /><br />**Also Note:** Each array object/model must have the attributes of: "**value**" (the true/false/undefined state of the item), "**id**" (unique identifier string), and "**label**" (string that is displayed to the user) otherwise the attributeMapping property must also be defined to ensure that attribute titles are associated correctly. |
 |                                  | **itemColumn**       | object     | Should contain the **columnTitle** (_string_) and **columnClasses** (optional, _array of strings_) attributes<br />**Example:** `itemColumn: {columnTitle:"Item Text", columnClasses:["special-column-class-1"]}`|
 |                                  | **additionalColumns**| array of objects | Each item in the array should have the **columnTitle** (_string_) and **columnClasses** (optional, _array of strings_) attributes. The _columnTitle_ atribute is the string that will be displayed in that columns header, while the _columnClasses_ attribute are the classes that will be placed both on the header and appropriate cell per row. Otherwise, each object in array corresponds to the control to be included. Follow the format for the desired control under its respective place in documentation. Each of these controls will be displayed on the selected side on the control for each selected item.<br /> **Example:** `additionalColumns: [{columnTitle: "Additional Column 1", name: "additionalColumn1Value", control: 'checkbox'}]`|
 |                                  | **detailsPopoverOptions**| object | Uses the same control options as a Popover control. See the **Popover** control documentation for more info. <br /> **Example:** `detailsPopoverOptions: {items:[{control:'input',name:'popoverInput',label:'Popover Input'}]}` <br /> **Note:** Do not change the **control** attribute as by default it is set to **popover**|
@@ -1549,7 +1641,7 @@ this.ui.allControls.trigger('control:hidden', false);
 |                                  | **selectedCountName**| string | Model attribute to be updated with the live count of items selected in the list <br />**Example:** `selectedCountName: 'msbsCount'`|
 
 ::: callout
-**<i class="fa fa-check-circle note">\*</i> Note:** _"collection"_ is required if the model attribute asscoiated with the given _"name"_ does not have an initial value.
+**<i class="fa fa-check-circle note">\*</i> Note:** _"collection"_ is required if the model attribute associated with the given _"name"_ does not have an initial value.
 :::
 
 ::: side-note
@@ -1602,11 +1694,16 @@ var Model = Backbone.Model.extend({
 _Please also refer back to the section on [form validation](components.md#Form-Form-Validation) for more details._
 :::
 
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction. **Note:** will also bubble up interactions from embedded controls.
+
 ::: side-note
 #### Events that can be triggered to change the multiselect side-by-side control's attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
+| **control:disabled**      | boolean   | disables/enables the full control <br/>**Example:** `$().trigger('control:disabled', true)` |
 :::
 
 ::: showcode Backbone Model Used In Examples:
@@ -1742,7 +1839,8 @@ this.ui.msbs.trigger('control:hidden', true);
 |<i class="fa fa-check-circle"></i>| **label**       | string     | Label text for checkbox. <br />**Example:** `label: "Heading Label For Radio List"`|
 |                                  | **extraClasses**| array of strings | Classes to be added to control <br />**Example:** `extraClasses: ["class1", "class2"]`|
 |                                  | **attributeMapping**| object | Ensures for flexible naming of control or model attributes<br />**Options:** `name`, `label`, and `value`<br /> **Example:** `attributeMapping: {name: "itemName", label: "itemLabel", value: "itemValue"}`|
-|<i class="fa fa-check-circle note">*</i>| **collection** | array of objects<br />-- OR --<br />backbone collection | Array of items / collection to generate the list of items from. <br />**Example:** <br />`collection: new Backbone.Collection([{name: 'service',label: 'Service Connected Condition',value: true}, {name: 'orange',label: 'Agent Orange',value: false}])`<br />-- OR --<br />``collection: [{name: 'combat',label: 'Combat Vet (Combat Related)',value: undefined}, {name: 'orange',label: 'Agent Orange',value: false}]`` <br /><br />**Also Note:** Each array object/model must have the attributes of "**value**"" (the selected option's value for that item), "**name**" (unquie identifier string), and "**label**" (string that is displayed to the user) otherwise the attributeMapping property must also be defined to ensure that attribute titles are asscoiated correctly. |
+|                                  | **options**     | array of objects | A radio button will be created for each object in the array <br /> **Example:** `options: [{label: "Option 1",value: "opt1",title: "Option 1"}, {label: "Option 2",value: "opt2"}]`|
+|<i class="fa fa-check-circle note">*</i>| **collection** | array of objects<br />-- OR --<br />backbone collection | Array of items / collection to generate the list of items from. <br />**Example:** <br />`collection: new Backbone.Collection([{name: 'service',label: 'Service Connected Condition',value: true}, {name: 'orange',label: 'Agent Orange',value: false}])`<br />-- OR --<br />``collection: [{name: 'combat',label: 'Combat Vet (Combat Related)',value: undefined}, {name: 'orange',label: 'Agent Orange',value: false}]`` <br /><br />**Also Note:** Each array object/model must have the attributes of "**value**" (the selected option's value for that item), "**name**" (unique identifier string), and "**label**" (string that is displayed to the user) otherwise the attributeMapping property must also be defined to ensure that attribute titles are associated correctly. |
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
 |                                  | **disabled**    | boolean    | Makes all the item's disabled <br />**Example:** `disabled: true`|
 |                                  | **required**    | boolean    | Makes all the item's required <br />**Example:** `required: true`|
@@ -1750,6 +1848,10 @@ this.ui.msbs.trigger('control:hidden', true);
 ::: callout
 **<i class="fa fa-check-circle note">\*</i> Note:** _"collection"_ is required if the model attribute associated with the given _"name"_ does not have an initial value.
 :::
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
 
 ::: definition
 #### Events that can be triggered to change the yesNoChecklist control's attributes dynamically ####
@@ -1953,6 +2055,206 @@ this.ui.allControls.trigger('control:hidden', false);
 ```
 :::
 
+### Select List ###
+> control: **'selectList'**
+
+![selectList](assets/selectList.png "SelectList Basic Example")
+
+| Required                         | Attribute       | Type       | Description / Example                                                           |
+|:--------------------------------:|:---------------:|:----------:|:--------------------------------------------------------------------------------|
+|<i class="fa fa-check-circle"></i>| **name**        | string     | Model attribute to be updated. <br />**Example:** `name: "selectListValue"`|
+|<i class="fa fa-check-circle"></i>| **label**       | string     | Label text for select list heading. <br />**Example:** `label: "Heading Label For Select List"`|
+|                                  | **labelTemplate**| string<br />-- OR --<br />compiled Handlebars template | Custom template for each collection item's label <br />**Example:** `labelTemplate: "<i class="fa fa-spoon" /> {{label}}"`|
+|                                  | **valueTemplate**| string<br />-- OR --<br />compiled Handlebars template | Custom template for the select list <br />**Example:** `valueTemplate: "{{selectedLabel this}}"`|
+|                                  | **getLabelTemplate**| function | If provided, this function is called for each item in the collection with `model` and `index` arguments. It must return a string, a compiled Handlebars template or falsy to use the default template. <br />**Example:** `getLabelTemplate: function(model, index) {return index % 2 === 0 ? '<p>{{label}}</p>' : false;}`|
+|                                  | **getValueTemplate**| function | If provided, this function is called for each item in the collection with `model` and `index` arguments. It must return a string, a compiled Handlebars template or falsy to use the default template. <br />**Example:** `getValueTemplate: function(model, index) {return model.get('value') ? 'Prefilled: {{selectedLabel}}' : false;}`|
+|                                  | **options**     | array of objects | A select option will be created for each object in the array <br /> **Example:** `options: [{label: "Option 1",value: "opt1"}, {label: "Option 2",value: "opt2"}]` <br /><br />**Also Note:** Each array object must have the attributes of "**value**" and "**label**". Array objects may also have a "**disabled**" attribute, which if `true` disables the option. |
+|                                  | **extraClasses**| array of strings | Classes to be added to control <br />**Example:** `extraClasses: ["class1", "class2"]`|
+|                                  | **attributeMapping**| object | Ensures for flexible naming of control or model attributes<br />**Options:** `name`, `label`, and `value`<br /> **Example:** `attributeMapping: {name: "itemName", label: "itemLabel", value: "itemValue"}`|
+|<i class="fa fa-check-circle note">*</i>| **collection** | array of objects<br />-- OR --<br />backbone collection | Array of items / collection to generate the list of items from. <br />**Example:** <br />`collection: new Backbone.Collection([{name: 'service',label: 'Service Connected Condition',value: true}, {name: 'orange',label: 'Agent Orange',value: false}])`<br />-- OR --<br />``collection: [{name: 'combat',label: 'Combat Vet (Combat Related)',value: undefined}, {name: 'orange',label: 'Agent Orange',value: false}]`` <br /><br />**Also Note:** Each array object/model must have the attributes of "**value**" (the selected option's value for that item), "**name**" (unique identifier string), and "**label**" (string that is displayed to the user) otherwise the attributeMapping property must also be defined to ensure that attribute titles are associated correctly. <br /><br />Array objects/models also support the attributes of "**required**" (make the select box required), "**disabled**" (disable the select box), "**multiple**" (make the select box allow multiple selected options) and "**title**" (title text for the select box). |
+|                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
+|                                  | **disabled**    | boolean    | Makes all the item's disabled <br />**Example:** `disabled: true`|
+|                                  | **required**    | boolean    | Makes all the item's required <br />**Example:** `required: true`|
+|                                  | **multiple**    | boolean    | Makes all the select boxes allow selecting multiple options at once <br />**Example:** `multiple: true`|
+
+::: callout
+**<i class="fa fa-check-circle note">\*</i> Note:** _"collection"_ is required if the model attribute associated with the given _"name"_ does not have an initial value.
+:::
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
+
+::: definition
+#### Events that can be triggered to change the selectList control's attributes dynamically ####
+| Event                     | Parameter Type | Description / Example                                                      |
+|:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
+| **control:disabled**      | boolean   | disables/enables all the items <br/>**Example:** `$().trigger('control:disabled', true)` |
+| **control:required**      | boolean   | toggles the required state of all the items <br/>**Example:** `$().trigger('control:required', true)` |
+| **control:item:disabled** | object    | disables/enables a list item.  If no _item_ is provided in the parameter object then all list items willl be targeted. <br/>**Example:** `$().trigger('control:item:disabled', {item:'uniqueName',value:true})` |
+| **control:item:required** | object    | toggles the required state for a list item.  If no _item_ is provided in the parameter object then all list items willl be targeted. <br/>**Example:** `$().trigger('control:item:required', {item:'uniqueName',value:true})` |
+| **control:item:value**    | object    | changes a list item's value.  If no _item_ is provided in the parameter object then all list items willl be targeted. <br/>**Example:** `$().trigger('control:item:disabled', {item:'uniqueName',value:true})` |
+:::
+
+::: showcode Backbone Model Used In Examples:
+```JavaScript
+var Model = Backbone.Model.extend({
+    defaults: {
+        selectListCollection: new Backbone.Collection([{
+          name: 'service',
+          label: 'Service Connected Condition',
+          value: null
+        }, {
+          name: 'combat',
+          label: 'Combat Vet (Combat Related)',
+          value: true
+        }, {
+          name: 'orange',
+          label: 'Agent Orange',
+          value: false
+        }])
+    }
+})
+```
+:::
+::: showcode Example Form Instance:
+```JavaScript
+var ExampleFormView = ADK.UI.Form.extend({
+    model: new Model(),
+    fields: [
+    // basic
+    {
+        name: "selectListValue",
+        label: "Select List (basic)",
+        control: "selectList",
+        options: [{
+                label: "Option 1",
+                value: "opt1"
+            }, {
+                label: "Option 2",
+                value: "opt2"
+            }, {
+                label: "Undefined",
+                value: null
+            }]
+    },
+    // with extra classes
+    {
+        name: "selectListValue",
+        label: "Select List (with extra classes)",
+        control: "selectList",
+        extraClasses: ["class1", "class2"]
+    },
+    // with collection and attributeMapping
+    {
+        name: "selectListValue",
+        label: "Select List (with collection)",
+        control: "selectList",
+        collection: [{
+          itemName: 'service',
+          itemLabel: 'Service Connected Condition',
+          itemValue: undefined
+        }, {
+          itemName: 'combat',
+          itemLabel: 'Combat Vet (Combat Related)',
+          itemValue: true
+        }, {
+          itemName: 'orange',
+          itemLabel: 'Agent Orange',
+          itemValue: false
+        }],
+        attributeMapping: {
+            name: "itemName",
+            label: "itemLabel",
+            value: "itemValue"
+        }
+    },
+    // with sr-only label
+    {
+        name: "selectListValue",
+        label: "Select List (sr-only label)",
+        control: "selectList",
+        options: [{
+            label: "Yes",
+            value: true
+        }, {
+            label: "No",
+            value: false
+        }],
+        srOnlyLabel: true
+    },
+    // with all items required
+    {
+        name: "selectListValue",
+        label: "Select List (required)",
+        control: "selectList",
+        options: [{
+            label: "Option 1",
+            value: "opt1"
+        }, {
+            label: "Option 2",
+            value: "opt2"
+        }, {
+            label: "Undefined",
+            value: null
+        }],
+        required: true
+    },
+    // with all items disabled
+    {
+        name: "selectListValue",
+        label: "Select List (disabled)",
+        control: "selectList",
+        options: [{
+            label: "Option 1",
+            value: "opt1"
+        }, {
+            label: "Option 2",
+            value: "opt2"
+        }, {
+            label: "Undefined",
+            value: null
+        }],
+        disabled: true
+    },
+    // with a single option disabled
+    {
+        name: "selectListValue",
+        label: "Select List (disabled option)",
+        control: "selectList",
+        options: [{
+            label: "Option 1",
+            value: "opt1"
+        }, {
+            label: "Option 2",
+            value: "opt2",
+            disabled: true
+        }, {
+            label: "Undefined",
+            value: null
+        }]
+    }]
+});
+```
+:::
+
+::: showcode Example of dynamically changing the selectList control's config attributes:
+``` JavaScript
+ui: {
+    'selectList' : 'div.control.selectList-control',
+    'allControls': 'div.control'
+}
+```
+``` JavaScript
+this.ui.selectList.trigger('control:hidden', true);
+
+// you can trigger event on multiple at once!!
+// just make sure your UI selector targets all that apply
+this.ui.allControls.trigger('control:hidden', false);
+```
+:::
+
 ### Range Slider ###
 
 > control: **'rangeSlider'**
@@ -2109,6 +2411,10 @@ this.ui.allControls.trigger('control:hidden', false);
 **\*** The **options** The default options are {showMeridian: false, defaultTime: 'current', minuteStep: 5} that denote 24H format, default current time, and 5 mins increment/decrement by clicking up/down arrow. See [bootstrap-timepicker documentation](http://jdewit.github.io/bootstrap-timepicker/) for more info.
 :::
 
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
+
 ::: side-note
 #### Events that can be triggered to change the control's attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
@@ -2209,14 +2515,18 @@ this.ui.allTimepickers.trigger('control:hidden', false);
 |                                  | **extraClasses**| array of strings | Classes to be added to typeahead <br />**Example:** `extraClasses: ["col-md-4", "text-danger"]`|
 |                                  | **disabled**    | boolean    | Makes typeahead disabled (value will not be submitted) <br />**Example:** `disabled: true`|
 |                                  | **required**    | boolean    | Makes typeahead required <br /> **Example:** `required: true`|
-|<i class="fa fa-check-circle"></i>| **pickList**    | array of objects<br />-- OR --<br />backbone collection | Array of items that a user has to select from.  <br /> **Example:** `pickList: [{value: 'AL',label: 'Alabama'}, {value: 'AK',label: 'Alaska'}]`<br /><br />**Note:** That if a picklist item does not conatin a label, it's value will be shown as it's label in the list.<br /><br />**Also Note:** Each array object/model must have the attributes of _"value"_ and _"label"_ otherwise the **attributeMapping** property must also be defined to ensure that attribute titles are asscoiated correctly.|
-|<i class="fa fa-check-circle note">*</i>| **attributeMapping**| object | Object with attributes of _"value"_ and _"label"_ where their value pair is asscoiated with the attribute names of the pickList items.  This property will ensure that the correct mapping of the picklist item's label and value.<br /> **Example:** `attributeMapping: {label: 'description',value: 'code'}`|
+|<i class="fa fa-check-circle"></i>| **pickList**    | array of objects<br />-- OR --<br />backbone collection | Array of items that a user has to select from.  <br /> **Example:** `pickList: [{value: 'AL',label: 'Alabama'}, {value: 'AK',label: 'Alaska'}]`<br /><br />**Note:** That if a picklist item does not conatin a label, it's value will be shown as it's label in the list.<br /><br />**Also Note:** Each array object/model must have the attributes of _"value"_ and _"label"_ otherwise the **attributeMapping** property must also be defined to ensure that attribute titles are associated correctly.|
+|<i class="fa fa-check-circle note">*</i>| **attributeMapping**| object | Object with attributes of _"value"_ and _"label"_ where their value pair is associated with the attribute names of the pickList items.  This property will ensure that the correct mapping of the picklist item's label and value.<br /> **Example:** `attributeMapping: {label: 'description',value: 'code'}`|
 |                                  | **fetchFunction** | function    | Sets a callback function for fetching a picklist and enables fetching mode automatically. Enables filtering automatically so that there is no need to enable showFilter option. <br />**Example:** `fetchFunction: function(input, setPickList){ ... }` <br /> _See table below for more details on the arguments that get passed to your fetchFunction._ |
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
 
 ::: callout
 **<i class="fa fa-check-circle note"></i>\*** The **attributeMapping** property is required when the _"pickList"_ items do not have the attributes of _"value"_ and _"label"_.
 :::
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
 
 ::: definition
 #### The fetchFunction's callback function takes these parameters. ####
@@ -2535,6 +2845,7 @@ this.$('.uniqueName').trigger('control:headerItems:update', model)
 |**control:items:add**      | object | adds a model to the specified collection <br/>**Example:** `$().trigger('control:items:add', {control: 'button', name: 'test'})`|
 |**control:items:remove**      | object | removes a model to the specified collection <br/>**Example:** `$().trigger('control:items:remove', {control: 'button', name: 'test'})`|
 |**control:items:update**      | object | updates specified collection to the given models <br/>**Example:** `$().trigger('control:items:update', {control: 'button', name: 'test'})`|
+|**control:hidden**         | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 :::
 
 
@@ -2927,8 +3238,8 @@ var ExampleFormView = ADK.UI.Form.extend({
 :::
 ::: showcode Example of popover events
 ```Javascript
-this.$('#popoverButtonRegion').trigger('control:popover:hidded', false);
-this.$('#popoverButtonRegion').trigger('control:popover:hidded', true);
+this.$('.popover-button-region').trigger('control:popover:hidded', false);
+this.$('.popover-button-region').trigger('control:popover:hidded', true);
 
 //Create a new model to add
 var model = {
@@ -2937,11 +3248,11 @@ var model = {
 };   // A basic button
 
 //Trigger the add event to add the model to the collection
-this.$('#popoverContentRegion > .Popover').trigger('control:items:add', model)
+this.$('.popover-content-region > .Popover').trigger('control:items:add', model)
 //Trigger the remove event to remove the model we just added
-this.$('#popoverContentRegion > .Popover').trigger('control:items:remove', model)
+this.$('.popover-content-region > .Popover').trigger('control:items:remove', model)
 //Trigger the update event to set the entire collection
-this.$('#popoverContentRegion > .Popover').trigger('control:items:update', model)
+this.$('.popover-content-region > .Popover').trigger('control:items:update', model)
 ```
 :::
 
@@ -3089,6 +3400,8 @@ The comment box control provides a method for viewing, editing, creating, and de
 |<i class="fa fa-check-circle note">\*</i>| **collection**        | collection     | Collection to generate list of comments. Each item in the collection must contain: **commentString** (string of actual comment), **author** (object with **name** and **duz**, which is an object containing the vistaid and userid.. _See example below_), and **timeStamp** (string of time comment was authored) <br />**Example:** `collection: new Backbone.Collection([{commentString: "This is probably the primary cause of the patients pain", author: {name: "USER,PANORAMA", duz: {"9E7A": "10000000237"}},timeStamp: "12/14/2014 11:15PM"}])`|
 |                                  | **attributeMapping**| object | Ensures for flexible naming of control or model attributes<br />**Options:** `comment`, `author`, and `timeStamp`<br /> **Example:** `attributeMapping: {comment: 'commentString',author: 'author', timeStamp: 'timeEntered'}`|
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
+|                                  | **disabled**    | boolean    | Makes entire control disabled <br />**Example:** `disabled: true`|
+|                                  | **required**    | boolean    | Requires at least one comment to be entered <br />**Example:** `required: true`|
 |                                  | **allowEdit**   | boolean / function  | Determines whether or not the current user can edit a particular comment. The model for the individual comment is passed in as an argument.<br />**Important:** if this is a function, must return a boolean, else it will not be used.<br />**Default:** `true` <br />**Example:** `allowEdit: false`|
 |                                  | **allowDelete**   | boolean / function  | Determines whether or not the current user can delete a particular comment. The model for the individual comment is passed in as an argument.<br />**Important:** if this is a function, must return a boolean, else it will not be used.<br />**Default:** `true` <br />**Example:** `allowDelete: false`|
 |                                  | **commentTemplate**   | string / Handlebars template  | Template to use instead of default template. This can be used to omit, reorder, or style comment attributes<br />**Note:** can be a string or a Handlebars.compile template.<br />**Default:** `'{{comment}}{{#if timeStamp}} {{timeStamp}}{{/if}}{{#if name}} - {{name}}{{/if}}'` <br />**Example:** `commentTemplate: '{{comment}}'` (will show only the comment text)|
@@ -3097,7 +3410,7 @@ The comment box control provides a method for viewing, editing, creating, and de
 |                                  | **inputOptions** | object    | Options to pass into the input control used to enter text (will take any from the [Input Control](#Basic-Input)) <br />**Example:** `inputOptions: {maxlength: 100, placeholder: "Different placeholder."}`|
 
 ::: callout
-**<i class="fa fa-check-circle note">\*</i> Note:** _"collection"_ is required if the model attribute asscoiated with the given _"name"_ does not have an initial value.
+**<i class="fa fa-check-circle note">\*</i> Note:** _"collection"_ is required if the model attribute associated with the given _"name"_ does not have an initial value.
 :::
 
 #### Access Control ####
@@ -3153,6 +3466,12 @@ Notice the "readonly" state of the input as well as the placeholder text of "Com
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
+| **control:disabled**      | boolean   | disables/enables the full control <br/>**Example:** `$().trigger('control:disabled', true)` |
+| **control:required**      | boolean   | requires at least one comment to be entered when `true` <br/>**Example:** `$().trigger('control:required', true)` |
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
 
 #### Examples ####
 ::: showcode Backbone Model Used In Examples:
@@ -3265,6 +3584,10 @@ This is a special combination of a select and checklist for use when a select is
 ::: callout
 Please see code example below to better understand the relationships between the select and checklist controls
 :::
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
 
 ::: definition
 #### Events that can be triggered to change the drilldownChecklist control's attributes dynamically ####
@@ -3393,8 +3716,12 @@ this.ui.allControls.trigger('control:hidden', false);
 |                                  | **inputOptions** | object    | Options to pass into the commentBox control which passes them to its input control used to enter text (will take any from the [Input Control](#Basic-Input)) <br />**Example:** `inputOptions: {maxlength: 100, placeholder: "Different placeholder."}`|
 
 ::: callout
-**<i class="fa fa-check-circle note">\*</i> Note:** _"collection"_ is required if the model attribute asscoiated with the given _"name"_ does not have an initial value.
+**<i class="fa fa-check-circle note">\*</i> Note:** _"collection"_ is required if the model attribute associated with the given _"name"_ does not have an initial value.
 :::
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction. **Note:** will also bubble up interaction from embedded controls.
 
 ::: definition
 #### Events that can be triggered to change the nestedCommentBox control's attributes dynamically ####
@@ -3607,14 +3934,23 @@ this.ui.allControls.trigger('control:hidden', false);
 |<i class="fa fa-check-circle"></i>| **collection**        | collection     | Collection to generate table's rows <br />**Example:** `collection: new Backbone.Collection([{date: '05/09/2015', details: 'Something happened', location: 'General Medicine'}])`|
 |<i class="fa fa-check-circle"></i>| **columns**        | array     | Columns used to generate columns and maps to collection's model values <br />**Title will be displayed in header, id maps to the model attribute desired**<br />**Example:** `columns: [{title: "Date", id: "date"}, {title: "Details", id: "details"}, {title: "Location", id: "location"}]`|
 |                                  | **extraClasses**| array of strings | Classes to be added to the container immediately around the table <br />**Example:** `extraClasses: ["special-class"]`|
+|                                  | **label**| string | The label for the type of row item, used by screen readers and the "No items found" message. <br />**Example:** `label: "Encounter location"`|
 |                                  | **id**    | string    | Id to add to the container immediately around the table <br />**Defaults to use name field**<br />**Example:** `id: selectableTableExample`|
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
+|                                  | **showEmptyMessage** | boolean | Whether to show a "No items found" message when empty <br />**Defaults to `true`**<br />**Example:** `showEmptyMessage: false`|
+|                                  | **emptyTemplate** | string    | Custom template for "No items found" message <br />**Example:** `emptyTemplate: 'Nothing to see here.'`|
+|                                  | **loadingTemplate** | string    | Custom template for "loading" message <br />**Example:** `loadingTemplate: 'Now loading...'`|
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
 
 ::: side-note
 #### Events that can be triggered to change the selectableTable control's attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
+| **control:loading**       | boolean   | displays or hides the "loading" message <br/>**Note:** the "loading" message auto-hides when the collection changes <br/>**Example:** `$().trigger('control:loading', true)` |
 :::
 
 ::: showcode Backbone Model Used In Examples:
@@ -3696,13 +4032,17 @@ this.ui.allControls.trigger('control:hidden', false);
 |<i class="fa fa-check-circle"></i>| **name**        | string     | Model attribute to be updated. <br />**Example:** `name: "ToggleOptionsChecklist"`|
 |<i class="fa fa-check-circle"></i>| **label**       | string     | Label text for checklist. <br />**Example:** `label: "Heading Label For Checklist"`|
 |<i class="fa fa-check-circle"></i>| **description**       | string     | Description displayed above the toggle options checklist table <br /> **Example** `description: "This is the TOC description."`|
-|<i class="fa fa-check-circle"></i>| **columnHeaders** | array of objects| Array of objects to generate the list of header buttons. <br />**Example:** <br />``columnHeaders: [{name: 'SC', description: 'Service Connected'},{name: 'CV',description: 'Combat Veteran'}, {name: 'AO', description: 'Agent Orange exposure'}, {name: 'HNC', description: 'Hippopotomal Nordic Conditions'}]`` <br /><br />**Also Note:** Each array object/model must have the attributes of "**description**" (String used to describe the header category) and "**name**" (unquie identifier string) |
-|<i class="fa fa-check-circle note">\*</i>| **collection** | array of objects<br />-- OR --<br />backbone collection | Array of items / collection to generate the list of items from. <br />**Example:** <br />`collection: new Backbone.Collection([{name: 'toc-row1',label: 'First Row',value: true, disabled: false, description: 'This is the first thing'}, {name: 'toc-row2',label: 'Second Row',value: false, disabled: false, description: "This is the second row"}])`<br />**Also Note:** Each array object/model must have the attributes of "**value**" (the initial value of the checkbox for the row), "**name**" (unquie identifier string), "**label**" (label applied to the checkbox), "**disabled**" (value true if the row is disabled to the user), and "**description**" (string displayed to the user in the row) otherwise the attributeMapping property must also be defined to ensure that attribute titles are asscoiated correctly. |
+|<i class="fa fa-check-circle"></i>| **columnHeaders** | array of objects| Array of objects to generate the list of header buttons. <br />**Example:** <br />``columnHeaders: [{name: 'SC', description: 'Service Connected'},{name: 'CV',description: 'Combat Veteran'}, {name: 'AO', description: 'Agent Orange exposure'}, {name: 'HNC', description: 'Hippopotomal Nordic Conditions'}]`` <br /><br />**Also Note:** Each array object/model must have the attributes of "**description**" (String used to describe the header category) and "**name**" (unique identifier string) |
+|<i class="fa fa-check-circle note">\*</i>| **collection** | array of objects<br />-- OR --<br />backbone collection | Array of items / collection to generate the list of items from. <br />**Example:** <br />`collection: new Backbone.Collection([{name: 'toc-row1',label: 'First Row',value: true, disabled: false, description: 'This is the first thing'}, {name: 'toc-row2',label: 'Second Row',value: false, disabled: false, description: "This is the second row"}])`<br />**Also Note:** Each array object/model must have the attributes of "**value**" (the initial value of the checkbox for the row), "**name**" (unique identifier string), "**label**" (label applied to the checkbox), "**disabled**" (value true if the row is disabled to the user), and "**description**" (string displayed to the user in the row) otherwise the attributeMapping property must also be defined to ensure that attribute titles are associated correctly. |
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
 
 ::: callout
-**<i class="fa fa-check-circle note">\*</i> Note:** _"collection"_ is required if the model attribute asscoiated with the given _"name"_ does not have an initial value.
+**<i class="fa fa-check-circle note">\*</i> Note:** _"collection"_ is required if the model attribute associated with the given _"name"_ does not have an initial value.
 :::
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
 
 ::: definition
 #### Events that can be triggered to change the ToggleOptionChecklist control's attributes dynamically ####
@@ -3820,6 +4160,10 @@ The treepicker control provides a method for drilling down into a resource consi
 ::: callout
 **Important:** The collection models are expected to have at least a _"description"_ and either _"nodes"_ -OR- _"href"_. _"description"_ is the item label. _"nodes"_ indicates that the data is prepopulated. If not, _"href"_ will be used to fetch new data. _"attributeMapping"_ should be set and will be used in cases where _"description"_ / _"nodes"_ / _"href"_ is not on the models.
 :::
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
 
 ::: definition
 #### Events that can be triggered to change the treepicker control's attributes dynamically ####

@@ -5,7 +5,7 @@ class DiabetesMellitusCBW < CBW
     add_action(CucumberLabel.new("Diabetes Mellitus"), ClickAction.new, AccessHtmlElement.new(:link_text, "Diabetes Mellitus"))
 
     # applets
-    add_verify(CucumberLabel.new("CONDITIONS"), VerifyContainsText.new, applet_panel_title("problems"))
+    add_verify(CucumberLabel.new("PROBLEMS"), VerifyContainsText.new, applet_panel_title("problems"))
     add_verify(CucumberLabel.new("STACKED GRAPHS"), VerifyContainsText.new, applet_panel_title("stackedGraph"))
     add_verify(CucumberLabel.new("APPOINTMENTS & VISITS"), VerifyContainsText.new, applet_panel_title("appointments"))
     add_verify(CucumberLabel.new("CLINICAL REMINDERS"), VerifyContainsText.new, applet_panel_title("cds_advice"))

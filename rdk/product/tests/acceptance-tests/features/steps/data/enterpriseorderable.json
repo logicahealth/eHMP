@@ -1,0 +1,28 @@
+{
+    "uid": "urn:va:enterpriseorderable:2",
+    "name": "Hypertensive Patient EO",
+    "state": "active",
+    "facility-enterprise": "",
+    "type": "ehmp-enterprise-orderable",
+    "domain": "ehmp-activity",
+    "subDomain": "consult",
+    "data": {
+        "activity": {
+            "deploymentId": "VistaCore:Order",
+            "processDefinitionId": "Order:Consult"
+        },
+        "prerequisites": {
+            "cdsIntent": "name on a cds intent to be executed",
+            "questions": ["Q1", "Q2"]
+        },
+        "codes": [
+            {
+            "code": "2601-3",
+            "system": "urn:oid:2.16.840.1.113883.6.1",
+            "display": "Magnesium [Moles/volume] in Serum or Plasma"
+            }
+        ],
+        "data": {
+        }
+    }
+}

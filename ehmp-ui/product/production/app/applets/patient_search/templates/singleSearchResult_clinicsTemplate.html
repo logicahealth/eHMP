@@ -1,5 +1,5 @@
 <div class="list-group-item-text row cursor-hand">
-		<div class="col-md-2 no-padding user_info-ps-td-datetime">
+		<div class="col-xs-2 all-padding-no user_info-ps-td-datetime">
 			<span aria-hidden="true" class="hidden user_info-ps-sm-th">Appt Date/Time:</span>
 			<span class="sr-only">. Appointment date and time</span>
 			{{#if appointmentTime}}
@@ -8,40 +8,34 @@
 				No Appointment Date
 			{{/if}}
 		</div>
-		<div class="col-md-2">
+		<div class="col-xs-2">
 			<span aria-hidden="true" class="hidden user_info-ps-sm-th">Clinic Name:</span>
 			<span class="sr-only">. Clinic Name</span>
 			{{clinicName}}
 		</div>
-		<div class="col-md-3 no-padding-right patientDisplayName user_info-ps-td-name">
+		<div class="col-xs-3 right-padding-no patientDisplayName user_info-ps-td-name">
 			<span aria-hidden="true" class="hidden user_info-ps-sm-th">Patient Name:</span>
 			<span class="sr-only">. Patient record, name</span>
-			{{formatName fullName ',' ', '}}
+			{{displayName}}
 		</div>
-		<div class="col-md-2 no-padding-left user_info-ps-td-ssn ssn">
+		<div class="col-xs-2 left-padding-no user_info-ps-td-ssn ssn">
 			<span aria-hidden="true" class="hidden user_info-ps-sm-th">SSN:</span>
 			<span class="sr-only">. Social security number</span>
-			{{#if sensitive}}
-				{{ssn}}
-			{{else}}
-				{{formatSSN ssn}}
-			{{/if}}
+			{{ssn}}
 		</div>
-			<div class="col-md-2 no-padding user_info-ps-td-adob dob">
+		<div class="col-xs-2 all-padding-no user_info-ps-td-adob dob">
 			<span aria-hidden="true" class="hidden user_info-ps-sm-th">DOB:</span>
 			<span class="sr-only">. Date of birth</span>
-			{{#if sensitive}}
-				{{birthDate}}
-			{{else}}
-				{{formatDate birthDate "MM/DD/YYYY"}}
-				<span class="sr-only">Age</span>
-				({{getAge birthDate}}y)
+			{{birthDate}}
+			{{#if age }}
+			<span class="sr-only">. Age</span>
+			({{age}}y)
 			{{/if}}
 		</div>
-		<div class="col-md-1 user_info-ps-td-gender">
+		<div class="col-xs-1 user_info-ps-td-gender">
 			<span aria-hidden="true" class="hidden user_info-ps-sm-th">Gender:</span>
 			<span class="sr-only">. Gender</span>
 			{{genderName}}
 		</div>
-		<span class="sr-only">Press enter to select this patient.</span>
+		<span class="sr-only">Press enter to activate patient, then tab to the patient confirmation. To search for a new patient press ALT + E.</span>
 </div>

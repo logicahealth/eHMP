@@ -15,8 +15,8 @@
   </event-listeners>
   <task-event-listeners>
     <task-event-listener>
-      <resolver>reflection</resolver>
-      <identifier><%= node[:jbpm][:configure][:taskeventlistener] %></identifier>
+      <resolver>mvel</resolver>
+      <identifier>new <%= node[:jbpm][:configure][:taskeventlistener] %>(runtimeManager)</identifier>
     </task-event-listener>
   </task-event-listeners>
 
@@ -57,6 +57,42 @@
       <identifier>new gov.va.CDSInvocationServiceHandler()</identifier>
       <parameters/>
       <name>CDSInvocationService</name>
+    </work-item-handler>
+    <work-item-handler>
+      <resolver>mvel</resolver>
+      <identifier>new gov.va.clinicalobjectstorageservice.ClinicalObjectWriteHandler()</identifier>
+      <parameters/>
+      <name>ClinicalObjectWriteService</name>
+    </work-item-handler>
+    <work-item-handler>
+      <resolver>mvel</resolver>
+      <identifier>new gov.va.clinicalobjectstorageservice.ClinicalObjectReadHandler()</identifier>
+      <parameters/>
+      <name>ClinicalObjectReadService</name>
+    </work-item-handler>
+    <work-item-handler>
+      <resolver>mvel</resolver>
+      <identifier>new gov.va.storageservice.notifications.NotificationsWriteHandler()</identifier>
+      <parameters/>
+      <name>NotificationsWriteService</name>
+    </work-item-handler>
+    <work-item-handler>
+      <resolver>mvel</resolver>
+      <identifier>new gov.va.storageservice.signal.SignalWriteHandler(ksession)</identifier>
+      <parameters/>
+      <name>SignalWriteService</name>
+    </work-item-handler>
+    <work-item-handler>
+      <resolver>mvel</resolver>
+      <identifier>new gov.va.signalregistrationservice.RegistrationHandler(ksession)</identifier>
+      <parameters/>
+      <name>SignalRegistrationService</name>
+    </work-item-handler>
+    <work-item-handler>
+      <resolver>mvel</resolver>
+      <identifier>new gov.va.eventstatewriteservice.WriteHandler(ksession)</identifier>
+      <parameters/>
+      <name>EventStateWriteService</name>
     </work-item-handler>
   </work-item-handlers>
   <environment-entries/>

@@ -1,0 +1,9 @@
+{
+  "id": "newrelic",
+  "license_key": {
+    "encrypted_data": "ed//lZcr10dcH+TJiO1avPTyHTjSQIEiamx40mPTU+SnaSWLjnh0X0rYdkG7\nGqqM10xzZ4rkzUAwKytso5tSww==\n",
+    "iv": "6eLyMqYFLXHliCPZcSgfYA==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}

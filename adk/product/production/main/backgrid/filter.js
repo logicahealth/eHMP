@@ -15,11 +15,7 @@ define([
     var Filter = {};
     var custprocessId;
 
-    // Capture the name of the browser
-    var browser = window.navigator.userAgent;
-    var msie = browser.indexOf("MSIE ");
-
-     var UserDefinedFilter = Backbone.Model.extend({
+    var UserDefinedFilter = Backbone.Model.extend({
         defaults: {
             name: '',
             workspaceId: '',
@@ -41,11 +37,15 @@ define([
             },
             events: _.extend({}, Backgrid.Extension.ClientSideFilter.prototype.events, {
                 'submit': 'addFilterOnSubmit',
-                'click a.remove-all': 'removeAllFilters',
+                'click .input-filters': 'clickInputFilters',
+                'click .filter-title-input': 'clickInputFilterTitle',
+                'click button.remove-all': 'removeAllFilters',
                 'click .filter-title': 'filterEditModeFromUi',
+                'keypress .filter-name-container': 'filterEditModeFromUIKeypress',
                 'focusout .filter-title-input': 'filterEditModeFromUi',
                 'change .filter-title-input': 'saveFilter',
-                'keypress .filter-title-input': 'filterKeypress'
+                'keypress .filter-title-input': 'filterKeypress',
+                'click .clear-input': 'clear'
             }),
             addFilter: function(filterText) {
                 if (filterText.length < 1) {
@@ -82,6 +82,7 @@ define([
             },
             addFilterOnSubmit: function(e) {
                 e.preventDefault();
+                this.$('.filter-add').blur();
                 //if not on a user defined workspace, return
                 if (!this.onUserWorkspace) {
                     return;
@@ -92,6 +93,16 @@ define([
                 }
                 var filterTerms = searchText.split(' ');
                 _.each(filterTerms, this.addFilter, this);
+
+                var formControl = this.$('.form-control.input-filters');
+                this.clearInputBtnDisplay();
+                formControl.focus();
+            },
+            clickInputFilters: function() {
+                this.$('input.input-filters').focus();
+            },
+            clickInputFilterTitle: function() {
+                this.$('input.filter-title-input').focus();
             },
             getFilterTextbox: function() {
                 return this.$el.find('.filter-title-input');
@@ -100,8 +111,8 @@ define([
                 return this.$el.find('.filter-title');
             },
             filterKeypress: function(e) {
-                if (e.which == 13) {
-                    this.getFilterTextbox().focusout();
+                if (e.which === 13) {
+                    this.filterEditModeFromUIKeypress(e);
                 }
             },
             saveFilter: function() {
@@ -120,10 +131,12 @@ define([
                     this.$el.parents('.gs-w').find('.applet-filter-title').text(newTitle);
                     ADK.SessionStorage.setAppletStorageModel(this.instanceId, 'filterName', newTitle, true);
                 }
+                this.$el.parents('.panel-body').find('.sub-header').show();
+                this.$el.parents('div[data-appletid]').addClass('filtered');
             },
             removeAllFilters: function(e) {
                 e.preventDefault();
-                this.filterName = 'Filtered';
+                this.filterName = '';
                 if (this.fullScreen) {
                     WorkspaceFilters.removeAllFiltersFromAppletFromSession(this.workspaceId, this.instanceId);
                 } else {
@@ -136,8 +149,12 @@ define([
                 Messaging.trigger('gridster:saveAppletsConfig');
                 this.userDefinedFilters.reset();
                 this.clear();
-                this.$('.udaf').html('');
+                this.$('.udaf').find('span.udaf-tag').remove();
+                this.$('.filter-container').find('.filter-title-input').val('');
                 this.userDefinedFiltersCollectionChanged();
+                this.$el.parents('.panel-body').find('.sub-header').hide();
+                this.$el.parents('.filtered').removeClass('filtered');
+                this.$('.input-filters').focus();
             },
             filterEditModeFromUi: function(event) {
                 if (!this.fullScreen) {
@@ -145,22 +162,19 @@ define([
                     this.filterEditMode(!editFilter);
                 }
             },
+            filterEditModeFromUIKeypress: function(event) {
+                if (event.which === 13 || event.which === 32) {
+                    event.preventDefault();
+                    this.filterEditModeFromUi(event);
+                }
+            },
             filterEditMode: function(editFilter) {
                 var filterTitleLabel = this.getFilterLabel();
                 var filterTitleTextbox = this.getFilterTextbox();
-                this.setVisible(filterTitleLabel, !editFilter);
-                this.setVisible(filterTitleTextbox, editFilter);
 
                 if (editFilter) {
                     var filterTitle = filterTitleLabel.text();
                     filterTitleTextbox.focus().val(filterTitle);
-                }
-            },
-            setVisible: function(element, makeVisible) {
-                if (makeVisible) {
-                    element.removeClass('hidden');
-                } else {
-                    element.addClass('hidden');
                 }
             },
             setVisibleWithTransition: function(element, makeVisible) {
@@ -175,8 +189,7 @@ define([
                 var self = this;
                 WorkspaceFilters.onRetrieveWorkspaceFilters(self.instanceId, function(args) {
                     var j, filters, filterCount, userDefinedFilter, udafTag, status;
-                    var filterTitle = self.$el.parents('.gs-w').attr('data-filter-name');
-                    self.getFilterLabel().text(filterTitle);
+                    self.getFilterLabel().text(self.filterName);
 
                     filters = args.applet ? args.applet.filters : args.applet;
                     filterCount = filters ? filters.length : 0;
@@ -203,12 +216,24 @@ define([
                 this.listenTo(this.collection, 'backgrid:sorted', this.onSort);
                 this.listenTo(this.collection, 'baseGistView:sortNone', this.onSortNone);
                 this.listenTo(this.collection, 'baseGistView:sortManual', this.onSortManual);
+                this.getFilterTextbox().val(this.filterName);
+
+                if (this.filterName === "") {
+                    this.$el.parents('.panel-body').find('.sub-header').hide();
+                } else {
+                    this.$el.parents('.panel-body').find('.sub-header').show();
+                }
             },
             render: function() {
                 this.$el.html(this.template(this));
                 Utils.applyMaskingForSpecialCharacters(this.$el.find('.filter-title-input'));
-                var filterTitle = this.$el.parents('.gs-w').attr('data-filter-name');
-                this.getFilterLabel().text(filterTitle);
+                this.getFilterTextbox().text(this.filterName);
+                var bodyTag = $('body').attr('class');
+                if (bodyTag.search('-full') > 0) {
+                    this.$el.find('.filter-header').remove();
+                    this.$el.find('.input-group.input-group-sm').addClass('not-udws');
+                }
+                this.clearInputBtnDisplay();
                 return this;
             },
             initialize: function(options) {
@@ -220,9 +245,9 @@ define([
                 this.fullScreen = options.fullScreen;
                 this.collection = options.collection;
                 this.maximizedScreen = options.maximizedScreen;
-                this.filterName = options.filterName || 'Filtered';
+                this.filterName = options.filterName || '';
                 this.model = options.model;
-                this.destinationCollection= options.destinationCollection;
+                this.destinationCollection = options.destinationCollection;
 
                 var currentScreen = Messaging.request('get:current:screen');
                 this.onUserWorkspace = (currentScreen.config.predefined === false ? true : false);
@@ -259,18 +284,12 @@ define([
                 }
                 this.userDefinedFiltersCollectionChanged();
             },
-            search: function() {
+
+            applyFilters: function() {
                 var originalModelsCount = 0;
-                var self = this;
                 // custom filter
                 if (this.collection._events.customfilter !== undefined) {
-                    //reset the timeout
-                    if (custprocessId) {
-                        clearTimeout(custprocessId);
-                    }
-                    custprocessId = setTimeout(function() {
-                        self.doCustomSearch();
-                    }, 400);
+                    this.doCustomSearch();
                     return;
                 }
                 if (this.collection.pageableCollection !== undefined && this.collection.pageableCollection.originalModels !== undefined) {
@@ -278,29 +297,40 @@ define([
                 } else if (this.collection.originalModels !== undefined) {
                     originalModelsCount = this.collection.originalModels.length;
                 }
-                //expect at least 1 characters to start filtering.
-                if ((this.searchBox().val().length < 1 && this.searchBox().val().length > this.prevSearchTextLength && this.collection.models.length === originalModelsCount && this.userDefinedFilters.length === 0) || !this.patternIsMatched(this.searchBox())) {
+
+                var isFilterKeyMatchingPattern = this.isFilterKeyMatchingPattern(this.searchBox());
+
+                // expect at least 1 characters to start filtering.
+                if (!isFilterKeyMatchingPattern || (this.searchBox().val().length < 1 &&
+                        this.collection.models.length === originalModelsCount && this.userDefinedFilters.length === 0)) {
                     this.prevSearchTextLength = this.searchBox().val().length;
+                    if (!isFilterKeyMatchingPattern) {
+                        this.$('.filter-add').attr('disabled', true);
+                    }
                     return;
                 }
+
+                // non empty filter key string that is in valid format
                 this.prevSearchTextLength = this.searchBox().val().length;
-                //make an unblocking call to the ClientSideFilter.search so that the user can continue typing
-                //reset the timeout
-                if (this.processId) {
-                    clearTimeout(this.processId);
-                }
-                this.processId = setTimeout(function() {
-                    self.doSearch();
-                }, 400);
+                this.doSearch();
                 // trigger filterDone event for GistView.
                 if (this.collection._events.filterDone !== undefined) {
                     options.collection.trigger('filterDone');
                 }
+                this.clearInputBtnDisplay();
+            },
+
+            // Note: search is being wrapped around a debounce by Backgrid.
+            // the debounce prevents the code from running immediately after typing one character, so a few characters can be typed.
+            search: function() {
+                this.applyFilters();
             },
             doCustomSearch: function() {
                 //console.log('doCustomSearch');
                 var regexp = this.getFilterRegExp();
                 options.collection.trigger("customfilter", regexp);
+
+                this.clearInputBtnDisplay();
             },
             getFilterRegExp: function() {
                 var query = this.searchBox().val().trim();
@@ -343,9 +373,9 @@ define([
                     return queryThusFar + seperator + filterValue;
                 }, '');
 
-                if (msie > 0) {
-                    query = query.replace(/[\%&\^$\!]/gi, '');
-                }
+                //remove the special characters
+                query = query.replace(/[\*%&\$#\!\\\/]/g, '');
+
                 //replace the spaces with | to represent logical OR
                 query = query.replace(/\s/g, '|');
 
@@ -368,11 +398,14 @@ define([
                     return;
                 }
 
+                var fullCollection = this.collection.fullCollection || this.collection;
+                if (fullCollection.preFilterCollection) this.preFilterCollection = fullCollection.preFilterCollection;
                 // capture pre-filtered collections for restoring collections on clearing of filters.
-                if (this.preFilterCollection === null || this.preFilterCollection.length === 0) {
-                    var fullCollection = this.collection.fullCollection || this.collection;
+                if (_.isEmpty(this.preFilterCollection)) {
                     this.preFilterCollection = fullCollection.clone();
+                    fullCollection.preFilterCollection = this.preFilterCollection;  // persist preFilterCollection on applet refresh
                 }
+
                 var matcher = _.bind(this.makeMatcher(query), this);
                 var col = this.collection;
                 if (col.pageableCollection) col.pageableCollection.getFirstPage({
@@ -380,7 +413,20 @@ define([
                 });
 
                 if (col instanceof Backbone.PageableCollection) {
-                    col.fullCollection.reset(this.preFilterCollection.models, {
+                    var clonedModels = this.preFilterCollection.models;
+                    // deep cloning models if the collection has panels (nested collections) that should be filtered
+                    if (col.fullCollection.where({
+                            isPanel: "Panel"
+                        }).length > 0) {
+                        clonedModels = this.preFilterCollection.map(function(model) {
+                            var newModel = model.clone();
+                            if (model.has('labs')) {
+                                newModel.set('labs', model.get('labs').clone());
+                            }
+                            return newModel;
+                        });
+                    }
+                    col.fullCollection.reset(clonedModels, {
                         silent: true
                     });
                     col.getFirstPage({
@@ -412,6 +458,8 @@ define([
                 }
 
                 this.remove();
+
+                options = null;
             },
             onFetchCollection: function() {
                 this.preFilterCollection = null;
@@ -446,6 +494,8 @@ define([
             clear: function() {
                 this.searchBox().val('');
                 this.toggleClearButton();
+                this.$(".clear-input").hide();
+                this.$('.filter-add').attr('disabled', true);
 
                 // trigger filterDone event for GistView.
                 if (this.collection._events.filterDone !== undefined) {
@@ -454,6 +504,7 @@ define([
                 if (this.collection._events.clear_customfilter !== undefined) {
                     var filterRegExp = this.getFilterRegExp();
                     options.collection.trigger('clear_customfilter', filterRegExp);
+                    this.searchBox().focus();
                     return;
                 }
                 this.searchBox().focus();
@@ -465,7 +516,6 @@ define([
                 if (options.collection.markInfobutton) {
                     options.collection.markInfobutton.func(options.collection.markInfobutton.that);
                 }
-
             },
             toggleClearButton: function() {
                 var $clearButton = this.clearButton();
@@ -476,25 +526,24 @@ define([
                     $clearButton.hide();
                 }
             },
-            invalidInput: function(string) {
-                var pattern = /[^\%&\^$\!]/gi;
-                var result = pattern.test(string);
-            },
-
-            patternIsMatched: function(object) {
-                var a = [];
-                if (msie > 0) {
-                    a = $(object).parent().find('input').val();
-                    return (!this.invalidInput(a));
+            clearInputBtnDisplay: function() {
+                var searchVal = this.searchBox().val();
+                if (searchVal) {
+                    this.$(".clear-input").show();
+                    if (searchVal.length > 2) {
+                        this.$('.filter-add').attr('disabled', false);
+                        return;
+                    }
                 } else {
-                    a = $(object).parent().find('input:valid');
+                    this.$(".clear-input").hide();
                 }
-                if (a.length > 0) {
-                    return true;
-                }
-                return false;
+                this.$('.filter-add').attr('disabled', true);
             },
-
+            isFilterKeyMatchingPattern: function(object) {
+                var filterKey = $(object).parent().find('input').val();
+                var pattern = /[\*%&\$#\!\\\/]/g;
+                return !pattern.test(filterKey);
+            },
             makeMatcher: function(query) {
                 var regexp;
 
@@ -528,6 +577,7 @@ define([
                     var fields = this.fields;
                     var keys = this.fields || model.keys();
 
+                    var isMatched = false;
                     for (var i = 0, l = keys.length; i < l; i++) {
                         var key = keys[i];
                         var cellValue = getCellValue(json, key);
@@ -541,46 +591,33 @@ define([
                                 var observed2 = cellValue + '';
                                 observed2 = cellValue.slice(0, 8);
 
-                                if (tryMatch(observed1) || tryMatch(observed2)) return true;
+                                if (tryMatch(observed1) || tryMatch(observed2)) {
+                                    isMatched = true;
+                                }
                             }
                         }
-                        if (tryMatch(cellValue + '')) return true;
+                        if (!_.isUndefined(cellValue) && tryMatch(cellValue + '')) {
+                            isMatched = true;
+                        }
                     }
 
                     // for Panel, add all of its enclosed laps' keys, too.
-                    var isNestedMatched = false;
                     var isPanel = model.get('isPanel');
                     if (isPanel !== undefined && isPanel !== null && isPanel === 'Panel') {
                         var labs = model.get('labs');
                         if (labs !== undefined && labs !== null) {
-                            labs.each(function(nestedLab) {
-                                var nestedJson = nestedLab.toJSON();
-                                var nestedKeys = fields || nestedLab.keys();
-
-                                for (var i = 0, l = nestedKeys.length; i < l; i++) {
-                                    var nestedKey = nestedKeys[i];
-                                    var nestedCellValue = getCellValue(json, nestedKey);
-                                    if (nestedKey === 'observed') {
-                                        var observed1 = nestedCellValue + '';
-                                        observed1 = nestedCellValue.slice(0, 8);
-                                        observed1 = nestedCellValue.replace(/(\d{4})(\d{2})(\d{2})/, '$2/$3/$1');
-
-                                        var observed2 = nestedCellValue + '';
-                                        observed2 = nestedCellValue.slice(0, 8);
-
-                                        if (tryMatch(observed1) || tryMatch(observed2)) {
-                                            isNestedMatched = true;
-                                        }
-                                    }
-                                    if (tryMatch(nestedCellValue + '')) {
-                                        isNestedMatched = true;
-                                    }
-                                }
-                            });
+                            var matcher = _.bind(this.makeMatcher(query), this);
+                            var filteredLabs = new Backbone.Collection(labs.filter(matcher));
+                            if (filteredLabs.length > 0) {
+                                isMatched = true;
+                                labs.reset(filteredLabs.models, {
+                                    reindex: false
+                                });
+                            }
                         }
                     }
 
-                    return isNestedMatched;
+                    return isMatched;
                 };
             }
         });
@@ -592,14 +629,14 @@ define([
             fullScreen: options.fullScreen,
             collection: options.collection,
             fields: options.filterFields,
-            placeholder: 'Enter your text filter',
+            placeholder: 'Filter',
             name: 'q-' + options.id,
             template: filterTemplate,
-            filterName: options.filterName || 'Filtered',
+            filterName: options.filterName || '',
             model: options.model
         });
 
-        if(!_.isUndefined(filterView.instanceId)) {
+        if (!_.isUndefined(filterView.instanceId)) {
             filterView.filterId = filterView.filterName + '-' + filterView.instanceId;
         } else {
             console.error('508: filter-title-input has no ID. The label element is broken.');

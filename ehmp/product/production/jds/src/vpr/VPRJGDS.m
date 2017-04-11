@@ -1,5 +1,4 @@
 VPRJGDS ;KRM/CJE -- Generic Data Store
- ;;1.0;JSON DATA STORE;;AUG 5, 2015
  ;
  Q
  ;
@@ -39,7 +38,8 @@ SET(ARGS,BODY)  ; Store error(s) based on the passed in uid
  I $G(UID)'="" S OBJECT("uid")=UID
  ;
  ; Increment the total count and get a non-used sequential uid
- S INCR=$I(@GLOBAL@(0))
+ ; only do this if it isn't a PATCH OR it is a patch with no uid (which is equivalent to a post/put)
+ S:$G(HTTPREQ("method"))'="PATCH"!($G(HTTPREQ("method"))="PATCH"&($G(UID)="")) INCR=$I(@GLOBAL@(0))
  ;
  ; Ensure INCR UID doesn't contain data (it would cause a collision)
  I $G(UID)="",$D(@GLOBAL@("urn:va:"_HTTPREQ("store")_":"_INCR)) D
@@ -59,14 +59,22 @@ SET(ARGS,BODY)  ; Store error(s) based on the passed in uid
  . D ENCODE^VPRJSON("OBJECT","BODY","ERR")
  ; Kill destination global before merging
  ; need to do this for updates
+ L +@GLOBAL@(UID):$G(^VPRCONFIG("timeout","gds"),5) E  D SETERROR^VPRJRER(502) QUIT ""
  M OLDOBJ=@GLOBAL@(UID)
  ; Merge parsed JSON
- K @GLOBAL@(UID)
+ K:$G(HTTPREQ("method"))'="PATCH" @GLOBAL@(UID)
  M @GLOBAL@(UID)=OBJECT
+ ;
+ ; if this is a PATCH we need to re-create the full object to continue
+ I $G(HTTPREQ("method"))="PATCH" D  I $D(ERR) D SETERROR^VPRJRER(217) QUIT ""
+ . M OBJECT=@GLOBAL@(UID)
+ . D ENCODE^VPRJSON("OBJECT","BODY","ERR")
+ ;
  ; Merge Raw JSON
  K @GLOBALJ@("JSON",UID)
  M @GLOBALJ@("JSON",UID)=BODY
  D INDEX^VPRJGDSX(UID,.OLDOBJ,.OBJECT)
+ L -@GLOBAL@(UID)
  Q "/"_HTTPREQ("store")_"/"_UID
  ;
 CLR(RESULT,ARGS)  ; Clear ALL objects in generic data store!!!
@@ -108,14 +116,20 @@ CLR(RESULT,ARGS)  ; Clear ALL objects in generic data store!!!
  Q
  ;
 DEL(RESULT,ARGS)  ; Delete a given data object in generic data store
- N GLOBAL
+ N GLOBAL,GLOBALJ
  I $G(HTTPREQ("store"))="" D SETERROR^VPRJRER(253) Q
  S GLOBAL="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))
+ S GLOBALJ="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))_"J"
  I $L(GLOBAL)<2 D SETERROR^VPRJRER(253) Q
  I $G(ARGS("uid"))="" D SETERROR^VPRJRER(111,"uid is blank") Q
  I $D(@GLOBAL@(ARGS("uid"))) D
- . L +@GLOBAL@(ARGS("uid")):$G(^VPRCONFIG("timeout","gds"),5)
+ . L +@GLOBAL@(ARGS("uid")):$G(^VPRCONFIG("timeout","gds"),5) E  D SETERROR^VPRJRER(502) QUIT
+ . N OLDOBJ,OBJECT
+ . S OBJECT=""
+ . M OLDOBJ=@GLOBAL@(ARGS("uid"))
+ . D INDEX^VPRJGDSX(ARGS("uid"),.OLDOBJ,.OBJECT)
  . K @GLOBAL@(ARGS("uid"))
+ . K @GLOBALJ@("JSON",ARGS("uid"))
  . L -@GLOBAL@(ARGS("uid"))
  S RESULT="{""ok"": true}"
  Q
@@ -160,8 +174,10 @@ GET(RESULT,ARGS) ; Returns object in generic data store
  K @OBJECT
  ; Get single object
  I $G(ARGS("uid"))'="" D
+ . L +@GLOBAL@(ARGS("uid")):$G(^VPRCONFIG("timeout","gds"),5) E  D SETERROR^VPRJRER(502) Q
  . M @OBJECT=@GLOBAL@(ARGS("uid"))
  . I '$D(@OBJECT) S ERR=1
+ . L -@GLOBAL@(ARGS("uid"))
  I $D(ERR) D SETERROR^VPRJRER(229,"uid "_ARGS("uid")_" doesn't exist") Q
  ; Get all objects (or run filter) if no uid passed
  I '$D(@OBJECT) D
@@ -172,7 +188,10 @@ GET(RESULT,ARGS) ; Returns object in generic data store
  . . ; All clauses are wrapped in an implicit AND
  . . I $D(CLAUSES) Q:'$$EVALAND^VPRJGQF(.CLAUSES,$NA(@GLOBAL@(UID)))
  . . ; Merge the data (will run only if the filter is true or non-existant)
+ . . L +@GLOBAL@(UID):$G(^VPRCONFIG("timeout","gds"),5) E  D SETERROR^VPRJRER(502) Q
  . . M @OBJECT@("items",I)=@GLOBAL@(UID)
+ . . L -@GLOBAL@(UID)
+ I $G(HTTPERR) QUIT
  ; Set Result variable to global
  S RESULT=$NA(^TMP($J,"RESULT"))
  K @RESULT
@@ -197,12 +216,12 @@ CINDEX(ARGS,BODY)
  D DECODE^VPRJSON("BODY","OBJECT","ERR") ; From JSON to an array
  I $D(ERR) D SETERROR^VPRJRER(202) Q ""
  ;
+ ; Ensure all data fields exist
+ I $G(OBJECT("indexName"))=""!($G(OBJECT("fields"))="")!($G(OBJECT("sort"))="")!($G(OBJECT("type"))="") D SETERROR^VPRJRER(273,"required field missing") Q ""
+ ;
  ; If the index already exists stop processing and tell the user
  I $D(^VPRMETA("index",$G(OBJECT("indexName")))) D SETERROR^VPRJRER(271,"index name: "_$G(OBJECT("indexName"))) Q ""
  I $D(^VPRMETA("collection",HTTPREQ("store"),"index",$G(OBJECT("indexName")))) D SETERROR^VPRJRER(271,"index name: "_$G(OBJECT("indexName"))) Q ""
- ;
- ; Ensure all data fields exist
- I $G(OBJECT("indexName"))=""!($G(OBJECT("fields"))="")!($G(OBJECT("sort"))="") D SETERROR^VPRJRER(273,"required field missing") Q ""
  ;
  ; Parse the JSON into format BLDSPEC needs
  S LINES(1)=$G(OBJECT("indexName"))
@@ -215,6 +234,7 @@ CINDEX(ARGS,BODY)
  K LINES ; The lines are no longer necessary
  I $D(METADATA("errors","errors")) D SETERROR^VPRJRER(270) Q ""
  M ^VPRMETA($P(METATYPE,":"))=METADATA          ; save it
+ M ^VPRCONFIG("store",$G(HTTPREQ("store")),"index",$G(OBJECT("indexName")))=METADATA
  M ^VPRMETA("collection")=METACLTN              ; map collections to it
  ;
  ; re-index (and store raw JSON) data

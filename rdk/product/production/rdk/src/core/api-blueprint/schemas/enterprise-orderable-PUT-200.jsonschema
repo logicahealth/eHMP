@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "object",
+      "required": [
+        "name",
+        "uid"
+      ],
+      "properties": {
+        "name": {
+          "description": "Unique identifier for this Enterprise Orderable",
+          "type": "string"
+        },
+        "uid": {
+          "description": "Name of this Enterprise Orderable",
+          "type": "string"
+        },
+        "state": {
+          "description": "Whether this Enterprise Orderable is active or inactive. In the future we may also support a test state.",
+          "enum": ["active","inactive"]
+        },
+        "facility-enterprise": {
+          "description": "The Orderable would be available at one facility, multiple facility, or enterprise",
+          "type": "string"
+        },
+        "type": {
+          "description": "The type of this object, initially a single fixed value of 'ehmp-enterprise-orderable",
+          "enum": ["ehmp-enterprise-orderable"]
+        },
+        "domain": {
+          "description": "The domain of this enterprise orderable, 'ehmp-order', 'ehmp-activity', ...",
+          "enum": ["ehmp-order","ehmp-activity"]
+        },
+        "subDomain": {
+          "description": "Enumeration reflecting the sub-domain, such as 'laboratory', 'consult', 'request', ...",
+          "enum": ["laboratory","consult","request"]
+        },
+        "data": {
+          "description": "Payload specific to the domain to use for processing",
+          "type": "object",
+          "properties": {
+            "activity": {
+              "description": "Data values specific to an Activity Enterprise Orderable",
+              "type": "object",
+              "properties": {
+                "deploymentId": {
+                  "description": "A deployment ID",
+                  "type": "string"
+                },
+                "processDefinitionId": {
+                  "description": "A deployment ID",
+                  "type": "string"
+                }
+              }
+            },
+            "prerequisites": {
+              "description": "List of questions and a cds intent",
+              "type": "object",
+              "properties": {
+                "cdsIntent": {
+                  "description": "name on a cds intent to be executed",
+                  "type": "string"
+                },
+                "questions": {
+                  "description": "List of questions",
+                  "type": "array"
+                }
+              }
+            },
+            "codes": {
+              "description": "List of codes",
+              "type": "array",
+              "items": {
+                "description": "system code, i.e. 2601-3",
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "id": "http://jsonschema.net/data/data/codes/0/code",
+                    "type": "string"
+                  },
+                  "system": {
+                    "description": "A unique ID, i.e.: urn:oid:2.16.840.1.113883.6.1",
+                    "type": "string"
+                  },
+                  "display": {
+                    "description": "Display name, i.e.: Magnesium [Moles/volume] in Serum or Plasma",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "data": {
+              "description": "Payload specific to the clinical data object (structure used for drafts and activity-centric orders)",
+              "type": "object",
+              "properties": {}
+            }
+          }
+        },
+        "timestamp": {
+          "description": "Timestamp, such as '2016-03-02T22:19:34.496Z'",
+          "type": "string"
+        },
+        "createdBy": {
+          "description" : "Identity of the user, such as 'urn:va:user:9E7A:10000000270'",
+          "type": "string"
+        }
+      }
+    },
+    "status": {
+      "description": "HTTP status code",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "data",
+    "status"
+  ]
+}

@@ -19,19 +19,19 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="allergy">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.domain.ext/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="allergyId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="allergyName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="comment" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="comments" type="{http://webservice.vds.domain.ext/}comment" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="drugClasses" type="{http://webservice.vds.domain.ext/}code" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="drugIngredients" type="{http://webservice.vds.domain.ext/}code" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="comments" type="{http://webservice.vds.DNS       /}comment" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="drugClasses" type="{http://webservice.vds.DNS       /}code" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="drugIngredients" type="{http://webservice.vds.DNS       /}code" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="enteredDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="historical" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="onsetDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
- *         &lt;element name="provider" type="{http://webservice.vds.domain.ext/}provider" minOccurs="0"/>
- *         &lt;element name="reactions" type="{http://webservice.vds.domain.ext/}code" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="provider" type="{http://webservice.vds.DNS       /}provider" minOccurs="0"/>
+ *         &lt;element name="reactions" type="{http://webservice.vds.DNS       /}code" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="severity" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="verified" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -43,7 +43,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "allergy", namespace = "http://webservice.vds.domain.ext/", propOrder = {
+@XmlType(name = "allergy", namespace = "http://webservice.vds.DNS       /", propOrder = {
     "allergyId",
     "allergyName",
     "comment",

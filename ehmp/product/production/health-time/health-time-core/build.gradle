@@ -7,6 +7,7 @@ group = 'gov.va.hmp'
 version = '2.0.23'
 
 apply plugin: 'maven-publish'
+apply plugin: 'java'
 
 dependencies {
 	compile 'joda-time:joda-time:2.2'

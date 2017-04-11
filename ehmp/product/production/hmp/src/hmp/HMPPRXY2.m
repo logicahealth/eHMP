@@ -1,6 +1,8 @@
-HMPPRXY2 ;SLC/JCH - Post-Install Routine to Create HMP User ;02/03/15 17:35
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Feb 03, 2015;Build 49
+HMPPRXY2 ;ASMR/JCH,PB - Post-Install Routine to Create HMP User ; 02/01/16 11:56
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Feb 03, 2015;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
+ ;Jan 29, 2016 - PB added code to add the APPLICATION PROXY user class to the HMP,APPLILCATION PROXY proxy account
  Q
  ;
 POST ; Entry point for post install
@@ -15,7 +17,7 @@ ADDUSR() ; FileMan calls to add user, update fields, update sub-files
  ;                                   Q:DIC(0)'["E"
  N FDA ; The name of the root of a VA FileMan Data Array, which describes the entries to add to the database.
  N ERR ; Array containing error messages.
- N HMPERTXT ; Array contaning generic user message text indicating fields/files that were not updated
+ N HMPERTXT ; Array containing generic user message text indicating fields/files that were not updated
  N USRIEN ; The Internal Entry Number (IEN) of the 
  N FDAIEN ; The IEN of HMP,APPLICATION PROXY user found in the NEW PERSON (#200) file
  N HMPERR ; The full reference to each ERR error node, including the array with subscripts and data (i.e., ERR("DIERR",1,"TEXT")="Error Message")
@@ -69,7 +71,19 @@ ADDUSR() ; FileMan calls to add user, update fields, update sub-files
  ; If failure, provide details
  I $D(ERR) D ERROUT(.ERR)
  ;
+ ;JAN 29, 2016 - PB - Add User Class, APPLICATION PROXY to the HMP,APPLICATION PROXY account
+ ;get pointers for classes in file 201
+ K FDA,ERR
+ S FDA(200.07,"?+1,"_USRIEN_",",.01)="APPLICATION PROXY"
+ S FDA(200.07,"?+1,"_USRIEN_",",2)="1"
+ D UPDATE^DIE("E","FDA",,"ERR")
+ ;if user class, APPLICATION PROXY is not added notify users
+ K HMPERTXT
+ S HMPERTXT(1)="The following sub-files for user HMP,APPLICATION PROXY were "_$S($D(ERR):"NOT updated: ",1:"updated: ")
+ S HMPERTXT(2)="  User Class - APPLICATION PROXY"
+ D BMES^XPDUTL(.HMPERTXT)
  Q
+ ;end changes to add user classes to the HMP,APPLICATION PROXY proxy user account.
  ;
 ERROUT(ERR) ; Output ERR array
  D BMES^XPDUTL("Error Details:")

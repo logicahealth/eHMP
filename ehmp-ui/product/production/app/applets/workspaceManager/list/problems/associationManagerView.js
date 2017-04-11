@@ -18,7 +18,9 @@ define([
     var QUERY_LENGTH_THRESHOLD = 3; // number of characters typed before typeahead kicks in
 
     var EmptyView = Backbone.Marionette.ItemView.extend({
-        template: NoAssociationsTemplate
+        template: NoAssociationsTemplate,
+        tagName: 'li',
+        className: 'background-color-pure-white'
     });
 
     var ProblemListView = Backbone.Marionette.ItemView.extend({
@@ -29,25 +31,26 @@ define([
     var ProblemListCollectionView = Backbone.Marionette.CollectionView.extend({
         childView: ProblemListView,
         emptyView: EmptyView,
-        tagName: 'ul'
+        tagName: 'ul',
+        className: 'all-padding-no'
     });
 
     var AssociationManagerView = Backbone.Marionette.LayoutView.extend({
         template: AssociationManagerTemplate,
         regions: {
-            problemListRegion: '#problem-list-region',
-            statusRegion: '#problem-query-status-region'
+            problemListRegion: '.problem-list-region',
+            statusRegion: '#problemQueryStatusRegion'
         },
         events: {
-            'keyup #screen-problem-search': function(event) {
+            'keyup #screenProblemSearch': function(event) {
                 if ($(event.target).val().length < QUERY_LENGTH_THRESHOLD) {
                     this.hideStatus();
                 }
 
                 if ($(event.target).val().length > 0) {
-                    this.$('#clear-search-problem-btn').show();
+                    this.$('.clear-search-problem-btn').show();
                 } else {
-                    this.$('#clear-search-problem-btn').hide();
+                    this.$('.clear-search-problem-btn').hide();
                 }
             },
             'keyup .association-manager': function(event) {
@@ -56,19 +59,19 @@ define([
                     this.closeSearchResultDropdown(event);
                 }
             },
-            'click #clear-search-problem-btn': function(event) {
+            'click .clear-search-problem-btn': function(event) {
                 event.stopImmediatePropagation();
-                this.$('#screen-problem-search').val('');
-                this.$('#screen-problem-search').focus();
+                this.$('#screenProblemSearch').val('');
+                this.$('#screenProblemSearch').focus();
                 this.hideStatus();
                 this.closeSearchResultDropdown(event);
-                this.$('#clear-search-problem-btn').hide();
+                this.$('.clear-search-problem-btn').hide();
             },
-            'click #problem-list-region li button': function(event) {
+            'click .problem-list-region li button': function(event) {
                 event.stopPropagation();
                 var snomed = $(event.currentTarget).attr('data-snomed-ct');
                 this.removeProblemAssociation(snomed);
-                this.$('#screen-problem-search').focus();
+                this.$('#screenProblemSearch').focus();
             }
         },
         initialize: function(options) {
@@ -108,7 +111,7 @@ define([
             var self = this;
             function onSuccess(problemsCollection) {
                 //user has escaped the query so do not load the results
-                if (!self.$('#problem-query-status-region').is(':visible')) {
+                if (!self.$('#problemQueryStatusRegion').is(':visible')) {
                     return;
                 }
 
@@ -132,7 +135,7 @@ define([
             var $dropdown = this.$('.twitter-typeahead .tt-dropdown-menu');
             if ($dropdown.is(':visible')) {
                 $dropdown.hide();
-                this.$('#screen-problem-search').focus();
+                this.$('#screenProblemSearch').focus();
                 event.stopPropagation(); // stop propagation so the parent view won't take any 'close' action
             }
         },
@@ -141,7 +144,7 @@ define([
 
             if (!this.model.get('predefined')) {
                 // initialize twitter typeahead for searching problems
-                var $typeahead = this.$('#screen-problem-search');
+                var $typeahead = this.$('#screenProblemSearch');
 
                 $typeahead.on('keydown', function(event) {
                     switch(event.keyCode) {
@@ -205,9 +208,9 @@ define([
                     attributeOldValue: true
                 });
 
-                this.$('#screen-problem-search').focus(); //focus the search input
+                this.$('#screenProblemSearch').focus(); //focus the search input
             } else {
-                this.$('#association-manager-close-btn').focus();
+                this.$('#associationManagerCloseBtn').focus();
             }
         },
         onDropdownShown: function($dropdown) {
@@ -260,21 +263,21 @@ define([
         },
         showLoadingStatus: function() {
             this.$('.tt-dropdown-menu').hide();
-            this.$('#problem-query-status-region').show();
+            this.$('#problemQueryStatusRegion').show();
             this.statusRegion.show(ADK.Views.Loading.create());
         },
         hideStatus: function() {
             this.statusRegion.reset();
-            this.$('#problem-query-status-region').hide();
+            this.$('#problemQueryStatusRegion').hide();
         },
         showErrorStatus: function() {
             this.$('.tt-dropdown-menu').hide();
-            this.$('#problem-query-status-region').show();
+            this.$('#problemQueryStatusRegion').show();
             this.statusRegion.show(ADK.Views.Error.create({ model: this.model }));
         },
         onBeforeDestroy: function() {
             if (!this.model.get('predefined')) {
-                this.$('#screen-problem-search').typeahead('destroy');
+                this.$('#screenProblemSearch').typeahead('destroy');
             }
             if (this.dropdownMutationObserver) {
                 this.dropdownMutationObserver.disconnect();

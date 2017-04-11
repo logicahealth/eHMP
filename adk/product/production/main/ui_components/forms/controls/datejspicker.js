@@ -28,7 +28,7 @@ define([
             },
             extraClasses: [],
             helpMessage: '',
-            title: 'Please enter date in text or numerical format.'
+            title: 'Enter date in text or numerical format.'
         },
         template: Handlebars.compile([
             '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',

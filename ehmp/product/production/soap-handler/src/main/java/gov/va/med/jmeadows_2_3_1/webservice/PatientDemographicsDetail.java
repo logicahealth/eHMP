@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="patientDemographicsDetail">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.domain.ext/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="report" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "patientDemographicsDetail", namespace = "http://webservice.vds.domain.ext/", propOrder = {
+@XmlType(name = "patientDemographicsDetail", namespace = "http://webservice.vds.DNS       /", propOrder = {
     "report"
 })
 public class PatientDemographicsDetail

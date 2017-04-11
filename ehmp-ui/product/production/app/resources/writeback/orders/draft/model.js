@@ -9,15 +9,15 @@ define([
 
         //============================= CONSTANTS =============================
         var SUBDOMAIN_DATA_FIELD_MAP = {
-            'laboratory': Laboratory.DATA_FIELDS
+            'laboratory': Laboratory.DATA_FIELDS,
         };
 
         var SUBDOMAIN_CONTENT_VALIDATION_FIELD_MAP = {
-            'laboratory': Laboratory.CONTENT_VALIDATION_FIELDS
+            'laboratory': Laboratory.CONTENT_VALIDATION_FIELDS,
         };
 
         var SUBDOMAIN_POPULATE_MODEL_FUNCTION_MAP = {
-            'laboratory': Laboratory.populateModel
+            'laboratory': Laboratory.populateModel,
         };
 
         var VALID_CLINICAL_OBJECT_FIELDS = ['patientUid', 'authorUid', 'domain', 'subDomain', 'visit', 'data'];
@@ -30,7 +30,7 @@ define([
         //============================ VALIDATION =============================
         var validateObject = function(attributes, fields, parent) {
             var errorField = _.find(fields, function(field) {
-                return _.isUndefined(this[field]);
+                return ((_.isUndefined(this[field])) || (_.isNull(this[field])));
             }, attributes);
 
             if (_.isString(errorField)) {
@@ -98,7 +98,13 @@ define([
                 pid: this.patient.get('pid')
             };
 
-            var url = ADK.ResourceService.buildUrl(this.resource);
+            var criteria = options.criteria || {};
+
+            if (this.patient.has("acknowledged")) {
+                criteria._ack = true;
+            }
+
+            var url = ADK.ResourceService.buildUrl(this.resource, criteria);
             return ADK.ResourceService.replaceURLRouteParams(unescape(url), params);
         };
 
@@ -108,7 +114,13 @@ define([
                 resourceId: this.get('uid')
             };
 
-            var url = ADK.ResourceService.buildUrl(this.resource);
+            var criteria = option.criteria || {};
+
+            if (this.patient.has("acknowledged")) {
+                criteria._ack = true;
+            }
+
+            var url = ADK.ResourceService.buildUrl(this.resource, criteria);
             return ADK.ResourceService.replaceURLRouteParams(unescape(url), params);
         };
 
@@ -142,7 +154,7 @@ define([
         };
 
         var handleError = function(resp) {
-            var responseData = _.get(resp, 'responseJSON.data.error') || _.get(resp, 'responseJSON.message', 'System Error');
+            var responseData = retrieveErrorMessage(resp);
             var errorMessage = (_.isArray(responseData) ? responseData.join('\n') : responseData);
             this.set('errorMessage', errorMessage);
         };
@@ -158,30 +170,64 @@ define([
                 _.extend(objectData, subdomainPopulateModel.apply(this));
             }
 
+            var siteCode = this.user.get('site');
             // Populate the clinical object fields only if the object UID is undefined
             if (_.isEmpty(this.get('uid'))) {
 
                 _.defaults(objectData, {
-                    patientUid: this.patient.get('pid'),
+                    patientUid: this.patient.get('uid'),
                     ehmpState: 'draft',
-                    displayName: ''
+                    displayName: '',
+                    referenceId: ''
                 });
 
-                var siteCode = this.user.get('site');
                 var provider = _.get(this.user.get('duz'), siteCode);
                 objectData.authorUid = 'urn:va:user:' + siteCode + ':' + provider;
-
-                var visit = this.patient.get('visit') || {};
-                objectData.visit = {
-                    serviceCategory: visit.serviceCategory,
-                    dateTime: visit.visitDateTime,
-                    location: visit.uid
-                };
             }
+
+            // Always set the visit context information
+            var visit = this.patient.get('visit') || {};
+            var location = visit.locationUid;
+            objectData.visit = {
+                serviceCategory: visit.serviceCategory || '',
+                dateTime: visit.dateTime || '',
+                location: location  
+            };
 
             this.set(objectData, {
                 silent: true
             });
+        };
+
+        var setDeletedState = function() {
+            this.set('ehmpState', 'deleted', {
+                silent: true
+            });
+        };
+
+        var retrieveErrorMessage = function(resp) {
+            var errorMessage = _.get(resp, 'responseJSON.data.error');
+            if (!_.isEmpty(errorMessage)) {
+                return errorMessage;
+            }
+
+            errorMessage = _.get(resp, 'responseJSON.message');
+            if (!_.isEmpty(errorMessage)) {
+                return errorMessage;
+            }
+
+            var errorData = _.get(resp, 'responseJSON.data');
+            if (_.isEmpty(errorData)) {
+                errorMessage = 'System Error';
+            }
+            else if (_.isArray(errorData)) {
+                errorMessage = (errorData.join('\n'));
+            }
+            else if (_.isString(errorData)) {
+                errorMessage = errorData;
+            }
+
+            return errorMessage;
         };
 
         //=========================== API FUNCTIONS ===========================
@@ -237,9 +283,10 @@ define([
             var payload = model.pick(attributes);
 
             // Fill in the missing data attributes with default values.
-            var missingAttributes = _.difference(attributes, _.keys(payload));
-            _.each(missingAttributes, function(key) {
-                _.set(payload, key, '');
+            _.each(attributes, function(key) {
+                if (_.isEmpty(payload[key])) {
+                    payload[key] = '';
+                }
             });
 
             return payload;
@@ -292,15 +339,16 @@ define([
                 requestType: 'update'
             },
             delete: {
-                resource: 'clinical-object-delete',
+                resource: 'orders-lab-save-draft',
                 validate: validateUid,
-                getUrl: getUrlWithUid,
+                getUrl: getUrl,
+                beforeExecute: setDeletedState,
                 parse: parseEmpty,
                 method: 'draft:delete',
-                requestType: 'delete'
+                requestType: 'create'
             },
             save: {
-                resource: 'orders-save-draft',
+                resource: 'orders-lab-save-draft',
                 validate: validateClinicalObject,
                 getUrl: getUrl,
                 beforeExecute: populateModel,
@@ -318,16 +366,18 @@ define([
 
         //============================ PUBLIC API =============================
         var draftResource = ADK.Resources.Writeback.Model.extend({
-            resource: 'clinical-object',
-            vpr: 'clinical-objects',
+            resource: 'draft-order',
+            vpr: 'draft-order',
             idAttribute: 'uid',
             childParse: false,
 
             defaults: {
+                uid: null,
                 patientUid: '',
                 authorUid: '',
-                domain: 'order',
+                domain: 'ehmp-order',
                 subDomain: '',
+                referenceId: '',
                 visit: {},
                 data: {}
             },
@@ -339,13 +389,13 @@ define([
             updateDraft: _.partial(execute, 'update'),
             deleteDraft: _.partial(execute, 'delete'),
             saveDraft: _.partial(execute, 'save'),
-
             getPayload: getPayload,
             setPayload: setPayload,
             extractPayload: extractPayload,
             getUid: getUid,
             setUid: setUid,
-            resetDraft: resetDraft
+            resetDraft: resetDraft,
+            populateModel: populateModel
         });
 
         return draftResource;

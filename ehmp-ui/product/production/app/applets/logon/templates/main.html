@@ -11,32 +11,34 @@
     </div>
     <form role="form">
         <div class="login-container">
-            <div class="logo text-center" aria-hidden="true">Enterprise Health Management Platform</div>
-            <span id="errorMessage" class="text-danger text-center"></span>
-            <div class="form-group" id="facilityForm">
-                <label for="facility">Select Facility</label>
-                <div id="authenication-facility-list"></div>
-            </div>
-            <div class="form-group" id="accessForm">
-                <label for="accessCode">Access code</label>
-                <input type="password" class="form-control" id="accessCode" name="accessCode" title="Please enter in access code" required />
-            </div>
-            <div class="form-group" id="verifyForm">
-                <label for="verifyCode">Verify code</label>
-                <input type="password" class="form-control" id="verifyCode" name="verifyCode" title="Please enter in verfication code" required />
-            </div>
-            <button type="submit" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Authenticating" class="btn btn-primary percent-width-100" id="login" title="Press enter to sign in">Sign In</button>
-            <div class="hidden" id="screenReaderAuthenticating">
-                Authenticating
-            </div>
-
-            <div class="all-padding-sm top-padding-sm text-center">
-                <a id="linkHelp-logon" class="help-icon-link" href="{{helpUrl}}" target="helpIconUniqueWindow" title="Press enter to access the help content. You will be redirected to a new browser window.">
+            <h1 class="logo text-center" aria-hidden="true">Enterprise Health Management Platform</h1>
+            <div class="login-container-body">
+                <p class="sr-only">All fields are required</p>
+                <p id="errorMessage" class="text-danger text-center bottom-padding-xs" aria-live="assertive"></p>
+                <div class="form-group" id="facilityForm">
+                    <label for="facility">Select Facility</label>
+                    <div id="authenication-facility-list"></div>
+                </div>
+                <div class="form-group" id="accessForm">
+                    <label for="accessCode">Access code</label>
+                    <input type="password" autocomplete="off" class="form-control" id="accessCode" name="accessCode" title="Enter in access code" required />
+                </div>
+                <div class="form-group" id="verifyForm">
+                    <label for="verifyCode">Verify code</label>
+                    <input type="password" autocomplete="off" class="code-error form-control" id="verifyCode" name="verifyCode" title="Enter in verfication code" required />
+                </div>
+                <button type="submit" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Authenticating" class="btn btn-primary percent-width-100" id="login" title="Press enter to sign in">Sign In</button>
+                <div class="hidden" id="screenReaderAuthenticating">
+                    Authenticating
+                </div>
+                <div class="all-padding-sm top-padding-sm text-center">
+                    <a id="linkHelp-logon" class="help-icon-link" href="{{helpUrl}}" target="helpIconUniqueWindow" title="Press enter to access the help content. You will be redirected to a new browser window.">
                     Need Help Logging In?
                 </a>
-            </div>
-            <div class="text-center">
-                EHMP {{softwareVersion}}
+                </div>
+                <div class="text-center">
+                    EHMP {{softwareVersion}}
+                </div>
             </div>
         </div>
     </form>

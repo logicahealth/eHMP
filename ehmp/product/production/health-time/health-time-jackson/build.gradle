@@ -5,6 +5,7 @@ group = 'gov.va.hmp'
 version = '2.0.23'
 
 apply plugin: 'maven-publish'
+apply plugin: 'java'
 
 dependencies {
     compile project(':production:health-time:health-time-core')

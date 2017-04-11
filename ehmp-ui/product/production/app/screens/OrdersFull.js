@@ -17,6 +17,7 @@ define([
 
     var screenConfig = {
         id: 'orders-full',
+        context: 'patient',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

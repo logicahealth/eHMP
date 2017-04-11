@@ -44,3 +44,21 @@ function HTTPError(code, msg) {
 }
 
 module.exports.HTTPError = HTTPError;
+
+function getJDSErrorMessage(error) {
+    var msg = '';
+
+    if (nullchecker.isNotNullish(error.errors)) {
+        msg = _.reduce(error.errors, function(memo, e) {
+            if (!_.isEmpty(memo)) {
+                memo += ', ';
+            }
+            memo += e.domain + ' :: ' + e.message;
+            return memo;
+        }, '');
+    }
+    return msg;
+}
+
+module.exports.getJDSErrorMessage = getJDSErrorMessage;
+

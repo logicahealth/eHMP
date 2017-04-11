@@ -3,6 +3,7 @@ define(function() {
 
     var addLabOrderConfig = {
         id: "add-lab-order",
+        context: 'patient',
         contentRegionLayout: "gridOne",
         appletHeader: "patient",
         applets: [{

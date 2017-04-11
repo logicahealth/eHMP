@@ -1,0 +1,38 @@
+{
+    "target": {
+        "intentsSet": ["InvocationIntentA"],
+        "mode": "Normal",
+        "perceivedExecutionTime": null,
+        "type": "Background",
+        "supplementalMappings": null
+    },
+    "context": {
+        "location": {
+            "codeSystem": "VA:Location",
+            "entityType": "Location",
+            "id": "2883",
+            "name": "ClinicOne",
+            "type": "ClinicName"
+        },
+        "specialty": null,
+        "subject": {
+            "codeSystem": "VA:UniversalId",
+            "entityType": "Subject",
+            "id": "2299:2222:Junk",
+            "name": null,
+            "type": "Patient"
+        },
+        "user": {
+            "codeSystem": "VA:Provider",
+            "entityType": "User",
+            "id": "unitTestUserId",
+            "name": "TESR,USER",
+            "type": "Provider"
+        }
+    },
+  "parameters" : {
+    "Weight" : {"resourceType":"Observation","code":{"coding":[{"system":"http://loinc.org","code":"29463-7"}]},"valueQuantity":{"value":180.5,"code":"inches"},"comments":"Comment","issued":"2015-06-11T17:26:00.291-07:00","status":"preliminary"},
+    "Height" : {"resourceType":"Observation","code":{"coding":[{"system":"http://loinc.org","code":"8302-2"}]},"valueQuantity":{"value":68.5},"comments":"Comment","status":"preliminary"}
+  }
+
+}

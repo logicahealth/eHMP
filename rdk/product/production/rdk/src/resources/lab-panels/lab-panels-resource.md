@@ -1,6 +1,6 @@
 # Group Patient
 
-## Patient record labsbypanel [{{{path}}}{?pid}{&start}{&limit}{&filter}{&fields}]
+## Patient record labsbypanel [{{{path}}}{?pid}{&start}{&limit}{&filter}]
 
 + Parameters
 
@@ -11,8 +11,6 @@
     :[limit]({{{common}}}/parameters/limit.md)
 
     :[filter]({{{common}}}/parameters/filter.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Get [GET]

@@ -146,6 +146,11 @@ describe('rdkSend', function() {
         expect(sentBody).to.eql({status: 200});
     });
 
+    it('enforces an empty body for a 204', function() {
+        res.status(204).rdkSend("hello");
+        expect(sentBody).to.eql(undefined);
+    });
+
     it('handles a null body', function() {
         res.rdkSend(null);
         expect(sentBody).to.eql({status: 200});

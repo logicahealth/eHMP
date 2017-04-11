@@ -1,6 +1,8 @@
-HMPDERRH ;SLC/AGP -- HMP Error Handler ;3/21/12 5:44pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
+HMPDERRH ;SLC/AGP,ASMR/RRB - HMP Error Handler;3/21/12 5:44pm
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
+ Q
  ;
 ERRHDLR ; -- save errors to return in JSON [Expects ERRPAT, ERRMSG]
  N ERROR S ERROR=$$EC^%ZOSV

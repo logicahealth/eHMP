@@ -17,6 +17,7 @@ define([
 
     var screenConfig = {
         id: 'news-feed',
+        context: 'patient',
         contentRegionLayout: 'gridster',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

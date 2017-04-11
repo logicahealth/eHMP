@@ -1,0 +1,2 @@
+#build the Solr suggestion index at 2am
+* 2 * * * root curl "http://localhost:<%= node[:solr][:port] %>/solr/vpr/suggest?suggest.build=true"

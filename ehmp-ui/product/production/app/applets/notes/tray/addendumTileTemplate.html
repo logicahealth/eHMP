@@ -1,0 +1,27 @@
+<a href="#li-item" data-uniqueID="{{itemUniqueId}}" title="Press enter to open {{itemLabel}}">
+    <div class="col-xs-12 left-padding-xl left-margin-xl accordion-indented-more">
+        <h5 id="addendum-list-title-{{itemUniqueId}}" class="all-padding-no all-margin-no">
+            <span class="sr-only">Addendum: </span>{{itemLabel}}
+        </h5>
+        <p>
+        {{#if authorDisplayName}}
+            <span class="sr-only">Author: </span>
+            <span id="addendum-list-author-{{itemUniqueId}}">{{{authorDisplayName}}}</span>
+        {{/if}}
+        {{#if visitLocationName}}
+            <span class="sr-only">Visit location: </span>
+            <span id="addendum-list-location-{{itemUniqueId}}"> | {{visitLocationName}}</span>
+        {{/if}}
+        </p>
+        {{#if referenceDateTime}}
+            <p>
+            <span id="addendum-list-datetime-{{itemUniqueId}}">{{formatDate referenceDateTime "MM/DD/YYYY - HH:mm"}}</span>
+            </p>
+        {{/if}}
+        {{#if itemStatus}}
+            <p>
+            <span id="addendum-list-status-{{itemUniqueId}}">Status: {{itemStatus}}</span>
+            </p>
+        {{/if}}
+    </div>
+</a>

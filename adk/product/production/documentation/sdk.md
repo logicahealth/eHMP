@@ -48,7 +48,8 @@
                             <ul>
                                 <li>
                                     <div class="component">
-                                        <h2>JDS</h2>
+                                        <a href="./#/vx-api/jds"><h2>JDS</h2></a>
+                                        <p class="hidden-xs"><a href="./#/vx-api/jds" class="btn btn-default" id="vxApi_link" role="button">API Documentation <i class="fa fa-chevron-right"></i></a></p>
                                     </div>
                                 </li>
                                 <li>

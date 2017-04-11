@@ -12,10 +12,10 @@ vista_sites = search(:node, "role:vista-* AND stack:#{node[:stack]}")
 if vista_sites.size == 0 
   vista_sites.push(
     {
-      "ipaddress" => "172.16.2.101"
+      "ipaddress" => "IP_ADDRESS"
     },
     {
-      "ipaddress" => "172.16.2.102"
+      "ipaddress" => "IP_ADDRESS"
     }
   )
 end

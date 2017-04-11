@@ -6,7 +6,7 @@
 chef_gem "chef-provisioning-ssh"
 require 'chef/provisioning/ssh_driver'
 
-include_solr = find_optional_node_by_role("solr", node[:machine][:stack]).nil? and node[:machine][:driver] == "vagrant"
+include_solr = find_optional_node_by_criteria(node[:machine][:stack], 'role:solr', 'role:mocks').nil?
 
 ############################################## Staging Artifacts #############################################
 if include_solr
@@ -46,6 +46,34 @@ if ENV.has_key?('CORRELATED_IDS_LOCAL_FILE')
 else
   correlated_ids_source = artifact_url(node[:ehmp_provision][:artifacts][:correlated_ids])
 end
+
+if ENV.has_key?('MOCKSSOISERVLET_LOCAL_FILE')
+  node.default[:ehmp_provision][:mocks][:copy_files].merge!({
+    "/tmp/#{File.basename(ENV['MOCKSSOISERVLET_LOCAL_FILE'])}" => ENV['MOCKSSOISERVLET_LOCAL_FILE']
+  })
+  mockssoiservlet_source = "file:///tmp/#{File.basename(ENV['MOCKSSOISERVLET_LOCAL_FILE'])}"
+else
+  mockssoiservlet_source = artifact_url(node[:ehmp_provision][:artifacts][:mockssoiservlet])
+end
+
+if ENV.has_key?('MOCKTOKENGENERATOR_LOCAL_FILE')
+  node.default[:ehmp_provision][:mocks][:copy_files].merge!({
+    "/tmp/#{File.basename(ENV['MOCKTOKENGENERATOR_LOCAL_FILE'])}" => ENV['MOCKTOKENGENERATOR_LOCAL_FILE']
+  })
+  mocktokengenerator_source = "file:///tmp/#{File.basename(ENV['MOCKTOKENGENERATOR_LOCAL_FILE'])}"
+else
+  mocktokengenerator_source = artifact_url(node[:ehmp_provision][:artifacts][:mocktokengenerator])
+end
+
+if ENV.has_key?('MOCKSSOI_USERS_LOCAL_FILE')
+  node.default[:ehmp_provision][:mocks][:copy_files].merge!({
+    "/tmp/#{File.basename(ENV['MOCKSSOI_USERS_LOCAL_FILE'])}" => ENV['MOCKSSOI_USERS_LOCAL_FILE']
+  })
+  mockssoi_users_source = "file:///tmp/#{File.basename(ENV['MOCKSSOI_USERS_LOCAL_FILE'])}"
+else
+  mockssoi_users_source = artifact_url(node[:ehmp_provision][:artifacts][:mockssoi_users])
+end
+
 ############################################## Staging Artifacts #############################################
 
 ############################################################### Shared Folders #################################################################
@@ -55,11 +83,6 @@ node.default[:ehmp_provision][:mocks][:vagrant][:shared_folders].push(
   {
     :host_path => File.expand_path("#{ENV['HOME']}/Projects/vistacore/ehmp/product/production/NodeMockServices/", File.dirname(__FILE__)),
     :guest_path => "/opt/mocks_server",
-    :create => true
-  },
-  {
-    :host_path => "#{ENV['HOME']}/Projects/vistacore/private_licenses",
-    :guest_path => "/opt/private_licenses",
     :create => true
   }
 )
@@ -73,12 +96,19 @@ node.default[:ehmp_provision][:mocks][:copy_files].merge!(node[:machine][:copy_f
 machine_deps = parse_dependency_versions "machine"
 ehmp_deps = parse_dependency_versions "ehmp_provision"
 
+ssoi_vars = ["MOCKSSOISERVLET", "MOCKTOKENGENERATOR", "MOCKSSOI_USERS"]
+ssoi_check = ssoi_vars.all? { |var| ENV.has_key?("#{var}_VERSION") || ENV.has_key?("#{var}_LOCAL_FILE") }
+
 r_list = []
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
 r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access]
 r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
 r_list << "role[mocks]"
+r_list << "role[solr]" if include_solr
+r_list << "role[ssoi]" if ssoi_check
 r_list << "recipe[mocks@#{ehmp_deps["mocks"]}]"
+r_list << "recipe[mocks::ssoi]" if ssoi_check
+r_list << "recipe[vx_solr::zookeeper@#{ehmp_deps["vx_solr"]}]" if include_solr
 r_list << "recipe[vx_solr@#{ehmp_deps["vx_solr"]}]" if include_solr
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
 
@@ -115,13 +145,19 @@ machine machine_name do
   attributes(
     stack: node[:machine][:stack],
     nexus_url: node[:common][:nexus_url],
+    data_bag_string: node[:common][:data_bag_string],
     mocks: {
       node_services: {
         source: artifact_url(node[:ehmp_provision][:artifacts][:nodemockservices])
       },
       correlated_ids: {
         source: correlated_ids_source
-      }
+      },
+      ssoi: {
+        servlet_source: mockssoiservlet_source,
+        tokengenerator_source: mocktokengenerator_source,
+        users_source: mockssoi_users_source
+      },
     },
     hdr: {
       hdr_sites: [
@@ -139,8 +175,15 @@ machine machine_name do
       ehmp: {
         vpr: vpr_source,
         health_time_core: health_time_core_source,
-        health_time_solr: health_time_solr_source
+        health_time_solr: health_time_solr_source,
+        collection: {
+          # by default, only allow recreating solr collections when not using ssh driver
+          allow_recreate: node[:machine][:driver] != "ssh"
+        }
       }
+    },
+    beats: {
+      logging: node[:machine][:logging]
     }
   )
   files lazy { node[:ehmp_provision][:mocks][:copy_files] }

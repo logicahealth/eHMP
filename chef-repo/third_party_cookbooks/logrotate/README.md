@@ -151,7 +151,7 @@ end
 License & Authors
 -----------------
 - Author:: Scott M. Likens (<scott@likens.us>)
-- Author::     ua Timberman (<joshua@chef.io>)
+- Author:: Joshua Timberman (<joshua@chef.io>)
 
 ```text
 Copyright 2009, Scott M. Likens

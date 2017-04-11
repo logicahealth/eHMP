@@ -58,12 +58,12 @@ define([
                 var lastFilled = moment(model.get('lastFilled'), "YYYYMMDDHHmm").valueOf();
                 var lastAdmin = moment(model.get('lastAdmin'), "YYYYMMDDHHmm").valueOf();
                 var name = model.get('qualifiedName');
-                if (dateModel.get('selectedId') === 'all-range-global' || !self.useGlobalDateFilter) {
+                if (dateModel.get('selectedId') === 'allRangeGlobal' || !self.useGlobalDateFilter) {
                     return true;
                 } else if (dateModel.get('fromDate') && (dateModel.get('fromDate') !== 'null')) {
                     var filter1 = (overallStart >= GDFStart || lastFilled >= GDFStart || lastAdmin >= GDFStart || overallStop >= GDFStart);
                     return filter1;
-                } else if (dateModel.get('selectedId') === 'custom-range-apply-global') {
+                } else if (dateModel.get('selectedId') === 'customRangeApplyGlobal') {
                     var startCustom = moment(dateModel.get('customFromDate'), 'MM/DD/YYYY').valueOf();
                     var stopCustom = moment(dateModel.get('customToDate'), 'MM/DD/YYYY').valueOf();
                     var filter2 = ((overallStart >= startCustom || lastFilled >= startCustom || lastAdmin >= startCustom) && overallStop <= stopCustom);
@@ -79,7 +79,7 @@ define([
 
             var startTime,
                 endTime, stoppedDate;
-            if (dateModel.get('selectedId') === 'all-range-global') {
+            if (dateModel.get('selectedId') === 'allRangeGlobal') {
                 var sortDate = function(a, b) {
                     var c = new Date(a);
                     var d = new Date(b);
@@ -123,7 +123,7 @@ define([
         },
         groupCollectionModels: function(collection, useGlobalDateFilter) {
             var sortOrderValue = function(firstGroupByValue) {
-                var patientClass = ADK.PatientRecordService.getCurrentPatient().get('patientStatusClass');
+                var patientClass = ADK.PatientRecordService.getCurrentPatient().patientStatusClass();
                 if (patientClass.toLowerCase() === 'inpatient') {
                     if (firstGroupByValue.toLowerCase() === 'inpatient') {
                         return 1;
@@ -145,7 +145,7 @@ define([
                 isNonVa: false,
                 meds: new Backbone.Collection(),
                 sortOrderValue: sortOrderValue('inpatient'),
-                firstModel: ADK.PatientRecordService.getCurrentPatient().get('patientStatusClass'),
+                firstModel: ADK.PatientRecordService.getCurrentPatient().patientStatusClass(),
                 groupNames: []
             });
             var emptyOutpatientModel = new Backbone.Model({
@@ -153,7 +153,7 @@ define([
                 isNonVa: false,
                 meds: new Backbone.Collection(),
                 sortOrderValue: sortOrderValue('outpatient'),
-                firstModel: ADK.PatientRecordService.getCurrentPatient().get('patientStatusClass'),
+                firstModel: ADK.PatientRecordService.getCurrentPatient().patientStatusClass(),
                 groupNames: []
             });
 
@@ -162,7 +162,7 @@ define([
                 isNonVa: false,
                 meds: new Backbone.Collection(),
                 sortOrderValue: sortOrderValue('clinic_order'),
-                firstModel: ADK.PatientRecordService.getCurrentPatient().get('patientStatusClass'),
+                firstModel: ADK.PatientRecordService.getCurrentPatient().patientStatusClass(),
                 groupNames: []
             });
 
@@ -177,7 +177,7 @@ define([
                     isNonVa: false,
                     meds: new medicationCollectionFormatHelper.medsCollection(medications),
                     sortOrderValue: sortOrderValue(firstGroupByValue),
-                    firstModel: ADK.PatientRecordService.getCurrentPatient().get('patientStatusClass')
+                    firstModel: ADK.PatientRecordService.getCurrentPatient().patientStatusClass()
                 });
             });
             _.each(medicationGroups, function(model) {
@@ -187,7 +187,7 @@ define([
                 model.get("meds").reset(groupedMeds.medicationSubGroups);
             });
 
-            var patientClass = ADK.PatientRecordService.getCurrentPatient().get('patientStatusClass');
+            var patientClass = ADK.PatientRecordService.getCurrentPatient().patientStatusClass();
             var medicationGroupsFinal = [emptyOutpatientModel, emptyClinicOrderModel, emptyInpatientModel];
             var medicationGroupsFinalMap = {
                 'inpatient': 2,

@@ -1,7 +1,7 @@
 When(/^the client adds Outpatient Medication "(.*?)" for the patient "(.*?)" and "(.*?)" in VPR format from RDK API$/) do |opmed, pid, _uid|
   path = "#{DefaultLogin.rdk_writeback_url}/resource/writeback/opmed/save?pid="+pid
   p path
-  @response = HTTPartyWithBasicAuth.post_json_with_authorization(path, opmed, { "Content-Type"=>"application/json" })
+  @response = HTTPartyRDK.post(path, opmed, { "Content-Type"=>"application/json" })
   p @response
 end
 

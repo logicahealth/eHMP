@@ -1,0 +1,604 @@
+~Format=5.S~
+08 Mar 2016   3:32 PM   Cache
+^SRF(10117,0)
+100295^6^^17^^N^2^^{today-1}.113^U^^2^^^^^^^^1
+^SRF(10117,.1)
+3^20171^S^10000000228^20171^^^^^^^^10000000230^^3
+^SRF(10117,.2)
+{today-1}.1145^{today-1}.1145^{today-1}.1315^{today-1}.1325^200^150^^^^{today-1}.113^^{today-1}.133^^^{today-1}.1125^600^1
+^SRF(10117,.3)
+10000000229^^^^^^^O
+^SRF(10117,.4)
+^R^13^^^13
+^SRF(10117,.6)
+^^^^^^^^20171^^^{today-1}.1325
+^SRF(10117,.7)
+^^N^3^^2^^^13
+^SRF(10117,.8)
+1^^^^^^^^^3
+^SRF(10117,.9)
+{today-1}^{today-1}.112^{today-1}^{today-1}.112^{today-1}^{today-1}
+^SRF(10117,1.1)
+^^1^
+^SRF(10117,3)
+PENROSE
+^SRF(10117,5,0)
+^130.05^1^1^{today-1}^^
+^SRF(10117,5,1,0)
+HERE ARE SOME GENERAL COMMENTS
+^SRF(10117,6,0)
+^130.06SA^1^1
+^SRF(10117,6,1,0)
+G^^Y^^^^^^^^^^^^^^^^N^N
+^SRF(10117,6,1,8)
+^N
+^SRF(10117,8)
+500
+^SRF(10117,20,0)
+^130.31PA^1^1
+^SRF(10117,20,1,0)
+2
+^SRF(10117,25)
+Y^Y^Y^20171^991^N^^N
+^SRF(10117,26,0)
+IRRIGATION^130.08PA^1^1
+^SRF(10117,26,1,0)
+11
+^SRF(10117,26,1,1,0)
+TIME^130.39DA^1^1
+^SRF(10117,26,1,1,1,0)
+{today-1}.114^1000^20171
+^SRF(10117,31)
+^^^{today-1}.113^{today-1}.12^^^^N
+^SRF(10117,33)
+GALLSTONES
+^SRF(10117,34)
+GALLSTONES^510147^510147
+^SRF(10117,35)
+TELFA^Y
+^SRF(10117,39,0)
+^^2^2^{today-1}^
+^SRF(10117,39,1,0)
+SUBSCAPULAR PAIN FOR 3 DAYS. NAUSEA AND VOMITING. ACHOLIC
+^SRF(10117,39,2,0)
+STOOLS. CHOLANGIOGRAM SHOWS COMMON DUCT OBSTRUCTION.
+^SRF(10117,40,0)
+^^1^1^{today-1}
+^SRF(10117,40,1,0)
+GALLSTONES
+^SRF(10117,42,0)
+^130.065P^1^1
+^SRF(10117,42,1,0)
+1
+^SRF(10117,45,0)
+CELL SAVER^130.013A
+^SRF(10117,50,0)
+ANES CARE TIME BLOCK^130.213DA^1^1
+^SRF(10117,50,1,0)
+{today-1}.1145^{today-1}.1325
+^SRF(10117,50,"B",{today-1}.1145,1)
+
+^SRF(10117,51,0)
+^^1^1^{today-1}^
+^SRF(10117,51,1,0)
+ALL REQUIRED CHECKLIST ITEMS ARE CONFIRMED.
+^SRF(10117,52)
+0^0^0^0^0^0
+^SRF(10117,56,0)
+LASER PERFORMED^130.11A
+^SRF(10117,205)
+^^^^N^N^N^N^N^N^^N^N^^N^N^N^^^N^N^N^N^^N^N^N^^^N^^N^N^N^N^^N^^N^N^^N^N
+^SRF(10117,206)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^N^N
+^SRF(10117,208)
+^N^N^N^N^N^N
+^SRF(10117,"1.0")
+G^N^ABDOMINAL ULTRASOUND^N^N^^^CC^Y^991^{today-1}.112
+^SRF(10117,"OP")
+CHOLECYSTECTOMY^47562
+^SRF(10117,"REQ")
+0
+^SRF(10117,"SP")
+CHOLECYSTECTOMY
+^SRF(10117,"TIU")
+11681^11680^^11679
+^SRF(10117,"VER")
+^^^^^C^Y^Y^Y^2^Y^Y^Y^Y^Y^Y^Y^Y
+^SRF("AC",{today-1}.113,10117)
+100295
+^SRF("AQ",{today+44},10117)
+
+^SRF("B",100295,10117)
+
+^SRF("ADT",100295,{today-2I}.886999,10117)
+{today-1}.113
+^SRF("AOR",6,{today-1},10117)
+
+^SRF("ASP",17,{today-1},10117)
+10117
+^TIU(8925,11679,0)
+1284^100295^11805^1285^7^^{today-1}.113^^^^^^E
+^TIU(8925,11679,12)
+{today-1}.1141^10000000229^^10000000229^424^^^^^^424^500
+^TIU(8925,11679,13)
+{today-1}.113^20171^R
+^TIU(8925,11679,14)
+^^^1024^10117;SRF(
+^TIU(8925,11679,15)
+{today-1}.132945^10000000229^Y[%g;u6|'*mq=0Y\N&U{K?t1^dEp2S4AH[y _z`Z~|0yu:eOM^E^0
+^TIU(8925,11679,17)
+Case #: 10117
+^TIU(8925,11679,150)
+1JNJ-ALN
+^TIU(8925,11679,"TEXT",0)
+^^27^27^{today-1}^^
+^TIU(8925,11679,"TEXT",1,0)
+Operating Room: OR4
+^TIU(8925,11679,"TEXT",2,0)
+
+^TIU(8925,11679,"TEXT",3,0)
+Anesthetist: ANESTHESIOLOGIST,ONE       Relief Anesth: 
+^TIU(8925,11679,"TEXT",4,0)
+Anesthesiologist:                       Assist Anesth: 
+^TIU(8925,11679,"TEXT",5,0)
+Attending Code: 
+^TIU(8925,11679,"TEXT",6,0)
+
+^TIU(8925,11679,"TEXT",7,0)
+Anes Begin:  MAR 08, 2016  11:45        Anes End:  MAR 08, 2016  13:25
+^TIU(8925,11679,"TEXT",8,0)
+
+^TIU(8925,11679,"TEXT",9,0)
+ASA Class: 1-NO DISTURB.
+^TIU(8925,11679,"TEXT",10,0)
+
+^TIU(8925,11679,"TEXT",11,0)
+Operation Disposition: WARD
+^TIU(8925,11679,"TEXT",12,0)
+
+^TIU(8925,11679,"TEXT",13,0)
+Anesthesia Technique(s): 
+^TIU(8925,11679,"TEXT",14,0)
+GENERAL  (PRINCIPAL)
+^TIU(8925,11679,"TEXT",15,0)
+  Agent: NONE ENTERED
+^TIU(8925,11679,"TEXT",16,0)
+  Intubated: NO
+^TIU(8925,11679,"TEXT",17,0)
+
+^TIU(8925,11679,"TEXT",18,0)
+Procedure(s) Performed:
+^TIU(8925,11679,"TEXT",19,0)
+Principal: CHOLECYSTECTOMY
+^TIU(8925,11679,"TEXT",20,0)
+
+^TIU(8925,11679,"TEXT",21,0)
+Intraoperative Blood Loss: 200 ml       Urine Output: 600 ml
+^TIU(8925,11679,"TEXT",22,0)
+PAC(U) Admit Score:                     PAC(U) Discharge Score: 
+^TIU(8925,11679,"TEXT",23,0)
+
+^TIU(8925,11679,"TEXT",24,0)
+General Comments:
+^TIU(8925,11679,"TEXT",25,0)
+  HERE ARE SOME GENERAL COMMENTS
+^TIU(8925,11679,"TEXT",26,0)
+
+^TIU(8925,11679,"TEXT",27,0)
+Postop Anesthesia Note Date/Time: 
+^TIU(8925,11680,0)
+1286^100295^11805^1287^7^^{today-1}.113^^^^^^E
+^TIU(8925,11680,12)
+{today-1}.132321^20171^^20171^424^^^^^^424^500
+^TIU(8925,11680,13)
+{today-1}.113^20171^R
+^TIU(8925,11680,14)
+^^^1024^10117;SRF(
+^TIU(8925,11680,15)
+{today-1}.132709^20171^&a*a>m_-k*=^^E^0
+^TIU(8925,11680,17)
+Case #: 10117
+^TIU(8925,11680,150)
+1JNJ-ALN
+^TIU(8925,11680,"TEXT",0)
+^^129^129^{today-1}^^
+^TIU(8925,11680,"TEXT",1,0)
+Operating Room:  OR4                    Surgical Priority: URGENT
+^TIU(8925,11680,"TEXT",2,0)
+
+^TIU(8925,11680,"TEXT",3,0)
+Patient in Hold: MAR 08, 2016  11:25    Patient in OR:  MAR 08, 2016  11:30
+^TIU(8925,11680,"TEXT",4,0)
+Operation Begin: MAR 08, 2016  11:45    Operation End:  MAR 08, 2016  13:15
+^TIU(8925,11680,"TEXT",5,0)
+                                        Patient Out OR: MAR 08, 2016  13:30
+^TIU(8925,11680,"TEXT",6,0)
+
+^TIU(8925,11680,"TEXT",7,0)
+Major Operations Performed:
+^TIU(8925,11680,"TEXT",8,0)
+Primary: CHOLECYSTECTOMY
+^TIU(8925,11680,"TEXT",9,0)
+
+^TIU(8925,11680,"TEXT",10,0)
+Wound Classification: CLEAN/CONTAMINATED
+^TIU(8925,11680,"TEXT",11,0)
+Operation Disposition: WARD
+^TIU(8925,11680,"TEXT",12,0)
+Discharged Via: PACU BED
+^TIU(8925,11680,"TEXT",13,0)
+
+^TIU(8925,11680,"TEXT",14,0)
+Primary Surgeon: SURGEON,ONE            First Assist: NURSE,EIGHT
+^TIU(8925,11680,"TEXT",15,0)
+Attending Surgeon: SURGEON,TWO          Second Assist: N/A
+^TIU(8925,11680,"TEXT",16,0)
+Anesthetist: ANESTHESIOLOGIST,ONE       Assistant Anesth: N/A
+^TIU(8925,11680,"TEXT",17,0)
+
+^TIU(8925,11680,"TEXT",18,0)
+Other Scrubbed Assistants: N/A
+^TIU(8925,11680,"TEXT",19,0)
+
+^TIU(8925,11680,"TEXT",20,0)
+OR Support Personnel:
+^TIU(8925,11680,"TEXT",21,0)
+  Scrubbed                              Circulating
+^TIU(8925,11680,"TEXT",22,0)
+  N/A                                   N/A
+^TIU(8925,11680,"TEXT",23,0)
+
+^TIU(8925,11680,"TEXT",24,0)
+Other Persons in OR: N/A
+^TIU(8925,11680,"TEXT",25,0)
+
+^TIU(8925,11680,"TEXT",26,0)
+Preop Mood:       N/A                   Preop Consc:    RESTING
+^TIU(8925,11680,"TEXT",27,0)
+Preop Skin Integ: INTACT                Preop Converse: N/A
+^TIU(8925,11680,"TEXT",28,0)
+
+^TIU(8925,11680,"TEXT",29,0)
+--- Time Out Checklist ---
+^TIU(8925,11680,"TEXT",30,0)
+Confirm Correct Patient Identity: YES
+^TIU(8925,11680,"TEXT",31,0)
+Confirm Procedure To Be Performed: YES
+^TIU(8925,11680,"TEXT",32,0)
+Confirm Site of the Procedure, Including Laterality: YES
+^TIU(8925,11680,"TEXT",33,0)
+Confirm Valid Consent: YES, PAPER
+^TIU(8925,11680,"TEXT",34,0)
+Confirm Patient Position: YES
+^TIU(8925,11680,"TEXT",35,0)
+Confirm Procedure Site has been Marked Appropriately and that the Site of the 
+^TIU(8925,11680,"TEXT",36,0)
+ Mark is Visible After Prep and Draping: YES
+^TIU(8925,11680,"TEXT",37,0)
+Pertinent Medical Images Have Been Confirmed: YES
+^TIU(8925,11680,"TEXT",38,0)
+Correct Medical Implant(s) is Available: YES
+^TIU(8925,11680,"TEXT",39,0)
+Availability of Special Equipment: YES
+^TIU(8925,11680,"TEXT",40,0)
+Appropriate Antibiotic Prophylaxis: YES
+^TIU(8925,11680,"TEXT",41,0)
+Appropriate Deep Vein Thrombosis Prophylaxis: YES
+^TIU(8925,11680,"TEXT",42,0)
+Blood Availability: YES
+^TIU(8925,11680,"TEXT",43,0)
+Checklist Comment: 
+^TIU(8925,11680,"TEXT",44,0)
+   ALL REQUIRED CHECKLIST ITEMS ARE CONFIRMED.
+^TIU(8925,11680,"TEXT",45,0)
+
+^TIU(8925,11680,"TEXT",46,0)
+Time-Out Document Completed By: NURSE,EIGHT
+^TIU(8925,11680,"TEXT",47,0)
+Time-Out Completed: MAR 08, 2016@13:25
+^TIU(8925,11680,"TEXT",48,0)
+
+^TIU(8925,11680,"TEXT",49,0)
+Skin Prep By: N/A                       Skin Prep Agent: N/A
+^TIU(8925,11680,"TEXT",50,0)
+Skin Prep By (2): N/A                   2nd Skin Prep Agent: N/A
+^TIU(8925,11680,"TEXT",51,0)
+
+^TIU(8925,11680,"TEXT",52,0)
+Preop Surgical Site Hair Removal by: NURSE,EIGHT
+^TIU(8925,11680,"TEXT",53,0)
+Surgical Site Hair Removal Method: CLIPPER
+^TIU(8925,11680,"TEXT",54,0)
+  Hair Removal Comments: NO COMMENTS ENTERED
+^TIU(8925,11680,"TEXT",55,0)
+
+^TIU(8925,11680,"TEXT",56,0)
+Surgery Position(s): 
+^TIU(8925,11680,"TEXT",57,0)
+  SUPINE                                Placed: N/A
+^TIU(8925,11680,"TEXT",58,0)
+
+^TIU(8925,11680,"TEXT",59,0)
+Restraints and Position Aids: 
+^TIU(8925,11680,"TEXT",60,0)
+  SAFETY STRAP                      Applied By: N/A
+^TIU(8925,11680,"TEXT",61,0)
+
+^TIU(8925,11680,"TEXT",62,0)
+Electrocautery Unit:       N/A
+^TIU(8925,11680,"TEXT",63,0)
+ESU Coagulation Range:     N/A
+^TIU(8925,11680,"TEXT",64,0)
+ESU Cutting Range:         N/A
+^TIU(8925,11680,"TEXT",65,0)
+Electroground Position(s): N/A
+^TIU(8925,11680,"TEXT",66,0)
+
+^TIU(8925,11680,"TEXT",67,0)
+Material Sent to Laboratory for Analysis: 
+^TIU(8925,11680,"TEXT",68,0)
+Specimens: N/A
+^TIU(8925,11680,"TEXT",69,0)
+Cultures:  N/A
+^TIU(8925,11680,"TEXT",70,0)
+
+^TIU(8925,11680,"TEXT",71,0)
+Anesthesia Technique(s):
+^TIU(8925,11680,"TEXT",72,0)
+  GENERAL  (PRINCIPAL)
+^TIU(8925,11680,"TEXT",73,0)
+
+^TIU(8925,11680,"TEXT",74,0)
+Tubes and Drains: 
+^TIU(8925,11680,"TEXT",75,0)
+  PENROSE
+^TIU(8925,11680,"TEXT",76,0)
+
+^TIU(8925,11680,"TEXT",77,0)
+Tourniquet: N/A
+^TIU(8925,11680,"TEXT",78,0)
+
+^TIU(8925,11680,"TEXT",79,0)
+Thermal Unit: N/A
+^TIU(8925,11680,"TEXT",80,0)
+
+^TIU(8925,11680,"TEXT",81,0)
+Prosthesis Installed: N/A
+^TIU(8925,11680,"TEXT",82,0)
+
+^TIU(8925,11680,"TEXT",83,0)
+Medications: N/A
+^TIU(8925,11680,"TEXT",84,0)
+
+^TIU(8925,11680,"TEXT",85,0)
+Irrigation Solution(s): 
+^TIU(8925,11680,"TEXT",86,0)
+  NORMAL SALINE
+^TIU(8925,11680,"TEXT",87,0)
+    Time Used: MAR 08, 2016  11:40
+^TIU(8925,11680,"TEXT",88,0)
+      Amount: 1000                      Provider: NURSE,EIGHT
+^TIU(8925,11680,"TEXT",89,0)
+
+^TIU(8925,11680,"TEXT",90,0)
+Blood Replacement Fluids: N/A
+^TIU(8925,11680,"TEXT",91,0)
+
+^TIU(8925,11680,"TEXT",92,0)
+Possible Item Retention:    NO
+^TIU(8925,11680,"TEXT",93,0)
+Sponge Final Count Correct: YES
+^TIU(8925,11680,"TEXT",94,0)
+Sharps Final Count Correct: YES
+^TIU(8925,11680,"TEXT",95,0)
+Instrument Final Count Correct: YES
+^TIU(8925,11680,"TEXT",96,0)
+Wound Sweep:                * NOT ENTERED *
+^TIU(8925,11680,"TEXT",97,0)
+Wound Sweep Comment: NO COMMENTS ENTERED
+^TIU(8925,11680,"TEXT",98,0)
+Intra-Operative X-Ray:      NO
+^TIU(8925,11680,"TEXT",99,0)
+Intra-Operative X-Ray Comment: NO COMMENTS ENTERED
+^TIU(8925,11680,"TEXT",100,0)
+Counter:                  NURSE,EIGHT
+^TIU(8925,11680,"TEXT",101,0)
+Counts Verified By:       PROVIDER,EIGHT
+^TIU(8925,11680,"TEXT",102,0)
+
+^TIU(8925,11680,"TEXT",103,0)
+Dressing: TELFA
+^TIU(8925,11680,"TEXT",104,0)
+Packing:  N/A
+^TIU(8925,11680,"TEXT",105,0)
+
+^TIU(8925,11680,"TEXT",106,0)
+Blood Loss: 200 ml                      Urine Output: 600 ml
+^TIU(8925,11680,"TEXT",107,0)
+
+^TIU(8925,11680,"TEXT",108,0)
+Postoperative Mood:           RELAXED
+^TIU(8925,11680,"TEXT",109,0)
+Postoperative Consciousness:  RESTING
+^TIU(8925,11680,"TEXT",110,0)
+Postoperative Skin Integrity: INTACT
+^TIU(8925,11680,"TEXT",111,0)
+Postoperative Skin Color:     N/A
+^TIU(8925,11680,"TEXT",112,0)
+
+^TIU(8925,11680,"TEXT",113,0)
+Laser Performed: N/A
+^TIU(8925,11680,"TEXT",114,0)
+
+^TIU(8925,11680,"TEXT",115,0)
+Sequential Compression Device: NO
+^TIU(8925,11680,"TEXT",116,0)
+
+^TIU(8925,11680,"TEXT",117,0)
+Cell Saver(s): N/A
+^TIU(8925,11680,"TEXT",118,0)
+
+^TIU(8925,11680,"TEXT",119,0)
+Devices: N/A
+^TIU(8925,11680,"TEXT",120,0)
+
+^TIU(8925,11680,"TEXT",121,0)
+Immediate Use Steam Sterilization Episodes: 
+^TIU(8925,11680,"TEXT",122,0)
+   Contamination:                       0
+^TIU(8925,11680,"TEXT",123,0)
+   SPS Processing/OR Management Issues: 0
+^TIU(8925,11680,"TEXT",124,0)
+   Emergency Case:                      0
+^TIU(8925,11680,"TEXT",125,0)
+   No Better Option:                    0
+^TIU(8925,11680,"TEXT",126,0)
+   Loaner or Short Notice Instrument:   0
+^TIU(8925,11680,"TEXT",127,0)
+   Decontamination of Instruments Contaminated During the Case: 0
+^TIU(8925,11680,"TEXT",128,0)
+
+^TIU(8925,11680,"TEXT",129,0)
+Nursing Care Comments: NO COMMENTS ENTERED
+^TIU(8925,11681,0)
+1288^100295^11805^1289^7^^{today-1}.113^^^^^^E
+^TIU(8925,11681,12)
+{today-1}.132321^10000000228^^10000000228^424^^^10000000230^10000000230^^424^500
+^TIU(8925,11681,13)
+{today-1}.113^20171^R^{today-1}.133233
+^TIU(8925,11681,14)
+^^^1024^10117;SRF(
+^TIU(8925,11681,15)
+{today-1}.13324^10000000228^+VV|sQ~E>rJc{FY^+B#J<RF9~|y(sCKfE9^E^0^{today-1}.133916^10000000230^x8o|sQ~E>rJc{FY^O.+E<|b~Hyo)"j_d )7^E
+^TIU(8925,11681,17)
+Case #: 10117
+^TIU(8925,11681,150)
+1JNJ-ALN
+^TIU(8925,11681,"TEXT",0)
+^^58^58^{today-1}^^
+^TIU(8925,11681,"TEXT",1,0)
+SURGEON:                   SURGEON,ONE
+^TIU(8925,11681,"TEXT",2,0)
+
+^TIU(8925,11681,"TEXT",3,0)
+1ST ASST:                   NURSE,EIGHT
+^TIU(8925,11681,"TEXT",4,0)
+
+^TIU(8925,11681,"TEXT",5,0)
+ATTENDING:                 SURGEON,TWO
+^TIU(8925,11681,"TEXT",6,0)
+
+^TIU(8925,11681,"TEXT",7,0)
+PROCEDURE:                 CHOLECYSTECTOMY 
+^TIU(8925,11681,"TEXT",8,0)
+
+^TIU(8925,11681,"TEXT",9,0)
+INDICATIONS FOR OPERATION:     Patient underwent laparoscopic gastric bypass 3 
+^TIU(8925,11681,"TEXT",10,0)
+years ago. The patient presented with acute onset of right upper quadrant pain. 
+^TIU(8925,11681,"TEXT",11,0)
+The patient had a large palpable gallbladder on exam and was tender.  The 
+^TIU(8925,11681,"TEXT",12,0)
+patient?s white count was normal at 7.8.  The patient was explained the risks 
+^TIU(8925,11681,"TEXT",13,0)
+and benefits of surgery and consented for surgery as explained in the history 
+^TIU(8925,11681,"TEXT",14,0)
+and physical. 
+^TIU(8925,11681,"TEXT",15,0)
+
+^TIU(8925,11681,"TEXT",16,0)
+SUMMARY OF PROCEDURES:     After consent was obtained, the patient was taken 
+^TIU(8925,11681,"TEXT",17,0)
+back to the operating room and placed in a supine position.  After induction of 
+^TIU(8925,11681,"TEXT",18,0)
+general anesthesia and endotracheal intubation, the abdomen was prepped and 
+^TIU(8925,11681,"TEXT",19,0)
+draped in normal sterile fashion.  Entrance was gained into the abdomen using 
+^TIU(8925,11681,"TEXT",20,0)
+infraumbilical incision using a Hasson technique.  Then, 2-0 Vicryl stay sutures 
+^TIU(8925,11681,"TEXT",21,0)
+were placed in the fascia and Hasson port was advanced into the abdomen, 
+^TIU(8925,11681,"TEXT",22,0)
+followed by the 10 mm scope.  The gallbladder was visualized and it was very 
+^TIU(8925,11681,"TEXT",23,0)
+large.  Next, 5 mm ports were then inserted into the abdomen under direct 
+^TIU(8925,11681,"TEXT",24,0)
+visualization, first into the midline just below the xiphoid and the next two 
+^TIU(8925,11681,"TEXT",25,0)
+along the right costal margin.  Next, because the gallbladder was very large and 
+^TIU(8925,11681,"TEXT",26,0)
+tense, through one of the right subcostal ports, the gallbladder was aspirated 
+^TIU(8925,11681,"TEXT",27,0)
+using needle aspirator.  Approximately 30 mL of sludge and bile were evacuated 
+^TIU(8925,11681,"TEXT",28,0)
+from the gallbladder.  Next, the gallbladder was then retracted cephalad and the 
+^TIU(8925,11681,"TEXT",29,0)
+peritoneum was stripped off the gallbladder.  There was noted to be a short 
+^TIU(8925,11681,"TEXT",30,0)
+cystic artery and the gallbladder was partially intrahepatic.  The cystic duct 
+^TIU(8925,11681,"TEXT",31,0)
+was then dissected free.  The common bile duct was visualized.  Clips were 
+^TIU(8925,11681,"TEXT",32,0)
+placed on the cystic duct and the duct was transected.  Next, the cystic artery 
+^TIU(8925,11681,"TEXT",33,0)
+was isolated.  It was doubly clipped proximally and clipped distally and 
+^TIU(8925,11681,"TEXT",34,0)
+transected.
+^TIU(8925,11681,"TEXT",35,0)
+
+^TIU(8925,11681,"TEXT",36,0)
+Next, the gallbladder was removed from the liver bed using electrocautery, and 
+^TIU(8925,11681,"TEXT",37,0)
+once the gallbladder was removed from the liver bed, it was placed into an 
+^TIU(8925,11681,"TEXT",38,0)
+Endocatch and removed through the infraumbilical port.  It should be noted that 
+^TIU(8925,11681,"TEXT",39,0)
+because the gallbladder was so large that again we had to aspirate bile out of 
+^TIU(8925,11681,"TEXT",40,0)
+the gallbladder to remove it through the infraumbilical port.  There was some 
+^TIU(8925,11681,"TEXT",41,0)
+leakage of bile into the wound.  After the gallbladder was successfully removed, 
+^TIU(8925,11681,"TEXT",42,0)
+again the 10 mm scope was placed into the abdomen.  The liver bed was evaluated. 
+^TIU(8925,11681,"TEXT",43,0)
+There was a small laceration at the junction of the liver and the falciform 
+^TIU(8925,11681,"TEXT",44,0)
+ligament due to retraction of the gallbladder.  This was controlled with 
+^TIU(8925,11681,"TEXT",45,0)
+electrocautery; however, there was still a small amount of blood seen at the 
+^TIU(8925,11681,"TEXT",46,0)
+site.  A small piece of Surgicel was placed over the active bleeding.  The 
+^TIU(8925,11681,"TEXT",47,0)
+abdomen was then irrigated copiously with 2 liters of saline until the aspirate 
+^TIU(8925,11681,"TEXT",48,0)
+was clear.
+^TIU(8925,11681,"TEXT",49,0)
+
+^TIU(8925,11681,"TEXT",50,0)
+Next, the ports were removed under direct visualization and the fascia was 
+^TIU(8925,11681,"TEXT",51,0)
+closed with 0 interrupted Vicryl stitches.  After the fascia was closed in the 
+^TIU(8925,11681,"TEXT",52,0)
+infraumbilical port, the wounds were all irrigated out with saline and closed 
+^TIU(8925,11681,"TEXT",53,0)
+with Vicryl subcuticular stitches.  The wounds were dressed with Steri-Strips 
+^TIU(8925,11681,"TEXT",54,0)
+and Mastisol and dressed with gauze and Tegaderm.  The patient tolerated this 
+^TIU(8925,11681,"TEXT",55,0)
+procedure well.  Sponge and instrument counts were correct at the end of the 
+^TIU(8925,11681,"TEXT",56,0)
+case.  The patient was extubated in the operating room without event and 
+^TIU(8925,11681,"TEXT",57,0)
+transferred to recovery room in stable condition.
+^TIU(8925,11681,"TEXT",58,0)
+
+^AUPNVSIT(11805,0)
+{today-1}.113^{today-1}.114101^V^^100146^^E^355^4^^^^{today-1}.114101^^^^^^^^^424^20171^3759
+^AUPNVSIT(11805,150)
+1JNJ-ALN^0^P
+^AUPNVSIT(11805,800)
+^^^^^^^^^^0^0^0^0^0^0^0^0
+^AUPNVSIT(11805,812)
+^507^19
+
+

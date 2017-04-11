@@ -1,4 +1,12 @@
-define(["backbone", "api/Messaging"], function(Backbone, Messaging) {
+define([
+    'backbone',
+    'api/Messaging',
+    'jsHelpers'
+], function(
+    Backbone,
+    Messaging,
+    jsHelpers
+) {
     "use strict";
     // THIS APPLICATION IS DESIGNED FOR A MINIMUM SCREEN RESOLUTION OF:
     // 1280px x 768px
@@ -17,6 +25,10 @@ define(["backbone", "api/Messaging"], function(Backbone, Messaging) {
         },
         calculateWidth: function() {
             return this.width;
+        },
+        recalculate: function(options) {
+            this.calculateWidth.apply(this, arguments);
+            this.calculateHeight.apply(this, arguments);
         }
     });
 
@@ -61,12 +73,19 @@ define(["backbone", "api/Messaging"], function(Backbone, Messaging) {
         calculateHeight: function() {
             var topRegionHeight = Messaging.request('get:adkApp:region', 'topRegion').$el.children().height() || 0,
                 $centerRegion = Messaging.request('get:adkApp:region', 'centerRegion').$el || $('#center-region'),
-                $bottomRegion = Messaging.request('get:adkApp:region', 'bottomRegion').$el || $('#bottom-region');
+                $bottomRegion = Messaging.request('get:adkApp:region', 'bottomRegion').$el || $('#bottom-region'),
+                $otherItems = $('.additional-center-region-height-calculation'),
+                extraHeight = 0;
 
-            var centerRegionHeight = $(window).height() - topRegionHeight - $bottomRegion.children().height();
+            _.each($otherItems, function(item) {
+                extraHeight += $(item).outerHeight(true);
+            });
+
+            var centerRegionHeight = $(window).height() - topRegionHeight - $bottomRegion.children().height() - extraHeight;
+            var centerRegionMargionTop = topRegionHeight + extraHeight;
 
             $centerRegion.css({
-                'margin-top': topRegionHeight + 'px',
+                'margin-top': centerRegionMargionTop + 'px',
                 'height': centerRegionHeight + 'px'
             });
 
@@ -74,12 +93,89 @@ define(["backbone", "api/Messaging"], function(Backbone, Messaging) {
             return centerRegionHeight;
         },
         calculateWidth: function() {
-            var windowWidth = $(window).width();
+            var $centerRegion = Messaging.request('get:adkApp:region', 'centerRegion').$el || $('#center-region');
+            if (_.isEmpty($centerRegion)) {
+                $centerRegion = $(window);
+            }
+            var centerRegionWidth = $centerRegion.width();
 
-            this.set('width', windowWidth);
-            return windowWidth;
+            this.set('width', centerRegionWidth);
+            return centerRegionWidth;
         }
     });
+
+    var ContentRegionDimensionModel = DimensionModel.extend({
+        defaults: {
+            // (base screen height) - (base header height) -
+            // (base workspace navigation height) - (base footer height)
+            // -------------------------------------------------
+            // (768px - 28px  - 36px - 28px)
+            height: 676,
+            width: null
+        },
+        calculateHeight: function(centerRegionModel) {
+            var $contentRegion = Messaging.request('get:adkApp:region', 'centerRegion').$el.find('.content-region-resize-height');
+            if (_.isEmpty($contentRegion)) {
+                $contentRegion = $('#center-region .content-region-resize-height');
+                if (_.isEmpty($contentRegion)) {
+                    $contentRegion = $('#center-region #content-region');
+                }
+            }
+            var $otherItems = $('.additional-content-region-height-calculation'),
+                extraHeight = 0;
+
+            _.each($otherItems, function(item) {
+                extraHeight += $(item).outerHeight(true);
+            });
+
+            var contentRegionHeight = centerRegionModel.get('height') - extraHeight;
+            $contentRegion.css({
+                'height': contentRegionHeight + 'px'
+            });
+
+            this.set('height', contentRegionHeight);
+            return contentRegionHeight;
+        },
+        calculateWidth: function(centerRegionModel) {
+            var $contentRegion = this.getContentRegion();
+            var $otherItems = $('.additional-content-region-width-calculation'),
+                extraWidth = 0;
+
+            _.each($otherItems, function(item) {
+                extraWidth += $(item).outerWidth(true);
+            });
+
+            var contentRegionWidth = centerRegionModel.get('width') - extraWidth;
+            $contentRegion.css({
+                'width': contentRegionWidth + 'px',
+            });
+            this.set({
+                width: contentRegionWidth
+            });
+
+            return contentRegionWidth;
+        },
+        calculateViewportWidth: function(openTrayModel) {
+            var $contentRegion = this.getContentRegion();
+            var openTrayWidth = openTrayModel ? openTrayModel.calculateWidth() || 0 : 0;
+            var viewportWidth = this.get('width') - openTrayWidth;
+            $contentRegion.css({
+                'width': viewportWidth + 'px'
+            });
+            this.set('viewport', viewportWidth);
+        },
+        getContentRegion: function() {
+            var $contentRegion = Messaging.request('get:adkApp:region', 'centerRegion').$el.find('.content-region-resize-width');
+            if (_.isEmpty($contentRegion)) {
+                $contentRegion = $('#center-region .content-region-resize-width');
+                if (_.isEmpty($contentRegion)) {
+                    $contentRegion = $('#center-region #content-region');
+                }
+            }
+            return $contentRegion;
+        }
+    });
+
     // Custom dimension model for the gridster container which appears inside the centerRegion
     var GridsterRegionDimensionModel = DimensionModel.extend({
         defaults: {
@@ -90,11 +186,16 @@ define(["backbone", "api/Messaging"], function(Backbone, Messaging) {
             width: null
         },
         calculateHeight: function() {
-            var $gridsterEl = Messaging.request('get:adkApp:region', 'centerRegion').$el.find('.gridster') || $('#center-region .gridster'),
-                gridsterHeight = null,
-                windowHeight = $(window).height();
+            var $gridsterEl = Messaging.request('get:adkApp:region', 'centerRegion').$el.find('.gridster');
+            if (_.isEmpty($gridsterEl)) {
+                $gridsterEl = $('#center-region .gridster');
+            }
+            var gridsterHeight = null,
+                regionMarginBottom = 20,
+                windowHeight = $(window).height(),
+                contentRegionHeight = appDimensions.contentRegion.get('height');
             if ($gridsterEl.offset()) {
-                gridsterHeight = windowHeight - $gridsterEl.offset().top - 20;
+                gridsterHeight = contentRegionHeight - regionMarginBottom;
                 this.set('height', gridsterHeight);
             }
             return gridsterHeight;
@@ -111,79 +212,82 @@ define(["backbone", "api/Messaging"], function(Backbone, Messaging) {
             // (((base screen width) - 2 * (gridster left position)) - ((base breakpoint value) * 10 + 30)) / (base breakpoint value)
             // -------------------------------------------------
             // ((1280px - 2 * 16) - (12 * 10 + 30)) / 12
-            width: 91.5
+            width: 91.5,
+            breakPointValue: 12,
+            totalNumberOfColumnsFilled: 12,
+            GRIDSTER_MARGIN_VALUE: 5
         },
         calculateHeight: function() {
-            var $gridsterEl = Messaging.request('get:adkApp:region', 'centerRegion').$el.find('.gridster') || $('#center-region .gridster'),
-                gridsterWidgetHeight = null,
+            var $gridsterEl = Messaging.request('get:adkApp:region', 'centerRegion').$el.find('.gridster');
+            if (_.isEmpty($gridsterEl)) {
+                $gridsterEl = $('#center-region .gridster');
+            }
+            var gridsterWidgetHeight = null,
                 divisableUnits = 12,
-                windowHeight = $(window).height();
-
+                windowHeight = $(window).height(),
+                gridsterRegionHeight = appDimensions.gridsterRegion.get('height');
             if ($gridsterEl.offset()) {
-                gridsterWidgetHeight = (windowHeight - $gridsterEl.offset().top - 160) / divisableUnits;
+                gridsterWidgetHeight = (gridsterRegionHeight / divisableUnits) - (2 * this.get('GRIDSTER_MARGIN_VALUE'));
                 this.set('height', gridsterWidgetHeight);
             }
             return gridsterWidgetHeight;
         },
         calculateWidth: function() {
-            var $gridsterEl = Messaging.request('get:adkApp:region', 'centerRegion').$el.find('.gridster') || $('#center-region .gridster'),
-                gridsterWidgetWidth = null,
-                windowWidth = $(window).width();
+            if (appDimensions.openTray.trayOpen()) return this.get('width');
+            var $gridsterEl = Messaging.request('get:adkApp:region', 'centerRegion').$el.find('.gridster');
+            if (_.isEmpty($gridsterEl)) {
+                $gridsterEl = $('#center-region .gridster');
+            }
+            var baseBreakPoint = 12,
+                maxCol = 1,
+                widgetWidthDimension = null,
+                containerWidth = appDimensions.contentRegion.get('width');
+
+            var breakPoint = baseBreakPoint;
 
             if ($gridsterEl.length > 0) {
-                var breakPoint1 = 12,
-                    breakPoint2 = 12,
-                    breakPoint3 = 16,
-                    breakPoint4 = 20,
-                    breakPoint5 = 24,
-                    baseBreakPointValue = 12;
-                var winWidth = windowWidth - 2 * $gridsterEl.position().left;
-                var baseGridster = winWidth - (breakPoint1 * 10 + 30);
-                var maxCol = 1;
+                var maxbreakPoint = 32,
+                    breakPointIncrement = 4,
+                    minWidgetWidthDimension = 75,
+                    extraPadding = 2 * this.get('GRIDSTER_MARGIN_VALUE'),
+                    extraGridsterRegionMargin = 2 * 5,
+                    i;
 
                 $gridsterEl.find('div[data-col]').each(function() {
-                    var col = parseInt($(this).attr('data-col'));
+                    var col = parseInt($(this).attr('data-col')) - 1;
                     var size = parseInt($(this).attr('data-sizex'));
                     col += size;
                     if (col > maxCol) maxCol = col;
                 });
-                if (windowWidth <= 1024) {
-                    gridsterWidgetWidth = (1024 - 2 * $gridsterEl.position().left - 150) / breakPoint1;
-                } else if (windowWidth > 1024 && windowWidth < 1280) {
-                    gridsterWidgetWidth = baseGridster / 12;
-                } else {
-                    if (windowWidth >= 1280 && windowWidth < 1440) {
-                        baseBreakPointValue = breakPoint2;
-                    } else {
-                        if (maxCol <= 13) {
-                            gridsterWidgetWidth = baseGridster / breakPoint1;
-                            this.set('width', gridsterWidgetWidth);
-                            return gridsterWidgetWidth;
-                        } else {
-                            if (windowWidth >= 1440 && windowWidth < 1920) {
-                                baseBreakPointValue = breakPoint3;
-                            } else if (windowWidth >= 1920 && windowWidth < 2560) {
-                                if (maxCol <= 17) {
-                                    baseBreakPointValue = breakPoint3;
-                                } else {
-                                    baseBreakPointValue = breakPoint4;
-                                }
-                            } else {
-                                if (maxCol <= 17) {
-                                    baseBreakPointValue = breakPoint3;
-                                } else if (maxCol <= 21) {
-                                    baseBreakPointValue = breakPoint4;
-                                } else {
-                                    baseBreakPointValue = breakPoint5;
-                                }
-                            }
-                        }
+                for (i = maxbreakPoint; i > baseBreakPoint; i = i - breakPointIncrement) {
+                    if (maxCol >= i && ((containerWidth - (i * extraPadding) - extraGridsterRegionMargin) / i) >= minWidgetWidthDimension) {
+                        breakPoint = i;
+                        break;
                     }
-                    gridsterWidgetWidth = (winWidth - (baseBreakPointValue * 10 + 30)) / baseBreakPointValue;
                 }
+                widgetWidthDimension = _.max([((containerWidth - (breakPoint * extraPadding) - extraGridsterRegionMargin) / breakPoint), minWidgetWidthDimension]);
             }
-            this.set('width', gridsterWidgetWidth);
-            return gridsterWidgetWidth;
+            this.set({
+                'width': widgetWidthDimension,
+                'breakPointValue': breakPoint,
+                'totalNumberOfColumnsFilled': maxCol
+            });
+            return widgetWidthDimension;
+        }
+    });
+    var OpenTrayDimensionModel = DimensionModel.extend({
+        defaults: {
+            height: null,
+            width: 0
+        },
+        calculateWidth: function() {
+            var $tray = $('aside.tray-container .sidebar.open .sidebar-tray >');
+            var openTrayWidth = $tray.attr('data-tray-width') || $tray.outerWidth(true);
+            this.set('width', openTrayWidth);
+            return openTrayWidth;
+        },
+        trayOpen: function() {
+            return this.get('width') > 0;
         }
     });
     // END OF: DIMENSION MODEL DEFINITIONS
@@ -192,9 +296,11 @@ define(["backbone", "api/Messaging"], function(Backbone, Messaging) {
     // Define an object that holds a single reusable model for each
     // element in which the application needs to keep track of it's size.
     var appDimensions = ResizeUtils.dimensions = {
+        openTray: new OpenTrayDimensionModel(),
         gridsterRegion: new GridsterRegionDimensionModel(),
         gridsterWidget: new GridsterWidgetDimensionModel(),
         centerRegion: new CenterRegionDimensionModel(),
+        contentRegion: new ContentRegionDimensionModel(),
         patientDemographics: new DimensionModel(),
         workspaceNavigation: new DimensionModel(),
         header: new DimensionModel(),
@@ -204,37 +310,57 @@ define(["backbone", "api/Messaging"], function(Backbone, Messaging) {
 
     // Group all the resize methods for the application's wrapping container together
     var containerResize = ResizeUtils.containerResize = function() {
-        appDimensions.viewport.calculateHeight();
-        appDimensions.viewport.calculateWidth();
-        
-        appDimensions.centerRegion.calculateHeight();
-        appDimensions.centerRegion.calculateWidth();
+        Messaging.trigger("resize.ehmp.container");
+        appDimensions.viewport.recalculate();
+        appDimensions.centerRegion.recalculate();
+        appDimensions.contentRegion.recalculate(appDimensions.centerRegion);
+        appDimensions.contentRegion.calculateViewportWidth(appDimensions.openTray);
+        Messaging.trigger("resized.ehmp.container", appDimensions);
     };
+
     // Group all the resize methods for gridster together
     var gridsterResize = ResizeUtils.gridsterResize = function() {
+        Messaging.trigger("resize.ehmp.gridster");
         appDimensions.gridsterRegion.calculateHeight();
-        appDimensions.gridsterWidget.calculateHeight();
-        appDimensions.gridsterWidget.calculateWidth();
+        appDimensions.gridsterWidget.recalculate();
+        Messaging.trigger("resize.ehmp.gridster", appDimensions);
     };
 
     // One single method that gets called on the window's resize event
     var windowResize = ResizeUtils.windowResize = function() {
+        Messaging.trigger("resize.ehmp.window");
         containerResize();
         gridsterResize();
+        Messaging.trigger("resized.ehmp.window", appDimensions);
     };
+
+    var trayOpeningResize = ResizeUtils.trayToggleResize = function() {
+        Messaging.trigger("resize.ehmp.toggle-tray");
+        if (!appDimensions.openTray.trayOpen()) {
+            appDimensions.openTray.calculateWidth();
+            appDimensions.contentRegion.calculateViewportWidth(appDimensions.openTray);
+            gridsterResize();
+            Messaging.trigger("resized.ehmp.toggle-tray resized.ehmp.close-tray", appDimensions);
+        } else {
+            appDimensions.openTray.set('width', 0);
+            appDimensions.contentRegion.calculateViewportWidth();
+            gridsterResize();
+            Messaging.trigger("resized.ehmp.toggle-tray resized.ehmp.open-tray", appDimensions);
+        }
+    };
+
+    var debouncedWindowResize = jsHelpers.debounce(windowResize, 100, false);
 
     // Methods to Register and Un-register to the window resize event
     // (These should be used at App Start and at APP End)
-    var debouncedWindowResize = _.debounce(windowResize, 100);
     ResizeUtils.register = function() {
         $(window).on('resize.resizeUtil', debouncedWindowResize);
     };
+
     ResizeUtils.unRegister = function() {
         $(window).off('resize.resizeUtil', debouncedWindowResize);
-        debouncedWindowResize.cancel();
     };
 
-    // TODO : Clean up logic and create an appropriate dimension model
     // -------------------------------------------------
     // START OF: RESIZING CODE FOR APPLETS WITH FILTERS
     ResizeUtils.hasMob = function() {
@@ -246,6 +372,7 @@ define(["backbone", "api/Messaging"], function(Backbone, Messaging) {
         }
         return false;
     };
+
     ResizeUtils.deployMob = function(ma) {
         var mobArgs = $.extend({
             name: '',
@@ -270,134 +397,6 @@ define(["backbone", "api/Messaging"], function(Backbone, Messaging) {
         if ((!_.isUndefined($(document).data('mobs'))) && (!_.isUndefined($(document).data('mobs')[mobName]))) {
             $(document).data('mobs')[mobName].disconnect();
             delete $(document).data('mobs')[mobName];
-        }
-    };
-    ResizeUtils.jqPlugs = function() {
-        (function($) {
-            $.fn.resizeEnd = function(a) {
-                var args = $.extend({
-                    cb: function() {},
-                    namespace: '',
-                    duration: 100,
-                    timeoutName: 'resizeTimeout',
-                    timeoutCallbackName: 'resizeCallback',
-                    timeoutFunctionName: 'resizeFunction'
-                }, a);
-                this.each(function() {
-                    var t = $(this);
-                    t.data(args.timeoutCallbackName, args.cb);
-                    t.data(args.timeoutFunctionName, function() {
-                        clearTimeout($(this).data(args.timeoutName));
-                        $(this).data(args.timeoutName, setTimeout(function() {
-                            args.cb();
-                        }), args.duration);
-                    });
-                    t.bind('resize' + (args.namespace === '' ? '' : '.' + args.namespace), function() {
-                        clearTimeout($(this).data(args.timeoutName));
-                        $(this).data(args.timeoutName, setTimeout(function() {
-                            clearTimeout($(this).data('resizeTimeout'));
-                            $(this).data(args.timeoutName, setTimeout(function() {
-                                args.cb();
-                            }), args.duration);
-                        }, args.duration));
-                    });
-                });
-            };
-        })(jQuery);
-    }();
-    ResizeUtils.filteredView = function(view) {
-        if (!_.isUndefined(view)) {
-            if (view.indexOf('-full') > -1) {
-                if (ResizeUtils.hasMob()) {
-                    var mobName = 'captureFilter';
-                    ResizeUtils.deployMob({
-                        name: mobName,
-                        target: $('#center-region')[0],
-                        args: {
-                            attributes: false,
-                            childList: true,
-                            characterData: false,
-                            subtree: true
-                        },
-                        mobCb: function(mutes) {
-                            for (var i = 0; i < mutes.length; i++) {
-                                var mute = mutes[i];
-                                var nodes = mute.addedNodes;
-                                for (var j = 0; j < nodes.length; j++) {
-                                    var node = nodes[j];
-                                    if ($(node).find('.gridContainer').not('.filter-parsed').length > 0) {
-                                        var gc = $('.gridContainer');
-                                        gc.addClass('filter-parsed');
-                                        ResizeUtils.destroyMob(mobName);
-                                        break;
-                                    }
-                                }
-                            }
-                            var fp = $('.gridContainer.filter-parsed');
-                            var scrollingView = fp.find('.grid-container');
-
-                            var svAdjustHeight = function(obj) {
-                                var sh = 0;
-                                obj.siblings().each(function() {
-                                    if ($(this).is(':visible')) {
-                                        sh += $(this).height();
-                                    }
-                                });
-                                obj.height(obj.parent().height() - sh);
-                            };
-                            svAdjustHeight(scrollingView);
-
-                            var collapsingDiv = fp.find('[id^="grid-filter"]');
-                            collapsingDiv.on('hidden.bs.collapse', function() {
-                                svAdjustHeight(scrollingView);
-                            });
-                            collapsingDiv.on('shown.bs.collapse', function() {
-                                svAdjustHeight(scrollingView);
-                            });
-                            // i set a resize event listener to window in order to resize the scrolling area
-                            $(window).resizeEnd({
-                                cb: function() {
-                                    svAdjustHeight(scrollingView);
-                                },
-                                namespace: 'fullViewFilterResize',
-                                duration: 300,
-                                timeoutName: 'fr_resizeTimeout',
-                                timeoutCallbackName: 'fr_resizeCallback',
-                                timeoutFunctionName: 'fr_resizeFunction'
-                            });
-                            // now i have to remove the window resize event listener if i go outside the full applet view
-                            ResizeUtils.deployMob({
-                                name: 'removeCaptureFilter',
-                                target: $('#center-region')[0],
-                                args: {
-                                    attributes: false,
-                                    childList: true,
-                                    characterData: false,
-                                    subtree: true
-                                },
-                                mobCb: function(mutes_2) {
-                                    for (var i = 0; i < mutes_2.length; i++) {
-                                        var mute_2 = mutes_2[i];
-                                        var nodes_2 = mute_2.removedNodes;
-                                        for (var j = 0; j < nodes_2.length; j++) {
-                                            var node_2 = nodes_2[j];
-                                            if ($(node_2).find('.gridContainer.filter-parsed').length > 0) {
-                                                var win = $(window);
-                                                win.unbind('resize.fullViewFilterResize');
-                                                delete win.data().fr_resizeTimeout;
-                                                delete win.data().fr_resizeCallback;
-                                                delete win.data().fr_resizeFunction;
-                                                ResizeUtils.destroyMob('removeCaptureFilter');
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            }
         }
     };
     // END OF: RESIZING CODE FOR APPLETS WITH FILTERS

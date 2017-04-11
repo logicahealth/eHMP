@@ -9,7 +9,7 @@ var logger = sinon.stub(require('bunyan').createLogger({
 }));
 
 var sampleVital = {
-    'locIEN': '67',
+    'locationUid': 'urn:va:location:9E7A:67',
     'vitals': [{
         'fileIEN': '1',
         'reading': '80/30',

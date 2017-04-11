@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<actions/>
+	<description/>
+	<keepDependencies>false</keepDependencies>
+	<properties>
+		<hudson.model.ParametersDefinitionProperty>
+			<parameterDefinitions>
+				<hudson.model.StringParameterDefinition>
+					<name>PACKAGE_VERSION</name>
+					<description/>
+					<defaultValue/>
+				</hudson.model.StringParameterDefinition>
+				<hudson.model.StringParameterDefinition>
+					<name>NEXUS_URL</name>
+					<description/>
+					<defaultValue>http://NEXUS_IP:8081</defaultValue>
+				</hudson.model.StringParameterDefinition>
+			</parameterDefinitions>
+		</hudson.model.ParametersDefinitionProperty>
+	</properties>
+	<scm class="hudson.scm.NullSCM"/>
+	<canRoam>true</canRoam>
+	<disabled>false</disabled>
+	<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+	<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+	<triggers/>
+	<concurrentBuild>false</concurrentBuild>
+	<builders>
+		<hudson.tasks.Shell>
+			<command>
+				export CHEF_REPO_PATH=/var/deployment/chef-repo
+rm -rf $CHEF_REPO_PATH/cookbooks
+rm -rf $CHEF_REPO_PATH/roles
+rm chef-server-package.tar.gz 
+curl $NEXUS_URL/nexus/content/repositories/releases/us/vistacore/chef-server-package/$PACKAGE_VERSION/chef-server-package-$PACKAGE_VERSION.tar.gz -o chef-server-package.tar.gz 
+tar -xzvf chef-server-package.tar.gz -C /var/deployment/chef-repo/ 
+cd $CHEF_REPO_PATH 
+knife upload cookbooks/ --config $CHEF_REPO_PATH/.chef/knife.rb 
+knife upload roles/ --config $CHEF_REPO_PATH/.chef/knife.rb
+			</command>
+		</hudson.tasks.Shell>
+	</builders>
+	<publishers/>
+	<buildWrappers/>
+</project>

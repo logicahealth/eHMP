@@ -15,6 +15,8 @@ def artifactsToUpload = [
   cdsinvocationservice: [name: 'CDSInvocationService', proj: ':production:jbpm:CDSInvocationService', env_var: 'JBPM_CDSINVOCATIONSERVICE_VERSION'],
   fobtlabservice: [name: 'FOBTLabService', proj: ':production:jbpm:FOBTLabService', env_var: 'JBPM_FOBTLABSERVICE_VERSION'],
   tasksservice: [name: 'tasksservice', proj: ':production:jbpm:tasksservice', env_var: 'JBPM_TASKSSERVICE_VERSION'],
+  ehmpservices: [name: 'EhmpServices', proj: ':production:jbpm:EhmpServices', env_var: 'JBPM_EHMPSERVICES_VERSION'],
+  sql_config: [name: 'sql_config', proj: ':production:jbpm:sql_config', env_var: 'JBPM_SQL_CONFIG_VERSION'],
   rdk: [name: 'rdk', proj: ':production:rdk', env_var: 'RDK_VERSION']
 ]
 
@@ -27,7 +29,7 @@ allprojects {
   ext.set('currentCommitHash', getCurrentCommitHash())
 
   repositories {
-    maven {url "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp-public"}
+    maven {url "https://store.vistacore.us/nexus/content/groups/public"}
   }
 }
 

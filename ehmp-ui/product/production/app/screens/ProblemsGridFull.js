@@ -6,12 +6,13 @@ define([
     'use strict';
     var screenConfig = {
         id: 'problems-full',
+        context: 'patient',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',
         applets: [{
             id: 'problems',
-            title: 'Conditions',
+            title: 'Problems',
             region: 'center',
             fullScreen: true,
             viewType: 'expanded'

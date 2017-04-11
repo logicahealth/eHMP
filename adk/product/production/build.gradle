@@ -16,12 +16,10 @@ buildscript {
 apply plugin: 'grunt'
 
 task installNpm (type: Exec ){
-    //commandLine "npm", "install"
-    commandLine "bash", "-c", "npm install"
+    commandLine "npm", "install"
 }
 task installBower (type: Exec ){
-    // commandLine "bower-installer", "-p", "-r"
-    commandLine "bash", "-c", "bower-installer -p -r"
+    commandLine "bower-installer", "-p", "-r"
 }
 
 task findAndReplace {
@@ -30,10 +28,10 @@ task findAndReplace {
 
 task test {}
 task intTest{}
-intTest.dependsOn installGrunt, installNpm, installBower, grunt_inttest
-test.dependsOn installGrunt, installNpm, installBower, grunt_test
+intTest.dependsOn  installNpm, installBower, grunt_inttest
+test.dependsOn  installNpm, installBower, grunt_test
 task build {}
-build.dependsOn installGrunt, installNpm, installBower, grunt_build
+build.dependsOn  installNpm, installBower, grunt_build
 grunt_build.dependsOn grunt_sass
 
 apply from : 'grunt_sass_errors.gradle'
@@ -51,13 +49,13 @@ grunt_sass {
 }
 
 
-uploadArchives.dependsOn installGrunt, installNpm, installBower, grunt_test, grunt_deploy
-grunt_deploy.mustRunAfter installGrunt, installNpm, installBower
-grunt_build.mustRunAfter installGrunt, installNpm, installBower
-grunt_test.mustRunAfter installGrunt, installNpm, installBower
-grunt_inttest.mustRunAfter installGrunt, installNpm, installBower
-grunt_minify.mustRunAfter installGrunt, installNpm, installBower
-grunt_sass.mustRunAfter installGrunt, installNpm, installBower
+uploadArchives.dependsOn  installNpm, installBower, grunt_test, grunt_deploy
+grunt_deploy.mustRunAfter  installNpm, installBower
+grunt_build.mustRunAfter  installNpm, installBower
+grunt_test.mustRunAfter  installNpm, installBower
+grunt_inttest.mustRunAfter  installNpm, installBower
+grunt_minify.mustRunAfter  installNpm, installBower
+grunt_sass.mustRunAfter  installNpm, installBower
 
 artifacts {
     archives adkTar

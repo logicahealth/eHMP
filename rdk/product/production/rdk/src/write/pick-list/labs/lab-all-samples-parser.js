@@ -5,39 +5,39 @@ var rpcCategoryTransformer = require('../utils/rpc-categories-tilde-transformer'
 var rpcUtil = require('../utils/rpc-util');
 
 function addSampleTime(logger, retValue, categoryName, categoryFields) {
-    var SAMP_FIELD_LENGTH_1 = 10;
-    var SAMP_FIELD_LENGTH_2 = 8;
-    var SPECIMEN_FIELD_LENGTH_2 = 2;
-
+    var SAMP_FIELD_LENGTH_2 = 2;
+    var SAMP_FIELD_LENGTH_1 = 1;
     var categoryType = categoryFields[0][0];
-    var categoryEntry;
+    var categoryEntry = {};
 
-    if (categoryFields.length === SAMP_FIELD_LENGTH_1) {
-
-        categoryEntry = {
-            ien: categoryFields[1],
-            name: categoryFields[2],
-            specPtr: categoryFields[3],
-            tubeTop: categoryFields[4],
-            labCollect: categoryFields[7],
-            specName: categoryFields[9]
-        };
-    } else if (categoryFields.length === SAMP_FIELD_LENGTH_2) {
-        categoryEntry = {
-            ien: categoryFields[1],
-            name: categoryFields[2]
-        };
-    } else if (categoryFields.length === SPECIMEN_FIELD_LENGTH_2) {
+    if (categoryFields.length === SAMP_FIELD_LENGTH_2) {
         categoryType = 'i';
 
         categoryEntry = {
             ien: categoryFields[0],
             name: categoryFields[1]
         };
-    } else if (categoryFields.length === 1) {
+    } else if (categoryFields.length === SAMP_FIELD_LENGTH_1) {
         categoryEntry = categoryFields[0];
-    } else {
-        categoryEntry = {};
+    } else if (categoryFields.length > SAMP_FIELD_LENGTH_2) {
+        if(categoryFields[1]){
+            categoryEntry.ien = categoryFields[1];
+        }
+        if(categoryFields[2]){
+            categoryEntry.name = categoryFields[2];
+        }
+        if(categoryFields[3]){
+            categoryEntry.specPtr = categoryFields[3];
+        }
+        if(categoryFields[4]){
+            categoryEntry.tubeTop = categoryFields[4];
+        }
+        if(categoryFields[7]){
+            categoryEntry.labCollect = categoryFields[7];
+        }
+        if(categoryFields[9]){
+            categoryEntry.specName = categoryFields[9];
+        }
     }
 
     addEntry(logger, retValue, categoryName, categoryType, categoryFields, categoryEntry);

@@ -30,6 +30,7 @@ MOCKP ; mock patient data (new last)
  ; Set variables to be resuable
  S PID="93EF;-7"
  S UID="urn:va:med:93EF:-7:15231"
+ S JPID=$$JPID4PID^VPRJPR(PID)
  S VPRJTPID=$G(^VPRPTJ("JPID",PID))
  ; 1st version of object
  S METASTAMP1=76
@@ -42,17 +43,18 @@ MOCKP ; mock patient data (new last)
  D MOCKSS(PID,UID,METASTAMP2)
  D SETPUT^VPRJTX("/vpr/"_PID,"MED6N","VPRJTP02")
  D RESPOND^VPRJRSP
- S ^VPRSTATUS(PID,$P(PID,";"),"patient",METASTAMP2)=""
+ S ^VPRSTATUS(JPID,PID,$P(PID,";"),"patient",METASTAMP2)=""
  Q
 MOCKSS(PID,UID,STAMP,STORED) ; mock patient sync status
  N SITE,DOMAIN
  S SITE=$P(PID,";",1)
  S DOMAIN=$P(UID,":",3)
- S ^VPRSTATUS(PID,SITE,"stampTime")=STAMP
- S ^VPRSTATUS(PID,SITE,DOMAIN,STAMP)=""
- S ^VPRSTATUS(PID,SITE,DOMAIN,UID,STAMP)=""
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ S ^VPRSTATUS(JPID,PID,SITE,"stampTime")=STAMP
+ S ^VPRSTATUS(JPID,PID,SITE,DOMAIN,STAMP)=""
+ S ^VPRSTATUS(JPID,PID,SITE,DOMAIN,UID,STAMP)=""
  ; Conditional for forcing stored flag
- I $G(STORED) S ^VPRSTATUS(PID,SITE,DOMAIN,UID,STAMP,"stored")=1
+ I $G(STORED) S ^VPRSTATUS(JPID,PID,SITE,DOMAIN,UID,STAMP,"stored")=1
  Q
 MOCKSSD(UID,STAMP,STORED) ; mock operational data sync status
  ; ^VPRSTATUSOD(SITE,SOURCESTAMP,DOMAIN,ITEM,ITEMSTAMP)
@@ -71,6 +73,7 @@ MOCKP2 ; mock patient data reversed (new first)
  ; Set variables to be resuable
  S PID="93EF;-7"
  S UID="urn:va:med:93EF:-7:15231"
+ S JPID=$$JPID4PID^VPRJPR(PID)
  S VPRJTPID=$G(^VPRPTJ("JPID",PID))
  ; 2nd version of object
  S METASTAMP2=77
@@ -82,14 +85,14 @@ MOCKP2 ; mock patient data reversed (new first)
  S METASTAMP1=76
  D SETPUT^VPRJTX("/vpr/"_PID,"MED6","VPRJTP02")
  D RESPOND^VPRJRSP
- S ^VPRSTATUS(PID,$P(PID,";"),"patient",METASTAMP2)=""
+ S ^VPRSTATUS(JPID,PID,$P(PID,";"),"patient",METASTAMP2)=""
  Q
 MOCKPM ; mock multiple patient data (new last)
  N HTTPERR,HTTPREQ,PID,UID,VPRJTPID
  ; Set variables to be resuable
  D ADDPT^VPRJTX("DEMOG8^VPRJTP01")
- S ^VPRSTATUS("93EF;-7","93EF","patient",7)=""
- S ^VPRSTATUS("93EF;-8","93EF","patient",8)=""
+ S ^VPRSTATUS($$JPID4PID^VPRJPR("93EF;-7"),"93EF;-7","93EF","patient",7)=""
+ S ^VPRSTATUS($$JPID4PID^VPRJPR("93EF;-8"),"93EF;-8","93EF","patient",8)=""
  F PID="93EF;-7","93EF;-8" D
  . S UID="urn:va:med:"_$TR(PID,";",":")_":15231"
  . S VPRJTPID=$G(^VPRPTJ("JPID",PID))
@@ -106,14 +109,14 @@ MOCKPM ; mock multiple patient data (new last)
  . I PID["7" D SETPUT^VPRJTX("/vpr/"_PID,"MED6N","VPRJTP02")
  . I PID["8" D SETPUT^VPRJTX("/vpr/"_PID,"MED8N","VPRJTP02")
  . D RESPOND^VPRJRSP
- . S ^VPRSTATUS(PID,$P(PID,";"),"med",METASTAMP2)=""
+ . S ^VPRSTATUS($$JPID4PID^VPRJPR(PID),PID,$P(PID,";"),"med",METASTAMP2)=""
  Q
 MOCKPM2 ; mock multiple patient data (new last)
  N HTTPERR,HTTPREQ,PID,UID,VPRJTPID
  ; Set variables to be resuable
  D ADDPT^VPRJTX("DEMOG8^VPRJTP01")
- S ^VPRSTATUS("93EF;-7","93EF","patient",7)=""
- S ^VPRSTATUS("93EF;-8","93EF","patient",8)=""
+ S ^VPRSTATUS($$JPID4PID^VPRJPR("93EF;-7"),"93EF;-7","93EF","patient",7)=""
+ S ^VPRSTATUS($$JPID4PID^VPRJPR("93EF;-8"),"93EF;-8","93EF","patient",8)=""
  F PID="93EF;-7","93EF;-8" D
  . S UID="urn:va:med:"_$TR(PID,";",":")_":15231"
  . S VPRJTPID=$G(^VPRPTJ("JPID",PID))
@@ -130,7 +133,7 @@ MOCKPM2 ; mock multiple patient data (new last)
  . I PID["7" D SETPUT^VPRJTX("/vpr/"_PID,"MED6","VPRJTP02")
  . I PID["8" D SETPUT^VPRJTX("/vpr/"_PID,"MED8","VPRJTP02")
  . D RESPOND^VPRJRSP
- . S ^VPRSTATUS(PID,$P(PID,";"),"med",METASTAMP2)=""
+ . S ^VPRSTATUS($$JPID4PID^VPRJPR(PID),PID,$P(PID,";"),"med",METASTAMP2)=""
  Q
 MOCKD ; mock operational data
  N HTTPERR,HTTPREQ
@@ -210,10 +213,11 @@ MOCKDM2 ; mock multiple operational data (new last)
  Q
 PATDATA ;; @TEST Ensure previous versions of patient data are garbage collected
  ; Look at SAVE^VPRJPS to ensure all save actions are covered
- N PID,UID,VPRJTPID,METASTAMP1,METASTAMP2
+ N PID,UID,VPRJTPID,METASTAMP1,METASTAMP2,JPID
  N HTTPERR,HTTPREQ,HTTPRSP
  ; Stage Mock data
  D MOCKP
+ S JPID=$$JPID4PID^VPRJPR(PID)
  ; Run algorithm
  ; Ensure variables from SETPUT are cleared
  K HTTPERR,HTTPREQ,HTTPRSP
@@ -225,23 +229,24 @@ PATDATA ;; @TEST Ensure previous versions of patient data are garbage collected
  ; Ensure HTTP Request had no errors
  D ASSERT(0,$D(^TMP("HTTPERR",$J)),"Error during HTTP rquest")
  ; Ensure previous version of object is gone
- D ASSERT(0,$D(^VPRPT(PID,UID,METASTAMP1)),"Previous medication ARRAY version found and it shouldn't be found")
- D ASSERT(10,$D(^VPRPT(PID,UID,METASTAMP2)),"Current medication ARRAY version not found and it should be found")
+ D ASSERT(0,$D(^VPRPT(JPID,PID,UID,METASTAMP1)),"Previous medication ARRAY version found and it shouldn't be found")
+ D ASSERT(10,$D(^VPRPT(JPID,PID,UID,METASTAMP2)),"Current medication ARRAY version not found and it should be found")
  ; Ensure previous version of JSON string is gone
- D ASSERT(0,$D(^VPRPTJ("JSON",PID,UID,METASTAMP1)),"Previous medication JSON version found and it shouldn't be found")
- D ASSERT(10,$D(^VPRPTJ("JSON",PID,UID,METASTAMP2)),"Current medication JSON version not found and it should be found")
+ D ASSERT(0,$D(^VPRPTJ("JSON",JPID,PID,UID,METASTAMP1)),"Previous medication JSON version found and it shouldn't be found")
+ D ASSERT(10,$D(^VPRPTJ("JSON",JPID,PID,UID,METASTAMP2)),"Current medication JSON version not found and it should be found")
  ; Ensure previous version of the KEY is gone
  D ASSERT(0,$D(^VPRPTJ("KEY",UID,PID,METASTAMP1)),"Previous medication KEY version found and it shouldn't be found")
  D ASSERT(1,$D(^VPRPTJ("KEY",UID,PID,METASTAMP2)),"Current medication KEY version not found and it should be found")
  ; Ensure previous version of the TEMPLATE is gone
- D ASSERT(1,$G(^VPRPTJ("TEMPLATE",PID,UID,"dose",1))["""dose"":""70 MG""","Current medication TEMPLATE version not found and it should be found")
+ D ASSERT(1,$G(^VPRPTJ("TEMPLATE",JPID,PID,UID,"dose",1))["""dose"":""70 MG""","Current medication TEMPLATE version not found and it should be found")
  Q
 PATDATA2 ;; @TEST Ensure previous versions of patient data are garbage collected (order reversed - new stored first)
  ; Look at SAVE^VPRJPS to ensure all save actions are covered
- N PID,UID,VPRJTPID,METASTAMP1,METASTAMP2
+ N PID,UID,VPRJTPID,METASTAMP1,METASTAMP2,JPID
  N HTTPERR,HTTPREQ,HTTPRSP
  ; Stage Mock data
  D MOCKP2
+ S JPID=$$JPID4PID^VPRJPR(PID)
  ; Run algorithm
  ; Ensure variables from SETPUT are cleared
  K HTTPERR,HTTPREQ,HTTPRSP
@@ -253,16 +258,16 @@ PATDATA2 ;; @TEST Ensure previous versions of patient data are garbage collected
  ; Ensure HTTP Request had no errors
  D ASSERT(0,$D(^TMP("HTTPERR",$J)),"Error during HTTP rquest")
  ; Ensure previous version of object is gone
- D ASSERT(0,$D(^VPRPT(PID,UID,METASTAMP1)),"Previous medication ARRAY version found and it shouldn't be found")
- D ASSERT(10,$D(^VPRPT(PID,UID,METASTAMP2)),"Current medication ARRAY version not found and it should be found")
+ D ASSERT(0,$D(^VPRPT(JPID,PID,UID,METASTAMP1)),"Previous medication ARRAY version found and it shouldn't be found")
+ D ASSERT(10,$D(^VPRPT(JPID,PID,UID,METASTAMP2)),"Current medication ARRAY version not found and it should be found")
  ; Ensure previous version of JSON string is gone
- D ASSERT(0,$D(^VPRPTJ("JSON",PID,UID,METASTAMP1)),"Previous medication JSON version found and it shouldn't be found")
- D ASSERT(10,$D(^VPRPTJ("JSON",PID,UID,METASTAMP2)),"Current medication JSON version not found and it should be found")
+ D ASSERT(0,$D(^VPRPTJ("JSON",JPID,PID,UID,METASTAMP1)),"Previous medication JSON version found and it shouldn't be found")
+ D ASSERT(10,$D(^VPRPTJ("JSON",JPID,PID,UID,METASTAMP2)),"Current medication JSON version not found and it should be found")
  ; Ensure previous version of the KEY is gone
  D ASSERT(0,$D(^VPRPTJ("KEY",UID,PID,METASTAMP1)),"Previous medication KEY version found and it shouldn't be found")
  D ASSERT(1,$D(^VPRPTJ("KEY",UID,PID,METASTAMP2)),"Current medication KEY version not found and it should be found")
  ; Ensure previous version of the TEMPLATE is gone
- D ASSERT(1,$G(^VPRPTJ("TEMPLATE",PID,UID,"dose",1))["""dose"":""70 MG""","Current medication TEMPLATE version not found and it should be found")
+ D ASSERT(1,$G(^VPRPTJ("TEMPLATE",JPID,PID,UID,"dose",1))["""dose"":""70 MG""","Current medication TEMPLATE version not found and it should be found")
  Q
 PATDATAll ;; @TEST Ensure previous versions of patient data are garbage collected (All Patients)
  ; Look at SAVE^VPRJPS to ensure all save actions are covered
@@ -284,16 +289,16 @@ PATDATAll ;; @TEST Ensure previous versions of patient data are garbage collecte
  . S PID2=$TR(PID,";",":")
  . S UID="urn:va:med:"_PID2_":15231"
  . ; Ensure previous version of object is gone
- . D ASSERT(0,$D(^VPRPT(PID,UID,METASTAMP1)),"Previous medication ARRAY version found and it shouldn't be found")
- . D ASSERT(10,$D(^VPRPT(PID,UID,METASTAMP2)),"Current medication ARRAY version not found and it should be found")
+ . D ASSERT(0,$D(^VPRPT($$JPID4PID^VPRJPR(PID),PID,UID,METASTAMP1)),"Previous medication ARRAY version found and it shouldn't be found")
+ . D ASSERT(10,$D(^VPRPT($$JPID4PID^VPRJPR(PID),PID,UID,METASTAMP2)),"Current medication ARRAY version not found and it should be found")
  . ; Ensure previous version of JSON string is gone
- . D ASSERT(0,$D(^VPRPTJ("JSON",PID,UID,METASTAMP1)),"Previous medication JSON version found and it shouldn't be found")
- . D ASSERT(10,$D(^VPRPTJ("JSON",PID,UID,METASTAMP2)),"Current medication JSON version not found and it should be found")
+ . D ASSERT(0,$D(^VPRPTJ("JSON",$$JPID4PID^VPRJPR(PID),PID,UID,METASTAMP1)),"Previous medication JSON version found and it shouldn't be found")
+ . D ASSERT(10,$D(^VPRPTJ("JSON",$$JPID4PID^VPRJPR(PID),PID,UID,METASTAMP2)),"Current medication JSON version not found and it should be found")
  . ; Ensure previous version of the KEY is gone
  . D ASSERT(0,$D(^VPRPTJ("KEY",UID,PID,METASTAMP1)),"Previous medication KEY version found and it shouldn't be found")
  . D ASSERT(1,$D(^VPRPTJ("KEY",UID,PID,METASTAMP2)),"Current medication KEY version not found and it should be found")
  . ; Ensure previous version of the TEMPLATE is gone
- . D ASSERT(1,$G(^VPRPTJ("TEMPLATE",PID,UID,"dose",1))["""dose"":""70 MG""","Current medication TEMPLATE version not found and it should be found")
+ . D ASSERT(1,$G(^VPRPTJ("TEMPLATE",$$JPID4PID^VPRJPR(PID),PID,UID,"dose",1))["""dose"":""70 MG""","Current medication TEMPLATE version not found and it should be found")
  Q
 PATDATAll2 ;; @TEST Ensure previous versions of patient data are garbage collected (All Patients, order reversed - new stored first)
  ; Look at SAVE^VPRJPS to ensure all save actions are covered
@@ -315,16 +320,16 @@ PATDATAll2 ;; @TEST Ensure previous versions of patient data are garbage collect
  . S PID2=$TR(PID,";",":")
  . S UID="urn:va:med:"_PID2_":15231"
  . ; Ensure previous version of object is gone
- . D ASSERT(0,$D(^VPRPT(PID,UID,METASTAMP1)),"Previous medication ARRAY version found and it shouldn't be found")
- . D ASSERT(10,$D(^VPRPT(PID,UID,METASTAMP2)),"Current medication ARRAY version not found and it should be found")
+ . D ASSERT(0,$D(^VPRPT($$JPID4PID^VPRJPR(PID),PID,UID,METASTAMP1)),"Previous medication ARRAY version found and it shouldn't be found")
+ . D ASSERT(10,$D(^VPRPT($$JPID4PID^VPRJPR(PID),PID,UID,METASTAMP2)),"Current medication ARRAY version not found and it should be found")
  . ; Ensure previous version of JSON string is gone
- . D ASSERT(0,$D(^VPRPTJ("JSON",PID,UID,METASTAMP1)),"Previous medication JSON version found and it shouldn't be found")
- . D ASSERT(10,$D(^VPRPTJ("JSON",PID,UID,METASTAMP2)),"Current medication JSON version not found and it should be found")
+ . D ASSERT(0,$D(^VPRPTJ("JSON",$$JPID4PID^VPRJPR(PID),PID,UID,METASTAMP1)),"Previous medication JSON version found and it shouldn't be found")
+ . D ASSERT(10,$D(^VPRPTJ("JSON",$$JPID4PID^VPRJPR(PID),PID,UID,METASTAMP2)),"Current medication JSON version not found and it should be found")
  . ; Ensure previous version of the KEY is gone
  . D ASSERT(0,$D(^VPRPTJ("KEY",UID,PID,METASTAMP1)),"Previous medication KEY version found and it shouldn't be found")
  . D ASSERT(1,$D(^VPRPTJ("KEY",UID,PID,METASTAMP2)),"Current medication KEY version not found and it should be found")
  . ; Ensure previous version of the TEMPLATE is gone
- . D ASSERT(1,$G(^VPRPTJ("TEMPLATE",PID,UID,"dose",1))["""dose"":""70 MG""","Current medication TEMPLATE version not found and it should be found")
+ . D ASSERT(1,$G(^VPRPTJ("TEMPLATE",$$JPID4PID^VPRJPR(PID),PID,UID,"dose",1))["""dose"":""70 MG""","Current medication TEMPLATE version not found and it should be found")
  Q
 OPDATA ;; @TEST  Ensure previous versions of operational data are garbage collected
  ; Look at SAVE^VPRJPS to ensure all save actions are covered

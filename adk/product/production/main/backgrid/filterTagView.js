@@ -19,7 +19,7 @@ define('main/backgrid/filterTagView', [
         tagName: 'span',
         className: 'udaf-tag',
         events: {
-            'click a.clear-udaf-tag': 'clear'
+            'click button.clear-udaf-tag': 'clear'
         },
 
         clear: function(e) {
@@ -49,12 +49,12 @@ define('main/backgrid/filterTagView', [
             var filter = this.model.get('name');
             var workspaceId, instanceId;
             if (options.onUserWorkspace) {
-                this.template = _.template('<span class="btn btn-default btn-sm">' + filter +
-                    '<a href="#" class="clear-udaf-tag"><i class="fa fa-times-circle"></i><span class="sr-only">Press enter to delete ' + filter + ' filter</span></a></span>', null, {
+                this.template = _.template('<button type="button" class="clear-udaf-tag btn btn-info btn-sm btn-label bottom-margin-sm right-margin-xs" title="Press enter to remove ' + filter + '.">' + filter +
+                    '<i class="fa fa-times-circle left-margin-xs color-white"></i></button>', null, {
                         variable: null
                     });
             } else {
-                this.template = _.template('<span class="btn btn-default btn-sm">' + filter +
+                this.template = _.template('<span class="label label-info font-size-12 inline-block-display bottom-margin-xs right-margin-xs">' + filter +
                     '</span>', null, {
                         variable: null
                     });

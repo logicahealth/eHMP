@@ -1,0 +1,56 @@
+{ "categories" : [ "UnitTestCategory1",
+      "UnitTestCategory2"
+    ],
+  "context" : { "location" : { "codeSystem" : "VA:Location",
+          "entityType" : "Location",
+          "id" : "2883",
+          "name" : "ClinicOne",
+          "type" : "ClinicName"
+        },
+      "specialty" : null,
+      "subject" : { "codeSystem" : "VA:UniversalId",
+          "entityType" : "Subject",
+          "id" : "2299:2222:Junk",
+          "name" : null,
+          "type" : "Patient"
+        },
+      "user" : { "codeSystem" : "VA:Provider",
+          "entityType" : "User",
+          "id" : "unitTestUserId",
+          "name" : "TESR,USER",
+          "type" : "Provider"
+        }
+    },
+  "duplicateCheckKey" : { "checkSum" : "",
+      "subject" : { "codeSystem" : "VA:UniversalId",
+          "entityType" : "Subject",
+          "id" : "2299:2222:Junk",
+          "name" : null,
+          "type" : "Patient"
+        },
+      "type" : "advice"
+    },
+  "expirationDate" : 1443989700000,
+  "generationDate" : 1443903300000,
+  "id" : "2929289789573",
+  "invocationInfo" : { "callId" : "UUID of CallId",
+      "generatedBy" : "UnitTestRulesEngine",
+      "targetInfo" : { "intentsSet" : [ "InvocationIntentA" ],
+          "mode" : "Normal",
+          "perceivedExecutionTime" : null,
+          "supplementalMappings" : null,
+          "type" : "Background"
+        }
+    },
+  "payload" : [ { "data" : { "body" : "This is the body",
+            "callId" : "TheCallId",
+            "generatedBy" : "GeneratedBYUnitTest",
+            "provenance" : "Test Data",
+            "title" : "A Test Result",
+            "type" : "advice"
+          },
+        "type" : "advice"
+      } ],
+  "priority" : 0,
+  "type" : "advice"
+}

@@ -1,0 +1,18 @@
+<a href="#li-item" data-uniqueID="{{itemUniqueId}}" title="Press enter to open {{itemLabel}}">
+    <div class="col-xs-12 left-margin-lg">
+        <h5 id="{{groupLabel}}-{{summaryLabel}}-list-title-{{itemUniqueId}}" class="all-padding-no all-margin-no">
+            <span class="sr-only">Title: </span> {{itemLabel}}
+        </h5>
+        {{#if formattedReferenceDate}}
+            <p>
+            <span class="sr-only">Date/Time: </span>
+            <span id="{{groupLabel}}-note-list-date-{{itemUniqueId}}">{{{formattedReferenceDate}}}</span>
+            </p>
+        {{/if}}
+        {{#if itemStatus}}
+            <p>
+            <span id="{{groupLabel}}-note-list-status-{{itemUniqueId}}">Status: {{itemStatus}}</span>
+            </p>
+        {{/if}}
+    </div>
+</a>

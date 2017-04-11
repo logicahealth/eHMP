@@ -25,10 +25,10 @@ function setUpEnvironment() {
 		'vistaSites': {
 			'9E7A': _.defaults(wConfig.vistaSites['9E7A'], {
 				'name': 'panorama',
-				'host': 'IPADDRESS ',
+				'host': 'IP_ADDRESS',
 				'port': 9210,
-				'accessCode': 'PW    ',
-				'verifyCode': 'PW    !!',
+				'accessCode': 'PW',
+				'verifyCode': 'PW',
 				'localIP': '127.0.0.1',
 				'localAddress': 'localhost',
 				'connectTimeout': 3000,
@@ -36,10 +36,10 @@ function setUpEnvironment() {
 			}),
 			'C877': _.defaults(wConfig.vistaSites.C877, {
 				'name': 'kodak',
-				'host': 'IPADDRESS ',
+				'host': 'IP_ADDRESS',
 				'port': 9210,
-				'accessCode': 'PW    ',
-				'verifyCode': 'PW    !!',
+				'accessCode': 'PW',
+				'verifyCode': 'PW',
 				'localIP': '127.0.0.1',
 				'localAddress': 'localhost',
 				'connectTimeout': 3000,
@@ -68,7 +68,18 @@ describe('vista-subscribe.js', function() {
             runs(function() {
                 environment.vistaClient.getIds('9E7A', '3', wConfig.vistaSites['9E7A'].stationNumber, function(error, response) {
                     expect(error).toBeNull();
-                    expect(response).toEqual('10108V420871^NI^200M^USVHA^A\r\n3^PI^9E7A^USVHA^A^500\r\n3^PI^C877^USVHA^A^507\r\n32758^PI^^USVHA^A^742V1\r\n19^PI^2939^USVHA^A^536\r\n0000000003^NI^200DOD^USDOD^A^200DOD\r\n38^PI^76C6^USVHA^A^547\r\n28^PI^FFC7^USVHA^A^551\r\n');
+                    expect(response).toBeTruthy();
+                    var ids = response.split('\r\n');
+                    expect(_.isArray(ids)).toBe(true);
+                    console.log('ids: %j', ids);
+                    expect(ids).toContain('10108V420871^NI^USVHA^200M^A');
+                    expect(ids).toContain('3^PI^USVHA^500^A');
+                    expect(ids).toContain('3^PI^USVHA^507^A');
+                    expect(ids).toContain('32758^PI^USVHA^742V1^A');
+                    expect(ids).toContain('19^PI^USVHA^536^A');
+                    expect(ids).toContain('0000000003^NI^USDOD^200DOD^A');
+                    expect(ids).toContain('38^PI^USVHA^547^A');
+                    expect(ids).toContain('28^PI^USVHA^551^A');
                     completed = true;
                 });
             });

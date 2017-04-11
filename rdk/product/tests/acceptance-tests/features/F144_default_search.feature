@@ -17,8 +17,8 @@ Feature: F144 - eHMP Viewer GUI
       | familyName  | EIGHTEEN                                |
       | givenNames  | INPATIENT                               |
       | fullName    | EIGHTEEN,INPATIENT                      |
-      | genderName  | MALE                                    |
+      | genderName  | Male                                    |
       | sensitive   | false                                   |
-      | ssn         | *****0818                               |
-      | age         | 70                                      |
+      | ssn         | ***-**-0818                             |
+      | age         | 71                                      |
       | locationName| 7A GEN MED                              |

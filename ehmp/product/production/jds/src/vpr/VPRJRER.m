@@ -54,6 +54,7 @@ SETERROR(ERRCODE,MESSAGE) ; set error info into ^TMP("HTTPERR",$J)
  I ERRCODE=229 S HTTPERR=404,ERRNAME="No data on file"
  I ERRCODE=230 S ERRNAME="Invalid Patient Identifier passed"
  I ERRCODE=241 S HTTPERR=404,ERRNAME="A Site must be specified"
+ I ERRCODE=242 S HTTPERR=400,ERRNAME="Invalid query"
  ; Job Storage error codes
  I ERRCODE=231 S HTTPERR=404,TOPMSG="Not Found",ERRNAME="Missing job patient identifier"
  I ERRCODE=232 S HTTPERR=404,TOPMSG="Not Found",ERRNAME="Missing rootJobId"

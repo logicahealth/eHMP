@@ -12,6 +12,10 @@ class UnitDose
 
       console = Greenletters::Process.new(command,:transcript => logger, :timeout => 20)
 
+      console.on(:output, /Are you sure you want to continue connecting/i) do |process, match_data|
+        console << "YES\n"
+      end
+
       console.on(:output, /Do you wish to continue with this patient/i) do |process, match_data|
         console << "yes\n"
       end
@@ -55,8 +59,10 @@ class UnitDose
 
       console.start!
 
-      console.wait_for(:output, /password:/i)
-      console << "#{options[:password]}\n"
+      unless options[:ssh_key]
+        console.wait_for(:output, /password:/i)
+        console << "#{options[:password]}\n"
+      end
 
       console.wait_for(:output, /$/i)
       if options[:sudo]

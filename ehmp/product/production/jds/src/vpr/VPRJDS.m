@@ -9,7 +9,7 @@ SAVE(JSON) ; Save a JSON encoded object
  I $L($G(VPRJERR)) D SETERROR^VPRJRER(202,VPRJERR) QUIT ""
  S UID=$G(OBJECT("uid")) I '$L(UID) D SETERROR^VPRJRER(207) QUIT ""
  ; stampTime is a required field
- S STAMP=$G(OBJECT("stampTime")) I '$L(STAMP) D SETERROR^VPRJRER(221) QUIT ""
+ S STAMP=$G(OBJECT("stampTime")) I '$$ISSTMPTM^VPRSTMP(STAMP) D SETERROR^VPRJRER(221,"Invalid stampTime passed: "_STAMP) QUIT ""
  ;
  ; Parse out the collection, and key from the UID
  ; Currently assuming UID is urn:va:type:vistaAccount...
@@ -42,7 +42,11 @@ SAVE(JSON) ; Save a JSON encoded object
  S ^VPRSTATUSOD(SOURCE,DOMAIN,UID,STAMP,"stored")="1"
  L -^VPRSTATUSOD(SOURCE,DOMAIN,UID,STAMP)
  ; ** End Critical Section **
- D INDEX^VPRJDX(UID,.OLDOBJ,.OBJECT)
+ ;
+ ; If we have an OLDSTAMP, but no OLDOBJ it means that
+ ; the object on file was newer than the object currently
+ ; stored and we shouldn't update any indexes
+ I '((OLDSTAMP'="")&($D(OLDOBJ)=0)) D INDEX^VPRJDX(UID,.OLDOBJ,.OBJECT)
  ;
  Q $$URLENC^VPRJRUT(UID)  ; no errors
  ;

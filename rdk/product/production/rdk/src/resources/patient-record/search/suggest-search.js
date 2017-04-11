@@ -46,7 +46,6 @@ function suggestSearch(req, res) {
                     'terms.sort': 'count',
                     'terms.regex': '.*' + escapedQuery + '.*',
                     'terms.regex.flag': 'case_insensitive',
-                    wt: 'json'
                 }
             },
             // MedsSearchFrame.java in HMP
@@ -58,7 +57,6 @@ function suggestSearch(req, res) {
                     'terms.sort': 'count',
                     'terms.regex': '.*' + escapedQuery + '.*',
                     'terms.regex.flag': 'case_insensitive',
-                    wt: 'json'
                 }
             }, {
                 method: 'suggest',
@@ -67,7 +65,6 @@ function suggestSearch(req, res) {
                     //                fq: [
                     //                        'pid:' + reqQuery.pid
                     //                ],
-                    wt: 'json'
                 }
             }, {
                 method: 'select',
@@ -81,7 +78,6 @@ function suggestSearch(req, res) {
                     ],
                     q: '*' + escapedQuery + '*',
                     rows: 0,
-                    wt: 'json',
                     facet: 'true',
                     'facet.pivot': 'med_drug_class_name,qualified_name',
                     synonyms: 'true',

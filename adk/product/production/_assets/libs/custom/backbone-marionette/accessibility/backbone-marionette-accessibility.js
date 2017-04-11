@@ -186,31 +186,31 @@
             listbox.attr('role', 'listbox');
             options.attr('role', 'option');
 
-            var spanPrev = document.createElement('span');
-            spanPrev.setAttribute('class', 'sr-only');
-            spanPrev.innerHTML = 'Previous';
+            // var spanPrev = document.createElement('span');
+            // spanPrev.setAttribute('class', 'sr-only');
+            // spanPrev.innerHTML = 'Previous';
 
-            var spanNext = document.createElement('span');
-            spanNext.setAttribute('class', 'sr-only');
-            spanNext.innerHTML = 'Next';
+            // var spanNext = document.createElement('span');
+            // spanNext.setAttribute('class', 'sr-only');
+            // spanNext.innerHTML = 'Next';
 
-            prev.attr('role', 'button');
-            next.attr('role', 'button');
+            // prev.attr('role', 'button');
+            // next.attr('role', 'button');
 
-            prev.append(spanPrev);
-            next.append(spanNext);
+            // prev.append(spanPrev);
+            // next.append(spanNext);
 
             options.each(function() {
                 var item = $(this);
                 if (item.hasClass('active')) {
                     item.attr({
-                        'aria-selected': 'true',
-                        'tabindex': '0'
+                        'aria-selected': 'true'//,
+                        //'tabindex': '0'
                     });
                 } else {
                     item.attr({
-                        'aria-selected': 'false',
-                        'tabindex': '-1'
+                        'aria-selected': 'false'//,
+                        //'tabindex': '-1'
                     });
                 }
             });

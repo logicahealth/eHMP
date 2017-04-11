@@ -39,8 +39,8 @@ Given(/^user login with incorrect credentials$/) do
   con= LoginHTMLElements.instance
   TestSupport.wait_for_page_loaded
   con.perform_action('Facility', 'Panorama')
-  con.perform_action('AccessCode', '9E7a;PW    ')
-  con.perform_action('VerifyCode', 'PW')
+  con.perform_action('AccessCode', '9E7a;lu1234')
+  con.perform_action('VerifyCode', 'lU1234!!')
   con.perform_action('SignIn')
   #sleep 10
 end

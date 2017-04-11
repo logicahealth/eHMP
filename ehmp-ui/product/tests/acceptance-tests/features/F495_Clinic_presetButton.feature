@@ -2,7 +2,7 @@
 Feature: Enhance the Patient Selection Process - 
 
 Background:
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
     When the patient search screen is displayed
 
 @US8352 @US7514 @TC825 @TC1041 @DE1345

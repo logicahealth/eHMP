@@ -25,6 +25,7 @@ var jobUtil = require(global.VX_UTILS + 'job-utils');
 var VprUpdateOpData = require(global.VX_UTILS + 'VprUpdateOpData');
 var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 var metaStampUtil = require(global.VX_UTILS + 'metastamp-utils');
+var util = require('util');
 
 //---------------------------------------------------------------------------------
 // Constructor for this class - This class inherits from events.EventEmitter. (REMOVAL PENDING)
@@ -186,7 +187,10 @@ Poller.prototype._processResponse = function(error, wrappedResponse) {
         //---------------------------------------------------------------------------------------------------------------------
         self.hmpBatchSize = self.getBatchSize();
 
-        self.log.error('vista-record-poller.processResponse: Received failed message with hmpBatchSize=1.   Setting poller to skip this message. Error: %s; rawResponse: %s', error, wrappedResponse.rawResponse);
+        var errorMessage = util.format('vista-record-poller.processResponse: Received failed message with hmpBatchSize=1.   Setting poller to skip this message. Error: %s; rawResponse: %s', error, wrappedResponse.rawResponse);
+        self.errorPublisher.publishPollerError(self.vistaId, errorMessage, function(){});
+        self.log.error(errorMessage);
+
         var messagelastUpdateTime = self._extractLastUpdateFromRawResponse(wrappedResponse.rawResponse);
         if ((_.isString(messagelastUpdateTime)) && (!_.isEmpty(messagelastUpdateTime))) {
             self._storeLastUpdateTime({ lastUpdate: messagelastUpdateTime },  function (error, response) {
@@ -206,6 +210,11 @@ Poller.prototype._processResponse = function(error, wrappedResponse) {
         self.errorPublisher.publishPollerError(self.vistaId, error, function(){});
         self.success = false;
         self.hmpBatchSize = self.getBatchSize();
+        self.environment.metrics.warn('Vista record poller in error', {
+            'error': error,
+            'process': process.pid,
+            'site': self.vistaId
+        });
         self.log.error('vista-record-poller.processResponse: Failed to invoke vista [%s]', error);
         return poll(self, self.pollDelayMillis);
     } else {
@@ -238,14 +247,14 @@ Poller.prototype._processResponse = function(error, wrappedResponse) {
                     self.log.warn('vista-record-poller.processResponse: Failed to process records [%s]', error);
 
                     // hmmm, what should we do...?
-                    poll(self, this.pollDelayMillis);
+                    poll(self, self.pollDelayMillis);
                 } else {
                     self.log.debug('vista-record-poller.processResponse: Finished process batch of data');
                     poll(self);
                 }
             });
         } else {
-            poll(self, this.pollDelayMillis);
+            poll(self, self.pollDelayMillis);
         }
     }
 };
@@ -420,27 +429,46 @@ Poller.prototype._createJobsForUnsolicitedUpdates = function(data, callback){
     async.each(data.items, function(item, asyncCallback){
         if(item.collection === 'syncStart' && !item.rootJobId && !item.jobId){
             self.log.debug('vista-record-poller._createJobsForUnsolicitedUpdates: Found unsolicited update data: %j', item);
+
+            var metaStamp = item.metaStamp;
+            var errorMessage;
+            if(!metaStamp){
+                errorMessage = util.format('vista-record-poller._createJobsForUnsolicitedUpdates: unsolicited update syncStart missing metastamp: %j', item);
+                self.log.error(errorMessage);
+                self.errorPublisher.publishPollerError(self.vistaId, item, errorMessage, function(){});
+                return asyncCallback(null);
+            }
+
+            var syncStartDomain = metaStampUtil.getDomainFromMetastamp(metaStamp, self.vistaId);
+            if(!syncStartDomain){
+                errorMessage = util.format('vista-record-poller._createJobsForUnsolicitedUpdates: unable to determine domain of unsolicited update syncStart: %j', item);
+                self.log.error(errorMessage);
+                self.errorPublisher.publishPollerError(self.vistaId, item, errorMessage, function(){});
+                return asyncCallback(null);
+            }
+
             var newRootJobId = uuid.v4();
             var newJobId = newRootJobId;
-            var syncStartDomain = metaStampUtil.getDomainFromMetastamp(item.metaStamp, self.vistaId);
 
             self._createUnsolicitedUpdateJobStatus(self.vistaId, syncStartDomain, item.pid, newJobId, self.environment.jobStatusUpdater, self.log, function(error, response){
                 if(error){
-                    self.log.error('vista-record-poller._createJobsForUnsolicitedUpdates: got error when trying to create job status for unsolicited update. data: %j; error: %s', item, error);
-                } else {
-                    item.rootJobId = newRootJobId;
-                    item.jobId = newJobId;
+                    var errorMessage = util.format('vista-record-poller._createJobsForUnsolicitedUpdates: got error when trying to create job status for unsolicited update. data: %j; error: %s', item, error);
+                    self.log.error(errorMessage);
+                    self.errorPublisher.publishPollerError(self.vistaId, item, errorMessage, function(){});
+                    return asyncCallback(null);
                 }
 
+                item.rootJobId = newRootJobId;
+                item.jobId = newJobId;
                 taskResponses.push(response);
-                asyncCallback(error);
+                asyncCallback(null);
             });
         } else {
             asyncCallback(null);
         }
-    }, function(error){
-        self.log.debug('vista-record-poller._createJobsForUnsolicitedUpdates: completed method. error: %s, response: %s', error, taskResponses);
-        callback(error, taskResponses);
+    }, function() {
+        self.log.debug('vista-record-poller._createJobsForUnsolicitedUpdates: completed method. responses: %s', taskResponses);
+        callback(null, taskResponses);
     });
 };
 

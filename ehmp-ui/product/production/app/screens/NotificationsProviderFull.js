@@ -6,6 +6,7 @@ define([
 
     var screenConfig = {
         id: 'my-notifications-full',
+        context: 'staff',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

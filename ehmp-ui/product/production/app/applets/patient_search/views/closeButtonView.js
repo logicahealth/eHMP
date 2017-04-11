@@ -19,7 +19,7 @@ define([
         },
         closeSearchPage: function(e){
             e.preventDefault();
-            ADK.Navigation.navigate('cover-sheet');
+            ADK.Navigation.back();
         }
     });
 

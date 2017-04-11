@@ -6,5 +6,5 @@ When(/^the client requests COMMUNITY HEALTH SUMMARIES for the patient "([^"]*)" 
   end
   p request.path
   path = request.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end

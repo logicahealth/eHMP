@@ -1,12 +1,10 @@
 # Group FHIR
 
-## Medicationdispense get Medication Dispense [{{{path}}}{?subject.identifier}{&fields}]
+## Medicationdispense get Medication Dispense [{{{path}}}{?subject.identifier}]
 
 + Parameters
 
     :[subject.identifier]({{{common}}}/parameters/subject.identifier.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Fhir medicationdispense [GET]

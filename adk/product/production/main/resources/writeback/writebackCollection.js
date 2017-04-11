@@ -1,9 +1,9 @@
 define([
     'main/resources/abstract',
     'api/Messaging',
-    'api/ResourceService',
+    'api/PatientRecordService',
     'api/UserService'
-], function(Abstract, Messaging, ResourceService, UserService) {
+], function(Abstract, Messaging, PatientRecordService, UserService) {
     "use strict";
 
     var AbstractCollection = Abstract.Collection.extend({
@@ -34,7 +34,7 @@ define([
                 }
 
                 //keep a pointer to the logged in patient
-                this.patient = ResourceService.patientRecordService.getCurrentPatient();
+                this.patient = PatientRecordService.getCurrentPatient();
                 if (_.isUndefined(this.patient.get('pid'))) {
                     throw new Error('No patient has been selected.  Resource collection cannot be instanted without patient data available.');
                 }

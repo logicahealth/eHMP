@@ -1,0 +1,143 @@
+{
+    "resourceType": "Patient",
+    "extension": [
+        {
+            "url": "http://vistacore.us/fhir/profiles/@main#service-connected",
+            "valueCoding": {
+                "code": "Y",
+                "display": "Service Connected"
+            }
+        },
+        {
+            "url": "http://vistacore.us/fhir/profiles/@main#sensitive",
+            "valueBoolean": false
+        },
+        {
+            "url": "http://vistacore.us/fhir/profiles/@main#religion",
+            "valueCoding": {
+                "code": "urn:va:pat-religion:29",
+                "display": "UNKNOWN/NO PREFERENCE"
+            }
+        },
+        {
+            "url": "http://vistacore.us/fhir/profiles/@main#service-connected-percent",
+            "valueQuantity": {
+                "value": "0",
+                "units": "%"
+            }
+        }
+    ],
+    "text": {
+        "status": "generated",
+        "div": "<div>SEVEN,PATIENT. SSN: 666000007</div>"
+    },
+    "identifier": [
+        {
+            "system": "http://vistacore.us/fhir/id/uid",
+            "value": "urn:va:patient:9E7A:253:253"
+        },
+        {
+            "use": "official",
+            "system": "http://hl7.org/fhir/sid/us-ssn",
+            "value": "666000007"
+        },
+        {
+            "system": "http://vistacore.us/fhir/id/dfn",
+            "value": "253"
+        },
+        {
+            "system": "http://vistacore.us/fhir/id/pid",
+            "value": "9E7A;253"
+        },
+        {
+            "system": "http://vistacore.us/fhir/id/lrdfn",
+            "value": "394"
+        },
+        {
+            "system": "http://vistacore.us/fhir/id/icn",
+            "value": "10107V395912"
+        }
+    ],
+    "name": [
+        {
+            "use": "official",
+            "text": "SEVEN,PATIENT",
+            "family": [
+                "SEVEN"
+            ],
+            "given": [
+                "PATIENT"
+            ]
+        }
+    ],
+    "gender": "male",
+    "birthDate": "1935-04-07",
+    "contained": [
+        {
+            "resourceType": "Organization",
+            "_id": "abefa604-c309-4e41-cf9a-8a9cf11dc062",
+            "identifier": [
+                {
+                    "system": "http://vistacore.us/fhir/id/facility-code",
+                    "value": "998"
+                }
+            ],
+            "name": "ABILENE (CAA)"
+        }
+    ],
+    "managingOrganization": {
+        "reference": "#abefa604-c309-4e41-cf9a-8a9cf11dc062"
+    },
+    "telecom": [
+        {
+            "use": "work",
+            "system": "phone",
+            "value": "(222)555-7720"
+        },
+        {
+            "use": "home",
+            "system": "phone",
+            "value": "(222)555-8235"
+        }
+    ],
+    "address": [
+        {
+            "use": "home",
+            "line": [
+                "Any Street"
+            ],
+            "city": "Any Town",
+            "state": "WV",
+            "postalCode": ""
+        }
+    ],
+    "contact": [
+        {
+            "relationship": [
+                {
+                    "coding": [
+                        {
+                            "system": "http://hl7.org/fhir/patient-contact-relationship",
+                            "code": "family",
+                            "display": "Next of Kin"
+                        }
+                    ],
+                    "text": "Next of Kin"
+                }
+            ],
+            "name": {
+                "use": "usual",
+                "text": "VETERAN,BROTHER"
+            }
+        }
+    ],
+    "maritalStatus": {
+        "coding": [
+            {
+                "system": "http://hl7.org/fhir/v3/MaritalStatus",
+                "code": "UNK",
+                "display": "unknown"
+            }
+        ]
+    }
+}

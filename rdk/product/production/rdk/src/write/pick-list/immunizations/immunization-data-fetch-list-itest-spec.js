@@ -9,11 +9,11 @@ var log = sinon.stub(require('bunyan').createLogger({ name: 'immunization-data-f
 var configuration = {
     environment: 'development',
     context: 'HMP UI CONTEXT',
-    host: 'IP        ',
+    host: 'IP_ADDRESS',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'PW',
+    verifyCode: 'PW',
+    localIP: 'IPADDRES',
     localAddress: 'localhost'
 };
 

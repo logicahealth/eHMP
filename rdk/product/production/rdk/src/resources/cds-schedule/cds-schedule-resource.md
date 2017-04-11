@@ -2,7 +2,7 @@
 
 ## Cds schedule cds schedule [{{{path}}}]
 
-### Get [GET {{{path}}}/job{?id}{&jobname}{&fields}]
+### Get [GET {{{path}}}/job{?id}{&jobname}]
 
 Schedule resource
 
@@ -15,8 +15,6 @@ Get scheduled job(s)
     + id (string, optional) - id of schedule job
 
     + jobname (string, optional) - name of schedule job
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

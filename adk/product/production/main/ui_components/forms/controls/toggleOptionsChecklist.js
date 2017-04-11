@@ -79,12 +79,20 @@ define([
             this._privateAttributes = options._privateAttributes;
             this.listenTo(this._privateAttributes, 'change:disabled', this.render);
         },
+        onRender: function() {
+            this.previousValue = this.$el.find("input:checked").val();
+        },
         serializeModel: function(model) {
             return _.defaults(model.toJSON(), this._privateAttributes.toJSON());
         },
         updateModelValue: function(e) {
+            var currentValue = this.$el.find("input:checked").val();
             this.model.set(this.attributeMapping.columnItemValue, this.$el.find("input:checked").val() === "yes");
             this.trigger('row:radio:click');
+            if (this.previousValue !== currentValue) {
+                this.$el.trigger('toc.change.user.input');
+            }
+            this.previousValue = currentValue;
         }
     });
 
@@ -102,7 +110,12 @@ define([
             'control:TOC:checkbox:disable': 'disableCheckbox'
         },
         'checkbox:value:change': function(event) {
-            this.model.set('value', this.$(event.currentTarget).is(":checked"));
+            var currentValue = this.$(event.currentTarget).is(':checked');
+            this.model.set('value', currentValue);
+            if (this.previousValue !== currentValue) {
+                this.$el.trigger('toc.change.user.input');
+            }
+            this.previousValue = currentValue;
         },
         template: Handlebars.compile([
             '<legend class="sr-only">{{label}}</legend>',
@@ -163,6 +176,11 @@ define([
             }
         },
         modelEvents: {},
+        collectionEvents: {
+            'change.inputted': function() {
+                this.$el.trigger('toc.change.user.input');
+            }
+        },
         serializeModel: function(model) {
             return {
                 id: model.get(this.attributeMapping.id),
@@ -197,6 +215,9 @@ define([
             } else {
                 this.setColumnCollectionOnModel([]);
             }
+        },
+        onRender: function() {
+            this.previousValue = this.$('input:checkbox').is(':checked');
         },
         setColumnCollectionOnModel: function(array) {
             this.model.set(this.attributeMapping.columnCollection, new Backbone.Collection(array), {
@@ -261,6 +282,10 @@ define([
             'control:header:update': function(e, buttonDefinitions) {
                 this.columnHeaders.reset(buttonDefinitions);
             },
+            'toc.change.user.input': function(event) {
+                event.stopPropagation();
+                this.onUserInput.apply(this, arguments);
+            }
             // 'control:rows:add': function(e, rowDefinition) {
             //     _.defaults(rowDefinition, this.rowDefinitionDefault);
             //     this.collection.add(rowDefinition);

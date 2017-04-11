@@ -1,0 +1,7 @@
+"chef-server-update-slaves-%branch%" {
+	template = 'templates/chef-server-update-slaves-build.tpl'
+	description = "This build updates all aidk (jenkins) slaves with configuration and software changes."
+	
+   gitUrl = 'https://code.vistacore.us/scm/pi/chef-repo.git'
+   gitBranch = '%branch%'
+}

@@ -4,14 +4,13 @@ define(function() {
     var logonScreenConfig = {
         contentRegionLayout: "fullOne",
         id: "logon-screen",
-        appHeader: "none",
+        context: "logon",
         applets: [{
             id: "logon",
             title: "Sign In",
             region: "center"
         }],
-        patientRequired: false,
-        appFooter: "none"
+        patientRequired: false
     };
 
     return logonScreenConfig;

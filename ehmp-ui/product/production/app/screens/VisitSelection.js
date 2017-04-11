@@ -3,6 +3,7 @@ define(function() {
 
     return {
         id: "visit-select",
+        context: 'patient',
         contentRegionLayout: "gridTwo",
         appletHeader: "patient",
         applets: [

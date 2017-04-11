@@ -2,9 +2,9 @@ define([
     'main/resources/abstract',
     'api/Messaging',
     'api/UrlBuilder',
-    'api/ResourceService',
+    'api/PatientRecordService',
     'api/UserService'
-], function(Abstract, Messaging, UrlBuilder, ResourceService, UserService) {
+], function(Abstract, Messaging, UrlBuilder, PatientRecordService, UserService) {
     "use strict";
 
     var AbstractCollection = Abstract.Collection.extend({
@@ -36,7 +36,7 @@ define([
                 if (_.isUndefined(this.user.get('duz'))) {
                     throw new Error('No user has logged in.  Resource collection cannot be instanted without user data available.');
                 }
-                this.patient = ResourceService.patientRecordService.getCurrentPatient();
+                this.patient = PatientRecordService.getCurrentPatient();
                 if (_.isUndefined(this.patient.get('pid'))) {
                     throw new Error('No patient has been selected.  Resource collection cannot be instanted without patient data available.');
                 }

@@ -10,7 +10,7 @@ When(/^the client requests medication results for that patient "(.*?)"$/) do |pi
   temp.add_format("json")
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 Then(/^the results contain medication results$/) do |table|
@@ -18,7 +18,7 @@ Then(/^the results contain medication results$/) do |table|
   result_array = @json_object["entry"]
 
   json_verify = VerifyJsonRuntimeValue.new
-  json_verify.verify_json_runtime_vlaue(result_array, table)
+  json_verify.verify_json_runtime_value(result_array, table)
 end
 
 When(/^the client breaks glass and repeats a request for out\-patient medication results for that patient "(.*?)"$/) do |pid|
@@ -27,7 +27,7 @@ When(/^the client breaks glass and repeats a request for out\-patient medication
   #temp.add_parameter("domain", "imun")
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests out\-patient medication results for that sensitive patient "(.*?)"$/) do |pid|
@@ -36,7 +36,7 @@ When(/^the client requests out\-patient medication results for that sensitive pa
   #temp.add_parameter("domain", "imun")
   temp.add_acknowledge("false")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client breaks glass and repeats a request for in\-patient medication results for that patient "(.*?)"$/) do |pid|
@@ -45,7 +45,7 @@ When(/^the client breaks glass and repeats a request for in\-patient medication 
   #temp.add_parameter("domain", "imun")
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests in\-patient medication results for that sensitive patient "(.*?)"$/) do |pid|
@@ -54,7 +54,7 @@ When(/^the client requests in\-patient medication results for that sensitive pat
   #temp.add_parameter("domain", "imun")
   temp.add_acknowledge("false")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client breaks glass and repeats a request for out\-patient medication statement for that patient "(.*?)"$/) do |pid|
@@ -63,7 +63,7 @@ When(/^the client breaks glass and repeats a request for out\-patient medication
   #temp.add_parameter("domain", "imun")
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests out\-patient medication statement for that sensitive patient "(.*?)"$/) do |pid|
@@ -72,5 +72,5 @@ When(/^the client requests out\-patient medication statement for that sensitive 
   #temp.add_parameter("domain", "imun")
   temp.add_acknowledge("false")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end

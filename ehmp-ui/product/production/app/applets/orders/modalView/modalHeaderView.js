@@ -59,7 +59,6 @@ define([
                 }
             }
 
-            this.model.set('loading_progress', true);
             this.currentModel = (this.pageable) ? this.collection.fullCollection.at(this.modelIndex) : this.collection.at(this.modelIndex);
             this.currentModel.set({
                 "getDiscontinueBtnStatus": ordersUtil.getDiscontinueBtnStatus(this.currentModel),
@@ -70,7 +69,7 @@ define([
             });
 
             var orderId = this.currentModel.get('localId') + ';1';
-            var detailModel = new ADK.UIResources.Writeback.Orders.Model({
+            var detailModel = new ADK.UIResources.Writeback.Orders.Detail({
                 orderId: orderId
             });
 
@@ -78,7 +77,6 @@ define([
                 this.currentModel.set('detailSummary', model.get('detail'));
                 this.model.clear();
                 this.model.set(this.currentModel.attributes);
-                this.model.set('loading_progress', false);
 
                 //After rendering we maintain focus on the button that was clicked - 508 requirement
                 this.$('#' + event.currentTarget.id).focus();

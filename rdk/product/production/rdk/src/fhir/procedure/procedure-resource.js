@@ -2,8 +2,13 @@
 var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
-var procedure = require('./procedure.js');
+var procedure = require('./procedure');
 var fhirToJDSSearch = require('../common/utils/fhir-to-jds-search');
+var fhirResource = require('../common/entities/fhir-resource');
+var educations = require('./educations');
+var async = require('async');
+var confUtils = require('../conformance/conformance-utils');
+var conformance = require('../conformance/conformance-resource');
 
 function getResourceConfig() {
     return [{
@@ -20,6 +25,17 @@ function getResourceConfig() {
     }];
 }
 
+//Issue call to Conformance registration
+conformance.register(confUtils.domains.PROCEDURE, createConformanceData());
+
+function createConformanceData() {   
+    var resourceType = confUtils.domains.PROCEDURE;
+    var profileReference = 'http://www.hl7.org/FHIR/2015May/procedure.html';
+    var interactions = [ 'read', 'search-type'];
+
+    return confUtils.createConformanceData(resourceType, profileReference,
+            interactions, procedure.fhirToJDSAttrMap);
+}
 
 /**
  * @api {get} /fhir/patient/{id}/procedure Get Procedure
@@ -31,7 +47,7 @@ function getResourceConfig() {
  *
  * @apiExample {js}  Examples:
  *      // Limiting results count
- *      http://IP           /resource/fhir/patient/9E7A;253/procedure?_count=1
+ *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/procedure?_count=1
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/procedure.html">Procedure  FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
@@ -116,43 +132,90 @@ function getResourceConfig() {
  *      Invalid parameter values.
  * }
  */
+
+function buildBundle(results, req, total) {
+    var link;
+    if (req) {
+        link = [new fhirResource.Link(req.protocol + '://' + req.headers.host + req.originalUrl, 'self')];
+    }
+
+    var entry = [];
+    _.forEach(results, function(aResult) {
+        entry.push(new fhirResource.Entry(aResult));
+    });
+
+    return (new fhirResource.Bundle(link, entry, total));
+}
+
+function buildTask(req, res, module) {
+    // task function called by async
+    return function(callback) {
+        module.getData(req.app.config, req.logger, req.query.pid, req.query, function(err, inputJSON) {
+            if (nullchecker.isNotNullish(err)) {
+                return res.status(err.code).send(err.message);
+            }
+            var outJSON = module.convertToFhir(inputJSON.data.items, req);
+            return callback(err, outJSON);
+        });
+    };
+}
+
 function getProcedure(req, res) {
     var pid = req.query.pid;
     var params = req.query;
+    var domainFilter = params._tag;
 
     if (nullchecker.isNullish(pid)) {
         return res.status(rdk.httpstatus.bad_format).send('Missing required parameter: pid');
     }
 
     validateParams(req.query, /*onSuccess*/ function() {
-        procedure.getData(req.app.config, req.logger, pid, params, function(err, inputJSON) {
-            if (nullchecker.isNotNullish(err)) {
-                return res.status(err.code).send(err.message);
-            }
-            // If we decide to get the referenced order data - Note: requires callback!
-            // procedure.processFhirWithOrders(inputJSON, req, function(fhirBundle) {}
 
-            var fhirBundle = procedure.convertToFhir(inputJSON, req);
-            limitFHIRResultByCount(fhirBundle, params._count);
-            res.status(rdk.httpstatus.ok).send(fhirBundle);
+
+        var tasks;
+        switch (domainFilter) {
+            case 'procedure':
+                tasks = [buildTask(req, res, procedure)];
+                break;
+            case 'educations':
+                tasks = [buildTask(req, res, educations)];
+                break;
+            default:
+                tasks = [buildTask(req, res, procedure), buildTask(req, res, educations)];
+        }
+
+        async.parallel(tasks, function(err, results) {
+            if (err) {
+                return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
+            }
+
+            //-----------------------------------------------------------
+            // 1) consolidate all entries into a single array. Note, concat
+            //    will take leave out empty array items.
+            // 2) reduce total number of entries as specificed per _count
+            // 3) build and send final Bundle of all gathered entries.
+            //-----------------------------------------------------------
+
+            var resources = _.flatten(results);
+
+            limitFHIRResultByCount(resources, params._count);
+            var fhirBundle = buildBundle(resources, req, resources.length);
+
+            return res.status(rdk.httpstatus.ok).send(fhirBundle);
         });
+
     }, /*onError*/ function(errors) {
         return res.status(rdk.httpstatus.bad_request).send('Invalid parameters:' + fhirToJDSSearch.validationErrorsToString(errors));
-    });
+    }); //end-validateParams
 }
+
 
 function validateParams(params, onSuccess, onError) {
     // check common parameters
     fhirToJDSSearch.validateCommonParams(params, function() {
         // validate date
-        fhirToJDSSearch.validateDateParams(params, ['date'], function() {
-            if (procedure.isSortCriteriaValid(params, procedure.fhirToJDSMap)) {
-                onSuccess();
-            } else {
-                onError(['Unsupported _sort criteria. Supported attributes are: ' + _.keys(procedure.fhirToJDSMap)]);
-            }
-        }, onError);
-        // TODO: add validation for code param
+        fhirToJDSSearch.validateDateParams(params, ['date'], onSuccess, onError );
+        // TODO-FUTURE: add validation for code param
     }, onError);
 }
 
@@ -165,3 +228,4 @@ function limitFHIRResultByCount(fhirBundle, countStr) {
 
 module.exports.getResourceConfig = getResourceConfig;
 module.exports.getProcedure = getProcedure;
+module.exports.createConformanceData = createConformanceData;

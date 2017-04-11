@@ -2,7 +2,7 @@
 
 ## Visits [{{{path}}}]
 
-### Providers [GET {{{path}}}/providers{?facility.code}{&facility.name}{&order}{&fields}]
+### Providers [GET {{{path}}}/providers{?facility.code}{&facility.name}{&order}]
 
 + Parameters
 
@@ -11,8 +11,6 @@
     + facility.name (string, optional) - facility name
 
     :[order]({{{common}}}/parameters/order.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -41,7 +39,7 @@
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Locations [GET {{{path}}}/locations{?facility.code}{&provider.name}{&limit}{&order}{&fields}]
+### Locations [GET {{{path}}}/locations{?facility.code}{&provider.name}{&limit}{&order}]
 
 + Parameters
 
@@ -52,8 +50,6 @@
     :[limit]({{{common}}}/parameters/limit.md)
 
     :[order]({{{common}}}/parameters/order.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

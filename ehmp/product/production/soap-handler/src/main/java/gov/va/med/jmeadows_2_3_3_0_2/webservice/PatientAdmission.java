@@ -20,11 +20,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="patientAdmission">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.domain.ext/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="admissionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="admissionId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="admittingProvider" type="{http://webservice.vds.domain.ext/}provider" minOccurs="0"/>
+ *         &lt;element name="admittingProvider" type="{http://webservice.vds.DNS       /}provider" minOccurs="0"/>
  *         &lt;element name="admittingUserIen" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="codingCompleteDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="dischargeSummaryId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -32,9 +32,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="division" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="drg" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="drgDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="encounterDocuments" type="{http://webservice.vds.domain.ext/}encounterDocument" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="provider" type="{http://webservice.vds.domain.ext/}provider" minOccurs="0"/>
- *         &lt;element name="reason" type="{http://webservice.vds.domain.ext/}code" minOccurs="0"/>
+ *         &lt;element name="encounterDocuments" type="{http://webservice.vds.DNS       /}encounterDocument" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="provider" type="{http://webservice.vds.DNS       /}provider" minOccurs="0"/>
+ *         &lt;element name="reason" type="{http://webservice.vds.DNS       /}code" minOccurs="0"/>
  *         &lt;element name="reasonNarrative" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="recordStatus" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="registerNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -53,7 +53,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "patientAdmission", namespace = "http://webservice.vds.domain.ext/", propOrder = {
+@XmlType(name = "patientAdmission", namespace = "http://webservice.vds.DNS       /", propOrder = {
     "admissionDate",
     "admissionId",
     "admittingProvider",

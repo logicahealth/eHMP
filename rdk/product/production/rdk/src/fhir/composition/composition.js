@@ -9,10 +9,47 @@
 var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
-var helpers = require('../common/utils/helpers.js');
+var helpers = require('../common/utils/helpers');
 var fhirResource = require('../common/entities/fhir-resource');
 var fhirUtils = require('../common/utils/fhir-converter');
 var constants = require('../common/utils/constants');
+var confUtils = require('../conformance/conformance-utils');
+var conformance = require('../conformance/conformance-resource');
+
+var fhirToJDSAttrMap = [{
+    fhirName: 'subject.identifier',
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier - note that this patient identifier will overrule any patient identifier that is in the URI of this endpoint.',
+    searchable: true
+},{
+    fhirName: 'pid',
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier - note that this patient identifier will overrule any patient identifier that has been specified in the URI of this endpoint as well as the subject.identifier on the query string.',
+    searchable: true
+},{
+    fhirName: 'type',
+    //Note:  There is no VPR name directly associated with this value, but the value it is based on is related to 'kind'.
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Kind of composition (LOINC if possible)  Currently this is optional, but supported options are 34745-0 and 34765-8.',
+    searchable: true
+}];
+
+// Issue call to Conformance registration
+conformance.register(confUtils.domains.COMPOSITION, createCompositionConformanceData());
+
+function createCompositionConformanceData() {   
+   var resourceType = confUtils.domains.COMPOSITION;
+   var profileReference = 'http://hl7.org/fhir/2015MAY/composition.html';
+   var interactions = [ 'read', 'search-type' ];
+
+   return confUtils.createConformanceData(resourceType, profileReference,
+           interactions, fhirToJDSAttrMap);
+}
 
 
 var jdsToFHIRStatusMap = {
@@ -34,7 +71,7 @@ function convertToFhir(result, req) {
     _.forEach(items, function(item) {
         entry.push(new fhirResource.Entry(convertToComposition(item, req)));
     });
-    return new fhirResource.Bundle2(link, entry, result.data.totalItems);
+    return new fhirResource.Bundle(link, entry, result.data.totalItems);
 }
 
 function buildAttester(clinicians) {
@@ -53,7 +90,7 @@ function buildAttester(clinicians) {
                 ]
             };
             if (nullchecker.isNotNullish(clinician.signedDateTime)) {
-                attester.time = fhirUtils.convertToFhirDateTime(clinician.signedDateTime);
+                attester.time = fhirUtils.convertToFhirDateTime(clinician.signedDateTime, fhirUtils.getSiteHash(clinician.uid));
             }
             attesters.push(attester);
         }
@@ -179,7 +216,7 @@ function convertToComposition(jdsItem, req) {
     var fhirItem = new fhirResource.Composition(helpers.generateUUID());
     fhirItem.contained = [];
     fhirItem.identifier = new fhirResource.Identifier(jdsItem.uid, constants.composition.COMPOSITION_UID_IDENTIFIER_SYSTEM);
-    fhirItem.date = fhirUtils.convertToFhirDateTime(jdsItem.lastUpdateTime); // REQUIRED
+    fhirItem.date = fhirUtils.convertToFhirDateTime(jdsItem.lastUpdateTime, fhirUtils.getSiteHash(jdsItem.uid)); // REQUIRED
     fhirItem.type = // REQUIRED
         new fhirResource.CodeableConcept(jdsItem.documentTypeName,
             new fhirResource.Coding(jdsItem.documentTypeCode, null, constants.composition.COMPOSITION_UID_IDENTIFIER_SYSTEM));
@@ -215,3 +252,4 @@ function convertToComposition(jdsItem, req) {
 
 module.exports.convertToFhir = convertToFhir;
 module.exports.convertToComposition = convertToComposition;
+module.exports.createCompositionConformanceData = createCompositionConformanceData;

@@ -6,20 +6,8 @@
     <persistence-mode>JPA</persistence-mode>
     <runtime-strategy>SINGLETON</runtime-strategy>
     <marshalling-strategies/>
-    <event-listeners>
-        <event-listener>
-            <resolver>reflection</resolver>
-            <identifier>gov.va.jbpm.eventlisteners.CustomProcessEventListener</identifier>
-            <parameters/>
-        </event-listener>
-    </event-listeners>
-    <task-event-listeners>
-        <task-event-listener>
-            <resolver>reflection</resolver>
-            <identifier>gov.va.jbpm.eventlisteners.CustomTaskEventListener</identifier>
-            <parameters/>
-        </task-event-listener>
-    </task-event-listeners>
+    <event-listeners/>
+    <task-event-listeners/>
     <globals/>
     <work-item-handlers>
         <work-item-handler>

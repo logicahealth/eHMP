@@ -1,0 +1,27 @@
+{
+  "id": "aws",
+  "aws_access_key_id": {
+    "encrypted_data": "xPZnx98uCb3FMOjYitihsdLHYMITGtbtqErEQP6VKKYB0ljEUMmxV3Rz3FS6\n8ZQY\n",
+    "iv": "PKD0cxqatAUQOtFlLiYGZA==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "aws_secret_access_key": {
+    "encrypted_data": "bu4+MGFabld7Fc2odu2mi5oCvZTmaBWD/72P3p4ljHIPuFF7LXw/Qs5HviAi\n/tp92xrcm35tLmVA0G8OB8qpIA==\n",
+    "iv": "c2/6KPWSinMBbniql61oZQ==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "region": {
+    "encrypted_data": "deVwTWmZWBoE8mElW0viIPfXxUaJpXGr71G6CdPRUpc=\n",
+    "iv": "JY/9fDusuarpX0a3ada7ew==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "output": {
+    "encrypted_data": "+on1VSFDL4IuN+gY59tfOQIGMZjVl5Q36iuj5N27+vQ=\n",
+    "iv": "02Zeu259MTa2UYPERjzD5g==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}

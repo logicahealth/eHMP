@@ -1,12 +1,5 @@
 {
 	"parameters": {
-		"fields": {
-			"name": "fields",
-			"paramType": "query",
-			"type": "string",
-			"values": [
-			]
-		},
 		"uri": {
 			"name": "uri",
 			"paramType": "query",

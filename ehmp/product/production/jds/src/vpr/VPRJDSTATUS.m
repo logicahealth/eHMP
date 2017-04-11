@@ -33,19 +33,19 @@ SET(ARGS,BODY) ; Store operational data metastamp from a source
  ; Overall stampTime
  S SOURCESTAMP=$G(@OBJECT@("sourceMetaStamp",SOURCE,"stampTime"))
  ; Ensure overall stampTime is valid
- I '$$ISSTMPTM^VPRSTMP(SOURCESTAMP) D SETERROR^VPRJRER(228,"Invalid Source stampTime passed") Q ""
+ I '$$ISSTMPTM^VPRSTMP(SOURCESTAMP) D SETERROR^VPRJRER(228,"Invalid Source stampTime passed: "_SOURCESTAMP) Q ""
  ; Loop through the sourceMetaStamp
  S DOMAIN=""
  S ERR=0
  F  S DOMAIN=$O(@OBJECT@("sourceMetaStamp",SOURCE,"domainMetaStamp",DOMAIN)) Q:DOMAIN=""  Q:ERR  D
  . ; Ensure Domain stampTimes is valid
  . S DOMAINSTAMP=$G(@OBJECT@("sourceMetaStamp",SOURCE,"domainMetaStamp",DOMAIN,"stampTime"))
- . I '$$ISSTMPTM^VPRSTMP(DOMAINSTAMP) D SETERROR^VPRJRER(228,"Invalid Domain stampTime passed") S ERR=1 Q
+ . I '$$ISSTMPTM^VPRSTMP(DOMAINSTAMP) D SETERROR^VPRJRER(228,"Invalid Domain "_DOMAIN_" stampTime passed: "_DOMAINSTAMP) S ERR=1 Q
  . ; Ensure item stampTimes is valid
  . S ITEM=""
  . F  S ITEM=$O(@OBJECT@("sourceMetaStamp",SOURCE,"domainMetaStamp",DOMAIN,"itemMetaStamp",ITEM)) Q:ITEM=""  Q:ERR  D
  . . S ITEMSTAMP=$G(@OBJECT@("sourceMetaStamp",SOURCE,"domainMetaStamp",DOMAIN,"itemMetaStamp",ITEM,"stampTime"))
- . . I '$$ISSTMPTM^VPRSTMP(ITEMSTAMP) D SETERROR^VPRJRER(228,"Invalid item stampTime passed") S ERR=1 Q
+ . . I '$$ISSTMPTM^VPRSTMP(ITEMSTAMP) D SETERROR^VPRJRER(228,"Invalid item "_ITEM_" stampTime passed: "_ITEMSTAMP) S ERR=1 Q
  I ERR Q ""
  ;
  ; Everything is ok, store the metastamp
@@ -147,7 +147,7 @@ DATA(RESULT,ID,DETAILED,CLAUSES) ; GET Operational Data Sync Status algorithm
  ;
  F  S DOMAIN=$O(^VPRSTATUSOD(SOURCE,DOMAIN)) Q:DOMAIN=""  D
  . ; skip non domain subscripts
- . I DOMAIN="stampTime" Q
+ . I DOMAIN="stampTime"!(DOMAIN="syncCompleteAsOf") Q
  . ;
  . ; Set the domain stampTime
  . ; A is the first character after numerics so we can run the $O backwards
@@ -195,6 +195,15 @@ DATA(RESULT,ID,DETAILED,CLAUSES) ; GET Operational Data Sync Status algorithm
  . . I DETAILED S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"itemMetaStamp",ITEM,"stampTime")=ITEMSTAMP
  . . ;
  . . I DETAILED,ITEMSTORED S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"itemMetaStamp",ITEM,"stored")="true"
+ . ;
+ . ; Set the flags to control syncCompleted for the domain and inProgress/completedStamp for the entire site
+ . I ITEMSCOMPLETE,DOMAINSTAMP'="" D
+ . . ; domain is complete
+ . . S DOMAINSTORED=1
+ . E  D
+ . . ; set entire site inProgress - domain is not complete
+ . . S DOMAINCOMPLETE=0
+ . ;
  . ; TOTAL will be one extra from the loop before it quits at end of data
  . S TOTAL=TOTAL-1
  . ; Filters for domain data when not in detailed mode
@@ -207,14 +216,9 @@ DATA(RESULT,ID,DETAILED,CLAUSES) ; GET Operational Data Sync Status algorithm
  . ; All clauses are wrapped in an implicit AND
  . I $D(CLAUSES),'$$EVALAND^VPRJGQF(.CLAUSES,$NA(DOMAINARRAY)) Q
  . ;
- . ; Set the stored flag if all of the items are complete and DOMAINSTAMP isn't null
- . I ITEMSCOMPLETE,DOMAINSTAMP'="" D
- . . S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"syncCompleted")="true"
- . . S DOMAINSTORED=1
- . E  D
- . . S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"syncCompleted")="false"
- . . S DOMAINCOMPLETE=0
- . ;
+ . ; If we pass the filter add the syncCompleted for the domain
+ . S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"syncCompleted")=$S(DOMAINSTORED:"true",1:"false")
+  . ;
  . ; If domainstamp is null set the domain stampTime to the latest item stamp
  . I DOMAINSTAMP="",ITEMSTAMP>DOMAINSTAMP D
  . . S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"stampTime")=ITEMSTAMP
@@ -226,8 +230,14 @@ DATA(RESULT,ID,DETAILED,CLAUSES) ; GET Operational Data Sync Status algorithm
  . S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"itemCount")=TOTAL
  . S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"storedCount")=COMPLETE
  ; Set the complete flag if all of the domains were complete
- I $G(DOMAINCOMPLETE) S @BUILD@("sourceMetaStamp",SSOURCE,"syncCompleted")="true" M @RESULT@("completedStamp")=@BUILD
- E  M @RESULT@("inProgress")=@BUILD
+ I $G(DOMAINCOMPLETE) D
+ . S @BUILD@("sourceMetaStamp",SSOURCE,"syncCompleted")="true"
+ . S ^VPRSTATUSOD(SOURCE,"syncCompleteAsOf")=$$CURRTIME^VPRJRUT
+ . S @BUILD@("sourceMetaStamp",SSOURCE,"syncCompleteAsOf")=$G(^VPRSTATUSOD(SOURCE,"syncCompleteAsOf"))
+ . M @RESULT@("completedStamp")=@BUILD
+ E  D
+ . S:$G(^VPRSTATUSOD(SOURCE,"syncCompleteAsOf"))'="" @BUILD@("sourceMetaStamp",SSOURCE,"syncCompleteAsOf")=$G(^VPRSTATUSOD(SOURCE,"syncCompleteAsOf"))
+ . M @RESULT@("inProgress")=@BUILD
  K @BUILD
  ;
 DEL(RESULT,ARGS) ; Delete all sync status data

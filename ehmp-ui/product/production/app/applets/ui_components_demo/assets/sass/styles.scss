@@ -70,6 +70,20 @@
     }
 }
 
-body.ui-components-demo {
-    background-color: #FFFFFF;
+body.ui-components-demo #center-region {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background: #FFFFFF;
+    padding-bottom: 50px;
+}
+
+#select2-select15-results {
+    > li {
+        &:first-child {
+            background-color: $primary-lighter;
+        }
+        &.select2-results__message, &.loading-results {
+            background-color: $pure-white;
+        }
+    }
 }

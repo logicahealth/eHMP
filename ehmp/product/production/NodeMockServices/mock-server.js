@@ -19,13 +19,21 @@ var expected_type = 'json';
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
-app.get('/repositories.domain.ext/fpds/:domain', function(req, res) {
+app.get('/repositories.DNS       /fpds/:domain', function(req, res) {
     var templateId = req.param('templateId');
     var filterId = req.param('filterId');
     var clientName = req.param('clientName');
     var requestId = req.param('requestId');
     var clientRequestInitiationTime = req.param('clientRequestInitiationTime');
     var type = req.param('_type');
+
+    var excludeIdentifier = req.param('excludeIdentifier');
+
+    if((typeof excludeIdentifier === 'string' || Array.isArray(excludeIdentifier)) && excludeIdentifier.length > 0) {
+        logger.info('mock-server -> "excludeIdentifier" parameter passed for "site blacklist" feature with value of: %s', excludeIdentifier);
+    } else {
+        logger.info('mock-server -> "excludeIdentifier" parameter not passed or passed without a value: %s', excludeIdentifier);
+    }
 
     var message = '';
     if ((!templateId) || (templateId != expected_template)) {
@@ -47,7 +55,7 @@ app.get('/repositories.domain.ext/fpds/:domain', function(req, res) {
         message = appendToMessage(message, 'Missing required parameter clientRequestInitiationTime');
     }
 
-    if (message != '') {
+    if (message !== '') {
         logger.error(message);
         res.status(bad_request).send(message);
     } else {
@@ -55,7 +63,7 @@ app.get('/repositories.domain.ext/fpds/:domain', function(req, res) {
         var domain = req.params.domain;
         logger.debug('Received request for ' + domain + ' for ' + pid);
 
-        mockHdrProcess.fetchHdrData(pid, domain, res);
+        mockHdrProcess.fetchHdrData(pid, domain, excludeIdentifier, res);
     }
 });
 
@@ -72,8 +80,8 @@ var server = app.listen(app.config.port, function() {
 });
 
 function appendToMessage(message, appendix) {
-    if (message == '') {
+    if (message === '') {
         return appendix;
     }
     return message + '; ' + appendix;
-} 
+}

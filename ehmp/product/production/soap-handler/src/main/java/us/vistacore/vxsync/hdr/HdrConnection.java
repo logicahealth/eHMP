@@ -7,6 +7,7 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.net.ssl.HostnameVerifier;
@@ -22,11 +23,7 @@ import org.apache.commons.lang.time.DateFormatUtils;
 
 import us.vistacore.vxsync.config.HdrConfiguration;
 
-/**
- * Created by kumblep on 1/14/15.
- */
-public class HdrConnection
-{
+public class HdrConnection {
     public static final String DIVISION="500";
     private static final Logger LOG = LoggerFactory.getLogger(HdrConnection.class);
     private static HdrConfiguration hdrConfig;
@@ -44,64 +41,78 @@ public class HdrConnection
     @param - String icn,String domain
     @return - String - URL
      */
-    public static String getURL(String icn,String domain)
-    {
-         String requestId = UUID.randomUUID().toString().trim();
-         String clientRequestInitiationTime = DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(new Date());
-    	 String answer = hdrConfig.getProtocol() + "://" + hdrConfig.getUri() + hdrConfig.getPath() + domain +
-                         "?_type=json&clientName=HMP&templateId=GenericObservationRead1&" +
-                         "filterId=GENERIC_VISTA_LIST_DATA_FILTER&nationalId=" + icn + "&requestId=" + requestId + "&clientRequestInitiationTime=" + clientRequestInitiationTime;
-         LOG.debug("Using HDR url: " + answer);
-         return answer;
+    public static String getURL(String icn, String domain, List<String> excludeIdentifiers) {
+        String requestId = UUID.randomUUID().toString().trim();
+        String clientRequestInitiationTime = DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(new Date());
+        String answer = hdrConfig.getProtocol() + "://" + hdrConfig.getUri() + hdrConfig.getPath() + domain +
+                "?_type=json&clientName=HMP&templateId=GenericObservationRead1&" +
+                "filterId=GENERIC_VISTA_LIST_DATA_FILTER&nationalId=" + icn + "&requestId=" + requestId +
+                "&clientRequestInitiationTime=" + clientRequestInitiationTime;
+
+        for (String excludeIdentifier : excludeIdentifiers) {
+            answer += "&excludeIdentifier=" + excludeIdentifier;
+        }
+
+        LOG.debug("Using HDR url: " + answer);
+
+        return answer;
     }
+
+    // public static HttpURLConnection createConnection(URL url) throws IOException {
+    //     if (hdrConfig.getProtocol().equals("https")) {
+    //         // configure();
+    //     }
+
+    //     return (HttpURLConnection)url.openConnection();
+    // }
 
     public static HttpURLConnection createConnection(URL url) throws IOException {
         if (hdrConfig.getProtocol().equals("https")) {
             // configure();
-            return (HttpsURLConnection) url.openConnection();
+            return (HttpsURLConnection)url.openConnection();
         }
-        return (HttpURLConnection) url.openConnection();
+
+        return (HttpURLConnection)url.openConnection();
     }
 
-
     public static void configure() {
-        TrustManager[] certs = new TrustManager[]
-                {
-                        new X509TrustManager() {
-                            @Override
-                            public X509Certificate[] getAcceptedIssuers() {
-                                return null;
-                            }
-                            @Override
-                            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException { }
-                            @Override
-                            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException { }
-                        }
-                };
+        TrustManager[] certs = new TrustManager[] {
+            new X509TrustManager() {
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException { }
+
+                @Override
+                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException { }
+            }
+        };
+
         SSLContext ctx = null;
+
         try {
             ctx = SSLContext.getInstance("TLS");
             ctx.init(null, certs, new SecureRandom());
         } catch (java.security.GeneralSecurityException ex) {
             LOG.warn("GeneralSecurityException while configuring HttpsURLConnection.", ex);
         }
-        if(ctx == null)
-        {
+
+        if (ctx == null) {
             LOG.warn("CTX variable is null");
+            return;
         }
-        else
-        {
-            HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
 
-            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
-            LOG.debug("ConnectionBuilder.configure: Configuration finished.");
-        }
+        HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
+        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        });
+
+        LOG.debug("ConnectionBuilder.configure: Configuration finished.");
     }
-
-
 }
 

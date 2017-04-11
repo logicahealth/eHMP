@@ -8,6 +8,7 @@ define([
     };
     var config = {
         id: 'diabetes-mellitus-cbw',
+        context: 'patient',
         contentRegionLayout: 'gridster',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',
@@ -15,7 +16,7 @@ define([
         freezeApplets: true, //if true, applets won't be draggable and resizable by gridster
         applets: [{
             "id": "problems",
-            "title": "Conditions",
+            "title": "Problems",
             "instanceId": "dmcbw-problems-1",
             "region": "dmcbw-problems-1",
             "maximizeScreen": "problems-full",
@@ -28,7 +29,7 @@ define([
             "dataMaxSizeX": 8,
             "dataMaxSizeY": 12,
             "viewType": "gist",
-            "filterName": "Filtered Diabetes"
+            "filterName": "Diabetes"
         }, {
             "id": "newsfeed",
             "title": "Timeline",
@@ -42,7 +43,7 @@ define([
             "dataMinSizeY": 4,
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Diabetes",
+            "filterName": "Diabetes",
             "viewType": "summary",
             "maximizeScreen": "news-feed"
         }, {
@@ -58,7 +59,7 @@ define([
             "dataMaxSizeY": 12,
             "dataMinSizeX": 8,
             "dataMinSizeY": 4,
-            "filterName": "Filtered Diabetes",
+            "filterName": "Diabetes",
              "viewType": "expanded"
         }, {
             "id": "appointments",
@@ -73,7 +74,7 @@ define([
             "dataMinSizeY": 4,
             "dataSizeX": "4",
             "dataSizeY": "4",
-            "filterName": "Filtered Diabetes",
+            "filterName": "Diabetes",
             "maximizeScreen": "appointments-full",
             "viewType": "summary"
         }, {
@@ -89,7 +90,7 @@ define([
             "dataMinSizeY": 4,
             "dataSizeX": "4",
             "dataSizeY": "4",
-            "filterName": "Filtered Diabetes",
+            "filterName": "Diabetes",
             "maximizeScreen": "orders-full",
             "viewType": "summary"
         }, {
@@ -105,7 +106,7 @@ define([
             "dataMinSizeY": 4,
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Diabetes",
+            "filterName": "Diabetes",
             "maximizeScreen": "cds-advice-full",
             "viewType": "summary"
         }, {
@@ -121,7 +122,7 @@ define([
             "dataMinSizeY": 4,
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Diabetes",
+            "filterName": "Diabetes",
             "viewType": "summary"
         }, {
             "id": "medication_review",
@@ -136,7 +137,7 @@ define([
             "dataMinSizeY": 4,
             "dataSizeX": "8",
             "dataSizeY": "4",
-            "filterName": "Filtered Diabetes",
+            "filterName": "Diabetes",
             "viewType": "expanded",
             "maximizeScreen": "medication-review"
         }, {
@@ -152,7 +153,7 @@ define([
             "dataMinSizeY": 4,
             "dataSizeX": "4",
             "dataSizeY": "4",
-            "filterName": "Filtered Diabetes",
+            "filterName": "Diabetes",
             "viewType": "summary",
             "maximizeScreen": "documents-list"
         }],

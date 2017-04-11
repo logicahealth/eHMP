@@ -58,14 +58,14 @@ When(/^the client requests demographics for that patient "(.*?)"$/) do |uid|
   # temp.add_parameter("urn:va:patient:", pid)
   #temp.add_format("json")
   #p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^a user "(.*?)" with password "(.*?)" requests demographics for that patient "(.*?)"$/) do |user, pass, pid|
   temp = QueryRDK.new("patient")
   temp.add_parameter("_id", pid)
   #p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization_for_user(temp.path, user, pass)
+  @response = HTTPartyRDK.get_as_user(temp.path, user, pass)
 end
 
 When(/^the client breaks glass and repeats a request for demographics for that patient "(.*?)"$/) do |pid|
@@ -73,7 +73,7 @@ When(/^the client breaks glass and repeats a request for demographics for that p
   #temp.add_parameter("_id", pid)
   #temp.add_format("json")
   #p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests demographics for that sensitive patient "(.*?)"$/) do |pid|
@@ -81,11 +81,11 @@ When(/^the client requests demographics for that sensitive patient "(.*?)"$/) do
   #temp.add_parameter("_id", pid)
   #temp.add_format("json")
   #p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests demographics for the patient "(.*?)" in VPR format$/) do |pid|
   p path = QueryVPR.new("patient", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 

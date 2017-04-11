@@ -2,7 +2,7 @@
 Feature: Build a Activity Management Framework Environment
 
 Background:
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
     When the patient search screen is displayed
     When the user selects My Workspace from the navigation bar
     Then Provider Centric View is active

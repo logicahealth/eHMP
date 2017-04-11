@@ -20,14 +20,18 @@
             {{else}}
                 <td>N/A</td>
             {{/if}}
-            {{#ifExp low '===' 0}}
-                <td>{{low}} {{units}} {{#if high}} - {{high}} {{units}} {{/if}}</td>
+            {{#ifExp typeName '===' "Pain"}}
+                <td>N/A</td>
             {{else}}
-                {{#if low}}
-                    <td>{{low}}{{units}} {{#if high}} - {{high}}{{units}} {{/if}}</td>
-                    {{else}}
-                    <td>N/A</td>
-                {{/if}}
+                {{#ifExp low '===' 0}}
+                    <td>{{low}} {{units}} {{#if high}} - {{high}} {{units}} {{/if}}</td>
+                {{else}}
+                    {{#if low}}
+                        <td>{{low}}{{units}} {{#if high}} - {{high}}{{units}} {{/if}}</td>
+                        {{else}}
+                        <td>N/A</td>
+                    {{/if}}
+                {{/ifExp}}
             {{/ifExp}}
             <td>{{facilityMoniker}}</td>
         </tr>
@@ -43,14 +47,18 @@
             {{else}}
                 <td>N/A</td>
             {{/if}}
-            {{#ifExp attributes.low '===' 0}}
-                <td>{{attributes.low}} {{attributes.units}} {{#if attributes.high}} - {{attributes.high}} {{attributes.units}} {{/if}}</td>
+            {{#ifExp attributes.typeName '===' "Pain"}}
+                <td>N/A</td>
             {{else}}
-                {{#if attributes.low}}
-                    <td>{{attributes.low}}{{attributes.units}} {{#if attributes.high}} - {{attributes.high}}{{attributes.units}} {{/if}}</td>
-                    {{else}}
-                    <td>N/A</td>
-                {{/if}}
+                {{#ifExp attributes.low '===' 0}}
+                    <td>{{attributes.low}} {{attributes.units}} {{#if attributes.high}} - {{attributes.high}} {{attributes.units}} {{/if}}</td>
+                {{else}}
+                    {{#if attributes.low}}
+                        <td>{{attributes.low}}{{attributes.units}} {{#if attributes.high}} - {{attributes.high}}{{attributes.units}} {{/if}}</td>
+                        {{else}}
+                        <td>N/A</td>
+                    {{/if}}
+                {{/ifExp}}
             {{/ifExp}}
             <td>{{attributes.facilityMoniker}}</td>
         </tr>

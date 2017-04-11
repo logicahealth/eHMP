@@ -21,7 +21,7 @@ var config = {
     },
     jds: _.defaults(wConfig.jds, {
         protocol: 'http',
-        host: 'IPADDRESS ',
+        host: 'IP_ADDRESS',
         port: 9080
     })
 };

@@ -36,6 +36,7 @@ function handle(log, config, environment, job, handlerCallback) {
         var meta = {
             jpid: job.jpid,
             rootJobId: job.rootJobId,
+            priority: job.priority,
             param: job.param
         };
         return jobUtil.createJmeadowsDomainSyncRequest(job.patientIdentifier, domain, requestStampTime, meta);

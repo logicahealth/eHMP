@@ -1,0 +1,517 @@
+{
+    "resourceType": "Bundle",
+    "id": "example",
+    "meta": {
+        "versionId": "1",
+        "lastUpdated": "2015-03-12T01:43:30Z"
+    },
+    "type": "searchset",
+    "base": "http://example.com/base",
+    "total": 4,
+    "link": [
+        {
+            "relation": "next",
+            "url": "https://example.com/base/MedicationPrescription?patient=347&searchId=ff15fd40-ff71-4b48-b366-09c706bed9d0&page=2"
+        },
+        {
+            "relation": "self",
+            "url": "https://example.com/base/MedicationPrescription?patient=347&_include=MedicationPrescription.medication"
+        }
+    ],
+    "entry": [
+        {
+            "resource": {
+                "active": true,
+                "resourceType": "Patient",
+                "extension": [
+                    {
+                        "url": "http://vistacore.us/fhir/profiles/@main#service-connected",
+                        "valueCoding": {
+                            "code": "Y",
+                            "display": "Service Connected"
+                        }
+                    },
+                    {
+                        "url": "http://vistacore.us/fhir/profiles/@main#sensitive",
+                        "valueBoolean": false
+                    },
+                    {
+                        "url": "http://vistacore.us/fhir/profiles/@main#religion",
+                        "valueCoding": {
+                            "code": "urn:va:pat-religion:29",
+                            "display": "UNKNOWN/NO PREFERENCE"
+                        }
+                    },
+                    {
+                        "url": "http://vistacore.us/fhir/profiles/@main#service-connected-percent",
+                        "valueQuantity": {
+                            "value": "0",
+                            "units": "%"
+                        }
+                    }
+                ],
+                "text": {
+                    "status": "generated",
+                    "div": "<div>NINE,PATIENT. SSN: 666000007</div>"
+                },
+                "identifier": [
+                    {
+                        "use": "official",
+                        "type": "ssn",
+                        "system": "http://hl7.org/fhir/sid/us-ssn",
+                        "value": "666000007"
+                    },
+                    {
+                        "type": "uid",
+                        "system": "http://vistacore.us/fhir/id/uid",
+                        "value": "urn:va:patient:9E7A:253:253"
+                    },
+                    {
+                        "type": "dfn",
+                        "system": "http://vistacore.us/fhir/id/dfn",
+                        "value": "253"
+                    },
+                    {
+                        "type": "pid",
+                        "system": "http://vistacore.us/fhir/id/pid",
+                        "value": "9E7A;253"
+                    },
+                    {
+                        "type": "lrdfn",
+                        "system": "http://vistacore.us/fhir/id/lrdfn",
+                        "value": "394"
+                    },
+                    {
+                        "type": "icn",
+                        "system": "http://vistacore.us/fhir/id/icn",
+                        "value": "10107V395912"
+                    }
+                ],
+                "name": [
+                    {
+                        "use": "official",
+                        "text": "NINE,PATIENT",
+                        "family": [
+                            "NINE"
+                        ],
+                        "given": [
+                            "PATIENT"
+                        ],
+                        "prefix": [
+                            "Dr."
+                        ],
+                        "suffix": [
+                            "MSc"
+                        ],
+                        "period": [
+                            {
+                                "start": "2013-04-03T15:30:10+01:00",
+                                "end": "2015-04-03T15:30:10+01:00"
+                            }
+                        ]
+                    }
+                ],
+                "gender": "male",
+                "birthDate": "1935-04-07",
+                "contained": [
+                    {
+                        "resourceType": "Organization",
+                        "_id": "284160c8-2d58-448e-d082-fc88044e3f55",
+                        "identifier": [
+                            {
+                                "type": "facility-code",
+                                "value": "998"
+                            }
+                        ],
+                        "name": "ABILENE (CAA)"
+                    }
+                ],
+                "managingOrganization": {
+                    "reference": "#284160c8-2d58-448e-d082-fc88044e3f55"
+                },
+                "telecom": [
+                    {
+                        "use": "home",
+                        "system": "phone",
+                        "value": "(222)555-8235",
+                        "period": [
+                            {
+                                "start": "2013-04-03T15:30:10+01:00",
+                                "end": "2015-04-03T15:30:10+01:00"
+                            }
+                        ]
+                    },
+                    {
+                        "use": "work",
+                        "system": "phone",
+                        "value": "(222)555-7720"
+                    }
+                ],
+                "address": [
+                    {
+                        "use": "work",
+                        "text": "Any Street, Any Town, WV, 99998-0071",
+                        "line": [
+                            "Any Street"
+                        ],
+                        "city": "Any Town",
+                        "state": "WV",
+                        "postalCode": "99998-0071",
+                        "period": [
+                            {
+                                "start": "2013-04-03T15:30:10+01:00",
+                                "end": "2015-04-03T15:30:10+01:00"
+                            }
+                        ]
+                    },
+                    {
+                        "use": "home",
+                        "text": "Van Egmondkade 23, Amsterdam, 1024 RJ, NLD",
+                        "line": [
+                            "Van Egmondkade 23"
+                        ],
+                        "city": "Amsterdam",
+                        "postalCode": "1024 RJ",
+                        "country": "NLD"
+                    }
+                ],
+                "multipleBirthBoolean": true,
+                "contact": [
+                    {
+                        "relationship": [
+                            {
+                                "coding": [
+                                    {
+                                        "system": "http://hl7.org/fhir/patient-contact-relationship",
+                                        "code": "family"
+                                    }
+                                ],
+                                "text": "Next of Kin"
+                            }
+                        ],
+                        "name": {
+                            "use": "usual",
+                            "text": "VETERAN,BROTHER"
+                        },
+                        "address": [
+                            {
+                                "use": "home",
+                                "line": [
+                                    "Van Egmondkade 24"
+                                ],
+                                "city": "Amsterdam",
+                                "postalCode": "1024 RJ",
+                                "country": "NLD"
+                            }
+                        ],
+                        "gender": "male"
+                    },
+                    {
+                        "relationship": [
+                            {
+                                "coding": [
+                                    {
+                                        "system": "http://hl7.org/fhir/patient-contact-relationship",
+                                        "code": "partner"
+                                    }
+                                ]
+                            }
+                        ],
+                        "name": {
+                            "use": "usual",
+                            "family": [
+                                "Abels"
+                            ],
+                            "given": [
+                                "Sarah"
+                            ]
+                        },
+                        "telecom": [
+                            {
+                                "system": "phone",
+                                "value": "0690383372",
+                                "use": "mobile"
+                            }
+                        ]
+                    }
+                ],
+                "maritalStatus": {
+                    "coding": [
+                        {
+                            "system": "http://hl7.org/fhir/v3/MaritalStatus",
+                            "code": "UNK",
+                            "display": "unknown"
+                        }
+                    ],
+                    "text": "married-text"
+                },
+                "communication": [
+                    {
+                        "language": {
+                            "coding": [
+                                {
+                                    "system": "urn:ietf:bcp:47",
+                                    "code": "nl",
+                                    "display": "Dutch"
+                                }
+                            ],
+                            "text": "Nederlands"
+                        },
+                        "preferred": true
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match",
+                "score": 1
+            }
+        },
+        {
+            "resource": {
+                "active": true,
+                "resourceType": "Patient",
+                "extension": [
+                    {
+                        "url": "http://vistacore.us/fhir/profiles/@main#service-connected",
+                        "valueCoding": {
+                            "code": "Y",
+                            "display": "Service Connected"
+                        }
+                    },
+                    {
+                        "url": "http://vistacore.us/fhir/profiles/@main#sensitive",
+                        "valueBoolean": false
+                    },
+                    {
+                        "url": "http://vistacore.us/fhir/profiles/@main#religion",
+                        "valueCoding": {
+                            "code": "urn:va:pat-religion:29",
+                            "display": "UNKNOWN/NO PREFERENCE"
+                        }
+                    },
+                    {
+                        "url": "http://vistacore.us/fhir/profiles/@main#service-connected-percent",
+                        "valueQuantity": {
+                            "value": "0",
+                            "units": "%"
+                        }
+                    }
+                ],
+                "text": {
+                    "status": "generated",
+                    "div": "<div>EIGHT,PATIENT. SSN: 666000008</div>"
+                },
+                "identifier": [
+                    {
+                        "use": "official",
+                        "type": "ssn",
+                        "system": "http://hl7.org/fhir/sid/us-ssn",
+                        "value": "666000007"
+                    },
+                    {
+                        "type": "uid",
+                        "system": "http://vistacore.us/fhir/id/uid",
+                        "value": "urn:va:patient:9E7A:253:253"
+                    },
+                    {
+                        "type": "dfn",
+                        "system": "http://vistacore.us/fhir/id/dfn",
+                        "value": "253"
+                    },
+                    {
+                        "type": "pid",
+                        "system": "http://vistacore.us/fhir/id/pid",
+                        "value": "9E7A;253"
+                    },
+                    {
+                        "type": "lrdfn",
+                        "system": "http://vistacore.us/fhir/id/lrdfn",
+                        "value": "394"
+                    },
+                    {
+                        "type": "icn",
+                        "system": "http://vistacore.us/fhir/id/icn",
+                        "value": "10107V395912"
+                    }
+                ],
+                "name": [
+                    {
+                        "use": "official",
+                        "text": "EIGHT,PATIENT",
+                        "family": [
+                            "EIGHT"
+                        ],
+                        "given": [
+                            "PATIENT"
+                        ],
+                        "prefix": [
+                            "Dr."
+                        ],
+                        "suffix": [
+                            "MSc"
+                        ],
+                        "period": [
+                            {
+                                "start": "2013-04-03T15:30:10+01:00",
+                                "end": "2015-04-03T15:30:10+01:00"
+                            }
+                        ]
+                    }
+                ],
+                "gender": "female",
+                "birthDate": "1935-04-07",
+                "contained": [
+                    {
+                        "resourceType": "Organization",
+                        "_id": "284160c8-2d58-448e-d082-fc88044e3f55",
+                        "identifier": [
+                            {
+                                "type": "facility-code",
+                                "value": "998"
+                            }
+                        ],
+                        "name": "ABILENE (CAA)"
+                    }
+                ],
+                "managingOrganization": {
+                    "reference": "#284160c8-2d58-448e-d082-fc88044e3f55"
+                },
+                "telecom": [
+                    {
+                        "use": "home",
+                        "system": "phone",
+                        "value": "(222)555-8235",
+                        "period": [
+                            {
+                                "start": "2013-04-03T15:30:10+01:00",
+                                "end": "2015-04-03T15:30:10+01:00"
+                            }
+                        ]
+                    },
+                    {
+                        "use": "work",
+                        "system": "phone",
+                        "value": "(222)555-7720"
+                    }
+                ],
+                "address": [
+                    {
+                        "use": "work",
+                        "text": "Any Street, Any Town, WV, 99998-0071",
+                        "line": [
+                            "Any Street"
+                        ],
+                        "city": "Any Town",
+                        "state": "WV",
+                        "postalCode": "99998-0071",
+                        "period": [
+                            {
+                                "start": "2013-04-03T15:30:10+01:00",
+                                "end": "2015-04-03T15:30:10+01:00"
+                            }
+                        ]
+                    },
+                    {
+                        "use": "home",
+                        "text": "Van Egmondkade 23, Amsterdam, 1024 RJ, NLD",
+                        "line": [
+                            "Van Egmondkade 23"
+                        ],
+                        "city": "Amsterdam",
+                        "postalCode": "1024 RJ",
+                        "country": "NLD"
+                    }
+                ],
+                "multipleBirthBoolean": true,
+                "contact": [
+                    {
+                        "relationship": [
+                            {
+                                "coding": [
+                                    {
+                                        "system": "http://hl7.org/fhir/patient-contact-relationship",
+                                        "code": "family"
+                                    }
+                                ],
+                                "text": "Next of Kin"
+                            }
+                        ],
+                        "name": {
+                            "use": "usual",
+                            "text": "VETERAN,BROTHER"
+                        },
+                        "address": [
+                            {
+                                "use": "home",
+                                "line": [
+                                    "Van Egmondkade 24"
+                                ],
+                                "city": "Amsterdam",
+                                "postalCode": "1024 RJ",
+                                "country": "NLD"
+                            }
+                        ],
+                        "gender": "male"
+                    },
+                    {
+                        "relationship": [
+                            {
+                                "coding": [
+                                    {
+                                        "system": "http://hl7.org/fhir/patient-contact-relationship",
+                                        "code": "partner"
+                                    }
+                                ]
+                            }
+                        ],
+                        "name": {
+                            "use": "usual",
+                            "family": [
+                                "Abels"
+                            ],
+                            "given": [
+                                "Sarah"
+                            ]
+                        },
+                        "telecom": [
+                            {
+                                "system": "phone",
+                                "value": "0690383372",
+                                "use": "mobile"
+                            }
+                        ]
+                    }
+                ],
+                "maritalStatus": {
+                    "coding": [
+                        {
+                            "system": "http://hl7.org/fhir/v3/MaritalStatus",
+                            "code": "UNK",
+                            "display": "unknown"
+                        }
+                    ],
+                    "text": "married-text"
+                },
+                "communication": [
+                    {
+                        "language": {
+                            "coding": [
+                                {
+                                    "system": "urn:ietf:bcp:47",
+                                    "code": "nl",
+                                    "display": "Dutch"
+                                }
+                            ],
+                            "text": "Nederlands"
+                        },
+                        "preferred": true
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match",
+                "score": 1
+            }
+        }
+    ]
+}

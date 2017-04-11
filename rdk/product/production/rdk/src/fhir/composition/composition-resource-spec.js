@@ -141,7 +141,7 @@ describe('Composition FHIR conversion methods', function() {
                     expect(attester.mode.length).to.equal(1);
                     expect(attester.mode[0]).to.equal('professional');
                     if (clinician.signedDateTime) {
-                        expect(attester.time).to.equal(fhirUtils.convertToFhirDateTime(clinician.signedDateTime));
+                        expect(attester.time).to.equal(fhirUtils.convertToFhirDateTime(clinician.signedDateTime, fhirUtils.getSiteHash(clinician.uid)));
                     } else {
                         expect(attester.time).to.be.undefined();
                     }
@@ -201,3 +201,37 @@ describe('Composition FHIR conversion methods', function() {
         });
     });
 });
+
+describe('Composition FHIR conformance', function() {
+
+    var conformanceData = composition.createCompositionConformanceData();
+
+    it('conformance data is returned', function() {
+        expect(conformanceData.type).to.equal('composition');
+        expect(conformanceData.profile.reference).to.equal('http://hl7.org/fhir/2015MAY/composition.html');
+
+        expect(conformanceData.interaction.length).to.equal(2);
+        expect(conformanceData.interaction[0].code).to.equal('read');
+        expect(conformanceData.interaction[1].code).to.equal('search-type');
+    });
+
+    it('conformance data searchParam is returned', function() {
+
+        expect(conformanceData.searchParam.length).to.equal(3);
+
+        expect(conformanceData.searchParam[0].name).to.equal('subject.identifier');
+        expect(conformanceData.searchParam[0].type).to.equal('string');
+        expect(conformanceData.searchParam[0].definition).to.equal('http://hl7.org/FHIR/2015May/datatypes.html#string');
+
+        expect(conformanceData.searchParam[1].name).to.equal('pid');
+        expect(conformanceData.searchParam[1].type).to.equal('string');
+        expect(conformanceData.searchParam[1].definition).to.equal('http://hl7.org/FHIR/2015May/datatypes.html#string');
+
+        expect(conformanceData.searchParam[2].name).to.equal('type');
+        expect(conformanceData.searchParam[2].type).to.equal('string');
+        expect(conformanceData.searchParam[2].definition).to.equal('http://hl7.org/FHIR/2015May/datatypes.html#string');
+
+    });
+
+});
+

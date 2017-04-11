@@ -9,6 +9,18 @@ body {
     line-height: 150%;
     color: #555;
 }
+h2, h3, h4, h5, h6 {
+    &.copy-link .click-to-copy {
+        position: absolute;
+        padding-left: 5px;
+        color: #CCC;
+        display: none;
+        font-size: smaller;
+    }
+    &.copy-link:hover .click-to-copy {
+      display: inline-block;
+    }
+}
 
 h2 {
     border-bottom: 1px solid #efefef;
@@ -24,6 +36,34 @@ h6:before {
     margin-top: -70px;
     height: 70px;
     visibility: hidden;
+}
+
+h2 {
+ font-size: 30px;
+}
+h3 {
+ font-size: 26px;
+}
+h4 {
+ font-size: 22px;
+}
+h5 {
+ font-size: 18px;
+}
+h6 {
+ font-size: 15px;
+ font-weight: 600;
+ margin-bottom: 0;
+}
+.h4, .h5, .h6, h4, h5, h6 {
+    margin-top: 15px;
+}
+
+table * {
+    font-size: 14px;
+}
+p + details {
+    margin-top: -10px;
 }
 
 #markdown {
@@ -293,4 +333,15 @@ body,
     -moz-animation: infinite-spinning 200s infinite linear;
     -o-animation: infinite-spinning 200s infinite linear;
     animation: infinite-spinning 200s infinite linear;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    &.option {
+        font-family: monospace;
+        color: $options_color;
+    }
+    &.method {
+        font-family: monospace;
+        color: $methods_color;
+    }
 }

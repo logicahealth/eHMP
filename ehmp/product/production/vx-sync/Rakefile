@@ -64,7 +64,7 @@ def get_worker_config(env)
 case env
 when "aws"
   vxsync_ip = knife_search_for_ip("vxsync")
-  system "scp -i #{ENV['WORKSPACE']}/.chef/keys/vagrantaws_c82a142d5205 -o StrictHostKeyChecking=no PW      @#{vxsync_ip}:/opt/vxsync/worker-config.json ."
+  system "scp -i #{ENV['WORKSPACE']}/.chef/keys/vagrantaws_c82a142d5205 -o StrictHostKeyChecking=no ec2-user@#{vxsync_ip}:/opt/vxsync/worker-config.json ."
 when "virtualbox"
   vxsync_ip = knife_search_for_ip("vxsync")
   system "scp -i #{ENV['VAGRANT_HOME']}/insecure_private_key vagrant@#{vxsync_ip}:/opt/vxsync/worker-config.json ."
@@ -73,7 +73,7 @@ end
 
 task :inttest do
   puts "start npm install"
-  sh "npm install"
+  sh "npm install --registry https://store.vistacore.us/nexus/content/repositories/npm-all/"
   puts "completed npm install"
   puts "start integration tests"
   sh "npm run-script int-test"
@@ -82,7 +82,7 @@ end
 
 task :operational_data do
   puts "start npm install"
-  sh "npm install"
+  sh "npm install --registry https://store.vistacore.us/nexus/content/repositories/npm-all/"
   puts "completed npm install"
   puts "start operational data check against #{ENV['JDS_IP']}"
   sh "npm run-script operational-check"
@@ -91,7 +91,7 @@ end
 
 task :patient_sync do
   puts "start npm install"
-  sh "npm install"
+  sh "npm install --registry https://store.vistacore.us/nexus/content/repositories/npm-all/"
   puts "completed npm install"
   puts "start patient sync against #{ENV['VXSYNC_IP']}"
   sh "npm run-script sync-patient"

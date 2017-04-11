@@ -6,8 +6,8 @@ Feature: F323 syncing data to check the domains
 
 @count_hdr
 Scenario: Client request sync for patient and get all domain records in Mock HDR
-	When a patient with pid "9E7A;227" has been synced through VX-Sync API for "2939" site(s)
-	Then the sync status results for "2939" site(s) contain
+	When a patient with pid "9E7A;227" has been synced through VX-Sync API for "HDR" site(s)
+	Then the sync status results for "HDR" site(s) contain
 	  | Domain       | SyncComplete |
       | Allergy      |     true     |
       | Lab          |     true     |

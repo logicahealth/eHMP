@@ -10,6 +10,7 @@ task :syncCache, [:testType] do |t, args|
     ]
   else
     patient_sync_list = [
+      "9E7A;227",
       "9E7A;237",
       "9E7A;100599",
       "9E7A;100840",
@@ -22,10 +23,10 @@ task :syncCache, [:testType] do |t, args|
       "9E7A;100022",
       "9E7A;711",
       "9E7A;100023",
-      "4325678V4325679",
+      "4325679V4325679",
+      "DOD;4325678",
       "9E7A;100726",
       "9E7A;65",
-      "9E7A;227",
       "C877;100319",
       "9E7A;253",
       "9E7A;3",
@@ -42,11 +43,11 @@ task :syncCache, [:testType] do |t, args|
       "9E7A;100731",
       "9E7A;100012",
       "9E7A;149",
-      "9E7A;100608",
       "9E7A;100826",
       "9E7A;100470",
       "9E7A;100472",
-      "9E7A;100861"  
+      "9E7A;100861",
+      "9E7A;35" 
     ]
   end
   ENV["JDS_IP"] = knife_search_for_ip("jds")
@@ -59,7 +60,7 @@ task :scpRdkLogs, :driver do |t, args|
   logDir = "./rdk_logs"
   logs = ["*_stderr.log", "*_stdout.log"]
   key = knife_search_for_key_name("rdk", args[:driver])
-  user = "PW      "
+  user = "ec2-user"
   ip = knife_search_for_ip("resource_server")
   Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
   logs.each do |logname|
@@ -70,23 +71,15 @@ end
 task :scpVxsyncLogs, :driver do |t,args|
   logDir = "./vxsync_error_logs"
   key = knife_search_for_key_name("vxsync", args[:driver])
-  user = "PW      "
+  user = "ec2-user"
   ip = knife_search_for_ip("vxsync")
   Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
   sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/tmp/*_stderr.log", "#{logDir}")
 end
 
 def knife_search_for_ip(machine_name)
-  stack = ENV['JOB_NAME'] || ENV['USER']
-  if ENV.key?('BUNDLE_BIN_PATH')
-    raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
-  else
-    raw_search = `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
-  end
-  parsed_search = JSON.parse(raw_search)
-  fail "More than one node with that name found" if parsed_search["results"] > 1
-  fail "No node with that name found" if parsed_search["results"] == 0
-  ip = parsed_search["rows"][0]['automatic']['ipaddress']
+  parsed_search = get_parsed_node(machine_name)
+  ip = parsed_search['automatic']['ipaddress']
 end
 
 def knife_search_for_key_name(machine_name, driver)
@@ -109,4 +102,18 @@ def knife_search_for_key_name(machine_name, driver)
     end
   end
   key_name = File.expand_path(key, "#{ENV['HOME']}/Projects/vistacore/.chef/keys")
+end
+
+def get_parsed_node(machine_name)
+  release = File.read(File.dirname(__FILE__) + "/../../infrastructure/properties/releaseVersion")
+  stack = ENV['JOB_NAME'] || "#{ENV['USER']}-#{release}"
+  if ENV.key?('BUNDLE_BIN_PATH')
+    raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
+  else
+    raw_search = `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
+  end
+  parsed_search = JSON.parse(raw_search)
+  fail "More than one node with that name found" if parsed_search["results"] > 1
+  fail "No node with that name found: \'role:#{machine_name} AND stack:#{stack}\'" if parsed_search["results"] == 0
+  parsed_search["rows"][0]
 end

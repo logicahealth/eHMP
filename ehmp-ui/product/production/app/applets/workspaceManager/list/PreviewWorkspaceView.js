@@ -23,7 +23,7 @@ define([
         },
         getTemplateForDocumentsList: function() {
             //this is a special case for documents-list only
-            return '<div id="gridsterPreview" class="gridster"><ul><li data-row="1" data-col="1" data-sizex="12" data-sizey="12" ><h4 class="applet-title">Documents</h4><p>expanded</p></li></ul></div>';
+            return '<div id="gridsterPreview" class="gridster"><ul><li data-row="1" data-col="1" data-sizex="12" data-sizey="12" ><h5 class="applet-title">Documents</h5><p>expanded</p></li></ul></div>';
 
         },
         setContinerHeight: function() {
@@ -47,10 +47,9 @@ define([
         },
         getGridsterDimension: function() {
             var $container = this.$el.find('.gridsterContainer');
-            var containerWidth = $container.width();
             var containerHeight = $container.height();
             var hightestCol = this.getHighestGridsterCol();
-            var x = Math.floor(containerWidth / hightestCol) - 7.5;
+            var x = 25; // using X as the best desired max width for applets before horizontal scroll rules apply
             var y = (containerHeight) / 12 - 8;
             return [x, y];
         },
@@ -83,7 +82,7 @@ define([
                 var initialHeight = 260;
                 var initialWidth = 568;
                 var hightestCol = this.getHighestGridsterCol();
-                var x = Math.floor(initialWidth / hightestCol) - 7.5;
+                var x = 25; // using X as the best desired max width for applets before horizontal scroll rules apply
                 var y = (initialHeight) / 12 - 8;
 
                 this.gridster.resize_widget_dimensions({

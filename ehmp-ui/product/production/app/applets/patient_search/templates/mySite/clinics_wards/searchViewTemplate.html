@@ -1,12 +1,53 @@
-<div class="filter col-md-12"></div>
-<div class="col-md-12 row">
-    <div class="col-md-3 smallColumn">
-        <div id="{{locationType}}-location-list-filter-input"></div>
-        <div id="{{locationType}}-location-list-results-loading"></div>
-        <div id="{{locationType}}-location-list-error-message"></div>
-        <div id="{{locationType}}-location-list-results" class="simple-list list-result-container"></div>
+<div class="filter"></div>
+<div class="results-wrapper" accesskey="u">
+    <div class="location-selector">
+        {{#if isClinic}}
+        <div id="{{locationType}}-location-list-filter-date-range"></div>
+        {{else}}
+        <div id="{{locationType}}-location-list-filter-date-range"></div>
+        {{/if}}
     </div>
-    <div title="My Site Clinics Search Results" class="searchResults">
-        <div class="patient-search-results col-md-12" accesskey="u"></div>
+    <div class="search-results">
+        {{#if isClinic}}
+        <div class="patient-search-results">
+            <div class="dummy-text-clinics" aria-hidden="true">
+                <div class="columnHeader row">
+                    <div class="col0 columnName col-xs-2 user_info-ps-th-datetime">
+                        <span class="visible-lg">Appt Date / Time</span>
+                        <span class="visible-xs visible-sm visible-md">Date / Time</span>
+                    </div>
+                    <div class="col1 columnName col-xs-2 user_info-ps-th-clinic">Clinic Name</div>
+                    <div class="col2 columnName col-xs-3 user_info-ps-th-name">Patient Name</div>
+                    <div class="col3 columnName col-xs-2 user_info-ps-th-ssn">SSN</div>
+                    <div class="col4 columnName col-xs-2 user_info-ps-th-dob">
+                        <span class="visible-xs visible-sm visible-md">DOB</span>
+                        <span class="visible-lg">Date of Birth</span>
+                    </div>
+                    <div class="col5 columnName col-xs-1 user_info-ps-th-gender">Gender</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 font-size-14 top-padding-sm left-padding-xl">Use filter to display results</div>
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <div class="patient-search-results col-md-12">
+            <div class="dummy-text-wards" aria-hidden="true">
+                <div class="columnHeader row">
+                    <div class="col0 columnName col-xs-4">Patient Name</div>
+                    <div class="col1 columnName col-xs-2">SSN</div>
+                    <div class="col2 columnName col-xs-2">
+                        <span class="visible-xs visible-sm visible-md">DOB</span>
+                        <span class="visible-lg">Date of Birth</span>
+                    </div>
+                    <div class="col3 columnName col-xs-2">Gender</div>
+                    <div class="col4 columnName col-xs-2">Room-Bed</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 font-size-14 top-padding-sm left-padding-xl">Use filter to display results</div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
     </div>
 </div>

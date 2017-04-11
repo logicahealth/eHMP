@@ -7,8 +7,8 @@ describe('write-back orders Resources', function() {
         var resources = resource.getResourceConfig();
         expect(resources.length).to.equal(10);
 
-        expect(resources[0].name).to.equal('orders-create');
-        expect(resources[0].path).to.equal('');
+        expect(resources[0].name).to.equal('orders-lab-create');
+        expect(resources[0].path).to.equal('/lab');
         expect(resources[0].interceptors).to.eql({
             operationalDataCheck: false,
             synchronize: false
@@ -21,8 +21,8 @@ describe('write-back orders Resources', function() {
         var resources = resource.getResourceConfig();
         expect(resources.length).to.equal(10);
 
-        expect(resources[1].name).to.equal('orders-update');
-        expect(resources[1].path).to.equal('/:resourceId');
+        expect(resources[1].name).to.equal('orders-lab-update');
+        expect(resources[1].path).to.equal('/lab/:resourceId');
         expect(resources[1].interceptors).to.eql({
             operationalDataCheck: false,
             synchronize: false
@@ -35,8 +35,8 @@ describe('write-back orders Resources', function() {
         var resources = resource.getResourceConfig();
         expect(resources.length).to.equal(10);
 
-        expect(resources[2].name).to.equal('orders-edit');
-        expect(resources[2].path).to.equal('/:resourceId');
+        expect(resources[2].name).to.equal('orders-lab-edit');
+        expect(resources[2].path).to.equal('/lab/:resourceId');
         expect(resources[2].interceptors).to.eql({
             operationalDataCheck: false,
             synchronize: false
@@ -49,8 +49,8 @@ describe('write-back orders Resources', function() {
         var resources = resource.getResourceConfig();
         expect(resources.length).to.equal(10);
 
-        expect(resources[3].name).to.equal('orders-detail');
-        expect(resources[3].path).to.equal('/detail/:resourceId');
+        expect(resources[3].name).to.equal('orders-lab-detail');
+        expect(resources[3].path).to.equal('/detail-lab/:resourceId');
         expect(resources[3].interceptors).to.eql({
             operationalDataCheck: false,
             synchronize: false
@@ -63,8 +63,8 @@ describe('write-back orders Resources', function() {
         var resources = resource.getResourceConfig();
         expect(resources.length).to.equal(10);
 
-        expect(resources[4].name).to.equal('orders-sign-details');
-        expect(resources[4].path).to.equal('/sign-details');
+        expect(resources[4].name).to.equal('orders-lab-sign-details');
+        expect(resources[4].path).to.equal('/sign-details-lab');
         expect(resources[4].interceptors).to.eql({
             operationalDataCheck: false,
             synchronize: false
@@ -77,8 +77,8 @@ describe('write-back orders Resources', function() {
         var resources = resource.getResourceConfig();
         expect(resources.length).to.equal(10);
 
-        expect(resources[5].name).to.equal('orders-discontinue-details');
-        expect(resources[5].path).to.equal('/discontinue-details');
+        expect(resources[5].name).to.equal('orders-lab-discontinue-details');
+        expect(resources[5].path).to.equal('/discontinue-details-lab');
         expect(resources[5].interceptors).to.eql({
             operationalDataCheck: false,
             synchronize: false
@@ -91,8 +91,8 @@ describe('write-back orders Resources', function() {
         var resources = resource.getResourceConfig();
         expect(resources.length).to.equal(10);
 
-        expect(resources[6].name).to.equal('orders-discontinue');
-        expect(resources[6].path).to.equal('/discontinue');
+        expect(resources[6].name).to.equal('orders-lab-discontinue');
+        expect(resources[6].path).to.equal('/discontinue-lab');
         expect(resources[6].interceptors).to.eql({
             operationalDataCheck: false,
             synchronize: false
@@ -105,8 +105,8 @@ describe('write-back orders Resources', function() {
         var resources = resource.getResourceConfig();
         expect(resources.length).to.equal(10);
 
-        expect(resources[7].name).to.equal('orders-sign');
-        expect(resources[7].path).to.equal('/sign');
+        expect(resources[7].name).to.equal('orders-lab-sign');
+        expect(resources[7].path).to.equal('/sign-lab');
         expect(resources[7].interceptors).to.eql({
             operationalDataCheck: false,
             synchronize: false
@@ -119,8 +119,8 @@ describe('write-back orders Resources', function() {
         var resources = resource.getResourceConfig();
         expect(resources.length).to.equal(10);
 
-        expect(resources[8].name).to.equal('orders-save-draft');
-        expect(resources[8].path).to.equal('/save-draft');
+        expect(resources[8].name).to.equal('orders-lab-save-draft');
+        expect(resources[8].path).to.equal('/save-draft-lab');
         expect(resources[8].interceptors).to.eql({
             operationalDataCheck: false,
             synchronize: false
@@ -133,8 +133,8 @@ describe('write-back orders Resources', function() {
         var resources = resource.getResourceConfig();
         expect(resources.length).to.equal(10);
 
-        expect(resources[9].name).to.equal('orders-find-draft');
-        expect(resources[9].path).to.equal('/find-draft');
+        expect(resources[9].name).to.equal('orders-lab-find-draft');
+        expect(resources[9].path).to.equal('/find-draft-lab');
         expect(resources[9].interceptors).to.eql({
             operationalDataCheck: false,
             synchronize: false

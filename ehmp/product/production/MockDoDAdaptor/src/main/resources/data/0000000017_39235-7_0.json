@@ -1,0 +1,72 @@
+{
+  "queryComplete": "true",
+  "dataList": [
+    {
+      "dataRecord": {
+        "LotNumber": "0012345",
+        "VaccineId": "43",
+        "EnteredBy": "Unknown, Nurse",
+        "LotNumberText": "0012345",
+        "ProviderName": "Unknown, Provider",
+        "Vaccine": "Hep A",
+        "ManufacturedMaterial": "43",
+        "VaccineExemption": "None",
+        "CustodianId": "2.16.840.1.113883.3.42.126.100001.13",
+        "RepositoryId": "2.16.840.1.113883.3.42.126.100001.13",
+        "DosageUnits": "mL",
+        "OtherIdentifier": "",
+        "EnteredByDate": "",
+        "CustodianName": "ahlta",
+        "VaccineDosage": "1 mL",
+        "ManufacturerName": "TRS",
+        "LoincCode": "39235-7",
+        "Facility": "",
+        "Dosage": "1",
+        "VaccineDate": "20140109000000",
+        "NextVaccineDueDate": "18991230000000",
+        "CVX": "Transcribed",
+        "VaccineSeries": "1",
+        "EventId": "1000000654"
+      },
+      "dataType": 17
+    },
+    {
+      "dataRecord": {
+        "LotNumber": "",
+        "VaccineId": "43",
+        "EnteredBy": "Unknown, Nurse",
+        "LotNumberText": "0012346",
+        "ProviderName": "Unknown, Provider",
+        "Vaccine": "Hep A",
+        "ManufacturedMaterial": "43",
+        "VaccineExemption": "None",
+        "CustodianId": "2.16.840.1.113883.3.42.126.100001.13",
+        "RepositoryId": "2.16.840.1.113883.3.42.126.100001.13",
+        "DosageUnits": "mL",
+        "OtherIdentifier": "",
+        "EnteredByDate": "",
+        "CustodianName": "ahlta",
+        "VaccineDosage": "1 mL",
+        "ManufacturerName": "TRS",
+        "LoincCode": "39235-7",
+        "Facility": "",
+        "Dosage": "1",
+        "VaccineDate": "20140709000000",
+        "NextVaccineDueDate": "18991230000000",
+        "CVX": "Transcribed",
+        "VaccineSeries": "2",
+        "EventId": "1000000655"
+      },
+      "dataType": 17
+    }
+ ],
+  "statusList": [
+    {
+      "ExpectedCount": "1",
+      "RetrievedCount": "1",
+      "SiteStatus": "COMPLETE",
+      "SiteName": "ahlta",
+      "SiteId": "2.16.840.1.113883.3.42.126.100001.13"
+    }
+  ]
+}

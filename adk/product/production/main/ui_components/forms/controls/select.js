@@ -42,7 +42,7 @@ define([
             groupEnabled: false,
             extraClasses: [],
             multiple: false,
-            title: 'Press enter to open search filter text.',
+            title: 'Use up and down arrows to view options and then press enter to select',
             fetchDelay: 750,
             options: {
                 width: '100%',
@@ -56,7 +56,14 @@ define([
             label: 'label'
         },
         events: _.defaults({
-            "change select": "onChange",
+            "change select": function(event, options) {
+                options = options || {};
+                var changedByUser = _.isBoolean(options.triggeredByUser) ? options.triggeredByUser : true;
+                this.onChange.apply(this, arguments);
+                if (changedByUser) {
+                    this.onUserInput.apply(this, arguments);
+                }
+            },
             "focus select": "",
             "control:label": function(e, labelString) {
                 e.preventDefault();
@@ -94,46 +101,43 @@ define([
             }
         }, PuppetForm.CommonPrototype.events),
         getTemplate: function() {
-            var selectTemplate = [
+            var selectTemplate =
                 '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}' +
-                    '<select class="{{PuppetForm "controlClassName"}}" id="{{clean-for-id name}}" name="{{name}}"' +
-                        '{{#if title}} title="{{title}}"{{/if}}' +
-                        '{{#if disabled}} disabled{{/if}}' +
-                        '{{#if required}} required{{/if}}' +
-                        '{{#if size}} size={{size}}{{/if}}' +
-                        '{{#if multiple}} multiple{{/if}}' +
-                    '>'
-            ].join('\n');
+                '<select class="{{PuppetForm "controlClassName"}}" id="{{clean-for-id name}}" name="{{name}}"' +
+                    '{{#if title}} title="{{title}}"{{/if}}' +
+                    '{{#if disabled}} disabled{{/if}}' +
+                    '{{#if required}} required{{/if}}' +
+                    '{{#if size}} size={{size}}{{/if}}' +
+                    '{{#if multiple}} multiple{{/if}}' +
+                '>';
 
             if (this.groupEnabled) {
-                selectTemplate = [selectTemplate,
-                    '<option value=""></option>',
+                selectTemplate +=
+                    '<option value=""></option>' +
                     '{{#each groups}}' +
-                        '<optgroup label=' + this.mappedAttribute('group', true, true) + '>',
+                    '<optgroup label=' + this.mappedAttribute('group', true, true) + '>' +
                         '{{#each pickList}}' +
-                            '<option value=' + this.mappedAttribute('value', true, true) +
-                                '{{#include ../../rawValue ' + this.mappedAttribute('value') + '}} selected="selected"{{/include}}' +
-                                '{{#if disabled}} disabled="disabled"{{/if}}>' +
-                                this.mappedAttribute('label', true) +
-                            '</option>' +
-                        '{{/each}}',
-                        '</optgroup>',
-                    '{{/each}}'
-                ].join('\n');
-            } else {
-                selectTemplate = [selectTemplate,
-                    '<option value=""></option>',
-                    '{{#each options}}' +
-                        '<option value="{{formatter-from-raw ../formatter ' + this.mappedAttribute('value') + '}}"' +
-                            '{{#include ../rawValue ' + this.mappedAttribute('value') + '}} selected="selected"{{/include}}' +
+                        '<option value=' + this.mappedAttribute('value', true, true) +
+                            '{{#include ../../rawValue ' + this.mappedAttribute('value') + '}} selected="selected"{{/include}}' +
                             '{{#if disabled}} disabled="disabled"{{/if}}>' +
                             this.mappedAttribute('label', true) +
                         '</option>' +
-                    '{{/each}}'
-                ].join('\n');
+                        '{{/each}}' +
+                    '</optgroup>' +
+                    '{{/each}}';
+            } else {
+                selectTemplate +=
+                    '<option value=""></option>' +
+                    '{{#each options}}' +
+                    '<option value="{{formatter-from-raw ../formatter ' + this.mappedAttribute('value') + '}}"' +
+                        '{{#include ../rawValue ' + this.mappedAttribute('value') + '}} selected="selected"{{/include}}' +
+                        '{{#if disabled}} disabled="disabled"{{/if}}>' +
+                        this.mappedAttribute('label', true) +
+                    '</option>' +
+                    '{{/each}}';
             }
 
-            selectTemplate = [selectTemplate, '</select>'].join('\n');
+            selectTemplate += '</select>';
 
             return Handlebars.compile(selectTemplate);
         },
@@ -189,7 +193,7 @@ define([
                         this.failure = failure;
                     },
                     fetch: function() {
-                        fetchSync(
+                        fetchSync.call(self,
                             this.params.data.q,
                             this.success,
                             this.failure);
@@ -205,7 +209,7 @@ define([
                 this.modelChangeListener = function() {
                     var modelName = self.getComponentInstanceName();
                     var newValue = self.model.get(modelName);
-                    self.$('select').val(newValue).trigger('change');
+                    self.$('select').val(newValue).trigger('change', { triggeredByUser: false });
                 };
             }
 
@@ -230,7 +234,7 @@ define([
             var pickList = options.pickList || [];
 
             if (_.isString(pickList)) {
-                var field = _.defaults(this.field.toJSON(), this.defaults);
+                var field = _.defaultsDeep(this.field.toJSON(), this.defaults);
                 var attributes = this.model.toJSON();
                 var attrArr = field.pickList.split('.');
                 var name = attrArr.shift();
@@ -257,6 +261,7 @@ define([
         },
         initSelect2: function() {
             var $select = this.$('select');
+            $select.attr('title', "Press enter to open the " + this.field.get('label') + " search filter text");
 
             if ($select.length === 0 || this.field.get('disabled')) {
                 return;
@@ -282,11 +287,9 @@ define([
                 dropdownParent = this.$el.closest('.modal-content');
             }
 
-            if (_.isEmpty(dropdownParent)) {
-                dropdownParent = $('body');
+            if (!_.isEmpty(dropdownParent)) {
+                fieldOptions.dropdownParent = dropdownParent;
             }
-
-            fieldOptions.dropdownParent = dropdownParent;
 
             $select.select2(fieldOptions);
 
@@ -310,6 +313,13 @@ define([
 
             if (_.isString(this.field.get('pickList'))) {
                 this.listenTo(this.model.get(this.field.get('pickList')), 'add remove', function() {
+                    this.setPickList({
+                        pickList: this.field.get('pickList')
+                    });
+                });
+            }
+            if (this.field.get('pickList') instanceof Backbone.Collection) {
+                this.listenTo(this.field.get('pickList'), 'add remove reset', function() {
                     this.setPickList({
                         pickList: this.field.get('pickList')
                     });

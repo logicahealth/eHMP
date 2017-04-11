@@ -6,7 +6,9 @@ define([
 ], function(Backbone, $, tooltipMappings, Messaging) {
     'use strict';
 
-    var tooltipUtils = {};
+    var tooltipUtils = {
+        mappings: tooltipMappings
+    };
 
     tooltipUtils.initTooltip = function(event) {
         var eventTarget = $(event.target);
@@ -76,7 +78,6 @@ define([
                 $('[data-toggle=tooltip]').tooltip('destroy');
                 break;
             case 'patient-search-screen':
-                $('#patientDemographic-region [data-toggle=tooltip]').tooltip('destroy');
                 $('#content-region [data-toggle=tooltip]').tooltip('destroy');
                 break;
             default:

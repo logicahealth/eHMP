@@ -24,7 +24,7 @@ define([
             if (ADK.SessionStorage.getAppletStorageModel('search', 'useTextSearchFilter')) {
                 var modalOptions = ADK.SessionStorage.getAppletStorageModel('search', 'modalOptions');
                 this.model.set('selectedId', modalOptions.selectedId);
-                if (modalOptions.selectedId === 'custom-range-apply') {
+                if (modalOptions.selectedId === 'customRangeApply') {
                     this.model.set('customFromDate', modalOptions.customFromDate);
                     this.model.set('customToDate', modalOptions.customToDate);
                 }
@@ -59,28 +59,32 @@ define([
         },
         monitorCustomDateRange: function(event) {
             if (this.checkCustomRangeCondition()) {
-                this.$el.find('#custom-range-apply').removeAttr('disabled');
+                this.$el.find('#customRangeApply').removeAttr('disabled');
             } else {
-                this.$el.find('#custom-range-apply').prop('disabled', true);
+                this.$el.find('#customRangeApply').prop('disabled', true);
             }
         },
         setDatePickers: function(fromDate, toDate) {
-            this.$('.input-group.date#custom-date-range1').datepicker({
-                format: 'mm/dd/yyyy'
+            this.$('.input-group.date#customDateRange1').datepicker({
+                format: 'mm/dd/yyyy',
+                todayBtn: 'linked',
+                todayHighlight: true
             });
             if (fromDate !== null) {
-                this.$('.input-group.date#custom-date-range1').datepicker('update', fromDate);
+                this.$('.input-group.date#customDateRange1').datepicker('update', fromDate);
             }
 
-            this.$('.input-group.date#custom-date-range2').datepicker({
-                format: 'mm/dd/yyyy'
+            this.$('.input-group.date#customDateRange2').datepicker({
+                format: 'mm/dd/yyyy',
+                todayBtn: 'linked',
+                todayHighlight: true
             });
             if (toDate !== null) {
-                this.$('.input-group.date#custom-date-range2').datepicker('update', toDate);
+                this.$('.input-group.date#customDateRange2').datepicker('update', toDate);
             }
 
-            this.$('#filter-from-date').datepicker('remove');
-            this.$('#filter-to-date').datepicker('remove');
+            this.$('#filterFromDate').datepicker('remove');
+            this.$('#filterToDate').datepicker('remove');
         },
         applyDateRange: function(event) {
             var fromDate, toDate;
@@ -92,18 +96,18 @@ define([
                 this.model.set('selectedId', selectedId);
             };
 
-            if (event.currentTarget.id.indexOf('-range') !== -1 &&
-                event.currentTarget.id.indexOf('custom-range-apply') === -1) {
-                this.$el.find('#filter-from-date').val('');
-                this.$el.find('#filter-to-date').val('');
-                this.$el.find('#custom-range-apply').prop('disabled', true);
+            if (event.currentTarget.id.indexOf('Range') !== -1 &&
+                event.currentTarget.id.indexOf('customRangeApply') === -1) {
+                this.$el.find('#filterFromDate').val('');
+                this.$el.find('#filterToDate').val('');
+                this.$el.find('#customRangeApply').prop('disabled', true);
             }
 
             switch (event.currentTarget.id) {
-                case 'custom-range-apply':
+                case 'customRangeApply':
                     event.preventDefault();
-                    var filterFromDate = moment(this.$el.find('#filter-from-date').val());
-                    var filterToDate = moment(this.$el.find('#filter-to-date').val());
+                    var filterFromDate = moment(this.$el.find('#filterFromDate').val());
+                    var filterToDate = moment(this.$el.find('#filterToDate').val());
 
                     if (filterFromDate <= filterToDate) {
                         fromDate = filterFromDate.format('MM/DD/YYYY');
@@ -116,34 +120,34 @@ define([
                     this.sharedDateRange.set('customFromDate', fromDate);
                     this.sharedDateRange.set('customToDate', toDate);
 
-                    this.model.set('selectedId', 'custom-range-apply');
+                    this.model.set('selectedId', 'customRangeApply');
                     break;
-                case '2yr-range':
-                    this.setDateRangeValues('years', 2, '2yr-range');
+                case '2yrRange':
+                    this.setDateRangeValues('years', 2, '2yrRange');
                     break;
-                case '1yr-range':
-                    this.setDateRangeValues('years', 1, '1yr-range');
+                case '1yrRange':
+                    this.setDateRangeValues('years', 1, '1yrRange');
                     break;
-                case '3mo-range':
-                    this.setDateRangeValues('months', 3, '3mo-range');
+                case '3moRange':
+                    this.setDateRangeValues('months', 3, '3moRange');
                     break;
-                case '1mo-range':
-                    this.setDateRangeValues('months', 1, '1mo-range');
+                case '1moRange':
+                    this.setDateRangeValues('months', 1, '1moRange');
                     break;
-                case '7d-range':
-                    this.setDateRangeValues('days', 7, '7d-range');
+                case '7dRange':
+                    this.setDateRangeValues('days', 7, '7dRange');
                     break;
-                case '72hr-range':
-                    this.setDateRangeValues('days', 3, '72hr-range');
+                case '72hrRange':
+                    this.setDateRangeValues('days', 3, '72hrRange');
                     break;
-                case '24hr-range':
-                    this.setDateRangeValues('days', 1, '24hr-range');
+                case '24hrRange':
+                    this.setDateRangeValues('days', 1, '24hrRange');
                     break;
-                case 'all-range':
+                case 'allRange':
                     fromDate = null;
                     toDate = moment().format('MM/DD/YYYY');
                     //toDate = moment().add('years', 100).format('MM/DD/YYYY');
-                    this.model.set('selectedId', 'all-range');
+                    this.model.set('selectedId', 'allRange');
                     break;
                 default:
                     break;
@@ -175,7 +179,7 @@ define([
 
             this.$el.find('button').removeClass('active-range');
 
-            if (event.currentTarget.id !== 'custom-range-apply') {
+            if (event.currentTarget.id !== 'customRangeApply') {
                 this.$el.find('#' + event.currentTarget.id).addClass('active-range');
             }
 
@@ -195,8 +199,8 @@ define([
         },
         checkCustomRangeCondition: function() {
             var hasCustomRangeValuesBeenSetCorrectly = true;
-            var customFromDate = this.$el.find('#filter-from-date').val();
-            var customToDate = this.$el.find('#filter-to-date').val();
+            var customFromDate = this.$el.find('#filterFromDate').val();
+            var customToDate = this.$el.find('#filterToDate').val();
 
             if (moment(customFromDate, 'MM/DD/YYYY', true).isValid()) {
                 this.model.set('customFromDate', customFromDate);
@@ -224,11 +228,11 @@ define([
             }
         },
         onRender: function(event) {
-            this.$('#filter-from-date').inputmask('m/d/y', {
+            this.$('#filterFromDate').inputmask('m/d/y', {
                 'placeholder': 'MM/DD/YYYY'
             });
 
-            this.$('#filter-to-date').inputmask('m/d/y', {
+            this.$('#filterToDate').inputmask('m/d/y', {
                 'placeholder': 'MM/DD/YYYY'
             });
 
@@ -250,9 +254,9 @@ define([
                 this.$el.find('#' + selectedId).click();
             } else {
                 if (this.fullScreen) {
-                    selectedId = $('[data-appletid=\'narrative_lab_results_grid\'] .grid-filter-daterange .active-range').attr('id') || 'custom-range-apply';
-                    customFromDate = $('[data-appletid=\'narrative_lab_results_grid\'] .grid-filter-daterange #filter-from-date-narrative_lab_results_grid').val();
-                    customToDate = $('[data-appletid=\'narrative_lab_results_grid\'] .grid-filter-daterange #filter-to-date-narrative_lab_results_grid').val();
+                    selectedId = $('[data-appletid=\'narrative_lab_results_grid\'] .grid-filter-daterange .active-range').attr('id') || 'custom-range-apply-lab_results_grid';
+                    customFromDate = $('[data-appletid=\'narrative_lab_results_grid\'] .grid-filter-daterange #filterFromDate-narrative_lab_results_grid').val();
+                    customToDate = $('[data-appletid=\'narrative_lab_results_grid\'] .grid-filter-daterange #filterToDate-narrative_lab_results_grid').val();
                 } else {
 
 
@@ -269,25 +273,25 @@ define([
                 this.setDatePickers(customFromDate, customToDate);
 
                 if (selectedId !== undefined && selectedId !== null && selectedId.trim().length > 0) {
-                    if (selectedId.indexOf('2yr-range') >= 0) {
-                        this.$el.find('#2yr-range').click();
-                    } else if (selectedId.indexOf('1yr-range') >= 0) {
-                        this.$el.find('#1yr-range').click();
-                    } else if (selectedId.indexOf('3mo-range') >= 0) {
-                        this.$el.find('#3mo-range').click();
-                    } else if (selectedId.indexOf('1mo-range') >= 0) {
-                        this.$el.find('#1mo-range').click();
-                    } else if (selectedId.indexOf('7d-range') >= 0) {
-                        this.$el.find('#7d-range').click();
-                    } else if (selectedId.indexOf('72hr-range') >= 0) {
-                        this.$el.find('#72hr-range').click();
-                    } else if (selectedId.indexOf('24hr-range') >= 0) {
-                        this.$el.find('#24hr-range').click();
-                    } else if (selectedId.indexOf('all-range') >= 0) {
-                        this.$el.find('#all-range').click();
-                    } else if (selectedId.indexOf('custom-range-apply') >= 0) {
-                        if (!this.$el.find('custom-range-apply').prop('disabled')) {
-                            this.$el.find('#custom-range-apply').click();
+                    if (selectedId.indexOf('2yrRange') >= 0) {
+                        this.$el.find('#2yrRange').click();
+                    } else if (selectedId.indexOf('1yrRange') >= 0) {
+                        this.$el.find('#1yrRange').click();
+                    } else if (selectedId.indexOf('3moRange') >= 0) {
+                        this.$el.find('#3moRange').click();
+                    } else if (selectedId.indexOf('1moRange') >= 0) {
+                        this.$el.find('#1moRange').click();
+                    } else if (selectedId.indexOf('7dRange') >= 0) {
+                        this.$el.find('#7dRange').click();
+                    } else if (selectedId.indexOf('72hrRange') >= 0) {
+                        this.$el.find('#72hrRange').click();
+                    } else if (selectedId.indexOf('24hrRange') >= 0) {
+                        this.$el.find('#24hrRange').click();
+                    } else if (selectedId.indexOf('allRange') >= 0) {
+                        this.$el.find('#allRange').click();
+                    } else if (selectedId.indexOf('customRangeApply') >= 0) {
+                        if (!this.$el.find('customRangeApply').prop('disabled')) {
+                            this.$el.find('#customRangeApply').click();
                         }
                     }
                 }

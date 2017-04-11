@@ -1,0 +1,8 @@
+"chef-server-package-%branch%" {
+	template = 'templates/chef-server-package.tpl'
+	description = "This job serves to download the release artifacts last used by ehmp-ui-deploy-demo-build-dev, zip them up, and put them back on a nexus."
+
+   gitUrl = 'https://code.vistacore.us/scm/pi/chef-server-package.git'
+   gitBranch = '%branch%'
+   release = 'r2.0'
+}

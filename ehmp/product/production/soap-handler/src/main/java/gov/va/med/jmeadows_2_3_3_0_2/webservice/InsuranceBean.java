@@ -19,7 +19,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="insuranceBean">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.domain.ext/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="comment" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="companyAddressLine1" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -30,7 +30,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="companyName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="companyPostalCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="companyStateProvince" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="companyTelecom" type="{http://webservice.vds.domain.ext/}telecom" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="companyTelecom" type="{http://webservice.vds.DNS       /}telecom" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="effectiveDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="expirationDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="groupNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -56,7 +56,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "insuranceBean", namespace = "http://webservice.vds.domain.ext/", propOrder = {
+@XmlType(name = "insuranceBean", namespace = "http://webservice.vds.DNS       /", propOrder = {
     "comment",
     "companyAddressLine1",
     "companyAddressLine2",

@@ -20,7 +20,7 @@
         <repository>
           <id>internal</id>
           <name>internal</name>
-           <url><%= node['nexus_url']%>/nexus/content/repositories/ehmp-public</url>
+           <url><%= node['nexus_url']%>/nexus/content/groups/public</url>
           <releases>
             <enabled>true</enabled>
             <updatePolicy>always</updatePolicy>
@@ -34,7 +34,7 @@
       <pluginRepositories>
         <pluginRepository>
           <id>jboss-brms-bpmsuite-plugin-repository</id>
-          <url><%= node['nexus_url']%>/nexus/content/repositories/ehmp-public</url>
+          <url><%= node['nexus_url']%>/nexus/content/groups/public</url>
           <releases>
             <enabled>true</enabled>
           </releases>

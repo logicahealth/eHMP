@@ -1,32 +1,43 @@
 define([], function() {
-    var OrderModel = ADK.Resources.Writeback.Model.extend({
-        resource: 'orders-detail',
+    var order = ADK.Resources.Writeback.Model.extend({
+        resource: 'orders-lab-create',
         vpr: 'orders',
-        idAttribute: 'uid',
+        childParse: false,
         parse: function(resp, options) {
-            return {
-                detail: _.get(resp, 'data.data', 'Unable to retrieve detail summary')
-            };
-        },
-        getUrl: function(method, options) {
-            var params = {
-                pid: this.patient.get('pid'),
-                resourceId: this.get('orderId')
-            };
+            //[Edison]: rdk returns resp.data.data when there's order check
+            var respData = resp.data.data || resp.data;
+            var labOrders = [JSON.parse(respData)];
+            if (!labOrders[0].orderCheckList) {
+                return {
+                    orderCheckList: [],
+                    orderCheckOriginalList: []
+                };
+            }
 
-            var url = ADK.ResourceService.buildUrl('orders-detail', {
-                dfn: this.patient.get('localId')
+            var orderCheck = labOrders[0].orderCheckList;
+            var orderCheckList = _.map(labOrders, function(v, i) {
+                var size = v.orderCheckList.length;
+                return _.map(v.orderCheckList, function(v, i) {
+                    return {
+                        orderCheck: '(' + (i + 1) + ' of ' + size + ') ' + (v.orderCheck.split('^')[3])
+                    };
+                });
             });
-            return ADK.ResourceService.replaceURLRouteParams(unescape(url), params);
-        },
-        execute: function() {
-            var attributes = {
-                contentType: "application/json"
-            };
 
-            this.fetch(attributes);
+            return {
+                orderCheckList: orderCheckList[0],
+                orderCheckOriginalList: labOrders[0].orderCheckList
+            };
+        },
+        methodMap: {
+            'create': {
+                resource: 'orders-lab-create',
+                parameters: {
+                    'pid': 'pid'
+                }
+            }
         }
     });
 
-    return OrderModel;
+    return order;
 });

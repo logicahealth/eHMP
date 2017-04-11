@@ -1,8 +1,11 @@
-HMPTFU2 ;SLC/JCH-Utilities for the Treating Facility file 391.91 ; 12/11/15 11:26
- ;;2.0;Health Management Platform (HMP);1;Feb 05, 2015;Build 3
+HMPTFU2 ;ASMR/JCH,CK - Utilities for the Treating Facility file 391.91 ;Apr 27, 2016 10:35:07
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; Reference to ^DGCN(391.91 is NOT currently supported; see ICR #2911 for an existing Private ICR between 
  ;  Registration and CIRN that would meet the needs of this routine, or provide an example for a new ICR.
+ ;
+ Q
  ;
 TFL(LIST,PT) ;for this PT [patient] (either DFN, ICN or EDIPI) return the list of treating facilities
  ; CALLED FROM RPC HMP LOCAL GET CORRESPONDINGIDS
@@ -168,23 +171,23 @@ SET(TFIEN,ARY,CTR) ;This sets the array with the treating facility list.
  I SITEN["200N"&(IDTYPE="NI")&(ASSAUTH="USVHA") S ASSAUTH=""
  I SDFN'="" S CTR=CTR+1,@ARY@(CTR)=SDFN_"^"_IDTYPE_"^"_SITEN_"^"_ASSAUTH_"^"_STATUS_"^"_STNNUM,FOUND=1
  Q
-TF2SITEN(TFIEN) ;Find the DOMAIN associated with the TREATING FACILITY and return the DOMAIN name hash
+TF2SITEN(TFIEN) ;Find the DOMAIN associated with the TREATING FACILITY and return the station number.
  ;Currently, our test systems' station numbers are not set up for local DOMAINs. This would result in these
  ;entries failing all the time, thus breaking existing behavior. For the time being, we will default to
  ;the old behavior if we cannot locate a station number as a temporary measure. In the future, we need to
  ;fix the test systems to set up the station numbers correctly, and then change this code to return
  ;an empty string if the DOMAIN could not be resolved.
  S SITEN=""
- ;S SITEN=$$SYS^HMPUTILS ;<--NOT DEAD CODE
  Q:'+$G(TFIEN) ""
  Q:'$D(^DGCN(391.91,TFIEN)) ""
  ;Get station number from Institution file (pointed to from Treating Facility List)
  N INSTNUM,STNNUM,DONE,I
  S INSTNUM=$P($G(^DGCN(391.91,TFIEN,0)),U,2) Q:'+INSTNUM SITEN
  S STNNUM=$P($G(^DIC(4,INSTNUM,99)),U) Q:'+STNNUM SITEN
- ;DE2345 - MBS 9/15/2015; Do not return entires with station numbers=+200
+ ;DE2345 - MBS 9/15/2015; Do not return entries with station numbers=+200
  I STNNUM?1"200".A Q ""
  ;Domain file doesn't have an x-ref on station number, so we have to brute-force it
  S (I,DONE)=0 F  S I=$O(^DIC(4.2,I)) Q:'+I  D  Q:DONE
- . I $P(^DIC(4.2,I,0),U,13)=STNNUM S SITEN=$$BASE^XLFUTL($$CRC16^XLFCRC($P(^DIC(4.2,I,0),U)),10,16),DONE=1
+ . I $P(^DIC(4.2,I,0),U,13)=STNNUM S SITEN=$$SYS^HMPUTILS($P(^DIC(4.2,I,0),U)),DONE=1
  Q SITEN
+ ;

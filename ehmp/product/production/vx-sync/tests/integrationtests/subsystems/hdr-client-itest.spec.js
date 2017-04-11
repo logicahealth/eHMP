@@ -15,6 +15,7 @@ var logger = require(global.VX_DUMMIES + '/dummy-logger');
 var testSampleData = {
     siteId: '76C6', /* This site is currently not being used by VxSync Poller.*/
     rootJobId: 22394,
+    jobPriority: 5,
     jobId: [
         {domain: 'allergy', jobId:'123'},
         {domain: 'auxilary', jobId:'345'},
@@ -44,7 +45,7 @@ describe('hdr-client.js', function() {
             var finished = false;
             runs(function() {
                 hdrClient.subscribe(testSampleData.siteId, testSampleData.patientIdentifier,
-                testSampleData.rootJobId, testSampleData.jobId, function(err, result) {
+                testSampleData.rootJobId, testSampleData.jobId, testSampleData.jobPriority, function(err, result) {
                     expect(err).toBeFalsy();
                     expect(result).toBeTruthy();
                     expect(result).toEqual('success');
@@ -59,7 +60,7 @@ describe('hdr-client.js', function() {
             var finished = false;
             runs(function() {
                 hdrClient.subscribe(testSampleData.siteId, testSampleData.patientIdentifier.value,
-                testSampleData.rootJobId, testSampleData.jobId, function(err, result) {
+                testSampleData.rootJobId, testSampleData.jobId, testSampleData.jobPriority, function(err, result) {
                     expect(err).toBeFalsy();
                     expect(result).toBeTruthy();
                     expect(result).toEqual('success');
@@ -74,7 +75,7 @@ describe('hdr-client.js', function() {
             var finished = false;
             runs(function() {
                 hdrClient.subscribe(invalidSiteId, testSampleData.patientIdentifier,
-                testSampleData.rootJobId, testSampleData.jobId, function(err, result) {
+                testSampleData.rootJobId, testSampleData.jobId, testSampleData.jobPriority, function(err, result) {
                     expect(err).toBeTruthy();
                     expect(result).toBeFalsy();
                     finished = true;
@@ -89,7 +90,7 @@ describe('hdr-client.js', function() {
             runs(function() {
                 config.hdr.hdrSites[invalidSiteId] = {stationNumber: '999999'};
                 hdrClient.subscribe(invalidSiteId, testSampleData.patientIdentifier,
-                testSampleData.rootJobId, testSampleData.jobId, function(err, result) {
+                testSampleData.rootJobId, testSampleData.jobId, testSampleData.jobPriority, function(err, result) {
                     expect(err).toBeTruthy();
                     expect(result).toBeFalsy();
                     delete config.hdr.hdrSites[invalidSiteId];
@@ -104,7 +105,7 @@ describe('hdr-client.js', function() {
             var finished = false;
             runs(function() {
                 hdrClient.subscribe(testSampleData.siteId, null,
-                testSampleData.rootJobId, testSampleData.jobId, function(err, result) {
+                testSampleData.rootJobId, testSampleData.jobId, testSampleData.jobPriority, function(err, result) {
                     expect(err).toBeTruthy();
                     expect(result).toBeFalsy();
                     finished = true;
@@ -118,7 +119,7 @@ describe('hdr-client.js', function() {
             var finished = false;
             runs(function() {
                 hdrClient.subscribe(testSampleData.siteId, invalidPatientId,
-                testSampleData.rootJobId, testSampleData.jobId, function(err, result) {
+                testSampleData.rootJobId, testSampleData.jobId, testSampleData.jobPriority, function(err, result) {
                     expect(err).toBeTruthy();
                     expect(result).toBeFalsy();
                     finished = true;
@@ -132,7 +133,7 @@ describe('hdr-client.js', function() {
             var finished = false;
             runs(function() {
                 hdrClient.subscribe(testSampleData.siteId, testSampleData.patientIdentifier,
-                null, testSampleData.jobId, function(err, result) {
+                null, testSampleData.jobId, testSampleData.jobPriority, function(err, result) {
                     expect(err).toBeTruthy();
                     expect(result).toBeFalsy();
                     finished = true;
@@ -146,7 +147,7 @@ describe('hdr-client.js', function() {
             var finished = false;
             runs(function() {
                 hdrClient.subscribe(testSampleData.siteId, testSampleData.patientIdentifier,
-                testSampleData.rootJobId, null, function(err, result) {
+                testSampleData.rootJobId, null, testSampleData.jobPriority, function(err, result) {
                     expect(err).toBeTruthy();
                     expect(result).toBeFalsy();
                     finished = true;

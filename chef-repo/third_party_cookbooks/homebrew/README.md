@@ -146,7 +146,7 @@ The default recipe also ensures that Homebrew is installed and up to date if the
 # License and Authors
 
 - Author:: Graeme Mathieson (<mathie@woss.name>)
-- Author::     ua Timberman (<joshua@chef.io>)
+- Author:: Joshua Timberman (<joshua@chef.io>)
 
 ```text
 Copyright:: 2011, Graeme Mathieson

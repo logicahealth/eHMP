@@ -124,24 +124,32 @@ define([
                     });
 
                     this.showModal(modalModel);
-
                 });
+
+                this.listenToOnce(modalCollection, 'fetch:error', function() {
+                  this.showErrorModal(this.model, modelUid);
+                });
+
                 ADK.PatientRecordService.fetchCollection(modalFetchOptions, modalCollection);
             }
 
-            var sections = this.model.get('sections');
-            _.each(sections, function(section) {
+            var sections = {};
+            if (!_.isUndefined(this.model)){
+              sections = this.model.get('sections');
+              _.each(sections, function(section) {
                 section.text = section.text.replace(/\s+/g, ' ');
-            });
-            var currentPatient = ADK.PatientRecordService.getCurrentPatient();
+              });
 
-            this.model.set({
+              var currentPatient = ADK.PatientRecordService.getCurrentPatient();
+
+              this.model.set({
                 'sections': sections,
                 'fullName': currentPatient.get('fullName'),
                 'birthDate': currentPatient.get('birthDate'),
                 'genderName': currentPatient.get('genderName'),
                 'ssn': currentPatient.get('ssn')
-            });
+              });
+            }
         },
         showModal: function(modalModel, clickedBtn) {
             var view = new ModalView({
@@ -168,6 +176,37 @@ define([
             modal.show();
             if(clickedBtn) modal.$el.closest('.modal').find('#' + clickedBtn).focus();
         },
+        showErrorModal: function(model, modelUid, clickedBtn){
+          var modalModel = _.find(dataCollection.models, function(model) {
+            return model.get('uid') === modelUid;
+          });
+
+          var view = new ModalView({
+            model: modalModel,
+            collection: dataCollection
+          });
+
+          var errorView = ADK.Views.Error.create({
+            model: modalModel
+          });
+
+          var modalOptions = {
+            'size': 'xlarge',
+            'headerView': ModalHeader.extend({
+              model: modalModel,
+              theView: view
+            })
+          };
+
+          var modal = new ADK.UI.Modal({
+            view: errorView,
+            options: modalOptions
+          });
+
+          modal.show();
+
+          if(clickedBtn) modal.$el.closest('.modal').find('#' + clickedBtn).focus();
+        },
         getNextModal: function(clickedBtn) {
             var next = _.indexOf(modelUids, this.model.get('uid')) + 1;
             if (next >= modelUids.length) {
@@ -188,14 +227,19 @@ define([
                 }
             };
             var modalCollection = ADK.PatientRecordService.createEmptyCollection(modalFetchOptions);
-                this.listenToOnce(modalCollection, 'fetch:success', function() {
-                    var modalModel = _.find(modalCollection.models, function(model) {
-                        return model.get('uid') === modelUid;
-                    });
+            this.listenToOnce(modalCollection, 'fetch:success', function() {
+              var modalModel = _.find(modalCollection.models, function(model) {
+                return model.get('uid') === modelUid;
+              });
 
-                    this.showModal(modalModel, clickedBtn);
+              this.showModal(modalModel, clickedBtn);
 
-                });
+            });
+
+            this.listenToOnce(modalCollection, 'fetch:error', function() {
+              this.showErrorModal(this.model, modelUid);
+            });
+
             ADK.PatientRecordService.fetchCollection(modalFetchOptions, modalCollection);
 
         },
@@ -218,17 +262,22 @@ define([
                     vler_uid : modelUid
                 }
             };
+
             var modalCollection = ADK.PatientRecordService.createEmptyCollection(modalFetchOptions);
-                this.listenToOnce(modalCollection, 'fetch:success', function() {
-                    var modalModel = _.find(modalCollection.models, function(model) {
-                        return model.get('uid') === modelUid;
-                    });
+            this.listenToOnce(modalCollection, 'fetch:success', function() {
+              var modalModel = _.find(modalCollection.models, function(model) {
+                return model.get('uid') === modelUid;
+              });
 
-                    this.showModal(modalModel, clickedBtn);
+              this.showModal(modalModel, clickedBtn);
 
-                });
+            });
+
+            this.listenToOnce(modalCollection, 'fetch:error', function() {
+              this.showErrorModal(this.model, modelUid);
+            });
+
             ADK.PatientRecordService.fetchCollection(modalFetchOptions, modalCollection);
-
         },
         getModelUids: function() {
             modelUids = [];

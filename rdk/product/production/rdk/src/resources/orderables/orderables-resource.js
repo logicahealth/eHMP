@@ -9,14 +9,10 @@ module.exports.getResourceConfig = function() {
         get: orderables.getOrderables,
         parameters: {
             get: {
-                criteria: {
+                searchString: {
                     required: false,
-                    description: 'Search criteria',
+                    description: 'Search string',
                 },
-                domain: {
-                    required: false,
-                    description: 'List of domains to search. If empty, it searches all domains'
-                }
             }
         },
         requiredPermissions: [],

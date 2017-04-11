@@ -12,7 +12,7 @@ define([
                     'months': 6
                 });
                 var endTime;
-                if (dateModel.get('selectedId') === "all-range-global") {
+                if (dateModel.get('selectedId') === "allRangeGlobal") {
                     endTime = moment().add(newDuration).format('YYYYMMDDHHmm');
                 } else {
                     endTime = moment(dateModel.get('toDate'), "MM/DD/YYYY").format('YYYYMMDDHHmm');
@@ -425,9 +425,11 @@ define([
 
             //if (expirationDate - today) is less than fillableTimeMinutes, report the lower of the two values
             var expirationDateMoment = moment(medDomainData.expirationDate, 'YYYYMMDDHHmm');
-            var expirationDateMinusToday = expirationDateMoment.diff(today, 'minutes');
-            if ((expirationDateMinusToday >= 0) && (expirationDateMinusToday < fillableTimeMinutes)) {
-                fillableTimeMinutes = expirationDateMinusToday;
+            if (expirationDateMoment.isValid()) {
+                var expirationDateMinusToday = expirationDateMoment.diff(today, 'minutes');
+                if (((expirationDateMinusToday >= 0) && (expirationDateMinusToday < fillableTimeMinutes)) || expirationDateMinusToday < 0) {
+                    fillableTimeMinutes = expirationDateMinusToday;
+                }
             }
 
             var fillableTimeDuration = moment.duration(fillableTimeMinutes, 'minutes');
@@ -456,6 +458,14 @@ define([
             if (status === 'Fillable for' && fillableTimeDays <= 90) {
                 result.label = 'label label-warning';
                 result.hasLabel = true;
+            }
+            if (fillableTimeDays <= 0) {
+                result.description = "This medication is "+medDomainData.vaStatus.toLowerCase()+" but expiration date has passed.";
+                result.display = "Not Refillable";
+                result.label = 'label label-warning';
+            } else {
+                result.description = "This medication is Active and fillable for " + fillableTimeString + ". ";
+                result.date = fillableTimeString;
             }
             return result;
         },

@@ -4,7 +4,7 @@ define([
     "underscore"
 ], function(Backbone, Marionette, _) {
     'use strict';
-    
+
     var Helper = (function() {
 
         var newUnsignedOrderDetail = '25 OH VITAMIN D BLOOD SERUM SP *UNSIGNED*\r\n' +
@@ -198,53 +198,63 @@ define([
             'Collection Date/Time: TODAY \r\n' +
             'Urgency: ROUTINE \r\n' +
             'How often: ONE TIME';
-        
+
         var getNewOrder = function() {
             return new Backbone.Model({
                 statusName: "UNRELEASED",
                 detailSummary: newUnsignedOrderDetail,
-                clinicians: []
+                clinicians: [],
+                uid: 'urn:va:order:9E7A:3:44259'
             });
         };
-        
+
         var getSignedOrder = function() {
             return new Backbone.Model({
                 statusName: "PENDING",
                 detailSummary: signedOrderDetail,
-                clinicians: ["Doctor Foo"]
+                clinicians: ["Doctor Foo"],
+                uid: 'urn:va:order:9E7A:3:44259'
             });
         };
-        
+
         var getDiscontinuedUnsignedOrder = function() {
             return new Backbone.Model({
                 statusName: "DISCONTINUED",
                 detailSummary: discontinuedUnsignedOrderDetail,
-                clinicians: ["Doctor Foo"]
+                clinicians: ["Doctor Foo"],
+                uid: 'urn:va:order:9E7A:3:44259'
             });
         };
-        
+
         var getDiscontinuedOrder = function() {
             return new Backbone.Model({
                 statusName: "DISCONTINUED",
                 detailSummary: discontinuedOrderDetail,
-                clinicians: ["Doctor Foo"]
+                clinicians: ["Doctor Foo"],
+                uid: 'urn:va:order:9E7A:3:44259'
             });
         };
-        
+
         var getCanceledOrder = function() {
             return new Backbone.Model({
                 statusName: "CANCELLED",
                 detailSummary: canceledOrderDetail,
-                clinicians: ["Doctor Foo"]
+                clinicians: ["Doctor Foo"],
+                uid: 'urn:va:order:9E7A:3:44259'
             });
         };
-        
+
         var getCompletedOrder = function() {
             return new Backbone.Model({
                 statusName: "COMPLETE",
                 detailSummary: completedOrderDetail,
-                clinicians: ["Doctor Foo"]
+                clinicians: ["Doctor Foo"],
+                uid: 'urn:va:order:9E7A:3:44259'
             });
+        };
+
+        var describe = function(stubText, stubFunction) {
+            //Nothing
         };
 
         return {
@@ -255,7 +265,8 @@ define([
                 getDiscontinuedOrder: getDiscontinuedOrder,
                 getCanceledOrder: getCanceledOrder,
                 getCompletedOrder: getCompletedOrder
-            }
+            },
+            describe: describe
         };
     })();
 

@@ -8,9 +8,9 @@ class VitalsExpandedHeader < AccessBrowserV2
     add_verify(CucumberLabel.new("Date Observed"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-observed']"))
     add_verify(CucumberLabel.new("Type"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-typeName']"))
     add_verify(CucumberLabel.new("Result"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-resultUnitsMetricResultUnits']"))
-    add_verify(CucumberLabel.new("Qualifiers"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-qualifiers']"))
+    add_verify(CucumberLabel.new("Qualifiers"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-qualifiersNames']"))
     add_verify(CucumberLabel.new("Date Entered"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-resulted']"))
-    add_verify(CucumberLabel.new("Facility"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-facilityMoniker']"))
+    add_verify(CucumberLabel.new("Facility"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-facilityName']"))
   end
 end #VitalsExpandedHeader
 
@@ -28,7 +28,7 @@ class Vitals < AllApplets
     add_verify(CucumberLabel.new('Vital Rows'), VerifyXpathCount.new(rows), rows)
     # First Vital Row
     add_action(CucumberLabel.new('First Vital Row'), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@id='data-grid-vitals']/descendant::td[contains(string(),'BMI')]"))
-    add_action(CucumberLabel.new('Applet Toolbar Detail'), ClickAction.new, AccessHtmlElement.new(:css, '#info-button-template #info-button-sidekick-detailView'))
+    add_action(CucumberLabel.new('Applet Toolbar Detail'), ClickAction.new, AccessHtmlElement.new(:css, '[button-type=detailView-button-toolbar]'))
 
     add_verify(CucumberLabel.new("Vital"), VerifyText.new, AccessHtmlElement.new(:id, "vitalsModalDisplayName"))
     add_verify(CucumberLabel.new("Result"), VerifyText.new, AccessHtmlElement.new(:id, "vitalsModalResult"))
@@ -40,6 +40,7 @@ class Vitals < AllApplets
     add_applet_buttons appletid_css
     add_applet_title appletid_css
     add_applet_add_button appletid_css
+    add_toolbar_buttons
   end
 
   def applet_loaded?
@@ -50,25 +51,29 @@ class Vitals < AllApplets
     false
   end
 
-  def clear_filter
-    css_filter = '#grid-filter-button-vitals span.applet-filter-title'
-    driver = TestSupport.driver
-    element = driver.find_element(:css, css_filter)
-    p "Class: #{element.attribute('class')}"
-    unless element.attribute('class').include? 'hidden'
-      p "need to clear the filter"
-      add_action(CucumberLabel.new('Remove All'), ClickAction.new, AccessHtmlElement.new(:css, '#content-region .remove-all'))
-      html_action_element = 'Search Filter'
+  # def clear_filter
+  #   css_filter = '#grid-filter-button-vitals span.applet-filter-title'
+  #   driver = TestSupport.driver
+  #   element = driver.find_element(:css, css_filter)
+  #   p "Class: #{element.attribute('class')}"
+  #   unless element.attribute('class').include? 'hidden'
+  #     p "need to clear the filter"
+  #     add_action(CucumberLabel.new('Remove All'), ClickAction.new, AccessHtmlElement.new(:css, '#content-region .remove-all'))
+  #     html_action_element = 'Search Filter'
 
-      # Open Filter
-      wait_until_action_element_visible(html_action_element, 40)
-      perform_action(html_action_element) unless am_i_visible? 'Remove All'
+  #     # Open Filter
+  #     wait_until_action_element_visible(html_action_element, 40)
+  #     perform_action(html_action_element) unless am_i_visible? 'Remove All'
 
-      # Wait until the filter terms are displayed
-      wait_until_action_element_visible('Remove All', 40)
-      perform_action('Remove All')
-    end
-  end
+  #     # Wait until the filter terms are displayed
+  #     wait_until_action_element_visible('Remove All', 40)
+  #     perform_action('Remove All')
+  #   end
+  # end
+end
+
+When(/^the user clears any existing filters$/) do
+  expect(Vitals.instance.remove_all_filter).to eq(true)
 end
 
 Then(/^the Vitals expanded headers are$/) do |table|
@@ -80,7 +85,7 @@ Then(/^the Vitals expanded headers are$/) do |table|
   expect(headers.length).to eq(table.rows.length)
   table.rows.each do |header_text|
     does_exist = elements.static_dom_element_exists? header_text[0]
-    p "#{header_text[0]} was not found" unless does_exist
+    p "#{header_text[0]} was not found. Text found was  " unless does_exist
     expect(does_exist).to be_true
   end #table
 end #Vitals Headers
@@ -214,7 +219,7 @@ When(/^the user views the first Vital detail view$/) do
   vital_applet = Vitals.instance
   expect(vital_applet.wait_until_xpath_count_greater_than('Vital Rows', 0)).to eq(true), "Test requires at least 1 row to be displayed"
   expect(vital_applet.perform_action('First Vital Row')).to eq(true)
-  expect(vital_applet.perform_action('Applet Toolbar Detail')).to eq(true)
+  expect(vital_applet.perform_action('Detail View Button')).to eq(true)
 end
 
 Then(/^the Vital Detail modal displays$/) do |table|
@@ -329,3 +334,61 @@ Then(/^the Expanded Vitals applet only displays rows from the last (\d+) hours$/
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
   wait.until { verify_rows_last_hours('#data-grid-vitals tbody tr td:nth-child(1)', hour.to_i) }
 end
+
+Then(/^the BMI Vital detail modal is displayed$/) do
+  @ehmp = VitalModal.new
+  expected_headers = ["Vital", "Result", "Date Observed", "Facility", "Type", "Date Entered"]
+  expected_headers.each do | header_text |
+    expect(@ehmp.latest_column_text).to include header_text
+  end
+  @ehmp.btn_all_range.click
+  @ehmp.wait_until_tbl_vital_tests_date_header_visible
+  expect(@ehmp.tbl_vital_tests.length).to be > 0
+end
+
+Then(/^vitals gist is loaded successfully$/) do
+  @ehmp = PobVitalsApplet.new
+  @ehmp.wait_until_applet_gist_loaded 
+end
+
+When(/^user opens the first vitals gist item$/) do
+  @ehmp = PobVitalsApplet.new
+  @ehmp.wait_until_fld_vitals_gist_item_visible
+  expect(@ehmp).to have_fld_vitals_gist_item
+  @ehmp.fld_vitals_gist_item.click
+end
+  
+Then(/^vitals info button is displayed$/) do
+  @ehmp = PobVitalsApplet.new
+  @ehmp.wait_for_btn_info
+  expect(@ehmp).to have_btn_info
+end
+
+Then(/^user navigates to Vitals expanded view$/) do
+  @ehmp = PobVitalsApplet.new
+  @ehmp.load_and_wait_for_screenname
+  @ehmp.wait_until_applet_loaded
+  expect(@ehmp.menu.fld_screen_name.text.upcase).to have_text("Vitals".upcase)
+end
+
+When(/^user opens the first Vitals row$/) do
+  @ehmp = PobVitalsApplet.new
+  @ehmp.wait_until_tbl_vitals_grid_visible
+  expect(@ehmp).to have_tbl_vitals_grid
+  rows = @ehmp.tbl_vitals_grid
+  expect(rows.length >= 0).to eq(true), "this test needs at least 1 row, found only #{rows.length}"
+  rows[0].click
+end
+
+When(/^the user clicks the All vitals range$/) do
+  @ehmp = PobVitalsApplet.new
+  @ehmp.wait_until_btn_expanded_all_range_visible
+  expect(@ehmp).to have_btn_expanded_all_range
+  @ehmp.btn_expanded_all_range.click
+  @ehmp.wait_until_btn_expanded_all_range_active_visible
+
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until {  Vitals.instance.applet_loaded? }
+end
+
+

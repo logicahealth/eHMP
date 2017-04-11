@@ -9,8 +9,8 @@ apply plugin: "sonar-runner"
 
 sonarRunner {
     sonarProperties {
-       property "sonar.host.url", "http://172.16.2.11:9000"
-       property "sonar.jdbc.url", "jdbc:mysql://172.16.2.11:3306/sonar?useUnicode=true&amp;characterEncoding=utf8"
+        property "sonar.host.url", "http://IPADDRESS:PORT"
+        property "sonar.jdbc.url", "jdbc:mysql://IPADDRESS:PORT/sonar?useUnicode=true&amp;characterEncoding=utf8"
     }
 }
 
@@ -60,15 +60,15 @@ allprojects  {
     version = "${->repoVersion + '.' + repoCommitCount}"
 
     repositories {
-        maven { url "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp-public" }
-        maven { url "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp/filerepo/" }
+        maven { url "https://store.vistacore.us/nexus/content/groups/public" }
+        maven { url "https://store.vistacore.us/nexus/content/repositories/filerepo/" }
     }
 
     uploadArchives {
        repositories.mavenDeployer {
            pom.groupId = "${->groupId}"
            pom.version = "${->version}"
-          repository(url: "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp/${->repo}/") {
+           repository(url: "https://store.vistacore.us/nexus/content/repositories/${->repo}/") {
              authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
            }
        }

@@ -3,7 +3,7 @@ Feature: F144 - eHMP Viewer GUI - Documents
 
 @f144_documents_navigation_thro_dropdwon @US1914
 Scenario: progress notes, clinical procedure and discharge summary are displayed in document applet
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "ZZZRETFOUREIGHTY,PATIENT"
   And Overview is active
   When user selects Documents from Coversheet dropdown
@@ -13,7 +13,7 @@ Scenario: progress notes, clinical procedure and discharge summary are displayed
   
 @f144_documents_default_display_gdf_all @US1914 @DE3038
 Scenario: Procedure, Surgery, Imaging, Discharge Summary, Advance Directive and Consult report are displayed in document applet
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "NINETYNINE,PATIENT"
   When user navigates to Documents Applet
   Then "Documents" is active
@@ -37,7 +37,7 @@ Scenario: Procedure, Surgery, Imaging, Discharge Summary, Advance Directive and 
   
 @f144_documents_filter 
 Scenario: Documents applet is able to filter data based on search
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "EIGHT,Patient"
   And the user has selected All within the global date picker
   When user navigates to Documents Applet
@@ -45,9 +45,9 @@ Scenario: Documents applet is able to filter data based on search
   And the user filters the Document Applet by text "Surgery"
   Then the Documents table only diplays rows including text "Surgery"
   
-@f144_documents_sorting_by_type @US2684 @DE3038 @debug @DE3844
+@f144_documents_sorting_by_type @US2684 @DE3038 @DE3844
 Scenario: Documents applet displays sorting by Type correctly
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "EIGHT,PATIENT"
   And the user has selected All within the global date picker
   When user navigates to Documents Applet
@@ -58,10 +58,10 @@ Scenario: Documents applet displays sorting by Type correctly
   And the user sorts the Documents grid by "Type" 
   And the default sorting by Date/Time is in descending in Documents Applet 
   
-@f144_documents_sorting_by_facility  @US2684 @DE3038 @debug @DE3844
+@f144_documents_sorting_by_facility  @US2684 @DE3038 @DE3844
 Scenario: Documents applet displays sorting by Facility correctly
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "EIGHT,PATIENT"
   And the user has selected All within the global date picker
   When user navigates to Documents Applet
@@ -72,10 +72,10 @@ Scenario: Documents applet displays sorting by Facility correctly
   And the user sorts the Documents grid by "Facility"
   And the default sorting by Date/Time is in descending in Documents Applet
   
-@f144_documents_sorting_by_author  @US2684 @DE3038 @debug @DE3844
+@f144_documents_sorting_by_author  @US2684 @DE3038 @DE3844
 Scenario: Documents applet displays sorting by Author correctly
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "EIGHT,PATIENT"
   And the user has selected All within the global date picker
   When user navigates to Documents Applet
@@ -86,10 +86,10 @@ Scenario: Documents applet displays sorting by Author correctly
   And the user sorts the Documents grid by "Author"
   And the default sorting by Date/Time is in descending in Documents Applet
 
-@f144_documents_sorting_by_desc  @US2684 @DE3038 @debug @DE3844
+@f144_documents_sorting_by_desc  @US2684 @DE3038 @DE3844
 Scenario: Documents applet displays sorting by Description correctly
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "EIGHT,PATIENT"
   And the user has selected All within the global date picker
   When user navigates to Documents Applet
@@ -103,7 +103,7 @@ Scenario: Documents applet displays sorting by Description correctly
   
 @f144_documents_refresh 
 Scenario: Documents applet displays all of the same details after applet is refreshed
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "EIGHT,Patient"
   When user navigates to Documents Applet
   And the user has selected All within the global date picker

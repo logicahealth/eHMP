@@ -1,0 +1,13 @@
+{
+  "id": "authentication_keys",
+  "admins": [
+    "jenkins"
+  ],
+  "clients": [
+
+  ],
+  "search_query": [
+
+  ],
+  "jenkins": "QaYuLVncFRt9GpI7oDIBR5WalWvPJgGZ5eqqM6gVKTyI+BuX7XZiH2JINsMR\ntL6L516+KNbNVwyr3etEa2tFxgPLXUH2WOlZl9M6RJ7y1XBBamu5mX2ndAQ2\nHqajN4bfJzCqul2Y1A1CqyWPO6abQKmLEuInlqNMi/fuhnP2Zw+kxPhGmNti\nSG79E974lt47cij/UEAwjIDvkL3Y+X9Ywok2UPnKRyvmy2Ew42qvik3QEx3o\nR02dtKWMa8ja8RKhFTEr8eBnUejty5sKPo0i85AAFglVMdQOFZ9o9bAY/XA3\nbPdYMLmCnZ7yjoQEdEXFGK27qQVK4hqDF2cc0OD+Hw==\n"
+}

@@ -19,16 +19,16 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="questionnaireBean">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.domain.ext/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="comments" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="enteredBy" type="{http://webservice.vds.domain.ext/}provider" minOccurs="0"/>
+ *         &lt;element name="enteredBy" type="{http://webservice.vds.DNS       /}provider" minOccurs="0"/>
  *         &lt;element name="enteredDate" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="recordId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="responseComments" type="{http://webservice.vds.domain.ext/}questionnaireResponseComments" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="responseComments" type="{http://webservice.vds.DNS       /}questionnaireResponseComments" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="responseDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
- *         &lt;element name="responses" type="{http://webservice.vds.domain.ext/}questionnaireDetails" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="responses" type="{http://webservice.vds.DNS       /}questionnaireDetails" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="version" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -40,7 +40,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "questionnaireBean", namespace = "http://webservice.vds.domain.ext/", propOrder = {
+@XmlType(name = "questionnaireBean", namespace = "http://webservice.vds.DNS       /", propOrder = {
     "comments",
     "enteredBy",
     "enteredDate",

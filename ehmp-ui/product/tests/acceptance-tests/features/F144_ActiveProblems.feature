@@ -1,12 +1,21 @@
-@US2411 @regression @triage
+@US2411 @regression
 Feature: F144 - eHMP viewer GUI - Active Problems
 #Team Neptune 
 
 Background: 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
 
+@detail_next_previous
+Scenario: Verify user can step through the problems using the next button / previous button
+  Given the Problems applet displays
+  And the problems applet displays at least 3 problem rows
+  And the user notes the first 3 problems
+  And the user views a problem applet row's details
+  Then the modal is displayed
+  And the user can step through the problems using the next button
+  And the user can step through the problems using the previous button
 
 @US2411a
 Scenario: User uses the active problems coversheet to view modal
@@ -90,13 +99,26 @@ Scenario: User uses the expanded active problems applet to sort
    
 
   
-@f144_conditions_on_coversheet_expand_view_refresh 
-Scenario: Conditions Expanded view from coversheet view displays all of the same details after applet is refreshed
+@f144_problems_on_coversheet_expand_view_refresh 
+Scenario: Problems Expanded view from coversheet view displays all of the same details after applet is refreshed
   When the Problems applet displays
-  Then the Problems applet is titled "CONDITIONS"
+  Then the Problems applet is titled "PROBLEMS"
   When the user clicks the Problems Expand Button
-  Then the expanded Conditions Applet is displayed
-  And the Conditions Applet contains data rows
-  When user refreshes Conditions Applet
-  Then the message on the Conditions Applet does not say "An error has occurred"
+  Then the expanded Problems Applet is displayed
+  And the Problems Applet contains data rows
+  When user refreshes Problems Applet
+  Then the message on the Problems Applet does not say "An error has occurred"
+  
+@f297_conditions_info_button_integration
+Scenario: Verify Problems applet on overview page has info button toolbar
+  And Overview is active
+  And problems gist is loaded successfully
+  When user opens the first problems gist item
+  Then problems info button is displayed
+  
+@f297_conditions_info_button_integration
+Scenario: Verify Problems applet expanded view has info button toolbar
+  And user navigates to problems expanded view 
+  When user opens the first problems row
+  Then problems info button is displayed
 	

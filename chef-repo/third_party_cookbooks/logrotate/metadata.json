@@ -2,7 +2,7 @@
   "name": "logrotate",
   "description": "Installs logrotate package and provides a definition for logrotate configs",
   "long_description": "Installs the logrotate package, manages /etc/logrotate.conf, and provides a logrotate_app definition.",
-  "maintainer": "     n Danna",
+  "maintainer": "Steven Danna",
   "maintainer_email": "steve@chef.io",
   "license": "Apache 2.0",
   "platforms": {

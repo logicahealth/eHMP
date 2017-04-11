@@ -21,7 +21,7 @@ define([
         template: rowTemplate,
         events: {
             'click': 'displayModal',
-            'keyup': 'triggerClick'
+            'keydown': 'triggerClick'
         },
         triggerClick: function(e) {
             if (e.keyCode === 13) {

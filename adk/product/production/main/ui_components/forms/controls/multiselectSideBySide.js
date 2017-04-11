@@ -22,7 +22,7 @@ define([
             '</div>' +
             '{{/if}}' +
             '<div class="table-cell pixel-width-57 text-right">' +
-            '<button type="button" class="btn btn-link add-remove-btn all-padding-no checked-{{value}}" title="Press enter to remove {{label}}.">Remove</button>' +
+            '<button type="button" class="btn btn-link add-remove-btn all-padding-no color-red-dark checked-{{value}}" title="Press enter to remove {{label}}.">Remove</button>' +
             '</div>'
         ].join("\n")),
         templateHelpers: function() {
@@ -34,6 +34,25 @@ define([
             };
         },
         className: 'table-row',
+        events: {
+            'focusout .popover-control button': 'hidePopovers'
+        },
+        modelEvents: {
+            'change.inputted': function() {
+                this.$el.trigger('mssbs.change.user.input');
+            }
+        },
+        hidePopovers: function(e) {
+            var popoverId = this.$('.popover-control button').attr('aria-describedby');
+            var popover = $('#' + popoverId);
+            var isPopoverElement = false;
+            if (!_.isUndefined(e) && !_.isEmpty(popover)) {
+                isPopoverElement = $.contains(popover.get(0), e.relatedTarget);
+            }
+            if (this.enablePopovers && !isPopoverElement) {
+                this.$el.find('.popover-control').find('button').trigger('control:popover:hidden', true);
+            }
+        },
         triggers: {
             'click .add-remove-btn': 'child:item:removed'
         },
@@ -82,7 +101,7 @@ define([
                     }
                 }, detailsPopoverOptions), {
                     control: 'popover',
-                    label: popoverTitle,
+                    label: 'Press enter to view details and then press T to access the table.',
                     srOnlyLabel: true,
                     name: 'detailsPopoverValue',
                     icon: 'fa-file-text-o',
@@ -105,6 +124,7 @@ define([
                 popoverButton.popover().on('click', function() {
                     self.triggerMethod('details:popover:clicked', $(this));
                 });
+                popoverButton.prop('disabled', !!this.field.get('disabled'));
             }
         },
         onRender: function() {
@@ -120,6 +140,7 @@ define([
                     value: attributes[this.attributeMapping.value],
                     id: attributes[this.attributeMapping.id],
                     label: attributes[this.attributeMapping.label],
+                    srOnlyLabel: _.isBoolean(attributes[this.attributeMapping.srOnlyLabel]) ? attributes[this.attributeMapping.srOnlyLabel] : false,
                     additionalColumns: this.additionalColumns,
                     itemColumn: this.itemColumn
                 };
@@ -132,10 +153,10 @@ define([
             "TableBody": ".body",
             "FilterInput": ".filter"
         },
-        className: "faux-table",
+        className: "faux-table background-color-pure-white",
         template: Handlebars.compile([
             '<div class="header table-row right-padding-md top-padding-xs bottom-padding-xs">',
-            '<div class="table-cell{{#each itemColumn.columnClasses}} {{this}}{{/each}}">{{#if itemColumn.columnTitle}}{{add-required-indicator itemColumn.columnTitle required}}{{else}}Selected {{add-required-indicator label required}}{{/if}}</div>',
+            '<div class="table-cell {{#each itemColumn.columnClasses}} {{this}}{{/each}}">{{#if itemColumn.columnTitle}}{{add-required-indicator itemColumn.columnTitle required}}{{else}}Selected {{#unless srOnlyLabel}}{{add-required-indicator label required}}{{/unless}}{{/if}}</div>',
             '{{#each additionalColumns}}' +
             '<div class="table-cell{{#each columnClasses}} {{this}}{{/each}}">{{add-required-indicator columnTitle required}}</div>' +
             '{{/each}}',
@@ -192,6 +213,7 @@ define([
                     //No focusable elements.
                     this._parent._parent._regions.AvailableModifiersRegion.currentView.$('input.filter').focus();
                 }
+                this.$el.trigger('mssbs.change.user.input');
             }
         },
         modelEvents: {
@@ -206,12 +228,14 @@ define([
         initialize: function(options) {
             this.model = options.field;
             this.attributeMapping = options.attributeMapping;
-
+            this.enablePopovers = false;
+            if (!_.isUndefined(this.model.get('detailsPopoverOptions'))) {
+                this.enablePopovers = true;
+            }
             this._orginialCollection = options._orginialCollection;
 
             this.resetItems();
-            //IMPORTANT: when Backbone is upgraded use "update" event instead of "add remove"
-            this.listenTo(this._orginialCollection, 'add remove', this.resetItems);
+            this.listenTo(this._orginialCollection, 'update', this.resetItems);
             this.listenTo(this._orginialCollection, 'change:' + this.attributeMapping.value, function(model) {
                 if (model.changed[this.attributeMapping.value]) {
                     this.collection.add(model);
@@ -220,25 +244,32 @@ define([
                 }
             }, this);
         },
+        hidePopovers: function() {
+            if (this.enablePopovers) {
+                this.$el.find('.popover-control').find('button').trigger('control:popover:hidden', true);
+            }
+        },
         resetItems: function() {
+            this.hidePopovers();
             this.collection.set(this._orginialCollection.filter(function(model) {
                 return model.get(this.attributeMapping.value);
             }, this));
         }
     });
     var AvailableRowItemView = Backbone.Marionette.LayoutView.extend({
-        template: Handlebars.compile(['<div class="table-cell{{#if value}} color-primary-lighter{{/if}}">{{label}}</div>' +
+        template: Handlebars.compile(['<div class="table-cell{{#if value}} color-grey-darkest{{/if}}">{{label}}</div>' +
             '{{#if enablePopovers}}' +
             '<div class="table-cell pixel-width-57 text-right details-popover-region">' +
             '</div>' +
             '{{/if}}' +
             '<div class="table-cell pixel-width-57 text-right">' +
-            '<button tabindex="-1" type="button" class="btn btn-link add-remove-btn all-padding-no checked-{{value}}{{#if value}} color-primary-lighter{{/if}}" title="Press enter to {{#if value}}remove{{else}}add{{/if}} {{label}}.">{{#if value}}Remove{{else}}Add{{/if}}</button>' +
+            '<button tabindex="-1" type="button" class="btn btn-link add-remove-btn all-padding-no checked-{{value}}{{#if value}} color-grey-darkest{{/if}}" title="Press enter to {{#if value}}remove{{else}}add{{/if}} {{label}}.">{{#if value}}Remove{{else}}Add{{/if}}</button>' +
             '</div>'
         ].join("\n")),
         className: 'table-row',
         events: {
-            "click .add-remove-btn": "onChange"
+            "click .add-remove-btn": "onChange",
+            'focusout .popover-control button': 'hidePopovers'
         },
         initialize: function(options) {
             this.attributeMapping = options.attributeMapping;
@@ -269,10 +300,10 @@ define([
         buildPopover: function() {
             if (this.enablePopovers) {
                 var self = this;
-                var popoverTitle = 'Details for ' + this.model.get(this.attributeMapping.label) + ' ';
+                var popoverTitle = 'Press enter to view details for ' + this.model.get(this.attributeMapping.label) + ' ';
                 var extraClasses = ['btn-link'];
                 if (this.model.get(this.attributeMapping.value) === true) {
-                    extraClasses = ['btn-link', 'color-primary-lighter'];
+                    extraClasses = ['btn-link', 'color-grey-darker'];
                 }
                 var popoverContainer = this.$el.closest('.modal-body, form');
                 var detailsPopoverOptions = this.field.get('detailsPopoverOptions') || {};
@@ -308,14 +339,24 @@ define([
                 }));
                 var popoverButton = this.$el.find('.popover-control').find('button');
                 popoverButton.attr('tabindex', '-1');
-                popoverButton.popover().on('click', function() {
+                popoverButton.on('click', function(event) {
                     self.triggerMethod('details:popover:clicked', $(this));
+                });
+                popoverButton.prop('disabled', !!this.field.get('disabled'));
+                this.listenTo(this.model, 'user.inputted', function() {
+                    this.$el.trigger('mssbs.change.user.input');
                 });
             }
         },
-        hidePopovers: function() {
-            if (this.enablePopovers) {
-                this.$el.find('.popover-control').find('button').trigger('control:popover:hidden', true);
+        hidePopovers: function(e) {
+            var popoverId = this.$('.popover-control button').attr('aria-describedby');
+            var popover = $('#' + popoverId);
+            var isPopoverElement = false;
+            if (!_.isUndefined(e)) {
+                isPopoverElement = $.contains(popover.get(0), e.relatedTarget);
+            }
+            if (this.enablePopovers && !isPopoverElement) {
+                this.$el.find('.popover-control button').trigger('control:popover:hidden', true);
             }
         },
         onChange: function(e) {
@@ -323,6 +364,7 @@ define([
             var value = this.getValueFromDOM(e);
             this.model.set(this.attributeMapping.value, value);
             this.buildPopover();
+            this.$el.trigger('mssbs.change.user.input');
         },
         templateHelpers: function() {
             var self = this;
@@ -348,19 +390,23 @@ define([
             "TableBody": ".body:first",
             "FilterInput": ".filter"
         },
-        className: "faux-table",
+        className: "faux-table background-color-pure-white",
         attributes: {
             'role': 'application'
         },
         template: Handlebars.compile([
             '<div class="header table-row right-padding-md top-padding-xs bottom-padding-xs">',
-            '<div class="table-cell">{{#if itemColumn.columnTitle}}{{itemColumn.columnTitle}}{{else}}Available {{label}}{{/if}}</div>', '<div class="table-cell pixel-width-57 text-center"></div>',
+            '<div class="table-cell">{{#if itemColumn.columnTitle}}{{itemColumn.columnTitle}}{{else}}Available {{#unless srOnlyLabel}}{{label}}{{/unless}}{{/if}}</div>', '<div class="table-cell pixel-width-57 text-center"></div>',
             '</div>',
             '<div class="container-fluid">',
             '<div class="msbs-input row all-padding-xs">',
             '<div class="control input-control form-group bottom-margin-no">',
             '<label for="available-{{clean-for-id label}}-modifiers-filter-results" class="sr-only">Available {{label}} Filter</label>',
-            '<input id="available-{{clean-for-id label}}-modifiers-filter-results" type="text" class="form-control input-sm filter" name="available-{{clean-for-id label}}-filter" title="Enter text to filter the {{#if itemColumn.columnTitle}}{{itemColumn.columnTitle}}{{else}}Available {{label}}{{/if}}. Use the up and down arrow keys to cycle through the list of {{#if itemColumn.columnTitle}}{{itemColumn.columnTitle}}{{else}}available {{label}}{{/if}}." placeholder="Filter {{label}}"/>',
+            '<i class="fa fa-filter"></i>',
+            '<input id="available-{{clean-for-id label}}-modifiers-filter-results" type="text" class="form-control input-sm filter" name="available-{{clean-for-id label}}-filter" title="Enter text to filter the {{#if itemColumn.columnTitle}}{{itemColumn.columnTitle}}{{else}}Available {{label}}{{/if}}. Use the up and down arrow keys to cycle through the list of {{#if itemColumn.columnTitle}}{{itemColumn.columnTitle}}{{else}}available {{label}}{{/if}}.{{#if detailsPopoverOptions}} Use the right arrow key to view details.{{/if}}" placeholder="Filter {{label}}"/>',
+            '<button class="clear-input hidden btn btn-icon btn-sm color-grey-darkest" type="button" title="Press enter to clear text">',
+            '<i class="fa fa-times"></i>',
+            '</button>',
             '<span class="loading hidden"><i class="fa fa-spinner fa-spin"></i></span>',
             '</div>',
             '</div>',
@@ -401,11 +447,6 @@ define([
         onBeforeDestroy: function() {
             this.ui.TableBody.off('scroll');
         },
-        hidePopovers: function() {
-            if (this.enablePopovers) {
-                this.$el.find('.popover-control').find('button').trigger('control:popover:hidden', true);
-            }
-        },
         onKeydownEvent: function(event, triggeredFromPopover) {
             var isAltOrCtrl = (event.altKey || event.ctrlKey);
             var accessPopoverContent = (triggeredFromPopover && event.keyCode === SPACE_BAR);
@@ -421,7 +462,6 @@ define([
                     if (this._currentRowId > 0) {
                         this._currentRowId--;
                         this.selectRow(this._currentRowId);
-                        this.hidePopovers();
                     }
                 } else if (event.keyCode === DOWN_ARROW_KEY) {
                     event.preventDefault();
@@ -434,22 +474,21 @@ define([
                     if (this._currentRowId < (this.collection.length - 1)) {
                         this._currentRowId++;
                         this.selectRow(this._currentRowId);
-                        this.hidePopovers();
                     }
                 } else if (event.keyCode === RIGHT_ARROW_KEY) {
                     if (this.enablePopovers && this._currentRowId != -1 && !this.useRightKeyForFilterNavigation) {
                         event.preventDefault();
                         if (triggeredFromPopover && !isAltOrCtrl) {
                             this.ui.FilterInput.focus();
+                        } else {
+                            this.toggleDetailsPopoverOnSelectedRow();
                         }
-                        this.toggleDetailsPopoverOnSelectedRow();
                     }
                 } else if (event.keyCode === LEFT_ARROW_KEY) {
                     if (this.enablePopovers) {
                         if (triggeredFromPopover && !isAltOrCtrl) {
                             this.ui.FilterInput.focus();
                         }
-                        this.hidePopovers();
                         this.useRightKeyForFilterNavigation = true;
                     }
                 } else if (event.keyCode === ENTER_KEY) {
@@ -482,7 +521,6 @@ define([
                                 }
                             } else {
                                 this.ui.FilterInput.focus();
-                                this.hidePopovers();
                                 this.onFilterInput(event);
                             }
                         }
@@ -490,7 +528,6 @@ define([
                         if (triggeredFromPopover) {
                             this.ui.FilterInput.focus();
                         }
-                        this.hidePopovers();
                         this.onFilterInput(event);
                     }
                 }
@@ -507,7 +544,7 @@ define([
             },
             'input @ui.FilterInput': function(event) {
                 if (this.enablePopovers) {
-                    if (this.useRightKeyForFilterNavigation === true) {
+                    if (this.useRightKeyForFilterNavigation === true || event.target.value.toLowerCase() === '') {
                         this.onFilterInput(event);
                     }
                 } else {
@@ -515,16 +552,26 @@ define([
                 }
             },
             'focusout @ui.FilterInput': function(event) {
-                this._currentRowId = -1;
-                this.$('.active').removeClass('active');
+                if (!this.enablePopovers || (this.enablePopovers && this.useRightKeyForFilterNavigation)) {
+                    this._currentRowId = -1;
+                    this.$('.active').removeClass('active');
+                }
+            },
+            'click .clear-input': function(event) {
+                this.ui.FilterInput.val('').focus();
+                this.$('.clear-input').addClass("hidden");
+                this.resetItems();
             }
         },
         onFilterInput: function(event) {
+            this.$('.clear-input').addClass("hidden");
             this.$('.loading').removeClass("hidden");
             clearTimeout(this._inputEvent);
             this._inputEvent = setTimeout(_.bind(function() {
-                this._currentRowId = -1;
-                this.selectRow();
+                if (!this.enablePopovers || (this.enablePopovers && this.useRightKeyForFilterNavigation)) {
+                    this._currentRowId = -1;
+                    this.selectRow();
+                }
                 this.filterCollectionEvent(event);
             }, this), 250);
         },
@@ -581,23 +628,27 @@ define([
             }
         },
         filterCollectionEvent: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.$el.find('.popover-control').find('button').trigger('control:popover:hidden', true);
-            var filterString = e.target.value.toLowerCase();
+            var filterString = this.$el.find('.filter').val();
+            if (!_.isUndefined(e)) {
+                e.preventDefault();
+                e.stopPropagation();
+                filterString = e.target.value.toLowerCase();
+            }
+
             var itemColumnTitle = this.model.get('itemColumn') || {};
             itemColumnTitle = itemColumnTitle.columnTitle || 'available ' + this.model.get('label');
             if (filterString.length > 0) {
+                var filterStringIgnoreSpaces = filterString.replace(/\s+/g, '');
                 var label = this.attributeMapping.label;
                 if (this._lastInputString.length > filterString.length || (this._lastInputString.indexOf(filterString) < 0)) {
                     //Deleting Characters
                     this.collection.set(this._orginialCollection.filter(function(model) {
-                        return model.get(label).toLowerCase().indexOf(filterString) > -1;
+                        return model.get(label).toLowerCase().replace(/\s+/g, '').indexOf(filterStringIgnoreSpaces) > -1;
                     }, this), this).sort();
                 } else {
                     //Adding Characters
                     this.collection.set(this.collection.filter(function(model) {
-                        return model.get(label).toLowerCase().indexOf(filterString) > -1;
+                        return model.get(label).toLowerCase().replace(/\s+/g, '').indexOf(filterStringIgnoreSpaces) > -1;
                     }, this), this);
                 }
                 Accessibility.Notification.new({
@@ -613,28 +664,33 @@ define([
             }
             this._lastInputString = filterString;
             this.$('.loading').addClass("hidden");
+            if (filterString) {
+                this.$('.clear-input').removeClass("hidden");
+            }
         },
         initialize: function(options) {
             this.model = options.field;
-            this.enablePopovers = false;
-            if (!_.isUndefined(this.model.get('detailsPopoverOptions'))) {
-                this.enablePopovers = true;
-            }
+            this.enablePopovers = !_.isUndefined(this.model.get('detailsPopoverOptions'));
             this.attributeMapping = options.attributeMapping;
             this._orginialCollection = options._orginialCollection;
             this._inputEvent = null;
             this._lastInputString = "";
             this._currentRowId = -1;
-            //IMPORTANT: when Backbone is upgraded use "update" event instead of "add remove"
-            this.listenTo(this._orginialCollection, 'add remove', this.resetItems);
+            this.listenTo(this._orginialCollection, 'update', function() {
+                this.resetItems(true);
+            });
         },
-        resetItems: function() {
+        resetItems: function(filterCollection) {
             this.collection.set(this._orginialCollection.models).sort();
+            if (!_.isUndefined(filterCollection) && filterCollection === true) {
+                this.filterCollectionEvent();
+            }
+
         }
     });
 
     var TotalCountView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile("<div class='pull-right'><span>Total Selected: {{totalSelected}}</span>{{#if required}}<input class='total-selected-input' type='number' min='1' value={{totalSelected}} tabIndex='-1' oninvalid='setCustomValidity(\"{{errorMessage}}\")'>{{/if}}"),
+        template: Handlebars.compile("<div class='pull-right'><span aria-hidden='true'>Total Selected: {{totalSelected}}</span><label for='total-selected-{{fieldName}}' class='sr-only'>Total Selected: {{totalSelected}}</label>{{#if required}}<input class='total-selected-input' id='total-selected-{{fieldName}}' type='number' min='1' value={{totalSelected}} tabIndex='-1' oninvalid='setCustomValidity(\"{{errorMessage}}\")'>{{/if}}"),
         modelEvents: {
             'change': 'render'
         },
@@ -646,7 +702,8 @@ define([
             return {
                 'totalSelected': model.get('totalSelected'),
                 'required': field.get('required'),
-                'errorMessage': model.get('errorMessage')
+                'errorMessage': model.get('errorMessage'),
+                'fieldName': field.get('name')
             };
         }
     });
@@ -671,7 +728,7 @@ define([
         template: Handlebars.compile([
             '<div class="available-region{{#if availableSize}} col-md-{{availableSize}}{{else}} col-md-6{{/if}}"></div>',
             '<div class="selected-region{{#if selectedSize}} col-md-{{selectedSize}}{{else}} col-md-6{{/if}}"></div>',
-            '<div class="col-xs-12 total-selected-region"></div>'
+            '<div class="col-xs-12 total-selected-region background-color-pure-white"></div>'
         ].join("\n")),
         initialize: function(options) {
             this.initOptions(options);
@@ -682,10 +739,8 @@ define([
 
             // Set any undefined/nonBoolean values to false
             _.each(this.collection.reject(function(model) {
-                if (_.isBoolean(model.get(this.attributeMapping.value))) {
-                    return true;
-                }
-                return false;
+                return !!_.isBoolean(model.get(this.attributeMapping.value));
+
             }, this), function(model) {
                 model.set(this.attributeMapping.value, false);
             }, this);
@@ -694,7 +749,7 @@ define([
                 this.listenTo(this.model.errorModel, "change:" + this.getComponentInstanceName(), this.updateInvalid);
             }
             this._utilityModel = new Backbone.Model({
-                errorMessage: 'This field is required. Please select one or more items.',
+                errorMessage: 'This field is required. Select one or more items.',
                 field: this.field
             });
             this.listenTo(this.collection, 'change reset', function() {
@@ -710,8 +765,7 @@ define([
 
             this.model.set(this.getComponentInstanceName(), this.collection);
         },
-        events: _.defaults({
-            //Events to be Triggered By User
+        events: {
             "control:required": function(event, booleanValue) {
                 this.setBooleanFieldOption("required", booleanValue, event);
             },
@@ -721,8 +775,16 @@ define([
                     var shownPopovers = this.$('.popover-control').find('.popover-shown');
                     shownPopovers.trigger('control:popover:hidden', true);
                 }
+            },
+            "control:disabled": function(event, booleanValue) {
+                this.$el.find('button').prop('disabled', booleanValue);
+                this.$el.find('input.filter').prop('disabled', booleanValue);
+            },
+            'mssbs.change.user.input': function(event) {
+                event.stopPropagation();
+                this.onUserInput.apply(this, arguments);
             }
-        }, PuppetForm.DefaultRadioControl.prototype.events),
+        },
         onShow: function() {
             this.showChildView('AvailableModifiersRegion', new AvailableCompositeView({
                 field: this.field,
@@ -741,21 +803,22 @@ define([
             this.showChildView('TotalSelectedRegion', new TotalCountView({
                 model: this._utilityModel
             }));
+            this.$el.trigger('control:disabled', this.field.get('disabled'));
         },
         onTogglePopover: function(childView) {
             var clickedPopover = childView.$('.popover-control > button');
-            var otherPopovers = this.$('.popover-control').find('.popover-shown').not(clickedPopover);
-            otherPopovers.trigger('control:popover:hidden', true);
-            var hideClickedPopover = clickedPopover.hasClass('popover-shown');
             clickedPopover.popover('toggle');
         },
         serializeModel: function(model, moreOptions) {
             var field = this.field.toJSON(),
                 selectedSize = null,
                 availableSize = null;
-            if (_.isNumber(field.selectedSize) && (0 < field.selectedSize < 13)) {
+            if (_.isNumber(field.selectedSize) && 0 < field.selectedSize && field.selectedSize < 12) {
                 selectedSize = field.selectedSize;
                 availableSize = 12 - selectedSize;
+            } else if (_.isEqual(field.selectedSize, 12)) {
+                selectedSize = field.selectedSize;
+                availableSize = selectedSize;
             }
             return _.defaults({
                 selectedSize: selectedSize,

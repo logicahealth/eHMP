@@ -1,9 +1,8 @@
-@F333 @regression @triage
+@F333 @regression @triage @DE4426 @DE4767 @debug @DE5113
 Feature: Global search of patients outside local VistA
 
-@TC561 @DE1491 @DE1722
+@TC561 @DE1491 @DE1722 @TC561_1
 Scenario: Verify that the Demographic information for secondary patients displays in demographic detail drop-down
-    Given user is logged into eHMP-UI
     When the patient search screen is displayed
     Given the call to my cprs list is completed
     And the User selects All Patient
@@ -13,17 +12,15 @@ Scenario: Verify that the Demographic information for secondary patients display
     And the user click on All Patient Search
     And the user select all patient result patient name "DODONLY, PATIENT"
     And the user click on Confirm Selection
-    And the user waits 10 seconds for sync to complete
-    Then Overview is active
-    Then user selects Patient Name drop down
-    And the Patient's "Home Phone" is "(301) 222-3333"
-    And the Patient's "Home Address line1" is "Lost Street"
-    And the Patient's "Home Address line2" is "Norfolk, VA, 20152"
+    Then Default Screen is active
+    And user selects Patient Demographic drop down
+    And the Patient's Home Phone is "(301) 222-3333"
+    And the Patient's Home Address line is "Lost Street Norfolk, VA, 20152"
 
 
-@TC560
+@TC560 @DE5056 @debug @DE5054
 Scenario: Verify that the Write Back is disabled from CoverSheet for Non-Vista patient
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	When the patient search screen is displayed
 	Given the call to my cprs list is completed
 	And the User selects All Patient
@@ -45,7 +42,7 @@ Scenario: Verify that the Write Back is disabled from CoverSheet for Non-Vista p
 
 @TC560
 Scenario: Verify that the Write Back is disabled from Overview for Non-Vista patient
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
     When the patient search screen is displayed
     Given the call to my cprs list is completed
     And the User selects All Patient

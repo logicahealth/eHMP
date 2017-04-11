@@ -1,6 +1,10 @@
-class PobLabResults < SitePrism::Page
+require_relative 'parent_applet.rb'
+
+class PobLabResults < PobParentApplet
+  
   set_url '/#lab-results-grid-full'
   set_url_matcher(/\/#lab-results-grid-full/)
+    
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #
   # *****************  All_Field_Elements  ******************* #
@@ -15,6 +19,8 @@ class PobLabResults < SitePrism::Page
   element :btn_lab_results_all, "button[id='all-range-lab_results_grid']"
   element :btn_sidekick_detail, "a[id='info-button-sidekick-detailView'] i"
   element :btn_lab_results_modal_close, "#modal-header #sm-close"
+
+  element :fld_lab_results_modal_header , '#grid-panel-lab_results_grid .header'
 
   # *****************  All_Drop_down_Elements  ******************* #
 
@@ -37,5 +43,16 @@ class PobLabResults < SitePrism::Page
         break
       end
     end
+  end
+  
+  def initialize
+    super
+    appletid_css = "[data-appletid=lab_results_grid]"
+    add_applet_buttons appletid_css
+    add_title appletid_css
+    add_empty_table_row appletid_css
+    add_generic_error_message appletid_css
+    add_empty_gist appletid_css
+    add_toolbar_buttons
   end
 end

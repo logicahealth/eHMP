@@ -206,12 +206,12 @@ with this cookbook, please follow up there.
 License and Author
 ==================
 
-* Author:     ua Timberman <cookbooks@housepub.org>
+* Author: Joshua Timberman <cookbooks@housepub.org>
 * Author: Ringo De Smet
 * Author: Chris Peplin
 * Author: Eric G. Wolfe <eric.wolfe@gmail.com>
 
-* Copyright 2011-2013,     ua Timberman <cookbooks@housepub.org>
+* Copyright 2011-2013, Joshua Timberman <cookbooks@housepub.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

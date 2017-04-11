@@ -71,7 +71,7 @@ describe('Immunizations write-back', function () {
                 encounterPatientDFN: 3,
                 contraindicated: 1,
                 hasCptCodes: 2,
-                encounterLocation: 'location',
+                encounterLocation: 'urn:va:location:9E7A:349',
                 encounterInpatient: 32,
                 reaction: 'FEVER',
                 series: ''
@@ -83,7 +83,7 @@ describe('Immunizations write-back', function () {
             expect(result.hasCptCodes).not.to.be.undefined();
             expect(result.hasCptCodes).to.equal(1);
             expect(result.encounterLocation).not.to.be.undefined();
-            expect(result.encounterLocation).to.equal('location');
+            expect(result.encounterLocation).to.equal('349');
             expect(result.encounterInpatient).not.to.be.undefined();
             expect(result.encounterInpatient).to.equal(1);
             expect(result.reaction).not.to.be.undefined();
@@ -142,7 +142,7 @@ describe('Immunizations write-back', function () {
             var model = {
                 'encounterPatientDFN': '100013',
                 'encounterInpatient': '1',
-                'encounterLocation': '349',
+                'encounterLocation': 'urn:va:location:9E7A:349',
                 'encounterDateTime': '20150411004050',
                 'encounterServiceCategory': 'A',
                 'encounterProviderIEN': '991',
@@ -179,7 +179,7 @@ describe('Immunizations write-back', function () {
             var model = {
                 'encounterPatientDFN': '3',
                 'encounterInpatient': '1',
-                'encounterLocation': '349',
+                'encounterLocation': 'urn:va:location:9E7A:349',
                 'encounterDateTime': '20150411004050',
                 'encounterServiceCategory': 'E',
                 'series': '0',

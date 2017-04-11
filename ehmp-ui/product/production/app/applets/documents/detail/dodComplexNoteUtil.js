@@ -75,7 +75,7 @@ define([
         },
 
         massageContent: function() {
-            var dodContentContainer = $('.dod-content');
+            var dodContentContainer = this.$el.find('.dod-content');
 
             if (dodContentContainer.size() > 0) {
                 var $note = $(dodContentContainer[0].contentWindow.document);
@@ -97,7 +97,7 @@ define([
 
         writeDodNoteContent: function(model, view) {
             var content = model.get('dodComplexNoteContent');
-            var dodContent = view ? view.$el.find('.dod-content') : $('.dod-content');
+            var dodContent = this.$el.find('.dod-content');
 
             if (dodContent.size() > 0) {
                 var iframeDoc = dodContent[0].contentWindow.document;
@@ -108,7 +108,7 @@ define([
         },
 
         scaleDodIframeToContent: function() {
-            var $contentIframe = $('.dod-content');
+            var $contentIframe = this.$el.find('.dod-content');
 
             if ($contentIframe.size() > 0) {
                 var contentHeight = $($contentIframe[0].contentWindow.document).height();
@@ -117,13 +117,13 @@ define([
         },
 
         showContent: function(model) {
-
-            var me = this;
+            var me = dodComplexNoteUtil;
+            var self = this;
             function doRender() {
-                me.writeDodNoteContent(model);
-                me.massageContent();
-                me.scaleDodIframeToContent();
-                ADK.Messaging.getChannel('search').trigger('documentsLoaded', $('.dod-content').contents().find('body'));
+                me.writeDodNoteContent.call(self, model);
+                me.massageContent.call(self);
+                me.scaleDodIframeToContent.call(self);
+                ADK.Messaging.getChannel('search').trigger('documentsLoaded', self.$('.dod-content').contents().find('body'));
             }
 
             var $iframe = $('iframe.dod-content');

@@ -4,7 +4,7 @@ When(/^the client requests diagnosticorders for the patient "(.*?)" in FHIR form
   #temp.add_parameter("domain", "imun")
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 Then(/^the FHIR results contain diagnosticorders/) do |table|
@@ -55,7 +55,7 @@ When(/^the client requests diagnosticorders for that sensitive patient "(.*?)"$/
   #temp.add_parameter("domain", "imun")
   temp.add_acknowledge("false")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client breaks glass and repeats a request for diagnosticorders for that patient "(.*?)"$/) do |pid|
@@ -64,7 +64,7 @@ When(/^the client breaks glass and repeats a request for diagnosticorders for th
   #temp.add_parameter("domain", "imun")
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests "(.*?)" diagnosticorders for the patient "(.*?)" in FHIR format$/) do |limit, pid|
@@ -73,5 +73,5 @@ When(/^the client requests "(.*?)" diagnosticorders for the patient "(.*?)" in F
   temp.add_parameter("limit", limit)
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end

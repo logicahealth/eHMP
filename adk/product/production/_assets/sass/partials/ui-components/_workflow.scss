@@ -2,7 +2,6 @@
 .workflow-controller {
     position: static;
     .modal-body {
-        background-color: $pure-white;
         margin-bottom: 0px;
         padding: 5px 0px;
         h5 {
@@ -20,14 +19,10 @@
             .input-group-addon {
                 &.border-top-left-radius {
                     border-radius: 4px 0px 0px 4px;
+                    border-right:0px;
                 }
             }
         }
-    }
-    .modal-footer {
-        background-color: $pure-white;
-        border-radius: 0px 0px 6px 6px;
-        min-height: 45px;
     }
 }
 
@@ -38,7 +33,6 @@
         min-height: 200px;
     }
     .modal-header {
-        background-color: $pure-white;
         border-radius: 6px 6px 0px 0px;
         .header-btns {
             .btn.btn-icon {

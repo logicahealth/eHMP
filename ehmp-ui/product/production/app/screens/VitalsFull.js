@@ -84,6 +84,7 @@ define([
 
     var screenConfig = {
         id: 'vitals-full',
+        context: 'patient',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

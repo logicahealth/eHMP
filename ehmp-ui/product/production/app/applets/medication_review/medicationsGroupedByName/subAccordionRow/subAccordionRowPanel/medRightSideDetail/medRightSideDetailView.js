@@ -36,10 +36,11 @@ define([
                     }
                 },
                 expireText: function() {
-                    if (this.getStoppedAsMoment.isBefore(moment())) {
-                        return "Expired";
+                    var vaStatus = this.vaStatus.toLowerCase();
+                    if (vaStatus === 'expired') {
+                        return 'Expired';
                     } else {
-                        return "Expires";
+                        return 'Expires';
                     }
                 },
                 showExpiredDate: function() {
@@ -54,18 +55,18 @@ define([
                     var ivSig = "";
                     if (this.ivProducts) {
                         if (this.ivProducts.length === 1) {
-                            ivSig = "<div>" + this.ivProducts[0] + "</div>";
+                            ivSig = "<p>" + this.ivProducts[0] + "</p>";
                         } else {
                             for (var i = 0; i < this.ivProducts.length; i++) {
                                 if (i === this.ivProducts.length - 1) {
-                                    ivSig = ivSig + "<div class='leftPadding'>" + this.ivProducts[i] + "</div>";
+                                    ivSig = ivSig + "<p class='all-margin-no left-padding-sm'>" + this.ivProducts[i] + "</p>";
                                 } else {
-                                    ivSig = ivSig + "<div>" + this.ivProducts[i] + "</div>";
+                                    ivSig = ivSig + "<p class='all-margin-no'>" + this.ivProducts[i] + "</p>";
                                 }
                             }
                         }
                     } else {
-                        ivSig = "<div class='ellipsisFormat'>" + this.computedSig + "</div>";
+                        ivSig = "<p>" + this.computedSig + "</p>";
                     }
                     return ivSig.trim();
                 },
@@ -77,7 +78,10 @@ define([
                 getStoppedAsMoment: this.model.getStoppedAsMoment(),
                 computedSig: this.model.getSig(),
                 ivProducts: this.model.getSig().products,
-                ivDosages: this.model.getSig().dosages
+                ivDosages: this.model.getSig().dosages,
+                facilityName: this.model.getFacilityName(),
+                additives: _.where(this.model.get('products'), { ingredientRole: 'urn:sct:418804003' }),
+                solutions: _.where(this.model.get('products'), { ingredientRole: 'urn:sct:418297009' })
             };
         },
         getTemplate: function() {

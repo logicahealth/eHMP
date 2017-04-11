@@ -277,8 +277,8 @@ ADDOBJ ;; @TEST adding object to store
  S TIME=$G(^VPRMETA("JPID",VPRJPID,"lastAccessTime"))
  D ASSERT(1,TIME>PTIME)
  D ASSERT("/vpr/"_VPRJPID_"/urn:va:med:93EF:-7:15231",HTTPREQ("location"))
- D ASSERT(10,$D(^VPRPT(VPRJTPID,"urn:va:med:93EF:-7:15231")))
- D ASSERT(1,$D(^VPRPTI(VPRJTPID,"attr","medication","79949668=","urn:va:med:93EF:-7:15231",1)))
+ D ASSERT(10,$D(^VPRPT(VPRJPID,VPRJTPID,"urn:va:med:93EF:-7:15231")))
+ D ASSERT(1,$D(^VPRPTI(VPRJPID,VPRJTPID,"attr","medication","79949668=","urn:va:med:93EF:-7:15231",1)))
  Q
 DELOBJ ;; @TEST remove object from store
  N HTTPERR,PTIME,TIME,VPRJPID
@@ -296,8 +296,8 @@ DELOBJ ;; @TEST remove object from store
  H 1
  S TIME=$G(^VPRMETA("JPID",VPRJPID,"lastAccessTime"))
  D ASSERT(1,TIME>PTIME)
- D ASSERT(0,$D(^VPRPT(VPRJTPID,"urn:va:med:93EF:-7:15231")))
- D ASSERT(0,$D(^VPRPTI(VPRJTPID,"list","medication",20050331,"urn:va:med:93EF:-7:15231")))
+ D ASSERT(0,$D(^VPRPT(VPRJPID,VPRJTPID,"urn:va:med:93EF:-7:15231")))
+ D ASSERT(0,$D(^VPRPTI(VPRJPID,VPRJTPID,"list","medication",20050331,"urn:va:med:93EF:-7:15231")))
  Q
 ADDPT ;; @TEST add new patient
  N MYPID,JSON,HTTPERR,PTIME,TIME,VPRJPID
@@ -331,9 +331,9 @@ ADDPT ;; @TEST add new patient
  D SETDEL^VPRJTX("/vpr/"_MYPID)
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
- D ASSERT(0,$D(^VPRPT(MYPID)))
- D ASSERT(0,$D(^VPRPTJ("JSON",MYPID)))
- D ASSERT(0,$D(^VPRPTI(MYPID)))
+ D ASSERT(0,$D(^VPRPT(VPRJPID,MYPID)))
+ D ASSERT(0,$D(^VPRPTJ("JSON",VPRJPID,MYPID)))
+ D ASSERT(0,$D(^VPRPTI(VPRJPID,MYPID)))
  Q
 NOICN ;; @TEST add patient without ICN
  N HTTPERR,JSON,PTIME,TIME,VPRJPID
@@ -356,7 +356,7 @@ NOICN ;; @TEST add patient without ICN
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
  D ASSERT("/vpr/93EF;-9/urn:va:patient:93EF:-9:-9",HTTPREQ("location"))
- D ASSERT(1,$D(^VPRPT("93EF;-9"))>0)
+ D ASSERT(1,$D(^VPRPT(VPRJPID,"93EF;-9"))>0)
  ; one more time for date of death
  D SETPUT^VPRJTX("/vpr","DIED9","VPRJTP01")
  D RESPOND^VPRJRSP
@@ -366,7 +366,7 @@ NOICN ;; @TEST add patient without ICN
  S TIME=$G(^VPRMETA("JPID",VPRJPID,"lastAccessTime"))
  D ASSERT(1,TIME>PTIME)
  D ASSERT("/vpr/93EF;-9/urn:va:patient:93EF:-9:-9",HTTPREQ("location"))
- D ASSERT(1,$D(^VPRPT("93EF;-9"))>0)
+ D ASSERT(1,$D(^VPRPT(VPRJPID,"93EF;-9"))>0)
  D SETGET^VPRJTX("/vpr/93EF;-9")
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
@@ -377,9 +377,9 @@ NOICN ;; @TEST add patient without ICN
  D SETDEL^VPRJTX("/vpr/93EF;-9")
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
- D ASSERT(0,$D(^VPRPT("93EF;-9")))
- D ASSERT(0,$D(^VPRPTJ("JSON","93EF;-9")))
- D ASSERT(0,$D(^VPRPTI("93EF;-9")))
+ D ASSERT(0,$D(^VPRPT(VPRJPID,"93EF;-9")))
+ D ASSERT(0,$D(^VPRPTJ("JSON",VPRJPID,"93EF;-9")))
+ D ASSERT(0,$D(^VPRPTI(VPRJPID,"93EF;-9")))
  Q
 ADDICN ;; @TEST add an ICN where the patient did not previously have one
  N HTTPERR,JSON,PTIME,TIME,VPRJPID
@@ -389,6 +389,7 @@ ADDICN ;; @TEST add an ICN where the patient did not previously have one
  S ^VPRPTJ("JPID","93EF;-9")="52833885-af7c-4899-90be-b3a6630b2371"
  S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2371")=""
  S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2371","93EF;-9")=""
+ ; store patient demographics
  D SETPUT^VPRJTX("/vpr","DEMOG9","VPRJTP01",1)
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
@@ -400,6 +401,7 @@ ADDICN ;; @TEST add an ICN where the patient did not previously have one
  S TIME=$G(^VPRMETA("JPID",VPRJPID,"lastAccessTime"))
  D ASSERT(1,TIME>PTIME)
  D ASSERT("/vpr/93EF;-9/urn:va:patient:93EF:-9:-9",HTTPREQ("location"))
+ ; Add ICN to patient
  D SETPUT^VPRJTX("/vpr","NEWICN9","VPRJTP01",1)
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
@@ -408,7 +410,8 @@ ADDICN ;; @TEST add an ICN where the patient did not previously have one
  S TIME=$G(^VPRMETA("JPID",VPRJPID,"lastAccessTime"))
  D ASSERT(1,TIME>PTIME)
  D ASSERT("/vpr/93EF;-9/urn:va:patient:93EF:-9:-9",HTTPREQ("location"))
- D ASSERT(1,$D(^VPRPT("93EF;-9"))>0)
+ D ASSERT(1,$D(^VPRPT(VPRJPID,"93EF;-9"))>0)
+ ; Verify ICN is part of returned demographics
  D SETGET^VPRJTX("/vpr/93EF;-9")
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
@@ -497,9 +500,9 @@ NUMFAC ;; @TEST fully numeric facility id
  D SETDEL^VPRJTX("/vpr/"_MYPID)
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
- D ASSERT(0,$D(^VPRPT(MYPID)))
- D ASSERT(0,$D(^VPRPTJ("JSON",MYPID)))
- D ASSERT(0,$D(^VPRPTI(MYPID)))
+ D ASSERT(0,$D(^VPRPT(VPRJPID,MYPID)))
+ D ASSERT(0,$D(^VPRPTJ("JSON",VPRJPID,MYPID)))
+ D ASSERT(0,$D(^VPRPTI(VPRJPID,MYPID)))
  Q
 DELCLTN ;; @TEST delete collection via REST
  N HTTPERR,X,PTIME,TIME,VPRJPID
@@ -510,7 +513,7 @@ DELCLTN ;; @TEST delete collection via REST
  D ASSERT(1,$D(^VPRMETA("JPID",VPRJPID,"lastAccessTime")),"lastAccessTime doesn't exist for this patient")
  S TIME=^VPRMETA("JPID",VPRJPID,"lastAccessTime")
  H 1
- S X=$O(^VPRPT(VPRJTPID,"urn:va:med:")) D ASSERT(1,+(X["med"))
+ S X=$O(^VPRPT(VPRJPID,VPRJTPID,"urn:va:med:")) D ASSERT(1,+(X["med"))
  D SETDEL^VPRJTX("/vpr/"_VPRJTPID_"/collection/med")
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
@@ -518,33 +521,35 @@ DELCLTN ;; @TEST delete collection via REST
  H 1
  S TIME=$G(^VPRMETA("JPID",VPRJPID,"lastAccessTime"))
  D ASSERT(1,TIME>PTIME)
- S X=$O(^VPRPT(VPRJTPID,"urn:va:med:")) D ASSERT(0,+(X["med"))
+ S X=$O(^VPRPT(VPRJPID,VPRJTPID,"urn:va:med:")) D ASSERT(0,+(X["med"))
  Q
 DELSITE ;; @TEST REST endpoint to delete a site's patient data
- N HTTPERR,PID1,PID2
+ N HTTPERR,PID1,PID2,JPID1,JPID2
  S PID1="93EF;-7"
  S PID2="93DD;-7"
+ S JPID1=$$JPID4PID^VPRJPR(PID1)
+ S JPID2=$$JPID4PID^VPRJPR(PID2)
  D SETPUT^VPRJTX("/vpr","DEMOG7","VPRJTP01")
  D SETPUT^VPRJTX("/vpr","NUMFAC","VPRJTP01")
- D ASSERT(10,$D(^VPRPT(PID1)))
- D ASSERT(10,$D(^VPRPTJ("JSON",PID1)))
- D ASSERT(10,$D(^VPRPTJ("TEMPLATE",PID1)))
- D ASSERT(1,^VPRPTI(PID1,"tally","collection","patient"))
- D ASSERT(10,$D(^VPRPT(PID2)))
- D ASSERT(10,$D(^VPRPTJ("JSON",PID2)))
- D ASSERT(10,$D(^VPRPTJ("TEMPLATE",PID2)))
- D ASSERT(1,^VPRPTI(PID2,"tally","collection","patient"))
+ D ASSERT(10,$D(^VPRPT(JPID1,PID1)))
+ D ASSERT(10,$D(^VPRPTJ("JSON",JPID1,PID1)))
+ D ASSERT(10,$D(^VPRPTJ("TEMPLATE",JPID1,PID1)))
+ D ASSERT(1,^VPRPTI(JPID1,PID1,"tally","collection","patient"))
+ D ASSERT(10,$D(^VPRPT(JPID2,PID2)))
+ D ASSERT(10,$D(^VPRPTJ("JSON",JPID2,PID2)))
+ D ASSERT(10,$D(^VPRPTJ("TEMPLATE",JPID2,PID2)))
+ D ASSERT(1,^VPRPTI(JPID2,PID2,"tally","collection","patient"))
  D SETDEL^VPRJTX("/vpr/site/93EF")
  D RESPOND^VPRJRSP
  D ASSERT(0,$G(HTTPERR))
- D ASSERT(0,$D(^VPRPT(PID1)))
- D ASSERT(0,$D(^VPRPTJ("JSON",PID1)))
- D ASSERT(0,$D(^VPRPTJ("TEMPLATE",PID1)))
- D ASSERT(0,^VPRPTI(PID1,"tally","collection","patient"))
- D ASSERT(10,$D(^VPRPT(PID2)))
- D ASSERT(10,$D(^VPRPTJ("JSON",PID2)))
- D ASSERT(10,$D(^VPRPTJ("TEMPLATE",PID2)))
- D ASSERT(10,$D(^VPRPTI(PID2)))
+ D ASSERT(0,$D(^VPRPT(JPID1,PID1)))
+ D ASSERT(0,$D(^VPRPTJ("JSON",JPID1,PID1)))
+ D ASSERT(0,$D(^VPRPTJ("TEMPLATE",JPID1,PID1)))
+ D ASSERT(0,^VPRPTI(JPID1,PID1,"tally","collection","patient"))
+ D ASSERT(10,$D(^VPRPT(JPID2,PID2)))
+ D ASSERT(10,$D(^VPRPTJ("JSON",JPID2,PID2)))
+ D ASSERT(10,$D(^VPRPTJ("TEMPLATE",JPID2,PID2)))
+ D ASSERT(10,$D(^VPRPTI(JPID2,PID2)))
  D SETDEL^VPRJTX("/vpr/site/93DD")
  Q
 GETDMOG1 ;; @TEST try to get demographics when none on file ICN

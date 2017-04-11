@@ -2,14 +2,14 @@
 
 var validTasks = {
 	// commonTaskName: [writeback tasks]
-	discontinueDetails: [require('./orders-common-discontinue-details-vista-writer')],
-	discontinue: [require('./orders-common-discontinue-vista-writer')],
-	edit: [require('./orders-common-edit-vista-writer')],
-	detail: [require('./orders-common-detail-vista-writer')],
-	signDetails: [require('./orders-common-sign-details-vista-writer')],
-	signOrders: [require('./orders-common-sign-vista-writer')],
-	saveDraftOrder: [require('./orders-common-save-draft-write')],
-	findDraftOrders: [require('./orders-common-find-draft')]
+	discontinueDetailsLab: [require('./orders-common-discontinue-details-vista-writer')],
+	discontinueLab: [require('./orders-common-discontinue-vista-writer')],
+	editLab: [require('./orders-common-edit-vista-writer')],
+	detailLab: [require('./orders-common-detail-vista-writer')],
+	signDetailsLab: [require('./orders-common-sign-details-vista-writer')],
+	signOrdersLab: [require('./orders-common-sign-vista-writer')],
+	saveDraftLabOrder: [require('./orders-common-save-draft-write')],
+	findDraftLabOrders: [require('./orders-common-find-draft')]
 };
 
 /**

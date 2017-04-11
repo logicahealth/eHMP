@@ -1,0 +1,18 @@
+PREFIX ehmp:   <http://localhost:3030/ehmp/> 
+PREFIX oi:     <urn:va:oi:> 
+PREFIX snomed: <http://snomed.info/id/> 
+PREFIX loinc:  <http://purl.bioontology.org/ontology/LNC/>  
+PREFIX skos:   <http://www.w3.org/2004/02/skos/core#> 
+       
+    SELECT ?code ?system 
+    FROM ehmp:site-%s  
+    FROM ehmp:synonyms
+    FROM ehmp:loinc
+    WHERE {   
+       ?labConcept ?hasResult ?labCode  .
+       FILTER( ?labConcept =  snomed:%s  )    .  
+       FILTER( ?hasResult != oi:isPreferredOrderable ) .
+       OPTIONAL { ?labCode skos:notation ?conceptId  } .  
+       BIND(IF(CONTAINS ( STR(?labCode), "LNC"), "http://loinc.org", "urn:oid:2.16.840.1.113883.6.233") AS ?system) . 
+       BIND(IF(CONTAINS ( STR(?labCode), "LNC"), ?conceptId, ?labCode) AS ?code) . 
+     } 

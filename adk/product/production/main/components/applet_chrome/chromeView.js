@@ -14,8 +14,29 @@ define([
     'main/components/applet_chrome/views/filterButtonView',
     'main/components/applet_chrome/views/helpButtonView',
     'main/components/applet_chrome/views/buttonCollectionView',
-    'main/api/WorkspaceFilters'
-], function($, _, Messaging, Utils, Navigation, ResourceService, SessionStorage, containerTemplate, AddButtonView, OptionsButtonView, RefreshButtonView, ResizeView, FilterButtonView, HelpButtonView, ButtonCollectionView, WorkspaceFilters) {
+    'main/components/applet_chrome/views/notificationView',
+    'main/api/WorkspaceFilters',
+    'main/adk_utils/crsUtil'
+], function(
+    $,
+    _,
+    Messaging,
+    Utils,
+    Navigation,
+    ResourceService,
+    SessionStorage,
+    containerTemplate,
+    AddButtonView,
+    OptionsButtonView,
+    RefreshButtonView,
+    ResizeView,
+    FilterButtonView,
+    HelpButtonView,
+    ButtonCollectionView,
+    NotificationView,
+    WorkspaceFilters,
+    CrsUtil
+) {
     'use strict';
 
 
@@ -66,7 +87,7 @@ define([
                 this.appletScreenConfig.filterName = maximizedModel.get('filterName');
             }
             if (_.isUndefined(this.appletScreenConfig.filterName)) {
-                this.appletScreenConfig.filterName = ADK.SessionStorage.getAppletStorageModel(this.appletScreenConfig.instanceId, 'filterName', true) || 'Filtered';
+                this.appletScreenConfig.filterName = ADK.SessionStorage.getAppletStorageModel(this.appletScreenConfig.instanceId, 'filterName', true) || '';
             }
             ADK.SessionStorage.setAppletStorageModel(this.appletScreenConfig.instanceId, 'filterName', this.appletScreenConfig.filterName, true);
 
@@ -77,9 +98,12 @@ define([
             if (!dd(this.predefinedScreen).exists) {
                 this.predefinedScreen = true;
             }
-
+            this.model.set('cid', this.cid);
+            if (this.model.get('filterName') !== '') {
+                this.$el.addClass('filtered');
+            }
         },
-        onShow: function() {
+        onBeforeShow: function() {
             this.createViews();
             this.appletDiv.show(this.viewToDisplay);
 
@@ -91,8 +115,36 @@ define([
             this.ensureEditableTitleCssClass();
             var appletInstanceId = this.model.get('instanceId');
             WorkspaceFilters.onAppletFilterCollectionChanged(appletInstanceId, this.refreshAppletTitleColor, this);
-        },
 
+            var NotificationView = _.get(this.appletViewConfig, 'chromeOptions.notificationView');
+            if (NotificationView) {
+                var aggregatedOptions = {};
+
+                _.extend(aggregatedOptions, this.appletView.appletConfig || {}, this.appletView.dataGridOptions || {}, this.appletView.appletOptions || {});
+                if (_.isFunction(NotificationView)) {
+                    NotificationView = NotificationView.extend({
+                        collection: aggregatedOptions.collection
+                    });
+                    this.NotificationContainer.show(new NotificationView());
+                } else if (_.isArray(NotificationView)) {
+                    var NotificationsCollection = new Backbone.Collection(NotificationView, {
+                        comparator: 'orderIndex'
+                    });
+
+                    var CollectionView = Backbone.Marionette.CollectionView.extend({
+                        collection: NotificationsCollection,
+                        childViewOptions: {
+                            collection: aggregatedOptions.collection
+                        },
+                        getChildView: function(model) {
+                            return model.get('view');
+                        }
+                    });
+
+                    this.NotificationContainer.show(new CollectionView());
+                }
+            }
+        },
         refreshAppletTitleColor: function(args) {
             var anyFilters = args.anyFilters;
             var panelHeading = this.$el.find('.panel-heading');
@@ -155,7 +207,7 @@ define([
             // - when the view being displayed has a filterDateRangeView or filterView
             if (this.appletView.hasOwnProperty('filterDateRangeView') || this.appletView.hasOwnProperty('filterView')) {
                 if (!this.model.get('filterName')) {
-                    this.model.set('filterName', 'Filtered');
+                    this.model.set('filterName', '');
                 }
                 this.buttonCollection.add(new ButtonViewModel({
                     id: 'filter-button',
@@ -170,7 +222,6 @@ define([
             if (!this.predefinedScreen && (!this.model.has('fullScreen') && ($('.gridster').length > 0)) && this.AppletController) {
                 this.buttonCollection.add(new ButtonViewModel({
                     id: 'options-button',
-                    openContext: false,
                     view: OptionsButtonView
                 }));
             }
@@ -181,7 +232,8 @@ define([
                     id: 'resize',
                     maximizeScreen: this.model.get('maximizeScreen'),
                     fullScreen: this.model.get('fullScreen'),
-                    view: ResizeView
+                    view: ResizeView,
+                    fromMinimizedToMaximized: this.options.fromMinimizedToMaximized
                 }));
             }
         },
@@ -190,14 +242,16 @@ define([
             this.model.set('viewType', appletControllerModel.get('currentViewType'));
             this.resetButtons();
 
-            this.$el.find(".appletDiv_ChromeContainer").removeClass("hide");
+            this.$el.find(".applet-div-chrome-container").removeClass("hide");
             this.$el.find(".switchboard-container").addClass("hide");
             this.$el.find(".grid-applet-heading").toggleClass("optionsPanelStyle panel-heading");
 
             if (this.$el.find(".panel-title-label").text().indexOf("- Select a View") > -1) {
                 this.$el.find(".panel-title-label").text(this.model.attributes.title);
+                this.$el.find(".panel-title").removeClass("col-xs-12 text-center");
             } else {
                 this.$el.find(".panel-title-label").text(this.model.attributes.title + " - Select a View");
+                this.$el.find(".panel-title").addClass("col-xs-12 text-center");
             }
             this.switchboardContainer.reset();
         },
@@ -216,9 +270,12 @@ define([
             Utils.applyMaskingForSpecialCharacters(this.$el.find('.panel-title-textbox'));
         },
         template: containerTemplate,
+        behaviors: {
+            Tooltip: {}
+        },
         regions: {
-            appletDiv: '.appletDiv_ChromeContainer',
-            chromeContainer: '.chrome-container',
+            NotificationContainer: '.panel-title-notification',
+            appletDiv: '.applet-div-chrome-container',
             buttonRegion: '.right-button-region',
             chromeFooter: '.grid-footer',
             switchboardContainer: '.switchboard-container'
@@ -242,7 +299,6 @@ define([
         },
         titleKeypress: function(e) {
             if (e.which == 13) {
-                //this.getPanelTitleTextbox().focusout();
                 this.getPanelTitleTextbox().blur();
             }
         },
@@ -258,7 +314,7 @@ define([
             var newTitle = panelTitleTextbox.val();
             if (newTitle === '')
                 return;
-            if(this.appletScreenConfig && this.appletScreenConfig.id.toLowerCase() === 'stackedgraph'){
+            if (this.appletScreenConfig && this.appletScreenConfig.id.toLowerCase() === 'stackedgraph') {
                 isStackedGraph = true;
             }
             this.model.set('title', newTitle);
@@ -341,15 +397,18 @@ define([
                 'id': this.options.appletConfig.instanceId
             }));
 
-            Navigation.navigate(this.model.get('maximizeScreen'));
+            Navigation.navigate(this.model.get('maximizeScreen'), {fromMinimizedToMaximized: true});
         },
         minimizeApplet: function(event) {
             $('.tooltip').tooltip('hide');
-            Backbone.history.history.back();
+            Navigation.back();
         },
         onClickButton: function(type, event) {
             if (this.eventMapper && this.eventMapper[type] && type !== null) {
                 var eventMethod = this.eventMapper[type];
+                if ((eventMethod === 'onRefresh' || eventMethod === 'refresh') && this.$el.find(CrsUtil.getCrsIconHeaderClassName() + '.hide').length === 0) {
+                    CrsUtil.removeStyle(this);
+                }
                 this.appletView[eventMethod](event);
             }
         },
@@ -357,15 +416,19 @@ define([
             this.$el.find(".grid-applet-heading").toggleClass("optionsPanelStyle panel-heading");
             this.$el.find(".grid-filter, .grid-toolbar").toggleClass("hide");
             _.forEach(this.buttonCollection.models, function(buttonModel) {
-                if (buttonModel.get('id') != "options-button") {
-                    this.$el.find(".grid-" + buttonModel.get('id')).toggleClass("hide");
-                }
+                this.$el.find(".grid-" + buttonModel.get('id')).toggleClass("hide");
             }, this);
+
+            if (this.$el.attr("data-appletid") === "stackedGraph") {
+                this.$el.find(".stacked-graph-filter-button").toggleClass("hide");
+            }
 
             if (this.$el.find(".panel-title-label").text().indexOf("- Select a View") > -1) {
                 this.$el.find(".panel-title-label").text(this.model.attributes.title);
+                this.$el.find(".panel-title").removeClass("col-xs-12 text-center");
             } else {
                 this.$el.find(".panel-title-label").text(this.model.attributes.title + " - Select a View");
+                this.$el.find(".panel-title").addClass("col-xs-12 text-center");
             }
         },
         toolTipHide: function(event) {
@@ -384,28 +447,19 @@ define([
             };
             var SwitchboardView = Messaging.request('switchboard : display', switchboardOptions);
             this.switchboardContainer.show(SwitchboardView);
-            this.$el.find(".appletDiv_ChromeContainer").addClass("hide");
+            this.$el.find(".applet-div-chrome-container").addClass("hide");
             this.$el.find(".switchboard-container").removeClass("hide");
-            _.find(this.buttonCollection.models, {
-                'id': 'options-button'
-            }).set('openContext', true);
             this.toggleClasses_SwitchBoard_show_hide();
-            this.$('.applet-exit-options-button').focus();
+            this.$('.options-panel').append('<li><button type="button" title="Press enter to close." class="applet-exit-options-button btn btn-sm btn-icon"><i class="fa fa-close"></i></button></li>');
+            this.$('.options-panel li:first button:first').focus();
         },
         closeSwitchboard: function(event) {
             this.toolTipHide(event);
-            _.find(this.buttonCollection.models, {
-                'id': 'options-button'
-            }).set('openContext', false);
-            this.$el.find(".appletDiv_ChromeContainer").removeClass("hide");
+            this.$el.find(".applet-div-chrome-container").removeClass("hide");
             this.$el.find(".switchboard-container").addClass("hide");
             this.toggleClasses_SwitchBoard_show_hide();
             this.switchboardContainer.reset();
-        },
-        addFilterOpenClass: function() {
-            if (this.$el.find('#grid-filter-' + this.appletScreenConfig.id + ':not(.collapse)').length > 0) {
-                this.filterButtonView.$el.find('button').addClass("filterOpen");
-            }
+            this.$('.applet-options-button').focus();
         },
         showHelp: function(event) {
             var url = getHelpUrl(this.appletView);
@@ -414,6 +468,8 @@ define([
             event.preventDefault();
         }
     });
+
+    ChromeLayoutView.NotificationView = NotificationView;
 
     return ChromeLayoutView;
 });

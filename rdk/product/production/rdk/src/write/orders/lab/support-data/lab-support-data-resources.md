@@ -1,32 +1,44 @@
 # Group Orders Lab Support Data
 
-## Orders Lab Support Data API [{{{path}}}]
+## Orders Lab Support Data API [{{{path}}}{?site}{&type}{&location}{&dateSelected}{&timestamp}]
 
-Orders Lab Support Data API handles pick-list gaps.  This resource handles all the lab order RPC calls needed by UI that are not handled by pick-list.  
-
-### Retrieve Lab Support Data [GET {{{path}}}]
-
-Retrieve lab order support data from VistA.  Based on the input type, different RPC is invoked.  Parsed RPC response is returned.
+Orders Lab Support Data API handles pick-list gaps.  This resource handles all the lab order RPC calls needed by UI that are not handled by pick-list.
 
 + Parameters
 
-	+ type (string, required) - name of lab support data
-	
 	+ site (string, required) - site hash
 
-Additional parameter(s) is(are) required for different input type.  
+	+ type (enum[string], required) - name of lab support data
 
-#### lab collect times
+        + Members
+            + `lab-default-immediate-collect-time` - Return default immediate collect time for the user's division.
+            + `lab-collect-times` - Return a list of lab collect times for a date and location.
+            + `lab-valid-immediate-collect-time` - Determine whether the supplied time is a valid lab immediate collect time.
+            + `lab-future-lab-collects` - Return the number of days in the future to allow Lab Collects.
+            + `discontinue-reason` - Return a list of valid discontinuation reasons.
+            + `lab-specimens` - Return a list of valid lab specimens.
+            + `lab-current-time` - Return the lab current time.
 
-"Returns a list of lab collect times for a date and location." (from RPC description)
+    + location (string, optional) - location ID, required when `type` is `lab-collect-times` or `lab-future-lab-collects`.
 
-+ Additional Parameters
+    + dateSelected (string, optional) - selected date, required when `type` is `lab-collect-times`.
 
-    + dateSelected (string, required) - selected date
-    
-    + location (string, required) - location ID
-    
-    
+    + timestamp (string, optional) - selected timestamp, required when `type` is `lab-valid-immediate-collect-time`.
+
+### Retrieve Lab Support Data [GET]
+
+Retrieve lab order support data from VistA.  Based on the input type, different RPC is invoked.  Additional parameter(s) is(are) required for different input type.  Parsed RPC response is returned.
+
++ Request Lab Collect Times
+
+    + Parameters
+
+        + type: `lab-collect-times`
+
+        + location (required)
+
+        + dateSelected (required)
+
 + Response 200 (application/json)
 
     + Body
@@ -45,9 +57,11 @@ Additional parameter(s) is(are) required for different input type.
                 "status": 200
             }
 
-#### lab default immediate collect time
++ Request Lab Collect Times
 
-"Returns default immediate collect time for the user's division." (from RPC description)
+    + Parameters
+
+        + type: `lab-default-immediate-collect-time`
 
 + Response 200 (application/json)
 
@@ -62,10 +76,12 @@ Additional parameter(s) is(are) required for different input type.
                 "status": 200
             }
 
-#### lab discontinue reason
++ Request Discontinue Reasons
 
-"RPC to return a list of valid discontinuation reasons." (from RPC description)
-    
+    + Parameters
+
+        + type: `discontinue-reason`
+
 + Response 200 (application/json)
 
     + Body
@@ -92,15 +108,14 @@ Additional parameter(s) is(are) required for different input type.
                 "status": 200
             }
 
-#### lab future lab collects
++ Request Future Lab Collects
 
-"Returns the number of days in the future to allow Lab Collects." (from RPC description)
+    + Parameters
 
-+ Additional Parameters
-    
-    + location (string, required) - location ID
-    
-    
+        + type: `lab-future-lab-collects`
+
+        + location (required)
+
 + Response 200 (application/json)
 
     + Body
@@ -112,15 +127,14 @@ Additional parameter(s) is(are) required for different input type.
                 "status": 200
             }
 
-#### lab valid immediate collect time
++ Request Lab Valid Immediate Collect Time
 
-"Determines whether the supplied time is a valid lab immediate collect time." (from RPC description)  If valid, 1 is returned.  Otherwise, 0 is returned.
+    + Parameters
 
-+ Additional Parameters
+        + type: `lab-valid-immediate-collect-time`
 
-    + timestamp (string, required) - selected timestamp
-    
-    
+        + timestamp (required)
+
 + Response 200 (application/json)
 
     + Body
@@ -135,7 +149,51 @@ Additional parameter(s) is(are) required for different input type.
                 "status": 200
             }
 
++ Request Lab Specimens
+
+    + Parameters
+
+        + type: `lab-specimens`
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "data": [
+                    {
+                        "id": "76",
+                        "name": "PERITONEAL FLUID"
+                    },
+                    {
+                        "id": "70",
+                        "name": "BLOOD"
+                    },
+                    {
+                        "id": "124",
+                        "name": "BRONCHIAL WASHING CYTOLOGIC MATERIAL"
+                    }
+                ]
+            }
+
++ Request Lab Current Time
+
+    + Parameters
+
+        + type: `lab-current-time`
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "data": [
+                    {
+                        "currentTime": "20150702194000"
+                    }
+                ]
+            }
+
 :[Response 400]({{{common}}}/responses/400.md)
 
 :[Response 500]({{{common}}}/responses/500.md)
-

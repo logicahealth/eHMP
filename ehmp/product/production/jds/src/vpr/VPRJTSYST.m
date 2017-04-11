@@ -18,49 +18,49 @@ ASSERT(EXPECT,ACTUAL,MSG) ; for convenience
  ;
 BLANK ; basic sync status
  K ^VPRSTATUS
- S ^VPRSTATUS("9E7A;3","9E7A","stampTime")=20141031094920
- S ^VPRSTATUS("9E7A;3","9E7A","allergy",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","vitals",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","stampTime")=20141031094920
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920)=""
  Q
  ;
 BLANK2 ; basic sync status
  K ^VPRSTATUS
- S ^VPRSTATUS("9E7A;3","9E7A","stampTime")=20141031094920
- S ^VPRSTATUS("9E7A;3","9E7A","allergy",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","vitals",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","stampTime")=20141031094930
- S ^VPRSTATUS("9E7A;3","9E7A","allergy",20141031094933)=""
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094931)=""
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094931)=""
- S ^VPRSTATUS("9E7A;3","9E7A","vitals",20141031094933)=""
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094932)=""
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094932)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","stampTime")=20141031094920
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","stampTime")=20141031094930
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy",20141031094933)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094931)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094931)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals",20141031094933)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094932)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094932)=""
  Q
  ;
 BLANK2DIFF ; basic sync status
  K ^VPRSTATUS
- S ^VPRSTATUS("9E7A;3","9E7A","stampTime")=20141031094920
- S ^VPRSTATUS("9E7A;3","9E7A","allergy",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","vitals",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920)=""
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920)=""
- S ^VPRSTATUS("C877;3","C877","stampTime")=20141031094930
- S ^VPRSTATUS("C877;3","C877","allergy",20141031094933)=""
- S ^VPRSTATUS("C877;3","C877","allergy","urn:va:allergy:C877:3:1001",20141031094931)=""
- S ^VPRSTATUS("C877;3","C877","allergy","urn:va:allergy:C877:3:1002",20141031094931)=""
- S ^VPRSTATUS("C877;3","C877","vitals",20141031094933)=""
- S ^VPRSTATUS("C877;3","C877","vitals","urn:va:vitals:C877:3:1001",20141031094932)=""
- S ^VPRSTATUS("C877;3","C877","vitals","urn:va:vitals:C877:3:1002",20141031094932)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","stampTime")=20141031094920
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","stampTime")=20141031094930
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","allergy",20141031094933)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","allergy","urn:va:allergy:C877:3:1001",20141031094931)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","allergy","urn:va:allergy:C877:3:1002",20141031094931)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","vitals",20141031094933)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","vitals","urn:va:vitals:C877:3:1001",20141031094932)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","vitals","urn:va:vitals:C877:3:1002",20141031094932)=""
  Q
  ;
 PATIDS ; Setup patient identifiers
@@ -85,7 +85,7 @@ GETBEFORE ;; @TEST Get Patient Sync Status before metastamp stored
  D ASSERT(0,$D(OBJECT("inProgress")),"Sync status is not inProgress")
  D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is not inProgress")
  ; Try again with an event stored
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
  D GET^VPRJPSTATUS(.DATA,.ARG)
  D DECODE^VPRJSON(DATA,"OBJECT","ERR")
  ; If we can't decode the JSON Fail the test
@@ -135,13 +135,14 @@ GETINITIAL ;; @TEST Get Initial Patient Sync Status
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","stored")),"Vital 9E7A:3:1001 shouldn't be stored")
  D ASSERT(20141031094920,$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stampTime")),"Vital 9E7A:3:1002 stampTime doesn't exist")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stored")),"Vital 9E7A:3:1002 shouldn't be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","syncCompleteAsOf")),"syncCompleteAsOf should not exist")
  K @DATA
  Q
 GETLASTVITAL ;; @TEST Get Patient Sync Status - Last Vital Stored
  N DATA,ARG,ERR,OBJECT,HTTPERR
  D BLANK
  ; Set complete flags
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
  S ARG("id")="9E7A;3"
  S ARG("detailed")="true"
  D GET^VPRJPSTATUS(.DATA,.ARG)
@@ -167,13 +168,14 @@ GETLASTVITAL ;; @TEST Get Patient Sync Status - Last Vital Stored
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","stored")),"Vital 9E7A:3:1001 should not be stored")
  ; Last Vital should be stored
  D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stored")),"Vital 9E7A:3:1002 should be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","syncCompleteAsOf")),"syncCompleteAsOf should not exist")
  K @DATA
  Q
 GETLASTALLERGY ;; @TEST Get Patient Sync Status - Last Allergy Stored
  N DATA,ARG,ERR,OBJECT,HTTPERR
  D BLANK
  ; Set complete flags
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
  S ARG("id")="9E7A;3"
  S ARG("detailed")="true"
  D GET^VPRJPSTATUS(.DATA,.ARG)
@@ -199,14 +201,15 @@ GETLASTALLERGY ;; @TEST Get Patient Sync Status - Last Allergy Stored
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stored")),"Vital 9E7A:3:1002 should not be stored")
  ; Last Allergy should be stored
  D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","stored")),"Allergy 9E7A:3:1002 should be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","syncCompleteAsOf")),"syncCompleteAsOf should not exist")
  K @DATA
  Q
-GETLASTALLERGYVITAL;; @TEST Get Patient Sync Status - Last Vital & Allergy Stored
+GETLASTALLERGYVITAL ;; @TEST Get Patient Sync Status - Last Vital & Allergy Stored
  N DATA,ARG,ERR,OBJECT,HTTPERR
  D BLANK
  ; Set complete flags
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
  S ARG("id")="9E7A;3"
  S ARG("detailed")="true"
  D GET^VPRJPSTATUS(.DATA,.ARG)
@@ -232,14 +235,15 @@ GETLASTALLERGYVITAL;; @TEST Get Patient Sync Status - Last Vital & Allergy Store
  ; Last Allergy & Vital should be stored
  D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","stored")),"Allergy 9E7A:3:1002 should be stored")
  D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stored")),"Vital 9E7A:3:1002 should be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","syncCompleteAsOf")),"syncCompleteAsOf should not exist")
  K @DATA
  Q
 GETALLERGY ;; @TEST Get Patient Sync Status - Both Allergies Stored. Test complete flag being set
  N DATA,ARG,ERR,OBJECT,HTTPERR
  D BLANK
  ; Set complete flags
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
  S ARG("id")="9E7A;3"
  S ARG("detailed")="true"
  D GET^VPRJPSTATUS(.DATA,.ARG)
@@ -264,14 +268,15 @@ GETALLERGY ;; @TEST Get Patient Sync Status - Both Allergies Stored. Test comple
  D ASSERT(0,$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","storedCount")),"storedCount is incorrect")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","stored")),"Vital 9E7A:3:1001 should not be stored")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stored")),"Vital 9E7A:3:1002 should not be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","syncCompleteAsOf")),"syncCompleteAsOf should not exist")
  K @DATA
  Q
 GETVITAL ;; @TEST Get Patient Sync Status - Both Vitals Stored. Test complete flag being set
  N DATA,ARG,ERR,OBJECT,HTTPERR
  D BLANK
  ; Set complete flags
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
  S ARG("id")="9E7A;3"
  S ARG("detailed")="true"
  D GET^VPRJPSTATUS(.DATA,.ARG)
@@ -296,16 +301,17 @@ GETVITAL ;; @TEST Get Patient Sync Status - Both Vitals Stored. Test complete fl
  D ASSERT(2,$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","storedCount")),"storedCount is incorrect")
  D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","stored")),"Vital 9E7A:3:1001 should be stored")
  D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stored")),"Vital 9E7A:3:1002 should be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","syncCompleteAsOf")),"syncCompleteAsOf should not exist")
  K @DATA
  Q
 GETBOTH ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Test SyncComplete flag being set
  N DATA,ARG,ERR,OBJECT,HTTPERR
  D BLANK
  ; Set complete flags
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
  S ARG("id")="9E7A;3"
  S ARG("detailed")="true"
  D GET^VPRJPSTATUS(.DATA,.ARG)
@@ -330,6 +336,8 @@ GETBOTH ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Test SyncC
  D ASSERT(2,$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","storedCount")),"storedCount is incorrect")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","stored")),"Vital 9E7A:3:1001 should be stored")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stored")),"Vital 9E7A:3:1002 should be stored")
+ D ASSERT(1,$D(OBJECT("completedStamp","sourceMetaStamp","9E7A","syncCompleteAsOf")),"syncCompleteAsOf should exist")
+ D ASSERT(1,$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","syncCompleteAsOf"))?14N,"syncCompleteAsOf isn't 14 digits")
  K @DATA
  Q
 GET2SAMESOURCE ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Test SyncComplete flag being set for 2 metaStamps for the same source
@@ -337,10 +345,10 @@ GET2SAMESOURCE ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Tes
  D BLANK2
  ; Setup to make sure the old object doesn't appear
  ; Set complete flags
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
  S ARG("id")="9E7A;3"
  S ARG("detailed")="true"
  D GET^VPRJPSTATUS(.DATA,.ARG)
@@ -365,13 +373,14 @@ GET2SAMESOURCE ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Tes
  D ASSERT(0,$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","storedCount")),"storedCount is incorrect")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","stored")),"Vital 9E7A:3:1001 should not be stored")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stored")),"Vital 9E7A:3:1002 should not be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","syncCompleteAsOf")),"syncCompleteAsOf should not exist")
  ; Setup to make sure the new object completes
  K ARG,@DATA,OBJECT,ERR
  ; Set complete flags - allergy uses incorrect times
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094932,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094932,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094932,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094932,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094932,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094932,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094932,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094932,"stored")=1
  S ARG("id")="9E7A;3"
  S ARG("detailed")="true"
  D GET^VPRJPSTATUS(.DATA,.ARG)
@@ -396,13 +405,15 @@ GET2SAMESOURCE ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Tes
  D ASSERT(2,$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","storedCount")),"storedCount is incorrect")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","stored")),"Vital 9E7A:3:1001 should be stored")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stored")),"Vital 9E7A:3:1002 should be stored")
+ D ASSERT(1,$D(OBJECT("completedStamp","sourceMetaStamp","9E7A","syncCompleteAsOf")),"syncCompleteAsOf should exist")
+ D ASSERT(1,$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","syncCompleteAsOf"))?14N,"syncCompleteAsOf isn't 14 digits")
  ; Setup to make sure the new object completes
  K ARG,@DATA,OBJECT,ERR
  ; Set complete flags - allergy uses correct times
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094932,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094932,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094931,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094931,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094932,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094932,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094931,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094931,"stored")=1
  S ARG("id")="9E7A;3"
  S ARG("detailed")="true"
  D GET^VPRJPSTATUS(.DATA,.ARG)
@@ -427,6 +438,8 @@ GET2SAMESOURCE ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Tes
  D ASSERT(2,$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","storedCount")),"storedCount is incorrect")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","stored")),"Vital 9E7A:3:1001 should be stored")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stored")),"Vital 9E7A:3:1002 should be stored")
+ D ASSERT(1,$D(OBJECT("completedStamp","sourceMetaStamp","9E7A","syncCompleteAsOf")),"syncCompleteAsOf should exist")
+ D ASSERT(1,$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","syncCompleteAsOf"))?14N,"syncCompleteAsOf isn't 14 digits")
  K @DATA
  Q
 GET2DIFFSOURCE ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Test SyncComplete flag being set for 2 metaStamps for different sources
@@ -460,6 +473,7 @@ GET2DIFFSOURCE ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Tes
  D ASSERT(0,$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","storedCount")),"storedCount is incorrect")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","stored")),"Vital 9E7A:3:1001 should not be stored")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stored")),"Vital 9E7A:3:1002 should not be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","syncCompleteAsOf")),"syncCompleteAsOf should not exist")
  ; C877
  ; Source should exist
  D ASSERT(10,$D(OBJECT("inProgress","sourceMetaStamp","C877")),"Source C877 should exist")
@@ -475,13 +489,14 @@ GET2DIFFSOURCE ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Tes
  D ASSERT(0,$G(OBJECT("inProgress","sourceMetaStamp","C877","domainMetaStamp","vitals","storedCount")),"storedCount is incorrect")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","C877","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:C877:3:1001","stored")),"Vital C877:3:1001 should not be stored")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","C877","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:C877:3:1002","stored")),"Vital C877:3:1002 should not be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","C877","syncCompleteAsOf")),"syncCompleteAsOf should not exist")
  ; Setup to make sure one source is complete
  K ARG,@DATA,OBJECT,ERR
  ; Set complete flags
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
  S ARG("id")="9E7A;3"
  S ARG("detailed")="true"
  D GET^VPRJPSTATUS(.DATA,.ARG)
@@ -506,6 +521,8 @@ GET2DIFFSOURCE ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Tes
  D ASSERT(2,$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","storedCount")),"storedCount is incorrect")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","stored")),"Vital 9E7A:3:1001 should be stored (9E7A)")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stored")),"Vital 9E7A:3:1002 should be stored (9E7A)")
+ D ASSERT(1,$D(OBJECT("completedStamp","sourceMetaStamp","9E7A","syncCompleteAsOf")),"syncCompleteAsOf should exist")
+ D ASSERT(1,$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","syncCompleteAsOf"))?14N,"syncCompleteAsOf isn't 14 digits")
  ; C877
  ; Since the sync status is mocked, lastAccessTime won't be set but should exist
  D ASSERT(1,$D(OBJECT("inProgress","lastAccessTime"))#2,"Sync lastAccessTime inProgress does not exist, but should")
@@ -523,13 +540,14 @@ GET2DIFFSOURCE ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Tes
  D ASSERT(0,$G(OBJECT("inProgress","sourceMetaStamp","C877","domainMetaStamp","vitals","storedCount")),"storedCount is incorrect")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","C877","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:C877:3:1001","stored")),"Vital C877:3:1001 should not be stored (9E7A)")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","C877","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:C877:3:1002","stored")),"Vital C877:3:1002 should not be stored (9E7A)")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","C877","syncCompleteAsOf")),"syncCompleteAsOf should not exist")
  ; Setup to make sure both sources are complete
  K ARG,@DATA,OBJECT,ERR
  ; Set complete flags C877
- S ^VPRSTATUS("C877;3","C877","vitals","urn:va:vitals:C877:3:1001",20141031094932,"stored")=1
- S ^VPRSTATUS("C877;3","C877","vitals","urn:va:vitals:C877:3:1002",20141031094932,"stored")=1
- S ^VPRSTATUS("C877;3","C877","allergy","urn:va:allergy:C877:3:1001",20141031094931,"stored")=1
- S ^VPRSTATUS("C877;3","C877","allergy","urn:va:allergy:C877:3:1002",20141031094931,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","vitals","urn:va:vitals:C877:3:1001",20141031094932,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","vitals","urn:va:vitals:C877:3:1002",20141031094932,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","allergy","urn:va:allergy:C877:3:1001",20141031094931,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","allergy","urn:va:allergy:C877:3:1002",20141031094931,"stored")=1
  S ARG("id")="9E7A;3"
  S ARG("detailed")="true"
  D GET^VPRJPSTATUS(.DATA,.ARG)
@@ -554,6 +572,8 @@ GET2DIFFSOURCE ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Tes
  D ASSERT(2,$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","storedCount")),"storedCount is incorrect")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","stored")),"Vital 9E7A:3:1001 should be stored (All)")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","stored")),"Vital 9E7A:3:1002 should be stored (All)")
+ D ASSERT(1,$D(OBJECT("completedStamp","sourceMetaStamp","9E7A","syncCompleteAsOf")),"syncCompleteAsOf should exist")
+ D ASSERT(1,$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","syncCompleteAsOf"))?14N,"syncCompleteAsOf isn't 14 digits")
  ; C877
  ; Since the sync status is mocked, lastAccessTime won't be set but should exist
  D ASSERT(1,$D(OBJECT("completedStamp","lastAccessTime"))#2,"Sync lastAccessTime completedStamp does not exist, but should")
@@ -571,6 +591,8 @@ GET2DIFFSOURCE ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Tes
  D ASSERT(2,$G(OBJECT("completedStamp","sourceMetaStamp","C877","domainMetaStamp","vitals","storedCount")),"storedCount is incorrect")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","C877","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:C877:3:1001","stored")),"Vital C877:3:1001 should be stored (All)")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","C877","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:C877:3:1002","stored")),"Vital C877:3:1002 should be stored (All)")
+ D ASSERT(1,$D(OBJECT("completedStamp","sourceMetaStamp","C877","syncCompleteAsOf")),"syncCompleteAsOf should exist")
+ D ASSERT(1,$G(OBJECT("completedStamp","sourceMetaStamp","C877","syncCompleteAsOf"))?14N,"syncCompleteAsOf isn't 14 digits")
  K @DATA
  Q
  ;
@@ -607,11 +629,25 @@ GETFILTER ;; @TEST Get Patient Sync Status with filters
  D ASSERT(0,$D(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp")),"Allergy domain exists and it should not")
  D ASSERT(10,$D(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp")),"Vitals domain does not exist and it should")
  ;
- ; Set complete flags
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ K DATA,OBJECT
+ S ARG("detailed")="true"
+ ; Test that filter by uid works
  S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ARG("filter")="eq(""uid"",""urn:va:vitals:9E7A:3:1001"")"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ ; If data is blank force error and quit
+ I $D(DATA)=0 D ASSERT(0,1,"Return variable undefined") Q
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; In detailed mode, domain filtering only filters eventMetaStamp, not domainMetaStamp
+ D ASSERT(10,$D(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp")),"Vitals domain does not exist and it should")
+ ;
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
  ; Test that syncCompleted
  K DATA,OBJECT
  K ARG("detailed")
@@ -646,12 +682,12 @@ GET2NODOMAINSTAMP ;; @TEST Get Patient Sync Status - Domain syncComplete only wh
  D BLANK2DIFF
  ;
  ; Remove domainstamp for the first site
- K ^VPRSTATUS("9E7A;3","9E7A","allergy",20141031094920)
+ K ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy",20141031094920)
  ; Set complete flags
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
- S ^VPRSTATUS("9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
  S ARG("id")="9E7A;3"
  S ARG("detailed")="true"
  D GET^VPRJPSTATUS(.DATA,.ARG)
@@ -696,14 +732,14 @@ GET2NODOMAINSTAMP ;; @TEST Get Patient Sync Status - Domain syncComplete only wh
  ; Setup to make sure both sources are complete
  K ARG,@DATA,OBJECT,ERR
  ; Set the domain metastamp for 9E7A
- S ^VPRSTATUS("9E7A;3","9E7A","allergy",20141031094920)=""
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy",20141031094920)=""
  ; Kill the domain metastamp for C877
- K ^VPRSTATUS("C877;3","C877","vitals",20141031094933)
+ K ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","vitals",20141031094933)
  ; Set complete flags C877
- S ^VPRSTATUS("C877;3","C877","vitals","urn:va:vitals:C877:3:1001",20141031094932,"stored")=1
- S ^VPRSTATUS("C877;3","C877","vitals","urn:va:vitals:C877:3:1002",20141031094932,"stored")=1
- S ^VPRSTATUS("C877;3","C877","allergy","urn:va:allergy:C877:3:1001",20141031094931,"stored")=1
- S ^VPRSTATUS("C877;3","C877","allergy","urn:va:allergy:C877:3:1002",20141031094931,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","vitals","urn:va:vitals:C877:3:1001",20141031094932,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","vitals","urn:va:vitals:C877:3:1002",20141031094932,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","allergy","urn:va:allergy:C877:3:1001",20141031094931,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","C877;3","C877","allergy","urn:va:allergy:C877:3:1002",20141031094931,"stored")=1
  S ARG("id")="9E7A;3"
  S ARG("detailed")="true"
  D GET^VPRJPSTATUS(.DATA,.ARG)

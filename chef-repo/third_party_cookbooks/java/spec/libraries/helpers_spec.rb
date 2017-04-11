@@ -1,5 +1,5 @@
 #
-# Author::     ua Timberman <joshua@opscode.com>
+# Author:: Joshua Timberman <joshua@opscode.com>
 # Copyright:: Copyright (c) 2013, Opscode, Inc. <legal@opscode.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

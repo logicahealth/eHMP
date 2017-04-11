@@ -30,6 +30,7 @@ function ErrorProcessor(logger, config, environment, name) {
     this.name = name;
     this.ignoreSeverity = objUtil.getProperty(config, 'error-processing', name, 'ignoreSeverity') || false;
     this.jobTypes = objUtil.getProperty(config, 'error-processing', name, 'jobTypes') || [];
+    this.limit = objUtil.getProperty(config, 'error-processing', 'jdsGetErrorLimit') || 1000;
     this.paused = true;
     this._loopDelayMillis = objUtil.getProperty(config, 'error-processing', name, 'loopDelayMillis') || 10000;
     this.readyToShutdown = true;
@@ -106,7 +107,7 @@ ErrorProcessor.prototype._run = function() {
         }
 
         // 1. iterate through this.jobTypes
-        var processEach = fetchAndProcessErrors.bind(null, self.logger, self.config, self.environment, self.ignoreSeverity);
+        var processEach = fetchAndProcessErrors.bind(null, self.logger, self.config, self.environment, self.ignoreSeverity, self.limit);
         async.eachSeries(self.jobTypes, processEach, function(error) {
             if (error) {
                 self.logger.error('Error processing errors jobTypes for "%s"', self.name);
@@ -120,31 +121,42 @@ ErrorProcessor.prototype._run = function() {
 };
 
 // Callbacks do not return errors so that processing can continue
-function fetchAndProcessErrors(logger, config, environment, ignoreSeverity, jobType, callback) {
+function fetchAndProcessErrors(logger, config, environment, ignoreSeverity, limit, jobType, callback) {
     logger.debug('ErrorProcessor.fetchAndProcessErrors() %s', jobType);
 
-    // 2. get errors
-    // Since this is background, do in series to keep connections/load on JDS low
-    findErrorsByJobType(logger, config, environment.jds, jobType, ignoreSeverity, function(error, result) {
-        if (error) {
-            logger.error('Error finding errors from JDS for "%s"', jobType);
-            return callback();
-        }
+    var items = [];
 
-        result = _.filter(result, function(errors) {
-            return !_.isEmpty(errors);
-        });
-
-        var resubmit = resubmitError.bind(null, logger, config, environment);
-        async.eachSeries(result, resubmit, function(error) {
+    async.doWhilst(function(whileCallback) {
+        // 2. get errors
+        // Since this is background, do in series to keep connections/load on JDS low
+        findErrorsByJobType(logger, config, environment.jds, jobType, ignoreSeverity, limit, function(error, result) {
             if (error) {
-                logger.error('Error processing errors for jobType "%s"', jobType);
-                return callback();
+                logger.error('Error finding errors from JDS for "%s"', jobType);
+                return whileCallback(error);
             }
 
-            logger.info('Processed errors for jobType "%s"', jobType);
-            callback();
+            items = _.isArray(result) ? result : [];
+
+            var resubmit = resubmitError.bind(null, logger, config, environment);
+            async.eachSeries(items, resubmit, function(error) {
+                if (error) {
+                    logger.error('Error processing errors for jobType "%s"', jobType);
+                    return whileCallback(error);
+                }
+
+                logger.info('Processed errors for jobType "%s"', jobType);
+                whileCallback();
+            });
         });
+    }, function() {
+       return items.length !== 0;
+    }, function(error) {
+        if (error) {
+            logger.error('ErrorProcessor.fetchAndProcessErrors(): Error: %s', error);
+            return callback();
+        }
+        logger.info('Processed ALL errors for jobType "%s"', jobType);
+        callback();
     });
 }
 
@@ -172,14 +184,14 @@ function resubmitError(logger, config, environment, errorRecord, callback) {
     });
 }
 
-function findErrorsByJobType(logger, config, jdsClient, jobType, ignoreSeverity, callback) {
+function findErrorsByJobType(logger, config, jdsClient, jobType, ignoreSeverity, limit, callback) {
     logger.debug('error-finder.findErrorsByJobType() jobType: "%s"', jobType);
-    var filter = buildFilter(jobType, ignoreSeverity);
+    var filter = buildFilter(jobType, ignoreSeverity, limit);
 
     jdsClient.findErrorRecordsByFilter(filter, callback);
 }
 
-function buildFilter(jobType, ignoreSeverity) {
+function buildFilter(jobType, ignoreSeverity, limit) {
     var jobTypeString = '';
 
     if (!ignoreSeverity) {
@@ -191,6 +203,8 @@ function buildFilter(jobType, ignoreSeverity) {
     if (!_.isEmpty(jobType)) {
         jobTypeString += util.format(',eq("jobType","%s")', jobType);
     }
+
+    jobTypeString += '&limit=' + (limit || 1000);
 
     return jobTypeString;
 }

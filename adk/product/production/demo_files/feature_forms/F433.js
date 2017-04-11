@@ -433,7 +433,7 @@ define([
                         e.preventDefault();
                         var deleteAlertView = new ADK.UI.Alert({
                             title: 'Are you sure you want to delete?',
-                            icon: 'fa-warning color-red',
+                            icon: 'icon-delete',
                             messageView: DeleteMessageView,
                             footerView: FooterView
                         });

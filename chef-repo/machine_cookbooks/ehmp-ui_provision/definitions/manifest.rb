@@ -22,19 +22,39 @@ define :ehmp_ui_manifest, :path => "" do
   puts "The following artifacts are missing versions...\n#{unset_versions.inspect} \nThis means the overall version number is likely invalid."
   puts "overall_version = #{overall_version}"
 
-  template "#{params[:path]}-#{overall_version}.json" do
-    source 'manifest.json.erb'
-    variables(
-      :overall_version => overall_version,
-      :versions => versions
-    )
+  node.default[:'ehmp-ui_provision'][:manifest][:versions] = versions
+  node.default[:'ehmp-ui_provision'][:manifest][:overall_version] = overall_version
+
+  version_host_path = "/tmp/artifact-versions-shell-#{overall_version}.sh"
+
+  File.open(version_host_path, "w") do |f|
+    ENV.each do |key,value|
+      if key.end_with?("_VERSION") || key.end_with?("_PROVISION")
+        f.write("export #{key}=#{value}\n")
+      end
+    end
   end
 
-  node.default[:'ehmp-ui_provision'][:'ehmp-ui'][:copy_files].merge!(
-    {
-      params[:path] => "#{params[:path]}-#{overall_version}.json"
-    }
-  ) 
+  puts "\nAPP_VERSION='#{overall_version}'\n"
+  if ENV.has_key?("UPLOAD_RELEASE_MANIFEST")
 
+    chef_gem 'chef-vault' do
+      version '2.6.1'
+    end
+
+    require 'chef-vault'
+
+    nexus = ChefVault::Item.load(
+      "jenkins", "nexus",
+      node_name: Chef::Config['node_name'],
+      client_key_path: Chef::Config['client_key']
+    ).to_hash
+    nexus_creds = nexus['credentials']
+
+    execute "uploading artifact version shell to nexus" do
+      command "curl -v -F r=releases -F hasPom=false -F e=sh -F g=us.vistacore -F a=artifact-versions-shell -F v=#{overall_version} -F p=sh -F file=@#{version_host_path} -u #{nexus_creds['username']}:#{nexus_creds['password']} #{node[:common][:nexus_url]}/nexus/service/local/artifact/maven/content"
+    end
+
+  end
 end
 

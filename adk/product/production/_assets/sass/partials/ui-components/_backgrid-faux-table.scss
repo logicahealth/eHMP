@@ -1,6 +1,6 @@
 // backgrid faux-table
 // for sticky headers
-.appletDiv_ChromeContainer .gridContainer {
+.applet-div-chrome-container .gridContainer {
     // for meds review applet *** could be moved to applet
     > .gridster {
         .panel-body {
@@ -28,13 +28,14 @@
                     height: calc(100% - 2px);
                     // for orders applet *** could be moved to applet
                     &#data-grid-orders {
-                        height: calc(100% - 30px);
+                        height: calc(100% - 2px);
                     }
                     tr {
                         display: flex;
                         margin: 0;
                         width: 100%;
                         border-bottom: 1px solid $grey-lighter;
+                        padding-right: 15px;
                         td, th {
                             align-items: center;
                             display: block;
@@ -63,11 +64,9 @@
                     }
                     thead {
                         border-bottom: 2px solid $grey-light;
-                        padding-right: 15px;
                         th {
                             border-bottom: none;
                             text-align: left;
-                            text-transform: uppercase;
                         }
                         tr {
                             border-bottom: none;
@@ -79,6 +78,7 @@
                     tbody {
                         height: calc(100% - 20px);
                         overflow-y: auto;
+                        -ms-overflow-style: -ms-autohiding-scrollbar;
                         tr {
                             cursor: pointer;
                         }

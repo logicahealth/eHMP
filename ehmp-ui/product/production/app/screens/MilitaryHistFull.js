@@ -2,9 +2,9 @@ define(function() {
     'use strict';
     var screenConfig = {
         id: 'military-history-full',
+        context: 'patient',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
-        appHeader: 'nav',
         appLeft: 'patientInfo',
         applets: [{
             id: 'military_hist',

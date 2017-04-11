@@ -1,5 +1,5 @@
 HMPWB5 ;JD/CNP - Write back entry points for Notes, and Encounters;Jul 8, 2015@08:31:16
-	;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 2
+	;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 2
 	;Per VA Directive 6402, this routine should not be modified.
 	;
 	Q

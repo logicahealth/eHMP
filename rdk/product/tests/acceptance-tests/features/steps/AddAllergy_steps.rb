@@ -6,12 +6,12 @@ When(/^the client marks the saved allergy as Entered in Error for patient "(.*?)
       uid: @uid
     }
   }
-  @response = HTTPartyWithBasicAuth.put_json_with_authorization(path + "/resource/writeback/allergy/error/save?pid=#{pid}", content.to_json, { "Content-Type" => "application/json" })
+  @response = HTTPartyRDK.put(path + "/resource/writeback/allergy/error/save?pid=#{pid}", content.to_json, { "Content-Type" => "application/json" })
 end
 
 When(/^the client saves an allergy for patient "(.*?)" with content "(.*?)"$/) do |pid, content|
   path = String.new(DefaultLogin.rdk_writeback_url)
-  @response = HTTPartyWithBasicAuth.post_json_with_authorization(path+"/resource/writeback/allergy/save?pid=#{pid}", content, { "Content-Type"=>"application/json" })
+  @response = HTTPartyRDK.post(path+"/resource/writeback/allergy/save?pid=#{pid}", content, { "Content-Type"=>"application/json" })
 end
 
 Then(/^the VPR result has a uid$/) do |table|

@@ -1,0 +1,26 @@
+<configuration>
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<Pattern>%date %-5level %logger - %msg %n</Pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>TRACE</level>
+		</filter>
+	</appender>
+
+	<logger name="com.gargoylesoftware.htmlunit.DefaultCssErrorHandler"
+		level="OFF" />
+	<logger name="com.gargoylesoftware.htmlunit.javascript.StrictErrorReporter"
+		level="OFF" />
+	<logger
+		name="com.gargoylesoftware.htmlunit.javascript.host.css.CSSStyleSheet"
+		level="OFF" />
+	<logger
+		name="org.opensaml.saml2.binding.decoding"
+		level="DEBUG" />
+
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="consoleAppender" />
+	</root>
+</configuration>

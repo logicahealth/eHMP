@@ -1,0 +1,26 @@
+{
+  "id": "vler",
+  "normal": {
+    "ipaddress": "IP___ADDRESS",
+    "stack": "production-staging-deploy-r1-2-conversion",
+    "roles": [
+      "vler"
+    ],
+    "vler": {
+      "port": 80,
+      "protocol": "http",
+      "doc_query": {
+        "protocol": "http",
+        "path": "/VLERMockDocQuery/NHINAdapterGatewayDocQuery/EntityDocQuery",
+        "path_query": "wsdl",
+        "timeout": 45000
+      },
+      "doc_retrieve": {
+        "protocol": "http",
+        "path": "/VLERMockDocRetrieve/NHINAdapterGatewayDocRetrieve/EntityDocRetrieve",
+        "path_query": "wsdl",
+        "timeout": 45000
+      }
+    }
+  }
+}

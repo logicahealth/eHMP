@@ -20,7 +20,7 @@ Add a new allergy for a patient to single Vista
                 "eventDateTime": "ssss",
                 "allergyName": "ssss",
                 "natureOfReaction": "ssss",
-                "historicalOrObserved": "ssss",
+                "historicalOrObserved": "o^OBSERVED",
                 "comment": "ssss",
                 "severity": "ssss",
                 "name": "ssss",
@@ -95,7 +95,14 @@ Add a new allergy for a patient to single Vista
                         "type": "array",
                         "description": "zero or more symptoms of allergy",
                         "items": {
-                            "$ref": "Symptom"
+                            "required": ["name", "IEN"],
+                            "properties": {
+                                    "name": {"type": "string", "description": "name of symptom"},
+                                    "IEN": {"type": "string", "description": "unique id of symptom in a single Vista"},
+                                    "dateTime": {"type": "string", "format": "date-time", "description": "date/time symptom noticed in yyyymmddHHMM format"},
+                                    "symptomDate": {"type": "string", "format": "date", "description": "date symptom noticed in mm/dd/yyyy format"},
+                                    "symptomTime": {"type": "string", "description": "time symptom noticed in \"hh\":mm a/p format"}
+                            }
                         }
                     }
                 }
@@ -110,7 +117,7 @@ Add a new allergy for a patient to single Vista
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Eie [PUT]
+### Eie [PUT {{{path}}}/{resourceId}]
 
 Update an existing patient allergy
 
@@ -131,7 +138,7 @@ Update an existing patient allergy
                 "allergyName": "ssss",
                 "enteredBy": "ssss",
                 "natureOfReaction": "ssss",
-                "historicalOrObserved": "ssss",
+                "historicalOrObserved": "o^OBSERVED",
                 "observedDate": "ssss",
                 "severity": "ssss",
                 "symptoms": []
@@ -174,7 +181,19 @@ Update an existing patient allergy
                     "symptoms": {
                         "type": "array",
                         "items": {
-                            "$ref": "UpdateAllergySymptom"
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "IEN": {
+                                    "type": "string"
+                                },
+                                "dateTime": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": ["name", "IEN"]
                         }
                     }
                 },

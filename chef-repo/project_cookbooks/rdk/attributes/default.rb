@@ -10,34 +10,75 @@ default[:rdk][:home_dir] = '/opt/rdk'
 default[:rdk][:ccow_dir] = '/opt/ccow'
 default[:rdk][:config][:xml_path] = "#{node[:rdk][:home_dir]}/src/resources/patient-search/xml/"
 default[:rdk][:log_dir] = "/var/rdk/logs"
-default[:rdk][:config][:processing_code] = 'T'
-
 default[:rdk][:audit_log_path] = "#{node[:rdk][:log_dir]}/audit.log"
-default[:rdk][:audit_host] = "172.16.4.105"
+default[:rdk][:audit_host] = "IP_ADDRESS"
 default[:rdk][:audit_port] = "9200"
-
 default[:rdk][:complex_note_port] = "8080"
-
 default[:rdk][:node_dev_home]= "/usr/local/bin/"
-
-default[:rdk][:fetch_server][:processes] = 1
-default[:rdk][:fetch_server][:service] = "fetch_server"
-default[:rdk][:fetch_server][:port] = 8888
-default[:rdk][:fetch_server][:deploy_path] = "bin/rdk-fetch-server.js"
-default[:rdk][:fetch_server][:config_file] = "#{node[:rdk][:home_dir]}/config/rdk-fetch-server-config"
-default[:rdk][:fetch_server][:debug_port] = 5858
+default[:rdk][:cookie_prefix] = "ehmp.vistacore"
+default[:rdk][:oracledb_module][:version] = '1.9.3'
 default[:rdk][:write_dir] = "#{node[:rdk][:home_dir]}/src/write"
-default[:rdk][:write_back][:processes] = 1
-default[:rdk][:write_back][:service] = "write_back"
-default[:rdk][:write_back][:port] = 9999
-default[:rdk][:write_back][:deploy_path] = "bin/rdk-write-server.js"
-default[:rdk][:write_back][:config_file] = "#{node[:rdk][:home_dir]}/config/rdk-write-server-config"
-default[:rdk][:write_back][:debug_port] = 5868
-default[:rdk][:pick_list][:processes] = 1
-default[:rdk][:pick_list][:service] = "pick_list"
-default[:rdk][:pick_list][:port] = 7777
-default[:rdk][:pick_list][:deploy_path] = "bin/rdk-pick-list-server.js"
-default[:rdk][:pick_list][:config_file] = "#{node[:rdk][:home_dir]}/config/rdk-pick-list-server-config"
-default[:rdk][:pick_list][:debug_port] = 5878
+# some common default attributes for jdsSync/reSyncs
+default[:rdk][:jdsSync][:settings][:waitMillis] = 1000
+default[:rdk][:jdsSync][:settings][:timeoutMillis] = 420000
+default[:rdk][:jdsSync][:settings][:syncExistsWaitDelayMillis] = 30000
+default[:rdk][:resync][:openJobsTimeoutMillis] = 21600000
+default[:rdk][:resync][:inProgressTimeoutMillis] = 86400000
+default[:rdk][:resync][:inactivityTimeoutMillis] = 86400000
+default[:rdk][:resync][:lastSyncMaxIntervalMillis] = 600000
 
-default[:rdk][:oracledb_module][:version] = "1.4.0"
+
+default[:rdk][:services] = {
+	fetch_server: {
+		processes: 1,
+		service: "fetch_server",
+		service_run_level: "2345",
+		service_template_source: "upstart-node_process.erb",
+		bluepill_template_source: "node_process-cluster.pill.erb",
+		port: 8888,
+		deploy_path: "bin/rdk-fetch-server.js",
+		config_source: "rdk-fetch-server-config.json.erb",
+		config_destination: "#{node[:rdk][:home_dir]}/config/rdk-fetch-server-config",
+		debug_port: 5858,
+		max_sockets: "-1"
+	},
+	write_back: {
+		processes: 1,
+		service: "write_back",
+		service_run_level: "2345",
+		service_template_source: "upstart-node_process.erb",
+		bluepill_template_source: "node_process-cluster.pill.erb",
+		port: 9999,
+		deploy_path: "bin/rdk-write-server.js",
+		config_source: "rdk-write-server-config.json.erb",
+		config_destination: "#{node[:rdk][:home_dir]}/config/rdk-write-server-config",
+		debug_port: 5868,
+		max_sockets: "-1"
+	},
+	pick_list: {
+		processes: 1,
+		service: "pick_list",
+		service_run_level: "2345",
+		service_template_source: "upstart-node_process.erb",
+		bluepill_template_source: "node_process-cluster.pill.erb",
+		port: 7777,
+		deploy_path: "bin/rdk-pick-list-server.js",
+		config_source: "rdk-pick-list-server-config.json.erb",
+		config_destination: "#{node[:rdk][:home_dir]}/config/rdk-pick-list-server-config",
+		debug_port: 5878,
+		max_sockets: "-1"
+	},
+	activity_handler: {
+		processes: 1,
+		service: "activity_handler",
+		service_run_level: "2345",
+		service_template_source: "upstart-node_process.erb",
+		bluepill_template_source: "node_process-cluster.pill.erb",
+		port: 0,
+		deploy_path: "bin/subscriberHost.js",
+		config_source: "activity_handler.json.erb",
+		config_destination: "#{node[:rdk][:home_dir]}/config/activity_handler",
+		debug_port: nil,
+		max_sockets: "-1"
+	}
+}

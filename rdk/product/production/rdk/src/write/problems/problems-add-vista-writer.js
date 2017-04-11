@@ -2,15 +2,14 @@
 
 var _ = require('lodash');
 var async = require('async');
-var rpcClientFactory = require('../core/rpc-client-factory');
-var paramUtil = require('../../utils/param-converter');
-var filemanDateUtil = require('../../utils/fileman-date-converter');
-var nullChecker = require('../../utils/nullchecker');
-
 var moment = require('moment');
 
-var DATE_DISPLAY_FORMAT = 'MM DD YYYY';
-var BAD_ADD_RESPONSE = -1;
+var rpcClientFactory = require('../core/rpc-client-factory');
+var filemanDateUtil = require('../../utils/fileman-date-converter');
+var getVistaFormattedDateString = require('./utils')._getVistaFormattedDateString;
+var adjustTreatmentFactors = require('./utils').adjustTreatmentFactors;
+
+var BAD_ADD_RESPONSE = require('./utils').BAD_ADD_RESPONSE;
 
 function transformModel(logger, model) {
     model.condition =                   'P';
@@ -27,18 +26,6 @@ function transformModel(logger, model) {
     model.location =                    model.service || '^';
     model.clinic =                      model.clinic || '^';
     model.problemNumber =               model.problemNumber || '';
-    model.newComments =                 model.comments || [];
-
-    // Treatment Factors: defaulting to NO
-    model.serviceConnected =            model.serviceConnected || '0^NO';
-    model.agentOrange =                 model.agentOrange || '0^NO';
-    model.radiation =                   model.radiation || '0^NO';
-    model.shipboard =                   model.shipboard || '0^NO';
-    model.persianGulfVet =              model.southwestAsiaConditions || '0^NO';
-    model.headOrNeckCancer =            model.headOrNeckCancer || '0^NO';
-    model.combatVet =                   model.combatVet || '0^NO';
-    model.MST =                         model.MST || '0^NO';
-    model.newComments =                 model.comments || [];
 
     model.patient =                     model.patientIEN + '^' + model.patientName + '^0008^';
 
@@ -54,13 +41,16 @@ function transformModel(logger, model) {
     } else {
         model.dateOfOnset =             '^';
     }
+
+    adjustTreatmentFactors(model);
+    model.comments =                 model.comments || [];
 }
 
 function constructRpcArgs(model) {
     var params = {};
     var index = 0;
 
-    params[index++] = 'GMPFLD(.01)="'       + model.lexiconCode + '"';
+    params[index++] = 'GMPFLD(.01)="' + model.lexiconCode + '^'+ model.code + '"';
     params[index++] = 'GMPFLD(.03)="0^"';
     params[index++] = 'GMPFLD(.05)="^'      + model.problemName + '"';
     params[index++] = 'GMPFLD(.08)="'       + model.currentDate + '"';
@@ -101,10 +91,12 @@ function constructRpcArgs(model) {
 
     params[index++] = 'GMPFLD(80201)="'       + model.dateRecorded + '"';
 
-    if (_.isArray(model.newComments) && model.newComments.length) {
-        params[index++] = 'GMPFLD(10,0)="' + model.newComments.length + '"';
-        for (var x = 1; x <= model.newComments.length; x ++) {
-            params[index++] = 'GMPFLD(10,"NEW",' + x + ')="' + model.newComments[x - 1] + '"';
+    params[index++] = 'GMPFLD(80202)="10D^ICD-10-CM"';
+
+    if (_.isArray(model.comments) && model.comments.length) {
+        params[index++] = 'GMPFLD(10,0)="' + model.comments.length + '"';
+        for (var x = 1; x <= model.comments.length; x ++) {
+            params[index++] = 'GMPFLD(10,"NEW",' + x + ')="' + model.comments[x - 1] + '"';
         }
     } else {
         params[index] = 'GMPFLD(10,0)="0"';
@@ -175,7 +167,7 @@ function callRpcFunctions(writebackContext, siteId, rpcClient, passedInCallback)
         function addProblem(callback) {
             var parameters = [];
             parameters.push(model.patientIEN);
-            parameters.push(model.responsibleProviderIEN);
+            parameters.push(model.recordingProviderIEN);
             parameters.push(siteId);
             parameters.push(model.rpcParameters);
 
@@ -261,19 +253,7 @@ function callRpcFunctions(writebackContext, siteId, rpcClient, passedInCallback)
     );
 }
 
-function getVistaFormattedDateString(date){
-    var outputDate;
 
-    //handle fuzzy dates
-    if(date && (date.length === 8 && date.slice(-2) === '00')){
-        outputDate = filemanDateUtil.getFilemanDateWithArgAsStr(date);
-    } else {
-        var dateTimeMoment = paramUtil.convertWriteBackInputDate(date);
-        outputDate = filemanDateUtil.getFilemanDate(dateTimeMoment.toDate()) + '^' + dateTimeMoment.format(DATE_DISPLAY_FORMAT);
-    }
-
-    return outputDate;
-}
 
 function add(writebackContext, callback) {
     var logger = writebackContext.logger;
@@ -295,11 +275,10 @@ function add(writebackContext, callback) {
 
         callRpcFunctions(writebackContext, writebackContext.vistaConfig.division, rpcClient, callback);
     });
-};
+}
 
 module.exports.add = add;
 module.exports._constructRpcArgs = constructRpcArgs;
 module.exports._transformModel = transformModel;
-module.exports._getNewProblem = getNewProblem;
 module.exports._problemMatch = problemMatch;
-module.exports._getVistaFormattedDateString = getVistaFormattedDateString;
+

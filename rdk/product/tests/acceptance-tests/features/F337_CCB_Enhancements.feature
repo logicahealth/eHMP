@@ -9,9 +9,6 @@ Scenario: Client can request vital results in VPR format
     #And a patient with pid "10107V395912" has been synced through the RDK API
 	When the client requests vitals data for the patient "9E7A;253"
 	Then a successful response is returned
-	And the results contain
-	| field           | panorama_value |
-	| data.totalItems | 321            |
 	#Pulse oximetry
 	And the results contain
 	| name                | value                       |

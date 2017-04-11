@@ -100,7 +100,7 @@ added manually, but will be available once they are created.
 License and Author
 ==================
 
-- Author::     ua Timberman (<joshua@opscode.com>)
+- Author:: Joshua Timberman (<joshua@opscode.com>)
 - Copyright:: 2009-2014, Chef Software, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");

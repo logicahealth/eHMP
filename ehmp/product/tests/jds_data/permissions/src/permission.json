@@ -170,6 +170,15 @@
     "version": "1.3.1",
     "status": "active"
 }, {
+    "uid": "complete-consult-order",
+    "value": "complete-consult-order",
+    "label": "Complete Consult Order",
+    "description": "Ability to complete a consult order which includes associating a consult with a note for completion",
+    "example": "",
+    "note": "",
+    "version": "2.0.1",
+    "status": "active"
+}, {
     "uid": "discontinue-consult-order",
     "value": "discontinue-consult-order",
     "label": "Discontinue Order",
@@ -188,6 +197,24 @@
     "version": "1.3.1",
     "status": "active"
 }, {
+    "uid": "review-result-consult-order",
+    "value": "review-result-consult-order",
+    "label": "Review Consult Order Results",
+    "description": "Ability to complete the review results task and end the activity (For use if the ordering provider is unavailable)",
+    "example": "",
+    "note": "",
+    "version": "2.0.1",
+    "status": "active"
+}, {
+    "uid": "schedule-consult-order",
+    "value": "schedule-consult-order",
+    "label": "Schedule Consult Order",
+    "description": "Ability to schedule a consult order",
+    "example": "",
+    "note": "",
+    "version": "2.0.1",
+    "status": "active"
+}, {
     "uid": "sign-consult-order",
     "value": "sign-consult-order",
     "label": "Sign Consult Order",
@@ -195,6 +222,15 @@
     "example": "",
     "note": "",
     "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "triage-consult-order",
+    "value": "triage-consult-order",
+    "label": "Triage Consult Order",
+    "description": "Ability to triage a consult order",
+    "example": "",
+    "note": "",
+    "version": "2.0.1",
     "status": "active"
 }, {
     "uid": "add-immunization",
@@ -294,6 +330,15 @@
     "example": "",
     "note": "",
     "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "track-lab-order",
+    "value": "track-lab-order",
+    "label": "Track Lab Order",
+    "description": "Ability to track a lab order",
+    "example": "",
+    "note": "",
+    "version": "2.0.1",
     "status": "active"
 }, {
     "uid": "add-med-order",
@@ -515,7 +560,7 @@
     "uid": "load-patient-sync",
     "value": "load-patient-sync",
     "label": "Load Patient Sync",
-    "description": "Ability to start a patient sync to occur",
+    "description": "Ability to start a patient sync",
     "example": "",
     "note": "",
     "version": "1.3.1",
@@ -781,4 +826,40 @@
     "note": "",
     "version": "1.3.1",
     "status": "depricated"
+}, {
+    "uid": "create-clinical-object",
+    "value": "create-clinical-object",
+    "label": "Create Clinical Object",
+    "description": "Allows users to create clinical objects",
+    "example": "",
+    "note": "This is for Activity Management Only",
+    "version": "2.0.1",
+    "status": "activeJBPMOnly"
+}, {
+    "uid": "delete-clinical-object",
+    "value": "delete-clinical-object",
+    "label": "Delete Clinical Object",
+    "description": "Allows users to delete clinical objects",
+    "example": "",
+    "note": "This is for Activity Management Only",
+    "version": "2.0.1",
+    "status": "activeJBPMOnly"
+}, {
+    "uid": "edit-clinical-object",
+    "value": "edit-clinical-object",
+    "label": "Edit Clinical Object",
+    "description": "Allows users to edit clinical objects",
+    "example": "",
+    "note": "This is for Activity Management Only",
+    "version": "2.0.1",
+    "status": "activeJBPMOnly"
+}, {
+    "uid": "read-clinical-object",
+    "value": "read-clinical-object",
+    "label": "Read Clinical Object",
+    "description": "Allows users to read clinical objects",
+    "example": "",
+    "note": "This is for Activity Management Only",
+    "version": "2.0.1",
+    "status": "activeJBPMOnly"
 }]

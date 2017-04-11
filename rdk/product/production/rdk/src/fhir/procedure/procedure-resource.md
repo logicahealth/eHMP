@@ -2,7 +2,7 @@
 
 ## Procedure procedure [{{{path}}}]
 
-### Fhir patient procedure [GET {{{path}}}{?limit}{&fields}]
+### Fhir patient procedure [GET {{{path}}}{?limit}]
 
 Converts a vpr call for procedures into a FHIR 'Procedure' resource.
 
@@ -11,8 +11,6 @@ Converts a vpr call for procedures into a FHIR 'Procedure' resource.
     :[id]({{{common}}}/parameters/fhir.id.md)
 
     :[limit]({{{common}}}/parameters/limit.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

@@ -1,0 +1,12 @@
+
+task smokeTest{
+  group "Test"
+  doLast{
+    exec {
+      workingDir = "${rootDir}/tests/smoke-tests"
+      executable = "ruby"
+      args = ['OpenCDS-Smoke-Test.rb'] 
+    }
+  }
+}
+

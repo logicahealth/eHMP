@@ -32,7 +32,15 @@ define([
                 view: view,
                 options: modalOptions
             });
+
             modal.show();
+            var ModalRegion = ADK.Messaging.request('get:adkApp:region', 'modalRegion');
+            if (ModalRegion.hasView()) {
+                ModalRegion.currentView.$el.off('hidden.bs.modal');
+                ModalRegion.currentView.$el.one('hidden.bs.modal', function() {
+                    if (model.xhr) model.xhr.abort();
+                });
+            }
         }
     };
 });

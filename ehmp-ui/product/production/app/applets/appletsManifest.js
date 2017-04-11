@@ -1,229 +1,305 @@
-define(function() {
+define(['main/ADK'], function(ADK) {
     'use strict';
     var appletsManifest = {};
-
+    var crsDomain = ADK.utils.crsUtil.domain;
     var applets = [{
         id: 'ui_components_demo',
         title: 'UI Components Demo',
+        context: ['demo'],
         showInUDWSelection: false,
-        requiredPermissions: []
+        permissions: []
+    }, {
+        id: "patient_information",
+        title: "Patient Information",
+        permissions: [],
+        requiredByLayout: ['patient'],
+        showInUDWSelection: false
     }, {
         id: 'action',
         title: 'Actions',
+        context: ['patient'],
         showInUDWSelection: false,
-        requiredPermissions: []
+        permissions: [],
+        requiredByLayout: ['patient']
     }, {
         id: 'observations',
         title: 'Observations',
+        context: ['patient'],
         showInUDWSelection: false,
-        requiredPermissions: []
+        permissions: [],
+        requiredByLayout: ['patient']
     }, {
         id: 'notes',
         title: 'Notes',
-        //requiredPermissions: ['sign-progress-note', 'add-visit']
-        requiredPermissions: []
+        //permissions: ['sign-progress-note', 'add-visit']
+        context: ['patient'],
+        permissions: [],
+        requiredByLayout: ['patient']
     }, {
         id: 'vitals',
         title: 'Vitals',
+        context: ['patient'],
         maximizeScreen: 'vitals-full',
         showInUDWSelection: true, //true to show up in User Defined Workspace Carousel
-        requiredPermissions: ['read-vital']
+        permissions: ['read-vital'],
+        crsDomain: crsDomain.VITAL
+    }, {
+        id: 'short_cuts',
+        title: 'Short Cuts',
+        context: ['patient', 'admin', 'staff'],
+        showInUDWSelection: false,
+        permissions: []
     }, {
         id: 'stackedGraph',
         title: 'Stacked Graphs',
+        context: ['patient'],
         showInUDWSelection: true,
-        requiredPermissions: ['access-stack-graph']
+        permissions: ['access-stack-graph']
     }, {
         id: 'todo_list',
-        title: 'All tasks',
+        title: 'Tasks',
+        context: ['patient', 'staff'],
         maximizeScreen: 'todo-list-full',
         showInUDWSelection: true,
-        requiredPermissions: ['read-task'] // todo: review permission
+        permissions: ['read-task'], // todo: review permission
+        dependencies: ['notes', 'orders']
     }, {
         id: 'activeMeds',
         title: 'Active & Recent Medications',
+        context: ['patient'],
         maximizeScreen: 'medication-review',
         showInUDWSelection: true,
-        requiredPermissions: ['read-active-medication']
+        permissions: ['read-active-medication'],
+        crsDomain: crsDomain.MEDICATION
     }, {
         id: 'problems',
-        title: 'Conditions',
+        title: 'Problems',
+        context: ['patient'],
         maximizeScreen: 'problems-full',
         showInUDWSelection: true,
-        requiredPermissions: ['read-condition-problem'] // todo: review permission
+        permissions: ['read-condition-problem'], // todo: review permission,
+        crsDomain: crsDomain.PROBLEM
     }, {
         id: 'lab_results_grid',
         title: 'Numeric Lab Results',
+        context: ['patient'],
         maximizeScreen: 'lab-results-grid-full',
         showInUDWSelection: true,
-        requiredPermissions: ['read-order'] // todo: review permission
+        permissions: ['read-order'], // todo: review permission
+        crsDomain: crsDomain.LABORATORY
     }, {
         id: 'narrative_lab_results_grid',
         title: 'Narrative Lab Results',
+        context: ['patient'],
         maximizeScreen: 'narrative-lab-results-grid-full',
         showInUDWSelection: true,
-        requiredPermissions: ['read-order']
+        permissions: ['read-order']
     }, {
         id: 'encounters',
         title: 'Encounters',
+        context: ['patient'],
         maximizeScreen: 'news-feed',
         showInUDWSelection: true,
-        requiredPermissions: ['read-encounter']
+        permissions: ['read-encounter'],
+        requiredByLayout: ['patient'],
+        dependencies: ['visit']
     }, {
         id: 'appointments',
         title: 'Appointments & Visits',
+        context: ['patient'],
         maximizeScreen: 'appointments-full',
         showInUDWSelection: true,
-        requiredPermissions: ['read-encounter']
+        permissions: ['read-encounter']
     }, {
         id: 'immunizations',
         title: 'Immunizations',
+        context: ['patient'],
         maximizeScreen: 'immunizations-full',
         showInUDWSelection: true,
-        requiredPermissions: ['read-immunization']
+        permissions: ['read-immunization']
     }, {
         id: 'allergy_grid',
         title: 'Allergies',
+        context: ['patient'],
         maximizeScreen: 'allergy-grid-full',
         showInUDWSelection: true,
-        requiredPermissions: ['read-allergy']
+        permissions: ['read-allergy']
     }, {
         id: 'orders',
         title: 'Orders',
+        context: ['patient'],
         maximizeScreen: 'orders-full',
         showInUDWSelection: true,
-        requiredPermissions: ['read-order']
+        permissions: ['read-order']
     }, {
         id: 'ccd_grid',
         title: 'Community Health Summaries',
+        context: ['patient'],
         maximizeScreen: 'ccd-list-full',
         showInUDWSelection: true,
-        requiredPermissions: ['read-community-health-summary', 'read-document']
+        permissions: ['read-community-health-summary', 'read-document']
     }, {
         id: 'cds_advice',
         title: 'Clinical Reminders',
+        context: ['patient'],
         maximizeScreen: 'cds-advice-full',
         showInUDWSelection: true,
-        requiredPermissions: ['read-clinical-reminder']
+        permissions: ['read-clinical-reminder']
     }, {
         id: 'documents',
         title: 'Documents',
+        context: ['patient'],
         maximizeScreen: 'documents-list',
         showInUDWSelection: true,
-        requiredPermissions: ['read-document'] // todo: review permission
-        //requiredPermissions: []
+        permissions: ['read-document'] // todo: review permission
+            //permissions: []
     }, {
         id: 'medication_review',
         title: 'Medications Review',
+        context: ['patient'],
         maximizeScreen: 'medication-review',
         showInUDWSelection: true,
-        requiredPermissions: ['read-medication-review'] // todo: review permission
+        permissions: ['read-medication-review'], // todo: review permission
+        crsDomain: crsDomain.MEDICATION
     }, {
         id: 'newsfeed',
         title: 'Timeline',
+        context: ['patient'],
         showInUDWSelection: true,
         maximizeScreen: 'news-feed',
-        requiredPermissions: []
+        permissions: []
     }, {
         id: 'vista_health_summaries',
         title: 'VistA Health Summaries',
+        context: ['patient'],
         showInUDWSelection: true,
         maximizeScreen: 'vista-health-summaries-full',
-        requiredPermissions: ['read-vista-health-summary']
+        permissions: ['read-vista-health-summary']
     }, {
         id: 'reports',
         title: 'Reports',
+        context: ['patient'],
         maximizeScreen: 'reports-full',
         showInUDWSelection: true,
-        requiredPermissions: ['read-document'] // todo: review permission
+        permissions: ['read-document'] // todo: review permission
     }, {
         id: 'addApplets',
         title: 'Add Applets',
-        requiredPermissions: []
+        context: ['patient'],
+        permissions: [],
+        requiredByLayout: ['patient']
     }, {
         id: 'workspaceManager',
         title: 'Workspace Manager',
-        requiredPermissions: []
+        context: ['patient'],
+        permissions: [],
+        requiredByLayout: ['patient']
     }, {
         id: 'logon',
         title: 'Logon',
-        requiredBeforeLogin: true,
-        requiredPermissions: []
+        context: ['logon'],
+        permissions: [],
+        dependencies: ['ssoLogon']
     }, {
         id: 'patient_search',
         title: 'Patient Search',
-        requiredBeforeLogin: true,
-        requiredPermissions: ['read-patient-record']
-    }, {
-        id: 'reports',
-        title: 'Reports',
-        requiredPermissions: ['read-document'] // todo: review permission
+        context: ['patient', 'staff'],
+        permissions: ['read-patient-record']
     }, {
         id: 'discharge_summary',
         title: 'Discharge Summary',
-        requiredPermissions: ['read-document']
-    }, {
-        id: 'addOrder',
-        title: 'Add New Order',
-        requiredPermissions: []
+        context: ['patient'],
+        permissions: ['read-document']
     }, {
         id: 'vitalsEiE',
         title: 'Vitals in Error',
-        requiredPermissions: []
+        context: ['patient'],
+        permissions: []
     }, {
         id: 'vitalsObservationList',
         title: 'Patient Vitals Observed List',
-        requiredPermissions: ['read-vital']
+        context: ['patient'],
+        permissions: ['read-vital']
     }, {
         id: 'visit',
         title: 'Visit',
-        requiredPermissions: []
+        context: ['patient'],
+        permissions: []
     }, {
-        id: "modalTest",
-        title: "Modal Tests",
-        requiredPermissions: []
+        id: "workspace_context_navigation",
+        title: "Workspace Context Navigation",
+        permissions: [],
+        requiredByLayout: true,
+        showInUDWSelection: false
     }, {
         id: 'search',
         title: 'Search',
-        requiredPermissions: []
+        context: ['patient'],
+        permissions: [],
+        requiredByLayout: ['patient']
     }, {
         id: "problems_add_edit",
         title: "Add/Edit Problem",
-        requiredPermissions: []
+        context: ['patient'],
+        permissions: []
+    }, {
+        id: "patient_sync_status",
+        title: "Patient Sync Status",
+        context: ['patient'],
+        permissions: [],
+        requiredByLayout: ['patient']
     }, {
         id: "ssoLogon",
         title: "Auto Signing In",
-        requiredBeforeLogin: true,
-        requiredPermissions: []
+        context: ['logon'],
+        permissions: []
     }, {
-        id: "esignature",
-        title: "eSignature",
+        id: 'esignature',
+        title: 'eSignature',
+        context: ['patient'],
         showInUDWSelection: false,
-        requiredPermissions: []
+        permissions: []
     }, {
         id: 'user_management',
         title: 'Users',
+        context: ['admin'],
         maximizeScreen: 'ehmp-administration-full',
         showInUDWSelection: true,
-        requiredPermissions: ['read-user-permission-set', 'read-admin-screen']
+        permissions: ['read-user-permission-set', 'read-admin-screen']
     }, {
         id: "task_forms",
         title: "Task Forms",
-        requiredPermissions: []
+        context: ['patient'],
+        permissions: []
     }, {
-        id: "military_hist",
-        title: "Military History",
+        id: 'military_hist',
+        title: 'Military History',
+        context: ['patient'],
         maximizeScreen: 'military-history-full',
         showInUDWSelection: true,
-        requiredPermissions: []
+        permissions: []
     }, {
-        id: "notifications",
-        title: "My notifications",
+        id: 'notifications',
+        title: 'My notifications',
+        context: ['staff', 'patient'],
         maximizeScreen: 'notifications',
-        requiredPermissions: []
+        permissions: []
+    }, {
+        id: 'global_datepicker',
+        title: 'Global Datepicker',
+        context: ['patient'],
+        showInUDWSelection: false,
+        permissions: [],
+        requiredByLayout: ['patient']
+    }, {
+        id: "activities",
+        title: "Activities",
+        context: ['patient', 'staff'],
+        showInUDWSelection: true,
+        maximizeScreen: 'activities-patient-full',
+        permissions: []
     }];
 
     appletsManifest.applets = applets;
-
     return appletsManifest;
 });

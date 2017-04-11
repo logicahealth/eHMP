@@ -2,13 +2,12 @@ define([
     'underscore',
     'backbone',
     'handlebars',
-    'api/SessionStorage',
     'app/applets/medication_review/medicationsUngrouped/medicationOrderCollection',
     'app/applets/medication_review/medicationFilter/medicationDateFilter',
     'app/applets/medication_review/medicationFilter/medicationTextFilter',
     'app/applets/medication_review/medicationsGroupedByType/superAccordionList/medTypeListView',
     'app/applets/medication_review/medicationsGroupedByType/superAccordionList/medTypeListCollection'
-], function(_, Backbone, Handlebars, SessionStorage, MedicationOrderCollection, MedicationDateFilter, MedicationTextFilter, MedTypeListView, MedTypeListCollection) {
+], function(_, Backbone, Handlebars, MedicationOrderCollection, MedicationDateFilter, MedicationTextFilter, MedTypeListView, MedTypeListCollection) {
     'use strict';
 
     var HelpButtonView = Backbone.Marionette.ItemView.extend({
@@ -21,18 +20,15 @@ define([
         tagName: 'span'
     });
 
-    var LoadingView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('<p class="loading"><i class="fa fa-spinner fa-spin"></i> Loading...</p>')
-    });
-
     var medsReviewRootView = Backbone.Marionette.LayoutView.extend({
-        template: Handlebars.compile('<div id="grid-filter-{{instanceId}}" class="panel-body collapse"><div class="grid-filter"></div></div><div class="meds-review-main-region"></div>'),
+        template: Handlebars.compile('<div id="grid-filter-{{instanceId}}" class="panel-body all-padding-no collapse"><div class="grid-filter"></div></div><div class="meds-review-main-region hidden"></div><div class="loading-region"></div>'),
         className: 'grid-applet-panel',
         destroyImmediate: true,
         regions: {
             main: '.meds-review-main-region',
             appletToolbar: '.grid-toolbar',
-            appletFilter: '.grid-filter'
+            appletFilter: '.grid-filter',
+            loading: '.loading-region'
         },
         initialize: function() {
             this.appletInstanceId = this.options.appletConfig.instanceId;
@@ -87,8 +83,13 @@ define([
         onBeforeRender: function() {
             this.performInitialUngroupedFetch();
         },
+        onDestroy: function() {
+            this.ungroupedMeds.cleanUp();
+            this.loadingView.destroy();
+        },
         onRender: function() {
-            this.main.show(new LoadingView());
+            this.loadingView = ADK.Views.Loading.create();
+            this.showLoading();
             if (this.filterView) {
                 $(this.filterView.el).css({
                     marginLeft: '0px',
@@ -101,12 +102,25 @@ define([
 
                 var self = this;
                 this.filterView.$el.find('input[type=search]').on('change', function() {
-                    SessionStorage.setAppletStorageModel(self.appletInstanceId, 'filterText', $(this).val(), true);
+                    ADK.SessionStorage.setAppletStorageModel(self.appletInstanceId, 'filterText', $(this).val(), true);
                 });
                 this.filterView.$el.find('a[data-backgrid-action=clear]').on('click', function() {
-                    SessionStorage.setAppletStorageModel(self.appletInstanceId, 'filterText', $(this).val(), true);
+                    ADK.SessionStorage.setAppletStorageModel(self.appletInstanceId, 'filterText', $(this).val(), true);
                 });
             }
+        },
+        showFilterView: function() {
+            var filterText = ADK.SessionStorage.getAppletStorageModel(this.appletInstanceId, 'filterText', true, this.parentWorkspace);
+            if (this.appletOptions.filterFields && filterText !== undefined && filterText !== null && filterText.length > 0) {
+                this.$el.find('#grid-filter-' + this.appletConfig.instanceId).toggleClass('collapse in');
+                this.$el.find('input[name=\'q-' + this.appletConfig.instanceId + '\']').val(filterText);
+                this.filterView.showClearButtonMaybe();
+            } else if (this.appletOptions.filterDateRangeField && this.appletConfig.fullScreen) {
+                this.$el.find('#grid-filter-' + this.appletConfig.instanceId).toggleClass('collapse in');
+            }
+        },
+        onShow: function() {
+            this.showFilterView();
         },
         onTextFilteredCollectionUpdate: function() {
             this.groupedByTypeCollection.set(this.textFilteredCollection, {
@@ -124,21 +138,38 @@ define([
                         model: new Backbone.Model(resp)
                     });
                     self.main.show(errorView);
+                    self.hideLoading();
                 }
             });
         },
         onInitialUngroupedFetch: function() {
             if (this.main.currentView !== this.medTypeListView) {
                 this.main.show(this.medTypeListView);
+                this.hideLoading();
             }
         },
+        showLoading: function() {
+            this.main.$el.addClass('hidden');
+            this.loading.show(this.loadingView);
+            // need give the appearance of the view resetting, since the main
+            // collection view is NOT re-rendered on refresh
+            this.main.$el.find('.accordion-toggle:first-of-type > .collapse').collapse('show');
+            this.main.$el.find('.accordion-toggle:not(:first-of-type) > .collapse.in').collapse('hide');
+        },
+        hideLoading: function() {
+            this.main.$el.removeClass('hidden');
+            this.loading.empty({ preventDestroy: true });
+        },
         onRefresh: function() {
+            this.showLoading();
             this.ungroupedMeds.refresh({
-                expireCache: true
+                expireCache: true,
+                onSuccess: _.bind(this.hideLoading, this),
+                onError: _.bind(this.hideLoading, this)
             });
         },
         listOrder: function() {
-            var patientStatusClass = ADK.PatientRecordService.getCurrentPatient().get('patientStatusClass').toLowerCase();
+            var patientStatusClass = ADK.PatientRecordService.getCurrentPatient().patientStatusClass().toLowerCase();
             var finalValue = (patientStatusClass === 'outpatient') ? 'inpatient' : 'outpatient';
             var order = {
                 type: [patientStatusClass, 'clinical', 'supply', finalValue],

@@ -1,27 +1,21 @@
 # Group Patient
 
-## Patientphoto get Patient Photo [{{{path}}}{?pid}{&fields}]
+## Patientphoto get Patient Photo [{{{path}}}{?pid}]
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Get [GET]
 
 Get patient photo from VHIC
 
-+ Response 200 (application/json)
++ Response 200 (image/jpeg)
 
-    + Body
+    + Headers
 
-            {}
-
-    + Schema
-
-            :[Schema]({{{common}}}/schemas/patient_photo-GET-200.jsonschema)
+            Content-Encoding: base64
 
 :[Response 400]({{{common}}}/responses/400.md)
 

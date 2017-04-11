@@ -1,0 +1,28 @@
+<div class="demographic-group-header">
+	<h5>Email</h5>
+	{{#if email.email.diff}}
+	<button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseEmail" aria-expanded="false" aria-controls="discrepanciesCollapseEmail" tooltip-data-key="patient_information_deatils_discrepancies">
+		<i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+        <span class="sr-only">Press enter to view different data found at other sites</span>
+	</button>
+	{{/if}}
+</div>
+<div class="demographic-group-content" data-diff="{{email.email.diff}}">
+	<div class="left-padding-xs" class="demographic-data">{{email.email.value}}</div>
+
+	{{#if email.email.diff}}
+	<div class="collapse" id="discrepanciesCollapseEmail">
+        <div class="well">
+            <p>Other Sites</p>
+			<dl data-diff="{{email.email.diff}}" class="discrepancy-group">
+    		{{#each items}}
+				{{#if email.email.diff}}
+				<dt>{{facilityName}}</dt>
+				<dd class="demographic-data">{{email.email.value}}</dd>
+    			{{/if}}
+    		{{/each}}
+			</dl>
+    	</div>
+    </div>
+    {{/if}}
+</div>

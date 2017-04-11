@@ -12,25 +12,25 @@ pidValidator.initialize({
             '9E7A': {
                 name: 'PANORAMA',
                 division: '500',
-                host: 'IP        ',
-                localIP: 'IP      ',
+                host: 'IP_ADDRESS',
+                localIP: 'IPADDRES',
                 localAddress: 'localhost',
                 port: 9210,
                 production: false,
-                accessCode: 'PW    ',
-                verifyCode: 'PW    !!',
+                accessCode: 'PW',
+                verifyCode: 'PW',
                 infoButtonOid: '1.3.6.1.4.1.3768'
             },
             'C877': {
                 name: 'KODAK',
                 division: '500',
-                host: 'IP        ',
-                localIP: 'IP      ',
+                host: 'IP_ADDRESS',
+                localIP: 'IPADDRES',
                 localAddress: 'localhost',
                 port: 9210,
                 production: false,
-                accessCode: 'PW    ',
-                verifyCode: 'PW    !!',
+                accessCode: 'PW',
+                verifyCode: 'PW',
                 infoButtonOid: '1.3.6.1.4.1.3768'
             }
         }

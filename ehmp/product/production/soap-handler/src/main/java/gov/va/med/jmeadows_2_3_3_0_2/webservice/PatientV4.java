@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "patientV4", namespace = "http://webservice.bhie.domain.ext/", propOrder = {
+@XmlType(name = "patientV4", namespace = "http://webservice.bhie.DNS       /", propOrder = {
     "address",
     "dob",
     "gender",

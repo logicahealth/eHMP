@@ -1,14 +1,12 @@
 # Group FHIR
 
-## FHIR patient demographics [GET {{{path}}}{?fields}]
+## FHIR patient demographics [GET {{{path}}}]
 
 Get demographics for a patient
 
 + Parameters
 
     :[id]({{{common}}}/parameters/fhir.id.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 + Response 200 (application/json)
 

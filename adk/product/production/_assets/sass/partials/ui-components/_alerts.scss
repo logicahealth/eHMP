@@ -1,3 +1,14 @@
+/* modal alerts */
+.alert-modal {
+    .modal-body {
+        h5 {
+            &::first-letter {
+                text-transform: capitalize;
+            }
+        }
+    }
+}
+/* bootstrap alerts */
 .alert.alert-user {
     padding: 10px;
     display: block;
@@ -14,6 +25,11 @@
     	right: 0px;
     }
 }
+.alert.alert-danger{
+    color: $red-dark;
+}
+
+/* growl alerts */
 .alert.growl-alert-user {
 	display: block;
     float: left;

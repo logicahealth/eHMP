@@ -10,30 +10,20 @@ define([
 ], function(Backbone, Marionette, _, AppletUiHelper, DetailsView, columns, tooltip, LabOrderTrayUtils) {
     "use strict";
 
+    var DATE_FORMAT = 'YYYYMMDDHHmmss';
+
     var fetchOptions = {
         resourceTitle: 'patient-record-labsbypanel',
         pageable: true,
         cache: true,
+        allowAbort: true,
         collectionConfig: {
             comparator: function(model) {
-                var observed = model.get('observed');
-
-                // I don't believe this is a stable in the long term,
-                // but it is the pattern that the onSuccess is already using.
-                if (!observed) {
-
-                    for (var key in model.attributes) {
-                        if(model.attributes.hasOwnProperty(key)) {
-                            observed = model.get(key)[0];
-                            observed = observed.observed;
-                            model.set('observed', observed, {silent: true});
-                            break;
-                        }
-                    }
-
+                var orderDateStr = model.get('observed') || model.get('resulted');
+                if (!_.isString(orderDateStr) || isNaN(orderDateStr)) {
+                    return 0;
                 }
-                if (observed.length === 12) observed = [observed, '00'].join('');
-                return -observed;
+                return -(_.padRight(orderDateStr, DATE_FORMAT.length, '0').slice(0, DATE_FORMAT.length));
             }
         },
         viewModel: {
@@ -51,7 +41,6 @@ define([
                 }
                 response.loinc = lCodes;
                 response.stdTestNames = testNames;
-
                 var low = response.low,
                     high = response.high;
 
@@ -104,6 +93,9 @@ define([
                     }
                 }
                 return response;
+            },
+            defaults: {
+                'applet_id': 'narrative_lab_results'
             }
         }
     };
@@ -121,8 +113,14 @@ define([
     return ADK.AppletViews.GridView.extend({
         initialize: function(options) {
             this._super = ADK.AppletViews.GridView.prototype;
-            this.summaryColumns = [columns.dateCol(), columns.testCol(), columns.flagCol(), columns.resultAndUnitCol()];
-            this.fullScreenColumns = [columns.dateCol(), columns.testCol(), columns.flagCol(), columns.resultNoUnitCol(), columns.unitCol(), columns.refCol(), columns.facilityCol()];
+
+            var columnList = [columns.dateCol(), columns.descriptionCol(),
+                columns.typeCol(), columns.authorCol(), columns.facilityCol()];
+
+            var authorColIdx = 3;
+
+            this.summaryColumns = _.without(columnList, columnList[authorColIdx]);
+            this.fullScreenColumns = columnList;
 
             var appletOptions = {
                 filterFields: ['observed', 'typeName', 'flag', 'result', 'specimen', 'groupName', 'isPanel', 'units', 'referenceRange', 'facilityMoniker', 'labs.models', this.getLoincValues],
@@ -249,6 +247,11 @@ define([
                             type: 'panel'
                         });
                     } else {
+
+                        if (result.has('results')) {
+                            result.set('description', result.get('results')[0].localTitle);
+                        }
+
                         result.set('infobuttonContext', 'LABRREV');
                     }
                 });
@@ -262,7 +265,7 @@ define([
             };
 
             this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
-                self.dateRangeRefresh('observed',  {
+                self.dateRangeRefresh('observed', {
                     customFilter: narrativeLabsFilter
                 });
             });
@@ -270,16 +273,24 @@ define([
             this.gridCollection = ADK.PatientRecordService.fetchCollection(fetchOptions);
             appletOptions.collection = this.gridCollection;
 
+            appletOptions.toolbarOptions = {
+                buttonTypes: ['infobutton', 'detailsviewbutton'],
+            };
+
             this.appletOptions = appletOptions;
             this._super.initialize.apply(this, arguments);
 
             var message = ADK.Messaging.getChannel('narrative_lab_results');
+            this.listenTo(message, 'detailView', function(channelObj) {
+                AppletUiHelper.getDetailView(channelObj.model, channelObj.targetElement, channelObj.model.collection, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
+            });
+
             message.reply('gridCollection', function() {
                 return self.gridCollection;
             });
 
         },
-        getLoincValues : function(json) {
+        getLoincValues: function(json) {
             if (json.codes === undefined) return '';
             var codesWithLoinc = _.filter(json.codes, function(item) {
                 return item.system === 'http://loinc.org';

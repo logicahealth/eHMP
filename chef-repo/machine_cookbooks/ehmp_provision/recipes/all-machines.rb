@@ -4,7 +4,9 @@
 #
 
 node.override[:machine][:action] = :setup if node[:machine][:action].eql?("converge")
-node.override[:machine][:batch_action] = :nothing if node[:machine][:action].eql?("destroy")
+node.override[:machine][:batch_action] = :nothing if node[:machine][:action].eql?("destroy") || 
+                                                     node[:machine][:action].eql?("stop") ||
+                                                     node[:machine][:action].eql?("ready")
 node.default[:ehmp_provision][:machines].delete("solr") if node[:machine][:driver] == "vagrant"
 
 node[:ehmp_provision][:machines].each {|machine_name|

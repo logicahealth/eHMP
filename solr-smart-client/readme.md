@@ -1,0 +1,1 @@
+Solr-Smart-Client

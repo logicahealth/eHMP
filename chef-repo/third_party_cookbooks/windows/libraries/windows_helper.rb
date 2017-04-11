@@ -3,7 +3,7 @@
 # Cookbook Name:: windows
 # Library:: helper
 #
-# Copyright:: 2011-2015, Chef Software, Inc.
+# Copyright:: 2011, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,9 +23,10 @@ require 'chef/exceptions'
 
 module Windows
   module Helper
+
     AUTO_RUN_KEY = 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run'.freeze unless defined?(AUTO_RUN_KEY)
     ENV_KEY = 'HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment'.freeze unless defined?(ENV_KEY)
-    ExpandEnvironmentStrings = Win32API.new('kernel32', 'ExpandEnvironmentStrings', %w(P P L), 'L') if Chef::Platform.windows? && !defined?(ExpandEnvironmentStrings)
+    ExpandEnvironmentStrings = Win32API.new('kernel32', 'ExpandEnvironmentStrings', ['P', 'P', 'L'], 'L') if Chef::Platform.windows?
 
     # returns windows friendly version of the provided path,
     # ensures backslashes are used everywhere
@@ -38,9 +39,9 @@ module Windows
     # especially important for 32-bit processes (like Ruby) on a
     # 64-bit instance of Windows.
     def locate_sysnative_cmd(cmd)
-      if ::File.exist?("#{ENV['WINDIR']}\\sysnative\\#{cmd}")
+      if ::File.exists?("#{ENV['WINDIR']}\\sysnative\\#{cmd}")
         "#{ENV['WINDIR']}\\sysnative\\#{cmd}"
-      elsif ::File.exist?("#{ENV['WINDIR']}\\system32\\#{cmd}")
+      elsif ::File.exists?("#{ENV['WINDIR']}\\system32\\#{cmd}")
         "#{ENV['WINDIR']}\\system32\\#{cmd}"
       else
         cmd
@@ -62,28 +63,20 @@ module Windows
       @win_version ||= Windows::Version.new
     end
 
-    # Helper function to properly parse a URI
-    def as_uri(source)
-      URI.parse(source)
-    rescue URI::InvalidURIError
-      Chef::Log.warn("#{source} was an invalid URI. Trying to escape invalid characters")
-      URI.parse(URI.escape(source))
-    end
-
     # if a file is local it returns a windows friendly path version
     # if a file is remote it caches it locally
-    def cached_file(source, checksum = nil, windows_path = true)
+    def cached_file(source, checksum=nil, windows_path=true)
       @installer_file_path ||= begin
 
-        if source =~ /^(file|ftp|http|https):\/\//
-          uri = as_uri(source)
+        if source =~ ::URI::ABS_URI && %w[ftp http https].include?(URI.parse(source).scheme)
+          uri = ::URI.parse(source)
           cache_file_path = "#{Chef::Config[:file_cache_path]}/#{::File.basename(::URI.unescape(uri.path))}"
           Chef::Log.debug("Caching a copy of file #{source} at #{cache_file_path}")
-          remote_file cache_file_path do
-            source source
-            backup false
-            checksum checksum unless checksum.nil?
-          end.run_action(:create)
+          r = Chef::Resource::RemoteFile.new(cache_file_path, run_context)
+          r.source(source)
+          r.backup(false)
+          r.checksum(checksum) if checksum
+          r.run_action(:create)
         else
           cache_file_path = source
         end
@@ -98,12 +91,12 @@ module Windows
       # http://msdn.microsoft.com/en-us/library/windows/desktop/ms724265%28v=vs.85%29.aspx
       buf = 0.chr * 32 * 1024 # 32k
       if ExpandEnvironmentStrings.call(path.dup, buf, buf.length) == 0
-        raise Chef::Exceptions::Win32APIError, 'Failed calling ExpandEnvironmentStrings (received 0)'
+        raise Chef::Exceptions::Win32APIError, "Failed calling ExpandEnvironmentStrings (received 0)"
       end
       buf.strip
     end
 
-    def is_package_installed?(package_name) # rubocop:disable Style/PredicateName
+    def is_package_installed?(package_name)
       installed_packages.include?(package_name)
     end
 
@@ -111,48 +104,35 @@ module Windows
       @installed_packages || begin
         installed_packages = {}
         # Computer\HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Uninstall
-        installed_packages.merge!(extract_installed_packages_from_key(::Win32::Registry::HKEY_LOCAL_MACHINE)) # rescue nil
+        installed_packages.merge!(extract_installed_packages_from_key(::Win32::Registry::HKEY_LOCAL_MACHINE)) #rescue nil
         # 64-bit registry view
         # Computer\HKEY_LOCAL_MACHINE\Software\Wow6464Node\Microsoft\Windows\CurrentVersion\Uninstall
-        installed_packages.merge!(extract_installed_packages_from_key(::Win32::Registry::HKEY_LOCAL_MACHINE, (::Win32::Registry::Constants::KEY_READ | 0x0100))) # rescue nil
+        installed_packages.merge!(extract_installed_packages_from_key(::Win32::Registry::HKEY_LOCAL_MACHINE, (::Win32::Registry::Constants::KEY_READ | 0x0100))) #rescue nil
         # 32-bit registry view
         # Computer\HKEY_LOCAL_MACHINE\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall
-        installed_packages.merge!(extract_installed_packages_from_key(::Win32::Registry::HKEY_LOCAL_MACHINE, (::Win32::Registry::Constants::KEY_READ | 0x0200))) # rescue nil
+        installed_packages.merge!(extract_installed_packages_from_key(::Win32::Registry::HKEY_LOCAL_MACHINE, (::Win32::Registry::Constants::KEY_READ | 0x0200))) #rescue nil
         # Computer\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall
-        installed_packages.merge!(extract_installed_packages_from_key(::Win32::Registry::HKEY_CURRENT_USER)) # rescue nil
+        installed_packages.merge!(extract_installed_packages_from_key(::Win32::Registry::HKEY_CURRENT_USER)) #rescue nil
         installed_packages
       end
     end
 
     private
-
     def extract_installed_packages_from_key(hkey = ::Win32::Registry::HKEY_LOCAL_MACHINE, desired = ::Win32::Registry::Constants::KEY_READ)
       uninstall_subkey = 'Software\Microsoft\Windows\CurrentVersion\Uninstall'
       packages = {}
       begin
         ::Win32::Registry.open(hkey, uninstall_subkey, desired) do |reg|
-          reg.each_key do |key, _wtime|
+          reg.each_key do |key, wtime|
             begin
               k = reg.open(key, desired)
-              display_name = begin
-                               k['DisplayName']
-                             rescue
-                               nil
-                             end
-              version = begin
-                          k['DisplayVersion']
-                        rescue
-                          'NO VERSION'
-                        end
-              uninstall_string = begin
-                                   k['UninstallString']
-                                 rescue
-                                   nil
-                                 end
+              display_name = k["DisplayName"] rescue nil
+              version = k["DisplayVersion"] rescue "NO VERSION"
+              uninstall_string = k["UninstallString"] rescue nil
               if display_name
-                packages[display_name] = { name: display_name,
-                                           version: version,
-                                           uninstall_string: uninstall_string }
+                packages[display_name] = {:name => display_name,
+                                          :version => version,
+                                          :uninstall_string => uninstall_string}
               end
             rescue ::Win32::Registry::Error
             end

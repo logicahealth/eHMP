@@ -2,7 +2,7 @@
 <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <env:Header />
    <env:Body>
-      <idm:PRPA_IN201310UV02 xmlns:idm="http://DNS  oed.oit.domain" xmlns="urn:hl7-org:v3" ITSVersion="XML_1.0" xsi:schemaLocation="urn:hl7-org:v3 ../../schema/HL7V3/NE2008/multicacheschemas/PRPA_IN201310UV02.xsd">
+      <idm:PRPA_IN201310UV02 xmlns:idm="http://URL         .DNS   " xmlns="urn:hl7-org:v3" ITSVersion="XML_1.0" xsi:schemaLocation="urn:hl7-org:v3 ../../schema/HL7V3/NE2008/multicacheschemas/PRPA_IN201310UV02.xsd">
          <id extension="WSDOC1602101409186300564250222" root="2.16.840.1.113883.4.349" />
          <creationTime value="20160210140918" />
          <versionCode code="3.0" />
@@ -35,9 +35,9 @@
                   <subject1 typeCode="SBJ">
                      <patient classCode="PAT">
                         <id root="2.16.840.1.113883.4.1" extension="666000618^PI^200SSA^USSSA^A"/>
-                        <id root="2.16.840.1.113883.4.349" extension="100625^PI^500^USVHA"/>
-                        <id root="2.16.840.1.113883.4.349" extension="100625^PI^507^USVHA"/>
-                        <id root="2.16.840.1.113883.4.349" extension="11^PI^742V1^USVHA"/>
+                        <id root="2.16.840.1.113883.4.349" extension="100625^PI^500^USVHA^A"/>
+                        <id root="2.16.840.1.113883.4.349" extension="100625^PI^507^USVHA^A"/>
+                        <id root="2.16.840.1.113883.4.349" extension="11^PI^742V1^USVHA^A"/>
                         <id root="2.16.840.1.113883.4.349" extension="0005000000126V406128^PI^200ESR^USVHA^H"/>
                         <id root="2.16.840.1.113883.4.349" extension="0005000000126V406128^PI^200ESR^USVHA^PCE"/>
                         <id root="2.16.840.1.113883.4.349" extension="5000000126V406128^NI^200M^USVHA^P"/>

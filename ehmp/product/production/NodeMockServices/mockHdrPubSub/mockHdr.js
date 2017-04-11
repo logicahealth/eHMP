@@ -76,15 +76,15 @@ app.get('/ping', function(req, res) {
 
 //HDR interface
 //Subscribe
-app.post('/repositories.domain.ext/fpds/vpr/subscribe', [validateSubscribeParams, handleSubscribe]);
+app.post('/repositories.DNS       /fpds/vpr/subscribe', [validateSubscribeParams, handleSubscribe]);
 //Poll
-app.get('/repositories.domain.ext/fpds/vpr/patientdata/:siteId', [validatePollParams, handlePoll]);
+app.get('/repositories.DNS       /fpds/vpr/patientdata/:siteId', [validatePollParams, handlePoll]);
 //Unsubscribe
-app.post('/repositories.domain.ext/fpds/vpr/cancel', [validateUnsubscribeParams, handleUnsubscribe]);
+app.post('/repositories.DNS       /fpds/vpr/cancel', [validateUnsubscribeParams, handleUnsubscribe]);
 
 //Not part of the real HDR interface
 //Clear all subscriptions
-app.post('/repositories.domain.ext/fpds/vpr/cancel/all', handleUnsubscribeAll);
+app.post('/repositories.DNS       /fpds/vpr/cancel/all', handleUnsubscribeAll);
 //Unsolicited update
 app.post('/update', [validateUnsolicitedUpdate, handleUnsolicitedUpdate]);
 
@@ -436,7 +436,8 @@ function addDomainDataAndMetaStamp(stampTime, patient, site, domain, metaStamp, 
     try {
         domainTemplate = require('./data/templates/' + domain);
     } catch (e){
-        log.error('Error getting data for domain: %s: error: %s', domain, e);
+        //   not needed,  not an error
+        // log.info('Error getting data for domain: %s: error: %s , Sending and empty metaStamp indicating that there is no data for that domain', domain, e);
         // send out empty domainStamp
         metaStamp.sourceMetaStamp[siteId].domainMetaStamp[domain] = getDomainMetaStamp(stampTime, domain);
         patient.domainsSynced[domain] = stampTime;

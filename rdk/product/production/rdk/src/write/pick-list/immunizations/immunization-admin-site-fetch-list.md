@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Immunization admin site [/immunization-admin-site{?site}{&filter}{&date}{&fields}]
+## Immunization admin site [/immunization-admin-site{?site}{&filter}{&date}]
 
 Returns entries from the IMM ADMINISTRATION SITE (BODY) file (920.3).
 
@@ -15,8 +15,6 @@ PXVIMM ADMIN SITE
     :[filter]({{{common}}}/parameters/immunization-filter.md)
 
     :[date]({{{common}}}/parameters/date.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

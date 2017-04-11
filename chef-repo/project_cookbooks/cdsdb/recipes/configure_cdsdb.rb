@@ -10,4 +10,5 @@ end
 
 execute "restart mongod" do
 	command "service mongod restart"
+	action :nothing
 end

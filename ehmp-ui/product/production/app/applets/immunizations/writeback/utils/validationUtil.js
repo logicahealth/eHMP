@@ -8,7 +8,11 @@ define([], function(){
             this.validateDose(model, model.get('dosage'));
 
             if(model.get('administeredHistorical') === 'historical'){
-                this.validateAdminDate(model, model.get('administrationDate'));
+                model.unset('visDateOffered');
+                this.validateAdminDate(model, model.get('administrationDateHistorical'));
+            } else {
+                model.unset('administrationDateHistorical');
+                this.validateVisDate(model, model.get('visDateOffered'));
             }
 
             if (!_.isEmpty(model.errorModel.toJSON())) {
@@ -19,7 +23,7 @@ define([], function(){
         validateAdministeringProvider: function(model, administeringProvider, immunizationOption){
             if(immunizationOption === 'administered' && administeringProvider){
                 if (administeringProvider.indexOf(';') === -1){
-                    model.errorModel.set({administeredBy: 'Please choose a valid provider'});
+                    model.errorModel.set({administeredBy: 'Choose a valid provider'});
                 }
             }
         },
@@ -49,8 +53,15 @@ define([], function(){
 
                 var dateMeasured = moment(dateToCompare, 'MM/DD/YYYY');
                 if(dateMeasured.isAfter(today)){
-                   model.errorModel.set({administrationDate: 'Administration Date must be in the past.'});
+                   model.errorModel.set({administrationDateHistorical: 'Administration Date must be in the past.'});
                 }
+            }
+        },
+        validateVisDate: function(model, visDateOffered){
+            var today = moment();
+
+            if(visDateOffered && moment(visDateOffered, 'MM/DD/YYYY').isAfter(moment())){
+                model.errorModel.set({visDateOffered: 'VIS Date Offered must be in the past.'});
             }
         }
     };

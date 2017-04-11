@@ -1,6 +1,7 @@
 'use strict';
 var Educations = require('./educations-resource');
 var jdsInput = require('./educations-resource-spec-data').jdsInput;
+var _ = require('lodash');
 
 describe('Educations FHIR Resource', function() {
     it('Verifies correct resource name and path', function() {
@@ -36,6 +37,7 @@ describe('Educations FHIR conversion methods', function() {
 
     describe(':: Educations', function() {
         var fhirItem = Educations.createItem(jdsInput.data.items[0], req._pid);
+        var fhirItemWithText = Educations.createItem(jdsInput.data.items[1], req._pid); // second item has summary text defined
 
         it('sets the resourceType correctly', function() {
             expect(fhirItem.resourceType).to.eql('Procedure');
@@ -50,7 +52,10 @@ describe('Educations FHIR conversion methods', function() {
             expect(fhirItem.patient.reference).to.eql('Patient/' + req._pid);
         });
         it('sets other fields correctly', function() {
-            expect(fhirItem.text).not.to.be.undefined();
+            expect(fhirItem.text).to.be.undefined(); // First JDS item doesn't have a summary, FHIR item shouldn't have a text property
+            expect(fhirItemWithText.text).not.to.be.undefined(); // Second JDS item has a summary, FHIR item should have a text property
+            expect(fhirItemWithText.text.status).to.eql('generated');
+            expect(fhirItemWithText.text.div).to.eql('<div>' + _.escape(jdsInput.data.items[1].summary) + '</div>');
             expect(fhirItem.status).not.to.be.undefined();
             expect(fhirItem.type).not.to.be.undefined();
             expect(fhirItem.encounter).not.to.be.undefined();

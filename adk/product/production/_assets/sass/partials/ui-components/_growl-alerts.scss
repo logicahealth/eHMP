@@ -1,4 +1,4 @@
-.growl-alert{
+.growl-alert {
 	font-size: 14px;
 	[data-notify="icon"]{
 		display: block;
@@ -12,9 +12,11 @@
 		[data-notify="title"]{
 			display: block;
 			font-weight: 700;
+			margin-bottom: -5px;
 		}
 		[data-notify="message"]{
 			display:block;
+			margin-top: 9px;
 		}
 	}
 	&.alert-custom{

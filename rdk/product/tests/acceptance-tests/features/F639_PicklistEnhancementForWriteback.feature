@@ -9,7 +9,7 @@ When the client requests picklist with the parameters and site "9E7A"
       | type          | encounters-visit-service-connected |
       | dfn           | 140                                |
       | visitDate     | 0                                  |
-      | loc           | 240                                |
+      | locationUid  | urn:va:location:9E7A:240           |
 
   Then a successful response is returned
   And the Service Conntected result contains
@@ -220,6 +220,7 @@ Scenario: Returns a list of specimens from the TOPOGRAPHY FIELD file (#61) (ORWD
 When the client requests picklist with the parameters and site "9E7A"
       | paramter name | value                |
       | type          | lab-order-dialog-def |
+      | location  | 240           |
   Then a successful response is returned
   And the picklist result contains 
       | field             | value        |
@@ -247,7 +248,7 @@ When the client requests picklist with the parameters and site "9E7A"
       | paramter name | value               |
       | type          | lab-times-available |
       | date          | 20312015            |
-      | location      | 1                   |
+      | locationUid      | urn:va:location:9E7A:1 |
   Then a successful response is returned
   And the picklist result contains 
       | field   | value         |
@@ -451,7 +452,8 @@ Scenario: Create Endpoint for encounters diagnosis codes for clinic (ORWPCE DIAG
   When the client requests picklist with the parameters and site "9E7A"
       | paramter name | value                                 |
       | type          | encounters-diagnosis-codes-for-clinic |
-      | clinic        | 195                                   |
+      | locationUid  | urn:va:location:9E7A:195           |
+
   Then a successful response is returned
  
 
@@ -462,16 +464,16 @@ Scenario: Create Endpoint for problems-lexicon-lookup (ORQQPL4 LEX)
       | type          | problems-lexicon-lookup |
       | searchString  | ABC                     |
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field     | value                |
       | lexIen    | 7299081              |
       | prefText  | Aneurysmal bone cyst |
-      | code      | R69.               |
-      | codeIen   | 521774                 |
+      | code      | R69.                 |
+      | codeIen   | 521774               |
       | codeSys   | SNOMED CT            |
       | conceptId | 203468000            |
-      | desigId   | 126234010            |
-      | version   | ICD-10-CM             |
+      | desigId   | 312186013            |
+      | version   | ICD-10-CM            |
 
 @F639_18_Encounters_diagnosis_lexicon_lookup
 Scenario: Create Endpoint for encounters-diagnosis-lexicon-lookup (ORWPCE4 LEX)
@@ -480,30 +482,29 @@ Scenario: Create Endpoint for encounters-diagnosis-lexicon-lookup (ORWPCE4 LEX)
       | type          | encounters-diagnosis-lexicon-lookup |
       | searchString  | ABC                                 |
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field     | value                |
       | lexIen    | 7299081              |
       | prefText  | Aneurysmal bone cyst |
       | code      | EMPTY                |
       | codeSys   | SNOMED CT            |
       | conceptId | 203468000            |
-      | desigId   | 126234010            |
+      | desigId   | 312186013            |
       | version   | EMPTY                |
 
-@F639_19_Encounters_procedures_lexicon_lookup
+@F639_19_Encounters_procedures_lexicon_lookup @debug
 Scenario: Create Endpoint for encounters-procedures-lexicon-lookup(ORWPCE4 LEX)
   When the client requests picklist with the parameters and site "9E7A"
       | paramter name | value                                |
       | type          | encounters-procedures-lexicon-lookup |
       | searchString  | ABC                                  |
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field     | value                      |
       | lexIen    | 321435                     |
       | prefText  | Injection Abciximab, 10 mg |
       | codeSys   | HCPCS                      |
       | conceptId | J0130                      |
-      
 
 @F639_20_Vitals_List
 Scenario: Get list of vitals qualifiers/categories
@@ -582,4 +583,28 @@ Scenario: Returns the flags for a Progress Note Title
       | isConsultNote  | false |
 
 
+@F639_24_Lab_Order_Types @DE5107 @DE5196
+Scenario: Create endpoint for ORWDX ORDITM (lab order types)
+  When the client requests picklist with the parameters and site "9E7A"
+      | parameter name | value                     |
+      | type           | lab-order-orderable-items |
+      | labType        | S.LAB                     |
 
+  Then a successful response is returned
+  And the picklist result contains
+      | field   | value          |
+      | ien     | 430            |
+      | synonym | CLONAZEPAM     |
+      | name    | CLONAZEPAM     |
+  And the picklist result contains
+      | ien     | 1199           |
+      | synonym | GENTAMICIN     |
+      | name    | GENTAMICIN     |
+  And the picklist result contains
+      | ien     | 162            |
+      | synonym | PLATELET COUNT |
+      | name    | PLATELET COUNT |
+  And the picklist result contains
+      | ien     | 362            |
+      | synonym | TESTOSTERONE   |
+      | name    | TESTOSTERONE   |

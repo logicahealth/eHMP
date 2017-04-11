@@ -28,6 +28,8 @@ Feature: F361 FHIR Domain - Observation
       | resource.contained.identifier.system        | urn:oid:2.16.840.1.113883.6.233       |
       | resource.contained.identifier.value         | 998                                   |
       | resource.contained.name                     | ABILENE (CAA)                         |
+      And FHIR date and time conver to Zulu format for Observation
+      
 
 @F361_vitals @US5108 @DE3161
  Scenario: Client can request vitals in FHIR format

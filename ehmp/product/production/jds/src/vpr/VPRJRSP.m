@@ -15,7 +15,7 @@ RESPOND ; find entry point to handle request and call it
  S LOWPATH=$$LOW^VPRJRUT(HTTPREQ("path"))
  S HTTPREQ("store")=$S($E(LOWPATH,2,9)="vpr/all/":"xvpr",$E(LOWPATH,2,4)="vpr":"vpr",$L($P(LOWPATH,"/",2)):$P(LOWPATH,"/",2),1:"data")
  ; treat PUT and POST the same for now (we always replace objects when updating)
- I "PUT,POST"[HTTPREQ("method") D  QUIT
+ I "PUT,POST,PATCH"[HTTPREQ("method") D  QUIT
  . N BODY
  . M BODY=HTTPREQ("body") K:'$G(HTTPLOG) HTTPREQ("body")
  . X "S LOCATION=$$"_ROUTINE_"(.HTTPARGS,.BODY)"
@@ -81,6 +81,7 @@ SENDATA ; write out the data as an HTTP response
  W "Date: "_$$GMT^VPRJRUT_$C(13,10)
  I $D(HTTPREQ("location")) W "Location: "_HTTPREQ("location")_$C(13,10)
  W "Content-Type: application/json"_$C(13,10)
+ W "Access-Control-Allow-Origin: *"_$C(13,10)
  W "Content-Length: ",SIZE,$C(13,10)_$C(13,10)
  I 'SIZE W $C(13,10),! Q  ; flush buffer and quit
  ;
@@ -98,7 +99,7 @@ SENDATA ; write out the data as an HTTP response
  . . S J="" F  S J=$O(@HTTPRSP@($J,I,J)) Q:'J  W @HTTPRSP@($J,I,J)
  . W $S('$D(^VPRCONFIG("store",$G(HTTPREQ("store")),"global")):"]}}",1:"]}")
  . K @HTTPRSP@($J)
- W $C(13,10),!  ; flush buffer
+ W !  ; flush buffer
  I RSPTYPE=3,($E(HTTPRSP,1,4)="^TMP") D UPDCACHE
  Q
 UPDCACHE ; update the cache for this query
@@ -106,14 +107,16 @@ UPDCACHE ; update the cache for this query
  I HTTPREQ("store")="xvpr" Q  ; don't cache cross patient for now
  ; otherwise drop into VPR cache update
 UPD4VPR ;
- N PID,INDEX,HASH,HASHTS,MTHD
+ N PID,INDEX,HASH,HASHTS,MTHD,JPID
  S PID=$G(^TMP($J,"pid")),INDEX=$G(^TMP($J,"index"))
  S HASH=$G(^TMP($J,"hash")),HASHTS=$G(^TMP($J,"timestamp"))
  Q:'$L(PID)  Q:'$L(INDEX)  Q:'$L(HASH)  Q:PID[","
  ;
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(222,"Identifier "_PID) Q
  S MTHD=$G(^VPRMETA("index",INDEX,"common","method"))
  L +^VPRTMP(HASH):$G(^VPRCONFIG("timeout","odhash"),1)  E  Q
- I $G(^VPRPTI(PID,MTHD,INDEX))=HASHTS D
+ I $G(^VPRPTI(JPID,PID,MTHD,INDEX))=HASHTS D
  . K ^VPRTMP(HASH)
  . M ^VPRTMP(HASH)=^TMP($J)
  . S ^VPRTMP(HASH,"created")=$H

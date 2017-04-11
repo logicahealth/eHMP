@@ -35,7 +35,7 @@ class VitalsWriteBack < AllApplets
   def initialize
     super
     add_action(CucumberLabel.new("Vitals Add Button"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=vitals] .applet-add-button"))
-    add_verify(CucumberLabel.new("Add Vitals Modal Title"), VerifyText.new, AccessHtmlElement.new(:css, '[id^="main-workflow-label-"]'))
+    add_verify(CucumberLabel.new("Add Vitals Modal Title"), VerifyText.new, AccessHtmlElement.new(:css, '[id="main-workflow-label-Enter-Vitals"]'))
     add_verify(CucumberLabel.new("Date Taken"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='dateTakenInput']"))
     add_action(CucumberLabel.new("Date Taken Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#dateTakenInput"))
     add_verify(CucumberLabel.new('Date Taken Input Value'), VerifyValue.new, AccessHtmlElement.new(:css, "#dateTakenInput"))
@@ -50,8 +50,8 @@ class VitalsWriteBack < AllApplets
     add_action(CucumberLabel.new("Cancel"), ClickAction.new, AccessHtmlElement.new(:id, "form-cancel-btn"))
     add_verify(CucumberLabel.new("Growl Alert Msg"), VerifyContainsText.new, AccessHtmlElement.new(:css, ".growl-alert"))
     add_action(CucumberLabel.new("GDF Region"), ClickAction.new, AccessHtmlElement.new(:css, "#date-region-minimized"))
-    add_action(CucumberLabel.new("GDF 24 Hours"), ClickAction.new, AccessHtmlElement.new(:css, "[name='24hr-range-global']"))
-    add_action(CucumberLabel.new("GDF Apply"), ClickAction.new, AccessHtmlElement.new(:css, "#custom-range-apply-global"))
+    add_action(CucumberLabel.new("GDF 24 Hours"), ClickAction.new, AccessHtmlElement.new(:css, "[name='24hrRangeGlobal']"))
+    add_action(CucumberLabel.new("GDF Apply"), ClickAction.new, AccessHtmlElement.new(:css, "#customRangeApplyGlobal"))
     add_action(CucumberLabel.new("24 HR Range Vital"), ClickAction.new, AccessHtmlElement.new(:css, "#24hr-range-vitals"))
     add_verify(CucumberLabel.new("BP label"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@id='data-grid-vitals']/descendant::td[contains(string(), 'Blood Pressure')]"))
     #add_verify(CucumberLabel.new("BP value"), VerifyContainsText.new, AccessHtmlElement.new(:css, '[data-appletid=vitals] [data-infobutton=BP] td:nth-child(2)'))
@@ -146,8 +146,8 @@ class RespirationLabels < VitalsWriteBack
     add_action(CucumberLabel.new("Respiration Method Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "respiration-method-po"))
     add_action(CucumberLabel.new("Respiration Position Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "respiration-position-po"))
 
-    add_verify(CucumberLabel.new('Respiration has error'), VerifyText.new, AccessHtmlElement.new(:css, 'div.respirationInputValue.has-error'))
-    add_verify(CucumberLabel.new('Respiration has error message'), VerifyText.new, AccessHtmlElement.new(:css, 'div.respirationInputValue.has-error span.help-block.error'))
+    add_verify(CucumberLabel.new('Respiration has error'), VerifyContainsText.new, AccessHtmlElement.new(:css, 'div.respirationInputValue.has-error'))
+    add_verify(CucumberLabel.new('Respiration has error message'), VerifyContainsText.new, AccessHtmlElement.new(:css, 'div.respirationInputValue.has-error span.help-block.error'))
   end
 end
 
@@ -264,15 +264,20 @@ end
 Then(/^user chooses to "([^"]*)" on add vitals modal detail screen$/) do | expand_all |
   aa = TempLabels.instance
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { aa.get_element(expand_all).displayed? }
-  wait.until { aa.get_element(expand_all).enabled? }
-  expect(aa.perform_action(expand_all)).to eq(true)
-  expect(aa.am_i_visible?("Temp Location Drop Down")).to eq(true)
+  @ehmp = AddVitalModal.new
+  @ehmp.wait_until_btn_expand_collapse_button_visible
+  @ehmp.btn_expand_collapse_button.click
+  @ehmp.wait_until_fld_temp_location_visible
+  # btn_expand_collapse_button
+  # wait.until { aa.get_element(expand_all).displayed? }
+  # wait.until { aa.get_element(expand_all).enabled? }
+  # expect(aa.perform_action(expand_all)).to eq(true)
+  # expect(aa.am_i_visible?("Temp Location Drop Down")).to eq(true)
 end
 
 Then(/^add vital modal detail title says "([^"]*)"$/) do |modal_title|
   aa = VitalsWriteBack.instance
-  expect(aa.perform_verification("Add Vitals Modal Title", modal_title)).to eq(true)
+  expect(aa.perform_verification("Add Vitals Modal Title", modal_title.upcase)).to eq(true)
 end
 
 Then(/^the add vitals detail modal displays labels$/) do |table|
@@ -325,7 +330,9 @@ def map_add_vitals_class(vital_type)
 end
 
 def verify_vitals_modal_details(table, modal)
-  expect(modal.wait_until_action_element_visible("Modal Loaded", DefaultLogin.wait_time)).to be_true
+  #expect(modal.wait_until_action_element_visible("Modal Loaded", DefaultLogin.wait_time)).to be_true
+  @ehmp = PobCommonElements.new
+  @ehmp.wait_until_fld_modal_body_visible
   table.rows.each do | row |
     expect(modal.am_i_visible?(row[0])).to eq(true)
   end
@@ -472,5 +479,12 @@ end
 
 Then(/^user closes the new observation window$/) do
   aa = VitalsWriteBack.instance
-  expect(aa.perform_action("New Observation Button")).to eq(true)
+  click_button = aa.perform_action("New Observation Button")
+  unless click_button
+    aa.add_action(CucumberLabel.new("ob button"), ClickAction.new, AccessHtmlElement.new(:css, "#patientDemographic-newObservation div.action-list-container button"))
+    if aa.am_i_visible? 'ob button'
+      p "observation tray still open, try to refresh page"
+      TestSupport.driver.navigate.refresh
+    end
+  end
 end

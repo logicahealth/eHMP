@@ -2,14 +2,9 @@
 
 ## User service user [{{{path}}}]
 
-### Info [GET {{{path}}}/info{?fields}]
+### Info [GET {{{path}}}/info]
 
 Get the current user session
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 
@@ -41,7 +36,7 @@ Get the current user session
             :[Schema]({{{common}}}/schemas/user_info-GET-200.jsonschema)
 
 
-### List [GET {{{path}}}/list{?user.filter}{&show.inactive}{&start}{&limit}{&fields}]
+### List [GET {{{path}}}/list{?user.filter}{&show.inactive}{&start}{&limit}{&page}]
 
 Get the list of users from JDS with eHMP roles
 
@@ -55,7 +50,7 @@ Get the list of users from JDS with eHMP roles
 
     + limit (limit, optional) - The limit for the number of returned search results
 
-    :[fields]({{{common}}}/parameters/fields.md)
+    + page (page, optional) - The page number for desired search results. If start is defined then page is overwritten.
 
 
 + Response 200 (application/json)
@@ -77,13 +72,14 @@ Get the list of users from JDS with eHMP roles
 
 :[Response 500]({{{common}}}/responses/500.md)
 
-### Ehmp User Context [PUT {{{path}}}/set-recent-patients{?viewedPatientContext}{&clear}]
 
-Set the eHMP UI context of a given user
+### Set Recent Patients [PUT {{{path}}}/set-recent-patients{?workspaceContext}{&clear}]
+
+Set a current patient of the current user
 
 + Parameters
 
-    + viewedPatientContext (viewedPatientContext, required) - Viewed Patient Context parameters in JSON format
+    + workspaceContext (workspaceContext, required) - Viewed Patient Context parameters in JSON format
 
     + clear (boolean, optional) - Clear User Context
 
@@ -107,9 +103,9 @@ Set the eHMP UI context of a given user
 
 :[Response 500]({{{common}}}/responses/500.md)
 
-### Get User Context [GET {{{path}}}/get-recent-patients]
+### Get Recent Patients [GET {{{path}}}/get-recent-patients]
 
-Get the eHMP UI context of the current user
+Get the list current patients of the current user
 
 + Response 200 (application/json)
 

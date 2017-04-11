@@ -1,5 +1,8 @@
-HMPUPD ;SLC/MKB - Update local data ;11/13/13 2:11pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
+HMPUPD ;SLC/MKB,ASMR/RRB,CK - Update local data ;Jun 22, 2016 17:23:52
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ Q
  ;
 PHONE(HMP,JSON) ; RPC = HMP PUT PHONE
  Q
@@ -7,7 +10,7 @@ PUT(HMP,DFN,CMD,JSON) ; -- update phone numbers
  ; RPC = HMP PUT DEMOGRAPHICS
  ;
  N ARRAY,HMPERR,ERR,HOME,CELL,WORK,NOK,ECON,X,OK,HMPSYS
- S HMPSYS=$$GET^XPAR("SYS","HMP SYSTEM NAME")
+ S HMPSYS=$$SYS^HMPUTILS
  D DECODE^HMPJSON("JSON","ARRAY","HMPERR")
  I $D(HMPERR) D  G PQ
  . K ARRAY N HMPTMP,HMPTXT
@@ -55,12 +58,12 @@ PUT(HMP,DFN,CMD,JSON) ; -- update phone numbers
  S:$L(NOK) HMPX(.219)=NOK,HMPDR=HMPDR_$S($L(HMPDR):";",1:"")_".219"
  I '$O(HMPX(0)) S ERR=$$ERR(3) G PHQ
  D EDIT^VAFCPTED(DFN,"HMPX",HMPDR)
- S X=$G(^DPT(DFN,.13)),OK=1 D  ;check global
+ S X=$G(^DPT(DFN,.13)),OK=1 D  ;check global ;ICR 10035 DE2818 ASF 11/12/15
  . I $L(HOME),$S(HOME="@":$L($P(X,U)),1:(HMPX(.131)'=$P(X,U))) S OK=0
  . I $L(CELL),$S(CELL="@":$L($P(X,U,4)),1:(HMPX(.134)'=$P(X,U,4))) S OK=0
  . I $L(WORK),$S(WORK="@":$L($P(X,U,2)),1:(HMPX(.132)'=$P(X,U,2))) S OK=0
- . I $L(ECON) S X=$G(^DPT(DFN,.33)) I $S(ECON="@":$L($P(X,U,9)),1:(HMPX(.339)'=$P(X,U,9))) S OK=0
- . I $L(NOK) S X=$G(^DPT(DFN,.21)) I $S(NOK="@":$L($P(X,U,9)),1:(HMPX(.219)'=$P(X,U,9))) S OK=0
+ . I $L(ECON) S X=$G(^DPT(DFN,.33)) I $S(ECON="@":$L($P(X,U,9)),1:(HMPX(.339)'=$P(X,U,9))) S OK=0 ;ICR 10035 DE2818 ASF 11/12/15
+ . I $L(NOK) S X=$G(^DPT(DFN,.21)) I $S(NOK="@":$L($P(X,U,9)),1:(HMPX(.219)'=$P(X,U,9))) S OK=0 ;ICR 10035 DE2818 ASF 11/12/15
  S:'OK ERR=$$ERR(5)
  ;
 PHQ ; add item count and terminating characters
@@ -92,7 +95,7 @@ FORMAT(X) ; -- enforce (xxx)xxx-xxxx phone format
  Q Y
  ;
 HL7NOW() ; -- Return current time in HL7 format
- Q $P($$FMTHL7^XLFDT($$NOW^XLFDT),"-")
+ Q $$FMTHL7^HMPSTMP($$NOW^XLFDT)  ; DE5016
  ;
 ERR(X,VAL) ; -- return error message
  N MSG  S MSG="Error"
@@ -105,8 +108,8 @@ ERR(X,VAL) ; -- return error message
  Q MSG
  ;
 VAL(SUB) ; -- pull values from ^DPT
- N X S X=$G(^DPT(DFN,.13))
+ N X S X=$G(^DPT(DFN,.13)) ;ICR 10035 DE2818 ASF 11/12/15
  S HOME(SUB)=$P(X,U),CELL(SUB)=$P(X,U,4),WORK(SUB)=$P(X,U,2)
- S X=$G(^DPT(DFN,.33)),ECON(SUB)=$P(X,U,9)
- S X=$G(^DPT(DFN,.21)),NOK(SUB)=$P(X,U,9)
+ S X=$G(^DPT(DFN,.33)),ECON(SUB)=$P(X,U,9) ;ICR 10035 DE2818 ASF 11/12/15
+ S X=$G(^DPT(DFN,.21)),NOK(SUB)=$P(X,U,9) ;ICR 10035 DE2818 ASF 11/12/15
  Q

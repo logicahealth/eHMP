@@ -2,7 +2,6 @@
 var rdk = require('../../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
-var errors = require('../../common/errors.js');
 var helpers = require('../../common/utils/helpers.js');
 var fhirUtils = require('../../common/utils/fhir-converter');
 var fhirToJDSSearch = require('../../common/utils/fhir-to-jds-search');
@@ -57,21 +56,6 @@ function buildSearchQuery(params) {
     return fhirToJDSSearch.buildSearchQueryString(query);
 }
 
-function getJDSErrorMessage(error) {
-    var msg = '';
-
-    if (nullchecker.isNotNullish(error.errors)) {
-        msg = _.reduce(error.errors, function(memo, e) {
-            if (memo && memo.length > 0) {
-                memo += ', ';
-            }
-            memo += e.domain + ' :: ' + e.message;
-            return memo;
-        }, '');
-    }
-    return msg;
-}
-
 function getVitalsData(appConfig, logger, pid, params, callback) {
     // check for required pid param
     if (nullchecker.isNullish(pid)) {
@@ -85,80 +69,29 @@ function getVitalsData(appConfig, logger, pid, params, callback) {
         json: true
     });
 
-    // console.log('\n\n\n ********** Observation (vitals) - JDSPath: ' + jdsPath + ' **********\n\n\n');
-
     rdk.utils.http.get(options, function(error, response, body) {
-        var internalError = 'There was an error processing your request. The error has been logged.';
-        logger.debug('callback from fetch()');
+        callback(error, body);
+    });
+}
 
-        if (error) {
-            callback(new errors.HTTPError(rdk.httpstatus.internal_server_error, 'Error fetching pid=' + pid + ' - ' + (error.message || error)));
+function convertToFHIRObservations(vprItems, req) {
+    return _.map(vprItems, function(vprItem) {
+        if (vprItem.typeName !== 'BLOOD PRESSURE') {
+            return createVital(vprItem);
         } else {
-            if ('data' in body) {
-                return callback(null, body);
-            } else if ('error' in body) {
-                logger.error('Observation::getVitalsData: ' + body.error.code + ' - ' + getJDSErrorMessage(body.error));
-                return callback(new errors.HTTPError(rdk.httpstatus.internal_server_error, internalError));
-            }
-            logger.error('Observation::getVitalsData: Empty response from JDS.');
-            return callback(new errors.HTTPError(rdk.httpstatus.internal_server_error, internalError));
+            return createVitalBP(vprItem);
         }
     });
 }
 
-function getFhirItems(result, req) {
-
-    var fhirResult = {};
-    fhirResult = convertToFhir(result, req);
-
-    var fhirItems = [];
-    fhirItems = fhirResult.entry;
-
-    return fhirItems;
-}
-
-function convertToFhir(result, req) {
-    var link = 'http://' + req._remoteAddress + req.url; //HTTPS sau HTTP?
-
-    var fhirResult = {};
-    fhirResult.resourceType = 'Bundle';
-    fhirResult.type = 'collection';
-    //fhirResult.title = 'Observation with subject identifier \'' + pid + '\'';
-    fhirResult.id = 'urn:uuid:' + helpers.generateUUID();
-    fhirResult.link = [{
-        'rel': 'self',
-        'href': link
-    }];
-
-    var now = new Date();
-
-    fhirResult.meta = {
-        'lastUpdated': fhirUtils.convertToFhirDateTime(now)
-    };
-
-    fhirResult.entry = [];
-
-    var items = result.data.items;
-    for (var i = 0; i < items.length; i++) {
-        if (items[i].typeName !== 'BLOOD PRESSURE') {
-            createVital(items[i], fhirResult.entry, req._remoteAddress, fhirResult.updated);
-        } else {
-            createVitalBP(items[i], fhirResult.entry, req._remoteAddress, fhirResult.updated);
-        }
-    }
-
-    fhirResult.total = result.data.totalItems;
-    return fhirResult;
-}
-
-function createVital(jdsItem, fhirItems /*, host, updated*/ ) {
+function createVital(jdsItem) {
     var fhirItem = {};
 
     fhirItem.resource = {};
     fhirItem.resource.resourceType = 'Observation';
     fhirItem.resource.text = {
         'status': 'generated',
-        'div': '<div>' + jdsItem.summary + '</div>'
+        'div': '<div>' + _.escape(jdsItem.summary) + '</div>'
     };
     var orgUid = helpers.generateUUID();
 
@@ -187,13 +120,15 @@ function createVital(jdsItem, fhirItems /*, host, updated*/ ) {
         fhirItem.resource.valueQuantity.units = jdsItem.units;
     }
 
+    var siteHash = fhirUtils.getSiteHash(jdsItem.uid);
+
     // RESOURCE.APPLIESDATETIME
     if (jdsItem.observed !== undefined) {
-        fhirItem.resource.appliesDateTime = fhirUtils.convertToFhirDateTime(jdsItem.observed);
+        fhirItem.resource.appliesDateTime = fhirUtils.convertToFhirDateTime(jdsItem.observed, siteHash);
     }
 
     if (jdsItem.resulted !== undefined) {
-        fhirItem.resource.issued = fhirUtils.convertToFhirDateTime(jdsItem.resulted);
+        fhirItem.resource.issued = fhirUtils.convertToFhirDateTime(jdsItem.resulted, siteHash);
     }
     fhirItem.resource.status = 'final';
     fhirItem.resource.reliability = 'unknown';
@@ -256,8 +191,7 @@ function createVital(jdsItem, fhirItems /*, host, updated*/ ) {
         fhirItem.resource.referenceRange[0].meaning.coding = [];
         fhirItem.resource.referenceRange[0].meaning.coding.push(fhirUtils.generateReferenceMeaning(jdsItem.typeName));
     }
-
-    fhirItems.push(fhirItem);
+    return fhirItem;
 }
 
 /**
@@ -390,7 +324,7 @@ function createContainedForRelatedObsv(jdsItem, referenceFlag, value, comments, 
 
     //SET issued date
     if (jdsItem.resulted !== undefined) {
-        obsv.issued = fhirUtils.convertToFhirDateTime(jdsItem.resulted);
+        obsv.issued = fhirUtils.convertToFhirDateTime(jdsItem.resulted, fhirUtils.getSiteHash(jdsItem.uid));
     }
 
     obsv.referenceRange = [];
@@ -420,16 +354,7 @@ function createContainedForRelatedObsv(jdsItem, referenceFlag, value, comments, 
     return obsv;
 }
 
-
-/**
- * createVitalBP
- *
- * @param jdsItem
- * @param fhirItems
- * @param host
- * @param updated
- */
-function createVitalBP(jdsItem, fhirItems) {
+function createVitalBP(jdsItem) {
     var fhirItem = {};
 
     fhirItem.resource = {};
@@ -448,7 +373,7 @@ function createVitalBP(jdsItem, fhirItems) {
     fhirItem.resource.resourceType = 'Observation';
     fhirItem.resource.text = {
         'status': 'generated',
-        'div': '<div>' + divDate + jdsItem.codes[0].display + ' ' + jdsItem.result.toString() + ' ' + jdsItem.units + '</div>'
+        'div': '<div>' + _.escape(divDate + jdsItem.codes[0].display + ' ' + jdsItem.result.toString() + ' ' + jdsItem.units) + '</div>'
     };
 
     //------------------------------------------
@@ -463,12 +388,13 @@ function createVitalBP(jdsItem, fhirItems) {
     //------------------------------------------
     // SETTING DATES
     //------------------------------------------
+    var siteHash = fhirUtils.getSiteHash(jdsItem.uid);
     if (jdsItem.observed !== undefined) {
-        fhirItem.resource.appliesDateTime = fhirUtils.convertToFhirDateTime(jdsItem.observed);
+        fhirItem.resource.appliesDateTime = fhirUtils.convertToFhirDateTime(jdsItem.observed, siteHash);
     }
 
     if (jdsItem.resulted !== undefined) {
-        fhirItem.resource.issued = fhirUtils.convertToFhirDateTime(jdsItem.resulted);
+        fhirItem.resource.issued = fhirUtils.convertToFhirDateTime(jdsItem.resulted, siteHash);
     }
     fhirItem.resource.status = 'final';
     fhirItem.resource.reliability = 'unknown';
@@ -507,17 +433,13 @@ function createVitalBP(jdsItem, fhirItems) {
     fhirItem.resource.contained = [];
     setBPContainedItemsAndRelatedReferences(fhirItem.resource, orgUid, jdsItem);
 
-    //------------------------------------------
-    // ADD created BP vital into parent entry list
-    //------------------------------------------
-    fhirItems.push(fhirItem);
+    return fhirItem;
 }
 
 function isSortCriteriaValid(params) {
     return fhirToJDSSearch.isSortCriteriaValid(params, fhirToJDSMap);
 }
 
-module.exports.convertToFhir = convertToFhir;
+module.exports.convertToFHIRObservations = convertToFHIRObservations;
 module.exports.getVitalsData = getVitalsData;
-module.exports.getFhirItems = getFhirItems;
 module.exports.isSortCriteriaValid = isSortCriteriaValid;

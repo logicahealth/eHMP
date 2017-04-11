@@ -121,7 +121,7 @@ define([
                 if (model.previous('tasktype') && this.firstTime > 0) {
                     new ADK.UI.Alert({
                         title: 'New Activity Selected!',
-                        icon: 'fa-exclamation-triangle',
+                        icon: 'icon-warning-severe',
                         messageView: changedActivityHeaderView,
                         footerView: changedActivityFooterView.extend({
                             model: model
@@ -152,7 +152,7 @@ define([
                 var self = this;
                 var fetchOptions = {
                     cache: true,
-                    resourceTitle: 'tasks-getprocessdefinitions',
+                    resourceTitle: 'activities-available',
                     pageable: false,
                     onSuccess: function(collection) {
                         var activityTypes = collection.map(function(model) {

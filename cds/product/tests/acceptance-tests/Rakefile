@@ -1,0 +1,133 @@
+require 'rubygems'
+require 'cucumber'
+require 'cucumber/rake/task'
+require 'rubocop/rake_task'
+
+$LOAD_PATH.push(File.expand_path(File.dirname(__FILE__) + '/features/lib'))
+
+# Check environment sanity and fail fast if not correct
+fail 'WORKSPACE environment variable not set. Did you "source infrastructure/set.env.sh"?' unless ENV.keys.include?('WORKSPACE')
+fail 'GEM_HOME environment variable not set. Did you "source infrastructure/set.env.sh"?' unless ENV.keys.include?('GEM_HOME')
+
+task :default => [:endToEndTests]
+
+task endToEndTests: [:codequality]
+task endToEndTestsCDS: [:codequality]
+task endToEndStableTests: [:codequality]
+task endToEndUnstableTests: [:codequality]
+
+task codequality: [
+  :info,
+  :rubocop
+]
+
+task :endToEndTests, [:env] => [:environment_setup]
+task :endToEndTestsCDS, [:env] => [:environment_setup]
+task :endToEndStableTests, [:env] => [:environment_setup]
+task :endToEndUnstableTests, [:env] => [:environment_setup]
+task :endToEndOncTests, [:env] => [:environment_setup]
+
+### This block defines the default test selection
+Cucumber::Rake::Task.new(:endToEndTests) do |t|
+  t.cucumber_opts = "features --verbose --color --format pretty --tags ~@full_stack --tags ~@future --tags ~@UI --tags ~@debug --tags ~@manual -f json_pretty -o cucumber.json -f html -o cucumber.html"
+end
+
+## This block captures thoses tests tagged as CDS
+Cucumber::Rake::Task.new(:endToEndTestsCDS) do |t|
+  t.cucumber_opts = "features --verbose --color --format pretty --tags @cds --tags ~@future --tags ~@UI --tags ~@debug --tags ~@manual -f json_pretty -o cucumber.json -f html -o cucumber.html"
+end
+
+Cucumber::Rake::Task.new(:endToEndStableTests) do |t|
+  t.cucumber_opts = "features --verbose --color --format pretty --tags ~@unstable --tags ~@onc --tags ~@future --tags ~@UI --tags ~@debug --tags ~@manual -f json_pretty -o cucumber.json -f html -o cucumber.html"
+end
+
+Cucumber::Rake::Task.new(:endToEndUnstableTests) do |t|
+  t.cucumber_opts = "features --verbose --color --format pretty --tags @unstable -f json_pretty -o cucumber.json -f html -o cucumber.html"
+end
+
+## Placeholder task for executing all Acceptance Tests for all Mobile Applications
+Cucumber::Rake::Task.new(:allAcceptanceTests) do |t|
+  t.cucumber_opts = "features --verbose --color --format pretty --tags ~@future"
+end
+
+task :info do
+  puts '=========================================================================='
+  puts '#     Running codequality checks.                                        #'
+  puts '#     For details, see https://wiki.vistacore.us/display/VACORE/Ruby     #'
+  puts '=========================================================================='
+end
+
+# Rubocop files not created yet
+desc 'Rubocop code quality checks configured in .rubocop.yml file'
+Rubocop::RakeTask.new(:rubocop) do |rubocop|
+  # Specify config file in non-standard location.
+  rubocop.options = ['-c.rubocop.yml']
+
+  # Specify Ruby file locations
+  rubocop.patterns = ['**/*.rb', 'Rakefile']
+
+  # Show emacs style output, and offense counts
+  # See https://github.com/bbatsov/rubocop#formatters for other output options
+  rubocop.formatters = ['emacs', 'o']
+
+  # Abort rake on failure
+  rubocop.fail_on_error = true
+end
+
+task :environment_setup, :env do |_task, args|
+  env = args[:env] || 'virtualbox'
+  environment_endpoints(env)
+end
+
+def environment_endpoints(env)
+  case env
+  when "virtualbox"
+    ENV["RDK_IP"] = knife_search_for_ip("resource_server")
+    ENV["RDK_PORT"] = "8888"
+    ENV["RDK_WRITEBACK_PORT"]="9999"
+    ENV["RDK_PICKLIST_PORT"]="7777"
+    begin
+      ENV["CDSINVOCATION_IP"] = knife_search_for_ip("cdsinvocation") 
+      ENV["CDSINVOCATION_PORT"] = "8080"
+      ENV["OPENCDS_IP"] = knife_search_for_ip("opencds")
+      ENV["OPENCDS_PORT"] = "8080"
+      ENV["CDSDB_IP"] = knife_search_for_ip("cdsdb")
+      ENV["CDSDB_PORT"] = "27017"
+      ip = knife_search_for_ip("cdsdashboard")
+      ENV["CDSDASHBOARD_IP"] = 'http://' + "#{ip}:8080"
+    rescue => error
+      raise error if Rake.application.top_level_tasks.include? "cdsTests"
+    end
+  when "aws"
+    ENV["RDK_IP"] = knife_search_for_ip("resource_server") 
+    ENV["RDK_PORT"] = "8888"
+    ENV["RDK_WRITEBACK_PORT"]="9999"
+    ENV["RDK_WRITEBACK_HOST"] = knife_search_for_ip("resource_server") 
+    ENV["RDK_PICKLIST_PORT"]="7777"
+    ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server") 
+    ENV["Perf_Monitor_IP"] = 'IP____ADDRESS'
+    ENV["CDSINVOCATION_IP"] = knife_search_for_ip("cdsinvocation") 
+    ENV["CDSINVOCATION_PORT"] = "8080"
+    ENV["OPENCDS_IP"] = knife_search_for_ip("opencds")
+    ENV["OPENCDS_PORT"] = "8080"
+    ENV["CDSDB_IP"] = knife_search_for_ip("cdsdb")
+    ENV["CDSDB_PORT"] = "27017"
+    ip = knife_search_for_ip("cdsdashboard")
+    ENV["CDSDASHBOARD_IP"] = 'https://' + "#{ip}"
+  else
+    fail "Unrecognized environment type: #{env}. Allowable types are: 'virtualbox' and 'aws'"
+  end
+end
+
+def knife_search_for_ip(machine_name)
+  stack = ENV['JOB_NAME'] || ENV['USER']
+  if ENV.key?('BUNDLE_BIN_PATH')
+    raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
+  else
+    raw_search = `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
+  end
+  parsed_search = JSON.parse(raw_search)
+  fail "More than one node with that name found" if parsed_search["results"] > 1
+  fail "No node with that name found" if parsed_search["results"] == 0
+  ip = parsed_search["rows"][0]['automatic']['ipaddress']
+end

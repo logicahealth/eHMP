@@ -6,6 +6,7 @@ define([
 
     var screenConfig = {
         id: "ui-components-demo",
+        context: 'demo',
         contentRegionLayout: "gridOne",
         appletHeader: "patient",
         applets: [{

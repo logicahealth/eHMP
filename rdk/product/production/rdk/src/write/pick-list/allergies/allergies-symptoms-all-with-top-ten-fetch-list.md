@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Allergies symptoms all with top ten [/allergies-symptoms-all-with-top-ten{?site}{&fields}]
+## Allergies symptoms all with top ten [/allergies-symptoms-all-with-top-ten{?site}]
 
 Large Pick List - Combines the data for allergies-symptoms and allergies-symptoms-top-ten into one JSON
 
@@ -11,8 +11,6 @@ ORWDAL32 DEF and ORWDAL32 SYMPTOMS
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

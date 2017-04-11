@@ -21,13 +21,15 @@ var CACHE_TIME_OUT_FIVE_MIN = 300000;
  *    This should only be done if and only if we confirm that this is the actual problem aka do not pre-optimize this.
  */
 module.exports.getClient = function(logger, config) {
-    var cachedResponse = cache.get(config.host);
+    var cacheKey = config.host + ' ' + config.context;
+
+    var cachedResponse = cache.get(cacheKey);
     if (cachedResponse) {
         return cachedResponse;
     }
 
     var rpcClient = RpcClient.create(logger, config);
-    cache.put(config.host, rpcClient, CACHE_TIME_OUT_FIVE_MIN);
+    cache.put(cacheKey, rpcClient, CACHE_TIME_OUT_FIVE_MIN);
 
     return rpcClient;
 };

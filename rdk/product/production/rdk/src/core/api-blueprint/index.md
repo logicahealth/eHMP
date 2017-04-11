@@ -4,4 +4,4 @@
 
 ### Authentication
 
-To begin, use the [Authentication](#authentication-authentication) resource to establish a session.
+To begin, use the [Authentication](/resource/docs/vx-api/#authentication-authentication) resource to establish a session.

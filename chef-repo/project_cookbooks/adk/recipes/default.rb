@@ -3,10 +3,9 @@
 # Recipe:: default
 #
 
+include_recipe "apache2_wrapper"
 include_recipe "apache2::default"
 include_recipe "apache2::mod_headers"
-include_recipe "apache2::mod_proxy"
-include_recipe "apache2::mod_proxy_http"
 
 apache_site "default" do
   enable false
@@ -30,7 +29,7 @@ node[:adk][:source]
 
 you should have set this in the ehmp-ui machine file.
 
-/ if node[:adk][:source].nil? || node[:adk][:source].empty? 
+/ if node[:adk][:source].nil? || node[:adk][:source].empty?
 
 remote_file node[:adk][:artifact_path] do
   source node[:adk][:source]
@@ -42,7 +41,7 @@ end
 ruby_block "clean all ADK dir except app directory" do
   block do
     Dir["#{node[:adk][:home_dir]}/*"].each do |filePath|
-      next if(File.basename(filePath) == 'app')
+      next if(File.basename(filePath) == 'app' || File.basename(filePath) == 'app.json')
       FileUtils.rm_rf(filePath)
     end
   end

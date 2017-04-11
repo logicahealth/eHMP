@@ -1,5 +1,5 @@
 HMPDE811 ;Agilex/Hrubovcak - post-installation processing ;May 12, 2015@13:58:53
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;
  ;;Per VHA Directive 2004-038, this routine should not be modified.
  ;
  Q

@@ -6,7 +6,6 @@
 yum_package node[:vista][:cache_package] do
   version node[:vista][:cache_version]
   arch node[:vista][:cache_arch]
-  source "/opt/private_licenses/cache_server/" + node[:vista][:cache_package] + "-" + node[:vista][:cache_version] + "." + node[:vista][:cache_arch] + ".rpm"
   not_if { node[:vista][:no_reset] }
 end
 
@@ -60,8 +59,15 @@ cookbook_file "cache.cpf" do
   action :create
 end
 
-cookbook_file "cache.key" do
-  path "/usr/cachesys/mgr/cache.key"
+# Retrieve cache license from encrypted data bag
+license_item = Chef::EncryptedDataBagItem.load(node[:vista][:cache_license_data_bag], node[:vista][:cache_license_item], node[:data_bag_string])
+license_content = license_item["content"]
+
+file "#{node[:vista][:cache_mgr_dir]}/cache.key" do
+  content license_content
+  owner node[:vista][:cache_user]
+  group node[:vista][:cache_user]
+  mode "0644"
   action :create
 end
 
@@ -86,7 +92,21 @@ vista_install_distribution "cache_patches" do
   patch_list "cache_patches"
   manifest_path "#{Chef::Config[:file_cache_path]}/kids-manifest.json"
   log node[:vista][:chef_log]
+  run_checksums node[:vista][:run_checksums]
 end
+
+
+if node[:vista].attribute?(:site_id)
+  vista_mumps_block "update_hmpsystemname:#{node[:vista][:site_id]}" do
+    namespace "VISTA"
+    command [
+      "D PUT^XPAR(\"SYS\",\"HMP SYSTEM NAME\",1,\"#{node[:vista][:site_id]}\")"
+    ]
+    log node[:vista][:chef_log]
+    not_if { node[:vista][:no_reset] }
+  end
+end
+
 
 service "cache" do
   action :stop

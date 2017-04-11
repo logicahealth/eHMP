@@ -6,18 +6,8 @@
 chef_gem "chef-provisioning-ssh"
 require 'chef/provisioning/ssh_driver'
 
-_host_path_private_licenses = "#{ENV['HOME']}/Projects/vistacore/private_licenses"
-node.default[:rdk_provision][:jbpm][:vagrant][:shared_folders].push(
-  {
-    :host_path => _host_path_private_licenses,
-    :guest_path => "/opt/private_licenses",
-    :create => true
-  }
-) 
-
 ############################################## Staging Artifacts #############################################
 if ENV.has_key?('DEV_DEPLOY')
-
   node.default[:rdk_provision][:jbpm][:copy_files].merge!({
     "/tmp/#{File.basename(ENV['JBPM_PROJECTS_LOCAL_FILE_1'])}" => ENV['JBPM_PROJECTS_LOCAL_FILE_1'],
     "/tmp/#{File.basename(ENV['JBPM_PROJECTS_LOCAL_FILE_2'])}" => ENV['JBPM_PROJECTS_LOCAL_FILE_2'],
@@ -28,7 +18,9 @@ if ENV.has_key?('DEV_DEPLOY')
     "/tmp/#{File.basename(ENV['JBPM_EVENT_LISTENERS_LOCAL_FILE'])}" => ENV['JBPM_EVENT_LISTENERS_LOCAL_FILE'],
     "/tmp/#{File.basename(ENV['JBPM_CDSINVOCATIONSERVICE_LOCAL_FILE'])}" => ENV['JBPM_CDSINVOCATIONSERVICE_LOCAL_FILE'],
     "/tmp/#{File.basename(ENV['JBPM_FOBTLABSERVICE_LOCAL_FILE'])}" => ENV['JBPM_FOBTLABSERVICE_LOCAL_FILE'],
-    "/tmp/#{File.basename(ENV['JBPM_TASKSSERVICE_LOCAL_FILE'])}" => ENV['JBPM_TASKSSERVICE_LOCAL_FILE']
+    "/tmp/#{File.basename(ENV['JBPM_TASKSSERVICE_LOCAL_FILE'])}" => ENV['JBPM_TASKSSERVICE_LOCAL_FILE'],
+    "/tmp/#{File.basename(ENV['JBPM_EHMPSERVICES_LOCAL_FILE'])}" => ENV['JBPM_EHMPSERVICES_LOCAL_FILE'],
+    "/tmp/#{File.basename(ENV['JBPM_SQL_CONFIG_LOCAL_FILE'])}" => ENV['JBPM_SQL_CONFIG_LOCAL_FILE']
   })
   jbpm_artifacts_source = "file:///tmp/#{File.basename(ENV['JBPM_PROJECTS_LOCAL_FILE_1'])}"
   jbpm_artifacts_version = "0.0.0"
@@ -50,6 +42,9 @@ if ENV.has_key?('DEV_DEPLOY')
   jbpm_tasksservice_artifacts_version = "0.0.0"
   jbpm_activity_artifacts_source = "file:///tmp/#{File.basename(ENV['JBPM_PROJECTS_LOCAL_FILE_5'])}"
   jbpm_activity_artifacts_version = "0.0.0"
+  jbpm_ehmpservices_artifacts_source = "file:///tmp/#{File.basename(ENV['JBPM_EHMPSERVICES_LOCAL_FILE'])}"
+  jbpm_ehmpservices_artifacts_version = "0.0.0"
+  jbpm_sql_config_artifacts_source = "file:///tmp/#{File.basename(ENV['JBPM_SQL_CONFIG_LOCAL_FILE'])}"
 else
   jbpm_artifacts_source = artifact_url(node[:rdk_provision][:artifacts][:vistatasks])
   jbpm_artifacts_version = node[:rdk_provision][:artifacts][:vistatasks][:version]
@@ -71,6 +66,9 @@ else
   jbpm_tasksservice_artifacts_version = node[:rdk_provision][:artifacts][:jbpm_tasksservice][:version]
   jbpm_activity_artifacts_source = artifact_url(node[:rdk_provision][:artifacts][:jbpm_activity])
   jbpm_activity_artifacts_version = node[:rdk_provision][:artifacts][:jbpm_activity][:version]
+  jbpm_ehmpservices_artifacts_source = artifact_url(node[:rdk_provision][:artifacts][:jbpm_ehmpservices])
+  jbpm_ehmpservices_artifacts_version = node[:rdk_provision][:artifacts][:jbpm_ehmpservices][:version]
+  jbpm_sql_config_artifacts_source = artifact_url(node[:rdk_provision][:artifacts][:jbpm_sql_config])
 end
 ############################################## Staging Artifacts #############################################
 
@@ -87,9 +85,9 @@ r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]
 r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access]
 r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
 if node[:machine][:driver] == "vagrant"
-  r_list << "oracle-xe_wrapper@#{rdk_deps["oracle-xe_wrapper"]}"
+  oracle_cookbook = "oracle-xe_wrapper"
 else
-  r_list << "oracle_wrapper@#{rdk_deps["oracle_wrapper"]}"
+  oracle_cookbook = "oracle_wrapper"
 end
 r_list << "role[jbpm]"
 r_list << "recipe[jbpm@#{rdk_deps["jbpm"]}]"
@@ -105,6 +103,8 @@ end
 
 oracle_sid = "jbpmdb"
 oracle_sid = "xe" if node[:machine][:driver] == "vagrant"
+# if driver is ssh then production flag is set to true
+production_flag = node[:machine][:driver] == "ssh"
 
 # if the driver is 'vagrant', append -node- after the machine identify and before the stack name; else use only machine-stack
 machine_name = node[:machine][:driver] == "vagrant" ? "#{machine_ident}-#{node[:machine][:stack]}-node" : "#{machine_ident}-#{node[:machine][:stack]}"
@@ -131,6 +131,8 @@ machine machine_name do
   attributes(
     stack: node[:machine][:stack],
     nexus_url: node[:common][:nexus_url],
+    data_bag_string: node[:common][:data_bag_string],
+    production_flag: production_flag,
     jbpm_artifacts: {
       source: jbpm_artifacts_source,
       version: jbpm_artifacts_version
@@ -171,13 +173,25 @@ machine machine_name do
       source: jbpm_activity_artifacts_source,
       version: jbpm_activity_artifacts_version
     },
+    jbpm_ehmpservices_artifacts: {
+      source: jbpm_ehmpservices_artifacts_source,
+      version: jbpm_ehmpservices_artifacts_version
+    },
+    jbpm_sql_config_artifacts: {
+      source: jbpm_sql_config_artifacts_source
+    },
     jbpm: {
       oracle_config: {
         sid: oracle_sid
-      }
+      },
+      oracle_cookbook: oracle_cookbook
     },
     oracle_wrapper: {
-      dbs: ["jbpmdb"]
+      dbs: ["jbpmdb"],
+      archive_log_mode: production_flag
+    },
+    beats: {
+      logging: node[:machine][:logging]
     }
   )
   files lazy { node[:rdk_provision][:jbpm][:copy_files] }

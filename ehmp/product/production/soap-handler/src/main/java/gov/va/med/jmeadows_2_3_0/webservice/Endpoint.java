@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "endpoint", namespace = "http://webservice.vds.domain.ext/", propOrder = {
+@XmlType(name = "endpoint", namespace = "http://webservice.vds.DNS       /", propOrder = {
     "accessionPrefix",
     "aeTitle",
     "environment",

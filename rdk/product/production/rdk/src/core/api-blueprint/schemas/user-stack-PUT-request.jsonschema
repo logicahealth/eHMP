@@ -1,0 +1,37 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "user-defined-stack PUT request",
+    "description": "Schema for user-defined-stack PUT request body",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "instanceId": {
+            "type": "string"
+        },
+        "graphs": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "graphType",
+                    "typeName"
+                ],
+                "properties": {
+                    "graphType": {
+                        "type": "string"
+                    },
+                    "typeName": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "required": [
+        "id",
+        "instanceId",
+        "graphs"
+    ]
+}

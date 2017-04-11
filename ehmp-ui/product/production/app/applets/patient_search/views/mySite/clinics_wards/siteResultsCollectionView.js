@@ -1,9 +1,8 @@
 define([
     "backbone",
     "marionette",
-    "app/applets/patient_search/views/mySite/clinics_wards/singleSearchResultView",
-    "app/applets/patient_search/views/common/blankView"
-], function(Backbone, Marionette, SingleSearchResultView, BlankView) {
+    "app/applets/patient_search/views/mySite/clinics_wards/singleSearchResultView"
+], function(Backbone, Marionette, SingleSearchResultView) {
     "use strict";
 
     var SCROLL_TRIGGERPOINT = 50;
@@ -11,11 +10,11 @@ define([
     var INITIAL_NUMBER_OF_ROWS = 30;
 
     var LoadingView = Backbone.Marionette.ItemView.extend({
-        template: _.template('<h5 class="loading"><i class="fa fa-spinner fa-spin"></i> Loading...</h5>')
+        template: _.template('<div class="loading all-padding-md"><i class="fa fa-spinner fa-spin"></i> Loading...</div>')
     });
 
     var ErrorView = Backbone.Marionette.ItemView.extend({
-        template: _.template('<div aria-live="assertive"><p class="error-message padding" role="alert">No results found.</p></div>'),
+        template: _.template('<div aria-live="assertive" role="alert" class="all-padding-md"><p class="error-message padding">No results were found.</p></div>'),
         tagName: "p"
     });
 
@@ -23,22 +22,23 @@ define([
         searchView: undefined,
         locationFilterView: undefined,
         emptyView: LoadingView,
+        filterFields: ['name'],
         initialize: function(options) {
             this.searchView = options.searchView;
             this.locationFilterView = options.locationListFilterView;
             this.locationType = options.locationType;
             this.searchApplet = options.searchApplet;
             var siteCode = ADK.UserService.getUserSession().attributes.site;
+            var self = this;
+
             var searchOptions = {
-                resourceTitle: 'locations-' + this.locationType,
+                resourceTitle: (this.locationType === 'clinics' ? 'write-pick-list-clinics-fetch-list' : 'write-pick-list-wards-fetch-list'),
                 criteria: {
-                    "site.code": siteCode,
-                    itemsPerPage: 20
+                    site: siteCode
                 },
                 cache: true,
                 pageable: true
             };
-            var self = this;
             searchOptions.onError = function(model, resp) {
                 self.emptyView = ErrorView;
                 self.render();
@@ -49,9 +49,12 @@ define([
                 self.updateResults(self.locationFilterView.model);
                 self.render();
             };
-
             this.collection = ADK.ResourceService.fetchCollection(searchOptions);
-            this.searchApplet.wardsList = this.collection;
+            if (this.locationType === 'clinics') {
+                this.searchApplet.clinicsList = this.collection;
+            } else {
+                this.searchApplet.wardsList = this.collection;
+            }
             this.listenTo(this.locationFilterView.model, 'change:filterString', this.updateResults);
         },
         onRender: function() {},
@@ -64,7 +67,6 @@ define([
                 searchApplet: this.searchApplet
             };
         },
-        fields: ['displayName'],
         fetchRows: function(event) {
             var e = event.currentTarget;
             if ((e.scrollTop + e.clientHeight + SCROLL_TRIGGERPOINT > e.scrollHeight) && this.collection.hasNextPage()) {
@@ -73,8 +75,12 @@ define([
             }
         },
         updateResults: function(filterModel) {
-            this.collection.setPageSize(INITIAL_NUMBER_OF_ROWS, {silent: true});
-            this.collection.fullCollection.reset(this.collection.originalModels, {silent: true});
+            this.collection.setPageSize(INITIAL_NUMBER_OF_ROWS, {
+                silent: true
+            });
+            this.collection.fullCollection.reset(this.collection.originalModels, {
+                silent: true
+            });
             var matcher = _.bind(this.makeMatcher(filterModel.get('filterString').toLowerCase()), this);
             this.collection.getFirstPage({
                 silent: true
@@ -86,9 +92,11 @@ define([
         makeMatcher: function(query) {
             var regexp = this.makeRegExp(query);
             return function(model) {
-                var keys = this.fields || model.keys();
+                var keys = this.filterFields || model.keys();
                 for (var i = 0, l = keys.length; i < l; i++) {
-                    if (regexp.test(model.get(keys[i]) + "")) return true;
+                    if (regexp.test(model.get(keys[i]) + "")) {
+                        return true;
+                    }
                 }
                 return false;
             };
@@ -97,7 +105,10 @@ define([
             return new RegExp(query.trim().split(/\s+/).join("|"), "i");
         },
         tagName: "div",
-        className: "list-group"
+        className: "list-group",
+        events:{
+            "click": "goto-location"
+        }
     });
 
     return SiteResultsCollectionView;

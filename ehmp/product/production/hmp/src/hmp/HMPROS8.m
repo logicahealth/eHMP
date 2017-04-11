@@ -1,6 +1,9 @@
-HMPROS8 ;SLC/AGP -- Get CPRS User Default Roster List ; 6/11/14 8:38pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;AUG 17, 2011;Build 14
+HMPROS8 ;SLC/AGP,ASMR/RRB - Get CPRS User Default Roster List ; 6/11/14 8:38pm
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;AUG 17, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
  Q
+ ;
 BLDSORT(NODE,SRC,SORT,SEQ) ; emulate TStringList Sort found in CPRS
  ; append separator to ensure string sort (rather than numeric)
  ; append SEQ to avoid dropping node where SORTKEY is duplicated
@@ -31,7 +34,7 @@ CHKPAT(PATIENTS,SERVER) ;
  Q
  ;
 GETDLIST(RESULT,SERVER) ;
- N APPT,ARRAY,DFN,CNT,ERROR,GBL,GSOURCE,GISOUT,LISTIEN,LROOT,NAME,NODE,PATIENTS
+ N APPT,ARRAY,DFN,CNT,ERROR,GBL,GSOURCE,ISOUT,LISTIEN,LROOT,NAME,NODE,PATIENTS
  N PATTYPE,PATUID,PID,ROOM,ROOT,SOURCE,SOURCETYPE,TYPE,TYPEI,HMPSRC,HMPSORT,HMPOUT
  N XOBDATA S XOBDATA(0)=1
  N XWBOS S XWBOS(0)=1
@@ -51,7 +54,7 @@ GETDLIST(RESULT,SERVER) ;
  F  S GBL=$Q(@GBL) Q:$E(GBL,1,LROOT)'=ROOT  D
  .S NODE=@GBL
  .S CNT=CNT+1
- .S DFN=$P(NODE,U),ROOM=$G(^DPT(DFN,.101))
+ .S DFN=$P(NODE,U),ROOM=$G(^DPT(DFN,.101)) ;ICR 10035 DE2818 ASF 11/12/15
  .S PATIENTS(DFN)=""
  .S PID=$$PID^HMPDJFS(DFN)
  .S PATTYPE=$P(NODE,U,9)
@@ -88,8 +91,8 @@ STINP(DFN,CNT,ROOM) ;
  D INP^VADPT I $G(VAIN(1))="" D KVA^VADPT Q
  S ^TMP("HMPTEMP",$J,"data","patients",CNT,"admissionUid")=$$SETUID^HMPUTILS("visit",DFN,"H"_VAIN(1))
  S WIEN=+$G(VAIN(4)) I WIEN'>0 D KVA^VADPT Q
- S LOC=+$G(^DIC(42,WIEN,44))
- S NODE=$P($G(^SC(+LOC,0)),U,1,2)
+ S LOC=+$G(^DIC(42,WIEN,44)) ;ICR 10040 DE2818 ASF 11/12/15
+ S NODE=$P($G(^SC(+LOC,0)),U,1,2) ;ICR 10040 DE2818 ASF 11/12/15
  S ^TMP("HMPTEMP",$J,"data","patients",CNT,"locationUid")=$$SETUID^HMPUTILS("location","",LOC,"")
  I $P(NODE,U)'="" S ^TMP("HMPTEMP",$J,"data","patients",CNT,"locationName")=$P(NODE,U)
  I $P(NODE,U,2)'="" S ^TMP("HMPTEMP",$J,"data","patients",CNT,"locationShortName")=$P(NODE,U,2)
@@ -110,7 +113,7 @@ LSTSRC(ADUZ) ; Return type of list source
  ; T:TeamList, W:Ward List, P:Provider List, S:Specialty List, C:Clinic List, M:Combination
  N FROM,IEN,SRV
  S:'$G(ADUZ) ADUZ=DUZ
- S SRV=$G(^VA(200,ADUZ,5)) I +SRV>0 S SRV=$P(SRV,U)
+ S SRV=$G(^VA(200,ADUZ,5)) I +SRV>0 S SRV=$P(SRV,U) ;ICR 10060 DE2818 ASF 11/12/15
  S FROM=$$GET^XPAR("USR.`"_ADUZ_"^SRV.`"_+$G(SRV),"ORLP DEFAULT LIST SOURCE",1,"Q")
  I FROM="M" Q FROM
  I FROM="T" S IEN=$$GET^XPAR("USR^SRV.`"_+$G(SRV),"ORLP DEFAULT TEAM",1,"Q") Q FROM_U_+$G(IEN)
@@ -140,7 +143,7 @@ GETCLIST(RESULT,SERVER,ID,START,END) ;
  . S ^TMP("HMPTEMP",$J,"data","patients",CNT,"patientType")=$S($P(NODE,U,9)="OPT":"Outpatient",1:"Inpatient")
  . I $G(APPT)'="" D SETAPPT(SOURCE,APPT,DFN,CNT)
  . ;S ^TMP("HMPTEMP",$J,"data","patients",CNT,"appointment")=$$JSONDT^HMPUTILS(APPT)
- D SRTSRC(HMPSORT,"C",$P($G(^SC(ID,0)),U))
+ D SRTSRC(HMPSORT,"C",$P($G(^SC(ID,0)),U)) ;ICR 10040 DE2818 ASF 11/12/15
  D ENCODE^HMPJSON($NA(^TMP("HMPTEMP",$J)),"RESULT","ERROR")
  ;I SERVER'="" D CHKPAT(.PATIENTS,SERVER)    ;    *S68-JCH*
  Q
@@ -150,7 +153,7 @@ GTSOURCE(TYPE,INT) ;
  S SPEC=$P(TYPE," ")
  S SPECTYPE=$S(SPEC="Cl":"Clinic",SPEC="Wd":"Ward",SPEC="Sp":"Treating Specality",SPEC="Pr":"Provider",SPEC="Tm":"OR Team",1:SPEC)
  I SPECTYPE=SPEC Q SPEC_U_""
- I SPECTYPE="Ward" S REC=+$G(^DIC(42,INT,44)) I REC'=INT S INT=REC
+ I SPECTYPE="Ward" S REC=+$G(^DIC(42,INT,44)) I REC'=INT S INT=REC ;ICR 10039 DE2818 ASF 11/12/15
  S UID=$$SETUID^HMPUTILS($S(SPEC="Cl":"location",SPEC="Wd":"location",SPEC="Sp":"treatingSpecialty",SPEC="Pr":"provider",SPEC="Tm":"orTeam",1:SPEC),"",INT,"")
  S RESULT=SPECTYPE_U_UID
  I UID["location" S RESULT=RESULT_U_$P($G(^SC(+INT,0)),U,1,2)
@@ -162,10 +165,10 @@ STGSRCE(SPEC,INT) ;
  S RESULT=""
  I "TWPSC"'[SPEC Q RESULT
  S SPECTYPE=$S(SPEC="C":"Clinic",SPEC="W":"Ward",SPEC="S":"Treating Specality",SPEC="P":"Provider",SPEC="T":"OR Team",1:SPEC) I SPECTYPE=SPEC Q RESULT
- I SPECTYPE="Ward" S REC=+$G(^DIC(42,INT,44)) I REC'=INT S INT=REC
+ I SPECTYPE="Ward" S REC=+$G(^DIC(42,INT,44)) I REC'=INT S INT=REC ;ICR 10039 DE2818 ASF 11/12/15
  S UID=$$SETUID^HMPUTILS($S(SPEC="C":"location",SPEC="W":"location",SPEC="S":"treatingSpecialty",SPEC="P":"provider",SPEC="T":"orTeam",1:SPEC),"",INT,"")
  S RESULT=SPECTYPE_U_UID
- I UID["location" S RESULT=RESULT_U_$P($G(^SC(+INT,0)),U,1,2)
+ I UID["location" S RESULT=RESULT_U_$P($G(^SC(+INT,0)),U,1,2) ;ICR 10060 DE2818 ASF 11/12/15
  Q RESULT
  ;        
 GETWLIST(RESULT,SERVER,ID) ;
@@ -185,7 +188,7 @@ GETWLIST(RESULT,SERVER,ID) ;
  .S ^TMP("HMPTEMP",$J,"data","patients",CNT,"pid")=PID
  .D STINP(DFN,CNT,ROOM)
  .;S ^TMP("HMPTEMP",$J,"data","patients",CNT,"roomBed")=ROOM
- D SRTSRC(HMPSORT,"W",$P($G(^DIC(42,ID,0)),U))
+ D SRTSRC(HMPSORT,"W",$P($G(^DIC(42,ID,0)),U)) ;ICR 10039 DE2818 ASF 11/12/15
  D ENCODE^HMPJSON($NA(^TMP("HMPTEMP",$J)),"RESULT","ERROR")
  ;I SERVER'="" D CHKPAT(.PATIENTS,SERVER)    ;    *S68-JCH*
  Q

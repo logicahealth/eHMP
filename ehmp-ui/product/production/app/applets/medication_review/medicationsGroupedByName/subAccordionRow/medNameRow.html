@@ -1,9 +1,10 @@
-<div class="medNameList"></div>
-<div class="panel-heading medsItem" role="tab">
-    <div class="row left-margin-no right-margin-no item">
-        <div class="medsItemInner collapsed clickDetail medicationNameLayoutRow" tabindex="0">
-            <div class="col-sm-3 capitalize">{{medicationName}}</div>
-            <div class="medicationGroup col-sm-9"></div>
+<div data-toolbar="appletToolbar"></div>
+<div class="panel-heading meds-item" role="row">
+    <div class="row left-margin-no right-margin-no text-capitalize" role="gridcell">
+        <div data-medication-container="medication-list" role="presentation">
+ 			<span class="sr-only toolbar-instructions">Press enter to open the toolbar menu.</span>
+            <div class="col-xs-3">{{medicationName}}</div>
+            <div class="medication-group col-xs-9"></div>
         </div>
     </div>
 </div>

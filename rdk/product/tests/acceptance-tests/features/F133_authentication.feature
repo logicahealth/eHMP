@@ -18,7 +18,7 @@ Feature: F133 - SDK VistA Write-Back Architecture
       | site        | 9E7A                              |
       Examples:
       | accesscode    | verifycode   | site       | contenttype         |
-      | PW            | PW    !!     | 9E7A       | application/json    |
+      | pu1234        | pu1234!!     | 9E7A       | application/json    |
 
   @F133_authentication_api_2 @US2990
   Scenario Outline: Authentication should fail if both CPRS tab settings are false
@@ -30,4 +30,4 @@ Feature: F133 - SDK VistA Write-Back Architecture
       | error         | <error>        |
       Examples:
       | accesscode    | verifycode   | site       | contenttype         | error                                           |
-      | PW            | PW    !!     | 9E7A       | application/json    | VistA Security Error: No Tabs Permissions.   |
+      | lu1234        | lu1234!!     | 9E7A       | application/json    | VistA Security Error: No Tabs Permissions.      |

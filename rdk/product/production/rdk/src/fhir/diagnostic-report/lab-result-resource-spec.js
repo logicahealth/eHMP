@@ -31,6 +31,7 @@ describe('Lab Results FHIR Resource', function() {
             var fhirLR = _.find(fhirLabResults, function(rr) {
                 return rr.identifier[0].value === vprLR.uid;
             });
+            var siteHash = fhirUtils.getSiteHash(vprLR.uid);
 
             expect(fhirLR).not.to.be.undefined();
             if (fhirLR !== undefined) {
@@ -100,7 +101,7 @@ describe('Lab Results FHIR Resource', function() {
                                 expect(resSpecimen.type.text).to.equal(vprLR.specimen);
                                 expect(resSpecimen.subject.reference).not.to.be.undefined();
                                 if (vprLR.observed !== undefined) {
-                                    expect(resSpecimen.collection.collectedDateTime).to.equal(fhirUtils.convertToFhirDateTime(vprLR.observed));
+                                    expect(resSpecimen.collection.collectedDateTime).to.equal(fhirUtils.convertToFhirDateTime(vprLR.observed, fhirUtils.getSiteHash(vprLR.uid)));
                                 }
                             }
                         });
@@ -123,7 +124,7 @@ describe('Lab Results FHIR Resource', function() {
 
                             var obsCode = vprLR.typeCode;
                             var obsDisplay = vprLR.typeName;
-                            var obsSystem = 'urn:oid:2.16.840.1.113883.4.642.2.58';
+                            var obsSystem = 'urn:oid:2.16.840.1.113883.6.233';
 
                             if (cat === 'MI') {
                                 obsSystem = resObservation.code.coding[0].system;
@@ -141,6 +142,9 @@ describe('Lab Results FHIR Resource', function() {
                                             expect(fhirObs.code.coding[0].system).to.equal(obsSystem);
                                             expect(fhirObs.code.coding[0].code).to.equal(obsCode);
                                             expect(fhirObs.code.coding[0].display).to.equal(obsDisplay);
+                                            expect(fhirObs.issued).to.equal(fhirUtils.convertToFhirDateTime(vprLR.resulted, siteHash));
+                                            expect(fhirObs.appliesDateTime).to.equal(fhirUtils.convertToFhirDateTime(vprLR.observed, siteHash));
+                                            
                                         });
                                     });
                                 } else if (obsSystem === 'http://loinc.org') {
@@ -154,6 +158,8 @@ describe('Lab Results FHIR Resource', function() {
                                         expect(fhirObs.code.coding[0].system).to.equal(obsSystem);
                                         expect(fhirObs.code.coding[0].code).to.equal(obsCode);
                                         expect(fhirObs.code.coding[0].display).to.equal(obsDisplay);
+                                        expect(fhirObs.issued).to.equal(fhirUtils.convertToFhirDateTime(vprLR.resulted, siteHash));
+                                        expect(fhirObs.appliesDateTime).to.equal(fhirUtils.convertToFhirDateTime(vprLR.observed, siteHash));
                                     });
                                 }
                                 expect(resObservation.code.coding[0].system).to.equal(obsSystem);
@@ -164,7 +170,7 @@ describe('Lab Results FHIR Resource', function() {
                                     expect(resObservation.interpretation.coding[0].system).to.equal('http://hl7.org/fhir/vs/observation-interpretation');
                                     expect(resObservation.interpretation.coding[0].code).to.equal(intCodes[vprLR.interpretationCode]);
                                 }
-                                if (cat === 'CH') {
+                                if (cat === 'CH' && vprLR.interpretationCode === undefined) {
                                     expect(resObservation.valueQuantity.value + '').to.equal(vprLR.result);
                                     expect(resObservation.valueQuantity.units).to.equal(vprLR.units);
                                     expect(resObservation.status).to.equal(status[vprLR.statusName]);
@@ -178,12 +184,16 @@ describe('Lab Results FHIR Resource', function() {
                                         expect(resObservation.referenceRange[0].high.value + '').to.equal(vprLR.high);
                                         expect(resObservation.referenceRange[0].high.units).to.equal(vprLR.units);
                                     }
+                                    expect(resObservation.issued).to.equal(fhirUtils.convertToFhirDateTime(vprLR.resulted, siteHash));
+                                    expect(resObservation.appliesDateTime).to.equal(fhirUtils.convertToFhirDateTime(vprLR.observed, siteHash));
+                                    
                                 } else if (cat === 'AP') {
                                     expect(resObservation.valueString).to.equal(vprLR.result);
                                     expect(resObservation.status).to.equal(status[vprLR.statusName]);
                                     expect(resObservation.reliability).to.equal('ok');
                                     expect(resObservation.specimen.reference).to.equal('#' + specimen.id);
                                     expect(resObservation.specimen.display).to.equal(vprLR.specimen);
+                                    expect(resObservation.issued).to.equal(fhirUtils.convertToFhirDateTime(vprLR.resulted, siteHash));
                                 }
                                 var index = 0;
                                 if (vprLR.vuid !== undefined) {
@@ -197,6 +207,7 @@ describe('Lab Results FHIR Resource', function() {
                                     expect(resObservation.code.coding[index].code).to.equal(obsCode);
                                     expect(resObservation.code.coding[index].display).to.equal(obsDisplay);
                                 }
+                                
                             }
                         });
                     });
@@ -224,7 +235,7 @@ describe('Lab Results FHIR Resource', function() {
                             ind = 1;
                         }
                         if (vprLR.typeCode && vprLR.typeName !== undefined) {
-                            expect(fhirLR.name.coding[ind].system).to.equal('urn:oid:2.16.840.1.113883.4.642.2.58');
+                            expect(fhirLR.name.coding[ind].system).to.equal('urn:oid:2.16.840.1.113883.6.233');
                             expect(fhirLR.name.coding[ind].code).to.equal(vprLR.typeCode);
                             expect(fhirLR.name.coding[ind].display).to.equal(vprLR.typeName);
                         }
@@ -263,8 +274,9 @@ describe('Lab Results FHIR Resource', function() {
                     it('verifies that the issued/diagnostic date from VPR LabResults Resource coresponds to the one from the FHIR LabResults Resource', function() {
                         var rDate = vprLR.resulted === undefined ? vprLR.observed : vprLR.resulted;
                         var oDate = vprLR.observed === undefined ? vprLR.resulted : vprLR.observed;
-                        expect(fhirLR.issued).to.equal(fhirUtils.convertToFhirDateTime(rDate));
-                        expect(fhirLR.diagnosticDateTime).to.equal(fhirUtils.convertToFhirDateTime(oDate));
+                        var siteHash = fhirUtils.getSiteHash(vprLR.uid);
+                        expect(fhirLR.issued).to.equal(fhirUtils.convertToFhirDateTime(rDate, siteHash));
+                        expect(fhirLR.diagnosticDateTime).to.equal(fhirUtils.convertToFhirDateTime(oDate, siteHash));
                     });
 
                     it('verifies that the observation/specimen references exists', function() {

@@ -1,7 +1,13 @@
 .datepicker {
     font-size: 11px;
-    > div {
-        padding-left: 5px;
+    .datepicker-days {
+        table {
+            tbody {
+                tr {
+                    display: block;
+                }
+            }
+        }
     }
     table {
         width: 200px;
@@ -11,6 +17,9 @@
                 &:first-child th:hover {
                     background: $pure-white;
                     color: $primary-dark;
+                }
+                &:last-child {
+                    padding-left: 5px;
                 }
                 th {
                     width: 27px;
@@ -23,6 +32,8 @@
         }
         tbody {
             tr {
+                border-bottom: none;
+                padding-left: 5px;
                 td {
                     &.day {
                         border-radius: 50%;
@@ -75,7 +86,7 @@
             tr th {
                 color: $primary;
                 &:hover {
-                    background: $pure-white;
+                    background: $grey-lightest;
                     color: $primary-dark;
                 }
             }
@@ -89,12 +100,27 @@ form.form-container .form-group.datepicker-control .input-group .form-control:no
     border-bottom-right-radius: 4px;
 }
 .gdt-input {
-    height: 25px;
+    &#filterFromDateGlobal, &#filterToDateGlobal {
+        border-radius: 0 3px 3px 0;
+    }
     padding-left: 0px;
     padding-right: 0px;
-    text-align: center;
     width: 86px;
 }
 input.datepicker-input::-ms-clear {
     display: none;
+}
+form.form-inline {
+    fieldset .input-group.date input.form-control:first-child {
+        border-radius: 4px 0px 0px 4px;
+    }
+    #dateRangeHeader {
+        border-bottom: 2px solid $primary-lighter;
+    }
+}
+.input-group.date .input-group-addon {
+  color: $primary;
+  &:hover {
+    color: $primary-dark;
+  }
 }

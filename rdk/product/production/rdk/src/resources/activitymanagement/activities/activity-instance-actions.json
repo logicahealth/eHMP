@@ -1,0 +1,294 @@
+{
+  "domains": [
+    {
+      "consult": [
+        {
+          "state": "Draft",
+          "substate": "",
+          "actions": [
+            "END",
+            "EDIT"
+          ]
+        },
+        {
+          "state": "Unreleased",
+          "substate": "Pre-order Workup",
+          "actions": [
+            "END",
+            "EDIT"
+          ]
+        },
+        {
+          "state": "Unreleased",
+          "substate": "Pre-order Workup Complete",
+          "actions": [
+            "END",
+            "EDIT"
+          ]
+        },
+        {
+          "state": "Unreleased",
+          "substate": "Pending Signature",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Pending",
+          "substate": "",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Active",
+          "substate": "Under Review",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Active",
+          "substate": "Assigned to Triage Member",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Active",
+          "substate": "Clarification Requested",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Active",
+          "substate": "Patient Did Not Respond",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Active",
+          "substate": "Patient Canceled Previous Appt.",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Active",
+          "substate": "Patient No-showed Previous Appt.",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Active",
+          "substate": "Patient Left Without Being Seen",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Active",
+          "substate": "Clinic Canceled Previous Appt.",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Active",
+          "substate": "eConsult",
+          "actions": [
+            "END",
+            "RELEASE.ECONSULT",
+            "COMPLETE"
+          ]
+        },
+        {
+          "state": "Scheduling",
+          "substate": "Underway",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Scheduling",
+          "substate": "1st Attempt",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Scheduling",
+          "substate": "2nd Attempt",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Scheduling",
+          "substate": "3rd Attempt",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Scheduling",
+          "substate": "EWL",
+          "actions": [
+            "END",
+            "RELEASE.EWL"
+          ]
+        },
+        {
+          "state": "Scheduled",
+          "substate": "Appt. Booked",
+          "actions": [
+            "END",
+            "APPT.CANCELED",
+            "APPT.KEPT",
+            "RESCHEDULE",
+            "COMPLETE"
+          ]
+        },
+        {
+          "state": "Scheduled",
+          "substate": "Appt. in Past",
+          "actions": [
+            "END",
+            "APPT.CANCELED",
+            "APTT.KEPT",
+            "RESCHEDULE",
+            "COMPLETE"
+          ]
+        },
+        {
+          "state": "Scheduled",
+          "substate": "Appt. in Past, Checked Out",
+          "actions": [
+            "END",
+            "APPT.CANCELED",
+            "RESCHEDULE",
+            "COMPLETE"
+          ]
+        },
+        {
+          "state": "Scheduled",
+          "substate": "Appt. in Past, Action Required",
+          "actions": [
+            "END",
+            "APTT.CANCELED",
+            "APPT.KEPT",
+            "RESCHEDULE",
+            "COMPLETE"
+          ]
+        },
+        {
+          "state": "Scheduled",
+          "substate": "Appt. Started",
+          "actions": [
+            "END",
+            "APTT.KEPT",
+            "RESCHEDULE",
+            "COMPLETE"
+          ]
+        },
+        {
+          "state": "Scheduled",
+          "substate": "Provider Completing",
+          "actions": [
+            "END",
+            "RELEASE.CONSULT",
+            "COMPLETE"
+          ]
+        },
+        {
+          "state": "Community Care",
+          "substate": "Pending",
+          "actions": [
+            "END",
+            "COMPLETE",
+            "RELEASE.COMMUNITY",
+            "COMMUNITY.UPDATE.SCHEDULED"
+          ]
+        },
+        {
+          "state": "Community Care",
+          "substate": "Scheduled",
+          "actions": [
+            "END",
+            "COMPLETE",
+            "RELEASE.COMMUNITY",
+            "COMMUNITY.UPDATE.PENDING"
+          ]
+        }
+      ],
+      "request": [
+        {
+          "state": "Draft",
+          "substate": "",
+          "actions": [
+            "END",
+            "EDIT"
+          ]
+        },
+        {
+          "state": "Active",
+          "substate": "Pending Response",
+          "actions": [
+            "END",
+            "EDIT"
+          ]
+        },
+        {
+          "state": "Active",
+          "substate": "Clarification Requested",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Active",
+          "substate": "Declined",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Discontinued",
+          "substate": "",
+          "actions": []
+        },
+        {
+          "state": "Completed",
+          "substate": "",
+          "actions": []
+        }
+      ],
+      "lab": [
+        {
+          "state": "Draft",
+          "substate": "",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Unreleased",
+          "substate": "",
+          "actions": [
+            "END"
+          ]
+        },
+        {
+          "state": "Released",
+          "substate": "Pending Collection",
+          "actions": [
+            "END"
+          ]
+        }
+      ]
+    }
+  ]
+}

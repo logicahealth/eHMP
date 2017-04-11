@@ -122,7 +122,7 @@
   | resource.effectiveTimePeriod.start    | IS_FHIR_FORMATTED_DATE|
   | resource.effectiveTimePeriod.end      | IS_FHIR_FORMATTED_DATE|
   | resource.note                         | MedicationDose{uid=''} |
-
+And FHIR date and time conver to Zulu format for Inpatient Medication
 
  @F138_2_inpatient_medication_fhir @fhir @10146V393772
  Scenario: Client can request in-patient medication results in FHIR format

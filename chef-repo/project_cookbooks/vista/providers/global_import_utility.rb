@@ -13,12 +13,12 @@ def replace_datestring(contents)
   start_date = date.strftime("3%y%m%d")
 
   contents = contents.gsub(/\{today\}/, start_date)
-  regex = /\{today(?<sign>[+-])(?<day>\d*)(?<inverse>[I])?\}/
+  regex = /\{today(?<sign>[+-])(?<day>\d*)(?<flag>[EI])?\}/
 
   contents = contents.gsub(regex){ |match|
     sign = match.gsub(regex, '\k<sign>')
     day = match.gsub(regex, '\k<day>')
-    inverse = match.gsub(regex, '\k<inverse>')
+    flag = match.gsub(regex, '\k<flag>')
 
     if sign == '-'
       new_date = date - day.to_i
@@ -26,9 +26,13 @@ def replace_datestring(contents)
       new_date = date + day.to_i
     end
 
-    formatted_new_date = new_date.strftime("3%y%m%d")
+    if flag == 'E'
+      formatted_new_date = new_date.strftime("%m/%d/%y")
+    else
+      formatted_new_date = new_date.strftime("3%y%m%d")
+    end
 
-    if inverse == 'I'
+    if flag == 'I'
       return_value = (9999998 - formatted_new_date.to_i).to_s
     else
       return_value = formatted_new_date

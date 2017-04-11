@@ -2,27 +2,30 @@ VPRJTZ ;SLC/KCM -- Miscellaneous Experiments
  ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
 C2D ; Compare collections to domains
- N PID,UID,CLTN,CNT
+ N PID,UID,CLTN,CNT,JPID
  S CNT=0
- S PID="" F  S PID=$O(^VPRPT(PID)) Q:'$L(PID)  D
- . S UID="" F  S UID=$O(^VPRPT(PID,UID)) Q:'$L(UID)  D
- . . S CLTN=$P(UID,":",3)
- . . Q:$D(^VPRMETA("collection",CLTN,"domain"))
- . . W !,PID,?20,CLTN S CNT=CNT+1
+ S JPID="" F  S JPID=$O(^VPRPT(JPID)) Q:'$L(JPID)  D
+ . S PID="" F  S PID=$O(^VPRPT(JPID,PID)) Q:'$L(PID)  D
+ . . S UID="" F  S UID=$O(^VPRPT(JPID,PID,UID)) Q:'$L(UID)  D
+ . . . S CLTN=$P(UID,":",3)
+ . . . Q:$D(^VPRMETA("collection",CLTN,"domain"))
+ . . . W !,PID,?20,CLTN S CNT=CNT+1
  W !!,CNT
  Q
 SUBINDIR ; Compare subscript indirection
- N PID,KEY,UID,START
+ N PID,KEY,UID,START,JPID
  S START=$ZH
- S PID="" F  S PID=$O(^VPRPT(PID)) Q:'$L(PID)  D
- . S KEY="" F  S KEY=$O(^VPRPT(PID,KEY)) Q:KEY=""  D
- . . S UID=$G(^VPRPT(PID,KEY,"uid"))
+ S JPID="" F  S JPID=$O(^VPRPT(JPID)) Q:'$L(JPID)  D
+ . S PID="" F  S PID=$O(^VPRPT(JPID,PID)) Q:'$L(PID)  D
+ . . S KEY="" F  S KEY=$O(^VPRPT(JPID,PID,KEY)) Q:KEY=""  D
+ . . . S UID=$G(^VPRPT(JPID,PID,KEY,"uid"))
  W !,"Direct:",$ZH-START
  ;
  S START=$ZH
- S PID="" F  S PID=$O(^VPRPT(PID)) Q:'$L(PID)  D
- . S KEY="" F  S KEY=$O(^VPRPT(PID,KEY)) Q:KEY=""  D
- . . S REF=$NA(^VPRPT(PID,KEY)),UID=$G(@REF@("uid"))
+ S JPID="" F  S JPID=$O(^VPRPT(JPID)) Q:'$L(JPID)  D
+ . S PID="" F  S PID=$O(^VPRPT(JPID,PID)) Q:'$L(PID)  D
+ . . S KEY="" F  S KEY=$O(^VPRPT(JPID,PID,KEY)) Q:KEY=""  D
+ . . . S REF=$NA(^VPRPT(JPID,PID,KEY)),UID=$G(@REF@("uid"))
  W !,"Indirect:",$ZH-START
  Q
 BLDSPEC(FIELDS,SPEC) ; Build spec then set values given FIELDS

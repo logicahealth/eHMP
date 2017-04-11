@@ -1,17 +1,61 @@
 'use strict';
-var ra = require('../common/entities/condition-objects.js'),
-    errors = require('../common/errors'),
-    domains = require('../common/domain-map.js'),
-    fhirResource = require('../common/entities/fhir-resource'),
-    rdk = require('../../core/rdk'),
-    fhirToJDSSearch = require('../common/utils/fhir-to-jds-search'),
-    _ = require('lodash'),
-    nullchecker = rdk.utils.nullchecker;
+var condition = require('../common/entities/condition-objects');
+var errors = require('../common/errors');
+var domains = require('../common/domain-map');
+var fhirResource = require('../common/entities/fhir-resource');
+var rdk = require('../../core/rdk');
+var fhirToJDSSearch = require('../common/utils/fhir-to-jds-search');
+var _ = require('lodash');
+var nullchecker = rdk.utils.nullchecker;
+var conformanceUtils = require('../conformance/conformance-utils');
+var conformance = require('../conformance/conformance-resource');
 
-//http://IP             /vpr/all/find/problem?filter=like(%22problemText%22,%22%25%22)
+var fhirToJDSAttrMap = [{
+    fhirName: 'subject.identifier',
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier - note that this patient identifier will overrule any patient identifier that is in the URI of this endpoint.',
+    searchable: true
+},{
+    fhirName: 'pid',
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier - note that this patient identifier will overrule any patient identifier that has been specified in the URI of this endpoint as well as the subject.identifier on the query string.',
+    searchable: true
+},{
+    fhirName: 'date-asserted',
+    vprName: 'entered',
+    dataType: 'dateTime',
+    definition: 'http://hl7.org/fhir/2015MAY/datatypes.html#dateTime',
+    description: 'date-asserted date/time. The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. date-asserted=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. date-asserted=2015-01-26T08:30:00) or an implicit range (e.g. date-asserted=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=).',
+    searchable: true
+},{
+    fhirName: 'onset',
+    vprName: 'onset',
+    dataType: 'dateTime',
+    definition: 'http://hl7.org/fhir/2015MAY/datatypes.html#dateTime',
+    description: 'onset date/time. The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. onset=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. onset=2015-01-26T08:30:00) or an implicit range (e.g. onset=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=).',
+    searchable: true
+}];
+
+// Issue call to Conformance registration
+conformance.register(conformanceUtils.domains.CONDITION, createConditionConformanceData());
+
+function createConditionConformanceData() {   
+   var resourceType = conformanceUtils.domains.CONDITION;
+   var profileReference = 'http://hl7.org/fhir/2015MAY/condition.html';
+   var interactions = [ 'read', 'search-type' ];
+
+   return conformanceUtils.createConformanceData(resourceType, profileReference,
+           interactions, fhirToJDSAttrMap);
+}
+
+//http://IP_ADDRESS:PORT/vpr/all/find/problem?filter=like(%22problemText%22,%22%25%22)
 //get all problems in the system
 
-//http://IP             /vpr/9E7A;20/find/problem
+//http://IP_ADDRESS:PORT/vpr/9E7A;20/find/problem
 //get all problems for a specific pid
 
 function getResourceConfig() {
@@ -112,42 +156,42 @@ function buildSearchQuery(params) {
  * @apiParam {Number} [_count] The number of results to show.
  * @apiParam {String} [date-asserted] date-asserted date/time. The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. date-asserted=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. date-asserted=2015-01-26T08:30:00) or an implicit range (e.g. date-asserted=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=). Consult the <a href="http://www.hl7.org/FHIR/2015May/search.html#date">FHIR DSTU2 API</a> documentation for more information.
  * @apiParam {String} [onset] onset date/time. The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. onset=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. onset=2015-01-26T08:30:00) or an implicit range (e.g. onset=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=). Consult the <a href="http://www.hl7.org/FHIR/2015May/search.html#date">FHIR DSTU2 API</a> documentation for more information.
- * @apiParam {String} [_sort] Sort criteria. Ascending order by default, order is specified with the following variants:  _sort:asc (ascending), _sort:dsc (descending). Supported sort properties: asserter, code, date-asserted, onset, patient.
+ * @apiParam {String} [_sort] Sort criteria. Ascending order by default, order is specified with the following variants:  _sort:asc (ascending), _sort:desc (descending). Supported sort properties: asserter, code, date-asserted, onset, patient.
  *
  * @apiDescription Converts a vpr \'problem\' resource into a FHIR \'condition\' resource.
  * @apiExample {js} Request Examples:
  *      // Limiting results count
- *      http://IP           /resource/fhir/patient/10110V004877/condition?_count=1
+ *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?_count=1
  *
  *      // Conditions on a year
- *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=2000
+ *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?onset=2000
  *
  *      // Conditions in a year and month
- *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=2005-04
+ *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?onset=2005-04
  *
  *      // Conditions in a year, month, and day
- *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=2000-02-21
+ *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?onset=2000-02-21
  *
  *      // Conditions outside of a date range
- *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=!=2000-02
+ *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?onset=!=2000-02
  *
  *      // Conditions within an explicit date range
- *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=>=2010-06&onset=<=2014-09-20
+ *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?onset=>=2010-06&onset=<=2014-09-20
  *
  *      // Conditions sorted by code
- *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=code
+ *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?_sort=code
  *
  *      // Conditions sorted by asserter
- *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=asserter
+ *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?_sort=asserter
  *
  *      // Conditions sorted by date-asserted
- *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=date-asserted
+ *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?_sort=date-asserted
  *
  *      // Conditions sorted by onset
- *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=onset
+ *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?_sort=onset
  *
  *      // Conditions sorted by patient (pid)
- *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=patient
+ *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?_sort=patient
  *
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/condition.html">Condition FHIR DTSU2 specification</a>.
@@ -316,31 +360,31 @@ function convertToFhir(inputJSON, req) {
     var results = [],
         items = inputJSON.data.items,
         total = inputJSON.data.totalItems;
-    for (var i = 0, l = items.length; i < l; i++) {
-        //add meta to item
-        items[i].fhirMeta = {
+        
+    _.forEach(items, function(item, index) {
+         item.fhirMeta = {
             _pid: req._pid,
             _originalUrl: req.originalUrl,
             _host: req.headers.host,
             _protocol: req.protocol
         };
-        results.push(ra.conditionFactory('ConditionItem', items[i]));
-    }
+        results.push(condition.conditionFactory('ConditionItem', item));
+    });
     return buildBundle(results, req, total);
 }
 
 function buildBundle(results, req, total) {
-    var b = new fhirResource.Bundle2();
+    var b = new fhirResource.Bundle();
     if (req) {
         b.link.push(new fhirResource.Link(req.protocol + '://' + req.headers.host + req.originalUrl, 'self'));
     }
     b.total = total;
-    for (var i in results) {
-        if (nullchecker.isNotNullish(results[i])) {
-            var e = new fhirResource.Entry(results[i]);
+    _.forEach(results, function(result, index) {
+        if (nullchecker.isNotNullish(result)) {
+            var e = new fhirResource.Entry(result);
             b.entry.push(e);
         }
-    }
+    });
     return b;
 }
 
@@ -366,3 +410,4 @@ function getJDSErrorMessage(error) {
 module.exports.convertToFhir = convertToFhir;
 module.exports.getResourceConfig = getResourceConfig;
 module.exports.isSortCriteriaValid = isSortCriteriaValid;
+module.exports.createConditionConformanceData = createConditionConformanceData;

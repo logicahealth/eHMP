@@ -1,11 +1,6 @@
 # Group Notes
 
-## Notes titles get User Recent Titles [{{{path}}}{?fields}]
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
+## Notes titles get User Recent Titles [{{{path}}}]
 
 ### Get [GET]
 

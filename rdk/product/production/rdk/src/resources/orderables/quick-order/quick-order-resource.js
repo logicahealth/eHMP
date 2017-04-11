@@ -1,37 +1,60 @@
 'use strict';
 
-var quickOrder = require('./quick-order');
-
 module.exports.getResourceConfig = function() {
     return [{
         name: 'quickorder-create',
         path: '',
-        post: quickOrder.create,
+        post: create,
         requiredPermissions: [],
-        isPatientCentric: false
+        isPatientCentric: false,
+        subsystems: ['pjds', 'quickorder']
     }, {
         name: 'quickorder-get',
         path: '/:uid',
-        get: quickOrder.get,
+        get: get,
         requiredPermissions: [],
-        isPatientCentric: false
+        isPatientCentric: false,
+        subsystems: ['pjds', 'quickorder']
     }, {
         name: 'quickorder-search',
         path: '',
-        get: quickOrder.search,
+        get: search,
         requiredPermissions: [],
-        isPatientCentric: false
+        isPatientCentric: false,
+        subsystems: ['pjds', 'quickorder']
     }, {
         name: 'quickorder-delete',
         path: '/:uid',
-        delete: quickOrder.delete,
+        delete: callDelete,
         requiredPermissions: [],
-        isPatientCentric: false
+        isPatientCentric: false,
+        subsystems: ['pjds', 'quickorder']
     }, {
         name: 'quickorder-update',
         path: '/:uid',
-        put: quickOrder.update,
+        put: update,
         requiredPermissions: [],
-        isPatientCentric: false
+        isPatientCentric: false,
+        subsystems: ['pjds', 'quickorder']
     }];
 };
+
+function create(req, res) {
+    req.app.subsystems.quickorder.create(req, res);
+}
+
+function get(req, res) {
+    req.app.subsystems.quickorder.get(req, res);
+}
+
+function search(req, res) {
+    req.app.subsystems.quickorder.search(req, res);
+}
+
+function callDelete(req, res) {
+    req.app.subsystems.quickorder.delete(req, res);
+}
+
+function update(req, res) {
+    req.app.subsystems.quickorder.update(req, res);
+}

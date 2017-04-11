@@ -1,18 +1,18 @@
-HMPDMDC ;SLC/MKB,DP -- CLiO extract ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDMDC ;SLC/MKB,DP,ASMR/RRB - CLiO extract;8/2/11  15:29
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
  ; ^MDC(704.101                 5748 (Private)
  ; ^MDC(704.102                 5748 (Private)
  ; ^MDC(704.117                 5748 (Private)
- ; ^MDC(704.118                 5748 (Private)
+ ; ^MDC(704.118                 5811 (Private)
  ; DIC                          2051
  ; DIQ                          2056
  ; XLFDT                       10103
  ; XLFSTR                      10104
- ;
+ Q
  ; ------------ Get observations from VistA ------------
  ;
 EN(DFN,BEG,END,MAX,ID) ; -- find patient's observations
@@ -86,7 +86,7 @@ ADD(X) ; Add a line @HMP@(n)=X
 QRYPT(HMPRET,HMPDFN,HMPFR,HMPTO,HMPSTAT) ; List of observations by pt, datetime, status
  K @HMPRET
  N HMPDT,HMPIEN
- S HMPSTAT=$G(HMPSTAT,1) ; Default to Verfied
+ S HMPSTAT=$G(HMPSTAT,1) ; Default to Verified
  F HMPDT=HMPFR-.0000001:0 S HMPDT=$O(^MDC(704.117,"AS",HMPSTAT,HMPDFN,HMPDT)) Q:'HMPDT!(HMPDT>HMPTO)  D
  . F HMPIEN=0:0 S HMPIEN=$O(^MDC(704.117,"AS",HMPSTAT,HMPDFN,HMPDT,HMPIEN)) Q:'HMPIEN  D
  . . S:$P(^MDC(704.117,HMPIEN,0),U,9)=HMPSTAT @HMPRET@(HMPIEN)=$P(^MDC(704.117,HMPIEN,0),U)
@@ -113,7 +113,7 @@ QRYOBS(HMPRET,HMPID) ; Return a single observation
 QRYQUAL(HMPRET,HMPIEN) ; Returns the qualifiers for obs in HMPIEN
  ; We do NOT want to kill HMPRET here because it points at the parent node of the return
  N HMPQUAL
- F Y=0:0 S Y=$O(^MDC(704.118,"PK",HMPIEN,Y)) Q:'Y  D
+ F Y=0:0 S Y=$O(^MDC(704.118,"PK",HMPIEN,Y)) Q:'Y  D  ;ICR 5811 DE2818 ASF 11/25/15
  . S HMPQUAL=$$GET1^DIQ(704.101,Y_",",".05:.02")
  . S @HMPRET@(HMPQUAL,"I")=$$GET1^DIQ(704.101,Y_",","99.99")
  . S @HMPRET@(HMPQUAL,"E")=$$GET1^DIQ(704.101,Y_",",".02")
@@ -132,9 +132,9 @@ QRYCTX(HMPRET,HMPID) ; We need a terminology based context observation relations
  S HMPFR=$$FMADD^XLFDT(HMPDT,0,0,0,-30) ; PREVIOUS 30 SECONDS
  S HMPTO=$$FMADD^XLFDT(HMPDT,0,0,0,30) ; NEXT 30 SECONDS
  ; Now we find the context observations
- F HMPDT=HMPFR:0 S HMPDT=$O(^MDC(704.117,"PT",HMPDFN,HMPDT)) Q:'HMPDT!(HMPDT>HMPTO)  D
+ F HMPDT=HMPFR:0 S HMPDT=$O(^MDC(704.117,"PT",HMPDFN,HMPDT)) Q:'HMPDT!(HMPDT>HMPTO)  D  ;ICR 5810 DE2818 ASF 11/25/15 
  . F HMPOBS=0:0 S HMPOBS=$O(^MDC(704.117,"PT",HMPDFN,HMPDT,HMPOBS)) Q:'HMPOBS  D
- . . Q:$$GET1^DIQ(704.117,HMPOBS_",",.09,"I")'=1  ; Verfied Only
+ . . Q:$$GET1^DIQ(704.117,HMPOBS_",",.09,"I")'=1  ; Verified Only
  . . S HMPXID=$$GET1^DIQ(704.117,HMPOBS_",",.01)
  . . Q:HMPXID=HMPID  ; You should ignore yourself in this loop
  . . S HMPTERM=$$GET1^DIQ(704.117,HMPOBS_",",".07")
@@ -153,7 +153,7 @@ QRYCTX(HMPRET,HMPID) ; We need a terminology based context observation relations
 QRYTYPES(HMPRET) ; Return the terminology Term Types
  K @HMPRET
  N X
- F X=0:0 S X=$O(^MDC(704.102,X)) Q:'X  D
+ F X=0:0 S X=$O(^MDC(704.102,X)) Q:'X  D  ;ICR 5748 DE2818 ASF 11/25/15
  . S @HMPRET@(X,"NAME")=$P(^MDC(704.102,X,0),U,1)
  . S @HMPRET@(X,"XML")=$P(^MDC(704.102,X,0),U,2)
  . S @HMPRET@("B",$P(^MDC(704.102,X,0),U,1),X)=""

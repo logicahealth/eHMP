@@ -1,6 +1,6 @@
 {
   "id": "mocks",
-  "ip_address": "172.16.4.205",
+  "ip_address": "IP_ADDRESS",
   "stack": "example-stack",
   "roles": [
     "example",

@@ -2,58 +2,41 @@ define([
     "backbone",
     "marionette",
     "handlebars",
-    "moment", 
+    "moment",
     "app/applets/patient_search/views/common/searchResultsCollectionView",
     "app/applets/patient_search/views/common/errorMessageView",
-    "app/applets/patient_search/views/common/blankView",
     "app/applets/patient_search/views/mySite/clinics_wards/siteResultsCollectionView",
     "hbs!app/applets/patient_search/templates/mySite/clinics_wards/searchViewTemplate",
     "app/applets/patient_search/views/mySite/clinics_wards/dateRangeSelectorView"
-], function(Backbone, Marionette, Handlebars, Moment, SearchResultsCollectionView, ErrorMessageView, BlankView, LocationsListResultsView, SearchViewTemplate, DateRangeSelectorView) {
+], function(Backbone, Marionette, Handlebars, Moment, SearchResultsCollectionView, ErrorMessageView, LocationsListResultsView, SearchViewTemplate, DateRangeSelectorView) {
     "use strict";
 
+    // var APPOINTMENT_DATE_FORMAT = 'MMDDYYYYHHmmss';
+
+    /* objects */
     var LocationsListFilterModel = Backbone.Model.extend({
         defaults: {
             'filterString': '',
             'locationType': ''
         }
     });
-    var locationsListFilterModel = new LocationsListFilterModel();
-    var locationsListFilterModelClinics = new LocationsListFilterModel();
-
-    var APPOINTMENT_DATE_FORMAT = 'MMDDYYYYHHmmss';
 
     var LocationsListFilterViewWards = Backbone.Marionette.ItemView.extend({
-
-        template: Handlebars.compile("<input type='text' autocomplete='off' class='form-control' id='wardFilter'  placeholder='Filter {{locationType}}' title='Please enter in text to filter wards.'></input>"),
-        model: locationsListFilterModel,
+        template: '<div></div>',
         initialize: function(options) {
+            this.model = new LocationsListFilterModel();
             this.model.set('locationType', options.locationType);
             this.model.set('filterString', '');
-        },
-        events: {
-            'keyup input': 'updateWardsListResults',
-            'keydown input': 'updateWardsListResults',
-            'keypress input': 'updateWardsListResults',
-            'input input' : 'updateWardsListResults',
-            'change': 'updateWardsListResults'
-        },
-        updateWardsListResults: function(event) {
-            var self = this;
-            if (event.currentTarget.id == 'wardFilter') {
-                self.model.set({
-                    'filterString': $(event.currentTarget).val()
-                });
-            }
         }
     });
+
     var LocationsListFilterViewClinics = Backbone.Marionette.LayoutView.extend({
-        template: Handlebars.compile("<input type='text' autocomplete='off' class='form-control' id='clinicFilter' placeholder='Filter {{locationType}}' title='Please enter in text to filter clinics.'></input><div id='locationDateRange'></div>"),
-        model: locationsListFilterModelClinics,
+        template: Handlebars.compile("<div id='locationDateRange'></div>"),
         regions: {
             locationDateRange: "#locationDateRange"
         },
         initialize: function(options) {
+            this.model = new LocationsListFilterModel();
             this.model.set('locationType', options.locationType);
             this.model.set('filterString', '');
             this.locationDateRangeView = new DateRangeSelectorView({
@@ -62,32 +45,20 @@ define([
         },
         onRender: function() {
             this.locationDateRange.show(this.locationDateRangeView);
-        },
-        events: {
-            'keyup input': 'updateClinicListResults',
-            'keydown input': 'updateClinicListResults',
-            'keypress input': 'updateClinicListResults',
-            'input input' : 'updateClinicListResults',
-            'change': 'updateClinicListResults'
-        },
-        updateClinicListResults: function(event) {
-            if (this.setModel) clearTimeout(this.setModel);
-            var self = this;
-            var target = event.target.id;
-            if (target == 'clinicFilter') {
-                this.setModel = setTimeout(function() {
-                    self.model.set({
-                        'filterString': $(event.target).val()
-
-                    });
-                }, 200);
-            }
         }
     });
 
     var SearchLayoutView = Backbone.Marionette.LayoutView.extend({
         searchApplet: undefined,
         template: SearchViewTemplate,
+        templateHelpers: function(){
+            var self = this;
+            return {
+                isClinic: function(){
+                    return (self.getOption('locationType')=='clinics');
+                }
+            };
+        },
         regions: {
             patientSearchResults: ".patient-search-results",
         },
@@ -95,11 +66,12 @@ define([
             this.searchApplet = options.searchApplet;
             this.locationType = options.locationType;
             this.model = new Backbone.Model({
-                locationType: this.locationType
+                locationType: this.locationType//,
             });
+
+            /*slimmed down version with just the date filter*/
             this.addRegions({
-                locationListFilterRegion: "#" + this.locationType + "-location-list-filter-input",
-                locationListResultsRegion: "#" + this.locationType + "-location-list-results"
+                locationListFilterRegion: "#" + this.locationType + "-location-list-filter-date-range"
             });
             if (this.locationType === 'clinics') {
                 this.locationsListFilterView = new LocationsListFilterViewClinics({
@@ -117,33 +89,10 @@ define([
                 locationListFilterView: this.locationsListFilterView,
                 locationType: options.locationType
             });
+            /* end of slimmed down version */
         },
-        onAttach: function() {
-            this.searchApplet.onResize();
-        },
-
-        onRender: function() {
-            var self = this;
+        onBeforeShow: function(){
             this.locationListFilterRegion.show(this.locationsListFilterView);
-            this.locationListResultsRegion.show(this.locationListResultsView);
-            this.$el.find('#' + this.locationType + 'location-list-results').on('scroll', function(event) {
-                self.locationListResultsView.fetchRows(event);
-            });
-        },
-        locationSelected: function(locationModel) {
-            var criteria;
-            if (this.locationType === 'clinics') {
-                criteria = {
-                    "uid": locationModel.attributes.uid
-                };
-            } else {
-                criteria = {
-                    "ref.id": locationModel.attributes.refId,
-                    "uid": locationModel.attributes.uid
-                };
-            }
-            this.searchApplet.removePatientSelectionConfirmation();
-            this.executeSearch(criteria);
         },
         executeSearch: function(criteria) {
             this.searchApplet.removePatientSelectionConfirmation();
@@ -198,12 +147,6 @@ define([
                     self.patientsView.setEmptyMessage('Invalid dates entered.');
                     self.patientsView.render();
                 } else {
-                    if (this.$el.find('#filter-from-date-clinic').val() !== '' && this.$el.find('#filter-to-date-clinic').val() !== '') {
-                        this.$el.find('button').removeClass('active-range');
-                    } else {
-                        this.$el.find('#filter-from-date-clinic').val('');
-                        this.$el.find('#filter-to-date-clinic').val('');
-                    }
                     var clinicSearchOptions = {
                         resourceTitle: 'locations-' + this.locationType + '-search',
                         criteria: criteria,
@@ -245,24 +188,11 @@ define([
                         self.patientsView.collection = patientsCollection;
                         self.patientsView.originalCollection = patientsCollection;
                         self.patientsView.render();
-
-                        // this has to be checked after render b/c of element availability
-                        if (patientsCollection.length > 0){
-                            // size the height of the results
-                            self.searchApplet.onResize();
-
-                            // apply scrollbar css to column headers for adjustments.
-                            if (self.searchApplet.hasScrollbars($('#main-search-mySiteClinics .results-table .list-group')[0]).vertical){
-                                $('#main-search-mySiteClinics .results-table').toggleClass('data-scroll');
-                            }
-                        }
                     };
 
                     patientsCollection = ADK.ResourceService.fetchCollection(clinicSearchOptions);
                 }
-            }
-            else
-            {
+            } else {
                 var wardSearchOptions = {
                     resourceTitle: 'locations-' + this.locationType + '-search',
                     criteria: criteria,
@@ -289,17 +219,6 @@ define([
                     self.patientsView.collection = patientsCollection;
                     self.patientsView.originalCollection = patientsCollection;
                     self.patientsView.render();
-
-                    // this has to be checked after render b/c of element availability
-                    if (patientsCollection.length > 0){
-                        // size the height of the results
-                        self.searchApplet.onResize();
-
-                        // apply scrollbar css to column headers for adjustments.
-                        if (self.searchApplet.hasScrollbars($('#main-search-mySiteWards .results-table .list-group')[0]).vertical){
-                            $('#main-search-mySiteWards .results-table').toggleClass('data-scroll');
-                        }
-                    }
                 };
 
                 patientsCollection = ADK.ResourceService.fetchCollection(wardSearchOptions);

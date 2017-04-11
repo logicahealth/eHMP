@@ -1,19 +1,18 @@
 <div class="table-row selectable collapsed"
-
      {{#unless empty}}
         data-toggle="collapse"
      {{/unless}}>
     <div class="table-cell border-vertical">
-        <a href="#" class="left-side" aria-expanded="false" role="button">
+        <button class="left-side btn btn-accordion" aria-expanded="false" type="button" title="Press enter to expand {{kind}} accordion.">
             {{#unless empty}}
-                <span arrowPosition="right" class="caret-placer right-caret"></span>
+                <i arrowPosition="right" class="fa fa-caret-right right-margin-xs"></i>
                 {{kind}}
             {{/unless}}
             {{#if empty}}
-                <span  arrowPosition="none" class="empty-caret"></span>
+                <i arrowPosition="none"></i>
                 {{kind}}
             {{/if}}
-        </a>
+        </button>
     </div>
     <div tabindex="0" role="button" class="flex-width-2 right-side has-popover"
          {{#unless empty}}
@@ -111,6 +110,5 @@
         </div>
     </div>
 </div>
-<div class="panel-collapse collapse" data-toggle="false" role="tabpanel">
-</div>
+<div class="panel-collapse collapse" data-toggle="false" role="tabpanel"></div>
 

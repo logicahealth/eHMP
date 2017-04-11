@@ -1,12 +1,12 @@
-HMPCORD4 ;;SLC/AGP -Retreived Orderable Items ; 2/17/15 2:40pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;
+HMPCORD4 ;SLC/AGP,ASMR/RRB -Retrieved Orderable Items;Nov 04, 2015 12:13:23
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q
  ;
-ADDODG ;
+ADDODG ; called by HMPEF
  N CNT,IEN,NUM,NODE,PTR,RESULT,TEMP
- N ERRMSG S ERRMSG="A mumps error occurred while extaracting display groups"
+ N ERRMSG S ERRMSG="A mumps error occurred while extracting display groups"
  S IEN=0 F  S IEN=$O(^ORD(100.98,IEN)) Q:IEN'>0  D
  .N $ES,$ET
  .S $ET="D ERRHDLR^HMPDERRH"
@@ -42,7 +42,7 @@ SODGNODE(RESULT,NODE) ;
 ADDROUTE ;
  N CNT,IEN,NAME,RESULT,ROUTES,X,UID,VALUE
  N ERRMSG
- S ERRMSG="A mumps error occurred while extaracting routes."
+ S ERRMSG="A mumps error occurred while extracting routes."
  S CNT=1,IEN=0
  I +$G(HMPLAST)>0 S IEN=HMPLAST
  F  S IEN=$O(^PS(51.2,IEN)) Q:IEN'>0  D
@@ -69,7 +69,7 @@ ADDSCH ;
  ;D SCHALL^ORWDPS1(.HMPSCH,0,0)
  D SCHED^PSS51P1(0,.HMPSCH)
  N ERRMSG
- S ERRMSG="A mumps error occurred while extaracting schedules."
+ S ERRMSG="A mumps error occurred while extracting schedules."
  S CNT=0 F  S CNT=$O(HMPSCH(CNT)) Q:CNT'>0  D
  .N $ES,$ET
  .S $ET="D ERRHDLR^HMPDERRH"
@@ -95,6 +95,7 @@ LAB(RESULT,OI) ;
  D GETLST^XPAR(.HMPLST,"ALL","ORWD COMMON LAB INPT")  ;DBIA 2263
  S I=0 F  S I=$O(HMPLST(I)) Q:'I  D
  . S IEN=$P(HMPLST(I),U,2)
+ . K P1
  . S P1="dialogAdditionalInformation"
  . S RESULT("dialogAdditionalInformation","common",I,"uid")=$$SETUID^HMPUTILS("orderable","",IEN)
  . S RESULT("dialogAdditionalInformation","common",I,"internal")=IEN
@@ -125,10 +126,10 @@ LABTYPE(L) ;
  I L="CY" Q "Cytology"
  Q ""
  ;
-OI(OITYPE) ;
+OI(OITYPE) ; called by HMPEF
  N CNT,ERROR,IEN,NAME,LINK,LINKTYPE,NODE,RADDET,RADTYPE,RESULT,TCNT,TYPE,UID,HMPTEMP
  N ERRMSG
- S ERRMSG="A mumps error occurred while extaracting orderable items."
+ S ERRMSG="A mumps error occurred while extracting orderable items."
  S CNT=1,IEN=0
  ;
  D RADTYPE(.RADTYPE,.RADDET)
@@ -162,7 +163,7 @@ PS(RESULT,IEN,PLACE) ;
  I $D(^ORD(101.43,IEN,9,"B","RX")) S CNT=CNT+1 S RESULT("types",CNT,"type")="MEDS" S MEDS("RX")=""
  I $D(^ORD(101.43,IEN,9,"B","UD RX")) S CNT=CNT+1 S RESULT("types",CNT,"type")="INPATIENT MEDS" S MEDS("UD RX")=""
  ;
- ;K DOSES
+ K DOSES
  S PSOI=+$P(^ORD(101.43,IEN,0),U,2)
  S TYPE="" F  S TYPE=$O(MEDS(TYPE)) Q:TYPE=""  D
  .D DOSE^PSSOPKI1(.HMPDOSE,PSOI,TYPE,0)
@@ -269,7 +270,7 @@ SUBMIT(SUBMIT,IMGTYP) ; Get the locations to which the request may be submitted
  ;
 QO ;
  N IEN,NAME,NODE,RESULT
- N ERRMSG S ERRMSG="A mumps error occurred while extaracting orderable items."
+ N ERRMSG S ERRMSG="A mumps error occurred while extracting orderable items."
  S IEN=0 F  S IEN=$O(^ORD(101.41,IEN)) Q:IEN'>0  D
  .N $ES,$ET
  .S $ET="D ERRHDLR^HMPDERRH"

@@ -1,7 +1,7 @@
 {
   "id": "vler",
   "normal": {
-    "ipaddress": "172.16.16.242",
+    "ipaddress": "IP__ADDRESS",
     "stack": "production-staging-deploy-dev",
     "roles": [
       "vler"

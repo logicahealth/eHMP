@@ -14,10 +14,11 @@ define([
             });
             this.patient = new Backbone.Model({
                 pid: '1234567890',
+                uid: '1234567890',
                 visit: {
                     serviceCategory: 'PSB',
-                    visitDateTime: '201603290000',
-                    uid: '0987654321'
+                    dateTime: '201603290000',
+                    location: '0987654321'
                 }
             });
             this.errorModel = new Backbone.Model();
@@ -34,10 +35,11 @@ define([
             });
             this.patient = new Backbone.Model({
                 pid: '1234567890',
+                uid: '1234567890',
                 visit: {
                     serviceCategory: 'PSB',
-                    visitDateTime: '201603290000',
-                    uid: '0987654321'
+                    dateTime: '201603290000',
+                    location: '0987654321'
                 }
             });
             this.errorModel = new Backbone.Model();
@@ -73,6 +75,14 @@ define([
         Picklist: {
             Model: ResourceModel,
             Collection: ResourceCollection
+        }
+    };
+
+    ADK.UserService = {
+        getUserSession: function() {
+            return new Backbone.Model({
+                site: '9E7A'
+            });
         }
     };
 

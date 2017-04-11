@@ -43,6 +43,7 @@ var config = {
             'pov',
             'procedure',
             'problem',
+            'ptf',
             'surgery',
             'visit',
             'vital'

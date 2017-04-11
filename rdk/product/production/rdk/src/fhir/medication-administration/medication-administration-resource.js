@@ -9,6 +9,39 @@ var errors = require('../common/errors.js');
 var constants = require('../common/utils/constants');
 var querystring = require('querystring');
 
+var confUtils = require('../conformance/conformance-utils');
+var conformance = require('../conformance/conformance-resource');
+
+
+var fhirToJDSAttrMap = [{
+    fhirName: 'subject.identifier', // Note this attribute is a app-defined search param, not a Fhir specified attribute.
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier.',
+    searchable: true
+},{
+    fhirName: 'limit', // Note this attribute is a app-defined search param, not a Fhir specified attribute.
+    vprName: '',
+    dataType: 'integer',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#integer',
+    description: 'This indicates the total number of resources that will be fetched.',
+    searchable: true
+}
+];
+
+// Issue call to Conformance registration
+conformance.register(confUtils.domains.MEDICATION_ADMINISTRATION, createConformanceData());
+
+function createConformanceData() {
+   var resourceType = confUtils.domains.MEDICATION_ADMINISTRATION;
+   var profileReference = 'http://www.hl7.org/FHIR/2015May/medicationadministration.html';
+   var interactions = [ 'read', 'search-type' ];
+
+   return confUtils.createConformanceData(resourceType, profileReference,
+           interactions, fhirToJDSAttrMap);
+}
+
 var getResourceConfig = function() {
     return [{
         name: 'medicationadministration-medicationAdministration',
@@ -169,7 +202,7 @@ function convertToFhir(result, req, previousResults, limit) {
             entry.push(e);
         }
     }
-    return (new fhirResource.Bundle2(link, entry, result.data.totalItems));
+    return (new fhirResource.Bundle(link, entry, result.data.totalItems));
 }
 
 function createExtension(key, valueX, x) {
@@ -188,7 +221,7 @@ function createMedicationAdministration(jdsItem, fhirItems, req) {
     // Identifier
     if (nullchecker.isNotNullish(jdsItem.uid)) {
         fhirItem.identifier = [new fhirResource.Identifier(jdsItem.uid,
-                                                           constants.medPrescription.MED_PRESCRIPTION_UID_IDENTIFIER_SYSTEM)];
+            constants.medPrescription.MED_PRESCRIPTION_UID_IDENTIFIER_SYSTEM)];
     }
 
     var ext = [
@@ -222,18 +255,18 @@ function createMedicationAdministration(jdsItem, fhirItems, req) {
 
     var reasonNotGiven;
     var reasonGiven;
-    if(wasNotGiven) {
+    if (wasNotGiven) {
         reasonNotGiven = 'a';
     } else {
         reasonGiven = 'a';
     }
 
-    if(nullchecker.isNotNullish(reasonNotGiven)) {
+    if (nullchecker.isNotNullish(reasonNotGiven)) {
         var medicationNotGivenUrl = 'http://hl7.org/fhir/reason-medication-not-given';
         var medicationNotGivenDisplay;
-        switch(reasonNotGiven) {
+        switch (reasonNotGiven) {
             case 'a':
-                medicationNotGivenDisplay =  'None';
+                medicationNotGivenDisplay = 'None';
                 break;
             case 'b':
                 medicationNotGivenDisplay = 'Away';
@@ -253,12 +286,12 @@ function createMedicationAdministration(jdsItem, fhirItems, req) {
         fhirItem.reasonNotGiven.push(notGivenCode);
     }
 
-    if(nullchecker.isNotNullish(reasonGiven)) {
+    if (nullchecker.isNotNullish(reasonGiven)) {
         var medicationGivenUrl = 'http://hl7.org/fhir/reason-medication-given';
         var medicationGivenDisplay;
-        switch(reasonGiven) {
+        switch (reasonGiven) {
             case 'a':
-                medicationGivenDisplay =  'None';
+                medicationGivenDisplay = 'None';
                 break;
             case 'b':
                 medicationGivenDisplay = 'Given as Ordered';
@@ -275,48 +308,50 @@ function createMedicationAdministration(jdsItem, fhirItems, req) {
         fhirItem.reasonGiven.push(givenCode);
     }
 
-    if(nullchecker.isNotNullish(jdsItem.dosages) &&
-       nullchecker.isNotNullish(jdsItem.dosages[0].start) &&
-       nullchecker.isNotNullish(jdsItem.dosages[0].stop) &&
-       jdsItem.dosages[0].start <= jdsItem.dosages[0].stop) {
+    var siteHash = fhirUtils.getSiteHash(jdsItem.uid);
+
+    if (nullchecker.isNotNullish(jdsItem.dosages) &&
+        nullchecker.isNotNullish(jdsItem.dosages[0].start) &&
+        nullchecker.isNotNullish(jdsItem.dosages[0].stop) &&
+        jdsItem.dosages[0].start <= jdsItem.dosages[0].stop) {
 
         var period = {};
         if (nullchecker.isNotNullish(jdsItem.dosages[0].start)) {
-            period.start = fhirUtils.convertToFhirDateTime(jdsItem.dosages[0].start);
+            period.start = fhirUtils.convertToFhirDateTime(jdsItem.dosages[0].start, siteHash);
         }
         if (nullchecker.isNotNullish(jdsItem.dosages[0].stop)) {
-            period.end = fhirUtils.convertToFhirDateTime(jdsItem.dosages[0].stop);
+            period.end = fhirUtils.convertToFhirDateTime(jdsItem.dosages[0].stop, siteHash);
         }
         fhirItem.effectiveTimePeriod = period;
 
     } else if (nullchecker.isNotNullish(jdsItem.dosages) && nullchecker.isNotNullish(jdsItem.dosages[0].start)) {
-        fhirItem.effectiveTimeDateTime = fhirUtils.convertToFhirDateTime(jdsItem.dosages[0].start);
+        fhirItem.effectiveTimeDateTime = fhirUtils.convertToFhirDateTime(jdsItem.dosages[0].start, siteHash);
 
     } else if (nullchecker.isNotNullish(jdsItem.overallStart)) {
 
-        fhirItem.effectiveTimeDateTime = fhirUtils.convertToFhirDateTime(jdsItem.overallStart);
+        fhirItem.effectiveTimeDateTime = fhirUtils.convertToFhirDateTime(jdsItem.overallStart, siteHash);
     }
 
     //note
-    if(nullchecker.isNotNullish(jdsItem.dosages) && nullchecker.isNotNullish(jdsItem.dosages[0].summary)) {
+    if (nullchecker.isNotNullish(jdsItem.dosages) && nullchecker.isNotNullish(jdsItem.dosages[0].summary)) {
         fhirItem.note = jdsItem.dosages[0].summary;
     }
 
     //dosage
-    if(nullchecker.isNotNullish(jdsItem.dosages) && nullchecker.isNotNullish(jdsItem.dosages[0])) {
+    if (nullchecker.isNotNullish(jdsItem.dosages) && nullchecker.isNotNullish(jdsItem.dosages[0])) {
 
-        if(nullchecker.isNotNullish(jdsItem.dosages[0].dose) &&
-           nullchecker.isNotNullish(jdsItem.dosages[0].units)) {
+        if (nullchecker.isNotNullish(jdsItem.dosages[0].dose) &&
+            nullchecker.isNotNullish(jdsItem.dosages[0].units)) {
 
             var dosage = {};
 
             //'system' is assumed from here: https://hl7-fhir.github.io/terminologies-systems.html
             dosage.quantity = new fhirResource.Quantity(jdsItem.dosages[0].dose,
-                                                        jdsItem.dosages[0].units,
-                                                        null,
-                                                        'urn:oid:2.16.840.1.113883.6.8');
+                jdsItem.dosages[0].units,
+                null,
+                'urn:oid:2.16.840.1.113883.6.8');
 
-            if(nullchecker.isNotNullish(jdsItem.dosages[0].routeName)) {
+            if (nullchecker.isNotNullish(jdsItem.dosages[0].routeName)) {
                 dosage.route = new fhirResource.CodeableConcept(jdsItem.dosages[0].routeName);
             }
 
@@ -362,7 +397,7 @@ function createPractitioner(item) {
     var practitioner = new fhirResource.Practitioner(helpers.generateUUID());
 
     if (nullchecker.isNotNullish(item.orders) && item.orders.length > 0) {
-        if(nullchecker.isNotNullish(item.orders[0].name)) {
+        if (nullchecker.isNotNullish(item.orders[0].name)) {
             practitioner.name = item.orders[0].providerName;
         }
     }
@@ -400,7 +435,7 @@ function createMedicationPrescription(item, req) {
     if (nullchecker.isNotNullish(item.orders) && item.orders.length > 0) {
         var order = item.orders[0];
         if (nullchecker.isNotNullish(order.ordered)) {
-            mp.dateWritten = fhirUtils.convertToFhirDateTime(order.ordered);
+            mp.dateWritten = fhirUtils.convertToFhirDateTime(order.ordered, fhirUtils.getSiteHash(item.uid));
         }
         if (nullchecker.isNotNullish(order.providerUid)) {
             mp.prescriber = new fhirResource.ReferenceResource(constants.medPrescription.PRESCRIBER_PREFIX + order.providerUid);
@@ -484,11 +519,12 @@ function createDosageInstruction(text, dosage) {
 }
 
 function setDispense(fhirItem, item) {
+    var siteHash = fhirUtils.getSiteHash(item.uid);
     var d = {
         medication: fhirItem.medication,
         validityPeriod: new fhirResource.Period(
-            fhirUtils.convertToFhirDateTime(item.overallStart),
-            fhirUtils.convertToFhirDateTime(item.overallStop)),
+            fhirUtils.convertToFhirDateTime(item.overallStart, siteHash),
+            fhirUtils.convertToFhirDateTime(item.overallStop, siteHash)),
     };
     if (nullchecker.isNotNullish(item.orders) && item.orders.length > 0) {
         var order = item.orders[0];
@@ -636,3 +672,5 @@ module.exports.getMedicationAdministrationData = getMedicationAdministrationData
 module.exports.getResourceConfig = getResourceConfig;
 module.exports.getMedicationAdministration = getMedicationAdministration;
 module.exports.convertToFhir = convertToFhir;
+module.exports.createConformanceData = createConformanceData;
+

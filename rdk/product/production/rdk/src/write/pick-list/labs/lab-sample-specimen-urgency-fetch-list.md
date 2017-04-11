@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Lab sample specimen urgency [/lab-sample-specimen-urgency{?site}{&labTestIEN}{&fields}]
+## Lab sample specimen urgency [/lab-sample-specimen-urgency{?site}{&labTestIEN}]
 
 lab sample, specimen, urgency.
 
@@ -13,8 +13,6 @@ ORWDLR32 LOAD
     :[site]({{{common}}}/parameters/site.md)
 
     + labTestIEN: `291` (number, required) - the IEN to obtain the lab sample, specimen, and urgency for.
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

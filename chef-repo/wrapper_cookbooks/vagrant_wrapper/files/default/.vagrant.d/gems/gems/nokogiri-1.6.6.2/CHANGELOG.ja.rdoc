@@ -233,7 +233,7 @@ libxml2 2.6.21 以上が必要に. (従前は 2.6.17 以上)
 
 * バグ修正
 
-  * (JRuby) xlink:href 属性があり base_uri が無いとき、 EmptyStackException 例外が発生するのを修正 #534, #805. (ありがとう, Patrick       と Brian Hoffman!)
+  * (JRuby) xlink:href 属性があり base_uri が無いとき、 EmptyStackException 例外が発生するのを修正 #534, #805. (ありがとう, Patrick Quinn と Brian Hoffman!)
   * 1.5.7 から xmlns 属性が重複するバグを修正 #865
   * Nokogiri::XML::Builder を使って prefixed 名前空間をルートノードに対しても使えるようにした。 #868
 
@@ -409,7 +409,7 @@ libxml2 2.6.21 以上が必要に. (従前は 2.6.17 以上)
   * ルートノードを複数持つことを認めない #550
   * カスタムXPath関数を修正 #606 (Juan Wajnermanに感謝!)
   * Node#to_xml で :save_with が指定されている場合は上書きしないように修正 #505
-  * Node#set をプライベートメソッドに (JRuby) #564 (     Siegerに感謝!)
+  * Node#set をプライベートメソッドに (JRuby) #564 (Nick Siegerに感謝!)
   * C14nの整理と Node#canonicalize (Ivan Pirlikに感謝!) #563
 
 
@@ -564,7 +564,7 @@ libxml2 2.6.21 以上が必要に. (従前は 2.6.17 以上)
   * XML::Document#create_entnty は新規のEntityDecl のオブジェクトを生成する
     GH #174
   * JRuby FFI implementationでは、従来まで使用されたObjectSpace._id2refの代わり
-    に        Nutterのrocking   Weakling gemを使用に変更
+    にCharles Nutterのrocking   Weakling gemを使用に変更
   * Nokogiri::XML::Node#first_element_child は一番最初のELEMENT子ノードを返す
   * Nokogiri::XML::Node#last_element_child は最後のELEMENT子ノードを返す
   * Nokogiri::XML::Node#elements は全てのELEMENT子ノードを返す

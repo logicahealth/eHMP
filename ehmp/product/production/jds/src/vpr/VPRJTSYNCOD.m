@@ -318,6 +318,7 @@ GETINITIAL ;; @TEST Get Initial Operational Data Sync Status
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1001","stored")),"Vital ZZUT:1001 shouldn't be stored")
  D ASSERT(20141031094920,$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stampTime")),"Vital ZZUT:1002 stampTime doesn't exist")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stored")),"Vital ZZUT:1002 shouldn't be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","syncCompleteAsOf")),"syncCompleteAsOf shouldn't exist")
  Q
 GETLASTVITAL ;; @TEST Get Operational Data Sync Status - Last Vital Stored
  N DATA,ARG,ERR,OBJECT,HTTPERR
@@ -344,6 +345,7 @@ GETLASTVITAL ;; @TEST Get Operational Data Sync Status - Last Vital Stored
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1001","stored")),"Vital ZZUT:1001 should not be stored")
  ; Last Vital should be stored
  D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stored")),"Vital ZZUT:1002 should be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","syncCompleteAsOf")),"syncCompleteAsOf shouldn't exist")
  Q
 GETLASTALLERGY ;; @TEST Get Operational Data Sync Status - Last Allergy Stored
  N DATA,ARG,ERR,OBJECT,HTTPERR
@@ -370,8 +372,9 @@ GETLASTALLERGY ;; @TEST Get Operational Data Sync Status - Last Allergy Stored
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stored")),"Vital ZZUT:1002 should not be stored")
  ; Last Allergy should be stored
  D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","allergy","itemMetaStamp","urn:va:allergy:ZZUT:1002","stored")),"Allergy ZZUT:1002 should be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","syncCompleteAsOf")),"syncCompleteAsOf shouldn't exist")
  Q
-GETLASTALLERGYVITAL;; @TEST Get Operational Data Sync Status - Last Vital & Allergy Stored
+GETLASTALLERGYVITAL ;; @TEST Get Operational Data Sync Status - Last Vital & Allergy Stored
  N DATA,ARG,ERR,OBJECT,HTTPERR
  D BLANK
  ; Set complete flags
@@ -397,6 +400,7 @@ GETLASTALLERGYVITAL;; @TEST Get Operational Data Sync Status - Last Vital & Alle
  ; Last Allergy & Vital should be stored
  D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","allergy","itemMetaStamp","urn:va:allergy:ZZUT:1002","stored")),"Allergy ZZUT:1002 should be stored")
  D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stored")),"Vital ZZUT:1002 should be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","syncCompleteAsOf")),"syncCompleteAsOf shouldn't exist")
  Q
 GETALLERGY ;; @TEST Get Operational Data Sync Status - Both Allergies Stored. Test complete flag being set
  N DATA,ARG,ERR,OBJECT,HTTPERR
@@ -423,6 +427,7 @@ GETALLERGY ;; @TEST Get Operational Data Sync Status - Both Allergies Stored. Te
  D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","syncCompleted")),"vitals domain should not be complete")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1001","stored")),"Vital ZZUT:1001 should not be stored")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stored")),"Vital ZZUT:1002 should not be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","syncCompleteAsOf")),"syncCompleteAsOf shouldn't exist")
  Q
 GETVITAL ;; @TEST Get Operational Data Sync Status - Both Vitals Stored. Test complete flag being set
  N DATA,ARG,ERR,OBJECT,HTTPERR
@@ -449,6 +454,7 @@ GETVITAL ;; @TEST Get Operational Data Sync Status - Both Vitals Stored. Test co
  D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","syncCompleted")),"vitals domain should be complete")
  D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1001","stored")),"Vital ZZUT:1001 should be stored")
  D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stored")),"Vital ZZUT:1002 should be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","syncCompleteAsOf")),"syncCompleteAsOf shouldn't exist")
  Q
 GETBOTH ;; @TEST Get Operational Data Sync Status - Allergy and Vitals Stored. Test SyncComplete flag being set
  N DATA,ARG,ERR,OBJECT,HTTPERR
@@ -477,6 +483,8 @@ GETBOTH ;; @TEST Get Operational Data Sync Status - Allergy and Vitals Stored. T
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","syncCompleted")),"vitals domain should be complete")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1001","stored")),"Vital ZZUT:1001 should be stored")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stored")),"Vital ZZUT:1002 should be stored")
+ D ASSERT(1,$D(OBJECT("completedStamp","sourceMetaStamp","ZZUT","syncCompleteAsOf")),"syncCompleteAsOf should exist")
+ D ASSERT(1,$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","syncCompleteAsOf"))?14N,"syncCompleteAsOf isn't 14 digits")
  Q
 GET2SAMESOURCE ;; @TEST Get Operational Data Sync Status - Allergy and Vitals Stored. Test SyncComplete flag being set for 2 metaStamps for the same source
  N DATA,ARG,ERR,OBJECT,HTTPERR
@@ -506,6 +514,7 @@ GET2SAMESOURCE ;; @TEST Get Operational Data Sync Status - Allergy and Vitals St
  D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","syncCompleted")),"vitals domain should not be complete")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1001","stored")),"Vital ZZUT:1001 should not be stored")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stored")),"Vital ZZUT:1002 should not be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","syncCompleteAsOf")),"syncCompleteAsOf shouldn't exist")
  ; Setup to make sure the new object completes
  K ARG,DATA,OBJECT,ERR
  ; Set complete flags
@@ -532,6 +541,8 @@ GET2SAMESOURCE ;; @TEST Get Operational Data Sync Status - Allergy and Vitals St
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","syncCompleted")),"vitals domain should be complete")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1001","stored")),"Vital ZZUT:1001 should be stored")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stored")),"Vital ZZUT:1002 should be stored")
+ D ASSERT(1,$D(OBJECT("completedStamp","sourceMetaStamp","ZZUT","syncCompleteAsOf")),"syncCompleteAsOf should exist")
+ D ASSERT(1,$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","syncCompleteAsOf"))?14N,"syncCompleteAsOf isn't 14 digits")
  ; Setup to make sure the new object completes
  K ARG,DATA,OBJECT,ERR
  ; Set complete flags - allergy uses correct times
@@ -556,6 +567,8 @@ GET2SAMESOURCE ;; @TEST Get Operational Data Sync Status - Allergy and Vitals St
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","syncCompleted")),"vitals domain should be complete")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1001","stored")),"Vital ZZUT:1001 should be stored")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stored")),"Vital ZZUT:1002 should be stored")
+ D ASSERT(1,$D(OBJECT("completedStamp","sourceMetaStamp","ZZUT","syncCompleteAsOf")),"syncCompleteAsOf should exist")
+ D ASSERT(1,$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","syncCompleteAsOf"))?14N,"syncCompleteAsOf isn't 14 Digits")
  Q
 GET2DIFFSOURCE ;; @TEST Get Operational Data Sync Status - Allergy and Vitals Stored. Test SyncComplete flag being set for 2 metaStamps for different sources
  N DATA,ARG,ERR,OBJECT,HTTPERR
@@ -583,6 +596,7 @@ GET2DIFFSOURCE ;; @TEST Get Operational Data Sync Status - Allergy and Vitals St
  D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","syncCompleted")),"vitals domain should not be complete")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1001","stored")),"Vital ZZUT:1001 should not be stored")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stored")),"Vital ZZUT:1002 should not be stored")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","ZZUT","syncCompleteAsOf")),"syncCompleteAsOf shouldn't exist")
  ; 1ZZUT
  K DATA,ARG,OBJECT,ERR
  ; Setup to make sure both objects are inProgress
@@ -607,6 +621,7 @@ GET2DIFFSOURCE ;; @TEST Get Operational Data Sync Status - Allergy and Vitals St
  D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","1ZZUT","domainMetaStamp","vitals","syncCompleted")),"vitals domain should not be complete")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","1ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:1ZZUT:1001","stored")),"Vital 1ZZUT:1001 should not be stored")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","1ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:1ZZUT:1002","stored")),"Vital 1ZZUT:1002 should not be stored")
+ D ASSERT(0,$D(OBJECT("inProgress","sourceMetaStamp","1ZZUT","syncCompleteAsOf")),"syncCompleteAsOf shouldn't exist")
  ; Setup to make sure one source is complete
  ; Set complete flags
  S ^VPRSTATUSOD("ZZUT","vitals","urn:va:vitals:ZZUT:1001",20141031094920,"stored")=1
@@ -635,6 +650,8 @@ GET2DIFFSOURCE ;; @TEST Get Operational Data Sync Status - Allergy and Vitals St
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","syncCompleted")),"vitals domain should be complete (ZZUT)")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1001","stored")),"Vital ZZUT:1001 should be stored (ZZUT)")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stored")),"Vital ZZUT:1002 should be stored (ZZUT)")
+ D ASSERT(1,$D(OBJECT("completedStamp","sourceMetaStamp","ZZUT","syncCompleteAsOf")),"syncCompleteAsOf should exist")
+ D ASSERT(1,$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","syncCompleteAsOf"))?14N,"syncCompleteAsOf isn't 14 Digits")
  ; 1ZZUT
  K ARG,DATA,OBJECT,ERR
  ; Setup to make sure both objects are inProgress
@@ -656,6 +673,7 @@ GET2DIFFSOURCE ;; @TEST Get Operational Data Sync Status - Allergy and Vitals St
  D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","1ZZUT","domainMetaStamp","vitals","syncCompleted")),"vitals domain should not be complete (1ZZUT)")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","1ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:1ZZUT:1001","stored")),"Vital 1ZZUT:1001 should not be stored (1ZZUT)")
  D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","1ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:1ZZUT:1002","stored")),"Vital 1ZZUT:1002 should not be stored (1ZZUT)")
+ D ASSERT(0,$D(OBJECT("inProgress","sourceMetaStamp","1ZZUT","syncCompleteAsOf")),"syncCompleteAsOf shouldn't exist")
  ; Setup to make sure both sources are complete
  ; Set complete flags 1ZZUT
  S ^VPRSTATUSOD("1ZZUT","vitals","urn:va:vitals:1ZZUT:1001",20141031094932,"stored")=1
@@ -683,6 +701,8 @@ GET2DIFFSOURCE ;; @TEST Get Operational Data Sync Status - Allergy and Vitals St
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","syncCompleted")),"vitals domain should be complete (All)")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1001","stored")),"Vital ZZUT:1001 should be stored (All)")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:ZZUT:1002","stored")),"Vital ZZUT:1002 should be stored (All)")
+ D ASSERT(1,$D(OBJECT("completedStamp","sourceMetaStamp","ZZUT","syncCompleteAsOf")),"syncCompleteAsOf should exist")
+ D ASSERT(1,$G(OBJECT("completedStamp","sourceMetaStamp","ZZUT","syncCompleteAsOf"))?14N,"syncCompleteAsOf isn't 14 Digits")
  ; 1ZZUT
  K ARG,DATA,OBJECT,ERR
  ; Setup to make sure both objects are inProgress
@@ -704,6 +724,8 @@ GET2DIFFSOURCE ;; @TEST Get Operational Data Sync Status - Allergy and Vitals St
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","1ZZUT","domainMetaStamp","vitals","syncCompleted")),"vitals domain should not be complete (All)")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","1ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:1ZZUT:1001","stored")),"Vital 1ZZUT:1001 should be stored (All)")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","1ZZUT","domainMetaStamp","vitals","itemMetaStamp","urn:va:vitals:1ZZUT:1002","stored")),"Vital 1ZZUT:1002 should be stored (All)")
+ D ASSERT(1,$D(OBJECT("completedStamp","sourceMetaStamp","1ZZUT","syncCompleteAsOf")),"syncCompleteAsOf should exist")
+ D ASSERT(1,$G(OBJECT("completedStamp","sourceMetaStamp","1ZZUT","syncCompleteAsOf"))?14N,"syncCompleteAsOf isn't 14 Digits")
  Q
  ;
 GETFILTER ;; @TEST Get Operational Data Sync Status with filters
@@ -738,6 +760,19 @@ GETFILTER ;; @TEST Get Operational Data Sync Status with filters
  ; In detailed mode, domain filtering only filters itemMetaStamp, not domainMetaStamp
  D ASSERT(0,$D(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","allergy","itemMetaStamp")),"Allergy domain exists and it should not")
  D ASSERT(10,$D(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","vitals","itemMetaStamp")),"Vitals domain does not exist and it should")
+ ;
+ K DATA,OBJECT
+ S ARG("detailed")="true"
+ ; Test that filter for uid works correctly
+ S ARG("filter")="eq(""uid"",""urn:va:allergy:ZZUT:1001"")"
+ D GET^VPRJDSTATUS(.DATA,.ARG)
+ ; If data is blank force error and quit
+ I $D(DATA)=0 D ASSERT(0,1,"Return variable is undefined") Q
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; In detailed mode, domain filtering only filters itemMetaStamp, not domainMetaStamp
+ D ASSERT(10,$D(OBJECT("inProgress","sourceMetaStamp","ZZUT","domainMetaStamp","allergy","itemMetaStamp")),"Allergy not inProgress")
  ;
  ; Set complete flags
  S ^VPRSTATUSOD("ZZUT","allergy","urn:va:allergy:ZZUT:1001",20141031094920,"stored")=1
@@ -798,6 +833,7 @@ DELONE ;; @TEST DELETE one site operational Sync Status
  D ASSERT(0,$D(^VPRSTATUSOD("ZZUT","vitals",20141031094925)),"Domain: Vitals metastamp doesn't exist")
  D ASSERT(0,$D(^VPRSTATUSOD("ZZUT","vitals","urn:va:vitals:ZZUT:1001",20141031094926)),"Item metastamp 'urn:va:vitals:ZZUT:1001' doesn't exist")
  D ASSERT(0,$D(^VPRSTATUSOD("ZZUT","vitals","urn:va:vitals:ZZUT:1002",20141031094927)),"Item metastamp 'urn:va:vitals:ZZUT:1001' doesn't exist")
+ D ASSERT(0,$D(^VPRSTATUSOD("ZZUT","syncCompleteAsOf")),"syncCompleteAsOf doesn't exist")
  ; Ensure 1ZZUT data still exists
  D ASSERT(20141031094921,$G(^VPRSTATUSOD("1ZZUT","stampTime")),"CALL TO DEL^VPRJDSTATUS FAILED WITH AN ERROR")
  D ASSERT(10,$D(^VPRSTATUSOD("1ZZUT")),"Source metastamp doesn't exist")
@@ -880,6 +916,7 @@ SETGET ;; @TEST with realistic data for setting and retrieving an site operation
  D ASSERT(10,$D(OBJECT("inProgress","sourceMetaStamp","DCBA","domainMetaStamp","pt-select")),"pt-select domain should not be complete")
  D ASSERT(20141031094920,$G(OBJECT("inProgress","sourceMetaStamp","DCBA","domainMetaStamp","pt-select","itemMetaStamp","urn:va:pt-select:DCBA:1001","stampTime")),"pt-select DCBA:1001 should not be stored")
  D ASSERT(20141031094920,$G(OBJECT("inProgress","sourceMetaStamp","DCBA","domainMetaStamp","pt-select","itemMetaStamp","urn:va:pt-select:DCBA:1002","stampTime")),"pt-select DCBA:1002 should not be stored")
+ D ASSERT(0,$D(OBJECT("inProgress","sourceMetaStamp","DCBA","syncCompleteAsOf")),"syncCompleteAsOf shouldn't exist")
  ; Delete all of the data
  K ARG,BODY,RETURN
  D DEL^VPRJDSTATUS(.BODY,.ARG)
@@ -926,6 +963,7 @@ SETGET2 ;; @TEST with realistic data for setting and retrieving an site operatio
  D ASSERT(10,$D(OBJECT("inProgress","sourceMetaStamp","DCBA","domainMetaStamp","pt-select")),"pt-select domain should not be complete")
  D ASSERT(20141031094920,$G(OBJECT("inProgress","sourceMetaStamp","DCBA","domainMetaStamp","pt-select","itemMetaStamp","urn:va:pt-select:DCBA:1001","stampTime")),"pt-select DCBA:1001 should not be stored")
  D ASSERT(20141031094920,$G(OBJECT("inProgress","sourceMetaStamp","DCBA","domainMetaStamp","pt-select","itemMetaStamp","urn:va:pt-select:DCBA:1002","stampTime")),"pt-select DCBA:1002 should not be stored")
+ D ASSERT(0,$D(OBJECT("inProgress","sourceMetaStamp","DCBA","syncCompleteAsOf")),"syncCompleteAsOf shouldn't exist")
  ; Store doc-def objects
  S JSON="{""stampTime"":""20141031094920"",""abbreviation"":"""",""displayName"":""MAMMOGRAM FREQUENCY"",""name"":""MAMMOGRAM FREQUENCY"",""statusName"":""ACTIVE"",""statusUid"":""urn:va:doc-status:DCBA:1001"",""typeName"":""OBJECT"",""typeUid"":""urn:va:doc-type:DCBA:0"",""uid"":""urn:va:doc-def:DCBA:1001""}"
  S RSLT=$$SAVE^VPRJDS(JSON)
@@ -969,6 +1007,8 @@ SETGET2 ;; @TEST with realistic data for setting and retrieving an site operatio
  D ASSERT(10,$D(OBJECT("completedStamp")),"Sync status is not completed")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","DCBA","domainMetaStamp","pt-select","itemMetaStamp","urn:va:pt-select:DCBA:1001","stored")),"Expected item is not stored")
  D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","DCBA","domainMetaStamp","pt-select","itemMetaStamp","urn:va:pt-select:DCBA:1002","stored")),"Expected item is not stored")
+ D ASSERT(1,$D(OBJECT("completedStamp","sourceMetaStamp","DCBA","syncCompleteAsOf")),"syncCompleteAsOf should exist")
+ D ASSERT(1,$G(OBJECT("completedStamp","sourceMetaStamp","DCBA","syncCompleteAsOf"))?14N,"syncCompleteAsOf isn't 14 Digits")
  ; Delete all of the data
  K ARG,BODY,RETURN
  D DEL^VPRJDSTATUS(.BODY,.ARG)

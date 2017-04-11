@@ -42,13 +42,11 @@ class TimelineAppletImmunizationModalDetail < ADKContainer
   include Singleton
   def initialize
     super
-    add_verify(CucumberLabel.new("Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=name]"))
-    add_verify(CucumberLabel.new("Reaction"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=series]"))
-    add_verify(CucumberLabel.new("Series"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=result]"))
-    add_verify(CucumberLabel.new("Repeat Contraindicated"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=contraDisplay]"))
-    add_verify(CucumberLabel.new("Date"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=administeredDate]"))
-    add_verify(CucumberLabel.new("Facility"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=facilityCode]"))
-    add_verify(CucumberLabel.new("Site"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=siteCode]"))
+    path = "//div[@id='modal-body']/descendant::"
+    add_verify(CucumberLabel.new("Name"), VerifyText.new, AccessHtmlElement.new(:xpath, "#{path}h5[string() = 'Name']"))
+    add_verify(CucumberLabel.new("Date Administered"), VerifyText.new, AccessHtmlElement.new(:xpath, "#{path}h5[string() = 'Date Administered']"))
+    add_verify(CucumberLabel.new("Location"), VerifyText.new, AccessHtmlElement.new(:xpath, "#{path}h5[string() = 'Location']"))
+    add_verify(CucumberLabel.new("Administered By"), VerifyText.new, AccessHtmlElement.new(:xpath, "#{path}h5[string() = 'Administered By']"))
   end
 end
 
@@ -56,11 +54,11 @@ class TimelineAppletSurgeryProcedureModalDetail < ADKContainer
   include Singleton
   def initialize
     super
-    add_verify(CucumberLabel.new("Facility"), VerifyText.new, AccessHtmlElement.new(:id, "docDetailFacilityLabel"))
-    add_verify(CucumberLabel.new("Type"), VerifyText.new, AccessHtmlElement.new(:id, "docDetailTypeLabel"))
-    add_verify(CucumberLabel.new("Status"), VerifyText.new, AccessHtmlElement.new(:id, "docDetailStatusLabel"))
-    add_verify(CucumberLabel.new("Date/Time"), VerifyText.new, AccessHtmlElement.new(:id, "docDetailDateTimeLabel"))
-    add_verify(CucumberLabel.new("Providers"), VerifyText.new, AccessHtmlElement.new(:id, "docDetailProviderLabel"))
+    add_verify(CucumberLabel.new("Facility"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=facility] strong"))
+    add_verify(CucumberLabel.new("Type"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=type] strong"))
+    add_verify(CucumberLabel.new("Status"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=status] strong"))
+    add_verify(CucumberLabel.new("Date/Time"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=date-time] strong"))
+    add_verify(CucumberLabel.new("Providers"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=providers] strong"))
   end
 end
 
@@ -81,6 +79,10 @@ end
 When(/^the user views the first Timeline event "(.*?)" detail view$/) do |event_type|
   timeline_applet = TimelineAppletModalDetail.instance
   expect(timeline_applet.wait_until_xpath_count_greater_than('Timeline Rows', 0)).to eq(true), "Test requires at least 1 row to be displayed"
+  
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until { infiniate_scroll("#data-grid-newsfeed tbody") }
+
   first_event_row = "First " + event_type + " Row"
   expect(timeline_applet.perform_action(first_event_row)).to eq(true)
 end

@@ -6,32 +6,17 @@
 
 Save encounter form information to VistA
 
-+ Parameters
-
-    + pid (string, required) - patient id
-
-    + patientDFN (string, required) - patient DFN
-
-    + isInpatient (string, required) - 0 if patient is an outpatient, 1 if inpatient
-
-    + locationIEN (string, required) - IEN of encounter location
-
-    + encounterDateTime (string, required) - date/time of encounter
-
-    + primaryProviderIEN (string, required) - IEN of primary provider on the encounter
-
-
 + Request JSON Message (application/json)
 
     + Body
 
             {
                 "patientDFN": "ssss",
-                "isInpatient": "ssss",
-                "locationIEN": "ssss",
+                "isInpatient": "1",
+                "locationUid": "ssss",
                 "encounterDateTime": "ssss",
-                "primaryProviderIEN", "ssss",
-                "isHistoricalVisit", "ssss"
+                "primaryProviderIEN": "ssss",
+                "isHistoricalVisit": "0"
             }
 
     + Schema
@@ -42,7 +27,7 @@ Save encounter form information to VistA
                 "required": [
                     "patientDFN",
                     "isInpatient",
-                    "locationIEN",
+                    "locationUid",
                     "encounterDateTime",
                     "primaryProviderIEN"
                 ],
@@ -53,11 +38,12 @@ Save encounter form information to VistA
                     },
                     "isInpatient": {
                         "type": "string",
-                        "description": "0 if patient is an outpatient, 1 if inpatient"
+                        "description": "0 if patient is an outpatient, 1 if inpatient",
+                        "enum": ["0", "1"]
                     },
-                    "locationIEN": {
+                    "locationUid": {
                         "type": "string",
-                        "description": "IEN of encounter location"
+                        "description": "Uid of encounter location"
                     },
                     "encounterDateTime": {
                         "type": "string",
@@ -69,7 +55,8 @@ Save encounter form information to VistA
                     },
                     "isHistoricalVisit": {
                         "type": "string",
-                        "description": "0 if encounter is not historical, 1 if encounter is historical"
+                        "description": "0 if encounter is not historical, 1 if encounter is historical",
+                        "enum": ["0", "1"]
                     }
                 }
             }

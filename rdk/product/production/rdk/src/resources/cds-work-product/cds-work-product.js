@@ -30,7 +30,7 @@ function initDb(app) {
         priority: 1
     }, {}, function(error) {
         if (error) {
-            app.logger.error('error ensuring ' + workCollection + ' index: ' + error);
+            app.logger.error({error: error}, 'error ensuring ' + workCollection + ' index');
         }
     });
 
@@ -40,7 +40,7 @@ function initDb(app) {
         unique: true
     }, function(error) {
         if (error) {
-            app.logger.error('error ensuring ' + subscriptionCollection + ' index: ' + error);
+            app.logger.error({error: error}, 'error ensuring ' + subscriptionCollection + ' index');
         }
     });
 }
@@ -84,7 +84,7 @@ function fetchNames(req, items, fetchcb) {
         items, 
  
         function(item, callback) {
-            //http://IP             /vpr/9E7A;237
+            //http://IP_ADDRESS:PORT/vpr/9E7A;237
             
             var pid = item.pid;
             var jdsResource = '/vpr';
@@ -107,13 +107,13 @@ function fetchNames(req, items, fetchcb) {
                     } else {
                         err = result.error;
                     }
-                    req.logger.debug('cds-work-product.fetchNames - Error fetching name: ' + err.toString());
+                    req.logger.debug({error: err}, 'cds-work-product.fetchNames - Error fetching name');
                 }
                 if (nullchecker.isNotNullish(result) && nullchecker.isNotNullish(result.data) && nullchecker.isNotNullish(result.data.items[0])) {
                     item.displayName = result.data.items[0].displayName;
                     item.fullName = result.data.items[0].fullName;
                 }
-                callback();
+                setImmediate(callback);
             });
         },
 
@@ -289,7 +289,7 @@ module.exports.retrieveInbox = function(req, res) {
     var status = rdk.httpstatus.ok;
     db.collection(workCollection).find(query, projection).toArray(function(err, result) {
         if (nullchecker.isNotNullish(err)) {
-            req.logger.debug('error: ' + err);
+            req.logger.debug({error: err});
             status = rdk.httpstatus.not_found;
             return res.status(status).rdkSend(err);
         }

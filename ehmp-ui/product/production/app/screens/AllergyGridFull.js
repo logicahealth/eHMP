@@ -6,6 +6,7 @@ define([
 
     var dataGridConfig = {
         id: 'allergy-grid-full',
+        context: 'patient',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

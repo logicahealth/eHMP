@@ -6,14 +6,14 @@ Background:
 
 # @f144_coversheet_prestep
 # Scenario: User performs pre steps
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	And user searches for and selects "Eight,Patient"
 	Then Cover Sheet is active
 
 @US2411_a
 Scenario: User views Active Problems on the coversheet
   When the Problems applet displays
-  Then the Problems applet is titled "CONDITIONS"
+  Then the Problems applet is titled "PROBLEMS"
   And the Problems applet contains buttons
     | buttons  |
     | Refresh  |
@@ -26,13 +26,13 @@ Scenario: User views Active Problems on the coversheet
 	 | Acuity |
 	 | Status |
 
-@f144_conditions_on_coversheet_refresh 
-Scenario: Conditions Summary view displays all of the same details after applet is refreshed
+@f144_problems_on_coversheet_refresh 
+Scenario: Problems Summary view displays all of the same details after applet is refreshed
   When the Problems applet displays
-  Then the Problems applet is titled "CONDITIONS"
-  And the Conditions Applet contains data rows
-  When user refreshes Conditions Applet
-  Then the message on the Conditions Applet does not say "An error has occurred"
+  Then the Problems applet is titled "PROBLEMS"
+  And the Problems Applet contains data rows
+  When user refreshes Problems Applet
+  Then the message on the Problems Applet does not say "An error has occurred"
 
 @US2800f @DE1068
 Scenario: User view vitals on coversheet

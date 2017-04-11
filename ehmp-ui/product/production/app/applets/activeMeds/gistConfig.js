@@ -1,8 +1,10 @@
 define([
     "backbone",
     "app/applets/activeMeds/medicationCollectionHandler",
-    'app/applets/medication_review_v2/appletHelper'
-], function(Backbone, CollectionHandler, AppletHelper) {
+    "app/applets/activeMeds/appUtil",
+    'app/applets/activeMeds/appletHelper',
+    "hbs!app/applets/activeMeds/templates/tooltip"
+], function(Backbone, CollectionHandler, AppUtil, AppletHelper, tooltip) {
     "use strict";
 
     var gistConfiguration = {
@@ -10,8 +12,11 @@ define([
             resourceTitle: 'patient-record-med',
             cache: true,
             viewModel: {
+                defaults: {
+                    totalFillsRemaining: 'Unknown'
+                },
                 parse: function(response) {
-                    var ageData = ADK.utils.getTimeSince(response.lastAction);
+                    var ageData = AppletHelper.getTimeSince(response.lastAction);
                     response.age = response.lastAction;
                     response.ageDescription = ageData.timeSinceDescription;
                     response.standardizedVaStatus = AppletHelper.getStandardizedVaStatus(response);
@@ -22,6 +27,67 @@ define([
                     response.nextAdminData = AppletHelper.getNextAdminData(response);
                     response = AppletHelper.setMedCategory(response);
                     return response;
+                },
+                setTotalFillsRemaining: function() {
+                    var isExpiredCancelledOrDiscontinued = false;
+                    if (this.get('calculatedStatus').toUpperCase() === 'DISCONTINUED' || this.get('calculatedStatus').toUpperCase() === 'CANCELLED' || this.get('calculatedStatus').toUpperCase() === 'EXPIRED') {
+                        isExpiredCancelledOrDiscontinued = true;
+                        this.set('totalFillsRemaining', '0');
+                    }
+                    if (this.get('vaType').toUpperCase() === 'I' || this.get('vaType').toUpperCase() === 'V' || (this.get('vaType') === 'N' && !this.get('orders')[0].fillsRemaining)) {
+                        this.set('totalFillsRemaining', 'No Data');
+                    } else if (this.get('calculatedStatus').toUpperCase() === 'PENDING') {
+                        if (this.get('orders')[0].fillsAllowed) {
+                            this.set('totalFillsRemaining', this.get('orders')[0].fillsAllowed.toString());
+                        } else {
+                            this.set('totalFillsRemaining', 'No Data');
+                        }
+                    } else if (!isExpiredCancelledOrDiscontinued) {
+
+                        if (this.get('expirationDate') !== undefined && this.get('orders')[0].daysSupply) {
+                            this.set('effectiveFillsRemaining', AppUtil.getCalculatedEffectiveFillsRemaining(this.get('expirationDate'), this.get('orders')[0].daysSupply, this.get('orders')[0].fillsRemaining, this.get('calculatedStatus')));
+                        } else {
+                            this.set('effectiveFillsRemaining', this.get('orders')[0].fillsRemaining);
+                        }
+                        this.set('totalFillsRemaining', this.get('effectiveFillsRemaining'));
+                    }
+                },
+                updateFillableStatus: function() {
+                    var fillableStatus;
+                    if(this.get('CategoryInpatient'))
+                    {
+                        if (this.get('nextAdminData').date) {
+                            fillableStatus = this.get('nextAdminData').display + " " + this.get('nextAdminData').date;
+                        } else {
+                            fillableStatus = this.get('nextAdminData').display;
+                        }
+                    } else {
+                        if (this.get('fillableDays').date) {
+                            fillableStatus = this.get('fillableStatus') + " " + this.get('fillableDays').date;
+                        }
+                    }
+
+                    if (!_.isUndefined(fillableStatus)) {
+                        this.set('fillableStatus', fillableStatus);
+                    }
+                },
+                setShortNameAndDescription: function() {  // used by ADK interventionsGistView for more/less link
+                    var name = this.get('normalizedName') || '';
+                    var description = this.get('sig') || '';
+                    var characterLimit = 100;
+                    this.set('characterLimit', characterLimit);
+                    if (name.length > characterLimit) {
+                        var limitedName = name.substring(0, characterLimit);
+                        var nameCharacterLimitToLastSpace = limitedName.lastIndexOf(' ') > -1 ? limitedName.lastIndexOf(' ') : characterLimit;
+                        var nameCharactersOverLimit = name.length - nameCharacterLimitToLastSpace;
+                        this.set('shortName', name.substring(0, name.length - nameCharactersOverLimit));
+                    }
+                    if (description.length > characterLimit) {
+                        var limitedDescription = description.substring(0, characterLimit);
+                        var descriptionCharacterLimitToLastSpace = limitedDescription.lastIndexOf(' ') > -1 ? limitedDescription.lastIndexOf(' ') : characterLimit;
+                        var descriptionCharactersOverLimit = description.length - descriptionCharacterLimitToLastSpace;
+                        this.set('shortDescription', description.substring(0, description.length - descriptionCharactersOverLimit));
+                    }
                 }
             },
             pageable: false,
@@ -30,55 +96,22 @@ define([
             }
         },
         transformCollection: function(collection) {
-            /* if collection is already transformed return collection */
-            if (collection.models.length > 0 && collection.models[0].get('meds') !== undefined) {
-                return collection;
-            }
-            var MedGroupModel = Backbone.Model.extend({});
-            var groups = collection.groupBy(function(med) {
-                return CollectionHandler.getActiveMedicationGroupbyData(med).groupbyValue;
-            });
-            var medicationGroups = _.map(groups, function(medications, groupName) {
-                var fillableStatus;
-                if(medications[0].get('CategoryInpatient'))
-                {
-                    if (medications[0].get('nextAdminData').date) {
-                        fillableStatus = medications[0].get('nextAdminData').display + " " + medications[0].get('nextAdminData').date;
-                    } else {
-                        fillableStatus = medications[0].get('nextAdminData').display;
-                    }
-                }else{
-                    if (medications[0].get('fillableDays').date) {
-                        fillableStatus = medications[0].get('fillableStatus') + " " + medications[0].get('fillableDays').date;
-                    } else {
-                        fillableStatus = medications[0].get('fillableStatus');
-                    }
-                }
-                return new MedGroupModel({
-                    groupName: groupName,
-                    normalizedName: medications[0].get('normalizedName'),
-                    meds: medications,
-                    sig: medications[0].get('sig'),
-                    facilityDisplay: medications[0].get('facilityName'),
-                    uid: medications[0].get('uid'),
-                    lastAction: medications[0].get('lastAction'),
-                    age: medications[0].get('age'),
-                    ageReadText: medications[0].get('ageDescription'),
-                    calculatedStatus: medications[0].get('calculatedStatus'),
-                    orders: medications[0].get('orders'),
-                    products: medications[0].get('products'),
-                    fillableStatus: fillableStatus,
-                    applet_id: "activeMeds"
+            collection.each(function(med) {
+                med.setTotalFillsRemaining();
+                med.updateFillableStatus();
+                med.setShortNameAndDescription();
+                med.set({
+                    'applet_id': 'activeMeds',
+                    'popoverMeds': [med],
+                    'numberOfMedsNotShownInPopover': 0,
+                    'overallStartFormat': ADK.utils.formatDate(med.get('lastAction')),
+                    'infobuttonContext': 'MLREV',
+                    'codes': med.get('codes'),
+                    'crsDomain': ADK.utils.crsUtil.domain.MEDICATION
                 });
+                // Dependent on popoverMeds having already been set above
+                med.set('tooltip', tooltip(med.toJSON()));
             });
-            _.each(medicationGroups, function(model) {
-                CollectionHandler.afterGroupingParse(model.attributes);
-
-            });
-
-
-
-            collection.reset(medicationGroups);
             gistConfiguration.shadowCollection = collection.clone();
             return collection;
         },
@@ -127,11 +160,11 @@ define([
         }, {
             id: 'count',
             field: 'totalFillsRemaining'
-        },{
+        }, {
             id: 'fillableStatus',
             field: 'fillableStatus'
         }],
-        filterFields: ['normalizedName', 'age', 'totalFillsRemaining','sig', 'drugClassName']
+        filterFields: ['normalizedName', 'age', 'totalFillsRemaining', 'sig', 'drugClassName']
     };
     return gistConfiguration;
 });

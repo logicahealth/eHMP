@@ -52,12 +52,39 @@ body {
     font-size: 15px;
   line-height: 150%;
 }
+
+h2 {
+ font-size: 30px;
+}
+h3 {
+ font-size: 26px;
+}
+h4 {
+ font-size: 22px;
+}
+h5 {
+ font-size: 18px;
+}
+h6 {
+ font-size: 15px;
+ font-weight: 600;
+ margin-bottom: 0;
+}
+.h4, .h5, .h6, h4, h5, h6 {
+    margin-top: 15px;
+}
 h2:before, h3:before {
     display: block;
     content: ' ';
     margin-top: -70px;
     height: 70px;
     visibility: hidden;
+}
+table * {
+    font-size: 14px;
+}
+p + details {
+    margin-top: -10px;
 }
 #markdown {
     margin-top: 22px;

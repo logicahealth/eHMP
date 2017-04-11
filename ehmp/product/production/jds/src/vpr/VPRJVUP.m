@@ -52,7 +52,7 @@ TASK1 ; move JSON, template, indexing nodes out of main data global
  . K ^VPRJD("TEMPLATE")
  Q
 CNVRT61 ; Convert syncstatus objects for version 0.7-S61
- N ROOT,JSON,UID,LROOT,DFN,SITE,PID,DNM,PITER,PTUID,LOCIDS
+ N ROOT,JSON,UID,LROOT,DFN,SITE,PID,DNM,PITER,PTUID,LOCIDS,JPID
  S ROOT="urn:va:syncstatus:",LROOT=$L(ROOT)
  S UID=ROOT F  S UID=$O(^VPRJDJ("JSON",UID)) Q:$E(UID,1,LROOT)'=ROOT  D
  . W UID,!
@@ -62,12 +62,14 @@ CNVRT61 ; Convert syncstatus objects for version 0.7-S61
  . I SITE'="OPD",$D(DFN) D
  . . S PTUID="urn:va:patient:"_SITE_":"_DFN_":"_DFN
  . . S PID=SITE_";"_DFN
- . . S DNM=^VPRPT(PID,PTUID,"displayName")
+ . . S JPID=$$JPID4PID^VPRJPR(PID)
+ . . I JPID="" Q
+ . . S DNM=^VPRPT(JPID,PID,PTUID,"displayName")
  . . S LOCIDS="",PITER=""
- . . F  S PITER=$O(^VPRPT(PID,PTUID,"facilities",PITER)) Q:PITER=""  D
- . . . I $D(^VPRPT(PID,PTUID,"facilities",PITER,"code")),$D(^VPRPT(PID,PTUID,"facilities",PITER,"localPatientId"))  D
+ . . F  S PITER=$O(^VPRPT(JPID,PID,PTUID,"facilities",PITER)) Q:PITER=""  D
+ . . . I $D(^VPRPT(JPID,PID,PTUID,"facilities",PITER,"code")),$D(^VPRPT(JPID,PID,PTUID,"facilities",PITER,"localPatientId"))  D
  . . . . I LOCIDS'=""  S LOCIDS=LOCIDS_","
- . . . . S LOCIDS=LOCIDS_","_^VPRPT(PID,PTUID,"facilities",PITER,"code")_";"_^VPRPT(PID,PTUID,"facilities",PITER,"localPatientId")
+ . . . . S LOCIDS=LOCIDS_","_^VPRPT(JPID,PID,PTUID,"facilities",PITER,"code")_";"_^VPRPT(JPID,PID,PTUID,"facilities",PITER,"localPatientId")
  . . S OBJ("displayName")=DNM,OBJ("localPatientIds")=LOCIDS
  . . K JSON
  . . D ENCODE^VPRJSON("OBJ","JSON","ERR")

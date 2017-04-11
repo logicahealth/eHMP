@@ -8,8 +8,28 @@ define([
         response.resolve({
             view: modalView,
             footerView: footerView,
-            closeOnESC: closeOnESC 
+            closeOnESC: closeOnESC
         });
+    }
+
+    function workflowSetup(title, showProgress, steps, trayId) {
+        var workflowOptions = {
+            title: title || '',
+            showProgress: showProgress || false,
+            steps: steps
+        };
+        var workflowController = new ADK.UI.Workflow(workflowOptions);
+
+        var inTray = {};
+        if (trayId) {
+            ADK.Navigation.navigate('overview');
+            inTray = {
+                inTray: trayId
+            };
+        }
+        workflowController.show(inTray);
+
+        return workflowController;
     }
 
     var viewController = {
@@ -20,19 +40,23 @@ define([
 
             // Provide training and kit form
             channel.reply(PROCESSID + 'note-sign_note', function(params) {
-                var response = $.Deferred();
-                // Pass the model to the view to populate template
-                var modalView = new NotificationView({
-                    model: params.model
-                });
- 
-                var footerView = new ModalFooterView({
-                    parentView: modalView,
-                    taskListView: params.taskListView
-                });
+                return workflowSetup(
+                    'Note',
+                    'false', [{
+                        view: NotificationView,
+                        viewModel: params.model
+                    }]
+                );
+            });
 
-                resolveHelper(response, modalView, footerView, true);
-                return response.promise();
+            channel.reply(PROCESSID + 'note-sign_note_addendum', function(params) {
+                return workflowSetup(
+                    'Note Addendum',
+                    'false', [{
+                        view: NotificationView,
+                        viewModel: params.model
+                    }]
+                );
             });
         }
     };

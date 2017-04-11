@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Medication orders default days [/medication-orders-default-days{?site}{&unitStr}{&schedStr}{&patientDFN}{&drug}{&oi}{&fields}]
+## Medication orders default days [/medication-orders-default-days{?site}{&unitStr}{&schedStr}{&patientDFN}{&drug}{&oi}]
 
 DIRECT RPC CALL - Returns med order days supply value
 
@@ -21,8 +21,6 @@ ORWDPS1 DFLTSPLY
     + drug (string, required) - The drug
 
     + oi (number, required) - The oi
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

@@ -7,7 +7,7 @@ configurations {
 
 buildscript {
   repositories {
-    maven { url "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp-public" }
+    maven { url "https://store.vistacore.us/nexus/content/groups/public" }
   }
 
   dependencies {

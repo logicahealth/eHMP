@@ -21,6 +21,24 @@ define([
             'change': 'render',
             'change:disabled': 'updateDisabled'
         },
+        collectionEvents: {
+            'read:success': function(coll, resp) {
+                this.model.set({
+                    'message': 'Select a facility',
+                    'disabled': false
+                });
+                this.parentView.$el.find('#facility').val(this.parentView.options.routeParam);
+            },
+            'read:error': function(coll, resp) {
+                console.error('Error loading facility list', resp);
+                this.model.set({
+                    'message': 'Server error while trying to load list of facilities.',
+                    'disabled': true,
+                    'cssClass': 'bg-danger'
+                });
+                this.parentView.$el.find('#errorMessage').html('Unable to login due to server error. Status code: ' + resp.status);
+            }
+        },
         attributes: {
             name: "facility",
             id: "facility",
@@ -42,23 +60,11 @@ define([
             var searchOptions = {
                 resourceTitle: 'authentication-list',
                 cache: true,
-                onError: function(resp) {
-                    if(window.console && window.console.log) {
-                        console.log('Error loading facility list', resp);
-                    }
-                    self.model.set({
-                        'message': 'Server error while trying to load list of facilities.',
-                        'disabled': true,
-                        'cssClass': 'bg-danger'
-                    });
-                    self.parentView.$el.find('#errorMessage').html('Unable to login due to server error. Status code: ' + resp.status);
+                onError: function(coll, resp) {
+                    coll.trigger('read:error', coll, resp);
                 },
-                onSuccess: function() {
-                    self.model.set({
-                        'message': 'Select a facility',
-                        'disabled': false
-                    });
-                    self.parentView.$el.find('#facility').val(self.parentView.options.routeParam);
+                onSuccess: function(coll, resp) {
+                    coll.trigger('read:success', coll, resp);
                 }
             };
             ADK.ResourceService.fetchCollection(searchOptions, this.collection);

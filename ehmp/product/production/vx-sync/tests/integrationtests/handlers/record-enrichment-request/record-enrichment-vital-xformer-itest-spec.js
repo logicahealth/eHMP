@@ -21,7 +21,8 @@ var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 
 var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
-var config = require(global.VX_ROOT + 'worker-config');
+var wConfig = require(global.VX_ROOT + 'worker-config');
+var config = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
 config.terminology.host = vx_sync_ip;
 
 var originalVaVitalRecord = {
@@ -94,7 +95,7 @@ var jdsCodedDodValue = {
 };
 
 
-var terminologyUtil = new TerminologyUtil(log, null, config);
+var terminologyUtil = new TerminologyUtil(log, log, config);
 describe('record-enrichment-vital-xformer.js', function() {
     describe('transformAndEnrichRecord()', function() {
         xit('Happy Path with VA Vitals', function() {

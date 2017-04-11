@@ -36,7 +36,7 @@ define([
             this.listenToFieldOptions();
         },
         serializeModel: function(model, moreOptions) {
-            var field = _.defaults(this.field.toJSON(), this.defaults);
+            var field = _.defaultsDeep(this.field.toJSON(), this.defaults);
             _.defaults(field, moreOptions || {});
             _.defaults(field, model.toJSON());
 

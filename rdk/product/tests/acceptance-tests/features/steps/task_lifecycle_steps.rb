@@ -2,7 +2,7 @@ When(/^the client creates a process with content latest deployment ID and conten
   path = RDKStartProcess.new.path
   p path
   updated_content = "{\"deploymentId\":\"#{@deployment_id}\"," + content
-  @response = HTTPartyWithBasicAuth.post_json_with_authorization(path, updated_content, { "Content-Type" => "application/json" })
+  @response = HTTPartyRDK.post(path, updated_content, { "Content-Type" => "application/json" })
   @new_process_id = @response["data"]["processInstanceId"]
   puts "New Process Id = #{@new_process_id}"
 end
@@ -10,7 +10,7 @@ end
 When(/^the client requests to see the list of tasks for a patient "(.*?)"$/) do |content|
   path = RDKProcessList.new.path
   p path
-  @response = HTTPartyWithBasicAuth.post_json_with_authorization(path, content, { "Content-Type" => "application/json" })
+  @response = HTTPartyRDK.post(path, content, { "Content-Type" => "application/json" })
 end
 
 And(/^the results contain the new process ID$/) do
@@ -45,14 +45,14 @@ When(/^the client changes state of the newly created task to "(.*?)"$/) do |stat
   path = query.path
   content = "{\"deploymentid\":\"#{@deployment_id}\",\"parameter\":{\"out_training_completed\":true,\
           \"out_training_notes\":\"Done\"},\"state\":\"#{state}\",\"taskid\":\"#{@new_task_id}\"}"
-  @response = HTTPartyWithBasicAuth.post_json_with_authorization(path, content, { "Content-Type" => "application/json" })
+  @response = HTTPartyRDK.post(path, content, { "Content-Type" => "application/json" })
 end
 
 When(/^the client cancels the new process$/) do
   query = RDKQuery.new('tasks-abortprocess')
   path = query.path
   content = "{\"deploymentId\":\"#{@deployment_id}\",\"processInstanceId\":#{@new_process_id}}"
-  @response = HTTPartyWithBasicAuth.post_json_with_authorization(path, content, { "Content-Type" => "application/json" })
+  @response = HTTPartyRDK.post(path, content, { "Content-Type" => "application/json" })
 end
 
 Then(/^the result is an empty array$/) do
@@ -64,7 +64,7 @@ end
 When(/^the client gets list of all available process definitions$/) do
   query = RDKQuery.new('tasks-getprocessdefinitions')
   path = query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^save the deployment ID for "(.*?)"$/) do |project_name|

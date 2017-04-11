@@ -1,5 +1,7 @@
 'use strict';
 
+var crypto = require('crypto');
+
 var CIPHER_PAD = [
     'wkEo-ZJt!dG)49K{nX1BS$vH<&:Myf*>Ae0jQW=;|#PsO`\'%+rmb[gpqN,l6/hFC@DcUa ]z~R}"V\\iIxu?872.(TYL5_3',
     'rKv`R;M/9BqAF%&tSs#Vh)dO1DZP> *fX\'u[.4lY=-mg_ci802N7LTG<]!CWo:3?{+,5Q}(@jaExn$~p\\IyHwzU"|k6Jeb',
@@ -23,11 +25,13 @@ var CIPHER_PAD = [
     '5:iar.{YU7mBZR@-K|2 "+~`M%8sq4JhPo<_X\\Sg3WC;Tuxz,fvEQ1p9=w}FAI&j/keD0c?)LN6OHV]lGy\'$*>nd[(tb!#'
 ];
 
+var KEY_RANGE = 10;
+
 function encryptSig (input) {
 
-    //this picks a number between 0 and 9. Not sure why we limit the range when the cipher pad is larger
+    //this picks a number between 0, inclusive and KEY_RANGE, exclusive. Not sure why we limit the range when the cipher pad is larger
     var rnd = function() {
-        return Math.floor(Math.random() * 10);
+        return (crypto.randomBytes(1)[0] % KEY_RANGE);
     };
 
     var a = rnd();
@@ -52,4 +56,3 @@ function encryptSig (input) {
 }
 
 module.exports.encryptSig = encryptSig;
-

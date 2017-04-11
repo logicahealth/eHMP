@@ -8,36 +8,41 @@ define([
 ], function(Backbone, Marionette, $, Handlebars, validationUtils, writebackUtils) {
     "use strict";
 
-    var patientAllergyCollection;
+    var NO_KNOWN_ALLERGY_CODE_D = '132;GMRD(120.82,"D")';
+    var NO_KNOWN_ALLERGY_CODE_B = '132;GMRD(120.82,"B")';
+
     var allergenRow = {
         control: 'container',
         extraClasses: ['row'],
         items: [{
             control: 'container',
-            extraClasses: ['col-md-12'],
+            extraClasses: ['col-xs-12'],
             items: [{
                 control: 'select',
                 name: 'allergen',
                 label: 'Allergen',
+                title: 'Press enter to open search filter text',
                 required: true,
+                disabled: true,
                 pickList: [],
                 showFilter: true,
                 groupEnabled: true,
                 fetchFunction: function(input, fetchSuccess, fetchFail) {
                     var allergenCollection = new ADK.UIResources.Picklist.Allergies.Allergens();
-                    allergenCollection.on('read:success', function(collection, response) {
+                    this.listenToOnce(allergenCollection, 'read:success', function(collection, response) {
+                        allergenCollection.off('read:error');
                         var excludeNoKnownAllergies = false;
-                        if((patientAllergyCollection.length === 1 && !_.isUndefined(patientAllergyCollection.at(0).get('name')) &&
-                            patientAllergyCollection.at(0).get('name').toUpperCase().indexOf('NO KNOWN ALLERGIES') < 0) || patientAllergyCollection.length > 1){
+                        if ((this.patientAllergyArray.length === 1 && this.patientAllergyArray[0].toUpperCase().indexOf('NO KNOWN ALLERGIES') < 0) || this.patientAllergyArray.length > 1) {
                             excludeNoKnownAllergies = true;
                         }
-                        var picklist = writebackUtils.parseAllergenResponse(this.toPicklist(), excludeNoKnownAllergies);
+                        var picklist = writebackUtils.parseAllergenResponse(collection.toPicklist(), excludeNoKnownAllergies);
                         fetchSuccess({
                             results: picklist
                         });
                     });
 
-                    allergenCollection.on('read:error', function(collection) {
+                    this.listenToOnce(allergenCollection, 'read:error', function(collection) {
+                        allergenCollection.off('read:success');
                         fetchFail();
                     });
 
@@ -51,65 +56,84 @@ define([
 
     var topFields = {
         control: 'container',
-        extraClasses: ['row'],
         items: [{
             control: 'container',
-            extraClasses: ['col-md-12', 'all-padding-no'],
+            extraClasses: 'row',
             items: [{
-                control: 'radio',
-                extraClasses: ['top-padding-xs', 'col-xs-5'],
-                name: 'allergyType',
-                options: [{
-                    value: 'o',
-                    label: 'Observed'
-                }, {
-                    value: 'h',
-                    label: 'Historical'
-                }],
-                label: 'Choose an option',
-                required: true,
-            }, {
-                extraClasses: ['col-xs-4'],
-                control: 'datepicker',
-                name: 'reaction-date',
-                label: 'Reaction Date',
-                required: false,
-                disabled: true,
-                flexible: true,
-                options: {
-                    endDate: '0d'
-                }
-            }, {
-                extraClasses: ['col-xs-3'],
-                control: 'timepicker',
-                name: 'reaction-time',
-                label: 'Time',
-                placeholder: 'HH:MM',
-                disabled: true,
-                options: {
-                    defaultTime: false
-                }
+                control: 'fieldset',
+                legend: 'Choose an option *',
+                extraClasses: ['col-xs-12'],
+                items: [{
+                    control: 'radio',
+                    name: 'allergyType',
+                    options: [{
+                        value: 'o',
+                        label: 'Observed'
+                    }, {
+                        value: 'h',
+                        label: 'Historical'
+                    }],
+                    label: 'Choose an option',
+                    srOnlyLabel: true,
+                    required: true,
+                }]
             }]
         }, {
             control: 'container',
-            extraClasses: ['col-md-12', 'all-padding-no'],
+            extraClasses: 'row',
             items: [{
-                control: 'select',
-                extraClasses: ['col-xs-6'],
-                name: 'severity',
-                label: 'Severity',
-                required: false,
-                disabled: true,
-                pickList: []
+                control: 'container',
+                extraClasses: 'col-xs-6',
+                items: [{
+                    control: 'datepicker',
+                    name: 'reaction-date',
+                    label: 'Reaction Date',
+                    title: 'Enter date in text or numerical format',
+                    required: false,
+                    disabled: true,
+                    flexible: true,
+                    options: {
+                        endDate: '0d'
+                    }
+                }]
             }, {
                 control: 'container',
-                extraClasses: ['col-xs-6'],
+                extraClasses: 'col-xs-6',
+                items: [{
+                    control: 'timepicker',
+                    name: 'reaction-time',
+                    label: 'Time',
+                    title: 'Enter time in HH:MM format',
+                    placeholder: 'HH:MM',
+                    disabled: true,
+                    options: {
+                        defaultTime: false
+                    }
+                }]
+            }]
+        }, {
+            control: 'container',
+            extraClasses: 'row',
+            items: [{
+                control: 'container',
+                extraClasses: 'col-xs-5',
+                items: [{
+                    control: 'select',
+                    name: 'severity',
+                    label: 'Severity',
+                    required: false,
+                    disabled: true,
+                    pickList: []
+                }]
+            }, {
+                control: 'container',
+                extraClasses: 'col-xs-7',
                 items: [{
                     control: 'select',
                     name: 'nature-of-reaction',
                     label: 'Nature of Reaction',
                     required: true,
-                    disabled: false,
+                    disabled: true,
                     pickList: []
                 }]
             }]
@@ -119,7 +143,8 @@ define([
     var SignsAndSymptoms = {
         control: 'multiselectSideBySide',
         name: 'signsSymptoms',
-        label: 'Signs / Symptoms',
+        label: 'signs and symptoms',
+        srOnlyLabel: true,
         extraClasses: ['top-margin-xs'],
         required: true,
         attributeMapping: {
@@ -137,6 +162,7 @@ define([
             extraClasses: ['cell-valign-middle', 'bottom-margin-no'],
             name: 'symptom-date',
             label: 'Symptom Date',
+            title: 'Enter date in text or numerical format.',
             srOnlyLabel: true,
             flexible: true,
             options: {
@@ -149,6 +175,7 @@ define([
             extraClasses: ['cell-valign-middle', 'bottom-margin-no'],
             name: 'symptom-time',
             label: 'Symptom Time',
+            title: 'Enter time in HH:MM format',
             placeholder: 'HH:MM',
             srOnlyLabel: true,
             options: {
@@ -156,10 +183,18 @@ define([
             }
         }],
         selectedCountName: "msbs-Count",
-        template: Handlebars.compile("<span class='right-padding-xs pull-right'>Total Selected: {{msbs-Count}}</span>"),
+        template: Handlebars.compile("<span class='right-padding-xs text-right'>Total Selected: {{msbs-Count}}</span>"),
         modelListeners: ["msbs-Count"],
-        selectedSize: 7,
+        selectedSize: 12,
         collection: []
+    };
+
+
+    var SignsAndSymptomsFieldset = {
+        control: 'fieldset',
+        legend: 'Signs / Symptoms *',
+        items: [SignsAndSymptoms],
+        extraClasses: ['bottom-margin-md', 'signs-and-symptoms']
     };
 
     var SignsAndSymptomsRequired = {
@@ -181,21 +216,20 @@ define([
                 rows: 4,
                 name: 'moreInfo',
                 label: 'Comments',
-                title: 'Please enter in comments',
-                maxlength: 255
+                title: 'Enter in comments',
             }]
         }]
     };
 
     var AllergyFields = [{
         control: 'container',
-        extraClasses: ['modal-body'],
+        extraClasses: ['modal-body', 'allergies-writeback-add'],
         items: [{
             control: 'container',
             extraClasses: ['container-fluid'],
             items: [allergenRow, topFields, {
                 control: 'spacer'
-            }, SignsAndSymptoms, SignsAndSymptomsRequired, Comments]
+            }, SignsAndSymptomsFieldset, SignsAndSymptomsRequired, Comments]
         }]
     }, {
         control: 'container',
@@ -206,14 +240,14 @@ define([
             items: [{
                 control: 'container',
                 extraClasses: ['col-xs-6'],
-                template: Handlebars.compile('<p aria-hidden="true">(* indicates a required field.)</p>{{#if savedTime}}<p><span id="allergies-saved-at">Saved at: {{savedTime}}</span></p>{{/if}}')
+                template: Handlebars.compile('{{#if savedTime}}<p><span id="allergies-saved-at">Saved at: {{savedTime}}</span></p>{{/if}}')
             }, {
                 control: 'container',
                 extraClasses: ['col-xs-6'],
                 items: [{
                         control: 'button',
                         id: 'form-cancel-btn',
-                        extraClasses: ['btn-default', 'btn-sm', 'right-margin-lg'],
+                        extraClasses: ['btn-default', 'btn-sm'],
                         label: 'Cancel',
                         type: 'button',
                         title: 'Press enter to cancel',
@@ -232,9 +266,9 @@ define([
                     {
                         control: 'button',
                         extraClasses: ['btn-primary', 'btn-sm'],
-                        label: 'Add',
+                        label: 'Accept',
                         name: 'addBtn',
-                        title: 'Press enter to add',
+                        title: 'Press enter to accept',
                         disabled: true
                     }
                 ]
@@ -243,7 +277,7 @@ define([
     }];
 
     var CancelMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('You will lose all work in progress if you cancel this task. Would you like to proceed with ending this observation?'),
+        template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
         tagName: 'p'
     });
     // todo: removed until draft function is working
@@ -251,12 +285,13 @@ define([
     //     template: Handlebars.compile('Your progress will be saved and remain in draft status. Would you like to proceed with ending this observation?'),
     //     tagName: 'p'
     // });
+
     var FooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "Cancel" classes="btn-default btn-sm" title="Press enter to cancel."}}{{ui-button "Continue" classes="btn-primary btn-sm" title="Press enter to continue."}}'),
+        template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary btn-sm" title="Press enter to cancel."}}'),
         events: {
             'click .btn-primary': function() {
                 ADK.UI.Alert.hide();
-                writebackUtils.unregisterNavigationCheck();
+                writebackUtils.unregisterChecks();
                 this.getOption('workflow').close();
             },
             'click .btn-default': function() {
@@ -267,7 +302,7 @@ define([
     });
 
     var ErrorMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('Unable to save your data at this time due to a system error. Please try again later.'),
+        template: Handlebars.compile('Unable to save your data at this time due to a system error. Try again later.'),
         tagName: 'p'
     });
 
@@ -282,12 +317,9 @@ define([
     });
 
     var formView = ADK.UI.Form.extend({
-        onInitialize: function() {
-            patientAllergyCollection = this.model.get('allergyCollection');
-        },
         ui: {
             'inProgressContainer': '.inProgressContainer',
-            'dateTimeSeverity': '.reaction-date, .reaction-time, .severity, .signsSymptoms',
+            'dateTimeSeverity': '.reaction-date, .reaction-time, .severity',
             'dateTimeRequired': '.reaction-date, .severity',
             'initialDisabledFields': '.reaction-date, .reaction-time, .signsSymptoms, .moreInfo, .allergyType',
             'allergyType': '.allergyType',
@@ -297,32 +329,37 @@ define([
             'addBtn': '.addBtn',
             'signsSymptomsRequired': '.signsSymptomsRequired',
             'moreInfo': '.moreInfo',
+            'allergen': '.allergen'
         },
         fields: AllergyFields,
-        onRender: function() {
-            var form = this;
-            var operationalData = new ADK.UIResources.Picklist.Allergies.OperationalData();
-            form.listenTo(operationalData, 'read:success', function(collection, resp) {
+        allergenCollectionEvents: {
+            'read:success': function(collection, response) {
+                if (!_.isUndefined(response.data) && !_.isEmpty(response.data.items)) {
+                    _.each(response.data.items, function(allergy) {
+                        if (!_.isEmpty(allergy.products) && !_.isUndefined(allergy.products[0].name)) {
+                            this.patientAllergyArray.push(allergy.products[0].name);
+                        }
+                    }, this);
+                }
+
+                this.ui.allergen.trigger('control:disabled', false);
+            }
+        },
+        operationalDataEvents: {
+            'read:success': function(collection, resp) {
+                this.ui.natureOfReaction.trigger('tray.loaderHide');
                 var natureOfReactionList = writebackUtils.parseOperationalDataList(resp, 'Nature of Reaction');
-                form.ui.natureOfReaction.trigger('control:picklist:set', [natureOfReactionList]);
+                this.ui.natureOfReaction.trigger('control:picklist:set', [natureOfReactionList]);
                 var severityList = writebackUtils.parseOperationalDataList(resp, 'Severity');
-                form.ui.severity.trigger('control:picklist:set', [severityList]);
+                this.ui.severity.trigger('control:picklist:set', [severityList]);
                 var symptomsCollection = writebackUtils.parseSymptomList(resp);
-                form.model.get('signsSymptoms').add(symptomsCollection.models);
-                this.listenToOnce(this.model, 'change', function() {
-                    ADK.Navigation.registerCheck(new ADK.Navigation.PatientContextCheck({
-                        id: 'allergy-writeback-in-progress',
-                        failureMessage: 'Allergy Writeback Workflow In Progress! Any unsaved changes will be lost if you continue.',
-                        onCancel: _.bind(function() {
-                            this.$el.trigger('tray.show');
-                        }, this)
-                    }));
-                });
-            });
-            form.listenTo(operationalData, 'read:error', function(collection) {
+                this.model.get('signsSymptoms').add(symptomsCollection.models);
+            },
+            'read:error': function(collection) {
+                this.ui.natureOfReaction.trigger('tray.loaderHide');
                 var errorAlertView = new ADK.UI.Alert({
                     title: 'Failed to load picklist data.',
-                    icon: 'fa-exclamation-triangle font-size-18 color-red',
+                    icon: 'icon-error',
                     messageView: ErrorMessageView.extend({
                         msg: 'There was an error loading the form.'
                     }),
@@ -330,19 +367,67 @@ define([
 
                 });
                 errorAlertView.show();
-            });
-            operationalData.fetch();
+            }
         },
-        onDestroy: function(){
-            writebackUtils.unregisterNavigationCheck();
+        onInitialize: function() {
+            this.patientAllergyArray = [];
+            this.allergyCollection = new Backbone.Collection();
+            this.operationalData = new ADK.UIResources.Picklist.Allergies.OperationalData();
+
+            this.bindEntityEvents(this.allergyCollection, this.allergenCollectionEvents);
+            this.bindEntityEvents(this.operationalData, this.operationalDataEvents);
+        },
+        onShow: function() {
+            this.componentList.select_allergen.patientAllergyArray = this.patientAllergyArray;
+        },
+        onRender: function() {
+            var fetchOptions = {
+                resourceTitle: 'patient-record-allergy',
+                criteria: {
+                    filter: 'ne(removed, true)'
+                },
+                cache: true,
+                pageable: false,
+                onSuccess: function(collection, response) {
+                    collection.trigger('read:success', collection, response);
+                }
+            };
+            ADK.PatientRecordService.fetchCollection(fetchOptions, this.allergyCollection);
+
+            this.operationalData.fetch();
+            this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
+
+        },
+        onAttach:function(){
+            if (this.$('#allergen').is(':visible')){
+                this.$el.trigger('tray.loaderShow',{
+                    loadingString:'Loading allergens and symptoms'
+                });
+            }
+        },
+        registerChecks: function() {
+            var checkOptions = {
+                id: 'allergy-writeback-in-progress',
+                label: 'Allergy',
+                failureMessage: 'Allergy Writeback Workflow In Progress! Any unsaved changes will be lost if you continue.',
+                onContinue: _.bind(function(model) {
+                    this.workflow.close();
+                }, this)
+            };
+            ADK.Checks.register([new ADK.Navigation.PatientContextCheck(checkOptions), new ADK.Checks.predefined.VisitContextCheck(checkOptions)]);
+        },
+        onDestroy: function() {
+            writebackUtils.unregisterChecks();
+            this.unbindEntityEvents(this.allergyCollection, this.allergenCollectionEvents);
+            this.unbindEntityEvents(this.operationalData, this.operationalDataEvents);
         },
         events: {
             'click #form-cancel-btn': function(e) {
                 e.preventDefault();
 
                 var cancelAlertView = new ADK.UI.Alert({
-                    title: 'Are you sure you want to cancel?',
-                    icon: 'fa-warning color-red',
+                    title: 'Cancel',
+                    icon: 'icon-cancel',
                     messageView: CancelMessageView,
                     footerView: FooterView,
                     workflow: this.workflow
@@ -354,7 +439,7 @@ define([
             //     e.preventDefault();
             //     var closeAlertView = new ADK.UI.Alert({
             //         title: 'Are you sure you want to close this form?',
-            //         icon: 'fa-exclamation-triangle font-size-18 color-red',
+            //         icon: 'icon-warning',
             //         messageView: CloseMessageView,
             //         footerView: FooterView
             //     });
@@ -362,16 +447,22 @@ define([
             // },
             'submit': function(e) {
                 e.preventDefault();
-                if (!this.model.isValid())
+                var self = this;
+                if (!this.model.isValid()){
                     this.model.set('formStatus', {
                         status: 'error',
                         message: this.model.validationError
                     });
-                else {
+                    this.transferFocusToFirstError();
+                } else {
+                    this.$el.trigger('tray.loaderShow',{
+                        loadingString:'Adding allergy'
+                    });
                     this.model.unset('formStatus');
-                    var self = this;
+                    this.ui.addBtn.trigger('control:disabled', true);
                     writebackUtils.addAllergy(this.model,
                         function() {
+                            self.$el.trigger('tray.loaderHide');
                             var saveAlertView = new ADK.UI.Notification({
                                 title: 'Allergy Submitted',
                                 icon: 'fa-check',
@@ -380,7 +471,7 @@ define([
                             });
 
                             saveAlertView.show();
-                            writebackUtils.unregisterNavigationCheck();
+                            writebackUtils.unregisterChecks();
                             self.workflow.close();
 
                             ADK.ResourceService.clearAllCache('allergy');
@@ -388,6 +479,8 @@ define([
                         },
                         function(error) {
                             var errorAlertView;
+                            self.$el.trigger('tray.loaderHide');
+                            self.ui.addBtn.trigger('control:disabled', false);
 
                             if (error.status === 409) {
                                 var errorMessage = '';
@@ -402,7 +495,7 @@ define([
                                         _.each(errorMessageArray.data, function(msg) {
                                             errorMessage += '<li>' + msg + '</li>';
                                         });
-                                        hbErrorMessage = Handlebars.compile('Please review the following errors from the submission:<ul>' + errorMessage + '</ul>');
+                                        hbErrorMessage = Handlebars.compile('Review the following errors from the submission:<ul>' + errorMessage + '</ul>');
                                     }
                                 }
 
@@ -413,14 +506,14 @@ define([
 
                                 errorAlertView = new ADK.UI.Alert({
                                     title: 'Allergy Save Error',
-                                    icon: 'fa-exclamation-triangle font-size-18 color-red',
+                                    icon: 'icon-error',
                                     messageView: DuplicateErrorMessageView,
                                     footerView: ErrorFooterView
                                 });
                             } else {
                                 errorAlertView = new ADK.UI.Alert({
                                     title: 'Save Failed (System Error)',
-                                    icon: 'fa-exclamation-circle font-size-18 color-red',
+                                    icon: 'icon-error',
                                     messageView: ErrorMessageView,
                                     footerView: ErrorFooterView
                                 });
@@ -429,8 +522,6 @@ define([
                             errorAlertView.show();
                         }
                     );
-
-
                 }
             },
         },
@@ -457,8 +548,8 @@ define([
                         return false;
                     }
                 });
+                this.ui.addBtn.trigger('control:disabled', !allRequired);
 
-                this.$(this.ui.addBtn.selector).find('button').attr('disabled', !allRequired);
             },
             'change:allergyType': function(model) {
                 var allergyType = model.get('allergyType');
@@ -485,7 +576,7 @@ define([
 
                 if (searchAllergies) {
 
-                    if (searchAllergies === '132;GMRD(120.82,"D")') {
+                    if (searchAllergies === NO_KNOWN_ALLERGY_CODE_D || searchAllergies === NO_KNOWN_ALLERGY_CODE_B) {
                         model.set('allergyType', 'h');
                         model.set('nature-of-reaction', 'U');
 
@@ -506,10 +597,15 @@ define([
                         this.$(this.ui.signsSymptoms.selector).trigger('control:disabled', true);
                         this.$(this.ui.signsSymptoms.selector).trigger('control:readonly', true);
                         this.$(this.ui.signsSymptomsRequired.selector).trigger('control:disabled', true);
+                        this.$(this.ui.natureOfReaction.selector).trigger('control:disabled', true);
                     } else {
                         this.showInProgress('Loading...');
                         this.$(this.ui.signsSymptoms.selector).trigger('control:hidden', false);
                         this.$(this.ui.allergyType.selector).trigger('control:disabled', false);
+
+                        if(this.model.has('allergyType') && !_.isEmpty(this.model.get('allergyType'))){
+                            this.model.trigger('change:allergyType', this.model);
+                        }
                     }
                 }
             }

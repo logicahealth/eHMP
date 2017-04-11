@@ -6,6 +6,30 @@ var domains = require('../common/domain-map.js');
 var errors = require('../common/errors');
 var _ = require('lodash');
 var nullchecker = rdk.utils.nullchecker;
+var fhirResource = require('../common/entities/fhir-resource');
+var confUtils = require('../conformance/conformance-utils');
+var conformance = require('../conformance/conformance-resource');
+
+var fhirToJDSAttrMap = [{
+    fhirName: 'subject.identifier',
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier.',
+    searchable: true
+}];
+
+// Issue call to Conformance registration
+conformance.register(confUtils.domains.MEDICATION_STATEMENT, createMedicationStatementConformanceData());
+
+function createMedicationStatementConformanceData() {   
+   var resourceType = confUtils.domains.MEDICATION_STATEMENT;
+   var profileReference = 'http://www.hl7.org/FHIR/2015May/medicationstatement.html';
+   var interactions = [ 'read', 'search-type' ];
+
+   return confUtils.createConformanceData(resourceType, profileReference,
+           interactions, fhirToJDSAttrMap);
+}
 
 function getResourceConfig() {
     return [{

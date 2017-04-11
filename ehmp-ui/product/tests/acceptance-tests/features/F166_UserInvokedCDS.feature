@@ -4,7 +4,7 @@ Feature: F166 - User invoked clinical decision support (CDS)
 # This feature covers existence of CDS Advice applet on Coversheet
 
 Background:
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
     And user searches for and selects "Eight,Patient"
     
 @US3822_CDSAdviceApplet @future

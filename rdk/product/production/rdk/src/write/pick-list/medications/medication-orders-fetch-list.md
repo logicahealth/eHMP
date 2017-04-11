@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Medication orders [/medication-orders{?site}{&ien}{&first}{&last}{&fields}]
+## Medication orders [/medication-orders{?site}{&ien}{&first}{&last}]
 
 Get list of available Med Orders
 
@@ -18,8 +18,6 @@ ORWUL FVSUB
 
     + last: `100` (string, required) - parameter for the last entry you want returned from the array returned
 
-    :[fields]({{{common}}}/parameters/fields.md)
-
 ### GET
 
 + Response 200 (application/json)
@@ -27,10 +25,10 @@ ORWUL FVSUB
     + Body
 
             {
-              "data": {
-                "dispenseMsg": "BCMA",
-                "quantityMsg": ""
-              },
+              "data": [{
+                "ien": "",
+                "name": ""
+              }],
               "status": 200
             }
 

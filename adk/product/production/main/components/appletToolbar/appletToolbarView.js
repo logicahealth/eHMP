@@ -6,89 +6,224 @@ define([
     "handlebars",
     "api/Messaging",
     "api/ResourceService",
+    'api/PatientRecordService',
+    'main/Utils',
     'hbs!main/components/appletToolbar/templates/toolbarTemplate',
     'hbs!main/components/appletToolbar/templates/buttonTemplate',
-    'hbs!main/components/appletToolbar/templates/dropdownTemplate'
-], function($, _, Backbone, Marionette, Handlebars, Messaging, ResourceService, ToolbarTemplate, ButtonTemplate, DropdownTemplate) {
+], function($, _, Backbone, Marionette, Handlebars, Messaging, ResourceService, PatientRecordService, Utils, ToolbarTemplate, ButtonTemplate) {
     "use strict";
 
     var buttonFactory = function(bOptions, buttonType) {
         switch (buttonType.toLowerCase()) {
-            case 'detailsviewbutton':
+            case 'crsbutton':
                 return {
-                    icon: 'fa-file-text-o',
+                    index: 5,
+                    icon: 'icon-concept-relationship',
+                    srMessage: 'Press enter to view related concepts.',
                     view: ButtonView.extend({
                         options: bOptions,
-                        attributes: _.extend({}, ButtonView.prototype.attributes, {
-                            'tooltip-data-key': 'toolbar_detailview',
-                            'button-type': 'detailView-button-toolbar'
-                        }),
-                        events: _.extend({}, ButtonView.prototype.events, {
-                            click: function(e) {
-                                e.preventDefault();
-                                var currentPatient = ResourceService.patientRecordService.getCurrentPatient();
-                                var channelObject = {
-                                    model: this.options.targetElement.model,
-                                    uid: this.options.targetElement.model.get("uid"),
-                                    patient: {
-                                        icn: currentPatient.attributes.icn,
-                                        pid: currentPatient.attributes.pid
-                                    }
-                                };
 
-                                if (this.options.targetElement.applet) {
-                                    channelObject.applet = this.options.targetElement.applet;
+                        onRender: function() {
+                            var target = this.getOption('targetView') || this.getOption('targetElement');
+                            if (!_.isEmpty(target)) {
+                                var itemClickedCode = target.model.get('dataCode');
+                                if (_.isEmpty(itemClickedCode)) {
+                                    this.$el.prop('disabled', true);
                                 }
-                                Messaging.getChannel('gists').trigger('close:quicklooks');
-                                Messaging.getChannel(this.options.targetElement.model.get('applet_id')).trigger('detailView', channelObject);
-                                this.$el.tooltip('hide');
                             }
-                        }, bOptions.detailViewEvent)
-                    })
-                };
-            case 'quicklookbutton':
-                return {
-                    icon: 'fa-eye',
-                    view: ButtonView.extend({
-                        options: bOptions,
+                        },
+
                         attributes: _.extend({}, ButtonView.prototype.attributes, {
-                            'tooltip-data-key': 'toolbar_quicklook',
-                            'button-type': 'quick-look-button-toolbar'
+                            'tooltip-data-key': 'toolbar_crs',
+                            'button-type': 'crs-button-toolbar'
                         }),
                         events: _.extend({}, ButtonView.prototype.events, {
                             'click': function(e) {
                                 e.preventDefault();
                                 e.stopImmediatePropagation();
-                                var pop = this.options.targetElement.$('[data-toggle=popover]');
-                                pop.trigger('click');
+                                var targetElement = this.getOption('targetView') || this.getOption('targetElement');
+                                this.$el.trigger('fetch:crs', targetElement);
+                            }
+                        })
+                    })
+                };
+            case 'detailsviewbutton':
+                return {
+                    index: 3,
+                    icon: 'fa-file-text-o',
+                    srMessage: 'Press enter to view details.',
+                    view: ButtonView.extend({
+                        options: bOptions,
+                        attributes: _.extend({}, ButtonView.prototype.attributes, {
+                            'button-type': 'detailView-button-toolbar',
+                            'tooltip-data-key': 'toolbar_detailview'
+                        }),
+                        onRender: function() {
+                            var target = this.getOption('targetView') || this.getOption('targetElement');
+                            if (!_.isEmpty(target) && target.model) {
+                                if (target.model.get('collection') && target.model.get('collection').length === 0) {
+                                    this.$el.prop('disabled', true);
+                                }
+                            }
+                        },
+                        events: _.extend({}, ButtonView.prototype.events, {
+                            click: function(e) {
+                                e.preventDefault();
+                                var currentPatient = PatientRecordService.getCurrentPatient();
+                                var targetElement = this.getOption('targetView') || this.getOption('targetElement');
+                                var channelObject = {
+                                    model: targetElement.model,
+                                    collection: targetElement.collection || _.get(targetElement, 'model.collection'),
+                                    uid: targetElement.model.get("uid"),
+                                    patient: {
+                                        icn: currentPatient.attributes.icn,
+                                        pid: currentPatient.attributes.pid
+                                    },
+                                    $el: targetElement.$el
+                                };
+
+                                if (targetElement.applet) {
+                                    channelObject.applet = targetElement.applet;
+                                }
+                                this.trigger('modal.show');
+                                Messaging.getChannel('toolbar').trigger('close:quicklooks');
+                                Messaging.getChannel(targetElement.model.get('applet_id')).trigger('detailView', channelObject);
+                                this.$el.tooltip('hide');
+                            }
+                        }, bOptions.detailViewEvent)
+                    })
+                };
+                //Create Note Object code implementation
+            case 'notesobjectbutton':
+                return {
+                    index: 10,
+                    icon: 'fa-sticky-note',
+                    srMessage: 'Press enter to create a new note object.',
+                    view: ButtonView.extend({
+                        options: bOptions,
+                        attributes: _.extend({}, ButtonView.prototype.attributes, {
+                            'button-type': 'notesObject-button-toolbar',
+                            'tooltip-data-key': 'toolbar_note_object'
+                        }),
+                        events: _.extend({}, ButtonView.prototype.events, {
+                            click: function(e) {
+                                e.preventDefault();
+                                var currentPatient = PatientRecordService.getCurrentPatient();
+                                var targetElement = this.getOption('targetView') || this.getOption('targetElement');
+                                var channelObject = {
+                                    model: targetElement.model,
+                                    collection: targetElement.collection || _.get(targetElement, 'model.collection'),
+                                    uid: targetElement.model.get("uid"),
+                                    patient: {
+                                        icn: currentPatient.attributes.icn,
+                                        pid: currentPatient.attributes.pid
+                                    },
+                                    $el: targetElement.$el
+                                };
+
+                                if (targetElement.applet) {
+                                    channelObject.applet = targetElement.applet;
+                                }
+                                this.trigger('modal.show');
+                                Messaging.getChannel('toolbar').trigger('close:quicklooks');
+                                Messaging.getChannel(targetElement.model.get('applet_id')).trigger('notesView', channelObject);
+                                this.$el.tooltip('hide');
+                            }
+                        }, bOptions.detailViewEvent)
+                    })
+                };
+                //
+            case 'editviewbutton':
+                return {
+                    index: 7,
+                    icon: 'fa-pencil',
+                    srMessage: 'Press enter to edit.',
+                    view: ButtonView.extend({
+                        options: bOptions,
+                        onRender: function() {
+                            var targetElement = this.getOption('targetView') || this.getOption('targetElement');
+                            var model = targetElement.model;
+
+                            if (this.getOption('disableNonLocal')) {
+                                var siteCode = ADK.UserService.getUserSession().get('site'),
+                                    pidSiteCode = model.get('pid') ? model.get('pid').split(';')[0] : '';
+
+                                if (siteCode !== pidSiteCode) {
+                                    this.$el.prop('disabled', true);
+                                }
+                            }
+                        },
+                        attributes: _.extend({}, ButtonView.prototype.attributes, {
+                            'button-type': 'editView-button-toolbar',
+                            'tooltip-data-key': 'toolbar_edititem'
+                        }),
+                        events: _.extend({}, ButtonView.prototype.events, {
+                            click: function(e) {
+                                e.preventDefault();
+                                var currentPatient = PatientRecordService.getCurrentPatient();
+                                var targetElement = this.getOption('targetView') || this.getOption('targetElement');
+                                var channelObject = {
+                                    model: targetElement.model,
+                                    collection: targetElement.collection || _.get(targetElement, 'model.collection'),
+                                    uid: targetElement.model.get("uid"),
+                                    patient: {
+                                        icn: currentPatient.attributes.icn,
+                                        pid: currentPatient.attributes.pid
+                                    },
+                                    $el: targetElement.$el
+                                };
+
+                                if (targetElement.applet) {
+                                    channelObject.applet = targetElement.applet;
+                                }
+                                Messaging.getChannel('toolbar').trigger('close:quicklooks');
+                                Messaging.getChannel(targetElement.model.get('applet_id')).trigger('editView', channelObject);
+                                this.$el.tooltip('hide');
+                            }
+                        })
+                    })
+                };
+            case 'quicklookbutton':
+                return {
+                    index: 4,
+                    icon: 'fa-eye',
+                    srMessage: 'Press enter to open the quicklook table.',
+                    view: ButtonView.extend({
+                        options: bOptions,
+                        attributes: _.extend({}, ButtonView.prototype.attributes, {
+                            'button-type': 'quick-look-button-toolbar',
+                            'tooltip-data-key': 'toolbar_quicklook'
+                        }),
+                        events: _.extend({}, ButtonView.prototype.events, {
+                            'click': function(e) {
+                                e.preventDefault();
+                                e.stopImmediatePropagation();
+                                if (this.getOption('targetView')) {
+                                    var targetView = this.getOption('targetView');
+                                    targetView.trigger('toggle:quicklook');
+                                } else {
+                                    var targetElement = this.getOption('targetElement');
+                                    var pop = targetElement.$('[data-toggle=popover]');
+                                    pop.trigger('click');
+                                }
+                                var toggleSrMessageText;
+                                this.$('.sr-only:contains("open")').length > 0 ? toggleSrMessageText = 'close' : toggleSrMessageText = 'open';
+                                this.$('.sr-only').text('Press enter to ' + toggleSrMessageText + ' the quicklook table');
+                                this.$el.focus();
                             }
                         }),
                         initialize: function() {
                             ButtonView.prototype.initialize.apply(this, arguments);
-                            var self = this;
-                            var pop = this.options.targetElement.$('[data-toggle=popover]');
-                            $(document).on('click.' + self.cid, function(e) {
-                                if (e.target === pop[0]) {
-                                    return;
-                                }
-
-                                if (pop[0] && $.contains(pop[0], e.target)) {
-                                    return;
-                                }
-                                if ($(e.target).is('.popover.gist-popover') || $(e.target).parents('.popover.gist-popover').length) {
-                                    return;
-                                }
-                                pop.popover('hide');
-                            });
+                            var targetElement = this.getOption('targetView') || this.getOption('targetElement');
+                            var pop = targetElement.$('[data-toggle=popover]');
                         },
-                        onBeforeDestroy: function() {
-                            $(document).off('click.' + this.cid);
-                        }
                     })
                 };
             case 'submenubutton':
                 return {
+                    index: 6,
                     icon: 'fa-tags',
+                    srMessage: 'Press enter to view associated workspaces.',
                     view: Backbone.Marionette.LayoutView.extend({
                         template: Handlebars.compile('<div class="submenuButtonWrapper"></div>'),
                         regions: {
@@ -97,7 +232,31 @@ define([
                         className: 'btn-group',
                         initialize: function() {
                             var self = this;
-                            this.collection = bOptions.submenuItems;
+                            this.collection = new Backbone.Collection();
+
+                            if (bOptions.submenuItems instanceof Backbone.Collection && (bOptions.submenuItems.length > 0)) {
+                                this.collection = bOptions.submenuItems;
+                            } else if (!_.isUndefined(bOptions.targetView.model.get('snomedCode'))) {
+                                this.setToolbarItems(this.collection, bOptions.targetView.model);
+                            }
+                        },
+                        setToolbarItems: function(collection, model) {
+                            ADK.UserDefinedScreens.getScreenBySnomedCt(model.get('snomedCode')).done(function(filteredScreenList) {
+                                if (filteredScreenList.length > 0) {
+                                    var currentScreen = ADK.Messaging.request('get:current:screen');
+                                    var models = [];
+                                    _.each(filteredScreenList, function(filteredScreen) {
+                                        if (filteredScreen.id !== currentScreen.id) {
+                                            var scrnObj = {
+                                                displayText: filteredScreen.title,
+                                                url: ('#' + filteredScreen.routeName)
+                                            };
+                                            models.push(new Backbone.Model(scrnObj));
+                                        }
+                                    });
+                                    collection.reset(models);
+                                }
+                            });
                         },
                         collectionEvents: {
                             'add': 'setView',
@@ -130,8 +289,8 @@ define([
                             if (this.collection.length === 0) {
                                 return ButtonView.extend({
                                     attributes: _.extend({}, ButtonView.prototype.attributes, {
-                                        'tooltip-data-key': 'toolbar_submenu',
                                         'button-type': 'submenu-button-toolbar',
+                                        'tooltip-data-key': 'toolbar_submenu',
                                         'disabled': true
                                     }),
                                     onRender: function() {
@@ -143,8 +302,8 @@ define([
                                 return ButtonView.extend({
                                     tagName: 'a',
                                     attributes: _.extend({}, ButtonView.prototype.attributes, {
-                                        'tooltip-data-key': 'toolbar_submenu',
                                         'button-type': 'submenu-button-toolbar',
+                                        'tooltip-data-key': 'toolbar_submenu',
                                         'href': this.collection.models[0].get('url')
                                     })
                                 });
@@ -156,86 +315,65 @@ define([
                                 initialize: function() {
                                     //we need to add in a header
                                     if (!!this.collection.length && this.collection.at(0).get('header')) return;
-                                    var model = new Backbone.Model({
-                                        header: 'true',
-                                        displayText: 'Select Associated Workspace'
-                                    });
-                                    this.collection.add(model, {
-                                        'silent': 'true',
-                                        'at': 0
-                                    });
+
+                                    this.options.dropdownTitle = 'Select Associated Workspace';
                                 },
-                                itemClass: 'appletToolbar-submenu-title',
-                                containerClass: 'appletToolbar-submenu-title appletToolbar',
-                                DropdownView: ADK.UI.Dropdown.prototype.DropdownListView.extend({
-                                    childView: Marionette.ItemView.extend({
-                                        tagName: 'li',
-                                        template: Handlebars.compile('<a href="{{url}}">{{displayText}}</a>'),
-                                        attributes: function() {
-                                            return {
-                                                'title': this.model.get('displayText')
-                                            };
-                                        },
-                                        className: function() {
-                                            if (this.model.get('header')) {
-                                                return 'dropdown-header appletToolbar-submenu-title';
-                                            }
-                                            return;
-                                        },
-                                        getTemplate: function() {
-                                            if (this.model.get('header')) {
-                                                return Handlebars.compile('<div>{{displayText}}</div>');
-                                            }
-                                            return this.getOption('template');
-                                        }
+                                position: 'auto',
+                                container: 'body',
+                                ButtonView: ButtonView.extend({
+                                    attributes: _.extend({}, ButtonView.prototype.attributes, {
+                                        'button-type': 'submenu-button-toolbar',
+                                        'tooltip-data-key': 'toolbar_submenu'
                                     })
-                                }),
-                                attributes: _.extend({}, DropdownView.prototype.attributes, {
-                                    'button-type': 'submenu-button-toolbar'
-                                }),
-                                'position': 'auto',
-                                'container': 'body'
+                                })
                             });
                         }
                     })
                 };
             case 'infobutton':
                 return {
+                    index: 2,
                     icon: 'fa-info',
+                    srMessage: 'Press enter to view more information.',
                     view: ButtonView.extend({
                         options: bOptions,
                         attributes: _.extend({}, ButtonView.prototype.attributes, {
-                            'tooltip-data-key': 'toolbar_infobutton',
-                            'button-type': 'info-button-toolbar'
+                            'button-type': 'info-button-toolbar',
+                            'tooltip-data-key': 'toolbar_infobutton'
                         }),
                         events: _.extend({}, ButtonView.prototype.events, {
                             'click': function(e) {
                                 e.preventDefault();
-                                var currentPatient = ResourceService.patientRecordService.getCurrentPatient();
+                                var currentPatient = PatientRecordService.getCurrentPatient(),
+                                    targetElement = this.getOption('targetView') || this.getOption('targetElement'),
+                                    model = targetElement.model;
                                 var channelObject = {
-                                    model: this.options.targetElement.model,
-                                    uid: this.options.targetElement.model.get("uid"),
+                                    model: model,
+                                    uid: model.get("uid"),
                                     patient: currentPatient
                                 };
-                                ADK.utils.infoButtonUtils.callProvider(channelObject);
+                                Utils.infoButtonUtils.callProvider(channelObject);
                             }
                         })
                     })
                 };
             case 'deletestackedgraphbutton':
                 return {
-                    icon: 'fa-times',
+                    index: 8,
+                    icon: 'fa-trash',
+                    srMessage: 'Press enter to delete.',
                     view: ButtonView.extend({
                         options: bOptions,
                         attributes: _.extend({}, ButtonView.prototype.attributes, {
-                            'tooltip-data-key': 'toolbar_deletestackedgraph',
-                            'button-type': 'deletestackedgraph-button-toolbar'
+                            'button-type': 'deletestackedgraph-button-toolbar',
+                            'tooltip-data-key': 'toolbar_deletestackedgraph'
                         }),
                         events: _.extend({}, ButtonView.prototype.events, {
                             click: function(e) {
                                 e.preventDefault();
+                                var targetElement = this.getOption('targetView') || this.getOption('targetElement');
                                 Messaging.getChannel('stackedGraph').trigger('delete', {
-                                    model: this.options.targetElement.model
+                                    model: targetElement.model
                                 });
                             }
                         })
@@ -244,78 +382,86 @@ define([
                 };
             case 'tilesortbutton':
                 return {
+                    index: 1,
                     icon: 'fa-arrows-v',
+                    srMessage: 'Rearrange mode ',
                     view: ButtonView.extend({
                         options: bOptions,
                         className: 'tilesort-button-toolbar ' + ButtonView.prototype.className,
                         attributes: _.extend({}, ButtonView.prototype.attributes, {
-                            'tooltip-data-key': 'toolbar_tilesortbutton',
-                            'button-type': 'tilesort-button-toolbar'
+                            'button-type': 'tilesort-button-toolbar',
+                            'tooltip-data-key': 'toolbar_tilesortbutton'
                         }),
-                        events: _.extend({}, ButtonView.prototype.events, {
-                            click: function(e) {
+
+                        activateTitleSort: function(e) {
+                            var draggingClass, draggingRow, startTile, selectedTileIndex, itemList, tileNameList, tileName = '',
+                                tile;
+                            draggingClass = 'tilesort-keydown-dragging';
+                            draggingRow = 'dragging-row';
+                            startTile = this.$el.closest('.gist-item');
+                            selectedTileIndex = $(startTile).parent().find('.gist-item').index(startTile);
+                            itemList = this.$el.closest('.gist-item').parent();
+
+                            tileNameList = $(itemList).find('[data-cell-tilesort="tilesort"]');
+
+                            if (!this.$el.hasClass(draggingClass)) {
+                                tile = this.$el.closest('.applet-toolbar').parent().closest('.gist-item');
+
+                                if (tile.length) {
+                                    switch (e.which) {
+                                        case 1:
+                                        case 13:
+                                        case 32:
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            $(startTile).find('button.tilesort-button-toolbar').addClass('background-color-secondary-dark');
+                                            this.$el.addClass(draggingClass);
+                                            $(startTile).addClass(draggingRow);
+
+                                            tileName = tileNameList[selectedTileIndex].textContent;
+
+                                            this.$el.append("<span class=\"sr-only\">activated for " + tileName +
+                                                " tile. Use the up or down arrow keys to move the tile, then press enter again to set tile</span>");
+
+                                            this.$el.trigger('dragstart');
+
+                                            break;
+                                    }
+                                }
+                            } else {
                                 e.preventDefault();
-                            },
-                            keydown: function(e) {
-                                var draggingClass = 'tilesort-keydown-dragging';
-                                var startTile = this.$el.closest('.gist-item');
-                                var selectedTileIndex = $(startTile).parent().find('.gist-item').index(startTile);
-                                var itemList = this.$el.closest('.gist-item').parent();
+                                e.stopPropagation();
+                                var itemListLen = tileNameList.length;
 
-                                var tileNameList = $(itemList).find('.problem-name').length > 0 ? $(itemList).find('.problem-name') : $(itemList).find('[name="name"]');
-                                var tileName = '';
-                                if (!this.$el.hasClass(draggingClass)) {
-                                    var tile;
+                                if (e.which === 1 || e.which === 32 || e.which === 13) {
+                                    tileName = tileNameList[selectedTileIndex].textContent;
+                                    this.$el.find('.sr-only').remove();
+                                    this.$el.append("<span class=\"sr-only\">" + tileName + " tile was successfully set</span>");
 
-                                    if (this.options.isStackedGraph) {
-                                        tile = this.$el.closest('.appletToolbar').parent().parent().siblings('[draggable="true"]');
-                                    } else {
-                                        tile = this.$el.closest('.appletToolbar').parent().siblings('[draggable="true"]');
-                                    }
+                                    this.$el.removeClass(draggingClass);
 
-                                    if (tile.length) {
-                                        switch (e.which) {
-                                            case 13:
-                                            case 32:
-                                                e.preventDefault();
-                                                e.stopPropagation();
+                                    $(startTile).trigger('drop');
+                                    $(startTile).find('button.tilesort-button-toolbar').removeClass('background-color-secondary-dark');
+                                    $(startTile).removeClass(draggingRow);
 
-                                                this.$el.addClass(draggingClass);
-
-                                                startTile.trigger('dragstart');
-
-                                                this.$el.tooltip('destroy');
-
-                                                tileName = tileNameList[selectedTileIndex].textContent;
-
-                                                this.$el.append("<span class=\"sr-only\">You are on the Sort Tile button for the " + tileName +
-                                                    " tile. To sort each tile, press enter on the sort tile button, then use the Up and Down arrow keys to reorder the selected tile. Press the enter key again to deselect the tile and lock into position. </span>");
-                                                break;
-                                        }
-                                    }
                                 } else {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    var itemListLen = tileNameList.length;
 
                                     switch (e.which) {
                                         case 38: // up arrow
                                         case 87: // up arrow
 
                                             this.$el.find('.sr-only').remove();
+
+
                                             if (selectedTileIndex > 0) {
                                                 $(itemList).children('.gist-item').eq(selectedTileIndex - 1).before($(itemList).children('.gist-item').eq(selectedTileIndex));
                                                 tileName = tileNameList[selectedTileIndex - 1].textContent;
-                                                this.$el.append("<span class=\"sr-only\">You are above the " + tileName + " tile</span>");
+                                                this.$el.append("<span class=\"sr-only\">Current tile moved above the " + tileName + " tile</span>");
 
                                                 selectedTileIndex--;
                                             } else {
-                                                this.$el.append("<span class=\"sr-only\">You've reached the top of the list</span>");
+                                                this.$el.append("<span class=\"sr-only\">Beginning of list</span>");
                                             }
-
-                                            // drops out of focus after move
-                                            this.$el.focus();
-                                            this.$el.addClass(draggingClass);
 
                                             break;
                                         case 40: // down arrow
@@ -325,16 +471,12 @@ define([
                                                 selectedTileIndex++;
                                             }
 
-                                            // drops out of focus after move
-                                            this.$el.focus();
-                                            this.$el.addClass(draggingClass);
-
                                             this.$el.find('.sr-only').remove();
                                             if (tileNameList[selectedTileIndex]) {
                                                 tileName = tileNameList[selectedTileIndex].textContent;
-                                                this.$el.append("<span class=\"sr-only\">You are below the " + tileName + " tile</span>");
+                                                this.$el.append("<span class=\"sr-only\">Current tile moved below the " + tileName + " tile</span>");
                                             } else {
-                                                this.$el.append("<span class=\"sr-only\">You've reached the end of the list.</span>");
+                                                this.$el.append("<span class=\"sr-only\">End of list.</span>");
                                             }
 
                                             break;
@@ -343,69 +485,66 @@ define([
 
                                             tileName = tileNameList[selectedTileIndex].textContent;
                                             this.$el.find('.sr-only').remove();
-                                            this.$el.append("<span class=\"sr-only\">You just dropped the " + tileName + " tile</span>");
+                                            this.$el.append("<span class=\"sr-only\">" + tileName + " tile was successfully set</span>");
 
                                             this.$el.removeClass(draggingClass);
 
-                                            var selectedTile = this.$el.closest('.gist-item');
-                                            $(selectedTile).trigger('drop');
-                                            $(selectedTile).focus();
-
-
-
+                                            $(startTile).trigger('drop');
+                                            $(startTile).find('button.tilesort-button-toolbar').removeClass('background-color-secondary-dark');
+                                            $(startTile).removeClass(draggingRow);
                                             break;
                                     }
-
-                                    this.$el.focus();
                                 }
+
+                                this.$el.focus();
                             }
+
+                        },
+                        onDestroy: function() {
+                            this.$el.closest('.toolbar-active').removeClass('dragging-row');
+                        },
+                        events: _.extend({}, ButtonView.prototype.events, {
+                            click: 'activateTitleSort',
+                            keydown: 'activateTitleSort'
                         })
                     })
                 };
             case 'additembutton':
                 return {
+                    index: 9,
                     icon: 'fa-plus',
+                    srMessage: 'Press enter to add new item.',
                     view: ButtonView.extend({
                         options: bOptions,
-                        className: 'btn additem-button-toolbar',
                         attributes: _.extend({}, ButtonView.prototype.attributes, {
-                            'tooltip-data-key': 'toolbar_addorders',
-                            'button-type': 'additem-button-toolbar'
+                            'button-type': 'additem-button-toolbar',
+                            'tooltip-data-key': 'toolbar_addnewitem'
                         }),
                         events: _.extend({}, ButtonView.prototype.events, {
                             'click': function(e) {
                                 e.preventDefault();
                                 e.stopImmediatePropagation();
+                                var targetElement = this.getOption('targetView') || this.getOption('targetElement');
+
                                 var channelObject = {
-                                    model: this.options.targetElement.model,
+                                    model: targetElement.model,
                                 };
 
-                                if (this.options.targetElement.applet) {
-                                    channelObject.applet = this.options.targetElement.applet;
+                                if (targetElement.applet) {
+                                    channelObject.applet = targetElement.applet;
                                 }
-
-                                e.preventDefault();
-                                var writebackView = ADK.utils.appletUtils.getAppletView('orders', 'writeback');
-                                var formModel = new Backbone.Model();
-                                var workflowOptions = {
-                                    size: "large",
-                                    title: "Order a Lab Test",
-                                    showProgress: false,
-                                    keyboard: true,
-                                    steps: [{
-                                        view: writebackView,
-                                        viewModel: formModel,
-                                        stepTitle: 'Step 1'
-                                    }]
-                                };
-                                ADK.UI.Workflow.show(workflowOptions);
+                                Messaging.getChannel('toolbar').trigger('close:quicklooks');
+                                Messaging.getChannel(targetElement.model.get('applet_id')).trigger('addItem', channelObject);
+                                this.$el.tooltip('hide');
                             }
                         })
                     })
                 };
         }
         return {
+            index: '',
             icon: '',
+            srMessage: '',
             view: ButtonView.extend({
                 options: bOptions,
                 events: _.extend({}, ButtonView.prototype.events, {
@@ -424,15 +563,10 @@ define([
         initialize: function(options) {
             this.options = options;
         },
-        attributes: {
-            'data-toggle': 'tooltip',
-            'data-container': 'body',
-            'data-placement': 'auto top'
-        },
         events: {
             'focusin': 'handleTrigger',
             'click': function(e) {
-                if (this.$el.is('.disabled, :disabled') ) {
+                if (this.$el.is('.disabled, :disabled')) {
                     e.preventDefault();
                 }
             },
@@ -445,43 +579,18 @@ define([
         },
         handleTrigger: function(e) {
             this.trigger('before:click');
-            this.$el.addClass('toolbar-btn-hover');
         },
-        onDestroy: function(e) {
-            this.$el.tooltip('destroy');
-        }
-    });
-
-    var DropdownView = Backbone.Marionette.CompositeView.extend({
-        template: DropdownTemplate,
-        className: 'btn-group',
-        attributes: {
-            'role': 'group',
-        },
-        ui: {
-            'dropdownEl': '[data-toggle=dropdown]'
-        },
-        events: {
-            'keydown': function(e) {
-                if (!/(13|32)/.test(e.which) || this.$el.is('.disabled, :disabled')) return;
-                e.preventDefault();
-                this.$el.trigger('click');
-            }
+        behaviors: {
+            Tooltip: {}
         }
     });
 
     var toolbarView = Backbone.Marionette.CompositeView.extend({
         fade: 100,
         template: ToolbarTemplate,
-        className: 'appletToolbar',
+        className: 'applet-toolbar',
         childViewContainer: '.btn-group',
         childEvents: {
-            'before:click': function(e) {
-                this.$('.toolbar-btn-hover').removeClass('toolbar-btn-hover');
-            },
-            'focusout': function(e) {
-                this.$('.toolbar-btn-hover').removeClass('toolbar-btn-hover');
-            },
             'dropdown.show': function() {
                 this.trigger('dropdown.show');
             },
@@ -494,42 +603,71 @@ define([
             'dropdown.hidden': function() {
                 this.trigger('dropdown.hidden');
             },
+            'modal.show': function(e) {
+                this.trigger('modal.show', e, 'modal.show');
+            },
+            'workflow.show': function(e) {
+                this.trigger('workflow.show', e, 'workflow.show');
+            }
+        },
+        events: {
+            'dropdown.show': function() {
+                var targetElement = this.getOption('targetView') || this.getOption('targetElement');
+                var popup = targetElement.$el.find('[data-toggle=popover]');
+                if (!!popup.length) popup.popup('hide');
+            }
         },
         initialize: function(options) {
-            this.options = options;
-
+            var buttonTypes = this.getOption('buttonTypes');
             if (!this.collection)
-                this.collection = (this.options.buttonTypes instanceof Backbone.Collection) ? this.options.butonTypes : new Backbone.Collection();
+                this.collection = (buttonTypes instanceof Backbone.Collection) ? butonTypes : new Backbone.Collection();
+            if (_.isFunction(buttonTypes))
+                buttonTypes = buttonTypes();
 
             var array_views = [];
-            _.each(this.options.buttonTypes, function(type) {
+            _.each(buttonTypes, function(type) {
                 var button = buttonFactory(this.options, type);
+                var btnModel = new Backbone.Model();
                 array_views.push({
+                    'index': button.index,
                     'icon': button.icon,
+                    'srMessage': button.srMessage,
                     'view': button.view
                 });
             }, this);
+
+            this.collection.comparator = 'index';
 
             if (!this.collection.length) this.collection.set(array_views);
         },
         getChildView: function(child) {
             return child.get('view');
         },
-        show: function(e) {
+        toggleSrMessageText: function($el, change) {
+            var newSrMsg = 'Press enter to ' + change + ' the toolbar menu.';
+            $el.find('.toolbar-instructions').text(newSrMsg);
+        },
+        show: function() {
+            var $el = _.get(this.getOption('targetView'), '$el') || _.get(this.getOption('targetElement'), '$el');
+            this.toggleSrMessageText($el, 'close');
+
             this.trigger('show:toolbar');
             this.$el.fadeIn(this.fade, _.bind(function(e) {
                 this.trigger('shown:toolbar');
             }, this));
-        },
-        onDestroy: function() {
-            this.$el.find('a').off('show.bs.tooltip');
+            this.options.targetView.$el.focus();
         },
         hide: function(e) {
+            var $el = _.get(this.getOption('targetView'), '$el') || _.get(this.getOption('targetElement'), '$el');
+            this.toggleSrMessageText($el, 'open');
+
             this.trigger('hide:toolbar');
-            this.$('.toolbar-btn-hover').removeClass('toolbar-btn-hover');
             this.$el.fadeOut(this.fade, _.bind(function(e) {
                 this.trigger('hidden:toolbar');
             }, this));
+        },
+        onDestroy: function(e) {
+            this.hide(e);
         }
     });
     return toolbarView;

@@ -17,7 +17,9 @@ template "#{node[:oracle][:rdbms][:ora_home]}/assistants/dbca/templates/default_
   owner 'oracle'
   group 'oinstall'
   mode '0644'
-  cookbook 'oracle'
+  variables({
+  :archiveLogMode => node[:oracle_wrapper][:archive_log_mode]
+  })
 end
 
 template "#{node[:oracle][:rdbms][:ora_home]}/assistants/dbca/templates/midrange_template.dbt" do

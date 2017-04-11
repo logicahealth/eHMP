@@ -2,64 +2,79 @@ class PatientSearch < AccessBrowserV2
   include Singleton
   def initialize
     super
+    initialize_action
+    initialize_verify
+  end
+
+  def initialize_action
+    add_action(CucumberLabel.new("patient demographic"), ClickAction.new, AccessHtmlElement.new(:css, "#patientDemographic"))
     add_action(CucumberLabel.new("patientSearch"), ClickAction.new, AccessHtmlElement.new(:id, "patientSearchButton"))
-    add_action(CucumberLabel.new("myCPRSList"), ClickAction.new, AccessHtmlElement.new(:css, "#patient-search-pills li:nth-of-type(1)"))
+    add_action(CucumberLabel.new("patient context tab"), ClickAction.new, AccessHtmlElement.new(:id, "current-patient-nav-header-tab"))
+    add_action(CucumberLabel.new("active patient context tab"), ClickAction.new, AccessHtmlElement.new(:css, "[id=current-patient-nav-header-tab].active"))
+    add_action(CucumberLabel.new("myCPRSList"), ClickAction.new, AccessHtmlElement.new(:id, "myCprsList"))
     add_action(CucumberLabel.new("defaultSearchInput"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "patientFilterInput"))
     add_action(CucumberLabel.new("patientSearchInput"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "patientSearchInput"))
-    add_action(CucumberLabel.new("mySite"), ClickAction.new, AccessHtmlElement.new(:css, "#mySite a"))
+    add_action(CucumberLabel.new("mySite"), ClickAction.new, AccessHtmlElement.new(:css, "#mySite"))
 
     add_action(CucumberLabel.new("mySiteSearch"), ClickAction.new, AccessHtmlElement.new(:css, "div#patient-search-input"))
     add_action(CucumberLabel.new("global"), ClickAction.new, AccessHtmlElement.new(:id, "global"))
-    add_action(CucumberLabel.new("mySiteClinics"), ClickAction.new, AccessHtmlElement.new(:id, "mySiteClinics"))
-    add_action(CucumberLabel.new("mySiteWards"), ClickAction.new, AccessHtmlElement.new(:id, "mySiteWards"))
+    add_action(CucumberLabel.new("mySiteClinics"), ClickAction.new, AccessHtmlElement.new(:id, "clinics"))
+    add_action(CucumberLabel.new("mySiteWards"), ClickAction.new, AccessHtmlElement.new(:id, "wards"))
 
     add_action(CucumberLabel.new("center"), ClickAction.new, AccessHtmlElement.new(:id, "patient-search-main"))
     add_action(CucumberLabel.new("Search Tab"), ClickAction.new,  AccessHtmlElement.new(:class, "patientDisplayName"))
     add_action(CucumberLabel.new("Confirm"), ClickAction.new, AccessHtmlElement.new(:id, "confirmationButton"))
-    add_verify(CucumberLabel.new("panel-heading"), VerifyContainsText.new, AccessHtmlElement.new(:class, "panel-title"))
-    @@patient_search_count = AccessHtmlElement.new(:xpath, "//*[@class='patient-search-results']/descendant::a")
-    add_verify(CucumberLabel.new("Patient Search Results"), VerifyXpathCount.new(@@patient_search_count), @@patient_search_count)
-    @@global_search_count = AccessHtmlElement.new(:xpath, "//*[@id='global-search-results']/descendant::a")
-    add_verify(CucumberLabel.new("Global Search Results"), VerifyXpathCount.new(@@global_search_count), @@global_search_count)
+
     add_action(CucumberLabel.new("globalSearchLastName"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "globalSearchLastName"))
     add_action(CucumberLabel.new("globalSearchFirstName"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "globalSearchFirstName"))
     add_action(CucumberLabel.new("globalSearchDob"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "globalSearchDob"))
     add_action(CucumberLabel.new("globalSearchSsn"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "globalSearchSsn"))
     add_action(CucumberLabel.new("globalSearch"), ClickAction.new, AccessHtmlElement.new(:id, "globalSearchButton"))
-    add_verify(CucumberLabel.new("acknowledgement message"), VerifyContainsText.new, AccessHtmlElement.new(:id, "ackMessagePanel"))
+ 
     add_action(CucumberLabel.new("Patient Result"), ClickAction.new,  AccessHtmlElement.new(:css, "#patient-search-main patient-search-results .list-group-item"))
+    add_action(CucumberLabel.new("ackButton"), ClickAction.new, AccessHtmlElement.new(:id, "ackButton"))
+
+    add_action(CucumberLabel.new("clinics"), ClickAction.new, AccessHtmlElement.new(:id, "clinics"))
+    add_action(CucumberLabel.new("patientSearchKeyword"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#patient-search-main .smallColumn input.form-control")) #this doesn't exist anymore
+    add_action(CucumberLabel.new("wardKeyword"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#wardFilter"))
+    add_action(CucumberLabel.new("locationDisplayName"), ClickAction.new, AccessHtmlElement.new(:css, ".locationDisplayName"))
+    add_action(CucumberLabel.new("patientFilterInput"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "patientFilterInput")) #this soesn't exist anymore
+    add_action(CucumberLabel.new("Ward"), ClickAction.new, AccessHtmlElement.new(:id, "wards"))
+  end
+
+  def initialize_verify
+    add_verify(CucumberLabel.new("panel-heading"), VerifyContainsText.new, AccessHtmlElement.new(:class, "panel-title"))
+    @@patient_search_count = AccessHtmlElement.new(:xpath, "//*[@class='patient-search-results']/descendant::div[contains(@class, 'list-group-item')]")
+    add_verify(CucumberLabel.new("Patient Search Results"), VerifyXpathCount.new(@@patient_search_count), @@patient_search_count)
+    @@global_search_count = AccessHtmlElement.new(:xpath, "//*[@id='globalSearchResults']/descendant::a")
+    add_verify(CucumberLabel.new("Global Search Results"), VerifyXpathCount.new(@@global_search_count), @@global_search_count)
+
+    add_verify(CucumberLabel.new("acknowledgement message"), VerifyContainsText.new, AccessHtmlElement.new(:id, "ackMessagePanel"))
+
     add_verify(CucumberLabel.new("Error Message"), VerifyContainsText.new, AccessHtmlElement.new(:id, "error-message"))
     add_verify(CucumberLabel.new("Error Message patient"), VerifyContainsText.new, AccessHtmlElement.new(:css, ".patient-search-results div.list-group"))
-
-    add_verify(CucumberLabel.new("Global Error Message"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#global-search-results div.list-group"))
+    add_verify(CucumberLabel.new("Global Error Message"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#globalSearchResults div.list-group"))
 
     @@applet_count = AccessHtmlElement.new(:xpath, "//*[@data-appletid]")
     add_verify(CucumberLabel.new("Number of Applets"), VerifyXpathCount.new(@@applet_count), @@applet_count)
-    add_action(CucumberLabel.new("clinics"), ClickAction.new, AccessHtmlElement.new(:css, "#clinics>a"))
-    add_action(CucumberLabel.new("patientSearchKeyword"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#patient-search-main .smallColumn input.form-control"))
-    add_action(CucumberLabel.new("locationDisplayName"), ClickAction.new, AccessHtmlElement.new(:css, ".locationDisplayName"))
-    add_action(CucumberLabel.new("patientFilterInput"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "patientFilterInput"))
-    add_action(CucumberLabel.new("Ward"), ClickAction.new, AccessHtmlElement.new(:css, "#wards>a"))
     # add_verify(CucumberLabel.new("error message padding"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#patient-search-main .list-group > div"))
     add_verify(CucumberLabel.new("error message padding"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//div[@id='wards-location-list-results']/descendant::div[contains(@class, 'list-group')]/descendant::p[contains(@class, 'error-message padding')]"))
-
     add_verify(CucumberLabel.new("unAuthorized"), VerifyContainsText.new, AccessHtmlElement.new(:css, ".unAuthorized"))
-    add_action(CucumberLabel.new("ackButton"), ClickAction.new, AccessHtmlElement.new(:id, "ackButton"))
 
     location_list_result_count = AccessHtmlElement.new(:css, "#patient-search-main .list-result-container a")
     add_verify(CucumberLabel.new("Number of Location List Results"), VerifyXpathCount.new(location_list_result_count), location_list_result_count)
     #CONFIRM SECTION
     add_verify(CucumberLabel.new("patient identifying name"), VerifyText.new, AccessHtmlElement.new(:css, "#confirmSection div.patientName"))
-
     add_verify(CucumberLabel.new("no patient error message"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//div[@id='confirmSection']/p"))
 
     confirm_section = AccessHtmlElement.new(:css, "#confirmSection div.patientInfo")
     add_verify(CucumberLabel.new("patient identifying traits"), VerifyText.new, confirm_section)
     add_verify(CucumberLabel.new("dob"), VerifyContainsText.new, confirm_section)
     age_format = Regexp.new("\\d+\\y")
+    ssn_format = Regexp.new("[\\d, *]{3}-[\\d, *]{2}-\\d{4}")
     add_verify(CucumberLabel.new("age"), VerifyTextFormat.new(age_format), AccessHtmlElement.new(:id, 'confirm_age'))
     add_verify(CucumberLabel.new("gender"), VerifyContainsText.new, confirm_section)
-    add_verify(CucumberLabel.new("ssn"), VerifyContainsText.new, confirm_section)
+    add_verify(CucumberLabel.new("ssn"), VerifyTextFormat.new(ssn_format), AccessHtmlElement.new(:id, 'confirm_ssn'))
     add_verify(CucumberLabel.new("alert"), VerifyContainsText.new, confirm_section)
   end
 
@@ -88,7 +103,7 @@ class PatientSearch < AccessBrowserV2
   end
 
   def select_global_patient_name_in_list(name)
-    full_xpath = "//div[@id='global-search-results']/descendant::div[contains(@class, 'list-group-item-text')]/descendant::div[contains(string(), '#{name}')]"
+    full_xpath = "//div[@id='globalSearchResults']/descendant::div[contains(@class, 'list-group-item-text')]/descendant::div[contains(string(), '#{name}')]"
     p full_xpath
     add_action(CucumberLabel.new("My Patient Name"), ClickAction.new, AccessHtmlElement.new(:xpath, full_xpath))
 
@@ -99,7 +114,8 @@ class PatientSearch < AccessBrowserV2
 
   def select_patient_name_in_list(name)
     aa = 'ancestor::a'
-    full_xpath = "//div[@class='patient-search-results']/descendant::div[contains(@class, 'list-group-item-text')]/descendant::div[contains(string(), '#{name}')]/#{aa}"
+    #full_xpath = "//div[@class='patient-search-results']/descendant::div[contains(@class, 'list-group-item-text')]/descendant::div[contains(string(), '#{name}')]/#{aa}"
+    full_xpath = "//*[@class='patient-search-results']/descendant::div[contains(@class, 'patientDisplayName') and contains(string(), '#{name}')]"
     p full_xpath
     add_action(CucumberLabel.new("My Patient Name"), ClickAction.new, AccessHtmlElement.new(:xpath, full_xpath))
 
@@ -115,7 +131,8 @@ class PatientSearch2 < PatientSearch
     super
     add_action(CucumberLabel.new("Confirm Flag"), ClickAction.new, AccessHtmlElement.new(:id, "confirmFlaggedPatinetButton"))
     add_action(CucumberLabel.new("Active MyCPRSList"), ClickAction.new, AccessHtmlElement.new(:css, "#myCprsList.active"))
-    add_action(CucumberLabel.new('searchClose'), ClickAction.new, AccessHtmlElement.new(:id, 'searchCloseBtn'))
+    #add_action(CucumberLabel.new('searchClose'), ClickAction.new, AccessHtmlElement.new(:id, 'searchCloseBtn'))
+    add_action(CucumberLabel.new('Patient Search Overview Navigation'), ClickAction.new, AccessHtmlElement.new(:id, 'current-patient-nav-header-tab'))
     add_verify(CucumberLabel.new('Patient Image'), VerifyText.new, AccessHtmlElement.new(:id, 'patient-image-container'))
   end
 end
@@ -291,7 +308,8 @@ end
 
 Then(/^the user click on Confirm Selection$/) do
   patient_search= PatientSearch.instance
-  wait_until_present_and_perform_action(patient_search, "Confirm")
+  expect(patient_search.wait_until_action_element_visible("Confirm", DefaultLogin.wait_time)).to be_true
+  expect(patient_search.perform_action("Confirm")).to be_true
 end
 
 Then(/^the user looks for "(.*?)"$/) do  |name|
@@ -385,9 +403,11 @@ When(/^the user clicks the Patient Search Button$/) do
   expect(patient_search.perform_action("patientSearch")).to be_true
 end
 
+# this feature does not work the same anymore
+
 Given(/^user attempt to filter by keyword "(.*?)"$/) do |keyword|
   patient_search= PatientSearch.instance
-  wait_until_present_and_perform_action(patient_search, 'patientSearchKeyword', keyword)
+  wait_until_present_and_perform_action(patient_search, 'wardKeyword', keyword)
 end
 
 Given(/^the user select keyword "(.*?)"$/) do |name|
@@ -488,9 +508,26 @@ end
 
 When(/^the user clears though the Confirm Flag$/) do
   patient_search = PatientSearch2.instance
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { patient_search.static_dom_element_exists?("Confirm Flag") == true }
   expect(patient_search.perform_action("Confirm Flag")).to be_true
+end
+
+Then(/^the user confirms patient "(.*?)"$/) do |arg1|
+  patient_search = PatientSearch2.instance
+  
+  patient_search.wait_until_element_present("Confirm", DefaultLogin.wait_time)
+  expect(patient_search.static_dom_element_exists? "Confirm").to be_true
+  results = TestSupport.driver.find_element(:css, "#patient-search-confirmation div.patientName")
+  @ehmp = PobPatientSearch.new
+  begin
+    @ehmp.wait_until_img_patient_visible
+    p "patient image was visible"
+  rescue
+    p "DE3576: img doesn't appear, try to continue anyway"
+  end
+  expect(patient_search.perform_action("Confirm")).to be_true
+  expect(wait_until_dom_has_confirmflag_or_patientsearch).to be_true, "Patient selection did not complete successfully"
 end
 
 Then(/^the user waits 10 seconds for sync to complete$/) do
@@ -498,16 +535,37 @@ Then(/^the user waits 10 seconds for sync to complete$/) do
 end
 
 Given(/^the user has navigated to the patient search screen$/) do
-  navigate_in_ehmp '#patient-search-screen'
+  DefaultLogin.logged_in = true
+  navigate_in_ehmp '#/patient/patient-search-screen'
+  # navigate_in_ehmp '#patient-search-screen'
   elements = PatientSearch.instance
 
   need_refresh_de2106(elements)
   
   expect(elements.wait_until_element_present("mySite")).to be_true
   expect(elements.wait_until_element_present("global")).to be_true
+  p "On url: #{TestSupport.driver.current_url}"
 end
 
 Then(/^a patient image is displayed$/) do
   patient_search = PatientSearch2.instance
   expect(patient_search.wait_until_element_present('Patient Image')).to eq(true)
+end
+
+Then(/^the patient ssn is masked$/) do
+  search_screen = PatientSearch.instance
+  expect(search_screen.wait_until_element_present('ssn')).to eq(true), "SSN element was not displayed"
+  ssn_element = search_screen.get_element('ssn')
+  ssn_text = ssn_element.text
+  masked_format = Regexp.new("[*]{3}-[*]{2}-\\d{4}")
+  expect(masked_format.match(ssn_text)).to_not be_nil, "Expected ssn (#{ssn_text}) to be in format #{masked_format}"
+end
+
+Then(/^the patient ssn is unmasked$/) do
+  search_screen = PatientSearch.instance
+  expect(search_screen.wait_until_element_present('ssn')).to eq(true), "SSN element was not displayed"
+  ssn_element = search_screen.get_element('ssn')
+  ssn_text = ssn_element.text
+  unmasked_format = Regexp.new("\\d{3}-\\d{2}-\\d{4}")
+  expect(unmasked_format.match(ssn_text)).to_not be_nil, "Expected ssn (#{ssn_text}) to be in format #{unmasked_format}"
 end

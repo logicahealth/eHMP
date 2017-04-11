@@ -3,10 +3,11 @@ define([
     'puppetForm',
     'handlebars',
     'main/adk_utils/dateUtils',
+    'moment',
     'underscore',
     'jquery',
     'jquery.inputmask'
-], function(Backbone, PuppetForm, Handlebars, DateUtils,_, $, InputMask) {
+], function(Backbone, PuppetForm, Handlebars, DateUtils, Moment, _, $, InputMask) {
     'use strict';
 
     var TimepickerControl = PuppetForm.TimepickerControl = PuppetForm.DefaultInputControl.extend({
@@ -15,8 +16,9 @@ define([
             label: '',
             options: {
                 showMeridian: false,
-                defaultTime: 'current',
-                minuteStep: 5
+                minuteStep: 5,
+                explicitMode: true,
+                defaultTime: 'current'
             },
             extraClasses: [],
             helpMessage: ''
@@ -24,20 +26,19 @@ define([
         template: Handlebars.compile([
             '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
             '<div class="input-group bootstrap-timepicker">',
-                '<span class="input-group-addon border-top-left-radius" aria-hidden="true"><i class="fa fa-clock-o color-primary"></i></span>',
-                '<input type="{{type}}" id="{{clean-for-id name}}" name="{{name}}" value="{{value}}"' +
-                    ' class="{{PuppetForm "controlClassName"}}"' +
-                    ' placeholder="HH:MM"' +
-                    '{{#if title}} title="{{title}}"{{/if}}' +
-                    //'{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}' +
-                    '{{#if disabled}} disabled{{/if}}' +
-                    '{{#if required}} required{{/if}}' +
-                    '{{#if readonly}} readonly{{/if}}/>',
+            '<span class="input-group-addon border-top-left-radius" aria-hidden="true"><i class="fa fa-clock-o color-primary"></i></span>',
+            '<input type="{{type}}" id="{{clean-for-id name}}" name="{{name}}" value="{{value}}"' +
+            ' class="{{PuppetForm "controlClassName"}}"' +
+            ' placeholder="HH:MM"' +
+            '{{#if title}} title="{{title}}"{{/if}}' +
+            '{{#if disabled}} disabled{{/if}}' +
+            '{{#if required}} required{{/if}}' +
+            '{{#if readonly}} readonly{{/if}}/>',
             '</div>',
             '{{#if helpMessage}} <span {{#if (has-puppetForm-prop "helpMessageClassName")}}class="{{PuppetForm "helpMessageClassName"}}"{{/if}}>{{helpMessage}}</span>{{/if}}'
         ].join("\n")),
         getFormattedValue: function() {
-            var field = _.defaults(this.field.toJSON(), this.defaults),
+            var field = _.defaultsDeep(this.field.toJSON(), this.defaults),
                 attributes = this.model.toJSON(),
                 attrArr = field.name.split('.'),
                 name = attrArr.shift(),
@@ -62,37 +63,48 @@ define([
             'control:helpMessage': function(event, stringValue) {
                 this.setStringFieldOption('helpMessage', stringValue, event);
             },
-            'change input': function (event) {
+            'change input': function(event) {
                 var newVal = this.getValueFromDOM();
                 if (this.currVal === newVal) {
                     event.stopPropagation();
                 } else {
                     this.currVal = newVal;
                     PuppetForm.DefaultInputControl.prototype.onChange.call(this, event);
+                    this.onUserInput.apply(this, arguments);
                 }
             }
         }, PuppetForm.DefaultInputControl.prototype.events),
         onRender: function() {
             PuppetForm.DefaultInputControl.prototype.onRender.apply(this, arguments);
-
-            var customOptions = this.field.get('options') || {};
-            customOptions = _.defaults(customOptions, this.defaults.options);
-
+            var customOptions = _.defaultsDeep({}, this.field.get('options'), this.defaults.options);
             var formattedValue = this.getFormattedValue();
-            formattedValue || (customOptions.setTime = formattedValue);
             this.currVal = formattedValue;
+            var $input = this.$('input');
+            $input.timepicker(customOptions);
 
-            this.$('input').inputmask('h:s', {
-                placeholder: 'HH:MM',
-                showMaskOnHover: false,
-                disableSmartFocus: true
-            });
-            this.$('input').timepicker(customOptions);
+            if (!_.isEmpty(formattedValue)) {
+                $input.timepicker('setTime', formattedValue);
+            }
+
             this.currVal = this.getValueFromDOM();
             return this;
         },
         getValueFromDOM: function() {
-            return this.$el.find('#' + this.field.get('name')).val();
+            var fieldName = this.field.get('name');
+
+            if (this.field.get('prependToDomId')) {
+                fieldName = this.field.get('prependToDomId') + fieldName;
+            }
+            var timeValue = this.$el.find('#' + fieldName).val();
+
+            if (!_.isEmpty(timeValue) && timeValue.length === 4) {
+                timeValue = '0' + timeValue;
+            }
+
+            return timeValue;
+        },
+        onBeforeDestroy: function() {
+            this.$('input').timepicker('remove');
         }
     });
 

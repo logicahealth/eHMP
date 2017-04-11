@@ -2,15 +2,13 @@
 
 ## Order detail [{{{path}}}]
 
-### Get [GET {{{path}}}/detail{?pid}{&id}{&fields}]
+### Get [GET {{{path}}}/detail{?pid}{&id}]
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
 
     + id (string, required) - order id
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

@@ -4,13 +4,12 @@ define([
     "moment",
     "app/applets/search/searchUtil",
     "hbs!app/applets/search/templates/searchTemplate",
-    "hbs!app/applets/search/templates/searchSuggestTemplate",
     "hbs!app/applets/search/templates/searchResultTemplate",
     "hbs!app/applets/search/templates/searchResultGroupTemplate",
     "jquery.inputmask",
     "bootstrap-datepicker",
     "underscore"
-], function(Backbone, Marionette, Moment, searchUtil, searchTemplate, searchSuggestTemplate, searchResultTemplate, searchResultGroupTemplate, inputmask, datepicker, underscore) {
+], function(Backbone, Marionette, Moment, searchUtil, searchTemplate, searchResultTemplate, searchResultGroupTemplate, inputmask, datepicker, underscore) {
     "use strict";
 
     var SuggestResultsModel = Backbone.Model.extend({
@@ -24,7 +23,6 @@ define([
     var SearchView = Backbone.Marionette.ItemView.extend({
         util: searchUtil,
         template: searchTemplate,
-        searchSuggestTemplate: searchSuggestTemplate,
         searchResultTemplate: searchResultTemplate,
         searchResultGroupTemplate: searchResultGroupTemplate,
         isSearching: null, // wait (500ms) for user to stop typing before search
@@ -42,7 +40,6 @@ define([
             var storageText = ADK.SessionStorage.getAppletStorageModel('search', 'searchText');
 
             this.clearDateFilters();
-            // this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {});
             this.listenTo(ADK.Messaging.getChannel('search'), 'newSearch', function() {
                 storageText = ADK.SessionStorage.getAppletStorageModel('search', 'searchText');
                 if (storageText) {
@@ -76,7 +73,6 @@ define([
                     } else if (self.filterType === "custom") {
                         self.$('.active-range').removeClass('active-range');
                         var customDates = ADK.SessionStorage.getAppletStorageModel('search', 'customDates');
-                        //console.log(customDates);
                         this.toDate = moment(customDates.toDate).format('MM/DD/YYYY');
                         this.fromDate = moment(customDates.fromDate).format('MM/DD/YYYY');
 
@@ -85,12 +81,9 @@ define([
 
                     }
                     self.doSubmitSearch();
-
                 }
+
             });
-
-            //self.globalDateRefresh('observed');
-
 
         },
         onRender: function(event) {
@@ -98,12 +91,7 @@ define([
         },
 
         events: {
-            'keydown #searchtext': 'onSearchTextKey',
-            'keydown #suggestList a': 'onSuggestionKey',
-            'click #submit': 'doSubmitSearch',
-            'keydown .text-search-accessible': 'onAccessibilityKeydown',
-            'click .searchResultItem': 'onSelectSearchResult',
-            'click #search-results-header .badge': 'onSelectFilter',
+            'click .search-result-item': 'onSelectSearchResult',
             'show.bs.collapse .collapse': 'onExpandGroup',
             'hide.bs.collapse .collapse': 'onCollapseGroup',
 
@@ -132,7 +120,8 @@ define([
             var fetchOptions = {
                 criteria: {
                     "query": this.searchTerm
-                }
+                },
+                cache: false
             };
             fetchOptions.patient = ADK.PatientRecordService.getCurrentPatient();
             fetchOptions.resourceTitle = 'patient-record-search-text';
@@ -142,7 +131,10 @@ define([
             this.listenTo(this.searchResults, 'error', this.onError);
             this.suggestionsLocked = true;
 
-            $("#searchSpinner").show();
+            $(".search-spinner").show();
+            $(".search-applet-main").focus();
+
+
         },
 
         onError: function(collection, resp) {
@@ -151,23 +143,36 @@ define([
                 model: errorModel
             });
             errorView.render();
-            $('#searchResults').append(errorView.$el);
-            $("#searchSpinner").hide();
+            $('.search-results').append(errorView.$el);
+            $(".search-spinner").hide();
+        },
+
+        getKeywords: function() {
+            var keywords = ADK.SessionStorage.getAppletStorageModel('search', 'searchText').searchTerm.toString().toLowerCase();
+            keywords = keywords.split(' ');
+            _.each(keywords, function(kw) {
+                if (!_.find(keywords, function(key) {
+                        if (_.isUndefined(ADK.utils.stringUtils.singularize(kw))) {
+                            return true;
+                        }
+                        return key === ADK.utils.stringUtils.singularize(kw);
+                    })) {
+                    keywords.push(ADK.utils.stringUtils.singularize(kw));
+                }
+            });
+            return keywords;
         },
 
         fillSearchResultsTemplate: function() {
             var mainGroupList = [];
             var afterSearchTime = new Date().getTime();
             var timeToComplete = (afterSearchTime - this.preSearchTime) / 1000;
-            //console.log(this.searchResults);
             var me = this,
-                $searchResultList = $('#searchResults'),
+                $searchResultList = $('.search-results'),
                 totalResults = 0,
                 formattedResults = [],
                 groupedResults = {};
 
-
-            //console.log('SearchResults returned ' + this.searchResults.length + ' results.');
             $searchResultList.empty();
             this.searchResults.forEach(function(item) {
 
@@ -199,35 +204,48 @@ define([
             // generate grouped results for display
             var IDNumCount = 0; //numberto append to dateID (for future filtering)
 
+
             for (var groupName in groupedResults) { //iterate over the groups
 
                 var items = groupedResults[groupName],
                     cleanGroupName = groupName.replace(/[^a-zA-Z0-9]/g, ""),
                     groupId = 'result-group-' + cleanGroupName,
-                    highlightedGroupName = this.addSearchResultElementHighlighting(groupName),
-                    $group = $(me.searchResultGroupTemplate({
+                    highlightedGroupName = ADK.utils.stringUtils.addSearchResultElementHighlighting(groupName, this.getKeywords()),
+                    calcount = 0,
+                    i,
+                    itemCount;
+
+                    for (i = 0; i < items.length; i++) {
+                        itemCount = items[i];
+                        if (!_.isUndefined(_.get(itemCount, 'attributes.count'))) {
+                            calcount += parseInt(_.get(itemCount, 'attributes.count') );
+                        } else {
+                            calcount ++;
+                        }
+                    }
+
+                    var $group = $(me.searchResultGroupTemplate({
                         groupName: highlightedGroupName,
                         titleElemId: 'result-group-title-' + cleanGroupName,
                         groupId: groupId,
                         subGroupClass: 'mainGroup dataFetched',
-                        mainGroup: 'mainGroupIndent'
+                        mainGroup: 'mainGroupIndent',
+                        count: calcount
                     })),
-                    $groupList = $group.find('#' + groupId + ' .groupContent');
+                    $groupList = $group.find('#' + groupId + ' .group-content');
 
                 formattedResults = [];
 
-                for (var i = 0; i < items.length; i++) { //iterate over each item in the result group
+                for (i = 0; i < items.length; i++) { //iterate over each item in the result group
                     IDNumCount++;
 
-                    var item = items[i],
-                        where = item.attributes.where,
+                        var item = items[i],
+                        where = ADK.utils.stringUtils.addSearchResultElementHighlighting(item.attributes.where, this.getKeywords()),
                         summary = (item.attributes.summary || '').replace("\n", ""),
                         uid = item.attributes.uid,
                         datetime = me.util.doDatetimeConversion(item.attributes.datetime),
                         count = '1', // default result count
                         highlights = '';
-                    //console.log(item.uid);
-
 
                     if (typeof(item.attributes.count) !== 'undefined') {
                         count = (item.attributes.count).toString();
@@ -266,7 +284,7 @@ define([
                         var cleanGroupName2 = summary.replace(/[^a-zA-Z0-9]/g, ""),
                             subgroupIdCount = subgroupIdCounts[cleanGroupName2] = (subgroupIdCounts[cleanGroupName2] || 0) + 1,
                             subGroupId = 'result-subGroup-' + cleanGroupName2 + '-' + subgroupIdCount,
-                            highlightedSubGroupName = this.addSearchResultElementHighlighting(summary),
+                            highlightedSubGroupName = ADK.utils.stringUtils.addSearchResultElementHighlighting(summary, this.getKeywords()),
                             subGroup = me.searchResultGroupTemplate({
                                 groupName: highlightedSubGroupName,
                                 titleElemId: 'result-subGroup-title-' + cleanGroupName2 + '-' + subgroupIdCount,
@@ -296,10 +314,10 @@ define([
                             }
 
                         }
-                        var highlightedSummary = this.addSearchResultElementHighlighting(summaryPlus);
-                        var highlightedDomain = this.addSearchResultElementHighlighting(item.attributes.kind);
+                        var highlightedSummary = ADK.utils.stringUtils.addSearchResultElementHighlighting(summaryPlus, this.getKeywords());
+                        var highlightedDomain = ADK.utils.stringUtils.addSearchResultElementHighlighting(item.attributes.kind, this.getKeywords());
                         var entry = me.searchResultTemplate({
-                            Class: "topLevelItem searchResultItem text-search-accessible searchResultItemFilterable",
+                            Class: "topLevelItem search-result-item all-padding-xs searchResultItem-filterable",
                             resultId: IDNumCount,
                             uid: uid.toString(),
                             count: count.toString(),
@@ -329,7 +347,6 @@ define([
                     group: $group,
                     sortText: sortText
                 });
-                //$searchResultList.append($group);
 
 
             }
@@ -360,7 +377,6 @@ define([
                 this.do24HrDateFilter();
             } else if (filterType === "custom") {
                 var customDates = ADK.SessionStorage.getAppletStorageModel('search', 'customDates');
-                //console.log(customDates);
                 this.toDate = moment(customDates.toDate).format('MM/DD/YYYY');
                 this.fromDate = moment(customDates.fromDate).format('MM/DD/YYYY');
 
@@ -373,7 +389,7 @@ define([
                 this.doAllDateFilter();
             }
 
-            $("#searchSpinner").hide();
+            $(".search-spinner").hide();
 
         },
         getDocumentDrilldownData: function(group_value, subGroupList, drilldown_type) {
@@ -395,11 +411,10 @@ define([
                     "group.field": group_field,
                     "group.value": group_value
                 },
-                cache: true,
+                cache: false
             };
             var self = this;
             fetchOptions.onSuccess = function(collection, resp) {
-                //console.log(resp);
                 self.drillDownCount++;
                 var returnedSubGroupData = resp.data.items.results;
                 var snippets = '';
@@ -408,9 +423,8 @@ define([
                 }
 
                 for (var subgroupData = 0; subgroupData < returnedSubGroupData.length; subgroupData++) {
-                    //console.log(returnedSubGroupData[subgroupData]);
                     var drillDownItem = returnedSubGroupData[subgroupData];
-                    var where = drillDownItem.facility_name;
+                    var where = ADK.utils.stringUtils.addSearchResultElementHighlighting(drillDownItem.facility_name, self.getKeywords());
                     var name = drillDownItem.author_display_name;
                     var problemStatus = drillDownItem.problem_status;
                     var uid = drillDownItem.uid;
@@ -423,16 +437,15 @@ define([
                     }
 
                     if (drillDownItem.problem_status !== undefined) {
-                        problemStatus = self.addSearchResultElementHighlighting(drillDownItem.problem_status);
+                        problemStatus = ADK.utils.stringUtils.addSearchResultElementHighlighting(drillDownItem.problem_status, self.getKeywords());
                     }
                     if (snippets[uid].body !== 'undefined' && !underscore.isEmpty(snippets[uid])) {
-                        //console.log(snippets[uid]);
-                        highlights = '<p>...' + snippets[uid].body.join(" ... </p><p>...") + '...</p>';
+                        highlights = '<p class="all-margin-no">...' + snippets[uid].body.join(" ... </p><p class='all-margin-no'>...") + '...</p>';
                     }
 
 
                     var subGroupEntryItem = self.searchResultTemplate({
-                        Class: "subgroupItem searchResultItem text-search-accessible searchResultItemFilterable",
+                        Class: "subgroupItem search-result-item all-padding-xs searchResultItem-filterable",
                         resultId: 'subgroupItem' + subgroupData.toString(),
                         uid: uid.toString(),
                         datetime: datetime,
@@ -448,14 +461,12 @@ define([
                     subGroupList = subGroupList.append(subGroupEntryItem);
 
                 }
-                subGroupList.find($('.subgroupDataFetchSpinner')).hide();
+                subGroupList.find($('.subgroup-data-fetchspinner')).hide();
                 self.refreshDateFilter();
             };
 
             fetchOptions.patient = ADK.PatientRecordService.getCurrentPatient();
             fetchOptions.resourceTitle = 'patient-record-search-detail-document';
-            //console.log(ADK.PatientRecordService.fetchCollection(fetchOptions));
-            //var drilldownCollection = ResourceService.createEmptyCollection(fetchOptions);
             ADK.PatientRecordService.fetchCollection(fetchOptions);
 
         },
@@ -463,52 +474,26 @@ define([
 
             var group_value = subGroup.attr('groupOnText');
             var drilldown_type = subGroup.attr('subGroupType');
-            var $subGroupList = subGroup.find($('.groupContent'));
+            var $subGroupList = subGroup.find($('.group-content'));
 
             this.getDocumentDrilldownData(group_value.toString(), $subGroupList, drilldown_type);
             subGroup.removeClass('dataUnfetched');
-            subGroup.removeClass('searchResultItemFilterable');
+            subGroup.removeClass('searchResultItem-filterable');
             subGroup.addClass('dataFetched');
 
 
 
         },
-        addSearchResultElementHighlighting: function(textToHighlight) {
-            var textToFindAndHighlight = ADK.SessionStorage.getAppletStorageModel('search', 'searchText').searchTerm.toString().toLowerCase();
-            var searchString = textToHighlight.toString().toLowerCase();
-
-            if (searchString.indexOf('<' + textToFindAndHighlight + '>') <= -1 && searchString.indexOf(textToFindAndHighlight) > -1) {
-                var startIndex = searchString.indexOf(textToFindAndHighlight);
-                var endIndex = startIndex + textToFindAndHighlight.length;
-                var stringToHighlight = textToHighlight.substring(startIndex, endIndex);
-                var highlightedText = textToHighlight;
-
-
-                highlightedText = highlightedText.replace(stringToHighlight, '<mark class=\"cpe-search-term-match\">' + stringToHighlight + '</mark>');
-
-
-                return highlightedText;
-
-
-            }
-            return textToHighlight;
-        },
-
-        handleResultEvent: function() {
-            //console.log('handeled event!'); // individual result handeler for future work
-        },
         showFromCalendar: function() {
 
             this.$('#fromDateText').datepicker('show');
             this.$('#toDateText').datepicker('hide');
-            //this.$('#fromDateText').val("");
 
         },
         showToCalendar: function() {
 
             this.$('#toDateText').datepicker('show');
             this.$('#fromDateText').datepicker('hide');
-            //this.$('#toDateText').val("");
 
         },
         doDateFilterCommon: function(dateRange, textSearchId, dateRangeId, selectedId) {
@@ -577,15 +562,7 @@ define([
                 customFromDate: fromDate.format('MM/DD/YYYY'),
                 customToDate: fromDate.format('MM/DD/YYYY')
             });
-            //console.log(ADK.SessionStorage.getAppletStorageModel('search', 'customDates'));
             this.doDateFilter(false);
-        },
-        parseDateArray: function(dateArray) {
-            var year = parseInt(dateArray[2]);
-            var month = parseInt(dateArray[0]) - 1;
-            var day = parseInt(dateArray[1]);
-
-            return new Date(year, month, day);
         },
         clearDateFilters: function() {
             this.$('#fromDateText').val("");
@@ -601,15 +578,19 @@ define([
             this.doDateFilter(showAll);
         },
         formatDates: function() {
-            this.$('#fromDateText').datepicker({
+            ADK.utils.dateUtils.datepicker(this.$('#fromDateText'), {
                 format: 'mm/dd/yyyy',
                 forceParse: false,
-                autoclose: true
+                autoclose: true,
+                todayBtn: 'linked',
+                todayHighlight: true
             });
-            this.$('#toDateText').datepicker({
+            ADK.utils.dateUtils.datepicker(this.$('#toDateText'), {
                 format: 'mm/dd/yyyy',
                 forceParse: false,
-                autoclose: true
+                autoclose: true,
+                todayBtn: 'linked',
+                todayHighlight: true
             });
 
             this.$('#fromDateText').inputmask('m/d/y', {
@@ -618,6 +599,8 @@ define([
             this.$('#toDateText').inputmask('m/d/y', {
                 'placeholder': 'MM/DD/YYYY'
             });
+            this.$('#toDateText').datepicker('remove');
+            this.$('#fromDateText').datepicker('remove');
         },
         monitorCustomDateRange: function(event) {
             this.toggleApplyBtn();
@@ -647,10 +630,8 @@ define([
         },
         doDateFilter: function(displayAll) {
 
-            // $('#fromDateText').datepicker('update', this.fromDate);
-            // $('#toDateText').datepicker('update', this.toDate);
 
-            var items = $('#searchResults .searchResultItemFilterable');
+            var items = $('.search-results .searchResultItem-filterable');
             var filteredOut = 0;
             var fromTimeInMilisec = null;
             var toTimeInMilisec = null;
@@ -696,7 +677,7 @@ define([
 
             } //end for-loop
             var results = this.totalResults - filteredOut;
-            this.$('#numberOfResults').html(results.toString());
+            this.$('.number-of-results').html(results.toString());
 
 
             this.changeEntireSearchResultGroupVisibility();
@@ -710,7 +691,7 @@ define([
                 var newCount = 0;
                 var visible = false;
                 var nextGroup = $(groups[i]);
-                var list = nextGroup.find('.searchResultItemFilterable');
+                var list = nextGroup.find('.searchResultItem-filterable');
 
                 if (nextGroup.css("display") !== "none") {
                     groupDisplay = nextGroup.css("display");
@@ -721,7 +702,6 @@ define([
                     var nextItem = $(list[k]);
                     if (nextItem.css("display") === groupDisplay) {
                         visible = true;
-                        //var addToCount = parseInt(nextItem.find(".badge").val()) || 1;
                         newCount++;
                     }
 
@@ -738,41 +718,41 @@ define([
             }
         },
         onSelectSearchResult: function(event) {
-            var $resultContainer = $(event.target).closest('.searchResultItem'),
-                uid = $resultContainer.attr('data-uid'),
-                currentPatient = ADK.PatientRecordService.getCurrentPatient();
-
-            //console.log("search applet sending message: resultClicked: uid=" + uid);
-            ADK.Messaging.getChannel('search').trigger('resultClicked', {
-                uid: uid,
-                patient: {
-                    icn: currentPatient.attributes.icn,
-                    pid: currentPatient.attributes.pid
-                }
-            });
-        },
-
-        onAccessibilityKeydown: function(keyEvent) {
-            if (keyEvent.keyCode === 32 || keyEvent.keyCode === 13) { // trigger click on space/enter key for accessibility
-                $(keyEvent.target).trigger('click');
+            var self = this;
+            if (event.type == "click" || event.keyCode == 13) {
+                event.preventDefault();
+                var $resultContainer = $(event.target).closest('.search-result-item'),
+                    uid = $resultContainer.attr('data-uid'),
+                    currentPatient = ADK.PatientRecordService.getCurrentPatient();
+                var model = _.find(self.searchResults.models, function(item) {
+                    return item.attributes.uid === uid;
+                });
+                ADK.Messaging.getChannel('search').trigger('resultClicked', {
+                    uid: uid,
+                    patient: {
+                        icn: currentPatient.attributes.icn,
+                        pid: currentPatient.attributes.pid
+                    },
+                    model: model
+                });
             }
         },
-
-        onCollapseGroup: function(event) {
-            var $groupIcon = $(event.target).closest('.searchGroup').children('.searchGroupTitle').children('.searchGroupTitleArrow');
-            $groupIcon.removeClass('fa-chevron-down');
-            $groupIcon.addClass('fa-chevron-right');
+        accordionExpandCollapse: function(caret1, caret2, accordionState ){
+            var groupIcon = this.$(event.target).closest('.search-group').find('button.btn-accordion:first');
+            groupIcon.children('.fa').removeClass(caret1).addClass(caret2);
+            var accordionHeading = groupIcon.find('.text-uppercase').text().trim();
+            groupIcon.attr('title', 'Press enter to ' + accordionState + accordionHeading + ' accordion');
+            groupIcon.blur().focus();
         },
-
+        onCollapseGroup: function(event) {
+            this.accordionExpandCollapse('fa-chevron-down', 'fa-chevron-right', 'expand ');
+        },
         onExpandGroup: function(event) {
-            var $groupIcon = $(event.target).closest('.searchGroup').children('.searchGroupTitle').children('.searchGroupTitleArrow');
-            var $group = $(event.target).closest('.searchGroup');
+            var $group = $(event.target).closest('.search-group');
             if ($group.hasClass('dataUnfetched')) {
                 this.checkforSubGroups($group);
             }
-            $groupIcon.removeClass('fa-chevron-right');
-            $groupIcon.addClass('fa-chevron-down');
-
+            this.accordionExpandCollapse('fa-chevron-right', 'fa-chevron-down', 'collapse ');
         }
     });
 

@@ -575,7 +575,6 @@ class ScreenManager < AccessBrowserV2
     add_action(CucumberLabel.new("Add New WorkSheet"), ClickAction.new, AccessHtmlElement.new(:id, "addScreen"))
     add_action(CucumberLabel.new("Title"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "screen-title"))
     add_action(CucumberLabel.new("Description"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "screen-description"))
-    add_action(CucumberLabel.new("Done Button"), ClickAction.new, AccessHtmlElement.new(:css, "#doneEditing")) 
     add_action(CucumberLabel.new("User Defined Screen"), ClickAction.new, AccessHtmlElement.new(:id, ".//*[@id='screens-carousel']/div[1]/div[2]/div/div[6]"))
     add_action(CucumberLabel.new("Delete Button"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@id='workspace-delete']"))
     add_action(CucumberLabel.new("Confirm Delete Button"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@id='workspace-delete']"))  
@@ -587,7 +586,6 @@ class ScreenManager < AccessBrowserV2
     add_action(CucumberLabel.new("Workspace Manager Filter Field"), SendKeysAndEnterAction, AccessHtmlElement.new(:xpath, ".//*[@id='searchScreens']"))  
     add_verify(CucumberLabel.new("test"), VerifyText.new, AccessHtmlElement.new(:xpath, ".//*[@id='screens-carousel']/div[1]/div[2]/div/div"))
     add_verify(CucumberLabel.new("Coversheet"), VerifyText.new, AccessHtmlElement.new(:xpath, ".//*[@id='cover-sheet']/div/div[1]/div[2]"))
-    add_verify(CucumberLabel.new("Workspace Manager Title"), VerifyText.new, AccessHtmlElement.new(:xpath, ".//*[@id='mainOverlayRegion']/div/div/h1"))
     add_action(CucumberLabel.new("Filter Button"), ClickAction.new, AccessHtmlElement.new(:css, "#grid-filter-button-workspace-manager > span"))
     add_verify(CucumberLabel.new("Filter Field"), VerifyText.new, AccessHtmlElement.new(:css, "#mainOverlayRegion > div > div > div.col-sm-10.grid-filter.hiddenRow > div.col-xs-offset-6.col-xs-4.filterRegion"))
     add_action(CucumberLabel.new("Filter Value"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "searchScreens"))
@@ -744,20 +742,6 @@ end
 #   end
 #end
 
-When(/^the user delete the test screen$/) do
-  screen = ScreenManager.instance
-  screen.wait_until_action_element_visible("Workspace Manager Button", 20)
-  expect(screen.perform_action("Workspace Manager Button")).to be_true, "Error when attempting to open Workspace Manager"
-  TestSupport.driver.manage.window.maximize
-  screen.wait_until_action_element_visible("workspace1", 20)
-  expect(screen.perform_action("workspace1")).to be_true, "Error when attempting to click on workspace 1"
-  screen.wait_until_action_element_visible("Delete Button", 20)
-  expect(screen.perform_action("Delete Button")).to be_true, "Error when attempting to click on Workspace Manager Delete Button"
-  screen.wait_until_action_element_visible("Confirm Delete Button", 20)
-  expect(screen.perform_action("Confirm Delete Button")).to be_true, "Error when attempting to click on Confirm Delete"
-  expect(screen.perform_action("Close")).to be_true, "Workspace Manager Close"
-end
-
 When(/^update the test screen$/) do
   screen = ScreenManager.instance
   screen.wait_until_action_element_visible("Workspace Manager Button", 40)
@@ -897,33 +881,7 @@ end
 # #else # succesful begin
 # #  p "Input - #{control_name}"
 # end
-  
-Then(/^the user enters "([^"]*)" for title and enters "([^"]*)" for description and verify add and load button is "([^"]*)"$/) do |element1, element2, disable_or_enable|
-  con = ScreenManager.instance
-  driver = TestSupport.driver
-  #con.wait_until_action_element_visible("AddLoadButton")
-  expect(con.static_dom_element_exists?("AddLoadButton")).to be_true
-  con.perform_action("Title", element1) unless element1.length==0
-  p element1.length
-  p element2.length
-  con.perform_action("Description", element2) unless element2.length==0
-  #con.perform_verify('Add and Load Screen Button' is_disabled())
-  if (element1.length == 0) || (element2.length == 0)
-    disable_or_enable = "disable"      
-    element = con.get_element("AddLoadButton")
-    t = verify_element_enabled(element, disable_or_enable)
-    p t
-  else
-    disable_or_enable = "enable"
-    element = con.get_element("AddLoadButton")
-    t = verify_element_enabled(element, disable_or_enable)
-    p t    
-    con.perform_action('AddLoadButton')
-    TestSupport.wait_for_page_loaded
-    con.perform_action('Done Button')
-    exit
-  end
-end
+
 # Then user sees validation message
   
 Then(/the user enters values for both fields "([^"]*)" for title and enters "([^"]*)" for description and verify add and load button is "([^"]*)"$/) do |element1, element2, _disable_or_enable|   
@@ -1047,11 +1005,11 @@ Then(/^user sees carousel display$/) do |sourceElement|
   #           build();
   #            dragAndDrop.perform();
   #actions=Actions.new("driver");
-  #driver.get("http://IP        /#workspace1)
+  #driver.get("http://IP_ADDRESS/#workspace1)
   # sourceElement = driver.find_element(:xpath, ".//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[1]/p")
 
   #actions.clickAndHold(sourceElement).perform()
-  #driver.get("http://IP        /#workspace1")
+  #driver.get("http://IP_ADDRESS/#workspace1")
   #WebElement draggable = driver.find_element(:xpath, ".//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[1]")
   #draggable.highlight
   #new Actions(driver).dragAndDropBy(draggable, 200, 10).build().perform(); 
@@ -1123,7 +1081,7 @@ def drag_and_drop(_access_browser_instance)
       
   driver = TestSupport.driver
   p driver
-  driver.get("http://IP        /#Workspace1")
+  driver.get("http://IP_ADDRESS/#Workspace1")
           
   #    con.perform_action('Done Button')
   #  p '----------------'
@@ -1155,8 +1113,8 @@ def drag_and_drop(_access_browser_instance)
   #    el2 = @driver.find_element(:css, "div.captcha div.sliderCaptcha div.dottedBorder")
   #    
   #    @browser.action.move_to(el2).release.perform          
-  #    driver.get("http://IP        /#trial1");
-  #    #driver=Browser.new("http://IP        /#trial1")
+  #    driver.get("http://IP_ADDRESS/#trial1");
+  #    #driver=Browser.new("http://IP_ADDRESS/#trial1")
   #    WebElement draggable = driver.findElement(By.xpath(".//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[2]/p"))
   #      draggable.click
   #      sleep(8)
@@ -1334,13 +1292,12 @@ class CoversheetDropdown < AccessBrowserV2
   include Singleton
   def initialize
     super
-    #add_verify(CucumberLabel.new("Coversheet"), VerifyText.new, AccessHtmlElement.new(:css, "#cover-sheet-button>a"))
-    #add_verify(CucumberLabel.new("Coversheet"), VerifyText.new, AccessHtmlElement.new(:css, "#navigation-navbar > ul > li.btn-group.open > ul > li.cover-sheet-button.active > a"))
     add_verify(CucumberLabel.new("Coversheet"), VerifyText.new, AccessHtmlElement.new(:css, "a[href='#cover-sheet']")) 
     add_verify(CucumberLabel.new("Timeline"), VerifyText.new, AccessHtmlElement.new(:css, "a[href='#news-feed']"))
     add_verify(CucumberLabel.new("Meds Review"), VerifyText.new, AccessHtmlElement.new(:css, "a[href='#medication-review']"))
     add_verify(CucumberLabel.new("Documents"), VerifyText.new, AccessHtmlElement.new(:css, "a[href='#documents-list']"))  
     add_verify(CucumberLabel.new("Overview"), VerifyText.new, AccessHtmlElement.new(:css, "a[href='#overview']"))
+    add_verify(CucumberLabel.new("Summary"), VerifyText.new, AccessHtmlElement.new(:css, "a[href='#summary']"))
   end
 end
 

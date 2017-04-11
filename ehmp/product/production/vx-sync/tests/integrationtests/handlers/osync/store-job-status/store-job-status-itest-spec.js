@@ -8,7 +8,7 @@ var handler = require(global.VX_HANDLERS + 'osync/store-job-status/store-job-sta
 var mockConfig = {
     jds: {
         protocol: 'http',
-        host: 'IPADDRESS ',
+        host: 'IP_ADDRESS',
         port: 9080,
         "jdsSaveURI": "/user/set/this",
         "jdsGetURI": "/user/get"

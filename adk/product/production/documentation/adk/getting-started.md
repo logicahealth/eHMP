@@ -36,10 +36,12 @@ The ADK:
 >       id: 'sample_applet',                    // same as name given to applet on
 >                                               //      creation (same as applet folder name)
 >       title: 'Sample Applet Display Name',    // what is displayed on title bar
+>       context: ['patient','staff','admin'],   // specify a list of contexts that this applet belongs to.
 >       maximizeScreen: 'sample-applet-full',   // (optional) screen for maximized version of applet.
 >       showInUDWSelection: true,               // true to show up in User Defined Workspace Carousel
->       requiredBeforeLogin: true,              // optional parameter: true if applet is necessary to load before login                                             
->       requiredPermissions: ['some-permission', 'another-permission'] // Array of permissions needed to view applet.
+>       permissions: ['some-permission', 'another-permission'] // Array of permissions needed to view applet.
+>       dependencies: ['other_sample_applet'],  // array of applets to prioritize before this applet
+>       requiredByLayout: ['patient'] || true   // array of contexts requiring this applet for its layout (true == all contexts)
 >   },
 >     ...
 > }];

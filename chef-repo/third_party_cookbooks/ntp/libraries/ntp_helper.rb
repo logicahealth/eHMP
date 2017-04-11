@@ -1,5 +1,5 @@
 #
-# Author::     an         (<jdunn@getchef.com>)
+# Author:: Julian C. Dunn (<jdunn@getchef.com>)
 # Cookbook Name:: ntp
 # Library:: helper
 #

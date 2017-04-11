@@ -12,6 +12,6 @@ var patientPhotoPort = patientPhotoApp.config.patientPhotoServer.port;
 
 patientPhotoApp.register('/patientphoto', ROOT + '/src/resources/patient-photo/patient-photo-resource');
 
-patientPhotoApp.listen(patientPhotoPort, function(){
+patientPhotoApp.rdkListen(patientPhotoPort, function(){
     patientPhotoApp.logger.info('Patient photo now listening on %s', patientPhotoPort);
 });

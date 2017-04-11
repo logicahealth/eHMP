@@ -5,7 +5,7 @@ define([
     'handlebars',
     'moment',
     '../collectionHandler',
-    'app/applets/visit/utils/saveUtil'
+    'app/applets/encounters/writeback/saveUtil'
 ], function(Backbone, Marionette, $, Handlebars, moment, collectionHandler, saveUtil) {
     "use strict";
 
@@ -22,39 +22,40 @@ define([
             'locationUid': '',
             'locationDisplayName': '',
             'dateTime': '',
-            'formattedDate': '',
-            'isHistorical': 'off',
+            'formattedDateTime': '',
+            'isHistorical': false,
             'existingVisit': false,
             'selectedProvider': {}
         }
     });
-    var DATE_TIME_FORMAT = 'YYYYMMDDHHmm';
+    var DATE_TIME_FORMAT = 'YYYYMMDDHHmmss';
     var DISPLAY_FORMAT = 'MM/DD/YYYY HH:mm';
-    var locationQueue = [];
     var NUM_RECENT_LOCATIONS = 5;
     var ALL_LOCATIONS_TEXT = 'All Locations';
     var RECENTLY_USED_LOCATIONS_TEXT = 'Recently Used Locations';
-    var providerQueue = [];
     var NUM_RECENT_PROVIDERS = 5;
     var ALL_PROVIDERS_TEXT = 'All Providers';
+    var PROVIDERS_ERROR_MSG = '<h3>There was an error retrieving the providers list.</h3>';
     var RECENTLY_USED_PROVIDERS_TEXT = 'Recently Used Providers';
-    var LOADING_ELEMENT = '<i class="loading fa fa-spinner fa-spin" style="position: absolute; top: 28px; left: 17px; z-index: 9;"></i>';
+    var LOADING_ELEMENT = '<i class="loading fa fa-spinner fa-spin visit-loading"></i>';
+    var ENCOUNTER_FORM = 'Encounter Form';
+    var PROVIDERS_ERROR_NO_RESOURCE_RESPONSE = 'No response was received from the resource server. Contact your System Administrator for assistance.';
     // *********************************************** CONTAINERS ****************************************
     var selectEncounterProviderContainer = {
         control: 'container',
-        extraClasses: ['row select-encounter-container'],
+        extraClasses: ['row select-encounter-container', 'top-margin-md'],
         items: [{
             control: 'container',
-            extraClasses: ['col-md-6'],
+            extraClasses: ['col-xs-6 select-encounter-provider', 'top-margin-sm'],
             template: LOADING_ELEMENT,
             items: [{
                 control: 'select',
                 label: 'Select Encounter Provider',
                 srOnlyLabel: false,
                 name: 'selectEncounterProvider',
-                placeholder: 'Please wait while the list is loading.',
+                placeholder: 'Wait while the list is loading.',
                 disabled: true,
-                pickList: 'selectEncounterProviderPickList',
+                pickList: [],
                 showFilter: true,
                 groupEnabled: true,
                 options: {
@@ -128,8 +129,8 @@ define([
             extraClasses: ['row'],
             items: [{
                 control: 'container',
-                extraClasses: ['col-md-12', 'marginTopButtom'],
-                template: '<span class="sr-only">{{preSelectSRText}}</span><span>Viewing {{clinicAppointmentsFromDate}} to {{clinicAppointmentsThroughDate}}<span>'
+                extraClasses: ['col-xs-12'],
+                template: '<p>Viewing {{clinicAppointmentsFromDate}} to {{clinicAppointmentsThroughDate}}<p>'
             }]
         }, {
             control: 'container',
@@ -141,14 +142,15 @@ define([
                 collection: appointmentsArray,
                 columns: [{
                     title: 'Date',
-                    id: 'formatteddateTime'
+                    id: 'formattedDateTime'
                 }, {
                     title: 'Details',
                     id: 'details'
                 }, {
                     title: 'Location',
                     id: 'locationDisplayName'
-                }]
+                }],
+                label: 'appointments/visit'
             }]
         }]
     };
@@ -159,8 +161,8 @@ define([
             extraClasses: ['row'],
             items: [{
                 control: 'container',
-                extraClasses: ['col-md-12', 'marginTopButtom'],
-                template: '<span>Recent admissions (up to the last 5)</span>'
+                extraClasses: ['col-xs-12'],
+                template: '<p>Recent admissions (up to the last 5)</p>'
             }]
         }, {
             control: 'container',
@@ -172,14 +174,15 @@ define([
                 collection: admissionsArray,
                 columns: [{
                     title: 'Date',
-                    id: 'formatteddateTime'
+                    id: 'formattedDateTime'
                 }, {
                     title: 'Details',
                     id: 'details'
                 }, {
                     title: 'Location',
                     id: 'locationDisplayName'
-                }]
+                }],
+                label: 'admission'
             }]
         }]
     };
@@ -190,15 +193,15 @@ define([
             extraClasses: ['row'],
             items: [{
                 control: 'container',
-                extraClasses: ['col-md-12'],
-                template: '<h6>New Visit</h6>'
+                extraClasses: ['col-xs-12'],
+                template: '<p>New Visit</p>'
             }]
         }, {
             control: 'container',
             extraClasses: ['row select-location-container'],
             items: [{
                 control: 'container',
-                extraClasses: ['col-md-6'],
+                extraClasses: ['col-xs-6', 'encounter-set'],
                 template: LOADING_ELEMENT,
                 items: [{
                     control: 'select',
@@ -206,7 +209,7 @@ define([
                     srOnlyLabel: false,
                     name: 'selectNewEncounterLocation',
                     disabled: true,
-                    pickList: 'selectNewEncounterLocationPickList',
+                    pickList: [],
                     showFilter: true,
                     groupEnabled: true,
                     options: {
@@ -273,10 +276,10 @@ define([
                 }]
             }, {
                 control: 'container',
-                extraClasses: ['col-md-6'],
+                extraClasses: ['col-xs-6', 'encounter-set'],
                 items: [{
                     control: 'container',
-                    extraClasses: ['col-md-6'],
+                    extraClasses: ['col-xs-6'],
                     items: [{
                         control: 'datepicker',
                         name: 'newVisitDate',
@@ -285,7 +288,7 @@ define([
                     }]
                 }, {
                     control: 'container',
-                    extraClasses: ['col-md-6'],
+                    extraClasses: ['col-xs-6'],
                     items: [{
                         control: 'timepicker',
                         placeholder: 'HH:MM',
@@ -295,18 +298,18 @@ define([
                     }]
                 }, {
                     control: 'container',
-                    extraClasses: ['col-md-12'],
+                    extraClasses: ['col-xs-12', 'left-padding-no'],
                     items: [{
                         control: 'alertBanner',
                         name: 'newVisitDateTimeWarning',
-                        type: 'warning'
+                        type: 'info'
                     }]
                 }, {
                     control: 'container',
                     extraClasses: ['row'],
                     items: [{
                         control: 'container',
-                        extraClasses: ['col-md-12'],
+                        extraClasses: ['col-xs-12', 'right-padding-xl'],
                         items: [{
                             control: 'checkbox',
                             name: 'isHistorical',
@@ -322,11 +325,11 @@ define([
         extraClasses: ['row'],
         items: [{
             control: 'container',
-            extraClasses: ['col-md-12'],
+            extraClasses: ['col-xs-12'],
             items: [{
                 control: 'container',
                 tagName: 'h5',
-                extraClasses: ['encounters-sub-heading'],
+                extraClasses: ['bottom-padding-no'],
                 template: 'Select Encounter Location'
             }, {
                 control: 'tabs',
@@ -352,16 +355,11 @@ define([
             control: 'container',
             extraClasses: ['form-group'],
             items: [{
-                control: 'checkbox',
-                id: 'viewEncounters-checkbox',
-                label: 'View encounter form after setting',
-                extraClasses: ['checkbox-inline', 'right-margin-xs'],
-                name: 'viewEncounter'
-            }, {
                 control: 'button',
                 type: 'submit',
                 id: 'cancel-btn',
                 label: 'Cancel',
+                title: 'Press enter to cancel.',
                 disabled: false,
                 extraClasses: ['btn-default', 'btn-sm'],
                 name: 'cancel'
@@ -370,8 +368,9 @@ define([
                 type: 'submit',
                 id: 'viewEncounters-btn',
                 label: 'Set',
+                title: 'Press enter to confirm.',
                 disabled: true,
-                extraClasses: ['btn-default', 'btn-sm', 'left-margin-xs'],
+                extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
                 name: 'set'
             }]
         }]
@@ -379,7 +378,8 @@ define([
     // *********************************************** END OF FIELDS ********************************************
     // *********************************************** FOOTER VIEW **********************************************
     var FooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "Cancel" classes="btn-default" title="Press enter to cancel."}}{{ui-button "Continue" classes="btn-primary" title="Press enter to continue."}}'),
+        encounter_title: ENCOUNTER_FORM,
+        template: Handlebars.compile('{{ui-button "No" classes="btn-default" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary" title="Press enter to cancel."}}'),
         events: {
             'click .btn-primary': function() {
                 var footerOptions = this.getOption('footerOptions');
@@ -387,10 +387,26 @@ define([
                     _.bind(footerOptions.onClose, footerOptions.workflow)();
                 }
                 ADK.UI.Alert.hide();
-                if (footerOptions.inTray) {
+
+                //--- Remove if ENABLING encounter form.
+                ADK.UI.Workflow.hide();
+                if (!_.isUndefined(footerOptions.workflow)) {
                     footerOptions.workflow.close();
                 }
-                ADK.UI.Workflow.hide();
+                ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:context:cancel', footerOptions);
+                //--- end Remove
+
+                /* Removed in order to Disable Encounter Form:
+                if (footerOptions.inTray && _.includes(footerOptions.workflow.model.get('title'), this.encounter_title)) {
+                    // Trigger the change encounter cancellation.
+                    ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:context:cancel', footerOptions);
+                } else {
+                    ADK.UI.Workflow.hide();
+                    if (!_.isUndefined(footerOptions.workflow)) {
+                        footerOptions.workflow.close();
+                    }
+                }
+                */
             },
             'click .btn-default': function() {
                 ADK.UI.Alert.hide();
@@ -401,11 +417,7 @@ define([
     // *********************************************** END OF FOOTER VIEW ***************************************
     // *********************************************** ALERT MESSAGE VIEWS **************************************
     var DeleteMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('You will lose all work in progress if you delete this task. Would you like to proceed?'),
-        tagName: 'p'
-    });
-    var CloseMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('You will lose all work in progress if you close this task. Would you like to proceed?'),
+        template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
         tagName: 'p'
     });
     // *********************************************** END OF ALERT MESSAGE VIEWS *******************************
@@ -428,22 +440,21 @@ define([
             'click #cancel-btn': function(e) {
                 e.preventDefault();
                 var deleteAlertView = new ADK.UI.Alert({
-                    title: 'Are you sure you want to cancel?',
-                    icon: 'fa-exclamation-triangle font-size-18 color-red',
+                    title: 'Cancel',
+                    icon: 'icon-cancel',
                     messageView: DeleteMessageView,
                     footerView: FooterView,
                     footerOptions: {
                         workflow: this.workflow,
                         inTray: this._inTray,
-                        onClose: this.onClose
+                        onClose: this.onClose,
+                        form: this
                     }
-
                 });
                 deleteAlertView.show();
             },
-            'click @ui.encountersButton': function(e) {
+            'click @ui.encountersButtons': function(e) {
                 e.preventDefault();
-                $(e.currentTarget).html("<i class='fa fa-spinner fa-spin'></i> <span>Set</span>");
                 this.submitForm(e);
             },
             'show.bs.tab .tab-container': 'tabChanged'
@@ -456,145 +467,260 @@ define([
             'change:appointmentsModel': 'setAppointment',
             'change:selectNewEncounterLocation': 'setNewEncounterLocation'
         },
-        viewEncounterFormIfSelected: function() {
-            if ($('#viewEncounter').is(':checked')) {
-                var encounterFormChannel = ADK.Messaging.getChannel('encounterFormRequestChannel');
-                encounterFormChannel.command('openEncounterForm');
-            }
-        },
         submitForm: function(e) {
             var self = this;
-            var locationIEN = '';
+            var locationUid = '';
             var currentPatient = ADK.PatientRecordService.getCurrentPatient();
-            var isInpatient = (currentPatient.get('patientStatusClass') === 'Inpatient') ? '1' : '0';
+            var isInpatient = (currentPatient.patientStatusClass() === 'Inpatient') ? '1' : '0';
             e.preventDefault();
             if (!this.model.isValid()) this.model.set('formStatus', {
                 status: 'error',
                 message: self.model.validationError
             });
             else {
-                this.model.unset('formStatus');
-                var PatientModel = ADK.PatientRecordService.getCurrentPatient();
-                var saveAlertView = new ADK.UI.Notification({
-                    title: 'Encounter context',
-                    icon: 'fa-check',
-                    type: 'success',
-                    message: 'The encounter context was successfully set.'
+                this.$el.trigger('tray.loaderShow', {
+                    loadingString:'Setting encounter'
                 });
-
-                this.setProvider(this.model);
-                if (!_.isUndefined(this.model.get('visit').get('refId')) && this.model.get('visit').get('refId') !== '') {
-                    locationIEN = this.model.get('visit').get('refId');
-                } else if (!_.isUndefined(this.model.get('visit').get('locationIEN')) && this.model.get('visit').get('locationIEN') !== '') {
-                    locationIEN = this.model.get('visit').get('locationIEN');
-                }
-                if (this.currentTab.indexOf('New-Visit-tab-panel') >= 0) {
+                ADK.Checks.run('visit-context', _.bind(function() {
+                    this.model.unset('formStatus');
+                    var PatientModel = ADK.PatientRecordService.getCurrentPatient();
                     var visit = this.model.get('visit');
-                    var datetime = moment(this.model.get('newVisitDate') + ' ' + this.model.get('newVisitTime')).format(DATE_TIME_FORMAT);
-                    var formateddatetime = moment(datetime, DATE_TIME_FORMAT).format(DISPLAY_FORMAT);
-                    visit.set('newVisit', {
-                        isHistorical: this.model.get('isHistorical'),
-                        dateTime: datetime,
-                        formatteddateTime: formateddatetime
+                    var saveAlertView = new ADK.UI.Notification({
+                        title: 'Encounter context',
+                        icon: 'fa-check',
+                        type: 'success',
+                        message: 'Successfully set with no errors.'
                     });
-                    if (locationIEN) {
-                        visit.set('locationIEN', locationIEN);
+                    this.setProvider(this.model);
+                    if (!_.isUndefined(this.model.get('visit').get('locationUid')) && this.model.get('visit').get('locationUid') !== '') {
+                        locationUid = this.model.get('visit').get('locationUid');
                     }
-                    visit.set('visitDateTime', datetime);
-                    visit.set('formatteddateTime', formateddatetime);
-                }
-
-                if (locationIEN) {
-
-                    collectionHandler.getServiceCategory(this.model.get('visit'), this.currentTab, isInpatient, function(result) {
-
-                        self.setServiceCategory(result, self.model);
-                        if (self.model.get('visit').get('newVisit')) {
-
-                            //THIS FUNCTIONALITY IS CURRENTLY DISABLED
-                            //PENDING DECISION ABOUT DOUBLE SAVE VISTA ISSUE
-                            //TODO:  this.saveNewVisit();
+                    if (this.currentTab.indexOf('New-Visit-tab-panel') >= 0) {
+                        var datetime = moment(this.model.get('newVisitDate') + ' ' + this.model.get('newVisitTime')).format(DATE_TIME_FORMAT);
+                        var formateddatetime = moment(datetime, DATE_TIME_FORMAT).format(DISPLAY_FORMAT);
+                        if (locationUid) {
+                            visit.set('locationUid', locationUid);
                         }
+                        visit.set('dateTime', datetime);
+                        visit.set('formattedDateTime', formateddatetime);
+                        visit.set('isHistorical', this.model.get('isHistorical'));
+                    }
+                    if (locationUid) {
+                        var isHistorical = false;
+                        var locName = visit.get("locationDisplayName") || '';
+                        if (this.model.get('visit').newVisit && this.model.get('visit').newVisit.isHistorical) {
+                            isHistorical = true;
+                        }
+                        var serviceCategory = ADK.utils.contextUtils.getServiceCategory(locName, self.getVisitTabLocationType(this.currentTab), isInpatient);
+                        self.setServiceCategory(serviceCategory, self.model);
                         self.stopListening(ADK.Messaging.getChannel('visit'), 'context:set');
                         ADK.Messaging.getChannel('visit').trigger('context:set');
                         //check if we're in a workflow
                         //check if we're the last step in the flow
                         if (self.isLastStep()) {
                             if (self._inTray) {
+                                self.$el.trigger('tray.loaderHide');
+                                self.$el.trigger('tray.hide');
                                 self.workflow.close();
-                            } else {
-                                ADK.UI.Workflow.hide();
+                                self.preloadEncounter();
                             }
+                            ADK.UI.Workflow.hide();
                         } else {
+                            // *** Uncomment this block if encounter form is re-enabled
+                            // Reset encounter form done loading indicator.
+                            // ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:fetch');
+                            // Hide the tray.
+                            // ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:variable:get', function(encounterVars) {
+                            //     if (encounterVars.closeOnSet && self._inTray) {
+                            //         // Use the encounter channel to animate the growl alert after the tray is done hidding.
+                            //         ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:context:alert', saveAlertView);
+                            //         self.$el.trigger('tray.hide');
+                            //     }
+                            // });
+                            // Close the encounter workflow only if the context was not set AND it was set from clicking the encounter tray button
+                            // Otherwise, continue with the workflow. This is need to support the other tray buttons too.
+                            // ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:variable:get', function(encounterVars) {
+                            //     if (encounterVars.trayOpen && encounterVars.isEncounterWorkflow || !encounterVars.isEncounterWorkflow) {
+                            //         self.workflow.goToNext();
+                            //         ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:promise:new');
+                            //     } else {
+                            //         self.workflow.close();
+                            //         self.preloadEncounter();
+                            //     }
+                            // });
+                            // Close the encounter workflow after setting so we can resume our external workflow.
                             self.workflow.goToNext();
                         }
-
-                        saveAlertView.show();
-                        self.viewEncounterFormIfSelected();
-                    });
-
-                }
+                    }
+                }, this));
             }
         },
+        preloadEncounter: function() {
+            ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:promise:new');
+            //Uncomment this line if encounter form is re-enabled: ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:load', true);
+        },
         isLastStep: function() {
-            var currentStep = this.workflow.options.model.get('steps').findWhere({
-                currentStep: true
-            });
+            var currentStep = this.getCurrentStep();
             if (!_.isUndefined(currentStep) && currentStep.get('numberOfSteps') === currentStep.get('currentIndex')) {
                 return true;
             }
             return false;
         },
-        saveNewVisit: function() {
-            var currentPatient = ADK.PatientRecordService.getCurrentPatient();
-            var patientICN = currentPatient.get('icn');
-            var patientPID = currentPatient.get('pid');
-            var patientDFN = currentPatient.get('localId');
-            var isInpatient = (currentPatient.get('patientStatusClass') === 'Inpatient') ? '1' : '0';
-            var locationIEN = this.model.get('visit').get('refId');
-            var encounterDateTime = this.model.get('visit').get('newVisit').dateTime;
-            var primaryProviderIEN = this.model.get('visit').get('selectedProvider').code;
-            var serviceCategory = this.model.get('visit').get('newVisit').serviceCategory;
-            var isPrimaryProvider = '1';
-            var isHistoricalVisit = (this.model.get('visit').get('newVisit').isHistorical) ? '1' : '0';
-            var saveVisitModel = {
-                patientICN: patientICN,
-                patientPID: patientPID,
-                patientDFN: patientDFN,
-                isInpatient: isInpatient,
-                locationIEN: locationIEN,
-                encounterDateTime: encounterDateTime,
-                isHistoricalVisit: isHistoricalVisit,
-                serviceCategory: serviceCategory,
-                providers: [{
-                    ien: primaryProviderIEN,
-                    name: '',
-                    primary: isPrimaryProvider
-                }]
-            };
-            saveUtil.save(saveVisitModel);
+        getCurrentStep: function() {
+            return this.workflow.options.model.get('steps').findWhere({
+                currentStep: true
+            });
         },
         tabChanged: function(e) {
+            this.previousTab = this.currentTab;
             if (e.target.attributes['aria-controls']) {
                 this.currentTab = e.target.attributes['aria-controls'].value;
             }
             if (this.currentTab.indexOf('Clinic-Appointments-tab-panel') >= 0) {
+                if (this.previousTab.indexOf('Hospital-Admissions-tab-panel') < 0) {
+                    this.refreshProviderPicklist();
+                }
                 this.setAppointment(this.model);
             } else if (this.currentTab.indexOf('Hospital-Admissions-tab-panel') >= 0) {
+                if (this.previousTab.indexOf('Clinic-Appointments-tab-panel') < 0) {
+                    this.refreshProviderPicklist();
+                }
                 this.setAdmission(this.model);
             } else if (this.currentTab.indexOf('New-Visit-tab-panel') >= 0) {
                 this.validateNewVisitDateTime();
                 this.setNewEncounterLocation(this.model);
             }
         },
+        refreshProviderPicklist: function(newVisitDateTime) {
+            var refreshDateTime = newVisitDateTime || '';
+            var self = this;
+            //Clear out provider picklist inbetween loading up new ones.
+            self.updateprovidersPickList(self, []);
+
+            //Show loading sign in the providers picklist
+            self.$el.find(self.ui.selectEncounterProvider.selector).trigger('control:disabled', true);
+            if (this.LOADING_ELEMENT_JQUERY) {
+                this.LOADING_ELEMENT_JQUERY.appendTo(self.$el.find('.select-encounter-provider'));
+                this.$el.trigger('tray.loaderShow',{
+                    loadingString:'Loading providers'
+                });
+            }
+            //Keep track of the tab we're on to preserve the correct call
+            var currTab = self.currentTab;
+            collectionHandler.getProvidersPicklist(refreshDateTime, function(collection, response) {
+                //This is the correct call if we're still on the same tab or if the tab we're on,
+                // and the tab we were on when the call was made are both not the new visit tab.
+                var isCorrespondingResponse = (currTab === self.currentTab || (currTab.indexOf('New-Visit-tab-panel') < 0 && self.currentTab.indexOf('New-Visit-tab-panel') < 0));
+                if (!self.isDestroyed && response.status == 200 && isCorrespondingResponse) {
+                    var parsedCollection = collectionHandler.providerParser(collection);
+                    var providers = self.getVerifiedMostRecent('providers', collection);
+                    //Determine if there is a most recent list and include if available.
+                    if (providers.available) {
+                        self.updateprovidersPickList(self, [{
+                            group: RECENTLY_USED_PROVIDERS_TEXT,
+                            pickList: providers.items
+                        }, {
+                            group: ALL_PROVIDERS_TEXT,
+                            pickList: parsedCollection[0].pickList
+                        }]);
+                    } else {
+                        self.providersQueue = [];
+                        self.updateprovidersPickList(self, parsedCollection);
+                    }
+                    // defaults the select encounter providers field with user logged-in as a provider
+                    var user = ADK.UserService.getUserSession();
+                    var isProvider = user.get('provider');
+                    if (isProvider && _.isEmpty(self.model.get('selectEncounterProvider')) && !_.isUndefined(collection.get(user.get('duz')[user.get('site')]))) {
+                        self.model.set('selectEncounterProvider', user.get('duz')[user.get('site')]);
+                    } else if (_.isUndefined(collection.get(self.model.get('selectEncounterProvider')))) {
+                        self.model.unset('selectEncounterProvider');
+                    }
+                    // Enable components if there's a context visit with provider and provider select box has selected item
+                    self.validateForm();
+                    self.$el.find(self.ui.selectEncounterProvider.selector).trigger('control:disabled', false);
+                    cachedData.providers.set(collection.models);
+                //If this isn't the corresponding response, either the correct response has already returned or we're still waiting on it.
+                } else if (!self.isDestroyed && !_.isUndefined(response) && isCorrespondingResponse) {
+                    //Keep user from being able to press set
+                    self.model.unset('selectEncounterProvider');
+                    //if response text is empty set a descriptive message
+                    response.responseText = !_.isEmpty(response.responseText) ? response.responseText : PROVIDERS_ERROR_NO_RESOURCE_RESPONSE;
+                    //Alert user that the provider picklist call has errored out.
+                    var SimpleAlertItemView = Backbone.Marionette.ItemView.extend({
+                        template: Handlebars.compile([
+                            PROVIDERS_ERROR_MSG + '<div><strong>Error:</strong> ' + response.status + ' - ' + response.statusText + '<br><strong>Error Response: </strong>' + response.responseText + '</div>'
+                        ].join('\n'))
+                    });
+                    var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
+                        template: Handlebars.compile(['{{ui-button "OK" classes="btn-primary alert-continue" title="Press enter to continue."}}'].join('\n')),
+                        events: {
+                            'click button': function() {
+                                ADK.UI.Alert.hide();
+                            }
+                        }
+                    });
+                    var alertView = new ADK.UI.Alert({
+                        title: 'Provider Error',
+                        icon: 'icon-error',
+                        messageView: SimpleAlertItemView,
+                        footerView: SimpleAlertFooterItemView
+                    });
+                    alertView.show();
+                    console.log('Error retrieving provider picklist:');
+                    console.log(response);
+                }
+                // Clear loading spinner
+                if (_.isObject(self.ui.providerLoading) && $(self.ui.providerLoading.selector)) {
+                    self.LOADING_ELEMENT_JQUERY = $(self.ui.providerLoading.selector).find('.loading');
+                    self.LOADING_ELEMENT_JQUERY.detach();
+                    self.$el.trigger('tray.loaderHide');
+                }
+            });
+        },
+        getVerifiedMostRecent: function(type, collection) {
+            var list = {
+                available: false,
+                items: []
+            };
+            var sessionRecentlySelected = ADK.UserService.getUserSession().get('recentlySelected');
+            if (sessionRecentlySelected && sessionRecentlySelected.attributes && (list.items = sessionRecentlySelected.get(type)) && list.items.length > 0) {
+                list.available = true;
+            } else if (sessionRecentlySelected && (list.items = sessionRecentlySelected[type]) && list.items.length > 0) {
+                list.available = true;
+                //Keep consistent persistence between window refreshes.
+                this[type + 'Queue'] = list.items;
+            }
+            //This should only need to be used for providers not locations.
+            if (list.available && !_.isUndefined(collection)) {
+                var availableList = [];
+                //Want to make sure we're only displaying recent items that are available in the complete list.
+                _.each(list.items, function(item) {
+                    if (!_.isUndefined(collection.get(item.value))) {
+                        availableList.push(item);
+                    }
+                });
+                if (availableList.length > 0) {
+                    list.items = availableList;
+                } else {
+                    list.available = false;
+                    list.items = [];
+                }
+            }
+            return list;
+        },
         /**
          * Displays a warning if the user selects a new visit date/time that occurs
          * in the future. Hides the warning if the user selects a new visit date/time
-         * that occurs in the past.
+         * that occurs in the past. If the New Visit tab is selected, the provider
+         * picklist will be repopulated with providers that were active on the date
+         * that is selected in the date picker.
          */
         validateNewVisitDateTime: function() {
             var newVisitDateTime = moment(this.model.get('newVisitDate') + ' ' + this.model.get('newVisitTime'));
             var currentDateTime = moment();
+            if (this.currentTab.indexOf('New-Visit-tab-panel') >= 0) {
+                this.refreshProviderPicklist(newVisitDateTime);
+            }
             if (newVisitDateTime.isValid() && newVisitDateTime.isAfter(currentDateTime)) {
                 this.$(this.ui.newVisitDateTimeWarning.selector).removeClass('hide');
             } else {
@@ -602,28 +728,25 @@ define([
             }
             this.validateForm();
         },
-        isContextSet: function() {
-            return (this.model.get('contextVisit') && !_.isUndefined(this.model.get('contextVisit').get('locationDisplayName')) && this.model.get('contextVisit').get('locationDisplayName') !== '');
-        },
-        isProviderSelectSet: function() {
-            return (!_.isUndefined(this.$el.find(this.ui.selectEncounterProvider.selector + ' option:selected')) && !_.isUndefined(this.$el.find(this.ui.selectEncounterProvider.selector + ' option:selected').val()) && this.$el.find(this.ui.selectEncounterProvider.selector + ' option:selected').val() !== '');
-        },
         validateForm: function() {
             var isValid = {
-                'enc': !_.isUndefined(this.model.get('selectEncounterProvider')) && this.model.get('selectEncounterProvider') !== '',
-                'loc': this.model.get('visit') && !_.isUndefined(this.model.get('visit').get('locationDisplayName')) && this.model.get('visit').get('locationDisplayName') !== '',
-                'nloc': !_.isUndefined(this.model.newVisit.get('existingVisit')) && this.model.newVisit.get('locationDisplayName') !== '',
-                'nvtime': this.model.get('newVisitTime') !== '',
-                'nvdate': this.model.get('newVisitDate') !== '',
-                'provSelected': this.isProviderSelectSet()
+                //Selected location, exisiting location, or new location
+                loc: !_.isUndefined(this.model.get('visit')) && !_.isUndefined(this.model.get('visit').get('locationDisplayName')) && this.model.get('visit').get('locationDisplayName') !== '',
+                eloc: !_.isUndefined(this.model.get('contextVisit')) && !_.isUndefined(this.model.get('contextVisit').get('locationDisplayName') && this.model.get('contextVisit').get('locationDisplayName') !== ''),
+                nloc: !_.isUndefined(this.model.newVisit.get('existingVisit')) && this.model.newVisit.get('locationDisplayName') !== '',
+                //Selected provider
+                prov: !_.isUndefined(this.model.get('selectEncounterProvider')) && this.model.get('selectEncounterProvider') !== '',
+                //New visit date and time
+                nvtime: this.model.get('newVisitTime') !== '',
+                nvdate: this.model.get('newVisitDate') !== '',
             };
             var validForm = false;
             if (this.currentTab.indexOf('Clinic-Appointments-tab-panel') >= 0 || this.currentTab.indexOf('Hospital-Admissions-tab-panel') >= 0) {
-                if ((this.isContextSet() || isValid.enc && isValid.loc) && isValid.provSelected) {
+                if ((isValid.loc || isValid.eloc) && isValid.prov) {
                     validForm = true;
                 }
             } else if (this.currentTab.indexOf('New-Visit-tab-panel') >= 0) {
-                if ((this.isContextSet() && isValid.enc && isValid.nvtime && isValid.nvdate || !this.isContextSet() && isValid.nloc && isValid.nvtime && isValid.nvdate) && isValid.provSelected) {
+                if ((isValid.nloc) && isValid.prov && isValid.nvtime && isValid.nvdate) {
                     validForm = true;
                 }
             } else {
@@ -657,7 +780,6 @@ define([
                 uid: locationUid
             });
             if (locationModel) {
-                this.model.newVisit.set(locationModel.attributes);
                 //additional fields
                 this.model.newVisit.set({
                     existingVisit: false,
@@ -677,8 +799,17 @@ define([
                     'label': locationDisplayName
                 };
                 var locationIndex = -1;
+                var recentLocations = ADK.UserService.getUserSession().get('recentlySelected');
+                // Check the user session first for existing list of recent locations.
+                if (!_.isUndefined(recentLocations)) {
+                    if (recentLocations instanceof Backbone.Model) {
+                        this.locationsQueue = recentLocations.get('locations');
+                    } else if (!_.isUndefined(recentLocations.locations)) {
+                        this.locationsQueue = recentLocations.locations;
+                    }
+                }
                 // Check to see if the selected location is already in the queue. If it is, grab its index.
-                _.each(locationQueue, function(queueElement, queueIndex) {
+                _.each(this.locationsQueue, function(queueElement, queueIndex) {
                     if (queueElement.value === locationUid) {
                         locationIndex = queueIndex;
                     }
@@ -686,30 +817,31 @@ define([
                 // If the selected location is already in the queue,
                 // remove the original item and add the location to the top,
                 // otherwise just add the selected location to the top
-                if (locationIndex >= 0) {
-                    locationQueue.splice(locationIndex, 1);
-                    locationQueue.unshift(selectedLocation);
+                if (locationIndex >= 0 && !_.isUndefined(recentLocations)) {
+                    this.locationsQueue.splice(locationIndex, 1);
+                    this.locationsQueue.unshift(selectedLocation);
                 } else {
-                    if (locationQueue.length < NUM_RECENT_LOCATIONS) {
+                    if (this.locationsQueue.length < NUM_RECENT_LOCATIONS) {
                         // Add to the beginning of the array
-                        locationQueue.unshift(selectedLocation);
+                        this.locationsQueue.unshift(selectedLocation);
                     } else {
-                        locationQueue.pop();
-                        locationQueue.unshift(selectedLocation);
+                        this.locationsQueue.pop();
+                        this.locationsQueue.unshift(selectedLocation);
                     }
                 }
                 var self = this;
-                self.updatelocationsPickList(self, [{
+                var updatedLocations = [{
                     group: RECENTLY_USED_LOCATIONS_TEXT,
-                    pickList: locationQueue
+                    pickList: this.locationsQueue
                 }, {
                     group: ALL_LOCATIONS_TEXT,
-                    pickList: collectionHandler.locationsParser(cachedData.locations)[0].pickList
-                }]);
+                    pickList: collectionHandler.locationsParser(cachedData.locations.models)[0].pickList
+                }];
+                self.updatelocationsPickList(self, updatedLocations);
                 // Add selected location to the "recently selected" session object
                 var recentlySelected = new Backbone.Model({
-                    locations: locationQueue,
-                    providers: providerQueue
+                    locations: this.locationsQueue,
+                    providers: this.providersQueue
                 });
                 var userModel = ADK.UserService.getUserSession();
                 userModel.set('recentlySelected', recentlySelected);
@@ -717,18 +849,23 @@ define([
             this.model.set('visit', this.model.newVisit);
             this.validateForm();
         },
-        setServiceCategory: function(result, original) {
-            if (result.data.serviceCategory) {
-                original.get('visit').set('serviceCategory', result.data.serviceCategory);
-                if (original.get('visit').get('newVisit')) {
-                    original.get('visit').get('newVisit').serviceCategory = result.data.serviceCategory;
-                }
+        setServiceCategory: function(serviceCategory, original) {
+            original.get('visit').set('serviceCategory', serviceCategory);
+            if (original.get('visit').get('newVisit')) {
+                original.get('visit').get('newVisit').serviceCategory = serviceCategory;
             }
             var PatientModel = ADK.PatientRecordService.getCurrentPatient();
             PatientModel.set({
                 visit: JSON.parse(JSON.stringify(original.get('visit')))
             });
             ADK.SessionStorage.set.sessionModel('patient', PatientModel, 'session');
+        },
+        getVisitTabLocationType: function(currentTab) {
+            if (currentTab.indexOf('Clinic-Appointments-tab-panel') >= 0 || currentTab.indexOf('New-Visit-tab-panel') >= 0) {
+                return 'c';
+            } else if (currentTab.indexOf('Hospital-Admissions-tab-panel') >= 0) {
+                return 'w';
+            }
         },
         setProvider: function(model) {
             var selectedProvider = cachedData.providers.findWhere({
@@ -756,7 +893,7 @@ define([
                 };
                 var providerIndex = -1;
                 // Check to see if the selected provider is already in the queue. If it is, grab its index.
-                _.each(providerQueue, function(queueElement, queueIndex) {
+                _.each(this.providersQueue, function(queueElement, queueIndex) {
                     if (queueElement.value === providerCode) {
                         providerIndex = queueIndex;
                     }
@@ -765,193 +902,56 @@ define([
                 // remove the original item and add the provider to the top,
                 // otherwise just add the selected provider to the top
                 if (providerIndex >= 0) {
-                    providerQueue.splice(providerIndex, 1);
-                    providerQueue.unshift(selectedProvider);
+                    this.providersQueue.splice(providerIndex, 1);
+                    this.providersQueue.unshift(selectedProvider);
                 } else {
-                    if (providerQueue.length < NUM_RECENT_PROVIDERS) {
+                    if (this.providersQueue.length < NUM_RECENT_PROVIDERS) {
                         // Add to the beginning of the array
-                        providerQueue.unshift(selectedProvider);
+                        this.providersQueue.unshift(selectedProvider);
                     } else {
-                        providerQueue.pop();
-                        providerQueue.unshift(selectedProvider);
+                        this.providersQueue.pop();
+                        this.providersQueue.unshift(selectedProvider);
                     }
                 }
                 var self = this;
-                self.updateprovidersPickList(self, [{
+                var updatedProviders = [{
                     group: RECENTLY_USED_PROVIDERS_TEXT,
-                    pickList: providerQueue
+                    pickList: this.providersQueue
                 }, {
                     group: ALL_PROVIDERS_TEXT,
-                    pickList: collectionHandler.providerParser(cachedData.providers)[0].pickList
-                }]);
+                    pickList: collectionHandler.providerParser(cachedData.providers.models)[0].pickList
+                }];
+                self.updateprovidersPickList(self, updatedProviders);
                 // Add selected provider to the "recently selected" session object
                 var recentlySelected = new Backbone.Model({
-                    locations: locationQueue,
-                    providers: providerQueue
+                    locations: this.locationsQueue,
+                    providers: this.providersQueue
                 });
                 var userModel = ADK.UserService.getUserSession();
                 userModel.set('recentlySelected', recentlySelected);
             }
             this.validateForm();
         },
-        setDatesAppointments: function(form, fromDate, toDate) {
+        setDatesAppointments: function(fromDate, toDate) {
             //filter the collection
             var filteredCollection = collectionHandler.collectionDateFilter(cachedData.appointments, fromDate, toDate);
             appointmentsArray.set(filteredCollection);
-            // // No results found.
-            if (filteredCollection.length === 0) {
-                this.$el.find('#selectableTableAppointments .no-results').text('No appointments/visit found.');
-                this.$el.find('#selectableTableAppointments .no-results').show();
-            } else {
-                this.$el.find('#selectableTableAppointments .no-results').hide();
-            }
         },
-        setDatesHospital: function(model, collection) {
+        setDatesHospital: function(collection) {
             //filter the collection
             var filteredCollection = collectionHandler.admissionsParser(collection).models;
             admissionsArray.set(filteredCollection);
-            if (filteredCollection.length === 0) {
-                this.$el.find('#selectableTableAdmissions .no-results').text('No admissions found.');
-                this.$el.find('#selectableTableAdmissions .no-results').show();
-            } else {
-                this.$el.find('#selectableTableAdmissions .no-results').hide();
-            }
         },
         currentTab: 'Clinic-Appointments-tab-panel', //initial value
-        initialize: function(form) {
-            this._inTray = _.isBoolean(this.inTray) ? this.inTray : false;
-
-            this.listenTo(ADK.Messaging.getChannel('visit'), 'context:set', function() {
-                this.stopListening(ADK.Messaging.getChannel('visit'), 'context:set');
-                if (this.isLastStep()) {
-                    if (this._inTray) {
-                        this.workflow.close();
-                    } else {
-                        ADK.UI.Workflow.hide();
-                    }
-                } else {
-                    this.workflow.goToNext();
-                }
-            });
-
-            // defaults the select encounter providers field with user logged-in as a provider
-            var user = ADK.UserService.getUserSession();
-            var isProvider = user.get('provider');
-            if (isProvider && _.isUndefined(this.model.get('selectEncounterProvider'))) {
-                this.model.set('selectEncounterProvider', user.get('duz')[user.get('site')]);
-            }
-                 
-            //clears out the appointments of the previous patient     
+        previousTab: 'Clinic-Appointments-tab-panel',
+        loadVisits: function(self){
+            //Clear out old results
             appointmentsArray.reset();
             admissionsArray.reset();
-            //defaults 
-            var now = moment();
-            var minusThirty = moment();
-            var plusThirty = moment();
-            var minusTen = moment();
-            minusThirty = minusThirty.subtract('days', 30);
-            plusThirty = plusThirty.add('days', 30);
-            minusTen = minusTen.subtract('years', 10);
-            this.model.set('newVisitDate', now.format('MM/DD/YYYY'));
-            this.model.newVisit = new NewVisitModel();
-            this.model.set({
-                'visit': this.model.newVisit,
-                'clinicAppointmentsFromDate': minusThirty.format('MM/DD/YYYY'),
-                'clinicAppointmentsThroughDate': plusThirty.format('MM/DD/YYYY'),
-                'hospitalAdmissionFromDate': minusThirty.format('MM/DD/YYYY'),
-                'hospitalAdmissionThroughDate': plusThirty.format('MM/DD/YYYY'),
-                'newVisitDateTimeWarning': 'You have selected a future date/time',
-                'selectNewEncounterLocationPickList': new Backbone.Collection(),
-                'selectEncounterProviderPickList': new Backbone.Collection()
-            });
-            var self = this;
-            this._super = ADK.UI.Form.prototype;
-            this._super.initialize.apply(this, arguments);
-            // the providers picklist
-            collectionHandler.getProvidersPicklist(function(collection) {
-                if (!self.isDestroyed) {
-                    var parsedCollection = collectionHandler.providerParser(collection);
-                    var sessionRecentlySelected = ADK.UserService.getUserSession().get('recentlySelected');
-                    if (sessionRecentlySelected) {
-                        var sessionRecentlySelectedProviders;
-                        if (sessionRecentlySelected.attributes) {
-                            sessionRecentlySelectedProviders = sessionRecentlySelected.attributes.providers;
-                        } else {
-                            sessionRecentlySelectedProviders = sessionRecentlySelected.providers;
-                        }
-                        if (sessionRecentlySelectedProviders && sessionRecentlySelectedProviders.length > 0) {
-                            self.updateprovidersPickList(self, [{
-                                group: RECENTLY_USED_PROVIDERS_TEXT,
-                                pickList: sessionRecentlySelectedProviders
-                            }, {
-                                group: ALL_PROVIDERS_TEXT,
-                                pickList: parsedCollection[0].pickList
-                            }]);
-                        } else {
-                            self.updateprovidersPickList(self, parsedCollection);
-                        }
-                    } else {
-                        providerQueue = [];
-                        self.updateprovidersPickList(self, parsedCollection);
-                    }
-                    // Enable components if there's a context visit with provider and provider select box has selected item
-                    if (self.isContextSet() && !_.isUndefined(self.model.get('contextVisit').get('selectedProvider')) && self.isProviderSelectSet()) {
-                        self.ui.encountersButton.trigger('control:disabled', false);
-                    }
-                    self.$el.find(self.ui.selectEncounterProvider.selector).trigger('control:disabled', false);
-                    cachedData.providers.set(collection.models);
-                }
-                // Clear loading spinner
-                if (_.isObject(self.ui.providerLoading) && $(self.ui.providerLoading.selector)) {
-                    $(self.ui.providerLoading.selector).find('.loading').detach();
-                }
-            });
-            //locations picklist
-            collectionHandler.getLocations(function(collection) {
-                if (!self.isDestroyed) {
-                    var parsedCollection = collectionHandler.locationsParser(collection);
-                    var sessionRecentlySelected = ADK.UserService.getUserSession().get('recentlySelected');
-                    if (sessionRecentlySelected) {
-                        var sessionRecentlySelectedLocations;
-                        if (sessionRecentlySelected.attributes) {
-                            sessionRecentlySelectedLocations = sessionRecentlySelected.attributes.locations;
-                        } else {
-                            sessionRecentlySelectedLocations = sessionRecentlySelected.locations;
-                        }
-                        if (sessionRecentlySelectedLocations && sessionRecentlySelectedLocations.length > 0) {
-                            self.updatelocationsPickList(self, [{
-                                group: RECENTLY_USED_LOCATIONS_TEXT,
-                                pickList: sessionRecentlySelectedLocations
-                            }, {
-                                group: ALL_LOCATIONS_TEXT,
-                                pickList: parsedCollection[0].pickList
-                            }]);
-                        } else {
-                            self.updatelocationsPickList(self, parsedCollection);
-                        }
-                    } else {
-                        locationQueue = [];
-                        self.updatelocationsPickList(self, parsedCollection);
-                    }
-                    self.$el.find(self.ui.selectNewEncounterLocation.selector).trigger('control:disabled', false);
-                    cachedData.locations.set(collection.models);
-                }
-                // Clear loading spinner
-                if (_.isObject(self.ui.locationLoading) && $(self.ui.locationLoading.selector)) {
-                    $(self.ui.locationLoading.selector).find('.loading').detach();
-                }
-            });
-            // admissions
-            collectionHandler.getAdmissions(function(collection) {
-                var admissions = collectionHandler.admissionsParser(collection);
-                cachedData.admissions.set(admissions.models);
-                admissionsArray.set(admissions.models);
-                if (collection.length > 0) {
-                    self.setDatesHospital(form, collection);
-                } else {
-                    self.$el.find('#selectableTableAdmissions .no-results').text('No admissions found.');
-                    self.$el.find('#selectableTableAdmissions .no-results').show();
-                }
+            //Put up loader
+            self.onAttach();
+            self.$el.trigger('tray.loaderShow',{
+                loadingString:'Loading encounter locations'
             });
             // appointments
             var criteria = ADK.SessionStorage.get.sessionModel('user', 'SessionStorage');
@@ -971,47 +971,124 @@ define([
             collectionHandler.getAppointments(appointmentsCriteria, function(collection) {
                 var appts = collectionHandler.appointmentsParser(collection);
                 var contextVisit = self.model.get('contextVisit');
-                if (contextVisit && contextVisit.get('formatteddateTime')) {
+                if (contextVisit && contextVisit.get('formattedDateTime')) {
                     contextVisit = appts.where({
-                        formatteddateTime: contextVisit.get('formatteddateTime')
+                        formattedDateTime: contextVisit.get('formattedDateTime')
                     })[0];
-                    if (contextVisit && contextVisit.get('formatteddateTime')) {
+                    if (contextVisit && contextVisit.get('formattedDateTime')) {
                         self.model.set('appointmentsModel', contextVisit);
-                        self.model.set('preSelectSRText', 'Appointment ' + contextVisit.get('formatteddateTime') + ' ' + contextVisit.get('locationDisplayName') + ' ' + contextVisit.get('facilityDisplay') + ' pre-selected from current Encounter.');
+                        self.model.set('preSelectSRText', 'Appointment ' + contextVisit.get('formattedDateTime') + ' ' + contextVisit.get('locationDisplayName') + ' ' + contextVisit.get('facilityDisplay') + ' pre-selected from current Encounter.');
                     }
                 }
                 cachedData.appointments.set(appts.models);
                 appointmentsArray.set(appts.models);
                 if (collection.length > 0) {
-                    self.setDatesAppointments(form, fromDate, toDate);
+                    self.setDatesAppointments(fromDate, toDate);
                 } else {
-                    self.$el.find('#selectableTableAppointments .no-results').text('No appointments/visit found.');
-                    self.$el.find('#selectableTableAppointments .no-results').show();
+                    self.$el.find('#selectableTableAppointments').trigger('control:loading', false);
+                    self.$el.trigger('tray.loaderHide');
+                }
+            });
+            // admissions
+            collectionHandler.getAdmissions(function(collection) {
+                var admissions = collectionHandler.admissionsParser(collection);
+                cachedData.admissions.set(admissions.models);
+                admissionsArray.set(admissions.models);
+                if (collection.length > 0) {
+                    self.setDatesHospital(collection);
+                } else {
+                    self.$el.find('#selectableTableAdmissions').trigger('control:loading', false);
+                    self.$el.trigger('tray.loaderHide');
                 }
             });
         },
+        initialize: function(form) {
+            this._inTray = _.isBoolean(this.inTray) ? this.inTray : false;
+            this.listenTo(ADK.Messaging.getChannel('visit'), 'context:set', function() {
+                this.stopListening(ADK.Messaging.getChannel('visit'), 'context:set');
+                if (this.isLastStep()) {
+                    if (this._inTray) {
+                        this.workflow.close();
+                    } else {
+                        ADK.UI.Workflow.hide();
+                    }
+                } else {
+                    this.workflow.goToNext();
+                }
+            });
+            //set recent queues up
+            this.locationsQueue = [];
+            this.providersQueue = [];
+            //clears out the appointments of the previous patient
+            appointmentsArray.reset();
+            admissionsArray.reset();
+            //defaults
+            var now = moment();
+            var minusThirty = moment();
+            var plusThirty = moment();
+            var minusTen = moment();
+            minusThirty = minusThirty.subtract('days', 30);
+            plusThirty = plusThirty.add('days', 30);
+            minusTen = minusTen.subtract('years', 10);
+            this.model.set('newVisitDate', now.format('MM/DD/YYYY'));
+            this.model.newVisit = new NewVisitModel();
+            this.model.set({
+                'visit': this.model.newVisit,
+                'clinicAppointmentsFromDate': minusThirty.format('MM/DD/YYYY'),
+                'clinicAppointmentsThroughDate': plusThirty.format('MM/DD/YYYY'),
+                'hospitalAdmissionFromDate': minusThirty.format('MM/DD/YYYY'),
+                'hospitalAdmissionThroughDate': plusThirty.format('MM/DD/YYYY'),
+                'newVisitDateTimeWarning': 'You have selected a future date/time'
+            });
+            var self = this;
+            this._super = ADK.UI.Form.prototype;
+            this._super.initialize.apply(this, arguments);
+            // the providers picklist
+            this.refreshProviderPicklist('');
+            //locations picklist
+            collectionHandler.getLocations(this, function(collection) {
+                if (!self.isDestroyed) {
+                    var parsedCollection = collectionHandler.locationsParser(collection);
+                    var locations = self.getVerifiedMostRecent('locations');
+                    if (locations.available) {
+                        self.updatelocationsPickList(self, [{
+                            group: RECENTLY_USED_LOCATIONS_TEXT,
+                            pickList: locations.items
+                        }, {
+                            group: ALL_LOCATIONS_TEXT,
+                            pickList: parsedCollection[0].pickList
+                        }]);
+                    } else {
+                        self.locationsQueue = [];
+                        self.updatelocationsPickList(self, parsedCollection);
+                    }
+                    self.$el.find(self.ui.selectNewEncounterLocation.selector).trigger('control:disabled', false);
+                    cachedData.locations.set(collection.models);
+                }
+                // Clear loading spinner
+                if (_.isObject(self.ui.locationLoading) && $(self.ui.locationLoading.selector)) {
+                    $(self.ui.locationLoading.selector).find('.loading').detach();
+                }
+            });
+            this.listenTo(self.workflow.parentViewInstance.TrayView, 'tray.show', function(){
+                if(self.workflow.model.get('currentIndex') === self.viewIndex){
+                    self.loadVisits(self);
+                }
+            });
+        },
+        onDestroy: function(){
+            this.stopListening();
+        },
         onAttach: function() {
             // Loading...
-            if ($('#selectableTableAppointments .no-results').length === 0) {
-                $('#selectableTableAppointments').append('<div class="no-results"> <i class="fa fa-spinner fa-spin"></i> Loading...</div>');
-            }
-            if ($('#selectableTableAdmissions .no-results').length === 0) {
-                $('#selectableTableAdmissions').append('<div class="no-results"> <i class="fa fa-spinner fa-spin"></i> Loading...</div>');
-            }
+            this.$el.find('#selectableTableAdmissions').trigger('control:loading', true);
+            this.$el.find('#selectableTableAppointments').trigger('control:loading', true);
         },
         updateprovidersPickList: function(form, options) {
-            // There is an issue with the 'select' component that prevents picklists with groups from
-            // being displayed properly when set dynamically. Setting an attribute on the model to keep track
-            // of the picklist as a workaround.
-            //this.$('.selectEncounterProvider').trigger('control:picklist:set', options);
-            this.model.attributes.selectEncounterProviderPickList.set(options);
+            this.$('.selectEncounterProvider').trigger('control:picklist:set', [options]);
         },
         updatelocationsPickList: function(form, options) {
-            // There is an issue with the 'select' component that prevents picklists with groups from
-            // being displayed properly when set dynamically. Setting an attribute on the model to keep track
-            // of the picklist as a workaround.
-            //this.$('.selectNewEncounterLocation').trigger('control:picklist:set', options);
-            this.model.attributes.selectNewEncounterLocationPickList.set(options);
+            this.$('.selectNewEncounterLocation').trigger('control:picklist:set', [options]);
         }
     });
     // *********************************************** END OF FORM VIEW *****************************************

@@ -8,7 +8,7 @@ define([
     var channel = ADK.Messaging.getChannel('notes');
     return function(params) {
           var operationFooterView = Backbone.Marionette.ItemView.extend({
-              template: Handlebars.compile('{{ui-button "Cancel" id="btn-notes-operation-no" classes="btn-default btn-sm" title="Press enter to cancel deletion."}}{{ui-button "Continue" id ="btn-notes-operation-yes" classes="btn-primary btn-sm" title="Press enter to continue with deletion."}}'),
+              template: Handlebars.compile('{{ui-button "No" id="btn-notes-operation-no" classes="btn-default btn-sm" title="Press enter to go back."}}{{ui-button "Yes" id ="btn-notes-operation-yes" classes="btn-primary btn-sm" title="Press enter to delete."}}'),
               events: {
                'click #btn-notes-operation-yes': 'onConfirmation',// params.yes_callback,
                'click #btn-notes-operation-no': 'onCancel'//params.no_callback,

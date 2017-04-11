@@ -52,10 +52,6 @@ define([
 
     function chartConfig(graphData) {
         return {
-            global: {
-                useUTC: false,
-                timezoneOffset: 5 * 60
-            },
             chart: {
                 plotBorderColor: 'rgba(215, 215, 215, 1)',
                 plotBorderWidth: 1,

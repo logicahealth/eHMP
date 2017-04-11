@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Progress notes titles [/progress-notes-titles{?site}{&class}{&fields}]
+## Progress notes titles [/progress-notes-titles{?site}{&class}]
 
 Large Pick List - Returns a list of Note Titles
 
@@ -11,8 +11,6 @@ HMP TIU LONG LIST OF TITLES
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

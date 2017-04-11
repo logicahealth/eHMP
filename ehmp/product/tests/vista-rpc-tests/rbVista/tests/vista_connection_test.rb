@@ -5,7 +5,7 @@ require '../vista_connection'
 class VistaConnectionTest < Test::Unit::TestCase
 
   def setup
-    @host = 'IPADDRESS '
+    @host = 'IP_ADDRESS'
     @PORT       
     @cxn = VistaConnection.new @host, @port
   end

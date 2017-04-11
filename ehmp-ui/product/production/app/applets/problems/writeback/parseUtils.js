@@ -32,7 +32,7 @@ define([
 
             return pickList;
         },
-        getTreatmentFactors: function(patient) {
+        getTreatmentFactors: function(patient, existingTreatmentFactors) {
             var exposures = patient.get('exposure'),
             factors = {
                 'ionizing-radiation': {
@@ -50,7 +50,7 @@ define([
                 'head-neck-cancer': {
                     label: 'Head and/or Neck Cancer'
                 },
-                'shipboard': {
+                'shipboard-hazard': {
                     label: 'Shipboard Hazard and Defense'
                 }
             },
@@ -61,7 +61,7 @@ define([
             var swaObj = _.find(exposures, function(exposure) {return exposure.uid.match(/^urn:va:sw-asia/);});
             var irObj = _.find(exposures, function(exposure) {return exposure.uid.match(/^urn:va:ionizing-radiation/);});
             var hncObj = _.find(exposures, function(exposure) {return exposure.uid.match(/^urn:va:head-neck-cancer/);});
-            var shipObj = _.find(exposures, function(exposure) {return exposure.uid.match(/^urn:va:shipboard/);});
+            var shipObj = _.find(exposures, function(exposure) {return exposure.uid.match(/^urn:va:shipboard-hazard/);});
 
             var exposuresOrdered = [];
             if(!_.isUndefined(aoObj)){
@@ -102,6 +102,26 @@ define([
                 }
             }
 
+            if(!_.isUndefined(existingTreatmentFactors)){
+                _.each(pickList, function(pickListItem){
+                    if(pickListItem.name === 'ionizing-radiation' && !_.isUndefined(existingTreatmentFactors.radiation) && existingTreatmentFactors.radiation.toUpperCase() === 'YES'){
+                        pickListItem.value = true;
+                    } else if(pickListItem.name === 'mst' && !_.isUndefined(existingTreatmentFactors.mst) && existingTreatmentFactors.mst.toUpperCase() === 'YES'){
+                        pickListItem.value = true;
+                    } else if(pickListItem.name === 'agent-orange' && !_.isUndefined(existingTreatmentFactors.agentOrange) && existingTreatmentFactors.agentOrange.toUpperCase() === 'YES'){
+                        pickListItem.value = true;
+                    } else if(pickListItem.name === 'sw-asia' && !_.isUndefined(existingTreatmentFactors.swAsia) && existingTreatmentFactors.swAsia.toUpperCase() === 'YES'){
+                        pickListItem.value = true;
+                    } else if(pickListItem.name === 'head-neck-cancer' && !_.isUndefined(existingTreatmentFactors.headNeckCancer) && existingTreatmentFactors.headNeckCancer.toUpperCase() === 'YES'){
+                        pickListItem.value = true;
+                    } else if(pickListItem.name === 'shipboard-hazard' && !_.isUndefined(existingTreatmentFactors.shipboardHazard) && existingTreatmentFactors.shipboardHazard.toUpperCase() === 'YES'){
+                        pickListItem.value = true;
+                    } else if(pickListItem.name === 'serviceConnected' && !_.isUndefined(existingTreatmentFactors.serviceConnected) && existingTreatmentFactors.serviceConnected === true) {
+                        pickListItem.value = true;
+                    }
+                });
+            }
+
             return pickList;
         },
         formatSearchErrorMessage: function(errorResponse){
@@ -123,7 +143,7 @@ define([
             }
 
             if(errorMessage.length === 0){
-                errorMessage.push('An unexpected error occurred during your search. Please try again');
+                errorMessage.push('An unexpected error occurred during your search. Try again');
             }
 
             return errorMessage;
@@ -155,6 +175,116 @@ define([
             }
 
             return treeData;
+        },
+        copyModelPropertiesForEdit: function(existingProblemModel, newFormModel){
+            var newFormData = {};
+            newFormData.editMode = true;
+
+            var onset = existingProblemModel.get('onset');
+            if(onset){
+                if(onset.length === 4){
+                    newFormData['onset-date'] = onset;
+                } else if(onset.length === 6){
+                    newFormData['onset-date'] = moment(onset, 'YYYYMM').format('MM/YYYY');
+                } else if(onset.length === 8){
+                    newFormData['onset-date'] = moment(onset, 'YYYYMMDD').format('MM/DD/YYYY');
+                }
+            }
+
+            var status = existingProblemModel.get('statusName');
+            if(status){
+                if(status.toUpperCase() === 'ACTIVE'){
+                    newFormData.statusRadioValue =  'A^ACTIVE';
+                } else {
+                    newFormData.statusRadioValue = 'I^INACTIVE';
+                }
+            }
+
+            var acuity = existingProblemModel.get('acuityName');
+            if(acuity){
+                if(acuity.toUpperCase() === 'CHRONIC'){
+                    newFormData.immediacyRadioValue = 'C^CHRONIC';
+                } else if(acuity.toUpperCase() === 'ACUTE'){
+                    newFormData.immediacyRadioValue = 'A^ACUTE';
+                } else {
+                    newFormData.immediacyRadioValue = 'U^UNKNOWN';
+                }
+            }
+
+            var lexiconCode = existingProblemModel.get('lexiconCode');
+            if (!_.isUndefined(lexiconCode)) {
+                newFormData.lexiconCode = lexiconCode;
+            }
+
+            var codes = existingProblemModel.get('codes');
+            if (_.isArray(codes)) {
+                newFormData.codes = codes;
+            }
+
+            var comments = existingProblemModel.get('comments');
+            var manualNoteCounter = 1;
+            if(comments && comments.length > 0){
+                var commentsCollection = [];
+                _.each(comments, function(comment){
+                    var enteredByCodeSplit = comment.enteredByCode.split(':');
+                    var duz = {};
+                    duz[enteredByCodeSplit[3]] =  enteredByCodeSplit[4];
+
+                    var formattedTimestamp = '';
+                    if(comment.entered){
+                        formattedTimestamp = moment(comment.entered.toString(), 'YYYYMMDD').format('MM/DD/YYYY');
+                    }
+
+                    var noteCounter = comment.noteCounter || manualNoteCounter;
+                    commentsCollection.push({
+                        commentString: comment.comment,
+                        noteCounter: noteCounter,
+                        author: {
+                            name: comment.enteredByName,
+                            duz: duz
+                        },
+                        timeStamp: formattedTimestamp
+                    });
+
+                    manualNoteCounter++;
+
+                    var sortedCommentsCollection = _.sortBy(commentsCollection, 'noteCounter');
+                    newFormData.annotations = new Backbone.Collection(sortedCommentsCollection);
+                    newFormData.originalComments = new Backbone.Collection(sortedCommentsCollection);
+                });
+            }
+
+            var provider = existingProblemModel.get('providerUid');
+            if(provider){
+                newFormData.existingProviderId = provider.split(':').pop();
+            }
+
+            var location = existingProblemModel.get('locationUid');
+            if(location){
+                newFormModel.set('existingLocationId', location.split(':').pop());
+            } else if(existingProblemModel.get('service')){
+                newFormModel.set('existingLocationName', existingProblemModel.get('service'));
+            }
+
+            var ien = existingProblemModel.get('uid');
+            if(ien){
+                newFormData.problemIEN = ien.split(':').pop();
+            }
+
+            newFormData.problemText = existingProblemModel.get('problemText');
+            newFormData.isFreeTextProblem = false;
+
+            newFormData.existingTreatmentFactors = {
+                serviceConnected: existingProblemModel.get('serviceConnected'),
+                mst: existingProblemModel.get('militarySexualTrauma'),
+                swAsia: existingProblemModel.get('persianGulfExposure'),
+                radiation: existingProblemModel.get('radiationExposure'),
+                shipboardHazard: existingProblemModel.get('shipboardHazard'),
+                headNeckCancer: existingProblemModel.get('headNeckCancer'),
+                agentOrange: existingProblemModel.get('agentOrangeExposure')
+            };
+
+            newFormModel.set(newFormData);
         }
     };
 });

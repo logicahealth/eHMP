@@ -54,33 +54,77 @@ function getPatientPhoto(req, res) {
     req.audit.dataDomain = 'Patient Photo';
     req.audit.logCategory = 'PATIENT_PHOTO';
 
-    var requestedDfn;
-    //Get the dfn from the request
-    if (req.interceptorResults.patientIdentifiers && req.interceptorResults.patientIdentifiers.dfn) {
-        requestedDfn = req.interceptorResults.patientIdentifiers.vhic;
-    }
+    getVhicIdFromJds(req, res, function callback(vhicId) {
+        if(!_.isUndefined(vhicId)){
+            return fetchImageFromVhic(vhicId, req, res);
+        }
+        var requestedDfn;
+        //Get the dfn from the request
+        if (req.interceptorResults.patientIdentifiers && req.interceptorResults.patientIdentifiers.dfn) {
+            requestedDfn = req.interceptorResults.patientIdentifiers.vhic;
+        }
 
+        var requestedLocalId = requestedDfn + '^PI^USVHA^500';
+        //if we do not have local id,  go straight to mvi
+        if (!requestedDfn) {
+            return getImageUsingMVI(req, res);
+        }
 
-    var requestedLocalId = requestedDfn + '^PI^USVHA^500';
-    //if we do not have local id,  go straight to mvi
-    if (!requestedDfn) {
-        return getImageUsingMVI(req, res);
-    }
+        //Otherwise go to local vista instance first to see if we have a VHIC ID stored
+        var rpcConfig = getVistaRpcConfiguration(req.app.config, req.session.user.site);
+        rpcConfig.context = 'HMP SYNCHRONIZATION CONTEXT';
 
-    //Otherwise go to local vista instance first to see if we have a VHIC ID stored
-    var rpcConfig = getVistaRpcConfiguration(req.app.config, req.session.user.site);
-    rpcConfig.context = 'HMP SYNCHRONIZATION CONTEXT';
-
-    if (requestedDfn) {
-        req.logger.debug(' VHIC ID found: %s', requestedDfn);
-        return fetchImageFromVhic(requestedLocalId, req, res);
-    }
-    req.logger.debug(' VHIC ID not found.');
-    RpcClient.callRpc(req.logger, rpcConfig, 'VAFC LOCAL GETCORRESPONDINGIDS', requestedLocalId, function(error, result) {
-        getPatientPhotoCallRpcCallBack(error, result, req, res);
+        if (requestedDfn) {
+            req.logger.debug(' VHIC ID found: %s', requestedDfn);
+            return fetchImageFromVhic(requestedLocalId, req, res);
+        }
+        req.logger.debug(' VHIC ID not found.');
+        RpcClient.callRpc(req.logger, rpcConfig, 'VAFC LOCAL GETCORRESPONDINGIDS', requestedLocalId, function(error, result) {
+            getPatientPhotoCallRpcCallBack(error, result, req, res);
+        });
     });
 
 
+}
+
+/**
+ * Retrieves the VHIC Id from JDS based on patients PID.
+ * @param  req The request from the client
+ * @param  res The response for the client
+ * @return the response
+ */
+function getVhicIdFromJds(req, res, callback) {
+    var config = req.app.config;
+    var domain = 'vhic-id';
+    var pid;
+    if (req.interceptorResults.patientIdentifiers && req.interceptorResults.patientIdentifiers.icn) {
+        pid = req.interceptorResults.patientIdentifiers.icn;
+
+        //Not using the JDS substem, because it makes a call to /vpr/{pid}/index/, and vpr/{pid}/index/vhic-id
+        //doesn't exist, only /vpr/{pid}/find/vhic-id exists.
+        var jdsPath = '/vpr/' + pid + '/find/' + domain;
+        var options = _.extend({}, config.jdsServer, {
+            url: jdsPath,
+            logger: req.logger,
+            json: true
+        });
+
+        rdk.utils.http.get(options, function(error, response, body) {
+            if (error) {
+                req.logger.warn('Received error response from JDS when retrieving vhicId. ' + error);
+                return callback();
+            }
+            var ids = body.data.items[0].vhicIds;
+            var vhicIdObj = _.find(ids, 'active');
+            if (!_.isUndefined(vhicIdObj) && !_.isUndefined(vhicIdObj.vhicId)) {
+                req.logger.warn('JDS did not have an active vhicId available. ' + error);
+                return callback();
+            }
+            return callback(vhicIdObj.vhicId);
+        });
+    } else {
+        callback();
+    }
 }
 
 /**
@@ -117,8 +161,8 @@ function getImageUsingMVI(req, res) {
     http.post(mviHttpConfig, function(error, response, data) {
 
         if (error) {
-            req.logger.warn('Received error response from MVI when attempting a POST request. ' + error);
-            return res.status(rdk.httpstatus.ok).send(genderNeutralEncodedImageString);
+            req.logger.warn({error: error}, 'Received error response from MVI when attempting a POST request.');
+            return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
         }
         var getIdCallback = getIdFromSoapEnvelope.bind(null, req, res);
         return parseString(data, getIdCallback);
@@ -138,14 +182,14 @@ function getImageUsingMVI(req, res) {
 function getIdFromSoapEnvelope(req, res, err, result) {
 
     if (err) {
-        req.logger.warn('A problem occurred while attempting to parse results from MVI: ' + err);
-        return res.status(rdk.httpstatus.ok).send(genderNeutralEncodedImageString);
+        req.logger.warn({error: err}, 'A problem occurred while attempting to parse results from MVI');
+        return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
     }
     // Get the id element out of the MVI SOAP response
     if (JSON.stringify(result).indexOf('subject1') === -1) {
 
         req.logger.warn('The MVI did not return any patient IDs.');
-        return res.status(rdk.httpstatus.ok).send(genderNeutralEncodedImageString);
+        return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
     }
     var idObjectFromTree = searchUtil.retrieveObjFromTree(result, ['Envelope', 'Body', 0, 'PRPA_IN201310UV02', 0, 'controlActProcess', 0, 'subject', 0, 'registrationEvent', 0, 'subject1', 0, 'patient', 0, 'id']);
 
@@ -166,7 +210,7 @@ function getIdFromSoapEnvelope(req, res, err, result) {
 
     if (!_.isString(vhicId)) {
         req.logger.warn('The MVI did not return a VHIC ID.');
-        return res.status(rdk.httpstatus.ok).send(genderNeutralEncodedImageString);
+        return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
     } else {
         return fetchImageFromVhic(vhicId, req, res);
     }
@@ -185,14 +229,14 @@ function fetchImageFromVhic(vhicId, req, res) {
     vhicIdOnly = vhicIdOnly[0];
     if (!_.isString(vhicIdOnly)) {
         req.logger.warn(' The VHIC ID was not in the expected format:  ' + vhicId);
-        return res.status(rdk.httpstatus.ok).send(genderNeutralEncodedImageString);
+        return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
     }
 
     // Get the VHIC HTTP configuration
     var vhicHttpConfig = getVHICHttpConfig(req);
     if (!vhicHttpConfig) {
         req.logger.warn(' The VHIC endpoint was not configured correctly.');
-        return res.status(rdk.httpstatus.ok).send(genderNeutralEncodedImageString);
+        return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
     }
 
     // Define the substitution values to use for the VHIC query
@@ -218,7 +262,7 @@ function fetchImageFromVhic(vhicId, req, res) {
         return sendSoapRequestToVhic(vhicHttpConfig, req, res);
     } else {
         req.logger.debug(' Sending Gender Neutral response. ');
-        return res.status(rdk.httpstatus.ok).send(genderNeutralEncodedImageString);
+        return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
     }
 
 }
@@ -276,24 +320,24 @@ function sendSoapRequestToVhic(vhicHttpConfig, req, res) {
     http.post(vhicHttpConfig, function(error, response, data) {
         if (!data) {
             req.logger.warn(' Received error response from VHIC: ');
-            return res.status(rdk.httpstatus.ok).send(genderNeutralEncodedImageString);
+            return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
         }
 
         req.logger.info(' Received data from VHIC:  ' + data);
         parseString(data, function(err, result) {
             if (!err) {
-                req.logger.info(' Parsed results from VHIC: ' + result);
+                req.logger.info({result: result}, ' Parsed results from VHIC');
                 var results = searchUtil.retrieveObjFromTree(result, ['Envelope', 'Body', 0, 'getVeteranPicturesResponse', 0, 'return', 0, 'results', 0]);
                 if (_.has(results, 'picture')) {
                     var patientPhoto = results.picture[0];
-                    return res.status(rdk.httpstatus.ok).send(JSON.stringify(patientPhoto).replace('"', '').replace('"', ''));
+                    return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(JSON.stringify(patientPhoto).replace('"', '').replace('"', ''));
                 }
                 req.logger.debug(' The patient does not have a picture.');
             } else {
-                req.logger.warn(' Got error from VHIC:  ' + err);
+                req.logger.warn({error: err}, ' Got error from VHIC');
             }
             req.logger.debug('Returning default image, since no image found in VHIC.');
-            return res.status(rdk.httpstatus.ok).send(genderNeutralEncodedImageString);
+            return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
         });
     });
 }

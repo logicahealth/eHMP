@@ -1,15 +1,12 @@
 require 'net/http'
 require 'fileutils'
 
+use_inline_resources
+
 action :execute do
 
   chef_gem 'httparty' do
     version '0.11.0'
-  end
-
-  service "beanstalk" do
-    provider Chef::Provider::Service::Upstart
-    action :stop
   end
 
   service "vxsync" do
@@ -22,8 +19,15 @@ action :execute do
     action :stop
   end
 
+  service "beanstalk" do
+    provider Chef::Provider::Service::Upstart
+    action :stop
+  end
+
   jds = find_node_by_role("jds", node[:stack])
   solr = find_node_by_role("solr", node[:stack], "mocks")
+  vxsync = find_node_by_role("vxsync", node[:stack])
+  pjds = find_node_by_role("pjds", node[:stack], "jds")
 
   ruby_block 'clear jds cache' do
     block do
@@ -31,12 +35,14 @@ action :execute do
       SolrCache.clear("http://#{solr['ipaddress']}:#{solr['solr']['port']}")
     end
     action :create
+    only_if { new_resource.reset }
   end
 
   directory node[:vxsync][:documents_dir] do
     recursive true
     action :delete
     notifies :create, "directory[#{node[:vxsync][:documents_dir]}]", :immediately
+    only_if { new_resource.reset }
   end
 
   ruby_block "reset vista" do
@@ -51,6 +57,7 @@ action :execute do
       end
     end
     action :create
+    only_if { new_resource.reset }
   end
 
   ruby_block 'clear HDR pub/sub subscription' do
@@ -65,14 +72,19 @@ action :execute do
       end
     end
     action :create
+    only_if { new_resource.reset }
   end
 
   execute "clear persistence directory and error logs" do
     command "rm -rf #{node[:vxsync][:persistence_dir]}/*"
     command "rm -f #{node[:vxsync][:log_directory]}/*_error.log*"
+    only_if { new_resource.reset }
+  end
+
+  execute "echo 'starting vxsync processes'" do
     notifies :start, "service[beanstalk]", :immediately
-    notifies :start, "service[vxsync]", :immediately
     notifies :start, "service[soap_handler]", :immediately
+    notifies :start, "service[vxsync]", :immediately
   end
 
   sites = find_multiple_nodes_by_role("vista-*", node[:stack])
@@ -81,7 +93,8 @@ action :execute do
     site_id = site['vista']['site_id']
 
     vxsync_wait_for_connection "triggering initial operational data sync for site #{site_id}" do
-      url "http://localhost:8080/data/doLoad?sites=#{site_id}"
+      url "http://localhost:#{vxsync[:vxsync][:web_service_port]}/data/doLoad?sites=#{site_id}"
+      only_if { new_resource.reset }
     end
   }
 

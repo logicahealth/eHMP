@@ -335,7 +335,7 @@
         listenToFieldName: function() {
             this.modelName = this.getComponentInstanceName();
 
-            this.listenTo(this.model, "change:" + this.modelName, this.modelChangeListener || this.render);
+            this.listenTo(this.model, "change:" + this.modelName, this.onModelChange);
             if (this.model.errorModel instanceof Backbone.Model)
                 this.listenTo(this.model.errorModel, "change:" + this.modelName, this.updateInvalid);
 
@@ -405,7 +405,7 @@
             });
         },
         serializeModel: function(model, moreOptions) {
-            var field = _.defaults(this.field.toJSON(), this.defaults);
+            var field = _.defaultsDeep(this.field.toJSON(), this.defaults);
             var attributes = model.toJSON();
             var attrArr = field.name.split('.');
             var name = attrArr.shift();
@@ -451,12 +451,21 @@
 
             changes[name] = _.isEmpty(path) ? value : _.clone(model.get(name)) || {};
             if (!_.isEmpty(path)) this.keyPathSetter(changes[name], path, value);
-            this.stopListening(this.model, "change:" + name, this.modelChangeListener || this.render);
+            this.stopListening(this.model, "change:" + name, this.onModelChange);
             if (_.isFunction(this.getSelectedLabelFromDOM)) {
                 this.model.trigger('labelsForSelectedValues:update', name, this.getSelectedLabelFromDOM());
             }
             model.set(changes);
-            this.listenTo(this.model, "change:" + name, this.modelChangeListener || this.render);
+            this.listenTo(this.model, "change:" + name, this.onModelChange);
+            return model.changedAttributes();
+        },
+        onModelChange: function() {
+            var attrArr = this.field.get("name").split('.');
+            var name = attrArr.shift();
+            var path = attrArr.join('.');
+            this.clearErrorModelValue(name, path);
+            var callback = this.modelChangeListener || this.render;
+            callback.apply(this, arguments);
         },
         clearErrorModelValue: function(name, path){
             if (this.model.errorModel instanceof Backbone.Model) {
@@ -497,7 +506,7 @@
             return this;
         },
         keyPathAccessor: function(obj, path) {
-            var res = obj;
+            var res = obj || {};
             path = path.split('.');
             for (var i = 0; i < path.length; i++) {
                 if (_.isNull(res)) return null;
@@ -528,6 +537,10 @@
             this.$el.addClass(this.field.get('controlName') + '-control ' + this.field.get('name').split('.').shift() + (this.extraClasses ? ' ' + this.extraClasses : ''));
             this.toggleHidden();
             this.updateInvalid();
+        },
+        onUserInput: function() {
+            this.model.trigger('change.inputted', this.model, this.model.changedAttributes());
+            this.model.trigger('change.inputted:' + this.modelName, this.model, (this.model.changedAttributes()[this.modelName] || this.model.get(this.modelName)));
         }
     };
 
@@ -541,6 +554,35 @@
             this.setExtraClasses();
         }
     };
+
+    // Future control prototype
+    var CommonPrototypeFuture = {
+        getComponentInstanceName: function() {
+            var attrArr = this.field.get('name').split('.');
+            return attrArr.shift();
+        },
+        getComponentInstanceNamePath: function() {
+            var attrArr = this.field.get('name').split('.');
+            var name = attrArr.shift();
+            return attrArr.join('.');
+        },
+        getModelValue: function() {
+            return !_.isEmpty(this.fieldConfigPath) && _.isObject(this.model.get(this.fieldConfigName)) ?
+                this.keyPathAccessor(this.model.get(this.fieldConfigName), this.fieldConfigPath) :
+                this.model.get(this.fieldConfigName);
+        },
+        setFieldName: function() {
+            this.fieldConfigName = this.getComponentInstanceName();
+        },
+        setFieldNamePath: function() {
+            this.fieldConfigPath = this.getComponentInstanceNamePath();
+        }
+    };
+
+    // Base LayoutView-based control
+    var LayoutViewControl = PuppetForm.LayoutViewControl = Backbone.Marionette.LayoutView.extend(
+        _.defaults(_.defaults(CommonPrototypeFuture, ControlPrototype), _.defaults(CommonPrototype, CommonEventsFunctions))
+    );
 
     // Base Control class
 
@@ -584,9 +626,7 @@
             '  <% } %>',
             '</div>'
         ].join("\n")),
-        events: _.defaults({
-            "change textarea": "onChange"
-        }, Control.prototype.events),
+        events: Control.prototype.events,
         getValueFromDOM: function() {
             return this.formatter.toRaw(this.$("textarea").val(), this.model);
         }
@@ -636,7 +676,7 @@
             '</div>'
         ].join("\n")),
         events: {
-            "change select": "onChange",
+            "change selected": "onChange",
             "dblclick select": "onDoubleClick"
         },
         formatter: JSONFormatter,
@@ -666,7 +706,10 @@
             '</div>'
         ].join("\n")),
         events: _.defaults({
-            "change input": "onChange"
+            "change input": function() {
+                this.onChange.apply(this, arguments);
+                this.onUserInput.apply(this, arguments);
+            }
         }, Control.prototype.events),
         getValueFromDOM: function() {
             return this.formatter.toRaw(this.$("input").val(), this.model);

@@ -3,102 +3,6 @@
 # Recipe:: import_panorama
 #
 
-chef_gem 'vistarpc4r' do
-  version '0.3.0'
-end
-
-require 'rubygems'
-require 'vistarpc4r'
-
-remote_directory '/var/data/panorama_data' do
-  source 'panorama_data'
-  owner 'root'
-  group 'root'
-  mode '0755'
-  action :create
-end
-
-ruby_block "import_panorama" do
-  block do
-
-    broker = VistaRPC4r::RPCBrokerConnection.new("127.0.0.1", 9210, "PW    ", "PW    !!", false)
-    broker.connect
-    broker.setContext('OR CPRS GUI CHART')
-
-    Dir.glob("/var/data/panorama_data/*.json") do |json_file|
-      Chef::Log.info("Found vitals data: #{json_file}\n")
-      p = JSON.parse(File.read(File.expand_path(json_file, File.dirname(__FILE__))))
-      if p['vitals'] != nil && p['vitals']['observations'] != nil
-        p['vitals']['observations'].each do |observation|
-          vrpc = VistaRPC4r::VistaRPC.new("GMV ADD VM", VistaRPC4r::RPCResponse::ARRAY)
-          vrpc.params[0] = "#{p['vitals']['date']}.#{p['vitals']['time']}^#{p['vitals']['patientIEN']}^#{observation['VITAL TYPE']};#{observation['result']};^#{p['vitals']['location']}^#{p['vitals']['userIEN']}"
-          broker.execute(vrpc)
-        end
-      elsif p['allergies'] != nil && p['allergies']['list'] != nil
-        third_parameter = []
-        p['allergies']['list'].each do |list|
-          if list['ordinal'] == nil || list['ordinal'] == ""
-            third_parameter << ["\"#{list['key']}\"", list['value']]
-          else
-            third_parameter << ["\"#{list['key']}\", #{list['ordinal']}", list['value']]
-          end
-        end
-        vrpc = VistaRPC4r::VistaRPC.new("ORWDAL32 SAVE ALLERGY", VistaRPC4r::RPCResponse::SINGLE_VALUE)
-        vrpc.params[0] = "0" # first parameter is the allergy IEN to update/insert, if inserting, default to 0
-        vrpc.params[1] = p['allergies']['patientIEN'] # second parameter is the DFN of the patient to insert the allergy for
-        # third parameter is the list of allergy information to insert
-        vrpc.params[2] = third_parameter
-        broker.execute(vrpc)
-      elsif p['notes'] != nil
-        n = p['notes']
-
-
-        vrpc = VistaRPC4r::VistaRPC.new("OOPS NEW PERSON DATA", VistaRPC4r::RPCResponse::ARRAY)
-        vrpc.params = [
-          n["provider"],
-        ]
-
-        resp = broker.execute(vrpc)
-        provider_ien = resp.value.first.split('^').first
-
-        vrpc = VistaRPC4r::VistaRPC.new("TIU CREATE RECORD", VistaRPC4r::RPCResponse::SINGLE_VALUE)
-        vrpc.params = [
-          n["patientIEN"],
-          n["noteType"],
-          "",
-          "",
-          "",
-          [
-            ["1202", provider_ien],
-            ["1201", "T"],
-            ["1205", n["location"]],
-            ["1701",""],
-          ],
-          "#{n["location"]};T;A",
-          "1"
-        ]
-
-        resp = broker.execute(vrpc)
-        id = resp.value
-
-        vrpc = VistaRPC4r::VistaRPC.new("TIU SET DOCUMENT TEXT", VistaRPC4r::RPCResponse::SINGLE_VALUE)
-        vrpc.params = [
-          id,
-          [
-            ["\"TEXT\",1,0", n["text"]],
-            ["\"HDR\"","1^1"]
-          ],
-          "0"
-        ]
-        resp = broker.execute(vrpc)
-      end
-    end
-
-    broker.close
-  end
-  not_if { node[:vista][:no_reset] }
-end
-
 vista_mumps_block "Run MUMPS commands on Panorama" do
   duz       1
   programmer_mode true
@@ -142,6 +46,23 @@ vista_load_global "vista-panorama_test_data" do
   log node[:vista][:chef_log]
 end
 
+vista_mumps_block "Update patient TWOHUNDREDNINE,PATIENT's problems to have one originate in Panorama and one in Kodak" do
+  duz       1
+  programmer_mode true
+  namespace node[:vista][:namespace]
+  command [
+    "K FDA",
+    "S FDA(9000011,\"971,\",.02)=100155",
+    "S FDA(9000011,\"971,\",.06)=500",
+    "S FDA(9000011.11,\"1,971,\",.01)=500",
+    "S FDA(9000011,\"975,\",.02)=100865",
+    "S FDA(9000011,\"975,\",.06)=500",
+    "S FDA(9000011.11,\"1,975,\",.01)=500",
+    "D FILE^DIE(,\"FDA\")"
+  ]
+  log node[:vista][:chef_log]
+end
+
 vista_mumps_block "Reset all subscriptions on deploy" do
   namespace node[:vista][:namespace]
   command [
@@ -156,4 +77,16 @@ vista_mumps_block "Reset all subscriptions on deploy" do
   ]
   log node[:vista][:chef_log]
   not_if { node[:vista][:no_reset] }
+end
+
+26.times do |i|
+  alph = ("a".."z").to_a
+
+  number = alph[i]
+  vista_patient "Create a patient" do
+    name "PANORAMA,#{number}"
+    sex "MALE"
+    dob "01/01/1962"
+    not_if { node[:vista][:no_reset] }
+  end
 end

@@ -12,10 +12,10 @@ class ImmunizationGist <  AllApplets
     add_applet_buttons appletid_css
     add_applet_title appletid_css
     add_applet_add_button appletid_css
+    add_toolbar_buttons
 
     add_verify(CucumberLabel.new("Immunization Gist Tooltip"), VerifyContainsText.new, AccessHtmlElement.new(:id, "urn:va:immunization:9E7A:301:37"))
     gist_view_count = AccessHtmlElement.new(:xpath, "//*[@id='immunizations-pill-gist-items']/descendant::div[contains(@class, 'immunGist')]")
-    #add_verify(CucumberLabel.new("Immunization Gist Title"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=immunizations] .panel-title"))
     add_verify(CucumberLabel.new('Immunization gist view count'), VerifyXpathCount.new(gist_view_count), gist_view_count)
     add_verify(CucumberLabel.new("Empty Gist"), VerifyText.new, AccessHtmlElement.new(:css, "#{appletid_css} div.empty-gist-list"))
 
@@ -29,7 +29,7 @@ class ImmunizationGist <  AllApplets
   end
 
   def pill_count
-    return TestSupport.driver.find_elements(:css, '#immunizations-pill-gist-items > div.gist-item').length
+    return TestSupport.driver.find_elements(:css, "[data-appletid='immunizations'] div.gist-item").length
   end
 
   def applet_loaded?
@@ -67,13 +67,6 @@ When(/^the Immunization Gist Hover Table table contains rows$/) do
   end
 end
 
-When(/^user hovers over the first pill$/) do
-  driver = TestSupport.driver
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  hover = wait.until { driver.find_element(:css, "[data-appletid=immunizations] li:nth-child(1) [data-infobutton]") }
-  driver.action.move_to(hover).perform
-end
-
 Then(/^user sees Immunizations Gist$/) do
   aa = ImmunizationGist.instance
   expect(aa.wait_until_action_element_visible("Title", DefaultLogin.wait_time)).to be_true
@@ -97,7 +90,7 @@ When(/^user clicks on "(.*?)" pill$/) do |vaccine_name|
   aa = ImmunizationGist.instance
   driver = TestSupport.driver
   expect(aa.perform_action(vaccine_name, "")).to be_true
-  driver.find_element(:id, "info-button-sidekick-detailView").click
+  expect(aa.perform_action('Detail View Button')).to eq(true) 
 end
 
 Then(/^the immunization gist applet title is "(.*?)"$/)  do |title|
@@ -142,20 +135,43 @@ Then(/^the user filters the Immunization Gist Applet by text "([^"]*)"$/) do |in
   aa = ImmunizationGist.instance
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   pill_count = aa.pill_count
+  expect(pill_count).to be > 0, "need at least 1 pill to test functionality"
+  p pill_count
   expect(aa.perform_action('Control - applet - Text Filter', input_text)).to eq(true)
   wait.until { pill_count != aa.pill_count }
 end
 
 Then(/^the Immunization Gist only diplays pills including text "([^"]*)"$/) do |input_text|
-# //div[@id='immunizations-pill-gist']/descendant::div[contains(@class, 'gist-item')]/descendant::span[contains(string(), 'PNE')]
   aa = ImmunizationGist.instance
   upper = input_text.upcase
   lower = input_text.downcase
-  path = "//div[@id='immunizations-pill-gist']/descendant::div[contains(@class, 'gist-item')]/descendant::span[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]"
-  # path =  "//table[@id='data-grid-problems']/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
-
+  path = "//div[@data-appletid='immunizations']/descendant::div[contains(@class, 'gist-item')]/descendant::p[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]"
+  p path
   row_count = aa.pill_count
   rows_containing_filter_text = TestSupport.driver.find_elements(:xpath, path).size
   expect(row_count).to eq(rows_containing_filter_text), "Only #{rows_containing_filter_text} pills contain the filter text but #{row_count} pills are visible"
 end
 
+When(/^user clicks the first pill$/) do
+  @ehmp = PobImmunizationsApplet.new
+  @ehmp.wait_until_applet_gist_loaded
+  pills = @ehmp.fld_pills
+  expect(pills.length).to be > 0, "Need at least 1 immunization pill to perform test"
+  pills[0].click
+  @ehmp.wait_until_btn_quick_view_visible
+  expect(@ehmp).to have_btn_quick_view
+end
+
+When(/^a quick look icon is displayed in the immunization toolbar$/) do
+  @ehmp = PobImmunizationsApplet.new
+  @ehmp.wait_until_fld_toolbar_visible
+  expect(@ehmp).to have_btn_quick_view
+end
+
+When(/^user clicks the quick look icon$/) do
+  @ehmp = PobImmunizationsApplet.new
+  @ehmp.btn_quick_view.click
+  wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+  wait.until { @ehmp.hdr_quickview_headers.length > 0 }
+  expect(@ehmp.hdr_quickview_headers.length).to be > 0
+end

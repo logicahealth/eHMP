@@ -8,6 +8,7 @@ define([
     };
     var config = {
         id: 'hypertension-cbw',
+        context: 'patient',
         contentRegionLayout: 'gridster',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',
@@ -15,7 +16,7 @@ define([
         freezeApplets: true, //if true, applets won't be draggable and resizable by gridster
         applets: [{
             "id": "problems",
-            "title": "Conditions",
+            "title": "Problems",
             "instanceId": "htcbw-problems-1",
             "region": "htcbw-problems-1",
             "dataCol": "1",
@@ -27,7 +28,7 @@ define([
             "dataSizeX": "4",
             "dataSizeY": "6",
             "maximizeScreen": "problems-full",
-            "filterName": "Filtered Hypertension",
+            "filterName": "Hypertension",
             "viewType": "gist"
         }, {
             "id": "newsfeed",
@@ -42,7 +43,7 @@ define([
             "dataRow": "7",
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Hypertension",
+            "filterName": "Hypertension",
             "viewType": "summary",
             "maximizeScreen": "news-feed"
         }, {
@@ -58,7 +59,7 @@ define([
             "dataRow": "1",
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Hypertension",
+            "filterName": "Hypertension",
             "maximizeScreen": "vitals-full",
             "viewType": "gist"
         }, {
@@ -74,7 +75,7 @@ define([
             "dataRow": "1",
             "dataSizeX": "4",
             "dataSizeY": "6",
-            "filterName": "Filtered Hypertension",
+            "filterName": "Hypertension",
             "maximizeScreen": "lab-results-grid-full",
             "viewType": "gist"
         }, {
@@ -90,7 +91,7 @@ define([
             "dataRow": "1",
             "dataSizeX": "4",
             "dataSizeY": "4",
-            "filterName": "Filtered Hypertension",
+            "filterName": "Hypertension",
             "maximizeScreen": "cds-advice-full",
             "viewType": "summary"
         }, {
@@ -106,7 +107,7 @@ define([
             "dataRow": "5",
             "dataSizeX": "4",
             "dataSizeY": "4",
-            "filterName": "Filtered Hypertension",
+            "filterName": "Hypertension",
             "maximizeScreen": "appointments-full",
             "viewType": "summary"
         }, {
@@ -122,7 +123,7 @@ define([
             "dataRow": "9",
             "dataSizeX": "4",
             "dataSizeY": "4",
-            "filterName": "Filtered Hypertension",
+            "filterName": "Hypertension",
             "viewType": "summary",
             "maximizeScreen": "documents-list"
         }, {
@@ -138,7 +139,7 @@ define([
             "dataRow": "7",
             "dataSizeX": "8",
             "dataSizeY": "6",
-            "filterName": "Filtered Hypertension",
+            "filterName": "Hypertension",
             "viewType": "expanded",
             "maximizeScreen": "medication-review"
         }],

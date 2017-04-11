@@ -25,6 +25,10 @@ link "/usr/bin/bundle" do
   action :nothing
 end
 
+link "/usr/bin/chef-client" do
+  to "/opt/chefdk/bin/chef-client"
+end
+
 execute "set_embedded_links" do
 	command "ls"
 	notifies :create, "link[/usr/bin/ruby]", :delayed

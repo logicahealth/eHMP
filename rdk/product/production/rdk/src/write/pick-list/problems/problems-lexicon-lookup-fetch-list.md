@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Problems lexicon lookup [/problems-lexicon-lookup{?site}{&searchString}{&date}{&synonym}{&limit}{&noMinimumLength}{&fields}]
+## Problems lexicon lookup [/problems-lexicon-lookup{?site}{&searchString}{&date}{&synonym}{&limit}{&noMinimumLength}]
 
 DIRECT RPC CALL - Problems Lexicon Lookup - calls orqqpl4-lex-lookup with a value of PLS
 
@@ -21,8 +21,6 @@ ORQQPL4 LEX
     + limit (string, optional) - If not supplied will default to zero, which means return all records found
 
     + noMinimumLength (string, optional) - If supplied, searchString can be as short as 1.
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

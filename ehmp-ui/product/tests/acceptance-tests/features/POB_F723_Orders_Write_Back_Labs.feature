@@ -1,14 +1,14 @@
-@f723_pob_lab_order_write_back @regression
+@f723_pob_lab_order_write_back @regression @future @DE4560
 
 Feature: F723 : Outpatient Labs Write Back Orders to VistA with File Locking and Order Checks
 
 @f723_pob_lab_order_create_form_validation
 Scenario: Validate Add Lab Order form.
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "twenty,patient"
   Then Cover Sheet is active
-  And POB user selects and sets new encounter "Cardiology"
+  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   Then POB user adds a new order
   And POB add order modal detail title says "ORDER A LAB TEST"
   And POB add order detail modal displays labels
@@ -35,44 +35,43 @@ Scenario: Validate Add Lab Order form.
   | Save & Close 			|
   And POB add order detail modal has button "Accept & Add Another"
 
-@f723_pob_lab_order_create_new
+@f723_pob_lab_order_create_new 
 Scenario: Create a Lab Order and Save it.
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "twenty,patient"
   Then Cover Sheet is active
-  And POB user selects and sets new encounter "Cardiology"
+  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   Then POB user adds a new order
   And POB user orders "24 hr urine calcium" lab test
   And POB user validates the order to be "24 hr urine calcium"
   And POB user accepts the order
   And POB user clicks the actions tray
   When POB user expands orders applet
-  #When POB user navigates to orders expanded view
   And POB user verifies the above "24 hr urine calcium" order is added to patient record  
 
-@f723_pob_lab_order_sign
+@f723_pob_lab_order_sign @future
 Scenario: Create a Lab Order and Sign it.
 
   Given user views the login screen
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   Then the patient search screen is displayed
   And user searches for and selects "twenty,patient"
   Then Cover Sheet is active
-  And POB user selects and sets new encounter "Cardiology"
+  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   When POB user expands orders applet
   And user verifies that the first row contains the order "24 hr urine calcium" with status "UNRELEASED"
   Then POB user opens the detail view of the order "24 hr urine calcium"
-  And POB user signs the order as "PW    !!"
+  And POB user signs the order as "vk1234!!"
   And POB user verifies order status changes to "PENDING"
     
 @f723_pob_lab_order_discontinue @future
 Scenario: Create a Lab order and discontinue it.
 
-  Given user is logged into eHMP-UI
+  # Given user is logged into eHMP-UI
   And user searches for and selects "twenty,patient"
   Then Cover Sheet is active
-  And user selects and sets new encounter
+  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   When POB user expands orders applet
   And user verifies that the first row contains the order "24 hr urine calcium" with status "PENDING"
   Then POB user opens the detail view of the order "24 hr urine calcium"

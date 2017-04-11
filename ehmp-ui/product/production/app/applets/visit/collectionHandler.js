@@ -5,74 +5,13 @@ define([
     'handlebars'
 ], function(Backbone, Marionette, $, Handlebars) {
     "use strict";
-
+    
     var ADMISSION_LIMIT = '5';
     var DATE_TIME_FORMAT = 'YYYYMMDDHHmm';
     var DISPLAY_TIME_FORMAT = 'MM/DD/YYYY HH:mm';
     var DATE_FORMAT = 'MM/DD/YYYY';
     var DATE_DISPLAY_FORMAT = 'YYYYMMDD';
-    var INHOSPITAL_SC = 'I';
-    var AMBULATORY_SC = 'A';
-    var DAILY_SC = 'D';
-    var ANCILLARY_PACKAGE_SC = 'X';
-    var TELEHEALTH_SC = 'T';
-    var HISTORICAL_SC = 'E';
-
     var collectionHandler = {
-        getServiceCategory: function(visit, currentTab, isInpatient, callback) {
-            var result;
-            if (visit.get('newVisit') && visit.get('newVisit').isHistorical) {
-                result = {
-                    'data': {
-                        'serviceCategory': HISTORICAL_SC
-                    }
-                };
-                return callback(result);
-            }
-
-            if (visit.get('locationDisplayName').toUpperCase().indexOf('TELE') > -1) {
-                result = {
-                    'data': {
-                        'serviceCategory': TELEHEALTH_SC
-                    }
-                };
-                return callback(result);
-            }
-
-            if (currentTab.indexOf('Clinic-Appointments-tab-panel') >= 0 || currentTab.indexOf('New-Visit-tab-panel') >= 0) {
-                if (isInpatient) {
-                    result = {
-                        'data': {
-                            'serviceCategory': INHOSPITAL_SC
-                        }
-                    };
-                    return callback(result);
-                } else {
-                    result = {
-                        'data': {
-                            'serviceCategory': AMBULATORY_SC
-                        }
-                    };
-                    return callback(result);
-                }
-            } else if (currentTab.indexOf('Hospital-Admissions-tab-panel') >= 0) {
-                if (isInpatient) {
-                    result = {
-                        'data': {
-                            'serviceCategory': DAILY_SC
-                        }
-                    };
-                    return callback(result);
-                } else {
-                    result = {
-                        'data': {
-                            'serviceCategory': ANCILLARY_PACKAGE_SC
-                        }
-                    };
-                    return callback(result);
-                }
-            }
-        },
         getProviders: function(callback) {
             var siteCode = ADK.UserService.getUserSession().get('site');
             var providersfetchOptions = {
@@ -84,23 +23,30 @@ define([
             };
             ADK.ResourceService.fetchCollection(providersfetchOptions);
         },
-        getProvidersPicklist: function(callback) {
-            var collection = new Backbone.Collection();
-            var site = ADK.UserService.getUserSession().get('site');
-            collection.url = '/resource/write-pick-list?type=new-persons&new-persons-type=PROVIDER&site=' + site;
-            collection.fetch({
+        getProvidersPicklist: function(filterDate, callback) {
+            var people = new ADK.UIResources.Picklist.Encounters.Providers();
+            var date = '';
+            var formattedDate = moment(filterDate, DISPLAY_TIME_FORMAT).format(DATE_TIME_FORMAT);
+            if (formattedDate !== 'Invalid date') {
+                date = formattedDate;
+            }
+            people.fetch({
+                dateTime: date,
                 success: callback
+            }).fail(function(child, response) {
+                //If the picklist fetch fails
+                callback(null, response);
             });
         },
-        getLocations: function(callback) {
+        getLocations: function(form, callback) {
+            var locations = new ADK.UIResources.Picklist.Encounters.Locations();
             var siteCode = ADK.UserService.getUserSession().get('site');
-            var locationsfetchOptions = {};
-            locationsfetchOptions.resourceTitle = "locations-clinics";
-            locationsfetchOptions.onSuccess = callback;
-            locationsfetchOptions.criteria = {
-                "site.code": siteCode
-            };
-            ADK.ResourceService.fetchCollection(locationsfetchOptions);
+            form.listenTo(locations, 'read:success', function(collection, response) {
+                callback(collection);
+            });
+            locations.fetch({
+                site: siteCode
+            });
         },
         getAdmissions: function(callback) {
             var admissionsfetchOptions = {
@@ -109,6 +55,7 @@ define([
                 criteria: {
                     limit: ADMISSION_LIMIT
                 },
+                cache: false,
                 onSuccess: callback,
                 onError: callback
             };
@@ -125,6 +72,7 @@ define([
                     'date.start': moment(criteria.fromDate, DATE_FORMAT).format(DATE_DISPLAY_FORMAT),
                     'date.end': moment(criteria.toDate, DATE_FORMAT).format(DATE_DISPLAY_FORMAT)
                 },
+                cache: false,
                 onSuccess: callback,
                 onError: callback
             };
@@ -140,16 +88,15 @@ define([
             this.toDate = toDate;
             var self = this;
             return _.filter(col.models, function(model) {
-                var d = moment(model.get('visitDateTime'), DATE_TIME_FORMAT);
+                var d = moment(model.get('dateTime'), DATE_TIME_FORMAT);
                 return (moment(this.fromDate || '01/01/1900') <= d) && (d <= moment(this.toDate || '01/01/2999'));
             }, self);
         },
         admissionsParser: function(col) {
             col.forEach(function(model) {
                 model.set({
-                    formatteddateTime: moment(model.get('dateTime'), DATE_TIME_FORMAT).format(DISPLAY_TIME_FORMAT),
-                    visitDateTime: model.get('dateTime'),
-                    locationIEN: model.get('locationIEN')
+                    formattedDateTime: moment(model.get('dateTime'), DATE_TIME_FORMAT).format(DISPLAY_TIME_FORMAT),
+                    dateTime: model.get('dateTime')
                 });
             });
             return col;
@@ -157,7 +104,7 @@ define([
         appointmentsParser: function(col) {
             col.forEach(function(model) {
                 model.set({
-                    formatteddateTime: moment(model.get('visitDateTime'), DATE_TIME_FORMAT).format(DISPLAY_TIME_FORMAT)
+                    formattedDateTime: moment(model.get('dateTime'), DATE_TIME_FORMAT).format(DISPLAY_TIME_FORMAT)
                 });
             });
             return col;
@@ -168,7 +115,7 @@ define([
             }];
             var pickList = collection.map(function(model) {
                 return {
-                    label: model.get('name'),
+                    label: model.get('displayName'),
                     value: model.get('uid')
                 };
             });

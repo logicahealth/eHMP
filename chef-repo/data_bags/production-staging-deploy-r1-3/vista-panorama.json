@@ -1,7 +1,7 @@
 {
   "id": "vista-panorama",
   "normal": {
-    "ipaddress": "IPADDRESS  ",
+    "ipaddress": "IP__ADDRESS",
     "vista": {
       "domain_name": "PANORAMA.VISTACORE.US",
       "site_recipe": "panorama",
@@ -9,8 +9,8 @@
       "site_id": "9E7A",
       "site": "PANORAMA",
       "station_number": "500",
-      "access_code": "PW    ",
-      "verify_code": "PW    !!",
+      "access_code": "ep1234",
+      "verify_code": "ep1234!!",
       "division": "500",
       "clinics_osync_appointment_request": [
         {

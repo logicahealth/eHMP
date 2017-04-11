@@ -75,8 +75,8 @@ define([
     //Define Popover Control Prototype
     var PopoverControlPrototype = {
         regions: {
-            popoverButton: "#popoverButtonRegion",
-            popoverContent: "#popoverContentRegion"
+            popoverButton: ".popover-button-region",
+            popoverContent: ".popover-content-region"
         },
         defaults: {
             options: {
@@ -93,8 +93,8 @@ define([
             extraClasses: []
         },
         template: Handlebars.compile([
-            '<div id="popoverButtonRegion"></div>',
-            '<div id="popoverContentRegion"></div>'
+            '<div class="popover-button-region"></div>',
+            '<div class="popover-content-region"></div>'
         ].join('\n')),
         initialize: function(options) {
             this.initOptions(options);

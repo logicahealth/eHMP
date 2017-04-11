@@ -2,13 +2,44 @@
 
 var deleteHandler = require('./communication-request-delete');
 
+function stubRequest() {
+    var logger = {
+        trace: function() {},
+        debug: function() {},
+        info: function() {},
+        warn: function() {},
+        error: function() {},
+        fatal: function() {}
+    };
+    var app = {
+        config: {
+            generalPurposeJdsServer: ''
+        }
+    };
+    var req = {
+        logger: logger,
+        app: app
+    };
+    return req;
+}
+
+function stubResponse() {
+    var res = {
+        status: function() {},
+        send: function() {},
+        next: function() {}
+    };
+    return res;
+}
 describe('When deleting a communication request', function() {
     var callback;
-
+    var req = stubRequest();
+    var res = stubResponse();
     var queueName = '9E7A;18';
-    var queue = {delete: function(queueName, id, callback) {
-        callback(null, 'deleteCalled');
-    },
+    var queue = {
+        delete: function(queueName, id, callback) {
+            callback(null, 'deleteCalled');
+        },
         removeQueue: function(queueName, callback) {
             callback(null, 'removeQueueCalled');
         }
@@ -23,16 +54,10 @@ describe('When deleting a communication request', function() {
     });
 
     it('a single communication request is deleted if a resource id is provided', function(done) {
-        deleteHandler.handle(queue, queueName, 1, callback);
+        deleteHandler.handle(queue, queueName, 1, callback, req, res);
         expect(callback.calledWith(null, 'deleteCalled'));
 
         done();
     });
 
-    it('all communication requests are deleted if a resource id is Not provided', function(done) {
-        deleteHandler.handle(queue, queueName, callback);
-        expect(callback.calledWith(null, 'removeQueueCalled'));
-
-        done();
-    });
 });

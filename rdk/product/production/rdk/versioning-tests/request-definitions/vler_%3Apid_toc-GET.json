@@ -14,13 +14,6 @@
 			"values": [
 			]
 		},
-		"fields": {
-			"name": "fields",
-			"paramType": "query",
-			"type": "string",
-			"values": [
-			]
-		},
 		"pid": {
 			"name": "pid",
 			"required": true,

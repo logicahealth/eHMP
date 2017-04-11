@@ -1,0 +1,189 @@
+[data-appletid="global-datepicker"] {
+
+}
+#navigation-date {
+    #globalDatePicker-compact {
+        button.global-date-picker-button {
+            background-color: $primary-lighter;
+        	border-radius: 20px 0 0 20px;
+            box-shadow: none;
+            color: $primary;
+            padding: 4px 7px;
+        }
+    }
+    .globalDatePicker-popupRegion {
+        position: absolute;
+        height: 100%;
+        z-index: 5;
+        // Used when there is no spikeline graph
+        // padding: 29px 0 0px 0;
+        .panel-primary {
+            box-shadow: none;
+        }
+        #globalDate-region {
+            overflow: hidden;
+            height: 70vh;
+            border-radius: 6px;
+            box-shadow: 0 1px 6px 1px rgba(0,0,0,.30);
+            .global-grid-filter-daterange {
+                > .container-fluid {
+                    margin-left: -13px;
+                    margin-right: -13px;
+                }
+                &.scroll-no-padding {
+                    padding: 0 5px 8px 5px;
+                    margin-bottom: -7px;
+                    overflow: hidden;
+                    border-top: 1px solid #bfbfbf;
+                }
+                .gdt-padding {
+				    padding: 5px;
+				    display: inline-block;
+				    width: 100%;
+                    .btn {
+                        box-shadow: none;
+                    }
+				}
+                #timelineSummary .panel {
+                    margin-bottom: 0px;
+                }
+            }
+            .col-md-12 {
+                &.center-block {
+                    padding: 0;
+                }
+            }
+            .global-grid-filter-daterange,
+            .global-grid-filter-daterange > .container-fluid,
+            .center-block,
+            .timelineSummary-scrollable,
+            .timelineSummary-scrollable > div,
+            .applet-div-chrome-container .panel-body,
+            .applet-div-chrome-container .grid-container,
+            .applet-div-chrome-container .grid-container > div,
+            .applet-div-chrome-container .data-grid{
+                height: 100%;
+            }
+            .global-grid-filter-daterange {
+                max-width: 686px;
+            }
+            .global-grid-filter-daterange > .container-fluid .scroll-no-padding {
+                height: calc(100% - 21px);
+                & > div:nth-of-type(2) {
+                    height: calc(100% - 190px);
+                }
+            }
+            .applet-div-chrome-container .panel-body {
+                overflow-y: hidden;
+                .data-grid {
+                    overflow: auto;
+                }
+            }
+        }
+        .highcharts-legend-item text {
+            color: #fff !important;
+            fill: #fff !important;
+            font-weight: normal !important;
+        }
+        .panel-body {
+            overflow: hidden;
+        }
+        #customRangeApplyGlobal {
+            height: 25px;
+        }
+        #cancelGlobal {
+            height: 25px;
+        }
+        .input-helper-text {
+            padding: 0;
+            width: auto;
+            display: inline-block;
+            font-size: 13px;
+            color: $grey-darker;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .input-group-addon {
+            padding: 0px 6px
+        }
+        .tooltip {
+            position: fixed;
+            z-index: 6;
+        }
+        .tooltip-inner {
+            background-color: white;
+            color: black;
+            font-size: 11px;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+        .tooltip-arrow {
+            border-color: transparent;
+            border-style: solid;
+            border-top-color: red;
+        }
+        label{
+            font-weight: 500;
+        }
+    }
+    .global-grid-filter-daterange {
+        background: $pure-white;
+        .active-range {
+            background-color: $primary-dark;
+            color: $pure-white;
+        }
+    }
+    .op-color {
+    background-color: #000000;
+	}
+	.ip-color {
+	    background-color: #3C64FF;
+	}
+	#allActivitiesTitle {
+	    background-color: $pure-white;
+	    font-size: 14px;
+	    font-weight: bold;
+	    border-bottom: 1px solid #000000;
+	    color: $primary;
+	    text-transform: uppercase;
+	    text-align: center;
+	}
+	#selectedActivities,
+	#timelineSummaryTitle {
+	    background-color: #E0E0E0;
+	    height: 24px;
+	    padding-top: 3px;
+	    color: #616161;
+	    border-bottom: 1px solid #bfbfbf;
+	    border-bottom-width: thin;
+	}
+	#timelineSummaryTitle {
+	    text-align: center;
+	}
+	.selectedActivitiesTitle,
+	.timelineSummaryTitle {
+	    font-size: 14px;
+	    font-weight: bold;
+	}
+	#gdr-spikeline {
+	    position: relative;
+	    float: left;
+	}
+	#gdr-spikeline .highcharts-container {
+	    overflow: visible !important;
+	}
+	#spikeLineChartContainer {
+        background-color: rgb(0, 25, 36);
+	    border-radius: 0 20px 20px 0;
+        cursor: pointer;
+        padding-right: 12px;
+	}
+	.gdt-chart-padding {
+	    margin-left: -23px;
+	    margin-right: -23px;
+	}
+	.gdt-custom-date-input {
+	    height: 25px;
+	    text-align: center;
+	}
+}

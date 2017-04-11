@@ -1,5 +1,5 @@
 #
-# Author::     ua Timberman (<jtimberman@chef.io>)
+# Author:: Joshua Timberman (<jtimberman@chef.io>)
 # Author:: Graeme Mathieson (<mathie@woss.name>)
 # Cookbook Name:: homebrew
 # Providers:: tap

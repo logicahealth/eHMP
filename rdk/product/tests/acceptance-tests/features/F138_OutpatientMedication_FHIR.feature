@@ -151,6 +151,7 @@
   | resource.dosageInstruction.route.coding.display | Oral |
   | resource.dosageInstruction.doseQuantity.value | 10 |
   | resource.dosageInstruction.doseQuantity.units | MG |
+And FHIR date and time conver to Zulu format for Outpatient Medication
 
  @F138_3_outpatient_medication_dispense_fhir @fhir @9E7A167
  Scenario: Client can request out-patient medication results in FHIR format
@@ -225,7 +226,7 @@
  	Given a patient with "No medication results" in multiple VistAs
  	When the client requests out-patient medication results for the patient "9E7A;100125" in FHIR format
  	Then a successful response is returned
- 	Then corresponding matching FHIR records totaling "2" are displayed
+ 	Then corresponding matching FHIR records totaling "1" are displayed
 
  @F138_6_outpatient_medication_statement_fhir @fhir @10110V004877
  Scenario: Client can request Outpatient Medications statement in FHIR format

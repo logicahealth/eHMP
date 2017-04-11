@@ -6,6 +6,7 @@ var inputValue = require('./allergy-intolerance-resource-spec-data').inputValue;
 var fhirUtils = require('../common/utils/fhir-converter');
 var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
+var constants = require('../common/utils/constants');
 
 describe('AllergyIntolerance FHIR Resource', function() {
 
@@ -59,9 +60,18 @@ function allergyIntoleranceResource(fhirAResoure, vprA) {
     if (fhirA !== undefined) {
         describe('found FHIR AllergyIntolerance coresponds to the original VPR Allergy Resource', function() {
 
+        //Site hash is stored in an extension
+        var siteHash = fhirUtils.getSiteHash(fhirA.uid);
+        for (var ext in fhirA.extension) {
+            if (fhirA.extension[ext].url === constants.allergyintolerancefhir.ALLERGYINTOLERANCE_EXTENSION_URL_PREFIX + 'uid') {
+                siteHash = fhirA.extension[ext].valueString;
+            }
+        }
+        siteHash = fhirUtils.getSiteHash(siteHash);
+
           //CHECKING ENTERED DATETIME
           it('verifies that the entered datetime information from VPR Allergy Resource coresponds to the recordedDate from the FHIR Allergy Resource', function() {
-              expect(fhirA.recordedDate.replace('-00:00', '')).to.equal(fhirUtils.convertToFhirDateTime(vprA.entered));
+              expect(fhirA.recordedDate.replace('-00:00', '')).to.equal(fhirUtils.convertToFhirDateTime(vprA.entered, siteHash));
           });
 
           //CHECKING REQUIRED PATIENT ID
@@ -105,3 +115,36 @@ function allergyIntoleranceResource(fhirAResoure, vprA) {
         }); //end-describe
     }
 }
+
+describe('Composition FHIR conformance', function() {
+
+    var conformanceData = allergyResource.createAllergyIntoleranceConformanceData();
+
+    it('conformance data is returned', function() {
+        expect(conformanceData.type).to.equal('allergyIntolerance');
+        expect(conformanceData.profile.reference).to.equal('http://hl7.org/fhir/2015MAY/allergyintolerance.html');
+
+        expect(conformanceData.interaction.length).to.equal(2);
+        expect(conformanceData.interaction[0].code).to.equal('read');
+        expect(conformanceData.interaction[1].code).to.equal('search-type');
+    });
+
+    it('conformance data searchParam is returned', function() {
+
+        expect(conformanceData.searchParam.length).to.equal(3);
+
+        expect(conformanceData.searchParam[0].name).to.equal('subject.identifier');
+        expect(conformanceData.searchParam[0].type).to.equal('string');
+        expect(conformanceData.searchParam[0].definition).to.equal('http://hl7.org/FHIR/2015May/datatypes.html#string');
+
+        expect(conformanceData.searchParam[1].name).to.equal('pid');
+        expect(conformanceData.searchParam[1].type).to.equal('string');
+        expect(conformanceData.searchParam[1].definition).to.equal('http://hl7.org/FHIR/2015May/datatypes.html#string');
+
+        expect(conformanceData.searchParam[2].name).to.equal('identifier.value');
+        expect(conformanceData.searchParam[2].type).to.equal('string');
+        expect(conformanceData.searchParam[2].definition).to.equal('http://hl7.org/FHIR/2015May/datatypes.html#string');
+
+    });
+
+});

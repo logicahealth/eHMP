@@ -20,6 +20,11 @@ STARTUP  ; Run once before all tests
 SHUTDOWN ; Run once after all tests
  ; DELETE database test will remove the store from the database and route map
  K HTTPREQ
+ K ^VPRMETA("collection","ut"),^VPRMETA("index","gdsutest"),^VPRMETA("index","gdsutest2"),^VPRMETA("index","gdsutest3")
+ Q
+TEARDOWN ; Run after each test
+ K ^TMP($J)
+ K ^TMP("HTTPERR",$J)
  Q
 ASSERT(EXPECT,ACTUAL,MSG) ; for convenience
  D EQ^VPRJT(EXPECT,ACTUAL,$G(MSG))
@@ -177,7 +182,7 @@ SET2 ;; @TEST PUTing 2 items with UID
  ; Cleanup HTTPERR
  K ^TMP("HTTPERR",$J)
  Q
-SETCOLLISION ;; @TEST cause a collision and ensure everything works as intended
+SETCOLLISION ;; cause a collision and ensure everything works as intended
  Q
  ;
  ;
@@ -237,6 +242,7 @@ DEL ;; @TEST Delete Data
  D DEL^VPRJGDS(.DATA,.ARGS)
  D DECODE^VPRJSON("DATA","OBJECT","ERR")
  D ASSERT(0,$D(^VPRJUT("urn:va:ut:23")),"Data exists and it should not")
+ D ASSERT(0,$D(^VPRJUTJ("JSON","urn:va:ut:23")),"Data exists and it should not")
  D ASSERT("{""ok"": true}",$G(DATA),"DATA returned from a DELETE call (should not happen)")
  ; Cleanup HTTPERR
  K ^TMP("HTTPERR",$J)
@@ -577,7 +583,7 @@ CINDEXJSONERR ;; @TEST Error code is set if JSON is mangled in PUT/POST
  K ^TMP("HTTPERR",$J)
  Q
  ;
-CINDEXMFIELDS;; @TEST POST without required fields
+CINDEXMFIELDS ;; @TEST POST without required fields
  N RETURN,BODY,ARG,HTTPERR
  ; Try with an empty string for the name
  S BODY(1)=$$SAMPLEINDEX("","roles[]","roles asc","attr")
@@ -664,7 +670,7 @@ CINDEXMFIELDS;; @TEST POST without required fields
  ; Cleanup HTTPERR
  K ^TMP("HTTPERR",$J)
  ;
- ; Try with a non existant sort
+ ; Try with a non existant type
  ; "null" is a magic string to the SAMPLEINDEX generator to prevent the field from even being passed
  S BODY(1)=$$SAMPLEINDEX("gdsutest","roles[]","roles asc","null")
  S RETURN=$$CINDEX^VPRJGDS(.ARG,.BODY)
@@ -683,6 +689,7 @@ CINDEX1 ;; @TEST Create 1 index (happy path)
  D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should NOT have occured")
  D ASSERT(1,$D(^VPRJUTX("attr","gdsutest","ehmp-proxy ","urn:va:ut:1","roles#1")),"The first role type is not as expected")
  D ASSERT(1,$D(^VPRJUTX("attr","gdsutest","ehmp-test ","urn:va:ut:5","roles#2")),"The second role type is not as expected")
+ D ASSERT(10,$D(^VPRCONFIG("store","ut","index","gdsutest")),"Index Not stored in VPRJCONFIG")
  ; Cleanup HTTPERR
  K ^TMP("HTTPERR",$J)
  Q
@@ -695,6 +702,7 @@ CINDEX2 ;; @TEST Creating 2 (additional) indexes
  D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should NOT have occured")
  D ASSERT(1,$D(^VPRJUTX("attr","gdsutest2","20130526050000000 ","urn:va:ut:1",1)),"The first lastLogin.date index is not as expected")
  D ASSERT(1,$D(^VPRJUTX("attr","gdsutest2","20130526050000000 ","urn:va:ut:2",1)),"The second lastLogin.date index is not as expected")
+ D ASSERT(10,$D(^VPRCONFIG("store","ut","index","gdsutest2")),"Index Not stored in VPRJCONFIG")
  ; Cleanup HTTPERR
  K ^TMP("HTTPERR",$J)
  ; Cleanup Vars
@@ -706,6 +714,7 @@ CINDEX2 ;; @TEST Creating 2 (additional) indexes
  D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should NOT have occured")
  D ASSERT(1,$D(^VPRJUTX("attr","gdsutest3","20000101120000000 ","urn:va:ut:1",1)),"The first createDate.date index is not as expected")
  D ASSERT(1,$D(^VPRJUTX("attr","gdsutest3","20000101120000000 ","urn:va:ut:2",1)),"The second createDate.date index is not as expected")
+ D ASSERT(10,$D(^VPRCONFIG("store","ut","index","gdsutest3")),"Index Not stored in VPRJCONFIG")
  ; Cleanup HTTPERR
  K ^TMP("HTTPERR",$J)
  Q
@@ -762,13 +771,22 @@ INDEXNOINDEX ;; @TEST Error code is set if no index specified
  ;
 INDEX ;; @TEST Get via Index
  N RETURN,ARG,BODY,DATA,ARGS,OBJECT,ERR,HTTPERR
+ N START,LIMIT,SIZE,PREAMBLE,RSP
+ ; Setup paging info for PAGE^VPRJRUT
+ S HTTPREQ("paging")=$G(HTTPARGS("start"),0)_":"_$G(HTTPARGS("limit"),999999)
+ S START=$P(HTTPREQ("paging"),":"),LIMIT=$P(HTTPREQ("paging"),":",2)
+ ;
  ; Get the data we've stored so far
  S ARGS("indexName")="gdsutest"
- D INDEX^VPRJGDS(.DATA,.ARGS)
- ; Reset Data to be the actual result. This is normally taken care of in
- ; RESPOND^VPRJRSP
- S DATA=$NA(^TMP($J,"RESULT"))
- D:$G(DATA)'="" DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ D INDEX^VPRJGDS(.RSP,.ARGS)
+ D PAGE^VPRJRUT(.RSP,START,LIMIT,.SIZE,.PREAMBLE)
+ ; Emulate RESPOND^VPRJRSP to get a real JSON response
+ S DATA(0)=PREAMBLE
+ F I=START:1:(START+LIMIT-1) Q:'$D(@RSP@($J,I))  D
+ . I I>START S DATA(I)="," ; separate items with a comma
+ . S J="" F  S J=$O(@RSP@($J,I,J)) Q:'J  S DATA(I)=$G(DATA(I))_@RSP@($J,I,J)
+ S DATA(I)="]}"
+ D:$D(DATA) DECODE^VPRJSON("DATA","OBJECT","ERR")
  D ASSERT(10,$D(OBJECT("items")),"Data does not exist and it should")
  D ASSERT(0,$D(ERR),"A JSON Decode Error Occured")
  D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error")),"An HTTP error should NOT have occured")
@@ -778,14 +796,18 @@ INDEX ;; @TEST Get via Index
  ; Cleanup HTTPERR
  K ^TMP("HTTPERR",$J)
  ; Cleanup Vars
- K DATA,ARGS,OBJECT,ERR
+ K DATA,ARGS,OBJECT,ERR,RSP
  ; Get another object
  S ARGS("indexName")="gdsutest2"
- D INDEX^VPRJGDS(.DATA,.ARGS)
- ; Reset Data to be the actual result. This is normally taken care of in
- ; RESPOND^VPRJRSP
- S DATA=$NA(^TMP($J,"RESULT"))
- D:$G(DATA)'="" DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ D INDEX^VPRJGDS(.RSP,.ARGS)
+ D PAGE^VPRJRUT(.RSP,START,LIMIT,.SIZE,.PREAMBLE)
+ ; Emulate RESPOND^VPRJRSP to get a real JSON response
+ S DATA(0)=PREAMBLE
+ F I=START:1:(START+LIMIT-1) Q:'$D(@RSP@($J,I))  D
+ . I I>START S DATA(I)="," ; separate items with a comma
+ . S J="" F  S J=$O(@RSP@($J,I,J)) Q:'J  S DATA(I)=$G(DATA(I))_@RSP@($J,I,J)
+ S DATA(I)="]}"
+ D:$D(DATA) DECODE^VPRJSON("DATA","OBJECT","ERR")
  D ASSERT(10,$D(OBJECT("items")),"Data does not exist and it should")
  D ASSERT(0,$D(ERR),"A JSON Decode Error Occured")
  D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error")),"An HTTP error should NOT have occured")
@@ -794,6 +816,42 @@ INDEX ;; @TEST Get via Index
  D ASSERT("urn:va:ut:99",$G(OBJECT("items",5,"uid")),"The uid field was not returned correctly")
  ; Cleanup HTTPERR
  K ^TMP("HTTPERR",$J)
+ Q
+ ;
+DELETEITEMINDEX ;; @TEST deleted item isn't in Index
+ N RETURN,ARG,BODY,DATA,ARGS,OBJECT,ERR,HTTPERR
+ N START,LIMIT,SIZE,PREAMBLE,RSP
+ ; Setup paging info for PAGE^VPRJRUT
+ S HTTPREQ("paging")=$G(HTTPARGS("start"),0)_":"_$G(HTTPARGS("limit"),999999)
+ S START=$P(HTTPREQ("paging"),":"),LIMIT=$P(HTTPREQ("paging"),":",2)
+ ;
+ ; delete an object
+ S ARGS("uid")="urn:va:ut:99"
+ D DEL^VPRJGDS(.DATA,.ARGS)
+ K ARGS
+ ; Get the data we've stored so far
+ S ARGS("indexName")="gdsutest"
+ D INDEX^VPRJGDS(.RSP,.ARGS)
+ D PAGE^VPRJRUT(.RSP,START,LIMIT,.SIZE,.PREAMBLE)
+ ; Emulate RESPOND^VPRJRSP to get a real JSON response
+ S DATA(0)=PREAMBLE
+ F I=START:1:(START+LIMIT-1) Q:'$D(@RSP@($J,I))  D
+ . I I>START S DATA(I)="," ; separate items with a comma
+ . S J="" F  S J=$O(@RSP@($J,I,J)) Q:'J  S DATA(I)=$G(DATA(I))_@RSP@($J,I,J)
+ S DATA(I)="]}"
+ D:$D(DATA) DECODE^VPRJSON("DATA","OBJECT","ERR")
+ D ASSERT(10,$D(OBJECT("items")),"Data does not exist and it should")
+ D ASSERT(0,$D(ERR),"A JSON Decode Error Occured")
+ D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error")),"An HTTP error should NOT have occured")
+ D ASSERT("urn:va:ut:1",$G(OBJECT("items",1,"uid")),"The uid field was not returned correctly")
+ D ASSERT("urn:va:ut:2",$G(OBJECT("items",2,"uid")),"The uid field was not returned correctly")
+ D ASSERT("",$G(OBJECT("items",5,"uid")),"Object 99 exists and shouldn't")
+ ; Cleanup HTTPERR
+ K ^TMP("HTTPERR",$J)
+ K BODY,RETURN,ARG
+ ; RE-add uid urn:va:ut:99
+ S BODY(1)=$$SAMPLEDATA("""ehmp-test""","urn:va:ut:99")
+ S RETURN=$$SET^VPRJGDS(.ARG,.BODY)
  Q
  ;
 INDEXFILTER ;; @TEST Get index with filter
@@ -1010,6 +1068,62 @@ INDEXRANGEFILTER ;; @TEST Get index with range and filter
  K ^TMP($J)
  Q
  ;
+PATCH1 ;; @TEST PATCH existing document
+ N RETURN,BODY,ARG,HTTPERR
+ S BODY(1)="{""lastLogin"": {""date"":""20160615120000000""}}"
+ S ARG("uid")="urn:va:ut:23"
+ S HTTPREQ("method")="PATCH"
+ S RETURN=$$SET^VPRJGDS(.ARG,.BODY)
+ D ASSERT(10,$D(^VPRJUT("urn:va:ut:23")),"Data NOT stored when it should be")
+ D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should NOT have occured")
+ D ASSERT("urn:va:ut:23",$G(^VPRJUT("urn:va:ut:23","uid")),"The uid field was not stored correctly")
+ D ASSERT("20160615120000000",$G(^VPRJUT("urn:va:ut:23","lastLogin","date")),"The lastLogin.date attribute was not stored correctly")
+ D ASSERT($G(RETURN),"/ut/"_"urn:va:ut:23","The UID wasn't returned")
+ ; Cleanup HTTPERR
+ K ^TMP("HTTPERR",$J)
+ K HTTPREQ("method")
+ K BODY,RETURN,ARG
+ ; Reset data back to what it was
+ S BODY(1)="{""lastLogin"": {""date"":""20130526050000000""}}"
+ S ARG("uid")="urn:va:ut:23"
+ S HTTPREQ("method")="PATCH"
+ S RETURN=$$SET^VPRJGDS(.ARG,.BODY)
+ ; Cleanup HTTPERR
+ K ^TMP("HTTPERR",$J)
+ K HTTPREQ("method")
+ Q
+ ;
+PATCH2 ;; @TEST PATCH new document
+ N RETURN,BODY,ARG,HTTPERR,UID
+ S BODY(1)="{""lastLogin"": {""date"":""20160615120000000""}}"
+ S HTTPREQ("method")="PATCH"
+ S RETURN=$$SET^VPRJGDS(.ARG,.BODY)
+ S UID="urn:va:ut:"_$G(^VPRJUT(0))
+ D ASSERT(10,$D(^VPRJUT(UID)),"Data NOT stored when it should be")
+ D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should NOT have occured")
+ D ASSERT(UID,$G(^VPRJUT(UID,"uid")),"The uid field was not stored correctly")
+ D ASSERT("20160615120000000",$G(^VPRJUT(UID,"lastLogin","date")),"The lastLogin.date attribute was not stored correctly")
+ D ASSERT($G(RETURN),"/ut/"_UID,"The UID wasn't returned")
+ ; Cleanup HTTPERR
+ K ^TMP("HTTPERR",$J)
+ K HTTPREQ("method")
+ Q
+ ;
+PATCH3 ;; @TEST PATCH new document
+ N RETURN,BODY,ARG,HTTPERR
+ S BODY(1)="{""lastLogin"": {""date"":""20160615120000000""},""uid"":99999}"
+ S HTTPREQ("method")="PATCH"
+ S RETURN=$$SET^VPRJGDS(.ARG,.BODY)
+ D ASSERT(10,$D(^VPRJUT(99999)),"Data NOT stored when it should be")
+ D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should NOT have occured")
+ D ASSERT(99999,$G(^VPRJUT(99999,"uid")),"The uid field was not stored correctly")
+ D ASSERT("20160615120000000",$G(^VPRJUT(99999,"lastLogin","date")),"The lastLogin.date attribute was not stored correctly")
+ D ASSERT($G(RETURN),"/ut/"_99999,"The UID wasn't returned")
+ ; Cleanup HTTPERR
+ K ^TMP("HTTPERR",$J)
+ K HTTPREQ("method")
+ Q
+ ;
  ;
 CLR ;; @TEST Clear ALL Generic Data Store data and route map
  N RETURN,BODY,ARG,DATA,ARGS,OBJECT,ERR,HTTPERR,URLMAPNUM
@@ -1030,4 +1144,48 @@ CLR ;; @TEST Clear ALL Generic Data Store data and route map
  . . D ASSERT(0,$D(^VPRCONFIG("urlmap",URLMAPNUM,"store")),"Route map still has entries for this data store and it should not")
  ; Cleanup HTTPERR
  K ^TMP("HTTPERR",$J)
+ Q
+ ;
+ ;
+RDKSESSION ;; @TEST Realistic RDK session store test
+ N HTTPREQ,HTTPERR
+ ; Create Store
+ D ADDSTORE^VPRJCONFIG("utses")
+ K ^TMP("HTTPERR",$J)
+ ; Add sample session
+ N RETURN,BODY,ARG,HTTPREQ,DATA,ERR
+ S HTTPREQ("store")="utses"
+ S BODY(1)="{""uid"":""ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-"",""expires"":""2016-06-09T19:02:09.395Z"",""session"":{""cookie"":{""expires"":""2016-06-09T19:02:09.395Z"",""httpOnly"":true,""originalMaxAge"":899998,""path"":""/""},""csrf"":{""secret"":""v06210J1hu2MYpqUwg0IeJwZ""},""jwt"":{""secret"":""zTAhkVWhJ4DHC13_0lNSAyW5""},""user"":{""accessCode"":""pu1234"",""consumerType"":""user"",""corsTabs"":""true"",""dgRecordAccess"":""false"",""dgSecurityOfficer"":""false"",""dgSensitiveAccess"":""false"",""disabled"":false,""division"":""500"",""divisionSelect"":false,""duz"":{""9E7A"":""10000000270""},""eHMPUIContext"":[{""lastAccessed"":""20160609103852321"",""patientId"":{""type"":""pid"",""value"":""9E7A;100022""},""patientIdentifier"":""pid:9E7A;100022"",""workspaceContext"":{""contextId"":""patient"",""workspaceId"":""overview""}},{""lastAccessed"":""20160609115349599"",""patientId"":{""type"":""pid"",""value"":""9E7A;3""},""patientIdentifier"":""pid:9E7A;3"",""workspaceContext"":{""contextId"":""patient"",""workspaceId"":""overview""}}],""expires"":""2016-06-09T19:02:09.395Z"",""facility"":""PANORAMA"",""firstname"":""PANORAMA"",""infoButtonOid"":""1.3.6.1.4.1.3768"",""lastname"":""USER"",""password"":""pu1234!!"",""pcmm"":[{""roles"":[""NURSE (RN)"",""NURSE PRACTITIONER"",""OIF OEF CLINICAL CASE MANAGER"",""PHYSICIAN-ATTENDING"",""PHYSICIAN-PRIMARY CARE"",""RN CARE COORDINATOR"",""SOCIAL WORKER""],""service"":[""HOME TELEHEALTH"",""HOSPITAL MEDICINE"",""IMAGING"",""INFECTIOUS DISEASE""],""team"":[""TEAM1"",""TEAM2"",""TEAM3""]}],""permissionSets"":[""read-access"",""standard-doctor""],""permissions"":[""read-active-medication"",""read-allergy"",""read-clinical-reminder"",""read-community-health-summary"",""read-document"",""read-encounter"",""read-immunization"",""read-medication-review"",""read-order"",""read-patient-history"",""read-condition-problem"",""read-patient-record"",""access-stack-graph"",""read-task"",""read-vital"",""read-vista-health-summary"",""read-stack-graph"",""read-timeline"",""add-active-medication"",""add-allergy"",""add-condition-problem"",""add-consult-order"",""add-encounter"",""add-immunization"",""add-lab-order"",""add-med-order"",""add-non-va-medication"",""add-note"",""add-note-addendum"",""add-patient-history"",""add-radiology-order"",""add-task"",""add-vital"",""cancel-task"",""complete-consult-order"",""cosign-lab-order"",""cosign-med-order"",""cosign-note"",""cosign-radiology-order"",""delete-note"",""discontinue-active-medication"",""discontinue-consult-order"",""discontinue-lab-order"",""discontinue-med-order"",""discontinue-radiology-order"",""edit-active-medication"",""edit-allergy"",""edit-condition-problem"",""edit-consult-order"",""edit-encounter-form"",""edit-lab-order"",""edit-med-order"",""edit-non-va-medication"",""edit-note"",""edit-note-addendum"",""edit-patient-history"",""edit-radiology-order"",""edit-task"",""eie-allergy"",""eie-immunization"",""eie-patient-history"",""eie-vital"",""release-lab-order"",""release-med-order"",""release-radiology-order"",""remove-condition-problem"",""schedule-consult-order"",""sign-consult-order"",""sign-lab-order"",""sign-med-order"",""sign-note"",""sign-note-addendum"",""sign-radiology-order"",""triage-consult-order"",""abort-task"",""edit-encounter"",""eie-encounter"",""edit-immunization"",""edit-vital""],""provider"":true,""requiresReset"":false,""rptTabs"":""false"",""section"":""Medicine"",""sessionLength"":900000,""site"":""9E7A"",""ssn"":666441233,""title"":""Clinician"",""uid"":""urn:va:user:9E7A:10000000270"",""username"":""9E7A;pu1234"",""verifyCode"":""pu1234!!"",""vistaKeys"":[""GMRA-SUPERVISOR"",""GMRC101"",""GMV MANAGER"",""ORES"",""PROVIDER"",""PSB CPRS MED BUTTON""],""vistaUserClass"":[{""role"":""USER"",""uid"":""urn:va:asu-class:9E7A:561""}]}}}"
+ S RETURN=$$SET^VPRJGDS(.ARG,.BODY)
+ D ASSERT(10,$D(^VPRJUTSES("ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-")),"Data NOT stored when it should be")
+ ; Patch the expires date/times
+ K BODY,ARG,RETURN
+ S BODY(1)="{""expires"": ""2016-06-15T16:19:00.000Z"",""session"": {""cookie"": {""expires"":""2016-06-15T16:19:00.000Z""},""user"": {""expires"":""2016-06-15T16:19:00.000Z""}}}"
+ D DECODE^VPRJSON("BODY","OBJECT","ERR")
+ S HTTPREQ("method")="PATCH"
+ S ARG("uid")="ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-"
+ S RETURN=$$SET^VPRJGDS(.ARG,.BODY)
+ D ASSERT("2016-06-15T16:19:00.000Z",$G(^VPRJUTSES("ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-","expires")),"object.expires not stored correctly")
+ D ASSERT("2016-06-15T16:19:00.000Z",$G(^VPRJUTSES("ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-","session","cookie","expires")),"object.session.cookie.expires not stored correctly")
+ D ASSERT("2016-06-15T16:19:00.000Z",$G(^VPRJUTSES("ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-","session","user","expires")),"object.session.user.expires not stored correctly")
+ K BODY,ARG,RETURN,DATA,ERR,HTTPREQ("method")
+ ; retrieve the object
+ S ARG("uid")="ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-"
+ D GET^VPRJGDS(.DATA,.ARG)
+ D:$G(DATA)'="" DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ D ASSERT(10,$D(^VPRJUTSES("ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-")),"Data does not exist and it should")
+ D ASSERT(0,$D(ERR),"A JSON Decode Error Occured")
+ D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error")),"An HTTP error should NOT have occured")
+ D ASSERT("ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-",$G(OBJECT("uid")),"The uid field was not returned correctly")
+ D ASSERT("2016-06-15T16:19:00.000Z",$G(OBJECT("expires")),"object.expires not stored correctly")
+ D ASSERT("2016-06-15T16:19:00.000Z",$G(OBJECT("session","cookie","expires")),"object.session.cookie.expires not stored correctly")
+ D ASSERT("2016-06-15T16:19:00.000Z",$G(OBJECT("session","user","expires")),"object.session.user.expires not stored correctly")
+ K BODY,ARG,RETURN,DATA,ERR,HTTPREQ("method")
+ ; delete an object
+ S ARGS("uid")="ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-"
+ D DEL^VPRJGDS(.DATA,.ARGS)
+ D ASSERT(0,$D(^VPRJUTSES("ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-")),"Session still exists and shouldn't")
+ K ARGS,DATA
+ ; Kill the data stores
+ D CLR
  Q

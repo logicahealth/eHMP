@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Allergies symptoms [/allergies-symptoms{?site}{&fields}]
+## Allergies symptoms [/allergies-symptoms{?site}]
 
 Large Pick List - Retrieves data for symptoms pick list
 
@@ -11,8 +11,6 @@ ORWDAL32 SYMPTOMS
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

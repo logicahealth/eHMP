@@ -3,24 +3,25 @@ Feature: F361 FHIR Domain - DiagnosticReport
 @F361_diagnosticreport @US5961 @DE3161
      Scenario: Client can request DiagnosticReport in FHIR format
      Given a patient with "diagnosticreport" in multiple VistAs
-     #And a patient with pid "10110V004877" has been synced through the RDK API
- 	   When the diagnosticreport is requested for the patient "9E7A;229"
+     When the diagnosticreport is requested for the patient "9E7A;229"
      Then a successful response is returned
      And the FHIR results contain "diagnosticreport"
      	 | field 											           | value 								|
        | resource.resourceType 					 | DiagnosticReport |
        | resource.name.text              | HDL|
-       | resource.name.coding.code       |  urn:va:ien:60:244:72|
+       | resource.name.coding.code       |  urn:lnc:2085-9      |
        | resource.name.coding.display    | HDL|
        | resource.status                 | final |
        | resource.issued                 | IS_FHIR_FORMATTED_DATE |
        | resource.subject.reference      | Patient/9E7A;229|
        | resource.performer.display      | ALBANY VA MEDICAL CENTER|
        | resource.contained.resourceType | Observation |
+       | resource.contained.issued       | IS_FHIR_FORMATTED_DATE |
+       | resource.contained.appliesDateTime |IS_FHIR_FORMATTED_DATE|
        | resource.contained.code.text    | HDL |
        | resource.contained.status       | final |
        | resource.contained.reliability  | ok |
-       | resource.contained.valueQuantity.value | 41 |
+       | resource.contained.valueQuantity.value | 58 |
        | resource.contained.valueQuantity.units | MG/DL|
        | resource.contained.specimen.display              | SERUM |
        | resource.contained.referenceRange.high.value     |60|
@@ -32,3 +33,4 @@ Feature: F361 FHIR Domain - DiagnosticReport
        | resource.serviceCategory.coding.code             | CH |
        | resource.serviceCategory.coding.display          | Chemistry |
        | resource.diagnosticDateTime                      | IS_FHIR_FORMATTED_DATE |
+    And FHIR date and time conver to Zulu format for Diagnostic Report

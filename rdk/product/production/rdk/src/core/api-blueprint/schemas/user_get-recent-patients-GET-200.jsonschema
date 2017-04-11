@@ -8,8 +8,9 @@
 	"properties": {
 		"data": {
 			"type": "array",
-			"items": [
-			]
+			"items": {
+				"type": "object"
+			}
 		},
 		"status": {
 			"type": "integer"

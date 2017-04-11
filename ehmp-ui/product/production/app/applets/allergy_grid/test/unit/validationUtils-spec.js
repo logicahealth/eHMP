@@ -59,7 +59,7 @@ define([
             model.set('reaction-date', tomorrow);
 
             var error = ValidationUtils.validateReactionDate(model.get('reaction-date'));
-            expect(error).toBe('Reaction Date/Time must be in the past.');
+            expect(error).toBe('Reaction Date/Time cannot be in the future.');
          });
         it('should validate reaction time', function() {
             var model = getModel(),

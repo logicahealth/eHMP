@@ -208,8 +208,8 @@ abigei
 Abilify
 abinoxylan
 abio
-Abio o 
- b o eneses
+AbioCor
+abiogeneses
 abiogenesis
 abiogenetic
 abiogenic
@@ -3440,8 +3440,8 @@ Aleutian
 alevin
 alex
 Alexa
-         
-         's
+Alexander
+Alexander's
 alexandrinus
 alexia
 alexic
@@ -6678,9 +6678,9 @@ antholite
 anthological
 Anthomyia
 Anthomyiidae
-       
+Anthony
 anthonyi
-       's
+Anthony's
 anthophagous
 anthophobia
 anthophore
@@ -11857,13 +11857,13 @@ barth's
 bartia
 bartlett
 barton
-      ella
-      ellaceae
+Bartonella
+Bartonellaceae
 bartonellemia
 bartonelliasis
 bartonelloses
 bartonellosis
-      's
+Barton's
 Bartos
 bartram
 Bart's
@@ -12668,9 +12668,9 @@ berlock
 Berman
 bermeister's
 Berna
-       
+Bernard
 bernardiae
-       's
+Bernard's
 bernardus
 Bernay
 Bernays'
@@ -16675,8 +16675,8 @@ cAMP
 campanulaceae
 campanulae
 Campath
-        
-        's
+Campbell
+Campbell's
 campeachy
 Campechy
 Camper's
@@ -16843,7 +16843,7 @@ cannibis
 Cannizzaro's
 cannomys
 cannon
-      's
+Cannon's
 cannula
 cannulae
 cannular
@@ -22786,7 +22786,7 @@ confection
 confectioner's
 confectiones
 Confeel
-user12tus
+confertus
 confidence
 confidentiality
 configuration
@@ -23993,8 +23993,8 @@ cradle
 Crafoord
 Crafts'
 Cragg
-     ia
-     ies
+Craigia
+Craigies
 crambe
 Cramer's
 cramp
@@ -26080,8 +26080,8 @@ damping
 damsela
 damys
 dan
-    
-    l
+Dana
+Danal
 danann
 danaparoid
 danazol
@@ -30172,9 +30172,9 @@ dorcatragus
 dorcopsis
 dorcopsulus
 dore-almeida
-    llo
+Dorello
 dorello's
-    ndorf's
+Dorendorf's
 Dorfman
 Doribax
 doriden
@@ -31288,7 +31288,7 @@ EasySafe
 Easytrak
 eating
 eatolithectomy
-     
+Eaton
 eaumont's
 ebark
 ebastine
@@ -31708,7 +31708,7 @@ edematize
 edematodes
 edematogenic
 edematous
-    tata
+Edentata
 edentate
 edentatus
 edentia
@@ -31758,10 +31758,10 @@ edulis
 edulitare
 EDV
 edvaxhib
-       
-       '
-       iella
-       ielleae
+Edwards
+Edwards'
+Edwardsiella
+Edwardsielleae
 EEC
 EECP
 eed
@@ -38665,16 +38665,16 @@ frange
 frangula
 frangulic
 frangulin
-     
-     el
+Frank
+Frankel
 Fränkel
 Fränkel's
-     enhauser
-     enhäuser's
-     fort
-     lin
+Frankenhauser
+Frankenhäuser's
+Frankfort
+Franklin
 franklinic
-     's
+Frank's
 Franseen
 Fraser
 Fraser's
@@ -39251,8 +39251,8 @@ gagerie
 gaging
 gagni
 gai
-    lard
-    liard's
+Gaillard
+Gailliard's
 gain
 Gaisböck
 Gaisböck's
@@ -41651,8 +41651,8 @@ Grasset's
 Grassi
 grat
 grating
- r t o a
- r t o et's
+Gratiola
+Gratiolet's
 grattage
 gratus
 grave
@@ -41701,7 +41701,7 @@ Greek
 Green
 green-blind
 green-blindness
-      's
+Greene's
 Greenfield
 Greenfield's
 greensick
@@ -42423,7 +42423,7 @@ Hamberger's
 Hamburger
 Hamdi's
 Hamel's
-        
+Hamilton
 hamilton's
 hammamelis
 Hamman
@@ -45814,14 +45814,14 @@ hunnemannia
 Hunner
 hunner's
 Hunstad
-    
-    er
+Hunt
+Hunter
 hunteri
 hunterian
-    er's
+Hunter's
 hunting
-    ington's
-    's
+Huntington's
+Hunt's
 huon
 Hup
 huperzia
@@ -45942,9 +45942,9 @@ hydatiform
 Hydatigena
 hydatism
 hydatoid
-    ltra
-    ltrasol
-    rgine
+Hydeltra
+Hydeltrasol
+Hydergine
 hydr
 hydracid
 hydradenitis
@@ -52059,7 +52059,7 @@ Jamshidi
 Janet's
 Janeway
 Janeway's
-      ps
+Janiceps
 Janimine
 janipha
 Jannetta
@@ -52214,7 +52214,7 @@ johnnie
 johnny
 johnson
 johnsonella
-       's
+Johnson's
 Johnston
 Johnswort
 joint
@@ -52412,7 +52412,7 @@ kanamyceticus
 kanamycin
 Kanavel
 Kanavel's
-    da
+Kaneda
 kang
 kannabateomys
 Kanner
@@ -52563,13 +52563,13 @@ Kaup
 kava
 kavatrol
 Kawasaki
-   
+Kay
 kaya
 kaye
-   exalate
-   lixir
-   ser
-   ser-Fleischer
+Kayexalate
+Kaylixir
+Kayser
+Kayser-Fleischer
 Kazal
 Kazanjian
 Kazanjian's
@@ -52616,8 +52616,8 @@ kellicotti
 Kellie
 kellin
 Kellock's
-     
-     's
+Kelly
+Kelly's
 Kelman
 Kelo
 keloid
@@ -54067,8 +54067,8 @@ Landouzy-Dejerine
 Landouzy's
 landrace
 landraces
-      
-      's
+Landry
+Landry's
 Landsteiner
 landström's
 Landströmuscles
@@ -55023,7 +55023,7 @@ lesser
 lesser's
 Lesshaft
 Lesshaft's
-      
+Lester
 lestes
 lestodelphys
 lestoros
@@ -56534,7 +56534,7 @@ logagnosia
 logagraphia
 logale
 logamnesia
-     
+Logan
 loganiaceae
 logaphasia
 logarithm
@@ -56742,8 +56742,8 @@ lordotic
 lordotica
 Lorelco
 lorentz
-     z
-     z's
+Lorenz
+Lorenz's
 lorette
 lorettine
 Lorfan
@@ -57512,7 +57512,7 @@ machine
 machinery
 Machupo
 macies
-Mac   
+MacKay
 Mackenrodt's
 Mackenzie's
 MacLachlan
@@ -57704,7 +57704,7 @@ maculosa
 maculosquamous
 maculosus
 maculovesicular
-Mac       's
+MacWilliam's
 mad
 Madagascar
 madagascariensis
@@ -58442,7 +58442,7 @@ material
 maternal
 maternity
 mathematical
-      s'
+Mathews'
 Mathieu
 mating
 MatrACELL
@@ -58577,7 +58577,7 @@ McBurney's
 McCallan
 McCall's
 McCarthy's
-Mc     ock
+McClintock
 McCollough
 McConckey
 McCormac's
@@ -60891,9 +60891,9 @@ Millard's
 Millar's
 milled
 Millenia
-      
+Miller
 millers'
-      's
+Miller's
 milli
 milli-
 milliammeter
@@ -61669,11 +61669,11 @@ Morgagni
 morgagnian
 Morgagnii
 Morgagni's
-      
-      ella
+Morgan
+Morganella
 morgani
 morganii
-      's
+Morgan's
 morgue
 mori
 moria
@@ -64145,7 +64145,7 @@ niche
 NICHHD
 nick
 nickel
-    erson
+Nickerson
 nicking
 niclofolan
 niclosamide
@@ -69565,10 +69565,10 @@ pauci-
 pauciarticular
 paucimobilis
 paucisynaptic
-    
-    linia
-    o
-    y's
+Paul
+Paullinia
+Paulo
+Pauly's
 paunch
 paurometabola
 pause
@@ -70273,7 +70273,7 @@ perennial
 perennibranchiata
 Perenyi's
 Pereyra
-     's
+Perez's
 Pérez's
 perfect
 perfectionism
@@ -71519,7 +71519,7 @@ PHC
 PhD
 Phe
 phellandrene
-      '
+Phelps'
 pHEM
 Phemerol
 phemfilcon
@@ -74547,10 +74547,10 @@ ponceau
 Poncet
 Poncet's
 pond
-    .
+Pond.
 ponderable
 ponderal
-    imin
+Pondimin
 pondostatural
 ponesiatrics
 pong
@@ -74681,8 +74681,8 @@ portales
 portalis
 porte
 portepolisher
-      
-      's
+Porter
+Porter's
 Porteus
 portio
 portiones
@@ -78900,8 +78900,8 @@ raxibacumab
 ray
 Rayer
 Raygat's
-       
-       's
+Raymond
+Raymond's
 Raynaud
 Raynaud's
 rays
@@ -80635,9 +80635,9 @@ Ritgen
 Ritgen's
 ritodrine
 ritonavir
-      
-      -Lyell
-      's
+Ritter
+Ritter-Lyell
+Ritter's
 ritual
 Rituxan
 rituximab
@@ -80718,7 +80718,7 @@ rocephalosyndactylia
 rocephalosyndactylias
 Rocephin
 rochalimae
-     limaea
+Rochalimaea
 Rocher
 Rocher's
 Rochette
@@ -80764,9 +80764,9 @@ Roesler
 rofecoxib
 Roferon
 Rogaine
-     
-     's
-     s'
+Roger
+Roger's
+Rogers'
 Rogosa
 Rohadur
 Röhl's
@@ -81606,8 +81606,8 @@ Sanctura
 Sancuso
 sand
 sandalwood
-       
-       '
+Sanders
+Sanders'
 sandfly
 Sandhoff
 Sandhoff's
@@ -83843,8 +83843,8 @@ Silver
 SilverBullet
 silverized
 Silverlon
-         
-         's
+Silverman
+Silverman's
 Silver's
 SilverSpeed
 SilverStream
@@ -84242,10 +84242,10 @@ smilagenin
 Smilax
 Smillie
 Smirnov
-     
-     Kline
-     's
-     wick
+Smith
+SmithKline
+Smith's
+Smithwick
 smog
 smoke
 smoker's
@@ -84273,10 +84273,10 @@ sNDA
 Sneddon
 sneeze
 sneezing
-     
-     en
-     en's
-     's
+Snell
+Snellen
+Snellen's
+Snell's
 Snider
 sniff
 sniffling
@@ -86055,7 +86055,7 @@ stephanofilariases
 stephanofilariasis
 stephanostomum
 Stephanurus
-       's
+Stephen's
 stepladder
 steppage
 stepping
@@ -86259,7 +86259,7 @@ stethoscope
 stethoscopic
 stethoscopy
 stethospasm
-     ns
+Stevens
 stevia
 Stewart
 steyogamous
@@ -90602,9 +90602,9 @@ THL
 thlipsencephalus
 Thoma
 thomae
-      
+Thomas
 Thoma's
-      '
+Thomas'
 thomasii
 thomism
 Thompson
@@ -91277,9 +91277,9 @@ Tocophobia
 tocotrienol
 Todaro
 Todaro's
-    
-    alia
-    's
+Todd
+Toddalia
+Todd's
 todralazine
 toe
 toenail
@@ -91521,7 +91521,7 @@ torr
 Torre
 torrefaction
 torrefy
-      
+Torres
 Torre's
 Torreya
 torricellian
@@ -93544,9 +93544,9 @@ turmeric
 turmschadel
 turmschädel
 Turnbull's
-      
-      a
-      's
+Turner
+Turnera
+Turner's
 turnover
 turnsick
 turnsickness
@@ -96674,7 +96674,7 @@ vocational
 Vocem
 VOCO
 Voelcker
-     
+Vogel
 vogeli
 Voges
 Vogt
@@ -97222,10 +97222,10 @@ Wilbrand
 Wilcoxon
 Wilcoxon's
 wild
-     rmuth
-     rmuth's
-     r's
-     rvanck
+Wildermuth
+Wildermuth's
+Wilder's
+Wildervanck
 wildfire
 Wilhelmy
 Wilkie
@@ -97237,11 +97237,11 @@ Willebrand's
 Willett
 Willi
 Willia
-        
-        '
+Williams
+Williams'
 williamsii
-        on
-        on's
+Williamson
+Williamson's
 Williger
 Willis'
 willisiana

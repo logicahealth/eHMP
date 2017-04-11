@@ -5,7 +5,7 @@ JSON.create_id = nil
 task :scpVxsyncLogs, :driver do |t, args|
   logDir = "vxsync_error_logs"
   key = knife_search_for_key_name("vxsync", args[:driver])
-  user = args[:driver] == "aws" ? "PW      " : "vagrant"
+  user = args[:driver] == "aws" ? "ec2-user" : "vagrant"
   ip = knife_search_for_ip("vxsync")
   Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
   sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/var/log/vxsync/*_error.log", "#{logDir}")

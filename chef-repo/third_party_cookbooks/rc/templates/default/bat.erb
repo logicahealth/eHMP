@@ -1,0 +1,10 @@
+@REM This file is managed by Chef; all manual changes will be lost!
+<%- @new_resource.options.map do |k, v| %>
+<%- if v.kind_of?(Array) %>
+SET <%= [k, v.map(&:to_s).join(' ').to_s].join('=') %>
+<%- elsif v.kind_of?(Hash) %>
+SET <%= v.map { |k2, v2| [[k, k2].join('_'), v2].join('=') }.join("\n") %>
+<%- else %>
+SET <%= [k, v].join('=') %>
+<%- end %>
+<%- end.join("\n") %>

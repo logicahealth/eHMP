@@ -12,11 +12,11 @@ Parameters may be provided as query parameters or in the request body. The `name
 
     + name.last (string, optional) - patient last name
 
-        Pattern: `^[- ,A-Z']+$`
+        Pattern: `^[- ,A-Za-z']+$`
 
     + name.first (string, optional) - patient first name
 
-        Pattern: `^[- ,A-Z']+$`
+        Pattern: `^[- ,A-Za-z']+$`
 
     + ssn (string, optional) - patient full social security number
 
@@ -44,11 +44,11 @@ Parameters may be provided as query parameters or in the request body. The `name
                 "properties": {
                     "name.last": {
                         "type": "string",
-                        "pattern": "^[- ,A-Z']+$"
+                        "pattern": "^[- ,A-Za-z']+$"
                     },
                     "name.first": {
                         "type": "string",
-                        "pattern": "^[- ,A-Z']+$"
+                        "pattern": "^[- ,A-Za-z']+$"
                     },
                     "ssn": {
                         "type": "string",
@@ -63,7 +63,7 @@ Parameters may be provided as query parameters or in the request body. The `name
                 "oneOf": [
                     { "required": ["name.last", "name.first"] },
                     { "required": ["name.last", "ssn"] },
-                    { "required": ["name.last", "date.birth"] },
+                    { "required": ["name.last", "date.birth"] }
                 ]
             }
 
@@ -101,7 +101,7 @@ Parameters may be provided as query parameters or in the request body. The `name
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Mvi patient sync [POST]
+### Mvi patient sync [POST {{{path}}}/]
 
 + Request JSON Message (application/json)
 
@@ -184,12 +184,22 @@ Parameters may be provided as query parameters or in the request body. The `name
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Default search [GET {{{path}}}/cprs{?fields}]
+### Mvi patient sync status [GET {{{path}}}/{?pid}]
 
 + Parameters
 
-    :[fields]({{{common}}}/parameters/fields.md)
+    :[pid]({{{common}}}/parameters/pid.md)
 
++ Response 200 (application/json)
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+
+### Default search [GET {{{path}}}/cprs]
 
 + Response 200 (application/json)
 

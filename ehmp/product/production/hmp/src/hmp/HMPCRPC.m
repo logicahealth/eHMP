@@ -1,5 +1,5 @@
 HMPCRPC ;SLC/AGP - Generic RPC controller for HMP ; 11/7/12 5:42pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 49
  ;
  ;
 CHAINRPC(HMPRES,PARAMS) ; Chain multiple rpcs into one call

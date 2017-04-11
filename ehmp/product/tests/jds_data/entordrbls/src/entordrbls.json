@@ -1,0 +1,130 @@
+[
+    {
+        "name": "Physical Therapy",
+        "state": "active",
+        "facility-enterprise": "enterprise",
+        "type": "ehmp-enterprise-orderable",
+        "domain": "ehmp-activity",
+        "subDomain": "consult",
+        "data": {
+            "activity": {
+                "deploymentId": "VistaCore:Order",
+                "processDefinitionId": "Order:Consult"
+            },
+            "codes": [{
+                    "code": "444831000124102",
+                    "system": "urn:oid:2.16.840.1.113883.6.96",
+                    "display": "Referral for physical therapy "
+                }],
+            "teamFocus": {
+                "name": "Physical Therapy",
+                "code": 81
+            }
+        }
+    }, {
+        "name": "Rheumatology",
+        "state": "active",
+        "facility-enterprise": "enterprise",
+        "type": "ehmp-enterprise-orderable",
+        "domain": "ehmp-activity",
+        "subDomain": "consult",
+        "data": {
+            "activity": {
+                "deploymentId": "VistaCore:Order",
+                "processDefinitionId": "Order:Consult"
+            },
+            "prerequisites": {
+                "cdsIntent": "RheumatologyConsultScreen",
+                "ehmp-questionnaire": {
+                    "observation-results": [
+                        {
+                            "observation-result": {
+                                "derived-from": {
+                                    "form": "4F4723CF-E537-4257-98DB-8754665E6A93",
+                                    "version": {
+                                        "time": "2016.03.29T16:00:00",
+                                        "module": "4BAF7D55-E9BE-4CC5-BFF0-BAEE985DCDC4",
+                                        "path": "2BBF7E6B-EEE3-4C10-98D4-5307A35B27AA"
+                                    },
+                                    "item": "4461E7DA-1629-464A-91D5-02DFF7648898"
+                                },
+                                "lego-id": "88d89788-1d4f-4419-a7c4-796ba8869016",
+                                "version": {
+                                    "time": "2016.03.29T16:00:00",
+                                    "module": "4BAF7D55-E9BE-4CC5-BFF0-BAEE985DCDC4",
+                                    "path": "2BBF7E6B-EEE3-4C10-98D4-5307A35B27AA"
+                                },
+                                "question-text": "Has patient been informed to bring a copy of all external reports and radiology images to their consult visit?",
+                                "observable": "339c876c-15a1-4975-ae29-d4815aef242c",
+                                "provenance": "ed2f734a-9196-3410-ae04-751808edf584",
+                                "timing": "[2016.03.3.29T16:50:39, 2016.03.29T16:50:40]",
+                                "episodicity": "",
+                                "value": "c928767e-f519-3b34-bff2-a2ed3cd5c6c3"
+                            }
+                        },
+                        {
+                            "observation-result": {
+                                "derived-from": {
+                                    "form": "4F4723CF-E537-4257-98DB-8754665E6A93",
+                                    "version": {
+                                        "time": "2016.03.29T16:00:00",
+                                        "module": "4BAF7D55-E9BE-4CC5-BFF0-BAEE985DCDC4",
+                                        "path": "2BBF7E6B-EEE3-4C10-98D4-5307A35B27AA"
+                                    },
+                                    "item": "4F49C2CE-FAE5-4385-A76C-B43DADB34B32"
+                                },
+                                "lego-id": "c4828d28-8d64-4b3e-81c4-a9c00921d412",
+                                "version": {
+                                    "time": "2016.03.29T16:00:00",
+                                    "module": "4BAF7D55-E9BE-4CC5-BFF0-BAEE985DCDC4",
+                                    "path": "2BBF7E6B-EEE3-4C10-98D4-5307A35B27AA"
+                                },
+                                "question-text": "Has the patient been tried on a regime of antiinflamatory medications for at least 4 weeks?",
+                                "observable": "86703071-0f81-411a-82f8-8ac28be46ef1",
+                                "provenance": "ed2f734a-9196-3410-ae04-751808edf584",
+                                "timing": "[2016.01.30T16:50:39, 2016.03.29T16:50:40]",
+                                "episodicity": "",
+                                "value": "c928767e-f519-3b34-bff2-a2ed3cd5c6c3"
+                            }
+                        },
+                        {
+                            "observation-result": {
+                                "derived-from": {
+                                    "form": "4F4723CF-E537-4257-98DB-8754665E6A93",
+                                    "version": {
+                                        "time": "2016.03.29T16:00:00",
+                                        "module": "4BAF7D55-E9BE-4CC5-BFF0-BAEE985DCDC4",
+                                        "path": "2BBF7E6B-EEE3-4C10-98D4-5307A35B27AA"
+                                    },
+                                    "item": "F61AFA3D-BCA0-4E93-8B21-8CD560B9C8CA"
+                                },
+                                "lego-id": "7831e8cd-bb5d-4d22-8010-3496a06a7bb1",
+                                "version": {
+                                    "time": "2016.03.29T16:00:00",
+                                    "module": "4BAF7D55-E9BE-4CC5-BFF0-BAEE985DCDC4",
+                                    "path": "2BBF7E6B-EEE3-4C10-98D4-5307A35B27AA"
+                                },
+                                "question-text": "Has the patient had recent (last 60 days) Xrays of any effected joint? Y/N",
+                                "observable": "b3abf762-1893-40a6-aea2-51139e5dd7f3",
+                                "provenance": "ed2f734a-9196-3410-ae04-751808edf584",
+                                "timing": "[2016.01.30T16:50:39, 2016.03.29T16:50:39]",
+                                "episodicity": "",
+                                "value": "c928767e-f519-3b34-bff2-a2ed3cd5c6c3"
+                            }
+                        }
+                    ]
+                }
+            },
+            "teamFocus": {
+                "name": "Rheumatology",
+                "code": 75
+            },
+            "instructions": "Rheumatoid arthritis (RA) is a chronic, systemic, inflammatory disorder of unknown etiology that primarily involves synovial joints. The arthritis is typically symmetrical, and usually leads, if uncontrolled, to destruction of joints due to erosion of cartilage and bone, causing joint deformities.\n\nDisease Activity Score Calculator for Rheumatoid Arthritis \n\nhttp://www.4s-dawn.com/DAS28/\n\nSmoking can trigger and perpetuate Rheumatoid Arthritis Inflammation. Please refer your patient for Smoking Cessation.",
+            "codes": [{
+                    "code": "415279002",
+                    "system": "urn:oid:2.16.840.1.113883.6.96",
+                    "display": "Referral to rheumatology clinic"
+                }]
+        }
+    }
+]

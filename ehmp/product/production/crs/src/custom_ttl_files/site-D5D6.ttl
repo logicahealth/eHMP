@@ -1,0 +1,28 @@
+@prefix snomed: <http://snomed.info/id/> .
+@prefix loinc:  <http://purl.bioontology.org/ontology/LNC/> .
+@prefix oi:     <urn:va:oi:>
+@prefix ien:    <urn:va:ien:>
+
+#  South Texas / San Antonio - Production
+
+# VA enterprise rheumatoid factor orderable concept mapped to local order code
+# RF
+snomed:415301001 oi:isPreferredOrderable oi:13882  .
+
+# C Reactive Protein
+snomed:415301001 oi:isPreferredOrderable oi:12825 .
+
+# Mapping VA enterprise laboratory result concepts to local code
+# Rheumatoid Factor
+snomed:415301001 snomed:isA ien:60:136 .
+snomed:415301001 snomed:isA ien:60:7318 .
+snomed:415301001 snomed:isA ien:60:5845 .
+snomed:415301001 snomed:isA ien:60:5212 .
+snomed:415301001 snomed:isA ien:60:5210 .
+
+# C Reactive Protein
+snomed:55235003 snomed:isA ien:60:6648 .
+snomed:55235003 snomed:isA ien:60:5610 .
+snomed:55235003 snomed:isA ien:60:6378 .
+snomed:55235003 snomed:isA ien:60:6683 .
+snomed:55235003 snomed:isA ien:60:7714 .

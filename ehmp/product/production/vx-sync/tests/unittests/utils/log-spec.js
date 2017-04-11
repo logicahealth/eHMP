@@ -75,8 +75,11 @@ describe('log.js', function() {
 
     describe('initialize()', function() {
         it('test loggers initialized correctly from configuration list', function() {
-            logUtil.initialize(loggerConfigs);
-            expect(logUtil._getLoggers()['root']).not.toBeUndefined();
+            logUtil.initialize({
+                'loggers': loggerConfigs,
+                'addChangeCallback': function() {}
+            });
+            expect(logUtil._getLoggers().root).not.toBeUndefined();
         });
     });
 

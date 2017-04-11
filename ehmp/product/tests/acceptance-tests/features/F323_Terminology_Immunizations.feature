@@ -12,7 +12,7 @@ Feature: F323  Normalization of Immunizations Data
 	When the client requests "immunizations" for the patient "10108V420871" in VPR format  
     Then the VPR results contain "immunizations" terminology from "(CPT to CVX (VA))"
       | field         	| value       										|
-      | facilityCode	| 551 												|
+      | facilityCode	| 561 												|
       | summary       	| PNEUMOCOCCAL 										|
       #CVX Code
       | codes.code    	| 33       											|

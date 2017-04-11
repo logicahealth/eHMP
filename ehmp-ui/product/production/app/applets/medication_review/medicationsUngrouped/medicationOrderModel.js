@@ -41,6 +41,25 @@ define([
                 return "No Data";
             }
         },
+        getCode: function() {
+            var codes = this.get("codes");
+            var rxnormSystem = "urn:oid:2.16.840.1.113883.6.88";
+            if (codes && codes.length > 0) {
+                for (var i = 0; i < codes.length; i++) {
+                    if (rxnormSystem === codes[i].system) {
+                        return codes[i].code;
+                    }
+                }
+            }
+        },
+        getFacilityName: function() {
+            var facilityName = this.get("facilityName");
+            if (facilityName) {
+                return facilityName;
+            } else {
+                return "No Data";
+            }
+        },
         getProducts: function() { //needs rewriting because should not be accessing only first object need to loop
             var products = this.get("products");
             var noData = "No Data";
@@ -340,25 +359,30 @@ define([
 
             var daysSupply = parseInt(this.get('orders')[0].daysSupply);
             var lastFilledMoment = moment(this.get('lastFilled'), 'YYYYMMDDHHmm');
-            var earlierStopMoment = this.getEarlierStop().stoppedMoment;
+            var earlierStopMoment = this.getEarlierStopAsMoment();
 
             var fillsRemaining = parseInt(this.get('orders')[0].fillsRemaining);
 
             var supplyRemainForPickup = moment.duration(((daysSupply * (fillsRemaining - 1)) * 1440), "minutes");
+
             var supplyOnHands = lastFilledMoment.add((daysSupply * 1440), 'minutes').endOf('minutes').diff(now, "minutes");
+            if (supplyOnHands < 0) supplyOnHands = 0;  // today occurs after supply on hand runs out
+
             var fillableFor = supplyRemainForPickup.add(supplyOnHands, "minutes");
             var fillTimeInMinutes = fillableFor.asMinutes();
-
-            var earlierStopMomentMinusToday = earlierStopMoment.diff(now, 'minutes');
 
             var fillText = '';
             var result = {
                 display: vaStatus
             };
 
-            if (earlierStopMomentMinusToday >= 0 && earlierStopMomentMinusToday < fillTimeInMinutes) {
-                fillTimeInMinutes = earlierStopMomentMinusToday;
-                fillableFor = moment.duration(earlierStopMomentMinusToday, 'minutes');
+            if (earlierStopMoment.isValid()) {
+                var earlierStopMomentMinusToday = earlierStopMoment.diff(now, 'minutes');  // time until expiration
+                // (not yet expired AND expires before not fillable) OR already expired
+                if ((earlierStopMomentMinusToday >= 0 && (earlierStopMomentMinusToday < fillTimeInMinutes)) || earlierStopMomentMinusToday < 0) {
+                    fillTimeInMinutes = earlierStopMomentMinusToday;
+                    fillableFor = moment.duration(earlierStopMomentMinusToday, 'minutes');
+                }
             }
 
             var count;
@@ -367,23 +391,20 @@ define([
             if (fillTimeInMinutes <= 0) {
                 fillText = '0\'';
                 durationUnitText = '0\'';
-            } else if (fillTimeInMinutes < 60 && fillTimeInMinutes > 0) {
-                fillText = fillTimeInMinutes + '\'';
-                durationUnitText = fillTimeInMinutes <= 0 ? '0\'' : fillTimeInMinutes + '\'';
-            } else if (fillTimeInMinutes >= 60 && fillTimeInMinutes < 2880) {
-                count = parseInt(fillableFor.asHours());
-                fillText = parseInt(Math.round(fillableFor.asHours())) + "h";
-                durationUnitText = parseInt(Math.round(fillableFor.asHours())) + " hour";
-            } else if (fillTimeInMinutes >= 2880 && fillTimeInMinutes <= 86400) {
-                count = parseInt(fillableFor.asDays());
+            } else if (fillTimeInMinutes > 0 && fillTimeInMinutes < 1440) {
+                count = 1;
+                fillText = "1d";
+                durationUnitText = "1 day";
+            } else if (fillTimeInMinutes >= 1440 && fillTimeInMinutes <= 86400) {
+                count = parseInt(Math.round(fillableFor.asDays()));
                 fillText = parseInt(Math.round(fillableFor.asDays())) + "d";
                 durationUnitText = parseInt(Math.round(fillableFor.asDays())) + " day";
             } else if (fillTimeInMinutes > 86400 && fillTimeInMinutes <= 1051200) {
-                count = parseInt(fillableFor.asMonths());
+                count = parseInt(Math.round(fillableFor.asMonths()));
                 fillText = parseInt(Math.round(fillableFor.asMonths())) + "m";
                 durationUnitText = parseInt(Math.round(fillableFor.asMonths())) + " month";
             } else if (fillTimeInMinutes > 1051200) {
-                count = parseInt(fillableFor.asYears());
+                count = parseInt(Math.round(fillableFor.asYears()));
                 fillText = parseInt(Math.round(fillableFor.asYears())) + "y";
                 durationUnitText = parseInt(Math.round(fillableFor.asYears())) + " year";
             }
@@ -393,8 +414,13 @@ define([
             }
 
             if (vaStatus === "expired") {
-                result.description = "This medication was expired " + date.timeSinceDescription.toLowerCase() + " ago.";
-                result.date = date.count + date.timeUnits;
+                if (date.count < 0) {
+                    result.date = '??';
+                    result.description = "This medication is listed as expired but expiration date has not yet passed.";
+                } else {
+                    result.date = date.count + date.timeUnits;
+                    result.description = "This medication was expired " + date.timeSinceDescription.toLowerCase() + " ago.";
+                }
                 result.label = 'label label-danger';
             } else if (vaStatus === "pending") {
                 result.description = "This medication is pending.";
@@ -404,9 +430,14 @@ define([
                     result.description = "This medication is Non VA and was discontinued " + date.timeSinceDescription.toLowerCase() + " ago.";
                 } else {
                     result.display = "discontinued";
+                }
+                if (date.count < 0) {
+                    result.date = '??';
+                    result.description = "This medication is listed as discontinued but discontinue date has not yet passed.";
+                } else {
+                    result.date = date.count + date.timeUnits;
                     result.description = "This medication was discontinued " + date.timeSinceDescription.toLowerCase() + " ago.";
                 }
-                result.date = date.count + date.timeUnits;
                 result.label = 'label label-default';
             } else if (vaStatus === "active" && (vaType === "i" || vaType === "v")) {
                 result.description = "This medication is active.";
@@ -417,6 +448,10 @@ define([
                 result.display = "0 Refills";
                 result.description = "This medication is active with no refills remaining.";
                 result.label = 'label label-danger';
+            } else if (!lastFilledMoment.isValid() && isNaN(fillsRemaining) && _.isEmpty(this.get('fills'))) {
+                result.display = "No Data";
+                result.description = "This medication was not filled or missing data to determine its status.";
+                result.label = 'label label-danger';
             } else {
                 var daysLeft = Math.round(fillableFor.asDays());
                 var hoursLeft = Math.round(fillableFor.asHours());
@@ -424,9 +459,9 @@ define([
                     result.label = 'label label-warning';
                 }
                 if (daysLeft <= 0 && hoursLeft <= 0) {
-                    result.description = "This medication is active with no refills remaining.";
-                    result.display = "0 Refills";
-                    result.label = 'label label-danger';
+                    result.description = "This medication is "+vaStatus+" but expiration date has passed.";
+                    result.display = "Not Refillable";
+                    result.label = 'label label-warning';
                 } else {
                     result.description = "This medication is active and fillable for " + durationUnitText + ".";
                     result.display = "Fillable for ";
@@ -569,36 +604,23 @@ define([
             this.overallStopAsMoment = moment(this.get('overallStop'), 'YYYYMMDDHHmm');
             return this.overallStopAsMoment;
         },
-        getEarlierStop: function() {
-            if (!_.isUndefined(this.earlierStopAsMoment) && !this.changed.overallStopMoment && !this.changed.stoppedMoment && !this.changed.overallStartMoment) {
-                return {
-                    stoppedDate: this.earlierStopDate,
-                    stoppedMoment: this.earlierStopAsMoment
-                };
+        getEarlierStopAsMoment: function() {
+            if (!_.isUndefined(this.earlierStopAsMoment) && !this.changed.overallStop && !this.changed.stopped && !this.changed.overallStart) {
+                return this.earlierStopAsMoment;
             }
-            var overallStop = this.get('overallStop');
-            var stopped = this.get('stopped');
-            var overallStart = this.get('overallStart');
+            var overallStop = this.getOverallStopAsMoment();
+            var stopped = this.getStoppedAsMoment();
+            var overallStart = this.getOverallStartAsMoment();
 
-            var overallStartMoment = this.getOverallStartAsMoment();
-            var overallStopMoment = this.getOverallStopAsMoment();
-            var stoppedMoment = this.getStoppedAsMoment();
-
-            if (!stoppedMoment.isValid() || !overallStopMoment.isValid()) {
-                this.earlierStopDate = stoppedMoment.isValid() ? stopped : overallStop;
-                this.earlierStopAsMoment = stoppedMoment.isValid() ? stoppedMoment : overallStopMoment;
+            if (!stopped.isValid() || !overallStop.isValid()) {
+                this.earlierStopAsMoment = stopped.isValid() ? stopped : overallStop;
             } else {
-                this.earlierStopDate = stoppedMoment.isSame(overallStopMoment) || stoppedMoment.isBefore(overallStopMoment) ? stopped : overallStop;
-                this.earlierStopAsMoment = stoppedMoment.isSame(overallStopMoment) || stoppedMoment.isBefore(overallStopMoment) ? stoppedMoment : overallStopMoment;
-                if (overallStartMoment.isValid() && this.earlierStopAsMoment.isBefore(overallStartMoment)) {
-                    this.earlierStopDate = this.earlierStop === stopped ? overallStop : stopped;
-                    this.earlierStopAsMoment = this.earlierStopAsMoment === stoppedMoment ? overallStopMoment : stoppedMoment;
+                this.earlierStopAsMoment = stopped.isSame(overallStop) || stopped.isBefore(overallStop) ? stopped : overallStop;
+                if (overallStart.isValid() && this.earlierStopAsMoment.isBefore(overallStart)) {
+                    this.earlierStopAsMoment = this.earlierStopAsMoment === stopped ? overallStop : stopped;
                 }
             }
-            return {
-                stoppedDate: this.earlierStopDate,
-                stoppedMoment: this.earlierStopAsMoment
-            };
+            return this.earlierStopAsMoment;
         },
         getCanBeGraphed: function() {
             if (!_.isUndefined(this.canBeGraphed) && !this.changed.overallStart && !this.changed.overallStop && !this.changed.stopped && !this.changed.vaStatus && !this.changed.vaType) {
@@ -617,7 +639,7 @@ define([
                 return this.canBeGraphed;
             }
 
-            var earlierStop = this.getEarlierStop().stoppedMoment;
+            var earlierStop = this.getEarlierStopAsMoment();
             this.canBeGraphed = false;
             if (status === 'active') {
                 if (this.getIsNonVA() || (earlierStop.isValid() && !earlierStop.isBefore(overallStart))) {
@@ -645,7 +667,7 @@ define([
                 return true;
             }
 
-            var stopped = this.getEarlierStop().stoppedMoment;
+            var stopped = this.getEarlierStopAsMoment();
             if (!overallStart.isValid() || !stopped.isValid()) {
                 return resultFromInvalidStartOrStop(overallStart, stopped);
             }
@@ -796,7 +818,7 @@ define([
                 return true;
             }
             var later = otherIsEarlier ? this : otherOrder;
-            return earlier.getEarlierStop().stoppedMoment.isAfter(later.getOverallStartAsMoment());
+            return earlier.getEarlierStopAsMoment().isAfter(later.getOverallStartAsMoment());
         }
     });
 });

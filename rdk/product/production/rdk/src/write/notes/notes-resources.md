@@ -143,7 +143,7 @@ Add a new unsigned note for a patient to single VistA
                         "description": "Boolean to determine if the note is interdisciplinary"
                     },
                     "lastSavedDisplayTime": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "description": "Last saved timestamp in display format"
                     },
                     "lastSavedTime": {
@@ -155,7 +155,7 @@ Add a new unsigned note for a patient to single VistA
                         "description": "Timestamp from VxSync"
                     },
                     "localId": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "description": "Note IEN from VistA"
                     },
                     "localTitle": {
@@ -194,19 +194,19 @@ Add a new unsigned note for a patient to single VistA
                         "description": "Date and time of the note in the format of YYYYMMDDHHmm"
                     },
                     "signedDateTime": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "description": "Date and time of when the note was signed"
                     },
                     "signer": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "description": "Name of the signer of the note"
                     },
                     "signerDisplayName": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "description": "Display name of the signer of the note"
                     },
                     "signerUid": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "description": "Identifier of the signer of the note"
                     },
                     "siteHash": {
@@ -259,7 +259,8 @@ Add a new unsigned note for a patient to single VistA
                     "deriv_isEditForm": {
                         "type": "boolean",
                         "description": "Determines if the note came from an edit form versus a new note form"
-                    },
+                    }
+                },
                 "required": [
                     "_labelsForSelectedValues",
                     "app",
@@ -312,11 +313,13 @@ Add a new unsigned note for a patient to single VistA
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-## Notes [{{{path}}}/:uid]
-
-### Update [PUT]
+### Update [PUT {{{path}}}/{resourceId}]
 
 Update an existing patient unsigned note
+
++ Parameters
+
+    + resourceId (string, required) - ID of the note to delete
 
 + Request JSON Message (application/json)
 
@@ -455,7 +458,7 @@ Update an existing patient unsigned note
                         "description": "Boolean to determine if the note is interdisciplinary"
                     },
                     "lastSavedDisplayTime": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "description": "Last saved timestamp in display format"
                     },
                     "lastSavedTime": {
@@ -467,7 +470,7 @@ Update an existing patient unsigned note
                         "description": "Timestamp from VxSync"
                     },
                     "localId": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "description": "Note IEN from VistA"
                     },
                     "localTitle": {
@@ -506,19 +509,19 @@ Update an existing patient unsigned note
                         "description": "Date and time of the note in the format of YYYYMMDDHHmm"
                     },
                     "signedDateTime": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "description": "Date and time of when the note was signed"
                     },
                     "signer": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "description": "Name of the signer of the note"
                     },
                     "signerDisplayName": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "description": "Display name of the signer of the note"
                     },
                     "signerUid": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "description": "Identifier of the signer of the note"
                     },
                     "siteHash": {
@@ -571,7 +574,8 @@ Update an existing patient unsigned note
                     "deriv_isEditForm": {
                         "type": "boolean",
                         "description": "Determines if the note came from an edit form versus a new note form"
-                    },
+                    }
+                },
                 "required": [
                     "_labelsForSelectedValues",
                     "app",
@@ -624,9 +628,13 @@ Update an existing patient unsigned note
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Delete [DELETE]
+### Delete [DELETE {{{path}}}/{resourceId}]
 
 Delete an existing patient unsigned note
+
++ Parameters
+
+    + resourceId (string, required) - ID of the note to delete
 
 + Response 200 (application/json)
 
@@ -637,10 +645,7 @@ Delete an existing patient unsigned note
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-
-## Notes [{{{path}}}/sign]
-
-### Sign [POST]
+### Sign [POST {{{path}}}/sign]
 
 Add a new unsigned note for a patient to single VistA
 
@@ -813,8 +818,6 @@ Add a new unsigned note for a patient to single VistA
 
     + Schema
 
-              "signItems": [
-
             {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
@@ -848,7 +851,7 @@ Add a new unsigned note for a patient to single VistA
                         "description": ""
                     },
                     "checklistCount": {
-                        "type": "string",
+                        "type": "integer",
                         "description": "Count of items to be signed"
                     }
                 },
@@ -863,6 +866,72 @@ Add a new unsigned note for a patient to single VistA
                     "checklistCount"
                 ]
             }
+
++ Response 200 (application/json)
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+
+### Add Addendum [POST {{{path}}}/addendum]
+
+Add a new addendum to an unsigned note for a patient to single VistA
+
++ Request JSON Message (application/json)
+
++ Response 200 (application/json)
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+
+### Update Addendum [PUT {{{path}}}/addendum/{resourceId}]
+
+Update an existing patient unsigned note's addendum
+
++ Parameters
+
+    + resourceId (string, required) - ID of the addendum to update
+
++ Request JSON Message (application/json)
+
++ Response 200 (application/json)
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+
+### Delete Addendum [DELETE {{{path}}}/addendum/{resourceId}]
+
+Delete an existing patient unsigned note's addendum
+
++ Parameters
+
+    + resourceId (string, required) - ID of the addendum to delete
+
++ Response 200 (application/json)
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+
+### Sign Addendum [POST {{{path}}}/addendum/sign]
+
+Sign an unsigned note's addendum
+
++ Request JSON Message (application/json)
 
 + Response 200 (application/json)
 

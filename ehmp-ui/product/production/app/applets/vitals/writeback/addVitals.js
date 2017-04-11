@@ -4,8 +4,9 @@ define([
     'jquery',
     'handlebars',
     'app/applets/vitals/writeback/validationUtils',
-    'app/applets/vitals/writeback/writebackUtils'
-], function(Backbone, Marionette, $, Handlebars, validationUtils, writebackUtils) {
+    'app/applets/vitals/writeback/writebackUtils',
+    'app/applets/vitals/writeback/errorFooterView'
+], function(Backbone, Marionette, $, Handlebars, validationUtils, writebackUtils, ErrorFooterView) {
     "use strict";
 
     var rowSubheader = {
@@ -13,14 +14,14 @@ define([
         extraClasses: ["row"],
         items: [{
             control: "container",
-            extraClasses: ["col-xs-12"],
+            extraClasses: ["col-xs-12", "left-padding-xs"],
             items: [{
                 control: 'container',
-                extraClasses: ['col-xs-4'],
+                extraClasses: ["col-xs-4", "all-padding-xs"],
                 items: [{
                     control: "datepicker",
                     name: "dateTakenInput",
-                    title: "Please enter in a date in the following format, MM/DD/YYYY",
+                    title: "Enter in a date in the following format, MM/DD/YYYY",
                     label: "Date Taken",
                     required: true,
                     options: {
@@ -29,11 +30,11 @@ define([
                 }]
             }, {
                 control: "container",
-                extraClasses: ["col-xs-3"],
+                extraClasses: ["col-xs-3", "all-padding-xs"],
                 items: [{
                     control: "timepicker",
                     name: "time-taken",
-                    title: "Please enter in a time in the following format, HH:MM",
+                    title: "Enter in a time in the following format, HH:MM",
                     label: "Time Taken",
                     options: {
                         defaultTime: false
@@ -42,23 +43,23 @@ define([
 
             }, {
                 control: "container",
-                extraClasses: ["col-xs-3"],
+                extraClasses: ["col-xs-2", "top-margin-xs", "all-padding-no", "left-padding-xs"],
                 items: [{
                     control: "button",
                     title: "Press enter to pass",
                     name: "facility-name-pass-po",
                     label: "Pass",
-                    extraClasses: ["btn-primary", "btn-sm", "top-margin-lg"]
+                    extraClasses: ["btn-primary", "btn-xs", "top-margin-xl", "font-size-12"]
                 }]
             }, {
                 control: "container",
-                extraClasses: ["col-xs-2"],
+                extraClasses: ["col-xs-3", "top-margin-xs", "all-padding-no", "left-paddgin-xs"],
                 items: [{
                     control: 'button',
                     type: 'button',
                     label: 'Expand All',
                     name: 'expandCollapseAll',
-                    extraClasses: ["btn-default", "btn-sm", "pull-right", "top-margin-lg"],
+                    extraClasses: ["btn-default", "btn-xs", "top-margin-xl", "background-color-pure-white", "font-size-12"],
                     title: "Press enter to expand all vitals"
                 }]
             }, {
@@ -72,30 +73,34 @@ define([
         items: [{
             control: "select",
             name: "bp-location-po",
+            disabled: true,
             label: "Location",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
-            extraClasses: ["col-xs-3"],
+            title: "Use up and down arrows to view options and then press enter to select",
+            extraClasses: ["col-xs-12"],
             pickList: []
         }, {
             control: "select",
             name: "bp-method-po",
+            disabled: true,
             label: "Method",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
-            extraClasses: ["col-xs-3"],
+            title: "Use up and down arrows to view options and then press enter to select",
+            extraClasses: ["col-xs-12"],
             pickList: []
         }, {
             control: "select",
             label: "Cuff Size",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
+            title: "Use up and down arrows to view options and then press enter to select",
             name: "bp-cuff-size-po",
-            extraClasses: ["col-xs-3"],
+            disabled: true,
+            extraClasses: ["col-xs-12"],
             pickList: []
         }, {
             control: "select",
             label: "Position",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
+            title: "Use up and down arrows to view options and then press enter to select",
             name: "bp-position-po",
-            extraClasses: ["col-xs-3"],
+            disabled: true,
+            extraClasses: ["col-xs-12"],
             pickList: []
         }]
     };
@@ -105,24 +110,24 @@ define([
         name: 'bpSection',
         headerItems: [{
             control: "container",
-            extraClasses: ["col-xs-6", "bpInput"],
+            extraClasses: ["col-xs-7", "bpInput"],
             items: [{
                 control: "input",
                 name: "bpInputValue",
                 label: "Blood Pressure",
-                title: "Please enter in a numeric value",
+                title: "Enter in a numeric value",
                 extraClasses: ["vitalInput"],
                 units: "mm[HG]"
             }]
         }, {
             control: "container",
-            extraClasses: ["col-xs-6"],
+            extraClasses: ["col-xs-5"],
             items: [{
                 control: "radio",
                 name: "bp-radio-po",
-                label: "Blood Pressure Vital Unavailable or Refused Radio",
+                label: "Blood Pressure Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-md"],
+                extraClasses: ["top-margin-sm"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -135,28 +140,69 @@ define([
         collapseItems: [bloodPressureBody]
     };
 
+    var temperatureHeader = {
+        control: "container",
+        items: [{
+            control: "container",
+            extraClasses: ["col-xs-7"],
+            items: [{
+                control: "input",
+                name: "temperatureInputValue",
+                label: "Temperature",
+                title: "Enter in a numeric value",
+                maxlength: '6',
+                extraClasses: ["vitalInput", "inputWithRadio"],
+                units: [{
+                    label: "F",
+                    value: "F",
+                    title: "fahrenheit"
+                }, {
+                    label: "C",
+                    value: "C",
+                    title: "celsius"
+                }]
+            }]
+        }, {
+            control: "container",
+            extraClasses: ["col-xs-5"],
+            items: [{
+                control: "radio",
+                name: "temperature-radio-po",
+                label: "Temperature Vital",
+                srOnlyLabel: true,
+                extraClasses: ["top-margin-sm"],
+                options: [{
+                    value: "Unavailable",
+                    label: "Unavailable"
+                }, {
+                    value: "Refused",
+                    label: "Refused"
+                }]
+            }]
+        }]
+    };
     var pulseHeader = {
         control: "container",
         items: [{
             control: "container",
-            extraClasses: ['col-xs-6'],
+            extraClasses: ["col-xs-7"],
             items: [{
                 control: "input",
                 label: "Pulse",
                 name: "pulseInputValue",
                 units: "/min",
                 extraClasses: ["vitalInput"],
-                title: "Please enter in a numeric value"
+                title: "Enter in a numeric value"
             }]
         }, {
             control: "container",
-            extraClasses: ['col-xs-6'],
+            extraClasses: ["col-xs-5"],
             items: [{
                 control: "radio",
                 name: "pulse-radio-po",
-                label: "Pulse Vital Unavailable or Refused Radio",
+                label: "Pulse Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-md"],
+                extraClasses: ["top-margin-sm"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -173,30 +219,34 @@ define([
         items: [{
             control: "select",
             name: "pulse-method-po",
+            disabled: true,
             label: "Method",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
-            extraClasses: ["col-xs-3"],
+            title: "Use up and down arrows to view options and then press enter to select",
+            extraClasses: ["col-xs-12"],
             pickList: []
         }, {
             control: "select",
             name: "pulse-position-po",
+            disabled: true,
             label: "Position",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
-            extraClasses: ["col-xs-3"],
+            title: "Use up and down arrows to view options and then press enter to select",
+            extraClasses: ["col-xs-12"],
             pickList: []
         }, {
             control: "select",
             name: "pulse-site-po",
+            disabled: true,
             label: "Site",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
-            extraClasses: ["col-xs-3"],
+            title: "Use up and down arrows to view options and then press enter to select",
+            extraClasses: ["col-xs-12"],
             pickList: []
         }, {
             control: "select",
             name: "pulse-location-po",
+            disabled: true,
             label: "Location",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
-            extraClasses: ["col-xs-3"],
+            title: "Use up and down arrows to view options and then press enter to select",
+            extraClasses: ["col-xs-12"],
             pickList: []
         }]
     };
@@ -212,24 +262,24 @@ define([
         control: "container",
         items: [{
             control: "container",
-            extraClasses: ['col-xs-6'],
+            extraClasses: ["col-xs-7"],
             items: [{
                 control: "input",
                 label: "Respiration",
                 units: "/min",
                 extraClasses: ["vitalInput"],
-                title: "Please enter in a numeric value",
+                title: "Enter in a numeric value",
                 name: "respirationInputValue"
             }]
         }, {
             control: "container",
-            extraClasses: ['col-xs-6'],
+            extraClasses: ["col-xs-5"],
             items: [{
                 control: "radio",
                 name: "respiration-radio-po",
-                label: "Respiration Vital Unavailable or Refused Radio",
+                label: "Respiration Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-md"],
+                extraClasses: ["top-margin-sm"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -246,16 +296,18 @@ define([
         items: [{
             control: "select",
             name: "respiration-method-po",
+            disabled: true,
             label: "Method",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
-            extraClasses: ["col-xs-6"],
+            title: "Use up and down arrows to view options and then press enter to select",
+            extraClasses: ["col-xs-12"],
             pickList: []
         }, {
             control: "select",
             name: "respiration-position-po",
+            disabled: true,
             label: "Position",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
-            extraClasses: ["col-xs-6"],
+            title: "Use up and down arrows to view options and then press enter to select",
+            extraClasses: ["col-xs-12"],
             pickList: []
         }]
     };
@@ -267,55 +319,15 @@ define([
         collapseItems: [respirationBody]
     };
 
-    var temperatureHeader = {
-        control: "container",
-        items: [{
-            control: "container",
-            extraClasses: ['col-xs-6'],
-            items: [{
-                control: "input",
-                name: "temperatureInputValue",
-                label: "Temperature",
-                title: "Please enter in a numeric value",
-                extraClasses: ["vitalInput"],
-                units: [{
-                    label: "F",
-                    value: "F",
-                    title: "fahrenheit"
-                }, {
-                    label: "C",
-                    value: "C",
-                    title: "celsius"
-                }]
-            }]
-        }, {
-            control: "container",
-            extraClasses: ['col-xs-6'],
-            items: [{
-                control: "radio",
-                name: "temperature-radio-po",
-                label: "Temperature Vital Unavailable or Refused Radio",
-                srOnlyLabel: true,
-                extraClasses: ["top-margin-md"],
-                options: [{
-                    value: "Unavailable",
-                    label: "Unavailable"
-                }, {
-                    value: "Refused",
-                    label: "Refused"
-                }]
-            }]
-        }]
-    };
-
     var temperatureBody = {
         control: "container",
-        extraClasses: ["col-xs-6"],
+        extraClasses: ["col-xs-12"],
         items: [{
             control: "select",
             label: "Location",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
+            title: "Use up and down arrows to view options and then press enter to select",
             name: "temperature-location-po",
+            disabled: true,
             pickList: []
         }]
     };
@@ -331,24 +343,24 @@ define([
         control: "container",
         items: [{
             control: "container",
-            extraClasses: ['col-xs-6'],
+            extraClasses: ["col-xs-7"],
             items: [{
                 control: "input",
                 name: "O2InputValue",
                 label: "Pulse Oximetry",
-                title: "Please enter in a numeric value",
+                title: "Enter in a numeric value",
                 units: "%",
                 extraClasses: ["vitalInput"]
             }]
         }, {
             control: "container",
-            extraClasses: ['col-xs-6'],
+            extraClasses: ["col-xs-5"],
             items: [{
                 control: "radio",
                 name: "po-radio-po",
-                label: "Pulse Oximetry Vital Unavailable or Refused Radio",
+                label: "Pulse Oximetry Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-md"],
+                extraClasses: ["top-margin-sm"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -366,15 +378,17 @@ define([
             control: "input",
             label: "Supplemental Oxygen Flow Rate",
             name: "suppO2InputValue",
+            disabled: true,
             units: "(liters/minute)",
-            title: "Please enter in a numeric value",
-            extraClasses: ["col-xs-6"],
+            title: "Enter in a numeric value",
+            extraClasses: ["col-xs-12"],
         }, {
             control: "select",
             label: "Method",
             name: "po-method-po",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
-            extraClasses: ["col-xs-6"],
+            disabled: true,
+            title: "Use up and down arrows to view options and then press enter to select",
+            extraClasses: ["col-xs-12"],
             pickList: []
         }]
     };
@@ -390,13 +404,13 @@ define([
         control: "container",
         items: [{
             control: "container",
-            extraClasses: ['col-xs-6'],
+            extraClasses: ["col-xs-7"],
             items: [{
                 control: "input",
                 name: "heightInputValue",
                 label: "Height",
-                title: "Please enter in a numeric value",
-                extraClasses: ["vitalInput"],
+                title: "Enter in a numeric value",
+                extraClasses: ["vitalInput", "input-with-radio"],
                 units: [{
                     label: "in",
                     value: "in",
@@ -409,13 +423,13 @@ define([
             }]
         }, {
             control: "container",
-            extraClasses: ['col-xs-6'],
+            extraClasses: ["col-xs-5"],
             items: [{
                 control: "radio",
                 name: "height-radio-po",
-                label: "Height Vital Unavailable or Refused Radio",
+                label: "Height Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-md"],
+                extraClasses: ["top-margin-sm"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -429,12 +443,13 @@ define([
 
     var heightBody = {
         control: "container",
-        extraClasses: ["col-xs-6"],
+        extraClasses: ["col-xs-12"],
         items: [{
             control: "select",
             label: "Quality",
             name: "height-quality-po",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
+            disabled: true,
+            title: "Use up and down arrows to view options and then press enter to select",
             pickList: []
         }]
     };
@@ -450,13 +465,13 @@ define([
         control: "container",
         items: [{
             control: "container",
-            extraClasses: ['col-xs-6'],
+            extraClasses: ["col-xs-7"],
             items: [{
                 control: "input",
                 name: "weightInputValue",
                 label: "Weight",
-                title: "Please enter in a numeric value",
-                extraClasses: ["vitalInput"],
+                title: "Enter in a numeric value",
+                extraClasses: ["vitalInput", "input-with-radio"],
                 units: [{
                     label: "lb",
                     value: "lb",
@@ -469,13 +484,13 @@ define([
             }]
         }, {
             control: "container",
-            extraClasses: ['col-xs-6'],
+            extraClasses: ["col-xs-5"],
             items: [{
                 control: "radio",
                 name: "weight-radio-po",
-                label: "Weight Vital Unavailable or Refused Radio",
+                label: "Weight Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-md"],
+                extraClasses: ["top-margin-sm"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -492,16 +507,18 @@ define([
         items: [{
             control: "select",
             name: "weight-method-po",
+            disabled: true,
             label: "Method",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
-            extraClasses: ["col-xs-6"],
+            title: "Use up and down arrows to view options and then press enter to select",
+            extraClasses: ["col-xs-12"],
             pickList: []
         }, {
             control: "select",
             name: "weight-quality-po",
+            disabled: true,
             label: "Quality",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
-            extraClasses: ["col-xs-6"],
+            title: "Use up and down arrows to view options and then press enter to select",
+            extraClasses: ["col-xs-12"],
             pickList: []
         }]
     };
@@ -515,12 +532,13 @@ define([
 
     var painHeader = {
         control: "container",
+        extraClasses: ["row", "form-group"],
         items: [{
             control: "container",
-            extraClasses: ["col-xs-12"],
+            extraClasses: ["well", "well-collapse"],
             items: [{
                 control: "container",
-                extraClasses: ["col-xs-2", "left-padding-no"],
+                extraClasses: ["col-xs-2", "right-padding-xs"],
                 items: [{
                     control: "input",
                     name: "pain-value-po",
@@ -528,27 +546,27 @@ define([
                     extraClasses: ["vitalInput"],
                     maxlength: 2,
                     placeholder: "0-10",
-                    title: "Please enter in numeric value for pain from 0 to 10, 0 being no pain and 10 being the greatest amount of pain"
+                    title: "Enter in numeric value for pain from 0 to 10, 0 being no pain and 10 being the greatest amount of pain"
                 }]
             }, {
                 control: "container",
-                extraClasses: ["col-xs-4"],
+                extraClasses: ["col-xs-4", "all-padding-no", " percent-width-35"],
                 items: [{
                     control: "checkbox",
                     label: "Unable to Respond",
                     name: "pain-checkbox-po",
-                    extraClasses: ["top-margin-lg"],
+                    extraClasses: ["top-margin-xl"],
                     title: "To select this checkbox, press the spacebar"
                 }]
             }, {
                 control: "container",
-                extraClasses: ["col-xs-6", "right-padding-no"],
+                extraClasses: ["col-xs-5", "left-padding-xl"],
                 items: [{
                     control: "radio",
                     name: "pain-radio-po",
-                    label: "Pain Vital Unavailable or Refused Radio",
+                    label: "Pain Vital",
                     srOnlyLabel: true,
-                    extraClasses: ["top-margin-md"],
+                    extraClasses: ["top-margin-sm"],
                     options: [{
                         value: "Unavailable",
                         label: "Unavailable"
@@ -562,22 +580,22 @@ define([
     };
 
     var painSection = {
-        control: 'collapsibleContainer',
+        control: 'container',
         name: 'painSection',
-        headerItems: [painHeader]
+        items: [painHeader]
     };
 
     var circumferenceHeader = {
         control: "container",
         items: [{
             control: "container",
-            extraClasses: ['col-xs-6'],
+            extraClasses: ["col-xs-7"],
             items: [{
                 control: "input",
                 label: "Circumference/Girth",
                 name: "circumValue",
-                title: "Please enter in a numeric value",
-                extraClasses: ["vitalInput"],
+                title: "Enter in a numeric value",
+                extraClasses: ["vitalInput", "input-with-radio"],
                 units: [{
                     label: "in",
                     value: "in",
@@ -590,13 +608,13 @@ define([
             }]
         }, {
             control: "container",
-            extraClasses: ['col-xs-6'],
+            extraClasses: ["col-xs-5"],
             items: [{
                 control: "radio",
                 name: "cg-radio-po",
-                label: "Circumference / Girth Vital Unavailable or Refused Radio",
+                label: "Circumference / Girth Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-md"],
+                extraClasses: ["top-margin-sm"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -613,16 +631,18 @@ define([
         items: [{
             control: "select",
             name: "cg-site-po",
+            disabled: true,
             label: "Site",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
-            extraClasses: ["col-xs-6"],
+            title: "Use up and down arrows to view options and then press enter to select",
+            extraClasses: ["col-xs-12"],
             pickList: []
         }, {
             control: "select",
             label: "Location",
             name: "cg-location-po",
-            title: "To select an option, use the up and down arrow keys then press enter to select",
-            extraClasses: ["col-xs-6"],
+            disabled: true,
+            title: "Use up and down arrows to view options and then press enter to select",
+            extraClasses: ["col-xs-12"],
             pickList: []
         }]
     };
@@ -637,7 +657,7 @@ define([
     var F423Fields = [{
         //*************************** Modal Body START ***************************
         control: "container",
-        extraClasses: ["modal-body"],
+        extraClasses: ["modal-body", "vitals-writeback"],
         items: [{
             control: "container",
             extraClasses: ["container-fluid"],
@@ -656,7 +676,7 @@ define([
             items: [{
                 control: "container",
                 extraClasses: ["col-xs-6"],
-                template: Handlebars.compile('<p aria-hidden="true">(* indicates a required field.)</p>{{#if savedTime}}<p><span id="vitals-saved-at">Saved at: {{savedTime}}</span></p>{{/if}}'),
+                template: Handlebars.compile('{{#if savedTime}}<p><span id="vitals-saved-at">Saved at: {{savedTime}}</span></p>{{/if}}'),
                 modelListeners: ["savedTime"]
             }, {
                 control: "container",
@@ -671,21 +691,22 @@ define([
                 }, {
                     control: "button",
                     extraClasses: ["btn-primary", "btn-sm", "left-margin-xs"],
-                    label: "Add",
+                    label: "Accept",
                     type: "button",
                     id: "form-add-btn",
-                    title: "Press enter to add"
+                    title: "Press enter to accept"
                 }]
             }]
         }]
     }];
 
     var FormModel = Backbone.Model.extend({
-        defaults: {
-            facilityName: 'D.C. VA Hospital',
-            dateTakenInput: moment().format('MM/DD/YYYY'),
-            'time-taken': moment().format('HH:mm'),
-            errorModel: new Backbone.Model()
+        defaults: function(){
+            return {
+                'time-taken': moment().format('HH:mm'),
+                dateTakenInput: moment().format('MM/DD/YYYY'),
+                errorModel: new Backbone.Model()
+            };
         },
         validate: function(attributes, options) {
             return validationUtils.validateModel(this);
@@ -699,15 +720,15 @@ define([
     });
 
     var DeleteMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('You will lose your progress if you cancel. Would you like to proceed with ending this observation?'),
+        template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
         tagName: 'p'
     });
     var FooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "Cancel" classes="btn-default" title="Press enter to cancel."}}{{ui-button "Continue" classes="btn-primary" title="Press enter to continue."}}'),
+        template: Handlebars.compile('{{ui-button "No" classes="btn-default" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary" title="Press enter to cancel."}}'),
         events: {
             'click .btn-primary': function() {
                 ADK.UI.Alert.hide();
-                writebackUtils.unregisterNavigationCheck();
+                writebackUtils.unregisterChecks();
                 this.getOption('workflow').close();
             },
             'click .btn-default': function() {
@@ -717,29 +738,23 @@ define([
         tagName: 'span'
     });
 
-    var _msg = 'There was an error submitting your form.';
     var OpDataErrorMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('We\'re sorry. ' + _msg),
-        msg: _msg,
+        template: Handlebars.compile('We\'re sorry. {{message}}'),
+        templateHelpers: function() {
+            var self = this;
+            return {
+                'message': function() {
+                    return self.msg;
+                }
+            };
+        },
+        msg: 'There was an error submitting your form.',
         tagName: 'p'
     });
 
     var ErrorMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('Unable to save your data at this time due to a system error. Please try again later.'),
+        template: Handlebars.compile('Unable to save your data at this time due to a system error. Try again later.'),
         tagName: 'p'
-    });
-
-    var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary" title="Press enter to close."}}'),
-        events: {
-            'click .btn-primary': function() {
-                ADK.UI.Alert.hide();
-                if (this.form) {
-                    this.form.$(this.form.ui.submitButton.selector).trigger('control:disabled', false);
-                }
-            }
-        },
-        tagName: 'span'
     });
 
     var WarningFooterView = Backbone.Marionette.ItemView.extend({
@@ -750,7 +765,7 @@ define([
                 ADK.UI.Alert.hide();
                 writebackUtils.addVitals(this.form.model, this.form.isPassSelected(), this.form.model.get('vitalsIENMap'), function() {
                         saveAlertView.show();
-                        self.getOption('workflow').close();
+                        self.form.workflow.close();
                         ADK.ResourceService.clearAllCache('vital');
                         var vitalsChannel = ADK.Messaging.getChannel('vitals');
                         vitalsChannel.trigger('refreshGridView');
@@ -758,7 +773,7 @@ define([
                     function() {
                         var errorAlertView = new ADK.UI.Alert({
                             title: 'Save Failed (System Error)',
-                            icon: 'fa-exclamation-circle font-size-18 color-red',
+                            icon: 'icon-error',
                             messageView: ErrorMessageView,
                             footerView: ErrorFooterView.extend({
                                 form: self.form
@@ -789,7 +804,7 @@ define([
         events: {
             'click .btn-primary': function() {
                 ADK.UI.Alert.hide();
-                writebackUtils.unregisterNavigationCheck();
+                writebackUtils.unregisterChecks();
                 this.getOption('workflow').close();
             },
             'click .btn-default': function() {
@@ -845,20 +860,11 @@ define([
             "circumValue", "cg-radio-po", "cg-site-po", "cg-location-po"
         ],
         onRender: function() {
-            writebackUtils.retrievePickLists(this, function() {
-                this.listenToOnce(this.model, 'change', function() {
-                ADK.Navigation.registerCheck(new ADK.Navigation.PatientContextCheck({
-                    id: 'vitals-writeback-in-progress',
-                    failureMessage: 'Vitals Writeback Workflow In Progress! Any unsaved changes will be lost if you continue.',
-                    onCancel: _.bind(function() {
-                        this.$el.trigger('tray.show');
-                    }, this)
-                }));
-            });
-            }, function() {
+            this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
+            writebackUtils.retrievePickLists(this, function() {}, function() {
                 var errorAlertView = new ADK.UI.Alert({
                     title: 'Failed to load picklist data.',
-                    icon: 'fa-exclamation-triangle font-size-18 color-red',
+                    icon: 'icon-error',
                     messageView: OpDataErrorMessageView.extend({
                         msg: 'There was an error loading the form.'
                     }),
@@ -866,6 +872,21 @@ define([
                 });
                 errorAlertView.show();
             });
+        },
+        registerChecks: function() {
+            var checkOptions = {
+                id: 'vitals-writeback-in-progress',
+                label: 'Vital',
+                failureMessage: 'Vitals Writeback Workflow In Progress! Any unsaved changes will be lost if you continue.',
+                onContinue: _.bind(function() {
+                    this.workflow.close();
+                }, this)
+            };
+            ADK.Checks.register([new ADK.Navigation.PatientContextCheck(checkOptions),
+                new ADK.Checks.predefined.VisitContextCheck(checkOptions)]);
+        },
+        onDestroy: function() {
+            writebackUtils.unregisterChecks();
         },
         events: {
             'blur #dateTakenInput': function() {
@@ -951,6 +972,7 @@ define([
                 }, this);
 
                 toggleBooleanPassBtn = !toggleBooleanPassBtn;
+                this.registerChecks();
             },
             "keyup .vitalInput:not(:last) input:not(:radio):focus": function(e) {
                 if (e.which == 13) {
@@ -979,8 +1001,8 @@ define([
             "click #form-cancel-btn": function(e) {
                 e.preventDefault();
                 var deleteAlertView = new ADK.UI.Alert({
-                    title: 'Are you sure you want to cancel?',
-                    icon: 'fa-exclamation-triangle font-size-18 color-red',
+                    title: 'Cancel',
+                    icon: 'icon-cancel',
                     messageView: DeleteMessageView,
                     footerView: FooterView,
                     workflow: this.workflow
@@ -994,7 +1016,7 @@ define([
                 if (validationUtils.areAllDataFieldsEmpty(self.model, self.isPassSelected())) {
                     var noVitalsEnteredAlertView = new ADK.UI.Alert({
                         title: 'No Data Entered',
-                        icon: 'fa-exclamation-triangle font-size-18 color-red',
+                        icon: 'icon-warning',
                         messageView: NoVitalsEnteredMessageView,
                         footerView: NoVitalsEnteredFooterView,
                         workflow: this.workflow
@@ -1019,7 +1041,7 @@ define([
                             });
                             var warningView = new ADK.UI.Alert({
                                 title: 'Height/Weight Warnings Exist',
-                                icon: 'fa-exclamation-triangle font-size-18 color-red',
+                                icon: 'icon-warning',
                                 messageView: WarningMessageView,
                                 footerView: WarningFooterView.extend({
                                     form: self
@@ -1029,7 +1051,7 @@ define([
                         } else {
                             writebackUtils.addVitals(self.model, self.isPassSelected(), self.model.get('vitalsIENMap'), function() {
                                     saveAlertView.show();
-                                    writebackUtils.unregisterNavigationCheck();
+                                    writebackUtils.unregisterChecks();
                                     self.workflow.close();
 
                                     ADK.ResourceService.clearAllCache('vital');
@@ -1039,7 +1061,7 @@ define([
                                 function() {
                                     var errorAlertView = new ADK.UI.Alert({
                                         title: 'Save Failed (System Error)',
-                                        icon: 'fa-exclamation-circle font-size-18 color-red',
+                                        icon: 'icon-error',
                                         messageView: ErrorMessageView,
                                         footerView: ErrorFooterView.extend({
                                             form: self
@@ -1106,6 +1128,7 @@ define([
                 $('.' + this.vitalsMapping[vitalName].radio).trigger("control:disabled", true);
             } else {
                 $('.' + this.vitalsMapping[vitalName].radio).trigger("control:disabled", false);
+                this.ui[this.vitalsMapping[vitalName].fields].trigger("control:disabled", true);
             }
         },
         radioDisableHandler: function(vitalName) {

@@ -1,4 +1,4 @@
-                <datasource jta="false" jndi-name="java:jboss/datasources/<%= node[:jbpm][:configure][:datasource] %>" pool-name="<%= node[:jbpm][:configure][:datasource] %>_Pool" enabled="true" use-java-context="true" use-ccm="true">
+                <datasource jta="true" jndi-name="java:jboss/datasources/<%= node[:jbpm][:configure][:datasource] %>" pool-name="<%= node[:jbpm][:configure][:datasource] %>_Pool" enabled="true" use-java-context="true" use-ccm="true">
                     <connection-url>jdbc:oracle:thin:@localhost:<%= node[:jbpm][:oracle_config][:port] %>/<%= node[:jbpm][:oracle_config][:sid] %></connection-url>
                     <driver>oracle</driver>
                     <pool>
@@ -11,7 +11,7 @@
                             <password><%= @jbpm_schema_password %></password>
                     </security>
                 </datasource>
-                <datasource jta="false" jndi-name="java:jboss/datasources/<%= node[:jbpm][:configure][:activitydb_datasource] %>" pool-name="<%= node[:jbpm][:configure][:activitydb_datasource] %>_Pool" enabled="true" use-java-context="true" use-ccm="true">
+                <datasource jta="true" jndi-name="java:jboss/datasources/<%= node[:jbpm][:configure][:activitydb_datasource] %>" pool-name="<%= node[:jbpm][:configure][:activitydb_datasource] %>_Pool" enabled="true" use-java-context="true" use-ccm="true">
                     <connection-url>jdbc:oracle:thin:@localhost:<%= node[:jbpm][:oracle_config][:port] %>/<%= node[:jbpm][:oracle_config][:sid] %></connection-url>
                     <driver>oracle</driver>
                     <pool>

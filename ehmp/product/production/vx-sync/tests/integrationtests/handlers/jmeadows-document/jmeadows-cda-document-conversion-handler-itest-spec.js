@@ -13,7 +13,7 @@ var val = require(global.VX_UTILS + 'object-utils').getProperty;
 var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 
 //var VistaClientDummy = require(global.VX_DUMMIES + 'vista-client-dummy');
-//var jobStatusUpdaterDummy = require(global.VX_JOBFRAMEWORK + '/JobStatusUpdaterDummy');
+//var jobStatusUpdaterDummy = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdaterDummy');
 
 var log = require(global.VX_DUMMIES + '/dummy-logger');
 

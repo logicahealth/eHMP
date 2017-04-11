@@ -30,7 +30,7 @@ var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 // var dummyLogger = logUtil.get('VistaRecordProcessor-spec', 'host');
 // End of code to comment out.
 
-var JobStatusUpdater = require(global.VX_JOBFRAMEWORK + 'JobStatusUpdater');
+var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
 
 
@@ -129,7 +129,7 @@ function getConfig() {
 	return {
 		jds: {
 			protocol: 'http',
-			host: 'IPADDRESS ',
+			host: 'IP_ADDRESS',
 			port: 9080
 		},
 		'hmp.batch.size': 1000,

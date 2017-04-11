@@ -43,7 +43,7 @@ VistaClient.prototype._setFetchResponseData = function(error, response) {
 };
 
 //callback: err, metastamp
-VistaClient.prototype.subscribe = function(vistaId, patientIdentifier, rootJobId, jobId, subscribeCallback) {
+VistaClient.prototype.subscribe = function(vistaId, patientIdentifier, rootJobId, jobId, priority, subscribeCallback) {
     subscribeCallback(null, 'success');
 };
 

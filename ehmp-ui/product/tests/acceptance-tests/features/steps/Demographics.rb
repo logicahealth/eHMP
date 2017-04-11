@@ -1,126 +1,215 @@
-path = File.expand_path '..', __FILE__
-$LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
-path = File.expand_path '../../../../shared-test-ruby', __FILE__
-$LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
-path = File.expand_path '../helper', __FILE__
-$LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
+Then(/^user selects Patient Demographic drop down$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_btn_demographic_visible(30)
+  expect(@ehmp).to have_btn_demographic
+  @ehmp.btn_demographic.click
+  @ehmp.wait_until_btn_demographic_visible(30)
 
-require 'AccessBrowserV2.rb'
-
-class PatientInformationHeaders < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    add_action(CucumberLabel.new("Patient Information"), ClickAction.new, AccessHtmlElement.new(:css, "#patientDemographic-patientInfo-detail .media-body i"))
-    #drop down group level heading: (blue labels in drop down)
-    add_verify(CucumberLabel.new("Phone"), VerifyContainsText.new, AccessHtmlElement.new(:css, ".demographic-group-header"))
-    add_verify(CucumberLabel.new("Adressess"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#pt-header-pt-address .demographic-group .demographic-group-header"))
-    add_verify(CucumberLabel.new("Email"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#pt-header-email .demographic-group .demographic-group-header"))
-    add_verify(CucumberLabel.new("Emergency Contact"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#pt-header-em-contact .demographic-group .demographic-group-header"))
-    add_verify(CucumberLabel.new("Next of Kin"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#pt-header-nok-contact .demographic-group .demographic-group-header"))
-    add_verify(CucumberLabel.new("Health Benefits and Insurance"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#pt-header-em-ins .demographic-group .demographic-group-header"))
-    add_verify(CucumberLabel.new("Service and Social History"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#pt-header-em-misc .demographic-group .demographic-group-header"))
-    #Drop down heading (field level)
-    add_verify(CucumberLabel.new("Home Phone"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-home-phone"))
-    add_verify(CucumberLabel.new("Cell Phone"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-cell-phone"))
-    add_verify(CucumberLabel.new("Work Phone"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-work-phone"))
-    add_verify(CucumberLabel.new("Home Address"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-home-address"))
-    add_verify(CucumberLabel.new("Temporary Address"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-temp-address"))
-    add_verify(CucumberLabel.new("Emergency Name Label"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-em-name"))
-    add_verify(CucumberLabel.new("Emergency Home Phone"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-em-hphone"))
-    add_verify(CucumberLabel.new("Emergency Work Phone"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-em-wphone"))
-    add_verify(CucumberLabel.new("Emergency Address"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-em-address"))
-    add_verify(CucumberLabel.new("NOK Name Label"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-nok-name"))
-    add_verify(CucumberLabel.new("NOK Home Phone"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-nok-hphone"))
-    add_verify(CucumberLabel.new("NOK Work Phone"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-nok-wphone"))
-    add_verify(CucumberLabel.new("NOK Address"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-nok-address"))
-    add_verify(CucumberLabel.new("Service Connected"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-svc-connected"))
-    add_verify(CucumberLabel.new("Service Connected Conditions"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-svc-conditions"))
-    add_verify(CucumberLabel.new("Insurance"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-insurance"))
-    add_verify(CucumberLabel.new("Insurance Name"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-insurance-name"))
-    add_verify(CucumberLabel.new("Group"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-insurance-gp"))
-    add_verify(CucumberLabel.new("Holder"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-insurance-holder"))
-    add_verify(CucumberLabel.new("Effective Date"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-insurance-eff-date"))
-    add_verify(CucumberLabel.new("Expiration Date"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-insurance-exp-date"))
-    add_verify(CucumberLabel.new("Veteran Status"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-vet-status"))
-    add_verify(CucumberLabel.new("Marital Status"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-marital-status"))
-    add_verify(CucumberLabel.new("Religion"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-religion-status"))
+  if @ehmp.btn_demographic['aria-expanded'] == 'false'
+    @ehmp.btn_demographic.click
   end
 end
 
-Then(/^user selects Patient Name drop down$/) do 
-  con = PatientInformationHeaders.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible("Patient Information", 60)
-  expect(con.static_dom_element_exists?("Patient Information")).to be_true
-  con.perform_action("Patient Information")
+Then(/^the Patient's Home Address value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_home_address_value_visible
+  expect(@ehmp).to have_fld_home_address_value
 end
 
-Then(/^the Patient Information header displays: "(.*?)"$/) do |element|
-  con = PatientInformationHeaders.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible(element, DefaultLogin.wait_time)
-  expect(con.static_dom_element_exists?(element)).to be_true
-  expect(con.perform_verification(element, "")).to be_true
+Then(/^the Patient's Email value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_email_value_visible
+  expect(@ehmp).to have_fld_email_value
 end
 
-Then(/^the Patient Information header does not displays: "(.*?)"$/) do |element|
-  con = PatientInformationHeaders.instance
-  driver = TestSupport.driver
-  expect(con.static_dom_element_exists?(element)).to be_false
+Then(/^the Patient's EM Contact Relationship value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_em_con_relationship_value_visible
+  expect(@ehmp).to have_fld_em_con_relationship_value
 end
 
-class PatientInformationData < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    #Drop down data values 
-    add_verify(CucumberLabel.new("Home Phone"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-home-phone-val"))
-    add_verify(CucumberLabel.new("Cell Phone"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-cell-phone-val"))
-    add_verify(CucumberLabel.new("Work Phone"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-work-phone-val"))
-    add_verify(CucumberLabel.new("Home Address line1"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-haddress-line1"))
-    add_verify(CucumberLabel.new("Home Address line2"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#demo-haddress-line4"))
-    add_verify(CucumberLabel.new("Temp Address line1"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-taddress-line1"))
-    add_verify(CucumberLabel.new("Temp Address line2"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-taddress-line4"))
-    add_verify(CucumberLabel.new("Email_1"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-email-val"))
-    add_verify(CucumberLabel.new("Sister"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-em-name-val"))
-    add_verify(CucumberLabel.new("Nephew"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-em-name-val"))
-    add_verify(CucumberLabel.new("Emergency Home Phone"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-em-hphone-val"))
-    add_verify(CucumberLabel.new("Emergency Work Phone"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-em-wphone-val"))
-    add_verify(CucumberLabel.new("Emergency Address1"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-em-line1"))
-    add_verify(CucumberLabel.new("Emergency Address2"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-em-line4"))
-    add_verify(CucumberLabel.new("NOK Brother"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-nok-name-val"))
-    add_verify(CucumberLabel.new("NOK cousin"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-nok-name-val"))
-    add_verify(CucumberLabel.new("NOK Home Phone"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-nok-hphone-val"))
-    add_verify(CucumberLabel.new("NOK Work Phone"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-nok-wphone-val"))
-    add_verify(CucumberLabel.new("NOK Address line1"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-nok-line1"))
-    add_verify(CucumberLabel.new("NOK Address line2"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-nok-line4"))
-    add_verify(CucumberLabel.new("Service Connected"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-svc-connected-status-val"))
-    add_verify(CucumberLabel.new("Service Conditions l1"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-svc-conditions-values :nth-child(1)"))
-    add_verify(CucumberLabel.new("Service Conditions l2"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-svc-conditions-values :nth-child(2)"))
-    add_verify(CucumberLabel.new("Service Conditions l3"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-svc-conditions-values :nth-child(3)"))
-    add_verify(CucumberLabel.new("Service Conditions l4"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-svc-conditions-values :nth-child(4)"))
-    add_verify(CucumberLabel.new("Insurance Name"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-insurance-name-val"))
-    add_verify(CucumberLabel.new("Group"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-insurance-gp-val"))
-    add_verify(CucumberLabel.new("Holder"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-insurance-holder-val"))
-    add_verify(CucumberLabel.new("Effective Date"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-insurance-eff-date-val"))
-    add_verify(CucumberLabel.new("Expiration Date"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-insurance-exp-date-val"))
-    add_verify(CucumberLabel.new("Veteran Status"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-vet-status-val"))
-    add_verify(CucumberLabel.new("Marital Status"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-marital-status-val"))
-    add_verify(CucumberLabel.new("Religion"), VerifyText.new, AccessHtmlElement.new(:css, "#demo-religion-status-val"))
-    add_verify(CucumberLabel.new("Status"), VerifyText.new, AccessHtmlElement.new(:css, ".pull-right.bold"))
-    #Patient demographic data (coversheet)
-    add_verify(CucumberLabel.new("DOB"), VerifyText.new, AccessHtmlElement.new(:css, "#patientDemographic-patientInfo-dob"))
-    add_verify(CucumberLabel.new("SSN"), VerifyText.new, AccessHtmlElement.new(:css, "#patientDemographic-patientInfo-ssn"))
-    add_verify(CucumberLabel.new("Gender"), VerifyText.new, AccessHtmlElement.new(:css, "#patientDemographic-patientInfo-gender"))
-    add_verify(CucumberLabel.new("Name"), VerifyText.new, AccessHtmlElement.new(:css, ".media-heading > span.pull-left"))
-   
+Then(/^the Patient's EM Contact Name value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_em_con_name_value_visible
+  expect(@ehmp).to have_fld_em_con_name_value
+end
+
+Then(/^the Patient's EM Home Phone value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_em_home_ph_value_visible
+  expect(@ehmp).to have_fld_em_home_ph_value
+end
+
+Then(/^the Patient's EM Work Phone value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_em_work_ph_value_visible
+  expect(@ehmp).to have_fld_em_work_ph_value
+end
+
+Then(/^the Patient's EM Home Address value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_em_home_add_value_visible
+  expect(@ehmp).to have_fld_em_home_add_value
+end
+
+Then(/^the Patient's NOK Relationship value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_nok_relationship_value_visible
+  expect(@ehmp).to have_fld_nok_relationship_value
+end
+
+Then(/^the Patient's NOK Name value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_nok_name_value_visible
+  expect(@ehmp).to have_fld_nok_name_value
+end
+
+Then(/^the Patient's NOK Home Phone value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_nok_home_ph_value_visible
+  expect(@ehmp).to have_fld_nok_home_ph_value
+end
+
+Then(/^the Patient's NOK Work Phone value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_nok_work_ph_value_visible
+  expect(@ehmp).to have_fld_nok_work_ph_value
+end
+
+Then(/^the Patient's NOK Home Address value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_nok_home_add_value_visible
+  expect(@ehmp).to have_fld_nok_home_add_value
+end
+
+Then(/^the Patient's Ins Service Connected value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_ins_service_connected_value_visible
+  expect(@ehmp).to have_fld_ins_service_connected_value
+end
+
+Then(/^the Patient's Ins Service Condition value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_ins_service_cond_value_visible
+  expect(@ehmp).to have_fld_ins_service_cond_value
+end
+
+Then(/^the Patient's Ins Service Insurance value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_ins_service_insurance_value_visible
+  expect(@ehmp).to have_fld_ins_service_insurance_value
+end
+
+Then(/^the Patient's Veteran status value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_veteran_status_value_visible
+  expect(@ehmp).to have_fld_veteran_status_value
+end
+
+Then(/^the Patient's Marital status value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  Capybara.page.driver.browser.manage.window.resize_to(1280, 2400)
+  @ehmp.wait_until_fld_marital_status_value_visible(30)
+  expect(@ehmp).to have_fld_marital_status_value
+end
+
+Then(/^the Patient's Religion value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  Capybara.page.driver.browser.manage.window.resize_to(1280, 2400)
+  @ehmp.wait_until_fld_religion_value_visible(30)
+  expect(@ehmp).to have_fld_religion_value
+end
+
+Then(/^the Patient's Temporary Home Address value is displayed$/) do
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_home_temp_add_value_visible
+  expect(@ehmp).to have_fld_home_temp_add_value
+end
+
+Then(/^the Patient's Home Phone is in acceptable format$/) do
+  @ehmp = PobDemographicsElements.new unless @ehmp.is_a? PobDemographicsElements
+  @ehmp.wait_until_fld_home_phone_label_visible
+  @ehmp.wait_until_fld_home_phone_value_visible
+  expect(@ehmp.phone_in_correct_format? @ehmp.fld_home_phone_value.text).to eq(true), "Home Phone was not in correct format"
+end
+
+Then(/^the Patient's Cell Phone is in acceptable format$/) do
+  @ehmp = PobDemographicsElements.new unless @ehmp.is_a? PobDemographicsElements
+  @ehmp.wait_until_fld_cell_phone_label_visible
+  @ehmp.wait_until_fld_cell_phone_value_visible
+  expect(@ehmp.phone_in_correct_format? @ehmp.fld_cell_phone_value.text).to eq(true), "Cell Phone was not in correct format"
+end
+
+Then(/^the Patient's Work Phone is in acceptable format$/) do
+  @ehmp = PobDemographicsElements.new unless @ehmp.is_a? PobDemographicsElements
+  @ehmp.wait_until_fld_work_phone_label_visible
+  @ehmp.wait_until_fld_work_phone_value_visible
+  expect(@ehmp.phone_in_correct_format? @ehmp.fld_work_phone_value.text).to eq(true), "Work Phone was not in correct format"
+end
+
+Then(/^the Patient's "([^"]*)" indicates discrepant data$/) do |partial_id|
+  @ehmp = PobDemographicsElements.new unless @ehmp.is_a? PobDemographicsElements
+  @ehmp.load_decrepant_elements(partial_id)
+  @ehmp.wait_until_btn_decrepant_visible
+  expect(@ehmp.has_btn_decrepant?).to eq(true)
+end
+
+Then(/^the Patient's "([^"]*)" does not indicate discrepant data$/) do |partial_id|
+  @ehmp = PobDemographicsElements.new unless @ehmp.is_a? PobDemographicsElements
+  @ehmp.load_decrepant_elements(partial_id)
+  @ehmp.wait_until_fld_patient_info_title_visible
+  expect(@ehmp.has_btn_decrepant?).to eq(false)
+end
+
+Then(/^the Patient's Name is "([^"]*)"$/) do |name|
+  @ehmp = PobDemographicsElements.new unless @ehmp.is_a? PobDemographicsElements
+  @ehmp.wait_until_fld_patient_name_status_visible
+  expect(@ehmp.fld_patient_name_status.text.downcase).to include(name.downcase)
+end
+
+Then(/^the Patient's Status is "([^"]*)"$/) do |status|
+  @ehmp = PobDemographicsElements.new unless @ehmp.is_a? PobDemographicsElements
+  @ehmp.wait_until_fld_patient_name_status_visible
+  expect(@ehmp.fld_patient_name_status.text.downcase).to include(status.downcase)
+end
+
+Then(/^the Patient's DOB is in format MM\/DD\/YYYY \(AGEy\)$/) do
+  @ehmp = PobDemographicsElements.new unless @ehmp.is_a? PobDemographicsElements
+  @ehmp.wait_until_fld_patient_name_status_visible
+  years = Regexp.new("\\d{2}\\/\\d{2}\\/\\d{4}\s\\(\\d{2}y.*\\)")
+  expect((@ehmp.fld_patient_info.text).should =~ (years)).to eq(true), "Actual: #{@ehmp.fld_patient_dob.text}, Expected Format: MM/DD/YYYY (AGEy)"
+end
+
+Then(/^the Patient's Home Phone is "([^"]*)"$/) do |phone|
+  @ehmp = PobDemographicsElements.new unless @ehmp.is_a? PobDemographicsElements
+  @ehmp.wait_until_fld_home_phone_label_visible
+  @ehmp.wait_until_fld_home_phone_value_visible
+  expect(@ehmp.fld_home_phone_value.text).to eq(phone)
+end
+
+Then(/^the Patient's Home Address line is "([^"]*)"$/) do |address|
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_until_fld_home_address_value_visible
+  expect(@ehmp).to have_fld_home_address_value
+  expect(@ehmp.fld_home_address_value.text.upcase).to eq(address.upcase)
+end
+
+And(/^the Patient Information expanded area contains headers$/) do |table|
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_for_fld_demographic_group_headers minimum: 5
+  @ehmp.wait_until_fld_demographic_group_headers_visible
+
+  table.rows.each do |headers|
+    expect(object_exists_in_list(@ehmp.fld_demographic_group_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} >> was not found."
   end
 end
-Then(/^the Patient's "(.*?)" is "(.*?)"$/) do |element, value|
-  con = PatientInformationData.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible(element, DefaultLogin.wait_time)
-  expect(con.static_dom_element_exists?(element)).to be_true
-  expect(con.perform_verification(element, value)).to be_true  
+
+And(/^the Patient Information expanded area contains fields/) do |table|
+  @ehmp = PobDemographicsElements.new
+  @ehmp.wait_for_fld_demographic_group_fields minimum: 5
+  @ehmp.wait_until_fld_demographic_group_fields_visible
+
+  table.rows.each do |headers|
+    expect(object_exists_in_list(@ehmp.fld_demographic_group_fields, "#{headers[0]}")).to eq(true), "#{headers[0]} >> was not found."
+  end
 end

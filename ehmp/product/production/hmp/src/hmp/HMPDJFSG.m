@@ -1,9 +1,10 @@
-HMPDJFSG ;SLC/KCM,ASMR/RRB -- GET for Extract and Freshness Stream;Oct 24, 2015 14:39:51
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 62
+HMPDJFSG ;SLC/KCM,ASMR/RRB,CPC,JD,ASF,CK -- GET for Extract and Freshness Stream;Apr27, 2016 10:35:07
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; US3907 - Allow for jobId and rootJobId to be retrieved from ^XTMP.  JD - 1/20/15
  ; DE2818 - SQA findings. Newed ERRCNT in BLDSERR+2.  RRB - 10/24/2015
+ ; DE3869 - Remove the freshness stream entries with undefined DFNs.  JD - 3/4/16
  ;
  ; --- retrieve updates for an HMP server's subscriptions
  ;
@@ -23,17 +24,17 @@ GETSUB(HMPFRSP,ARGS) ; retrieve items from stream
  ;
  K ^TMP("HMPF",$J)
  N HMPFSYS,HMPFSTRM,HMPFLAST,HMPFDT,HMPFLIM,HMPFMAX,HMPFSIZE,HMPCLFLG
- N HMPFSEQ,HMPFIDX,HMPFCNT,SNODE,STYPE,HMPFERR,HMPDEL,HMPERR,HMPSTGET,HMPLITEM  ;*S68-JCH* de3502
+ N HMPFSEQ,HMPFIDX,HMPFCNT,SNODE,STYPE,HMPFERR,HMPDEL,HMPERR,HMPSTGET,HMPLITEM  ;*S68-JCH*, DE3502
  S HMPFRSP=$NA(^TMP("HMPF",$J))
  ; Next line added for US6734 - Make sure OPD metastamp data has been completed before fetching.
  I '$$OPD^HMPMETA(HMPFHMP) S @HMPFRSP@(1)="{""warning"":""Staging is not complete yet!""}" Q
  ;
- S HMPFSYS=$$GET^XPAR("SYS","HMP SYSTEM NAME") ; TODO -- switch to HMPSYS
+ S HMPFSYS=$$SYS^HMPUTILS
  S HMPFHMP("ien")=$O(^HMP(800000,"B",HMPFHMP,0))
  S HMPFDT=$P($G(ARGS("lastUpdate")),"-")
  S HMPFSEQ=+$P($G(ARGS("lastUpdate")),"-",2)
  S HMPSTGET=$G(ARGS("getStatus"))
- S HMPLITEM="" ;de3502 initialise tracking of last item type
+ S HMPLITEM="" ; DE3502 initialise tracking of last item type
  ; stream goes back a maximum of 8 days
  I HMPFDT<$$FMADD^XLFDT($$DT^XLFDT,-8) S HMPFDT=$$HTFM^XLFDT(+$H-8),HMPFSEQ=0
  S HMPFLAST=HMPFDT_"-"_HMPFSEQ
@@ -48,6 +49,7 @@ GETSUB(HMPFRSP,ARGS) ; retrieve items from stream
  F  D  Q:HMPFSIZE'<HMPFMAX  D NXTSTRM Q:HMPFSTRM=""  ; *S68-JCH*
  . F  S HMPFIDX=$O(^XTMP(HMPFSTRM,HMPFIDX)) Q:'HMPFIDX  D  Q:HMPFCNT'<HMPFLIM
  ..  S SNODE=^XTMP(HMPFSTRM,HMPFIDX),STYPE=$P(SNODE,U,2)
+ ..  K FILTER("freshnessDateTime")
  ..  ;===JD START===
  ..  K ARGS("hmp-fst") I $P(SNODE,U,4)="@" S ARGS("hmp-fst")=$P(SNODE,U,5)
  ..  ;===JD END===
@@ -57,10 +59,10 @@ GETSUB(HMPFRSP,ARGS) ; retrieve items from stream
  ..  S HMPFSEQ=HMPFIDX
  ..  I STYPE="syncCommand" D SYNCCMD(SNODE) Q  ; command to middle tier
  ..  I STYPE="syncError" D SYNCERR(SNODE,.HMPERR) Q
- ..  I STYPE="syncStart" D SYNCSTRT(SNODE) S HMPLITEM="SYNC" Q   ; begin initial extraction ;de3502
- ..  I STYPE="syncMeta" D SYNCMETA(SNODE) S HMPLITEM="SYNC" Q    ; US11019 - Build replacement syncstart ;de3502
- ..  I STYPE="syncDone" D SYNCDONE(SNODE) S HMPLITEM="SYNC" Q    ; end of initial extraction ;de3502
- ..  D FRESHITM(SNODE,.HMPDEL,.HMPERR) S HMPLITEM="FRESH"   ; otherwise, freshness item ;de3502
+ ..  I STYPE="syncStart" D SYNCSTRT(SNODE) S HMPLITEM="SYNC" Q  ; begin initial extraction ;DE3502
+ ..  I STYPE="syncMeta" D SYNCMETA(SNODE) S HMPLITEM="SYNC" Q   ; US11019 - Build replacement syncstart ;DE3502
+ ..  I STYPE="syncDone" D SYNCDONE(SNODE) S HMPLITEM="SYNC" Q   ; end of initial extraction ;DE3502
+ ..  D FRESHITM(SNODE,.HMPDEL,.HMPERR) S HMPLITEM="FRESH"       ; otherwise, freshness item ;DE3502
  Q:$G(HMPFERR)
  D FINISH(.HMPDEL,.HMPERR)
  ;Check if HMP GLOBAL USAGE MONITOR mail message is required - US8228
@@ -87,7 +89,7 @@ DOMITMS ; loop thru extract items, OFFSET is last sent
  . M ^TMP("HMPF",$J,HMPFCNT)=^XTMP(BATCH,TASK,DOMAIN,OFFSET)
  . ;S ^TMP("HMPF",$J,HMPFCNT,.3)=$$WRAPPER(DOMAIN,PIDS,$S('COUNT:0,1:ITEMNUM),+DOMSIZE)
  . S ^TMP("HMPF",$J,HMPFCNT,.3)=$$WRAPPER(DOMAIN,PIDS,$S('COUNT:0,1:ITEMNUM),+DOMSIZE,1)  ; *S68-JCH*
- . S HMPLITEM="SYNC",HMPCLFLG=0 ;de3502
+ . S HMPLITEM="SYNC",HMPCLFLG=0 ; DE3502
  Q
 MIDXTRCT() ; Return true if mid-extract
  ; from GETSUB expects HMPFSTRM,HMPFSEQ
@@ -238,7 +240,7 @@ SYNCMETA(SNODE) ; US11019 Build NEW syncStart object
  S HMPFSIZE=$$INCITEM("syncmeta") ;need to increment count
  S ^TMP("HMPF",$J,HMPFCNT,.3)=$$WRAPPER("syncStart"_"#"_METADOM,$$PIDS^HMPDJFS(DFN),$S(DFN:1,1:-1),$S(DFN:1,1:-1))
  S ^TMP("HMPF",$J,HMPFCNT,1)="null" ;always null object with this record
- S HMPCLFLG=0 ;de3502
+ S HMPCLFLG=0 ; DE3502
  Q
  ;
 SYNCERR(SNODE,HMPERR) ;
@@ -257,6 +259,16 @@ FRESHITM(SEQNODE,DELETE,ERROR) ; Get freshness item and stick in ^TMP
  N ACT,DFN,DOMAIN,ECNT,FILTER,ID,RSLT,UID,HMP97,HMPI,WRAP,HMPPAT7,HMPPAT8
  S FILTER("noHead")=1
  S DFN=$P(SEQNODE,U),DOMAIN=$P(SEQNODE,U,2),ID=$P(SEQNODE,U,3),ACT=$P(SEQNODE,U,4)
+ ;Next 2 IFs added to prevent <UNDEFINED> in LKUP^HMPDJ00.  JD - 3/4/16. DE3869
+ ;Make sure deletes ('@') are not included.
+ ;HMPFSTRM and HMPFIDX are defined in the GETSUB section above.
+ ;For "pt-select", which is an operational data domain, ID=patient IEN and DFN="OPD".
+ ;For ptient domains ID=DFN=patient IEN.
+ ;We want the checks to be for all patient domains and pt-select of the operational data domain.
+ ;Kill the freshness stream entry with the bad patient IEN.
+ I ACT'="@",DFN=+DFN,'$D(^DPT(DFN,0)) K ^XTMP(HMPFSTRM,HMPFIDX) Q  ;For patient domains
+ I ACT'="@",DOMAIN="pt-select",ID=+ID,'$D(^DPT(ID,0)) K ^XTMP(HMPFSTRM,HMPFIDX) Q
+ ;
  ;==JD START
  ;Create a phantom "patient" if visit is the domain
  I DOMAIN="visit" D
@@ -269,8 +281,14 @@ FRESHITM(SEQNODE,DELETE,ERROR) ; Get freshness item and stick in ^TMP
  . S FILTER("domain")=DOMAIN
  . I DFN="OPD" D GET^HMPEF(.RSLT,.FILTER)
  . I +DFN>0 D
- . . S FILTER("patientId")=DFN
- . . D GET^HMPDJ(.RSLT,.FILTER)
+ ..  S FILTER("patientId")=DFN
+ ..  D  ; DE3691, add date/time with seconds to FILTER parameters, Feb 29 2016
+ ...   N DAY,SECS,TM S SECS=$P($G(^XTMP(HMPFSTRM,HMPFIDX)),U,5),DAY=$P(HMPFSTRM,"~",3)
+ ...   Q:('DAY)!('$L(SECS))  ; must have date and seconds, could be zero seconds (midnight)
+ ...   S TM=$S(SECS:SECS#60/100+(SECS#3600\60)/100+(SECS\3600)/100,SECS=0:".000001",1:"")  ; if zero (midnight) push to 1 second after
+ ...   Q:'$L(TM)  ; couldn't compute time
+ ...   S FILTER("freshnessDateTime")=DAY+TM
+ ..  D GET^HMPDJ(.RSLT,.FILTER)
  I ACT'="@",$L($G(^TMP("HMP",$J,"error")))>0 D BLDSERR(DFN,.ERROR)  Q
  I '$D(^TMP("HMP",$J,1)) S ACT="@"
  I ACT="@" D
@@ -282,13 +300,13 @@ FRESHITM(SEQNODE,DELETE,ERROR) ; Get freshness item and stick in ^TMP
  I (DOMAIN="pt-select")!(DOMAIN="user")!(DOMAIN["asu-")!(DOMAIN="doc-def")!(DFN=+DFN) D  Q
  .D ADHOC^HMPUTIL1(DOMAIN,.HMPFCNT,DFN)
  .I $P(HMPFIDX,".",2)=99 K ^XTMP(HMPFSTRM,HMPFIDX) ;Remove the phantom "patient"; JD
- .S HMPLITEM="FRESH" ;de3502
+ .S HMPLITEM="FRESH" ; DE3502
  ;
- S WRAP=$$WRAPPER(DOMAIN,$$PIDS^HMPDJFS(DFN),1,1) ;N.B. this updates the .3 node on this HMPFCNT
+ S WRAP=$$WRAPPER(DOMAIN,$$PIDS^HMPDJFS(DFN),1,1) ; N.B. this updates the .3 node on this HMPFCNT
  F HMPI=1:1 Q:'$D(^TMP("HMP",$J,HMPI))  D
  . S HMPFCNT=HMPFCNT+1
  . M ^TMP("HMPF",$J,HMPFCNT)=^TMP("HMP",$J,HMPI)
- . I HMPLITEM="SYNC" S HMPLITEM="FRESH" I WRAP="," S ^TMP("HMPF",$J,HMPFCNT,.3)="}," Q  ;de3502 add closing
+ . I HMPLITEM="SYNC" S HMPLITEM="FRESH" I WRAP="," S ^TMP("HMPF",$J,HMPFCNT,.3)="}," Q  ; DE3502 add closing
  . S ^TMP("HMPF",$J,HMPFCNT,.3)=WRAP
  Q
  ;
@@ -324,7 +342,7 @@ WRAPPER(DOMAIN,PIDS,OFFSET,DOMSIZE,FROMXTR) ; return JSON wrapper for each item 
  I DFN="OPD" D
  . S:$P($G(DOMAIN),"#")'="syncStart" X="},{""collection"":"""_$P(DOMAIN,"#")_""""_PIDS ;US11019
  E  S X="},{""collection"":"""_$P(DOMAIN,"#")_""""_PIDS  ; If ONLY patient data exists
- I HMPLITEM="FRESH" I $E(X)="}" S X=$E(X,2,$L(X)) ;de3502 - remove closing when coming from Fresh
+ I HMPLITEM="FRESH" I $E(X)="}" S X=$E(X,2,$L(X)) ; DE3502 - remove closing when coming from Fresh
  I $P(DOMAIN,"#")="syncStart",$O(^XTMP(Z,0))]"" D  Q X
  .; --- Start US3907 ---
  .; Pass JobId and RootJobId back in the response if we were given them

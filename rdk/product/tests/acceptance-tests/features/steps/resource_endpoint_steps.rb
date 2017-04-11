@@ -1,6 +1,6 @@
 When(/^client requests the patient resource directory in RDK format$/) do
   path = RDClass.resourcedirectory_fetch.get_url("resource-directory")
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the response contains (\d+) "(.*?)" items$/) do |number_of, tag|

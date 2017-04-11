@@ -1,7 +1,4 @@
-define([
-    'app/screens/EHMPAdministration',
-    'app/screens/ProviderCentricView'
-], function(EHMPAdministration, ProviderCentricView) {
+define([], function() {
     'use strict';
     var predefinedScreens = {};
 
@@ -19,7 +16,6 @@ define([
         routeName: 'news-feed',
         description: '',
         predefined: true,
-        //requiredPermissions: []
         requiredPermissions: ['read-timeline']
     }, {
         title: 'Overview',
@@ -27,8 +23,7 @@ define([
         screenId: 3,
         routeName: 'overview',
         description: '',
-        predefined: true,
-        defaultScreen: true
+        predefined: true
     }, {
         title: 'Meds Review',
         id: 'medication-review',
@@ -43,44 +38,14 @@ define([
         routeName: 'documents-list',
         description: '',
         predefined: true,
-        //requiredPermissions: []
         requiredPermissions: ['read-document']
-    }, {
-        title: 'Depression',
-        id: 'depression-cbw',
-        screenId: 6,
-        routeName: 'depression-cbw',
-        description: '',
-        predefined: true
-    }, {
-        title: 'Diabetes Mellitus',
-        id: 'diabetes-mellitus-cbw',
-        screenId: 7,
-        routeName: 'diabetes-mellitus-cbw',
-        description: '',
-        predefined: true
-    }, {
-        title: 'Hypertension',
-        id: 'hypertension-cbw',
-        screenId: 8,
-        routeName: 'hypertension-cbw',
-        description: '',
-        predefined: true
-    }, {
-        title: 'Pre-Procedure',
-        id: 'pre-procedure-cbw',
-        screenId: 9,
-        routeName: 'pre-procedure-cbw',
-        description: '',
-        predefined: true
     }, {
         title: 'Access Control',
         id: 'ehmp-administration',
         screenId: 10,
         routeName: 'ehmp-administration',
         description: '',
-        predefined: true,
-        addNavigationTab: true
+        predefined: true
     }, {
         title: 'Notifications',
         id: 'notifications-full',
@@ -94,8 +59,14 @@ define([
         screenId: 12,
         routeName: 'provider-centric-view',
         description: '',
-        predefined: true,
-        addNavigationTab: true
+        predefined: true
+    }, {
+        title: 'Summary',
+        id: 'summary',
+        screenId: 13,
+        routeName: 'summary',
+        description: '',
+        predefined: true
     }];
 
     predefinedScreens.screens = screens;

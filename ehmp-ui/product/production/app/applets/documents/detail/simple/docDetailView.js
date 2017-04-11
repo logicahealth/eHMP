@@ -15,7 +15,8 @@ define([
             'keydown .detail-result-link': 'onEnter'
         },
         regions: {
-            addendaRegion: '.document-detail-addenda-region'
+            addendaRegion: '.document-detail-addenda-region',
+            pdfViewer: '.pdf-viewer-container'
         },
         onClickResultLink: function(event) {
             var docUid = $(event.target).attr('data-doc-uid'),
@@ -29,8 +30,14 @@ define([
                 $targetResult.focus();
             }
         },
-        onRender: function() {
-            this.addendaRegion.show(new AddendaView({ model: this.model }));
+        onBeforeShow: function() {
+            this.addendaRegion.show(new AddendaView({
+                model: this.model
+            }));
+            if (this.model.has('dodComplexNotePdf'))
+                this.pdfViewer.show(new ADK.UI.PdfViewer({
+                    model: this.model
+                }));
         },
         onEnter: function(keyEvent) {
             if (keyEvent.keyCode === 13 || keyEvent.keyCode === 32) {
@@ -40,7 +47,7 @@ define([
         },
         onShow: function() {
             if (this.model.get('dodComplexNoteContent')) {
-                dodComplexNoteUtil.showContent(this.model);
+                dodComplexNoteUtil.showContent.call(this, this.model);
             }
         }
     });

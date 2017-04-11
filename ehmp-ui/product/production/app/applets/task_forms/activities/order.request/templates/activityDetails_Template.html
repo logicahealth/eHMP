@@ -1,0 +1,26 @@
+<div class="row">
+	<div class="col-xs-4">
+		<p><strong>Requested by</strong><br />
+		{{startedBy}} on {{formatDate initiationDate "MM/DD/YYYY"}}
+		{{#if createdAtFacilityName}}
+		<br/>
+		{{createdAtFacilityName}}
+		{{/if}}
+		</p>
+	</div>
+	<div class="col-xs-2">
+		<p><strong>Earliest Date</strong><br />
+		{{formatDate request.earliestDate "MM/DD/YYYY"}}</p>
+	</div>
+	<div class="col-xs-6">
+		<p><strong>Latest Date</strong><br />
+		{{formatDate request.latestDate "MM/DD/YYYY"}}</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<p><strong>Request</strong><br />
+		{{request.request}}</p>
+	</div>
+</div>

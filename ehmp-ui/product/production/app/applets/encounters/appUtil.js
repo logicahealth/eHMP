@@ -152,13 +152,13 @@ define([
         },
         setAggregationScale: function(selector) {
             var result = "ymd";
-            /*  if(selector == "all-range-global") {
+            /*  if(selector == "allRangeGlobal") {
                   result = "y";
-              } else if(selector == "1yr-range-global"){
+              } else if(selector == "1yrRangeGlobal"){
                   result = "ymd";
-              } else if (selector == "2yr-range-global"){
+              } else if (selector == "2yrRangeGlobal"){
                   result = "ym";
-              }else if (selector == "custom-range-apply-global"){
+              }else if (selector == "customRangeApplyGlobal"){
                   result = "ym";
               }*/
             return result;
@@ -278,12 +278,12 @@ define([
             var maxDate = moment().add(6, 'M'); // 6 monthes ahead
             var aDate = moment().add(1, 'd'); // 6 monthes ahead
 
-            if (filterMode === "all-range-global") {
+            if (filterMode === "allRangeGlobal") {
                 return {
                     start: firstEvent,
                     stop: moment(maxDate).format("YYYYMMDD")
                 };
-            } else if (filterMode === "custom-range-apply-global") {
+            } else if (filterMode === "customRangeApplyGlobal") {
                 return {
                     start: fromDate,
                     stop: toDate

@@ -66,3 +66,4 @@ infrastructure/vagrant/virtualbox/**/dist-file
 
 product/production/_assets/css/adk.css
 product/production/_assets/css/vendor.css
+product/production/_assets/css/partials/adk/helper-classes.css

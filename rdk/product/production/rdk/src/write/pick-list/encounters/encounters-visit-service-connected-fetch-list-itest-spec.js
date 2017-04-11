@@ -9,11 +9,11 @@ var log = sinon.stub(require('bunyan').createLogger({
 var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
-    host: 'IP        ',
+    host: 'IP_ADDRESS',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'PW',
+    verifyCode: 'PW',
+    localIP: 'IPADDRES',
     localAddress: 'localhost'
 };
 
@@ -24,6 +24,14 @@ describe('encounters-visit-service-connected resource integration test', functio
             expect(err).to.be.null();
             expect(result).not.to.be.falsy();
             done();
-        }, {dfn: '230', visitDate: '20131001', loc: '195'});
+        }, {dfn: '230', visitDate: '20131001', locationUid: 'urn:va:location:9E7A:195'});
+    });
+    it('will return an error if locationUid is missing', function (done) {
+        this.timeout(20000);
+        getServiceConnected(log, configuration, function(err, result) {
+            expect(err).to.be.truthy();
+            expect(result).to.be.falsy();
+            done();
+        }, {dfn: '230', visitDate: '20131001'});
     });
 });

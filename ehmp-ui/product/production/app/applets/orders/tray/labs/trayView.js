@@ -5,13 +5,12 @@ define([
     'jquery',
     'handlebars',
     'app/applets/orders/viewUtils',
-    'app/applets/orders/writeback/orderCheck',
     'app/applets/orders/writeback/writebackUtils',
     'app/applets/orders/writeback/labs/labUtils',
     'app/applets/orders/writeback/labs/formFields',
     'app/applets/orders/writeback/labs/formUtils',
-    'app/applets/orders/behaviors/draft'
-], function(ADK, Backbone, Marionette, $, Handlebars, ViewUtils, OrderCheck, Utils, LabUtils, FormFields, FormUtils, DraftBehavior) {
+    'app/applets/orders/behaviors/draftOrder'
+], function(ADK, Backbone, Marionette, $, Handlebars, ViewUtils, Utils, LabUtils, FormFields, FormUtils, DraftBehavior) {
     "use strict";
 
     var FormModel = Backbone.Model.extend({
@@ -36,16 +35,6 @@ define([
         }
     });
 
-    var CloseAlertView = new ViewUtils.DialogBox({
-        icon: 'fa-exclamation-triangle font-size-16 color-red',
-        title: 'Closing Lab Order Form',
-        message: 'You will lose all work in progress if you close this lab order. Would you like to proceed?',
-        confirmButton: 'Close',
-        onConfirm: function() {
-            this.saveDraft({resetTray: true});
-        }
-    });
-
     var formView = ADK.UI.Form.extend({
         model: FormModel,
         ui: {
@@ -64,7 +53,6 @@ define([
             "otherSpecimenContainer": ".otherSpecimenContainer",
             "collectionSample": ".collectionSample",
             "otherCollectionSample": ".otherCollectionSample",
-            "otherCollectionSampleContainer": ".otherCollectionSampleContainer",
             "anticoagulant": ".anticoagulant",
             "sampleDrawnAt": ".sampleDrawnAt",
             "sampleDrawnAtContainer": ".sampleDrawnAtContainer",
@@ -85,93 +73,169 @@ define([
             "futureLabCollectDate": ".futureLabCollectDate",
             "futureLabCollectTime": ".futureLabCollectTime",
             "futureLabCollectInProgress": ".futureLabCollectInProgress",
+            "problemRelationship": ".problemRelationship",
             "acceptDrpDwnContainer": "#acceptDrpDwnContainer",
-            "cancelButton": ".cancelButton",
-            "deleteButton": ".deleteButton",
+            "acceptButton": "#acceptDrpDwnContainer-accept",
+            "acceptAddAnotherButton": "#acceptDrpDwnContainer-accept-add",
+            "cancelButton": "#cancelButton",
+            "saveButton": "#saveButton",
+            "deleteButton": "#deleteButton",
             "errorMessage": ".errorMessage",
-            "dynamicFields": ".anticoagulant, .sampleDrawnAtContainer, .additionalComments, .orderComment, .urineVolume, .doseContainer, .drawContainer, .immediateCollectionContainer, .futureLabCollectTimesContainer, .otherSpecimenContainer, .otherCollectionSampleContainer",
+            "notificationDate": ".notificationDate",
+            "dynamicFields": ".anticoagulant, .sampleDrawnAtContainer, .additionalComments, .orderComment, .urineVolume, .doseContainer, .drawContainer, .immediateCollectionContainer, .futureLabCollectTimesContainer, .otherSpecimenContainer, .otherCollectionSample",
             "dynamicRequiredFields": ".collectionDate, .collectionTime,.collectionDateTimePicklist, .otherCollectionSample, .otherSpecimen, .futureLabCollectDate, .futureLabCollectTime, .howLong, .immediateCollectionDate, .immediateCollectionTime, .sampleDrawnAt, .doseDate, .doseTime, .drawDate, .drawTime",
             "doseDrawDateTime": ".doseDate, .doseTime, .drawDate, .drawTime",
-            "inputFields": ".urgency, .howOften, .howLong, .collectionType, .collectionDateTimePicklist, .collectionDate, .collectionTime, .otherSpecimen, .collectionSample, .otherCollectionSample, .anticoagulant, .sampleDrawnAt, .additionalComments, .immediateCollection, .immediateCollectionDate, .immediateCollectionTime, .orderComment, .urineVolume, .doseDate, .doseTime, .drawDate, .drawTime"
+            "inputFields": ".urgency, .collectionType, .collectionDateTimePicklist, .collectionDate, .collectionTime, .otherSpecimen, .collectionSample, .otherCollectionSample, .anticoagulant, .sampleDrawnAt, .additionalComments, .immediateCollection, .immediateCollectionDate, .immediateCollectionTime, .orderComment, .urineVolume, .doseDate, .doseTime, .drawDate, .drawTime .notificationDate"
         },
         fields: FormFields,
         onInitialize: function() {
-            var self = this;
-            this.listenTo(ADK.Messaging.getChannel('addOrders'), 'visit:ready', function(model) {
-                self.updateVisit();
+            this.listenToOnce(ADK.Messaging.getChannel('addOrders'), 'visit:ready', function() {
+                LabUtils.retrieveLabSpecimens.apply(this);
+                LabUtils.retrieveAllCollectionSamples.apply(this);
+                LabUtils.retrieveAllSpecimens.apply(this);
+                if (this.model.orderModel) {
+                    //hard code semicolon and 1 for now
+                    var orderId = this.model.orderModel.get('orderNumber') + ";1";
+                    this.model.set('orderId', orderId);
+                }
+                LabUtils.retrieveOrderableItems.apply(this);
+                LabUtils.retrieveCollectionTypesUrgencyAndSchedules.apply(this);
+                LabUtils.retrieveProblemRelationships.apply(this);
+                LabUtils.retrieveServerTime.apply(this);
             });
         },
-        updateVisit: function() {
-            LabUtils.retrieveMaxDays(this);
-        },
         onRender: function() {
-            this.ui.acceptDrpDwnContainer.trigger('control:disable', true);
             this.enableFooterButtons(false);
-            LabUtils.retrieveAllCollectionSamples(this);
-            LabUtils.retrieveAllSpecimens(this);
-            if (this.model.orderModel) {
-                //hard code semicolon and 1 for now
-                var orderId = this.model.orderModel.get('orderNumber') + ";1";
-                this.model.set('orderId', orderId);
-            }
-            LabUtils.retrieveOrderableItems(this);
-            LabUtils.retrieveCollectionTypesUrgencyAndSchedules(this);
-            LabUtils.retrieveImmediateCollection(this);
-            if (this.model.get('orderId')) {
-                LabUtils.retrieveExisting(this);
-            }
+            this.enableCancelButton(true);
+            this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
+        },
+        onDestroy: function() {
+            this.unregisterChecks();
+        },
+        registerChecks: function() {
+            var checkOptions = {
+                id: 'lab-order-writeback-in-progress',
+                label: 'Lab Order',
+                failureMessage: 'Lab Order Writeback Workflow In Progress! Any unsaved changes will be lost if you continue.',
+                onContinue: _.bind(function(model) {
+                    this.workflow.close();
+                }, this)
+            };
+            ADK.Checks.register([new ADK.Navigation.PatientContextCheck(checkOptions),
+                new ADK.Checks.predefined.VisitContextCheck(checkOptions)]);
+        },
+        unregisterChecks: function() {
+            ADK.Checks.unregister({
+                id: 'lab-order-writeback-in-progress'
+            });
         },
         events: {
-            "click #acceptDrpDwnContainer-accept": function(e) {
-                this.ui.acceptDrpDwnContainer.text("Accept");
+            "click @ui.acceptButton": function(e) {
+                this.ui.acceptDrpDwnContainer.text("Accept").trigger('click');
             },
-            "click #acceptDrpDwnContainer-accept-sign": function(e) {
-                this.ui.acceptDrpDwnContainer.text("Accept & Sign");
-            },
-            "click #acceptDrpDwnContainer-accept-add": function(e) {
-                this.ui.acceptDrpDwnContainer.text("Accept & Add Another");
+            "click @ui.acceptAddAnotherButton": function(e) {
+                this.ui.acceptDrpDwnContainer.text("Accept & Add Another").trigger('click');
             },
             "click @ui.cancelButton": function(e) {
-                this.saveDraft({resetTray: true});
+                e.preventDefault();
+                var closeAlertView = new ViewUtils.DialogBox({
+                    title: 'Cancel',
+                    message: 'All unsaved changes will be lost. Are you sure you want to cancel?',
+                    confirmButton: 'Yes',
+                    cancelButton: 'No',
+                    confirmTitle: 'Press enter to cancel',
+                    cancelTitle: 'Press enter to go back',
+                    onConfirm: function() {
+                        var TrayView = ADK.Messaging.request("tray:writeback:actions:trayView");
+                        if (TrayView) {
+                            TrayView.$el.trigger('tray.reset');
+                        }
+                    }
+                });
+                closeAlertView.show();
+            },
+            "click @ui.saveButton": function(e) {
+                this.saveDraft();
+            },
+            "click @ui.deleteButton": function(e) {
+                this.deleteDraft();
             },
             "submit": function(e) {
                 e.preventDefault();
-
-                var existingVisit = ADK.PatientRecordService.getCurrentPatient().get('visit');
-                this.model.unset('errorMessage');
-                this.model.set('immediateCollectionIsComplete', true);
-                this.model.set('howLongIsComplete', true);
-                if (this.model.isValid()) {
-                    this.enableInputFields(false);
-                    this.showInProgress('Validating...');
-                    this.ui.inProgressContainer.removeClass('hidden');
-                    this.ui.acceptDrpDwnContainer.trigger('control:disable', true);
-                    this.enableFooterButtons(false);
-
-                    var validDateTime, validHowLong;
-
-                    if (this.model.get('collectionType') === 'I') {
-                        this.model.set('immediateCollectionIsComplete', false);
-                        validDateTime = this.model.validateImmediateCollectDateTime(this);
-                        if (!validDateTime) {
-                            validDateTime = new $.Deferred();
-                            validDateTime.resolve();
-                        }
-                    } else {
-                        validDateTime = new $.Deferred();
-                        validDateTime.resolve();
-                    }
-                    if (!_.isUndefined(this.model.get('howLong'))) {
-                        this.model.set('howLongIsComplete', false);
-                        validHowLong = this.model.validateHowLong(this);
-                    } else {
-                        validHowLong = new $.Deferred();
-                        validHowLong.resolve();
-                    }
-                    // Since this takes a while I would put some some of visual clue that it is processing
-                    $.when(validDateTime, validHowLong).done(_.bind(this.checkServerSideValidations, this));
-                }
+                this.submitForm();
                 return false;
+            }
+        },
+        submitForm: function() {
+            this.model.unset('errorMessage');
+            this.model.set('immediateCollectionIsComplete', true);
+            if (this.model.isValid()) {
+                this.enableInputFields(false);
+                this.enableCancelButton(false);
+                this.showInProgress('Validating...');
+                this.ui.inProgressContainer.removeClass('hidden');
+                this.enableFooterButtons(false);
+
+                var dateTimeSelected = new Date(this.model.get('immediateCollectionDate') + ' ' + this.model.get('immediateCollectionTime')).toString('yyyyMMddHHmmss');
+
+                var siteCode = ADK.UserService.getUserSession().get('site');
+                var pid = ADK.PatientRecordService.getCurrentPatient().get("pid");
+
+                if (this.model.get('collectionType') === 'I') {
+                    var validDateTime = new ADK.UIResources.Writeback.Orders.LabSupportData();
+
+                    this.listenTo(validDateTime, 'read:success', function(model, resp) {
+                        if (!model.get('isValid')) {
+                            this.model.set('errorMessage', '[Immediate Collection Times] - ' + model.get('validationMessage'));
+                        }
+                        this.checkServerSideValidations();
+                    });
+
+                    this.listenTo(validDateTime, 'read:error', function(model, resp) {
+                        this.model.set('errorMessage', '[Immediate Collection Times] - Error occurred validating.');
+                        this.checkServerSideValidations();
+                    });
+
+                    validDateTime.fetch({
+                        params: {
+                            type: 'lab-valid-immediate-collect-time',
+                            timestamp: dateTimeSelected,
+                            site: siteCode,
+                            pid: pid,
+                        }
+                    });
+                }
+                else if (this.model.get('collectionType') === 'LC') {
+                    var validDays = new ADK.UIResources.Writeback.Orders.LabSupportData();
+                    this.listenTo(validDays, 'read:success', function(model, resp) {
+                        var maxDays = model.get('maxDays');
+                        var futureLabCollectDateTime = moment(this.model.get('futureLabCollectDate'));
+                        var difference = futureLabCollectDateTime.diff(moment(), 'days');
+                        if (difference >= maxDays) {
+                            this.model.set('errorMessage', '[Lab Future Collect Days] - A lab collection cannot be ordered more than ' + maxDays + ' days in advance.');
+                        }
+                        this.checkServerSideValidations();
+                    });
+
+                    this.listenTo(validDays, 'read:error', function(model, resp) {
+                        this.model.set('errorMessage', '[Lab Future Collect Days] - Error occurred validating.');
+                        this.checkServerSideValidations();
+                    });
+                    var location;
+                    if (ADK.PatientRecordService.getCurrentPatient().get('visit')) {
+                        location = ADK.PatientRecordService.getCurrentPatient().get('visit').locationUid.split(':').pop();
+                    }
+                    validDays.fetch({
+                        params: {
+                            type: 'lab-future-lab-collects',
+                            site: siteCode,
+                            location: location,
+                        }
+                    });
+                }
+                else {
+                    this.checkServerSideValidations();
+                }
             }
         },
         checkServerSideValidations: function() {
@@ -187,20 +251,19 @@ define([
             } else {
                 this.enableInputFields(true);
                 this.hideInProgress();
-                this.ui.acceptDrpDwnContainer.trigger('control:disable', false);
                 this.enableFooterButtons(true);
+                this.enableCancelButton(true);
             }
         },
         onServerSideError: function() {
-            // Once a server-side error occurs, we disable everything except the cancel button. We also stop
+            // Once a server-side errorez occurs, we disable everything except the cancel button. We also stop
             // listening to "enable" messages on all the form controls, since the server data retrieval code
             // implements a parallel asynchronous callback handler scheme which might cause fields to be
             // enabled over the top of this code. Eventually, we should move this into a mixin or a behavior.
             this.ui.inputFields.trigger('control:disabled', true);
             this.ui.availableLabTests.trigger('control:disabled', true);
-
-            this.ui.acceptDrpDwnContainer.trigger('control:disable', true);
             this.enableFooterButtons(false);
+            this.enableCancelButton(false);
             this.ui.errorMessage.trigger('control:title', 'System Error');
             this.ui.errorMessage.trigger('control:icon', 'fa-exclamation-circle');
             this.hideInProgress();
@@ -213,21 +276,21 @@ define([
             var componentList = form.model.get('componentList');
             form.model.set('componentList', {});
 
-            var callback = {
-                validate: false,
-                success: function(model, resp) {
-                    form.model.trigger('save:success', model, resp);
-                },
-                error: function(model, resp) {
-                    form.model.trigger('save:error', model, resp);
-                }.bind(this),
-            };
+            var patient = ADK.PatientRecordService.getCurrentPatient();
+            var localId = patient.get('localId');
+            var uid = patient.get('uid');
+            var pid = patient.get("pid");
+
+            var session = ADK.UserService.getUserSession();
+            var siteCode = session.get('site');
+            var provider = session.get('duz')[siteCode];
+
 
             this.listenTo(form.model, 'save:error', function(model, resp) {
                 var errorMessage = JSON.parse(resp.responseText).message;
 
                 if (errorMessage) {
-                    model.set('errorMessage', errorMessage);
+                    form.model.set('errorMessage', errorMessage);
                 }
                 model.set('componentList', componentList);
                 console.log('Failed to accept lab order: ' + JSON.stringify(resp));
@@ -236,9 +299,10 @@ define([
                     message: "Failed to accept lab order: " + resp.responseText
                 });
                 form.enableInputFields(true);
+                form.enableCancelButton(false);
                 form.hideInProgress();
                 form.ui.availableLabTests.trigger('control:disabled', false);
-                form.ui.acceptDrpDwnContainer.trigger('control:disable', false);
+                form.enableFooterButtons(true);
                 this.stopListeningSaveCallback();
             });
 
@@ -250,7 +314,7 @@ define([
                 if (actList && availAct) {
                     var activity = actList.get(availAct).attributes;
                     var fetchOptions = {
-                        resourceTitle: 'tasks-startprocess',
+                        resourceTitle: 'activities-start',
                         fetchType: 'POST',
                         criteria: {
                             deploymentId: activity.deploymentId,
@@ -273,72 +337,42 @@ define([
 
                 model.set('componentList', componentList);
                 form.enableInputFields(true);
+                form.enableCancelButton(true);
                 form.hideInProgress();
                 var SignListModel = Backbone.Model.extend({});
                 var ordersModel = new SignListModel({});
-                var labOrders = [JSON.parse(resp.data.data)];
 
-                if (labOrders[0].orderCheckList) {
-                    var orderCheckList = _.map(labOrders, function(v, i) {
-                        var size = v.orderCheckList.length;
-                        return _.map(v.orderCheckList, function(v, i) {
-                            /*Commented below code out to make duplicate order check accept and display*/
-                            //v.orderCheck = v.orderCheck.replace("Duplicate order:", "");
-                            return '('.concat(i + 1).concat(' of ').concat(size).concat(') ').concat(v.orderCheck.split('^')[3]);
-                        });
-                    });
-
-                    if (orderCheckList[0].length > 0) {
-                        var FooterView = Backbone.Marionette.ItemView.extend({
-                            template: Handlebars.compile('{{ui-button "Cancel Order" classes="btn-default btn-sm" title="Press enter to cancel."}}{{ui-button "Accept Order" classes="btn-primary btn-sm" title="Press enter to continue."}}'),
-                            events: {
-                                'click .btn-primary': function() {
-                                    ADK.UI.Modal.hide();
-                                    model.set('orderCheckList', labOrders[0].orderCheckList);
-                                    LabUtils.save(model, callback);
-                                },
-                                'click .btn-default': function() {
-                                    ADK.UI.Modal.hide();
-                                    ADK.UI.Workflow.hide();
-                                }
-                            },
-                            tagName: 'span'
-                        });
-
-                        var HeaderView = Backbone.Marionette.ItemView.extend({
-                            template: Handlebars.compile('<div><i class="fa fa-exclamation-triangle font-size-18 color-red"></i>ORDER CHECKING</div>')
-                        });
-
-                        var modalOptions = {
-                            'size': "medium",
-                            'backdrop': true,
-                            'keyboard': true,
-                            'callShow': true,
-                            'footerView': FooterView,
-                            'headerView': HeaderView
-                        };
-
-                        var FormModel = Backbone.Model.extend({
-                            defaults: {
-                                orderCheckResponse: orderCheckList[0],
+                if (model.get('orderCheckList').length > 0) {
+                    var alertView = new ViewUtils.DialogBox({
+                        title: 'Order Check Warning',
+                        message: [
+                            '<h5 class="all-margin-no">Duplicate Order:</h5>',
+                            '<ul class="list-inline">',
+                            '  {{#each orderCheckResponse}}<li>{{this.orderCheck}}</li>{{/each}}',
+                            '</ul>'
+                        ].join('\n'),
+                        confirmButton: 'Accept Order',
+                        cancelButton: 'Cancel Order',
+                        confirmButtonClasses: 'btn-primary btn-sm',
+                        cancelButtonClasses: 'btn-danger btn-sm',
+                        onConfirm: function() {
+                            model.set('orderCheckList', model.get('orderCheckOriginalList'));
+                            form.saveOrder(model, form);
+                        },
+                        onCancel: function() {
+                            var TrayView = ADK.Messaging.request("tray:writeback:actions:trayView");
+                            if (TrayView) {
+                                TrayView.$el.trigger('tray.reset');
                             }
-                        });
-
-                        var orderCheckFormView = new OrderCheck({
-                            model: new FormModel()
-                        });
-
-                        var modalView = new ADK.UI.Modal({
-                            view: orderCheckFormView,
-                            icon: 'fa-exclamation-triangle',
-                            options: modalOptions
-                        });
-
-                        modalView.show();
-                    }
-
+                        }
+                    });
+                    alertView.show(form, {
+                        model: new Backbone.Model({
+                            orderCheckResponse: model.get('orderCheckList')
+                        })
+                    });
                 } else {
-                    ordersModel.set('items', labOrders);
+                    ordersModel.set('items', model.get('items'));
                     var saveAlertView = new ADK.UI.Notification({
                         title: 'Lab Order Submitted',
                         icon: 'fa-check',
@@ -347,36 +381,32 @@ define([
                     });
                     saveAlertView.show();
                     model.trigger('draft:reset');
+                    this.unregisterChecks();
                     if (form.ui.acceptDrpDwnContainer.text() === ("Accept")) {
                         ADK.UI.Alert.hide();
                         form.workflow.close();
                     } else if (form.ui.acceptDrpDwnContainer.text() === ("Accept & Add Another")) {
                         FormUtils.resetForm(form);
-                        model.unset('availableLabTests');
+                        this.model.unset('availableLabTests');
                         ADK.UI.Alert.hide();
                         form.hideInProgress();
                         this.enableInputFields(false);
+                        form.isDraftLoaded = false;
                         form.ui.availableLabTests.trigger('control:disabled', false);
-                        form.ui.acceptDrpDwnContainer.trigger('control:disable', true);
                         form.enableFooterButtons(false);
+                        form.enableCancelButton(true);
+                        this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
                     }
-                    model.unset('orderCheckList');
+                    this.model.unset('orderCheckList');
                     this.stopListeningSaveCallback();
                     Utils.refreshApplet();
                 }
             });
 
             this.showInProgress('Saving...');
-            var patient = ADK.PatientRecordService.getCurrentPatient();
-            var localId = patient.get('localId');
-            var uid = patient.get('uid');
-
-            var session = ADK.UserService.getUserSession();
-            var siteCode = session.get('site');
-            var provider = session.get('duz')[siteCode];
 
             this.model.set({
-                pid: patient.get("pid"),
+                pid: pid,
                 dfn: localId,
                 provider: provider,
                 orderDialog: 'LR OTHER LAB TESTS',
@@ -389,12 +419,34 @@ define([
                 kind: 'Laboratory'
             });
 
+            this.model.trigger('draft:copyToModel');
+
             this.ui.availableLabTests.trigger('control:disabled', true);
-            LabUtils.save(this.model, callback);
+            this.saveOrder(this.model, form);
             this.model.unset("formStatus");
+        },
+        saveOrder: function(model, form) {
+            var order = new ADK.UIResources.Writeback.Orders.Model();
+            order.set(model.attributes);
+            var callback = {
+                params: {
+                    'pid': this.model.get("pid")
+                },
+                validate: false,
+                success: function(model, resp) {
+                    form.model.trigger('save:success', model, resp);
+                },
+                error: function(model, resp) {
+                    form.model.trigger('save:error', model, resp);
+                }.bind(this),
+            };
+            order.save(null, callback);
         },
         hideDynamicFields: function() {
             this.ui.dynamicFields.trigger('control:hidden', true);
+        },
+        enableCancelButton: function(isEnabled){
+            this.$(this.ui.cancelButton.selector).trigger('control:disabled', !isEnabled);
         },
         resetDynamicRequiredFields: function() {
             this.ui.dynamicRequiredFields.trigger('control:required', false);
@@ -402,41 +454,15 @@ define([
         enableInputFields: function(enabled) {
             this.ui.inputFields.trigger('control:disabled', !enabled);
             if (enabled) {
-                this.checkStateHowOften();
-                this.checkStateHowLong();
                 this.checkStateCollectionSample();
                 this.checkStateUrgency();
+                this.checkOtherSpecimen();
             }
         },
         enableFooterButtons: function(isEnabled) {
-            this.ui.cancelButton.trigger('control:disabled', !isEnabled);
-            this.ui.deleteButton.trigger('control:disabled', !isEnabled);
-        },
-        checkStateHowOften: function() {
-            if (this.model.get('howOftenAlwaysDisabled') !== true) {
-                this.ui.howOften.trigger('control:disabled', false);
-            } else {
-                this.ui.howOften.trigger('control:disabled', true);
-            }
-        },
-        checkStateHowLong: function() {
-            var self = this;
-            var selectedHowOften = _.filter(this.model.get('howOftenListCache'), function(e) {
-                return e.code === self.model.get('howOften');
-            });
-            if (selectedHowOften && selectedHowOften[0]) {
-                if (selectedHowOften[0].frequencyType === "O") {
-                    this.ui.howLong.trigger('control:disabled', true);
-                    this.model.unset('howLong');
-                    this.ui.howLong.trigger('control:required', false);
-                } else {
-                    this.ui.howLong.trigger('control:disabled', false);
-                    this.ui.howLong.trigger('control:required', true);
-                }
-                if (this.model.get('howOften') !== '28') { //ONE TIME
-                    this.model.set('howOftenText', selectedHowOften[0].name);
-                }
-            }
+            this.ui.acceptDrpDwnContainer.trigger('control:disabled', !isEnabled);
+            this.$(this.ui.saveButton.selector).trigger('control:disabled', !isEnabled);
+            this.$(this.ui.deleteButton.selector).trigger('control:disabled', !(isEnabled && this.isDraftLoaded));
         },
         stopListeningSaveCallback: function() {
             this.stopListening(this.model, 'save:success save:error');
@@ -451,6 +477,11 @@ define([
                 this.ui.urgency.trigger('control:disabled', true);
             }
         },
+        checkOtherSpecimen: function() {
+            if (_.isUndefined(this.model.get('otherCollectionSample')) || _.isEmpty(this.model.get('otherCollectionSample'))) {
+                this.ui.otherSpecimen.trigger('control:disabled', true);
+            }
+        },
         showInProgress: function(message) {
             this.model.set('inProgressMessage', message);
             this.ui.inProgressContainer.trigger('control:hidden', false);
@@ -458,6 +489,18 @@ define([
         hideInProgress: function() {
             this.ui.inProgressContainer.trigger('control:hidden', true);
             this.model.unset('inProgressMessage');
+        },
+        handleCollectionTypeListCache: function() {
+            var immediateCollectionType = _.find(this.model.get('collectionTypeListCache'), {code: 'I'});
+            if (!_.isUndefined(immediateCollectionType)) {
+                LabUtils.retrieveImmediateCollection.apply(this);
+            }
+        },
+        handleCollectionDateTime: function() {
+            FormUtils.handleCollectionDateTime(this);
+        },
+        handleEnableActivity: function() {
+            FormUtils.handleEnableActivity.apply(this);
         },
         modelEvents: {
             'change:sampleDrawnAt': function(model) {
@@ -471,19 +514,15 @@ define([
             },
             'change:doseDate': function(model) {
                 FormUtils.handleDoseDrawTimes(this);
-                FormUtils.handleDoseDate(this);
             },
             'change:doseTime': function(model) {
                 FormUtils.handleDoseDrawTimes(this);
-                FormUtils.handleDoseTime(this);
             },
             'change:drawDate': function(model) {
                 FormUtils.handleDoseDrawTimes(this);
-                FormUtils.handleDrawDate(this);
             },
             'change:drawTime': function(model) {
                 FormUtils.handleDoseDrawTimes(this);
-                FormUtils.handleDrawTime(this);
             },
             'change:futureLabCollectDate': function(model) {
                 FormUtils.handleFutureLabCollectDate(this);
@@ -498,20 +537,14 @@ define([
                 FormUtils.handleSpecimen(this);
             },
             'change:otherSpecimen': function(model) {
-                FormUtils.handleSpecimen(this);
-            },
-            'change:howOften': function(model) {
-                this.checkStateHowLong();
+                FormUtils.handleOtherSpecimen(this);
             },
             'change:collectionType': function(model) {
                 FormUtils.handleCollectionType(this);
             },
-            'change:collectionDate': function(model) {
-                FormUtils.handleCollectionDateTime(this);
-            },
-            'change:collectionTime': function(model) {
-                FormUtils.handleCollectionDateTime(this);
-            },
+            'change:collectionTypeListCache': 'handleCollectionTypeListCache',
+            'change:collectionDate': 'handleCollectionDateTime handleEnableActivity',
+            'change:collectionTime': 'handleCollectionDateTime',
             'change:collectionDateTimePicklist': function(model) {
                 FormUtils.handleCollectionDateTimePicklist(this);
             },
@@ -519,7 +552,17 @@ define([
                 FormUtils.handleCollectionSample(this);
             },
             'change:otherCollectionSample': function(model) {
-                FormUtils.updateCollectionSampleText(this);
+                FormUtils.handleOtherCollectionSample(this);
+            },
+            'change:isActivityEnabled': 'handleEnableActivity',
+            'change:notificationDate': function(model) {
+                FormUtils.handleNotificationDate.apply(this);
+            },
+            'change:orderable-items-loaded': function(model) {
+                var contextIen = model.get('contextIen');
+                if (!_.isUndefined(contextIen)){
+                    model.set('availableLabTests', contextIen);
+                }
             },
             'change:availableLabTests': function(model) {
                 var ien = model.get('availableLabTests');
@@ -527,37 +570,56 @@ define([
                     this.showInProgress('Loading...');
                     var visit = ADK.PatientRecordService.getCurrentPatient().get('visit');
                     if (visit) {
-                        this.model.set('location', visit.localId);
+                        if (visit.locationUid) {
+                            this.model.set('location', visit.locationUid);
+                        }
                     }
                     FormUtils.resetForm(this);
                     if (_.isUndefined(model.get('collectionDate'))) {
                         FormUtils.setInitialCollectionDateTimeValues(this);
                     }
                     this.enableInputFields(false);
-                    LabUtils.retrieveOrderableItemLoad(this, ien);
+                    LabUtils.retrieveOrderableItemLoad.apply(this);
                 }
             },
+            'change:draft-data': 'onChangeDraftData',
             'change:serverSideError': 'onServerSideError'
         },
         behaviors: {
             draft: {
                 behaviorClass: DraftBehavior,
-                type: 'laboratory'
+                type: 'laboratory',
+                preloadEvents: ['orderable-items-loaded']
+            }
+        },
+        onChangeDraftData: function(model, payload) {
+            // Trigger the population of the lab order form with draft information by triggering a Model update
+            // on the 'availableLabTests' attribute.
+            var labTestIen = payload.availableLabTests;
+            delete payload.availableLabTests;
+
+            if (!_.isEmpty(labTestIen)) {
+                this.model.set('availableLabTests', labTestIen);
             }
         },
         saveDraft: function(options) {
-            this.showInProgress('Saving draft...');
             this.model.trigger('draft:save', options);
         },
-        onDraftSaveSuccess: function(options) {
-            this.hideInProgress();
-            if (_.get(options, 'resetTray')) {
-                this.$el.trigger('tray.reset');
-            }
+        deleteDraft: function(options) {
+            this.model.trigger('draft:delete', options);
         },
-        onDraftSaveError: function(options) {
-            this.hideInProgress();
-        }
+
+        onBeforeDraftSave: _.partial(FormUtils.onBeforeDraftEvent, 'Saving'),
+        onDraftSaveSuccess: FormUtils.onDraftSuccessEvent,
+        onDraftSaveError: FormUtils.onDraftErrorEvent,
+
+        onBeforeDraftRead: _.partial(FormUtils.onBeforeDraftEvent, 'Loading'),
+        onDraftReadSuccess: FormUtils.onDraftReadSuccess,
+        onDraftReadError: FormUtils.onDraftErrorEvent,
+
+        onBeforeDraftDelete: _.partial(FormUtils.onBeforeDraftEvent, 'Deleting'),
+        onDraftDeleteSuccess: FormUtils.onDraftSuccessEvent,
+        onDraftDeleteError: FormUtils.onDraftErrorEvent,
     });
 
     return formView;

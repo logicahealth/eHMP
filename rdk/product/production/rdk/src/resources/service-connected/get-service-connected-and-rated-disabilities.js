@@ -53,7 +53,7 @@ function getServiceConnectedAndRatedDisabilities(req, res) {
                 disability = [];
 
             if(err) {
-                req.logger.error('The fetch sent back an error:' + err);
+                req.logger.error({error: err}, 'The fetch sent back an error');
                 return res.status(500).rdkSend(err);
             } else if (response.statusCode >= 300) {
                 return res.status(response.statusCode).rdkSend(data);

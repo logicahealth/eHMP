@@ -1,0 +1,44 @@
+//Visit Encounter in the workspace navigation
+.encounter-info {
+    flex: 1 1 40%;
+    #current-visit-context-button {
+        color: $grey-darkest;
+        box-shadow: none;
+        border-left: 1px solid $grey;
+        margin-left: 5px;
+        border-radius: 0;
+        text-align: left;
+        font-size: 11px;
+        line-height: 14px;
+        &:hover {
+            color: $primary;
+        }
+        .encounter-location-provider {
+            overflow: hidden;
+            span {
+                max-width: 100%;
+                white-space: normal;
+            }
+        }
+    }
+}
+
+[data-tray-width-scale="0.33"] {
+    .encounter-set {
+        width: 100%;
+        > .col-xs-6 {
+            margin-top: 10px;
+            padding: 0px 2px 0px 10px;
+        }
+        > .col-xs-12 {
+            padding-left: 0px;
+            .alert-warning {
+                margin-top: 10px;
+                width: 310px;
+            }
+        }
+    }
+    .select-encounter-provider {
+        width: 100%;
+    }
+}

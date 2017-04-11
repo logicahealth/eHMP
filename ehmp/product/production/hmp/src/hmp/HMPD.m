@@ -1,6 +1,6 @@
-HMPD ;SLC/MKB -- Serve VistA data as XML via RPC ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPD ;SLC/MKB,ASMR/RRB - Serve VistA data as XML via RPC ;8/2/11  15:29
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
@@ -13,6 +13,8 @@ HMPD ;SLC/MKB -- Serve VistA data as XML via RPC ;8/2/11  15:29
  ; XLFSTR                       10104
  ; XUAF4                         2171
  ;
+ Q
+ ;
 GET(HMP,DFN,TYPE,START,STOP,MAX,ID,FILTER) ; -- Return search results as XML in @HMP@(n) 
  ; RPC = HMP GET PATIENT DATA
  N ICN,HMPI,HMPTOTL,HMPTEXT
@@ -23,7 +25,7 @@ GET(HMP,DFN,TYPE,START,STOP,MAX,ID,FILTER) ; -- Return search results as XML in 
  S ICN=+$P($G(DFN),";",2),DFN=+$G(DFN),ID=$G(ID)
  I DFN<1,ICN S DFN=+$$GETDFN^MPIF001(ICN)
  S TYPE=$$LOW^XLFSTR($G(TYPE)) I TYPE="" S TYPE=$$ALL
- I TYPE'="new",DFN<1!'$D(^DPT(DFN)) D ERR(1,DFN) G GTQ
+ I TYPE'="new",DFN<1!'$D(^DPT(DFN)) D ERR(1,DFN) G GTQ ;ICR 10035 ASF 11/2/15 DE2818
  S:'$G(START) START=1410102 S:'$G(STOP) STOP=4141015 S:'$G(MAX) MAX=9999
  I START,STOP,STOP<START N X S X=START,START=STOP,STOP=X  ;switch
  I STOP,$L(STOP,".")<2 S STOP=STOP_".24"
@@ -127,7 +129,7 @@ STRING(ARRAY) ; -- Return text in ARRAY(n) or ARRAY(n,0) as a string
  ;
 FAC(X) ; -- return Institution file station# for location X
  N HLOC,FAC,Y0,Y S Y=""
- S HLOC=$G(^SC(+$G(X),0)),FAC=$P(HLOC,U,4)
+ S HLOC=$G(^SC(+$G(X),0)),FAC=$P(HLOC,U,4) ;ICR 10040 DE2818 ASF 11/5/15
  ; Get P:4 via Med Ctr Div, if not directly linked
  I 'FAC,$P(HLOC,U,15) S FAC=$$GET1^DIQ(44,+$G(X)_",","3.5:.07","I")
  S Y0=$S(FAC:$$NS^XUAF4(FAC),1:$P($$SITE^VASITE,U,2,3)) ;name^stn#

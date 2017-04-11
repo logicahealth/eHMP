@@ -5,7 +5,7 @@ var xformer = require(global.VX_HANDLERS + 'record-enrichment-request/record-enr
 var log = require(global.VX_DUMMIES + '/dummy-logger');
 // NOTE: be sure next line is commented out before pushing
 // log = require('bunyan').createLogger({
-//     name: 'record-enrichment-problem-xformer-spec',
+//     name: 'record-enrichment-problem-xformer-itest-spec',
 //     level: 'debug'
 // });
 
@@ -15,7 +15,8 @@ var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 
 var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
-var config = require(global.VX_ROOT + 'worker-config');
+var wConfig = require(global.VX_ROOT + 'worker-config');
+var config = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
 config.terminology.host = vx_sync_ip;
 
 var originalVaProblem = {

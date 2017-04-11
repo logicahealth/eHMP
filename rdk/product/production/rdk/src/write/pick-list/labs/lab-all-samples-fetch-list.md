@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Lab all samples [/lab-all-samples{?site}{&fields}]
+## Lab all samples [/lab-all-samples{?site}]
 
 Returns all collection samples.
 
@@ -11,8 +11,6 @@ ORWDLR32 ALLSAMP
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

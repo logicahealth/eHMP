@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Lab times available [/lab-times-available{?site}{&date}{&location}{&fields}]
+## Lab times available [/lab-times-available{?site}{&date}{&locationUid}]
 
 DIRECT RPC CALL - a list of date/time available from the lab schedule
 
@@ -14,9 +14,7 @@ ORWDLR32 GET LAB TIMES
 
     :[date]({{{common}}}/parameters/date.md required:"required")
 
-    + location (string, required) - The location
-
-    :[fields]({{{common}}}/parameters/fields.md)
+    + locationUid (string, required) - The locationUid
 
 ### GET
 

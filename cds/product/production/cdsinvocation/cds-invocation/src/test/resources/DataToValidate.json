@@ -1,0 +1,32 @@
+{
+    "resourceType": "Bundle",
+    "id": "a4a17e7a-874d-3279-b663-4f47b700f8cf",
+    "type": "collection",
+    "base": "http://127.0.0.1:8888/resource/fhir/",
+    "total": 0,
+    "entry": [{
+            "resource": {
+                "resourceType": "Observation",
+                "modifierExtension": [{
+                        "url": "http://org.cognitive.cds.invocation.fhir.datanature",
+                        "valueCode": "Input"
+                    }, {
+                        "url": "http://org.cognitive.cds.invocation.fhir.parametername",
+                        "valueString": "Weight"
+                    }],
+                "code": {
+                    "coding": [{
+                            "system": "http://loinc.org",
+                            "code": "29463-7"
+                        }]
+                },
+                "valueQuantity": {
+                    "value": 180.5,
+                    "code": "Pounds"
+                },
+                "comments": "Comment",
+                "issued": "2015-06-02T18:55:48.338-07:00",
+                "status": "preliminary"
+            }
+        }]
+}

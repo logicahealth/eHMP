@@ -10,10 +10,10 @@ Check out [How Cookbooks are Maintained](https://github.com/chef-cookbooks/commu
 for details on the process and how to become a maintainer or the project lead.
 
 # Project Maintainer
-* [Tim      ](https://github.com/tas50)
+* [Tim Smith](https://github.com/tas50)
 
 # Maintainers
-* [         Davis](https://github.com/sigje)
+* [Jennifer Davis](https://github.com/sigje)
 * [Sean OMeara](https://github.com/someara)
-* [Tim      ](https://github.com/tas50)
+* [Tim Smith](https://github.com/tas50)
 * [Thom May](https://github.com/thommay)

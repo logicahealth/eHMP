@@ -147,13 +147,14 @@ TerminologyUtil.prototype.getVADrugConcept = function(conceptId, callback) {
 //               concept: Is the attributes for the concept retrieved.
 //-------------------------------------------------------------------------------------------
 TerminologyUtil.prototype.getVAConceptMappingTo = function(concept, targetCodeSystem, callback) {
+    var self = this;
     if ((concept) && (!_.isEmpty(concept.sameas))) {
         var targetUrn = _.find(concept.sameas, function(urn) {
             return (urn.indexOf('urn:' + targetCodeSystem) >= 0);
         });
 
         if (targetUrn) {
-            return this.getVADrugConcept(targetUrn, callback);
+            return self.getVADrugConcept(targetUrn, callback);
         } else {
             return callback(null, null);
         }
@@ -193,13 +194,14 @@ TerminologyUtil.prototype.getJlvMappedCode = function(mappingType, sourceCode, c
     var self = this;
     var metricsObj = {'subsystem':'Terminology', 'action':'getJlvMappedCode', 'process':uuid.v4(),'timer': 'start'};
     self.metrics.debug('Terminology JLV Mapped Code', metricsObj);
+
     // Cannot translate if we have nothing to start with.
     //---------------------------------------------------
     if (!_.isString(sourceCode) || sourceCode.length === 0) {
         return callback(null, null);
     }
 
-	if(!this.isMappingTypeValid(mappingType)) {
+    if(!self._isMappingTypeValid(mappingType)) {
         // log.warn('terminology-utils.getJlvMappedCode: Invalid mapping type requested.  mappingType: %s; sourceCode: %s', mappingType, sourceCode);
         return callback(util.format('Invalid mapping type requested.  mappingType: %s; sourceCode: %s', mappingType, sourceCode));
     }
@@ -219,6 +221,8 @@ TerminologyUtil.prototype.getJlvMappedCode = function(mappingType, sourceCode, c
         timeout: self.config.terminology.timeout,
         agentClass: VxSyncForeverAgent
     };
+
+    // console.log('terminology-utils.getJlvMappedCode(): before calling request.  option: %j', options);
 
     request(options, function(error, response, body) {
         metricsObj.timer = 'stop';
@@ -268,7 +272,7 @@ TerminologyUtil.prototype.getJlvMappedCodeList = function(mappingType, sourceCod
     var metricsObj = {'subsystem':'Terminology', 'action':'getJlvMappedCodeList', 'process':uuid.v4(),'timer': 'start'};
     self.metrics.debug('Terminology JLV Mapped Code', metricsObj);
     metricsObj.timer = 'stop';
-    if(!this.isMappingTypeValid(mappingType)) {
+    if(!self._isMappingTypeValid(mappingType)) {
         // log.warn('terminology-utils.getJlvMappedCode: Invalid mapping type requested.  mappingType: %s; sourceCode: %s', mappingType, sourceCode);
         self.metrics.debug('Terminology JLV Mapped Code in Error', metricsObj);
         return callback(util.format('Invalid mapping type requested.  mappingType: %s; sourceCode: %s', mappingType, sourceCode));
@@ -293,6 +297,8 @@ TerminologyUtil.prototype.getJlvMappedCodeList = function(mappingType, sourceCod
         agentClass: VxSyncForeverAgent
     };
 
+    // console.log('terminology-utils.getJlvMappedCodeList(): before calling request.  option: %j', options);
+
     request(options, function(error, response, body) {
         if(error || (response && response.statusCode !== 200 && response.statusCode !== 204)) {
             self.metrics.debug('Terminology JLV Mapped Code in Error', metricsObj);
@@ -308,7 +314,7 @@ TerminologyUtil.prototype.getJlvMappedCodeList = function(mappingType, sourceCod
     });
 };
 
-TerminologyUtil.prototype.isMappingTypeValid = function(mappingType) {
+TerminologyUtil.prototype._isMappingTypeValid = function(mappingType) {
     if  (!_.contains(validMappingTypes, mappingType)) {
         return false;
     }

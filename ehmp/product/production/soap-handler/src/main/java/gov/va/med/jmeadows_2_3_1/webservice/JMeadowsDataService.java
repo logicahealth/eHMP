@@ -17,14 +17,14 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "JMeadowsDataService", targetNamespace = "http://webservice.jmeadows.domain.ext/", wsdlLocation = "wsdl/jmeadows_2_3_1/JMeadowsDataService.wsdl")
+@WebServiceClient(name = "JMeadowsDataService", targetNamespace = "http://webservice.jmeadows.DNS       /", wsdlLocation = "wsdl/jmeadows_2_3_1/JMeadowsDataService.wsdl")
 public class JMeadowsDataService
     extends Service
 {
 
     private final static URL JMEADOWSDATASERVICE_WSDL_LOCATION;
     private final static WebServiceException JMEADOWSDATASERVICE_EXCEPTION;
-    private final static QName JMEADOWSDATASERVICE_QNAME = new QName("http://webservice.jmeadows.domain.ext/", "JMeadowsDataService");
+    private final static QName JMEADOWSDATASERVICE_QNAME = new QName("http://webservice.jmeadows.DNS       /", "JMeadowsDataService");
 
     static {
         URL url = null;
@@ -49,7 +49,7 @@ public class JMeadowsDataService
      */
     @WebEndpoint(name = "JMeadowsDataPort")
     public JMeadowsData getJMeadowsDataPort() {
-        return super.getPort(new QName("http://webservice.jmeadows.domain.ext/", "JMeadowsDataPort"), JMeadowsData.class);
+        return super.getPort(new QName("http://webservice.jmeadows.DNS       /", "JMeadowsDataPort"), JMeadowsData.class);
     }
 
     /**
@@ -61,7 +61,7 @@ public class JMeadowsDataService
      */
     @WebEndpoint(name = "JMeadowsDataPort")
     public JMeadowsData getJMeadowsDataPort(WebServiceFeature... features) {
-        return super.getPort(new QName("http://webservice.jmeadows.domain.ext/", "JMeadowsDataPort"), JMeadowsData.class, features);
+        return super.getPort(new QName("http://webservice.jmeadows.DNS       /", "JMeadowsDataPort"), JMeadowsData.class, features);
     }
 
     private static URL __getWsdlLocation() {

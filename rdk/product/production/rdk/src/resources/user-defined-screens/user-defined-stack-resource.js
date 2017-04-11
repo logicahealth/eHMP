@@ -293,7 +293,7 @@ function createStackedGraph(req, res) {
 
     //Get UserScreensConfig and update with new or updated graphs
     uds.getScreenData(screenId, req, function(err, data) {
-        req.logger.debug('getting data in createStackedGraph for screenID: ' + screenId + ' and data returned is this: ' + data);
+        req.logger.debug({data: data}, 'getting data in createStackedGraph for screenID: ' + screenId + ' and data returned');
         if (err) {
             req.logger.error('Unable to save custom filter due to error retrieving UserScreensConfig data');
             req.logger.error(err);
@@ -336,7 +336,7 @@ function createStackedGraph(req, res) {
             //The UI is coded to expect strings, store it as such
             var content = JSON.stringify(udsData);
 
-            req.logger.debug('Inside userDefinedFilters createFilter filter data before post: ' + JSON.stringify(content));
+            req.logger.debug({content: content}, 'Inside userDefinedFilters createFilter filter data before post');
 
             postStackedData(data, req, function(err) {
                 if (err) {
@@ -436,7 +436,7 @@ function postStackedData(content, req, callback) {
     httpUtil.post(options,
         function(err, response, data) {
             if (err) {
-                options.logger.error('Unable to POST stacked graph data. Error: ' + err);
+                options.logger.error({error: err}, 'Unable to POST stacked graph data.');
                 if (callback) {
                     callback(err);
                 }

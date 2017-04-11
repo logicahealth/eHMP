@@ -2,11 +2,14 @@ VPRJCT1 ;SLC/KCM -- Apply Rel and Rev Templates
  ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
 RELTLTP(ROOT,KEY,TLT,PID) ; apply rel template for VPR and put in ROOT
- N CTN,OBJECT,STAMP
+ N CTN,OBJECT,STAMP,JPID
+ ;
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(224,"Identifier "_PID) Q
  ; Get latest object stamp
- S STAMP=$O(^VPRPT(PID,KEY,""),-1)
+ S STAMP=$O(^VPRPT(JPID,PID,KEY,""),-1)
  ; TODO: check to see if PID is defined here for xvpr queries
- S CTN=$P(KEY,":",3) M OBJECT=^VPRPT(PID,KEY,STAMP)
+ S CTN=$P(KEY,":",3) M OBJECT=^VPRPT(JPID,PID,KEY,STAMP)
  G RELTLT
  ;
 RELTLTD(ROOT,KEY,TLT) ; apply rel template for DATA and put in ROOT
@@ -34,11 +37,14 @@ RELTLT ; common entry point for rel template
  Q
  ;
 REVTLTP(ROOT,KEY,TLT,PID) ; add multiple for rev template and put in ROOT
- N OBJECT,REVFLD,REL,UID,CNT
+ N OBJECT,REVFLD,REL,UID,CNT,JPID
  S REVFLD=TLT("common","rev"),REL=TLT("common","rel"),CNT=0
+ ;
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ I JPID="" D SETERROR^VPRJRER(224,"Identifier "_PID) Q
  ; TODO: check to see if PID is defined here for xvpr queries
- M OBJECT=^VPRPT(PID,KEY)
- S UID="" F  S UID=$O(^VPRPTI(PID,"rev",KEY,REL,UID)) Q:UID=""  D REVTLT
+ M OBJECT=^VPRPT(JPID,PID,KEY)
+ S UID="" F  S UID=$O(^VPRPTI(JPID,PID,"rev",KEY,REL,UID)) Q:UID=""  D REVTLT
  D ENCODE^VPRJSON("OBJECT",ROOT,"ERRS")
  ; TODO: figure out how to throw an error at this point (writing out response)
  Q

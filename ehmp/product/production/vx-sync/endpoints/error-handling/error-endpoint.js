@@ -47,13 +47,13 @@ function submitById(logger, config, environment, request, response) {
         errorRecord = _.first(result);
 
         if (!errorRecord.job) {
-            return response.status(500).send(format('Error Record %s does not have a job to resubmit', id));
+            return response.status(500).send(format('Error Record does not have a job to resubmit'));
         }
 
         environment.publisherRouter.publish(errorRecord.job, function(error) {
             if (error) {
                 logger.error('error-endpoint.submitById(): publisher error: %s', error);
-                return response.status(500).send(format('Unable to publish message %s: %s', id, error));
+                return response.status(500).send(format('Unable to publish message'));
             }
 
             logger.debug('error-endpoint.submitById(): job published, complete status. jobId: %s, jobsToPublish: %j', errorRecord.job.jobId, errorRecord.job);

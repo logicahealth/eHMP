@@ -3,15 +3,28 @@ var _ = require('underscore');
 var domains = require('./domain');
 
 var domainToUidTemplates = {};
+var operationalDomainToUidTemplates = {};
 
 //Generate domain uid templates from domain list
 _.each(domains.getDomainList(), function(domainName){
     return (domainToUidTemplates[domainName] = 'urn:va:' + domainName + ':');
 });
 
+_.each(domains.getOperationalDomainList(), function(domainName) {
+    return (operationalDomainToUidTemplates[domainName] = 'urn:va:' + domainName + ':');
+});
+
 function getUidForDomain(domain, systemId, localPatientId, localId){
     if(_.isUndefined(domainToUidTemplates[domain])) {return null;}
     return domainToUidTemplates[domain] + systemId + ':' + localPatientId + ':' + localId;
+}
+
+function getUidForOperationalDomain(domain, systemId, localId) {
+    if(_.isUndefined(operationalDomainToUidTemplates[domain])) {return null;}
+    if (domain === 'pt-select') {
+        return operationalDomainToUidTemplates[domain] + systemId + ':' + localId + ':' + localId;
+    }
+    return operationalDomainToUidTemplates[domain] + systemId + ':' +localId;
 }
 
 function extractPiecesFromUID(uid, delimiter) {
@@ -63,9 +76,33 @@ function extractSiteHash(uid, delimiter) {
     return info;
 }
 
+/**
+    Utility function to check to see if uid is a valid format.
+    At least need five parts: prefix, organization, domain, site, patient.
+    return callback with (error, uidParts) argument.
+    if there is an error, then error will be the detailed error message, uidParts will be undefined.
+    if uid is valid, then error will be undefined, and uidParts will be
+    filled with right information.
+**/
+function isValidUidFormat(uid, callback) {
+    if (_.isUndefined(uid)){
+        return callback('uid is undefined');
+    }
+    var uidParts = extractPiecesFromUID(uid);
+    var missingField = _.find(['patient', 'site', 'domain', 'organization', 'prefix'], function(field){
+        return _.isUndefined(uidParts[field]);
+    });
+    if (missingField) {
+        return callback('Missing field: ' + missingField);
+    }
+    return callback(undefined, uidParts);
+}
+
 module.exports.getUidForDomain = getUidForDomain;
+module.exports.getUidForOperationalDomain = getUidForOperationalDomain;
 module.exports.extractPiecesFromUID = extractPiecesFromUID;
 module.exports.extractDomainFromUID = extractDomainFromUID;
 module.exports.extractSiteFromUID = extractSiteFromUID;
 module.exports.extractLocalIdFromUID = extractLocalIdFromUID;
 module.exports.extractSiteHash = extractSiteHash;
+module.exports.isValidUidFormat = isValidUidFormat;

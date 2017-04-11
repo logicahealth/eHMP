@@ -67,7 +67,7 @@ function init(app) {
  *                         "2015-02-27T20:33:41.308Z",
  *                 "scope": "private",
  *                 "owner":
- *                         "9E7A;PW    "
+ *                         "9E7A;pu1234"
  *             },
  *             "pidhistory": [{
  *                     "timestamp": "2015-03-10T00:53:55.934Z",
@@ -77,7 +77,7 @@ function init(app) {
  *             "patients": [
  *                 "12345V123"],
  *             "scope": "private",
- *             "owner": "9E7A;PW    ",
+ *             "owner": "9E7A;pu1234",
  *             "_id": "54fe407fc9f41fad0fff5dc4"
  *         }]
  * }
@@ -166,7 +166,7 @@ module.exports.getPatientList = function(req, res) {
  *                         "2015-02-27T20:33:41.308Z",
  *                 "scope": "private",
  *                 "owner":
- *                         "9E7A;PW    "
+ *                         "9E7A;pu1234"
  *             },
  *             "pidhistory": [{
  *                     "timestamp": "2015-03-10T00:53:55.934Z",
@@ -176,7 +176,7 @@ module.exports.getPatientList = function(req, res) {
  *             "patients": [
  *                 "12345V123"],
  *             "scope": "private",
- *             "owner": "9E7A;PW    ",
+ *             "owner": "9E7A;pu1234",
  *             "_id": "54fe407fc9f41fad0fff5dc4"
  *         }]
  * }
@@ -568,7 +568,7 @@ module.exports.checkPatientMembershipStatus = function(req, res) {
 
     http.get(options, function(error, response, result) {
         if (error) {
-            req.logger.error('patient-list.checkPatientMembershipStatus error:' + error);
+            req.logger.error({error: error}, 'patient-list.checkPatientMembershipStatus error');
             return res.status(rdk.httpstatus.ok).rdkSend('false');
         }
 
@@ -623,7 +623,7 @@ module.exports.checkPatientMembershipStatus = function(req, res) {
  *                         "2015-02-27T20:33:41.308Z",
  *                 "scope": "private",
  *                 "owner":
- *                         "9E7A;PW    "
+ *                         "9E7A;pu1234"
  *             },
  *             "pidhistory": [{
  *                     "timestamp": "2015-03-10T00:53:55.934Z",
@@ -633,7 +633,7 @@ module.exports.checkPatientMembershipStatus = function(req, res) {
  *             "patients": [
  *                 "12345V123"],
  *             "scope": "private",
- *             "owner": "9E7A;PW    ",
+ *             "owner": "9E7A;pu1234",
  *             "_id": "54fe407fc9f41fad0fff5dc4"
  *         }]
  * }

@@ -13,13 +13,13 @@ Feature: F117 Searching for patient with first letter of last name + last 4 soci
     #And the client receives 1 RDK result(s) with start index of 0 and results limit of 5 per page
     And the RDK last5 search results contain
       | field       | value                                        |
-      | displayName | Bcma,Eight                                   |
-      | birthDate   | 19450407                                     |
+      | displayName | Bcma, Eight                                  |
+      | birthDate   | 04/07/1945                                   |
       | familyName  | BCMA                                         |
-      | genderName  | MALE                                         |
+      | genderName  | Male                                         |
       | givenNames  | EIGHT                                        |
       | pid         | 9E7A;100022                                  |
-      | ssn         |  *****0008                                    |
+      | ssn         |  ***-**-0008                                 |
       | summary     | Bcma,Eight                                   |
       | localId     | 100022                                       |
 
@@ -50,92 +50,92 @@ Scenario: Search for Sensitive patients and set the limit
   | field       | value                                 |
   | familyName  | ZZZRETFIVEFIFTY                       |
   | givenNames  | PATIENT                               |
-  | genderName  | MALE                                  |
+  | genderName  | Male                                  |
   | sensitive   | true                                  |
   | ssn         | *SENSITIVE*                           |
-  | birthDate| *SENSITIVE*                              |
+  | birthDate   | *SENSITIVE*                           |
 
 And the VPR results contain
   | field       | value                                 |
   | familyName  | ZZZRETFIVEFIFTYEIGHT                  |
   | givenNames  | PATIENT                               |
-  | genderName  | MALE                                  |
+  | genderName  | Male                                  |
   | sensitive   | false                                 |
-  | ssn         | *****2633                             |
-  | birthDate   | 19350407                              |
+  | ssn         | ***-**-2633                           |
+  | birthDate   | 04/07/1935                            |
 
 And the VPR results contain
   | field       | value                                 |
   | familyName  | ZZZRETFIVEFIFTYFIVE                   |
   | givenNames  | PATIENT                               |
-  | genderName  | MALE                                  |
+  | genderName  | Male                                  |
   | sensitive   | false                                 |
-  | ssn         | *****0330                             |
-  | birthDate   | 19350407                              |
+  | ssn         | ***-**-0330                           |
+  | birthDate   | 04/07/1935                            |
 
 And the VPR results contain
   | field       | value                                 |
   | familyName  | ZZZRETFIVEFIFTYFOUR                   |
   | givenNames  | PATIENT                               |
-  | genderName  | MALE                                  |
+  | genderName  | Male                                  |
   | sensitive   | false                                 |
-  | ssn         | *****1111                             |
-  | birthDate   | 19350407                              |
+  | ssn         | ***-**-1111                           |
+  | birthDate   | 04/07/1935                            |
 
 
   And the VPR results contain
   | field       | value                                 |
   | familyName  | ZZZRETFIVEFIFTYNINE                   |
   | givenNames  | PATIENT                               |
-  | genderName  | MALE                                  |
+  | genderName  | Male                                  |
   | sensitive   | true                                  |
   | ssn         | *SENSITIVE*                           |
-  | birthDate| *SENSITIVE*                              |
+  | birthDate   | *SENSITIVE*                           |
 
   And the VPR results contain
   | field       | value                                 |
   | familyName  | ZZZRETFIVEFIFTYONE                    |
   | givenNames  | PATIENT                               |
-  | genderName  | MALE                                  |
+  | genderName  | Male                                  |
   | sensitive   | true                                  |
   | ssn         | *SENSITIVE*                           |
-  | birthDate| *SENSITIVE*                              |
+  | birthDate   | *SENSITIVE*                           |
 
   And the VPR results contain
   | field       | value                                 |
   | familyName  | ZZZRETFIVEFIFTYSEVEN                  |
   | givenNames  | PATIENT                               |
-  | genderName  | MALE                                  |
+  | genderName  | Male                                  |
   | sensitive   | false                                 |
-  | ssn         | *****5564                             |
-  | birthDate   | 19350407                              |
+  | ssn         | ***-**-5564                           |
+  | birthDate   | 04/07/1935                            |
 
   And the VPR results contain
   | field       | value                                 |
   | familyName  | ZZZRETFIVEFIFTYSIX                    |
   | givenNames  | PATIENT                               |
-  | genderName  | MALE                                  |
+  | genderName  | Male                                  |
   | sensitive   | false                                 |
-  | ssn         | *****9921                             |
-  | birthDate   | 19350407                              |
+  | ssn         | ***-**-9921                           |
+  | birthDate   | 04/07/1935                            |
 
 And the VPR results contain
   | field       | value                                 |
   | familyName  | ZZZRETFIVEFIFTYTHREE                  |
   | givenNames  | PATIENT                               |
-  | genderName  | MALE                                  |
+  | genderName  | Male                                  |
   | sensitive   | false                                 |
-  | ssn         | *****9109                             |
-  | birthDate   | 19350407                              |
+  | ssn         | ***-**-9109                           |
+  | birthDate   | 04/07/1935                            |
 
 And the VPR results contain
   | field       | value                                 |
   | familyName  | ZZZRETFIVEFIFTYTWO                    |
   | givenNames  | PATIENT                               |
-  | genderName  | MALE                                  |
+  | genderName  | Male                                  |
   | sensitive   | false                                 |
-  | ssn         | *****2354                             |
-  | birthDate   | 19350407                              |
+  | ssn         | ***-**-2354                           |
+  | birthDate   | 04/07/1935                            |
 
 
   

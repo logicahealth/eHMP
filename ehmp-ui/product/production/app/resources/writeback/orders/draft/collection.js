@@ -21,8 +21,7 @@ define([
 
             return {
                 patientUid: this.patient.get('pid'),
-                domain: 'order',
-                subDomain: this.subDomain,
+                domain: 'ehmp-order',
                 ehmpState: 'draft'
             };
         };
@@ -46,7 +45,13 @@ define([
                 pid: this.patient.get('pid')
             };
 
-            var url = ADK.ResourceService.buildUrl(this.resource);
+            var criteria = options.criteria || {};
+
+            if (this.patient.has("acknowledged")) {
+                criteria._ack = true;
+            }
+
+            var url = ADK.ResourceService.buildUrl(this.resource, criteria);
             return ADK.ResourceService.replaceURLRouteParams(unescape(url), params);
         };
 

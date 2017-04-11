@@ -14,93 +14,98 @@ define([
 ], function(Backbone, Marionette, _, AppletHelper, AppletUiHelper, GridView, DetailsView, ModalView, tooltip, StackedGraph, LabOrderTrayUtils, trayView) {
     "use strict";
 
-    var fetchOptions = {
-        resourceTitle: 'patient-record-lab',
-        pageable: true,
-        cache: true,
-        collectionConfig: {
-            comparator: function(model) {
-                var observed = model.get('observed');
-                if (!observed) {
-                    // Fall back to resulted attribute
-                    observed = model.get('resulted');
+    var AppletID = 'lab_results_grid',
+        _fetchOptions = {
+            resourceTitle: 'patient-record-lab',
+            pageable: true,
+            cache: true,
+            allowAbort: true,
+            collectionConfig: {
+                comparator: function(model) {
+                    var observed = model.get('observed');
+                    if (!observed) {
+                        // Fall back to resulted attribute
+                        observed = model.get('resulted');
 
-                    // This should never happen but additional safety check
-                    if(!observed) return -1;
-                }
-                if (observed.length === 12) observed = [observed, '00'].join('');
-                return -observed;
-            }
-        },
-        viewModel: {
-            parse: function(response) {
-                // Check 'codes' for LOINC codes and Standard test name.
-                var lCodes = [];
-                var testNames = [];
-                if (response.codes) {
-                    response.codes.forEach(function(code) {
-                        if (code.system.indexOf("loinc") != -1) {
-                            lCodes.push(" " + code.code);
-                            testNames.push(" " + code.display);
-                        }
-                    });
-                }
-                response.loinc = lCodes;
-                response.stdTestNames = testNames;
-
-                var low = response.low,
-                    high = response.high;
-
-                if (low && high) {
-                    response.referenceRange = low + '-' + high;
-                }
-
-                if (response.interpretationCode) {
-                    var temp = response.interpretationCode.split(":").pop(),
-                        flagTooltip = "",
-                        labelClass = "label-danger";
-
-                    if (temp === "HH") {
-                        temp = "H*";
-                        flagTooltip = "Critical High";
+                        // This should never happen but additional safety check
+                        if (!observed) return -1;
                     }
-                    if (temp === "LL") {
-                        temp = "L*";
-                        flagTooltip = "Critical Low";
-                    }
-                    if (temp === "H") {
-                        flagTooltip = "Abnormal High";
-                        labelClass = "label-warning";
-                    }
-                    if (temp === "L") {
-                        flagTooltip = "Abnormal Low";
-                        labelClass = "label-warning";
-                    }
-                    response.interpretationCode = temp;
-                    response.flagTooltip = flagTooltip;
-                    response.labelClass = labelClass;
+                    if (observed.length === 12) observed = [observed, '00'].join('');
+                    return -observed;
                 }
-
-                if (response.categoryCode) {
-                    var categoryCode = response.categoryCode.slice(response.categoryCode.lastIndexOf(':') + 1);
-                    switch (categoryCode) {
-                        case 'EM':
-                        case 'MI':
-                        case 'SP':
-                        case 'CY':
-                        case 'AP':
-                            response.result = 'View Report';
-                            if (!response.typeName) {
-                                response.typeName = response.categoryName;
+            },
+            viewModel: {
+                parse: function(response) {
+                    // Check 'codes' for LOINC codes and Standard test name.
+                    var lCodes = [];
+                    var testNames = [];
+                    var crsUtil = ADK.utils.crsUtil;
+                    if (response.codes) {
+                        response.codes.forEach(function(code) {
+                            if (code.system.indexOf("loinc") != -1) {
+                                lCodes.push(" " + code.code);
+                                testNames.push(" " + code.display);
                             }
-                            response.pathology = true;
-                            break;
+                        });
                     }
+
+                    response.loinc = lCodes;
+                    response.stdTestNames = testNames;
+                    response[crsUtil.crsAttributes.CRSDOMAIN] = crsUtil.domain.LABORATORY;
+
+                    var low = response.low,
+                        high = response.high;
+
+                    if (low && high) {
+                        response.referenceRange = low + '-' + high;
+                    }
+
+                    if (response.interpretationCode) {
+                        var temp = response.interpretationCode.split(":").pop(),
+                            flagTooltip = "",
+                            labelClass = "applet-badges label-critical";
+
+                        if (temp === "HH") {
+                            temp = "H*";
+                            flagTooltip = "Critical High";
+                        }
+                        if (temp === "LL") {
+                            temp = "L*";
+                            flagTooltip = "Critical Low";
+                        }
+                        if (temp === "H") {
+                            flagTooltip = "Abnormal High";
+                            labelClass = "label-warning";
+                        }
+                        if (temp === "L") {
+                            flagTooltip = "Abnormal Low";
+                            labelClass = "label-warning";
+                        }
+                        response.interpretationCode = temp;
+                        response.flagTooltip = flagTooltip;
+                        response.labelClass = labelClass;
+                    }
+
+                    if (response.categoryCode) {
+                        var categoryCode = response.categoryCode.slice(response.categoryCode.lastIndexOf(':') + 1);
+                        switch (categoryCode) {
+                            case 'EM':
+                            case 'MI':
+                            case 'SP':
+                            case 'CY':
+                            case 'AP':
+                                response.result = 'View Report';
+                                if (!response.typeName) {
+                                    response.typeName = response.categoryName;
+                                }
+                                response.pathology = true;
+                                break;
+                        }
+                    }
+                    return response;
                 }
-                return response;
             }
-        }
-    };
+        };
 
     var gistConfiguration = {
         //Collection fetchOptions
@@ -108,7 +113,7 @@ define([
         gistModel: [{
             id: 'shortName',
             field: 'shortName'
-        },{
+        }, {
             id: 'specimenForTrend',
             field: 'specimenForTrend'
         }, {
@@ -136,7 +141,7 @@ define([
             id: 'tooltip',
             field: 'tooltip'
         }],
-        filterFields: ['observedFormatted', 'shortName', 'typeName', 'normalizedName', 'timeSince', 'result', 'units'],
+        filterFields: ['observedFormatted', 'shortName', 'typeName', 'normalizedName', 'specimenForTrend', 'timeSince', 'result', 'units'],
         gistHeaders: {
             header1: {
                 title: 'Lab Test',
@@ -180,13 +185,96 @@ define([
     };
 
     var InAPanelModel = Backbone.Model.extend({
-        parse: fetchOptions.viewModel.parse
+        parse: _fetchOptions.viewModel.parse
     });
 
     var gridView;
     var GistView = ADK.Applets.BaseGridApplet.extend({
+        collectionEvents: {
+            'read:success': function() {
+                var self = this;
+                var collection = this.collection;
+                var options = this.options;
+                var fullCollection = collection.fullCollection || collection;
+
+                fullCollection.each(function(result) {
+                    var resultAttributes = _.values(result.attributes);
+
+                    if (typeof resultAttributes[0][0] === 'object' && !resultAttributes[0][0].code) {
+                        var currentPanel = resultAttributes[0];
+                        var currentPanelFirstLab = currentPanel[0];
+                        var panelGroupName = _.keys(result.attributes)[0];
+
+                        var group = panelGroupName,
+                            id = group.replace(/\s/g, ''),
+                            tempCode = "",
+                            tempTooltip = "",
+                            labelClass = "";
+
+                        _.each(currentPanel, function(lab, i) {
+                            lab = new InAPanelModel(InAPanelModel.prototype.parse(lab));
+
+                            if (lab.attributes.interpretationCode == "H*") {
+                                tempCode = "H*";
+                                tempTooltip = "Critical High";
+                                labelClass = "applet-badges label-critical";
+
+                            } else if (lab.attributes.interpretationCode == "L*") {
+                                if (tempCode == "H" || tempCode == "L" || tempCode === "") {
+                                    tempCode = "L*";
+                                    tempTooltip = "Critical Low";
+                                    labelClass = "applet-badges label-critical";
+                                }
+                            } else if (lab.attributes.interpretationCode == "H") {
+                                if (tempCode == "L" || tempCode === "") {
+                                    tempCode = "H";
+                                    tempTooltip = "Abnormal High";
+                                    labelClass = "label-warning";
+                                }
+                            } else if (lab.attributes.interpretationCode == "L") {
+                                if (tempCode === "") {
+                                    tempCode = "L";
+                                    tempTooltip = "Abnormal Low";
+                                    labelClass = "label-warning";
+                                }
+                            }
+                            currentPanel[i] = lab;
+                        });
+
+                        var tempUid = panelGroupName.replace(/\s/g, '') + "_" + currentPanelFirstLab.groupUid.replace(/\s/g, '');
+                        tempUid = tempUid.replace('#', '');
+
+                        result.set({
+                            labs: new Backbone.Collection(currentPanel),
+                            observed: currentPanelFirstLab.observed,
+                            isPanel: 'Panel',
+                            typeName: group,
+                            panelGroupName: panelGroupName,
+                            facilityCode: currentPanelFirstLab.facilityCode,
+                            facilityMoniker: currentPanelFirstLab.facilityMoniker,
+                            interpretationCode: tempCode,
+                            flagTooltip: tempTooltip,
+                            labelClass: labelClass,
+                            uid: tempUid,
+                            type: 'panel'
+                        });
+                    }
+                });
+
+                if (self.columnsViewType !== undefined && self.columnsViewType === 'gist') {
+                    var modifiedCollection = self.modifyModel(fullCollection);
+                    modifiedCollection = self.addTooltips(modifiedCollection, 4);
+                    fullCollection.reset(modifiedCollection.models, {
+                        reindex: true
+                    });
+                }
+            }
+        },
         initialize: function(options) {
             this._super = ADK.Applets.BaseGridApplet.prototype;
+
+            var fetchOptions = _.clone(_fetchOptions);
+
             var addPermission = 'add-lab-order';
             var onClickRow = function(model, event, gridView) {
                 event.preventDefault();
@@ -250,7 +338,7 @@ define([
             this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
                 // Bypass the global date filtering if All button is selected
                 var selectedId = ADK.SessionStorage.getModel('globalDate').get('selectedId');
-                if (selectedId !== 'all-range-global') {
+                if (selectedId !== 'allRangeGlobal') {
                     self.dataGridOptions.collection.fetchOptions.criteria.filter = self.buildJdsDateFilter('observed', options);
                 } else {
                     delete self.dataGridOptions.collection.fetchOptions.criteria.filter;
@@ -260,84 +348,15 @@ define([
                 self.createDataGridView();
                 ADK.ResourceService.fetchCollection(self.dataGridOptions.collection.fetchOptions, self.dataGridOptions.collection);
             });
-            fetchOptions.onSuccess = function(collection) {
-                var fullCollection = collection.fullCollection || collection;
-
-                fullCollection.each(function(result) {
-                    var resultAttributes = _.values(result.attributes);
-
-                    if (typeof resultAttributes[0][0] === 'object' && !resultAttributes[0][0].code) {
-                        var currentPanel = resultAttributes[0];
-                        var currentPanelFirstLab = currentPanel[0];
-                        var panelGroupName = _.keys(result.attributes)[0];
-
-                        var group = panelGroupName,
-                            id = group.replace(/\s/g, ''),
-                            tempCode = "",
-                            tempTooltip = "",
-                            labelClass = "";
-
-                        _.each(currentPanel, function(lab, i) {
-                            lab = new InAPanelModel(InAPanelModel.prototype.parse(lab));
-
-                            if (lab.attributes.interpretationCode == "H*") {
-                                tempCode = "H*";
-                                tempTooltip = "Critical High";
-                                labelClass = "label-danger";
-
-                            } else if (lab.attributes.interpretationCode == "L*") {
-                                if (tempCode == "H" || tempCode == "L" || tempCode === "") {
-                                    tempCode = "L*";
-                                    tempTooltip = "Critical Low";
-                                    labelClass = "label-danger";
-                                }
-                            } else if (lab.attributes.interpretationCode == "H") {
-                                if (tempCode == "L" || tempCode === "") {
-                                    tempCode = "H";
-                                    tempTooltip = "Abnormal High";
-                                    labelClass = "label-warning";
-                                }
-                            } else if (lab.attributes.interpretationCode == "L") {
-                                if (tempCode === "") {
-                                    tempCode = "L";
-                                    tempTooltip = "Abnormal Low";
-                                    labelClass = "label-warning";
-                                }
-                            }
-                            currentPanel[i] = lab;
-                        });
-
-                        var tempUid = panelGroupName.replace(/\s/g, '') + "_" + currentPanelFirstLab.groupUid.replace(/\s/g, '');
-                        tempUid = tempUid.replace('#', '');
-
-                        result.set({
-                            labs: new Backbone.Collection(currentPanel),
-                            observed: currentPanelFirstLab.observed,
-                            isPanel: 'Panel',
-                            typeName: group,
-                            panelGroupName: panelGroupName,
-                            facilityCode: currentPanelFirstLab.facilityCode,
-                            facilityMoniker: currentPanelFirstLab.facilityMoniker,
-                            interpretationCode: tempCode,
-                            flagTooltip: tempTooltip,
-                            labelClass: labelClass,
-                            uid: tempUid,
-                            type: 'panel'
-                        });
-                    }
-                });
-
-                if (options.appletConfig !== undefined && options.appletConfig.viewType !== undefined && options.appletConfig.viewType === 'gist') {
-                    var modifiedCollection = self.modifyModel(fullCollection);
-                    modifiedCollection = self.addTooltips(modifiedCollection, 4);
-                    fullCollection.set(modifiedCollection.models);
-                }
-            };
             fetchOptions.criteria = {
                 filter: this.buildJdsDateFilter('observed') + ',eq(categoryCode , "urn:va:lab-category:CH")'
             };
+            fetchOptions.onSuccess = function(collection) {
+                collection.trigger('read:success', collection);
+            };
 
-            dataGridOptions.collection = ADK.PatientRecordService.fetchCollection(fetchOptions);
+            this.collection = dataGridOptions.collection = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
+            ADK.PatientRecordService.fetchCollection(fetchOptions, dataGridOptions.collection);
 
             this.dataGridOptions = dataGridOptions;
             if (!self.isFullscreen) {
@@ -349,13 +368,19 @@ define([
                     };
                 }
             }
+
             this._super.initialize.apply(this, arguments);
 
-            ADK.Messaging.getChannel('lab_results_grid').on('addItem', function(e) {
+
+            var channel = ADK.Messaging.getChannel(AppletID);
+            this.listenTo(channel, 'detailView', function(params) {
+                this.expandOrOpenDetails(params);
+            });
+
+            this.listenTo(channel, 'addItem', function(e) {
                 var addOrdersChannel = ADK.Messaging.getChannel('addALabOrdersRequestChannel');
                 addOrdersChannel.trigger('addLabOrdersModal', event, gridView);
             });
-            ADK.Applets.BaseGridApplet.prototype.initialize.apply(this, arguments);
 
             var message = ADK.Messaging.getChannel('lab_results');
             message.reply('gridCollection', function() {
@@ -363,8 +388,42 @@ define([
             });
 
         },
+        expandOrOpenDetails: function(channelObj) {
+            var model = channelObj.model,
+                currentTarget = channelObj.$el;
+
+            if (!this.$(currentTarget).length) return;
+
+            if (model.get('isPanel')) {
+                if (!this.$(currentTarget).data('isOpen')) {
+                    this.$(currentTarget).data('isOpen', true);
+                } else {
+                    var k = this.$(currentTarget).data('isOpen');
+                    k = !k;
+                    this.$(currentTarget).data('isOpen', k);
+                }
+
+                var i = this.$(currentTarget).find('.js-has-panel i');
+                if (i.length) {
+                    if (i.hasClass('fa-chevron-up')) {
+                        i.removeClass('fa-chevron-up')
+                            .addClass('fa-chevron-down');
+                        this.$(currentTarget).data('isOpen', true);
+                    } else {
+                        i.removeClass('fa-chevron-down')
+                            .addClass('fa-chevron-up');
+                        this.$(currentTarget).data('isOpen', false);
+                    }
+                }
+                this.getRegion('appletContainer').currentView.expandRow(model, event);
+            } else {
+                AppletUiHelper.getDetailView(model, currentTarget, model.collection, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
+            }
+        },
         onDestroy: function() {
             ADK.Messaging.getChannel('lab_results_grid').off('addItem');
+            var message = ADK.Messaging.getChannel('lab_results');
+            message.stopReplying('gridCollection');
         },
         onRender: function() {
             this._super.onRender.apply(this, arguments);
@@ -378,7 +437,9 @@ define([
                         attr.moreresultsCount = attr.oldValues.length - attr.limitedoldValues.length;
                     }
                 }
-                collectionItems.models[i].set('tooltip', tooltip(attr), {silent: true});
+                collectionItems.models[i].set('tooltip', tooltip(attr), {
+                    silent: true
+                });
             }
             return collectionItems;
         },
@@ -405,7 +466,7 @@ define([
                     collectionItems.models[i].attributes.specimenForTrend = collectionItems.models[i].attributes.specimen;
                     var serum = collectionItems.models[i].attributes.specimenForTrend.indexOf('SERUM');
                     var blood = collectionItems.models[i].attributes.specimenForTrend.indexOf('BLOOD');
-                    if (serum >= 0 || blood >= 0){
+                    if (serum >= 0 || blood >= 0) {
                         collectionItems.models[i].attributes.specimenForTrend = '';
                     }
                     if (collectionItems.models[i].attributes.typeName.indexOf(',') >= 0) {
@@ -422,9 +483,8 @@ define([
                         for (var j = 0; j < modifiedCollection.models.length; j++) {
                             //If the modifiedCollection item has the same typeName as the initial collectionItems item
                             if ((modifiedCollection.models[j].attributes.facilityCode === 'DOD' && collectionItems.models[i].facilityCode === 'DOD' &&
-                                modifiedCollection.models[j].attributes.codes[0].code === collectionItems.models[i].attributes.codes[0].code) ||
-                                (modifiedCollection.models[j].attributes.typeCode && modifiedCollection.models[j].attributes.typeCode === collectionItems.models[i].attributes.typeCode) ||
-                                (modifiedCollection.models[j].attributes.typeName === collectionItems.models[i].attributes.typeName)) {
+                                    modifiedCollection.models[j].attributes.codes[0].code === collectionItems.models[i].attributes.codes[0].code) ||
+                                (modifiedCollection.models[j].attributes.typeName === collectionItems.models[i].attributes.typeName && modifiedCollection.models[j].attributes.specimen === collectionItems.models[i].attributes.specimen)) {
                                 //We will put the old values with the same typeName in the oldValues array within the attributes
                                 if (modifiedCollection.models[j].attributes.oldValues === undefined) {
                                     //Initialize the oldValues if this is the second value found in the collectionItems
@@ -449,7 +509,7 @@ define([
     });
 
     var applet = {
-        id: 'lab_results_grid',
+        id: AppletID,
         viewTypes: [{
             type: 'summary',
             view: GridView.extend({
@@ -477,11 +537,12 @@ define([
         defaultViewType: 'summary'
     };
 
-
-    // expose detail view through messaging
-    var channel = ADK.Messaging.getChannel(applet.id);
+    var channel = ADK.Messaging.getChannel(AppletID);
 
     channel.on('detailView', function(params) {
+        if (!params.model.has('chart')) {
+            return;
+        }
         var modalView = new ModalView.ModalView({
             model: params.model,
             navHeader: false,
@@ -489,7 +550,7 @@ define([
 
         var modalOptions = {
             'fullScreen': self.isFullscreen,
-            'size': "large",
+            'size': "xlarge",
             'title': params.model.get('typeName')
         };
 
@@ -499,6 +560,10 @@ define([
         });
 
         modal.show();
+    });
+
+    channel.on('notesView', function(params) {
+        AppletUiHelper.launchNoteWorkflow(params.model);
     });
 
     ADK.Messaging.getChannel('labresults_timeline_detailview').reply('detailView', function(params) {
@@ -513,7 +578,7 @@ define([
             }),
             resourceTitle: 'uid',
             viewModel: {
-                parse: fetchOptions.viewModel.parse
+                parse: params.model.parse
             }
         };
 
@@ -550,7 +615,8 @@ define([
 
         var stackedGraph = new StackedGraph({
             model: chartModel,
-            target: null
+            target: null,
+            requestParams: params
         });
 
         response.resolve({

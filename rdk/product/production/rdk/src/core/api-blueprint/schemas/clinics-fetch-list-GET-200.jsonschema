@@ -11,14 +11,18 @@
 			"items": {
 				"type": "object",
 				"required": [
-					"ien",
-					"name"
+					"displayName",
+					"name",
+					"uid"
 				],
 				"properties": {
-					"ien": {
+					"displayName": {
 						"type": "string"
 					},
 					"name": {
+						"type": "string"
+					},
+					"uid": {
 						"type": "string"
 					}
 				}

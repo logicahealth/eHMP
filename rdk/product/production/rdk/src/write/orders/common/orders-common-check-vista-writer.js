@@ -4,6 +4,7 @@
 'use strict';
 
 var rpcClientFactory = require('./../../core/rpc-client-factory');
+var filemanDateUtil = require('../../../utils/fileman-date-converter');
 
 module.exports.check = function(writebackContext, callback) {
 
@@ -32,7 +33,11 @@ function getParameters(model) {
         var collectionDateTime, labTest, specimen, i;
         for (i = 0; i < inputList.length; i++) {
             if (inputList[i].inputKey === '6') {
-                collectionDateTime = inputList[i].inputValue;
+                if (isNaN(inputList[i].inputValue)) {
+                    collectionDateTime = inputList[i].inputValue;
+                } else {
+                    collectionDateTime = filemanDateUtil.getFilemanDateWithArgAsStr(inputList[i].inputValue);
+                }
             } else if (inputList[i].inputKey === '4') {
                 labTest = inputList[i].inputValue;
             } else if (inputList[i].inputKey === '127') {

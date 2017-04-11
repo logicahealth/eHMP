@@ -7,7 +7,7 @@ define([
     'use strict';
     return function(params) {
           var errorFooterView = Backbone.Marionette.ItemView.extend({
-              template: Handlebars.compile('<button type="button" class="btn btn-primary ok-button" data-dismiss="modal">OK</button>'),
+              template: Handlebars.compile('<button type="button" class="btn btn-primary ok-button" data-dismiss="modal" title="Press enter to close" id="notesErrorBtn">OK</button>'),
               events: {
                'click .ok-button': 'onOk',// params.ok_callback,
               },
@@ -23,7 +23,7 @@ define([
         this.showModal = function() {
             var errorView = new ADK.UI.Alert({
                 title: 'Error',
-                icon:  'fa-exclamation-triangle font-size-18 color-red',
+                icon:  'icon-error',
                 messageView: errorBodyView,
                 footerView: errorFooterView
             });

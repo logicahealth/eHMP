@@ -23,13 +23,12 @@ app.register('/patient-search', ROOT + '/src/resources/patient-search/search-res
 
 app.register('/patient/record/uid', ROOT + '/src/resources/patient-record/patient-uid-resource');
 app.register('/patient/record/search', ROOT + '/src/resources/patient-record/search/patient-record-search-resource');
+app.register('/patient/record/search/by-type', ROOT + '/src/resources/search-by-type/search-by-type-resource');
 app.register('/patient/record', ROOT + '/src/resources/patient-record/patient-record-resource');
 app.register('/patient/record/complex-note', ROOT + '/src/resources/patient-record/patient-complex-note-resource');
 app.register('/patient/record/cwad', ROOT + '/src/resources/patient-record/patient-cwad-resource');
 app.register('/patient/record/labs/by-order', ROOT + '/src/resources/lab-search-by-order-resource');
 app.register('/patient/record/labs/by-panel', ROOT + '/src/resources/lab-panels/lab-panels-resource');
-app.register('/patient/record/labs/by-type', ROOT + '/src/resources/lab-search-by-type-resource');
-app.register('/patient/record/labs/by-type', ROOT + '/src/resources/search-by-type/search-by-type-resource');
 app.register('/patient/record/timeline', ROOT + '/src/resources/patient-record/patient-timeline-resource');
 app.register('/patient/record/notes', ROOT + '/src/resources/patient-record/patient-notes-resource');
 app.register('/patient/record/patient-entered-goals', ROOT + '/src/resources/patient-record/patient-generated-data/patient-goals-resource');
@@ -54,7 +53,16 @@ app.register('/cds/engine', ROOT + '/src/resources/cds-engine/cds-engine-resourc
 app.register('/cds/intent', ROOT + '/src/resources/cds-intent/cds-intent-resource');
 app.register('/cds/metrics', ROOT + '/src/resources/cds-metrics/metrics-resource');
 
+// CRS
+app.register('/crs/concept-relationships', ROOT + '/src/resources/crs/concept-relationships-resource');
+
+//Orders
+app.register('/order', ROOT + '/src/resources/orders/order-resource');
+
+// Immunizations
 app.register('/immunizations', ROOT + '/src/resources/immunizations/immunization-resource');
+
+// Locations
 app.register('/locations', ROOT + '/src/resources/locations-resource');
 app.register('/locations/facility-monikers', ROOT + '/src/resources/facility-moniker/facility-moniker-resource');
 
@@ -64,9 +72,13 @@ app.register('/problems', ROOT + '/src/resources/problems-resource');
 app.register('/visits', ROOT + '/src/resources/visits/visits-resource');
 app.register('/visit', ROOT + '/src/resources/visits/visit-service-category-resource');
 app.register('/vitals', ROOT + '/src/resources/vitals/vitals-resource');
-app.register('/tasks', ROOT + '/src/resources/tasks/tasks-resource');
+app.register('/tasks', ROOT + '/src/resources/activitymanagement/tasks/tasks-resource');
+app.register('/notifications', ROOT + '/src/resources/notifications/notifications-resource');
+app.register('/activities', ROOT + '/src/resources/activitymanagement/activities/activities-resource');
 app.register('/notes/recent-titles', ROOT + '/src/resources/notes-title-resource');
 
+//note objects
+app.register('/note-objects', ROOT + '/src/resources/note-objects/note-objects-resource');
 
 app.register('/user/screens', ROOT + '/src/resources/user-defined-screens/user-defined-screens-resource');
 app.register('/user/screens', ROOT + '/src/resources/user-defined-screens/write-user-defined-screens-resource');
@@ -74,13 +86,12 @@ app.register('/user/filter', ROOT + '/src/resources/user-defined-screens/user-de
 app.register('/user/sort', ROOT + '/src/resources/user-defined-screens/user-defined-sort-resource');
 app.register('/user/stack', ROOT + '/src/resources/user-defined-screens/user-defined-stack-resource');
 
-//fhir
+//fhir - metadata must be 1st!
+app.register('/fhir/metadata', ROOT + '/src/fhir/conformance/conformance-resource');
 app.register('/fhir/patient/:id', ROOT + '/src/fhir/patient-demographics/patient-demographics-resource');
 app.register('/fhir/adverseReaction', ROOT + '/src/fhir/adverse-reaction/adverse-reaction-resource');
 app.register('/fhir/allergyintolerance', ROOT + '/src/fhir/allergy-intolerance/allergy-intolerance-resource');
-app.register('/fhir/patient/:id/observation', ROOT + '/src/fhir/observation/observation-resource'); // TODO: missing docs  //TODO: need to refactor to separate vitals resource
-app.register('/fhir/healthFactors', ROOT + '/src/fhir/health-factors/health-factors-resource');
-app.register('/fhir/educations', ROOT + '/src/fhir/educations/educations-resource');
+app.register('/fhir/patient/:id/observation', ROOT + '/src/fhir/observation/observation-resource');
 app.register('/fhir/patient/:id/diagnosticreport', ROOT + '/src/fhir/diagnostic-report/diagnostic-report-resource');
 app.register('/fhir/order', ROOT + '/src/fhir/order/order-resource');
 app.register('/fhir/patient/:id/diagnosticorder', ROOT + '/src/fhir/order/diagnostic-order/diagnostic-order-resource');
@@ -104,6 +115,7 @@ app.register('/orderables', ROOT + '/src/resources/orderables/orderables-resourc
 app.register('/favorites', ROOT + '/src/resources/orderables/favorites/favorites-resource');
 app.register('/orderset', ROOT + '/src/resources/orderables/order-set/order-set-resource');
 app.register('/quickorder', ROOT + '/src/resources/orderables/quick-order/quick-order-resource');
+app.register('/enterprise-orderable', ROOT + '/src/resources/orderables/enterprise-orderable/enterprise-orderable-resource');
 
 //Authentication
 //TODO this will be moved to its own resource server prior to delivery
@@ -125,6 +137,8 @@ app.register('/teams', ROOT + '/src/resources/teams/teams-resource');
 // Vista Encounter Resource
 app.register('/encounter', ROOT + '/src/resources/encounter/encounter-resource');
 
+app.register('/shortcuts', ROOT + '/src/resources/shortcuts/shortcuts-resource');
+
 // TEST RESOURCE for Generic RPC Calls
 // DO NOT ENABLE IN PRODUCTION; IT IS A SECURITY RISK!
 // app.register('/test', '../src/resources/vista-resource');
@@ -133,6 +147,6 @@ app.logger.info('app created with ' + app.resourceRegistry.getResources().length
 
 // todo: move listen to start
 var port = app.config.appServer.port;
-app.listen(port, function() {
+app.rdkListen(port, function() {
     app.logger.info('application now listening on %s', port);
 });

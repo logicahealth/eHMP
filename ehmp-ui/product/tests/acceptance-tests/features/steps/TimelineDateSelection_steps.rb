@@ -10,15 +10,15 @@ class GTDate < AccessBrowserV2
   include Singleton
   def initialize
     super
-    add_action(CucumberLabel.new("From Date"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#filter-from-date-global"))
-    add_action(CucumberLabel.new("RemoveDateFrom"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#filter-from-date-global"))
-    add_action(CucumberLabel.new("To Date"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#filter-to-date-global"))
-    add_action(CucumberLabel.new("RemoveDateTo"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#filter-to-date-global"))
-    add_verify(CucumberLabel.new("FromTooltip"), VerifyContainsText.new, AccessHtmlElement.new(:css, '#filter-from-date-global'))
-    add_verify(CucumberLabel.new("ToTooltip"), VerifyContainsText.new, AccessHtmlElement.new(:css, '#filter-from-date-global'))
+    add_action(CucumberLabel.new("From Date"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#filterFromDateGlobal"))
+    add_action(CucumberLabel.new("RemoveDateFrom"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#filterFromDateGlobal"))
+    add_action(CucumberLabel.new("To Date"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#filterToDateGlobal"))
+    add_action(CucumberLabel.new("RemoveDateTo"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#filterToDateGlobal"))
+    add_verify(CucumberLabel.new("FromTooltip"), VerifyContainsText.new, AccessHtmlElement.new(:css, '#filterFromDateGlobal'))
+    add_verify(CucumberLabel.new("ToTooltip"), VerifyContainsText.new, AccessHtmlElement.new(:css, '#filterFromDateGlobal'))
     add_verify(CucumberLabel.new("TimelineDateFilter "), VerifyContainsText.new, AccessHtmlElement.new(:id, 'globalDate-region'))
-    add_verify(CucumberLabel.new("From Date"), VerifyValue.new, AccessHtmlElement.new(:css, "#filter-from-date-global"))
-    add_verify(CucumberLabel.new("To Date"), VerifyValue.new, AccessHtmlElement.new(:css, "#filter-to-date-global"))
+    add_verify(CucumberLabel.new("From Date"), VerifyValue.new, AccessHtmlElement.new(:css, "#filterFromDateGlobal"))
+    add_verify(CucumberLabel.new("To Date"), VerifyValue.new, AccessHtmlElement.new(:css, "#filterToDateGlobal"))
     add_action(CucumberLabel.new("Outside"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "eHMP-CurrentUser"))
   end
 
@@ -93,7 +93,7 @@ Then(/^the from tooltip contains text "(.*?)"$/) do |arg1|
   driver = TestSupport.driver
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time) 
   wait.until { con.get_element("FromTooltip") }
-  expect(driver.find_element(:css, "#filter-from-date-global").attribute("data-original-title")).to include(arg1)
+  expect(driver.find_element(:css, "#filterFromDateGlobal").attribute("data-original-title")).to include(arg1)
 end
 
 Then(/^the to tooltip contains text "(.*?)"$/) do |arg1|
@@ -101,7 +101,7 @@ Then(/^the to tooltip contains text "(.*?)"$/) do |arg1|
   driver = TestSupport.driver
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time) 
   wait.until { con.get_element("ToTooltip") }
-  expect(driver.find_element(:css, "#filter-to-date-global").attribute("data-original-title")).to include(arg1)
+  expect(driver.find_element(:css, "#filterToDateGlobal").attribute("data-original-title")).to include(arg1)
 end
 
 def wait_until_date_filter_closes

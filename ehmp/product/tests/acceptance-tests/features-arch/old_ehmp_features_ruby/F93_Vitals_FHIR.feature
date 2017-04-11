@@ -385,7 +385,7 @@ Scenario: Client can request vital results in FHIR format
 @f93_5_vitals_neg_fhir	
 Scenario: Negative scenario.  Client can request vital results in VPR format
 Given a patient with "No vital results" in multiple VistAs
-Given a patient with pid "xxxxxxxxxxV088473" has been synced through Admin API
-When the client requests vitals for the patient "xxxxxxxxxxV088473" in FHIR format
+Given a patient with pid "1006184063V088473" has been synced through Admin API
+When the client requests vitals for the patient "1006184063V088473" in FHIR format
 Then a successful response is returned
 Then corresponding matching FHIR records totaling "0" are displayed

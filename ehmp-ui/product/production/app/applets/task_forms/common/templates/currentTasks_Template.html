@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h5 class="bottom-border-grey">Current Tasks</h5>
+    </div>
+</div>
+{{#if tasks}}
+<table class="table table-hover activity-detail-task-table">
+    <caption class="sr-only">This table represents tasks for this activity categorized by priority, due date, and title.</caption>
+    <thead>
+        <tr>
+            <th class="renderable" scope="col"><span class="sr-only">Status</span></th>
+            <th class="renderable" scope="col" col-name="observed">Priority</th>
+            <th class="renderable" scope="col" col-name="typeName">Due</th>
+            <th class="renderable" scope="col" col-name="flag">Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each tasks}}
+        <tr data-taskid="{{TASKID}}">
+            <td>{{#ifExp dueTextValue "!==" 1}} {{#if ACTIVE}}<i class="icon-action-arrow color-primary-dark"><span class="sr-only">This activity has an action</span></i> {{/if}} {{/ifExp}}</td>
+            <td>{{priorityFormatted}}</td>
+            <td>{{dueText}}</td>
+            <td>{{TASKNAME}}</td>
+        </tr>
+        {{/each}}
+        {{else}}
+        <tr>
+            <td col-span="4">None</td>
+        </tr>
+    </tbody>
+</table>
+{{/if}}

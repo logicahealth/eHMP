@@ -26,7 +26,7 @@ task generateRestDocs(type: Javadoc) {
     options.addStringOption("docBasePath", "http://localhost:8000")
 
     // The host of the ReST endpoints
-    options.addStringOption("apiBasePath", "https://IPADDRESS)
+    options.addStringOption("apiBasePath", "https://IPADDRES")
     options.addStringOption("errorTags", "@status")
 }
 

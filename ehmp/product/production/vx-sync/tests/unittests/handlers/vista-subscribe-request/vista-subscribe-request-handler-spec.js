@@ -12,10 +12,10 @@ var config = {
     'vistaSites': {
         '9E7A': {
             'name': 'panorama',
-            'host': 'IPADDRESS ',
+            'host': 'IP_ADDRESS',
             'port': 9210,
-            'accessCode': 'PW    ',
-            'verifyCode': 'PW    !!',
+            'accessCode': 'pu1234',
+            'verifyCode': 'pu1234!!',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
@@ -23,10 +23,10 @@ var config = {
         },
         'C877': {
             'name': 'kodak',
-            'host': 'IPADDRESS ',
+            'host': 'IP_ADDRESS',
             'port': 9210,
-            'accessCode': 'PW    ',
-            'verifyCode': 'PW    !!',
+            'accessCode': 'pu1234',
+            'verifyCode': 'pu1234!!',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
@@ -80,9 +80,11 @@ var patientIdentifier = idUtil.create('pid', pid);
 var jobId = '2';
 var rootJobId = '1';
 var pollerJobId = '3';
+var jobPriority = 55;
 var meta = {
     jobId : jobId,
     rootJobId: rootJobId,
+    priority: jobPriority,
     jpid: '21EC2020-3AEA-4069-A2DD-FFFFFFFFFFFF'
 };
 var job = jobUtil.createVistaSubscribeRequest(vistaId, patientIdentifier, meta);
@@ -224,7 +226,7 @@ describe('vista-subscribe-request-handler.js', function() {
             runs(function() {
                 expect(actualError).toBeNull();
                 expect(environment.vistaClient.subscribe.calls.length).toEqual(1);
-                expect(environment.vistaClient.subscribe).toHaveBeenCalledWith(vistaId, { type : 'pid', value : pid }, rootJobId, pollerJobId, jasmine.any(Function));
+                expect(environment.vistaClient.subscribe).toHaveBeenCalledWith(vistaId, { type : 'pid', value : pid }, rootJobId, pollerJobId, jobPriority, jasmine.any(Function));
             });
         });
     });
@@ -247,7 +249,7 @@ describe('vista-subscribe-request-handler.js', function() {
             runs(function() {
                 expect(actualError).toBeNull();
                 expect(environment.hdrClient.subscribe.calls.length).toEqual(1);
-                expect(environment.hdrClient.subscribe).toHaveBeenCalledWith(hdrId, { type : 'pid', value : hdrPid }, rootJobId, pollerJobId, jasmine.any(Function));
+                expect(environment.hdrClient.subscribe).toHaveBeenCalledWith(hdrId, { type : 'pid', value : hdrPid }, rootJobId, pollerJobId, jobPriority, jasmine.any(Function));
             });
         });
     });
@@ -286,7 +288,7 @@ describe('vista-subscribe-request-handler.js', function() {
                 // _subscribePatientToVistA was called
                 //-------------------------------------
                 expect(environment.vistaClient.subscribe.calls.length).toEqual(1);
-                expect(environment.vistaClient.subscribe).toHaveBeenCalledWith(vistaId, { type : 'pid', value : pid }, rootJobId, jasmine.any(Array), jasmine.any(Function));
+                expect(environment.vistaClient.subscribe).toHaveBeenCalledWith(vistaId, { type : 'pid', value : pid }, rootJobId, jasmine.any(Array), jobPriority, jasmine.any(Function));
 
             });
         });
@@ -323,7 +325,7 @@ describe('vista-subscribe-request-handler.js', function() {
                 // _subscribePatientToVistA was called
                 //-------------------------------------
                 expect(environment.hdrClient.subscribe.calls.length).toEqual(1);
-                expect(environment.hdrClient.subscribe).toHaveBeenCalledWith(hdrId, { type : 'pid', value : hdrPid }, rootJobId, jasmine.any(Array), jasmine.any(Function));
+                expect(environment.hdrClient.subscribe).toHaveBeenCalledWith(hdrId, { type : 'pid', value : hdrPid }, rootJobId, jasmine.any(Array), jobPriority, jasmine.any(Function));
 
             });
         });

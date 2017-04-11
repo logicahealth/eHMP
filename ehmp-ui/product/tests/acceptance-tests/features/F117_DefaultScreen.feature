@@ -8,8 +8,8 @@ Scenario: Login to ehmpui_url
     When user attempts login
         |field | value|
         |Facility|PANORAMA|
-        |AccessCode|PW    |
-        |VerifyCode|PW    !!|
+        |AccessCode|pu1234|
+        |VerifyCode|pu1234!!|
         |SignIn||
     And the patient search screen is displayed
 
@@ -21,13 +21,13 @@ Scenario: If a user has not logged in, the default screen is login
 
 @DefaultScreen2
 Scenario: If a user has logged in, but not set a patient context, the default screen is patient screen
-	Given user is logged into eHMP-UI   
+	# Given user is logged into eHMP-UI
 	When the user accesses the base url     
     Then the patient search screen is displayed
 
 @DefaultScreen3
 Scenario: if a user has logged in and set a patient contect, the default screen is coversheet
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	And user searches for and selects "BCMA,Eight"
 	Then Cover Sheet is active
 	When the user accesses the base url

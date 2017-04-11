@@ -1,32 +1,29 @@
 define([
     "backbone",
     "marionette",
-    "hbs!app/applets/medication_review_v2/templates/medicationTemplate",
+    'handlebars',
     "app/applets/medication_review_v2/views/orderDetailView",
-    "hbs!app/applets/medication_review_v2/templates/orderHistoryTemplate",
     "hbs!app/applets/medication_review_v2/templates/infoButtonTemplate",
-    "hbs!app/applets/medication_review_v2/templates/infoButtonTemplate2",
     "hbs!app/applets/medication_review_v2/templates/infoButtonPatientTemplate",
     "app/applets/medication_review_v2/appletHelper"
-],function(Backbone, Marionette, medicationTemplate, OrderDetailView, orderHistoryTemplate, infoButtonTemplate, infoButtonTemplate2, infoButtonPatientTemplate, appletHelper) {
+],function(Backbone, Marionette, Handlebars, OrderDetailView, infoButtonTemplate, infoButtonPatientTemplate, appletHelper) {
     "use strict";
 
     var singleOrderView = Backbone.Marionette.ItemView.extend({
-        template: orderHistoryTemplate,
-        tagName: "li",
+        template: Handlebars.compile([
+            '<a role="button" href="#qualifiedName-{{detailId}}-{{instanceid}}" title="Press enter to view additional content">',
+            '{{formatDate overallStart}} - {{#if isActiveNonVA}} {{else}} {{formatDate stopped}} {{/if}}',
+            '</a>'
+            ].join('\n')),
         className: "order-dates-range",
         attributes: {
-            // "tabindex": 0,
-            "role": "listitem"
+            "role": "tab"
         },
         initialize: function(options) {
             this.parentView = options.parent;
-            //this.model.pickUpType = this.parentView.pickUpType;
         },
         events: {
             'click': 'updateDetailView',
-            'click .order-dates': 'selectOrder',
-            'keydown .order-dates': 'onEnter'
         },
         updateDetailView: function(e) {
             e.preventDefault();
@@ -34,25 +31,15 @@ define([
             this.selectOrder();
         },
         selectOrder: function() {
-            $(this.parentView.$el).find('.selectedOrder').removeClass('selectedOrder');
-            $(this.$el).addClass('selectedOrder');
-        },
-        onEnter: function(event) {
-            if (event.which == 13 || event.which == 32) {
-                $(event.target).click();
-            }
+            $(this.parentView.$el).find('.selected-order').removeClass('selected-order');
+            $(this.$el).addClass('selected-order');
         }
 
     });
     var OrderHistoryView = Backbone.Marionette.CollectionView.extend({
-        tagName: "ul",
-        attributes: {
-            "role": "list"
-        },
         initialize: function(options){
             this.parent = options.parentLayoutView;
         },
-        className: "orders-links-list",
         childView: singleOrderView,
         childViewOptions: function(){
             return {
@@ -60,7 +47,7 @@ define([
             };
         },
         onRender: function() {
-            $(this.$el).find('li').first().addClass('selectedOrder');
+            $(this.$el).find('.order-dates-range').first().addClass('selected-order');
         }
     });
 
@@ -138,11 +125,11 @@ define([
             } else {
                 this.infoButtonView = new InfoButtonView({
                     model: infoButtonModel,
-                    template: infoButtonTemplate2
+                    template: Handlebars.compile('<p>No Links Available</p>')
                 });
                 this.infoButtonPatientView = new InfoButtonPatientView({
                     model: infoButtonPatientModel,
-                    template: infoButtonTemplate2
+                    template: Handlebars.compile('<p>No Links Available</p>')
                 });
             }
 
@@ -387,13 +374,15 @@ define([
         updateDetailView: function(newModel) {
             this.orderDetailView.model = newModel;
             this.orderDetailView.render();
+            this.$('[data-detail=content]').focus();
+            this.$(event.currentTarget).find('a').attr('accesskey', 'm');
+            this.$(event.currentTarget).siblings().find('a').removeAttr('accesskey');
         },
         onOrderNavKeyDown: function(event) {
             if (event.which === 13 || event.which === 32) {
                 $(event.target).click();
             }
         },
-        template: medicationTemplate,
         regions: {
             orderHistoryRegion: ".order-history-panel",
             orderDetailRegion: ".order-detail-panel",

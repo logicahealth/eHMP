@@ -5,6 +5,10 @@ var async = require('async');
 var request = require('request');
 var errorUtil = require(global.VX_UTILS + 'error');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
+var loadPatient = require('./load-patient');
+var syncDemoPatient = require('./demographics-sync');
+var getDemoPatient = require('./get-patient-demographics');
+var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 
 function handle(logger, config, environment, job, handlerCallback) {
     logger.debug('Resync handler started for job: j%.', job);
@@ -15,11 +19,23 @@ function handle(logger, config, environment, job, handlerCallback) {
     }
 
     return async.applyEachSeries(
-        [checkPatientSyncStatus, clearPatient, loadPatient],
-        logger, config.syncRequestApi, job.patientIdentifier,
+        [checkPatientSyncStatus, addDemographics.bind(undefined, environment), clearPatient, determineSyncMethod(job.patientIdentifier)],
+        logger, config.syncRequestApi, job,
         function(error) {
             return processResults(logger, environment, config, job, handlerCallback, error);
         });
+}
+
+function addDemographics(environment, logger, config, job, callback) {
+    if (_.isUndefined(job.demographics) && idUtil.isIcn(job.patientIdentifier.value) || idUtil.isDod(job.patientIdentifier.value)) {
+        return getDemoPatient.loadDemographics(environment, logger, job, callback);
+    }
+
+    return callback();
+}
+
+function determineSyncMethod(patientIdentifier) {
+ return idUtil.isIcn(patientIdentifier.value) || idUtil.isDod(patientIdentifier.value) ? syncDemoPatient : loadPatient;
 }
 
 //Stable - all domains synced for all sites (syncStatus.inProgress is undefined) and
@@ -40,7 +56,9 @@ function syncUnstable(statusResponse) {
     return !_.isUndefined(inProcessJob);
 }
 
-function checkPatientSyncStatus(logger, syncConfig, patientIdentifier, callback) {
+function checkPatientSyncStatus(logger, syncConfig, job, callback) {
+    var patientIdentifier = job.patientIdentifier;
+
     logger.debug('resync-request-handler.checkPatientSyncStatus: Checking sync status for patient id %s.', patientIdentifier.value);
 
     var options = {
@@ -70,7 +88,9 @@ function checkPatientSyncStatus(logger, syncConfig, patientIdentifier, callback)
     });
 }
 
-function clearPatient(logger, syncConfig, patientIdentifier, callback) {
+function clearPatient(logger, syncConfig, job, callback) {
+    var patientIdentifier = job.patientIdentifier;
+
     logger.debug('resync-request-handler.clearPatient: Clearing patient for patient id %s.', patientIdentifier.value);
 
     var options = {
@@ -97,32 +117,6 @@ function clearPatient(logger, syncConfig, patientIdentifier, callback) {
     });
 }
 
-function loadPatient(logger, syncConfig, patientIdentifier, callback) {
-    logger.debug('resync-request-handler.loadPatient: Initiating load/sync for patient id %s.', patientIdentifier.value);
-
-    var options = {
-        url: syncConfig.protocol + '://' + syncConfig.host + ':' + syncConfig.port + syncConfig.patientSyncPath,
-        method: 'GET',
-        qs: {}};
-
-    options.qs[patientIdentifier.type] = patientIdentifier.value;
-
-    request.get(options, function(error, response, body) {
-        if (error)  {
-            logger.error('resync-request-handler.loadPatient: Error trying to access load patient endpoint: %s.', error);
-            return callback(error);
-        }
-
-        if (response.statusCode === 202 || response.statusCode === 200) {
-            logger.debug('resync-request-handler.loadPatient: Initiated sync for patient with patient id %s.', patientIdentifier.value);
-            return callback();
-        } else {
-            logger.error('resync-request-handler.loadPatient: Error trying to call load/sync patient endpoint: %s.', body);
-            return  callback('Error calling load patient endpoint. Status code: ' + response.statusCode + ' Error: ' + body);
-        }
-    });
-}
-
 function processResults(logger, environment, config, job, handlerCallback, error) {
     if (error) {
         var newJob = jobUtil.createResyncRequest(job.patientIdentifier, job);
@@ -133,14 +127,14 @@ function processResults(logger, environment, config, job, handlerCallback, error
             return environment.publisherRouter.publish(newJob, function(error) {
                 if (error) {
                     logger.error('resync-request-handler.processResults: New job %j failed to publish with error %s.', newJob, error);
-                    return handlerCallback(errorUtil.createFatal(error, newJob));
+                    return handlerCallback(errorUtil.createFatal(error));
                 } else {
                     return handlerCallback(null, 'success');
                 }
             });
         } else {
             logger.error('resync-request-handler.processResults: Maximum retries %d for %j reached for this patient. Job will not be requeued for retry.', config.retrySync.maxRetries, job);
-            return handlerCallback(errorUtil.createFatal(error, job));
+            return handlerCallback(errorUtil.createFatal(error + ' Maximum retries reached.'));
         }
     } else {
         return handlerCallback(null, 'success');

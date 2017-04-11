@@ -32,7 +32,8 @@ function getResourceConfig() {
             synchronize: false
         },
         requiredPermissions: [],
-        isPatientCentric: false
+        isPatientCentric: false,
+        bypassCsrf: true
     }, {
         name: 'authentication-refreshToken',
         path: '',
@@ -69,10 +70,46 @@ function getResourceConfig() {
             synchronize: false
         },
         requiredPermissions: [],
+        isPatientCentric: false,
+        bypassCsrf: true
+    },{
+        name: 'authentication-internal-systems-authenticate',
+        path: '/systems/internal',
+        post: getSystemSession,
+        interceptors: {
+            authentication: false,
+            systemAuthentication: true,
+            operationalDataCheck: false,
+            synchronize: false
+        },
+        requiredPermissions: [],
+        isPatientCentric: false,
+        bypassCsrf: true
+    },{
+        name: 'authentication-internal-systems-destroy-session',
+        path: '/systems/internal',
+        delete: destroySystemSession,
+        interceptors: {
+            authentication: false,
+            operationalDataCheck: false,
+            synchronize: false
+        },
+        requiredPermissions: [],
         isPatientCentric: false
     },{
-        name: 'authentication-systems-authenticate',
-        path: '/systems',
+        name: 'authentication-internal-systems-refresh-session',
+        path: '/systems/internal',
+        get: refreshSystemSession,
+        interceptors: {
+            authentication: false,
+            operationalDataCheck: false,
+            synchronize: false
+        },
+        requiredPermissions: [],
+        isPatientCentric: false
+    },{
+        name: 'authentication-external-systems-authenticate',
+        path: '/systems/external',
         post: getSystemSession,
         interceptors: {
             authentication: false,
@@ -83,8 +120,8 @@ function getResourceConfig() {
         requiredPermissions: [],
         isPatientCentric: false
     },{
-        name: 'authentication-systems-destroy-session',
-        path: '/systems',
+        name: 'authentication-external-systems-destroy-session',
+        path: '/systems/external',
         delete: destroySystemSession,
         interceptors: {
             authentication: false,
@@ -94,8 +131,8 @@ function getResourceConfig() {
         requiredPermissions: [],
         isPatientCentric: false
     },{
-        name: 'authentication-systems-refresh-session',
-        path: '/systems',
+        name: 'authentication-external-systems-refresh-session',
+        path: '/systems/external',
         get: refreshSystemSession,
         interceptors: {
             authentication: false,

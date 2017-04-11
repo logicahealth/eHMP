@@ -1,22 +1,30 @@
+When(/^the client requests vitals with _count of "(\d+)" for the patient "(.*?)" in FHIR format$/) do |count, pid|
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/patient/#{pid}/observation?_count=" + count
+  @response = HTTPartyRDK.get(path)
+  puts @response.body
+end
+
+Then(/^the FHIR results contain "(\d+)" vitals/) do |count|
+  @json_object = JSON.parse(@response.body)
+  json_verify = JsonVerifier.new
+
+  result_array = @json_object["entry"]
+  expect(result_array.length.to_s).to eq(count)
+end
+
 When(/^the client requests vitals for the patient "(.*?)" in FHIR format$/) do |pid|
-  #  base_url = DefaultLogin.fhir_url
-  #  path = "#{base_url}/fhir/Observation?subject.identifier=#{pid}&_format=json"
-  #  p path
-  #  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
-  #
-  temp = RDKQuery.new('vitals-observation')
-  temp.add_parameter("subject.identifier", pid)
-  #temp.add_format("json")
-  #temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/patient/#{pid}/observation"
+  @response = HTTPartyRDK.get(path)
+  puts @response.body
 end
 
 When(/^the client "(.*?)" requests vitals for the patient "(.*?)" in FHIR format$/) do |user, pid|
-  temp = RDKQuery.new('vitals-observation')
-  temp.add_parameter("subject.identifier", pid)
-  p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization_for_user(temp.path, user, "PW    !!")
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/patient/#{pid}/observation"
+  @response = HTTPartyRDK.get_as_user(path, user, "pu1234!!")
+  puts @response.body
 end
 
 Then(/^the FHIR results contain vitals/) do |table|
@@ -66,5 +74,5 @@ When(/^the client requests "(.*?)" vitals for the patient "(.*?)" in FHIR format
   temp.add_parameter("subject.identifier", pid)
   temp.add_parameter("limit", limit)
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end

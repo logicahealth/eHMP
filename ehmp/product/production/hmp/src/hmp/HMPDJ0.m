@@ -1,11 +1,12 @@
-HMPDJ0 ;SLC/MKB,ASMR/JD -- Serve VistA data as JSON cont ; 01/22/16 11:45am
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 1
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPDJ0 ;SLC/MKB,ASMR/JD,PB,CPC -- Serve VistA data as JSON cont ; 06/27/16 11:45am
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;*1*;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
  ; ^DPT                         10035  <see HMPDJ0* for others>
  ; EN^ORQ1                      3154
+ ; SDAMA301                     4433
  ;
  ; All tags expect DFN, HMPSTART, HMPSTOP, HMPMAX, HMPID, HMPTEXT
  ;
@@ -144,7 +145,7 @@ MED ; -- Pharmacy
  . Q:$D(^TMP("HMPOR",$J,+ID))  Q:$P(ID,";",2)>1  S ID=+ID
  . S X3=$G(^OR(100,ID,3)),X4=$G(^(4))
  . Q:$P(X3,U,3)=13  I X4["P",$P(X3,U,3)=1!($P(X3,U,3)=12) Q  ;cancelled
- . S DAD=$P(X3,U,9) I DAD Q:$D(^TMP("HMPOR",$J,DAD))  S ID=DAD
+ . S DAD=$P(X3,U,9) I DAD I '$D(^TMP("HMPOR",$J,DAD)) D PS1^HMPDJ05(DAD) S ^TMP("HMPOR",$J,DAD)="" ;DE5156 ensure parent added as well as children
  . D PS1^HMPDJ05(ID) S ^TMP("HMPOR",$J,ID)=""
  K ^TMP("HMPOR",$J),^TMP("ORR",$J),^TMP("ORGOTIT",$J),^TMP($J,"PSOI")
  Q
@@ -200,7 +201,7 @@ IMQ ; end
 APPOINTM ; -- Scheduling/Appointment Mgt
  N HMPX,HMPNUM,HMPDT,X,HMPA,ID
  S HMPX(1)=HMPSTART_";"_HMPSTOP,HMPX(4)=DFN,ID=$G(HMPID)
- S HMPX("FLDS")="1;2;3;6;9;10;11;13",HMPX("SORT")="P"
+ S HMPX("FLDS")="1;2;3;6;9;10;11;13;22",HMPX("SORT")="P"  ;DE4469 - PB - Apr 26, 2016 added field 22 to the list of fields to be pulled.
  I $L(ID) G:$E(ID)="H" DGS^HMPDJ04 D  Q
  . S HMPDT=$P(ID,";",2),HMPX(1)=$P(ID,";",2)_";"_$P(ID,";",2)
  . S HMPX(2)=$P(ID,";",3)

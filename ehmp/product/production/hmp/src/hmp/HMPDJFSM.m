@@ -1,5 +1,8 @@
-HMPDJFSM ;SLC/KCM -- Monitoring Tools for Extracts
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
+HMPDJFSM ;SLC/KCM,ASMR/RRB,CK - Monitoring Tools for Extracts;Jun 22, 2016 17:23:52
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ Q
  ;
 EN ; Show information for one server
  N IEN
@@ -19,7 +22,7 @@ ADDPT(PAT) ; Add patient to server
  S ARGS("server")=$P(^HMP(800000,SRV,0),"^")
  S ARGS("localId")=PAT
  D API^HMPDJFS(.RESULT,.ARGS)
- I ^TMP("HMPF",$J,1)["location" W !,$P($G(^DPT(PAT,0)),"^")," is being synced."
+ I ^TMP("HMPF",$J,1)["location" W !,$P($G(^DPT(PAT,0)),"^")," is being synced."  ; IA10035, DE2818
  E  W !,"Subscription failed."
  Q
 LOGLVL ; Set log level
@@ -39,7 +42,7 @@ THLTH ; test health
  N ARGS,HMPFHMP,HMPSYS,HMPFRSP
  S ARGS("server")="Test-Server-1"
  S HMPFRSP=$NA(^TMP("HMPF",$J))
- S HMPSYS=$$GET^XPAR("SYS","HMP SYSTEM NAME")
+ S HMPSYS=$$SYS^HMPUTILS
  S HMPFHMP=$TR($G(ARGS("server")),"~","=")
  D HLTHCHK(.ARGS)
  N I S I=0 F  S I=$O(^TMP("HMPF",$J,I)) Q:'I  W !,^TMP("HMPF",$J,I)
@@ -78,7 +81,7 @@ HLTHINFO(SRV,SRVIEN,DFN) ; Return a string of JSON reporting progress for this d
  S INFO("domainsCompleted")=DONE
  S INFO("domainsPending")=PEND
  S INFO("objectCount")=CNT
- I $L(QTIME) S INFO("queuedTime")=$P($$FMTHL7^XLFDT(QTIME),"-")
+ I $L(QTIME) S INFO("queuedTime")=$$FMTHL7^HMPSTMP(QTIME)  ; DE5016
  S STS=$P($G(^HMP(800000,SRVIEN,1,DFN,0)),"^",2)
  S INFO("extractStatus")=$S(STS=1:"initializing",STS=2:"initialized",1:"uninitialized")
  D ENCODE^HMPJSON("INFO","JSON")
@@ -109,7 +112,7 @@ GETSRV() ; Return the IEN for the server to monitor
  ;
 GETPAT() ; Return DFN for a patient
  N DIC,Y
- S DIC="^DPT(",DIC(0)="AEMQ"
+ S DIC=2,DIC(0)="AEMQ"  ; DE2818, changed to file number, not global
  D ^DIC
  Q +Y
  ;
@@ -241,7 +244,7 @@ CHGFTYP(TYPE,START) ; Change the freshness update flag for a type
  Q
 STOPFTYP(TYPE) ; Stop freshness updates for type
  I '$D(^XTMP("HMP-off",0)) D NEWXTMP^HMPDJFS("HMP-off",999,"Switch off HMP freshness updates")
- W !,"Stopping freshess updates for: ",TYPE
+ W !,"Stopping freshness updates for: ",TYPE
  S ^XTMP("HMP-off",TYPE)=1
  Q
 STRTFTYP(TYPE) ; Resume freshness updates for type

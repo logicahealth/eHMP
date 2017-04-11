@@ -6,7 +6,7 @@
 #
 # Assumptions: Distribution has not been previously loaded and waiting install
 #
-# see: http://www.domain/vdl/documents/Clinical/virtual_patient_record/vpr_ig.pdf for VPR install guide
+# see: http://www.DNS   /vdl/documents/Clinical/virtual_patient_record/vpr_ig.pdf for VPR install guide
 #
 #
 
@@ -17,3 +17,4 @@ attribute :name, :kind_of => String, :required => true, :name_attribute => true
 attribute :patch_list, :kind_of => String, :required => true
 attribute :manifest_path, :kind_of => String, :default => "#{Chef::Config[:file_cache_path]}/kids-manifest.json"
 attribute :log, :default => ''
+attribute :run_checksums, :kind_of => [TrueClass, FalseClass],  :required => true

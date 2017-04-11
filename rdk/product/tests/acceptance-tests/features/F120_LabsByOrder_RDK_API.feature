@@ -11,7 +11,7 @@ Scenario: Client can request labsbyorder in VPR format from RDK API
       | field              | value                                                |
       | typeName           | GLUCOSE                                              |
       #| vuid               | urn:va:vuid:4665449                                  |
-      | typeCode           | urn:va:ien:60:175:72                                 |
+      | typeCode           | urn:lnc:1547-9                                       |
       | result             | 310                                                  |
       | units              | mg/dL                                                |
       | interpretationCode | urn:hl7:observation-interpretation:HH                |
@@ -35,8 +35,8 @@ Scenario: Client can request labsbyorder in VPR format from RDK API
       | comment            | CONTAINS NY                                          |
       | comment            | CONTAINS 12180-0097                                  |
       | specimen           | SERUM                                                |
-      | observed           | 200503170336                                         |
-      | resulted           | 200503170336                                         |
+      | observed           | 20050317033600                                         |
+      | resulted           | 20050317033600                                         |
       | uid                | urn:va:lab:9E7A:227:CH;6949681.966383;2              |
       | categoryCode       | urn:va:lab-category:CH                               |
       #| codes.code         | 2344-0                                               |

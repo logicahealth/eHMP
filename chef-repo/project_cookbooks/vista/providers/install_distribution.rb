@@ -41,6 +41,10 @@ action :install do
       Chef::Log.info("Distribution was previously loaded and installed.")
     end
 
+    shell.on(:output, /Enter RETURN to continue/) do | process, match |
+      process.write("\n")
+    end
+
     # Add non-blocking trigger for Environment Check Routine
     shell.on(:output, /Want to RUN the Environment Check Routine\?/) do | process, match |
       process.write("Yes\n")
@@ -97,6 +101,73 @@ action :install do
     end
 
     Chef::Log.info("Distribution Loaded: #{distribution_name}")
+
+
+    if new_resource.run_checksums
+      #running checksuom and transport global checks
+
+      Chef::Log.info("Running checksums: #{distribution_name}")
+
+      release = node.name
+      formated_dist_name = distribution_name.gsub(/\*/, '_')
+      log_name = "/vagrant/#{release}_#{formated_dist_name}"
+
+      shell.wait_for(:output, /#{node[:vista][:prompt]}/) do | process, match |
+        process.write("S DUZ=1 D ^XUP\n")
+      end
+      shell.wait_for(:output, /Select OPTION NAME:/) do | process, match |
+        process.write("XPD PRINT CHECKSUM\n")
+      end
+      shell.wait_for(:output, /Select INSTALL NAME:/) do | process, match |
+        process.write("#{distribution_name}\n")
+      end
+
+      shell.wait_for(:output, /Want each Routine Listed with Checksums/) do | process, match |
+        process.write("YES\n")
+      end
+
+      shell.wait_for(:output, /DEVICE/) do | process, match |
+        process.write("HFS\n")
+      end
+
+      shell.wait_for(:output, /HOST FILE NAME/) do | process, match |
+        process.write("#{log_name}_compare2current.log\n")
+      end
+
+      shell.wait_for(:output, /ADDRESS/) do | process, match |
+        process.write("\n")
+      end
+
+
+
+      shell.wait_for(:output, /#{node[:vista][:prompt]}/) do | process, match |
+        process.write("S DUZ=1 D ^XUP\n")
+      end
+
+      shell.wait_for(:output, /Select OPTION NAME:/) do | process, match |
+        process.write("XPD COMPARE TO SYSTEM\n")
+      end
+
+      shell.wait_for(:output, /Select INSTALL NAME:/) do | process, match |
+        process.write("#{distribution_name}\n")
+      end
+
+      shell.wait_for(:output, /Type of Compare:/) do | process, match |
+        process.write("1\n")
+      end
+
+      shell.wait_for(:output, /DEVICE/) do | process, match |
+        process.write("HFS\n")
+      end
+
+      shell.wait_for(:output, /HOST FILE NAME/) do | process, match |
+        process.write("#{log_name}_verifyChecksums.log\n")
+      end
+
+      shell.wait_for(:output, /ADDRESS/) do | process, match |
+        process.write("\n")
+      end
+    end
 
     shell.wait_for(:output, /#{node[:vista][:prompt]}/) do | process, match |
       process.write("S DUZ=1 D ^XUP\n")

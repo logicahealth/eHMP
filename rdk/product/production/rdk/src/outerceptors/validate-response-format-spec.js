@@ -51,6 +51,13 @@ describe('Tests validateResponseFormat', function() {
         checkValidation(null, error);
     });
 
+    it('enforces empty bodies for a 204 status', function() {
+        var body = {status: 200};
+        res.statusCode = 204;
+        var error = 'response payload must be empty for a 204 status code';
+        checkValidation(body, error);
+    });
+
     it('rejects array bodies', function() {
         var body = ['one', 'two'];
         var error = 'response payload must not be an array';

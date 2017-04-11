@@ -24,12 +24,13 @@ define([
                         extraClasses: ["row"],
                         items: [{
                             control: "container",
-                            extraClasses: ["col-xs-12"],
+                            extraClasses: ["col-xs-12", "top-margin-sm"],
                             items: [{
                                 control: "checklist",
                                 label: checklistOptions.label,
                                 name: "itemChecklist",
-                                extraClasses: ["bordered-checklist"],
+                                hideCheckboxForSingleItem: true,
+                                extraClasses: ["bordered-checklist", "bottom-margin-lg"],
                                 selectedCountName: checklistOptions.checklistCountField,
                                 itemTemplate: checklistOptions.itemTemplate,
                                 attributeMapping: {
@@ -48,7 +49,7 @@ define([
                                 label: "Enter Electronic Signature Code",
                                 name: "signatureCode",
                                 required: true,
-                                title: "Please enter your Electronic Signature Code",
+                                title: "Enter your Electronic Signature Code",
                                 type: "password"
                             }]
                         }]
@@ -66,9 +67,13 @@ define([
                     extraClasses: ["col-xs-6"],
                     items: [{
                         control: "container",
-                        extraClasses: ["pull-left"],
-                        modelListeners: [checklistOptions.checklistCountField],
-                        template: Handlebars.compile("<span>Total Selected: {{" + checklistOptions.checklistCountField + "}}</span>")
+                        extraClasses: ["row"],
+                        items: [{
+                            control: "container",
+                            extraClasses: ["col-xs-12", "inProgressContainer"],
+                            template: Handlebars.compile('<span class="pull-left"><i class="fa fa-spinner fa-spin pull-left"></i><span>In progress...</span></span>'),
+                            hidden: true
+                        }]
                     }]
                 }, {
                     control: "container",
@@ -95,7 +100,7 @@ define([
     };
 
     var DeleteMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('You will lose all work in progress if you cancel this signature process. Would you like to proceed?'),
+        template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
         tagName: 'p'
     });
 
@@ -107,7 +112,8 @@ define([
             "FormCancelBtn": ".control.esig-cancel",
             "esignCode": ".esignCode",
             "signatureInput": ".control.signatureCode",
-            "checkboxes": ".control.itemChecklist"
+            "checkboxes": ".control.itemChecklist",
+            "inProgressContainer": ".inProgressContainer"
         },
         checklistOptionsDefaults: {
             itemTemplate: null,
@@ -129,89 +135,20 @@ define([
                 }
             },
             "click @ui.FormCancelBtn": function(e) {
-                var self = this;
                 e.preventDefault();
-                var deleteAlertView = new ADK.UI.Alert({
-                    title: 'Are you sure you want to cancel?',
-                    icon: 'fa-warning color-red',
-                    messageView: DeleteMessageView,
-                    footerView: Backbone.Marionette.ItemView.extend({
-                        returnStep: this.returnStep,
-                        steps: this.workflow.options.model.get('steps'),
-                        tagName: 'span',
-                        ui: {
-                            'ContinueButton': '#alert-continue-btn',
-                            'CancelButton': '#alert-cancel-btn'
-                        },
-                        template: Handlebars.compile('{{ui-button "Cancel" id="alert-cancel-btn" classes="btn-default btn-sm" title="Press enter to cancel."}}{{ui-button "Continue" id="alert-continue-btn" classes="btn-primary btn-sm" title="Press enter to continue."}}'),
-                        events: {
-                            'click @ui.ContinueButton': function(e) {
-                                e.preventDefault();
-                                ADK.UI.Alert.hide();
-                                var numWorkflowSteps = this.steps.length;
-                                if (!_.isUndefined(this.returnStep) && numWorkflowSteps > 1 && this.returnStep < numWorkflowSteps) {
-                                    self.workflow.goToIndex(this.returnStep);
-                                } else {
-                                    ADK.UI.Workflow.hide();
-                                    esigChannel.trigger('esign:cancel');
-                                }
-                            },
-                            'click @ui.CancelButton': function() {
-                                ADK.UI.Alert.hide();
-                            }
-                        }
-                    })
-                });
-                deleteAlertView.show();
+                var numWorkflowSteps = this.workflow.options.model.get('steps').length;
+                if (!_.isUndefined(this.returnStep) && numWorkflowSteps > 1 && this.returnStep < numWorkflowSteps) {
+                    this.workflow.goToIndex(this.returnStep);
+                } else {
+                    ADK.UI.Workflow.hide();
+                    esigChannel.trigger('esign:cancel');
+                }
             },
             "submit": function(e) {
                 e.preventDefault();
-                var self = this;
-
                 this.disableForm();
-
-                this.model.save(null, {
-                    success: function(model, resp, options) {
-                        var successView = new ADK.UI.Notification({
-                            title: 'Signature Submitted',
-                            icon: 'fa-check',
-                            message: 'Signature successfully submitted with no errors.',
-                            type: "success"
-                        });
-                        successView.show();
-                        self.enableForm();
-                    },
-                    error: function(model, resp, options) {
-                        var invalidEsig = false;
-                        var response = '';
-                        try {
-                            if (resp.responseText) {
-                                response = JSON.parse(resp.responseText);
-								console.error('Error: ' + response.message);
-                                if (response.message.indexOf('Invalid e-signature') > -1) {
-                                    invalidEsig = true;
-                                }
-                            }
-                        } finally {
-                            self.enableForm();
-                            if (invalidEsig) {
-                                self.model.errorModel.set('signatureCode', response.message);
-                                self.transferFocusToFirstError();
-                            } else {
-                                var message = 'There was an error saving your note. Please contact your System Administrator for assistance.';
-                                message += response.message ? '<br><b>' + response.message : '';
-                                var input = {
-                                    message: message,
-                                    ok_callback: function() {
-                                        ADK.UI.Alert.hide();
-                                    }
-                                };
-                                var errorView = new ErrorView(input);
-                                errorView.showModal();
-                            }
-                        }
-                    }
-                });
+                this.model.save();
+                this.showInProgress();
                 return false;
             }
         },
@@ -220,6 +157,7 @@ define([
             this.ui.FormSignBtn.trigger('control:disabled', true);
             this.ui.signatureInput.trigger('control:disabled', true);
             this.ui.checkboxes.trigger('control:disabled', true);
+            this.$el.closest('.workflow-container').find('.workflow-header .close').attr('disabled', 'disabled');
         },
         enableForm: function() {
             this.ui.FormCancelBtn.trigger('control:disabled', false);
@@ -227,6 +165,7 @@ define([
             this.ui.signatureInput.trigger('control:disabled', false);
             this.ui.checkboxes.trigger('control:disabled', false);
             this.areAnyChecked(this.model);
+            this.$el.closest('.workflow-container').find('.workflow-header .close').removeAttr('disabled');
         },
         areAnyChecked: function(model) {
             var checklistCount = model.get(this.checklistOptions.checklistCountField);
@@ -237,11 +176,84 @@ define([
                 this.ui.signatureInput.trigger('control:disabled', false);
             }
         },
+        triggerMessages: function(model, signedModel) {
+            if (model.has('successEvents')) {
+                _.each(model.get('successEvents'), function(event) {
+                    if (!!event.messagingChannel && event.messagingEventName) {
+                        ADK.Messaging.getChannel(event.messagingChannel).trigger(event.messagingEventName, signedModel);
+                    }
+                });
+            }
+        },
         modelEvents: {
             'invalid': function() {
                 this.enableForm();
                 this.transferFocusToFirstError();
-            }
+            },
+            'create:success': function(model, resp, options) {
+                var successView = new ADK.UI.Notification({
+                    title: 'Signature Submitted',
+                    icon: 'fa-check',
+                    message: 'Signature successfully submitted with no errors.',
+                    type: "success"
+                });
+                successView.show();
+                this.enableForm();
+                this.triggerMessages(model, resp);
+            },
+            'create:error': function(model, resp, options) {
+                var invalidEsig = false;
+                var response = {};
+                var parsing_error = false;
+                try {
+                    if (resp.responseText) {
+                        response = JSON.parse(resp.responseText);
+                        if (response.message.indexOf('Invalid e-signature') > -1) {
+                            invalidEsig = true;
+                        }
+                        if (resp.responseText.indexOf('ECONNREFUSED') > -1) {
+                            response.message = 'Server connection error.';
+                        }
+                        if (resp.responseText.indexOf('503 Service Temporarily Unavailable') > -1) {
+                            response.message = 'Service Temporarily Unavailable.<br> Try again later.';
+                        }
+                        if (resp.responseText.indexOf('502 Proxy Error') > -1) {
+                            response.message = 'Proxy Error.<br> The proxy server received an invalid response from an upstream server.';
+                        }
+                    }
+                } catch(e) {
+                    console.error('Error message parsing error:', e.message);
+                    console.error('Sign error server message:', resp.responseText);
+                    console.error('Error:', response.message);
+                } finally {
+                    this.enableForm();
+                    if (invalidEsig) {
+                        this.model.errorModel.set('signatureCode', response.message);
+                        this.transferFocusToFirstError();
+                    } else {
+                        // Close form in case of server side error
+                        ADK.UI.Workflow.hide();
+                        esigChannel.trigger('esign:cancel');
+
+                        var message = 'There was an error saving your note. Contact your System Administrator for assistance.';
+                        message += response.message ? '<br><strong>' + response.message : '';
+                        var input = {
+                            message: message,
+                            ok_callback: function() {
+                                ADK.UI.Alert.hide();
+                            }
+                        };
+                        var errorView = new ErrorView(input);
+                        errorView.showModal();
+                    }
+                }
+            },
+        },
+        showInProgress: function() {
+            this.ui.inProgressContainer.trigger('control:hidden', false);
+        },
+        hideInProgress: function() {
+            this.ui.inProgressContainer.trigger('control:hidden', true);
         }
     });
     return signatureView;

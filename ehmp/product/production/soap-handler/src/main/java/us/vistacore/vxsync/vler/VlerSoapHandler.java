@@ -4,7 +4,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.DefaultValue;
 
+import gov.hhs.fha.nhinc.common.nhinccommonentity.RespondingGatewayCrossGatewayQueryRequestType;
+import gov.hhs.fha.nhinc.common.nhinccommonentity.RespondingGatewayCrossGatewayRetrieveRequestType;
 import com.codahale.metrics.annotation.Timed;
 import ihe.iti.xds_b._2007.RetrieveDocumentSetResponseType;
 import oasis.names.tc.ebxml_regrep.xsd.query._3.AdhocQueryResponse;
@@ -48,16 +51,21 @@ public class VlerSoapHandler {
     @GET
     @Produces("application/json")
     @Timed
-    public String getDocumentList(@QueryParam("icn") String icn)
+    public String getDocumentList(@QueryParam("icn") String icn, @DefaultValue("false") @QueryParam("debug") String debug)
     {
         try
         {
             VlerConfig cfg = EntityDocQueryConnection.getVlerConfig();
 
             LOG.debug("VlerSoapHandler.getDocumentList: icn "+icn + " systemUsername: " + cfg.getSystemUsername() + " systemSiteCode: " + cfg.getSystemSiteCode());
+            RespondingGatewayCrossGatewayQueryRequestType requestDocument;
+            requestDocument = generateDocumentListQuery(icn, cfg.getSystemUsername(), cfg.getSystemSiteCode());
+            if ("true".equals(debug)) {
+                LOG.warn("XML REQUEST->JSON");
+                LOG.warn(DataConverter.convertObjectToJSON(requestDocument));
+            }
             AdhocQueryResponse adhocQueryResponse = EntityDocQueryConnection.getInstance().
-                    respondingGatewayCrossGatewayQuery(
-                            generateDocumentListQuery(icn, cfg.getSystemUsername(), cfg.getSystemSiteCode()));
+                    respondingGatewayCrossGatewayQuery(requestDocument);
 
             VlerDocQueryResponse vlerDocQueryResponse = toVlerDocResponse(adhocQueryResponse);
 
@@ -67,7 +75,12 @@ public class VlerSoapHandler {
                 LOG.error("VlerSoapHandler.getDocumentList() error - " + vlerDocQueryResponse.getErrorMsg());
             }
 
-            return (DataConverter.convertObjectToJSON(vlerDocQueryResponse));
+            String responseJSON = DataConverter.convertObjectToJSON(vlerDocQueryResponse);
+            if ("true".equals(debug)) {
+                LOG.warn("XML RESPONSE->JSON");
+                LOG.warn(responseJSON);
+            }
+            return (responseJSON);
         }
         catch (Exception e)
         {
@@ -83,16 +96,24 @@ public class VlerSoapHandler {
     public String getDocument(@QueryParam("icn") String icn,
                               @QueryParam("documentUniqueId") String documentUniqueId,
                               @QueryParam("homeCommunityId") String homeCommunityId,
-                              @QueryParam("repositoryUnqiueId") String repositoryUniqueId) {
+                              @QueryParam("repositoryUnqiueId") String repositoryUniqueId,
+                              @DefaultValue("false") @QueryParam("debug") String debug) {
         try {
             LOG.debug("VlerSoapHandler.getDocument - icn " + icn + ", documentUniqueId: " + documentUniqueId + ", " +
                     "homeCommunityId: " + homeCommunityId + ", repositoryUniqueId: " + repositoryUniqueId);
 
             VlerConfig cfg = EntityDocRetrieveConnection.getVlerConfig();
 
+            RespondingGatewayCrossGatewayRetrieveRequestType requestDocument;
+            requestDocument = VlerConnectUtil.generateDocumentQuery(icn, documentUniqueId,
+                            homeCommunityId, repositoryUniqueId, cfg.getSystemSiteCode());
+
+            if ("true".equals(debug)) {
+                LOG.warn("XML REQUEST->JSON");
+                LOG.warn(DataConverter.convertObjectToJSON(requestDocument));
+            }
             RetrieveDocumentSetResponseType response = EntityDocRetrieveConnection.getInstance().
-                    respondingGatewayCrossGatewayRetrieve(VlerConnectUtil.generateDocumentQuery(icn, documentUniqueId,
-                            homeCommunityId, repositoryUniqueId, cfg.getSystemSiteCode()));
+                    respondingGatewayCrossGatewayRetrieve(requestDocument);
 
 
             VlerDocRetrieveResponse vlerRetrieveResponse = new VlerDocRetrieveResponse();
@@ -124,7 +145,12 @@ public class VlerSoapHandler {
             }
             vlerRetrieveResponse.setVlerDocHtml(htmlDoc.replaceAll("\"","\'"));
 
-            return (DataConverter.convertObjectToJSON(vlerRetrieveResponse));
+            String responseJSON = DataConverter.convertObjectToJSON(vlerRetrieveResponse);
+            if ("true".equals(debug)) {
+                LOG.warn("XML RESPONSE->JSON");
+                LOG.warn(responseJSON);
+            }
+            return (responseJSON);
         }
         catch (Exception e) {
             LOG.error("VlerSoapHandler.getDocument() exception " + e);

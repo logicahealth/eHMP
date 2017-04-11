@@ -1,5 +1,5 @@
-HMPDJ05V ;ASMR/MKB - IV/Infusions ;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 3
+HMPDJ05V ;SLC/MKB,ASMR/RRB - IV/Infusions;Nov 09, 2015 15:40:35
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -53,7 +53,7 @@ IV1 ; -- IV fluid, Infusion order [continued from HMPDJ05]
  . E  S MED("dosages",1,"ivRate")=X
  . S X=$G(PS("IVLIM",0)) S:$L(X) MED("dosages",1,"restriction")=$$IVLIM(X)
  . S X=+$P($G(PS("RXN",0)),U,5)
- . S:X MED("orders",1,"pharmacistUid")=$$SETUID^HMPUTILS("user",,X),MED("orders",1,"pharmacistName")=$P($G(^VA(200,X,0)),U)
+ . S:X MED("orders",1,"pharmacistUid")=$$SETUID^HMPUTILS("user",,X),MED("orders",1,"pharmacistName")=$$GET1^DIQ(200,X_",",.01)  ;DE2818
  . D IVP
  ; no med in PS (pending or cancelled), so use Order values
  S RTE=+$$VALUE^ORX8(ID,"ROUTE") I RTE D
@@ -67,8 +67,9 @@ IV1 ; -- IV fluid, Infusion order [continued from HMPDJ05]
  S X=$$VALUE^ORX8(ID,"RATE")
  I X["INFUSE OVER" S MED("dosages",1,"duration")=X
  E  S MED("dosages",1,"ivRate")=X
+ ;DE2818, ^OR(100) references - ICR 5771
  S I=0 F  S I=$O(^OR(100,ID,.1,I)) Q:I<1  S X=+$G(^(I,0)) D
- . S X0=$G(^ORD(101.43,X,0)),MED("name")=$P(X0,U)
+ . S X0=$$GET1^DIQ(101.43,X_",",.01),MED("name")=$P(X0,U)  ;DE2818, ICR 2843
  . S MED("products",I,"ingredientName")=$P(X0,U)
  S X=$$VALUE^ORX8(ID,"DAYS") I $L(X) D  S MED("dosages",1,"restriction")=X
  . I X?1.A1.N S X=$$IVLIM(X) Q
@@ -81,7 +82,7 @@ IVQ ; done
  S MED("stampTime")=MED("lastUpdateTime") ; RHL 20150102
  D BCMA(.MED,DFN,ORPK)
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("med",MED("uid"),MED("stampTime")) Q:HMPMETA=1  ;US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("med",MED("uid"),MED("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("MED","med")
  Q
  ;
@@ -187,6 +188,7 @@ SCH(NAME) ; -- Return other schedule info
 BCMA(RET,DFN,ORPK) ; -- administration times
  Q:$G(DFN)<1  Q:$G(ORPK)<1
  N LAST,ADT,DA,CNT,X,Y,N,NODE,X0,DRUG,HMPDT
+ ;DE2818 begin, ^PSB(53.79) references - ICR 5909
  S LAST=$P($O(^PSB(53.79,"AORDX",DFN,ORPK,9999999),-1),".")
  S ADT=$$FMADD^XLFDT(LAST,-90) ;return most recent 90 days
  S CNT=0 F  S ADT=$O(^PSB(53.79,"AORDX",DFN,ORPK,ADT)) Q:ADT<1  D
@@ -195,7 +197,7 @@ BCMA(RET,DFN,ORPK) ; -- administration times
  .. S Y("status")=X,Y("dateTime")=$$JSONDT^HMPUTILS(ADT)
  .. S X=+$P($G(^PSB(53.79,DA,0)),U,7) I X D
  ... S Y("administeredByUid")=$$SETUID^HMPUTILS("user",,X)
- ... S Y("administeredByName")=$P($G(^VA(200,+X,0)),U)
+ ... S Y("administeredByName")=$$GET1^DIQ(200,X_",",.01)  ;DE2818
  .. S X=$P($G(^PSB(53.79,DA,.1)),U,6) S:$L(X) Y("injectionSite")=X
  .. S X=$G(^PSB(53.79,DA,.2)) ;PRN
  .. S:$L($P(X,U,1)) Y("prnReason")=$P(X,U)
@@ -206,7 +208,7 @@ BCMA(RET,DFN,ORPK) ; -- administration times
  ... S:$P(X,U,3) Y("comment",N,"dateTime")=$$JSONDT^HMPUTILS($P(X,U,3))
  ... S X=+$P(X,U,2) Q:X<1
  ... S Y("comment",N,"enteredByUid")=$$SETUID^HMPUTILS("user",,X)
- ... S Y("comment",N,"enteredByName")=$P($G(^VA(200,X,0)),U)
+ ... S Y("comment",N,"enteredByName")=$$GET1^DIQ(200,X_",",.01)  ;DE2818
  .. ; drugs administered
  .. F NODE=.5,.6,.7 S N=0 F  S N=$O(^PSB(53.79,DA,NODE,N)) Q:N<1  S X0=$G(^(N,0)) D
  ... S X=$P(X0,U,2)
@@ -215,6 +217,7 @@ BCMA(RET,DFN,ORPK) ; -- administration times
  ... S X=$P(X0,U,3) S:$L(X) Y("medication",N,"amount")=X
  ... S X=$P(X0,U,4) S:$L(X) Y("medication",N,"units")=X
  .. S CNT=CNT+1 M RET("administrations",CNT)=Y
+ ;DE2818 end, ^PSB(53.79) references - ICR 5909
  ; get next scheduled administration time
  ;D ADMIN^PSBHMP(.HMPDT,DFN,ORPK) ; <<< 12.3
  D ADMIN^PSBVPR(.HMPDT,DFN,ORPK) ; <<<< 12.3 

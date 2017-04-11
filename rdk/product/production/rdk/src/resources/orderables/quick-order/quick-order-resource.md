@@ -55,10 +55,6 @@ Create Quick Order
                         "description": "Whether the QuickOrder is active. Inactive QuickOrder will not show up in Orderable service queries.",
                         "type": "boolean"
                     },
-                    "timestamp": {
-                        "description": "a time stamp of when last updated",
-                        "type": "integer"
-                    },
                     "orderable": {
                         "description": "The uuid of the Orderable",
                         "type": "string"

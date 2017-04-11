@@ -31,8 +31,9 @@ define([
         sortable: false
     }, {
         name: "reactionName",
-        cell: "string",
+        cell: "handlebars",
         label: "Reaction",
+        template: Handlebars.compile('{{#if reactionName}}{{reactionName}}{{else}}NONE{{/if}}'),
         sortable: false
     }, {
         name: "seriesName",
@@ -54,7 +55,8 @@ define([
     gridOptions.columns = columns;
     gridOptions.appletConfig = {
         name: 'immunizations_modal',
-        id: 'immunizations-modalView'
+        id: 'immunizations-modalView',
+        simpleGrid: true
     };
 
     var DateRangeModel = Backbone.Model.extend({
@@ -98,12 +100,19 @@ define([
 
    var totalTestModel = new TotalTestModel();
 
+   var comparator = function(modelOne, modelTwo){
+        return -modelOne.get('administeredDateTime').localeCompare(modelTwo.get('administeredDateTime'));
+    };
+
     var ModalView =  Backbone.Marionette.LayoutView.extend({
         template: modalTemplate,
         fetchOptions: {},
         initialize: function(options) {
             this.loadingView = ADK.Views.Loading.create();
             dataCollection = options.gridCollection;
+            if (!_.isEmpty(dataCollection)) {
+                dataCollection.comparator = comparator;
+            }
             this.getModals();
 
             if (this.showNavHeader) {
@@ -121,10 +130,13 @@ define([
             var self = this;
 
             this.fetchOptions.collectionConfig = {
-                collectionParse: self.filterCollection
+                collectionParse: self.filterCollection,
+                comparator: comparator
             };
 
             this.fetchOptions.pageable = true;
+
+            gridOptions.appletConfig.gridTitle = 'This table represents the selected immunizations vaccine, ' + this.model.attributes.name;
 
             this.fetchOptions.onSuccess = function(collection, response) {
                 self.collection = collection;
@@ -158,11 +170,18 @@ define([
                         collection: gridOptions.collection,
                         windowSize: 4
                     });
-                    $('.js-backgrid').append(self.paginatorView.render().el);
+                    self.$('.js-backgrid').append(self.paginatorView.render().el);
                 } else {
                     $('#data-grid-immunizations-modalView').find('tbody').append($('<tr><td>No Records Found</td></tr>'));
                 }
             }; // end of onSuccess
+
+            this.fetchOptions.onError = function(resp) {
+              var errorModel = new Backbone.Model(resp);
+              self.leftColumn.show(ADK.Views.Error.create({
+                model: errorModel
+              }));
+            };
         },
         events: {
             'click .immunizationsNext': 'getNextModal',
@@ -241,7 +260,7 @@ define([
 
             var modalOptions = {
                 'title': 'Vaccine - ' + model.get('name'),
-                'size': 'large',
+                'size': 'xlarge',
                 'headerView': modalHeader.extend({
                     model: model,
                     theView: view
@@ -289,10 +308,6 @@ define([
             this.dateRangeFilter.show(filterDateRangeView);
 
             this.leftColumn.show(this.loadingView);
-
-            this.totalTests.show(new TotalView({
-                model: totalTestModel
-            }));
 
             self.collection = ADK.PatientRecordService.fetchCollection(this.fetchOptions);
         },filterCollection: function(coll) {

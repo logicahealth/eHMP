@@ -43,6 +43,7 @@ define([
 
     var AbstractCollection = Backbone.Collection.extend({
         childParse: true, //greedily convert objects and arrays into models and collections
+        url: null,
         parse: function(resp, options) {
             return resp;
         },
@@ -55,7 +56,7 @@ define([
                 params = _.extend(this.defaultParams || {}, _.isFunction(opts.params) ? opts.params.apply(this, arguments) : opts.params),
                 resource = opts.resource || this.resource;
 
-            if (this.patient.has("acknowledged")) {
+            if (this.patient && this.patient.has("acknowledged")) {
                 _.extend(params, {
                     '_ack': true
                 });
@@ -81,14 +82,17 @@ define([
         },
         parseParameters: function(url, parameters) {
             _.each(parameters, function(val, key) {
-                url = url.replace(new RegExp(':' + key, 'g'), this.get(val));
+                url = url.replace(new RegExp(':' + key, 'g'), this.get(val) || _.get(this, val) || val);
             }, this);
             return url;
         },
         methodMap: methodMap,
         sync: function(method, collection, options) {
             var backboneMethod = parseMethodMap.call(this, method),
-                opts = options || {},
+                opts = _.extend({
+                    success: _.noop,
+                    error: _.noop
+                }, options),
                 url;
 
             if (!_.isObject(opts)) throw new Error('Options must be an object');
@@ -144,6 +148,7 @@ define([
     var AbstractModel = Backbone.Model.extend({
         childParse: true, //greedily convert objects and arrays into models and collections
         //childAttributes: [],  //convert only these attributes if applicable
+        url: null,
         parse: function(resp, options) {
             return resp;
         },
@@ -228,7 +233,7 @@ define([
                 params = _.extend(this.defaultParams || {}, _.isFunction(opts.params) ? opts.params.apply(this, arguments) : opts.params),
                 resource = opts.resource || this.resource;
 
-            if (this.patient.has("acknowledged")) {
+            if (this.patient && this.patient.has("acknowledged")) {
                 _.extend(params, {
                     '_ack': true
                 });
@@ -254,14 +259,17 @@ define([
         },
         parseParameters: function(url, parameters) {
             _.each(parameters, function(val, key) {
-                url = url.replace(new RegExp(':' + key, 'g'), this.get(val));
+                url = url.replace(new RegExp(':' + key, 'g'), this.get(val) || _.get(this, val) || val);
             }, this);
             return url;
         },
         methodMap: methodMap,
         sync: function(method, model, options) {
             var backboneMethod = parseMethodMap.call(this, method),
-                opts = options || {},
+                opts = _.extend({
+                    success: _.noop,
+                    error: _.noop
+                }, options),
                 url;
 
             if (!_.isObject(opts)) throw new Error('Options must be an object');

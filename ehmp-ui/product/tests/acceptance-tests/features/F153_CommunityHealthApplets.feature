@@ -3,7 +3,7 @@
 Feature:F153-HIE C32 - Community Health Summaries
 
 Background:
-  Given user is logged into eHMP-UI 
+  # Given user is logged into eHMP-UI
   And user searches for and selects "Eight,Patient"
   When Cover Sheet is active
   Then the Community Health Summary finishes loading
@@ -19,7 +19,7 @@ Scenario: Community Health Sorting - Authoring Institution
     When user clicks on the column header "Authoring Institution" in CHS Gist
     Then Authoring Institution column is sorted in "descending" order in CHS Gist
 
-@US2113_expand
+@US2113_expand @DE4084 
 Scenario: User will be able to expand and minimize community health sumamry
   When the user clicks the Community Health Summary Expand Button
   Then the Expanded Community Health Summary applet displays
@@ -27,8 +27,8 @@ Scenario: User will be able to expand and minimize community health sumamry
   When the user clicks the Community Health Summary Minimize Button
   Then the user returns to the coversheet
 
-@US2113_Filter
-Scenario: User will be able to filter
+#@US2113_Filter
+#Scenario: User will be able to filter
 
 @US2113_detail @debug
 Scenario: User will be able to view details
@@ -42,7 +42,7 @@ Scenario: Users will be able to view modal popup for a particular community heal
   Then the modal is displayed
   And the modal's title is "Continuity of Care Document - Kaiser Permanente Mid-Atlantic STSTMA2"
   
-@f153_community_health_modal_details @data_specific
+@f153_community_health_modal_details @data_specific @DE4084 
 Scenario: Users will be able to view modal popup for a particular community health summary from expand view
   When the user clicks the Community Health Summary Expand Button
   Then the Expanded Community Health Summary applet displays	
@@ -56,7 +56,7 @@ Scenario: Community Health Summary Applet displays all of the same details after
   When user refreshes Community Health Summary Applet
   Then the message on the Community Health Summary Applet does not say "An error has occurred"
   
-@f153_community_health_expand_view_refresh 
+@f153_community_health_expand_view_refresh @DE4084 
 Scenario: Community Health Summary expand view (which is Timeline) displays all of the same details after applet is refreshed
   When the user clicks the Community Health Summary Expand Button
   Then the Expanded Community Health Summary applet displays	

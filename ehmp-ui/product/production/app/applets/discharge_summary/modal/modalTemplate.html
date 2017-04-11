@@ -1,99 +1,82 @@
-<div class="document-detail">
-    <div class="row">
-        <div class="col-xs-2">
-            <p class="text-right all-margin-no"><strong>
-                <span class="color-grey-darker" data-detail-label="facility">
-                 Facility:</span>
-            </strong></p>
-        </div>
-        <div class="col-xs-8" data-detail="facility">
-            <p class="all-margin-no">
-                {{#if summaryFacilityName}}
-                    {{summaryFacilityName}}
-                {{else}}
-                    N/A
-                {{/if}}
-            </p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-2">
-            <p class="text-right all-margin-no"><strong>
-                <span class="color-grey-darker" data-detail-label="author">Author:</span>
-            </strong></p>
-        </div>
-        <div class="col-xs-4" data-detail="author">
-            <p class="all-margin-no">
-                {{#if summaryAuthorDisplayName}}
-                    {{summaryAuthorDisplayName}}
-                {{else}}
-                    N/A
-                {{/if}}
-            </p>
-        </div>
-        <div class="col-xs-2">
-            <p><strong>
-                <span class="text-right color-grey-darker" data-detail-label="cosigner">Expected Cosigner:</span>
-            </strong></p>
-        </div>
-        <div class="col-xs-4" data-detail="cosigner">
-            <p class="all-margin-no">
-            {{#if summaryCosignerDisplayName}}
-                {{summaryCosignerDisplayName}}
-            {{else}}
-                N/A
-            {{/if}}
-            </p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-2">
-             <p class="text-right all-margin-no"><strong>
-                    <span class="color-grey-darker" data-detail-label="status">Status:</span>
-            </strong></p>
-        </div>
-        <div class="col-xs-8 {{summaryStatusClass}}" data-detail="status">
-            <p class="all-margin-no">
-                {{#if summaryStatusDisplayName}}
-                    {{summaryStatusDisplayName}}
-                {{else}}
-                    N/A
-                {{/if}}
-            </p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-2">
-            <p class="text-right all-margin-no"><strong>
-                <span class="color-grey-darker" data-detail-label="attending">
-                Attending:</span>
-            </strong></p>
-        </div>
-        <div class="col-xs-8 {{statusClass}}" data-detail="attending">
-            <p class="all-margin-no">
-            {{#if summaryAttendingDisplayName}}
-                {{summaryAttendingDisplayName}}
-            {{else}}
-                N/A
-            {{/if}}
-            </p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-2">
-            <p class="text-right all-margin-no"><strong>
-                <span class="color-grey-darker" data-detail-label="date-time">Date/Time:</span>
-            </strong></p>
-        </div>
-        <div class="col-xs-8" data-detail="date-time">
-            <p class="all-margin-no">
-                {{#if summaryDateTime}}
-                    {{formatDate summaryDateTime "MM/DD/YYYY - HH:mm"}}
-                {{else}}
-                    N/A
-                {{/if}}
-            </p>
+<div class="detail-modal-content">
+    <div class="document-detail">
+        <div class="row">
+            <div class="col-xs-12">
+                <h5 class="bottom-border-grey-dark">Details</h5>
+            </div>
+            <div class="col-xs-3">
+                <p>
+                    <span data-detail-label="facility"><strong>Facility</strong></span><br />
+                    <span data-detail="facility">
+                        {{#if summaryFacilityName}}
+                            {{summaryFacilityName}}
+                        {{else}}
+                            N/A
+                        {{/if}}
+                    </span>
+                </p>
+            </div>
+            <div class="col-xs-3">
+                <p>
+                    <span data-detail-label="author"><strong>Author</strong></span><br />
+                    <span data-detail="author">
+                        {{#if summaryAuthorDisplayName}}
+                            {{summaryAuthorDisplayName}}
+                        {{else}}
+                            N/A
+                        {{/if}}
+                    </span>
+                </p>
+            </div>
+            <div class="col-xs-3">
+                <p>
+                    <span data-detail-label="cosigner"><strong>Expected Cosigner</strong></span><br />
+                    <span data-detail="cosigner">
+                        {{#if summaryCosignerDisplayName}}
+                            {{summaryCosignerDisplayName}}
+                        {{else}}
+                            N/A
+                        {{/if}}
+                    </span>
+                </p>
+            </div>
+            <div class="col-xs-3">
+                <p>
+                    <span data-detail-label="status"><strong>Status</strong></span><br />
+                    <span class="{{summaryStatusClass}}" data-detail="status">
+                        {{#if summaryStatusDisplayName}}
+                            {{summaryStatusDisplayName}}
+                        {{else}}
+                            N/A
+                        {{/if}}
+                    </span>
+                </p>
+            </div>
+            <div class="col-xs-3">
+                <p>
+                    <span data-detail-label="attending"><strong>Attending</strong></span><br />
+                    <span class="{{statusClass}}" data-detail="attending">
+                        {{#if summaryAttendingDisplayName}}
+                            {{summaryAttendingDisplayName}}
+                        {{else}}
+                            N/A
+                        {{/if}}
+                    </span>
+                </p>
+            </div>
+            <div class="col-xs-3">
+                <p>
+                    <span data-detail-label="date-time"><strong>Date/Time</strong></span><br />
+                    <span data-detail="date-time">
+                        {{#if summaryDateTime}}
+                            {{formatDate summaryDateTime "MM/DD/YYYY - HH:mm"}}
+                        {{else}}
+                            N/A
+                        {{/if}}
+                    </span>
+                </p>
+            </div>
         </div>
     </div>
+    <pre>{{summaryText}}</pre>
 </div>
-<pre class="font-size-12 top-margin-sm">{{summaryText}}</pre>

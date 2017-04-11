@@ -3,7 +3,7 @@ Feature: F148 -  Audit Reports
 @manual
 Scenario: Manually check that audit log has been created
     Given a user is logged into EHMP-UI and searches for patient Threehundredeighty,Patient, who has a patient ID of 100379
-    Then to manually confirm the entry is there ssh vagrant@IP        
+    Then to manually confirm the entry is there ssh vagrant@IP_ADDRESS
     And the password is vagrant
     Then cd /tmp
     Then tail audit.log

@@ -5,9 +5,37 @@ define([
     "app/applets/lab_results_grid/modal/modalView",
     "app/applets/lab_results_grid/modal/errorView",
     "app/applets/lab_results_grid/modal/modalHeaderView",
-    "app/applets/lab_results_grid/modal/modalFooterView"
-], function(require, Backbone, _, ModalView, ErrorView, ModalHeaderViewUndef, modalFooterView) {
+    "app/applets/lab_results_grid/modal/modalFooterView",
+    "app/applets/lab_results_grid/modal/noteView",
+    "app/applets/visit/writeback/addselectVisit"
+], function(require, Backbone, _, ModalView, ErrorView, ModalHeaderViewUndef, modalFooterView, NoteView, AddSelectVisit) {
     'use strict';
+
+    var WORKFLOW_DEFAULTS = {
+        size: 'medium',
+        showProgress: false,
+        keyboard: true
+    };
+
+    var launchWorkflow = function(model, view, title) {
+        if (_.isUndefined(model) || _.isUndefined(view)) {
+            throw new Error('Invalid parameters passed to lab_results_grid::launchWorkflow');
+        }
+
+        var workflowOptions = _.extend({}, WORKFLOW_DEFAULTS, {
+            steps: [],
+            title: title || 'Numeric Lab Results'
+        });
+        ADK.utils.writebackUtils.handleVisitWorkflow(workflowOptions, AddSelectVisit);
+
+        workflowOptions.steps.push({
+            view: view,
+            viewModel: model
+        });
+
+        var workflow = new ADK.UI.Workflow(workflowOptions);
+        workflow.show();
+    };
 
     var appletUiHelpers = {
 
@@ -65,7 +93,7 @@ define([
         showModal: function(detailData, detailModel, dataCollection, navHeader, appletOptions, id) {
             var modalOptions = {
                 'title': detailData.title,
-                'size': 'large',
+                'size': 'xlarge',
                 'footerView': modalFooterView.extend()
             };
 
@@ -92,7 +120,7 @@ define([
         showErrorModal: function(error, itemModel, dataCollection) {
             var modalOptions = {
                 'title': "An Error Occurred",
-                'size': 'large',
+                'size': 'xlarge',
                 'footerView': modalFooterView.extend()
             };
 
@@ -114,6 +142,11 @@ define([
                 options: modalOptions
             });
             modal.show();
+        },
+        launchNoteWorkflow: function(dataModel) {
+            // This will change to the appropriate ADK Writeback Resource object.
+            var model = new Backbone.Model(dataModel.attributes);
+            launchWorkflow(model, NoteView, 'Create Note Object');
         }
     };
     return appletUiHelpers;

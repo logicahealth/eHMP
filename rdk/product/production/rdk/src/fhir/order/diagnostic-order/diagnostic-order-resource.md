@@ -2,7 +2,7 @@
 
 ## Diagnostic order diagnostic order [{{{path}}}]
 
-### Fhir patient diagnostic order [GET {{{path}}}{?limit}{&fields}]
+### Fhir patient diagnostic order [GET {{{path}}}{?limit}]
 
 Converts a vpr call for radiology and laboratory orders into a FHIR 'DiagnosticOrder' resource.
 
@@ -11,8 +11,6 @@ Converts a vpr call for radiology and laboratory orders into a FHIR 'DiagnosticO
     :[id]({{{common}}}/parameters/fhir.id.md)
 
     :[limit]({{{common}}}/parameters/limit.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

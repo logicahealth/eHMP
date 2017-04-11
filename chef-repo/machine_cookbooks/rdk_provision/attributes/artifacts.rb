@@ -5,7 +5,7 @@
 
 default[:rdk_provision][:artifacts] = {
 	:rdk => {
-		:repo => "ehmp",
+		:repo => "releases",
   	:group => "us.vistacore.rdk",
   	:artifact => "rdk",
   	:extension => "zip",
@@ -13,7 +13,7 @@ default[:rdk_provision][:artifacts] = {
     :release => true
   },
   :vistatasks => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.jbpm",
     :artifact => "VistaTasks",
     :extension => "jar",
@@ -21,7 +21,7 @@ default[:rdk_provision][:artifacts] = {
     :release => true
   },
   :jbpm_fitlabproject => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.jbpm",
     :artifact => "FITLabProject",
     :extension => "jar",
@@ -29,7 +29,7 @@ default[:rdk_provision][:artifacts] = {
     :release => true
   },
   :jbpm_auth => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.jbpm",
     :artifact => "jboss-custom-login-jar-with-dependencies",
     :extension => "jar",
@@ -37,7 +37,7 @@ default[:rdk_provision][:artifacts] = {
     :release => true
   },
   :jbpm_eventlisteners => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.jbpm",
     :artifact => "jbpm-custom-event-listeners",
     :extension => "jar",
@@ -45,7 +45,7 @@ default[:rdk_provision][:artifacts] = {
     :release => true
   },
   :jbpm_cdsinvocationservice => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.jbpm",
     :artifact => "CDSInvocationService",
     :extension => "jar",
@@ -53,7 +53,7 @@ default[:rdk_provision][:artifacts] = {
     :release => true
   },
   :jbpm_fobtlabservice => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.jbpm",
     :artifact => "FOBTLabService",
     :extension => "jar",
@@ -61,7 +61,7 @@ default[:rdk_provision][:artifacts] = {
     :release => true
   },
   :jbpm_tasksservice => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.jbpm",
     :artifact => "tasksservice",
     :extension => "war",
@@ -69,7 +69,7 @@ default[:rdk_provision][:artifacts] = {
     :release => true
   },
   :jbpm_general_medicine => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.jbpm",
     :artifact => "General_Medicine",
     :extension => "jar",
@@ -77,7 +77,7 @@ default[:rdk_provision][:artifacts] = {
     :release => true
   },
   :jbpm_order => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.jbpm",
     :artifact => "Order",
     :extension => "jar",
@@ -85,11 +85,27 @@ default[:rdk_provision][:artifacts] = {
     :release => true
   },
   :jbpm_activity => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.jbpm",
     :artifact => "Activity",
     :extension => "jar",
     :version => ENV["JBPM_ACTIVITY_VERSION"],
+    :release => true
+  },
+  :jbpm_ehmpservices => {
+    :repo => "releases",
+    :group => "us.vistacore.jbpm",
+    :artifact => "EhmpServices",
+    :extension => "jar",
+    :version => ENV["JBPM_EHMPSERVICES_VERSION"],
+    :release => true
+  },
+  :jbpm_sql_config => {
+    :repo => "releases",
+    :group => "us.vistacore.jbpm",
+    :artifact => "sql_config",
+    :extension => "tgz",
+    :version => ENV["JBPM_SQL_CONFIG_VERSION"],
     :release => true
   }
 }

@@ -3,6 +3,7 @@ define(function() {
 
     return {
         id: "vital-list",
+        context: 'patient',
         contentRegionLayout: "gridOne",
         appletHeader: "patient",
         applets: [{

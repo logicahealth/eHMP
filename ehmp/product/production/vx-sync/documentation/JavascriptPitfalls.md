@@ -1,7 +1,7 @@
 Some Pitfalls in Node.js Javascript
 ===================================
 
-#####      n Reich (steven.reich@agilex.com)
+##### Steven Reich (steven.reich@agilex.com)
 
 Developers familiar with Java are likely to be surprised by some of the behaviors of Javascript. Below are some of the behaviors that you need to know if you want to avoid hours of frustrating debug sessions.
 

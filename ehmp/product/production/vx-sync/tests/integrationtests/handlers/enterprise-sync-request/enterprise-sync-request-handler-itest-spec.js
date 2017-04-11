@@ -7,32 +7,32 @@ var _ = require('underscore');
 
 require('../../../../env-setup');
 
-var uuid = require('node-uuid');
 var logger = require(global.VX_DUMMIES + 'dummy-logger');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
 var testHandler = require(global.VX_INTTESTS + 'framework/handler-test-framework').testHandler;
 var patientIdUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 var handler = require(global.VX_HANDLERS + 'enterprise-sync-request/enterprise-sync-request-handler');
 var VistaClient = require(global.VX_SUBSYSTEMS + 'vista/vista-client');
-// var queueConfig = require(global.VX_JOBFRAMEWORK + 'queue-config');
+// var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
 var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 
-// var PublisherRouter = require(global.VX_JOBFRAMEWORK + 'publisherRouter');
+// var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 var MviClient = require(global.VX_SUBSYSTEMS + 'mvi/mvi-client');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
-var JobStatusUpdater = require(global.VX_JOBFRAMEWORK + 'JobStatusUpdater');
+var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 var wConfig = require(global.VX_ROOT + 'worker-config');
 
 // logger = require('bunyan').createLogger({
-//     name: 'enterprise-sync-request-handler',
+//     name: 'dummy-log',
 //     level: 'debug'
 // });
 
 describe('enterprise-sync-request-handler.js', function() {
     var patientIdentifier = patientIdUtil.create('icn', '5000000126V406128');
-    var job = jobUtil.createEnterpriseSyncRequest(patientIdentifier, uuid.v4(), false);
+    var jpid;
+    var job;
     var host = vx_sync_ip;
     var PORT       ;
     var tubename = 'vx-sync-test';
@@ -107,7 +107,7 @@ describe('enterprise-sync-request-handler.js', function() {
 
             'record-enrichment': {},
             'store-record': {},
-            'vista-prioritization-request': {},
+            'event-prioritization-request': {},
             'operational-store-record': {},
             'publish-data-change-event': {},
             'patient-data-state-checker': {}
@@ -119,10 +119,10 @@ describe('enterprise-sync-request-handler.js', function() {
         'vistaSites': {
             '9E7A': _.defaults(wConfig.vistaSites['9E7A'], {
                 'name': 'panorama',
-                'host': 'IPADDRESS ',
+                'host': 'IP_ADDRESS',
                 'port': 9210,
-                'accessCode': 'PW    ',
-                'verifyCode': 'PW    !!',
+                'accessCode': 'PW',
+                'verifyCode': 'PW',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -130,10 +130,10 @@ describe('enterprise-sync-request-handler.js', function() {
             }),
             'C877': _.defaults(wConfig.vistaSites.C877, {
                 'name': 'kodak',
-                'host': 'IPADDRESS ',
+                'host': 'IP_ADDRESS',
                 'port': 9210,
-                'accessCode': 'PW    ',
-                'verifyCode': 'PW    !!',
+                'accessCode': 'PW',
+                'verifyCode': 'PW',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -144,12 +144,12 @@ describe('enterprise-sync-request-handler.js', function() {
         mvi: {
             protocol: 'http',
             host: vx_sync_ip,
-            port: 54000,
+            port: 5400,
             path: '/mvi/correspondingIds'
         },
         jds: _.defaults(wConfig.jds, {
             protocol: 'http',
-            host: 'IPADDRESS ',
+            host: 'IP_ADDRESS',
             port: 9080
         }),
         rules: {
@@ -165,11 +165,18 @@ describe('enterprise-sync-request-handler.js', function() {
         'hdr': {
             'operationMode': 'REQ/RES',
             'hdrSites': {
-                'FFC7': { 'stationNumber': '536' },
-                '2939': { 'stationNumber': '551' },
-                '76C6': { 'stationNumber': '547' }
+                'FFC7': {
+                    'stationNumber': '536'
+                },
+                '2939': {
+                    'stationNumber': '551'
+                },
+                '76C6': {
+                    'stationNumber': '547'
+                }
             }
-        }
+        },
+        'vistaSitesByStationCombined': _.defaults(wConfig.vistaSitesByStationCombined, {})
     };
 
     var environment = {
@@ -190,57 +197,95 @@ describe('enterprise-sync-request-handler.js', function() {
         jobUtil.vlerSyncRequestType(),
         // jobUtil.jmeadowsSyncRequestType()    //5000000126V406128 does not have a DOD record
     ];
+    it('Set up and run test', function() {
 
-    testHandler(handler, logger, config, environment, host, port, tubename, job, matchingJobTypes, 90000, function(result) {
-        expect(result).toBeTruthy();
-    });
+        var setUpDone = false;
 
-    describe('tests handler for storing patient identifiers', function() {
-        it('verify JDS has stored patient identifiers', function() {
-            var done = false;
-            // var expectedPatientIdentifierValues = [ '5000000126V406128', '9E7A;100625', 'C877;100625', 'HDR;5000000126V406128', 'DAS;5000000126V406128', 'VLER;5000000126V406128' ];
-            var expectedPatientIdentifierValues = ['5000000126V406128', '9E7A;100625', 'C877;100625', 'HDR;5000000126V406128', 'VHICID;1325', 'VLER;5000000126V406128'];
-            var jdsError, jdsResponse;
-            runs(function() {
-                environment.jds.getPatientIdentifier(job, function(error, response) {
-                    done = true;
-                    jdsError = error;
-                    jdsResponse = response;
-                });
-            });
+        runs(function() {
+            environment.jds.storePatientIdentifier({
+                patientIdentifiers: [patientIdentifier.value]
+            }, function(error, response) {
+                expect(error).toBeFalsy();
 
-            waitsFor(function() {
-                return done;
-            }, 'response from JDS', 10000);
+                jpid = val(response, ['headers', 'location']).replace(/(^http:\/\/.*\/vpr\/jpid\/)/, '');
+                job = jobUtil.createEnterpriseSyncRequest(patientIdentifier, jpid, false);
 
-            runs(function() {
-                expect(jdsError).toBeFalsy();
-                expect(jdsResponse).toBeTruthy();
-                expect(val(jdsResponse, 'statusCode')).toEqual(200);
-
-                var body;
-                try {
-                    body = JSON.parse(jdsResponse.body);
-                } catch (error) {
-                    // Do nothing
-                }
-
-                expect(val(body, 'patientIdentifiers')).toEqual(expectedPatientIdentifierValues);
+                setUpDone = true;
             });
         });
 
-        afterEach(function() {
+        waitsFor(function() {
+            return setUpDone;
+        }, 'set up', 20000);
+
+        runs(function() {
+            testHandler(handler, logger, config, environment, host, port, tubename, job, matchingJobTypes, 90000, function(result) {
+                expect(result).toBeTruthy();
+            });
+        });
+    });
+
+    afterEach(function() {
+        var checkIdentifiersDone = false;
+        // var expectedPatientIdentifierValues = [ '5000000126V406128', '9E7A;100625', 'C877;100625', 'HDR;5000000126V406128', 'DAS;5000000126V406128', 'VLER;5000000126V406128' ];
+        var expectedPatientIdentifierValues = ['5000000126V406128', '9E7A;100625', 'C877;100625', 'HDR;5000000126V406128', 'JPID;' + jpid, 'VLER;5000000126V406128'];
+        var jdsError, jdsResponse;
+        runs(function() {
+            environment.jds.getPatientIdentifier(job, function(error, response) {
+                checkIdentifiersDone = true;
+                jdsError = error;
+                jdsResponse = response;
+            });
+        });
+
+        waitsFor(function() {
+            return checkIdentifiersDone;
+        }, 'response from JDS', 10000);
+
+
+        var checkVhicIdEventDone = false;
+        runs(function() {
+            environment.jds.getPatientDataByUid('urn:va:vhic-id:JPID:' + jpid + ':' + jpid, function(error, response, result) {
+                checkVhicIdEventDone = true;
+                expect(error).toBeFalsy();
+                expect(response).toBeTruthy();
+                expect(result).toBeTruthy();
+                expect(val(result, ['data', 'items'])).toBeTruthy();
+                var vhicIds = val(result, ['data', 'items', 0, 'vhicIds']);
+                expect(vhicIds).toBeTruthy();
+                expect(vhicIds).toContain(jasmine.objectContaining({
+                    'vhicId': '1325'
+                }));
+            });
+        });
+        waitsFor(function() {
+            return checkVhicIdEventDone;
+        });
+
+        var teardownDone = false;
+
+        runs(function() {
+            expect(jdsError).toBeFalsy();
+            expect(jdsResponse).toBeTruthy();
+            expect(val(jdsResponse, 'statusCode')).toEqual(200);
+
+            var body;
+            try {
+                body = JSON.parse(jdsResponse.body);
+            } catch (error) {
+                // Do nothing
+            }
+
             //Clean up the patient we created for the test
-            var done = false;
-            runs(function() {
-                environment.jds.deletePatientByPid('9E7A;100625', function() {
-                    done = true;
-                });
-            });
-            waitsFor(function() {
-                return done;
+            expect(val(body, 'patientIdentifiers')).toEqual(expectedPatientIdentifierValues);
+            environment.jds.deletePatientByPid(patientIdentifier.value, function() {
+                teardownDone = true;
             });
         });
 
+        waitsFor(function() {
+            return teardownDone;
+        }, 'clear test patient from JDS');
     });
+
 });

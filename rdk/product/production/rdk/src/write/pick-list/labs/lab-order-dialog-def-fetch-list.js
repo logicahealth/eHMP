@@ -3,7 +3,6 @@ var parse = require('./lab-order-dialog-def-parser').parse;
 var rpcUtil = require('./../utils/rpc-util');
 var _ = require('lodash');
 
-
 /**
  * Calls the RPC 'ORWDLR32 DEF' and parses out the data<br/><br/>
  *
@@ -15,6 +14,8 @@ var _ = require('lodash');
 module.exports.fetch = function(logger, configuration, callback, params) {
     var location = _.get(params, 'location');
     var division = _.get(params, 'division');
-
-    return rpcUtil.standardRPCCall(logger, configuration, 'ORWDLR32 DEF', location, division , parse, callback);
+    if (!location) {
+        return callback('location for Lab Order Dialog Cannot be Empty');
+    }
+    return rpcUtil.standardRPCCall(logger, configuration, 'ORWDLR32 DEF', location, division, parse, callback);
 };

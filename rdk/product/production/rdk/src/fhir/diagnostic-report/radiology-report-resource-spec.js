@@ -25,6 +25,7 @@ describe('Vitals FHIR Resource', function() {
                 'localId': '7059382.8387-1',
                 'typeName': 'RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS',
                 'dateTime': '199406171612',
+                'stampTime': '19940617160800',
                 'category': 'RA',
                 'reason': '',
                 'providers': [{
@@ -189,9 +190,9 @@ describe('Vitals FHIR Resource', function() {
                                 return res.resourceType === 'Observation';
                             });
                             expect(resObservation).not.to.be.undefined();
-                            expect(resObservation.name.coding[0].system).to.equal('CPT OID: 2.16.840.1.113883.6.12');
-                            expect(resObservation.name.coding[0].display).to.equal(vprRR.typeName);
-                            expect(resObservation.name.text).to.equal(vprRR.name);
+                            expect(resObservation.code.coding[0].system).to.equal('CPT OID: 2.16.840.1.113883.6.12');
+                            expect(resObservation.code.coding[0].display).to.equal(vprRR.typeName);
+                            expect(resObservation.code.text).to.equal(vprRR.typeName);
                         });
                     });
                     it('verifies that the name from VPR RadiologyReports Resource coresponds to the one from the FHIR RadiologyReports Resource', function() {
@@ -207,11 +208,11 @@ describe('Vitals FHIR Resource', function() {
                         };
                         expect(fhirRR.status).to.equal(statusMap[vprRR.statusName]);
                     });
-                    it('verifies that the issued date from VPR RadiologyReports Resource coresponds to the one from the FHIR RadiologyReports Resource', function() {
-                        expect(fhirRR.issued).to.equal(fhirUtils.convertToFhirDateTime(vprRR.dateTime));
+                    it('verifies that the dateTime date from VPR RadiologyReports Resource coresponds to the issued attribute from the FHIR RadiologyReports Resource', function() {
+                        expect(fhirRR.issued).to.equal(fhirUtils.convertToFhirDateTime(vprRR.dateTime, fhirUtils.getSiteHash(vprRR.uid)));
                     });
-                    it('verifies that the patient uid from VPR RadiologyReports Resource coresponds to the one from the FHIR RadiologyReports Resource', function() {
-                        expect(fhirRR.subject.display).to.equal(vprRR.pid);
+                    it('verifies that the stampTime from VPR RadiologyReports Resource coresponds to the appliesDateTime attribute from the FHIR RadiologyReports Resource', function() {
+                        expect(fhirRR.diagnosticDateTime).to.equal(fhirUtils.convertToFhirDateTime(vprRR.dateTime, fhirUtils.getSiteHash(vprRR.uid)));
                     });
                     it('verifies that the patient uid from VPR RadiologyReports Resource coresponds to the one from the FHIR RadiologyReports Resource', function() {
                         expect(fhirRR.subject.display).to.equal(vprRR.pid);
@@ -226,7 +227,7 @@ describe('Vitals FHIR Resource', function() {
                         expect(fhirRR.serviceCategory.coding[0].display).to.equal('Radiology');
                     });
                     it('verifies that the diagnostic dateTime from VPR RadiologyReports Resource coresponds to the one from the FHIR RadiologyReports Resource', function() {
-                        expect(fhirRR.diagnosticDateTime).to.equal(fhirUtils.convertToFhirDateTime(vprRR.dateTime));
+                        expect(fhirRR.diagnosticDateTime).to.equal(fhirUtils.convertToFhirDateTime(vprRR.dateTime, fhirUtils.getSiteHash(vprRR.uid)));
                     });
                     it('verifies that the diagnosis code from VPR RadiologyReports Resource coresponds to the one from the FHIR RadiologyReports Resource', function() {
                         expect(fhirRR.codedDiagnosis[0].text).to.equal(vprRR.diagnosis[0].code);

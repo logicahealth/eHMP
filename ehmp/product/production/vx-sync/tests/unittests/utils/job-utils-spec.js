@@ -37,6 +37,7 @@ describe('job.js', function() {
             expect(job.patientIdentifier).toEqual(testId);
             expect(job.jpid).toEqual('jpid');
             expect(job.jobId).toBeDefined();
+            expect(job.priority).toBeUndefined();
         });
 
         it('verify job without domain is correct', function() {
@@ -61,10 +62,14 @@ describe('job.js', function() {
         });
 
         it('verify job with event-uid is correct', function() {
-            var job = jobUtil.create(testType, testId, null, null, null, testEventUid);
+            var meta = {
+                priority: 5
+            };
+            var job = jobUtil.create(testType, testId, null, null, null, testEventUid, meta);
             expect(job.type).toEqual(testType);
             expect(job.patientIdentifier).toEqual(testId);
             expect(job['event-uid']).toEqual(testEventUid);
+            expect(job.priority).toEqual(5);
         });
     });
 
@@ -213,9 +218,9 @@ describe('job.js', function() {
         });
 
         it('verify missing field tests', function() {
-            var type = jobUtil.vistaPrioritizationRequestType();
-            var type2 = jobUtil.vistaPrioritizationRequestType();
-            var wrongType = jobUtil.hdrXformVprType();
+            var type = jobUtil.eventPrioritizationRequestType();
+            var type2 = jobUtil.eventPrioritizationRequestType();
+            var wrongType = jobUtil.hdrDomainXformVprType();
 
             expect(jobUtil.isValid(type, {
                 type: type,
@@ -262,11 +267,12 @@ describe('job.js', function() {
                 value: '9E7A;8'
             };
             var rootJob = {
-                jpid : uuid.v4()
+                jpid : uuid.v4(),
+                priority: 38
             };
             var type = jobUtil.vistaSubscribeRequestType(site);
             var job_gen = jobUtil.createVistaSubscribeRequest(site, patientIdentifier, rootJob);
-
+            expect(job_gen.priority).toBe(38);
             expect(jobUtil.isValid(type, job_gen, 'C877')).toBe(false);
             expect(jobUtil.isValid(type, job_gen, site)).toBe(true);
         });

@@ -2,14 +2,9 @@
 
 ## Permissions [{{{path}}}]
 
-### List [GET {{{path}}}/list{?fields}]
+### List [GET {{{path}}}/list]
 
 Used to get the eHMP Permission Sets from JDS.
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 

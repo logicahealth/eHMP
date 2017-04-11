@@ -2,7 +2,7 @@
 var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
-var errors = require('../common/errors.js');
+var errors = require('../common/errors');
 var querystring = require('querystring');
 var composition = require('./composition');
 

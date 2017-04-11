@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var rdk = require('../../../core/rdk');
 var pjds = rdk.utils.pjdsStore;
-var quickorder = require('./quick-order');
+var quickorder = require('../../../subsystems/orderables/quickorder-subsystem');
 
 var logger = {
     trace: function() {},
@@ -154,7 +154,10 @@ function createReqWithParam(map) {
         logger: logger,
         audit: {},
         app: {
-            config: {}
+            config: {},
+            subsystems: {
+                quickorder: quickorder
+            }
         },
         session: {
             user: {

@@ -5,7 +5,7 @@
 
 default[:cds_provision][:artifacts] = {
   :cdsi_metrics => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.cdsinvocation",
     :artifact => "cdsinvocation-metrics",
     :extension => "war",
@@ -13,7 +13,7 @@ default[:cds_provision][:artifacts] = {
     :release => true
   },
   :cdsi_results => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.cdsinvocation",
     :artifact => "cdsinvocation-results",
     :extension => "war",
@@ -21,15 +21,15 @@ default[:cds_provision][:artifacts] = {
     :release => true
   },
   :cdsdashboard => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.cdsdashboard",
-    :artifact => "cdsdashboard",
+    :artifact => "cds-dashboard",
     :extension => "war",
     :version => ENV["CDSDASHBOARD_VERSION"],
     :release => true
   },
   :opencds_knowledge_repository_data => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.opencds",
     :artifact => "opencds-knowledge-repository-data",
     :extension => "zip",
@@ -37,7 +37,7 @@ default[:cds_provision][:artifacts] = {
     :release => true
   },
   :cds_engine_agent => {
-    :repo => "ehmp",
+    :repo => "releases",
     :group => "us.vistacore.cdsinvocation",
     :artifact => "cds-engine-agent",
     :extension => "war",

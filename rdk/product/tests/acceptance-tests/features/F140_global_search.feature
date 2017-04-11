@@ -12,13 +12,13 @@ Feature: F140 - Global Patient Search
       | field       | value                                   |
       | givenNames  | PATIENT                                 |
       | familyName  | EIGHT                                   |
-      | ssn         | *****0008                               |
-      | birthDate   | 19350407                                |
+      | ssn         | ***-**-0008                             |
+      | birthDate   | 04/07/1935                              |
       | id          | 10108V420871^NI^200M^USVHA^P            |
       | facility    | 200M                                    |
       | pid         | 10108V420871                            |
-      | age         | 80                                      |
       | genderName  | Male                                    |
+    And the global patient result contains an age 
 
       Examples:
       | lastname    | firstname   | ssnumber    | dobirth     | contenttype         |
@@ -36,8 +36,8 @@ Feature: F140 - Global Patient Search
       | field       | value                                   |
       | familyName  | EIGHT                                   |
       | givenNames  | INPATIENT                               |
-      | ssn         | *****0808                               |
-      | birthDate   | 19450309                                |
+      | ssn         | ***-**-0808                             |
+      | birthDate   | 03/09/1945                              |
       | genderName  | Male                                    |
       | id          | 5000000217V519385^NI^200M^USVHA^P       |
 
@@ -57,8 +57,8 @@ Feature: F140 - Global Patient Search
       | field       | value                                   | contenttype         |
       | familyName  | EIGHTEEN                                | application/json    |
       | givenNames  | PATIENT                                 | application/json    |
-      | ssn         | *****0018                               | application/json    |
-      | birthDate   | 19350407                                | application/json    |
+      | ssn         | ***-**-0018                             | application/json    |
+      | birthDate   | 04/07/1935                              | application/json    |
       | genderName  | Male                                    | application/json    |
       | id          | 10118V572553^NI^200M^USVHA^P            | application/json    |
 
@@ -163,8 +163,8 @@ Feature: F140 - Global Patient Search
       | field       | value                                   | contenttype         |
       | familyName  | EIGHTEEN                                | application/json    |
       | givenNames  | PATIENT                                 | application/json    |
-      | ssn         | *****0018                               | application/json    |
-      | birthDate   | 19350407                                | application/json    |
+      | ssn         | ***-**-0018                             | application/json    |
+      | birthDate   | 04/07/1935                              | application/json    |
       | genderName  | Male                                    | application/json    |
       | id          | 10118V572553^NI^200M^USVHA^P            | application/json    |
 

@@ -24,13 +24,6 @@
 			"values": [
 			]
 		},
-		"fields": {
-			"name": "fields",
-			"paramType": "query",
-			"type": "string",
-			"values": [
-			]
-		},
 		"patientDFN": {
 			"name": "patientDFN",
 			"paramType": "query",

@@ -1,0 +1,47 @@
+{
+  "name": "topbeat",
+  "description": "Installs/Configures topbeat",
+  "long_description": "topbeat Cookbook\n================\n\n[![Cookbook](http://img.shields.io/badge/cookbook-v0.1.2-green.svg)](https://github.com/vkhatri/chef-topbeat)[![Build Status](https://travis-ci.org/vkhatri/chef-topbeat.svg?branch=master)](https://travis-ci.org/vkhatri/chef-topbeat)\n\nThis is a [Chef] cookbook to manage [Topbeat].\n\n\n>> For Production environment, always prefer the [most recent release](https://supermarket.chef.io/cookbooks/topbeat).\n\n\n## Most Recent Release\n\n```\ncookbook 'topbeat', '~> 0.1.2'\n```\n\n## From Git\n\n```\ncookbook 'topbeat', github: 'vkhatri/chef-topbeat'\n```\n\n## Repository\n\nhttps://github.com/vkhatri/chef-topbeat\n\n\n## Supported OS\n\nThis cookbook was tested on Amazon & Ubuntu Linux and expected to work on other RHEL platforms.\n\n\n## Recipes\n\n- `topbeat::default` - default recipe (use it for run_list)\n\n- `topbeat::install` - install topbeat\n\n- `topbeat::config` - configure topbeat\n\n\n## Core Attributes\n\n\n* `default['topbeat']['version']` (default: `1.0.0`): topbeat version\n\n* `default['topbeat']['packages']` (default: `[]`): package dependencies\n\n* `default['topbeat']['conf_dir']` (default: `/etc/topbeat`): topbeat yaml configuration file directory\n\n* `default['topbeat']['conf_file']` (default: `/etc/topbeat/topbeat.yml`): topbeat configuration file\n\n* `default['topbeat']['notify_restart']` (default: `true`): whether to restart topbeat service on configuration file change\n\n* `default['topbeat']['disable_service']` (default: `false`): whether to stop and disable topbeat service, useful for maintenance mode\n\n\n## Configuration File topbeat.yml Attributes\n\n* `default['topbeat']['config']['input']['period']` (default: `10`): topbeat statistics collection interval\n\n* `default['topbeat']['config']['input']['period']` (default: `10`): topbeat procs to collect statistics\n\n* `default['topbeat']['config']['output']` (default: `{}`): topbeat output configuration, e.g. elasticsearch, logstash, file etc.\n\nFor more attribute info, visit below link:\n\nhttps://github.com/elastic/topbeat/blob/master/etc/topbeat.yml\n\n\n## Topbeat YUM/APT Repository Attributes\n\n* `default['topbeat']['yum']['description']` (default: ``): beats yum reporitory attribute\n\n* `default['topbeat']['yum']['gpgcheck']` (default: `true`): beats yum reporitory attribute\n\n* `default['topbeat']['yum']['enabled']` (default: `true`): beats yum reporitory attribute\n\n* `default['topbeat']['yum']['baseurl']` (default: `https://packages.elastic.co/beats/yum/el/$basearch`): beatsyum reporitory attribute\n\n* `default['topbeat']['yum']['gpgkey']` (default: `https://packages.elasticsearch.org/GPG-KEY-elasticsearch`): beats yum reporitory attribute\n\n* `default['topbeat']['yum']['action']` (default: `:create`): beats yum reporitory attribute\n\n\n* `default['topbeat']['apt']['description']` (default: `calculated`): beats apt reporitory attribute\n\n* `default['topbeat']['apt']['components']` (default: `['stable', 'main']`): beats apt reporitory attribute\n\n* `default['topbeat']['apt']['uri']` (default: `https://packages.elastic.co/beats/apt`): beats apt reporitory attribute\n\n* `default['topbeat']['apt']['key']` (default: `http://packages.elasticsearch.org/GPG-KEY-elasticsearch`): beats apt reporitory attribute\n\n* `default['topbeat']['apt']['action']` (default: `:add`): filebeat apt reporitory attribute\n\n\n## Contributing\n\n1. Fork the repository on Github\n2. Create a named feature branch (like `add_component_x`)\n3. Write your change\n4. Write tests for your change (if applicable)\n5. Run the tests (`rake & rake knife`), ensuring they all pass\n6. Write new resource/attribute description to `README.md`\n7. Write description about changes to PR\n8. Submit a Pull Request using Github\n\n\n## Copyright & License\n\nAuthors:: Virender Khatri and [Contributors]\n\n<pre>\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n</pre>\n\n\n[Chef]: https://www.chef.io/\n[Topbeat]: https://www.elastic.co/downloads/beats/topbeat\n[Contributors]: https://github.com/vkhatri/chef-topbeat/graphs/contributors\n",
+  "maintainer": "Virender Khatri",
+  "maintainer_email": "vir.khatri@gmail.com",
+  "license": "Apache 2.0",
+  "platforms": {
+    "ubuntu": ">= 0.0.0",
+    "centos": ">= 0.0.0",
+    "amazon": ">= 0.0.0",
+    "redhat": ">= 0.0.0",
+    "fedora": ">= 0.0.0"
+  },
+  "dependencies": {
+    "yum": ">= 0.0.0",
+    "apt": ">= 0.0.0"
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "0.1.2",
+  "source_url": "https://github.com/vkhatri/chef-topbeat",
+  "issues_url": "https://github.com/vkhatri/chef-topbeat/issues",
+  "privacy": false
+}

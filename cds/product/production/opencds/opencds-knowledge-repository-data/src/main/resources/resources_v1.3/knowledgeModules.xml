@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<ns2:knowledgeModules xsi:schemaLocation="org.opencds.dss.config_rest.v1_0 ../../../../../../opencds-parent/opencds-config/opencds-config-schema/src/main/resources/schema/OpenCDSConfigRest.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ns2="org.opencds.dss.config_rest.v1_0" xmlns:ns3="org.opencds.dss.config.v1_0">
+
+	<!-- knowledgeModule>
+		<identifier scopingEntityId="org.opencds" businessId="bounce" version="1.6.0" />
+		<status>APPROVED</status>
+		<executionEngine>Drools 6.3 Adapter</executionEngine>
+		<semanticSignifierId scopingEntityId="org.opencds.fhir" businessId="FHIR" version="1.0" />
+		<package>
+			<packageType>MAVEN</packageType>
+			<packageId>org.opencds:bounce:1.6.0</packageId>
+			<preload>false</preload>
+		</package>
+		<primaryProcess></primaryProcess>
+		<timestamp>2015-10-20T22:02:06.650-06:00</timestamp>
+		<userId>salvador</userId>
+	</knowledgeModule -->
+    
+    <knowledgeModule>
+		<identifier scopingEntityId="com.cognitive" businessId="fhirBounceback" version="1.0.0" />
+		<status>APPROVED</status>
+		<executionEngine>org.opencds.service.drools.v61.KieDroolsAdapter</executionEngine>
+		<semanticSignifierId scopingEntityId="org.opencds.fhir" businessId="FHIR" version="1.0" />
+		<package>
+			<packageType>DRL</packageType>
+			<packageId>com.cognitive^fhirBounceback^1.0.0.drl</packageId>
+			<preload>true</preload>
+		</package>
+		<primaryProcess></primaryProcess>
+		<timestamp>2015-10-20T22:02:06.650-06:00</timestamp>
+		<userId>tadesse</userId>
+	</knowledgeModule>
+    <knowledgeModule>
+		<identifier scopingEntityId="com.cognitive" businessId="genderAge" version="1.0.0" />
+		<status>APPROVED</status>
+		<executionEngine>org.opencds.service.drools.v61.KieDroolsAdapter</executionEngine>
+		<semanticSignifierId scopingEntityId="org.opencds.fhir" businessId="FHIR" version="1.0" />
+		<package>
+			<packageType>DRL</packageType>
+			<packageId>com.cognitive^genderAge^1.0.0.drl</packageId>
+			<preload>true</preload>
+		</package>
+		<primaryProcess></primaryProcess>
+		<timestamp>2014-12-13T22:02:06.650-06:00</timestamp>
+		<userId>tadesse</userId>
+	</knowledgeModule>
+	<knowledgeModule>
+		<identifier scopingEntityId="com.cognitive" businessId="colorectal" version="1.0.0" />
+		<status>APPROVED</status>
+		<executionEngine>org.opencds.service.drools.v61.KieDroolsAdapter</executionEngine>
+		<semanticSignifierId scopingEntityId="org.opencds.fhir" businessId="FHIR" version="1.0" />
+		<package>
+			<packageType>DRL</packageType>
+			<packageId>com.cognitive^colorectal^1.0.0.drl</packageId>
+			<preload>true</preload>
+		</package>
+		<primaryProcess></primaryProcess>
+		<timestamp>2014-12-13T22:02:06.650-06:00</timestamp>
+		<userId>tadesse</userId>
+	</knowledgeModule>
+	<knowledgeModule>
+		<identifier scopingEntityId="com.cognitive" businessId="agentOrange" version="1.0.0" />
+		<status>APPROVED</status>
+		<executionEngine>org.opencds.service.drools.v61.KieDroolsAdapter</executionEngine>
+		<semanticSignifierId scopingEntityId="org.opencds.vmr" businessId="VMR" version="1.0" />
+		<package>
+			<packageType>DRL</packageType>
+			<packageId>com.cognitive^agentOrange^1.0.0.drl</packageId>
+			<preload>false</preload>
+		</package>
+		<primaryProcess></primaryProcess>
+		<timestamp>2014-12-13T22:02:06.650-06:00</timestamp>
+		<userId>tadesse</userId>
+	</knowledgeModule>
+	<knowledgeModule>
+		<identifier scopingEntityId="com.cognitive" businessId="abdominalAorticAneurysmScreening" version="1.0.0" />
+		<status>APPROVED</status>
+		<executionEngine>org.opencds.service.drools.v61.KieDroolsAdapter</executionEngine>
+		<semanticSignifierId scopingEntityId="org.opencds.fhir" businessId="FHIR" version="1.0" />
+		<package>
+			<packageType>DRL</packageType>
+			<packageId>com.cognitive^abdominalAorticAneurysmScreening^1.0.0.drl</packageId>
+			<preload>true</preload>
+		</package>
+		<primaryProcess></primaryProcess>
+		<timestamp>2014-11-13T22:02:06.650-06:00</timestamp>
+		<userId>tadesse</userId>
+	</knowledgeModule>
+	<knowledgeModule>
+		<identifier scopingEntityId="com.cognitive" businessId="validateVitals" version="1.0.0" />
+		<status>APPROVED</status>
+		<executionEngine>org.opencds.service.drools.v61.KieDroolsAdapter</executionEngine>
+		<semanticSignifierId scopingEntityId="org.opencds.fhir" businessId="FHIR" version="1.0" />
+		<package>
+			<packageType>DRL</packageType>
+			<packageId>com.cognitive^validateVitals^1.0.0.drl</packageId>
+			<preload>true</preload>
+		</package>
+		<primaryProcess></primaryProcess>
+		<timestamp>2014-11-13T22:02:06.650-06:00</timestamp>
+		<userId>tadesse</userId>
+	</knowledgeModule>
+	<knowledgeModule>
+		<identifier scopingEntityId="com.cognitive" businessId="hypertension" version="1.0.0" />
+		<status>APPROVED</status>
+		<executionEngine>org.opencds.service.drools.v61.KieDroolsAdapter</executionEngine>
+		<semanticSignifierId scopingEntityId="org.opencds.fhir" businessId="FHIR" version="1.0" />
+		<package>
+			<packageType>DRL</packageType>
+			<packageId>com.cognitive^hypertension^1.0.0.drl</packageId>
+			<preload>true</preload>
+		</package>
+		<primaryProcess></primaryProcess>
+		<timestamp>2014-12-13T22:02:06.650-06:00</timestamp>
+		<userId>tadesse</userId>
+	</knowledgeModule>
+	<knowledgeModule>
+		<identifier scopingEntityId="com.cognitive" businessId="rheumatologyConsultScreen" version="1.0.0" />
+		<status>APPROVED</status>
+		<executionEngine>org.opencds.service.drools.v61.KieDroolsAdapter</executionEngine>
+		<semanticSignifierId scopingEntityId="org.opencds.fhir" businessId="FHIR" version="1.0" />
+		<package>
+			<packageType>DRL</packageType>
+			<packageId>com.cognitive^rheumatologyConsultScreen^1.0.0.drl</packageId>
+			<preload>true</preload>
+		</package>
+		<primaryProcess></primaryProcess>
+		<timestamp>2016-03-15T22:02:06.650-06:00</timestamp>
+		<userId>tadesse</userId>
+	</knowledgeModule>
+	<knowledgeModule>
+		<identifier scopingEntityId="com.cognitive" businessId="neurosurgeryConsult" version="1.0.0" />
+		<status>APPROVED</status>
+		<executionEngine>org.opencds.service.drools.v61.KieDroolsAdapter</executionEngine>
+		<semanticSignifierId scopingEntityId="org.opencds.fhir" businessId="FHIR" version="1.0" />
+		<package>
+			<packageType>DRL</packageType>
+			<packageId>com.cognitive^neurosurgeryConsult^1.0.0.drl</packageId>
+			<preload>true</preload>
+		</package>
+		<primaryProcess></primaryProcess>
+		<timestamp>2016-06-15T22:02:06.650-06:00</timestamp>
+		<userId>tadesse</userId>
+	</knowledgeModule>
+</ns2:knowledgeModules>

@@ -6,6 +6,7 @@ var patientsSearchResource = require('./patient-search-resource');
 var patientsMassiveResponse = require('./patient-search-resource-unittest-data');
 var sensitivity = rdk.utils.sensitivity;
 var pidValidator = require('../../utils/pid-validator');
+var patientSelect = require('./hmp-patient-select');
 
 var logger = {
     trace: function() {},
@@ -16,44 +17,69 @@ var logger = {
     fatal: function() {}
 };
 
+var req = {
+    logger: {
+        trace: function() {},
+        debug: function() {},
+        info: function() {},
+        warn: function() {},
+        error: function() {},
+        fatal: function() {}
+    },
+    app: {
+        config: {
+            rpcConfig: {
+                host: '127.0.0.1',
+                port: '9999'
+            },
+            vistaSites: {
+                badsite: {},
+                abc123: {
+                    path: '/give/me/data'
+                },
+                def456: {}
+            }
+        }
+    },
+    session: {
+        user: {
+            site: 'abc123'
+        }
+    }
+};
+
+
 function createResponse() {
     var response = {
         apiVersion: '1.0',
         data: {
             totalItems: 6,
             currentItemCount: 6,
-            items: [
-                {
-                    birthDate: '19350407',
-                    fullName: 'ZZTOP,PATIENT',
-                    genderName: 'Female'
-                },
-                {
-                    birthDate: '19350413',
-                    fullName: 'HAPPY,PATIENT',
-                    genderName: 'Male'
-                },
-                {
-                    birthDate: '19350406',
-                    fullName: 'SEVEN,PATIENT',
-                    genderName: 'Male'
-                },
-                {
-                    birthDate: '19350405',
-                    fullName: 'MAD,PATIENT',
-                    genderName: 'Female'
-                },
-                {
-                    birthDate: '19350401',
-                    fullName: 'ANGRY,PATIENT',
-                    genderName: 'Male'
-                },
-                {
-                    birthDate: '19350403',
-                    fullName: 'CRAZY,PATIENT',
-                    genderName: 'Male'
-                }
-            ]
+            items: [{
+                birthDate: '19350407',
+                fullName: 'ZZTOP,PATIENT',
+                genderName: 'Female'
+            }, {
+                birthDate: '19350413',
+                fullName: 'HAPPY,PATIENT',
+                genderName: 'Male'
+            }, {
+                birthDate: '19350406',
+                fullName: 'SEVEN,PATIENT',
+                genderName: 'Male'
+            }, {
+                birthDate: '19350405',
+                fullName: 'MAD,PATIENT',
+                genderName: 'Female'
+            }, {
+                birthDate: '19350401',
+                fullName: 'ANGRY,PATIENT',
+                genderName: 'Male'
+            }, {
+                birthDate: '19350403',
+                fullName: 'CRAZY,PATIENT',
+                genderName: 'Male'
+            }]
         },
         'status': 200
     };
@@ -86,8 +112,7 @@ function validatePaginationExists(response, exists) {
         expect(response.data.startIndex, 'response.data.startIndex').must.exist();
         expect(response.data.pageIndex, 'response.data.pageIndex').must.exist();
         expect(response.data.totalPages, 'response.data.totalPages').must.exist();
-    }
-    else {
+    } else {
         expect(response.data.itemsPerPage, 'response.data.itemsPerPage').must.not.exist();
         expect(response.data.startIndex, 'response.data.startIndex').must.not.exist();
         expect(response.data.pageIndex, 'response.data.pageIndex').must.not.exist();
@@ -226,7 +251,14 @@ describe('patientsSearchResource\'s limit', function() {
 
         validateItems(response, 4);
         validatePaginationExists(response, true);
-        validatePaginationEquals(response, {totalItems: 6, currentItemCount: 4, itemsPerPage: 4, startIndex: 0, pageIndex: 0, totalPages: 2});
+        validatePaginationEquals(response, {
+            totalItems: 6,
+            currentItemCount: 4,
+            itemsPerPage: 4,
+            startIndex: 0,
+            pageIndex: 0,
+            totalPages: 2
+        });
         expect(response.data.items[0].fullName).to.equal('ZZTOP,PATIENT');
         expect(response.data.items[1].fullName).to.equal('HAPPY,PATIENT');
         expect(response.data.items[2].fullName).to.equal('SEVEN,PATIENT');
@@ -241,7 +273,14 @@ describe('patientsSearchResource\'s limit', function() {
 
         validateItems(response, 4);
         validatePaginationExists(response, true);
-        validatePaginationEquals(response, {totalItems: 6, currentItemCount: 4, itemsPerPage: 4, startIndex: 0, pageIndex: 0, totalPages: 2});
+        validatePaginationEquals(response, {
+            totalItems: 6,
+            currentItemCount: 4,
+            itemsPerPage: 4,
+            startIndex: 0,
+            pageIndex: 0,
+            totalPages: 2
+        });
         expect(response.data.items[0].fullName).to.equal('ZZTOP,PATIENT');
         expect(response.data.items[1].fullName).to.equal('HAPPY,PATIENT');
         expect(response.data.items[2].fullName).to.equal('SEVEN,PATIENT');
@@ -256,7 +295,14 @@ describe('patientsSearchResource\'s limit', function() {
 
         validateItems(response, 3);
         validatePaginationExists(response, true);
-        validatePaginationEquals(response, {totalItems: 6, currentItemCount: 3, itemsPerPage: 3, startIndex: 2, pageIndex: 0, totalPages: 2});
+        validatePaginationEquals(response, {
+            totalItems: 6,
+            currentItemCount: 3,
+            itemsPerPage: 3,
+            startIndex: 2,
+            pageIndex: 0,
+            totalPages: 2
+        });
         //expect(response.data.items[ ].fullName).to.equal('ZZTOP,PATIENT');
         //expect(response.data.items[ ].fullName).to.equal('HAPPY,PATIENT');
         expect(response.data.items[0].fullName).to.equal('SEVEN,PATIENT');
@@ -271,7 +317,14 @@ describe('patientsSearchResource\'s limit', function() {
 
         validateItems(response, 2);
         validatePaginationExists(response, true);
-        validatePaginationEquals(response, {totalItems: 6, currentItemCount: 2, itemsPerPage: 4, startIndex: 4, pageIndex: 1, totalPages: 2});
+        validatePaginationEquals(response, {
+            totalItems: 6,
+            currentItemCount: 2,
+            itemsPerPage: 4,
+            startIndex: 4,
+            pageIndex: 1,
+            totalPages: 2
+        });
         //expect(response.data.items[ ].fullName).to.equal('ZZTOP,PATIENT');
         //expect(response.data.items[ ].fullName).to.equal('HAPPY,PATIENT');
         //expect(response.data.items[ ].fullName).to.equal('SEVEN,PATIENT');
@@ -286,7 +339,14 @@ describe('patientsSearchResource\'s limit', function() {
 
         validateItems(response, 1);
         validatePaginationExists(response, true);
-        validatePaginationEquals(response, {totalItems: 6, currentItemCount: 1, itemsPerPage: 1, startIndex: 4, pageIndex: 4, totalPages: 6});
+        validatePaginationEquals(response, {
+            totalItems: 6,
+            currentItemCount: 1,
+            itemsPerPage: 1,
+            startIndex: 4,
+            pageIndex: 4,
+            totalPages: 6
+        });
         //expect(response.data.items[ ].fullName).to.equal('ZZTOP,PATIENT');
         //expect(response.data.items[ ].fullName).to.equal('HAPPY,PATIENT');
         //expect(response.data.items[ ].fullName).to.equal('SEVEN,PATIENT');
@@ -301,7 +361,14 @@ describe('patientsSearchResource\'s limit', function() {
 
         validateItems(response, 0);
         validatePaginationExists(response, true);
-        validatePaginationEquals(response, {totalItems: 6, currentItemCount: 0, itemsPerPage: 4, startIndex: 1000, pageIndex: 250, totalPages: 2});
+        validatePaginationEquals(response, {
+            totalItems: 6,
+            currentItemCount: 0,
+            itemsPerPage: 4,
+            startIndex: 1000,
+            pageIndex: 250,
+            totalPages: 2
+        });
         //expect(response.data.items[ ].fullName).to.equal('ZZTOP,PATIENT');
         //expect(response.data.items[ ].fullName).to.equal('HAPPY,PATIENT');
         //expect(response.data.items[ ].fullName).to.equal('SEVEN,PATIENT');
@@ -316,7 +383,14 @@ describe('patientsSearchResource\'s limit', function() {
 
         validateItems(response, 4);
         validatePaginationExists(response, true);
-        validatePaginationEquals(response, {totalItems: 99, currentItemCount: 4, itemsPerPage: 4, startIndex: 2, pageIndex: 0, totalPages: 25});
+        validatePaginationEquals(response, {
+            totalItems: 99,
+            currentItemCount: 4,
+            itemsPerPage: 4,
+            startIndex: 2,
+            pageIndex: 0,
+            totalPages: 25
+        });
         expect(response.data.items[0].fullName).to.equal('BCMA,EIGHTY-PATIENT');
         expect(response.data.items[1].fullName).to.equal('BCMA,EIGHTYEIGHT-PATIENT');
         expect(response.data.items[2].fullName).to.equal('BCMA,EIGHTYFIVE-PATIENT');
@@ -453,14 +527,23 @@ describe('patientsSearchResource\'s filter', function() {
     });
 });
 
-describe('callVxSyncPatientSearch', function() {
+describe('callPatientSearch', function() {
     var patients;
+    var searchOptions;
 
     beforeEach(function() {
-        patients = [{ssn: '12345', birthDate: 'birthday'}];
+        patients = [{
+            ssn: '12345',
+            birthDate: 'birthday'
+        }];
+        searchOptions = {
+            site: 'site',
+            searchType: 'searchType',
+            searchString: 'searchString'
+        };
 
-        sinon.stub(rdk.utils.http, 'get', function(options, callback) {
-            callback(null, {statusCode: 200}, patients);
+        sinon.stub(patientSelect, 'fetch', function(req, params, site, callback) {
+            callback(null, patients);
         });
         sinon.stub(pidValidator, 'isIcn', function(pid) {
             return true;
@@ -470,16 +553,16 @@ describe('callVxSyncPatientSearch', function() {
     afterEach(function() {
         //unwrap spies
         pidValidator.isIcn.restore();
-        rdk.utils.http.get.restore();
+        patientSelect.fetch.restore();
     });
 
     it('masks sensitive patient demographics', function(done) {
         patients[0].sensitive = true;
-        patientsSearchResource.callVxSyncPatientSearch(logger, undefined, undefined, undefined, 'site', 'searchType', 'searchString', function(err, result) {
+
+        patientsSearchResource.callPatientSearch(req, undefined, undefined, searchOptions, function(err, result) {
             expect(err).to.be.falsy();
 
             expect(result).to.be.truthy();
-            expect(result).to.have.property('apiVersion', '1.0');
             expect(result).to.have.property('status', 200);
             expect(result).to.have.property('data');
 
@@ -493,30 +576,6 @@ describe('callVxSyncPatientSearch', function() {
             expect(resultItems[0]).to.have.property('sensitive', true);
             expect(resultItems[0]).to.have.property('ssn', sensitivity._sensitiveDataValue);
             expect(resultItems[0]).to.have.property('birthDate', sensitivity._sensitiveDataValue);
-
-            done();
-        });
-    });
-
-    it('doesn\'t mask non-sensitive patient demographics', function(done) {
-        patientsSearchResource.callVxSyncPatientSearch(logger, undefined, undefined, undefined, 'site', 'searchType', 'searchString', function(err, result) {
-            expect(err).to.be.falsy();
-
-            expect(result).to.be.truthy();
-            expect(result).to.have.property('apiVersion', '1.0');
-            expect(result).to.have.property('status', 200);
-            expect(result).to.have.property('data');
-
-            expect(result.data).to.have.property('totalItems', 1);
-            expect(result.data).to.have.property('currentItemCount', 1);
-            expect(result.data).to.have.property('items');
-
-            var resultItems = result.data.items;
-            expect(resultItems).to.be.an.array();
-            expect(resultItems).to.have.length(1);
-            expect(resultItems[0]).to.have.property('sensitive', false);
-            expect(resultItems[0]).to.have.property('ssn', '12345');
-            expect(resultItems[0]).to.have.property('birthDate', 'birthday');
 
             done();
         });

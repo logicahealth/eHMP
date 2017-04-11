@@ -8,7 +8,7 @@
         baseUrl = baseUrl >= 0 ? 'container/' : '';
 
 	if ((!Modernizr.audio && navigator.userAgent.indexOf('PhantomJS')) < 0 || navigator.userAgent.indexOf('Android 2.2') > 0) {
-		alert('Your browser does not support this application. Please upgrade your browser or device.\n\n');
+		alert('Your browser does not support this application. Upgrade your browser or device.\n\n');
 		window.location = baseUrl + 'newbrowser.html';
 	}
 }());

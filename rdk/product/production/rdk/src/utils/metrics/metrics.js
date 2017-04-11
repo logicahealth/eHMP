@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var dd = require('drilldown');
+var uriBuilder = require('../uri-builder');
 var MetricsData = require('./metrics-data');
 
 /*
@@ -114,6 +115,11 @@ function handleStart(type, config, reqLogger) {
         if (!url) {
             logger.info({metrics: config}, 'metrics: no host defined');
         } else {
+            if (config.baseUrl && (config.url || config.uri)) {
+                url = uriBuilder.fromUri(config.baseUrl)
+                    .path(config.url || config.uri)
+                    .build();
+            }
             var hostName = findHostNameByIP(url);
             metricData.addHost(url, hostName);
         }

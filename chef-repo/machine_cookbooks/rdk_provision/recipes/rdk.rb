@@ -6,15 +6,6 @@
 chef_gem "chef-provisioning-ssh"
 require 'chef/provisioning/ssh_driver'
 
-_host_path_private_licenses = "#{ENV['HOME']}/Projects/vistacore/private_licenses"
-node.default[:rdk_provision][:rdk][:vagrant][:shared_folders].push(
-  {
-    :host_path => _host_path_private_licenses,
-    :guest_path => "/opt/private_licenses",
-    :create => true
-  }
-)
-
 ####################################################### Shared Folders #########################################################
 if ENV['DEV_DEPLOY']
   node.default[:rdk_provision][:rdk][:vagrant][:shared_folders].push(
@@ -34,29 +25,21 @@ end
 
 version = ENV['RDK_VERSION']
 
-# Define number of rdk instances/processes per instance using
-# the following environment variables
-# Default to 1 for each option
-rdk_config = {
-  instances: ENV['RDK_INSTANCES'].nil? ? 1 : ENV['RDK_INSTANCES'].to_i,
-  fetch_server: {
-    processes: ENV['RDK_FETCH_PROCESSES'].nil? ? 1 : ENV['RDK_FETCH_PROCESSES'].to_i
-  },
-  write_back: {
-    processes: ENV['RDK_WRITE_PROCESSES'].nil? ? 1 : ENV['RDK_WRITE_PROCESSES'].to_i
-  },
-  pick_list: {
-    processes: ENV['RDK_PICK_LIST_PROCESSES'].nil? ? 1 : ENV['RDK_PICK_LIST_PROCESSES'].to_i
+# deploy default of one machine named "rdk" if rdk config doesn't exist, get servers from config if config does exist
+rdk_machines = if node[:rdk_config].nil? then ["rdk"] else node[:rdk_config].keys end
+
+rdk_machines.each do |machine_ident|
+  rdk_config = node[:rdk_config] || {
+    machine_ident.to_sym => {
+      :write_back => { :processes => 1 },
+      :fetch_server => { :processes => 1 },
+      :pick_list => { :processes => 1 }
+    }
   }
-}
 
-1.upto(rdk_config[:instances]) do |index|
-
-  # Define machine name with inline index if index is not equal to 1
-  # This will mean that there will never be an "rdk-1" machine because
-  # the first instance will always be "rdk"
-  machine_ident = index == 1 ? "rdk" : "rdk-#{index}"
-
+  unless rdk_config[machine_ident.to_sym][:aws_instance_type].nil?
+    node.default[:rdk_provision][:rdk]["#{node[:machine][:driver]}".to_sym][:instance_type] = rdk_config[machine_ident.to_sym][:aws_instance_type]
+  end
   boot_options = node[:rdk_provision][:rdk]["#{node[:machine][:driver]}".to_sym]
   node.default[:rdk_provision][:rdk][:copy_files].merge!(node[:machine][:copy_files])
 
@@ -71,7 +54,7 @@ rdk_config = {
   r_list << "recipe[rdk::clear_logs@#{rdk_deps["rdk"]}]" if node[:machine][:driver] == "aws"
   r_list << "recipe[rdk@#{rdk_deps["rdk"]}]"
   r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
-
+  
   machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} environment" do
     machine_name machine_ident
     boot_options boot_options
@@ -80,9 +63,9 @@ rdk_config = {
     only_if { node[:machine][:production_settings][machine_ident.to_sym].nil? }
   end
 
-    # if the driver is 'vagrant', append -node- after the machine identify and before the stack name; else use only machine-stack
-    machine_name = node[:machine][:driver] == "vagrant" ? "#{machine_ident}-#{node[:machine][:stack]}-node" : "#{machine_ident}-#{node[:machine][:stack]}"
-    machine machine_name do
+  # if the driver is 'vagrant', append -node- after the machine identify and before the stack name; else use only machine-stack
+  machine_name = node[:machine][:driver] == "vagrant" ? "#{machine_ident}-#{node[:machine][:stack]}-node" : "#{machine_ident}-#{node[:machine][:stack]}"
+  machine machine_name do
     driver "ssh"
     converge node[:machine][:converge]
     machine_options lazy {
@@ -106,19 +89,24 @@ rdk_config = {
       stack: node[:machine][:stack],
       allow_ldap_access: node[:machine][:allow_ldap_access],
       nexus_url: node[:common][:nexus_url],
+      data_bag_string: node[:common][:data_bag_string],
       dev_deploy: ENV['DEV_DEPLOY'] == "true" ? true : false,
+      using_vagrant: node[:machine][:driver] == "vagrant",
       rdk: {
         source: artifact_url(node[:rdk_provision][:artifacts][:rdk]),
         fetch_server: {
-          processes: rdk_config[:fetch_server][:processes] 
+          processes: rdk_config[machine_ident.to_sym][:fetch_server][:processes]
         },
         write_back: {
-          processes: rdk_config[:write_back][:processes]
+          processes: rdk_config[machine_ident.to_sym][:write_back][:processes]
         },
         pick_list: {
-          processes: rdk_config[:pick_list][:processes]
+          processes: rdk_config[machine_ident.to_sym][:pick_list][:processes]
         }
-      }
+      },
+      beats: {
+        logging: node[:machine][:logging]
+    }
     )
     files lazy { node[:rdk_provision][:rdk][:copy_files] }
     chef_environment node[:machine][:environment]

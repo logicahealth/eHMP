@@ -10,10 +10,11 @@ var domains = require('./domain');
 
 var jobUtil = {};
 
-function createEnterpriseSyncRequest(patientIdentifier, jpid, forceSync, demographics) {
+function createEnterpriseSyncRequest(patientIdentifier, jpid, forceSync, demographics, priority) {
     var job = create(enterpriseSyncRequestType(), patientIdentifier, null, null, null, null, {
         'jpid': jpid,
-        'forceSync': forceSync
+        'forceSync': forceSync,
+        'priority': priority
     });
     if(demographics) {
         job.demographics = demographics;
@@ -37,17 +38,12 @@ function createVistaRecordProcessorRequest(record, rootJob) {
     return create(vistaRecordProcessorRequestType(), null, null, record, null, null, rootJob);
 }
 
-function createVistaPrioritizationRequest(patientIdentifier, domain, record, rootJob) {
-    return create(vistaPrioritizationRequestType(), patientIdentifier, domain, record, null, null, rootJob);
+function createEventPrioritizationRequest(patientIdentifier, domain, record, rootJob) {
+    return create(eventPrioritizationRequestType(), patientIdentifier, domain, record, null, null, rootJob);
 }
 
 function createHdrSyncRequest(patientIdentifier, rootJob) {
     return create(hdrSyncRequestType(), patientIdentifier, null, null, null, null, rootJob);
-}
-
-// TODO: requestStampTime
-function createHdrXformVpr(patientIdentifier, domain, record, rootJob) {
-    return create(hdrXformVprType(), patientIdentifier, domain, record, null, null, rootJob);
 }
 
 function createOperationalSyncRequest(site) {
@@ -127,7 +123,17 @@ function createStoreRecord(patientIdentifier, domain, record, rootJob) {
 }
 
 function createResyncRequest(patientIdentifier, rootJob) {
-    return create(resyncRequestType(), patientIdentifier, null, null, null, null, rootJob);
+    var newJob = create(resyncRequestType(), patientIdentifier, null, null, null, null, rootJob);
+
+    if(!_.isUndefined(rootJob) && rootJob.demographics) {
+        newJob.demographics = rootJob.demographics;
+    }
+
+    return newJob;
+}
+
+function createRecordUpdate(patientIdentifier, domain, record, rootJob){
+    return create(recordUpdateType(), patientIdentifier, domain, record, null, null, rootJob);
 }
 
 function createPublishVxDataChange(patientIdentifier, domain, record, rootJob) {
@@ -135,7 +141,13 @@ function createPublishVxDataChange(patientIdentifier, domain, record, rootJob) {
 }
 
 function createActivityManagementEvent(patientIdentifier, domain, record) {
-    return create(publishVxDataChangeType(), patientIdentifier, domain, record, null, null, null);
+    var jobId = uuid.v4();
+    var meta = {
+        'jobId': jobId,
+        'rootJobId': jobId
+    };
+
+    return create(publishVxDataChangeType(), patientIdentifier, domain, record, null, null, meta);
 }
 
 function createSolrRecordStorage(patientIdentifier, domain, record, rootJob) {
@@ -186,8 +198,8 @@ function vistaOperationalSubscribeRequestType() {
     return 'vista-operational-subscribe-request';
 }
 
-function vistaPrioritizationRequestType() {
-    return 'vista-prioritization-request';
+function eventPrioritizationRequestType() {
+    return 'event-prioritization-request';
 }
 
 function vistahdrSubScribeRequestType(siteId) {
@@ -200,10 +212,6 @@ function vistahdrPollerRequestType(siteId) {
 
 function vistahdrPollerDomainRequestType(siteId, domain) {
     return format('vistahdr-%s-data-%s-poller', siteId, domain);
-}
-
-function hdrXformVprType() {
-    return 'hdr-xform-vpr';
 }
 
 function isVistAHdrSubscribeRequestType(type) {
@@ -313,6 +321,10 @@ function resyncRequestType() {
     return 'resync-request';
 }
 
+function recordUpdateType(){
+    return 'record-update';
+}
+
 // TODO: requestStampTime
 function create(type, patientIdentifier, domain, record, requestStampTime, eventUid, meta) {
     var job = {
@@ -334,6 +346,10 @@ function create(type, patientIdentifier, domain, record, requestStampTime, event
 
     if (!_.isUndefined(meta.rootJobId)) {
         job.rootJobId = meta.rootJobId;
+    }
+
+    if (!_.isUndefined(meta.priority)) {
+        job.priority = meta.priority;
     }
 
     if (!_.isUndefined(meta.forceSync)) {
@@ -471,7 +487,6 @@ var fields = {};
 fields[enterpriseSyncRequestType()] = [];
 fields[resyncRequestType()] = [];
 
-fields[hdrXformVprType()] = ['domain', 'record', 'jpid'];
 fields[vlerSyncRequestType()] = ['jpid'];
 fields[vlerXformVprType()] = ['domain', 'record', 'jpid'];
 fields[pgdSyncRequestType()] = ['jpid'];
@@ -480,6 +495,7 @@ fields[dasSyncRequestType()] = ['jpid'];
 fields[dasXformVprType()] = ['domain', 'record', 'jpid'];
 fields[jmeadowsSyncRequestType()] = ['jpid'];
 fields[hdrSyncRequestType()] = ['jpid'];
+fields[recordUpdateType()] = ['dataDomain', 'record', 'patientIdentifier'];
 
 _.each(domains.getJmeadowsDomainList(), function(domain) {
     fields[jmeadowsDomainSyncRequestType(domain)] = ['domain', 'record', 'jpid'];
@@ -502,8 +518,8 @@ fields[storeRecordType()] = ['record'];
 // fields[publishVxDataChangeType()] = ['domain', 'record', 'jpid'];
 fields[publishVxDataChangeType()] = ['domain', 'record'];
 
-// fields[vistaPrioritizationRequestType()] = ['record', 'jpid'];
-fields[vistaPrioritizationRequestType()] = ['record'];
+// fields[eventPrioritizationRequestType()] = ['record', 'jpid'];
+fields[eventPrioritizationRequestType()] = ['record'];
 
 fields[vistaSubscribeRequestType()] = ['jpid'];
 fields[vistaRecordProcessorRequestType()] = ['record'];
@@ -519,10 +535,8 @@ jobUtil.createVistaSubscribeRequest = createVistaSubscribeRequest;
 jobUtil.createVistaPollerRequest = createVistaPollerRequest;
 jobUtil.createVistaPollerDomainRequest = createVistaPollerDomainRequest;
 jobUtil.createVistaRecordProcessorRequest = createVistaRecordProcessorRequest;
-jobUtil.createVistaPrioritizationRequest = createVistaPrioritizationRequest;
+jobUtil.createEventPrioritizationRequest = createEventPrioritizationRequest;
 jobUtil.createHdrSyncRequest = createHdrSyncRequest;
-jobUtil.hdrXformVprType = hdrXformVprType;
-jobUtil.createHdrXformVpr = createHdrXformVpr;
 jobUtil.createVlerSyncRequest = createVlerSyncRequest;
 jobUtil.createVlerXformVpr = createVlerXformVpr;
 jobUtil.createPgdSyncRequest = createPgdSyncRequest;
@@ -541,14 +555,16 @@ jobUtil.createOperationalSyncRequest = createOperationalSyncRequest;
 jobUtil.createSiteRequest = createSiteRequest;
 jobUtil.createJmeadowsPdfDocumentTransformRequest = createJmeadowsPdfDocumentTransformRequest;
 jobUtil.createJmeadowsDocumentRetrievalRequest = createJmeadowsDocumentRetrievalRequest;
+jobUtil.createRecordUpdate = createRecordUpdate;
 
 jobUtil.enterpriseSyncRequestType = enterpriseSyncRequestType;
 jobUtil.vistaSubscribeRequestType = vistaSubscribeRequestType;
 jobUtil.vistaPollerRequestType = vistaPollerRequestType;
 jobUtil.vistaPollerDomainRequestType = vistaPollerDomainRequestType;
 jobUtil.vistaRecordProcessorRequestType = vistaRecordProcessorRequestType;
-jobUtil.vistaPrioritizationRequestType = vistaPrioritizationRequestType;
+jobUtil.eventPrioritizationRequestType = eventPrioritizationRequestType;
 jobUtil.resyncRequestType = resyncRequestType;
+jobUtil.recordUpdateType = recordUpdateType;
 jobUtil.createResyncRequest = createResyncRequest;
 
 jobUtil.vlerSyncRequestType = vlerSyncRequestType;
@@ -559,7 +575,6 @@ jobUtil.dasSyncRequestType = dasSyncRequestType;
 jobUtil.dasXformVprType = dasXformVprType;
 jobUtil.jmeadowsSyncRequestType = jmeadowsSyncRequestType;
 jobUtil.hdrSyncRequestType = hdrSyncRequestType;
-jobUtil.hdrXformVprType = hdrXformVprType;
 
 jobUtil.jmeadowsDomainSyncRequestType = jmeadowsDomainSyncRequestType;
 jobUtil.hdrDomainSyncRequestType = hdrDomainSyncRequestType;

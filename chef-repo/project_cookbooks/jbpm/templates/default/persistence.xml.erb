@@ -72,6 +72,19 @@
     <!-- deployment store -->
     <class>org.jbpm.kie.services.impl.store.DeploymentStoreEntry</class>
 
+    <!-- entities -->
+    <class><%= @base_route_entity %></class>
+    <class><%= @task_instance_entity %></class>
+    <class><%= @process_instance_entity %></class>
+    <class><%= @task_route_entity %></class>
+    <class><%= @process_route_entity %></class>
+    <class><%= @event_listener_entity %></class>
+    <class><%= @event_match_action_entity %></class>
+    <class><%= @event_match_criteria_entity %></class>
+    <class><%= @simple_match_entity %></class>
+    <class><%= @signal_instance_entity %></class>
+    <class><%= @processed_event_state_entity %></class>
+
       <!-- BZ 841786: AS7/EAP 6/Hib 4 uses new (sequence) generators which seem to cause problems -->
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.<%= @dialect %>" />

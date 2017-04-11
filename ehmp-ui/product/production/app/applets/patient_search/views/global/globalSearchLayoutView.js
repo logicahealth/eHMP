@@ -2,10 +2,9 @@ define([
     "backbone",
     "marionette",
     "app/applets/patient_search/views/common/searchResultsCollectionView",
-    "app/applets/patient_search/views/common/blankView",
     "hbs!app/applets/patient_search/templates/global/globalSearchResultsTemplate"
 
-], function(Backbone, Marionette, SearchResultsCollectionView, BlankView, globalSearchResultsTemplate) {
+], function(Backbone, Marionette, SearchResultsCollectionView, globalSearchResultsTemplate) {
     "use strict";
 
     // constants
@@ -15,13 +14,13 @@ define([
         searchApplet: undefined,
         template: globalSearchResultsTemplate,
         regions: {
-            globalSearchResultsRegion: '#global-search-results'
+            globalSearchResultsRegion: '#globalSearchResults'
         },
         initialize: function(options) {
             this.searchApplet = options.searchApplet;
         },
         clearSearchResultsRegion: function() {
-            this.globalSearchResultsRegion.show(new BlankView());
+            this.globalSearchResultsRegion.empty();
         },
         displayErrorMessage: function(message) {
             var patientsView = new SearchResultsCollectionView({
@@ -73,17 +72,6 @@ define([
                     patientsView.collection = patientsCollection;
                 }
                 patientsView.render();
-
-                // this has to be checked after render b/c of element availability
-                if (patientsCollection.length > 0){
-                    // size the height of the results
-                    self.searchApplet.onResize();
-
-                    // apply scrollbar css to column headers for adjustments.
-                    if (self.searchApplet.hasScrollbars($('#global-search-results .results-table .list-group')[0]).vertical){
-                        $('#global-search-results .results-table').toggleClass('data-scroll');
-                    }
-                }
             };
 
             var patientsCollection = ADK.ResourceService.fetchCollection(searchOptions);

@@ -8,9 +8,9 @@ define([
 
     var TabView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile([
-            '<a href="#{{clean-for-id label}}-tab-panel-{{tabId}}" aria-controls="{{clean-for-id label}}-tab-panel" data-toggle="tab" role="tab">' +
+            '<a href="#{{clean-for-id label}}-tab-panel-{{tabId}}" class="left-padding-sm right-padding-sm" aria-controls="{{clean-for-id label}}-tab-panel-{{tabId}}" data-toggle="tab" role="tab">' +
             '{{label}}' +
-            '<span class="sr-only">You are currently on a tab. Use the left and right arrow keys to navigate between tabs, and then press the tab key to activate the content.</span>' +
+            '<span class="sr-only">Tab heading. Tab through to view headings and then arrow down to hear content.</span>' +
             '</a>',
         ].join("\n")),
         tagName: 'li',
@@ -30,7 +30,7 @@ define([
     });
     var PanelView = Backbone.Marionette.LayoutView.extend({
         template: Handlebars.compile([
-            '<span class="sr-only">This is the content for tab 1.</span>',
+            '<span class="sr-only">Content for selected tab</span>',
             '<div></div>'
         ].join("\n")),
         className: function() {

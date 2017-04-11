@@ -7,7 +7,7 @@
  	Given a patient with "vitals" in multiple VistAs
  	When the client requests vitals for the patient "9E7A;100022" in FHIR format
  	Then a successful response is returned
- 	And the FHIR results contain "vital results" 
+ 	And the FHIR results contain "vital results"
  	| field									                  | panorama_value					            |
  	| resource.contained.resourceType	        | Organization					            	|
  	| resource.identifier.value				        | CONTAINS urn:va:vital:9E7A:100022		|
@@ -121,12 +121,13 @@
   | resource.valueQuantity.units          | EMPTY		                |
  	| resource.referenceRange.low.value		  | IS_NOT_SET							|
  	| resource.referenceRange.high.value		| IS_NOT_SET							|
+ And FHIR date and time conver to Zulu format for Vitals
 
  @F138_vitals_fhir_girth @fhir @9E7A428
  Scenario: Client can request vitals in FHIR format
  	Given a patient with "vitals" in multiple VistAs
  	When the client requests vitals for the patient "9E7A;428" in FHIR format
- 	Then a successful response is returned 
+ 	Then a successful response is returned
  	And the FHIR results contain "vitals"
    | name                                           | value                                |
    | resource.text.div                              | CONTAINS CIRCUMFERENCE/GIRTH         |
@@ -162,8 +163,8 @@
  	When the client requests vitals for the patient "9E7A;100184" in FHIR format
  	Then a successful response is returned
  	Then the client receives 13 FHIR "VistA" result(s)
- 	And the client receives 13 FHIR "panorama" result(s) 
-  And the FHIR results contain "vital results" 
+ 	And the client receives 13 FHIR "panorama" result(s)
+  And the FHIR results contain "vital results"
  	| field									          | panorama_value						             |
  	| resource.identifier.value				| CONTAINS urn:va:vital:9E7A:100184			 |
  	| resource.code.coding.system			| http://loinc.org									     |
@@ -228,8 +229,5 @@
  @F138_6_vitals_fhir @fhir @DE974 @9E7A100022
  Scenario: Client can request vital results in FHIR format
  	Given a patient with "vitals" in multiple VistAs
- 	When the client requests vitals for the patient "9E7A;100022" in FHIR format
- 	Then a successful response is returned
- 	And the results contain
-       | name         | value     |
-       | total        | 86        |
+ 	When the client requests vitals with _count of "10" for the patient "9E7A;100022" in FHIR format
+  Then the FHIR results contain "10" vitals

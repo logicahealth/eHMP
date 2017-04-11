@@ -330,3 +330,23 @@ describe('Patient FHIR Resource', function() {
     });
 
 });
+
+describe('Composition FHIR conformance', function() {
+
+    var conformanceData = patientResource.createConformanceData();
+
+    it('conformance data is returned', function() {
+        expect(conformanceData.type).to.equal('patient');
+        expect(conformanceData.profile.reference).to.equal('http://www.hl7.org/FHIR/2015May/patient.html');
+
+        expect(conformanceData.interaction.length).to.equal(1);
+        expect(conformanceData.interaction[0].code).to.equal('read');
+    });
+
+    it('conformance data searchParam is returned', function() {
+
+        expect(conformanceData.searchParam.length).to.equal(0);
+
+    });
+
+});

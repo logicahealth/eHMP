@@ -72,10 +72,7 @@ class VitalsGist <  AllApplets
     add_action(CucumberLabel.new('Result Header Sort'), ClickAction.new, AccessHtmlElement.new(:css, '[data-appletid="vitals"] [data-header-instanceid="results-header"]'))
     add_action(CucumberLabel.new('Last Header Sort'), ClickAction.new, AccessHtmlElement.new(:css, '[data-appletid="vitals"] [data-header-instanceid="age-header"]'))
 
-    # popover toolbar
-    add_action(CucumberLabel.new("Quick View Icon"), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} div.toolbarActive [button-type=quick-look-button-toolbar]"))
-    add_action(CucumberLabel.new("Detail View Icon"), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} div.toolbarActive [button-type=detailView-button-toolbar]"))
-    add_action(CucumberLabel.new("Info Icon"), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} div.toolbarActive [button-type=info-button-toolbar]"))
+    add_toolbar_buttons 
 
     # quickview
     add_action(CucumberLabel.new("Blood pressure Sistolic results"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='BPS'] [data-cell-instanceid='time_since_BPS']"))
@@ -88,7 +85,6 @@ class VitalsGist <  AllApplets
    
     # First Vital Gist Row
     add_action(CucumberLabel.new('First Vitals Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='BPS'] .problem-name"))
-    add_action(CucumberLabel.new('Detail View Icon'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid=vitals] div.toolbarActive [button-type=detailView-button-toolbar]"))
   end
 
   def add_vitals_verification(type, id)
@@ -113,7 +109,8 @@ Then(/^user sees Vitals Gist$/) do
   expect(vg.wait_until_action_element_visible("Vitals Gist Title", DefaultTiming.default_wait_time)).to be_true
   expect(vg.perform_verification("Vitals Gist Title", "VITALS")).to be_true
   expect(vg.wait_until_action_element_visible("Vitals Gist Rows", DefaultTiming.default_table_row_load_time)).to be_true
-  expect(vg.perform_verification("Vitals Gist Rows", 10)).to be_true
+  expected_vitals = 11
+  expect(vg.perform_verification("Vitals Gist Rows", expected_vitals)).to be_true, "expected #{expected_vitals} vitals to be displayed"
 end
 
 # #Verify the first coloumn of the Vitals Coversheet view
@@ -196,6 +193,7 @@ class VitalsCoversheet < AccessBrowserV2
     add_vital('BMI', Regexp.new("\\d+.*\\d*"), date_format)
     add_vital('PO2', Regexp.new("\\d+ %"), date_format)
     add_vital('PN', Regexp.new("\\d+"), date_format)
+    add_vital('CG', Regexp.new("\\d+"), date_format)
     add_action(CucumberLabel.new('Add'), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-add-button"))
   end
 
@@ -203,6 +201,7 @@ class VitalsCoversheet < AccessBrowserV2
     add_verify(CucumberLabel.new("#{vital} label"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-appletid='vitals']/descendant::td[starts-with(string(), '#{vital}')]"))
     add_verify(CucumberLabel.new("#{vital} value"), VerifyTextFormat.new(bp_format), AccessHtmlElement.new(:xpath, "//*[@data-appletid='vitals']/descendant::td[starts-with(string(), '#{vital}')]/following-sibling::td[1]"))
     add_verify(CucumberLabel.new("#{vital} date"), VerifyTextFormat.new(date_format), AccessHtmlElement.new(:xpath, "//*[@data-appletid='vitals']/descendant::td[starts-with(string(), '#{vital}')]/following-sibling::td[2]"))
+    add_verify(CucumberLabel.new("#{vital} no record"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-appletid='vitals']/descendant::td[starts-with(string(), '#{vital}')]/following-sibling::td[1]"))
   end
 
   def applet_loaded
@@ -220,6 +219,13 @@ Then(/^the Coversheet Vitals table contains$/) do |table|
     expect(vitals.perform_verification("#{label} label", label)).to eq(true), "Failing on label #{label}"
     expect(vitals.perform_verification("#{label} value", label)).to eq(true), "Failing on value #{label}"
     expect(vitals.perform_verification("#{label} date", label)).to eq(true), "Failing on date #{label}"
+  end
+end
+
+Then(/^the Coversheet Vitals table displays no data for$/) do |table|
+  vitals = VitalsCoversheet.instance
+  table.rows.each do | label |
+    expect(vitals.perform_verification("#{label[0]} no record", "No Record")).to eq(true), "Failing on label #{label[0]}"
   end
 end
 
@@ -274,7 +280,7 @@ end
 Then(/^a popover toolbar displays buttons$/) do |table|
   vitals = VitalsGist.instance
   table.rows.each do | button |
-    expect(vitals.am_i_visible? button[0]).to eq(true)
+    expect(vitals.am_i_visible? button[0]).to eq(true), "#{button[0]} was not visible"
   end
 end
 
@@ -294,8 +300,8 @@ end
 When(/^the user views the first Vitals Gist detail view$/) do
   vitals = VitalsGist.instance
   expect(vitals.wait_until_xpath_count_greater_than('Vitals Gist Rows', 0)).to eq(true), "Test requires at least 1 row to be displayed"
-  expect(vitals.perform_action('First Vitals Row')).to eq(true)
-  expect(vitals.perform_action('Detail View Icon')).to eq(true)
+  expect(vitals.perform_action('First Vitals Row')).to eq(true), "Could not select first vital row"
+  expect(vitals.perform_action('Detail View Button')).to eq(true), "Could not select detail view icon"
 end
 
 

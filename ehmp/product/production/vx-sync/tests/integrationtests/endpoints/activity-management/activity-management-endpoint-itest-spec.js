@@ -58,9 +58,15 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            pid:  '9E7A;3',
-            domain: 'order',
-            'encounter-uid': 'urn:va:visit:9E7A:3:2733'
+            patientUid:  'urn:va:patient:9E7A:3:3',
+            authorUid: 'urn:va:user:9E7A:123:123',
+            domain: 'ehmp-order',
+            subDomain: 'noteObject',
+            visit: {
+                location: 'urn:va:location:9E7A:1',
+                serviceCategory: 'E',
+                dateTime: '20160118123000'
+            }
         };
         testConfig.body = postBody;
         runs(function() {
@@ -76,13 +82,47 @@ describe('activity-management-endpoint.js', function() {
         }, 'HTTP request for activity-management-endpoint', 4000);
     });
 
-    it('Error Path: POST Body Missing pid', function() {
+    it('Error Path: POST Body Missing patientUid', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
             uid: 'urn:va:ehmp:9E7A:3:751',
-            domain: 'order',
-            'encounter-uid': 'urn:va:visit:9E7A:3:2733'
+            authorUid: 'urn:va:user:9E7A:123:123',
+            domain: 'ehmp-order',
+            subDomain: 'noteObject',
+            visit: {
+                location: 'urn:va:location:9E7A:1',
+                serviceCategory: 'E',
+                dateTime: '20160118123000'
+            }
+        };
+        testConfig.body = postBody;
+        runs(function() {
+            request(testConfig, function(err, response) {
+                expect(err).toBeFalsy();
+                expect(response).toBeDefined();
+                expect(response.statusCode).toBe(400);
+                complete = true;
+            });
+        });
+        waitsFor(function() {
+            return complete;
+        }, 'HTTP request for activity-management-endpoint', 4000);
+    });
+
+    it('Error Path: POST Body missing authorUid', function() {
+        var testConfig = _.extend({}, httpConfig);
+        var complete = false;
+        var postBody = {
+            uid: 'urn:va:ehmp:9E7A:3:751',
+            patientUid:  'urn:va:patient:9E7A:3:3',
+            domain: 'ehmp-order',
+            subDomain: 'noteObject',
+            visit: {
+                location: 'urn:va:location:9E7A:1',
+                serviceCategory: 'E',
+                dateTime: '20160118123000'
+            }
         };
         testConfig.body = postBody;
         runs(function() {
@@ -103,8 +143,14 @@ describe('activity-management-endpoint.js', function() {
         var complete = false;
         var postBody = {
             uid: 'urn:va:ehmp:9E7A:3:751',
-            pid:  '9E7A;3',
-            'encounter-uid': 'urn:va:visit:9E7A:3:2733'
+            patientUid:  'urn:va:patient:9E7A:3:3',
+            authorUid: 'urn:va:user:9E7A:123:123',
+            subDomain: 'noteObject',
+            visit: {
+                location: 'urn:va:location:9E7A:1',
+                serviceCategory: 'E',
+                dateTime: '20160118123000'
+            }
         };
         testConfig.body = postBody;
         runs(function() {
@@ -120,13 +166,19 @@ describe('activity-management-endpoint.js', function() {
         }, 'HTTP request for activity-management-endpoint', 4000);
     });
 
-    it('Error Path: POST Body missing encounter-uid', function() {
+    it('Error Path: POST Body missing subDomain', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
             uid: 'urn:va:ehmp:9E7A:3:751',
-            pid:  '9E7A;3',
-            domain: 'order'
+            patientUid:  'urn:va:patient:9E7A:3:3',
+            authorUid: 'urn:va:user:9E7A:123:123',
+            domain: 'ehmp-order',
+            visit: {
+                location: 'urn:va:location:9E7A:1',
+                serviceCategory: 'E',
+                dateTime: '20160118123000'
+            }
         };
         testConfig.body = postBody;
         runs(function() {
@@ -142,14 +194,182 @@ describe('activity-management-endpoint.js', function() {
         }, 'HTTP request for activity-management-endpoint', 4000);
     });
 
-    it('Error Path: POST Body invalid pid format', function() {
+    it('Error Path: POST Body missing visit info', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
             uid: 'urn:va:ehmp:9E7A:3:751',
-            pid:  '9E7A:3',
-            domain: 'order',
-            'encounter-uid': 'urn:va:visit:9E7A:3:2733'
+            patientUid:  'urn:va:patient:9E7A:3:3',
+            authorUid: 'urn:va:user:9E7A:123:123',
+            domain: 'ehmp-order',
+            subDomain: 'noteObject'
+        };
+        testConfig.body = postBody;
+        runs(function() {
+            request(testConfig, function(err, response) {
+                expect(err).toBeFalsy();
+                expect(response).toBeDefined();
+                expect(response.statusCode).toBe(400);
+                complete = true;
+            });
+        });
+        waitsFor(function() {
+            return complete;
+        }, 'HTTP request for activity-management-endpoint', 4000);
+    });
+
+    it('Error Path: POST Body invalid uid format', function() {
+        var testConfig = _.extend({}, httpConfig);
+        var complete = false;
+        var postBody = {
+            uid: 'urn:va:ehmp:9E7A:3:751',
+            patientUid:  'urn:va:patient:9E7A:3:3',
+            authorUid: 'urn:va:user:9E7A:123:123',
+            domain: 'ehmp-order',
+            subDomain: 'noteObject',
+            visit: {
+                location: 'urn:va:location:9E7A:1',
+                serviceCategory: 'E'
+            }
+        };
+        testConfig.body = postBody;
+        runs(function() {
+            request(testConfig, function(err, response) {
+                expect(err).toBeFalsy();
+                expect(response).toBeDefined();
+                expect(response.statusCode).toBe(400);
+                complete = true;
+            });
+        });
+        waitsFor(function() {
+            return complete;
+        }, 'HTTP request for activity-management-endpoint', 4000);
+    });
+
+    it('Error Path: POST Body invalid patientUid format', function() {
+        var testConfig = _.extend({}, httpConfig);
+        var complete = false;
+        var postBody = {
+            uid: 'urn:va:ehmp:9E7A:3:751',
+            patientUid:  'urn:va:patient:9E7A',
+            authorUid: 'urn:va:user:9E7A:123:123',
+            domain: 'ehmp-order',
+            subDomain: 'noteObject',
+            visit: {
+                location: 'urn:va:location:9E7A:1',
+                serviceCategory: 'E',
+                dateTime: '20160118123000'
+            }
+        };
+        testConfig.body = postBody;
+        runs(function() {
+            request(testConfig, function(err, response) {
+                expect(err).toBeFalsy();
+                expect(response).toBeDefined();
+                expect(response.statusCode).toBe(400);
+                complete = true;
+            });
+        });
+        waitsFor(function() {
+            return complete;
+        }, 'HTTP request for activity-management-endpoint', 4000);
+    });
+
+    it('Error Path: POST Body invalid authorUid format', function() {
+        var testConfig = _.extend({}, httpConfig);
+        var complete = false;
+        var postBody = {
+            uid: 'urn:va:ehmp:9E7A:3:751',
+            patientUid:  'urn:va:user:9E7A:3:3',
+            authorUid: 'urn:va:user:9E7A',
+            domain: 'ehmp-order',
+            subDomain: 'noteObject',
+            visit: {
+                location: 'urn:va:location:9E7A:1',
+                serviceCategory: 'E',
+                dateTime: '20160118123000'
+            }
+        };
+        testConfig.body = postBody;
+        runs(function() {
+            request(testConfig, function(err, response) {
+                expect(err).toBeFalsy();
+                expect(response).toBeDefined();
+                expect(response.statusCode).toBe(400);
+                complete = true;
+            });
+        });
+        waitsFor(function() {
+            return complete;
+        }, 'HTTP request for activity-management-endpoint', 4000);
+    });
+
+    it('Error Path: POST Body missing location under visit', function() {
+        var testConfig = _.extend({}, httpConfig);
+        var complete = false;
+        var postBody = {
+            uid: 'urn:va:ehmp:9E7A:3:751',
+            patientUid:  'urn:va:user:9E7A:3:3',
+            domain: 'ehmp-order',
+            subDomain: 'noteObject',
+            visit: {
+                serviceCategory: 'E',
+                dateTime: '20160118123000'
+            }
+        };
+        testConfig.body = postBody;
+        runs(function() {
+            request(testConfig, function(err, response) {
+                expect(err).toBeFalsy();
+                expect(response).toBeDefined();
+                expect(response.statusCode).toBe(400);
+                complete = true;
+            });
+        });
+        waitsFor(function() {
+            return complete;
+        }, 'HTTP request for activity-management-endpoint', 4000);
+    });
+
+    it('Error Path: POST Body missing serviceCategory under visit', function() {
+        var testConfig = _.extend({}, httpConfig);
+        var complete = false;
+        var postBody = {
+            uid: 'urn:va:ehmp:9E7A:3:751',
+            patientUid:  'urn:va:patient:9E7A:3:3',
+            domain: 'ehmp-order',
+            subDomain: 'noteObject',
+            visit: {
+                location: 'urn:va:location:9E7A:1',
+                dateTime: '20160118123000'
+            }
+        };
+        testConfig.body = postBody;
+        runs(function() {
+            request(testConfig, function(err, response) {
+                expect(err).toBeFalsy();
+                expect(response).toBeDefined();
+                expect(response.statusCode).toBe(400);
+                complete = true;
+            });
+        });
+        waitsFor(function() {
+            return complete;
+        }, 'HTTP request for activity-management-endpoint', 4000);
+    });
+
+    it('Error Path: POST Body missing dateTime under visit', function() {
+        var testConfig = _.extend({}, httpConfig);
+        var complete = false;
+        var postBody = {
+            uid: 'urn:va:ehmp:9E7A:3:751',
+            patientUid:  'urn:va:patient:9E7A:3:3',
+            domain: 'ehmp-order',
+            subDomain: 'noteObject',
+            visit: {
+                location: 'urn:va:location:9E7A:1',
+                serviceCategory: 'E'
+            }
         };
         testConfig.body = postBody;
         runs(function() {
@@ -170,9 +390,15 @@ describe('activity-management-endpoint.js', function() {
         var complete = false;
         var postBody = {
             uid: 'urn:va:ehmp:9E7A:3:751',
-            pid:  '9E7A;3',
-            domain: 'order',
-            'encounter-uid': 'urn:va:visit:9E7A:3:2733'
+            patientUid:  'urn:va:patient:9E7A:3:3',
+            authorUid: 'urn:va:user:9E7A:123:123',
+            domain: 'ehmp-order',
+            subDomain: 'noteObject',
+            visit: {
+                location: 'urn:va:location:9E7A:1',
+                serviceCategory: 'E',
+                dateTime: '20160118123000'
+            }
         };
         testConfig.body = postBody;
         runs(function() {

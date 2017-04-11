@@ -18,7 +18,7 @@ function getResourceConfig() {
         name: 'adversereaction-adversereactions',
         path: '',
         get: getAdverseReactions,
-        subsystems: ['patientrecord','jds','solr','jdsSync','authorization'],
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
         requiredPermissions: [],
         isPatientCentric: true,
         permitResponseFormat: true
@@ -152,7 +152,7 @@ function createReaction(item, req, updated) {
 
     //datetime
     extension.url = 'http://vistacore.us/fhir/profiles/@main#entered-datetime';
-    extension.valueDateTime = fhirUtils.convertToFhirDateTime(item.entered);
+    extension.valueDateTime = fhirUtils.convertToFhirDateTime(item.entered, fhirUtils.getSiteHash(item.uid));
     advReaction.extension.push(extension);
 
     //reactiontype
@@ -163,7 +163,7 @@ function createReaction(item, req, updated) {
 
     //summary
     advReaction.text.status = 'generated';
-    advReaction.text.div = '<div>' + item.summary + '</div>';
+    advReaction.text.div = '<div>' + _.escape(item.summary) + '</div>';
 
     //patient
     patient.identifier.label = item.pid;
@@ -179,7 +179,7 @@ function createReaction(item, req, updated) {
     //substance
     sub.id = helpers.generateUUID();
     sub.text.status = 'generated';
-    sub.text.div = '<div>' + item.summary + '</div>';
+    sub.text.div = '<div>' + _.escape(item.summary) + '</div>';
     item.products.forEach(function(product) {
         var coding = ao.allergyFactory('Coding');
         if (nullchecker.isNotNullish(product.vuid)) {
@@ -236,7 +236,7 @@ function createReaction(item, req, updated) {
 
     //misc fields
     if ((item.observations) && (item.observations.length > 0)) {
-        advReaction.date = fhirUtils.convertToFhirDateTime(item.observations[0].date); //issue: there may be multiple obs per reaction
+        advReaction.date = fhirUtils.convertToFhirDateTime(item.observations[0].date, fhirUtils.getSiteHash(item.uid)); //issue: there may be multiple obs per reaction
     }
     advReaction.subject.reference = item.uid;
     advReaction.didNotOccurFlag = false;

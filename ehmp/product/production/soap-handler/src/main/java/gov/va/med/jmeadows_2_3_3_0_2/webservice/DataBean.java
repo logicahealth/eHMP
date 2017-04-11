@@ -21,11 +21,11 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="cdrEventId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="codes" type="{http://webservice.vds.domain.ext/}code" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="codes" type="{http://webservice.vds.DNS       /}code" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="narrativeId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="patientId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="patientName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="site" type="{http://webservice.vds.domain.ext/}site" minOccurs="0"/>
+ *         &lt;element name="site" type="{http://webservice.vds.DNS       /}site" minOccurs="0"/>
  *         &lt;element name="sourceProtocol" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "dataBean", namespace = "http://webservice.vds.domain.ext/", propOrder = {
+@XmlType(name = "dataBean", namespace = "http://webservice.vds.DNS       /", propOrder = {
     "cdrEventId",
     "codes",
     "narrativeId",

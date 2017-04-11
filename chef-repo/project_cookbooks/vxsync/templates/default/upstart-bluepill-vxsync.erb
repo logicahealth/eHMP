@@ -6,6 +6,7 @@ stop on runlevel [!<%= @level %>]
 expect daemon
 respawn
 respawn limit 5 30
+limit nofile 65535 65535
 
 env PATH=/opt/chef/bin:/opt/chef/embedded/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 

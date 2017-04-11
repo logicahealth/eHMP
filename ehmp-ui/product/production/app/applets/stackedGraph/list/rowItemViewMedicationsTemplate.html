@@ -1,41 +1,28 @@
-<div class="toolbar-container"></div>
-<div class="medsBorderStyle selectable">
-    <div class="capitalize selectable col-sm-2 {{ attributes.firstFacilityMed.attributes.genericMedClass }}" title="{{ attributes.firstFacilityMed.attributes.displayName }}">{{displayName}}</div>
-    <div class="row">
-        <div class="col-sm-2 selectable minimumHeight noTopBottomBorderStyle">
-            {{#if noData}} -- {{/if}}
-            {{#each subMedsInternalGroupModels.models}}
-            <div class="row">
-                <div class="col-sm-5"></div>
-                <div class="col-sm-7 {{ attributes.topBorderClass }} fullWidth"></div>
-            </div>
-            <div style="height: {{ ../sigHeight }};" class="clearfix selectable">
-                <div class="clearfix vertical-center">
-
-                    {{#if attributes.firstFacilityMed.attributes.badDataFound}}
-                         <div class="fa fa-exclamation-triangle globeIcon col-sm-2" title="Bad Data Found"></div>
-                            {{else}}
-
-                            {{#if attributes.firstFacilityMed.attributes.isNotUserSiteMed}}
-                                <div class="fa fa-globe globeIcon col-sm-2"></div>
-                                {{else}}
-                                <div class="col-sm-2 pull-left"><img src="../../app/applets/stackedGraph/assets/img/placeholder.png"></div>
-                            {{/if}}
-
-                    {{/if}}
-
-                    <div class="col-sm-9 twentyOne
-                        {{ attributes.firstFacilityMed.attributes.genericMedClass }}MedItemSig" title="{{attributes.firstFacilityMed.attributes.doseUnitRouteSchedule}}">
-                        <div>
-                            <div class="ellipsisFormat">
-                                {{ attributes.firstFacilityMed.attributes.doseUnitRouteSchedule }}
-                            </div>
-                        </div>
-                    </div>
+<div role="gridcell" class="col-xs-2 selectable">
+    <span class="sr-only toolbar-instructions">Press enter to open the toolbar menu.</span>
+    <div class="toolbar-container"></div>
+    <span class="text-capitalize" data-cell-tilesort="tilesort">{{displayName}}</span>
+</div>
+<div role="gridcell" class="col-xs-2 selectable right-border">
+    {{#if noData}} -- 
+    {{else}}
+        {{#each subMedsInternalGroupModels.models}}
+            <div class="row-graph-data row">
+                <div class="col-xs-1">
+                {{#if attributes.firstFacilityMed.attributes.badDataFound}}
+                    <i class="fa fa-exclamation-triangle left-padding-xs"><span class="sr-only">Bad Data Found</span></i>
+                {{else if attributes.firstFacilityMed.attributes.isNotUserSiteMed}}
+                    <i class="fa fa-globe left-padding-xs"><span class="sr-only">Non-local Medication:</span></i>
+                {{/if}}
+                </div>
+                <div class="col-xs-10">
+                    {{ attributes.firstFacilityMed.attributes.doseUnitRouteSchedule }}
                 </div>
             </div>
-            {{/each}}
-        </div>
-        <div class="renderTo selectable col-sm-8 minimumHeight" data-toggle="popover" data-content="{{tooltip}}"></div>
-    </div>
+        {{/each}}
+    {{/if}}
+</div>
+<div role="gridcell" class="col-xs-8 selectable no-left-border" data-toggle="popover" data-content="{{tooltip}}">
+    <span class="sr-only">{{displayName}} Graph</span>
+    <div class="render-to"></div>
 </div>

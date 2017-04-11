@@ -4,8 +4,8 @@
      'underscore',
      'handlebars',
      'hbs!app/applets/notifications/templates/summaryTemplate',
-     'api/ResourceService',
- ], function(Backbone, Marionette, _, Handlebars, summaryTemplate, ResourceService) {
+     'app/applets/notifications/applicationHeaderIcon'
+ ], function(Backbone, Marionette, _, Handlebars, summaryTemplate, NotificationsHeaderIcon) {
      "use strict";
 
      var PriorityMappings = {
@@ -179,7 +179,7 @@
              var url = 'resource/fhir/communicationrequest/' + recipientId;
 
              if (isPatientView(options)) {
-                 var currentPatient = ResourceService.patientRecordService.getCurrentPatient();
+                 var currentPatient = ADK.PatientRecordService.getCurrentPatient();
                  if (currentPatient.has('pid')) {
                      url += '?subject=patient/' + currentPatient.get('pid');
                      columns = Columns.patient;
@@ -219,6 +219,8 @@
                  }
              });
 
+            this.listenTo(ADK.Messaging.getChannel('activities'), 'create:success', this.refresh);
+
              // calling ADK.GridView's initialize method
              this._super.initialize.apply(this, arguments);
          },
@@ -229,7 +231,7 @@
              this.$el.find('#all-range-' + this.appletOptions.appletId).click();
 
              if (isPatientView(options)) {
-                 var currentPatient = ResourceService.patientRecordService.getCurrentPatient();
+                 var currentPatient = ADK.PatientRecordService.getCurrentPatient();
                  if (currentPatient.has('displayName')) {
                      var patientName = currentPatient.get('displayName');
 

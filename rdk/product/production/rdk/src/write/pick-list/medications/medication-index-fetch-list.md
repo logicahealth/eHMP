@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Medication index [/medication-index{?site}{&searchString}{&ien}{&fields}]
+## Medication index [/medication-index{?site}{&searchString}{&ien}]
 
 Get the index of a medication that meets a search term
 
@@ -15,8 +15,6 @@ ORWUL FVIDX
     + searchString: `ACD` (string, required) - A string that is the closest match to the index you want to start returning data from
 
     + ien: `31` (number, required) - There is differing opinions on where this IEN comes from. One source says it comes from rpc 'ORWUL FV4DG' Another source says the following: Examples:  31 = O RX, for Outpatient Meds, 32 = UD RX, for Unit Dose – Inpatient Meds. There is no RPC that retrieves this IEN.  It is hardcoded in CPRS GUI code and passed as a literal string input. Use the quickViewIen 31 for Outpatient Medications.
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

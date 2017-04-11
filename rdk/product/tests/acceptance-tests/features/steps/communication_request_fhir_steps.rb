@@ -40,16 +40,8 @@ Given(/^the system knows about the following communication requests for the "(.*
 
     #puts resource.path, json, type
 
-    @response = HTTPartyWithBasicAuth.post_json_with_authorization(resource.path, json, type)
+    @response = HTTPartyRDK.post(resource.path, json, type)
   end
-end
-
-When(/^the client deletes all communication requests for recipient "(.*?)"$/) do |recipient_id|
-  resource = RDKQuery.new('communicationrequest-delete-all')
-  resource.replace_path_var(':recipientId', recipient_id)  unless recipient_id.nil?
-
-  path = remove_escaped_amp(resource.path)
-  @response = HTTPartyWithBasicAuth.delete_with_authorization(path)
 end
 
 When(/^the client retrieves all communication requests for recipient "(.*?)"$/) do |recipient_id|
@@ -57,7 +49,7 @@ When(/^the client retrieves all communication requests for recipient "(.*?)"$/) 
   resource.replace_path_var(':recipientId', recipient_id)  unless recipient_id.nil?
 
   path = remove_escaped_amp(resource.path)
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client retrieves a communication request for recipient "(.*?)" with the resource id$/) do |recipient_id|
@@ -69,7 +61,7 @@ When(/^the client retrieves a communication request for recipient "(.*?)" with t
   resource.replace_path_var(':recipientId', recipient_id) unless recipient_id.nil?
 
   path = remove_escaped_amp(resource.path)
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 
   result_array = JSON.parse(@response.body)
   expect(result_array).to be_a_kind_of(Array)
@@ -86,7 +78,7 @@ When(/^the client retrieves a communication request for recipient "(.*?)" with t
   resource.replace_path_var(':id', resource_id)
 
   path = remove_escaped_amp(resource.path)
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client deletes the communication request for recipient "(.*?)" with a resource id$/) do |recipient_id|
@@ -98,7 +90,7 @@ When(/^the client deletes the communication request for recipient "(.*?)" with a
   resource.replace_path_var(':recipientId', recipient_id) unless recipient_id.nil?
 
   path = remove_escaped_amp(resource.path)
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 
   result_array = JSON.parse(@response.body)
   expect(result_array).to be_a_kind_of(Array)
@@ -116,7 +108,7 @@ When(/^the client deletes the communication request for recipient "(.*?)" with a
   resource.replace_path_var(':id', resource_id)
 
   path = remove_escaped_amp(resource.path)
-  @response = HTTPartyWithBasicAuth.delete_with_authorization(path)
+  @response = HTTPartyRDK.delete(path)
 end
 
 When(/^the client retrieves a communication request for recipient "(.*?)" with an unknown resource id$/) do |recipient_id|
@@ -125,7 +117,7 @@ When(/^the client retrieves a communication request for recipient "(.*?)" with a
   resource.replace_path_var(':id', '0-0')
 
   path = remove_escaped_amp(resource.path)
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^trying to add an invalid communication requests$/) do |table|
@@ -153,7 +145,7 @@ When(/^trying to add an invalid communication requests$/) do |table|
 
     #puts resource.path, json, type
 
-    @response = HTTPartyWithBasicAuth.post_json_with_authorization(resource.path, json, type)
+    @response = HTTPartyRDK.post(resource.path, json, type)
   end
 end
 
@@ -169,21 +161,34 @@ Then(/^one of the communication request has the following data:$/) do |table|
   result = JSON.parse(@response.body)
 
   json_verify = VerifyJsonRuntimeValue.new
-  json_verify.verify_json_runtime_vlaue(result, table)
+  json_verify.verify_json_runtime_value(result, table)
 end
 
 Then(/^the communication request contains$/) do |table|
   result = [JSON.parse(@response.body)]
 
   json_verify = VerifyJsonRuntimeValue.new
-  json_verify.verify_json_runtime_vlaue(result, table)
+  json_verify.verify_json_runtime_value(result, table)
 end
 
-Then(/^remove all communication requests for recipient "(.*?)"/) do |recipient|
-  resource = RDKQuery.new('communicationrequest-delete-all')
-
-  resource.replace_path_var(':recipientId', recipient)
+Then(/^remove all communication requests for recipient "(.*?)"/) do |recipient_id|
+  # need to get all to get resource id
+  resource = RDKQuery.new('communicationrequest-get-all')
+  resource.replace_path_var(':recipientId', recipient_id) unless recipient_id.nil?
 
   path = remove_escaped_amp(resource.path)
-  @response = HTTPartyWithBasicAuth.delete_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
+
+  result_array = JSON.parse(@response.body)
+  expect(result_array).to be_a_kind_of(Array)
+
+  for i in 0..result_array.length-1
+    resource_id = result_array[i]['id']
+    resource = RDKQuery.new('communicationrequest-delete')
+    resource.replace_path_var(':recipientId', recipient_id)  unless recipient_id.nil?
+    resource.replace_path_var(':id', resource_id)
+
+    path = remove_escaped_amp(resource.path)
+    @response = HTTPartyRDK.delete(path)
+  end
 end

@@ -1,6 +1,6 @@
 When(/^the client requests "(.*?)" resource for the patient "(.*?)" in RDK format$/) do |resource, patient|
   path = QueryRDKDomain.new(resource, patient).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests "(.*?)" resource for the patient "(.*?)" starting with (\d+) and limited to (\d+)$/) do |resource, patient, start_with, limit|
@@ -8,21 +8,21 @@ When(/^the client requests "(.*?)" resource for the patient "(.*?)" starting wit
   resource_query.add_parameter("start", start_with)
   resource_query.add_parameter("limit", limit)
   path = resource_query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests "(.*?)" resource for the patient "(.*?)" limited to (\d+)$/) do |resource, patient, limit|
   resource_query = QueryRDKDomain.new(resource, patient)
   resource_query.add_parameter("limit", limit)
   path = resource_query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests "(.*?)" resource for the patient "(.*?)" starting with (\d+)$/) do |resource, patient, start_with|
   resource_query = QueryRDKDomain.new(resource, patient)
   resource_query.add_parameter("start", start_with)
   path = resource_query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the client receives (\d+) pagination results$/) do |num_results|
@@ -48,7 +48,7 @@ When(/^the client requests full name patient search with name "(.*?)"$/) do |nam
   resource_query = RDKQuery.new('patient-search-full-name')
   resource_query.add_parameter("name.full", name)
   path = resource_query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests full name patient search with name "(.*?)" starting with (\d+) and limited to (\d+)$/) do |name, start, limit|
@@ -57,7 +57,7 @@ When(/^the client requests full name patient search with name "(.*?)" starting w
   resource_query.add_start(start)
   resource_query.add_limit(limit)
   path = resource_query.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests last(\d+) patient search with "(.*?)"$/) do |_arg1, name|
@@ -65,7 +65,7 @@ When(/^the client requests last(\d+) patient search with "(.*?)"$/) do |_arg1, n
   build_path.add_parameter("last5", name)
 
   path = build_path.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests last(\d+) patient search with "(.*?)" starting with (\d+) and limited to (\d+)$/) do |_arg1, name, start, limit|
@@ -75,7 +75,7 @@ When(/^the client requests last(\d+) patient search with "(.*?)" starting with (
   build_path.add_parameter("limit", limit) 
 
   path = build_path.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests lab orders for the patient "(.*?)" and order "(.*?)" starting with (\d+) and limited to (\d+)$/) do |pid, uid, start, limit|
@@ -87,6 +87,6 @@ When(/^the client requests lab orders for the patient "(.*?)" and order "(.*?)" 
   resource_query.add_limit(limit)
   path = resource_query.path
 
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 

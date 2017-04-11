@@ -12,70 +12,50 @@ Feature: F138 - Return of immunization in FHIR format
       And the FHIR results contain "immunization"
       | name                          | value                |
       | resource.text.status          | generated            |
-      | resource.subject.reference    | Patient/9E7A;253     |
       | resource.resourceType         | Immunization         |
       #Organization
       | resource.contained.resourceType    |Organization          |
-      | resource.contained.identifier.label | facility-code        |
       | resource.contained.identifier.value | 888                  |
       | resource.contained.name             | FT. LOGAN            |
       #Practitioner
       | resource.contained.resourceType    | Practitioner         |
-      | resource.contained.identifier.label | uid                      |
       | resource.contained.identifier.value | urn:va:user:9E7A:11623   |
       | resource.contained.name             | STUDENT,SEVEN            |
       | resource.contained.text.status      | generated                |
       #Location
       | resource.contained.resourceType     | Location                 |
-      | resource.contained.identifier.label | uid                      |
       | resource.contained.identifier.value | urn:va:location:9E7A:32  |
       | resource.contained.name             | PRIMARY CARE             |
       | resource.contained.text.status       | generated                |
       #Extensions
-      | resource.extension.url          | CONTAINS immunization#contraindicated |
       | resource.extension.valueBoolean | false                                 |
-      | resource.extension.url          | CONTAINS immunization#encounterUid    |
-      | resource.extension.valueString  | urn:va:visit:9E7A:253:2035            |
-      | resource.extension.url          | CONTAINS immunization#encounterName   |
-      | resource.extension.valueString  | PRIMARY CARE Apr 06, 2000             |
       | resource.extension.url          | CONTAINS immunization#seriesName      |
       | resource.extension.valueString  | BOOSTER                               |
       #Vaccin no1
       | resource.date                       | IS_FHIR_FORMATTED_DATE  |
       | resource.vaccineType.coding.code    | CONTAINS urn:cpt:90732  |
       | resource.vaccineType.coding.display | PNEUMOCOCCAL VACCINE    |
-      | resource.performer.display          | STUDENT,SEVEN           |
-      | resource.location.display           | PRIMARY CARE            |
       | resource.reported                   | false                   |
-      | resource.refusedIndicator           | false                   |
       #Vaccin no2
       And the FHIR results contain "immunization"
       | name                                | value                   |
       | resource.date                       | IS_FHIR_FORMATTED_DATE  |
       | resource.vaccineType.coding.code    | CONTAINS urn:cpt:90732  |
       | resource.vaccineType.coding.display | PNEUMOCOCCAL VACCINE    |
-      | resource.performer.display          | STUDENT,SEVEN           |
-      | resource.location.display           | PRIMARY CARE            |
       | resource.reported                   | false                   |
-      | resource.refusedIndicator           | false                   |
       | resource.date                       | IS_FHIR_FORMATTED_DATE  |
       | resource.vaccineType.coding.code    | CONTAINS urn:cpt:90732  |
       | resource.vaccineType.coding.display | PNEUMOCOCCAL VACCINE    |
-      | resource.performer.display          | STUDENT,SEVEN           |
-      | resource.location.display           | PRIMARY CARE            |
       | resource.reported                   | false                   |
-      | resource.refusedIndicator           | false                   |
       #Vaccin no2
       And the FHIR results contain "immunization"
       | name                                | value                    |
       | resource.date                       | IS_FHIR_FORMATTED_DATE   |
       | resource.vaccineType.coding.code    | CONTAINS urn:cpt:90732   |
       | resource.vaccineType.coding.display | PNEUMOCOCCAL VACCINE     |
-      | resource.performer.display          | STUDENT,SEVEN            |
-      | resource.location.display           | PRIMARY CARE             |
       | resource.reported                   | false                    |
-      | resource.refusedIndicator           | false                    |
-
+   And FHIR date and time conver to Zulu format for Immunization
+   
   @F138_2_fhir_immunzation @fhir @9E7A100615
   Scenario: Client can request immunization results in FHIR format
       Given a patient with "immunization" in multiple VistAs
@@ -116,10 +96,7 @@ Feature: F138 - Return of immunization in FHIR format
       | resource.date                       | IS_FHIR_FORMATTED_DATE   |
       | resource.vaccineType.coding.code    | CONTAINS urn:cpt:90732   |
       | resource.vaccineType.coding.display | PNEUMOCOCCAL VACCINE     |
-      | resource.performer.display          | WARDCLERK,SIXTYEIGHT     |
-      | resource.location.display           | AUDIOLOGY                |
       | resource.reported                   | false                    |
-      | resource.refusedIndicator           | false                    |
       #Vaccin no2
       And the FHIR results contain "immunization"
       | name                                | value                            |
@@ -130,7 +107,6 @@ Feature: F138 - Return of immunization in FHIR format
       | resource.vaccineType.coding.code    | 19                               |
       | resource.vaccineType.coding.display | Bacillus Calmette-Guerin vaccine |
       | resource.reported                   | false                            |
-      | resource.refusedIndicator           | false                            |
       And the FHIR results contain "immunization"
       | name                                | value                    |
       | resource.text.div                   | CONTAINS MMR             |
@@ -139,7 +115,6 @@ Feature: F138 - Return of immunization in FHIR format
       | resource.date                       | IS_FHIR_FORMATTED_DATE   |
       | resource.vaccineType.coding.code    | 3                        |
       | resource.reported                   | false                    |
-      | resource.refusedIndicator           | false                    |
       And the FHIR results contain "immunization"
       | name                                | value                    |
       | resource.text.div                   | CONTAINS Td              |
@@ -148,7 +123,6 @@ Feature: F138 - Return of immunization in FHIR format
       | resource.date                       | IS_FHIR_FORMATTED_DATE   |
       | resource.vaccineType.coding.code    | 9                        |
       | resource.reported                   | false                    |
-      | resource.refusedIndicator           | false                    |
       And the FHIR results contain "immunization"
       | name                                | value                           |
       | resource.text.div                   | CONTAINS IPV                    |
@@ -158,7 +132,6 @@ Feature: F138 - Return of immunization in FHIR format
       | resource.vaccineType.coding.code    | 10                              |
       | resource.vaccineType.coding.display | poliovirus vaccine, inactivated |
       | resource.reported                   | false                           |
-      | resource.refusedIndicator           | false                           |
 
 @F138_3_fhir_immunzation @fhir @9E7A100716
 Scenario: Client can request immunization results in FHIR format
@@ -318,7 +291,6 @@ Scenario: Client can break the glass when requesting immunization in FHIR format
       And the results contain
       | name | value |
       # @TODO, we now have one CDS immunization record for this patient
-     #| totalResults | "" |
 
 @F138_6_fhir_immunzation @fhir @10117V810068
 Scenario: Negativ scenario. Client can request immunization results in FHIR format
@@ -328,7 +300,6 @@ Scenario: Negativ scenario. Client can request immunization results in FHIR form
       And the results contain
       | name | value |
       # @TODO, we now have one CDS immunization record for this patient
-     #| totalResults | "" |
 
 @F138_7_fhir_immunzation @fhir @5000000116V912836 @DE974
 Scenario: Client can request immunization results in FHIR format
@@ -339,4 +310,4 @@ Scenario: Client can request immunization results in FHIR format
       And total returned resources are "10"
       And the results contain
       | name         | value |
-     #| totalResults | ""    |
+    

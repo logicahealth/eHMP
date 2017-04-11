@@ -3,4 +3,4 @@
 # Attributes:: default
 #
 
-default["bluepill"]["version"] = "0.0.69"
+default["bluepill"]["version"] = "0.1.1"

@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Progress notes ICD 10 codes [/progress-notes-titles-icd-10{?site}{&searchString}{&fields}]
+## Progress notes ICD 10 codes [/progress-notes-titles-icd-10{?site}{&searchString}]
 
 Large Pick List - Returns a list of ICD 10 Codes
 
@@ -15,8 +15,6 @@ ORWLEX GETI10DX
     :[site]({{{common}}}/parameters/site.md)
 
     + searchString (string, required) - Given this text string, return a list of possible matches.
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

@@ -295,6 +295,240 @@ GETFLTR ;; @TEST Get objects by filter
  D ASSERT("",$G(OBJECT("items",2,"jobId")),"more objects returned than there should be")
  Q
  ;
+GETLIMIT ;; @TEST Get objects with limit, start, and startid
+ N ARG,ARGS,BODY,DATA,ERR,HTTPERR,ID,OBJECT,RESULT,RETURN
+ ; Cleanup HTTPERR
+ K ^TMP("HTTPERR",$J)
+ ; Empty error store
+ K ^VPRJERR
+ ;
+ ; Add errors to the error store to test limit, start, and startid
+ D MOCKDATA(.BODY,"21795","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21805","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21806","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21796","1432037853131","enterprise-sync-request","Unable to communicate with Primary VistA instance C877")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21797","1432037853132","vler-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21798","1432037853133","vler-sync-request","Unable to communicate with Primary VistA instance C877")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21807","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21808","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21809","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21810","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21799","1432037853134","jmeadows-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21811","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21812","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21813","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21800","1432037853135","jmeadows-sync-request","Unable to communicate with Primary VistA instance C877")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21814","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21801","1432037853136","hdr-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21815","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21816","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21817","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21818","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21819","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21802","1432037853137","hdr-sync-request","Unable to communicate with Primary VistA instance C877")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21820","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21803","1432037853138","store-record","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21821","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21822","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21823","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21824","1432037853130","enterprise-sync-request","Unable to communicate with Primary VistA instance 9E7A")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ D MOCKDATA(.BODY,"21804","1432037853139","store-record","Unable to communicate with Primary VistA instance C877")
+ S RETURN=$$SET^VPRJERR(.ARG,.BODY)
+ ;
+ ; Delete errors out of error store to properly test startid, start, and limit
+ S ARGS("id")=2
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=3
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=7
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=8
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=9
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=10
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=12
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=13
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=14
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=16
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=18
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=19
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=20
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=21
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=22
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=24
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=26
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=27
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=28
+ D DEL^VPRJERR(.DATA,.ARGS)
+ S ARGS("id")=29
+ D DEL^VPRJERR(.DATA,.ARGS)
+ ;
+ ; Cleanup HTTPERR
+ K ^TMP("HTTPERR",$J)
+ ; Cleanup Vars
+ K ARG,ARGS,BODY,DATA,RETURN,OBJECT
+ ; Get using limit
+ S ARGS("limit")=5
+ D GET^VPRJERR(.DATA,.ARGS)
+ D:$D(DATA) DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ D ASSERT(0,$D(ERR),"A JSON Decode Error Occured")
+ D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error")),"An HTTP error should NOT have occured")
+ D ASSERT(21795,$G(OBJECT("items",1,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853130,$G(OBJECT("items",1,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("enterprise-sync-request",$G(OBJECT("items",1,"type")),"returned data for timestamp didn't match")
+ D ASSERT(1,$G(OBJECT("items",1,"id")),"returned data for the wrong id")
+ D ASSERT(21796,$G(OBJECT("items",2,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853131,$G(OBJECT("items",2,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("enterprise-sync-request",$G(OBJECT("items",2,"type")),"returned data for timestamp didn't match")
+ D ASSERT(4,$G(OBJECT("items",2,"id")),"returned data for the wrong id")
+ D ASSERT(21797,$G(OBJECT("items",3,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853132,$G(OBJECT("items",3,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("vler-sync-request",$G(OBJECT("items",3,"type")),"returned data for timestamp didn't match")
+ D ASSERT(5,$G(OBJECT("items",3,"id")),"returned data for the wrong id")
+ D ASSERT(21798,$G(OBJECT("items",4,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853133,$G(OBJECT("items",4,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("vler-sync-request",$G(OBJECT("items",4,"type")),"returned data for timestamp didn't match")
+ D ASSERT(6,$G(OBJECT("items",4,"id")),"returned data for the wrong id")
+ D ASSERT(21799,$G(OBJECT("items",5,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853134,$G(OBJECT("items",5,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("jmeadows-sync-request",$G(OBJECT("items",5,"type")),"returned data for timestamp didn't match")
+ D ASSERT(11,$G(OBJECT("items",5,"id")),"returned data for the wrong id")
+ D ASSERT("",$G(OBJECT("items",6,"jobId")),"more objects returned than there should be")
+ D ASSERT("",$G(OBJECT("items",6,"timestamp")),"more objects returned than there should be")
+ D ASSERT("",$G(OBJECT("items",6,"type")),"more objects returned than there should be")
+ D ASSERT("",$G(OBJECT("items",6,"id")),"more objects returned than there should be")
+ ;
+ ; Cleanup HTTPERR
+ K ^TMP("HTTPERR",$J)
+ ; Cleanup Vars
+ K ARG,BODY,RETURN,OBJECT
+ ; Get using start and limit
+ S ARGS("start")=3
+ S ARGS("limit")=3
+ D GET^VPRJERR(.DATA,.ARGS)
+ D:$D(DATA) DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ D ASSERT(0,$D(ERR),"A JSON Decode Error Occured")
+ D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error")),"An HTTP error should NOT have occured")
+ D ASSERT(21797,$G(OBJECT("items",1,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853132,$G(OBJECT("items",1,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("vler-sync-request",$G(OBJECT("items",1,"type")),"returned data for timestamp didn't match")
+ D ASSERT(5,$G(OBJECT("items",1,"id")),"returned data for the wrong id")
+ D ASSERT(21798,$G(OBJECT("items",2,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853133,$G(OBJECT("items",2,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("vler-sync-request",$G(OBJECT("items",2,"type")),"returned data for timestamp didn't match")
+ D ASSERT(6,$G(OBJECT("items",2,"id")),"returned data for the wrong id")
+ D ASSERT(21799,$G(OBJECT("items",3,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853134,$G(OBJECT("items",3,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("jmeadows-sync-request",$G(OBJECT("items",3,"type")),"returned data for timestamp didn't match")
+ D ASSERT(11,$G(OBJECT("items",3,"id")),"returned data for the wrong id")
+ D ASSERT("",$G(OBJECT("items",4,"jobId")),"more objects returned than there should be")
+ D ASSERT("",$G(OBJECT("items",4,"timestamp")),"more objects returned than there should be")
+ D ASSERT("",$G(OBJECT("items",4,"type")),"more objects returned than there should be")
+ D ASSERT("",$G(OBJECT("items",4,"id")),"more objects returned than there should be")
+ ;
+ ; Cleanup HTTPERR
+ K ^TMP("HTTPERR",$J)
+ ; Cleanup Vars
+ K ARG,BODY,RETURN,OBJECT
+ ; Get using startid, start, and limit
+ S ARGS("startid")=15
+ S ARGS("start")=2
+ S ARGS("limit")=2
+ D GET^VPRJERR(.DATA,.ARGS)
+ D:$D(DATA) DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ D ASSERT(0,$D(ERR),"A JSON Decode Error Occured")
+ D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error")),"An HTTP error should NOT have occured")
+ D ASSERT(21801,$G(OBJECT("items",1,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853136,$G(OBJECT("items",1,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("hdr-sync-request",$G(OBJECT("items",1,"type")),"returned data for timestamp didn't match")
+ D ASSERT(17,$G(OBJECT("items",1,"id")),"returned data for the wrong id")
+ D ASSERT(21802,$G(OBJECT("items",2,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853137,$G(OBJECT("items",2,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("hdr-sync-request",$G(OBJECT("items",2,"type")),"returned data for timestamp didn't match")
+ D ASSERT(23,$G(OBJECT("items",2,"id")),"returned data for the wrong id")
+ D ASSERT("",$G(OBJECT("items",3,"jobId")),"more objects returned than there should be")
+ D ASSERT("",$G(OBJECT("items",3,"timestamp")),"more objects returned than there should be")
+ D ASSERT("",$G(OBJECT("items",3,"type")),"more objects returned than there should be")
+ D ASSERT("",$G(OBJECT("items",3,"id")),"more objects returned than there should be")
+ ;
+ ; Cleanup HTTPERR
+ K ^TMP("HTTPERR",$J)
+ ; Cleanup Vars
+ K ARG,BODY,RETURN,OBJECT
+ ; Get using startid, start, limit, and filter
+ S ARGS("startid")=4
+ S ARGS("start")=2
+ S ARGS("limit")=4
+ S ARGS("filter")="or(eq(type,vler-sync-request),eq(type,store-record))"
+ D GET^VPRJERR(.DATA,.ARGS)
+ D:$D(DATA) DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ D ASSERT(0,$D(ERR),"A JSON Decode Error Occured")
+ D ASSERT(0,$D(^TMP("HTTPERR",$J,1,"error")),"An HTTP error should NOT have occured")
+ D ASSERT(21797,$G(OBJECT("items",1,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853132,$G(OBJECT("items",1,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("vler-sync-request",$G(OBJECT("items",1,"type")),"returned data for timestamp didn't match")
+ D ASSERT(5,$G(OBJECT("items",1,"id")),"returned data for the wrong id")
+ D ASSERT(21798,$G(OBJECT("items",2,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853133,$G(OBJECT("items",2,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("vler-sync-request",$G(OBJECT("items",2,"type")),"returned data for timestamp didn't match")
+ D ASSERT(6,$G(OBJECT("items",2,"id")),"returned data for the wrong id")
+ D ASSERT(21803,$G(OBJECT("items",3,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853138,$G(OBJECT("items",3,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("store-record",$G(OBJECT("items",3,"type")),"returned data for timestamp didn't match")
+ D ASSERT(25,$G(OBJECT("items",3,"id")),"returned data for the wrong id")
+ D ASSERT(21804,$G(OBJECT("items",4,"jobId")),"returned data for the wrong jobId")
+ D ASSERT(1432037853139,$G(OBJECT("items",4,"timestamp")),"returned data for timestamp didn't match")
+ D ASSERT("store-record",$G(OBJECT("items",4,"type")),"returned data for timestamp didn't match")
+ D ASSERT(30,$G(OBJECT("items",4,"id")),"returned data for the wrong id")
+ D ASSERT("",$G(OBJECT("items",5,"jobId")),"more objects returned than there should be")
+ D ASSERT("",$G(OBJECT("items",5,"timestamp")),"more objects returned than there should be")
+ D ASSERT("",$G(OBJECT("items",5,"type")),"more objects returned than there should be")
+ D ASSERT("",$G(OBJECT("items",5,"id")),"more objects returned than there should be")
+ Q
+ ;
 CLR ;; @TEST Clear ALL Store Data
  N ARG,ARGS,BODY,DATA,ERR,ERRNUM,ERRMSG,ERRPRE,HTTPERR,OBJECT,RESULT,RETURN
  D CLR^VPRJERR(.DATA,.ARGS)

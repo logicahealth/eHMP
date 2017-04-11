@@ -1,14 +1,10 @@
-@F321 @US6178 @TC306 @regression @US7259
+@F321 @US6178 @TC306 @regression @US7259 @future @US146753
 Feature: Condition-based Analysis Workspaces - Immutable Pre-procedure Workspace
 
 # Filter tests based off of steps in eHMP_Regression Test Procedures for IOC Release 1.2.1_v1.0_08192015dia
 
 Background:
-#   Given user is testing functionality
-
-# @US6178 
-# Scenario: User performs pre steps
-	Given user is logged into eHMP-UI
+	# Given user is logged into eHMP-UI
 	And user searches for and selects "Eight,Patient"
 	And Default Screen is active
 
@@ -22,7 +18,7 @@ Scenario: Pre-procedure CBW  displays expected applets
 	When the user navigates to the Pre-procedure CBW
 	And the applets are displayed on the Pre-procedure CBW
       | applet                 |
-      | CONDITIONS             |
+      | PROBLEMS             |
       | VITALS                 |
       | ORDERS                 |
       | APPOINTMENTS & VISITS  |
@@ -32,12 +28,12 @@ Scenario: Pre-procedure CBW  displays expected applets
       | ALLERGIES              |
       | MEDICATIONS REVIEW     |
       
-@US6178 @TC306_9 @DE3079 @debug @DE3444
-Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Lab Results
+@US6178 @TC306_9 @DE3079 @DE3444 @future @US13456
+Scenario: Verify the Pre-procedure CBW has the correct Filters Label applied for Lab Results
       When the user navigates to the Pre-procedure CBW
       Then the Lab Results applet reports filtered "Filtered Preprocedure"
 
-@US6178 @TC306_9 @debug @DE3444
+@US6178 @TC306_9 @DE3444
 Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Lab Results
 	When the user navigates to the Pre-procedure CBW
 	# Then the Lab Results applet reports filtered "Filtered Preprocedure"
@@ -110,12 +106,12 @@ Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Lab R
 |	PTT   |
 |	TSH   |
 
-@US6178 @TC306_10 @DE3079 @debug @DE3444
+@US6178 @TC306_10 @DE3079 @DE3444 @future @US13456
 Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Documents
       When the user navigates to the Pre-procedure CBW
       Then the Documents applet reports filtered "Filtered Preprocedure"
  
-@US6178 @TC306_10 @debug @DE3444
+@US6178 @TC306_10 @DE3444
 Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Documents
 	When the user navigates to the Pre-procedure CBW
 	# Then the Documents applet reports filtered "Filtered Preprocedure"
@@ -141,12 +137,12 @@ Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Docum
       | Urology          |
       | Vascular         |
 
-@US6178 @TC306_11 @DE3079 @debug @DE3444
+@US6178 @TC306_11 @DE3079 @DE3444 @future @US13456
 Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Appointments/Visits
       When the user navigates to the Pre-procedure CBW
       Then the Appointment & Visit applet reports filtered "Filtered Preprocedure"
 
-@US6178 @TC306_11 @debug @DE3444
+@US6178 @TC306_11 @DE3444
 Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Appointments/Visits
 	When the user navigates to the Pre-procedure CBW
 	# Then the Appointment & Visit applet reports filtered "Filtered Preprocedure"
@@ -175,12 +171,12 @@ Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Appoi
       | Urology          |
       | Vascular         |
 
-@US6178 @TC306_12 @DE3079 @debug @DE3444
+@US6178 @TC306_12 @DE3079 @DE3444 @future @US13456
 Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Timeline
       When the user navigates to the Pre-procedure CBW
       Then the Timeline applet reports filtered "Filtered Preprocedure"
 
-@US6178 @TC306_12 @debug @DE3444
+@US6178 @TC306_12 @DE3444 @US13456
 Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Timeline
 	When the user navigates to the Pre-procedure CBW
 	#Then the Timeline applet reports filtered "Filtered Preprocedure"
@@ -196,12 +192,12 @@ Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Timel
       | Visit           |
 
 
-@US6178 @TC306_13 @DE2371 @DE3079 @debug @DE3444
+@US6178 @TC306_13 @DE2371 @DE3079 @DE3444 @future @US13456
 Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Meds
    When the user navigates to the Pre-procedure CBW
    Then the Meds Review applet reports filtered "Filtered Preprocedure"
 
-@US6178 @TC306_13 @DE2371 @debug @DE3444
+@US6178 @TC306_13 @DE2371 @DE3444
 Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Meds
    When the user navigates to the Pre-procedure CBW
    # Then the Meds Review applet reports filtered "Filtered Preprocedure"
@@ -364,9 +360,4 @@ Scenario: Verify the Pre-procedure CBW has the correct Filters applied for Meds
       | WARFARIN               |
       | XARELTO                |
 
-
-# @US6178
-# Scenario: User reports test results
-#     Given user is done testing functionality
-#     Then user reports results
 

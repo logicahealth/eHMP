@@ -42,7 +42,7 @@ function init(app) {
 function initDefinitions() {
     //Clear out the existing definitions and re-seed them
     db.collection('definitions').remove({}, function(error, result) {
-        logger.debug('error: ' + error + ' result: ' + result);
+        logger.debug({error: error, result: result});
     });
 
     _.each(definitionList, function(definition, index) {
@@ -52,7 +52,7 @@ function initDefinitions() {
             upsert: true
         }, function(error, result) {
             if (error) {
-                logger.error('error: ' + error);
+                logger.error({error: error});
                 return;
             }
             logger.debug('result: ' + result);
@@ -69,7 +69,7 @@ function initDefinitions() {
             upsert: true
         }, function(error, result) {
             if (error) {
-                logger.error('error: ' + error);
+                logger.error({error: error});
                 return;
             }
             logger.debug('result: ' + result);
@@ -397,7 +397,7 @@ function toISOString(epoch) {
  * @apiParam {String} [origin] Used to filter by using the name of the source from where a metric originated
  * @apiParam {String="Direct","Background"} [invocationType] describes how a metric is generated
  * @apiExample {js} Example usage:
- * curl -i http://IP             /resource/metrics/metrics?metricId=1&startPeriod=1431607947079&endPeriod=1431636747079&granularity=3600000&origin=SystemA&invocationType=Direct
+ * curl -i http://IP_ADDRESS:PORT/resource/metrics/metrics?metricId=1&startPeriod=1431607947079&endPeriod=1431636747079&granularity=3600000&origin=SystemA&invocationType=Direct
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Bad Request
  *     {
@@ -478,7 +478,7 @@ module.exports.getMetricSearch = function(req, res) {
 
     db.collection(query.collection).aggregate(pipeline, function(error, result) {
         if (error) {
-            req.logger.debug('Error: ' + error);
+            req.logger.debug({error: error});
             return res.status(404).send({
                 status: 404,
                 error: error

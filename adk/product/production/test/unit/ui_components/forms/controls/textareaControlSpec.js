@@ -7,35 +7,39 @@
 define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/components", "api/UIComponents", "jasminejquery"],
     function($, Handlebars, Backbone, Marionette, UI) {
 
-        var $form, form;
+        var $testPage, testPage;
 
         var textareaControlDefinition_1 = {
                 control: "textarea",
                 name: "textareaValue",
                 label: "textarea label",
                 placeholder: "Enter text...",
-                title: "Enter message here"
+                title: "Enter message here",
+                charCount: false
             },
             textareaControlDefinition_2 = {
                 control: "textarea",
                 name: "textareaValue",
                 label: "textarea label",
                 placeholder: "Enter text...",
-                extraClasses: ["special-class-1", "special-class-2"]
+                extraClasses: ["special-class-1", "special-class-2"],
+                charCount: false
             },
             textareaControlDefinition_3 = {
                 control: "textarea",
                 name: "textareaValue",
                 label: "textarea label",
                 placeholder: "Enter text...",
-                disabled: true
+                disabled: true,
+                charCount: false
             },
             textareaControlDefinition_4 = {
                 control: "textarea",
                 name: "textareaValue",
                 label: "textarea label",
                 placeholder: "Enter text...",
-                required: true
+                required: true,
+                charCount: false
             },
             textareaControlDefinition_5 = {
                 control: "textarea",
@@ -43,21 +47,24 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                 label: "textarea label",
                 placeholder: "Enter text...",
                 rows: 5,
-                cols: 3
+                cols: 3,
+                charCount: false
             },
             textareaControlDefinition_6 = {
                 control: "textarea",
                 name: "textareaValue",
                 label: "textarea label",
                 placeholder: "Enter text...",
-                maxlength: 20
+                maxlength: 20,
+                charCount: false
             },
             textareaControlDefinition_7 = {
                 control: "textarea",
                 name: "textareaValue",
                 label: "textarea label",
                 placeholder: "Enter text...",
-                helpMessage: "This is a help message."
+                helpMessage: "This is a help message.",
+                charCount: false
             },
             textareaControlDefinition_8 = {
                 control: "textarea",
@@ -65,229 +72,405 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                 label: "textarea label",
                 placeholder: "Enter text...",
                 title: "Enter message here",
-                srOnlyLabel: true
+                srOnlyLabel: true,
+                charCount: false
+            },
+            textareaControlDefinition_9 = {
+                control: "textarea",
+                name: "textareaValue",
+                label: "textarea label",
+                placeholder: "Enter text...",
+                title: "Enter message here"
             },
             formModel_1 = new Backbone.Model(),
             formModel_2 = new Backbone.Model({
                 textareaValue: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit ex purus, quis cursus augue tempor vitae. Integer commodo tincidunt.'
-            });
+            }),
+            formModel_3 = new Backbone.Model({
+                textareaValue: 'Some starting text'
+            }),
+            FormModelClean = Backbone.Model;
+
+        var TestView = Backbone.Marionette.LayoutView.extend({
+            template: Handlebars.compile([
+                '<div class="test-region"></div>'
+            ].join('\n')),
+            ui: {
+                'TestRegion': '.test-region'
+            },
+            regions: {
+                'TestRegion': '@ui.TestRegion'
+            },
+            initialize: function(options) {
+                this.ViewToTest = options.view;
+                if (!_.isFunction(this.ViewToTest.initialize)) {
+                    this.ViewToTest = new this.ViewToTest();
+                }
+            },
+            onRender: function() {
+                this.showChildView('TestRegion', this.ViewToTest);
+            }
+        });
 
         describe("A textarea control", function() {
             afterEach(function() {
-                form.remove();
+                testPage.remove();
             });
 
             describe("basic", function() {
                 beforeEach(function() {
-                    form = new UI.Form({
-                        model: formModel_1,
-                        fields: [textareaControlDefinition_1]
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: formModel_1,
+                            fields: [textareaControlDefinition_1]
+                        })
                     });
-                    $form = form.render().$el;
-                    $("body").append($form);
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
                 });
 
                 it("contains correct wrapper", function() {
-                    expect($form.find('.control').length).toBe(1);
+                    expect($testPage.find('.control').length).toBe(1);
                 });
                 it("contains correct label", function() {
-                    expect($form.find('label').length).toBe(1);
-                    expect($form.find('label')).toHaveText('textarea label');
-                    expect($form.find('label')).toHaveAttr('for', 'textareaValue');
+                    expect($testPage.find('label').length).toBe(1);
+                    expect($testPage.find('label')).toHaveText('textarea label');
+                    expect($testPage.find('label')).toHaveAttr('for', 'textareaValue');
                 });
                 it("contains correct title", function() {
-                    expect($form.find('textarea').length).toBe(1);
-                    expect($form.find('textarea')).toHaveAttr('title', 'Enter message here');
+                    expect($testPage.find('textarea').length).toBe(1);
+                    expect($testPage.find('textarea')).toHaveAttr('title', 'Enter message here');
                 });
                 it("contains correct initial text", function() {
-                    expect($form.find('textarea')).toBeEmpty();
+                    expect($testPage.find('textarea')).toBeEmpty();
                 });
                 it("updates model after value change", function() {
-                    $form.find('textarea').text('New Text String').trigger('change');
-                    expect(form.model.get('textareaValue')).toBe('New Text String');
+                    $testPage.find('textarea').text('New Text String').trigger('input');
+                    expect(testPage.ViewToTest.model.get('textareaValue')).toBe('New Text String');
                 });
                 it("contains default maxlength", function() {
-                    expect($form.find('textarea')).toHaveAttr('maxlength', '4000');
+                    expect($testPage.find('textarea')).toHaveAttr('maxlength', '200');
                 });
                 it("contains correct id", function() {
-                    expect($form.find('textarea')).toHaveId('textareaValue');
+                    expect($testPage.find('textarea')).toHaveId('textareaValue');
                 });
                 it("contains correct class", function() {
-                    expect($form.find('textarea')).toHaveClass('form-control');
+                    expect($testPage.find('textarea')).toHaveClass('form-control');
                 });
             });
             describe("with extra classes", function() {
                 beforeEach(function() {
-                    form = new UI.Form({
-                        model: formModel_1,
-                        fields: [textareaControlDefinition_2]
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: formModel_1,
+                            fields: [textareaControlDefinition_2]
+                        })
                     });
-                    $form = form.render().$el;
-                    $("body").append($form);
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
                 });
 
                 it("has correct classes", function() {
-                    expect($form.find('div')).toHaveClass("special-class-1");
-                    expect($form.find('div')).toHaveClass("special-class-2");
+                    expect($testPage.find('div')).toHaveClass("special-class-1");
+                    expect($testPage.find('div')).toHaveClass("special-class-2");
                 });
                 it("textarea does not have the same classes", function() {
-                    expect($form.find('textarea')).not.toHaveClass("special-class-1");
-                    expect($form.find('textarea')).not.toHaveClass("special-class-2");
+                    expect($testPage.find('textarea')).not.toHaveClass("special-class-1");
+                    expect($testPage.find('textarea')).not.toHaveClass("special-class-2");
                 });
             });
             describe("disabled", function() {
                 beforeEach(function() {
-                    form = new UI.Form({
-                        model: formModel_1,
-                        fields: [textareaControlDefinition_3]
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: formModel_1,
+                            fields: [textareaControlDefinition_3]
+                        })
                     });
-                    $form = form.render().$el;
-                    $("body").append($form);
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
                 });
 
                 it("has correct attribute", function() {
-                    expect($form.find('textarea')).toBeDisabled();
+                    expect($testPage.find('textarea')).toBeDisabled();
                 });
             });
             describe("required", function() {
                 beforeEach(function() {
-                    form = new UI.Form({
-                        model: formModel_1,
-                        fields: [textareaControlDefinition_4]
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: formModel_1,
+                            fields: [textareaControlDefinition_4]
+                        })
                     });
-                    $form = form.render().$el;
-                    $("body").append($form);
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
                 });
 
                 it("has correct attribute", function() {
-                    expect($form.find('textarea')).toHaveAttr('required', 'required');
+                    expect($testPage.find('textarea')).toHaveAttr('required', 'required');
                 });
             });
             describe("set cols and rows", function() {
                 beforeEach(function() {
-                    form = new UI.Form({
-                        model: formModel_1,
-                        fields: [textareaControlDefinition_5]
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: formModel_1,
+                            fields: [textareaControlDefinition_5]
+                        })
                     });
-                    $form = form.render().$el;
-                    $("body").append($form);
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
                 });
 
                 it("has correct attribute", function() {
-                    expect($form.find('textarea')).toHaveAttr('cols', '3');
-                    expect($form.find('textarea')).toHaveAttr('rows', '5');
+                    expect($testPage.find('textarea')).toHaveAttr('cols', '3');
+                    expect($testPage.find('textarea')).toHaveAttr('rows', '5');
                 });
             });
             describe("set maxlength", function() {
                 beforeEach(function() {
-                    form = new UI.Form({
-                        model: formModel_1,
-                        fields: [textareaControlDefinition_6]
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: formModel_1,
+                            fields: [textareaControlDefinition_6]
+                        })
                     });
-                    $form = form.render().$el;
-                    $("body").append($form);
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
                 });
 
                 it("has correct attribute", function() {
-                    expect($form.find('textarea')).toHaveAttr('maxlength', '20');
+                    expect($testPage.find('textarea')).toHaveAttr('maxlength', '20');
                 });
             });
             describe("with help message", function() {
                 beforeEach(function() {
-                    form = new UI.Form({
-                        model: formModel_1,
-                        fields: [textareaControlDefinition_7]
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: formModel_1,
+                            fields: [textareaControlDefinition_7]
+                        })
                     });
-                    $form = form.render().$el;
-                    $("body").append($form);
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
                 });
                 it("help message is in a span with proper class", function() {
-                    expect($form.find('span').length).toBe(1);
-                    expect($form.find('span')).toHaveClass('help-block');
+                    expect($testPage.find('span').length).toBe(1);
+                    expect($testPage.find('span')).toHaveClass('help-block');
                 });
                 it("has help message", function() {
-                    expect($form.find('span.help-block')).toHaveText('This is a help message.');
+                    expect($testPage.find('span.help-block')).toHaveText('This is a help message.');
                 });
             });
             describe("with initial value", function() {
                 beforeEach(function() {
-                    form = new UI.Form({
-                        model: formModel_2,
-                        fields: [textareaControlDefinition_1]
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: formModel_2,
+                            fields: [textareaControlDefinition_1]
+                        })
                     });
-                    $form = form.render().$el;
-                    $("body").append($form);
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
                 });
                 it("initial model value set correctly", function() {
 
-                    expect($form.find('textarea')).toHaveText('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit ex purus, quis cursus augue tempor vitae. Integer commodo tincidunt.');
+                    expect($testPage.find('textarea')).toHaveText('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit ex purus, quis cursus augue tempor vitae. Integer commodo tincidunt.');
                 });
             });
             describe("basic with sr-only label", function() {
                 beforeEach(function() {
-                    form = new UI.Form({
-                        model: formModel_1,
-                        fields: [textareaControlDefinition_8]
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: formModel_1,
+                            fields: [textareaControlDefinition_8]
+                        })
                     });
-                    $form = form.render().$el;
-                    $("body").append($form);
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
                 });
 
                 it("contains correct label", function() {
-                    expect($form.find('label').length).toBe(1);
-                    expect($form.find('label')).toHaveText('textarea label');
-                    expect($form.find('label')).toHaveAttr('for', 'textareaValue');
-                    expect($form.find('label')).toHaveClass('sr-only');
+                    expect($testPage.find('label').length).toBe(1);
+                    expect($testPage.find('label')).toHaveText('textarea label');
+                    expect($testPage.find('label')).toHaveAttr('for', 'textareaValue');
+                    expect($testPage.find('label')).toHaveClass('sr-only');
                 });
             });
             describe("with error", function() {
                 beforeEach(function() {
-                    form = new UI.Form({
-                        model: formModel_1,
-                        fields: [textareaControlDefinition_1]
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: formModel_1,
+                            fields: [textareaControlDefinition_1]
+                        })
                     });
-                    $form = form.render().$el;
-                    $("body").append($form);
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
                 });
                 it("contains error", function() {
-                    form.model.errorModel.set('textareaValue', 'Example error');
-                    expect($form.find('span.error')).toExist();
-                    expect($form.find('span.error')).toHaveText('Example error');
+                    testPage.ViewToTest.model.errorModel.set('textareaValue', 'Example error');
+                    expect($testPage.find('span.error')).toExist();
+                    expect($testPage.find('span.error')).toHaveLength(1);
+                    expect($testPage.find('span.error')).toHaveText('Example error');
                 });
                 it("error is removed", function() {
-                    expect($form.find('span.error')).toHaveText('Example error');
-                    $form.find('textarea').text('New Text String').trigger('change');
-                    expect($form.find('span.error')).not.toExist();
+                    testPage.ViewToTest.model.errorModel.set('textareaValue', 'Example error');
+                    expect($testPage.find('textarea')).toHaveLength(1);
+                    expect($testPage.find('span.error')).toHaveLength(1);
+                    expect($testPage.find('.control.textarea-control')).toHaveClass('has-error');
+                    expect($testPage.find('span.error')).toHaveText('Example error');
+                    $testPage.find('textarea').val('Post error text').trigger('input');
+                    expect($testPage.find('span.error')).not.toExist();
+                    expect($testPage.find('.control.textarea-control')).not.toHaveClass('has-error');
                 });
             });
             describe("using trigger to dynamically change attributes", function() {
                 beforeEach(function() {
-                    form = new UI.Form({
-                        model: formModel_1,
-                        fields: [textareaControlDefinition_1]
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: new FormModelClean(),
+                            fields: [textareaControlDefinition_1]
+                        })
                     });
-                    $form = form.render().$el;
-                    $("body").append($form);
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
                 });
 
                 it("hidden", function() {
-                    $form.find('.textareaValue').trigger("control:hidden", true);
-                    expect($form.find('.textareaValue')).toHaveClass('hidden');
-                    $form.find('.textareaValue').trigger("control:hidden", false);
-                    expect($form.find('.textareaValue')).not.toHaveClass('hidden');
+                    $testPage.find('.textareaValue').trigger("control:hidden", true);
+                    expect($testPage.find('.textareaValue')).toHaveClass('hidden');
+                    $testPage.find('.textareaValue').trigger("control:hidden", false);
+                    expect($testPage.find('.textareaValue')).not.toHaveClass('hidden');
 
                 });
                 it("placeholder", function() {
-                    $form.find('.textareaValue').trigger("control:placeholder", 'new place');
-                    expect($form.find('textarea')).toHaveAttr("placeholder", 'new place');
-                    $form.find('.textareaValue').trigger("control:placeholder", '');
-                    expect($form.find('textarea')).not.toHaveAttr('placeholder','new place');
+                    $testPage.find('.textareaValue').trigger("control:placeholder", 'new place');
+                    expect($testPage.find('textarea')).toHaveAttr("placeholder", 'new place');
+                    $testPage.find('.textareaValue').trigger("control:placeholder", '');
+                    expect($testPage.find('textarea')).not.toHaveAttr('placeholder', 'new place');
                 });
                 it("rows", function() {
-                    $form.find('.textareaValue').trigger("control:rows", 4);
-                    expect($form.find('textarea')).toHaveAttr('rows', '4');
-                    $form.find('.textareaValue').trigger("control:rows", 7);
-                    expect($form.find('textarea')).toHaveAttr('rows', '7');
+                    $testPage.find('.textareaValue').trigger("control:rows", 4);
+                    expect($testPage.find('textarea')).toHaveAttr('rows', '4');
+                    $testPage.find('.textareaValue').trigger("control:rows", 7);
+                    expect($testPage.find('textarea')).toHaveAttr('rows', '7');
+                });
+                it("updates text and model value with control:insert:string", function() {
+                    expect($testPage.find('.textareaValue textarea')).toHaveValue('');
+                    $testPage.find('.textareaValue textarea').val("starting text").trigger('input');
+                    expect($testPage.find('.textareaValue textarea')).toHaveValue('starting text');
+                    expect(testPage.ViewToTest.model.get('textareaValue')).toBe('starting text');
+                    $testPage.find('.textareaValue textarea').trigger('control:insert:string', ' added text!');
+                    expect($testPage.find('.textareaValue textarea')).toHaveValue(' added text!starting text');
+                    expect(testPage.ViewToTest.model.get('textareaValue')).toBe(' added text!starting text');
+                });
+                it("updates text and model value with control:insert:string with prependWith and appendWith", function() {
+                    expect($testPage.find('.textareaValue textarea')).toHaveValue('');
+                    $testPage.find('.textareaValue textarea').val("starting text").trigger('input');
+                    expect($testPage.find('.textareaValue textarea')).toHaveValue('starting text');
+                    expect(testPage.ViewToTest.model.get('textareaValue')).toBe('starting text');
+                    $testPage.find('.textareaValue textarea').trigger('control:insert:string', [' added text!', {
+                        prependWith: "---",
+                        appendWith: " :-) "
+                    }]);
+                    expect($testPage.find('.textareaValue textarea')).toHaveValue('--- added text! :-) starting text');
+                    expect(testPage.ViewToTest.model.get('textareaValue')).toBe('--- added text! :-) starting text');
+                });
+            });
+            describe("with char count enabled", function() {
+                beforeEach(function() {
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: new FormModelClean(),
+                            fields: [_.defaults({
+                                charCount: true,
+                                maxlength: 60
+                            }, textareaControlDefinition_9)]
+                        })
+                    });
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
+                });
+                it("contains correct span class", function() {
+                    expect($testPage.find('.char-count-region')).toHaveLength(1);
+                    expect($testPage.find('.char-count-region span')).toHaveLength(1);
+                });
+                it("shows correct count when initialized without a value", function() {
+                    expect($testPage.find('.char-count-region span')).toContainText("60");
+                });
+                it("shows correct count when initialized with a value", function() {
+                    testPage.remove();
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: formModel_3,
+                            fields: [_.defaults({
+                                charCount: true,
+                                maxlength: 60
+                            }, textareaControlDefinition_9)]
+                        })
+                    });
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
+                    expect($testPage.find('.char-count-region span')).toContainText("42");
+                });
+                it("shows correct count when input is entered", function() {
+                    var string = 'Test string';
+                    $testPage.find('textarea').val(string);
+                    $testPage.find('textarea').trigger('input');
+                    expect($testPage.find('.char-count-region span')).toContainText($testPage.find('textarea').attr('maxlength') - string.length);
+                });
+                it("shows correct count when model value is updated", function() {
+                    var string = 'New text from model!';
+                    testPage.ViewToTest.model.set('textareaValue', string);
+                    expect($testPage.find('.char-count-region span')).toContainText($testPage.find('textarea').attr('maxlength') - string.length);
+                });
+                it("displays character count text by default", function() {
+                    testPage.remove();
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: new FormModelClean(),
+                            fields: [_.defaults({
+                                maxlength: 60
+                            }, textareaControlDefinition_9)]
+                        })
+                    });
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
+                    expect($testPage.find('.char-count-region')).toHaveLength(1);
+                    expect($testPage.find('.char-count-region span')).toHaveLength(1);
+                });
+                it("does not display character count text if maxlength is -1 (for unlimited)", function() {
+                    testPage.remove();
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: new FormModelClean(),
+                            fields: [_.defaults({
+                                charCount: true,
+                                maxlength: -1
+                            }, textareaControlDefinition_9)]
+                        })
+                    });
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
+                    expect($testPage.find('.char-count-region')).toHaveLength(0);
+                    expect($testPage.find('.char-count-region span')).toHaveLength(0);
                 });
             });
         });

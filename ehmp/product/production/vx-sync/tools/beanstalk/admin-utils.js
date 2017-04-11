@@ -6,7 +6,7 @@ var inspect = require('util').inspect;
 var async = require('async');
 var _ = require('underscore');
 
-var BeanstalkClient = require(global.VX_JOBFRAMEWORK + 'beanstalk-client');
+var BeanstalkClient = require(global.VX_JOBFRAMEWORK).BeanstalkClient;
 
 function execute(client, command, callback) {
     async.series({

@@ -2,8 +2,8 @@
 @F120_allergyapplet_dod @regression
 Feature: JLV GUI Refactoring to use VistA Exchange
 
-Background:
-	Given user is logged into eHMP-UI
+#Background:
+	# Given user is logged into eHMP-UI
 
 
 @US1446 @US2178

@@ -2,45 +2,131 @@
 
 ## Orderables [{{{path}}}]
 
-### Orderables Search [GET {{{path}}}{?criteria}{&domains}]
+### Orderables Search [GET {{{path}}}{?searchString}]
 
 Search Orderables
 
 + Parameters
 
-	+ criteria (string, optional)
+	+ searchString (string, optional)
 
-		Search criteria
+		Search string
 
-	+ domains (enum[string], optional)
-
-        List of domains to search. If empty, it searches all domains.
-
-        + Members
-            + `lab` - Laboratory orderables
-            + `rad` - Radiology orderables
 
 + Response 200 (application/json)
 
 	+ Body
 
-            {
-                "data": {
-                    "items": [
-                    {
-                        "ien": "204",
-                        "synonym": "BICARBONATE (SBC)",
-                        "name": "BICARBONATE (SBC)",
-                        "type": "lab"
-                    }
-                    ]
-                },
-                "status": 200
-            }
+			{
+			  "data": [
+			    {
+			      "uid": "1255",
+			      "type": "vista-orderable",
+			      "domain": "ehmp-order",
+			      "subDomain": "labratory",
+			      "facility-enterprise": "9E7A",
+			      "state": "active",
+			      "name": "BB CBC-TEST"
+			    },
+			    {
+			      "uid": "210",
+			      "type": "vista-orderable",
+			      "domain": "ehmp-order",
+			      "subDomain": "labratory",
+			      "facility-enterprise": "9E7A",
+			      "state": "active",
+			      "name": "CBC"
+			    },
+			    {
+			      "active": true,
+			      "createdBy": "urn:va:user:9E7A:10000000270",
+			      "data": {
+			        "activity": {
+			          "deploymentId": "VistaCore:Order",
+			          "processDefinitionId": "Order:Consult"
+			        },
+			        "codes": [
+			          {
+			            "code": "2601-3",
+			            "display": "Magnesium [Moles/volume] in Serum or Plasma",
+			            "system": "urn:oid:2.16.840.1.113883.6.1"
+			          }
+			        ],
+			        "prerequisites": {
+			          "cdsIntent": "name on a cds intent to be executed",
+			          "questions": [
+			            "Q1",
+			            "Q2"
+			          ]
+			        }
+			      },
+			      "domain": "ehmp-activity",
+			      "facility-enterprise": "",
+			      "name": "Physical Therapy Consult CBC",
+			      "state": "active",
+			      "subDomain": "consult",
+			      "timestamp": "2016-03-10T22:13:23.105Z",
+			      "type": "entr",
+			      "uid": "urn:va:entordrbls:2"
+			    }
+			  ],
+			  "status": 200
+			}
 
-+ Response 400 (application/json)
+	+ Schema
 
-        {
-            "message": "Unsupported domain. Supported domains are lab, rad.",
-            "status": 400
-        }
+			{
+			  "$schema": "http://json-schema.org/draft-04/schema#",
+			  "type": "object",
+			  "properties": {
+			    "data": {
+			      "type": "array",
+			      "items": [
+			        {
+			          "type": "object",
+			          "properties": {
+			            "uid": {
+			              "type": "string"
+			            },
+			            "type": {
+			              "type": "string"
+			            },
+			            "domain": {
+			              "type": "string"
+			            },
+			            "subDomain": {
+			              "type": "string"
+			            },
+			            "facility-enterprise": {
+			              "type": "string"
+			            },
+			            "state": {
+			              "type": "string"
+			            },
+			            "name": {
+			              "type": "string"
+			            }
+			          },
+			          "required": [
+			            "uid",
+			            "type",
+			            "domain",
+			            "subDomain",
+			            "name"
+			          ]
+			        }
+			      ]
+			    },
+			    "status": {
+			      "type": "integer"
+			    }
+			  },
+			  "required": [
+			    "data",
+			    "status"
+			  ]
+			}
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 500]({{{common}}}/responses/500.md)

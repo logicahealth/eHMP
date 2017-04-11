@@ -1,3 +1,79 @@
-[data-appletid="allergy_grid"] {
+[data-appletid="allergy_grid"] {}
 
+.allergies-writeback-add {
+    .multiselectSideBySide-control {
+        &.has-error {
+            .available-region .faux-table {
+                border-right: 1px solid $red-dark;
+                .msbs-input {
+                    border-right: 2px solid $red-dark;
+                }
+            }
+            .selected-region .faux-table {
+                border-left: 2px solid $red-dark;
+                .header {
+                    border-top: none;
+                }
+                .form-control {
+                    border: 1px solid $red-dark !important;
+                }
+            }
+            .header {
+                border-right: 1px solid $red-dark;
+            }
+            .body {
+                border-right: 1px solid $red-dark;
+            }
+        }
+        .input-group {
+        	.input-group-addon {
+        		padding: 2px;
+        	}
+        	&.calendar-container {
+        		input {
+        			padding: 0px 0px 0px 2px;
+        			width: 64px;
+        		}
+        	}
+            &.bootstrap-timepicker {
+            	left: 3px;
+            	position: relative;
+            	input {
+            		padding: 0px 0px 0px 3px;
+            		width: 44px;
+            	}
+            }
+        }
+    }
+    .signsSymptoms {
+        border: 1px solid $grey-light;
+        margin: 0;
+    }
+    .available-region,
+    .selected-region {
+        border-top: 1px solid $grey-light !important;
+        padding: 0px;
+        .header {
+            border-bottom-width: 1px;
+        }
+        .input-group {
+            margin: 2px 0;
+        }
+        .msbs-input {
+            background-color: $primary-lightest;
+            border-bottom: 1px solid $grey-light;
+        }
+        .scolling-content {
+            border-bottom: 1px solid $grey-light;
+            margin-bottom: 1px;
+            height: 120px;
+        }
+    }
+    .total-selected-region {
+        border-top: 2px solid $grey;
+    }
+    .help-block .error {
+        background-color: $pure-white;
+        margin: 0px;
+    }
 }

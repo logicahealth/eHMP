@@ -1,19 +1,38 @@
 define([
-    "backbone",
-    "main/adk_utils/dateUtils",
-    "main/adk_utils/resizeUtils",
-    "main/adk_utils/collectionUtils",
-    "main/adk_utils/appletUtils",
-    "main/adk_utils/helpUtils",
-    "main/adk_utils/pdfUtils",
-    "main/adk_utils/infoButtonUtils",
-    "main/Session",
-    "backbone-sorted-collection",
-    "moment",
-    "underscore",
-    "main/adk_utils/tooltipUtils",
-    "main/adk_utils/writebackUtils"
-], function(Backbone, DateUtils, ResizeUtils, CollectionUtils, AppletUtils, HelpUtils, PdfUtils, InfoButtonUtils, Session, SortedCollection,  moment, _, TooltipUtils, writebackUtils) {
+    'backbone',
+    'main/adk_utils/dateUtils',
+    'main/adk_utils/resizeUtils',
+    'main/adk_utils/collectionUtils',
+    'main/adk_utils/appletUtils',
+    'main/adk_utils/contextUtils',
+    'main/adk_utils/helpUtils',
+    'main/adk_utils/infoButtonUtils',
+    'main/adk_utils/stringUtils',
+    'main/adk_utils/crsUtil',
+    'main/Session',
+    'backbone-sorted-collection',
+    'moment',
+    'underscore',
+    'main/adk_utils/writebackUtils',
+    '_assets/js/tooltipMappings'
+], function(
+    Backbone,
+    DateUtils,
+    ResizeUtils,
+    CollectionUtils,
+    AppletUtils,
+    ContextUtils,
+    HelpUtils,
+    InfoButtonUtils,
+    StringUtils,
+    CrsUtil,
+    Session,
+    SortedCollection,
+    moment,
+    _,
+    writebackUtils,
+    TooltipMappings
+){
     "use strict";
 
     var Utils = {};
@@ -23,10 +42,12 @@ define([
     Utils.resize = ResizeUtils;
     Utils.collection = CollectionUtils;
     Utils.appletUtils = AppletUtils;
+    Utils.contextUtils = ContextUtils;
     Utils.helpUtils = HelpUtils;
-    Utils.pdfUtils = PdfUtils;
     Utils.infoButtonUtils = InfoButtonUtils;
-    Utils.tooltipUtils = TooltipUtils;
+    Utils.stringUtils = StringUtils;
+    Utils.tooltipMappings = TooltipMappings;
+    Utils.crsUtil = CrsUtil;
 
     Utils.formatDate = function(date, displayFormat, sourceFormat) {
 

@@ -94,6 +94,8 @@ function getOpData(opType, req, res) {
         ],
         function(err, results) {
             if (err) {
+                req.logger.error('DE4687:getOpData:BEGIN --- ' + err, err);
+                req.logger.error('DE4687:getOpData:END ---');
                 return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
             }
             return res.status(results.statusCode).rdkSend(results.data);
@@ -112,6 +114,10 @@ function getJdsResponse(req, path, callback) {
         var resultObj = {};
         resultObj.data = data;
         resultObj.statusCode = dd(response)('statusCode').val;
+        if (error) {
+            req.logger.error('DE4687:getJdsResponse:BEGIN --- ', error, response, resultObj);
+            req.logger.error('DE4687:getJdsResponse:END ---');
+        }
         callback(error, resultObj);
     });
 }

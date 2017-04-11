@@ -2,6 +2,7 @@ define(function() {
     'use strict';
     var screenConfig = {
         id: 'ccd-list-full',
+        context: 'patient',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

@@ -47,7 +47,7 @@ define([
             this.stopListening(this.model, "change", this.render);
             this.model.set(this.attributeMapping.value, value);
             this.listenTo(this.model, "change", this.render);
-            this.trigger('checklist-value-change');
+            this.trigger('checklist-value-change', e);
         }
     });
 
@@ -148,6 +148,12 @@ define([
                 event.stopPropagation();
             }
         },
+        filter: function(child, index, collection) {
+            if (_.isBoolean(this.field.get('filterChecked'))) {
+                return child.get(this.attributeMapping.value) === this.field.get('filterChecked');
+            }
+            return child;
+        },
         childViewContainer: '@ui.ChildViewContainer',
         childEvents: {
             'checklist-value-change': 'childValueChange'
@@ -182,7 +188,7 @@ define([
                 Marionette.CollectionView.prototype.addChild.apply(this, arguments);
             }
         },
-        childValueChange: function() {
+        childValueChange: function(child, event) {
             var model = this.model,
                 attrArr = this.field.get("name").split('.'),
                 name = attrArr.shift(),
@@ -198,6 +204,7 @@ define([
                     }
                 }
             }
+            this.onUserInput.apply(this, arguments);
         }
     };
 

@@ -3,7 +3,7 @@ require "httparty"
 Given(/^the request data was sent for patient "(.*?)" with content "(.*?)"$/) do |pid, payload|
   path = String.new(DefaultLogin.rdk_writeback_url) + "/resource/write-health-data/patient/#{pid}/allergies?"
   type = { "Content-Type" => "application/json" }
-  @response = HTTPartyWithBasicAuth.post_json_with_authorization(path, payload, type)
+  @response = HTTPartyRDK.post(path, payload, type)
   puts @response
 end
 

@@ -13,6 +13,8 @@ var rdk = require('../../core/rdk');
 var mongo = require('mongoskin');
 var Agenda = require('agenda');
 var request = require('request');
+var dd = require('drilldown');
+var cdsDBUtil = require('./cds-db-util');
 
 var agenda;
 var logger;
@@ -22,9 +24,13 @@ var jobProcessorName = 'sendRequest';
 function init(app, mongoConfig) {
     logger = app.logger;
     try {
+
+    var connectionString = cdsDBUtil.getMongoDBConnectionString(dbName, mongoConfig, logger);
+
+    logger.debug('connection string test ' + connectionString );
         agenda = new Agenda()
             .name('CDS Jobs Queue')
-            .database('mongodb://' + mongoConfig.host + ':' + mongoConfig.port + '/' + dbName + '?auto_reconnect=true')
+            .database(connectionString)
             .processEvery('5 seconds');
 
         agenda._db.ensureIndex('nextRunAt', ignoreErrors)
@@ -52,7 +58,7 @@ function init(app, mongoConfig) {
 
     } catch (e) {
         // console.log('error initializing agenda: ' + e);
-        logger.error('error initializing agenda: ' + e);
+        logger.error({error: e}, 'error initializing agenda');
         return null;
     }
 }

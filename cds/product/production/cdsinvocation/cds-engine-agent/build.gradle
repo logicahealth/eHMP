@@ -1,0 +1,37 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
+
+group = 'us.vistacore.cdsinvocation'
+description = """cds-engine-agent"""
+
+repositories {
+     maven { url "https://store.vistacore.us/nexus/content/repositories/public" }
+}
+dependencies {
+    compile project(':production:cdsinvocation:cds-invocation')
+	
+	compile group: 'org.apache.cxf', name: 'cxf-rt-frontend-jaxrs', version: property('cxfVersion')
+    compile group: 'org.apache.cxf', name: 'cxf-rt-rs-client', version: property('cxfVersion')
+    compile group: 'org.apache.cxf', name: 'cxf-rt-frontend-jaxws', version: property('cxfVersion')
+    compile group: 'org.apache.cxf', name: 'cxf-rt-rs-extension-providers', version: property('cxfVersion')
+    compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http', version: property('cxfVersion')
+    compile group: 'org.springframework', name: 'spring-test', version: property('springVersion')
+    compile group: 'org.springframework', name: 'spring-web', version: property('springVersion')
+    compile group: 'org.springframework.security', name: 'spring-security-core', version: property('springSecurityVersion')
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: property('slf4jVersion')
+    compile group: 'junit', name: 'junit', version: property('junitVersion')
+}
+
+sourceCompatibility = property('javaVersion')
+targetCompatibility = property('targetJavaVersion')
+
+gretty {
+	httpPort = 8080
+	managedClassReload = true
+}
+
+war {
+    archiveName = 'cds-engine-agent.war'
+}

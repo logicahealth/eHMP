@@ -105,13 +105,11 @@ Parameters may be provided as query parameters or in the request body.
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Get User Permission Sets [GET {{{path}}}/getUserPermissionSets{?uid}{&fields}]
+### Get User Permission Sets [GET {{{path}}}/getUserPermissionSets{?uid}]
 
 + Parameters
 
     :[uid]({{{common}}}/parameters/uid.md example:"urn:va:user:C877:10000000270" required:"required")
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -142,14 +140,9 @@ Parameters may be provided as query parameters or in the request body.
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### List [GET {{{path}}}/list{?fields}]
+### List [GET {{{path}}}/list]
 
 Used to get the eHMP Permission Sets from JDS.
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 

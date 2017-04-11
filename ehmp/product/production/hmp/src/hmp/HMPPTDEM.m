@@ -1,6 +1,7 @@
-HMPPTDEM  ;AGX/EJK/JD -- File Patient Demographic Information passed via RPC ; 09/16/2014
- ;;2.0;HEALTH MANAGEMENT PLATFORM;**1**;Oct 10, 2014;Build 49
- ;;Per VHA Directive 2004-038, this routine should not be modified.
+HMPPTDEM  ;ASMR/EJK,JD - File Patient Demographic Information passed via RPC ; 09/16/2014
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Oct 10, 2014;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
  ; RPC = HMP WRITEBACK PT DEM
  ;
  ; *** NOTES ***
@@ -45,7 +46,7 @@ PROC ;
  K RSP
  S RSP(0)=1 ;"Writeback was successful"  ; default to good news!
  I HMPDFN']"" S RSP(0)="No DFN" Q
- I '$D(^DPT(HMPDFN)) S RSP(0)="Patient does not exist.  DFN: "_HMPDFN Q
+ I '$D(^DPT(HMPDFN)) S RSP(0)="Patient does not exist.  DFN: "_HMPDFN Q  ;ICR 10035 DE2818 ASF 11/12/15
  I $$GET1^DIQ(2,HMPDFN_",",.331)']"",HMPEPN]"" S RSP(0)="Setting EM CO PH w/o EM CO Name" Q
  I $$GET1^DIQ(2,HMPDFN_",",.211)']"",HMPNPN]"" S RSP(0)="Setting NOK PH w/o NOK Name" Q
  S HMPX(2,DA_",",.131)=$S(HMPHPN=-1:"",HMPHPN="":$$GET1^DIQ(2,HMPDFN_",",.131),1:HMPHPN)
@@ -58,6 +59,7 @@ PROC ;
  Q
 BEFORE ;
  S DFN=$P(HMPDEM,"^",1)
+ K HPN,CPN,WPN,EPN,NPN,PTNAME
  S (HPN,CPN,WPN,EPN,NPN)=""
  S PTNAME=$$GET1^DIQ(2,DFN_",",.01,"E")
  S HPN=$$GET1^DIQ(2,DFN_",",.131,"E")

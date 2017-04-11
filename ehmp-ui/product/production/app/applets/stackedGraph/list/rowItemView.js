@@ -202,7 +202,8 @@ define([
         tagName: 'div',
         className: 'row gist-item',
         attributes: {
-            'tabindex': 0
+            'tabindex': 0,
+            'role': 'row'
         },
         getTemplate: function() {
             if (this.model.get('graphType') === 'Medications') {
@@ -215,7 +216,7 @@ define([
         },
         events: {
             'click': function(e) {
-                e.stopPropagation();
+                //e.stopPropagation();
                 $('[data-toggle=popover]').popover('hide');
             }
         },
@@ -258,7 +259,7 @@ define([
                     }
 
                 }
-                
+
                 if(!this.model.has('uid')){
                     this.model.set('uid', this.model.get("medicationGroupType").get("uid"));
                 }
@@ -290,6 +291,22 @@ define([
             this.timeLineCharts = options.timeLineCharts;
             this.pointers = options.pointers;
             this._base = RowItemParentView.prototype;
+
+
+            var currentScreen = ADK.Messaging.request('get:current:screen');
+            var buttonTypes = ['infoButton', 'detailsviewbutton'];
+            if ((!currentScreen.config.predefined && ADK.UserService.hasPermission('access-stack-graph'))) {
+                buttonTypes.push('deleteStackedGraphButton');
+            }
+
+            this.toolbarOptions = {
+                targetElement: this.$el,
+                buttonTypes: buttonTypes,
+                appletID: this.model.get('applet_id'),
+                model: this.model
+            };
+            this._base.initialize.apply(this, arguments);
+
         },
         onDestroy: function() {
 
@@ -301,7 +318,7 @@ define([
         },
         onRender: function() {
             var self = this,
-                $renderTo = self.$('.renderTo');
+                $renderTo = self.$('.render-to');
 
             // I did not alter any of the following, just refactored
             window.requestAnimationFrame(function() {
@@ -324,9 +341,9 @@ define([
                             $.each(this.points, function (i, point) {
                                 if (this.series.name !== "Ref Range") {
                                     if (this.series.name === 'DBP' || this.series.name === 'SBP') {
-                                        s += '<b>' + this.series.name + ' ' + this.y + '</b>' + this.series.tooltipOptions.valueSuffix + '<br/>';
+                                        s += '<strong>' + this.series.name + ' ' + this.y + '</strong>' + this.series.tooltipOptions.valueSuffix + '<br/>';
                                     } else {
-                                        s += '<b>' + this.y + '</b>' + this.series.tooltipOptions.valueSuffix + '<br/>';
+                                        s += '<strong>' + this.y + '</strong>' + this.series.tooltipOptions.valueSuffix + '<br/>';
                                     }
 
                                 }
@@ -431,6 +448,8 @@ define([
                         })
                         .add();
                 }).highcharts();
+                $renderTo.find('svg').attr('focusable', false);
+                $renderTo.find('svg').attr('aria-hidden', true);
 
                 $renderTo.resize(function () {
                     var width = $(this).width();
@@ -476,25 +495,16 @@ define([
                 }
 
 
-
-                    var currentScreen = ADK.Messaging.request('get:current:screen');
-                    var buttonTypes = ['infoButton', 'detailsviewbutton'];
-                    if ((!currentScreen.config.predefined && ADK.UserService.hasPermission('access-stack-graph')) ) {
-                        buttonTypes.push('deleteStackedGraphButton');
-                    }
-
-                self.tlbrOpts = {
-                    targetElement: self.$el,
-                    buttonTypes: buttonTypes,
-                    appletID: self.model.get('applet_id'),
-                    model: self.model
-                };
-
                 if (self.model.get('graphType') !== 'Medications') {
                     if (returnedResponse !== null && returnedResponse !== 'No Records Found') {
-                        self.tlbrOpts.buttonTypes.splice(2, 0, 'quicklookbutton');
+                        var index = self.toolbarOptions.buttonTypes.indexOf('detailsviewbutton');
+                        self.toolbarOptions.buttonTypes.splice(index+1, 0, 'quicklookbutton');
+                    } else {
+                        var buttons = _.clone(self.toolbarOptions.buttons);
+                        self.toolbarOptions.buttonTypes = _.remove(buttons, function(text) {
+                            return text === 'quicklookbutton';
+                        });
                     }
-
                 }
 
                 self._base.onRender.apply(self, arguments);

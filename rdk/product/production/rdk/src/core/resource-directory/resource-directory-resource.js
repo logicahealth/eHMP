@@ -11,30 +11,24 @@ var resourceDirectoryInterceptors = {
 };
 
 module.exports.getResourceConfig = function() {
-    return _.flatten(_.map(['', 'cors'], function(path) {
-        return [
-            {
-                name: path ? 'resource-directory-' + path : 'resource-directory',
-                path: path,
-                get: getResourceDirectory.bind(null, path),
-                interceptors: resourceDirectoryInterceptors,
-                requiredPermissions: [],
-                isPatientCentric: false
-            }
-        ];
-    }));
+    return [
+        {
+            name: 'resource-directory',
+            path: '',
+            get: getResourceDirectory,
+            interceptors: resourceDirectoryInterceptors,
+            requiredPermissions: [],
+            isPatientCentric: false,
+            bypassCsrf: true
+        }
+    ];
 };
 
-function getResourceDirectory(path, req, res) {
+function getResourceDirectory(req, res) {
     req.audit.logCategory = 'RESOURCEDIRECTORY';
-
     var baseUrl = null;
-    if(path === 'cors') {
-        baseUrl = (dd(req.app)('config')('externalProtocol').val || req.protocol) + '://' + req.get('Host');
-    }
-
     var serializedResources = req.app.resourceRegistry.getDirectory(
         baseUrl,
         dd(req.app)('config')('rootPath').val);
-    res.rdkSend(serializedResources);
+    return res.rdkSend(serializedResources);
 }

@@ -10,8 +10,8 @@ define([
 
     var CommentTextInputView = Backbone.Marionette.LayoutView.extend({
         template: Handlebars.compile([
-            '<div class="input-region col-xs-9 all-padding-no"></div>',
-            '<div class="button-region col-xs-3 all-padding-no"></div>'
+            '<div class="input-region col-xs-7 all-padding-no"></div>',
+            '<div class="button-region col-xs-5 all-padding-no"></div>'
         ].join('\n')),
         ui: {
             'InputRegion': '.input-region',
@@ -57,10 +57,11 @@ define([
         },
         onBeforeShow: function() {
             var fieldInputOptions = this.field.get('inputOptions') || {};
+            fieldInputOptions.disabled = this.field.get('disabled') || false;
             this.inputOptions = _.defaults(fieldInputOptions, {
                 control: "input",
                 name: "inputString",
-                title: "Please enter in a comment",
+                title: "Enter in a comment",
                 placeholder: "Add comment",
                 maxlength: 60,
                 charCount: true,
@@ -83,6 +84,14 @@ define([
                 field: this.field,
                 collection: this.getOption('collection')
             }));
+            this.listenTo(this.field, 'change:disabled', function(model, newState) {
+                this.InputRegion.currentView.$el.trigger('control:disabled', newState);
+            });
+            this.listenTo(this._internalModel, 'change:editMode', function(model, editState){
+                if (!this.field.get('disabled')) {
+                    this.InputRegion.currentView.$el.trigger('control:disabled', editState);
+                }
+            });
             var previousCommentLimitExceededState = _.isNumber(this.field.get('maxComments')) && this._internalModel.get('collectionLength') >= this.field.get('maxComments');
             this.listenTo(this._internalModel, 'change:collectionLength', function(model, collectionLength) {
                 var commentLimitExceeded = _.isNumber(this.field.get('maxComments')) && collectionLength >= this.field.get('maxComments');
@@ -133,21 +142,21 @@ define([
             var itemInEditMode = this._itemModel.get('editMode');
             if (_.isBoolean(itemInEditMode) && itemInEditMode) {
                 return Handlebars.compile([
-                    '<div class="table-cell comment-edit-region top-padding-xs"></div>'
+                    '<div class="table-cell comment-edit-region top-padding-sm bottom-padding-xs"></div>'
                 ].join('\n'));
             }
             // if the current item/row is currently editing, then otherwise, if we are in edit mode, the other
             // rows should be disabled
             return Handlebars.compile([
-                '<div class="table-cell comment-text-region"></div>',
+                '<div class="table-cell comment-text-region top-padding-xs bottom-padding-xs"></div>',
                 '<div class="table-cell pixel-width-55 text-right">',
                 '{{#if userIsAllowedEditDelete}}' +
                 '<span>',
-                '{{#if allowEdit}}<button type="button" ' + (this._internalModel.get('editMode') ? 'disabled="disabled"' : '') +
-                'class="comment-edit-button btn btn-icon right-padding-xs left-padding-xs" title="Press enter to edit comment: {{comment}}{{#if showAuthor}} {{timeStamp}}{{/if}}{{#if showTimeStamp}} - {{name}}{{/if}}">' +
+                '{{#if allowEdit}}<button type="button" ' + (this.field.get('disabled') || this._internalModel.get('editMode') ? 'disabled="disabled"' : '') +
+                'class="comment-edit-button font-size-12 btn btn-icon right-padding-xs left-padding-xs" title="Press enter to edit comment: {{comment}}{{#if showAuthor}} {{timeStamp}}{{/if}}{{#if showTimeStamp}} - {{name}}{{/if}}">' +
                 '<i class="fa fa-pencil"></i></button>{{/if}}',
-                '{{#if allowDelete}}<button type="button" ' + (this._internalModel.get('editMode') ? 'disabled="disabled"' : '') +
-                'class="comment-delete-button button btn btn-icon right-padding-xs left-padding-xs" title="Press enter to delete this comment">' +
+                '{{#if allowDelete}}<button type="button" ' + (this.field.get('disabled') || this._internalModel.get('editMode') ? 'disabled="disabled"' : '') +
+                'class="comment-delete-button font-size-12 button btn btn-icon right-padding-xs left-padding-xs" title="Press enter to delete this comment">' +
                 '<i class="fa fa-trash"></i></button>{{/if}}',
                 '</span>' +
                 '{{/if}}',
@@ -182,6 +191,12 @@ define([
             this.formModel = this.getOption('formModel');
             this.attributeMapping = this.getOption('attributeMapping');
             this.field = this.getOption('field');
+            this.listenTo(this.field, 'change:disabled', function(model, newState){
+                var itemInEditMode = this._itemModel.get('editMode');
+                if(_.isBoolean(itemInEditMode) && !itemInEditMode && this.CommentTextRegion.hasView()){
+                    this.render();
+                }
+            });
             this._internalModel = this.getOption('internalModel');
             var RowModel = Backbone.Model.extend({
                 defaults: {
@@ -201,7 +216,7 @@ define([
         },
         showViews: function() {
             var itemInEditMode = this._itemModel.get('editMode');
-            if (_.isBoolean(itemInEditMode) && itemInEditMode) {
+            if (_.isBoolean(itemInEditMode) && itemInEditMode && !this.CommentEditRegion.hasView()) {
                 this.showChildView('CommentEditRegion', new CommentTextInputView({
                     model: this._internalModel,
                     field: this.field,
@@ -260,6 +275,7 @@ define([
                 inputString: '',
                 editMode: false
             });
+            this.triggerMethod('save:edit:comment', arguments);
         },
         queueEditComment: function(e) {
             // needs to be set prior to the _internalModel editMode being set since change of that creates render
@@ -326,11 +342,11 @@ define([
             '<button type="button" class="cancel-edit-comment-button btn btn-default btn-block btn-sm" title="Press enter to cancel edit of comment">Cancel</button>',
             '</div>',
             '<div class="col-xs-6 left-padding-xs right-padding-no">',
-            '<button {{#if shouldDisableSave}} disabled="disabled"{{/if}}type="button" class="edit-comment-button btn btn-default btn-block btn-sm" title="Press enter to save edit of comment">Save</button>',
+            '<button {{#if shouldDisableSave}} disabled="disabled"{{/if}}type="button" class="edit-comment-button btn btn-primary btn-block btn-sm" title="Press enter to save edit of comment">Save</button>',
             '</div>',
             '{{else}}' +
             '<div class="col-xs-{{#if additionalAddCommentButton}}6{{else}}12{{/if}} left-padding-xs right-padding-no">',
-            '<button type="button" class="add-comment-button btn btn-default btn-block btn-sm" title="Press enter to add comment"{{#if shouldDisableSave}} disabled="disabled"{{/if}}>Add</button>',
+            '<button type="button" class="add-comment-button btn btn-primary btn-block btn-sm" title="Press enter to add comment"{{#if shouldDisableSave}} disabled="disabled"{{/if}}>Add</button>',
             '</div>' +
             '{{#if additionalAddCommentButton}}' +
             '<div class="col-xs-6 left-padding-xs right-padding-no">',
@@ -343,7 +359,7 @@ define([
             var self = this;
             return {
                 shouldDisableSave: function() {
-                    return this.collectionLength >= self.field.get('maxComments') || this.saveDisabled;
+                    return self.field.get('disabled') || this.collectionLength >= self.field.get('maxComments') || this.saveDisabled;
                 },
                 shouldDisplayEdit: function() {
                     return !this.topLevel && _.isBoolean(this.editMode) && this.editMode;
@@ -360,15 +376,13 @@ define([
             'click @ui.AddCommentButton': 'addComment',
             'click @ui.EditCommentButton': 'editComment',
             'click @ui.CancelEditCommentButton': 'cancelEditComment',
-            'addbutton:disabled': function(e, booleanValue) {
-                this.ui.AddCommentButton.attr('disabled', booleanValue);
-            },
             'click @ui.AdditionalAddCommentButton': function(e) {
                 this.ui.AdditionalAddCommentButton.trigger('click:additional:comment:button');
             }
         },
         initialize: function(options) {
             this.field = this.getOption('field');
+            this.listenTo(this.field, 'change:disabled', this.render);
         },
         addComment: function(e) {
             this.triggerMethod('add:comment');
@@ -384,7 +398,7 @@ define([
         },
         serializeModel: function(model) {
             var attributes = model.toJSON();
-            var field = _.defaults(this.field.toJSON(), this.defaults);
+            var field = _.defaultsDeep(this.field.toJSON(), this.defaults);
             field = _.defaults(field, attributes);
             return field;
         }
@@ -402,10 +416,24 @@ define([
                 commentTemplate: this.getOption('commentTemplate')
             };
         },
+        emptyView: Backbone.Marionette.ItemView.extend({
+            template: Handlebars.compile('Write at least one comment.<input class="comments-required-input" type="number" min="1" value={{collectionLength}} tabIndex="-1" oninvalid="setCustomValidity(\'{{requiredError}}\')">'),
+            className: 'comment-required'
+        }),
+        emptyViewOptions: function() {
+            return {
+                model: this.getOption('internalModel')
+            };
+        },
+        isEmpty: function(collection) {
+            return this.collection.length === 0 && this.getOption('internalModel').get('required');
+        },
         initialize: function(options) {
             this.attributeMapping = options.attributeMapping;
             this.formModel = options.formModel;
             this.field = options.field;
+
+            this.listenTo(options.internalModel, 'change:required', this.render);
         },
         className: "body"
     });
@@ -417,9 +445,10 @@ define([
             allowEdit: null,
             allowDelete: null,
             exceededCommentLimitPlaceholder: "Comment limit exceeded",
-            exceededCommentLimitTitle: "The comment limit has exceeded. To enter a new comment, please remove an existing comment.",
+            exceededCommentLimitTitle: "The comment limit has exceeded. To enter a new comment, remove an existing comment.",
             exceededCommentLimitLabel: "Comment Box Disabled",
-            addCommentPosition: 'bottom'
+            addCommentPosition: 'bottom',
+            disabled: false
         },
         attributeMappingDefaults: {
             comment: "commentString",
@@ -430,8 +459,8 @@ define([
             return PuppetForm.CommonPrototype.className() + ' comment-box bottom-margin-none';
         },
         template: Handlebars.compile([
-            '{{#if isAddCommentTop}}<div class="comment enter-comment-region top-margin-xs"></div>{{/if}}',
-            '<div class="faux-table-container comments-container"><div class="comment-region faux-table all-margin-no top-border"></div></div>',
+            '{{#if isAddCommentTop}}<div class="comment enter-comment-region bottom-padding-sm top-margin-xs"></div>{{/if}}',
+            '<div class="faux-table-container comments-container background-color-pure-white"><div class="comment-region top-padding-xs faux-table all-margin-no top-border"></div></div>',
             '{{#unless isAddCommentTop}}<div class="comment enter-comment-region top-margin-xs"></div>{{/unless}}'
         ].join('\n')),
         ui: {
@@ -456,6 +485,9 @@ define([
             this.initOptions(options);
             this.setAttributeMapping();
             this.setFormatter();
+            this.fieldChangeListener = function() {
+                return;
+            };
             this.listenToFieldOptions();
             var name = this.getComponentInstanceName();
 
@@ -466,6 +498,8 @@ define([
                 defaults: {
                     inputString: "",
                     editMode: false,
+                    required: !!this.field.get('required'),
+                    requiredError: 'This field is required. Write at least one comment.',
                     commentIndex: null,
                     saveDisabled: true,
                     collectionLength: this.collection.length,
@@ -502,6 +536,16 @@ define([
                 };
             }
         },
+        events: _.defaults({
+            'control:disabled': function(event, controlDisabled) {
+                this.setBooleanFieldOption("disabled", controlDisabled, event);
+                event.stopPropagation();
+            },
+            'control:required': function(e, booleanValue) {
+                this._internalModel.set('required', booleanValue);
+                e.stopPropagation();
+            }
+        }, PuppetForm.CommonPrototype.events),
         childEvents: {
             'remove:comment': function(child) {
                 var self = this;
@@ -512,7 +556,7 @@ define([
                 });
                 var deleteCommentAlert = new ADK.UI.Alert({
                     title: "Comment Deleted",
-                    icon: "fa-exclamation-triangle",
+                    icon: "icon-warning",
                     messageView: Backbone.Marionette.ItemView.extend({
                         template: Handlebars.compile(['<p>You have deleted a comment.</p>'].join('\n'))
                     }),
@@ -566,6 +610,7 @@ define([
                                 } else {
                                     self.ui.EnterCommentRegion.find('input').focus();
                                 }
+                                self.onUserInput.apply(self, arguments);
                             }
                         }
                     })
@@ -575,6 +620,9 @@ define([
             'add:comment': function(child) {
                 this.saveComment();
             },
+            'save:edit:comment': function() {
+                this.onUserInput.apply(this, arguments);
+            }
         },
         commonRender: PuppetForm.CommonPrototype.onRender,
         onRender: function() {
@@ -588,9 +636,9 @@ define([
                 defaults: this.defaults
             }));
             this.listenTo(this._internalModel, 'change:editMode', function(internalModel, booleanValue) {
-                this.EnterCommentRegion.currentView.$('input').trigger('control:disabled', booleanValue);
                 this.ui.EnterCommentRegion.toggleClass('muted', booleanValue);
             });
+            this.$el.trigger('control:required', this.field.get('required'));
         },
         saveComment: function() {
             if (this._internalModel.get('inputString').length > 0) {
@@ -615,6 +663,7 @@ define([
                     inputString: '',
                     saveDisabled: true
                 });
+                this.onUserInput.apply(this, arguments);
             }
         }
     };

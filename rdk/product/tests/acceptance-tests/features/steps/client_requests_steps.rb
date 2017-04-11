@@ -7,99 +7,99 @@ $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 #-------------------------------------------------VPR
 When(/^the client requests appointments for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("appointment", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests cpt for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("cpt", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests educations for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("education", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests documents for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("document", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests exams for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("exam", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests factors for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("factor", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests images for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("image", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests mentalhealth for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("mh", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests pointofvisits for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("pov", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests procedures for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("procedure", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests skin for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("skin", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests surgery for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("surgery", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests visit for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("visit", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests treatment for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("treatment", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests observations for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("obs", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests ptf for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("ptf", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests newsfeed for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("newsfeed", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests timeline for the patient "(.*?)" in RDK format$/) do |pid|
   query_timeline = RDKQuery.new('patient-record-timeline')
   query_timeline.add_parameter("pid", pid)
   path = query_timeline.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests medication for the patient "(.*?)" in RDK format$/) do |pid|
   path = QueryRDKDomain.new("med", pid).path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(path)
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests labs for the patient "(.*?)" in FHIR format$/) do |pid|
@@ -108,7 +108,7 @@ When(/^the client requests labs for the patient "(.*?)" in FHIR format$/) do |pi
   temp.add_parameter("domain", "lab")
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests "(.*?)" labs for the patient "(.*?)" in FHIR format$/) do |limit, pid|
@@ -118,7 +118,7 @@ When(/^the client requests "(.*?)" labs for the patient "(.*?)" in FHIR format$/
   temp.add_acknowledge("true")
   temp.add_parameter("_count", limit)
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests radiology report results for the patient "(.*?)" in FHIR format$/) do |pid|
@@ -127,7 +127,7 @@ When(/^the client requests radiology report results for the patient "(.*?)" in F
   temp.add_parameter("domain", "rad")
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests "(.*?)" radiology report results for the patient "(.*?)" in FHIR format$/) do |limit, pid|
@@ -137,7 +137,7 @@ When(/^the client requests "(.*?)" radiology report results for the patient "(.*
   temp.add_parameter("_count", limit)
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests radiology report results for the patient "(.*?)" in FHIR format with no domain param$/) do |pid|
@@ -145,7 +145,7 @@ When(/^the client requests radiology report results for the patient "(.*?)" in F
   temp.add_parameter("subject.identifier", pid)
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests out-patient medication results for the patient "(.*?)" in FHIR format$/) do |pid|
@@ -153,7 +153,7 @@ When(/^the client requests out-patient medication results for the patient "(.*?)
   temp.add_parameter("subject.identifier", pid)
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests in-patient medication results for the patient "(.*?)" in FHIR format$/)  do |pid|
@@ -161,7 +161,7 @@ When(/^the client requests in-patient medication results for the patient "(.*?)"
   temp.add_parameter("subject.identifier", pid)
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests out-patient medication statement for the patient "(.*?)" in FHIR format$/) do |pid|
@@ -169,7 +169,7 @@ When(/^the client requests out-patient medication statement for the patient "(.*
   temp.add_parameter("subject.identifier", pid)
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests "(.*?)" out-patient medication results for the patient "(.*?)" in FHIR format$/) do |limit, pid|
@@ -178,7 +178,7 @@ When(/^the client requests "(.*?)" out-patient medication results for the patien
   temp.add_acknowledge("true")
   temp.add_parameter("limit", limit)
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests "(.*?)" in-patient medication results for the patient "(.*?)" in FHIR format$/)  do |limit, pid|
@@ -187,5 +187,5 @@ When(/^the client requests "(.*?)" in-patient medication results for the patient
   temp.add_acknowledge("true")
   temp.add_parameter("limit", limit)
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end

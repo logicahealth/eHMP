@@ -5,7 +5,7 @@
 
 include_recipe "jboss-eap_wrapper"
 
-admin_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_admin_password", 'n25q2mp#h4')["password"]
+admin_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_admin_password", node[:data_bag_string])["password"]
 
 template "#{Chef::Config[:file_cache_path]}/jbpm.auto.xml" do
   source "jbpm.auto.xml.erb"
@@ -57,4 +57,20 @@ execute "Set bind address in standalone.xml" do
   cwd "#{Chef::Config[:file_cache_path]}"
   not_if "grep 0.0.0.0 #{node['jboss-eap']['install_path']}/#{node['jboss-eap']['symlink']}/standalone/configuration/standalone.xml"
   notifies :stop, "service[jboss]", :immediately
+end
+
+logrotate_app "jboss_server_logs" do
+  path "#{node['jboss-eap']['log_dir']}/server.log.????-??-??"
+  enable true
+  frequency "daily"
+  lastaction [" # Remove rotated files older than 7 days
+    find #{node['jboss-eap']['log_dir']} -name 'server.log.????-??-??' -mtime +7 -exec rm {} \;"]
+end
+
+logrotate_app "jboss_console_logs" do
+  path "#{node['jboss-eap']['log_dir']}/console.log"
+  enable true
+  rotate "7"
+  frequency "daily"
+  dateformat ".%Y-%m-%d"
 end

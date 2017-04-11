@@ -222,6 +222,35 @@ define(['jquery',
                     expect($form.find('select option').length).toBe(4);
                 });
 
+                it('triggers change.inputted on user input', function() {
+                    var testObject = {
+                        onUserInput: function() {
+                            return true;
+                        }
+                    };
+                    spyOn(testObject, 'onUserInput');
+                    var listenerObject = new Marionette.Object();
+                    listenerObject.listenTo(form.model, 'change.inputted', testObject.onUserInput);
+                    $form.find('select').val('opt3').trigger('change');
+                    expect(form.model.get('select1')).toBe('opt3');
+                    expect(testObject.onUserInput).toHaveBeenCalled();
+                });
+
+                it('does not trigger change.inputted on model.set', function() {
+                    var testObject = {
+                        onUserInput: function() {
+                            return true;
+                        }
+                    };
+                    spyOn(testObject, 'onUserInput');
+                    var listenerObject = new Marionette.Object();
+                    listenerObject.listenTo(form.model, 'change.inputted', testObject.onUserInput);
+                    form.model.set('select1', 'opt2');
+                    expect(form.model.get('select1')).toBe('opt2');
+                    expect($form.find('select')).toHaveValue('opt2');
+                    expect(testObject.onUserInput).not.toHaveBeenCalled();
+                });
+
                 it('has no options selected', function() {
                     var selectOptions = $form.find('select option');
                     for (var i = 0; i < selectOptions.length; i++) {
@@ -537,6 +566,50 @@ define(['jquery',
                     expect($form.find('label')).toHaveText('select label');
                     expect($form.find('label').attr('for')).toBe('select1');
                     expect($form.find('label')).toHaveClass('sr-only');
+                });
+            });
+
+            describe('with filter enabled', function() {
+                beforeEach(function() {
+                    form = new UI.Form({
+                        model: new Backbone.Model(),
+                        fields: [_.defaults({showFilter: true}, selectControlDefinition)]
+                    });
+
+                    $form = form.render().$el;
+                    var selectView = form._getControl({ controlType: 'select', controlName: 'select1' });
+                    $('body').append($form);
+                    selectView.triggerMethod('attach');
+                });
+
+                it('triggers change.inputted on user input', function() {
+                    var testObject = {
+                        onUserInput: function() {
+                            return true;
+                        }
+                    };
+                    spyOn(testObject, 'onUserInput');
+                    var listenerObject = new Marionette.Object();
+                    listenerObject.listenTo(form.model, 'change.inputted', testObject.onUserInput);
+                    $form.find('select').val('opt3').trigger('change');
+                    expect(form.model.get('select1')).toBe('opt3');
+                    expect($form.find('select')).toHaveValue('opt3');
+                    expect(testObject.onUserInput).toHaveBeenCalled();
+                });
+
+                it('does not trigger change.inputted on model.set', function() {
+                    var testObject = {
+                        onUserInput: function() {
+                            return true;
+                        }
+                    };
+                    spyOn(testObject, 'onUserInput');
+                    var listenerObject = new Marionette.Object();
+                    listenerObject.listenTo(form.model, 'change.inputted', testObject.onUserInput);
+                    form.model.set('select1', 'opt2');
+                    expect(form.model.get('select1')).toBe('opt2');
+                    expect($form.find('select')).toHaveValue('opt2');
+                    expect(testObject.onUserInput).not.toHaveBeenCalled();
                 });
             });
 

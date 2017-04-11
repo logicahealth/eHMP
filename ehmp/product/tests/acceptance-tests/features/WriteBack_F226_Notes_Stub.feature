@@ -1,5 +1,6 @@
-@writeback 
+@writeback @DE5208 @future @debug
 Feature: F226 - Enter Plain Text Basic Progress Notes (TIU)
+# This RPC has not used anymore since we're now doing the shortcut write. So, I am retiring this test case.
 
 @writeback 
 Scenario: Client can write to the VistA and add Notes records

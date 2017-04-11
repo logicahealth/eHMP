@@ -14,12 +14,23 @@ define([
                     control: "container",
                     extraClasses: ["container-fluid"],
                     items: [{
+                        control: "container",
+                        items: [{
+                            control: "alertBanner",
+                            name: "saveErrorBanner",
+                            extraClasses: ["save-error-banner"],
+                            dismissible: true,
+                            type: "danger",
+                            title: "Server Error",
+                            hidden: true
+                        }]
+                    }, {
                         //title container
                         control: "container",
                         extraClasses: ["row"],
                         items: [{
                             control: "container",
-                            extraClasses: ["col-xs-5"],
+                            extraClasses: ["col-xs-12"],
                             items: [{
                                 control: "select",
                                 name: "documentDefUidUnique",
@@ -92,27 +103,33 @@ define([
                                     }
                                 }
                             }]
-                        }, {
+                        }]
+                    }, {
+                        //Date and Time picker
+                        control: "container",
+                        extraClasses: ["row"],
+                        items: [{
                             control: "container",
-                            extraClasses: ["col-xs-4"],
+                            extraClasses: ["col-xs-6"],
                             items: [{
                                 control: "datepicker",
                                 id: "derivReferenceDate",
                                 name: "derivReferenceDate",
-                                title: "Please enter in a date in the following format, " + options.referenceDateFormat.toUpperCase(),
+                                title: "Enter in a date in the following format, " + options.referenceDateFormat.toUpperCase(),
                                 label: "Date",
                                 required: true,
+                                flexible: true,
                                 options: {
                                     endDate: '0d'
                                 }
                             }]
                         }, {
                             control: "container",
-                            extraClasses: ["col-xs-3"],
+                            extraClasses: ["col-xs-6"],
                             items: [{
                                 control: "timepicker",
                                 id: "derivReferenceTime",
-                                title: "Please enter in a time in the following format, " + options.referenceTimeFormat.toUpperCase(),
+                                title: "Enter in a time in the following format, " + options.referenceTimeFormat.toUpperCase(),
                                 label: "Time",
                                 placeholder: options.referenceTimeFormat,
                                 name: "derivReferenceTime",
@@ -129,14 +146,15 @@ define([
                             items: [{
                                 control: "textarea",
                                 id: "derivBody",
-                                name: "text.0.content",
-                                title: "Please enter in note details",
+                                name: "noteBody",
+                                title: "Enter in note details",
                                 label: "Note",
                                 placeholder: "",
                                 rows: 27,
                                 required: true,
                                 disabled: true,
-                                maxlength: "1000000" // 1 Megabyte is the maximum for the RDK
+                                maxlength: 1000000, // 1 Megabyte is the maximum for the RDK
+                                charCount: false
                             }]
                         }]
                     }]
@@ -144,41 +162,41 @@ define([
             }, {
                 //buttons container
                 control: "container",
-                extraClasses: ["modal-footer"],
+                extraClasses: ["modal-footer footer-extended"],
                 items: [{
                     control: "container",
                     extraClasses: ["row"],
                     items: [{
                         control: "container",
-                        extraClasses: ["col-xs-5"],
-                        template: Handlebars.compile('<p aria-hidden="true">(* indicates a required field.)</p>{{#if lastSavedDisplayTime}}<p><span id="notes-saved-at-view2">Saved {{lastSavedDisplayTime}}</span></p>{{/if}}'),
+                        extraClasses: ["col-xs-12"],
+                        template: Handlebars.compile('{{#if lastSavedDisplayTime}}<p><span id="notes-saved-at-view2">Saved {{lastSavedDisplayTime}}</span></p>{{/if}}'),
                         modelListeners: ["lastSavedDisplayTime"]
                     }, {
                         control: "container",
-                        extraClasses: ["col-xs-7"],
+                        extraClasses: ["col-xs-12"],
                         items: [{
-                            label: "Preview",
-                            type: "button",
-                            control: "button",
-                            name: "note-preview",
-                            id: "preview-form-btn",
-                            title: "Press enter to see a preview",
-                            extraClasses: ["btn-default", "btn-sm"]
-                        }, {
                             label: "Delete",
                             type: "button",
                             control: "button",
                             name: "note-delete",
                             id: "delete-form-btn",
                             title: "Press enter to delete and close note",
-                            extraClasses: ["btn-default", "btn-sm"]
+                            extraClasses: ["btn-danger", "btn-sm", "pull-left"]
                         }, {
-                            label: "Save and Close",
+                            label: "Preview",
+                            type: "button",
+                            control: "button",
+                            name: "note-preview",
+                            id: "preview-form-btn",
+                            title: "Press enter to preview note",
+                            extraClasses: ["btn-primary", "btn-sm"]
+                        }, {
+                            label: "Draft",
                             type: "button",
                             control: "button",
                             name: "note-close",
                             id: "close-form-btn",
-                            extraClasses: ["btn-default", "btn-sm"],
+                            extraClasses: ["btn-primary", "btn-sm"],
                             title: "Press enter to save and close note"
                         }, {
                             label: "Sign",

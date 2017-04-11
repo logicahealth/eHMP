@@ -83,7 +83,7 @@ v2.0.0 (2014-02-19)
 - [COOK-4213] Use use_inline_resources
 - [COOK-3467] Support IAM role
 - [COOK-4344] Add support for mounting existing raids and reusing volume
-- [COOK-3859] Add VPC support (allocation_id) to AWS elastic_ip LWRPJoseph      
+- [COOK-3859] Add VPC support (allocation_id) to AWS elastic_ip LWRPJoseph Smith
 
 
 v1.0.0

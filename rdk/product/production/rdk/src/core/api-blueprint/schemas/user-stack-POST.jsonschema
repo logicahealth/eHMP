@@ -1,0 +1,28 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "required": [
+        "id",
+        "graphType",
+        "typeName",
+        "instanceId"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "workspace name"
+        },
+        "graphType": {
+            "type": "string",
+            "description": "stacked graph type"
+        },
+        "typeName": {
+            "type": "string",
+            "description": "stacked graph data type for the supplied type of graph"
+        },
+        "instanceId": {
+            "type": "string",
+            "description": "stacked graph applet instance id"
+        }
+    }
+}

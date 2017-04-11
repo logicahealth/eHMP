@@ -6,49 +6,48 @@ define([
 ], function(ADK, Backbone, Handlebars, Utils) {
     "use strict";
 
-    var LOADING_ELEMENT = '<i class="loading fa fa-spinner fa-spin" style="position: absolute; top: 28px; left: 17px; z-index: 9;"></i>';
-
-    var discontinueFields = [{
-        control: 'container',
-        items: [{
+    var getDiscontinueFields = function(attributes) {
+        return [{
             control: 'container',
-            extraClasses: ['modal-header'],
-            template: Handlebars.compile('<h4 class="modal-title all-padding-xs">{{headerLabel}}</h4>')
-        }, {
-            control: 'container',
-            extraClasses: ['modal-body no-min-height'],
+            extraClasses: ['modal-body', 'no-min-height'],
             items: [{
                 control: 'container',
-                extraClasses: ['container-fluid'],
+                extraClasses: ['container-fluid', 'top-margin-sm'],
                 items: [{
                     control: 'container',
                     extraClasses: ['row'],
                     items: [{
-                        control: 'container',
-                        extraClasses: ['col-md-12'],
-                        template: Handlebars.compile([
-                            '<div class="discontinue-error-container alert alert-danger" role="alert"><div><i class="fa fa-exclamation-circle font-size-18"></i>',
-                            '&nbsp;<strong>Unable To Submit</strong></div><div class="discontinue-error-message"></div></div>',
-                            '<div><strong>The following orders will be {{orderAction}}:</strong><p class="well all-padding-xs">{{summary}}&nbsp;<strong>{{entered}}</strong></p>'
-                        ].join('\n'))
+                        control: 'alertBanner',
+                        name: 'errorBanner',
+                        dismissable: false,
+                        type: 'danger',
+                        icon: 'fa-exclamation-circle',
+                        extraClasses: ['col-xs-12'],
                     }]
                 }, {
                     control: 'container',
                     extraClasses: ['row'],
                     items: [{
-                        control: 'container',
-                        extraClasses: ['col-md-6 discontine-reason-progress-spinner'],
-                        template: LOADING_ELEMENT,
+                        control: 'checklist',
+                        name: 'discontinueCheck',
+                        hideCheckboxForSingleItem: 'true',
+                        label: 'The following order will be ' + attributes.orderAction + ':',
+                        extraClasses: ['col-xs-12'],
+                        itemTemplate: '<p class="well-sm">{{label}} <strong>{{entered}}</strong></p>'
+                    }]
+                }, {
+                    control: 'container',
+                    extraClasses: ['row'],
+                    items: [{
+                        control: 'select',
+                        name: 'reason',
+                        label: 'Reason',
+                        title: 'Select reason for discontinue',
+                        required: true,
+                        disabled: true,
                         hidden: true,
-                        items: [{
-                            control: 'select',
-                            name: 'reason',
-                            label: 'Reason',
-                            required: true,
-                            disabled: true,
-                            hidden: true,
-                            pickList: []
-                        }]
+                        extraClasses: ['col-xs-6'],
+                        pickList: []
                     }]
                 }]
             }]
@@ -57,93 +56,112 @@ define([
             extraClasses: ["modal-footer"],
             items: [{
                 control: "container",
-                extraClasses: ["col-sm-12"],
+                extraClasses: ["row"],
                 items: [{
-                    control: 'container',
+                    control: "container",
+                    extraClasses: ["col-xs-12"],
                     items: [{
                         control: "container",
-                        extraClasses: ["col-xs-3"],
-                        template: '<span/>',
+                        extraClasses: ["pull-left", "inProgressContainer"],
+                        template: Handlebars.compile('<i class="fa fa-spinner fa-spin pull-left"></i><span>In progress...</span>'),
+                        hidden: true
+                    }]
+                }, {
+                    control: "container",
+                    extraClasses: ["col-xs-12"],
+                    items: [{
+                        control: "button",
+                        extraClasses: ["btn-default", "btn-sm", "close-modal", "pull-left"],
+                        label: "Close",
+                        type: "button",
+                        title: "Press enter to close the order.",
+                        name: "close-modal"
                     }, {
-                        control: "container",
-                        extraClasses: ["col-xs-3", "text-left", "inProgressContainer"],
-                        items: [{
-                            control: "container",
-                            extraClasses: "in-progress",
-                            template: Handlebars.compile('<i class="fa fa-spinner fa-spin pull-left"></i>{{progressLabel}}'),
-                            hidden: true
-                        }]
-                    }, {
-                        control: "container",
-                        extraClasses: ["col-xs-3"],
-                        items: [{
-                            control: "button",
-                            label: "Close",
-                            type: "button",
-                            title: "Press enter to close.",
-                            extraClasses: ["btn-default", "alert-cancel"],
-                            name: "cancel"
-                        }]
-                    }, {
-                        control: "container",
-                        extraClasses: ["col-xs-1"],
-                        items: [{
-                            control: "button",
-                            label: "Cancel Order",
-                            type: "button",
-                            title: "Press enter to cancel order.",
-                            extraClasses: ["btn-default", "alert-continue"],
-                            name: "continue"
-                        }]
+                        control: "button",
+                        extraClasses: ["btn-danger", "btn-sm", "continue", "pull-right"],
+                        type: "submit",
+                        label: "Discontinue Order",
+                        title: "Press enter to discontinue the order.",
+                        name: "discontinue"
                     }]
                 }]
             }]
-        }]
-    }];
+        }];
+    };
+
+
+    var DEFAULT_MODEL_ATTRIBUTES = {
+        cancel: {
+            headerLabel: 'CANCEL ORDER',
+            progressLabel: 'Cancelling',
+            orderAction: 'Cancelled'
+        },
+        discontinue: {
+            headerLabel: 'DISCONTINUE ORDER',
+            progressLabel: 'Discontinuing',
+            orderAction: 'Discontinued'
+        }
+    };
+
+    var DEFAULT_FORM_ATTRIBUTES = {
+        cancel: {
+            buttonLabel: 'Cancel Order',
+            buttonTitle: 'Press enter to cancel order',
+            growlTitle: 'Lab Order Cancelled',
+            growlMessage: 'Lab order successfully Cancelled.'
+        },
+        discontinue: {
+            buttonLabel: 'Discontinue Order',
+            buttonTitle: 'Press enter to discontinue order',
+            growlTitle: 'Lab Order Discontinued',
+            growlMessage: 'Lab order successfully Discontinued.'
+        }
+    };
 
     var formView = ADK.UI.Form.extend({
-        fields: discontinueFields,
         ui: {
             inprogress_container: ".in-progress",
-            discontinue_error_message: ".discontinue-error-message",
-            discontinue_error_title: ".discontinue-error-title",
-            discontinue_error_container: ".discontinue-error-container",
-            alert_continue: ".continue",
-            alert_cancel: ".cancel",
+            errorBanner: ".errorBanner",
+            discontinue: ".discontinue",
+            cancel: ".close-modal",
             discontinue_reason: ".reason",
-            discontinue_reason_spinner: ".discontine-reason-progress-spinner > i"
+            discontinue_check: ".discontinueCheck .form-group"
         },
-        onInitialize: function() {
+        initialize: function() {
             var action = this.model.get('action') || 'cancel';
-            action = (action[0].toUpperCase() + action.slice(1).toLowerCase());
-            this.isCanceling = (action === 'Cancel');
-            var actionRoot = (this.isCanceling ? 'Cancel' : 'Discontinu');
 
-            this.model.set({
-                headerLabel: (action + ' orders').toUpperCase(),
-                progressLabel: actionRoot + 'ing...',
-                orderAction: actionRoot + 'ed',
-            }, {silent: true});
+            var formAttributes = _.extend({}, (DEFAULT_FORM_ATTRIBUTES[action] || DEFAULT_FORM_ATTRIBUTES.cancel), {
+                isCanceling: (action === 'cancel')
+            });
 
-            this.buttonLabel = action + ' Order';
-            this.buttonTitle = 'Press enter to ' + action.toLowerCase() + ' order';
-            this.growlTitle = 'Lab Order ' + actionRoot + 'ed';
-            this.growlMessage = 'Lab order successfully ' + actionRoot.toLowerCase() + 'ed.';
+            var modelAttributes = _.extend({}, (DEFAULT_MODEL_ATTRIBUTES[action] || DEFAULT_MODEL_ATTRIBUTES.cancel), {
+                discontinueCheck: [{
+                    label: this.model.get('summary'),
+                    entered: this.model.get('entered')
+                }]
+            });
+
+            _.extend(this, formAttributes);
+            this.model.set(modelAttributes, {silent: true});
+            this.fields = getDiscontinueFields(modelAttributes);
+
+            ADK.UI.Form.prototype.initialize.apply(this, arguments);
         },
         onRender: function() {
-            this.ui.alert_continue.trigger('control:label', this.buttonLabel);
-            this.ui.alert_continue.trigger('control:title', this.buttonTitle);
+            this.ui.discontinue.trigger('control:label', this.buttonLabel);
+            this.ui.discontinue.trigger('control:title', this.buttonTitle);
             this.hideErrorMessage();
 
             if (!this.isCanceling) {
                 this.enableDiscontinueReasons();
-                this.ui.discontinue_reason_spinner.trigger('control:hidden', false);
+                this.ui.discontinue.trigger('control:disabled', true);
             }
+
+            this.ui.discontinue_check.css('overflow', 'hidden');
         },
         events: {
-            'click @ui.alert_cancel': 'alertCancel',
-            'click @ui.alert_continue': 'alertContinue',
-            'onchange @ui.discontinue_reason': 'onReasonChange'
+            'click @ui.cancel': 'formCancel',
+            'submit': 'formContinue'
         },
         modelEvents: {
             'delete:success': 'onSuccess',
@@ -161,6 +179,7 @@ define([
             });
             discontinueSuccessView.show();
             Utils.refreshApplet();
+            Utils.refreshActionTrayTasks();
         },
         onError: function(model, resp) {
             var errorMessage = _.get(resp, 'responseJSON.message');
@@ -173,12 +192,11 @@ define([
         onReasonSuccess: function(model, resp) {
             this.ui.discontinue_reason.trigger('control:disabled', false);
             this.ui.discontinue_reason.trigger('control:picklist:set', model.get('reasonListItems'));
-            this.ui.discontinue_reason_spinner.remove();
+            this.ui.discontinue.trigger('control:disabled', false);
         },
         onReasonError: function() {
-            this.showErrorMessage("Unable to retrieve discontinue reasons due to a system error. Please try again later.", "System Error");
-            this.ui.alert_continue.trigger('control:disabled', true);
-            this.ui.discontinue_reason_spinner.remove();
+            this.showErrorMessage("Unable to retrieve discontinue reasons due to a system error. Try again later.", "System Error");
+            this.ui.discontinue.trigger('control:disabled', true);
         },
         showInProgress: function() {
             this.ui.inprogress_container.trigger('control:hidden', false);
@@ -187,29 +205,27 @@ define([
             this.ui.inprogress_container.trigger('control:hidden', true);
         },
         showErrorMessage: function(errorMessage, errorTitle) {
-            this.ui.discontinue_error_message.text(errorMessage);
-            this.ui.discontinue_error_title.text(errorTitle || "Unable To Submit");
-            this.ui.discontinue_error_container.show();
+            this.ui.errorBanner.trigger('control:title', errorTitle || "Unable To Submit");
+            this.ui.errorBanner.trigger('control:message', errorMessage);
+            this.ui.errorBanner.trigger('control:hidden', false);
         },
         hideErrorMessage: function() {
-            this.ui.discontinue_error_message.text('');
-            this.ui.discontinue_error_container.hide();
+            this.ui.errorBanner.trigger('control:message', '');
+            this.ui.errorBanner.trigger('control:hidden', true);
         },
         enableButtons: function(isEnabled) {
-            this.ui.alert_continue.trigger('control:disabled', !isEnabled);
-            this.ui.alert_cancel.trigger('control:disabled', !isEnabled);
+            this.ui.discontinue.trigger('control:disabled', !isEnabled);
+            this.ui.cancel.trigger('control:disabled', !isEnabled);
         },
         enableDiscontinueReasons: function() {
             this.ui.discontinue_reason.trigger('control:hidden', this.isCanceling);
             this.model.getReasons();
         },
-        onReasonChange: function() {
-            this.model.errorModel.clear();
-        },
-        alertCancel: function() {
+        formCancel: function() {
             ADK.UI.Workflow.hide();
         },
-        alertContinue: function() {
+        formContinue: function(e) {
+            e.preventDefault();
             this.hideErrorMessage();
             this.enableButtons(false);
             this.showInProgress();

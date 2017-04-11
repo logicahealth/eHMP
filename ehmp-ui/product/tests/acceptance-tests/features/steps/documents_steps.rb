@@ -32,7 +32,7 @@ class Documents < AllApplets
     add_action(CucumberLabel.new("Surgery Row"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@id='center-region']/descendant::*//td[contains(string(),'Surgery')]"))
     add_action(CucumberLabel.new("Documents Filter input"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "input[name='q-documents']"))
     add_action(CucumberLabel.new("Search Filter"), ClickAction.new, AccessHtmlElement.new(:id, "grid-filter-button-documents"))
-    add_verify(CucumberLabel.new("No Records Found"), VerifyText.new, AccessHtmlElement.new(:xpath, ".//*[@id='center-region']/descendant::*//td[contains(string(),'No Records Found')]"))
+    add_verify(CucumberLabel.new("No Records Found"), VerifyText.new, AccessHtmlElement.new(:css, "#data-grid-documents tr.empty"))
     add_action(CucumberLabel.new("August 1992"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@id='center-region']/descendant::*//td[contains(string(),'August 1992')]"))
     add_verify(CucumberLabel.new("August 1992 Count"), VerifyText.new, AccessHtmlElement.new(:xpath, ".//*[@id='center-region']/descendant::*[@data-group-instanceid='199208_groupCount']"))
     add_verify(CucumberLabel.new("Document Modal Details"), VerifyContainsText.new, AccessHtmlElement.new(:class, "doc-detail-region"))
@@ -105,9 +105,9 @@ class DocumentsDateFilter < ADKContainer
   def initialize
     super
     add_action(CucumberLabel.new("Control - Applet - Date Filter"), ClickAction.new, AccessHtmlElement.new(:css, "#navigation-date #date-region-minimized"))
-    add_action(CucumberLabel.new("Control - Applet - From Date"), SendKeysAction.new, AccessHtmlElement.new(:css, "#globalDate-region #filter-from-date-global"))
-    add_action(CucumberLabel.new("Control - Applet - To Date"), SendKeysAction.new, AccessHtmlElement.new(:id, "filter-to-date-global"))
-    add_action(CucumberLabel.new("Control - Applet - Apply"), ClickAction.new, AccessHtmlElement.new(:id, "custom-range-apply-global"))
+    add_action(CucumberLabel.new("Control - Applet - From Date"), SendKeysAction.new, AccessHtmlElement.new(:css, "#globalDate-region #filterFromDateGlobal"))
+    add_action(CucumberLabel.new("Control - Applet - To Date"), SendKeysAction.new, AccessHtmlElement.new(:id, "filterToDateGlobal"))
+    add_action(CucumberLabel.new("Control - Applet - Apply"), ClickAction.new, AccessHtmlElement.new(:id, "customRangeApplyGlobal"))
   end
 end
 
@@ -162,11 +162,29 @@ class DocumentsGroup < ADKContainer
   end
 end
 
+When(/^the user sees date groups in the Documents Applet$/) do
+  documents = Documents.instance
+  @ehmp = PobDocumentsList.new
+
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { documents.applet_grid_loaded }
+
+  expect(@ehmp).to have_fld_date_headers
+  date_headers = @ehmp.fld_date_headers
+  expect(date_headers.length).to be > 0, "minimum requirement is not met, need at least 1 date header to be displayed"
+  date_format = Regexp.new("\\w+ \\d{4}")
+  date_headers.each do | date_header |
+    expect(( date_format.match(date_header.text)).nil?).to eq(false)
+  end
+end
+
 When(/^user selects Documents from Coversheet dropdown$/) do
   aa = Documents.instance
   expect(aa.wait_until_action_element_visible("Coversheet Dropdown", DefaultLogin.wait_time)).to be_true
   expect(aa.perform_action("Coversheet Dropdown", "")).to be_true, "Could not click on drop down menu"
   expect(aa.wait_until_element_present("Drop Down Menu")).to be_true, "Could not see the drop down menu"
+  script = "a[href$='documents-list']"
+  TestSupport.driver.execute_script("$(\"#{script}\").focus()")
   expect(aa.perform_action("Documents", "")).to be_true, "could not click on Documents link from drop down menu"
 end
 
@@ -318,32 +336,16 @@ Then(/^the date\/time collapses and shows "(.*?)" result for "(.*?)" in the Docu
 end
 
 Then(/^the default sorting by Date\/Time is in descending in Documents Applet$/) do
-  wait = Selenium::WebDriver::Wait.new(:timeout => (DefaultTiming.default_table_row_load_time))
-  wait.until { VerifyTableValue.verify_date_sort_selectable('data-grid-documents', 1, true) }
-  expect(VerifyTableValue.verify_date_sort_selectable('data-grid-documents', 1, true)).to eq(true)
-  
-  # aa = DocumentsGroup.instance
-  # cc = Documents.instance
-  # driver = TestSupport.driver
-  # expect(cc.wait_until_xpath_count_greater_than("Number of Documents Applet Rows", 8)).to be_true
-  # element_first = driver.find_element(:xpath, ".//*[@id='center-region']/descendant::*[@id='data-grid-documents']/tbody/tr[1]/descendant::td")
-  # element_last = driver.find_element(:xpath, ".//*[@id='center-region']/descendant::*[@id='data-grid-documents']/tbody/tr[9]/descendant::td")
-  # expect(aa.perform_verification("date_group1", element_first.text)).to be_true
-  # expect(aa.perform_verification("date_group5", element_last.text)).to be_true
+  #wait = Selenium::WebDriver::Wait.new(:timeout => (DefaultTiming.default_table_row_load_time))
+  wait = Selenium::WebDriver::Wait.new(:timeout => (10))
+  wait.until { VerifyTableValue.verify_date_only_sort_selectable('data-grid-documents', 1, true) }
+  expect(VerifyTableValue.verify_date_only_sort_selectable('data-grid-documents', 1, true)).to eq(true)
 end
 
 Then(/^the sorting by Date\/Time is in ascending in Documents Applet$/) do
   wait = Selenium::WebDriver::Wait.new(:timeout => (DefaultTiming.default_table_row_load_time))
   wait.until { VerifyTableValue.verify_date_sort_selectable('data-grid-documents', 1, false) }
   expect(VerifyTableValue.verify_date_sort_selectable('data-grid-documents', 1, false)).to eq(true)
-  # aa = DocumentsGroup.instance
-  # cc = Documents.instance
-  # driver = TestSupport.driver
-  # expect(cc.wait_until_xpath_count_greater_than("Number of Documents Applet Rows", 8)).to be_true
-  # element_first = driver.find_element(:xpath, ".//*[@id='center-region']/descendant::*[@id='data-grid-documents']/tbody/tr[1]/descendant::td")
-  # element_last = driver.find_element(:xpath, ".//*[@id='center-region']/descendant::*[@id='data-grid-documents']/tbody/tr[9]/descendant::td")
-  # expect(aa.perform_verification("date_group5", element_first.text)).to be_true
-  # expect(aa.perform_verification("date_group1", element_last.text)).to be_true
 end
 
 Then(/^the first row is as below when grouped by "(.*?)" in Documents Applet$/) do |_groupBy, table|
@@ -448,7 +450,7 @@ end
 Then(/^the Documents table only diplays rows including text "(.*?)"$/) do |input_text|
   upper = input_text.upcase
   lower = input_text.downcase
-  documents_grid_xpath = "//div[@id='content-region']/descendant::table[@id='data-grid-documents']"
+  documents_grid_xpath = "//*[@id='content-region']/descendant::table[@id='data-grid-documents']"
   path =  "#{documents_grid_xpath}/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
   p path
   row_count = TableContainer.instance.get_elements('Rows - Documents Applet data').size 

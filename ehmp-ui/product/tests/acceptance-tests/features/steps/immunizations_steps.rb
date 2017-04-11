@@ -20,6 +20,7 @@ class ImmunizationsCoverSheet < AllApplets
     add_applet_buttons appletid_css
     add_applet_title appletid_css
     add_applet_add_button appletid_css
+    add_toolbar_buttons
 
     rows = AccessHtmlElement.new(:css, '#data-grid-immunizations tbody tr.selectable')
     add_verify(CucumberLabel.new('Rows - Immunizations Applet'), VerifyXpathCount.new(rows), rows)
@@ -27,7 +28,7 @@ class ImmunizationsCoverSheet < AllApplets
 
     # Headers for sorting
     add_action(CucumberLabel.new("Vaccine Name Header"), ClickAction.new, AccessHtmlElement.new(:css, '[data-appletid="immunizations"] [data-header-instanceid="immunizations-name"] a'))
-    add_action(CucumberLabel.new("Facility Header"), ClickAction.new, AccessHtmlElement.new(:css, '[data-appletid="immunizations"] [data-header-instanceid="immunizations-facilityMoniker"] a'))
+    add_action(CucumberLabel.new("Facility Header"), ClickAction.new, AccessHtmlElement.new(:css, '[data-appletid="immunizations"] [data-header-instanceid="immunizations-facilityName"] a'))
 
     add_action(CucumberLabel.new('Applet Toolbar Detail'), ClickAction.new, AccessHtmlElement.new(:css, '#info-button-template #info-button-sidekick-detailView'))
     add_action(CucumberLabel.new('Add'), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-add-button"))
@@ -46,30 +47,18 @@ class ImmunizationsDetailModal < ADKContainer
   include Singleton
   def initialize
     super 
-    add_verify(CucumberLabel.new('Name Label'), VerifyText.new, AccessHtmlElement.new(:css, '.modal-body thead [data-detail-label="name"]'))
-    add_verify(CucumberLabel.new('Name'), VerifyText.new, AccessHtmlElement.new(:css, '#modal-body tbody td:nth-child(1)'))
+    add_verify(CucumberLabel.new('Name Label'), VerifyText.new, AccessHtmlElement.new(:xpath, "//h5[string() = 'Name']"))
+    add_verify(CucumberLabel.new('Name'), VerifyText.new, AccessHtmlElement.new(:xpath, "//h5[string() = 'Name']/following-sibling::p"))
 
-    add_verify(CucumberLabel.new('Reaction Label'), VerifyText.new, AccessHtmlElement.new(:css, '.modal-body thead [data-detail-label="series"]'))
-    add_verify(CucumberLabel.new('Reaction'), VerifyText.new, AccessHtmlElement.new(:css, '#modal-body tbody td:nth-child(2)'))
+    add_verify(CucumberLabel.new('Series Label'), VerifyText.new, AccessHtmlElement.new(:xpath, "//h5[string() = 'Series']"))
+    add_verify(CucumberLabel.new('Series'), VerifyText.new, AccessHtmlElement.new(:xpath, "//h5[string() = 'Series']/following-sibling::p"))
 
-    add_verify(CucumberLabel.new('Series Label'), VerifyText.new, AccessHtmlElement.new(:css, '.modal-body thead [data-detail-label="result"]'))
-    add_verify(CucumberLabel.new('Series'), VerifyText.new, AccessHtmlElement.new(:css, '#modal-body tbody td:nth-child(3)'))
-
-    add_verify(CucumberLabel.new('Repeat Label'), VerifyText.new, AccessHtmlElement.new(:css, '.modal-body thead [data-detail-label="contraDisplay"]'))
-    add_verify(CucumberLabel.new('Repeat'), VerifyText.new, AccessHtmlElement.new(:css, '#modal-body tbody td:nth-child(4)'))
-
-    add_verify(CucumberLabel.new('Date Label'), VerifyText.new, AccessHtmlElement.new(:css, '.modal-body thead [data-detail-label="administeredDate"]'))
-    add_verify(CucumberLabel.new('Date'), VerifyText.new, AccessHtmlElement.new(:css, '#modal-body tbody td:nth-child(5)'))
-
-    add_verify(CucumberLabel.new('Facility Label'), VerifyText.new, AccessHtmlElement.new(:css, '.modal-body thead [data-detail-label="facilityCode"]'))
-    add_verify(CucumberLabel.new('Facility'), VerifyText.new, AccessHtmlElement.new(:css, '#modal-body tbody td:nth-child(6)'))
-
-    add_verify(CucumberLabel.new('Site Label'), VerifyText.new, AccessHtmlElement.new(:css, '.modal-body thead [data-detail-label="siteCode"]'))
-    add_verify(CucumberLabel.new('Site'), VerifyText.new, AccessHtmlElement.new(:css, '#modal-body tbody td:nth-child(7)'))
+    add_verify(CucumberLabel.new('Date Administered Label'), VerifyText.new, AccessHtmlElement.new(:xpath, "//h5[string() = 'Date Administered']"))
+    add_verify(CucumberLabel.new('Date Administered'), VerifyText.new, AccessHtmlElement.new(:xpath, "//h5[string() = 'Date Administered']/following-sibling::p"))
 
     add_action(CucumberLabel.new('next button'), ClickAction.new, AccessHtmlElement.new(:id, 'immunizationsNext'))
     add_action(CucumberLabel.new('previous button'), ClickAction.new, AccessHtmlElement.new(:id, 'immunizationsPrevious'))
-    add_action(CucumberLabel.new('close button'), ClickAction.new, AccessHtmlElement.new(:id, 'modalCloseButton'))
+    add_action(CucumberLabel.new('close button'), ClickAction.new, AccessHtmlElement.new(:id, 'modal-close-button'))
   end
 end
 
@@ -241,14 +230,34 @@ end
 When(/^the user views the details for the first immunization$/) do
   imm_coversheet = ImmunizationsCoverSheet.instance
   first_element = TestSupport.driver.find_elements(:css, "#data-grid-immunizations tbody tr.selectable:nth-child(1) td")[0]
-  p first_element.text
-  @first_imm_title = first_element.text
-  expect(imm_coversheet.perform_action('first row')).to eq(true)
-  expect(imm_coversheet.perform_action('Applet Toolbar Detail')).to eq(true)
+  # remove screen reader text
+  first_element_text = first_element.text.sub('Press enter to open the toolbar menu.', '')
+  p first_element_text
+  # remove newline
+  first_element_text = first_element_text[1, first_element_text.length-1]
+  p first_element_text
+
+  max_attempt = 4
+  begin
+    p "Attempt Count-------#{max_attempt}"
+    @first_imm_title = first_element_text
+    expect(imm_coversheet.perform_action('first row')).to eq(true)
+    expect(imm_coversheet.perform_action('Detail View Button')).to eq(true)
+  rescue => e
+    p e
+    max_attempt -= 1
+    retry if max_attempt > 0
+    raise e if max_attempt <= 0
+  end
 end
 
 Then(/^the modal's title displays "(.*?)" and immunization name$/) do |arg1|
   title = "#{arg1} - #{@first_imm_title}"
+  expect(ModalTest.instance.perform_verification("ModalTitle", title)).to be_true
+end
+
+Then(/^the modal's title displays the immunization name$/) do
+  title = "#{@first_imm_title}"
   expect(ModalTest.instance.perform_verification("ModalTitle", title)).to be_true
 end
 
@@ -274,4 +283,28 @@ end
 
 Then(/^the message on the Immunization Applet does not say "(.*?)"$/) do |message_text|
   compare_applet_refresh_action_response("immunizations", message_text)
+end
+
+Then(/^the user can step through the immunizations using the next button$/) do
+  @ehmp = PobImmunizationsApplet.new
+  @titles.each do |modal_title|
+    expect(@uc.perform_verification("Modal Title", modal_title)).to eq(true), "Expected title to be #{modal_title}"
+    @ehmp.btn_next.click
+  end
+end
+
+Then(/^the user can step through the immunizations using the previous button$/) do
+  @ehmp = PobImmunizationsApplet.new
+  @ehmp.btn_previous.click
+  @titles.reverse.each { |val| 
+    expect(@uc.perform_verification("Modal Title", val)).to eq(true), "Expected title to be #{val}"
+    @ehmp.btn_previous.click
+  }
+end
+
+Given(/^the user notes the first (\d+) immunizations$/) do |num_immunizations|
+  @ehmp = PobImmunizationsApplet.new
+  @titles = @ehmp.summary_immunization_names num_immunizations.to_i
+  expect(@titles.length).to be > num_immunizations.to_i
+  @titles = @titles[0..num_immunizations.to_i - 1]
 end

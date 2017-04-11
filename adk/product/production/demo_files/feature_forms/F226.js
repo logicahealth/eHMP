@@ -8,7 +8,7 @@ define([
     //=============================================================================================================
     // PLEASE DO NOT COPY AND PASTE THIS FULL FILE. PLEASE JUST USE AS A REFERENCE AND COPY PARTS THAT ARE NEEDED
     // for more information on how to layout this form for your applet please checkout the following link:
-    // http://IP        /documentation/#/adk/conventions#Writeback
+    // http://IP_ADDRESS/documentation/#/adk/conventions#Writeback
     //=============================================================================================================
 
     var F226 = {
@@ -88,7 +88,7 @@ define([
                             items: [{
                                 control: "datepicker",
                                 name: "notesCalendar",
-                                title: "Please enter in a date in the following format, MM/DD/YYYY",
+                                title: "Enter in a date in the following format, MM/DD/YYYY",
                                 label: "Date",
                                 required: true
                             }]
@@ -207,7 +207,7 @@ define([
                         e.preventDefault();
                         var closeAlertView = new ADK.UI.Alert({
                             title: 'Are you sure you want to cancel?',
-                            icon: 'fa-warning color-red',
+                            icon: 'icon-warning',
                             messageView: CloseMessageView,
                             footerView: FooterView
                         });

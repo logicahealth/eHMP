@@ -2,19 +2,19 @@
 	<tbody>
 		<tr>
 			<th>Service</th>
-			<td>{{ SERVICE }}</td>
+			<td>{{ taskModel.SERVICE }}</td>
 		</tr>
 		<tr>
 			<th>Task</th>
-			<td>{{ TASKNAME }}</td>
+			<td>{{ taskModel.TASKNAME }}</td>
 		</tr>
 		<tr>
 			<th>Created By</th>
-			<td>{{ CREATEDBYNAME }}</td>
+			<td>{{ taskModel.CREATEDBYNAME }}</td>
 		</tr>
 		<tr>
 			<th>Due date</th>
-			<td>{{ dueDateTime }} <b>{{ dueText }}</b></td>
+			<td>{{ taskModel.dueDateTime }} <strong>{{ taskModel.dueText }}</strong></td>
 		</tr>
 	</tbody>
 </table>
@@ -25,8 +25,7 @@
 	</div>
 	<div class="panel-body">
 		<p>
-			{{ DESCRIPTION }}
+			{{ taskModel.DESCRIPTION }}
 		</p>
 	</div>
 </div>
-<div class="form-elements"></div>

@@ -445,7 +445,7 @@ define([
             });
 
             var DeleteMessageView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile('You will lose all work in progress if you delete this task. Would you like to proceed?'),
+                template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
                 tagName: 'p'
             });
             var CloseMessageView = Backbone.Marionette.ItemView.extend({
@@ -453,7 +453,7 @@ define([
                 tagName: 'p'
             });
             var FooterView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile('{{ui-button "Cancel" classes="btn-default" title="Click button to cancel your action!"}}{{ui-button "Continue" classes="btn-primary" title="Click button to continue your action!"}}'),
+                template: Handlebars.compile('{{ui-button "No" classes="btn-default" title="Click button to cancel your action!"}}{{ui-button "Yes" classes="btn-primary" title="Click button to continue your action!"}}'),
                 events: {
                     'click .btn-primary': function() {
                         ADK.UI.Alert.hide();
@@ -477,7 +477,7 @@ define([
                         e.preventDefault();
                         var deleteAlertView = new ADK.UI.Alert({
                             title: 'Are you sure you want to delete?',
-                            icon: 'fa-exclamation-triangle font-size-18 color-red',
+                            icon: 'icon-delete',
                             messageView: DeleteMessageView,
                             footerView: FooterView
                         });
@@ -606,7 +606,7 @@ define([
                             var saveAlertView = new ADK.UI.Alert({
                                 title: 'Problem Submitted',
                                 notificationAlert: true,
-                                icon: 'fa-check',
+                                icon: 'icon-success',
                                 message: 'Problem successfully submitted with no errors.',
                                 type: "sucess"
                             });
@@ -618,7 +618,7 @@ define([
                         e.preventDefault();
                         var deleteAlertView = new ADK.UI.Alert({
                             title: 'Are you sure you want to delete?',
-                            icon: 'fa-exclamation-triangle font-size-18 color-red',
+                            icon: 'icon-delete',
                             messageView: DeleteMessageView,
                             footerView: FooterView
                         });
@@ -628,7 +628,7 @@ define([
                         e.preventDefault();
                         var closeAlertView = new ADK.UI.Alert({
                             title: 'Are you sure you want to close this form?',
-                            icon: 'fa-exclamation-triangle font-size-18 color-red',
+                            icon: 'icon-warning',
                             messageView: CloseMessageView,
                             footerView: FooterView
                         });

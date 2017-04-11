@@ -11,7 +11,7 @@ var jdsFilterUtil = require('jds-filter');
  */
 module.exports = function(req, res, next) {
     req.logger.info('jdsFilterInterceptor invoked');
-    req.interceptorResults = {};
+    req.interceptorResults = req.interceptorResults || {};
     req.interceptorResults.jdsFilter = {};
     var filter = req.query.filter;
     if(!filter) {

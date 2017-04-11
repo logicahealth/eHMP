@@ -105,7 +105,7 @@ function handle(log, config, environment, job, handlerCallback) {
             //-----------------------
             var vprDataDomain = uidUtil.extractDomainFromUID(job.record.uid);
 
-            var jobToPublish = jobUtil.createRecordEnrichment(job.patientIdentifier, vprDataDomain, job.record, job);
+            var jobToPublish = jobUtil.createEventPrioritizationRequest(job.patientIdentifier, vprDataDomain, job.record, job);
             environment.publisherRouter.publish(jobToPublish, handlerCallback);
         } else {
             log.warn('jmeadows-pdf-document-transform-handler.handle for patient %s: Could not create HTML and/or TXT file because the document %s appears to be corrupted. error: %s', logPatientIdentifier, pdfFile, err);
@@ -133,7 +133,7 @@ function handle(log, config, environment, job, handlerCallback) {
                 //-----------------------
                 var vprDataDomain = uidUtil.extractDomainFromUID(job.record.uid);
 
-                var jobToPublish = jobUtil.createRecordEnrichment(job.patientIdentifier, vprDataDomain, job.record, job);
+                var jobToPublish = jobUtil.createEventPrioritizationRequest(job.patientIdentifier, vprDataDomain, job.record, job);
                 environment.publisherRouter.publish(jobToPublish, handlerCallback);
             });
 

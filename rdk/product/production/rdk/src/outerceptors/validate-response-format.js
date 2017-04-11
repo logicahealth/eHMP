@@ -23,7 +23,9 @@ function validateResponseFormat(req, res, body, callback) {
     }
 
     var error = null;
-    if (!_.isObject(bodyObject)) {
+    if (bodyObject && res.statusCode === 204) {
+        error = 'response payload must be empty for a 204 status code';
+    } else if (!_.isObject(bodyObject)) {
         error = 'response payload must be an object';
     } else if (_.isArray(bodyObject)) {
         error = 'response payload must not be an array';

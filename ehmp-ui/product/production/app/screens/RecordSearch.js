@@ -32,83 +32,35 @@ define([
     };
 
     function getAllKeywords(uid) {
-        var keys = [];
-        $("[data-uid='" + uid + "']").find('.cpe-search-term-match').contents().each(function() {
-            var keyword = {
-                key: $(this).text().toString().toLowerCase(),
-                nextChar: ''
-            };
-            if (keyword.key.length < 4) {
-                var parentElement = $(this).parent().parent().get(0);
-                var parentText = parentElement.innerHTML;
-                var $clone = $(this).parent().clone();
-                $clone.wrap('<div>');
-                var txtToFind = $clone.parent().html();
-                var indexOfKeyword = parentText.indexOf(txtToFind) + txtToFind.length;
-                if (parentElement.id.substring('ResultSummary')) {
-                    keyword.nextChar = parentText.substring(indexOfKeyword, indexOfKeyword + 1);
-                } else if (parentElement.parentElement.id.substring('ResultHighlightssubgroupItem')) {
-                    parentText = parentText.substring(3);
-                    parentText = parentText.substring(0, parentText.length - 3);
-                    indexOfKeyword = parentText.indexOf(txtToFind) + txtToFind.length;
-                    keyword.nextChar = parentText.substring(indexOfKeyword, indexOfKeyword + 1);
-                    if (keyword.nextChar === ' ' && parentText.charCodeAt(indexOfKeyword + 2) === 10) {
-                        keyword.nextChar = parentText.charAt(indexOfKeyword + 2);
+        var keywords = ADK.SessionStorage.getAppletStorageModel('search', 'searchText').searchTerm.toString().toLowerCase();
+        keywords = keywords.split(' ');
+        _.each(keywords, function(kw){
+            if (!_.find(keywords, function(key){
+                    if (_.isUndefined(ADK.utils.stringUtils.singularize(kw))){
+                        return true;
                     }
-                }
+                    return key===ADK.utils.stringUtils.singularize(kw);
+                })){
+                keywords.push(ADK.utils.stringUtils.singularize(kw));
             }
-            keys.push(keyword);
         });
-        if (keys.length < 1) {
-            var searchText = ADK.SessionStorage.getAppletStorageModel('search', 'searchText');
-            keys.push({
-                key: searchText.searchTerm.toString().toLowerCase(),
-                nextChar: searchText.searchTerm.length < 4 ? ' ' : ''
-            });
-        }
-        keys.sort(function(a, b) {
-            return a.key.length < b.key.length;
-        });
-        return keys.filter(function(elem, pos) {
-            for (var i = 0; i < keys.length; i++) {
-                if (keys[i].key + keys[i].nextChar === elem.key + elem.nextChar && i !== pos) {
-                    return false;
-                } else {
-                    return true;
-                }
+        $("[data-uid='" + uid + "']").find('.cpe-search-term-match').contents().each(function() {
+            var text = $(this).text().toString().toLowerCase();
+            if (!_.find(keywords, function(key){
+                return key === text;
+            })){
+                keywords.push(text);
             }
-            return true;
         });
+        return keywords;
     }
 
     function highlightHtmlElement(htmlToHighlight, keywords) {
         $(htmlToHighlight).find("*").contents().each(function() {
             if (this.nodeType == 3) {
-                $(this).replaceWith(addSearchResultElementHighlighting($(this).text(), keywords));
+                $(this).replaceWith(ADK.utils.stringUtils.addSearchResultElementHighlighting($(this).text(), keywords));
             }
         });
-    }
-
-    function addSearchResultElementHighlighting(textToHighlight, keywords) {
-        var searchString = textToHighlight.toString().toLowerCase();
-        var highlightedText = textToHighlight;
-        var markStart = '<mark class="cpe-search-term-match">';
-        var markEnd = '</mark>';
-        for (var i = 0; i < keywords.length; i++) {
-            var startIndex = 0;
-            var keyword = keywords[i];
-            var textToFindAndHighlight = keyword.key.toString().toLowerCase() + keyword.nextChar.toLowerCase();
-            while (searchString.indexOf(textToFindAndHighlight, startIndex) > -1) {
-                startIndex = searchString.indexOf(textToFindAndHighlight, startIndex);
-                var endIndex = startIndex + textToFindAndHighlight.length - keyword.nextChar.length;
-                var stringToHighlight = highlightedText.substring(startIndex, endIndex);
-
-                highlightedText = highlightedText.substring(0, startIndex) + markStart + stringToHighlight + markEnd + highlightedText.substring(endIndex);
-                searchString = searchString.substring(0, startIndex) + markStart + textToFindAndHighlight.substring(0, textToFindAndHighlight.length - keyword.nextChar.length) + markEnd + searchString.substring(endIndex);
-                startIndex = endIndex + markStart.length + markEnd.length + keyword.nextChar.length;
-            }
-        }
-        return highlightedText;
     }
 
     function onDocumentsLoaded(view) {
@@ -136,13 +88,15 @@ define([
                     title: "Loading..."
                 }
             });
-            modal.show();
+
+            var showOptions = {triggerElement: $(':focus')};
+            modal.show(showOptions);
 
             // request detail view from whatever applet is listening for this domain
             deferredResponse.done(function(response) {
                 var modalOptions = {
                     size: "large",
-                    title: addSearchResultElementHighlighting(response.title, keywords)
+                    title: ADK.utils.stringUtils.addSearchResultElementHighlighting(response.title, keywords)
                 };
                 if (response.headerView) {
                     modalOptions.headerView = response.headerView;
@@ -155,7 +109,7 @@ define([
                     view: response.view,
                     options: modalOptions
                 });
-                modal.show();
+                modal.show(showOptions);
                 highlightHtmlElement(response.view.$el, keywords);
             });
             deferredResponse.fail(function(response) {
@@ -171,7 +125,7 @@ define([
                         title: "An Error Occurred"
                     }
                 });
-                modal.show();
+                modal.show(modalShowOptions);
             });
         } else {
             // no detail view available; use the default placeholder view
@@ -188,6 +142,7 @@ define([
 
     var screenConfig = {
         id: 'record-search',
+        context: 'patient',
         contentRegionLayout: 'gridOne',
         appletHeader: 'navigation',
         appLeft: 'patientInfo',

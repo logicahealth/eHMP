@@ -2,7 +2,7 @@
 Feature: F295 - Encounters Applet
 
 Background:
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
   	Given user searches for and selects "Sixhundred,Patient"
   	Then Overview is active
   	And user sees Encounters Gist

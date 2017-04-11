@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Encounters visit disabilities [/encounters-visit-disabilities{?site}{&dfn}{&fields}]
+## Encounters visit disabilities [/encounters-visit-disabilities{?site}{&dfn}]
 
 Populates Service Connection & Rated Disabilities
 
@@ -13,8 +13,6 @@ ORWPCE SCDIS
     :[site]({{{common}}}/parameters/site.md)
 
     + dfn: `230` (string, required) - The dfn
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 

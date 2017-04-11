@@ -4,22 +4,22 @@ var getCommonOrderTasks = require('./orders-common-tasks');
 
 describe('write-back orders common tasks', function() {
     it('tests that getCommonOrderTasks returns defined tasks', function() {
-        var discontinueDetailsOrderTasks = getCommonOrderTasks('discontinueDetails', {});
-        expect(discontinueDetailsOrderTasks).not.to.be.undefined();
-        var discontinueOrderTasks = getCommonOrderTasks('discontinue', {});
-        expect(discontinueOrderTasks).not.to.be.undefined();
-        var editOrderTasks = getCommonOrderTasks('edit', {});
-        expect(editOrderTasks).not.to.be.undefined();
-        var detailOrderTasks = getCommonOrderTasks('detail', {});
-        expect(detailOrderTasks).not.to.be.undefined();
-        var signDetailsOrderTasks = getCommonOrderTasks('signDetails', {});
-        expect(signDetailsOrderTasks).not.to.be.undefined();
-        var signOrdersTasks = getCommonOrderTasks('signOrders', {});
-        expect(signOrdersTasks).not.to.be.undefined();
-        var saveDraftOrderTasks = getCommonOrderTasks('saveDraftOrder', {});
-        expect(saveDraftOrderTasks).not.to.be.undefined();
-        var findDraftOrderTasks = getCommonOrderTasks('findDraftOrders', {});
-        expect(findDraftOrderTasks).not.to.be.undefined();
+        var discontinueDetailsLabOrderTasks = getCommonOrderTasks('discontinueDetailsLab', {});
+        expect(discontinueDetailsLabOrderTasks).not.to.be.undefined();
+        var discontinueLabOrderTasks = getCommonOrderTasks('discontinueLab', {});
+        expect(discontinueLabOrderTasks).not.to.be.undefined();
+        var editLabOrderTasks = getCommonOrderTasks('editLab', {});
+        expect(editLabOrderTasks).not.to.be.undefined();
+        var detailLabOrderTasks = getCommonOrderTasks('detailLab', {});
+        expect(detailLabOrderTasks).not.to.be.undefined();
+        var signDetailsLabOrderTasks = getCommonOrderTasks('signDetailsLab', {});
+        expect(signDetailsLabOrderTasks).not.to.be.undefined();
+        var signLabOrdersTasks = getCommonOrderTasks('signOrdersLab', {});
+        expect(signLabOrdersTasks).not.to.be.undefined();
+        var saveDraftLabOrderTasks = getCommonOrderTasks('saveDraftLabOrder', {});
+        expect(saveDraftLabOrderTasks).not.to.be.undefined();
+        var findDraftLabOrderTasks = getCommonOrderTasks('findDraftLabOrders', {});
+        expect(findDraftLabOrderTasks).not.to.be.undefined();
     });
 
     it('tests that getCommonOrderTasks returns undefined tasks', function() {

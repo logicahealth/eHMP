@@ -2,7 +2,7 @@
 
 ## Vitals [{{{path}}}]
 
-### Closest reading [GET {{{path}}}/closest{?pid}{&ts}{&type}{&flag}{&fields}]
+### Closest reading [GET {{{path}}}/closest{?pid}{&ts}{&type}{&flag}]
 
 Get the observation date/time and reading of the record closest to the date/time for the patient and vital type
 
@@ -22,8 +22,6 @@ Get the observation date/time and reading of the record closest to the date/time
             + `2` - Search after the `ts`
 
 
-    :[fields]({{{common}}}/parameters/fields.md)
-
 
 + Response 200 (application/json)
 
@@ -34,7 +32,7 @@ Get the observation date/time and reading of the record closest to the date/time
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Qualifier information [GET {{{path}}}/qualifiers{?param}{&fields}]
+### Qualifier information [GET {{{path}}}/qualifiers{?param}]
 
 Get qualifier information for selected vital types
 
@@ -45,8 +43,6 @@ Returns all qualifier information for the vital types selected. If no types are 
 + Parameters
 
     + param (string, required) - a comma delimited list of vital abbreviations; example: types=WT,HT,T for weight, height, temperature. Leaving this parameter off will return all vital qualifiers
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)
@@ -71,7 +67,7 @@ Returns all qualifier information for the vital types selected. If no types are 
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### All vitals [GET {{{path}}}/all{?pid}{&date.start}{&date.end}{&fields}]
+### All vitals [GET {{{path}}}/all{?pid}{&date.start}{&date.end}]
 
 List all vitals/measurements data for a given date/time span
 
@@ -82,8 +78,6 @@ List all vitals/measurements data for a given date/time span
     :[date.start]({{{common}}}/parameters/date.start.md required:"required")
 
     :[date.end]({{{common}}}/parameters/date.end.md required:"required")
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

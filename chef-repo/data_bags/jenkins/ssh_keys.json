@@ -1,0 +1,13 @@
+{
+  "id": "ssh_keys",
+  "admins": [
+    "jenkins"
+  ],
+  "clients": [
+
+  ],
+  "search_query": [
+
+  ],
+  "jenkins": "PGE5TWzIjfT/HlI42IiCx1xiQ/mE6gTtEV+9Y0kGI03a9bqurTiYh1bqeTHC\nY5jirRrcKKJcbdPthLNPrZ3VE3k+sze1CX2JmrAvdMWZxkPImtP3uHNfzYnF\n0E9DRB2ocqjAXpu3kxqUAWLBq/8jeyN5kdyJW4+Rk1/QbquxlH/gS1i7mlgV\ntBa/lC5/0m1LW5LdWgkW3RdH4kfh8HLcty05o2sBOAdv7G4TfHTffNEUaHi5\ntjZMSquXIq/T3wjy9m4KGNbuTUpInC5CZHMPIlW1rFm7cmxf4P6/r2TFITPV\npjWpAP0QrnwXzrKqUodfiHAqux9aEK4ED1QH+c4+7w==\n"
+}

@@ -1,5 +1,5 @@
-HMPDJ04 ;ASMR/MKB/ASF -- Appointments,Visits ;10/14/2015 14:11
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 66
+HMPDJ04 ;SLC/MKB,ASMR/RRB/ASF/PB - Appointments,Visits;May 24, 2016 15:21:17
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;*1*;Sep 01, 2011;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -15,8 +15,11 @@ HMPDJ04 ;ASMR/MKB/ASF -- Appointments,Visits ;10/14/2015 14:11
  ; SDAMA301                      4433
  ; XLFDT                        10103
  ; XUAF4                         2171
+ ; EDP(230                       6275
+ ; SC(                             93
  ;
  ; All tags expect DFN, ID, [HMPSTART, HMPSTOP, HMPMAX, HMPTEXT]
+ Q
  ;
 SDAM1 ; -- appointment ^TMP($J,"SDAMA301",DFN,HMPDT)
  N NODE,HLOC,APPT,X,STS,CLS,FAC,SV,PRV
@@ -30,7 +33,7 @@ SDAM1 ; -- appointment ^TMP($J,"SDAMA301",DFN,HMPDT)
  S APPT("localId")=X,APPT("uid")=$$SETUID^HMPUTILS("appointment",DFN,X)
  S X=$P(NODE,U,10),APPT("typeCode")=$P(X,";"),APPT("typeName")=$P(X,";",2)
  S STS=$P(NODE,U,3),CLS=$S($E(STS)="I":"I",1:"O")
- S STS=$P($$STATUS^SDAMA308(DFN,HMPDT,+HLOC),";",1,2) ;DE2552 ASF 11/16/15 handles "scheduled/kept" issue; ICR needed
+ S STS=$P($P(NODE,U,22),";",1,2)  ;DE4469 - PB - APR 26, 2016 changed from using the SDAMA308 API to using the SDAMA301 Supported API to get appointment status ICR 4433
  S APPT("dateTime")=$$JSONDT^HMPUTILS(HMPDT)
  S:$L($P(NODE,U,6)) APPT("comment")=$P(NODE,U,6)
  S:$P(NODE,U,9) APPT("checkIn")=$$JSONDT^HMPUTILS($P(NODE,U,9))
@@ -39,7 +42,7 @@ SDAM1 ; -- appointment ^TMP($J,"SDAMA301",DFN,HMPDT)
  S FAC=$$FAC^HMPD(+HLOC) D FACILITY^HMPUTILS(FAC,"APPT") I HLOC D
  . S APPT("locationName")=$P(HLOC,";",2)
  . S APPT("locationUid")=$$SETUID^HMPUTILS("location",,+HLOC)
- . S X=$P($G(^SC(+HLOC,0)),U,2) S:X]"" APPT("shortLocationName")=X
+ . S X=$$GET1^DIQ(44,(+HLOC)_",",1) S:X]"" APPT("shortLocationName")=X  ;DE2818, (#1) ABBREVIATION
  . S X=$$AMIS^HMPDVSIT(+$P(NODE,U,13))
  . S:$L(X) APPT("stopCodeUid")="urn:va:stop-code:"_$P(X,U),APPT("stopCodeName")=$P(X,U,2)
  . S SV=$$GET1^DIQ(44,+HLOC_",",9.5,"I")
@@ -51,7 +54,7 @@ SDAM1 ; -- appointment ^TMP($J,"SDAMA301",DFN,HMPDT)
  .. S FIRST=$O(HMPP(44.1,"")),I=""
  .. F  S I=$O(HMPP(44.1,I)) Q:I=""  I $G(HMPP(44.1,I,.02,"I")) S PRV=$G(HMPP(44.1,I,.01,"I")) Q
  .. I 'PRV,FIRST S PRV=$G(HMPP(44.1,FIRST,.01,"I"))
- I $G(PRV) S APPT("providers",1,"providerUid")=$$SETUID^HMPUTILS("user",,PRV),APPT("providers",1,"providerName")=$P($G(^VA(200,PRV,0)),U)
+ I $G(PRV) S APPT("providers",1,"providerUid")=$$SETUID^HMPUTILS("user",,PRV),APPT("providers",1,"providerName")=$$GET1^DIQ(200,PRV_",",.01)  ;DE2818
  S APPT("patientClassCode")="urn:va:patient-class:"_$S(CLS="I":"IMP",1:"AMB")
  S APPT("patientClassName")=$S(CLS="I":"Inpatient",1:"Ambulatory")
  S APPT("categoryCode")="urn:va:encounter-category:OV",APPT("categoryName")="Outpatient Visit"
@@ -59,11 +62,12 @@ SDAM1 ; -- appointment ^TMP($J,"SDAMA301",DFN,HMPDT)
  S APPT("lastUpdateTime")=$$EN^HMPSTMP("appointment") ;RHL 20150102
  S APPT("stampTime")=APPT("lastUpdateTime") ; RHL 20150102
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("appointment",APPT("uid"),APPT("stampTime")) Q:HMPMETA=1  ;US6734/US11019
+ I $G(HMPMETA) D ADD^HMPMETA("appointment",APPT("uid"),APPT("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("APPT","appointment")
  Q
  ;
 DGS ; scheduled admissions [from APPOINTM^HMPDJ0]
+ ;DE2818, ^DGS(41.1) references ICR 3796
  S HMPA=0 F  S HMPA=$O(^DGS(41.1,"B",DFN,HMPA)) Q:HMPA<1  D  Q:HMPI'<HMPMAX
  . S HMPX=$G(^DGS(41.1,HMPA,0))
  . I $L($G(ID)),+$P(ID,";",2)=+$P(HMPX,U,2) D DGS1(HMPA) Q
@@ -74,16 +78,16 @@ DGS ; scheduled admissions [from APPOINTM^HMPDJ0]
  ;
 DGS1(IFN) ; -- scheduled admission
  N ADM,X0,DATE,HLOC,FAC,SV,X
- S X0=$G(^DGS(41.1,+$G(IFN),0)) Q:X0=""  ;deleted
+ S X0=$G(^DGS(41.1,+$G(IFN),0)) Q:X0=""  ;deleted (DE2818, ICR 3796)
  ;
  S DATE=+$P(X0,U,2),HLOC=+$G(^DIC(42,+$P(X0,U,8),44))
  S X="H;"_DATE,ADM("localId")=X,ADM("uid")=$$SETUID^HMPUTILS("appointment",DFN,X)
  S ADM("dateTime")=$$JSONDT^HMPUTILS(DATE)
  S FAC=$$FAC^HMPD(+HLOC) D FACILITY^HMPUTILS(FAC,"ADM") I HLOC D
- . S HLOC=+HLOC_";"_$P($G(^SC(+HLOC,0)),U)
+ . S HLOC=$$GET1^DIQ(44,(+HLOC)_",",.01)  ;DE2818, (#.01) NAME
  . S ADM("uid")=ADM("uid")_";"_+HLOC
  . S ADM("locationName")=$P(HLOC,";",2)
- . S X=$P($G(^SC(+HLOC,0)),U,2) S:X]"" ADM("shortLocationName")=X
+ . S X=$$GET1^DIQ(44,(+HLOC)_",",1)  S:X]"" ADM("shortLocationName")=X  ;DE2818, (#1) ABBREVIATION
  . S ADM("locationUid")=$$SETUID^HMPUTILS("location",,+HLOC)
  . S X=$$GET1^DIQ(44,+HLOC_",",8,"I"),X=$$AMIS^HMPDVSIT(X)
  . S:$L(X) ADM("stopCodeUid")="urn:va:stop-code:"_$P(X,U),ADM("stopCodeName")=$P(X,U,2)
@@ -91,56 +95,60 @@ DGS1(IFN) ; -- scheduled admission
  . I SV S ADM("service")=$$SERV^HMPDSDAM(SV)
  S X=+$P(X0,U,5) I X D
  . S ADM("providers",1,"providerUid")=$$SETUID^HMPUTILS("user",,X)
- . S ADM("providers",1,"providerName")=$P($G(^VA(200,X,0)),U)
+ . S ADM("providers",1,"providerName")=$$GET1^DIQ(200,X_",",.01)  ;DE2818
  S ADM("patientClassCode")="urn:va:patient-class:IMP",ADM("patientClassName")="Inpatient"
  S ADM("categoryCode")="urn:va:encounter-category:AD",ADM("categoryName")="Admission"
  S ADM("appointmentStatus")=$S($P(X0,U,17):"ADMITTED",$P(X0,U,13):"CANCELLED",1:"SCHEDULED")
  S ADM("lastUpdateTime")=$$EN^HMPSTMP("adm") ;RHL 20150102
  S ADM("stampTime")=ADM("lastUpdateTime") ; RHL 20150102
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("appointment",ADM("uid"),ADM("stampTime")) Q:HMPMETA=1  ;US6734/US11019
+ I $G(HMPMETA) D ADD^HMPMETA("appointment",ADM("uid"),ADM("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("ADM","appointment")
  Q
  ;
 VSIT1(ID) ; -- visit
  N VST,X0,X15,X,FAC,LOC,CATG,AMIS,INPT,DA,PS
  I $G(ID)?1"H"1.N D ADM^HMPDJ04A(ID) Q
+ ;DE2818, ICR 6275
  I $D(^EDP(230,"V",ID)),$L($T(EDP1^HMPDJ04E)) D EDP1^HMPDJ04E(ID) Q
  ; ENCEVENT^PXAPI(ID)
  ;
+ ; DE2818, ^AUPNVSIT - ICR 2028
  S X0=$G(^AUPNVSIT(ID,0)),X15=$G(^(150)) Q:X0=""  ;pjh - quit if visit already deleted
  ; X0=$G(^TMP("PXKENC",$J,ID,"VST",ID,0)),X15=$G(^(150))
  ;Q:$P(X15,U,3)'="P"  Q:$P(X0,U,7)="E"  Q:$P(X0,U,12)  ;primary, not historical or child
  I $P(X0,U,7)="H" D ADM^HMPDJ04A(ID,+X0) Q
  S VST("localId")=ID,VST("uid")=$$SETUID^HMPUTILS("visit",DFN,ID)
- S VST("dateTime")=$$JSONDT^HMPUTILS(+X0)
- S:$P(X0,U,18) VST("checkOut")=$$JSONDT^HMPUTILS($P(X0,U,18))
- S:$P(X0,U,12) VST("parentUid")=$$SETUID^HMPUTILS("visit",DFN,$P(X0,U,12))
+ S VST("dateTime")=$$JSONDT^HMPUTILS(+X0)  ;(#.01) VISIT/ADMIT DATE&TIME
+ S:$P(X0,U,18) VST("checkOut")=$$JSONDT^HMPUTILS($P(X0,U,18))  ;(#.18) CHECK OUT DATE&TIME
+ S:$P(X0,U,12) VST("parentUid")=$$SETUID^HMPUTILS("visit",DFN,$P(X0,U,12))  ;(#.12) PARENT VISIT LINK
+ ;(#.06) LOC. OF ENCOUNTER, (#.07) SERVICE CATEGORY, (#.22) HOSPITAL LOCATION
  S FAC=+$P(X0,U,6),CATG=$P(X0,U,7),LOC=+$P(X0,U,22)
  S:FAC X=$$STA^XUAF4(FAC)_U_$P($$NS^XUAF4(FAC),U)
  S:'FAC X=$$FAC^HMPD(LOC) D FACILITY^HMPUTILS(X,"VST")
  S X=$S(CATG="H":"AD",CATG="C":"CR",CATG="T":"TC",CATG="N":"U",CATG="R":"NH","D^X"[CATG:"O",1:"OV")
  S VST("categoryCode")="urn:va:encounter-category:"_X
  S VST("categoryName")=$S(X="AD":"Admission",X="CR":"Chart Review",X="TC":"Phone Contact",X="U":"Unknown",X="NH":"Nursing Home",X="O":"Other",1:"Outpatient Visit")
- S INPT=$P(X15,U,2) S:INPT="" INPT=$S("H^I^R^D"[CATG:1,1:0)
- S X=$P(X15,U,3) S:$L(X) VST("encounterType")=X
+ S INPT=$P(X15,U,2) S:INPT="" INPT=$S("H^I^R^D"[CATG:1,1:0)  ;(#15002) PATIENT STATUS IN/OUT
+ S X=$P(X15,U,3) S:$L(X) VST("encounterType")=X  ;(#15003) ENCOUNTER TYPE
  S X=$$CPT(ID) S:X VST("typeName")=$P($$CPT^ICPTCOD(X),U,3)
- I 'X S VST("typeName")=$S('INPT&LOC:$P($G(^SC(LOC,0)),U)_" VISIT",1:$$CATG^HMPDVSIT(CATG))
+ I 'X S VST("typeName")=$S('INPT&LOC:$$GET1^DIQ(44,LOC_",",.01)_" VISIT",1:$$CATG^HMPDVSIT(CATG))  ;DE2818
  S VST("patientClassCode")="urn:va:patient-class:"_$S(INPT:"IMP",1:"AMB")
  S VST("patientClassName")=$S(INPT:"Inpatient",1:"Ambulatory")
  ; US12589 - add createdByName field to extract
  S X=$$GET1^DIQ(200,$P(X0,U,23)_",",".01") S:$G(X)="" X="UNKNOWN"
  S VST("createdByName")=X
+ ;(#.08) DSS ID
  S X=$P(X0,U,8) S:X AMIS=$$AMIS^HMPDVSIT(X) I LOC D
- . N L0 S L0=$G(^SC(LOC,0))
- . I 'X S AMIS=$$AMIS^HMPDVSIT($P(L0,U,7))
+ . I 'X N AMISARR D GETS^DIQ(44,LOC_",",8,"I","AMISARR","ERR") I $G(AMISARR(44,LOC_",",8,"I"))'="" S X=$G(AMISARR(44,LOC_",",8,"I")),AMIS=$$AMIS^HMPDVSIT(X)  ;DE5300 - PB - Jun 30 2015 changed call to get stop code name and number
  . S VST("locationUid")=$$SETUID^HMPUTILS("location",,+LOC)
- . S X=$P($G(^SC(+LOC,0)),U,2) S:X]"" VST("shortLocationName")=X
- . S VST("locationName")=$P(L0,U),VST("locationOos")=$S(+$G(^SC(+LOC,"OOS")):"true",1:"false")
- . S X=$$SERV^HMPDVSIT($P(L0,U,20)) S:$L(X) VST("service")=X
+ . S X=$$GET1^DIQ(44,LOC_",",1) S:X]"" VST("shortLocationName")=X  ;DE2818, (#1) ABBREVIATION
+ . S VST("locationName")=$$GET1^DIQ(44,LOC_",",.01)  ;DE2818, (#.01) NAME
+ . S VST("locationOos")=$S($$GET1^DIQ(44,LOC_",",50.01,"I"):"true",1:"false")  ;DE2818, (#50.01) OCCASION OF SERVICE CLINIC?
+ . S X=$$SERV^HMPDVSIT($$GET1^DIQ(44,LOC_",",9.5,"I")) S:$L(X) VST("service")=X  ;DE2818, (#9.5) TREATING SPECIALTY
  S:$D(AMIS) VST("stopCodeUid")="urn:va:stop-code:"_$P(AMIS,U),VST("stopCodeName")=$P(AMIS,U,2)
  S X=$$POV(ID) S:$L(X) VST("reasonUid")=$$SETNCS^HMPUTILS("icd",$P(X,U)),VST("reasonName")=$P(X,U,2)
- ; provider(s)
+ ; provider(s), DE2818 - ^AUPNVPRV references - ICR 2316
  S DA=0 F  S DA=$O(^AUPNVPRV("AD",ID,DA)) Q:DA<1  D
  . S X0=$G(^AUPNVPRV(DA,0))
  . I $P(X0,U,4)="P" D PROV("VST",DA,+X0,"P",1) Q  ;primary
@@ -150,18 +158,22 @@ VSIT1(ID) ; -- visit
  S VST("lastUpdateTime")=$$EN^HMPSTMP("visit") ;RHL 20150103
  S VST("stampTime")=VST("lastUpdateTime") ; RHL 20150103
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("visit",VST("uid"),VST("stampTime")) Q:HMPMETA=1  ;US6734
+ I $G(HMPMETA) D ADD^HMPMETA("visit",VST("uid"),VST("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("VST","visit")
  Q
  ;
 CPT(VISIT) ; -- Return CPT code of encounter type
- N DA,Y,X S Y=""
+ ;DE2818 - Change to use API and not directly access the global
+ N DA,Y S Y=""
+ ;DE2818, ICR 2048 for ^AUPNVCPT references
  S DA=0 F  S DA=$O(^AUPNVCPT("AD",VISIT,DA)) Q:DA<1  D  Q:$L(Y)
- . S X=$P($G(^AUPNVCPT(DA,0)),U) I X?1"992"2N S Y=X Q
+ . D ENCEVENT^PXAPI(VISIT,1)
+ . I +$G(^TMP("PXKENC",$J,VISIT,"CPT",DA,0))?1"992"2N S Y=+$G(^TMP("PXKENC",$J,VISIT,"CPT",DA,0))
  Q Y
  ;
 POV(VISIT) ; -- return the primary Purpose of Visit as ICD^ProviderNarrative
  N DA,Y,X,X0,ICD S Y=""
+ ;DE2818, ^AUPNVPOV( - ICR 3094
  S DA=0 F  S DA=$O(^AUPNVPOV("AD",VISIT,DA)) Q:DA<1  D  Q:$L(Y)
  . S X0=$G(^AUPNVPOV(DA,0)) Q:$P(X0,U,12)'="P"
  . S X=+$P(X0,U,4),ICD=$$ICD^HMPDVSIT(+X0)
@@ -170,15 +182,15 @@ POV(VISIT) ; -- return the primary Purpose of Visit as ICD^ProviderNarrative
  ;
 PROV(ARR,I,IEN,ROLE,PRIM) ; -- add providers
  S @ARR@("providers",I,"providerUid")=$$SETUID^HMPUTILS("user",,+IEN)
- S @ARR@("providers",I,"providerName")=$P($G(^VA(200,+IEN,0)),U)
+ S @ARR@("providers",I,"providerName")=$$GET1^DIQ(200,(+IEN)_",",.01)  ;DE2818
  S @ARR@("providers",I,"role")=ROLE
  S:$G(PRIM) @ARR@("providers",I,"primary")="true"
  Q
  ;
 NAME(IEN) ; -- Return a string 'name' for the visit
  N Y,X0,LOC,DATE
- S X0=$G(^AUPNVSIT(+$G(IEN),0)),Y=""
- S DATE=+X0,LOC=+$P(X0,U,22) S:LOC LOC=$P($G(^SC(LOC,0)),U)_" "
+ S X0=$G(^AUPNVSIT(+$G(IEN),0)),Y=""  ;DE2818, ICR 2028
+ S DATE=+X0,LOC=+$P(X0,U,22) S:LOC LOC=$$GET1^DIQ(44,LOC_",",.01)_" "  ;DE2818
  S Y=LOC_$$FMTE^XLFDT(DATE,"1D") ;Mon DD, YYYY
  Q Y
  ;

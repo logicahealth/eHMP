@@ -7,7 +7,8 @@ var filemanDateUtil = require('../../utils/fileman-date-converter');
 var nullChecker = require('../../utils/nullchecker');
 var _ = require('lodash');
 var async = require('async');
-
+var rdk = require('../../core/rdk');
+var locationUtil = rdk.utils.locationUtil;
 var SAVE_RPC = 'ORWPCE SAVE';
 var GETSVC_RPC = 'ORWPCE GETSVC';
 var CARET = '^';
@@ -52,7 +53,7 @@ module.exports.save = function(writebackContext, callback) {
     // required
     var patientDFN = model.patientDFN;
     var isInpatient = model.isInpatient;
-    var locationIEN = model.locationIEN;
+    var locationIEN = locationUtil.getLocationIEN(model.locationUid);
     var encounterDateTime = getFilemanDate(model.encounterDateTime);
 
     // optional

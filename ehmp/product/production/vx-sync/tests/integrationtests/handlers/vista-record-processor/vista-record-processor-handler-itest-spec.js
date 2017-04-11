@@ -10,9 +10,8 @@ require('../../../../env-setup');
 var _ = require('underscore');
 
 var testHandler = require(global.VX_INTTESTS + 'framework/handler-test-framework').testHandler;
-var queueConfig = require(global.VX_JOBFRAMEWORK + 'queue-config');
 var VistaClient = require(global.VX_SUBSYSTEMS + 'vista/vista-client');
-var PublisherRouter = require(global.VX_JOBFRAMEWORK + 'publisherRouter');
+var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 var grabJobs = require(global.VX_INTTESTS + 'framework/job-grabber');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
 var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
@@ -24,9 +23,11 @@ var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 
 var handle = require(global.VX_HANDLERS + 'vista-record-processor/vista-record-processor-handler');
-var JobStatusUpdater = require(global.VX_JOBFRAMEWORK + 'JobStatusUpdater');
+var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var wConfig = require(global.VX_ROOT + 'worker-config');
+var realConfig = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
+
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
 var host = vx_sync_ip;
@@ -39,15 +40,15 @@ var config = {
         'C877': {}
     },
     // remove this if it has not caused an integration test build to fail
-    // mvi: _.defaults(wConfig.mvi, {
+    // mvi: _.defaults(realConfig.mvi, {
     //     protocol: 'http',
     //     host: '127.0.0.1',
-    //     port: 54000,
+    //     port: 5400,
     //     path: '/mvi'
     // }),
-    jds: _.defaults(wConfig.jds, {
+    jds: _.defaults(realConfig.jds, {
         protocol: 'http',
-        host: 'IPADDRESS ',
+        host: 'IP_ADDRESS',
         port: 9080
     })
 };
@@ -455,7 +456,7 @@ describe('vista-record-processor.js', function() {
 
         var actualResponse, actualError, actualOperationalSyncStatus, actualSyncStatus;
 
-        var matchingJobTypes = [jobUtil.operationalDataStoreType(), jobUtil.operationalDataStoreType(), jobUtil.vistaPrioritizationRequestType(), jobUtil.vistaPrioritizationRequestType()];
+        var matchingJobTypes = [jobUtil.operationalDataStoreType(), jobUtil.operationalDataStoreType(), jobUtil.eventPrioritizationRequestType(), jobUtil.eventPrioritizationRequestType()];
         testHandler(handle, dummyLogger, config, environment, host, port, tubename, job, matchingJobTypes, null, function(error, response) {
             actualError = error;
             actualResponse = response;

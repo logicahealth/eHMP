@@ -22,13 +22,9 @@ Return whether the RDK server is healthy.
             :[Schema]({{{common}}}/schemas/healthcheck_healthy-GET-200.jsonschema)
 
 
-### Detailed Health Check [GET {{{path}}}/detail{?fields}]
+### Detailed Health Check [GET {{{path}}}/detail]
 
 Return details about the health of the RDK server and its dependencies.
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 + Response 200 (application/json)
 
@@ -82,13 +78,9 @@ Return details about the health of the RDK server and its dependencies.
             :[Schema]({{{common}}}/schemas/healthcheck_detail-GET-200.jsonschema)
 
 
-### Detailed Health Check Without Updating [GET {{{path}}}/noupdate{?fields}]
+### Detailed Health Check Without Updating [GET {{{path}}}/noupdate]
 
 Return details about the health of the RDK server and its dependencies without re-querying the health—instead, the most recent status is returned.
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 + Response 200 (application/json)
 
@@ -149,13 +141,9 @@ Return details about the health of the RDK server and its dependencies in HTML f
 + Response 200 (text/html)
 
 
-### Systems with Health Checks [GET {{{path}}}/checks{?fields}]
+### Systems with Health Checks [GET {{{path}}}/checks]
 
 Return the systems and dependencies of the RDK server that can be checked for health.
-
-+ Parameters
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 + Response 200 (application/json)
 

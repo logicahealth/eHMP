@@ -1,6 +1,6 @@
 # Group Patient
 
-## Patient record cwad [{{{path}}}{?pid}{&start}{&limit}{&filter}{&order}{&fields}]
+## Patient record cwad [{{{path}}}{?pid}{&start}{&limit}{&filter}{&order}]
 
 + Parameters
 
@@ -13,8 +13,6 @@
     :[filter]({{{common}}}/parameters/filter.md)
 
     :[order]({{{common}}}/parameters/order.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 ### Get [GET]

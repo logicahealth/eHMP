@@ -13,11 +13,12 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
 
             it('should parse information statements correctly and only show current', function(){
                 var informationStatementList = new Backbone.Collection();
-                informationStatementList.add(new Backbone.Model({name: 'INFLUENZA VACCINE - INACTIVATED VIS', editionStatus: 'CURRENT', value: '36'}));
-                informationStatementList.add(new Backbone.Model({name: 'INFLUENZA VACCINE - INACTIVATED VIS', editionStatus: 'HISTORIC', value: '13'}));
+                informationStatementList.add(new Backbone.Model({name: 'INFLUENZA VACCINE - INACTIVATED VIS', editionStatus: 'CURRENT', ien: '36', label: 'Formatted Influenza Vaccine 1'}));
+                informationStatementList.add(new Backbone.Model({name: 'INFLUENZA VACCINE - INACTIVATED VIS', editionStatus: 'HISTORIC', ien: '13', label: 'Formatted Influenza Vaccine 2'}));
                 var infoStatements = ParseUtil.getInformationStatementList('13~INFLUENZA VACCINE - INACTIVATED VIS   07-02-12   HISTORIC   1|36~INFLUENZA VACCINE - INACTIVATED VIS   08-19-14   CURRENT   1', informationStatementList);
-                expect(infoStatements[0].get('value')).toEqual('36');
-                expect(infoStatements[0].get('name')).toEqual('INFLUENZA VACCINE - INACTIVATED VIS');
+                expect(infoStatements[0].ien).toEqual('36');
+                expect(infoStatements[0].name).toEqual('36');
+                expect(infoStatements[0].label).toEqual('Formatted Influenza Vaccine 1');
             });
         });
 
@@ -135,14 +136,13 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
 
             it('Getting list with max series value should give default list with extra values', function(){
                 var seriesList = ParseUtil.getSeriesList('3');
-                expect(seriesList.length).toEqual(7);
-                expect(seriesList[0].label).toEqual('0');
-                expect(seriesList[1].label).toEqual('1');
-                expect(seriesList[2].label).toEqual('2');
-                expect(seriesList[3].label).toEqual('3');
-                expect(seriesList[4].label).toEqual('Booster');
-                expect(seriesList[5].label).toEqual('Complete');
-                expect(seriesList[6].label).toEqual('Partially Complete');
+                expect(seriesList.length).toEqual(6);
+                expect(seriesList[0].label).toEqual('1');
+                expect(seriesList[1].label).toEqual('2');
+                expect(seriesList[2].label).toEqual('3');
+                expect(seriesList[3].label).toEqual('Booster');
+                expect(seriesList[4].label).toEqual('Complete');
+                expect(seriesList[5].label).toEqual('Partially Complete');
             });
         });
 

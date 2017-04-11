@@ -3,7 +3,51 @@ var rdk = require('../../../core/rdk');
 var _ = require('lodash');
 var nullchecker = rdk.utils.nullchecker;
 var fhirToJDSSearch = require('../../common/utils/fhir-to-jds-search');
-var diagnosticOrder = require('./diagnostic-order.js');
+var diagnosticOrder = require('./diagnostic-order');
+var conformanceUtils = require('../../conformance/conformance-utils');
+var conformance = require('../../conformance/conformance-resource');
+
+var fhirToJDSAttrMap = [{
+    fhirName: 'subject.identifier',
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier - note that this patient identifier will overrule any patient identifier that is in the URI of this endpoint.',
+    searchable: true
+},{
+    fhirName: 'pid',
+    vprName: 'pid',
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Patient indentifier - note that this patient identifier will overrule any patient identifier that has been specified in the URI of this endpoint as well as the subject.identifier on the query string.',
+    searchable: true
+},{
+    fhirName: 'event-date',
+    vprName: 'entered',
+    dataType: 'date',
+    definition: 'http://hl7.org/fhir/2015MAY/datatypes.html#date',
+    description: 'The date at which the event happened.',
+    searchable: true
+},{
+    fhirName: 'code',
+    vprName: 'item[].code.coding[].code',
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Code to indicate the item (test or panel) being ordered.',
+    searchable: true
+}];
+
+// Issue call to Conformance registration
+conformance.register(conformanceUtils.domains.DIAGNOSTIC_ORDER, createDiagnosticOrderConformanceData());
+
+function createDiagnosticOrderConformanceData() {   
+   var resourceType = conformanceUtils.domains.DIAGNOSTIC_ORDER;
+   var profileReference = 'http://hl7.org/fhir/2015MAY/diagnosticorder.html';
+   var interactions = [ 'read', 'search-type' ];
+
+   return conformanceUtils.createConformanceData(resourceType, profileReference,
+           interactions, fhirToJDSAttrMap);
+}
 
 function getResourceConfig() {
     return [{
@@ -31,7 +75,7 @@ function getResourceConfig() {
  *
  * @apiExample {js} Request Examples:
  *      // Limiting results count
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticorder?_count=1
+ *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticorder?_count=1
  *
  * @apiSuccess {json} data JSON object conforming to the <a href="http://www.hl7.org/FHIR/2015May/diagnosticorder.html">Diagnostic Order FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
@@ -60,7 +104,7 @@ function getResourceConfig() {
  *                         "code": {
  *                             "coding": [
  *                                 {
- *                                     "system": "oi-code",
+ *                                     "system": "urn:oid:2.16.840.1.113883.6.233",
  *                                     "code": "urn:va:oi:1339",
  *                                     "display": "24 HR URINE CALCIUM",
  *                                     "extension": [
@@ -265,7 +309,7 @@ function validateParams(params, onSuccess, onError) {
                 onError(['Unsupported _sort criteria. Supported attributes are: ' + _.keys(diagnosticOrder.fhirToJDSMap)]);
             }
         }, onError);
-    // TODO: add validation for code param
+        // TODO: add validation for code param
     }, onError);
 }
 
@@ -278,3 +322,4 @@ function limitFHIRResultByCount(fhirBundle, countStr) {
 
 module.exports.getResourceConfig = getResourceConfig;
 module.exports.getDiagnosticOrder = getDiagnosticOrder;
+module.exports.createDiagnosticOrderConformanceData = createDiagnosticOrderConformanceData;

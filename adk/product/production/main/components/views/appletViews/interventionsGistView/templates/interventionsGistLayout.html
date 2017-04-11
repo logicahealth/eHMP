@@ -1,6 +1,6 @@
 <div gistviewtype="interventions" role="presentation" class="faux-table">
     <div class="header table-row" role="row">
-        <div class="flex-width-2" role="presentation">
+        <div class="flex-width-1_5" role="presentation">
             <div aria-sort="none" role="gridcell" class="table-cell">
                 <div>
                     <a href="#" data-header-instanceid="name-header"
@@ -12,7 +12,7 @@
                          sortKey="{{gistHeaders.name.key}}"
                          tooltip-data-key="{{gistHeaders.name.hoverTip}}">
                         {{gistHeaders.name.title}}
-                        <i sortArrow="headerDirectionalIndicator" class="sort-caret fa"></i>
+                        <i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
                         <span class="sr-only">Press enter to sort.</span>
                     </a>
                 </div>
@@ -29,21 +29,21 @@
                      sortKey="{{gistHeaders.count.key}}"
                      tooltip-data-key="{{gistHeaders.count.hoverTip}}">
                     {{gistHeaders.count.title}}
-                    <i sortArrow="headerDirectionalIndicator" class="sort-caret fa"></i>
+                    <i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
                     <span class="sr-only">Press enter to sort.</span>
                 </a>
             </div>
             <div aria-sort="none" role="gridcell" class="table-cell">
                 <a href="#" data-header-instanceid="fillable-header"
                      role="button"
-                     class="{{#if gistHeaders.fillableStatus.sortable}}selectable{{/if}} text-center"
+                     class="{{#if gistHeaders.fillableStatus.sortable}}selectable{{/if}}"
                      sortable="{{gistHeaders.fillableStatus.sortable}}"
                      sortType="{{gistHeaders.fillableStatus.sortType}}"
                      sortDirection="none"
                      sortKey="{{gistHeaders.fillableStatus.key}}"
                      tooltip-data-key="{{gistHeaders.fillableStatus.hoverTip}}">
                     {{gistHeaders.fillableStatus.title}}
-                    <i sortArrow="headerDirectionalIndicator" class="sort-caret fa"></i>
+                    <i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
                     <span class="sr-only">Press enter to sort.</span>
                 </a>
             </div>
@@ -51,14 +51,14 @@
             <div aria-sort="none" role="gridcell" class="table-cell">
                 <a href="#" data-header-instanceid="age-header"
                      role="button"
-                     class="{{#if gistHeaders.age.sortable}}selectable{{/if}} text-center"
+                     class="{{#if gistHeaders.age.sortable}}selectable{{/if}}"
                      sortable="{{gistHeaders.age.sortable}}"
                      sortType="{{gistHeaders.age.sortType}}"
                      sortDirection="none"
                      sortKey="{{gistHeaders.age.key}}"
                      tooltip-data-key="{{gistHeaders.age.hoverTip}}">
                     {{gistHeaders.age.title}}
-                    <i sortArrow="headerDirectionalIndicator" class="sort-caret fa"></i>
+                    <i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
                     <span class="sr-only">Press enter to sort.</span>
                 </a>
             </div>

@@ -1,0 +1,11 @@
+jar {
+    baseName "cdsdashboard-model"
+    from('src/main/java') {
+    	include 'com/cognitivemedicine/metricsservice/MetricsServiceModel.gwt.xml'
+		include '**/*.java'
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: property('junitVersion')
+}

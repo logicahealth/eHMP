@@ -3,7 +3,7 @@ def globalTasks = ['build', 'clean', 'tasks', 'generateversionpropertiesfile', '
 def tasks = gradle.startParameter.taskNames
 
 tasks.each { taskName ->
-	
+
 	def formattedTaskName = taskName.toString().toLowerCase()
 
 	// Include only the test projects
@@ -12,7 +12,8 @@ tasks.each { taskName ->
 		include ':tests:acceptance-tests'
 	}
 	if(globalTasks.contains(formattedTaskName) || formattedTaskName.contains("rdkdev") || formattedTaskName.contains("destroyrdk")
-		|| formattedTaskName.contains("install") || formattedTaskName.contains("test") || formattedTaskName.contains("npm"))
+		|| formattedTaskName.contains("install") || formattedTaskName.contains("test") || formattedTaskName.contains("npm")
+		|| formattedTaskName.contains("apidocs"))
 	{
 		//rdk
 		include ':production:rdk'
@@ -31,5 +32,7 @@ tasks.each { taskName ->
 		include ':production:jbpm:Order'
 		include ':production:jbpm:Activity'
 		include ':production:jbpm:tasksservice'
+		include ':production:jbpm:EhmpServices'
+		include ':production:jbpm:sql_config'
 	}
 }

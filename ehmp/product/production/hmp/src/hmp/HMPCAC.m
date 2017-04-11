@@ -1,16 +1,16 @@
-HMPCAC ;SLC/AGP-- HMP CAC Tools
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Feb 06, 2014;Build 49
+HMPCAC ;SLC/AGP,ASMR/RRB - HMP CAC Tools;Nov 24, 2015 20:05:06
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Feb 06, 2014;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q
  ;
-ASK(YESNO,PROMPT)      ;
+ASK(YESNO,PROMPT) ;
  N X,Y,TEXT
  K DIROUT,DIRUT,DTOUT,DUOUT
  S DIR(0)="YA0"
  S DIR("A")=PROMPT
  S DIR("B")="N"
  S DIR("?")="Enter Y or N. For detailed help type ??"
- ;S DIR("??")=U_"D HELP^PXRMLCR("_NUM_")"
  W !
  D ^DIR K DIR
  I $D(DIROUT) S DTOUT=1
@@ -29,18 +29,19 @@ ADDSVR() ;
  D ^DIC
  Q Y
  ;
-OPTASGN() ;
- N ARGS,DIC,DLAYGO,FDA,HASOPT,IEN,LIST,MSG,OPTNAME,PAT,RESULT,SVR,HMPERR,HMPOPT,Y,YESNO
+ ;DE2818, documented code below
+OPTASGN() ; called by Option: Add Health Management Platform User [HMPM ADD HMP USER]
+ N ARGS,DIC,DLAYGO,FDA,HASOPT,HMPERR,HMPOPT,IEN,LIST,MSG,OPTNAME,PAT,RESULT,SVR,Y,YESNO
  S OPTNAME="HMP UI CONTEXT"
  S HMPOPT=$$FIND1^DIC(19,"","B",OPTNAME,,,"MSG") I HMPOPT'>0 W !,"Error: Could not find 'HMP UI CONTEXT' option." Q
  ;
- S Y=$$ADDSVR() I +Y<0 Q
+ S Y=$$ADDSVR() I Y<0 Q
  S SVR=$P($G(^HMP(800000,+Y,0)),U)
  ;
  K DLAYGO
  S DIC="^VA(200,",DIC(0)="AEMQ",DIC("A")="Select user to provide access to HMP: "
  D ^DIC
- I +Y<0 Q
+ I Y<0 Q
  S IEN=+Y
  ;
  S HASOPT=$$ACCESS^XQCHK(IEN,HMPOPT)
@@ -83,6 +84,7 @@ BLDLIST(LIST,HMPY) ;
  .S LIST(+$P(NODE,U))=""
  Q
  ;
+ ;
  ;The appointment list date range is designed to query for full dates, 
  ;so when the search result exceeds 200 appointments, 
  ;the display will end with the last appointment of the last day before the maximum was reached. 
@@ -101,9 +103,11 @@ CLINPTS2(Y,USER,CLIN,BDATE,EDATE) ; WRAPPER FUNCTION FOR USE BY RPC CALL ORQPT C
  . S Y(MAXAPPTS+3)="^"_$C(160)_" Modify the appointment list date range to start on "_$$FMTE^XLFDT(APPTEND,"D")_" to see additional appointments." ;add blank line
  . S Y(MAXAPPTS+4)="^"_$C(160)_$C(160) ;add blank line
  ;
+ Q  ; DE2818, added QUIT here to prevent code falling through
+ ;
 CLINPTS(Y,USER,CLIN,BDATE,EDATE,MAXAPPTS,APPTBGN,APPTEND) ; RETURN LIST OF PTS W/CLINIC APPT W/IN BEGINNING AND END DATES
  ; PKS-8/2003: Modified for new scheduling pkg APIs.
- I +$G(CLIN)<1 S Y(1)="^No clinic identified" Q 
+ I $G(CLIN)<1 S Y(1)="^No clinic identified" Q 
  I $$ACTLOC^ORWU(CLIN)'=1 S Y(1)="^Clinic is inactive or Occasion Of Service" Q
  N ORSRV,ORRESULT,ORERR,ORI,ORPT,ORPTSTAT,ORAPPT,ORCLIN,SDARRAY,NODE
  I $L($G(MAXAPPTS))=0 S MAXAPPTS=200
@@ -117,7 +121,7 @@ CLINPTS(Y,USER,CLIN,BDATE,EDATE,MAXAPPTS,APPTBGN,APPTEND) ; RETURN LIST OF PTS W
  I (BDATE=-1)!(EDATE=-1) S Y(1)="^Error in date range." Q 
  S EDATE=$P(EDATE,".")_.5 ; Add 1/2 day to end date.
  ;
- K ^TMP($J,"SDAMA301") ; Clean house before starting.
+ K ^TMP($J,"SDAMA301") ; clear residual data
  S ORRESULT=""
  S ORCLIN=+CLIN
  S SDARRAY(1)=BDATE_";"_EDATE
@@ -135,7 +139,7 @@ CLINPTS(Y,USER,CLIN,BDATE,EDATE,MAXAPPTS,APPTBGN,APPTEND) ; RETURN LIST OF PTS W
  .N IDXERR S IDXERR=$O(^TMP($J,"SDAMA301","")) Q:IDXERR'>0
  .S ORERR=^TMP($J,"SDAMA301",IDXERR)
  ;
- ; Reassign ^TMP array to local array:
+ ; add ^TMP results to local array
  S (ORPT,ORI)=0
  I ORRESULT'>0 S Y(1)="^No appointments." Q
  F  S ORPT=$O(^TMP($J,"SDAMA301",ORPT)) Q:ORPT=""  D
@@ -167,41 +171,40 @@ COMBPTS(LIST,USER,PTR,BDATE,EDATE) ;
  D CLEAN^DILF ; Clean up after DB call.
  ;
  ; If no combination record, then punt:
- I +RTN<1 D
- .S MSG="No combination entry."
- .Q
+ I +RTN<1 S MSG="No combination entry." Q
+ ;
  ;
  ; Order through the user's combination source entries:
  S SORT="A" ; Required variable for PTSCOMBO^ORQPTQ5.
  S SRC=0
+ ;DE2818, ^OR(100.24) - ICR 6283
  F  S SRC=$O(^OR(100.24,RTN,.01,SRC)) Q:'SRC  D
- .K ORY                                         ; Clean up each time.
- .S TXT=""                                   ; Initialize.
+ .K ORY  ; Clean up each time.
  .S TXT=$G(^OR(100.24,RTN,.01,SRC,0))  ; Get record's value.
  .;
  .; In case of error, punt:
- .I TXT="" S MSG="Combination source entry error."
- .I TXT="" Q
+ .I TXT="" S MSG="Combination source entry error." Q
  .S PTR=$P(TXT,";")                       ; Get pointer.
  .S FILE="^"_$P(TXT,";",2)                ; Get file.
  .;
  .; Get info for each source entry and build HMPY array accordingly.
- .I FILE="^DIC(42," D  Q                     ; Wards.
+ .I FILE="^DIC(42," D  Q  ; Wards
  ..D WARDPTS^ORQPTQ2(.HMPY,PTR)
  ..I $D(HMPY) D BLDLIST(.LIST,.HMPY)
- .I FILE="^VA(200," D  Q                     ; Providers.
+ .I FILE="^VA(200," D  Q  ; Providers
  ..D PROVPTS^ORQPTQ2(.HMPY,PTR)
  ..I $D(HMPY) D BLDLIST(.LIST,.HMPY)
- .I FILE="^DIC(45.7," D  Q                   ; Specialties.
+ .I FILE="^DIC(45.7," D  Q  ; Specialties
  ..D SPECPTS^ORQPTQ2(.HMPY,PTR)
  ..I $D(HMPY) D BLDLIST(.LIST,.HMPY)
- .I FILE="^OR(100.21," D  Q                  ; Team Lists
+ .I FILE="^OR(100.21," D  Q  ; Team Lists
  ..D TEAMPTS^ORQPTQ1(.HMPY,PTR)
  ..I $D(HMPY) D BLDLIST(.LIST,.HMPY)
- .I FILE="^SC(" D  Q                         ; Clinics.
+ .I FILE="^SC(" D  Q  ; Clinics
  ..N APPTBGN,APPTEND S (APPTBGN,APPTEND)=""
  ..D CLINPTS^ORQPTQ2(.HMPY,PTR,BDATE,EDATE,MAXAPPTS,.APPTBGN,.APPTEND)
  ..I $D(HMPY) D BLDLIST(.LIST,.HMPY)
+ ;
  Q
  ;
 GETDFLST(LIST,USER) ;
@@ -215,7 +218,7 @@ GETDFLST(LIST,USER) ;
  I SRC="S" S IEN=$$GET^XPAR("USR.`"_USER_"^SRV.`"_+$G(SRV),"ORLP DEFAULT SPECIALTY",1,"Q") D:+$G(IEN)>0 SPECPTS^ORQPTQ2(.HMPY,IEN)
  I SRC'="C",SRC'="M" D BLDLIST(.LIST,.HMPY) Q
  ;
-  I SRC="C" D  Q
+ I SRC="C" D  Q
  .F X="Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday" D
  ..S API="ORLP DEFAULT CLINIC "_$$UP^XLFSTR(X),IEN=$$GET^XPAR("USR.`"_USER_"^SRV.`"_+$G(SRV),API,1,"Q") I +$G(IEN)>0 D
  ...S BEG=$$UP^XLFSTR($$GET^XPAR("USR.`"_USER_"^SRV.`"_+$G(SRV)_"^DIV^SYS^PKG","ORLP DEFAULT CLINIC START DATE",1,"E"))
@@ -224,7 +227,7 @@ GETDFLST(LIST,USER) ;
  ...I END="T+0" S END=$$FMTE^XLFDT(DT,END)
  ...D CLINPTS2(.HMPY,USER,+$G(IEN),BEG,END)
  ...D BLDLIST(.LIST,.HMPY)
- I SRC="M" D  Q
+ I SRC="M" D  Q  ;DE2818, ^OR(100.24) - ICR 6283
  .S IEN=$D(^OR(100.24,USER,0)) I +$G(IEN)>0 S IEN=USER D
  ..S BEG=$$UP^XLFSTR($$GET^XPAR("USR.`"_USER_"^SRV.`"_+$G(SRV)_"^DIV^SYS^PKG","ORLP DEFAULT CLINIC START DATE",1,"E"))
  ..I BEG="T+0" S BEG=$$FMTE^XLFDT(DT,BEG)
@@ -233,6 +236,7 @@ GETDFLST(LIST,USER) ;
  ..D COMBPTS(.LIST,USER,+$G(IEN),BEG,END) ; "0"= GUI RPC call.
  Q
  ;
-REMOPT(IEN,OPT) ;
- Q
+ ;
+ ;REMOPT(IEN,OPT) ;
+ ;Q
  ;

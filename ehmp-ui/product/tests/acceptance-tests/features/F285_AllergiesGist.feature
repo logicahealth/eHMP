@@ -1,11 +1,11 @@
-@F285_allergies_gist @regression @triage
+@F285_allergies_gist @regression
 Feature: F285 : Overview Screen
 
 
 # POC Team Jupiter
 
 Background:
- Given user is logged into eHMP-UI
+ # Given user is logged into eHMP-UI
   And user searches for and selects "FORTYSIX,PATIENT"
   Then Overview is active
   And user sees Allergies Gist
@@ -43,6 +43,7 @@ Scenario: Verify expanded applet returns to overview
   When the user clicks the control "Expand View" in the "Allergies Applet"
   And the Allergies Applet expand view contains data rows
   And the user minimizes the expanded Allergies Applet
+  #Then Overview is active by default
   Then Overview is active
   And user sees Allergies Gist
 

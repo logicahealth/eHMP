@@ -4,8 +4,23 @@
     }
     .table-row {
         &.non-muted {
-            border: 1px solid $grey;
-            box-shadow: 0px 6px 12px rgba(0,0,0,0.175);
+            box-shadow: 0px 2px 12px rgba(0,0,0,0.35);
+        }
+    }
+    .table-row:nth-child(2n) {
+        &.non-muted {
+            .cancel-edit-comment-button {
+                background-color: $pure-white;
+            }
+        }
+    }
+    .comment-region {
+        .table-row:first-child {
+            border-top: 1px solid $grey-light;
+            padding-top: 8px;
+            .comment-edit-region {
+                padding-top: 2px !important; // This is overriding a helper class //
+            }
         }
     }
     .comment {
@@ -28,6 +43,23 @@
                     }
                 }
             }
+        }
+    }
+    .comment-text-region {
+        word-wrap: break-word;
+        span {
+            font-size: 12px;
+        }
+    }
+    .comment-required {
+        margin-left: 5px;
+        font-weight: bold;
+
+        input {
+            height: 20px;
+            width: 0px;
+            opacity: 0;
+            margin-left: -20px;
         }
     }
 }

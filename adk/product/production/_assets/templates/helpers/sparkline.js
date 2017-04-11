@@ -169,7 +169,7 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
         return desc;
     }
 
-    function initializeRanges(low, high, hasCritical, standardDeviation, aw, w, h, b) {
+    function initializeRanges(low, high, hasCritical, standardDeviation, aw, w, h, b, uniqueName) {
         var ranges = [];
         var lowLimit, highLimit;
         var tw = w;
@@ -200,7 +200,9 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
                     valueClass: 'criticalValue',
                     flag: 'L*',
                     description: 'critical low'
-                }]
+                }],
+                uniqueName: uniqueName,
+                hashedRange: false
             });
         }
         if (hasCritical || !isNaN(low)) {
@@ -221,7 +223,9 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
                     valueClass: 'criticalValue',
                     flag: 'L*',
                     description: 'critical low'
-                }]
+                }],
+                uniqueName: uniqueName,
+                hashedRange: false
             });
         }
         ranges.push({
@@ -239,7 +243,9 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
                 valueClass: 'normalValue',
                 flag: 'N',
                 description: 'normal'
-            }]
+            }],
+            uniqueName: uniqueName,
+            hashedRange: false
         });
         if (hasCritical || !isNaN(high)) {
             ranges.push({
@@ -259,7 +265,9 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
                     valueClass: 'criticalValue',
                     flag: 'H*',
                     description: 'critical high'
-                }]
+                }],
+                uniqueName: uniqueName,
+                hashedRange: false
             });
         }
         if (hasCritical && highLimit) {
@@ -280,14 +288,16 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
                     valueClass: 'criticalValue',
                     flag: 'H*',
                     description: 'critical high'
-                }]
+                }],
+                uniqueName: uniqueName,
+                hashedRange: false
             });
         }
 
         return ranges;
     }
 
-    function setDefaults(ranges, w, h) {
+    function setDefaults(ranges, w, h, uniqueName) {
         var x = 0;
         if (ranges) {
             _.each(ranges, function(r) {
@@ -300,6 +310,8 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
                 r.valueClass = r.valueClass || 'normalValue';
                 r.flag = r.flag || 'N';
                 r.description = r.description || 'normal';
+                r.uniqueName = uniqueName;
+                r.hashedRange = false;
 
                 x += r.width;
             });
@@ -432,7 +444,7 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
         }
     }
 
-    function sparkline(graphOptions, result, previousResult, lowValue, highValue, interpretationCode, previousInterpretationCode, standardDeviation, options) {
+    function sparkline(graphOptions, result, previousResult, lowValue, highValue, interpretationCode, previousInterpretationCode, standardDeviation, uniqueName, options) {
         var ret = '';
         graphOptions = graphOptions || {};
         // Read values from parameters
@@ -459,9 +471,9 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
         var ranges = graphOptions.ranges || [];
 
         if (ranges.length === 0) {
-            ranges = initializeRanges(low, high, hasCritical, sd, aw, w, h, b);
+            ranges = initializeRanges(low, high, hasCritical, sd, aw, w, h, b, uniqueName);
         } else {
-            setDefaults(ranges, w, h);
+            setDefaults(ranges, w, h, uniqueName);
         }
 
         // Compute coordinates
@@ -478,6 +490,13 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
             ensureMinDistance(curr, prev, ((b + r + 1) || 10));
         }
 
+        for(var i=0;i<ranges.length;i++) {
+            var temp = JSON.stringify(ranges[i].rangeClass);
+            if(temp.indexOf('hashedRange') >= 0) {
+                ranges[i].hashedRange = true;
+            }
+        }
+
         var context = {
             description: getDescription(curr.Val, prev.Val, low, high, curr.Flag, hasCritical),
             id: id,
@@ -491,7 +510,8 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
                 width: w - (hasCritical && sd ? 2 * b : 0),
                 height: h
             },
-            ranges: ranges
+            ranges: ranges,
+            uniqueName: uniqueName
         };
         if (!isNaN(prev.Val)) {
             $.extend(context, {

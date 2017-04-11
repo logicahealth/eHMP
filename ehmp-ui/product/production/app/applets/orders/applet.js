@@ -21,42 +21,96 @@ define([
     'marionette',
     'moment',
     'handlebars',
-    'app/applets/orders/modalView/modalContentView',
-    'app/applets/orders/modalView/modalHeaderView',
-    'app/applets/orders/modalView/modalFooterView',
+    'app/applets/orders/modalView/modalViewUtils',
     'app/applets/orders/toolBar/toolBarView',
     'hbs!app/applets/orders/toolBar/ordersFilterTemplate',
     'app/applets/orders/detailCommunicator',
     'app/applets/orders/util',
     'app/applets/orders/displayGroupManifest',
     'app/applets/orders/tray/labs/trayUtils',
-    'app/applets/orders/tray/labs/trayView'
-], function(ADK, _, Backbone, Marionette, moment, Handlebars, ModalView, ModalHeaderView,
-            ModalFooterView, ToolBarView, ordersFilterTemplate, DetailCommunicator, orderUtil,
-            DisplayGroupManifest, LabOrderTrayUtils, trayView) {
+    'app/applets/orders/tray/labs/trayView',
+    'app/applets/ordersearch/tray/trayView'
+], function(ADK, _, Backbone, Marionette, moment, Handlebars, ModalViewUtils,
+    ToolBarView, ordersFilterTemplate, DetailCommunicator, orderUtil,
+    DisplayGroupManifest, LabOrderTrayUtils, trayView, OrderSearchTrayView) {
+
     'use strict';
     var summaryColumns, flagColumn, shortSummaryColumn, fullScreenColumns, resourceTitle, _super, GridApplet,
         AppletLayoutView, applet, statusColumn, nameColumn, enteredColumn, orderType, facilityCodeColumn, providerNameColumn,
-        summaryColumn, orderTypeColumn, startColumn, stopColumn, nurseColumn, clerkColumn, chartColumn;
+        summaryColumn, orderTypeColumn, startColumn, stopColumn, nurseColumn, clerkColumn, chartColumn, summaryOrderType;
 
     var DATE_FORMAT = 'YYYYMMDDHHmmSS';
     var DATE_LENGTH = DATE_FORMAT.length;
     var ZERO_FILL = DATE_FORMAT.replace(/./g, '0');
+    var FETCH_RESOURCE_TITLE = 'all-orders';
+    var ENTERED = 'entered';
 
     //define grid columns for cover sheet and single page
+    enteredColumn = {
+        name: 'entered',
+        label: 'Order Date',
+        flexWidth: 'flex-width-1_5',
+        cell: Backgrid.HandlebarsCell.extend({
+            className: 'handlebars-cell flex-width-1_5'
+        }),
+        type: 'date',
+        sortType: 'cycle',
+        template: Handlebars.compile('{{formatDate entered "MM/DD/YYYY"}}'),
+        hoverTip: 'orders_orderdate'
+    };
+    flagColumn = {
+        name: 'isFlagged',
+        label: 'Flag',
+        flexWidth: 'flex-width-0_5',
+        cell: Backgrid.HandlebarsCell.extend({
+            className: 'handlebars-cell flex-width-0_5'
+        }),
+        template: Handlebars.compile('{{#if isFlagged}} {{#unless isDiscontinuedOrder}}<i class="fa fa-flag color-primary" data-toggle="tooltip" title="This order is flagged."></i>{{/unless}}{{/if}}'),
+        hoverTip: 'Identifies that this order has been flagged by a user.'
+    };
     statusColumn = {
         name: 'statusName',
         label: 'Status',
-        cell: 'handlebars',
+        flexWidth: 'flex-width-2',
         template: Handlebars.compile('{{statusName}}'),
+        cell: Backgrid.HandlebarsCell.extend({
+            className: 'handlebars text-uppercase flex-width-2'
+        }),
         hoverTip: 'orders_status'
     };
-    flagColumn = {
-        name: 'flag',
-        label: 'Flag',
-        cell: 'handlebars',
-        template: Handlebars.compile('{{#if isFlagged}}<i class="fa fa-flag color-blue" data-toggle="tooltip" title="This order is flagged."></i>{{/if}}'),
-        hoverTip: 'Identifies that this order has been flagged by a user.'
+    shortSummaryColumn = {
+        name: 'summary',
+        label: 'Order',
+        flexWidth: 'flex-width-2_5',
+        cell: Backgrid.HandlebarsCell.extend({
+            className: 'handlebars-cell flex-width-2_5'
+        }),
+        template: Handlebars.compile('{{#if longSummary}}<span data-toggle="tooltip" title="{{summary}}">{{shortSummary}}...</span>{{else}}{{shortSummary}}{{/if}}'),
+        hoverTip: 'orders_order'
+    };
+    orderType = {
+        name: 'kind',
+        label: 'Type',
+        cell: 'string',
+        hoverTip: 'orders_type'
+    };
+    summaryOrderType = {
+        name: 'kind',
+        label: 'Type',
+        flexWidth: 'flex-width-2',
+        cell: Backgrid.StringCell.extend({
+            className: 'string-cell flex-width-2'
+        }),
+        hoverTip: 'orders_type'
+    };
+    facilityCodeColumn = {
+        name: 'facilityMoniker',
+        label: 'Facility',
+        cell: Backgrid.HandlebarsCell.extend({
+            className: 'handlebars-cell'
+        }),
+        template: Handlebars.compile('{{facilityMoniker}}'),
+        hoverTip: 'orders_facility'
     };
     nameColumn = {
         name: 'name',
@@ -64,36 +118,23 @@ define([
         cell: 'string',
         hoverTip: 'orders_order'
     };
-    shortSummaryColumn = {
-        name: 'summary',
-        label: 'Order',
-        flexWidth: 'flex-width-2',
-        cell: Backgrid.HandlebarsCell.extend({
-            className: 'handlebars-cell flex-width-2'
-        }),
-        template: Handlebars.compile('{{#if longSummary}}<span data-toggle="tooltip" title="{{summary}}">{{shortSummary}}...</span>{{else}}{{shortSummary}}{{/if}}'),
-        hoverTip: 'orders_order'
-    };
     summaryColumn = {
         name: 'summary',
         label: 'Order',
-        flexWidth: 'flex-width-3',
+        flexWidth: 'flex-width-6',
         cell: Backgrid.StringCell.extend({
-            className: 'string-cell flex-width-3'
+            className: 'string-cell flex-width-6'
         }),
         hoverTip: 'orders_order'
     };
-    enteredColumn = {
-        name: 'entered',
-        label: 'Order Date',
-        flexWidth: 'flex-width-date',
-        cell: Backgrid.HandlebarsCell.extend({
-            className: 'handlebars-cell flex-width-date'
+    providerNameColumn = {
+        name: 'providerDisplayName',
+        label: 'Provider Name',
+        flexWidth: 'flex-width-1_5',
+        cell: Backgrid.StringCell.extend({
+            className: 'string-cell flex-width-1_5'
         }),
-        type: 'date',
-        sortType: 'cycle',
-        template: Handlebars.compile('{{formatDate entered "MM/DD/YYYY"}}'),
-        hoverTip: 'orders_orderdate'
+        hoverTip: 'orders_providername'
     };
     startColumn = {
         name: 'start',
@@ -119,12 +160,6 @@ define([
         template: Handlebars.compile('{{formatDate stop "MM/DD/YYYY"}}'),
         hoverTip: 'orders_stopdate'
     };
-    orderType = {
-        name: 'kind',
-        label: 'Type',
-        cell: 'string',
-        hoverTip: 'orders_type'
-    };
     nurseColumn = {
         name: 'nurse',
         label: 'Nurse',
@@ -140,26 +175,11 @@ define([
         label: 'Chart',
         cell: 'string'
     };
-    facilityCodeColumn = {
-        name: 'facilityMoniker',
-        label: 'Facility',
-        flexWidth: 'flex-width-date',
-        cell: Backgrid.HandlebarsCell.extend({
-            className: 'handlebars-cell flex-width-date'
-        }),
-        template: Handlebars.compile('{{facilityMoniker}}'),
-        hoverTip: 'orders_facility'
-    };
-    providerNameColumn = {
-        name: 'providerDisplayName',
-        label: 'Provider Name',
-        cell: 'string',
-        hoverTip: 'orders_providername'
-    };
+
     //Data Grid Columns - summary for coversheet, fullscreen for single page
-    summaryColumns = [enteredColumn, flagColumn, statusColumn, shortSummaryColumn, facilityCodeColumn];
-    fullScreenColumns = [enteredColumn, flagColumn, statusColumn, summaryColumn, orderType, providerNameColumn, startColumn, stopColumn, facilityCodeColumn];
-    resourceTitle = 'patient-record-order';
+    summaryColumns = [enteredColumn, flagColumn, statusColumn, shortSummaryColumn, orderType, facilityCodeColumn];
+    fullScreenColumns = [enteredColumn, flagColumn, statusColumn, summaryColumn, summaryOrderType, providerNameColumn, startColumn, stopColumn, facilityCodeColumn];
+    resourceTitle = FETCH_RESOURCE_TITLE;
     GridApplet = ADK.AppletViews.GridView;
     var MenuItem = Backbone.Model.extend({
         defaults: {
@@ -192,6 +212,10 @@ define([
     }, {
         "displayGroup": "CSLT",
         "mixedName": "Consults",
+        "show": true
+    }, {
+        'displayGroup': 'eHMP CSLT',
+        'mixedName': 'Consult-eHMP',
         "show": true
     }, {
         "displayGroup": "DIET",
@@ -256,7 +280,7 @@ define([
         className: 'app-size-2',
         initialize: function(options) {
             var toolBarView, onClickRow, sharedModel, sharedModelChanged, filterCollection;
-            var collection, fetchOptions, dateFilter, fetchFilter, gridView;
+            var collection, fetchOptions, gridView;
             var exclude, displayGroup, displayGroupList;
             var dataGridOptions = {};
             var addPermission = 'add-lab-order';
@@ -291,6 +315,7 @@ define([
             fetchOptions = {
                 resourceTitle: resourceTitle,
                 cache: true,
+                allowAbort: true,
                 pageable: true
             };
             this.expandedAppletId = this.options.appletConfig.instanceId;
@@ -313,12 +338,9 @@ define([
                 var self = this;
                 displayGroup = model.get('displayGroup');
                 displayGroupList = fetchDisplayGroups(displayGroup, DisplayGroupManifest);
-                dateFilter = '';
                 var isOverrideGlobalDate = false;
                 this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
-                    self.dateRangeRefresh('entered', {
-                        customFilter: dateFilter
-                    });
+                    self.dateRangeRefresh(ENTERED);
                 });
 
                 if (displayGroup !== 'ALL') {
@@ -346,17 +368,13 @@ define([
             } else {
                 exclude = ADK.SessionStorage.getAppletStorageModel(this.options.appletConfig.instanceId, 'excludeMenuItems', true, this.parentWorkspace);
             }
-            dateFilter = '';
-            fetchFilter = 'and(' + this.buildJdsDateFilter("entered") + ')';
             var isOverrideGlobalDate = false;
             this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
-                self.dateRangeRefresh('entered', {
-                    customFilter: dateFilter
-                });
+                self.dateRangeRefresh(ENTERED);
             });
             filterCollection = function(collection) {
                 return collection.filter(function(model) {
-                    if (model.get("children") && (model.get("children").length > 0)) { //filter out parent order (US11905)
+                    if (model.get('childrenOrderUids')) { //filter parent orders (US14416)
                         return false;
                     } else if (exclude.indexOf(model.get("displayGroup")) === -1) {
                         model.set(orderUtil.parseOrderResponse(model.attributes, displayGroup));
@@ -367,12 +385,12 @@ define([
                 });
             };
             fetchOptions.criteria = {
-                filter: fetchFilter
+                filter: this.buildJdsDateFilter(ENTERED)
             };
             //set comparator based on view type 'summary' or 'expanded'
 
             var _dateSort = function(order) {
-                var _entered = order.get('entered');
+                var _entered = order.get(ENTERED);
                 // Pad the end of the string with zeros
                 if (_entered !== DATE_LENGTH) {
                     _entered = String(_entered + ZERO_FILL).substr(0, DATE_LENGTH);
@@ -416,81 +434,12 @@ define([
             gridView = this;
 
             //Row click event handler - display the Modal window
-            onClickRow = function(model, event) {
-
-                var loadingModal = new ADK.UI.Modal({
-                    view: ADK.Views.Loading.create(),
-                    options: {
-                        size: "normal",
-                        title: "Loading..."
-                    }
-                });
-                loadingModal.show();
-
-                var ModalModel = Backbone.Model.extend({});
-                model.set({
-                    'getSignBtnStatus': orderUtil.getSignBtnStatus(model),
-                    'getDiscontinueBtnStatus': orderUtil.getDiscontinueBtnStatus(model)
-                }, {
-                    silent: true
-                });
-                var modelIndex = this.collection.indexOf(model);
-                model.set('index', modelIndex);
-                var modalModel = new ModalModel(model.attributes);
-                var orderId = model.get('localId') + ';1';
-
-                var detailModel = new ADK.UIResources.Writeback.Orders.Model({
-                    orderId: orderId
-                });
-
-                self.listenTo(detailModel, 'read:success', function(model, resp) {
-                    modalModel.set('detailSummary', model.get('detail'));
-
-                    var view = new ModalView({
-                        model: modalModel,
-                        collection: dataGridOptions.collection,
-                        modelIndex: modelIndex,
-                        pageable: !options.appletConfig.fullScreen
-                    });
-
-                    var modalOptions = {
-                        'size': 'normal',
-                        'title': model.get('summary')
-                    };
-
-                    modalOptions.headerView = ModalHeaderView.extend({
-                        model: modalModel,
-                        theView: view,
-                        collection: dataGridOptions.collection,
-                        modelIndex: modelIndex,
-                        pageable: !options.appletConfig.fullScreen
-                    });
-
-                    modalOptions.footerView = ModalFooterView.extend({
-                        model: modalModel,
-                        theView: view
-                    });
-
-                    var modal = new ADK.UI.Modal({
-                        view: view,
-                        options: modalOptions,
-                    });
-
-                    modal.show();
-                });
-
-                self.listenTo(detailModel, 'read:error', function(model, resp) {
-                    console.log(resp);
-                });
-
-                detailModel.execute();
+            onClickRow = function(model, event, context) {
+                event.preventDefault();
+                ModalViewUtils.showOrderDetails(model, context.options);
             };
 
             dataGridOptions = {
-                //[M. Furoyama]: Current ADK GridView logic prioritizes these properties; setting them here breaks the
-                //               "expanded" normal applet view column setup.
-                //summaryColumns: summaryColumns,
-                //fullScreenColumns: fullScreenColumns,
                 enableModal: true,
                 toolbarView: toolBarView,
                 collection: collection,
@@ -513,24 +462,37 @@ define([
 
             // Only show the "+" icon for the applet if the user has the 'add-lab-order' permission
             if (ADK.UserService.hasPermissions(addPermission)) {
-                dataGridOptions.onClickAdd = LabOrderTrayUtils.launchLabForm;
+                dataGridOptions.onClickAdd = function() {
+                    var TrayView = ADK.Messaging.request("tray:writeback:actions:trayView");
+                    if (TrayView) {
+                        TrayView.$el.trigger('tray.show');
+                        TrayView.$el.trigger('tray.swap', OrderSearchTrayView);
+                    }
+                };
             }
 
             if (this.columnsViewType === "summary") {
+                dataGridOptions.filterFields = ['statusName', 'shortSummary', 'enteredFormatted', 'facilityMoniker'];
                 dataGridOptions.columns = summaryColumns;
             } else if (this.columnsViewType === "expanded") {
                 dataGridOptions.columns = fullScreenColumns;
             }
 
-            //Attach a "refresh" event listener to the 'orders' ADK Messaging channel to handle global
-            //requests for encapsulated functionality.
-            this.listenTo(channel, 'applet:refresh', this.refresh);
+            this.registerEventListeners();
 
             this.appletOptions = dataGridOptions;
+
+            //add refreshGridView to messaging
+            this.listenTo(ADK.Messaging.getChannel('orders'), 'refreshGridView', function() {
+                this.refresh({});
+            });
             _super.initialize.apply(this, arguments);
         },
         onRender: function() {
             _super.onRender.apply(this, arguments);
+        },
+        registerEventListeners: function() {
+            this.listenTo(ADK.Messaging.getChannel('orders'), 'applet:refresh', this.refresh);
         }
     });
 
@@ -556,37 +518,7 @@ define([
         }],
         defaultViewType: 'summary'
     };
-
     // expose detail view through messaging
-    var channel = ADK.Messaging.getChannel(applet.id);
-    channel.reply('detailView', function(params) {
-        var fetchOptions = {
-            criteria: {
-                "uid": params.uid
-            },
-            patient: ADK.PatientRecordService.getCurrentPatient(),
-            resourceTitle: 'uid',
-            viewModel: {
-                parse: AppletHelper.parseLabResponse
-            }
-        };
-        var response = $.Deferred();
-        var data = ADK.PatientRecordService.fetchCollection(fetchOptions);
-        data.on('sync', function() {
-            var detailModel = data.first();
-            var onSuccess = function(detailView) {
-                response.resolve({
-                    view: detailView,
-                    title: AppletHelper.getModalTitle(detailModel)
-                });
-            };
-            var onFail = function(errorMsg) {
-                response.reject(errorMsg);
-            };
-            AppletUiHelper.getDetailView(detailModel, null, data, false, onSuccess, onFail);
-        }, this);
-        return response.promise();
-    });
     DetailCommunicator.initialize(applet.id, resourceTitle);
     return applet;
 });

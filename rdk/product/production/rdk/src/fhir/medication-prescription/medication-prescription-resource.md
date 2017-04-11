@@ -2,7 +2,7 @@
 
 ## Medicationprescription medicationprescription [{{{path}}}]
 
-### Fhir medicationprescription [GET {{{path}}}{?limit}{&fields}]
+### Fhir medicationprescription [GET {{{path}}}{?limit}]
 
 Converts a vpr 'Medication' resource into a FHIR 'MedicationPrescription' resource.
 
@@ -11,8 +11,6 @@ Converts a vpr 'Medication' resource into a FHIR 'MedicationPrescription' resour
     :[id]({{{common}}}/parameters/fhir.id.md)
 
     :[limit]({{{common}}}/parameters/limit.md)
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 
 + Response 200 (application/json)

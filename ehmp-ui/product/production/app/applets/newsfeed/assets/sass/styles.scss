@@ -6,6 +6,9 @@
             }
             table.backgrid {
                 height: calc(100% - 2px);
+                &.filter-expanded {
+                    height: calc(100% - 33px);
+                }
                 thead {
                     border-bottom: 1px solid $grey-light;
                     padding-right: 15px;
@@ -19,7 +22,6 @@
                     overflow-y: scroll;
                 }
                 tr {
-                    border-bottom: 1px solid $grey-lighter;
                     display: flex;
                     td, th {
                         flex: 1;

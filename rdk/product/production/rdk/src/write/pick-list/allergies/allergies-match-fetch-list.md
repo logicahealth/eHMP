@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Allergies match [/allergies-match{?site}{&searchString}{&fields}]
+## Allergies match [/allergies-match{?site}{&searchString}]
 
 DIRECT RPC CALL - Retrieves matching allergies based on the given search term.
 
@@ -13,8 +13,6 @@ ORWDAL32 ALLERGY MATCH
     :[site]({{{common}}}/parameters/site.md)
 
     + searchString (string, required) - Given this text string, return a list of possible matches from several different sources.
-
-    :[fields]({{{common}}}/parameters/fields.md)
 
 ### GET
 
@@ -45,7 +43,7 @@ ORWDAL32 ALLERGY MATCH
                       "source": "1"
                     }
                   ]
-                }
+                },
                 {
                   "source": "7",
                   "categoryName": "Drug Ingredients File",

@@ -12,7 +12,7 @@ class ModifyNonVAMedsTest < AccessBrowserV2
   def initialize
     super
     add_action(CucumberLabel.new("ViewingDateRangeButton"), ClickAction.new, AccessHtmlElement.new(:id, "date-region2"))
-    add_action(CucumberLabel.new("AllDatesLink"), ClickAction.new, AccessHtmlElement.new(:id, "all-range-global"))
+    add_action(CucumberLabel.new("AllDatesLink"), ClickAction.new, AccessHtmlElement.new(:id, "allRangeGlobal"))
     add_verify(CucumberLabel.new("MedsList"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#Non-VAGroup"))
     add_action(CucumberLabel.new("Non-VA"), ClickAction.new, AccessHtmlElement.new(:xpath, "//div[@id='medicationsAccordion']/descendant::*[@data-target='#list_Non-VA']"))
     add_action(CucumberLabel.new("ExpandMedPanel"), ClickAction.new, AccessHtmlElement.new(:xpath, "(//div[@id='medGroupItem']/div[2])[6]"))

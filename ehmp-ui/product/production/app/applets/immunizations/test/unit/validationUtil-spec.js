@@ -30,7 +30,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/immunizations/writeb
                 var model = getFormModelInstance({administeredBy: 'PROVIDER', administeredHistorical: 'administered'});
                 var errorMessage = ValidationUtil.validateModel(model);
                 expect(errorMessage).toEqual('Validation errors. Please fix.');
-                expect(model.get('errorModel').get('administeredBy')).toEqual('Please choose a valid provider');
+                expect(model.get('errorModel').get('administeredBy')).toEqual('Choose a valid provider');
             });
 
             it('should fail validation if dose is not valid', function(){
@@ -41,10 +41,17 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/immunizations/writeb
             });
             it('should fail validation if administration date is in the future', function(){
                 var date = moment().add(1, 'days').format('MM/DD/YYYY');
-                var model = getFormModelInstance({administrationDate: date, administeredHistorical: 'historical'});
+                var model = getFormModelInstance({administrationDateHistorical: date, administeredHistorical: 'historical'});
                 var errorMessage = ValidationUtil.validateModel(model);
                 expect(errorMessage).toEqual('Validation errors. Please fix.');
-                expect(model.get('errorModel').get('administrationDate')).toEqual('Administration Date must be in the past.');
+                expect(model.get('errorModel').get('administrationDateHistorical')).toEqual('Administration Date must be in the past.');
+            });
+            it('should fail validation if vis date offered is in the future', function(){
+                var date = moment().add(1, 'days').format('MM/DD/YYYY');
+                var model = getFormModelInstance({visDateOffered: date, administeredHistorical: 'administered'});
+                var errorMessage = ValidationUtil.validateModel(model);
+                expect(errorMessage).toEqual('Validation errors. Please fix.');
+                expect(model.get('errorModel').get('visDateOffered')).toEqual('VIS Date Offered must be in the past.');
             });
         });
 
@@ -58,7 +65,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/immunizations/writeb
             it('Should fail if administered provider is not valid', function(){
                 var model = getFormModelInstance({immunizationOption: 'administered', administeringProvider: 'PROVIDER'});
                 ValidationUtil.validateAdministeringProvider(model, 'PROVIDER', 'administered');
-                expect(model.get('errorModel').get('administeredBy')).toEqual('Please choose a valid provider');
+                expect(model.get('errorModel').get('administeredBy')).toEqual('Choose a valid provider');
             });
 
             it('Should pass if administered provider is valid', function(){
@@ -102,30 +109,45 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/immunizations/writeb
 
         describe('Validation for administration date', function(){
             it('Should pass if past or present date', function(){
-                var model = getFormModelInstance({administrationDate: '10/18/2015'});
+                var model = getFormModelInstance({administrationDateHistorical: '10/18/2015'});
                 ValidationUtil.validateAdminDate(model, '10/18/2015');
-                expect(model.get('errorModel').get('administrationDate')).toEqual(undefined);
+                expect(model.get('errorModel').get('administrationDateHistorical')).toEqual(undefined);
             });
 
             it('Should fail if future date - full date', function(){
                 var date = moment().add(7, 'days').format('MM/DD/YYYY');
-                var model = getFormModelInstance({administrationDate: date});
+                var model = getFormModelInstance({administrationDateHistorical: date});
                 ValidationUtil.validateAdminDate(model, date);
-                expect(model.get('errorModel').get('administrationDate')).toEqual('Administration Date must be in the past.');
+                expect(model.get('errorModel').get('administrationDateHistorical')).toEqual('Administration Date must be in the past.');
             });
 
             it('Should fail if future date - fuzzy year', function(){
                 var date = moment().add(1, 'years').format('YYYY');
-                var model = getFormModelInstance({administrationDate: date});
+                var model = getFormModelInstance({administrationDateHistorical: date});
                 ValidationUtil.validateAdminDate(model, date);
-                expect(model.get('errorModel').get('administrationDate')).toEqual('Administration Date must be in the past.');
+                expect(model.get('errorModel').get('administrationDateHistorical')).toEqual('Administration Date must be in the past.');
             });
 
             it('Should fail if future date - fuzzy month/year', function(){
                 var date = moment().add(1, 'months').format('MM/YYYY');
-                var model = getFormModelInstance({administrationDate: date});
+                var model = getFormModelInstance({administrationDateHistorical: date});
                 ValidationUtil.validateAdminDate(model, date);
-                expect(model.get('errorModel').get('administrationDate')).toEqual('Administration Date must be in the past.');
+                expect(model.get('errorModel').get('administrationDateHistorical')).toEqual('Administration Date must be in the past.');
+            });
+        });
+
+        describe('Validation for VIS Date Offered', function(){
+            it('Should pass if past or presentDate', function(){
+                var model = getFormModelInstance({visDateOffered: '04/03/2016'});
+                ValidationUtil.validateVisDate(model, '04/03/2016');
+                expect(model.get('errorModel').get('visDateOffered')).toEqual(undefined);
+            });
+
+            it('Should fail if future date', function(){
+                var date = moment().add(7, 'days').format('MM/DD/YYYY');
+                var model = getFormModelInstance({visDateOffered: date});
+                ValidationUtil.validateVisDate(model, date);
+                expect(model.get('errorModel').get('visDateOffered')).toEqual('VIS Date Offered must be in the past.');
             });
         });
     });

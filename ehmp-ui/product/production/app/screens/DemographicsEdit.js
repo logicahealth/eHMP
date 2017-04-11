@@ -3,6 +3,7 @@ define(function() {
 
     return {
         id: "demographics-edit",
+        context: 'patient',
         contentRegionLayout: "gridOne",
         appletHeader: "patient",
         applets: [{

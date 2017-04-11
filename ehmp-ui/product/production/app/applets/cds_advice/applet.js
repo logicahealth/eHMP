@@ -38,6 +38,9 @@ define([
         cell: Backgrid.StringCell.extend ({
             className: 'string-cell flex-width-date'
         }),
+        sortValue: function(model, sortKey) {
+            return model.get('dueDate');
+        },
         hoverTip: 'clinicalreminders_duedate'
     };
     var doneCol = {
@@ -134,16 +137,16 @@ define([
                 criteria: {
                     id: model.get('id'),
                     use: selectedUse
+                },
+                onError: function(data) {
+                    ErrorModal.show(model.get('title'));
+                    delete model.xhr;
                 }
             };
             var data = ADK.PatientRecordService.fetchModel(fetchOptions);
-            detailsPromise = data.fetch().promise();
 
-            detailsPromise.fail(function(coll, resp) {
-                ErrorModal.show(model.get('title'));
-            });
-
-            data.on('sync', function() {
+            this.listenToOnce(data, 'sync', function(data) {
+                delete model.xhr;
                 // check for empty details
                 var dataJSON = data.toJSON();
                 if (dataJSON.detail) {
@@ -152,6 +155,7 @@ define([
                 model.set('details', dataJSON);
                 self.showDetails(model);
             });
+            model.xhr = data.fetch();
         },
         showDetails: function(model) {
             switch (model.get('type')) {

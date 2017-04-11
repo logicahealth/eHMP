@@ -4,7 +4,7 @@ When(/^the client requests immunization for the patient "(.*?)" in FHIR format$/
   #temp.add_parameter("domain", "imun")
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 Then(/^the FHIR results contain immunization/) do |table|
@@ -55,7 +55,7 @@ When(/^the client requests immunization for that sensitive patient "(.*?)"$/) do
   #temp.add_parameter("domain", "imun")
   temp.add_acknowledge("false")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client breaks glass and repeats a request for immunization for that patient "(.*?)"$/) do |pid|
@@ -64,7 +64,7 @@ When(/^the client breaks glass and repeats a request for immunization for that p
   #temp.add_parameter("domain", "imun")
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end
 
 When(/^the client requests "(.*?)" immunization for the patient "(.*?)" in FHIR format$/) do |limit, pid|
@@ -73,5 +73,5 @@ When(/^the client requests "(.*?)" immunization for the patient "(.*?)" in FHIR 
   temp.add_parameter("limit", limit)
   temp.add_acknowledge("true")
   p temp.path
-  @response = HTTPartyWithBasicAuth.get_with_authorization(temp.path)
+  @response = HTTPartyRDK.get(temp.path)
 end

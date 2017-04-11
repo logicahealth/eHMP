@@ -87,7 +87,7 @@ extension:
 License & Authors
 -----------------
 - Author: Seth Vargo (<sethvargo@gmail.com>)
-- Author:     ua Timberman (<joshua@chef.io>)
+- Author: Joshua Timberman (<joshua@chef.io>)
 - Author: Seth Chisamore (<schisamo@chef.io>)
 
 ```text

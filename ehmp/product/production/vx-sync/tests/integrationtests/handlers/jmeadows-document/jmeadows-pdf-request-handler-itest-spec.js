@@ -24,7 +24,7 @@ describe('jmeadows-pdf-request-handler', function() {
             domains: ['allergy', 'appointment', 'consult', 'demographics', 'encounter', 'immunization', 'lab', 'progressNote', 'dischargeSummary'],
             defaults: {
                 host: 'localhost',
-                port: 54000,
+                port: 5400,
                 method: 'GET'
             },
             allergy: {

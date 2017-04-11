@@ -2,145 +2,306 @@
 'use strict';
 
 var rdk = require('../../core/rdk');
+var http = rdk.utils.http;
 var _ = require('lodash');
 var nullchecker = rdk.utils.nullchecker;
 var asu = require('../../subsystems/asu/asu-process');
 var async = require('async');
 
+var NO_PERMISSION_FOR_ADDENDUM = 'You may not VIEW this UNSIGNED Addendum.';
+
 function applyAsuRules(req, details, callback) {
-    var asuResponse = [];
-
-    async.each(details.data.items, function(item, callback) {
-
-        // short circuit - skipping ASU check to allow all users to see meta data of retracted notes
-        if (item.status === 'RETRACTED') {
-            item.summary += ' (Retracted)';
-            item.localTitle += ' (Retracted)';
-            if (_.find(req.session.user.vistaUserClass, function(item) {
-                    return item.role === 'CHIEF, MIS';
-                }) === undefined) {
-
-                var msg = 'This note has been retracted.  See HIM personnel for access if required.';
-                item.text = [{
-                    content: msg
-                }];
-                item.stub = 'true';
-                item.activity = item.activity || [];
-                item.results = item.results || [];
-            }
-            asuResponse.push(item);
-            return callback();
+    async.series({
+        defaultUser: function (cb) {
+            asu.getDefaultUserClass(req, function (error, response, body) {
+                cb(error, body);
+            });
+        }
+    }, function (error, response) {
+        if (!_.isUndefined(error)) {
+            req.logger.debug(error, 'asuProcess.getAsuPermissionForActionNames: Got an error fetching default USER class from JDS');
+            return callback(error);
         }
 
+        req.logger.debug({response: response}, 'asuProcess.getAsuPermission: getDefaultUserClass response');
 
-        if (nullchecker.isNullish(item.documentDefUid)) {
-            req.logger.debug({item:item}, 'asu-utils.applyAsuRules: Item NOT evaluated by ASU');
-            asuResponse.push(item);
-            return callback();
+        var items = JSON.parse(response.defaultUser).data.items;
+
+        if (_.isEmpty(items)) {
+            req.logger.debug({'response.defaultUser': response.defaultUser}, 'asuProcess.getAsuPermissionForActionNames: Could NOT find default USER class in JDS');
+            return callback(error);
         }
-        var asuItem = {
-            data: {
-                items: [item]
-            }
-        };
-        req.logger.debug({item:item},'asu-utils.applyAsuRules: Item ready to be sent for ASU evaluation');
-        asu.getAsuPermission(req, asuItem, function(asuError, asuResult) {
-            if (!nullchecker.isNullish(asuError) || _.isNull(asuResult)) {
-                req.logger.error({localTitle:item.localTitle, asuError:asuError, asuResult:asuResult},'asu-utils.applyAsuRules: Failed to check ASU for item ');
-                item.text = [];
-                return callback(asuError);
-            }
-            //If the user has permission to view the document, push the item to the list of items to be viewed.
-            //true or false is got from the ASU java code.
-            req.logger.debug({title:item.localTitle, asuResult:asuResult},'asu-utils.applyAsuRules: Result for item');
 
-            if (asuResult === true) {
-                req.logger.debug('asu-utils.applyAsuRules: pushing item to response');
-                asuResponse.push(item);
-                return callback();
+        var documents = splitAccessDocuments(req, details, items);
+
+        async.series([function (cb) {
+
+            var httpConfig = _.extend({}, req.app.config.asuServer, {
+                logger: req.logger,
+                json: true,
+                url: "/asu/rules/multiAccessDocument",
+                body: {'documents': documents.request}
+            });
+
+            http.post(httpConfig, function (err, response, data) {
+                req.logger.debug({response: response}, 'asuProcess.evaluate results');
+                if (err) {
+                    req.logger.info(err);
+                    return cb(err);
+                }
+
+                return cb(false, data);
+            });
+        }], function (err, result) {
+            if (err) {
+                req.logger.error({error: err});
+                callback(err);
+            } else {
+                var data = result[0];
+                var uncheckedIndex = 0;
+
+                if (err) {
+                    req.logger.error({
+                        localTitle: item.localTitle,
+                        asuError: err,
+                        asuResult: result
+                    }, 'asu-utils.applyAsuRules: Failed to check ASU for item ');
+                    return callback(err);
+                }
+
+                _.each(details.data.items, function(item) {
+                    if (nullchecker.isNullish(item.documentDefUid) || item.status === 'RETRACTED') {
+                        return;
+                    }
+                    var asuResult = data[uncheckedIndex++];
+                    if (asuResult === true) {
+                        req.logger.debug('asu-utils.applyAsuRules: pushing item to response');
+                        documents.response.push(item);
+                    }
+                    item.text = [];
+                });
+                callback(null, documents.response);
             }
-            item.text = [];
-            return callback();
         });
-
-    }, function(err) {
-        if (err) {
-            req.logger.error(err, 'asu-utils.applyAsuRules error in applyAsuRules');
-            return callback(err);
-        }
-        req.logger.debug({asuResponse:asuResponse}, 'asu-utils.applyAsuRules response');
-        return callback(null, asuResponse);
-
     });
 }
-function applyAsuRulesWithActionNames(req, requiredPermission, allPermissions, details, callback) {
-    var asuResponse = [];
-    async.each(details.data.items, function(item,callback){
 
+function applyAsuRulesWithActionNames(req, requiredPermission, allPermissions, details, callback) {
+    async.series({
+        defaultUser: function (cb) {
+            asu.getDefaultUserClass(req, function (error, response, body) {
+                cb(error, body);
+            });
+        }
+    }, function (error, response) {
+        if (!_.isUndefined(error)) {
+            req.logger.debug(error, 'asuProcess.getAsuPermissionForActionNames: Got an error fetching default USER class from JDS');
+            return callback(error);
+        }
+
+        req.logger.debug({response: response}, 'asuProcess.getAsuPermission: getDefaultUserClass response');
+
+        var items = JSON.parse(response.defaultUser).data.items;
+
+        if (_.isEmpty(items)) {
+            req.logger.debug({'response.defaultUser': response.defaultUser}, 'asuProcess.getAsuPermissionForActionNames: Could NOT find default USER class in JDS');
+            return callback(error);
+        }
+
+        var documents = splitActionDocuments(req, details, items, allPermissions);
+
+        async.series([function (cb) {
+            // Request the permissions on the documents
+
+            var httpConfig = _.extend({}, req.app.config.asuServer, {
+                logger: req.logger,
+                json: true,
+                url: "/asu/rules/getMultiDocPermissions",
+                body: {'documents': documents.request}
+            });
+
+            http.post(httpConfig, function (err, response, data) {
+                req.logger.debug({response: response}, 'asuProcess.evaluate results');
+                if (err) {
+                    req.logger.info(err);
+                    return cb(err);
+                }
+
+                return cb(false, data);
+            });
+        }], function (err, result) {
+            // Modify the documents with the results from the permission request.
+
+            if (err) {
+                req.logger.error({error: err});
+                callback(err);
+            } else {
+                var data = result[0];
+                var uncheckedIndex = 0;
+
+                _.each(details.data.items, function(item) {
+                    if(nullchecker.isNullish(item.documentDefUid)) {
+                        // These documents were added to the list before the request went out.
+                        formatAddendum(item);
+                        return;
+                    }
+
+                    var approved = [];
+                    _.each(data[uncheckedIndex], function(val) {
+                        if(val.hasPermission === true) {
+                            approved.push(val.actionName);
+                        }
+                    });
+
+                    uncheckedIndex++;
+
+                    redactDocument(req, item, approved);
+
+                    //If the user has the required permission, push the item to the list.
+                    if (_.contains(approved, requiredPermission)) {
+                        item.asuPermissions = approved;
+                        req.logger.debug({
+                            title: item.localTitle,
+                            asuResult: item
+                        }, 'asu-utils.applyAsuRulesForActionNames: pushing item to response');
+                        documents.response.push(item);
+                    }
+                });
+
+                callback(null, documents.response);
+            }
+        });
+    });
+}
+
+
+/**
+ * Splits the documents between the ones that need permissions and the ones that do not.
+ * @returns {{response: Array, request: Array}}
+ */
+function splitActionDocuments(req, details, items, allPermissions) {
+    var responseArray = [];
+    var requestArray = [];
+
+    async.each(details.data.items, function (item, callback) {
         if (nullchecker.isNullish(item.documentDefUid)) {
             req.logger.debug('asu-utils.applyAsuRulesForActionNames: Item NOT evaluated by ASU. No docDefUid');
-            asuResponse.push(item);
-            return callback();
+            responseArray.push(item);
+            return setImmediate(callback);
         }
+
+        // Format getPermission expects
         var asuItem = {
             data: {
                 items: [item]
             },
             actionNames: allPermissions
         };
-        asu.getAsuPermissionForActionNames(req, asuItem, function(asuError, asuResult) {
-            var item = asuItem.data.items[0];
-            if (!nullchecker.isNullish(asuError) || _.isNull(asuResult)) {
-                req.logger.error({title:item.localTitle,asuError:asuError,asuResult:asuResult},'asu-utils.applyAsuRules: Failed to check ASU for item');
-                item.text = [];
-                return callback(asuError);
-            }
-            req.logger.debug({title:item.localTitle, asuResult:asuResult},'asu-utils.applyAsuRulesForActionNames: Displaying result for item');
-            //Condense the ASU result to a simple array of approved permissions.
-            var approved = _.chain(asuResult)
-                .filter(function(perm) {return perm.hasPermission === true;})
-                .map(function(perm) { return perm.actionName;})
-                .value();
-            if (item.status === 'RETRACTED') {
-                item.summary += ' (Retracted)';
-                item.localTitle += ' (Retracted)';
-                if (_.find(req.session.user.vistaUserClass, function(item) {
-                        return item.role === 'CHIEF, MIS';
-                    }) === undefined) {
 
-                    var msg = 'This note has been retracted.  See HIM personnel for access.';
-                    item.text = [{
-                        content: msg
-                    }];
-                    item.stub = 'true';
-                    item.activity = item.activity || [];
-                    item.results = item.results || [];
-                }
-                if (!_.contains(approved, 'VIEW')) {
-                    approved.push('VIEW');
-                }
+        asu.getPermission(req, asuItem, items, function (asuError, asuResult) {
+            if (asuError) {
+                req.logger.error({error: asuError});
+                callback(asuError);
+            } else {
+                requestArray.push(asuResult);
             }
-            //If the user has the required permission, push the item to the list.
-            if (_.contains(approved, requiredPermission)) {
-                item.asuPermissions = approved;
-                req.logger.debug({title:item.localTitle,asuResult:asuResult},'asu-utils.applyAsuRulesForActionNames: pushing item to response');
-                asuResponse.push(item);
-                return callback();
-            }
-            item.text = [];
-            return callback();
         });
-
-    }, function(err) {
-        if (err) {
-            req.logger.error(err,'asu-utils.applyAsuRulesForActionNames error in applyAsuRules');
-            return callback(err);
-        }
-        req.logger.debug({asuResponse:asuResponse},'asu-utils.applyAsuRulesForActionNames: asuResponse');
-        return callback(null, asuResponse);
     });
+
+    return {
+        response: responseArray,
+        request: requestArray
+    };
 }
 
 
+/**
+ * Splits the documents between the ones that need permissions and the ones that do not.
+ * @returns {{response: Array, request: Array}}
+ */
+function splitAccessDocuments(req, details, items) {
+    var responseArray = [];
+    var requestArray = [];
+
+    async.each(details.data.items, function (item, callback) {
+        if (item.status === 'RETRACTED') {
+            redactDocument(req, item, []);
+            responseArray.push(item);
+            return;
+        }
+
+        if (nullchecker.isNullish(item.documentDefUid)) {
+            req.logger.debug({item: item}, 'asu-utils.applyAsuRules: Item NOT evaluated by ASU');
+            responseArray.push(item);
+            return;
+        }
+
+        // Format getPermission expects
+        var asuItem = {
+            data: {
+                items: [item]
+            }
+        };
+
+        asu.getPermission(req, asuItem, items, function (asuError, asuResult) {
+            if (asuError) {
+                req.logger.error({error: asuError});
+                callback(asuError);
+            } else {
+                requestArray.push(asuResult)
+            }
+        });
+    });
+
+    return {
+        response: responseArray,
+        request: requestArray
+    };
+}
+
+
+function redactDocument(req, item, approved) {
+    if (item.status === 'RETRACTED') {
+        item.summary += ' (Retracted)';
+        item.localTitle += ' (Retracted)';
+        if (_.find(req.session.user.vistaUserClass, function (item) {
+                return item.role === 'CHIEF, MIS';
+            }) === undefined) {
+
+            var msg = 'This note has been retracted.  See HIM personnel for access.';
+            item.text = [{
+                content: msg
+            }];
+            item.stub = 'true';
+            item.activity = item.activity || [];
+            item.results = item.results || [];
+        }
+        if (!_.contains(approved, 'VIEW')) {
+            approved.push('VIEW');
+        }
+    }
+}
+
+
+function formatAddendum(item) {
+    if (item.noteType === 'ADDENDUM') {
+        if (item.addendumBody) {
+            item.addendumBody = NO_PERMISSION_FOR_ADDENDUM;
+        }
+
+        _.each(item.text, function (textElement) {
+            textElement.content = NO_PERMISSION_FOR_ADDENDUM;
+
+            if (textElement.contentPreview) {
+                textElement.contentPreview = NO_PERMISSION_FOR_ADDENDUM;
+            }
+        });
+    } else {
+        item.text = [];
+    }
+}
+
+
+module.exports.NO_PERMISSION_FOR_ADDENDUM = NO_PERMISSION_FOR_ADDENDUM;
 module.exports.applyAsuRules = applyAsuRules;
 module.exports.applyAsuRulesWithActionNames = applyAsuRulesWithActionNames;

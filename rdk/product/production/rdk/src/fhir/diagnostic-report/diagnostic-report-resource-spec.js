@@ -5,6 +5,8 @@ var labResults = require('./lab-result-resource');
 var jdsInput = diagnosticReportIn.inputValue;
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
+var diagnosticreport = require('./diagnostic-report-resource');
+var diagnosticreportIn = require('./diagnostic-report-resource-spec-data');
 
 var req = {
     '_pid': '9E7A;253',
@@ -26,6 +28,34 @@ function createParam(propName, value) {
     obj[propName] = value;
     return obj;
 }
+
+
+describe('DiagnosticReport Conformance Statement', function() {
+
+    var testConformance = diagnosticreportIn.conformanceData;
+    var builtConformance = diagnosticreport.createConformanceData();
+
+    it('verifies that a generated conformance statement exists', function() {
+        expect(builtConformance).not.to.be.undefined();
+    });
+
+    describe('DiagnosticReport Conformance Details', function() {
+        it('verifies metadata are valid', function() {
+            expect(builtConformance.type).to.eql(testConformance.rest[0].resource[0].type);
+            expect(builtConformance.profile.reference).to.eql(testConformance.rest[0].resource[0].profile.reference);
+            expect(builtConformance.interaction[0].code).to.eql('read');
+            expect(builtConformance.interaction[1].code).to.eql('search-type');
+        });
+
+        it('verifies conformance search parameters are valid', function() {
+            expect(builtConformance.searchParam[0].name).to.eql('domain');
+            expect(builtConformance.searchParam[1].name).to.eql('service');
+            expect(builtConformance.searchParam[2].name).to.eql('subject.identifier');
+            expect(builtConformance.searchParam[3].name).to.eql('pid');
+            expect(builtConformance.searchParam[4].name).to.eql('date');
+        });
+    });
+});
 
 describe('DiagnosticReport FHIR Resource', function() {
     it('Verifies that resource is parameters are configured correctly', function() {
@@ -122,7 +152,7 @@ describe('DiagnosticReport Parameter Validation', function() {
 
         req.query = {
             _count: 3,
-            '_sort:dsc': 'issued',
+            '_sort:desc': 'issued',
         };
         diagnosticReport.validateParams(req.query, onSuccess, onError);
         expect(success).to.eql(true);
@@ -138,7 +168,7 @@ describe('DiagnosticReport Parameter Validation', function() {
         expect(error).to.eql(true);
 
         req.query = {
-            '_sort:dsc': 'foo'
+            '_sort:desc': 'foo'
         };
         diagnosticReport.validateParams(req.query, onSuccess, onError);
         expect(success).to.eql(false);
@@ -265,9 +295,9 @@ describe('DiagnosticReport Sorting', function() {
         expect(isSortedDsc).to.eql(false);
     });
 
-    it('Results are sorted in descending order when _sort:dsc parameter is specified', function() {
+    it('Results are sorted in descending order when _sort:desc parameter is specified', function() {
         req.query = {
-            '_sort:dsc': 'issued'
+            '_sort:desc': 'issued'
         };
         var fhirEntries = labResults.convertToFhir(jdsInput, req);
         var fhirBundle = diagnosticReport.buildBundle(fhirEntries, req, jdsInput.data.totalItems);

@@ -32,7 +32,7 @@ export <%= envvar %>
 JAVA_ENDORSED_DIRS="$CATALINA_HOME/endorsed"
 
 # Use the Java security manager? (yes/no, default: no)
-TOMCAT6_SECURITY=<%= @tomcat["use_security_manager"] ? "yes" : "no" %>
+#TOMCAT6_SECURITY=<%= @tomcat["use_security_manager"] ? "yes" : "no" %>
 
 CATALINA_TMPDIR=<%= @tomcat["tmp_dir"] %>
 

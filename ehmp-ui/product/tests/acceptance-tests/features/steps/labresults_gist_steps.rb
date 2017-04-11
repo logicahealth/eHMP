@@ -1,9 +1,10 @@
-class LabResultsGist <  ADKContainer
+class LabResultsGist <  AllApplets
   include Singleton
   attr_reader :appletid
   def initialize
     super
     @appletid = 'lab_results_grid'
+    add_toolbar_buttons
     add_verify(CucumberLabel.new("Numeric Lab Results Gist Title"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=lab_results_grid] .panel-title"))
     add_verify(CucumberLabel.new("Numeric Lab Results Ten Check"), VerifyContainsText.new, AccessHtmlElement.new(:id, "labs_problem_name_Leukocytes__Blood_Quantitative"))
     add_verify(CucumberLabel.new("Numeric Lab Results Five Check"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='lab_results_grid'] [data-row-instanceid='TRIGLYCERIDE'] .problem-name"))
@@ -32,7 +33,6 @@ class LabResultsGist <  ADKContainer
     
     # First Numberic Lab result Row
     add_action(CucumberLabel.new('First Numeric Lab Result Gist Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='lab_results_grid'] [data-row-instanceid='HDL'] .problem-name"))
-    add_action(CucumberLabel.new('Numeric Lab Result Detail Button'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid=lab_results_grid] div.toolbarActive [button-type=detailView-button-toolbar]"))
   end
 
   def applet_grid_loaded
@@ -144,7 +144,7 @@ end
 
 Then(/^the Lab Test column contains data$/) do
   xpath = "//*[@id='lab_results_grid-observations-gist-items']/descendant::*[contains(@class, 'gistItemInner')]/descendant::*[contains(@class, 'problem-name')]"
-  css = "div[id='grid-panel-lab_results_grid'] [class='selectable info-display']"
+  css = "#grid-panel-lab_results_grid .selectable[dialog-toggle='toolbar']"
 
   driver = TestSupport.driver
   gist_items = driver.find_elements(:css, css)
@@ -243,11 +243,26 @@ Then(/^the Lab Results Gist is sorted in reverse alphabetic order based on Lab T
 end
 
 When(/^the user views the first Numeric Lab Result Gist detail view$/) do
-  numeric_lab_result_applet = LabResultsGist.instance
-  expect(numeric_lab_result_applet.wait_until_xpath_count_greater_than('Numeric Lab Result Gist Rows', 0)).to eq(true), "Test requires at least 1 row to be displayed"
-  expect(numeric_lab_result_applet.perform_action('First Numeric Lab Result Gist Row')).to eq(true)
-  expect(numeric_lab_result_applet.perform_action('Numeric Lab Result Detail Button')).to eq(true)  
+  @ehmp = PobNumericLabApplet.new
+  @ehmp.wait_for_fld_lab_names
+  expect(@ehmp.fld_lab_names.length).to be > 0
+  @ehmp.fld_lab_names[0].click
+  @ehmp.wait_until_fld_toolbar_visible
+  @ehmp.wait_until_btn_detail_view_visible
+  @ehmp.btn_detail_view.click
+  @ehmp = ModalElements.new
+  @ehmp.wait_for_fld_modal_title
+  expect(@ehmp).to have_fld_modal_title
 end
 
+Then(/^the modal's title contains first Numeric Lab Result name$/) do
+  @ehmp = PobNumericLabApplet.new
+  @ehmp.wait_for_fld_lab_names
+  expect(@ehmp.fld_lab_names.length).to be > 0
+  title = @ehmp.fld_lab_names[0].text.strip
+  @ehmp = ModalElements.new
+  @ehmp.wait_until_fld_modal_title_visible
+  expect(@ehmp.fld_modal_title).to have_text(title)
+end
 
 

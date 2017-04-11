@@ -98,7 +98,7 @@ function buildLabPanels(req, res) {
         function(err, resultArray) {
             if (err) {
                 if (err.name === 'OrdersError') {
-                    req.logger.error('Lab panel unable to lookup orders ' + err.error.toString());
+                    req.logger.error({error: err}, 'Lab panel unable to lookup orders');
                     // all we really need is Labs to complete -- if orders fails allow Labs to finish
                 } else {
                     if (_.isNumber(err.error)) {

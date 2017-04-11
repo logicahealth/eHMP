@@ -15,12 +15,12 @@
        | resource.contained.valueQuantity.value | 17.5                |
        | resource.issued                        | IS_FHIR_FORMATTED_DATE |
        | resource.name.text           | PROTIME             |
-       | resource.name.coding.code              | CONTAINS urn:va:ien:60:467:73                            |
+       | resource.name.coding.code              | CONTAINS urn:lnc:5902-2                                  |
        | resource.name.coding.display           | PROTIME                                           |
-       | resource.name.coding.system            | CONTAINS urn:oid:2.16.840.1.113883.4.642.2.58                  |
-       | resource.name.coding.code              | CONTAINS urn:va:ien:60:467:73                                   |
+       | resource.name.coding.system            | CONTAINS urn:oid:2.16.840.1.113883.6.233                  |
+       | resource.name.coding.code              | CONTAINS urn:lnc:5902-2                                         |
        | resource.name.coding.display           | PROTIME                                          |
-       | resource.name.coding.system            | urn:oid:2.16.840.1.113883.4.642.2.58              |
+       | resource.name.coding.system            | urn:oid:2.16.840.1.113883.6.233              |
        | resource.contained.referenceRange.high.value     | 13                                              |
        | resource.contained.referenceRange.high.units     | SEC.                                             |
        | resource.contained.referenceRange.low.value      | 10                                                |
@@ -41,7 +41,7 @@
        | resource.contained.subject.reference            | Patient/9E7A;227                                            |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE                                            |
        | resource.text.status                            | generated                                                       |
-       | resource.name.coding.system                     | urn:oid:2.16.840.1.113883.4.642.2.58                            |
+       | resource.name.coding.system                     | urn:oid:2.16.840.1.113883.6.233                            |
        | resource.status                                 | final                                                           |
        | resource.issued                                 | IS_FHIR_FORMATTED_DATE                                             |
        | resource.subject.reference                      | Patient/9E7A;227                                            |
@@ -63,7 +63,7 @@
        | resource.extension.valueString | CH;6949681.966382;430                              |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/lab#orderUid   |
        | resource.extension.valueString | urn:va:order:9E7A:227:16688                        |
-
+  And FHIR date and time conver to Zulu format for Labs Chemistry
 
  @F138_2_Labs_chem_fhir @fhir @11016V630869
  Scenario: Client can request lab (Chem/Hem) results in FHIR format
@@ -77,11 +77,11 @@
        | resource.issued                        | IS_FHIR_FORMATTED_DATE |
        | resource.name.text           | PROTIME             |
        | resource.name.text                     | PROTIME                                            |
-       | resource.name.coding.code              | urn:va:ien:60:467:73                               |
+       | resource.name.coding.code              | urn:lnc:5902-2                                     |
        | resource.name.coding.display           | PROTIME                                            |
-       | resource.name.coding.system            | urn:oid:2.16.840.1.113883.4.642.2.58                   |
+       | resource.name.coding.system            | urn:oid:2.16.840.1.113883.6.233                   |
        | resource.name.coding.display           | PROTIME                                            |
-       | resource.name.coding.system            | urn:oid:2.16.840.1.113883.4.642.2.58             |
+       | resource.name.coding.system            | urn:oid:2.16.840.1.113883.6.233             |
        | resource.contained.valueQuantity.value           | 17.5                                               |
        | resource.contained.valueQuantity.units           | SEC.                                             |
        | resource.contained.referenceRange.high.value     | 13                                              |
@@ -106,7 +106,7 @@
        | resource.name.text                              | PROTIME                                                        |
        | resource.name.coding.display                    | PROTIME                                                        |
        | resource.name.coding.display                    | PROTIME                                                         |
-       | resource.name.coding.system                     | urn:oid:2.16.840.1.113883.4.642.2.58                            |
+       | resource.name.coding.system                     | urn:oid:2.16.840.1.113883.6.233                            |
        | resource.status                                 | final                                                           |
        | resource.issued                                 | IS_FHIR_FORMATTED_DATE                                          |
        | resource.subject.reference                      | Patient/9E7A;227                                            |
@@ -171,7 +171,7 @@
  Given a patient with "No lab results" in multiple VistAs
  When the client requests lab "(Chem/Hem)" results for that patient "9E7A;100125"
  Then a successful response is returned
- Then corresponding matching FHIR records totaling "2" are displayed
+ Then corresponding matching FHIR records totaling "1" are displayed
 
  @F138_6_Labs_chem_fhir @fhir @11016V630869 @DE974
  Scenario: Client can request lab (Chem/Hem) results in FHIR format

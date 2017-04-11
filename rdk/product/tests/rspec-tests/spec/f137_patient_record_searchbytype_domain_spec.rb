@@ -22,7 +22,7 @@ describe 'f137_patient_record_searchbytype_domain_spec.rb', debug: true do
   include JsonUtilities
 
   before(:all) do
-    @command = 'resource/patient/record/labs/by-type'
+    @command = 'resource/patient/record/search/by-type'
     @command_lab = @command + '/lab'
     @command_vital = @command + '/vital'
     @command_immu = @command + '/immunization'

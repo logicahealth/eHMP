@@ -39,12 +39,12 @@ function getmedicationPrescription(req, res) {
     validateParams(params, /*onSuccess*/ function() {
         medicationPrescription.getData(req, pid, params, function(err, data) {
             if (err) {
-                req.logger.error(err.message);
-                res.status(rdk.httpstatus.internal_server_error).send(err.message);
+                req.logger.error({error: err}, 'fhir::medication-prescription: JDS get data error.');
+                return res.status(rdk.httpstatus.internal_server_error).send(err.message);
             }
             var fhirBundle = medicationPrescription.convertToFhir(data, req);
             limitFHIRResultByCount(fhirBundle, params._count);
-            res.status(rdk.httpstatus.ok).send(fhirBundle);
+            return res.status(rdk.httpstatus.ok).send(fhirBundle);
 
         });
     }, /*onError*/ function(errors) {

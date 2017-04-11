@@ -3,76 +3,76 @@
   "jds": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.2.110"
+    "ip": "IP_ADDRESS"
   },
   "pjds": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.2.110"
+    "ip": "IP_ADDRESS"
   },
   "solr": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.3.10"
+    "ip": "IPADDRESS"
   },
   "mocks": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.4.205"
+    "ip": "IP_ADDRESS"
   },
   "vista-panorama": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.2.101"
+    "ip": "IP_ADDRESS"
   },
   "vista-kodak": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.2.102"
+    "ip": "IP_ADDRESS"
   },
   "vxsync": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.3.6"
+    "ip": "IPADDRES"
   },
   "rdk": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.4.105"
+    "ip": "IP_ADDRESS"
   },
   "jbpm": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.4.208"
+    "ip": "IP_ADDRESS"
   },
   "ehmp-ui": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.1.150"
+    "ip": "IP_ADDRESS"
   },
   "ehmp-balancer": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.1.150"
+    "ip": "IP_ADDRESS"
   },
   "cdsinvocation": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.2.49"
+    "ip": "IPADDRESS"
   },
   "cdsdashboard": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.2.48"
+    "ip": "IPADDRESS"
   },
   "opencds": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.2.47"
+    "ip": "IPADDRESS"
   },
   "cdsdb": {
     "ssh_username": "vagrant",
     "ssh_key": "~/Projects/vistacore/.vagrant.d/insecure_private_key",
-    "ip": "172.16.2.125"
+    "ip": "IP_ADDRESS"
   }
 }

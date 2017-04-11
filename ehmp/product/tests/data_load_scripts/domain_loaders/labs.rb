@@ -2,8 +2,8 @@ require 'greenletters'
 
 # options
 #------------------------------------
-serve_ip = "IPADDRESS "
-labs_amount = 1000
+serve_ip = "IP_ADDRESS"
+labs_amount = 10
 # patient_id = 100841 #alpha test
 patient_name = "alphatest"
 #------------------------------------
@@ -66,42 +66,64 @@ console << "Accessioning menu\n"
 console.wait_for(:output, /to continue/i)
 console << "\n"
 
-console.wait_for(:output, /Select Accessioning menu/i)
-console << "Accessioning tests ordered by ward order entry\n"
-
 labs_amount.times do
-  console.wait_for(:output, /Select Order number/i)
+
+
+  console.wait_for(:output, /Select Accessioning menu/i)
+  console << "bypass normal data entry\n"
+
+  console.wait_for(:output, /Select Performing Laboratory/i)
+  console << "\n"
+
+  console.wait_for(:output, /Do you want to enter draw times/i)
   console << "\n"
 
   console.wait_for(:output, /Select Patient Name/i)
   console << "#{patient_name}\n"
 
-  console.wait_for(:output, /PATIENT LOCATION:/i)
-  console << "\n"
-
-
-  console.wait_for(:output, /PROVIDER:/i)
-  console << "\n"
-
-  console.wait_for(:output, /Select LABORATORY TEST NAME/i)
-  console << "A1\n"
-
-  console.wait_for(:output, /Select URGENCY/i)
-  console << "\n"
-
-  console.wait_for(:output, /Select LABORATORY TEST NAME/i)
+  console.wait_for(:output, /PATIENT LOCATION/i)
   console << "\n"
 
   console.wait_for(:output, /Specimen collected how/i)
   console << "\n"
 
+  console.wait_for(:output, /PROVIDER/i)
+  console << "\n"
+
+  console.wait_for(:output, /Select URGENCY/i)
+  console << "\n"
+
+  console.wait_for(:output, /Select LABORATORY TEST NAME/i)
+  console << "CALCIUM\n"
+
+  console.wait_for(:output, /Correct sample/i)
+  console << "\n"
+
   console.wait_for(:output, /Nature of Order/i)
   console << "\n"
 
-  console.wait_for(:output, /All satisfactory/i)
+
+
+  prng = Random.new
+  number = prng.rand(98..123)
+
+
+  console.wait_for(:output, /CALCIUM/i)
+  console << "#{number}\n"
+
+  console.wait_for(:output, /Select COMMENT/i)
+  console << "Test\n"
+
+  console.wait_for(:output, /Select COMMENT/i)
   console << "\n"
 
-  console.wait_for(:output, /Collection Date@Time/i)
+  console.wait_for(:output, /SELECT/i)
+  console << "\n"
+
+  console.wait_for(:output, /Approve for release by entering your initials/i)
+  console << "LE\n"
+
+  console.wait_for(:output, /to continue/i)
   console << "\n"
 
 end

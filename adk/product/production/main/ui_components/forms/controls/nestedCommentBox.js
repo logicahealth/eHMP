@@ -59,7 +59,7 @@ define([
     var NCBRemoveButtonItemView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile([
             // '{{ui-button "" classes="btn btn-icon remove-panel-button" type="button" icon="fa-times"}}'
-            '<button type="button" class="btn btn-text btn-block all-padding-no remove-panel-button color-primary-dark" title="Press enter to remove this item">Remove</button>'
+            '<button type="button" class="btn btn-link btn-block all-padding-no remove-panel-button color-red-dark" title="Press enter to remove this item">Remove</button>'
         ].join('\n')),
         ui: {
             'RemoveButton': '.remove-panel-button'
@@ -129,6 +129,7 @@ define([
                 this.toggleCommentsContainer();
             },
             'remove:panel': function(child) {
+                this.$el.trigger('ncb.change.user.input');
                 this.model.set(this.attributeMapping.value, false);
                 this.formModel.trigger('change', this.formModel);
                 this.parent.setFocusNextRow(this);
@@ -185,9 +186,11 @@ define([
             }, this);
             this.removeButtonView = new NCBRemoveButtonItemView();
 
-            var self = this;
             this.listenTo(this.commentsCollection, 'change add remove', function() {
-                self.model.trigger('change', self.model);
+                this.model.trigger('change', this.model);
+            });
+            this.listenTo(this.model, 'change.inputted', function() {
+                this.$el.trigger('ncb.change.user.input');
             });
         },
         onRender: function() {
@@ -279,6 +282,9 @@ define([
             });
         },
         className: 'panel-container',
+        attributes: {
+            role: "tab"
+        },
         onRemoveChild: function() {
             if (this.children.length < 1) {
                 this.parent.setIsEmpty();
@@ -298,7 +304,7 @@ define([
             '{{#if isEmpty}}<div class="panel-group accordion-container small ftar">',
             '<div class="panel-container"><div class="panel panel-default">',
             '<div class="panel-heading"><div class="panel-title">',
-            '<p class="ncb-empty-message" aria-hidden="true">No items selected</p>',
+            '<p class="ncb-empty-message top-padding-xs left-padding-sm bottom-padding-xs" aria-hidden="true">No items selected</p>',
             '<p class="ncb-empty-message-sr-only sr-only" tabindex="-1">No items selected</p>',
             '</div></div></div></div></div>{{/if}}'
         ].join('\n')),
@@ -443,6 +449,12 @@ define([
             'NCBBodyCollectionRegion': '.ncb-body-region',
             'NCBEmptyViewRegion': '.empty-view-region'
         },
+        events: _.defaults({
+            'ncb.change.user.input': function(event) {
+                event.stopPropagation();
+                this.onUserInput.apply(this, arguments);
+            }
+        }, PuppetForm.CommonPrototype.events),
         regions: {
             'NCBBodyCollectionRegion': '@ui.NCBBodyCollectionRegion',
             'NCBEmptyViewRegion': '@ui.NCBEmptyViewRegion'
@@ -469,13 +481,12 @@ define([
             this.listenToFieldName();
 
             var name = this.getComponentInstanceName();
-            this.stopListening(this.model, "change:" + name, this.render);
+            this.stopListening(this.model, "change:" + name, this.onModelChange);
             this.model.set(name, this.collection);
-            this.listenTo(this.model, "change:" + name, this.render);
+            this.listenTo(this.model, "change:" + name, this.onModelChange);
 
-            var self = this;
             this.listenTo(this.collection, 'change', function() {
-                self.model.trigger('change', self.model);
+                this.model.trigger('change', this.model);
             });
             this.emptyModel = new Backbone.Model({
                 isEmpty: false

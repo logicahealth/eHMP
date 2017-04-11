@@ -38,14 +38,8 @@ class OrdersContainer < AllApplets
     add_verify(CucumberLabel.new("Tooltip"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, '//*[@data-row-instanceid="urn-va-order-9E7A-3-12978"]/td[3]/a'))
     order_table_rows = AccessHtmlElement.new(:xpath, "//*[@data-appletid='orders']/descendant::tbody/descendant::tr")
     add_verify(CucumberLabel.new("applet - Table - xpath"), VerifyXpathCount.new(order_table_rows), order_table_rows)
-    add_action(CucumberLabel.new("Change AMPICILLIN INJ IV 2 GM in 50 over 20 min"), ClickAction.new, AccessHtmlElement.new(:css, "[data-row-instanceid='urn-va-order-9E7A-8-11976']"))
     add_action(CucumberLabel.new("01AUDIOLOGY OUTPATIENT Cons Consultant's Choice"), ClickAction.new, AccessHtmlElement.new(:css, "[data-row-instanceid='urn-va-order-9E7A-3-15479']"))
-    add_action(CucumberLabel.new("METFORMIN TAB,SA 500MG TAKE ONE TABLET MOUTH TWICE A DAY Quantity: 180 Refills: 0"), ClickAction.new, AccessHtmlElement.new(:css, "[data-row-instanceid='urn-va-order-9E7A-3-27837']"))
-    
-    add_action(CucumberLabel.new("Discontinue UPPER GI WITH KUB <Requesting Physician Cancelled>"), ClickAction.new, AccessHtmlElement.new(:css, "[data-row-instanceid='urn-va-order-9E7A-3-12977']"))
     add_action(CucumberLabel.new('CULTURE & SUSCEPTIBILITY UNKNOWN WC LB #18424'), ClickAction.new, AccessHtmlElement.new(:css, "[data-row-instanceid='urn-va-order-9E7A-3-38312']"))
-    add_action(CucumberLabel.new('ACETAMINOPHEN TAB 325MG PO Q4H'), ClickAction.new, AccessHtmlElement.new(:css, "[data-row-instanceid='urn-va-order-9E7A-100022-17692']"))
-    add_action(CucumberLabel.new('Non-VA ASPIRIN TAB,EC 81MG TAKE ONE TABLET BY MOUTH EVERY MORNING Non-VA medication recommended by VA provider.'), ClickAction.new, AccessHtmlElement.new(:css, "[data-row-instanceid='urn-va-order-9E7A-3-18068']"))
     add_verify(CucumberLabel.new('Empty Row'), VerifyText.new, AccessHtmlElement.new(:css, '#data-grid-orders tr.empty'))
   end # initialize
 
@@ -99,6 +93,10 @@ end
 
 # ######################## When ########################
 
+When(/^the user minimizes the expanded Orders Applet$/) do
+  expect(@oc.perform_action('Control - applet - Minimize View')).to eq(true)
+end
+
 When(/^the user clicks the "(.*?)" button in the Orders applet$/) do |control_name|
   @oc.wait_until_element_present("Table - Orders Applet", 15)
   wait_and_perform(@oc, control_name)
@@ -139,22 +137,6 @@ end
 
 # ######################## Then ########################
 
-Then(/^the modal has the following section headers$/) do |expected_section_headers|
-  TestSupport.driver.save_screenshot('features/heders.png')
-  actual_section_headers = @oc.get_elements("Modal Section Headers")
-  #  print "****actual section headers length : "
-  #  p actual_section_headers.length
-  expected_section_headers = expected_section_headers.rows
-
-  #expect(actual_section_headers.size).to eq(expected_section_headers.size)
-
-  for i in 0...expected_section_headers.size do
-    actual_section_headers[i].location_once_scrolled_into_view
-    p actual_section_headers[i].text.strip
-    verify_elements_equal(expected_section_headers[i][0], actual_section_headers[i].text.strip)
-  end
-end
-
 Then(/^under the "(.*?)" headers there are the following fields$/) do |_section_name, expected_fields|
   # removed the check for rows under specific headers
   # after a code change the test was throwing "Element is no longer attached to the DOM"
@@ -167,47 +149,6 @@ Then(/^under the "(.*?)" headers there are the following fields$/) do |_section_
   end
 end
 
-Then(/^under the Order Details headers there are the following fields$/) do |expected_fields|
-  # the order details section of the modal has different css then the sections above so it needs its own
-  # step
-  expected_fields.rows.each do |row|
-    xpath = "//div[@id='mainModalDialog']/descendant::div[contains(@class, 'col-md-4') and contains(string(), '#{row[0]}')]"
-    p xpath
-    @oc.add_verify(CucumberLabel.new('Order Row'), VerifyContainsText.new, AccessHtmlElement.new(:xpath, xpath))
-    expect(@oc.perform_verification('Order Row', row[0])).to eq(true), "Could not find label #{row[0]}"
-  end
-end
-
-Then(/^the "(.*?)" column contains "(.*?)"$/) do |column_name, expected_text|
-  driver = TestSupport.driver
-
-  wait = Selenium::WebDriver::Wait.new(:timeout => 15)
-
-  # the only way I was able to avoid stale element references
-  sleep 0.5
-  wait.until {
-    first_row_element = driver.find_element(:css, "[data-appletid=orders] table tbody tr")
-    first_row_element.text.include? expected_text
-  }
-
-  p "First Row: #{driver.find_element(:css, '[data-appletid=orders] table tbody tr').text}"
-
-  table_key = "Complete Table"
-  @oc.wait_until_element_present(table_key, 15)
-  actual_table = @oc.get_element(table_key)
-
-  headers = actual_table.find_elements(:css, "thead tr th")
-  desired_column_index = headers.index { |h| h.text == column_name }
-
-  actual_data_rows = actual_table.find_elements(:css, "tbody tr")
-
-  actual_data_rows.each do |actual_row|
-    desired_actual_column = actual_row.find_elements(:css, "td")[desired_column_index].text
-    is_text_included = desired_actual_column.include? expected_text
-    expect(is_text_included).to be_true, "The column (#{desired_actual_column}) did not include the expected text (#{expected_text})."
-  end # actual_data_rows.each
-end
-
 Then(/^the Orders should be sorted by "(.*?)" and then "(.*?)"$/) do |_first_sort_argument, _second_sort_argument|
   sleep 5
   # check type first
@@ -216,6 +157,7 @@ Then(/^the Orders should be sorted by "(.*?)" and then "(.*?)"$/) do |_first_sor
 
   types = Set.new
   format = "%m/%d/%Y"
+  date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4}")
   driver = TestSupport.driver
   all_row_types = driver.find_elements(:css, '#content-region #data-grid-orders tbody td:nth-child(5)')
   all_row_types.each do |column|
@@ -225,52 +167,18 @@ Then(/^the Orders should be sorted by "(.*?)" and then "(.*?)"$/) do |_first_sor
 
   types.each do |order_type, _num|
     columns = driver.find_elements(:xpath, "//*[@id='data-grid-orders']/tbody/tr/td[.='#{order_type}']/ancestor::tr/descendant::td[1]")
-    higher = Date.strptime(columns[0].text, format)
+    date_only = date_format.match(columns[0].text).to_s
+    higher = Date.strptime(date_only, format)
     (1..columns.length-1).each do |i|
       columns[i].location_once_scrolled_into_view
-      lower = Date.strptime(columns[i].text, format)
+      date_only = date_format.match(columns[i].text).to_s
+      lower = Date.strptime(date_only, format)
       check_alpha =  ((higher >= lower))
       expect(check_alpha).to eq(true), "Failing order type #{order_type}, expected #{higher} to be earlier then #{lower}"
       #return false unless check_alpha
       higher = lower
     end
   end
-
-  # table_key = "Complete Table"
-  # @oc.wait_until_element_present(table_key, 15)
-  # actual_table = @oc.get_element(table_key)
-
-  # headers = actual_table.find_elements(:css, "thead tr th")
-  # first_column_index = headers.index { |h| h.text == first_sort_argument }
-  # second_column_index = headers.index { |h| h.text == second_sort_argument }
-
-  # last_first_element = ""
-  # last_second_element = ""
-
-  # @oc.wait_until_element_present(table_key, 15)
-  # actual_table = @oc.get_element(table_key)
-
-  # #row_elements = actual_table.find_elements(:css, "tbody tr")
-  # row_elements = TestSupport.driver.find_elements(:css, "[data-appletid=orders] table tbody tr")
-
-  # row_elements.each do |row|
-  #   row.location_once_scrolled_into_view
-  #   # debugger
-  #   cell_elements = row.find_elements(:css, "td")
-  #   current_first_element = cell_elements[first_column_index].text
-  #   current_second_element = cell_elements[second_column_index].text
-
-  #   if current_first_element == last_first_element # only evaluate the 2nd argument if the 1st stays the same
-  #     is_second_element_greater = convert_to_date(current_second_element) <= convert_to_date(last_second_element)
-  #     expect(is_second_element_greater).to be_true
-  #   else # only evaluate the 1st argument if it changes
-  #     is_first_element_greater = current_first_element >= last_first_element
-  #     expect(is_first_element_greater).to be_true
-  #   end # if current == last
-
-  #   last_first_element = current_first_element
-  #   last_second_element = current_second_element
-  # end # row_elements.each
 end
 
 Then(/^the "(.*?)" input should have the value "(.*?)" in the Orders applet$/) do |control_name, expected_value|
@@ -292,42 +200,9 @@ Then(/^the selected Order type is "(.*?)"$/) do |expected_text|
   expect(@oc.perform_verification("Selected Order Type", expected_text)).to be_true
 end
 
-Then(/^the "(.*?)" is in the correct format: all digits$/) do |field_name|
-  correct_format_regex = /\d+/
-
-  check_field_format(field_name, correct_format_regex)
-end
-
-Then(/^the "(.*?)" is in the correct format: mm\/dd\/yyyy hh:mm$/) do |field_name|
-  correct_format_regex = /\d{2}\/\d{2}\/\d{4}\s\d{2}:\d{2}/
-
-  check_field_format(field_name, correct_format_regex)
-end
-
 Then(/^the Orders Applet table contains rows$/) do
   wait = Selenium::WebDriver::Wait.new(:timeout => 60)
   wait.until { VerifyTableValue.check_data_rows_exist('orders') }
-end
-
-Then(/^user scrolls the order applet down$/) do
-  driver = TestSupport.driver
-  driver.execute_script("$('#grid-panel-orders').scrollTop(1000000)")
-  # sleep 10
-end
-
-When(/^user hovers over on the first record's "(.*?)"$/) do |_arg1|
-  @oc = OrdersContainer.instance
-  driver = TestSupport.driver
-  wait = Selenium::WebDriver::Wait.new(:timeout => 60)
-  hover = wait.until { driver.find_element(:xpath, "//*[@data-row-instanceid='urn-va-order-9E7A-3-12978']/td[contains(string(),'...')]") }
-  driver.action.move_to(hover).perform
-end
-
-Then(/^the tooltip contains text "(.*?)"$/) do |arg1|
-  driver = TestSupport.driver
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time) 
-  wait.until { @oc.get_element("Tooltip") }
-  expect(driver.find_element(:xpath, "//*[@data-row-instanceid='urn-va-order-9E7A-3-12978']/td[3]/span").attribute("title")).to include(arg1)
 end
 
 When(/^the user scrolls to the bottom of the Orders Applet$/) do
@@ -390,19 +265,15 @@ Then(/^the Orders Applet is not filtered by text "([^"]*)"$/) do |input_text|
   expect(row_count).to_not eq rows_containing_filter_text
 end
 
-When(/^the user opens details for order "([^"]*)"$/) do |arg1|
-  # it appears right now that order details can be opened by just clicking the row
-  expect(@oc.perform_action(arg1)).to eq(true)
-end
-
 def order_date_between_dates(start_string, end_string)
+  date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4}")
   range = Date.strptime(start_string, "%m/%d/%Y")..Date.strptime(end_string, "%m/%d/%Y")
   order_dates_tds = TestSupport.driver.find_elements(:css, '#data-grid-orders tbody tr.selectable td:nth-child(1)')
   order_dates_tds.each do |td_element|
     td_element.location_once_scrolled_into_view
     td_date = td_element.text
-    p td_date
-    return false unless range.cover? Date.strptime(td_date, "%m/%d/%Y")
+    date_only = date_format.match(td_date).to_s
+    return false unless range.cover? Date.strptime(date_only, "%m/%d/%Y")
   end
   return true
 rescue Exception => e
@@ -509,3 +380,92 @@ Given(/^the Orders Applet contains buttons$/) do |table|
   end
 end
 
+def verify_orders_between(start_time, end_time)
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { @oc.applet_loaded }
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time * 2)
+  wait.until { infiniate_scroll('#data-grid-orders tbody') }
+
+  format = "%m/%d/%Y"
+
+  @ehmp = PobOrdersApplet.new 
+  unless @ehmp.has_tbl_order_empty_row?
+    date_column_elements = @ehmp.tbl_coversheet_date_column
+    expect(date_column_elements.length).to be > 0
+    date_column_elements.each do | date_element |
+      is_after_start_time = Date.strptime(date_element.text, format) >= start_time
+      is_before_now = Date.strptime(date_element.text, format) <= end_time
+      expect(is_after_start_time).to eq(true), "#{date_element.text} is not after #{start_time}"
+      expect(is_before_now).to eq(true), "#{date_element.text} is not before #{end_time}"
+    end
+  end
+end
+
+Then(/^the Orders applet displays orders from the last (\d+) yrs$/) do |year|
+  right_now = Date.today
+  start_time = Date.today.prev_year(year.to_i)
+  verify_orders_between start_time, right_now
+end
+
+Then(/^the Orders applet displays orders from the last yr$/) do
+  right_now = Date.today
+  start_time = Date.today.prev_year(1)
+  verify_orders_between start_time, right_now
+end
+
+Then(/^the Orders applet displays orders from the last (\d+) months$/) do |month|
+  right_now = Date.today
+  start_time = Date.today.prev_month(month.to_i)
+  verify_orders_between start_time, right_now
+end
+
+Then(/^the Orders applet displays orders between "([^"]*)" and "([^"]*)"$/) do |arg1, arg2|
+  format = "%m/%d/%Y"
+  end_time = Date.strptime(arg2, format)
+  start_time = Date.strptime(arg1, format)
+  verify_orders_between start_time, end_time
+end
+
+When(/^the user opens the details for an order "([^"]*)" row$/) do |order_type|
+  @ehmp = PobOrdersApplet.new
+  rows = @ehmp.rows_of_type(order_type)
+  expect(rows.length).to be > 0
+  rows[0].click
+  @ehmp = OrderDetailModal.new
+  @ehmp.wait_until_fld_modal_title_visible
+end
+
+Then(/^an Order Details modal is displayed$/) do
+  @ehmp = OrderDetailModal.new
+  @ehmp.wait_until_fld_modal_content_visible
+  expect(@ehmp.fld_modal_content.text.length).to be > 0
+end
+
+Then(/^the modal has the following fields$/) do |expected_section_headers|
+  @ehmp = OrderDetailModal.new
+  expected_section_headers.rows.each do | header |
+    expect(@ehmp.fld_modal_content.text.upcase).to include "#{header[0].upcase}:"
+  end
+end
+
+Then(/^the Order num is in the correct format: all digits$/) do
+  @ehmp = OrderDetailModal.new
+  @ehmp.wait_until_fld_modal_content_visible
+  order_format = Regexp.new("Order #\\d+")
+  expect((@ehmp.fld_modal_content.text).should =~ (order_format)).to eq(true)
+end
+
+Then(/^the Start Date\/Time is in the correct format: mm\/dd\/yyyy hh:mm$/) do
+  @ehmp = OrderDetailModal.new
+  @ehmp.wait_until_fld_modal_content_visible
+  order_format = Regexp.new("Start Date/Time:.*\\d{2}\/\\d{2}\/\\d{4} \\d{2}:\\d{2}")
+  expect((@ehmp.fld_modal_content.text).should =~ (order_format)).to eq(true)
+end
+
+Then(/^the Stop Date\/Time is in the correct format: mm\/dd\/yyyy hh:mm$/) do
+  @ehmp = OrderDetailModal.new
+  @ehmp.wait_until_fld_modal_content_visible
+  #Start Date/Time:              04/01/2004 22:57
+  order_format = Regexp.new("Stop Date/Time:.*\\d{2}\/\\d{2}\/\\d{4} \\d{2}:\\d{2}")
+  expect((@ehmp.fld_modal_content.text).should =~ (order_format)).to eq(true)
+end

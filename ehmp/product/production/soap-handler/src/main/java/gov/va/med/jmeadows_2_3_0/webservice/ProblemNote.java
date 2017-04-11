@@ -16,7 +16,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="problemNote">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.domain.ext/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="noteDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="noteEnteredBy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -30,7 +30,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "problemNote", namespace = "http://webservice.vds.domain.ext/", propOrder = {
+@XmlType(name = "problemNote", namespace = "http://webservice.vds.DNS       /", propOrder = {
     "noteDate",
     "noteEnteredBy",
     "noteText"

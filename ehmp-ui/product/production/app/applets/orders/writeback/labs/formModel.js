@@ -11,8 +11,6 @@ define([
     var COLLECTION_DATE_TIME = '6';
     var COMMENTS = '15';
     var COLLECTION_TYPE = '28';
-    var HOW_OFTEN = '29';
-    var HOW_LONG = '153';
     var COLLECTION_SAMPLES = '126';
     var SPECIMEN = '127';
     var URGENCY = '180';
@@ -37,8 +35,9 @@ define([
                 var collectionDate = this.get('collectionDate');
                 var collectionTime = _.isUndefined(this.get('collectionTime')) ? '00:00' : this.get('collectionTime');
                 var collectionDateTime = new Date(collectionDate + ' ' + collectionTime);
-                var now = new Date(moment().format('MM/DD/YYYY HH:mm'));
-                if (this.get('collectionDateTime') !== 'TODAY' && collectionDateTime < now) {
+                var serverTimeDifference = this.get('serverTimeDifference');
+                var serverTime = moment().add(serverTimeDifference, 'milliseconds');
+                if (this.get('collectionDateTime') !== 'TODAY' && collectionDateTime < serverTime) {
                     if (this.get('collectionDate') !== moment().format('MM/DD/YYYY')){
 						this.errorModel.set({
 							collectionDate: "The start date may not be earlier than the present"
@@ -51,111 +50,33 @@ define([
                     }
                 }
             }
-            if (this.get('collectionType') === 'I' && !this.get('labCanCollect')) {
+            if (this.get('collectionType') === 'I' && !this.labCanCollect()) {
 				this.errorModel.set({
 					collectionType: "Immediate collect is not available for this test/sample"
 				});
-            }
-            if (!_.isEmpty(this.get('howLong'))) {
-                var howLong = this.get('howLong').toLowerCase().replace('x', '');
-                if (howLong != parseInt(howLong) || parseInt(howLong) <= 0) {
-					this.errorModel.set({
-						howLong: 'For continuous orders, enter a number of days, or an "X" followed by a number of times.'
-					});
-                }
             }
             if (!_.isEmpty(this.errorModel.toJSON())) {
                 return "Validation errors. Please fix.";
             }
         },
-        validateImmediateCollectDateTime: function() {
-            var self = this;
-            if (this.get('collectionType') === 'I') {
-                var callback = {
-                    error: function(model, resp) {
-                        self.set({
-                            errorMessage: "[Immediate Collection Times] - Error occurred validating.",
-                            immediateCollectionIsComplete: true
-                        });
-                    },
-                    success: function(model, resp) {
-                        if (resp.data[0].isValid !== "1") {
-                            self.set('errorMessage', "[Immediate Collection Times] - " + resp.data[0].validationMessage);
-                        }
-                        self.set('immediateCollectionIsComplete', true);
-                    }
-                };
-                var dateTimeSelected = new Date(this.get('immediateCollectionDate') + ' ' + this.get('immediateCollectionTime'));
+        labCanCollect: function() {
+            var labCanCollect = false;
+            var labCollSampDefault = this.get('labCollSampDefault');
+            var collSampList = this.get('collectionSampleListCache');
+            var collectionSample = this.get('collectionSample');
 
-                var siteCode = ADK.UserService.getUserSession().get('site');
-                var pid = ADK.PatientRecordService.getCurrentPatient().get("pid");
-                var modelUrl = '/resource/write-health-data/labSupportData?site=' + siteCode + '&type=lab-valid-immediate-collect-time&timestamp=' + dateTimeSelected.toString('yyyyMMddHHmmss') + '&pid=' + pid;
-                var RetrieveModel = Backbone.Model.extend({
-                    url: modelUrl,
-                    parse: function(data) {
-                        return data.data;
-                    }
+            if (!_.isUndefined(collSampList) && !_.isUndefined(labCollSampDefault)){
+                var selectedCollectionSample = _.filter(collSampList, function(e) {
+                    return e.ien == collectionSample;
                 });
-                var model = new RetrieveModel();
-                return model.fetch(callback);
-            }
-            return false;
-        },
-        validateHowLong: function() {
-            var self = this;
-            var callback = {
-                error: function(model, resp) {
-                    self.set('serverSideError', 'pick-list');
-                },
-                success: function(model, resp) {
-                    var maxDays = (resp.data ? (resp.data.value || resp.data[0]) : undefined);
-                    if (_.isUndefined(maxDays)) {
-                        maxDays = -1;
-                    }
-
-                    if (self.get('howLong').toLowerCase().indexOf('x') !== -1) {
-                        var selectedHowOften = _.filter(self.get('howOftenListCache'), function(e) {
-                            return e.code === self.get('howOften');
-                        });
-                        if (selectedHowOften[0]) {
-                            var minutes = parseInt(selectedHowOften[0].frequency);
-                            var days = (minutes / 1440) * parseInt(self.get('howLong').toLowerCase().replace('x', ''));
-                            var maxFrequency = (maxDays * 1440) / minutes;
-                            var perHour = minutes / 60;
-                            if (days > maxDays) {
-                                var message = 'For this frequency, the maximum number of times allowed is: X' + maxFrequency + ' (Every ' + perHour + ' hours for a maximum of ' + maxDays + ' days.)';
-                                self.set('errorMessage', '[How Long] - ' + message);
-                            }
-                        }
-                    } else if (self.get('howLong') == parseInt(self.get('howLong'))) { //by days
-                        if (parseInt(self.get('howLong')) > maxDays) {
-                            self.set('errorMessage', '[How Long] - Maximum number of days allowed is ' + maxDays);
-                        }
-                    }
-                    self.set('howLongIsComplete', true);
+                if (!_.isEmpty(selectedCollectionSample) && selectedCollectionSample[0].n === labCollSampDefault) {
+                    labCanCollect = true;
                 }
-            };
-
-            var siteCode = ADK.UserService.getUserSession().get('site');
-            var location;
-            if (ADK.PatientRecordService.getCurrentPatient().get('visit')) {
-                location = ADK.PatientRecordService.getCurrentPatient().get('visit').localId;
             }
-            var schedule = this.get('howOften');
-            var modelUrl = '';
-            if ((this.get('collectionType').toString() === 'LC') || (this.get('collectionType').toString() === 'I')) {
-                modelUrl = '/resource/write-health-data/labSupportData?site=' + siteCode + '&type=lab-future-lab-collects&location=' + location;
-            } else {
-                modelUrl = '/resource/write-pick-list?site=' + siteCode + '&type=lab-order-max-days-continuous&location=' + location + '&schedule=' + schedule;
+            else if (_.isUndefined(collSampList)) {
+                labCanCollect = true;
             }
-            var RetrieveModel = Backbone.Model.extend({
-                url: modelUrl,
-                parse: function(data) {
-                    return data.data;
-                }
-            });
-            var model = new RetrieveModel();
-            return model.fetch(callback);
+            return labCanCollect;
         },
         generateInputList: function() {
             var collectionSample = this.get('collectionSample').toString() !== "0" ? this.get('collectionSample').toString() : this.get('otherCollectionSample').toString();
@@ -211,19 +132,8 @@ define([
                 {
                     'inputKey': COLLECTION_DATE_TIME,
                     'inputValue': collectionDateTime
-                }, //collection date time
-                {
-                    'inputKey': HOW_OFTEN,
-                    'inputValue': this.get('howOften').toString()
-                } //frequency
+                } //collection date time
             ];
-
-            if (this.get("howLong") && this.get("howLong") !== '') {
-                inputList.push({
-                    'inputKey': HOW_LONG,
-                    'inputValue': this.get('howLong').toString()
-                }); //frequency)
-            }
             return inputList;
         },
         generateCommentList: function() {

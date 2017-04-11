@@ -62,7 +62,7 @@ define([
                 placeholder: 'Enter your text filter',
                 name: 'q-' + options.id,
                 template: filterTemplate,
-                filterName: options.filterName || 'Filtered',
+                filterName: options.filterName || '',
                 model: options.model
             });
         }

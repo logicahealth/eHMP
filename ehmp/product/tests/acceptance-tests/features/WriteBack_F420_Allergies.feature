@@ -3,7 +3,7 @@ Feature: F420 - Enter and Store an Allergy and an Allergy EIE
   
 @allergy_writeback
 Scenario: Client can write to the VistA and add Allergy records then marked it as Entered in Error- patient with ICN
-  Given a patient with pid "C877;253" has been synced through VX-Sync API for "9E7A;C877;2939;FFC7;VLER" site(s)
+  Given a patient with pid "C877;253" has been synced through VX-Sync API for "9E7A;C877;HDR;VLER" site(s)
   And the client requests "ALLERGIES" for the patient "C877;253" in VPR format
   And save the totalItems
   And a client connect to VistA using "KODAK"

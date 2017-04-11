@@ -195,6 +195,15 @@ define([
         storyNumber: 8069,
         documentationURL: "/documentation/#/adk/form-controls#Basic-Select"
     }, {
+        id: 'selectList',
+        label: 'Select List',
+        developmentStatus: false,
+        cometStatus: false,
+        exampleForm: true,
+        supportsErrorMessage: true,
+        storyNumber: 13379,
+        documentationURL: "/documentation/#/adk/form-controls#Utility-Select-List"
+    }, {
         id: 'multiselectSideBySide',
         label: 'Multi-Select Side By Side',
         developmentStatus: true,

@@ -110,7 +110,7 @@ define([
             });
 
             it('contains a title on the input field', function() {
-                expect($form.find('input').attr('title')).toBe('Please enter date in text or numerical format.');
+                expect($form.find('input').attr('title')).toBe('Enter date in text or numerical format.');
             });
 
             it('allows free text to be typed into a date field', function() {

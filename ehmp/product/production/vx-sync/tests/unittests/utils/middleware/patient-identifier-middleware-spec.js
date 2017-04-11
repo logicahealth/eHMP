@@ -14,11 +14,11 @@ var config = {
     'vistaSites': {
         '9E7A': {
             'name': 'panorama',
-            'stationNumber': 500,
+            'stationNumber': 500
         },
         'C877': {
             'name': 'kodak',
-            'stationNumber': 500,
+            'stationNumber': 500
         }
     },
     'hdr': {
@@ -42,6 +42,7 @@ var PatientIdentifierMiddleware = require(global.VX_UTILS + 'middleware/patient-
 
 var mockIdentifierData = require(global.VX_ROOT + 'mocks/jds/jds-mock-identifier-data');
 
+var verifyPatientExists = PatientIdentifierMiddleware._tests._verifyPatientExists;
 var validatePatientIdentifier = PatientIdentifierMiddleware._tests._validatePatientIdentifier;
 var getJPID = PatientIdentifierMiddleware._tests._getJPID;
 var resolveJPID = PatientIdentifierMiddleware._tests._resolveJPID;
@@ -62,7 +63,126 @@ var SEPARATED_IDENTIFIER = {
     'value': 'ABCD;19'
 };
 
-describe('middleware/patient-identifier.js', function() {
+describe('middleware/patient-identifier-middleware.js', function() {
+    describe('verifyPatientExists()', function() {
+        it('If patient identifier is not a pid then continue without checking if patient is in jds.', function() {
+            var response = new DummyResponse();
+            var next = jasmine.createSpy();
+
+            verifyPatientExists.call(options, {patientIdentifier: {type: 'icn', value: '10108V420871'}}, response, next);
+
+            expect(response.statusCode).toBeFalsy();
+            expect(next).toHaveBeenCalled();
+        });
+
+        it('If jds returns a search error then reject request.', function() {
+            var jdsCalled = false;
+            var response = new DummyResponse();
+            var next = jasmine.createSpy();
+            var opts = _.clone(options);
+            opts.jdsClient.getOperationalDataPtSelectByPid = jasmine.createSpy().andCallFake(function(pid, callback) {
+                callback('Connection refused', {
+                    'statusCode': 500
+                });
+                jdsCalled = true;
+            });
+
+            runs(function() {
+                verifyPatientExists.call(opts, {patientIdentifier: {type: 'pid', value: '9E7A;3'}}, response, next);
+            });
+
+            waitsFor(function() {
+                return jdsCalled;
+            });
+
+            runs(function() {
+                expect(response.statusCode).toBe(400);
+                expect(response.response).toBe('Unable to check if patient exists in Jds.');
+                expect(next).not.toHaveBeenCalled();
+            });
+        });
+
+        it('If jds returns an invalid response then reject request.', function() {
+            var jdsCalled = false;
+            var response = new DummyResponse();
+            var next = jasmine.createSpy();
+            var opts = _.clone(options);
+            opts.jdsClient.getOperationalDataPtSelectByPid = jasmine.createSpy().andCallFake(function(pid, callback) {
+                callback(null, {
+                    'statusCode': 200
+                }, {data: {}});
+                jdsCalled = true;
+            });
+
+            runs(function() {
+                verifyPatientExists.call(opts, {patientIdentifier: {type: 'pid', value: '9E7A;3'}}, response, next);
+            });
+
+            waitsFor(function() {
+                return jdsCalled;
+            });
+
+            runs(function() {
+                expect(response.statusCode).toBe(400);
+                expect(response.response).toBe('Unable to check if patient exists in Jds.');
+                expect(next).not.toHaveBeenCalled();
+            });
+        });
+
+        it('If patient is not in jds then reject request.', function() {
+            var jdsCalled = false;
+            var response = new DummyResponse();
+            var next = jasmine.createSpy();
+            var opts = _.clone(options);
+            opts.jdsClient.getOperationalDataPtSelectByPid = jasmine.createSpy().andCallFake(function(pid, callback) {
+                callback(null, {
+                    'statusCode': 200
+                }, {data: {totalItems: 0}});
+                jdsCalled = true;
+            });
+
+            runs(function() {
+                verifyPatientExists.call(opts, {patientIdentifier: {type: 'pid', value: '9E7A;3'}}, response, next);
+            });
+
+            waitsFor(function() {
+                return jdsCalled;
+            });
+
+            runs(function() {
+                expect(response.statusCode).toBe(400);
+                expect(response.response).toBe('Patient does not exist in Jds.');
+                expect(next).not.toHaveBeenCalled();
+            });
+        });
+
+        it('If patient is in jds then continue processing request.', function() {
+            var jdsCalled = false;
+            var response = new DummyResponse();
+            var next = jasmine.createSpy();
+            var opts = _.clone(options);
+            opts.jdsClient.getOperationalDataPtSelectByPid = jasmine.createSpy().andCallFake(function(pid, callback) {
+                callback(null, {
+                    'statusCode': 200
+                }, {data: {totalItems: 1}});
+                jdsCalled = true;
+            });
+
+            runs(function() {
+                verifyPatientExists.call(opts, {patientIdentifier: {type: 'pid', value: '9E7A;3'}}, response, next);
+            });
+
+            waitsFor(function() {
+                return jdsCalled;
+            });
+
+            runs(function() {
+                expect(response.statusCode).toBeFalsy();
+                expect(next).toHaveBeenCalled();
+            });
+        });
+    });
+
     describe('validatePatientIdentifier ()', function() {
         it('Rejects requests without a valid query parameter', function() {
             var response = new DummyResponse();
@@ -89,7 +209,7 @@ describe('middleware/patient-identifier.js', function() {
             var response = new DummyResponse();
             validatePatientIdentifier.call(options, new DummyRequest(requestParameters), response, function() {});
             expect(response.statusCode).toEqual(400);
-            expect(response.response).toEqual('No value was given for the query parameter pid');
+            expect(response.response).toEqual('No value was given for the query parameter');
         });
 
         it('Rejects invalid PIDs', function() {
@@ -99,7 +219,7 @@ describe('middleware/patient-identifier.js', function() {
             var response = new DummyResponse();
             validatePatientIdentifier.call(options, new DummyRequest(requestParameters), response, function() {});
             expect(response.statusCode).toEqual(400);
-            expect(response.response).toEqual('The value "10108V420871" for patient id type "pid" was not in a valid format');
+            expect(response.response).toEqual('The value for patient id type was not in a valid format');
         });
 
         it('Rejects invalid ICNs', function() {
@@ -109,7 +229,7 @@ describe('middleware/patient-identifier.js', function() {
             var response = new DummyResponse();
             validatePatientIdentifier.call(options, new DummyRequest(requestParameters), response, function() {});
             expect(response.statusCode).toEqual(400);
-            expect(response.response).toEqual('The value "9E7A;3" for patient id type "icn" was not in a valid format');
+            expect(response.response).toEqual('The value for patient id type was not in a valid format');
         });
 
         it('Appends a PID patientIdentifier json property to valid request objects', function() {
@@ -252,29 +372,93 @@ describe('middleware/patient-identifier.js', function() {
                 expect(request.jpid).toBe(false);
             });
         });
+
+        it('Error from JDS', function() {
+            var done;
+            var request = {
+                'patientIdentifier': UNKNOWN_IDENTIFIER
+            };
+            var response = new DummyResponse();
+            spyOn(response, 'status').andCallThrough();
+            spyOn(response, 'json').andCallFake(function(){
+                done = true;
+            });
+            var next = jasmine.createSpy();
+            var opts = _.clone(options);
+            opts.jdsClient.getPatientIdentifier = jasmine.createSpy().andCallFake(function(job, callback) {
+                callback('Error!', null, null);
+            });
+
+            runs(function() {
+                getJPID.call(opts, request, response, next);
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+
+            runs(function() {
+                expect(response.status).toHaveBeenCalledWith(500);
+            });
+        });
+
     });
 
     describe('resolveJPID()', function() {
-        it('Gets the JPID for a PID that has been disconnected form its ICN via corresponding ICN in pt-select that has already been assigned a JPID in JDS', function() {
+        var jpid = '21EC2020-3AEA-4069-A2DD-DDDDDDDDDDDD';
+        var identifiers = ['000000V111111', 'ABCD;19', 'DOD;1111111'];
+        var idObjects = [{
+                            type: 'icn',
+                            value: '000000V111111'
+                        }, {
+                            type: 'pid',
+                            value: 'ABCD;19'
+                        }, {
+                            type: 'pid',
+                            value: 'DOD;1111111'
+                        }];
+        it('Normal path: jpid already present', function() {
+            var request = {
+                'patientIdentifier': SEPARATED_IDENTIFIER
+            };
+            var response = {};
+            var opts = _.clone(options);
+            opts.getJPID = function(req, res, next){
+                req.jpid = jpid;
+                req.identifiers = identifiers;
+                next();
+            };
+
+            var done = false;
+
+            runs(function() {
+                resolveJPID.call(opts, request, response, function() {
+                    expect(request.jpid).toBeTruthy();
+                    expect(request.jpid).toEqual(jpid);
+                    expect(request.identifiers).toContain('000000V111111');
+                    expect(request.identifiers).toContain('DOD;1111111');
+                    expect(request.identifiers).toContain('ABCD;19');
+                    done = true;
+                });
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+        });
+
+        it('Normal path: jpid query returns 200', function() {
             var request = {
                 'patientIdentifier': SEPARATED_IDENTIFIER
             };
             var response = {};
             var opts = _.clone(options);
             opts.getJPID = getJPID;
+            opts.createJPID = createJPID;
 
             opts.mviClient = {
                 lookup: function(patientIdentifier, callback) {
-                    return callback(null, {ids: [{
-                        type: 'icn',
-                        value: '000000V111111'
-                    }, {
-                        type: 'pid',
-                        value: 'ABCD;19'
-                    }, {
-                        type: 'pid',
-                        value: 'DOD;1111111'
-                    }]} );
+                    return callback(null, {ids: idObjects} );
                 }
             };
 
@@ -282,16 +466,10 @@ describe('middleware/patient-identifier.js', function() {
                 jds: {}
             });
 
-            jdsClientDummy._setResponseData([null, null, null], [{
-                statusCode: 404
-            }, {
-                statusCode: 200
-            }, {
-                statusCode: 200
-            }], [null, {
-                jpid: '21EC2020-3AEA-4069-A2DD-DDDDDDDDDDDD',
-                patientIdentifiers: ['000000V111111', 'DOD;1111111']
-            }, null]);
+            jdsClientDummy._setResponseData([null, null, null, null],[{statusCode: 404}, {statusCode: 200}, {statusCode: 201}, {statusCode: 200}], [null, null, null, {
+                jpid: jpid,
+                patientIdentifiers: [request.patientIdentifier.value]
+            }]);
 
             opts.jdsClient = jdsClientDummy;
             var done = false;
@@ -299,7 +477,99 @@ describe('middleware/patient-identifier.js', function() {
             runs(function() {
                 resolveJPID.call(opts, request, response, function() {
                     expect(request.jpid).toBeTruthy();
-                    expect(request.jpid).toEqual('21EC2020-3AEA-4069-A2DD-DDDDDDDDDDDD');
+                    expect(request.jpid).toEqual(jpid);
+                    expect(request.identifiers).toContain(request.patientIdentifier.value);
+                    expect(request.identifiers).not.toContain('000000V111111');
+                    expect(request.identifiers).not.toContain('DOD;1111111');
+                    done = true;
+                });
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+        });
+        it('Normal path: jpid query returns 400', function() {
+            var request = {
+                'patientIdentifier': SEPARATED_IDENTIFIER
+            };
+            var response = {};
+            var opts = _.clone(options);
+            var getJPIDcalls = 0;
+            opts.getJPID = function(req, res, next){
+                if(!getJPIDcalls){
+                    req.jpid = false;
+                    getJPIDcalls++;
+                } else {
+                    req.jpid = jpid;
+                    req.identifiers = [request.patientIdentifier.value];
+                }
+                next();
+            };
+            opts.createJPID = createJPID;
+
+            opts.mviClient = {
+                lookup: function(patientIdentifier, callback) {
+                    return callback(null, {ids: idObjects} );
+                }
+            };
+
+            var jdsClientDummy = new JdsClientDummy(log, {
+                jds: {}
+            });
+
+            jdsClientDummy._setResponseData([null, null, null],[{statusCode: 400}, {statusCode: 201}, {statusCode: 200}], [null, null, {
+                jpid: jpid,
+                patientIdentifiers: identifiers
+            }]);
+
+            opts.jdsClient = jdsClientDummy;
+            var done = false;
+
+            runs(function() {
+                resolveJPID.call(opts, request, response, function() {
+                    expect(request.jpid).toBeTruthy();
+                    expect(request.jpid).toEqual(jpid);
+                    expect(request.identifiers).toContain(request.patientIdentifier.value);
+                    expect(request.identifiers).not.toContain('000000V111111');
+                    expect(request.identifiers).not.toContain('DOD;1111111');
+                    done = true;
+                });
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+        });
+        it('Normal path: jpid query returns 201 and no conflict when re-associating pid to jpid', function() {
+            var request = {
+                'patientIdentifier': SEPARATED_IDENTIFIER
+            };
+            var response = {};
+            var opts = _.clone(options);
+            opts.getJPID = getJPID;
+            opts.createJPID = createJPID;
+
+            opts.mviClient = {
+                lookup: function(patientIdentifier, callback) {
+                    return callback(null, {ids: idObjects} );
+                }
+            };
+
+            var jdsClientDummy = new JdsClientDummy(log, {
+                jds: {}
+            });
+
+            jdsClientDummy._setResponseData([null, null, null],[{statusCode: 404}, {statusCode: 201, headers: {location:'http://IP_ADDRESS:PORT/vpr/jpid'+jpid}}, {statusCode: 201}, {statusCode: 200}], [null, null, null, {jpid: jpid, patientIdentifiers: identifiers}]);
+
+            opts.jdsClient = jdsClientDummy;
+            var done = false;
+
+            runs(function() {
+                resolveJPID.call(opts, request, response, function() {
+                    expect(request.jpid).toBeTruthy();
+                    expect(request.jpid).toEqual(jpid);
+                    expect(request.identifiers).toContain(request.patientIdentifier.value);
                     expect(request.identifiers).toContain('000000V111111');
                     expect(request.identifiers).toContain('DOD;1111111');
                     done = true;
@@ -310,23 +580,68 @@ describe('middleware/patient-identifier.js', function() {
                 return done;
             });
         });
+        it('Normal path: jpid query returns 201 and conflict when re-associating pid to jpid', function() {
+            var request = {
+                'patientIdentifier': SEPARATED_IDENTIFIER
+            };
+            var response = {};
+            var opts = _.clone(options);
 
-        it('Calls getJPID normally if a JPID is found the first time', function() {
+            opts.getJPID = getJPID;
+            opts.createJPID = createJPID;
+
+            opts.mviClient = {
+                lookup: function(patientIdentifier, callback) {
+                    return callback(null, {ids: idObjects} );
+                }
+            };
+
+            var jdsClientDummy = new JdsClientDummy(log, {
+                jds: {}
+            });
+
+            jdsClientDummy._setResponseData([null, null, null, null, null],[{statusCode:404},{statusCode: 201, headers: {location:'http://IP_ADDRESS:PORT/vpr/jpid'+jpid}}, {statusCode: 400}, {statusCode:201}, {statusCode:200}], [null,null, null, null, {jpid: jpid, patientIdentifiers:[request.patientIdentifier.value]}]);
+
+            opts.jdsClient = jdsClientDummy;
+            var done = false;
+
+            runs(function() {
+                resolveJPID.call(opts, request, response, function() {
+                    expect(request.jpid).toBeTruthy();
+                    expect(request.jpid).toEqual(jpid);
+                    expect(request.identifiers).toContain(request.patientIdentifier.value);
+                    expect(request.identifiers).not.toContain('000000V111111');
+                    expect(request.identifiers).not.toContain('DOD;1111111');
+                    done = true;
+                });
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+        });
+        it('Normal path (edge case): corresponding ids lookup returns no ids', function(){
             var request = {
                 'patientIdentifier': SEPARATED_IDENTIFIER
             };
             var response = {};
             var opts = _.clone(options);
             opts.getJPID = getJPID;
+            opts.createJPID = createJPID;
+
+            opts.mviClient = {
+                lookup: function(patientIdentifier, callback) {
+                    return callback(null, null);
+                }
+            };
 
             var jdsClientDummy = new JdsClientDummy(log, {
                 jds: {}
             });
-            jdsClientDummy._setResponseData([null], [{
-                statusCode: 200
-            }], [{
-                jpid: '21EC2020-3AEA-4069-A2DD-DDDDDDDDDDDD',
-                patientIdentifiers: ['000000V111111', 'ABCD;19', 'DOD;1111111']
+
+            jdsClientDummy._setResponseData([null, null, null],[{statusCode: 404}, {statusCode: 201}, {statusCode: 200}], [null, null, {
+                jpid: jpid,
+                patientIdentifiers: [request.patientIdentifier.value]
             }]);
 
             opts.jdsClient = jdsClientDummy;
@@ -335,11 +650,347 @@ describe('middleware/patient-identifier.js', function() {
             runs(function() {
                 resolveJPID.call(opts, request, response, function() {
                     expect(request.jpid).toBeTruthy();
-                    expect(request.jpid).toEqual('21EC2020-3AEA-4069-A2DD-DDDDDDDDDDDD');
-                    expect(request.identifiers).toContain('000000V111111');
-                    expect(request.identifiers).toContain('DOD;1111111');
-                    expect(request.identifiers).toContain('ABCD;19');
+                    expect(request.jpid).toEqual(jpid);
+                    expect(request.identifiers).toContain(request.patientIdentifier.value);
+                    expect(request.identifiers).not.toContain('000000V111111');
+                    expect(request.identifiers).not.toContain('DOD;1111111');
                     done = true;
+                });
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+        });
+        it('Error path: corresponding ids lookup returns error', function(){
+            var request = {
+                'patientIdentifier': SEPARATED_IDENTIFIER
+            };
+            var done = false;
+            var response = {
+                status: function(){
+                    return this;
+                },
+                json: function(){
+                    expect(request.jpid).toBeFalsy();
+                    expect(request.identifiers).toBeFalsy();
+                    expect(response.status).toHaveBeenCalledWith(400);
+                    done = true;
+                    return this;
+                }
+            };
+            var opts = _.clone(options);
+            opts.getJPID = getJPID;
+            opts.createJPID = createJPID;
+
+            spyOn(response, 'status').andCallThrough();
+            spyOn(response, 'json').andCallThrough();
+
+            opts.mviClient = {
+                lookup: function(patientIdentifier, callback) {
+                    return callback({error: 'ERROR!'}, null);
+                }
+            };
+
+            var jdsClientDummy = new JdsClientDummy(log, {
+                jds: {}
+            });
+
+            jdsClientDummy._setResponseData([null],[{statusCode: 404}], [null]);
+
+            opts.jdsClient = jdsClientDummy;
+
+            runs(function() {
+                resolveJPID.call(opts, request, response, function() {
+                    //Should error out
+                });
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+        });
+        it('Error path: jpid query returns error', function(){
+            var request = {
+                'patientIdentifier': SEPARATED_IDENTIFIER
+            };
+            var done = false;
+            var response = {
+                status: function(){
+                    return this;
+                },
+                json: function(){
+                    expect(request.jpid).toBeFalsy();
+                    expect(request.identifiers).toBeFalsy();
+                    expect(response.status).toHaveBeenCalledWith(400);
+                    done = true;
+                    return this;
+                }
+            };
+            var opts = _.clone(options);
+            opts.getJPID = getJPID;
+            opts.createJPID = createJPID;
+
+            spyOn(response, 'status').andCallThrough();
+            spyOn(response, 'json').andCallThrough();
+
+            opts.mviClient = {
+                lookup: function(patientIdentifier, callback) {
+                    return callback(null, {ids: idObjects});
+                }
+            };
+
+            var jdsClientDummy = new JdsClientDummy(log, {
+                jds: {}
+            });
+
+            jdsClientDummy._setResponseData([null, {error: 'ERROR!'}],[{statusCode: 404}, null], [null, null]);
+
+            opts.jdsClient = jdsClientDummy;
+
+            runs(function() {
+                resolveJPID.call(opts, request, response, function() {
+                    //Should error out
+                });
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+        });
+        it('Error path: jpid query returns null response', function(){
+            var request = {
+                'patientIdentifier': SEPARATED_IDENTIFIER
+            };
+            var done = false;
+            var response = {
+                status: function(){
+                    return this;
+                },
+                json: function(){
+                    expect(request.jpid).toBeFalsy();
+                    expect(request.identifiers).toBeFalsy();
+                    expect(response.status).toHaveBeenCalledWith(400);
+                    done = true;
+                    return this;
+                }
+            };
+            var opts = _.clone(options);
+            opts.getJPID = getJPID;
+            opts.createJPID = createJPID;
+
+            spyOn(response, 'status').andCallThrough();
+            spyOn(response, 'json').andCallThrough();
+
+            opts.mviClient = {
+                lookup: function(patientIdentifier, callback) {
+                    return callback(null, {ids: idObjects});
+                }
+            };
+
+            var jdsClientDummy = new JdsClientDummy(log, {
+                jds: {}
+            });
+
+            jdsClientDummy._setResponseData([null, null],[{statusCode: 404}, null], [null, null]);
+
+            opts.jdsClient = jdsClientDummy;
+
+            runs(function() {
+                resolveJPID.call(opts, request, response, function() {
+                    //Should error out
+                });
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+        });
+        it('Error path: jpid query returns unexpected response', function(){
+            var request = {
+                'patientIdentifier': SEPARATED_IDENTIFIER
+            };
+            var done = false;
+            var response = {
+                status: function(){
+                    return this;
+                },
+                json: function(){
+                    expect(request.jpid).toBeFalsy();
+                    expect(request.identifiers).toBeFalsy();
+                    expect(response.status).toHaveBeenCalledWith(400);
+                    done = true;
+                    return this;
+                }
+            };
+            var opts = _.clone(options);
+            opts.getJPID = getJPID;
+            opts.createJPID = createJPID;
+
+            spyOn(response, 'status').andCallThrough();
+            spyOn(response, 'json').andCallThrough();
+
+            opts.mviClient = {
+                lookup: function(patientIdentifier, callback) {
+                    return callback(null, {ids: idObjects});
+                }
+            };
+
+            var jdsClientDummy = new JdsClientDummy(log, {
+                jds: {}
+            });
+
+            jdsClientDummy._setResponseData([null, null],[{statusCode: 404}, {statusCode: 500}], [null, null]);
+
+            opts.jdsClient = jdsClientDummy;
+
+            runs(function() {
+                resolveJPID.call(opts, request, response, function() {
+                    //Should error out
+                });
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+        });
+        it('Error path: jds.storePatientIdentifier returns error', function(){
+            var request = {
+                'patientIdentifier': SEPARATED_IDENTIFIER
+            };
+            var done = false;
+            var response = {
+                status: function(){
+                    return this;
+                },
+                json: function(){
+                    expect(request.jpid).toBeFalsy();
+                    expect(request.identifiers).toBeFalsy();
+                    expect(response.status).toHaveBeenCalledWith(400);
+                    done = true;
+                    return this;
+                }
+            };
+            var opts = _.clone(options);
+            opts.getJPID = getJPID;
+            opts.createJPID = createJPID;
+
+            spyOn(response, 'status').andCallThrough();
+            spyOn(response, 'json').andCallThrough();
+
+            opts.mviClient = {
+                lookup: function(patientIdentifier, callback) {
+                    return callback(null, {ids: idObjects});
+                }
+            };
+
+            var jdsClientDummy = new JdsClientDummy(log, {
+                jds: {}
+            });
+
+            jdsClientDummy._setResponseData([null, null, {error:'ERROR!'}],[{statusCode: 404}, {statusCode: 201}, null], [null, null, null]);
+
+            opts.jdsClient = jdsClientDummy;
+
+            runs(function() {
+                resolveJPID.call(opts, request, response, function() {
+                    //Should error out
+                });
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+        });
+        it('Error path: jds.storePatientIdentifier returns null response', function(){
+            var request = {
+                'patientIdentifier': SEPARATED_IDENTIFIER
+            };
+            var done = false;
+            var response = {
+                status: function(){
+                    return this;
+                },
+                json: function(){
+                    expect(request.jpid).toBeFalsy();
+                    expect(request.identifiers).toBeFalsy();
+                    expect(response.status).toHaveBeenCalledWith(400);
+                    done = true;
+                    return this;
+                }
+            };
+            var opts = _.clone(options);
+            opts.getJPID = getJPID;
+            opts.createJPID = createJPID;
+
+            spyOn(response, 'status').andCallThrough();
+            spyOn(response, 'json').andCallThrough();
+
+            opts.mviClient = {
+                lookup: function(patientIdentifier, callback) {
+                    return callback(null, {ids: idObjects});
+                }
+            };
+
+            var jdsClientDummy = new JdsClientDummy(log, {
+                jds: {}
+            });
+
+            jdsClientDummy._setResponseData([null, null, null],[{statusCode: 404}, {statusCode: 201}, null], [null, null, null]);
+
+            opts.jdsClient = jdsClientDummy;
+
+            runs(function() {
+                resolveJPID.call(opts, request, response, function() {
+                    //Should error out
+                });
+            });
+
+            waitsFor(function() {
+                return done;
+            });
+        });
+        it('Error path: jds.storePatientIdentifier returns unexpected response', function(){
+            var request = {
+                'patientIdentifier': SEPARATED_IDENTIFIER
+            };
+            var done = false;
+            var response = {
+                status: function(){
+                    return this;
+                },
+                json: function(){
+                    expect(request.jpid).toBeFalsy();
+                    expect(request.identifiers).toBeFalsy();
+                    expect(response.status).toHaveBeenCalledWith(400);
+                    done = true;
+                    return this;
+                }
+            };
+            var opts = _.clone(options);
+            opts.getJPID = getJPID;
+            opts.createJPID = createJPID;
+
+            spyOn(response, 'status').andCallThrough();
+            spyOn(response, 'json').andCallThrough();
+
+            opts.mviClient = {
+                lookup: function(patientIdentifier, callback) {
+                    return callback(null, {ids: idObjects});
+                }
+            };
+
+            var jdsClientDummy = new JdsClientDummy(log, {
+                jds: {}
+            });
+
+            jdsClientDummy._setResponseData([null, null, null],[{statusCode: 404}, {statusCode: 201}, {statusCode: 500}], [null, null, null]);
+
+            opts.jdsClient = jdsClientDummy;
+
+            runs(function() {
+                resolveJPID.call(opts, request, response, function() {
+                    //Should error out
                 });
             });
 
@@ -389,7 +1040,7 @@ describe('middleware/patient-identifier.js', function() {
                     var retObj = {
                         'jpid': '21EC2020-3AEA-4069-A2DD-08002B30309D'
                     };
-                    callback(null, {}, retObj);
+                    callback(null, {'statusCode':201}, retObj);
                 })
             };
             opts.getJPID = getJPID;
@@ -427,7 +1078,7 @@ describe('middleware/patient-identifier.js', function() {
                     var retObj = {
                         'jpid': '21EC2020-3AEA-4069-A2DD-FFFFFFFFFFFF'
                     };
-                    callback(null, {}, retObj);
+                    callback(null, {'statusCode':201}, retObj);
                 })
             };
             opts.getJPID = getJPID;
@@ -446,6 +1097,96 @@ describe('middleware/patient-identifier.js', function() {
                 expect(request.jpid).toNotMatch(/21EC2020-3AEA-4069-A2DD-[A]{12}/);
                 expect(request.jpid).toNotMatch(/21EC2020-3AEA-4069-A2DD-[B]{12}/);
                 expect(request.jpid).toNotMatch(/21EC2020-3AEA-4069-A2DD-[C]{12}/);
+            });
+        });
+
+        it('Error path: error returned by JDS', function() {
+            var request = new DummyRequest();
+            request.jpid = false;
+            request.patientIdentifier = UNKNOWN_IDENTIFIER;
+            var response = new DummyResponse();
+            var next = jasmine.createSpy();
+            var opts = _.clone(options);
+            opts.jdsClient = {
+                'storePatientIdentifier': jasmine.createSpy().andCallFake(function(job, callback) {
+                    callback({error:'ERROR!'}, null);
+                })
+            };
+
+            spyOn(response, 'status').andCallThrough();
+
+            opts.getJPID = getJPID;
+
+            runs(function() {
+                createJPID.call(opts, request, response, next);
+            });
+
+            waitsFor(function() {
+                return response.status.callCount > 0;
+            });
+
+            runs(function() {
+                expect(response.status).toHaveBeenCalledWith(400);
+            });
+        });
+
+        it('Error path: null response returned by JDS', function() {
+            var request = new DummyRequest();
+            request.jpid = false;
+            request.patientIdentifier = UNKNOWN_IDENTIFIER;
+            var response = new DummyResponse();
+            var next = jasmine.createSpy();
+            var opts = _.clone(options);
+            opts.jdsClient = {
+                'storePatientIdentifier': jasmine.createSpy().andCallFake(function(job, callback) {
+                    callback(null, null);
+                })
+            };
+
+            spyOn(response, 'status').andCallThrough();
+
+            opts.getJPID = getJPID;
+
+            runs(function() {
+                createJPID.call(opts, request, response, next);
+            });
+
+            waitsFor(function() {
+                return response.status.callCount > 0;
+            });
+
+            runs(function() {
+                expect(response.status).toHaveBeenCalledWith(400);
+            });
+        });
+
+        it('Error path: unexpected response returned by JDS', function() {
+            var request = new DummyRequest();
+            request.jpid = false;
+            request.patientIdentifier = UNKNOWN_IDENTIFIER;
+            var response = new DummyResponse();
+            var next = jasmine.createSpy();
+            var opts = _.clone(options);
+            opts.jdsClient = {
+                'storePatientIdentifier': jasmine.createSpy().andCallFake(function(job, callback) {
+                    callback(null, {statusCode: 500});
+                })
+            };
+
+            spyOn(response, 'status').andCallThrough();
+
+            opts.getJPID = getJPID;
+
+            runs(function() {
+                createJPID.call(opts, request, response, next);
+            });
+
+            waitsFor(function() {
+                return response.status.callCount > 0;
+            });
+
+            runs(function() {
+                expect(response.status).toHaveBeenCalledWith(400);
             });
         });
     });

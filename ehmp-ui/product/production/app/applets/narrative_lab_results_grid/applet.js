@@ -14,10 +14,11 @@ define([
 ], function(Backbone, Marionette, _, AppletHelper, AppletUiHelper, GridView, DetailsView, ModalView, tooltip, StackedGraph, trayView, LabOrderTrayUtils) {
     "use strict";
 
-    var fetchOptions = {
+    var _fetchOptions = {
         resourceTitle: 'patient-record-lab',
         pageable: true,
         cache: true,
+        allowAbort: true,
         viewModel: {
             parse: function(response) {
                 // Check 'codes' for LOINC codes and Standard test name.
@@ -163,13 +164,16 @@ define([
     };
 
     var InAPanelModel = Backbone.Model.extend({
-        parse: fetchOptions.viewModel.parse
+        parse: _fetchOptions.viewModel.parse
     });
 
     var gridView;
     var GistView = ADK.Applets.BaseGridApplet.extend({
         initialize: function(options) {
             this._super = ADK.Applets.BaseGridApplet.prototype;
+
+            var fetchOptions = _.clone(_fetchOptions);
+
             var dataGridOptions = {
                 //filterFields: ['observed', 'typeName', 'flag', 'result', 'specimen', 'groupName', 'isPanel', 'units', 'referenceRange', 'facilityMoniker', 'labs.models'],
                 filterFields: gistConfiguration.filterFields,
@@ -227,7 +231,7 @@ define([
             this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
                 // Bypass the global date filtering if All button is selected
                 var selectedId = ADK.SessionStorage.getModel('globalDate').get('selectedId');
-                if (selectedId !== 'all-range-global') {
+                if (selectedId !== 'allRangeGlobal') {
                     self.dataGridOptions.collection.fetchOptions.criteria.filter = self.buildJdsDateFilter('observed', options);
                 } else {
                     delete self.dataGridOptions.collection.fetchOptions.criteria.filter;
@@ -324,6 +328,10 @@ define([
 
             dataGridOptions.collection = ADK.PatientRecordService.fetchCollection(fetchOptions);
 
+            dataGridOptions.toolbarOptions = {
+                buttonTypes: ['infobutton', 'detailsviewbutton'],
+            };
+
             this.dataGridOptions = dataGridOptions;
             if (!self.isFullscreen) {
                 if (dataGridOptions.gistView === true) {
@@ -336,23 +344,25 @@ define([
             }
             this._super.initialize.apply(this, arguments);
 
-            ADK.Messaging.getChannel('narrative_lab_results_grid').on('addItem', function(e) {
+            this.listenTo(ADK.Messaging.getChannel('narrative_lab_results_grid'), 'addItem', function(e) {
                 var addOrdersChannel = ADK.Messaging.getChannel('addALabOrdersRequestChannel');
                 addOrdersChannel.trigger('addLabOrdersModal', event, gridView);
             });
-            ADK.Applets.BaseGridApplet.prototype.initialize.apply(this, arguments);
 
             var message = ADK.Messaging.getChannel('narrative_lab_results');
+
             message.reply('gridCollection', function() {
                 return self.gridCollection;
             });
 
         },
-        onDestroy: function() {
-            ADK.Messaging.getChannel('narrative_lab_results_grid').off('addItem');
-        },
+
         onRender: function() {
             this._super.onRender.apply(this, arguments);
+        },
+        onDestroy: function(){
+            var message = ADK.Messaging.getChannel('narrative_lab_results');
+            message.stopReplying('gridCollection');
         },
         addTooltips: function(collectionItems, limit) {
             for (var i = 0; i < collectionItems.models.length; i++) {
@@ -401,7 +411,7 @@ define([
                         for (var j = 0; j < modifiedCollection.models.length; j++) {
                             //If the modifiedCollection item has the same typeName as the initial collectionItems item
                             if ((modifiedCollection.models[j].attributes.facilityCode === 'DOD' && collectionItems.models[i].facilityCode === 'DOD' &&
-                                modifiedCollection.models[j].attributes.codes[0].code === collectionItems.models[i].attributes.codes[0].code) ||
+                                    modifiedCollection.models[j].attributes.codes[0].code === collectionItems.models[i].attributes.codes[0].code) ||
                                 (modifiedCollection.models[j].attributes.typeCode && modifiedCollection.models[j].attributes.typeCode === collectionItems.models[i].attributes.typeCode) ||
                                 (modifiedCollection.models[j].attributes.typeName === collectionItems.models[i].attributes.typeName)) {
                                 //We will put the old values with the same typeName in the oldValues array within the attributes
@@ -491,7 +501,8 @@ define([
 
         var stackedGraph = new StackedGraph({
             model: chartModel,
-            target: null
+            target: null,
+            requestParams: params
         });
 
         response.resolve({

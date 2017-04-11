@@ -38,6 +38,11 @@ var httpConfig = {
         server: 'jdsServer',
         json: true
     },
+    getPatientStatusSimple: {
+        url: '/sync/combinedstat',
+        server: 'jdsServer',
+        json: true
+    },
     syncPatientDemographics: {
         url: '/sync/demographicSync',
         server: 'vxSyncServer'

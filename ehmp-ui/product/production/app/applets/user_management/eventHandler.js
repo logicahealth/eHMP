@@ -8,7 +8,7 @@
 
      //Retrieve all the users that meet the criteria in the query.
      //Called from the Search Form
-     eventHandler.createUserList = function(isInitializing, dataToSend, bulkEditFormModel, parentCollection, currentView) {
+     eventHandler.createUserList = function(isInitializing, dataToSend, bulkEditFormModel, parentCollection, currentView, elementTarget) {
          var allUsersFetchOptions = {
              resourceTitle: 'user-service-userlist',
              cache: false,
@@ -90,7 +90,7 @@
                      if (formModel.ehmpCheckboxValue === false && formModel.vistaCheckboxValue === false) {
                          errorMessage = errorMessage + 'Users may be inactive in VistA, eHMP, or both. ';
                      } else if (formModel.ehmpCheckboxValue === true && formModel.vistaCheckboxValue === true) {
-                         errorMessage = errorMessage + 'Please double check that your search criteria spelling is correct. ';
+                         errorMessage = errorMessage + 'Double check that your search criteria spelling is correct. ';
                      } else if (!formModel.ehmpCheckboxValue) {
                          errorMessage = errorMessage + 'Users may be inactive in eHMP. ';
                      } else if (!formModel.vistaCheckboxValue) {
@@ -108,6 +108,15 @@
                          usersCollection.trigger('noUsersReturned');
                      }
                  }
+                 if (elementTarget !== null && !_.isUndefined(elementTarget)) {
+                    var findTarget = currentView.$el.find(elementTarget);
+                    if (findTarget.length > 0) {
+                        findTarget.focus();
+                    } else {
+                        $(elementTarget).focus();
+                    }
+                    elementTarget = null;
+                }
              },
              onError: function(error, response) {
                  if (bulkEditFormModel !== null) {

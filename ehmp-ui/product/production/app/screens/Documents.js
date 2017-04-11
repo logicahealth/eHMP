@@ -46,6 +46,7 @@ define([
 
     var screenConfig = {
         id: "documents-list",
+        context: 'patient',
         contentRegionLayout: "gridster",
         appletHeader: "navigation",
         appLeft: "patientInfo",

@@ -21,7 +21,7 @@ class NumericLabResults < AllApplets
     add_date_input 'lab_results_grid'
 
     add_applet_add_button @appletid_css
-    
+
     add_verify(CucumberLabel.new('Empty Row'), VerifyText.new, AccessHtmlElement.new(:css, "##{@table_id} tbody tr.empty"))
 
     # specific data for Eight,Patient
@@ -189,4 +189,15 @@ end
 
 When(/^the user clicks the Add button on the Numeric Lab Results Applet$/) do
   expect(@numeric_lab_results.perform_action('Control - applet - Add')).to eq(true)
+end
+
+When(/^the user clicks the date control (\d+)yr in the Numeric Lab Results modal$/) do |yr|
+  expect(LabResultsModal.instance.perform_action("Modal Date Filter #{yr}yr")).to eq(true)
+end
+
+When(/^user expands the numeric lab result applet from overview$/) do
+  @ehmp = PobNumericLabApplet.new
+  @ehmp.wait_until_btn_applet_expand_view_visible
+  expect(@ehmp).to have_btn_applet_expand_view
+  @ehmp.btn_applet_expand_view.click
 end

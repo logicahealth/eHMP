@@ -1,0 +1,30 @@
+<div class="row profile-img">
+    <div class="col-xs-3">
+        {{#if patientImage}}
+        <img src='{{patientImage}}' width="120" height="120" alt="Patient Image" title="{{displayName}} Image" aria-hidden="true" /> {{else}}
+        <div class="loading">
+            <i class=fa fa-spinner fa-spin></i> <span class="sr-only"> Retrieving patient image...</span>
+        </div>
+        {{/if}}
+    </div>
+    <div class="col-xs-3">
+      <h2>
+            <span class="sr-only">Patient's Name: </span>{{displayName}}
+            <br />
+            <span class="sr-only">Type of care: </span>
+            <span class="font-size-12">{{getPatientStatusClassInfo}}</span>
+      </h2>
+    </div>
+    <div class="col-xs-3 top-margin-lg">
+        <p class="font-size-12">
+            <strong aria-hidden="true">DOB:</strong>
+            <span class="sr-only">Patient's date of birth</span>
+            <span data-instanceid='patientDemographic-patientInfo-dob'>{{formatDate birthDate}}</span> ({{getAge birthDate}}<span aria-hidden="true">y</span><span class="sr-only">years old</span>)
+            <br />
+            <strong aria-hidden="true">SSN: </strong>
+            <span class="sr-only">Social Security Number</span>{{formatSSN ssn false}}
+            <br />
+            <strong>Gender:</strong> {{genderName}}
+        </p>
+    </div>
+</div>

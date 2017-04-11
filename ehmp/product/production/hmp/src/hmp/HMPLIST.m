@@ -1,6 +1,8 @@
-HMPLIST ;HINES OIFO/DP - List Manager;02 Nov 2012
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 49
- ; Per VHA Directive 2004-038, this routine should not be modified.
+HMPLIST ;HOIFO/DP,ASMR/RRB - List Manager;02 Nov 2012
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;Per VA Directive 6402, this routine should not be modified.
+ ;
+ Q
  ;
 EN(TARGET,NAME,FORMAT,PARAMS) ; OlD sKOoL entry point
  Kill @TARGET
@@ -146,7 +148,7 @@ REBUILD(NAME) ;
  ;
  Set LIST=$$LIST(NAME) Quit:+LIST<1  ; No Such List
  ;
- If $Piece(LIST,U,2) Quit  ; Dynamic list - fired everytime
+ If $Piece(LIST,U,2) Quit  ; Dynamic list - fired every time
  Set CODE=$$CODE(LIST) Quit:CODE=""  ; No rebuild code, must be manual
  ;
  Set TARGET=$Name(^TMP($J))
@@ -160,6 +162,7 @@ REBUILD(NAME) ;
  ;
 DQ ; Called via Taskman to build any list that has expired
  New HMPNOW,HMPLIST,HMPMIN
+ Kill HMPNEXT
  ; Nothing set to refresh automatically
  Quit:'$Order(^HMPD(800000.2,"AREFRESH",0))
  Do NOW^%DTC Set HMPNOW=%
@@ -174,10 +177,11 @@ DQ ; Called via Taskman to build any list that has expired
  . Do REBUILD($Piece(^HMPD(800000.2,HMPLIST,0),U))
  ; Get the shortest refresh threshold and reschedule for that
  Set HMPNEXT=$$FMADD^XLFDT(+$Extract(HMPNOW,1,12),0,0,$Order(^HMPD(800000.2,"AREFRESH",0)),0)
+ Kill ZTREQ
  Set ZTREQ=$$FMTH^XLFDT(HMPNEXT)
  Quit
  ;
-ADD(X) ; Adds an item to the list automagically
+ADD(X) ; Adds an item to the list automatically
  Set @TARGET@($Order(@TARGET@(""),-1)+1)=X
  Quit $Order(@TARGET@(""),-1)
  ;
@@ -192,7 +196,7 @@ CLINICS ; Get Active Clinics
 LOC(TYPES) ; Build list of locations by type
  New HMPDT,HMPNOW
  Do NOW^%DTC Set HMPNOW=%
- For X=0:0 Set X=$Order(^SC(X)) Quit:'X  Do:TYPES[$Piece(^(X,0),U,3)
+ For X=0:0 Set X=$Order(^SC(X)) Quit:'X  Do:TYPES[$Piece(^(X,0),U,3)  ;DE2818 ICR 10040 ASF 11/16/15
  . Set HMPDT=$Get(^SC(X,"I"),U) ; Deactivation and Reactivation dates
  . If +HMPDT Quit:(+HMPDT<HMPNOW&('$Piece(HMPDT,U,2)))!(+HMPDT<HMPNOW&($Piece(HMPDT,U,2)>HMPNOW))
  . Set Y=$$ADD^HMPLIST(X_U_$Piece(^SC(X,0),U,1,3)) ; Full tag^rtn used for demonstration purposes

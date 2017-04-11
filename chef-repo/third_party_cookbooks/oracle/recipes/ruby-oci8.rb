@@ -1,7 +1,7 @@
 #
 # Cookbook Name:: oracle
 # Recipe:: ruby-oci8
-# Author::     an         (<jdunn@getchef.com>)
+# Author:: Julian C. Dunn (<jdunn@getchef.com>)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

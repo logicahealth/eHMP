@@ -54,7 +54,7 @@ function init(app) {
  *             "type": "OpenCDS",
  *             "version": "2.0.5",
  *             "environment": {
- *             "environment": "url=http://IP            /opencds-decision-support-service,memory=32,cpus= 8,java_version=7,webservice=tomcat,webservice_version=7",
+ *             "environment": "url=http://IPADDRESS:PORT/opencds-decision-support-service,memory=32,cpus= 8,java_version=7,webservice=tomcat,webservice_version=7",
  *         }]
  * }
  * @apiError (Error 404) data The entry for id, name, filter not located
@@ -133,7 +133,7 @@ module.exports.getEngine = function(req, res) {
  *             "class": "com.cognitive.cds.invocation.model.EngineInfo",
  *             "type": "OpenCDS",
  *             "version": "2.0.5",
- *             "environment": "url=http://IP            /opencds-decision-support-service,memory=32,cpus= 8,java_version=7,webservice=tomcat,webservice_version=7",
+ *             "environment": "url=http://IPADDRESS:PORT/opencds-decision-support-service,memory=32,cpus= 8,java_version=7,webservice=tomcat,webservice_version=7",
  *             "_id": "555f4edee2d9eceab4e53ec8"
  *         }]
  * }

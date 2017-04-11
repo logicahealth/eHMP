@@ -1,14 +1,14 @@
 {
   "id": "vista-kodak",
-  "ip_address": "172.16.2.102",
+  "ip_address": "IP_ADDRESS",
   "vista": {
     "domain_name": "KODAK.VISTACORE.US",
     "site_recipe": "panorama",
     "import_recipe": "kodak",
     "site_id": "C877",
     "site": "KODAK",
-    "access_code": "PW    ",
-    "verify_code": "PW    !!",
+    "access_code": "ep1234",
+    "verify_code": "ep1234!!",
     "division": "500"
   }
 }

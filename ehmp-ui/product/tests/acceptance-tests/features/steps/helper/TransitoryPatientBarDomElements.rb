@@ -8,7 +8,7 @@ class TransPatientBarHTMLElements < AccessBrowserV2
     age_format = Regexp.new("\\d+y")
     add_verify(CucumberLabel.new('Age'), VerifyTextFormat.new(age_format), AccessHtmlElement.new(:id, 'confirm_age'))
     add_verify(CucumberLabel.new('Gender'), VerifyText.new, AccessHtmlElement.new(:id, 'confirm_gender'))
-    add_verify(CucumberLabel.new('SSN'), VerifyText.new, AccessHtmlElement.new(:id, 'confirm_ssn'))
+    add_verify(CucumberLabel.new('SSN'), VerifyContainsText.new, AccessHtmlElement.new(:id, 'confirm_ssn'))
   end
 
   def build_header_xpath(text)

@@ -1,5 +1,10 @@
 /*jslint node: true, nomen: true, unparam: true */
 /*global jquery, $, _, define, Marionette, jqm, describe, it, expect, beforeEach, spyOn */
+require.config({
+    paths: {
+        main: 'app/applets/orders/test/unit'
+    }
+});
 
 define([
     'jquery',
@@ -347,7 +352,7 @@ define([
             expect(util.getSignBtnStatus(model)).toEqual('');
             expect(model.get('getDiscontinueBtnStatus')).toEqual('');
             expect(model.get('getSignBtnStatus')).toEqual('');
-            expect(model.get('discontinueBtnLabel')).toEqual('Cancel');
+            expect(model.get('discontinueBtnLabel')).toEqual('Cancel Order');
         });
 
         it('Should correctly determine the control info for a signed, pending lab order', function() {
@@ -356,7 +361,7 @@ define([
             expect(util.getSignBtnStatus(model)).toEqual('disabled');
             expect(model.get('getDiscontinueBtnStatus')).toEqual('');
             expect(model.get('getSignBtnStatus')).toEqual('disabled');
-            expect(model.get('discontinueBtnLabel')).toEqual('Discontinue');
+            expect(model.get('discontinueBtnLabel')).toEqual('Discontinue Order');
         });
 
         it('Should correctly determine the control info for a discontinued, pending lab order', function() {
@@ -365,7 +370,7 @@ define([
             expect(util.getSignBtnStatus(model)).toEqual('');
             expect(model.get('getDiscontinueBtnStatus')).toEqual('disabled');
             expect(model.get('getSignBtnStatus')).toEqual('');
-            expect(model.get('discontinueBtnLabel')).toEqual('Discontinue');
+            expect(model.get('discontinueBtnLabel')).toEqual('Discontinue Order');
         });
 
         it('Should correctly determine the control info for a discontinued lab order', function() {
@@ -374,7 +379,7 @@ define([
             expect(util.getSignBtnStatus(model)).toEqual('disabled');
             expect(model.get('getDiscontinueBtnStatus')).toEqual('disabled');
             expect(model.get('getSignBtnStatus')).toEqual('disabled');
-            expect(model.get('discontinueBtnLabel')).toEqual('Discontinue');
+            expect(model.get('discontinueBtnLabel')).toEqual('Discontinue Order');
         });
 
         it('Should correctly determine the control info for a canceled lab order', function() {
@@ -383,7 +388,7 @@ define([
             expect(util.getSignBtnStatus(model)).toEqual('disabled');
             expect(model.get('getDiscontinueBtnStatus')).toEqual('disabled');
             expect(model.get('getSignBtnStatus')).toEqual('disabled');
-            expect(model.get('discontinueBtnLabel')).toEqual('Cancel');
+            expect(model.get('discontinueBtnLabel')).toEqual('Cancel Order');
         });
 
         it('Should correctly determine the control info for a completed lab order', function() {
@@ -392,7 +397,7 @@ define([
             expect(util.getSignBtnStatus(model)).toEqual('disabled');
             expect(model.get('getDiscontinueBtnStatus')).toEqual('disabled');
             expect(model.get('getSignBtnStatus')).toEqual('disabled');
-            expect(model.get('discontinueBtnLabel')).toEqual('Cancel');
+            expect(model.get('discontinueBtnLabel')).toEqual('Cancel Order');
         });
     });
 });

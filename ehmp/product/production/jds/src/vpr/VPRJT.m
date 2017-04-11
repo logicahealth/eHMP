@@ -3,26 +3,30 @@ VPRJT ;SLC/KCM -- Unit test driver
  ;
  ;with acknowlegements to XTMUNIT, Imitation is the sincerest form of flattery
  ;
-1 ; Run one specific test
- D EN("VPRJTPS") ;
- ; D EN("VPRJTQF") ;"VPRJTJE,VPRJTJD,VPRJTQU,VPRJTU")
- Q
 ALL ; Run all the tests
- N ZZLINE,ZZNAME,ZZLIST
+ N ZZLINE,ZZNAME,ZZLIST,ZZLISTEXC
  S ZZLINE=0,ZZLIST=""
  F  S ZZLINE=ZZLINE+1 S ZZNAME=$T(EACH+ZZLINE) Q:'$L(ZZNAME)  S ZZNAME=$P($P(ZZNAME,";;",2,99)," ") Q:ZZNAME="zzzzz"  D
- . S ZZLIST=ZZLIST_$S($L(ZZLIST):",",1:"")_ZZNAME
+ . I $L($T(^%ut)) S ZZLIST(ZZNAME)=""
+ . E  S ZZLIST=ZZLIST_$S($L(ZZLIST):",",1:"")_ZZNAME
+ I $L($T(^%ut)) D
+ . M ZZLISTEXC=ZZLIST
+ . S ZZLISTEXC("VPRJT")=""
+ . S ZZLISTEXC("VPRJCONV")=""
+ . S ZZLISTEXC("VPRJTCONV")=""
+ . S ZZLISTEXC("VPRJTX")=""
+ . S ZZLISTEXC("VPRJTZ")=""
+ I $L($T(^%ut)) D COVERAGE^%ut("VPR*",.ZZLIST,.ZZLISTEXC) QUIT
  D EN(ZZLIST)
- ;D EN("VPRJTJE,VPRJTJD")
- ;D EN("VPRJTJE,VPRJTJD,VPRJUCU,VPRJTU,VPRJTS,VPRJUCR,VPRJTCF,VPRJTQX,VPRJUCD,VPRJUCV,VPRJTL,VPRJTT,VPRJTR,VPRJTRP,VPRJTDS,VPRJTDR,VPRJTDM")
- ;D EN("VPRJTJE,VPRJTJD,VPRJTCD,VPRJTCV")
  Q
 EN(ZZRSET) ; Run tests for set of routines passed in
  N ZZFAILED,ZZROU,ZZPIECE
  F ZZPIECE=1:1:$L(ZZRSET,",") D TEST($P(ZZRSET,",",ZZPIECE))
+ I $L($T(^%ut)) QUIT
  W !,$S($G(ZZFAILED):"Tests FAILED",1:"Tests PASSED")
  Q
 TEST(ZZROU) ; Run tests in a specific routine
+ I $L($T(^%ut)) D EN^%ut(ZZROU) QUIT
  W !!,">> "_ZZROU,?10,$P($T(@(ZZROU_"^"_ZZROU)),"--",2,99)
  N ZZI,ZZK,ZZX,ZZLABEL,ZZCODE,ZZCMT,ZZSET,ZZTEAR
  S ZZK=$T(@("STARTUP^"_ZZROU)) I $L(ZZK) D @("STARTUP^"_ZZROU)
@@ -40,6 +44,7 @@ TEST(ZZROU) ; Run tests in a specific routine
  S ZZK=$T(@("SHUTDOWN^"_ZZROU)) I $L(ZZK) D @("SHUTDOWN^"_ZZROU)
  Q
 EQ(EXPECT,ACTUAL,MSG) ;
+ I $L($T(^%ut)) D CHKEQ^%ut(EXPECT,ACTUAL,$G(MSG)) QUIT
  I EXPECT=ACTUAL W "." Q
  S ZZFAILED=1
  W:$X>1 ! W "expected: ",EXPECT,"  actual: ",ACTUAL,"  ",$G(MSG),!
@@ -95,6 +100,8 @@ EACH ; run each test one at a time
  ;;VPRJTERR  -- Unit tests for Error Storage
  ;;VPRJTGDS  -- Unit tests for Generic Data Storage
  ;;VPRJTPL   -- Integration tests for RESTful patient list queries
+ ;;VPRJTPSTATUS  -- Unit/Integration tests for simple patient sync status
+ ;;VPRJTAR   -- Special tests for RESTful queries across patients
  ;;zzzzz
  ;;
  N ZZZ S ZZZ=0

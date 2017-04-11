@@ -4,7 +4,7 @@ Feature: F144-eHMP Viewer GUI - Patient Search and Selection (Ward)
 #POC: Team Mercury
 
 Background:
-    Given user is logged into eHMP-UI
+    # Given user is logged into eHMP-UI
     And the user has navigated to the patient search screen
 
 # Needs record enrichment for locations for any tests to pass
@@ -93,15 +93,15 @@ Scenario: User attempts invalid search  with wrong keyword
     And the User selects mysite and Ward
     And user attempt to filter by keyword "@"
     Then no results are displayed in word
-    Then the user verifies word "No results found."
+    Then the user verifies word "No results were found."
 
 @invalidWardSearch_3 @US1976 @DE1590
 Scenario: User attempts search  with  filter which has no data
     And the User selects mysite and Ward
     And user attempt to filter by keyword "3"
-    And the user select keyword "3 North Surg"
+    And the user select keyword "3EN"
     Then no results are displayed in patient search
-    Then the user verifies patient "No results found."
+    Then the user verifies patient "No results were found."
 
 @inValidWardSearch_2 @US1976 @debug @DE862
 Scenario: User attempts invalid search  with wrong refine patient results
@@ -110,4 +110,4 @@ Scenario: User attempts invalid search  with wrong refine patient results
     And the user select keyword "7A Gen Med"
     And user enters patient "0008@" in the patient filter
     Then no results are displayed in patient search
-    Then the user verifies patient "No results found."
+    Then the user verifies patient "No results were found."

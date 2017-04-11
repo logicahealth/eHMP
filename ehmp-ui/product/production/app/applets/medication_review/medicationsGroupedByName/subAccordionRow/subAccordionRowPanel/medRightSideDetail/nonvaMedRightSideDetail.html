@@ -1,57 +1,84 @@
-<div class="col-sm-12 dropShadow">
-    <div class="col-sm-12 left-padding-no">
-        <div class="col-sm-9 left-padding-no right-padding-no">
-            <h3 class="capitalize">{{name}} {{strength}} </h3>
+<div class="detail-modal-content drop-shadow all-padding-md" tabindex="0" data-detail="content">
+    <span class="sr-only">To Go back to Order History panel press ALT + M</span>
+    <div class="row">
+        <div class="col-xs-9">
+            <h4>{{name}} {{strength}}</h4>
         </div>
-        <div class="col-sm-3 left-padding-no right-padding-no">
-            <h3 class="detailStatus capitalize">{{modifiedVaStatus}}</h3>
-            <p class="detailStatus">(Non-VA)</p>
+        <div class="col-xs-3 text-right">
+            <span class="font-size-14 text-uppercase"><strong>{{modifiedVaStatus}}</strong></span>
         </div>
-    </div>
-    <div class="col-sm-12 left-padding-no">
-       <p>{{computedSig}}</p>
-    </div>
-    <div class="col-sm-12 left-padding-no bottom-padding-sm">
-        <div class="bottom-border-grey-light"><b>Order Details</b></div>
-    </div>
-    <div class="col-sm-12 order-info-line left-padding-no bottom-padding-sm">
-        <div class="col-sm-3 order-info left-padding-no">
-            <p class="labelStyleColor">Ordering Provider</p>
-            {{#each orders}}
-            <p>{{providerName}} on</p>
-            <p>{{formatDate ordered "MM/DD/YYYY HH:mm"}}</p>
-            {{/each}}
+        <div class="col-xs-9">
+            <p>{{computedSig}}</p>
         </div>
-        <div class="col-sm-3 order-info">
-            <p class="labelStyleColor">Ordering Location</p>
-            {{#each orders}}
-            <p>{{locationName}}</p>
-            {{/each}}
-        </div>
-        <div class="col-sm-3 order-info">
-            <p class="labelStyleColor">Order Text</p>
-            <p class="capitalize">{{name}} {{strength}}</p>
+        <div class="col-xs-3 text-right">
+            <p>(Non-VA)</p>
+            <p>{{facilityName}}</p>
         </div>
     </div>
-    <div class="col-sm-12 order-info-line left-padding-no bottom-padding-sm">
-        <div class="col-sm-3 order-info left-padding-no">
-            <p class="labelStyleColor">Start Date/Time</p>
-            <p>{{formatDate overallStart "MM/DD/YYYY HH:mm"}}</p>
+    <div class="row top-margin-sm">
+        <div class="col-xs-12">
+            <h5 class="bottom-border-grey-dark">Order Details</h5>
         </div>
-        <div class="col-sm-3 order-info">
-            <p class="labelStyleColor">Order Number</p>
-            <p>#{{slicedOrderUid}}</p>
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Ordering Provider</strong></span><br />
+                {{#if orders}}
+                    {{#each orders}}
+                        <span>
+                            {{#if providerName}}
+                                {{providerName}}{{#if ordered}} <span class="text-lowercase">on</span> {{formatDate ordered "MM/DD/YYYY HH:mm"}}{{/if}}
+                            {{else}}
+                                No Data
+                            {{/if}}
+                        </span><br />
+                    {{/each}}
+                {{else}}
+                    <span>No Data</span><br />
+                {{/if}}
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Ordering Location</strong></span><br />
+                {{#if orders}}
+                    {{#each orders}}
+                        <span>{{#if locationName}}{{locationName}}{{else}}No Data{{/if}}</span><br />
+                    {{/each}}
+                {{else}}
+                    <span>No Data</span><br />
+                {{/if}}
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Order Text</strong></span><br />
+                <span>{{name}} {{strength}}</span>
+            </p>
         </div>
     </div>
-    <div class="col-sm-12 left-padding-no bottom-padding-sm">
-        <div class="col-sm-12 left-padding-no">
-            <div class="bottom-border-grey-light"><b>Statement/Explanation</b></div>
+    <div class="row">
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Start Date/Time</strong></span><br />
+                <span>
+                    {{#if overallStart}}
+                        {{formatDate overallStart "MM/DD/YYYY HH:mm"}}
+                    {{else}}
+                        No Data
+                    {{/if}}
+                </span>
+            </p>
+        </div>
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Order Number</strong></span><br />
+                <span>{{slicedOrderUid}}</span>
+            </p>
         </div>
     </div>
-</div>
-</div>
-<div class="col-sm-12 footerBox">
-    <!--    <button type="button" class="btn btn-default">Discontinue</button>
-    <button type="button" class="btn btn-default">Renew</button>
-    <button type="button" class="btn btn-default">Close</button> -->
+    <div class="row top-margin-sm">
+        <div class="col-xs-12">
+            <h5 class="bottom-border-grey-dark">Statement/Explanation</h5>
+        </div>
+    </div>
 </div>

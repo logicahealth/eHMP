@@ -260,7 +260,6 @@ describe('enterprise-sync-request-handler.js', function() {
 
         expect(has([opts.job], jobUtil.enterpriseSyncRequestType())).toBe(true);
         expect(has([job2], jobUtil.vistaSubscribeRequestType('C877'))).toBe(true);
-        expect(has([opts.job], jobUtil.hdrXformVprType())).toBe(false);
         expect(has([job2, job3], jobUtil.vistaSubscribeRequestType('00A0'))).toBe(false);
     });
 
@@ -297,6 +296,7 @@ describe('enterprise-sync-request-handler.js', function() {
                 var called = false;
                 var env = createEnvironment();
                 var opts = createOptions(log, config, env);
+                env.jds.storePatientData = jasmine.createSpy().andCallFake(storePatientIdentifier);
 
                 runs(function() {
                     handle._steps._mviSteps._queryMVI.call(opts, function() {
@@ -349,6 +349,7 @@ describe('enterprise-sync-request-handler.js', function() {
                     lookup: mviLookup
                 };
                 env.jds.storePatientIdentifier = jasmine.createSpy().andCallFake(storePatientIdentifier);
+                env.jds.storePatientData = jasmine.createSpy().andCallFake(storePatientIdentifier);
                 opts.environment = env;
 
                 runs(function() {
@@ -365,7 +366,7 @@ describe('enterprise-sync-request-handler.js', function() {
 
                 runs(function() {
                     //                    expect(expectedResult.length).toBe(7);
-                    expect(expectedResult.length).toBe(7);
+                    expect(expectedResult.length).toBe(6);
                     expect(expectedResult).toContain(jasmine.objectContaining({
                         type: 'icn',
                         value: '10110V004877'
@@ -386,10 +387,10 @@ describe('enterprise-sync-request-handler.js', function() {
                         type: 'pid',
                         value: 'HDR;10110V004877'
                     }));
-                    expect(expectedResult).toContain(jasmine.objectContaining({
-                        type: 'pid',
-                        value: 'VHICID;1111'
-                    }));
+                    // expect(expectedResult).toContain(jasmine.objectContaining({
+                    //     type: 'pid',
+                    //     value: 'VHICID;1111'
+                    // }));
                     // expect(expectedResult).toContain(jasmine.objectContaining({ type: 'pid', value: 'VLER;10110V004877'}));
                     // expect(expectedResult).toContain(jasmine.objectContaining({ type: 'pid', value: 'DAS;10110V004877'}));
                     expect(opts.environment.jds.storePatientIdentifier).toHaveBeenCalled();
@@ -403,12 +404,13 @@ describe('enterprise-sync-request-handler.js', function() {
                 var expectedError;
                 var expectedResult;
                 var env = createEnvironment();
+                env.jds = new JdsClientDummy(log, log, config);
                 var opts = createOptions(log, config, env);
 
                 runs(function() {
                     handle._steps._mviSteps._saveMviResults.call(opts, {
                         'ids': patientIdList
-                    }, function(error, result) {
+                    }, null, function(error, result) {
                         called = true;
                         expectedError = error;
                         expectedResult = result;
@@ -435,7 +437,7 @@ describe('enterprise-sync-request-handler.js', function() {
                     'ids': patientIdList
                 });
 
-                expect(expectedResult.length).toBe(7);
+                expect(expectedResult.length).toBe(6);
                 // expect(expectedResult.length).toBe(7);
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'icn',
@@ -461,10 +463,10 @@ describe('enterprise-sync-request-handler.js', function() {
                     type: 'pid',
                     value: 'VLER;10110V004877'
                 }));
-                expect(expectedResult).toContain(jasmine.objectContaining({
-                    type: 'pid',
-                    value: 'VHICID;1111'
-                }));
+                // expect(expectedResult).toContain(jasmine.objectContaining({
+                //     type: 'pid',
+                //     value: 'VHICID;1111'
+                // }));
                 // expect(expectedResult).toContain(jasmine.objectContaining({ type: 'pid', value: 'DAS;10110V004877'}));
             });
             it('Create identfiers based on the results from MVI using VistaHdr', function() {
@@ -475,7 +477,7 @@ describe('enterprise-sync-request-handler.js', function() {
                     'ids': patientIdListVistaHdr
                 });
 
-                expect(expectedResult.length).toBe(8);
+                expect(expectedResult.length).toBe(7);
                 // expect(expectedResult.length).toBe(7);
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'icn',
@@ -505,11 +507,185 @@ describe('enterprise-sync-request-handler.js', function() {
                     type: 'pid',
                     value: 'VLER;10110V004877'
                 }));
+                // expect(expectedResult).toContain(jasmine.objectContaining({
+                //     type: 'pid',
+                //     value: 'VHICID;1111'
+                // }));
+                // expect(expectedResult).toContain(jasmine.objectContaining({ type: 'pid', value: 'DAS;10110V004877'}));
+            });
+        });
+
+        describe('_createVhicIdEvent()', function(){
+            it('Normal path', function(){
+                var mviResponse = {
+                    ids: [{
+                        type: 'icn',
+                        value: '10110V004877'
+                    }, {
+                        type: 'edipi',
+                        value: '10110'
+                    }, {
+                        type: 'pid',
+                        value: 'C877;8'
+                    }, {
+                        type: 'pid',
+                        value: '9E7A;8'
+                    }, {
+                        type: 'vhicid',
+                        value: '1111'
+                    }, {
+                        type: 'vhicid',
+                        value: '22222',
+                        active: true
+                    }]
+                };
+                var env = createEnvironment();
+                var opts = createOptions(log, config, env);
+                var vhicIdEvent = handle._steps._mviSteps._createVhicIdEvent.call(opts, mviResponse);
+
+                expect(vhicIdEvent).toBeTruthy();
+                expect(vhicIdEvent).toEqual(jasmine.objectContaining({
+                    'lastUpdateTime': jasmine.any(String),
+                    'localId':opts.job.jpid,
+                    'pid':'JPID;'+opts.job.jpid,
+                    'stampTime':jasmine.any(String),
+                    'uid':'urn:va:vhic-id:JPID:'+opts.job.jpid+':'+opts.job.jpid
+                }));
+                expect(vhicIdEvent.vhicIds).toContain(jasmine.objectContaining({vhicId: '1111'}));
+                expect(vhicIdEvent.vhicIds).toContain(jasmine.objectContaining({vhicId: '22222', active: true}));
+            });
+
+            it('Error path: No mviResponse', function(){
+                var env = createEnvironment();
+                var opts = createOptions(log, config, env);
+                var vhicIdEvent = handle._steps._mviSteps._createVhicIdEvent.call(opts, null);
+                expect(vhicIdEvent).toBeNull();
+            });
+        });
+    });
+
+    describe('_storeVhicIdEvent', function(){
+        it('Normal path: No vhicIdEvent', function(){
+            var env = createEnvironment();
+            var opts = createOptions(log, config, env);
+            handle._steps._mviSteps._storeVhicIdEvent.call(opts, null, patientIdentifiers, function(error, expectedResult){
+                expect(error).toBeNull();
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'icn',
+                    value: '10110V004877'
+                }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
-                    value: 'VHICID;1111'
+                    value: '9E7A;8'
                 }));
-                // expect(expectedResult).toContain(jasmine.objectContaining({ type: 'pid', value: 'DAS;10110V004877'}));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: 'C877;8'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: 'DOD;10110'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: 'HDR;10110V004877'
+                }));
+            });
+        });
+        it('Normal path: Store vhicIdEvent', function(){
+            var env = createEnvironment();
+            env.jds = new JdsClientDummy(log, log, config);
+            var opts = createOptions(log, config, env);
+            var vhicIdEventDummy = {};
+
+            env.jds._setResponseData([null], [{statusCode: 201}], [null]);
+
+            handle._steps._mviSteps._storeVhicIdEvent.call(opts, vhicIdEventDummy, patientIdentifiers, function(error, expectedResult){
+                expect(error).toBeNull();
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'icn',
+                    value: '10110V004877'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: '9E7A;8'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: 'C877;8'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: 'DOD;10110'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: 'HDR;10110V004877'
+                }));
+            });
+        });
+        it('Error path: error from JDS', function(){
+            var env = createEnvironment();
+            env.jds = new JdsClientDummy(log, log, config);
+            var opts = createOptions(log, config, env);
+            var vhicIdEventDummy = {};
+
+            env.jds._setResponseData([{error: 'ERROR'}], [null], [null]);
+
+            handle._steps._mviSteps._storeVhicIdEvent.call(opts, vhicIdEventDummy, patientIdentifiers, function(error, expectedResult){
+                expect(error).toBeTruthy();
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'icn',
+                    value: '10110V004877'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: '9E7A;8'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: 'C877;8'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: 'DOD;10110'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: 'HDR;10110V004877'
+                }));
+            });
+        });
+        it('Error path: unexpected statusCode', function(){
+            var env = createEnvironment();
+            env.jds = new JdsClientDummy(log, log, config);
+            var opts = createOptions(log, config, env);
+            var vhicIdEventDummy = {};
+
+            env.jds._setResponseData([null], [{statusCode: 500}], [null]);
+
+            handle._steps._mviSteps._storeVhicIdEvent.call(opts, vhicIdEventDummy, patientIdentifiers, function(error, expectedResult){
+                expect(error).toBeTruthy();
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'icn',
+                    value: '10110V004877'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: '9E7A;8'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: 'C877;8'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: 'DOD;10110'
+                }));
+                expect(expectedResult).toContain(jasmine.objectContaining({
+                    type: 'pid',
+                    value: 'HDR;10110V004877'
+                }));
             });
         });
     });

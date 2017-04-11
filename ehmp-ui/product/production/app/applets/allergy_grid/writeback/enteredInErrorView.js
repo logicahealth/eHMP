@@ -7,6 +7,14 @@ define([
 ], function(Backbone, Marionette, $, Handlebars, writebackUtils){
     "use strict";
 
+    var AllergyModelCheck = ADK.Checks.CheckModel.extend({
+        validate: function(attributes, validationOptions) {
+            ADK.Checks.unregister('allergy-eie-form-id');
+            ADK.UI.Workflow.hide();
+            ADK.UI.Modal.hide();
+        },
+    });
+
     var EnteredInErrorView = {
         createAndShowEieView: function(model) {
             var formModel = new Backbone.Model();
@@ -26,6 +34,11 @@ define([
             };
 
             var workflowController = new ADK.UI.Workflow(workflowOptions);
+            ADK.Checks.register(new AllergyModelCheck({
+                id: 'allergy-eie-form-id',
+                label: 'Allergy EIE Form',
+                failureMessage: 'Allergy Entered in Error Writeback In Progress! Any unsaved changes will be lost if you continue.'
+            }));
             workflowController.show();
             ADK.utils.writebackUtils.applyModalCloseHandler(workflowController);
         },
@@ -41,7 +54,7 @@ define([
                     items: [{
                         control: "textarea",
                         name: "reason",
-                        title: "Please enter a reason",
+                        title: "Enter a reason",
                         label: "Reason",
                         rows: 10,
                         required: false,
@@ -51,7 +64,7 @@ define([
             };
 
             var ErrorMessageView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile('Unable to remove this item at this time due to a system error. Please try again later.'),
+                template: Handlebars.compile('Unable to remove this item at this time due to a system error. Try again later.'),
                 tagName: 'p'
             });
 
@@ -59,6 +72,7 @@ define([
                 template: Handlebars.compile('{{ui-button "OK" classes="btn-primary" title="Press enter to close."}}'),
                 events: {
                     'click .btn-primary': function() {
+                        ADK.Checks.unregister('allergy-eie-form-id');
                         ADK.UI.Alert.hide();
                     }
                 },
@@ -86,14 +100,14 @@ define([
                         items: [{
                             control: 'button',
                             id: 'form-cancel-btn',
-                            extraClasses: ["btn-primary", "btn-sm", "left-margin-xs"],
+                            extraClasses: ["btn-primary", "btn-sm", "pull-left"],
                             type: 'button',
                             label: 'Cancel',
                             title: 'Press enter to cancel'
                         }, {
                             control: 'button',
                             disabled: false,
-                            extraClasses: ['btn-primary', 'btn-sm'],
+                            extraClasses: ['btn-primary', 'btn-sm', 'pull-right'],
                             label: 'Enter in Error',
                             name: 'submit-entered-in-error',
                             id: 'submit-entered-in-error',
@@ -104,20 +118,23 @@ define([
             }];
 
             var CancelMessageView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile('You will lose all work in progress if you cancel this task. Would you like to proceed?'),
+                template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
                 tagName: 'p'
             });
 
             var FooterView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile('{{ui-button "Cancel" classes="btn-default btn-sm" title="Press enter to cancel."}}{{ui-button "Continue" classes="btn-primary btn-sm" title="Press enter to continue."}}'),
+                template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary btn-sm" title="Press enter to cancel."}}'),
                 events: {
                     'click .btn-primary': function() {
                         ADK.UI.Alert.hide();
-                        writebackUtils.unregisterNavigationCheck();
+                        ADK.UI.Workflow.hide();
+                        ADK.Checks.unregister('allergy-eie-form-id');
+                        writebackUtils.unregisterChecks();
                         this.options.workflow.close();
                     },
                     'click .btn-default': function() {
                         ADK.UI.Alert.hide();
+                        ADK.Checks.unregister('allergy-eie-form-id');
                     }
                 },
                 tagName: 'span'
@@ -135,8 +152,8 @@ define([
                     "click #form-cancel-btn": function(e) {
                         e.preventDefault();
                         var cancelAlertView = new ADK.UI.Alert({
-                            title: 'Are you sure you want to cancel?',
-                            icon: 'fa-warning color-red',
+                            title: 'Cancel',
+                            icon: 'icon-cancel',
                             messageView: CancelMessageView,
                             footerView: FooterView,
                             workflow: this.workflow
@@ -164,7 +181,10 @@ define([
                                     message: 'Allergy successfully marked entered in error.'
                                 });
                                 saveSuccessAlertView.show();
-                                writebackUtils.unregisterNavigationCheck();
+                                ADK.Checks.unregister('allergy-eie-form-id');
+                                writebackUtils.unregisterChecks();
+                                ADK.UI.Alert.hide();
+                                ADK.UI.Workflow.hide();
                                 self.workflow.close();
 
                                 ADK.ResourceService.clearAllCache('allergy');
@@ -173,7 +193,7 @@ define([
                             error: function(model, error) {
                                 var errorAlertView = new ADK.UI.Alert({
                                     title: 'Save Failed (System Error)',
-                                    icon: 'fa-exclamation-circle font-size-18 color-red',
+                                    icon: 'icon-error',
                                     messageView: ErrorMessageView,
                                     footerView: ErrorFooterView
                                 });

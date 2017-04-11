@@ -1,5 +1,5 @@
 HMPWB1 ; Agilex/EJK/JD - WRITE BACK ACTIVITY;Nov 5, 2015@16:15:08
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;Sep 01, 2011;Build 2
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 2
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q
@@ -33,7 +33,7 @@ ALLERGY(RSLT,IEN,DFN,DATA) ;file allergy data
  S $ET="D ERRHDLR^HMPDERRH",ERRPAT=DFN
  S ERRMSG="A problem occurred in the allergy domain, routine: "_$T(+0)
  S XWBOS=$$NOW^XLFDT  ; indicate that we're in the RPC broker, prevent interactive calls
- L +^GMR(120.8,0)
+ L +^GMR(120.8,0):5
  D EDITSAVE^ORWDAL32(.ORY,IEN,DFN,.DATA)  ; update ADVERSE REACTION ASSESSMENT (#120.86)
  ; ejk US3232 if failure to file, send error message as result. 
  I $P(ORY,"^",1)=-1 D MSG^HMPTOOLS($P(ORY,"^",2)) D ERROR Q
@@ -46,7 +46,8 @@ ALLERGY(RSLT,IEN,DFN,DATA) ;file allergy data
  . Q
  I HMPSTOP S D0=HMPIDX,DFN=HMPDFN
  ; return value in RSLT
- L -^GMR(120.8,0)
+ L +^GMR(120.8,0):5
+ I $P(DATA("GMRAGNT"),U,2)?.E1"""".E S DATA("GMRAGNT")=$E(DATA("GMRAGNT"),1,$L(DATA("GMRAGNT"))-4) ;DE4763 ASF 5/25/16 CORRECT SAVED VARIABLE POINTER
  S HMP=$NA(^TMP("HMP",$J)) K @HMP
  S FILTER("id")=D0 ;ien for the entry into the allergy file
  S FILTER("patientId")=DFN ;patient identifier
@@ -70,7 +71,7 @@ ALLERGY(RSLT,IEN,DFN,DATA) ;file allergy data
  K @HMP
  Q
  ;
-ALLEIE(RSLT,DATA)	;file allergy entered in error
+ALLEIE(RSLT,DATA) ;file allergy entered in error
  ;Since DFN is not relevant as an input parameter, we removed it from the DATA string
  ;Once we know the allergy IEN, DFN will also be known.  JD - 11/5/15.
  ; RSLT - result, passed by reference
@@ -113,7 +114,7 @@ ALLEIE(RSLT,DATA)	;file allergy entered in error
  K @HMP
  Q
  ;
-CHECKREQ	; check for required fields
+CHECKREQ ; check for required fields
  ;Removed DFN from the input parameter DATA but for integrity purposes (and not to modify
  ;too much code), we need to keep the number of pieces in DATA the same.
  I HMPIEN'=+HMPIEN D MSG^HMPTOOLS("Allergy identifier is invalid/null: "_HMPIEN) D ERROR Q
@@ -126,7 +127,7 @@ CHECKREQ	; check for required fields
  I $D(^GMR(120.8,HMPIEN,"ER"))>0 D MSG^HMPTOOLS("Allergy already entered in error: "_HMPIEN) D ERROR Q
  Q
  ;
-CHKDATE	;CHECK DATES FOR PROPER FORMAT OF DATE.
+CHKDATE ;CHECK DATES FOR PROPER FORMAT OF DATE.
  N HMPDT
  S HMPSTOP=0
  S HMPDT=$P($G(DATA("GMRACHT",1)),".",1)
@@ -137,7 +138,7 @@ CHKDATE	;CHECK DATES FOR PROPER FORMAT OF DATE.
  I $L(HMPDT)'=7 D MSG^HMPTOOLS("Date "_HMPDT_" not formatted correctly",2) D ERROR Q
  Q
  ;
-PARSE	;Parse data string into data elements for EDITSAVE^ORWDAL32
+PARSE ;Parse data string into data elements for EDITSAVE^ORWDAL32
  S HMPDFN=$P(DATA,U,2)
  S DATA("GMRAERR")=$P(DATA,U,3)
  S DATA("GMRAERRBY")=$P(DATA,U,4)

@@ -14,7 +14,7 @@ define([
                 opts = _.extend({
                     'params': this.params
                 }, options),
-                patient = ADK.ResourceService.patientRecordService.getCurrentPatient(),
+                patient = ADK.PatientRecordService.getCurrentPatient(),
                 standardParams = {
                     pid: patient.get('pid')
                 },
@@ -54,7 +54,7 @@ define([
 
             if (_.isEmpty(signNotesModel.get('notes'))) {
                 context.model.errorModel.set({
-                    notesChecklist: "Please select at least one note."
+                    notesChecklist: "Select at least one note."
                 });
                 return;
             }
@@ -123,7 +123,7 @@ define([
                     } catch (e) {
                         // no signedNotes array
                     }
-                    channel.trigger('tray:open');
+                    // channel.trigger('tray:open');
                 }
             });
         },

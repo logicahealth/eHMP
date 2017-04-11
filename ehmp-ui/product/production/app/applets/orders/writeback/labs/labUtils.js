@@ -18,8 +18,6 @@ define([
     var COLLECTION_DATE_TIME = '6';
     var COMMENTS = '15';
     var COLLECTION_TYPE = '28';
-    var HOW_OFTEN = '29';
-    var HOW_LONG = '153';
     var COLLECTION_SAMPLES = '126';
     var SPECIMEN = '127';
     var URGENCY = '180';
@@ -35,33 +33,16 @@ define([
     }
 
     var addLabUtils = {
-        save: function(model, saveCallback) {
-            var attributes = {
-                contentType: "application/json"
-            };
-            if ($('#acceptDrpDwnContainer').attr('action') === 'edit') {
-                var siteCode = ADK.UserService.getUserSession().get('site');
-                model.url = '/resource/write-health-data/patient/' + model.get("pid") + '/orders/' + model.get('orderId') + '?site=' + siteCode + '&pid=' + model.get("pid");
-                //set dummy id to trigger backbone http PUT request
-                model.set('id', 1);
-            } else {
-                //hard coded url for now
-                model.url = '/resource/write-health-data/patient/' + model.get('pid') + '/orders?pid=' + model.get('pid');
-            }
-            model.save(attributes, saveCallback);
-        },
         getServerSideErrorMessage: function(errorType) {
             errorType = errorType || 'generic';
             var action = SERVER_SIDE_ERROR_ACTIONS[errorType] || SERVER_SIDE_ERROR_ACTIONS.generic;
-            return ('Unable to ' + action + ' at this time due to a system error. Please try again later.');
+            return ('Unable to ' + action + ' at this time due to a system error. Try again later.');
         },
         processExistingLabOrder: function(form) {
             var existingOrder = form.model.get('existingOrder');
             if (!_.isEmpty(existingOrder)) {
                 var collectionDateTimeValue = null;
                 var collectionTypeId = null;
-                var howOftenId = null;
-                var howLong = null;
                 var collectionSampleId = null;
                 var specimenId = null;
                 var urgencyId = null;
@@ -78,7 +59,7 @@ define([
                                 parsedComments.forEach(function(comment) {
                                     if (comment !== '') {
                                         if (comment.indexOf('~For Test:') !== -1) {
-                                            atrributes.forTest = comment;
+                                            attributes.forTest = comment;
                                         } else if (comment.indexOf('~Last dose:') !== -1) {
                                             //todo: parse out the date time
                                             var doseDrawDateTime = comment.replace('~Last dose: ', '').split(' draw time: ');
@@ -111,12 +92,6 @@ define([
                             break;
                         case COLLECTION_TYPE:
                             collectionTypeId = entry.valueId;
-                            break;
-                        case HOW_OFTEN:
-                            howOftenId = entry.valueId;
-                            break;
-                        case HOW_LONG:
-                            howLong = entry.valueId;
                             break;
                         case COLLECTION_SAMPLES:
                             collectionSampleId = entry.valueId;
@@ -154,14 +129,12 @@ define([
                 }
 
                 attributes.urgency = urgencyId;
-                attributes.howOften = howOftenId;
-                attributes.howLong = howLong;
 
                 if (collectionSampleId) {
                     if (form.model.get('collectionSample') === '0') {
                         attributes.otherCollectionSample = collectionSampleId;
                     } else {
-                       attributes.collectionSample = collectionSampleId;
+                        attributes.collectionSample = collectionSampleId;
                     }
                 }
                 if (specimenId) {
@@ -173,529 +146,454 @@ define([
                 }
                 form.ui.availableLabTests.trigger('control:disabled', false);
                 form.model.set(attributes);
-                form.model.unset('existingOrder', {silent: true});
+                form.model.unset('existingOrder', {
+                    silent: true
+                });
             }
         },
-        retrieveCollectionTypesUrgencyAndSchedules: function(form) {
-            var that = this;
-            var callback = {
-                error: function(model, resp) {
-                    form.model.set('serverSideError', 'pick-list');
-                },
-                success: function(model, resp) {
-                    if (!_.isEmpty(resp.data)) {
-                        resp.data.forEach(function(entry) {
-                            switch (entry.categoryName) {
-                                case "Collection Types":
-                                    var defaultCollectionType = 'SP';
-                                    form.ui.collectionType.trigger('control:picklist:set', [entry.values]);
-                                    if (entry.default) {
-                                        defaultCollectionType = entry.default.code;
-                                    }
-                                    else if (ADK.PatientRecordService.getCurrentPatient().get('patientStatusClass') === 'Inpatient') {
-                                        defaultCollectionType = 'LC';
-                                    }
-                                    form.model.set({
-                                        collectionTypeListCache: entry.values,
-                                        collectionTypeDefault: defaultCollectionType
-                                    });
-                                    break;
-                                case "Default Urgency":
-                                    var urgencyList = [];
-                                    if (!_.isEmpty(entry.values)) {
-                                        entry.values.forEach(function(urgency) {
-                                            urgencyList.push({
-                                                ien: urgency.code,
-                                                name: urgency.name
-                                            });
-                                        });
-                                    }
-                                    else {
-                                        form.model.set('serverSideError', 'invalid-response');
-                                        return;
-                                    }
-                                    form.model.set({
-                                        urgencyListCache: urgencyList,
-                                        urgencyDefaultCache: entry.default.code
-                                    });
-                                    form.ui.urgency.trigger('control:picklist:set', urgencyList);
-                                    break;
-                                case "Schedules":
-                                    form.model.set({
-                                        howOftenListCache: entry.values,
-                                        howOftenDefaultCache: entry.default.code
-                                    });
-                                    //form.ui.howOften.trigger('control:picklist:set', [entry.values]);
-                                    break;
-                                case "Lab Collection Times":
-                                    form.model.set('collectionDateTimeLC', entry.values);
-                                    break;
-                                case "Ward Collection Times":
-                                    form.model.set('collectionDateTimeWC', entry.values);
-                                    break;
-                                case "Send Patient Times":
-                                    form.model.set('collectionDateTimeSP', entry.values);
-                                    break;
-                            }
-                        });
-                    }
-                    else {
-                        form.model.set('serverSideError', 'invalid-response');
-                    }
-                }
-            };
-
-            var siteCode = ADK.UserService.getUserSession().get('site');
-            var location;
-            if (ADK.PatientRecordService.getCurrentPatient().get('visit')) {
-                location = ADK.PatientRecordService.getCurrentPatient().get('visit').localId;
-            }
-            var modelUrl = '/resource/write-pick-list?site=' + siteCode + '&type=lab-order-dialog-def&location=' + location;
-            var RetrieveModel = Backbone.Model.extend({
-                url: modelUrl,
-                parse: function(data) {
-                    return data.data;
-                }
+        processDraftLabOrder: function(form, draftData) {
+            form.isDraftLoading = true;
+            var attributes = _.pick(draftData, function(val) {
+                return (!_.isEmpty(val) || _.isBoolean(val) || _.isNumber(val));
             });
-            var model = new RetrieveModel();
-            model.fetch(callback);
-        },
-        retrieveOrderableItems: function(form) {
-            form.ui.availableLabTests.trigger('control:disabled', true);
-            var that = this;
-            var callback = {
-                error: function(model, resp) {
-                    form.model.set('serverSideError', 'pick-list');
-                },
-                success: function(model, resp) {
-                    form.model.unset('availableLabTests');
-                    form.ui.availableLabTests.trigger('control:picklist:set', [resp.data]);
-                    if (!form.model.get('orderId')) {
-                        form.ui.availableLabTests.trigger('control:disabled', false);
-                    }
-                }
-            };
 
-            var siteCode = ADK.UserService.getUserSession().get('site');
-            var modelUrl = '/resource/write-pick-list?type=lab-order-orderable-items&labType=S.LAB&site=' + siteCode;
-            var RetrieveModel = Backbone.Model.extend({
-                url: modelUrl,
-                parse: function(data) {
-                    return data.data;
-                }
+            var attributeLoadingOrder = ["collectionSample", "otherCollectionSample", "specimen", "otherSpecimen"];
+            //set specific attributes in order
+            _.each(attributeLoadingOrder, function(attribute){
+                form.model.set(attribute, attributes[attribute]);
             });
-            var model = new RetrieveModel();
-            model.fetch(callback);
+            var remainingAttributes = _.omit(attributes, attributeLoadingOrder);
+            form.model.set(remainingAttributes);
+
+            delete form.isDraftLoading;
+            form.ui.availableLabTests.trigger('control:disabled', false);
         },
-        retrieveExisting: function(form) {
-            var that = this;
-            var callback = {
-                error: function(model, resp) {
-                    form.model.set('serverSideError', 'generic');
-                },
-                success: function(model, resp) {
-                    form.model.set('existingOrder', resp.data.items);
-                    var availableLabTestIen;
-                    if (!_.isEmpty(resp.data)) {
-                        resp.data.items.forEach(function(entry) {
-                            switch (entry.keyId) {
-                                case AVAILABLE_LAB_TEST:
-                                    availableLabTestIen = entry.valueId;
-                                    break;
-                            }
-                        });
+        retrieveCollectionTypesUrgencyAndSchedules: function() {
+            var orderDialogsDef = new ADK.UIResources.Picklist.Lab_Orders.OrderDialogDef();
+            var location = !_.isEmpty(ADK.PatientRecordService.getCurrentPatient().get('visit')) ? ADK.PatientRecordService.getCurrentPatient().get('visit').locationUid.split(':').pop() : '';
+            this.listenTo(orderDialogsDef, 'read:success', function(collection) {
+                if (!_.isEmpty(collection)) {
+                    //collection types
+                    var collectionTypes = collection.findWhere({
+                        'categoryName': 'Collection Types'
+                    });
+
+                    this.ui.collectionType.trigger('control:picklist:set', [collectionTypes.get('values')]);
+                    var defaultCollectionType = 'SP';
+                    if (!_.isEmpty(collectionTypes.get('default'))) {
+                        defaultCollectionType = collectionTypes.get('default').code;
+                    } else if (ADK.PatientRecordService.getCurrentPatient().patientStatusClass() === 'Inpatient') {
+                        defaultCollectionType = 'LC';
                     }
-                    else {
-                        form.model.set('serverSideError', 'invalid-response');
+                    this.model.set({
+                        collectionTypeListCache: collectionTypes.get('values'),
+                        collectionTypeDefault: defaultCollectionType
+                    });
+
+                    //default urgency
+                    var defaultUrgency = collection.findWhere({
+                        'categoryName': 'Default Urgency'
+                    });
+
+                    var urgencyList = [];
+                    if (!_.isEmpty(defaultUrgency.get('values'))) {
+                        urgencyList.push({
+                            code: _.first(defaultUrgency.get('values')).code,
+                            name: _.first(defaultUrgency.get('values')).name
+                        });
+                    } else {
+                        this.model.set('serverSideError', 'invalid-response');
                         return;
                     }
-                    $('#acceptDrpDwnContainer').attr('action', 'edit');
-                    form.model.set('availableLabTests', availableLabTestIen);
-                }
-            };
+                    this.model.set({
+                        urgencyListCache: urgencyList,
+                        urgencyDefaultCache: defaultUrgency.get('default').code
+                    });
+                    this.ui.urgency.trigger('control:picklist:set', urgencyList);
 
-            var pid = ADK.PatientRecordService.getCurrentPatient().get("pid");
-            var siteCode = ADK.UserService.getUserSession().get('site');
-            var modelUrl = '/resource/write-health-data/patient/' + pid + '/orders/' + form.model.get('orderId') + '?site=' + siteCode;
-            var RetrieveModel = Backbone.Model.extend({
-                url: modelUrl,
-                parse: function(data) {
-                    return data.data;
+                    //collection times
+                    var LabCollectionTimes = collection.findWhere({
+                        'categoryName': 'Lab Collection Times'
+                    });
+
+                    this.model.set('collectionDateTimeLC', LabCollectionTimes.get('values'));
+
+                    //ward collection times
+                    var wardCollectionTimes = collection.findWhere({
+                        'categoryName': 'Ward Collection Times'
+                    });
+
+                    this.model.set('collectionDateTimeWC', wardCollectionTimes.get('values'));
+
+                    //send patient times
+                    var sendPatientTimes = collection.findWhere({
+                        'categoryName': 'Send Patient Times'
+                    });
+                    this.model.set('collectionDateTimeSP', sendPatientTimes.get('values'));
+                } else {
+                    this.model.set('serverSideError', 'invalid-response');
                 }
             });
-            var model = new RetrieveModel();
-            model.fetch(callback);
+            this.listenTo(orderDialogsDef, 'read:error', function() {
+                this.model.set('serverSideError', 'pick-list');
+            });
+
+            orderDialogsDef.fetch({
+                params: {
+                    location: location
+                }
+            });
         },
-        retrieveOrderableItemLoad: function(form, ien) {
-            var that = this;
-            var callback = {
-                error: function(model, resp) {
-                    form.model.set('serverSideError', 'pick-list');
-                    form.hideInProgress();
-                },
-                success: function(model, resp) {
-                    var selectedLabInfo = resp.data;
-                    var collectionSampleListFound = false;
-                    var specimenListFound = false;
-                    var collectionSampleDefault;
-                    var urgencyListFound = false;
-                    var itemID = null;
-                    var collSamp = null;
-                    var specimenDefault = null;
-                    var urgencyDefault = null;
-                    var reqCom = null;
-                    if (!_.isEmpty(resp.data)) {
-                        selectedLabInfo.forEach(function(entry) {
-                            switch (entry.categoryName) {
-                                case 'Test Name':
-                                    form.model.set('labTestText', entry.default.name);
-                                    break;
-                                case 'Item ID':
-                                    itemID = entry.default;
-                                    break;
-                                case 'Unique CollSamp':
-                                    form.model.set('collectionSampleDisabled', true);
-                                    break;
-                                case 'Default CollSamp':
-                                    form.model.set('defaultCollSamp', entry.default.value);
-                                    break;
-                                case 'Lab CollSamp':
-                                    form.model.set('labCollSampDefault', entry.default.value);
-                                    break;
-                                case 'CollSamp':
-                                    collSamp = entry;
-                                    break;
-                                case 'Specimens':
-                                    form.model.set('specimenListCache', entry.values);
-                                    form.model.unset('specimen');
-                                    form.ui.specimen.trigger('control:picklist:set', [entry.values]);
-                                    specimenListFound = true;
-                                    break;
-                                case 'Default Urgency':
-                                    urgencyDefault = entry.default;
-                                    break;
-                                case 'Urgencies':
-                                    form.model.set('urgencyList', entry.values);
-                                    urgencyListFound = true;
-                                    break;
-                                case 'OIMessage':
-                                    if (entry.values.length > 0) {
-                                        form.model.set('alertMessage', entry.values[0].text0);
-                                    }
-                                    break;
-                                case 'ReqCom':
-                                    reqCom = entry.default.name;
-                                    break;
-                            }
+        retrieveOrderableItems: function() {
+            this.ui.availableLabTests.trigger('control:disabled', true);
+
+            var orderableItems = new ADK.UIResources.Picklist.Lab_Orders.OrderableItems();
+
+            this.listenTo(orderableItems, 'read:success', function(collection) {
+                this.ui.availableLabTests.trigger('control:picklist:set', [collection.toPicklist()]);
+                if (!this.model.get('orderId')) {
+                    this.ui.availableLabTests.trigger('control:disabled', false);
+                }
+                this.model.set('orderable-items-loaded', true);
+            });
+
+            this.listenTo(orderableItems, 'read:error', function(collection) {
+                this.model.set('serverSideError', 'pick-list');
+            });
+
+            orderableItems.fetch();
+        },
+        retrieveOrderableItemLoad: function() {
+            var ien = this.model.get('availableLabTests');
+            var orderableItems = new ADK.UIResources.Picklist.Lab_Orders.LabSampleSpecimenUrgency();
+
+            this.listenTo(orderableItems, 'read:success', function(collection) {
+                var collectionSampleListFound = false;
+                var specimenListFound = false;
+                var collectionSampleDefault;
+                var urgencyListFound = false;
+                var specimenDefault = null;
+
+                var testName = collection.findWhere({
+                    'categoryName': 'Test Name'
+                });
+                if (testName) {
+                    this.model.set('labTestText', testName.get('default').name);
+                }
+
+                var itemID = null;
+                var itemId = collection.findWhere({
+                    'categoryName': 'Item ID'
+                });
+                if (itemId) {
+                    itemID = itemId.get('default');
+                }
+
+                var uniqueCollSamp = collection.findWhere({
+                    'categoryName': 'Unique CollSamp'
+                });
+                if (uniqueCollSamp) {
+                    this.model.set('collectionSampleDisabled', true);
+                }
+
+                var defaultCollSamp = collection.findWhere({
+                    'categoryName': 'Default CollSamp'
+                });
+                if (defaultCollSamp) {
+                    this.model.set('defaultCollSamp', defaultCollSamp.get('default').value);
+                }
+
+                var labCollSamp = collection.findWhere({
+                    'categoryName': 'Lab CollSamp'
+                });
+                if (labCollSamp) {
+                    this.model.set('labCollSampDefault', labCollSamp.get('default').value);
+                }
+
+                var collSamp = collection.findWhere({
+                    'categoryName': 'CollSamp'
+                });
+
+                var specimens = collection.findWhere({
+                    'categoryName': 'Specimens'
+                });
+
+                var labSpecimenListCache  = [];
+                if (specimens) {
+                    labSpecimenListCache = specimens.get('values');
+                    this.model.unset('specimen');
+                    this.ui.specimen.trigger('control:picklist:set', [specimens.get('values')]);
+                    specimenListFound = true;
+                }
+                labSpecimenListCache.push({
+                    ien: '0',
+                    name: 'Other'
+                });
+                this.model.set('labSpecimenListCache', labSpecimenListCache);
+
+                var urgencyDefault = null;
+                var urgencyDefaultObj = collection.findWhere({
+                    'categoryName': 'Default Urgency'
+                });
+                if (urgencyDefaultObj) {
+                    urgencyDefault = urgencyDefaultObj.get('default');
+                }
+
+                var urgencyList = collection.findWhere({
+                    'categoryName': 'Urgencies'
+                });
+                if (urgencyList) {
+                    this.model.set('urgencyList', urgencyList.get('values'));
+                    if (urgencyList) {
+                        urgencyListFound = true;
+                    }
+                }
+
+                var oiMessage = collection.findWhere({
+                    'categoryName': 'OIMessage'
+                });
+                if (!_.isEmpty(oiMessage) && oiMessage.get('values').length > 0) {
+                    FormUtils.handleAlertMessage(this, oiMessage.get('values'));
+                }
+
+                var reqCom = collection.findWhere({
+                    'categoryName': 'ReqCom'
+                });
+
+                //check reqCom
+                if (reqCom) {
+                    FormUtils.handleReqCom(this, reqCom.get('default').name);
+                }
+
+                //collection sample
+                collectionSampleDefault = this.model.get('defaultCollSamp');
+                if (_.isUndefined(uniqueCollSamp) && !_.isUndefined(this.model.get('labCollSampDefault'))) {
+                    collectionSampleDefault = this.model.get('labCollSampDefault');
+                }
+
+                var collectionSampleList = [];
+                if (collSamp) {
+                    collectionSampleList = FormUtils.generateCollectionSamplePicklist(collSamp.get('values'));
+                    this.model.set('collectionSampleListCache', collectionSampleList);
+                    collectionSampleListFound = true;
+                }
+                var userHasLrLabKey = false; //placeholder until LR Lab Key is implemented
+                if (!collectionSampleListFound || itemID.name !== 'CH' || userHasLrLabKey) {
+                    collectionSampleList.push({
+                        ien: '0',
+                        displayName: 'Other'
+                    });
+                }
+                this.ui.collectionSample.trigger('control:picklist:set', [collectionSampleList]);
+
+                if (collectionSampleListFound) {
+                    var collectionSampleListCache = this.model.get('collectionSampleListCache');
+                    if (collectionSampleDefault) {
+                        var selectedCollectionSample = _.filter(collectionSampleListCache, function(e) {
+                            return e.n == collectionSampleDefault;
                         });
-                    }
-                    else {
-                        form.model.set('serverSideError', 'invalid-response');
-                        return;
-                    }
-
-                    //check reqCom
-                    if (reqCom) {
-                        FormUtils.handleReqCom(form, reqCom);
-                    }
-
-                    //collection sample
-                    collectionSampleDefault = form.model.get('labCollSampDefault') ? form.model.get('labCollSampDefault') : form.model.get('defaultCollSamp');
-
-                    var collectionSampleList = [];
-                    if (collSamp) {
-                        collectionSampleList = FormUtils.generateCollectionSamplePicklist(collSamp);
-                        form.model.set('collectionSampleListCache', collectionSampleList);
-                        collectionSampleListFound = true;
-                    }
-                    var userHasLrLabKey = false; //placeholder until LR Lab Key is implemented
-                    if (!collectionSampleListFound || itemID.name !== 'CH' || userHasLrLabKey) {
-                        collectionSampleList.push({ien: '0', displayName: 'Other'});
-                    }
-                    form.ui.collectionSample.trigger('control:picklist:set', [collectionSampleList]);
-
-                    if (collectionSampleListFound) {
-                        var collectionSampleListCache = form.model.get('collectionSampleListCache');
-                        if (collectionSampleDefault) {
-                            var selectedCollectionSample = _.filter(collectionSampleListCache, function(e) {
-                                return e.n == collectionSampleDefault;
-                            });
-                            if (_.isEmpty(selectedCollectionSample)) {
-                                form.model.set('collectionSample', collectionSampleListCache[0].ien);
-                            }
-                            else {
-                                form.model.set('collectionSample', selectedCollectionSample[0].ien);
-                            }
+                        if (_.isEmpty(selectedCollectionSample)) {
+                            this.model.set('collectionSample', collectionSampleListCache[0].ien);
                         } else {
-                            form.model.set('collectionSample', collectionSampleListCache[0].ien);
+                            this.model.set('collectionSample', selectedCollectionSample[0].ien);
                         }
                     } else {
-                        form.model.set('collectionSample', '0');
+                        this.model.set('collectionSample', collectionSampleListCache[0].ien);
                     }
+                } else {
+                    this.model.set('collectionSample', '0');
+                }
 
-                    if (specimenListFound) {
-                        if (specimenDefault) {
-                            form.model.set('specimen', specimenDefault);
-                        }
-                        form.ui.otherSpecimenContainer.trigger('control:hidden', true);
+                if (specimenListFound) {
+                    if (specimenDefault) {
+                        this.model.set('specimen', specimenDefault);
                     }
+                    this.ui.otherSpecimenContainer.trigger('control:hidden', true);
+                }
 
-                    //labCanCollect
-                    var labCanCollect = FormUtils.labCanCollect(form.model.get('labCollSampDefault'), form.model.get('collectionSampleListCache'));
-                    form.model.set('labCanCollect', labCanCollect);
+                //check collectionType
+                var collectionTypes = this.model.get('collectionTypeListCache');
+                this.model.unset('collectionType');
 
-                    //check collectionType
-                    var collectionTypes = form.model.get('collectionTypeListCache');
-                    form.model.unset('collectionType');
-                    if (!labCanCollect && !_.isUndefined(form.model.get('collectionSampleListCache'))) {
-                        var modifiedCollectionTypes = [];
-                        if (!_.isEmpty(collectionTypes)) {
-                            collectionTypes.forEach(function(entry) {
-                                if (entry.code !== 'LC' && entry.code !== 'I') {
-                                    modifiedCollectionTypes.push(entry);
-                                }
-                            });
-                        }
-                        else {
-                            form.model.set('serverSideError', 'invalid-response');
-                            return;
-                        }
-                        form.ui.collectionType.trigger('control:picklist:set', [modifiedCollectionTypes]);
+                if (this.model.get('collectionTypeDefault') === 'LC' || this.model.get('collectionTypeDefault') === 'I') {
+                    if (this.model.get('labCanCollect')) {
+                        this.model.set('collectionType', this.model.get('collectionTypeDefault'));
                     } else {
-                        form.ui.collectionType.trigger('control:picklist:set', [collectionTypes]);
+                        this.model.set('collectionType', 'WC');
                     }
-                    if (form.model.get('collectionTypeDefault') === 'LC' || form.model.get('collectionTypeDefault') === 'I') {
-                        if (form.model.get('labCanCollect')) {
-                            form.model.set('collectionType', form.model.get('collectionTypeDefault'));
-                        }
-                        else {
-                            form.model.set('collectionType', 'WC');
-                        }
-                    }
-                    else {
-                        form.model.set('collectionType', form.model.get('collectionTypeDefault'));
-                    }
+                } else {
+                    this.model.set('collectionType', this.model.get('collectionTypeDefault'));
+                }
 
-                    //check urgency
-                    form.model.unset('urgency');
-                    if (!urgencyListFound && urgencyDefault) {
-                        var filteredUrgencyListCache = _.filter(form.model.get('urgencyListCache'), function(item) {
-                           return item.ien === urgencyDefault.ien;
-                        }, this);
-                        if (filteredUrgencyListCache.length > 0) {
-                            form.model.set('urgencyList', form.model.get('urgencyListCache'));
-                        }
-                        else {
-                            form.model.set('urgencyList', [urgencyDefault]);
-                        }
-                    }
-                    form.ui.urgency.trigger('control:picklist:set', [form.model.get('urgencyList')]);
-                    if (urgencyDefault) {
-                        form.model.set({
-                            urgency: urgencyDefault.ien,
-                            urgencyDisabled: true
-                        });
+                //check urgency
+                this.model.unset('urgency');
+                if (!urgencyListFound && urgencyDefault) {
+                    var filteredUrgencyListCache = _.filter(this.model.get('urgencyListCache'), function(item) {
+                        return item.ien === urgencyDefault.ien;
+                    }, this);
+                    if (filteredUrgencyListCache.length > 0) {
+                        this.model.set('urgencyList', this.model.get('urgencyListCache'));
                     } else {
-                        form.model.set('urgency', form.model.get('urgencyDefaultCache'));
-                    }
-
-                    //check schedules
-                    form.model.unset('howOften');
-                    form.ui.howOften.trigger('control:picklist:set', [form.model.get('howOftenListCache')]);
-                    if (form.model.get('howOftenDefaultCache')) {
-                        form.model.set('howOften', form.model.get('howOftenDefaultCache'));
-                    }
-
-                    //specimen
-                    if (form.model.get('existingOrder')) {
-                        that.processExistingLabOrder(form);
-                    }
-                    form.hideInProgress();
-                    form.enableInputFields(true);
-                    form.ui.acceptDrpDwnContainer.trigger('control:disable', false);
-                    form.enableFooterButtons(true);
-                }
-            };
-
-            if (ien) {
-                var siteCode = ADK.UserService.getUserSession().get('site');
-                var modelUrl = '/resource/write-pick-list?site=' + siteCode + '&type=lab-sample-specimen-urgency&labTestIEN=' + ien;
-                var RetrieveModel = Backbone.Model.extend({
-                    url: modelUrl,
-                    async: false,
-                    parse: function(data) {
-                        return data.data;
-                    }
-                });
-                var model = new RetrieveModel();
-                model.fetch(callback);
-
-                // Get available activity data
-                this.retrieveActivity(form, ien);
-            }
-        },
-        retrieveActivity: function(form, ien){
-            var that = this;
-            var callback = {
-                error: function(model, resp) {
-                    // FIXME: Enable the server-side error handling when activity definition retrieval are implemented.
-                    //form.model.set('serverSideError', 'generic');
-                },
-                success: function(model, resp) {
-                    if (resp.data.length > 0) {
-                        form.model.unset('activity');
-                        var collect = new Backbone.Collection(resp.data);
-                        form.model.set('activityList', collect);
-                        form.ui.activity.trigger('control:picklist:set', collect);
-                        form.ui.activity.trigger('control:disabled', false);
+                        this.model.set('urgencyList', [urgencyDefault]);
                     }
                 }
-            };
+                this.ui.urgency.trigger('control:picklist:set', [this.model.get('urgencyList')]);
+                if (urgencyDefault) {
+                    this.model.set({
+                        urgency: urgencyDefault.ien,
+                        urgencyDisabled: true
+                    });
+                } else {
+                    this.model.set('urgency', this.model.get('urgencyDefaultCache'));
+                }
 
-            var siteCode = ADK.UserService.getUserSession().get('site');
-            var modelUrl = '/resource/tasks/getactivitydefinitionsbyquery?testIen=' + ien + '&siteCode=' + siteCode;
-            var RetrieveModel = Backbone.Model.extend({
-                url: modelUrl,
-                parse: function(data) {
-                    return data.data;
+                //specimen
+                if (this.model.get('existingOrder')) {
+                    addLabUtils.processExistingLabOrder(this);
+                }
+
+                // Handle loading of a draft lab order.  This procedure mirrors the 'load/process existing order'
+                // workflow, but is much simpler, since the lab order payload is already parsed and set in the
+                // view Model, having been processed by the draft order Behavior.
+                var draftData = this.model.get('draft-data');
+                if (!_.isUndefined(draftData)) {
+                    addLabUtils.processDraftLabOrder(this, draftData);
+                    this.model.unset('draft-data', {
+                        silent: true
+                    });
+                }
+                this.hideInProgress();
+                this.enableInputFields(true);
+                this.enableFooterButtons(true);
+            });
+
+            this.listenTo(orderableItems, 'read:error', function(collection) {
+                this.model.set('serverSideError', 'pick-list');
+                this.hideInProgress();
+            });
+
+            orderableItems.fetch({
+                params: {
+                    labTestIEN: ien
                 }
             });
-            var model = new RetrieveModel();
-            form.ui.activity.trigger('control:disabled', true);
-            model.fetch(callback);
         },
-        retrieveAllCollectionSamples: function(form) {
-            var that = this;
-            var callback = {
-                error: function(model, resp) {
-                    form.model.set('serverSideError', 'pick-list');
-                },
-                success: function(model, resp) {
-                    if (!_.isEmpty(resp.data)) {
-                        resp.data.forEach(function(entry) {
-                            if (entry.categoryName === 'CollSamp') {
-                                form.model.unset('otherCollectionSample');
-                                var collSamp = FormUtils.generateCollectionSamplePicklist(entry);
-                                form.model.set('otherCollectionSampleListCache', collSamp);
-                                form.ui.otherCollectionSample.trigger('control:picklist:set', [collSamp]);
-                            }
-                        });
-                    }
-                    else {
-                        form.model.set('serverSideError', 'invalid-response');
-                    }
-                }
-            };
+        retrieveAllCollectionSamples: function() {
+            var labSamples = new ADK.UIResources.Picklist.Lab_Orders.Samples();
 
-            var siteCode = ADK.UserService.getUserSession().get('site');
-            var modelUrl = '/resource/write-pick-list?site=' + siteCode + '&type=lab-all-samples';
-            var RetrieveModel = Backbone.Model.extend({
-                url: modelUrl,
-                parse: function(data) {
-                    return data.data;
+            this.listenTo(labSamples, 'read:success', function(collection) {
+                this.model.unset('otherCollectionSample');
+                var samples = collection.toPicklist();
+                var collSamp = _.find(samples, function(obj) {
+                    return obj.group === 'CollSamp';
+                }).pickList;
+                if (!_.isEmpty(collSamp)) {
+                    this.model.set('otherCollectionSampleListCache', collSamp);
+                    this.ui.otherCollectionSample.trigger('control:picklist:set', [collSamp]);
+                } else {
+                    this.model.set('serverSideError', 'invalid-response');
                 }
             });
-            var model = new RetrieveModel();
-            model.fetch(callback);
-        },
-        retrieveAllSpecimens: function(form) {
-            var that = this;
-            var callback = {
-                error: function(model, resp) {
-                    form.model.set('serverSideError', 'pick-list');
-                },
-                success: function(model, resp) {
-                    form.model.unset('otherSpecimen');
-                    form.model.set('otherSpecimenListCache', resp.data);
-                }
-            };
 
-            var siteCode = ADK.UserService.getUserSession().get('site');
-            var modelUrl = '/resource/write-pick-list?site=' + siteCode + '&type=lab-order-specimens';
-            var RetrieveModel = Backbone.Model.extend({
-                url: modelUrl,
-                parse: function(data) {
-                    return data.data;
+            this.listenTo(labSamples, 'read:error', function() {
+                this.model.set('serverSideError', 'pick-list');
+            });
+
+            labSamples.fetch();
+        },
+        retrieveAllSpecimens: function() {
+            var specimens = new ADK.UIResources.Picklist.Lab_Orders.Specimens();
+
+            this.listenTo(specimens, 'read:success', function(collection) {
+                var otherSpecimen = collection.toPicklist();
+                this.model.unset('otherSpecimen');
+                this.model.set('allSpecimensListCache', otherSpecimen);
+                this.ui.otherSpecimen.trigger('control:picklist:set', [otherSpecimen]);
+            });
+
+            this.listenTo(specimens, 'read:error', function(collection) {
+                this.model.set('serverSideError', 'pick-list');
+            });
+
+            specimens.fetch();
+        },
+        retrieveImmediateCollection: function() {
+            var immediateCollection = new ADK.UIResources.Picklist.Lab_Orders.LabCollectTimes();
+
+            this.listenTo(immediateCollection, 'read:success', function(collection) {
+                var immediateCollection = [];
+                if (!_.isEmpty(collection)) {
+                    _.each(collection.models, function(m, i) {
+                        immediateCollection.push(m.get('text' + i).trim());
+                    });
+                } else {
+                    this.model.set('serverSideError', 'invalid-response');
+                    return;
+                }
+                this.model.set('immediateCollection', immediateCollection);
+            });
+
+            this.listenTo(immediateCollection, 'read:error', function(collection) {
+                this.model.set('serverSideError', 'pick-list');
+            });
+
+            immediateCollection.fetch();
+        },
+        retrieveLabSpecimens: function() {
+            var labSpecimens = new ADK.UIResources.Writeback.Orders.LabSupportData();
+            this.listenTo(labSpecimens, 'read:success', function(model, resp) {
+                this.model.set('otherSpecimenCache', model.get('labSpecimens'));
+            });
+
+            this.listenTo(labSpecimens, 'read:error', function(model, resp) {
+                this.model.set('serverSideError', 'pick-list');
+            });
+
+            labSpecimens.fetch({
+                params: {
+                    type: 'lab-specimens',
+                    site: ADK.UserService.getUserSession().get('site'),
                 }
             });
-            var model = new RetrieveModel();
-            model.fetch(callback);
         },
-        retrieveImmediateCollection: function(form) {
-            var that = this;
-            var callback = {
-                error: function(model, resp) {
-                    form.model.set('serverSideError', 'pick-list');
-                },
-                success: function(model, resp) {
-                    var immediateCollection = [];
-                    var count = 0;
-                    if (!_.isEmpty(resp.data)) {
-                        resp.data.forEach(function(entry) {
-                            if (entry['text' + count]) {
-                                immediateCollection.push(entry['text' + count]);
-                            }
-                            count++;
-                        });
-                    }
-                    else {
-                        form.model.set('serverSideError', 'invalid-response');
-                        return;
-                    }
-                    form.model.set('immediateCollection', immediateCollection);
-                }
-            };
+        retrieveProblemRelationships: function() {
+            var problemRelationships = new ADK.UIResources.Picklist.Notes.Problems();
+            this.listenTo(problemRelationships, 'read:success', function(collection) {
+                this.ui.problemRelationship.trigger('control:picklist:set', [collection.toPicklist()]);
+                this.ui.problemRelationship.trigger('control:disabled', false);
+            });
 
-            var siteCode = ADK.UserService.getUserSession().get('site');
-            var modelUrl = '/resource/write-pick-list?site=' + siteCode + '&type=lab-collect-times';
-            var RetrieveModel = Backbone.Model.extend({
-                url: modelUrl,
-                parse: function(data) {
-                    return data.data;
+            this.listenTo(problemRelationships, 'read:error', function(collection) {
+                this.model.set('serverSideError', 'pick-list');
+            });
+            problemRelationships.fetch();
+        },
+        retrieveServerTime: function() {
+            var serverTimeResource = new ADK.UIResources.Writeback.Orders.LabSupportData();
+            this.listenTo(serverTimeResource, 'read:success', function(model, resp) {
+                if (!_.isEmpty(resp.data)) {
+                    var serverTime = moment(resp.data[0].currentTime, 'YYYYMMDDhhmmss');
+                    var serverDifference = serverTime.diff(moment(), 'milliseconds');
+                    this.model.set('serverTimeDifference', serverDifference);
+                }
+                else {
+                    this.model.set({ serverTimeDifference: 0,
+                        serverSideError: 'invalid-response'
+                    });
+                    return;
                 }
             });
-            var model = new RetrieveModel();
-            model.fetch(callback);
-        },
-        retrieveMaxDays: function(form) {
-            var that = this;
-            var callback = {
-                error: function(model, resp) {
-                    form.model.set('serverSideError', 'pick-list');
-                },
-                success: function(model, resp) {
-                    var howOftenAlwaysDisabled = resp.data.value;
-                    howOftenAlwaysDisabled = -1; //temp solution to always disable howOften field. delete line once multiple recurring orders is implemented
-                    if (howOftenAlwaysDisabled === -1) {
-                        form.model.set('howOftenAlwaysDisabled', true);
-                        form.ui.howOften.trigger('control:disabled', true);
-                    } else {
-                        form.model.set('howOftenAlwaysDisabled', false);
-                        form.ui.howOften.trigger('control:disabled', false);
-                    }
+
+            this.listenTo(serverTimeResource, 'read:error', function(model, resp) {
+                this.model.set('serverSideError', 'pick-list');
+            });
+
+            serverTimeResource.fetch({
+                params: {
+                    type: 'lab-current-time',
+                    site: ADK.UserService.getUserSession().get('site'),
                 }
-            };
-
-            var siteCode = ADK.UserService.getUserSession().get('site');
-            var location;
-            if (ADK.PatientRecordService.getCurrentPatient().get('visit')) {
-                location = ADK.PatientRecordService.getCurrentPatient().get('visit').localId;
-            }
-
-            if (_.isUndefined(location)) {
-                console.log('visit has not been set');
-            }
-            else {
-                var modelUrl = '/resource/write-pick-list?site=' + siteCode + '&type=lab-order-max-days-continuous&location=' + location + '&schedule=0';
-                var RetrieveModel = Backbone.Model.extend({
-                    url: modelUrl,
-                    parse: function(data) {
-                        return data.data;
-                    }
-                });
-                var model = new RetrieveModel();
-                model.fetch(callback);
-            }
+            });
         }
     };
 
