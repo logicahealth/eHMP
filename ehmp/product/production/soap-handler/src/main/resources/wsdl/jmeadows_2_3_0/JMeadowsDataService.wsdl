@@ -1714,7 +1714,7 @@
   </binding>
   <service name="JMeadowsDataService">
     <port binding="tns:JMeadowsDataPortBinding" name="JMeadowsDataPort">
-      <soap:address location="http://IP             /jMeadows/JMeadowsDataService"/>
+      <soap:address location="http://127.0.0.1/jMeadows/JMeadowsDataService"/>
     </port>
   </service>
 </definitions>

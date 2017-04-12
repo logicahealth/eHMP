@@ -1,5 +1,5 @@
 {
-  "VXSYNC_IP": "IP      ",
+  "VXSYNC_IP": "172.16.3.6",
   "vxsync": {
     "configRefresh": 60000,
     "rules": {
@@ -35,10 +35,10 @@
     "vistaSites": {
         "9E7A": {
           "name": "PANORAMA",
-          "host": "IP        ",
+          "host": "172.16.2.101",
           "port": 9210,
-          "accessCode": "PW",
-          "verifyCode": "PW!!",
+          "accessCode": "PW    ",
+          "verifyCode": "PW    !!",
           "localIP": "127.0.0.1",
           "stationNumber": "500",
           "localAddress": "localhost",
@@ -47,10 +47,10 @@
       },
         "C877": {
           "name": "KODAK",
-          "host": "IP        ",
+          "host": "172.16.2.102",
           "port": 9210,
-          "accessCode": "PW",
-          "verifyCode": "PW!!",
+          "accessCode": "PW    ",
+          "verifyCode": "PW    !!",
           "localIP": "127.0.0.1",
           "stationNumber": "507",
           "localAddress": "localhost",
@@ -221,10 +221,10 @@
         ],
         "disabled": false,
         "pubsubConfig": {
-          "host": "IP        ",
+          "host": "172.16.4.205",
           "port": 8999,
           "protocol": "http",
-          "path": "repositories.med.DNS   /fpds/vpr/",
+          "path": "repositories.med.va.gov/fpds/vpr/",
           "server": "HMPTest",
           "clientName": "eHMP",
           "_type": "json",
@@ -782,14 +782,14 @@
     },
         "jds": {
             "protocol": "http",
-            "host": "IP        ",
+            "host": "172.16.2.110",
             "port": "9082",
             "timeout": 300000
         },
 
         "solrClient": {
             "core": "vpr",
-            "zooKeeperConnection": "IP             "
+            "zooKeeperConnection": "172.16.3.10"
         },
 
         "mvi": {
@@ -1075,8 +1075,8 @@
         "configRefresh": 0,
         "scheduledRunAtHour": 3,
         "scheduledRunAtMinutes": 15,
-        "syncUrl": "http://IP           /sync/doLoad",
-        "statusUrl": "http://IP           /sync/status",
+        "syncUrl": "http://172.16.3.6:8080/sync/doLoad?",
+        "statusUrl": "http://172.16.3.6:8080/sync/status",
         "mixedEnvironmentMode": true,
         "activeUserThresholdDays": 30,
         "jobs": {
@@ -1132,7 +1132,7 @@
         },
         "jds": {
             "protocol": "http",
-            "host": "IP        ",
+            "host": "172.16.2.110",
             "port": 9080,
             "timeout": 60000,
             "jdsSaveURI": "/user/set/this",
@@ -1141,7 +1141,7 @@
         },
         "pjds": {
             "protocol": "http",
-            "host": "IP        ",
+            "host": "172.16.2.110",
             "port": 9080,
             "timeout": 60000
         },
@@ -1187,7 +1187,7 @@
       },
       "vxsync": {
         "protocol": "http",
-        "host": "IP      ",
+        "host": "172.16.3.6",
         "port": "8080",
         "timeout": 300000
       },

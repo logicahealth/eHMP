@@ -44,17 +44,17 @@
   },
   "hdr" :
   {
-    "uri" : "IP             ",
-    "path": "/repositories.med.DNS   /fpds/",
+    "uri" : "127.0.0.1",
+    "path": "/repositories.med.va.gov/fpds/",
     "protocol": "http"
   },
   "pgd" : {
-    "uri" : "IP        ",
+    "uri" : "172.16.2.110",
     "retry" : 3,
     "protocol": "http"
   },
   "vler" : {
-    "host" : "IP        ",
+    "host" : "127.0.0.1",
     "port": 80,
     "protocol": "http",
     "docquerypath": "/VLERMockDocQuery/NHINAdapterGatewayDocQuery/EntityDocQuery",
@@ -68,8 +68,8 @@
   },
   "jmeadows-version": "2.3.3.0.2",
   "jmeadows-v2.3.0" : {
-    "host" : "IP        ",
-    "port": 80,
+    "host" : "127.0.0.1",
+    "port": 8080,
     "protocol": "http",
     "retry" : 3,
     "path" : "/jMeadows/JMeadowsDataService",
@@ -82,8 +82,8 @@
     "parallelismmin" : 4
   },
   "jmeadows-v2.3.1" : {
-    "host" : "IP        ",
-    "port": 80,
+    "host" : "127.0.0.1",
+    "port": 8080,
     "protocol": "http",
     "retry" : 3,
     "path" : "/jMeadows/JMeadowsDataService",
@@ -96,8 +96,8 @@
     "parallelismmin" : 4
   },
   "jmeadows-v2.3.3.0.2" : {
-    "host" : "IP        ",
-    "port": 80,
+    "host" : "127.0.0.1",
+    "port": 8080,
     "protocol": "http",
     "retry" : 3,
     "path" : "/jMeadows/JMeadowsDataService",
@@ -110,7 +110,7 @@
     "parallelismmin" : 4
   },
   "mvi" : {
-    "host" : "IP        ",
+    "host" : "127.0.0.1",
     "path" : "/mvi",
     "port" : 8896,
     "protocol" : "http",
