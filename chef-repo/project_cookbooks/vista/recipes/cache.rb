@@ -7,6 +7,7 @@
 yum_package node[:vista][:cache_package] do
   version node[:vista][:cache_version]
   arch node[:vista][:cache_arch]
+  source "/opt/private_licenses/cache_server/" + node[:vista][:cache_package] + "-" + node[:vista][:cache_version] + "." + node[:vista][:cache_arch] + ".rpm"
   not_if { node[:vista][:no_reset] }
 end
 

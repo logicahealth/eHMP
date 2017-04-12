@@ -1,7 +1,9 @@
 default[:jds][:cache_version] = "2014.1.3.775.14809"
 default[:jds][:cache_install_version] = "2014.1.3.775.0.14809"
 default[:jds][:cache_arch] = "lnxrhx64"
-default[:jds][:cache_source] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/intersystems/cache/#{node[:jds][:cache_version]}/cache-#{node[:jds][:cache_version]}-#{node[:jds][:cache_arch]}.tar.gz"
+default[:jds][:cache_source] = "file:///opt/private_licenses/cache_server/cache-#{node[:jds][:cache_version]}-#{node[:jds][:cache_arch]}.tar.gz" 
+#default[:jds][:cache_source] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/intersystems/cache/#{node[:jds][:cache_version]}/cache-#{node[:jds][:cache_version]}-#{node[:jds][:cache_arch]}.tar.gz"
+
 default[:jds][:build_jds] = false
 
 default[:jds][:cache_user] = "cacheserver"
@@ -37,7 +39,8 @@ default[:jds][:chef_log] = STDOUT
 
 default[:jds][:jds_database_location] = "/usr/cachesys/vista/jsonvpr"
 default[:jds][:cache_listener_ports][:general] = 9080
-default[:jds][:cache_listener_ports][:vxsync] = 9082
+#default[:jds][:cache_listener_ports][:vxsync] = 9082 <-- OSE/SMH - Aint no such port opened
+default[:jds][:cache_listener_ports][:vxsync] = 9080
 
 default[:jds][:httpd_user] = "root"
 default[:jds][:trace_enable] = "off"

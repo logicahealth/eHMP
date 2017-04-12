@@ -6,6 +6,15 @@
 chef_gem "chef-provisioning-ssh"
 require 'chef/provisioning/ssh_driver'
 
+_host_path_private_licenses = "#{ENV['HOME']}/Projects/vistacore/private_licenses"
+node.default[:ehmp_provision][:'vista-kodak'][:vagrant][:shared_folders].push(
+  {
+    :host_path => _host_path_private_licenses,
+    :guest_path => "/opt/private_licenses",
+    :create => true
+  }
+)
+
 ############################################## Staging Artifacts #############################################
 if ENV.has_key?('HMP_LOCAL_FILE')
   node.default[:ehmp_provision][:'vista-kodak'][:copy_files].merge!({

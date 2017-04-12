@@ -6,6 +6,15 @@
 chef_gem "chef-provisioning-ssh"
 require 'chef/provisioning/ssh_driver'
 
+_host_path_private_licenses = "#{ENV['HOME']}/Projects/vistacore/private_licenses"
+node.default[:ehmp_provision][:vxsync][:vagrant][:shared_folders].push(
+  {
+    :host_path => _host_path_private_licenses,
+    :guest_path => "/opt/private_licenses",
+    :create => true
+  }
+)
+
 include_asu = find_optional_node_by_criteria(node[:machine][:stack], 'role:asu', 'role:vxsync_client').nil? && node[:ehmp_provision][:vxsync][:vxsync_applications].include?("client")
 
 ############################################## Staging Artifacts #############################################
