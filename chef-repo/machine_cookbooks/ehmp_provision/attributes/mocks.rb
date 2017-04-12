@@ -16,7 +16,7 @@ default[:ehmp_provision][:mocks][:aws][:ssh_key_path] = "#{ENV['HOME']}/Projects
 
 #######################################################################################################################
 # mocks specific vagrant configuration options
-default[:ehmp_provision][:mocks][:vagrant][:ip_address] = "IP_ADDRESS"
+default[:ehmp_provision][:mocks][:vagrant][:ip_address] = "172.16.4.205"
 default[:ehmp_provision][:mocks][:vagrant][:provider_config] = {
   :memory => 1024
 }

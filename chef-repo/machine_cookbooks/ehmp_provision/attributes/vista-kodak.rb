@@ -16,7 +16,7 @@ default[:ehmp_provision][:'vista-kodak'][:aws][:ssh_key_path] = "#{ENV['HOME']}/
 
 #######################################################################################################################
 # vista-kodak specific vagrant configuration options
-default[:ehmp_provision][:'vista-kodak'][:vagrant][:ip_address] = "IP_ADDRESS"
+default[:ehmp_provision][:'vista-kodak'][:vagrant][:ip_address] = "10.2.2.102"
 default[:ehmp_provision][:'vista-kodak'][:vagrant][:provider_config] = {}
 default[:ehmp_provision][:'vista-kodak'][:vagrant][:shared_folders] = []
 #######################################################################################################################

@@ -17,7 +17,7 @@ default[:ehmp_provision][:vxsync][:aws][:ssh_key_path] = "#{ENV['HOME']}/Project
 
 #######################################################################################################################
 # vxsync specific vagrant configuration options
-default[:ehmp_provision][:vxsync][:vagrant][:ip_address] = "IPADDRES"
+default[:ehmp_provision][:vxsync][:vagrant][:ip_address] = "172.16.3.6"
 default[:ehmp_provision][:vxsync][:vagrant][:provider_config] = {
   :memory => 3584,
   :cpus => 4

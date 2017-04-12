@@ -13,13 +13,13 @@ default[:'ehmp-ui_provision'][:'ehmp-ui'][:copy_files] = {}
 default[:'ehmp-ui_provision'][:'ehmp-ui'][:aws][:instance_type] = "m3.medium"
 default[:'ehmp-ui_provision'][:'ehmp-ui'][:aws][:subnet] = "subnet-213b2256"
 default[:'ehmp-ui_provision'][:'ehmp-ui'][:aws][:ssh_username] = "PW      "
-default[:'ehmp-ui_provision'][:'ehmp-ui'][:aws][:ssh_keyname] = "redacted"
+default[:'ehmp-ui_provision'][:'ehmp-ui'][:aws][:ssh_keyname] = "vagrantaws_c82a142d5205"
 default[:'ehmp-ui_provision'][:'ehmp-ui'][:aws][:ssh_key_path] = "#{ENV['HOME']}/Projects/vistacore/.chef/keys/#{node[:'ehmp-ui_provision'][:'ehmp-ui'][:aws][:ssh_keyname]}"
 #######################################################################################################################
 
 #######################################################################################################################
-# ehmp-ui specific vagrant configuration options
-default[:'ehmp-ui_provision'][:'ehmp-ui'][:vagrant][:ip_address] = "IP_ADDRESS"
+# ehmp-ui specific vagrant configuration options 
+default[:'ehmp-ui_provision'][:'ehmp-ui'][:vagrant][:ip_address] = "172.16.1.150" 
 default[:'ehmp-ui_provision'][:'ehmp-ui'][:vagrant][:provider_config] = {
   :memory => 256
 }

@@ -16,7 +16,7 @@ default[:ehmp_provision][:jds][:aws][:ssh_key_path] = "#{ENV['HOME']}/Projects/v
 
 #######################################################################################################################
 # jds specific vagrant configuration options
-default[:ehmp_provision][:jds][:vagrant][:ip_address] = "IP_ADDRESS"
+default[:ehmp_provision][:jds][:vagrant][:ip_address] = "172.16.2.110"
 default[:ehmp_provision][:jds][:vagrant][:provider_config] = {
   :memory => 1024
 }

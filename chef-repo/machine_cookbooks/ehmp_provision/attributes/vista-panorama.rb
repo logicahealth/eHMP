@@ -16,7 +16,7 @@ default[:ehmp_provision][:'vista-panorama'][:aws][:ssh_key_path] = "#{ENV['HOME'
 
 #######################################################################################################################
 # vista-panorama specific vagrant configuration options
-default[:ehmp_provision][:'vista-panorama'][:vagrant][:ip_address] = "IP_ADDRESS"
+default[:ehmp_provision][:'vista-panorama'][:vagrant][:ip_address] = "172.16.2.101"
 default[:ehmp_provision][:'vista-panorama'][:vagrant][:provider_config] = {}
 default[:ehmp_provision][:'vista-panorama'][:vagrant][:shared_folders] = []
 #######################################################################################################################
