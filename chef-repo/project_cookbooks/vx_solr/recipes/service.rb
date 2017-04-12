@@ -4,7 +4,7 @@
 #
 
 chef_gem "chef-rewind" do
-  version node[:vx_solr][:service][:'chef-rewind_version']
+    source Chef::Config[:file_cache_path] + '/cookbooks/chef-rewind/chef-rewind-0.0.9.gem'
 end
 
 require 'chef/rewind'

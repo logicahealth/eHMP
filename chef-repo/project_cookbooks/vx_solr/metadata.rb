@@ -10,6 +10,7 @@ supports 'redhat'
 supports 'centos'
 
 depends "common", "2.0.12"
+depends "chef-rewind"
 
 #############################
 # 3rd party
