@@ -13,16 +13,6 @@ def repoCommitCountClosure = {
 def repoCommitCount = "${->repoCommitCountClosure()}"
 def version = "${->repoVersion + '.' + repoCommitCount}"
 
-uploadArchives {
-  repositories.mavenDeployer {
-    pom.groupId = "${->groupId}"
-    pom.version = "${->version}"
-    repository(url: "https://store.vistacore.us/nexus/content/repositories/${->repo}/") {
-      authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
-    }
-  }
-}
-
 task installNpm(type: Exec) {
   group "RDK Tasks"
   description "installs package(s)"
@@ -114,8 +104,6 @@ task zipRDK(type: Zip, dependsOn: [build, ccowInstallNpm, writeInstallNpm]) {
                        details.file.name.endsWith('.sh') ||
                        details.file.name.startsWith('.') }
 }
-
-uploadArchives.dependsOn zipRDK
 
 artifacts {
   archives zipRDK
