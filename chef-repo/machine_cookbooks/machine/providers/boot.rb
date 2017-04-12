@@ -97,6 +97,7 @@ action :vagrant do
           :ip => new_resource.boot_options[:ip_address]
         }
       },
+      'ssh.insert_key' => false,
       'vm.provider' => {
         "virtualbox" => {
           :name => "#{new_resource.machine_name}-#{node[:machine][:stack]}"
