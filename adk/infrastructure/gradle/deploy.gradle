@@ -202,7 +202,7 @@ For example, if you want to "gradle sshMongoDB", execute the following:
 }
 
 def vagrantBin(){
-  def retval = '/usr/bin/vagrant'
+  def retval = '/usr/local/bin/vagrant'
 
   if( System.properties['os.name'].toLowerCase().contains('windows')) {
     retval = 'C:/opscode/chef/embedded/bin/vagrant.bat'

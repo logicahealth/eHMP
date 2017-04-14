@@ -18,10 +18,12 @@ export VAGRANT_BIN=/usr/bin/vagrant
 
 export GRADLE_OPTS="-Xmx1G -Xms256m  -Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=1"
 export GRADLE_HOME=/usr/local/gradle/gradle-2.4
-export GROOVY_HOME=/usr/local/groovy/groovy-2.0.6
-export PATH=$GROOVY_HOME/bin:$GRADLE_HOME/bin:$PATH
+#export GROOVY_HOME=/usr/local/groovy/groovy-2.0.6
+#export PATH=$GROOVY_HOME/bin:$GRADLE_HOME/bin:$PATH
+export PATH=$GRADLE_HOME/bin:$PATH
 
 jdk_version="jdk1.8.0_92"
+#jdk_version="jdk1.8.0_121"
 
 export destroyAll="destroyAll"
 export startAll="startJDS startMocks startKodak startPanorama startVxSync"
@@ -101,7 +103,7 @@ else
 fi
 
 export PATH=$JAVA_HOME/bin:/opt/chefdk/bin:/opt/chefdk/embedded/bin:$PATH
-export GEM_PATH=/opt/chefdk/embedded/lib/ruby/gems/2.1.0
+export GEM_PATH=/opt/chefdk/embedded/lib/ruby/gems/2.3.0
 
 export GEM_HOME=$WORKSPACE/.aidk_gems
 export GEM_PATH=$GEM_PATH:$GEM_HOME

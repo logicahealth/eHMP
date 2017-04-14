@@ -57,7 +57,7 @@ else
 fi
 
 export PATH=$GEM_HOME/bin:$JAVA_HOME/bin:$M2_HOME/bin:$GROOVY_HOME/bin:$GRADLE_HOME/bin:/opt/chefdk/bin:/opt/chefdk/embedded/bin:$PATH
-export GEM_PATH=$GEM_HOME:/opt/chefdk/embedded/lib/ruby/gems/2.1.0
+export GEM_PATH=$GEM_HOME:/opt/chefdk/embedded/lib/ruby/gems/2.3.0
 export BUNDLE_PATH=$GEM_HOME
 
 function vagrant(){
