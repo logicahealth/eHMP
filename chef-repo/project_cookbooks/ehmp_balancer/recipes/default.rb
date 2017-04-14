@@ -86,21 +86,22 @@ end
 fqdn = node[:ehmp_balancer][:fqdn]
 
 certs = nil
-begin
-  cert_data_bag_item_name = fqdn.gsub(/\.+/, '')
-  certs = Chef::EncryptedDataBagItem.load("certs", cert_data_bag_item_name, node[:data_bag_string])
-rescue
-  Chef::Log.warn "Did not find data bag item 'certs' #{cert_data_bag_item_name}, this could be okay, we will proceed to make a self-singed cert instead."
-end
-
-if certs.nil?
-  begin
-    # certificate chain file
-    certs = Chef::EncryptedDataBagItem.load("certs", "wildcard", node[:data_bag_string])
-  rescue
-    Chef::Log.warn "Did not find data bag item 'certs' 'wildcard', this could be okay, we will proceed to for a server specific cert instead."
-  end
-end
+# OSE/SMH - comment this out to create our own cert
+# begin
+#   cert_data_bag_item_name = fqdn.gsub(/\.+/, '')
+#   certs = Chef::EncryptedDataBagItem.load("certs", cert_data_bag_item_name, node[:data_bag_string])
+# rescue
+#   Chef::Log.warn "Did not find data bag item 'certs' #{cert_data_bag_item_name}, this could be okay, we will proceed to make a self-singed cert instead."
+# end
+# 
+# if certs.nil?
+#   begin
+#     # certificate chain file
+#     certs = Chef::EncryptedDataBagItem.load("certs", "wildcard", node[:data_bag_string])
+#   rescue
+#     Chef::Log.warn "Did not find data bag item 'certs' 'wildcard', this could be okay, we will proceed to for a server specific cert instead."
+#   end
+# end
 
 if certs.nil?
   execute "create-private-key" do
