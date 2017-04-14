@@ -4,4 +4,4 @@
 #
 #
 
-#default[:vagrant_wrapper][:home] = "#{ENV['HOME']}/.vagrant.d"
+default[:vagrant_wrapper][:home] = "#{ENV['HOME']}/.vagrant.d"
