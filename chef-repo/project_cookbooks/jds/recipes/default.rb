@@ -14,7 +14,13 @@ end
 
 gem_package 'greenletters'
 
-include_recipe 'jds::cache'
-include_recipe 'jds::config'
-include_recipe 'jds::routines'
+if node[:jds][:install_cache] == true
+  include_recipe 'jds::cache'
+  include_recipe 'jds::config'
+  include_recipe 'jds::routines'
+else 
+  include_recipe 'jds::gtm_install'
+  include_recipe 'jds::gtm_jds_config'
+end
+
 include_recipe 'jds::networking'

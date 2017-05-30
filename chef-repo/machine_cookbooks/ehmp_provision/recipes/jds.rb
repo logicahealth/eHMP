@@ -96,7 +96,8 @@ machine machine_name do
       jds_data: {
         source: node[:machine][:driver] == "vagrant" ? jds_data_source : "",
         dev_pjds: node[:machine][:driver] == "ssh" ? false : true
-      }
+      },
+      install_cache: ENV.has_key?("INSTALL_INTERSYSTEMS_CACHE") ? true : false
     },
     beats: {
       logging: node[:machine][:logging]

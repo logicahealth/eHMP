@@ -4,18 +4,25 @@ default[:jds][:cache_arch] = "lnxrhx64"
 default[:jds][:cache_source] = "file:///opt/private_licenses/cache_server/cache-#{node[:jds][:cache_version]}-#{node[:jds][:cache_arch]}.tar.gz" 
 #default[:jds][:cache_source] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/intersystems/cache/#{node[:jds][:cache_version]}/cache-#{node[:jds][:cache_version]}-#{node[:jds][:cache_arch]}.tar.gz"
 
+default[:jds][:gtm_source]  = "https://sourceforge.net/projects/fis-gtm/files/GT.M%20Installer/v0.13/gtminstall"
+default[:jds][:gtm_version] = "V6.3-001A"
+default[:jds][:gtm_arch] = "x86_64"
+default[:jds][:gtm_user]    = "gtmuser"
+default[:jds][:gtm_jds_install_dir] = "/var/db/jds"
+default[:jds][:gtm_db_name] = "JDS"
+
 default[:jds][:build_jds] = false
 
 default[:jds][:cache_user] = "cacheserver"
 default[:jds][:cache_dir] = "/usr/cache-#{node[:jds][:cache_version]}"
 default[:jds][:cache_mgr_dir] = "#{node[:jds][:cache_dir]}/mgr"
-default[:jds][:installer_dir] = "#{Chef::Config[:file_cache_path]}/cache"
+default[:jds][:installer_dir] = "#{Chef::Config[:file_cache_path]}"
 default[:jds][:cache_temp] = "/tmp"
 default[:jds][:instance_name] = "jds"
-default[:jds][:service_name] = "cache_jds_#{node[:jds][:cache_version]}"
+default[:jds][:service_name] = node[:jds][:install_cache] ? "cache_jds_#{node[:jds][:cache_version]}" : "gtm_jds"
 default[:jds][:cache_install_type] = "Normal"
 
-default[:jds][:install_user] = node[:jds][:cache_user]
+default[:jds][:install_user] = node[:jds][:install_cache] ? node[:jds][:cache_user] : default[:jds][:gtm_user]
 default[:jds][:shell] = "sudo -H -u #{node[:jds][:install_user]} sh"
 default[:jds][:shell_prompt] = /sh-[0-9\.]+/
 default[:jds][:session] = "csession #{node[:jds][:instance_name]}"
@@ -39,9 +46,7 @@ default[:jds][:chef_log] = STDOUT
 
 default[:jds][:jds_database_location] = "/usr/cachesys/vista/jsonvpr"
 default[:jds][:cache_listener_ports][:general] = 9080
-#default[:jds][:cache_listener_ports][:vxsync] = 9082 <-- OSE/SMH - Aint no such port opened
-default[:jds][:cache_listener_ports][:vxsync] = 9080
-
+default[:jds][:cache_listener_ports][:vxsync] = 9082 
 default[:jds][:httpd_user] = "root"
 default[:jds][:trace_enable] = "off"
 
@@ -79,7 +84,7 @@ default[:jds][:jds_data][:data_bag][:teamsys] = nil
 default[:jds][:jds_data][:data_bag][:entordrbls] = nil
 default[:jds][:jds_data][:data_bag][:activeusr] = nil
 
-if node[:jds][:jds_data][:dev_pjds]
+if default[:jds][:jds_data][:dev_pjds]
 	default[:jds][:jds_data][:use_artifact][:entordrbls] = true
 	default[:jds][:jds_data][:use_artifact][:ehmpusers] = true
 	default[:jds][:jds_data][:use_artifact][:permset] = true
