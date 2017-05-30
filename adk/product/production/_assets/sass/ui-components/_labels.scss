@@ -1,0 +1,47 @@
+// labels
+.label {
+    color: $pure-white;
+    padding: 2px 5px 2px 5px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: normal;
+    display: inline-flex;
+}
+.label-default {
+    background-color: $grey-darker;
+}
+.label-danger {
+    background-color: $red-dark;
+    color: $pure-white;
+}
+.label-success {
+    background-color: $secondary;
+}
+.label-info {
+    background-color: $grey-darker;
+}
+.label-error {
+    background-color: $red;
+}
+.label-warning {
+    background-color: $tertiary-darker;
+    color: $pure-black;
+}
+.applet-badges {
+	border-radius: 4px;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 400;
+    margin: 1px 0;
+    padding: 3px 6px;
+	&.label-abnormal {
+		background-color: $tertiary;
+	}
+	&.label-critical {
+		background-color: $red;
+	}
+	&.label-panel {
+		background-color: $grey-darkest;
+	}
+}

@@ -114,6 +114,16 @@ define([
                     Storage.set.sessionModel(appletStorageName, model);
                 }
             },
+            appletStorageModelAttribute: function(workspaceId, appletId, appletAttribute, context) {
+                var appletModelName = Storage.getAppletStorageModelName(workspaceId, appletId);
+                var appletStorageName = buildAppletStorageName(context);
+                var model = Storage.get.sessionModel(appletStorageName);
+
+                if (Storage.check.appletHasSessionStorage(appletModelName, model)) {
+                    model.set(appletModelName, _.omit(model.get(appletModelName), appletAttribute));
+                    Storage.set.sessionModel(appletStorageName, model);
+                }
+            },
             all: function() {
                 session.clearAllSessionModels();
                 window.sessionStorage.clear();
@@ -160,6 +170,18 @@ define([
             }
             var appletModelName = this.getAppletStorageModelName(workspaceId, appletId);
             return this.get.appletStorageModel(workspaceId, appletId, context).get(appletModelName)[appletAttribute];
+        },
+        clearAppletStorageModelAttribute: function(appletId, appletAttribute, boundToWorkspace, customWorkspace, context) {
+            var workspaceId;
+            if (!_.isUndefined(customWorkspace)) {
+                workspaceId = customWorkspace;
+            } else {
+                workspaceId = Messaging.request('get:current:screen').id;
+            }
+            if (!_.isUndefined(boundToWorkspace) && !boundToWorkspace) {
+                workspaceId = 'unbound-' + appletId;
+            }
+            this.delete.appletStorageModelAttribute(workspaceId, appletId, appletAttribute, context);
         },
         clearAppletStorageModel: function(appletId, customWorkspace, context) {
             var workspaceId;

@@ -1,4 +1,5 @@
 define([], function() {
+    'use strict';
 
     var CollectTimesModel = ADK.Resources.Picklist.Model.extend({
         label: 'text'

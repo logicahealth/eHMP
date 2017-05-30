@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(["jquery", "backbone", "marionette", "main/ui_components/components", "api/UIComponents", "jasminejquery"],
+define(["jquery", "backbone", "marionette", "main/UILibrary", "api/UIComponents", "jasminejquery"],
     function($, Backbone, Marionette, UI) {
 
         var $form, form;

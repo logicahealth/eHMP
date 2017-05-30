@@ -17,7 +17,7 @@ define([
             minimumInputLength: 1,
             buttonOptions: {}
         },
-        template: Handlebars.compile('{{ui-form-searchbar placeholder size=size value=value title=title helpMessage=helpMessage required=required buttonOptions=buttonOptions id=name}}'),
+        template: Handlebars.compile('{{ui-form-searchbar placeholder size=size value=value title=title helpMessage=helpMessage required=required buttonOptions=buttonOptions id=name icon=icon}}'),
         events: _.defaults({
             "focus input": "clearInvalid",
             "click .clear-input-btn": "clearInput",
@@ -29,7 +29,7 @@ define([
         ui: {
             input: 'input',
             clearBtn: '.clear-input-btn',
-            searchBtn: '.input-group-btn > button'
+            searchBtn: 'button:last-of-type'
         },
         onBeforeShow: function() {
             this.searchBtnEnable();
@@ -54,6 +54,9 @@ define([
             } else {
                 this.ui.searchBtn.prop('disabled', true);
             }
+        },
+        className: function() {
+            return BaseInputControl.prototype.className() + ' form-group--searchbar';
         }
     });
 });

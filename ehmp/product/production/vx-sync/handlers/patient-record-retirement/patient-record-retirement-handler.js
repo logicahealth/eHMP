@@ -44,14 +44,17 @@ function getPatientIdentifiersFromJds(log, config, environment, job, callback) {
 		var errorMessage;
 		if (error) {
 			errorMessage = format('patient-record-retirement-handler.getPatientIdentifiersFromJds: received error from JDS when attempting to get identifiers for: %s, error: %s', id, inspect(error));
+			log.error(errorMessage);
 			return callback(errorMessage);
 		}
 		if (!response || response.statusCode !== 200) {
 			errorMessage = format('patient-record-retirement-handler.getPatientIdentifiersFromJds: received unexpected response from JDS when attempting to get identifiers for: %s, response: %s', id, inspect((response) ? response.body : null));
+			log.error(errorMessage);
 			return callback(errorMessage);
 		}
 		if (!result) {
 			errorMessage = format('patient-record-retirement-handler.getPatientIdentifiersFromJds: received null result from JDS when attempting to get identifiers for: %s', id);
+			log.error(errorMessage);
 			return callback(errorMessage);
 		}
 

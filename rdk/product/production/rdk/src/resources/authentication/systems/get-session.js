@@ -20,7 +20,7 @@ var finalizeCall = function(req, res, params) {
         if (err.log) {
             err.log(req.logger);
         }
-        return res.status(err.status).rdkSend(err);
+        return res.status(err.status || 500).rdkSend(err);
     }
 
     if (!authUtils.hasValidSession(req)) {

@@ -1,4 +1,5 @@
 define([], function() {
+    'use strict';
 
     var OrderableItem = ADK.Resources.Picklist.Model.extend({
         label: 'synonym',

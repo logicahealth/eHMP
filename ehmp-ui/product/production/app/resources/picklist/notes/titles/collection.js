@@ -110,7 +110,8 @@ define([], function() {
                 }
             };
             _.each(fetchMethods, function(fetchMethod) {
-                self[fetchMethod](options);
+                var clonedOptions = _.clone(options);
+                self[fetchMethod](clonedOptions);
             });
             return deferred.promise();
         },

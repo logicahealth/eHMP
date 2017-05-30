@@ -1,5 +1,11 @@
 .patient-postings {
    .cwad-detail-list {
+        h5.cwad-title {
+            color: $grey-darkest;
+            strong {
+                color: $primary;
+            }
+        }
         .dl-horizontal {
             dt {
                 width: 65px;

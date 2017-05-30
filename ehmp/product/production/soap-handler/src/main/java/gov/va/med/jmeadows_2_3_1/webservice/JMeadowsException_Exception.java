@@ -10,7 +10,7 @@ import javax.xml.ws.WebFault;
  * Generated source version: 2.1
  * 
  */
-@WebFault(name = "JMeadowsException", targetNamespace = "http://webservice.jmeadows.med.va.gov/")
+@WebFault(name = "JMeadowsException", targetNamespace = "http://webservice.jmeadows.URL       /")
 public class JMeadowsException_Exception
     extends Exception
 {

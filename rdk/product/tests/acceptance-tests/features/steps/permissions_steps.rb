@@ -3,7 +3,7 @@ When(/^the client requests to view all ehmp permissions$/) do
   query.add_parameter('testdata', 'true')
   path = query.path
   p path
-  @response = HTTPartyRDK.get_as_user(path, "9E7A;vk1234", "vk1234!!")
+  @response = HTTPartyRDK.get_as_user(path, "9E7A;REDACTED", "REDACTED")
 end
 
 Then(/^the permissions results contain more than (\d+) records$/) do |count|

@@ -127,6 +127,9 @@ function transformRecord(job, log, environment, patientDemographicsIcn, callback
                 priority: job.priority,
                 param: job.param
             };
+            if (job.referenceInfo) {
+                meta.referenceInfo = job.referenceInfo;
+            }
             if (_.contains(['consult', 'progressNote', 'dischargeSummary'], job.dataDomain)) {
                 if (item.dodComplexNoteUri) {
                     return jobUtil.createJmeadowsDocumentRetrievalRequest(job.patientIdentifier, 'document', item, meta);

@@ -1,11 +1,11 @@
 VPRJTPATID ;KRM/CJE -- Unit Tests for GET/PUT Patient Identifiers and JPID utils
- ;;1.0;JSON DATA STORE;;Dec 16, 2014
  ;
  ; Endpoints tested
  ;GET vpr/jpid/{jpid} PIDS^VPRJPR
  ;PUT vpr/jpid/{jpid} ASSOCIATE^VPRJPR
  ;PUT vpr/jpid ASSOCIATE^VPRJPR
  ;DELETE vpr/jpid/{jpid} DISASSOCIATE^VPRJPR
+ ;DELETE vpr/{pid} DELPT^VPRJPR
  ;POST vpr/jpid/query JPIDQUERY^VPRJPR
  ;
 STARTUP  ; Run once before all tests
@@ -50,9 +50,9 @@ NEWJPID ;; @TEST Creating a new JPID
  K ^||TMP
  S JPID=$$JPID^VPRJPR
  D NE^VPRJT("",$G(JPID),"JPID not created")
- D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID existance index not created")
- D ASSERT(1,$G(^VPRPTX("count","patient","patient")),"Patient count index not created")
- D ASSERT(1,$D(^VPRPTJ("JPID",JPID,"JPID;"_JPID)),"Patient JPID not found in identifier list")
+ D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID existence index not created but should be")
+ D ASSERT(1,$G(^VPRPTX("count","patient","patient")),"Patient count index not created but should be")
+ D ASSERT(1,$D(^VPRPTJ("JPID",JPID,"JPID;"_JPID)),"Patient JPID not found in identifier list but should be")
  K ^VPRPTJ("JPID")
  K ^VPRPTX("count","patient","patient")
  K ^||TMP
@@ -65,12 +65,12 @@ IDXJPID ;; @TEST Index a new JPID with one identifier
  S JPID=$$JPID^VPRJPR
  D JPIDIDX^VPRJPR(JPID,"9E7A;3")
  D NE^VPRJT("",$G(JPID),"JPID not created")
- D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID existance index not created")
+ D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID existence index not created but should be")
  D ASSERT(1,$D(^VPRPTJ("JPID",JPID,"9E7A;3")),"Patient identifier forward (JPID -> PID/ICN) index not updated correctly")
  D ASSERT(1,$D(^VPRPTJ("JPID",JPID,"JPID;"_JPID)),"Patient identifier forward (JPID -> JPID;{JPID}) index not updated correctly")
  D ASSERT(JPID,$G(^VPRPTJ("JPID","9E7A;3")),"Patient identifier reverse (PID/ICN -> JPID) index not updated correctly")
  D ASSERT(JPID,$G(^VPRPTJ("JPID","JPID;"_JPID)),"Patient identifier reverse (JPID;{JPID} -> JPID index not updated correctly")
- D ASSERT(1,$G(^VPRPTX("count","patient","patient")),"Patient count index not created")
+ D ASSERT(1,$G(^VPRPTX("count","patient","patient")),"Patient count index not created but should be")
  K ^VPRPTJ("JPID")
  K ^VPRPTX("count","patient","patient")
  K ^||TMP
@@ -84,8 +84,8 @@ IDXJPID2 ;; @TEST Index a new JPID with two identifiers
  D JPIDIDX^VPRJPR(JPID,"9E7A;3")
  D JPIDIDX^VPRJPR(JPID,"1234V4321")
  D NE^VPRJT("",$G(JPID),"JPID not created")
- D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID existance index not created")
- D ASSERT(1,$G(^VPRPTX("count","patient","patient")),"Patient count index not created")
+ D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID existence index not created but should be")
+ D ASSERT(1,$G(^VPRPTX("count","patient","patient")),"Patient count index not created but should be")
  D ASSERT(1,$D(^VPRPTJ("JPID",JPID,"9E7A;3")),"Patient identifier forward (JPID -> PID/ICN) index not updated correctly")
  D ASSERT(JPID,$G(^VPRPTJ("JPID","9E7A;3")),"Patient identifier reverse (PID/ICN -> JPID) index not updated correctly")
  D ASSERT(1,$D(^VPRPTJ("JPID",JPID,"1234V4321")),"Patient identifier forward (JPID -> PID/ICN) index not updated correctly")
@@ -102,9 +102,9 @@ DELJPID ;; @TEST Delete one Patient identifier from JPID Index
  D PATIDS
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
  D JPIDDIDX^VPRJPR(JPID,"9E7A;3")
- D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID existance does not exist and should")
- D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"9E7A;3")),"Patient identifier forward (JPID -> PID/ICN index exists")
- D ASSERT(0,$D(^VPRPTJ("JPID","9E7A;3")),"Patient identifier reverse (PID/ICN -> JPID index exists")
+ D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID existence does not exist and should")
+ D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"9E7A;3")),"Patient identifier forward (JPID -> PID/ICN) index exists but should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID","9E7A;3")),"Patient identifier reverse (PID/ICN -> JPID) index exists but should not")
  D ASSERT(1,$G(^VPRPTX("count","patient","patient")),"Patient count index incorrect")
  K ^VPRPTJ("JPID")
  K ^VPRPTX("count","patient","patient")
@@ -119,11 +119,11 @@ DELJPID2 ;; @TEST Delete two Patient identifiers from JPID Index
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
  D JPIDDIDX^VPRJPR(JPID,"9E7A;3")
  D JPIDDIDX^VPRJPR(JPID,"1234V4321")
- D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID existance index does not exist")
- D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"9E7A;3")),"Patient identifier forward (JPID -> PID/ICN index exists")
- D ASSERT(0,$D(^VPRPTJ("JPID","9E7A;3")),"Patient identifier reverse (PID/ICN -> JPID index exists")
- D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"1234V4321")),"Patient identifier forward (JPID -> PID/ICN index exists")
- D ASSERT(0,$D(^VPRPTJ("JPID","1234v4321")),"Patient identifier reverse (PID/ICN -> JPID index exists")
+ D ASSERT(11,$D(^VPRPTJ("JPID",JPID)),"JPID existence index does not exist but should")
+ D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"9E7A;3")),"Patient identifier forward (JPID -> PID/ICN) index exists but should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID","9E7A;3")),"Patient identifier reverse (PID/ICN -> JPID) index exists but should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"1234V4321")),"Patient identifier forward (JPID -> PID/ICN) index exists but should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID","1234v4321")),"Patient identifier reverse (PID/ICN -> JPID) index exists but should not")
  D ASSERT(1,$G(^VPRPTX("count","patient","patient")),"Patient count index incorrect")
  K ^VPRPTJ("JPID")
  K ^VPRPTX("count","patient","patient")
@@ -139,13 +139,13 @@ DELJPIDA ;; @TEST Delete all Patient identifiers from JPID Index
  D JPIDDIDX^VPRJPR(JPID,"9E7A;3")
  D JPIDDIDX^VPRJPR(JPID,"1234V4321")
  D JPIDDIDX^VPRJPR(JPID,"C877;3")
- D ASSERT(0,$D(^VPRPTJ("JPID",JPID)),"JPID existance index exists")
- D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"9E7A;3")),"Patient identifier forward (JPID -> PID/ICN index exists")
- D ASSERT(0,$D(^VPRPTJ("JPID","9E7A;3")),"Patient identifier reverse (PID/ICN -> JPID index exists")
- D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"1234V4321")),"Patient identifier forward (JPID -> PID/ICN index exists")
- D ASSERT(0,$D(^VPRPTJ("JPID","1234v4321")),"Patient identifier reverse (PID/ICN -> JPID index exists")
- D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"C877;3")),"Patient identifier forward (JPID -> PID/ICN index exists")
- D ASSERT(0,$D(^VPRPTJ("JPID","C877;3")),"Patient identifier reverse (PID/ICN -> JPID index exists")
+ D ASSERT(0,$D(^VPRPTJ("JPID",JPID)),"JPID existence index exists but should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"9E7A;3")),"Patient identifier forward (JPID -> PID/ICN) index exists but should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID","9E7A;3")),"Patient identifier reverse (PID/ICN -> JPID) index exists but should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"1234V4321")),"Patient identifier forward (JPID -> PID/ICN) index exists but should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID","1234v4321")),"Patient identifier reverse (PID/ICN -> JPID) index exists but should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"C877;3")),"Patient identifier forward (JPID -> PID/ICN) index exists but should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID","C877;3")),"Patient identifier reverse (PID/ICN -> JPID) index exists but should not")
  D ASSERT(0,$G(^VPRPTX("count","patient","patient")),"Patient count index incorrect")
  K ^VPRPTJ("JPID")
  K ^VPRPTX("count","patient","patient")
@@ -586,6 +586,7 @@ DISAALL ;; @TEST Disassociate JPID (Delete JPID and Patient Data)
  D ASSERT(0,$D(^VPRPTJ("JPID","9E7A;3")),"PID index for 9E7A;3 does not exist")
  D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"C877;3")),"JPID index for C877;3 does not exist")
  D ASSERT(0,$D(^VPRPTJ("JPID","C877;3")),"PID index for C877;3 does not exist")
+ D ASSERT(0,$D(^VPRMETA("JPID",JPID,"lastAccessTime")),"A lastAccessTime data node exists and should not")
  K ^VPRPTJ("JPID")
  K ^VPRPTX("count","patient","patient")
  K ^||TMP
@@ -609,6 +610,7 @@ DISAALLP ;; @TEST Disassociate JPID (Delete JPID and Patient Data) using PID
  D ASSERT(0,$D(^VPRPTJ("JPID","9E7A;3")),"PID index for 9E7A;3 does not exist")
  D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"C877;3")),"JPID index for C877;3 does not exist")
  D ASSERT(0,$D(^VPRPTJ("JPID","C877;3")),"PID index for C877;3 does not exist")
+ D ASSERT(0,$D(^VPRMETA("JPID",JPID,"lastAccessTime")),"A lastAccessTime data node exists and should not")
  K ^VPRPTJ("JPID")
  K ^VPRPTX("count","patient","patient")
  K ^||TMP
@@ -637,6 +639,32 @@ DISAEJPIDU ;; @TEST Disassociate JPID Unknown error
  D DISASSOCIATE^VPRJPR(.BODY,.ARG)
  D ASSERT(404,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP 400 error should have occured")
  D ASSERT(224,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 224 reason code should have occurred")
+ K ^VPRPTJ("JPID")
+ K ^VPRPTX("count","patient","patient")
+ K ^||TMP
+ Q
+ ;
+DELALL ;; @TEST Delete PID (Delete PID and Patient Data)
+ N BODY,ARG,ERR,RETURN,JPID,HTTPERR
+ K ^VPRPTJ("JPID")
+ K ^VPRPTX("count","patient","patient")
+ K ^||TMP
+ D PATIDS
+ S PID="9E7A;3"
+ S JPID=$$JPID4PID^VPRJPR(PID)
+ S ARG("pid")=PID
+ D DELPT^VPRJPR(.BODY,.ARG)
+ D ASSERT(0,$D(^||TMP("HTTPERR",$J)),"Error returned from DELPT^VPRJPR")
+ D ASSERT(0,$D(^VPRPTJ("JPID")),"JPID index exists and should not")
+ D ASSERT(0,$D(^VPRPTJ("JSON")),"Patient data JSON exists and should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID",JPID)),"JPID exists and should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"1234V4321")),"JPID index for 1234V4321 exists and should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID","1234V4321")),"PID index for 1234V4321 exists and should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"9E7A;3")),"JPID index for 9E7A;3 exists and should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID","9E7A;3")),"PID index for 9E7A;3 exists and should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID",JPID,"C877;3")),"JPID index for C877;3 exists and should not")
+ D ASSERT(0,$D(^VPRPTJ("JPID","C877;3")),"PID index for C877;3 exists and should not")
+ D ASSERT(0,$D(^VPRMETA("JPID",JPID,"lastAccessTime")),"A lastAccessTime data node exists and should not")
  K ^VPRPTJ("JPID")
  K ^VPRPTX("count","patient","patient")
  K ^||TMP

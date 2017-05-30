@@ -10,7 +10,7 @@
         top: 0;
         width: 100%;
         z-index: 50;
-        .tray-loader-animation {
+        &-animation {
             align-self: center;
             background-color: $pure-white;
             border-radius: 10px;
@@ -24,7 +24,7 @@
                 margin: 3px 3px 0 0;
             }
         }
-        .tray-loader-message{
+        &-message {
             overflow: hidden;
             white-space: nowrap;
         }
@@ -45,21 +45,6 @@
         }
         p {
             word-break: break-word;
-        }
-        label, .faux-label, legend {
-            color: $pure-black !important;
-            text-transform: lowercase;
-            &::first-letter {
-                text-transform: uppercase;
-            }
-        }
-        .radio input[type="radio"],
-        .radio-inline input[type="radio"],
-        .checkbox input[type="checkbox"],
-        .checkbox-inline input[type="checkbox"] {
-            position: absolute;
-            margin-left: -16px;
-            top: -2px;
         }
         h4, h5 {
             word-wrap: break-word;
@@ -96,18 +81,16 @@
                 background-color: $primary-light;
                 &.action-list-container {
                     background-color: $primary-light-alt;
-                    .btn-group {
-                        .btn {
-                            color: $pure-white;
-                            text-transform: uppercase;
-                            &.btn-default {
-                                background-color: $primary;
-                                &:hover {
-                                    background-color: $primary-dark;
-                                }
-                                .fa.pull-right {
-                                    padding-top: 3px;
-                                }
+                    .btn-group .btn {
+                        color: $pure-white;
+                        text-transform: uppercase;
+                        &.btn-default {
+                            background-color: $primary;
+                            &:hover {
+                                background-color: $primary-dark;
+                            }
+                            .fa.pull-right {
+                                padding-top: 3px;
                             }
                         }
                     }
@@ -115,14 +98,10 @@
             }
         }
         .accordion-container {
-            &.panel-group {
-                &.ftar {
-                    .panel {
-                        .ncb-comment-collapse-container {
-                            &.panel-collapse {
-                                background-color: transparent;
-                            }
-                        }
+            .panel {
+                .ncb-comment-collapse-container {
+                    &.panel-collapse {
+                        background-color: transparent;
                     }
                 }
             }
@@ -151,24 +130,29 @@
                 }
             }
         }
-        .modal-content, .panel {
+        .modal-content, 
+        .panel {
             box-shadow: none;
             border: none;
         }
         .modal-header,
         .panel-heading {
+            background-color: $primary-dark;
             border-radius: 0;
+            padding: 0px;
             h4 {
                 color: $pure-white;
+                display: inline-block;
                 font-size: 12px;
                 line-height: 23px;
                 padding: 4px 0;
                 text-transform: uppercase;
             }
         }
-        // for activies radio buttons, should consider making this global for the component
-        .request-assignment .radio-inline+.radio-inline {
-            margin-left: 0px;
+        // info alert for inside of the tray only
+        .alert-info {
+            background-color: $pure-white;
+            border-color: $grey-darker;
         }
     }
     &.open > .sidebar-tray {

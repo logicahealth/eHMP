@@ -27,7 +27,7 @@ describe('jmeadows-sync-request-handler.js', function() {
     };
 
     var host = vx_sync_ip;
-    var port = 5000;
+    var port = PORT;
     var tubename = 'vx-sync-test';
 
     var matchingJobTypes = [jobUtil.jmeadowsDomainSyncRequestType('allergy')];

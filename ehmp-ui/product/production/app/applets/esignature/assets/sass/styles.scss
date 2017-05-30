@@ -1,0 +1,14 @@
+ .control.checklist-control {
+    &.bordered-checklist > .childView-container {
+        .form-group {
+            background-color: $pure-white;
+            border: 1px solid $grey;
+            border-radius: 4px;
+            margin: 2px 0;
+            padding: 5px 3px;
+            .checkbox {
+                margin: 5px;
+            }
+        }
+    }
+ }

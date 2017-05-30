@@ -11,7 +11,7 @@ define([
     'main/components/views/errorView',
     'main/components/applets/grid_applet/views/filterDateRangeView',
     'main/adk_utils/crsUtil',
-    '/main/components/behaviors/tooltip.js'
+    'main/components/behaviors/tooltip'
 ], function($, _, utils, BaseDisplayApplet, DataGrid, CollectionFilter, ResourceService, SessionStorage, LoadingView, ErrorView, FilterDateRangeView, CrsUtil, Tooltip) {
     'use strict';
 

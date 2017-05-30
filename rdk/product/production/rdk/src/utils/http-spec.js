@@ -6,6 +6,8 @@ var nock = require('nock');
 var _ = require('lodash');
 var httpUtil = require('./http');
 var fs = require('fs');
+var bunyan = require('bunyan');
+
 
 var logger = {
     trace: function() {this.log('trace', arguments);},
@@ -235,23 +237,20 @@ describe('http', function() {
         });
     });
 
-    describe('request ID', function() {
+    describe('request context', function() {
         var config;
 
         beforeEach(function() {
             this.timeout(1000);
             config = {
                 url: 'http://localhost/info',
-                logger: logger
+                logger: bunyan.createLogger({name: 'http-spec.js', level: 99})
             };
-        });
-
-        afterEach(function () {
-            delete logger.fields.requestId;
+            // level 99 should prevent logs from being written
         });
 
         it('adds an X-Request-ID header when present in the logger', function(done) {
-            logger.fields.requestId = 'test-request-ID';
+            config.logger = config.logger.child({requestId: 'test-request-ID'});
 
             nock('http://localhost')
                 .matchHeader('X-Request-ID', 'test-request-ID')
@@ -265,7 +264,7 @@ describe('http', function() {
         });
 
         it('preserves a custom-added X-Request-ID header in the options', function(done) {
-            logger.fields.requestId = 'test-request-ID';
+            config.logger = config.logger.child({requestId: 'test-request-ID'});
             config.headers = { 'X-Request-ID': 'original-request-ID' };
 
             nock('http://localhost')
@@ -281,6 +280,80 @@ describe('http', function() {
 
         it('doesn\'t add an X-Request-ID header when not in the options', function(done) {
             nock('http://localhost', { badheaders: ['X-Request-ID'] })
+                .get('/info')
+                .reply(200, 'Hello World');
+
+            httpUtil.get(config, function(error, response, body) {
+                expect(error).to.be.falsy();
+                done();
+            });
+        });
+
+        it('adds an X-Session-ID header when present in the logger', function(done) {
+            config.logger = config.logger.child({sid: 'test-session-ID'});
+
+            nock('http://localhost')
+                .matchHeader('X-Session-ID', 'test-session-ID')
+                .get('/info')
+                .reply(200, 'Hello World');
+
+            httpUtil.get(config, function(error, response, body) {
+                expect(error).to.be.falsy();
+                done();
+            });
+        });
+
+        it('preserves a custom-added X-Session-ID header in the options', function(done) {
+            config.logger = config.logger.child({sid: 'test-session-ID'});
+            config.headers = { 'X-Session-ID': 'original-session-ID' };
+
+            nock('http://localhost')
+                .matchHeader('X-Session-ID', 'original-session-ID')
+                .get('/info')
+                .reply(200, 'Hello World');
+
+            httpUtil.get(config, function(error, response, body) {
+                expect(error).to.be.falsy();
+                done();
+            });
+        });
+
+        it('doesn\'t add an X-Session-ID header when not in the options', function(done) {
+            nock('http://localhost', { badheaders: ['X-Session-ID'] })
+                .get('/info')
+                .reply(200, 'Hello World');
+
+            httpUtil.get(config, function(error, response, body) {
+                expect(error).to.be.falsy();
+                done();
+            });
+        });
+
+        it('adds X-Session-ID and X-Request-ID headers when present in the logger', function(done) {
+            config.logger = config.logger.child({requestId: 'test-request-ID', sid: 'test-session-ID'});
+
+            nock('http://localhost')
+                .matchHeader('X-Session-ID', 'test-session-ID')
+                .matchHeader('X-Request-ID', 'test-request-ID')
+                .get('/info')
+                .reply(200, 'Hello World');
+
+            httpUtil.get(config, function(error, response, body) {
+                expect(error).to.be.falsy();
+                done();
+            });
+        });
+
+        it('preserves custom-added X-Session-ID and X-Request-ID headers in the options', function(done) {
+            config.logger = config.logger.child({requestId: 'test-request-ID', sid: 'test-session-ID'});
+            config.headers = {
+                'X-Session-ID': 'original-session-ID',
+                'X-Request-ID': 'original-request-ID'
+            };
+
+            nock('http://localhost')
+                .matchHeader('X-Session-ID', 'original-session-ID')
+                .matchHeader('X-Request-ID', 'original-request-ID')
                 .get('/info')
                 .reply(200, 'Hello World');
 

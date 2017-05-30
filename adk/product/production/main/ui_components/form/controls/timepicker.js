@@ -33,10 +33,10 @@ define([
             helpMessage: ''
         },
         template: Handlebars.compile([
-            '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
+            '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel)}}',
             '<div class="input-group bootstrap-timepicker">',
             '<span class="input-group-addon" aria-hidden="true"><i class="fa fa-clock-o color-primary"></i></span>',
-            '<input type="{{type}}" id="{{clean-for-id name}}" name="{{name}}" value="{{value}}"' +
+            '<input type="{{type}}" id="{{clean-for-id id}}" name="{{name}}" value="{{value}}"' +
             ' class="{{form-class-name "controlClassName"}}"' +
             ' placeholder="HH:MM"' +
             '{{#if title}} title="{{title}}"{{/if}}' +
@@ -65,9 +65,6 @@ define([
             },
             'control:title': function(event, stringValue) {
                 this.setStringFieldOption('title', stringValue, event);
-            },
-            'control:placeholder': function(event, stringValue) {
-                this.setStringFieldOption('placeholder', stringValue, event);
             },
             'control:helpMessage': function(event, stringValue) {
                 this.setStringFieldOption('helpMessage', stringValue, event);
@@ -103,7 +100,7 @@ define([
             if (this.field.get('prependToDomId')) {
                 fieldName = this.field.get('prependToDomId') + fieldName;
             }
-            var timeValue = this.$el.find('#' + fieldName).val();
+            var timeValue = this.$('input[name="' + fieldName + '"]').val();
 
             if (!_.isEmpty(timeValue) && timeValue.length === 4) {
                 timeValue = '0' + timeValue;

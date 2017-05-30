@@ -128,8 +128,7 @@ Scenario: User is able to filter reports
   And the user filters the Reports Gist Applet by text "Consult"
   Then the Reports Gist table only diplays rows including text "Consult"
 
-#following test works only in the browser
-@f285_reports_gist_exapnd_view_modal_detail @data_specific @future
+@f285_reports_gist_exapnd_view_modal_detail
 Scenario: From Reports Gist expand view user can view report details
   # Given user is logged into eHMP-UI
   And user searches for and selects "ZZZRETFOUREIGHTY,PATIENT"
@@ -139,5 +138,5 @@ Scenario: From Reports Gist expand view user can view report details
   When the user clicks the control "Expand View" in the "Reports Gist applet"
   Then the expanded Reports Applet is displayed
   When the user views the first Report detail view
-  Then the inframe modal details is displayed
-  And the modal title says "Biospy Details"
+  Then the modal's title is displayed
+  And the modal dialog contains data labels

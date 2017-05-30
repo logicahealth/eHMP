@@ -433,4 +433,9 @@ describe('unit test to validate immunization-lot', function() {
         ]);
 		/* jshint +W109 */
     });
+
+it('can parse the empty response data correctly', function () {
+        var result = parse(log, '0 RECORDS\r\n');
+        expect(result).to.eql([]);
+    });
 });

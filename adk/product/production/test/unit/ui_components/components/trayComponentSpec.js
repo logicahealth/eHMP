@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/components'],
+define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/UILibrary'],
     function($, Handlebars, Backbone, Marionette, UI) {
 
         var testText = "Test Text",

@@ -38,12 +38,23 @@ default[:vxsync][:client][:processes] = {
       :profile => "vistahdr"
     },
   },
-  :subscriber_storage_client => {
+  :subscriber_prioritization => {
     :template => "subscriber_host.sh.erb",
     :config => {
-      :profile => "storage"
-    },
-    :number_of_copies => 3
+      :profile => "prioritization"
+    }
+  },
+  :subscriber_jds_storage_client => {
+    :template => "subscriber_host.sh.erb",
+    :config => {
+      :profile => "jds-storage"
+    }
+  },
+  :subscriber_solr_storage_client => {
+    :template => "subscriber_host.sh.erb",
+    :config => {
+      :profile => "solr-storage"
+    }
   },
   :subscriber_primary => {
     :template => "subscriber_host.sh.erb",
@@ -141,3 +152,5 @@ default[:vxsync][:client][:processes] = {
     }
   }
 }
+
+default[:vxsync][:client][:jds_app_server_ident] = nil

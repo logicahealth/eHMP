@@ -1,7 +1,7 @@
 define(['jquery',
     'backbone',
     'marionette',
-    'main/ui_components/components',
+    'main/UILibrary',
     'api/UIComponents',
     'jasminejquery'
 ], function($, Backbone, Marionette, UI) {
@@ -44,32 +44,32 @@ define(['jquery',
                 expect($form.find('form > .control, .form-group').length).toBe(1);
             });
             it('contains the correct header content', function() {
-                expect($form.find('.collapsibleContainerHeaderRegion')).toContainElement('button');
+                expect($form.find('.collapsible-container-header-region')).toContainElement('button');
             });
             it('contains the correct extra classes', function() {
                 expect($form.find('form > .control, .form-group')).toHaveClass('extraClass');
             });
             it('contains the correct header content', function() {
-                expect($form.find('.collapsibleContainerHeaderRegion')).toContainElement('button');
+                expect($form.find('.collapsible-container-header-region')).toContainElement('button');
             });
             it('contains the correct container content', function() {
-                expect($form.find('.collapsibleContainerCollapseRegion')).toContainElement('button');
+                expect($form.find('.collapsible-container-collapse-region')).toContainElement('button');
             });
 
             it('contains the collapse button', function() {
                 expect($form.find('[data-buttonid="collapsibleContainerTrigger"]').length).toBe(1);
             });
             it('should toggle collapse on button click', function() {
-                expect($form.find('.collapsibleContainerCollapseRegion')).not.toHaveClass('in');
+                expect($form.find('.collapsible-container-collapse-region')).not.toHaveClass('in');
                 $('button[data-toggle=collapse]').click();
-                expect($form.find('.collapsibleContainerCollapseRegion').css('display')).toBe('block');
+                expect($form.find('.collapsible-container-collapse-region').css('display')).toBe('block');
             });
             it('should toggle collapse on custom control toggle event', function() {
-                expect($form.find('.collapsibleContainerCollapseRegion')).not.toHaveClass('in');
+                expect($form.find('.collapsible-container-collapse-region')).not.toHaveClass('in');
                 $('.collapsibleContainerContainerRegion').trigger('control:hidden', false);
-                expect($form.find('.collapsibleContainerCollapseRegion').css('display')).toBe('block');
+                expect($form.find('.collapsible-container-collapse-region').css('display')).toBe('block');
                 $('#collapsibleContainerContainerRegion').trigger('control:hidden', true);
-                expect($form.find('.collapsibleContainerCollapseRegion')).not.toHaveClass('in');
+                expect($form.find('.collapsible-container-collapse-region')).not.toHaveClass('in');
             });
         });
         describe('collapsibleContainer event testing', function() {
@@ -88,23 +88,23 @@ define(['jquery',
                 $('body').append($form);
             });
             it('should correctly add a new control to the header collection', function() {
-                expect($form.find('.collapsibleContainerHeaderRegion button').length).toBe(1);
+                expect($form.find('.collapsible-container-header-region button').length).toBe(1);
                 $('.uniqueName').trigger('control:headerItems:add', this.model);
-                expect($form.find('.collapsibleContainerHeaderRegion button').length).toBe(2);
+                expect($form.find('.collapsible-container-header-region button').length).toBe(2);
             });
             it('should correctly remove a control from the header collection', function() {
-                expect($form.find('.collapsibleContainerHeaderRegion button').length).toBe(1);
+                expect($form.find('.collapsible-container-header-region button').length).toBe(1);
                 $('.uniqueName').trigger('control:headerItems:add', this.model);
-                expect($form.find('.collapsibleContainerHeaderRegion button').length).toBe(2);
+                expect($form.find('.collapsible-container-header-region button').length).toBe(2);
                 $('.uniqueName').trigger('control:headerItems:remove', this.model);
-                expect($form.find('.collapsibleContainerHeaderRegion button').length).toBe(1);
+                expect($form.find('.collapsible-container-header-region button').length).toBe(1);
             });
             it('should correctly update the header collection', function() {
-                expect($form.find('.collapsibleContainerHeaderRegion button').length).toBe(1);
+                expect($form.find('.collapsible-container-header-region button').length).toBe(1);
                 $('.uniqueName').trigger('control:headerItems:add', this.model);
-                expect($form.find('.collapsibleContainerHeaderRegion button').length).toBe(2);
+                expect($form.find('.collapsible-container-header-region button').length).toBe(2);
                 $('.uniqueName').trigger('control:headerItems:update', this.model);
-                expect($form.find('.collapsibleContainerHeaderRegion button').length).toBe(1);
+                expect($form.find('.collapsible-container-header-region button').length).toBe(1);
             });
         });
     });

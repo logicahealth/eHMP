@@ -84,10 +84,11 @@ define([
         form.adjustButtonProperties();
     };
 
-    var facilitiesCollection;
     var retrieveFacilityPicklist = function(form) {
         form.ui.facilityField.trigger('control:disabled', true);
         showLoader(form, 'Loading');
+
+        if(!(form.facilitiesCollection instanceof Backbone.Collection)) form.facilitiesCollection = new Backbone.Collection();
 
         var fetchOptions = {
             type: 'GET',
@@ -103,8 +104,8 @@ define([
                 }
             }
         };
-        facilitiesCollection = ADK.ResourceService.fetchCollection(fetchOptions);
-        form.listenToOnce(facilitiesCollection, 'sync', function(collection, response) {
+        ADK.ResourceService.fetchCollection(fetchOptions, form.facilitiesCollection);
+        form.listenToOnce(form.facilitiesCollection, 'sync', function(collection, response) {
             if (response.status === 200) {
                 if (response && response.data && response.data.items) {
                     var items = collection.models;
@@ -184,9 +185,13 @@ define([
         form.model.unset('person');
 
         var setFacility = form.model.get('facility');
-        var setSite = facilitiesCollection.findWhere({
+        var setSiteModel = form.facilitiesCollection.findWhere({
             facilityID: setFacility
-        }).get('siteCode');
+        });
+        var setSite = '';
+        if (!_.isUndefined(setSiteModel)) {
+            setSite = setSiteModel.get('siteCode');
+        }
         var setAssignment = form.model.get('assignment');
 
         form.ui.teamField.trigger('control:disabled', true);
@@ -240,8 +245,10 @@ define([
 
             var teams = new ADK.UIResources.Picklist.Team_Management.Teams.ForAFacility();
 
-            form.listenToOnce(teams, 'read:success', function(collection, response) {
-                if (response && response.data) {
+
+
+            form.listenTo(teams, 'read:success', function readSuccess(collection, response, options) {
+                if (_.get(response, 'data')) {
                     var items = _.sortBy(response.data, 'teamName');
                     var groups = [{
                         group: 'All Teams',
@@ -252,6 +259,31 @@ define([
                     form.ui.teamField.trigger('control:picklist:set', [groups]);
 
                     cleanupAfterTeamListLoad(form);
+                    form.stopListening(teams, 'read:success', readSuccess);
+                } else {
+
+                    // Check to see if we received a response asking for more time
+                    var getRetryAfter = _.get(options, 'xhr.getResponseHeader');
+                    if (_.isFunction(getRetryAfter)) {
+                        var MIN_TIMEOUT_SECONDS = 10;
+                        var MIN_TIMEOUT_MILLISECONDS = 10000;
+                        var retrySeconds = getRetryAfter('Retry-After');
+
+                        var seconds = parseInt(retrySeconds);
+                        if (!_.isEmpty(seconds) && !_.isNaN(seconds)) {
+                            var retryMilliseconds = seconds > MIN_TIMEOUT_SECONDS ? seconds * 1000 : MIN_TIMEOUT_MILLISECONDS;
+                            setTimeout(function() {
+                                teams.fetch({
+                                    facilityID: setFacility,
+                                    site: setSite
+                                });
+                            }, retryMilliseconds);
+                        } else {
+                            // Something else went wrong
+                            cleanupAfterTeamListLoad(form);
+                        }
+                    }
+
                 }
             });
 

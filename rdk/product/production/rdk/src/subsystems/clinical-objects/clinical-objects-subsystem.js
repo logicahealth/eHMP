@@ -17,8 +17,8 @@ module.exports.update = updateClinicalObject;
 module.exports.find = findClinicalObject;
 module.exports.getList = getClinicalObjectList;
 module.exports.loadReference = dereferenceClinicalObject;
-module.exports.postActivityManagementEvent = postActivityManagementEvent;
 module.exports.transformPatientUid = transformPatientUid;
+module.exports.storeToSolr = storeToSolr;
 
 var CLINICAL_OBJECT_NOT_FOUND = module.exports.CLINICAL_OBJECT_NOT_FOUND = 'Clinical object not found';
 var REFERENCE_ID_NOT_FOUND = module.exports.REFERENCE_ID_NOT_FOUND = 'Reference ID';
@@ -28,7 +28,7 @@ var UTC_STANDARD = module.exports.UTC_STANDARD = 'YYYYMMDDHHmmss+0000';
 
 function createClinicalObject(logger, appConfig, model, callback) {
     logger.info('createClinicalObject');
-    clinicalObjectsValidator.validateCreate([], model, appConfig, function(errorMessages) {
+    clinicalObjectsValidator.validateCreate([], model, appConfig, function (errorMessages) {
         if (!_.isEmpty(errorMessages)) {
             logger.info({
                 validationErrors: errorMessages
@@ -48,38 +48,24 @@ function createClinicalObject(logger, appConfig, model, callback) {
         var localId = uidUtils.extractLocalIdFromUID(model.patientUid, ':');
         model.uid = 'urn:va:' + model.domain + ':' + site + ':' + localId + ':' + uuid.v4();
 
-        var createTask = function(taskCallback) {
-            var requestConfig = _.extend({}, appConfig.generalPurposeJdsServer, {
-                logger: logger,
-                url: '/clinicobj',
-                body: model,
-                json: true
-            });
+        // Set storeToSolr flag based on rules determined in function storeToSolr
+        model.storeToSolr = storeToSolr(model);
 
-            httpUtil.post(requestConfig, function(err, response, body) {
-                if (err) {
-                    logger.error({
-                        err: err
-                    }, 'Failed to create clinical object.');
-                    return taskCallback(err);
-                }
-                return taskCallback(null, response);
-            });
-        };
+        var clinicalObjectRequestConfig = _.extend({}, appConfig.vxSyncServer, {
+            logger: logger,
+            url: '/clinicalObject',
+            body: model,
+            json: true
+        });
 
-        async.series({
-            createTask: createTask,
-            postActivityManagementEvent: function(callback) {
-                postActivityManagementEvent(logger, appConfig, model, function(err, resp) {
-                    //silent activity management service failure
-                    return callback(null, resp);
-                });
-            }
-        }, function(err, results) {
+        httpUtil.post(clinicalObjectRequestConfig, function(err, response) {
             if (err) {
+                logger.error({
+                    err: err
+                }, 'Failed to create clinical object.');
                 return callback(err);
             }
-            return callback(null, results.createTask);
+            return callback(null, response);
         });
     });
 }
@@ -95,7 +81,7 @@ function readClinicalObject(logger, appConfig, uid, loadReference, callback) {
         return callback(errorMessages);
     }
 
-    return getClinicalObjectList(logger, appConfig, [uid], loadReference, function(err, listResponse) {
+    return getClinicalObjectList(logger, appConfig, [uid], loadReference, function (err, listResponse) {
         if (err) {
             return callback(err);
         }
@@ -110,7 +96,7 @@ function readClinicalObject(logger, appConfig, uid, loadReference, callback) {
 
 function updateClinicalObject(logger, appConfig, uid, model, callback) {
     logger.info('updateClinicalObject');
-    clinicalObjectsValidator.validateUpdate([], uid, model, appConfig, function(errorMessages) {
+    clinicalObjectsValidator.validateUpdate([], uid, model, appConfig, function (errorMessages) {
         if (!_.isEmpty(errorMessages)) {
             logger.info({
                 validationErrors: errorMessages
@@ -121,39 +107,24 @@ function updateClinicalObject(logger, appConfig, uid, model, callback) {
         //replace VLER or HDR site with ICN.
         transformPatientUid(model);
 
-        var updateTask = function(taskCallback) {
-            var requestConfig = _.extend({}, appConfig.generalPurposeJdsServer, {
-                logger: logger,
-                url: '/clinicobj/' + uid,
-                body: model,
-                json: true
-            });
+        // Set storeToSolr flag based on rules determined in function storeToSolr
+        model.storeToSolr = storeToSolr(model);
 
-            httpUtil.put(requestConfig, function(err, response, body) {
-                if (err) {
-                    logger.error({
-                        err: err,
-                        uid: uid
-                    }, 'Failed to update clinical object');
-                    return taskCallback(err);
-                }
-                return taskCallback(null, response);
-            });
-        };
+        var clinicalObjectRequestConfig = _.extend({}, appConfig.vxSyncServer, {
+            logger: logger,
+            url: '/clinicalObject',
+            body: model,
+            json: true
+        });
 
-        async.series({
-            updateTask: updateTask,
-            postActivityManagementEvent: function(callback) {
-                postActivityManagementEvent(logger, appConfig, model, function(err, resp) {
-                    //silent activity management service failure
-                    return callback(null, resp);
-                });
-            }
-        }, function(err, results) {
+        httpUtil.post(clinicalObjectRequestConfig, function(err, response) {
             if (err) {
+                logger.error({
+                    err: err
+                }, 'Failed to update clinical object.');
                 return callback(err);
             }
-            return callback(null, results.updateTask);
+            return callback(null, response);
         });
     });
 }
@@ -188,7 +159,7 @@ function getClinicalObjectsFromPjds(logger, appConfig, jdsQuery, callback) {
         json: true
     });
 
-    httpUtil.get(requestConfig, function(err, response, body) {
+    httpUtil.get(requestConfig, function (err, response, body) {
         if (err) {
             logger.error({
                 err: err
@@ -199,7 +170,7 @@ function getClinicalObjectsFromPjds(logger, appConfig, jdsQuery, callback) {
 
         var errors = _.get(body, 'error.errors', []);
         if (!_.isEmpty(errors)) {
-            _.each(errors, function(errorObj) {
+            _.each(errors, function (errorObj) {
                 errorMessages.push(errorObj.domain + ':' + errorObj.message);
             });
             return callback(errorMessages);
@@ -217,7 +188,7 @@ function getClinicalObjectsFromPjds(logger, appConfig, jdsQuery, callback) {
 function createFindQueryString(model) {
     var queryList = ['patientUid', 'authorUid', 'domain', 'subDomain', 'ehmpState', 'displayName', 'referenceId'];
     var queryStr = '';
-    _.each(model, function(value, key) {
+    _.each(model, function (value, key) {
         if (_.includes(queryList, key) && (!_.isEmpty(value))) {
             queryStr = queryStr + 'eq("' + key + '","' + value + '"),';
         }
@@ -250,7 +221,7 @@ function createUidListQueryObject(uidList) {
 }
 
 function dereferenceClinicalObjects(logger, appConfig, clinicalObjectResponse, callback) {
-    async.map(clinicalObjectResponse.items, function(clinicalObject, callback) {
+    async.map(clinicalObjectResponse.items, function (clinicalObject, callback) {
         if (!clinicalObject.referenceId) {
             return setImmediate(callback, null, clinicalObject);
         }
@@ -279,7 +250,7 @@ function dereferenceClinicalObject(logger, appConfig, clinicalObject, callback) 
         url: jdsPath,
         json: true
     });
-    httpUtil.get(requestConfig, function(err, response, body) {
+    httpUtil.get(requestConfig, function (err, response, body) {
         if (err) {
             logger.error({
                 err: err
@@ -290,7 +261,7 @@ function dereferenceClinicalObject(logger, appConfig, clinicalObject, callback) 
 
         var errors = _.get(body, 'error.errors', []);
         if (!_.isEmpty(errors)) {
-            _.each(errors, function(errorObj) {
+            _.each(errors, function (errorObj) {
                 errorMessages.push(errorObj.domain + ':' + errorObj.message);
             });
             return callback(errorMessages);
@@ -300,7 +271,7 @@ function dereferenceClinicalObject(logger, appConfig, clinicalObject, callback) 
             errorMessages.push(REFERENCE_ID_NOT_FOUND);
             return callback(errorMessages);
         }
-        if(clinicalObject.data && _.isUndefined(clinicalObject.ehmpData)){
+        if (clinicalObject.data && _.isUndefined(clinicalObject.ehmpData)) {
             clinicalObject.ehmpData = clinicalObject.data;
         }
         clinicalObject.data = body.data.items[0];
@@ -329,34 +300,6 @@ function getAndDereferenceClinicalObjects(logger, appConfig, jdsQuery, loadRefer
     });
 }
 
-function postActivityManagementEvent(logger, appConfig, clinicalObject, callback) {
-    var requestConfig = _.extend({}, appConfig.vxSyncServer, {
-        logger: logger,
-        url: '/activity-management-event',
-        body: clinicalObject,
-        json: true
-    });
-
-    httpUtil.post(requestConfig, function(err, resp, body) {
-        var ERR_LOG_MSG = 'Failed to post activity management event.';
-
-        var isErr = err || (resp && resp.statusCode !== 200);
-        if (isErr) {
-            if (!err) {
-                err = new Error(resp ? resp.body : ERR_LOG_MSG);
-            }
-
-            logger.error({
-                err: err
-            }, ERR_LOG_MSG);
-
-            return callback(err);
-        }
-
-        return callback(null, resp);
-    });
-}
-
 /**
  * Transforms patientUid site piece from VLER or HDR to ICN.
  *
@@ -369,4 +312,18 @@ function transformPatientUid(clinicalObj) {
     }
 
     clinicalObj.patientUid = clinicalObj.patientUid.replace(/VLER|HDR/gi, 'ICN');
+}
+
+/**
+ * Rules to determine if a clinical object should be stored to text search (SOLR)
+ * @param {object} document - The clinical object document
+ * @returns {boolean} - returns true if document should be stored to text search (SOLR), false if it shouldn't
+ **/
+function storeToSolr(document) {
+    if (document.domain === 'ehmp-activity' && (document.subDomain === 'consult' || document.subDomain === 'request') && document.ehmpState === 'active') {
+        return true;
+    }
+
+    // Always default to not storing to solr
+    return false;
 }

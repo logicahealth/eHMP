@@ -10,6 +10,7 @@ var bunyan = require('bunyan');
 var logger = sinon.stub(bunyan.createLogger({
     name: 'test-logger'
 }));
+logger.child.returnsThis();
 
 var handler = require('./activity-management-event-handler');
 var util = require('../common/util');
@@ -19,44 +20,44 @@ var env = {};
 var config = {
     'rdk': {
         protocol: 'http',
-        host: '10.4.4.105',
-        activityPort: 8888,
-        writePort: 9999,
+        host: 'REDACTED',
+        activityPort: PORT,
+        writePort: PORT,
         timeout: 60000,
-        accessCode: 'pu1234',
-        verifyCode: 'pu1234!!',
+        accessCode: 'IP    ',
+        verifyCode: 'REDACTED',
         activityURI: '/resource/activities/startactivityevent',
         writeURI: '/resource/write-health-data/patient'
     },
     'jdsServer': {
-        'baseUrl': 'http://10.2.2.110:9080',
+        'baseUrl': 'http://REDACTED     ',
         'timeout': 120000
     },
     'generalPurposeJdsServer': {
-        'baseUrl': 'http://10.2.2.110:9080',
+        'baseUrl': 'http://REDACTED     ',
         'urlLengthLimit': 120
     },
     'jbpm': {
-        'baseUrl': 'http://10.4.4.208:8080',
+        'baseUrl': 'http://REDACTED     ',
         'apiPath': '/business-central/rest',
         'adminUser': {
-            'username': 'bpmsAdmin',
-            'password': 'bpm$@dmin11'
+            'username': 'REDACTED',
+            'password': 'REDACTED'
         },
         'nurseUser': {
-            'username': 'Susan',
-            'password': 'Password1!'
+            'username': 'REDACTED',
+            'password': 'REDACTED'
         },
         'healthcheckEndpoint': '/history/instances',
         'activityDatabase': {
             'user': 'activitydbuser',
-            'password': 'activitydb$11',
-            'connectString': '10.4.4.208:1521/xe'
+            'password': 'REDACTED',
+            'connectString': 'REDACTED     /xe'
         },
         'notifsDatabase': {
-            'user': 'notifdb',
-            'password': 'notifdb',
-            'connectString': '10.4.4.208:1521/xe'
+            'user': 'REDACTED',
+            'password': 'REDACTED',
+            'connectString': 'REDACTED     /xe'
         }
     },
     'activityManagementJobRetryLimit': 5,

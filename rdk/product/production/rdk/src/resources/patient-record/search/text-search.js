@@ -19,6 +19,7 @@ module.exports.description = {
 // below: _ exports for unit testing only
 module.exports._buildSolrQuery = buildSolrQuery;
 module.exports._buildSpecializedSolrQuery = buildSpecializedSolrQuery;
+module.exports._buildDefaultQuery = buildDefaultQuery;
 
 /**
  * /vpr/v{apiVersion}/search
@@ -50,7 +51,7 @@ function performTextSearch(req, res, next) {
     var domains;
     var patientPIDList = [];
 
-    _.each(req.interceptorResults.patientIdentifiers.allSites, function(pid){
+    _.each(req.interceptorResults.patientIdentifiers.allSites, function(pid) {
         patientPIDList.push(pid);
     });
 
@@ -76,7 +77,14 @@ function performTextSearch(req, res, next) {
         return res.status(400).rdkSend('Missing query parameter');
     }
 
-    req.logger.info({ query: reqQuery.query, domain: reqQuery.domains }, 'performing text search');
+    if (nullchecker.isNotNullish(reqQuery.returnSynonyms) && (reqQuery.returnSynonyms !== 'true' && reqQuery.returnSynonyms !== 'false')) {
+        return res.status(400).rdkSend('Invalid value for query parameter returnSynonyms');
+    }
+
+    req.logger.info({
+        query: reqQuery.query,
+        domain: reqQuery.domains
+    }, 'performing text search');
 
 
 
@@ -93,7 +101,8 @@ function performTextSearch(req, res, next) {
             'document',
             'vital',
             'lab',
-            'problem'
+            'problem',
+            'vlerdocument'
         ];
     } else {
         var types = reqQuery.types;
@@ -129,33 +138,64 @@ function executeAndTransformSolrQuerys(specializedSolrQueryStrings, res, req, re
                 res.status(500).rdkSend('The search could not be completed\n' + err.stack);
                 return;
             }
-            var hmpEmulatedResponseObject = hmpSolrResponseTransformer.addSpecializedResultsToResponse(results, reqQuery);
-            if (hmpEmulatedResponseObject.error) {
-                req.logger.error(hmpEmulatedResponseObject, 'Error in addSpecializedResultsToResponse');
-                return res.status(500).rdkSend(hmpEmulatedResponseObject.error);
-            }
-            hmpEmulatedResponseObject.params = reqQuery;
-            hmpEmulatedResponseObject.method = req.route.stack[0].method.toUpperCase() + ' ' + req.route.path;
-
-            if (nullchecker.isNullish(hmpEmulatedResponseObject.data.items) || !hmpEmulatedResponseObject.data.items.length) {
-                res.rdkSend(hmpEmulatedResponseObject);
-            } else {
-                var matches = _.where(hmpEmulatedResponseObject.data.items, {type: 'document'});
-                if (!nullchecker.isNullish(matches) && matches.length > 0) {
-                    asuUtils.applyAsuRules(req, hmpEmulatedResponseObject, function (error, response) {
-                        if (error) {
-                            req.logger.debug('Asu Error: %j', error);
-                            return res.status(500).rdkSend(error);
-                        }
-                        else {
-                            hmpEmulatedResponseObject.data.items = groupByTitle(response, req.logger);
-                            res.rdkSend(hmpEmulatedResponseObject);
-                        }
-                    });
-                } else {
-                    res.rdkSend(hmpEmulatedResponseObject);
+            async.each(results, function(result, callback) {
+                if (!result.response) {
+                    return callback();
                 }
-            }
+                var docs = _.get(result, 'response.docs');
+                async.each(docs, function(doc, callback) {
+                    if (!(doc.kind === 'C32 Document' || doc.kind === 'CCDA Document')) {
+                        return callback();
+                    }
+                    req.app.subsystems.jds.getByUid(req, req.query.pid, doc.uid, function(error, data, statusCode) {
+                        if (error) {
+                            return callback(error);
+                        }
+
+                        var institution = _.get(data, 'data.items[0].authorList[0].institution');
+                        if (!_.isUndefined(institution)) {
+                            doc.institution = institution;
+                        }
+
+                        return callback();
+                    });
+                }, function(err) {
+                    return callback(err);
+                });
+            }, function(err) {
+                if (err) {
+                    return res.status(500).rdkSend('The search could not be completed\n' + err.stack);
+                }
+
+                var hmpEmulatedResponseObject = hmpSolrResponseTransformer.addSpecializedResultsToResponse(results, reqQuery);
+                if (hmpEmulatedResponseObject.error) {
+                    req.logger.error(hmpEmulatedResponseObject, 'Error in addSpecializedResultsToResponse');
+                    return res.status(500).rdkSend(hmpEmulatedResponseObject.error);
+                }
+                hmpEmulatedResponseObject.params = reqQuery;
+                hmpEmulatedResponseObject.method = req.route.stack[0].method.toUpperCase() + ' ' + req.route.path;
+
+                if (nullchecker.isNullish(hmpEmulatedResponseObject.data.items) || !hmpEmulatedResponseObject.data.items.length) {
+                    res.rdkSend(hmpEmulatedResponseObject);
+                } else {
+                    var matches = _.where(hmpEmulatedResponseObject.data.items, {
+                        type: 'document'
+                    });
+                    if (!nullchecker.isNullish(matches) && matches.length > 0) {
+                        asuUtils.applyAsuRules(req, hmpEmulatedResponseObject, function(error, response) {
+                            if (error) {
+                                req.logger.debug('Asu Error: %j', error);
+                                return res.status(500).rdkSend(error);
+                            } else {
+                                hmpEmulatedResponseObject.data.items = groupByTitle(response, req.logger);
+                                res.rdkSend(hmpEmulatedResponseObject);
+                            }
+                        });
+                    } else {
+                        res.rdkSend(hmpEmulatedResponseObject);
+                    }
+                }
+            });
         }
     );
 }
@@ -167,9 +207,10 @@ function executeAndTransformSolrQuerys(specializedSolrQueryStrings, res, req, re
 function groupByTitle(response, logger) {
 
     //iterate and get a list with localTitle
-    var docList = [], itemArray = [];
+    var docList = [];
+    var itemArray = [];
     _.each(response, function(item) {
-        if(_.has(item, 'localTitle')) {
+        if (_.has(item, 'localTitle')) {
             docList = docList.concat(item);
         } else {
             itemArray = itemArray.concat(item);
@@ -224,7 +265,8 @@ function buildSolrQuery(reqQuery, domain, queryParameters) {
             'summary',
             'url',
             'kind',
-            'facility_name'
+            'facility_name',
+            'body'
         ],
         fq: [ // filter queries
             ('pid:' + reqQuery.pidJoinedList), ('domain:' + fqDomain),
@@ -237,7 +279,7 @@ function buildSolrQuery(reqQuery, domain, queryParameters) {
         synonyms: 'true',
         defType: 'synonym_edismax',
         hl: 'true',
-        'hl.fl': ['summary', 'kind', 'facility_name'],
+        'hl.fl': ['summary', 'kind', 'facility_name', 'body'],
         'hl.fragsize': 45,
         'hl.snippets': 5
     };
@@ -285,6 +327,7 @@ function buildSpecializedSolrQuery(reqQuery, domain) {
         result: buildLabQuery,
         lab: buildLabQuery,
         problem: buildProblemQuery,
+        vlerdocument: buildDefaultQuery,
 
         //suggest: buildSuggestQuery,
         //tasks: buildTasksQuery,
@@ -305,7 +348,14 @@ function buildSpecializedSolrQuery(reqQuery, domain) {
 }
 
 function buildDefaultQuery(reqQuery, domain) {
-    var queryString = buildSolrQuery(reqQuery, domain);
+    var debugQuery = false;
+    if (nullchecker.isNotNullish(reqQuery.returnSynonyms) && reqQuery.returnSynonyms === 'true') {
+        debugQuery = true;
+    }
+    var queryParameters = {
+        debugQuery: debugQuery
+    };
+    var queryString = buildSolrQuery(reqQuery, domain, queryParameters);
     return queryString;
 }
 

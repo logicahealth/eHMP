@@ -3,7 +3,7 @@ When(/^the client requests to view list Active users with name search criteria "
   query.add_parameter('user.filter', '{"firstName":"'+firstName +'","lastName":"'+ lastName+ '"}')
   path = query.path
   p path
-  @response = HTTPartyRDK.get_as_user(path, "9E7A;vk1234", "vk1234!!")
+  @response = HTTPartyRDK.get_as_user(path, "9E7A;REDACTED", "REDACTED")
 end
 When(/^the client requests to view list Active and Inactive users with name search criteria "(.*?)","(.*?)"$/) do |lastName, firstName|
   query = RDKQuery.new('user-service-userlist')
@@ -11,7 +11,7 @@ When(/^the client requests to view list Active and Inactive users with name sear
   query.add_parameter('show.inactive', 'true')
   path = query.path
   p path
-  @response = HTTPartyRDK.get_as_user(path, "9E7A;vk1234", "vk1234!!")
+  @response = HTTPartyRDK.get_as_user(path, "9E7A;REDACTED", "REDACTED")
 end
 When(/^the client requests to view list Active users with name and role search criteria "(.*?)","(.*?)","(.*?)"$/) do |lastName, firstName, role|
   query = RDKQuery.new('user-service-userlist')
@@ -19,7 +19,7 @@ When(/^the client requests to view list Active users with name and role search c
   query.add_parameter('show.inactive', 'true')
   path = query.path
   p path
-  @response = HTTPartyRDK.get_as_user(path, "9E7A;vk1234", "vk1234!!")
+  @response = HTTPartyRDK.get_as_user(path, "9E7A;REDACTED", "REDACTED")
 end
 Then(/^the results contains all required fields$/) do
   json = JSON.parse(@response.body)

@@ -10,11 +10,12 @@ var domains = require('./domain');
 
 var jobUtil = {};
 
-function createEnterpriseSyncRequest(patientIdentifier, jpid, forceSync, demographics, priority) {
+function createEnterpriseSyncRequest(patientIdentifier, jpid, forceSync, demographics, priority, referenceInfo) {
     var job = create(enterpriseSyncRequestType(), patientIdentifier, null, null, null, null, {
         'jpid': jpid,
         'forceSync': forceSync,
-        'priority': priority
+        'priority': priority,
+        'referenceInfo': referenceInfo
     });
     if(demographics) {
         job.demographics = demographics;
@@ -140,11 +141,12 @@ function createPublishVxDataChange(patientIdentifier, domain, record, rootJob) {
     return create(publishVxDataChangeType(), patientIdentifier, domain, record, null, null, rootJob);
 }
 
-function createActivityManagementEvent(patientIdentifier, domain, record) {
+function createActivityManagementEvent(patientIdentifier, domain, record, referenceInfo) {
     var jobId = uuid.v4();
     var meta = {
         'jobId': jobId,
-        'rootJobId': jobId
+        'rootJobId': jobId,
+        'referenceInfo': referenceInfo
     };
 
     return create(publishVxDataChangeType(), patientIdentifier, domain, record, null, null, meta);
@@ -362,6 +364,10 @@ function create(type, patientIdentifier, domain, record, requestStampTime, event
 
     if (!_.isUndefined(meta.forceSync)) {
         job.forceSync = meta.forceSync;
+    }
+
+    if (!_.isUndefined(meta.referenceInfo)) {
+        job.referenceInfo = meta.referenceInfo;
     }
 
     if (domain) {

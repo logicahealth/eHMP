@@ -8,6 +8,13 @@
     flex-direction: column;
     border-radius: 5px;
     min-height: 475px;
+    .error-components-container {
+        button {
+            text-align: center;
+            width: 100%;
+            margin-right: 5px;
+        }
+    }
     .confirmHeader {
         height: 0;
         overflow: visible;

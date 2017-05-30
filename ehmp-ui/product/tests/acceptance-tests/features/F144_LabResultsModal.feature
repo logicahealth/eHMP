@@ -9,6 +9,7 @@ Scenario: Verify able to see details for numeric lab result panels
   Then Cover Sheet is active
   Given the user has selected All within the global date picker
   And the applet displays numeric lab results
+  And the user scrolls to the bottom of the Numeric Lab Results Applet
   Given the Numeric Lab Results applet displays at least 1 panel
   When the user clicks the first numeric lab result panel row
   #Then a popover menu is displayed on the first numeric lab result panel row
@@ -26,7 +27,7 @@ Scenario: Verify able to see details for numeric lab result panels
 
 
 # f144_US2498_labresults_spec.rb
-@f144_numeric_lab_results_modal_non_numeric_table @US2498 @TA7551 @modal_test @vimm @DE3709 @DE6755
+@f144_numeric_lab_results_modal_non_numeric_table @US2498 @TA7551 @modal_test @vimm @DE3709 @DE6755 @debug @DE7574
 Scenario: Numeric Lab Results Modal - history table containing non-numerical result types.
   Given user searches for and selects "Bcma,Eight"
   And Cover Sheet is active
@@ -41,7 +42,7 @@ Scenario: Numeric Lab Results Modal - history table containing non-numerical res
   And the Lab History table contains rows with data in correct format
 
  
-@f144_numeric_lab_results_modal_non_numeric_table @US2498 @TA7551b @DE4786 @DE6755
+@f144_numeric_lab_results_modal_non_numeric_table @US2498 @TA7551b @DE4786 @DE6755 @debug @DE7574
 Scenario: Numeric Lab Results Modal - history table containing non-numerical result types - displays total test count
 
   Given user searches for and selects "Bcma,Eight"

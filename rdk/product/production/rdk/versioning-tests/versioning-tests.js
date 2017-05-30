@@ -29,7 +29,7 @@ describe('For API version stability,', function() {
     mockHttp();
     mockVistaJS();
     app = createApp();
-    user = JSON.parse(fs.readFileSync('versioning-tests/pu1234.json', {encoding: 'utf8'}));
+    user = JSON.parse(fs.readFileSync('versioning-tests/IP    .json', {encoding: 'utf8'}));
     versioningConfig = loadVersioningConfig();
 
     // FUTURE-TODO: get rid of this skip list

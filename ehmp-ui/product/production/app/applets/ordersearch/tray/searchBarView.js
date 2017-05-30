@@ -7,12 +7,12 @@ define([
 
     var View = Backbone.Marionette.ItemView.extend({
         tagName: 'form',
-        className: 'backgrid-filter form-search flex-display',
+        className: 'form-search flex-display all-margin-no form-group form-group--searchbar',
         template: Handlebars.compile([
+            '<div class="input-group submit-hidden">',
             '<label class="sr-only">{{screenReaderLabel}} for="searchInput"</label>',
-            '<input id="searchInput" type="search" placeholder="{{placeholder}}" title="{{instructions}}"/>',
-            '<div class="input-group-btn">',
-            '<button type="button" class="clear-input default btn btn-icon btn-sm color-grey-darkest" title="Press enter to clear search text" data-search-action="clear"><i class="fa fa-remove"></i></button>',
+            '<input type="search" id="searchInput" class="form-control" placeholder="{{placeholder}}" title="{{instructions}}"/>',
+            '<button type="button" class="clear-input-btn btn btn-icon btn-sm color-grey-darkest hidden" title="Press enter to clear search text" data-search-action="clear"><i class="fa fa-times color-grey-darkest"></i></button>',
             '</div>'
         ].join('\n')),
         templateHelpers: function() {
@@ -59,9 +59,9 @@ define([
             var criteria = this.ui.searchBox.val();
             this.model.set('criteria', criteria);
             if (this.ui.searchBox.val()){
-                this.ui.clearButton.show();
+                this.ui.clearButton.removeClass('hidden');
             } else {
-                this.ui.clearButton.hide();
+                this.ui.clearButton.addClass('hidden');
             }
         }, 500),
         clear: function(e) {
@@ -69,7 +69,7 @@ define([
                 e.preventDefault();
             }
             this.model.set('criteria', null);
-            this.ui.clearButton.hide();
+            this.ui.clearButton.addClass('hidden');
         },
         onRender: function() {
             this.ui.searchBox.val(this.model.get('criteria'));

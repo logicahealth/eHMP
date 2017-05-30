@@ -85,6 +85,6 @@ Given(/^the rdk audit logs are cleared$/) do
 end
 
 if __FILE__ == $PROGRAM_NAME
-  p TestClients.password_for("B362;pu1234")
-  p TestClients.password_for("badname")
+  p TestClients.password_for("REDACTED")
+  p TestClients.password_for("REDACTED")
 end

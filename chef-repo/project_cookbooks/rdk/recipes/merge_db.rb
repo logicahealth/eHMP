@@ -20,4 +20,12 @@ We will create an activity handler for all vxsync machines in the stack, #{node[
 else
 	Chef::Log.info "Using the given given vxsync_list for activity_handler: #{node[:rdk][:services][:activity_handler][:vxsync_list]}"
 end
-node.normal[:rdk][:services][:activity_handler][:processes] = node[:rdk][:services][:activity_handler][:vxsync_list].length
+
+handlers_modifier = (node[:rdk][:services][:activity_handler][:handlers_per_vx]).to_i
+
+if handlers_modifier > 1
+	Chef::Log.warn "Starting #{handlers_modifier} activity_handler processes per each of #{node[:rdk][:services][:activity_handler][:vxsync_list].length} vxsync nodes"
+	node.normal[:rdk][:services][:activity_handler][:processes] = node[:rdk][:services][:activity_handler][:vxsync_list].length * handlers_modifier
+else
+	node.normal[:rdk][:services][:activity_handler][:processes] = node[:rdk][:services][:activity_handler][:vxsync_list].length
+end

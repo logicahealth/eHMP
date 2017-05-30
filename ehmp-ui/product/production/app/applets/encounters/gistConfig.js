@@ -1,20 +1,20 @@
-define(function () {
+define(function() {
     'use strict';
 
     return {
         gistHeaders: {
-            visits: {
+            visit: {
                 name: {
                     title: 'Visit Type',
                     sortable: true,
                     sortType: 'alphabetical',
-                    key: 'subKind' //'groupName'
+                    key: 'groupName'
                 },
                 itemsInGraphCount: {
                     title: 'Hx Occurrence',
                     sortable: true,
                     sortType: 'numeric',
-                    key: 'count' //'encounterCount'
+                    key: 'count'
                 },
                 age: {
                     title: 'Last',
@@ -23,12 +23,12 @@ define(function () {
                     key: 'sort_time'
                 }
             },
-            procedures: {
+            procedure: {
                 name: {
                     title: 'Procedure name',
                     sortable: true,
                     sortType: 'alphabetical',
-                    key: 'subKind'
+                    key: 'groupName'
                 },
                 itemsInGraphCount: {
                     title: 'Hx Occurrence',
@@ -43,12 +43,12 @@ define(function () {
                     key: 'sort_time'
                 }
             },
-            appointments: {
+            appointment: {
                 name: {
                     title: 'Appointment Type',
                     sortable: true,
                     sortType: 'alphabetical',
-                    key: 'subKind'
+                    key: 'groupName'
                 },
                 itemsInGraphCount: {
                     title: 'Hx Occurrence',
@@ -63,12 +63,12 @@ define(function () {
                     key: 'sort_time'
                 }
             },
-            admissions: {
+            admission: {
                 name: {
                     title: 'Diagnosis',
                     sortable: true,
                     sortType: 'alphabetical',
-                    key: 'subKind'
+                    key: 'groupName'
                 },
                 itemsInGraphCount: {
                     title: 'Hx Occurrence',
@@ -84,16 +84,6 @@ define(function () {
                 }
             }
         },
-        gistModel: [{
-            id: 'groupName',
-            field: 'subKind'
-        }, {
-            id: 'encounterCount',
-            field: 'count'
-        }, {
-            id: 'timeSince',
-            field: 'time'
-        }],
         filterFields: ['groupName', 'problemText', 'acuityName'],
         defaultView: 'encounters'
     };

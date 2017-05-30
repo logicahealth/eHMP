@@ -8,7 +8,7 @@
       | summary          | Consultation Note (Provider) Document                          |
       | uid              | urn:va:document:DOD:0000000003:1000000649                      |
       | kind             | Consultation Note (Provider) Document                          |
-      | dodComplexNoteUri| https://10.3.3.4:8443/documents/dod/0000000003/:1000000649.html|
+      | dodComplexNoteUri| https://IP           /documents/dod/0000000003/:1000000649.html|
       | facilityCode     | DOD                                                            |
       | facilityName     | DOD                                                            |
       | dateTime         | 20140110051524                                                 |

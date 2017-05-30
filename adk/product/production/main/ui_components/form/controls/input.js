@@ -33,27 +33,31 @@ define([
             var singleUnitString = '{{#if units}}<span class="input-group-addon">{{units}}</span></div>{{/if}}',
                 singleUnitArray = '{{#if units}}{{#each units}}<span class="input-group-addon">{{label}}</span>{{/each}}</div>{{/if}}';
 
+            var iconAddOn = '{{#if icon}}<div class="input-icon--left" aria-hidden="true"><i class="fa {{icon}}"></i></div>{{/if}}';
+
             var unitsAsString = [
-                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
+                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel)}}',
                 '{{#if units}}<div class="input-group">{{/if}}',
-                '<input type="{{type}}" autocomplete="off" class="{{form-class-name "controlClassName"}}" id="{{clean-for-id name}}" name="{{name}}" maxlength="{{maxlength}}"{{#if value}} value="{{value}}"{{/if}}{{#if title}} title="{{title}}"{{/if}}{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}{{#if readonly}} readonly{{/if}}/>',
+                iconAddOn,
+                '<input type="{{type}}" autocomplete="off" class="{{form-class-name "controlClassName"}}" id="{{clean-for-id id}}" name="{{name}}" maxlength="{{maxlength}}"{{#if value}} value="{{value}}"{{/if}}{{#if title}} title="{{title}}"{{/if}}{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}{{#if readonly}} readonly{{/if}}/>',
             ].join("\n");
 
             var unitsAsArray_2_Elements = Handlebars.compile([
                 '<div class="col-xs-8 all-padding-no">',
-                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
-                '<input type="{{type}}" autocomplete="off" class="{{form-class-name "controlClassName"}}" id="{{clean-for-id name}}" name="{{name}}" maxlength="{{maxlength}}"{{#if value}} value="{{value}}"{{/if}}{{#if title}} title="{{title}}"{{/if}}{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}{{#if readonly}} readonly{{/if}}/>',
+                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel)}}',
+                iconAddOn,
+                '<input type="{{type}}" autocomplete="off" class="{{form-class-name "controlClassName"}}" id="{{clean-for-id id}}" name="{{name}}" maxlength="{{maxlength}}"{{#if value}} value="{{value}}"{{/if}}{{#if title}} title="{{title}}"{{/if}}{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}{{#if readonly}} readonly{{/if}}/>',
                 '</div>',
                 '{{#if units}}',
-                '<fieldset class="col-xs-4 radio radio-and-input all-padding-no left-padding-xs top-margin-sm">',
+                '<fieldset class="col-xs-4 radio radio-and-input all-padding-no left-padding-xs top-margin-md">',
                 '<legend class="sr-only">{{label}} Units</legend>',
                 '{{#each units}}',
                 Handlebars.helpers['ui-form-label'].apply(this, ["{{label}}", {
                     hash: {
-                        forID: "{{../name}}-{{clean-for-id value}}-radio-{{value}}",
+                        forID: "{{../id}}-{{clean-for-id value}}-radio-{{value}}",
                         classes: ControlService.radioLabelClassName + ' radio-units radio-inline',
                         extraClassLogic: '{{#if disabled}}disabled {{else}}{{#if ../disabled}}disabled {{/if}}{{/if}}',
-                        content: '<input type="radio" id="{{../name}}-{{clean-for-id value}}-radio" name="{{../name}}-radio-units" {{#if title}}title="{{title}}"{{/if}} value="{{formatter-from-raw ../formatter value}}" {{#compare value ../rawValueUnits}}checked="checked"{{/compare}}{{#if disabled}} disabled{{else}}{{#if ../disabled}} disabled{{/if}}{{/if}}/>'
+                        content: '<input type="radio" id="{{../id}}-{{clean-for-id value}}-radio" name="{{../name}}-radio-units" {{#if title}}title="{{title}}"{{/if}} value="{{formatter-from-raw ../formatter value}}" {{#compare value ../rawValueUnits}}checked="checked"{{/compare}}{{#if disabled}} disabled{{else}}{{#if ../disabled}} disabled{{/if}}{{/if}}/>'
                     }
                 }]),
                 '{{/each}}',
@@ -64,12 +68,13 @@ define([
             ].join("\n"));
 
             var unitsAsArray_3_OrMoreElements = Handlebars.compile([
+                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel)}}',
                 '<div class="input-group">',
-                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
-                '<input type="{{type}}" autocomplete="off" class="{{form-class-name "controlClassName"}}" id="{{clean-for-id name}}" name="{{name}}" maxlength="{{maxlength}}"{{#if value}} value="{{value}}"{{/if}}{{#if title}} title="{{title}}"{{/if}}{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}{{#if readonly}} readonly{{/if}}/>',
+                iconAddOn,
+                '<input type="{{type}}" autocomplete="off" class="{{form-class-name "controlClassName"}}" id="{{clean-for-id id}}" name="{{name}}" maxlength="{{maxlength}}"{{#if value}} value="{{value}}"{{/if}}{{#if title}} title="{{title}}"{{/if}}{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}{{#if readonly}} readonly{{/if}}/>',
                 '<div class="input-group-btn">',
-                '<label for="{{clean-for-id name}}-unit-select" class="sr-only">{{label}} Unit</label>',
-                '<select class="form-control btn-form-control" title="Select from the list" id="{{clean-for-id name}}-unit-select"{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}>',
+                '<label for="{{clean-for-id id}}-unit-select" class="sr-only">{{label}} Unit</label>',
+                '<select class="form-control btn-form-control" title="Select from the list" id="{{clean-for-id id}}-unit-select"{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}>',
                 '{{#each units}}',
                 '<option value={{value}}{{#if selected}} selected="selected"{{/if}}>{{label}}</option>',
                 '{{/each}}',
@@ -135,11 +140,6 @@ define([
             },
             "control:maxlength": function(event, intValue) {
                 this.setIntegerFieldOption("maxlength", intValue, event);
-            },
-            "control:update:config": function(event, configHash) {
-                if (_.isObject(configHash)) {
-                    this.field.set(configHash);
-                }
             }
         }, BaseInputControl.prototype.events),
         ui: {

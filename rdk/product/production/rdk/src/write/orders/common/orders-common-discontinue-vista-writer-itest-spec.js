@@ -9,11 +9,11 @@ var async = require('async');
 var discontinueWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: '10.2.2.101',
-        port: 9210,
-        accessCode: 'mx1234',
-        verifyCode: 'mx1234!!',
-        localIP: '10.2.2.1',
+        host: 'IP        ',
+        port: PORT,
+        accessCode: 'REDACTED',
+        verifyCode: 'REDACTED',
+        localIP: 'IP      ',
         localAddress: 'localhost',
         noReconnect: true
     },
@@ -36,11 +36,11 @@ var discontinueWritebackContext = {
 var saveWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: '10.2.2.101',
-        port: 9210,
-        accessCode: 'mx1234',
-        verifyCode: 'mx1234!!',
-        localIP: '10.2.2.1',
+        host: 'IP        ',
+        port: PORT,
+        accessCode: 'REDACTED',
+        verifyCode: 'REDACTED',
+        localIP: 'IP      ',
         localAddress: 'localhost',
         noReconnect: true
     },

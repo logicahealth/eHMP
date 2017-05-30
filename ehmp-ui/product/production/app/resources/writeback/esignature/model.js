@@ -2,6 +2,7 @@ define([
     'backbone',
     'underscore'
 ], function(Backbone, _) {
+    'use strict';
 
     var Model = ADK.Resources.Writeback.Model.extend({
         childAttributes: ['_labelsForSelectedValues'],

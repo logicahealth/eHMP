@@ -19,133 +19,133 @@ module.exports.description = {
 module.exports.suggestSearch = suggestSearch;
 
 function suggestSearch(req, res) {
-        var reqQuery = req.query;
+    var reqQuery = req.query;
 
-        req.logger.info('performing solr Suggest search using query [%s]', reqQuery.query);
-        if (nullchecker.isNullish(reqQuery.pid)) {
-            // require searchText and pid
-            return res.status(rdk.httpstatus.bad_request).rdkSend('Missing pid parameter');
-        }
-        if (nullchecker.isNullish(reqQuery.query) || reqQuery.query.length < 3) {
-            return res.status(rdk.httpstatus.bad_request).rdkSend('Invalid query parameter');
-        }
-        // solr throws error if search text does not contains at least one alphanumeric character
-        var regex = new RegExp(/[a-zA-Z0-9]+/);
-        if (!regex.test(reqQuery.query)) {
-            return res.status(rdk.httpstatus.bad_request).rdkSend('Query parameter must contain at least one letter or digit.');
-        }
+    req.logger.info('performing solr Suggest search using query [%s]', reqQuery.query);
+    if (nullchecker.isNullish(reqQuery.pid)) {
+        // require searchText and pid
+        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing pid parameter');
+    }
+    if (nullchecker.isNullish(reqQuery.query) || reqQuery.query.length < 3) {
+        return res.status(rdk.httpstatus.bad_request).rdkSend('Invalid query parameter');
+    }
+    // solr throws error if search text does not contains at least one alphanumeric character
+    var regex = new RegExp(/[a-zA-Z0-9]+/);
+    if (!regex.test(reqQuery.query)) {
+        return res.status(rdk.httpstatus.bad_request).rdkSend('Query parameter must contain at least one letter or digit.');
+    }
 
-        var escapedQuery = solrSimpleClient.escapeQueryChars(reqQuery.query);
-        //Lower case the query to suggest so that we get consistent results,
-        //due to Solr's file based spelling suggestion handling, different case gives different results
-        var suggestQuery = escapedQuery.toLowerCase();
+    var escapedQuery = solrSimpleClient.escapeQueryChars(reqQuery.query);
+    //Lower case the query to suggest so that we get consistent results,
+    //due to Solr's file based spelling suggestion handling, different case gives different results
+    var suggestQuery = escapedQuery.toLowerCase();
 
     var solrQueryObjects = [
 
-            //wholeDomainSearchFrame in HMP
-            {
-                method: 'terms',
-                query: {
-                    qt: '/terms',
-                    'terms.fl': 'kind',
-                    'terms.sort': 'count',
-                    'terms.regex': '.*' + escapedQuery + '.*',
-                    'terms.regex.flag': 'case_insensitive',
-                }
-            },
-            // MedsSearchFrame.java in HMP
-            {
-                method: 'terms',
-                query: {
-                    qt: '/terms',
-                    'terms.fl': 'med_drug_class_name',
-                    'terms.sort': 'count',
-                    'terms.regex': '.*' + escapedQuery + '.*',
-                    'terms.regex.flag': 'case_insensitive',
-                }
-            }, {
-                method: 'suggest',
-                query: {
-                    q: suggestQuery,
-                    //                fq: [
-                    //                        'pid:' + reqQuery.pid
-                    //                ],
-                }
-            }, {
-                method: 'select',
-                query: {
-                    fl: [ // select these fields
-                        'qualified_name',
-                        'med_drug_class_name'
-                    ],
-                    fq: [ // filter queries
-                        'domain:' + 'med'
-                    ],
-                    q: '*' + escapedQuery + '*',
-                    rows: 0,
-                    facet: 'true',
-                    'facet.pivot': 'med_drug_class_name,qualified_name',
-                    synonyms: 'true',
-                    defType: 'synonym_edismax'
-                }
+        //wholeDomainSearchFrame in HMP
+        {
+            method: 'terms',
+            query: {
+                qt: '/terms',
+                'terms.fl': 'kind',
+                'terms.sort': 'count',
+                'terms.regex': '.*' + escapedQuery + '.*',
+                'terms.regex.flag': 'case_insensitive',
             }
-        ];
-
-        var solrQueryStringObjects = solrQueryObjects.map(function(solrQueryObject) {
-            var compiledQueryParameters = solrSimpleClient.compileQueryParameters(solrQueryObject.query);
-
-            var solrQueryStringObject = {
-                type: 'solr',
-                method: solrQueryObject.method,
-                query: querystring.stringify(compiledQueryParameters)
-
-            };
-            return solrQueryStringObject;
-        });
-
-        var tasks = [];
-        //add the solr tasks
-        _.extend(tasks, solrQueryStringObjects);
-        //add the ontology search task if enabled
-        if (req.app.config.ontologySuggest.enabled){
-            tasks.push({
-                type: 'ontology',
-                query: reqQuery.query
-
-            });
+        },
+        // MedsSearchFrame.java in HMP
+        {
+            method: 'terms',
+            query: {
+                qt: '/terms',
+                'terms.fl': 'med_drug_class_name',
+                'terms.sort': 'count',
+                'terms.regex': '.*' + escapedQuery + '.*',
+                'terms.regex.flag': 'case_insensitive',
+            }
+        }, {
+            method: 'suggest',
+            query: {
+                q: suggestQuery,
+                //                fq: [
+                //                        'pid:' + reqQuery.pid
+                //                ],
+            }
+        }, {
+            method: 'select',
+            query: {
+                fl: [ // select these fields
+                    'qualified_name',
+                    'med_drug_class_name'
+                ],
+                fq: [ // filter queries
+                    'domain:' + 'med'
+                ],
+                q: '*' + escapedQuery + '*',
+                rows: 0,
+                facet: 'true',
+                'facet.pivot': 'med_drug_class_name,qualified_name',
+                synonyms: 'true',
+                defType: 'synonym_edismax'
+            }
         }
+    ];
 
-        async.map(tasks,
-            function(task, callback) {
-                if (task.type === 'solr') {
-                    solrSimpleClient.executeSolrQuery(task.query, task.method, req, function(err, result) {
-                        callback(err, result);
-                    });
+    var solrQueryStringObjects = solrQueryObjects.map(function(solrQueryObject) {
+        var compiledQueryParameters = solrSimpleClient.compileQueryParameters(solrQueryObject.query);
 
-                } else {
-                    ontologyClient.executeTermQuery(task.query, req, function(err, results) {
-                        callback(err, results);
-                    });
-                }
-            },
-            function(err, results) {
-                if (err) {
-                    res.status(500).rdkSend('The search could not be completed\n' + err.stack);
-                    return;
-                }
+        var solrQueryStringObject = {
+            type: 'solr',
+            method: solrQueryObject.method,
+            query: querystring.stringify(compiledQueryParameters)
 
-                var hmpEmulatedSuggestResponseObject = buildSuggestResponseObjectSkeleton(reqQuery);
-                hmpEmulatedSuggestResponseObject = transformSuggestSolrToHmp(results, hmpEmulatedSuggestResponseObject, reqQuery);
-                hmpEmulatedSuggestResponseObject = transformSuggestLOINCToHmp(hmpEmulatedSuggestResponseObject, reqQuery);
-                hmpEmulatedSuggestResponseObject = transformSuggestLabPanelsToHmp(hmpEmulatedSuggestResponseObject, reqQuery);
-                hmpEmulatedSuggestResponseObject = transformSuggestLabGroupsToHmp(hmpEmulatedSuggestResponseObject, reqQuery);
-                hmpEmulatedSuggestResponseObject = transformSuggestOntologyToHmp(results, hmpEmulatedSuggestResponseObject, reqQuery);
-                res.rdkSend(hmpEmulatedSuggestResponseObject);
+        };
+        return solrQueryStringObject;
+    });
 
-            }
-        );
+    var tasks = [];
+    //add the solr tasks
+    _.extend(tasks, solrQueryStringObjects);
+    //add the ontology search task if enabled
+    if (req.app.config.ontologySuggest.enabled) {
+        tasks.push({
+            type: 'ontology',
+            query: reqQuery.query
+
+        });
     }
-    //Add SnomedCT ontology search result
+
+    async.map(tasks,
+        function(task, callback) {
+            if (task.type === 'solr') {
+                solrSimpleClient.executeSolrQuery(task.query, task.method, req, function(err, result) {
+                    callback(err, result);
+                });
+
+            } else {
+                ontologyClient.executeTermQuery(task.query, req, function(err, results) {
+                    callback(err, results);
+                });
+            }
+        },
+        function(err, results) {
+            if (err) {
+                res.status(500).rdkSend('The search could not be completed\n' + err.stack);
+                return;
+            }
+
+            var hmpEmulatedSuggestResponseObject = buildSuggestResponseObjectSkeleton(reqQuery);
+            hmpEmulatedSuggestResponseObject = transformSuggestSolrToHmp(results, hmpEmulatedSuggestResponseObject, reqQuery);
+            hmpEmulatedSuggestResponseObject = transformSuggestLOINCToHmp(hmpEmulatedSuggestResponseObject, reqQuery);
+            hmpEmulatedSuggestResponseObject = transformSuggestLabPanelsToHmp(hmpEmulatedSuggestResponseObject, reqQuery);
+            hmpEmulatedSuggestResponseObject = transformSuggestLabGroupsToHmp(hmpEmulatedSuggestResponseObject, reqQuery);
+            hmpEmulatedSuggestResponseObject = transformSuggestOntologyToHmp(results, hmpEmulatedSuggestResponseObject, reqQuery);
+            res.rdkSend(hmpEmulatedSuggestResponseObject);
+
+        }
+    );
+}
+//Add SnomedCT ontology search result
 function transformSuggestOntologyToHmp(results, hmpEmulatedSuggestResponseObject, reqQuery) {
     var nextResponseItems = [];
     var nextResponseItem = {};
@@ -170,47 +170,47 @@ function transformSuggestOntologyToHmp(results, hmpEmulatedSuggestResponseObject
 
 // Add Logical Observation Identifiers Names and Codes (LOINC) Items
 function transformSuggestLOINCToHmp(hmpEmulatedSuggestResponseObject, reqQuery) {
-        var loincArray = loincSearch(reqQuery.query);
-        var nextResponseItems = [];
-        var nextResponseItem = {};
-        var totalFound = loincArray.length;
-        _.each(loincArray, function(loincItem) {
-            nextResponseItem = buildSuggestResponseObjectItemSkeleton(loincItem, reqQuery);
-            nextResponseItem.category = 'loincSearch';
-            nextResponseItems = nextResponseItems.concat(nextResponseItem);
+    var loincArray = loincSearch(reqQuery.query);
+    var nextResponseItems = [];
+    var nextResponseItem = {};
+    var totalFound = loincArray.length;
+    _.each(loincArray, function(loincItem) {
+        nextResponseItem = buildSuggestResponseObjectItemSkeleton(loincItem, reqQuery);
+        nextResponseItem.category = 'loincSearch';
+        nextResponseItems = nextResponseItems.concat(nextResponseItem);
 
 
-        });
+    });
 
-        hmpEmulatedSuggestResponseObject.data.currentItemCount += totalFound;
-        hmpEmulatedSuggestResponseObject.data.itemsPerPage += totalFound;
-        hmpEmulatedSuggestResponseObject.data.totalItems += totalFound;
-        hmpEmulatedSuggestResponseObject.data.items = hmpEmulatedSuggestResponseObject.data.items.concat(nextResponseItems);
+    hmpEmulatedSuggestResponseObject.data.currentItemCount += totalFound;
+    hmpEmulatedSuggestResponseObject.data.itemsPerPage += totalFound;
+    hmpEmulatedSuggestResponseObject.data.totalItems += totalFound;
+    hmpEmulatedSuggestResponseObject.data.items = hmpEmulatedSuggestResponseObject.data.items.concat(nextResponseItems);
 
-        return hmpEmulatedSuggestResponseObject;
-    }
-    //Add Lab Panel Items
+    return hmpEmulatedSuggestResponseObject;
+}
+//Add Lab Panel Items
 function transformSuggestLabPanelsToHmp(hmpEmulatedSuggestResponseObject, reqQuery) {
-        var labPanels = labPanelSearch(reqQuery.query);
-        var nextResponseItems = [];
-        var nextResponseItem = {};
-        var totalFound = labPanels.length;
-        _.each(labPanels, function(labPanel) {
-            nextResponseItem = buildSuggestResponseObjectItemSkeleton(labPanel, reqQuery);
-            nextResponseItem.category = 'Lab Panel';
-            nextResponseItems = nextResponseItems.concat(nextResponseItem);
+    var labPanels = labPanelSearch(reqQuery.query);
+    var nextResponseItems = [];
+    var nextResponseItem = {};
+    var totalFound = labPanels.length;
+    _.each(labPanels, function(labPanel) {
+        nextResponseItem = buildSuggestResponseObjectItemSkeleton(labPanel, reqQuery);
+        nextResponseItem.category = 'Lab Panel';
+        nextResponseItems = nextResponseItems.concat(nextResponseItem);
 
 
-        });
+    });
 
-        hmpEmulatedSuggestResponseObject.data.currentItemCount += totalFound;
-        hmpEmulatedSuggestResponseObject.data.itemsPerPage += totalFound;
-        hmpEmulatedSuggestResponseObject.data.totalItems += totalFound;
-        hmpEmulatedSuggestResponseObject.data.items = hmpEmulatedSuggestResponseObject.data.items.concat(nextResponseItems);
+    hmpEmulatedSuggestResponseObject.data.currentItemCount += totalFound;
+    hmpEmulatedSuggestResponseObject.data.itemsPerPage += totalFound;
+    hmpEmulatedSuggestResponseObject.data.totalItems += totalFound;
+    hmpEmulatedSuggestResponseObject.data.items = hmpEmulatedSuggestResponseObject.data.items.concat(nextResponseItems);
 
-        return hmpEmulatedSuggestResponseObject;
-    }
-    //Add Lab Group Items
+    return hmpEmulatedSuggestResponseObject;
+}
+//Add Lab Group Items
 function transformSuggestLabGroupsToHmp(hmpEmulatedSuggestResponseObject, reqQuery) {
     var labGroups = labGroupSearch(reqQuery.query);
     var nextResponseItems = [];

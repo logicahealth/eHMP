@@ -1,7 +1,7 @@
 # Valid Login information to be used for most tests
 class DefaultLogin
-  @@adk_url = ENV.keys.include?('ADK_IP') ? 'http://' + ENV['ADK_IP'] : "http://10.1.1.200/#logon-screen"
-  @@ehmpui_url = ENV.keys.include?('EHMPUI_IP') ? 'http://' + ENV['EHMPUI_IP'] : "http://10.1.1.150/"
+  @@adk_url = ENV.keys.include?('ADK_IP') ? 'http://' + ENV['ADK_IP'] : "http://IP        /#logon-screen"
+  @@ehmpui_url = ENV.keys.include?('EHMPUI_IP') ? 'http://' + ENV['EHMPUI_IP'] : "http://IP        /"
   @@default_wait_time = 50
 
   def self.wait_time

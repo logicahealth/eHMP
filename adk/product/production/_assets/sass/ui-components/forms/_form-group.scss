@@ -1,0 +1,103 @@
+// form group
+.form-group {
+    margin-bottom: 5px;
+    &.input-control .input-group {
+        .form-control {
+            &:not(:first-child):not(:last-child) {
+                border-top-left-radius: 4px;
+                border-bottom-left-radius: 4px;
+            }
+        }
+        .input-group-btn {
+            label {
+                &.sr-only {
+                    overflow: inherit;
+                }
+            }
+            select {
+                &.form-control {
+                    height: 27px;
+                    -webkit-appearance: none;
+                    border-radius: 0px 4px 4px 0px;
+                }
+            }
+        }
+    }
+    .input-group-btn {
+        vertical-align: bottom;
+    }
+    .input-icon--left {
+        position: relative;
+        i {
+            position: absolute;
+            z-index: 3;
+            top: 8px;
+            left: 5px;
+        }
+        & + input.form-control {
+            padding-left: 18px;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+    }
+}
+//for searchbar elements
+.form-group--searchbar .input-group {
+    width: 100%;
+    input.form-control:not(:first-child):not(:last-child) {
+        padding-right: 18px;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+    .clear-input-btn {
+        position: absolute;
+        left: -18px;
+        z-index: 2;
+        height: 100%;
+    }
+    > .input-group-addon:last-of-type {
+        background-color: inherit;
+        position: relative;
+        padding: 0;
+        button:last-of-type {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    }
+    &.submit-hidden {
+        input.form-control {
+            border-radius: 4px;
+        }
+        .clear-input-btn {
+            left: inherit;
+            right: 2px;
+        }
+    }
+}
+// form-group-sm
+.form-group-sm {
+    .form-control {
+      height: 25px;
+    }
+    select.form-control {
+      height: 25px;
+      line-height: 25px;
+    }
+    .form-control-static {
+      height: 25px;
+      min-height: 25px;
+    }
+    .form-control + .form-control-feedback {
+      width: 25px;
+      height: 25px;
+      line-height: 25px;
+    }
+    .input-group > .input-group-addon > {
+        * {
+            line-height: 13px;
+        }
+        button:last-of-type {
+             border-radius: 3px;
+        }
+    }
+}

@@ -13,6 +13,9 @@ module.exports.setStandardizedDescription = setStandardizedDescription;
 module.exports.decompressFullHtml = decompressFullHtml;
 module.exports.setTimeSince = setTimeSince;
 module.exports._calculateBmi = calculateBmi;
+module.exports._findStartDateString = findStartDateString;
+module.exports._setTimeSinceItem = setTimeSinceItem;
+
 
 function addNormalizedName(jdsData) {
     _.each(jdsData.data.items, function(item) {
@@ -124,78 +127,115 @@ function setExpirationLabel(jdsData) {
     return jdsData;
 }
 
+
+var DATE_FORMAT = 'YYYYMMDDHHmmssSSS';
+
+
+/**
+ * @param {*} item JDS response item
+ * @param {moment} today
+ * @returns {String} Start Date in DATE_FORMAT
+ */
+function findStartDateString(item, today) {
+    if (!_.isUndefined(item.lastFilled) && !_.isNull(item.lastFilled)) {
+        var startDateToUse = item.lastFilled.toString();
+
+        var lastFilledMoment = moment(startDateToUse, DATE_FORMAT);
+
+        if (!lastFilledMoment.isValid()) {
+            item.lastFilled = null;
+            return findStartDateString(item, today);
+        }
+
+        var lastFilledTime = lastFilledMoment.toISOString();
+        var lastFilledLocalTime = moment.utc(lastFilledTime).toDate();
+
+        lastFilledTime = moment(lastFilledLocalTime);
+
+
+        var secondToLastFill = item.fills[item.fills.length - 2];
+        var advancedFillForReleaseAfterCurrentFillExpiresExists = (
+            lastFilledTime > today &&
+            item.fills.length > 1 &&
+            secondToLastFill !== undefined &&
+            secondToLastFill.dispenseDate !== undefined
+        );
+
+        if (advancedFillForReleaseAfterCurrentFillExpiresExists) {
+            //use the date of the fill the patient is currently on
+            startDateToUse = secondToLastFill.dispenseDate.toString();
+        }
+        return startDateToUse;
+
+    }
+
+    var fills = _.get(item, 'fills[0].dispenseDate');
+    if (!_.isUndefined(fills)) {
+        return fills;
+    }
+
+    var lastAdmin = _.get(item, 'lastAdmin');
+    if (!_.isUndefined(lastAdmin)) {
+        return lastAdmin;
+    }
+
+    return item.overallStart;
+}
+
+
+
+
+function setTimeSinceItem(today, item) {
+    var ordered = _.get(item, 'orders[0].ordered');
+
+    if (item.overallStart) {
+        item.overallStart = item.overallStart.toString();
+    } else if (ordered) {
+        item.overallStart = ordered.toString();
+    }
+
+    if (item.stopped) {
+        item.stopped = item.stopped.toString();
+    }
+
+    if (!item.fills) {
+        item.fills = [];
+    }
+
+    var startDateToUse = findStartDateString(item, today);
+    var startDate = moment(startDateToUse, DATE_FORMAT);
+
+    var overallStopStr = item.overallStop || item.stopped || '';
+    var overallStop = moment(overallStopStr.toString(), DATE_FORMAT);
+
+    if (startDate < overallStop && overallStop < today) {
+        startDate = overallStop;
+    }
+
+    // ensure the start time is no sooner than the medication order time and no later than right now.
+    if (!_.isUndefined(ordered)) {
+        var orderedDate = moment(ordered.toString(), DATE_FORMAT);
+        if (startDate <= orderedDate || startDate > today) {
+            startDate = moment(ordered.toString(), DATE_FORMAT).add(1, 'second');
+        }
+    }
+
+    var duration = moment.duration(today.diff(startDate));
+    var months = parseFloat(duration.asMonths());
+
+    item.lastAction = startDate.format(DATE_FORMAT);
+    item.expirationDate = overallStop.format(DATE_FORMAT);
+    item.recent = months <= 6;
+}
+
 function setTimeSince(jdsData) {
-    if(!(jdsData && jdsData.data && jdsData.data.items)) {
+    if(!_.get(jdsData, 'data.items')) {
         return jdsData;
     }
-    _.each(jdsData.data.items, function(item) {
 
-        if (item.overallStart) {
-            item.overallStart = item.overallStart.toString();
-        } else if (item.orders && item.orders.length > 0 && item.orders[0].ordered) {
-            item.overallStart = item.orders[0].ordered.toString();
-        }
+    var setTimeWithToday = _.partial(setTimeSinceItem, moment());
+    _.each(jdsData.data.items, setTimeWithToday);
 
-        if (item.stopped) {
-            item.stopped = item.stopped.toString();
-        }
-
-        if (!item.fills) {
-            item.fills = [];
-        }
-
-        var startDateToUse = '';
-        var today = moment();
-        if (item.lastFilled !== undefined) {
-            startDateToUse = item.lastFilled.toString();
-            var lastFilledTime = moment(startDateToUse, 'YYYYMMDDHHmmssSSS').toISOString();
-            var lastFilledLocalTime = moment.utc(lastFilledTime).toDate();
-            lastFilledTime = moment(lastFilledLocalTime);
-            var secondToLastFill = item.fills[item.fills.length - 2];
-            var advancedFillForReleaseAfterCurrentFillExpiresExists = (
-                lastFilledTime > today && item.fills.length > 1 &&
-                secondToLastFill !== undefined &&
-                secondToLastFill.dispenseDate !== undefined);
-            if (advancedFillForReleaseAfterCurrentFillExpiresExists) {
-                //use the date of the fill the patient is currently on
-                startDateToUse = secondToLastFill.dispenseDate.toString();
-            }
-
-        } else if (item.fills && item.fills[0] !== undefined && item.fills[0].dispenseDate !== undefined) {
-            startDateToUse = item.fills[0].dispenseDate.toString();
-        } else if (item.lastAdmin !== undefined) {
-            startDateToUse = item.lastAdmin;
-        } else {
-            startDateToUse = item.overallStart;
-        }
-        var overallStop = '';
-        if (item.overallStop) {
-            overallStop = moment(item.overallStop.toString(), 'YYYYMMDDHHmmssSSS');
-        } else {
-            overallStop = moment(item.stopped, 'YYYYMMDDHHmmssSSS');
-        }
-        var startDate = moment(startDateToUse, 'YYYYMMDDHHmmssSSS');
-        if (overallStop > startDate && overallStop < today) {
-            startDate = overallStop;
-        }
-        // ensure the start time is no sooner than the medication order time and no later than right now.
-        if (item.orders !== undefined && item.orders !== null && item.orders[0].ordered !== undefined) {
-            var orderedDate = moment(item.orders[0].ordered.toString(), 'YYYYMMDDHHmmssSSS');
-            if (startDate <= orderedDate || startDate > today) {
-                startDate = moment(item.orders[0].ordered.toString(), 'YYYYMMDDHHmmssSSS').add(1, 'second');
-            }
-        }
-        var duration = moment.duration(today.diff(startDate));
-        var months = parseFloat(duration.asMonths());
-        //recent check
-        var recent = false;
-        if (months <= 6) {
-            recent = true;
-        }
-        item.lastAction = startDate.format('YYYYMMDDHHmmssSSS');
-        item.expirationDate = overallStop.format('YYYYMMDDHHmmssSSS');
-        item.recent = recent;
-    });
     return jdsData;
 }
 

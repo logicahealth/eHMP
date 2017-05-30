@@ -1,35 +1,11 @@
-[data-appletid="problems"] {
-    .problems-full & {
-        .panel-body {
-            overflow-y: auto;
-        }
-    }
-}
-
+// [data-appletid="problems"] {}
 [data-tray-width-scale="0.33"] {
-    .problem-clear-text {
-        .btn-icon {
-            position: relative;
-            right: 30px;
-            top: 34px;
-        }
-    }
-    .problemTerm {
-        input::-ms-clear {
-            display: none;
-        }
-    }
     .adk-form {
         .select-problem-container {
             margin-top: -5px;
         }
         .keep-problem-container {
             margin-top: -15px;
-        }
-    }
-    .immediacyRadioValue {
-        .radio-inline+.radio-inline {
-            margin-left: 7px;
         }
     }
 }

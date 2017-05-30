@@ -27,7 +27,7 @@ var grabJobs = require(global.VX_INTTESTS + 'framework/job-grabber');
 
 var BeanstalkClient = require(global.VX_JOBFRAMEWORK).BeanstalkClient;
 var host = require(global.VX_INTTESTS + 'test-config');
-var port = 5000;
+var port = PORT;
 
 var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 
@@ -95,6 +95,11 @@ var clinic4 = {
 var tubePrefix = 'osync-clinic-utils-test';
 var jobType = 'appointments';
 var tubenames;
+
+var referenceInfo = {
+	sessionId: 'TEST',
+	utilityType: 'osync-clinic'
+};
 
 describe('osync-clinic-utils integration test', function() {
 	beforeEach(function() {
@@ -204,8 +209,8 @@ describe('osync-clinic-utils integration test', function() {
 		var osyncClinicRunByUidDone = false;
 		runs(function() {
 			//osyncClinicRun - by uid
-			//						       site  uid
-			osyncClinicUtil.osyncClinicRun(null, clinic3.uid, function(error, response) {
+			//						       site  uid          referenceInfo
+			osyncClinicUtil.osyncClinicRun(null, clinic3.uid, referenceInfo, function(error, response) {
 				expect(error).toBeFalsy();
 				expect(response).toContain('Published');
 
@@ -224,6 +229,12 @@ describe('osync-clinic-utils integration test', function() {
 					expect(val(resultJobTypes, 'length')).toEqual(1);
 					expect(resultJobTypes).toContain(jobType);
 
+					var resultJobReferenceInfo = _.map(val(jobs, ['0','jobs']), function(job){
+                        return job.referenceInfo;
+                    });
+
+                    expect(resultJobReferenceInfo).toContain(jasmine.objectContaining(referenceInfo));
+
 					osyncClinicRunByUidDone = true;
 					return;
 				});
@@ -236,8 +247,8 @@ describe('osync-clinic-utils integration test', function() {
 		var osyncClinicRunBySiteDone = false;
 		runs(function() {
 			//osyncClinicRun - by site
-			//						       site  uid
-			osyncClinicUtil.osyncClinicRun(site1, null, function(error, response) {
+			//						       site   uid   referenceInfo
+			osyncClinicUtil.osyncClinicRun(site1, null, referenceInfo, function(error, response) {
 				expect(error).toBeFalsy();
 				expect(response).toContain('published');
 
@@ -256,6 +267,16 @@ describe('osync-clinic-utils integration test', function() {
 					expect(val(resultJobTypes, 'length')).toEqual(2);
 					expect(resultJobTypes).toContain(jobType);
 
+					var resultJobReferenceInfo = _.map(val(jobs, ['0','jobs']), function(job){
+                        return job.referenceInfo;
+                    });
+
+                    expect(resultJobReferenceInfo.length).toBeGreaterThan(1);
+                    _.each(resultJobReferenceInfo, function(item){
+                        expect(item).toEqual(jasmine.objectContaining(referenceInfo));
+                    });
+
+
 					osyncClinicRunBySiteDone = true;
 					return;
 				});
@@ -268,8 +289,8 @@ describe('osync-clinic-utils integration test', function() {
 		var osyncClinicRunByNumericSiteDone = false;
 		runs(function() {
 			//osyncClinicRun - by site
-			//						       site  uid
-			osyncClinicUtil.osyncClinicRun(numericSite, null, function(error, response) {
+			//						       site         uid   referenceInfo
+			osyncClinicUtil.osyncClinicRun(numericSite, null, referenceInfo, function(error, response) {
 				expect(error).toBeFalsy();
 				expect(response).toContain('published');
 

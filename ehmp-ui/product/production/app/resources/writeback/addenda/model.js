@@ -1,6 +1,8 @@
 define([
     'moment'
 ], function(moment) {
+    'use strict';
+
     var formUidCounter = 0;
     var addendum = ADK.Resources.Writeback.Model.extend({
         resource: 'addendum-add',

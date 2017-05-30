@@ -1,0 +1,35 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'us.vistacore.cdsinvocation'
+description = """cds-invocation"""
+sourceCompatibility = property('javaVersion')
+targetCompatibility = property('targetJavaVersion')
+
+repositories {
+     maven { url "https://store.vistacore.us/nexus/content/repositories/public"
+	 }
+}
+dependencies {
+    compile group: 'org.mongodb', name: 'mongo-java-driver', version:'3.0.2'
+    compile group: 'com.google.code.gson', name: 'gson', version:'2.3.1'
+    compile group: 'com.phloc', name: 'phloc-schematron', version:'2.7.1'
+    compile group: 'com.phloc', name: 'phloc-commons', version:'4.3.6'
+    compile group: 'ca.uhn.hapi.fhir', name: 'hapi-fhir-base', version: property('hapiVersion')
+    compile group: 'ca.uhn.hapi.fhir', name: 'hapi-fhir-structures-dstu2', version: property('hapiVersion')
+    compile group: 'org.springframework', name: 'spring-test', version: property('springVersion')
+    compile group: 'org.springframework.security', name: 'spring-security-core', version: property('springSecurityVersion')
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: property('log4jVersion')
+	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: property('log4jVersion')
+	compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: property('log4jVersion')
+	compile group: 'org.apache.logging.log4j', name: 'log4j-web', version: property('log4jVersion')
+    compile group: 'org.opencds', name: 'dss-java-stub', version: property('openCDSDSSVersion')
+    compile group: 'org.opencds', name: 'opencds-vmr-1_0-schema', version: property('openCDSVMRVersion')
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: property('jacksonVersion')
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: property('jacksonVersion')
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: property('jacksonVersion')
+    compile group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version: property('jacksonVersion')
+    compile group: 'org.apache.commons', name: 'commons-lang3', version:'3.4'
+    compile group: 'org.apache.cxf', name: 'cxf-rt-rs-client', version: property('cxfVersion')
+    compile group: 'junit', name: 'junit', version: property('junitVersion')
+}

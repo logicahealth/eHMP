@@ -5,6 +5,7 @@ require('../../../env-setup');
 var bunyan = require('bunyan');
 var logUtil = require(global.VX_UTILS + 'log');
 var dummyLog = require(global.VX_DUMMIES + 'dummy-logger');
+var _ = require('underscore');
 
 var testLog = bunyan.createLogger({
     name: 'test-logger',
@@ -146,6 +147,32 @@ describe('log.js', function() {
             var childLog = logUtil.getAsChild('child', dummyLog);
             expect(childLog).not.toBe(parentLog);
             expect(childLog.fields.name).toEqual(dummyLog.fields.name);
+        });
+    });
+
+    describe('child()', function(){
+        it('verify referenceInfo is logged by child logger', function(){
+            var referenceInfo = {
+                sessionId: 'TEST',
+                requestId: 'test'
+            };
+
+            var ringbuffer = new bunyan.RingBuffer({ limit: 1 });
+
+            var log = logUtil._createLogger({
+                name: 'referenceInfo-test',
+                streams: [{
+                    level: 'debug',
+                    type: 'raw',
+                    stream: ringbuffer
+                }]
+            }).child(referenceInfo);
+
+            log.debug('Test message');
+            var message = _.first(ringbuffer.records);
+            expect(message).toBeTruthy();
+            expect(message.sessionId).toEqual(referenceInfo.sessionId);
+            expect(message.requestId).toEqual(referenceInfo.requestId);
         });
     });
 });

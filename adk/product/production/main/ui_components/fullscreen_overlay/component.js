@@ -35,7 +35,13 @@ define([
             this.showChildView('overlayViewRegion', this.overlayView);
         },
         template: Handlebars.compile('<div id="mainOverlayRegion"></div>'),
-        className: 'overlay overlay-scale',
+        className: function(){
+            var themeClass = '';
+            if(_.isString(this.getOption('theme'))){
+                themeClass += ' overlay--' + this.getOption('theme');
+            }
+            return 'overlay overlay-scale' + themeClass;
+        },
         tagName: 'div',
         attributes: {
             'role': 'dialog',

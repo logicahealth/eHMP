@@ -7,7 +7,7 @@ var request = require('request');
 var getDemographics = require(global.VX_HANDLERS + 'resync-request/get-patient-demographics');
 var demographicsSync = require(global.VX_HANDLERS + 'resync-request/demographics-sync');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
-
+var val = require(global.VX_UTILS + 'object-utils').getProperty;
 var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 
 // NOTE: be sure next lines are commented out before pushing
@@ -21,7 +21,6 @@ var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 var wConfig = require(global.VX_ROOT + 'worker-config');
 
 var host = require(global.VX_INTTESTS + 'test-config');
-var port = 5000;
 
 function clearTestPatient(config, patientIdentifierValue) {
     var completed = false;
@@ -31,7 +30,10 @@ function clearTestPatient(config, patientIdentifierValue) {
         var options = {
             url: config.protocol + '://' + config.host + ':' + config.port + config.patientUnsyncPath,
             method: 'POST',
-            qs: {pid: patientIdentifierValue}};
+            qs: {
+                pid: patientIdentifierValue
+            }
+        };
 
         request.post(options, function(error, response) {
             actualError = error;
@@ -56,13 +58,29 @@ function retrieveSyncStatus(patientIdentifier, environment, callback) {
     });
 }
 
+function retrieveEnterpriseSyncJobHistory(patientIdentifier, environment, callback) {
+    var job = {
+        patientIdentifier: patientIdentifier
+    };
+
+    var filter = {
+        filter: '?filter=eq(\"type\",\"enterprise-sync-request\")'
+    };
+
+    environment.jds.getJobStatus(job, filter, function(error, response, result) {
+        callback(error, response, result);
+    });
+}
+
 describe('demographics-sync', function() {
     describe('When a demographics sync request is made', function() {
         var config, environment;
 
         beforeEach(function() {
             config = {
-                retrySync: {maxRetries: 3},
+                retrySync: {
+                    maxRetries: 3
+                },
                 syncRequestApi: {
                     protocol: 'http',
                     host: host,
@@ -79,8 +97,8 @@ describe('demographics-sync', function() {
                 },
                 jds: _.defaults(wConfig.jds, {
                     protocol: 'http',
-                    host: '10.2.2.110',
-                    port: 9080
+                    host: 'IP        ',
+                    port: PORT
                 })
             };
 
@@ -102,7 +120,8 @@ describe('demographics-sync', function() {
                 },
                 rootJobId: '1',
                 jobId: '1',
-                demographics: {"birthDate": "19350407",
+                demographics: {
+                    "birthDate": "19350407",
                     "displayName": "Eight,Patient",
                     "familyName": "EIGHT",
                     "fullName": "EIGHT,PATIENT",
@@ -121,12 +140,16 @@ describe('demographics-sync', function() {
                     "ssn": "666000008",
                     "uid": "urn:va:patient:2939:19:19",
                     "veteran": true
+                },
+                referenceInfo: {
+                    'sessionId': 'Test session',
+                    'requestId': 'Test request'
                 }
             };
             var completed = false;
             var actualError, actualSyncStatus;
 
-            demographicsSync(dummyLogger, config.syncRequestApi, job, function (error) {
+            demographicsSync(dummyLogger, config.syncRequestApi, job, function(error) {
                 actualError = error;
                 retrieveSyncStatus(job.patientIdentifier, environment, function(error, syncStatus) {
                     actualError = error;
@@ -135,15 +158,33 @@ describe('demographics-sync', function() {
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return completed;
             }, 'response from demographics sync timed out.', 20000);
 
-            runs(function () {
+            var getJobComplete = false;
+
+            runs(function() {
                 expect(actualError).toBeFalsy();
                 expect(actualSyncStatus).toBe(200);
+
+                //Verify referenceInfo was passed into enterprise-sync-request
+                retrieveEnterpriseSyncJobHistory(job.patientIdentifier, environment, function(error, response, result){
+                    expect(error).toBeFalsy();
+                    expect(response).toBeTruthy();
+                    expect(response.message).toBeFalsy();
+                    expect(val(result, ['items','0', 'referenceInfo'])).toEqual(jasmine.objectContaining({
+                        'sessionId': 'Test session',
+                        'requestId': 'Test request'
+                    }));
+                    getJobComplete = true;
+                });
             });
+
+            waitsFor(function() {
+                return getJobComplete;
+            }, 'waiting for enterprise sync job', 20000);
+
         });
     });
 });
-

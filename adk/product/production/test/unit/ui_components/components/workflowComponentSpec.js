@@ -8,7 +8,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/components', 'api/UIComponents', 'jasminejquery'],
+define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/UILibrary', 'api/UIComponents', 'jasminejquery'],
     function($, Handlebars, Backbone, Marionette, UI) {
         var $workflowTestPage,
             workflowTestPage;
@@ -194,7 +194,7 @@ define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/co
                 });
 
                 it('persists data between steps', function() {
-                    var $input1 = $('#input1');
+                    var $input1 = $('.input-control.input1 input');
                     $input1.attr('value', 'new input1 value');
                     expect($input1).toHaveAttr('value', 'new input1 value');
                     $('#form1-next').click();
@@ -288,7 +288,7 @@ define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/co
                 });
 
                 it('persists data between steps', function() {
-                    var $input1 = $('#input1');
+                    var $input1 = $('.input-control.input1 input');
                     $input1.attr('value', 'new input1 value');
                     expect($input1).toHaveAttr('value', 'new input1 value');
                     $('#form1-next').click();

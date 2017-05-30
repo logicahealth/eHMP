@@ -47,32 +47,13 @@ task :syncCache, [:testType] do |t, args|
       "9E7A;100470",
       "9E7A;100472",
       "9E7A;100861",
-      "9E7A;35"
+      "9E7A;35",
+      "9E7A;17",
+      "9E7A;140"
     ]
   end
   ENV["JDS_IP"] = knife_search_for_ip("jds")
   ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync_client")
   PatientSynchronizer.wait_until_operational_data_loaded "http://#{ENV["JDS_IP"]}:9080", 1200, ["9E7A", "C877"]
   PatientSynchronizer.synchronize_patient_list "http://#{ENV["VX_SYNC_IP"]}:8080", 3600, patient_sync_list
-end
-
-task :scpRdkLogs, :driver do |t, args|
-  logDir = './rdk_logs'
-  logs = ['*.log']
-  key = knife_search_for_key_name('rdk', args[:driver])
-  user = 'ec2-user'
-  ip = knife_search_for_ip('resource_server')
-  Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
-  logs.each do |logname|
-    sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/var/log/rdk/#{logname}", "#{logDir}")
-  end
-end
-
-task :scpVxsyncLogs, :driver do |t,args|
-  logDir = "./vxsync_error_logs"
-  key = knife_search_for_key_name("vxsync", args[:driver])
-  user = "ec2-user"
-  ip = knife_search_for_ip("vxsync_client")
-  Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
-  sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/tmp/*_stderr.log", "#{logDir}")
 end

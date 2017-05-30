@@ -1,27 +1,9 @@
 define([
-    "backbone",
-    "underscore",
-    'app/applets/vitals/util'
-], function(Backbone, _, Util) {
-    "use strict";
+    'underscore'
+], function(_) {
+    'use strict';
 
     var gistConfiguration = {
-        fetchOptions: {
-            resourceTitle: 'patient-record-med',
-            cache: true,
-            viewModel: {
-                parse: function(response) {
-                    var ageData = ADK.utils.getTimeSince(response.lastAction);
-                    response.age = response.lastAction;
-                    response.ageDescription = ageData.timeSinceDescription;
-                    return response;
-                }
-            },
-            pageable: false,
-            criteria: {
-                filter: ''
-            }
-        },
         enableTileSorting: true,
         tileSortingUniqueId : 'typeName',
         gistHeaders: {
@@ -137,11 +119,11 @@ define([
             high: 18.5,
             interpretations: [{
                 flag: 'L',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'underweight'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth,
-            rangeClass: 'abnormalRange lowRange',
+            rangeClass: 'abnormal-range low-range',
             positionValues: 'center'
         }, {
             low: 18.5,
@@ -149,11 +131,11 @@ define([
             high: 25,
             interpretations: [{
                 flag: 'N',
-                valueClass: 'normalValue',
+                valueClass: 'normal-value',
                 description: 'normal'
             }],
             width: gistConfiguration.graphOptions.width - 2 * gistConfiguration.graphOptions.abnormalRangeWidth,
-            rangeClass: 'normalRange',
+            rangeClass: 'normal-range',
             positionValues: 'scaled'
         }, {
             low: 25,
@@ -161,22 +143,22 @@ define([
             high: 30,
             interpretations: [{
                 flag: 'H',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'overweight'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth / 2,
-            rangeClass: 'abnormalRange highRange',
+            rangeClass: 'abnormal-range high-range',
             positionValues: 'center'
         }, {
             low: 30,
             includeLow: true,
             interpretations: [{
                 flag: 'H',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'obese'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth / 2,
-            rangeClass: 'abnormalRange criticalHighRange',
+            rangeClass: 'abnormal-range critical-high-range',
             positionValues: 'center'
         }]
     });
@@ -185,11 +167,11 @@ define([
             high: 0,
             interpretations: [{
                 flag: 'L',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'low'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth,
-            rangeClass: 'abnormalRange hashedRange lowRange',
+            rangeClass: 'abnormal-range hashed-range low-range',
             positionValues: 'center'
         }, {
             low: 0,
@@ -198,22 +180,22 @@ define([
             includeHigh: true,
             interpretations: [{
                 flag: 'N',
-                valueClass: 'normalValue',
+                valueClass: 'normal-value',
                 description: 'normal'
             }],
             width: gistConfiguration.graphOptions.width - 2 * gistConfiguration.graphOptions.abnormalRangeWidth,
-            rangeClass: 'normalRange',
+            rangeClass: 'normal-range',
             positionValues: 'scaled'
         }, {
             low: 2,
             high: 5,
             interpretations: [{
                 flag: 'H',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'high'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth / 4,
-            rangeClass: 'abnormalRange highRange',
+            rangeClass: 'abnormal-range high-range',
             positionValues: 'center'
         }, {
             low: 5,
@@ -221,11 +203,11 @@ define([
             high: 7,
             interpretations: [{
                 flag: 'H',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'high'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth / 4,
-            rangeClass: 'abnormalRange highRange',
+            rangeClass: 'abnormal-range high-range',
             positionValues: 'center'
         }, {
             low: 7,
@@ -233,22 +215,22 @@ define([
             high: 9,
             interpretations: [{
                 flag: 'H',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'critical high'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth / 4,
-            rangeClass: 'abnormalRange criticalHighRange',
+            rangeClass: 'abnormal-range critical-high-range',
             positionValues: 'center'
         }, {
             low: 9,
             includeLow: true,
             interpretations: [{
                 flag: 'H',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'critical high'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth / 4,
-            rangeClass: 'abnormalRange criticalHighRange',
+            rangeClass: 'abnormal-range critical-high-range',
             positionValues: 'center'
         }]
     });
@@ -257,11 +239,11 @@ define([
             high: 90,
             interpretations: [{
                 flag: 'L',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'critical low'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth / 2,
-            rangeClass: 'abnormalRange criticalLowRange',
+            rangeClass: 'abnormal-range critical-low-range',
             positionValues: 'center'
         }, {
             low: 90,
@@ -270,11 +252,11 @@ define([
             includeHigh: true,
             interpretations: [{
                 flag: 'L',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'low'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth / 2,
-            rangeClass: 'abnormalRange lowRange',
+            rangeClass: 'abnormal-range low-range',
             positionValues: 'center'
         }, {
             low: 95,
@@ -282,21 +264,21 @@ define([
             includeHigh: true,
             interpretations: [{
                 flag: 'N',
-                valueClass: 'normalValue',
+                valueClass: 'normal-value',
                 description: 'normal'
             }],
             width: gistConfiguration.graphOptions.width - 2 * gistConfiguration.graphOptions.abnormalRangeWidth,
-            rangeClass: 'normalRange',
+            rangeClass: 'normal-range',
             positionValues: 'scaled'
         }, {
             includeHigh: true,
             interpretations: [{
                 flag: 'L',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'low'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth,
-            rangeClass: 'abnormalRange hashedRange highRange',
+            rangeClass: 'abnormal-range hashed-range high-range',
             positionValues: 'center'
         }]
     });
@@ -306,33 +288,33 @@ define([
             includeHigh: true,
             interpretations: [{
                 flag: 'L',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'abnormal height'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth,
-            rangeClass: 'abnormalRange lowRange hashedRange',
+            rangeClass: 'abnormal-range low-range hashed-range',
             positionValues: 'center'
         }, {
             low: 0,
             high: 118,
             interpretations: [{
                 flag: 'N',
-                valueClass: 'normalValue',
+                valueClass: 'normal-value',
                 description: 'normal'
             }],
             width: gistConfiguration.graphOptions.width - 2 * gistConfiguration.graphOptions.abnormalRangeWidth,
-            rangeClass: 'normalRange',
+            rangeClass: 'normal-range',
             positionValues: 'scaled'
         }, {
             low: 118,
             includeLow: true,
             interpretations: [{
                 flag: 'H',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'giant'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth ,
-            rangeClass: 'abnormalRange criticalHighRange hashedRange',
+            rangeClass: 'abnormal-range critical-high-range hashed-range',
             positionValues: 'center'
         }]
     });
@@ -342,33 +324,33 @@ define([
             includeHigh: true,
             interpretations: [{
                 flag: 'L',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'abnormal height'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth,
-            rangeClass: 'abnormalRange lowRange hashedRange',
+            rangeClass: 'abnormal-range low-range hashed-range',
             positionValues: 'center'
         }, {
             low: 0,
             high: 1501,
             interpretations: [{
                 flag: 'N',
-                valueClass: 'normalValue',
+                valueClass: 'normal-value',
                 description: 'normal'
             }],
             width: gistConfiguration.graphOptions.width - 2 * gistConfiguration.graphOptions.abnormalRangeWidth,
-            rangeClass: 'normalRange',
+            rangeClass: 'normal-range',
             positionValues: 'scaled'
         }, {
             low: 1501,
             includeLow: true,
             interpretations: [{
                 flag: 'H',
-                valueClass: 'abnormalValue',
+                valueClass: 'abnormal-value',
                 description: 'giant'
             }],
             width: gistConfiguration.graphOptions.abnormalRangeWidth ,
-            rangeClass: 'abnormalRange criticalHighRange hashedRange',
+            rangeClass: 'abnormal-range critical-high-range hashed-range',
             positionValues: 'center'
         }]
     });

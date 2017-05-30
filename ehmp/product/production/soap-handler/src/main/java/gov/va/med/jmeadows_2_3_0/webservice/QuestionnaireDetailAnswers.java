@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "questionnaireDetailAnswers", namespace = "http://webservice.vds.med.va.gov/", propOrder = {
+@XmlType(name = "questionnaireDetailAnswers", namespace = "http://webservice.vds.URL       /", propOrder = {
     "answer",
     "answerType",
     "choice",

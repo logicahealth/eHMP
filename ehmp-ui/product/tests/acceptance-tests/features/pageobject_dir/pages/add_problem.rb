@@ -9,11 +9,13 @@ class AddProblemsTrayModal < SitePrism::Page
   # ****************  first modal **************** #
   element :btn_keep_previous, '#keepProblemBtn'
   element :fld_search_problem, "#problemTerm"
-  element :btn_search_problem, "#problemTermBtn"
+  element :btn_search_problem, "#problemTermBtn:not([disabled])"
+  # element :btn_search_problem, "#problemTermBtn"
   element :fld_results_header, ".problem-results-header"
   element :btn_extend_search, '#extendedSearchBtn'
   element :btn_free_text, '#freeTxtBtn'
   element :fld_result_message, '.problem-results-message-container'
+  elements :fld_selectable_problems, '.problem-results-container ul[role=tree] > li.tree-leaf div'
 
   # ****************  second modal *************** #
   element :btn_select_new_problm, '#changeProblemBtn'
@@ -23,24 +25,26 @@ class AddProblemsTrayModal < SitePrism::Page
   element :fld_freetext_problem_name_label, '.free-text-container p:nth-of-type(1) strong'
   element :fld_freetext_problem_name, '.free-text-container p:nth-of-type(1)'
   
-  element :rbn_status_active, '#statusRadioValue-A-ACTIVE'
-  element :rbn_status_inactive, '#statusRadioValue-I-INACTIVE'
+  element :rbn_status_active, '.statusRadioValue [id$=A-ACTIVE]'
+  element :rbn_status_inactive, '.statusRadioValue [id$=I-INACTIVE]'
   element :fld_status_label, "div.statusRadioValue p.faux-label"
 
-  element :rbn_acuity_acute, '#immediacyRadioValue-A-ACUTE'
-  element :rbn_acuity_chronic, '#immediacyRadioValue-C-CHRONIC'
-  element :rbn_acuity_unknown, '#immediacyRadioValue-U-UNKNOWN'
+  element :rbn_acuity_acute, '.immediacyRadioValue [id$=A-ACUTE]'
+  element :rbn_acuity_chronic, '.immediacyRadioValue [id$=C-CHRONIC]'
+  element :rbn_acuity_unknown, '.immediacyRadioValue [id$=U-UNKNOWN]'
   element :fld_acuity_label, "div.immediacyRadioValue p.faux-label"
 
-  element :fld_onset_date, '#onset-date'
-  element :fld_onset_date_label, "label[for='onset-date']"
+  element :fld_onset_date, '#onsetDate'
+  element :fld_onset_date_label, "label[for='onsetDate']"
 
-  element :fld_clinic, '#clinic'
-  element :fld_clinic_label, "label[for='clinic']"
-  element :fld_selected_clinic, '#select2-clinic-container'
+  element :fld_clinic, '.select-control.clinic [id^=clinic]'
+  element :fld_clinic_label, ".select-control.clinic label"
+  element :fld_selected_clinic, "[id^='select2-clinic']"
 
-  element :fld_responsible_provider, '#resProvider'
-  element :fld_responsible_provider_label, "label[for='resProvider']"
+  element :fld_responsible_provider, '.select-control.resProvider [id^=resProvider]'
+  element :fld_responsible_provider_label, ".select-control.resProvider label"
+  element :fld_responsible_provider_instruction, "ul[id ^='select2-resProvider'] li.select2-results__message"
+  elements :fld_responsible_provider_list, "ul[id^='select2-resProvider'] li:not(.select2-results__message)"
   element :fld_treatment_factors_label, :xpath, "//div[contains(@class, 'bottom-margin-md')]/descendant::strong[(string() = 'Treatment Factors')]"
   element :rbn_service_contected_yes, '#treatmentFactors-serviceConnected-true-0'
   element :rbn_service_contected_no, '#treatmentFactors-serviceConnected-false-1'
@@ -55,36 +59,36 @@ class AddProblemsTrayModal < SitePrism::Page
   element :rbn_head_cancer_yes, '#treatmentFactors-head-neck-cancer-true-0'
   element :rbn_head_cancer_no, '#treatmentFactors-head-neck-cancer-false-1'
 
-  element :fld_comment, '#inputString'
+  element :fld_comment, '.input-control.inputString input'
   element :fld_comment_label, ".annotations-container strong"
   element :btn_add_comment, ".add-comment-button"
   element :fld_comment_characters_left, "div.inputString span.input-char-count"
   element :btn_cancel_problem_addition, '#cancelBtnProblem'
   element :btn_accept_problem_addition, '#addDrpDwnContainer'
-  element :ddl_responsible_provider, "[x-is-labelledby='select2-resProvider-container']"
+  element :ddl_responsible_provider, ".select-control.resProvider [x-is-labelledby^='select2-resProvider']"
   element :fld_select2_search_box, "input[class='select2-search__field']"
 
   element :btn_details, '#ftDetailsBtn'
-  elements :fld_comment_rows, '.comment-region .table-row'
-  elements :fld_comment_row_text, '.comment-region .comment-text-region'
-  elements :btn_comment_row_edit, '.comment-region .comment-edit-button'
-  elements :btn_comment_row_delete, '.comment-region .comment-delete-button'
+  elements :fld_comment_rows, '#patientDemographic-newObservation .comment-box-comment-region .table-row'
+  elements :fld_comment_row_text, '.comment-box-comment-region .comment-text-region'
+  elements :btn_comment_row_edit, '.comment-box-comment-region .comment-edit-button'
+  elements :btn_comment_row_delete, '.comment-box-comment-region .comment-delete-button'
   element :txt_comment_edit, 'div.table-row input'
   element :btn_comment_cancel_edit, 'div.table-row .cancel-edit-comment-button'
   element :btn_comment_save_edit, 'div.table-row .edit-comment-button'
 
-  element :txt_editable_new_term_request, 'form:not(.hidden) div.editableFreeTxtTxtArea #editableFreeTxtTxtArea'
+  element :txt_editable_new_term_request, "form:not(.hidden) div.editableFreeTxtTxtArea [name='editableFreeTxtTxtArea']"
   element :txt_editable_new_term_request_length, 'form:not(.hidden) div.editableFreeTxtTxtArea span.char-count-region span'
 
   # *************** free text modal *************** #
   element :btn_free_text_no, '#ftNoBtn'
   element :btn_free_text_yes, '#ftYesBtn'
-  element :chk_request_term, 'form:not(.hidden) #requestTermCheckBox'
+  element :chk_request_term, "form:not(.hidden) [name='requestTermCheckBox']"
   element :fld_icd_code_warning, 'form:not(.hidden) p:nth-of-type(1) strong'
   element :fld_use_term_quesiton, 'form:not(.hidden) p:nth-of-type(2) strong'
-  element :fld_new_term_request_label, "form:not(.hidden) label[for='freeTxtTxtArea']"
-  element :txt_new_term_request, 'form:not(.hidden) div.freeTxtTxtArea #freeTxtTxtArea'
-  element :txt_new_term_request2, 'form:not(.hidden) #editableFreeTxtTxtArea'
+  element :fld_new_term_request_label, "form:not(.hidden) label[for^='freeTxtTxtArea']"
+  element :txt_new_term_request, "form:not(.hidden) div.freeTxtTxtArea [name='freeTxtTxtArea']"
+  element :txt_new_term_request2, "form:not(.hidden) [name='editableFreeTxtTxtArea']"
   element :txt_new_term_request_length, 'form:not(.hidden) div.freeTxtTxtArea span.char-count-region span'
 
   def index_of_comment(comment_text)
@@ -98,7 +102,7 @@ class AddProblemsTrayModal < SitePrism::Page
   end
 
   def problem_search_result(problem_result_text)
-    self.class.element :fld_search_result, :xpath, "//div[contains(@class, 'problemResults')]/descendant::li[contains(@class, 'tree-leaf')]/descendant::div[contains(string(), '#{problem_result_text}')]"
+    self.class.element :fld_search_result, :xpath, "//div[contains(@class, 'problemResults')]/descendant::li[contains(@class, 'tree-leaf')]/descendant::div[(text()='#{problem_result_text}')]"
   end
 
   def selected_problem(selected_problem_text)

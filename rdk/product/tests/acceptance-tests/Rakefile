@@ -99,6 +99,7 @@ def environment_endpoints(env)
     ENV["RDK_WRITEBACK_PORT"]="9999"
     ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server")
     ENV["RDK_PICKLIST_PORT"]="7777"
+    ENV['JDS_IP'] = knife_search_for_ip('jds')
   when "aws"
     ENV["RDK_FETCH_HOST"] = knife_search_for_ip("resource_server")
     ENV["RDK_FETCH_PORT"] = "8888"
@@ -106,7 +107,8 @@ def environment_endpoints(env)
     ENV["RDK_WRITEBACK_HOST"] = knife_search_for_ip("resource_server")
     ENV["RDK_PICKLIST_PORT"]="7777"
     ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server")
-    ENV["Perf_Monitor_IP"] = '10.150.78.227'
+    ENV["Perf_Monitor_IP"] = 'IP           '
+    ENV['JDS_IP'] = knife_search_for_ip('jds')
   else
     fail "Unrecognized environment type: #{env}. Allowable types are: 'virtualbox' and 'aws'"
   end

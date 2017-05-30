@@ -58,10 +58,6 @@ Changes that will **NOT** be reflected:
 ### Changes ###
 - [ADK.UI.Notification](ui-library/components.md#Notification) supports sticky growl alert and onClick callback. See the api documentation for more info.
 
-## 2016-03-31 (March 31th, 2016) ##
-### Additions ###
-- [How-to-build-Applets](getting-started.md#How-to-build-Applets) section has an example of specifying a list of contexts.
-
 ### Changes ###
 - [ADK.PatientRecordService](using-adk.md#ADK-Services-PatientRecordService)'s setCurrentPatient api does navigation checking prior to displaying modal. By default it always asks to confirm, and this can be overwritten by an option **reconfirm**.
 

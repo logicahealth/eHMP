@@ -10,8 +10,7 @@ define([
 ], function(_, Backbone, Marionette, $, Handlebars, moment, validationUtils, writebackUtils) {
     "use strict";
 
-    var NO_KNOWN_ALLERGY_CODE_D = '132;GMRD(120.82,"D")';
-    var NO_KNOWN_ALLERGY_CODE_B = '132;GMRD(120.82,"B")';
+    var NO_KNOWN_ALLERGY_CODE = '132;GMRD(120.82';
 
     var patientAllergyArray = [];
 
@@ -194,7 +193,7 @@ define([
 
     var SignsAndSymptomsFieldset = {
         control: 'fieldset',
-        legend: 'Signs/Symptoms *',
+        legend: '<span class="transform-text-capitalize">signs/symptoms *</span>',
         items: [SignsAndSymptoms],
         extraClasses: ['bottom-margin-md', 'signs-and-symptoms']
     };
@@ -249,7 +248,7 @@ define([
             extraClasses: ['row'],
             items: [{
                 control: 'container',
-                extraClasses: ['col-xs-12', 'display-flex', 'valign-bottom'],
+                extraClasses: ['col-xs-12', 'flex-display', 'valign-bottom'],
                 items: [{
                     control: 'popover',
                     behaviors: {
@@ -263,7 +262,7 @@ define([
                     extraClasses: ['btn-default', 'btn-sm']
                 }, {
                     control: 'button',
-                    extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
+                    extraClasses: ['btn-primary', 'btn-sm', 'left-margin-sm'],
                     label: 'Accept',
                     name: 'addBtn',
                     title: 'Press enter to accept',
@@ -517,7 +516,7 @@ define([
 
                 if (searchAllergies) {
 
-                    if (searchAllergies === NO_KNOWN_ALLERGY_CODE_D || searchAllergies === NO_KNOWN_ALLERGY_CODE_B) {
+                    if (searchAllergies === NO_KNOWN_ALLERGY_CODE) {
                         model.set('allergyType', 'h');
                         model.set('nature-of-reaction', 'U');
 
@@ -543,6 +542,8 @@ define([
                         this.showInProgress('Loading...');
                         this.$(this.ui.signsSymptoms.selector).trigger('control:hidden', false);
                         this.$(this.ui.allergyType.selector).trigger('control:disabled', false);
+                        this.$(this.ui.signsSymptoms.selector).trigger('control:disabled', false);
+                        this.$(this.ui.signsSymptoms.selector).trigger('control:readonly', false);
 
                         if (this.model.has('allergyType') && !_.isEmpty(this.model.get('allergyType'))) {
                             this.model.trigger('change:allergyType', this.model);

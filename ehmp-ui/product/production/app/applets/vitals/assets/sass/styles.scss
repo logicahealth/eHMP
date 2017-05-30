@@ -12,39 +12,19 @@
         margin-top: 2px;
     }
     .a-table, .b-table {
-        tbody {
-            tr:focus {
+        tr:not(.no-records) {
+            cursor: pointer;
+            &:focus, &:hover {
                 background-color: $primary-lightest;
             }
         }
-    }
-    .a-table td,
-    .b-table td {
-        padding: 2px 5px
-    }
-    tr.clickable {
-        cursor: pointer;
-    }
-    tr.clickable:hover {
-        background-color: $primary-lightest;
-    }
-    .gist-item .table-row {
-        min-height: 21px;
-    }
-    .grid-container .gist-item-list .gist-item .selectable.flex-width-2 {
-        padding-right: 0px;
-    }
-    .faux-table .table-row .table-cell {
-        padding-right: 0px;
+        td {
+            padding: 2px 5px
+        }
     }
 }
 
-[data-tray-width-scale="0.33"] {
-    .collapsibleContainerHeaderRegion {
-        .radio-inline:nth-child(3) {
-            padding-left: 12px;
-        }
-    }
+.vitals-writeback {
     .temperatureInputValue {
         .col-xs-4 {
             padding: 0px 6px !important;
@@ -54,15 +34,26 @@
         .help-block {
             width: 187px;
         }
-    }
-    .pain-radio-po {
         .radio-inline:nth-child(3) {
             padding-left: 12px;
         }
     }
     .circumValue {
         label {
-            text-transform: capitalize !important;
+            text-transform: capitalize;
         }
+    }
+    .checkbox-inline + .checkbox-inline, 
+    .radio-inline + .radio-inline {
+        margin-left: 8px;
+        padding-left: 12px;
+    }
+    .radio input[type="radio"], 
+    .radio-inline input[type="radio"], 
+    .checkbox input[type="checkbox"], 
+    .checkbox-inline input[type="checkbox"] {
+        position: absolute;
+        margin-left: -16px;
+        top: -2px;
     }
 }

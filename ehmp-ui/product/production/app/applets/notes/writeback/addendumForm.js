@@ -186,7 +186,7 @@ define([
             closeButton: '.control.addendum-close',
             deleteButton: '.control.addendum-delete',
             signButton: '.control.addendum-sign',
-            textArea: '#addendumBody',
+            textArea: '.addendumBody textarea',
             saveErrorBanner: '.saveErrorBanner'
         },
         events: {

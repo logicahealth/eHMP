@@ -4,14 +4,13 @@ var _ = require('lodash');
 var async = require('async');
 var rdk = require('./../../../../core/rdk');
 var rpcClientFactory = require('../../utils/rpc-client-factory');
-var validate = require('./../../utils/validation-util');
 var http = rdk.utils.http;
 var locationUtil = rdk.utils.locationUtil;
 
 // constants
-var ITERATEE_LIMIT = 5;
+var CONCURRENT_TASKS = 5;
 var CLINICS_LOCATION_TYPE = 'C';
-var MAX_RPC_RESULTS_RETURNED = 44; //RPC calls will return no more than 44 records if they support pagination (see JSDoc).
+var MAX_UNIQUE_RPC_RESULTS_RETURNED = 44; //RPC calls will return no more than 44 records if they support pagination (see JSDoc).
 var NEWLOC_RPC = 'ORWU1 NEWLOC';
 var RPC_ELEMENT_DELIMITER = '\r\n';
 var RPC_FIELD_DELIMITER = '^';
@@ -50,6 +49,7 @@ function callRpcRecursively(logger, configuration, retValue, searchString, callb
     var site = _.get(params, 'site');
 
     var rpcClient = rpcClientFactory.getClient(logger, configuration);
+    var lastResponseName;
 
     rpcClient.execute(NEWLOC_RPC, searchString, SORT_ORDER_DESC, function(err, rpcData) {
         if (err) {
@@ -57,16 +57,26 @@ function callRpcRecursively(logger, configuration, retValue, searchString, callb
         }
 
         var clinicsCollection = _.filter(rpcData.split(RPC_ELEMENT_DELIMITER), Boolean);
+        if (clinicsCollection.length >= MAX_UNIQUE_RPC_RESULTS_RETURNED) {
+            var last = _.last(clinicsCollection);
+            var lastSplit = last.split(RPC_FIELD_DELIMITER);
+            lastResponseName = lastSplit[1];
+            if (lastResponseName) {
+                lastResponseName = lastResponseName.toUpperCase();
+            }
+        }
         var clinics = [];
 
         // For each clinic returned by the RPC, call JDS to retrieve the mixed-case location name
-        async.eachLimit(clinicsCollection, ITERATEE_LIMIT, function callJDS(clinic, jdsCallback) {
+        async.eachLimit(clinicsCollection, CONCURRENT_TASKS, function callJDS(clinic, jdsCallback) {
             logger.debug({
                 clinic: clinic
             });
+
             var clinicFields = clinic.split(RPC_FIELD_DELIMITER);
             var clinicIen = clinicFields[0];
             var clinicUid = locationUtil.getLocationUid(site, CLINICS_LOCATION_TYPE, clinicIen);
+
             var jdsOptions = _.extend({}, configuration.jdsServer, {
                 url: '/data/' + clinicUid,
                 timeout: 120000,
@@ -76,18 +86,28 @@ function callRpcRecursively(logger, configuration, retValue, searchString, callb
 
             http.get(jdsOptions, function processJDSResponse(jdsError, jdsResponseCode, jdsResponse) {
                 if (jdsError) {
-                    logger.debug({error: jdsError}, 'JDS returned an error');
+                    logger.debug({
+                        error: jdsError
+                    }, 'JDS returned an error');
                     return jdsCallback(jdsError);
                 }
 
                 if (_.isObject(jdsResponse)) {
                     if (jdsResponse.error) {
-                        logger.debug({error: jdsResponse.error}, 'The JDS response object contained an error');
+                        logger.debug({
+                            error: jdsResponse.error
+                        }, 'The JDS response object contained an error');
+                        if (_.get(jdsResponse, 'error.code') === 404) {
+                            // We don't want to give up just because one call fails, it could be a bad entry so we just
+                            // skip and move onto the next.
+                            return jdsCallback();
+                        }
                         return jdsCallback(jdsResponse.error);
                     }
 
-                    if (jdsResponse.data && jdsResponse.data.items) {
-                        var jdsClinic = jdsResponse.data.items[0];
+                    var jdsClinic = _.get(jdsResponse, 'data.items[0]');
+                    if (!_.isUndefined(jdsClinic)) {
+
                         clinics.push({
                             displayName: jdsClinic.displayName,
                             name: jdsClinic.name,
@@ -99,25 +119,15 @@ function callRpcRecursively(logger, configuration, retValue, searchString, callb
                 }
                 return jdsCallback('JDS response was not a JSON object.');
             });
-        }, function (err) {
+        }, function(err) {
             if (err) {
-                callback(err);
-            }
-
-            var localStartName = clinics.length > 0 ? _.last(clinics).name : null;
-            if (!validate.isStringNullish(localStartName)) {
-                localStartName = localStartName.toUpperCase();
-            }
-
-            var callAgain = false;
-            if (clinics.length >= MAX_RPC_RESULTS_RETURNED) {
-                callAgain = true;
+                return callback(err);
             }
 
             retValue = retValue.concat(clinics);
 
-            if (callAgain) {
-                callRpcRecursively(logger, configuration, retValue, localStartName, callback, params);
+            if (!_.isUndefined(lastResponseName)) {
+                callRpcRecursively(logger, configuration, retValue, lastResponseName, callback, params);
                 return;
             }
 
@@ -133,3 +143,5 @@ module.exports.fetch = function(logger, configuration, callback, params) {
     var initialSearchString = '';
     callRpcRecursively(logger, configuration, retValue, initialSearchString, callback, params);
 };
+
+module.exports._callRpcRecursively = callRpcRecursively;

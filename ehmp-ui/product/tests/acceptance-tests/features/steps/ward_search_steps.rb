@@ -42,8 +42,8 @@ When(/^the user selects a ward with patients$/) do
     p "attempt to click #{num_wards[i].text}"
     @choosen_ward = num_wards[i].text.upcase
     num_wards[i].click
+
     wait_until { ward_tray.ward_search_results_loaded? }
-    ward_tray.wait_for_fld_ward_dob_results
     break if ward_tray.fld_ward_dob_results.length > 0
   end
   expect(ward_tray.fld_ward_dob_results.length).to be > 0, "Could not find a ward with patients, searched #{attempt_num_wards} wards"
@@ -74,13 +74,13 @@ Then(/^the Ward Tray patient name search results are in format Last Name, First 
   end
 end
 
-Then(/^the Ward Tray date of birth search results are in format Date \(Agey\) \- Gender \(first letter\)$/) do
+Then(/^the Ward Tray date of birth search results are in format Date \(Agey\)$/) do
   ward_tray = PobStaffView.new
   dobs = ward_tray.fld_ward_result_dob_text
   expect(dobs.length).to be > 0
 
   dobs.each do | dob |
-    result = dob.match(/\d{2}\/\d{2}\/\d{4}  \(\d+y\)  - [MFU]/)
+    result = dob.match(/\d{2}\/\d{2}\/\d{4}  \(\d+y\)/)
     expect(result).to_not be_nil, "#{dob} did not match expected format"
   end
 end
@@ -179,4 +179,14 @@ When(/^user chooses to load a patient from the Ward results list$/) do
   ward_tray.fld_ward_dob_results[0].click
   expect(patient_search.perform_action("Confirm")).to be_true
   expect(wait_until_dom_has_confirmflag_or_patientsearch(120)).to be_true, "Patient selection did not complete successfully"
+end
+
+Then(/^the Ward Tray gender search results are in terms Male, Female or Unknown$/) do
+  staff_view = PobStaffView.new
+  allowable_genders = staff_view.allowable_genders
+  genders = staff_view.fld_ward_gender_results
+  expect(genders.length).to be > 0
+  genders.each do | temp_gender |
+    expect(allowable_genders).to include temp_gender.text.upcase
+  end
 end

@@ -3,7 +3,7 @@ define([
     'backbone',
     'marionette',
     'handlebars',
-    'main/ui_components/components',
+    'main/UILibrary',
     'api/UIComponents',
     'jasminejquery'
 ], function($, Backbone, Marionette, Handlebars, UI) {
@@ -78,6 +78,24 @@ define([
             it('contains the correct extra classes', function() {
                 expect(this.$form).toContainElement('fieldset.class1');
                 expect(this.$form).toContainElement('fieldset.class2');
+            });
+            it("update:config", function() {
+                this.$form.find('.control.form-group.selectList-control').trigger("control:update:config", {
+                    hidden: true,
+                    disabled: true,
+                    required: true
+                });
+                expect(this.$form.find('.control.form-group.selectList-control')).toHaveClass('hidden');
+                expect(this.$form.find('select')).toHaveAttr('disabled');
+                expect(this.$form.find('select')).toHaveAttr('required');
+                this.$form.find('.control.form-group.selectList-control').trigger("control:update:config", {
+                    hidden: false,
+                    disabled: false,
+                    required: false
+                });
+                expect(this.$form.find('.control.form-group.selectList-control')).not.toHaveClass('hidden');
+                expect(this.$form.find('select')).not.toHaveAttr('disabled');
+                expect(this.$form.find('select')).not.toHaveAttr('required');
             });
         });
 

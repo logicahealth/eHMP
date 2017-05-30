@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/components", "api/UIComponents", "jasminejquery"],
+define(["jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api/UIComponents", "jasminejquery"],
     function($, Handlebars, Backbone, Marionette, UI) {
 
         var $form, form;
@@ -192,7 +192,7 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                 it("contains correct label", function() {
                     expect($form.find('label').length).toBe(1);
                     expect($form.find('label')).toHaveText('input label');
-                    expect($form.find('label').attr('for')).toBe('inputValue');
+                    expect($form.find('label').attr('for')).toContain('inputValue');
                 });
                 it("contains correct placeholder", function() {
                     expect($form.find('input').length).toBe(1);
@@ -215,7 +215,7 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                     expect(form.model.get('inputValue')).toBe("Test Input String!");
                 });
                 it("contains correct id", function() {
-                    expect($form.find('input')).toHaveId('inputValue');
+                    expect($form.find('input').attr('id')).toContain('inputValue');
                 });
                 it("does not contain charCount span", function() {
                     expect($form.find('.input-char-count')).toHaveLength(0);
@@ -397,13 +397,13 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                     expect($form.find('.radio-units')[1]).toHaveText('C');
                 });
                 it("doesn't include unit until input has value", function() {
-                    $form.find('input:radio[id="inputValue-c-radio"]').click();
+                    $form.find('.input-control input:radio[value="c"]').click();
                     $form.find('input:radio').trigger('change)');
                     expect(form.model.get('inputValue')).toBe('');
                 });
                 it("it includes the correct unit in the value", function() {
-                    $form.find('input[id="inputValue"]').val('300').trigger('change');
-                    $form.find('input:radio[id="inputValue-c-radio"]').click();
+                    $form.find('input[name="inputValue"]').val('300').trigger('change');
+                    $form.find('.input-control input:radio[value="c"]').click();
                     $form.find('input:radio').trigger('change)');
                     expect(form.model.get('inputValue')).toBe('300c');
                     form.model.unset('inputValue');
@@ -454,7 +454,7 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                 it("label contains class of sr-only", function() {
                     expect($form.find('label').length).toBe(1);
                     expect($form.find('label')).toHaveText('input label');
-                    expect($form.find('label').attr('for')).toBe('inputValue');
+                    expect($form.find('label').attr('for')).toContain('inputValue');
                     expect($form.find('label')).toHaveClass('sr-only');
                 });
             });
@@ -537,13 +537,43 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                 });
                 it("title", function() {
                     $form.find('.inputValue').trigger("control:title", 'newTitle');
-                    expect($form.find('input')).toHaveAttr('title','newTitle');
+                    expect($form.find('input')).toHaveAttr('title', 'newTitle');
                     $form.find('.inputValue').trigger("control:title", '');
                     expect($form.find('input')).not.toHaveAttr('title');
                 });
                 it("maxlength", function() {
                     $form.find('.inputValue').trigger('control:maxlength', 10);
                     expect($form.find('input')).toHaveAttr('maxlength', '10');
+                });
+                it("update:config", function() {
+                    $form.find('.inputValue').trigger("control:update:config", {
+                        hidden: true,
+                        disabled: true,
+                        required: true,
+                        readonly: true,
+                        title: 'newTitle',
+                        maxlength: 10
+                    });
+                    expect($form.find('.inputValue')).toHaveClass('hidden');
+                    expect($form.find('input')).toHaveAttr('disabled');
+                    expect($form.find('input')).toHaveAttr('required');
+                    expect($form.find('input')).toHaveAttr('readonly');
+                    expect($form.find('input')).toHaveAttr('title', 'newTitle');
+                    expect($form.find('input')).toHaveAttr('maxlength', '10');
+                    $form.find('.inputValue').trigger("control:update:config", {
+                        hidden: false,
+                        disabled: false,
+                        required: false,
+                        readonly: false,
+                        title: '',
+                        maxlength: 100
+                    });
+                    expect($form.find('.inputValue')).not.toHaveClass('hidden');
+                    expect($form.find('input')).not.toHaveAttr('disabled');
+                    expect($form.find('input')).not.toHaveAttr('required');
+                    expect($form.find('input')).not.toHaveAttr('readonly');
+                    expect($form.find('input')).not.toHaveAttr('title');
+                    expect($form.find('input')).toHaveAttr('maxlength', '100');
                 });
             });
             describe("with error", function() {
@@ -556,7 +586,7 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                     $("body").append($form);
                 });
                 it("contains error", function() {
-                    form.model.errorModel.set('inputValue','Example error');
+                    form.model.errorModel.set('inputValue', 'Example error');
                     expect($form.find('span.error')).toExist();
                     expect($form.find('span.error')).toHaveText('Example error');
                 });

@@ -73,7 +73,7 @@ public class SimpleServer {
 		return ss;
 	}
 	
-	private static String response = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:vaww=\"http://vaww.oed.oit.va.gov\">"+
+	private static String response = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:vaww=\"http://URL         .DNS   \">"+
 	   "<soapenv:Header/>"+
 	   "<soapenv:Body>" +
 	      "<vaww:PRPA_IN201310UV02>" +

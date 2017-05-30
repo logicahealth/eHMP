@@ -6,6 +6,7 @@ var _ = require('underscore');
 var handle = require(global.VX_HANDLERS + 'store-record-request/store-record-request-handler');
 var store = handle.store;
 var logger = require(global.VX_DUMMIES + 'dummy-logger');
+var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
 
 // NOTE: be sure next line is commented out before pushing
 // logger = require('bunyan').createLogger({
@@ -16,23 +17,19 @@ var logger = require(global.VX_DUMMIES + 'dummy-logger');
 describe('store-record-request-handler.js', function() {
     var environment = {};
     environment.publisherRouter = {
-        'publish': function(jobsToPublish,callback) {
+        'publish': function(jobsToPublish, callback) {
             callback(null, [1]);
         }
     };
     environment.metrics = logger;
-    environment.jds = {
-        'storePatientDataFromJob': jasmine.createSpy().andCallFake(function(job, callback) {
-            callback(null, {
-                'statusCode': 201
-            });
-        }),
-        'storePatientData': jasmine.createSpy().andCallFake(function(record, callback) {
-            callback(null, {
-                'statusCode': 201
-            });
-        })
-    };
+
+    var jdsClientDummy = new JdsClientDummy(logger, environment.metrics, {});
+    jdsClientDummy._setResponseData([null], [{
+        statusCode: 201
+    }], [null]);
+
+    environment.jds = jdsClientDummy;
+
     environment.solr = {
         'add': jasmine.createSpy().andCallFake(function(doc, callback) {
             callback(null);
@@ -71,11 +68,17 @@ describe('store-record-request-handler.js', function() {
             'value': '9E7A;3'
         };
 
+        var referenceInfo = {
+            'sessionId': 'test-session-id',
+            'requestId': 'test-request-id'
+        };
+
         var storageJob = {
             'patientIdentifier': patientIdentifier,
             'record': demographicsRecord,
             'jpid': '21EC2020-3AEA-4069-A2DD-08002B30309D',
-            'type': 'store-record-request'
+            'type': 'store-record-request',
+            'referenceInfo': referenceInfo
         };
         it('handles a store-record-request job', function() {
             spyOn(environment.publisherRouter, 'publish').andCallThrough();
@@ -85,6 +88,21 @@ describe('store-record-request-handler.js', function() {
                     expect(error).toBeNull();
                     expect(result).toEqual('success');
                     expect(environment.publisherRouter.publish).toHaveBeenCalled();
+                    expect(environment.publisherRouter.publish).toHaveBeenCalledWith([jasmine.objectContaining({
+                        type: 'publish-data-change-event',
+                        timestamp: jasmine.any(String),
+                        patientIdentifier: patientIdentifier,
+                        referenceInfo: referenceInfo,
+                        record: demographicsRecord,
+                        jobId: jasmine.any(String)
+                    }), jasmine.objectContaining({
+                        type: 'solr-record-storage',
+                        timestamp: jasmine.any(String),
+                        patientIdentifier: patientIdentifier,
+                        referenceInfo: referenceInfo,
+                        record: demographicsRecord,
+                        jobId: jasmine.any(String)
+                    })], jasmine.any(Function));
                     finished = true;
                 }, function() {});
             });
@@ -124,18 +142,12 @@ describe('store-record-request-handler.js', function() {
                 }
             };
             environment.metrics = logger;
-            environment.jds = {
-                'storePatientDataFromJob': jasmine.createSpy().andCallFake(function(job, callback) {
-                    callback(null, {
-                        'statusCode': 201
-                    });
-                }),
-                'storePatientData': jasmine.createSpy().andCallFake(function(record, callback) {
-                    callback(null, {
-                        'statusCode': 201
-                    });
-                })
-            };
+            var jdsClientDummy = new JdsClientDummy(logger, environment.metrics, {});
+            jdsClientDummy._setResponseData([null], [{
+                statusCode: 201
+            }], [null]);
+
+            environment.jds = jdsClientDummy;
             environment.solr = {
                 'add': jasmine.createSpy().andCallFake(function(doc, callback) {
                     callback(null);

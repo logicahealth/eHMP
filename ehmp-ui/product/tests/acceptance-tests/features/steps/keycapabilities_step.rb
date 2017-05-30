@@ -119,8 +119,8 @@ end
 
 def refresh_zombie_tooltips(patient_search = nil)
   tooltips = ToolTips.new.clear_all_tool_tips
-  p "visible tooltips that may cause test interference" unless tooltips
-  take_screenshot "visible_tooltips_#{Time.now}" unless tooltips
+  # p "visible tooltips that may cause test interference" unless tooltips
+  # take_screenshot "visible_tooltips_#{Time.now}" unless tooltips
 end
 
 def need_refresh_de2106(patient_search)
@@ -213,6 +213,22 @@ Given(/^user searches for and selects "(.*?)"$/) do |search_value|
   if ehmp.has_chk_previous_workspace?
     ehmp.chk_previous_workspace.click if ehmp.chk_previous_workspace.checked?
     p "resume recent workspace checkbox is INCORRECTLY checked.  May cause failure!" if ehmp.chk_previous_workspace.checked?
+  end
+  expect(patient_search.perform_action("Confirm")).to be_true
+  expect(wait_until_dom_has_confirmflag_or_patientsearch).to be_true, "Patient selection did not complete successfully"
+end
+
+When(/^user searches for, selects "([^"]*)" and chooses to resume most recent workspace$/) do |search_value|
+  ehmp = PobPatientSearch.new
+  patient_search = PatientSearch2.instance
+
+  perform_patient_search_and_selection search_value
+  expect(ehmp.wait_for_fld_confirm_modal).to eq(true), "Patient Confirmation box did not display"
+  ehmp.wait_for_chk_previous_workspace(2) # deliberately don't expect it
+
+  if ehmp.has_chk_previous_workspace?
+    ehmp.chk_previous_workspace.click unless ehmp.chk_previous_workspace.checked?
+    p "resume recent workspace checkbox is INCORRECTLY unchecked.  May cause failure!" unless ehmp.chk_previous_workspace.checked?
   end
   expect(patient_search.perform_action("Confirm")).to be_true
   expect(wait_until_dom_has_confirmflag_or_patientsearch).to be_true, "Patient selection did not complete successfully"

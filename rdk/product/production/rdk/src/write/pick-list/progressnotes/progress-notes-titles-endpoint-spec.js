@@ -20,7 +20,7 @@ var dummyLogger = {
 describe('progress-notes-titles-endpoint', function() {
     var mockConfiguration = {
         asuServer: {
-            baseUrl: 'http://10.3.3.6:9000',
+            baseUrl: 'http://IP           ',
             timeout: '30000'
         }
     };

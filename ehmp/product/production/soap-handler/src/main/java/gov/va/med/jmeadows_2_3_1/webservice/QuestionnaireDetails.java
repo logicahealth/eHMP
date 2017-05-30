@@ -19,9 +19,9 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="answers" type="{http://webservice.vds.med.va.gov/}questionnaireDetailAnswers" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="choices" type="{http://webservice.vds.med.va.gov/}questionnaireDetailChoices" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="comments" type="{http://webservice.vds.med.va.gov/}questionnaireDetailComments" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="answers" type="{http://webservice.vds.URL       /}questionnaireDetailAnswers" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="choices" type="{http://webservice.vds.URL       /}questionnaireDetailChoices" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="comments" type="{http://webservice.vds.URL       /}questionnaireDetailComments" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="question" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sequence" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "questionnaireDetails", namespace = "http://webservice.vds.med.va.gov/", propOrder = {
+@XmlType(name = "questionnaireDetails", namespace = "http://webservice.vds.URL       /", propOrder = {
     "answers",
     "choices",
     "comments",

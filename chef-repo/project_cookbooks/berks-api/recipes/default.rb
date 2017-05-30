@@ -10,14 +10,17 @@ end
 package "libarchive-devel"
 
 gem_package "hashie" do
+  gem_binary node[:'berks-api'][:gem_binary]
   version "2.1.0"
 end
 
 gem_package "http" do
+  gem_binary node[:'berks-api'][:gem_binary]
   version "0.9.8"
 end
 
 gem_package "berkshelf-api" do
+  gem_binary node[:'berks-api'][:gem_binary]
   version "2.2.0"
 end
 
@@ -42,4 +45,16 @@ end
 
 berks_api_wait_for_connection "berks-api to be available" do
   url node[:'berks-api'][:berkshelf_api_url]
+  notifies :stop, "service[berks-api]", :immediately
+  notifies :disable, "service[berks-api]", :immediately
+end
+
+sudo "jenkins" do
+  user      "jenkins"
+  commands  [
+    "/sbin/service berks-api start",
+    "/sbin/service berks-api stop",
+    "/sbin/service berks-api restart"
+  ]
+  nopasswd true
 end

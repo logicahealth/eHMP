@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main/ui_components/components", "api/UIComponents", "jasminejquery"],
+define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api/UIComponents", "jasminejquery"],
     function(Messaging, $, Handlebars, Backbone, Marionette, UI) {
 
         var $testPage,
@@ -507,8 +507,8 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                         view: new UI.Form({
                             model: formModel_1,
                             fields: [_.defaults({
-                            selectedCountName: 'msbs-count'
-                        }, msbs_definition_basic)]
+                                selectedCountName: 'msbs-count'
+                            }, msbs_definition_basic)]
                         })
                     });
                     testPage = testPage.render();

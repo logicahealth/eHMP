@@ -1,0 +1,33 @@
+.patient-search-tray-list {
+	table.table-view--patient-selection {
+		&.adjust-table-container {
+			margin: 0 -20px -20px -20px;
+			thead {
+				padding: 0 20px;
+			}
+			tbody {
+				tr {
+					padding: 0 20px;
+					td {
+						padding: 10px 5px;
+					}
+                    &:last-child {
+                        border: none;
+                    }
+				}
+				&.no-scroll tr {
+					padding-right: 35px;
+				}
+			}
+		}
+	}
+	form.adk-form {
+		fieldset legend {
+			font-weight: normal;
+    		margin-bottom: 15px;
+		}
+		legend, label {
+			text-transform: initial;
+		}
+	}
+}

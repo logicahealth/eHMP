@@ -48,7 +48,7 @@ define([
                         case 'EDIT':
                             var fullUserId = user.get('site') + ';' + user.get('duz')[user.get('site')];
 
-                            if (model.has('userID') && (model.get('userID') === fullUserId)) {
+                            if (model.has('userID') && (model.get('userID') === fullUserId) && ADK.UserService.hasPermissions('edit-coordination-request&edit-task&add-task')) {
                                 actionButtons.push({
                                     signal: action,
                                     label: 'Edit Request'

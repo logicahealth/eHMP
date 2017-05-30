@@ -264,7 +264,7 @@ Scenario: Patient view, consult applet requests "Related to me" and display only
 Scenario:  Staff View, verify createdByMe and intendedForMeAndMyTeams UNSIGNED consult - Physical Therapy
   Given a patient with pid "9E7A;100728" has been synced through the RDK API
   And the client has the current deploymentid
-  And the user "9E7A;vk1234" has started a consult with parameters
+  And the user "REDACTED" has started a consult with parameters
       | parameters                   | value                                      |
       | icn                          | 9E7A;100728                                |
       | assignedTo                   | [FC:PANORAMA(500)/TF:Physical Therapy(81)] |
@@ -278,7 +278,7 @@ Scenario:  Staff View, verify createdByMe and intendedForMeAndMyTeams UNSIGNED c
   And a successful response is returned
   And the successful response contains a processInstanceId 
 
-  When the user "9E7A;pu1234" requests open activities for the staff context
+  When the user "REDACTED" requests open activities for the staff context
       | extra parameter         | value |
       | intendedForMeAndMyTeams | true  |
       | domain|Consult|
@@ -299,7 +299,7 @@ Scenario:  Staff View, verify createdByMe and intendedForMeAndMyTeams UNSIGNED c
       | INTENDEDFOR          | Physical Therapy                           |
       | PATIENTNAME          | TWENTY,INPATIENT                           |
 
-  When the user "9E7A;vk1234" requests open activities for the staff context
+  When the user "REDACTED" requests open activities for the staff context
       | extra parameter         | value |
       | createdByMe             | true  |
       | domain|Consult|

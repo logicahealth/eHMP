@@ -1,13 +1,16 @@
 define([
     'underscore',
+    'backbone',
+    'handlebars',
     'moment',
     'app/applets/task_forms/common/views/activityOverview',
     'app/applets/task_forms/activities/simple_activity/utils/popupView',
     'app/applets/orders/tray/requests/requestTrayUtils',
     'hbs!app/applets/task_forms/activities/simple_activity/templates/lockedModalFooterTemplate',
     'app/applets/todo_list/statusView',
+    'app/applets/todo_list/statusNotCompletedView',
     'hbs!app/applets/todo_list/templates/statusModalFooterTemplate'
-], function(_, moment, ActivityOverview, PopupView, RequestTrayUtils, LockedModalFooterTemplate, StatusView, StatusModalFooterTemplate) {
+], function(_, Backbone, Handlebars, moment, ActivityOverview, PopupView, RequestTrayUtils, LockedModalFooterTemplate, StatusView, StatusNotCompletedView, StatusModalFooterTemplate) {
     "use strict";
 
     function resolveHelper(response, modalView, footerView, closeOnESC) {
@@ -74,44 +77,21 @@ define([
                 var ownerId = taskObj.get('actualOwnerId');
                 var processInstanceId = taskObj.get('processInstanceId');
                 taskObj.set('lockedDate', moment(taskObj.get('statusTimeStamp')).format('MM/DD/YYYY HH:mm'));
-                if (status === 'Completed') {
-                    var headerView = Backbone.Marionette.ItemView.extend({
-                        template: Handlebars.compile('<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-check color-secondary right-padding-sm" aria-hidden="true"></i>Task Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>')
-                    });
-
-                    var footerView = Backbone.Marionette.ItemView.extend({
-                        template: StatusModalFooterTemplate,
-                        model: new Backbone.Model({
-                            params: {
-                                processId: processInstanceId
-                            }
-                        }),
-                        events: {
-                            'click #activDetailBtn': 'activDetail'
-                        },
-                        event: event,
-                        activDetail: function(event) {
-                            event.preventDefault();
-                            ADK.Messaging.getChannel('task_forms').request('activity_detail', this.model.get('params'));
-                        }
-                    });
-
-                    var reason = 'This task was completed and no further actions are required.';
-                    var modalModel = {
-                        reason: reason
-                    };
-                    var view = new StatusView({
-                        model: new Backbone.Model(modalModel)
-                    });
-                    var modalOptions = {
-                        'size': 'normal',
-                        'headerView': headerView,
-                        'footerView': footerView
-                    };
-                    var modal = new ADK.UI.Modal({
-                        view: view,
-                        options: modalOptions
-                    });
+                var taskName = taskObj.get('name');
+                var modal;
+                var hasEditRequestPermission = ADK.UserService.hasPermissions('edit-coordination-request');
+                var hasRespondRequestPermission = ADK.UserService.hasPermissions('respond-coordination-request');
+                var isReviewRequest = (taskName === 'Review');
+                var isResponseRequest = (taskName === 'Response');
+                var hasEditPermissions = !isReviewRequest || hasEditRequestPermission;
+                var hasRespondPermissions = !isResponseRequest || hasRespondRequestPermission;
+                if (!hasEditPermissions || !hasRespondPermissions) {
+                    //Task can not be completed
+                    modal = taskModal(false, processInstanceId);
+                    modal.show();
+                } else if (status === 'Completed') {
+                    //The cask can be completed
+                    modal = taskModal(true, processInstanceId);
                     modal.show();
                 } else if (status === 'Ready' || (status === 'Reserved' && (ownerId === userId)) || (status === 'InProgress' && (ownerId === userId))) {
                     //If the task isn't 'locked' proceed to form
@@ -123,7 +103,6 @@ define([
                         params.formModel = taskObj;
                         ADK.Messaging.getChannel('task_forms').trigger('Consult.Review', params);
                     }
-
                 } else {
                     //Else we need to show the locked modal and ask if the user wants to unlock the task.
                     lockModal(params, taskObj);
@@ -131,6 +110,56 @@ define([
             }
         };
         ADK.ResourceService.fetchCollection(fetchOptions);
+    };
+
+    var taskModal = function(canBeCompleted, processInstanceId) {
+        var headerView = Backbone.Marionette.ItemView.extend({
+            template: function() {
+                var template = '';
+                if (canBeCompleted) {
+                    template = '<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-check color-secondary right-padding-sm" aria-hidden="true"></i>Task Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>';
+                } else {
+                    template = '<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-ban font-size-18 color-red-dark right-padding-xs" aria-hidden="true"></i>Task Cannot Be Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>';
+                }
+                return Handlebars.compile(template);
+            }
+        });
+        var footerView = Backbone.Marionette.ItemView.extend({
+            template: StatusModalFooterTemplate,
+            model: new Backbone.Model({
+                params: {
+                    processId: processInstanceId
+                }
+            }),
+            events: {
+                'click #activDetailBtn': 'activDetail'
+            },
+            activDetail: function(event) {
+                event.preventDefault();
+                ADK.Messaging.getChannel('task_forms').request('activity_detail', this.model.get('params'));
+            }
+        });
+        var view = new StatusNotCompletedView({
+            model: new Backbone.Model({
+                reason: canBeCompleted && 'This task was completed and no further actions are required.',
+                icon: !canBeCompleted && 'fa-exclamation-circle',
+                color: !canBeCompleted && 'color-red'
+            })
+        });
+        var modalOptions = {
+            'size': 'xsmall',
+            'headerView': headerView,
+            'footerView': footerView
+        };
+        if (!canBeCompleted) {
+            modalOptions.size = 'normal';
+        }
+        var modal = new ADK.UI.Modal({
+            view: view,
+            options: modalOptions
+        });
+
+        return modal;
     };
 
     //If task is 'locked' this is the code that's run before the form is launched.
@@ -184,7 +213,7 @@ define([
                         criteria: {
                             taskid: this.model.get('id').toString(),
                             deploymentId: this.model.get('deploymentId'),
-                            state: "release",
+                            state: 'release',
                             parameter: {}
                         },
                     };

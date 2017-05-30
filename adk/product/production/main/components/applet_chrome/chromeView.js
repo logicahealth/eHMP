@@ -198,7 +198,7 @@ define([
             }
             //Create Add Button View
             // - if the view being displayed has a onClickAdd method
-            if (this.appletView.hasOwnProperty('onClickAdd')) {
+            if (this.addEnabled()) {
                 this.buttonCollection.add(new ButtonViewModel({
                     id: 'add-button',
                     view: AddButtonView
@@ -213,8 +213,10 @@ define([
                 this.buttonCollection.add(new ButtonViewModel({
                     id: 'filter-button',
                     instanceId: this.model.get('instanceId'),
-                    buttonMsg: 'Press enter to activate filter',
-                    view: FilterButtonView
+                    buttonMsg: 'Press enter to collapse filter.',
+                    view: FilterButtonView.extend({
+                        filterView: _.get(this, 'appletView.filterView', _.get(this, 'appletView.filterDateRangeView', null))
+                    })
                 }));
             }
             //Create the cog icon Options Button View
@@ -243,9 +245,9 @@ define([
             this.model.set('viewType', appletControllerModel.get('currentViewType'));
             this.resetButtons();
 
-            this.$el.find(".applet-div-chrome-container").removeClass("hide");
+            this.$el.find(".applet-chrome-body").removeClass("hide");
             this.$el.find(".switchboard-container").addClass("hide");
-            this.$el.find(".grid-applet-heading").toggleClass("optionsPanelStyle panel-heading");
+            this.$el.find(".applet-chrome-header").toggleClass("optionsPanelStyle panel-heading");
 
             if (this.$el.find(".panel-title-label").text().indexOf("- Select a View") > -1) {
                 this.$el.find(".panel-title-label").text(this.model.attributes.title);
@@ -272,13 +274,23 @@ define([
         },
         template: containerTemplate,
         behaviors: {
-            Tooltip: {}
+            Tooltip: {},
+            ErrorContext: {
+                title: function() {
+                    return _.get(this, 'appletScreenConfig.title');
+                },
+                details: function() {
+                    return {
+                        appletConfig: _.get(this, 'appletScreenConfig')
+                    };
+                }
+            }
         },
         regions: {
-            NotificationContainer: '.panel-title-notification',
-            appletDiv: '.applet-div-chrome-container',
+            NotificationContainer: '.applet-chrome-title-notification',
+            appletDiv: '.applet-chrome-body',
             buttonRegion: '.right-button-region',
-            chromeFooter: '.grid-footer',
+            chromeFooter: '.applet-chrome-footer',
             switchboardContainer: '.switchboard-container'
         },
         events: {
@@ -305,7 +317,7 @@ define([
         isTitleEditable: function() {
             var isUserDefinedWorkspace = !Messaging.request('get:current:screen').config.predefined;
             var isStackedGraphApplet = this.model.id === 'stackedGraph';
-            var isInRegularViewModeNotInSettingsMode = $('.panel-heading.grid-applet-heading', this.$el).length;
+            var isInRegularViewModeNotInSettingsMode = $('.panel-heading.applet-chrome-header', this.$el).length;
             return isUserDefinedWorkspace && isStackedGraphApplet && isInRegularViewModeNotInSettingsMode;
         },
         saveTitle: function() {
@@ -347,8 +359,10 @@ define([
             setEditable = setEditable === undefined ? true : setEditable;
             var panelTitleLabel = this.getPanelTitleLabel();
             var panelTitleLabelWidth = panelTitleLabel.width();
+            this.$('form.custom-applet-header-form').attr('aria-hidden', setEditable);
             this.setVisible(panelTitleLabel, !setEditable);
             var panelTitleTextbox = this.getPanelTitleTextbox();
+            this.$('form.custom-applet-header-form').attr('aria-hidden', !setEditable);
             this.setVisible(panelTitleTextbox, setEditable);
             panelTitleTextbox.width(350);
 
@@ -368,6 +382,15 @@ define([
             }
             return false;
         },
+        addEnabled: function() {
+            var method = null;
+            if (this.appletView.hasOwnProperty('onClickAdd')){
+                method = this.appletView.onClickAdd;
+            } else if (_.get(this, 'eventMapper.add', false)) {
+                method = this.appletView[this.eventMapper.add];
+            }
+            return _.isFunction(method);
+        },
         helpEnabled: function() {
             var url = getHelpUrl(this.appletView);
             return (url !== "");
@@ -383,13 +406,12 @@ define([
             ADK.SessionStorage.setAppletStorageModel(instanceId, 'filterName', filterName, true, workspaceId);
 
             var maximizeScreenId = this.model.get('maximizeScreen');
-            var filterText = ADK.SessionStorage.getAppletStorageModel(instanceId, 'filterText', true) || '';
+            var filterText = SessionStorage.getAppletStorageModel(instanceId, 'filterText', true) || '';
 
             ADK.Messaging.reply("applet:maximized", function() {
                 return new MaximizedAppletModel({
                     instanceId: instanceId,
                     workspaceId: workspaceId,
-                    filterName: filterName,
                     filterText: filterText
                 });
             });
@@ -400,7 +422,10 @@ define([
                 'id': this.options.appletConfig.instanceId
             }));
 
-            Navigation.navigate(maximizeScreenId, {fromMinimizedToMaximized: true});
+            Navigation.navigate(maximizeScreenId, {
+                fromMinimizedToMaximized: true,
+                textFilter: filterText
+            });
         },
         minimizeApplet: function(event) {
             $('.tooltip').tooltip('hide');
@@ -417,7 +442,7 @@ define([
             }
         },
         toggleClasses_SwitchBoard_show_hide: function() {
-            this.$el.find(".grid-applet-heading").toggleClass("optionsPanelStyle panel-heading");
+            this.$el.find(".applet-chrome-header").toggleClass("optionsPanelStyle panel-heading");
             this.$el.find(".grid-filter, .grid-toolbar").toggleClass("hide");
             _.forEach(this.buttonCollection.models, function(buttonModel) {
                 this.$el.find(".grid-" + buttonModel.get('id')).toggleClass("hide");
@@ -451,7 +476,7 @@ define([
             };
             var SwitchboardView = Messaging.request('switchboard : display', switchboardOptions);
             this.switchboardContainer.show(SwitchboardView);
-            this.$el.find(".applet-div-chrome-container").addClass("hide");
+            this.$el.find(".applet-chrome-body").addClass("hide");
             this.$el.find(".switchboard-container").removeClass("hide");
             this.toggleClasses_SwitchBoard_show_hide();
             this.$('.options-panel').append('<li><button type="button" title="Press enter to close." class="applet-exit-options-button btn btn-sm btn-icon"><i class="fa fa-close"></i></button></li>');
@@ -459,7 +484,7 @@ define([
         },
         closeSwitchboard: function(event) {
             this.toolTipHide(event);
-            this.$el.find(".applet-div-chrome-container").removeClass("hide");
+            this.$el.find(".applet-chrome-body").removeClass("hide");
             this.$el.find(".switchboard-container").addClass("hide");
             this.toggleClasses_SwitchBoard_show_hide();
             this.switchboardContainer.reset();

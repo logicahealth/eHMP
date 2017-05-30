@@ -12,7 +12,7 @@ var wConfig = require(global.VX_ROOT + 'worker-config');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 
 var host = require(global.VX_INTTESTS + 'test-config');
-var port = 5000;
+var port = PORT;
 
 function loadTestPatient(config, patientIdentifierValue) {
     var completed = false;
@@ -88,8 +88,8 @@ describe('get-patient-demographics', function() {
                 },
                 jds: _.defaults(wConfig.jds, {
                     protocol: 'http',
-                    host: '10.2.2.110',
-                    port: 9080
+                    host: 'IP        ',
+                    port: PORT
                 })
             };
 

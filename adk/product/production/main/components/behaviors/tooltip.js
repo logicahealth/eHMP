@@ -52,7 +52,7 @@ define([
             }, this);
         },
         onBeforeDestroy: function() {
-            this.ui.$tooltip.tooltip('destroy');
+            if(_.isObject(this.ui.$tooltip)) this.ui.$tooltip.tooltip('destroy');
         }
     });
 

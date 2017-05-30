@@ -237,7 +237,7 @@ function createReport(jdsItem, item) {
     var siteHash = fhirUtils.getSiteHash(jdsItem.uid);
     var result = {
         resourceType: 'DiagnosticReport',
-        id: item.uid,
+        id: fhirResource.fixId(item.uid),
         text: {
             status: 'generated',
             div: '<div>' + _.escape(item.localTitle) + '</div>'

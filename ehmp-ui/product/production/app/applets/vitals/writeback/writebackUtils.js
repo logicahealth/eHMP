@@ -22,8 +22,11 @@ define([
             }
 
             saveVitalsModel.set('dateTime', dateTaken);
-
             saveVitalsModel.set('pid', currentPatient.get('pid'));
+
+            if (currentPatient.has('localId')) {
+                saveVitalsModel.set('dfn', currentPatient.get('localId'));
+            }
             if (visit) {
                 saveVitalsModel.set('locationUid', visit.locationUid);
             }

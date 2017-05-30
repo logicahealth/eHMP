@@ -17,14 +17,14 @@ function handle(log, config, environment, job, handlerCallback, touchBack) {
         log.debug('store-record-request-handler.handle: Valid job received');
     }
 
-    realStoreRecord(log, environment, job.dataDomain, job.patientIdentifier, job.record, handlerCallback, touchBack, true);
+    realStoreRecord(log, environment, job.dataDomain, job.patientIdentifier, job.record, handlerCallback, touchBack, true, job);
 }
 
 function storeRecord(log, environment, domain, patientIdentifier, record, callback) {
     realStoreRecord(log, environment, domain, patientIdentifier, record, callback, function() {}, false);
 }
 
-function realStoreRecord(log, environment, domain, patientIdentifier, record, callback, touchBack, calledByHandler) {
+function realStoreRecord(log, environment, domain, patientIdentifier, record, callback, touchBack, calledByHandler, job) {
     if (_.isUndefined(record)) {
         log.error('store-record-request-handler.handle: Missing record.  Record: %j', record);
         return callback(errorUtil.createFatal('Missing record', record));
@@ -48,7 +48,7 @@ function realStoreRecord(log, environment, domain, patientIdentifier, record, ca
     ];
 
     if(calledByHandler){
-        tasks.push(publish.bind(null, environment, patientIdentifier, domain, record));
+        tasks.push(publish.bind(null, environment, patientIdentifier, domain, record, job));
     }
 
     log.debug('store-record-request-handler.handle: Storing to JDS: %j', record);
@@ -82,6 +82,7 @@ function storeJds(log, environment, record, callback) {
     };
     environment.metrics.warn('Store record in JDS', metricsObj);
     metricsObj.timer = 'stop';
+
     environment.jds.storePatientData(record, function(error, response, body) {
         log.debug('store-record-request-handler.handle: JDS response code: %s', (response ? response.statusCode : undefined));
         if (error) {
@@ -107,15 +108,19 @@ function callTouchBack(touchBack, callback) {
     callback();
 }
 
-function publish(environment, patientIdentifier, domain, record, callback) {
-    // var meta = {
-    //     jpid: job.jpid,
-    //     rootJobId: job.rootJobId,
-    //     param: job.param
-    // };
+function publish(environment, patientIdentifier, domain, record, job, callback) {
+    var meta = {
+        jobId: job.jobId,
+        rootJobId: job.rootJobId,
+        priority: job.priority
+    };
+    if(job.referenceInfo){
+        meta.referenceInfo = job.referenceInfo;
+    }
+
     var jobsToPublish = [
-        jobUtil.createPublishVxDataChange(patientIdentifier, domain, record),
-        jobUtil.createSolrRecordStorage(patientIdentifier, domain, record)
+        jobUtil.createPublishVxDataChange(patientIdentifier, domain, record, meta),
+        jobUtil.createSolrRecordStorage(patientIdentifier, domain, record, meta)
     ];
     environment.publisherRouter.publish(jobsToPublish, callback);
 }

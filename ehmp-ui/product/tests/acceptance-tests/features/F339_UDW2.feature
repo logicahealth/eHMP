@@ -113,7 +113,7 @@ Scenario: Workspace title needs to accommodate 30 characters
     When the user creates a user defined workspace and sets the title to a string of length 30
     Then the user defined workspace name is listed
 
-@US4514 @DE5904
+@US4514 @DE5904 @debug @DE7306
 Scenario: UDW:  Deleting an active work space
     # Given user is logged into eHMP-UI
     And user searches for and selects "BCMA,EIGHT"
@@ -141,7 +141,7 @@ Scenario: UDW:  Deleting an active work space
     And the user closes the workspace manager to save workspace updates
 
 @US4444 
-Scenario: UDW:  Gridsterize Pre-defined Workspaces
+Scenario: UDW:  Gridsterize Pre-defined Workspaces 
     # Given user is logged into eHMP-UI
     And user searches for and selects "BCMA,EIGHT"
     Then Overview is active

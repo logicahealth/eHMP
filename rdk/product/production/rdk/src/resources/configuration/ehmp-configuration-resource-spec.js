@@ -39,6 +39,6 @@ describe('Configuration', function() {
         });
         resource.test._get(req, res);
         expect(res.rdkSend.called).to.be.true();
-        expect(res.rdkSend.calledWith(err)).to.be.true();
+        expect(res.rdkSend.calledWithMatch(err)).to.be.true();
     });
 });

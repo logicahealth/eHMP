@@ -3,6 +3,22 @@ Feature: F144 - eHMP Viewer GUI - Documents
 
 #POC:Team Jupiter
 
+@f144_documents_dod_note_modal_details @data_specific @DE3038 @DE4549
+Scenario: Users will be able to view modal popup for event Progress Note DoD*
+  And user searches for and selects "Onehundredsixteen,Patient"
+  And the user has selected All within the global date picker
+  When user navigates to Documents Applet
+  Then "Documents" is active
+  Given there is at least one document of type "Progress Note"
+  When the user views the first Documents event "Progress Note" detail view
+  Then a modal with the title "progress note" is displayed
+  And the Documents event "Progress Note DoD*" Detail modal displays 
+      | modal item      |
+      | Facility    |
+      | Author      |
+      | Status      |
+      | Date/Time   |
+
 @f144_1_documents_default_display @US1914 @DE1480 @debug @DE1735
 Scenario: progress notes, clinical procedure and discharge summary are displayed in document applet
   Given user is logged into eHMP-UI

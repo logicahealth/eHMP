@@ -126,8 +126,10 @@ Then(/^POB user saves the note "(.*?)"$/) do |note_title|
   ehmp = PobNotes.new
   ehmp.wait_until_btn_close_visible
   expect(ehmp).to have_btn_close
+  wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+  wait.until { ehmp.btn_close.disabled? != true }
   ehmp.btn_close.click
-  verify_and_close_growl_alert_pop_up("Note Saved")
+  verify_and_close_growl_alert_pop_up("Note Draft Saved")
   ehmp.wait_for_fld_unsigned_notes_section
   ehmp.wait_until_fld_unsigned_notes_section_visible
   expect(ehmp.fld_unsigned_notes_section).to have_text(note_title)
@@ -200,16 +202,31 @@ Then(/^POB user deletes all unsigned notes created$/) do
   ehmp = PobNotes.new
   ehmp.wait_until_fld_unsigned_notes_section_visible
   ehmp.wait_until_fld_unsigned_notes_list_visible
-  i = 0
+#  p "Length of unsigned notes is = "
+#  p ehmp.fld_unsigned_notes_list.length
+  i = ehmp.fld_unsigned_notes_list.length
   until ehmp.fld_unsigned_notes_list[i].text.include? "No Unsigned Notes." 
 #    print "i = "
 #    p i
 #    print "Note Details = "
 #    p ehmp.fld_unsigned_notes_list[i].text
-    ehmp.fld_unsigned_notes_list[i].click 
+    max_attempt = 3
+    begin
+      p ehmp.fld_unsigned_notes_list[i].text
+      ehmp.fld_unsigned_notes_list[i].click 
+    rescue => e
+      max_attempt-=1
+      raise e if max_attempt <= 0
+      retry if max_attempt > 0
+    end
     wait = Selenium::WebDriver::Wait.new(:timeout => 5)
     wait.until { ehmp.fld_note_body.disabled? == false }
     delete_unsigned_note
+    i = i-1
+    if i < 0
+      break
+    end
+    ehmp.wait_for_fld_unsigned_notes_list
   end 
   expect(ehmp.fld_unsigned_notes_section).to have_text("No Unsigned Notes.")
 end

@@ -200,4 +200,14 @@ Scenario: User views the problems gist modal pop-up from expand view
     And the user views a problem applet row's details
     Then the modal is displayed
     And the modal's title is "Diabetes Mellitus Type II or unspecified"
+    
+@f282_problems_Column_Sorting_facility @F282-9.1 @US4684
+Scenario: Problems Gist Applet is sorted by the column header Last
+  And user searches for and selects "ZZZRETFOURFIFTYEIGHT,PATIENT"
+  Then Overview is active
+  And Problems trend view has data rows
+  And the user sorts the Problems trend view applet by column Facility
+  Then the Problems trend view applet is sorted in alphabetic order based on Facility
+  And the user sorts the Problems trend view applet by column Facility
+  And the Problems trend view applet is sorted in reverse alphabetic order based on Facility 
   

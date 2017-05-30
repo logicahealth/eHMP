@@ -12,7 +12,7 @@ require.config({
         'highcharts': 'highcharts/highstock.src',
         'highcharts-more': 'highcharts/highcharts-more.src',
         'pattern-fill': 'highcharts/pattern-fill',
-        'async': 'node_modules/async/lib/async',
+        'async': 'node_modules/async/dist/async',
 
         // Plugins
         'jasminejquery': 'node_modules/jasmine-jquery/lib/jasmine-jquery',

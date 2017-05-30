@@ -21,6 +21,7 @@ def environment_endpoints(env)
     ENV["RDK_WRITEBACK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "write_back", "port"], "default")
     ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server")
     ENV["RDK_PICKLIST_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "pick_list", "port"], "default")
+    ENV['JDS_IP'] = knife_search_for_ip('jds')
   when "aws"
     ENV["RDK_FETCH_HOST"] = knife_search_for_ip("resource_server")
     ENV["RDK_FETCH_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "fetch_server", "port"], "default")
@@ -28,6 +29,7 @@ def environment_endpoints(env)
     ENV["RDK_WRITEBACK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "write_back", "port"], "default")
     ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server")
     ENV["RDK_PICKLIST_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "pick_list", "port"], "default")
+    ENV['JDS_IP'] = knife_search_for_ip('jds')
   else
     fail "Unrecognized environment type: #{env}. Allowable types are: 'virtualbox' and 'aws'"
   end
@@ -37,7 +39,7 @@ def get_rdk_config_files(driver)
   configDir = "./rdk_config_files"
   configs = ["rdk-fetch-server-config.json", "rdk-pick-list-server-config.json", "rdk-write-server-config.json"]
   key = knife_search_for_key_name("rdk", driver)
-  user = driver == "aws" ? "ec2-user" : "vagrant"
+  user = driver == "aws" ? "REDACTED" : "vagrant"
   ip = knife_search_for_ip("resource_server")
   Dir.mkdir("#{configDir}") unless File.exists?("#{configDir}")
   puts "copy rdk configs from rdk machine to #{configDir}"
@@ -68,38 +70,9 @@ task :inttest do |t, args|
   }
 end
 
-desc "Copy rdk logs from the guest to the host"
-task :scpRdkLogs, :driver do |t, args|
-  logDir = "./rdk_logs"
-  logs = ["*.log"]
-  key = knife_search_for_key_name("rdk", args[:driver])
-  user = args[:driver] == "aws" ? "ec2-user" : "vagrant"
-  ip = knife_search_for_ip("resource_server")
-  Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
-  logs.each do |logname|
-    sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/var/log/rdk/#{logname}", "#{logDir}")
-  end
-end
-
-desc "Copy vxsync logs from the guest to the host"
-task :scpVxsyncLogs, :driver do |t, args|
-  logDir = "vxsync_error_logs"
-  key = knife_search_for_key_name("vxsync", args[:driver])
-  user = args[:driver] == "aws" ? "ec2-user" : "vagrant"
-  ip = knife_search_for_ip("vxsync_client")
-  Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
-  sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/tmp/*_stderr.log", "#{logDir}")
-end
-
 desc "Presync the cache with the patient_sync_list prior to int/acc test runs"
-task :syncCache, [:testType] do |t, args|
-  testType = args[:testType]
-  if testType == "jbpm"
-    patient_sync_list = [
-      "9E7A;3"
-    ]
-  else
-    patient_sync_list = [
+task :syncCache do
+  patient_sync_list = [
     "9E7A;227",
     "9E7A;71",
     "9E7A;253",
@@ -130,8 +103,7 @@ task :syncCache, [:testType] do |t, args|
     "9E7A;100817",
     "9E7A;149",
     "9E7A;204"
-    ]
-  end
+  ]
   ENV["JDS_IP"] = knife_search_for_ip("jds")
   ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync_client")
   PatientSynchronizer.wait_until_operational_data_loaded "http://#{ENV["JDS_IP"]}:9080", 600, ["9E7A", "C877"]

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.jboss.logging.Logger;
 import org.kie.api.runtime.process.WorkItem;
 import org.kie.api.runtime.process.WorkItemManager;
 import org.springframework.http.HttpStatus;
@@ -13,9 +14,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import gov.va.ehmp.services.exception.EhmpServicesException;
-import gov.va.ehmp.services.utils.Logging;
 
 public class WorkItemUtil {
+	private static final Logger LOGGER = Logger.getLogger(WorkItemUtil.class);
 	/**
 	 * Extracts the given parameter from the work item, validates it's of type String and then returns it.
 	 * 
@@ -79,11 +80,11 @@ public class WorkItemUtil {
 	 */
 	public static void completeWorkItem(WorkItem workItem, WorkItemManager manager, String serviceResponse) {
 		if (workItem == null) {
-			Logging.error("workItem cannot be null in populateServiceResult");
+			LOGGER.error("workItem cannot be null in populateServiceResult");
 			return;
 		}
 		if (manager == null) {
-			Logging.error("manager cannot be null in populateServiceResult");
+			LOGGER.error("manager cannot be null in populateServiceResult");
 			return;
 		}
 		
@@ -94,7 +95,7 @@ public class WorkItemUtil {
 		String name = workItem.getName();
 		manager.completeWorkItem(id, serviceResult);
 		
-		Logging.debug("work item completed (" + id + ") - " + name);
+		LOGGER.debug("work item completed (" + id + ") - " + name);
 	}
 	
 	public static String buildSuccessResponse() {

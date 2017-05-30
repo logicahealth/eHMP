@@ -112,7 +112,7 @@ define([
                     },
                     label: 'Cancel',
                     name: 'problemSearchConfirmCancel',
-                    extraClasses: ['btn-default', 'btn-sm', 'right-margin-xs']
+                    extraClasses: ['btn-default', 'btn-sm', 'right-margin-sm']
                 }, {
                     control: "dropdown",
                     split: true,
@@ -315,7 +315,7 @@ define([
             'read:error': function(collection, response) {
                 this.ui.problemResults.trigger('control:loading:hide');
                 this.ui.problemResults.trigger('control:hidden', true);
-                this.model.set('resultsMessage', ParseUtil.formatSearchErrorMessage(error));
+                this.model.set('resultsMessage', ParseUtil.formatSearchErrorMessage(response));
             }
         },
         performSearch: function(extended) {

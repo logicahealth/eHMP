@@ -17,7 +17,7 @@ define([], function() {
         model: Facility,
         params: function(method, options) {
             return {
-                siteCode: options.siteCode || ''
+                division: options.division || ''
             };
         }
     });

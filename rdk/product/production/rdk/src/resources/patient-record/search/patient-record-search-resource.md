@@ -2,7 +2,7 @@
 
 ## Patient record search [{{{path}}}]
 
-### Text [GET {{{path}}}/text{?pid}{&query}{&types*}{&start}{&limit}]
+### Text [GET {{{path}}}/text{?pid}{&query}{&types*}{&start}{&limit}{&returnSynonyms}]
 
 Perform a text search on records for a patient
 
@@ -23,11 +23,13 @@ Perform a text search on records for a patient
             + `result`
             + `lab`
             + `problem`
+            + `vlerdocument`
 
     :[start]({{{common}}}/parameters/start.md)
 
     :[limit]({{{common}}}/parameters/limit.md)
-
+    
+    + returnSynonyms (boolean, optional) - true/false whether synonyms should be returned as part of result
 
 + Response 200 (application/json)
 

@@ -4,8 +4,10 @@ define([
     'marionette',
     'jquery',
     'handlebars',
-    'moment'
-], function(_, Backbone, Marionette, $, Handlebars, moment) {
+    'moment',
+    'app/applets/todo_list/statusNotCompletedView',
+    'hbs!app/applets/todo_list/templates/statusModalFooterTemplate'
+], function(_, Backbone, Marionette, $, Handlebars, moment, StatusNotCompletedView, StatusModalFooterTemplate) {
     'use strict';
 
     var newTaskNotification = new ADK.UI.Notification({
@@ -54,19 +56,17 @@ define([
         },
         parse: function(response, attr) {
             var duz = this.DUZ;
-            return _.each(_.sortBy(response.data, function(item) {
-                return _.findWhere(item.recipients, {
-                    userId: duz
-                }).salience;
-            }), function(item, index) {
-                item.title = 'Item ' + (index + 1) + '. Press enter to view notifications.';
+
+            return _.sortBy(response.data, function(item) {
                 var itemExpiration = moment(item.expiration);
                 if (itemExpiration.isValid()) {
                     item.expirationFormatted = itemExpiration.format('MM/DD/YYYY HH:mm');
                     item.message.body = item.message.body.replace('{dateString}', item.expirationFormatted);
                 }
+                return _.findWhere(item.recipients, {
+                    userId: duz
+                }).salience;
             });
-
         },
         methodMap: {
             'read': {
@@ -154,6 +154,8 @@ define([
 
             this.listenTo(ADK.Messaging, 'refresh:allData', this.fetch);
 
+            this.listenTo(ADK.Messaging.getChannel('activities'), 'create:success', this.fetch);
+
             this.countModel.fetch();
             this.growlerCollection.fetch();
 
@@ -175,7 +177,7 @@ define([
                 this.countModel.xhr = this.countModel.fetch();
             }
             if (!_.has(this, "growlerCollection.xhr") || !_.isFunction(_.get(this, "growlerCollection.xhr.state", null)) || this.growlerCollection.xhr.state() !== "pending") {
-                this.growlerCollection.xhr =  this.growlerCollection.fetch();
+                this.growlerCollection.xhr = this.growlerCollection.fetch();
             }
         },
         onDestroy: function() {
@@ -189,15 +191,28 @@ define([
                 'click @ui.rowitem': function() {
                     var isPatientSearch = ADK.WorkspaceContextRepository.currentWorkspace.id === 'patient-search-screen';
                     var isPatientContext = ADK.WorkspaceContextRepository.currentContext.id === 'patient' && !isPatientSearch;
-                    var navigation = this.model.get('navigation');
-                    if (_.isObject(navigation)) {
-                        ADK.PatientRecordService.setCurrentPatient(this.model.get('patientId'), {
+                    var hasEditRequestPermission = ADK.UserService.hasPermissions('edit-coordination-request');
+                    var hasRespondRequestPermission = ADK.UserService.hasPermissions('respond-coordination-request');
+                    var navigation = this.model.get('navigation') || new Backbone.Model();
+                    var parameter = navigation.get('parameter') || {};
+                    var taskName = _.get(parameter, 'taskName');
+                    var isReviewRequest = (taskName === 'Review');
+                    var isResponseRequest = (taskName === 'Response');
+                    var hasEditPermissions = !isReviewRequest || hasEditRequestPermission;
+                    var hasRespondPermissions = !isResponseRequest || hasRespondRequestPermission;
+                    if (!hasEditPermissions || !hasRespondPermissions) {
+                        var activityId = _.get(parameter, 'activityId');
+                        var modal = this.taskModal(activityId);
+                        modal.show();
+                    } else if (_.isObject(navigation)) {
+                        var patientId = this.model.get('patientId');
+                        ADK.PatientRecordService.setCurrentPatient(patientId, {
                             reconfirm: !isPatientContext,
-                            navigation: !isPatientContext || (ADK.PatientRecordService.getCurrentPatient().get('pid') !== this.model.get('patientId')),
+                            navigation: !isPatientContext || (ADK.PatientRecordService.getCurrentPatient().get('pid') !== patientId),
                             staffnavAction: {
                                 channel: navigation.get('channel'),
                                 event: navigation.get('event'),
-                                data: navigation.get('parameter') //this should be parameters
+                                data: parameter //this should be parameters
                             }
                         });
                     }
@@ -205,8 +220,70 @@ define([
                     return false;
                 }
             },
+            serializeModel: function() {
+                var modelJSON = this.model.toJSON();
+                modelJSON.title = 'Item ' + (this._index + 1) + '. Press enter to view notifications.';
+                return modelJSON;
+            },
             getTemplate: function() {
-                return Handlebars.compile('<a href="#" title="{{title}}" class="dd-link" role="menuitem" tabindex="-1"><i class="fa fa-arrow-right"></i><div class="row right-margin-no left-margin-no"><div class="col-xs-12 left-padding-md pre-wrap word-wrap-break-word word-break-break-word"><div><strong>{{patientName}} ({{last4OfSSN}})</strong></div><div>{{message.subject}}</div><div>{{message.body}}</div></div></div></a>');
+                var navigation = this.model.get('navigation') || new Backbone.Model();
+                var parameter = navigation.get('parameter') || {};
+                var taskName = _.get(parameter, 'taskName');
+                var hasPermissions = true;
+                if (taskName === 'Review') {
+                    hasPermissions = ADK.UserService.hasPermissions('edit-coordination-request');
+                } else if (taskName === 'Response') {
+                    hasPermissions = ADK.UserService.hasPermissions('respond-coordination-request');
+                }
+                this.model.set('hasPermissions', hasPermissions);
+                return Handlebars.compile(
+                    '<a href="#" title="{{title}}" class="dd-link" role="menuitem" tabindex="-1">' +
+                    '{{#if hasPermissions}}<i class="fa fa-arrow-right"></i>{{/if}}' +
+                    '<div class="row right-margin-no left-margin-no">' +
+                    '<div class="col-xs-12 left-padding-md pre-wrap word-wrap-break-word word-break-break-word">' +
+                    '<div><strong>{{patientName}} ({{last4OfSSN}})</strong></div>' +
+                    '<div>{{message.subject}}</div>' +
+                    '<div>{{message.body}}</div>' +
+                    '</div></div></a>'
+                );
+            },
+            taskModal: function(activityId) {
+                var headerView = Backbone.Marionette.ItemView.extend({
+                    template: Handlebars.compile('<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-ban font-size-18 color-red-dark right-padding-xs" aria-hidden="true"></i>Task Cannot Be Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>')
+                });
+                var footerView = Backbone.Marionette.ItemView.extend({
+                    template: StatusModalFooterTemplate,
+                    model: new Backbone.Model({
+                        params: {
+                            processId: activityId
+                        }
+                    }),
+                    events: {
+                        'click #activDetailBtn': 'activDetail'
+                    },
+                    activDetail: function(event) {
+                        event.preventDefault();
+                        ADK.Messaging.getChannel('task_forms').request('activity_detail', this.model.get('params'));
+                    }
+                });
+                var view = new StatusNotCompletedView({
+                    model: new Backbone.Model({
+                        reason: '',
+                        icon: 'fa-exclamation-circle',
+                        color: 'color-red'
+                    })
+                });
+                var modalOptions = {
+                    'size': 'normal',
+                    'headerView': headerView,
+                    'footerView': footerView
+                };
+                var modal = new ADK.UI.Modal({
+                    view: view,
+                    options: modalOptions
+                });
+
+                return modal;
             }
         }),
         ButtonView: ADK.UI.AlertDropdown.ButtonView.extend({
@@ -219,7 +296,7 @@ define([
                 return Handlebars.compile([
                     '<i class="fa {{icon}} font-size-18"></i>',
                     '{{#if alert_count}}',
-                    '<span class="badge font-size-11">{{alert_count}}</span>',
+                    '<span class="badge badge--notification">{{alert_count}}</span>',
                     '{{/if}}'
                 ].join('\n'));
             }
@@ -251,8 +328,8 @@ define([
                 this.regionManager = new Backbone.Marionette.RegionManager({
                     regions: {
                         'countRegion': Backbone.Marionette.Region.extend({
-                            el: this.$('.numeric-notification-count-container')
-                        }) // if dropdownTitle needs to be dynamic, control with new region/view here
+                                el: this.$('.numeric-notification-count-container')
+                            }) // if dropdownTitle needs to be dynamic, control with new region/view here
                     }
                 });
                 this.regionManager.get('countRegion').show(new CountView({

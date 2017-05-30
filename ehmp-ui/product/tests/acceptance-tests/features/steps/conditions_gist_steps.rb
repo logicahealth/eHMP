@@ -74,21 +74,6 @@ class ConditionsGist <  AllApplets
   end
 end 
 
-class ConditionsGistHeaders < ADKContainer
-  include Singleton
-  def initialize
-    super   
-
-    add_verify(CucumberLabel.new('Description'), VerifyContainsText.new, AccessHtmlElement.new(:css, '[data-appletid="problems"] [data-header-instanceid="problems-problemText"]'))
-    add_verify(CucumberLabel.new('Standardized Description'), VerifyContainsText.new, AccessHtmlElement.new(:css, '[data-appletid="problems"] [data-header-instanceid="problems-standardizedDescription"]'))
-    add_verify(CucumberLabel.new('Acuity'), VerifyContainsText.new, AccessHtmlElement.new(:css, '[data-appletid="problems"] [data-header-instanceid="problems-acuityName"]'))
-    add_verify(CucumberLabel.new('Onset Date'), VerifyContainsText.new, AccessHtmlElement.new(:css, '[data-appletid="problems"] [data-header-instanceid="problems-onsetFormatted"]'))
-    add_verify(CucumberLabel.new('Last Updated'), VerifyContainsText.new, AccessHtmlElement.new(:css, '[data-appletid="problems"] [data-header-instanceid="problems-updatedFormatted"]'))
-    add_verify(CucumberLabel.new('Provider'), VerifyContainsText.new, AccessHtmlElement.new(:css, '[data-appletid="problems"] [data-header-instanceid="problems-providerDisplayName"]'))
-    add_verify(CucumberLabel.new('Facility'), VerifyContainsText.new, AccessHtmlElement.new(:css, '[data-appletid="problems"] [data-header-instanceid="problems-facilityMoniker"]'))
-  end
-end
-
 class ProblemList <  ADKContainer
   include Singleton
   def initialize
@@ -184,29 +169,6 @@ Then(/^user sees Problems Gist$/) do
   expect(@cg.perform_verification("Title", "PROBLEMS")).to be_true
 end
 
-Then(/^the problems gist detail view contains$/) do |table|
-  aa = ProblemList.instance    
-  table.rows.each do |row|
-    expect(aa.perform_verification("#{row[0]} - Problem", row[0])).to be_true, "The value #{row[0]} is not present in the problems gist"
-    expect(aa.perform_verification("#{row[0]} - Acuity", row[1])).to be_true, "The value #{row[1]} is not present in the problems gist"
-    expect(aa.perform_verification("#{row[0]} - Status", row[2])).to be_true, "The value #{row[2]} is not present in the problems gist"
-    expect(aa.perform_verification("#{row[0]} - Facility", row[3])).to be_true, "The value displayed in the facility column is not considered a valid facility"
-  end
-end
-
-Then(/^the problems gist detail view has headers$/) do |table|
-  
-  expect(@cg.wait_until_action_element_visible("ProblemsGridVisible", DefaultLogin.wait_time)).to be_true
-  table.rows.each do |row|
-    expect(@cg.perform_verification("Header - #{row[0]}", row[0])).to be_true, "The value #{row[0]} is not present in the problems detail headers"
-  end
-end
-
-Then(/^the Problems Gist applet title is "(.*?)"$/) do |title|
-  expect(@cg.wait_until_action_element_visible("Title", DefaultLogin.wait_time)).to be_true
-  expect(@cg.perform_verification("Title", title)).to be_true
-end
-
 Then(/^hovering over the right side of problem trend view and selecting the "(.*?)" pop\-up link$/) do |quick_view| 
   driver = TestSupport.driver
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
@@ -216,19 +178,11 @@ Then(/^hovering over the right side of problem trend view and selecting the "(.*
   expect(@cg.perform_action('hover', "")).to be_true
 end
 
-Then(/^clicking a second time on the "(.*?)" hover button will result in the closure of the quick draw data box$/) do |quick_view|
-  expect(@cg.perform_action('hover', "")).to be_true
-end
-
 When(/^user clicks on the left hand side of the item "(.*?)"$/) do |problem_text|
   expect(@cg.wait_until_action_element_visible("ProblemsGridVisible", DefaultLogin.wait_time)).to be_true 
   problem_list = ProblemList.instance 
   p "#{problem_text} - Problem Click"    
   expect(problem_list.perform_action("#{problem_text} - Problem Click", "")).to be_true, "cannot click on the problem text"
-end
-
-Then(/^it should show the detail modal of the most recent for this problem$/) do
-  expect(@cg.wait_until_action_element_visible("Main Modal Label", DefaultLogin.wait_time)).to be_true
 end
 
 When(/^user clicks on the column header "(.*?)" in Problems Gist$/) do |name_column_header|
@@ -385,73 +339,6 @@ Then(/^Problem column is sorted in manual order in Problems Gist$/) do
   expect(problems.gist_problem_names_only).to eq(@manual_problem_gist_order)
 end
 
-Then(/^Last column is sorted in "(.*?)" order in Problems Gist$/) do |_arg1|
-  driver = TestSupport.driver
-  expect(@cg.wait_until_action_element_visible("ProblemsGridVisible", DefaultLogin.wait_time)).to be_true
-  element_column_values = driver.find_elements(css: '#problems-event-gist-items div.eventsTimeSince.counter2.text-center')
-  column_values_array = []
-  element_column_values.each do |row|
-    #column_values_array << row.text.downcase
-    column_values_array << (/\d+/.match(row.text.downcase)).to_s
-  end
-  p column_values_array
-  
-  if _arg1.eql?('descending')
-    p 'check ascending'
-    higher_placement = column_values_array[0].to_i
-    column_values_array.each do |year|
-      lower_placement = year.to_i
-      expect(higher_placement).to be >= lower_placement, "#{higher_placement} is not >= #{lower_placement}"
-    end
-  else
-    p 'check descending'
-    higher_placement = column_values_array[0].to_i
-    column_values_array.each do |year|
-      lower_placement = year.to_i
-      expect(higher_placement).to be <= lower_placement, "#{higher_placement} is not <= #{lower_placement}"
-    end
-  end
-end
-
-Then(/^a Menu appears on the Problems Gist$/) do
-  expect(@cg.wait_until_action_element_visible("ProblemsGridVisible", DefaultLogin.wait_time)).to be_true
-  expect(@cg.wait_until_action_element_visible("Detail View Icon", DefaultLogin.wait_time)).to be_true, "Detail view icon is not displayed"
-  expect(@cg.wait_until_action_element_visible("Quick View Icon", DefaultLogin.wait_time)).to be_true, "Quick view icon is not displayed"    
-end
-
-Then(/^a Menu appears on the Problems Gist for item "(.*?)"$/) do |arg1|
-  expect(@cg.wait_until_action_element_visible("ProblemsGridVisible", DefaultLogin.wait_time)).to be_true
-  expect(@cg.wait_until_action_element_visible('Detail View Button')).to eq(true), "Detail View button is not displayed"
-  expect(@cg.wait_until_action_element_visible('Quick View Button')).to eq(true), "Quick View button is not displayed"
-end
-
-When(/^user select the menu "(.*?)" in Problems Gist$/) do |icon|
-  expect(@cg.wait_until_action_element_visible("ProblemsGridVisible", DefaultLogin.wait_time)).to be_true
-  expect(@cg.perform_action(icon, "")).to be_true, "#{icon} can't be clicked"
-end
-
-Then(/^the Problems Gist Applet table contains headers$/) do |table|
-  headers = ConditionsGistHeaders.instance
-  table.rows.each do |row|
-    expect(headers.perform_verification(row[0], row[0])).to be_true
-  end
-end
-
-Then(/^user selects the "(.*?)" detail icon in Problems Gist$/) do |arg1|
-  expect(@cg.perform_action('Detail View Button')).to be_true
-end
-
-Then(/^user selects the "(.*?)" quick view icon in Problems Gist$/) do |arg1|
-  label = "#{arg1} Quick View Icon"
-  p label
-  expect(@cg.perform_action(label)).to be_true
-end
-
-Then(/^"(.*?)" message is displayed in Problems Gist$/) do |no_records_message|
-  expect(@cg.wait_until_action_element_visible("ProblemsGridVisible", DefaultLogin.wait_time)).to be_true
-  expect(@cg.perform_verification(no_records_message, no_records_message))
-end
-
 When(/^hovering over the "(.*?)" side of the tile "(.*?)"$/) do |direction, _problem_text|
   
   driver = TestSupport.driver
@@ -488,15 +375,6 @@ Then(/^the problems gist table only diplays rows including text "([^"]*)"$/) do 
   row_count = TableContainer.instance.get_elements("Rows - Problems Gist Applet").size 
   rows_containing_filter_text = TestSupport.driver.find_elements(:xpath, path).size
   expect(row_count).to eq(rows_containing_filter_text), "Only #{rows_containing_filter_text} rows contain the filter text but #{row_count} rows are visible"
-end
-
-Then(/^the Problems Gist Quick View Table table contains rows$/) do 
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { @cg.am_i_visible? 'Problems Popover' }
-  expect(@cg.perform_verification('Popover Date Header', 'Date')).to eq(true)
-  expect(@cg.perform_verification('Popover Description Header', 'Description')).to eq(true)
-  expect(@cg.perform_verification('Popover Facility Header', 'Facility')).to eq(true)
-  expect(@cg.wait_until_xpath_count_greater_than('Popover Rows', 0)).to eq(true)
 end
 
 When(/^the Problems Gist Applet contains data rows$/) do

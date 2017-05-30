@@ -1,5 +1,7 @@
 package gov.va;
 
+import org.jboss.logging.Logger;
+
 /**
  * This exception can be used to provide a status code to the UI
  */
@@ -9,6 +11,7 @@ public class FOBTException extends Exception {
 	public static final Integer INTERNAL_SERVER_ERROR = 500;
 	
 	private Integer httpStatus = INTERNAL_SERVER_ERROR;
+	private static final Logger LOGGER = Logger.getLogger(FOBTException.class);
 	
 //-----------------------------------------------------------------------------
 //-------------------------Constructors----------------------------------------
@@ -24,7 +27,7 @@ public class FOBTException extends Exception {
 	public FOBTException(Integer httpStatus, String message) {
 		super(message);
 		this.httpStatus = httpStatus;
-		FOBTLogging.error(message);
+		LOGGER.error(message);
 	}
 	
 	/**
@@ -34,7 +37,7 @@ public class FOBTException extends Exception {
 	 */
 	public FOBTException(String message) {
 		super(message);
-		FOBTLogging.error(message);
+		LOGGER.error(message);
 	}
 
 	/**
@@ -48,7 +51,7 @@ public class FOBTException extends Exception {
 	public FOBTException(Integer httpStatus, String message, Throwable cause) {
 		super(message, cause);
 		this.httpStatus = httpStatus;
-		FOBTLogging.error(message);
+		LOGGER.error(message);
 	}
 	
 	/**
@@ -59,7 +62,7 @@ public class FOBTException extends Exception {
 	 */
 	public FOBTException(String message, Throwable cause) {
 		super(message, cause);
-		FOBTLogging.error(message);
+		LOGGER.error(message);
 	}
 	
 //-----------------------------------------------------------------------------

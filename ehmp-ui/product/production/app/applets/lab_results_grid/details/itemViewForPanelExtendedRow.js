@@ -1,56 +1,44 @@
+/* global ADK */
 define([
-    "backbone",
-    "marionette",
-    "underscore",
-    "hbs!app/applets/lab_results_grid/details/singleLabResultTemplateForPanelExtendedRow",
-    "app/applets/lab_results_grid/appletUiHelpers"
-], function(Backbone, Marionette, _, rowTemplate, AppletUiHelper) {
-    "use strict";
+    'backbone',
+    'marionette',
+    'underscore',
+    'hbs!app/applets/lab_results_grid/details/singleLabResultTemplateForPanelExtendedRow',
+    'app/applets/lab_results_grid/appletHelpers'
+], function (Backbone, Marionette, _, rowTemplate, Utils) {
+    'use strict';
 
     return Backbone.Marionette.LayoutView.extend({
-        tagName: "tr",
+        tagName: 'tr',
         AppletID: 'lab_results_grid',
         behaviors: {
             FloatingToolbar: {
                 DialogContainer: '.toolbar-container',
-                buttonTypes: ['infobutton', 'detailsviewbutton', 'notesobjectbutton'],
+                buttonTypes: ['infobutton', 'detailsviewbutton', 'notesobjectbutton']
             }
         },
-        attributes: {
-            'tabindex': '0'
-        },
-        initialize: function(options) {
-            var listen = ADK.Messaging.getChannel('lab_results');
-            this.gridCollection = listen.request('gridCollection');
-            this.model.set('isFullscreen', options.isFullscreen);
-            this.model.set('applet_id', this.AppletID);
-            ADK.utils.crsUtil.applyConceptCodeId(this.model);
-            this.$el.attr('data-code', this.model.get('dataCode'));
+        attributes: function() {
+            return {
+                'data-code': this.model.get('dataCode'),
+                'tabindex': '0'
+            };
         },
         template: rowTemplate,
         events: {
-            'before:showtoolbar': function() {
-                this.listenTo(ADK.Messaging.getChannel(this.AppletID), 'detailView', this.displayModal);
+            'before:showtoolbar': function () {
+                this.listenTo(ADK.Messaging.getChannel(this.AppletID), 'detailView');
             },
-            'before:hidetoolbar': function() {
+            'before:hidetoolbar': function () {
                 this.stopListening(ADK.Messaging.getChannel(this.AppletID), 'detailView');
             }
         },
-        displayModal: function(e) {
-            if (e.model !== this.model) return;
-            if (!this.model.get('pathology')) {
-                AppletUiHelper.getDetailView(this.model, this.el, this.gridCollection, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
-            } else {
-                var uid = this.model.get('results')[0].resultUid;
-                var currentPatient = ADK.PatientRecordService.getCurrentPatient();
-                ADK.Messaging.getChannel(this.AppletID).trigger('resultClicked', {
-                    uid: uid,
-                    patient: {
-                        icn: currentPatient.attributes.icn,
-                        pid: currentPatient.attributes.pid
-                    }
-                });
-            }
+        initialize: function (options) {
+            this.model.set('isFullscreen', options.isFullscreen);
+            this.model.set('applet_id', this.AppletID);
+            ADK.utils.crsUtil.applyConceptCodeId(this.model);
+        },
+        serializeModel: function() {
+            return Utils.prepareNonPanelForRender(this.model);
         }
     });
 });

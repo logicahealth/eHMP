@@ -336,36 +336,6 @@ Document.prototype.formatAddendum = function () {
     }
 };
 
-/**
- * Sets up the users to check permissions against for the asu request.
- * @param users {[]} The response from: getDefaultUserClass()
- * @param sites {[]} The sites from the vista configuration.
- * @param userDetails {string} urn:va:user:<site>:<duz>
- */
-Document.prototype.setUserClass = function (users, sites, userDetails) {
-    var self = this;
-    _.each(users, function iterateUsers(user) {
-        var add = false;
-
-        if (user.uid.indexOf(userDetails) > -1) {
-            add = true;
-        } else {
-            _.each(sites, function iterateSites(site) {
-                if (user.uid.indexOf(site) > -1) {
-                    add = true;
-
-                    // break the loop
-                    return false;
-                }
-            });
-        }
-
-        if (add && !_.includes(self.asuRequest.userClassUids, user.uid)) {
-            self.asuRequest.userClassUids.push(user.uid);
-        }
-    });
-};
-
 Document.prototype.setDocDefUid = function () {
     this.asuRequest.docDefUid = this.response.documentDefUid;
 };
@@ -375,10 +345,26 @@ Document.prototype.setDocStatus = function () {
 };
 
 /**
- * @param userDetails {{vistaUserClass: {}}} The sites from the vista configuration
+ * @param userClasses {[]} The response from getDefaultUserClass()
+ * @param userDetails {{vistaUserClass: {}}} The user details from the document or the session
  */
-Document.prototype.setUserClassIds = function (userDetails) {
-    this.asuRequest.userClassUids = _.map(userDetails.vistaUserClass, 'uid');
+Document.prototype.setUserClassUids = function (userClasses, userDetails) {
+    var docDefSite = this.response.documentDefUid.substring(15, this.response.documentDefUid.lastIndexOf(':'));
+    var allUserClassUids = _
+        .chain(userDetails.vistaUserClass || [])
+        .concat(userClasses)
+        .map('uid')
+        .value();
+    var userClassUids = _.filter(allUserClassUids, function isDocDefSite(uid) {
+        return uid.indexOf(docDefSite) > -1;
+    });
+    if (_.isEmpty(userClassUids)) {
+        // just send the first UID--rule evaluation requires at least one, but
+        // since none match the docDefUid it doesn't matter which one; this
+        // document can only succeed by role name matching
+        userClassUids = _.slice(allUserClassUids, 0, 1);
+    }
+    this.asuRequest.userClassUids = userClassUids;
 };
 
 /**
@@ -391,24 +377,24 @@ Document.prototype.setActionNames = function (actionNames) {
 
 /**
  * @param items {[]} The `items` field of the the JDS documents request
- * @param defaultUser {[]} The result of: getDefaultUserClass()
+ * @param userClasses {[]} The result of: getDefaultUserClass()
  * @param [requiredPermissions] {string} The type of permission the user must have in order to view the document.
  *                                        Example: 'View'
  * @param [allPermissions] {[]}
  * @constructor
  */
-var DocumentList = function (items, defaultUser, requiredPermissions, allPermissions) {
+var DocumentList = function (items, userClasses, requiredPermissions, allPermissions) {
     if (_.isEmpty(items)) {
         throw new Error('items cannot be an empty list');
-    } else if (_.isEmpty(defaultUser)) {
-        throw new Error('defaultUser cannot be empty');
+    } else if (_.isEmpty(userClasses)) {
+        throw new Error('userClasses cannot be empty');
     }
     this._jdsDocuments = items;
     this._asuRequest = [];
     this.response = [];
     this.requiredPermissions = requiredPermissions;
     this.allPermissions = allPermissions;
-    this.user = defaultUser;
+    this.userClasses = userClasses;
     this.isAccessDocument = !(requiredPermissions && allPermissions);
 };
 
@@ -418,54 +404,49 @@ var DocumentList = function (items, defaultUser, requiredPermissions, allPermiss
  */
 DocumentList.prototype.filterPermission = function (req) {
     var self = this;
-    var configVistaSites = req.app.config.vistaSites;
-    if (_.isEmpty(configVistaSites)) {
-        req.logger.debug({}, 'DocumentList.filterPermission: Missing req.app.config.vistaSites');
-        return false;
-    }
-
-    var sites = _.keys(configVistaSites);
     var hasErrors = false;
 
     _.each(this._jdsDocuments, function asuSetup(item) {
         var doc = _createDocument(item);
-        if (!_.isError(doc)) {
-            if (self.isAccessDocument && item.status === 'RETRACTED') {
-                doc.redactDocument(req, []);
-                return;
-            }
-
-            if (!doc.needsPermissions()) {
-                return;
-            }
-
-            var userDetails = item.userdetails;
-            if (_.isUndefined(userDetails) || _.isNull(userDetails)) {
-                userDetails = req.session.user;
-            }
-
-            var user = _.get(userDetails, 'uid');
-            if (_.isUndefined(user)) {
-                var site = _.get(userDetails, 'site');
-                var duz = _.get(userDetails, 'duz');
-
-                if(_.isEmpty(site) || _.isEmpty(duz) || !_.has(duz, site)) {
-                    hasErrors = true;
-                    return false;
-                }
-                user = 'urn:va:user:' + site + ':' + duz[site];
-            }
-
-            doc.setExtractRoles(user);
-            doc.setDocDefUid();
-            doc.setDocStatus();
-            doc.setUserClassIds(userDetails);
-            doc.setUserClass(self.user, sites, user);
-            doc.setActionNames(self.allPermissions);
-            self._asuRequest.push(doc.asuRequest);
-        } else {
+        if (_.isError(doc)) {
             req.logger.debug(item, 'DocumentList.filterPermission: Invalid Document');
+            return;
         }
+
+        if (self.isAccessDocument && item.status === 'RETRACTED') {
+            doc.redactDocument(req, []);
+            return;
+        }
+
+        if (!doc.needsPermissions()) {
+            return;
+        }
+
+        var userDetails = item.userdetails;
+        if (_.isUndefined(userDetails) || _.isNull(userDetails)) {
+            userDetails = req.session.user;
+        }
+
+        var userUid = _.get(userDetails, 'uid');
+        if (_.isUndefined(userUid)) {
+            var site = _.get(userDetails, 'site');
+            var duz = _.get(userDetails, 'duz');
+
+            if(_.isEmpty(site) || _.isEmpty(duz) || !_.has(duz, site)) {
+                hasErrors = true;
+                return false;
+            }
+            userUid = 'urn:va:user:' + site + ':' + duz[site];
+        }
+
+        doc.setExtractRoles(userUid);
+        doc.setDocDefUid();
+        doc.setDocStatus();
+        doc.setUserClassUids(self.userClasses, userDetails);
+        if (self.isAccessDocument === false) {
+            doc.setActionNames(self.allPermissions);
+        }
+        self._asuRequest.push(doc.asuRequest);
     });
     return !hasErrors;
 };
@@ -487,7 +468,8 @@ DocumentList.prototype.asuRequestPermissions = function (req, callback) {
         httpConfig.url = '/asu/rules/multiAccessDocument';
     }
     http.post(httpConfig, function (err, resp, body) {
-        if (err) {
+        if (err || !body) {
+            err = err || 'No response returned, status ' + _.get(resp, 'statusCode');
             req.logger.error({error: err});
             return callback(err);
         }

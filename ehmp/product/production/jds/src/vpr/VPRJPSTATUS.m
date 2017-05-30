@@ -1,4 +1,4 @@
-VPRJPSTATUS ;KRM/CJE -- Handle Patient Sync Status operations
+VPRJPSTATUS ;KRM/CJE,V4W/DLW -- Handle Patient Sync Status operations
  Q
  ;
 SET(ARGS,BODY) ; Store patient metastamps from a source
@@ -143,7 +143,7 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES,MINIMAL) ; GET Patient Sync Status algorithm
  N SOURCE,SSOURCE,DOMAINCOMPLETE,BUILD,DOMAIN,DOMAINSTAMP,EVENTSCOMPLETE,EVENT
  N EVENTSTORED,EVENTSTAMP,COMPLETE,TOTAL,DOMAINARRAY,EVENTARRAY,JPID,DOMAINSTORED
  N SOLREVENTSCOMPLETE,SOLREVENTSTORED,SOLRDOMAINSTORED,SOLRDOMAINCOMPLETE,SOLR
- N SOLRDOMAIN,SOLREXCEPTIONS
+ N SOLRDOMAIN,SOLREXCEPTIONS,SOLRDOMAINERROR,SYNCDOMAINERROR,SOLRHASERROR,SYNCHASERROR,SYNCEVENTERROR,SOLREVENTERROR
  ; Ensure Detailed flag exists
  S DETAILED=$G(DETAILED)
  S MINIMAL=$G(MINIMAL)
@@ -208,21 +208,25 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES,MINIMAL) ; GET Patient Sync Status algorithm
  . ; Flag if all domains are complete
  . ; If a domainstamp doesn't exist domain can never be complete
  . I DOMAINSTAMP="" S DOMAINCOMPLETE=0
- . E   I $G(DOMAINCOMPLETE)'=0 S DOMAINCOMPLETE=1
+ . E  I $G(DOMAINCOMPLETE)'=0 S DOMAINCOMPLETE=1
+ . ; Solr flag if all domains are complete
  . I SOLR D
  . . I DOMAINSTAMP="" S SOLRDOMAINCOMPLETE=0
  . . E  I $G(SOLRDOMAINCOMPLETE)'=0 S SOLRDOMAINCOMPLETE=1
- . S (SOLRDOMAINSTORED,DOMAINSTORED)=0
+ . S (SOLRDOMAINSTORED,DOMAINSTORED,SOLRDOMAINERROR,SYNCDOMAINERROR)=0
  . ;
  . ; eventMetaStamp object
  . ; All events begin with urn
- . S (EVENTSCOMPLETE,SOLREVENTSCOMPLETE)=1
  . S EVENT="urn"
+ . ; Complete flags
+ . S (EVENTSCOMPLETE,SOLREVENTSCOMPLETE)=1
+ . ; Total number of eventStamp
  . S COMPLETE=0
+ . ;
  . F TOTAL=1:1 S EVENT=$O(^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,EVENT)) Q:EVENT=""  D
  . . I EVENT="stampTime" Q
  . . ; Flag if all events are complete within a domain
- . . S (EVENTSTORED,SOLREVENTSTORED)=0
+ . . S (EVENTSTORED,SOLREVENTSTORED,SOLREVENTERROR,SYNCEVENTERROR)=0
  . . ;
  . . ; Get the event stampTime
  . . ; A is the first character after numerics so we can run the $O backwards
@@ -237,6 +241,13 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES,MINIMAL) ; GET Patient Sync Status algorithm
  . . . I $G(^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,EVENT,EVENTSTAMP,"solrStored")) S SOLREVENTSTORED=1
  . . . E  I SOLREXCEPTIONS'[(","_DOMAIN_",") S SOLREVENTSCOMPLETE=0
  . . ;
+ . . ; Get the SOLR error flag
+ . . I $G(^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,EVENT,EVENTSTAMP,"solrError")) D
+ . . . S (SOLREVENTERROR,SOLRDOMAINERROR,SOLRHASERROR)=1
+ . . ; Get the Sync error flag
+ . . I $G(^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,EVENT,EVENTSTAMP,"syncError")) D
+ . . . S (SYNCEVENTERROR,SYNCDOMAINERROR,SYNCHASERROR)=1
+ . . ;
  . . I EVENTSTORED S COMPLETE=COMPLETE+1
  . . ;
  . . ; Filters for event data when in detailed mode
@@ -247,6 +258,8 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES,MINIMAL) ; GET Patient Sync Status algorithm
  . . S EVENTARRAY("stampTime")=EVENTSTAMP
  . . I EVENTSTORED S EVENTARRAY("stored")="true"
  . . I SOLR,SOLREVENTSTORED S EVENTARRAY("solrStored")="true"
+ . . I SOLREVENTERROR S EVENTARRAY("solrError")="true"
+ . . I SYNCEVENTERROR S EVENTARRAY("syncError")="true"
  . . ; All clauses are wrapped in an implicit AND
  . . I DETAILED,$D(CLAUSES),'$$EVALAND^VPRJGQF(.CLAUSES,$NA(EVENTARRAY)) Q
  . . ;
@@ -255,6 +268,8 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES,MINIMAL) ; GET Patient Sync Status algorithm
  . . ;
  . . I DETAILED,EVENTSTORED S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"eventMetaStamp",EVENT,"stored")="true"
  . . I SOLR,DETAILED,SOLREVENTSTORED S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"eventMetaStamp",EVENT,"solrStored")="true"
+ . . I DETAILED,SOLREVENTERROR S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"eventMetaStamp",EVENT,"solrError")="true"
+ . . I DETAILED,SYNCEVENTERROR S @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"eventMetaStamp",EVENT,"syncError")="true"
  . ;
  . ; Set the flags to control syncCompleted for the domain and inProgress/completedStamp for the entire site
  . ; Is the domain complete, if so set DOMAINSTORED=1
@@ -268,6 +283,10 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES,MINIMAL) ; GET Patient Sync Status algorithm
  . . ; Need to test and maybe set SOLRDOMAINSTORED again so that SOLRDOMAINCOMPLETE can still be set to 0 for metaStamp roll-up
  . . I SOLREXCEPTIONS[(","_DOMAIN_";") S SOLRDOMAINSTORED=1
  . ;
+ . ; Set mutual exclusion flags for sync/solr errors. They can never be complete if there is an error.
+ . I SOLRDOMAINERROR S (SOLRDOMAINSTORED,SOLRDOMAINCOMPLETE)=0
+ . I SYNCDOMAINERROR S (DOMAINSTORED,DOMAINCOMPLETE)=0
+ . ;
  . ; TOTAL will be one extra from the loop before it quits at end of data
  . S TOTAL=TOTAL-1
  . ; Filters for domain data when not in detailed mode
@@ -278,13 +297,20 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES,MINIMAL) ; GET Patient Sync Status algorithm
  . S DOMAINARRAY("storedCount")=COMPLETE
  . I EVENTSCOMPLETE S DOMAINARRAY("syncCompleted")="true"
  . I SOLR,SOLREVENTSCOMPLETE S DOMAINARRAY("solrSyncCompleted")="true"
+ . I SOLREVENTERROR S DOMAINARRAY("hasSolrError")="true"
+ . I SYNCEVENTERROR S DOMAINARRAY("hasSyncError")="true"
+ . ;
  . ; All clauses are wrapped in an implicit AND
  . I 'DETAILED,$D(CLAUSES),'$$EVALAND^VPRJGQF(.CLAUSES,$NA(DOMAINARRAY)) Q
  . ;
- . ; If we pass the filter add the syncCompleted for the domain
+ . ; If we pass the filter and the syncCompleted for the domain
  . S:'MINIMAL @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"syncCompleted")=$S(DOMAINSTORED:"true",1:"false")
- . ; If we pass the filter add the solrSyncCompleted for the domain
+ . ; If we pass the filter and the solrSyncCompleted for the domain
  . S:SOLR&('MINIMAL) @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"solrSyncCompleted")=$S(SOLRDOMAINSTORED:"true",1:"false")
+ . ; If we pass the filter and there are solr errors for the domain
+ . S:'MINIMAL @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"hasSolrError")=$S(SOLRDOMAINERROR:"true",1:"false")
+ . ; If we pass the filter and there are sync errors for the domain
+ . S:'MINIMAL @BUILD@("sourceMetaStamp",SSOURCE,"domainMetaStamp",DOMAIN,"hasSyncError")=$S(SYNCDOMAINERROR:"true",1:"false")
  . ;
  . ; If domainstamp is null set the domain stampTime to the latest event stamp
  . I DOMAINSTAMP="",EVENTSTAMP>DOMAINSTAMP D
@@ -304,6 +330,11 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES,MINIMAL) ; GET Patient Sync Status algorithm
  . S:'MINIMAL @BUILD@("sourceMetaStamp",SSOURCE,"solrSyncCompleteAsOf")=$G(^VPRSTATUS(JPID,PID,SOURCE,"solrSyncCompleteAsOf"))
  E  S:(SOLR)&($G(^VPRSTATUS(JPID,PID,SOURCE,"solrSyncCompleteAsOf"))'="")&('MINIMAL) @BUILD@("sourceMetaStamp",SSOURCE,"solrSyncCompleteAsOf")=$G(^VPRSTATUS(JPID,PID,SOURCE,"solrSyncCompleteAsOf"))
  ;
+ ; Set the solr error flag if any event is in error
+ S @BUILD@("sourceMetaStamp",SSOURCE,"hasSolrError")=$S($G(SOLRHASERROR):"true",1:"false")
+ ; Set the sync error flag if any event is in error
+ S @BUILD@("sourceMetaStamp",SSOURCE,"hasSyncError")=$S($G(SYNCHASERROR):"true",1:"false")
+ ;
  ; Set the complete flag if all of the domains are complete
  I $G(DOMAINCOMPLETE) D
  . S @BUILD@("sourceMetaStamp",SSOURCE,"syncCompleted")="true"
@@ -319,6 +350,7 @@ PATIENT(RESULT,PID,DETAILED,CLAUSES,MINIMAL) ; GET Patient Sync Status algorithm
 CLEAR(RESULT,ARGS) ; Delete all sync status data
  K ^VPRSTATUS
  Q
+ ;
 DELSS(PID) ; Delete a patient's sync status
  N JPID
  S JPID=$$JPID4PID^VPRJPR(PID)
@@ -326,6 +358,7 @@ DELSS(PID) ; Delete a patient's sync status
  ;
  K ^VPRSTATUS(JPID,PID)
  Q
+ ;
 DELSITE(SITE) ; Delete a site's sync status
  N PID,JPID
  S JPID=""
@@ -334,10 +367,11 @@ DELSITE(SITE) ; Delete a site's sync status
  . F  S PID=$O(^VPRPT(JPID,PID)) Q:PID=""!($P(PID,";")'=SITE)  D
  . . K ^VPRSTATUS(JPID,PID)
  Q
+ ;
 STORERECORD(ARGS,BODY)
- ; Set flags to indicate records are stored.
+ ; Set flags to indicate records are stored or in error.
  ; supports type="jds" only for testing purposes - not to be used in regular operations
- ; type="solr" is supported for regular operations
+ ; type="solr","solrError","syncError" is supported for regular operations
  N OBJECT,ERR,PID,SOURCE,DOMAIN,UID,EVENTSTAMP,JPID
  D DECODE^VPRJSON("BODY","OBJECT","ERR")
  S UID=$G(OBJECT("uid"))
@@ -349,8 +383,14 @@ STORERECORD(ARGS,BODY)
  S JPID=$$JPID4PID^VPRJPR(PID)
  I JPID="" D SETERROR^VPRJRER(224,"Unable to acquire JPID for PID: "_PID) Q ""
  I (DOMAIN="")!(UID="")!(EVENTSTAMP="")!($P(UID,":",6)="") D SETERROR^VPRJRER(210,"Required fields are missing from the UID or eventStamp") Q ""
- I (TYPE="")!(TYPE="jds") S ^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,EVENTSTAMP,"stored")=1
- E  I (TYPE="solr") S ^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,EVENTSTAMP,"solrStored")=1
+ I (TYPE="")!(TYPE="jds") D
+ . S ^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,EVENTSTAMP,"stored")=1
+ . K ^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,EVENTSTAMP,"syncError")
+ E  I (TYPE="solr") D
+ . S ^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,EVENTSTAMP,"solrStored")=1
+ . K ^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,EVENTSTAMP,"solrError")
+ E  I (TYPE="solrError") S ^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,EVENTSTAMP,"solrError")=1
+ E  I (TYPE="syncError") S ^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,EVENTSTAMP,"syncError")=1
  Q "/vpr/"_PID_"/"_UID
  ;
 COMBINED(RETURN,ARGS) ; Return patient sync status with job status
@@ -392,7 +432,7 @@ COMBINED(RETURN,ARGS) ; Return patient sync status with job status
  ; Global enterprise-sync-request rules
  ; If enterprise-sync-request is in error the site can never be complete
  ; Set the hasError flag and set syncComplete=false
- I $G(ESRJOB("status"))="error" D BLDRESULT($G(PIDS(1)),"false",$G(ESRJOB("timestamp")),1) G BLDRETURN
+ I $G(ESRJOB("status"))="error" D BLDRESULT($G(PIDS(1)),"false",$G(ESRJOB("timestamp")),"job") G BLDRETURN
  ;
  ; If we have a started enterprise-sync-request, but no patient identifiers the sync isn't complete
  ; We are guaranteed to have 2 results in the PIDS array in most cases (the JPID and the identifier
@@ -437,10 +477,10 @@ COMBINED(RETURN,ARGS) ; Return patient sync status with job status
  . . ;
  . . ; Determine if Jobs are in error
  . . I $G(VSRJOB("status"))="error" S VDJOBS("hasError")=1
- . . I $G(VDJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",VDJOBS("latestTimestamp"),1) Q
+ . . I $G(VDJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",VDJOBS("latestTimestamp"),"job") Q
  . . ; vistahdr
  . . I $G(VHSRJOB("status"))="error" S VHDJOBS("hasError")=1
- . . I $G(VHDJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",VHDJOBS("latestTimestamp"),1) Q
+ . . I $G(VHDJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",VHDJOBS("latestTimestamp"),"job") Q
  . . ;
  . . ; Save jobs off to global for debugging
  . . ;M ^KTMP($J,INCR,"RESULT","JOBS",SITE,"ESR")=ESRJOB
@@ -496,7 +536,7 @@ COMBINED(RETURN,ARGS) ; Return patient sync status with job status
  . . ; Determine if Jobs are in error
  . . I $G(HSRJOB("status"))="error" S HDJOBS("hasError")=1
  . . I $G(HXJOBS("hasError")) S HDJOBS("hasError")=1
- . . I $G(HDJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",HDJOBS("latestTimestamp"),1) Q
+ . . I $G(HDJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",HDJOBS("latestTimestamp"),"job") Q
  . . ;
  . . ; Save jobs off to global for debugging
  . . ;M ^KTMP($J,INCR,"RESULT","JOBS",SITE,"ESR")=ESRJOB
@@ -541,7 +581,7 @@ COMBINED(RETURN,ARGS) ; Return patient sync status with job status
  . . I $G(JPDTJOB("status"))="error" S JJOBS("hasError")=1
  . . I $G(JCDCJOB("status"))="error" S JJOBS("hasError")=1
  . . I $G(JXJOBS("hasError")) S JJOBS("hasError")=1
- . . I $G(JJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",JJOBS("latestTimestamp"),1) Q
+ . . I $G(JJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",JJOBS("latestTimestamp"),"job") Q
  . . ;
  . . ; Save jobs off to global for debugging
  . . ;M ^KTMP($J,INCR,"RESULT","JOBS",SITE,"ESR")=ESRJOB
@@ -579,7 +619,7 @@ COMBINED(RETURN,ARGS) ; Return patient sync status with job status
  . . ; Determine if Jobs are in error
  . . I $G(VSRJOB("status"))="error" S VJOBS("hasError")=1
  . . I $G(VXVJOB("status"))="error" S VJOBS("hasError")=1
- . . I $G(VJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",VJOBS("latestTimestamp"),1) Q
+ . . I $G(VJOBS("hasError")) D BLDRESULT(PIDS(ID),"false",VJOBS("latestTimestamp"),"job") Q
  . . ;
  . . ; Save jobs off to global for debugging
  . . ;M ^KTMP($J,INCR,"RESULT","JOBS",SITE,"ESR")=ESRJOB
@@ -596,6 +636,24 @@ COMBINED(RETURN,ARGS) ; Return patient sync status with job status
  . . ;
  . . ; 3. If vler-sync-request AND vler-xform-vpr don't exist AND enterprise-sync-request is OPEN or ERROR: syncComplete = false
  . . I ('VSR)&('VXV)&(($G(ESRJOB("status"))="open")) S ^||TMP($J,"RESULT","RULES",SITE)="VLER RULE 3 FALSE" D BLDRESULT(PIDS(ID),"false",VJOBS("latestTimestamp")) Q
+ . ;
+ . ; Check for sync or solr errors regardless of whether the sync is in progress or completed
+ . I $D(^||TMP($J,"RESULT","syncStatus","inProgress","sourceMetaStamp",SITE)) D
+ . . ; Determine if there are any sync errors
+ . . I $G(^||TMP($J,"RESULT","syncStatus","inProgress","sourceMetaStamp",SITE,"hasSyncError"),"false")="true" D
+ . . . D BLDRESULT(PIDS(ID),"false",$G(^||TMP($J,"RESULT","syncStatus","inProgress","sourceMetaStamp",SITE,"stampTime")),"sync")
+ . . ;
+ . . ; Determine if there are any solr errors
+ . . I $G(^||TMP($J,"RESULT","syncStatus","inProgress","sourceMetaStamp",SITE,"hasSolrError"),"false")="true" D
+ . . . D BLDRESULT(PIDS(ID),"",$G(^||TMP($J,"RESULT","syncStatus","inProgress","sourceMetaStamp",SITE,"stampTime")),"solr")
+ . E  I $D(^||TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",SITE)) D
+ . . ; Determine if there are any sync errors
+ . . I $G(^||TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",SITE,"hasSyncError"),"false")="true" D
+ . . . D BLDRESULT(PIDS(ID),"false",$G(^||TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",SITE,"stampTime")),"sync")
+ . . ;
+ . . ; Determine if there are any solr errors
+ . . I $G(^||TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",SITE,"hasSolrError"),"false")="true" D
+ . . . D BLDRESULT(PIDS(ID),"",$G(^||TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",SITE,"stampTime")),"solr")
  ;
 BLDRETURN
  ; Build Return
@@ -612,9 +670,30 @@ BLDRESULT(PID,STATUS,TIMESTAMP,ERROR)
  N SOURCE,SOLRSTATUS
  S SOURCE=$P(PID,";",1)
  I SOURCE=+SOURCE S SOURCE=""""_SOURCE_""
+ ;
+ ; NOTE: ERROR is being used as both a flag to indicate that there was an error,
+ ; and it also contains a string representing what type of error it is. If ERROR
+ ; is undefined (because nothing was passed as the fourth argument to this call),
+ ; or it happens to contain an "", then that means there is no error, which can
+ ; happen because this call is called by many parts of the simple sync status end
+ ; point (combinedstat), in order to build up the correct response object.
+ ;
+ ; Set Site & Global hasError and hasSolrError flags for jobs, sync, and solr errors
+ I $G(ERROR)="job"!($G(ERROR)="sync") D
+ . I $$ISPID^VPRJPR(PID) S ^||TMP($J,"RESULT","return","sites",SOURCE,"hasError")="true"
+ . S ^||TMP($J,"RESULT","return","hasError")="true"
+ E  I $G(ERROR)="solr" D
+ . I $$ISPID^VPRJPR(PID) S ^||TMP($J,"RESULT","return","sites",SOURCE,"hasSolrError")="true"
+ . S ^||TMP($J,"RESULT","return","hasSolrError")="true"
+ . ; Also need to set solrSyncCompleted to false
+ . I $G(^||TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",SOURCE,"stampTime")) D
+ . . S ^||TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",SOURCE,"solrSyncCompleted")="false"
+ . E  I $G(^||TMP($J,"RESULT","syncStatus","inProgress","sourceMetaStamp",SOURCE,"stampTime")) D
+ . . S ^||TMP($J,"RESULT","syncStatus","inProgress","sourceMetaStamp",SOURCE,"solrSyncCompleted")="false"
+ ;
  I $$ISPID^VPRJPR(PID) D
  . S ^||TMP($J,"RESULT","return","sites",SOURCE,"pid")=PID
- . S ^||TMP($J,"RESULT","return","sites",SOURCE,"syncCompleted")=STATUS
+ . S:$G(STATUS)'="" ^||TMP($J,"RESULT","return","sites",SOURCE,"syncCompleted")=STATUS
  . ;
  . ; Set Site sourceStampTime (either from inProgress or completedStamp) and solr sync status
  . I $G(^||TMP($J,"RESULT","syncStatus","completedStamp","sourceMetaStamp",SOURCE,"stampTime")) D
@@ -628,11 +707,6 @@ BLDRESULT(PID,STATUS,TIMESTAMP,ERROR)
  . ;
  . ; Set Site latestJobTimestamp
  . S ^||TMP($J,"RESULT","return","sites",SOURCE,"latestJobTimestamp")=TIMESTAMP
- ;
- ; Set Site & Global hasError flag
- I $G(ERROR) D
- . I $$ISPID^VPRJPR(PID) S ^||TMP($J,"RESULT","return","sites",SOURCE,"hasError")="true"
- . S ^||TMP($J,"RESULT","return","hasError")="true"
  ;
  ; Set Global syncStatus
  I 'SITELIST&(STATUS="false") S ^||TMP($J,"RESULT","return","syncCompleted")="false"

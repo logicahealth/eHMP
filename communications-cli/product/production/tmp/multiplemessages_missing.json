@@ -1,0 +1,23 @@
+[{
+
+	"category": "announcements-promotions",
+	"content": "Test content 2",
+	"title":"Test Title 2",
+	"sender":"Developer 2",
+	"ehmp-app-version":"2.12.12.1"
+},{
+
+	"category": "announcements-terms",
+	"content": "missing title",
+	"sender":"Developer 2",
+	"ehmp-app-version":"2.12.12.2"
+},
+{
+
+	"category": "announcements-terms",
+	"content": "Test content 2",
+	"title":"Test Title 2",
+	"sender":"Developer 2",
+	"ehmp-app-version":"2.12.12.2"
+}
+]

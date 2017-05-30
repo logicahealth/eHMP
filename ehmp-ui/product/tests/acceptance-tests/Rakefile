@@ -176,7 +176,7 @@ def environment_endpoints(env)
 
   when "aws"
     ip = knife_search_for_ip("ehmp-balancer")
-    ENV["EHMPUI_IP"] = 'https://' + "#{ip}"
+    ENV["EHMPUI_IP"] = 'https://' + "#{ip}/r2.0/"
     p "env #{ENV["EHMPUI_IP"]}"
 
     ENV["RDK_IP"] = knife_search_for_ip("resource_server")

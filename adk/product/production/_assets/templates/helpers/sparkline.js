@@ -190,13 +190,13 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
                 x: x0,
                 y: 0,
                 positionValues: 'center',
-                rangeClass: 'abnormalRange lowRange',
+                rangeClass: 'abnormal-range low-range',
                 interpretations: [{
-                    valueClass: 'abnormalValue',
+                    valueClass: 'abnormal-value',
                     flag: 'L',
                     description: 'abnormal low'
                 }, {
-                    valueClass: 'criticalValue',
+                    valueClass: 'critical-value',
                     flag: 'L*',
                     description: 'critical low'
                 }],
@@ -213,13 +213,13 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
                 x: x0,
                 y: 0,
                 positionValues: (hasCritical ? 'scaled' : 'relative'),
-                rangeClass: 'abnormalRange lowRange',
+                rangeClass: 'abnormal-range low-range',
                 interpretations: [{
-                    valueClass: 'abnormalValue',
+                    valueClass: 'abnormal-value',
                     flag: 'L',
                     description: 'abnormal low'
                 }, {
-                    valueClass: 'criticalValue',
+                    valueClass: 'critical-value',
                     flag: 'L*',
                     description: 'critical low'
                 }],
@@ -237,9 +237,9 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
             x: x0 + (hasCritical || !isNaN(low) ? aw : 0),
             y: 0,
             positionValues: 'scaled',
-            rangeClass: 'normalRange',
+            rangeClass: 'normal-range',
             interpretations: [{
-                valueClass: 'normalValue',
+                valueClass: 'normal-value',
                 flag: 'N',
                 description: 'normal'
             }],
@@ -255,13 +255,13 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
                 x: x0 + tw - aw,
                 y: 0,
                 positionValues: (hasCritical ? 'scaled' : 'relative'),
-                rangeClass: 'abnormalRange highRange',
+                rangeClass: 'abnormal-range high-range',
                 interpretations: [{
-                    valueClass: 'abnormalValue',
+                    valueClass: 'abnormal-value',
                     flag: 'H',
                     description: 'abnormal high'
                 }, {
-                    valueClass: 'criticalValue',
+                    valueClass: 'critical-value',
                     flag: 'H*',
                     description: 'critical high'
                 }],
@@ -278,13 +278,13 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
                 x: x0 + tw,
                 y: 0,
                 positionValues: 'center',
-                rangeClass: 'abnormalRange highRange',
+                rangeClass: 'abnormal-range high-range',
                 interpretations: [{
-                    valueClass: 'abnormalValue',
+                    valueClass: 'abnormal-value',
                     flag: 'H',
                     description: 'abnormal high'
                 }, {
-                    valueClass: 'criticalValue',
+                    valueClass: 'critical-value',
                     flag: 'H*',
                     description: 'critical high'
                 }],
@@ -305,8 +305,8 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
                 r.width = r.width || w / ranges.length;
                 r.height = r.height || h;
                 r.positionValues = r.positionValues || 'center';
-                r.rangeClass = r.rangeClass || 'normalRange';
-                r.valueClass = r.valueClass || 'normalValue';
+                r.rangeClass = r.rangeClass || 'normal-range';
+                r.valueClass = r.valueClass || 'normal-value';
                 r.flag = r.flag || 'N';
                 r.description = r.description || 'normal';
                 r.uniqueName = uniqueName;
@@ -400,7 +400,7 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
     }
 
     function getValueClass(range, flag) {
-        var valueClass = 'normalValue';
+        var valueClass = 'normal-value';
         if (range) {
             var interpretation;
             interpretation = _.findWhere(range.interpretations, {
@@ -491,7 +491,7 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
 
         for(var i=0;i<ranges.length;i++) {
             var temp = JSON.stringify(ranges[i].rangeClass);
-            if(temp.indexOf('hashedRange') >= 0) {
+            if(temp.indexOf('hashed-range') >= 0) {
                 ranges[i].hashedRange = true;
             }
         }

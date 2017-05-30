@@ -1,20 +1,12 @@
-<div class="search-group panel panel-default {{subGroupClass}} {{#if subGroup}} searchResultItem-filterable{{/if}}" {{#if subGroup}} sortText="{{groupName}}" date="{{datetime}}" count="{{count}}" subGroupType="{{subGroupType}}" groupOnText="{{groupOnText}}" docSearchText="{{docSearchText}}" {{/if}}>
+<div class="search-group panel panel-default {{#compare subGroup true}} searchResultItem-filterable topLevelItem documentSubgroup dataUnfetched{{/compare}}" {{#if subGroup}} sortText="{{groupName}}" date="{{datetime}}" count="{{count}}" subGroupType="{{subGroupType}}" groupOnText="{{groupOnText}}" docSearchText="{{docSearchText}}" {{/if}} groupId="{{groupId}}">
 	<button type="button" class="btn btn-accordion all-padding-xs" data-toggle="collapse" data-target="#{{groupId}}" aria-expanded="false" title="Press enter to expand {{groupName}} accordion">
 		<i class="fa fa-chevron-right left-padding-sm right-padding-sm"></i>
-		<span class="{{resultId}} badge background-color-primary right-margin-sm" aria-hidden="true">{{count}}</span>
-		<span class="sr-only">{{count}} results in</span>
+		<span class="badge-region right-margin-sm"></span>
 		<span id="{{titleElemId}}" class="text-uppercase">{{{groupName}}}</span>
 	</button>
 	<div class="panel-collapse collapse" id="{{groupId}}">
+		<div class="loading-region"></div>
 		<div class="{{#if mainGroup}} {{mainGroup}} {{/if}} group-content list-group">
-		{{#if subGroup}}
-			<div class="subgroup-data-fetchspinner">
-                <p>
-                    <i class="fa fa-spinner fa-spin right-padding-xs"></i>
-                    Loading...
-                </p>
-            </div>
-        {{/if}}
 			<!-- group result content goes here -->
 		</div>
 	</div>

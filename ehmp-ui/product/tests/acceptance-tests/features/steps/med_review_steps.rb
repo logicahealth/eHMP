@@ -189,7 +189,7 @@ class MedReviewDateFilter < ADKContainer
   include Singleton
   def initialize
     super
-    add_action(CucumberLabel.new("Control - Applet - Date Filter"), ClickAction.new, AccessHtmlElement.new(:css, "#navigation-date #date-region-minimized"))
+    add_action(CucumberLabel.new("Control - Applet - Date Filter"), ClickAction.new, AccessHtmlElement.new(:css, ".global-date-picker #date-region-minimized"))
     add_action(CucumberLabel.new("Control - Applet - From Date"), SendKeysAction.new, AccessHtmlElement.new(:css, "#globalDate-region #filterFromDateGlobal"))
     add_action(CucumberLabel.new("Control - Applet - To Date"), SendKeysAction.new, AccessHtmlElement.new(:id, "filterToDateGlobal"))
     add_action(CucumberLabel.new("Control - Applet - Apply"), ClickAction.new, AccessHtmlElement.new(:id, "customRangeApplyGlobal"))
@@ -260,18 +260,6 @@ Then(/^"(.*?)" summary view contains medications in Meds Review Applet$/) do |me
     expect(aa.perform_verification(row[0] + " Sig", row[1])).to be_true, "The value #{row[1]} is not present in the Sig column"
     expect(aa.perform_verification(row[0] + " Fillable", row[2])).to be_true, "The value #{row[0]} #{row[2]} is not present in the Fillable column"
   end
-end
-
-Then(/^user selects medication "(.*?)" in Meds Review Applet$/) do |med_name|
-  aa = MedReviewApplet.instance
-  expect(aa.wait_until_action_element_visible(med_name, DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_action(med_name, "")).to be_true, "Could not expand #{med_name}"
-end
-
-Then(/^user selects from the menu medication review detail icon for "(.*?)" in Meds Review Applet$/) do |med_name|
-  aa = MedReviewApplet.instance
-  expect(aa.wait_until_action_element_visible(med_name + " detail icon", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_action(med_name + " detail icon", "")).to be_true, "for #{med_name}, medication review detail icon can't be clicked"
 end
 
 Then(/^the medication detail header section in Meds Review Applet contains$/) do |table|

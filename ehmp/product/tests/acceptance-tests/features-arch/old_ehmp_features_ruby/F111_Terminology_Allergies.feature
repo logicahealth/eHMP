@@ -73,7 +73,7 @@ Scenario Outline: An authorized user can access VA Allergens Data and see standa
 	  | content.contained.type.coding.system 	| <va_system>		|
 	  | content.contained.type.coding.display	| <summary_value>	|
       
-#  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
+#  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS  E/JLV+Terminology+Handling
       
     Examples: 
       |facility_code | umls_code | umls_display	| vuid_code 			| summary_value | umls_system					  | va_system 						 |

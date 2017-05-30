@@ -25,8 +25,8 @@ describe 'f117_patient_complex_note_spec.rb', acceptance: true do
     @command = 'resource/patient/record/complex-note'
 
     @pid_data = '10108V420871'
-    @sync_url = 'http://10.3.3.6:8080'
-    @rdk_url = 'http://10.4.4.105:8888'
+    @sync_url = 'http://IP           '
+    @rdk_url = 'http://IP             '
 
     # rdk_clear_sync(@pid_data)
     rdk_sync(@pid_data)

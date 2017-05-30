@@ -69,8 +69,11 @@ module.exports = function writebackWorkflow(req, res, tasks) {
     };
 
     //check interceptorResults.patientIdentifiers.site against req.session.user.site
-    if (!_.isEmpty(_.get(writebackContext, 'interceptorResults.patientIdentifiers.site', '')) && (writebackContext.interceptorResults.patientIdentifiers.site !== writebackContext.siteHash)) {
-        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Patient Site on identifier not found or does not match user site.');
+    if (_.isEmpty(_.get(writebackContext, 'interceptorResults.patientIdentifiers.site', ''))) {
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('The request can not determine the site for the record requested');
+    } else if (writebackContext.interceptorResults.patientIdentifiers.site !== writebackContext.siteHash) {
+        return res.status(rdk.httpstatus.precondition_failed)
+            .rdkSend('This requested record belongs to a site other than the site currently logged into.');
     }
 
     var elevatedTaskResponse = {};

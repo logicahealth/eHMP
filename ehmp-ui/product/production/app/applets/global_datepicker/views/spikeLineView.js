@@ -39,10 +39,10 @@ define([
                 this.spikeLineChartOptions.series[1].data = this.buildOutpatientArray(collection);
                 this.spikeLineChartOptions.series[0].data = this.buildInpatientArray(collection);
 
-                this.spikeLineChartOptions.chart.renderTo = self.$('#spikeLineChartContainer')[0];
+                this.spikeLineChartOptions.chart.renderTo = this.$('.global-date-picker-open-popover--graph')[0];
                 this.chart = new Highcharts.Chart(this.spikeLineChartOptions, this.spikelineEventsChartCallback);
                 this.drawAndZoom();
-                this.$el.find('#spikeLineChartContainer').tooltip();
+                this.$el.find('.global-date-picker-open-popover--graph').tooltip();
                 this.$el.find('svg').attr('focusable', false);
                 this.$el.find('svg').attr('aria-hidden', true);
                 

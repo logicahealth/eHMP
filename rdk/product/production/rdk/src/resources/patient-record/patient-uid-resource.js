@@ -72,7 +72,7 @@ function isCheckASU(details)
 }
 
 function filterAsuDocuments(req, res, statusCode,details) {
-    if (nullchecker.isNullish(details) && nullchecker.isNullish(details.data) &&
+    if (nullchecker.isNullish(details) || nullchecker.isNullish(details.data) ||
         nullchecker.isNullish(details.data.items) || !details.data.items.length) {
         return res.set('Content-Type', 'application/json').status(statusCode).rdkSend(details);
     }

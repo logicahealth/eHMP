@@ -267,7 +267,7 @@ define([
             treeItemNodes: 'nodes',
             href: 'href'
         },
-        template: Handlebars.compile('{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}<div class="tree-region" role="presentation"></div>'),
+        template: Handlebars.compile('{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel)}}<div class="tree-region" role="presentation"></div>'),
         behaviors: _.omit(ControlService.LayoutViewControl.prototype.behaviors, 'ErrorMessages'),
         initialize: function(options) {
             this.listenToFieldOptions();

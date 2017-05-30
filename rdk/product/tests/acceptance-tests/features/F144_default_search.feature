@@ -19,5 +19,5 @@ Feature: F144 - eHMP Viewer GUI
       | genderName  | Male                                    |
       | sensitive   | false                                   |
       | ssn         | ***-**-0818                             |
-      | age         | 71                                      |
+      | age         | 72                                      |
       | locationName| 7A GEN MED                              |

@@ -1,10 +1,14 @@
-<form role="form">
-    <label for="select-source-{{instanceId}}">Source:</label>
-    <select class="appts-type-menu" id="select-source-{{instanceId}}" name="source" title="Use up and down arrows to view options and then press enter to select.">
-        {{#each siteitems}}
-        {{#if show}}
-        <option value="{{site}}">{{siteLabel}}</option>
-        {{/if}}
-        {{/each}}
-    </select>
+<form class="form-container" role="form">
+    <div class="form-inline">
+        <div class="form-group">
+            <label for="select-source-{{instanceId}}">Source:</label>
+            <select class="appts-type-menu form-control" id="select-source-{{instanceId}}" name="source" title="Use up and down arrows to view options and then press enter to select.">
+                {{#each siteitems}}
+                {{#if show}}
+                <option value="{{site}}">{{siteLabel}}</option>
+                {{/if}}
+                {{/each}}
+            </select>
+        </div>
+    </div>
 </form>

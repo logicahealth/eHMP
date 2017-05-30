@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/components", "api/UIComponents", "jasminejquery"],
+define(["jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api/UIComponents", "jasminejquery"],
     function($, Handlebars, Backbone, Marionette, UI) {
 
         describe("A searchbar control", function() {
@@ -93,11 +93,14 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                         expect($label).toContainText('Test 1');
                     });
                     it("with correct for attribute", function() {
-                        expect($label.attr('for')).toBe('test1');
+                        expect($label.attr('for')).toContain('test1');
                     });
                 });
                 describe("has an input", function() {
                     var $input;
+                    afterEach(function() {
+                        form.model.clear();
+                    });
                     beforeEach(function() {
                         $input = $control.find('.input-group > input:text');
                     });
@@ -115,18 +118,31 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                         expect($input).toHaveValue('');
                     });
                     it("with correct id", function() {
-                        expect($input).toHaveId('test1');
+                        expect($input.attr('id')).toContain('test1');
                     });
                     it("that updates the model after value change", function() {
                         $input.val('Test Input String!').trigger('change');
                         expect($input).toHaveValue('Test Input String!');
                         expect(form.model.get('test1')).toBe("Test Input String!");
                     });
+                    it("update:config", function() {
+                        $form.find('.test1').trigger("control:update:config", {
+                            hidden: true
+                        });
+                        expect($form.find('.test1')).toHaveClass('hidden');
+                        $form.find('.test1').trigger("control:update:config", {
+                            hidden: false
+                        });
+                        expect($form.find('.test1')).not.toHaveClass('hidden');
+                    });
                 });
                 describe("has an clear input button", function() {
                     var $clearButton;
+                    afterEach(function() {
+                        form.model.clear();
+                    });
                     beforeEach(function() {
-                        $clearButton = $control.find('.input-group > button.clear-input-btn');
+                        $clearButton = $control.find('.input-group > .input-group-addon > button.clear-input-btn');
                     });
 
                     it("element present", function() {
@@ -168,8 +184,11 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                 });
                 describe("has an submit button", function() {
                     var $submitButton;
+                    afterEach(function() {
+                        form.model.clear();
+                    });
                     beforeEach(function() {
-                        $submitButton = $control.find('.input-group > .input-group-btn > button.text-search');
+                        $submitButton = $control.find('.input-group > .input-group-addon > button.text-search');
                     });
 
                     it("element present", function() {

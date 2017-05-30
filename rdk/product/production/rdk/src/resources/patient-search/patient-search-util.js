@@ -550,7 +550,7 @@ function parseFilter(logger, logMessagePrefix, filter) {
 }
 /**
  * Pass in 'req.query.filter' and the response which contains data.items that need to be ordered.
- * Example: http://10.4.4.105:8888/resource/locations/clinics/patients?uid=urn:va:location:9E7A:23&filter=eq(familyName,%22EIGHT%22)
+ * Example: http://IP             /resource/locations/clinics/patients?uid=urn:va:location:9E7A:23&filter=eq(familyName,%22EIGHT%22)
  *
  * @param logger - req.logger - The logger
  * @param logMessagePrefix - Used when logging messages to show who is calling this - useful for debugging.

@@ -16,95 +16,108 @@ define([
     'app/applets/problems/writeback/workflowUtils'
 ], function(Backbone, _, Handlebars, ModalView, modalHeader, modalFooter, Util, tooltip, GistView, AddEditProblemsView, ProblemSearchView, RequestFreeTextView, addselectEncounter, FormModel, WorkflowUtils) {
     'use strict';
+
+    var UNICODE_MAX_HEX = 0xFFFFFFFF;
+    var UNICODE_MAX_CHAR = String.fromCharCode(UNICODE_MAX_HEX);
+
     var problemChannel = ADK.Messaging.getChannel('problems');
 
     //Data Grid Columns
-    var summaryColumns = [{
+    var ProblemName = {
         name: 'problemText',
-        label: 'Description',
+        label: 'Problem',
         flexWidth: 'flex-width-4',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-4'
         }),
         sortType: 'cycle',
         hoverTip: 'conditions_description'
-    }, {
+    };
+    var AcuityName = {
         name: 'acuityName',
         label: 'Acuity',
         cell: 'handlebars',
         sortType: 'cycle',
         template: Handlebars.compile('<span class="acuityType">{{acuityName}}</span>'),
         hoverTip: 'conditions_acuity'
-    }, {
+    };
+    var StatusName = {
         name: 'statusName',
         label: 'Status',
         cell: 'string',
         sortType: 'cycle',
+        sortValue: function(model) {
+            var statusName = model.get('statusName') || '';
+            statusName = statusName.toLowerCase().trim();
+            var onset = model.get('onset') || UNICODE_MAX_CHAR;
+            return statusName + onset;
+        },
         hoverTip: 'conditions_status'
-    }];
-
-    var fullScreenColumns =
-        summaryColumns.concat([{
-            name: 'onsetFormatted',
-            label: 'Onset Date',
-            flexWidth: 'flex-width-2',
-            cell: Backgrid.StringCell.extend({
-                className: 'string-cell flex-width-2'
-            }),
-            sortType: 'cycle',
-            sortValue: function(model) {
-                return model.get("onset");
-            },
-            hoverTip: 'conditions_onsetdate'
-        }, {
-            name: 'updatedFormatted',
-            label: 'Last Updated',
-            flexWidth: 'flex-width-2',
-            cell: Backgrid.StringCell.extend({
-                className: 'string-cell flex-width-2'
-            }),
-            sortType: 'cycle',
-            sortValue: function(model) {
-                return model.get("updated");
-            },
-            hoverTip: 'conditions_lastupdated'
-        }, {
-            name: 'providerDisplayName',
-            label: 'Provider',
-            flexWidth: 'flex-width-2',
-            cell: Backgrid.StringCell.extend({
-                className: 'string-cell flex-width-2'
-            }),
-            sortType: 'cycle',
-            hoverTip: 'conditions_provider'
-        }, {
-            name: 'facilityMoniker',
-            label: 'Facility',
-            cell: 'handlebars',
-            sortType: 'cycle',
-            hoverTip: 'conditions_facility',
-            template: Handlebars.compile(['<span class="facilityName">{{#if facilityMoniker}}',
-                '{{facilityMoniker}}{{else if facilityCode}}{{facilityCode}}',
-                '{{else}}{{facNameTruncated}}{{/if}}</span>'
-            ].join("\n"))
-        }, {
-            name: 'comments',
-            label: '',
-            flexWidth: 'flex-width-0_5 ',
-            sortable: false,
-            srOnlyLabel: 'Comments',
-            cell: Backgrid.HandlebarsCell.extend({
-                className: 'handlebars-cell flex-width-0_5'
-            }),
-            template: Handlebars.compile([
-                '{{#if commentBubble}}',
-                '<i class="fa fa-comment"></i>',
-                '<span class="sr-only">Comments</span>',
-                '{{/if}}'
-            ].join("\n"))
-        }]);
-
-    fullScreenColumns.splice(1, 0, {
+    };
+    var OnsetFormatted = {
+        name: 'onsetFormatted',
+        label: 'Onset Date',
+        flexWidth: 'flex-width-2',
+        cell: Backgrid.StringCell.extend({
+            className: 'string-cell flex-width-2'
+        }),
+        sortType: 'cycle',
+        sortValue: function(model) {
+            return model.get("onset");
+        },
+        hoverTip: 'conditions_onsetdate'
+    };
+    var UpdatedFormatted = {
+        name: 'updatedFormatted',
+        label: 'Last Updated',
+        flexWidth: 'flex-width-2',
+        cell: Backgrid.StringCell.extend({
+            className: 'string-cell flex-width-2'
+        }),
+        sortType: 'cycle',
+        sortValue: function(model) {
+            return model.get("updated");
+        },
+        hoverTip: 'conditions_lastupdated'
+    };
+    var ProviderDisplayName = {
+        name: 'providerDisplayName',
+        label: 'Provider',
+        flexWidth: 'flex-width-2',
+        cell: Backgrid.StringCell.extend({
+            className: 'string-cell flex-width-2'
+        }),
+        sortType: 'cycle',
+        hoverTip: 'conditions_provider'
+    };
+    var FacilityMoniker = {
+        name: 'facilityMoniker',
+        label: 'Facility',
+        cell: 'handlebars',
+        sortType: 'cycle',
+        hoverTip: 'conditions_facility',
+        template: Handlebars.compile(['<span class="facilityName">{{#if facilityMoniker}}',
+            '{{facilityMoniker}}{{else if facilityCode}}{{facilityCode}}',
+            '{{else}}{{facNameTruncated}}{{/if}}</span>'
+        ].join("\n"))
+    };
+    var Comments = {
+        name: 'comments',
+        label: '',
+        flexWidth: 'flex-width-0_5 ',
+        sortable: false,
+        srOnlyLabel: 'Comments',
+        cell: Backgrid.HandlebarsCell.extend({
+            className: 'handlebars-cell flex-width-0_5'
+        }),
+        template: Handlebars.compile([
+            '{{#if commentBubble}}',
+            '<i class="fa fa-comment"></i>',
+            '<span class="sr-only">Comments</span>',
+            '{{/if}}'
+        ].join("\n"))
+    };
+    var StandardizedDescription = {
         name: 'standardizedDescription',
         label: 'Standardized Description',
         flexWidth: 'flex-width-4',
@@ -113,7 +126,25 @@ define([
         }),
         sortType: 'cycle',
         hoverTip: 'conditions_standardizeddescription'
-    });
+    };
+    var summaryColumns = [ProblemName, StatusName, OnsetFormatted , Comments];
+    var fullScreenColumns = [ProblemName, StandardizedDescription, AcuityName, StatusName, OnsetFormatted, UpdatedFormatted, ProviderDisplayName, FacilityMoniker, Comments];
+
+
+    function comparator(a, b) {
+        var statusNameA = a.get('statusName') || '';
+        var statusNameB = b.get('statusName') || '';
+        statusNameA = statusNameA.toLowerCase().trim();
+        statusNameB = statusNameB.toLowerCase().trim();
+        if (!_.isEqual(statusNameA, statusNameB)) {
+            return statusNameA.localeCompare(statusNameB);
+        }
+        var textA = a.get('problemText') || '';
+        var textB = b.get('problemText') || '';
+        textA = textA.toLowerCase();
+        textB = textB.toLowerCase();
+        return textA.localeCompare(textB);
+    }
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
         className: '',
@@ -149,6 +180,19 @@ define([
 
             this.dataGridOptions = dataGridOptions;
 
+
+            this.dataGridOptions.refresh = function() {
+                self.loading();
+                if (self.dataGridOptions.filterEnabled !== true) {
+                    self.listenToOnce(this.dataGridOptions.collection, 'fetch:success', function() {
+                        //repopulate backgrid where filter is not used
+                        //when the filter mechanism is cleaned up to stop the multi-render, this will need to change
+                        self.trigger('sort');
+                    });
+                }
+                self.fetchData();
+            };
+
             this.listenTo(ADK.Messaging.getChannel('problems'), 'refreshGridView', function() {
                 this.refresh({});
             });
@@ -162,17 +206,8 @@ define([
                 });
             });
 
-            dataGridOptions.collection.comparator = function(a, b) {
-                var statusNameA = a.get('statusName') || '';
-                var statusNameB = b.get('statusName') || '';
-                if (!_.isEqual(statusNameA, statusNameB)) {
-                    return -statusNameB.localeCompare(statusNameA);
-                } else {
-                    var uidA = a.get('uid') || '';
-                    var uidB = b.get('uid') || '';
-                    return uidA.localeCompare(uidB);
-                }
-            };
+            dataGridOptions.collection.comparator = comparator;
+
             this.listenTo(problemChannel, 'detailView', function(channelObject) {
                 var model = channelObject.model;
                 model.attributes.exposure = self.exposure;
@@ -255,12 +290,10 @@ define([
         var fetchOptions = {
             criteria: {
                 "uid": params.uid
-            },
-            patient: ADK.PatientRecordService.getCurrentPatient(),
-            resourceTitle: 'patient-record-problem'
+            }
         };
-
-        var data = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
+        var data = new ADK.UIResources.Fetch.Problems.Collection();
+        data.fetchOptions = _.extend({}, data.fetchOptions, fetchOptions);
         var detailModel = params.model.clone();
         return {
             view: ModalView.extend({
@@ -274,6 +307,7 @@ define([
                 model: detailModel
             })
         };
+
 
     });
 

@@ -53,6 +53,7 @@ r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machin
 r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
 
 machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} environment" do
+  elastic_ip ENV["KODAK_ELASTIC_IP"]
   machine_name machine_ident
   boot_options boot_options
   driver node[:machine][:driver]
@@ -105,10 +106,10 @@ machine machine_name do
         site_id: "C877",
         site: "KODAK",
         abbreviation: "KDK",
-        access_code: "ep1234",
-        verify_code: "ep1234!!",
-        multidivision_proxy_access_code: "MDEHMP1234",
-        multidivision_proxy_verify_code: "EHMPMD4321$",
+        access_code: "REDACTED",
+        verify_code: "REDACTED",
+        multidivision_proxy_access_code: "REDACTED",
+        multidivision_proxy_verify_code: "REDACTED",
         division: [{id: "507", name: "KODAK"},{id: "613", name: "MARTINSBURG"}, {id: "688", name: "WASHINGTON"}],
         station_number: "507",
         region: "us-east",

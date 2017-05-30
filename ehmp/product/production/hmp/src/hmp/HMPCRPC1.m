@@ -1,5 +1,5 @@
 HMPCRPC1 ;SLC/AGP,ASMR/RRB,CK,JD - Patient and User routine;Aug 10, 2016 11:10:07
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,3**;May 15, 2016;Build 1
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,3**;May 15, 2016;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#

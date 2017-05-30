@@ -21,6 +21,7 @@ define([
     var baseDisplayApplet = BaseDisplayApplet;
 
     var PillsGistView = BaseDisplayApplet.extend({
+        AppletView: PillsView,
         initialize: function(options) {
             this._base = baseDisplayApplet.prototype;
             if (!this.options.appletConfig) {

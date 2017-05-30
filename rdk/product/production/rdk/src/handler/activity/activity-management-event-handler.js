@@ -8,6 +8,7 @@ var activityRetry = require('./activity-management-event-retry-handler');
 var activityRequestType = 'activity-management-event';
 
 function handle(log, config, environment, job, handlerCallback) {
+    log = util.setupIdLogger(job, log);
     util.isValidRequest(job, activityRequestType, log, function(error) {
         if (error) {
             log.warn('activity-management-event-handler.handle - isValidRequest returned an error: %s', error);

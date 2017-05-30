@@ -52,12 +52,19 @@ Then(/^user navigates to numeric lab results expanded view$/) do
   @ehmp.wait_to_load_all_data_in_lab_results_table
 end
 
-When(/^user opens the first numeric lab results row$/) do
+When(/^user opens the first non\-panel numeric lab results row$/) do
   @ehmp = PobLabResults.new
   @ehmp.wait_to_load_all_data_in_lab_results_table
-  rows = @ehmp.fld_lab_results_table_row
+  rows = @ehmp.fld_non_panel_date_rows
   expect(@ehmp.has_fld_empty_row?).to eq(false), "Numeric Lab Results table is empty. This test expects at least two rows in the table"
-  expect(rows.length >= 2).to eq(true), "this test needs at least 2 rows, found only #{rows.length}"
-  rows[2].click
+  expect(rows.length >= 1).to eq(true), "this test needs at least 1 row, found only #{rows.length}"
+  rows[0].click
 end
 
+Then(/^the Narrative Lab Results Detail modal displays$/) do |table|
+  ehmp = ModalElements.new
+  ehmp.wait_until_fld_modal_detail_labels_visible
+  table.rows.each do |fields|
+    expect(object_exists_in_list(ehmp.fld_modal_detail_labels, "#{fields[0]}")).to eq(true), "#{fields[0]} was not found on details"
+  end
+end

@@ -24789,7 +24789,7 @@ T-2198;T;100
 "DATA",8989.5,8845,0)
 400;DIC(4.2,^396^1
 "DATA",8989.5,8845,1)
-http://vista.med.va.gov/ClinicalSpecialties/vitals/index.asp
+http://DNS      .DNS   /ClinicalSpecialties/vitals/index.asp
 "DATA",8989.5,8846,0)
 400;DIC(4.2,^399^DAILY VITALS
 "DATA",8989.5,8846,1)
@@ -35873,7 +35873,7 @@ Hypertext Markup Language files
 "DATA",8989.5,11370,0)
 400;DIC(4.2,^385^1
 "DATA",8989.5,11370,1)
-vista.med.va.gov/ClinicalSpecialties/clinproc/
+DNS      .DNS   /ClinicalSpecialties/clinproc/
 "DATA",8989.5,11371,0)
 400;DIC(4.2,^387^1
 "DATA",8989.5,11371,1)
@@ -37639,7 +37639,7 @@ ROU
 "DATA",8989.5,11860,0)
 400;DIC(4.2,^383^Node
 "DATA",8989.5,11860,1)
-VHAISADHC4
+DNS   DHC4
 "DATA",8989.5,11861,0)
 400;DIC(4.2,^383^Last Purge Date
 "DATA",8989.5,11861,1)
@@ -38851,7 +38851,7 @@ COURIER NEW
 "DATA",8989.5,12163,0)
 170;DIC(9.4,^465^1
 "DATA",8989.5,12163,1)
-https://vistaweb.med.va.gov/ToolsPage.aspx
+https://vistaweb.URL       /ToolsPage.aspx
 "DATA",8989.5,12164,0)
 170;DIC(9.4,^457^1
 "DATA",8989.5,12164,1)
@@ -42065,11 +42065,11 @@ R
 "DATA",8989.5,12488,0)
 400;DIC(4.2,^501^1
 "DATA",8989.5,12488,1)
-Vhahinwbdbair.v12.med.va.gov
+SERVER      
 "DATA",8989.5,12489,0)
 400;DIC(4.2,^502^1
 "DATA",8989.5,12489,1)
-VHACO10FPCLRS@e2k.va.gov
+SERVER 
 "DATA",8989.5,12490,0)
 20012;VA(200,^204^frmRenewOrders
 "DATA",8989.5,12490,1)
@@ -43797,7 +43797,7 @@ $'iH|lPDx|Plz"6e_p=(
 "DATA",8989.5,12935,0)
 565;DIC(9.4,^555^LISTENER IP ADDRESS
 "DATA",8989.5,12935,1)
-10.1.21.83
+IP        
 "DATA",8989.5,12936,0)
 565;DIC(9.4,^555^LISTENER PORT NUMBER
 "DATA",8989.5,12936,1)
@@ -43915,11 +43915,11 @@ Default VistaLink Error
 "DATA",8989.5,12960,0)
 400;DIC(4.2,^198^3
 "DATA",8989.5,12960,1)
-Primary Care Almanac(FK)="https://secure.vssc.med.va.gov/pcalmanac/start.aspx?ZUD=123&N3AST=558"
+Primary Care Almanac(FK)="https://secure.DNS .URL       /pcalmanac/start.aspx?ZUD=123&N3AST=558"
 "DATA",8989.5,12961,0)
 400;DIC(4.2,^198^4
 "DATA",8989.5,12961,1)
-Primary Care Almanac Test="https://secure.vssc.med.va.gov/pcalmanac/start.aspx?ZUD=%DUZ&N3AST=621"
+Primary Care Almanac Test="https://secure.DNS .URL       /pcalmanac/start.aspx?ZUD=%DUZ&N3AST=621"
 "DATA",8989.5,12962,0)
 10000000049;VA(200,^4746^1006
 "DATA",8989.5,12962,1)
@@ -45161,7 +45161,7 @@ CAPRI GUI V2.7*123*0*A
 "DATA",8989.5,13270,0)
 ;DIC(9.4,^631^1
 "DATA",8989.5,13270,1)
-http://vaww.va.gov/hia/Downloads.htm
+http://vaww.DNS   /hia/Downloads.htm
 "DATA",8989.5,13271,0)
 173;DIC(9.4,^630^1
 "DATA",8989.5,13271,1)
@@ -45169,7 +45169,7 @@ http://vaww.va.gov/hia/Downloads.htm
 "DATA",8989.5,13272,0)
 173;DIC(9.4,^631^1
 "DATA",8989.5,13272,1)
-http://vaww.va.gov/hia/Downloads.htm
+http://vaww.DNS   /hia/Downloads.htm
 "DATA",8989.5,13273,0)
 173;DIC(9.4,^629^1
 "DATA",8989.5,13273,1)
@@ -46009,7 +46009,7 @@ CCR Predefined Report Template
 "DATA",8989.5,13481,0)
 400;DIC(4.2,^733^1
 "DATA",8989.5,13481,1)
-vaww1.va.gov/nursing/docs/npuap_press_ulcer_stages_rev_2-07.doc
+vaww1.DNS   /nursing/docs/npuap_press_ulcer_stages_rev_2-07.doc
 "DATA",8989.5,13482,0)
 400;DIC(4.2,^660^CBOINSUREDBRANCH
 "DATA",8989.5,13482,1)
@@ -50719,11 +50719,11 @@ D
 "DATA",8989.5,14026,0)
 ;DIC(9.4,^813^1
 "DATA",8989.5,14026,1)
-https://vbaphi5dopp.vba.va.gov:7002/VABFI/services/vva
+https://SERVER:PORT/VABFI/services/vva
 "DATA",8989.5,14027,0)
 ;DIC(9.4,^814^1
 "DATA",8989.5,14027,1)
-https://vbaphi5topp.vba.va.gov:7002/VABFI/services/vva
+https://SERVER:PORT/VABFI/services/vva
 "DATA",8989.5,14028,0)
 ;DIC(9.4,^815^1
 "DATA",8989.5,14028,1)
@@ -50747,11 +50747,11 @@ Username-1
 "DATA",8989.5,14033,0)
 173;DIC(9.4,^813^1
 "DATA",8989.5,14033,1)
-https://vbaphi8popp.vba.va.gov:7002/VABFI/services/vva
+https://SERVER:PORT/VABFI/services/vva
 "DATA",8989.5,14034,0)
 173;DIC(9.4,^814^1
 "DATA",8989.5,14034,1)
-https://vbaphi5topp.vba.va.gov:7002/VABFI/services/vva
+https://SERVER:PORT/VABFI/services/vva
 "DATA",8989.5,14035,0)
 173;DIC(9.4,^815^1
 "DATA",8989.5,14035,1)
@@ -51451,7 +51451,7 @@ HMP SANDBOX=https://hmpdemo.vainnovations.us/auth/login
 "DATA",8989.5,14206,0)
 457;DIC(4.2,^198^5
 "DATA",8989.5,14206,1)
-HMP LOCAL=https://10.3.3.4:8443/auth/login
+HMP LOCAL=https://IP           /auth/login
 "DATA",8989.5,14207,0)
 457;DIC(4.2,^198^10
 "DATA",8989.5,14207,1)

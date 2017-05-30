@@ -4,7 +4,7 @@ Feature: F799 - View PJDS Stores
 
 @F799_Get_Permission_Sets_List
 Scenario: View array of permission sets
-When the client requests authentication with accessCode "vk1234" and verifyCode "vk1234!!" and site "9E7A" and division "500" and contentType "application/json"
+When the client requests authentication with accessCode "REDACTED" and verifyCode "REDACTED" and site "9E7A" and division "500" and contentType "application/json"
 When the client requests to view all user permission sets
 Then a successful response is returned
 And the permission sets results contain more than 0 records

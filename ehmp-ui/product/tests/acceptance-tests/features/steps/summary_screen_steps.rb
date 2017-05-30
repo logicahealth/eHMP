@@ -12,7 +12,7 @@ class SummaryScreen < GlobalDateFilter
   include Singleton
   def initialize
     super
-    @@applet_count = AccessHtmlElement.new(:xpath, "//*[@data-appletid]")
+    @@applet_count = AccessHtmlElement.new(:css, "#summary [data-appletid]")
     add_verify(CucumberLabel.new("Number of Applets"), VerifyXpathCount.new(@@applet_count), @@applet_count)
   end
 end

@@ -231,7 +231,7 @@ Sing order in the VistA.  First, validate signature.  Second, lock patient.  Thi
             	"provider": "10000000271",
             	"dfn": "100615",
             	"location": "285",
-            	"eSig": "mx1234!!",
+            	"eSig": "REDACTED",
             	"orderList": [{
             		"orderId": "39209;1",
             		"orderDetailHash": "2443ff804e510680ab1fae863cb01ae9"
@@ -301,7 +301,7 @@ Save Draft order to pJDS.  Use this resource to create/update draft order.
                     "statusCode": 201,
                     "headers": {
                         "date": "Fri, 12 Feb 2016 22:28:31 GMT",
-                        "location": "http://10.2.2.110:9080/clinicobj/urn:va:ehmp:9E7A;100716:54a050c5-86e4-44df-a184-ac9d1fb52f7a",
+                        "location": "http://IP             /clinicobj/urn:va:ehmp:9E7A;100716:54a050c5-86e4-44df-a184-ac9d1fb52f7a",
                         "content-type": "application/json",
                         "content-length": "0"
                     },
@@ -310,15 +310,15 @@ Save Draft order to pJDS.  Use this resource to create/update draft order.
                             "protocol": "http:",
                             "slashes": true,
                             "auth": null,
-                            "host": "10.2.2.110:9080",
+                            "host": "IP             ",
                             "port": "9080",
-                            "hostname": "10.2.2.110",
+                            "hostname": "IP        ",
                             "hash": null,
                             "search": null,
                             "query": null,
                             "pathname": "/clinicobj",
                             "path": "/clinicobj",
-                            "href": "http://10.2.2.110:9080/clinicobj"
+                            "href": "http://IP             /clinicobj"
                         },
                         "method": "POST",
                         "headers": {

@@ -31,7 +31,8 @@ define([
         };
 
         ADK.utils.writebackUtils.handleVisitWorkflow(workflowOptions, AddSelectEncounter.extend({
-            inTray: true
+            inTray: true,
+            skipVisitCheck: true
         }));
 
         workflowOptions.steps.push({

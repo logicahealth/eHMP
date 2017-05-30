@@ -13,11 +13,8 @@ end
 template("#{node[:tomcat][:home]}/shared/classes/cds-dashboard.properties") do
   source "cds-dashboard.properties.erb"
   variables(
-    lazy {
-      {
-        :rdks => find_multiple_nodes_by_role("resource_server", node[:stack])
-      }
-    }
+    :fetch_server_host => "localhost",
+    :fetch_server_port => node[:synapse][:services][:fetch_server][:haproxy][:port]
   )
   owner node[:tomcat][:user]
   group node[:tomcat][:group]

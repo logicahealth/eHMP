@@ -1,52 +1,51 @@
 define([
     'backbone',
     'marionette',
-    'moment',
-    'backgrid'
-], function(Backbone, Marionette, moment, Backgrid) {
+    'moment'
+], function(Backbone, Marionette, moment) {
     'use strict';
 
     function getSortValueForMode(model, order){
         var value = '';
-        if(model.get('mode') === 'Open'){
-            if(order === -1){
-                value += '1';
+        if (model.get('mode') === 'Open') {
+            if (order === -1) {
+                value = 'A';
             } else {
-                value += '2';
+                value = 'B';
             }
         } else {
-            if(order === -1){
-                value += '2';
+            if (order === -1) {
+                value = 'B';
             } else {
-                value += '1';
+                value = 'A';
             }
         }
 
         return value;
     }
 
-    var sortValueWithMode = function(model, sortKey, order){
+    var sortValueWithMode = function(model, sortKey, order) {
         var propertyValue = model.get(sortKey);
-        if(!_.isEmpty(propertyValue)){
+        if (!_.isEmpty(propertyValue)) {
             propertyValue = model.get(sortKey).toLowerCase();
         }
         return propertyValue + '-' + getSortValueForMode(model, order);
     };
 
-    var urgencySortValueWithMode = function(model, sortKey, order){
+    var urgencySortValueWithMode = function(model, sortKey, order) {
         var urgencyValue = model.get(sortKey);
         var value;
 
-        if(urgencyValue){
-            if(urgencyValue.toLowerCase() === 'emergent'){
-                value = '1';
-            } else if(urgencyValue.toLowerCase() === 'urgent'){
-                value = '2';
+        if (_.isString(urgencyValue)) {
+            if (urgencyValue.toLowerCase() === 'emergent') {
+                value = 'A';
+            } else if (urgencyValue.toLowerCase() === 'urgent') {
+                value = 'B';
             } else {
-                value = '3';
+                value = 'C';
             }
         } else {
-            value = '99';
+            value = 'z';
         }
 
         return value + '-' + getSortValueForMode(model, order);
@@ -63,39 +62,37 @@ define([
     var flagColumn = {
         name: 'isActivityHealthy',
         label: 'Flag',
-        flexWidth: 'flex-width-0_5',
+        flexWidth: 'flex-width-0_75',
         cell: Backgrid.HandlebarsCell.extend({
-            className: 'handlebars-cell flex-width-0_5',
+            className: 'handlebars-cell flex-width-0_75',
             render: function() {
-                this.$el.empty();
                 this.$el.html(this.column.get('template')(this.model.toJSON()));
                 this.delegateEvents();
 
                 this.$el.find('[data-toggle="tooltip"]').tooltip();
                 return this;
             },
-            remove: function(){
+            remove: function() {
                 this.$el.find('[data-toggle="tooltip"]').tooltip('destroy');
             }
         }),
         sortValue: sortValueWithMode,
         sortType: 'cycle',
-        template: Handlebars.compile('{{#if isActivityHealthy}}{{else}}<i class="fa fa-flag fa-lg color-primary" data-toggle="tooltip" data-placement="auto" title="{{activityHealthDescription}}"><span class="sr-only">{{activityHealthDescription}}</span></i>{{/if}}')
+        template: Handlebars.compile('{{#unless isActivityHealthy}}<i class="fa fa-flag fa-lg color-primary" data-toggle="tooltip" data-placement="auto" title="{{ACTIVITYHEALTHDESCRIPTION}}" aria-hidden="true"></i><span class="sr-only">{{ACTIVITYHEALTHDESCRIPTION}}</span>{{/unless}}')
     };
 
     var activityNameColumn = {
-        name: 'name',
-        label: 'Activity Name',
-        flexWidth: 'flex-width-1_5',
+        name: 'INSTANCENAME',
+        label: 'Activity',
+        flexWidth: 'flex-width-1',
         cell: Backgrid.StringCell.extend({
-            className: 'string-cell flex-width-1_5'
+            className: 'string-cell flex-width-1'
         }),
         sortValue: sortValueWithMode,
         sortType: 'cycle'
     };
-
     var domainColumn = {
-        name: 'domain',
+        name: 'DOMAIN',
         label: 'Domain',
         flexWidth: 'flex-width-1',
         cell: Backgrid.StringCell.extend({
@@ -104,9 +101,8 @@ define([
         sortValue: sortValueWithMode,
         sortType: 'cycle'
     };
-
     var createdByColumn = {
-        name: 'createdByName',
+        name: 'CREATEDBYNAME',
         label: 'Created by',
         flexWidth: 'flex-width-1_5',
         cell: Backgrid.StringCell.extend({
@@ -117,7 +113,7 @@ define([
     };
 
     var modeColumn = {
-        name: 'mode',
+        name: 'MODE',
         label: 'Mode',
         cell: 'string',
         sortType: 'cycle'
@@ -135,7 +131,7 @@ define([
     };
 
     var intendedForColumn = {
-        name: 'intendedFor',
+        name: 'INTENDEDFOR',
         label: 'Intended for',
         flexWidth: 'flex-width-1_5',
         cell: Backgrid.StringCell.extend({
@@ -181,7 +177,7 @@ define([
     };
 
     var patientNameColumn = {
-        name: 'patientName',
+        name: 'PATIENTNAME',
         label: 'Patient Name',
         flexWidth: 'flex-width-2',
         cell: Backgrid.HandlebarsCell.extend({
@@ -189,7 +185,7 @@ define([
         }),
         sortValue: sortValueWithMode,
         sortType: 'cycle',
-        template: Handlebars.compile('{{patientName}} {{#if patientSsnLastFour}}({{patientSsnLastFour}}){{/if}}')
+        template: Handlebars.compile('{{PATIENTNAME}} {{#if PATIENTSSNLASTFOUR}}({{PATIENTSSNLASTFOUR}}){{/if}}')
     };
 
     var patientViewSummaryColumns = [urgencyColumn, flagColumn, activityNameColumn, domainColumn, taskStateColumn];
@@ -198,18 +194,18 @@ define([
     var staffViewExpandedColumns = [urgencyColumn, patientNameColumn, flagColumn, activityNameColumn, domainColumn, taskStateColumn, intendedForColumn, assignedFacilityColumn, createdByColumn, createdAtColumn, createdOnColumn, modeColumn];
 
     return {
-        getColumnnsAndFilterFields: function(columnsViewType, contextViewType){
+        getColumnnsAndFilterFields: function(columnsViewType, contextViewType) {
             var columns, filterFields;
-            if(contextViewType === 'patient'){
+            if (contextViewType === 'patient') {
                 filterFields = patientViewExpandedColumns;
-                if(columnsViewType === 'expanded'){
+                if (columnsViewType === 'expanded') {
                     columns = patientViewExpandedColumns;
                 } else {
                     columns = patientViewSummaryColumns;
                 }
             } else {
                 filterFields = staffViewExpandedColumns;
-                if(columnsViewType === 'expanded'){
+                if (columnsViewType === 'expanded') {
                     columns = staffViewExpandedColumns;
                 } else {
                     columns = staffViewSummaryColumns;
@@ -217,7 +213,7 @@ define([
             }
 
             filterFields = _.pluck(filterFields, 'name');
-            if(contextViewType === 'staff'){
+            if (contextViewType === 'staff') {
                 filterFields.push('patientSsnLastFour');
             }
 

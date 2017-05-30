@@ -19,18 +19,6 @@ define([
     var AbstractModel = Abstract.Model.extend({
         url: undefined,
         initialize: function() {
-            //keep a pointer to the logged in user
-            this.user = UserService.getUserSession();
-            if (_.isUndefined(this.user.get('duz'))) {
-                throw new Error('No user has logged in.  Resource model cannot be instanted without user data available.');
-            }
-
-            //keep a pointer to the logged in patient
-            this.patient = PatientRecordService.getCurrentPatient();
-            if (_.isUndefined(this.patient.get('pid'))) {
-                throw new Error('No patient has been selected.  Resource model cannot be instanted without patient data available.');
-            }
-
             _.each(this.resourceEvents, function(val, key) {
                 this.listenTo(this, key, (_.isFunction(val)) ? val : this[val]);
             }, this);
@@ -93,6 +81,18 @@ define([
                     if (WritebackModel.prototype.initialize === init) return;
                     init.apply(this, arguments);
                 };
+
+                //keep a pointer to the logged in user
+                this.user = UserService.getUserSession();
+                if (_.isUndefined(this.user.get('duz'))) {
+                    throw new Error('No user has logged in.  Resource model cannot be instanted without user data available.');
+                }
+
+                //keep a pointer to the logged in patient
+                this.patient = PatientRecordService.getCurrentPatient();
+                if (_.isUndefined(this.patient.get('pid'))) {
+                    throw new Error('No patient has been selected.  Resource model cannot be instanted without patient data available.');
+                }
 
                 WritebackModel.prototype.constructor.apply(this, arguments);
             }

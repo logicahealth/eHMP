@@ -97,17 +97,9 @@ function asuFilter(logger, configuration, userClassUid, roleNames, docStatus, ac
         //Now that we know what was approved (flag that was set), filter out anything that isn't approved.
         async.filterSeries(progressNotes, function(item, callback) {
                 logger.debug('progress-notes-titles-endpoint.asuFilter asu approved for docDefUid ' + item.documentDefUid + ' is: ' + item.asuApproved);
-                if (item.asuApproved === true) {
-                    async.setImmediate(function() {
-                        return callback(true);
-                    });
-                } else {
-                    async.setImmediate(function() {
-                        return callback(false);
-                    });
-                }
+                return setImmediate(callback, null, item.asuApproved === true);
             },
-            function(fieldResults) {
+            function(error, fieldResults) {
                 logger.debug('progress-notes-titles-endpoint.asuFilter FINISHED FILTERING asu approved');
                 return finished(error, fieldResults);
             });
@@ -172,9 +164,6 @@ function fetchProgressNotes(req, res) {
         return serverSend(res, 'actionNames cannot be empty');
     }
 
-    var userDetails = req.session.user;
-    var userClassUid = _.pluck(userDetails.vistaUserClass, 'uid');
-
     if (!(docStatus && actionNames)) {
         req.logger.debug('progress-notes-titles-endpoint.fetchProgressNotes docStatus & actionNames are required');
         return serverSend(res, 'docStatus & actionNames are required');
@@ -200,11 +189,8 @@ function fetchProgressNotes(req, res) {
             return serverSend(res, 'progress-notes-titles-endpoint...getDefaultUserClass ERROR parsing data: ' + e, null, errorStatus);
         }
 
-        if (body && body.data && body.data.items) {
-            _.each(body.data.items, function(item) {
-                userClassUid.push(item.uid);
-            });
-        }
+        var userClasses = _.get(body, 'data.items', []);
+        var userClassUids = getUserClassUids(userClasses, req.session.user);
 
         if (roleNames) {
             roleNames = roleNames.split(',');
@@ -222,7 +208,7 @@ function fetchProgressNotes(req, res) {
                 return serverSend(res, err);
             }
 
-            asuFilter(req.logger, req.app.config, userClassUid, roleNames, docStatus, actionNames, site, retValue, function(error, progressNotes) {
+            asuFilter(req.logger, req.app.config, userClassUids, roleNames, docStatus, actionNames, site, retValue, function(error, progressNotes) {
                 if (err) {
                     return serverSend(res, err);
                 }
@@ -230,6 +216,25 @@ function fetchProgressNotes(req, res) {
             });
         });
     });
+}
+
+function getUserClassUids(userClasses, userDetails) {
+    var allUserClassUids = _
+        .chain(userDetails.vistaUserClass || [])
+        .concat(userClasses)
+        .map('uid')
+        .uniq()
+        .value();
+    var userClassUids = _.filter(allUserClassUids, function isUserSite(uid) {
+        return uid.indexOf(userDetails.site) > -1;
+    });
+    if (_.isEmpty(userClassUids)) {
+        // just send the first UID--rule evaluation requires at least one, but
+        // since none match the docDefUid it doesn't matter which one; this
+        // document can only succeed by role name matching
+        userClassUids = _.slice(allUserClassUids, 0, 1);
+    }
+    return userClassUids;
 }
 
 function getDocDef(req, callback) {

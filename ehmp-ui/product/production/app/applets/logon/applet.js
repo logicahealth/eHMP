@@ -61,6 +61,9 @@ define([
                 model: new LoginFormViewModel(),
             });
             this.loginFormRegion.show(this.loginFormView);
+        },
+        onDomRefresh: function() {
+            this.$el.focus();
         }
     });
 

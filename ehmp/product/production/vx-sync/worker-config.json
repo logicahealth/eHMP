@@ -1,5 +1,5 @@
 {
-  "VXSYNC_IP": "10.3.3.6",
+  "VXSYNC_IP": "IP      ",
   "vxsync": {
     "trackSolrStorage": true,
     "configRefresh": 60000,
@@ -29,17 +29,23 @@
             "order": 40
         }
     },
+    "solrStorageRules": {
+      "jds-domains": {},
+      "store-to-solr-attribute": {},
+      "ehmp-activity-data": {}
+    },
     "retrySync": {"maxRetries": 3},
+    "trackErrorsByMetastamp": ["record-enrichment", "store-record", "solr-record-storage", "event-prioritization-request", "vler-xform-vpr"],
     "endpointMaxSockets": 5,
     "maxMetastampSize": 10485760,
     "vistaAssigningAuthority": "USVHA",
     "vistaSites": {
         "C877": {
           "name": "KODAK",
-          "host": "10.2.2.102",
-          "port": 9210,
-          "accessCode": "ep1234",
-          "verifyCode": "ep1234!!",
+          "host": "IP        ",
+          "port": PORT,
+          "accessCode": "REDACTED",
+          "verifyCode": "REDACTED",
           "localIP": "127.0.0.1",
           "stationNumber": "507",
           "localAddress": "localhost",
@@ -48,10 +54,10 @@
       },
         "9E7A": {
           "name": "PANORAMA",
-          "host": "10.2.2.101",
-          "port": 9210,
-          "accessCode": "ep1234",
-          "verifyCode": "ep1234!!",
+          "host": "IP        ",
+          "port": PORT,
+          "accessCode": "REDACTED",
+          "verifyCode": "REDACTED",
           "localIP": "127.0.0.1",
           "stationNumber": "500",
           "localAddress": "localhost",
@@ -223,10 +229,10 @@
         ],
         "disabled": false,
         "pubsubConfig": {
-          "host": "10.4.4.205",
-          "port": 8999,
+          "host": "IP        ",
+          "port": PORT,
           "protocol": "http",
-          "path": "repositories.med.va.gov/fpds/vpr/",
+          "path": "repositories.URL       /fpds/vpr/",
           "server": "HMPTest",
           "clientName": "eHMP",
           "_type": "json",
@@ -632,15 +638,17 @@
             "workerCount": 1
           }
         },
-        "storage": {
+        "jds-storage": {
           "store-record": {
-            "workerCount": 5
-          },
-          "solr-record-storage": {
             "workerCount": 5
           },
           "operational-store-record": {
             "workerCount": 8
+          }
+        },
+        "solr-storage": {
+          "solr-record-storage": {
+            "workerCount": 5
           }
         },
         "enrichment": {
@@ -883,22 +891,43 @@
         }
       }
     },
+    "publishTubes": {
+      "activity-management-event": {
+        "eventFilter": {
+          "generic": {
+            "domains": [
+              "lab",
+              "order",
+              "ehmp-order",
+              "ehmp-activity",
+              "ehmp-note"
+            ]
+          }
+        }
+      }
+    },
         "jds": {
             "protocol": "http",
-            "host": "10.2.2.110",
-            "port": "9082",
+            "host": "IP        ",
+            "port": "PORT",
             "timeout": 300000
         },
         "pjds": {
             "protocol": "http",
-            "host": "10.2.2.110",
-            "port": "9082",
+            "host": "IP        ",
+            "port": "PORT",
             "timeout": 300000
         },
 
         "solrClient": {
             "core": "vpr",
-            "zooKeeperConnection": "10.4.4.205:2181"
+            "zooKeeperConnection": "IP             "
+        },
+
+        "solr-xform": {
+            "vlerdocument": {
+                "regexFilters" : ["\\^multipart\\^\\^Base64\\^\\w*"]
+            }
         },
 
         "mvi": {
@@ -1179,11 +1208,12 @@
         "syncPriority": 50,
         "rpcContext": "HMP SYNCHRONIZATION CONTEXT",
         "configRefresh": 0,
-        "syncUrl": "http://10.3.3.6:8080/sync/doLoad",
-        "statusUrl": "http://10.3.3.6:8080/sync/status",
+        "syncUrl": "http://IP           /sync/doLoad",
+        "statusUrl": "http://IP           /sync/status",
         "mixedEnvironmentMode": true,
         "activeUserThresholdDays": 30,
         "handlerProfiles": {
+            "defaultWorkerCount": 1,
             "profileCollection": {
                 "default": "all",
                 "primary": {

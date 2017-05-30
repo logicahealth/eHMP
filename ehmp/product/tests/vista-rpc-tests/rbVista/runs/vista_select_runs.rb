@@ -15,8 +15,8 @@ require 'vista_user'
 class VistaSelectRuns < Test::Unit::TestCase
 
   def setup
-    @host = '10.2.2.102'
-    @port = 9210
+    @host = 'IP'
+    @port = PORT
     @cxn = VistaConnection.new @host, @port
     @user = VistaUser.new
     p '-------------'
@@ -33,8 +33,8 @@ def test_fms_run
     # query.from = '178'
     # query.part = '178'
     # query.index = 'AN'
-    access_code = 'pu1234'
-    verify_code = 'pu1234!!'
+    access_code = 'REDACTED'
+    verify_code = 'REDACTED'
     context = 'XUPROGMODE'
     sensitivePatient = "20"
 

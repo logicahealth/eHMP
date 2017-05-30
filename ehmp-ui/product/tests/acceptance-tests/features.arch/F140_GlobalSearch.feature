@@ -259,8 +259,8 @@ Scenario: All Patient search with first name and full last name that is in Kodak
     When user attempts login
         | field      | value    |
         | Facility   | Kodak    |
-        | AccessCode | pu1234   |
-        | VerifyCode | pu1234!! |
+        | AccessCode | REDACTED |
+        | VerifyCode | REDACTED |
         | SignIn     |          |
     Then the patient search screen is displayed
     And the User selects All Patient

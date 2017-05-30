@@ -15,10 +15,15 @@
         </div>
         <div id="workspaceFilter" class="grid-filter all-padding-no panel-collapse collapse flex-grow-fixed">
             <div class="filterRegion all-padding-sm background-color-primary-lightest">
-                <form class="backgrid-filter form-search all-margin-no">
-                    <label class="sr-only" for="searchScreens">Filter workspace</label>
-                    <i class="fa fa-filter font-size-14"></i>
-                    <input id="searchScreens" class="form-control workspace-filter-input" type="search" title="Enter in text to filter workspaces by title or description below." placeholder="Filter by title or description" name="searchScreens"/> {{ui-button "Clear." srOnlyLabel=true classes="btn-icon clear all-padding-no clearSearch color-grey-darkest" title="Press enter to clear filtered text" icon="fa-times"}}
+                <form class="form-search all-margin-no">
+                    <div class="form-group form-group--searchbar">
+                        <div class="input-group submit-hidden">
+                            <label for="searchScreens" class="sr-only">Filter workspace</label>
+                            <div class="input-icon--left" aria-hidden="true"><i class="fa fa-filter"></i></div>
+                            <input type="search" id="searchScreens" class="form-control workspace-filter-input" autocomplete="off" title="Enter in text to filter workspaces by title or description below." placeholder="Filter by title or description" name="searchScreens"/>
+                            {{ui-button "Clear" srOnlyLabel=true classes="btn-icon clear-input-btn clear clearSearch color-grey-darkest hidden" title="Press enter to clear filtered text" icon="fa-times"}}
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

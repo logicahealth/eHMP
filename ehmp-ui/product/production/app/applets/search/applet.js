@@ -4,9 +4,9 @@ define([
     'underscore',
     'handlebars',
     'app/applets/search/textSearchInput/view',
-    'app/applets/search/searchView',
+    'app/applets/search/views/searchView',
 ], function(Backbone, Marionette, _, Handlebars, TextSearchInputView, SearchView) {
-    "use strict";
+    'use strict';
 
     var AppletLayoutView = Backbone.Marionette.LayoutView.extend({
         template: Handlebars.compile('<div class="search-applet-container"><div>'),
@@ -14,10 +14,10 @@ define([
             'SearchAppletRegion': '.search-applet-container'
         },
         regions: {
-            MainAppletRegion: "@ui.SearchAppletRegion"
+            MainAppletRegion: '@ui.SearchAppletRegion'
         },
-        initialize: function() {
-            this.searchView = new SearchView();
+        initialize: function(options) {
+            this.searchView = new SearchView(options);
         },
         onBeforeShow: function() {
             this.MainAppletRegion.show(this.searchView);
@@ -25,7 +25,7 @@ define([
     });
 
     var applet = {
-        id: "search",
+        id: 'search',
         viewTypes: [{
             type: 'expanded',
             view: AppletLayoutView,

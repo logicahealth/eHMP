@@ -2,7 +2,6 @@
 var activities = require('./activities-operations-resource');
 var allInstances = require('./all-instances-resource');
 var singleInstance = require('./single-instance');
-var activityEventProcess = require('./eventprocessor/activity-event-process-resource');
 
 function getResourceConfig() {
     return [{
@@ -64,18 +63,6 @@ function getResourceConfig() {
         requiredPermissions: ['edit-task'],
         isPatientCentric: false,
         description: 'Aborts a process instance',
-        subsystems: ['jbpm']
-    }, {
-        name: 'activities-startevent',
-        path: 'startactivityevent',
-        post: activityEventProcess.startActivityEvent,
-        interceptors: {
-            operationalDataCheck: false,
-            synchronize: false
-        },
-        requiredPermissions: ['read-task'],
-        isPatientCentric: false,
-        description: 'created the activity instance',
         subsystems: ['jbpm']
     }, {
         name: 'activities-signal',

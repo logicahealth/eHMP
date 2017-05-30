@@ -56,8 +56,8 @@ define([
         behaviors: _.omit(SelectControlView.prototype.behaviors(), 'ErrorMessages'),
         getTemplate: function() {
             var selectTemplate = [
-                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}' +
-                '<select class="{{form-class-name "controlClassName"}}" id="{{clean-for-id name}}" name="{{name}}"' +
+                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel)}}' +
+                '<select class="{{form-class-name "controlClassName"}}" id="{{clean-for-id id}}" name="{{name}}"' +
                 '{{#if title}} title="{{title}}"{{/if}} ' +
                 '{{#if disabled}} disabled{{/if}}' +
                 '{{#if required}} required{{/if}}' +
@@ -118,7 +118,7 @@ define([
                 this.onUserInput.apply(this, arguments);
             }
         }, ControlService.LayoutViewControl.prototype.events),
-        behaviors: _.omit(ControlService.LayoutViewControl.prototype.behaviors, 'ErrorMessages'),
+        behaviors: _.omit(ControlService.LayoutViewControl.prototype.behaviors, ['ErrorMessages', 'UpdateConfig']),
         requiredFields: ['selectOptions', 'checklistOptions'],
         initialize: function(options) {
             this.initOptions(options);

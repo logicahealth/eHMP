@@ -2,6 +2,7 @@
 
 /**
  * TODO: put this in pjds subsystem
+ * TODO: remove unused res function parameters
  */
 
 var _ = require('lodash');

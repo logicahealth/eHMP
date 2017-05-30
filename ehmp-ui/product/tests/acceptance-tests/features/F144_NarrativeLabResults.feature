@@ -1,4 +1,4 @@
-@F144 @DE1757   @reg1
+@F144_narrative_labs @DE1757 @reg1 
 Feature: Narrative Lab Results
 
 
@@ -30,7 +30,7 @@ Scenario: User views the Narrative Lab Results
     And Narrative Lab Results applet loads without issue
 
 # non numeric labs were removed from numeric lab results and put in narrative lab results
-@US2467 @TA7888 @modal_test @DE2903 @DE2969 @DE3334 @DE4032 @DE4051 @DE4554 @DE6755
+@US2467 @TA7888 @narrative_modal_test @DE2903 @DE2969 @DE3334 @DE4032 @DE4051 @DE4554 @DE6755
 Scenario: Narrative Lab Results Modal - no Lab History graph is displayed for non-numerical result types.
   Given user navigates to expanded Narrative Lab Results Applet
   And Narrative Lab Results applet loads without issue
@@ -58,14 +58,15 @@ Scenario: User is able to sort Narrative lab result applet
   And the user sorts the Narrative Lab Results expand view applet by column Description
   Then the Narrative Lab Results applet expand view applet is sorted in reverse alphabetic order based on Description
 
-#placeholder for detail view
-#defect already exists, test is not yet complete as we don't know what the detail view fields look like
-@f144_narrative_labs_detail_view @DE6776 @debug
+@f144_narrative_labs_detail_view @DE6776
 Scenario: User is able to view details of Narrative lab result applet 
   And the user changes the global date filter to All
   When user navigates to Narrative Lab Results Applet expanded view
   And the user views the details of the first Narrative Lab Results 
   Then the detail modal is displayed
-#  And the Narrative Lab Results Detail modal displays 
-#      | modal item      |
-#      | Date            | 
+  And the Narrative Lab Results Detail modal displays 
+      | modal item      |
+      | Facility		|
+      | Author			|
+      | Status			|
+      | Date/Time       | 

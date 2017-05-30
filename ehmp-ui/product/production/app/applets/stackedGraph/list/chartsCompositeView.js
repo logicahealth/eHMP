@@ -1,18 +1,22 @@
+/* global ADK */
 define([
     'backbone',
     'marionette',
     'underscore',
+    'jquery',
     'highcharts',
     'hbs!app/applets/stackedGraph/list/chartsCompositeViewTemplate',
-    'app/applets/stackedGraph/utils/utils',
     'app/applets/stackedGraph/list/rowItemView',
-    'app/applets/medication_review_v2/medicationResourceHandler',
-    'app/applets/medication_review_v2/medicationCollectionHandler',
-    'app/applets/medication_review_v2/charts/stackedGraph',
+    'app/applets/medication_review/medicationResourceHandler',
+    'app/applets/medication_review/medicationCollectionHandler',
+    'app/applets/medication_review/medicationsUngrouped/medicationOrderCollection',
+    'app/applets/medication_review/appletHelper',
+    'hbs!app/applets/stackedGraph/list/pickListItemTemplate',
+    'app/applets/medication_review/charts/stackedGraph',
     'typeahead',
     'highcharts-more',
     'app/applets/lab_results_grid/applet'
-], function(Backbone, Marionette, _, Highcharts, ChartsCompositeViewTemplate, Utils, RowItemView, MedsResource, CollectionHandler) {
+], function(Backbone, Marionette, _, $, Highcharts, ChartsCompositeViewTemplate, RowItemView, MedsResource, CollectionHandler, MedicationCollection, AppletHelper, PickListItemTemplate) {
     "use strict";
 
     function makeString(object) {
@@ -20,13 +24,6 @@ define([
             return '';
         }
         return '' + object;
-    }
-
-    function capitalize(str, lowercaseRest) {
-        str = makeString(str);
-        var remainingChars = !lowercaseRest ? str.slice(1) : str.slice(1).toLowerCase();
-
-        return str.charAt(0).toUpperCase() + remainingChars;
     }
 
     function titleize(str) {
@@ -81,13 +78,40 @@ define([
             this.listenTo(ADK.Messaging.getChannel('gists'), 'close:quicklooks', function(el) {
                 this.$('[data-toggle=popover]').not(el).popup('hide');
             });
+
+            this.stackedGraphModel = new ADK.UIResources.Writeback.StackedGraph.Model();
+            this.bindEntityEvents(this.stackedGraphModel, this.stackedGraphModelEvents);
+        },
+        stackedGraphModelEvents: {
+            'create:success': 'success',
+            'update:success': 'success'
+        },
+        success: function(model, response) {
+            var newActiveChartIndex = this.childViewOptions.activeCharts.length - (model.reorderObj.newIndex + 1);
+            var screenId = ADK.ADKApp.currentScreen.config.id;
+            var userDefinedGraphs = response.data.get('userDefinedGraphs');
+            var screenObject = _.findWhere(userDefinedGraphs, {
+                id: screenId
+            });
+            if (screenObject) {
+                var appletsObject = _.findWhere(screenObject.applets, {
+                    instanceId: this.instanceId
+                });
+                if (_.get(appletsObject, 'graphs')) {
+                    ADK.UserDefinedScreens.reorderStackedGraphsInSession(screenId, this.instanceId, appletsObject.graphs);
+                }
+            }
+            // Since the updated graph gets unshifted to position 0, reorder the activeCharts to match.
+            var chartToMove = this.childViewOptions.activeCharts.splice(0, 1)[0];
+            this.childViewOptions.activeCharts.splice(newActiveChartIndex, 0, chartToMove);
         },
         reorderRows: function(target, reorderObj) {
-            var self = this;
             if (reorderObj.oldIndex !== reorderObj.newIndex) {
-                // Remove the selected model from the collection so that i can be inserted into the new location.
+                // Remove the selected model from the collection so that it can be inserted into the new location.
                 var temp = this.collection.at(reorderObj.oldIndex);
-                this.collection.remove(temp, {removeIndex: reorderObj.oldIndex});
+                this.collection.remove(temp, {
+                    removeIndex: reorderObj.oldIndex
+                });
                 // Add the graph back to the correct location.
                 this.collection.add(temp, {
                     at: reorderObj.newIndex,
@@ -100,28 +124,19 @@ define([
                         silent: true
                     });
                 });
-                var model = Utils.buildUpdateModel(ADK.ADKApp.currentScreen.config.id, self.instanceId, self.collection);
-                model.reorderObj = reorderObj;
-                model.save(null, {
-                    success: function(model, response) {
-                        var newActiveChartIndex = self.childViewOptions.activeCharts.length - (model.reorderObj.newIndex+1);
-                        var screenId = ADK.ADKApp.currentScreen.config.id;
-                        var screenObject = _.findWhere(response.data.userDefinedGraphs, {
-                            id: screenId
-                        });
-                        if (screenObject) {
-                            var appletsObject = _.findWhere(screenObject.applets, {
-                                instanceId: self.instanceId
-                            });
-                            if (appletsObject && appletsObject.graphs) {
-                                ADK.UserDefinedScreens.reorderStackedGraphsInSession(screenId, self.instanceId, appletsObject.graphs);
-                            }
-                        }
-                        // Since the updated graph gets unshifted to position 0, reorder the activeCharts to match.
-                        self.childViewOptions.activeCharts.splice(newActiveChartIndex, 0, self.childViewOptions.activeCharts.splice(0,1)[0]);
-                    },
-                    error: function(model) {}
+
+                var graphs = this.collection.map(function(model) {
+                    return {
+                        'graphType': model.get('stackedGraphType'),
+                        'typeName': model.get('stackedGraphTypeName')
+                    };
                 });
+
+                this.stackedGraphModel.set('instanceId', this.instanceId);
+                this.stackedGraphModel.set('graphs', graphs.reverse());
+                this.stackedGraphModel.setIsNew(false);
+                this.stackedGraphModel.reorderObj = reorderObj;
+                this.stackedGraphModel.save();
             }
         },
         hidePopovers: function(e) {
@@ -129,24 +144,25 @@ define([
             ADK.Messaging.getChannel('gists').trigger('close:quicklooks');
         },
         onDestroy: function() {
-            $(this.el).find('.placeholder-tile-sort').remove();
+            this.$el.find('.placeholder-tile-sort').remove();
             $(document).off(this.eventString());
         },
         onShow: function() {
             var self = this;
-            $(this.el).find('.collection-container').append('<div class="placeholder-tile-sort hidden"></div>');
-            $(this.el).find('.placeholder-tile-sort').on('dragover', function(e) {
+            this.$el.find('.collection-container').append('<div class="placeholder-tile-sort hidden"></div>');
+            this.$el.find('.placeholder-tile-sort').on('dragover', function(e) {
                 e.preventDefault();
             });
 
-            $(this.el).find('.placeholder-tile-sort').on('drop', function(e) {
+            this.$el.find('.placeholder-tile-sort').on('drop', function(e) {
                 var index = e.originalEvent.dataTransfer.getData('text');
                 var originalIndex = Number(index);
                 var targetIndex = $(this).index() - 2;
                 $(this).addClass('hidden');
 
-                if (originalIndex > targetIndex)
+                if (originalIndex > targetIndex) {
                     targetIndex++;
+                }
 
                 var reorder = {
                     oldIndex: originalIndex,
@@ -173,7 +189,6 @@ define([
 
                             // an array that will be populated with substring matches
                             matches = [];
-
                             // regex used to determine if a string contains the substring `q`
                             substrRegex = new RegExp(q, 'i');
 
@@ -186,7 +201,6 @@ define([
                                     var match = {
                                         value: str,
                                         type: type
-                                        // displayKey: capitalize(str)
                                     };
                                     var displayValue = str;
                                     if (str === 'LDL CHOLESTEROL') {
@@ -195,23 +209,15 @@ define([
                                         displayValue = titleize(str);
                                     }
                                     match.displayValue = displayValue;
-                                    if (_.indexOf(self.isAdded, (str.toUpperCase() + '-' + type.toUpperCase())) === -1) {
-                                        match.isAdded = false;
-                                    } else {
-                                        match.isAdded = true;
-                                    }
+                                    match.isAdded = _.indexOf(self.isAdded, (str.toUpperCase() + '-' + type.toUpperCase())) !== -1;
 
-                                    if (!currentScreen.config.predefined) {
-                                        match.predefined = false;
-                                    } else if (currentScreen.config.predefined) {
-                                        match.predefined = true;
-                                    }
+                                    match.predefined = Boolean(currentScreen.config.predefined);
                                     matches.push(match);
                                 }
                             });
 
                             if (matches.length > 0) {
-                                $(self.$el).closest('.panel-primary').find('.dropdown .sr-only[aria-live]').text(matches.length + ' results found for ' + this.query + ' under ' + matches[0].type);
+                                self.$el.closest('.panel-primary').find('.dropdown .sr-only[aria-live]').text(matches.length + ' results found for ' + this.query + ' under ' + matches[0].type);
                             }
                             cb(matches);
                         };
@@ -221,54 +227,56 @@ define([
                     var labDeferred = $.Deferred();
                     var medDeferred = $.Deferred();
 
+                    //Getting the Vitals from the resource pool
                     var vitalFetchOptions = {
-                        resourceTitle: 'operational-data-type-vital',
                         onSuccess: function(collection) {
                             vitalDeferred.resolve({
                                 coll: collection
                             });
                         }
                     };
+                    var operationalDataTypeVitals = new ADK.UIResources.Fetch.Vitals.OperationalDataTypeVitals();
+                    operationalDataTypeVitals.fetchCollection(vitalFetchOptions);
 
-                    ADK.ResourceService.fetchCollection(vitalFetchOptions);
-
+                    //Getting the Labs from the resource pool
                     var labFetchOptions = {
-                        resourceTitle: 'operational-data-type-laboratory',
                         onSuccess: function(collection) {
                             labDeferred.resolve({
                                 coll: collection
                             });
                         }
                     };
+                    var operationalDataTypeLabs = new ADK.UIResources.Fetch.Labs.OperationalDataTypeLabs();
+                    operationalDataTypeLabs.fetchCollection(labFetchOptions);
 
-                    ADK.ResourceService.fetchCollection(labFetchOptions);
-
-                    var medFetchOptions = {
-                        resourceTitle: 'operational-data-type-medication',
-                        onSuccess: function(collection) {
-                            medDeferred.resolve({
-                                coll: collection
-                            });
-                        }
-                    };
-
-                    var medGroups = ADK.PatientRecordService.createEmptyCollection({
-                        pageable: true
+                    var MedModel = Backbone.Model.extend({
+                        parse: AppletHelper.parseMedResponse
                     });
+                    var GroupedMedCollection = MedicationCollection.extend({
+                        model: MedModel
+                    });
+                    var medGroups = new GroupedMedCollection();
                     self.listenToOnce(medGroups, 'read:success', function(collection) {
                         self.stopListening(medGroups, 'read:error');
-                        var groupNames = MedsResource.getMedicationGroupNames(collection);
+                        var groupedCollection = CollectionHandler.resetCollections(collection, false);
+                        var groupNames = MedsResource.getMedicationGroupNames(groupedCollection);
                         medDeferred.resolve({
                             coll: groupNames,
-                            collection: collection
+                            collection: groupedCollection
                         });
                     });
-                    self.listenToOnce(medGroups, 'read:error', function(collection) {
+                    self.listenToOnce(medGroups, 'read:error', function() {
                         self.stopListening(medGroups, 'read:success');
                     });
-                    CollectionHandler.fetchAllMeds(false, medGroups);
+                    medGroups.performFetch({
+                        onSuccess: function(collection) {
+                            collection.trigger('read:success', collection);
+                        },
+                        onError: function(collection) {
+                            collection.trigger('read:error');
+                        }
+                    });
 
-                    // ADK.ResourceService.fetchCollection(medFetchOptions);
 
                     var sortFunc = function(a, b) {
                         if (a < b) {
@@ -285,7 +293,6 @@ define([
 
                     $.when(vitalDeferred, labDeferred, medDeferred).done(
                         function(vitalPickListCollection, labPickListCollection, medPickListCollection) {
-                            //self._base.render.apply(self, arguments);
                             var vitalPickList = vitalPickListCollection.coll.pluck('name');
                             vitalPickList.push('BMI');
                             vitalPickList.sort(sortFunc);
@@ -293,46 +300,40 @@ define([
                             var labPickList = labPickListCollection.coll.pluck('name');
                             labPickList.sort(sortFunc);
 
-                            var medPickList = [];
-                            medPickList = medPickListCollection.coll;
+                            var medPickList = medPickListCollection.coll;
                             medPickList.sort(sortFunc);
 
-                            var pickListItemTemplate = '<% if(isAdded && predefined){ %><% } '+
-                                                        'else if((!isAdded && !predefined)  || (!isAdded && predefined)) { %>'+
-                                                            '<p><%= displayValue %> <i><%= type %></i> <span class="small pull-right"><i class="fa fa-plus"></i> Add</span></p><% } '+
-                                                        'else if(isAdded && !predefined) { %>'+
-                                                            '<p><%= displayValue %> <i><%= type %></i> <span class="small pull-right"><i class="fa fa-minus"></i> Delete</span></p><% } %>';
                             var emptyItemTemplate = '<div class="left-margin-sm right-margin-sm" aria-live="assertive" aria-atomic="true"> No results found for <strong><%= query %></strong> under';
                             theTypeahead.off();
                             theTypeahead.typeahead({
-                                hint: false,
-                                highlight: true,
-                                minLength: 3
-                            }, {
-                                name: 'vitals',
-                                displayKey: 'displayValue',
-                                source: substringMatcher(vitalPickList, 'Vitals'),
-                                templates: {
-                                    suggestion: _.template(pickListItemTemplate),
-                                    empty: _.template(emptyItemTemplate + ' Vitals </div>')
-                                }
-                            }, {
-                                name: 'labs',
-                                displayKey: 'displayValue',
-                                source: substringMatcher(labPickList, 'Lab Tests'),
-                                templates: {
-                                    suggestion: _.template(pickListItemTemplate),
-                                    empty: _.template(emptyItemTemplate + ' Lab Tests </div>')
-                                }
-                            }, {
-                                name: 'meds',
-                                displayKey: 'displayValue',
-                                source: substringMatcher(medPickList, 'Medications'),
-                                templates: {
-                                    suggestion: _.template(pickListItemTemplate),
-                                    empty: _.template(emptyItemTemplate + ' Medications </div>')
-                                }
-                            })
+                                    hint: false,
+                                    highlight: true,
+                                    minLength: 3
+                                }, {
+                                    name: 'vitals',
+                                    displayKey: 'displayValue',
+                                    source: substringMatcher(vitalPickList, 'Vitals'),
+                                    templates: {
+                                        empty: _.template(emptyItemTemplate + ' Vitals </div>'),
+                                        suggestion: PickListItemTemplate
+                                    }
+                                }, {
+                                    name: 'labs',
+                                    displayKey: 'displayValue',
+                                    source: substringMatcher(labPickList, 'Lab Tests'),
+                                    templates: {
+                                        empty: _.template(emptyItemTemplate + ' Lab Tests </div>'),
+                                        suggestion: PickListItemTemplate
+                                    }
+                                }, {
+                                    name: 'meds',
+                                    displayKey: 'displayValue',
+                                    source: substringMatcher(medPickList, 'Medications'),
+                                    templates: {
+                                        empty: _.template(emptyItemTemplate + ' Medications </div>'),
+                                        suggestion: PickListItemTemplate
+                                    }
+                                })
                                 .on('typeahead:opened', function() {
                                     var ttDrop = theTypeahead.parents('.twitter-typeahead').find('.tt-dropdown-menu');
                                     if (ttDrop.find('.user-input').length === 0) {
@@ -346,12 +347,14 @@ define([
                                     var screenReaderText = (suggestion.isAdded ? 'Delete graph by pressing enter' : 'Add graph by pressing enter');
                                     $(this).closest('.dropdown').find('.sr-only[aria-live]').text(screenReaderText);
                                 })
-                                .on('typeahead:selected', function(e, suggestion, dataset) {
+                                .on('typeahead:selected', function(e, suggestion) {
+                                    var instanceId = self.instanceId;
+                                    var graphType = suggestion.type;
+                                    var value = suggestion.value;
 
                                     if (suggestion.isAdded) {
-
                                         var model = self.collection.find(function(model) {
-                                            return (model.get('stackedGraphTypeName') === suggestion.value.toUpperCase() && model.get('stackedGraphType') === suggestion.type);
+                                            return (model.get('stackedGraphTypeName') === value.toUpperCase() && model.get('stackedGraphType') === graphType);
                                         });
 
                                         if (!_.isUndefined(model)) {
@@ -361,7 +364,6 @@ define([
                                                 model: model
                                             });
                                         }
-
                                     } else {
                                         suggestion.isAdded = true;
 
@@ -370,50 +372,45 @@ define([
                                         var position = self.collection.length === 0 ? 0 : self.collection.at(0).get('stackedGraphPosition') - 1;
 
                                         var params = {
-                                            typeName: suggestion.value,
-                                            instanceId: self.instanceId,
-                                            graphType: suggestion.type,
+                                            typeName: value,
+                                            instanceId: instanceId,
+                                            graphType: graphType,
                                             graphPosition: position
                                         };
 
                                         if (!ADK.ADKApp.currentScreen.config.predefined) {
-                                            var pickListPersistanceFetchOptions = {
-                                                resourceTitle: 'user-defined-stack',
-                                                fetchType: 'POST',
-                                                criteria: {
-                                                    id: ADK.ADKApp.currentScreen.config.id,
-                                                    instanceId: self.instanceId,
-                                                    graphType: suggestion.type,
-                                                    typeName: suggestion.value.toUpperCase()
-                                                }
+                                            //Replacing fetch 'POST'
+                                            var stackedGraphModel = new ADK.UIResources.Writeback.StackedGraph.Model();
+                                            var attributes = {
+                                                id: ADK.ADKApp.currentScreen.config.id,
+                                                instanceId: instanceId,
+                                                graphType: graphType,
+                                                typeName: value.toUpperCase()
                                             };
-
-
-                                            ADK.ResourceService.fetchCollection(pickListPersistanceFetchOptions);
+                                            stackedGraphModel.save(attributes);
 
                                             ADK.UserDefinedScreens.addOneStackedGraphToSession(
                                                 ADK.ADKApp.currentScreen.config.id,
-                                                self.instanceId,
-                                                suggestion.type,
-                                                suggestion.value.toUpperCase());
-
+                                                instanceId,
+                                                graphType,
+                                                value.toUpperCase()
+                                            );
                                         }
 
                                         $(this).typeahead('val', '');
 
-                                        var channel, deferredResponse;
-                                        if (suggestion.type === 'Vitals') {
+                                        var channel;
+                                        if (graphType === 'Vitals') {
                                             channel = ADK.Messaging.getChannel('vitals');
-                                            deferredResponse = channel.request('chartInfo', params);
-                                        } else if (suggestion.type === 'Lab Tests') {
+                                            channel.request('chartInfo', params);
+                                        } else if (graphType === 'Lab Tests') {
                                             channel = ADK.Messaging.getChannel('lab_results_grid');
-                                            deferredResponse = channel.request('chartInfo', params);
-                                        } else if (suggestion.type === 'Medications') {
+                                            channel.request('chartInfo', params);
+                                        } else if (graphType === 'Medications') {
                                             channel = ADK.Messaging.getChannel('meds_review');
                                             params.collection = medPickListCollection.collection;
-                                            deferredResponse = channel.request('chartInfo', params);
+                                            channel.request('chartInfo', params);
                                         }
-                                        //end of else
                                     }
                                 })
                                 .click(function(e) {
@@ -424,11 +421,12 @@ define([
                                         e.stopPropagation();
                                     }
                                 })
-                                .on('keyup', function(e) {
+                                .on('keyup', function() {
                                     var val = $(this).val();
                                     theTypeahead.parents('.twitter-typeahead').find('.tt-dropdown-menu .user-input').text('Search for ' + val);
                                 });
-                        });
+                        }
+                    );
 
                     //The dropdown closes everytime the input box looses focus, but hidden.bs.dropdown isn't always triggered, so we're using 'focusout' instead
                     theTypeahead.parents('.dropdown-menu').on('focusout', function(e) {
@@ -443,7 +441,6 @@ define([
                         });
                     });
                 }
-
             }, 500);
         }
     });

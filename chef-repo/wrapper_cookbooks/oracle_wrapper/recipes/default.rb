@@ -22,3 +22,5 @@ include_recipe "oracle_wrapper::create_dbs"
 include_recipe "oracle_wrapper::env_vars"
 
 include_recipe "oracle_wrapper::stig_script"
+
+include_recipe "oracle_wrapper::apex"

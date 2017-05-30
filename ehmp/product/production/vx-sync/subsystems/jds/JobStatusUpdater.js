@@ -19,10 +19,36 @@ function JobStatusUpdater(logger, config, jdsClient) {
     this.config = config;
 }
 
+JobStatusUpdater.prototype.childInstance = function(log) {
+    return new JobStatusUpdater(log, this.config, this.jdsClient.childInstance(log));
+};
+
+JobStatusUpdater.prototype.storeMetaStampErrorEvent = function(job, callback) {
+    var storeEventInfo = {
+        'uid': job.record.uid,
+        'eventStamp': job.record.stampTime,
+        'type': job.type === 'solr-record-storage' ? 'solrError' : 'syncError'
+    };
+
+    var self = this;
+
+    self.jdsClient.setEventStoreStatus(job.record.pid, storeEventInfo, function(error, response, body) {
+        self.logger.debug('JobStatusUpdater.storeMetaStampErrorEvent: Response from setEventStoreStatus: error: %s, response: %j, result: %j', error, response, body);
+        if (error) {
+            self.logger.error('JobStatusUpdater.storeMetaStampErrorEvent: An error occurred.  error: %s; ', error);
+            return callback(error, response, body);
+        }
+        if ((response) && (response.statusCode !== 201)) {
+            self.logger.error('JobStatusUpdater.storeMetaStampErrorEvent: Response status code was not correct. response: %j; result: %j', response, body);
+        }
+        return callback(error, response, job);
+    });
+};
+
 JobStatusUpdater.prototype.writeStatus = function(jobState, callback) {
     var self = this;
 
-    if (!_.isObject(jobState)) { callback('Invalid job state'); }
+    if (!_.isObject(jobState)) { return callback('Invalid job state'); }
     if (_.isUndefined(jobState.timestamp) || jobState.status !== 'created') {
         jobState.timestamp = Date.now().toString();
     }
@@ -56,13 +82,16 @@ JobStatusUpdater.prototype.writeStatus = function(jobState, callback) {
 };
 
 JobStatusUpdater.prototype.errorJobStatus = function(job, error, callback) {
-    var self = this;
     job.status = 'error';
     job.error = error;
 
-    self.logger.debug(inspect(job));
+    this.logger.debug(inspect(job));
 
-    this.writeStatus(job, callback);
+    if (_.has(this.config, 'trackErrorsByMetastamp') && _.contains(this.config.trackErrorsByMetastamp, job.type)) {
+        this.storeMetaStampErrorEvent(job, callback);
+    } else {
+        this.writeStatus(job, callback);
+    }
 };
 
 JobStatusUpdater.prototype.createJobStatus = function(job, callback) {

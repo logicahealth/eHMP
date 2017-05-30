@@ -24,13 +24,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="includeVLER" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="itemId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="max" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="patient" type="{http://webservice.vds.med.va.gov/}patient" minOccurs="0"/>
+ *         &lt;element name="patient" type="{http://webservice.vds.URL       /}patient" minOccurs="0"/>
  *         &lt;element name="recordSiteCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="requestingApp" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sortBy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="startDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="status" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="user" type="{http://webservice.vds.med.va.gov/}user" minOccurs="0"/>
+ *         &lt;element name="user" type="{http://webservice.vds.URL       /}user" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

@@ -7,8 +7,6 @@ var jobUtil = require(global.VX_UTILS + 'job-utils');
 var metastampUtil = require(global.VX_UTILS + 'metastamp-utils');
 var moment = require('moment');
 var pidUtil = require(global.VX_UTILS + 'patient-identifier-utils');
-var uidUtil = require(global.VX_UTILS + 'uid-utils');
-var OperationaldataSyncUtil = require(global.VX_UTILS + 'site-operational-data-status-util');
 
 function handle(log, config, environment, job, handlerCallback) {
     log.debug('received request to HDR xform (%s) %s', job.dataDomain, job.type);
@@ -26,7 +24,6 @@ function handle(log, config, environment, job, handlerCallback) {
 
     if (_.isUndefined(job.record) || _.isUndefined(job.record.data) || ! _.isArray(job.record.data.items) || job.record.data.items.length < 1 || _.isUndefined(job.record.data.items[0].uid)) {
         log.error('hdr-xform-domain-vpr-handler: expected an HDR job with valid UID');
-        // @FUTURETODO, figure out root cause of this problem.
         return setTimeout(handlerCallback, 0, null, errorUtil.createFatal('No Valid Data Found'));
     }
 
@@ -101,6 +98,10 @@ function handle(log, config, environment, job, handlerCallback) {
                 param: job.param
             };
 
+            if (job.referenceInfo) {
+                meta.referenceInfo = job.referenceInfo;
+            }
+
             return jobUtil.createEventPrioritizationRequest(job.patientIdentifier, job.dataDomain, item, meta);
         });
 
@@ -157,27 +158,6 @@ function xformItemCollection(log, config, record, icn, stampTime) {
         log.debug('hdr-xform-domain-vpr-handler.xformItemCollection(): vprItem: %s', vprItem.pid);
 
         return vprItem;
-    });
-
-    var operationaldataSyncUtil = OperationaldataSyncUtil.getInstance();
-
-    retVal = _.filter(retVal, function(item) {
-        var siteHash = uidUtil.extractSiteHash(item.uid);
-        log.debug('hdr-xform-domain-vpr-handler.xformItemCollection(): siteHash', siteHash);
-
-        if (! _.contains(primaryVistaSites, siteHash)) {
-            log.debug('hdr-xform-domain-vpr-handler.xformItemCollection(): is not contained in primary site%j', primaryVistaSites);
-            return true;
-        }
-
-        if (! operationaldataSyncUtil.isSynced(log, siteHash))  {
-            log.debug('hdr-xform-domain-vpr-handler.xformItemCollection(): is not synced %j', siteHash);
-            return true;
-        }
-
-        log.debug('hdr-xform-domain-vpr-handler.xformItemCollection(): deleting item: %j', item);
-        return false;
-
     });
 
     return retVal;

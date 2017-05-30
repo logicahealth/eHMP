@@ -1,14 +1,4 @@
-When(/^the user removes all udaf tags$/) do
-  @ehmp = PobUDAF.new unless @ehmp.is_a? PobUDAF
-  @ehmp.to_filter_applet_grid('1')
-  expect(@ehmp.has_btn_remove_all?).to eq(true)
-  num_tags = @ehmp.fld_udaf_tags.length
-  @ehmp.btn_remove_all.click
-  wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-  wait.until { @ehmp.fld_udaf_tags.length == 0 }
-end
-
-When(/^the user removes the udaf tag for term "(.*?)"$/) do |term|
+def remove_single_udaf_tag(term)
   @ehmp = PobUDAF.new unless @ehmp.is_a? PobUDAF
   num_tags = @ehmp.fld_udaf_tags.length
   @ehmp.remove_udaf_tag(term)
@@ -17,6 +7,21 @@ When(/^the user removes the udaf tag for term "(.*?)"$/) do |term|
 
   wait = Selenium::WebDriver::Wait.new(:timeout => 5)
   wait.until { @ehmp.fld_udaf_tags.length < num_tags }
+  true
+end
+
+When(/^the user removes all udaf tags$/) do
+  @ehmp = PobUDAF.new unless @ehmp.is_a? PobUDAF
+  @ehmp.to_filter_applet_grid('1')
+  expect(@ehmp.has_btn_remove_all?).to eq(true), "'Remove All' button is not displayed"
+  num_tags = @ehmp.fld_udaf_tags.length
+  @ehmp.btn_remove_all.click
+  wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+  wait.until { @ehmp.fld_udaf_tags.length == 0 }
+end
+
+When(/^the user removes the udaf tag for term "(.*?)"$/) do |term|
+  expect(remove_single_udaf_tag(term)).to eq(true)
 end
 
 Then(/^a udaf tag is not displayed for term "(.*?)"$/) do |term|

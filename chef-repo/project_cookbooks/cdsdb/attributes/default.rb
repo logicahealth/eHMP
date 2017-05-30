@@ -1,5 +1,6 @@
 #
 # Cookbook Name:: cdsdb
+# Attributes:: default
 #
 
 default[:cdsdb][:ssl_files][:data_bags][:ssl_key_pem] = nil

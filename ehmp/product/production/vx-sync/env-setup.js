@@ -12,6 +12,7 @@ global.VX_JOBFRAMEWORK = 'job-framework';
 global.VX_SYNCRULES = global.VX_ROOT + 'syncruleengine/';
 global.VX_RETIREMENTRULES = global.VX_ROOT + 'utils/patient-record-retirement/retirementruleengine/';
 global.VX_EVENTPRIORITYRULES = global.VX_ROOT + 'eventpriorityruleengine/';
+global.VX_SOLRSTORAGERULES = global.VX_ROOT + 'solrstorageruleengine/';
 global.VX_TOOLS = global.VX_ROOT + 'tools/';
 
 global.VX_ERROR_PROCESSING = global.VX_ROOT + 'error-processing/';

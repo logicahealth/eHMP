@@ -12,8 +12,8 @@ function buildRequest() {
         },
         session: {
             user: {
-                accessCode: 'pu1234',
-                verifyCode: 'pu1234!!',
+                accessCode: 'REDACTED',
+                verifyCode: 'REDACTED',
                 ssn: '666884833',
                 breakglass: true,
                 sensitive: false,
@@ -50,7 +50,7 @@ function buildRequest() {
                 vistaSites: {
                     '9E7A': {
                         name: 'PANORAMA',
-                        host: '10.2.2.101'
+                        host: 'IP        '
                     }
                 }
             }
@@ -62,7 +62,7 @@ var jdsResponse = {
     btg: {
         data: {
             items: [{
-                ssn: '01201022',
+                ssn: 'REDACTED',
                 pid: '9E7A;18',
                 sensitive: true
             }]
@@ -71,7 +71,7 @@ var jdsResponse = {
     permit: {
         data: {
             items: [{
-                ssn: '01201023',
+                ssn: 'REDACTED',
                 pid: '9E7A;18',
                 sensitive: false
             }]
@@ -80,7 +80,7 @@ var jdsResponse = {
     deny: {
         data: {
             items: [{
-                ssn: '666884833',
+                ssn: 'REDACTED',
                 pid: '9E7A;18',
                 sensitive: false
             }]

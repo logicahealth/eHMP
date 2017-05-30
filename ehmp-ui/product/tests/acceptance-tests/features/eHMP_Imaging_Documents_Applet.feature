@@ -5,7 +5,7 @@ Background: As a clinician, I need the ability to launch third party software to
 
 	#Given user is logged into eHMP-UI
 	And user searches for and selects "EIGHT,PATIENT"
-	When user navigates to Documents Applet
+	When user navigates to Documents Screen
 	Then "Documents" is active
 
 

@@ -73,7 +73,9 @@ define([
                     '           <span data-notify="title">{1}</span>' +
                     '           <span data-notify="message">{2}</span>' +
                     '       </span>' +
-                    '       <button type="button" class="close" data-notify="dismiss" title="Press enter to close the alert, or wait ten seconds for autodismissal"><i class="fa fa-times"></i></button>' +
+                    '       <button type="button" class="close" data-notify="dismiss" title="Press enter to close the alert' +
+                    (!!_.get(alertOptions, 'autoClose') ? ', or wait ten seconds for autodismissal' : '.') +
+                    '"><i class="fa fa-times"></i></button>' +
                     '       <div class="progress" data-notify="progressbar">' +
                     '           <div class="progress-bar progress-bar-{0} percent-width-0" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>' +
                     '       </div>' +

@@ -10,8 +10,27 @@ define([
     'main/components/behaviors/crs',
     'main/components/behaviors/flexContainer',
     'main/components/behaviors/helpLink',
-    'main/components/behaviors/zIndex'
-], function(Backbone, Marionette, Tooltip, Popover, ListNav, KeySelect, FloatingDialog, FloatingToolbar, CRS, FlexContainer, HelpLink, ZIndex) {
+    'main/components/behaviors/zIndex',
+    'main/components/behaviors/infiniteScroll',
+    'main/components/behaviors/errorContext',
+    'main/components/behaviors/errorComponents'
+], function(
+    Backbone,
+    Marionette,
+    Tooltip,
+    Popover,
+    ListNav,
+    KeySelect,
+    FloatingDialog,
+    FloatingToolbar,
+    CRS,
+    FlexContainer,
+    HelpLink,
+    ZIndex,
+    InfiniteScroll,
+    ErrorContext,
+    ErrorComponents
+) {
     "use strict";
 
     //define new behaviors here
@@ -25,7 +44,10 @@ define([
         CRS: CRS,
         FlexContainer: FlexContainer,
         HelpLink: HelpLink,
-        ZIndex: ZIndex
+        ZIndex: ZIndex,
+        InfiniteScroll: InfiniteScroll,
+        ErrorContext: ErrorContext,
+        ErrorComponents: ErrorComponents
     };
 
     Backbone.Marionette.Behaviors.behaviorsLookup = function() {

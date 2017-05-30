@@ -1,4 +1,6 @@
 define([], function() {
+    'use strict';
+
     var vital = ADK.Resources.Writeback.Model.extend({
         resource: 'vitals-add',
         vpr: 'vitals',

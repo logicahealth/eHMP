@@ -21,7 +21,7 @@ export GRADLE_HOME=/usr/local/gradle/gradle-2.4
 export GROOVY_HOME=/usr/local/groovy/groovy-2.0.6
 export PATH=$GROOVY_HOME/bin:$GRADLE_HOME/bin:$PATH
 
-jdk_version="jdk1.8.0_92"
+jdk_version="jdk1.8.0_121"
 
 export destroyAll="destroyAll"
 export startAll="startJDS startMocks startKodak startPanorama startVxSync"

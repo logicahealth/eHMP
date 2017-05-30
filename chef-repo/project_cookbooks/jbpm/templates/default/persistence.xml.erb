@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ~ Copyright 2012 JBoss Inc ~ ~ Licensed under the Apache License, Version 
+<!-- ~ Copyright 2012 Red Hat, Inc. and/or its affiliates. ~ ~ Licensed under the Apache License, Version
   2.0 (the "License"); ~ you may not use this file except in compliance with 
   the License. ~ You may obtain a copy of the License at ~ ~ http://www.apache.org/licenses/LICENSE-2.0 
   ~ ~ Unless required by applicable law or agreed to in writing, software ~ 
@@ -9,14 +9,14 @@
   under the License. -->
 
 <persistence version="2.0"
-  xmlns="http://java.sun.com/xml/ns/persistence" xmlns:orm="http://java.sun.com/xml/ns/persistence/orm"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd 
+             xmlns="http://java.sun.com/xml/ns/persistence" xmlns:orm="http://java.sun.com/xml/ns/persistence/orm"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd
                       http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
 
   <persistence-unit name="org.jbpm.domain" transaction-type="JTA">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <jta-data-source>java:jboss/datasources/<%= node[:jbpm][:configure][:datasource] %></jta-data-source>
+    <jta-data-source>java:jboss/datasources/jbpmDS</jta-data-source>
     <mapping-file>META-INF/Taskorm.xml</mapping-file>
     <mapping-file>META-INF/JBPMorm.xml</mapping-file>
     <mapping-file>META-INF/Executor-orm.xml</mapping-file>
@@ -48,10 +48,11 @@
     <class>org.jbpm.executor.entities.RequestInfo</class>
     <!-- Event Classes -->
     <class>org.jbpm.services.task.audit.impl.model.TaskEventImpl</class>
-     
-    <!-- Task Audit Classes --> 
+
+    <!-- Task Audit Classes -->
     <class>org.jbpm.services.task.audit.impl.model.AuditTaskImpl</class>
-      
+    <class>org.jbpm.services.task.audit.impl.model.TaskVariableImpl</class>
+
     <!--BAM for task service -->
     <class>org.jbpm.services.task.audit.impl.model.BAMTaskSummaryImpl</class>
 
@@ -71,7 +72,8 @@
 
     <!-- deployment store -->
     <class>org.jbpm.kie.services.impl.store.DeploymentStoreEntry</class>
-
+    <!-- query service storage -->
+    <class>org.jbpm.kie.services.impl.query.persistence.QueryDefinitionEntity</class>
     <!-- entities -->
     <class><%= @base_route_entity %></class>
     <class><%= @task_instance_entity %></class>
@@ -83,8 +85,7 @@
     <class><%= @event_match_criteria_entity %></class>
     <class><%= @simple_match_entity %></class>
     <class><%= @signal_instance_entity %></class>
-    <class><%= @processed_event_state_entity %></class>
-
+    <class><%= @processed_event_state_entity %></class> 
       <!-- BZ 841786: AS7/EAP 6/Hib 4 uses new (sequence) generators which seem to cause problems -->
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.<%= @dialect %>" />

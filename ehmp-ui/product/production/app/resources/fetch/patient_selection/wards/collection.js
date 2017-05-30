@@ -1,4 +1,5 @@
 define([], function() {
+    'use strict';
 
     var Ward = ADK.Resources.Model.extend({
         idAttribute: 'uid'
@@ -9,7 +10,7 @@ define([], function() {
         model: Ward,
         parse: function(resp, options) {
             return resp.data || resp;
-        },
+        }
     });
 
     return Wards;

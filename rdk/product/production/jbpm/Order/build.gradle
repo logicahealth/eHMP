@@ -1,8 +1,14 @@
+apply plugin: 'java'
+
+sourceCompatibility = property('javaVersion')
+targetCompatibility = property('targetJavaVersion')
+
 dependencies {
-    compile group: 'joda-time', name: 'joda-time', version: '2.9'
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.6.2'
-    compile group: 'org.kie', name: 'kie-api', version: '6.2.0.Final'
-	compile group: 'org.json', name: 'json', version: '20160810'
+    compile group: 'joda-time', name: 'joda-time', version: property('joda-version')
+    compile group: 'com.google.code.gson', name: 'gson', version: property('gson-version')
+    compile group: 'org.kie', name: 'kie-api', version: property('kie-version')
+	compile group: 'org.json', name: 'json', version: property('json-version')
+	compile project(':production:jbpm:JbpmUtils')
 }
 
 repositories {

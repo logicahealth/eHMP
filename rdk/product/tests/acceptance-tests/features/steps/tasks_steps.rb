@@ -51,7 +51,7 @@ def request_task_instances(user, context, subcontext, patientid)
 end
 
 When(/^the client requests tasks instances for "([^"]*)" and "([^"]*)" for patient "([^"]*)"$/) do |context, subcontext, patientid|
-  request_task_instances("9E7A;pu1234", context, subcontext, patientid)
+  request_task_instances("REDACTED", context, subcontext, patientid)
 end
 
 When(/^the "([^"]*)" client requests tasks instances for "([^"]*)" and "([^"]*)" for patient "([^"]*)"$/) do |user, context, subcontext, patientid|

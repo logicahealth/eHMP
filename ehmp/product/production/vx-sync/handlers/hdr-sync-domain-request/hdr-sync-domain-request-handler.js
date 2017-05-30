@@ -8,7 +8,6 @@ var request = require('request');
 var format = require('util').format;
 var inspect = require(global.VX_UTILS + 'inspect');
 var uuid = require('node-uuid');
-var querystring = require('querystring');
 var VxSyncForeverAgent = require(global.VX_UTILS+'vxsync-forever-agent');
 var defaultAssigningAuthority = 'USVHA';
 
@@ -52,9 +51,9 @@ function handle(log, config, environment, job, handlerCallback) {
                     jsonBody = body;
                 }
             }
-            else{ // for 204, no content returned, so log with empty body
+            else{ // for 204: either there is no HDR data for this domain, or soap handler received bad data from HDR
                 log.debug(format('hdr-sync-domain-request-handler.handle: Unable to retrieve HDR sync for %s domain %s because there is no content', inspect(job.patientIdentifier), job.dataDomain));
-                jsonBody={data:{}};
+                return handlerCallback(null, errorUtil.createTransient('Received 204 (no content) from HDR via soap handler'));
             }
             var jobToPublish;
             if (_.isEmpty(jsonBody)) {
@@ -68,7 +67,7 @@ function handle(log, config, environment, job, handlerCallback) {
                 log.warn('hdr-sync-domain-request-handler.handle: HDR record in bad format, dealing with it');
                 jobToPublish = jobUtil.createHdrDomainXformVpr(job.patientIdentifier, job.dataDomain, jsonBody, job.requestStampTime, job);
             }
-            log.debug('hdr-sync-domain-request-handler.handle: Publish: %j and json is %j', job, jsonBody);
+            log.debug('hdr-sync-domain-request-handler.handle: Publish: %j and json response is %j', jobToPublish, jsonBody);
             environment.publisherRouter.publish(jobToPublish, handlerCallback);
 
         } else {

@@ -69,11 +69,11 @@ REVTLT ; common entry point for rev template
  M OBJECT(REVFLD,CNT,":")=JSON
  Q
  ;
-BLDTLT(CLTN,OBJECT,TLTARY) ; Build JSON objects for associated templates
- ; from: ^VPRJDS, ^VPRJPS
- ; CLTN identifies the collection
- ; OBJECT is the decoded JSON object as a MUMPS array
- ; TLTARY is the array of JSON objects that get built based on templates
+ ; Build JSON objects for associated templates
+ ; @param {string} CLTN - identifies the collection
+ ; @param {array} OBJECT - (passed by reference) decoded JSON object as a MUMPS array
+ ; @param {array} TLTARY - (passed by reference) array of JSON objects that get built based on templates
+BLDTLT(CLTN,OBJECT,TLTARY)
  N TLTNM,TJSON
  S TLTNM="" F  S TLTNM=$O(^VPRMETA("collection",CLTN,"template",TLTNM)) Q:TLTNM=""  D  Q:$G(HTTPERR)
  . I $D(^VPRMETA("template",TLTNM,"collection",CLTN))<10 D SETERROR^VPRJRER(219,TLTNM) Q
@@ -86,7 +86,9 @@ BLDTLT(CLTN,OBJECT,TLTARY) ; Build JSON objects for associated templates
  Q
 QRYTLT(ROOT,KEY,TLT,PID,INST) ; apply template at query time and put in ROOT
  Q
-LOADSPEC(TEMPLATE) ; load the specification for a template
+ ; Load the specification for a template
+ ; @param {array} TEMPLATE - (passed by reference) contains the formatted MUMPS array for a template
+LOADSPEC(TEMPLATE)
  ;  TEMPLATE contains the template name
  ; .TEMPLATE(collection,...): returned information
  Q:TEMPLATE="uid"  ; special case - uid is hard coded template

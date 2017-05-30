@@ -2,7 +2,7 @@ define([
     'jquery',
     'backbone',
     'marionette',
-    'main/ui_components/components',
+    'main/UILibrary',
     'api/UIComponents',
     'jasminejquery'
 ], function($, Backbone, Marionette, UI) {
@@ -72,6 +72,24 @@ define([
             it('contains the correct extra classes', function() {
                 expect(this.$form).toContainElement('fieldset.class1');
                 expect(this.$form).toContainElement('fieldset.class2');
+            });
+            it("update:config", function() {
+                this.$form.find('.control.form-group.radioList-control').trigger("control:update:config", {
+                    hidden: true,
+                    disabled: true,
+                    required: true
+                });
+                expect(this.$form.find('.control.form-group.radioList-control')).toHaveClass('hidden');
+                expect(this.$form.find('input')).toHaveAttr('disabled');
+                expect(this.$form.find('input')).toHaveAttr('required');
+                this.$form.find('.control.form-group.radioList-control').trigger("control:update:config", {
+                    hidden: false,
+                    disabled: false,
+                    required: false
+                });
+                expect(this.$form.find('.inputValue')).not.toHaveClass('hidden');
+                expect(this.$form.find('input')).not.toHaveAttr('disabled');
+                expect(this.$form.find('input')).not.toHaveAttr('required');
             });
         });
 

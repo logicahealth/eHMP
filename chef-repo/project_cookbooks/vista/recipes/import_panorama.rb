@@ -79,3 +79,14 @@ vista_mumps_block "Reset all subscriptions on deploy" do
   not_if { node[:vista][:no_reset] }
 end
 
+vista_global_import_utility "import_vha_trainers" do
+  duz       1
+  programmer_mode true
+
+  log node[:vista][:chef_log]
+  action :create
+  import_file "/var/chef/cache/cookbooks/vista/files/default/globals/trainer.txt"
+  dik_da_pairs [ ["^VA(200,", "88888888"],["^VA(200,", "88888889"],["^VA(200,", "88888890"],["^VA(200,", "88888891"],["^VA(200,", "88888892"],["^VA(200,", "88888893"]]
+  no_cross_ref true
+  not_if { node[:vista][:no_reset] }
+end

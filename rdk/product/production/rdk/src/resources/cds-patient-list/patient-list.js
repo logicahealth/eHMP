@@ -55,7 +55,7 @@ function init(app) {
  *                         "2015-02-27T20:33:41.308Z",
  *                 "scope": "private",
  *                 "owner":
- *                         "9E7A;pu1234"
+ *                         "REDACTED"
  *             },
  *             "pidhistory": [{
  *                     "timestamp": "2015-03-10T00:53:55.934Z",
@@ -65,7 +65,7 @@ function init(app) {
  *             "patients": [
  *                 "12345V123"],
  *             "scope": "private",
- *             "owner": "9E7A;pu1234",
+ *             "owner": "REDACTED",
  *             "_id": "54fe407fc9f41fad0fff5dc4"
  *         }]
  * }
@@ -159,7 +159,7 @@ module.exports.getPatientList = getPatientList;
  *                         "2015-02-27T20:33:41.308Z",
  *                 "scope": "private",
  *                 "owner":
- *                         "9E7A;pu1234"
+ *                         "REDACTED"
  *             },
  *             "pidhistory": [{
  *                     "timestamp": "2015-03-10T00:53:55.934Z",
@@ -169,7 +169,7 @@ module.exports.getPatientList = getPatientList;
  *             "patients": [
  *                 "12345V123"],
  *             "scope": "private",
- *             "owner": "9E7A;pu1234",
+ *             "owner": "REDACTED",
  *             "_id": "54fe407fc9f41fad0fff5dc4"
  *         }]
  * }
@@ -631,7 +631,7 @@ module.exports.checkPatientMembershipStatus = checkPatientMembershipStatus;
  *                         "2015-02-27T20:33:41.308Z",
  *                 "scope": "private",
  *                 "owner":
- *                         "9E7A;pu1234"
+ *                         "REDACTED"
  *             },
  *             "pidhistory": [{
  *                     "timestamp": "2015-03-10T00:53:55.934Z",
@@ -641,7 +641,7 @@ module.exports.checkPatientMembershipStatus = checkPatientMembershipStatus;
  *             "patients": [
  *                 "12345V123"],
  *             "scope": "private",
- *             "owner": "9E7A;pu1234",
+ *             "owner": "REDACTED",
  *             "_id": "54fe407fc9f41fad0fff5dc4"
  *         }]
  * }

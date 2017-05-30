@@ -1,1 +1,6 @@
+ZOOCFGDIR="<%= @zoo_instance_dir %>/<%= node[:zookeeper][:conf_dir] %>"
+ZOO_LOG_DIR="<%= @log_dir %>"
+CLASSPATH="$ZOOCFGDIR:$CLASSPATH"
+ZOOCFG="$ZOOCFGDIR/<%= node[:zookeeper][:config_filename] %>"
+ZOO_LOG4J_PROP="INFO,ROLLINGFILE"
 JVMFLAGS="$JVMFLAGS <%= @additional_jvm_flags %>"

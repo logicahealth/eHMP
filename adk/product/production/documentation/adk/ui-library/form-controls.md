@@ -35,6 +35,7 @@ Common HTML form elements. Use these when expecting normal HTML form controls.
 #### Events that can be triggered to change control attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:disabled**      | boolean   | toggles the disabled state of the control <br/>**Example:** `$().trigger('control:disabled', true)`|
 | **control:label**         | string    | adds/updates the label of the button with the provided string <br/>**Example:** `$().trigger('control:label', 'New Button Label')`|
@@ -180,6 +181,7 @@ This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFI
 #### Events that can be triggered to change control attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:disabled**      | boolean   | toggles the disabled state of the control <br/>**Example:** `$().trigger('control:disabled', true)`|
 | **control:label**         | string    | adds/updates the label of the checkbox with the provided string <br/>**Example:** `$().trigger('control:label', 'New checkbox label')`|
@@ -287,6 +289,7 @@ This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFI
 #### Events that can be triggered to change control attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:required**      | boolean   | toggles the required state of the control <br/>**Example:** `$().trigger('control:required', true)`|
 | **control:disabled**      | boolean   | toggles the disabled state of the control <br/>**Example:** `$().trigger('control:disabled', true)`|
@@ -471,6 +474,7 @@ This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFI
 #### Events that can be triggered to change control attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:disabled**      | boolean   | toggles the disabled state of the control <br/>**Example:** `$().trigger('control:disabled', true)`|
 | **control:required**      | boolean   | toggles the required state of the control <br/>**Example:** `$().trigger('control:required', true)`|
@@ -680,6 +684,7 @@ e.g. function (searchText, fetchSuccess, fetchFail)
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
 | **control:label**   | string    | adds/updates the label of the control with the provided string <br/>**Example:** `$().trigger('control:label', 'New Label')`|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:required**      | boolean   | toggles the required state of the control <br/>**Example:** `$().trigger('control:required', true)`|
 | **control:disabled**      | boolean   | toggles the disabled state of the control <br/>**Example:** `$().trigger('control:disabled', true)`|
@@ -919,6 +924,7 @@ This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFI
 
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:required**      | boolean   | toggles the required state of the control <br/>**Example:** `$().trigger('control:required', true)`|
 | **control:disabled**      | boolean   | toggles the disabled state of the control <br/>**Example:** `$().trigger('control:disabled', true)`|
@@ -1096,6 +1102,7 @@ this.model.set('alertMessage', 'Different message body');
 #### Dynamic Events ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { dismissible: false, message: 'new message' })` |
 | **control:dismissible**      | boolean   | toggles the dismissible state of the control (hides/shows close button) <br/>**Example:** `$().trigger('control:dismissible', true)`|
 | **control:title**         | string    | adds/updates the title of the control with the provide string <br/>**Example:** `$().trigger('control:title', 'New Title of the Alert')`|
 | **control:message**   | string    | adds/updates the message of the control with the provide string <br/>**Example:** `$().trigger('control:message', 'New Message string')`|
@@ -1195,6 +1202,7 @@ This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFI
 #### Events that can be triggered to change the checklist control's attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:disabled**      | object    | disables/enables all the checklist items.   <br/>**Example:** `$().trigger('control:disabled', true)` |
 | **control:item:disabled** | object    | disables/enables a checklist item.  If no _item_ is provided in the parameter object then all checklist items willl be targeted. <br/>**Example:** `$().trigger('control:item:disabled', {item:'uniqueName',value:true})` |
@@ -1401,6 +1409,7 @@ This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFI
 #### Dynamic Datepicker Control Events ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:disabled**      | boolean   | toggles the disabled state of the control <br/>**Example:** `$().trigger('control:disabled', true)`|
 | **control:required**      | boolean   | toggles the required state of the control <br/>**Example:** `$().trigger('control:required', true)`|
@@ -1518,6 +1527,7 @@ this.ui.allDatepickers.trigger('control:hidden', false);
 #### Events that can be triggered to change the dropdown control's attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:disabled**      | boolean   | enables/disables the full control <br/>**Example:** `$().trigger('control:disable', true)` |
 | **control:disabled**      | object    | enables/disables part of split dropdown control <br/>**Example:** `$().trigger('control:disable', { mainButton: true, dropdownToggle: false })` |
@@ -1854,6 +1864,7 @@ This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFI
 #### Events that can be triggered to change the yesNoChecklist control's attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:disabled**      | boolean   | disables/enables all the items <br/>**Example:** `$().trigger('control:disabled', true)` |
 | **control:required**      | boolean   | toggles the required state of all the items <br/>**Example:** `$().trigger('control:required', true)` |
@@ -2086,6 +2097,7 @@ This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFI
 #### Events that can be triggered to change the selectList control's attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:disabled**      | boolean   | disables/enables all the items <br/>**Example:** `$().trigger('control:disabled', true)` |
 | **control:required**      | boolean   | toggles the required state of all the items <br/>**Example:** `$().trigger('control:required', true)` |
@@ -2278,6 +2290,7 @@ this.ui.allControls.trigger('control:hidden', false);
 #### Events that can be triggered to change the rangeSlider control's attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 :::
 
@@ -2416,10 +2429,10 @@ This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFI
 #### Events that can be triggered to change the control's attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:disabled**      | boolean   | toggles the disabled state of the control <br/>**Example:** `$().trigger('control:disabled', true)`|
 | **control:required**      | boolean   | toggles the required state of the control <br/>**Example:** `$().trigger('control:required', true)`|
-| **control:placeholder**         | string    | adds/updates the placeholder of the timepickers's input with the provided string <br/>**Example:** `$().trigger('control:placeholder', 'New placeholder text')`|
 | **control:title**          | string    | adds/updates the title attribute of the timepickers's input <br/>**Example:** `$().trigger('control:title', 'New title')`|
 | **control:helpMessage**          | string    | adds/updates the helpMessage shown just beneath the control <br/>**Example:** `$().trigger('control:helpMessage', 'New Help Message')`|
 :::
@@ -2537,6 +2550,7 @@ e.g. function (input, setPickList)
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
 | **control:label**   | string    | adds/updates the label of the control with the provided string <br/>**Example:** `$().trigger('control:label', 'New Label')`|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:required**      | boolean   | toggles the required state of the control <br/>**Example:** `$().trigger('control:required', true)`|
 | **control:disabled**      | boolean   | toggles the disabled state of the control <br/>**Example:** `$().trigger('control:disabled', true)`|
@@ -2839,6 +2853,7 @@ this.$('.uniqueName').trigger('control:headerItems:update', model)
 
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once. Note that the keys should match the field options above.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, extraClasses: ['new-class'] })` |
 |**control:items:add**      | object | adds a model to the specified collection <br/>**Example:** `$().trigger('control:items:add', {control: 'button', name: 'test'})`|
 |**control:items:remove**      | object | removes a model to the specified collection <br/>**Example:** `$().trigger('control:items:remove', {control: 'button', name: 'test'})`|
 |**control:items:update**      | object | updates specified collection to the given models <br/>**Example:** `$().trigger('control:items:update', {control: 'button', name: 'test'})`|
@@ -2978,6 +2993,7 @@ this.$('.myContainer').trigger('control:items:update', model)
 
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+|**control:hidden**         | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 |**control:items:add**      | object | adds a model to the specified collection <br/>**Example:** `$().trigger('control:items:add', {control: 'button', name: 'test'})`|
 |**control:items:remove**      | object | removes a model to the specified collection <br/>**Example:** `$().trigger('control:items:remove', {control: 'button', name: 'test'})`|
 |**control:items:update**      | object | updates specified collection to the given models <br/>**Example:** `$().trigger('control:items:update', {control: 'button', name: 'test'})`|
@@ -3068,6 +3084,7 @@ this.$('.myFieldset').trigger('control:items:update', object)
 
 | Event                      | Parameter Type   | Description / Example                                                                             |
 |:---------------------------|:----------------:|:--------------------------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once. Note that the keys should match the field options above.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, extraClasses: ['new-class'] })` |
 | **control:hidden**         | boolean          | Hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:popover:hidden** | boolean          | Hides/shows the popover content <br/>**Example:** `$().trigger('control:popover:hidden', true)` |
 |**control:items:add**       | object           | Adds a control to the popover using the control options specified <br/>**Example:** `$().trigger('control:items:add', {control: 'button', name: 'test'})`|
@@ -3326,6 +3343,7 @@ this.$('.popover-content-region > .Popover').trigger('control:items:update', mod
 #### Events that can be triggered to change the tabs control's attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once. Note that the keys should match the field options above.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, extraClasses: ['new-class'] })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 |**control:items:add**      | object | adds a model to the specified collection <br/>**Example:** `$().trigger('control:items:add', {title: 'Test Tab', items: [{control: 'button', name: 'test'}]})`|
 |**control:items:remove**      | object | removes a model to the specified collection <br/>**Example:** `$().trigger('control:items:remove', {title: 'Test Tab', items: [{control: 'button', name: 'test'}]})`|
@@ -4099,6 +4117,8 @@ This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFI
 #### Events that can be triggered to change the ToggleOptionChecklist control's attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once. Note that the keys should match the field options above.<br/>**Example:** `$().trigger('control:update:config', { hidden: false })` |
+|**control:hidden**         | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:header:click** | string | Triggers a click event on the specfied header button. The string provided is the name provided to the columnHeaders field option<br/>**Example:** `$().trigger('control:header:click', 'SC')` |
 |**control:header:add**| object | Adds a new header button to the header as well as an additional radio group for every row for the new header <br/>**Example:** `$().trigger('control:header:add', {name: 'BAR', description: 'BAR description'})` <br/>**Note:** The object provided is the same object provided to the columnHeaders field.|
 |**control:header:remove**| object | Removes a header button from the header as well as the radio group for each row. <br/> **Example:** `$().trigger('control:header:remove', {name: 'BAR'})` <br/> **Note:** The object provided is the same / partial object provided to the columnHeaders field|
@@ -4220,6 +4240,7 @@ This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFI
 #### Events that can be triggered to change the treepicker control's attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once. Note that the keys should match the field options above.<br/>**Example:** `$().trigger('control:update:config', { hidden: false })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:loading:show**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:loading:show')` |
 | **control:picklist:set** | Array or Backbone.Collection | Resets to the given list. Make sure to enclose the list in the square brackets <br/>**Example:** `$().trigger('control:picklist:set', [ [{icdCode: 'icdCode1', childHref: '/resource/write-pick-list?type=progress-notes-titles-icd-10&searchString=icdCode1', preferredText: 'Diagnosis Set 1 (node)'}, {icdCode: 'icdCode2', preferredText: 'Diagnosis 2 (leaf)'}] ])` |

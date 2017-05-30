@@ -184,6 +184,10 @@ define([
                             title: 'Press enter to open search filter text',
                             showFilter: true,
                             picklist: [],
+                            attributeMapping: {
+                                label: 'name',
+                                value: 'name'
+                            },
                             options: {
                                 minimumInputLength: 0
                             }
@@ -216,6 +220,12 @@ define([
                                 }]
                             }, {
                                 control: 'select',
+                                // Please do not use this id approach, this is a stop-gap approach due to less than ideal util functions.
+                                // Setting the id is an undocumented way of assigning the id, and it prevents safe-guarding against duplicate id's.
+                                // <app ip/url>/documentation/#/adk/ui-library/views#Form-Controls
+                                // Please remove when the forms are made to use the desired pattern utilizing the ui hash.
+                                // <app ip/url>/documentation/#/adk/code-review-checklist%23Backbone-and-Marionette-Best-Practices
+                                id: 'acceptingProvider',
                                 name: 'acceptingProvider',
                                 extraClasses: 'top-margin-sm',
                                 label: 'Provider who accepted Consult',
@@ -360,7 +370,7 @@ define([
                             items: [{
                                 control: 'select',
                                 name: 'condition',
-                                label: 'Conditions related to this consult',
+                                label: 'Problems related to this consult',
                                 title: 'Use up and down arrow keys to view options and press enter to select',
                                 showFilter: true,
                                 options: {
@@ -416,7 +426,7 @@ define([
                 extraClasses: ['row'],
                 items: [{
                     control: 'container',
-                    extraClasses: ['col-xs-12', 'display-flex', 'valign-bottom'],
+                    extraClasses: ['col-xs-12', 'flex-display', 'valign-bottom'],
                     items: [{
                         control: 'container',
                         extraClasses: ['flex-grow-loose', 'text-left'],
@@ -444,31 +454,32 @@ define([
                         },
                         label: 'Cancel',
                         name: 'consultAddConfirmCancel',
-                        extraClasses: ['btn-default', 'btn-sm', 'right-margin-xs']
+                        title: 'Press enter to cancel',
+                        extraClasses: ['btn-default', 'btn-sm']
                     }, {
                         control: 'button',
-                        extraClasses: ['btn-primary', 'btn-sm'],
+                        extraClasses: ['btn-primary', 'btn-sm', 'left-margin-sm'],
                         id: 'consult-add-save-button',
                         label: 'Draft',
                         type: 'button',
                         title: 'Press enter to save as draft and close'
                     }, {
                         control: 'button',
-                        extraClasses: ['btn-primary', 'btn-sm'],
+                        extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
                         id: 'consult-add-begin-workup-button',
                         label: 'Begin Workup',
                         type: 'button',
                         title: 'Press enter to begin workup'
                     }, {
                         control: 'button',
-                        extraClasses: ['btn-primary', 'btn-sm'],
+                        extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
                         id: 'consult-add-accept-button',
                         label: 'Accept',
                         type: 'button',
                         title: 'Press enter to accept'
                     }, {
                         control: 'button',
-                        extraClasses: ['btn-primary', 'btn-sm'],
+                        extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
                         id: 'consult-add-edit-save-button',
                         label: 'Accept',
                         type: 'button',

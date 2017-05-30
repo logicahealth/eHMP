@@ -40,6 +40,8 @@ The standard place for an interceptor to store information for the request handl
            * 'SYNC' - for when syncing patient data
            * 'AUTH' - for when authenticating to a service
         * `req.audit.sensitive`: for when accessing a sensitive patient
+ * **ensureMethodOverridden** interceptor
+    * Ensures that the [`X-HTTP-Method-Override` header](querying.md#HTTP-Method-Override) was used to change the effective HTTP method.
  * **validatePid** interceptor
     * Validates that the `pid` query parameter is correctly formatted
  * **assignRequestSite** interceptor

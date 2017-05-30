@@ -30,15 +30,19 @@ Scenario: Single Item fetch - will not receive allergy from different patient
 Scenario: Single Item fetch - vital
 # use pagination
 	Given a patient with pid "9E7A;100022" has been synced through the RDK API
+	And test discovers vital for patient "9E7A;100022"
+	When the client requests that item for the patient "9E7A;100022" in RDK format
 	Then a successful response is returned                                      
+    And the client receives 1 result(s)   
+    And the VPR results contain the correct uid for that item                                      
 
 @US1813 @US1813_vital_neg  @5000000341V359724
 Scenario: Single Item fetch - will not receive vital from different patient
 # use pagination
 	Given a patient with pid "9E7A;100022" has been synced through the RDK API
 	And a patient with pid "9E7A;3" has been synced through the RDK API
-	And test discovers vital for patient with pid "9E7A;100022"
-	When the client requests that item for the patient with pid"9E7A;3" in RDK format
+	And test discovers vital for patient "9E7A;100022"
+	When the client requests that item for the patient "9E7A;3" in RDK format
 	Then a Not Found response is returned    
 	And the response contains error message
 		| field		| expected_value 								|

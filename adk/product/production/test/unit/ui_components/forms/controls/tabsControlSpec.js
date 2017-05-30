@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/components', 'api/UIComponents', 'jasminejquery'],
+define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/UILibrary', 'api/UIComponents', 'jasminejquery'],
     function($, Handlebars, Backbone, Marionette, UI) {
 
         var $form, form;
@@ -119,8 +119,8 @@ define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/co
                     expect($form.find('.tab-content-container .active')).toHaveLength(1);
                     expect($form.find('.tab-list-container li [href*="#Example-Tab-2-tab-panel"]').closest('li')).toHaveClass('active');
                     expect($form.find('.tab-content-container [id*="Example-Tab-2-tab-panel"]')).toHaveClass('active');
-                    $form.find('.tab-content-container .active #radio4-opt3').trigger('click');
-                    expect($form.find('.tab-content-container .active #radio4-opt3')).toHaveProp('checked');
+                    $form.find('.tab-content-container .active .radio-control.radio4 input[value="opt3"]').trigger('click');
+                    expect($form.find('.tab-content-container .active .radio-control.radio4 input[value="opt3"]')).toHaveProp('checked');
                     expect(form.model.get(tabsControlDefinition.tabs[1].items[0].name)).toBe(tabsControlDefinition.tabs[1].items[0].options[2].value);
 
                 });
@@ -156,6 +156,16 @@ define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/co
                     $form.find('.special-class-1').trigger("control:hidden", true);
                     expect($form.find('.special-class-1')).toHaveClass('hidden');
                     $form.find('.special-class-1').trigger("control:hidden", false);
+                    expect($form.find('.special-class-1')).not.toHaveClass('hidden');
+                });
+                it("update:config", function() {
+                    $form.find('.special-class-1').trigger("control:update:config", {
+                        hidden: true
+                    });
+                    expect($form.find('.special-class-1')).toHaveClass('hidden');
+                    $form.find('.special-class-1').trigger("control:update:config", {
+                        hidden: false
+                    });
                     expect($form.find('.special-class-1')).not.toHaveClass('hidden');
                 });
             });

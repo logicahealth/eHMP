@@ -1,16 +1,3 @@
-#Team Neptune
-#F144_ActiveProblems.feature
-
-class ProblemsCoverHeader < AccessBrowserV2
-  include Singleton
-  def initialize
-    super 
-    add_verify(CucumberLabel.new("Description"), VerifyText.new, AccessHtmlElement.new(:id, "data-grid-problems"))
-    add_verify(CucumberLabel.new("Acuity"), VerifyText.new, AccessHtmlElement.new(:id, "problems-acuityName"))
-    add_verify(CucumberLabel.new("Status"), VerifyText.new, AccessHtmlElement.new(:id, "problems-statusName"))
-  end
-end #ProblemsCoverHeader
-
 class ProblemsSecondary < ADKContainer
   include Singleton
   def initialize
@@ -26,20 +13,6 @@ class ProblemsSecondary < ADKContainer
     add_verify(CucumberLabel.new("Comments"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='problems'] [data-header-instanceid='problems-comments']"))
   end
 end #ProblemsSecondar
-
-#Validate the headers in the problems coversheet view
-Then(/^the Problems coversheet headers are$/) do |table|
-  driver = TestSupport.driver
-  headers = driver.find_elements(:css, "#data-grid-problems th") 
-  expect(headers.length).to_not eq(0)
-  expect(headers.length).to eq(table.rows.length)
-  elements = ProblemsCoverHeader.instance
-  table.rows.each do |header_text|
-    does_exist = elements.static_dom_element_exists? header_text[0]
-    p "#{header_text[0]} was not found" unless does_exist
-    expect(does_exist).to be_true
-  end #table
-end #Problems Headers
 
 #Validate the headers in the problems expanded view
 Then(/^the Problems expanded headers are$/) do |table|

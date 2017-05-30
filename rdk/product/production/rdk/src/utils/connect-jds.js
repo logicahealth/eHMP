@@ -18,7 +18,7 @@ var httpUtil = rdk.utils.http;
  */
 var defaultOptions = {
     jdsServer: {
-        baseUrl: 'http://10.2.2.110:9080'
+        baseUrl: 'http://IP             '
     },
     defaultExpirationTime: 1000 * 60 * 60 * 24 * 14
 };
@@ -85,6 +85,9 @@ module.exports = function(session) {
         mylogger.debug({sid: sid}, 'In connect-jds.get method with passed in sid: %s. Before httpUtil.get call', sid);
         httpUtil.get(jdsOptions,
             function(err, response, body) {
+                if (!err && _.get(response, 'statusCode') >= 300) {
+                    err = _.get(body, 'error') || response.statusCode;
+                }
                 if (err) {
                     mylogger.debug({sid: sid, error: err}, 'In connect-jds.get method with passed in sid: %s. After httpUtil.get call with error', sid);
                     if (callback) {
@@ -140,16 +143,19 @@ module.exports = function(session) {
 
         var jdsServer = this.jdsServer; //Get the JDS Server that we will do the HTTP Get from
         var jdsResource = '/session/set/this'; //The correct endpoint from the JDS for SET which is part of VPRJSES global
-        var content = JSON.stringify(s); //Stringify the session as it needs to go in to the JDS as JSON String
         var jdsOptions = _.extend({}, jdsServer, {
             url: jdsResource,
             timeout: 120000,
             logger: mylogger.child({sid: sid}),
-            body: content
+            body: s,
+            json: true
         });
         mylogger.debug({sid: sid, session: s}, 'In connect-jds.set method with passed in sid:' + sid + ' and session. Before httpUtil.post call');
         httpUtil.post(jdsOptions,
-            function(err, response, data) {
+            function (err, response, data) {
+                if (!err && _.get(response, 'statusCode') >= 300) {
+                    err = _.get(data, 'error') || response.statusCode;
+                }
                 if (err) {
                     mylogger.debug({sid: sid, error: err}, 'In connect-jds.set method with passed in sid:' + sid + '. Error on postJSONObject');
                     if (callback) {
@@ -184,11 +190,15 @@ module.exports = function(session) {
         var jdsOptions = _.extend({}, jdsServer, {
             url: jdsResource + '/' + sid, //JDS Team decided to just append the SID onto the URL as it made things easier for them
             timeout: 120000,
-            logger: mylogger.child({sid: sid})
+            logger: mylogger.child({ sid: sid }),
+            json: true
         });
         mylogger.debug({sid: sid}, 'In connect-jds.destroy method with passed in sid:' + sid + '. Before httpUtil.get call');
         httpUtil.get(jdsOptions,
-            function(err) {
+            function(err, response, body) {
+                if (!err && _.get(response, 'statusCode') >= 300) {
+                    err = _.get(body, 'error') || response.statusCode;
+                }
                 if (err) {
                     mylogger.debug({sid: sid, error: err}, 'In connect-jds.destroy method with passed in sid:' + sid + '. After httpUtil.get call with error');
                     if (callback) {
@@ -219,11 +229,15 @@ module.exports = function(session) {
         var jdsOptions = _.extend({}, jdsServer, {
             url: jdsResource,
             timeout: 120000,
-            logger: mylogger
+            logger: mylogger,
+            json: true
         });
         mylogger.debug('In connect-jds.length method. Before httpUtil.get call');
         httpUtil.get(jdsOptions,
             function(err, response, length) {
+                if (!err && _.get(response, 'statusCode') >= 300) {
+                    err = _.get(length, 'error') || response.statusCode;
+                }
                 if (err) {
                     mylogger.debug({error: err}, 'In connect-jds.length method. After httpUtil.get call with error');
                     if (callback) {
@@ -253,12 +267,16 @@ module.exports = function(session) {
         var jdsOptions = _.extend({}, jdsServer, {
             url: jdsResource,
             timeout: 120000,
-            logger: mylogger
+            logger: mylogger,
+            json: true
         });
 
         mylogger.debug('In connect-jds.clear method. Before httpUtil.get call');
         httpUtil.get(jdsOptions,
-            function(err) {
+            function(err, response, body) {
+                if (!err && _.get(response, 'statusCode') >= 300) {
+                    err = _.get(body, 'error') || response.statusCode;
+                }
                 if (err) {
                     mylogger.debug({error: err}, 'In connect-jds.clear method. After httpUtil.get call with error');
                     if (callback) {

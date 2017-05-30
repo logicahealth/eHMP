@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require('lodash');
 var notesValidator = require('./notes-validator');
 var writebackContext;
 
@@ -12,11 +13,11 @@ describe('The Notes input validator', function() {
                 'C77A': 'duz2'
             },
             vistaConfig: {
-                host: '10.2.2.101',
-                port: 9210,
-                accessCode: 'pu1234',
-                verifyCode: 'pu1234!!',
-                localIP: '10.2.2.1',
+                host: 'IP        ',
+                port: PORT,
+                accessCode: 'REDACTED',
+                verifyCode: 'REDACTED',
+                localIP: 'IP      ',
                 localAddress: 'localhost',
                 context: 'HMP UI CONTEXT'
             },
@@ -65,7 +66,7 @@ describe('The Notes input validator', function() {
         });
 
         it('encrypts the signature code and sets the dfn', function(done) {
-            writebackContext.model.signatureCode = 'pu1234!!';
+            writebackContext.model.signatureCode = 'REDACTED';
             writebackContext.model.signItems = [{}];
             notesValidator.sign(writebackContext, function() {
                 expect(writebackContext.model.signatureCode).to.be.truthy();
@@ -238,5 +239,193 @@ describe('The Notes input validator', function() {
         //         done();
         //     });
         // });
+    });
+
+    describe('checkIfCosignRequired', function() {
+        var rpcClientFactory = require('../core/rpc-client-factory');
+        it('reads signItems from model.signItems[].documentDefUid', function(done) {
+            var writebackContext = {};
+            _.set(writebackContext, 'model.signItems[0].documentDefUid', 'urn:va:item0');
+            _.set(writebackContext, 'model.signItems[1].documentDefUid', 'urn:va:item1');
+            _.set(writebackContext, 'siteHash', 'ABCD');
+            _.set(writebackContext, 'duz.ABCD', 'userDfn');
+            var rpcClient = {};
+            var executeErr = null;
+            var executeResponse = null;
+            rpcClient.execute = sinon.stub();
+            rpcClient.execute.callsArgWith(2, executeErr, executeResponse);
+            sinon.stub(rpcClientFactory, 'getRpcClient', function(writebackContext, vistaContext, callback) {
+                var err = null;
+                return callback(err, rpcClient);
+            });
+            var rpcName = 'TIU REQUIRES COSIGNATURE';
+            notesValidator.checkIfCosignRequired(writebackContext, function(err) {
+                expect(err).to.be.falsy();
+                expect(rpcClient.execute.calledWith(
+                    rpcName, ['item0', '', 'userDfn', sinon.match.string],
+                    sinon.match.func
+                )).to.be.true();
+                expect(rpcClient.execute.calledWith(
+                    rpcName, ['item1', '', 'userDfn', sinon.match.string],
+                    sinon.match.func
+                )).to.be.true();
+                expect(rpcClient.execute.calledTwice).to.be.true();
+                done();
+            });
+        });
+        it('reads signItems from model.signedAddendums[].documentDefUid', function(done) {
+            var writebackContext = {};
+            _.set(writebackContext, 'model.signedAddendums[0].documentDefUid', 'urn:va:item0');
+            _.set(writebackContext, 'model.signedAddendums[1].documentDefUid', 'urn:va:item1');
+            _.set(writebackContext, 'siteHash', 'ABCD');
+            _.set(writebackContext, 'duz.ABCD', 'userDfn');
+            var rpcClient = {};
+            var executeErr = null;
+            var executeResponse = null;
+            rpcClient.execute = sinon.stub();
+            rpcClient.execute.callsArgWith(2, executeErr, executeResponse);
+            sinon.stub(rpcClientFactory, 'getRpcClient', function(writebackContext, vistaContext, callback) {
+                var err = null;
+                return callback(err, rpcClient);
+            });
+            var rpcName = 'TIU REQUIRES COSIGNATURE';
+            notesValidator.checkIfCosignRequired(writebackContext, function(err) {
+                expect(err).to.be.falsy();
+                expect(rpcClient.execute.calledWith(
+                    rpcName, ['item0', '', 'userDfn', sinon.match.string],
+                    sinon.match.func
+                )).to.be.true();
+                expect(rpcClient.execute.calledWith(
+                    rpcName, ['item1', '', 'userDfn', sinon.match.string],
+                    sinon.match.func
+                )).to.be.true();
+                expect(rpcClient.execute.calledTwice).to.be.true();
+                done();
+            });
+        });
+        it('reads refIds from model.documentDefUid', function(done) {
+            var writebackContext = {};
+            _.set(writebackContext, 'model.documentDefUid', 'urn:va:item0');
+            _.set(writebackContext, 'siteHash', 'ABCD');
+            _.set(writebackContext, 'duz.ABCD', 'userDfn');
+            var rpcClient = {};
+            var executeErr = null;
+            var executeResponse = null;
+            rpcClient.execute = sinon.stub();
+            rpcClient.execute.callsArgWith(2, executeErr, executeResponse);
+            sinon.stub(rpcClientFactory, 'getRpcClient', function(writebackContext, vistaContext, callback) {
+                var err = null;
+                return callback(err, rpcClient);
+            });
+            var rpcName = 'TIU REQUIRES COSIGNATURE';
+            notesValidator.checkIfCosignRequired(writebackContext, function(err) {
+                expect(err).to.be.falsy();
+                expect(rpcClient.execute.calledWith(
+                    rpcName, ['item0', '', 'userDfn', sinon.match.string],
+                    sinon.match.func
+                )).to.be.true();
+                expect(rpcClient.execute.calledOnce).to.be.true();
+                done();
+            });
+        });
+        it('uses a default refId when there are no items', function(done) {
+            var writebackContext = {};
+            _.set(writebackContext, 'model.signItems', []);
+            _.set(writebackContext, 'siteHash', 'ABCD');
+            _.set(writebackContext, 'duz.ABCD', 'userDfn');
+            var rpcClient = {};
+            var executeErr = null;
+            var executeResponse = null;
+            rpcClient.execute = sinon.stub();
+            rpcClient.execute.callsArgWith(2, executeErr, executeResponse);
+            sinon.stub(rpcClientFactory, 'getRpcClient', function(writebackContext, vistaContext, callback) {
+                var err = null;
+                return callback(err, rpcClient);
+            });
+            var rpcName = 'TIU REQUIRES COSIGNATURE';
+            notesValidator.checkIfCosignRequired(writebackContext, function(err) {
+                expect(err).to.be.falsy();
+                expect(rpcClient.execute.calledWith(
+                    rpcName, ['0', '', 'userDfn', sinon.match.string],
+                    sinon.match.func
+                )).to.be.true();
+                expect(rpcClient.execute.calledOnce).to.be.true();
+                done();
+            });
+        });
+        it('returns an error when it can not get an RPC client', function(done) {
+            var writebackContext = {};
+            _.set(writebackContext, 'model.signItems[0].documentDefUid', 'urn:va:item0');
+            _.set(writebackContext, 'model.signItems[1].documentDefUid', 'urn:va:item1');
+            var rpcClient = null;
+            sinon.stub(rpcClientFactory, 'getRpcClient', function(writebackContext, vistaContext, callback) {
+                var err = new Error('can not get RPC client');
+                return callback(err, rpcClient);
+            });
+            notesValidator.checkIfCosignRequired(writebackContext, function(err) {
+                expect(err).to.match(/This note title requires that a cosigner/);
+                done();
+            });
+        });
+        it('returns the expected error response when an RPC returns an error', function(done) {
+            var writebackContext = {};
+            _.set(writebackContext, 'model.signItems[0].documentDefUid', 'urn:va:item0');
+            _.set(writebackContext, 'model.signItems[1].documentDefUid', 'urn:va:item1');
+            _.set(writebackContext, 'siteHash', 'ABCD');
+            _.set(writebackContext, 'duz.ABCD', 'userDfn');
+            var rpcClient = {};
+            var executeErr = null;
+            var executeResponse = '1';
+            rpcClient.execute = sinon.stub();
+            rpcClient.execute.callsArgWith(2, executeErr, executeResponse);
+            sinon.stub(rpcClientFactory, 'getRpcClient', function(writebackContext, vistaContext, callback) {
+                var err = null;
+                return callback(err, rpcClient);
+            });
+            var rpcName = 'TIU REQUIRES COSIGNATURE';
+            notesValidator.checkIfCosignRequired(writebackContext, function(err) {
+                expect(err).to.match(/This note title requires that a cosigner/);
+                expect(rpcClient.execute.calledWith(
+                    rpcName, ['item0', '', 'userDfn', sinon.match.string],
+                    sinon.match.func
+                )).to.be.true();
+                expect(rpcClient.execute.calledWith(
+                    rpcName, ['item1', '', 'userDfn', sinon.match.string],
+                    sinon.match.func
+                )).to.be.true();
+                expect(rpcClient.execute.calledTwice).to.be.true();
+                done();
+            });
+        });
+        it('returns the expected error response when the RPC says a cosigner is required', function(done) {
+            var writebackContext = {};
+            _.set(writebackContext, 'model.signItems[0].documentDefUid', 'urn:va:item0');
+            _.set(writebackContext, 'model.signItems[1].documentDefUid', 'urn:va:item1');
+            _.set(writebackContext, 'siteHash', 'ABCD');
+            _.set(writebackContext, 'duz.ABCD', 'userDfn');
+            var rpcClient = {};
+            var executeErr = new Error('error executing RPC');
+            var executeResponse = null;
+            rpcClient.execute = sinon.stub();
+            rpcClient.execute.callsArgWith(2, executeErr, executeResponse);
+            sinon.stub(rpcClientFactory, 'getRpcClient', function(writebackContext, vistaContext, callback) {
+                var err = null;
+                return callback(err, rpcClient);
+            });
+            var rpcName = 'TIU REQUIRES COSIGNATURE';
+            notesValidator.checkIfCosignRequired(writebackContext, function(err) {
+                expect(err).to.match(/This note title requires that a cosigner/);
+                expect(rpcClient.execute.calledWith(
+                    rpcName, ['item0', '', 'userDfn', sinon.match.string],
+                    sinon.match.func
+                )).to.be.true();
+                expect(rpcClient.execute.calledWith(
+                    rpcName, ['item1', '', 'userDfn', sinon.match.string],
+                    sinon.match.func
+                )).to.be.true();
+                expect(rpcClient.execute.calledTwice).to.be.true();
+                done();
+            });
+        });
     });
 });

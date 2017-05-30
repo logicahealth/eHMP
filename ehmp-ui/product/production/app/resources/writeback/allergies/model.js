@@ -1,4 +1,6 @@
 define([], function() {
+    'use strict';
+
     var allergy = ADK.Resources.Writeback.Model.extend({
         resource: 'allergies-add',
         vpr: 'allergies',

@@ -1,6 +1,4 @@
 [data-appletid="user_management"] {
-	z-index: 100;
-	position: relative;
     // do not remove this height *** required for resizeUtil.js to function (DE2928)
 	.grid-toolbar {
 		height: 55px;
@@ -10,11 +8,11 @@
 	.data-grid {
 		width: 100%;
 		overflow-y: hidden;
-		#data-grid-user_management td {
+		table.backgrid td {
 			word-break: normal;
 		}
 	}
 }
-.paginator-user-management-bulk-edit{
+.search-users .paginator-user-management-bulk-edit{
 	margin-top: -17px;
 }

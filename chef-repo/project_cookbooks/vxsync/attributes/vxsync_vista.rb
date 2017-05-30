@@ -33,12 +33,17 @@ default[:vxsync][:vista][:processes] = {
       :profile => "error"
     }
   },
-  :subscriber_storage_vista => {
+  :subscriber_jds_storage_vista => {
     :template => "subscriber_host.sh.erb",
     :config => {
-      :profile => "storage"
-    },
-    :number_of_copies => 3
+      :profile => "jds-storage"
+    }
+  },
+  :subscriber_solr_storage_vista => {
+    :template => "subscriber_host.sh.erb",
+    :config => {
+      :profile => "solr-storage"
+    }
   },
   :subscriber_enrichment_vista => {
     :template => "subscriber_host.sh.erb",
@@ -76,3 +81,5 @@ default[:vxsync][:vista][:processes] = {
     }
   }
 }
+
+default[:vxsync][:vista][:jds_app_server_ident] = nil

@@ -1,11 +1,10 @@
-@F718   @future @US11272 @DE4560
+@F718 @US11272 @DE4560 @reg1
 Feature: Invoke Outpatient Lab Order Form
 
 Background:
   # Given user is logged into eHMP-UI
-  And user searches for and selects "twenty,patient"
-  Then Default Screen is active
-  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
+  And user searches for and selects "twenty,inpatient"
+  Then Summary View is active
 
 @US6777 @TC968_1
 Scenario: Verify Lab Order Form can be accessed from all entry points - Numeric Lab Results Trend View

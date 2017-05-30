@@ -1,4 +1,5 @@
 define([], function() {
+    'use strict';
 
     var InformationStatement = ADK.Resources.Picklist.Model.extend({
         idAttribute: 'record',
@@ -13,7 +14,7 @@ define([], function() {
 
     var InformationStatements = ADK.Resources.Picklist.Collection.extend({
         resource: 'write-pick-list-immunization-vaccine-info-statement',
-        model: InformationStatement,
+        model: InformationStatement
     });
 
     return InformationStatements;

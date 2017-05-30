@@ -23,15 +23,20 @@ RDK core concepts:
  * **outerceptor**: middleware which runs after a request handler and before sending the response
 
 
-Currently there is one main resource server, the *VistA Exchange API Resource Server*.
+Currently there are 3 resource servers which compose together behind a load balancer to become the *VistA Exchange API Resource Server*:
+ * The fetch server, which happens to be the main resource server, primarily for authentication, fetching data, and general utility
+ * The write server, primarily for changing patient records
+ * The pick list server, specifically for fetching pick lists
 
 ## Running the Resource Server
-Proper deployment of RDK will generate a JSON configuration file at `config/rdk-fetch-server-config.json`.  
-Once a configuration file has been generated, one of these commands may be used to start the resource server:
- * `./run.sh`  
- * `./bin/rdk-fetch-server.js`
+Proper deployment of RDK will generate a JSON configuration file for each server, for example, `config/rdk-fetch-server-config.json`.
 
-The resource server process accepts a --config command-line argument to specify a path to a JSON configuration file.
+Once configuration files for the servers have been generated, the servers can be started by executing the bin files:
+ * `./bin/rdk-fetch-server.js`
+ * `./bin/rdk-write-server.js`
+ * `./bin/rdk-pick-list-server.js`
+
+The resource servers accept a `--config` command-line argument to specify a path to a JSON configuration file.
 
 ## Development and Implementation details
  * [Contributing](contributing.md)
@@ -50,6 +55,9 @@ The resource server process accepts a --config command-line argument to specify 
  * [Code Organization](code-organization.md)
     * [Directory overview](code-organization.md#Directory-overview)
     * [File and directory detail](code-organization.md#File-and-directory-detail)
+ * [Querying](querying.md)
+    * [Authentication](querying.md#Authentication)
+    * [HTTP method override (POST fetch)](querying.md#HTTP-Method-Override)
  * [Resources](resources.md)
     * [Writeback Resources](resources.md#Writeback-Resources)
         * [Writeback Code Organization](writeback.md#Writeback-Code-Organization)

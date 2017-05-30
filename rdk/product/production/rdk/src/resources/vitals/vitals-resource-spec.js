@@ -27,20 +27,20 @@ describe('Vitals Resource Test', function() {
                         '9E7A': {
                             name: 'PANORAMA',
                             division: '500',
-                            host: '10.2.2.101',
+                            host: 'IP        ',
                             port: 9210,
                             production: false,
-                            accessCode: 'pu1234',
-                            verifyCode: 'pu1234!!'
+                            accessCode: 'REDACTED',
+                            verifyCode: 'REDACTED'
                         },
                         'C877': {
                             name: 'KODAK',
                             division: '500',
-                            host: '10.2.2.102',
+                            host: 'IP        ',
                             port: 9210,
                             production: false,
-                            accessCode: 'pu1234',
-                            verifyCode: 'pu1234!!'
+                            accessCode: 'REDACTED',
+                            verifyCode: 'REDACTED'
                         }
                     }
                 }

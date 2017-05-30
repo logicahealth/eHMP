@@ -107,7 +107,7 @@ define([
                 } else {
                     this.addToolbar();
                     this.showingToolbar = true;
-                    this.ui.medsItemRow.addClass('activerow');
+                    this.ui.medsItemRow.addClass('active-row');
                     this.ui.medsItemRow.removeClass('meds-item');
                 }
             }
@@ -121,7 +121,7 @@ define([
             if (this.showingToolbar) {
                 this.toolbarView.hide();
                 this.showingToolbar = false;
-                this.ui.medsItemRow.removeClass('activerow');
+                this.ui.medsItemRow.removeClass('active-row');
                 this.ui.medsItemRow.addClass('meds-item');
             }
             if (this.panelOpen) {

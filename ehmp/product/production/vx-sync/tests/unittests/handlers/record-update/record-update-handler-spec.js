@@ -6,6 +6,7 @@ var handler = require(global.VX_HANDLERS + 'record-update/record-update-handler'
 var log = require(global.VX_DUMMIES + '/dummy-logger');
 var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
+var PublisherRouterDummy = require(global.VX_DUMMIES + 'publisherRouterDummy');
 
 // NOTE: be sure next line is commented out before pushing
 // log = require('bunyan').createLogger({
@@ -19,6 +20,13 @@ var patientIdentifier = {
 };
 var dataDomain = 'allergy';
 var rootJobId = 1;
+var meta = {
+    jobId: rootJobId,
+    referenceInfo: {
+        requestId: 'record-update-requestId',
+        sessionId: 'record-update-sessionId'
+    }
+};
 
 var originalVaAllergyRecord = {
     'drugClasses': [{
@@ -132,11 +140,7 @@ describe('record-update-handler', function() {
                 getJlvMappedCode: getJlvMappedCode_ReturnValidCode
             },
             jds: jdsClientDummy,
-            publisherRouter: {
-                publish: function(jobsToPublish, callback) {
-                    callback(null, 'success');
-                }
-            },
+            publisherRouter: new PublisherRouterDummy(),
             solr: {
                 add: function(solrRecord, callback) {
                     callback(null, 'success');
@@ -149,12 +153,15 @@ describe('record-update-handler', function() {
         //Deep copy test allergy object
         var record = JSON.parse(JSON.stringify(originalVaAllergyRecord));
 
-        var job = jobUtil.createRecordUpdate(patientIdentifier, dataDomain, record, rootJobId);
+        var job = jobUtil.createRecordUpdate(patientIdentifier, dataDomain, record, meta);
 
         runs(function() {
             handler(log, config, environment, job, function(error, result) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
+                expect(job.referenceInfo).toBeDefined();
+                expect(job.referenceInfo.requestId).toBe('record-update-requestId');
+                expect(job.referenceInfo.sessionId).toBe('record-update-sessionId');
                 done1 = true;
             });
         });
@@ -186,9 +193,7 @@ describe('record-update-handler', function() {
             },
             jds: jdsClientDummy,
             publisherRouter: {
-                publish: function(jobsToPublish, callback) {
-                    callback(null, 'success');
-                }
+                publish: new PublisherRouterDummy()
             },
             solr: {
                 add: function(solrRecord, callback) {
@@ -233,9 +238,7 @@ describe('record-update-handler', function() {
             },
             jds: jdsClientDummy,
             publisherRouter: {
-                publish: function(jobsToPublish, callback) {
-                    callback(null, 'success');
-                }
+                publish: new PublisherRouterDummy()
             },
             solr: {
                 add: function(solrRecord, callback) {
@@ -279,11 +282,7 @@ describe('record-update-handler', function() {
                 getJlvMappedCode: getJlvMappedCode_ReturnValidCode
             },
             jds: jdsClientDummy,
-            publisherRouter: {
-                publish: function(jobsToPublish, callback) {
-                    callback(null, 'success');
-                }
-            },
+            publisherRouter: new PublisherRouterDummy(),
             solr: {
                 add: function(solrRecord, callback) {
                     callback(null, 'success');
@@ -328,11 +327,7 @@ describe('record-update-handler', function() {
                 getJlvMappedCode: getJlvMappedCode_ReturnValidCode
             },
             jds: jdsClientDummy,
-            publisherRouter: {
-                publish: function(jobsToPublish, callback) {
-                    callback(null, 'success');
-                }
-            },
+            publisherRouter: new PublisherRouterDummy(),
             solr: {
                 add: function(solrRecord, callback) {
                     callback('error');
@@ -379,11 +374,7 @@ describe('record-update-handler', function() {
                 getJlvMappedCode: getJlvMappedCode_ReturnValidCode
             },
             jds: jdsClientDummy,
-            publisherRouter: {
-                publish: function(jobsToPublish, callback) {
-                    callback(null, 'success');
-                }
-            },
+            publisherRouter: new PublisherRouterDummy(),
             solr: {
                 add: function(solrRecord, callback) {
                     callback(null, 'success');
@@ -427,11 +418,7 @@ describe('record-update-handler', function() {
                 getJlvMappedCode: getJlvMappedCode_ReturnValidCode
             },
             jds: jdsClientDummy,
-            publisherRouter: {
-                publish: function(jobsToPublish, callback) {
-                    callback(null, 'success');
-                }
-            },
+            publisherRouter: new PublisherRouterDummy(),
             solr: {
                 add: function(solrRecord, callback) {
                     callback(null, 'success');

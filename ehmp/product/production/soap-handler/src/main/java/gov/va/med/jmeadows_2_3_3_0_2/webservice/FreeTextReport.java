@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="freeTextReport">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.med.va.gov/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.URL       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="reportText" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "freeTextReport", namespace = "http://webservice.vds.med.va.gov/", propOrder = {
+@XmlType(name = "freeTextReport", namespace = "http://webservice.vds.URL       /", propOrder = {
     "reportText"
 })
 public class FreeTextReport

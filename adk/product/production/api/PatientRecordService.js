@@ -19,31 +19,6 @@ define([
 ) {
     'use strict';
 
-    function setPatientFetchParams(inPatient, opts) {
-        var options = _.extend({}, opts);
-        var patient = (options.patient || inPatient);
-        if (!_.isUndefined(patient)) {
-            if (_.isUndefined(options.criteria)) {
-                options.criteria = {};
-            }
-            //Pid will be used if exists unless patientIdentifierType specified to ICN
-            if (options.patientIdentifierType && patient.get(options.patientIdentifierType)) {
-                options.criteria.pid = patient.get(options.patientIdentifierType);
-            } else if (patient.get("pid")) {
-                options.criteria.pid = patient.get("pid");
-            } else if (patient.get("icn")) {
-                options.criteria.pid = patient.get("icn");
-            } else {
-                options.criteria.pid = patient.get("id");
-            }
-
-            if (patient.has("acknowledged")) {
-                options.criteria._ack = 'true';
-            }
-        }
-        return options;
-    };
-
     var patientImageRequest = null;
 
     var PatientRecordService = Marionette.Object.extend({
@@ -60,17 +35,41 @@ define([
                 }
             });
         },
+        setPatientFetchParams: function(inPatient, opts) {
+            var options = _.extend({}, opts);
+            var patient = (options.patient || inPatient);
+            if (!_.isUndefined(patient)) {
+                if (_.isUndefined(options.criteria)) {
+                    options.criteria = {};
+                }
+                //Pid will be used if exists unless patientIdentifierType specified to ICN
+                if (options.patientIdentifierType && patient.get(options.patientIdentifierType)) {
+                    options.criteria.pid = patient.get(options.patientIdentifierType);
+                } else if (patient.get("pid")) {
+                    options.criteria.pid = patient.get("pid");
+                } else if (patient.get("icn")) {
+                    options.criteria.pid = patient.get("icn");
+                } else {
+                    options.criteria.pid = patient.get("id");
+                }
+
+                if (patient.has("acknowledged")) {
+                    options.criteria._ack = 'true';
+                }
+            }
+            return options;
+        },
         createEmptyCollection: function(options) {
-            return resourceService.createEmptyCollection(setPatientFetchParams(this.getCurrentPatient(), options));
+            return resourceService.createEmptyCollection(this.setPatientFetchParams(this.getCurrentPatient(), options));
         },
         fetchCollection: function(options, existingCollection) {
-            return resourceService.fetchCollection(setPatientFetchParams(this.getCurrentPatient(), options), existingCollection);
+            return resourceService.fetchCollection(this.setPatientFetchParams(this.getCurrentPatient(), options), existingCollection);
         },
         fetchModel: function(options) {
-            return resourceService.fetchModel(setPatientFetchParams(this.getCurrentPatient(), options));
+            return resourceService.fetchModel(this.setPatientFetchParams(this.getCurrentPatient(), options));
         },
         fetchResponseStatus: function(options) {
-            return resourceService.fetchResponseStatus(setPatientFetchParams(this.getCurrentPatient(), options));
+            return resourceService.fetchResponseStatus(this.setPatientFetchParams(this.getCurrentPatient(), options));
         },
         getCurrentPatient: function() {
             return SessionStorage.get.sessionModel('patient');
@@ -95,7 +94,7 @@ define([
             };
             options.onError = function(collection, error) {
                 console.log("ADK refreshCurrentPatient: -------->> Error");
-                console.log(JSON.stringify(error, null, 4));
+                console.log(error);
                 Messaging.trigger('refreshed.ehmp.patient');
             };
             this.fetchCollection(options);
@@ -113,7 +112,7 @@ define([
                 criteria: criteria
             };
 
-            return resourceService.buildUrl(resourceTitle, setPatientFetchParams(this.getCurrentPatient(), options).criteria);
+            return resourceService.buildUrl(resourceTitle, this.setPatientFetchParams(this.getCurrentPatient(), options).criteria);
         },
         setCurrentPatient: function(patient, options) {
             Messaging.trigger("context:patient:change", patient, options);

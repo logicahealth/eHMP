@@ -56,6 +56,10 @@ default[:vxsync][:site_list] = ["9E7A", "C877"]
 default[:vxsync][:hdr_enabled] = true
 default[:vxsync][:hdr_mode] = "REQ/RES"
 default[:vxsync][:hdr_timeout] = 60000
+default[:vxsync][:mvi_timeout] = 60000
+default[:vxsync][:terminology_timeout] = 60000
+default[:vxsync][:jds_timeout] = 300000
+default[:vxsync][:activity_filter_sites] = nil
 default[:vxsync][:hdr_blacklist_sites] = [
   {
     "site_hash" => "2927",
@@ -66,6 +70,11 @@ default[:vxsync][:hdr_blacklist_sites] = [
     "station_number" => 504
   }
 ]
+
+default[:vxsync][:log_level][:error_handling] = "debug"
+default[:vxsync][:log_level][:loggers] = {
+  :root => "warn"
+}
 
 # DoD Configuration
 default[:vxsync][:jmeadows_enabled] = true
@@ -80,6 +89,7 @@ default[:vxsync][:mvi_timeout] = 60000
 
 # Terminology Configuration
 default[:vxsync][:terminology_timeout] = 60000
+
 default[:terminology][:nexus_base_url] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/gov/va/hmp/termdb"
 default[:terminology][:home_dir] = '/opt/terminology'
 default[:terminology][:artifacts] = {
@@ -182,9 +192,10 @@ default[:vxsync][:profile][:document][:'jmeadows-pdf-document-transform'][:worke
 default[:vxsync][:profile][:document][:'jmeadows-document-retrieval'][:worker_count] = node[:vxsync][:profile][:worker_count]
 default[:vxsync][:profile][:document][:'jmeadows-cda-document-conversion'][:worker_count] = node[:vxsync][:profile][:worker_count]
 
-default[:vxsync][:profile][:storage][:'store-record'][:worker_count] = 5
-default[:vxsync][:profile][:storage][:'solr-record-storage'][:worker_count] = 5
-default[:vxsync][:profile][:storage][:'operational-store-record'][:worker_count] = 8
+default[:vxsync][:profile][:'jds-storage'][:'store-record'][:worker_count] = 5
+default[:vxsync][:profile][:'jds-storage'][:'operational-store-record'][:worker_count] = 8
+
+default[:vxsync][:profile][:'solr-storage'][:'solr-record-storage'][:worker_count] = 5
 
 default[:vxsync][:profile][:enrichment][:'record-enrichment'][:worker_count] = 3
 
@@ -218,9 +229,12 @@ default[:soap_handler][:security][:trust_store_pw] = nil
 default[:soap_handler][:security][:key_store] = nil
 default[:soap_handler][:security][:key_store_pw] = nil
 
+default[:soap_handler][:log_level] = "INFO"
+
 
 # Error Processing Configuration
 default[:error_processing][:jdsGetErrorLimit] = 1000
+default[:error_processing][:loop_delay_millis] = 30000
 default[:error_processing][:profiles][:catastrophic_recovery][:enabled] = false
 default[:error_processing][:profiles][:record_enrichment][:enabled] = false
 default[:error_processing][:profiles][:activity_management][:enabled] = false
@@ -235,6 +249,11 @@ default[:osync][:home] = '/opt/vxsync_client'
 default[:osync][:config] = nil
 default[:osync][:service] = 'osync'
 default[:osync][:log_directory] = "/var/log/osync"
+default[:osync][:log_level][:loggers] = {
+  :root => "debug",
+  :valid_patients => "debug",
+  :results => "debug"
+}
 default[:osync][:config_file] = "#{node[:osync][:home]}/worker-config.json"
 default[:osync][:bluepill_log_directory] = "#{node[:osync][:log_directory]}/bluepill"
 default[:osync][:config_refresh] = 0

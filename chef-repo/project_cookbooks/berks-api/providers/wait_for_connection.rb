@@ -1,11 +1,17 @@
+use_inline_resources
+
 require 'net/http'
 
 action :execute do
+
   ruby_block "wait_for_connection:#{new_resource.name}" do
     block do
       raise "Could not connect to #{new_resource.url} after #{new_resource.attempts} attempts!" unless attempt_connection(new_resource.url, 1, new_resource.attempts, new_resource.attempt_delay)
     end
   end
+
+  new_resource.updated_by_last_action(true)
+
 end
 
 def attempt_connection(url, attempt, max_attempts, attempt_delay)

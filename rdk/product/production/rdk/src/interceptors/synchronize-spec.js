@@ -2,9 +2,7 @@
 
 var _ = require('lodash');
 var moment = require('moment');
-// var jdsSync = require('../subsystems/jds/jds-sync-subsystem');
 var synchronize = require('./synchronize');
-
 
 describe('synchronize.js', function() {
     describe('isPid()', function() {
@@ -50,32 +48,6 @@ describe('synchronize.js', function() {
             expect(synchronize._isEdipi('DOD;')).to.equal(false);
             expect(synchronize._isEdipi('9E7A;3')).to.equal(false);
             expect(synchronize._isEdipi('10108420871')).to.equal(false);
-        });
-    });
-
-    describe('getMySiteAsList()', function() {
-        it('tests that an empty req returns empty array', function() {
-            var req;
-
-            req = {};
-            expect(synchronize._getMySiteAsList(req)).to.eql([]);
-
-            req.session = {};
-            expect(synchronize._getMySiteAsList(req)).to.eql([]);
-
-            req.session.user = {};
-            expect(synchronize._getMySiteAsList(req)).to.eql([]);
-        });
-        it('tests that the user site in req is returned as a list', function() {
-            var req = {
-                session: {
-                    user: {
-                        site: '9E7A'
-                    }
-                }
-            };
-
-            expect(synchronize._getMySiteAsList(req)).to.eql(['9E7A']);
         });
     });
 
@@ -203,6 +175,24 @@ describe('synchronize.js', function() {
             };
 
             expect(synchronize._isInterceptorDisabled(config)).to.equal(true);
+        });
+    });
+
+    describe('isErrorCooldownTimeoutExceeded()', function() {
+        it('tests that timeout not exceeded returns false', function() {
+            var errorCooldownMinIntervalMillis = 1000 * 60;
+            var startTime = moment().subtract(errorCooldownMinIntervalMillis / 1000 / 2, 'second');
+            var now = moment();
+
+            expect(synchronize._isErrorCooldownTimeoutExceeded(startTime, errorCooldownMinIntervalMillis, now)).to.equal(false);
+        });
+
+        it('tests that timeout exceeded returns true', function() {
+            var syncExistsWaitDelayMillis = 1000 * 60;
+            var startTime = moment().subtract(syncExistsWaitDelayMillis / 1000 * 2, 'second');
+            var now = moment();
+
+            expect(synchronize._isSyncExistsDelayAtTimeout(startTime, syncExistsWaitDelayMillis, now)).to.equal(true);
         });
     });
 
@@ -498,7 +488,17 @@ describe('synchronize.js', function() {
         it('tests that empty and null status returns false', function() {
             expect(synchronize._isEverySiteInError(null)).to.equal(false);
             expect(synchronize._isEverySiteInError({})).to.equal(false);
-            expect(synchronize._isEverySiteInError({ data: { sites: {}}})).to.equal(false);
+            expect(synchronize._isEverySiteInError({
+                data: {
+                    sites: {}
+                }
+            })).to.equal(false);
+        });
+    });
+
+    describe('intercept()', function() {
+        it('tests...', function() {
+            expect(_.isFunction(synchronize)).to.equal(true);
         });
     });
 

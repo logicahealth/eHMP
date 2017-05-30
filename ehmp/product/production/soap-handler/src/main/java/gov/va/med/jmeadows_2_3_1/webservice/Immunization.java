@@ -16,7 +16,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="immunization">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.med.va.gov/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.URL       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="bodySite" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="comment" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -52,7 +52,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "immunization", namespace = "http://webservice.vds.med.va.gov/", propOrder = {
+@XmlType(name = "immunization", namespace = "http://webservice.vds.URL       /", propOrder = {
     "bodySite",
     "comment",
     "contraindicated",

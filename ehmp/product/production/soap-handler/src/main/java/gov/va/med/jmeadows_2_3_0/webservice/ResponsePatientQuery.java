@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="errorMsg" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="patients" type="{http://webservice.vds.med.va.gov/}patient" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="patients" type="{http://webservice.vds.URL       /}patient" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="success" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *       &lt;/sequence>
  *     &lt;/restriction>

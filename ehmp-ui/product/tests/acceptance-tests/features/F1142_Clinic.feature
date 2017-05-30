@@ -1,4 +1,4 @@
-@F1142 @F1142_clinics @reg1
+@F1142 @F1142_clinics @reg2
 Feature: Implement Clinics search tray
 
 
@@ -21,7 +21,7 @@ Scenario: Verify nationwide tray displays a help button
     When the user opens clinic search tray
     And the clinics tray displays a help button     
 
-@F1142_clinics_3  
+@F1142_clinics_3 @DE7713
 Scenario: Verify user can select any item from the clinic location drop down field, select -30d button from the predefined dates. make sure the clinics list is display is in specific format
   When the user opens clinic search tray
   Then clinic location drop down field is displayed
@@ -33,9 +33,11 @@ Scenario: Verify user can select any item from the clinic location drop down fie
       | Appt Date / Time |
       | Patient Name     |
       | Date of Birth    |
+      | Gender           |
   And the clinics Tray Appt Date Time search results are in format date HH:MM
   And the clinics tray patient name search results are in format Last Name, First Name + (First Letter in Last Name + Last 4 SSN )
-  And the clinics Tray date of birth search results are in format Date (Agey) - Gender (first letter)
+  And the clinics Tray date of birth search results are in format Date (Agey)
+  And the clinics Tray gender search results are in terms Male, Female or Unknown
    
   
 @F1142_clinics_4  
@@ -166,6 +168,11 @@ Scenario: Verify error message when user enters from date more then todate
   And user selects apply button  
   And from date error message is displayed currently with dates "01/01/1900" and "10/10/2010"
   And to date error message is displayed currently with dates "10/11/2020" and today + 100 years
+
+@F1142_clinics_16
+Scenario: Verify following label is present in clinic tray  Clinic Location, From and To 
+  And the user opens clinic search tray
+  Then clinic tray has "Clinic Location *" "From *" and "To *"
 
 
 

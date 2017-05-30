@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(['hbs!index', 'jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/components', 'api/UIComponents', 'jasminejquery'],
+define(['hbs!index', 'jquery', 'handlebars', 'backbone', 'marionette', 'main/UILibrary', 'api/UIComponents', 'jasminejquery'],
     function(IndexTemplate, $, Handlebars, Backbone, Marionette, UI) {
 
         var $notificationTestPage,

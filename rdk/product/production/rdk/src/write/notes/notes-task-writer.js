@@ -1,12 +1,13 @@
 'use strict';
 
-var async = require('../../../node_modules/async/lib/async');
+var async = require('async');
 var activitiesResource = require('../../resources/activitymanagement/activities/activities-operations-resource'); // For signal processing to Consults
 var getGenericJbpmConfig = require('../../resources/activitymanagement/activity-utils').getGenericJbpmConfig; // For signal processing to Consults
 var consultTaskOperations = require('../../resources/activitymanagement/tasks/consult-tasks-resource');
 var httpUtil = require('../../core/rdk').utils.http;
 var paramUtil = require('../../utils/param-converter');
 var writeNoteToPjds = require('./notes-unsigned-pjds-writer');
+var versionCompare = require('../../resources/activitymanagement/activities/eventprocessor/activity-event-process-resource').versionCompare;
 var _ = require('lodash');
 
 module.exports.getDefinitions = function(writebackContext, callback) {
@@ -442,53 +443,20 @@ function changestateJson(writebackContext, state) {
 }
 
 function getDeploymentId(deployments) {
-    //This is nearly identical to the versionCompare method in
-    //'../../resources/activitymanagement/activities/eventprocessor/activity-event-process-resource')
-    //The one difference is it splits on v1.deploymentId instead of just v1.
-    deployments = deployments.sort(
-        function versionCompare(v1, v2) {
-            // Split version numbers to its parts
-            var v1parts = v1.deploymentId.split('.');
-            var v2parts = v2.deploymentId.split('.');
-
-            // Push 0 to the end of the version number that might be shorter
-            //      ie. 1.2.3 and 1.2.3.4 => 1.2.3.0 and 1.2.3.4
-            while (v1parts.length < v2parts.length) {
-                v1parts.push('0');
-            }
-
-            while (v2parts.length < v1parts.length) {
-                v2parts.push('0');
-            }
-
-            // Convert all values to numbers
-            var convert = function(val) {
-                val = val.replace(/\D/g, '');
-                return Number(val);
-            };
-            v1parts = v1parts.map(convert);
-            v2parts = v2parts.map(convert);
-
-            for (var i = 0; i < v1parts.length; i++) {
-                if (v1parts[i] === v2parts[i]) {
-                    continue;
-                } else if (v1parts[i] > v2parts[i]) {
-                    return -1;
-                } else if (v1parts[i] < v2parts[i]) {
-                    return 1;
-                }
-            }
-
-            return 0;
-        }
-    );
-
+    var trimmedDeployments = [];
     _.each(deployments, function(deployment) {
-        console.log('getDeploymentId.deployment.deploymentId=' + deployment.deploymentId);
+        var deploymentId = _.get(deployment, 'deploymentId', null);
+        if (!_.isNull(deploymentId)) {
+            trimmedDeployments.push(deploymentId);
+        }
     });
 
-    console.log('getDeploymentId.deployments[0].deploymentId=' + deployments[0].deploymentId);
-    return deployments[0].deploymentId;
+    if (trimmedDeployments.length > 0) {
+        trimmedDeployments = trimmedDeployments.sort(versionCompare);
+        return trimmedDeployments[0];
+    }
+
+    return null;
 }
 
 function createTaskJson(writebackContext) {

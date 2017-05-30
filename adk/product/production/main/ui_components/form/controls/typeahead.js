@@ -63,8 +63,8 @@ define([
         },
         getTemplate: function() {
             return Handlebars.compile([
-                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
-                '<input type="{{type}}" id="{{clean-for-id name}}" name="{{name}}" value="{{value}}"' +
+                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel)}}',
+                '<input type="{{type}}" id="{{clean-for-id id}}" name="{{name}}" value="{{value}}"' +
                     ' class="typeahead {{form-class-name "controlClassName"}}"' +
                     '{{#if title}} title="{{title}}"{{/if}}' +
                     '{{#if disabled}} disabled{{/if}}' +
@@ -174,7 +174,7 @@ define([
         },
         onRender: function() {
             var pickListMatcher = this.field.get('matcher') || this.substringMatcher;
-            var typeaheadElement = this.$el.find('#' + this.field.get('name'));
+            var typeaheadElement = this.$('input');
 
             var libOptions = _.defaults(this.field.get('options') || {}, this.defaults.options);
 
@@ -218,7 +218,7 @@ define([
             };
         },
         getValueFromDOM: function() {
-            var label = this.$('#' + this.field.get('name')).typeahead('val');
+            var label = this.$('input').typeahead('val');
             return this.formatter.toRaw(label, this.model);
         },
         getSelectedLabelFromDOM: function(){

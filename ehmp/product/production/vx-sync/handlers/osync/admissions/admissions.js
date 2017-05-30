@@ -82,6 +82,10 @@ function processVistaAdmissionResponse(log, config, environment, job, data, call
             singlePatientJob.jobId = undefined;
             singlePatientJob.jpid = undefined;
 
+            if (job.referenceInfo) {
+                singlePatientJob.referenceInfo = job.referenceInfo;
+            }
+
             var jobToPublish = jobUtil.createSyncJob(log, singlePatientJob);
             environment.publisherRouter.publish(jobToPublish, function (error) {
                 if (error) {

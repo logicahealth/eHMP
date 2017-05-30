@@ -21,7 +21,7 @@ define([
     var searchForm = [{
         name: "searchForm",
         control: "container",
-        extraClasses: ["search-form", "modal-body"],
+        extraClasses: ["modal-body", "search-form"],
         items: [{
             control: "container",
             extraClasses: ["container-fluid"],
@@ -35,192 +35,190 @@ define([
                 items: []
             }, {
                 control: "container",
-                extraClasses: ["row", "main-search-form"],
-                items: [{
-                    control: "container",
-                    extraClasses: ["col-xs-12"],
-                    template: '<p>Fill in at least one field to search for users. Default search results will return only users that are active in both eHMP and VistA.</p>'
-                }]
+                extraClasses: ["col-xs-12", "loading-view"],
+                template: loadingViewTemplate,
+                hidden: true
             }, {
                 control: "container",
-                extraClasses: ["row", "main-search-form"],
-                items: [{
-                    control: "input",
-                    name: "lastNameValueBulkEdit",
-                    label: "Last name",
-                    extraClasses: ["col-xs-3"],
-                    srOnlyLabel: false,
-                    title: "Enter at least three letters of the user's Last Name"
-                }, {
-                    control: "input",
-                    name: "firstNameValueBulkEdit",
-                    label: "First name",
-                    extraClasses: ["col-xs-3"],
-                    srOnlyLabel: false,
-                    title: "Enter at least three letters of the user's First Name"
-                }, {
-                    control: "container",
-                    extraClasses: ["col-xs-3", "permission-sets-for-search-picklist"],
-                    items: []
-                }, {
-                    control: "input",
-                    name: "duzValueBulkEdit",
-                    label: "DUZ",
-                    extraClasses: ["col-xs-3"],
-                    srOnlyLabel: false,
-                    title: "Enter the D U Z of the user"
-                }]
-            }, {
-                name: "checkboxForm",
-                control: "container",
-                extraClasses: ["row", "checkbox-form", "main-search-form"],
+                extraClasses: ["search-users"],
                 items: [{
                     control: "container",
-                    extraClasses: ["col-xs-3"],
+                    extraClasses: ["main-search-form"],
                     items: [{
-                        control: "checkbox",
-                        label: "Include inactive VistA users",
-                        name: "vistaCheckboxValueBulkEdit",
-                        title: "Press spacebar to toggle checkbox.",
-                    }]
-                }, {
-                    control: "container",
-                    extraClasses: ["col-xs-3"],
-                    items: [{
-                        control: "checkbox",
-                        label: "Include inactive eHMP users",
-                        name: "ehmpCheckboxValueBulkEdit",
-                        title: "Press spacebar to toggle checkbox.",
-                    }]
-                }, {
-                    control: "container",
-                    extraClasses: ['main-search-form', 'col-xs-3', 'top-padding-xs'],
-                    items: [{
-                        control: "button",
-                        extraClasses: ["btn-primary"],
-                        name: "Search",
-                        label: "Search",
-                        size: "sm",
-                        disabled: true,
-                        title: "Press enter to search",
-                        id: "search-button",
-                        type: "button"
-                    }]
-                }]
-            }, {
-                control: "container",
-                extraClasses: ["row"],
-                items: [{
-                    control: "container",
-                    extraClasses: ["col-xs-12", "loading-view"],
-                    template: loadingViewTemplate,
-                    hidden: true
-                }]
-            }, {
-                control: "container",
-                extraClasses: ["row", 'main-search-form'],
-                items: [{
-                    control: "container",
-                    extraClasses: ["col-xs-12", "results-count-container", "bold-font"],
-                    template: '<span id="resultCountLabelBulkEdit" aria-label="Table is now {{resultCountLabel}}">{{resultCount}}</span>'
-                }]
-            }, {
-                control: "container",
-                extraClasses: ['right-margin-sm', 'main-search-form'],
-                items: [{
-                    control: "multiselectSideBySide",
-                    name: "usersListResults",
-                    label: "Users",
-                    extraClasses: ['bottom-margin-no', 'main-search-form'],
-                    attributeMapping: {
-                        value: "selected",
-                        id: "labelForSideBySide",
-                        label: "labelForSideBySide"
-                    },
-                    detailsPopoverOptions: {
-                        options: {
-                            placement: 'auto left'
-                        },
+                        control: "container",
+                        tagName: ["p"],
+                        template: 'Fill in at least one field to search for users. Default search results will return only users that are active in both eHMP and VistA.'
+                    }, {
+                        control: "container",
                         items: [{
-                            control: 'container',
-                            template: appletUtil.getDetailsTemplate([{
-                                id: 'vistaStatus',
-                                label: 'VistA status'
+                                control: "input",
+                                name: "lastNameValueBulkEdit",
+                                label: "Last name",
+                                extraClasses: ["col-xs-3", "left-padding-no"],
+                                srOnlyLabel: false,
+                                title: "Enter at least three letters of the user's Last Name"
                             }, {
-                                id: 'ehmpStatus',
-                                label: 'eHMP Status',
+                                control: "input",
+                                name: "firstNameValueBulkEdit",
+                                label: "First name",
+                                extraClasses: ["col-xs-3"],
+                                srOnlyLabel: false,
+                                title: "Enter at least three letters of the user's First Name"
                             }, {
-                                id: 'formattedPermissionSetsString',
-                                label: 'Permission Sets',
+                                control: "container",
+                                extraClasses: ["col-xs-3", "permission-sets-for-search-picklist"],
+                                items: []
                             }, {
-                                id: 'additionalPermissionsLabelsFormatted',
-                                label: 'Additional Individual Permissions',
-                            }, {
-                                id: 'duz',
-                                label: 'DUZ'
-                            }])
+                                control: "input",
+                                name: "duzValueBulkEdit",
+                                label: "DUZ",
+                                extraClasses: ["col-xs-3", "right-padding-no"],
+                                srOnlyLabel: false,
+                                title: "Enter the D U Z of the user"
                         }]
-                    }
-                }]
-            }, {
-                control: "container",
-                extraClasses: ["row", "main-search-form", "bottom-margin-xs"],
-                items: [{
+                    }, {
+                        name: "checkboxForm",
+                        control: "container",
+                        extraClasses: ["checkbox-form"],
+                        items: [{
+                            control: "container",
+                            extraClasses: ["col-xs-3"],
+                            items: [{
+                                control: "checkbox",
+                                label: "Include inactive VistA users",
+                                name: "vistaCheckboxValueBulkEdit",
+                                title: "Press spacebar to toggle checkbox.",
+                            }]
+                        }, {
+                            control: "container",
+                            extraClasses: ["col-xs-3"],
+                            items: [{
+                                control: "checkbox",
+                                label: "Include inactive eHMP users",
+                                name: "ehmpCheckboxValueBulkEdit",
+                                title: "Press spacebar to toggle checkbox.",
+                            }]
+                        }, {
+                            control: "container",
+                            extraClasses: ['col-xs-3', 'top-padding-xs'],
+                            items: [{
+                                control: "button",
+                                extraClasses: ["btn-primary"],
+                                name: "Search",
+                                label: "Search",
+                                size: "sm",
+                                disabled: true,
+                                title: "Press enter to search",
+                                id: "search-button",
+                                type: "button"
+                            }]
+                        }]
+                    }]
+                }, {
                     control: "container",
-                    extraClasses: ["col-xs-6", "text-right", "pixel-height-23", "background-color-primary-lightest", "paginator-user-management-bulk-edit"],
+                    extraClasses: ["main-search-results"],
                     items: [{
-                        control: "button",
-                        extraClasses: ["btn-icon"],
-                        name: "previous-page-button",
-                        label: "Previous Page",
-                        srOnlyLabel: true,
-                        icon: "fa-chevron-left fa-lg",
-                        disabled: false,
-                        title: "Press enter to access previous data.",
-                        id: "previous-page-button-bulk-edit",
-                        type: "button"
+                        control: "container",
+                        extraClasses: ["col-xs-12", "results-count-container", "bold-font"],
+                        template: '<span id="resultCountLabelBulkEdit" aria-label="Table is now {{resultCountLabel}}">{{resultCount}}</span>'
                     }, {
-                        control: "button",
-                        extraClasses: ["btn-icon"],
-                        name: "next-page-button",
-                        label: "Next Page",
-                        srOnlyLabel: true,
-                        icon: "fa-chevron-right fa-lg",
-                        disabled: false,
-                        title: "Press enter to access next data.",
-                        id: "next-page-button-bulk-edit",
-                        type: "button"
+                        control: "container",
+                        extraClasses: ['right-margin-sm'],
+                        items: [{
+                            control: "multiselectSideBySide",
+                            name: "usersListResults",
+                            label: "Users",
+                            extraClasses: ['bottom-margin-no'],
+                            attributeMapping: {
+                                value: "selected",
+                                id: "labelForSideBySide",
+                                label: "labelForSideBySide"
+                            },
+                            detailsPopoverOptions: {
+                                options: {
+                                    placement: 'auto left'
+                                },
+                                items: [{
+                                    control: 'container',
+                                    template: appletUtil.getDetailsTemplate([{
+                                        id: 'vistaStatus',
+                                        label: 'VistA status'
+                                    }, {
+                                        id: 'ehmpStatus',
+                                        label: 'eHMP Status',
+                                    }, {
+                                        id: 'formattedPermissionSetsString',
+                                        label: 'Permission Sets',
+                                    }, {
+                                        id: 'additionalPermissionsLabelsFormatted',
+                                        label: 'Additional Individual Permissions',
+                                    }, {
+                                        id: 'duz',
+                                        label: 'DUZ'
+                                    }])
+                                }]
+                            }
+                        }]
+                    }, {
+                        control: "container",
+                        extraClasses: ["bottom-margin-xs"],
+                        items: [{
+                            control: "container",
+                            extraClasses: ["col-xs-6", "text-right", "pixel-height-23", "background-color-primary-lightest", "paginator-user-management-bulk-edit"],
+                            items: [{
+                                control: "button",
+                                extraClasses: ["btn-icon"],
+                                name: "previous-page-button",
+                                label: "Previous Page",
+                                srOnlyLabel: true,
+                                icon: "fa-chevron-left fa-lg",
+                                disabled: false,
+                                title: "Press enter to access previous data.",
+                                id: "previous-page-button-bulk-edit",
+                                type: "button"
+                            }, {
+                                control: "button",
+                                extraClasses: ["btn-icon"],
+                                name: "next-page-button",
+                                label: "Next Page",
+                                srOnlyLabel: true,
+                                icon: "fa-chevron-right fa-lg",
+                                disabled: false,
+                                title: "Press enter to access next data.",
+                                id: "next-page-button-bulk-edit",
+                                type: "button"
+                            }]
+                        }]
+                    }, {
+                        control: "container",
+                        items: [{
+                            control: "radio",
+                            name: "editMode",
+                            label: "Select an action to apply to the selected users above",
+                            value: 'add-permission',
+                            extraClasses: ['col-xs-12'],
+                            options: [{
+                                label: "Add permissions",
+                                value: "add-permissions",
+                                title: "Press enter to select add permissions."
+                            }, {
+                                label: "Remove permissions",
+                                value: "remove-permissions",
+                                title: "Press enter to select remove permissions."
+                            }, {
+                                label: "Clone permissions",
+                                value: "clone-permissions",
+                                title: "Press enter to select clone permissions."
+                            }]
+                        }]
                     }]
                 }]
             }, {
                 control: "container",
-                extraClasses: ["row"],
-                items: [{
-                    control: "radio",
-                    name: "editMode",
-                    label: "Select an action to apply to the selected users above",
-                    value: 'add-permission',
-                    extraClasses: ['col-xs-12', 'main-search-form'],
-                    options: [{
-                        label: "Add permissions",
-                        value: "add-permissions",
-                        title: "Press enter to select add permissions."
-                    }, {
-                        label: "Remove permissions",
-                        value: "remove-permissions",
-                        title: "Press enter to select remove permissions."
-                    }, {
-                        label: "Clone permissions",
-                        value: "clone-permissions",
-                        title: "Press enter to select clone permissions."
-                    }]
-                }]
-            }, {
-                control: "container",
-                extraClasses: ['edit-users-form'],
+                extraClasses: ["edit-users"],
                 items: [{
                     control: "container",
-                    extraClasses: ['row'],
+                    extraClasses: ['edit-users-form'],
                     items: [{
                         control: "container",
                         extraClasses: ["col-xs-12"],
@@ -240,76 +238,77 @@ define([
                     }]
                 }, {
                     control: "container",
-                    extraClasses: ["row"],
-                    items: [{
-                        control: "textarea",
-                        name: "selectedUserTemplatePermissionSets",
-                        label: "Permission Sets",
-                        extraClasses: ['col-xs-6', 'top-margin-sm', 'bottom-margin-sm'],
-                        placeholder: "None",
-                        disabled: true,
-                        rows: 5
-                    }, {
-                        control: "textarea",
-                        name: "selectedUserTemplateAdditionalPermissions",
-                        label: "Additional Individual Permissions",
-                        extraClasses: ['col-xs-6', 'top-margin-sm', 'bottom-margin-sm'],
-                        placeholder: "None",
-                        disabled: true,
-                        rows: 5
-                    }]
-                }, {
-                    control: "container",
-                    extraClasses: ["row", "edit-user-clone-alert", "edit-user-clone", "top-margin-xl"],
-                    items: [{
-                        control: "alertBanner",
-                        name: "cloneUsersAlertMessage",
-                        dismissible: false
-                    }]
-                }, {
-                    control: "container",
-                    extraClasses: ['user-clone-template', 'row'],
-                    items: []
-                }, {
-                    control: "container",
-                    extraClasses: ["row"],
+                    extraClasses: ['edit-user-permissions-form'],
                     items: [{
                         control: "container",
-                        extraClasses: ["col-xs-6"],
                         items: [{
-                            control: "select",
-                            name: "editUsersPermissionSets",
-                            extraClasses: ["permission-sets-picklist", "remove-from-clone", "disable-on-warning"],
-                            pickList: 'permissionSetsForPicklist',
-                            srOnlyLabel: false,
-                            multiple: true,
-                            showFilter: true,
-                            options: {
-                                minimumInputLength: 0
-                            },
-                            label: "Select permission set",
-                            title: "Use up and down arrows to view options and then press enter to select",
+                            control: "textarea",
+                            name: "selectedUserTemplatePermissionSets",
+                            label: "Permission Sets",
+                            extraClasses: ['col-xs-6', 'top-margin-sm', 'bottom-margin-sm'],
+                            placeholder: "None",
+                            disabled: true,
+                            rows: 5
                         }, {
-                            control: "button",
-                            type: "button",
-                            label: "Clear All",
-                            id: 'clear-permission-sets-button',
-                            extraClasses: ['btn-default', 'btn-sm', "bottom-margin-sm", "remove-from-clone", "disable-on-warning"],
-                            title: 'Press enter to clear all filters.',
-                            disabled: true
+                            control: "textarea",
+                            name: "selectedUserTemplateAdditionalPermissions",
+                            label: "Additional Individual Permissions",
+                            extraClasses: ['col-xs-6', 'top-margin-sm', 'bottom-margin-sm'],
+                            placeholder: "None",
+                            disabled: true,
+                            rows: 5
                         }]
                     }, {
                         control: "container",
-                        extraClasses: ['edit-users-additional-permissions-container', "col-xs-6"],
-                        items: []
-                    }]
-                }, {
-                    control: "container",
-                    extraClasses: ["row"],
-                    items: [{
+                        extraClasses: ["edit-user-clone-alert", "edit-user-clone", "top-margin-xl"],
+                        items: [{
+                            control: "alertBanner",
+                            name: "cloneUsersAlertMessage",
+                            dismissible: false
+                        }]
+                    }, {
                         control: "container",
-                        extraClasses: ['selectable-users-table-container', 'col-xs-12', 'right-padding-lg', 'bottom-padding-lg'],
+                        extraClasses: ['user-clone-template'],
                         items: []
+                    }, {
+                        control: "container",
+                        items: [{
+                            control: "container",
+                            extraClasses: ["col-xs-6"],
+                            items: [{
+                                control: "select",
+                                name: "editUsersPermissionSets",
+                                extraClasses: ["permission-sets-picklist", "remove-from-clone", "disable-on-warning"],
+                                pickList: 'permissionSetsForPicklist',
+                                srOnlyLabel: false,
+                                multiple: true,
+                                showFilter: true,
+                                options: {
+                                    minimumInputLength: 0
+                                },
+                                label: "Select permission set",
+                                title: "Use up and down arrows to view options and then press enter to select",
+                            }, {
+                                control: "button",
+                                type: "button",
+                                label: "Clear All",
+                                id: 'clear-permission-sets-button',
+                                extraClasses: ['btn-default', 'btn-sm', "bottom-margin-sm", "remove-from-clone", "disable-on-warning"],
+                                title: 'Press enter to clear all filters.',
+                                disabled: true
+                            }]
+                        }, {
+                            control: "container",
+                            extraClasses: ['edit-users-additional-permissions-container', "col-xs-6"],
+                            items: []
+                        }]
+                    }, {
+                        control: "container",
+                        items: [{
+                            control: "container",
+                            extraClasses: ['selectable-users-table-container', 'col-xs-12', 'right-padding-lg', 'bottom-padding-lg'],
+                            items: []
+                        }]
                     }]
                 }]
             }]
@@ -317,7 +316,7 @@ define([
     }, {
         name: "footerForm",
         control: "container",
-        extraClasses: ["left-padding-sm", "modal-footer"],
+        extraClasses: ["modal-footer", "left-padding-sm"],
         items: [{
             control: "button",
             type: "button",
@@ -368,6 +367,7 @@ define([
             disabled: true
         }]
     }];
+
     var getSelectableTable = function(collection, editMode, customLegend) {
         var columns = [{
             id: 'formattedName',

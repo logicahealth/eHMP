@@ -2,214 +2,271 @@
 
 require('../../env-setup');
 
-var BeanstalkClient = require(global.VX_JOBFRAMEWORK).BeanstalkClient;
 var util = require('util');
 var async = require('async');
-var jobUtil = require(global.VX_UTILS + 'job-utils');
-var pidUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 var _ = require('underscore');
+var format = require('util').format;
+
+var BeanstalkClient = require(global.VX_JOBFRAMEWORK).BeanstalkClient;
+var jobUtil = require(global.VX_UTILS + 'job-utils');
 var getProperty = require(global.VX_UTILS + 'object-utils').getProperty;
 
-function ReEnrichUtil(log, jdsClient, updateConfig){
+var recordUpdateUtils = require('./record-update-utils');
+var getPatientIdentifierFromRecordPid = recordUpdateUtils.getPatientIdentifierFromRecordPid;
+var createErrorStatus = recordUpdateUtils.createErrorStatus;
+var addDistinct = recordUpdateUtils.addDistinct;
+var addIncompleteDomain = recordUpdateUtils.addIncompleteDomain;
+var buildPidStats = recordUpdateUtils.buildPidStats;
+var buildPidToDomainComboList = recordUpdateUtils.buildPidToDomainComboList;
+var buildJobTaskList = recordUpdateUtils.buildJobTaskList;
+
+
+//---------------------------------------------------------------------------------
+// Variadic Function:
+// ReEnrichUtil(logger, jdsClient, updateConfig)
+// ReEnrichUtil(logger, jdsClient, updateConfig, tubename)
+//
+// This method returns an array of PIDs. If a non-empty list is passed for 'pidList',
+// then that will be returned with no processing. Otherwise, jdsClient.getPatientListBySite()
+// will be called for each site and all of the results will be returned as a single array.
+//
+// logger: A bunyan style logger instance
+//
+// jdsClient: An instance of jds-client
+//
+// updateConfig: A config object containing record updater specific properties
+//
+// tubename: An optional parameter to allow the tubename used to be specified
+//      for testing purposes.
+//---------------------------------------------------------------------------------
+function ReEnrichUtil(logger, jdsClient, updateConfig, tubename) {
     if (!(this instanceof ReEnrichUtil)) {
-        return new ReEnrichUtil(log, jdsClient, updateConfig);
+        return new ReEnrichUtil(logger, jdsClient, updateConfig, tubename);
     }
 
-    this.log = log;
+    this.logger = logger;
     this.jdsClient = jdsClient;
     this.updateConfig = updateConfig;
+    this.tubename = tubename || 'vxs-record-update';
 }
 
+
+//---------------------------------------------------------------------------------
+// This method returns an array of PIDs. If a non-empty list is passed for 'pidList',
+// then that will be returned with no processing. Otherwise, jdsClient.getPatientList()
+// will be called and the first identifier for each will be appended to the list
+// returned in the callback.
+//
+// pidList: A list of PIDs, e.g. ['9E7A;3', '9E7A;1', '9E7A;8', 'C877;1']
+//
+// callback: The function to call when this method is complete or when an error occurs.
+//---------------------------------------------------------------------------------
 ReEnrichUtil.prototype.retrievePatientList = function(pidList, callback) {
     var self = this;
 
-    self.log.info('record-re-enrichment-util.retrievePatientList: entering method');
+    self.logger.info('record-re-enrichment-util.retrievePatientList(): entering method');
     if (pidList) {
-        self.log.info('record-re-enrichment-util.retrievePatientList: pids already provided via parameter. Skipping to next step...');
-        return callback(null, pidList);
+        self.logger.info('record-re-enrichment-util.retrievePatientList(): pids already provided via parameter. Skipping to next step...');
+        return setTimeout(callback, 0, null, pidList);
     }
 
     pidList = [];
 
-    self.log.debug('record-re-enrichment-util.retrievePatientList: attempting to retrieve patient list from JDS');
+    self.logger.debug('record-re-enrichment-util.retrievePatientList(): attempting to retrieve patient list from JDS');
     self.jdsClient.getPatientList(null, function(error, response, result) {
         if (error) {
-            var message = util.format('record-re-enrichment-util.retrievePatientList: got error from JDS: %j', error);
-            self.log.error(message);
+            var message = util.format('record-re-enrichment-util.retrievePatientList(): Error from JDS: %j', error);
+            self.logger.error(message);
             return callback(message);
-        } else if (!response || response.statusCode !== 200) {
-            var errorMessage = util.format('record-re-enrichment-util.retrievePatientList: got unexpected response from JDS: Error %s, Response %s', util.inspect(error), util.inspect(response));
-            self.log.error(errorMessage);
-            return callback(errorMessage);
         }
 
-        self.log.debug('record-re-enrichment-util.retrievePatientList: picking first patientIdentifier for each patient...');
-        _.each(result.items, function(patient) {
-            pidList.push(_.first(patient.patientIdentifiers));
+        if (!response || response.statusCode !== 200) {
+            var errorMessage = util.format('record-re-enrichment-util.retrievePatientList(): Unexpected response from JDS: error %j, response %j', error, response);
+            self.logger.error(errorMessage);
+            return callback(errorMessage);
+        }
+        self.logger.debug('record-re-enrichment-util.retrievePatientList(): picking first patientIdentifier for each patient...');
+        pidList = _.map(result.items, function(patient) {
+            return _.first(patient.patientIdentifiers);
         });
-        self.log.debug('record-re-enrichment-util.retrievePatientList: resulting patient list: %s. Continuing to next step...', pidList);
+
+        self.logger.debug('record-re-enrichment-util.retrievePatientList(): resulting patient list: %s. Continuing to next step...', pidList);
         return callback(null, pidList);
     });
 };
 
-ReEnrichUtil.prototype.retrievePatientSyncStatuses = function(updateTime, filterDomains, pids, callback) {
+
+//---------------------------------------------------------------------------------
+// This method iterates through the list of identifiers and for each one in the list,
+// calls jdsClient.getSyncStatus() filtered on 'updateTime' to get a detailed sync
+// status. Then, for each site in the sync status, this method iterates through the
+// domains contained in domainMetaStamp, keeping those which have events and are also
+// contained in 'filterDomains'. This list will be added to the result object keyed
+// on the PID for that patient on that site.
+//
+// If 'updateTime' is falsy, then the call to jdsClient.getSyncStatus() will not be
+// filtered on 'updateTime'.
+//
+// The result of this method will be returned in the callback in the form of an object
+// with PID keys to the list of domains for that key, e.g.
+//
+//     {
+//         '9E7A;3': ['med', 'allergy', 'consult'],
+//         '9E7A;1': ['med', 'consult'],
+//         'C877;8': ['allergy'],
+//     }
+//
+// updateTime: A timestamp string in YYYYMMDDHHmmss format.
+//
+// filterDomains: An array of domains, e.g. ['med', 'allergy', 'consult']
+//
+// identifiers: An array of patient identifiers, e.g. ['10108V420871', '9E7A;1', '9E7A;8', 'C877;1']
+//      Note that the identifiers can be any patient identifier that is valid in VxSync. This
+//      includes ICNs, PIDs, JPIDs, etc.
+//
+// callback: The function to call when this method is complete or when an error occurs.
+//---------------------------------------------------------------------------------
+ReEnrichUtil.prototype.retrievePatientSyncDomains = function(updateTime, filterDomains, identifiers, callback) {
     var self = this;
 
-    self.log.info('record-re-enrichment-util.retrievePatientSyncStatuses: entering method');
+    self.logger.info('record-re-enrichment-util.retrievePatientSyncDomains(): entering method');
     var pidsToResyncDomains = {};
 
-    if(!updateTime){
-        _.each(pids,function(pid){
-            pidsToResyncDomains[pid] = filterDomains;
-        });
-
-        self.log.info('record-re-enrichment-util.retrievePatientSyncStatuses: No updateTime provided. Skipping this step; Using pids mapped to domains: %j', pidsToResyncDomains);
-        return callback(null, pidsToResyncDomains);
-    }
-
-    var jdsFilter = {filter: '?detailed=true&filter=lt("stampTime",' + updateTime + ')'};
-
-    self.log.info('record-re-enrichment-util.retrievePatientSyncStatuses: async: attempting to get sync status for each patient');
-    async.eachLimit(pids, 5, function(pid, callback) {
-        self.log.debug('record-re-enrichment-util.retrievePatientSyncStatuses: attempting to get sync status for patient %s', pid);
+    var jdsFilter = {
+        filter: '?detailed=true' + (updateTime ? '&filter=lt("stampTime",' + updateTime + ')' : '')
+    };
+    self.logger.info('record-re-enrichment-util.retrievePatientSyncDomains(): async: attempting to get sync status for each patient');
+    async.eachLimit(identifiers, 5, function(pid, callback) {
+        self.logger.debug('record-re-enrichment-util.retrievePatientSyncDomains(): attempting to get sync status for patient %s', pid);
         var patientIdentifier = getPatientIdentifierFromRecordPid(pid);
 
-        self.jdsClient.getSyncStatus(patientIdentifier, jdsFilter, function(err, response, result) {
-            if (err) {
-                var errorMessage = util.format('record-re-enrichment-util.retrievePatientSyncStatuses: got error from JDS when attempting to get sync status for patient %s. Error %j', pid, err);
-                self.log.error(errorMessage);
+        self.jdsClient.getSyncStatus(patientIdentifier, jdsFilter, function(error, response, result) {
+            if (error) {
+                var errorMessage = util.format('record-re-enrichment-util.retrievePatientSyncDomains(): Error from JDS when attempting to get sync status for patient %s. error %j', pid, error);
+                self.logger.error(errorMessage);
                 return callback(errorMessage);
-            } else if (!response || response.statusCode !== 200) {
-                var message = util.format('record-re-enrichment-util.retrievePatientSyncStatuses: got unexpected response from JDS when attempting to get sync status for patient %s. Error %s, Response %s', pid, util.inspect(err), util.inspect(response));
-                self.log.error(message);
+            }
+
+            if (!response || response.statusCode !== 200) {
+                var message = util.format('record-re-enrichment-util.retrievePatientSyncDomains(): Unexpected response from JDS when attempting to get sync status for patient %s. error %j, response %j', pid, error, result);
+                self.logger.error(message);
                 return callback(message);
             }
 
-            self.log.debug('record-re-enrichment-util.retrievePatientSyncStatuses: determining which domains should be resynced for patient %s', pid);
-            var pidDomainsToBeResynced = self.getDomainsToBeResynced(result, filterDomains, updateTime);
-            if (pidDomainsToBeResynced) {
-                pidsToResyncDomains[pid] = pidDomainsToBeResynced;
-                self.log.info('record-re-enrichment-util.retrievePatientSyncStatuses: Preparing to resync these domains for patient %s: %s', pid, pidDomainsToBeResynced);
-            }
+            self.logger.debug('record-re-enrichment-util.retrievePatientSyncDomains(): determining which domains should be resynced for patient %s', pid);
 
-            callback(null);
+
+            var sourceMetaStamp = getProperty(result, ['completedStamp', 'sourceMetaStamp']);
+            var sites = _.keys(sourceMetaStamp);
+            _.each(sites, function(site) {
+                // This is all of the domain objects returned in the MetaStamp for the patient's site
+                var returnedDomains = getProperty(sourceMetaStamp, [site, 'domainMetaStamp']);
+                var sitePid = getProperty(sourceMetaStamp, [site, 'pid']);
+
+                // Only add a domain if it has events with a stampTime earlier than the updateTime,
+                // which is any domain object with an eventMetaStamp property.
+                var pidDomainsToBeResynced = _.filter(filterDomains, function(domain) {
+                    return _.has(returnedDomains[domain], 'eventMetaStamp');
+                });
+
+                if (!_.isEmpty(pidDomainsToBeResynced)) {
+                    pidsToResyncDomains[sitePid] = pidDomainsToBeResynced;
+                    self.logger.info('record-re-enrichment-util.retrievePatientSyncDomains(): Preparing to resync these domains for patient %s: %s', pid, pidDomainsToBeResynced);
+                }
+            });
+
+            return callback();
         });
     }, function(error) {
         if (error) {
             return callback(error);
         }
 
-        self.log.debug('record-re-enrichment-util.retrievePatientSyncStatuses: mapped pids to domains to be resynced %j', pidsToResyncDomains);
-        callback(null, pidsToResyncDomains);
+        self.logger.debug('record-re-enrichment-util.retrievePatientSyncDomains(): mapped pids to domains to be resynced %j', pidsToResyncDomains);
+        return callback(null, pidsToResyncDomains);
     });
 };
 
-ReEnrichUtil.prototype.getDomainsToBeResynced = function (status, filterDomains, updateTime) {
+
+//---------------------------------------------------------------------------------
+// This method iterates through the object in 'pidsToResyncDomains' and for each domain
+// in the list for that PID, calls jdsClient.getPatientDomainData() to get all of the
+// data for that patient for that domain. It then builds a job for each record with a stampTime which
+// is earlier than 'updateTime' and publishes it to beanstalk.
+//
+// If 'updateTime' is falsy, then this method will create jobs for all of the records returned
+// for each domain.
+//
+// pidsToResyncDomains: An object containing lists of domains to resync keyed by PIDs, e.g.
+//     {
+//         '9E7A;3': ['med', 'allergy', 'consult'],
+//         '9E7A;1': ['med', 'consult'],
+//         'C877;8': ['allergy'],
+//     }
+//
+// referenceInfo: An object containing info for tracking the flow of a job through
+//      the system via the log files, e.g.
+//    {
+//         sessionId: 'c45e45bf-55ab-453e-bd5e-7e9f66c58d03',
+//         utilityType: 'record-update-enrichment'
+//    }
+//
+// updateTime: A timestamp string in YYYYMMDDHHmmss format.
+//
+// callback: The function to call when this method is complete or when an error occurs.
+//---------------------------------------------------------------------------------
+ReEnrichUtil.prototype.getRecordsAndCreateJobs = function(pidsToResyncDomains, updateTime, referenceInfo, callback) {
     var self = this;
+    self.logger.info('record-re-enrichment-util.getRecordsAndCreateJobs(): entering method');
 
-    self.log.debug('record-re-enrichment-util.getDomainsToBeResynced: entering method');
-    var resyncDomains = [];
-    var sourceMetaStamp = getProperty(status, ['completedStamp', 'sourceMetaStamp']);
-    var sites = _.keys(sourceMetaStamp);
-
-    _.each(sites, function(site) {
-        self.log.trace('record-re-enrichment-util.getDomainsToBeResynced: checking metastamp for %s', site);
-        var domainMetaStamp = getProperty(status, ['completedStamp', 'sourceMetaStamp', site, 'domainMetaStamp']);
-        if (domainMetaStamp) {
-            var domainsForSite = _.keys(domainMetaStamp);
-            _.each(domainsForSite, function(domain) {
-                self.log.trace('record-re-enrichment-util.getDomainsToBeResynced: checking domain metastamp for %s', domain);
-                var includeDomain = (filterDomains) ? _.contains(filterDomains, domain) : false;
-
-                //If no updateTime was given, ignore whether or not eventMetaStamp is empty and allow the domain to be added to the result list.
-                var eventMetaStampNotEmpty = (updateTime) ? !_.isEmpty(domainMetaStamp[domain].eventMetaStamp) : true;
-
-                if (includeDomain && eventMetaStampNotEmpty) {
-                    resyncDomains.push(domain);
-                }
-            });
-        }
-    });
-
-    if (!_.isEmpty(resyncDomains)) {
-        resyncDomains = _.uniq(resyncDomains);
-        self.log.debug('record-re-enrichment-util.getDomainsToBeResynced: exiting with domains to be resynced: %s', resyncDomains);
-        return resyncDomains;
-    }
-
-    self.log.debug('record-re-enrichment-util.getDomainsToBeResynced: found no domains to be resynced');
-    return null;
-};
-
-ReEnrichUtil.prototype.getRecordsAndCreateJobs = function(pidsToResyncDomains, updateTime, callback) {
-    var self = this;
-    self.log.info('record-re-enrichment-util.getRecordsAndCreateJobs: entering method');
-    var pidToDomainComboList = [];
-
-    var pidStats = {};
+    var pidToDomainComboList = buildPidToDomainComboList(pidsToResyncDomains);
+    var pidStats = buildPidStats(pidsToResyncDomains, referenceInfo);
     var totalJobsPublished = 0;
+    var pidCompleteList = [];
+    var incompleteCollection = {};
 
-    _.each(pidsToResyncDomains, function(domains, pid) {
-        pidStats[pid] = {
-            domainsComplete: [],
-            jobsPublished: 0
-        };
 
-        _.each(domains, function(domain) {
-            pidToDomainComboList.push({
-                pid: pid,
-                domain: domain
-            });
-        });
-    });
-
-    self.log.debug('record-re-enrichment-util.getRecordsAndCreateJobs: beginning async to get domain data for patients from JDS');
-    //Limit to 1 to avoid running out of memory on large data sets
+    self.logger.debug('record-re-enrichment-util.getRecordsAndCreateJobs(): beginning async to get domain data for patients from JDS');
+    // Limit to 1 to avoid running out of memory on large data sets
     async.eachLimit(pidToDomainComboList, 1, function(pidAndDomain, asyncCallback) {
         var pid = pidAndDomain.pid;
         var domain = pidAndDomain.domain;
-        var jobsToPublish = [];
 
-        if(!pidStats[pid].started){
-            self.log.info('record-re-enrichment-util:---STARTED patient %s---', pid);
+        var pidReferenceInfo = pidStats[pid].referenceInfo;
+        var childLogger = self.logger.child(pidReferenceInfo);
+
+        if (!pidStats[pid].started) {
+            childLogger.info('record-re-enrichment-util.getRecordsAndCreateJobs(): STARTED patient: %s', pid);
             pidStats[pid].started = true;
         }
 
-        self.log.info('record-re-enrichment-util.getRecordsAndCreateJobs: retrieving %s data for %s from JDS', domain, pid);
+        self.logger.info('record-re-enrichment-util.getRecordsAndCreateJobs(): retrieving %s data for %s from JDS', domain, pid);
         self.jdsClient.getPatientDomainData(pid, domain, function(error, response, result) {
             if (error) {
-                var errorMessage = util.format('record-re-enrichment-util.getRecordsAndCreateJobs: got error from JDS when attempting to retrieve %s data for patient %s. Error %j', domain, pid, error);
-                self.log.error(errorMessage);
-                return asyncCallback(errorMessage);
-            } else if (!response || response.statusCode !== 200) {
-                var message = util.format('record-re-enrichment-util.getRecordsAndCreateJobs: got unexpected response from JDS when attempting to retrieve %s data for patient %s. Error %s, Response %s', domain, pid, util.inspect(error), util.inspect(response));
-                self.log.error(message);
-                return asyncCallback(message);
+                var errorMessage = util.format('record-re-enrichment-util.getRecordsAndCreateJobs(): Error from JDS when attempting to retrieve %s data for patient %s. error %j', domain, pid, error);
+                childLogger.error(errorMessage);
+                childLogger.error(createErrorStatus('Get domain data from JDS', pid, domain, error));
+                addIncompleteDomain(incompleteCollection, pid, domain);
+                return asyncCallback();
             }
 
-            var items = getProperty(result, ['data', 'items']);
-            var domainJobsCreated = 0;
+            if (!response || response.statusCode !== 200) {
+                var message = util.format('record-re-enrichment-util.getRecordsAndCreateJobs(): Unexpected response from JDS when attempting to retrieve %s data for patient %s. error %j, response %j', domain, pid, error, result);
+                childLogger.error(message);
+                addIncompleteDomain(incompleteCollection, pid, domain);
+                return asyncCallback();
+            }
 
-            _.each(items, function(item) {
-                //Exclude the record if it is older than the provided updateTime; include if by default if updateTime is omitted
-                var updateRecord = (updateTime)?(item.stampTime < updateTime): true;
-                if(updateRecord){
-                    var newJob = jobUtil.createRecordUpdate(getPatientIdentifierFromRecordPid(item.pid), pidAndDomain.domain, item, null);
-                    if (self.updateConfig.solrOnly) {
-                        newJob.solrOnly = true;
-                    }
-                    jobsToPublish.push(newJob);
-                    domainJobsCreated++;
-                }
-            });
+            var domainItems = getProperty(result, ['data', 'items']);
+            var jobsToPublish = buildJobsToPublish(self.updateConfig.solrOnly,updateTime, domain, domainItems, pidReferenceInfo);
 
-            self.log.info('record-re-enrichment-util.getRecordsAndCreateJobs: Created %s record update jobs for %s domain data for patient %s. Now publishing jobs.', domainJobsCreated, domain, pid);
+            childLogger.info('record-re-enrichment-util.getRecordsAndCreateJobs(): Created %s record update jobs for %s domain data for patient %s. Now publishing jobs.', _.size(jobsToPublish), domain, pid);
 
-            self.writeJobsToBeanstalk(jobsToPublish, function(error, domainJobsPublished){
+            self.writeJobsToBeanstalk(childLogger, jobsToPublish, function(error, domainJobsPublished) {
                 var errorMessage;
                 if (error) {
                     errorMessage = util.format('record-re-enrichment-util: Error returned by writeJobsToBeanstalk for pid %s, domain %s: %s', pid, domain, error);
-                    self.log.error('record-re-enrichment-util: Error returned by writeJobsToBeanstalk: %s', errorMessage);
+                    childLogger.error('record-re-enrichment-util.getRecordsAndCreateJobs(): Error returned by writeJobsToBeanstalk: %s', errorMessage);
                 } else {
                     pidStats[pid].domainsComplete.push(domain);
                 }
@@ -217,73 +274,93 @@ ReEnrichUtil.prototype.getRecordsAndCreateJobs = function(pidsToResyncDomains, u
                 pidStats[pid].jobsPublished += domainJobsPublished;
                 totalJobsPublished += domainJobsPublished;
 
-                self.log.info('record-re-enrichment-util.getRecordsAndCreateJobs: Published %s out of %s %s jobs for patient %s', domainJobsPublished, domainJobsCreated, domain, pid);
-                self.log.info('record-re-enrichment-util: Total jobs published as of this time: %s', totalJobsPublished);
+                addDistinct(pidCompleteList, pid);
 
-                if(_.isEmpty(_.difference(pidsToResyncDomains[pid], pidStats[pid].domainsComplete))){
-                    self.log.info('record-re-enrichment-util:---FINISHED patient %s---', pid);
+                childLogger.info('record-re-enrichment-util.getRecordsAndCreateJobs(): Finished %s out of %s patients', _.size(pidCompleteList), _.size(pidStats));
+                childLogger.info('record-re-enrichment-util.getRecordsAndCreateJobs(): Published %s out of %s %s jobs for patient %s', domainJobsPublished, _.size(jobsToPublish), domain, pid);
+                childLogger.info('record-re-enrichment-util.getRecordsAndCreateJobs(): Total jobs published as of this time: %s', totalJobsPublished);
+
+                if (_.isEmpty(_.difference(pidsToResyncDomains[pid], pidStats[pid].domainsComplete))) {
+                    self.logger.info('record-re-enrichment-util.getRecordsAndCreateJobs(): FINISHED patient %s', pid);
                 }
 
-                self.log.debug('record-re-enrichment-util.getRecordsAndCreateJobs: Finished call to writeJobsToBeanstalk for patient %s and domain %s. Jobs published successfully.', pid, domain);
-                asyncCallback(errorMessage);
+                childLogger.debug('record-re-enrichment-util.getRecordsAndCreateJobs(): Finished call to writeJobsToBeanstalk for patient %s and domain %s. Jobs published successfully.', pid, domain);
+                asyncCallback();
             });
 
         });
-    }, function(error) {
-        if (error) {
-            self.log.error('record-re-enrichment-util.getRecordsAndCreateJobs: Processing interrupted due to error: %s', error);
-            return callback(error);
-        }
-
-        self.log.info('record-re-enrichment-util.getRecordsAndCreateJobs: async operation completed; finished creating and publishing jobs.');
-        callback(error);
+    }, function() {
+        self.logger.info('record-re-enrichment-util.getRecordsAndCreateJobs(): Finished creating and publishing jobs.');
+        self.logger.info({
+            incomplete: incompleteCollection
+        }, 'Incomplete domains by PID:');
+        return callback();
     });
 };
 
-function getPatientIdentifierFromRecordPid(pid) {
-    return pidUtil.create(pidUtil.isIcn(pid) ? 'icn' : 'pid', pid);
+
+//---------------------------------------------------------------------------------
+// This function iterates through each item in the domainItems list, creating a
+// 'record-update' job for each item that was created before the 'updateTime' or
+// all records if 'updateTime' is falsy. The resulting array of jobs is returned.
+//
+// solrOnly: True if this is only a solr update.
+//
+// updateTime: A timestamp in YYYYMMDDHHmmss format.
+//
+// domain: The domain of all of the domainItems (e.g. 'allergy').
+//
+// domainItems: A collection of items as returned from JDS.
+//---------------------------------------------------------------------------------
+function buildJobsToPublish(solrOnly, updateTime, domain, domainItems, pidReferenceInfo) {
+    var jobsToPublish = [];
+
+    _.each(domainItems, function(item) {
+        var updateRecord = updateTime ? (item.stampTime < updateTime) : true;
+        var newJob;
+        if (updateRecord) {
+            newJob = jobUtil.createRecordUpdate(getPatientIdentifierFromRecordPid(item.pid), domain, item, {
+                referenceInfo: pidReferenceInfo
+            });
+
+            if (solrOnly) {
+                newJob.solrOnly = true;
+            }
+
+            jobsToPublish.push(newJob);
+        }
+    });
+
+    return jobsToPublish;
 }
 
-//--------------------------------------------------------------------------------
-// This function writes a job to the tube.
-//
-// client: Beanstalk client.
-// delaySecs: The number of seconds to delay the job.
-// job: The job to be written.
-// callback: The callback handler.
-//---------------------------------------------------------------------------------
-function writeJob(client, delaySecs, job, callback) {
-    var priority = 10;
-    var ttrSecs = 60;
-    client.put(priority, delaySecs, ttrSecs, job, callback);
-}
 
 //---------------------------------------------------------------------------------
 // This function writes jobs to the tube.
 //
-// tubeName: The name of the tube to write the job to.
+// childLogger: A bunyan logger to use when all logging in this function.
+//
+// jobsToPublish: Puts one or more jobs on a Beanstalk tube.
+//
 // callback: The callback handler.
 //---------------------------------------------------------------------------------
-ReEnrichUtil.prototype.writeJobsToBeanstalk = function(jobsToPublish, callback) {
+ReEnrichUtil.prototype.writeJobsToBeanstalk = function(childLogger, jobsToPublish, callback) {
     var self = this;
 
-    self.log.debug('record-re-enrichment-util.writeJobsToBeanstalk: entering method');
-    var tubeName = 'vxs-record-update';
+    childLogger.debug('record-re-enrichment-util.writeJobsToBeanstalk: entering method');
+    var tubeName = self.tubename;
     var host = self.updateConfig.beanstalk.repoDefaults.host;
     var port = self.updateConfig.beanstalk.repoDefaults.port;
-    var client = new BeanstalkClient(self.log, host, port);
+    var client = new BeanstalkClient(childLogger, host, port);
 
-    var tasks = [];
-    _.each(jobsToPublish, function(job) {
-        tasks.push(writeJob.bind(null, client, 0, JSON.stringify(job)));
-    });
+    var tasks = buildJobTaskList(client, jobsToPublish);
 
     var jobsPublishedCount = 0;
 
     client.connect(function(error) {
         if (error) {
-            client.end(function() {
-                return callback(util.format('Failed to connect to beanstalk.  Host: %s; Port: %s; Error: %s', host, port, error), jobsPublishedCount);
+            return client.end(function() {
+                return callback(util.format('Failed to connect to beanstalk. Host: %s; Port: %s; error: %j', host, port, error), jobsPublishedCount);
             });
         }
 
@@ -291,8 +368,8 @@ ReEnrichUtil.prototype.writeJobsToBeanstalk = function(jobsToPublish, callback) 
         //-----------------------------------
         client.use(tubeName, function(error) {
             if (error) {
-                client.end(function() {
-                    return callback(util.format('Failed to use tube.  Host: %s; Port: %s; TubeName: %s; Error: %s', host, port, tubeName, error), jobsPublishedCount);
+                return client.end(function() {
+                    return callback(util.format('Failed to use tube. Host: %s; Port: %s; TubeName: %s; error: %j', host, port, tubeName, error), jobsPublishedCount);
                 });
             }
 
@@ -300,27 +377,76 @@ ReEnrichUtil.prototype.writeJobsToBeanstalk = function(jobsToPublish, callback) 
             //------------------------
             client.watch(tubeName, function(error) {
                 if (error) {
-                    client.end(function() {
-                        return callback(util.format('Failed to watch tube.  Host: %s; Port: %s; TubeName: %s; Error: %s', host, port, tubeName, error), jobsPublishedCount);
+                    return client.end(function() {
+                        return callback(util.format('Failed to watch tube.  Host: %s; Port: %s; TubeName: %s; error: %j', host, port, tubeName, error), jobsPublishedCount);
                     });
                 }
 
                 async.series(tasks, function(error, result) {
                     if (error) {
-                        self.log.error('record-re-enrichment-util.writeJobsToBeanstalk: Failed to process tasks to write jobs to tubes.  error: %j; result: %j', error, result);
+                        childLogger.error('record-re-enrichment-util.writeJobsToBeanstalk: Failed to process tasks to write jobs to tubes.  error: %j; result: %j', error, result);
                     }
 
-                    if(result){
-                        //Result is a list of ids of the inserted beanstalk jobs
-                        //Array may contain an 'undefined' in an error situation - will cause this number to be off
-                        jobsPublishedCount += result.length;
+                    if (result) {
+                        // Result is a list of ids of the inserted beanstalk jobs
+                        // Array may contain an 'undefined' in an error situation - will cause this number to be off
+                        jobsPublishedCount += _.size(result);
                     }
 
                     client.end(function() {
-                        self.log.debug('record-re-enrichment-util.writeJobsToBeanstalk: finished placing jobs into beanstalk tube');
+                        childLogger.debug('record-re-enrichment-util.writeJobsToBeanstalk: finished placing jobs into beanstalk tube');
                         return callback(error, jobsPublishedCount);
                     });
                 });
+            });
+        });
+    });
+};
+
+
+//---------------------------------------------------------------------------------
+// This method runs the Data Re-enrichment process one step at a time in correct order.
+//
+// pids: An array of PIDS to process
+//
+// updateTime: A timestamp in YYYYMMDDHHmmss format. Only domain event items dated
+//      before this value will be re-processed. If this value is null or undefined,
+//      then no filter will be applied.
+//
+// domains: An array of domains to re-process
+//
+// referenceInfo: An object containing info for tracking the flow of a job through
+//      the system via the log files, e.g.
+//    {
+//         sessionId: 'c45e45bf-55ab-453e-bd5e-7e9f66c58d03',
+//         utilityType: 'record-update-enrichment'
+//    }
+//
+// callback: The callback handler.
+//---------------------------------------------------------------------------------
+ReEnrichUtil.prototype.runUtility = function(pids, updateTime, domains, referenceInfo, callback) {
+    var self = this;
+    var errorMessage;
+
+    self.retrievePatientList(pids, function(error, pidList) {
+        if (error) {
+            errorMessage = format('record-re-enrichment-util: Exiting due to error returned by retrievePatientList: %s', error);
+            return callback(errorMessage);
+        }
+
+        self.retrievePatientSyncDomains(updateTime, domains, pidList, function(error, pidsToResyncDomains) {
+            if (error) {
+                errorMessage = format('record-re-enrichment-util: Exiting due to error returned by retrievePatientSyncStatuses: %s', error);
+                return callback(errorMessage);
+            }
+
+            self.getRecordsAndCreateJobs(pidsToResyncDomains, updateTime, referenceInfo, function(error) {
+                if (error) {
+                    errorMessage = format('record-re-enrichment-util: Exiting due to error returned by getRecordsAndCreateJobs: %s', error);
+                    return callback(errorMessage);
+                }
+
+                callback();
             });
         });
     });

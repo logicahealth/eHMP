@@ -1,27 +1,17 @@
-[data-appletid="patient-sync-status"] {
-
-}
+//[data-appletid="patient-sync-status"] {}
 #patientSyncStatusRegion {
-	.btn-xs {
-		font-size: 11px;
-	}
-	.help-icon-link {
-	    i {
-	        color: $primary-light;
-	        &:hover {
-	        	color: darken($primary-light, 10%);
-	        }
-	    }
-	}
+    .loading-muted {
+        color: rgba(255, 255, 255, 0.5);
+    }
 }
-#sync-status-modal {
+#syncStatusModal {
     margin: -15px;
     .fa-exclamation-circle,
     .sync-failed-text {
         color: $red-dark;
     }
     .source-list-panel {
-        #sync-source-sites {
+        #syncSourceSites {
             list-style-type: none;
             padding-left: 0;
             li {
@@ -54,7 +44,7 @@
         .row {
             margin: 0;
         }
-        #force-site-sync-status p {
+        #forceSiteSyncStatus p {
             margin: 5px;
             padding: 5px
         }

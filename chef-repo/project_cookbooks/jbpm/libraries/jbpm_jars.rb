@@ -24,7 +24,12 @@ end
 
 def jar_deployed?(artifactId, version, user, password)
   deployed_jars(user, password).each{ |unit|
-    return true if unit["artifactId"] == artifactId && unit["version"] == version && unit["status"] == "DEPLOYED"
+    # return true if unit["artifactId"] == artifactId && unit["version"] == version && unit["status"] == "DEPLOYED"
+    if (unit.key?("deployment-unit")) # true if "deployment-unit" is defined - BPM v6.3, false fro BPM v6.1
+      return true if unit["deployment-unit"]["artifactId"] == artifactId && unit["deployment-unit"]["version"] == version && unit["deployment-unit"]["status"] == "DEPLOYED"
+    else
+      return true if unit["artifactId"] == artifactId && unit["version"] == version && unit["status"] == "DEPLOYED"
+    end
   }
   false
 end
@@ -32,16 +37,21 @@ end
 def jar_deactivated?(groupId, artifactId, version, user, password)
   auth_string = "#{user}:#{password}"
   url = URI("http://#{node[:ipaddress]}:8080/business-central/rest/deployment/#{groupId}:#{artifactId}:#{version}/deactivate")
-  
+
   http = Net::HTTP.new(url.host, url.port)
   request = Net::HTTP::Post.new(url)
   request["Authorization"] = "Basic #{Base64.encode64(auth_string)}"
   request["Accept"] = "application/json"
-
-  response = http.request(request)
-  body = JSON.parse(response.body)
-  return true if body["status"] == "SUCCESS"
-  false 
+  begin
+    response = http.request(request)
+    body = JSON.parse(response.body)
+    return true if body["status"] == "SUCCESS"
+    Chef::Log.warn("jar_deactivated: CHEF Received this response.body: #{response.body}")
+    false
+  rescue
+    Chef::Log.warn("Deactivation request returned a bad result:  #{response.body}")
+    false
+  end
 end
 
 def deployed_jars(user, password)

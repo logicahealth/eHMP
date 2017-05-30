@@ -24,8 +24,8 @@ var mockConfig = {
     },
     jds: {
         protocol: 'http',
-        host: '10.2.2.110',
-        port: 9080
+        host: 'IP        ',
+        port: PORT
     }
 };
 
@@ -444,6 +444,10 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
                     type: 'pid',
                     value: 'DOD;00001'
                 };
+                job.referenceInfo = {
+                    sessionId: 'sessionId',
+                    requestId: 'requestId'
+                };
 
                 var expectedJdsResponse = {
                     statusCode: 200
@@ -505,6 +509,10 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
                             'uid': 'urn:va:allergy:DOD:00001:1000010341',
                             'pid': 'DOD;00001',
                             'stampTime': '20140102120059.000'
+                        },
+                        'referenceInfo': {
+                            'sessionId': 'sessionId',
+                            'requestId': 'requestId'
                         }
                     }, {
                         'type': 'event-prioritization-request',
@@ -536,6 +544,10 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
                             'uid': 'urn:va:allergy:DOD:00001:1000010340',
                             'pid': 'DOD;00001',
                             'stampTime': '20140102120059.000'
+                        },
+                        'referenceInfo': {
+                            'sessionId': 'sessionId',
+                            'requestId': 'requestId'
                         }
                     }, {
                         'type': 'event-prioritization-request',
@@ -563,6 +575,10 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
                             'uid': 'urn:va:allergy:DOD:00001:1000010342',
                             'pid': 'DOD;00001',
                             'stampTime': '20140102120059.000'
+                        },
+                        'referenceInfo': {
+                            'sessionId': 'sessionId',
+                            'requestId': 'requestId'
                         }
                     }];
 
@@ -591,8 +607,8 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: '10.2.2.110',
-                    port: 9080
+                    host: 'IP        ',
+                    port: PORT
                 }
             };
 

@@ -94,9 +94,9 @@ define([
             var filterText = this.$el.find('#searchScreens').val();
             this.managerRegion.currentView.filterScreens(filterText);
             if (filterText) {
-                this.$el.find('.clearSearch').show();
+                this.$el.find('.clearSearch').removeClass('hidden');
             } else {
-                this.$el.find('.clearSearch').hide();
+                this.$el.find('.clearSearch').addClass('hidden');
             }
         },
         clearSearch: function() {

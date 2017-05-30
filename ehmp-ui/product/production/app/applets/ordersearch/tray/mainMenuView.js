@@ -9,17 +9,18 @@ define([
 ], function(_, Backbone, Handlebars, GroupView, LabOrderTrayUtils, RequestTrayUtils, OrderEntryTrayUtils) {
     'use strict';
 
-    var ordersGroup = [{
+    var consultOrders = {
         id: 'consult',
         name: 'Consult Order',
         icon: 'fa-user-md',
         onClick: OrderEntryTrayUtils.launchOrderEntryForm
-    }, {
+    };
+    var labOrders = {
         id: 'lab',
         name: 'Lab Order',
         icon: 'fa-flask',
         onClick: LabOrderTrayUtils.launchLabForm
-    }];
+    };
 
     var activitiesGroup = [{
         id: 'request',
@@ -30,13 +31,29 @@ define([
 
     var MenuView = GroupView.extend({
         initialize: function(options) {
-            this.collection = new Backbone.Collection([{
-                name: 'Orders',
-                items: new Backbone.Collection(ordersGroup)
-            }, {
-                name: 'Activities',
-                items: new Backbone.Collection(activitiesGroup)
-            }]);
+            var permissions = new ADK.UIResources.Fetch.Permission.Collection();
+            this.collection = new Backbone.Collection();
+
+            var ordersGroup = [];
+            if (permissions.hasOrderPermissions('add-consult-order')) {
+                ordersGroup.push(consultOrders);
+            }
+            if (permissions.hasLabPermissions('add-lab-order')) {
+                ordersGroup.push(labOrders);
+            }
+
+            if (ordersGroup.length) {
+                this.collection.add({
+                    name: 'Orders',
+                    items: new Backbone.Collection(ordersGroup)
+                });
+            }
+            if (permissions.hasRequestPermissions('add-coordination-request')) {
+                this.collection.add({
+                    name: 'Activities',
+                    items: new Backbone.Collection(activitiesGroup)
+                });
+            }
             this.searchCriteriaModel = options.searchCriteriaModel;
         },
         options: {

@@ -1,7 +1,7 @@
-<div id="sync-status-modal" class="row">
+<div id="syncStatusModal" class="row">
   <div id="source-list-panel" class="source-list-panel col-xs-3">
     <h5>Source</h5>
-    <ul id="sync-source-sites">
+    <ul id="syncSourceSites">
     {{#if mySite}}
       <li data-source="mySite" class="{{#compare selectedSource.sourceName 'mySite'}}selected{{/compare}}">
         <div>
@@ -155,12 +155,12 @@
   </div>
   <div id="sync-site-detail" class="sync-site-detail col-xs-9" tabindex="0">
     <span class="sr-only">Press alt + m to return to source menu</span>
-    <div id="force-site-sync-status" class="row">
+    <div id="forceSiteSyncStatus" class="row">
       {{#if msgSuccessfulSync}}
-        <p id="force-site-sync-status-success" class="bg-danger"><strong>{{currentDateTime}} - Refresh was successful</strong><button id="msg-successful-sync" type="button" class="btn close" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>
+        <p id="forceSiteSyncStatus-success" class="bg-danger"><strong>{{currentDateTime}} - Refresh was successful</strong><button id="msg-successful-sync" type="button" class="btn close" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>
       {{/if}}
       {{#if msgFailedSync}}
-        <p id="force-site-sync-status-error" class="bg-danger"><strong>{{currentDateTime}} - Error detected during sync</strong><button id="msg-failed-sync" type="button" class="btn close" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>
+        <p id="forceSiteSyncStatus-error" class="bg-danger"><strong>{{currentDateTime}} - Error detected during sync</strong><button id="msg-failed-sync" type="button" class="btn close" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>
       {{/if}}
     </div>
     <div id="sync-site-detail-header" class="sync-site-detail-header row">

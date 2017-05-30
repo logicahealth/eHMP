@@ -1,4 +1,6 @@
 define([], function() {
+    'use strict';
+
     var labSupportData = ADK.Resources.Writeback.Model.extend({
         resource: 'lab-support-data',
         parse: function(resp, options) {

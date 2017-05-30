@@ -16,13 +16,13 @@ class PobOrdersApplet < PobParentApplet
   element :fld_collection_date, "#collectionDate"
   element :fld_in_progress, "div.inProgressContainer"
   element :fld_override_reason, "#reason-for-override"
-  element :fld_signature_code, "#signature-code"
-  element :fld_discontinue_reason, "#reason"
+  element :fld_signature_code, ".signature_code input:not([disabled])"
+  element :fld_discontinue_reason, ".reason select"
   element :fld_sign_order_screen_loaded, ".order_summary"
       
   elements :fld_order_preview_labels, ".col-xs-12 div"    
   elements :fld_order_modal_labels, ".form-group label"
-  elements :fld_add_lab_order, "#collapse-items-orders li"
+  elements :fld_add_lab_order, "#collapse-items-orders li a"
 
   # *****************  All_Button_Elements  ******************* #
   element :btn_toggle, ".btn.dropdown-toggle.btn-primary .caret"
@@ -48,8 +48,8 @@ class PobOrdersApplet < PobParentApplet
   element :btn_cancel, ".workflow-controller .modal-footer [data-original-title='Warning']"
 
   # *****************  All_Drop_down_Elements  ******************* #
-  element :fld_available_lab_test_drop_down, "[x-is-labelledby='select2-availableLabTests-container']"
-  element :ddl_urgency, "#urgency"
+  element :fld_available_lab_test_drop_down, "[x-is-labelledby^='select2-availableLabTests']"
+  element :ddl_urgency, "[id^=urgency]"
 
   # *****************  All_Table_Elements  ******************* #
   elements :tbl_orders_grid, "#data-grid-orders tbody tr"
@@ -90,6 +90,11 @@ class PobOrdersApplet < PobParentApplet
   def wait_until_applet_loaded
     wait_until { applet_loaded? }
   end
+  
+  def number_expanded_applet_rows
+    return 0 if has_fld_empty_row?
+    tbl_orders_grid.length
+  end    
 
   def rows_of_type(type)
     all_rows = tbl_orders_grid

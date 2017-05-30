@@ -19,10 +19,10 @@ function JobAPI(setLog, setConfig, setEnvironment) {
     if (_.isUndefined(setEnvironment)) {
         setEnvironment = {};
     }
-    this.jobStatusUpdater = setEnvironment.jobStatusUpdater || new JobStatusUpdater(setLog, setConfig);
-    this.jdsClient = setEnvironment.jds;
-    this.log = logUtil.getAsChild('job-util', setLog);
-    // this.log = setLog;
+    this.jobStatusUpdater = setEnvironment.jobStatusUpdater.childInstance(setLog) || new JobStatusUpdater(setLog, setConfig);
+    this.jdsClient = setEnvironment.jds.childInstance(setLog);
+    // this.log = logUtil.getAsChild('job-util', setLog);
+    this.log = setLog;
     this.config = setConfig;
 
     this.buildJob = buildJob.bind(this);
@@ -73,31 +73,17 @@ var getJobHistory = function(req, res, next) {
     var errorTemplate = 'job-middleware.getJobHistory: Could not determine whether or not job currently exists for %s. Received error from jds: %s';
 
     self.log.debug('job-middleware.getJobHistory - Getting job state history');
-    if (typeof filter === 'undefined') {
-        self.jdsClient.getJobStatus(job, function(error, response, result) {
-            if (error) {
-                var errorMessage = format(errorTemplate, logPatientIdentifier, inspect(error));
-                self.log.error(errorMessage);
-                return res.status(500).send(errorMessage);
-            }
-            self.log.debug('job-middleware.getJobHistory - Job status received');
-            self.log.debug(inspect(result));
-            res.jobStates = result.items;
-            next();
-        });
-    } else {
-        self.jdsClient.getJobStatus(job, filter, function(error, response, result) {
-            if (error) {
-                var errorMessage = format(errorTemplate, logPatientIdentifier, inspect(error));
-                self.log.error(errorMessage);
-                return res.status(500).send(errorMessage);
-            }
-            self.log.debug('job-middleware.getJobHistory - Job status received');
-            self.log.debug(inspect(result));
-            res.jobStates = result.items;
-            next();
-        });
-    }
+    self.jdsClient.getJobStatus(job, filter, function(error, response, result) {
+        if (error) {
+            var errorMessage = format(errorTemplate, logPatientIdentifier, inspect(error));
+            self.log.error(errorMessage);
+            return res.status(500).send(errorMessage);
+        }
+        self.log.debug('job-middleware.getJobHistory - Job status received');
+        self.log.debug(inspect(result));
+        res.jobStates = result.items;
+        next();
+    });
 };
 
 /**
@@ -138,12 +124,11 @@ var getSyncStatus = function(req, res, next) {
  * res: Job History object  ({ job: xxx, jobStates: [...]})
  */
 var jobVerification = function(allowedStatus, req, res, next) {
-    var self = this;
-    // self.log.trace('jobVerification:  Entered method..  res: %s', inspect(res, { depth: null }));
-    self.log.debug('job-middleware.jobVerification() - Parsing job state history for recent %s jobs', res.job.type);
-    self.log.debug('job-middleware.jobVerification() - Jobs with %j status will be allowed', allowedStatus);
+    // this.log.trace('jobVerification:  Entered method..  res: %s', inspect(res, { depth: null }));
+    this.log.debug('job-middleware.jobVerification() - Parsing job state history for recent %s jobs', res.job.type);
+    this.log.debug('job-middleware.jobVerification() - Jobs with %j status will be allowed', allowedStatus);
 
-    var currentJob = parseJobsForRecentStatus.call(self, res.jobStates, res.job.type, allowedStatus);
+    var currentJob = parseJobsForRecentStatus(this.log, res.jobStates, res.job.type, allowedStatus);
 
     if (currentJob !== false) {
         res.job.status = 'error';
@@ -159,16 +144,15 @@ var jobVerification = function(allowedStatus, req, res, next) {
     }
 };
 
-var parseJobsForRecentStatus = function(jdsJobsResponse, type, status) {
-    var self = this;
+function parseJobsForRecentStatus(logger, jdsJobsResponse, type, status) {
     var currentJob = false;
-    self.log.debug('parseJobsForRecentStatus: Entered method, searching for job type: %s', type);
-    self.log.debug('parseJobsForRecentStatus: Starting with %s job(s)', (jdsJobsResponse ? jdsJobsResponse.length : 0));
+    logger.debug('parseJobsForRecentStatus: Entered method, searching for job type: %s', type);
+    logger.debug('parseJobsForRecentStatus: Starting with %s job(s)', (jdsJobsResponse ? jdsJobsResponse.length : 0));
     var typeMatchedJobs = _.filter(jdsJobsResponse, function(job) {
         return job.type === type;
     });
-    self.log.debug('parseJobsForRecentStatus: filtered %s jobs, %s found', type, typeMatchedJobs.length);
-    self.log.debug('parseJobsForRecentStatus: checking job status, allowed states: %j', status);
+    logger.debug('parseJobsForRecentStatus: filtered %s jobs, %s found', type, typeMatchedJobs.length);
+    logger.debug('parseJobsForRecentStatus: checking job status, allowed states: %j', status);
     var conflictingJobs = _.filter(typeMatchedJobs, function(job) {
         if (!_.contains(status, job.status)) {
             return true;
@@ -176,14 +160,14 @@ var parseJobsForRecentStatus = function(jdsJobsResponse, type, status) {
     });
 
     if (conflictingJobs.length) {
-        self.log.debug('parseJobsForRecentStatus: %s conflicting jobs found', conflictingJobs.length);
+        logger.debug('parseJobsForRecentStatus: %s conflicting jobs found', conflictingJobs.length);
         currentJob = conflictingJobs;
     } else {
-        self.log.debug('parseJobsForRecentStatus: No conflict found...');
+        logger.debug('parseJobsForRecentStatus: No conflict found...');
     }
 
     return currentJob;
-};
+}
 
 /**
  * Middleware to publish the enterprise-sync-request

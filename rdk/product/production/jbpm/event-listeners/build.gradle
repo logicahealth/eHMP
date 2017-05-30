@@ -1,22 +1,27 @@
+sourceCompatibility = property('javaVersion')
+targetCompatibility = property('targetJavaVersion')
+
+configurations {
+    exportedLibs
+}
+
 dependencies {
-  compile 'junit:junit:4.12'
-  compile 'org.kie:kie-api:6.2.0.Final'
-  compile 'org.kie:kie-internal:6.2.0.Final'
-  compile 'org.jbpm:jbpm-flow:6.2.0.Final'
-  compile 'org.jbpm:jbpm-human-task-core:6.2.0.Final'
-  compile 'javax.persistence:persistence-api:1.0.2'
-  compile 'joda-time:joda-time:2.9'
+    compile 'junit:junit:4.12'
+    compile group: 'org.kie', name: 'kie-api', version: property('kie-version')
+    compile group: 'org.kie', name: 'kie-internal', version: property('kie-version')
+    compile group: 'org.jbpm', name: 'jbpm-flow', version: property('kie-version')
+    compile group: 'org.jbpm', name: 'jbpm-human-task-core', version: property('kie-version')
+    compile project(':production:jbpm:JbpmUtils')
+    compile 'javax.persistence:persistence-api:1.0.2'
+    exportedLibs group: 'joda-time', name: 'joda-time', version: property('joda-version')
+
+    configurations.compile.extendsFrom(configurations.exportedLibs)  
 }
 
 jar {
     baseName "jbpm-custom-event-listeners"
 
     from {
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-        configurations.runtime.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
+        configurations.exportedLibs.collect{ it.isDirectory() ? it : zipTree(it) }
     }
 }

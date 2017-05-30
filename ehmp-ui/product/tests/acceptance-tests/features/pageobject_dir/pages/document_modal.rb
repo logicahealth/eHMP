@@ -15,6 +15,11 @@ class DocumentDetail < ModalElements
   element :fld_result_doc, '.result-docs-region .detail-modal-content'
   element :fld_results_region, '.results-region h5'
 
-  elements :fld_results_links, '.result-links-region button.detail-result-link'
+  elements :fld_results_links, '.results-region'
   elements :fld_documents_row_headers, "#modal-body p > span strong"
+
+  element :btn_next, '#modalNext'
+  element :btn_previous, '#modalPrevious'
+  element :btn_next_disabled, '#modalNext[disabled]'
+  element :btn_previous_disabled, '#modalPrevious[disabled]'
 end

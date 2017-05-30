@@ -34,18 +34,6 @@
             <parameters/>
             <name>Rest</name>
         </work-item-handler>
-        <work-item-handler>
-            <resolver>mvel</resolver>
-            <identifier>new gov.va.FOBTServiceHandler()</identifier>
-            <parameters/>
-            <name>FOBTLabService</name>
-        </work-item-handler>
-        <work-item-handler>
-            <resolver>mvel</resolver>
-            <identifier>new gov.va.CDSInvocationServiceHandler()</identifier>
-            <parameters/>
-            <name>CDSInvocationService</name>
-        </work-item-handler>
     </work-item-handlers>
     <environment-entries/>
     <configurations/>

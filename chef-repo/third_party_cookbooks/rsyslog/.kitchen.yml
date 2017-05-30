@@ -35,7 +35,7 @@ suites:
       - recipe[rsyslog_test::client]
     attributes:
       rsyslog:
-        server_ip: 10.0.0.50
+        server_ip: IP       
   - name: server
     run_list:
       - recipe[rsyslog_test::server]

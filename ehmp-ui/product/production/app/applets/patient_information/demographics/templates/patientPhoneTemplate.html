@@ -1,19 +1,19 @@
-<div class="demographic-group-header">
+<div class="group-header">
 	<h5>Phone</h5>
 </div>
-<div class="demographic-group-content">
+<div class="group-content">
     <dl>
 		<!-- Home -->
 	    <dt>Home
 	    {{#if hPhone.phone.diff}}
     		<button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseHPhone" aria-expanded="false" aria-controls="discrepanciesCollapseHPhone" tooltip-data-key="patient_information_deatils_discrepancies">
-    			<i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+    			<i class="fa fa-exclamation-circle subgroup-icon"></i>
         		<span class="sr-only">Press enter to view different data found at other sites</span>
 			</button>
 		{{/if}}
 		</dt>
 	    <dd data-diff="{{hPhone.phone.diff}}">
-		    <div class="left-padding-xs demographic-data">{{formatPhone hPhone.phone.value}}</div>
+		    <div class="left-padding-xs group-data">{{formatPhone hPhone.phone.value}}</div>
 	    </dd>
 	    {{#if hPhone.phone.diff}}
 		<dd class="collapse" id="discrepanciesCollapseHPhone">
@@ -23,7 +23,7 @@
 		    	{{#each items}}
 					{{#if hPhone.phone.diff}}
 					<dt>{{facilityName}}</dt>
-					<dd class="demographic-data">{{formatPhone hPhone.phone.value}}</dd>
+					<dd class="group-data">{{formatPhone hPhone.phone.value}}</dd>
 					{{/if}}
 		    	{{/each}}
 		    	</dl>
@@ -34,13 +34,13 @@
 	    <dt>Cell
 	    {{#if cPhone.phone.diff}}
     		<button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseCPhone" aria-expanded="false" aria-controls="discrepanciesCollapseCPhone" tooltip-data-key="patient_information_deatils_discrepancies">
-    			<i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+    			<i class="fa fa-exclamation-circle subgroup-icon"></i>
         		<span class="sr-only">Press enter to view different data found at other sites</span>
 			</button>
 		{{/if}}
 		</dt>
 	    <dd data-diff="{{cPhone.phone.diff}}">
-		    <div class="left-padding-xs demographic-data">{{formatPhone cPhone.phone.value}}</div>
+		    <div class="left-padding-xs group-data">{{formatPhone cPhone.phone.value}}</div>
 	    </dd>
 	    {{#if cPhone.phone.diff}}
 	    <dd class="collapse" id="discrepanciesCollapseCPhone">
@@ -50,7 +50,7 @@
 		    	{{#each items}}
 					{{#if cPhone.phone.diff}}
 					<dt>{{facilityName}}</dt>
-					<dl class="demographic-data">{{formatPhone cPhone.phone.value}}</dl>
+					<dl class="group-data">{{formatPhone cPhone.phone.value}}</dl>
 					{{/if}}
 		    	{{/each}}
 	    		</dl>
@@ -61,13 +61,13 @@
 	    <dt>Work
 	    {{#if wPhone.phone.diff}}
     		<button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseWPhone" aria-expanded="false" aria-controls="discrepanciesCollapseWPhone" tooltip-data-key="patient_information_deatils_discrepancies">
-    			<i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+    			<i class="fa fa-exclamation-circle subgroup-icon"></i>
         		<span class="sr-only">Press enter to view different data found at other sites</span>
 			</button>
 		{{/if}}
 		</dt>
 	    <dd data-diff="{{wPhone.phone.diff}}">
-		    <div class="left-padding-xs demographic-data">{{formatPhone wPhone.phone.value}}</div>
+		    <div class="left-padding-xs group-data">{{formatPhone wPhone.phone.value}}</div>
 	    </dd>
 	    {{#if wPhone.phone.diff}}
 	    <dd class="collapse" id="discrepanciesCollapseWPhone">
@@ -77,7 +77,7 @@
 	    		{{#each items}}
 					{{#if wPhone.phone.diff}}
 					<dt>{{facilityName}}</dt>
-					<dd class="demographic-data">{{formatPhone wPhone.phone.value}}</dd>
+					<dd class="group-data">{{formatPhone wPhone.phone.value}}</dd>
 	    			{{/if}}
 	    		{{/each}}
 				</dl>

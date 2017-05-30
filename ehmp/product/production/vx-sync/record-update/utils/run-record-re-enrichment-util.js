@@ -2,16 +2,13 @@
 
 require('../../env-setup');
 
-var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var _ = require('underscore');
+var uuid = require('node-uuid');
+
 var config = require(global.VX_ROOT + 'worker-config');
 var updateConfig = require(global.VX_ROOT + './record-update/update-config');
 
-var log = require('bunyan').createLogger({
-    name: 'record-re-enrichment-util',
-    level: updateConfig.utilityLogLevel
-});
-
+var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var ReErnichUtil = require(global.VX_ROOT + './record-update/utils/record-re-enrichment-util');
 
 var argv = require('yargs')
@@ -22,6 +19,18 @@ var argv = require('yargs')
     .describe('pid', 'a pid or list of pids for which to re-enrich data; if excluded, all previously-synced patients\' records will be re-enriched (optional) ')
     .describe('solr-only', 'a flag to signify that only the Patient Record Text Indexing should be performed')
     .argv;
+
+var referenceInfo = {
+    sessionId: uuid.v4(),
+    utilityType: 'record-update-' + (argv['solr-only'] ? 'solr' : 'enrichment')
+};
+
+console.log('record-re-enrichment-util: Utility started. sessionId: %s', referenceInfo.sessionId);
+
+var log = require('bunyan').createLogger({
+    name: 'record-re-enrichment-util',
+    level: updateConfig.utilityLogLevel
+}).child(referenceInfo);
 
 var jdsClient = new JdsClient(log, log, config);
 
@@ -52,26 +61,15 @@ function parseParameterList(param) {
     return paramArray;
 }
 
-reEnrichUtil.retrievePatientList(pids, function(error, pidList) {
+reEnrichUtil.runUtility(pids, updateTime, domains, referenceInfo, function(error) {
     if (error) {
-        log.error('record-re-enrichment-util: Exiting due to error returned by retrievePatientList: %s', error);
+        log.error(error);
+        console.log(error);
         return process.exit();
     }
 
-    reEnrichUtil.retrievePatientSyncStatuses(updateTime, domains, pidList, function(error, pidsToResyncDomains) {
-        if (error) {
-            log.error('record-re-enrichment-util: Exiting due to error returned by retrievePatientSyncStatuses: %s', error);
-            return process.exit();
-        }
+    log.debug('record-re-enrichment-util: Utility has successfully finished processing.');
+    console.log('record-re-enrichment-util: Utility has successfully finished processing.');
 
-        reEnrichUtil.getRecordsAndCreateJobs(pidsToResyncDomains, updateTime, function(error) {
-            if (error) {
-                log.error('record-re-enrichment-util: Exiting due to error returned by getRecordsAndCreateJobs: %s', error);
-                return process.exit();
-            }
-
-            log.debug('record-re-enrichment-util: Utility has successfully finished processing.');
-            process.exit();
-        });
-    });
+    process.exit();
 });

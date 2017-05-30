@@ -3,7 +3,7 @@ define([
     'jquery',
     'backbone',
     'marionette',
-    'main/ui_components/components',
+    'main/UILibrary',
     'api/UIComponents',
     'jasminejquery',
     'bootstrap-timepicker'
@@ -110,8 +110,8 @@ define([
 
 
             it('contains an input time field', function() {
-                expect($form.find('#timePicker0').length).toBe(1);
-                expect($form.find('#timePicker0')).toBeVisible();
+                expect($form.find('.timepicker-control.timePicker0 input').length).toBe(1);
+                expect($form.find('.timepicker-control.timePicker0 input')).toBeVisible();
             });
 
             it('contains an input minute field', function() {
@@ -129,7 +129,7 @@ define([
             });
 
             it('contains a title on the input field', function() {
-                expect($form.find('#timePicker0').attr('title')).toBe('This is a timepicker');
+                expect($form.find('.timepicker-control.timePicker0 input').attr('title')).toBe('This is a timepicker');
             });
 
             it('has popup initially collapsed', function() {
@@ -154,7 +154,7 @@ define([
             });
 
             it('puts a correct initial time value', function() {
-                expect(_.isEqual($form.find('#timePicker0').val(), '14:05')).toBe(true);
+                expect(_.isEqual($form.find('.timepicker-control.timePicker0 input').val(), '14:05')).toBe(true);
             });
         });
 
@@ -172,28 +172,28 @@ define([
             it('allows hour increment', function() {
                 clickOnSpanTag();
                 useArrowToIncrementTime('Hour');
-                expect(_.isEqual($form.find('#timePicker0').val(), '15:05')).toBe(true);
+                expect(_.isEqual($form.find('.timepicker-control.timePicker0 input').val(), '15:05')).toBe(true);
                 expect(_.isEqual(getTimepickerHour().val(), '15')).toBe(true);
             });
 
             it('allows hour decrement', function() {
                 clickOnSpanTag();
                 useArrowToDecrementTime('Hour');
-                expect(_.isEqual($form.find('#timePicker0').val(), '13:05')).toBe(true);
+                expect(_.isEqual($form.find('.timepicker-control.timePicker0 input').val(), '13:05')).toBe(true);
                 expect(_.isEqual(getTimepickerHour().val(), '13')).toBe(true);
             });
 
             it('allows minute increment', function() {
                 clickOnSpanTag();
                 useArrowToIncrementTime('Minute');
-                expect(_.isEqual($form.find('#timePicker0').val(), '14:10')).toBe(true);
+                expect(_.isEqual($form.find('.timepicker-control.timePicker0 input').val(), '14:10')).toBe(true);
                 expect(_.isEqual(getTimepickerMinute().val(), '10')).toBe(true);
             });
 
             it('allows minute decrement', function() {
                 clickOnSpanTag();
                 useArrowToDecrementTime('Minute');
-                expect(_.isEqual($form.find('#timePicker0').val(), '14:00')).toBe(true);
+                expect(_.isEqual($form.find('.timepicker-control.timePicker0 input').val(), '14:00')).toBe(true);
                 expect(_.isEqual(getTimepickerMinute().val(), '00')).toBe(true);
             });
 
@@ -211,34 +211,34 @@ define([
             });
 
             it('allows time assignment in meridian', function() {
-                expect(_.isEqual($form.find('#timePicker1').val(), '2:05')).toBe(true);
+                expect(_.isEqual($form.find('.timepicker-control.timePicker1 input').val(), '2:05')).toBe(true);
             });
 
             it('allows hour increment with meridian', function() {
                 clickOnSpanTag();
                 useArrowToIncrementTime('Hour');
-                expect(_.isEqual($form.find('#timePicker1').val(), '3:05')).toBe(true);
+                expect(_.isEqual($form.find('.timepicker-control.timePicker1 input').val(), '3:05')).toBe(true);
                 expect(_.isEqual(getTimepickerHour().val(), '3')).toBe(true);
             });
 
             it('allows hour decrement with meridian', function() {
                 clickOnSpanTag();
                 useArrowToDecrementTime('Hour');
-                expect(_.isEqual($form.find('#timePicker1').val(), '1:05')).toBe(true);
+                expect(_.isEqual($form.find('.timepicker-control.timePicker1 input').val(), '1:05')).toBe(true);
                 expect(_.isEqual(getTimepickerHour().val(), '1')).toBe(true);
             });
 
             it('allows minute increment with step', function() {
                 clickOnSpanTag();
                 useArrowToIncrementTime('Minute');
-                expect(_.isEqual($form.find('#timePicker1').val(), '2:06')).toBe(true);
+                expect(_.isEqual($form.find('.timepicker-control.timePicker1 input').val(), '2:06')).toBe(true);
                 expect(_.isEqual(getTimepickerMinute().val(), '06')).toBe(true);
             });
 
             it('allows minute decrement with step', function() {
                 clickOnSpanTag();
                 useArrowToDecrementTime('Minute');
-                expect(_.isEqual($form.find('#timePicker1').val(), '2:04')).toBe(true);
+                expect(_.isEqual($form.find('.timepicker-control.timePicker1 input').val(), '2:04')).toBe(true);
                 expect(_.isEqual(getTimepickerMinute().val(), '04')).toBe(true);
             });
         });
@@ -261,8 +261,8 @@ define([
             });
 
             it('input does not have the same classes', function() {
-                expect($form.find('#timePicker2')).not.toHaveClass('special-class-1');
-                expect($form.find('#timePicker2')).not.toHaveClass('special-class-2');
+                expect($form.find('.timepicker-control.timePicker2 input')).not.toHaveClass('special-class-1');
+                expect($form.find('.timepicker-control.timePicker2 input')).not.toHaveClass('special-class-2');
             });
         });
 
@@ -278,7 +278,7 @@ define([
             });
 
             it('has correct attribute', function() {
-                expect($form.find('#timePicker3')).toBeDisabled();
+                expect($form.find('.timepicker-control.timePicker3 input')).toBeDisabled();
             });
         });
 
@@ -293,7 +293,7 @@ define([
             });
 
             it('has correct attribute', function() {
-                expect($form.find('#timePicker4')).toHaveAttr('required', 'required');
+                expect($form.find('.timepicker-control.timePicker4 input')).toHaveAttr('required', 'required');
             });
         });
 
@@ -308,7 +308,7 @@ define([
             });
 
             it('contains correct attribute', function() {
-                expect($form.find('#timePicker5')).toHaveAttr('readonly', 'readonly');
+                expect($form.find('.timepicker-control.timePicker5 input')).toHaveAttr('readonly', 'readonly');
             });
         });
 
@@ -345,7 +345,7 @@ define([
 
             it('contains correct label with sr-only class', function() {
                 expect($form.find('label')).toHaveText('timepicker sr-only label');
-                expect($form.find('label').attr('for')).toBe('timePicker0');
+                expect($form.find('label').attr('for')).toContain('timePicker0');
                 expect($form.find('label')).toHaveClass('sr-only');
             });
         });
@@ -389,9 +389,31 @@ define([
             });
             it("title", function() {
                 $form.find('.timePicker0').trigger("control:title", 'newTitle');
-                expect($form.find('#timePicker0')).toHaveAttr('title', 'newTitle');
+                expect($form.find('.timepicker-control.timePicker0 input')).toHaveAttr('title', 'newTitle');
                 $form.find('.timePicker0').trigger("control:title", '');
-                expect($form.find('#timePicker0')).not.toHaveText('newTitle');
+                expect($form.find('.timepicker-control.timePicker0 input')).not.toHaveText('newTitle');
+            });
+            it("update:config", function() {
+                $form.find('.timePicker0').trigger("control:update:config", {
+                    hidden: true,
+                    disabled: true,
+                    required: true,
+                    title: 'newTitle'
+                });
+                expect($form.find('.timePicker0')).toHaveClass('hidden');
+                expect($form.find('.timepicker-control.timePicker0 input')).toHaveAttr('disabled');
+                expect($form.find('.timepicker-control.timePicker0 input')).toHaveAttr('required');
+                expect($form.find('.timepicker-control.timePicker0 input')).toHaveAttr('title', 'newTitle');
+                $form.find('.timePicker0').trigger("control:update:config", {
+                    hidden: false,
+                    disabled: false,
+                    required: false,
+                    title: ''
+                });
+                expect($form.find('.timePicker0')).not.toHaveClass('hidden');
+                expect($form.find('.timepicker-control.timePicker0 input')).not.toHaveAttr('disabled');
+                expect($form.find('.timepicker-control.timePicker0 input')).not.toHaveAttr('required');
+                expect($form.find('.timepicker-control.timePicker0 input')).not.toHaveAttr('title');
             });
         });
     });

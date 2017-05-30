@@ -26,15 +26,6 @@ define([
     });
     var AppletLayoutView = ADK.AppletViews.GridView.extend({
         _super: ADK.AppletViews.GridView.prototype,
-        fetchOptions: {
-            resourceTitle: 'activities-instances-available',
-            cache: false,
-            pageable: true,
-            criteria: {},
-            viewModel: {
-                parse: Util.parseResponse
-            }
-        },
         initialize: function(options) {
             var config = Config.getColumnnsAndFilterFields(this.columnsViewType, ADK.WorkspaceContextRepository.currentContextId);
             this.sharedModel = new Util.FilterModel({}, _.extend(options, {
@@ -89,35 +80,29 @@ define([
                     label: "Date",
                     format: "YYYYMMDD"
                 };
-                this.fetchOptions.pageable = true;
                 this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
                     this.dateRangeRefresh('createdOn', dateModel.toJSON());
                 });
             }
 
-            this.listenTo(ADK.Messaging.getChannel('requestsApplet'), 'onChangeFilter', _.partial(this.setFetchOptions, true));
+            var instanceId = _.get(options, 'appletConfig.instanceId');
+            this.listenTo(ADK.Messaging.getChannel('requestsApplet_' + instanceId), 'onChangeFilter', this.onChangeFilter);
             this.listenTo(ADK.Messaging.getChannel('activities'), 'create:success', this.refresh);
-            this.fetchOptions.criteria = {
-                domain: 'Request',
-                context: ADK.WorkspaceContextRepository.currentContextId
-            };
-            if (ADK.WorkspaceContextRepository.currentContextId === 'patient') {
-                this.fetchOptions.criteria.pid = ADK.PatientRecordService.getCurrentPatient().get('pid');
-            }
-            this.setFetchOptions();
-            dataGridOptions.collection = this.collection = ADK.ResourceService.createEmptyCollection(this.fetchOptions);
+            dataGridOptions.collection = this.collection = new ADK.UIResources.Fetch.Activities.Collection();
             this.appletOptions = dataGridOptions;
-            ADK.ResourceService.fetchCollection(this.fetchOptions, this.collection);
+            this.collection.fetchCollection({
+                criteria: _.extend(this.sharedModel.attributes, {
+                    domain: 'Request'
+                })
+            });
             this._super.initialize.apply(this, arguments);
         },
-        setFetchOptions: function(refreshCollection) {
-            this.fetchOptions.criteria = _.extend(this.fetchOptions.criteria, this.sharedModel.pick(['showOnlyFlagged', 'mode', 'createdByMe', 'intendedForMeAndMyTeams', 'endDate', 'startDate']));
-            if (refreshCollection) {
-                if (this.appletOptions.collection.xhr) {
-                    this.appletOptions.collection.xhr.abort();
-                }
-                this.refresh();
+        onChangeFilter: function() {
+            this.collection.setCriteria(this.sharedModel.attributes);
+            if (this.appletOptions.collection.xhr) {
+                this.appletOptions.collection.xhr.abort();
             }
+            this.refresh();
         },
         dateRangeRefresh: function(dateFieldName, filterOptions) {
             this.sharedModel.set({
@@ -128,7 +113,7 @@ define([
         onAttach: function() {
             var summaryViewAppletTitle = 'Open Requests';
             var expandedViewAppletTitle = 'Requests';
-            var appletTitle = this.$el.closest('[data-appletid="requests"]').find('.grid-applet-heading');
+            var appletTitle = this.$el.closest('[data-appletid="requests"]').find('.applet-chrome-header');
             var appletTitleHeader = appletTitle.find('.panel-title-label');
             var appletTitleHeaderText = appletTitleHeader.text();
             if (this.columnsViewType === 'expanded' && appletTitleHeaderText !== expandedViewAppletTitle) {

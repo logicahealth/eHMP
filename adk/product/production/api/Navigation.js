@@ -30,6 +30,7 @@ define([
             }
         },
         defaults: {
+            beforeunload: true,
             onFailure: null,
             onCancel: null,
             onContinue: null,
@@ -142,8 +143,8 @@ define([
         runChecks: function(methodToExecuteOnPass, screenName) {
             Checks.run('navigation', methodToExecuteOnPass, { screenName: screenName });
         },
-        getMessagesOfAllChecks: function() {
-            return Checks.getAllMessages('navigation');
+        getMessagesOfAllChecks: function(conditionObject) {
+            return Checks.getAllMessages('navigation', conditionObject);
         },
         updateRouter: function(workspaceId, contextId) {
             var globalChannel = Backbone.Wreqr.radio.channel('global');
@@ -289,11 +290,11 @@ define([
         hasPreviousRoute: function() {
             return _.isString(Backbone.history._previousFragment);
         },
-        _isFirstScreenForCurrentContext: function (previous) {
+        _isFirstScreenForCurrentContext: function(previous) {
             previous = previous || Backbone.history._previousFragment;
             return _.includes(previous, 'patient-search') || !_.includes(previous, '/' + WorkspaceContextRepository.currentContextId + '/');
         },
-        isFirstAndDefaultScreen: function () {
+        isFirstAndDefaultScreen: function() {
             if (!this._isFirstScreenForCurrentContext()) {
                 return false;
             }
@@ -311,7 +312,7 @@ define([
     });
 
     $(window).on('beforeunload', function() {
-        var failureString = Navigation.getMessagesOfAllChecks();
+        var failureString = Navigation.getMessagesOfAllChecks({ beforeunload: true });
         if (_.isEmpty(failureString)) {
             return;
         }

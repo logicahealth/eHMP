@@ -95,8 +95,8 @@ define([
                         });
                         var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
                             template: Handlebars.compile([
-                                '{{ui-button "No" classes="btn-default alert-cancel" title="Press enter to cancel"}}',
-                                '{{ui-button "Yes" classes="btn-primary alert-continue" title="Press enter to continue"}}'
+                                '{{ui-button "No" classes="btn-default btn-sm alert-cancel" title="Press enter to cancel"}}',
+                                '{{ui-button "Yes" classes="btn-primary btn-sm alert-continue" title="Press enter to continue"}}'
                             ].join('\n')),
                             events: {
                                 'click button.alert-cancel': function() {
@@ -163,10 +163,11 @@ define([
         },
         run: function(group, methodToExecuteOnPass, options) {
             options = options || {};
+            var exclude = options.exclude || null;
             var failedCheck = Checks._checkCollection.find(function(checkModel) {
-                if (checkModel.get('group') === group && _.isFunction(checkModel.validate)) {
+                if (checkModel.get('group') === group && exclude !== checkModel.get('id') && _.isFunction(checkModel.validate)) {
                     if (options.forceFail || !checkModel.isValid({ options: options, checkConfig: checkModel.toJSON(), onPass: methodToExecuteOnPass })) {
-                        if (_.isFunction(checkModel.get('onInvalid'))) checkModel.get('onInvalid')({ options: options, checkConfig: checkModel.toJSON(), onPass: methodToExecuteOnPass });
+                        if (_.isFunction(checkModel.get('onInvalid'))) checkModel.get('onInvalid').call(checkModel, { options: options, checkConfig: checkModel.toJSON(), onPass: methodToExecuteOnPass });
                         return true;
                     }
                 }
@@ -176,9 +177,9 @@ define([
                 methodToExecuteOnPass();
             }
         },
-        getAllMessages: function(group) {
+        getAllMessages: function(group, conditionObject) {
             var failureString = '';
-            Checks._checkCollection.each(function(checkModel) {
+            _.each(Checks._checkCollection.where(conditionObject || {}), function(checkModel) {
                 if (_.isString(group) && _.isString(checkModel.get('group')) && checkModel.get('group') !== group) {
                     return;
                 }

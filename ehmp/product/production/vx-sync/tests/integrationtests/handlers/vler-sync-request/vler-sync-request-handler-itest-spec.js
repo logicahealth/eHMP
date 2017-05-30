@@ -25,7 +25,7 @@ xdescribe('vler-sync-request-handler.js', function() {
     var environment = {};
 
     var host = vx_sync_ip;
-    var port = 5000;
+    var port = PORT;
     var tubename = 'vx-sync-test';
 
     var matchingJobTypes = [jobUtil.vlerDomainSyncRequestType('allergy')];

@@ -6,8 +6,8 @@ version = '1.0.0'
 
 description = """FOBT :: Custom Work Item Handler"""
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = property('javaVersion')
+targetCompatibility = property('targetJavaVersion')
 
 repositories {
 
@@ -15,17 +15,24 @@ repositories {
 
 }
 
-dependencies {
-    compile group: 'org.kie', name: 'kie-api', version:'6.2.0.Final'
-    compile group: 'org.kie', name: 'kie-internal', version:'6.2.0.Final'
-    compile group: 'org.springframework', name: 'spring-web', version:'4.2.1.RELEASE'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version:'2.6.3'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.6.3'
-    compile group: 'joda-time', name: 'joda-time', version:'2.9'
+configurations {
+    exportedLibs
+}
 
-    testCompile group: 'org.jbpm', name: 'jbpm-test', version:'6.2.0.Final'
+dependencies {
+    compile group: 'org.kie', name: 'kie-api', version: property('kie-version')
+    compile group: 'org.kie', name: 'kie-internal', version: property('kie-version')
+    compile project(':production:jbpm:JbpmUtils')
+    exportedLibs group: 'org.springframework', name: 'spring-web', version: property('spring-version')
+    exportedLibs group: 'com.fasterxml.jackson.core', name: 'jackson-core', version:'2.6.3'
+    exportedLibs group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.6.3'
+    exportedLibs group: 'joda-time', name: 'joda-time', version: property('joda-version')
+
+    testCompile group: 'org.jbpm', name: 'jbpm-test', version: property('kie-version')
     testCompile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.12'
     testCompile group: 'org.slf4j', name: 'slf4j-simple', version:'1.7.12'
+
+    configurations.compile.extendsFrom(configurations.exportedLibs)  
 }
 
 jar {
@@ -36,11 +43,6 @@ jar {
 
     baseName = 'FOBTLabService'
     from {
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-        configurations.runtime.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
+        configurations.exportedLibs.collect{ it.isDirectory() ? it : zipTree(it) }
     }
 }

@@ -1,4 +1,5 @@
 define([], function() {
+    'use strict';
 
     var InformationSource = ADK.Resources.Picklist.Model.extend({
         idAttribute: 'ien',

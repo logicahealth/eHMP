@@ -1,16 +1,12 @@
-@F302-5.1_PatientCareTeamDetailHeadersInpatientQuicklook @F302 @CareTeamDetails @future @DE4560
+@F302-5.1_PatientCareTeamDetailHeadersInpatientQuicklook @F302 @CareTeamDetails @reg2
 
 Feature: F302 - Enhance Care Team Header
 # POC: Team Saturn
 
 @F302-3.1_PatientCareTeamDetails @US5256 @DE4009
     Scenario: Care Team Information: Detail verification (Panorama)
-    # Given user is logged into eHMP-UI
     When user searches for and selects "twentythree,inpatient"
-#    And Cover Sheet is active
-    And the "patient identifying traits" is displayed with information
-      | field     | value         |
-      | patient name  | Twentythree,Inpatient   |
+    And "Current Patient:" is displayed as "Twentythree, Inpatient"
     And Cover Sheet is active
     And user selects Provider Information drop down
     Then the "primary_care_provider" group contain headers
@@ -27,12 +23,8 @@ Feature: F302 - Enhance Care Team Header
 
 @F302-4.1_PatientCareTeamDetails @US5256
     Scenario: Care Team Information: Detail verification (Panorama)
-    # Given user is logged into eHMP-UI
     When user searches for and selects "TWENTYTHREE,PATIENT"
-#    And Cover Sheet is active
-    And the "patient identifying traits" is displayed with information
-      | field			| value               |
-      | patient name	| Twentythree,Patient |
+    And "Current Patient:" is displayed as "Twentythree, patient"
     And Cover Sheet is active
     And user selects Provider Information drop down
     Then the "primary_care_provider" group contain headers
@@ -49,13 +41,10 @@ Feature: F302 - Enhance Care Team Header
 
   @F302-3.2_PatientCareTeamDetailsKodak @US5256 @DE1309
     Scenario: Patient Information: Demographic verification (Kodak)
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
     Then staff view screen is displayed
     And user searches for and selects "TWENTYTHREE,PATIENT"
-#    And Cover Sheet is active
-    And the "patient identifying traits" is displayed with information
-      | field			| value 				|
-      | patient name	| Twentythree,patient 	|
+    And "Current Patient:" is displayed as "Twentythree, patient"
     And Cover Sheet is active
     And user selects Provider Information drop down
     Then the "primary_care_provider" group contain headers
@@ -72,13 +61,10 @@ Feature: F302 - Enhance Care Team Header
 
 @F302-3.1_PatientCareTeamDetailsKodak @US5256 @DE1309 @non_default_login @DE4009
     Scenario: Patient Information: Demographic verification (Kodak)
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
     Then staff view screen is displayed
     And user searches for and selects "twentythree,inpatient"
-#    And Cover Sheet is active
-    And the "patient identifying traits" is displayed with information
-      | field			| value 				|
-      | patient name	| Twentythree,Inpatient 	|
+    And "Current Patient:" is displayed as "Twentythree, Inpatient"
     And Cover Sheet is active
     And user selects Provider Information drop down
     Then the "primary_care_provider" group contain headers

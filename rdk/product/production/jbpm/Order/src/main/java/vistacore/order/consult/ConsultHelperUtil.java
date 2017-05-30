@@ -5,9 +5,10 @@ import vistacore.order.exception.OrderException;
 import vistacore.order.kie.utils.WorkflowProcessInstanceUtil;
 import vistacore.order.Facility;
 import vistacore.order.utils.GenericUtils;
-import vistacore.order.utils.Logging;
 import vistacore.order.Provider;
 import vistacore.order.consult.ConsultOrder;
+
+import org.jboss.logging.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -36,7 +37,16 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	private static final long serialVersionUID = -9042492411972383382L;
 	private static final String noTaskHistoryText = " "; //for tasks without a history, use a space instead of null
 	private static final String noTaskHistoryActionText = " "; //for tasks without a history action, use a space instead of null
-	
+	private static final Logger LOGGER = Logger.getLogger(ConsultHelperUtil.class);
+	private static final String DEFAULT_LATE_COMPLETE_TIMER = "90d";
+	private static final String DEFAULT_APPT_IN_PAST_TIMER = "1d";
+	private static final String DEFAULT_THIRD_CONTACT_TIMER = "1d";
+	private static final String DEAFULT_PAST_SCHEDULED_DATE_TIMER_UNITS = "d";
+	private static final String DEFAULT_APPT_IN_PAST_TIMER_UNITS = "d";
+	private static final String DEFAULT_PAST_LATEST_DATE_TIMER_UNITS = "d";
+	private static final String DEFAULT_LATE_COMPLETION_ACTIVITY_HEALTH_TIMER = "90d"; 
+	private static final String DEFAULT_LATE_SCHEDULING_ACTIVITY_HEALTH_TIMER =  "30d"; 
+	private static final String DEFAULT_LATE_TRIAGE_ACTIVITY_HEALTH_TIMER =  "7d"; 
 	public ConsultHelperUtil() {
 	}
 
@@ -49,6 +59,11 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		DateTimeFormatter dtformatter = DateTimeFormat.forPattern(pattern);
 		
 		String currentDateString = currentDate.toString(dtformatter);
+		return currentDateString;
+	}
+	protected static String getCurrentDateStringNotificationExpiration() {
+		DateTime currentDate = new DateTime(DateTimeZone.UTC);
+		String currentDateString = currentDate.toString(ISODateTimeFormat.dateTimeNoMillis());
 		return currentDateString;
 	}
 
@@ -65,7 +80,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	public static ConsultOrderData buildConsultOrder(ConsultClinicalObject consultClinicalObject, ConsultOrder consultOrder, String orderableString, String cdsIntentResultString, String userId, String userName) {
 		ConsultOrderData consultOrderData = new ConsultOrderData();
 		try {
-			Logging.debug("Entering ConsultHelperUtil.buildConsultOrder");
+			LOGGER.debug("Entering ConsultHelperUtil.buildConsultOrder");
 			String currentDateString = ConsultHelperUtil.getCurrentDateString();
 	
 			if (orderableString != null && !orderableString.isEmpty()) {
@@ -140,7 +155,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			consultOrderData.setVisit(consultOrder.getVisit());
 			consultOrderData.setOrderResultComment(consultOrder.getOrderResultComment());
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.buildConsultOrder: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.buildConsultOrder: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 		
 		return consultOrderData;
@@ -154,7 +169,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void saveClinicalObject(WorkflowProcessInstance workflowProcessInstance, ConsultClinicalObject consultClinicalObject) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.saveClinicalObject");
+			LOGGER.debug("Entering ConsultHelperUtil.saveClinicalObject");
 			workflowProcessInstance.setVariable("consultClinicalObject",consultClinicalObject);
 			Gson gson = new Gson();
 			String consultClinicalObjectJSON = gson.toJson(consultClinicalObject);
@@ -177,7 +192,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 					}
 					try {
 						String orderableString = consultOrderObject.getString("orderable");
-						Logging.debug("ConsultHelperUtil.saveClinicalObject: orderableString: " + orderableString);
+						LOGGER.debug("ConsultHelperUtil.saveClinicalObject: orderableString: " + orderableString);
 						JSONObject orderable = new JSONObject(orderableString);
 						consultOrderObject.put("orderable", orderable);
 					} catch (JSONException e) {
@@ -195,7 +210,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 				workflowProcessInstance.setVariable("consultClinicalObjectJSON", consultClinicalObjectJSON);
 			}
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.saveClinicalObject: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.saveClinicalObject: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -217,7 +232,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 				TFcode = teamFocus.getCode();
 				TFname = teamFocus.getName();
 			} else {
-				Logging.error("TeamFocus was not found. Triage & Scheduling tasks will not be assigned");
+				LOGGER.error("TeamFocus was not found. Triage & Scheduling tasks will not be assigned");
 			}
 	
 			String facilityRoute = null;
@@ -251,7 +266,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			workflowProcessInstance.setVariable("tmp_triageAssignee", "");		
 			workflowProcessInstance.setVariable("schedulingAssignment", schedulingAssignment);
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.setTriageAndSchedulingTaskRoutes: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.setTriageAndSchedulingTaskRoutes: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -294,7 +309,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 *
 	 */
 	public static void instantiateObjects(ProcessInstance processInstance) throws OrderException {
-		Logging.debug("Entering ConsultHelperUtil.instantiateObjects");
+		LOGGER.debug("Entering ConsultHelperUtil.instantiateObjects");
 		WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 		String currentDateString = ConsultHelperUtil.getCurrentDateString();
 		vistacore.order.Visit visit = new vistacore.order.Visit();
@@ -311,7 +326,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		if (teamFocus != null) {
 			workflowProcessInstance.setVariable("tmp_teamFocus", teamFocus);
 		} else {
-			Logging.debug("ConsultHelperUtil.instantiateObjects: TeamFocus was not found. Triage & Scheduling tasks are not assigned");
+			LOGGER.debug("ConsultHelperUtil.instantiateObjects: TeamFocus was not found. Triage & Scheduling tasks are not assigned");
 		}
 		setTriageAndSchedulingTaskRoutes(processInstance);
 		workflowProcessInstance.setVariable("discontinuedBy", consultOrder.getOrderingProvider().getDisplayName());
@@ -413,7 +428,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void prepareClinicalObject(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.prepareClinicalObject");
+			LOGGER.debug("Entering ConsultHelperUtil.prepareClinicalObject");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			String currentDateString = ConsultHelperUtil.getCurrentDateString();
 			
@@ -447,12 +462,12 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			String formAction = consultOrder.getFormAction();
 			String state = "";
 			if (formAction == null || formAction.equalsIgnoreCase("saved")) {
-				Logging.debug("ConsultHelperUtil.prepareClinicalObject: SAVED");
+				LOGGER.debug("ConsultHelperUtil.prepareClinicalObject: SAVED");
 				formAction = "saved";
 				state = StatesMap.getActivitystate().get("Draft");
 				ehmpState = "draft";
 			} else if (formAction.equalsIgnoreCase("accepted")) {
-				Logging.debug("ConsultHelperUtil.prepareClinicalObject: ACCEPTED");
+				LOGGER.debug("ConsultHelperUtil.prepareClinicalObject: ACCEPTED");
 				ehmpState = "active";
 				order.setOrderDate(currentDateString);
 				state = "Unreleased:Pending Signature";
@@ -466,11 +481,11 @@ public class ConsultHelperUtil implements java.io.Serializable {
 				newMilestones.add(milestone);
 				ccData.setMilestones(newMilestones);
 			} else if (formAction.equalsIgnoreCase("workup")) {
-				Logging.debug("ConsultHelperUtil.prepareClinicalObject: BEGIN WORKUP");
+				LOGGER.debug("ConsultHelperUtil.prepareClinicalObject: BEGIN WORKUP");
 				ehmpState = "active";
 				state = "Unreleased:Pre-order Workup";
 			} else if (formAction.equalsIgnoreCase("deleted") || formAction.equalsIgnoreCase("discontinued")) {
-				Logging.debug("ConsultHelperUtil.prepareClinicalObject: DELETED");
+				LOGGER.debug("ConsultHelperUtil.prepareClinicalObject: DELETED");
 				vistacore.order.Completion completion = new vistacore.order.Completion();
 				ehmpState = "deleted";
 				state = StatesMap.getActivitystate().get("Draft");
@@ -520,7 +535,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.prepareClinicalObject: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.prepareClinicalObject: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -531,14 +546,14 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void updateClinicalObject(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.updateClinicalObject");
+			LOGGER.debug("Entering ConsultHelperUtil.updateClinicalObject");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			ConsultClinicalObject consultClinicalObject =  WorkflowProcessInstanceUtil.getRequiredConsultClinicalObject(workflowProcessInstance, "consultClinicalObject");
 			String serviceResponse = WorkflowProcessInstanceUtil.getRequiredString(workflowProcessInstance, "serviceResponse");
 			String clinicalObjectUid = WorkflowProcessInstanceUtil.getRequiredString(workflowProcessInstance, "clinicalObjectUid");
-			Logging.debug("******************************************");
-			Logging.debug("clinicalObjectUid: " + clinicalObjectUid);
-			Logging.debug("******************************************");
+			LOGGER.debug("******************************************");
+			LOGGER.debug("clinicalObjectUid: " + clinicalObjectUid);
+			LOGGER.debug("******************************************");
 			JsonParser parser = new JsonParser();
 			JsonObject serviceResponseObject = parser.parse(serviceResponse).getAsJsonObject();
 			JsonElement dataElement = serviceResponseObject.get("data");
@@ -568,11 +583,11 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			consultClinicalObject.setData(ccData);
 			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 		} catch (JsonSyntaxException e) {
-			Logging.error("ConsultHelperUtil.updateClinicalObject: An unexpected condition has happened with json: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.updateClinicalObject: An unexpected condition has happened with json: " + e.getMessage(), e);
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.updateClinicalObject: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.updateClinicalObject: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -583,7 +598,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void checkPrerequisites(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.checkPrerequisites");
+			LOGGER.debug("Entering ConsultHelperUtil.checkPrerequisites");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			ConsultOrder consultOrder = WorkflowProcessInstanceUtil.getRequiredConsultOrder(workflowProcessInstance, "consultOrder");
 
@@ -608,7 +623,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 				}
 			}
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.checkPrerequisites: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.checkPrerequisites: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -619,7 +634,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void prepareLabResultListeners(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.prepareLabResultListeners");
+			LOGGER.debug("Entering ConsultHelperUtil.prepareLabResultListeners");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			ConsultOrder consultOrder = WorkflowProcessInstanceUtil.getRequiredConsultOrder(workflowProcessInstance, "consultOrder");
 
@@ -628,7 +643,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			if (preReqOrders !=null && preReqOrders.size() > 0) {
 			  for (ConsultPreReqOrder t_order : preReqOrders) {
 			   	if (((t_order.getSignalRegistered() != null && !t_order.getSignalRegistered()) || t_order.getSignalRegistered() == null) && OrderStatus.ORDER_STATUS_ORDER.equalsIgnoreCase(t_order.getStatus()) && !isEmptyString(t_order.getUid())) {
-			      Logging.debug("ConsultHelperUtil.prepareLabResultListeners: Registering Lab Results Signal for: " + t_order.getOrderName());
+			      LOGGER.debug("ConsultHelperUtil.prepareLabResultListeners: Registering Lab Results Signal for: " + t_order.getOrderName());
 			      t_order.setSignalRegistered(true);
 			      completed = false;
 			      String content = "{\"s_preReqOrders\":{\"objectType\":\"consultPreReqOrder\", \"uid\":\"{{uid}}\", \"status\":\"{{data.statusCode}}\"}}";
@@ -644,7 +659,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			}
 			workflowProcessInstance.setVariable("signalsRegistered", completed);
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.prepareLabResultListeners: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.prepareLabResultListeners: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -655,7 +670,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void savePendingMilestone(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.savePendingMilestone");
+			LOGGER.debug("Entering ConsultHelperUtil.savePendingMilestone");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			String currentDateString = ConsultHelperUtil.getCurrentDateString();
 			ConsultOrder consultOrder = WorkflowProcessInstanceUtil.getRequiredConsultOrder(workflowProcessInstance, "consultOrder");
@@ -676,9 +691,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			workflowProcessInstance.setVariable("pendingMilestone", currentDateString);
 			
 			//Set the performance indicator timers.
-			String tmp_lateCompletionActivityHealthTimer = PropertiesLoader.getConsultTimersProperty("tmp_lateCompletionActivityHealthTimer", "90d");
-			String tmp_lateSchedulingActivityHealthTimer = PropertiesLoader.getConsultTimersProperty("tmp_lateSchedulingActivityHealthTimer", "30d");
-			String tmp_lateTriageActivityHealthTimer = PropertiesLoader.getConsultTimersProperty("tmp_lateTriageActivityHealthTimer", "7d");
+			String tmp_lateCompletionActivityHealthTimer = PropertiesLoader.getConsultTimersProperty("tmp_lateCompletionActivityHealthTimer", DEFAULT_LATE_COMPLETION_ACTIVITY_HEALTH_TIMER);
+			String tmp_lateSchedulingActivityHealthTimer = PropertiesLoader.getConsultTimersProperty("tmp_lateSchedulingActivityHealthTimer", DEFAULT_LATE_SCHEDULING_ACTIVITY_HEALTH_TIMER);
+			String tmp_lateTriageActivityHealthTimer = PropertiesLoader.getConsultTimersProperty("tmp_lateTriageActivityHealthTimer", DEFAULT_LATE_TRIAGE_ACTIVITY_HEALTH_TIMER);
 			workflowProcessInstance.setVariable("tmp_lateCompletionActivityHealthTimer", tmp_lateCompletionActivityHealthTimer);
 			workflowProcessInstance.setVariable("tmp_lateSchedulingActivityHealthTimer", tmp_lateSchedulingActivityHealthTimer);
 			workflowProcessInstance.setVariable("tmp_lateTriageActivityHealthTimer", tmp_lateTriageActivityHealthTimer);
@@ -734,7 +749,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.savePendingMilestone: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.savePendingMilestone: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -745,7 +760,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void triageCompleted(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.triageCompleted");
+			LOGGER.debug("Entering ConsultHelperUtil.triageCompleted");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			String currentDateString = ConsultHelperUtil.getCurrentDateString();
 			ConsultOrder consultOrder = WorkflowProcessInstanceUtil.getRequiredConsultOrder(workflowProcessInstance, "consultOrder");
@@ -813,8 +828,8 @@ public class ConsultHelperUtil implements java.io.Serializable {
 				trgActionId = "5";
 				appointment.setDate(currentDateString);
 				state = StatesMap.getActivitystate().get("eConsult");
-				String lateCompleteTimer = PropertiesLoader.getConsultTimersProperty("lateCompleteTimer", "90d");
-				String tmp_apptInPastTimer = PropertiesLoader.getConsultTimersProperty("tmp_apptInPastTimer", "1d");
+				String lateCompleteTimer = PropertiesLoader.getConsultTimersProperty("lateCompleteTimer", DEFAULT_LATE_COMPLETE_TIMER);
+				String tmp_apptInPastTimer = PropertiesLoader.getConsultTimersProperty("tmp_apptInPastTimer", DEFAULT_APPT_IN_PAST_TIMER);
 				workflowProcessInstance.setVariable("lateCompleteTimer", lateCompleteTimer);
 				workflowProcessInstance.setVariable("tmp_apptInPastTimer", tmp_apptInPastTimer);
 			} else if (formAction.equalsIgnoreCase("communityCare")) {
@@ -915,7 +930,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.triageCompleted: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.triageCompleted: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -926,7 +941,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void noResponseReceived(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.noResponseReceived");
+			LOGGER.debug("Entering ConsultHelperUtil.noResponseReceived");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			ConsultClinicalObject consultClinicalObject =  WorkflowProcessInstanceUtil.getRequiredConsultClinicalObject(workflowProcessInstance, "consultClinicalObject");
 			String state = StatesMap.getActivitystate().get("NoResponse");
@@ -952,7 +967,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.noResponseReceived: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.noResponseReceived: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -963,7 +978,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void noResponseReceivedNotification(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.noResponseReceivedNotification");
+			LOGGER.debug("Entering ConsultHelperUtil.noResponseReceivedNotification");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			String state = WorkflowProcessInstanceUtil.getRequiredString(workflowProcessInstance, "state");
 			
@@ -986,13 +1001,18 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.noResponseReceived: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.noResponseReceived: An unexpected condition has happened: " + e.getMessage(), e);
 		}	
 			
 	}
 	
 	public static String buildNotificationJson(String author, String subject, String message, String patientId,
 			String notificationTaskId) {
+		return buildNotificationJson(author, subject, message, patientId, notificationTaskId, null);
+	}
+	
+	public static String buildNotificationJson(String author, String subject, String message, String patientId,
+			String notificationTaskId, String expiration) {
 		String jsonString = "{" + 
 								"\"recipients\": [" + 
 													"{"+ 
@@ -1013,8 +1033,13 @@ public class ConsultHelperUtil implements java.io.Serializable {
 								+ "\"resolution\": \"producer\","
 								+ "\"associatedItems\": ["
 															+ "\"ehmp:task:" + notificationTaskId + "\""
-													+ "] "
-							+ "}";
+													+ "]";
+		if (expiration != null) {
+			jsonString += ", \"expiration\": \"" + expiration + "\"";
+		}
+		
+		jsonString += "}";
+		
 		return jsonString;
 	}
 
@@ -1025,7 +1050,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void patientContactManager(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.patientContactManager");
+			LOGGER.debug("Entering ConsultHelperUtil.patientContactManager");
 			String currentDateString = ConsultHelperUtil.getCurrentDateString();
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			ConsultOrder consultOrder = WorkflowProcessInstanceUtil.getRequiredConsultOrder(workflowProcessInstance, "consultOrder");
@@ -1046,7 +1071,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			} else {
 				String duration = WorkflowProcessInstanceUtil.getRequiredString(workflowProcessInstance, "thirdContactTimer");
 				if (duration.equalsIgnoreCase("99d")) {
-					String thirdContactTimer = PropertiesLoader.getConsultTimersProperty("thirdContactTimer", "1d");
+					String thirdContactTimer = PropertiesLoader.getConsultTimersProperty("thirdContactTimer", DEFAULT_THIRD_CONTACT_TIMER);
 					workflowProcessInstance.setVariable("thirdContactTimer", thirdContactTimer);
 				}
 				state = StatesMap.getActivitystate().get("ThirdAttempt");
@@ -1096,7 +1121,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.patientContactManager: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.patientContactManager: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1107,7 +1132,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void schedulingCompleted(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.schedulingCompleted");
+			LOGGER.debug("Entering ConsultHelperUtil.schedulingCompleted");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			String currentDateString = ConsultHelperUtil.getCurrentDateString();
 			ConsultOrder consultOrder = WorkflowProcessInstanceUtil.getRequiredConsultOrder(workflowProcessInstance, "consultOrder");
@@ -1187,8 +1212,8 @@ public class ConsultHelperUtil implements java.io.Serializable {
 				DateTime currentDate = new DateTime(DateTimeZone.UTC);
 				int days = Days.daysBetween(currentDate.toLocalDate(), apptDate.toLocalDate()).getDays();
 				int timerDays = days + 7;
-				String tmp_pastScheduledDateTimerUnits = PropertiesLoader.getConsultTimersProperty("tmp_pastScheduledDateTimerUnits", "d");
-				String tmp_apptInPastTimerUnits = PropertiesLoader.getConsultTimersProperty("tmp_apptInPastTimerUnits", "d");
+				String tmp_pastScheduledDateTimerUnits = PropertiesLoader.getConsultTimersProperty("tmp_pastScheduledDateTimerUnits", DEAFULT_PAST_SCHEDULED_DATE_TIMER_UNITS);
+				String tmp_apptInPastTimerUnits = PropertiesLoader.getConsultTimersProperty("tmp_apptInPastTimerUnits", DEFAULT_APPT_IN_PAST_TIMER_UNITS);
 				String tmp_pastScheduledDateTimer = "" + timerDays + tmp_pastScheduledDateTimerUnits;
 				int apptInPastTimerDays = days + 1;
 				String tmp_apptInPastTimer = "" + apptInPastTimerDays + tmp_apptInPastTimerUnits;
@@ -1295,7 +1320,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.schedulingCompleted: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.schedulingCompleted: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1306,7 +1331,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void updateActivityNOrder(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.updateActivityNOrder");
+			LOGGER.debug("Entering ConsultHelperUtil.updateActivityNOrder");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			String currentDateString = ConsultHelperUtil.getCurrentDateString();
 			String state = WorkflowProcessInstanceUtil.getRequiredString(workflowProcessInstance, "state");
@@ -1378,7 +1403,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.updateActivityNOrder: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.updateActivityNOrder: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1389,7 +1414,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void setOrderAsDeleted(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.setOrderAsDeleted");
+			LOGGER.debug("Entering ConsultHelperUtil.setOrderAsDeleted");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			String currentDateString = ConsultHelperUtil.getCurrentDateString();
 			ConsultOrder consultOrder = WorkflowProcessInstanceUtil.getRequiredConsultOrder(workflowProcessInstance, "consultOrder");
@@ -1436,7 +1461,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.setOrderAsDeleted: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.setOrderAsDeleted: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1448,7 +1473,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	private static void setActivityHealthInfo(ProcessInstance processInstance, boolean activityHealthy, String activityHealthDescription) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.setActivityHealthInfo");
+			LOGGER.debug("Entering ConsultHelperUtil.setActivityHealthInfo");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			ConsultClinicalObject consultClinicalObject =  WorkflowProcessInstanceUtil.getRequiredConsultClinicalObject(workflowProcessInstance, "consultClinicalObject");
 
@@ -1471,7 +1496,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.setActivityHealthInfo: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.setActivityHealthInfo: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 	
@@ -1482,7 +1507,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 * @param processInstance	a reference to the running process instance
 	 */
 	public static void lateTriageSet(ProcessInstance processInstance) {
-		Logging.debug("Entering ConsultHelperUtil.Late Triage Set - Consult pending triage review for more than 7 days.");
+		LOGGER.debug("Entering ConsultHelperUtil.Late Triage Set - Consult pending triage review for more than 7 days.");
 		setActivityHealthInfo(processInstance, false, "Consult pending triage review for more than 7 days.");
 	}
 
@@ -1492,7 +1517,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 * @param processInstance	a reference to the running process instance
 	 */
 	public static void lateSchedulingSet(ProcessInstance processInstance) {
-		Logging.debug("Entering ConsultHelperUtil.lateSchedulingSet: Consult not scheduled within 30 days.");
+		LOGGER.debug("Entering ConsultHelperUtil.lateSchedulingSet: Consult not scheduled within 30 days.");
 		setActivityHealthInfo(processInstance, false, "Consult not scheduled within 30 days.");		
 	}
 
@@ -1502,7 +1527,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 * @param processInstance	a reference to the running process instance
 	 */
 	public static void lateCompletionSet(ProcessInstance processInstance) {
-		Logging.debug("Entering ConsultHelperUtil.lateCompletionSet: Consult not completed within 90 days.");
+		LOGGER.debug("Entering ConsultHelperUtil.lateCompletionSet: Consult not completed within 90 days.");
 		setActivityHealthInfo(processInstance, false, "Consult not completed within 90 days.");		
 	}
 
@@ -1512,7 +1537,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 * @param processInstance	a reference to the running process instance
 	 */
 	public static void pastLatestDateSet(ProcessInstance processInstance) {
-		Logging.debug("Entering ConsultHelperUtil.pastLatestDateSet: Consult not completed or discontinued by Consult Order Latest Date.");
+		LOGGER.debug("Entering ConsultHelperUtil.pastLatestDateSet: Consult not completed or discontinued by Consult Order Latest Date.");
 		setActivityHealthInfo(processInstance, false, "Consult not completed or discontinued by Consult Order Latest Date.");			
 	}
 
@@ -1522,7 +1547,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 * @param processInstance	a reference to the running process instance
 	 */
 	public static void pastScheduledDateSet(ProcessInstance processInstance) {
-		Logging.debug("Entering ConsultHelperUtil.pastScheduledDateSet: Consult not completed within 7 days of scheduled date.");
+		LOGGER.debug("Entering ConsultHelperUtil.pastScheduledDateSet: Consult not completed within 7 days of scheduled date.");
 		setActivityHealthInfo(processInstance, false, "Consult not completed within 7 days of scheduled date.");					
 	}
 
@@ -1532,7 +1557,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 * @param processInstance	a reference to the running process instance
 	 */
 	public static void healthReset(ProcessInstance processInstance) {
-		Logging.debug("Entering ConsultHelperUtil.healthReset");
+		LOGGER.debug("Entering ConsultHelperUtil.healthReset");
 		setActivityHealthInfo(processInstance, true, "");
 	}
 
@@ -1543,7 +1568,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void setTaskDates(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.setTaskDates");
+			LOGGER.debug("Entering ConsultHelperUtil.setTaskDates");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			
 			DateTime dueDate = new DateTime(DateTimeZone.UTC).plusDays(7);
@@ -1554,7 +1579,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			String earlyDateString = earlyDate.toString(ISODateTimeFormat.dateTimeNoMillis());
 			workflowProcessInstance.setVariable("earliestDate", earlyDateString);
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.setTaskDates: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.setTaskDates: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1565,7 +1590,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void setCompleteTaskDates(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.setCompleteTaskDates");
+			LOGGER.debug("Entering ConsultHelperUtil.setCompleteTaskDates");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			ConsultOrder consultOrder = WorkflowProcessInstanceUtil.getRequiredConsultOrder(workflowProcessInstance, "consultOrder");
 			
@@ -1589,10 +1614,10 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			//Error was already logged
 		}
 		 catch (Exception e) {
-			Logging.error("ConsultHelperUtil.setCompleteTaskDates: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.setCompleteTaskDates: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
-
+	
 	/**
 	 * Parse serviceResponse received from SavePjdsRecord work item handler service
 	 * Called from: On Exit Action of first Save ClinicalObject to pJDS (service)
@@ -1600,7 +1625,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void onExitSaveClinicalObject(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.onExitSaveClinicalObject");
+			LOGGER.debug("Entering ConsultHelperUtil.onExitSaveClinicalObject");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			JsonParser parser = new JsonParser();
 			String serviceResponse = WorkflowProcessInstanceUtil.getRequiredString(workflowProcessInstance, "serviceResponse");
@@ -1620,23 +1645,23 @@ public class ConsultHelperUtil implements java.io.Serializable {
 						String uidString = uid.getAsString();
 						workflowProcessInstance.setVariable("clinicalObjectUid", uidString);
 					} else {
-						Logging.warn("ConsultHelperUtil.onExitSaveClinicalObject: Process Failed to save to pJDS and will be aborted: " + serviceResponse);
+						LOGGER.warn("ConsultHelperUtil.onExitSaveClinicalObject: Process Failed to save to pJDS and will be aborted: " + serviceResponse);
 						workflowProcessInstance.setVariable("formAction", "Error");
 					}
 				} else {
-				Logging.warn("ConsultHelperUtil.onExitSaveClinicalObject: Process Failed to save to pJDS and will be aborted: " + serviceResponse);
+				LOGGER.warn("ConsultHelperUtil.onExitSaveClinicalObject: Process Failed to save to pJDS and will be aborted: " + serviceResponse);
 				workflowProcessInstance.setVariable("formAction", "Error");
 				}
 			} else {
-				Logging.warn("ConsultHelperUtil.onExitSaveClinicalObject: serviceResponseObject is NULL or not an object. Process will be aborted: " + serviceResponse);
+				LOGGER.warn("ConsultHelperUtil.onExitSaveClinicalObject: serviceResponseObject is NULL or not an object. Process will be aborted: " + serviceResponse);
 				workflowProcessInstance.setVariable("formAction", "Error");
 			}
 		} catch (JsonSyntaxException e) {
-			Logging.error("ConsultHelperUtil.onExitSaveClinicalObject: An unexpected condition has happened with json: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.onExitSaveClinicalObject: An unexpected condition has happened with json: " + e.getMessage(), e);
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.onExitSaveClinicalObject: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.onExitSaveClinicalObject: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1647,7 +1672,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void onEntrySaveNoteObject(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.onEntrySaveNoteObject");
+			LOGGER.debug("Entering ConsultHelperUtil.onEntrySaveNoteObject");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			ConsultClinicalObject consultClinicalObject =  WorkflowProcessInstanceUtil.getRequiredConsultClinicalObject(workflowProcessInstance, "consultClinicalObject");
 			vistacore.order.Visit visit = consultClinicalObject.getVisit();
@@ -1677,7 +1702,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.onEntrySaveNoteObject: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.onEntrySaveNoteObject: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1688,7 +1713,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void processDiscontinueNotification(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.processDiscontinuedNotification");
+			LOGGER.debug("Entering ConsultHelperUtil.processDiscontinuedNotification");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			
 			String author = WorkflowProcessInstanceUtil.getRequiredString(workflowProcessInstance, "initiator");
@@ -1711,17 +1736,17 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			}
 
 
-			String dateString = ConsultHelperUtil.getCurrentDateString("MM/dd/YYYY HH:mm ZZZ");
+			String dateString = ConsultHelperUtil.getCurrentDateStringNotificationExpiration();
 			
 			String subject = "Consult " + instanceName + " has been discontinued by another user.";
-			String message = "Consult " + instanceName + " has been discontinued by " + discontinuedBy + " on " + dateString ;
-			String jsonString = buildNotificationJson(author, subject, message, patientId, notificationTaskId);
+			String message = "Consult " + instanceName + " has been discontinued by " + discontinuedBy + " on {dateString}";
+			String jsonString = buildNotificationJson(author, subject, message, patientId, notificationTaskId, dateString);
 			
 			workflowProcessInstance.setVariable("tmp_notificationJSON",jsonString);
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.processDiscontinuedNotification: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.processDiscontinuedNotification: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1732,7 +1757,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void latestDateTimer(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.latestDateTimer");
+			LOGGER.debug("Entering ConsultHelperUtil.latestDateTimer");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			ConsultOrder consultOrder = WorkflowProcessInstanceUtil.getRequiredConsultOrder(workflowProcessInstance, "consultOrder");
 			DateTime compareDate = new DateTime().withTime(0, 0, 0, 0);
@@ -1749,13 +1774,13 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			}
 			
 			int days = Days.daysBetween(compareDate, latestDate).getDays();
-			String tmp_pastLatestDateTimerUnits = PropertiesLoader.getConsultTimersProperty("tmp_pastLatestDateTimerUnits", "d");
+			String tmp_pastLatestDateTimerUnits = PropertiesLoader.getConsultTimersProperty("tmp_pastLatestDateTimerUnits", DEFAULT_PAST_LATEST_DATE_TIMER_UNITS);
 			String tmp_pastLatestDateTimer = "" + days + tmp_pastLatestDateTimerUnits;
 			workflowProcessInstance.setVariable("tmp_pastLatestDateTimer",tmp_pastLatestDateTimer);
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.latestDateTimer: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.latestDateTimer: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1766,7 +1791,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void onExitTriage(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.onExitTriage");
+			LOGGER.debug("Entering ConsultHelperUtil.onExitTriage");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			ConsultOrder consultOrder = WorkflowProcessInstanceUtil.getRequiredConsultOrder(workflowProcessInstance, "consultOrder");
 			String action = consultOrder.getFormAction();
@@ -1798,7 +1823,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.onExitTriage: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.onExitTriage: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1809,14 +1834,14 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void onExitSign(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.onExitSign");
+			LOGGER.debug("Entering ConsultHelperUtil.onExitSign");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			workflowProcessInstance.setVariable("state",StatesMap.getActivitystate().get("Pending"));
 			workflowProcessInstance.setVariable("formAction","signed");
 			workflowProcessInstance.setVariable("taskHistory",noTaskHistoryText);
 			workflowProcessInstance.setVariable("taskHistoryAction",noTaskHistoryActionText);
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.onExitSign: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.onExitSign: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1827,13 +1852,13 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void onExitAccept(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.onExitAccept");
+			LOGGER.debug("Entering ConsultHelperUtil.onExitAccept");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			workflowProcessInstance.setVariable("taskHistory",noTaskHistoryText);
 			workflowProcessInstance.setVariable("taskHistoryAction","Accepted");
 			setTriageAndSchedulingTaskRoutes(processInstance);
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.onExitAccept: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.onExitAccept: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1844,7 +1869,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void onExitScheduling(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.onExitScheduling");
+			LOGGER.debug("Entering ConsultHelperUtil.onExitScheduling");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			ConsultOrder consultOrder = WorkflowProcessInstanceUtil.getRequiredConsultOrder(workflowProcessInstance, "consultOrder");
 			String formAction = consultOrder.getFormAction();
@@ -1896,7 +1921,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.onExitScheduling: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.onExitScheduling: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1907,7 +1932,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void onExitComplete(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.onExitComplete");
+			LOGGER.debug("Entering ConsultHelperUtil.onExitComplete");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			workflowProcessInstance.setVariable("formAction","completed");
 			workflowProcessInstance.setVariable("activityHealthy", true);
@@ -1916,7 +1941,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			workflowProcessInstance.setVariable("taskHistoryAction",noTaskHistoryActionText);
 			workflowProcessInstance.signalEvent("completionStarted", null);
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.onExitComplete: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.onExitComplete: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
@@ -1927,7 +1952,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 */
 	public static void onExitReview(ProcessInstance processInstance) {
 		try {
-			Logging.debug("Entering ConsultHelperUtil.onExitReview");
+			LOGGER.debug("Entering ConsultHelperUtil.onExitReview");
 			WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 			workflowProcessInstance.setVariable("formAction","reviewed");
 			workflowProcessInstance.setVariable("activityHealthy", true);
@@ -1936,29 +1961,29 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			workflowProcessInstance.setVariable("taskHistoryAction",noTaskHistoryActionText);
 			workflowProcessInstance.setVariable("tmp_notificationJSON","{\"userId\": \"" + (String)workflowProcessInstance.getVariable("reviewAssignment") + "\"}");
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.onExitReview: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.onExitReview: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
 	public static void processNotificationWriteResponse(ProcessInstance processInstance){
-		Logging.debug("Entering ConsultHelperUtil.processNotificationWriteResponse");
+		LOGGER.debug("Entering ConsultHelperUtil.processNotificationWriteResponse");
 		WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 		try {
 			String serviceResponse = WorkflowProcessInstanceUtil.getRequiredString(workflowProcessInstance, "serviceResponse");
-			Logging.debug("ConsultHelperUtil.processNotificationWriteResponse: serviceResponse: " + serviceResponse);
+			LOGGER.debug("ConsultHelperUtil.processNotificationWriteResponse: serviceResponse: " + serviceResponse);
 
 			JsonParser parser = new JsonParser();
 			JsonObject serviceResponseJson = parser.parse(serviceResponse).getAsJsonObject();		
 			String notificationid = GenericUtils.getOptionalJsonElementValueAsString(serviceResponseJson, "notificationid");
 			workflowProcessInstance.setVariable("tmp_notificationId", notificationid);
-			Logging.debug("NotificationId: "+ notificationid);
+			LOGGER.debug("NotificationId: "+ notificationid);
 		} catch (JsonSyntaxException e) {
-			Logging.error("ConsultHelperUtil.processNotificationWriteResponse: An unexpected condition has happened with json. Could not get notificationId: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.processNotificationWriteResponse: An unexpected condition has happened with json. Could not get notificationId: " + e.getMessage(), e);
 			workflowProcessInstance.setVariable("tmp_notificationId", "");
 		} catch (OrderException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.processNotificationWriteResponse: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.processNotificationWriteResponse: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 	
@@ -1972,7 +1997,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 * @throws OrderException
 	 */
 	protected static Integer setUrgency(WorkflowProcessInstance workflowProcessInstance, ConsultOrder consultOrder, vistacore.order.Activity activity) throws OrderException {
-		Logging.debug("Entering ConsultHelperUtil.setUrgency");
+		LOGGER.debug("Entering ConsultHelperUtil.setUrgency");
 		if (consultOrder != null && consultOrder.getUrgency() != null && !consultOrder.getUrgency().isEmpty()) {
 			String sConsultOrderUrgency = consultOrder.getUrgency();
 			Integer iConsultOrderUrgency;
@@ -1989,7 +2014,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			
 			return iConsultOrderUrgency;
 		}
-		Logging.info("***** ConsultHelperUtil.setUrgency: Exiting setUrgency - there was no consultOrder ");
+		LOGGER.info("***** ConsultHelperUtil.setUrgency: Exiting setUrgency - there was no consultOrder ");
 		return null;
 	}
 	
@@ -2002,7 +2027,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 * @throws OrderException
 	 */
 	protected static boolean setUpdateAndChangedToEmergent(WorkflowProcessInstance workflowProcessInstance, ConsultOrder consultOrder, vistacore.order.Activity activity) throws OrderException {
-		Logging.debug("Entering ConsultHelperUtil.setUpdateAndChangedToEmergent");
+		LOGGER.debug("Entering ConsultHelperUtil.setUpdateAndChangedToEmergent");
 		Integer urgencyInt = WorkflowProcessInstanceUtil.getRequiredInteger(workflowProcessInstance, "urgencyInt");	
 		Integer iConsultOrderUrgency = setUrgency(workflowProcessInstance, consultOrder, activity);
 		if (iConsultOrderUrgency == null)
@@ -2034,7 +2059,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 * @throws OrderException
 	 */
 	protected static boolean setUpdateAndChangedToEmergentWaitOnLabs(WorkflowProcessInstance workflowProcessInstance, ConsultOrder consultOrder, vistacore.order.Activity activity, boolean completed) throws OrderException {
-		Logging.debug("Entering ConsultHelperUtil.setUpdateAndChangedToEmergentWaitOnLabs");
+		LOGGER.debug("Entering ConsultHelperUtil.setUpdateAndChangedToEmergentWaitOnLabs");
 		Integer urgencyInt = WorkflowProcessInstanceUtil.getRequiredInteger(workflowProcessInstance, "urgencyInt");
 		Integer iConsultOrderUrgency = setUrgency(workflowProcessInstance, consultOrder, activity);
 		if (iConsultOrderUrgency == null)
@@ -2042,12 +2067,12 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		
 		if (urgencyInt >= 4 && iConsultOrderUrgency < 4) {
 			workflowProcessInstance.setVariable("changedToEmergent", true);
-			Logging.debug("ConsultHelperUtil.setUpdateAndChangedToEmergentWaitOnLabs: changedToEmergent");
+			LOGGER.debug("ConsultHelperUtil.setUpdateAndChangedToEmergentWaitOnLabs: changedToEmergent");
 			workflowProcessInstance.signalEvent("toSign", null);
 			return true;
 		} else {
 			workflowProcessInstance.setVariable("changedToEmergent", false);
-			Logging.debug("ConsultHelperUtil.setUpdateAndChangedToEmergentWaitOnLabs: changedToEmergent is reset");
+			LOGGER.debug("ConsultHelperUtil.setUpdateAndChangedToEmergentWaitOnLabs: changedToEmergent is reset");
 			return false;
 		}
 	}
@@ -2068,7 +2093,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	 * @return
 	 */
 	protected static String getStatusFromState(String state) {
-		Logging.debug("Entering ConsultHelperUtil.getStatusFromState");
+		LOGGER.debug("Entering ConsultHelperUtil.getStatusFromState");
 		if (state == null)
 			return "";
 		

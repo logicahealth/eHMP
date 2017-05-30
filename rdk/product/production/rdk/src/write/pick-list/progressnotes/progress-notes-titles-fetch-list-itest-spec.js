@@ -8,14 +8,14 @@ var log = sinon.stub(require('bunyan').createLogger({ name: 'progress-notes-titl
 var configuration = {
     environment: 'development',
     context: 'HMP UI CONTEXT',
-    host: '10.2.2.101',
-    port: 9210,
-    accessCode: 'pu1234',
-    verifyCode: 'pu1234!!',
-    localIP: '10.2.2.1',
+    host: 'IP        ',
+    port: PORT,
+    accessCode: 'REDACTED',
+    verifyCode: 'REDACTED',
+    localIP: 'IP      ',
     localAddress: 'localhost',
     vxSyncServer: {
-        baseUrl: 'http://10.3.3.6:8080'
+        baseUrl: 'http://IP           '
     }
 };
 

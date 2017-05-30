@@ -54,12 +54,14 @@ server_instances.each do |id, instance|
   template "#{node[:zookeeper][:base_server_dir]}-#{id}/#{node[:zookeeper][:conf_dir]}/zookeeper-env.sh" do
     source "zookeeper-env.sh.erb"
     variables(
-      :additional_jvm_flags => node[:zookeeper][:additional_jvm_flags]
+      :additional_jvm_flags => node[:zookeeper][:additional_jvm_flags],
+      :log_dir => "#{node[:zookeeper][:base_log_dir]}#{id}",
+      :zoo_instance_dir => "#{node[:zookeeper][:base_server_dir]}-#{id}"
     )
   end
 end
 
-# define and start the service for each instance
+# define and start the service for each instance, including log4j setup
 server_instances.each do |id, instance|
   zookeeper_service "zk_service_#{id}" do
     user node[:'zookeeper-cluster'][:service_user]
@@ -71,6 +73,13 @@ server_instances.each do |id, instance|
     binary_checksum node[:'zookeeper-cluster'][:service][:binary_checksum]
     binary_url node[:'zookeeper-cluster'][:service][:binary_url]
     install_path "#{node[:zookeeper][:base_server_dir]}-#{id}"
+  end
+
+  template "#{node[:zookeeper][:base_server_dir]}-#{id}/#{node[:zookeeper][:conf_dir]}/log4j.properties" do
+    source "log4j.properties.erb"
+    variables(
+      :log_dir => "#{node[:zookeeper][:base_log_dir]}#{id}"
+    )
   end
 end
 

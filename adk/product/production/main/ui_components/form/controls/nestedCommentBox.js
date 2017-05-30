@@ -477,7 +477,7 @@ define([
             itemColumn: 'itemColumn',
             commentColumn: 'commentColumn'
         },
-        behaviors: _.omit(ControlService.LayoutViewControl.prototype.behaviors, 'ErrorMessages'),
+        behaviors: _.omit(ControlService.LayoutViewControl.prototype.behaviors, ['ErrorMessages','UpdateConfig']),
         initialize: function(options) {
             this.initCollection('collection');
             this.listenToFieldName();

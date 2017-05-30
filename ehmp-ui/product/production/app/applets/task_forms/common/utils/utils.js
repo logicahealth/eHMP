@@ -3,7 +3,8 @@ define([
 ], function(moment) {
     "use strict";
 
-    // Compare two versions numbers and return the highest one
+    // NOTE this function also exists in RDK - they should be kept in sync, or perhaps
+    //  moved into a common utility package in a new repository that they can both include
     function versionCompare(v1, v2) {
         // Split version numbers to its parts
         var v1parts = v1.split('.');
@@ -19,9 +20,12 @@ define([
             v2parts.push('0');
         }
 
-        // Strip characters and convert all values to numbers
+        // Convert all values to numbers
         var convert = function(val) {
-            val = val.replace(/\D/g,'');
+            val = val.replace(/\D/g, '');
+            if (val.length === 0) {
+                return Number.MAX_VALUE;
+            }
             return Number(val);
         };
         v1parts = v1parts.map(convert);
@@ -32,7 +36,7 @@ define([
                 continue;
             } else if (v1parts[i] > v2parts[i]) {
                 return -1;
-            } else if (v1parts[i] < v2parts[i]){
+            } else if (v1parts[i] < v2parts[i]) {
                 return 1;
             }
         }
@@ -77,7 +81,13 @@ define([
                 Utils.activateField.call(this, fieldName)
         */
         activateField: function(fieldName) {
-            var field = this.$('#' + fieldName);
+            // Relying on the id is highly discouraged, as spelled out at:
+            // <app-ip/url>/documentation/#/adk/ui-library/views#Form-Controls
+            // Please do not re-use this pattern.
+            // Utilize the ui hash, as this allows for
+            // mapping selectors/elements with unlike selectors. i.e. this.ui[fieldName]
+            // <app-ip/url>/documentation/#/adk/code-review-checklist%23Backbone-and-Marionette-Best-Practices
+            var field = this.$('[id^=' + fieldName + ']');
             field.trigger('control:hidden', false);
             field.trigger('control:disabled', false);
         },
@@ -88,7 +98,13 @@ define([
         resetFields: function(fields) {
             fields = fields || [];
             _.forEach(fields, function(fieldName) {
-                var field = this.$('#' + fieldName);
+                // Relying on the id is highly discouraged, as spelled out at:
+                // <app-ip/url>/documentation/#/adk/ui-library/views#Form-Controls
+                // Please do not re-use this pattern.
+                // Utilize the ui hash, as this allows for
+                // mapping selectors/elements with unlike selectors. i.e. this.ui[fieldName]
+                // <app-ip/url>/documentation/#/adk/code-review-checklist%23Backbone-and-Marionette-Best-Practices
+                var field = this.$('[id^=' + fieldName + ']');
                 if (field.length !== 0) {
                     field.trigger('control:hidden', true);
                     field.trigger('control:disabled', true);
@@ -105,7 +121,13 @@ define([
             _.each(selectList, function(obj) {
                 docFrag.append($(template(obj)));
             });
-            this.$('#' + fieldName).html(docFrag);
+            // Relying on the id is highly discouraged, as spelled out at:
+            // <app-ip/url>/documentation/#/adk/ui-library/views#Form-Controls
+            // Please do not re-use this pattern.
+            // Utilize the ui hash, as this allows for
+            // mapping selectors/elements with unlike selectors. i.e. this.ui[fieldName]
+            // <app-ip/url>/documentation/#/adk/code-review-checklist%23Backbone-and-Marionette-Best-Practices
+            this.$('[id^=' + fieldName + ']').html(docFrag);
         },
 
         // Given the formModel and the contents of the fields, it will populate
@@ -144,7 +166,7 @@ define([
                     idAttribute: 'uniqueId'
                 },
                 onSuccess: function(collection, response) {
-                    var latestConsult = self.findLatestConsult(collection, processDefId);
+                    var latestConsult = self.findLatest(collection, processDefId);
                     // Add latest consult to the onSuccess parameters
                     successParams.latestConsult = latestConsult;
                     onSuccess(successParams);
@@ -153,34 +175,34 @@ define([
 
             ADK.ResourceService.fetchCollection(fetchOptions);
         },
-        // Find the latest consult deployment
-        findLatestConsult: function(collection, processDefId) {
-            var consults = [];
+        // Find the latest deployment
+        findLatest: function(collection, processDefId) {
+            var selected = [];
 
             // Get only the consult deployments
             collection.each(function(model) {
                 if (model.get('id') === processDefId) {
-                    consults.push(model);
+                    selected.push(model);
                 }
             });
 
             // Get the list of just the deployment version numbers
-            var modConsults = consults.map(function(model) {
+            var versions = selected.map(function(model) {
                 return model.get('deploymentId').split(':').pop();
             });
 
             // Find the location, in the array, for the largest value
-            var newestConsult = 0;
-            if (modConsults.length > 1) {
-                for (var i = 1, l = modConsults.length; i < l; ++i) {
-                    if (versionCompare(modConsults[newestConsult], modConsults[i])) {
-                        newestConsult = i;
+            var newestIndex = 0;
+            if (versions.length > 1) {
+                for (var i = 1, l = versions.length; i < l; ++i) {
+                    if (versionCompare(versions[newestIndex], versions[i]) === 1) {
+                        newestIndex = i;
                     }
                 }
             }
 
-            return consults[newestConsult];
-        }, 
+            return selected[newestIndex];
+        },
         // Build assginedTo field for the fetchOptions
         buildAssignedTo: function(location, teamFocus) {
             var locationName = location.name;

@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/components', 'api/UIComponents', 'jasminejquery'],
+define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/UILibrary', 'api/UIComponents', 'jasminejquery'],
     function($, Handlebars, Backbone, Marionette, UI) {
 
         var $form, form;
@@ -179,6 +179,16 @@ define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/co
                     $('form > div').trigger("control:hidden", true);
                     expect($('form > div')).toHaveClass('hidden');
                     $('form > div').trigger("control:hidden", false);
+                    expect($('form > div')).not.toHaveClass('hidden');
+                });
+                it("update:config", function() {
+                    $('form > div').trigger("control:update:config", {
+                        hidden: true
+                    });
+                    expect($('form > div')).toHaveClass('hidden');
+                    $('form > div').trigger("control:update:config", {
+                        hidden: false
+                    });
                     expect($('form > div')).not.toHaveClass('hidden');
                 });
             });

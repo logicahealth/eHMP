@@ -113,7 +113,6 @@ end
 template '/etc/init.d/oracle' do
   source 'ora_init_script.erb'
   mode '0755'
-  cookbook 'oracle'
 end
 
 service 'start oracle' do

@@ -10,6 +10,7 @@ class GlobalDateFilter < AccessBrowserV2
     date_filter = AccessHtmlElement.new(:id, "date-region-minimized")
     add_action(CucumberLabel.new("Control - Overview - Date Filter"), ClickAction.new, date_filter)
     add_action(CucumberLabel.new("Control - Coversheet - Date Filter Toggle"), ClickAction.new, date_filter)
+    add_action(CucumberLabel.new("Control - Applet - Date Filter"), ClickAction.new, date_filter)
 
     apply_button = AccessHtmlElement.new(:id, "customRangeApplyGlobal")
     add_action(CucumberLabel.new("Control - Coversheet - Apply"), ClickAction.new, apply_button)
@@ -22,10 +23,8 @@ class GlobalDateFilter < AccessBrowserV2
     add_action(CucumberLabel.new("Control - Overview - From Date"), SendKeysAction.new, from_date)
     add_action(CucumberLabel.new("Control - Overview - To Date"), SendKeysAction.new, to_date)
     
-    #add_action(CucumberLabel.new("Control - Coversheet - Date Filter Toggle"), ClickAction.new, AccessHtmlElement.new(:id, "navigation-dateButton"))
-    #add_action(CucumberLabel.new("Control - Coversheet - Date Filter Toggle"), ClickAction.new, AccessHtmlElement.new(:id, "date-region-minimized"))
-    add_action(CucumberLabel.new("Control - Coversheet - Date Filter Close"), ClickAction.new, AccessHtmlElement.new(:css, "#navigation-date #close-global-date-view"))
-    add_verify(CucumberLabel.new("Element - Date Filter"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#navigation-date .grid-filter-daterange"))
+    add_action(CucumberLabel.new("Control - Coversheet - Date Filter Close"), ClickAction.new, AccessHtmlElement.new(:css, ".global-date-picker #close-global-date-view"))
+    add_verify(CucumberLabel.new("Element - Date Filter"), VerifyContainsText.new, AccessHtmlElement.new(:css, ".global-date-picker .grid-filter-daterange"))
     add_verify(CucumberLabel.new("Element - Range Text"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#date-region-minimized span"))
     
     add_action(CucumberLabel.new("Control - Coversheet - Cancel"), ClickAction.new, AccessHtmlElement.new(:id, "cancelGlobal"))
@@ -33,7 +32,7 @@ class GlobalDateFilter < AccessBrowserV2
     add_action(CucumberLabel.new("Control - Coversheet - 24hr"), ClickAction.new, AccessHtmlElement.new(:id, '24hrRangeGlobal'))
 
     add_verify(CucumberLabel.new('Trend History Chart'), VerifyContainsText.new, AccessHtmlElement.new(:id, 'trendHistoryChart'))
-    add_verify(CucumberLabel.new('Empty Row'), VerifyContainsText.new, AccessHtmlElement.new(:css, '#globalDate-region #data-grid-newsfeed-gdt tr.empty'))
+    add_verify(CucumberLabel.new('Empty Row'), VerifyContainsText.new, AccessHtmlElement.new(:css, '#timelineSummary #data-grid-newsfeed-gdt tr.empty'))
 
     add_verify(CucumberLabel.new('All Activities Title'), VerifyText.new, AccessHtmlElement.new(:id, 'allActivitiesTitle'))
     add_verify(CucumberLabel.new('GDF Panel Title'), VerifyText.new, AccessHtmlElement.new(:css, '#timelineSummary h5.panel-title-label'))
@@ -49,7 +48,7 @@ class GlobalDateFilter < AccessBrowserV2
     
     def applet_loaded?
       return true if am_i_visible? 'Empty Row'
-      return TestSupport.driver.find_elements(:css, '#globalDate-region #data-grid-newsfeed-gdt tbody tr.selectable').length > 0
+      return TestSupport.driver.find_elements(:css, '#timelineSummary #data-grid-newsfeed-gdt tbody tr.selectable').length > 0
     rescue => e 
       # p e
       false
@@ -62,7 +61,7 @@ class CoversheetContainer < GlobalDateFilter
 
   def initialize
     super
-    # add_action(CucumberLabel.new("Control - Coversheet - Date Filter Toggle"), ClickAction.new, AccessHtmlElement.new(:css, "#navigation-date #date-region2"))
+    # add_action(CucumberLabel.new("Control - Coversheet - Date Filter Toggle"), ClickAction.new, AccessHtmlElement.new(:css, ".global-date-picker #date-region2"))
   end # initialize
 end # CoversheetContainer
 
@@ -156,7 +155,7 @@ Then(/^the following choices should be displayed for the "(.*?)" Date Filter$/) 
   when "Orders applet"
     key_append = "range-orders"
   when "Text Search"
-    key_append = "range-text-search"
+    key_append = "range-search"
   when "Documents Applet"
     key_append = "range-global"
   when "Med Review Applet"
@@ -215,7 +214,7 @@ Then(/^the active date control (?:on|in) the "(.*?)" is the "(.*?)" button$/) do
 
   case parent_name
   when "Coversheet"
-    parent_key = "#globalDate-region"
+    parent_key = "#timelineSummary"
     append = "range-global"
   when "Numeric Lab Results applet"
     parent_key = "[data-appletid=lab_results_grid]"
@@ -249,7 +248,7 @@ Then(/^there is no active date control (?:on|in) the "(.*?)"$/) do |parent_name|
 
   case parent_name
   when "Coversheet"
-    parent_key = "#globalDate-region"
+    parent_key = "#timelineSummary"
   when "Numeric Lab Results applet"
     parent_key = "[data-appletid=lab_results_grid]"
   when "Numeric Lab Results modal"

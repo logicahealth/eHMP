@@ -16,15 +16,15 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="form">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.med.va.gov/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.URL       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="formId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="formDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="enteredBy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="documentTitle" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="facilityName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="deploymentForm" type="{http://webservice.vds.med.va.gov/}progressNote" minOccurs="0"/>
- *         &lt;element name="questionnaireBean" type="{http://webservice.vds.med.va.gov/}questionnaireBean" minOccurs="0"/>
+ *         &lt;element name="deploymentForm" type="{http://webservice.vds.URL       /}progressNote" minOccurs="0"/>
+ *         &lt;element name="questionnaireBean" type="{http://webservice.vds.URL       /}questionnaireBean" minOccurs="0"/>
  *         &lt;element name="docType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>

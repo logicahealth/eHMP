@@ -1,0 +1,66 @@
+.ui {
+    // Overwriting SDK Styles
+    .navbar {
+        border-color: $ui_color;
+        .navbar-brand {
+            color: $ui_color;
+        }
+    }
+    #toc > div {
+        & > .nav > li.active,
+        & > .nav > li.activechild {
+            border-left-color: $ui_color;
+        }
+        .nav .active > a {
+            border-left-color: $ui_color;
+        }
+    }
+    // End of Overwriting SDK Styles
+    .home-button {
+        background-color: $ui_color;
+    }
+    .page-description {
+        background-color: $ui_color;
+        color: white;
+    }
+    .jumbotron {
+        background-color: $ui_color;
+        color: white;
+    }
+    .c-r-l {
+        background: #ddd;
+        border: 1px solid #aaa;
+        padding: 2px;
+        margin-right: auto;
+        margin-left: auto;
+        font-size: 12px;
+        text-align: center;
+        min-width: 230px;
+        [class*=col] > div {
+            background: #A9D2D2;
+            margin: 5px 0;
+            padding: 0px 10px;
+            border: 1px solid #eee;
+        }
+        [class*=col] {
+            padding: 0px 5px;
+        }
+        .row {
+            margin: 0;
+        }
+    }
+    .c-r-l.nm [class*=col],
+    .c-r-l.nm {
+        padding: 0;
+    }
+    .nav-pills {
+        &>li.active>a,
+        .nav-pills>li.active>a:focus,
+        .nav-pills>li.active>a:hover {
+            background-color: $ui_color;
+        }
+        a {
+            color: $ui_color;
+        }
+    }
+}

@@ -10,10 +10,6 @@ var processJsonObject = activityUtils.processJsonObject;
 var processValue = activityUtils.processValue;
 var wrapValueInCData = activityUtils.wrapValueInCData;
 var getGenericJbpmConfig = activityUtils.getGenericJbpmConfig;
-var processJsonObject = require('../activity-utils').processJsonObject;
-var processValue = require('../activity-utils').processValue;
-var wrapValueInCData = require('../activity-utils').wrapValueInCData;
-var getGenericJbpmConfig = require('../activity-utils').getGenericJbpmConfig;
 var nullchecker = rdk.utils.nullchecker;
 var xmlTemplates = activityUtils.xmlTemplates;
 var activityMockQuery = require('./activity-query-service-mock');
@@ -178,7 +174,7 @@ function abortProcess(req, res) {
     // [POST] /runtime/{deploymentId}/process/instance/{procInstanceID}/abort
     //
     // Example Postman URL:
-    // http://10.4.4.208:8080/business-central/rest/runtime/VistaCore:VistaTasks:1.0.2/process/instance/1/abort
+    // http://IP             /business-central/rest/runtime/VistaCore:VistaTasks:1.0.2/process/instance/1/abort
 
     req.audit.dataDomain = 'Tasks';
     req.audit.logCategory = 'ABORT_PROCESS';
@@ -367,9 +363,16 @@ function doProcessDefinitionsFetch(config, callback) {
 
         if (returnedData.hasOwnProperty('processDefinitionList') && Array.isArray(returnedData.processDefinitionList)) {
             _.each(returnedData.processDefinitionList, function(processDefinition) {
+                if (processDefinition.hasOwnProperty('process-definition')) {
+                    processDefinition = processDefinition['process-definition'];
+                }
                 //we do not need BPM forms data. Remove the element.
                 if (processDefinition.hasOwnProperty('forms')) {
                     delete processDefinition.forms;
+                }
+
+                if (processDefinition.hasOwnProperty('deployment-id')) {
+                    processDefinition.deploymentId = processDefinition['deployment-id'];
                 }
 
                 formattedResponse.data.items.push(processDefinition);

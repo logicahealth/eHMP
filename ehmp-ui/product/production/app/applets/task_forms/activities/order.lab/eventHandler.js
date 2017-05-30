@@ -1,8 +1,9 @@
 define([
     'underscore',
     'moment',
+    "app/applets/task_forms/common/utils/utils",
     'app/applets/task_forms/common/utils/eventHandler'
-], function(_, moment, EventHandler) {
+], function(_, moment, Utils, EventHandler) {
     'use strict';
 
     var LAB_ORDER_FORM_ATTRIBUTES = ['action', 'assignment', 'roles', 'team', 'facility', 'notificationDate', 'comment'];
@@ -110,7 +111,7 @@ define([
             },
             onSuccess: function(collection) {
                 // Find the newest consult deployment
-                var newestConsult = findLatestConsult(collection);
+                var newestConsult = Utils.findLatest(collection, 'Order.Consult');
                 sendSignalPost(e, newestConsult, taskModel, parameterObj, signalAction, onSuccess);
             }
         };

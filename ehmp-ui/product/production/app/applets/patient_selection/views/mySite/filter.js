@@ -38,7 +38,7 @@ define([
                 },
                 type: 'search',
                 minimumInputLength: 0,
-                extraClasses: ['flex-width-1', 'form-group-sm'],
+                extraClasses: ['flex-width-1'],
                 title: 'Enter either first letter of last name and last four of social security number, or generic name.'
             }]
         }],

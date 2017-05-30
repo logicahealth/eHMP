@@ -1,0 +1,12 @@
+// Flex columns allows the columns to extend to the height of the content
+// Display in Encounters write back original form
+.row-eq-height { 
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  [class*="col-"] {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+}

@@ -1,63 +1,52 @@
 define([
-    "backbone",
-    "marionette",
-    "underscore",
-    "hbs!app/applets/lab_results_grid/details/labDetailsTemplate",
-    "hbs!app/applets/lab_results_grid/details/panelDetailsTemplate",
-    "hbs!app/applets/lab_results_grid/details/panelDetailsTableTemplate",
-    "app/applets/lab_results_grid/details/itemViewForPanelExtendedRow"
-], function(Backbone, Marionette, _, labDetailsTemplate, panelDetailsTemplate, panelDetailsTableTemplate, singleLabResultView) {
+    'backbone',
+    'marionette',
+    'underscore',
+    'hbs!app/applets/lab_results_grid/details/labDetailsTemplate',
+    'hbs!app/applets/lab_results_grid/details/panelDetailsTemplate',
+    'hbs!app/applets/lab_results_grid/details/panelDetailsTableTemplate',
+    'app/applets/lab_results_grid/details/itemViewForPanelExtendedRow'
+], function (Backbone, Marionette, _, labDetailsTemplate, panelDetailsTemplate, panelDetailsTableTemplate, singleLabResultView) {
     'use strict';
-
-    var currentModel, currentCollection, panelTableView;
 
     var PanelTableView = Backbone.Marionette.CompositeView.extend({
         template: panelDetailsTableTemplate,
         childView: singleLabResultView,
-        childViewContainer: "tbody",
-        initialize: function(options) {
+        childViewContainer: 'tbody',
+        initialize: function (options) {
             this.childViewOptions = {
                 isFullscreen: options.isFullscreen
             };
-            // This is where I will need to send out the collection to the modal view
-            // console.log('Collection: ', this.collection);
         }
     });
 
     return Backbone.Marionette.LayoutView.extend({
-
-        initialize: function(options) {
-            currentModel = options.model;
-            currentCollection = options.collection;
-            currentModel.collection = currentModel.attributes.labs;
-            var isFullscreen = options.model.get('isFullscreen') || false;
-
-            if (currentModel.attributes.type === 'panel') {
+        regions: function (options) {
+            if (options.model.get('type') === 'panel') {
+                return {
+                    labsListRegion: '.lab-results-table-container'
+                };
+            }
+        },
+        initialize: function (options) {
+            var isFullscreen = this.model.get('isFullscreen') || false;
+            this.isPanel = this.model.get('type') === 'panel';
+            if (this.isPanel) {
                 this.panelTableView = new PanelTableView({
-                    collection: currentModel.attributes.labs,
+                    collection: this.model.get('labs'),
                     gridCollection: options.collection,
                     isFullscreen: isFullscreen
                 });
             }
         },
-        getTemplate: function() {
-            if (currentModel.attributes.type === 'panel') {
+        getTemplate: function () {
+            if (this.isPanel) {
                 return panelDetailsTemplate;
-            } else {
-                return labDetailsTemplate;
             }
+            return labDetailsTemplate;
         },
-        regions: function(options) {
-            if (options.model.attributes.type === 'panel') {
-                return {
-                    labsListRegion: ".lab-results-table-container"
-                };
-            } else {
-
-            }
-        },
-        onRender: function() {
-            if (currentModel.attributes.type === 'panel') {
+        onRender: function () {
+            if (this.isPanel) {
                 this.labsListRegion.show(this.panelTableView);
             }
         }

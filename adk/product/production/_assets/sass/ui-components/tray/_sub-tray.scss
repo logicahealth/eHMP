@@ -1,16 +1,14 @@
 .sub-tray-container {
     background-color: $primary-light-alt;
-    .btn {
-        &.btn-default {
-            background-color: $primary;
-            color: $pure-white;
-            &:hover {
-                background-color: $primary-dark;
-            }
+    .btn.btn-default {
+        background-color: $primary;
+        color: $pure-white;
+        &:hover {
+            background-color: $primary-dark;
         }
     }
     .sidebar {
-        .sidebar-tray.sidebar-sub-tray {
+        &-tray.sidebar-sub-tray {
             position: absolute;
             z-index: inherit;
             min-height: 300px;
@@ -49,42 +47,38 @@
                 transform: translateX(-100%);
             }
         }
-        &:not(.open) {
-            button {
-                > span {
-                    .fa-stack {
-                        visibility: hidden;
-                    }
-                }
-                i {
-                    -moz-transition: all .25s ease;
-                    -webkit-transition: all .25s ease;
-                    transition: all .25s ease;
+        &:not(.open) button {
+            > span {
+                .fa-stack {
+                    visibility: hidden;
                 }
             }
+            i {
+                -moz-transition: all .25s ease;
+                -webkit-transition: all .25s ease;
+                transition: all .25s ease;
+            }
         }
-        &.open {
-            > button {
-                color: $pure-white;
-                background-color: $primary-dark;
-                i {
-                    &.fa-chevron-circle-right {
-                        position: relative;
-                        top: 1px;
-                        display: inline-block;
-                    }
-                }
-                .fa-inverse {
-                    color: $primary-dark;
-                }
-                > span {
+        &.open > button {
+            color: $pure-white;
+            background-color: $primary-dark;
+            i {
+                &.fa-chevron-circle-right {
                     position: relative;
-                    left: -2px;
+                    top: 1px;
+                    display: inline-block;
                 }
-                :active {
-                    .fa-inverse {
-                        color: $pure-white;
-                    }
+            }
+            .fa-inverse {
+                color: $primary-dark;
+            }
+            > span {
+                position: relative;
+                left: -2px;
+            }
+            :active {
+                .fa-inverse {
+                    color: $pure-white;
                 }
             }
         }

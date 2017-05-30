@@ -4,7 +4,7 @@ maintainer_email "vistacore@vistacore.us"
 license          "All rights reserved"
 description      "Installs/Configures VistA"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.6"
+version          "2.1.8"
 
 supports "centos"
 supports "windows"

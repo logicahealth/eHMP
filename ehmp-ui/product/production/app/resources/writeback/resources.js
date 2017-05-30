@@ -25,8 +25,40 @@ define([
     'app/resources/writeback/activities/draft/model',
     'app/resources/writeback/activities/signal/model',
     'app/resources/writeback/notes/notesSignModel',
-    'app/resources/writeback/addenda/addendumSignModel'
-], function(Notes, Note, UnsignedNotes, UncosignedNotes, SignedNotes, Allergy, Allergies, Vital, Vitals, Immunization, Immunizations, Esignature, Problem, Problems, Order, OrderDetail, DraftOrder, DraftOrders, OrderDiscontinue, OrderSign, LabSupportData, OrderClinicalObject, Addendum, DraftActivity, SignalActivity, NotesSignModel, AddendumSignModel) {
+    'app/resources/writeback/addenda/addendumSignModel',
+    'app/resources/writeback/stackedGraph/model',
+    'app/resources/writeback/issueReport/model'
+], function(
+    Notes,
+    Note,
+    UnsignedNotes,
+    UncosignedNotes,
+    SignedNotes,
+    Allergy,
+    Allergies,
+    Vital,
+    Vitals,
+    Immunization,
+    Immunizations,
+    Esignature,
+    Problem,
+    Problems,
+    Order,
+    OrderDetail,
+    DraftOrder,
+    DraftOrders,
+    OrderDiscontinue,
+    OrderSign,
+    LabSupportData,
+    OrderClinicalObject,
+    Addendum,
+    DraftActivity,
+    SignalActivity,
+    NotesSignModel,
+    AddendumSignModel,
+    StackedGraph,
+    IssueReport
+) {
     'use strict';
 
     return {
@@ -84,6 +116,12 @@ define([
                 Signal: {
                     Model: SignalActivity
                 }
+            },
+            StackedGraph: {
+                Model: StackedGraph
+            },
+            IssueReport: {
+                Model: IssueReport
             }
         }
     };

@@ -78,7 +78,6 @@ define([
             }
         },
         tagName: 'ul',
-        className: 'all-padding-no',
         emptyView: Backbone.Marionette.ItemView.extend({
             template: _.template('<p class="color-grey-darkest top-padding-xs left-padding-xs" role="gridcell">No Records Found</p>'),
             attributes: {

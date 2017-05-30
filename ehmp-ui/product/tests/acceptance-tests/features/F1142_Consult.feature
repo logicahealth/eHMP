@@ -2,13 +2,20 @@
 
 Feature: F1142 : Home Page usability  (Staff View)
 
-@US17396_add_consult_physical_therapy
-Scenario: Create a physical therapy consult order and review it in cosnult applet expanded view
+@US18353_flagged_checkbox_consult
+Scenario: Verify that by default the flagged checkbox is unchecked 
 
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded consult applet
-  And user unchecks the flagged checkbox from consult applet
+  And flagged checkbox is unchecked by default in Consult Applet
+  
+@US17396_add_consult_physical_therapy
+Scenario: Create a physical therapy consult order and review it in cosnult applet expanded view
+
+  When user searches for and selects "bcma,eight"
+  # Then Summary View is active
+  And user navigates to expanded consult applet
   And the user takes note of number of existing consults
   And user adds a new consult
   And user selects "Physical Therapy" consult
@@ -22,7 +29,6 @@ Scenario: Create a Neurosurgery consult order and review it in cosnult applet ex
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded consult applet
-  And user unchecks the flagged checkbox from consult applet
   And the user takes note of number of existing consults
   And user adds a new consult
   And user selects "Neurosurgery" consult
@@ -39,7 +45,6 @@ Scenario: Create a Rheumatology consult order and review it in cosnult applet ex
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded consult applet
-  And user unchecks the flagged checkbox from consult applet
   And the user takes note of number of existing consults
   And user adds a new consult
   And user selects "Rheumatology" consult
@@ -50,13 +55,12 @@ Scenario: Create a Rheumatology consult order and review it in cosnult applet ex
   And user accepts the consult
   Then a consult is added to the applet
   
-@US17396_consult_view_details
+@US17396_consult_view_details @DE7396
 Scenario: View consult detail view
 
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded consult applet
-  And user unchecks the flagged checkbox from consult applet
   And user makes sure there exists at least one consult
   And user views the details of the consult
   Then the detail modal for consult displays 
@@ -68,19 +72,26 @@ Scenario: Sorts the consult applet based on column Consult
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded consult applet
-  And user unchecks the flagged checkbox from consult applet
   And the user sorts the Consult applet by column Consult 
   Then the Consult applet is sorted in alphabetic order based on column Consult
   And the user sorts the Consult applet by column Consult 
   Then the Consult applet is sorted in reverse alphabetic order based on column Consult
   
-@US17396_discontinue_consult
+@US17396_consult_applet_filter
+Scenario: User can filter the Consult applet
+
+  When user searches for and selects "bcma,eight"
+  Then Summary View is active
+  And user navigates to expanded consult applet
+  And user filters the Consult applet by text "Physical"
+  And Consult applet table only diplays rows including text "Physical"
+  
+@US17396_discontinue_consult @DE7396
 Scenario: Discontinue a consult to create closed consult
 
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded consult applet
-  And user unchecks the flagged checkbox from consult applet
   And user makes sure there exists at least one consult
   And user views the details of the consult
   Then the detail modal for consult displays 
@@ -92,16 +103,14 @@ Scenario: Display only open consults
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded consult applet
-  And user unchecks the flagged checkbox from consult applet
   Then Consult applet shows only consults that have are in "Open" mode
   
-@US17396_show_closed
+@US17396_show_closed @DE7396
 Scenario: Display only closed consults
 
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded consult applet
-  And user unchecks the flagged checkbox from consult applet
   And user selects to show only "Closed" consults
   Then Consult applet shows only consults that have are in "Closed" mode
   
@@ -111,16 +120,14 @@ Scenario: Display both open and closed consults
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded consult applet
-  And user unchecks the flagged checkbox from consult applet
   And user selects to show only "Open and Closed" consults
-  Then Consult applet shows both Open and Closed consults
+  Then Consult applet shows either Open or Closed consults
 
 @US17739_add_consult_for_another_patient
 Scenario: Create a physical therapy consult for another patient and verify in staff view screen
 
   Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "two1234" verifycode as  "two1234!!"
   And staff view screen is displayed
-  And user unchecks the flagged checkbox from consult applet
   And the user takes note of number of existing consults
   Then user searches for and selects "eight,inpatient"
   Then Summary View is active
@@ -142,7 +149,6 @@ Scenario: Verify consult applet in staff view screen displays multiple patients 
   | Patient Name |
   | Flag         |
   | Consult       |
-  And user unchecks the flagged checkbox from consult applet
   Then user verifies the consults applet has following patients listed
   | Patients            |
   | BCMA,EIGHT (0008)   |

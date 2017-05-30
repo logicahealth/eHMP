@@ -212,7 +212,8 @@ def get_container(key)
   container = nil
 
   case key.downcase
-  when "coversheet"
+  when "coversheet", "documents"
+    p 'returning coversheetcontainer'
     container = CoversheetContainer.instance
   when "numeric lab results"
     container = LabResultsContainer.instance
@@ -220,8 +221,9 @@ def get_container(key)
     container = OrdersContainer.instance
   when "text search"
     container = TextSearchContainer.instance
-  when "documents"
-    container = DocumentsDateFilter.instance
+  # DELETE WHEN ALL TESTS PASS IN PIPELINE
+  # when "documents"
+  #   container = DocumentsDateFilter.instance
   when "med review"
     container = MedReviewDateFilter.instance
   when "newsfeed"
@@ -277,7 +279,6 @@ def get_container_key(control_name, parent_name)
   container_key.modal_or_applet = parsed_name.modal_or_applet.nil? ? parsed_name.parent_name : parsed_name.modal_or_applet
 
   container_key.map_key = "#{container_key.modal_or_applet} - #{control_name}"
-
   return container_key
 end
 
@@ -359,7 +360,7 @@ Then(/^the modal's title is "(.*?)"$/) do |expected_title|
   max_attempt = 4
   begin
     @ehmp.wait_until_fld_modal_title_visible
-    wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+    wait = Selenium::WebDriver::Wait.new(:timeout => 30)
     wait.until { @ehmp.fld_modal_title.text.upcase != "LOADING..." }
     expect(@ehmp.fld_modal_title.text.upcase).to include(expected_title.upcase)
   rescue Exception => e

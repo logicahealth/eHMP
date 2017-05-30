@@ -45,7 +45,7 @@ define([
         },
 
         addPDF: function(newWindow) {
-            var pdfLink = '<div class="add-pdf-container"><a id="save_as_pdf" href="' + helpMappings.pdf_version.url + '" target="_blank">PDF Version</a></div>';
+            var pdfLink = '<a id="save_as_pdf" href="' + helpMappings.pdf_version.url + '" target="_blank">PDF Version</a>';
             $(newWindow.document).find('body').append(pdfLink);
         },
 

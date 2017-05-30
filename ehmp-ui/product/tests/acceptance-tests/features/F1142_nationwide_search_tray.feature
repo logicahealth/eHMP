@@ -1,4 +1,4 @@
-@F1142 @US17413 @reg1
+@F1142 @US17413 @reg2
 Feature: Home Page Usability (Staff View) - Implement Nationwide search tray
 
 Background:
@@ -23,7 +23,7 @@ Scenario: Verify nationwide tray displays a help button
     When the user opens the Nationwide tray
     And the Nationwide tray displays a help button
 
-@F1142_nationwide_3
+@F1142_nationwide_3 @DE7713
 Scenario: Verify nationwide search results are in correct format
   When the user opens the Nationwide tray
   And the user enters last name "Eight" in nationwide tray
@@ -36,8 +36,10 @@ Scenario: Verify nationwide search results are in correct format
     | header        |
     | Patient Name  |
     | Date of Birth |
+    | Gender        |
   And the Nationwide Tray patient name search results are in format Last Name, First Name + (First Letter in Last Name + Last 4 SSN )
-  And the Nationwide Tray date of birth search results are in format Date (Agey) - Gender (first letter)
+  And the Nationwide Tray date of birth search results are in format Date (Agey)
+  And the Nationwide Tray gender search results are in terms Male, Female or Unknown
 
 @F1142_nationwide_4
 Scenario: Verify correct error message displayed when no search results returned

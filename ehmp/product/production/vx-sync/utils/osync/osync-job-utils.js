@@ -9,11 +9,11 @@ osync.createOpportunisticSyncRequest = function(rootJob) {
     return osync.create(osync.opportunisticSyncRequestType(), rootJob);
 };
 
-osync.createAdmissionsJob = function(log, config, environment, rootJob) {
+osync.createAdmissionsJob = function(log, rootJob) {
     return osync.create(osync.admissionsJobType(), rootJob, log);
 };
 
-osync.createAppointmentsJob = function(log, config, environment, rootJob) {
+osync.createAppointmentsJob = function(log, rootJob) {
     return osync.create(osync.appointmentsJobType(), rootJob, log);
 };
 
@@ -66,6 +66,10 @@ osync.create = function(type, meta, logger) {
 
     if (!_.isUndefined(meta.forceSync)) {
         job.forceSync = meta.forceSync;
+    }
+
+    if (!_.isUndefined(meta.referenceInfo)) {
+        job.referenceInfo = meta.referenceInfo;
     }
 
     if (!_.isUndefined(meta.jobId)) {

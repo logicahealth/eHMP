@@ -1,7 +1,0 @@
-"chef-server-upload-roles-build-%branch%" {
-	template = 'templates/chef-server-upload-roles-build.tpl'
-	description = "Automatically uploads all roles to chef-server when any role has changed or been added into the following: roles/"
-	
-   gitUrl = 'https://code.vistacore.us/scm/pi/chef-repo.git'
-   gitBranch = '%branch%'
-}

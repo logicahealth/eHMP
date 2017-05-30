@@ -4,7 +4,7 @@ table {
     }
 }
 
-table[class^="table-view"]{
+table[class*="table-view"]{
     &,
     thead,
     tbody {
@@ -52,6 +52,9 @@ table[class^="table-view"]{
         th, tr {
             border-bottom: none;
             text-align: left;
+            > span {
+                cursor: not-allowed;
+            }
             button {
             	color: $grey-darkest;
     			font-weight: bold;

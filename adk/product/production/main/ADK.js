@@ -8,9 +8,11 @@ define([
     'api/PatientRecordService',
     'api/UserService',
     'main/Session',
-    'main/ui_components/components',
+    'main/UILibrary',
     'main/accessibility/components',
     'main/resources/resources',
+    'main/collections/collections',
+    'main/models/models',
     'main/Utils',
     'api/Messaging',
     'api/AutoLogoff',
@@ -21,31 +23,17 @@ define([
     'api/Navigation',
     'api/Checks',
     'api/Enrichment',
+    'api/Errors',
     'main/backgrid/datagrid',
     'main/backgrid/filter',
     'main/backgrid/paginator',
     'main/components/views/appletControllerView',
     'main/components/applets/grid_applet/gridAppletView',
-    'main/ui_components/workflow/component',
-    'main/components/views/loadingView',
-    'main/components/views/errorView',
-    'main/components/views/appletViews/eventsGistView/views/eventsGistView',
-    'main/components/views/appletViews/pillsGistView/views/pillGistView',
-    'main/components/views/appletViews/interventionsGistView/views/interventionsGistView',
-    'main/components/views/appletViews/observationsGistView/views/observationsGistView',
-    'main/components/applets/baseDisplayApplet/view',
-    'main/components/views/appletViews/gridView/view',
-    'main/components/views/appletViews/pillsGistView/view',
-    'main/components/views/appletViews/interventionsGistView/view',
-    'main/components/views/appletViews/eventsGistView/view',
-    'main/components/views/appletViews/observationsGistView/view',
+    'main/components/views/loadingView', // remove and use UILibrary.Loading when "create" pattern is removed
+    'main/components/views/errorView', // remove and use UILibrary.Error when "create" pattern is removed
     "main/components/appletToolbar/appletToolbarView",
-    'main/components/applet_chrome/chromeView',
     'main/components/popup/popup',
     'main/components/views/appletViews/TileSortManager',
-    'main/ui_components/tray/views/summary/view',
-    'main/ui_components/tray/views/action_summary_list/view',
-    'main/ui_components/tray/views/sub_tray_button/view',
     'main/components/behaviors/behaviors',
     'main/ADKApp',
     'main/layouts/layouts',
@@ -60,9 +48,11 @@ define([
     patientRecordService,
     userService,
     session,
-    UIComponents,
+    UILibrary,
     Accessibility,
     Resources,
+    Collections,
+    Models,
     utils,
     messaging,
     autoLogoff,
@@ -73,31 +63,17 @@ define([
     navigation,
     checks,
     Enrichment,
+    Errors,
     DataGrid,
     Filter,
     Paginator,
     AppletControllerView,
     GridAppletView,
-    Workflow,
     LoadingView,
     ErrorView,
-    EventsGistView,
-    PillGistView,
-    InterventionsGistView,
-    ObservationsGist,
-    baseDisplayApplet,
-    gridView,
-    pillsGistView,
-    interventionsGistView,
-    eventsGistView,
-    ObservationsGistView,
     AppletToolbarView,
-    ChromeView,
     Popup,
     tileSortManager,
-    SummaryViewType,
-    TrayActionSummaryListView,
-    SubTrayButtonView,
     Behaviors,
     ADKApp,
     Layouts,
@@ -105,7 +81,7 @@ define([
 ) {
     'use strict';
 
-    //ADK is moved to the global namespace in order to facilitate better seperation between ehmp-ui and adk.
+    //ADK is moved to the global namespace in order to facilitate better separation between ehmp-ui and adk.
     window.ADK = {
         AutoLogoff: autoLogoff,
         ResourceService: resourceService,
@@ -114,6 +90,7 @@ define([
         Messaging: messaging,
         Navigation: navigation,
         Checks: checks,
+        Errors: Errors,
         utils: utils,
         SessionStorage: sessionStorage,
         ErrorMessaging: errorMessaging,
@@ -122,12 +99,18 @@ define([
         UserDefinedScreens: UserDefinedScreens,
         CCOWService: CCOWService,
         Enrichment: Enrichment,
-        WorkspaceContextRepository: WorkspaceContextRepository
+        WorkspaceContextRepository: WorkspaceContextRepository,
+        Collections: Collections,
+        UserTracker: Tracker,
+        UI: UILibrary,
+        Accessibility: Accessibility,
+        Resources: Resources,
+        Models: Models
     };
 
     ADK.Applets = {
         BaseGridApplet: GridAppletView,
-        BaseDisplayApplet: baseDisplayApplet
+        BaseDisplayApplet: UILibrary.BaseDisplayApplet
     };
 
     //ADK View Components
@@ -138,31 +121,27 @@ define([
         Paginator: Paginator,
         Loading: LoadingView,
         Error: ErrorView,
-        EventGist: EventsGistView,
-        PillGist: PillGistView,
+        EventGist: UILibrary.EventsGistApplet.prototype.AppletView,
+        PillGist: UILibrary.PillsGistApplet.prototype.AppletView,
         AppletToolbarView: AppletToolbarView,
-        InterventionsGist: InterventionsGistView,
-        VitalsGist: ObservationsGist,
-        LabresultsGist: ObservationsGist,
-        TrayActionSummaryList: TrayActionSummaryListView,
-        TraySummaryList: SummaryViewType,
-        SubTrayButton: SubTrayButtonView
+        InterventionsGist: UILibrary.InterventionsGistApplet.prototype.AppletView,
+        VitalsGist: UILibrary.ObservationsGistApplet.prototype.AppletView,
+        LabresultsGist: UILibrary.ObservationsGistApplet.prototype.AppletView,
+        TrayActionSummaryList: UILibrary.TrayActionSummaryList,
+        TraySummaryList: UILibrary.TraySummaryList,
+        SubTrayButton: UILibrary.SubTrayButton,
+        ServerPagingView: UILibrary.ServerPagingApplet
     };
 
     ADK.AppletViews = {
-        GridView: gridView,
-        ChromeView: ChromeView,
-        PillsGistView: pillsGistView,
-        InterventionsGistView: interventionsGistView,
-        EventsGistView: eventsGistView,
-        ObservationsGistView: ObservationsGistView,
+        GridView: UILibrary.GridApplet,
+        ChromeView: UILibrary.Chrome,
+        PillsGistView: UILibrary.PillsGistApplet,
+        InterventionsGistView: UILibrary.InterventionsGistApplet,
+        EventsGistView: UILibrary.EventsGistApplet,
+        ObservationsGistView: UILibrary.ObservationsGistApplet
     };
     ADK.AppletViews.GridView.ADK = ADK;
-
-    ADK.UI = UIComponents;
-    ADK.Accessibility = Accessibility;
-
-    ADK.Resources = Resources;
 
     Tracker.start();
 
@@ -300,8 +279,8 @@ define([
     };
 
     ADK.hideAllModals = function() {
-        UIComponents.Modal.hide();
-        UIComponents.Workflow.hide();
+        UILibrary.Modal.hide();
+        UILibrary.Workflow.hide();
     };
 
     return ADK;

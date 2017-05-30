@@ -163,7 +163,7 @@ newrelic.daemon.loglevel = "<%= @resource.daemon_loglevel %>"
 ;          invocations to communicate with the daemon.
 ;
 <% if @resource.daemon_port.nil? %>
-;newrelic.daemon.port = 33142
+;newrelic.daemon.port = PORT
 <% else %>
 newrelic.daemon.port = <%= @resource.daemon_port %>
 <% end %>

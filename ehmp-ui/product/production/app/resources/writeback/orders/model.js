@@ -1,4 +1,6 @@
 define([], function() {
+    'use strict';
+
     var order = ADK.Resources.Writeback.Model.extend({
         resource: 'orders-lab-create',
         vpr: 'orders',

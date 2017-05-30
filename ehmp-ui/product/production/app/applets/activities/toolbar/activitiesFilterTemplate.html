@@ -2,7 +2,7 @@
     <div class="form-inline">
         <div class="form-group">
             <label for="{{instanceId}}-primary-filter-options" class="sr-only">Filter activities by:</label>
-            <select id="{{instanceId}}-primary-filter-options" title="Use up and down arrows to view options and then press enter to select.">
+            <select class="form-control" id="{{instanceId}}-primary-filter-options" title="Use up and down arrows to view options and then press enter to select.">
                 {{#each primaryItem}}
                 <option value="{{value}}" {{#if selected}}selected="true" {{/if}}>{{name}}</option>
                 {{/each}}
@@ -11,7 +11,7 @@
         {{#if secondaryItem.length}}
         <div class="form-group">
             <label for="{{instanceId}}-display-only-options">Display only:</label>
-            <select id="{{instanceId}}-display-only-options" title="Use up and down arrows to view options and then press enter to select.">
+            <select class="form-control" id="{{instanceId}}-display-only-options" title="Use up and down arrows to view options and then press enter to select.">
                 {{#each secondaryItem}}
                 <option value="{{value}}" {{#if selected}}selected="true" {{/if}}>{{name}}</option>
                 {{/each}}

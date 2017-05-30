@@ -105,81 +105,9 @@ When(/^the user clicks the "(.*?)"$/) do |html_action_element|
   end
 end
 
-#Validate the headers of the modal table
-Then(/^the modal view contains the headers$/) do |table|
-  driver = TestSupport.driver
-  num_of_rows = driver.find_elements(:css, "#modal-header div")
-  #Loop through rows in cucumber   
-  table.rows.each do |row_defined_in_cucumber|
-    matched = false
-    #Loop through UI rows
-    for i in 1..num_of_rows.length
-      row_data = driver.find_elements(:css, "#mainModalLabel")     
-      if row_defined_in_cucumber.length != row_data.length
-        matched = false
-        p "The number of columns in the UI is #{row_data.length} but in cucumber it's #{row_defined_in_cucumber.length}"
-      else 
-        matched = avoid_block_nesting(row_defined_in_cucumber, row_data)            
-      end         
-      if matched
-        break 
-      end
-    end # for loop  
-    p "could not match data: #{row_defined_in_cucumber}" unless matched  
-    driver.save_screenshot("incorrect_rows.png") unless matched
-    expect(matched).to be_true
-  end #do loop  
-end
-
-#Validate the rows of the modal view 
-Then(/^the modal body contains the rows$/) do |table|
-  driver = TestSupport.driver
-  num_of_rows = driver.find_elements(:css, "#modal-body div div")
-  #Loop through rows in cucumber   
-  table.rows.each do |row_defined_in_cucumber|
-    matched = false
-    #Loop through UI rows
-    for i in 1..num_of_rows.length
-      row_data = driver.find_elements(:css, "#modal-body > div > div:nth-child(#{i}) > div")     
-      if row_defined_in_cucumber.length != row_data.length
-        matched = false
-        p "The number of columns in the UI is #{row_data.length} but in cucumber it's #{row_defined_in_cucumber.length}"
-      else 
-        matched = avoid_block_nesting(row_defined_in_cucumber, row_data)            
-      end         
-      if matched
-        break 
-      end
-    end # for loop  
-    p "could not match data: #{row_defined_in_cucumber}" unless matched  
-    driver.save_screenshot("incorrect_rows.png") unless matched
-    expect(matched).to be_true
-  end #do loop  
-end
-
 #Enter Search Term
 When(/^the user enters "(.*?)" into the "(.*?)"$/) do |text, html_element|
   navigation = Navigation.instance
   navigation.wait_until_action_element_visible(html_element, DefaultLogin.wait_time)
   expect(navigation.perform_action(html_element, text)).to be_true, "Error when attempting to enter '#{text}' into #{html_element}"
-end
-
-Then(/^the modal closes$/) do
-  driver = TestSupport.driver
-  wait_until_modal_is_not_displayed
-end
-
-Then(/^user goes to bottom of screen$/) do
-  driver = TestSupport.driver
-  wait_until_modal_is_not_displayed
-  navigation = Navigation.instance
-  driver.execute_script("document.querySelector('#toc_ccd_Medications').scrollIntoView()")
-  #driver.execute_script("$('#modal-body').scrollTop(500)")  
-end
-
-Then(/^user goes to top of screen$/) do
-  driver = TestSupport.driver
-  #wait_until_modal_is_not_displayed
-  navigation = Navigation.instance
-  driver.execute_script("$('#modal-body').scrollTop(0)")
 end

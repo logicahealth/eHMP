@@ -90,8 +90,8 @@ describe('operational-sync-endpoint-handler integration test', function() {
             },
             jds: _.defaults(wConfig.jds, {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             })
         };
         beforeEach(function() {
@@ -276,8 +276,8 @@ describe('operational-sync-endpoint-handler integration test', function() {
         var config = {
             jds: _.defaults(wConfig.jds, {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             })
         };
         //Clear the metastamps for the sites used in these tests

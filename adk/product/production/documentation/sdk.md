@@ -17,7 +17,9 @@
         <ul>
             <li>
                 <div class="component ehmp-ui">
-                    <h2>eHMP UI</h2>
+                    <a href="ui/applets/README.md"><h2>eHMP UI</h2></a>
+                    <p>eHMP's User Interface</p>
+                    <p class="hidden-xs"><a href="ui/applets/README.md" class="btn btn-default" id="ui_link" role="button">Developer Guide <i class="fa fa-chevron-right fa-sm"></i></a></p>
                     <div class="component adk">
                         <a href="adk/index.md"><h2>ADK</h2></a>
                         <p>Application Development Kit</p>

@@ -23,7 +23,7 @@ Scenario: Sign out from eHMP coversheet page
 @US17388_logout_documents_applet
 Scenario: Sign out from eHMP documents applet
   Given user searches for and selects "BCMA,Eight"
-  And user navigates to Documents Applet
+  And user navigates to Documents Screen
   Then the Documents Expanded applet is displayed
   And user logs out
   
@@ -32,13 +32,6 @@ Scenario: Sign out from eHMP timeline applet
   Given user searches for and selects "BCMA,Eight"
   And user navigates to Timeline Applet
   Then the Timeline Summary applet is displayed
-  And user logs out
-  
-@US17388_logout_medsreview_applet
-Scenario: Sign out from eHMP Meds Review applet
-  Given user searches for and selects "BCMA,Eight"
-  And user navigates to Meds Review Applet
-  Then the Med Review applet is displayed
   And user logs out
   
 @US17388_logout_cancel

@@ -44,61 +44,61 @@ define([
             response = null;
         });
 
-        it('Test getContraindicated is false', function() {
-            response = Util.getContraindicated(response);
+        it('Test createContraindicated is false', function() {
+            response.contraindicatedDisplay = Util.createContraindicated(_.get(response, 'contraindicated', ''));
 
             expect(response.contraindicatedDisplay).toEqual('No');
         });
 
-        it('Test getContraindicated is true', function() {
+        it('Test createContraindicated is true', function() {
             response.contraindicated = true;
-            response = Util.getContraindicated(response);
+            response.contraindicatedDisplay = Util.createContraindicated(_.get(response, 'contraindicated', ''));
 
             expect(response.contraindicatedDisplay).toEqual('Yes');
         });
 
-        it('Test getFacilityColor sets DOD color ', function() {
+        it('Test createFacilityColor sets DOD color ', function() {
             response.facilityCode = 'DOD';
-            response = Util.getFacilityColor(response);
+            response.facilityColor = Util.createFacilityColor(_.get(response, 'facilityCode', ''));
 
             expect(response.facilityColor).toEqual('DOD');
         });
 
-        it('Test getFacilityColor sets non-DOD color ', function() {
+        it('Test createFacilityColor sets non-DOD color ', function() {
             response.facilityCode = 'nonDoD';
-            response = Util.getFacilityColor(response);
+            response.facilityColor = Util.createFacilityColor(_.get(response, 'facilityCode', ''));
 
             expect(response.facilityColor).toEqual('nonDOD');
         });
 
-        it('Test getStandardizedName ', function() {
-            response = ResourcePoolUtils.getStandardizedName(response);
+        it('Test createStandardizedName ', function() {
+            response.standardizedName = ResourcePoolUtils.createStandardizedName(_.get(response, 'codes', ''));
 
             expect(response.standardizedName).toBe('anthrax vaccine');
         });
 
-        it('Test getStandardizedName when null ', function() {
+        it('Test createStandardizedName when null ', function() {
             response.codes = null;
             delete response.codes;
-            response = ResourcePoolUtils.getStandardizedName(response);
+            response.standardizedName = ResourcePoolUtils.createStandardizedName(_.get(response, 'codes', ''));
 
             expect(response.standardizedName).toBe('');
         });
 
-        it('Test getStandardizedName when not exists ', function() {
+        it('Test createStandardizedName when system is incorrect ', function() {
             response.codes = [{
                 code: '24',
                 system: 'somethingElse',
                 display: 'anthrax vaccine'
             }];
-            response = ResourcePoolUtils.getStandardizedName(response);
+            response.standardizedName = ResourcePoolUtils.createStandardizedName(_.get(response, 'codes', ''));
 
             expect(response.standardizedName).toBe('');
         });
 
         it('Test hasCommentBubble when there is a comment', function() {
             response.comment = 'This is a test comment';
-            response = Util.hasCommentBubble(response);
+            response.commentBubble = Util.hasCommentBubble(_.get(response, 'comment'));
 
             expect(response.commentBubble).toBeDefined();
         });

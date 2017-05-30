@@ -5,6 +5,19 @@ subprojects {
   ext.set('groupId', 'us.vistacore.jbpm')
   ext.set('commitCountDir', projectDir)
 
+  ext.set('javaVersion', '1.8')
+  ext.set('targetJavaVersion', '1.8')
+  ext.set('kie-version', '6.4.0.Final')
+  ext.set('jboss-logging', '3.3.0.Final')
+  ext.set('servlet-api', '3.1.0')
+  ext.set('commons-lang3', '3.4')
+  ext.set('spring-version', '4.2.4.RELEASE')
+  ext.set('gson-version', '2.6.2')
+  ext.set('json-version', '20160810')
+  ext.set('joda-version', '2.9')
+  ext.set('junit-version', '3.8.1')
+
+
   def repoCommitCountClosure = {
     def proc1 = ['sh', '-c', "git rev-list --full-history --all ${->commitCountDir}"].execute()
     def proc2 = 'wc -l'.execute()

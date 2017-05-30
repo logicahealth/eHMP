@@ -1,7 +1,7 @@
 description "<%= @name %> monitoring process"
 
-start on runlevel [<%= @level %>]
-stop on runlevel [!<%= @level %>]
+start on started <%= @depends_on %> or runlevel [<%= @level %>]
+stop on stopping <%= @depends_on %>
 
 expect daemon
 respawn

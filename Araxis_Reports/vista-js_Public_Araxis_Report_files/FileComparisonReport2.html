@@ -1,0 +1,813 @@
+<!--?xml version="1.0"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mg="http://www.araxis.com/2002/Merge/Reporting" xmlns="http://www.w3.org/1999/xhtml">
+ <head> 
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  <!--The layout and design of this report is Copyright © 2003-2016 Araxis Ltd. All rights reserved.--> 
+  <!--The copyright of the data content of this report belongs to the relevant copyright holders.--> 
+  <title>2. EPMO Open Source Coordination Office Redaction File Detail Report</title> 
+  <style type="text/css">
+body { background: #fff;  color: #000; margin: 0px 14px 14px 14px; }
+h1, h2, h3, h4, h5 {
+  padding: 0em;
+  margin: 1.5em 0em .25em 0em;
+  text-align: left;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 70%;
+  max-width: 55em;
+}
+body, h4, h5, p, ol, ul, li, td, th { font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; }
+
+h4, h5, p, ol, ul, li { font-size: 70%; }
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120%;
+}
+
+h1 { margin: 14px 0em 1.2em 0em; font-size: 112%; line-height: 130%;}
+h2 { font-size: 125%; line-height: 84%;}
+h3 { margin-top: 1.4em; font-size: 81%; }
+h4 { margin-top: 1em; font-size: 70%; }
+h5 { margin-top: 1em; font-size: 100%; font-style: italic;}
+h1 strong, h2 strong, h3 strong, h4 strong { font-weight: bold; }
+
+p { margin: 6px 0em 6px 0em; max-width: 55em;}
+p.code, code {}
+p { font-size: 70%; line-height: 125%; }
+table { font-size: 70%;}
+
+p.copyright, .small { font-size: 60%; line-height: 120%; }
+p.copyright { margin: 3px 0px 0px 0px; padding: 0px; text-align: left; }
+acronym { font-variant: small-caps; }
+div.pad { padding: 3px; }
+span.lineEndings { color: red; font-size: 70%; }
+
+table.mgRowGroup, table.mgRowGroupFolder { border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px; width: 100%; table-layout: fixed; border-collapse: collapse; }
+table.mgRowGroup td { vertical-align: top; padding: 0; }
+table.mgRowGroupFolder td { vertical-align: top; padding: 1px 0 1px 0; }
+div.IP { width: 2px; height: 1em; float: left; }
+
+img.mgFldrIcon {float: left; text-align: left; margin: -1px 2px 0px 0px;  height: 16px; width: 16px; border: none; vertical-align: top; background-color: transparent;}
+div.mgFldrIcon {float: left; width: auto;}
+span.left {float: left;width: auto;}
+span.right {float: right;width: auto;}
+
+table.bordered { border-collapse: collapse; border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px;}
+table.bordered th, table.bordered td { vertical-align: top; padding: 3px; border: 1px solid #a0a0a0;}
+table.bordered th { background-color: #e5e5e5; }
+table.bordered td.group { background-color: #f5f5f5; }
+span.disabledNavigation { color: #a0a0a0; }
+div.navigation { margin-top: 14px; font-size: 70%; }
+div.comment { font-weight: normal; color: #000; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #fcfed8; padding: 2px 5px 2px 5px; border: 1px solid #E3E5C3; margin: 1px 2px 3px 2px; -moz-border-radius: 7px; border-radius: 7px; }
+
+                span.U1, span.U1 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U1 a {text-decoration: underline;}
+td.U1 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1, span.R1 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1 a {text-decoration: underline;}
+td.R1 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1, span.I1 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1 a {text-decoration: underline;}
+td.I1 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1, span.C1 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1 a {text-decoration: underline;}
+td.C1 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC1 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+span.U2, span.U2 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U2 a {text-decoration: underline;}
+td.U2 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2, span.R2 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2 a {text-decoration: underline;}
+td.R2 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2, span.I2 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2 a {text-decoration: underline;}
+td.I2 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2, span.C2 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2 a {text-decoration: underline;}
+td.C2 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC2 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+
+span.selected {background-color: #3d80df; color: #fff;}
+span.selected a {background-color: #3d80df; color: #fff; text-decoration: underline;}
+span.symbol {cursor: pointer;}
+      </style> 
+ </head> 
+ <body> 
+  <h1><strong>2. EPMO Open Source Coordination Office Redaction File Detail Report</strong></h1> 
+  <p>Produced by <strong>Araxis Merge</strong> on <strong>5/26/2017 3:37:32 PM Central Daylight Time</strong>. See <a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a> for information about Merge. This report uses XHTML and CSS2, and is best viewed with a modern standards-compliant browser. For optimum results when printing this report, use landscape orientation and enable printing of background images and colours in your browser.</p> 
+  <h3><strong>2.1&nbsp;Files compared</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th>#</th> 
+     <th>Location</th> 
+     <th>File</th> 
+     <th>Last Modified</th> 
+    </tr> 
+    <tr> 
+     <td>1</td> 
+     <td>vista-js.zip\vista-js\src</td> 
+     <td>examples.js</td> 
+     <td>Tue Sep 27 13:46:04 2016 UTC</td> 
+    </tr> 
+    <tr> 
+     <td>2</td> 
+     <td>vista-js.zip\vista-js\src</td> 
+     <td>examples.js</td> 
+     <td>Fri May 26 20:06:49 2017 UTC</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>2.2&nbsp;Comparison summary</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th rowspan="2" style="vertical-align: bottom;">Description</th> 
+     <th colspan="2">Between<br>Files 1 and 2</th> 
+    </tr> 
+    <tr> 
+     <th style="text-align: right;">Text Blocks</th> 
+     <th style="text-align: right;">Lines</th> 
+    </tr> 
+    <tr> 
+     <td>Unchanged</td> 
+     <td style="text-align: right;">2</td> 
+     <td style="text-align: right;">238</td> 
+    </tr> 
+    <tr> 
+     <td>Changed</td> 
+     <td style="text-align: right;">1</td> 
+     <td style="text-align: right;">10</td> 
+    </tr> 
+    <tr> 
+     <td>Inserted</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+    <tr> 
+     <td>Removed</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>2.3&nbsp;Comparison options</strong></h3> 
+  <table class="bordered" style="width: 55em;"> 
+   <tbody>
+    <tr> 
+     <th>Whitespace</th> 
+     <td></td> 
+    </tr> 
+    <tr> 
+     <th>Character case</th> 
+     <td>Differences in character case are significant</td> 
+    </tr> 
+    <tr> 
+     <th>Line endings</th> 
+     <td>Differences in line endings (<code>CR</code> and <code>LF</code> characters) are ignored</td> 
+    </tr> 
+    <tr> 
+     <th>CR/LF characters</th> 
+     <td>Not shown in the comparison detail</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>2.4&nbsp;Active regular expressions</strong></h3> 
+  <p>No regular expressions were active.</p> 
+  <h3><strong>2.5&nbsp;Comparison detail</strong></h3> 
+  <table class="mgRowGroup"> 
+   <colgroup>
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+    <col style="width: 1em;"> 
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+   </colgroup>
+   <tbody>
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">1</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">'use&nbsp;stric</span> <span class="U2">t';</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">2</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">3</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;util&nbsp;=</span> <span class="U2">&nbsp;require('</span> <span class="U2">util');</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">4</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;_&nbsp;=&nbsp;re</span> <span class="U2">quire('und</span> <span class="U2">erscore');</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">5</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;clc&nbsp;=&nbsp;</span> <span class="U2">require('c</span> <span class="U2">li-color')</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">6</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;moment</span> <span class="U2">&nbsp;=&nbsp;require</span> <span class="U2">('moment')</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">7</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;RpcCli</span> <span class="U2">ent&nbsp;=&nbsp;requ</span> <span class="U2">ire('./Rpc</span> <span class="U2">Client').R</span> <span class="U2">pcClient;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">8</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;logger</span> <span class="U2">&nbsp;=&nbsp;require</span> <span class="U2">('bunyan')</span> <span class="U2">.createLog</span> <span class="U2">ger({</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">9</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;name:&nbsp;</span> <span class="U2">'RpcClient</span> <span class="U2">',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">10</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;level:</span> <span class="U2">&nbsp;'trace'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">11</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">12</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">13</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">14</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">15</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">///</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">16</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">/*</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">17</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">TO&nbsp;DO:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">18</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">19</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">1.&nbsp;handle&nbsp;</span> <span class="U2">default&nbsp;lo</span> <span class="U2">gging&nbsp;bett</span> <span class="U2">er&nbsp;(maybe&nbsp;</span> <span class="U2">throw&nbsp;an&nbsp;e</span> <span class="U2">xception,&nbsp;</span> <span class="U2">or&nbsp;write&nbsp;t</span> <span class="U2">o&nbsp;console.</span> <span class="U2">log)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">20</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">2.&nbsp;add&nbsp;3rd</span> <span class="U2">&nbsp;parameter</span> <span class="U2">&nbsp;to&nbsp;callba</span> <span class="U2">ck&nbsp;with&nbsp;ad</span> <span class="U2">ditional&nbsp;r</span> <span class="U2">eturned&nbsp;in</span> <span class="U2">fo&nbsp;(i.e.&nbsp;a</span> <span class="U2">uthenticat</span> <span class="U2">ion,&nbsp;etc.)</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">21</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">3.&nbsp;add&nbsp;aut</span> <span class="U2">henticate(</span> <span class="U2">)&nbsp;function</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">22</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">4.&nbsp;get&nbsp;rid</span> <span class="U2">&nbsp;of&nbsp;'throw</span> <span class="U2">'&nbsp;in&nbsp;resul</span> <span class="U2">ts&nbsp;process</span> <span class="U2">ing</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">23</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">5.&nbsp;look&nbsp;in</span> <span class="U2">to&nbsp;connect</span> <span class="U2">ion&nbsp;poolin</span> <span class="U2">g&nbsp;(can&nbsp;the</span> <span class="U2">&nbsp;user&nbsp;be&nbsp;c</span> <span class="U2">hanged?&nbsp;ca</span> <span class="U2">n&nbsp;multiple</span> <span class="U2">&nbsp;RPCs&nbsp;be&nbsp;c</span> <span class="U2">alled?):</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">24</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">25</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">*/</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">26</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">//////////</span> <span class="U2">///</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">27</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">28</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">29</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">30</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">function&nbsp;i</span> <span class="U2">nspect(obj</span> <span class="U2">)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">31</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;return</span> <span class="U2">&nbsp;obj&nbsp;?&nbsp;uti</span> <span class="U2">l.inspect(</span> <span class="U2">obj,&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">32</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;de</span> <span class="U2">pth:&nbsp;null</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">33</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;})&nbsp;:&nbsp;'</span> <span class="U2">';</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">34</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">35</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">36</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">function&nbsp;p</span> <span class="U2">rintResult</span> <span class="U2">(error,&nbsp;re</span> <span class="U2">sult)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">37</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;consol</span> <span class="U2">e.log(clc.</span> <span class="U2">red(inspec</span> <span class="U2">t(error)))</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">38</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;consol</span> <span class="U2">e.log(clc.</span> <span class="U2">cyan(inspe</span> <span class="U2">ct(result)</span> <span class="U2">));</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">39</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">40</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">41</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">function&nbsp;p</span> <span class="U2">rintJsonRe</span> <span class="U2">sult(error</span> <span class="U2">,&nbsp;result)&nbsp;</span> <span class="U2">{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">42</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;consol</span> <span class="U2">e.log(clc.</span> <span class="U2">red(inspec</span> <span class="U2">t(error)))</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">43</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">44</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;ou</span> <span class="U2">tput&nbsp;=&nbsp;res</span> <span class="U2">ult;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">45</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;try&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">46</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ou</span> <span class="U2">tput&nbsp;=&nbsp;JSO</span> <span class="U2">N.parse(re</span> <span class="U2">sult);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">47</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;catc</span> <span class="U2">h&nbsp;(err)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">48</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;use&nbsp;defau</span> <span class="U2">lt</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">49</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">50</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">51</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;consol</span> <span class="U2">e.log(clc.</span> <span class="U2">cyan(inspe</span> <span class="U2">ct(output)</span> <span class="U2">));</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">52</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">53</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">54</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;contex</span> <span class="U2">t&nbsp;=&nbsp;'OR&nbsp;CP</span> <span class="U2">RS&nbsp;GUI&nbsp;CHA</span> <span class="U2">RT';</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">55</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">56</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;config</span> <span class="U2">uration&nbsp;=&nbsp;</span> <span class="U2">{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">57</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;contex</span> <span class="U2">t:&nbsp;'HMP&nbsp;UI</span> <span class="U2">&nbsp;CONTEXT',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">58</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">host:&nbsp;'</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">59</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">port:&nbsp;</span> <span class="C2">PORT</span> <span class="U2">,</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">60</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">accessCode</span> <span class="U2">:&nbsp;'</span> <span class="C2">REDACTED</span> <span class="U2">',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">61</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">verifyCode</span> <span class="U2">:&nbsp;'</span> <span class="C2">REDACTED</span> <span class="U2">',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">62</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">localIP:&nbsp;'</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">63</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;localA</span> <span class="U2">ddress:&nbsp;'l</span> <span class="U2">ocalhost'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">64</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">65</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">66</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">67</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;VistaJS</span> <span class="U2">.callRpc(l</span> <span class="U2">ogger,&nbsp;con</span> <span class="U2">figuration</span> <span class="U2">,&nbsp;'ORWDAL3</span> <span class="U2">2&nbsp;ALLERGY&nbsp;</span> <span class="U2">MATCH',&nbsp;Vi</span> <span class="U2">staJS.RpcP</span> <span class="U2">arameter.l</span> <span class="U2">iteral('AM</span> <span class="U2">P'),&nbsp;print</span> <span class="U2">Result);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">68</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;VistaJS</span> <span class="U2">.callRpc(l</span> <span class="U2">ogger,&nbsp;con</span> <span class="U2">figuration</span> <span class="U2">,&nbsp;'ORWDAL3</span> <span class="U2">2&nbsp;ALLERGY&nbsp;</span> <span class="U2">MATCH',&nbsp;'A</span> <span class="U2">MP',&nbsp;print</span> <span class="U2">Result);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">69</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">70</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;VistaJS</span> <span class="U2">.callRpc(l</span> <span class="U2">ogger,&nbsp;con</span> <span class="U2">figuration</span> <span class="U2">,&nbsp;'VPRCRPC</span> <span class="U2">&nbsp;RPC',&nbsp;{&nbsp;'</span> <span class="U2">"command"'</span> <span class="U2">:&nbsp;'logPati</span> <span class="U2">entAccess'</span> <span class="U2">,&nbsp;'"patien</span> <span class="U2">tId"':&nbsp;'16</span> <span class="U2">7'&nbsp;},&nbsp;prin</span> <span class="U2">tResult);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">71</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;respons</span> <span class="U2">e&nbsp;-&gt;&nbsp;'{"re</span> <span class="U2">sult":"ok"</span> <span class="U2">}'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">72</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">73</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">RpcClient.</span> <span class="U2">callRpc(lo</span> <span class="U2">gger,&nbsp;conf</span> <span class="U2">iguration,</span> <span class="U2">&nbsp;'VPRCRPC&nbsp;</span> <span class="U2">RPC',&nbsp;{&nbsp;'"</span> <span class="U2">command"':</span> <span class="U2">&nbsp;'getPatie</span> <span class="U2">ntChecks',</span> <span class="U2">&nbsp;'"patient</span> <span class="U2">Id"':&nbsp;'3'&nbsp;</span> <span class="U2">},&nbsp;printRe</span> <span class="U2">sult);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">74</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;respons</span> <span class="U2">e&nbsp;-&gt;&nbsp;'{}'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">75</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">76</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;VistaJS</span> <span class="U2">.callRpc(l</span> <span class="U2">ogger,&nbsp;con</span> <span class="U2">figuration</span> <span class="U2">,&nbsp;'VPRCRPC</span> <span class="U2">&nbsp;RPC',&nbsp;{&nbsp;'</span> <span class="U2">"command"'</span> <span class="U2">:&nbsp;'getPati</span> <span class="U2">entChecks'</span> <span class="U2">,&nbsp;'"patien</span> <span class="U2">tId"':&nbsp;'16</span> <span class="U2">7'&nbsp;},&nbsp;prin</span> <span class="U2">tResult);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">77</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;respons</span> <span class="U2">e&nbsp;-&gt;&nbsp;'{"se</span> <span class="U2">nsitive":{</span> <span class="U2">"dfn":167,</span> <span class="U2">"logAccess</span> <span class="U2">":true,"ma</span> <span class="U2">yAccess":t</span> <span class="U2">rue,"text"</span> <span class="U2">:"\\r\\n**</span> <span class="U2">*RESTRICTE</span> <span class="U2">D&nbsp;RECORD**</span> <span class="U2">*\\r\\n*&nbsp;*</span> <span class="U2">&nbsp;*&nbsp;*&nbsp;*&nbsp;*&nbsp;*</span> <span class="U2">&nbsp;*&nbsp;*&nbsp;*&nbsp;*&nbsp;*</span> <span class="U2">&nbsp;*&nbsp;*&nbsp;*&nbsp;*&nbsp;*</span> <span class="U2">&nbsp;*&nbsp;*&nbsp;*&nbsp;*&nbsp;*</span> <span class="U2">&nbsp;*&nbsp;*&nbsp;*&nbsp;*&nbsp;*</span> <span class="U2">&nbsp;*&nbsp;*&nbsp;*&nbsp;*&nbsp;*</span> <span class="U2">&nbsp;*&nbsp;*&nbsp;*&nbsp;*&nbsp;*</span> <span class="U2">&nbsp;\\r\\n*&nbsp;T</span> <span class="U2">his&nbsp;record</span> <span class="U2">&nbsp;is&nbsp;protec</span> <span class="U2">ted&nbsp;by&nbsp;the</span> <span class="U2">&nbsp;Privacy&nbsp;A</span> <span class="U2">ct&nbsp;of&nbsp;1974</span> <span class="U2">&nbsp;and&nbsp;the&nbsp;H</span> <span class="U2">ealth&nbsp;&nbsp;&nbsp;&nbsp;*</span> <span class="U2">\\r\\n*&nbsp;In</span> <span class="U2">surance&nbsp;Po</span> <span class="U2">rtability&nbsp;</span> <span class="U2">and&nbsp;Accoun</span> <span class="U2">tability&nbsp;A</span> <span class="U2">ct&nbsp;of&nbsp;1996</span> <span class="U2">.&nbsp;If&nbsp;you&nbsp;e</span> <span class="U2">lect&nbsp;&nbsp;&nbsp;&nbsp;*\</span> <span class="U2">\r\\n*&nbsp;to&nbsp;</span> <span class="U2">proceed,&nbsp;y</span> <span class="U2">ou&nbsp;will&nbsp;be</span> <span class="U2">&nbsp;required&nbsp;</span> <span class="U2">to&nbsp;prove&nbsp;y</span> <span class="U2">ou&nbsp;have&nbsp;a&nbsp;</span> <span class="U2">need&nbsp;to&nbsp;kn</span> <span class="U2">ow.&nbsp;&nbsp;&nbsp;&nbsp;*\\</span> <span class="U2">r\\n*&nbsp;Acce</span> <span class="U2">ssing&nbsp;this</span> <span class="U2">&nbsp;patient&nbsp;i</span> <span class="U2">s&nbsp;tracked,</span> <span class="U2">&nbsp;and&nbsp;your&nbsp;</span> <span class="U2">station&nbsp;Se</span> <span class="U2">curity&nbsp;Off</span> <span class="U2">icer&nbsp;&nbsp;*\\r</span> <span class="U2">\\n*&nbsp;will&nbsp;</span> <span class="U2">contact&nbsp;yo</span> <span class="U2">u&nbsp;for&nbsp;your</span> <span class="U2">&nbsp;justifica</span> <span class="U2">tion.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*\\r\</span> <span class="U2">\n*&nbsp;*&nbsp;*&nbsp;*&nbsp;</span> <span class="U2">*&nbsp;*&nbsp;*&nbsp;*&nbsp;*&nbsp;</span> <span class="U2">*&nbsp;*&nbsp;*&nbsp;*&nbsp;*&nbsp;</span> <span class="U2">*&nbsp;*&nbsp;*&nbsp;*&nbsp;*&nbsp;</span> <span class="U2">*&nbsp;*&nbsp;*&nbsp;*&nbsp;*&nbsp;</span> <span class="U2">*&nbsp;*&nbsp;*&nbsp;*&nbsp;*&nbsp;</span> <span class="U2">*&nbsp;*&nbsp;*&nbsp;*&nbsp;*&nbsp;</span> <span class="U2">*&nbsp;*&nbsp;*&nbsp;"}}'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">78</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">79</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">80</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;VistaJS</span> <span class="U2">.callRpc(l</span> <span class="U2">ogger,&nbsp;con</span> <span class="U2">figuration</span> <span class="U2">,&nbsp;'ORWU&nbsp;US</span> <span class="U2">ERINFO',&nbsp;p</span> <span class="U2">rintResult</span> <span class="U2">);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">81</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">82</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">RpcClient.</span> <span class="U2">authentica</span> <span class="U2">te(logger,</span> <span class="U2">&nbsp;configura</span> <span class="U2">tion,&nbsp;prin</span> <span class="U2">tResult);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">83</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">84</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">RpcClient.</span> <span class="U2">callRpc(lo</span> <span class="U2">gger,&nbsp;conf</span> <span class="U2">iguration,</span> <span class="U2">&nbsp;'VPR&nbsp;GET&nbsp;</span> <span class="U2">PATIENT&nbsp;DA</span> <span class="U2">TA&nbsp;JSON',&nbsp;</span> <span class="U2">{&nbsp;'"patien</span> <span class="U2">tId"':&nbsp;'8'</span> <span class="U2">,&nbsp;'"domain</span> <span class="U2">"':&nbsp;'aller</span> <span class="U2">gy'&nbsp;},&nbsp;pri</span> <span class="U2">ntResult);</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">85</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">86</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;VistaJS</span> <span class="U2">.callRpc(l</span> <span class="U2">ogger,&nbsp;con</span> <span class="U2">figuration</span> <span class="U2">,&nbsp;'ORWDAL3</span> <span class="U2">2&nbsp;SYMPTOMS</span> <span class="U2">',&nbsp;[</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">87</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vis</span> <span class="U2">taJS.RpcPa</span> <span class="U2">rameter.li</span> <span class="U2">teral(''),</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">88</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vis</span> <span class="U2">taJS.RpcPa</span> <span class="U2">rameter.li</span> <span class="U2">teral('1')</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">89</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;],&nbsp;prin</span> <span class="U2">tResult);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">90</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">91</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;VistaJS</span> <span class="U2">.callRpc(l</span> <span class="U2">ogger,&nbsp;con</span> <span class="U2">figuration</span> <span class="U2">,&nbsp;'ORWDAL3</span> <span class="U2">2&nbsp;SYMPTOMS</span> <span class="U2">',&nbsp;['',&nbsp;'1</span> <span class="U2">'],&nbsp;printR</span> <span class="U2">esult);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">92</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">93</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">RpcClient.</span> <span class="U2">callRpc(lo</span> <span class="U2">gger,&nbsp;conf</span> <span class="U2">iguration,</span> <span class="U2">&nbsp;'ORWDAL32</span> <span class="U2">&nbsp;SYMPTOMS'</span> <span class="U2">,&nbsp;'',&nbsp;'1',</span> <span class="U2">&nbsp;printResu</span> <span class="U2">lt);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">94</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;VistaJS</span> <span class="U2">.callRpc(l</span> <span class="U2">ogger,&nbsp;con</span> <span class="U2">figuration</span> <span class="U2">,&nbsp;'ORWDAL3</span> <span class="U2">2&nbsp;SYMPTOMS</span> <span class="U2">',&nbsp;'',&nbsp;1,&nbsp;</span> <span class="U2">printResul</span> <span class="U2">t);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">95</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">96</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;VistaJS</span> <span class="U2">.callRpc(l</span> <span class="U2">ogger,&nbsp;con</span> <span class="U2">figuration</span> <span class="U2">,&nbsp;'ORWDAL3</span> <span class="U2">2&nbsp;DEF',&nbsp;pr</span> <span class="U2">intResult)</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">97</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">98</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;var&nbsp;all</span> <span class="U2">ergyList&nbsp;=</span> <span class="U2">&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">99</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'"G</span> <span class="U2">MRAGNT"':&nbsp;</span> <span class="U2">'SULFAPYRI</span> <span class="U2">DINE^88;PS</span> <span class="U2">(50.416,',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">100</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'"G</span> <span class="U2">MRATYPE"':</span> <span class="U2">&nbsp;'D^Drug',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">101</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'"G</span> <span class="U2">MRANATR"':</span> <span class="U2">&nbsp;'A^Allerg</span> <span class="U2">y',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">102</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'"G</span> <span class="U2">MRAORIG"':</span> <span class="U2">&nbsp;'10000000</span> <span class="U2">225',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">103</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'"G</span> <span class="U2">MRAORDT"':</span> <span class="U2">&nbsp;'3140904.</span> <span class="U2">1737',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">104</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'"G</span> <span class="U2">MRASYMP",0</span> <span class="U2">':&nbsp;'1',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">105</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'"G</span> <span class="U2">MRASYMP",1</span> <span class="U2">':&nbsp;'39^ANX</span> <span class="U2">IETY^^^',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">106</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'"G</span> <span class="U2">MRACHT",0'</span> <span class="U2">:&nbsp;'1',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">107</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'"G</span> <span class="U2">MRACHT",1'</span> <span class="U2">:&nbsp;'3140904</span> <span class="U2">.17374',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">108</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'"G</span> <span class="U2">MRAOBHX"':</span> <span class="U2">&nbsp;'h^HISTOR</span> <span class="U2">ICAL'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">109</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">110</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">111</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;VistaJS</span> <span class="U2">.callRpc(l</span> <span class="U2">ogger,&nbsp;con</span> <span class="U2">figuration</span> <span class="U2">,&nbsp;'ORWDAL3</span> <span class="U2">2&nbsp;SAVE&nbsp;ALL</span> <span class="U2">ERGY',&nbsp;'0'</span> <span class="U2">,&nbsp;'8',&nbsp;all</span> <span class="U2">ergyList,&nbsp;</span> <span class="U2">printResul</span> <span class="U2">t);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">112</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">113</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">114</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;&nbsp;&nbsp;&nbsp;cont</span> <span class="U2">ext:&nbsp;'VPR&nbsp;</span> <span class="U2">APPLICATIO</span> <span class="U2">N&nbsp;PROXY',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">115</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">116</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;configu</span> <span class="U2">ration.rpc</span> <span class="U2">&nbsp;=&nbsp;'GMV&nbsp;AL</span> <span class="U2">LERGY';</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">117</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;configu</span> <span class="U2">ration.rpc</span> <span class="U2">&nbsp;=&nbsp;'ORQQAL</span> <span class="U2">&nbsp;LIST';</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">118</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//&nbsp;VistaJS</span> <span class="U2">.callRpc(l</span> <span class="U2">ogger,&nbsp;con</span> <span class="U2">figuration</span> <span class="U2">,&nbsp;'ORQQAL&nbsp;</span> <span class="U2">LIST',&nbsp;[Rp</span> <span class="U2">cParameter</span> <span class="U2">.literal('</span> <span class="U2">8')],&nbsp;prin</span> <span class="U2">tResult);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">119</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">120</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">121</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//VistaJS.</span> <span class="U2">callRpc(lo</span> <span class="U2">gger,&nbsp;conf</span> <span class="U2">iguration,</span> <span class="U2">&nbsp;[{&nbsp;type:&nbsp;</span> <span class="U2">'literal',</span> <span class="U2">&nbsp;value:&nbsp;'8</span> <span class="U2">'&nbsp;}]);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">122</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">123</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">124</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">//VistaJS.</span> <span class="U2">callRpc(lo</span> <span class="U2">gger,&nbsp;conf</span> <span class="U2">iguration,</span> <span class="U2">&nbsp;'ORWDAL32</span> <span class="U2">&nbsp;ALLERGY&nbsp;M</span> <span class="U2">ATCH',&nbsp;['t</span> <span class="U2">est'],&nbsp;[1,</span> <span class="U2">&nbsp;2],&nbsp;{&nbsp;tes</span> <span class="U2">t:&nbsp;'value'</span> <span class="U2">&nbsp;},&nbsp;printR</span> <span class="U2">esult);</span> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <p class="copyright" style="margin-top: 25px; padding-top: 2px; border-top: solid #a0a0a0 1px; max-width: none;">Araxis Merge (but not the data content of this report) is Copyright © 1993-2016 Araxis Ltd (<a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a>). All rights reserved.</p>   
+ </body>
+</html>

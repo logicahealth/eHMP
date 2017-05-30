@@ -46,7 +46,7 @@ CallinHalt=1
 CallinStart=1
 CliSysName=
 DBSizesAllowed=8192
-DefaultPort=1972
+DefaultPort=PORT
 DefaultPortBindAddress=
 EnsembleAutoStart=0
 ErrorPurge=30
@@ -65,7 +65,7 @@ TempDirectory=Temp
 TerminalPrompt=8,2
 WebServer=0
 WebServerName=
-WebServerPort=57772
+WebServerPort=PORT
 WebServerURLPrefix=
 ZSTU=1
 
@@ -206,7 +206,7 @@ IdTrxFrom=~ `!@#$%^&*()_+-=[]\{}|;':",./<>?
 IdTrxTo=
 JDBCGatewayAddress=
 JDBCGatewayLog=
-JDBCGatewayPort=62972
+JDBCGatewayPort=PORT
 JavaClassPath=
 JavaHome=
 LockThreshold=1000
@@ -313,7 +313,7 @@ VARCHAR2(%1)=%Library.String(MAXLEN=%1)
 
 [Telnet]
 DNSLookup=ON
-Port=23
+Port=PORT
 
 [Conversions]
 LastConvertTime=2015-03-13 16:05:31

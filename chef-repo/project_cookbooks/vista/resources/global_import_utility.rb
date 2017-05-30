@@ -12,4 +12,5 @@ attribute :duz, :kind_of => Integer, :required => false
 attribute :programmer_mode, :kind_of => [TrueClass, FalseClass], :default => false
 attribute :log, :default => STDOUT
 attribute :import_file, :kind_of => String, :required => true
+attribute :no_cross_ref, :kind_of => [TrueClass, FalseClass], :required => false
 attribute :dik_da_pairs, :kind_of => Array, :default => []

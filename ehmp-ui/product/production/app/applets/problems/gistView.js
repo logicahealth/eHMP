@@ -15,29 +15,26 @@ define([
     'use strict';
 
     var allEncounterDateArray = [];
-    
+
     var gistConfiguration = {
         //TODO: This needs to be moved to the collection
         transformCollection: function(collection) {
             var ProblemGroupModel = ADK.UIResources.Fetch.Problems.Model.extend({});
             var problemGroupsCollection = collection;
             var instanceId = this.options.instanceId;
-            problemGroupsCollection.comparator = function(problemOne, problemTwo) {
-                if (problemOne.get('statusName') === problemTwo.get('statusName')) {
-                    if (problemOne.get('timeSinceDate') > problemTwo.get('timeSinceDate')) {
-                        return -1;
-                    } else if (problemOne.get('timeSinceDate') < problemTwo.get('timeSinceDate')) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                } else {
-                    if (problemOne.get('statusName') === 'Active') {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
+            problemGroupsCollection.comparator = function(a, b) {
+                var statusNameA = a.get('statusName') || '';
+                var statusNameB = b.get('statusName') || '';
+                statusNameA = statusNameA.toLowerCase().trim();
+                statusNameB = statusNameB.toLowerCase().trim();
+                if (!_.isEqual(statusNameA, statusNameB)) {
+                    return statusNameA.localeCompare(statusNameB);
                 }
+                var textA = a.get('groupName') || '';
+                var textB = b.get('groupName') || '';
+                textA = textA.toLowerCase();
+                textB = textB.toLowerCase();
+                return textA.localeCompare(textB);
             };
             var encounterDateArray, problemGroup_EncounterCount;
             //group collection of models by standardizedDescription
@@ -63,7 +60,6 @@ define([
                     headNeckCancerBool: problems[0].get('headNeckCancer') === 'YES',
                     agentOrangeExposure: problems[0].get('agentOrangeExposure'),
                     agentOrangeExposureBool: problems[0].get('agentOrangeExposure') === 'YES',
-                    allGroupedComments: [],
                     acuityName: problems[0].get('acuityName'),
                     statusName: problems[0].get('statusDisplayName'),
                     timeSince: problems[0].get('timeSince'),
@@ -125,26 +121,15 @@ define([
             }
 
             //Going through each Problem Group in the collection
-            for (var q = 0; q < problemGroupsCollection.length; q++) {
+            problemGroupsCollection.each(function(problemGroup) {
                 problemGroup_EncounterCount = 0;
-                var problemGroup = problemGroupsCollection.at(q);
                 //Going through each Problem of the Group
-                for (var r = 0; r < problemGroup.get('probs').length; r++) {
-                    var problem = problemGroup.get('probs')[r];
+                _.each(problemGroup.get('probs'), function(problem) {
                     encounterDateArray = [];
-                    //Push all comments within a group to allGroupedComments array
-                    if (problem.get('comments') && problem.get('comments') !== undefined) {
-                        for (var d = 0; d < problem.get('comments').length; d++) {
-                            var comments = problem.get('comments')[d];
-                            problemGroup.get('allGroupedComments').push(comments.comment);
-                        }
-                    }
 
                     //Push all encounter within a group to allGroupedEncounters array
                     if (problem.get('encounters')) {
-                        for (var s = 0; s < problem.get('encounters').length; s++) {
-                            var encounter = problem.get('encounters')[s];
-
+                        _.each(problem.get('encounters'), function(encounter) {
                             var _date = encounter.dateTime + '';
                             _date = _date.substr(0, 8);
                             var _slashDate = _date.replace(/(\d{4})(\d{2})(\d{2})/, "$2/$3/$1");
@@ -157,7 +142,7 @@ define([
                                 problemText: problemGroup.get('problemText'),
                                 acuity: problemGroup.get('acuityName')
                             });
-                        }
+                        });
                         problem.set('encouterDates', encounterDateArray);
                     } else {
                         // problemGroup.get('timeSinceDate') looks to be in milliseconds
@@ -184,23 +169,24 @@ define([
                     var series = [];
                     allEncounterDateArray.sort(Util.compare);
                     //Going through grouped encounters and add dates and number of encounters to graph property
-                    for (var k = 0; k < allEncountersGroupedByDate.length; k++) {
-                        date = allEncountersGroupedByDate[k].date;
-                        count = allEncountersGroupedByDate[k].count;
+                    _.each(allEncountersGroupedByDate, function(encounterGroupedByDate){
+                        date = encounterGroupedByDate.date;
+                        count = encounterGroupedByDate.count;
 
                         if (max < count) {
                             max = count;
                         }
                         series.push([moment(date, "YYYYMMDD").valueOf(), count]);
-                    }
+                    });
 
                     problemGroup.set('graphData', {
                         series: series
                     });
-                }
+
+                });
 
                 problemGroup.set('encounterCount', problemGroup_EncounterCount);
-            }
+            });
             var oDate, nDate;
             var now = moment.utc().startOf('day').valueOf();
             var newDuration = moment.duration({
@@ -237,12 +223,12 @@ define([
                     key: 'groupName',
                     hoverTip: 'conditions_problem'
                 },
-                acuityName: {
-                    title: 'Acuity',
+                onsetDate: {
+                    title: 'Onset Date',
                     sortable: true,
-                    sortType: 'alphabetical',
-                    key: 'acuityName',
-                    hoverTip: 'conditions_acuity'
+                    sortType: 'date',
+                    key: 'onset',
+                    hoverTip: 'conditions_onsetdate'
                 },
                 statusName: {
                     title: 'Status',
@@ -250,35 +236,22 @@ define([
                     sortType: 'alphabetical',
                     key: 'statusName',
                     hoverTip: 'conditions_status'
-                },
-                facilityMoniker: {
-                    title: 'Facility',
-                    sortable: true,
-                    sortType: 'alphabetical',
-                    key: 'facilityMoniker',
-                    hoverTip: 'conditions_facility'
                 }
             },
             gistModel: [{
                 id: 'groupName',
                 field: 'groupName'
             }, {
-                id: 'allGroupedComments',
-                field: 'allGroupedComments'
-            }, {
-                id: 'facilityMoniker',
-                field: 'facilityMoniker'
-            }, {
                 id: 'statusName',
                 field: 'statusName'
             }, {
-                id: 'acuityName',
-                field: 'acuityName'
+                id: 'onsetDate',
+                field: 'onsetFormatted'
             }, {
                 id: 'problemText',
                 field: 'problemText'
             }],
-            filterFields: ['problemText', 'standardizedDescription', 'acuityName', 'statusName', 'onsetFormatted', 'updatedFormatted', 'providerDisplayName', 'facilityMoniker', 'comments']
+            filterFields: ['problemText', 'standardizedDescription', 'acuityName', 'statusName', 'onsetFormatted', 'updatedFormatted', 'providerDisplayName']
         },
         initialize: function(options) {
             this._super = ADK.AppletViews.EventsGistView.prototype;

@@ -18,8 +18,8 @@ var full_incomplete = {
             latestJobTimestamp: 1467819360679,
             pid: '9E7A;3',
             sourceStampTime: 20160706094004,
-            syncCompleted: true,
-            solrSyncCompleted: true
+            syncCompleted: false,
+            solrSyncCompleted: false
         },
         C877: {
             latestJobTimestamp: 1467819360679,
@@ -149,6 +149,33 @@ var full_error = {
     solrSyncCompleted: false
 };
 
+var full_solr_error = {
+    icn: '10108V420871',
+    latestEnterpriseSyncRequestTimestamp: 1481293555965,
+    latestJobTimestamp: 1481293555965,
+    latestSourceStampTime: 20161208162300,
+    sites: {
+        '9E7A': {
+            latestJobTimestamp: 1481293555965,
+            pid: '9E7A;3',
+            solrSyncCompleted: false,
+            hasSolrError: true,
+            sourceStampTime: 20161208162300,
+            syncCompleted: false
+        },
+        C877: {
+            latestJobTimestamp: 1481293555965,
+            pid: 'C877;3',
+            solrSyncCompleted: true,
+            sourceStampTime: 20161208162254,
+            syncCompleted: true
+        }
+    },
+    solrSyncCompleted: false,
+    hasSolrError: true,
+    syncCompleted: false
+};
+
 describe('jdsSync\'s', function() {
     var pid;
     var req;
@@ -161,14 +188,14 @@ describe('jdsSync\'s', function() {
         log = '';
 
         httpExpected = [];
-        sinon.stub(pidValidator, 'isIcn', function(icn) {
+        sinon.stub(pidValidator, 'isIcn').callsFake(function(icn) {
             return nullchecker.isNotNullish(icn) && !S(icn).contains(';');
         });
-        sinon.stub(pidValidator, 'isSiteDfn', function(icn) {
+        sinon.stub(pidValidator, 'isSiteDfn').callsFake(function(icn) {
             return nullchecker.isNotNullish(icn) && S(icn).contains(';');
         });
-        sinon.stub(rdk.utils.http, 'get', stubHttp.bind(null, 'GET'));
-        sinon.stub(rdk.utils.http, 'post', stubHttp.bind(null, 'POST'));
+        sinon.stub(rdk.utils.http, 'get').callsFake(stubHttp.bind(null, 'GET'));
+        sinon.stub(rdk.utils.http, 'post').callsFake(stubHttp.bind(null, 'POST'));
     });
 
     afterEach(function() {
@@ -193,7 +220,11 @@ describe('jdsSync\'s', function() {
         });
 
         it('should get the pid from the request when not provided', function(done) {
-            req = buildRequest({ params: { pid: 'req;pid' } });
+            req = buildRequest({
+                params: {
+                    pid: 'req;pid'
+                }
+            });
             expectHttpFetch('vxSyncServer', '/sync/status?pid=req;pid');
             req.app.subsystems.jdsSync.getPatientStatus(null, req, expectSuccess(done));
         });
@@ -214,14 +245,29 @@ describe('jdsSync\'s', function() {
             expect(jdsSync.isSimpleSyncStatusWithError()).to.equal(false);
         });
 
+        it('should be false when prioritySite is passed and no hasError attribute exists', function() {
+            expect(jdsSync.isSimpleSyncStatusWithError(full_complete, 'C877')).to.equal(false);
+            expect(jdsSync.isSimpleSyncStatusWithError(site_incomplete, 'C877')).to.equal(false);
+            expect(jdsSync.isSimpleSyncStatusWithError(site_error, 'C877')).to.equal(false);
+        });
+
         it('should be false when no hasError attribute exists', function() {
             expect(jdsSync.isSimpleSyncStatusWithError(full_incomplete)).to.equal(false);
             expect(jdsSync.isSimpleSyncStatusWithError(full_complete)).to.equal(false);
         });
 
-        it('should be true when any hasError attribute exists', function() {
+        it('should be true when prioritySite is passed and no hasError attribute exists for that site', function() {
+            expect(jdsSync.isSimpleSyncStatusWithError(site_error, '9E7A')).to.equal(true);
+        });
+
+        it('should be true when no prioritySite is passed and every site has a hasError attribute', function() {
             expect(jdsSync.isSimpleSyncStatusWithError(full_error)).to.equal(true);
-            expect(jdsSync.isSimpleSyncStatusWithError(site_error)).to.equal(true);
+            expect(jdsSync.isSimpleSyncStatusWithError(site_error)).to.equal(false);
+        });
+
+        it('should be true when prioritySite passed does not exist and every site has a hasError attribute', function() {
+            expect(jdsSync.isSimpleSyncStatusWithError(full_error, 'XXXX')).to.equal(true);
+            expect(jdsSync.isSimpleSyncStatusWithError(site_error, 'XXXX')).to.equal(false);
         });
     });
 
@@ -230,17 +276,38 @@ describe('jdsSync\'s', function() {
             expect(jdsSync.isSimpleSyncStatusComplete()).to.equal(false);
         });
 
-        it('should be false if the top-level syncCompleted attribute is false', function() {
+        it('should be true if the top-level syncCompleted attribute is true', function() {
+            expect(jdsSync.isSimpleSyncStatusComplete(full_complete)).to.equal(true);
+        });
+
+        it('should be false when no prioritySite is passed and every site-level syncCompleted attribute is false', function() {
             expect(jdsSync.isSimpleSyncStatusComplete(full_incomplete)).to.equal(false);
         });
 
-        it('should be false when any site-level syncCompeted attribute is false and no top-level attribute exists or is true', function() {
-            expect(jdsSync.isSimpleSyncStatusComplete(site_incomplete)).to.equal(false);
-        });
-
-        it('should be true when all syncCompeted attributes are true', function() {
+        it('should be true when no prioritySite is passed and any syncCompleted attributes are true', function() {
             expect(jdsSync.isSimpleSyncStatusComplete(full_complete)).to.equal(true);
             expect(jdsSync.isSimpleSyncStatusComplete(site_complete)).to.equal(true);
+        });
+
+        it('should be false when prioritySite syncCompleted attribute is false', function() {
+            expect(jdsSync.isSimpleSyncStatusComplete(site_incomplete, 'C877')).to.equal(false);
+        });
+
+        it('should be true when prioritySite syncCompleted attribute is true', function() {
+            expect(jdsSync.isSimpleSyncStatusComplete(site_incomplete, '9E7A')).to.equal(true);
+        });
+
+        it('should be true when prioritySite is true with error in other site', function() {
+            expect(jdsSync.isSimpleSyncStatusComplete(site_error, 'C877')).to.equal(true);
+        });
+
+        it('should be false when prioritySite does not exist and every site-level syncCompleted attribute is false', function() {
+            expect(jdsSync.isSimpleSyncStatusComplete(full_incomplete, 'XXXX')).to.equal(false);
+        });
+
+        it('should be true when prioritySite does not exist and any syncCompleted attributes are true', function() {
+            expect(jdsSync.isSimpleSyncStatusComplete(full_complete, 'XXXX')).to.equal(true);
+            expect(jdsSync.isSimpleSyncStatusComplete(site_complete, 'XXXX')).to.equal(true);
         });
     });
 
@@ -317,7 +384,9 @@ describe('jdsSync\'s', function() {
     //jshint -W069
     describe('createSimpleStatusResult', function() {
         it('should return a sync complete response', function() {
-            var status = jdsSync.createSimpleStatusResult(req.logger, _.keys(req.app.config.vistaSites), {data: full_complete});
+            var status = jdsSync.createSimpleStatusResult(req.logger, _.keys(req.app.config.vistaSites), {
+                data: full_complete
+            });
 
             expect(status.allSites).to.be.true();
             expect(status.isSolrSyncCompleted).to.be.true();
@@ -325,17 +394,36 @@ describe('jdsSync\'s', function() {
             expect(status.VISTA['9E7A'].isSolrSyncCompleted).to.be.true();
             expect(status.VISTA['C877'].isSyncCompleted).to.be.true();
             expect(status.VISTA['C877'].isSolrSyncCompleted).to.be.true();
+            expect(status.hasSolrError).to.be.undefined();
         });
 
         it('should return a sync incomplete response', function() {
-            var status = jdsSync.createSimpleStatusResult(req.logger, _.keys(req.app.config.vistaSites), {data: full_incomplete});
+            var status = jdsSync.createSimpleStatusResult(req.logger, _.keys(req.app.config.vistaSites), {
+                data: full_incomplete
+            });
 
             expect(status.allSites).to.be.false();
             expect(status.isSolrSyncCompleted).to.be.false();
-            expect(status.VISTA['9E7A'].isSyncCompleted).to.be.true();
-            expect(status.VISTA['9E7A'].isSolrSyncCompleted).to.be.true();
+            expect(status.VISTA['9E7A'].isSyncCompleted).to.be.false();
+            expect(status.VISTA['9E7A'].isSolrSyncCompleted).to.be.false();
             expect(status.VISTA['C877'].isSyncCompleted).to.be.false();
             expect(status.VISTA['C877'].isSolrSyncCompleted).to.be.false();
+            expect(status.hasSolrError).to.be.undefined();
+        });
+
+        it('should return hasSolrError when it is present', function() {
+            var status = jdsSync.createSimpleStatusResult(req.logger, _.keys(req.app.config.vistaSites), {
+                data: full_solr_error
+            });
+
+            expect(status.allSites).to.be.false();
+            expect(status.isSolrSyncCompleted).to.be.false();
+            expect(status.VISTA['9E7A'].isSyncCompleted).to.be.false();
+            expect(status.VISTA['9E7A'].isSolrSyncCompleted).to.be.false();
+            expect(status.VISTA['9E7A'].hasSolrError).to.be.true();
+            expect(status.VISTA['C877'].isSyncCompleted).to.be.true();
+            expect(status.VISTA['C877'].isSolrSyncCompleted).to.be.true();
+            expect(status.hasSolrError).to.be.true();
         });
     });
     //jshint +W069
@@ -347,7 +435,12 @@ describe('jdsSync\'s', function() {
             var data = 'data';
             var expectedResponse = {
                 status: 500,
-                data: {error: {code: 500, message: 'data'}}
+                data: {
+                    error: {
+                        code: 500,
+                        message: 'data'
+                    }
+                }
             };
             jdsSync._syncStatusResultProcessor(pid, function(err, response) {
                 expect(err).to.equal(error);
@@ -357,11 +450,18 @@ describe('jdsSync\'s', function() {
         it('should create an unsynced message if the response is 404', function() {
             var error = null;
             var pid = '9E7A;3';
-            var response = {statusCode: 404};
+            var response = {
+                statusCode: 404
+            };
             var data = 'data';
             var expectedResponse = {
                 status: 404,
-                data: {error: {code: 404, message: 'pid 9E7A;3 is unsynced'}}
+                data: {
+                    error: {
+                        code: 404,
+                        message: 'pid 9E7A;3 is unsynced'
+                    }
+                }
             };
             jdsSync._syncStatusResultProcessor(pid, function(err, response) {
                 expect(err).to.equal(error);
@@ -371,7 +471,9 @@ describe('jdsSync\'s', function() {
         it('should create an successful message if the response is 200', function() {
             var error = null;
             var pid = '9E7A;3';
-            var response = {statusCode: 200};
+            var response = {
+                statusCode: 200
+            };
             var data = 'data';
             var expectedResponse = {
                 status: 200,
@@ -385,7 +487,9 @@ describe('jdsSync\'s', function() {
         it('should create an successful message if the response is 202', function() {
             var error = null;
             var pid = '9E7A;3';
-            var response = {statusCode: 202};
+            var response = {
+                statusCode: 202
+            };
             var data = 'data';
             var expectedResponse = {
                 status: 202,
@@ -399,11 +503,18 @@ describe('jdsSync\'s', function() {
         it('should create a generic error message if the response is not handled', function() {
             var error = new Error('could not get URL');
             var pid = '9E7A;3';
-            var response = {statusCode: 509};
+            var response = {
+                statusCode: 509
+            };
             var data = 'data';
             var expectedResponse = {
                 status: 500,
-                data: {error: {code: 500, message: data}}
+                data: {
+                    error: {
+                        code: 500,
+                        message: data
+                    }
+                }
             };
             jdsSync._syncStatusResultProcessor(pid, function(err, response) {
                 expect(err).to.equal(error);
@@ -447,8 +558,8 @@ describe('jdsSync\'s', function() {
                 hmpServer: {
                     host: 'hmphost',
                     port: 3,
-                    accessCode: '9E7A;500',
-                    verifyCode: 'ep1234;ep1234!!'
+                    accessCode: 'REDACTED',
+                    verifyCode: 'REDACTED'
                 },
                 jdsSync: {
                     settings: {
@@ -494,7 +605,9 @@ describe('jdsSync\'s', function() {
         if (expected.response && httpConfig.json || typeof(httpConfig.body) === 'object') {
             expected.response = JSON.parse(expected.response);
         }
-        callback(expected.error, {statusCode: expected.status}, expected.response);
+        callback(expected.error, {
+            statusCode: expected.status
+        }, expected.response);
     }
 
     function expectHttpFetch(serverName, path, status, response, error) {

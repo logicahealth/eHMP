@@ -11,7 +11,7 @@ Applets _must_ be created using the "**createApplet**" task.  Applet directories
 ### Deploying an Applet ###
 To deploy your applet locally run the :`deploy[applet name]` task
 
-The applet will be deployed to http://10.1.1.150:8080.  The "test nav" with links for showing your applet in different layouts including "full" view will be displayed.
+The applet will be deployed to http://IP             .  The "test nav" with links for showing your applet in different layouts including "full" view will be displayed.
 
 You can see how your applet responds to changes in size when you cycle through _"Full"_, _"Half"_, and _"Quarter"_. Keep in mind that your applet may be used in different frame sizes when screen layouts are created and develop your applet accordingly.
 

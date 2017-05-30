@@ -19,15 +19,15 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="consult">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.med.va.gov/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.URL       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="complexDataUrl" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="consultType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="documents" type="{http://webservice.vds.med.va.gov/}encounterDocument" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="documents" type="{http://webservice.vds.URL       /}encounterDocument" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="patientNextAppointment" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="procedureConsult" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="provider" type="{http://webservice.vds.med.va.gov/}provider" minOccurs="0"/>
+ *         &lt;element name="provider" type="{http://webservice.vds.URL       /}provider" minOccurs="0"/>
  *         &lt;element name="report" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="requestDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="service" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -41,7 +41,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "consult", namespace = "http://webservice.vds.med.va.gov/", propOrder = {
+@XmlType(name = "consult", namespace = "http://webservice.vds.URL       /", propOrder = {
     "complexDataUrl",
     "consultType",
     "documents",

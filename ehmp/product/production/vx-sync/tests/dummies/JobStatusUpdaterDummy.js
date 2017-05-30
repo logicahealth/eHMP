@@ -27,11 +27,16 @@ function errorJobStatus(job, error, callback) {
     module.exports.writeStatus(job, callback);
 }
 
+function childInstance() {
+    return module.exports;
+}
+
 module.exports = {
     'configure': configure,
     'writeStatus': writeStatus,
     'createJobStatus': createJobStatus,
     'startJobStatus': startJobStatus,
     'completeJobStatus': completeJobStatus,
-    'errorJobStatus': errorJobStatus
+    'errorJobStatus': errorJobStatus,
+    'childInstance': childInstance
 };

@@ -1,7 +1,6 @@
 define([
     'underscore',
     'api/Messaging',
-    'main/ui_components/form/formView',
     'main/ui_components/workflow/component',
     'main/ui_components/modal/component',
     'main/ui_components/fullscreen_overlay/component',
@@ -13,13 +12,12 @@ define([
     'main/ui_components/collapsible_container/component',
     'main/ui_components/applet_dropdown/component',
     'main/ui_components/applet_dropdown/alert_dropdown/component',
-    'main/ui_components/pdfViewer/component',
+    'main/components/applet_chrome/chromeView',
     'main/ui_components/predefinedComponents'
-], function(_, Messaging, Form, Workflow, Modal, FullScreenOverlay, Tabs, Alert, Notification, Tray, SubTray, CollapsibleContainer, Dropdown, AlertDropdown, PdfViewer, PredefinedComponents) {
+], function(_, Messaging, Workflow, Modal, FullScreenOverlay, Tabs, Alert, Notification, Tray, SubTray, CollapsibleContainer, Dropdown, AlertDropdown, Chrome, PredefinedComponents) {
     'use strict';
 
     var UI_Componenets = {
-        Form: Form,
         Workflow: Workflow,
         Modal: Modal,
         FullScreenOverlay: FullScreenOverlay,
@@ -31,7 +29,7 @@ define([
         CollapsibleContainer: CollapsibleContainer,
         Dropdown: Dropdown,
         AlertDropdown: AlertDropdown,
-        PdfViewer: PdfViewer
+        Chrome: Chrome
     };
 
 
@@ -48,7 +46,7 @@ define([
             return true;
         },
         isOfGroup: function(type, group) {
-            return _.isEqual(this.get('type'), type)  && _.contains(this.get('group'), group);
+            return _.isEqual(this.get('type'), type) && _.contains(this.get('group'), group);
         },
         isOfType: function(type) {
             return _.isEqual(this.get('type'), type);
@@ -72,6 +70,7 @@ define([
         // }
         if (_.isString(options.type) && _.isString(options.key) && (_.isFunction(options.view) || _.isFunction(options.view.initialize))) {
             options._uniqueId = options.type + ':' + options.key;
+            options.view = options.view.extend({ _uniqueId: options._uniqueId });
             if (!_.isUndefined(options.group)) {
                 if (_.isString(options.group)) {
                     options.group = [options.group];
@@ -150,4 +149,3 @@ define([
 
     return UI_Componenets;
 });
-

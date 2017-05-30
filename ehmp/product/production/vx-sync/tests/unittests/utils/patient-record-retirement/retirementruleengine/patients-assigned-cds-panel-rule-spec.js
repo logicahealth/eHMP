@@ -19,8 +19,8 @@ var config = {
     recordRetirement: {
         jds: {
             protocol: 'http',
-            host: '10.2.2.110',
-            port: 9080
+            host: 'IP        ',
+            port: PORT
         },
         rules: {
             'patients-assigned-cds-panel': {}

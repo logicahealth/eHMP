@@ -15,12 +15,18 @@ form {
             height: calc((#{$lg} * 15px) + 12px);
         }
     }
+    //Displayed in applets as extra filters (Tasks, Activities, Requests, Orders)
     select {
         &.form-control {
+            font-size: 11px;
+            margin-left: 3px;
+            height: 20px;
+            padding: 0px;
             transition: none;
         }
     }
 }
+// select control
 .select2-dropdown {
   border: 1px solid $grey-dark;
 }

@@ -5,34 +5,34 @@ Feature: Logon screen validates credentials using ehmpui_url User service:
   
 @LoginWithDiffFacility
 Scenario: Login to ehmpui_url
-  Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "pu1234" verifycode as  "pu1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
   Then staff view screen is displayed
 
 @NoCPRSTabAccessLogin @US2990 @DE685 @DE1477 @DE3004 @DE6497
 Scenario: Attempt login with No CPRS Tab Access
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "lu1234" verifycode as  "lu1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "DNS   " verifycode as  "REDACTED"
   Then the page displays "VistA Security Error: No Tabs Permissions."
 
 @UnsuccessfulLogin @DE685 @DE1734 @DE2723 @DE6497
 Scenario: Attempt login with incorrect credentials
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "kkk1234" verifycode as  "pu12lkk!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   Then the page displays "Not a valid ACCESS CODE/VERIFY CODE pair"
 
 @BlankFelled
 Scenario:Test valid login when felled is blank
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "" verifycode as  "pu1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "" verifycode as  "REDACTED"
   Then the page displays "Ensure all fields have been entered"
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "pu1234" verifycode as  ""
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  ""
   Then the page displays "Ensure all fields have been entered"
 
 @CaseSensitive_1
 Scenario:Test login screen is not CaseSensitive
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PU1234" verifycode as  "Pu1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   Then staff view screen is displayed
 
 @CaseSensitive_2
 Scenario:Test login screen is not CaseSensitive
-  Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "Pu1234" verifycode as  "PU1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
   Then staff view screen is displayed
 
 @appletWithoutLogin
@@ -49,5 +49,5 @@ Scenario: Test attempt to go directly to applet with incorrect subpage
   
 @SuccessfulLogin
 Scenario: Login to ehmpui_url
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "Pu1234" verifycode as  "PU1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   Then staff view screen is displayed

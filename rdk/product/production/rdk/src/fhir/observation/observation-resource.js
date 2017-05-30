@@ -110,49 +110,49 @@ function limitFHIRResultByCount(fhirBundle, countStr) {
  *
  * @apiExample {js} Request Examples:
  *      // Limiting results count
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?_count=1
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_count=1
  *
  *      // Exact date search
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?date=2015-01-26T13:45:00
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=2015-01-26T13:45:00
  *
  *      // Observations on a day
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?date=2015-01-26
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=2015-01-26
  *
  *      // Observations on a month
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?date=2015-01
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=2015-01
  *
  *      // Observations on a year
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?date=2015
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=2015
  *
  *      // Observations outside a date range (e.g. observations not occuring on January 2015)
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?date=!=2015-01
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=!=2015-01
  *
  *      // Explicit date range
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?date=>=2014-06&date=<=2014-09-20
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=>=2014-06&date=<=2014-09-20
  *
  *      // Observations of a particular code
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?code=9279-1
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?code=9279-1
  *
  *      // Observations of a particular code and system
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?code=http://loinc.org|9279-1
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?code=http://loinc.org|9279-1
  *
  *      // Observations sorted by date (sorts by Observation.appliesDateTime)
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?_sort=date
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=date
  *
  *      // Observations sorted by identifier (sorts by Observation.identifier.value)
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?_sort=identifier
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=identifier
  *
  *      // Observations sorted by performer (sorts by Observation.performer.display)
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?_sort=performer
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=performer
  *
  *      // Observations sorted by subject (sorts by Observation.subject.reference)
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?_sort=subject
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=subject
  *
  *      // Observations sorted by value-quantity (sorts by Observation.valueQuantity.value)
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?_sort=value-quantity
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=value-quantity
  *
  *      // Observations sorted by value-quantity in descending order
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/observation?_sort:desc=value-quantity
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort:desc=value-quantity
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/observation.html">Observation FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
@@ -164,7 +164,7 @@ function limitFHIRResultByCount(fhirBundle, countStr) {
  *     "link": [
  *         {
  *             "rel": "self",
- *             "href": "http://10.4.4.1/resource/fhir/patient/9E7A;253/observation?date=%3E2015-01-26T01:20:00Z&code=http://loinc.org|8310-5&_count=1"
+ *             "href": "http://IP      /resource/fhir/patient/9E7A;253/observation?date=%3E2015-01-26T01:20:00Z&code=http://loinc.org|8310-5&_count=1"
  *         }
  *     ],
  *     "meta": {

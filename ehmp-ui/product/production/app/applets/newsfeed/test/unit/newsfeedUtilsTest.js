@@ -221,19 +221,4 @@ define(["jquery", "backbone", "marionette", "jasminejquery", "app/applets/newsfe
 
             });
         });
-        describe("Verify getDisplayType returns the appropriate type value", function() {
-            it("should return 'appointment' when the kind is visit and the uid is an appointment uid", function() {
-                var model = { kind: 'Visit', uid: 'urn:va:appointment:9E7A:1:101010101' };
-                expect(newsfeedUtils.getDisplayType(model)).toBe('Appointment');
-            });
-            it("should return 'visit' when the kind is visit and the uid is a visit uid", function() {
-                var model = { kind: 'Visit', uid: 'urn:va:visit:9E7A:1:101010101' };
-                expect(newsfeedUtils.getDisplayType(model)).toBe('Visit');
-            });
-            it("should return the kind when the kind is not visit", function() {
-                var model = { kind: 'Laboratory', uid: 'urn:va:lab:9E7A:1:101010101' };
-                expect(newsfeedUtils.getDisplayType(model)).toBe('Laboratory');
-            });
-        });
-
     });

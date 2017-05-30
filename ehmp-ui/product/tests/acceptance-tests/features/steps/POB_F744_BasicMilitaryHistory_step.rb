@@ -203,12 +203,22 @@ end
 
 And(/^the Location column displays the name of the site "(.*?)"$/) do |site|
   @ehmp = PobAppletMilitaryApplet.new
-  expect(@ehmp.get_military_history_expanded_data_row(1, 4)).to eq(site)
+  wait = Selenium::WebDriver::Wait.new(:timeout => 10)
+  begin
+    wait.until { @ehmp.get_military_history_expanded_data_row(1, 4).eql?(site) }
+  rescue
+    expect(@ehmp.get_military_history_expanded_data_row(1, 4)).to eq(site)
+  end
 end
 
 And(/^the Modified By column displays the name of the user "(.*?)" who edited the description$/) do |last_modified_user|
   @ehmp = PobAppletMilitaryApplet.new
-  expect(@ehmp.get_military_history_expanded_data_row(1, 5)).to eq(last_modified_user)
+  wait = Selenium::WebDriver::Wait.new(:timeout => 10)
+  begin
+    wait.until { @ehmp.get_military_history_expanded_data_row(1, 5).eql?(last_modified_user) }
+  rescue
+    expect(@ehmp.get_military_history_expanded_data_row(1, 5)).to eq(last_modified_user)
+  end
 end
 
 When(/^the user clicks on Detail view button for row "(.*?)"$/) do |t_row, table|

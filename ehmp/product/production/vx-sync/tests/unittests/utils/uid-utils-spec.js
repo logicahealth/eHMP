@@ -66,6 +66,18 @@ describe('uid-utils', function() {
         });
     });
 
+    describe('extractPidFromUID', function() {
+        it('Valid UID', function() {
+            var result = uidUtil.extractPidFromUID('urn:va:allergy:9E7A:8:753');
+            expect(result).toBeDefined();
+            expect(result).toBe('9E7A;8');
+        });
+        it('Invalid UID', function() {
+            var result = uidUtil.extractPidFromUID('urn:va:allergy:9E7A');
+            expect(result).toBeNull();
+        });
+    });
+
     describe('Is Valid Uid Format', function(){
         it('valid uid format', function(){
             var validUid = 'urn:va:allergy:ABCD:1234:5678';
@@ -80,6 +92,34 @@ describe('uid-utils', function() {
                 expect(error).toBeDefined();
                 expect(uidParts).toBeUndefined();
             });
+        });
+    });
+
+    describe('isValidUid()', function(){
+        it('valid uid format', function(){
+            var validUid = 'urn:va:allergy:ABCD:1234:5678';
+            var result = uidUtil.isValidUid(validUid);
+            expect(result).toBe(true);
+        });
+        it('valid uid format different dilimiter', function(){
+            var validUid = 'urn;va;allergy;ABCD;1234;5678';
+            var result = uidUtil.isValidUid(validUid, ';');
+            expect(result).toBe(true);
+        });
+        it('Invalid uid format - bad delimiter', function(){
+            var validUid = 'urn:va:allergy:ABCD;3456';
+            var result = uidUtil.isValidUid(validUid);
+            expect(result).toBe(false);
+        });
+        it('Invalid uid format - missing field', function(){
+            var validUid = 'urn:va:allergy:ABCD';
+            var result = uidUtil.isValidUid(validUid);
+            expect(result).toBe(false);
+        });
+        it('Invalid uid format - different delimiter - missing field', function(){
+            var validUid = 'urn;va;allergy;ABCD';
+            var result = uidUtil.isValidUid(validUid, ';');
+            expect(result).toBe(false);
         });
     });
 

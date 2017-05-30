@@ -17,11 +17,11 @@ var config = {
                 id: '500',
                 name: 'PANORAMA'
             }],
-            host: '10.2.2.101',
+            host: 'IP        ',
             port: 9210,
             production: false,
-            accessCode: 'pu1234',
-            verifyCode: 'pu1234!!',
+            accessCode: 'REDACTED',
+            verifyCode: 'REDACTED',
             localIP: '127.0.0.1',
             localAddress: 'localhost'
         },
@@ -30,11 +30,11 @@ var config = {
                 id: '500',
                 name: 'KODAK'
             }],
-            host: '10.2.2.102',
+            host: 'IP        ',
             port: 9210,
             production: false,
-            accessCode: 'pu1234',
-            verifyCode: 'pu1234!!',
+            accessCode: 'REDACTED',
+            verifyCode: 'REDACTED',
             localIP: '127.0.0.1',
             localAddress: 'localhost'
         }
@@ -47,11 +47,11 @@ describe('getVistaRpcConfig', function() {
         expect(rpcUtil.getVistaRpcConfiguration(config, user)).to.eql({
             context: 'HMP UI CONTEXT',
             division: '500',
-            host: '10.2.2.101',
+            host: 'IP        ',
             port: 9210,
             production: false,
-            accessCode: 'pu1234',
-            verifyCode: 'pu1234!!',
+            accessCode: 'REDACTED',
+            verifyCode: 'REDACTED',
             localIP: '127.0.0.1',
             localAddress: 'localhost'
         });

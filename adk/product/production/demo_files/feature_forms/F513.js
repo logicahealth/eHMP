@@ -8,11 +8,11 @@ define([
     //=============================================================================================================
     // PLEASE DO NOT COPY AND PASTE THIS FULL FILE. PLEASE JUST USE AS A REFERENCE AND COPY PARTS THAT ARE NEEDED
     // for more information on how to layout this form for your applet please checkout the following link:
-    // https://10.1.1.150/documentation/#/adk/conventions#Writeback
+    // https://IP        /documentation/#/adk/conventions#Writeback
     //
     // Additional Form Documentation:
-    //  - List of Controls and Options: https://10.1.1.150/documentation/#/adk/form-controls
-    //  - UI Library Components : https://10.1.1.150/documentation/#/adk/ui-library#Components
+    //  - List of Controls and Options: https://IP        /documentation/#/adk/form-controls
+    //  - UI Library Components : https://IP        /documentation/#/adk/ui-library#Components
     //=============================================================================================================
 
     var F513 = {

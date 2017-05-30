@@ -1086,7 +1086,7 @@ GETFILTERSOLR ;; @TEST Get Patient Sync Status with filters (SOLR)
  D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
  ; Test filters while in completedStamp
  D ASSERT(10,$D(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","allergy")),"Allergy domain does not exist and it should")
- D ASSERT(0,$D(OBJECT("completedStampe","sourceMetaStamp","9E7A","domainMetaStamp","vitals")),"Vitals domain exists and it should not")
+ D ASSERT(10,$D(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals")),"Vitals domain does not exist and it should")
  ;
  K DATA,OBJECT
  S ARG("detailed")="true"
@@ -1225,3 +1225,606 @@ GETSOLREXCEPTIONS ;; @TEST Get Patient Simple Sync Status with SOLR domain excep
  K ^VPRCONFIG("sync","status","solr","domainExceptions")
  M ^VPRCONFIG("sync","status","solr","domainExceptions")=DOMAINEXCEPTIONS
  Q
+ ;
+ ; SOLR ERROR tests
+ ;
+GETBEFORESOLRERROR ;; @TEST Get Patient Sync Status before metastamp stored (SOLR ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ ; Clean out all old data
+ K ^VPRSTATUS
+ K ^VPRPTJ("JPID")
+ K ^VPRMETA("JPID")
+ D PATIDS
+ ;
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; since solrSyncComplete is nested under inProgress or completedStamp, the code below will catch
+ ; it without an explicit test
+ D ASSERT(0,$D(OBJECT("inProgress")),"inProgress Sync Status exists")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"completedStamp Sync Status exists")
+ ; Try again with a solr event in error
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"solrError")=1
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; This data won't exist since we haven't received an initial metastamp yet.
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","solrError")))
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSolrError")))
+ K @DATA
+ Q
+GETINITIALSOLRERROR ;; @TEST Get Initial Patient Sync Status (SOLR ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be in progress
+ D ASSERT(10,$D(OBJECT("inProgress")),"Sync status is not inProgress")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is not inProgress")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","hasSolrError")),"hasSolrError set when it shouldn't")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","solrSyncCompleted")),"solrSyncCompleted set when it shouldn't")
+ ; ensure allergy domain and event stamps exist correctly
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSolrError")),"allergy domain should not have hasSolrError")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","solrSyncCompleted")),"allergy domain should not be solrSyncCompleted")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","solrError")),"Allergy 9E7A:3:1001 shouldn't have solrError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","solrError")),"Allergy 9E7A:3:1002 shouldn't have solrError")
+ ; ensure vitals domain and event stamps exist correctly
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSolrError")),"vitals domain should not have hasSolrError")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","solrSyncCompleted")),"vitals domain should not be solrSyncCompleted")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","solrStored")),"Vital 9E7A:3:1001 shouldn't have solrError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","solrStored")),"Vital 9E7A:3:1002 shouldn't have solrError")
+ K @DATA
+ Q
+GETLASTVITALSOLRERROR ;; @TEST Get Patient Sync Status - Last Vital Stored (SOLR ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ ; Set flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"solrError")=1
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be in progress
+ D ASSERT(10,$D(OBJECT("inProgress")),"Sync status is not inProgress")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is not inProgress")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","hasSolrError")),"doesn't have hasSolrError when it should")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","solrSyncCompleted")),"solrSyncCompleted when it shouldn't")
+ ; Allergy domain should not have solrError
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSolrError")),"allergy domain should not have hasSolrError")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","solrSyncCompleted")),"allergy domain should not be solrSyncCompleted")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","solrError")),"Allergy 9E7A:3:1001 should not have solrError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","solrError")),"Allergy 9E7A:3:1002 should not have solrError")
+ ; Vitals domain should have solrError
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSolrError")),"vitals domain should have hasSolrError")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","solrSyncCompleted")),"vitals domain should not be solrSyncCompleted")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","solrError")),"Vital 9E7A:3:1001 should not have solrError")
+ ; Last Vital should be stored
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","solrError")),"Vital 9E7A:3:1002 should have solrError")
+ K @DATA
+ Q
+GETLASTALLERGYSOLRERROR ;; @TEST Get Patient Sync Status - Last Allergy Stored (SOLR ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"solrError")=1
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be in progress
+ D ASSERT(10,$D(OBJECT("inProgress")),"Sync status is not inProgress")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is not inProgress")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","hasSolrError")),"doesn't have hasSolrError when it should")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","solrSyncCompleted")),"solrSyncCompleted when it shouldn't")
+ ; Allergy domain should have solrError
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSolrError")),"allergy domain should have hasSolrError")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","solrSyncCompleted")),"allergy domain should not be solrSyncCompleted")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","solrError")),"Allergy 9E7A:3:1001 should not have solrError")
+  ; Vitals domain should not have solrError
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSolrError")),"vitals domain should not have hasSolrError")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","solrSyncCompleted")),"vitals domain should not be solrSyncCompleted")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","solrError")),"Vital 9E7A:3:1001 should not have solrError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","solrError")),"Vital 9E7A:3:1002 should not have solrError")
+ ; Last Allergy should have solrError
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","solrError")),"Allergy 9E7A:3:1002 should have solrError")
+ K @DATA
+ Q
+GETLASTALLERGYVITALSOLRERROR ;; @TEST Get Patient Sync Status - Last Vital & Allergy Stored (SOLR ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"solrError")=1
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be in progress
+ D ASSERT(10,$D(OBJECT("inProgress")),"Sync status is not inProgress")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is not inProgress")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","hasSolrError")),"doesn't have hasSolrError when it should")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","solrSyncCompleted")),"solrSyncCompleted when it shouldn't")
+ ; Allergy domain should not be complete
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSolrError")),"allergy domain should have hasSolrError")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","solrSyncCompleted")),"allergy domain should not be solrSyncCompleted")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","solrError")),"Allergy 9E7A:3:1001 should not have solrError")
+ ; Vitals domain should not be complete
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSolrError")),"vitals domain should have hasSolrError")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","solrSyncCompleted")),"vitals domain should not be solrSyncCompleted")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","solrError")),"Vital 9E7A:3:1001 should not have solrError")
+ ; Last Allergy & Vital should be stored
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","solrError")),"Allergy 9E7A:3:1002 should have solrError")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","solrError")),"Vital 9E7A:3:1002 should have solrError")
+ K @DATA
+ Q
+GETALLERGYSOLRERROR ;; @TEST Get Patient Sync Status - Both Allergies Stored. Test complete flag being set (SOLR ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"solrError")=1
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be in progress
+ D ASSERT(10,$D(OBJECT("inProgress")),"Sync status is not inProgress")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is not inProgress")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","hasSolrError")),"doesn't have hasSolrError when it should")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","solrSyncCompleted")),"solrSyncCompleted when it shouldn't")
+ ; Allergy domain should be complete
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSolrError")),"allergy domain should have hasSolrError")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","solrSyncCompleted")),"allergy domain should not be solrSyncCompleted")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","solrError")),"Allergy 9E7A:3:1001 should have solrError")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","solrError")),"Allergy 9E7A:3:1002 should have solrError")
+ ; Vitals domain should not be complete
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSolrError")),"vitals domain should not have hasSolrError")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","solrSyncCompleted")),"vitals domain should not be solrSyncCompleted")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","solrError")),"Vital 9E7A:3:1001 should not have solrError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","solrError")),"Vital 9E7A:3:1002 should not have solrError")
+ K @DATA
+ Q
+GETVITALSOLRERROR ;; @TEST Get Patient Sync Status - Both Vitals Stored. Test complete flag being set (SOLR ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"solrError")=1
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be in progress
+ D ASSERT(10,$D(OBJECT("inProgress")),"Sync status is not inProgress")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is not inProgress")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","hasSolrError")),"doesn't have hasSolrError when it should")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","solrSyncCompleted")),"solrSyncCompleted when it shouldn't")
+ ; Allergy domain should not be complete
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSolrError")),"allergy domain should not have hasSolrError")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","solrSyncCompleted")),"allergy domain should not be solrSyncCompleted")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","solrError")),"Allergy 9E7A:3:1001 should not have solrError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","solrError")),"Allergy 9E7A:3:1002 should not have solrError")
+ ; Vitals domain should be complete
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSolrError")),"vitals domain should have hasSolrError")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","solrSyncCompleted")),"vitals domain should not be solrSyncCompleted")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","solrError")),"Vital 9E7A:3:1001 should have solrError")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","solrError")),"Vital 9E7A:3:1002 should have solrError")
+ K @DATA
+ Q
+GETBOTHSOLRERROR ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Test SyncComplete flag being set (SOLR ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"solrError")=1
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be completed
+ D ASSERT(0,$D(OBJECT("inProgress")),"Sync status is not completed")
+ D ASSERT(10,$D(OBJECT("completedStamp")),"Sync status is not completed")
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","hasSolrError")),"doesn't have hasSolrError when it should")
+ D ASSERT("",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","solrSyncCompleted")),"solrSyncCompleted when it shouldn't")
+ ; Allergy domain should be complete
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSolrError")),"allergy domain should have hasSolrError")
+ D ASSERT("false",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","allergy","solrSyncCompleted")),"allergy domain should not be solrSyncCompleted")
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","solrError")),"Allergy 9E7A:3:1001 should have solrError")
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","solrError")),"Allergy 9E7A:3:1002 should have solrError")
+ ; Vitals domain should be complete
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSolrError")),"vitals domain should have hasSolrError")
+ D ASSERT("false",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","solrSyncCompleted")),"vitals domain should not be solrSyncCompleted")
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","solrError")),"Vital 9E7A:3:1001 should have solrError")
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","solrError")),"Vital 9E7A:3:1002 should have solrError")
+ K @DATA
+ Q
+GETBOTHSOLRERRORSTORED ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored and Solr Stored. Test SyncComplete flag being set (SOLR ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"solrStored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"solrStored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"solrStored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"solrStored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"solrError")=1
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be completed
+ D ASSERT(0,$D(OBJECT("inProgress")),"Sync status is not completed")
+ D ASSERT(10,$D(OBJECT("completedStamp")),"Sync status is not completed")
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","hasSolrError")),"doesn't have hasSolrError when it should")
+ D ASSERT("",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","solrSyncCompleted")),"solrSyncCompleted when it shouldn't")
+ ; Allergy domain should be complete
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSolrError")),"allergy domain should have hasSolrError")
+ D ASSERT("false",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","allergy","solrSyncCompleted")),"allergy domain should not be solrSyncCompleted")
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","solrError")),"Allergy 9E7A:3:1001 should have solrError")
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","solrError")),"Allergy 9E7A:3:1002 should have solrError")
+ ; Vitals domain should be complete
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSolrError")),"vitals domain should have hasSolrError")
+ D ASSERT("false",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","solrSyncCompleted")),"vitals domain should not be solrSyncCompleted")
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","solrError")),"Vital 9E7A:3:1001 should have solrError")
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","solrError")),"Vital 9E7A:3:1002 should have solrError")
+ K @DATA
+ Q
+GETFILTERSOLRERROR ;; @TEST Get Patient Sync Status with filters (SOLR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ K ^TMP("HTTPERR",$J)
+ D BLANK
+ ;
+ S ARG("id")="9E7A;3"
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"solrError")=1
+ ; Test that syncCompleted
+ K DATA,OBJECT
+ K ARG("detailed")
+ ; Test that sync has been complete when not in detailed mode
+ S ARG("filter")="exists(""hasSolrError"")"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ ; If data is blank force error and quit
+ I $D(DATA)=0 D ASSERT(0,1,"Return variable is blank") Q
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; Test filters while in completedStamp
+ D ASSERT(10,$D(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","allergy")),"Allergy domain does not exist and it should")
+ D ASSERT(10,$D(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals")),"Vitals domain does not exist and it should")
+ ;
+ K DATA,OBJECT
+ S ARG("detailed")="true"
+ ; Test that domain has been stored when in detailed mode
+ S ARG("filter")="eq(""domain"",""allergy""),exists(""solrError"")"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ ; If data is blank force error and quit
+ I $D(DATA)=0 D ASSERT(0,1,"Return variable is blank") Q
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ D ASSERT(10,$D(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp")),"Allergy domain does not exist and it should")
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","solrError")),"Allergy 9E7A:3:1001 should have solrError")
+ D ASSERT("true",$G(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","solrError")),"Allergy 9E7A:3:1002 should have solrError")
+ D ASSERT(0,$D(OBJECT("completedStamp","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp")),"Vitals domain exists and it should not")
+ Q
+ ;
+ ; SYNC ERROR tests
+ ;
+GETBEFORESYNCERROR ;; @TEST Get Patient Sync Status before metastamp stored (SYNC ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ ; Clean out all old data
+ K ^VPRSTATUS
+ K ^VPRPTJ("JPID")
+ K ^VPRMETA("JPID")
+ D PATIDS
+ ;
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; since syncSyncComplete is nested under inProgress or completedStamp, the code below will catch
+ ; it without an explicit test
+ D ASSERT(0,$D(OBJECT("inProgress")),"inProgress Sync Status exists")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"completedStamp Sync Status exists")
+ ; Try again with a sync event in error
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"syncError")=1
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; This data won't exist since we haven't received an initial metastamp yet.
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","syncError")))
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSyncError")))
+ K @DATA
+ Q
+GETINITIALSYNCERROR ;; @TEST Get Initial Patient Sync Status (SYNC ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be in progress
+ D ASSERT(10,$D(OBJECT("inProgress")),"Sync status is not inProgress")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is not inProgress")
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","hasSyncError")),"hasSyncError set when it shouldn't")
+ ; ensure allergy domain and event stamps exist correctly
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSyncError")),"allergy domain should not have hasSyncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","syncError")),"Allergy 9E7A:3:1001 shouldn't have syncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","syncError")),"Allergy 9E7A:3:1002 shouldn't have syncError")
+ ; ensure vitals domain and event stamps exist correctly
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSyncError")),"vitals domain should not have hasSyncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","syncStored")),"Vital 9E7A:3:1001 shouldn't have syncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","syncStored")),"Vital 9E7A:3:1002 shouldn't have syncError")
+ K @DATA
+ Q
+GETLASTVITALSYNCERROR ;; @TEST Get Patient Sync Status - Last Vital Stored (SYNC ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ ; Set flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"syncError")=1
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be in progress
+ D ASSERT(10,$D(OBJECT("inProgress")),"Sync status is not inProgress")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is not inProgress")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","hasSyncError")),"doesn't have hasSyncError when it should")
+ ; Allergy domain should not have syncError
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSyncError")),"allergy domain should not have hasSyncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","syncError")),"Allergy 9E7A:3:1001 should not have syncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","syncError")),"Allergy 9E7A:3:1002 should not have syncError")
+ ; Vitals domain should have syncError
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSyncError")),"vitals domain should have hasSyncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","syncError")),"Vital 9E7A:3:1001 should not have syncError")
+ ; Last Vital should be stored
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","syncError")),"Vital 9E7A:3:1002 should have syncError")
+ K @DATA
+ Q
+GETLASTALLERGYSYNCERROR ;; @TEST Get Patient Sync Status - Last Allergy Stored (SYNC ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"syncError")=1
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be in progress
+ D ASSERT(10,$D(OBJECT("inProgress")),"Sync status is not inProgress")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is not inProgress")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","hasSyncError")),"doesn't have hasSyncError when it should")
+ ; Allergy domain should have syncError
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSyncError")),"allergy domain should have hasSyncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","syncError")),"Allergy 9E7A:3:1001 should not have syncError")
+  ; Vitals domain should not have syncError
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSyncError")),"vitals domain should not have hasSyncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","syncError")),"Vital 9E7A:3:1001 should not have syncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","syncError")),"Vital 9E7A:3:1002 should not have syncError")
+ ; Last Allergy should have syncError
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","syncError")),"Allergy 9E7A:3:1002 should have syncError")
+ K @DATA
+ Q
+GETLASTALLERGYVITALSYNCERROR ;; @TEST Get Patient Sync Status - Last Vital & Allergy Stored (SYNC ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"syncError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"syncError")=1
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be in progress
+ D ASSERT(10,$D(OBJECT("inProgress")),"Sync status is not inProgress")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is not inProgress")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","hasSyncError")),"doesn't have hasSyncError when it should")
+ ; Allergy domain should not be complete
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSyncError")),"allergy domain should have hasSyncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","syncError")),"Allergy 9E7A:3:1001 should not have syncError")
+ ; Vitals domain should not be complete
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSyncError")),"vitals domain should have hasSyncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","syncError")),"Vital 9E7A:3:1001 should not have syncError")
+ ; Last Allergy & Vital should be stored
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","syncError")),"Allergy 9E7A:3:1002 should have syncError")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","syncError")),"Vital 9E7A:3:1002 should have syncError")
+ K @DATA
+ Q
+GETALLERGYSYNCERROR ;; @TEST Get Patient Sync Status - Both Allergies Stored. Test complete flag being set (SYNC ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"syncError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"syncError")=1
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be in progress
+ D ASSERT(10,$D(OBJECT("inProgress")),"Sync status is not inProgress")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is not inProgress")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","hasSyncError")),"doesn't have hasSyncError when it should")
+ ; Allergy domain should be complete
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSyncError")),"allergy domain should have hasSyncError")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","syncError")),"Allergy 9E7A:3:1001 should have syncError")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","syncError")),"Allergy 9E7A:3:1002 should have syncError")
+ ; Vitals domain should not be complete
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSyncError")),"vitals domain should not have hasSyncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","syncError")),"Vital 9E7A:3:1001 should not have syncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","syncError")),"Vital 9E7A:3:1002 should not have syncError")
+ K @DATA
+ Q
+GETVITALSYNCERROR ;; @TEST Get Patient Sync Status - Both Vitals Stored. Test complete flag being set (SYNC ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"syncError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"syncError")=1
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be in progress
+ D ASSERT(10,$D(OBJECT("inProgress")),"Sync status is not inProgress")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is not inProgress")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","hasSyncError")),"doesn't have hasSyncError when it should")
+ ; Allergy domain should not be complete
+ D ASSERT("false",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSyncError")),"allergy domain should not have hasSyncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","syncError")),"Allergy 9E7A:3:1001 should not have syncError")
+ D ASSERT("",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","syncError")),"Allergy 9E7A:3:1002 should not have syncError")
+ ; Vitals domain should be complete
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSyncError")),"vitals domain should have hasSyncError")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","syncError")),"Vital 9E7A:3:1001 should have syncError")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","syncError")),"Vital 9E7A:3:1002 should have syncError")
+ K @DATA
+ Q
+GETBOTHSYNCERROR ;; @TEST Get Patient Sync Status - Allergy and Vitals Stored. Test SyncComplete flag being set (SYNC ERROR)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ D BLANK
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"syncError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"syncError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"syncError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"syncError")=1
+ S ARG("id")="9E7A;3"
+ S ARG("detailed")="true"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; this Sync Status should always be completed
+ D ASSERT(10,$D(OBJECT("inProgress")),"Sync status is not completed")
+ D ASSERT(0,$D(OBJECT("completedStamp")),"Sync status is completed and shouldn't be")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","hasSyncError")),"doesn't have hasSyncError when it should")
+ ; Allergy domain should be complete
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","hasSyncError")),"allergy domain should have hasSyncError")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","syncError")),"Allergy 9E7A:3:1001 should have syncError")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","syncError")),"Allergy 9E7A:3:1002 should have syncError")
+ ; Vitals domain should be complete
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","hasSyncError")),"vitals domain should have hasSyncError")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1001","syncError")),"Vital 9E7A:3:1001 should have syncError")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp","urn:va:vitals:9E7A:3:1002","syncError")),"Vital 9E7A:3:1002 should have syncError")
+ K @DATA
+ Q
+GETFILTERSYNCERROR ;; @TEST Get Patient Sync Status with filters (SYNC)
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ K ^TMP("HTTPERR",$J)
+ D BLANK
+ ;
+ S ARG("id")="9E7A;3"
+ ; Set complete flags
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"stored")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1001",20141031094920,"syncError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","allergy","urn:va:allergy:9E7A:3:1002",20141031094920,"syncError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1001",20141031094920,"syncError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"syncError")=1
+ ; Test that syncCompleted
+ K DATA,OBJECT
+ K ARG("detailed")
+ ; Test that sync has been complete when not in detailed mode
+ S ARG("filter")="exists(""hasSyncError"")"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ ; If data is blank force error and quit
+ I $D(DATA)=0 D ASSERT(0,1,"Return variable is blank") Q
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ; Test filters while in completedStamp
+ D ASSERT(10,$D(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy")),"Allergy domain does not exist and it should")
+ D ASSERT(10,$D(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals")),"Vitals domain does not exist and it should")
+ ;
+ K DATA,OBJECT
+ S ARG("detailed")="true"
+ ; Test that domain has been stored when in detailed mode
+ S ARG("filter")="eq(""domain"",""allergy""),exists(""syncError"")"
+ D GET^VPRJPSTATUS(.DATA,.ARG)
+ ; If data is blank force error and quit
+ I $D(DATA)=0 D ASSERT(0,1,"Return variable is blank") Q
+ D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ D ASSERT(10,$D(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp")),"Allergy domain does not exist and it should")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1001","syncError")),"Allergy 9E7A:3:1001 should have syncError")
+ D ASSERT("true",$G(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","allergy","eventMetaStamp","urn:va:allergy:9E7A:3:1002","syncError")),"Allergy 9E7A:3:1002 should have syncError")
+ D ASSERT(0,$D(OBJECT("inProgress","sourceMetaStamp","9E7A","domainMetaStamp","vitals","eventMetaStamp")),"Vitals domain exists and it should not")
+ Q
+ ;

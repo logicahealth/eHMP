@@ -5,15 +5,15 @@ ext.set('artifactId', 'vxsync')
 // add dummy test task so java plugin doesn't have to be applied
 task test {}
 
-task pruneNpm(type: Exec) {
+task cleanNPM(type: Delete) {
   group "VX-Sync Tasks"
-  description "prune package(s)"
-  commandLine  "npm", "prune"
+  description "Clean up node_modules"
+  delete "${projectDir}/node_modules"
 }
 
-clean.dependsOn pruneNpm
+clean.dependsOn cleanNPM
 
-task installNpm(type: Exec, dependsOn: pruneNpm) {
+task installNpm(type: Exec, dependsOn: cleanNPM) {
   group "VX-Sync Tasks"
   description "installs package(s)"
   commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"

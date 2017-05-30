@@ -161,6 +161,9 @@ var environment = {
     },
     patientIdComparator : patIdCompareUtil.detectAndResync 
 };
+environment.mvi.childInstance = function() { return environment.mvi; };
+environment.jds.childInstance = function() { return environment.jds; };
+environment.jobStatusUpdater.childInstance = function() { return environment.jobStatusUpdater; };
 
 
 environment.patientIdComparator =  patIdCompareUtil.detectAndResync;
@@ -205,7 +208,7 @@ function has(jobs, jobType) {
 // Create a local copy of the environment.
 //-----------------------------------------
 function createEnvironment() {
-    var env = JSON.parse(JSON.stringify(environment));
+    var env = _.clone(environment);
     env.publisherRouter.publish = publish;
     env.jds.storePatientIdentifier = storeJdsIdentifiers;
     env.mvi.lookupWithDemographics = jasmine.createSpy().andCallFake(mviLookupWithDemographics);

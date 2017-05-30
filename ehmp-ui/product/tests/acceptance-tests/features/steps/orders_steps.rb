@@ -376,7 +376,7 @@ def verify_orders_between(start_time, end_time)
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { @oc.applet_loaded }
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time * 2)
-  wait.until { infiniate_scroll('#data-grid-orders tbody') }
+  wait.until { infiniate_scroll('#data-grid-orders tbody', 3) }
 
   format = "%m/%d/%Y"
   order_date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4}")

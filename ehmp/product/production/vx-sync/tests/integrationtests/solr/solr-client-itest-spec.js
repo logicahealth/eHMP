@@ -70,37 +70,33 @@ var vprRecord = {
 
 };
 
-describe('solr-client.js', function () {
-  describe('send test data to SOLR', function () {
-    it('Can send one document to SOLR.', function () {
+describe('solr-client.js', function() {
+  describe('send test data to SOLR', function() {
+    it('Can send one document to SOLR.', function() {
       client = null;
       var solrConfig = config.solrClient;
       client = solrSmartClient.initClient(solrConfig.core, solrConfig.zooKeeperConnection, log);
 
-      runs(function () {
-        var solrRecord = solrXform(vprRecord, log);
-        expect(_.isObject(solrRecord)).toBe(true);
-        if (_.isObject(solrRecord)) {
+      runs(function() {
+        solrXform(vprRecord, log, config, function(error, solrRecord) {
+          expect(error).toBeFalsy();
+          expect(_.isObject(solrRecord)).toBe(true);
+          if (_.isObject(solrRecord)) {
 
-          client.add(solrRecord, function (error, data) {
-            expect(error).toBeNull();
-            expect(data).not.toBeUndefined();
-            expect(val(data, 'responseHeader')).not.toBeUndefined();
-            expect(val(data, 'responseHeader', 'status')).toBe(0);
-            finished = true;
-          });
-        }
-      })
-
-      waitsFor(function () {
-        return finished;
+            client.add(solrRecord, function (error, data) {
+              expect(error).toBeNull();
+              expect(data).not.toBeUndefined();
+              expect(val(data, 'responseHeader')).not.toBeUndefined();
+              expect(val(data, 'responseHeader', 'status')).toBe(0);
+              finished = true;
+            });
+          }
+        });
       });
 
+      waitsFor(function() {
+        return finished;
+      });
     });
-
-    it('can close the zk connection', function () {
-      client.closeZookeeper();
-    });
-
   });
 });

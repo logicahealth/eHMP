@@ -1,3 +1,9 @@
+.radio-inline+.radio-inline {
+    margin-left: 3px;
+}
+.radio label {
+    padding-right: 3px;
+}
 .control.radio-control {
     &.radio-col-2 {
         p,

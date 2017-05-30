@@ -1,0 +1,734 @@
+{
+    "resourceType": "Bundle",
+    "type": "collection",
+    "id": "5a9c0bac-e7fa-4438-f6cb-f5d13713bfe5",
+    "link": [
+        {
+            "relation": "self",
+            "url": "http://127.0.0.1:8888/resource/fhir/medicationdispense?subject.identifier=10107V395912&accessCode=IP    &verifyCode=IP    !!&site=9E7A&division=500"
+        }
+    ],
+    "total": 36,
+    "entry": [
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:27957"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:28057"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:27957"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:28057"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:27857"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:27857"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:21166"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:21167"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:21168"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:21166"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:21167"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:21168"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:18071"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:18073"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:18074"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:18071"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:18073"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:18074"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:17202"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:17202"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:17262"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:17263"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:17262"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:17263"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:16958"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:16958"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:16959"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:16981"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:16959"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:16981"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:15229"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:15230"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:15229"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:15230"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:9E7A:253:12725"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        },
+        {
+            "resource": {
+                "resourceType": "MedicationDispense",
+                "status": "",
+                "patient": {},
+                "dispenser": {},
+                "identifier": [
+                    {
+                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                        "value": "urn:va:med:C877:253:12725"
+                    }
+                ]
+            },
+            "link": [
+                {
+                    "relation": "self",
+                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                }
+            ]
+        }
+    ]
+}

@@ -32,7 +32,7 @@ module.exports = (function() {
         'ptf': 'visittreatment',
         'rad': 'imaging',
         'newsfeed': 'news-feed',
-        'document-view': 'docs-view',
+        'document-view': 'ehmp-documents',
         'vlerdocument': 'vlerdocument',
         'parent-documents': 'parent-documents'
     };

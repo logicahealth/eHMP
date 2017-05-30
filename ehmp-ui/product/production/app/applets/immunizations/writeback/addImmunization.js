@@ -12,10 +12,8 @@ define([
 
     var ImmuniztionType = {
         control: 'container',
+        extraClasses: ['col-xs-12'],
         items: [{
-            control: 'container',
-            extraClasses: ['col-xs-12'],
-            items: [{
                 control: 'radio',
                 name: 'administeredHistorical',
                 label: 'Choose an option',
@@ -29,11 +27,10 @@ define([
                     label: 'Historical',
                     title: 'Choose an option.',
                 }]
-            }]
-        }, {
+            }, {
             control: 'container',
-            extraClasses: ['col-xs-12', 'immunization-type-container'],
-            template: Handlebars.compile('<i class="loading fa fa-spinner fa-spin"></i>'),
+            extraClasses: ['select-control--loading-spinner'],
+            template: Handlebars.compile('<i class="fa fa-spinner fa-spin"></i>'),
             items: [{
                 control: 'select',
                 name: 'immunizationType',
@@ -58,63 +55,51 @@ define([
                 }
             }]
         }, {
-            control: 'container',
-            extraClasses: ['col-xs-12'],
-            items: [{
-                control: 'select',
-                name: 'informationSource',
-                label: 'Information Source',
-                title: 'Use up and down arrows to view options and then press enter to select.',
-                pickList: []
-            }]
-        }, {
-            control: 'spacer'
+            control: 'select',
+            name: 'informationSource',
+            label: 'Information Source',
+            title: 'Use up and down arrows to view options and then press enter to select.',
+            pickList: []
         }]
+    };
+
+    var Spacer = {
+        control: 'spacer'
     };
 
     var LotNumberFields = {
         control: 'container',
+        extraClasses: ['col-xs-12'],
         items: [{
-            control: 'container',
-            extraClasses: ['col-xs-6'],
-            items: [{
-                control: 'select',
-                name: 'lotNumberAdministered',
-                label: 'Lot Number',
-                title: 'Use up and down arrows to view options and then press enter to select.',
-                pickList: []
-            }]
+            control: 'select',
+            extraClasses: ['col-xs-6', 'left-padding-no'],
+            name: 'lotNumberAdministered',
+            label: 'Lot Number',
+            title: 'Use up and down arrows to view options and then press enter to select.',
+            pickList: []
         }, {
             control: 'container',
-            extraClasses: ['col-xs-6'],
-            items: [{
-                control: 'container',
-                extraClasses: ['expirationDateAdministered', 'form-group'],
-                modelListeners: ['expirationDateAdministered'],
-                template: Handlebars.compile('<label for="expirationDateAdministered">Expiration Date *</label><div id="expirationDateAdministered">{{#if expirationDateAdministered}}{{expirationDateAdministered}}{{else}}<div class="well well-collapse left-padding-sm left-margin-no background-color-grey-lighter"><span>Not specified</span></div>{{/if}}</div>'),
-            }]
+            extraClasses: [ 'expirationDateAdministered', 'col-xs-6', 'right-padding-no', 'form-group'],
+            modelListeners: ['expirationDateAdministered'],
+            template: Handlebars.compile('<label for="expirationDateAdministered">Expiration Date *</label><div id="expirationDateAdministered">{{#if expirationDateAdministered}}{{expirationDateAdministered}}{{else}}<div class="well well-collapse left-padding-xs right-padding-xs left-margin-no right-margin-no background-color-grey-lighter all-border-grey"><span>Not specified</span></div>{{/if}}</div>')
         }, {
             control: 'container',
-            extraClasses: ['col-xs-12'],
-            items: [{
-                control: 'container',
-                extraClasses: ['manufacturerAdministered', 'form-group'],
-                modelListeners: ['manufacturerAdministered'],
-                template: Handlebars.compile('<label for="manufacturerAdministered">Manufacturer *</label><div id="manufacturerAdministered">{{#if manufacturerAdministered}}{{manufacturerAdministered}}{{else}}<div class="well well-collapse left-padding-sm left-margin-no background-color-grey-lighter">Not specified</em></div>{{/if}}</div>'),
-            }]
+            extraClasses: ['manufacturerAdministered', 'form-group'],
+            modelListeners: ['manufacturerAdministered'],
+            template: Handlebars.compile('<label for="manufacturerAdministered">Manufacturer *</label><div id="manufacturerAdministered">{{#if manufacturerAdministered}}{{manufacturerAdministered}}{{else}}<div class="well well-collapse left-padding-xs right-padding-xs left-margin-no right-margin-no background-color-grey-lighter all-border-grey">Not specified</em></div>{{/if}}</div>')
         }]
     };
 
     var AdminDateAndProviders = {
         control: 'container',
-        extraClasses:['immunization-administration-fields'],
+        extraClasses: ['col-xs-12', 'all-padding-no', 'immunization-administration-fields'],
         items: [{
             control: 'container',
             extraClasses: ['col-xs-6'],
             items: [{
                 control: 'container',
                 extraClasses: ['administrationDate', 'form-group'],
-                template: Handlebars.compile('<p class="faux-label bottom-margin-xs">Administration Date *</p><div class="well well-collapse left-padding-sm left-margin-no background-color-grey-lighter"><span>{{administrationDate}}</span></div>'),
+                template: Handlebars.compile('<p class="faux-label bottom-margin-xs">Administration Date *</p><div class="well well-collapse left-padding-xs right-padding-xs left-margin-no right-margin-no background-color-grey-lighter all-border-grey"><span>{{administrationDate}}</span></div>'),
                 modelListeners: ['administrationDate']
             },{
                 control: 'datepicker',
@@ -168,6 +153,7 @@ define([
 
     var RouteLocationDosageSeriesRow = {
         control: 'container',
+        extraClasses: ['col-xs-12', 'all-padding-no'],
         items: [{
             control: 'container',
             extraClasses: ['col-xs-6'],
@@ -196,7 +182,7 @@ define([
                 name: 'dosage',
                 title: 'Enter dosage in milliliters',
                 units: 'mL',
-                label: 'Dosage/Unit',
+                label: '<span class="transform-text-capitalize">Dosage/Unit</span>'
             }]
         }, {
             control: 'container',
@@ -213,6 +199,7 @@ define([
 
     var VisRow = {
         control: 'container',
+        extraClasses: ['col-xs-12', 'all-padding-no'],
         items: [{
             control: 'container',
             extraClasses: ['col-xs-12'],
@@ -243,18 +230,12 @@ define([
     };
 
     var CommentsRow = {
-        control: 'container',
-        items: [{
-            control: 'container',
-            items: [{
-                control: 'textarea',
-                extraClasses: ['col-xs-12'],
-                name: 'comments',
-                label: 'Comments',
-                maxlength: 200,
-                rows: 4
-            }]
-        }]
+        control: 'textarea',
+        extraClasses: ['col-xs-12'],
+        name: 'comments',
+        label: 'Comments',
+        maxlength: 200,
+        rows: 4
     };
 
     var AddImmunizationFields = [{
@@ -263,7 +244,7 @@ define([
         items: [{
             control: "container",
             extraClasses: ["scroll-enter-form"],
-            items: [ImmuniztionType, LotNumberFields, AdminDateAndProviders, RouteLocationDosageSeriesRow, VisRow, CommentsRow]
+            items: [ImmuniztionType, Spacer, LotNumberFields, AdminDateAndProviders, RouteLocationDosageSeriesRow, VisRow, CommentsRow]
         }]
     }, {
         control: "container",
@@ -289,7 +270,7 @@ define([
                 },
                 {
                     control: "button",
-                    extraClasses: ["btn-primary", "btn-sm", "left-margin-xs"],
+                    extraClasses: ["btn-primary", "btn-sm", "left-margin-sm"],
                     label: "Accept",
                     title: "Press enter to accept",
                     name: 'addBtn',
@@ -343,14 +324,14 @@ define([
             'administeredHistorical': '.administeredHistorical',
             'informationSource': '.informationSource',
             'immunizationType': '.immunizationType',
-            'immunizationTypeContainer': '.immunization-type-container',
+            'immunizationTypeContainer': '.select-control--loading-spinner',
             'lotNumberAdministered': '.lotNumberAdministered',
             'expirationDateAdministered': '.expirationDateAdministered',
             'manufacturerAdministered': '.manufacturerAdministered',
             'administrationDate': '.administrationDate',
             'administrationDateHistorical': '.administrationDateHistorical',
             'administeredBy': '.administeredBy',
-            'administeredByInput': '#administeredBy',
+            'administeredByInput': '.administeredBy input',
             'orderedByAdministered': '.orderedByAdministered',
             'administeredLocation': '.administeredLocation',
             'routeOfAdministration': '.routeOfAdministration',
@@ -466,7 +447,7 @@ define([
             this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
         },
         onAttach:function(){
-            if (this.$('#immunizationType').is(':visible')){
+            if (this.$('.immunizationType select').is(':visible')){
                 this.$el.trigger('tray.loaderShow',{
                     loadingString:'Loading'
                 });
@@ -685,7 +666,7 @@ define([
                     this.ui.comments.trigger('control:placeholder', 'If available, please record the lot number, manufacturer, expiration date and ordering provider as part of the Comments');
 
                     this.model.unset('orderedByAdministered');
-                    if($(this.ui.informationSource).find('#informationSource').is(':disabled')){
+                    if(this.ui.informationSource.find('select').is(':disabled')){
                         this.ui.administrationDate.trigger('control:disabled', true);
                     }else {
                         this.ui.administrationDate.trigger('control:disabled', false);
@@ -881,7 +862,7 @@ define([
                     clearForm();
                 }else{
                     formModel.errorModel.clear();
-                    select2_search($('#immunizationType'), formModel.get('_labelsForSelectedValues').get('immunizationType').substring(0, 5));
+                    select2_search($('.immunizationType select'), formModel.get('_labelsForSelectedValues').get('immunizationType').substring(0, 5));
                 }
             },
             'click #adm-discard': function() {
@@ -919,7 +900,7 @@ define([
                 if(formModel.get('inactiveFlag') === "1"){
                     clearForm();
                 }else{
-                    select2_search($('#immunizationType'), formModel.get('_labelsForSelectedValues').get('immunizationType').substring(0, 5));
+                    select2_search($('.immunizationType select'), formModel.get('_labelsForSelectedValues').get('immunizationType').substring(0, 5));
                 }
 
             },

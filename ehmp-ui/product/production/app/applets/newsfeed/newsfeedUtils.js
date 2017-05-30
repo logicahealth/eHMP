@@ -52,34 +52,6 @@ define([
             }
             return undefined;
         },
-        getEnteredBy:function(response) {
-            var kind = response.displayType.toLowerCase();
-            if(kind === "visit"){
-                if(response.createdByName) return _.isEmpty(response.createdByName) ? undefined : response.createdByName;                  
-            } else if (kind === "consult"){
-                if(response.providerName)  return _.isEmpty(response.providerName) ? undefined : response.providerName;           
-            } else if (response.providers) {
-                    for (var m = 0; m < response.providers.length; m++) {
-                        if (response.providers[m].primary) {
-                            if (response.providers[m].providerDisplayName) {
-                                return response.providers[m].providerName;
-                            }
-                        }
-                        if (response.providers[m].providerDisplayName) {
-                             return response.providers[m].providerName;
-                        }
-                    }
-                } else {
-                    if (response.primaryProvider) {
-                        return _.isEmpty(response.primaryProvider.providerName) ? undefined : response.primaryProvider.providerName;
-                    } else if (response.secondaryProvider) {
-                        return _.isEmpty(response.secondaryProvider) ? undefined : response.secondaryProvider.toUpperCase();
-                    } else if (response.providerName) {
-                        return _.isEmpty(response.providerName) ? undefined : response.providerName.toUpperCase();
-                    }
-                }                               
-            return undefined;
-        },
         isHospitalization: function(model) {
             return model.categoryCode === 'urn:va:encounter-category:AD';
         },
@@ -153,18 +125,6 @@ define([
             if(date === undefined || date.toLowerCase() === 'present')
                 return undefined;
             return moment(date, "DD-MMM-YYYY").format("YYYYMMDD");
-        },
-        getDisplayType: function(model) {
-            if (this.isKindTypeHelper(model, "visit")) {
-                var uid = model instanceof Backbone.Model ? model.get('uid') : model.uid;
-                var type = uid.split(/\:/)[2];
-                if (type === 'appointment') {
-                    return "Appointment";
-                }
-                return "Visit";
-            }
-            var kind = model instanceof Backbone.Model ? model.get('kind') : model.kind;
-            return kind;
         }
     };
 

@@ -9,6 +9,10 @@ define([
     var TileSortManager = {};
 
     var sortCollection = function(originalCollection, sortAttribute, tileSortOrder) {
+        if (originalCollection.fullCollection) {
+            return sortCollection(originalCollection.fullCollection, sortAttribute, tileSortOrder);
+        }
+
         var wasSorted = false;
 
         if(_.isUndefined(sortAttribute)){
@@ -20,16 +24,17 @@ define([
             wasSorted = true;
 
             var currentModel = _.find(originalCollection.models, customSort);
-            originalCollection.remove(currentModel);
+            originalCollection.remove(currentModel, {silent:true});
             originalCollection.add(currentModel, {
-                at: i
+                at: i,
+                silent:true
             });
         }
 
         function customSort(currentItem) {
             return currentItem.attributes[sortAttribute] == tileSortOrder[i];
         }
-
+        originalCollection.trigger('sort', originalCollection);
         return wasSorted;
     };
 
@@ -81,8 +86,9 @@ define([
         var temp = collection.at(reorderObj.oldIndex);
         var listElement = reorderObj.listElement;
         var removedElement = $(listElement).find('div.gist-item:eq(' + reorderObj.oldIndex + ')').detach();
-        collection.remove(temp, {silent: true});
-
+        collection.remove(temp, {
+            silent: true
+        });
         if(reorderObj.newIndex === collection.models.length){
             $(listElement).append(removedElement);
         }else {

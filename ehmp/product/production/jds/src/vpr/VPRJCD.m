@@ -12,17 +12,19 @@ BLDMETA(METATYPE,TAG,RTN) ; build meta data
  . . M ^VPRMETA("collection")=METACLTN              ; map collections to it
  . S LINES=$G(LINES)+1,LINES(LINES)=X
  Q
-BLDSPEC(METATYPE,LINES,METADATA,METACLTN) ; build specification
- ; METATYPE: index, link, or template
- ;.LINES(n): contains a set of lines to parse into a specification
- ;.METADATA: contains the spec to be merged into ^VPRMETA(metatype)
- ;.METACLTN: contains the collection names to be merged into ^VPRMETA("collection")
+ ;
+ ; Build a specification for an index, link or template
+ ; @param {string} METATYPE - The string literal from the list: index, link, or template ":" then the style from the list (only for index) attr, tally, time, xattr
+ ; @param {array} LINES - (passed by reference) A MUMPS array of lines to parse into a specification
+ ; @param {array} METADATA - (passed by reference) the spec to be merged into ^VPRMETA(metatype)
+ ; @param {array} METACLTN - (passed by reference) the collection names to be merged into ^VPRMETA(collection)
+BLDSPEC(METATYPE,LINES,METADATA,METACLTN)
  ;
  ; CLTNS(name)=""          ;name of each collection
  ; FIELDS(0,seq#)=field    ;general field descriptor
  ; FIELDS(ctn,seq#)=field  ;override field descriptor for collection
  ; ATTR(name)=value        ;value for attribute
- ; MATCH(name)=""          ;name used for matching in MATCH type index  l
+ ; MATCH(name)=""          ;name used for matching in MATCH type index
  ;
  K METADATA,METACLTN
  N I,X,SPECNAME,GROUP,LINE,CLTN,CLTNS,FIELD,FIELDS,ATTR,MATCH,STYLE,ERRORS
@@ -95,7 +97,9 @@ FLDSPEC(FLD,SPEC,TYPE) ; convert field assignment descriptor to .SPEC
  I TYPE="data" S TYPE="src",OREF="^VPRJD(KEY,"
  ; Add support for Generic Data Store (GDS)
  ; All Generic Data stores are listed in ^VPRCONFIG
- I $G(HTTPREQ("store"))'="",$D(^VPRCONFIG("store",$G(HTTPREQ("store")))) S TYPE="src",OREF="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))_"(KEY,"
+ I (TYPE'="src"),(TYPE'="tgt"),(TYPE'="vpr"),(TYPE'="data"),($G(HTTPREQ("store"))'="") D
+ . I $D(^VPRCONFIG("store",HTTPREQ("store"))) D
+ . . S TYPE="src",OREF="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))_"(KEY,"
  ;
  S SPEC("merge")=0
  S TMPLT=$P(FLD,";",2),FLD=$P(FLD,";")

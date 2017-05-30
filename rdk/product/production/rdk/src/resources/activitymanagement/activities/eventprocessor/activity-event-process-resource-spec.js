@@ -143,6 +143,14 @@ describe('Activity Event Processor', function() {
             var firstOutput = pagesize1k.sort(aep.versionCompare)[0];
             expect(firstOutput).to.eql('2.0.rc204.215');
         });
+
+        it('works with .x versions with same major version', function() {
+            var input = ['2.0.rc217-staging.10', '2.x.0.10'];
+            var expectedOutput = ['2.x.0.10', '2.0.rc217-staging.10'];
+            var output = input.sort(aep.versionCompare);
+
+            expect(output).to.eql(expectedOutput);
+        });
     });
 
     describe('startActivityEvent', function() {

@@ -520,6 +520,28 @@ function isVistaHdrSite(siteId, config) {
     return false;
 }
 
+//----------------------------------------------------------------------------------------
+// This method returns a va patient uuid from either a pid of icn.  If the id is not
+// either a pid or icn then the id is returned.
+//
+// id: valid pid or icn.
+// return va patient uuid.
+//----------------------------------------------------------------------------------------
+function createPatientUUID(id) {
+    var patientUUID = 'urn:va:patient:';
+
+    if (isIcn(id)) {
+        patientUUID += 'ICN:' + id + ':' + id;
+    } else if (isPid(id)) {
+        var parts = extractPiecesFromPid(id);
+        patientUUID += parts.site + ':' + parts.dfn + ':' + parts.dfn;
+    } else {
+        patientUUID = id;
+    }
+
+    return patientUUID;
+}
+
 module.exports.create = create;
 module.exports.isIdFormatValid = isIdFormatValid;
 module.exports.isIcn = isIcn;
@@ -548,3 +570,4 @@ module.exports.isVistaHdrSitePid = isVistaHdrSitePid;
 module.exports.validFormats = _.clone(validFormats);
 module.exports.patientExistsIn = patientExistsIn;
 module.exports.isVistaHdrSite = isVistaHdrSite;
+module.exports.createPatientUUID = createPatientUUID;

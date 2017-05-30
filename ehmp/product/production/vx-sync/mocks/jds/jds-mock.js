@@ -18,8 +18,7 @@ var port = require('yargs').usage('Usage: $0 --port <port>')
                            .argv.port;
 
 var app = require('express')().use(bodyParser.json())
-                              .use(bodyParser.urlencoded({ extended: true }))
-                              .use(require('multer')());
+                              .use(bodyParser.urlencoded({ extended: true }));
 
 // ROUTES
 

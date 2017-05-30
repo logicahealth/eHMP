@@ -1,7 +1,10 @@
 class ModalElements < SitePrism::Page
   element :fld_modal_title, '#mainModalLabel'
   element :btn_close, '#modal-close-button'
-  element :btn_x_close, '.modal-header button.close'
+  element :btn_x_close, '#modal-header button.close'
+  element :fld_main_modal, "#mainModal"
+  element :fld_main_modal_fade_in, "div.modal-backdrop.fade.in"
+
   element :btn_modal_close, "#modal-footer [data-dismiss='modal']"
   element :modal_body, "#modal-body"
   elements :fld_modal_detail_labels, "#modal-body [data-detail-label]"

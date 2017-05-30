@@ -96,7 +96,7 @@ define([
         },
         childView: STRowItemView,
         childViewContainer: '@ui.BodyContainer',
-        behaviors: _.omit(ControlService.CompositeViewControl.prototype.behaviors, 'ErrorMessages'),
+        behaviors: _.omit(ControlService.CompositeViewControl.prototype.behaviors, ['ErrorMessages','UpdateConfig']),
         childViewOptions: function() {
             return {
                 attributeMapping: this.attributeMapping,

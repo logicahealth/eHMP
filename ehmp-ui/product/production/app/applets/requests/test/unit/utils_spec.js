@@ -4,29 +4,47 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(["test/stubs",
-        "jquery",
-        "backbone",
-        "marionette",
-        "jasminejquery",
-        "app/applets/requests/applet",
-        "app/applets/requests/utils"
-    ],
-    function(Stubs, $, Backbone, Marionette, JasmineJquery, RequestsApplet, Util) {
-        describe("Test Request applet", function() {
-            var config = RequestsApplet;
-            var View = config.viewTypes[1].view;
+define([
+    'test/stubs',
+    'jquery',
+    'backbone',
+    'marionette',
+    'moment',
+    'jasminejquery',
+    'app/applets/requests/applet',
+    'app/applets/requests/utils',
+    'require',
+    'underscore'
+], function(Stubs, $, Backbone, Marionette, moment, JasmineJquery, RequestsApplet, Util, require, _) {
+    describe('Load ActivitiesModel', function() {
+        var ActivitiesModel;
+
+        beforeEach(function(done) {
+            if (_.isUndefined(ActivitiesModel)) {
+                require(['app/resources/fetch/activities/model'], function(model) {
+                    ActivitiesModel = model;
+                    return done();
+                });
+            } else {
+                return done();
+            }
+        });
+
+
+        describe('Test Request applet', function() {
             var regionManager = new Backbone.Marionette.RegionManager();
             var testRegion;
-            var getMockResponse = function(urgancyCode) {
-                return Util.parseResponse({
-                    ASSIGNEDTOFACILITYID: "500",
-                    CREATEDATID: "500",
-                    CREATEDON: "2016-11-23T16:18:56.000Z",
-                    CREATEDONFORMATTED: "201611231118",
+            var getMockActivitiesModel = function(urgencyCode) {
+                return new ActivitiesModel({
+                    ASSIGNEDTOFACILITYID: '500',
+                    CREATEDATID: '500',
+                    CREATEDON: '2016-11-23T16:18:56.000Z',
+                    CREATEDONFORMATTED: '201611231118',
                     ISACTIVITYHEALTHY: 1,
-                    TASKSTATE: "Unreleased:Pending Signature",
-                    URGENCY: urgancyCode
+                    TASKSTATE: 'Unreleased:Pending Signature',
+                    URGENCY: urgencyCode
+                }, {
+                    parse: true
                 });
             };
 
@@ -52,9 +70,9 @@ define(["test/stubs",
                 spyOn(ADK.Messaging, 'request').and.callFake(function(channel) {
                     if (channel === 'facilityMonikers') {
                         return new Backbone.Collection({
-                            facilityCode: "500",
-                            facilityMoniker: "TST1",
-                            facilityName: "Camp Master"
+                            facilityCode: '500',
+                            facilityMoniker: 'TST1',
+                            facilityName: 'Camp Master'
                         });
                     } else if (channel === 'get:current:workspace') {
                         return 'request_test_page';
@@ -69,17 +87,20 @@ define(["test/stubs",
                 spyOn(ADK.SessionStorage.get, 'sessionModel').and.callFake(function(channel) {
                     if (channel === 'expandedAppletId') {
                         return new Backbone.Model({
-                            id: "request_test"
+                            id: 'request_test'
                         });
                     }
                 });
             });
 
             afterEach(function() { //avoid leaking into other tests
-                if (regionManager.get('testRegion')) regionManager.removeRegion('testRegion');
+                if (regionManager.get('testRegion')) {
+                    regionManager.removeRegion('testRegion');
+                }
                 $('body > .testRegion').remove();
             });
-            describe("Test Request applet utils Base FilterModel", function() {
+
+            describe('Test Request applet utils Base FilterModel', function() {
                 var testModel = new Util.FilterModel({}, {
                     appletConfig: {
                         fullScreen: false,
@@ -87,23 +108,24 @@ define(["test/stubs",
                     },
                     columnsViewType: 'expanded'
                 });
-                it("intendedForMeAndMyTeams is true", function() {
+                it('intendedForMeAndMyTeams is true', function() {
                     expect(testModel.get('intendedForMeAndMyTeams')).toBe(true);
                 });
-                it("onlyShowFlaggedRequests is true", function() {
-                    expect(testModel.get('onlyShowFlaggedRequests')).toBe(true);
+                it('onlyShowFlaggedRequests is false', function() {
+                    expect(testModel.get('onlyShowFlaggedRequests')).toBe(false);
                 });
-                it("createdByMe is true", function() {
+                it('createdByMe is true', function() {
                     expect(testModel.get('createdByMe')).toBe(true);
                 });
-                it("primarySelection is intendedForAndCreatedByMe", function() {
+                it('primarySelection is intendedForAndCreatedByMe', function() {
                     expect(testModel.get('primarySelection')).toBe('intendedForAndCreatedByMe');
                 });
-                it("mode is open", function() {
+                it('mode is open', function() {
                     expect(testModel.get('mode')).toBe('open');
                 });
             });
-            describe("Test Request applet utils FilterModel after model changes", function() {
+
+            describe('Test Request applet utils FilterModel after model changes', function() {
                 var testModel = new Util.FilterModel({}, {
                     appletConfig: {
                         fullScreen: false,
@@ -114,59 +136,61 @@ define(["test/stubs",
                 testModel.set({
                     primarySelection: 'none',
                     mode: 'closed',
-                    onlyShowFlaggedRequests: false
+                    onlyShowFlaggedRequests: true
                 });
-                it("intendedForMeAndMyTeams is false", function() {
+                it('intendedForMeAndMyTeams is false', function() {
                     expect(testModel.get('intendedForMeAndMyTeams')).toBe(false);
                 });
-                it("onlyShowFlaggedRequests is false", function() {
-                    expect(testModel.get('onlyShowFlaggedRequests')).toBe(false);
+                it('onlyShowFlaggedRequests is true', function() {
+                    expect(testModel.get('onlyShowFlaggedRequests')).toBe(true);
                 });
-                it("createdByMe is false", function() {
+                it('createdByMe is false', function() {
                     expect(testModel.get('createdByMe')).toBe(false);
                 });
-                it("primarySelection is none", function() {
+                it('primarySelection is none', function() {
                     expect(testModel.get('primarySelection')).toBe('none');
                 });
-                it("mode is closed", function() {
+                it('mode is closed', function() {
                     expect(testModel.get('mode')).toBe('closed');
                 });
             });
-            describe("Test Request applet utils parseResponse", function() {
-                it("Base parse fields parse correctly", function() {
-                    var mockResponse = getMockResponse(9);
-                    expect(mockResponse.assignedFacilityName).toBe("Camp Master");
-                    expect(mockResponse.createdAtName).toBe("Camp Master");
-                    expect(mockResponse.createdOn).toBe("20161123");
-                    expect(mockResponse.isActivityHealthy).toBe(1);
-                    expect(mockResponse.taskState).toBe("Unreleased");
-                    expect(mockResponse.urgency).toBe("Routine");
+
+            describe('Test Request applet utils parseResponse', function() {
+                it('Base parse fields parse correctly', function() {
+                    var localDateTime = moment.utc('11/23/2016 16:18:56', 'MM/DD/YYYY HH:mm:ss').local();
+                    var mockActivitiesModel = getMockActivitiesModel(9);
+                    expect(mockActivitiesModel.get('assignedFacilityName')).toBe('Camp Master');
+                    expect(mockActivitiesModel.get('createdAtName')).toBe('Camp Master');
+                    expect(mockActivitiesModel.get('createdOn')).toBe(localDateTime.format('YYYYMMDDHHmmss'));
+                    expect(mockActivitiesModel.get('isActivityHealthy')).toBe(1);
+                    expect(mockActivitiesModel.get('taskState')).toBe('Unreleased');
+                    expect(mockActivitiesModel.get('urgency')).toBe('Routine');
                 });
-                it("Urgancy of 2 parses to Emergent", function() {
-                    var mockResponse = getMockResponse(2);
-                    expect(mockResponse.urgency).toBe("Emergent");
+                it('Urgancy of 2 parses to Emergent', function() {
+                    var mockActivitiesModel = getMockActivitiesModel(2);
+                    expect(mockActivitiesModel.get('urgency')).toBe('Emergent');
                 });
-                it("Urgancy of 3 parses to Pre-op", function() {
-                    var mockResponse = getMockResponse(3);
-                    expect(mockResponse.urgency).toBe("Pre-op");
+                it('Urgancy of 3 parses to Pre-op', function() {
+                    var mockActivitiesModel = getMockActivitiesModel(3);
+                    expect(mockActivitiesModel.get('urgency')).toBe('Pre-op');
                 });
-                it("Urgancy of 4 parses to Urgent", function() {
-                    var mockResponse = getMockResponse(4);
-                    expect(mockResponse.urgency).toBe("Urgent");
+                it('Urgancy of 4 parses to Urgent', function() {
+                    var mockActivitiesModel = getMockActivitiesModel(4);
+                    expect(mockActivitiesModel.get('urgency')).toBe('Urgent');
                 });
-                it("Urgancy of 5 parses to Admit", function() {
-                    var mockResponse = getMockResponse(5);
-                    expect(mockResponse.urgency).toBe("Admit");
+                it('Urgancy of 5 parses to Admit', function() {
+                    var mockActivitiesModel = getMockActivitiesModel(5);
+                    expect(mockActivitiesModel.get('urgency')).toBe('Admit');
                 });
-                it("Urgancy of 6 parses to Outpatient", function() {
-                    var mockResponse = getMockResponse(6);
-                    expect(mockResponse.urgency).toBe("Outpatient");
+                it('Urgancy of 6 parses to Outpatient', function() {
+                    var mockActivitiesModel = getMockActivitiesModel(6);
+                    expect(mockActivitiesModel.get('urgency')).toBe('Outpatient');
                 });
-                it("Urgancy of 7 parses to Purple Triangle", function() {
-                    var mockResponse = getMockResponse(7);
-                    expect(mockResponse.urgency).toBe("Purple Triangle");
+                it('Urgancy of 7 parses to Purple Triangle', function() {
+                    var mockActivitiesModel = getMockActivitiesModel(7);
+                    expect(mockActivitiesModel.get('urgency')).toBe('Purple Triangle');
                 });
             });
         });
-
     });
+});

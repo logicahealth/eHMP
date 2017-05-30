@@ -207,9 +207,9 @@ When(/^user expands the numeric lab result applet from overview$/) do
 end
 
 Then(/^the Numeric Lab Results applet header indicates the applet is filtered$/) do
-  @ehmp = PobUDAF.new
-  @ehmp.filtered_applet "lab_results_grid"
-  expect(@ehmp).to have_filtered_applet
+  ehmp = PobUDAF.new
+  ehmp.create_filtered_applet_element "lab_results_grid"
+  expect(ehmp).to have_filtered_applet
 end
 
 Given(/^the user notes the order of the numeric lab results in the Numeric Lab Results Gist$/) do
@@ -253,3 +253,13 @@ Given(/^the Numeric Lab Results Applet displays at least (\d+) row of data$/) do
   expect(ehmp).to_not have_fld_empty_row
   expect(ehmp.summary_rows.length).to be > 0
 end
+
+Then(/^the Lab Detail table contains headers$/) do |table|
+  ehmp = PobNumericLabApplet.new
+  ehmp.wait_for_tbl_lab_detail_header
+  expected_headers = table.headers
+  for i in 0...expected_headers.size do
+    expect(object_exists_in_list(ehmp.tbl_lab_detail_header, "#{expected_headers[i]}")).to eq(true)
+  end
+end
+

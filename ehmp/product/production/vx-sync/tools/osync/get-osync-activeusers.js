@@ -54,10 +54,8 @@ pjdsClient.getActiveUsers(filter, function(error, response) {
         if (_.isEmpty(activeUsers)) {
             console.log('No users to process.');
         } else {
-            async.eachSeries(activeUsers, function(user, callback) {
-                console.log('User: ' + JSON.stringify(user));
-                return callback();
-
+            _.each(activeUsers, function(activeUser) {
+                console.log('User: ' + JSON.stringify(activeUser));
             });
         }
     }

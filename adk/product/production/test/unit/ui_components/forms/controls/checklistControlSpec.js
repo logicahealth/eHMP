@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/components", "api/UIComponents", "jasminejquery"],
+define(["jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api/UIComponents", "jasminejquery"],
     function($, Handlebars, Backbone, Marionette, UI) {
 
         var $form, form,
@@ -499,6 +499,16 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                     expect($form.find('input:checkbox')).toBeChecked();
                     $form.find('.checklistValue').trigger("control:item:value", {value:false});
                     expect($form.find('input:checkbox')).not.toBeChecked();
+                });
+                it("update:config", function() {
+                    $form.find('.checklistValue').trigger("control:update:config", {
+                        hidden: true
+                    });
+                    expect($form.find('.checklistValue')).toHaveClass('hidden');
+                    $form.find('.checklistValue').trigger("control:update:config", {
+                        hidden: false
+                    });
+                    expect($form.find('.checklistValue')).not.toHaveClass('hidden');
                 });
             });
         });

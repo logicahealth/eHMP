@@ -1,73 +1,81 @@
-<div class="{{Class}}" data-uid="{{uid}}" tabindex="0" date="{{datetime}}" count="{{count}}" sortText="{{summary}}">
-<span class="sr-only">Press enter to view additional details</span>
-	<div class="container-fluid left-margin-lg">
-	{{#if subGroupResult}}
-		<div class="row">
-			<div class="col-xs-12">{{{subGroupContent}}}</div>
-		</div>
-	{{/if}}
-	{{#if basicResult}}
-		{{#if singleResult}}
-			<div class="row">
-				<div class="col-xs-1 pixel-width-45">				
-					<span class="badge background-color-primary">{{count}}</span>
-				</div>
-				<div class="col-xs-11">
-					<div class="row">
-						<div class="col-xs-12">
-							<span><strong>{{{summary}}}</strong></span>
-						</div>
-						<div class="col-xs-4">
-							<span>{{datetime}}</span>
-						</div>
-						<div class="col-xs-4">
-							{{#if signer}}
-								<i class="fa fa-pencil" title="/eh/ {{signer}} - Signed: {{ datetime }}"></i>
-							{{/if}} 
-							{{#if name}}
-								<span>{{{name}}}</span>
-							{{/if}} 
-							{{#if problemStatus}} 
-								<span>{{{problemStatus}}}</span>
-							{{else}} 
-								<span>{{{domain}}}</span>
-							{{/if}}
-							<div>
-								<span>{{{highlights}}}</span>
-							</div>
-						</div>
-						<div class="col-xs-4">
-							<span>{{{facility}}}</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		{{else}}
-		<div class="row left-margin-xs">
-			<div class="col-xs-4">
-				<span>{{datetime}}</span>
-			</div>
-			<div class="col-xs-4">
-					{{#if signer}}
-						<i class="fa fa-pencil" title="/eh/ {{signer}} - Signed: {{ datetime }}"></i>
-					{{/if}} 
-					{{#if name}}
-						<span>{{{name}}}</span>
-					{{/if}} 
-					{{#if problemStatus}} 
-						<span>{{{problemStatus}}}</span>
-					{{else}} 
-						<span>{{{domain}}}</span>
-					{{/if}}
-				<div>
-					<span>{{{highlights}}}</span>
-				</div>
-			</div>
-			<div class="col-xs-4">
-				<span>{{{facility}}}</span>
-			</div>
-		</div>
-		{{/if}}
-	{{/if}}
-	</div>
+<div class=" search-result-item all-padding-xs searchResultItem-filterable {{#if isDrillDownModel}} subgroupItem {{else}} topLevelItem {{/if}}{{#if filterCacheCount}} left-margin-md{{/if}}" data-uid="{{uid}}" tabindex="0" date="{{datetime}}" count="{{count}}" sortText="{{summary}}">
+    <span class="sr-only">Press enter to view additional details</span>
+    <div class="container-fluid {{#if filterCacheCount}} left-margin-sm {{else}} left-margin-lg  {{/if}}">
+        {{#if subGroupResult}}
+            <div class="row">
+                <div class="col-xs-12">{{{subGroupContent}}}</div>
+            </div>
+        {{/if}}
+        {{#if basicResult}}
+            {{#if singleResult}}
+                <div class="row">
+                    <div class="col-xs-1 pixel-width-45">
+                        <span class="badge background-color-primary {{#if filterCacheCount}} left-margin-xs {{/if}}">{{count}}</span>
+                    </div>
+                    <div class="col-xs-11">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <span><strong>{{{summary}}}</strong></span>
+                            </div>
+                            <div class="col-xs-4">
+                                <span>{{datetime}}</span>
+                            </div>
+                            <div class="col-xs-4">
+                                {{#if signer}}
+                                    <i class="fa fa-pencil" title="/eh/ {{signer}} - Signed: {{ datetime }}"></i>
+                                {{/if}}
+                                {{#if name}}
+                                    <span>{{{name}}}</span>
+                                {{/if}}
+                                {{#if problemStatus}}
+                                    <span>{{{problemStatus}}}</span>
+                                {{else}}
+                                    <span>{{{domain}}}</span>
+                                {{/if}}
+                                <div>
+                                    <span>{{{highlights}}}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                {{#if vlerDoc}}
+                                    <span>{{{institution}}}</span>
+                                {{else}}
+                                    <span>{{{facility}}}</span>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{else}}
+                <div class="row left-margin-xs">
+                    <div class="col-xs-4">
+                        <span>{{datetime}}</span>
+                    </div>
+                    <div class="col-xs-4">
+                        {{#if signer}}
+                            <i class="fa fa-pencil" title="/eh/ {{signer}} - Signed: {{ datetime }}"></i>
+                        {{/if}}
+                        {{#if name}}
+                            <span>{{{name}}}</span>
+                        {{/if}}
+                        {{#if problemStatus}}
+                            <span>{{{problemStatus}}}</span>
+                        {{else}}
+                            <span>{{{domain}}}</span>
+                        {{/if}}
+                        <div>
+                            <span>{{{highlights}}}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        {{#if vlerDoc}}
+                            <span>{{{institution}}}</span>
+                        {{else}}
+                            <span>{{{facility}}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+            {{/if}}
+        {{/if}}
+    </div>
 </div>

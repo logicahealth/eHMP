@@ -1,0 +1,22 @@
+// inputs
+input {
+    &[type="text"],
+    &[type="password"],
+    &[type="email"],
+    &[type="number"],
+    &[type="search"],
+    &[type="url"] {
+        border-radius: 4px;
+        font-family: 'Source Sans Pro';
+        font-size: 11px;
+        height: 28px;
+        padding: 3px 6px;
+    }
+    &::-ms-clear {
+        display: none;
+    }
+}
+.input-group-addon {
+    font-size: 12px;
+    padding: 0px 5px;
+}

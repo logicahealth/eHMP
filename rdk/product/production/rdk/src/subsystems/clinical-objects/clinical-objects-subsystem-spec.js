@@ -10,7 +10,7 @@ var sample1 = {
     patientUid: 'urn:va:patient:9E7A:3:3',
     model: {
         patientUid: 'urn:va:patient:9E7A:3:3',
-        authorUid: 'mx1234',
+        authorUid: 'REDACTED',
         domain: 'ehmp-order',
         subDomain: 'laboratory',
         ehmpState: 'active',
@@ -55,7 +55,7 @@ var buildSampleObject = function(sample) {
         authorUid: sample.model.authorUid,
         items: [{
             addendum: 'my note',
-            authorUid: 'mx1234',
+            authorUid: 'REDACTED',
             data: {
                 labTestText: 'Lab Text',
                 currentItemCount: 1,
@@ -85,7 +85,7 @@ var buildOrderObject = function(ehmpState, referenceId, domain, subDomain){
         pid: '9E7A;3',
         model: {
             patientUid: 'urn:va:patient:9E7A:3:3',
-            authorUid: 'mx1234',
+            authorUid: 'REDACTED',
             domain: domain,
             subDomain: subDomain,
             ehmpState: ehmpState,
@@ -111,7 +111,7 @@ var buildOrderObject = function(ehmpState, referenceId, domain, subDomain){
 var updatedClinincalObject  = {
     uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
     patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'mx1234',
+    authorUid: 'REDACTED',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     ehmpState: 'active',
@@ -132,18 +132,17 @@ var updatedClinincalObject  = {
     },
 };
 
-//THIS SHOULD CHANGE ONCE WE SET THE CORRECT ENDPOINT!!
-var endpoint = 'clinicobj';
-var activityManagementEndpoint = 'activity-management-event';
-var testEndpoint = 'http://10.2.2.110:9080';
-var testVxsyncEndpoint = 'http://10.3.3.6:8080';
+var pJDSEndpoint = 'clinicobj';
+var vxSyncEndpoint = 'clinicalObject';
+var testEndpoint = 'http://IP             ';
+var testVxsyncEndpoint = 'http://IP           ';
 
 var appConfig = {
     generalPurposeJdsServer: {
-        baseUrl: 'http://10.2.2.110:9080'
+        baseUrl: 'http://IP             '
     },
     vxSyncServer: {
-        baseUrl: 'http://10.3.3.6:8080'
+        baseUrl: 'http://IP           '
     }
 };
 
@@ -153,11 +152,12 @@ describe('Clinical object subsystem resource task tests', function() {
 
         it('should create a clinical object when called with the correct parameters', function(done) {
 
-            nock(testEndpoint).post('/' + endpoint).reply(200, {});
-            nock(testVxsyncEndpoint).post('/' + activityManagementEndpoint).reply(200, {});
+            nock(testVxsyncEndpoint).post('/' + vxSyncEndpoint).reply(201, {'status': 'OK'});
 
             var orderModel = buildOrderObject('active', 'testReferenceID', 'ehmp-order', 'laboratory');
             clinicalObjects.create(logger, appConfig, orderModel.model, function(err, response) {
+                logger.warn('zzzerror %j', err);
+                logger.warn('zzzresponse %j', response);
                 expect(response).to.be.an.object();
                 expect(err).to.be.null();
                 // console.info(response.request.httpModule);
@@ -184,20 +184,6 @@ describe('Clinical object subsystem resource task tests', function() {
                 done();
             });
         });
-
-        it('should handle errors when the storage endpoint returns an error', function(done) {
-
-            nock(testEndpoint).post('/' + endpoint).replyWithError('Test Failure');
-
-            clinicalObjects.create(logger, appConfig, sample1.model, function(err, response) {
-                expect(response).to.be.undefined();
-                expect(err).not.to.be.undefined();
-                expect(logger.error.called).to.be.true();
-                expect(err.message).not.to.be.undefined();
-                expect(err.message).to.be('Test Failure');
-                done();
-            });
-        });
     });
 
     describe('Read clinical object', function() {
@@ -205,9 +191,9 @@ describe('Clinical object subsystem resource task tests', function() {
         it('should retrieve a clinical object when called with the correct parameters', function(done) {
             nock(testEndpoint)
                 .filteringPath(function(path) {
-                    return ('/' + endpoint);
+                    return ('/' + pJDSEndpoint);
                 })
-                .get('/' + endpoint)
+                .get('/' + pJDSEndpoint)
                 .reply(200, buildSampleObject(sample1));
 
             clinicalObjects.read(logger, appConfig, sample1.uid, false, function(err, response) {
@@ -235,13 +221,13 @@ describe('Clinical object subsystem resource task tests', function() {
             });
         });
 
-        it('should handle errors when the storage endpoint returns an error', function(done) {
+        it('should handle errors when the storage pJDSEndpoint returns an error', function(done) {
 
             nock(testEndpoint)
                 .filteringPath(function(path) {
-                    return ('/' + endpoint);
+                    return ('/' + pJDSEndpoint);
                 })
-                .get('/' + endpoint)
+                .get('/' + pJDSEndpoint)
                 .replyWithError('Test Failure');
 
             clinicalObjects.read(logger, appConfig, sample1.uid, false, function(err, response) {
@@ -258,14 +244,7 @@ describe('Clinical object subsystem resource task tests', function() {
     describe('Update clinical object', function() {
 
         it('should update a clinical object when called with the correct parameters', function(done) {
-            nock(testEndpoint)
-                .filteringPath(function(path) {
-                    return ('/' + endpoint);
-                })
-                .put('/' + endpoint)
-                .reply(200, {});
-
-            nock(testVxsyncEndpoint).post('/' + activityManagementEndpoint).reply(200, {});
+            nock(testVxsyncEndpoint).post('/' + vxSyncEndpoint).reply(200, {});
 
             clinicalObjects.update(logger, appConfig, sample1.uid, updatedClinincalObject, function(err, response) {
                 expect(response.body).to.be.an.object();
@@ -293,50 +272,6 @@ describe('Clinical object subsystem resource task tests', function() {
                 expect(response).to.be.undefined();
                 expect(err).not.to.be.undefined();
                 expect(logger.error.called).to.be.true();
-                done();
-            });
-        });
-
-        it('should handle errors when the storage endpoint returns an error', function(done) {
-
-            nock(testEndpoint)
-                .filteringPath(function(path) {
-                    return ('/' + endpoint);
-                })
-                .put('/' + endpoint)
-                .replyWithError('Test Failure');
-
-            clinicalObjects.update(logger, appConfig, sample1.uid, updatedClinincalObject, function(err, response) {
-                expect(response).to.be.undefined();
-                expect(err).not.to.be.undefined();
-                expect(logger.error.called).to.be.true();
-                expect(err.message).not.to.be.undefined();
-                expect(err.message).to.be('Test Failure');
-                done();
-            });
-        });
-    });
-
-    describe('Post clinical object to activity management service.', function() {
-        it ('should successfully post clinical object to activity management event service', function(done) {
-            nock(testVxsyncEndpoint).post('/' + activityManagementEndpoint).reply(200, {});
-
-            clinicalObjects.postActivityManagementEvent(logger, appConfig, sample1, function(err, response) {
-                expect(response).to.be.an.object();
-                expect(err).to.be.null();
-                done();
-            });
-        });
-
-        it ('should handle an error when activity management service returns an error', function(done) {
-            nock(testVxsyncEndpoint).post('/' + activityManagementEndpoint).replyWithError('Test Failure');
-
-            clinicalObjects.postActivityManagementEvent(logger, appConfig, sample1, function(err, response) {
-                expect(response).to.be.undefined();
-                expect(err).not.to.be.undefined();
-                expect(logger.error.called).to.be.true();
-                expect(err.message).not.to.be.undefined();
-                expect(err.message).to.be('Test Failure');
                 done();
             });
         });
@@ -374,6 +309,88 @@ describe('Clinical object subsystem resource task tests', function() {
             expect(clinicalObj.patientUid).not.to.be.undefined();
             expect(clinicalObj.patientUid).not.to.be('urn:va:patient:ICN:3:3');
             done();
+        });
+    });
+
+    describe('storeToSolr business rule', function() {
+        describe('ehmp-activity consult', function() {
+            var ehmpActivityConsultClinicalObject  = {
+                uid: 'urn:va:ehmp-activity:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+                patientUid: 'urn:va:patient:9E7A:3:3',
+                authorUid: 'REDACTED',
+                domain: 'ehmp-activity',
+                subDomain: 'consult',
+                visit: {
+                    location: 'location',
+                    serviceCategory: 'serviceCategory',
+                    dateTime: 'dateTime'
+                }
+            };
+            it('should return true if ehmp-activity is a consult and active', function() {
+                var document = _.extend({}, ehmpActivityConsultClinicalObject, {
+                    ehmpState: 'active'
+                });
+                expect(clinicalObjects.storeToSolr(document)).to.be.true();
+            });
+            it('should return false if ehmp-activity is a consult and in draft', function() {
+                var document = _.extend({}, ehmpActivityConsultClinicalObject, {
+                    ehmpState: 'draft'
+                });
+                expect(clinicalObjects.storeToSolr(document)).to.be.false();
+            });
+        });
+        describe('ehmp-activity request', function() {
+            var ehmpActivityRequestClinicalObject  = {
+                uid: 'urn:va:ehmp-activity:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+                patientUid: 'urn:va:patient:9E7A:3:3',
+                authorUid: 'REDACTED',
+                domain: 'ehmp-activity',
+                subDomain: 'request',
+                visit: {
+                    location: 'location',
+                    serviceCategory: 'serviceCategory',
+                    dateTime: 'dateTime'
+                }
+            };
+            it('should return true if ehmp-activity is a request and active', function() {
+                var document = _.extend({}, ehmpActivityRequestClinicalObject, {
+                    ehmpState: 'active'
+                });
+                expect(clinicalObjects.storeToSolr(document)).to.be.true();
+            });
+
+            it('should return false if ehmp-activity is a request and in draft', function() {
+                var document = _.extend({}, ehmpActivityRequestClinicalObject, {
+                    ehmpState: 'draft'
+                });
+                expect(clinicalObjects.storeToSolr(document)).to.be.false();
+            });
+        });
+        describe('ehmp-order laboratory', function() {
+            var ehmpOrderLaboratoryClinicalObject  = {
+                uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+                patientUid: 'urn:va:patient:9E7A:3:3',
+                authorUid: 'REDACTED',
+                domain: 'ehmp-order',
+                subDomain: 'laboratory',
+                visit: {
+                    location: 'location',
+                    serviceCategory: 'serviceCategory',
+                    dateTime: 'dateTime'
+                }
+            };
+            it('should return false if ehmp-order is a laboratory and active', function() {
+                var document = _.extend({}, ehmpOrderLaboratoryClinicalObject, {
+                    ehmpState: 'active'
+                });
+                expect(clinicalObjects.storeToSolr(document)).to.be.false();
+            });
+            it('should return false if ehmp-order is a laboratory and draft', function() {
+                var document = _.extend({}, ehmpOrderLaboratoryClinicalObject, {
+                    ehmpState: 'draft'
+                });
+                expect(clinicalObjects.storeToSolr(document)).to.be.false();
+            });
         });
     });
 });

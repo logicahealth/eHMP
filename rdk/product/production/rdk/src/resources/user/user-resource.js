@@ -18,17 +18,6 @@ var getResourceConfig = function() {
 
         }
     }, {
-        name: 'user-service-userinfo-byUid',
-        path: '/info/byUid',
-        requiredPermissions: ['read-patient-record'],
-        interceptors: {
-            operationalDataCheck: false,
-            synchronize: false
-        },
-        isPatientCentric: false,
-        get: userList.getUserByUid,
-        healthcheck: {}
-    }, {
         name: 'user-service-userlist',
         path: '/list',
         interceptors: {

@@ -36,7 +36,7 @@ Scenario: Opening and closing of the Orders single page view.
 
 
 
-@f144_orders_consult_modal @US2462 @TA7322 @modal_test @DE1232 @DE3439 @DE6912 @debug @DE7012
+@f144_orders_consult_modal @US2462 @TA7322 @modal_test @DE1232 @DE3439 @DE6912 @DE7012
 Scenario: Viewing modal details for Consult Order.
   Given user searches for and selects "Eight,Patient"
   And Cover Sheet is active
@@ -63,7 +63,7 @@ Scenario: Viewing modal details for Consult Order.
       | Place of Consultation        |
 
 
-@f144_orders_dietetic_modal @US2520 @TA7611 @modal_test @vimm @DE3439 @DE3385 @DE6912 @debug @DE7012
+@f144_orders_dietetic_modal @US2520 @TA7611 @modal_test @vimm @DE3439 @DE3385 @DE6912 @DE7012
 Scenario: Viewing modal details for Dietetics Order.
   Given user searches for and selects "Eight,Patient"
   And Cover Sheet is active
@@ -89,7 +89,7 @@ Scenario: Viewing modal details for Dietetics Order.
       | Order               |
     
 
-@f144_orders_lab_modal @US2463 @TA7329 @modal_test @DE3439 @DE6912 @debug @DE7012
+@f144_orders_lab_modal @US2463 @TA7329 @modal_test @DE3439 @DE6912 @DE7012
 Scenario: Viewing modal details for Laboratory.
   Given user searches for and selects "Eight,Patient"
   And Cover Sheet is active
@@ -118,7 +118,7 @@ Scenario: Viewing modal details for Laboratory.
       | Collection Date/Time |
       | Urgency              |
 
-@f144_orders_medication_modal @US1924 @TA5917a @modal_test @DE3439 @DE6912 @debug @DE7012
+@f144_orders_medication_modal @US1924 @TA5917a @modal_test @DE3439 @DE6912 @DE7012
 Scenario: Viewing modal details for Medication, Inpatient.
   Given user searches for and selects "Bcma,Eight"
   Then Cover Sheet is active
@@ -145,7 +145,7 @@ Scenario: Viewing modal details for Medication, Inpatient.
       | Text                |
       | Priority            |
 
-@f144_orders_medication_modal @US1924 @TA5917b @modal_test @DE3439 @DE6912 @debug @DE7012
+@f144_orders_medication_modal @US1924 @TA5917b @modal_test @DE3439 @DE6912 @DE7012
 Scenario: Viewing modal details for Medication, Non-VA.
   Given user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
@@ -173,7 +173,7 @@ Scenario: Viewing modal details for Medication, Non-VA.
       | Start Date/Time     |
       | Comments            |
 
-@f144_orders_medication_modal @US1924 @TA5917c @modal_test @DE1232 @DE3439 @DE6912 @debug @DE7012
+@f144_orders_medication_modal @US1924 @TA5917c @modal_test @DE1232 @DE3439 @DE6912 @DE7012
 Scenario: Viewing modal details for Medication, Outpatient.
   Given user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
@@ -205,7 +205,7 @@ Scenario: Viewing modal details for Medication, Outpatient.
       | Priority            |
 
 
-@f144_orders_nursing_modal @US2559 @TA7852 @DE1817 @DE3439 @DE3385 @DE6912 @debug @DE7012
+@f144_orders_nursing_modal @US2559 @TA7852 @DE1817 @DE3439 @DE3385 @DE6912 @DE7012
 Scenario: Viewing modal details for Text Order.
   Given user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
@@ -229,7 +229,7 @@ Scenario: Viewing modal details for Text Order.
       | Current Status      |
 
 
-@f144_orders_radiology_modal @US2465 @TA7342 @modal_test @DE1232 @DE3385 @DE3439 @DE6912 @debug @DE7012
+@f144_orders_radiology_modal @US2465 @TA7342 @modal_test @DE1232 @DE3385 @DE3439 @DE6912 @DE7012
 Scenario: Viewing modal details for Radiology Order.
   Given user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
@@ -261,7 +261,7 @@ Scenario: Viewing modal details for Radiology Order.
       | Submit Request to   |
 
 
-@f144_orders_infusion_modal @US2756 @TA8884 @modal_test @DE1452 @DE2780 @DE3119 @DE6912 @debug @DE7012
+@f144_orders_infusion_modal @US2756 @TA8884 @modal_test @DE1452 @DE2780 @DE3119 @DE6912 @DE7012
 Scenario: Viewing modal details for IV Fluid Order.
   Given user searches for and selects "Ten,Patient"
   And Cover Sheet is active
@@ -296,7 +296,7 @@ Scenario: Orders should be sorted by Order Type and then by Order Date after a g
  
   Then the Orders should be sorted by Order Date
 
-@f144_orders_default_sorting_expanded @US2512 @TA7590 @debug @DE6145
+@f144_orders_default_sorting_expanded @US2512 @TA7590 @DE6145 @debug @DE7375
 Scenario: Orders should be sorted by Order Type and then by Order Date after a global date
   #Given user searches for and selects "Eight,Patient"
   Given user searches for and selects "Onehundredsixteen,Patient"
@@ -429,7 +429,7 @@ Scenario: Date filtering using the Custom button.
   And the user clicks the control "Apply" in the "Orders applet"
   Then the Orders applet table displays rows with an Order Date between "01/28/2010" and "02/28/2010"
 
-@f144_orders_modal_order_number @US1775 @DE263 @modal_test @DE3439 @DE6912 @debug @DE7012
+@f144_orders_modal_order_number @US1775 @DE263 @modal_test @DE3439 @DE6912 @DE7012
 Scenario: Ensure order number format is correct.
   Given user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
@@ -450,7 +450,7 @@ Scenario: Ensure order number format is correct.
   When the user clicks the control "Next Button" in the "Orders modal"
   Then the Order num is in the correct format: all digits
 
-@f144_orders_modal_order_start_stop_date @US1775 @DE262 @modal_test @DE3439 @DE6912 @debug @DE7012
+@f144_orders_modal_order_start_stop_date @US1775 @DE262 @modal_test @DE3439 @DE6912 @DE7012
 Scenario: Ensure order number format is correct.
   Given user searches for and selects "Eight,Patient"
   Then Cover Sheet is active

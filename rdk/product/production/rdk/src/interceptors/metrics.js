@@ -1,6 +1,7 @@
 'use strict';
 
 var metrics = require('../utils/metrics/metrics');
+var _ = require('lodash');
 
 module.exports = function(req, res, next) {
     var logger = req.logger;
@@ -9,6 +10,10 @@ module.exports = function(req, res, next) {
     var metricData = metrics.handleIncomingStart(req, logger);
 
     function onFinish() {
+        var dataItems = _.get(res, 'data.items');
+        if(dataItems){
+            metricData.numRecords = _.size(dataItems);
+        }
         metrics.handleFinish(metricData, logger);
     }
 

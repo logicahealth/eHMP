@@ -1,7 +1,0 @@
-"chef-server-team-upload-build-%branch%" {
-	template = 'templates/chef-server-team-upload-build.tpl'
-	description = "Uploads everything on a branch."
-	
-   gitUrl = 'https://code.vistacore.us/scm/pi/chef-repo.git'
-   gitBranch = '%branch%'
-}

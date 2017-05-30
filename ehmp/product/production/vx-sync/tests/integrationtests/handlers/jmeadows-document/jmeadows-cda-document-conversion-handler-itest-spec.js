@@ -255,7 +255,7 @@ describe('jmeadows-cda-document-conversion-handler', function() {
             var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 
             var host = vx_sync_ip;
-            var port = 5000;
+            var port = PORT;
             var tubename = 'vx-sync-test';
 
             var jobTypes = [jobUtils.recordEnrichmentType()];

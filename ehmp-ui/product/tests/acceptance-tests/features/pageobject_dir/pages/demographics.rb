@@ -4,7 +4,7 @@ class PobDemographicsElements < SitePrism::Page
   # *****************  All_Logo_Elements  ******************* #
 
   # *****************  All_Field_Elements  ******************* #
-  element :fld_patient_info_title, "#patient-header-demographic-details .panel-title"
+  element :fld_patient_info_title, "#patient-header-demographic-details .sidebar.open .panel-title"
   element :fld_home_phone_label, '#pt-header-pt-phone dt:nth-of-type(1)'
   element :fld_home_phone_value, '#pt-header-pt-phone dl dd:nth-of-type(1)'
 
@@ -18,16 +18,17 @@ class PobDemographicsElements < SitePrism::Page
 
   element :fld_patient_info_block, '.patient-info'
   elements :fld_patient_info_options, '.patient-info span'
-  element :fld_patient_name_status, '#patientDemographic h2'
+  element :fld_patient_name_status, '.patient-demographic-content h2'
   element :fld_patient_dob, "[data-instanceid='patientDemographic-patientInfo-dob']"
   element :fld_patient_info, ".patient-info.toggle-details p"
   element :fld_patient_gender, "#patientDemographic-patientInfo-gender"
   element :fld_patient_ssn, "#patientDemographic-patientInfo-ssn"
 
+  element :fld_provider_info_title, "#patient-header-provider-details .sidebar.open .panel-title"
   element :fld_home_address_value, "#pt-header-pt-address dd:nth-of-type(1)"
   element :fld_home_temp_add_value, "#pt-header-pt-address dd:nth-of-type(3)"
   element :fld_temp_address_titile, "#pt-header-pt-address dt:nth-of-type(2)"
-  element :fld_email_value, "#pt-header-email .demographic-group-content"
+  element :fld_email_value, "#pt-header-email .group-content"
   element :fld_em_con_relationship_value, "#pt-header-em-contact dd:nth-of-type(1)"
   element :fld_em_con_name_value, "#pt-header-em-contact dd:nth-of-type(2)"
   element :fld_em_home_ph_value, "#pt-header-em-contact dd:nth-of-type(3)"
@@ -47,12 +48,12 @@ class PobDemographicsElements < SitePrism::Page
   element :fld_patient_information_provider, "#patientInformationProviderInfoSummary"
   element :fld_patient_provider_info, "#patientProviderInformation"
 
-  elements :fld_phone_values, "#pt-header-pt-phone dd .demographic-data"
-  elements :fld_provider_group_header, ".demographic-group-wrapper h5"
+  elements :fld_phone_values, "#pt-header-pt-phone dd .group-data"
+  elements :fld_provider_group_header, ".group-wrapper h5"
   elements :fld_patient_info_provider_headers, "#patientInformationProviderInfoSummary .info strong"
   elements :fld_patient_info_provider_groups, "#patientInformationProviderInfoSummary .info"
-  elements :fld_demographic_group_headers, ".demographic-group-header>h5"
-  elements :fld_demographic_group_fields, ".demographic-group-content>dl>dt"
+  elements :fld_demographic_group_headers, ".group-header>h5"
+  elements :fld_demographic_group_fields, ".group-content>dl>dt"
   # *****************  All_Button_Elements  ******************* #
   element :btn_demographic, ".patient-demographic button[id^='tray']"
   element :btn_provider_info, "#patient-header-provider-details button[id^= tray]"
@@ -119,7 +120,7 @@ class PobDemographicsElements < SitePrism::Page
   def load_patient_care_provider_header_elements(partialid)
     nth_type = @patient_care_provider_header[partialid]
     fail "'#{partialid}' is not a defined element" if nth_type.nil?
-    self.class.elements :fld_primary_care_provider, ".demographic-group-wrapper:nth-of-type(#{nth_type}) dt"
+    self.class.elements :fld_primary_care_provider, ".group-wrapper:nth-of-type(#{nth_type}) dt"
   end
 
   def provider_group_header_text

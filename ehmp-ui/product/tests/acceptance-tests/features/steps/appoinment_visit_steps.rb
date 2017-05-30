@@ -38,30 +38,6 @@ class AppointmentsCoverSheet < AllApplets
   end
 end #AppointmentCoverSheet
 
-class AppointmentModal < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    add_verify(CucumberLabel.new('Date'), VerifyText.new, AccessHtmlElement.new(:css, '[data-detail-label="date"]'))
-    add_verify(CucumberLabel.new('Type'), VerifyText.new, AccessHtmlElement.new(:css, '[data-detail-label="type"]'))
-    add_verify(CucumberLabel.new('Description'), VerifyText.new, AccessHtmlElement.new(:css, '[data-detail-label="desc"]'))
-    add_verify(CucumberLabel.new('Patient Class'), VerifyText.new, AccessHtmlElement.new(:css, '[data-detail-label="patientClass"]'))
-    add_verify(CucumberLabel.new('Location'), VerifyText.new, AccessHtmlElement.new(:css, '[data-detail-label="location"]'))
-    add_verify(CucumberLabel.new('Status'), VerifyText.new, AccessHtmlElement.new(:css, '[data-detail-label="status"]'))
-    add_verify(CucumberLabel.new('Stop Code'), VerifyText.new, AccessHtmlElement.new(:css, '[data-detail-label="stopCode"]'))
-    add_verify(CucumberLabel.new('Provider'), VerifyText.new, AccessHtmlElement.new(:css, '[data-detail-label="provider"]'))
-    add_verify(CucumberLabel.new('Facility'), VerifyText.new, AccessHtmlElement.new(:css, '[data-detail-label="facility"]'))
-    add_verify(CucumberLabel.new('Reason'), VerifyText.new, AccessHtmlElement.new(:css, '[data-detail-label="reason"]'))
-
-    add_action(CucumberLabel.new('next button'), ClickAction.new, AccessHtmlElement.new(:id, 'ccdNext'))
-    add_action(CucumberLabel.new('previous button'), ClickAction.new, AccessHtmlElement.new(:id, 'ccdPrevious'))
-    add_action(CucumberLabel.new('close button'), ClickAction.new, AccessHtmlElement.new(:id, 'modal-close-button'))
-
-    add_verify(CucumberLabel.new("Date Value"), VerifyText.new, AccessHtmlElement.new(:css, ' [data-detail="date"]'))
-    add_verify(CucumberLabel.new("Location Value"), VerifyText.new, AccessHtmlElement.new(:css, '[data-detail="location"]'))
-  end
-end
-
 class AppointmentExpanded < AllApplets
   include Singleton
   def initialize
@@ -136,14 +112,6 @@ Then(/^the Appointments table only diplays rows including text "([^"]*)"$/) do |
   rows_containing_filter_text = TestSupport.driver.find_elements(:xpath, path).size
   row_count = TableContainer.instance.get_elements("Rows - Appointment Applet").size 
   expect(row_count).to eq(rows_containing_filter_text), "Only #{rows_containing_filter_text} rows contain the filter text but #{row_count} rows are visible"
-end
-
-Then(/^the Appointment applet contains buttons$/) do |table|
-  appointments = AppointmentsCoverSheet.instance
-  table.rows.each do | button|
-    cucumber_label = "Control - applet - #{button[0]}"
-    expect(appointments.am_i_visible? cucumber_label).to eq(true)
-  end
 end
 
 When(/^the user refreshes the applet$/) do

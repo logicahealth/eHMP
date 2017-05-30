@@ -1,0 +1,294 @@
+/*
+ * COPYRIGHT STATUS: © 2015, 2016.  This work, authored by Cognitive Medical Systems
+ * employees, was funded in whole or in part by The Department of Veterans
+ * Affairs under U.S. Government contract VA118-11-D-1011 / VA118-1011-0013.
+ * The copyright holder agrees to post or allow the Government to post all or
+ * part of this work in open-source repositories subject to the Apache License,
+ * Version 2.0, dated January 2004. All other rights are reserved by the
+ * copyright owner.
+ *
+ * For use outside the Government, the following notice applies:
+ *
+ *     Copyright 2015 © Cognitive Medical Systems
+ *
+ *     Licensed under the Apache License, Version 2.0 (the "License"); you may
+ *     not use this file except in compliance with the License. You may obtain
+ *     a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ *
+ */
+
+package rheumatologyConsultScreen;
+ 
+import ca.uhn.fhir.model.api.ExtensionDt;
+import ca.uhn.fhir.model.primitive.CodeDt;
+import ca.uhn.fhir.model.primitive.StringDt;
+import ca.uhn.fhir.model.primitive.InstantDt;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.composite.ContainedDt;
+import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
+import ca.uhn.fhir.model.dstu2.resource.CommunicationRequest;
+import ca.uhn.fhir.model.dstu2.resource.Provenance;
+import ca.uhn.fhir.model.dstu2.resource.DiagnosticReport;
+import ca.uhn.fhir.model.dstu2.resource.Observation;
+import ca.uhn.fhir.model.dstu2.resource.ValueSet;
+import ca.uhn.fhir.model.dstu2.resource.ValueSet.Expansion;
+import ca.uhn.fhir.model.dstu2.resource.ValueSet.ExpansionContains;
+import ca.uhn.fhir.model.dstu2.valueset.ObservationStatusEnum;
+import ca.uhn.fhir.model.api.IResource;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+import java.util.Date;
+
+import java.util.Iterator;
+import java.util.Collections;
+import org.opencds.service.evaluate.ObservationComparator;
+
+import function org.opencds.service.evaluate.FhirUtils.isCodingContains;
+import function org.opencds.service.evaluate.FhirUtils.getValueString;
+import function org.opencds.service.evaluate.FhirUtils.isCodingStartsWith;
+import function org.opencds.service.evaluate.FhirUtils.createProvenance;
+import function org.opencds.service.evaluate.FhirUtils.createCommunicationRequest;
+import function org.opencds.service.evaluate.FhirUtils.createOutputExtension;
+
+
+global java.lang.String clientLanguage;
+global java.lang.String clientTimeZoneOffset;
+global java.lang.String focalPersonId;
+global java.util.Date evalTime;
+global java.util.HashSet assertions;
+global java.util.HashMap namedObjects;
+
+function boolean isCodeInValueSet(CodeableConceptDt cc, ValueSet valueSet ) {
+        Boolean result = false;
+        List<CodingDt> l = cc.getCoding();
+        for (CodingDt codingDt : l) {
+            List<ExpansionContains> containList = valueSet.getExpansion().getContains();
+            for (Iterator iterator = containList.iterator(); iterator.hasNext();) {
+                ExpansionContains expansionContains = (ExpansionContains) iterator.next();
+                String system = expansionContains.getSystem();
+                String code = expansionContains.getCode();
+                if((codingDt.getSystem().equalsIgnoreCase(system) && codingDt.getCode().equalsIgnoreCase(code)) || 
+                  (codingDt.getSystem().equalsIgnoreCase(system) && codingDt.getCode().startsWith(code))){  // for local site specific codes 
+                  return true;
+                }
+            } 
+        }
+        return result;
+    }
+function Observation createObservation(ValueSet valueSet) {
+        Observation obs = new Observation();
+        IdentifierDt id =  new IdentifierDt();
+        id.setSystem(valueSet.getIdentifier().getSystem());
+        id.setValue(valueSet.getIdentifier().getValue());
+        List<IdentifierDt> identifiers = new ArrayList<>();
+        identifiers.add(id);
+        obs.setIdentifier(identifiers);
+        obs.setComments(valueSet.getDescription());
+        obs.setStatus(ObservationStatusEnum.FINAL);
+        obs.addUndeclaredExtension(createOutputExtension());
+        obs.addUndeclaredExtension(createDurationExtension("60d"));
+        obs.addUndeclaredExtension(createStatusExtension("Failed"));
+        return obs;
+}
+function ExtensionDt createStatusExtension(String status){
+        ExtensionDt ext = new ExtensionDt();
+        ext.setUrl("http://org.cognitive.cds.invocation.fhir.datanature.status");
+        ext.setModifier(true);
+        CodeDt cd = new CodeDt();
+        cd.setValueAsString(status);
+        ext.setValue(cd);
+        return ext;
+    }
+function void setObservationIdentifier(Observation obs, ValueSet valueSet) {
+        IdentifierDt id =  new IdentifierDt();
+        id.setSystem(valueSet.getIdentifier().getSystem());
+        id.setValue(valueSet.getIdentifier().getValue());
+        List<IdentifierDt> identifiers = new ArrayList<>();
+        identifiers.add(id);
+        obs.setIdentifier(identifiers);
+        obs.setComments(valueSet.getDescription());
+}
+function ExtensionDt createDurationExtension(String d){
+    ExtensionDt ext = new ExtensionDt();
+    ext.setUrl("http://org.cognitive.cds.invocation.fhir.datanature.duration");
+    ext.setModifier(true);
+    CodeDt cd = new CodeDt();
+    cd.setValueAsString(d);
+    ext.setValue(cd);
+    return ext;
+}
+    
+function void setStatus(Observation obs, String status) {
+        List<ExtensionDt> extensions = obs.getUndeclaredModifierExtensions();
+        for (ExtensionDt next : extensions) {
+            if ("http://org.cognitive.cds.invocation.fhir.datanature.status".equals(next.getUrlAsString())) {
+              CodeDt cd = new CodeDt();
+              cd.setValueAsString(status);
+              next.setValue(cd);
+            }
+        }
+    }
+
+declare INDICATOR  
+    @propertyReactive
+    crpValueSet  : ValueSet
+    rfValueSet  : ValueSet
+    crpList : ArrayList  // CRP Observation list
+    rfList : ArrayList   // Rheumatoid factor list
+    crpMR : Observation // Most recent CRP Observation 
+    rfMR : Observation // Most recent rhematoid factor Observation
+end
+
+rule "Initialize"
+    salience 1000, no-loop
+    when
+    then
+        insert(new INDICATOR(null, null, new ArrayList(), new ArrayList(), null, null));    
+end
+
+rule "Initialize CRP ValueSet"
+salience 900, no-loop
+    when
+    $valueSet : ValueSet( name == "CRP" )
+    $indicator: INDICATOR()
+    
+    then
+    modify($indicator) { setCrpValueSet( $valueSet ) };
+    // create observation when prerequisites rules were not fired.
+    namedObjects.put("crpObs", createObservation($valueSet));
+end
+ 
+ 
+rule "Get DiagnosticReport contained Observations"
+     salience 800
+     when 
+         $fhir  : DiagnosticReport()
+     then
+      List<? extends IResource> contaned = $fhir.getContained().getContainedResources();
+      for (Iterator iterator = contaned.iterator(); iterator.hasNext();) {
+        IResource iResource = (IResource) iterator.next();
+        if( iResource instanceof Observation){
+            Observation obs = (Observation) iResource;
+            //obs.setIssued(new InstantDt($fhir.getIssued()));
+            System.out.println("Observation got" + obs.toString());
+            insert(obs);
+        }
+     }
+end
+
+rule "Collect CRP Lab Results"
+     salience 700
+     when 
+        $indicator   : INDICATOR(crpValueSet != null, $crpValueSet : crpValueSet)
+        $obs  : Observation(isCodeInValueSet(code, $crpValueSet ))
+    then
+        modify($indicator) { getCrpList( ).add($obs) }; 
+        System.out.println("CRP Observation noticed. ");
+end
+
+rule "The most recent CRP Lab result Observation"
+    dialect "java"
+    salience 600
+    when
+         $indicator: INDICATOR(!crpList.isEmpty(), $valueSet: crpValueSet)
+    then
+    Collections.sort($indicator.getCrpList(), ObservationComparator.ISSUED_DATE );
+    Observation obs = (Observation)$indicator.getCrpList().get(0);
+    obs.addUndeclaredExtension(createStatusExtension("Failed"));
+    modify($indicator) { setCrpMR( obs ) };
+    // for between 61 and 90 days 
+    obs.addUndeclaredExtension(createOutputExtension());
+    obs.addUndeclaredExtension(createDurationExtension("60d"));
+    //setObservationIdentifier(obs, $valueSet);
+    obs.getIdentifier().add($valueSet.getIdentifier());
+    namedObjects.put("crpObs", obs);
+end  
+
+
+rule "CRP Prerequisites Rule"
+     dialect "java"
+     salience 500
+     when 
+         $indicator   : INDICATOR(crpMR != null, $crpMR : crpMR, $issuedDate : crpMR.getIssued(), $issuedDate != null, $crpValueSet: crpValueSet )
+         $issued : Period() from new Period($issuedDate.getTime(), new Date().getTime(), PeriodType.days())
+         eval($issued.getDays() <= 60 )
+      then
+          System.out.println("CRP Issued Date days = " + $issued.getDays());
+          
+          $crpMR.getCode().getCoding().get(0).setDisplay($crpValueSet.getDescription());
+          $crpMR.getIdentifier().add($crpValueSet.getIdentifier());
+        
+          setStatus($crpMR, "Passed");
+          namedObjects.put("crpObs", $crpMR);
+end
+
+
+rule "Initialize Rheumatoid Factor ValueSet"
+    salience 900, no-loop
+    when
+    $valueSet : ValueSet( name == "RF" )
+    $indicator: INDICATOR()
+    
+    then
+    modify($indicator) { setRfValueSet( $valueSet ) };
+    // create observation when prerequisites rules were not fired.
+    namedObjects.put("rfObs", createObservation($valueSet));
+    System.out.println($valueSet.toString());
+end
+
+
+rule "Collect Rheumatoid Factor Lab Results"
+     salience 700
+     when 
+         $indicator   : INDICATOR(rfValueSet != null, $rfValueSet : rfValueSet)
+         $obs  : Observation(isCodeInValueSet(code, $rfValueSet ))
+     then
+     modify($indicator) { getRfList( ).add($obs) }; 
+     System.out.println(" Rheumatoid Factor Observation noticed.");
+end
+
+rule "The most recent rheumatoid factor lab result Observation"
+    dialect "java"
+    salience 600
+    when
+         $indicator: INDICATOR(!rfList.isEmpty(), $rfValueSet : rfValueSet)
+    then
+    Collections.sort($indicator.getRfList(), ObservationComparator.ISSUED_DATE );
+    Observation obs = (Observation)$indicator.getRfList().get(0);
+    obs.addUndeclaredExtension(createStatusExtension("Failed"));
+    modify($indicator) { setRfMR( obs ) };
+    // for between 61 and 90 days 
+    obs.addUndeclaredExtension(createOutputExtension());
+    obs.addUndeclaredExtension(createDurationExtension("60d"));
+    setObservationIdentifier(obs, $rfValueSet);
+    namedObjects.put("rfObs", obs);
+end  
+
+rule "Rheumatoid Factor Prerequisites Rule"
+       dialect "java"
+       salience 400
+       when 
+         INDICATOR(rfMR != null, $rfMR : rfMR, $issuedDate : rfMR.getIssued(), $issuedDate != null, $rfValueSet: rfValueSet )
+         $issued : Period() from new Period($issuedDate.getTime(), new Date().getTime(), PeriodType.days())
+                
+         eval($issued.getDays() <= 60 )
+         
+      then
+      System.out.println("RF Issued Date days = " + $issuedDate);
+      $rfMR.getCode().getCoding().get(0).setDisplay($rfValueSet.getDescription());
+      setStatus($rfMR, "Passed");
+      namedObjects.put("rfObs", $rfMR);
+end

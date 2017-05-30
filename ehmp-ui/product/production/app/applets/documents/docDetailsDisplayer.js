@@ -35,7 +35,7 @@ define([
             }
             //render DoD html complex note into an iframe
             else {
-                var complexData = new Backbone.Collection();
+                var complexData = new ADK.UIResources.Fetch.Document.ComplexNote.Collection();
                 this.listenToOnce(complexData, 'fetch:success', function() {
                     this.stopListening(complexData, 'fetch:error');
                     model.set('dodComplexNoteContent', complexData.models[0].get('complexNote'));
@@ -53,16 +53,11 @@ define([
                 if (DEBUG) console.log("DoD Complex Note format is HTML.");
 
                 var complexNoteFetchOptions = {
-                    resourceTitle: 'patient-record-complexnote-html',
                     criteria: {
                         uid: model.get('uid')
-
-                    },
-                    viewModel: {
-                        parse: DodComplexNoteUtil.parseModel
-                    },
+                    }
                 };
-                ADK.PatientRecordService.fetchCollection(complexNoteFetchOptions, complexData);
+                complexData.fetchCollection(complexNoteFetchOptions);
             }
         } else {
             if (DEBUG) console.log("Already have DoD Complex Note, not re-fetching");
@@ -152,14 +147,13 @@ define([
             }
         });
         if (amended) {
-            var asigners = _.filter(clinicians, function(item){
+            var asigners = _.filter(clinicians, function(item) {
                 return _.has(item, 'role') && item.role === 'AM';
             });
             //there can only be one amendment signer
             if (asigners.length > 0) {
                 signatures += getSignature(asigners[0]);
-            }
-            else {
+            } else {
                 signatures += '\nAMENDMENT FILED: \n N/A';
             }
         }
@@ -177,16 +171,15 @@ define([
         } else {
             signatureSuffix = signer.signature;
         }
-        if(signer.role === 'AM') {
-            signedText = '\n' +signedDateTime + ' AMENDMENT FILED:\n' + signatureSuffix + '\n';
-        }
-        else {
+        if (signer.role === 'AM') {
+            signedText = '\n' + signedDateTime + ' AMENDMENT FILED:\n' + signatureSuffix + '\n';
+        } else {
             signedText = '\nSigned: ';
             if (signer.role === 'C') {
                 signedText = '\nCosigned: ';
             }
             signedText += signedDateTime +
-                    '\nBy: ' + signatureSuffix + '\n';
+                '\nBy: ' + signatureSuffix + '\n';
         }
         return signedText;
     }
@@ -261,9 +254,8 @@ define([
                     'fetch:success': function(collection, response) {
                         if (!this.getRegion('view').hasView()) {
                             this.onBeforeShow();
-                        } else {
-                            this.getRegion('view').currentView.render();
                         }
+
                     }
                 },
                 initialize: function() {
@@ -274,7 +266,7 @@ define([
                             displayTitle: ''
                         }
                     });
-                    if(!this.model) this.model = new Model();
+                    if (!this.model) this.model = new Model();
                 },
                 childEvents: {
                     'render': function(view) {
@@ -285,10 +277,9 @@ define([
                     }
                 },
                 onBeforeShow: function() {
-                    if(this.collection.isEmpty()) return;
+                    if (this.collection.isEmpty()) return;
 
                     var complexNoteModels = [];
-
                     this.model.set(_.get(this.collection.at(0), 'attributes'));
 
                     if (resultDocCollection && resultDocCollection.length > 0) {
@@ -305,7 +296,7 @@ define([
                     });
                     var view = new this.responseView();
 
-                    if(_.isEmpty(complexNoteModels)) this.getRegion('view').show(view);
+                    if (_.isEmpty(complexNoteModels)) this.getRegion('view').show(view);
                     else getDodComplexNotes.call(this, complexNoteModels);
                 },
                 onBeforeDestroy: function() {

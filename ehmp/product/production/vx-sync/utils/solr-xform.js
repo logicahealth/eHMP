@@ -18,7 +18,8 @@ var uidUtil = require(global.VX_UTILS + 'uid-utils');
 // record: The record in VPR format.
 // log: The logger to output log messages to.
 //---------------------------------------------------------------------------------------------
-function xformVprToSolr(record, log) {
+function xformVprToSolr(record, log, config, callback) {
+    var errorMessage;
 
     var domain;
     if ((_.isObject(record)) && (_.isString(record.uid))) {
@@ -26,21 +27,41 @@ function xformVprToSolr(record, log) {
     }
 
     if ((!_.isString(domain)) || (_.isEmpty(domain))) {
-        log.info('solr-xform.xformVprToSolr: Record did not contain a uid with a valid domain.  record: %j', record);
-        return null;
+        errorMessage = util.format('solr-xform.xformVprToSolr: Record did not contain a uid with a valid domain.  record: %j', record);
+        log.error(errorMessage);
+        return callback(errorMessage);
+    }
+
+    var subDomain;
+    if ((_.isString(record.subDomain))) {
+        subDomain = record.subDomain;
+    }
+    if ((domain === 'ehmp-activity') && ((!_.isString(subDomain)) || (_.isEmpty(subDomain)))) {
+        errorMessage = util.format('solr-xform.xformVprToSolr: Record domain was ehmp-activity, but the subDomain field was not valid.  record: %j', record);
+        log.error(errorMessage);
+        return callback(errorMessage);
     }
 
     var xformer;
 
     try {
-        xformer = require(util.format('./solr-xform/solr-%s-xform', domain));
+        if (domain === 'ehmp-activity') {
+            xformer = require(util.format('./solr-xform/solr-%s-%s-xform', domain, subDomain));
+        } else {
+            xformer = require(util.format('./solr-xform/solr-%s-xform', domain));
+        }
     }
     catch (e) {
-        log.info('solr-xform.xformVprToSolr: No solr transform available for domain: %s', domain);
-        return null;
+        errorMessage = util.format('solr-xform.xformVprToSolr: No solr transform available for domain: %s', domain);
+        log.info(errorMessage);
+        return callback(errorMessage);
     }
 
-    return xformer(record, log);
+    if (domain === 'vlerdocument') {
+        return xformer(record, log, config['solr-xform'], callback);
+    }
+
+    return callback(null, xformer(record, log));
 }
 
 module.exports = xformVprToSolr;

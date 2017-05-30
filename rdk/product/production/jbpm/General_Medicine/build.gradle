@@ -1,4 +1,17 @@
+sourceCompatibility = property('javaVersion')
+targetCompatibility = property('targetJavaVersion')
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'VistaCore'
+description = "General_Medicine"
+
+dependencies {
+	compile group: 'org.kie', name: 'kie-api', version: property('kie-version')
+}
 
 jar {
     baseName "General_Medicine"
 }
+

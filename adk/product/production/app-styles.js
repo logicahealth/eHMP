@@ -9,7 +9,6 @@ define([
     'css!_assets/libs/custom/bootstrap/accessibility/bootstrap-accessibility',
     // grid / layout
     'css!_assets/libs/bower/backgrid/backgrid.min',
-    'css!_assets/libs/bower/backgrid/backgrid-filter/backgrid-filter.min',
     'css!_assets/libs/custom/backgrid/backgrid-paginator-master/backgrid-paginator-custom',
     'css!_assets/libs/custom/gridster/jquery.gridster',
     // ui plugins

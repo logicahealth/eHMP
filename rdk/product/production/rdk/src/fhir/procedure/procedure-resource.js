@@ -67,7 +67,7 @@ function createConformanceData() {
  *
  * @apiExample {js}  Examples:
  *      // Limiting results count
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/procedure?_count=1
+ *      http://IP           /resource/fhir/patient/9E7A;253/procedure?_count=1
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/procedure.html">Procedure  FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
@@ -172,7 +172,7 @@ function buildTask(req, res, module) {
     return function(callback) {
         module.getData(req.app.config, req.logger, req.query.pid, req.query, function(err, inputJSON) {
             if (nullchecker.isNotNullish(err)) {
-                return res.status(err.code).send(err.message);
+                return res.status(err.code || 500).send(err.message);
             }
             var outJSON = module.convertToFhir(inputJSON.data.items, req);
             return callback(err, outJSON);

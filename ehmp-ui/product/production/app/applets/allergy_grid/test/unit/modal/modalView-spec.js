@@ -1,8 +1,21 @@
-define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'test/stubs', 'app/applets/allergy_grid/modal/modalView', 'require'],
-    function($, Backbone, Marionette, jasminejquery, Stubs, ModalView, require) {
+define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'test/stubs', 'app/applets/allergy_grid/modal/modalView', 'require', 'underscore'],
+    function($, Backbone, Marionette, jasminejquery, Stubs, ModalView, require, _) {
         'use strict';
 
-        require(['app/resources/fetch/allergies/collection'], function(AllergiesCollection) {
+
+        describe('Setting allergy grid up for testing ', function() {
+            var AllergiesCollection;
+
+            beforeEach(function(done) {
+                if (_.isUndefined(AllergiesCollection)) {
+                    require(['app/resources/fetch/allergies/collection'], function(collection) {
+                        AllergiesCollection = collection;
+                        return done();
+                    });
+                } else {
+                    return done();
+                }
+            });
             describe('Base tests for modalView', function() {
                 var view;
 

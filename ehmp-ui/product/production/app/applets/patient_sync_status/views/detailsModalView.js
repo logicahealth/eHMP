@@ -346,7 +346,7 @@ define([
             'syncDetailHeaderNewDataSince': '[data-header-instanceid="sync-detail-header-new-data-since"]'
         },
         events: {
-            'click #sync-source-sites li': 'changeDetailView',
+            'click #syncSourceSites li': 'changeDetailView',
             'click #force-source-sync': 'forceSourceSync',
             'click #msg-successful-sync': 'closeSuccessfulSync',
             'click #msg-failed-sync': 'closeFailedSync',
@@ -354,7 +354,7 @@ define([
             'click @ui.syncDetailHeaderDomain': 'sortByDomain',
             'click @ui.syncDetailHeaderLastSynced': 'sortByLastSynced',
             'click @ui.syncDetailHeaderNewDataSince': 'sortByNewDataSince',
-            'keydown #sync-source-sites li': 'handleKeyPress',
+            'keydown #syncSourceSites li': 'handleKeyPress',
             'keydown #force-source-sync': 'handleKeyPress',
             'keydown #msg-successful-sync': 'handleKeyPress',
             'keydown #msg-failed-sync': 'handleKeyPress',
@@ -540,12 +540,12 @@ define([
                         function(){
                             self.model.set('msgSuccessfulSync', 'y');
                             self.model.set('forceSyncStatus', 'completed');
-                            $(self.el).find('#force-site-sync-status-success').focus();
+                            $(self.el).find('#forceSiteSyncStatus-success').focus();
                         },
                         function(){
                             self.model.set('msgFailedSync', 'y');
                             self.model.set('forceSyncStatus', 'completed');
-                            $(self.el).find('#force-site-sync-status-error').focus();
+                            $(self.el).find('#forceSiteSyncStatus-error').focus();
                         }
                     );
                 },

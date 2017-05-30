@@ -1,0 +1,15 @@
+.control.checklist-control {
+    &.split-checklist > .childView-container {
+        //This is used in Vitals EIE
+        label {
+            display: flex;
+            input {
+                width: 23px;
+            }
+            >:not(input) {
+                flex: 1;
+                margin-top: 3px;
+            }
+        }
+    }
+}

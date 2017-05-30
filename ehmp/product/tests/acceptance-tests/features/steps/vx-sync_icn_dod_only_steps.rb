@@ -36,7 +36,7 @@ When(/^a patient with icn "([^"]*)" has no demographics we should receive an err
   p @response = vx_sync.sync_request(path)
   @response = nil
   p status_path = "#{base_url}/sync/status?icn=#{icn}"
-#  p status_path = "http://10.3.3.6:8080/sync/status?icn=4325679V4325679"
+#  p status_path = "http://IP           /sync/status?icn=4325679V4325679"
   demographic_error_return = false
   max_index_run = 60
   index = 0

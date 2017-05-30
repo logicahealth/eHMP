@@ -1,4 +1,5 @@
 define([], function() {
+    'use strict';
 
     var Manufacturer = ADK.Resources.Picklist.Model.extend({
         idAttribute: 'mvx',

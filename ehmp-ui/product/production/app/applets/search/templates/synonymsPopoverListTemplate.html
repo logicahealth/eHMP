@@ -1,0 +1,9 @@
+<div aria-live="polite">
+    <p>eHMP Search includes synonyms. The following terms were also included in your search:</p>
+    {{#unless synonymList}}
+    <p aria-hidden="true"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i>Loading...</p>
+    <span class="sr-only">Loading</span>
+    {{else}}
+    <p class="bold-font">{{{synonymList}}}</p>
+    {{/unless}}
+</div>

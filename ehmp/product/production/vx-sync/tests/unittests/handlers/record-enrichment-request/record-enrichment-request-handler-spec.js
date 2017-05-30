@@ -55,7 +55,11 @@ var rootJobId = 1;
 var rootJob = {
     jpid: jpid,
     jobId: rootJobId,
-    rootJobId: rootJobId
+    rootJobId: rootJobId,
+    referenceInfo: {
+        requestId: 'record-enrichment-request-requestId',
+        sessionId: 'record-enrichment-request-sessionId'
+    }
 };
 
 
@@ -169,7 +173,11 @@ describe('record-enrichment-request-handler.js', function() {
                     patientIdentifier: patientIdentifier,
                     dataDomain: 'allergy',
                     rootJobId: rootJobId,
-                    record: allergyRecord
+                    record: allergyRecord,
+                    referenceInfo: {
+                        requestId: 'record-enrichment-request-requestId',
+                        sessionId: 'record-enrichment-request-sessionId'
+                    }
                 }));
                 expect(environment.publisherRouter.publish.calls.length).toEqual(1);
                 expect(environment.publisherRouter.publish).toHaveBeenCalledWith(jasmine.objectContaining({

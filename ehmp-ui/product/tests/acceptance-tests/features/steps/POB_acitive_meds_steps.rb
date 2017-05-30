@@ -3,11 +3,13 @@ Then(/^active meds gist is loaded successfully$/) do
   @ehmp.wait_until_applet_gist_loaded 
 end
 
+#adding deliberate extra wait to load at least one item
 When(/^user opens the first active medication gist item$/) do
   @ehmp = PobActiveRecentMedApplet.new
-  @ehmp.wait_until_fld_active_meds_gist_item_visible
-  expect(@ehmp).to have_fld_active_meds_gist_item
   rows = @ehmp.fld_active_meds_gist_item
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time * 2)
+  wait.until { rows.length > 0 }
+  expect(@ehmp).to have_fld_active_meds_gist_item  
   expect(rows.length >= 1).to eq(true), "this test needs at least 2 rows, found only #{rows.length}"
   rows[1].click
 end
@@ -17,11 +19,13 @@ Then(/^active meds summary view is loaded successfully$/) do
   @ehmp.wait_until_summary_applet_loaded
 end
 
+#adding deliberate extra wait to load at least one item
 When(/^user opens the first active medication summary item$/) do
   @ehmp = PobActiveRecentMedApplet.new
-  @ehmp.wait_until_tbl_active_meds_grid_visible
-  expect(@ehmp).to have_tbl_active_meds_grid
   rows = @ehmp.tbl_active_meds_grid
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time * 2)
+  wait.until { rows.length > 0 }
+  expect(@ehmp).to have_tbl_active_meds_grid  
   expect(rows.length >= 0).to eq(true), "this test needs at least 1 row, found only #{rows.length}"
   rows[0].click
 end
@@ -73,3 +77,12 @@ Then(/^the Medication Gist is sorted in reverse alphabetic order based on Medica
   is_descending = descending? column_values
   expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_descending == false}"
 end
+
+When(/^user views first active medication details$/) do
+  @ehmp = PobActiveRecentMedApplet.new
+  @ehmp.wait_for_btn_detail_view
+  expect(@ehmp).to have_btn_detail_view
+  @ehmp.btn_detail_view.click
+  ModalElements.new.wait_for_fld_modal_title
+end
+

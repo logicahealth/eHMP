@@ -11,6 +11,7 @@ require('../../env-setup');
 
 var _ = require('underscore');
 var mapUtil = require(global.VX_UTILS + 'map-utils');
+var uidUtil = require(global.VX_UTILS + 'uid-utils');
 
 //---------------------------------------------------------------------------------
 // This method will set a simple value (ignoring type) with the given solrPropName
@@ -24,7 +25,7 @@ var mapUtil = require(global.VX_UTILS + 'map-utils');
 //----------------------------------------------------------------------------------
 function setSimpleFromSimple(solrRecord, solrPropName, vprRecord, vprPropName) {
     if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (vprRecord[vprPropName] !== undefined) && (vprRecord[vprPropName] !== null)) {
-    	solrRecord[solrPropName] = vprRecord[vprPropName];
+        solrRecord[solrPropName] = vprRecord[vprPropName];
     }
 }
 
@@ -39,9 +40,9 @@ function setSimpleFromSimple(solrRecord, solrPropName, vprRecord, vprPropName) {
 //----------------------------------------------------------------------------------
 function setStringFromValue(solrRecord, solrPropName, value) {
     if ((_.isObject(solrRecord)) && (_.isString(value))) {
-    	solrRecord[solrPropName] = value;
+        solrRecord[solrPropName] = value;
     } else if ((_.isObject(solrRecord)) && ((_.isNumber(value) || _.isBoolean(value)))) {
-    	solrRecord[solrPropName] = String(value);
+        solrRecord[solrPropName] = String(value);
     }
 }
 
@@ -58,9 +59,9 @@ function setStringFromValue(solrRecord, solrPropName, value) {
 //---------------------------------------------------------------------------
 function setStringFromSimple(solrRecord, solrPropName, vprRecord, vprPropName) {
     if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (_.isString(vprRecord[vprPropName]))) {
-    	solrRecord[solrPropName] = vprRecord[vprPropName];
+        solrRecord[solrPropName] = vprRecord[vprPropName];
     } else if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && ((_.isNumber(vprRecord[vprPropName]) || _.isBoolean(vprRecord[vprPropName])))) {
-    	solrRecord[solrPropName] = String(vprRecord[vprPropName]);
+        solrRecord[solrPropName] = String(vprRecord[vprPropName]);
     }
 }
 
@@ -76,11 +77,11 @@ function setStringFromSimple(solrRecord, solrPropName, vprRecord, vprPropName) {
 //---------------------------------------------------------------------------
 function addStringFromSimple(solrRecord, solrPropName, vprRecord, vprPropName) {
     if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (_.isString(vprRecord[vprPropName]))) {
-    	if (_.isArray(solrRecord[solrPropName])) {
-    		solrRecord[solrPropName] = solrRecord[solrPropName].concat(vprRecord[vprPropName]);
-    	} else {
-	    	solrRecord[solrPropName] = [vprRecord[vprPropName]];
-    	}
+        if (_.isArray(solrRecord[solrPropName])) {
+            solrRecord[solrPropName] = solrRecord[solrPropName].concat(vprRecord[vprPropName]);
+        } else {
+            solrRecord[solrPropName] = [vprRecord[vprPropName]];
+        }
     }
 }
 
@@ -96,9 +97,9 @@ function addStringFromSimple(solrRecord, solrPropName, vprRecord, vprPropName) {
 //---------------------------------------------------------------------------
 function setStringArrayFromSimple(solrRecord, solrPropName, vprRecord, vprPropName) {
     if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (_.isString(vprRecord[vprPropName]))) {
-    	solrRecord[solrPropName] = [vprRecord[vprPropName]];
+        solrRecord[solrPropName] = [vprRecord[vprPropName]];
     } else if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && ((_.isNumber(vprRecord[vprPropName]) || _.isBoolean(vprRecord[vprPropName])))) {
-    	solrRecord[solrPropName] = [String(vprRecord[vprPropName])];
+        solrRecord[solrPropName] = [String(vprRecord[vprPropName])];
     }
 }
 
@@ -117,7 +118,7 @@ function setStringArrayFromSimple(solrRecord, solrPropName, vprRecord, vprPropNa
 //---------------------------------------------------------------------------
 function setStringArrayFromObjectArrayField(solrRecord, solrPropName, vprRecord, vprPropName, vprChildPropName) {
     if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (_.isArray(vprRecord[vprPropName])) && (!_.isEmpty(vprRecord[vprPropName]))) {
-        var list = mapUtil.filteredMap(vprRecord[vprPropName], function(item) {
+        var list = mapUtil.filteredMap(vprRecord[vprPropName], function (item) {
             if ((_.isObject(item)) && (_.isString(item[vprChildPropName])) && (!_.isEmpty(item[vprChildPropName]))) {
                 return item[vprChildPropName];
             } else {
@@ -149,20 +150,20 @@ function setStringArrayFromObjectArrayField(solrRecord, solrPropName, vprRecord,
 //---------------------------------------------------------------------------
 function setStringArrayFromObjectArrayFields(solrRecord, solrPropName, vprRecord, vprPropName, vprChildPropName1, vprChildPropName2, delimiter) {
     if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (_.isArray(vprRecord[vprPropName])) && (!_.isEmpty(vprRecord[vprPropName]))) {
-        var list = mapUtil.filteredMap(vprRecord[vprPropName], function(item) {
-        	var text = '';
+        var list = mapUtil.filteredMap(vprRecord[vprPropName], function (item) {
+            var text = '';
             if ((_.isObject(item)) && (_.isString(item[vprChildPropName1])) && (!_.isEmpty(item[vprChildPropName1]))) {
                 text = item[vprChildPropName1];
             }
             if ((_.isObject(item)) && (_.isString(item[vprChildPropName2])) && (!_.isEmpty(item[vprChildPropName2]))) {
-            	if (text.length > 0) {
-            		text += delimiter;
-            	}
+                if (text.length > 0) {
+                    text += delimiter;
+                }
                 text += item[vprChildPropName2];
             }
 
             if (text.length > 0) {
-            	return text;
+                return text;
             } else {
                 return null;
             }
@@ -181,6 +182,8 @@ function setStringArrayFromObjectArrayFields(solrRecord, solrPropName, vprRecord
 // of these and sets the field in the SOLR record to this array.  It verifies
 // the existence of the field before attempting to set the solr value.
 //
+// For fields in format: vprRecord{}.vprPropName[].vprChildPropName[].vprGrandChildPropName{}
+//
 // solrRecord: The SOLR record that is being updated.
 // solrPropName: The name of the SOLR property field to be updated.
 // vprRecord: The VPR record to extract the data from.
@@ -190,19 +193,52 @@ function setStringArrayFromObjectArrayFields(solrRecord, solrPropName, vprRecord
 //---------------------------------------------------------------------------
 function setStringArrayFromObjectArrayArrayField(solrRecord, solrPropName, vprRecord, vprPropName, vprChildPropName, vprGrandChildPropName) {
     if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (_.isArray(vprRecord[vprPropName])) && (!_.isEmpty(vprRecord[vprPropName]))) {
-    	var list = [];
-    	_.each(vprRecord[vprPropName], function(vprChild) {
-	        var childList = mapUtil.filteredMap(vprChild[vprChildPropName], function(item) {
-	            if ((_.isObject(item)) && (_.isString(item[vprGrandChildPropName])) && (!_.isEmpty(item[vprGrandChildPropName]))) {
-	                return item[vprGrandChildPropName];
-	            } else {
-	                return null;
-	            }
-	        }, [null, undefined]);
-	        if (!_.isEmpty(childList)) {
-	        	list = list.concat(childList);
-	        }
-    	});
+        var list = [];
+        _.each(vprRecord[vprPropName], function (vprChild) {
+            var childList = mapUtil.filteredMap(vprChild[vprChildPropName], function (item) {
+                if ((_.isObject(item)) && (_.isString(item[vprGrandChildPropName])) && (!_.isEmpty(item[vprGrandChildPropName]))) {
+                    return item[vprGrandChildPropName];
+                } else {
+                    return null;
+                }
+            }, [null, undefined]);
+            if (!_.isEmpty(childList)) {
+                list = list.concat(childList);
+            }
+        });
+
+        if (!_.isEmpty(list)) {
+            solrRecord[solrPropName] = list;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------
+// This method will set a simple string array with the given solrPropName
+// in the solrRecord by looping through the child array on the vprPropName object
+// and extracting the value at the vprChildPropName field.  It creates an array
+// of these and sets the field in the SOLR record to this array.  It verifies
+// the existence of the field before attempting to set the solr value.
+//
+// For fields in format: vprRecord{}.vprPropName{}.vprChildPropName[].vprGrandChildPropName{}
+//
+// solrRecord: The SOLR record that is being updated.
+// solrPropName: The name of the SOLR property field to be updated.
+// vprRecord: The VPR record to extract the data from.
+// vprPropName: The VPR property in the VPR record to extract the data from.
+// vprChildPropName: The child property in the vprPropName object.
+// vprGrandChildPropName: The child property in the vprChildPropName object.
+//---------------------------------------------------------------------------
+function setStringArrayFromObjectObjectArrayField(solrRecord, solrPropName, vprRecord, vprPropName, vprChildPropName, vprGrandChildPropName) {
+    if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (_.isObject(vprRecord[vprPropName])) && (!_.isEmpty(vprRecord[vprPropName])) &&
+        (_.isArray(vprRecord[vprPropName][vprChildPropName])) && (!_.isEmpty(vprRecord[vprPropName][vprChildPropName]))) {
+        var list = mapUtil.filteredMap(vprRecord[vprPropName][vprChildPropName], function (item) {
+            if ((_.isObject(item)) && (_.isString(item[vprGrandChildPropName])) && (!_.isEmpty(item[vprGrandChildPropName]))) {
+                return item[vprGrandChildPropName];
+            } else {
+                return null;
+            }
+        }, [null, undefined]);
 
         if (!_.isEmpty(list)) {
             solrRecord[solrPropName] = list;
@@ -222,12 +258,141 @@ function setStringArrayFromObjectArrayArrayField(solrRecord, solrPropName, vprRe
 //---------------------------------------------------------------------------
 function setStringFromPrimaryProviders(solrRecord, solrPropName, vprRecord, vprPropName, vprChildPropName) {
     if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (_.isArray(vprRecord[vprPropName])) && (!_.isEmpty(vprRecord[vprPropName]))) {
-    	var primaryProvider = _.find(vprRecord[vprPropName], function(provider) {
+        var primaryProvider = _.find(vprRecord[vprPropName], function (provider) {
             return ((_.isObject(provider)) && (provider.primary === true) && (_.isString(provider[vprChildPropName])) && (!_.isEmpty(provider[vprChildPropName])));
-    	});
+        });
         if (_.isObject(primaryProvider)) {
             solrRecord[solrPropName] = primaryProvider[vprChildPropName];
         }
+    }
+}
+
+//--------------------------------------------------------------------------
+// This method will set a string to be the value of the specified field
+// contained in the latest array occurrence of a child property.
+//
+// solrRecord: The SOLR record that is being updated.
+// solrPropName: The name of the SOLR property field to be updated.
+// vprRecord: The VPR record to extract the data from.
+// vprPropName: The VPR property in the VPR record to extract the data from.
+// vprChildArrayPropName:  The property name of the array within vprPropName.
+// vprFieldName: The name of the field within the last occurrence of the array.
+//---------------------------------------------------------------------------
+function setStringFromLatestChildArrayField(solrRecord, solrPropName, vprRecord, vprPropName, vprChildArrayPropName, vprFieldName) {
+    if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (_.isObject(vprRecord[vprPropName])) && (_.isArray(vprRecord[vprPropName][vprChildArrayPropName]))) {
+        var childArray = vprRecord[vprPropName][vprChildArrayPropName];
+        if (childArray.length > 0) {
+            var child = childArray[childArray.length - 1];
+            if ((_.isString(child[vprFieldName])) && (!_.isEmpty(child[vprFieldName]))) {
+                solrRecord[solrPropName] = child[vprFieldName];
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------------------
+// This method will set a string to be the value of the specified field
+// contained in the latest array occurrence of a child property where the
+// child is an object containing the field we are looking for.
+//
+// vprRecord{}.vprPropName{}.vprChildArrayPropName[].vprGrandChildName{}.vprFieldName
+//
+// solrRecord: The SOLR record that is being updated.
+// solrPropName: The name of the SOLR property field to be updated.
+// vprRecord: The VPR record to extract the data from.
+// vprPropName: The VPR property in the VPR record to extract the data from.
+// vprChildArrayPropName:  The property name of the array within vprPropName.
+// vprGrandChildName: The name of the object which will contain the field.
+// vprFieldName: The name of the field within the last occurrence of the array.
+//---------------------------------------------------------------------------
+function setStringFromLatestChildArrayObjectField(solrRecord, solrPropName, vprRecord, vprPropName, vprChildArrayPropName, vprGrandChildName, vprFieldName) {
+    if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (_.isObject(vprRecord[vprPropName])) && (_.isArray(vprRecord[vprPropName][vprChildArrayPropName]))) {
+        var childArray = vprRecord[vprPropName][vprChildArrayPropName];
+        if (childArray.length > 0) {
+            var child = childArray[childArray.length - 1];
+            if ((_.isObject(child[vprGrandChildName])) && (_.isString(child[vprGrandChildName][vprFieldName])) && (!_.isEmpty(child[vprGrandChildName][vprFieldName]))) {
+                solrRecord[solrPropName] = child[vprGrandChildName][vprFieldName];
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------------------
+// This method will set an array of strings by traversing a grandchild
+// array and picking up a specific field from each occurance. The grandchild
+// array will be contained in the latest occurrence of a child array.
+//
+// solrRecord: The SOLR record that is being updated.
+// solrPropName: The name of the SOLR property field to be updated.
+// vprRecord: The VPR record to extract the data from.
+// vprPropName: The VPR property in the VPR record to extract the data from.
+// vprChildArrayPropName:  The property name of the array within vprPropName.
+// vprGrandChildArray: The grand child property which is an array.
+// vprFieldName: The name of the field within an occurrance of the grand child array.
+//---------------------------------------------------------------------------
+function setStringArrayFromLatestChildArrayArrayField(solrRecord, solrPropName, vprRecord, vprPropName, vprChildArrayPropName, vprGrandChildArray, vprFieldName) {
+    if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (_.isObject(vprRecord[vprPropName])) && (_.isArray(vprRecord[vprPropName][vprChildArrayPropName]))) {
+        var childArray = vprRecord[vprPropName][vprChildArrayPropName];
+        if (childArray.length > 0) {
+            var child = childArray[childArray.length - 1];
+            if ((_.isArray(child[vprGrandChildArray])) && (child[vprGrandChildArray].length > 0)) {
+                var fieldArray = [];
+                _.each(child[vprGrandChildArray], function (grandChild) {
+                    if ((_.isString(grandChild[vprFieldName])) && (!_.isEmpty(grandChild[vprFieldName]))) {
+                        fieldArray.push(grandChild[vprFieldName]);
+                    }
+                });
+                if (fieldArray.length > 0) {
+                    solrRecord[solrPropName] = fieldArray;
+                }
+            }
+        }
+    }
+}
+
+//-------------------------------------------------------------------------------------------
+// This will take the value in the vprRecord[vprPropName] - verify it is a uid and extract
+// the tokens required to make a PID and assing the pid to the solrRecord[solrPropName] field.
+//
+// solrRecord: The SOLR record that is being updated.
+// solrPropName: The name of the SOLR property field to be updated.
+// vprRecord: The VPR record to extract the data from.
+// vprPropName: The VPR property in the VPR record to extract the data from.
+//--------------------------------------------------------------------------------------------
+function setStringPidFromSimpleUid(solrRecord, solrPropName, vprRecord, vprPropName) {
+    if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (_.isString(vprRecord[vprPropName]))) {
+        var pid = uidUtil.extractPidFromUID(vprRecord[vprPropName]);
+        if (pid) {
+            solrRecord[solrPropName] = pid;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------
+// This method will set a simple string with the given solrPropName
+// in the solrRecord by accessing the  field of the child object of a child
+// object.  It sets the field in the SOLR record to this value.  It verifies
+// the existence of the field before attempting to set the solr value.
+//
+// For fields in format: vprRecord{}.vprPropName{}.vprChildPropName{}.vprGrandChildPropName{}
+//
+// solrRecord: The SOLR record that is being updated.
+// solrPropName: The name of the SOLR property field to be updated.
+// vprRecord: The VPR record to extract the data from.
+// vprPropName: The VPR property in the VPR record to extract the data from.
+// vprChildPropName: The child property in the vprPropName object.
+// vprGrandChildPropName: The child property in the vprChildPropName object.
+//---------------------------------------------------------------------------
+function setStringFromObjectObjectField(solrRecord, solrPropName, vprRecord, vprPropName, vprChildPropName, vprGrandChildPropName) {
+    if ((_.isObject(solrRecord)) && (_.isObject(vprRecord)) && (_.isObject(vprRecord[vprPropName])) && (!_.isEmpty(vprRecord[vprPropName])) &&
+        (_.isObject(vprRecord[vprPropName][vprChildPropName])) && (!_.isEmpty(vprRecord[vprPropName][vprChildPropName]))) {
+
+        if ((_.isString(vprRecord[vprPropName][vprChildPropName][vprGrandChildPropName])) && (!_.isEmpty(vprRecord[vprPropName][vprChildPropName][vprGrandChildPropName]))) {
+            solrRecord[solrPropName] = vprRecord[vprPropName][vprChildPropName][vprGrandChildPropName];
+        } else if (((_.isNumber(vprRecord[vprPropName][vprChildPropName][vprGrandChildPropName]) || _.isBoolean(vprRecord[vprPropName][vprChildPropName][vprGrandChildPropName])))) {
+            solrRecord[solrPropName] = String(vprRecord[vprPropName][vprChildPropName][vprGrandChildPropName]);
+        }
+
     }
 }
 
@@ -239,17 +404,17 @@ function setStringFromPrimaryProviders(solrRecord, solrPropName, vprRecord, vprP
 // vprRecord: The record in VPR format.
 //-------------------------------------------------------------------------
 function setCommonFields(solrRecord, vprRecord) {
-	setStringFromSimple(solrRecord, 'uid', vprRecord, 'uid');
-	setStringFromSimple(solrRecord, 'pid', vprRecord, 'pid');
-	setStringFromSimple(solrRecord, 'facility_code', vprRecord, 'facilityCode');
-	setStringFromSimple(solrRecord, 'facility_name', vprRecord, 'facilityName');
-	setStringFromSimple(solrRecord, 'kind', vprRecord, 'kind');
-	setStringFromSimple(solrRecord, 'summary', vprRecord, 'summary');
+    setStringFromSimple(solrRecord, 'uid', vprRecord, 'uid');
+    setStringFromSimple(solrRecord, 'pid', vprRecord, 'pid');
+    setStringFromSimple(solrRecord, 'facility_code', vprRecord, 'facilityCode');
+    setStringFromSimple(solrRecord, 'facility_name', vprRecord, 'facilityName');
+    setStringFromSimple(solrRecord, 'kind', vprRecord, 'kind');
+    setStringFromSimple(solrRecord, 'summary', vprRecord, 'summary');
     setStringFromSimple(solrRecord, 'removed', vprRecord, 'removed');
-	setStringArrayFromObjectArrayField(solrRecord, 'codes_code', vprRecord, 'codes', 'code');
-	setStringArrayFromObjectArrayField(solrRecord, 'codes_system', vprRecord, 'codes', 'system');
-	setStringArrayFromObjectArrayField(solrRecord, 'codes_display', vprRecord, 'codes', 'display');
-	setDateTimes(solrRecord, vprRecord);
+    setStringArrayFromObjectArrayField(solrRecord, 'codes_code', vprRecord, 'codes', 'code');
+    setStringArrayFromObjectArrayField(solrRecord, 'codes_system', vprRecord, 'codes', 'system');
+    setStringArrayFromObjectArrayField(solrRecord, 'codes_display', vprRecord, 'codes', 'display');
+    setDateTimes(solrRecord, vprRecord);
 }
 
 //----------------------------------------------------------------------------
@@ -261,39 +426,39 @@ function setCommonFields(solrRecord, vprRecord) {
 //----------------------------------------------------------------------------
 function setDateTimes(solrRecord, vprRecord) {
 
-	setStringFromSimple(solrRecord, 'reference_date_time', vprRecord, 'referenceDateTime');
+    setStringFromSimple(solrRecord, 'reference_date_time', vprRecord, 'referenceDateTime');
 
-	setStringFromSimple(solrRecord, 'visit_date_time', vprRecord, 'visitDateTime');
+    setStringFromSimple(solrRecord, 'visit_date_time', vprRecord, 'visitDateTime');
 
-	setStringFromSimple(solrRecord, 'observed', vprRecord, 'observed');
+    setStringFromSimple(solrRecord, 'observed', vprRecord, 'observed');
 
-	setStringFromSimple(solrRecord, 'resulted', vprRecord, 'resulted');
+    setStringFromSimple(solrRecord, 'resulted', vprRecord, 'resulted');
 
-	setStringFromSimple(solrRecord, 'entered', vprRecord, 'entered');
+    setStringFromSimple(solrRecord, 'entered', vprRecord, 'entered');
 
-	setStringFromSimple(solrRecord, 'updated', vprRecord, 'updated');
+    setStringFromSimple(solrRecord, 'updated', vprRecord, 'updated');
 
-	setStringFromSimple(solrRecord, 'resolved', vprRecord, 'resolved');
+    setStringFromSimple(solrRecord, 'resolved', vprRecord, 'resolved');
 
-	setStringFromSimple(solrRecord, 'onset', vprRecord, 'onset');
+    setStringFromSimple(solrRecord, 'onset', vprRecord, 'onset');
 
-	setStringFromSimple(solrRecord, 'stopped', vprRecord, 'stopped');
+    setStringFromSimple(solrRecord, 'stopped', vprRecord, 'stopped');
 
-	setStringFromSimple(solrRecord, 'overall_start', vprRecord, 'overallStart');
+    setStringFromSimple(solrRecord, 'overall_start', vprRecord, 'overallStart');
 
-	setStringFromSimple(solrRecord, 'overall_stop', vprRecord, 'overallStop');
+    setStringFromSimple(solrRecord, 'overall_stop', vprRecord, 'overallStop');
 
-	setStringFromSimple(solrRecord, 'administered_date_time', vprRecord, 'administeredDateTime');
+    setStringFromSimple(solrRecord, 'administered_date_time', vprRecord, 'administeredDateTime');
 
-	setStringFromSimple(solrRecord, 'procedure_date_time', vprRecord, 'procedureDateTime');
+    setStringFromSimple(solrRecord, 'procedure_date_time', vprRecord, 'procedureDateTime');
 
-	setStringFromSimple(solrRecord, 'order_start_date_time', vprRecord, 'start');
+    setStringFromSimple(solrRecord, 'order_start_date_time', vprRecord, 'start');
 
-	setStringFromSimple(solrRecord, 'health_factor_date_time', vprRecord, 'healthFactorDateTime');
+    setStringFromSimple(solrRecord, 'health_factor_date_time', vprRecord, 'healthFactorDateTime');
 
-	setStringFromSimple(solrRecord, 'document_entered', vprRecord, 'documentEntered');
+    setStringFromSimple(solrRecord, 'document_entered', vprRecord, 'documentEntered');
 
-	setStringFromSimple(solrRecord, 'obs_entered', vprRecord, 'obsEntered');
+    setStringFromSimple(solrRecord, 'obs_entered', vprRecord, 'obsEntered');
 }
 
 module.exports.setSimpleFromSimple = setSimpleFromSimple;
@@ -306,4 +471,10 @@ module.exports.setStringArrayFromObjectArrayFields = setStringArrayFromObjectArr
 module.exports.setStringArrayFromObjectArrayArrayField = setStringArrayFromObjectArrayArrayField;
 module.exports.setStringFromPrimaryProviders = setStringFromPrimaryProviders;
 module.exports.setCommonFields = setCommonFields;
+module.exports.setStringFromLatestChildArrayField = setStringFromLatestChildArrayField;
+module.exports.setStringArrayFromLatestChildArrayArrayField = setStringArrayFromLatestChildArrayArrayField;
+module.exports.setStringArrayFromObjectObjectArrayField = setStringArrayFromObjectObjectArrayField;
+module.exports.setStringFromLatestChildArrayObjectField = setStringFromLatestChildArrayObjectField;
+module.exports.setStringPidFromSimpleUid = setStringPidFromSimpleUid;
+module.exports.setStringFromObjectObjectField = setStringFromObjectObjectField;
 

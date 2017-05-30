@@ -4,3 +4,4 @@ default['jboss-eap']['version'] = "6.4.0"
 default['jboss-eap']['start_on_boot'] = true 
 default['jboss-eap']['admin_user'] = "admin" 
 default['jboss-eap']['admin_passwd'] = "Secure@dmin1" 
+default['jboss-eap']['home_dir'] = "/home/jboss"

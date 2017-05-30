@@ -17,7 +17,7 @@ define([
                 '<div class="container-fluid">',
                 '<div class="row">',
                 '<div class="col-md-6 col-xs-6">',
-                '<p class="faux-label{{#if disabled}} disabled{{else}}{{#if @root.contorlDisabled}} disabled{{/if}}{{/if}}">{{add-required-indicator label (isRequired required controlRequired)}}</p>',
+                '<p class="faux-label{{#if disabled}} disabled{{else}}{{#if @root.controlDisabled}} disabled{{/if}}{{/if}}">{{add-required-indicator label (isRequired required controlRequired)}}</p>',
                 '</div>',
                 '<div class="col-md-6 col-xs-6">',
                 '{{#each radioOptions}}',
@@ -25,7 +25,7 @@ define([
                     hash: {
                         forID: "{{#if prependToDomId}}{{@root.prependToDomId}}-{{/if}}{{@root.formAttributeName}}-{{@root.name}}-{{clean-for-id (@root.getId this @index)}}",
                         classes: [ControlService.radioLabelClassName],
-                        extraClassLogic: '{{#if disabled}}disabled {{else}}{{#if @root.contorlDisabled}}disabled {{else}}{{#if @root.disabled}}disabled {{/if}}{{/if}}{{/if}}',
+                        extraClassLogic: '{{#if disabled}}disabled {{else}}{{#if @root.controlDisabled}}disabled {{else}}{{#if @root.disabled}}disabled {{/if}}{{/if}}{{/if}}',
                         content: '<input ' +
                             'type="radio" ' +
                             'id="{{#if prependToDomId}}{{@root.prependToDomId}}-{{/if}}{{@root.formAttributeName}}-{{@root.name}}-{{clean-for-id (@root.getId this @index)}}" ' +
@@ -33,7 +33,7 @@ define([
                             '{{#if title}}title="{{title}}" {{else}}title="Press spacebar to select {{label}} for {{../label}}" {{/if}}' +
                             'value="{{@root.getValueString this}}" ' +
                             '{{@root.isChecked this @root @index}}' +
-                            '{{#if disabled}}disabled {{else}}{{#if @root.contorlDisabled}}disabled {{else}}{{#if @root.disabled}}disabled {{/if}}{{/if}}{{/if}}' +
+                            '{{#if disabled}}disabled {{else}}{{#if @root.controlDisabled}}disabled {{else}}{{#if @root.disabled}}disabled {{/if}}{{/if}}{{/if}}' +
                             '{{#if required}}required {{else}}{{#if @root.controlRequired}}required {{else}}{{#if @root.required}}required {{/if}}{{/if}}{{/if}}' +
                             ' data-option-index="{{@index}}"' +
                             '/>'
@@ -111,7 +111,7 @@ define([
                     required: attributes[attributeMapping.required],
                     radioOptions: field.options,
                     controlRequired: field.required,
-                    contorlDisabled: field.disabled,
+                    controlDisabled: field.disabled,
                     formAttributeName: field.name || this.cid,
                     prependToDomId: field.prependToDomId
                 };

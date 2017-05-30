@@ -27,7 +27,7 @@ function createTestJson(name, scope) {
                     'entityType': 'User',
                     'codeSystem': 'VA:DUZ',
                     'name': 'USER PANORAMA',
-                    'id': '9E7A;pu1234',
+                    'id': 'REDACTED',
                     'type': 'provider'
                 },
                 'location': {

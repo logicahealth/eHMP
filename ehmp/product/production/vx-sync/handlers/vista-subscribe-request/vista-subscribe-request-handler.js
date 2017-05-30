@@ -24,7 +24,7 @@ function handle(vistaId, log, config, environment, job, handlerCallback) {
 	var pid = idUtil.extractPidFromJob(job);
 	var pidSite = idUtil.extractSiteFromPid(pid);
 
-    var domainList = config.vista.domains;
+	var domainList = config.vista.domains;
 
 	log.debug('vista-subscribe-request-handler.handle: Received request to subscribe pid: %s.', pid);
 	var isHdr = jobUtil.isVistAHdrSubscribeRequestType(job.type);
@@ -121,6 +121,9 @@ function _createNewJobStatus(vistaId, domain, pidSite, pid, job, pollerJobId, jo
 		priority: job.priority,
 		jobId: pollerJobId
 	};
+	if (job.referenceInfo) {
+            meta.referenceInfo = job.referenceInfo;
+        }
 	var isHdr = jobUtil.isVistAHdrSubscribeRequestType(job.type);
 	var pollerJob;
 	if (!isHdr) {
@@ -160,7 +163,7 @@ function _createNewJobStatus(vistaId, domain, pidSite, pid, job, pollerJobId, jo
 //--------------------------------------------------------------------------------------------
 function _subscribePatientToVistA(vistaId, pidSite, pid, job, pollerJobId, vistaClient, log, callback) {
 	log.debug('vista-subscribe-request-handler._subscribePatientToVistA: Entering method. vistaId: %s; pidSite: %s for pid: %s', vistaId, pidSite, pid);
-	vistaClient.subscribe(vistaId, job.patientIdentifier, job.rootJobId, pollerJobId, job.priority, callback);
+	vistaClient.subscribe(vistaId, job.patientIdentifier, job.rootJobId, pollerJobId, job.priority, job.referenceInfo, callback);
 }
 
 function _subscribePatientToVistAHdr(siteId, pidSite, pid, job, pollerJobId, hdrClient, log, callback) {

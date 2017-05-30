@@ -69,7 +69,7 @@ function getOpenConsultTasks(req, res) {
 
 function doGetOpenConsultTasks(identifiers, logger, jbpmConfig, dbConfig, consultTaskCb) {
 
-    var activityStates = 'Active:eConsult, Provider Completing|Active:eConsult|Scheduled:Appt. Booked|Scheduled:Appt. in Past|Scheduled:Appt. in Past, Checked Out|Scheduled:Patient no-showed previous Appt.|Scheduled:Provider Completing|Scheduling:Provider Completing|Scheduling:1st Attempt|Scheduling:2nd Attempt|Scheduling:3rd Attempt|Scheduling:EWL|Scheduling:Underway';
+    var activityStates = 'Active:eConsult, Provider Completing|Active:eConsult|Scheduled:Appt. Booked|Scheduled:Appt. in Past|Scheduled:Appt. in Past, Checked Out|Scheduled:Patient no-showed previous Appt.|Scheduled:Provider Completing|Scheduling:Provider Completing|Scheduling:1st Attempt|Scheduling:2nd Attempt|Scheduling:3rd Attempt|Scheduling:EWL|Scheduling:Underway|Scheduled:Appt. in Past, Action Required';
     var processDefinitionId = 'Order.Consult';
 
     var cb = function(err, rows) {
@@ -129,9 +129,11 @@ function doGetOpenConsultTasks(identifiers, logger, jbpmConfig, dbConfig, consul
                         if (taskItemDetail && taskItemDetail.data && taskItemDetail.data.items && taskItemDetail.data.items.length) {
                             _.each(taskItemDetail.data.items, function(moreTaskItemDetail) {
 
+                                if (moreTaskItemDetail.hasOwnProperty('process-instance-id')) {
+                                    moreTaskItemDetail.processInstanceId = moreTaskItemDetail['process-instance-id'];
+                                }
                                 var taskId = _.get(moreTaskItemDetail, 'id') || null;
                                 var activityInstanceId = _.get(moreTaskItemDetail, 'processInstanceId') || null;
-
                                 var correspondingStub = _.filter(stubs, {
                                     'taskId': taskId,
                                     'activityInstanceId': activityInstanceId

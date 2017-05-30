@@ -8,8 +8,8 @@ Scenario: Login to ehmpui_url
     When user attempts login
         |field | value|
         |Facility|PANORAMA|
-        |AccessCode|pu1234|
-        |VerifyCode|pu1234!!|
+        |AccessCode|REDACTED|
+        |VerifyCode|REDACTED|
         |SignIn||
     And the patient search screen is displayed
 

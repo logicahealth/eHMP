@@ -1,7 +1,7 @@
 @F282_problems_gist   @reg1
 Feature: F82 - Problems Gist View
 
-@f282_problems_initial_view @F282-1.1 @F282-2.1 @US3390 @US4317
+@f282_problems_initial_view @F282-1.1 @F282-2.1 @US3390 @US4317 @US18212
 Scenario: User views the problems gist view
   When user searches for and selects "ZZZRETFOURFIFTYEIGHT,Patient"
   And Overview is active
@@ -9,11 +9,9 @@ Scenario: User views the problems gist view
   And Problems trend view applet has headers
       | Headers 	  |
       | Problem       |
-      | Acuity        |
       | Status        |
-      | Facility      |
+      | Onset Date    |
   And Problems trend view has data rows
-  And Problems trend view facility column displays valid facility
     
 @f282_problems_expand_view_from_trend_view
 Scenario: User can expand Problems applet from trend view
@@ -62,32 +60,22 @@ Scenario: Problems Trend view Applet is sorted by the column header Problems
   And the user sorts the Problems trend view applet by column Problem
   Then the Problems trend view applet is sorted in reverse alphabetic order based on Problem
   
-@f282_problems_Column_Sorting_Acuity @F282-9.1 @US4684
-Scenario: Problems trend view Applet is sorted by the column header Acuity
+@f282_problems_Column_Sorting_Onset @F282-9.1 @US4684 @US18213
+Scenario: Problems trend view Applet is sorted by the column header Onset date
   And user searches for and selects "ZZZRETFOURFIFTYEIGHT,PATIENT"
   Then Overview is active
   And Problems trend view has data rows
-  When the user sorts the Problems trend view applet by column Acuity
-  Then the Problems trend view applet is sorted in alphabetic order based on Acuity
-  And the user sorts the Problems trend view applet by column Acuity
-  And the Problems trend view applet is sorted in reverse alphabetic order based on Acuity
-  
-@f282_problems_Column_Sorting_facility @F282-9.1 @US4684
-Scenario: Problems Gist Applet is sorted by the column header Last
-  And user searches for and selects "ZZZRETFOURFIFTYEIGHT,PATIENT"
-  Then Overview is active
-  And Problems trend view has data rows
-  And the user sorts the Problems trend view applet by column Facility
-  Then the Problems trend view applet is sorted in alphabetic order based on Facility
-  And the user sorts the Problems trend view applet by column Facility
-  And the Problems trend view applet is sorted in reverse alphabetic order based on Facility  
+  When the user sorts the Problems trend view applet by column Onset date
+  Then the Problems trend view applet is sorted in alphabetic order based on Onset date
+  And the user sorts the Problems trend view applet by column Onset date
+  And the Problems trend view applet is sorted in reverse alphabetic order based on Onset date 
   
 @f282_problems_quick_view_not_through_toolbar @F282-7.1 @US4155 @4317 @DE1321
 Scenario: Problems Applet Trend view - quick view of problems
   Given user searches for and selects "ZZZRETFOURFIFTYEIGHT,PATIENT"  
   Then Overview is active
   And Problems trend view has data rows
-  And hovering over the right side of problem trend view and selecting the facility field
+  And hovering over the right side of problem trend view and selecting the onset date field
   Then the problems quick look table is displayed
   And problems quick look table contains headers
     |Headers 		|

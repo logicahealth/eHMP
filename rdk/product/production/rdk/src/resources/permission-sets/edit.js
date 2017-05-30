@@ -75,8 +75,8 @@ function editPermissionSet(req, res, next) {
                 unsucessfulLoginAttemptCount: 0
             };
         }
-        req.audit.previousPermissionSets = pjdsOptions.data.permissionSet.val;
-        if (req.audit.previousPermissionSets === '' || req.audit.previousPermissionSets === null || req.audit.previousPermissionSets === undefined) {
+        req.audit.previousPermissionSets = _.get(pjdsOptions, 'data.permissionSet.val');
+        if (_.isEmpty(req.audit.previousPermissionSets)) {
             req.audit.previousPermissionSets = 'None';
         }
         req.audit.userEditedUid = pjdsOptions.data.uid;

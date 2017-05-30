@@ -12,7 +12,7 @@ require(['requirePlugins'], function() {
             require.config({
                 waitSeconds: "30",
                 paths: {
-                    "async": "_assets/libs/bower/async/async",
+                    "async": "_assets/libs/bower/async/async.min",
                     "backbone": "_assets/libs/bower/backbone/backbone",
                     "backbone.paginator": "_assets/libs/custom/backbone.paginator/backbone.paginator",
                     "backbone.radio": "_assets/libs/bower/backbone/backbone.radio/backbone.radio",

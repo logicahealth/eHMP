@@ -14,17 +14,15 @@ class PobProblemsApplet < PobParentApplet
   elements :fld_problem_gist_toolbar_trigger, "[data-appletid='problems'] .table-row-toolbar .table-row [dialog-toggle='toolbar']"
   elements :fld_problems_gist, "[data-appletid=problems] .gist-item-list .gist-item"
   
-  element :fld_quick_view_no_toolbar, "[data-cell-instanceid='facility_moniker_urn_va_problem_9E7A_711_139']"
+  element :fld_quick_view_no_toolbar, "[data-item-instanceid='onset_formatted_urn_va_problem_9E7A_711_139']"
 
   element :fld_open_tray, "#patientDemographic-newObservation.sidebar.open"
   element :fld_add_problem_title, "#main-workflow-label-Add-Problem"
 
   elements :fld_all_problems_expanded_view, "#data-grid-problems tr.selectable"
 
-  elements :fld_gist_problem_names, "[data-appletid='problems'] div.problem-name span:not(.sr-only)"
-  elements :fld_gist_acuity, "[data-appletid='problems'] div.border-vertical.table-cell:nth-of-type(2)"
-  elements :fld_gist_status, "[data-appletid='problems'] div.quick-view-popover div[data-cell-instanceid]:nth-of-type(1)"
-  elements :fld_gist_facility, "[data-appletid='problems'] div.quick-view-popover div[data-cell-instanceid]:nth-of-type(2)"
+  elements :fld_gist_problem_names, "[data-appletid='problems'] .problem-name span:not(.sr-only)"
+  elements :fld_gist_onset, "[data-appletid='problems'] [data-item-instanceid^='onset_formatted']"
 
   elements :fld_problems_headers, "[data-appletid='problems'] [data-header-instanceid]"
   element :fld_manual_sort, ".tilesort-remove-sort"
@@ -45,9 +43,11 @@ class PobProblemsApplet < PobParentApplet
   elements :tbl_problems_quick_view_headers, "#urn_va_problem_9E7A_711_139 thead th"
   
   element :col_problems, "[data-appletid=problems] [data-header-instanceid='name-header']"
-  element :col_acuity, "[data-appletid=problems] [data-header-instanceid='comment-header']"
+  element :col_acuity, "[data-appletid=problems] [data-header-instanceid='onset-date-header']"
   element :col_status, "[data-appletid=problems] [data-header-instanceid='status-name-header']"
   element :col_facility, "[data-appletid=problems] [data-header-instanceid='facility-name-header']"
+  
+  element :col_problem_name, "[data-header-instanceid='problems-problemText'] a"
 
   def initialize
     super

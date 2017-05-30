@@ -3,11 +3,25 @@ define([
     'marionette',
     'jasminejquery',
     'test/stubs',
-    'require'
-], function(Backbone, Marionette, jasminejquery, Stubs, require) {
+    'require',
+    'underscore'
+], function(Backbone, Marionette, jasminejquery, Stubs, require, _) {
     'use strict';
 
-    require(['app/resources/fetch/community_health_summaries/model'], function(CcdModel) {
+    describe('Setting up community health summaries', function() {
+        var CcdModel;
+
+        beforeEach(function(done) {
+            if (_.isUndefined(CcdModel)) {
+                require(['app/resources/fetch/community_health_summaries/model'], function(model) {
+                    CcdModel = model;
+                    return done();
+                });
+            } else {
+                return done();
+            }
+        });
+
         describe('Test for community health summaries model parse', function() {
 
             it('Should return model properties correctly', function() {

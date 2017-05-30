@@ -1,4 +1,4 @@
-@F414 @F414-4  @future @DE4560
+@F414 @F414-4 @DE4560 @reg3
 Feature: Enter and Store A Problem List - add a Freetext problem to the patient's problem list
 
 Background:
@@ -39,6 +39,7 @@ Scenario: eHMP user add a free text Problem
   And Freetext Problem Name is reported as "pea"
   And user selects Responsible Provider "Anesthesiologist,One"
   And user accepts the new problem
+  And user refreshes the problems applet
   Then a problem is added to the applet
 
 @F414-4_5 @UAT_script
@@ -56,5 +57,6 @@ Scenario: eHMP user can request a new term
   And the Add Problem New Term Request Comment is populated with "pea free text testing" and the timestamp
   And user selects Responsible Provider "Anesthesiologist,One"
   And user accepts the new problem
+  And user refreshes the problems applet
   Then a problem is added to the applet
 

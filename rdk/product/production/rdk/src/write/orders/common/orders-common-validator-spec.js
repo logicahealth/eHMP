@@ -55,7 +55,7 @@ describe('write-back orders common validator', function() {
                 'dfn': '100716',
                 'provider': '1000000000',
                 'location': '285',
-                'eSig': 'mx1234!!',
+                'eSig': 'REDACTED',
                 'orderList': [{
                     'orderId': '38989;1',
                     'orderDetailHash': 'some hash value'

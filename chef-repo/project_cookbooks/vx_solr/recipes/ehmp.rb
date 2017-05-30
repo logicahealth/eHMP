@@ -63,6 +63,19 @@ solrconfig = template "#{node[:vx_solr][:ehmp][:vpr_data_path]}/vpr/conf/solrcon
   notifies :restart, "service[solr]"
 end
 
+template "#{node[:vx_solr][:resources_dir]}/log4j.properties" do
+  source 'log4j.properties.erb'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  variables(
+      :max_file_size => node[:vx_solr][:ehmp][:solrconfig][:log4j][:max_file_size],
+      :solr_log_dir => node[:vx_solr][:log_dir],
+      :zookeeper_log_level => node[:vx_solr][:ehmp][:solrconfig][:log4j][:zookeeper_log_level]
+  )
+  notifies :restart, "service[solr]"
+end
+
 remote_file "#{node[:vx_solr][:ehmp][:solr_lib_path]}/health-time-core.jar" do
   use_conditional_get true
   source node[:vx_solr][:ehmp][:health_time_core]
@@ -121,6 +134,9 @@ vx_solr_collection "vpr" do
   allow_recreate node[:vx_solr][:ehmp][:collection][:allow_recreate]
 end
 
+# conditionally create or remove cron job
+create_cron_job_action = node[:vx_solr][:ehmp][:create_cron_job] ? :create : :delete
+
 #cron job to build suggestions
 template "#{node[:vx_solr][:cron_dir]}/solr_build_suggest" do
   source 'solr_build_suggest.erb'
@@ -128,6 +144,9 @@ template "#{node[:vx_solr][:cron_dir]}/solr_build_suggest" do
   group 'root'
   mode '0644'
   variables(
-      :solr_port => node[:solr][:port]
+      :solr_port => node[:solr][:port],
+      :cron_schedule => node[:vx_solr][:ehmp][:cron_schedule]
   )
+  action create_cron_job_action
 end
+

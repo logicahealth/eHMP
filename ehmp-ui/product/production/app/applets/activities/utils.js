@@ -1,82 +1,161 @@
 define([
-    'moment'
-], function(moment) {
+    'moment',
+    'backbone',
+    'underscore'
+], function(moment, Backbone, _) {
     'use strict';
 
     return {
-        parseResponse: function(response) {
-            var facilityMonikers = ADK.Messaging.request('facilityMonikers');
-
-            if (response.CREATEDATID) {
-                var createdAtFacility = facilityMonikers.findWhere({
-                    facilityCode: response.CREATEDATID
+        getToolbarFormFields: function(viewType, workspaceContext, domain) {
+            var items = [{
+                control: 'select',
+                name: 'primarySelection',
+                label: 'Filter activities by:',
+                title: 'Use up and down arrows to view options and then press enter to select.',
+                srOnlyLabel: true,
+                pickList: [{
+                    label: 'Activities Related to Me',
+                    value: 'intendedForAndCreatedByMe'
+                }, {
+                    label: 'Intended for Me or My Team(s)',
+                    value: 'intendedForMe'
+                }, {
+                    label: 'Created by Me',
+                    value: 'me'
+                }],
+                emptyDefault: false,
+                extraClasses: ['hide-default-empty-option']
+            }, {
+                control: 'select',
+                name: 'mode',
+                label: 'Display only:',
+                pickList: [{
+                    label: 'Open',
+                    value: 'open'
+                }, {
+                    label: 'Open and Closed',
+                    value: 'all'
+                }, {
+                    label: 'Closed',
+                    value: 'closed'
+                }],
+                emptyDefault: false
+            }];
+            if (workspaceContext === 'patient') {
+                items[0].pickList.push({
+                    label: 'All ' + domain,
+                    value: 'none'
                 });
-                if (!_.isUndefined(createdAtFacility)) {
-                    response.createdAtName = createdAtFacility.get('facilityName');
-                }
             }
-
-            if (response.ASSIGNEDTOFACILITYID) {
-                var assignedToFacility = facilityMonikers.findWhere({
-                    facilityCode: response.ASSIGNEDTOFACILITYID
+            if (viewType !== 'expanded') {
+                items.splice(1, 1, {
+                    control: 'container',
+                    template: '<p>Displaying only Open activities</p>',
+                    extraClasses: ['inline-block-display'],
+                    items: []
                 });
-                if (!_.isUndefined(assignedToFacility)) {
-                    response.assignedFacilityName = assignedToFacility.get('facilityName');
+            }
+            return [{
+                control: 'container',
+                extraClasses: ['form-inline'],
+                items: items
+            }];
+        },
+        FilterModel: Backbone.Model.extend({
+            initialize: function(attributes, options) {
+                var contextViewType = ADK.WorkspaceContextRepository.currentContextId;
+                var fullScreen = _.get(options, 'appletConfig.fullScreen') || false;
+                var expandedAppletId = _.get(options, 'appletConfig.instanceId');
+                this.set('instanceId', expandedAppletId);
+                var parentWorkspace = contextViewType + 'Activities';
+                if (fullScreen) {
+                    var expandedModel = ADK.SessionStorage.get.sessionModel('expandedAppletId');
+                    if (expandedModel instanceof Backbone.Model && _.isString(expandedModel.get('id'))) {
+                        expandedAppletId = expandedModel.get('id');
+                    }
                 }
-            }
+                // Default date picker options when the screen is loaded
+                if (options.columnsViewType === 'expanded') {
 
-            switch (response.URGENCY) {
-                case 2:
-                    response.urgency = 'Emergent';
-                    break;
-                case 4:
-                    response.urgency = 'Urgent';
-                    break;
-                case 3:
-                    response.urgency = 'Pre-op';
-                    break;
-                case 5:
-                    response.urgency = 'Admit';
-                    break;
-                case 6:
-                    response.urgency = 'Outpatient';
-                    break;
-                case 7:
-                    response.urgency = 'Purple Triangle';
-                    break;
-                case 9:
-                    response.urgency = 'Routine';
-                    break;
-            }
+                    var fromDate, toDate;
+                    var globalDate = ADK.SessionStorage.getModel('globalDate');
+                    if (!fullScreen && globalDate.get('selectedId') !== undefined && globalDate.get('selectedId') !== null) {
+                        fromDate = moment(globalDate.get('fromDate'), 'MM/DD/YYYY');
+                        toDate = moment(globalDate.get('toDate'), 'MM/DD/YYYY');
+                    } else {
+                        toDate = moment().add('months', 6);
+                        fromDate = moment().subtract('months', 18);
+                    }
+                    this.set({
+                        fromDate: fromDate.startOf('day').format('YYYYMMDDHHmm'),
+                        toDate: toDate.endOf('day').format('YYYYMMDDHHmm')
+                    });
+                }
+                var primarySelection = ADK.SessionStorage.getAppletStorageModel(expandedAppletId, 'primarySelection', true, parentWorkspace);
+                var mode = ADK.SessionStorage.getAppletStorageModel(expandedAppletId, 'mode', true, parentWorkspace);
 
-            response.name = response.INSTANCENAME;
-            response.domain = response.DOMAIN;
-            response.createdByName = response.CREATEDBYNAME;
-            response.mode = response.MODE;
-
-            if (!_.isUndefined(response.TASKSTATE) && _.isString(response.TASKSTATE)) {
-                response.taskState = response.TASKSTATE.split(':')[0];
+                if (!_.isString(primarySelection) || (contextViewType === 'staff' && primarySelection === 'none')) {
+                    primarySelection = 'intendedForAndCreatedByMe';
+                }
+                if (!_.isString(mode) || options.columnsViewType === 'summary') {
+                    mode = 'open';
+                }
+                var startingValues = _.extend({
+                    primarySelection: primarySelection,
+                    mode: mode
+                }, this.getPrimarySelectionFetchOptions(primarySelection), this.getSecondarySelectionFetchOptions(mode));
+                this.set(startingValues);
+                this.listenTo(this, 'change:primarySelection', this.onChangePrimarySelection);
+                this.listenTo(this, 'change:mode change:toDate change:fromDate', this.onChangeSecondarySelection);
+            },
+            onChangeFilter: function() {
+                ADK.Messaging.getChannel('activitiesApplet_' + this.get('instanceId')).trigger('onChangeFilter');
+            },
+            getPrimarySelectionFetchOptions: function(primarySelection) {
+                var createdByMe = false;
+                var intendedForMeAndMyTeams = false;
+                switch (primarySelection) {
+                    case 'intendedForAndCreatedByMe':
+                        createdByMe = true;
+                        intendedForMeAndMyTeams = true;
+                        break;
+                    case 'me':
+                        createdByMe = true;
+                        break;
+                    case 'intendedForMe':
+                        intendedForMeAndMyTeams = true;
+                        break;
+                    default:
+                        break;
+                }
+                return {
+                    createdByMe: createdByMe,
+                    intendedForMeAndMyTeams: intendedForMeAndMyTeams
+                };
+            },
+            formatDate: function(date) {
+                return moment.utc(moment(date, 'YYYYMMDDHHmm')).format('YYYYMMDDHHmm');
+            },
+            getSecondarySelectionFetchOptions: function(mode) {
+                var secondarySelectionFetchOptions = {
+                    startDate: null,
+                    endDate: null
+                };
+                if (mode !== 'open' && this.has('toDate') && this.has('fromDate')) {
+                    secondarySelectionFetchOptions.endDate = this.formatDate(this.get('toDate'));
+                    secondarySelectionFetchOptions.startDate = this.formatDate(this.get('fromDate'));
+                }
+                return secondarySelectionFetchOptions;
+            },
+            onChangePrimarySelection: function() {
+                var primarySelection = this.get('primarySelection');
+                this.set(this.getPrimarySelectionFetchOptions(primarySelection));
+                this.onChangeFilter();
+            },
+            onChangeSecondarySelection: function() {
+                this.set(this.getSecondarySelectionFetchOptions(this.get('mode')));
+                this.onChangeFilter();
             }
-            response.intendedFor = response.INTENDEDFOR;
-            if (response.CREATEDON) {
-                response.createdOn = moment.utc(response.CREATEDON, 'YYYY-MM-DD[T]HH:mm[Z]').local().format('YYYYMMDD');
-            }
-            response.patientName = response.PATIENTNAME;
-            response.patientSsnLastFour = response.PATIENTSSNLASTFOUR;
-            response.isSensitivePatient = response.ISSENSITIVEPATIENT;
-            response.status = response.STATUS;
-            response.createdAtId = response.CREATEDATID;
-            response.processId = response.PROCESSID;
-            response.assignedToFacilityId = response.ASSIGNEDTOFACILITYID;
-            response.pid = response.PID;
-
-            if (_.isNull(response.ISACTIVITYHEALTHY)) {
-                response.isActivityHealthy = true;
-            } else {
-                response.isActivityHealthy = response.ISACTIVITYHEALTHY;
-            }
-
-            response.activityHealthDescription = response.ACTIVITYHEALTHDESCRIPTION;
-        }
+        })
     };
 });

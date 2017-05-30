@@ -107,7 +107,7 @@ loglevel=<%= @resource.daemon_loglevel %>
 #          imposed by the daemon itself.
 # Default: 33142
 <% if @resource.daemon_port.nil? %>
-#port=33142
+#port=PORT
 <% else %>
 port=<%= @resource.daemon_port %>
 <% end %>
@@ -140,8 +140,8 @@ ssl=<%= @resource.daemon_ssl %>
 #          the details.
 #          This string is in the form [user[:password]]@hostname[:port] with
 #          the user, password and port fields being optional. Some examples:
-#          myusername:secret@10.1.1.1:12345
-#          someuser@proxy.mydomain.com:4321
+#          myusername:REDACTED
+#          someuser@proxy.mydomain.com:PORT
 #          proxy.mydomain.com
 # Default: none
 <% if @resource.daemon_proxy.nil? %>

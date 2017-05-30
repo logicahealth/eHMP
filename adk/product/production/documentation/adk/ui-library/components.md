@@ -4,7 +4,7 @@ ADK UI Library's Standardized Components that are 508 Compliant
 :::
 
 ::: definition
-UI Components can be acccessed and used by calling:
+UI Components can be accessed and used by calling:
 ### **ADK.UI.[component-name]** ###
 :::
 
@@ -47,7 +47,7 @@ alertView.show();
 ```
 
 ::: callout
-**Note:** The alert view is destroyed upon calling `ADK.UI.Alert.hide()`. Therefore, ADK.UI.Alert must be instantiated everytime a particular view needs to be shown.
+**Note:** The alert view is destroyed upon calling `ADK.UI.Alert.hide()`. Therefore, ADK.UI.Alert must be instantiated every time a particular view needs to be shown.
 :::
 
 ### Options ###
@@ -65,248 +65,501 @@ The following are methods available to call upon the ADK.UI.Alert constructor:
 |----------|-------------------|-----------------------------------------------------------------------|
 | hide     |                   | hides and destroys any currently open alert windows.<br />**Example**: `ADK.UI.Alert.hide()`   |
 
-## Form ##
-> **A list of supported form controls can be found by [clicking here][FormControls].**
+## Alert Dropdown ##
+
 ### Overview ###
-The ADK provides a way to generate, render and capture user input with an HTML form.  The data entered by the user is retrieved and stored in a Backbone model.  The form is rendered with a Marionette view. Any changes to the form are reflected back to the model and vice versa.  In order to POST (or PUT) the form to the server, a developer will simply have call the Backbone model's save method.
+The alert dropdown component is a dropdown container which resides in the navigation header.  Like trays, the alert dropdown is registered to the component registry.  The dropdown consists of a button and container.  The user may use options provided or may supply custom views for both the button and dropdown container.
 
-**ADK.UI.Form** provides a standard approach for developing forms including: form generation, model binding, and form validation. Form validation will be handled by Backbone.Model's validate method, which will have to be extended on a per-model basis and thus will be handled by the developer.  The form's html pieces have all been test and certified as 508 compliant.
-
-### Options ###
-**ADK.UI.Form** is the base form view that handles the form generation.  Each individual form can be customized by extending the base view with the following available options:
-
-| Required     | Option          | Type   | Description                                                                                             |
-|:------------:|-----------------|--------|---------------------------------------------------------------------------------------------------------|
-|<i class="fa fa-check-circle"></i> | **model** | instance of a Backbone.Model | a model that the field's values will be binded to  |
-|<i class="fa fa-check-circle note">*</i> | **fields** | array of controls | configuration of controls and how they are layed out in the form's UI |
-|              | **events** | hash / function | see [backbone's documentation on events][BackboneViewEvents] |
-|              | **modelEvents** | hash / function | see [marionette's documentation on modelEvents][MarionetteModelEvents] |
-|              | **onRender** | function | see [marionette's documentation on onRender][MarionetteOnRender] |
-|              | **onInitialize** | function | method gets called after the form's initialize method which gets called when the view is first created. <br /> **Note:** the options object passed to the constructor / initialize will get passed through as a argument of the _onInitialize_ method.  <br /> **Default:** `function(options){ }`|
+```JavaScript
+var AlertDropdown = ADK.UI.AlertDropdown.extend({});
+ADK.Messaging.trigger('register:component', {
+    type: 'applicationHeaderItem', //the component subset which is filtered out for display
+    title: 'Press enter to view notifications.', //508 title for the button in the global header
+    orderIndex: 1, //the order in which this particular item appears in the list
+    key: 'notification-demo', //the channel on which global events will be broadcasted
+    group: 'user-nav-alerts', //visual group of items
+    view: AlertDropdown //view definition, not instance
+});
+```
 
 ::: callout
-**<i class="fa fa-check-circle note">\*</i> Note:** the fields array is composed of a list of control objects.  Please see the [section below](#Form-Controls) for more information on what a control object is.
+**Note:** Anything passed into the options above will be available in the AlertDropdown view, and it's children.
 :::
+
 
 ### Basic Usage ###
+
+The component will automatically create a model to contain it's options if one is not provided.  All configuration options attached to the view object will be automatically set on the model to be available for template control logic on the button and dropdown views.  Additionally, custom views can be configured on the component.
+
+A basic alert dropdown view would be configured as follows:
 ```JavaScript
-var ExampleFormView = ADK.UI.Form.extend({
-    model: new Backbone.Model(),
-    fields: [],
-    events: {
-        "event-selector": "callback-function"
-        //...
+var AlertDropdown = ADK.UI.AlertDropdown.extend({
+    //which icon to display
+    icon: 'fa-folder-open',
+    dropdownTitle: 'Notifications For User',
+    //omit backdrop to prevent backdrop from appearing on show of dropdown
+    backdrop: true,
+    //omit footerButton to prevent a footer from being rendered
+    footerButton: {
+        eventName: 'all-notification',
+        title: 'Press enter to view all notifications.',
+        label: 'View All Notifications'
     },
-    modelEvents: {
-        "event-selector": "callback-function"
-        //...
+    onBeforeInitialize: function() {
+        //fired after the custom options and model have been set but
+        //before view logic is configured
+        //this will also be triggered on the view as 'before:initialize'
+        this.collection = new Backbone.Collection([{
+            'title': 'First Item',
+            'label': 'Hello'
+        }, {
+            'title': 'Second Item',
+            'label': 'I am a label'
+        }]);
     },
-    onRender: function(){
-        //...
-    },
-    onInitialize: function(options){
-        //...
+    onInitialize: function() {
+        //fired after initialize finishes
+        //also triggered on the view as 'initialize'
     }
 });
 ```
-::: callout
-**Note:** ADK.UI.Form returns a Marionette View, and in order to create an instance of the view you must call **new** on the view returned. `var formViewInstance = new ExampleFormView(); `
 
-**Important:** DO NOT EXTEND/OVERWRITE the following methods/properties of an ADK.UI.Form View: `tagName`, `attributes`, `template`, `initialize`, `onRenderCollection`, `childViewOptions`, and `getChildView`. Overwriting these will likely cause issues with rendering and showing a fully functional form.
-:::
+The three view definitions used to build the component can be sourced from the component abstract.  In addition, the alignment, container, and button's templates can be configured.
+The footer button, if optioned, will trigger an event `eventName` on the channel `key`.  These options can be set on the component definition, or on the DropdownListView definition.
 
-### Controls ###
-The ADK has created a collection of form controls that are 508 Compliant and are avaiable for use in the the **fields** array definition of ADK.UI.Form.  Each form control has a set of avabile attrbutes used to customize its look/feel and functionality.
-::: callout
-All form control objects **must** contain the attribute of **"control"** which tells the base view (ADK.UI.Form) which control is being defined/used.
-
-Most controls also have a attribute of **"name"** which gets used to bind the control's value back to the form's model.
-:::
-
-The following is an example of creating a Form with one input field, who's value is binded to the model's _"input1"_ attribute:
-```JSON
-var ExampleFormView = ADK.UI.Form.extend({
-    model: new Backbone.Model({
-        input1: ""
+```JavaScript
+var AlertDropdown = ADK.UI.AlertDropdown.extend({
+    //in most cases, this is the only view that will need to be configured
+    //the RowView is going to be each row item within the dropdown container
+    RowView: ADK.UI.AlertDropdown.RowView.extend({
+        template: SomeTemplate,
+        //[data-dismiss=dropdown] will close the dropdown when the row is clicked
+        attributes: {
+            'data-dismiss': 'dropdown'
+        }
+        events: {'click': function(e) { //communicate back with your applet
+            ADK.Messaging.getChannel(this.getOption('key')).trigger('openDetails', this.model);
+        }},
+        onBeforeInitialize: {},
+        onInitialize: {}
     }),
-    fields: [{
-        control: "input",
-        name: "input1",
-        label: "Input Label",
-        placeholder: "Enter text..."
-    }]
-});
+    DropdownListView: ADK.UI.AlertDropdown.DropdownListView.extend({}),
+    ButtonView: ADK.UI.AlertDropdown.ButtonView.extend({}),
+
+    position: 'auto', //top | bottom | auto (defaults to bottom),
+    align: 'left', //left | right | middle
+    ButtonTemplate: Handlebars.compile('<i class="fa {{icon}}"></i>')
+})
 ```
+
+In some cases, logic will need to be driven on the button view to determine what icons, and what colors are displayed.  This can be accomplished by configuring the `getTemplate` method on the `ButtonView`.  The collection that will populate the dropdown container will be available here so counting logic can occur as thus:
+```JavaScript
+ButtonView: ADK.UI.AlertDropdown.ButtonView.extend({
+    getTemplate: function() {
+        var subset = this.collection.where({'severity': 'high', 'unread': true});
+        if(subset.length)
+            return Handlebars.compile([
+                '<i class="fa danger {{icon}"}></i>',
+                '<i class="badge">' + subset.length + '</i>'
+            ].join('\n'));
+        else return this.getOption('template');
+    }
+})
+```
+
+In some cases, logic will need to be driven on the dropdown header to determine what count is displayed.  This can be accomplished by overriding `serializeModel` on the `DropdownListView` and setting the `count` attribute against the view's model.
+```JavaScript
+DropdownListView: ADK.UI.AlertDropdown.DropdownListView.extend({
+    serializeModel: function(model) {
+        model.set('count', this.collection.where({'severity': 'hight', 'unread': true}));
+        return model.toJSON();
+    }
+}
+})
+
+```
+
+### Options ###
+
+Options can be set in the constructor options, or on the view definition.
+| Required                          | Option                  | Type            | Description                                                       |
+|:---------------------------------:|-------------------------|-----------------|-------------------------------------------------------------------|
+|                                   | ButtonTemplate          | method          |  Configures the template for the ButtonView.  If a template is defined on the ButtonView, this option will be ignored |
+|                                   | position                | string          |  Determines whether the dialog appears above or below the trigger element.  Options are `top`, `bottom`, and `auto`. <br> **Default**: `bottom` |
+|                                   | align                   | string          |  Horizontally aligns dialog to trigger element.  Options are `left`, `right`, and `middle`.
+|                                   | backdrop                | boolean         |  Determines whether a backdrop should be displayed when the dropdown menu is shown. <br> **Default**: `false`
+|                                   | icon                    | string          |  Sets an attribute on the component model to be used for setting the icon in the template. |
+|                                   | ButtonView              | view            |  Configures the ButtonView.  The ButtonView definition can be accessed via `ADK.UI.AlertDrodpown.ButtonView`. |
+|                                   | DropdownListView        | view            |  Configures a menu view.  This is the view assigned to DropdownView by default.  The DropdownListView definition can be accessed via `ADK.UI.AlertDropdown.DropdownListView`.  A list view will be a navigation menu.|
+|                                   | DropdownView            | view            |  Overrides the selection of DropdownListView should a different view type, such as DropdownFormView need to be utilized. The DropdownFormView definition can be accessed via `ADK.UI.AlertDropdown.DropdownFormView`.  The DropdownFormView implies the dropdown contains a writeback feature.|
+|                                   | RowView                 | view            |  Configures the childView on a DropdownListView. The RowView definition can be accessed via `ADK.UI.AlertDropdown.RowView`.|
+|                                   | RowContentTemplate      | string          |  Use this options to set the contents of the RowView, but not override the RowView's template. |
+
+
+### Events ###
+All events are broadcasted both on the parent element with class **alert-dropdown** and on the AlertDropdown view.  Triggering **dropdown.show** or **dropdown.hide** on the DOM element with the class **alert-dropdown** will activate the corresponding behavior.  When a dropdown is open, the parent element will have the class **open** applied.
+
+| Event             | Description                              |
+|:-----------------:|------------------------------------------|
+| dropdown.show     | fired when show is called                |
+| dropdown.shown    | fired after dropdown is added to DOM     |
+| dropdown.hide     | fired when hide is called                |
+| dropdown.hidden   | fired after dropdown is removed from DOM |
+
+### Listeners ###
+Listeners are available to show and hide the component.
+```JavaScript
+//key is the same string as the one passed into the component registration options
+ADK.Messaging.getChannel(key).trigger('alert-dropdown.show');
+ADK.Messaging.getChannel(key).trigger('alert-dropdown.hide');
+```
+
+A global listener will close all dropdowns which extend from `ADK.UI.Dropdown` including this component.
+```JavaScript
+ADK.Messaging.trigger('dropdown.close');
+```
+
+## Chrome ##
+ADK's Applet Chrome refers to the optional (though **highly recommended**) applet wrapper that composes the visual container that surrounds an applet. Chrome was designed as a mechanism for consistent styling desired for most applets.
+
+However, Chrome provides much more than simple styling. It provides access to common applet eventing, such as triggering data refreshes and toggling between applet views.
+
+> In order to enable Chrome, an applet developer simply has to include **chromeEnabled: true** as an attribute within one of an applet's viewType objects.
+
+```JavaScript
+...
+var applet = {
+    id: 'sampleApplet',
+    viewTypes: [{
+        type: 'sample',
+        view: new SampleView,
+        chromeEnabled: true   // This enables chrome for this viewType
+                              // Note: will not work with getRootView...
+                              // Must use viewType array to use Chrome
+    }],
+    defaultViewType: 'sample'
+};
+...
+
+```
+**Note:** Chrome only works with an applet config that utilizes the _viewType_ array methodology for specifying views. Chrome will not work with _getRootView_.
 
 ::: side-note
-**The complete list of supported form controls can be found by [clicking here][FormControls].**
+Here's what Chrome would look like:
+<div class="panel panel-primary applet-chrome chrome-example"><div class="panel-heading applet-chrome-header"><span class=pull-left><span class=grid-refresh-button><span><button type=button class="applet-refresh-button btn btn-sm btn-link" tabindex=0 title=Refresh><i class="applet-title-button fa fa-refresh"></i> <span class=sr-only>Refresh</span></button></span></span></span> <span class=pull-right><span class=grid-titlebar></span> <span class=grid-add-button><span><button type=button class="applet-add-button btn btn-sm btn-link" tabindex=0 title="Add Item"><span class="applet-title-button fa fa-plus"><span class=sr-only>Add Item</span></span></button></span></span> <span class=grid-filter-button><span><button type=button id=grid-filter-button-applet-1 data-toggle=collapse data-target=#grid-filter-applet-1 class="applet-filter-button btn btn-sm btn-link" tabindex=0 title="Show Filter"><span class="applet-title-button fa fa-filter"><span class=sr-only>Show Filter</span></span></button></span></span> <span class=grid-options-button><span><button type=button id=grid-options-button- data-toggle=collapse data-target=#grid-options- class="applet-options-button btn btn-sm btn-link" tabindex=0 title="Show Options"><span class="applet-title-button fa fa-cog"><span class=sr-only>Show Options</span></span></button></span></span> <span class=grid-resize><span><button type=button class="applet-maximize-button btn btn-sm btn-link" tabindex=0 title="Maximize Applet"><span class="applet-title-button fa fa-expand"><span class=sr-only>Maximize Applet</span></span></button></span></span></span> <span class="center-block text-center panel-title">Applet Title</span></div><div class=appletDiv_ChromeContainer><div class="applet-view">Applet View</div></div><div class=applet-chrome-footer><span class="gs-resize-handle gs-resize-handle-both"></span></div></div>
 :::
 
-### Form Validation ###
-Form validation will be handled by Backbone.Model's **validate** method, which will have to be extended on a per-model basis and thus will be handled by the developer.
+### Using chrome with BaseDisplayApplet ###
 
-The validate method receives the model attributes as well as any options passed to set or save. If the attributes are valid, don't return anything from validate. If they are invalid return an error of your choosing. It can be as simple as a string error message to be displayed, or a complete error object that describes the error programmatically. If validate returns an error, save will not continue, and the model attributes will not be modified on the server. Failed validations trigger an "invalid" event, and set the validationError property on the model with the value returned by this method.
+Chrome is very easy to use with BaseDisplayApplet or a viewType that extends BaseDisplayApplet (**[any ADK UI Library's Applet Views](applet-views.md)**) since it is already set up with many of the requirements
 
----
+The table below contains the full list of elements and buttons available through Chrome and how to enable them using BaseDisplayApplet.
 
-Below is an example of validating the model to ensure that the attribute _"numberInput"_ is between 10 and 20:
+|  | Elements/Buttons | Description | Required to Work with BaseDisplayApplet |
+|--|------------------|-------------|-----------------------------------------|
+| <i class="applet-title-button fa fa-filter"></i> | **filter** | button that fires an event to toggle the display of the filter view(s) | applet's _appletOptions_ contains either attribute 'filterFields' or 'filterDateRangeField'  |
+| <i class="applet-title-button fa fa-refresh"></i> | **refresh**   | button that triggers the applet view's _refresh_ method | refresh method is built in but can be overwriten by including a _'refresh'_ method to applet's _appletOptions_ |
+| <i class="applet-title-button fa fa-plus"></i> | **add**  | button that triggers applet view's _onClickAdd_ method | applet's _appletOptions_ includes 'onClickAdd' method (to be called on click of **add** button) |
+| <i class="applet-title-button fa fa-expand"></i> <i class="applet-title-button fa fa-close"></i> | **resize** | button that triggers 'minimize' or 'maximize' event depending on which state the applet is in | applet's screen config must have _'maximizeScreen'_ or _'fullScreen'_ attribute ([info on applet's screen config][AppletScreenConfig]) |
+| | **title** | span that displays the name of the applet specified in screen config | applet's screen config object must have a _'title'- attribute|
+| <i class="applet-title-button fa fa-cog"></i> | **switch viewType** | button that triggers an event that shows a switch viewType view (**only on user-defined workspaces**) | applet is within a user-defined workspace and must have _viewTypes_ array defined in the applet's configuration |
+
+### Using chrome with a custom view ###
+
+If BaseDisplayApplet (or a viewType that extends it) is not being used, and instead a view is being created by extending one of Marionette's views, more must be done for the built-in elements/buttons to display in Chrome.
+
+The following table describes the requirements for displaying the various elements/buttons provided by Chrome when creating a custom applet view from scratch (extending one of Marionette's views). For the descriptions of each element, please see table above.
+
+|  | Elements/Buttons | Additional Requirements for inclusion in a custom view |
+|--|------------------|--------------------------------------------------------|
+| <i class="applet-title-button fa fa-filter"></i> | **filter** | applet view must contain at least one of the following attributes: **'filterDateRangeView'** or **'filterView'** and also contain a region with an id equal to _"#grid-filter-' + appletInstanceId"_ and class of _"collapse"_.
+| <i class="applet-title-button fa fa-refresh"></i> | **refresh** | applet view must contain a **'eventMapper'** object with an attribute of **"refresh"** with a value of: view's method name. This method should reset/re-fetch the applet's collection in this method |
+| <i class="applet-title-button fa fa-plus"></i> | **add** | applet view must contain a **'eventMapper'** object with an attribute of **"add"** with a value of: view's method name. This method should handle write-back functionality desired for the applet |
+| <i class="applet-title-button fa fa-expand"></i> <i class="applet-title-button fa fa-close"></i> | **resize** | _SAME INSTRUCTIONS AS BASEDISPLAYAPPLET_ (table directly above) |
+|  | **title** | _SAME INSTRUCTIONS AS BASEDISPLAYAPPLET_ (table directly above)|
+|  |  |  |
+| <i class="applet-title-button fa fa-cog"></i> | **switch viewType**  | _SAME INSTRUCTIONS AS BASEDISPLAYAPPLET_ (table directly above)|
+
+Below is an example of using applet chrome without with a custom view:
+
 ```JavaScript
-var Model = Backbone.Model.extend({
-    defaults: {
-        numberInput: 1,
+define([
+  'main/ADK',
+  'underscore',
+  'handlebars'
+], function (ADK, _, Handlebars) {
+
+  var fetchOptions = {
+    resourceTitle: 'example-resource',
+    pageable: true // enables infinite scrolling (makes a pageable collection)
+  };
+
+  var FilterView = Backbone.Marionette.ItemView.extend({
+    template: Handlebars.compile("I am a filter view!")
+  });
+
+  var SimpleItemView = Backbone.Marionette.ItemView.extend({
+    template: Handlebars.compile("<li>Tile: <%= title %></li>")
+  });
+
+  var CollectionView = Backbone.Marionette.CollectionView.extend({
+    template: Handlebars.compile("<li>Tile: <%= title %></li>"),
+    childView: SimpleItemView
+  });
+
+  var SampleView = Backbone.Marionette.LayoutView.extend({
+    initialize: function(options){
+      this.collection = ADK.ResourceService.fetchCollection(fetchOptions);
+
+      // creating a Collection View and giving it a collection
+      this.collectionView = new CollectionView;
+      this.collectionView.collection = this.collection;
+
+      // creating a filterView to enable Applet Chrome's filter button
+      this.filterView = new FilterView;
     },
-    validate: function(attributes, options) {
-        this.errorModel.clear();
-        var number = parseFloat(this.get("numberInput"), 10);
-        if (isNaN(number)) {
-            this.errorModel.set({
-                numberInput: "Not a number!"
-            });
-        } else if (number <= 10 || number >= 20) {
-            this.errorModel.set({
-                numberInput: "Must be between 10 and 20"
-            });
-        }
-        if (!_.isEmpty(this.errorModel.toJSON())) {
-            return "Validation errors. Please fix.";
-        }
-    }
-});
-```
-``` JavaScript
-var FormView = ADK.UI.Form.extend({
-    events: {
-        "submit": function(e) {
-            e.preventDefault();
-            // calling the form model's validate method
-            if (this.model.isValid())
-                // logic for when the model is valid
-            else {
-                // logic for when the model is not valid
-            }
-        }
-    }
-    ...
-});
-```
-View [Backbone's Documentation on validate][BackboneModelValidate] for more details
-
-### Setting focus on first error field ###
-If the model does not pass validation (`[form model].isValid()`) generally the user's focus should be placed at the first failing form field.
-
-By calling `[form view].transferFocusToFirstError()` the first form field with an error message will recieve focus.
-``` JavaScript
-var FormView = ADK.UI.Form.extend({
-    events: {
-        "submit": function(e) {
-            e.preventDefault();
-            // calling the form model's validate method
-            if (this.model.isValid())
-                // logic for when the model is valid
-            else {
-                // logic for when the model is not valid
-                // ...
-                this.transferFocusToFirstError();
-            }
-        }
-    }
-    ...
-});
-```
-
-### Dynamic Hiding and Showing of Form Elements ###
-Hiding and showing of form elements dynamically, should be hanndled by Marionette's **modelEvents** object.  The _modelEvents_ object parameter can be added to the form's view like shown in the example below:
-
-```JavaScript
-var ExampleFormView = ADK.UI.Form.extend({
-    model: new Backbone.Model(),
-    fields: [],
-    modelEvents: {
-        "event-selector": "callback-function"
-    }
-});
-```
-
-An example case where you might need to hide/show form elements dynmaically could be to allow the user to provide more specific information on a particular selection.  So the following example is to show how once the user selects an option from the select dropdown, if the option they select is email then the appropriately email field will be enabled and required, otherwise if they choose phone-number then similarly the phone number input field will be enabled and required.
-
-```JavaScript
-var ExampleFormModel = Backbone.Model.extend({
-    defaults: {
-        perferredMethodOfContact: '',
-        email: '',
-        phoneNumber: ''
-    }
-});
-ExampleFormView = ADK.UI.Form.extend({
-    model: new ExampleFormModel(),
-    ui: {
-        "phoneNumberField": ".phoneNumber",
-        "emailField": ".email",
+    onRender: function(){
+      this.collectionViewRegion.show(this.collectionView);
+      this.textFilterRegion.show(this.filterView);
     },
-    fields: [{
-        control: "select",
-        name: "perferredMethodOfContact",
-        label: "What is your perferred method of contact?",
-        options: [{
-            label: "Email",
-            value: "email"
-        }, {
-            label: "Phone",
-            value: "phone"
-        }],
-        required: true
-    }, {
-        control: "input",
-        name: "email",
-        label: "Email Address",
-        placeholder: "Enter youremail...",
-        type: "email",
-        extraClasses: ["hidden"],
-        required: true
-    }, {
-        control: "input",
-        name: "phoneNumber",
-        label: "Phone Number",
-        placeholder: "Enter your phone number...",
-        type: "input",
-        extraClasses: ["hidden"],
-        required: true
+    /*
+     * this eventMapper with the attributes "refresh" and "add"
+     * tied to the view's "refreshCollection" and "onClickAdd" methods
+     * will enable the Applet Chrome's "refresh" and "add" buttons
+     */
+    eventMapper: {
+      'refresh': 'refreshMethod',
+      'add': 'onClickAdd'
+    },
+    onClickAdd: function(){
+      // call writeBack
+    },
+    refreshCollection: function(){
+      // Example Code: clear the cached data,
+      // call reset and fetch on the collection to get the updated models
+      // -----------------------------------
+        var collection = this.collection;
+
+        if (collection instanceof Backbone.PageableCollection) {
+            collection.fullCollection.reset();
+        } else {
+            collection.reset();
+        }
+        ADK.ResourceService.clearCache(collection.url);
+        ADK.ResourceService.fetchCollection(collection.fetchOptions, collection);
+      // -----------------------------------
+    },
+    regions: {
+      collectionViewRegion: '.grid-container',
+      textFilterRegion: '.grid-filter'
+    },
+    // It is preferable to specify a separate html file, especially with larger/complex templates
+    template: Handlebars.compile([
+      '<div class="panel-body grid-applet-panel" id="grid-panel-{{instanceId}}">',
+      '<div id="grid-filter-{{instanceId}}" class="collapse">',
+      '<div class="grid-filter"></div>',
+      '</div>',
+      '<div class="grid-container"></div>',
+      '</div>'
+    ].join('\n'))
+  });
+
+  var appletConfig = {
+    id: 'sampleApplet',
+    // having viewTypes array will enable the "switch viewType" button
+    // in Applet Chrome on User defined workspaces
+    viewTypes: [{
+      type: 'base',
+      view: SampleView,
+      chromeEnabled: true // enabling the applet chrome for this view
     }],
-    modelEvents: {
-        'change:perferredMethodOfContact': function() {
-            var method = this.model.get('perferredMethodOfContact');
-            if (method === "email") {
-                this.ui.phoneNumberField.trigger('control:hidden', true);
-                this.ui.emailField.trigger('control:hidden', false);
-            } else if (method === "phone") {
-                this.ui.emailField.trigger('control:hidden', true);
-                this.ui.phoneNumberField.trigger('control:hidden', false);
-            } else {
-                this.ui.emailField.trigger('control:hidden', true);
-                this.ui.phoneNumberField.trigger('control:hidden', true);
-            }
-        }
-    }
+    defaultViewType: 'base'
+  };
+
+  return appletConfig;
 });
 ```
 
-::: callout
-**Please refer to each componet's documentation individually to ensure which events are supported for each.** (Not all controls will support the events used above example)
-:::
+### Adding Additional Buttons to Chrome Container ###
 
+> In order to add additional buttons to the Chrome container, an applet developer has to include a **chromeOptions: {}**  object as an attribute within one of an applet's viewType objects.
+>
+> In the **chromeOptions** object, the developer can specify an **additionalButtons** array attribute, that contains object(s) with the attributes **id** and **view** for each additional chrome button.
+>   - **id**: an unique identifier for the button
+>   - **view**: a Marionette view to show in the new chrome button region. (see example below)
 
+```JavaScript
+...
+var ExampleButtonView = Backbone.Marionette.ItemView.extend({
+    template: Handlebars.compile("<button>Sample Button</button>"),
+    tagName: 'span'
+});
+var applet = {
+    id: "example",
+    viewTypes: [{
+        type: 'summary',
+        view: AppletLayoutView,
+        chromeEnabled: true,
+        chromeOptions: {
+            additionalButtons: [{
+                'id': 'example-button',
+                'view': ExampleButtonView
+            }]
+        }
+    }],
+    defaultViewType: 'summary'
+};
+...
+```
+**Note:** Any event handling/listeners for the additional buttons should be taken care of in their respective views which are included in the _additionalButtons_ array.
+
+### Adding Notifications to Chrome Container ###
+
+One more multiple notifications can be added to the Chrome header via the **chromeOptions** configuration.  Notifications can be any view specified by a user, but the most basic notification will extend from **ADK.UI.Chrome.NotificationView** and will inform a user about information within the applet's collection.  When extending from **NotificationView**, the most common application will be to override the ```getNotifications``` method in order to display a count.  By default, the the model's **count** attribute, or the value returned by ```getNotifications``` will be the value displayed within the badge.
+
+```JavaScript
+var applet = {
+    id: 'some_applet',
+    viewTypes: [{
+        type: 'summary',
+        view: AppletLayoutView.extend({
+            columnsViewType: "summary"
+        }),
+        chromeEnabled: true,
+        chromeOptions: {
+            notificationView: ADK.UI.Chrome.NotificationView.extend({
+                getNotifications: function(collection) { //the applet's collection is passed in
+                    //return the number of models that have
+                    //the attribute 'facilityName' equal to 'DOD'
+                    return collection.where({
+                        facilityName: 'DOD'
+                    }).length;
+                }
+            })
+        }
+    }
+}
+```
+
+Each view type can have it's own **NotificationView**, and even multiples can be specified.
+
+```JavaScript
+var applet = {
+    id: 'some_applet',
+    viewTypes: [{
+        type: 'gist',
+        view: GistViewDefinition,
+        chromeEnabled: true,
+        chromeOptions: {
+            notificationView: [{
+                view: ADK.UI.Chrome.NotificationView.extend({
+                    getNotifications: function(collection) {
+                        return collection.length;
+                    }
+                }),
+                orderIndex: 1
+            }, {
+                view: ADK.UI.Chrome.NotificationView.extend({
+                    getNotifications: function(collection) {
+                        return 1;
+                    }
+                }),
+                orderIndex: 0
+            }]
+        }
+    }, {
+        type: 'expanded',
+        view: AppletLayoutView.extend({
+            columnsViewType: "expanded"
+        }),
+        chromeEnabled: true,
+        chromeOptions: {
+            notificationView: ADK.UI.Chrome.NotificationView.extend({
+                getNotifications: function(collection) {
+                    return collection.where(function(model) {
+                        return !_.isUndefined(model.get('radiationExposure'));
+                    }).length;
+                }
+            })
+        }
+    }
+}
+```
+
+When multiples are specified, **orderIndex** will specify the sort order, and the expected format will be as follows:
+
+```JavaScript
+var applet = {
+    viewTypes: [{
+        chromeOptions: {
+            notificationView: [{
+                view: ViewDefinition,
+                orderIndex: 0
+            }, {
+                view: ViewDefinition,
+                orderIndex: 1
+            }]
+        }
+    }
+}
+```
+
+In some cases, there may be logic to determine the icon to be displayed.  This can be accomplished by overriding **getTemplate** method to change the template based on certain counts:
+
+```JavaScript
+var applet = {
+    id: 'some_applet',
+    viewTypes: [{
+        type: 'gist',
+        view: SomeViewDefinition,
+        chromeEnabled: true,
+        chromeOptions: {
+            notificationView: ADK.UI.Chrome.NotificationView.extend({
+                getNotifications: function(collection) {
+                    return collection.where(function(model) {
+                        return !_.isUndefined(model.get('radiationExposure'));
+                    }).length;
+                },
+                somewhatUrgentTemplate: Handlebars.compile([
+                  '{{#if count}}',
+                    '<strong class="badge">{{count}}</strong>',
+                    '<i class="fa fa-exclamation-circle"></i>',
+                  '{{/if}}'
+                ].join('\n')),
+                veryUrgentTemplate: Handlebars.compile([
+                  '{{#if count}}',
+                    '<strong class="badge">{{count}}</strong>',
+                    '<i class="fa fa-exclamation-triangle"></i>',
+                  '{{/if}}'
+                ].join('\n')),
+                getTemplate: function() {
+                    var urgency = collection.where(function(model) {
+                        return model.get('urgency') > 0;
+                    }).length;
+
+                    if(urgency > 30) return this.getOption('veryUrgentTemplate');
+                    if(urgency > 15) return this.getOption('somewhatUrgentTemplate');
+                    return this.getOption('tempalte');
+                }
+            })
+        }
+    }]
+};
+```
+
+**Note:** All model attributes will be available for consumption in the templates, but **count** can and will be overridden by **getNotifications**, which will default to ```0``` if **getNotifications** is not overridden by the developer.
 
 ## Modal ##
 ### Basic Usage ###
-#### Create clickable item ####
+#### Create click-able item ####
 Add a unique id to the HTML tag.  See example below:
 
 ```HTML
 <button id="modalButton">CLICK ME</button>
 ```
 
-#### Tie clickable item to event function ####
-Under the events field in the extend Backbone ItemView use the unique id assign to the clickable item to listen for a click event.
+#### Tie click-able item to event function ####
+Under the events field in the extend Backbone ItemView use the unique id assign to the click-able item to listen for a click event.
 The event should call a function that creates your new instance of your modal view and assigned this.model to be the model for that view.
 Finally, instantiate the **ADK.UI.Modal** constructor with the appropriate options, and use the **show** function to display the view.  (see below)
 
@@ -371,7 +624,7 @@ The following are the available options/attributes for the _options_ object:
 |:---------:|--------------------|-------------------------------------|------------------------------------------------------------------|
 |           | **title**          | string                              | displays a string as the title to the modal |
 |           | **size**           | string                              | valid modal widths include: 'xlarge' / 'large' / 'medium' / 'small' <br />**default**: _'medium'_ |
-|           | **wrapperClasses** | string / array of strings           | classes to add the the top level wrapping element of the modal.  This can be used to help style the modal container or any content inside the modal. <br />**default**: _[ ] (empty array)_ |
+|           | **wrapperClasses** | string / array of strings           | classes to add the the top level wrapping element of the modal.  This can be used to help style the modal container or any content inside the modal. <br />**default**: _[ ](empty array)_ |
 |           | **backdrop**       | boolean / "static"                  | Includes a modal-backdrop element. Alternatively, specify static for a backdrop which doesn't close the modal on click. Notice that _true_ **draggable** option disables backdrop. <br />**default**: _true_ |
 |           | **draggable**      | boolean                             | Makes modal draggable. <br />**default**: _true_ |
 |           | **keyboard**       | boolean                             | closes the modal when escape key is pressed <br />**default**: _true_ |
@@ -387,7 +640,7 @@ The following are the available options/attributes for the _options_ object:
 :::
 
 ### Ways to Hide/Terminate Modal ###
-There are two ways to terminate a modal. A developer can apply 'data-dismiss="modal"' to a button and by default a click of that button will close the modal and destroy all associated views. Programatically, a developer can issue an ADK.UI.Modal.hide() call (for instance, in a 'success' callback) which will also terminate a modal and destroy all views.
+There are two ways to terminate a modal. A developer can apply 'data-dismiss="modal"' to a button and by default a click of that button will close the modal and destroy all associated views. Programmatically, a developer can issue an ADK.UI.Modal.hide() call (for instance, in a 'success' callback) which will also terminate a modal and destroy all views.
 
 
 ## Notification  ##
@@ -419,7 +672,7 @@ var exampleView = Backbone.Marionette.ItemView.extend({
             type: "basic",
             autoClose: false, // prevents from closing automatically after 5 seconds
             onClick: function () { // an optional callback function to be invoked on click event
-                ADK.Messaging.getChannel('notification-demo').trigger('alert-dropdown.show'); 
+                ADK.Messaging.getChannel('notification-demo').trigger('alert-dropdown.show');
             }
         });
     }
@@ -442,14 +695,65 @@ The following are the available options to pass to the _ADK.UI.Notification_ con
 The following are methods available to call upon the ADK.UI.Notification constructor:
 | Method   | Parameter         | Description                                                           |
 |----------|-------------------|-----------------------------------------------------------------------|
-| hide     |                   | hides and destroys any currently open notifcations.<br />**Example**: `ADK.UI.Notification.hide()`   |
+| hide     |                   | hides and destroys any currently open notifications.<br />**Example**: `ADK.UI.Notification.hide()`   |
+
+## Popup ##
+
+A popup is an extension of a Bootstrap popover which allows extra options to define placement and alignment to the trigger element.  This element can be used anytime a developer wishes to place a floating element in relation to another element that isn't explicitly a drop-down.  The trigger element must be visible.  All rules of Bootstrap popover apply, including event triggering, and the Bootstrap pattern should be used.  Be sure to keep event triggering within the scope of a view and don't use global selectors to apply or trigger events.
+
+::: note danger
+#### Not accessible via ADK.UI ####
+This is the only component that is not accessible by calling `ADK.UI.[component-name]` due to it being a jQuery method that needs to be called on a specific DOM element.
+
+:::
+
+```JavaScript
+var myView = new Marionette.ItemView({
+    template: Handlebars.compile('<div tabindex="0" data-toggle="popover">Click me to open popover</div>'),
+    initialize: function() {
+        this.headerView = new Marionette.ItemView({template: Handlebars.compile('<div>I\'m a header</div>')});
+        this.bodyView = new Marionette.ItemView({template: Handlebars.compile('<div>I\'m a body</div>')});
+    },
+    onRender: function() {
+        this.headerView.render();
+        this.bodyView.render();
+        this.$('[data-toggle="popover"').popup({
+            placement: 'right', //auto right would tell it to bias right but shift left if off screen
+            valign: 'top', //align the top of the popup with the top of the trigger element
+            content: this.bodyView.$el,
+            title: this.bodyView.$el
+        });
+    },
+    onDestroy: function() {
+        //We must explicitly destroy these views if we don't use a view type which handles children
+        //Failure to do so may result in a memory leak
+        this.headerView.destroy();
+        this.bodyView.destroy();
+    }
+});
+```
+In addition to Bootstrap options for a popover, the following options are available
+
+```JavaScript
+{
+    margin-left:  0px, //Margin will reference the trigger element
+    margin-top: 0px,
+    //Offset is absolute position in reference to base position.
+    //This can be used to place popup over trigger element
+    xoffset: 0px,
+    yoffset: 0px, //Negative offsets can be used as well
+    //The two following options are not recommended to be used together
+    valign: top,  //[ top | bottom ] Used with placement: [ right | left ]
+    halign: right //[ right | left ] Used with placement: [ top | bottom ]
+}
+```
 
 ## Tabs  ##
 ### Overview ###
-**ADK.UI.Tabs** provides a standard approach for generating and showing bootstrap tabs that are 508 compliant and has consistant HTML styling.
+**ADK.UI.Tabs** provides a standard approach for generating and showing bootstrap tabs that are 508 compliant and has consistent HTML styling.
 
 ### Options ###
-The following are the available options to pass into **ADK.UI.Tabs** constuctor upon initialization:
+The following are the available options to pass into **ADK.UI.Tabs** constructor upon initialization:
 
 **Note**: Must be passed in as an array of objects to a **tabs** attribute, with each tab consisting of one object (Example: `new ADK.UI.Tabs({tabs: tabConfigArray}))`
 
@@ -503,7 +807,7 @@ There are two possible uses for a tray component:  menu, and interactive content
 
 ### Basic Usage ###
 
-A tray is a combination of a button and content container ecapsulated in a DIV.  The basic structure is as follows:
+A tray is a combination of a button and content container encapsulated in a DIV.  The basic structure is as follows:
 
 ```Handlebars
 <div class="sidebar"> <!-- element which fires events -->
@@ -537,7 +841,7 @@ var trayView = ADK.UI.Tray.extend({
 });
 ```
 ::: callout
-**Note:** All critical functions defined in the tray abstract will continue to fire even if new ones are defined in the tray definition.  This also applies to events in that newly defined events will be merged into the event list.  However, a duplicate event definition will override the event in the tray abstract.  As such any additional event functionality can be easily implemented, and if needed, existing events can be overwriten.
+**Note:** All critical functions defined in the tray abstract will continue to fire even if new ones are defined in the tray definition.  This also applies to events in that newly defined events will be merged into the event list.  However, a duplicate event definition will override the event in the tray abstract.  As such any additional event functionality can be easily implemented, and if needed, existing events can be overwritten.
 :::
 
 ### Options ###
@@ -602,7 +906,7 @@ ADK.Messaging.trigger('register:component', {
     key: "observations", //unique identifier for the tray
     view: TrayView,
     shouldShow: function() {
-        return (ADK.PatientRecordService.isPatientInPrimaryVista()); //determine wether or not to show the tray
+        return (ADK.PatientRecordService.isPatientInPrimaryVista()); //determine whether or not to show the tray
     }
 });
 ```
@@ -637,7 +941,7 @@ events: {
 #### Changing the tray's contents dynamically ####
 A listener is configured to look for **tray.swap** on the tray's element.  The event listener takes in a Backbone.Marionette view, and "swaps" the tray's main view [(view passed into `tray` option)](#Tray-Options) with the one passed in.
 
-Below is an example of swaping out the tray's view from a region inside a tray:
+Below is an example of swapping out the tray's view from a region inside a tray:
 ```JavaScript
 var NewView = Backbone.Marionette.ItemView.extend({
     template: Handlebars.compile("Sample View To Swap")
@@ -693,7 +997,7 @@ ADK.Messaging.trigger('register:component', {
     key: "observations", //unique identifier for the tray
     view: TrayView, //is a definition and not a Backbone view instance
     shouldShow: function() {
-        return (ADK.PatientRecordService.isPatientInPrimaryVista()); //determine wether or not to show the tray
+        return (ADK.PatientRecordService.isPatientInPrimaryVista()); //determine whether or not to show the tray
     }
 });
 ```
@@ -710,7 +1014,7 @@ The sub-tray component is a container to house other views or components.  The s
 
 ### Basic Usage ###
 
-A sub-tray is a combination of a button and content container ecapsulated in a DIV.  The basic structure is as follows:
+A sub-tray is a combination of a button and content container encapsulated in a DIV.  The basic structure is as follows:
 
 ```Handlebars
 <div class="sidebar"> <!-- element which fires events -->
@@ -744,7 +1048,7 @@ var SubTrayView = ADK.UI.SubTray.extend({
 });
 ```
 ::: callout
-**Note:** All critical functions defined in the sub-tray abstract will continue to fire even if new ones are defined in the sub-tray definition.  This also applies to events in that newly defined events will be merged into the event list.  However, a duplicate event definition will override the event in the sub-tray abstract.  As such any additional event functionality can be easily implemented, and if needed, existing events can be overwriten.
+**Note:** All critical functions defined in the sub-tray abstract will continue to fire even if new ones are defined in the sub-tray definition.  This also applies to events in that newly defined events will be merged into the event list.  However, a duplicate event definition will override the event in the sub-tray abstract.  As such any additional event functionality can be easily implemented, and if needed, existing events can be overwritten.
 :::
 
 ### Options ###
@@ -755,7 +1059,7 @@ var SubTrayView = ADK.UI.SubTray.extend({
 |                                   | **tray**                | Marionette View | Contents of sub-tray; can be set after invocation but should usually be set in options |
 |                                   | **position**            | string          | Valid options are "left" or "right"; defaults to "right" |
 |                                   | **preventFocusoutClose**| boolean         | Prevents the sub-tray from closing if an object in the DOM outside of the view takes focus. |
-|                                   | **viewport**            | string          | A selector for the DOM object which will determine the position and height of the sub-tray.  If not defined, the sub-tray will extend from the buttom of the trigger button to the bottom of #center-region |
+|                                   | **viewport**            | string          | A selector for the DOM object which will determine the position and height of the sub-tray.  If not defined, the sub-tray will extend from the bottom of the trigger button to the bottom of #center-region |
 |                                   | **eventChannelName**    | string          | A unique identifier in which the will be used to define a Messaging Channel that all the sub-tray events will be broadcasted on.|
 |                                   | **widthScale**          | Number          | is used to scale the width of the tray based off of it's viewport. Value must be between 0 and 1. |
 
@@ -805,7 +1109,7 @@ ADK.Messaging.trigger('register:component', {
     key: "previous-notes", //unique identifier for the sub-tray
     view: SubTrayView,
     shouldShow: function() {
-        return (ADK.PatientRecordService.isPatientInPrimaryVista()); //determine wether or not to show the sub-tray
+        return (ADK.PatientRecordService.isPatientInPrimaryVista()); //determine whether or not to show the sub-tray
     }
 });
 ```
@@ -835,7 +1139,7 @@ ADK.Messaging.trigger('subTray.close', view.cid); //close all but this view
 #### Changing the sub-tray's contents dynamically ####
 A listener is configured to look for **subTray.swap** on the sub-tray's element.  The event listener takes in a Backbone.Marionette view, and "swaps" the sub-tray's main view [(view passed into `tray` option)](#SubTray-Options) with the one passed in.
 
-Below is an example of swaping out the sub-tray's view from a region inside a sub-tray:
+Below is an example of swapping out the sub-tray's view from a region inside a sub-tray:
 ```JavaScript
 var NewView = Backbone.Marionette.ItemView.extend({
     template: Handlebars.compile("Sample View To Swap")
@@ -891,7 +1195,7 @@ ADK.Messaging.trigger('register:component', {
     key: "previous-notes", //unique identifier for the sub-tray
     view: SubTrayView,
     shouldShow: function() {
-        return (ADK.PatientRecordService.isPatientInPrimaryVista()); //determine wether or not to show the sub-tray
+        return (ADK.PatientRecordService.isPatientInPrimaryVista()); //determine whether or not to show the sub-tray
     }
 });
 ```
@@ -902,165 +1206,11 @@ ADK.Messaging.trigger('register:component', {
 |--------------|-------------|
 | Workflow     | The workflow component supports showing all available sub-tray components registered to the ADK under the provided group string. <br /> _[(More details)](#Workflow-Inter-Component-Functionality-Support-SubTray)_ |
 
-## Alert Dropdown ##
-
-### Overview ###
-The alert dropdown component is a dropdown container which resides in the navigation header.  Like trays, the alert dropdown is registered to the component registry.  The dropdown consists of a button and container.  The user may use options provided or may supply custom views for both the button and dropdown container.
-
-```JavaScript
-var AlertDropdown = ADK.UI.AlertDropdown.extend({});
-ADK.Messaging.trigger('register:component', {
-    type: 'applicationHeaderItem', //the component subset which is filtered out for display
-    title: 'Press enter to view notifications.', //508 title for the button in the global header
-    orderIndex: 1, //the order in which this particular item appears in the list
-    key: 'notification-demo', //the channel on which global events will be broadcasted
-    group: 'user-nav-alerts', //visual group of items
-    view: AlertDropdown //view definition, not instance
-});
-```
-
-::: callout
-**Note:** Anything passed into the options above will be available in the AlertDropdown view, and it's children.
-:::
-
-
-### Basic Usage ###
-
-The component will automatically create a model to contain it's options if one is not provided.  All configuration options attached to the view object will be automatically set on the model to be aviailble for template control logic on the button and dropdown views.  Additionally, custom views can be configured on the component.
-
-A basic alert dropdown view would be configured as follows:
-```Javascript
-var AlertDropdown = ADK.UI.AlertDropdown.extend({
-    //which icon to display
-    icon: 'fa-folder-open',
-    dropdownTitle: 'Notifications For User',
-    //omit backdrop to prevent backdrop from appearing on show of dropdown
-    backdrop: true,
-    //omit footerButton to prevent a footer from being rendered
-    footerButton: {
-        eventName: 'all-notification',
-        title: 'Press enter to view all notifications.',
-        label: 'View All Notifications'
-    },
-    onBeforeInitialize: function() {
-        //fired after the custom options and model have been set but
-        //before view logic is configured
-        //this will also be triggered on the view as 'before:initialize'
-        this.collection = new Backbone.Collection([{
-            'title': 'First Item',
-            'label': 'Hello'
-        }, {
-            'title': 'Second Item',
-            'label': 'I am a label'
-        }]);
-    },
-    onInitialize: function() {
-        //fired after initialize finishes
-        //also triggered on the view as 'initialize'
-    }
-});
-```
-
-The three view definitions used to build the component can be sourced from the component abstract.  In addition, the alignment, container, and button's templates can be configured.
-The footer button, if optioned, will trigger an event `eventName` on the channel `key`.  These options can be set on the component definition, or on the DropdownListView definition.
-
-```JavaScript
-var AlertDropdown = ADK.UI.AlertDropdown.extend({
-    //in most cases, this is the only view that will need to be configured
-    //the RowView is going to be each row item within the dropdown container
-    RowView: ADK.UI.AlertDropdown.RowView.extend({
-        template: SomeTemplate,
-        //[data-dimiss=dropdown] will close the dropdown when the row is clicked
-        attributes: {
-            'data-dismiss': 'dropdown'
-        }
-        events: {'click': function(e) { //communicate back with your applet
-            ADK.Messaging.getChannel(this.getOption('key')).trigger('openDetails', this.model);
-        }},
-        onBeforeInitialize: {},
-        onInitialize: {}
-    }),
-    DropdownListView: ADK.UI.AlertDropdown.DropdownListView.extend({}),
-    ButtonView: ADK.UI.AlertDropdown.ButtonView.extend({}),
-
-    position: 'auto', //top | bottom | auto (defaults to bottom),
-    align: 'left', //left | right | middle
-    ButtonTemplate: Handlebars.compile('<i class="fa {{icon}}"></i>')
-})
-```
-
-In some cases, logic will need to be driven on the button view to determine what icons, and what colors are displayed.  This can be accomplished by configuring the `getTemplate` method on the `ButtonView`.  The collection that will populate the dropdown container will be available here so counting logic can occur as thus:
-```JavaScript
-ButtonView: ADK.UI.AlertDropdown.ButtonView.extend({
-    getTemplate: function() {
-        var subset = this.collection.where({'severity': 'high', 'unread': true});
-        if(subset.length)
-            return Handlebars.compile([
-                '<i class="fa danger {{icon}"}></i>',
-                '<i class="badge">' + subset.length + '</i>'
-            ].join('\n'));
-        else return this.getOption('template');
-    }
-})
-```
-
-In some cases, logic will need to be driven on the dropdown header to determine what count is displayed.  This can be accomplished by overriding `serializeModel` on the `DropdownListView` and setting the `count` attribute against the view's model.
-```Javascript
-DropdownListView: ADK.UI.AlertDropdown.DropdownListView.extend({
-    serializeModel: function(model) {
-        model.set('count', this.collection.where({'severity': 'hight', 'unread': true}));
-        return model.toJSON();
-    }
-}
-})
-
-```
-
-### Options ###
-
-Options can be set in the constructor options, or on the view definition.
-| Required                          | Option                  | Type            | Description                                                       |
-|:---------------------------------:|-------------------------|-----------------|-------------------------------------------------------------------|
-|                                   | ButtonTemplate          | method          |  Configures the template for the ButtonView.  If a template is defined on the ButtonView, this option will be ignored |
-|                                   | position                | string          |  Determines whether the dialog appears above or below the trigger element.  Options are `top`, `bottom`, and `auto`. <br> **Default**: `bottom` |
-|                                   | align                   | string          |  Horizonatally aligns dialog to trigger element.  Options are `left`, `right`, and `middle`.
-|                                   | backdrop                | boolean         |  Determines whether a backdrop should be displayed when the dropdown menu is shown. <br> **Default**: `false`
-|                                   | icon                    | string          |  Sets an attribute on the comopnent model to be used for setting the icon in the template. |
-|                                   | ButtonView              | view            |  Configures the ButtonView.  The ButtonView definition can be accessed via `ADK.UI.AlertDrodpown.ButtonView`. |
-|                                   | DropdownListView        | view            |  Configures a menu view.  This is the view assigned to DropdownView by default.  The DropdownListView definition can be accessed via `ADK.UI.AlertDropdown.DropdownListView`.  A list view will be a navigation menu.|
-|                                   | DropdownView            | view            |  Overrides the selection of DropdownListView should a different view type, such as DropdownFormView need to be utilized. The DropdownFormView definition can be accessed via `ADK.UI.AlertDropdown.DropdownFormView`.  The DropdownFormView implies the dropdown contains a writeback feature.|
-|                                   | RowView                 | view            |  Configures the childView on a DropdownListView. The RowView definition can be accessed via `ADK.UI.AlertDropdown.RowView`.|
-|                                   | RowContentTemplate      | string          |  Use this options to set the contents of the RowView, but not override the RowView's template. |
-
-
-### Events ###
-All events are broadcasted both on the parent element with class **alert-dropdown** and on the AlertDropdown view.  Triggering **dropdown.show** or **dropdown.hide** on the DOM element with the class **alert-dropdown** will activate the corresponding behavior.  When a dropdown is open, the parent element will have the class **open** applied.
-
-| Event             | Description                              |
-|:-----------------:|------------------------------------------|
-| dropdown.show     | fired when show is called                |
-| dropdown.shown    | fired after dropdown is added to DOM     |
-| dropdown.hide     | fired when hide is called                |
-| dropdown.hidden   | fired after dropdown is removed from DOM |
-
-### Listeners ###
-Listeners are available to show and hide the component.
-```Javascript
-//key is the same string as the one passed into the component registration options
-ADK.Messaging.getChannel(key).trigger('alert-dropdown.show');
-ADK.Messaging.getChannel(key).trigger('alert-dropdown.hide');
-```
-
-A global listener will close all dropdowns which extend from `ADK.UI.Dropdown` including this component.
-```Javascript
-ADK.Messaging.trigger('dropdown.close');
-```
-
 ## Workflow ##
 ### Overview ###
-A Workflow is a collection of form views that represent a writeback applet. Unlike a modal, a workflow allows a developer to open multiple form views at once and be able to step between them.  All form views will persist in the DOM elements until the workflow is abandonded or completes successfully.
+A Workflow is a collection of form views that represent a writeback applet. Unlike a modal, a workflow allows a developer to open multiple form views at once and be able to step between them.  All form views will persist in the DOM elements until the workflow is abandoned or completes successfully.
 
-The first thing to note is that a workflow should always be triggered programatically. Any button that either initiates the workflow, or adds another item to the workflow, needs to use event binding that triggers ADK.UI.Workflow.show(). Do not set 'data-toggle="modal" data-target="#mainWorkflow"'' on the DOM element. This will cause unwanted behavior and is not supported.
+The first thing to note is that a workflow should always be triggered programmatically. Any button that either initiates the workflow, or adds another item to the workflow, needs to use event binding that triggers ADK.UI.Workflow.show(). Do not set 'data-toggle="modal" data-target="#mainWorkflow"'' on the DOM element. This will cause unwanted behavior and is not supported.
 
 ### Basic Usage ###
 A typical invocation is as follows:
@@ -1161,7 +1311,7 @@ workflowController.changeHeaderCloseButtonOptions({
 ```
 
 ### Ways to Hide/Terminate Workflow ###
-There are two ways to terminate a workflow. Like Modal, a developer can apply 'data-dismiss="modal"'' to a button and by default a click of that button will close the workflow and destroy all associated views. Programatically, a developer can issue an ADK.UI.Workflow.hide() call (for instance, in a 'success' callback) which will also terminate a workflow and destroy all views.
+There are two ways to terminate a workflow. Like Modal, a developer can apply 'data-dismiss="modal"'' to a button and by default a click of that button will close the workflow and destroy all associated views. Programmatically, a developer can issue an ADK.UI.Workflow.hide() call (for instance, in a 'success' callback) which will also terminate a workflow and destroy all views.
 
 ### Inter-Component Functionality Support ###
 #### Supports ####
@@ -1240,9 +1390,9 @@ workflowController.show({
 #### SubTray ####
 The workflow component supports showing a collection of sub-tray components in a container below the workflow's header.
 
-![subTraysInWorkflow](assets/subTraysInWorkflow.png "Screenshot of sub-trays inside a workflow")
+![subTraysInWorkflow](assets/subTraysInWorkflow.png "Screen-shot of sub-trays inside a workflow")
 
-For the sub-trays to be included, each step in the workflow can designate which group of sub-trays it would like to have presented when it is shown by specifiy a string value for the `subTrayGroup` option in the [workflow's step object](#Workflow-Workflow-Step-Object). By not specifiying a value, the step is choosing not to show any sub-trays (default).
+For the sub-trays to be included, each step in the workflow can designate which group of sub-trays it would like to have presented when it is shown by specify a string value for the `subTrayGroup` option in the [workflow's step object](#Workflow-Workflow-Step-Object). By not specifying a value, the step is choosing not to show any sub-trays (default).
 
 **Note:** the `subTrayGroup` string value corresponds to the `group` that was specified upon a given sub-tray's [registration as a component](application-component-registration.md#Application-Component-Registration-Registering-Components) to the ADK.
 

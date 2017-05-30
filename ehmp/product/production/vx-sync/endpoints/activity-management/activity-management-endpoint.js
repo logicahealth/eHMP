@@ -4,6 +4,7 @@ var pidUtils = require(global.VX_UTILS + 'patient-identifier-utils');
 var uidUtils = require(global.VX_UTILS + 'uid-utils');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
 var actUtils = require(global.VX_UTILS + 'activity-management-utils');
+var HttpHeaderUtils = require(global.VX_UTILS + 'http-header-utils');
 
 var _ = require('underscore');
 
@@ -12,9 +13,11 @@ function registerAMEAPI(log, config, environment, app) {
 }
 
 function handleActivityManagementPost(log, config, environment, request, response) {
-	log.debug('handling activity management event post request');
+	var referenceInfo = (new HttpHeaderUtils(log)).extractReferenceInfo(request);
+	var childLog = log.child(referenceInfo);
+	childLog.debug('handling activity management event post request');
 	var reqBody = request.body;
-	log.debug(inspect(reqBody));
+	childLog.debug(inspect(reqBody));
 
 	var result = _validateRequest(reqBody);
 	if (!result.isValid) {
@@ -26,8 +29,8 @@ function handleActivityManagementPost(log, config, environment, request, respons
    	var pid = uidParts.site + ';'+ uidParts.patient;
 	var patientIdentifier = pidUtils.create('pid', pid);
 	// create job and publish it
-	var job = jobUtil.createActivityManagementEvent(patientIdentifier, reqBody.domain, reqBody);
-	environment.publisherRouter.publish(job, function(error){
+	var job = jobUtil.createActivityManagementEvent(patientIdentifier, reqBody.domain, reqBody, referenceInfo);
+	environment.publisherRouter.childInstance(childLog).publish(job, function(error){
 		if (!error) {
 			return response.status(200).send('OK');
 		}
@@ -68,3 +71,4 @@ function _validateRequest(postData) {
 
 
 module.exports = registerAMEAPI;
+module.exports._handleActivityManagementPost = handleActivityManagementPost;

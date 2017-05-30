@@ -599,10 +599,10 @@ define([
                         },
                         label: 'Cancel',
                         name: 'labTestAddConfirmCancel',
-                        extraClasses: ['btn-default', 'btn-sm', 'right-margin-xs']
+                        extraClasses: ['btn-default', 'btn-sm']
                     }, {
                         control: "button",
-                        extraClasses: ["btn-primary", "btn-sm"],
+                        extraClasses: ["btn-primary", "btn-sm", "left-margin-sm", "right-margin-xs"],
                         label: "Draft",
                         id: 'saveButton',
                         name: 'save-button',

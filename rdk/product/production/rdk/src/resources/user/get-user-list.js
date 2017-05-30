@@ -11,48 +11,6 @@ var pjds = rdk.utils.pjdsStore;
 
 var users = {};
 
-users.getUserByUid = function(req, res) {
-    var uid = req.param('uid');
-    if (!uid) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('User uid missing from request');
-    }
-
-    var jdsFilterObject = [
-        ['eq', 'uid', uid]
-    ];
-    var jdsFilterPath = jdsFilter.build(jdsFilterObject);
-    var jdsQuery = {
-        filter: jdsFilterPath
-    };
-    var jdsPath = '/data/find/user' + '?' + querystring.stringify(jdsQuery);
-    var jdsConfig = req.app.config.jdsServer;
-    var httpConfig = {
-        logger: req.logger,
-        baseUrl: jdsConfig.baseUrl,
-        url: jdsPath,
-        json: true
-    };
-
-    var processResults = function(err, response, result) {
-        if (err) {
-            req.logger
-                .error('An error occured in pep while gathering data from JDS' + err);
-            return res.status(err.status).rdkSend('An error occured while retrieving the user data');
-        } else if (!(result.data && result.data.items && (result.data.items.length === 1))) {
-            req.logger
-                .debug('There was a problem getting the user from JDS, invalid data or items');
-            return res.status(rdk.httpstatus.internal_server_error).rdkSend('An error occured retrieving the user data, bad return format.');
-        }
-
-        return res.status(rdk.httpstatus.ok).rdkSend({
-            //only return a minimum subset to keep security requirements low
-            data: _.pick(result.data.items[0], ['uid', 'name'])
-        });
-    };
-
-    httpUtil.get(httpConfig, processResults);
-};
-
 users.getUserList = function(req, res) {
     if (req.param('fetchEmptyCollection') && req.param('fetchEmptyCollection') === 'true') {
         return res.status(rdk.httpstatus.ok).rdkSend([]);
@@ -87,7 +45,7 @@ users.getUserList = function(req, res) {
         if (err) {
             req.logger
                 .error('An error occured in pep while gathering data from JDS' + err);
-            return res.status(err.status).rdkSend('An error occured in pep while gathering user list data.');
+            return res.status(err.status || 500).rdkSend('An error occured in pep while gathering user list data.');
         } else if (!_.get(result, 'data.items')) {
             req.logger.debug('JDS did not provide a list of user items.');
             return res.status(rdk.httpstatus.internal_server_error).rdkSend('Expected Conditions were not met for a list of users');
@@ -256,17 +214,17 @@ users.getUserList = function(req, res) {
         return res.status(rdk.httpstatus.ok).rdkSend(whiteListUsers);
     };
     var pjdsOptions = {
-        store: 'ehmpusers'
+        store: 'ehmpusers',
+        indexName: 'ehmpusers_uid',
+        range: 'urn:va:user:' + req.session.user.site + '*'
     };
     pjds.get(req, res, pjdsOptions, function(error, response) {
         if (error) {
             return res.status(rdk.httpstatus.bad_request).rdkSend(error.message);
         }
         ehmpUsers = response.data.items;
-        //get all the users from this users site.
-        var jdsFilterObject = [
-            ['like', 'uid', '%' + req.session.user.site + '%']
-        ];
+        var jdsFilterObject = [];
+
         var reqFilterParameters = req.param('user.filter');
         if (_.isString(reqFilterParameters)) {
             try {

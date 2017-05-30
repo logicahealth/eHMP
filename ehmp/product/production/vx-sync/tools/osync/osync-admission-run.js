@@ -2,11 +2,10 @@
 
 require('../../env-setup');
 
-var _ = require('underscore');
-
-var jobUtil = require(global.OSYNC_UTILS + 'osync-job-utils');
+var OsyncAdmissionUtil = require(global.VX_UTILS + 'osync/osync-admission-util');
 var config = require(global.VX_ROOT + 'worker-config');
 var pollerUtils = require(global.VX_UTILS + 'poller-utils');
+var uuid = require('node-uuid');
 
 var argv = require('yargs')
 	.usage('Usage: $0 --site <site> --log-level <log-level>')
@@ -14,22 +13,29 @@ var argv = require('yargs')
 	.string('site')
 	.argv;
 
+var referenceInfo = {
+    sessionId: uuid.v4(),
+    utilityType: 'osync-admission'
+};
+
 var logUtil = require(global.VX_UTILS + 'log');
 var log = logUtil._createLogger({
-    name: 'osync-active-user-list-run',
-    level: argv['log-level'] || 'error',
-    child: logUtil._createLogger
-});
+    name: 'osync-admission-run',
+    level: argv['log-level'] || 'error'
+}).child(referenceInfo);
+
+console.log('osync-admission-run: Utility started. sessionId: %s', referenceInfo.sessionId);
 
 var environment = pollerUtils.buildOsyncEnvironment(log, config);
 var sites = argv.site.split(',');
-var jobsToPublish = _.map(sites, function(site) {
-	return jobUtil.createAdmissionsJob(log, config, environment, { 'siteId': site });
-});
+var osyncAdmissionUtil = new OsyncAdmissionUtil(log, config, environment);
 
-environment.publisherRouter.publish(jobsToPublish, function(error) {
+osyncAdmissionUtil.createAndPublishAdmissionsJob(sites, referenceInfo, function(error) {
 	if (error) {
-		log.error(error);
+		console.log('osync-admission-run: Utility stopped due to error: %j', error);
+	} else {
+		console.log('osync-admission-run: Utility finished successfully.');
 	}
+
 	process.exit();
 });

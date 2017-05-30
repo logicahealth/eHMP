@@ -45,7 +45,7 @@
         "<%= site['vista']['site_id']%>": {
             "division": <%= site['vista']['division'].to_json %>,
             "host": "<%= site['ipaddress']%>",
-            "localIP": "10.2.2.1",
+            "localIP": "IP      ",
             "localAddress": "localhost",
             "port": <%= site['vista']['rpc_port']%>,
             "production": <%= site['vista']['production']%>,
@@ -98,7 +98,7 @@
     },
     "asu": {
         "evaluateRuleService": {
-            "timeout": 30000,
+            "timeout": <%= @asu['asu']['timeout']%>,
             "url": "/asu/rules/accessDocument",
             "port": <%= @asu['asu']['server_port']%>
         }
@@ -132,7 +132,7 @@
         "activityDatabase": {
             "user": "activitydbuser",
             "password": "<%= @jbpm_activitydbuser_password %>",
-            "connectString": "<%= @jbpm['ipaddress']%>:<%= @jbpm['jbpm']['oracle_config']['port'] %>/<%= @jbpm['ehmp_oracle']['oracle_sid'] %>"
+            "connectString": "<%= @oracle_ip %>:<%= @oracle_port %>/<%= @oracle_sid %>"
         }
     },
     <% end %>

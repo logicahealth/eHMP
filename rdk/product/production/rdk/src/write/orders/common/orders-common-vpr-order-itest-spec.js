@@ -13,22 +13,22 @@ var writebackContext = {
             '9E7A': {
                 name: 'PANORAMA',
                 division: '500',
-                host: '10.2.2.101',
-                port: 9210,
+                host: 'IP        ',
+                port: PORT,
                 production: false,
-                accessCode: 'ep1234',
-                verifyCode: 'ep1234!!',
+                accessCode: 'REDACTED',
+                verifyCode: 'REDACTED',
                 localIP: '127.0.0.1',
                 localAddress: 'localhost'
             },
             'C877': {
                 name: 'KODAK',
                 division: '500',
-                host: '10.2.2.102',
-                port: 9210,
+                host: 'IP        ',
+                port: PORT,
                 production: false,
-                accessCode: 'ep1234',
-                verifyCode: 'ep1234!!',
+                accessCode: 'REDACTED',
+                verifyCode: 'REDACTED',
                 localIP: '127.0.0.1',
                 localAddress: 'localhost'
             }
@@ -37,7 +37,7 @@ var writebackContext = {
     model: {
         'provider': '10000000231',
         'location': '285',
-        'eSig': 'mx1234!!',
+        'eSig': 'REDACTED',
         'orderList': [{
             'orderId': '38030;1',
             'orderDetailHash': 'foobar'

@@ -14,11 +14,12 @@ var solrClient = null;
 var foreverAgent = new ForeverAgent();
 
 function initSolr(solrConfig, req) {
-    //initClient only needs to be called once.
     if (solrClient === null) {
         req.logger.info('SolrSmartClient.InitClient called');
         solrClient = solrSmartClient.initClient(solrConfig.core, solrConfig.zooKeeperConnection, req.logger, foreverAgent);
     }
+
+    return solrClient;
 }
 
 /**
@@ -31,19 +32,21 @@ function initSolr(solrConfig, req) {
  */
 function executeSolrQuery(query, method, req, callback) {
     var solrConfig = req.app.config.solrClient;
-    initSolr(solrConfig, req);
-
+    var client = initSolr(solrConfig, req);
     //US17315: adding requestId to solr query for logging at solr
     if (typeof query === 'string') {
         query = querystring.parse(query);
     }
     query.requestId = req.id;
     req.logger.debug({ 'query': query }, 'Solr Request query object');
-
-    solrClient.get(method, query, function(error, solrResult) {
+    // test client was injected for testing
+    if(_.has(req, 'solrTestClient')) {
+        client = req.solrTestClient;
+    }
+    client.get(method, query, function(error, solrResult) {
         if (error) {
             req.logger.error('Error performing search', (error.message || error));
-            return callback(error, null);
+            return callback(error);
         }
         return callback(null, solrResult);
     });
@@ -100,15 +103,16 @@ function emulatedHmpGetRelativeDate(teeMinus) {
  * Named to be the same as solr's ClientUtils java method, escapeQueryChars
  * @param unescaped
  */
-function escapeQueryChars(unescaped) {
-    var buffer = '';
-    _.each(unescaped.split(''), function(c) {
-        if (c.match(/[\\\+\-\!\(\)\:\^\[\]\"\{\}\~\*\?\|\&\;\/\s]/)) {
-            // match the comment below and any whitespace
-            // \+-!():^[]"{}~*?|&;
-            buffer += '\\'; // friendly reminder that \\ in JS strings escapes to a single \
-        }
-        buffer += c;
-    });
-    return buffer;
+function escapeQueryChars(unescaped, preserveWhitespace) {
+    if (!unescaped) {
+        return '';
+    }
+    // match the comment below and (if requested) any whitespace
+    // \+-!():^[]"{}~*?|&;
+    // see http://lucene.apache.org/core/5_1_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Escaping_Special_Characters
+    if (preserveWhitespace) {
+        return unescaped.replace(/([\\\+\-\!\(\)\:\^\[\]\"\{\}\~\*\?\|\&\;\/])/g, '\\$1');
+    } else {
+        return unescaped.replace(/([\\\+\-\!\(\)\:\^\[\]\"\{\}\~\*\?\|\&\;\/\s])/g, '\\$1');
+    }
 }

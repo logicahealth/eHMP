@@ -42,7 +42,7 @@ function handle(log, osyncConfig, environment, job, handlerCallback) {
             return handlerCallback(error);
         }
 
-        createAndPublishPatientSyncJobs(log, environment, patients, function(error) {
+        createAndPublishPatientSyncJobs(log, environment, patients, job, function(error) {
             if (error) {
                 return handlerCallback(error);
             }
@@ -97,12 +97,13 @@ function validate(job) {
  * @param log The bunyan logger where log messages will be sent.
  * @param environment This contains handles to shared objects and resources.
  * @param patients An array of patient objects.
+ * @param job The job that gets passed to the sync job.
  * @param callback The callback to call when we are done.  The signature is:
  *            function(error)
  *            where:
  *              error is the error that occurred
  */
-function createAndPublishPatientSyncJobs(log, environment, patients, callback) {
+function createAndPublishPatientSyncJobs(log, environment, patients, job, callback) {
 
     // See if we have any jobs to publish
     //-----------------------------------
@@ -110,7 +111,7 @@ function createAndPublishPatientSyncJobs(log, environment, patients, callback) {
         return callback(null);
     }
 
-    var jobsToPublish = createPatientSyncJobs(log, patients);
+    var jobsToPublish = createPatientSyncJobs(log, patients, job);
     log.debug('patientlist.handle: Publishing jobs to oSync sync handler.  jobsToPublish: %j', jobsToPublish);
 
     environment.publisherRouter.publish(jobsToPublish, function(error) {
@@ -129,9 +130,10 @@ function createAndPublishPatientSyncJobs(log, environment, patients, callback) {
  *
  * @param log The bunyan logger where log messages will be sent.
  * @param patients The array of patient objects for which jobs will be created.
+ * @param job The job that gets passed into the sync job.
  * @returns {[jobs]} This returns an array of sync jobs - one for each patient.
  */
-function createPatientSyncJobs(log, patients) {
+function createPatientSyncJobs(log, patients, job) {
     var patientSyncJobs = [];
 
     _.each(patients, function(patient) {
@@ -140,6 +142,9 @@ function createPatientSyncJobs(log, patients) {
             'patient': patient,
             'siteId': patient.siteId
         };
+        if (job.referenceInfo) {
+            meta.referenceInfo = job.referenceInfo;
+        }
         var patientSyncJob = jobUtil.createSyncJob(log, meta);
         patientSyncJobs.push(patientSyncJob);
     });

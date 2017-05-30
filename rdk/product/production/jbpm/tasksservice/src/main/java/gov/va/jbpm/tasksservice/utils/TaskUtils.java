@@ -5,16 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jboss.logging.Logger;
+
 import gov.va.jbpm.tasksservice.bean.*;
 import gov.va.jbpm.tasksservice.exception.TaskServiceException;
 
 public class TaskUtils {
+	private static final Logger LOGGER = Logger.getLogger(TaskUtils.class);
 	/*
 	 * Transform Tasks structure to output structure.
 	 * */
 	public static TasksResponse transformToTasksResponse(Task task) {
 		try {
-			TaskLogging.debug("Entering transformToTasksResponse");
+			LOGGER.debug("Entering transformToTasksResponse");
 			if (task == null)
 				throw new TaskServiceException("TaskUtils.transformToTasksResponse: task cannot be null");
 			
@@ -49,7 +52,7 @@ public class TaskUtils {
 		} catch (TaskServiceException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			TaskLogging.error("TaskUtils.transformToTasksResponse: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("TaskUtils.transformToTasksResponse: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 		return null;
 	}
@@ -93,7 +96,7 @@ public class TaskUtils {
 		} catch (TaskServiceException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			TaskLogging.error("TaskUtils.filterVariablesForRecency: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("TaskUtils.filterVariablesForRecency: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 		
 		return newVariablesList;
@@ -106,13 +109,40 @@ public class TaskUtils {
 		if (typeName == null)
 			return false;
 		
-		if (typeName == "String" ||
-				typeName == "Integer" ||
-				typeName == "Boolean" ||
-				typeName == "Float") {
+		if (typeName.equals("String") ||
+				typeName.equals("Integer") ||
+				typeName.equals("Boolean") ||
+				typeName.equals("Float")) {
 			return true;
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Transform TaskDetail into Task to overcome changes in JSON response
+	 */
+	public static Task transformTaskDetailToTask(TaskDetail taskDetail) {
+		
+		Task task = new Task();
+		TaskInfo taskInfo = new TaskInfo();
+		taskInfo.setProcessInstanceId(taskDetail.getTaskInfoList().get(0).getProcessInstanceId());
+		taskInfo.setTaskSummaries(taskDetail.getTaskInfoList().get(0).getTaskSummaries());			
+		List<Variable> variables = new ArrayList<Variable>();
+		
+		for (TaskDetailVariable taskDetailVariable : taskDetail.getTaskInfoList().get(0).getVariables()) {
+			Variable variable = new Variable();
+			variable.setModificationDate(taskDetailVariable.getLastModificationDate());
+			variable.setName(taskDetailVariable.getName());
+			variable.setValue(taskDetailVariable.getValue().getValue());
+			variables.add(variable);
+		}
+		taskInfo.setVariables(variables);
+		List<TaskInfo> taskInfoList = new ArrayList<TaskInfo>();
+		taskInfoList.add(taskInfo);
+		task.setTaskInfoList(taskInfoList);
+		
+		return task;
+		
 	}
 }

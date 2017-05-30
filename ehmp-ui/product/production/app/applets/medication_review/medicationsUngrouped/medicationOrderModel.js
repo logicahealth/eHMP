@@ -18,17 +18,16 @@ define([
             return response;
         },
         getModifiedVaStatus: function() {
-            var vaStatus = this.get("calculatedStatus") || this.get("vaStatus");
+            var vaStatus = this.get('calculatedStatus') || this.get('vaStatus');
             if (vaStatus) {
                 var lowerCaseVaStatus = vaStatus.toLowerCase();
-                if (lowerCaseVaStatus === "discontinued/edit") {
-                    return "discontinued";
-                } else {
-                    return lowerCaseVaStatus;
+                if (lowerCaseVaStatus === 'discontinued/edit') {
+                    return 'discontinued';
                 }
-            } else {
-                return "No Data";
+                return lowerCaseVaStatus;
             }
+            return 'No Data';
+
         },
         getStatusRank: function() {
             if (this.statusRank && !this.changed.vaStatus) {
@@ -38,12 +37,12 @@ define([
             return this.statusRank;
         },
         getName: function() {
-            var name = this.get("name");
-            return name ? name.toLowerCase() : "No Data";
+            var name = this.get('name');
+            return name ? name.toLowerCase() : 'No Data';
         },
         getCode: function() {
-            var codes = this.get("codes");
-            var rxnormSystem = "urn:oid:2.16.840.1.113883.6.88";
+            var codes = this.get('codes');
+            var rxnormSystem = 'urn:oid:2.16.840.1.113883.6.88';
             if (codes && codes.length > 0) {
                 for (var i = 0; i < codes.length; i++) {
                     if (rxnormSystem === codes[i].system) {
@@ -53,12 +52,12 @@ define([
             }
         },
         getFacilityName: function() {
-            var facilityName = this.get("facilityName");
-            return facilityName ? facilityName : "No Data";
+            var facilityName = this.get('facilityName');
+            return facilityName ? facilityName : 'No Data';
         },
         getProducts: function() { //needs rewriting because should not be accessing only first object need to loop
-            var products = this.get("products");
-            var noData = "No Data";
+            var products = this.get('products');
+            var noData = 'No Data';
             if (products && products[0]) {
                 var strength = products[0].strength;
                 var ingredientCodeName = products[0].ingredientCodeName;
@@ -67,7 +66,7 @@ define([
                 return {
                     drugClassName: drugClassName ? drugClassName : noData,
                     ingredientCodeName: ingredientCodeName ? ingredientCodeName : noData,
-                    strength: strength ? strength : "",
+                    strength: strength ? strength : '',
                     volume: volume ? volume : noData
                 };
             } else {
@@ -83,7 +82,7 @@ define([
             return daysSupply ? daysSupply : undefined;
         },
         getUid: function() {
-            var uid = this.get('uid').replace(/[:|.]/g, "_");
+            var uid = this.get('uid').replace(/[:|.]/g, '_');
             return uid ? uid : undefined;
         },
         getSig: function() {
@@ -96,7 +95,7 @@ define([
             var textComplexConjunction;
             var vaType = this.get('vaType').toLowerCase();
             var summary = this.get('summary');
-            var noData = "No Data";
+            var noData = 'No Data';
 
             function getSigSummaryName() {
                 var sigSummaryName;
@@ -118,15 +117,15 @@ define([
                 var outputProducts = [];
                 if (products && products.length > 0) {
                     for (var i = 0; i < products.length; i++) {
-                        var medicationName = products[i].suppliedName ? products[i].suppliedName.trim() : products[i].ingredientName ? products[i].ingredientName.trim() : "";
-                        var volume = products[i].volume ? products[i].volume : "";
-                        if (vaType === "v") {
+                        var medicationName = products[i].suppliedName ? products[i].suppliedName.trim() : products[i].ingredientName ? products[i].ingredientName.trim() : '';
+                        var volume = products[i].volume ? products[i].volume : '';
+                        if (vaType === 'v') {
                             if (medicationName) {
                                 if (volume) {
                                     if (products.length === 1) {
-                                        outputProducts.push(medicationName + " " + volume);
+                                        outputProducts.push(medicationName + ' ' + volume);
                                     } else if (i === products.length - 1) {
-                                        outputProducts.push("in " + medicationName + " " + volume);
+                                        outputProducts.push('in ' + medicationName + ' ' + volume);
                                     }
                                 } else {
                                     if (i === products.length - 1) {
@@ -140,7 +139,7 @@ define([
                             }
                         } else {
                             if (medicationName && sig) {
-                                return medicationName + " " + sig;
+                                return medicationName + ' ' + sig;
                             } else if (medicationName) {
                                 return medicationName;
                             } else {
@@ -161,17 +160,17 @@ define([
                 if (dosages && dosages.length > 0) {
                     for (var i = 0; i < dosages.length; i++) {
 
-                        var routeName = dosages[i].routeName ? dosages[i].routeName + " " : "";
-                        var scheduleName = dosages[i].scheduleName ? dosages[i].scheduleName + " " : " Continuous ";
+                        var routeName = dosages[i].routeName ? dosages[i].routeName + ' ' : '';
+                        var scheduleName = dosages[i].scheduleName ? dosages[i].scheduleName + ' ' : ' Continuous ';
 
-                        var dose = dosages[i].dose ? dosages[i].dose : "";
-                        var duration = dosages[i].duration ? dosages[i].duration + " " : "";
-                        var ivRate = dosages[i].ivRate ? dosages[i].ivRate : duration ? duration : "";
-                        var units = dosages[i].units ? dosages[i].units + " " : "";
+                        var dose = dosages[i].dose ? dosages[i].dose : '';
+                        var duration = dosages[i].duration ? dosages[i].duration + ' ' : '';
+                        var ivRate = dosages[i].ivRate ? dosages[i].ivRate : duration ? duration : '';
+                        var units = dosages[i].units ? dosages[i].units + ' ' : '';
                         var complexConjunction = dosages[i].complexConjunction;
-                        var complexDuration = dosages[i].complexDuration ? dosages[i].complexDuration + " " : "";
+                        var complexDuration = dosages[i].complexDuration ? dosages[i].complexDuration + ' ' : '';
 
-                        if (vaType === "v") {
+                        if (vaType === 'v') {
                             if (routeName && ivRate) {
                                 ivDosages = routeName + ivRate + scheduleName;
                             } else {
@@ -180,24 +179,24 @@ define([
 
                         } else if (complexDuration || complexMed) {
                             complexMed = true;
-                            if (complexConjunction === "T") {
-                                textComplexConjunction = "Then";
-                            } else if (complexConjunction === "A") {
-                                textComplexConjunction = "And";
+                            if (complexConjunction === 'T') {
+                                textComplexConjunction = 'Then';
+                            } else if (complexConjunction === 'A') {
+                                textComplexConjunction = 'And';
                             } else if (i !== dosages.length - 1) {
-                                textComplexConjunction = "Except";
+                                textComplexConjunction = 'Except';
                             } else {
-                                textComplexConjunction = "";
+                                textComplexConjunction = '';
                             }
 
-                            if (dose && units && routeName && scheduleName && complexDuration && (complexConjunction === "T" || (i === dosages.length - 1))) {
-                                ivDosages = ivDosages + " " + dose + units + routeName + duration + scheduleName + complexDuration + textComplexConjunction;
-                            } else if (dose && units && routeName && scheduleName && !complexDuration && (complexConjunction === "T")) {
+                            if (dose && units && routeName && scheduleName && complexDuration && (complexConjunction === 'T' || (i === dosages.length - 1))) {
+                                ivDosages = ivDosages + ' ' + dose + units + routeName + duration + scheduleName + complexDuration + textComplexConjunction;
+                            } else if (dose && units && routeName && scheduleName && !complexDuration && (complexConjunction === 'T')) {
                                 return sig;
-                            } else if (dose && units && routeName && scheduleName || complexDuration && (complexConjunction !== "T" || (i === dosages.length - 1))) {
-                                ivDosages = ivDosages + " " + dose + units + routeName + duration + scheduleName + complexDuration + textComplexConjunction;
+                            } else if (dose && units && routeName && scheduleName || complexDuration && (complexConjunction !== 'T' || (i === dosages.length - 1))) {
+                                ivDosages = ivDosages + ' ' + dose + units + routeName + duration + scheduleName + complexDuration + textComplexConjunction;
                             } else {
-                                ivDosages = ivDosages + " " + dose + units + routeName + duration + scheduleName + complexDuration + textComplexConjunction;
+                                ivDosages = ivDosages + ' ' + dose + units + routeName + duration + scheduleName + complexDuration + textComplexConjunction;
                             }
                         } else {
                             if (dose && units && routeName && scheduleName) {
@@ -213,7 +212,7 @@ define([
                 return ivDosages;
             }
 
-            if (vaType && vaType === "v") {
+            if (vaType && vaType === 'v') {
                 var ivObj = {
                     products: undefined,
                     dosages: undefined
@@ -238,7 +237,7 @@ define([
             if (this.get('uid')) {
                 var siteCode = this.get('uid').split(':')[3];
                 if (siteCode !== userSiteCode) {
-                    return "fa-globe";
+                    return 'fa-globe';
                 }
             }
         },
@@ -246,15 +245,15 @@ define([
             var sig = this.get('sig').toLowerCase();
             var scheduleName = this.get('dosages')[0].scheduleName.toLowerCase(); //needs rewriting because should not be accessing only first object need to loop
             var vaType = this.get('vaType').toLowerCase();
-            if (sig && sig.indexOf("as needed") != -1 || ((scheduleName && (scheduleName.indexOf("prn") != -1) || scheduleName === "prn"))) {
+            if (sig && sig.indexOf('as needed') != -1 || ((scheduleName && (scheduleName.indexOf('prn') != -1) || scheduleName === 'prn'))) {
                 return 'PRN';
-            } else if (vaType === "v") {
-                return "IV";
+            } else if (vaType === 'v') {
+                return 'IV';
             } else {
                 return false;
             }
         },
-        hasFillDetail: function(medDomainData) {
+        hasFillDetail: function() {
             var vaType = this.get('vaType').toLowerCase();
             var fillsAllowed = this.get('orders')[0].fillsAllowed; //needs rewriting because should not be accessing only first object need to loop
             var supply = this.get('supply');
@@ -266,10 +265,10 @@ define([
         },
         getFacilityText: function() {
             var facilityCode = this.get('facilityCode');
-            if (facilityCode === "500") {
-                return "NCH";
+            if (facilityCode === '500') {
+                return 'NCH';
             } else {
-                return facilityCode || "No Data";
+                return facilityCode || 'No Data';
             }
         },
         getScheduleName: function() {
@@ -278,7 +277,7 @@ define([
             if (dosages && dosages[0] && dosages[0].scheduleName) { //needs rewriting because should not be accessing only first object need to loop
                 scheduleName = dosages[0].scheduleName;
             } else {
-                scheduleName = "No Data";
+                scheduleName = 'No Data';
             }
             return scheduleName;
         },
@@ -288,7 +287,7 @@ define([
             if (dosages && dosages[0] && dosages[0].scheduleType) { //ok to get only first for detail view per client's request
                 scheduleType = dosages[0].scheduleType;
             } else {
-                scheduleType = "No Data";
+                scheduleType = 'No Data';
             }
             return scheduleType;
         },
@@ -305,7 +304,7 @@ define([
         getDisplayName: function() { //there issue with this code because tests that should fail don't
             if (this.get('products') && this.get('products')[0] && this.get('products')[0].ingredientCodeName) { //needs rewriting because should not be accessing only first object need to loop
                 return {
-                    property: "products[].ingredientCodeName",
+                    property: 'products[].ingredientCodeName',
                     value: this.get('products')[0].ingredientCodeName.toLowerCase()
                 };
             }
@@ -313,18 +312,18 @@ define([
             var name = this.get('name');
             if (qualifiedName) {
                 return {
-                    property: "qualifiedName",
+                    property: 'qualifiedName',
                     value: qualifiedName.toLowerCase()
                 };
             } else if (name) {
                 return {
-                    property: "name",
+                    property: 'name',
                     value: name.split(/[, ]+/)[0].toLowerCase()
                 };
             } else {
                 return {
-                    property: "NoData",
-                    value: "No Data"
+                    property: 'NoData',
+                    value: 'No Data'
                 };
             }
         },
@@ -344,12 +343,12 @@ define([
 
             var fillsRemaining = parseInt(this.get('orders')[0].fillsRemaining);
 
-            var supplyRemainForPickup = moment.duration(((daysSupply * (fillsRemaining - 1)) * 1440), "minutes");
+            var supplyRemainForPickup = moment.duration(((daysSupply * (fillsRemaining - 1)) * 1440), 'minutes');
 
-            var supplyOnHands = lastFilledMoment.add((daysSupply * 1440), 'minutes').endOf('minutes').diff(now, "minutes");
-            if (supplyOnHands < 0) supplyOnHands = 0;  // today occurs after supply on hand runs out
+            var supplyOnHands = lastFilledMoment.add((daysSupply * 1440), 'minutes').endOf('minutes').diff(now, 'minutes');
+            if (supplyOnHands < 0) supplyOnHands = 0; // today occurs after supply on hand runs out
 
-            var fillableFor = supplyRemainForPickup.add(supplyOnHands, "minutes");
+            var fillableFor = supplyRemainForPickup.add(supplyOnHands, 'minutes');
             var fillTimeInMinutes = fillableFor.asMinutes();
 
             var fillText = '';
@@ -358,7 +357,7 @@ define([
             };
 
             if (earlierStopMoment.isValid()) {
-                var earlierStopMomentMinusToday = earlierStopMoment.diff(now, 'minutes');  // time until expiration
+                var earlierStopMomentMinusToday = earlierStopMoment.diff(now, 'minutes'); // time until expiration
                 // (not yet expired AND expires before not fillable) OR already expired
                 if ((earlierStopMomentMinusToday >= 0 && (earlierStopMomentMinusToday < fillTimeInMinutes)) || earlierStopMomentMinusToday < 0) {
                     fillTimeInMinutes = earlierStopMomentMinusToday;
@@ -374,64 +373,64 @@ define([
                 durationUnitText = '0\'';
             } else if (fillTimeInMinutes > 0 && fillTimeInMinutes < 1440) {
                 count = 1;
-                fillText = "1d";
-                durationUnitText = "1 day";
+                fillText = '1d';
+                durationUnitText = '1 day';
             } else if (fillTimeInMinutes >= 1440 && fillTimeInMinutes <= 86400) {
                 count = parseInt(Math.round(fillableFor.asDays()));
-                fillText = count + "d";
-                durationUnitText = count + " day";
+                fillText = count + 'd';
+                durationUnitText = count + ' day';
             } else if (fillTimeInMinutes > 86400 && fillTimeInMinutes <= 1051200) {
                 count = parseInt(Math.round(fillableFor.asMonths()));
-                fillText = count + "m";
-                durationUnitText = count + " month";
+                fillText = count + 'm';
+                durationUnitText = count + ' month';
             } else if (fillTimeInMinutes > 1051200) {
                 count = parseInt(Math.round(fillableFor.asYears()));
-                fillText = count + "y";
-                durationUnitText = count + " year";
+                fillText = count + 'y';
+                durationUnitText = count + ' year';
             }
 
             if (count > 1) {
-                durationUnitText = durationUnitText + "s";
+                durationUnitText = durationUnitText + 's';
             }
 
-            if (vaStatus === "expired") {
+            if (vaStatus === 'expired') {
                 if (date.count < 0) {
                     result.date = '??';
-                    result.description = "This medication is listed as expired but expiration date has not yet passed.";
+                    result.description = 'This medication is listed as expired but expiration date has not yet passed.';
                 } else {
                     result.date = date.count + date.timeUnits;
-                    result.description = "This medication was expired " + date.timeSinceDescription.toLowerCase() + " ago.";
+                    result.description = 'This medication was expired ' + date.timeSinceDescription.toLowerCase() + ' ago.';
                 }
                 result.label = 'label label-danger';
-            } else if (vaStatus === "pending") {
-                result.description = "This medication is pending.";
-            } else if (vaStatus === "discontinued" || vaStatus === "discontinued/edit") {
+            } else if (vaStatus === 'pending') {
+                result.description = 'This medication is pending.';
+            } else if (vaStatus === 'discontinued' || vaStatus === 'discontinued/edit') {
                 if (this.getIsNonVA()) {
-                    result.display = "Non VA - Discont.";
-                    result.description = "This medication is Non VA and was discontinued " + date.timeSinceDescription.toLowerCase() + " ago.";
+                    result.display = 'Non VA - Discont.';
+                    result.description = 'This medication is Non VA and was discontinued ' + date.timeSinceDescription.toLowerCase() + ' ago.';
                 } else {
-                    result.display = "discontinued";
+                    result.display = 'discontinued';
                 }
                 if (date.count < 0) {
                     result.date = '??';
-                    result.description = "This medication is listed as discontinued but discontinue date has not yet passed.";
+                    result.description = 'This medication is listed as discontinued but discontinue date has not yet passed.';
                 } else {
                     result.date = date.count + date.timeUnits;
-                    result.description = "This medication was discontinued " + date.timeSinceDescription.toLowerCase() + " ago.";
+                    result.description = 'This medication was discontinued ' + date.timeSinceDescription.toLowerCase() + ' ago.';
                 }
                 result.label = 'label label-default';
-            } else if (vaStatus === "active" && (vaType === "i" || vaType === "v")) {
-                result.description = "This medication is active.";
+            } else if (vaStatus === 'active' && (vaType === 'i' || vaType === 'v')) {
+                result.description = 'This medication is active.';
             } else if (this.getIsNonVA()) {
-                result.display = "Non VA";
-                result.description = "This medication is an active Non VA medication.";
+                result.display = 'Non VA';
+                result.description = 'This medication is an active Non VA medication.';
             } else if (fillsRemaining === 0) {
-                result.display = "0 Refills";
-                result.description = "This medication is active with no refills remaining.";
+                result.display = '0 Refills';
+                result.description = 'This medication is active with no refills remaining.';
                 result.label = 'label label-danger';
             } else if (!lastFilledMoment.isValid() && isNaN(fillsRemaining) && _.isEmpty(this.get('fills'))) {
-                result.display = "No Data";
-                result.description = "This medication was not filled or missing data to determine its status.";
+                result.display = 'No Data';
+                result.description = 'This medication was not filled or missing data to determine its status.';
                 result.label = 'label label-danger';
             } else {
                 var daysLeft = Math.round(fillableFor.asDays());
@@ -441,16 +440,16 @@ define([
                 }
                 if (daysLeft <= 0 && hoursLeft <= 0) {
                     if (fillsRemaining === 1) {
-                        result.description = "This medication is "+vaStatus+" and expiration date has not passed, but supply should be exhausted and the last refill has not been picked up.";
-                        result.display = "Refillable";
+                        result.description = 'This medication is ' + vaStatus + ' and expiration date has not passed, but supply should be exhausted and the last refill has not been picked up.';
+                        result.display = 'Refillable';
                     } else {
-                        result.description = "This medication is "+vaStatus+" but expiration date has passed.";
-                        result.display = "Not Refillable";
+                        result.description = 'This medication is ' + vaStatus + ' but expiration date has passed.';
+                        result.display = 'Not Refillable';
                     }
                     result.label = 'label label-warning';
                 } else {
-                    result.description = "This medication is active and fillable for " + durationUnitText + ".";
-                    result.display = "Fillable for ";
+                    result.description = 'This medication is active and fillable for ' + durationUnitText + '.';
+                    result.display = 'Fillable for ';
                     result.date = fillText;
                 }
                 return result;
@@ -461,14 +460,14 @@ define([
             var name = this.getDisplayName().value;
             var vaType = this.get('vaType').toLowerCase();
             var sig = this.getSig();
-            if (vaType === "v") {
-                var ivSig = "";
+            if (vaType === 'v') {
+                var ivSig = '';
                 if (sig.products) {
                     for (var i = 0; i < sig.products.length; i++) {
-                        ivSig = ivSig + " " + sig.products[i];
+                        ivSig = ivSig + ' ' + sig.products[i];
                     }
                     if (sig.dosages) {
-                        ivSig = ivSig + " " + sig.dosages;
+                        ivSig = ivSig + ' ' + sig.dosages;
                     }
                 }
                 sig = ivSig.trim();
@@ -477,60 +476,60 @@ define([
             var nameText;
 
             function escapeRegExp(string) {
-                return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+                return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');
             }
 
             function replaceAll(string, find, replace) {
                 return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
             }
 
-            if (sig && (sig !== "No Data")) {
-                sigText = "with a sig value of: " + sig + ". ";
+            if (sig && (sig !== 'No Data')) {
+                sigText = 'with a sig value of: ' + sig + '. ';
                 sigText = replaceAll(sigText.toLowerCase(), 'inj', 'injection');
                 sigText = replaceAll(sigText.toLowerCase(), 'soln', 'solution');
             } else {
-                sigText = "with no sig provided. ";
+                sigText = 'with no sig provided. ';
             }
 
             name = replaceAll(name.toLowerCase(), 'inj', 'injection');
             name = replaceAll(name.toLowerCase(), 'soln', 'solution');
 
             switch (vaType) {
-                case "i":
+                case 'i':
                     vaType = 'inpatient';
                     break;
-                case "o":
+                case 'o':
                     vaType = 'outpatient';
                     break;
-                case "v":
+                case 'v':
                     vaType = 'iv';
                     break;
-                case "n":
+                case 'n':
                     vaType = 'non va';
                     break;
             }
-            if (this.get('IMO') || this.get('kind') === "Medication, Clinic Order") {
+            if (this.get('IMO') || this.get('kind') === 'Medication, Clinic Order') {
                 vaType = 'clinical order';
             } else if (this.get('supply')) {
                 vaType = 'supply';
             }
-            nameText = "You are viewing " + vaType + " medication: " + name + " " + sigText;
+            nameText = 'You are viewing ' + vaType + ' medication: ' + name + ' ' + sigText;
             return nameText + this.getNextMedication(date).description;
         },
         sliceString: function(string) {
-            return string.slice(string.lastIndexOf(":") + 1);
+            return string.slice(string.lastIndexOf(':') + 1);
         },
         getOrderUid: function() {
             var orders = this.get('orders');
             if (orders && orders[0] && orders[0].orderUid) { //needs rewriting because should not be accessing only first object need to loop
                 return this.sliceString(this.get('orders')[0].orderUid);
             } else {
-                return "No Data";
+                return 'No Data';
             }
         },
         getType: function() {
             var medType = {};
-            if (this.get('IMO') || this.get('kind') === "Medication, Clinic Order") {
+            if (this.get('IMO') || this.get('kind') === 'Medication, Clinic Order') {
                 medType.displayType = 'CLINIC ORDER MEDS';
                 medType.type = 'clinical';
             } else {
@@ -550,19 +549,19 @@ define([
         },
         getFillableHeader: function() {
             var type = this.getType().type;
-            return (type === "inpatient") ? "Status/Next" : "Status/Fillable";
+            return (type === 'inpatient') ? 'Status/Next' : 'Status/Fillable';
         },
         getTooltip: function() {
             var tooltip = {};
-            var medicationName = "Name of medication";
-            var sig = "Name, dosage and instructions on use of the prescription";
+            var medicationName = 'Name of medication';
+            var sig = 'Name, dosage and instructions on use of the prescription';
             var outpatientFillable = 'For active medications with remaining refills, this column tells you how long until a patient will run out of valid refills (i.e. how long the medication is fillable for). This is based on the date the patient is expected to request their last refill or the expiration date, whichever is set to happen first.   For active medications with “0 refills”, “pending” medications and “non-VA” medications, you will see corresponding labels.  For expired and discontinued medications, you will see how long ago the medication order expired or was discontinued.';
-            var inpatientFillable = "Prescription status (discontinued, expired) or timeframe of next dosage";
+            var inpatientFillable = 'Prescription status (discontinued, expired) or timeframe of next dosage';
 
             tooltip.sig = sig;
             tooltip.medicationName = medicationName;
 
-            if (this.getType().type === "inpatient") {
+            if (this.getType().type === 'inpatient') {
                 tooltip.fillable = inpatientFillable;
             } else {
                 tooltip.fillable = outpatientFillable;
@@ -672,8 +671,8 @@ define([
             }
 
             // Now we know that start/stop are before the range, but we only
-            // need to continue if stop is "close" to the range
-            var durationConsideredClose = moment.duration(6, "months").add(15, 'days');
+            // need to continue if stop is 'close' to the range
+            var durationConsideredClose = moment.duration(6, 'months').add(15, 'days');
             var stoppedIsCloseToRange = moment(stopped).add(durationConsideredClose).isAfter(startDate);
             if (!stoppedIsCloseToRange) {
                 return false;
@@ -728,10 +727,8 @@ define([
                 var latestFillOrAdminIsBeforeEnd = (latestFillOrAdmin.isSame(endDate) || latestFillOrAdmin.isBefore(endDate));
                 var latestDateToConsiderIsAfterStart = (latestDateToConsider.isSame(startDate) || latestDateToConsider.isAfter(startDate));
                 var latestDatesSpanRange = (latestFillOrAdminIsBeforeEnd && latestDateToConsiderIsAfterStart);
-                if (latestDatesSpanRange) {
-                    return true;
-                }
-                return false;
+                return !!latestDatesSpanRange;
+
             } // end local function fillsOrAdminsExtendIntoRange()
 
             function sortFills(refillA, refillB) {
@@ -756,38 +753,17 @@ define([
             if (n > 0) {
                 name = name.substr(0, n);
             }
-            n = name.search(" tab");
-            if (n != -1) {
-                name = name.substr(0, n);
-            }
-            n = name.search(" cap");
-            if (n != -1) {
-                name = name.substr(0, n);
-            }
-            n = name.search(" inj");
-            if (n != -1) {
-                name = name.substr(0, n);
-            }
-            n = name.search(" soln");
-            if (n != -1) {
-                name = name.substr(0, n);
-            }
-            n = name.search(" aerosol");
-            if (n != -1) {
-                name = name.substr(0, n);
-            }
-            n = name.search(" drip");
-            if (n != -1) {
-                name = name.substr(0, n);
-            }
-            n = name.search(" oral");
-            if (n != -1) {
-                name = name.substr(0, n);
-            }
+
+            var searchWords = [' tab', ' cap', ' inj', ' soln', ' aerosol', ' drip', ' oral'];
+            _.each(searchWords, function(word) {
+                if (name.search(word) !== -1) {
+                    name = name.substr(0, n);
+                }
+            });
 
             // remove spaces from medication
-            while (name.search(" ") != -1) {
-                name = name.replace(" ", "%20");
+            while (name.search(' ') !== -1) {
+                name = name.replace(' ', '%20');
             }
             return name;
         },

@@ -4,171 +4,95 @@ define([
     'underscore',
     'handlebars',
     'moment',
-    'hbs!app/applets/task_forms/common/templates/currentTasks_Template'
-    ], function(Backbone, Marionette, _, Handlebars, moment, currentTasksTemplate) {
-        'use strict';
+    'hbs!app/applets/task_forms/common/templates/currentTasks_Template',
+    'hbs!app/applets/task_forms/common/templates/currentTasksRow_Template',
+    'hbs!app/applets/task_forms/common/templates/currentTasksContainer_Template'
+], function(Backbone, Marionette, _, Handlebars, moment, currentTasksTemplate, currentTasksRowTemplate, currentTasksContainer) {
+    'use strict';
 
-        var priority = {
-            0: 'High',
-            1: 'High',
-            2: 'High',
-            3: 'High',
-            4: 'Medium',
-            5: 'Medium',
-            6: 'Medium',
-            7: 'Low',
-            8: 'Low',
-            9: 'Low',
-            10: 'Low'
-        };
-
-        function setOverdueText(dueDate, pastDueDate) {
-
-            var now = moment();
-            var ret = {
-                '-1': {
-                    dueText: 'Past due',
-                    dueTextClass: 'text-danger',
-                    dueTextValue: -1
-                },
-                '0': {
-                    dueText: 'Due',
-                    dueTextClass: '',
-                    dueTextValue: 0
-                },
-                '1': {
-                    dueText: '',
-                    dueTextClass: '',
-                    dueTextValue: 1
-                }
+    var RowView = Backbone.Marionette.ItemView.extend({
+        tagName: 'a',
+        template: currentTasksRowTemplate,
+        attributes: function() {
+            return {
+                href: '#',
+                'data-taskid': this.model.get('TASKID'),
+                title: 'Press enter to view task'
             };
-
-            if (moment(now).isBefore(dueDate)) {
-                return ret[1];
-            }
-
-            if (moment(now).isBetween(dueDate, pastDueDate)) {
-                return ret[0];
-            }
-
-            return ret[-1];
-        }
-
-        var statusMappings = {
-            'Active': ['Created', 'Ready', 'Reserved', 'InProgress'],
-            'Inactive': ['Completed', 'Failed', 'Exited', 'Suspended'],
-            'All': ['All']
-        };
-
-        var hasPermissions = function(task) {
-            var permission = task.PERMISSION;
-            if(_.isString(permission)){
-                permission = JSON.parse(permission);
-            }
-
-            if (_.isUndefined(permission) || _.isNull(permission)) {
-                return true;
-            }
-            if (_.isEmpty(permission.ehmp) && _.isEmpty(permission.user)) {
-                return true;
-            }
-            var userSession = ADK.UserService.getUserSession();
-            var site = userSession.get('site');
-            var userId = [site, ';', userSession.get('duz')[site]].join('');
-            if (ADK.UserService.hasPermissions(permission.ehmp.join('|'))) {
-                if (_.isEmpty(permission.user) || _.contains(permission.user, userId)) {
-                    return true;
-                }
-            }
-            if (_.contains(permission.user, userId)) {
-                if (_.isEmpty(permission.ehmp)) {
-                    return true;
-                }
-            }
-            return false;
-        };
-
-        return Backbone.Marionette.ItemView.extend({
-            template: currentTasksTemplate,
-            events: {
-                'click .activity-detail-task-table .body .table-row': function(e) {
-                    e.preventDefault();
-                    if(!this.model.get('readOnly')){
-                        var dataTaskId = Number(e.currentTarget.dataset.taskid);
-
-                        if(_.isNumber(dataTaskId)){
-                            var task = _.find(this.model.get('tasks'), {TASKID: dataTaskId});
-                            var isStaffView = ADK.WorkspaceContextRepository.currentContextId === 'staff';
-
-                            if(!_.isUndefined(task) && task.hasPermissions){
-                                var navigation = task.NAVIGATION;
-                                if (_.isObject(task.NAVIGATION)) {
-                                    ADK.UI.Modal.hide();
-                                    navigation.parameters.createdBy = {
-                                        CREATEDBYNAME: task.CREATEDBYNAME
-                                    };
-                                    ADK.PatientRecordService.setCurrentPatient(task.PATIENTICN, {
-                                        reconfirm: isStaffView,
-                                        navigation: isStaffView,
-                                        staffnavAction: {
-                                            channel: navigation.channel,
-                                            event: navigation.event,
-                                            data: navigation.parameters
-                                        }
-                                    });
-                                } else {
-                                    //Temporary fallback until all tasks have a navigation node
-                                    //Trigger the activity management form router to open the appropriate form.
-                                    ADK.Messaging.getChannel('activity-management').trigger('show:form', {
-                                        taskId: dataTaskId,
-                                        taskDefinitionId: task.DEFINITIONID,
-                                        clinicalObjectUid: task.CLINICALOBJECTUID
-                                    });
+        },
+        className: 'table-row',
+        events: {
+            'click': function(e) {
+                e.preventDefault();
+                if (!this.getOption('readOnly')) {
+                    var isStaffView = ADK.WorkspaceContextRepository.currentContextId === 'staff';
+                    if (this.model.get('hasPermissions')) {
+                        var navigation = this.model.get('NAVIGATION');
+                        if (_.isObject(navigation)) {
+                            ADK.UI.Modal.hide();
+                            navigation.parameters.createdBy = {
+                                CREATEDBYNAME: this.model.get('CREATEDBYNAME')
+                            };
+                            ADK.PatientRecordService.setCurrentPatient(this.model.get('PATIENTICN'), {
+                                reconfirm: isStaffView,
+                                navigation: isStaffView,
+                                staffnavAction: {
+                                    channel: navigation.channel,
+                                    event: navigation.event,
+                                    data: navigation.parameters
                                 }
-                            }
+                            });
+                        } else {
+                            //Temporary fallback until all tasks have a navigation node
+                            //Trigger the activity management form router to open the appropriate form.
+                            ADK.Messaging.getChannel('activity-management').trigger('show:form', {
+                                taskId: this.model.get('TASKID'),
+                                taskDefinitionId: this.model.get('DEFINITIONID'),
+                                clinicalObjectUid: this.model.get('CLINICALOBJECTUID')
+                            });
                         }
                     }
                 }
-            },
-            initialize: function(options){
-                var self = this;
-                this.model.bind('change:tasks', this.render);
-                var fetchOptions = {
-                    resourceTitle: 'tasks-current',
-                    fetchType: 'POST',
-                    criteria: {
-                        processInstanceId: Number(this.model.get('processId'))
-                    },
-                    viewModel: {
-                        parse: function(response){
-                            // This should probably be a function in the tasks applet that we can leverage
-                            response.DUEDATEFORMATTED = moment(response.DUE).format('MM/DD/YYYY');
-                            response.EXPIRATIONTIMEFORMATTED = moment(response.EXPIRATIONTIME).format('MM/DD/YYYY');
-                            response.earliestDateMilliseconds = moment(response.DUE).valueOf();
-                            response.dueDateMilliseconds = moment(response.EXPIRATIONTIME).valueOf();
-                            _.extend(response, setOverdueText(response.DUE, response.EXPIRATIONTIME));
-
-                            if (response.PRIORITY !== undefined) {
-                                response.priorityFormatted = priority[response.PRIORITY];
-                            }
-
-                            response.statusFormatted = _.findKey(statusMappings, function(mapping) {
-                                return _.indexOf(mapping, response.STATUS) > -1;
-                            }, response);
-
-                            response.ACTIVE = (response.statusFormatted === 'Active');
-
-                            response.hasPermissions = hasPermissions(response);
-
-                            return response;
-                        }
-                    },
-                    onSuccess: function(collection){
-                        self.model.set('tasks', collection.toJSON());
-                    }
-                };
-
-                ADK.PatientRecordService.fetchCollection(fetchOptions);
             }
-        });
+        }
     });
+
+    var CompositeView = Backbone.Marionette.CompositeView.extend({
+        template: currentTasksTemplate,
+        childView: RowView,
+        childViewContainer: '.body',
+        childViewOptions: function() {
+            return {
+                readOnly: this.model.get('readOnly')
+            };
+        }
+    });
+
+    return Backbone.Marionette.LayoutView.extend({
+        template: currentTasksContainer,
+        regions: {
+            TasksList: '.activity-detail-task-table'
+        },
+        collectionEvents: {
+            'read:success': 'showTasksList'
+        },
+        initialize: function(options) {
+            this.collection = new ADK.UIResources.Fetch.Tasks.Current();
+
+            this.collection.fetchCollection({
+                processInstanceId: this.model.get('processId')
+            });
+        },
+        showTasksList: function() {
+            var region = this.getRegion('TasksList');
+            if (this.collection.length) {
+                region.show(new CompositeView({
+                    collection: this.collection,
+                    model: this.model
+                }));
+            } else {
+                region.empty();
+            }
+        }
+    });
+});

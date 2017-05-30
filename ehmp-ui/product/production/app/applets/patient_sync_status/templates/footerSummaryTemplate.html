@@ -1,5 +1,5 @@
-<ul>
-{{#if facility}}<li class="footer-facility">Logged into {{facility}}</li>{{/if}}
+<ul class="list-inline bottom-margin-no percent-height-100">
+{{#if facility}}<li class="footer-facility"><p>Logged into {{facility}}</p></li>{{/if}}
 {{#if syncStatus}}
     {{#each syncStatus}}
         {{#if completed}}
@@ -51,7 +51,6 @@
             </i> View Details
         </button>
     </li>
-    <li class="help-button-container"></li>
 {{/if}}
 </ul>
 

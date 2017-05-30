@@ -1,0 +1,19 @@
+.patient-provider {
+    .dl-horizontal {
+        dt {
+            width: 80px;
+            text-align: left;
+        }
+        dd {
+            margin-left: 85px;
+        }
+    }
+    .more {
+        height: 1px;
+        background: $grey-light;
+        margin: 15px;
+        button.more-info {
+            margin: -15px 0 0 50px;
+        }
+    }
+}

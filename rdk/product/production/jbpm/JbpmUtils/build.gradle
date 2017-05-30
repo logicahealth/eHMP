@@ -1,0 +1,26 @@
+apply plugin: 'java'
+
+sourceCompatibility = property('javaVersion')
+targetCompatibility = property('targetJavaVersion')
+
+configurations {
+	loggingLibs
+}
+
+dependencies {
+	compile group: 'javax.servlet', name: 'javax.servlet-api', version: property('servlet-api')
+	loggingLibs group: 'org.apache.commons', name: 'commons-lang3', version: property('commons-lang3')
+	compile group: 'org.jboss.logging', name: 'jboss-logging', version: property('jboss-logging')
+  	configurations.compile.extendsFrom(configurations.loggingLibs)  
+}
+
+repositories {
+    maven {url "https://store.vistacore.us/nexus/content/groups/public"}
+}
+
+jar {
+    baseName "JbpmUtils"
+    from { 
+            configurations.loggingLibs.collect{ it.isDirectory() ? it : zipTree(it) }
+        }
+}

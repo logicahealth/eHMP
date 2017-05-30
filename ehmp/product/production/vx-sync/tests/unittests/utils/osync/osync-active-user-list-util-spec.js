@@ -744,7 +744,7 @@ describe('osync-active-user-list-util unit test', function() {
 			var users = null;
 
 			var osyncActiveUserListUtil = new OsyncActiveUserListUtil(log, config, environment);
-			var resultJobs = osyncActiveUserListUtil.createJobsForUsers(users);
+			var resultJobs = osyncActiveUserListUtil.createJobsForUsers(users, null);
 			expect(_.isArray(resultJobs)).toBe(true);
 			expect(resultJobs.length).toBe(0);
 		});
@@ -764,7 +764,7 @@ describe('osync-active-user-list-util unit test', function() {
 			}];
 
 			var osyncActiveUserListUtil = new OsyncActiveUserListUtil(log, config, environment);
-			var resultJobs = osyncActiveUserListUtil.createJobsForUsers(users);
+			var resultJobs = osyncActiveUserListUtil.createJobsForUsers(users, null);
 			expect(_.isArray(resultJobs)).toBe(true);
 			expect(resultJobs.length).toBe(2);
 			expect(resultJobs).toContain(jasmine.objectContaining({
@@ -782,6 +782,47 @@ describe('osync-active-user-list-util unit test', function() {
 				})
 			}));
 		});
+		it('Verify referenceInfo is passed into jobs', function(){
+			var config = createConfig(true);
+			var environment = createEnvironment(null, null);
+			var users = [{
+				'uid': 'urn:va:user:9E7A:10000000271',
+				'id': '10000000271',
+				'site': '9E7A',
+				'lastSuccessfulLogin': '2016-10-31T16:00:28-04:00'
+			}, {
+				'uid': 'urn:va:user:9E7A:10000000016',
+				'id': '10000000016',
+				'site': '9E7A',
+				'lastSuccessfulLogin': '2016-10-27T20:01:38-04:00'
+			}];
+
+			var referenceInfo = {
+				sessionId: 'TEST',
+				utilityType: 'osync-active-user-list'
+			};
+
+			var osyncActiveUserListUtil = new OsyncActiveUserListUtil(log, config, environment);
+			var resultJobs = osyncActiveUserListUtil.createJobsForUsers(users, referenceInfo);
+			expect(_.isArray(resultJobs)).toBe(true);
+			expect(resultJobs.length).toBe(2);
+			expect(resultJobs).toContain(jasmine.objectContaining({
+				'type': 'patientlist',
+				'source': 'active-users',
+				'user': jasmine.objectContaining({
+					'uid': 'urn:va:user:9E7A:10000000016'
+				}),
+				'referenceInfo': jasmine.objectContaining(referenceInfo)
+			}));
+			expect(resultJobs).toContain(jasmine.objectContaining({
+				'type': 'patientlist',
+				'source': 'active-users',
+				'user': jasmine.objectContaining({
+					'uid': 'urn:va:user:9E7A:10000000271'
+				}),
+				'referenceInfo': jasmine.objectContaining(referenceInfo)
+			}));
+		});
 	});
 	describe('retrieveAndProcessActiveUserList method', function() {
 		it('Test when error is returned from getActiveUsers.', function() {
@@ -796,7 +837,7 @@ describe('osync-active-user-list-util unit test', function() {
 			var finished;
 
 			runs(function() {
-				osyncActiveUserListUtil.retrieveAndProcessActiveUserList(function(error, numProcessed) {
+				osyncActiveUserListUtil.retrieveAndProcessActiveUserList(null, function(error, numProcessed) {
 					expect(error).toBe(ERROR_RESPONSE);
 					expect(numProcessed).toBe(0);
 					expect(osyncActiveUserListUtil.getActiveUsers).toHaveBeenCalled();
@@ -820,7 +861,7 @@ describe('osync-active-user-list-util unit test', function() {
 			var finished;
 
 			runs(function() {
-				osyncActiveUserListUtil.retrieveAndProcessActiveUserList(function(error, numProcessed) {
+				osyncActiveUserListUtil.retrieveAndProcessActiveUserList(null, function(error, numProcessed) {
 					expect(error).toBeFalsy();
 					expect(numProcessed).toBe(0);
 					expect(osyncActiveUserListUtil.getActiveUsers).toHaveBeenCalled();
@@ -859,7 +900,7 @@ describe('osync-active-user-list-util unit test', function() {
 			var finished;
 
 			runs(function() {
-				osyncActiveUserListUtil.retrieveAndProcessActiveUserList(function(error, numProcessed) {
+				osyncActiveUserListUtil.retrieveAndProcessActiveUserList(null, function(error, numProcessed) {
 					expect(error).toBe(ERROR_RESPONSE);
 					expect(numProcessed).toBe(0);
 					expect(osyncActiveUserListUtil.getActiveUsers).toHaveBeenCalled();
@@ -898,7 +939,7 @@ describe('osync-active-user-list-util unit test', function() {
 			var finished;
 
 			runs(function() {
-				osyncActiveUserListUtil.retrieveAndProcessActiveUserList(function(error, numProcessed) {
+				osyncActiveUserListUtil.retrieveAndProcessActiveUserList(null, function(error, numProcessed) {
 					expect(error).toBeFalsy();
 					expect(numProcessed).toBe(2);
 					expect(osyncActiveUserListUtil.getActiveUsers).toHaveBeenCalled();
@@ -910,7 +951,63 @@ describe('osync-active-user-list-util unit test', function() {
 				return finished;
 			}, 'Callback not called', 100);
 		});
+		it('Verify referenceInfo is passed into resulting jobs', function(){
+			var config = createConfig(true);
 
+			var resultingReferenceInfo = [];
+
+			var publisherRouterMock = {
+				'publish': function(jobsToPublish, callback) {
+					_.each(jobsToPublish, function(job){
+						resultingReferenceInfo.push(job.referenceInfo);
+					});
+					return callback(null);
+				}
+			};
+			var environment = createEnvironment(null, null, publisherRouterMock);
+
+			var osyncActiveUserListUtil = new OsyncActiveUserListUtil(log, config, environment);
+			spyOn(osyncActiveUserListUtil, 'getActiveUsers').andCallFake(function(callback) {
+				return callback(null, [{
+					'uid': 'urn:va:user:9E7A:10000000271',
+					'id': '10000000271',
+					'site': '9E7A',
+					'lastSuccessfulLogin': '2016-10-31T16:00:28-04:00'
+				}, {
+					'uid': 'urn:va:user:9E7A:10000000016',
+					'id': '10000000016',
+					'site': '9E7A',
+					'lastSuccessfulLogin': '2016-10-27T20:01:38-04:00'
+				}]);
+			});
+
+			var referenceInfo = {
+				sessionId: 'TEST',
+				utilityType: 'osync-active-user-list'
+			};
+
+			var finished;
+
+			runs(function() {
+				osyncActiveUserListUtil.retrieveAndProcessActiveUserList(referenceInfo, function(error, numProcessed) {
+					expect(error).toBeFalsy();
+					expect(numProcessed).toBe(2);
+					expect(osyncActiveUserListUtil.getActiveUsers).toHaveBeenCalled();
+
+					expect(resultingReferenceInfo.length).toEqual(2);
+
+                	_.each(resultingReferenceInfo, function(item){
+                    	expect(item).toEqual(jasmine.objectContaining(referenceInfo));
+               		});
+
+					finished = true;
+				});
+			});
+
+			waitsFor(function() {
+				return finished;
+			}, 'Callback not called', 100);
+		});
 	});
 
 });

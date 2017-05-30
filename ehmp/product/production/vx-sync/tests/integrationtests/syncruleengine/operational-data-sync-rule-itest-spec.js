@@ -103,8 +103,8 @@ var config = {
     },
     jds: _.defaults(wConfig.jds, {
         protocol: 'http',
-        host: '10.2.2.110',
-        port: 9080
+        host: 'IP        ',
+        port: PORT
     }),
     rules: {
         'operational-data-sync': {}

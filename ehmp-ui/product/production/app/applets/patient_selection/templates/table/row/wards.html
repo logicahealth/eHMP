@@ -4,10 +4,9 @@
 <td class="flex-width-1">
     {{birthDate}} {{#if age }}
     <span class="sr-only">Age</span> ({{age}}y) {{/if}}
-    {{#if getGenderCode}}
-        <span class="sr-only">Gender {{getGenderName}}</span>
-        <span aria-hidden="true"> - {{getGenderCode}}</span>
-    {{/if}}
+</td>
+<td class="flex-width-1">
+    {{getGenderName}}
 </td>
 <td class="flex-width-1">
 	{{#if roomBed}}

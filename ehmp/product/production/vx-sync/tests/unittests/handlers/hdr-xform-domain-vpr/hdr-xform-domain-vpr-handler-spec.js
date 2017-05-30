@@ -17,8 +17,8 @@ var mockConfig = {
     },
     jds: {
         protocol: 'http',
-        host: '10.2.2.110',
-        port: 9080
+        host: 'IP        ',
+        port: PORT
     },
     'vistaSites' : {
         '9E7A': {
@@ -30,15 +30,9 @@ var mockConfig = {
     }
 };
 
-var configWithPrimarySites = {
-    'vistaSites' : {
-        '9E7A': {
-            'name': 'panorama'
-        },
-        'C877': {
-            'name': 'kodak'
-        }
-    }
+var referenceInfo = {
+    sessionId: 'test-session-id',
+    requestId: 'test-request-id'
 };
 
 var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
@@ -168,290 +162,6 @@ describe('hdr-xform-domain-vpr-handler', function() {
         });
     });
 
-    describe('xformItemCollection Primary Sites', function() {
-
-        var operationaldataSyncUtil = OperationaldataSyncUtil.getInstance();
-        var mockRequestStampTime = '20140113154827.356';
-
-        var mockEdipi = '00000099';
-
-        var sampleCDSAllergyCDS = {
-            comments: [
-                {
-                    comment: ' TESTING DIETETICS',
-                    entered: 19940119082309,
-                    enteredByName: 'PROGRAMMER,TWENTY',
-                    enteredByUid: 'urn:va:user:ABCD:755'
-                }
-            ],
-            entered: 199401190822,
-            facilityCode: 561,
-            facilityName: 'New Jersey HCS',
-            historical: true,
-            kind: 'Allergy / Adverse Reaction',
-            localId: 106,
-            mechanism: 'ALLERGY',
-            originatorName: 'PROGRAMMER,TWENTY',
-            products: [
-                {
-                    name: 'MILK',
-                    vuid: 'urn:va:vuid:4636981'
-                }
-            ],
-            reactions: [
-                {
-                    name: 'NAUSEA,VOMITING',
-                    vuid: 'urn:va:vuid:'
-                }
-            ],
-            reference: '29;GMRD(120.82,',
-            summary: 'MILK',
-            typeName: 'DRUG, FOOD',
-            uid: 'urn:va:allergy:ABCD:16:106',
-            verified: 19940119082339,
-            verifierName: 'PROGRAMMER,TWENTY'
-        };
-
-        var sampleVPRAllergyCDS = {
-            comments: [
-                {
-                    comment: ' TESTING DIETETICS',
-                    entered: 19940119082309,
-                    enteredByName: 'PROGRAMMER,TWENTY',
-                    enteredByUid: 'urn:va:user:ABCD:755'
-                }
-            ],
-            entered: 199401190822,
-            facilityCode: 561,
-            facilityName: 'New Jersey HCS',
-            historical: true,
-            kind: 'Allergy / Adverse Reaction',
-            localId: 106,
-            mechanism: 'ALLERGY',
-            originatorName: 'PROGRAMMER,TWENTY',
-            products: [
-                {
-                    name: 'MILK',
-                    vuid: 'urn:va:vuid:4636981'
-                }
-            ],
-            reactions: [
-                {
-                    name: 'NAUSEA,VOMITING',
-                    vuid: 'urn:va:vuid:'
-                }
-            ],
-            reference: '29;GMRD(120.82,',
-            summary: 'MILK',
-            typeName: 'DRUG, FOOD',
-            uid: 'urn:va:allergy:ABCD:16:106',
-            verified: 19940119082339,
-            verifierName: 'PROGRAMMER,TWENTY',
-            pid: 'HDR;00000099',
-            stampTime: '20140113154827.356'
-        };
-
-        var sampleCDSAllergy9E7A = {
-            comments: [
-                {
-                    comment: ' TESTING DIETETICS',
-                    entered: 19940119082309,
-                    enteredByName: 'PROGRAMMER,TWENTY',
-                    enteredByUid: 'urn:va:user:ABCD:755'
-                }
-            ],
-            entered: 199401190822,
-            facilityCode: 561,
-            facilityName: 'New Jersey HCS',
-            historical: true,
-            kind: 'Allergy / Adverse Reaction',
-            localId: 106,
-            mechanism: 'ALLERGY',
-            originatorName: 'PROGRAMMER,TWENTY',
-            products: [
-                {
-                    name: 'MILK',
-                    vuid: 'urn:va:vuid:4636981'
-                }
-            ],
-            reactions: [
-                {
-                    name: 'NAUSEA,VOMITING',
-                    vuid: 'urn:va:vuid:'
-                }
-            ],
-            reference: '29;GMRD(120.82,',
-            summary: 'MILK',
-            typeName: 'DRUG, FOOD',
-            uid: 'urn:va:allergy:9E7A:16:106',
-            verified: 19940119082339,
-            verifierName: 'PROGRAMMER,TWENTY'
-        };
-
-        var sampleVPRAllergy9E7A = {
-            comments: [
-                {
-                    comment: ' TESTING DIETETICS',
-                    entered: 19940119082309,
-                    enteredByName: 'PROGRAMMER,TWENTY',
-                    enteredByUid: 'urn:va:user:ABCD:755'
-                }
-            ],
-            entered: 199401190822,
-            facilityCode: 561,
-            facilityName: 'New Jersey HCS',
-            historical: true,
-            kind: 'Allergy / Adverse Reaction',
-            localId: 106,
-            mechanism: 'ALLERGY',
-            originatorName: 'PROGRAMMER,TWENTY',
-            products: [
-                {
-                    name: 'MILK',
-                    vuid: 'urn:va:vuid:4636981'
-                }
-            ],
-            reactions: [
-                {
-                    name: 'NAUSEA,VOMITING',
-                    vuid: 'urn:va:vuid:'
-                }
-            ],
-            reference: '29;GMRD(120.82,',
-            summary: 'MILK',
-            typeName: 'DRUG, FOOD',
-            uid: 'urn:va:allergy:9E7A:16:106',
-            verified: 19940119082339,
-            verifierName: 'PROGRAMMER,TWENTY',
-            pid: 'HDR;00000099',
-            stampTime: '20140113154827.356'
-        };
-
-        var sampleCDSAllergyC877 = {
-            comments: [
-                {
-                    comment: ' TESTING DIETETICS',
-                    entered: 19940119082309,
-                    enteredByName: 'PROGRAMMER,TWENTY',
-                    enteredByUid: 'urn:va:user:ABCD:755'
-                }
-            ],
-            entered: 199401190822,
-            facilityCode: 561,
-            facilityName: 'New Jersey HCS',
-            historical: true,
-            kind: 'Allergy / Adverse Reaction',
-            localId: 106,
-            mechanism: 'ALLERGY',
-            originatorName: 'PROGRAMMER,TWENTY',
-            products: [
-                {
-                    name: 'MILK',
-                    vuid: 'urn:va:vuid:4636981'
-                }
-            ],
-            reactions: [
-                {
-                    name: 'NAUSEA,VOMITING',
-                    vuid: 'urn:va:vuid:'
-                }
-            ],
-            reference: '29;GMRD(120.82,',
-            summary: 'MILK',
-            typeName: 'DRUG, FOOD',
-            uid: 'urn:va:allergy:C877:16:106',
-            verified: 19940119082339,
-            verifierName: 'PROGRAMMER,TWENTY'
-        };
-
-        var sampleVPRAllergyC877 = {
-            comments: [
-                {
-                    comment: ' TESTING DIETETICS',
-                    entered: 19940119082309,
-                    enteredByName: 'PROGRAMMER,TWENTY',
-                    enteredByUid: 'urn:va:user:ABCD:755'
-                }
-            ],
-            entered: 199401190822,
-            facilityCode: 561,
-            facilityName: 'New Jersey HCS',
-            historical: true,
-            kind: 'Allergy / Adverse Reaction',
-            localId: 106,
-            mechanism: 'ALLERGY',
-            originatorName: 'PROGRAMMER,TWENTY',
-            products: [
-                {
-                    name: 'MILK',
-                    vuid: 'urn:va:vuid:4636981'
-                }
-            ],
-            reactions: [
-                {
-                    name: 'NAUSEA,VOMITING',
-                    vuid: 'urn:va:vuid:'
-                }
-            ],
-            reference: '29;GMRD(120.82,',
-            summary: 'MILK',
-            typeName: 'DRUG, FOOD',
-            uid: 'urn:va:allergy:C877:16:106',
-            verified: 19940119082339,
-            verifierName: 'PROGRAMMER,TWENTY',
-            pid: 'HDR;00000099',
-            stampTime: '20140113154827.356'
-        };
-
-        var sampleItemCollection ={
-            data:{
-                items:[sampleCDSAllergy9E7A]
-            }
-        };
-
-        var site9E7ASynced = function (log, vistaSites, ODSyncedSites, jds){
-            ODSyncedSites.length = 0;
-            ODSyncedSites.push('9E7A');
-        };
-
-        var site9E7AAndC877Synced = function (log, vistaSites, ODSyncedSites, jds){
-            ODSyncedSites.length = 0;
-            ODSyncedSites.push('9E7A');
-            ODSyncedSites.push('C877');
-        };
-
-        it('excludes 9E7A allergy when 9E7A\'s OPD is synced', function() {
-            operationaldataSyncUtil.initialize(log, mockConfig, mockEnvironment, site9E7ASynced);
-            var vprItems = handler._steps._xformItemCollection(log, mockConfig, sampleItemCollection, mockEdipi, mockRequestStampTime);
-            expect(vprItems.length).toEqual(0);
-        });
-
-        it('excludes 9E7A and C877 allergies when both sites\' OPD is synced', function() {
-            var items = {
-                data:{
-                    items:[sampleCDSAllergy9E7A, sampleCDSAllergyC877]
-                }
-            };
-            operationaldataSyncUtil.initialize(log, mockConfig, mockEnvironment, site9E7AAndC877Synced);
-            var vprItems = handler._steps._xformItemCollection(log, mockConfig, items, mockEdipi, mockRequestStampTime);
-            expect(vprItems.length).toEqual(0);
-        });
-
-        it('includes sample C877 allergy when C877\'s OPD is NOT synced', function() {
-            var items = {
-                data:{
-                    items:[sampleCDSAllergy9E7A, sampleCDSAllergyC877]
-                }
-            };
-            operationaldataSyncUtil.initialize(log, mockConfig, mockEnvironment, site9E7ASynced);
-            var vprItems = handler._steps._xformItemCollection(log, mockConfig, items, mockEdipi, mockRequestStampTime);
-            expect(vprItems.length).toEqual(1);
-            expect(vprItems).toContain(sampleVPRAllergyC877);
-        });
-
-    });
-
-
     describe('handle', function() {
         beforeEach(function() {
             spyOn(mockHandlerCallback, 'callback');
@@ -571,6 +281,7 @@ describe('hdr-xform-domain-vpr-handler', function() {
                     type: 'pid',
                     value: 'HDR;00001'
                 };
+                job.referenceInfo = referenceInfo;
 
                 var expectedJdsResponse = {
                     statusCode: 200
@@ -611,6 +322,7 @@ describe('hdr-xform-domain-vpr-handler', function() {
                             'type': 'pid',
                             'value': 'HDR;00001'
                         },
+                        'referenceInfo': referenceInfo,
                         'jpid': 'aaa-aaaaa-aaaaaaaaaaa',
                         'dataDomain': 'allergy',
                         'record': {

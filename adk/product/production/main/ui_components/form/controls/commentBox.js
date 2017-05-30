@@ -435,7 +435,7 @@ define([
         },
         emptyView: Backbone.Marionette.ItemView.extend({
             template: Handlebars.compile('Write at least one comment.<input class="comments-required-input" type="number" min="1" value={{collectionLength}} tabIndex="-1" oninvalid="setCustomValidity(\'{{requiredError}}\')">'),
-            className: 'comment-required'
+            className: 'comment-box--comment-required'
         }),
         emptyViewOptions: function() {
             return {
@@ -472,17 +472,17 @@ define([
             author: "author",
             timeStamp: "timeStamp"
         },
-        behaviors: _.omit(ControlService.LayoutViewControl.prototype.behaviors, 'ErrorMessages'),
+        behaviors: _.omit(ControlService.LayoutViewControl.prototype.behaviors, ['ErrorMessages', 'UpdateConfig']),
         className: function() {
             return ControlService.LayoutViewControl.prototype.className() + ' comment-box bottom-margin-none';
         },
         template: Handlebars.compile([
-            '{{#if isAddCommentTop}}<div class="comment enter-comment-region bottom-padding-sm top-margin-xs"></div>{{/if}}',
-            '<div class="faux-table-container comments-container background-color-pure-white"><div class="comment-region top-padding-xs faux-table all-margin-no top-border"></div></div>',
+            '{{#if isAddCommentTop}}<div class="comment enter-comment-region bottom-padding-no top-margin-xs clearfix"></div>{{/if}}',
+            '<div class="faux-table-container comments-container background-color-pure-white"><div class="comment-box-comment-region top-padding-xs faux-table all-margin-no top-border"></div></div>',
             '{{#unless isAddCommentTop}}<div class="comment enter-comment-region top-margin-xs"></div>{{/unless}}'
         ].join('\n')),
         ui: {
-            'CommentRegion': '.comment-region',
+            'CommentRegion': '.comment-box-comment-region',
             'EnterCommentRegion': '.enter-comment-region'
         },
         regions: {

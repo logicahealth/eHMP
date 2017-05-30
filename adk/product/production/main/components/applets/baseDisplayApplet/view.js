@@ -185,17 +185,14 @@ define([
         },
 
         setAppletView: function() {
+            if (this.displayAppletView && !this.displayAppletView.isDestroyed) {
+                this.displayAppletView.destroy();
+            }
             this.displayAppletView = new this.appletOptions.AppletView(this.appletOptions);
         },
         onRender: function() {
             this.loading();
             if (this.filterView) {
-                $(this.filterView.el).css({
-                    marginLeft: '0px',
-                    marginTop: '0px',
-                    marginBottom: '6px'
-                });
-
                 this.appletFilter.show(this.filterView);
                 var queryInputSelector = 'input[name=\'q-' + this.appletConfig.instanceId + '\']';
                 var self = this;
@@ -320,7 +317,7 @@ define([
             }
             var collection = this.appletOptions.collection;
 
-            if(!!collection.xhr) {
+            if (!!collection.xhr) {
                 // If we're currently refreshing, then skip.
                 return;
             }
@@ -330,10 +327,10 @@ define([
 
             if (collection instanceof Backbone.PageableCollection) {
                 collection.fullCollection.reset();
-                collection.fullCollection.comparator = null;  // disable automatic sort on applet refresh
+                collection.fullCollection.comparator = null; // disable automatic sort on applet refresh
             } else {
                 collection.reset();
-                collection.comparator = null;  // disable automatic sort on applet refresh
+                collection.comparator = null; // disable automatic sort on applet refresh
             }
 
             ResourceService.clearCache(collection.url);

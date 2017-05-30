@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.drools.core.process.instance.WorkItemManager;
+import org.jboss.logging.Logger;
 import org.jbpm.workflow.instance.impl.WorkflowProcessInstanceImpl;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.manager.RuntimeEngine;
@@ -20,7 +21,6 @@ import org.kie.api.task.model.User;
 import gov.va.jbpm.entities.impl.TaskInstanceImpl;
 import gov.va.jbpm.entities.impl.TaskRouteImpl;
 import gov.va.jbpm.exception.EventListenerException;
-import gov.va.jbpm.utils.Logging;
 
 public class TaskInstanceImplUtil {
 	public static final String EARLIEST_DATE = "earliestDate";
@@ -29,9 +29,9 @@ public class TaskInstanceImplUtil {
 	public static final String PERMISSION = "permission";
 	public static final String TASK_HISTORY = "taskHistory";
 	public static final String TASK_HISTORY_ACTION = "taskHistoryAction";
-
+	private static final Logger LOGGER = Logger.getLogger(TaskInstanceImplUtil.class);
 	public static TaskInstanceImpl create(RuntimeManager runtimeManager, TaskEvent event) throws EventListenerException {
-		Logging.debug("Entering TaskInstanceImplUtil.create");
+		LOGGER.debug("Entering TaskInstanceImplUtil.create");
 		if (event == null)
 			throw new EventListenerException("Invalid state, event cannot be null");
 		
@@ -141,7 +141,7 @@ public class TaskInstanceImplUtil {
 			return null;
 		}
 		if (!(obj instanceof java.lang.String)) {
-			Logging.warn("paramName was not a String: " + paramName);
+			LOGGER.warn("paramName was not a String: " + paramName);
 		}
 		
 		String retvalue = (String)obj;
@@ -158,7 +158,7 @@ public class TaskInstanceImplUtil {
 	 * */
 	//Possible task status: Created, Ready, Reserved, InProgress, Suspended, Completed, Failed, Error, Exited, Obsolete
 	public static int mapStatus(Status taskStatus) {
-		Logging.debug("Entering TaskInstanceImplUtil.mapStatus");
+		LOGGER.debug("Entering TaskInstanceImplUtil.mapStatus");
 
 		switch (taskStatus) {
 			case Created:

@@ -147,18 +147,18 @@ define([
             items: userManagementMultiUserEditForms.searchForm
         }],
         ui: {
-            "searchButtonControl": ".main-search-form .Search",
+            "searchButtonControl": ".search-users .Search",
             "allControls": ".search-form .control",
-            "mainSearchFormControls": ".main-search-form",
+            "mainSearchFormControls": ".search-users",
             "loadingViewControl": ".loading-view",
             "editUsersPermissionSets": ".editUsersPermissionSets",
             "editUsersAdditionalPermissions": ".editUsersAdditionalPermissions",
             "editUsersAdditionalPermissionsContainer": ".edit-users-additional-permissions-container",
             "alertBannerControl": "div.control.alertBanner-control",
-            "editUsersFormControl": ".edit-users-form",
+            "editUsersFormControl": ".edit-users",
             "allEditUsersSelectedUsersTextAreas": ".editUsersSelectedUsersTextArea",
             "editUserCloneControls": ".edit-user-clone",
-            "editUserCloneAlertControl": ".edit-users-form div.control.alertBanner-control",
+            "editUserCloneAlertControl": ".edit-users div.control.alertBanner-control",
             "editUsersCloneUsersSelect": ".editUsersCloneUsersSelect",
             "selectableUsersTableContainer": ".selectable-users-table-container",
             "editActionAlertMessageContainer": ".edit-action-alert-message-container",
@@ -182,20 +182,18 @@ define([
             'bulkEditButtonsControl': '.bulk-edit-btn'
         },
         enableForm: function(e) {
-            this.ui.allControls = this.$el.find('.search-form .control').not('.popover-control');
+            this.ui.allControls = this.ui.allControls.not('.popover-control');
             this.ui.allControls.trigger('control:disabled', false);
             this.setPaging();
         },
         disableForm: function(e) {
-            this.ui.allControls = this.$el.find('.search-form .control').not('.popover-control');
+            this.ui.allControls = this.ui.allControls.not('.popover-control');
             this.ui.allControls.trigger('control:disabled', true);
         },
         enableBulkEditButtons: function(e) {
-            this.ui.bulkEditButtonsControl = this.$el.find('.bulk-edit-btn');
             this.ui.bulkEditButtonsControl.trigger('control:disabled', false);
         },
         disableBulkEditButtons: function(e) {
-            this.ui.bulkEditButtonsControl = this.$el.find('.bulk-edit-btn');
             this.ui.bulkEditButtonsControl.trigger('control:disabled', true);
         },
         showSearchView: function() {
@@ -237,7 +235,6 @@ define([
             this.ui.removeFromClone = this.$el.find(".remove-from-clone");
             var selectedUsers = this.getSelectedUsers();
             this.ui.editUsersAdditionalPermissions = this.$el.find('.editUsersAdditionalPermissions');
-            this.ui.editUsersFormControl = this.$el.find('.edit-users-form');
             _.each(selectedUsers, function(selectedUser) {
                 selectedUser.set('newFormattedPermissionSetsString', selectedUser.get('formattedPermissionSets'));
                 selectedUser.set('newAdditionalPermissionsLabelsFormatted', selectedUser.get('additionalPermissionsLabels'));
@@ -267,7 +264,7 @@ define([
                 if (!_.isUndefined(this.model.get('editUsersCloneUsersSelect'))) {
                     this.onSelectUserTemplate();
                 }
-                this.$el.find('#editUsersCloneUsersSelect').focus();
+                this.$el.find('.editUsersCloneUsersSelect select').focus();
             } else {
                 this.$el.find('.permission-sets-picklist').find('.select2-selection').focus();
             }
@@ -299,7 +296,7 @@ define([
                 this.$el.find('.disable-on-warning').trigger('control:disabled', false);
                 this.showSearchView();
                 this.hideEditUsersView();
-                this.$el.find('#lastNameValueBulkEdit').focus();
+                this.$el.find('.lastNameValueBulkEdit input').focus();
             },
             'click #cancelActionReturnButton': function(e) {
                 e.preventDefault();
@@ -319,7 +316,7 @@ define([
                 this.$el.find('.disable-on-warning').trigger('control:disabled', false);
                 this.showSearchView();
                 this.hideEditUsersView();
-                this.$el.find('#lastNameValueBulkEdit').focus();
+                this.$el.find('.lastNameValueBulkEdit input').focus();
             },
             'click #confirmActionButton': function(e) {
                 e.preventDefault();
@@ -374,7 +371,7 @@ define([
             'click #clone-permissions-button': function(e) {
                 e.preventDefault();
                 this.clearAlert();
-                if (this.usersWithLostPermissions.length > 0) {
+                if (_.get(this, 'usersWithLostPermissions.length', 0)) {
                     this.saveSelectforms();
                     this.disableBulkEditButtons();
                     this.$el.find('.disable-on-warning').trigger('control:disabled', true);
@@ -679,7 +676,7 @@ define([
             var usersToEdit = this.getCondensedUsers(this.getSelectedUsers());
             var selectedPermissionSetsValues = this['editUsersPermissionSets-' + this.model.get('editMode')];
             var selectedPermissionsValues = this['editUsersAdditionalPermissions-' + this.model.get('editMode')];
-            if (this.model.get('editMode') === 'clone-permissions') {
+            if (this.model.get('editMode') === 'clone-permissions' && this.cloneTemplateUser) {
                 usersToEdit = this.usersToClone;
                 selectedPermissionSetsValues = this.cloneTemplateUser.get('permissionSets').val;
                 selectedPermissionsValues = this.cloneTemplateUser.get('permissionSets').additionalPermissions;

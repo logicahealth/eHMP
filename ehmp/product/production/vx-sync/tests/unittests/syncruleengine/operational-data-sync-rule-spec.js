@@ -180,8 +180,8 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             },
             rules: {
                 'operational-data-sync': {}
@@ -217,8 +217,8 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             },
             rules: {
                 'operational-data-sync': {}
@@ -255,8 +255,8 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             },
             rules: {
                 'operational-data-sync': {}
@@ -295,8 +295,8 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             },
             rules: {
                 'operational-data-sync': {}
@@ -335,8 +335,8 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             },
             rules: {
                 'operational-data-sync': {}
@@ -380,8 +380,8 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             },
             rules: {
                 'operational-data-sync': {}
@@ -425,8 +425,8 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             },
             rules: {
                 'operational-data-sync': {}
@@ -466,8 +466,8 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             },
             rules: {
                 'operational-data-sync': {}
@@ -506,8 +506,8 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             },
             rules: {
                 'operational-data-sync': {}
@@ -551,8 +551,8 @@ describe('operational-data-sync-rule', function() {
             },
             jds: {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             },
             rules: {
                 'operational-data-sync': {}

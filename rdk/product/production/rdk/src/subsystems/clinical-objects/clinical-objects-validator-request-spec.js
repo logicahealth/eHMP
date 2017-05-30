@@ -374,7 +374,7 @@ describe('request clinical object', function() {
                                 'processDefinitionId': 'Order.Request',
                                 'processInstanceId': '',
                                 'state': 'draft',
-                                'initiator': 'pu1234',
+                                'initiator': 'REDACTED',
                                 'timeStamp': '20160420000000',
                                 'urgency': 'Urgent',
                                 'assignTo': 'Me',

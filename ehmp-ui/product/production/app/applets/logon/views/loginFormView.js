@@ -91,7 +91,7 @@ define([
                 verifyCode: " ",
                 selectedFacility: " "
             });
-            this.$('#accessCode').focus();
+            this.$('.accessCode input').focus();
         },
         setSignInButtonAuthenticating: function () {
             var $signinButton = this.$('.login');

@@ -24,15 +24,15 @@ var realConfig = JSON.parse(JSON.stringify(wConfig));            // Make sure we
 var config = {
     jds: _.defaults(realConfig.jds, {
         protocol: 'http',
-        host: '10.2.2.110',
-        port: 9080
+        host: 'IP        ',
+        port: PORT
     })
 };
 
 var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 
 var host = vx_sync_ip;
-var port = 5000;
+var port = PORT;
 var tubename = 'vx-sync-test';
 var jmeadowsVersion = "2.3.1";
 var jmeadowsSoapPath = "jmeadows_v2_3_1";

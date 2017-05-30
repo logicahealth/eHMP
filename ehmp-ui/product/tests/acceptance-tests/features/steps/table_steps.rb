@@ -73,7 +73,7 @@ class TableHeadersContainer < AccessBrowserV2
     add_verify(CucumberLabel.new("Headers - Orders Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-orders th"))
 
     # Numeric Lab Results
-    add_verify(CucumberLabel.new("Headers - Lab Detail"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body > div > .table-responsive > table th"))
+    add_verify(CucumberLabel.new("Headers - Lab Detail"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body .table-responsive th"))
     add_verify(CucumberLabel.new("Headers - Lab History"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-undefined th"))
     add_verify(CucumberLabel.new("Headers - Panel"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#lab-results-header th"))
     add_verify(CucumberLabel.new("Headers - Numeric Lab Results Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=lab_results_grid] .backgrid th"))
@@ -139,7 +139,7 @@ class TableContainer < AccessBrowserV2
     add_verify(CucumberLabel.new("Rows - Orders Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-orders tbody tr"))
 
     # Numeric Lab Results
-    add_verify(CucumberLabel.new("Rows - Lab Detail"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body > div > .table-responsive > table tbody"))
+    add_verify(CucumberLabel.new("Rows - Lab Detail"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body .table-responsive tbody"))
     add_verify(CucumberLabel.new("Rows - Lab History"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body .data-grid table tbody tr"))
     add_verify(CucumberLabel.new("Rows - Numeric Lab Results Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=lab_results_grid] .backgrid tbody tr"))
 
@@ -192,6 +192,7 @@ class TableContainer < AccessBrowserV2
 
     #Active Problems expand view table
     add_verify(CucumberLabel.new("Rows - Active Problems Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-problems tbody tr"))
+    add_verify(CucumberLabel.new("Rows - Activities Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-activities tbody tr"))
 
     #Patient Header Phone Group Quick Look table
     add_verify(CucumberLabel.new("Rows - Phone Group QuickLook"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#ql-phone-table-container table tbody tr"))

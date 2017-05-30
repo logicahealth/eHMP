@@ -162,6 +162,10 @@ describe('source-sync-job-factory.js', function() {
 
         it('Creates a Jmeadows job from a DOD identifier', function() {
             var forcedJob = dummyJob('9E7A;42', jpidValue);
+            forcedJob.referenceInfo = {
+                requestId: 'source-sync-job-factory-jmeadows-requestId',
+                sessionId: 'source-sync-job-factory-jmeadows-sessionId'
+            };
             var opts = _cloneOptions(forcedJob);
             var job = module._createJmeadowsJob(opts, dodIdentifier);
 
@@ -172,10 +176,18 @@ describe('source-sync-job-factory.js', function() {
 
             expect(job.patientIdentifier.type).toEqual(dodIdentifier.type);
             expect(job.patientIdentifier.value).toEqual(dodIdentifier.value);
+
+            expect(job.referenceInfo).toBeDefined();
+            expect(job.referenceInfo.requestId).toBe('source-sync-job-factory-jmeadows-requestId');
+            expect(job.referenceInfo.sessionId).toBe('source-sync-job-factory-jmeadows-sessionId');
         });
 
         it('Creates a HDR job from a HDR identifier', function() {
             var forcedJob = dummyJob('9E7A;42', jpidValue);
+            forcedJob.referenceInfo = {
+                requestId: 'source-sync-job-factory-hdr-requestId',
+                sessionId: 'source-sync-job-factory-hdr-sessionId'
+            };
             var opts = _cloneOptions(forcedJob);
             var job = module._createHdrJob(opts, hdrIdentifier);
 
@@ -186,10 +198,18 @@ describe('source-sync-job-factory.js', function() {
 
             expect(job.patientIdentifier.type).toEqual(hdrIdentifier.type);
             expect(job.patientIdentifier.value).toEqual(hdrIdentifier.value);
+
+            expect(job.referenceInfo).toBeDefined();
+            expect(job.referenceInfo.requestId).toBe('source-sync-job-factory-hdr-requestId');
+            expect(job.referenceInfo.sessionId).toBe('source-sync-job-factory-hdr-sessionId');
         });
 
         it('Creates a VLER job from a VLER identifier', function() {
             var forcedJob = dummyJob('9E7A;42', jpidValue);
+            forcedJob.referenceInfo = {
+                requestId: 'source-sync-job-factory-vler-requestId',
+                sessionId: 'source-sync-job-factory-vler-sessionId'
+            };
             var opts = _cloneOptions(forcedJob);
             var job = module._createVlerJob(opts, vlerIdentifier);
 
@@ -200,10 +220,18 @@ describe('source-sync-job-factory.js', function() {
 
             expect(job.patientIdentifier.type).toEqual(vlerIdentifier.type);
             expect(job.patientIdentifier.value).toEqual(vlerIdentifier.value);
+
+            expect(job.referenceInfo).toBeDefined();
+            expect(job.referenceInfo.requestId).toBe('source-sync-job-factory-vler-requestId');
+            expect(job.referenceInfo.sessionId).toBe('source-sync-job-factory-vler-sessionId');
         });
 
         it('Creates a PGD job from a PGD identifier', function() {
             var forcedJob = dummyJob('9E7A;42', jpidValue);
+            forcedJob.referenceInfo = {
+                requestId: 'source-sync-job-factory-pgd-requestId',
+                sessionId: 'source-sync-job-factory-pgd-sessionId'
+            };
             var opts = _cloneOptions(forcedJob);
             var job = module._createPgdJob(opts, pgdIdentifier);
 
@@ -214,6 +242,10 @@ describe('source-sync-job-factory.js', function() {
 
             expect(job.patientIdentifier.type).toEqual(pgdIdentifier.type);
             expect(job.patientIdentifier.value).toEqual(pgdIdentifier.value);
+
+            expect(job.referenceInfo).toBeDefined();
+            expect(job.referenceInfo.requestId).toBe('source-sync-job-factory-pgd-requestId');
+            expect(job.referenceInfo.sessionId).toBe('source-sync-job-factory-pgd-sessionId');
         });
 
         it('Removes PIDs for unknown primary sources', function() {
@@ -255,6 +287,10 @@ describe('source-sync-job-factory.js', function() {
 
         it('Creates primary source jobs from a list of PIDs', function() {
             var forcedJob = dummyJob('9E7A;42', jpidValue);
+            forcedJob.referenceInfo = {
+                requestId: 'source-sync-job-factory-primary-requestId',
+                sessionId: 'source-sync-job-factory-primary-sessionId'
+            };
             var opts = _cloneOptions(forcedJob);
             var pidList = [pidIdentifier, otherPidIdentifier];
 
@@ -274,10 +310,18 @@ describe('source-sync-job-factory.js', function() {
                 expect(job.rootJobId).toEqual(forcedJob.jobId);
                 expect(job.jpid).toEqual(forcedJob.jpid);
                 expect(job.patientIdentifier.type).toEqual('pid');
+                expect(job.referenceInfo).toBeDefined();
+                expect(job.referenceInfo.requestId).toBe('source-sync-job-factory-primary-requestId');
+                expect(job.referenceInfo.sessionId).toBe('source-sync-job-factory-primary-sessionId');
             });
         });
+
         it('Creates VistaHdr source jobs from a list of PIDs', function() {
             var forcedJob = dummyJob('9E7A;42', jpidValue);
+            forcedJob.referenceInfo = {
+                requestId: 'source-sync-job-factory-vistahdr-requestId',
+                sessionId: 'source-sync-job-factory-vistahdr-sessionId'
+            };
             var opts = _cloneOptions(forcedJob);
 
             // Set up for HDR Pub/Sub mode
@@ -304,6 +348,9 @@ describe('source-sync-job-factory.js', function() {
                 expect(job.rootJobId).toEqual(forcedJob.jobId);
                 expect(job.jpid).toEqual(forcedJob.jpid);
                 expect(job.patientIdentifier.type).toEqual('pid');
+                expect(job.referenceInfo).toBeDefined();
+                expect(job.referenceInfo.requestId).toBe('source-sync-job-factory-vistahdr-requestId');
+                expect(job.referenceInfo.sessionId).toBe('source-sync-job-factory-vistahdr-sessionId');
             });
         });
     });
@@ -313,6 +360,10 @@ describe('source-sync-job-factory.js', function() {
         describe('_createJobsToPublishUsingHdrAsSecondary()', function() {
             it('Creates all jobs for a list of patient identifiers from MVI', function() {
                 var forcedJob = dummyJob('9E7A;42', jpidValue);
+                forcedJob.referenceInfo = {
+                    requestId: 'create-jobs-to-publish-hdr-requestId',
+                    sessionId: 'create-jobs-to-publish-hdr-sessionId'
+                };
                 var opts = _cloneOptions(forcedJob);
                 var jobs = module._createJobsToPublish(opts, dummyPatientIdentifiersUsingHdrSecondary);
 
@@ -324,7 +375,11 @@ describe('source-sync-job-factory.js', function() {
                         value: '9E7A;42'
                     },
                     jpid: jpidValue,
-                    rootJobId: rootJobIdValue
+                    rootJobId: rootJobIdValue,
+                    referenceInfo: {
+                        requestId: 'create-jobs-to-publish-hdr-requestId',
+                        sessionId: 'create-jobs-to-publish-hdr-sessionId'
+                    }
                 }));
                 expect(jobs).toContain(jasmine.objectContaining({
                     type: 'vista-C877-subscribe-request',
@@ -333,7 +388,11 @@ describe('source-sync-job-factory.js', function() {
                         value: 'C877;12'
                     },
                     jpid: jpidValue,
-                    rootJobId: rootJobIdValue
+                    rootJobId: rootJobIdValue,
+                    referenceInfo: {
+                        requestId: 'create-jobs-to-publish-hdr-requestId',
+                        sessionId: 'create-jobs-to-publish-hdr-sessionId'
+                    }
                 }));
                 expect(jobs).toContain(jasmine.objectContaining({
                     type: 'jmeadows-sync-request',
@@ -342,7 +401,11 @@ describe('source-sync-job-factory.js', function() {
                         value: 'DOD;1234567'
                     },
                     jpid: jpidValue,
-                    rootJobId: rootJobIdValue
+                    rootJobId: rootJobIdValue,
+                    referenceInfo: {
+                        requestId: 'create-jobs-to-publish-hdr-requestId',
+                        sessionId: 'create-jobs-to-publish-hdr-sessionId'
+                    }
                 }));
                 expect(jobs).toContain(jasmine.objectContaining({
                     type: 'hdr-sync-request',
@@ -351,7 +414,11 @@ describe('source-sync-job-factory.js', function() {
                         value: 'HDR;111111'
                     },
                     jpid: jpidValue,
-                    rootJobId: rootJobIdValue
+                    rootJobId: rootJobIdValue,
+                    referenceInfo: {
+                        requestId: 'create-jobs-to-publish-hdr-requestId',
+                        sessionId: 'create-jobs-to-publish-hdr-sessionId'
+                    }
                 }));
                 expect(jobs).toContain(jasmine.objectContaining({
                     type: 'vler-sync-request',
@@ -360,7 +427,11 @@ describe('source-sync-job-factory.js', function() {
                         value: 'VLER;222222'
                     },
                     jpid: jpidValue,
-                    rootJobId: rootJobIdValue
+                    rootJobId: rootJobIdValue,
+                    referenceInfo: {
+                        requestId: 'create-jobs-to-publish-hdr-requestId',
+                        sessionId: 'create-jobs-to-publish-hdr-sessionId'
+                    }
                 }));
                 // expect(jobs).toContain(jasmine.objectContaining({
                 //     type: 'pgd-sync-request',
@@ -376,6 +447,10 @@ describe('source-sync-job-factory.js', function() {
         describe('_createJobsToPublishUsingVistaHdr()', function() {
             it('Creates all jobs for a list of patient identifiers from MVI', function() {
                 var forcedJob = dummyJob('9E7A;42', jpidValue);
+                forcedJob.referenceInfo = {
+                    requestId: 'create-jobs-to-publish-vistahdr-requestId',
+                    sessionId: 'create-jobs-to-publish-vistahdr-sessionId'
+                };
                 var opts = _cloneOptions(forcedJob);
                 // Set up for HDR Pub/Sub mode
                 //-----------------------------
@@ -391,7 +466,11 @@ describe('source-sync-job-factory.js', function() {
                         value: '9E7A;42'
                     },
                     jpid: jpidValue,
-                    rootJobId: rootJobIdValue
+                    rootJobId: rootJobIdValue,
+                    referenceInfo: {
+                        requestId: 'create-jobs-to-publish-vistahdr-requestId',
+                        sessionId: 'create-jobs-to-publish-vistahdr-sessionId'
+                    }
                 }));
                 expect(jobs).toContain(jasmine.objectContaining({
                     type: 'vista-C877-subscribe-request',
@@ -400,7 +479,11 @@ describe('source-sync-job-factory.js', function() {
                         value: 'C877;12'
                     },
                     jpid: jpidValue,
-                    rootJobId: rootJobIdValue
+                    rootJobId: rootJobIdValue,
+                    referenceInfo: {
+                        requestId: 'create-jobs-to-publish-vistahdr-requestId',
+                        sessionId: 'create-jobs-to-publish-vistahdr-sessionId'
+                    }
                 }));
                 expect(jobs).toContain(jasmine.objectContaining({
                     type: 'jmeadows-sync-request',
@@ -409,7 +492,11 @@ describe('source-sync-job-factory.js', function() {
                         value: 'DOD;1234567'
                     },
                     jpid: jpidValue,
-                    rootJobId: rootJobIdValue
+                    rootJobId: rootJobIdValue,
+                    referenceInfo: {
+                        requestId: 'create-jobs-to-publish-vistahdr-requestId',
+                        sessionId: 'create-jobs-to-publish-vistahdr-sessionId'
+                    }
                 }));
                 expect(jobs).toContain(jasmine.objectContaining({
                     type: 'vler-sync-request',
@@ -418,7 +505,11 @@ describe('source-sync-job-factory.js', function() {
                         value: 'VLER;222222'
                     },
                     jpid: jpidValue,
-                    rootJobId: rootJobIdValue
+                    rootJobId: rootJobIdValue,
+                    referenceInfo: {
+                        requestId: 'create-jobs-to-publish-vistahdr-requestId',
+                        sessionId: 'create-jobs-to-publish-vistahdr-sessionId'
+                    }
                 }));
 
                 // expect(jobs).toContain(jasmine.objectContaining({
@@ -437,7 +528,11 @@ describe('source-sync-job-factory.js', function() {
                         value: '3A8B;111'
                     },
                     jpid: jpidValue,
-                    rootJobId: rootJobIdValue
+                    rootJobId: rootJobIdValue,
+                    referenceInfo: {
+                        requestId: 'create-jobs-to-publish-vistahdr-requestId',
+                        sessionId: 'create-jobs-to-publish-vistahdr-sessionId'
+                    }
                 }));
                 expect(jobs).toContain(jasmine.objectContaining({
                     type: 'vistahdr-8211-subscribe-request',
@@ -446,7 +541,11 @@ describe('source-sync-job-factory.js', function() {
                         value: '8211;222'
                     },
                     jpid: jpidValue,
-                    rootJobId: rootJobIdValue
+                    rootJobId: rootJobIdValue,
+                    referenceInfo: {
+                        requestId: 'create-jobs-to-publish-vistahdr-requestId',
+                        sessionId: 'create-jobs-to-publish-vistahdr-sessionId'
+                    }
                 }));
             });
         });
@@ -534,8 +633,12 @@ describe('source-sync-job-factory.js', function() {
             var job = dummyJob(pidIdentifier.value, jpidValue);
             var environment = {
                 jobStatusFunction: jobStatusFunctionValue,
-                metrics: opts.log
+                metrics: opts.log,
+                jds: {},
+                jobStatusUpdater: {}
             };
+            environment.jds.childInstance = function() { return environment.jds; };
+            environment.jobStatusUpdater.childInstance = function() { return environment.jobStatusUpdater; };
 
             var sourceSyncJobFactory = new SourceSyncJobFactory(opts.log, opts.config, job, environment);
             //sourceSyncJobFactory.engine.rules = [require(global.VX_SYNCRULES + '/accept-all-rule')];

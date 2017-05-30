@@ -5,8 +5,6 @@
 
 require 'chef/provisioning/ssh_driver'
 
-include_asu = find_optional_node_by_criteria(node[:machine][:stack], 'role:asu', 'role:vxsync_client').nil? && node[:ehmp_provision][:vxsync][:vxsync_applications].include?("client")
-
 ############################################## Staging Artifacts #############################################
 if ENV.has_key?('VX_SYNC_LOCAL_FILE')
   node.default[:ehmp_provision][:vxsync][:copy_files].merge!({
@@ -53,6 +51,8 @@ unless db_item.nil?
   node.override[:ehmp_provision][:vxsync][:vxsync_applications] = db_attributes["vxsync"]["vxsync_applications"] unless (db_attributes["vxsync"].nil? || db_attributes["vxsync"]["vxsync_applications"].nil?)
 end
 
+include_asu = find_optional_node_by_criteria(node[:machine][:stack], 'role:asu', 'role:vxsync_client').nil? && node[:ehmp_provision][:vxsync][:vxsync_applications].include?("client")
+
 r_list = []
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
 r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh"
@@ -61,7 +61,7 @@ node[:ehmp_provision][:vxsync][:vxsync_applications].each { |app| r_list << "rol
 r_list << "role[asu]" if include_asu
 if ENV.has_key?("RESET_SYNC")
   r_list << "recipe[vxsync::reset_vxsync@#{ehmp_deps["vxsync"]}]"
-  r_list << "recipe[asu::default@#{ehmp_deps["asu"]}]"
+  r_list << "recipe[asu::default@#{ehmp_deps["asu"]}]" if include_asu
 else
   r_list << "recipe[vxsync::clear_logs@#{ehmp_deps["vxsync"]}]" if node[:machine][:driver] == "aws"
   r_list << "recipe[vxsync@#{ehmp_deps["vxsync"]}]"

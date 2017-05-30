@@ -9,8 +9,8 @@ var argv = require('yargs')
 	.demand(['host', 'port'])
 	.describe('host', 'IP Address of the VistA host')
 	.describe('port', 'Port of the VistA host')
-	.describe('accessCode', 'Value to use for accessCode for validation. Defaults to ep1234')
-	.describe('verifyCode', 'Value to use for verifyCode for validation. Defaults to ep1234!!')
+	.describe('accessCode', 'Value to use for accessCode for validation. Defaults to REDACTED')
+	.describe('verifyCode', 'Value to use for verifyCode for validation. Defaults to REDACTED')
 	.describe('localIP', 'Value to use for the localIP parameter in the RPC call. Defaults to 127.0.0.1')
 	.describe('localAddress', 'Value to use for the localAddress parameter in the RPC call. Defaults to localhost')
 	.describe('connectTimeout', 'Value in milliseconds to use for the connectTimeout parameter in the RPC call. Defaults to 3000')
@@ -40,8 +40,8 @@ var params = {
 var config = {
 	host: argv.host,
 	port: argv.port,
-	accessCode: argv.accessCode || 'ep1234',
-	verifyCode: argv.verifyCode || 'ep1234!!',
+	accessCode: argv.accessCode || 'REDACTED',
+	verifyCode: argv.verifyCode || 'REDACTED',
 	localIP: argv.localIP || '127.0.0.1',
 	localAddress: argv.localAddress || 'localhost',
 	context: argv.context || 'VPR SYNCHRONIZATION CONTEXT'.replace('VPR', prefix),

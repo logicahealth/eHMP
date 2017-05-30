@@ -54,6 +54,7 @@ function handle(log, config, environment, job, handlerCallback) {
             }
             var jobToPublish = jobUtil.createJmeadowsDomainXformVpr(job.patientIdentifier, job.dataDomain, jsonBody, job.requestStampTime, job);
 
+            log.debug('jmeadows-sync-domain-request-handler.handle: publishing job: %j', jobToPublish);
             environment.publisherRouter.publish(jobToPublish, handlerCallback);
         } else {
             environment.metrics.debug('JMeadows domain sync in Error',metricsObj);

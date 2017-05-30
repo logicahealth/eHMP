@@ -1,9 +1,341 @@
 ::: page-description
-# Using the Application Development Kit #
-API calls, utils, helpers, components, and views
+# API, Utilities & Services #
+List of all available API calls, utilities, and services that the ADK exposes
 :::
 
+## Collections ##
+
+**`ADK.Collections`** are Backbone collection definitions with extended fetch mechanisms, as well as additional functionality depending on which collection is being used. **`ADK.Collections`** should be the mechanism used to fetch and maintain domain data from the resource server, instead of the now deprecated ADK.ResourceService and ADK.PatientRecordService.
+
+**Note:** anything the BaseCollection supports, the other collections will also support as they extend the BaseCollection.
+
+To see full options, see the sections below. An example usage (using BaseCollection):
+
+```JavaScript
+var fetchOptions = {
+  resourceTitle: 'my-resource-title-from-directory'
+};
+var myColl = new ADK.Collections.BaseCollection();
+myColl.fetch(fetchOptions);
+```
+
+### BaseCollection ###
+
+The base collection definition that the other collections in **`ADK.Collections`** extend from. The fetch function has been extended to generate the url from the ResourceDirectory, as well as apply patient information relevant to the fetch url if `patientData: true`.
+
+#### Fetching ####
+
+After instantiation (`var myColl = new ADK.Collections.BaseCollection()`), you have two options to retrieve the data:
+
+**GET** : simply call `myColl.fetch(fetchOptions)`
+
+**POST** : simply call `myColl.post(fetchOptions)` (alternatively, set `type: 'POST'` with `.fetch`)
+
+There is no difference on how the fetchOptions needs to be formatted between `.fetch` and `.post` -- the `BaseCollection` handles that for you.
+
+##### FetchOptions #####
+
+```JavaScript
+// Available options, in addition to most xhr/Backbone.Model fetch options.
+// Defaults shown where applicable.
+var fetchOptions = {
+  type: 'GET', // `type: 'POST'` is alternative to calling `myColl.post`
+  cache: true, // whether the fetch url and response will be cached
+  patientData: false, // sends pid of current patient
+  resourceTitle: 'my-resource-title-from-directory', // maps to ResourceDirectory
+  allowAbort: true, // if another fetch goes out, abort will be called
+  criteria: { // send as part of the query string parameters
+    template: 'notext' // an example, will be resource-specific
+  } // this above would parse to '?template=notext' in the url
+};
+```
+
+#### Use Case ####
+
+This collection type should be used for simple data fetches in which server paging, sorting, and/or filtering is not required.
+
+#### Parse Error Catching ####
+
+Each parse call is wrapped in a try/catch and upon an uncaught error, the collection will throw an 'error' event, which can be treated the same as a fetch error.
+
+### ServerCollection ###
+
+Extends [BaseCollection](#Collections-BaseCollection), and adds server-side functionality, such as getting and managing pages of data, sorting while managing page state, and filtering appropriately. Supports [QueryBuilder](#Collections-QueryBuilder) on `this.Criteria`.
+
+#### FetchOptions ####
+```JavaScript
+// in addition to the options supported in BaseCollection
+var fetchOptions = {
+  sortKey: "dateTime desc, referenceDateTime desc"
+};
+```
+
+#### Functions ####
+- **serverSort(sortKey, fetchOptions)**: sets new sort key then triggers fetch. Calls `reset` with state option set to 'sorting'
+- **serverFilter(filterObject, fetchOptions)**: filterObject should have `values` and `fields`. Calls `reset` with state option set to 'filtering'
+- **hasNextPage**: returns true if there are more total items than the current start index
+- **getNextPage(fetchOptions)**: fetches next page if `hasNextPage` returns true
+
+#### Use Case ####
+
+This collection should be used when server-side paging, sorting, and filtering is required, but the data is expected to be a flat list of models.
+
+### GroupingCollection ###
+
+Extends the [ServerCollection](#Collects-ServerCollection), and thus is designed to conduct server-side paging, sorting, and filtering, but there are expected to be "groups" of models, i.e. grouped models by facility.
+
+#### FetchOptions ####
+```JavaScript
+// in addition to the options supported in ServerCollection
+var fetchOptions = {
+  groupKey: FullScreenColumns[0].groupKey, // data attribute to group with
+  groupName: FullScreenColumns[0].name
+};
+```
+
+#### Functions ####
+- **getTotalItems**: returns length of all items in all groups of models
+- **isEmpty**: returns true if either `collection.length` is 0 or `getTotalItems` is 0
+- **setGrouping(grouping)**: updates attribute to group on. Does not update groupings
+- **serverSort(sortKey, options)**: in addition to the [`ServerCollection.serverSort`](#Collections-ServerCollection), pass in `groupKey` to update attribute to group on, else will go to default/initial grouping -- calls `setGrouping` with appropriate groupKey
+
+#### Use Case ####
+
+This collection should be used when server-side paging, sorting, and filtering is required, and the data is expected to be in the form of a list of groups of models.
+
+### QueryBuilder ###
+
+The QueryBuilder manages the generation of certain criteria sent with fetch requests. For example, the [ServerCollection](#Collections-ServerCollection) makes use of the QueryBuilder to maintain the logic for the date range, text filter, pagination, and sort order. The typical use case is just to access the criteria through the collection.
+
+Example usage (as done in [ServerCollection](#Collections-ServerCollection)):
+```JavaScript
+initialize: function() {
+  // this is a chained constructor that instantiates all supported criteria
+  this.Criteria = new  QueryBuilder.Criteria();
+  // example use, works in similar manner with all supported criteria types
+  this.Criteria.Page.setPageSize(100);
+  this.Criteria.Page.setMax(300);
+},
+fetch: function(fetchOptions) {
+  // calls `getCriteria` for each criterion
+  fetchOptions.criteria = this.Criteria.getCriteria();
+  // ...
+}
+```
+
+#### Criteria ####
+
+When instantiated, instantiates all supported criteria. This is the recommended and most convenient way to manage criteria, as opposed to instantiating the criteria individually.
+
+##### Attributes #####
+On instantiation, sets the following attributes to the instantiated supported criteria. (accessible through `Criteria.<criterion>`)
+
+- [**Query**](#Collections-QueryBuilder-Query): generic generator tailored for JDS formatted queries. Useful for queries not supported by other criteria below.
+- [**Range**](#Collections-QueryBuilder-Range): used to set date range if 'range' is a supported field in the resource
+- [**TextFilter**](#Collections-QueryBuilder-TextFilter): used to filter with multiple text filters against multiple fields
+- [**Page**](#Collections-QueryBuilder-Page): used to maintain page state for pageable collections
+- [**NoText**](#Collections-QueryBuilder-NoText): reduces data payload
+- [**SortKey**](#Collections-QueryBuilder-SortKey): used to maintain sort order
+
+##### Functions #####
+
+- **Criteria.reset**: calls `reset` on all supported criteria
+- **Criteria.getCriteria**: calls `getCriteria` on all supported criteria
+
+#### Query ####
+Already instantiated by `QueryBuilder.Criteria()`
+
+Alternative isolated instantiation: `QueryBuilder.QueryBuilder()`
+
+Query is a generic JDS query generator. There are functions such as `Query.between` that return a new query. Doing this does not add that query to the Query object. To do this, you should create the new query then pass it to `Query.add`.
+
+##### Attributes #####
+
+None that should be accessed. `_fields` is used internally to keep track of added queries (i.e. with `Query.add`), but should not be relied on.
+
+##### Functions #####
+
+- **Query.hasQueries**: returns true if queries were added using the `Query.add` function
+- **Query.between(field, start, end)**: returns new 'between' query
+- **Query.gte(field, value)**: returns new 'gte' (greater than or equal) query
+- **Query.lte(field, value)**: returns new 'lte' (less than or equal) query
+- **Query.or(firstQuery, secondQuery)**: returns new 'or' query, which is a combination of the first and second queries passed in separated by an 'or'
+- **Query.and(firstQuery, secondQuery)**: returns new 'and' query, which is a combination of the first and second queries passed in separated by an 'and'
+- **Query.in(field, array)**: returns new 'in' query, i.e. 'in(field,[array[0],array[1],..,array[X]])'
+- **Query.not(query)**: returns new 'not' query, i.e. 'ne(field,query)'
+- **Query.ne(field, query)**: returns new 'ne' query, i.e. 'in(field,[array[0],array[1],..,array[X]])'
+- **Query.createClause(clause)**: creates new function at `Query[clause]` that receives 'field' and 'values' as parameter; function is a pass through to `Query.custom`. Returns false if the clause (string) specified already exists, i.e. 'between' or 'lte'
+- **Query.custom(clause, field, values)**: returns new query using 'clause' as map to custom clause created using `Query.createClause`. No need to use this function, as calling `Query[clause](field, value)` is equivalent
+- **Query.add(query)**: adds query to `_values` (i.e. will be returned by `Query.getCriteria`)
+- **Query.clearFilters**: clears all queries added with `Query.add`
+- **Query.dateFilter(field, start, end)**: returns date filter query. Returns a `Query.between` when 'start' and 'end' are strings, `Query.gte` when only 'start' is given, and `Query.lte` when only 'end'
+- **Query.globalDateFilter(field)**: returns date filter query with 'start' and 'end' from the global date filter in Session (calls `Query.dateFilter` with these values)
+- **Query.toString**: converts all queries added with `Query.add` into a string that can be used in the url. Returns string
+- **Query.reset**: clears all queries added with `Query.add`
+- **Query.getCriteria**: used when converting to criteria before fetch. Returns object with single string on 'filter' attribute. Single string is all queries added with `Query.add` stringified and concatenated together (using `Query.toString`)
+
+#### Range ####
+Already instantiated by `QueryBuilder.Criteria()`
+
+Alternative isolated instantiation: `QueryBuilder.RangeBuilder()`
+
+Range sets a date range criteria field, i.e. 'range={fromDate}..{toDate}'
+
+##### Attributes #####
+
+None that should be accessed. `isSet`, `_fromDate`, and `_toDate` are set internally to keep track of those respective values.
+
+##### Functions #####
+
+- **Range.setRange(fromDate, toDate)**: sets `_fromDate` and `_toDate` with given strings, and sets `isSet` to true
+- **Range.createFromGlobalDate**: calls `Range.setRange` using 'fromDate and 'toDate' from global date filter
+- **Range.toString**: returns `_fromDate` and `_toDate` as concatenated string separated by two periods, i.e. '{fromDate}..{toDate}'
+- **Range.reset**: unsets `_fromDate`, `_toDate`, and `isSet`
+- **Range.getCriteria**: returns range as an object with url-friendly string (uses `Range.toString`) set to 'range' attribute.
+
+#### TextFilter ####
+Already instantiated by `QueryBuilder.Criteria()`
+
+Alternative isolated instantiation: `QueryBuilder.TextFilterBuilder()`
+
+TextFilter allows for the creation and maintenance of multiple text filters against multiple fields, i.e. `filterFields=[{field1}, {field2},..,{fieldX}]` and `filterList=[{filter1},{filter2},..,{filterY}]`
+
+##### Attributes #####
+
+- `defaultValues` (array): set with `TextFilter.setDefaultValues`
+- `defaultFields` (array): set with `TextFilter.setDefaultFields`
+
+`_values` and `_fields` are used to keep track of the values and fields internally, and should not be accessed.
+
+##### Functions #####
+
+- **TextFilter.setDefaultValues(defaultValues)**: sets `defaultValues` taking in an array of strings
+- **TextFilter.setDefaultFields(defaultFields)**: sets `defaultFields` taking in an array of strings
+- **TextFilter.addTextValue(valueString)**: adds valueString to `_values`
+- **TextFilter.addTextValues(valueArray)**: add each value in array to `_values`, calls `TextFilter.addTextValue` on each item in array
+- **TextFilter.removeTextValue(valueString)**: removes valueString from `_values`
+- **TextFilter.removeTextValues(valueArray)**: removes each value in array from `_values`, calls `TextFilter.removeTextValue` on each item in array
+- **TextFilter.addField(fieldName)**: adds fieldName (string) to `_fields`
+- **TextFilter.addFields(fieldArray)**: adds array of field names to `_fields`, calls `TextFilter.addField` on each item in array
+- **TextFilter.removeField(fieldName)**: removes fieldName (string) from `_fields`
+- **TextFilter.removeFields(fieldArray)**: removes array of field names from `_fields`, calls `TextFilter.removeField` on each item in array
+- **TextFilter.clearTextValues**: clears `_values`
+- **TextFilter.clearFields**: clears `_fields`
+- **TextFilter.clear**: clears `_values` (calls `TextFilter.clearTextValues`) and `_fields` (`TextFilter.clearFields`)
+- **TextFilter.resetValues**: resets values to those set with `TextFilter.setDefaultValues` (or empty array)
+- **TextFilter.resetFields**: resets fields to those set with `TextFilter.setDefaultFields` (or empty array)
+- **TextFilter.reset**: resets `_values` and `_fields` to defaults (calls `TextFilter.setDefaultValues` and `TextFilter.setDefaultFields`)
+- **TextFilter.getFilterTextValues**: returns array of value strings
+- **TextFilter.getFilterFields**: returns array of field strings
+- **TextFilter.getCriteria**: used when converting to fetch-friendly format. Returns object with `filterList` (calls `TextFilter.getFilterTextValues`) and `filterFields` (calls `TextFilter.getFilterFields`) as attributes
+
+#### Page ####
+Already instantiated by `QueryBuilder.Criteria()`
+
+Alternative isolated instantiation: `QueryBuilder.PageBuilder()`
+
+Page maintains the page state for pageable collections (i.e. [ServerCollection](#Collections-ServerCollection) -- server paging).
+
+##### Attributes #####
+
+- `start` (integer): start index in collection, update with `Page.next`
+- `limit` (integer): page size, update with `Page.setPageSize`
+- `max` (integer): maximum number of items in collection. Used for `Page.hasNext`. Updated with `Page.setMax`
+
+##### Functions #####
+
+- **Page.setPageSize**: sets the `limit` to the provided value
+- **Page.next**: called when collection should get next page. Updates `start` to provided next start index, or the previous `start` + `limit`
+- **Page.setMax**: called when total number of items in collection is known (i.e. after initial fetch). Sets `max` with the provided value
+- **Page.hasNext**: returns true if there is a next page. Checks if `start` is less than `max`
+- **Page.reset**: sets `start` to 0, unsets `max`, and returns `limit` to default page size
+- **Page.getCriteria**: used when converting to fetch-friendly format. Returns object with `start` and `limit` as attributes
+
+#### NoText ####
+Already instantiated by `QueryBuilder.Criteria()`
+
+Alternative isolated instantiation: `QueryBuilder.NoTextBuilder()`
+
+If NoText is enabled, reduces data payload (resource must support it)
+
+##### Attributes #####
+
+- `notext` (boolean): turns flag on/off, updated with `NoText.enable` and `NoText.disable`
+
+##### Functions #####
+
+- **NoText.enable**: sets `notext` to true
+- **NoText.enable**: sets `notext` to false
+- **NoText.getCriteria**: used when converting to fetch-friendly format. Returns object with `notext` as attribute
+
+#### SortKey ####
+Already instantiated by `QueryBuilder.Criteria()`
+
+Alternative isolated instantiation: `QueryBuilder.SortKeyBuilder()`
+
+Builds and maintains key that collection is sorted on
+
+##### Attributes #####
+
+- `default` (string): key to fall back to after reset, updated with `SortKey.setDefaultKey`
+- `order` (string): current sort key, updated with `SortKey.setSortKey`
+
+##### Functions #####
+
+- **SortKey.setDefaultKey(defaultKey)**: sets `default` to defaultKey
+- **SortKey.setSortKey(sortKey)**: sets `order` to sortKey
+- **SortKey.reset**: sets `order` to `default`
+- **SortKey.getCriteria**: used when converting to fetch-friendly format. Returns object with `order` as attribute
+
+## Models ##
+**`ADK.Models`** are Backbone model definitions with extended fetch mechanisms, as well as additional functionality depending on which collection is being used. **`ADK.Models`** should be the mechanism used to fetch and maintain domain data from the resource server, instead of the now deprecated ADK.ResourceService's and ADK.PatientRecordService's `fetchModel` functions.
+
+**Note:** anything the BaseModel supports, the other models will also support as they will extend the BaseModel.
+
+To see full options, see the sections below. An example usage (using BaseModel):
+
+```JavaScript
+var fetchOptions = {
+  resourceTitle: 'my-resource-title-from-directory'
+};
+var myModel = new ADK.Models.BaseModel();
+myModel.fetch(fetchOptions);
+```
+### BaseModel ###
+The base model definition that the other models in **`ADK.Models`** will extend from. The 'save' and 'fetch' functions have been extended to generate the url from the ResourceDirectory, as well as apply patient information relevant to the fetch url if `patientData: true`.
+
+#### Fetch ####
+
+After instantiation (`var myModel = new ADK.Models.BaseModel()`), simply call 'fetch' with any attributes and fetch options to fetch a model from the server. [Fetch options are below](#Models-BaseModel-FetchOptions)
+
+#### Save ####
+
+After instantiation (`var myModel = new ADK.Models.BaseModel()`), simply call 'save' with any attributes and [fetch options](#Models-BaseModel-FetchOptions) to send a POST (first) or PATCH/PUT (subsequent) to the server:
+
+#### FetchOptions ####
+
+```JavaScript
+// Available options, in addition to most xhr/Backbone.Model fetch options.
+// Defaults shown where applicable.
+var fetchOptions = {
+  cache: true, // whether the fetch url and response will be cached
+  patientData: false, // sends pid of current patient
+  resourceTitle: 'my-resource-title-from-directory', // maps to ResourceDirectory
+  allowAbort: true // if another fetch goes out, abort will be called
+};
+```
+
+#### Use Case ####
+
+This model type should be used for data fetches fetches or saves.
+
+#### Parse Error Catching ####
+
+Each parse call is wrapped in a try/catch and upon an uncaught error, the model will throw an 'error' event, which can be treated the same as a fetch error.
+
 ## ResourceService ##
+RESOURCE SERVICE FETCHING NOW DEPRECATED, please transition to use [**`ADK.Collections`**](#Collections) and [**`ADK.Models`**](#Models)
+
 > **ADK.ResourceService** is an application service that returns an object of functions that allows a developer to interact with the Software Development Kit's [Vista Exchange API][VXAPI].
 
 Using ADK.ResourceService allows you to perform fetches against any domain listed in the [VX-API's Resource Directory][VXAPI].  New domains can be added to the Vista Exchange API through the SDK's [Resource Development Kit][RDK].
@@ -149,6 +481,8 @@ define([
 ```
 
 ## PatientRecordService ##
+PATIENT RECORD SERVICE FETCHING NOW DEPRECATED, please transition to use [**`ADK.Collections`**](#Collections) and [**`ADK.Models`**](#Models) with `patientData: true`
+
 > **ADK.PatientRecordService** acts similar to ADK.ResourceService except it allows you to fetch resources from the ResourceDirectory in regards to a particular patient by passing in a patient attribute as part of the options parameter.
 
 ### Methods ###
@@ -260,7 +594,7 @@ ADK.PatientRecordService.setCurrentPatient(PATIENT_MODEL);
 The following demonstrates a workflow where the application's current patient is being changed and on success of the patient change a form should be opened inside a tray.
 ::: showcode Show example
 ``` JavaScript
-  // Part 1. In some applet, set up a messsaging listener.
+  // Part 1. In some applet, set up a messaging listener.
   ADK.Messaging.on('show:exampleForm', function(name) {
       var ExampleFormModel = Backbone.Model.extend({
           defaults: {
@@ -273,7 +607,7 @@ The following demonstrates a workflow where the application's current patient is
           fields: [{
               control: 'select',
               name: 'perferredMethodOfContact',
-              label: 'What is your perferred method of contact?',
+              label: 'What is your preferred method of contact?',
               options: [{
                   label: 'Email',
                   value: 'email'
@@ -494,7 +828,7 @@ The Following is an example output of what gets returned by _getUserSession()_:
   }
 ```
 #### .authenticate(userName, password, facility) {.method .copy-link} ####
-authenticates against VX-API's Authenication resource with the provided credentials. Method returns a $.Deferred() promise. If successful at authenticating and setting the user session, promise.done() method will be called, otherwise promise.fail() method will be called with these [list of options][ADK.RecordService.CommonOptions].
+authenticates against VX-API's Authentication resource with the provided credentials. Method returns a $.Deferred() promise. If successful at authenticating and setting the user session, promise.done() method will be called, otherwise promise.fail() method will be called with these [list of options][ADK.RecordService.CommonOptions].
 ``` JavaScript
 function onSuccessfulLogin() {
     console.log("Successfully authenticated");
@@ -678,7 +1012,7 @@ Below is an example of how to register and run a simple check. Feel free to try 
 var MyCheck = ADK.Checks.CheckModel.extend({
   validate: function(attributes, validationOptions) {
     // validate is called by isValid, which is called
-    // by ADK.Checks.run. Both validate and inValid are
+    // by ADK.Checks.run. Both `validate` and `isValid` are
     // predefined patterns in Backbone
     validationOptions = validationOptions || {};
     var myCustomOptions = validationOptions.options || {};
@@ -987,7 +1321,7 @@ ADK.Checks.register('example-writeback-in-progress');
 
 ## Messaging ##
 
-> **ADK.Messaging** allows for global-scope eventing to facilitate a variety of functionality, such as applet to applet commmunication and global date range eventing.
+> **ADK.Messaging** allows for global-scope eventing to facilitate a variety of functionality, such as applet to applet communication and global date range eventing.
 
 #### ADK.**Messaging** ####
 - The global Backbone.Radio channel [Backbone.Radio docs][BackboneRadio]
@@ -1000,7 +1334,7 @@ this.listenTo(ADK.Messaging, "<someGlobalEvent>", function(...) {...});
 
 #### ADK.Messaging.**getChannel(channelName)** ####
 - returns a private channel specific to communications directed towards the _channelName_
-- example case would be to have a channel for a speciifc applet (see code example below)
+- example case would be to have a channel for a specific applet (see code example below)
 
 ```JavaScript
 var someAppletChannel = ADK.Messaging.getChannel('<AppletID>');
@@ -1102,6 +1436,113 @@ The following is an example of calling the request.
   ```
   **Note:** The requester is provided with a Backbone Model but its attributes are frozen, so calling `.set()` on the model will not affect the model's attributes or values.
 
+## Errors ##
+`ADK.Errors` mainly consists of a [central collection of errors](#Errors-Collection). When catching an error, an error can be added to this collection by calling [`ADK.Errors.collection.add`](http://backbonejs.org/#Collection-add) in a manner similar to below:
+
+```JavaScript
+if (!obj.someRequiredAttribute) {
+  ADK.Errors.collection.add({
+    message: 'Specific applet/view: someRequiredAttribute not found.', // 'message' is required
+    details: ADK.Errors.omitNonJSONDeep(obj, 'myObj', {})
+    // 'details' is optional, omitNonJSONDeep scrubs values to be more friendly when value is saved to server,
+    // useful to avoid JSON parsing errors.
+  });
+}
+```
+### Collection ###
+Backbone.Collection that gathers and sets information when a model is added, done with the `parse` function.
+
+#### Adding a New Error ####
+On add of a new error (AKA a new Backbone.Model), the model parse sets certain additional information, such as some route information and timestamp. The collection parse also ensures that each model has a `message` attribute, and if not, removes it from the collection and throws an error in the console.
+
+**`message`** is the only required attribute, and is used as the `idAttribute` for each model. In other words, a message of "An error has occurred." will only be represented by one unique error in the collection, while "My Applet/View 1: An error has occurred." will be that much more unique. Please note that the value of `message` is also visible to the user, so it is important to avoid any technical details. Utilizing `ADK.ErrorMessaging.getMessage(errorCode)` for the main content of the message is advised, as this returns a standardized message.
+
+**`details`** is an optional attribute that is meant to be used as a vehicle for any additional information that might be useful for context of the error, generally some arguments of the function that the error is found in. Other helpful content may be some resource response options, applet configuration, or view options. Scrubbing the contents of `details` with [`omitNonJSONDeep`](#Errors-Util-Functions-omitNonJSONDeep-sourceObject--keyString--targetObject-) is advised, as the model can eventually be sent to the server.
+
+### Util Functions ###
+#### omitNonJSONDeep(sourceObject, keyString, targetObject) {.method .copy-link} ####
+`omitNonJSONDeep` recursively scrubs an object or array of non-JSON-friendly values, such as functions. Returns `targetObject` with scrubbed copy of `sourceObject` set to attribute of `keyString`. Utilizes [`ADK.Errors.isJSONFriendly`](#Errors-Util-Functions-isJSONFriendly-item-) for type checking. Example:
+
+```JavaScript
+// try in the console
+var options = {
+  view: new Backbone.Marionette.ItemView({ model: new Backbone.Model({ a: true }) }),
+  values: [{
+    id: 'val1',
+    value: 1,
+    getValue: function() {
+        return 1;
+    },
+    props: { cool: true }
+  }, {
+    id: 'val2',
+    value: 2,
+    getValue: function() {
+        return 2;
+    },
+    props: { cool: false }
+  }]
+};
+JSON.stringify(options);
+// Uncaught TypeError: Converting circular structure to JSON
+JSON.stringify(ADK.Errors.omitNonJSONDeep(options, 'options', {}));
+// "{"options":{"values":[{"id":"val1","value":1,"props":{"cool":true}},{"id":"val2","value":2,"props":{"cool":false}}]}}"
+// Note that view and getValue are omitted from targetObject
+```
+
+**Note:** `omitNonJSONDeep` mutates `targetObject`, which means that multiple child objects can be set on `targetObject`.
+Example:
+
+```JavaScript
+// try in console
+var obj1 = {a: [{b:true}]};
+var obj2 = {a: [{b:false}]};
+var details = {};
+ADK.Errors.omitNonJSONDeep(obj1, 'obj1', details);
+ADK.Errors.omitNonJSONDeep(obj2, 'obj2', details);
+JSON.stringify(details);
+// "{"obj1":{"a":[{"b":true}]},"obj2":{"a":[{"b":false}]}}"
+```
+
+#### isJSONFriendly(item) {.method .copy-link} ####
+`isJSONFriendly` checks if `item` is of a JSON friendly type, and returns boolean. Note that it does not check the types of its child attributes in case of an object/array. Thus this function is best used recursively, as [`omitNonJSONDeep` does](#Errors-Util-Functions-omitNonJSONDeep-sourceObject--keyString--targetObject-). Examples:
+
+```JavaScript
+// try in the console
+ADK.Errors.isJSONFriendly(false) // true
+ADK.Errors.isJSONFriendly({ a: false }) // true
+ADK.Errors.isJSONFriendly(new Error('My error')) // false
+ADK.Errors.isJSONFriendly({ error: new Error('My error') }) // true
+ADK.Errors.isJSONFriendly([1, 2, 3]) // true
+ADK.Errors.isJSONFriendly([new Error('My first error'), new Error('My second error')]) // true
+ADK.Errors.isJSONFriendly(function() {return;}) // false
+ADK.Errors.isJSONFriendly({ func: function() {return;} }) // true
+```
+
+### Try/Catch Approach ###
+#### Function.prototype.try(thisBind, args) {.method .copy-link}
+Wraps `function.apply(context, args)` in a try/catch. `args` can be either in .apply or .call format (array/arguments vs simple list of args). `function.onError` can be defined which will be called in the catch. The 'onError' will receive the `error` and `args` passed to the apply. This approach can be used to add errors to [ADK.Errors.collection](#Errors-Collection) (already used to wrap most Backbone/Marionette life-cycle events and callbacks).
+
+Example:
+```JavaScript
+// try in console
+var testFunc = function() {
+  var myFunctionToTry = function(stringArg) {
+    // try this with and without `notHereVariable`,
+    // to see it work with error and without error
+    console.log('in myFunc', stringArg, notHereVariable);
+  };
+  myFunctionToTry.onError = function(error, args) {
+    console.warn('Error calling myFunc', error, args);
+  };
+  // can treat like .call
+  myFunctionToTry.try(this, "Try this on for size");
+  // can also treat like .apply
+  myFunctionToTry.try(this, arguments);
+};
+testFunc('test string');
+```
+
 ## SessionStorage ##
 ### ADK's Session Object ###
 This refers to the in-memory object that gets used to persist the changes to the following models:
@@ -1119,7 +1560,7 @@ For **retrieving** data, ADK.SessionStorage _always_ defaults to using the in-me
 #### **sessionModel(key, value, preference)** ####
 - Adds a key/value pair into the browser's Session Storage and sets the ADK's Session Object _(if applicable)_.
 - method parameters:
-  + **key** : unqiue identifier in session
+  + **key** : unique identifier in session
   + **value** : backbone model to save in session
   + **preference** : (string) options: "sessionStorage" | "session" | null   (default: null)
     * when preference equals "sessionStorage" the ADK's Session Object will **not** be set
@@ -1218,11 +1659,12 @@ ADK.SessionStorage.delete.all();
 
 ## ADK Utilities ##
 
-The following are the available utilities that have been created thus far in the ADK:
+The following are the available utilities that have been created thus far in the ADK.
 
 ### Collection Manipulation ###
+**ADK.utils.**[method below]
 
-#### ADK.utils.**sortCollection(collection, key, sortType, ascending)** ####
+#### .sortCollection(collection, key, sortType, ascending) {.method .copy-link} ####
 - _collection_ - The collection to be sorted
 - _key_ - The key to sort by
 - _sortType_ - Alphabetical, Alphanumerical, Numerical
@@ -1236,36 +1678,34 @@ sortCollection: function(collection, key, sortType, ascending) {
 ---
 The following collection filters are available for convenience.  However, backbone collections have a built in filter method based on Underscore, [Underscore][underscoreFilterWebPage].
 
-#### ADK.utils.**resetCollection(collection)** ####
-- _collection_ - The collection to be reset
-
-#### ADK.utils.**filterCollectionByDays(collection, numberOfDays, dateKey)** ####
+#### .filterCollectionByDays(collection, numberOfDays, dateKey) {.method .copy-link} ####
 - _collection_ - The collection to be filtered
 - _numberOfDays_ - The key to sort by
 - _dateKey_ - the model key of the date field to filter on
 
-#### ADK.utils.**filterCollectionByDateRange(collection, startDate, endDate, dateKey)** ####
+#### .filterCollectionByDateRange(collection, startDate, endDate, dateKey) {.method .copy-link} ####
 - _collection_ - The collection to be filtered
 - _startDate_ - JavaScript Date object of Start range
 - _endDate_ - JavaScript Date object of End range
 - _dateKey_ - the model key of the date field to filter on
 
-#### ADK.utils.**filterCollectionBeginsWith(collection, key, filterValue)** ####
+#### .filterCollectionBeginsWith(collection, key, filterValue) {.method .copy-link} ####
 - _collection_ - The collection to be filtered
 - _key_ - the model key of the field to filter on
 - _filterValue_ - the string value to filter by
 
-#### ADK.utils.**filterCollectionByValue(collection, key, filterValue)** ####
+#### .filterCollectionByValue(collection, key, filterValue) {.method .copy-link} ####
 - _collection_ - The collection to be filtered
 - _dateKey_ - the model key of the field to filter on
 - _filterValue_ - the string value to filter by
 
-
-
+#### .resetCollection(collection) {.method .copy-link} ####
+- _collection_ - The collection to be reset
 
 ### Date Utilities ###
+**ADK.utils.**[method below]
 
-#### ADK.utils.**formatDate(date, displayFormat, sourceFormat)** ####
+#### .formatDate(date, displayFormat, sourceFormat) {.method .copy-link} ####
 Returns a string that has been tranformed the given _date_ using the given _displayFormat_ and _sourceFormat_.
 
 The following example would return '12252014'
@@ -1275,7 +1715,7 @@ date = ADK.utils.formatDate(date, 'MMDDYYYY', 'YYYYMMDD');
 ```
 
 
-#### ADK.utils.**getTimeSince(dateString, showMinutes)** ####
+#### .getTimeSince(dateString, showMinutes) {.method .copy-link}  ####
 Returns an object containing the attributes specified below. The timeSince attribute is calculated with the given _dateString_. If time elapsed is less than 1 hour timeSince will have the value '< 1h' unless _showMinutes_ parameter is set to **true**, in which case timeSince will be the actual number of minutes.
 
 - timeSince : time elapsed since the given moment in time
@@ -1296,12 +1736,51 @@ Example returned values:
 }
 ```
 
+#### .dateUtils.datepicker(selector, options) {.method .copy-link}  ####
+Provides a standardized way to invoke the datepicker with masking utilizing the global convention for date formatting. The utility takes two arguments, the first of which is the reference to the input DOM element for which the datepicker and input masking is to be applied, and the second is an options object.
+
+For example:
+```JavaScript
+var currentDateTime = new Moment().format(ADK.utils.dateUtils.defaultOptions().placeholder);
+ADK.utils.dateUtils.datepicker(this.$('#myDateInput'), {
+  'endDate': currentDateTime
+});
+//Should one need to retrieve options set against an element...
+var startDate = this.$('#myDateInput').data('dateUtilOptions').startDate;
+```
+
+Note in the above example that all configuration options can be retrieved with the options function call. Also note that the placeholder does not need to be explicitly set on the DOM element, but since this method expects and input element type, manual configuration is required for an icon to trigger the datepicker.
+
+```JavaScript
+$('#myDateInput').parent().find('.glyphicon-calendar').on('click', function() {
+   $('#myDateInput').datepicker('show');
+});
+```
+
+The following are the default options configured for both the datepicker and input mask. Start date defaults to the oldest date vista can accept. All datepicker or input mask options can be configured (please refer to each libraries documentation for more information).
+
+```JavaScript
+{
+    format: 'mm/dd/yyyy',
+    placeholder: 'MM/DD/YYYY',
+    regex: /^(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d\d$/g,
+    clearIncomplete: true,
+    todayHighlight: true,
+    endDate: new Moment().format('mm/dd/yyyy'),
+    startDate: new Moment('01/01/1800').format('mm/dd/yyyy'),
+    keyboardNavigation: false,
+    onincomplete: function(e) { //Required to ensure model is sync'd to field
+        $(this).val('').trigger('change');
+    },
+    inputmask: 'm/d/y'
+}
+```
 
 
 ### Miscellaneous Utilities ###
+**ADK.utils.**[method below]
 
-#### ADK.utils.**extract(obj, expr, args)** ####
-
+#### .extract(obj, expr, args) {.method .copy-link}  ####
 The default response from the PatientRecordService is the VPR JSON format.  In many cases you may want to flatten or simplify the model for use in a view template.  The model is overridden by passing in an optional viewModel parameter including a new parse method to the PatientRecordService.
 
 - _obj_ - object representing the response
@@ -1318,7 +1797,7 @@ var viewModel = {
     }
 };
 ```
-#### ADK.utils.**chartDataBinning(graphData, config)** ####
+#### .chartDataBinning(graphData, config) {.method .copy-link}  ####
 The function is used to create binning data series for highchart.
 ::: side-note
 **graphData** - The data for highchart
@@ -1334,7 +1813,7 @@ The function is used to create binning data series for highchart.
      var config = {
                       chartWidth:  100,           // chart width in pixels
                       barWidth:    5,             // width of chart bar   / 5 by default
-                      barPadding:  2,             // padding bitween bars / 2 by default
+                      barPadding:  2,             // padding between bars / 2 by default
                       normal_function : function(val) {return Math.log((val*val)/0.1);},
                                                   // data normalization function (optional)
                       debug: true                 // false by default
@@ -1396,7 +1875,7 @@ When you call applyConceptCodeId() it will add dataCode on the model that was pa
 ```
 You can use an ADK utility to get the following values:
 
-```Javascript
+```JavaScript
 ADK.utils.crsUtil.domain.LABORATORY returns 'Laboratory'
 ADK.utils.crsUtil.domain.MEDICATION returns 'Medication'
 ADK.utils.crsUtil.domain.PROBLEM returns 'Problem'
@@ -1423,1443 +1902,11 @@ To remove the current active CRS highlighting you need to pass the current view 
 
  ADK.utils.crsUtil.removeStyle(this);
 
- // NOTE: You can also access the STYLE elemnent ID and CRS icon class names by doing the following:
+ // NOTE: You can also access the STYLE element ID and CRS icon class names by doing the following:
  ADK.utils.crsUtil.getCssTagName();
  ADK.utils.crsUtil.getCrsIconClassName();
 
 ```
-
-## Handlebar Template Helpers ##
-**Found In:** production/_assets/templates/helpers/
-
-The following are the available handlebar helpers that have been created for use in templates:
-### Format Date ###
-{{**formatDate** _[date]  "[displayFormat]"  "[sourceFormat]"_ }}
-
-```Handlebars
-<span>{{formatDate dateOfBirth}}</span>
-<span>{{formatDate dateOfBirth "YYYY-MM-DD"}}</span>
-<span>{{formatDate dateOfBirth "YYYY-MM-DD" "DDMMYYYY"}}</span>
-```
-
-### Format SSN ###
-{{**formatSSN** _[ssn] [mask boolean]_ }}
-
-If mask boolean is true, the helper will return the ssn string with all but the last four digits replaced by a "**\***"
-```Handlebars
-<span>{{formatSSN ssn}}</span>
-<span>{{formatSSN ssn true}}</span>
-<span>{{formatSSN ssn false}}</span>
-```
-
-### Format Phone ###
-{{**formatPhone** _[number] [defaultVal]_ }}
-
-Utilizes libphonenumber (https://github.com/googlei18n/libphonenumber) to consistently format phone numbers.
-```Handlebars
-<span>{{formatPhone phone}}</span>
-<span>{{formatPhone phone "Not Specified"}}</span>
-```
-
-### Get Age ###
-{{**getAge** _[date of birth] "[sourceFormat]"_ }}
-
-```Handlebars
-<span>{{getAge dateOfBirth}}y</span>
-<span>{{getAge dateOfBirth "DDMMYYYY"}}</span>
-```
-
-### Has Permission ###
-{{**hasPermission** _"[permission string]"_ }}
-
-Used to check if the current user has the specified permission. Returns html inside "hasPermission" tags if the user has the specified permission.
-```Handlebars
-{{hasPermission "edit-patient-record"}}
-<button>Add</button>
-{{/hasPermission}}
-```
-
-## ADK Components ##
-
-The following are the available components that have been created thus far in the ADK:
-
-### Global Date Range ###
-
-The ADK Global Date Range provides a standardized way to apply server side fetching based on selection of global date range options on the navigation bar by a user.
-
-```JavaScript
-initialize: function(options) {
-...
-  var self = this;
-  ADK.Messaging.on('globalDate:selected', function(dateModel) {
-    // This call refreshes the applet filtered by the given date field with
-    // the global date range.
-    self.dateRangeRefresh('observed');
-  });
-
-  // Sets this option to use the inital global date range setting of 1yr for the inital server side fetching when the coversheet is loaded for the first time.
-  fetchOptions.criteria = {
-      filter: this.buildJdsDateFilter('observed')
-  };
-
-},
-onBeforeDestroy: function() {
-  ADK.Messaging.off('globalDate:selected');
-},
-```
-Replace 'observed' with an appropriate field of a model that represent a date.
-
-Make sure to stop listening to the globalDate:selected event when Applet gets destroyed.
-
-This feature assumes that a corresponding resource api supports a criteria filter syntax 'between(field, fromValue, toValue)'. E.g. between(observed,'20141025','20141025')
-
-### Global Date Picker/Input Mask ###
-
-The ADK Global Date Picker provides a standardized way to invoke the datepicker with masking utilizing the global convention for date formatting. The utility takes two arguments, the first of which is the reference to the input DOM element for which the datepicker and input masking is to be applied, and the second is an options object.
-
-```JavaScript
-ADK.utils.dateUtils.datepicker(selector, options);
-```
-
-For example:
-
-```JavaScript
-var currentDateTime = new Moment().format(ADK.utils.dateUtils.defaultOptions().placeholder);
-ADK.utils.dateUtils.datepicker(this.$('#myDateInput'), {
-  'endDate': currentDateTime
-});
-//Should one need to retrieve options set against an element...
-var startDate = this.$('#myDateInput').data('dateUtilOptions').startDate;
-```
-
-Note in the above example that all configuration options can be retrieved with the options function call. Also note that the placeholder does not need to be explicitly set on the DOM element, but since this method expects and input element type, manual configuration is required for an icon to trigger the datepicker.
-
-```JavaScript
-$('#myDateInput').parent().find('.glyphicon-calendar').on('click', function() {
-   $('#myDateInput').datepicker('show');
-});
-```
-
-The following are the default options configured for both the datepicker and input mask. Start date defaults to the oldest date vista can accept. All datepicker or input mask options can be configured (please refer to each libraries documentation for more information).
-
-```JavaScript
-{
-    format: 'mm/dd/yyyy',
-    placeholder: 'MM/DD/YYYY',
-    regex: /^(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d\d$/g,
-    clearIncomplete: true,
-    todayHighlight: true,
-    endDate: new Moment().format('mm/dd/yyyy'),
-    startDate: new Moment('01/01/1800').format('mm/dd/yyyy'),
-    keyboardNavigation: false,
-    onincomplete: function(e) { //Required to ensure model is sync'd to field
-        $(this).val('').trigger('change');
-    },
-    inputmask: 'm/d/y'
-}
-```
-<br />
-
-### Popup ###
-
-A popup is an extention of a Bootstrap popover which allows extra options to define placement and alignement to the trigger element.  This element can be used anytime a developer wishes to place a floating element in relation to another element that isn't explicitly a dropdown.  The trigger element must be visible.  All rules of Bootstrap popover apply, including event triggering, and the Bootrap pattern should be used.  Be sure to keep event triggering within the scope of a view and don't use global selectors to apply or trigger events.
-
-```JavaScript
-var myView = new Marionette.ItemView({
-    template: Handlebars.compile('<div tabindex="0" data-toggle="popover">Click me to open popover</div>'),
-    initialize: function() {
-        this.headerView = new Marionette.ItemView({template: Handlebars.compile('<div>I\'m a header</div>')});
-        this.bodyView = new Mareiontte.ItemView({template: Handlebars.compile('<div>I\'m a body</div>')});
-    },
-    onRender: function() {
-        this.headerView.render();
-        this.bodyView.render();
-        this.$('[data-toggle="popover"').popup({
-            placement: 'right', //auto right would tell it to bias right but shift left if off screen
-            valign: 'top', //align the top of the popup with the top of the trigger element
-            content: this.bodyView.$el,
-            title: this.bodyView.$el
-        });
-    },
-    onDestroy: function() {
-        //We must explicitly destroy these views if we don't use a view type which handles children
-        //Failure to do so may result in a memory leak
-        this.headerView.destroy();
-        this.bodyView.destroy();
-    }
-});
-```
-In addition to Bootstrap options for a popover, the following options are available
-
-```JavaScript
-{
-    margin-left:  0px, //Margin will reference the trigger element
-    margin-top: 0px,
-    //Offset is absolute position in reference to base position.
-    //This can be used to place popup over trigger element
-    xoffset: 0px,
-    yoffset: 0px, //Negative offsets can be used as well
-    //The two following options are not recommended to be used together
-    valign: top,  //[ top | bottom ] Used with placement: [ right | left ]
-    halign: right //[ right | left ] Used with placement: [ top | bottom ]
-}
-```
-<br />
-
-## Applet Chrome ##
-
-ADK's Applet Chrome refers to the optional (though **highly recommended**) applet wrapper that composes the visual container that surrounds an applet. Chrome was designed as a mechanism for consistent styling desired for most applets.
-
-However, Chrome provides much more than simple styling. It provides access to common applet eventing, such as triggering data refreshes and toggling between applet views.
-
-> In order to enable Chrome, an applet developer simply has to include **chromeEnabled: true** as an attribute within one of an applet's viewType objects.
-
-```JavaScript
-...
-var applet = {
-    id: 'sampleApplet',
-    viewTypes: [{
-        type: 'sample',
-        view: new SampleView,
-        chromeEnabled: true   // This enables chrome for this viewType
-                              // Note: will not work with getRootView...
-                              // Must use viewType array to use Chrome
-    }],
-    defaultViewType: 'sample'
-};
-...
-
-```
-**Note:** Chrome only works with an applet config that utilizes the _viewType_ array methodology for specifying views. Chrome will not work with _getRootView_.
-
-::: side-note
-Here's what Chrome would look like:
-<div class="panel panel-primary chrome-example"><div class="panel-heading grid-applet-heading"><span class=pull-left><span class=grid-refresh-button><span><button type=button class="applet-refresh-button btn btn-sm btn-link" tabindex=0 title=Refresh><i class="applet-title-button fa fa-refresh"></i> <span class=sr-only>Refresh</span></button></span></span></span> <span class=pull-right><span class=grid-titlebar></span> <span class=grid-add-button><span><button type=button class="applet-add-button btn btn-sm btn-link" tabindex=0 title="Add Item"><span class="applet-title-button fa fa-plus"><span class=sr-only>Add Item</span></span></button></span></span> <span class=grid-filter-button><span><button type=button id=grid-filter-button-applet-1 data-toggle=collapse data-target=#grid-filter-applet-1 class="applet-filter-button btn btn-sm btn-link" tabindex=0 title="Show Filter"><span class="applet-title-button fa fa-filter"><span class=sr-only>Show Filter</span></span></button></span></span> <span class=grid-options-button><span><button type=button id=grid-options-button- data-toggle=collapse data-target=#grid-options- class="applet-options-button btn btn-sm btn-link" tabindex=0 title="Show Options"><span class="applet-title-button fa fa-cog"><span class=sr-only>Show Options</span></span></button></span></span> <span class=grid-resize><span><button type=button class="applet-maximize-button btn btn-sm btn-link" tabindex=0 title="Maximize Applet"><span class="applet-title-button fa fa-expand"><span class=sr-only>Maximize Applet</span></span></button></span></span></span> <span class="center-block text-center panel-title">Applet Title</span></div><div class=appletDiv_ChromeContainer><div class="applet-view">Applet View</div></div><div class=grid-footer><span class="gs-resize-handle gs-resize-handle-both"></span></div></div>
-:::
-
-### Using chrome with BaseDisplayApplet ###
-
-Chrome is very easy to use with BaseDisplayApplet or a viewType that extends BaseDisplayApplet (**[any ADK.AppletView](#ADK-AppletViews)**) since it is already set up with many of the requirements
-
-The table below contains the full list of elements and buttons available through Chrome and how to enable them using BaseDisplayApplet.
-
-|  | Elements/Buttons | Description | Required to Work with BaseDisplayApplet |
-|--|------------------|-------------|-----------------------------------------|
-| <i class="applet-title-button fa fa-filter"></i> | **filter** | button that fires an event to toggle the display of the filter view(s) | applet's _appletOptions_ contains either attribute 'filterFields' or 'filterDateRangeField'  |
-| <i class="applet-title-button fa fa-refresh"></i> | **refresh**   | button that triggers the applet view's _refresh_ method | refresh method is built in but can be overwriten by including a _'refresh'_ method to applet's _appletOptions_ |
-| <i class="applet-title-button fa fa-plus"></i> | **add**  | button that triggers applet view's _onClickAdd_ method | applet's _appletOptions_ includes 'onClickAdd' method (to be called on click of **add** button) |
-| <i class="applet-title-button fa fa-expand"></i> <i class="applet-title-button fa fa-close"></i> | **resize** | button that triggers 'minimize' or 'maximize' event depending on which state the applet is in | applet's screen config must have _'maximizeScreen'_ or _'fullScreen'_ attribute ([info on applet's screen config][AppletScreenConfig]) |
-| | **title** | span that displays the name of the applet specified in screen config | applet's screen config object must have a _'title'- attribute|
-| <i class="applet-title-button fa fa-cog"></i> | **switch viewType** | button that triggers an event that shows a switch viewType view (**only on user-derfined workspaces**) | applet is within a user-defined workspace and must have _viewTypes_ array defined in the applet's configuration |
-
-### Using chrome with a custom view ###
-
-If BaseDisplayApplet (or a viewType that extends it) is not being used, and instead a view is being created by extending one of Marionette's views, more must be done for the built-in elements/buttons to display in Chrome.
-
-The following table describes the requirements for displaying the various elements/buttons provided by Chrome when creating a custom applet view from scratch (extending one of Marionette's views). For the descriptions of each element, please see table above.
-
-|  | Elements/Buttons | Additional Requirements for inclusion in a custom view |
-|--|------------------|--------------------------------------------------------|
-| <i class="applet-title-button fa fa-filter"></i> | **filter** | applet view must contain at least one of the following attributes: **'filterDateRangeView'** or **'filterView'** and also contain a region with an id equal to _"#grid-filter-' + appletInstanceId"_ and class of _"collapse"_.
-| <i class="applet-title-button fa fa-refresh"></i> | **refresh** | applet view must contain a **'eventMapper'** object with an attribute of **"refresh"** with a value of: view's method name. This method should reset/re-fetch the applet's collection in this method |
-| <i class="applet-title-button fa fa-plus"></i> | **add** | applet view must contain a **'eventMapper'** object with an attribute of **"add"** with a value of: view's method name. This method should handle write-back functionality desired for the applet |
-| <i class="applet-title-button fa fa-expand"></i> <i class="applet-title-button fa fa-close"></i> | **resize** | _SAME INSTRUCTIONS AS BASEDISPLAYAPPLET_ (table directly above) |
-|  | **title** | _SAME INSTRUCTIONS AS BASEDISPLAYAPPLET_ (table directly above)|
-|  |  |  |
-| <i class="applet-title-button fa fa-cog"></i> | **switch viewType**  | _SAME INSTRUCTIONS AS BASEDISPLAYAPPLET_ (table directly above)|
-
-Below is an example of using applet chrome without with a custom view:
-
-```JavaScript
-define([
-  'main/ADK',
-  'underscore',
-  'handlebars'
-], function (ADK, _, Handlebars) {
-
-  var fetchOptions = {
-    resourceTitle: 'example-resource',
-    pageable: true // enables infinite scrolling (makes a pageable collection)
-  };
-
-  var FilterView = Backbone.Marionette.ItemView.extend({
-    template: Handlebars.compile("I am a filter view!")
-  });
-
-  var SimpleItemView = Backbone.Marionette.ItemView.extend({
-    template: Handlebars.compile("<li>Tile: <%= title %></li>")
-  });
-
-  var CollectionView = Backbone.Marionette.CollectionView.extend({
-    template: Handlebars.compile("<li>Tile: <%= title %></li>"),
-    childView: SimpleItemView
-  });
-
-  var SampleView = Backbone.Marionette.LayoutView.extend({
-    initialize: function(options){
-      this.collection = ADK.ResourceService.fetchCollection(fetchOptions);
-
-      // creating a Collection View and giving it a collection
-      this.collectionView = new CollectionView;
-      this.collectionView.collection = this.collection;
-
-      // creating a filterView to enable Applet Chrome's filter button
-      this.filterView = new FilterView;
-    },
-    onRender: function(){
-      this.collectionViewRegion.show(this.collectionView);
-      this.textFilterRegion.show(this.filterView);
-    },
-    /*
-     * this eventMapper with the attributes "refresh" and "add"
-     * tied to the view's "refreshCollection" and "onClickAdd" methods
-     * will enable the Applet Chrome's "refresh" and "add" buttons
-     */
-    eventMapper: {
-      'refresh': 'refreshMethod',
-      'add': 'onClickAdd'
-    },
-    onClickAdd: function(){
-      // call writeBack
-    },
-    refreshCollection: function(){
-      // Example Code: clear the cached data,
-      // call reset and fetch on the collection to get the updated models
-      // -----------------------------------
-        var collection = this.collection;
-
-        if (collection instanceof Backbone.PageableCollection) {
-            collection.fullCollection.reset();
-        } else {
-            collection.reset();
-        }
-        ADK.ResourceService.clearCache(collection.url);
-        ADK.ResourceService.fetchCollection(collection.fetchOptions, collection);
-      // -----------------------------------
-    },
-    regions: {
-      collectionViewRegion: '.grid-container',
-      textFilterRegion: '.grid-filter'
-    },
-    // It is preferable to specify a separate html file, especially with larger/complex templates
-    template: Handlebars.compile([
-      '<div class="panel-body grid-applet-panel" id="grid-panel-{{instanceId}}">',
-      '<div id="grid-filter-{{instanceId}}" class="collapse">',
-      '<div class="grid-filter"></div>',
-      '</div>',
-      '<div class="grid-container"></div>',
-      '</div>'
-    ].join('\n'))
-  });
-
-  var appletConfig = {
-    id: 'sampleApplet',
-    // having viewTypes array will enable the "switch viewType" button
-    // in Applet Chrome on User defined workspaces
-    viewTypes: [{
-      type: 'base',
-      view: SampleView,
-      chromeEnabled: true // enabling the applet chrome for this view
-    }],
-    defaultViewType: 'base'
-  };
-
-  return appletConfig;
-});
-```
-
-### Adding Additional Buttons to Chrome Container ###
-
-> In order to add additional buttons to the Chrome container, an applet developer has to include a **chromeOptions: {}**  object as an attribute within one of an applet's viewType objects.
->
-> In the **chromeOptions** object, the developer can specify an **additionalButtons** array attribute, that contains object(s) with the attributes **id** and **view** for each additional chrome button.
->   - **id**: an unique identifier for the button
->   - **view**: a Marionette view to show in the new chrome button region. (see example below)
-
-```JavaScript
-...
-var ExampleButtonView = Backbone.Marionette.ItemView.extend({
-    template: Handlebars.compile("<button>Sample Button</button>"),
-    tagName: 'span'
-});
-var applet = {
-    id: "example",
-    viewTypes: [{
-        type: 'summary',
-        view: AppletLayoutView,
-        chromeEnabled: true,
-        chromeOptions: {
-            additionalButtons: [{
-                'id': 'example-button',
-                'view': ExampleButtonView
-            }]
-        }
-    }],
-    defaultViewType: 'summary'
-};
-...
-```
-**Note:** Any event handling/listeners for the additional buttons should be taken care of in their respective views which are included in the _additionalButtons_ array.
-
-### Adding Notifications to Chrome Container ###
-
-One more multiple notifications can be added to the Chrome header via the **chromeOptions** configuration.  Notifations can be any view specified by a user, but the most basic notification will extend from **ADK.AppletViews.ChromeView.NotificationView** and will inform a user about information within the applet's collection.  When extending from **NotificationView**, the most common application will be to override the ```getNotifications``` method in order to display a count.  By default, the the model's **count** attribute, or the value returned by ```getNotifications``` will be the value displayed within the badge.
-
-```JavaScript
-var applet = {
-    id: 'some_applet',
-    viewTypes: [{
-        type: 'summary',
-        view: AppletLayoutView.extend({
-            columnsViewType: "summary"
-        }),
-        chromeEnabled: true,
-        chromeOptions: {
-            notificationView: ADK.AppletViews.ChromeView.NotificationView.extend({
-                getNotifications: function(collection) { //the applet's colleciton is passed in
-                    //return the number of models that have
-                    //the attribute 'facilityName' equal to 'DOD'
-                    return collection.where({
-                        facilityName: 'DOD'
-                    }).length;
-                }
-            })
-        }
-    }
-}
-```
-
-Each view type can have it's own **NotificationView**, and even multiples can be specified.
-
-```JavaScript
-var applet = {
-    id: 'some_applet',
-    viewTypes: [{
-        type: 'gist',
-        view: GistViewDefinition,
-        chromeEnabled: true,
-        chromeOptions: {
-            notificationView: [{
-                view: ADK.AppletViews.ChromeView.NotificationView.extend({
-                    getNotifications: function(collection) {
-                        return collection.length;
-                    }
-                }),
-                orderIndex: 1
-            }, {
-                view: ADK.AppletViews.ChromeView.NotificationView.extend({
-                    getNotifications: function(collection) {
-                        return 1;
-                    }
-                }),
-                orderIndex: 0
-            }]
-        }
-    }, {
-        type: 'expanded',
-        view: AppletLayoutView.extend({
-            columnsViewType: "expanded"
-        }),
-        chromeEnabled: true,
-        chromeOptions: {
-            notificationView: ADK.AppletViews.ChromeView.NotificationView.extend({
-                getNotifications: function(collection) {
-                    return collection.where(function(model) {
-                        return !_.isUndefined(model.get('radiationExposure'));
-                    }).length;
-                }
-            })
-        }
-    }
-}
-```
-
-When multiples are specified, **orderIndex** will specify the sort order, and the expected format will be as follows:
-
-```JavaScript
-var applet = {
-    viewTypes: [{
-        chromeOptions: {
-            notificationView: [{
-                view: ViewDefinition,
-                orderIndex: 0
-            }, {
-                view: ViewDefinition,
-                orderIndex: 1
-            }]
-        }
-    }
-}
-```
-
-In some cases, there may be logic to determine the icon to be displayed.  This can be accomplished by overriding **getTemplate** method to change the template based on certain counts:
-
-```JavaScript
-var applet = {
-    id: 'some_applet',
-    viewTypes: [{
-        type: 'gist',
-        view: SomeViewDefinition,
-        chromeEnabled: true,
-        chromeOptions: {
-            notificationView: ADK.AppletViews.ChromeView.NotificationView.extend({
-                getNotifications: function(collection) {
-                    return collection.where(function(model) {
-                        return !_.isUndefined(model.get('radiationExposure'));
-                    }).length;
-                },
-                somewhatUrgentTemplate: Handlebars.compile([
-                  '{{#if count}}',
-                    '<strong class="badge">{{count}}</strong>',
-                    '<i class="fa fa-exclamation-circle"></i>',
-                  '{{/if}}'
-                ].join('\n')),
-                veryUrgentTemplate: Handlebars.compile([
-                  '{{#if count}}',
-                    '<strong class="badge">{{count}}</strong>',
-                    '<i class="fa fa-exclamation-triangle"></i>',
-                  '{{/if}}'
-                ].join('\n')),
-                getTemplate: function() {
-                    var urgency = collection.where(function(model) {
-                        return model.get('urgency') > 0;
-                    }).length;
-
-                    if(urgency > 30) return this.getOption('veryUrgentTemplate');
-                    if(urgency > 15) return this.getOption('somewhatUrgentTemplate');
-                    return this.getOption('tempalte');
-                }
-            })
-        }
-    }]
-};
-```
-
-**Note:** All model attributes will be avilable for consumption in the templates, but **count** can and will be overriden by **getNotifications**, which will default to ```0``` if **getNotifications** is not overriden by the developer.
-
-## BaseDisplayApplet ##
-
-ADK.BaseDisplayApplet encapsulates the following commonly used applet functionality: **text filtering**, **date filtering**, **collection refreshing**, and **write back eventing**
-
-ADK.Applets.BaseDisplayApplet encapsulates the following commonly used applet functionality: **text filtering**, **date filtering**, **collection refreshing**, and **write back eventing**
-
-When extending BaseDisplayApplet, the following attributes can be set in the view's **appletOptions** object:
-
-| Required                                | Attribute                | Description                                                                 |
-|-----------------------------------------|--------------------------|-----------------------------------------------------------------------------|
-|<i class="fa fa-check-circle center"></i>| **collection**           | backbone collection that is used to populate AppletView |
-|<i class="fa fa-check-circle center"></i>| **AppletView**           | view that displays the details/models of the collection |
-|                                         | **toolbarView**          | view to be displayed above the AppletView |
-|                                         | **filterFields**         | array of strings that point to attributes in the collection's models in which to enable text filtering |
-|                                         | **filterDateRangeField** | object with string attributes (_name, label, format_) that configures how the collection is filtered by date |
-|                                         | **refresh**              | method to be called for refresh collection event |
-|                                         | **onClickAdd**           | method to be called for write-back event |
-
-ADK.Applets.BaseDisplayApplet has the following methods: _intitialize_, _onRender_, _onShow_, _setAppletView_, onSync, _onError_, _loading_, _refresh_, _buildJdsDateFilter_, _dateRangeRefresh_, _showFilterView_
-
-> **Note:**  assigning a **_super** attribute equal to ADK.Applets.BaseDisplayApplet.prototype, in the extending view, allows applet developers to augment BaseDisplayApplet's methods. If the extending view also contains a method with the same name, be sure to use the **_super** attribute to call the corresponding BaseDisplayApplet method (e.g. _this._super.[method name].apply(this, arguments)_)
-
-The following is an example of how an applet developer would use BaseDisplayApplet
-
-```JavaScript
-define([
-  'main/ADK',
-  'underscore',
-  'handlebars'
-], function (ADK, _, Handlebars) {
-
-  var SimpleView = Backbone.Marionette.ItemView.extend({
-      template: Handlebars.compile("<li>Name: <%= name %> Age: <%= age %></li>")
-  });
-
-  var CollectionView = Backbone.Marionette.CollectionView.extend({
-    childView: SimpleView,
-    tagName: "ul"
-  });
-
-  var ToolBarView = Backbone.Marionette.ItemView.extend({
-    template: Handlebars.compile("<div>I am a ToolBarView</div>")
-  });
-
-  var SampleView = ADK.Applets.BaseDisplayApplet.extend({
-    // use super to reference ADK.BaseDisplayApplet's methods
-    super: ADK.Applets.BaseDisplayApplet.prototype,
-    initialize: function(options){
-      /* always need to define this.appletOptions in the initialize
-       * with a minimum of the required attributes
-       *
-       * see the above table for attributes that are required
-       */
-      this.appletOptions = {
-        collection: new Backbone.Collection([
-          {name: "Tim", age: 5, dob: "20100101"},
-          {name: "Ida", age: 26, dob: "19890101"},
-          {name: "Rob", age: 55, dob: "19600101"}
-        ]),
-        AppletView: CollectionView,
-        filterFields: ['name', 'age'],
-        filterDateRangeField: {
-          name: "dob",
-          label: "Date of Birth",
-          format: "YYYYMMDD"
-        },
-        toolbarView: new ToolBarView
-      }
-
-      // calling ADK.Applets.BaseDisplayApplet's initialize method
-      this._super.initialize.apply(this, arguments);
-    }
-  });
-
-  var appletConfig = {
-    id: 'sampleApplet',
-    viewTypes: [{
-      type: 'base',
-      view: SampleView
-    }],
-    defaultViewType: 'base'
-  };
-
-  return appletConfig;
-});
-```
-
-## ADK AppletViews ##
-ADK.AppletViews is an object that contains predefined views extended from **ADK.BaseDisplayApplet**
-
-Functionality provided by these views through extending BaseDisplayApplet: **text filtering**, **date filtering**, **collection refresh**, and **write-back eventing**
-
-**Note:** Many of the predefined viewTypes below are a type of "gist" view. With a gist view, the intent is to display meaningful data in a very quick time in order to lessen the time needed to be spent by users looking at data. This can be done in various ways, and can include grouping, graphical representations, popovers, etc... In contrast, an applet using the GridView type, or one similar to it, would focus on displaying more inclusive and explicit data sets.
-
-
-> Each of these predefined applet views can be extended and customized by an applet developer by setting the view's _appletOptions_ object (**this.appletOptions** ... See examples below)
-
-### GridView ###
-ADK.AppletViews.GridView
-
-![GirdView](assets/gridView.png "GridView Example")
-
-GridView is a straight forward DataGrid applet. The applet's collection is rendered in table format with rows and columns, with built in text filtering (from BaseDisplayApplet) and column sorting (provided the appropriate requirements are met).
-
-Functionality provided by GridView in addition to that already provided by BaseDisplayApplet are as follows:
-- **infinite scrolling** : if the collection passed in with appletOptions is of type Backbone.PageableCollection
-- **column sorting** : enabled by default since passing in an appletOptions.columns attribute is a requirement for GridView
-
-Below are the addiontial **appletOptions** available/required with GridView:
-
-| Required     | Option          | Type   |Description                                                                                                                               |
-|--------------|-----------------|--------|------------------------------------------------------------------------------------------------------------------------------------------|
-|              | **onClickRow**  | method | handles event when user clicks a row.     |
-|              | **detailsView** | view   | if specified and onClickRow is not in appletOptions, will be shown between the row clicked on and the next row. |
-|<i class="fa fa-check-circle note center">*</i> | **columns** | array of objects | specified column objects are used to config what columns to display |
-|<i class="fa fa-check-circle note center">*</i> | **summaryColumns** | array of objects | specified column objects are used to config what columns to display (on a screen with "fullScreen: false" specified in the applet's screen config) |
-|<i class="fa fa-check-circle note center">*</i> | **fullScreenColumns** | array of objects | specified column objects are used to config what columns to display (on a screen with "fullScreen: true" specified in the applet's screen config) |
-|              | **groupable** | boolean | (default: _false_) set to true to enable the groupable behavior |
-
-::: callout
- **Note:** specifying neither onClickRow nor detailsView will result in nothing happening when a row is clicked, unless specified in an applet event.
-:::
-
-::: callout
- **<i class="fa fa-check-circle note"></i>\***: it is required to either have a **columns** or **summaryColumns** or **fullScreenColumns** attribute specified. (_summaryColumns_ and _fullScreenColumns_ take precedence over the _columns_ atrribute) All three attributes correspond to an array of objects that have the following attributes, listed in the box below:
-:::
-
-::: side-note
-#### **Column** Object Attributes: ####
-- **name** : Model key mapped to collection
-- **label** : Column heading displayed in table
-- **cell** : [Cell type](http://backgridjs.com/ref/cell.html) (default "string")
-- **template** : Optional handlebars template for use with cell: "handlebars"
-- **sortable** : Enable sorting (default true)
-- **renderable** : Enable rendering (default true)
-- **groupable** : Enable grouping (default false)
-- **groupableOptions** : object with grouping options
-:::
-
-::: definition
-### Grouping in GridView ###
-In addition to grouping rows, two other pieces of grouping options.
-- Group Header - This is a row that is inserted at the top of the group. Clicking on the row either hides all of the rows in that group, providing a count in the header row, or it shows all of the rows in that group.
-- Clicking on column headers changes the group by category - When a column header is clicked, the grid is regrouped by that column.
-    For example, when the Entered By column is clicked on, the grid will group all of the providers with the same name together.
-    Note: On the third click of a column header, the grid reverts back to what it looked like before you started clicking on headers (the same view that was loaded with the page)
-
-To enable the behavior, several things need to be done. Firstly, appletOptions.groupable needs to be true.
-The second thing that needs to be done, is that the columns need to be configured properly.
-Much of the grouping functionality is modeled after Backgrid's sorting behavior.
-
-::: side-note
-  #### Column.**groupableOptions** Attributes: ####
-  - **primary** : (_optional_) (default: _false_) : When a column is marked primary, when the grid is loaded, refreshed, or on the '3rd click', the grid is grouped by this column. At least one column should be marked as primary innerSort - In practice, this isn't optional. The requirements are that the groups should be sorted in reverse chronological order (most recent at the top). In theory, it is optional. The group sort will be the insertion order into the collection without it. (needs to be tested).
-  - **groupByFunction** : (_optional_) : Defaults to the name of the column. You can pass in an optional function. Dictates the sorting key - all rows that return the same result of this function will be grouped together.  You can access the model via collectionElement.model. Handy for grouping by date ranges. (year & month for example)
-  - **groupByRowFormatter** : (_optional_) : Defaults to the name of the column. Whatever this function returns is what will be displayed as the group header.
-
-:::
-
-The following is a sample implementation of a GridView applet
-```JavaScript
-define([
-  'main/ADK',
-  'underscore'
-], function (ADK, _) {
-
-    var sampleColumns = [{      // Specifies which columns are included and enables column sorting
-      name: 'name',           // field mapped to in collection
-      label: 'Name',          // displayed in the table
-      cell: 'string'
-    }, { // this column is not groupable or sortable. Clicking on the column will do nothing.
-      name: 'description',
-      label: 'Description',
-      cell: 'string',
-      sortable: false
-    }, {
-      name: 'observedDate',
-      label: 'Date',
-      cell: 'string'
-    }, {
-      //this column takes 2 optional groupableOptions, groupByFunction & groupByRowFormatter
-      name: 'kind',
-      label: 'Type',
-      cell: 'string',
-      groupable:true,
-      groupableOptions: {
-          primary:true,  //When a column is marked primary, when the grid is loaded, refreshed, or on the '3rd click', the grid is grouped by this column
-          innerSort: "activityDateTime", //this is reverse chronological (desc) order.
-      }
-    }, {
-      //this column takes 2 optional groupableOptions, groupByFunction & groupByRowFormatter
-      //this is because we want to group by year & month.
-      name: 'activityDateTime',
-      label: 'Date & Time',
-      cell: 'handlebars',
-      template: formatDateTemplate,
-      groupable:true,
-      groupableOptions: {
-        innerSort: "activityDateTime", //in practice, this isn't optional. In theory it is (not tested though)
-        groupByFunction: function(collectionElement) {
-            return -collectionElement.model.get("activityDateTime").substr(0,6);
-        },
-        //this takes the item returned by the groupByFunction
-        groupByRowFormatter: function(item) {
-            return moment(item, "YYYYMM").format("MMMM YYYY");
-        }
-      }
-    }];
-
-   var fetchOptions = {
-        resourceTitle: 'example-resource',
-        pageable: true                    // enables infinite scrolling (makes a pageable collection)
-    };
-
-  var SampleGridView = ADK.GridView.extend({
-    // use super to reference ADK.GridViews's methods
-    super: ADK.GridView.prototype,
-    initialize: function(options){
-      this.appletOptions = {
-        columns: sampleColumns,
-        collection: ADK.PatientRecordService.fetchCollection(fetchOptions),
-        filterFields: ['name', 'description'],
-        filterDateRangeField: {
-          name: "observedDate",
-          label: "Date",
-          format: "YYYYMMDD"
-        },
-        onClickRow: this.sampleOnClickRowHandler
-      }
-
-      // calling ADK.GridView's initialize method
-      this._super.initialize.apply(this, arguments);
-    },
-    // event handler for row click. Opens a modal with the detailed view
-    sampleOnClickRowHandler : function(model, event) {
-      var view = new ModalView({model: model});
-      var modalOptions = {
-        title: 'Details'
-      }
-      ADK.showModal(view, modalOptions);
-    }
-  });
-
-  var appletConfig = {
-    id: 'sampleGridApplet',
-    viewTypes: [{
-      type: 'grid',
-      view: SampleGridView,
-      chromeEnabled: true
-    }],
-    defaultViewType: 'grid'
-  };
-
-  return appletConfig;
-});
-
-```
-
-### PillsGistView ###
-ADK.AppletViews.PillsGistView
-
-![PillsGistView](assets/pillsGistView.png "PillsGistView Example")
-
-PillsGistView is a simple gist view that displays only the amount of data required to differentiate between other entries (ie. An allergies applet only displaying the name of an allergy per pill) in a pill shaped button/container.
-
-Below are the addiontial **appletOptions** available/required with PillsGistView:
-
-| Required     | Option               | Type   |Description                                                                                                                               |
-|--------------|----------------------|--------|------------------------------------------------------------------------------------------------------------------------------------------|
-|<i class="fa fa-check-circle center"></i> | **gistModel**        | array  | array of objects with attributes id and field (ie. [{id: 'name', field: 'summary'}]).|
-|              | **collectionParser** | method | returns a manipulated/parsed collection |
-
-The following is a sample implementation of a PillsGistView sample applet.
-
-```JavaScript
-define([
-  'main/ADK',
-  'underscore'
-], function (ADK, _) {
-
-    var fetchOptions = {
-        resourceTitle: 'example-resource'
-    };
-
-    var samplePillsGistView = ADK.AppletViews.PillsGistView.extend({
-        ._super:  ADK.AppletViews.PillsGistView.prototype,
-        initialize: function(options) {
-            var self = this;
-            this.appletOptions = {
-                filterFields: ["name"],
-                filterDateRangeField: {
-                  name: "dob",
-                  label: "Date of Birth",
-                  format: "YYYYMMDD"
-                },
-                collectionParser: self.transformCollection,
-                gistModel: self.gistModel,
-                collection: ADK.PatientRecordService.fetchCollection(fetchOptions)
-            };
-            this._super.initialize.apply(this, arguments);
-        },
-        transformCollection: function(collection) {
-            return collection;
-        },
-        gistModel: [{
-              id: 'name',
-              field: 'name'
-          }]
-        }
-    });
-    var appletConfig = {
-        id: 'samplePillsGistApplet',
-        viewTypes: [{
-          type: 'gist',
-          view: samplePillsGistView
-        }],
-        defaultViewType: 'gist'
-  };
-
-  return appletConfig;
-});
-
-```
-
-### InterventionsGistView ###
-ADK.AppletViews.InterventionsGistView
-
-![InterventionsGistView](assets/interventionsGistView.png "InterventionsGistView Example")
-
-Below are the addiontial **appletOptions** available/required with InterventionsGistView:
-
-| Required     | Option               | Type   |Description                                                                                                                               |
-|--------------|----------------------|--------|------------------------------------------------------------------------------------------------------------------------------------------|
-|<i class="fa fa-check-circle center"></i>| **gistModel** | array  | array of objects with attributes id and field (ie. [{id: 'name', field: 'summary'}]). |
-|              | **collectionParser** | method | returns a manipulated/parsed collection |
-|              | **gistHeaders**      | object | configruation object for column headers which will be displayed and sortable. |
-|              | **onClickRow**       | method | event handler for when user clicks on a row. Will default to opening a popover containing most recent events |
-
-The following is a sample implementation of a InterventionsGistView sample applet.
-
-```JavaScript
-define([
-  'main/ADK',
-  'underscore'
-], function onResolveDependencies(ADK, _) {
-
-    var fetchOptions = {
-        resourceTitle: 'example-resource'
-    };
-
-    var sampleInterventionsGistView = ADK.AppletViews.InterventionsGistView.extend({
-        ._super:  ADK.AppletViews.InterventionsGistView.prototype,
-        initialize: function(options) {
-            var self = this;
-            this.appletOptions = {
-                filterFields: ["name"],
-                filterDateRangeField: {
-                  name: "dob",
-                  label: "Date of Birth",
-                  format: "YYYYMMDD"
-                },
-                gistHeaders: {
-                  name: {
-                    title: 'Name',
-                    sortable: true,
-                    sortType: 'alphabetical'
-                  },
-                  description: {
-                    title: 'Description',
-                    sortable: false
-                  },
-                  graphic: {
-                      title: '',
-                      sortable: true,
-                      sortType: 'alphabetical'
-                  },
-                  age: {
-                      title: 'Age',
-                      sortable: true,
-                      sortType: 'date'
-                  },
-                  count: {
-                      title: 'Refills',
-                      sortable: true,
-                      sortType: 'numerical'
-                  }
-                },
-                collectionParser: self.transformCollection,
-                gistModel: self.gistModel,
-                collection: ADK.PatientRecordService.fetchCollection(fetchOptions)
-            };
-            this._super.initialize.apply(this, arguments);
-        },
-        transformCollection: function(collection) {
-            return collection;
-        },
-        gistModel: [{
-              id: 'name',
-              field: 'name'
-          }]
-        }
-    });
-    var appletConfig = {
-        id: 'sampleInterventionsGistApplet',
-        viewTypes: [{
-          type: 'gist',
-          view: sampleInterventionsGistView
-        }],
-        defaultViewType: 'gist'
-  };
-
-  return appletConfig;
-});
-
-```
-
-### EventsGistView ###
-ADK.AppletViews.EventsGistView
-
-![EventGistView](assets/eventGistView.png "EventGistView Example")
-
-The EventsGistView viewType is a more complicated gist featuring clumping of recurring data points (ie. if a patient gets a flu shot every year). Another feature of this gist is an in-line graph that displays ocurrences over time, useful for the user to determine quickly how many and how recently these events occur. This gist view also displays events in a column/row structure with built in column sorting.
-
-Below are the addiontial **appletOptions** available/required with EventsGistView:
-
-| Required     | Option               | Type   |Description                                                                                                                               |
-|--------------|----------------------|--------|------------------------------------------------------------------------------------------------------------------------------------------|
-|<i class="fa fa-check-circle center"></i>| **gistModel** | array  | array of objects with attributes id and field (ie. [{id: 'name', field: 'summary'}]). |
-|              | **collectionParser** | method | returns a manipulated/parsed collection |
-|              | **gistHeaders**      | object | configruation object for column headers which will be displayed and sortable. |
-|              | **onClickRow**       | method | event handler for when user clicks on a row. Will default to opening a popover containing most recent events |
-
-The following is a sample implementation of a EventsGistView sample applet.
-
-```JavaScript
-define([
-  'main/ADK',
-  'underscore'
-], function (ADK, _) {
-
-    var fetchOptions = {
-        resourceTitle: 'example-resource'
-    };
-
-    var sampleEventsGistView = ADK.AppletViews.EventsGistView.extend({
-        ._super:  ADK.AppletViews.EventsGistView.prototype,
-        initialize: function(options) {
-            var self = this;
-            this.appletOptions = {
-                filterFields: ["name"],
-                filterDateRangeField: {
-                  name: "dob",
-                  label: "Date of Birth",
-                  format: "YYYYMMDD"
-                },
-                gistHeaders: {
-                  name: {
-                    title: 'Name',
-                    sortable: true,
-                    sortType: 'alphabetical',
-                    key: 'groupName'
-                  },
-                  acuityName: {
-                    title: 'Acuity',
-                    sortable: true,
-                    sortType: 'alphabetical',
-                    key: 'acuityName'
-                  },
-                  graph: {
-                    title: '',
-                    sortable: false,
-                  },
-                  itemsInGraphCount: {
-                    title: 'Hx Occurrence',
-                    sortable: true,
-                    sortType: 'numeric',
-                    key: 'encounterCount'
-                  },
-                  age: {
-                    title: 'Age',
-                    sortable: true,
-                    sortType: 'date',
-                    key: 'timeSinceDateString'
-                  }
-                },
-                collectionParser: self.transformCollection,
-                gistModel: self.gistModel,
-                collection: ADK.PatientRecordService.fetchCollection(fetchOptions)
-            };
-            this._super.initialize.apply(this, arguments);
-        },
-        transformCollection: function(collection) {
-            return collection;
-        },
-        gistModel: [{
-              id: 'name',
-              field: 'name'
-          }]
-        }
-    });
-    var appletConfig = {
-        id: 'sampleEventsGistApplet',
-        viewTypes: [{
-          type: 'gist',
-          view: sampleEventsGistView
-        }],
-        defaultViewType: 'gist'
-  };
-
-  return appletConfig;
-});
-
-```
-
-### ObservationsGistView ###
-ADK.AppletViews.ObservationsGistView
-
-> **Note**: Not yet supported!
-
-## ADK Views ##
-
-ADK includes several build in, ready-to-use views that are accessible.  Each of the ADK views returns an object with an **create** method that returns a new instance of the view.  The following is a list of currently support views:
-
-### Error View ###
-```JavaScript
-ADK.Views.Error.create({
-  model: new Backbone.Model(resp)
-});
-```
-Returns an ItemView that displays an appropriate error message to the user.
-
-
-
-### Loading View ###
-
-The ADK Loading View provides a standardized view instance to show during applet loading
-
-#### ADK.Views.Loading.create() ####
-
-Returns an ItemView that displays a Loading spinner and message.
-
-The following is an example of how to use ADK's Loading View.
-
-```JavaScript
-initialize: function(options) {
-...
-  this.listenTo(collection, 'sync', this.onSync);
-  this.loadingView = ADK.Views.Loading.create();
-...
-},
-onRender: function() {
-...
-  this.appletRegion.show(this.loadingView);
-...
-},
-onSync: function() {
-...
-  this.appletRegion.show(this.appletView);
-...
-}
-```
-
-### Sub Tray Button View ###
-(_Built to be consumed by a registered sub-tray component in a workflow_)
-
-The basic goal of the Sub Tray Button View is to provide a button view that contains the exact template utilized by the ADK.UI.SubTray view without actually utilizing a Sub Tray view (with a flyout). This will allow an instance of the Sub Tray Button View to reside in the same space as a Sub Tray within a workflow and have the buttons look alike. This view also allows for configurability of both the click event and label. See options below.
-
-| Required                          | Option        | Type               | Description |
-|:---------------------------------:|---------------|--------------------|-------------|
-|<i class="fa fa-check-circle"></i> | **label**     | string             | text shown on the button. Defaults to "Button". |
-|<i class="fa fa-check-circle"></i> | **onClick**   | function           | called on click of the button. The context of `this` is the button view and the click event is available as the first argument.<br />Defaults to `function(event) {return true;}` |
-
-Example Usage:
-```JavaScript
-var ButtonInSubTray = ADK.Views.SubTrayButton.extend({
-    options: {
-        onClick: function(event) {
-            alert('a non-subTray button was clicked!');
-        },
-        label: 'My Test Button'
-    }
-});
-```
-
-### Tray Action Summary List View ###
-(_Built to be consumed by a patient writeback tray_)
-
-The basic goal of the tray action summary list view is to abstract out the layout and logic of retrieving the appropriate "[_application component items_](ui-library/application-component-registration.md#Application-Component-Registration-Registering-Items)" registered to a tray and displaying them in a dropdown list / action item format.  It also sets up the region in which the list view of the grouped items can be displayed.
-
-| Required                          | Option            | Type                     | Description |
-|:---------------------------------:|-------------------|--------------------------|-------------|
-|<i class="fa fa-check-circle"></i> | **key**           | string                   | corresponds to the key provided when defining an application component item |
-|<i class="fa fa-check-circle"></i> | **headerLabel**   | string                   | used to display the appropriate title in the header region of the tray container |
-|<i class="fa fa-check-circle">*</i>| **dropdownLabel** | string                   | the text a user will see on the dropdown button if there are multiple application component items registered to that specific tray |
-|                                   | **listView**      | Backbone View Definition | a Backbone / Marionette View Definition that will be shown below the list of actionable items |
-|                         | **helpMapping**| string   | String that corresponds to help mappings found in helpMappings.js -- is used to generate a url. <br />**Note:** defining either this or `helpUrl`, a help button will be shown in the header, though it must be found in helpMappings.js. |
-|                         | **helpUrl**| string   | String to be used as target on click of help button in header. <br />**Note:** defining either this or `helpMapping`, a help button will be shown in the header. |
-
-The diagram below helps depict where the options are being used inside the view's ui.
-
-![TrayActionSummaryListDiagram](assets/TrayActionSummaryList.png "Tray Action Summary List View description of where the view options are used.")
-
-```JavaScript
-ADK.Views.TrayActionSummaryList.extend({
-  options: {
-    key: "TRAY_KEY", // unique identifier of tray
-    headerLabel: "TRAY_HEADER_LABEL",
-    dropdownLabel: "DROPDOWN_MENU_LABEL"
-    listView: ADK.Views.TraySummaryList.extend(...), // see Tray Summary List View documentation
-    helpMapping: 'EXAMPLE_TRAY'
-  }
-})
-```
-
-::: definition
-**Note**: When [registering an application component items](ui-library/application-component-registration.md#Application-Component-Registration-Registering-Items) to be used in a Tray Action Summary List View an extra option is required in order for the click listener on the item to be set up correctly.  Below is an example of including the extra `onClick` option in your registration object.
-  ```JavaScript
-  // the following would be placed inside an applet
-  ADK.Messaging.trigger('register:component:item', {
-      type: "tray",
-      key: 'TRAY_KEY',
-      label: 'ITEM_LABEL',
-      onClick: function(){
-          // this is where the applet's workflow would be triggered to show in the tray
-      },
-      shouldShow: function() {
-          return true;
-      }
-  });
-  ```
-:::
-
-### Tray Summary List View ###
-(_Built to be consumed by a patient writeback tray_)
-
-The basic goal of the tray summary list view is to display a collection of grouped models (a.k.a. collection of collections).  The following is an example / default format for the collection tied to this view:
-
-```JavaScript
-var exampleCollection = new Backbone.Collection([{
-    id: 'SAMPLE_ID',
-    name: 'SAMPLE_NAME',
-    items: new Backbone.Collection([{
-        id: 'SAMPLE_ITEM_ID',
-        label: 'SAMPLE_ITEM_LABEL',
-        status: 'SAMPLE_ITEM_STATUS',
-        dateTime: 'SAMPLE_ITEM_DATE_AND_TIME'
-        nodes: 'SAMPLE_ITEM_NODES'
-      },
-      //...
-    ])
-  },
-  //...
-]);
-```
-
-If the model attribute's are different than the ones shown above, an attributeMapping object is provided as part of the options defined on the view.  Below is a table of all the configurable options on the summary list view.
-
-| Required                          | Option              | Type   | Description |
-|:---------------------------------:|---------------------|--------|-------------|
-|<i class="fa fa-check-circle"></i> | **label**           | string | string used for text in empty views (ie. "No ITEMS", "No Group1 ITEMS") |
-|<i class="fa fa-check-circle"></i> | **onClick**         | function | called when item in the list is clicked.  Usually onClick method whould take action to show pre-populated form in tray with the data from the selected item.  |
-|                                   | **itemTemplate**    | string or Handlebars template | used as the template of the individual rows. The row's model is available in this template, so any of its attributes are accessible using Handlebars (i.e. `{{myAttribute}}`). Simple logic can be used here, but if the template should differ substantially between two states, `getItemTemplate` should be used.<br />**Note:** will be overwritten if `getItemTemplate` is defined and will itself overwrite the default template.|
-|                                   | **getItemTemplate**  | function | used as the individual rows' _getTemplate_ function, which determines the template to use. This should be used instead of `itemTemplate` when the templates between two states of a row differ substantially.<br />**Note:** will overwrite `itemTemplate` as well as the default template.|
-|                                   | **emptyViewTemplate**   | string or Handlebars template | used as the template of the empty view that shows when there are no items within a group. By default, this is in the format of "This patient currently has no [label]." (where label is specified by the `label` option) |
-|                                   | **attributeMapping**| object | Ensures for flexible naming of the model attributes<br />**Options:** `groupLabel`, `groupId`, `groupItems`, `itemUniqueId`, `itemLabel`, `itemStatus`, `itemDateTime`, and `nodes`<br /> **Example:** `attributeMapping: {groupID: "groupId", groupLabel: "groupLabel", groupItems: "groupItems", itemUniqueId: "itemId", itemLabel: "itemLabelText", itemStatus: "statusOfItem", itemDateTime: "itemDateTimeString", nodes: "addenda"}`|
-
-```JavaScript
-ADK.Views.TraySummaryList.extend({
-  initialize: function() {
-    // place where collection can be created
-  },
-  options: {
-    label: "ITEMS",
-    onClick: function(model) {
-      //...
-    },
-    attributeMapping: {
-      groupID: 'groupId',
-      groupLabel: 'groupLabel',
-      groupItems: 'groupItems',
-      itemUniqueId: 'itemId',
-      itemLabel: 'itemLabelText',
-      itemStatus: 'statusOfItem',
-      itemDateTime: 'itemDateTimeString',
-      nodes: 'addenda"
-    }
-  }
-})
-```
-The diagram below helps depict where the attributes are being used inside the view's ui.
-
-![TraySummaryListDiagram](assets/TraySummaryList.png "Tray Summary List View description of where the view options are used.")
-
-## Behaviors ##
-
-Marionette provides a mechanism to define a centralized pool of reusable behaviors.  Behaviors sit on top of a view, but can access elements or components within a view.  It is important to maintain an event-observer pattern to ensure proper abstraction when developing a behavior.
-
-Behaviors live in the ADK, and each behavior needs to be included in ```behavior.js``` in order to be available in the behavior pool.
-```
-▼ main
-  ▼ components
-    ▼ behaviors
-```
-
-All behaviors defined in this manner are globally accessible from any view.  The view will lookup the behavior from the ```Backbone.Marionette.Behaviors.behaviorsLookup``` method defined in ```behaviors.js```.
-
-Nothing needs to be required or included in the file which owns the view.  The only thing needed to add a behavior from the pool to any view within the application is to include it in the behaviors attribute in the view's definition.  Behaviors can be nested and multiple behaviors can be specified in a view.
-
-```
-var config = {};
-var view = Backbone.Marionette.ItemView.extend({
-  behaviors: {
-    Tooltip: config,
-    Popover: {}
-  }
-});
-```
-
-### Tooltip ###
-
-The ```Tooltip``` behavior initializes the tooltip when a view is rendered, ensures that the tooltip is destroyed if it's shown when a view is destroyed, and will pull the necessary configuration from the DOM element or a configuration can be specified in the behavior's options.  Views that use Bootstrap tooltips need to use the ```Tooltip``` behavior to ensure the tooltip display container is not left attached to the body if the view is destroyed while the tooltip is still open.
-
-```
-var view = Backbone.Marionette.ItemView.extend({
-  template: Handlebars.compile(['<div tooltip-data-key="Refresh">',
-                               '<button>Refresh View</button>',
-                               '</div>'].join()),
-  model: resourceModel,
-  modelEvents: {
-    'sync': 'render'
-  },
-  events: {
-    'click button': 'refreshAction'
-  },
-  refreshAction: function(event) {
-    this.model.fetch();
-  },
-  behaviors: {
-    //see Bootstrap documentation for options
-    Tooltip: config || {}
-  }
-
-});
-
-```
-
-In the above example, the ```tooltip-data-key``` will be cross referenced with ```_assets/js/tooltipMappings.js``` in the ADK to produce the tooltip contents.  If no contents are found, the default tooltip configuration options will be used, and if ```data-original-title``` or ```title``` cannot be found, then it will set the tooltip contents as the attribute value, in this case, ```Refresh```.  Note that any Bootstrap configuration can be passed in as the behavior options, above shown as ```config```.
-
-Since the attributes are read from the HTML elements in most cases, help tooltips will continue to work as expected so long as this behavior is defined on views which contain help tooltips, and mapping standards are followed.  Note that help tooltips are looked up against ```_assets/js/helpMappings.js```.
-
-
-### Popover ###
-
-Bootstrap popovers are enhanced from tooltips, so the same possible problem can apply, in that the popover can be orphaned if the control element is lost, which happens when a view is destroyed while the popover is opened.  The popover behavior doesn't default any configuration at this time, so it would be advisable to pass in any configuration options necessary into the behavior options.
-
-```
-var view = Backbone.Marionette.ItemView.extend({
-  template: Handlebars.compile('<div data-toggle="popovers">Quicklook</div>'),
-  modelEvents: {
-    'sync': 'render'
-  },
-  events: {
-    'click button': 'refreshAction'
-  },
-  refreshAction: function(event) {
-    this.model.fetch();
-  },
-  behaviors: {
-    //see Bootstrap documentation for options
-    Popover: {
-      title: function() {
-        return this.getTitle();
-      },
-      trigger: 'click',
-      html: 'true'
-    }
-  },
-  getTitle: function() {
-    return '<div>Popover Contents</div>';
-  }
-});
-```
-
-### FlexContainer ###
-
-The FlexContainer behavior provides an easy mechanism for applying flexbox styled layouts. An example usage would be to have one or more regions be fixed in place with one or more regions made scrollable. The FlexContainer behavior can only apply flexbox styles to a container and its direct children.
-
-```JavaScript
-// this example makes .region2 a scrollable region with the other
-// regions remaining fixed. Note: the regions must be siblings of each other
-var View = Backbone.Marionette.LayoutView.extend({
-  template: Handlebars.compile([
-    '<div class="region1"></div>', // will receive flex-width: none
-    '<div data-flex-width="1" class="region2 auto-overflow-y"></div>',
-    '<div class="region3"></div>'  // will receive flex-width: none
-  ].join('\n')),
-  regions: {
-    Region1: '.region1',
-    Region2: '.region2',
-    Region3: '.region3'
-  },
-  behaviors: {
-    FlexContainer: {
-      // container option: optional (defaults to this.$el)
-      container: '.region1', // takes string selector to point to element in this.$el
-      // OR array, which is used to recursively add flex to each valid container in array
-      container: [
-        true, // true indicates to apply flex to this.$el (uses rest of config)
-        '.region2', // string selector points to element in this.$el (uses rest of config)
-        { // OR object with container -- applied to specified container with new options only
-          container: '.region3',
-          direction: 'row',
-          justifyContent: 'center',
-          alignItems: 'baseline'
-        }
-      ],
-      direction: 'column', // or other flex-direction (row row-reverse column-reverse)
-      justifyContent: 'flex-start' // or other justify-content (flex-end, center, space-between, space-around),
-      alignItems: 'flex-start' // or other align-items (flex-end, center, baseline, stretch)
-    }
-  }
-});
-```
-
-::: side-note
-**Note on `container` option:** the target container by default is `this.$el`, which means `this.$el` will receive `display: flex` and its direct children receive a flex-width of none unless specified with `data-flex-width="1"` (or other number, on increments of 0.5). If `container` is defined, the targeted element will receive `display: flex` and its direct children will receive the appropriate flex-width.
-
-Acceptable formats of `container`:
-- string: should be valid css/jquery selector that will get used to look up the correct element in this.$el
-- array: indicates multiple levels of flexbox properties within the view.
-  - `true`: indicates to apply flexbox to `this.$el`. Uses rest of config options
-  - string: indicates to look up the specified selector in this.$el. Uses rest of config options
-  - object: indicates that a new configuration is to be used. Must contain its own `container` option with string selector defined. In practice, this can be used to effectively apply desired properties in multiple containers
-:::
-
-### HelpLink ###
-
-The HelpLink behavior provides an easy mechanism for injecting help buttons into any view. A valid help mapping or url MUST be defined, otherwise the button will not appear. By default, the button is appended to the end of the view's template. To overwrite this, a container option can be defined. Additional options such as icon and color can be configured through the `buttonOptions` option. See below for example.
-
-```JavaScript
-var View = Backbone.Marionette.ItemView.extend({
-  template: Handlebars.compile([
-    '<div class="view-content1"></div>',
-    '<div class="help-button-container"></div>',
-    '<div class="view-content2"></div>'
-  ].join('\n'))
-  behaviors: {
-    HelpLink: {
-      mapping: 'example_mapping', // must exist in helpMappings.js
-      // OR url -- in practice, is used when url is determined from mapping beforehand
-      url: '/documentation/', // would link to sdk docs. Subject to security content policies
-      container: '.help-button-container', // valid css/jquery selector in this.$el
-      buttonOptions: {
-        icon: 'fa-question-circle', // default 'fa-question' (any valid font-awesome class)
-        colorClass: 'bgc-primary-dark', // 'bgc-<color>' -- primary-dark, primary-light, pure-white. Describes color of background
-        paddingClass: 'all-padding-no', // if default button padding is messing up styles
-        fontSize: 15 // or "15" (or any whole integer)
-      }
-    }
-  }
-});
-
-// the mapping and url can be updated at any time with the following events triggered on the view's $el
-var view = new View();
-view.$el.trigger('update:help:mapping', 'new_example_mapping');
-view.$el.trigger('update:help:url', '/documentation/#/adk/ui-library/components');
-view.$el.trigger('update:help:button:options', { colorClass: 'bgc-primary-light' });
-```
-
-::: showcode Try it out in the console:
-```JavaScript
-// paste into console on application page:
-// Note: remove mapping option... Since the mapping does not exist,
-// the button will not be displayed.
-// =======================
-// can be any view type
-var MyView = Backbone.Marionette.ItemView.extend({
-  behaviors: {
-    HelpLink: {
-      // container is optional, link will be appended to end of view
-      // if not specified
-      container: '.help-icon-container', // restricted to be within the view
-      mapping: 'example_view', // PREFERRED! corresponds to helpMappings.js -- (omit this line)
-      // also supports url, though content policies restrict outside links
-      url: '/documentation/' // DISCOURAGED! would take you to SDK docs
-      // Note: the help link will not be shown if neither mapping or url
-      // are defined. Also, if mapping is defined, it will only be shown if
-      // it is found in helpMappings.js
-    }
-  },
-  template: Handlebars.compile('<div class="help-icon-container"></div>')
-});
-
-// The mapping/url (and therefore whether the link is shown or not)
-// can be changed at any time using DOM events hooked up to the views el
-// see below for example. This can be tried in the console of a locally deployed
-// app, though the line with mapping option above should be removed for this
-// to work (also, don't trigger update of mapping, only url)
-//===================
-var myView = new MyView();
-var MyExampleLayoutView = Backbone.Marionette.LayoutView.extend({
-// simply an example view, normally would be shown in a normal way
-  el: 'body', // please, NEVER DO THIS, just an example
-  template: Handlebars.compile('<div class="my-region"></div>'),
-  regions: {
-    MyRegion: '.my-region'
-  },
-  onRender: function() {
-    this.showChildView('MyRegion', myView)
-  }
-});
-var myExampleLayoutView = new MyExampleLayoutView();
-myExampleLayoutView.render();
-// Notice at this point, the href will be pointing to '/documentation/'
-```
-```JavaScript
-// update mapping -- won't work unless mapping exists (skip this line)
-myView.$el.trigger('update:help:mapping', 'new_example_mapping');
-// OR update url (do this one if trying in console)
-myView.$el.trigger('update:help:url', '/documentation/#/adk/using-adk#Behaviors-HelpLink');
-// Now notice the updated href and destination in popup
-```
-:::
 
 [adkSourceCode]: https://code.vistacore.us/scm/app/adk.git
 [ehmpuiSourceCode]: https://code.vistacore.us/scm/app/ehmp-ui.git
@@ -2879,7 +1926,6 @@ myView.$el.trigger('update:help:url', '/documentation/#/adk/using-adk#Behaviors-
 [underscoreFilterWebPage]: http://underscorejs.org/#filter
 [BackboneRadio]: https://github.com/marionettejs/backbone.radio
 [sass]: http://sass-lang.com/
-[AppletScreenConfig]: getting-started.md#How-to-build-screens-Applet-Screen-Config-Object
 [VXAPI]: vx-api/
 [RDK]: /rdk/index.md
 [ModelParse]: http://backbonejs.org/#Model-parse

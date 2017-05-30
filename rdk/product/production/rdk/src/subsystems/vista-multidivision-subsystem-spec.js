@@ -17,13 +17,13 @@ var app = {
                     'name': 'WASHINGTON'
                 }],
                 'environment': 'development',
-                'host': '10.2.2.102',
-                'localIP': '10.2.2.1',
+                'host': 'IP        ',
+                'localIP': 'IP      ',
                 'localAddress': 'localhost',
                 'port': 9210,
                 'production': false,
-                'accessCode': 'MDEHMP1234',
-                'verifyCode': 'EHMPMD4321$',
+                'accessCode': 'REDACTED',
+                'verifyCode': 'REDACTED',
                 'infoButtonOid': '1.3.6.1.4.1.3768',
                 'abbreviation': 'KDK'
             },
@@ -33,13 +33,13 @@ var app = {
                     'name': 'PANORAMA'
                 }],
                 'environment': 'development',
-                'host': '10.2.2.101',
-                'localIP': '10.2.2.1',
+                'host': 'IP        ',
+                'localIP': 'IP      ',
                 'localAddress': 'localhost',
                 'port': 9210,
                 'production': false,
-                'accessCode': 'ep1234',
-                'verifyCode': 'ep1234!!',
+                'accessCode': 'REDACTED',
+                'verifyCode': 'REDACTED',
                 'infoButtonOid': '1.3.6.1.4.1.3768',
                 'abbreviation': 'PAN'
             }

@@ -244,7 +244,7 @@ function createIntolerance(item) {
 
     fhirItem.resource = {};
     fhirItem.resource.resourceType = 'AllergyIntolerance';
-    fhirItem.resource.id = item.uid;
+    fhirItem.resource.id = fhirResource.fixId(item.uid);
     fhirItem.resource.text = {
         'status': 'generated',
         'div': '<div>' + _.escape(item.summary) + '</div>'

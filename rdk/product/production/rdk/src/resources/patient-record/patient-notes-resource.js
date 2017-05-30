@@ -381,7 +381,7 @@ function readVistaSignedNotes(req, callback) {
 
 function getDocumentsFromJds(req, queryConfig, callback) {
     var pid = req.body.pid || req.query.pid;
-    var index = 'docs-view';
+    var index = 'ehmp-documents';
     var jdsQuery = {};
     var filter = [];
 
@@ -847,7 +847,8 @@ function getLocationName(req, cb) {
     var vistaConfig = _.extend({}, req.app.config.vistaSites[req.interceptorResults.patientIdentifiers.site], {
         context: HMP_UI_CONTEXT,
         accessCode: req.session.user.accessCode,
-        verifyCode: req.session.user.verifyCode
+        verifyCode: req.session.user.verifyCode,
+        division: req.session.user.division
     });
 
     var parameters = [];

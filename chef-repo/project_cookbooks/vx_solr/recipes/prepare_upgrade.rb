@@ -10,7 +10,7 @@ service 'solr' do
 end.run_action(:stop)
 
 # account for different solr directory structure
-glob_solr = Dir.glob('/opt/solr/solr-*')
+glob_solr = Dir.glob('/opt/solr-*')
 if glob_solr.length > 1
   raise "More than one solr directory found, cannot proceed with upgrade!"
 elsif glob_solr.length == 1
@@ -19,7 +19,7 @@ elsif glob_solr.length == 1
   server_dir = if glob_solr.first =~ /solr-5/ then "server" else "example" end
   node.default[:vx_solr][:old_server_dir] = "#{node[:vx_solr][:old_dir]}/#{server_dir}"
 else
-  raise "A solr installation exists but /opt/solr/solr-*/ does not, cannot proceed with upgrade!"
+  raise "A solr installation exists but /opt/solr-*/ does not, cannot proceed with upgrade!"
 end
 
 mount "#{node[:vx_solr][:old_server_dir]}/logs" do
@@ -27,6 +27,7 @@ mount "#{node[:vx_solr][:old_server_dir]}/logs" do
   fstype "ecryptfs"
   action [:umount, :disable]
 end
+
 
 directory node[:vx_solr][:upgrade_dir] do
   owner  'root'
@@ -39,6 +40,3 @@ execute "store solr vpr data" do
  command "cp -R #{node[:vx_solr][:old_server_dir]}/solr #{node[:vx_solr][:upgrade_dir]}"
 end
 
-execute "store solr logs" do
- command "cp -R #{node[:vx_solr][:old_server_dir]}/logs #{node[:vx_solr][:upgrade_dir]}"
-end

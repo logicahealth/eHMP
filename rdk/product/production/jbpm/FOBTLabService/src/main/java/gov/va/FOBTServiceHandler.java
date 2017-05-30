@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.jboss.logging.Logger;
+import org.jboss.logging.MDC;
 import org.joda.time.DateTime;
 //import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.process.WorkItem;
@@ -34,6 +36,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import vistacore.jbpm.utils.logging.RequestMessageType;
+
 /**
  * This code will eventually be merged into EhmpServices.  There is a class in there called RdkResourceUtil
  * that this class will eventually be replaced with.  It is more generic and provides better error handling.
@@ -46,7 +50,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 	/** The lab result resource. */
 	protected static String labResultResource = "resource/fhir/patient/{pid}/diagnosticreport?domain=lab&name=OCCULT BLOOD&_sort:desc=date&_count=1";
 	protected static String authenticationResource = "resource/authentication/systems/internal";
-
+	private static final Logger LOGGER = Logger.getLogger(FOBTServiceHandler.class);
 	/** The lab result query string. */
 	protected static String queryString = "&_ack=true";
 	protected static String RDK_SESSION_COOKIE_ID = "rdk.sid";
@@ -64,7 +68,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 	}
 
 	protected static void setSessionId(String sid) {
-		FOBTLogging.debug("SessionId was set to " + sid);
+		LOGGER.debug("SessionId was set to " + sid);
 		sessionId = sid;
 	}
 
@@ -73,7 +77,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 	}
 
 	protected static void setJwt(String jwtToSet) {
-		FOBTLogging.debug("JWT was set to " + jwtToSet);
+		LOGGER.debug("JWT was set to " + jwtToSet);
 		jwt = jwtToSet;
 	}
 
@@ -95,7 +99,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 				Boolean success = false;
 
 				for (String cookie : cookies) {
-					// FOBTLogging.debug(cookie);
+					// LOGGER.debug(cookie);
 					if (cookie.contains(RDK_SESSION_COOKIE_ID)) {
 						String[] cookieCrumbles = cookie.split(";");
 						if (cookieCrumbles.length > 0) {
@@ -150,7 +154,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 	 * @return the RDK url string
 	 */
 	protected static String getRDKurl() {
-		FOBTLogging.debug("getRDKurl");
+		LOGGER.debug("getRDKurl");
 
 		String rdkResourceEndpoint = "";
 		Properties prop = new Properties();
@@ -171,20 +175,20 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 				propertiesPath = tempFile.getParentFile().getParent();
 				file = new FileInputStream(propertiesPath + "/rdkconfig.properties");
 			}
-			FOBTLogging.debug("RDK properties path: " + propertiesPath);
+			LOGGER.debug("RDK properties path: " + propertiesPath);
 			prop.load(file);
 			rdkResourceEndpoint = prop.getProperty("RDK-Protocol") + "://"
 					+ prop.getProperty("RDK-IP") + ":"
 					+ prop.getProperty("RDK-Port") + "/";
-			FOBTLogging.debug("RDK URL: " + rdkResourceEndpoint);
+			LOGGER.debug("RDK URL: " + rdkResourceEndpoint);
 		} catch (FileNotFoundException e) {
-			FOBTLogging.error("FOBTServiceHandler.getRDKurl: File was not found: " + e.getMessage());
+			LOGGER.error("FOBTServiceHandler.getRDKurl: File was not found: " + e.getMessage(), e);
 		} catch (IOException e) {
-			FOBTLogging.error("FOBTServiceHandler.getRDKurl: An unexpected condition has happened with IO: " + e.getMessage());
+			LOGGER.error("FOBTServiceHandler.getRDKurl: An unexpected condition has happened with IO: " + e.getMessage(), e);
 		} catch (FOBTException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			FOBTLogging.error("FOBTServiceHandler.getRDKurl: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("FOBTServiceHandler.getRDKurl: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 		
 		finally {
@@ -192,7 +196,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 				try {
 					file.close();
 				} catch (IOException e) {
-					FOBTLogging.info("FOBTServiceHandler.getRDKurl: Problem closing file handle: " + e.getMessage());
+					LOGGER.info("FOBTServiceHandler.getRDKurl: Problem closing file handle: " + e.getMessage(), e);
 				}
 			}
 		}
@@ -225,7 +229,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 	}
 
 	protected String getRdkResponse(String resourceUrl, boolean isRetry) throws FOBTException {
-		FOBTLogging.debug("getRdkResponse" + (isRetry ? " (retry): " : ": ") + resourceUrl);
+		LOGGER.debug("getRdkResponse" + (isRetry ? " (retry): " : ": ") + resourceUrl);
 
 		String response = new String();
 
@@ -245,12 +249,28 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 			HttpHeaders headers = new HttpHeaders();
 			headers.set("Cookie", rdkSessionCookieId.concat("=").concat(getSessionId()));
 			headers.set("Authorization", rdkJwtPrepend.concat(getJwt()));
+			if(MDC.get("requestId")!=null) {
+				headers.set("X-Request-ID", (String) MDC.get("requestId"));
+				headers.set("X-Session-ID", (String) MDC.get("sid"));
+			}
 			HttpEntity<String> request = new HttpEntity<String>(headers);
+			
+			//Log the Outgoing Request
+			LOGGER.info(RequestMessageType.OUTGOING_REQUEST + " " +  HttpMethod.GET  + " " + resourceUrl );
+						
 			result = getRestTemplate().exchange(resourceUrl, HttpMethod.GET, request, String.class);
 			resultStatus = result.getStatusCode();
+
 			if (resultStatus.is2xxSuccessful()) {
 				response = result.getBody();
-				FOBTLogging.debug(response);
+
+				//Log the Incoming Response
+				LOGGER.info(RequestMessageType.INCOMING_RESPONSE + " " + response );
+			}
+			else {
+				//Log the Incoming Response Error
+				LOGGER.info(RequestMessageType.INCOMING_RESPONSE +  " Response code: " +
+						resultStatus.value() + " - "+	resultStatus.getReasonPhrase());
 			}
 		} catch (HttpClientErrorException hce) {
 			resultStatus = hce.getStatusCode();
@@ -262,7 +282,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 				if (!isRetry) {
 					setSessionId(null);
 					setJwt(null);
-					FOBTLogging.debug("getRdkResponse received an Unauthorized status, going to establish a new session and invoke again");
+					LOGGER.debug("getRdkResponse received an Unauthorized status, going to establish a new session and invoke again");
 					return getRdkResponse(resourceUrl, true);
 				}
 			} else {
@@ -281,7 +301,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 	 * @return a string
 	 */
 	public String pollJDSResults(String pid, String orderId) {
-		FOBTLogging.debug("pollJDSResults");
+		LOGGER.debug("pollJDSResults");
 		String returnString = "No Lab Results";
 		
 		try {
@@ -320,7 +340,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 		} catch (FOBTException e) {
 			//Error was already logged
 		} catch (Exception e) {
-			FOBTLogging.error("FOBTServiceHandler.pollJDSResults: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("FOBTServiceHandler.pollJDSResults: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 
 		return returnString;
@@ -328,7 +348,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 	}
 
 	public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
-		FOBTLogging.debug("FOBTService.executeWorkItem");
+		LOGGER.debug("FOBTService.executeWorkItem");
 		try {
 			String pid = (String) workItem.getParameter("pid");
 			String orderId = (String) workItem.getParameter("orderId");
@@ -343,12 +363,12 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable
 			serviceResult.put("ServiceResponse", result);
 			manager.completeWorkItem(workItem.getId(), serviceResult);
 		} catch (Exception e) {
-			FOBTLogging.error("FOBTServiceHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("FOBTServiceHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 	}
 
 	public void abortWorkItem(WorkItem workItem, WorkItemManager manager) {
-		FOBTLogging.debug("FOBTService.abortWorkItem");
+		LOGGER.debug("FOBTService.abortWorkItem");
 	}
 
 	@Override

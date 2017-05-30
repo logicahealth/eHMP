@@ -8,6 +8,98 @@ Subsystems may be used within the RDK framework itself as well.
 
 Use subsystems to enable writing [DRY](http://en.wikipedia.org/wiki/Don%27t_repeat_yourself) code. In other words, use subsystems to provide functionality to resources or other parts of the RDK which may be useful in multiple places.
 
+## Available Subsystems
+ * `asu` - Authorization/Subscription Utility
+ * `jds` - JSON Data Store
+ * `jdsSync` - General Synchronization (connects to both JDS and VX-Sync)
+ * `pjds` - Persistent JDS
+ * `enterpriseOrderable`
+ * `favoriteOrderable`
+ * `orderset`
+ * `quickorder`
+ * `authorization` (pep) - Policy Enforcement Point
+ * `mvi` - Master Veteran Index
+ * `patientrecord`
+ * `solr`
+ * `vistaReadOnly`
+ * `vxSync`
+
+Conditionally enabled subsystems:
+ * `email` - only enabled if configured
+
+Conditionally registered subsystems:
+ * `cds` - Clinical Decision Support
+ * `jbpm` - Java Business Process Model
+ * `pcmm` - Primary Care Management Model
+ * `vix` - Vista Imaging eXchange
+ * `vistaMultidivision`
+
+Unregistered subsystems:
+ * `beanstalk`
+ * `clinicalObjects`
+
+## Subsystem Configuration
+
+### Subsystems without configuration
+ * `asu`
+ * `authorization` (pep)
+ * `clinicalObjects`
+ * `quickorder` - uses `pjds`
+ * `orderset` - uses `pjds`
+ * `favoriteOrderable` - uses `pjds`
+ * `enterpriseOrderable` - uses `pjds`
+ * `vistaReadOnly`
+
+### Subsystem configuration detail
+Subsystems that use a request.js configuration object must have the `baseUrl` property set to the root URL of the server.
+
+ * `jds`
+    * `config.jdsServer` - request.js configuration object
+ * `jdsSync`
+    * `config.jdsServer` - request.js configuration object
+ * `solr`
+    * `config.solrServer` - request.js configuration object
+ * `patientrecord`
+    * `config.jdsServer` - request.js configuration object
+ * `mvi`
+    * `config.mvi` - request.js configuration object
+    * `config.mvi.search.path` - the root HTTP path to the MVI resource
+ * `vxSync`
+    * `config.vxSyncServer` - request.js configuration object
+ * `pjds`
+    * `config.generalPurposeJdsServer` - request.js configuration object
+ * `email`
+    * `config.emailTransport` - subsystem registered if defined
+    * `config.emailTransport` - nodemailer 1.x configuration object
+ * `vistaMultidivision`
+    * `config.enableMultidivisionProxyHealthcheck` - subsystem enabled if true
+    * `config.vistaSites` - array of VistA configuration objects
+ * `vix`
+    * `config.vix` - subsystem registered if defined
+    * `config.vix` - request.js configuration object
+ * `jbpm`
+    * `config.jbpm` - subsystem registered if defined
+    * `config.jbpm.baseUrl` - base URL to JBPM
+    * `config.jbpm.apiPath` - HTTP path to JBPM
+    * `config.jbpm.healthcheckEndpoint` - part of the path after apiPath to the JBPM healthcheck
+     * `config.jbpm.adminUser.username`
+     * `config.jbpm.adminUser.password`
+ * `pcmm`
+    * subsystem registered if `jbpm` is registered
+ * `cds`
+    * registered if any of these is defined:
+        * `config.cdsInvocationServer`
+        * `config.cdsMongoServer`
+    * `config.externalProtocol` - (incorrectly used - code needs updating)
+    * `config.cdsMongoServer.host`
+    * `config.cdsMongoServer.port`
+    * `config.cdsMongoServer.username`
+    * `config.cdsMongoServer.password`
+    * `config.cdsMongoServer.options` - formatted query string options
+    * `config.cdsMongoServer.rootCert` - path to root certificate
+    * `config.cdsInvocationServer.host`
+    * `config.cdsInvocationServer.port`
+
 ## Developing a Subsystem
 Subsystems are developed similarly to resources.
 
@@ -42,7 +134,7 @@ The subsystem configuration object is obtained by the resource server through an
 ### Register the subsystem
 Edit the `registerAppSubsystems` function in `app-factory.js`, following this example:
 ```JavaScript
-var fooSubsystem = require('../subsystems/foo/foo-subsystem.js');
+var fooSubsystem = require('../subsystems/foo/foo-subsystem');
 app.subsystems.register('foo', fooSubsystem);
 ```
 Where `foo` names the item of functionality that the subsystem exposes, like jds or solr.

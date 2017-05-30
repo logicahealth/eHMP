@@ -34,7 +34,7 @@ Then the user can retrieve patient data only by first breaking the glass
 
 # List of non-sensitive patients that been used to change to sensitive is: 9E7A;129, 9E7A;11
 
-# https://wiki.vistacore.us/display/VACORE/Manual+Verification+of+Sensitive+Status+Update
+# https://wiki.vistacore.us/display/DNS  E/Manual+Verification+of+Sensitive+Status+Update
 
 # Notes
 # There are two test scenarios. The first tests a patient with data on one VistA, while the second tests a patient with data # on multiple VistAs.
@@ -45,9 +45,9 @@ Then the user can retrieve patient data only by first breaking the glass
 
 # After running acceptance tests:
 
-# Sync the patient https://10.3.3.5/admin/sync/9E7A;1
-# Verify that https://10.3.3.5/vpr/9E7A;1 results in a 307 (Temporary Redirect) response.
-# Verify that https://10.3.3.5/vpr/9E7A;1?_ack=true results in a 200 (OK) response and that the JSON demographics data contains a field named "sensitive" with a value of true.
+# Sync the patient https://IP      /admin/sync/9E7A;1
+# Verify that https://IP      /vpr/9E7A;1 results in a 307 (Temporary Redirect) response.
+# Verify that https://IP      /vpr/9E7A;1?_ack=true results in a 200 (OK) response and that the JSON demographics data contains a field named "sensitive" with a value of true.
 # cd ~/Projects/vistacore/ehmp/infrastructure/vagrant/virtualbox/vista-exchange
 # vagrant ssh vista-panorama
 # sudo csession cache
@@ -59,7 +59,7 @@ Then the user can retrieve patient data only by first breaking the glass
 # h
 # exit
 # Wait at least 10 minutes.
-# Verify that https://10.3.3.5/vpr/9E7A;1 results in a 200 (OK) response and that the JSON demographics data contains a field named "sensitive" with a value of false.
+# Verify that https://IP      /vpr/9E7A;1 results in a 200 (OK) response and that the JSON demographics data contains a field named "sensitive" with a value of false.
 # vagrant ssh vista-panorama
 # sudo csession cache
 # ZNSPACE "VISTA"
@@ -70,16 +70,16 @@ Then the user can retrieve patient data only by first breaking the glass
 # h
 # exit
 # Wait at least 10 minutes.
-# Verify that https://10.3.3.5/vpr/9E7A;1 results in a 307 (Temporary Redirect) response.
-# Verify that https://10.3.3.5/vpr/9E7A;1?_ack=true results in a 200 (OK) response and that the JSON demographics data contains a field named "sensitive" with a value of true.
+# Verify that https://IP      /vpr/9E7A;1 results in a 307 (Temporary Redirect) response.
+# Verify that https://IP      /vpr/9E7A;1?_ack=true results in a 200 (OK) response and that the JSON demographics data contains a field named "sensitive" with a value of true.
 
 # Patient with data on multiple VistAs
 
 # After running acceptance tests:
 
-# Sync the patient https://10.3.3.5/admin/sync/5123456789V027402
-# Verify that https://10.3.3.5/vpr/5123456789V027402 results in a 307 (Temporary Redirect) response.
-# Verify that https://10.3.3.5/vpr/5123456789V027402?_ack=true results in a 200 (OK) response, that the JSON demographics data contains two records, that the first record has the fields "uid": "urn:va:patient:9E7A:18:18" and "sensitive": true, and that the second record has the fields "uid": "urn:va:patient:C877:18:18" and "sensitive": false.
+# Sync the patient https://IP      /admin/sync/5123456789V027402
+# Verify that https://IP      /vpr/5123456789V027402 results in a 307 (Temporary Redirect) response.
+# Verify that https://IP      /vpr/5123456789V027402?_ack=true results in a 200 (OK) response, that the JSON demographics data contains two records, that the first record has the fields "uid": "urn:va:patient:9E7A:18:18" and "sensitive": true, and that the second record has the fields "uid": "urn:va:patient:C877:18:18" and "sensitive": false.
 # cd ~/Projects/vistacore/ehmp/infrastructure/vagrant/virtualbox/vista-exchange
 # vagrant ssh vista-panorama
 # sudo csession cache
@@ -91,7 +91,7 @@ Then the user can retrieve patient data only by first breaking the glass
 # h
 # exit
 # Wait at least 10 minutes.
-# Verify that https://10.3.3.5/vpr/5123456789V027402 results in a 200 (OK) response, that the JSON demographics data contains two records, that the first record has the fields "uid": "urn:va:patient:9E7A:18:18" and "sensitive": false, and that the second record has the fields "uid": "urn:va:patient:C877:18:18" and "sensitive": false.
+# Verify that https://IP      /vpr/5123456789V027402 results in a 200 (OK) response, that the JSON demographics data contains two records, that the first record has the fields "uid": "urn:va:patient:9E7A:18:18" and "sensitive": false, and that the second record has the fields "uid": "urn:va:patient:C877:18:18" and "sensitive": false.
 # vagrant ssh vista-panorama
 # sudo csession cache
 # ZNSPACE "VISTA"
@@ -102,8 +102,8 @@ Then the user can retrieve patient data only by first breaking the glass
 # h
 # exit
 # Wait at least 10 minutes.
-# Verify that https://10.3.3.5/vpr/5123456789V027402 results in a 307 (Temporary Redirect) response.
-# Verify that https://10.3.3.5/vpr/5123456789V027402?_ack=true results in a 200 (OK) response, that the JSON demographics data contains two records, that the first record has the fields "uid": "urn:va:patient:9E7A:18:18" and "sensitive": true, and that the second record has the fields "uid": "urn:va:patient:C877:18:18" and "sensitive": false.
+# Verify that https://IP      /vpr/5123456789V027402 results in a 307 (Temporary Redirect) response.
+# Verify that https://IP      /vpr/5123456789V027402?_ack=true results in a 200 (OK) response, that the JSON demographics data contains two records, that the first record has the fields "uid": "urn:va:patient:9E7A:18:18" and "sensitive": true, and that the second record has the fields "uid": "urn:va:patient:C877:18:18" and "sensitive": false.
 
 # Starting with a non-sensitive patient
 
@@ -112,8 +112,8 @@ Then the user can retrieve patient data only by first breaking the glass
 # file within VistA, and the non-sensitive patients, by default, have no entry in that file (not an entry saying "non-sensitive"). 
 # To properly change a non-sensitive patient (for example, localPatientId=11) to sensitive:
 
-# Sync the patient https://10.3.3.5/admin/sync/9E7A;11
-# Verify that https://10.3.3.5/vpr/9E7A;11 results in a 200 (OK) 
+# Sync the patient https://IP      /admin/sync/9E7A;11
+# Verify that https://IP      /vpr/9E7A;11 results in a 200 (OK) 
 # cd ~/Projects/vistacore/ehmp/infrastructure/vagrant/virtualbox/vista-exchange
 # vagrant ssh vista-panorama
 # sudo csession cache
@@ -134,4 +134,4 @@ Then the user can retrieve patient data only by first breaking the glass
 # h
 # exit
 # Wait at least 10 minutes.
-# Verify that https://10.3.3.5/vpr/9E7A;11 results in a 307 (Temporary Redirect) response.
+# Verify that https://IP      /vpr/9E7A;11 results in a 307 (Temporary Redirect) response.

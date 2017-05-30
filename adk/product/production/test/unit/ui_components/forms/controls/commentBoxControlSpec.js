@@ -1,3 +1,6 @@
+/*jslint node: true, nomen: true, unparam: true */
+/*global jquery, $, _, define, Marionette, describe, it, expect, beforeEach, spyOn, afterEach */
+
 'use strict';
 define([
     'jquery',
@@ -6,7 +9,7 @@ define([
     'handlebars',
     'underscore',
     'api/Messaging',
-    'main/ui_components/components',
+    'main/UILibrary',
     'api/UIComponents',
     'jasminejquery'
 ], function($, Backbone, Marionette, Handlebars, _, Messaging, UI) {
@@ -144,7 +147,7 @@ define([
 
     describe('A commentBox control', function() {
         afterEach(function() {
-            testPage.remove();
+            testPage.destroy();
         });
 
         describe('basic', function() {
@@ -342,8 +345,8 @@ define([
                 $('body').append($testPage);
             });
             it('correctly applies the required option', function() {
-                expect($testPage.find('.commentCollection1 .comment-required')).toHaveText('Write at least one comment.');
-                expect($testPage.find('.commentCollection1 .comment-required input')).toHaveValue('0');
+                expect($testPage.find('.commentCollection1 .comment-box--comment-required')).toHaveText('Write at least one comment.');
+                expect($testPage.find('.commentCollection1 .comment-box--comment-required input')).toHaveValue('0');
             });
         });
 
@@ -510,11 +513,11 @@ define([
             });
             it("required", function() {
                 $testPage.find('.commentCollection1').trigger("control:required", true);
-                expect($testPage.find('.commentCollection1 .comment-required')).toHaveText('Write at least one comment.');
-                expect($testPage.find('.commentCollection1 .comment-required input')).toHaveValue('0');
+                expect($testPage.find('.commentCollection1 .comment-box--comment-required')).toHaveText('Write at least one comment.');
+                expect($testPage.find('.commentCollection1 .comment-box--comment-required input')).toHaveValue('0');
                 $testPage.find('.commentCollection1').trigger("control:required", false);
-                expect($testPage.find('.commentCollection1 .comment-required')).not.toExist();
-                expect($testPage.find('.commentCollection1 .comment-required input')).not.toExist();
+                expect($testPage.find('.commentCollection1 .comment-box--comment-required')).not.toExist();
+                expect($testPage.find('.commentCollection1 .comment-box--comment-required input')).not.toExist();
             });
         });
     });

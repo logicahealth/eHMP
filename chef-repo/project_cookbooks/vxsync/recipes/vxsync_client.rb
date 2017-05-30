@@ -36,7 +36,16 @@ execute "extract_vxsync for vxsync_client" do
 end
 
 vista_sites = find_multiple_nodes_by_role("vista-.*", node[:stack])
-jds = find_node_by_role("jds", node[:stack])
+
+if find_optional_nodes_by_criteria(node[:stack], "role:jds_app_server").empty?
+  raise "No JDS App Server has been found, yet you attempted to point to a jds_app_server" unless node[:vxsync][:client][:jds_app_server_ident].nil?
+  jds = find_node_by_role("jds", node[:stack])
+else
+  raise "JDS App Servers have been found in this environment, but a jds_app_server_ident was not set." if node[:vxsync][:client][:jds_app_server_ident].nil?
+  jds = find_optional_node_by_criteria(node[:stack], "role:jds_app_server AND jds_app_server_ident:#{node[:vxsync][:client][:jds_app_server_ident]}")
+  raise "JDS App Server #{node[:vxsync][:client][:jds_app_server_ident]} not found in stack." if jds.nil?
+end
+
 pjds = find_node_by_role("pjds", node[:stack], "jds")
 solr = find_node_by_role("solr", node[:stack], "mocks")
 jmeadows = find_node_by_role("jmeadows", node[:stack], "mocks")
@@ -57,6 +66,7 @@ template "#{node[:vxsync][:client][:home_dir]}/worker-config.json" do
     :hdr_enabled => node[:vxsync][:hdr_enabled],
     :jmeadows_enabled => node[:vxsync][:jmeadows_enabled],
     :vler_enabled => node[:vxsync][:vler_enabled],
+    :activity_filter_sites => node[:vxsync][:activity_filter_sites],
     :hdr_blacklist_sites => node[:vxsync][:hdr_blacklist_sites],
     :log_pattern => node[:vxsync][:client][:log_pattern],
     :beanstalk_port => node[:vxsync][:client][:beanstalk_processes][:jobrepo_client][:config][:port]
@@ -139,6 +149,7 @@ node[:vxsync][:client][:processes].each{ |name,process_block|
 template "/etc/init/vxsync_client.conf" do
   variables(
     :name => "vxsync_client",
+    :depends_on => "beanstalk_client",
     :level => 2345,
     :shutdown_script => "#{node[:vxsync][:client][:home_dir]}/scripts/shutdownVxSync.sh"
   )
@@ -175,6 +186,7 @@ node[:vxsync][:client][:beanstalk_processes].each{ |name, process_block|
 template "/etc/init/beanstalk_client.conf" do
   variables(
     :name => "beanstalk_client",
+    :dependency => "vxsync_client",
     :vxsync_application_home => node[:vxsync][:client][:home_dir],
     :beanstalk_dir => node[:vxsync][:client][:beanstalk_dir],
     :level => 2345

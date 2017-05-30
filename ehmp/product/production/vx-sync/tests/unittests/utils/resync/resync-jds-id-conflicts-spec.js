@@ -11,16 +11,16 @@ var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
 var config = {
     jds: {
         protocol: 'http',
-        host: '10.2.2.110',
-        port: 9080
+        host: 'REDACTED    ',
+        port: PORT
     },
     'vistaSites': {
         '9E7A': {
             'name': 'panorama',
-            'host': '10.2.2.101',
-            'port': 9210,
-            'accessCode': 'pu1234',
-            'verifyCode': 'pu1234!!',
+            'host': 'REDACTED    ',
+            'port': PORT,
+            'accessCode': 'REDACTED',
+            'verifyCode': 'REDACTED',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
@@ -28,10 +28,10 @@ var config = {
         },
         'C877': {
             'name': 'kodak',
-            'host': '10.2.2.102',
-            'port': 9210,
-            'accessCode': 'pu1234',
-            'verifyCode': 'pu1234!!',
+            'host': 'REDACTED    ',
+            'port': PORT,
+            'accessCode': 'REDACTED',
+            'verifyCode': 'REDACTED',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,

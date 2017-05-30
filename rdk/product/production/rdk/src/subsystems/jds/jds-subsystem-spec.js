@@ -36,7 +36,7 @@ describe('jds\'s', function() {
 
     describe('getPatientDomainData', function() {
         it('empty data from jds, returns empty results', function(done) {
-            expectHttpFetch('jdsServer', '/vpr/' + pid + '/index/docs-view', 200, {
+            expectHttpFetch('jdsServer', '/vpr/' + pid + '/index/ehmp-documents', 200, {
                 data: {
                     items: []
                 },
@@ -50,29 +50,22 @@ describe('jds\'s', function() {
 
             req = _.set(req, 'app.subsystems.vix', true);
 
-            var fetchStub = sinon.stub(vix.fetchBseToken, 'fetch', function(req, callback) {
-                return callback(null, 'some-token');
-            });
-
             var utilStub = sinon.stub(asuUtils, 'applyAsuRulesWithActionNames', function(req, requiredPermission, allPermissions, jdsResponse, callback) {
-                return callback(null, jdsResponse);
+                return callback(null, jdsResponse.data.items);
             });
 
-            var addStub = sinon.stub(vix, 'addImagesToDocument', function(req, responseBody, token, callback) {
+            var addStub = sinon.stub(vix, 'addImagesToDocument', function(req, responseBody, callback) {
                 return callback(null, [1, 2], 200);
             });
 
-            expectHttpFetch('jdsServer', '/vpr/' + pid + '/index/docs-view', 200, {
+            expectHttpFetch('jdsServer', '/vpr/' + pid + '/index/ehmp-documents', 200, {
                 data: {
-                    items: [{
-                        A: 'B'
-                    }]
+                    items: [{uid: 'B'}]
                 },
                 status: 200
             });
 
             jds.getPatientDomainData(req, pid, domain, query, vlerQuery, function(err, resp, status) {
-                expect(fetchStub.called).to.be.true();
                 expect(addStub.called).to.be.true();
                 expect(utilStub.called).to.be.true();
                 expectSuccess(done)(err, resp, status);
@@ -100,7 +93,7 @@ describe('jds\'s', function() {
         });
 
         it('no data from JDS', function(done) {
-            expectHttpFetch('jdsServer', '/vpr/' + pid + '/index/docs-view', 200);
+            expectHttpFetch('jdsServer', '/vpr/' + pid + '/index/ehmp-documents', 200);
             jds.getPatientDomainData(req, pid, domain, query, vlerQuery, expectError(done, 500));
         });
 
@@ -110,14 +103,17 @@ describe('jds\'s', function() {
                     totalItems: 3,
                     currentItemCount: 3,
                     items: [{
+                        uid: 'urn:123',
                         name: 'Parent',
                         orders: [{
                             childrenOrderUids: ['some:uid']
                         }]
                     }, {
-                        name: 'No orders'
+                        name: 'No orders',
+                        uid: 'urn:234'
                     }, {
                         name: 'Unrelated orders',
+                        uid: 'urn:345',
                         orders: [{
                             orderUid: 'some:order:uid'
                         }]
@@ -150,6 +146,17 @@ describe('jds\'s', function() {
 
     });
     describe('filterAsuDocuments', function() {
+        it('doesn\'t process a missing result', function (done) {
+            var testData = [null, {}, { data: {} }, { data: { items: [] } }];
+            _.each(testData, function(details) {
+                jds.filterAsuDocuments(req, details, function (err, response) {
+                    expect(err).to.eql(null);
+                    expect(response).to.be(details);
+                });
+            });
+            done();
+        });
+
         it('asu filters all records', function(done) {
             mockAsu = sinon.stub(asuUtils, 'applyAsuRulesWithActionNames', function(req, requiredPermission, allPermissions, details, callback) {
                 return callback(null, []);
@@ -171,7 +178,7 @@ describe('jds\'s', function() {
                 statusCode: 200
             };
 
-            jds._filterAsuDocuments(req, details, function(err, response) {
+            jds.filterAsuDocuments(req, details, function(err, response) {
                 expect(err).to.equal(error);
                 expect(response).to.eql(expectedResponse);
             }, error, response, details);
@@ -203,7 +210,7 @@ describe('jds\'s', function() {
                 statusCode: 200
             };
 
-            jds._filterAsuDocuments(req, details, function(err, response) {
+            jds.filterAsuDocuments(req, details, function(err, response) {
                 expect(err).to.equal(error);
                 expect(response).to.eql(expectedResponse);
             }, error, response, details);
@@ -289,7 +296,7 @@ describe('jds\'s', function() {
         var expected = {
             serverName: serverName,
             url: path,
-            method: 'GET',
+            method: 'POST',
             status: status || 200,
             response: JSON.stringify(response || {}),
             error: error
@@ -362,6 +369,9 @@ describe('fetchJdsAndFillPagination', function() {
     beforeEach(function() {
         req = {};
         jdsOptions = {};
+        req.logger = sinon.stub(bunyan.createLogger({
+            name: 'jds-subsystem-spec.js'
+        }));
     });
     it('only requests 1 page when no limit is requested', function() {
         function responseFilterer(req, responseBody, callback) {
@@ -374,19 +384,18 @@ describe('fetchJdsAndFillPagination', function() {
                 updated: '20140102',
                 totalItems: 2,
                 currentItemCount: 2,
-                items: [{
-                    id: 'a'
-                }, {
-                    id: 'b'
-                }]
+                items: [
+                    {uid: 'a'},
+                    {uid: 'b'}
+                ]
             }
         };
-        sinon.stub(rdk.utils.http, 'get', function(options, callback) {
+        sinon.stub(rdk.utils.http, 'post', function(options, callback) {
             return callback(null, {}, jdsResponse);
         });
         jds._fetchJdsAndFillPagination(req, jdsOptions, responseFilterer, function(err, filteredBody) {
             expect(filteredBody).to.eql(jdsResponse);
-            expect(rdk.utils.http.get.calledOnce).to.be.true();
+            expect(rdk.utils.http.post.calledOnce).to.be.true();
         });
     });
     it('stops requesting items when no more are available', function() {
@@ -405,15 +414,12 @@ describe('fetchJdsAndFillPagination', function() {
                 startIndex: 0,
                 pageIndex: 0,
                 totalPages: 2,
-                items: [{
-                    id: 'a'
-                }, {
-                    id: 'b'
-                }, {
-                    id: 'c'
-                }, {
-                    id: 'd'
-                }]
+                items: [
+                    {uid: 'a'},
+                    {uid: 'b'},
+                    {uid: 'c'},
+                    {uid: 'd'}
+                ]
             }
         };
         var jdsResponse2 = {
@@ -425,25 +431,22 @@ describe('fetchJdsAndFillPagination', function() {
                 startIndex: 4,
                 pageIndex: 1,
                 totalPages: 2,
-                items: [{
-                    id: 'e'
-                }, {
-                    id: 'f'
-                }, {
-                    id: 'g'
-                }, {
-                    id: 'h'
-                }]
+                items: [
+                    {uid: 'e'},
+                    {uid: 'f'},
+                    {uid: 'g'},
+                    {uid: 'h'}
+                ]
             }
         };
         var jdsResponses = [jdsResponse1, jdsResponse2];
         var jdsResponseCounter = -1;
-        sinon.stub(rdk.utils.http, 'get', function(options, callback) {
+        sinon.stub(rdk.utils.http, 'post', function(options, callback) {
             jdsResponseCounter++;
             return callback(null, {}, jdsResponses[jdsResponseCounter]);
         });
 
-        _.set(jdsOptions, 'qs.limit', 4);
+        _.set(jdsOptions, 'body.limit', 4);
 
         var expectedFilteredBody = {
             data: {
@@ -455,16 +458,15 @@ describe('fetchJdsAndFillPagination', function() {
                 nextStartIndex: 8,
                 pageIndex: 0,
                 totalPages: 2,
-                items: [{
-                    id: 'a'
-                }, {
-                    id: 'e'
-                }]
+                items: [
+                    {uid: 'a'},
+                    {uid: 'e'}
+                ]
             }
         };
         jds._fetchJdsAndFillPagination(req, jdsOptions, responseFilterer, function(err, filteredBody) {
             expect(filteredBody).to.eql(expectedFilteredBody);
-            expect(rdk.utils.http.get.calledTwice).to.be.true();
+            expect(rdk.utils.http.post.calledTwice).to.be.true();
         });
     });
     it('stops requesting items when enough are fetched', function() {
@@ -483,15 +485,12 @@ describe('fetchJdsAndFillPagination', function() {
                 startIndex: 4,
                 pageIndex: 1,
                 totalPages: 4,
-                items: [{
-                    id: 'a'
-                }, {
-                    id: 'b'
-                }, {
-                    id: 'c'
-                }, {
-                    id: 'd'
-                }]
+                items: [
+                    {uid: 'a'},
+                    {uid: 'b'},
+                    {uid: 'c'},
+                    {uid: 'd'}
+                ]
             }
         };
         var jdsResponse2 = {
@@ -503,15 +502,12 @@ describe('fetchJdsAndFillPagination', function() {
                 startIndex: 8,
                 pageIndex: 2,
                 totalPages: 4,
-                items: [{
-                    id: 'e'
-                }, {
-                    id: 'f'
-                }, {
-                    id: 'g'
-                }, {
-                    id: 'h'
-                }]
+                items: [
+                    {uid: 'e'},
+                    {uid: 'f'},
+                    {uid: 'g'},
+                    {uid: 'h'}
+                ]
             }
         };
         var jdsResponse3 = {
@@ -523,24 +519,22 @@ describe('fetchJdsAndFillPagination', function() {
                 startIndex: 12,
                 pageIndex: 3,
                 totalPages: 4,
-                items: [{
-                    id: 'i'
-                }, {
-                    id: 'j'
-                }, {
-                    id: 'k'
-                }]
+                items: [
+                    {uid: 'i'},
+                    {uid: 'j'},
+                    {uid: 'k'}
+                ]
             }
         };
         var jdsResponses = [jdsResponse1, jdsResponse2, jdsResponse3];
         var jdsResponseCounter = -1;
-        sinon.stub(rdk.utils.http, 'get', function(options, callback) {
+        sinon.stub(rdk.utils.http, 'post', function(options, callback) {
             jdsResponseCounter++;
             return callback(null, {}, jdsResponses[jdsResponseCounter]);
         });
 
-        _.set(jdsOptions, 'qs.limit', 4);
-        _.set(jdsOptions, 'qs.start', 4);
+        _.set(jdsOptions, 'body.limit', 4);
+        _.set(jdsOptions, 'body.start', 4);
 
         var expectedFilteredBody = {
             data: {
@@ -549,23 +543,20 @@ describe('fetchJdsAndFillPagination', function() {
                 currentItemCount: 4,
                 itemsPerPage: 4,
                 startIndex: 4,
-                nextStartIndex: 12,
+                nextStartIndex: 10,
                 pageIndex: 1,
                 totalPages: 4,
-                items: [{
-                    id: 'a'
-                }, {
-                    id: 'b'
-                }, {
-                    id: 'e'
-                }, {
-                    id: 'f'
-                }]
+                items: [
+                    {uid: 'a'},
+                    {uid: 'b'},
+                    {uid: 'e'},
+                    {uid: 'f'}
+                ]
             }
         };
         jds._fetchJdsAndFillPagination(req, jdsOptions, responseFilterer, function(err, filteredBody) {
             expect(filteredBody).to.eql(expectedFilteredBody);
-            expect(rdk.utils.http.get.calledTwice).to.be.true();
+            expect(rdk.utils.http.post.calledTwice).to.be.true();
         });
     });
     it('sets the proper paging metadata values', function() {
@@ -584,15 +575,12 @@ describe('fetchJdsAndFillPagination', function() {
                 startIndex: 0,
                 pageIndex: 0,
                 totalPages: 2,
-                items: [{
-                    id: 'a'
-                }, {
-                    id: 'b'
-                }, {
-                    id: 'c'
-                }, {
-                    id: 'd'
-                }]
+                items: [
+                    {uid: 'a'},
+                    {uid: 'b'},
+                    {uid: 'c'},
+                    {uid: 'd'}
+                ]
             }
         };
         var jdsResponse2 = {
@@ -604,25 +592,22 @@ describe('fetchJdsAndFillPagination', function() {
                 startIndex: 4,
                 pageIndex: 1,
                 totalPages: 2,
-                items: [{
-                    id: 'e'
-                }, {
-                    id: 'f'
-                }, {
-                    id: 'g'
-                }, {
-                    id: 'h'
-                }]
+                items: [
+                    {uid: 'e'},
+                    {uid: 'f'},
+                    {uid: 'g'},
+                    {uid: 'h'}
+                ]
             }
         };
         var jdsResponses = [jdsResponse1, jdsResponse2];
         var jdsResponseCounter = -1;
-        sinon.stub(rdk.utils.http, 'get', function(options, callback) {
+        sinon.stub(rdk.utils.http, 'post', function(options, callback) {
             jdsResponseCounter++;
             return callback(null, {}, jdsResponses[jdsResponseCounter]);
         });
 
-        _.set(jdsOptions, 'qs.limit', 4);
+        _.set(jdsOptions, 'body.limit', 4);
 
         jds._fetchJdsAndFillPagination(req, jdsOptions, responseFilterer, function(err, filteredBody) {
             // taken from the first page fetched
@@ -636,7 +621,85 @@ describe('fetchJdsAndFillPagination', function() {
             expect(filteredBody.data.totalItems).to.equal(jdsResponse2.data.totalItems);
             expect(filteredBody.data.itemsPerPage).to.equal(jdsResponse2.data.itemsPerPage);
             expect(filteredBody.data.totalPages).to.equal(jdsResponse2.data.totalPages);
-            expect(rdk.utils.http.get.calledTwice).to.be.true();
+            expect(rdk.utils.http.post.calledTwice).to.be.true();
+        });
+
+    });
+    it('handles when the full first page is filtered', function() {
+        var firstPageFiltered = false;
+        function responseFilterer(req, responseBody, callback) {
+            responseBody = _.cloneDeep(responseBody);
+            if (!firstPageFiltered) {
+                responseBody.data.items = [];
+                firstPageFiltered = true;
+            }
+            return callback(null, responseBody);
+        }
+
+        var jdsResponse1 = {
+            data: {
+                updated: '20140102',
+                totalItems: 8,
+                currentItemCount: 4,
+                itemsPerPage: 4,
+                startIndex: 0,
+                pageIndex: 0,
+                totalPages: 2,
+                items: [
+                    {uid: 'a'},
+                    {uid: 'b'},
+                    {uid: 'c'},
+                    {uid: 'd'}
+                ]
+            }
+        };
+        var jdsResponse2 = {
+            data: {
+                updated: '20140103',
+                totalItems: 8,
+                currentItemCount: 4,
+                itemsPerPage: 4,
+                startIndex: 4,
+                pageIndex: 1,
+                totalPages: 2,
+                items: [
+                    {uid: 'e'},
+                    {uid: 'f'},
+                    {uid: 'g'},
+                    {uid: 'h'}
+                ]
+            }
+        };
+        var jdsResponses = [jdsResponse1, jdsResponse2];
+        var jdsResponseCounter = -1;
+        sinon.stub(rdk.utils.http, 'post', function(options, callback) {
+            jdsResponseCounter++;
+            return callback(null, {}, jdsResponses[jdsResponseCounter]);
+        });
+
+        _.set(jdsOptions, 'body.limit', 4);
+        var expectedFilteredBody = {
+            data: {
+                updated: '20140102',
+                totalItems: 8,
+                currentItemCount: 4,
+                itemsPerPage: 4,
+                startIndex: 0,
+                nextStartIndex: 8,
+                pageIndex: 0,
+                totalPages: 2,
+                items: [
+                    {uid: 'e'},
+                    {uid: 'f'},
+                    {uid: 'g'},
+                    {uid: 'h'}
+                ]
+            }
+        };
+
+        jds._fetchJdsAndFillPagination(req, jdsOptions, responseFilterer, function(err, filteredBody) {
+            expect(filteredBody).to.eql(expectedFilteredBody);
+            expect(rdk.utils.http.post.calledTwice).to.be.true();
         });
 
     });
@@ -656,15 +719,12 @@ describe('fetchJdsAndFillPagination', function() {
                 startIndex: 0,
                 pageIndex: 0,
                 totalPages: 2,
-                items: [{
-                    id: 'a'
-                }, {
-                    id: 'b'
-                }, {
-                    id: 'c'
-                }, {
-                    id: 'd'
-                }]
+                items: [
+                    {uid: 'a'},
+                    {uid: 'b'},
+                    {uid: 'c'},
+                    {uid: 'd'}
+                ]
             }
         };
         var jdsResponse2 = {
@@ -676,25 +736,22 @@ describe('fetchJdsAndFillPagination', function() {
                 startIndex: 4,
                 pageIndex: 1,
                 totalPages: 2,
-                items: [{
-                    id: 'e'
-                }, {
-                    id: 'f'
-                }, {
-                    id: 'g'
-                }, {
-                    id: 'h'
-                }]
+                items: [
+                    {uid: 'e'},
+                    {uid: 'f'},
+                    {uid: 'g'},
+                    {uid: 'h'}
+                ]
             }
         };
         var jdsResponses = [jdsResponse1, jdsResponse2];
         var jdsResponseCounter = -1;
-        sinon.stub(rdk.utils.http, 'get', function(options, callback) {
+        sinon.stub(rdk.utils.http, 'post', function(options, callback) {
             jdsResponseCounter++;
             return callback(null, {}, jdsResponses[jdsResponseCounter]);
         });
 
-        _.set(jdsOptions, 'qs.limit', 4);
+        _.set(jdsOptions, 'body.limit', 4);
 
         var expectedFilteredBody = {
             data: {
@@ -703,25 +760,22 @@ describe('fetchJdsAndFillPagination', function() {
                 currentItemCount: 4,
                 itemsPerPage: 4,
                 startIndex: 0,
-                nextStartIndex: 6,
+                nextStartIndex: 5,
                 pageIndex: 0,
                 totalPages: 2,
-                items: [{
-                    id: 'a'
-                }, {
-                    id: 'b'
-                }, {
-                    id: 'c'
-                }, {
-                    id: 'e'
-                }]
+                items: [
+                    {uid: 'a'},
+                    {uid: 'b'},
+                    {uid: 'c'},
+                    {uid: 'e'}
+                ]
             }
         };
 
         jds._fetchJdsAndFillPagination(req, jdsOptions, responseFilterer, function(err, filteredBody) {
             // taken from the first page fetched
             expect(filteredBody).to.eql(expectedFilteredBody);
-            expect(rdk.utils.http.get.calledTwice).to.be.true();
+            expect(rdk.utils.http.post.calledTwice).to.be.true();
         });
     });
 });
@@ -756,7 +810,7 @@ describe('requestMedications', function() {
         req.logger = sinon.stub(bunyan.createLogger({
             name: 'jds-subsystem-spec'
         }));
-        sinon.stub(rdk.utils.http, 'get', function(options, callback) {
+        sinon.stub(rdk.utils.http, 'post', function(options, callback) {
             return callback(new Error('dummy error'));
         });
         var pid;
@@ -772,7 +826,7 @@ describe('requestMedications', function() {
         var jdsOptions = {};
 
         _.set(req, 'body', {});
-        _.set(req, 'query.afterFilter', 'not(eq(id,d)),not(eq(recent,false))');
+        _.set(req, 'query.afterFilter', 'not(eq(uid,d)),not(eq(recent,false))');
 
         var jdsResponse1 = {
             data: {
@@ -784,23 +838,23 @@ describe('requestMedications', function() {
                 pageIndex: 1,
                 totalPages: 4,
                 items: [{
-                    id: 'a',
+                    uid: 'a',
                     productFormName: 'productFormName',
                     orders: [{
-                        id: 'a',
+                        uid: 'a1',
                         childrenOrderUids: []
                     }]
                 }, {
-                    id: 'b',
+                    uid: 'b',
                     orders: [{
-                        id: 'b',
+                        uid: 'b1',
                         childrenOrderUids: ['urn:va:abc']
                     }]
                 }, {
-                    id: 'c',
+                    uid: 'c',
                     qualifiedName: 'qualifiedName'
                 }, {
-                    id: 'd'
+                    uid: 'd'
                 }]
             }
         };
@@ -814,38 +868,38 @@ describe('requestMedications', function() {
                 pageIndex: 2,
                 totalPages: 4,
                 items: [{
-                    id: 'e',
+                    uid: 'e',
                     codes: [{
                         display: 'code'
                     }]
                 }, {
-                    id: 'f',
+                    uid: 'f',
                     name: 'name',
                     overallStart: '20020101135300'
                 }, {
-                    id: 'g',
+                    uid: 'g',
                     name: 'name'
                 }, {
-                    id: 'h'
+                    uid: 'h'
                 }]
             }
         };
         var jdsResponses = [jdsResponse1, jdsResponse2];
         var jdsResponseCounter = -1;
-        sinon.stub(rdk.utils.http, 'get', function(options, callback) {
+        sinon.stub(rdk.utils.http, 'post', function(options, callback) {
             jdsResponseCounter++;
             return callback(null, {}, jdsResponses[jdsResponseCounter]);
         });
 
-        _.set(jdsOptions, 'qs.limit', 4);
-        _.set(jdsOptions, 'qs.start', 4);
+        _.set(jdsOptions, 'body.limit', 4);
+        _.set(jdsOptions, 'body.start', 4);
 
         var expectedFilteredBody = {
             data: {
                 items: [{
-                    id: 'a',
+                    uid: 'a',
                     orders: [{
-                        id: 'a',
+                        uid: 'a1',
                         childrenOrderUids: []
                     }],
                     calculatedStatus: '',
@@ -856,7 +910,7 @@ describe('requestMedications', function() {
                     normalizedName: 'productFormName',
                     productFormName: 'productFormName'
                 }, {
-                    id: 'c',
+                    uid: 'c',
                     qualifiedName: 'qualifiedName',
                     calculatedStatus: '',
                     fills: [],
@@ -865,7 +919,7 @@ describe('requestMedications', function() {
                     recent: true,
                     normalizedName: 'qualifiedName'
                 }, {
-                    id: 'e',
+                    uid: 'e',
                     calculatedStatus: '',
                     fills: [],
                     lastAction: 'Invalid date',
@@ -876,7 +930,7 @@ describe('requestMedications', function() {
                     }],
                     normalizedName: 'code'
                 }, {
-                    id: 'g',
+                    uid: 'g',
                     calculatedStatus: '',
                     fills: [],
                     lastAction: 'Invalid date',
@@ -897,7 +951,7 @@ describe('requestMedications', function() {
         };
         jds._requestMedications(req, '9E7A;3', jdsOptions, function(err, filteredBody, statusCode) {
             expect(filteredBody).to.eql(expectedFilteredBody);
-            expect(rdk.utils.http.get.calledTwice).to.be.true();
+            expect(rdk.utils.http.post.calledTwice).to.be.true();
             expect(statusCode).to.equal(200);
         });
     });

@@ -4,6 +4,12 @@
         border-bottom: 3px solid $primary-light;
         border-radius: 0px;
         padding: 10px 0px;
+        h2 {
+            font-weight: bold;
+            font-size: 14px;
+            margin: 0;
+            padding-top: 5px;
+        }
     }
     .panel-footer {
         background-color: $pure-white;
@@ -11,26 +17,26 @@
     .grid-filter {
         background-color: $grey-lighter;
         max-height: 52px;
-        padding: 10px 10px 0px 10px;
+        padding: 10px 10px 5px 10px;
         .fa-filter { 
             position: absolute;
-            top: 10px;
+            top: 8px;
             left: 24px;
         }
         .input-sm {
-            border-radius: 4px;
+            padding-left: 20px;
+            padding-right: 20px;
             &::-ms-clear {
                 display: none;
             }
         }
         .editor-clear-filter {
-            top: 3px;
+            color: #767676;
+            font-size: 12px;
+            top: 1px;
             position: absolute;
             right: 18px;
             display: none;
-            i {
-                font-size: 11px;
-            }
         }
     }
     .carousel {
@@ -39,29 +45,33 @@
         text-align: center;
         .item {
             display: none;
-        }
-        .carousel-inner {
-            background-color: #4A4D52;
-            height: 64px;
-            padding-top: 10px;
-            .active {
+            &.active {
                 display: block;
             }
-            .applet-thumbnail {
-                background-color: $pure-white;
-                border: 1px solid $grey-lighter;
-                border-radius: 4px;
-                color: $grey-darker;
-                height: 50px;
-                padding: 3px;
-                position: absolute;
-                width: 84px;
-                &:hover,
-                &:focus {
-                    border: 1px solid $primary-dark;
-                    color: $primary-dark;
-                    cursor: pointer;
-                }
+        }
+        button {
+            margin-top: 10px;
+            color: white;
+        }
+    }
+    .carousel-inner {
+        background-color: #4A4D52;
+        height: 64px;
+        padding-top: 10px;
+        .applet-thumbnail {
+            background-color: $pure-white;
+            border: 1px solid $grey-lighter;
+            border-radius: 4px;
+            color: $grey-darker;
+            height: 50px;
+            padding: 3px;
+            position: absolute;
+            width: 84px;
+            &:hover,
+            &:focus {
+                border: 1px solid $primary-dark;
+                color: $primary-dark;
+                cursor: pointer;
             }
         }
     }
@@ -69,72 +79,73 @@
         background-color: #4A4D52;
         min-height: 430px;
         padding: 10px 20px 20px 20px;
-        .boundary-indicator {
-            height: 360px;
-            position: fixed;
+        h4 {
+            color: white;
+            margin: 0;
             text-align: center;
-            .wireframe {
-                border: solid 1px #0CF;
-                border-radius: 4px;
-                height: 100%;
-                width: 100%;
+            padding: 0px 0px 5px 0px;
+        }
+    }
+    .boundary-indicator {
+        height: 360px;
+        position: fixed;
+        text-align: center;
+        .wireframe {
+            border: solid 1px #0CF;
+            border-radius: 4px;
+            height: 100%;
+            width: 100%;
+        }
+        h5 {
+            color: white;
+            margin: 0;
+            padding-top: 5px;
+        }
+    }
+    .gridster {
+        float: left;
+        height: 399px;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        width: 100%;
+        ul {
+            list-style: none;
+        }
+        li.gs-w {
+            background-color: $pure-white;
+            border-radius: 4px;
+            padding: 10px;
+            text-align: center;
+            z-index: inherit;
+            &:first-child > .view-switchboard {
+                left: 112%;
             }
         }
-        .gridsterContainer {
-            .gridster {
-                float: left;
-                height: 399px;
-                overflow-x: hidden;
-                overflow-y: hidden;
-                width: 100%;
-                ul {
-                    list-style: none;
-                }
-                .gs-w {
-                    z-index: inherit;
-                }
+        .edit-applet {
+            float: right;
+        }
+        .view-switchboard {
+            background-color: $pure-white;
+            border: 1px solid $grey-lighter;
+            border-radius: 4px;
+            left: calc(50% + 20px);
+            min-height: 172px;
+            padding-top: 10px;
+            position: relative;
+            transform: translate(-20em, -6.5em);
+            top: 60px;
+            width: 400px;
+            z-index: 100;
+            .applet-exit-options-button {
+                float: right;
+                margin: -117px 10px 0px 0px;
+            }
+        }
+        .options-list {
+            height: 70%;
+            .options-panel {
                 li {
-                    background-color: $pure-white;
-                    border-radius: 4px;
-                    padding: 10px;
-                    text-align: center;
-                    &:first-child > .view-switchboard {
-                        left: 112%;
-                    }
-                }
-                .options-list {
-                    height: 70%;
-                    .options-panel {
-                        li {
-                            padding-bottom: 0px;
-                        }
-                    }
-                }
-                .edit-applet {
-                    color: $primary;
-                    float: right;
-                    &:hover,
-                    &:active,
-                    &:focus {
-                        color: $primary-dark;
-                    }
-                }
-                .view-switchboard {
-                    background-color: $pure-white;
-                    border: 1px solid $grey-lighter;
-                    border-radius: 4px;
-                    left: calc(50% + 20px);
-                    min-height: 172px;
-                    padding-top: 10px;
-                    position: relative;
-                    transform: translate(-20em, -6.5em);
-                    top: 60px;
-                    width: 400px;
-                    z-index: 100;
-                    .applet-exit-options-button {
-                        float: right;
-                        margin: -117px 10px 0px 0px;
-                    }
+                    padding-bottom: 0px;
                 }
             }
         }
@@ -142,70 +153,70 @@
 }
 
 ul.options-panel {
+    list-style: none;    
     li {
-        list-style: none;
         padding: 5px;
-        .options-box {
-            border: 16px solid $grey-lighter;
-            max-width: 100px;
-            width: 100%;
-            &:focus {
-                outline: 0;
-                -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(102,175,233,0.6);
-                box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 10px;
-            }
+    }
+    .options-box {
+        border: 16px solid $grey-lighter;
+        max-width: 100px;
+        width: 100%;
+        &:focus {
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(102,175,233,0.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 10px;
+        }
+        &:hover,
+        &:active {
+            background-color: $primary;
+            cursor: pointer;
+        }
+        &.gist {
+            border-color: $grey-lighter;
             &:hover,
             &:active {
                 background-color: $primary;
-                cursor: pointer;
-            }
-            &.gist {
-                border-color: $grey-lighter;
-                &:hover,
-                &:active {
-                    background-color: $primary;
-                    border: 16px solid $primary-light;
-                }
-            }
-            &.summary {
-                border: 7px solid $primary;
-                box-shadow: inset 0px 0 0 7px $primary-light;
-                height: 41px;
-                &:hover,
-                &:active {
-                    border: 7px solid $primary-light;
-                    box-shadow: inset 0px 0 0 7px $primary;
-                }
-                &:focus {
-                    box-shadow: inset 0px 0 0 7px $primary-light, 0 1px 1px rgba(0,0,0,0.075),0 0 10px;
-                }
-            }
-            &.expanded {
-                border-color: $primary;
-                &:hover,
-                &:active {
-                    border-color: $grey-light;
-                }
-            }
-            &.remove-applet-option {
-                border: 1px dashed $primary;
-                height: 40px;
-                margin-bottom: 5px;
-                max-width: 50px;
-                .fa-trash-o {
-                    transform: inherit;
-                }
-                &:hover,
-                &:active {
-                    background-color: transparent;
-                    border: 1px solid $primary-dark;
-                    color: $primary-dark;
-                }
+                border: 16px solid $primary-light;
             }
         }
-        button.applet-exit-options-button {
-            float: right;
-            margin-top: -50px;
+        &.summary {
+            border: 7px solid $primary;
+            box-shadow: inset 0px 0 0 7px $primary-light;
+            height: 41px;
+            &:hover,
+            &:active {
+                border: 7px solid $primary-light;
+                box-shadow: inset 0px 0 0 7px $primary;
+            }
+            &:focus {
+                box-shadow: inset 0px 0 0 7px $primary-light, 0 1px 1px rgba(0,0,0,0.075),0 0 10px;
+            }
         }
+        &.expanded {
+            border-color: $primary;
+            &:hover,
+            &:active {
+                border-color: $grey-light;
+            }
+        }
+        &.remove-applet-option {
+            border: 1px dashed $primary;
+            height: 40px;
+            margin-bottom: 5px;
+            max-width: 50px;
+            .fa-trash-o {
+                transform: inherit;
+            }
+            &:hover,
+            &:active {
+                background-color: transparent;
+                border: 1px solid $primary-dark;
+                color: $primary-dark;
+            }
+        }
+    }
+    .applet-exit-options-button {
+        float: right;
+        margin-top: -50px;
     }
 }

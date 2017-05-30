@@ -2,7 +2,7 @@ BHIE_ENDPOINT: <%=node[:mocks][:jmeadows][:dod_adaptor_endpoint] %>
 VLER_ENDPOINT: <%=node[:mocks][:jmeadows][:dod_adaptor_endpoint] %>
 VLER_TEST_PAT = 1108000005
 #BHIE_ENDPOINT: http://localhost:8888/MockDoDAdaptor
-#BHIE_ENDPOINT: http://172.18.19.69:8080/
+#BHIE_ENDPOINT: http://IP:8080/
 SOAP_MAX_REQ: 0
 DEMOGRAPHICS_MAX_REQ: 0
 REST_CONNECTION_TIMEOUT_MS: 120000
@@ -18,8 +18,8 @@ REST_ASYNC_QUERY_PATHVLER = dmix/dataservice/v4.0/ehealthexchange/query
 REST_ASYNC_COMET_PATHVLER = dmix/dataservice/v4.0/ehealthexchange/poller
 COMPLEX_NOTE_PATH = /async/complex/note
 COMPLEX_NOTE_HOST_PLACEHOLDER = localhost
-SNAREWORKS_HOST = 172.18.53.16
-SNAREWORKS_PORT = 510
+SNAREWORKS_HOST = IP
+SNAREWORKS_PORT = PORT
 DEBUG_TRUST_ALL_SSL_HOSTNAMES_AND_CERTS = false
 #app name is passed to dod adaptor as user facility id
 USER_FACILITY_ID = JLV

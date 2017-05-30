@@ -87,7 +87,7 @@ Scenario: Add Lab Result to stack graph
   When the user adds lab troponin to the graph
   Then the Stacked Graphs applet displays a row for "troponin"
 
-@US5402 @US4388 @DE5779 @debug @DE6760
+@US5402 @US4388 @DE5779 @DE6760
 Scenario: Add Medication to stack graph
   And user searches for and selects "Eight,Patient"
   Then Overview is active

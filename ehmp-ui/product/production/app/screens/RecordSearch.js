@@ -28,7 +28,8 @@ define([
         "surgery": "documents",
         "procedure": "documents",
         "consult": "documents",
-        "image": "documents"
+        "image": "documents",
+        'vlerdocument': 'ccd_grid'
     };
 
     function getAllKeywords(uid) {
@@ -56,8 +57,8 @@ define([
     }
 
     function highlightHtmlElement(htmlToHighlight, keywords) {
-        $(htmlToHighlight).find("*").contents().each(function() {
-            if (this.nodeType == 3) {
+        $(htmlToHighlight).find('*').not('iframe').contents().each(function() {
+            if (this.nodeType === Node.TEXT_NODE) {
                 $(this).replaceWith(ADK.utils.stringUtils.addSearchResultElementHighlighting($(this).text(), keywords));
             }
         });
@@ -95,19 +96,33 @@ define([
                     });
                 });
             }
+
+            var responseHeaderView = response.headerView;
+            var headerView;
+
+            if (responseHeaderView) {
+                headerView = responseHeaderView.extend({
+                    initialize: function() {
+                        responseHeaderView.prototype.initialize.apply(this, arguments);
+                        this.listenTo(this, 'render', function() {
+                            highlightHtmlElement(this.$el, keywords);
+                        });
+                    }
+                });
+            }
+
             var modalOptions = {
                     size: "large",
                     title: function() {
                         var title = _.result(response, 'title') || _.result(bodyView, 'title');
                         return ADK.utils.stringUtils.addSearchResultElementHighlighting(title, keywords);
                     },
-                    showLoading: true,
-                    loadingTitle: 'Loading...',
+                    showLoading: _.result(response, 'showLoading', true),
                     resourceEntity: response.resourceEntity || bodyView.collection
                 };
-                if (response.headerView) {
-                    modalOptions.headerView = response.headerView;
-                    highlightHtmlElement(response.headerView.$el, keywords);
+                if (headerView) {
+                    modalOptions.headerView = headerView;
+                    highlightHtmlElement(headerView.$el, keywords);
                 }
                 if (response.footerView) {
                     modalOptions.footerView = response.footerView;
@@ -142,13 +157,11 @@ define([
             region: 'center'
         }],
         onStart: function() {
-            ADK.SessionStorage.setAppletStorageModel('search', 'useTextSearchFilter', true);
             var searchAppletChannel = ADK.Messaging.getChannel("search");
             searchAppletChannel.on('resultClicked', onResultClicked);
             searchAppletChannel.on('documentsLoaded', onDocumentsLoaded);
         },
         onStop: function() {
-            ADK.SessionStorage.setAppletStorageModel('search', 'useTextSearchFilter', false);
             var searchAppletChannel = ADK.Messaging.getChannel("search");
             searchAppletChannel.off('resultClicked', onResultClicked);
             searchAppletChannel.off('documentsLoaded', onDocumentsLoaded);

@@ -54,10 +54,15 @@ describe('error-endpoint.js', function() {
         var environment = {
             jds: {}
         };
+        environment.jds.childInstance = function() { return environment.jds; };
 
         var request = {
             query: {
                 patientIdentifierValue: ['9E7A;3', 'C877']
+            },
+            headers: {
+                'x-session-id': 'sessionId',
+                'x-request-id': 'requestId'
             }
         };
 
@@ -66,11 +71,62 @@ describe('error-endpoint.js', function() {
 
             endpoint._fetchErrors(logger, config, environment, request, response);
         });
+
+        it('uses referenceInfo', function() {
+            environment.jds.findErrorRecordsByFilter = returnResult;
+            spyOn(logger, 'child').andCallThrough();
+            spyOn(response, 'send');
+            runs(function() {
+                endpoint._fetchErrors(logger, config, environment, request, response);
+            });
+            waitsFor(function() {
+                return response.send.calls;
+            });
+            runs(function() {
+                expect(logger.child).toHaveBeenCalled();
+                expect(logger.child).toHaveBeenCalledWith(jasmine.objectContaining({
+                    'sessionId': 'sessionId',
+                    'requestId': 'requestId'
+                }));
+            });
+        });
     });
 
     describe('_submitById()', function() {
-        it('', function() {
+        var environment = {
+            jds: {},
+            publisherRouter: {}
+        };
+        environment.jds.childInstance = function() { return environment.jds; };
+        environment.publisherRouter.childInstance = function() { return environment.publisherRouter; };
 
+        var request = {
+            params: {
+                id: 1
+            },
+            headers: {
+                'x-request-id': 'requestId',
+                'x-session-id': 'sessionId'
+            }
+        };
+
+        it('uses referenceInfo', function() {
+            environment.jds.findErrorRecordById = returnResult;
+            spyOn(logger, 'child').andCallThrough();
+            spyOn(response, 'send');
+            runs(function() {
+                endpoint._submitById(logger, config, environment, request, response);
+            });
+            waitsFor(function() {
+                return response.send.calls;
+            });
+            runs(function() {
+                expect(logger.child).toHaveBeenCalled();
+                expect(logger.child).toHaveBeenCalledWith(jasmine.objectContaining({
+                    'sessionId': 'sessionId',
+                    'requestId': 'requestId'
+                }));
+            });
         });
     });
 });

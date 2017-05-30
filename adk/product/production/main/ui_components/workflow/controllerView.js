@@ -136,6 +136,7 @@ define([
             this.parentViewInstance.changeHeaderTitle(_.get(newHeaderOptions, 'title'));
             this.parentViewInstance.changeHeaderActionItems(_.get(newHeaderOptions, 'actionItems'));
             this.parentViewInstance.changeHeaderCloseButtonOptions(_.get(newHeaderOptions, 'closeButtonOptions'));
+            this.parentViewInstance.changeHeaderIcon(_.get(newHeaderOptions, 'icon'));
         },
         close: function() {
             this.parentViewInstance.close();

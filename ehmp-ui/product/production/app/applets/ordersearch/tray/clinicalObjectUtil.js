@@ -8,7 +8,7 @@ define([
      * data structure for enterprise orderables (e.g. consults) and lab-orderables. These follow the data structure
      * defined for enterprise-orderables.
      *
-     * Reference: https://wiki.vistacore.us/display/VACORE/Enterprise+Orderables+API
+     * Reference: https://wiki.vistacore.us/display/DNS RE/Enterprise+Orderables+API
      */
     function getBaseClinicalObject(orderableModel) {
         var userSession = ADK.UserService.getUserSession();

@@ -146,9 +146,12 @@ describe('extractDfnsFromRpc', function() {
     beforeEach(function() {
         callback = sinon.spy();
     });
-    it('should handle expected server errors', function() {
-        locationsResource._extractDfnsFromRpc(null, 'clinic', '^Server Error', callback);
-        expect(callback.calledWith(new Error('Server Error'))).to.be.true();
+    it('should handle expected server errors', function(done) {
+        locationsResource._extractDfnsFromRpc(null, 'clinic', '^Server Error', function(error) {
+            expect(error).to.be.an.error();
+            expect(error.message).to.equal('Server Error');
+            done();
+        });
     });
     it('should handle unexpected server errors', function() {
         locationsResource._extractDfnsFromRpc(null, 'clinic', '^Unknown Error', callback);
@@ -308,12 +311,12 @@ describe('RPC calls', function() {
                             id: '500',
                             name: 'PANORAMA'
                         }],
-                        host: '10.2.2.101',
-                        port: 9210,
+                        host: 'IP        ',
+                        port: PORT,
                         production: false,
-                        accessCode: 'pu1234',
-                        verifyCode: 'pu1234!!',
-                        localIP: '10.2.2.1',
+                        accessCode: 'REDACTED',
+                        verifyCode: 'REDACTED',
+                        localIP: 'IP      ',
                         localAddress: 'localhost'
                     },
                     'C877': {
@@ -321,11 +324,11 @@ describe('RPC calls', function() {
                             id: '500',
                             name: 'KODAK'
                         }],
-                        host: '10.2.2.102',
-                        port: 9210,
+                        host: 'IP        ',
+                        port: PORT,
                         production: false,
-                        accessCode: 'pu1234',
-                        verifyCode: 'pu1234!!'
+                        accessCode: 'REDACTED',
+                        verifyCode: 'REDACTED'
                     }
                 }
             }

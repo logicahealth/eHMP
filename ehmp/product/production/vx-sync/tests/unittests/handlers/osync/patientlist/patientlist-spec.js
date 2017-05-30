@@ -9,13 +9,17 @@ var log = require(global.VX_DUMMIES + 'dummy-logger');
 //     level: 'debug'
 // });
 
-
 var handle = require(global.VX_HANDLERS + 'osync/patientlist/patientlist');
 var validate = require(global.VX_HANDLERS + 'osync/patientlist/patientlist')._validate;
 var createAndPublishPatientSyncJobs = require(global.VX_HANDLERS + 'osync/patientlist/patientlist')._createAndPublishPatientSyncJobs;
 var createPatientSyncJobs = require(global.VX_HANDLERS + 'osync/patientlist/patientlist')._createPatientSyncJobs;
 
 var ERROR_MESSAGE = 'AnErrorOcurred';
+
+var referenceInfo = {
+    sessionId: 'patientlist-sessionId',
+    utilityType: 'Osync Patient List Handler Unit Test'
+};
 
 //-----------------------------------------------------------------------------
 // Return an instance of the osyncConfig variable.
@@ -90,7 +94,8 @@ function verifyJobs(jobs) {
             roomBed: '722-B',
             siteId: '9E7A'
         },
-        siteId: '9E7A'
+        siteId: '9E7A',
+        referenceInfo: referenceInfo
     });
     expect(jobs).toContain({
         type: 'sync',
@@ -102,7 +107,8 @@ function verifyJobs(jobs) {
             roomBed: '',
             siteId: '9E7A'
         },
-        siteId: '9E7A'
+        siteId: '9E7A',
+        referenceInfo: referenceInfo
     });
 }
 
@@ -214,9 +220,13 @@ describe('patientlist', function() {
     });
     describe('createAndPublishPatientSyncJobs method', function() {
         it('Undefined patients array works correctly', function() {
+            var job = {};
             var mockPublisherRouter = {
                 'publish': function(jobsToPublish, callback) {
                     return callback(null);
+                },
+                'childInstance': function() {
+                    return this;
                 }
             };
             var environment = createEnvironment(mockPublisherRouter);
@@ -224,7 +234,7 @@ describe('patientlist', function() {
 
             var finished;
             runs(function() {
-                createAndPublishPatientSyncJobs(log, environment, patients, function(error) {
+                createAndPublishPatientSyncJobs(log, environment, patients, job, function(error) {
                     expect(error).toBeFalsy();
                     expect(environment.publisherRouter.publish).not.toHaveBeenCalled();
                     finished = true;
@@ -236,9 +246,13 @@ describe('patientlist', function() {
             }, 'createAndPublishSyncJobs', 100);
         });
         it('Empty patients array works correctly', function() {
+            var job = {};
             var mockPublisherRouter = {
                 'publish': function(jobsToPublish, callback) {
                     return callback(null);
+                },
+                'childInstance': function() {
+                    return this;
                 }
             };
             var environment = createEnvironment(mockPublisherRouter);
@@ -246,7 +260,7 @@ describe('patientlist', function() {
 
             var finished;
             runs(function() {
-                createAndPublishPatientSyncJobs(log, environment, patients, function(error) {
+                createAndPublishPatientSyncJobs(log, environment, patients, job, function(error) {
                     expect(error).toBeFalsy();
                     expect(environment.publisherRouter.publish).not.toHaveBeenCalled();
                     finished = true;
@@ -259,9 +273,13 @@ describe('patientlist', function() {
         });
 
         it('Valid patients array but publisher returns an error.', function() {
+            var job = {referenceInfo: referenceInfo};
             var mockPublisherRouter = {
                 'publish': function(jobsToPublish, callback) {
                     return callback(ERROR_MESSAGE);
+                },
+                'childInstance': function() {
+                    return this;
                 }
             };
             var environment = createEnvironment(mockPublisherRouter);
@@ -269,7 +287,7 @@ describe('patientlist', function() {
 
             var finished;
             runs(function() {
-                createAndPublishPatientSyncJobs(log, environment, patients, function(error) {
+                createAndPublishPatientSyncJobs(log, environment, patients, job, function(error) {
                     expect(error).toBe(ERROR_MESSAGE);
                     verifyJobPublishArgs(environment);
                     finished = true;
@@ -281,9 +299,13 @@ describe('patientlist', function() {
             }, 'createAndPublishSyncJobs', 100);
         });
         it('Valid patients array publisher returns success.', function() {
+            var job = {referenceInfo: referenceInfo};
             var mockPublisherRouter = {
                 'publish': function(jobsToPublish, callback) {
                     return callback(null);
+                },
+                'childInstance': function() {
+                    return this;
                 }
             };
             var environment = createEnvironment(mockPublisherRouter);
@@ -291,7 +313,7 @@ describe('patientlist', function() {
 
             var finished;
             runs(function() {
-                createAndPublishPatientSyncJobs(log, environment, patients, function(error) {
+                createAndPublishPatientSyncJobs(log, environment, patients, job, function(error) {
                     expect(error).toBeFalsy();
                     verifyJobPublishArgs(environment);
                     finished = true;
@@ -305,13 +327,15 @@ describe('patientlist', function() {
     });
     describe('createPatientSyncJobs method', function() {
         it('Create empty array if patient list is null.', function() {
+            var job = {referenceInfo: referenceInfo};
             var patients = null;
-            var jobsToPublish = createPatientSyncJobs(log, patients);
+            var jobsToPublish = createPatientSyncJobs(log, patients, job);
             expect(_.isEmpty(jobsToPublish)).toBe(true);
         });
         it('Create valid set of sync jobs for patient list array.', function() {
+            var job = {referenceInfo: referenceInfo};
             var patients = createPatientList();
-            var jobsToPublish = createPatientSyncJobs(log, patients);
+            var jobsToPublish = createPatientSyncJobs(log, patients, job);
             verifyJobs(jobsToPublish);
         });
     });
@@ -372,6 +396,9 @@ describe('patientlist', function() {
             var mockPublisherRouter = {
                 'publish': function(jobsToPublish, callback) {
                     return callback(ERROR_MESSAGE);
+                },
+                'childInstance': function() {
+                    return this;
                 }
             };
             var mockPatientListVistaRetriever = {
@@ -387,7 +414,8 @@ describe('patientlist', function() {
                 'user': {
                     'id': '12345',
                     'site': '9E7A'
-                }
+                },
+                'referenceInfo': referenceInfo
             };
 
             var finished;
@@ -408,6 +436,9 @@ describe('patientlist', function() {
             var mockPublisherRouter = {
                 'publish': function(jobsToPublish, callback) {
                     return callback(null);
+                },
+                'childInstance': function() {
+                    return this;
                 }
             };
             var mockPatientListVistaRetriever = {
@@ -423,7 +454,8 @@ describe('patientlist', function() {
                 'user': {
                     'id': '12345',
                     'site': '9E7A'
-                }
+                },
+                'referenceInfo': referenceInfo
             };
 
             var finished;

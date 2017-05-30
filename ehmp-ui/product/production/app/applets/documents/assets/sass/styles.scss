@@ -1,11 +1,3 @@
-[data-appletid="documents"] {
-    table {
-        tr.active>td {
-            background-color: $primary-lighter;
-        }
-    }
-}
-
 .document-detail {
     .result-doc {
         border: 1px solid $grey;

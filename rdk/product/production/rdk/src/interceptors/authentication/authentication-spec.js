@@ -7,8 +7,8 @@ var auth = require('./authentication');
 var rdk = require('../../core/rdk');
 var RdkError = rdk.utils.RdkError;
 
-var VALID_ACCESS = '10VEHU';
-var VALID_PASS = 'VEHU10';
+var VALID_ACCESS = 'REDACTED';
+var VALID_PASS = 'REDACTED';
 var INVALID_ACCESS = 'zzz';
 var INVALID_PASS = 'xxx';
 var VALID_SYSTEM = 'CDS';
@@ -78,7 +78,7 @@ describe('Authentication interceptor', function() {
         auth(req, res, next);
         expect(req.logger.warn.called).to.be.false();
         expect(res.rdkSend.called).to.be.true();
-        expect(res.rdkSend.calledWith(new RdkError({
+        expect(res.rdkSend.calledWithMatch(new RdkError({
             code: 'rdk.401.1002',
             logger: req.logger
         }))).to.be.true();

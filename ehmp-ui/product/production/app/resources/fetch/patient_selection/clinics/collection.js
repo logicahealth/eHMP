@@ -1,4 +1,5 @@
 define([], function() {
+    'use strict';
 
     var Clinic = ADK.Resources.Model.extend({
         idAttribute: 'uid'

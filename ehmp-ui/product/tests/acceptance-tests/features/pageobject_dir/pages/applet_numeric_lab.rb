@@ -7,7 +7,7 @@ class PobNumericLabApplet < PobParentApplet
 
   # *****************  All_Field_Elements  ******************* #
   elements :fld_numeric_lab_results_gist, ".gist-item-list .selectable"
-  elements :fld_lab_names, "[data-appletid='lab_results_grid'] .problem-name [data-cell-instanceid]"
+  elements :fld_lab_names, "[data-appletid='lab_results_grid'] div.border-vertical span:not(.sr-only)"
   elements :fld_lab_test_column_data, "#grid-panel-lab_results_grid .auto-overflow-y > div span:nth-child(3)"
   elements :fld_results, "[data-appletid='lab_results_grid'] [data-cell-instanceid^='time_since']"
 
@@ -21,6 +21,7 @@ class PobNumericLabApplet < PobParentApplet
 
   # *****************  All_Table_Elements  ******************* #
   elements :tbl_coversheet_date_column, "#data-grid-lab_results_grid tr.selectable td:nth-child(1)"
+  elements :tbl_lab_detail_header, "#modal-body .table-responsive th"
   elements :summary_rows, "[data-appletid='lab_results_grid'] table tbody tr"
 
   element :gist_header_lab_test, "[data-appletid='lab_results_grid'] [data-header-instanceid='name-header']"

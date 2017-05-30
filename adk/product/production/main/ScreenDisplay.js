@@ -7,6 +7,8 @@ define([
     'main/ComponentLoader',
     'main/ADKApp',
     'main/Utils',
+    'main/AppletBuilder',
+    'api/Checks',
     'api/Messaging',
     'api/PatientRecordService',
     'api/SessionStorage',
@@ -21,7 +23,32 @@ define([
     'main/layouts/centerRegionLayouts/default_fullWidth',
     'api/UserService',
     'api/WorkspaceContextRepository'
-], function(Backbone, Marionette, _, $, session, ComponentLoader, ADKApp, Utils, Messaging, PatientRecordService, SessionStorage, UserDefinedScreens, ViewSwitchboard, Highcharts, ChromeView, AppletControllerView, Handlebars, WorkspaceFilters, chromeContainerTemplate, DefaultCenterRegionLayout, UserService, WorkspaceContextRepository) {
+], function(
+    Backbone,
+    Marionette,
+    _,
+    $,
+    session,
+    ComponentLoader,
+    ADKApp,
+    Utils,
+    AppletBuilder,
+    Checks,
+    Messaging,
+    PatientRecordService,
+    SessionStorage,
+    UserDefinedScreens,
+    ViewSwitchboard,
+    Highcharts,
+    ChromeView,
+    AppletControllerView,
+    Handlebars,
+    WorkspaceFilters,
+    chromeContainerTemplate,
+    DefaultCenterRegionLayout,
+    UserService,
+    WorkspaceContextRepository
+) {
     'use strict';
 
     var ScreensManifest = Messaging.request('ScreensManifest');
@@ -75,9 +102,13 @@ define([
                 var screenShowPromise = $.Deferred();
                 pendingPromises.push(screenShowPromise);
                 screenModule.buildPromise.done(function() {
-                    if (screenShowPromise.state() === 'pending') {
-                        screenShowPromise.resolve();
-                    }
+                    AppletBuilder.requiredByLayoutPromise(ADKApp, contextModel.get('id')).done(function() {
+                        Checks.run('screen-display', function() {
+                            if (screenShowPromise.state() === 'pending') {
+                                screenShowPromise.resolve();
+                            }
+                        });
+                    });
                 });
                 screenShowPromise.always(function() {
                     _.remove(pendingPromises, function(promise) {
@@ -265,7 +296,7 @@ define([
                 'data-instanceId': currentApplet.instanceId
             },
             regions: {
-                message: '.applet-div-chrome-container'
+                message: '.applet-chrome-body'
             },
             onBeforeShow: function() {
                 this.showChildView('message', new MessageView());
@@ -295,14 +326,13 @@ define([
 
             var viewType = appletModule.defaultViewType || "";
             var AppletView;
-            var options = {
-                    appletConfig: appletConfig,
-                    routeParam: routeOptions,
-                    viewTypes: appletModule.appletConfig.viewTypes,
-                    defaultViewType: appletModule.appletConfig.defaultViewType,
-                    screenModule: screenModule,
-                    fromMinimizedToMaximized: screenOptions.fromMinimizedToMaximized
-            };
+            var options = _.defaults({
+                appletConfig: appletConfig,
+                routeParam: routeOptions,
+                viewTypes: appletModule.appletConfig.viewTypes,
+                defaultViewType: appletModule.appletConfig.defaultViewType,
+                screenModule: screenModule
+            }, screenOptions);
 
             if (appletConfig.viewType !== undefined && appletConfig.viewType !== "undefined") {
                 viewType = appletConfig.viewType;
@@ -347,14 +377,14 @@ define([
                 }
                 options.region = contentRegion_layoutView[regionName];
                 try {
-                    contentRegion_layoutView[regionName].show(new AppletView(options));
-                } catch (e) {
-                    // Changing the workspace before all the applets have finished loading can cause
-                    // contentRegion_layoutView[regionName] to be undefined.  In the cases I have seen, the call for
-                    // the show is no longer necessary because the region does not need to be displayed any longer.
-                    console.warn('Possible error: ', e);
+                    var region = contentRegion_layoutView[regionName];
+                    AppletView = AppletView.extend({
+                        _uniqueId: _.get(appletConfig, 'instanceId')
+                    });
+                    region.show(new AppletView(options));
+                } catch (error) {
+                    console.warn('Possible error: ', error);
                 }
-
             }
 
             if (appletModule.displayApplet) {

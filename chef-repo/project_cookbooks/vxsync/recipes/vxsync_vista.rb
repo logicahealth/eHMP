@@ -42,7 +42,15 @@ if !node[:vxsync][:polled_vistas].nil?
   raise "Couldn't find every vista defined in polled_vistas attribute" if vista_sites.length < node[:vxsync][:polled_vistas].length
 end
 
-jds = find_node_by_role("jds", node[:stack])
+if find_optional_nodes_by_criteria(node[:stack], "role:jds_app_server").empty?
+  raise "No JDS App Server has been found, yet you attempted to point to a jds_app_server" unless node[:vxsync][:vista][:jds_app_server_ident].nil?
+  jds = find_node_by_role("jds", node[:stack])
+else
+  raise "JDS App Servers have been found in this environment, but a jds_app_server_ident was not set." if node[:vxsync][:vista][:jds_app_server_ident].nil?
+  jds = find_optional_node_by_criteria(node[:stack], "role:jds_app_server AND jds_app_server_ident:#{node[:vxsync][:vista][:jds_app_server_ident]}")
+  raise "JDS App Server #{node[:vxsync][:vista][:jds_app_server_ident]} not found in stack." if jds.nil?
+end
+
 pjds = find_node_by_role("pjds", node[:stack], "jds")
 solr = find_node_by_role("solr", node[:stack], "mocks")
 jmeadows = find_node_by_role("jmeadows", node[:stack], "mocks")
@@ -63,6 +71,7 @@ template "#{node[:vxsync][:vista][:home_dir]}/worker-config.json" do
     :hdr_enabled => node[:vxsync][:hdr_enabled],
     :jmeadows_enabled => node[:vxsync][:jmeadows_enabled],
     :vler_enabled => node[:vxsync][:vler_enabled],
+    :activity_filter_sites => node[:vxsync][:activity_filter_sites],
     :hdr_blacklist_sites => node[:vxsync][:hdr_blacklist_sites],
     :log_pattern => node[:vxsync][:vista][:log_pattern],
     :beanstalk_port => node[:vxsync][:vista][:beanstalk_processes][:jobrepo_vista][:config][:port]
@@ -140,6 +149,7 @@ node[:vxsync][:vista][:processes].each{ |name,process_block|
 template "/etc/init/vxsync_vista.conf" do
   variables(
     :name => "vxsync_vista",
+    :depends_on => "beanstalk_vista",
     :level => 2345,
     :shutdown_script => "#{node[:vxsync][:vista][:home_dir]}/scripts/shutdownVxSync.sh"
   )
@@ -176,6 +186,7 @@ node[:vxsync][:vista][:beanstalk_processes].each{ |name, process_block|
 template "/etc/init/beanstalk_vista.conf" do
   variables(
     :name => "beanstalk_vista",
+    :dependency => "vxsync_vista",
     :vxsync_application_home => node[:vxsync][:vista][:home_dir],
     :beanstalk_dir => node[:vxsync][:vista][:beanstalk_dir],
     :level => 2345

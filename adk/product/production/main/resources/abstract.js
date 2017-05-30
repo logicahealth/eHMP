@@ -1,8 +1,9 @@
 define([
     'backbone',
+    'main/overrides/overrides', // included for unit tests -- overrides aren't run otherwise
     'api/Messaging',
     'api/UrlBuilder'
-], function(Backbone, Messaging, UrlBuilder) {
+], function(Backbone, Overrides, Messaging, UrlBuilder) {
     "use strict";
 
     //model and collection events fired by Backbone
@@ -53,7 +54,7 @@ define([
                 opts = _.extend({
                     'params': this.params
                 }, options),
-                params = _.extend(this.defaultParams || {}, _.isFunction(opts.params) ? opts.params.apply(this, arguments) : opts.params),
+                params = _.extend(_.result(this, 'defaultParams') || {}, _.isFunction(opts.params) ? opts.params.apply(this, arguments) : opts.params),
                 resource = opts.resource || this.resource;
 
             if (this.patient && this.patient.has("acknowledged")) {
@@ -77,7 +78,7 @@ define([
 
             return this.setDefaultParameters(url.replace(/\/+/g, '/'), options); //replace multiple /'s with one
         },
-        setDefaultParameters: function(url) {
+        setDefaultParameters: function(url, options) {
             return url;
         },
         parseParameters: function(url, parameters) {
@@ -88,6 +89,7 @@ define([
         },
         methodMap: methodMap,
         sync: function(method, collection, options) {
+            if (!options) options = {};
             var backboneMethod = parseMethodMap.call(this, method),
                 opts = _.extend({
                     success: _.noop,
@@ -103,18 +105,17 @@ define([
 
             collection.trigger('before:' + method, this);
 
-            options = _.extend({}, options, {
-                url: url,
-                success: function(resp) {
-                    opts.success.apply(this, arguments);
-                    collection.trigger(method + ':success', collection, resp, options);
-                },
-                error: function(resp) {
-                    opts.error.apply(this, arguments);
-                    collection.trigger(method + ':error', collection, resp, options);
-                },
-                type: opts.type || backboneMethodMap[backboneMethod.method] || 'GET'
-            });
+            options.url = url;
+            options.success = function(resp) {
+                opts.success.apply(this, arguments);
+                collection.trigger(method + ':success', collection, resp, options);
+            };
+            options.error = function(resp) {
+                opts.error.apply(this, arguments);
+                collection.trigger(method + ':error', collection, resp, options);
+            };
+            options.type = opts.type || backboneMethodMap[backboneMethod.method] || 'GET';
+
             return Backbone.Collection.prototype.sync.call(this, backboneMethod.method, collection, options);
         }
     });
@@ -126,7 +127,8 @@ define([
 
                 var methodMap = this.methodMap,
                     removeReference = this._removeReference,
-                    set = this.set;
+                    set = this.set,
+                    Model = _.get(options, 'Model', this.Model) || this.model;
 
                 this.set = function(models, options) {
                     options = _.extend({}, options, {
@@ -137,7 +139,7 @@ define([
 
                 this.methodMap = _.extend({}, ADKModel.prototype.methodMap, methodMap);
 
-                this.model = (this.model === Backbone.Model) ? modModel : this.model;
+                this.model = (Model === Backbone.Model) ? modModel : Model;
                 this.Model = this.model; //create a reference for readability
 
                 ADKCollection.apply(this, arguments);
@@ -155,12 +157,8 @@ define([
         stopPropagation: CommonEvents, //a list of events to not bubble up from a child collection or model
         parseChildren: function(resp, options) {
             if (!this.childParse && _.isEmpty(this.childAttributes)) return resp;
-            var Collection = this.Collection.extend({
-                'parent': this
-            });
-            var Model = this.Model.extend({
-                'parent': this
-            });
+            var Collection = this.Collection;
+            var Model = this.Model;
 
             //just convert the childAttributes into a sub models/collection
             if (!_.isEmpty(this.childAttributes)) {
@@ -230,7 +228,7 @@ define([
                     'params': this.params
                 }, options),
                 //params is for query parameteres, in other words for a 'GET' request
-                params = _.extend(this.defaultParams || {}, _.isFunction(opts.params) ? opts.params.apply(this, arguments) : opts.params),
+                params = _.extend(_.result(this, 'defaultParams') || {}, _.isFunction(opts.params) ? opts.params.apply(this, arguments) : opts.params),
                 resource = opts.resource || this.resource;
 
             if (this.patient && this.patient.has("acknowledged")) {
@@ -254,7 +252,7 @@ define([
 
             return this.setDefaultParameters(url.replace(/\/+/g, '/'), options); //replace multiple /'s with one
         },
-        setDefaultParameters: function(url) {
+        setDefaultParameters: function(url, options) {
             return url;
         },
         parseParameters: function(url, parameters) {
@@ -322,7 +320,7 @@ define([
 
     var ADKModel = AbstractModel,
         modModel = ADKModel.extend({
-            constructor: function() {
+            constructor: function(options) {
                 var methodMap = this.methodMap,
                     parse = this.parse,
                     set = this.set;
@@ -346,8 +344,12 @@ define([
 
                 this.methodMap = _.extend({}, ADKModel.prototype.methodMap, methodMap);
 
-                this.Model = this.Model || modModel;
-                this.Collection = this.Collection || modCollection;
+                this.Model = (_.get(options, 'Model', this.Model) || modModel).extend({
+                    parent: this
+                });
+                this.Collection = (_.get(options, 'Collection', this.Collection) || modCollection).extend({
+                    parent: this
+                });
 
                 ADKModel.prototype.constructor.apply(this, arguments);
 

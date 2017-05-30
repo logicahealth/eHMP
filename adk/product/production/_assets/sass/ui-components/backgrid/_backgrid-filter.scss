@@ -1,0 +1,11 @@
+// backgrid filter (applets, workspace filter, workspace manager filter)
+// user defined workspace applet filter inputs
+.grid-filter {
+    padding: 5px 5px 0px 5px;
+    background-color: $primary-lightest;
+    border-bottom: 1px solid #ddd;
+}
+.udaf {
+    overflow-y: auto;
+    max-height: 70px;
+}

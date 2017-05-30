@@ -23,7 +23,7 @@ end
 When(/^the client "(.*?)" requests vitals for the patient "(.*?)" in FHIR format$/) do |user, pid|
   temp = QueryRDKCDSfhir.new
   path = temp.path + "/patient/#{pid}/observation"
-  @response = HTTPartyRDK.get_as_user(path, user, "pu1234!!")
+  @response = HTTPartyRDK.get_as_user(path, user, "REDACTED")
   puts @response.body
 end
 

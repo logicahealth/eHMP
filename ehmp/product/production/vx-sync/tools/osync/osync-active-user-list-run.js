@@ -5,6 +5,7 @@ var util = require('util');
 
 var OSyncActiveUserListUtil = require(global.OSYNC_UTILS + 'osync-active-user-list-util');
 var pollerUtils = require(global.VX_UTILS + 'poller-utils');
+var uuid = require('node-uuid');
 
 var argv;
 argv = require('yargs')
@@ -22,17 +23,23 @@ var config = require(global.VX_ROOT + 'worker-config');
 var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
 queueConfig.createFullBeanstalkConfig(config.osync.beanstalk);
 
+var referenceInfo = {
+    sessionId: uuid.v4(),
+    utilityType: 'osync-active-user-list'
+};
+
 var logUtil = require(global.VX_UTILS + 'log');
 var log = logUtil._createLogger({
     name: 'osync-active-user-list-run',
-    level: argv['log-level'] || 'error',
-    child: logUtil._createLogger
-});
+    level: argv['log-level'] || 'error'
+}).child(referenceInfo);
 
 var environment = pollerUtils.buildOsyncEnvironment(log, config);
 
+console.log('osync-active-user-list-run: Utility started. sessionId: %s', referenceInfo.sessionId);
+
 var oSyncActiveUserListUtil = new OSyncActiveUserListUtil(log, config, environment);
-oSyncActiveUserListUtil.retrieveAndProcessActiveUserList(function(error, numUsersProcessed) {
+oSyncActiveUserListUtil.retrieveAndProcessActiveUserList(referenceInfo, function(error, numUsersProcessed) {
     var message = '';
 
     if (error) {

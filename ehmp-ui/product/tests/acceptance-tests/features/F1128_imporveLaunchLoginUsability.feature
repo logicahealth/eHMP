@@ -5,7 +5,7 @@ Feature: Improve eHMP launch/login usability:
   
 @US17092_DefaultFacility @US17091_FacilityLabel
 Scenario: Login secreen defaults to the most recent facility selected
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "pu1234" verifycode as  "pu1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   And staff view screen is displayed
   And user logs out
   Then default facility is dislayed as "panorama"

@@ -11,4 +11,8 @@ DummyRequest.prototype.param = function(requestParameter) {
     return this.parameters[requestParameter];
 };
 
+DummyRequest.prototype.body = {
+	'demographics': {}
+};
+
 module.exports = DummyRequest;

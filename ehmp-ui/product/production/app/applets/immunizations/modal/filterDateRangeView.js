@@ -14,17 +14,16 @@ define([
         initialize: function() {
             this.listenTo(this.model, 'change', this.render);
             /* If the Text Search Applet is Active use these Options */
-            if (ADK.SessionStorage.getAppletStorageModel('search', 'useTextSearchFilter')) {
-                var modalOptions = ADK.SessionStorage.getAppletStorageModel('search', 'modalOptions');
-                this.model.set('selectedId', modalOptions.selectedId);
-                if (modalOptions.selectedId === 'customRangeApply') {
-                    this.model.set('customFromDate', modalOptions.customFromDate);
-                    this.model.set('customToDate', modalOptions.customToDate);
+            if (ADK.WorkspaceContextRepository.currentWorkspaceAndContext.get('workspace') === 'record-search') {
+                var filterOptions = ADK.SessionStorage.getAppletStorageModel('search', 'filterOptions') || {};
+                this.model.set('selectedId', filterOptions.selectedId);
+                if (filterOptions.selectedId === 'customRangeApply') {
+                    this.model.set('customFromDate', filterOptions.fromDate);
+                    this.model.set('customToDate', filterOptions.toDate);
                 }
             }
         }
     });
-
 
     var FilterDateRangeView = Backbone.Marionette.LayoutView.extend({
         sharedDateRange: {},
@@ -226,9 +225,9 @@ define([
                 this.$el.find('#' + selectedId).click();
             } else {
                 if (this.fullScreen) {
-                    selectedId = $('[data-appletid=\'immunizations\'] .grid-filter-daterange .active-range').attr('id');
-                    customFromDate = $('[data-appletid=\'immunizations\'] .grid-filter-daterange #filter-from-date-immunizations').val();
-                    customToDate = $('[data-appletid=\'immunizations\'] .grid-filter-daterange #filter-to-date-immunizations').val();
+                    selectedId = this.$('[data-appletid=\'immunizations\'] .grid-filter-daterange .active-range').attr('id');
+                    customFromDate = this.$('[data-appletid=\'immunizations\'] .grid-filter-daterange #filter-from-date-immunizations').val();
+                    customToDate = this.$('[data-appletid=\'immunizations\'] .grid-filter-daterange #filter-to-date-immunizations').val();
                 } else {
                     selectedId = 'allRange';
                 }

@@ -78,5 +78,5 @@ Scenario: Verify Numeric Lab Result applet expanded view has info button toolbar
   Then Overview is active
   And the user has selected All within the global date picker 
   And user navigates to numeric lab results expanded view 
-  When user opens the first numeric lab results row
+  When user opens the first non-panel numeric lab results row
   Then numeric lab results info button is displayed

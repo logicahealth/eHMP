@@ -5,7 +5,7 @@ define([
     'jquery',
     'backbone',
     'marionette',
-    'main/ui_components/components',
+    'main/UILibrary',
     'api/UIComponents',
     'jasminejquery',
     'typeahead'
@@ -204,12 +204,12 @@ define([
             });
 
             it('open and close typeahead suggestion', function() {
-                $form.find('#typeAhead1').focus();
-                $form.find('#typeAhead1').typeahead('val', 'Ma');
+                $form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').focus();
+                $form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').typeahead('val', 'Ma');
                 expect($form.find('span.tt-dropdown-menu')).toBeVisible();
                 expect($form.find('div.tt-suggestion').length).toBe(3);
 
-                $form.find('#typeAhead1').blur();
+                $form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').blur();
                 expect($form.find('span.tt-dropdown-menu')).toBeHidden();
             });
 
@@ -220,13 +220,13 @@ define([
             it('contains correct label', function() {
                 expect($form.find('label').length).toBe(1);
                 expect($form.find('label')).toHaveText('typeaheadValue');
-                expect($form.find('label')).toHaveAttr('for', 'typeAhead1');
+                expect($form.find('label').attr('for')).toContain('typeAhead1');
             });
 
             it('change a label', function() {
                 expect($form.find('label').length).toBe(1);
                 expect($form.find('label')).toHaveText('typeaheadValue');
-                $form.find('#typeAhead1').trigger('control:label', ['typeaheadValue2']);
+                $form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').trigger('control:label', ['typeaheadValue2']);
                 expect($form.find('label')).toHaveText('typeaheadValue2');
             });
 
@@ -263,7 +263,7 @@ define([
             it('contains correct label', function() {
                 expect($form.find('label').length).toBe(1);
                 expect($form.find('label')).toHaveText('typeahead (fetch)');
-                expect($form.find('label')).toHaveAttr('for', 'typeAhead9');
+                expect($form.find('label').attr('for')).toContain('typeAhead9');
             });
 
             it('contains correct title', function() {
@@ -355,12 +355,12 @@ define([
             });
 
             it('open and close typeahead suggestion', function() {
-                $form.find('#typeAhead2').focus();
-                $form.find('#typeAhead2').typeahead('val', 'Ma');
+                $form.find('.typeahead-control.typeAhead2 input[name="typeAhead2"]').focus();
+                $form.find('.typeahead-control.typeAhead2 input[name="typeAhead2"]').typeahead('val', 'Ma');
                 expect($form.find('span.tt-dropdown-menu')).toBeVisible();
                 expect($form.find('div.tt-suggestion').length).toBe(3);
 
-                $form.find('#typeAhead2').blur();
+                $form.find('.typeahead-control.typeAhead2 input[name="typeAhead2"]').blur();
                 expect($form.find('span.tt-dropdown-menu')).toBeHidden();
             });
 
@@ -371,7 +371,7 @@ define([
             it('contains correct label', function() {
                 expect($form.find('label').length).toBe(1);
                 expect($form.find('label')).toHaveText('typeaheadValue');
-                expect($form.find('label')).toHaveAttr('for', 'typeAhead2');
+                expect($form.find('label').attr('for')).toContain('typeAhead2');
             });
 
             it('contains correct title', function() {
@@ -406,12 +406,12 @@ define([
             });
 
             it('open and close typeahead suggestion', function() {
-                $form.find('#typeAhead3').focus();
-                $form.find('#typeAhead3').typeahead('val', 'Ma');
+                $form.find('.typeahead-control.typeAhead3 input[name="typeAhead3"]').focus();
+                $form.find('.typeahead-control.typeAhead3 input[name="typeAhead3"]').typeahead('val', 'Ma');
                 expect($form.find('span.tt-dropdown-menu')).toBeVisible();
                 expect($form.find('div.tt-suggestion').length).toBe(3);
 
-                $form.find('#typeAhead3').blur();
+                $form.find('.typeahead-control.typeAhead3 input[name="typeAhead3"]').blur();
                 expect($form.find('span.tt-dropdown-menu')).toBeHidden();
             });
 
@@ -422,7 +422,7 @@ define([
             it('contains correct label', function() {
                 expect($form.find('label').length).toBe(1);
                 expect($form.find('label')).toHaveText('typeaheadValue');
-                expect($form.find('label')).toHaveAttr('for', 'typeAhead3');
+                expect($form.find('label').attr('for')).toContain('typeAhead3');
             });
 
             it('contains correct title', function() {
@@ -477,7 +477,7 @@ define([
             });
 
             it('has correct attribute', function() {
-                expect($form.find('#typeAhead6')).toHaveAttr('required', 'required');
+                expect($form.find('.typeahead-control.typeAhead6 input[name="typeAhead6"]')).toHaveAttr('required', 'required');
             });
         });
 
@@ -508,7 +508,7 @@ define([
 
             it('puts a correct initial selection value', function() {
 
-                expect(_.isEqual($form.find('#typeAhead1').typeahead('val'), 'Maryland')).toBe(true);
+                expect(_.isEqual($form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').typeahead('val'), 'Maryland')).toBe(true);
 
             });
         });
@@ -549,9 +549,9 @@ define([
             it('listen to model change', function() {
                 var testIndex = 1;
                 formTestModel.set('typeAhead1', 'VA');
-                expect($form.find('#typeAhead1').val()).toBe('Virginia');
+                expect($form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').val()).toBe('Virginia');
                 formTestModel.set('typeAhead1', 'AMY <AMYLASE>');
-                expect($form.find('#typeAhead1').val()).toBe('Amy <Amylase>');
+                expect($form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').val()).toBe('Amy <Amylase>');
             });
         });
 
@@ -567,17 +567,17 @@ define([
             });
 
             it('has a correct number of matching list', function() {
-                $form.find('#typeAhead3').focus();
-                $form.find('#typeAhead3').typeahead('val', 'A');
+                $form.find('.typeahead-control.typeAhead3 input[name="typeAhead3"]').focus();
+                $form.find('.typeahead-control.typeAhead3 input[name="typeAhead3"]').typeahead('val', 'A');
                 expect($form.find('span.tt-dropdown-menu')).toBeVisible();
                 expect($form.find('div.tt-suggestion').length).toBe(11);
             });
 
             it('is replaced with new picklist by triggering an event', function() {
-                $form.find('#typeAhead3').trigger('control:picklist:set', [statesArrayReduced]);
+                $form.find('.typeahead-control.typeAhead3 input[name="typeAhead3"]').trigger('control:picklist:set', [statesArrayReduced]);
 
-                $form.find('#typeAhead3').focus();
-                $form.find('#typeAhead3').typeahead('val', 'A');
+                $form.find('.typeahead-control.typeAhead3 input[name="typeAhead3"]').focus();
+                $form.find('.typeahead-control.typeAhead3 input[name="typeAhead3"]').typeahead('val', 'A');
                 expect($form.find('span.tt-dropdown-menu')).toBeVisible();
                 expect($form.find('div.tt-suggestion').length).toBe(3);
             });
@@ -597,7 +597,7 @@ define([
             it('contains correct label with sr-only label', function() {
                 expect($form.find('label').length).toBe(1);
                 expect($form.find('label')).toHaveText('typeaheadValue');
-                expect($form.find('label')).toHaveAttr('for', 'typeAhead1');
+                expect($form.find('label').attr('for')).toContain('typeAhead1');
                 expect($form.find('label')).toHaveClass('sr-only');
             });
         });
@@ -634,22 +634,45 @@ define([
             });
 
             it("picklist", function() {
-                $form.find('#typeAhead1').focus();
-                $form.find('#typeAhead1').typeahead('val', 'A');
+                $form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').focus();
+                $form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').typeahead('val', 'A');
                 expect($form.find('span.tt-dropdown-menu')).toBeVisible();
                 expect($form.find('div.tt-suggestion').length).toBe(11);
                 $form.find('.typeAhead1').trigger("control:picklist:set", statesArrayReduced);
-                $form.find('#typeAhead1').focus();
-                $form.find('#typeAhead1').typeahead('val', 'A');
+                $form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').focus();
+                $form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').typeahead('val', 'A');
                 expect($form.find('span.tt-dropdown-menu')).toBeVisible();
                 expect($form.find('div.tt-suggestion').length).toBe(1);
             });
 
             it('control:loading:show and hide', function () {
-                $form.find('#typeAhead1').trigger('control:loading:show');
-                expect($form.find('#typeAhead1')).toHaveClass('loading')
-                $form.find('#typeAhead1').trigger('control:loading:hide');
-                expect($form.find('#typeAhead1')).not.toHaveClass('loading');
+                $form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').trigger('control:loading:show');
+                expect($form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]')).toHaveClass('loading')
+                $form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').trigger('control:loading:hide');
+                expect($form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]')).not.toHaveClass('loading');
+            });
+
+            it("update:config", function() {
+                $form.find('.typeAhead1').trigger("control:update:config", {
+                    hidden: true,
+                    disabled: true,
+                    required: true,
+                    label: 'newLabel'
+                });
+                expect($form.find('.typeAhead1')).toHaveClass('hidden');
+                expect($form.find('input')).toHaveAttr('disabled');
+                expect($form.find('input')).toHaveAttr('required');
+                expect($form.find('label')).toHaveText('newLabel *');
+                $form.find('.typeAhead1').trigger("control:update:config", {
+                    hidden: false,
+                    disabled: false,
+                    required: false,
+                    label: ''
+                });
+                expect($form.find('.typeAhead1')).not.toHaveClass('hidden');
+                expect($form.find('input')).not.toHaveAttr('disabled');
+                expect($form.find('input')).not.toHaveAttr('required');
+                expect($form.find('label')).not.toHaveText('newLabel *');
             });
         });
 
@@ -669,7 +692,7 @@ define([
             });
             it("error is removed", function() {
                 expect($form.find('span.error')).toHaveText('Example error');
-                $form.find('#typeAhead1').typeahead('val', "VA").trigger('change');
+                $form.find('.typeahead-control.typeAhead1 input[name="typeAhead1"]').typeahead('val', "VA").trigger('change');
                 expect($form.find('span.error')).not.toExist();
             });
         });

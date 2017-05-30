@@ -71,7 +71,7 @@ describe('record-enrichment-request-handler.js', function() {
     // environment.publisherRouter = new PublisherRouter(logger, config, environment.jobStatusUpdater);
 
     var host = vx_sync_ip;
-    var port = 5000;
+    var port = PORT;
     var tubename = 'vx-sync-test';
 
     var matchingJobTypes = [

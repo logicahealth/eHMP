@@ -1,7 +1,6 @@
 'use strict';
 
 var fs = require('fs');
-var _ = require('underscore');
 var mkdirp = require('mkdirp');
 
 function rmDir(removeSelf, dirPath) {
@@ -38,18 +37,14 @@ function deleteFile(path) {
     return false;
 }
 
-function writeFile(log, path, filename, permissions, file, tryAgainCallback, callback) {
-    fs.open(path+'/'+filename,'wx',permissions, function(err, fd){
-        if(err) {
-            if(_.isObject(err) && err.code && err.code === 'EEXIST') {
-                tryAgainCallback(log, path, permissions, file, callback);  //name already taken, try again
-            } else {    //other unknown error
-                log.error(err);
-                return callback('Unknown error writing JMeadows document ' + err);
-            }
+function writeFile(log, path, filename, permissions, file, callback) {
+    fs.open(path + '/' + filename, 'wx', permissions, function (err, fd) {
+        if (err) {
+            log.error(err);
+            return callback('Unknown error writing JMeadows document ' + err);
         } else {
-            fs.write(fd, file, 0, file.length, null, function(err) {
-                callback(err, filename);
+            fs.write(fd, file, 0, file.length, null, function (err) {
+                return callback(err, filename);
             });
         }
     });
@@ -57,17 +52,17 @@ function writeFile(log, path, filename, permissions, file, tryAgainCallback, cal
 
 function copyFile(oldPath, newPath, callback) {
     var outDir = newPath.substring(0, newPath.lastIndexOf('/'));
-    createPath(outDir, null, function(error) {
+    createPath(outDir, null, function (error) {
         if (!error) {
             var instream = fs.createReadStream(oldPath);
             var outstream = fs.createWriteStream(newPath);
-            outstream.on('finish', function(){
+            outstream.on('finish', function () {
                 callback();
             });
-            outstream.on('error', function(err){
+            outstream.on('error', function (err) {
                 callback(err);
             });
-            instream.on('error', function(err){
+            instream.on('error', function (err) {
                 callback(err);
             });
             instream.pipe(outstream);

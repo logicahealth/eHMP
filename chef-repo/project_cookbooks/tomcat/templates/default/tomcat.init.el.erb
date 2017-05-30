@@ -233,7 +233,7 @@ function status()
       pid="$(/usr/bin/pgrep -d , -u ${TOMCAT_USER} -G ${TOMCAT_USER} java)"
       if [ -z "$pid" ]; then
 	  echo "${NAME} is stopped"
-	  RETVAL="0"
+	  RETVAL="1"
       else
 	  echo "${NAME} (pid $pid) is running..."
 	  RETVAL="0"

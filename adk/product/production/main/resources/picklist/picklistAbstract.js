@@ -37,12 +37,8 @@ define([
                     throw new Error('No user has logged in.  Resource collection cannot be instanted without user data available.');
                 }
                 this.patient = PatientRecordService.getCurrentPatient();
-                if (_.isUndefined(this.patient.get('pid'))) {
-                    throw new Error('No patient has been selected.  Resource collection cannot be instanted without patient data available.');
-                }
 
                 this.defaultParams = _.extend({
-                    type: this.type,
                     site: this.user.get('site')
                 }, _.isFunction(this.defaultParams) ? this.defaultParams.apply(this, arguments) : this.defaultParams || {});
 

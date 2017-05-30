@@ -52,7 +52,7 @@ function fetchVhicData(req, res) {
         }
 
         //Define the anticipated XML namespaces.
-        var namespace = { soap: 'http://www.w3.org/2003/05/soap-envelope', vhic: 'http://cardpictureservice.vic.va.va.gov/'};
+        var namespace = { soap: 'http://www.w3.org/2003/05/soap-envelope', vhic: 'http://cardpictureservice.vic.va.DNS   /'};
 
         //Define the path to the getVeteranPictures message element.
         var pathGetVeteranPictures = '//soap:Envelope/soap:Body/vhic:getVeteranPictures';

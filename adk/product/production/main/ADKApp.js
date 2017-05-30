@@ -16,7 +16,8 @@ define([
     'main/adk_utils/resizeUtils',
     'api/WorkspaceContextRepository',
     'main/accessibility/components',
-    'bowser'
+    'bowser',
+    'main/collections/base'
 ], function(
     Backbone,
     Marionette,
@@ -35,7 +36,8 @@ define([
     ResizeUtils,
     WorkspaceContextRepository,
     Accessibility,
-    Bowser
+    Bowser,
+    ADKBaseCollection
 ) {
     'use strict';
 

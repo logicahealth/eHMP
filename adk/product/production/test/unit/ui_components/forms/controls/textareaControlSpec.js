@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/components", "api/UIComponents", "jasminejquery"],
+define(["jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api/UIComponents", "jasminejquery"],
     function($, Handlebars, Backbone, Marionette, UI) {
 
         var $testPage, testPage;
@@ -136,7 +136,7 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                 it("contains correct label", function() {
                     expect($testPage.find('label').length).toBe(1);
                     expect($testPage.find('label')).toHaveText('textarea label');
-                    expect($testPage.find('label')).toHaveAttr('for', 'textareaValue');
+                    expect($testPage.find('label').attr('for')).toContain('textareaValue');
                 });
                 it("contains correct title", function() {
                     expect($testPage.find('textarea').length).toBe(1);
@@ -153,7 +153,7 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                     expect($testPage.find('textarea')).toHaveAttr('maxlength', '200');
                 });
                 it("contains correct id", function() {
-                    expect($testPage.find('textarea')).toHaveId('textareaValue');
+                    expect($testPage.find('textarea').attr('id')).toContain('textareaValue');
                 });
                 it("contains correct class", function() {
                     expect($testPage.find('textarea')).toHaveClass('form-control');
@@ -303,7 +303,7 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                 it("contains correct label", function() {
                     expect($testPage.find('label').length).toBe(1);
                     expect($testPage.find('label')).toHaveText('textarea label');
-                    expect($testPage.find('label')).toHaveAttr('for', 'textareaValue');
+                    expect($testPage.find('label').attr('for')).toContain('textareaValue');
                     expect($testPage.find('label')).toHaveClass('sr-only');
                 });
             });
@@ -388,6 +388,40 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                     }]);
                     expect($testPage.find('.textareaValue textarea')).toHaveValue('--- added text! :-) starting text');
                     expect(testPage.ViewToTest.model.get('textareaValue')).toBe('--- added text! :-) starting text');
+                });
+                it("update:config", function() {
+                    $testPage.find('.textareaValue').trigger("control:update:config", {
+                        hidden: true,
+                        disabled: true,
+                        required: true,
+                        title: 'newTitle',
+                        maxlength: 10,
+                        rows: 4,
+                        placeholder: 'new place'
+                    });
+                    expect($testPage.find('.textareaValue')).toHaveClass('hidden');
+                    expect($testPage.find('textarea')).toHaveAttr('disabled');
+                    expect($testPage.find('textarea')).toHaveAttr('required');
+                    expect($testPage.find('textarea')).toHaveAttr('title', 'newTitle');
+                    expect($testPage.find('textarea')).toHaveAttr('maxlength', '10');
+                    expect($testPage.find('textarea')).toHaveAttr('rows', '4');
+                    expect($testPage.find('textarea')).toHaveAttr("placeholder", 'new place');
+                    $testPage.find('.textareaValue').trigger("control:update:config", {
+                        hidden: false,
+                        disabled: false,
+                        required: false,
+                        title: '',
+                        maxlength: 100,
+                        rows: 7,
+                        placeholder: ''
+                    });
+                    expect($testPage.find('.textareaValue')).not.toHaveClass('hidden');
+                    expect($testPage.find('textarea')).not.toHaveAttr('disabled');
+                    expect($testPage.find('textarea')).not.toHaveAttr('required');
+                    expect($testPage.find('textarea')).not.toHaveAttr('title');
+                    expect($testPage.find('textarea')).toHaveAttr('maxlength', '100');
+                    expect($testPage.find('textarea')).toHaveAttr('rows', '7');
+                    expect($testPage.find('textarea')).not.toHaveAttr('placeholder', 'new place');
                 });
             });
             describe("with char count enabled", function() {

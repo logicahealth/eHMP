@@ -7,6 +7,22 @@
         "requiredParams": ["searchString"],
         "requiredPermissions": ["add-allergy"]
     }, {
+        "name": "allergies-symptoms-top-ten",
+        "modulePath": "allergies/allergies-symptoms-top-ten-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredPermissions": ["add-allergy"]
+    }, {
+        "name": "immunization-types",
+        "modulePath": "immunizations/immunization-types-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredPermissions": ["add-immunization"]
+    }, {
+        "name": "lab-order-max-days-continuous",
+        "modulePath": "labs/lab-order-max-days-continuous-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["location", "schedule"],
+        "requiredPermissions": ["add-lab-order"]
+    }, {
         "name": "lab-time-valid-immediate-collect-time",
         "modulePath": "labs/lab-time-valid-immediate-collect-time-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
@@ -19,10 +35,29 @@
         "requiredParams": ["date", "locationUid"],
         "requiredPermissions": ["add-lab-order"]
     }, {
+        "name": "medication-defaults",
+        "modulePath": "medications/medication-defaults-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["pharmacyType"],
+        "optionalParams": ["pid", "locationIen"],
+        "requiredPermissions": ["future-release-not-available-for-use"]
+    }, {
+        "name": "medication-index",
+        "modulePath": "medications/medication-index-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["ien", "searchString"],
+        "requiredPermissions": ["future-release-not-available-for-use"]
+    }, {
         "name": "medication-list",
         "modulePath": "medications/medication-list-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
         "requiredParams": ["searchString"],
+        "requiredPermissions": ["future-release-not-available-for-use"]
+    }, {
+        "name": "medication-orders",
+        "modulePath": "medications/medication-orders-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["ien", "first", "last"],
         "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
         "name": "medication-orders-calc-max-refills",
@@ -31,10 +66,23 @@
         "requiredParams": ["pid", "drug", "days", "ordItem", "discharge"],
         "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
+        "name": "medication-order-defaults",
+        "modulePath": "medications/medication-order-defaults-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["pharmacyType"],
+        "optionalParams": ["ien", "pid", "needPatientInstructions", "pkiEnabled"],
+        "requiredPermissions": ["future-release-not-available-for-use"]
+    }, {
         "name": "medication-orders-default-days",
         "modulePath": "medications/medication-orders-default-days-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
         "requiredParams": ["unitStr", "schedStr", "pid", "drug", "oi"],
+        "requiredPermissions": ["future-release-not-available-for-use"]
+    }, {
+        "name": "medication-orders-dispense-drug-message",
+        "modulePath": "medications/medication-orders-dispense-drug-message-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["ien"],
         "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
         "name": "medication-orders-quantity-for-days-supply",
@@ -43,11 +91,24 @@
         "requiredParams": ["daysSupply", "unitsPerDose", "schedule", "duration", "pid", "drug"],
         "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
+        "name": "medication-schedules",
+        "modulePath": "medications/medication-schedules-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredPermissions": ["future-release-not-available-for-use"]
+    }, {
         "name": "new-persons-direct",
         "modulePath": "person/new-persons-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
         "optionalParams": ["date", "newPersonsType"],
         "requiredPermissions": ["read-patient-record"]
+    }, {
+        "name": "pki-enabled",
+        "modulePath": "site/pki-enabled-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART"
+    }, {
+        "name": "printer-devices",
+        "modulePath": "printers/printer-devices-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART"
     }, {
         "name": "problems-lexicon-lookup",
         "modulePath": "problems/problems-lexicon-lookup-fetch-list",
@@ -63,6 +124,12 @@
         "optionalParams": ["date", "synonym", "limit", "noMinimumLength"],
         "requiredPermissions": ["add-condition-problem"]
     }, {
+        "name": "progress-notes-titles-flags",
+        "modulePath": "progressnotes/progress-notes-titles-fetch-flags",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["ien"],
+        "requiredPermissions": ["sign-note"]
+    }, {
         "name": "radiology-dialog-default",
         "modulePath": "radiology/radiology-dialog-default-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
@@ -75,6 +142,20 @@
         "vistaContext": "OR CPRS GUI CHART",
         "requiredParams": ["searchString"],
         "requiredPermissions": ["add-encounter", "edit-encounter"]
+    }, {
+        "name": "radiology-imaging-types",
+        "modulePath": "radiology/radiology-imaging-types-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredPermissions": ["future-release-not-available-for-use"]
+    }, {
+        "name": "radiology-orderables",
+        "modulePath": "radiology/radiology-orderables-fetch-list",
+        "vistaContext": "HMP UI CONTEXT",
+        "requiredParams": ["imgType"],
+        "initialLoadDefaultParams": [{
+            "imgType": "9"
+        }],
+        "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
         "name": "services-fetch-list",
         "modulePath": "services/services-fetch-list",
@@ -108,7 +189,7 @@
         "vistaContext": "NOT APPLICABLE",
         "needsFullConfig": true,
         "needsPcmm": true,
-        "optionalParams": ["teamFocus", "siteCode"]
+        "optionalParams": ["teamFocus", "division"]
     }, {
         "name": "teams-for-user",
         "modulePath": "team-management/teams-for-user-fetch-list",

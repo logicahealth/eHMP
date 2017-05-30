@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="encounterDocument">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.med.va.gov/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.URL       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="content" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "encounterDocument", namespace = "http://webservice.vds.med.va.gov/", propOrder = {
+@XmlType(name = "encounterDocument", namespace = "http://webservice.vds.URL       /", propOrder = {
     "content",
     "id",
     "localTitle",

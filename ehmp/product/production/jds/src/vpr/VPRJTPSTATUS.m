@@ -1,4 +1,4 @@
-VPRJTPSTATUS ;KRM/CJE -- Unit Tests for business logic based sync status endpoints
+VPRJTPSTATUS ;KRM/CJE,V4W/DLW -- Unit Tests for business logic based sync status endpoints
  ;
 STARTUP  ; Run once before all tests
  K ^VPRSTATUS
@@ -51,6 +51,22 @@ COMPLETEBASICSOLR(SITE,ID,STAMPTIME)
  S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369",SITE_";"_ID,SITE,"vitals","urn:va:vitals:"_SITE_":"_ID_":1002",STAMPTIME,"solrStored")=1
  S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369",SITE_";"_ID,SITE,"allergy","urn:va:allergy:"_SITE_":"_ID_":1001",STAMPTIME,"solrStored")=1
  S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369",SITE_";"_ID,SITE,"allergy","urn:va:allergy:"_SITE_":"_ID_":1002",STAMPTIME,"solrStored")=1
+ Q
+ ;
+COMPLETEBASICSYNCERR(SITE,ID,STAMPTIME)
+ I $G(STAMPTIME)="" S STAMPTIME=20141031094920
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369",SITE_";"_ID,SITE,"vitals","urn:va:vitals:"_SITE_":"_ID_":1001",STAMPTIME,"syncError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369",SITE_";"_ID,SITE,"vitals","urn:va:vitals:"_SITE_":"_ID_":1002",STAMPTIME,"syncError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369",SITE_";"_ID,SITE,"allergy","urn:va:allergy:"_SITE_":"_ID_":1001",STAMPTIME,"syncError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369",SITE_";"_ID,SITE,"allergy","urn:va:allergy:"_SITE_":"_ID_":1002",STAMPTIME,"syncError")=1
+ Q
+ ;
+COMPLETEBASICSOLRERR(SITE,ID,STAMPTIME)
+ I $G(STAMPTIME)="" S STAMPTIME=20141031094920
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369",SITE_";"_ID,SITE,"vitals","urn:va:vitals:"_SITE_":"_ID_":1001",STAMPTIME,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369",SITE_";"_ID,SITE,"vitals","urn:va:vitals:"_SITE_":"_ID_":1002",STAMPTIME,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369",SITE_";"_ID,SITE,"allergy","urn:va:allergy:"_SITE_":"_ID_":1001",STAMPTIME,"solrError")=1
+ S ^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369",SITE_";"_ID,SITE,"allergy","urn:va:allergy:"_SITE_":"_ID_":1002",STAMPTIME,"solrError")=1
  Q
  ;
 PATIDS ; Setup patient identifiers
@@ -1679,7 +1695,6 @@ GETSOLREXCEPTIONS ;; @TEST Get Patient Simple Sync Status with SOLR domain excep
  K ^VPRCONFIG("sync","status","solr","domainExceptions")
  M ^VPRCONFIG("sync","status","solr","domainExceptions")=DOMAINEXCEPTIONS
  Q
- ;
 STORERECORDUNKJPID ;; @TEST Manual Store flag ERROR if UNKNOWN JPID
  N BODY,RETURN,DATA,ARG,ERR,OBJECT,HTTPERR
  S ARG("pid")="1234;6"
@@ -1794,4 +1809,375 @@ STORERECORDSOLR ;; @TEST Manual Store flag is set for SOLR
  S RETURN=$$STORERECORD^VPRJPSTATUS(.ARG,.DATA)
  D ASSERT(1,$G(^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"solrStored")),"SOLR Stored flag doesn't exist")
  D ASSERT("/vpr/9E7A;3/urn:va:vitals:9E7A:3:1002",$G(RETURN),"Return not a 201/no data returned")
+ Q
+STORERECORDSOLRERR ;; @TEST Manual Store flag is set for solrError
+ N BODY,RETURN,DATA,ARG,ERR,HTTPERR
+ S ARG("pid")="9E7A;3"
+ S BODY("uid")="urn:va:vitals:9E7A:3:1002"
+ S BODY("eventStamp")=20141031094920
+ S BODY("type")="solrError"
+ D ENCODE^VPRJSON("BODY","DATA","ERR")
+ K BODY,ERR
+ S RETURN=$$STORERECORD^VPRJPSTATUS(.ARG,.DATA)
+ D ASSERT(1,$G(^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"solrError")),"SOLR Error flag doesn't exist")
+ D ASSERT("/vpr/9E7A;3/urn:va:vitals:9E7A:3:1002",$G(RETURN),"Return not a 201/no data returned")
+ Q
+STORERECORDSYNCERR ;; @TEST Manual Store flag is set for syncError
+ N BODY,RETURN,DATA,ARG,ERR,HTTPERR
+ S ARG("pid")="9E7A;3"
+ S BODY("uid")="urn:va:vitals:9E7A:3:1002"
+ S BODY("eventStamp")=20141031094920
+ S BODY("type")="syncError"
+ D ENCODE^VPRJSON("BODY","DATA","ERR")
+ K BODY,ERR
+ S RETURN=$$STORERECORD^VPRJPSTATUS(.ARG,.DATA)
+ D ASSERT(1,$G(^VPRSTATUS("52833885-af7c-4899-90be-b3a6630b2369","9E7A;3","9E7A","vitals","urn:va:vitals:9E7A:3:1002",20141031094920,"syncError")),"Sync Error flag doesn't exist")
+ D ASSERT("/vpr/9E7A;3/urn:va:vitals:9E7A:3:1002",$G(RETURN),"Return not a 201/no data returned")
+ Q
+ ;
+ ; SOLR and Sync error flag tests for Simple Sync Status
+ ;
+GETSYNCERRORPARTSYNC ;; @TEST Get Patient Simple Sync Status with a Sync error after a partial sync
+ N DATA,ARG,ERR,OBJECT,HTTPERR,ROOTJOBID
+ ;
+ ; Set up test data
+ K ^VPRPTJ("JPID")
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369")=""
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369","9E7A;3")=""
+ S ^VPRPTJ("JPID","9E7A;3")="52833885-af7c-4899-90be-b3a6630b2369"
+ ;
+ D BASIC("9E7A",3)
+ D COMPLETEBASIC("9E7A",3)
+ D COMPLETEBASICSOLR("9E7A",3)
+ ;
+ S ARG("icnpidjpid")="9E7A;3"
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("9E7A;3",$G(OBJECT("sites","9E7A","pid")),"Site-pid 9E7A should exist")
+ D ASSERT("false",$G(OBJECT("sites","9E7A","syncCompleted")),"Site-SYNC 9E7A should not be complete")
+ D ASSERT("true",$G(OBJECT("sites","9E7A","solrSyncCompleted")),"Site-SOLR Sync 9E7A should be complete")
+ D ASSERT("false",$G(OBJECT("syncCompleted")),"Patient 9E7A;3 should not be sync complete")
+ D ASSERT("true",$G(OBJECT("solrSyncCompleted")),"Patient 9E7A;3 should be SOLR sync complete")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasError")),"Site-SYNC 9E7A should not have Sync error")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasSolrError")),"Site-SOLR Sync 9E7A should not have SOLR error")
+ D ASSERT(0,$D(OBJECT("hasError")),"Patient 9E7A;3 should not have Sync error")
+ D ASSERT(0,$D(OBJECT("hasSolrError")),"Patient 9E7A;3 should not have SOLR error")
+ ;
+ I $D(DATA) K @DATA
+ ; Set Sync error flags
+ D COMPLETEBASICSYNCERR("9E7A",3)
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("9E7A;3",$G(OBJECT("sites","9E7A","pid")),"Site-pid 9E7A should exist")
+ D ASSERT("false",$G(OBJECT("sites","9E7A","syncCompleted")),"Site-SYNC 9E7A should not be complete")
+ D ASSERT("true",$G(OBJECT("sites","9E7A","solrSyncCompleted")),"Site-SOLR Sync 9E7A should be complete")
+ D ASSERT("false",$G(OBJECT("syncCompleted")),"Patient 9E7A;3 should not be sync complete")
+ D ASSERT("true",$G(OBJECT("solrSyncCompleted")),"Patient 9E7A;3 should be SOLR sync complete")
+ D ASSERT(1,$D(OBJECT("sites","9E7A","hasError")),"Site-SYNC 9E7A should have Sync error")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasSolrError")),"Site-SOLR Sync 9E7A should not have SOLR error")
+ D ASSERT(1,$D(OBJECT("hasError")),"Patient 9E7A;3 should have Sync error")
+ D ASSERT(0,$D(OBJECT("hasSolrError")),"Patient 9E7A;3 should not have SOLR error")
+ Q
+ ;
+GETSOLRERRORPARTSYNC ;; @TEST Get Patient Simple Sync Status with a SOLR error after a partial sync
+ N DATA,ARG,ERR,OBJECT,HTTPERR,ROOTJOBID
+ ;
+ ; Set up test data
+ K ^VPRPTJ("JPID")
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369")=""
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369","9E7A;3")=""
+ S ^VPRPTJ("JPID","9E7A;3")="52833885-af7c-4899-90be-b3a6630b2369"
+ ;
+ D BASIC("9E7A",3)
+ D COMPLETEBASIC("9E7A",3)
+ D COMPLETEBASICSOLR("9E7A",3)
+ ;
+ S ARG("icnpidjpid")="9E7A;3"
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("9E7A;3",$G(OBJECT("sites","9E7A","pid")),"Site-pid 9E7A should exist")
+ D ASSERT("false",$G(OBJECT("sites","9E7A","syncCompleted")),"Site-SYNC 9E7A should not be complete")
+ D ASSERT("true",$G(OBJECT("sites","9E7A","solrSyncCompleted")),"Site-SOLR Sync 9E7A should be complete")
+ D ASSERT("false",$G(OBJECT("syncCompleted")),"Patient 9E7A;3 should not be sync complete")
+ D ASSERT("true",$G(OBJECT("solrSyncCompleted")),"Patient 9E7A;3 should be SOLR sync complete")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasError")),"Site-SYNC 9E7A should not have Sync error")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasSolrError")),"Site-SOLR Sync 9E7A should not have SOLR error")
+ D ASSERT(0,$D(OBJECT("hasError")),"Patient 9E7A;3 should not have Sync error")
+ D ASSERT(0,$D(OBJECT("hasSolrError")),"Patient 9E7A;3 should not have SOLR error")
+ ;
+ I $D(DATA) K @DATA
+ ; Set SOLR error flags
+ D COMPLETEBASICSOLRERR("9E7A",3)
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("9E7A;3",$G(OBJECT("sites","9E7A","pid")),"Site-pid 9E7A should exist")
+ D ASSERT("false",$G(OBJECT("sites","9E7A","syncCompleted")),"Site-SYNC 9E7A should not be complete")
+ D ASSERT("false",$G(OBJECT("sites","9E7A","solrSyncCompleted")),"Site-SOLR Sync 9E7A should not be complete")
+ D ASSERT("false",$G(OBJECT("syncCompleted")),"Patient 9E7A;3 should not be sync complete")
+ D ASSERT("false",$G(OBJECT("solrSyncCompleted")),"Patient 9E7A;3 should not be SOLR sync complete")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasError")),"Site-SYNC 9E7A should not have Sync error")
+ D ASSERT(1,$D(OBJECT("sites","9E7A","hasSolrError")),"Site-SOLR Sync 9E7A should have SOLR error")
+ D ASSERT(0,$D(OBJECT("hasError")),"Patient 9E7A;3 should not have Sync error")
+ D ASSERT(1,$D(OBJECT("hasSolrError")),"Patient 9E7A;3 should have SOLR error")
+ Q
+ ;
+GETSYNCSOLRERRORPARTSYNC ;; @TEST Get Patient Simple Sync Status with a Sync and a SOLR error after a partial sync
+ N DATA,ARG,ERR,OBJECT,HTTPERR,ROOTJOBID
+ ;
+ ; Set up test data
+ K ^VPRPTJ("JPID")
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369")=""
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369","9E7A;3")=""
+ S ^VPRPTJ("JPID","9E7A;3")="52833885-af7c-4899-90be-b3a6630b2369"
+ ;
+ D BASIC("9E7A",3)
+ D COMPLETEBASIC("9E7A",3)
+ D COMPLETEBASICSOLR("9E7A",3)
+ ;
+ S ARG("icnpidjpid")="9E7A;3"
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("9E7A;3",$G(OBJECT("sites","9E7A","pid")),"Site-pid 9E7A should exist")
+ D ASSERT("false",$G(OBJECT("sites","9E7A","syncCompleted")),"Site-SYNC 9E7A should not be complete")
+ D ASSERT("true",$G(OBJECT("sites","9E7A","solrSyncCompleted")),"Site-SOLR Sync 9E7A should be complete")
+ D ASSERT("false",$G(OBJECT("syncCompleted")),"Patient 9E7A;3 should not be sync complete")
+ D ASSERT("true",$G(OBJECT("solrSyncCompleted")),"Patient 9E7A;3 should be SOLR sync complete")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasError")),"Site-SYNC 9E7A should not have Sync error")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasSolrError")),"Site-SOLR Sync 9E7A should not have SOLR error")
+ D ASSERT(0,$D(OBJECT("hasError")),"Patient 9E7A;3 should not have Sync error")
+ D ASSERT(0,$D(OBJECT("hasSolrError")),"Patient 9E7A;3 should not have SOLR error")
+ ;
+ I $D(DATA) K @DATA
+ ; Set Sync and SOLR error flags
+ D COMPLETEBASICSYNCERR("9E7A",3)
+ D COMPLETEBASICSOLRERR("9E7A",3)
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("9E7A;3",$G(OBJECT("sites","9E7A","pid")),"Site-pid 9E7A should exist")
+ D ASSERT("false",$G(OBJECT("sites","9E7A","syncCompleted")),"Site-SYNC 9E7A should not be complete")
+ D ASSERT("false",$G(OBJECT("sites","9E7A","solrSyncCompleted")),"Site-SOLR Sync 9E7A should not be complete")
+ D ASSERT("false",$G(OBJECT("syncCompleted")),"Patient 9E7A;3 should not be sync complete")
+ D ASSERT("false",$G(OBJECT("solrSyncCompleted")),"Patient 9E7A;3 should not be SOLR sync complete")
+ D ASSERT(1,$D(OBJECT("sites","9E7A","hasError")),"Site-SYNC 9E7A should have Sync error")
+ D ASSERT(1,$D(OBJECT("sites","9E7A","hasSolrError")),"Site-SOLR Sync 9E7A should have SOLR error")
+ D ASSERT(1,$D(OBJECT("hasError")),"Patient 9E7A;3 should have Sync error")
+ D ASSERT(1,$D(OBJECT("hasSolrError")),"Patient 9E7A;3 should have SOLR error")
+ Q
+ ;
+GETSYNCERRORFULLSYNC ;; @TEST Get Patient Simple Sync Status with a Sync error after a full sync
+ N DATA,ARG,ERR,OBJECT,HTTPERR,ROOTJOBID
+ ;
+ ; Set up test data
+ K ^VPRPTJ("JPID")
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369")=""
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369","9E7A;3")=""
+ S ^VPRPTJ("JPID","9E7A;3")="52833885-af7c-4899-90be-b3a6630b2369"
+ ;
+ D BASIC("9E7A",3)
+ D COMPLETEBASIC("9E7A",3)
+ D COMPLETEBASICSOLR("9E7A",3)
+ ;
+ ; Create jobs
+ S ROOTJOBID=$$UUID^VPRJRUT
+ D JOB("9E7A;3",ROOTJOBID,"completed",20160420110400,"enterprise-sync-request")
+ D JOB("9E7A;3",ROOTJOBID,"completed",20160420110400,"vista-9E7A-subscribe-request")
+ D JOB("9E7A;3",ROOTJOBID,"completed",20160420110400,"vista-9E7A-data-allergy-poller")
+ ;
+ S ARG("icnpidjpid")="9E7A;3"
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("9E7A;3",$G(OBJECT("sites","9E7A","pid")),"Site-pid 9E7A should exist")
+ D ASSERT("true",$G(OBJECT("sites","9E7A","syncCompleted")),"Site-SYNC 9E7A should be complete")
+ D ASSERT("true",$G(OBJECT("sites","9E7A","solrSyncCompleted")),"Site-SOLR Sync 9E7A should be complete")
+ D ASSERT("true",$G(OBJECT("syncCompleted")),"Patient 9E7A;3 should be sync complete")
+ D ASSERT("true",$G(OBJECT("solrSyncCompleted")),"Patient 9E7A;3 should be SOLR sync complete")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasError")),"Site-SYNC 9E7A should not have Sync error")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasSolrError")),"Site-SOLR Sync 9E7A should not have SOLR error")
+ D ASSERT(0,$D(OBJECT("hasError")),"Patient 9E7A;3 should not have Sync error")
+ D ASSERT(0,$D(OBJECT("hasSolrError")),"Patient 9E7A;3 should not have SOLR error")
+ ;
+ I $D(DATA) K @DATA
+ ; Set Sync error flags
+ D COMPLETEBASICSYNCERR("9E7A",3)
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("9E7A;3",$G(OBJECT("sites","9E7A","pid")),"Site-pid 9E7A should exist")
+ D ASSERT("false",$G(OBJECT("sites","9E7A","syncCompleted")),"Site-SYNC 9E7A should not be complete")
+ D ASSERT("true",$G(OBJECT("sites","9E7A","solrSyncCompleted")),"Site-SOLR Sync 9E7A should be complete")
+ D ASSERT("false",$G(OBJECT("syncCompleted")),"Patient 9E7A;3 should not be sync complete")
+ D ASSERT("true",$G(OBJECT("solrSyncCompleted")),"Patient 9E7A;3 should be SOLR sync complete")
+ D ASSERT(1,$D(OBJECT("sites","9E7A","hasError")),"Site-SYNC 9E7A should have Sync error")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasSolrError")),"Site-SOLR Sync 9E7A should not have SOLR error")
+ D ASSERT(1,$D(OBJECT("hasError")),"Patient 9E7A;3 should have Sync error")
+ D ASSERT(0,$D(OBJECT("hasSolrError")),"Patient 9E7A;3 should not have SOLR error")
+ Q
+ ;
+GETSOLRERRORFULLSYNC ;; @TEST Get Patient Simple Sync Status with a SOLR error after a full sync
+ N DATA,ARG,ERR,OBJECT,HTTPERR,ROOTJOBID
+ ;
+ ; Set up test data
+ K ^VPRPTJ("JPID")
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369")=""
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369","9E7A;3")=""
+ S ^VPRPTJ("JPID","9E7A;3")="52833885-af7c-4899-90be-b3a6630b2369"
+ ;
+ D BASIC("9E7A",3)
+ D COMPLETEBASIC("9E7A",3)
+ D COMPLETEBASICSOLR("9E7A",3)
+ ;
+ ; Create jobs
+ S ROOTJOBID=$$UUID^VPRJRUT
+ D JOB("9E7A;3",ROOTJOBID,"completed",20160420110400,"enterprise-sync-request")
+ D JOB("9E7A;3",ROOTJOBID,"completed",20160420110400,"vista-9E7A-subscribe-request")
+ D JOB("9E7A;3",ROOTJOBID,"completed",20160420110400,"vista-9E7A-data-allergy-poller")
+ ;
+ S ARG("icnpidjpid")="9E7A;3"
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("9E7A;3",$G(OBJECT("sites","9E7A","pid")),"Site-pid 9E7A should exist")
+ D ASSERT("true",$G(OBJECT("sites","9E7A","syncCompleted")),"Site-SYNC 9E7A should be complete")
+ D ASSERT("true",$G(OBJECT("sites","9E7A","solrSyncCompleted")),"Site-SOLR Sync 9E7A should be complete")
+ D ASSERT("true",$G(OBJECT("syncCompleted")),"Patient 9E7A;3 should be sync complete")
+ D ASSERT("true",$G(OBJECT("solrSyncCompleted")),"Patient 9E7A;3 should be SOLR sync complete")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasError")),"Site-SYNC 9E7A should not have Sync error")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasSolrError")),"Site-SOLR Sync 9E7A should not have SOLR error")
+ D ASSERT(0,$D(OBJECT("hasError")),"Patient 9E7A;3 should not have Sync error")
+ D ASSERT(0,$D(OBJECT("hasSolrError")),"Patient 9E7A;3 should not have SOLR error")
+ ;
+ I $D(DATA) K @DATA
+ ; Set SOLR error flags
+ D COMPLETEBASICSOLRERR("9E7A",3)
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("9E7A;3",$G(OBJECT("sites","9E7A","pid")),"Site-pid 9E7A should exist")
+ D ASSERT("true",$G(OBJECT("sites","9E7A","syncCompleted")),"Site-SYNC 9E7A should be complete")
+ D ASSERT("false",$G(OBJECT("sites","9E7A","solrSyncCompleted")),"Site-SOLR Sync 9E7A should not be complete")
+ D ASSERT("true",$G(OBJECT("syncCompleted")),"Patient 9E7A;3 should be sync complete")
+ D ASSERT("false",$G(OBJECT("solrSyncCompleted")),"Patient 9E7A;3 should not be SOLR sync complete")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasError")),"Site-SYNC 9E7A should not have Sync error")
+ D ASSERT(1,$D(OBJECT("sites","9E7A","hasSolrError")),"Site-SOLR Sync 9E7A should have SOLR error")
+ D ASSERT(0,$D(OBJECT("hasError")),"Patient 9E7A;3 should not have Sync error")
+ D ASSERT(1,$D(OBJECT("hasSolrError")),"Patient 9E7A;3 should have SOLR error")
+ Q
+ ;
+GETSYNCSOLRERRORFULLSYNC ;; @TEST Get Patient Simple Sync Status with a Sync and a SOLR error after a full sync
+ N DATA,ARG,ERR,OBJECT,HTTPERR,ROOTJOBID
+ ;
+ ; Set up test data
+ K ^VPRPTJ("JPID")
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369")=""
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369","9E7A;3")=""
+ S ^VPRPTJ("JPID","9E7A;3")="52833885-af7c-4899-90be-b3a6630b2369"
+ ;
+ D BASIC("9E7A",3)
+ D COMPLETEBASIC("9E7A",3)
+ D COMPLETEBASICSOLR("9E7A",3)
+ ;
+ ; Create jobs
+ S ROOTJOBID=$$UUID^VPRJRUT
+ D JOB("9E7A;3",ROOTJOBID,"completed",20160420110400,"enterprise-sync-request")
+ D JOB("9E7A;3",ROOTJOBID,"completed",20160420110400,"vista-9E7A-subscribe-request")
+ D JOB("9E7A;3",ROOTJOBID,"completed",20160420110400,"vista-9E7A-data-allergy-poller")
+ ;
+ S ARG("icnpidjpid")="9E7A;3"
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("9E7A;3",$G(OBJECT("sites","9E7A","pid")),"Site-pid 9E7A should exist")
+ D ASSERT("true",$G(OBJECT("sites","9E7A","syncCompleted")),"Site-SYNC 9E7A should be complete")
+ D ASSERT("true",$G(OBJECT("sites","9E7A","solrSyncCompleted")),"Site-SOLR Sync 9E7A should be complete")
+ D ASSERT("true",$G(OBJECT("syncCompleted")),"Patient 9E7A;3 should be sync complete")
+ D ASSERT("true",$G(OBJECT("solrSyncCompleted")),"Patient 9E7A;3 should be SOLR sync complete")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasError")),"Site-SYNC 9E7A should not have Sync error")
+ D ASSERT(0,$D(OBJECT("sites","9E7A","hasSolrError")),"Site-SOLR Sync 9E7A should not have SOLR error")
+ D ASSERT(0,$D(OBJECT("hasError")),"Patient 9E7A;3 should not have Sync error")
+ D ASSERT(0,$D(OBJECT("hasSolrError")),"Patient 9E7A;3 should not have SOLR error")
+ ;
+ I $D(DATA) K @DATA
+ ; Set Sync and SOLR error flags
+ D COMPLETEBASICSYNCERR("9E7A",3)
+ D COMPLETEBASICSOLRERR("9E7A",3)
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("9E7A;3",$G(OBJECT("sites","9E7A","pid")),"Site-pid 9E7A should exist")
+ D ASSERT("false",$G(OBJECT("sites","9E7A","syncCompleted")),"Site-SYNC 9E7A should not be complete")
+ D ASSERT("false",$G(OBJECT("sites","9E7A","solrSyncCompleted")),"Site-SOLR Sync 9E7A should not be complete")
+ D ASSERT("false",$G(OBJECT("syncCompleted")),"Patient 9E7A;3 should not be sync complete")
+ D ASSERT("false",$G(OBJECT("solrSyncCompleted")),"Patient 9E7A;3 should not be SOLR sync complete")
+ D ASSERT(1,$D(OBJECT("sites","9E7A","hasError")),"Site-SYNC 9E7A should have Sync error")
+ D ASSERT(1,$D(OBJECT("sites","9E7A","hasSolrError")),"Site-SOLR Sync 9E7A should have SOLR error")
+ D ASSERT(1,$D(OBJECT("hasError")),"Patient 9E7A;3 should have Sync error")
+ D ASSERT(1,$D(OBJECT("hasSolrError")),"Patient 9E7A;3 should have SOLR error")
+ Q
+RESETSYNCERROR ;; @TEST Get Patient Simple Sync Status with a Sync and a SOLR error after a full sync
+ N JPID,DATA,ARG,ERR,HTTPERR,STAMPTIME,RETURN
+ ; Set up solr error
+ D PATIDS
+ S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S STAMPTIME=20141031094920
+ S ARG("pid")="9E7A;3"
+ S BODY("uid")="urn:va:vitals:9E7A:3:1001",BODY("eventStamp")=STAMPTIME,BODY("type")="solrErr",BODY("pid")="9E7A;3"
+ D ENCODE^VPRJSON("BODY","DATA","ERR")
+ S RETURN=$$STORERECORD^VPRJPSTATUS(.ARG,.DATA)
+ ; Set status to stored
+ S BODY("type")="solr"
+ K DATA,ERR D ENCODE^VPRJSON("BODY","DATA","ERR")
+ S RETURN=$$STORERECORD^VPRJPSTATUS(.ARG,.DATA)
+ D ASSERT("",$G(^VPRSTATUS(JPID,"9E7A;3","9E7A","vitals",BODY("uid"),STAMPTIME,"solrError")),"SOLR Error should have been cleared")
+ D ASSERT(1,$G(^VPRSTATUS(JPID,"9E7A;3","9E7A","vitals",BODY("uid"),STAMPTIME,"solrStored")),"SOLR status should be stored")
+ S BODY("uid")="urn:va:vitals:9E7A:3:1002",BODY("type")="syncError"
+ K DATA,ERR D ENCODE^VPRJSON("BODY","DATA","ERR")
+ S RETURN=$$STORERECORD^VPRJPSTATUS(.ARG,.DATA)
+ S BODY("type")="jds"
+ K DATA,ERR D ENCODE^VPRJSON("BODY","DATA","ERR")
+ S RETURN=$$STORERECORD^VPRJPSTATUS(.ARG,.DATA)
+ D ASSERT("",$G(^VPRSTATUS(JPID,"9E7A;3","9E7A","vitals",BODY("uid"),STAMPTIME,"syncError")),"Sync Error should have been cleared")
+ D ASSERT(1,$G(^VPRSTATUS(JPID,"9E7A;3","9E7A","vitals",BODY("uid"),STAMPTIME,"stored")),"Object should be stored")
  Q

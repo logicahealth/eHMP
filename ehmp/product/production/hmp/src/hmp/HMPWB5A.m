@@ -1,5 +1,5 @@
 HMPWB5A ;JD/CNP,ASMR/CPC - Write back entry points for Notes, and Encounters;Aug 12, 2016@08:44:47
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3**;Sep 01, 2011;Build 11
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;Continued from HMPWB5.
  ;

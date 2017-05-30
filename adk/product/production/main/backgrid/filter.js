@@ -45,7 +45,7 @@ define([
                 'focusout .filter-title-input': 'filterEditModeFromUi',
                 'change .filter-title-input': 'saveFilter',
                 'keypress .filter-title-input': 'filterKeypress',
-                'click .clear-input': 'clear'
+                'click .clear-input-btn': 'clear'
             }),
             addFilter: function(filterText) {
                 if (filterText.length < 1) {
@@ -504,7 +504,7 @@ define([
             clear: function() {
                 this.searchBox().val('');
                 this.toggleClearButton();
-                this.$(".clear-input").hide();
+                this.$(".clear-input-btn").addClass('hidden');
                 this.$('.filter-add').attr('disabled', true);
 
                 // trigger filterDone event for GistView.
@@ -528,24 +528,24 @@ define([
                 }
             },
             toggleClearButton: function() {
-                var $clearButton = this.clearButton();
+                var $clearButton = this.$(".clear-input-btn");
                 var searchTerms = this.searchBox().val();
                 if (searchTerms.length > 0) {
-                    $clearButton.show();
+                    $clearButton.removeClass('hidden');
                 } else {
-                    $clearButton.hide();
+                    $clearButton.addClass('hidden');
                 }
             },
             clearInputBtnDisplay: function() {
                 var searchVal = this.searchBox().val() || this.filterText;
                 if (searchVal) {
-                    this.$(".clear-input").show();
+                    this.$(".clear-input-btn").removeClass('hidden');
                     if (searchVal.length > 2) {
                         this.$('.filter-add').attr('disabled', false);
                         return;
                     }
                 } else {
-                    this.$(".clear-input").hide();
+                    this.$(".clear-input-btn").addClass('hidden');
                 }
                 this.$('.filter-add').attr('disabled', true);
             },

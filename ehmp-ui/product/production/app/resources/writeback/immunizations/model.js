@@ -1,4 +1,6 @@
 define([], function() {
+    'use strict';
+
     var immunization = ADK.Resources.Writeback.Model.extend({
         resource: 'immunizations-add',
         vpr: 'immunizations',

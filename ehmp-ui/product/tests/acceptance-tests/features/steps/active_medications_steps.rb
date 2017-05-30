@@ -34,7 +34,7 @@ class ActiveMedications < AllApplets
     add_applet_title appletid_css
     add_toolbar_buttons
 
-    add_verify(CucumberLabel.new("Header - Medication"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-activeMeds [data-header-instanceid=activeMeds-name] a"))
+    add_verify(CucumberLabel.new("Header - Medication"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-activeMeds [data-header-instanceid=activeMeds-normalizedName] a"))
     add_verify(CucumberLabel.new("Header - Status"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-activeMeds [data-header-instanceid=activeMeds-vaStatus] a"))
     add_verify(CucumberLabel.new("Header - Facility"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-activeMeds [data-header-instanceid=activeMeds-facilityMoniker] a"))
   end

@@ -1,10 +1,13 @@
+/*jslint node: true, nomen: true, unparam: true */
+/*global jquery, $, _, define, Marionette, describe, it, expect, beforeEach, afterEach, spyOn */
+
 'use strict';
 define([
     'jquery',
     'underscore',
     'backbone',
     'marionette',
-    'main/ui_components/components',
+    'main/UILibrary',
     'api/UIComponents',
     'jasminejquery'
 ], function($, _, Backbone, Marionette, UI) {
@@ -65,7 +68,7 @@ define([
             });
 
             it('has id default to name', function() {
-                expect($form.find('.faux-table-container')).toHaveId(selectableTableControlDefinition.name);
+                expect($form.find('.faux-table-container').attr('id')).toContain(selectableTableControlDefinition.name);
             });
 
             it('has screen reader text with a default label', function() {

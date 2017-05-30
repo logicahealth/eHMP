@@ -1,6 +1,6 @@
 require 'vistarpc4r'
 
-@broker = VistaRPC4r::RPCBrokerConnection.new("10.2.2.101", 9210, "PRO12345", "PRO12345!!", false)
+@broker = VistaRPC4r::RPCBrokerConnection.new("IP        ", PORT, "REDACTED", "REDACTED", false)
 @broker.connect
 @broker.setContext('OR CPRS GUI CHART')
 
@@ -221,11 +221,11 @@ save_med(patient_id, med, dose)
 
 # require 'greenletters'
 
-# console = Greenletters::Process.new("ssh vagrant@10.2.2.101", :timeout => 10)
+# console = Greenletters::Process.new("ssh vagrant@IP        ", :timeout => 10)
 
 # console.start!
 
-# console.wait_for(:output, /vagrant@10.2.2.101's password: /i)
+# console.wait_for(:output, /vagrant@IP        's password: /i)
 # console << "vagrant\r"
 
 # console.wait_for(:output, /[vagrant@localhost ~]$/i)

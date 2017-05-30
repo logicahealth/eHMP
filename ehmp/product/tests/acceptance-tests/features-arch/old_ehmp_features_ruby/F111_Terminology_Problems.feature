@@ -85,5 +85,5 @@ Scenario Outline: An authorized user can access DoD Problem List and see standar
       
 #TestNote: 
 #	* We could not test problems in FHIR format because it's not available through FHIR.
-#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
+#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS  E/JLV+Terminology+Handling
 	 

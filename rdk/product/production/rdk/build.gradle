@@ -47,17 +47,10 @@ task ccowInstallNpm(type: Exec) {
   commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
 }
 
-task writeInstallNpm(type: Exec) {
-  workingDir './src/write'
+task cleanNPM(type: Delete) {
   group "RDK Tasks"
-  description "installs package(s) for write back"
-  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
-}
-
-task pruneNpm(type: Exec) {
-  group "RDK Tasks"
-  description "prune package(s)"
-  commandLine  "npm", "prune"
+  description "Clean up node_modules"
+  delete "${projectDir}/node_modules"
 }
 
 task deletePreparsedApiDocs(type: Delete) {
@@ -66,7 +59,7 @@ task deletePreparsedApiDocs(type: Delete) {
   delete fileTree(dir: 'src', include: '**/*.md-preparsed.json')
 }
 
-clean.dependsOn pruneNpm
+clean.dependsOn cleanNPM
 clean.dependsOn deletePreparsedApiDocs
 
 task build(dependsOn: [clean, installNpm, installFakeOracleDB]) {
@@ -98,7 +91,7 @@ task rdkAllTests(dependsOn: [test, rdkIntTests]) {
   description "runs unit and integration tests"
 }
 
-task zipRDK(type: Zip, dependsOn: [build, ccowInstallNpm, writeInstallNpm]) {
+task zipRDK(type: Zip, dependsOn: [build, ccowInstallNpm]) {
   extension = 'zip'
   baseName = 'rdk'
   version = version

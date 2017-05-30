@@ -46,7 +46,7 @@ var processStartTime = moment().format('YYYYMMDDHHmmss');
 // COMMENT OUT NOTE:   This was commented our rather than deleted.   Currently we do not want this module to
 //                     be watching and handling config notification events.   Any change to config should
 //                     be handled by a start and stop of this system.   But in the future if it was determined
-//                     that this module shouild monitor for on the fly changes in config - the uncomment out
+//                     that this module should monitor for on the fly changes in config - the uncomment out
 //                     this code.
 //---------------------------------------------------------------------------------------------------------------
 // config.addChangeCallback('subscribeHost.js', function() {
@@ -125,58 +125,58 @@ function registerHandlers(logger, config, environment) {
     var handlerRegistry = new HandlerRegistry(environment);
     var hdrSites = config.hdr.hdrSites;
 
-    handlerRegistry.register(logger, config, environment, jobUtil.errorRequestType(), require(global.VX_HANDLERS + 'error-request/error-request-handler'));
+    handlerRegistry.register(config, jobUtil.errorRequestType(), require(global.VX_HANDLERS + 'error-request/error-request-handler'));
 
-    handlerRegistry.register(logger, config, environment, jobUtil.enterpriseSyncRequestType(), require(global.VX_HANDLERS + 'enterprise-sync-request/enterprise-sync-request-handler'));
-    handlerRegistry.register(logger, config, environment, jobUtil.vistaOperationalSubscribeRequestType(), require(global.VX_HANDLERS + 'operational-data-subscription/operational-data-subscription-handler'));
+    handlerRegistry.register(config, jobUtil.enterpriseSyncRequestType(), require(global.VX_HANDLERS + 'enterprise-sync-request/enterprise-sync-request-handler'));
+    handlerRegistry.register(config, jobUtil.vistaOperationalSubscribeRequestType(), require(global.VX_HANDLERS + 'operational-data-subscription/operational-data-subscription-handler'));
 
     _.each(config.vistaSites, function(site, vistaId) {
-        handlerRegistry.register(vistaId, logger, config, environment, jobUtil.vistaSubscribeRequestType(vistaId), require(global.VX_HANDLERS + 'vista-subscribe-request/vista-subscribe-request-handler'));
+        handlerRegistry.register(vistaId, config, jobUtil.vistaSubscribeRequestType(vistaId), require(global.VX_HANDLERS + 'vista-subscribe-request/vista-subscribe-request-handler'));
     });
 
     _.each(hdrSites, function(site, siteId) {
-        handlerRegistry.register(siteId, logger, config, environment, jobUtil.vistahdrSubScribeRequestType(siteId), require(global.VX_HANDLERS + 'vista-subscribe-request/vista-subscribe-request-handler'));
+        handlerRegistry.register(siteId, config, jobUtil.vistahdrSubScribeRequestType(siteId), require(global.VX_HANDLERS + 'vista-subscribe-request/vista-subscribe-request-handler'));
     });
 
-    handlerRegistry.register(logger, config, environment, jobUtil.hdrSyncRequestType(), require(global.VX_HANDLERS + 'hdr-sync-request/hdr-sync-request-handler'));
-    handlerRegistry.register(logger, config, environment, jobUtil.vlerSyncRequestType(), require(global.VX_HANDLERS + 'vler-sync-request/vler-sync-request-handler'));
-    handlerRegistry.register(logger, config, environment, jobUtil.pgdSyncRequestType(), require(global.VX_HANDLERS + 'pgd-sync-request/pgd-sync-request-handler'));
-    handlerRegistry.register(logger, config, environment, jobUtil.jmeadowsSyncRequestType(), require(global.VX_HANDLERS + 'jmeadows-sync-request/jmeadows-sync-request-handler'));
+    handlerRegistry.register(config, jobUtil.hdrSyncRequestType(), require(global.VX_HANDLERS + 'hdr-sync-request/hdr-sync-request-handler'));
+    handlerRegistry.register(config, jobUtil.vlerSyncRequestType(), require(global.VX_HANDLERS + 'vler-sync-request/vler-sync-request-handler'));
+    handlerRegistry.register(config, jobUtil.pgdSyncRequestType(), require(global.VX_HANDLERS + 'pgd-sync-request/pgd-sync-request-handler'));
+    handlerRegistry.register(config, jobUtil.jmeadowsSyncRequestType(), require(global.VX_HANDLERS + 'jmeadows-sync-request/jmeadows-sync-request-handler'));
 
-    handlerRegistry.register(logger, config, environment, jobUtil.vlerXformVprType(), require(global.VX_HANDLERS + 'vler-to-vpr-xform/vler-to-vpr-xform-handler'));
-    handlerRegistry.register(logger, config, environment, jobUtil.pgdXformVprType(), require(global.VX_HANDLERS + 'pgd-to-vpr-xform/pgd-to-vpr-xform-handler'));
+    handlerRegistry.register(config, jobUtil.vlerXformVprType(), require(global.VX_HANDLERS + 'vler-to-vpr-xform/vler-to-vpr-xform-handler'));
+    handlerRegistry.register(config, jobUtil.pgdXformVprType(), require(global.VX_HANDLERS + 'pgd-to-vpr-xform/pgd-to-vpr-xform-handler'));
 
     _.each(jmeadowsDomains, function(domain) {
-        handlerRegistry.register(logger, config, environment, jobUtil.jmeadowsDomainSyncRequestType(domain), require(global.VX_HANDLERS + 'jmeadows-sync-domain-request/jmeadows-sync-domain-request-handler'));
-        handlerRegistry.register(logger, config, environment, jobUtil.jmeadowsDomainXformVprType(domain), require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/jmeadows-xform-domain-vpr-handler'));
+        handlerRegistry.register(config, jobUtil.jmeadowsDomainSyncRequestType(domain), require(global.VX_HANDLERS + 'jmeadows-sync-domain-request/jmeadows-sync-domain-request-handler'));
+        handlerRegistry.register(config, jobUtil.jmeadowsDomainXformVprType(domain), require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/jmeadows-xform-domain-vpr-handler'));
     });
 
     _.each(hdrDomains, function(domain) {
-        handlerRegistry.register(logger, config, environment, jobUtil.hdrDomainSyncRequestType(domain), require(global.VX_HANDLERS + 'hdr-sync-domain-request/hdr-sync-domain-request-handler'));
-        handlerRegistry.register(logger, config, environment, jobUtil.hdrDomainXformVprType(domain), require(global.VX_HANDLERS + 'hdr-xform-domain-vpr/hdr-xform-domain-vpr-handler'));
+        handlerRegistry.register(config, jobUtil.hdrDomainSyncRequestType(domain), require(global.VX_HANDLERS + 'hdr-sync-domain-request/hdr-sync-domain-request-handler'));
+        handlerRegistry.register(config, jobUtil.hdrDomainXformVprType(domain), require(global.VX_HANDLERS + 'hdr-xform-domain-vpr/hdr-xform-domain-vpr-handler'));
     });
 
-    handlerRegistry.register(logger, config, environment, jobUtil.jmeadowsPdfDocumentTransformType(), require(global.VX_HANDLERS + 'jmeadows-document/jmeadows-pdf-document-transform-handler'));
-    handlerRegistry.register(logger, config, environment, jobUtil.jmeadowsDocRetrievalType(), require(global.VX_HANDLERS + 'jmeadows-document/jmeadows-pdf-request-handler'));
+    handlerRegistry.register(config, jobUtil.jmeadowsPdfDocumentTransformType(), require(global.VX_HANDLERS + 'jmeadows-document/jmeadows-pdf-document-transform-handler'));
+    handlerRegistry.register(config, jobUtil.jmeadowsDocRetrievalType(), require(global.VX_HANDLERS + 'jmeadows-document/jmeadows-pdf-request-handler'));
 
-    handlerRegistry.register(logger, config, environment, jobUtil.jmeadowsCdaDocumentConversionType(), require(global.VX_HANDLERS + 'jmeadows-document/jmeadows-cda-document-conversion-handler'));
+    handlerRegistry.register(config, jobUtil.jmeadowsCdaDocumentConversionType(), require(global.VX_HANDLERS + 'jmeadows-document/jmeadows-cda-document-conversion-handler'));
 
-    handlerRegistry.register(logger, config, environment, jobUtil.recordEnrichmentType(), require(global.VX_HANDLERS + 'record-enrichment-request/record-enrichment-request-handler'));
+    handlerRegistry.register(config, jobUtil.recordEnrichmentType(), require(global.VX_HANDLERS + 'record-enrichment-request/record-enrichment-request-handler'));
 
-    handlerRegistry.register(logger, config, environment, jobUtil.eventPrioritizationRequestType(), require(global.VX_HANDLERS + 'event-prioritization-request/event-prioritization-request-handler'));
+    handlerRegistry.register(config, jobUtil.eventPrioritizationRequestType(), require(global.VX_HANDLERS + 'event-prioritization-request/event-prioritization-request-handler'));
 
-    handlerRegistry.register(logger, config, environment, jobUtil.vistaRecordProcessorRequestType(), require(global.VX_HANDLERS + 'vista-record-processor/vista-record-processor-handler'));
+    handlerRegistry.register(config, jobUtil.vistaRecordProcessorRequestType(), require(global.VX_HANDLERS + 'vista-record-processor/vista-record-processor-handler'));
 
-    handlerRegistry.register(logger, config, environment, jobUtil.operationalDataStoreType(), require(global.VX_HANDLERS + 'operational-data-store-request/operational-data-store-request-handler'));
+    handlerRegistry.register(config, jobUtil.operationalDataStoreType(), require(global.VX_HANDLERS + 'operational-data-store-request/operational-data-store-request-handler'));
 
-    handlerRegistry.register(logger, config, environment, jobUtil.storeRecordType(), require(global.VX_HANDLERS + 'store-record-request/store-record-request-handler'));
-    handlerRegistry.register(logger, config, environment, 'solr-record-storage', require(global.VX_HANDLERS + 'solr-record-storage/solr-record-storage-handler'));
-    handlerRegistry.register(logger, config, environment, jobUtil.publishVxDataChangeType(), require(global.VX_HANDLERS + 'publish-vx-data-change-request/publish-vx-data-change-request-handler'));
+    handlerRegistry.register(config, jobUtil.storeRecordType(), require(global.VX_HANDLERS + 'store-record-request/store-record-request-handler'));
+    handlerRegistry.register(config, jobUtil.solrRecordStorageType(), require(global.VX_HANDLERS + 'solr-record-storage/solr-record-storage-handler'));
+    handlerRegistry.register(config, jobUtil.publishVxDataChangeType(), require(global.VX_HANDLERS + 'publish-vx-data-change-request/publish-vx-data-change-request-handler'));
 
-    handlerRegistry.register(logger, config, environment, jobUtil.resyncRequestType(), require(global.VX_HANDLERS + 'resync-request/resync-request-handler'));
-    handlerRegistry.register(logger, config, environment, jobUtil.recordUpdateType(), require(global.VX_HANDLERS + 'record-update/record-update-handler'));
+    handlerRegistry.register(config, jobUtil.resyncRequestType(), require(global.VX_HANDLERS + 'resync-request/resync-request-handler'));
+    handlerRegistry.register(config, jobUtil.recordUpdateType(), require(global.VX_HANDLERS + 'record-update/record-update-handler'));
 
-    handlerRegistry.register(logger, config, environment, jobUtil.patientRecordRetirementType(), require(global.VX_HANDLERS + 'patient-record-retirement/patient-record-retirement-handler'));
+    handlerRegistry.register(config, jobUtil.patientRecordRetirementType(), require(global.VX_HANDLERS + 'patient-record-retirement/patient-record-retirement-handler'));
 
     return handlerRegistry;
 }
@@ -197,12 +197,12 @@ function startWorkers(config, handlerRegistry, environment, profileJobTypes, aut
         logger.debug('subscriberHost.startWorkers: jobType: %j; jobSettings: %j', jobType, jobSettings);
         if (!_.isUndefined(config.beanstalk.jobTypes[jobType]) && !_.isUndefined(config.beanstalk.jobTypes[jobType].host)) {
             var workerCount;
-            if ((jobSettings) && (jobSettings.workerCount)) {
+            if ((jobSettings) && (jobSettings.workerCount) && (_.isNumber(jobSettings.workerCount)) && (jobSettings.workerCount >= 1)) {
                 workerCount = jobSettings.workerCount;
             } else {
                 workerCount = defaultWorkerCount;
-                logger.info('subscriberHost.startWorkers: Profile: %s and JobType: %s contained no workerCount setting in worker-config.json.  Using the default value of: %d', profile, jobType, defaultWorkerCount);
-                logger.warn('subscriberHost.startWorkers: Profile: %s and JobType: %s contained no workerCount setting in worker-config.json.  Using the default value of: %d', profile, jobType, defaultWorkerCount);
+                logger.info('subscriberHost.startWorkers: Profile: %s and JobType: %s contained no valid workerCount setting in worker-config.json.  Using the default value of: %d', profile, jobType, defaultWorkerCount);
+                logger.warn('subscriberHost.startWorkers: Profile: %s and JobType: %s contained no valid workerCount setting in worker-config.json.  Using the default value of: %d', profile, jobType, defaultWorkerCount);
             }
             var connectInfo = config.beanstalk.jobTypes[jobType];
 

@@ -23,7 +23,7 @@ Scenario: Verify if OnLineHelp icons are present on Coversheet page on all 9 app
 @F236_4_OnLineHelp_docuemnts
 Scenario: Verify if OnLineHelp icons are present on Documents applet
   When user searches for and selects "Eight,Patient"  
-  And user navigates to Documents Applet
+  And user navigates to Documents Screen
   Then "Documents" is active
   And the On-line Help icon is present on Documents page
   

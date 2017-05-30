@@ -52,6 +52,19 @@ function isValidRequest (job, type, log, callback) {
     return callback(null);
 }
 
+function setupIdLogger(job, log) {
+    //based on rdk-framework-middleware:addLoggerToRequest function
+    if(!_.isUndefined(job) && !_.isNull(job)) {
+        var idLogger = log.child({
+            requestId: _.get(job, 'referenceInfo.requestId', undefined),
+            sid: _.get(job, 'referenceInfo.sessionId', undefined)
+        });
+
+        return idLogger;
+    }
+    return log;
+}
+
 function isSecondarySitePid (job, log) {
     var pid = job.patientIdentifier.value;
     var isSecondarySite = true;
@@ -114,10 +127,15 @@ function buildClinicalObject(job, log) {
     clinicalObject.patientUid = constructPatientUid(pid, log);
 
     clinicalObject.authorUid = job.record.authorUid ? job.record.authorUid : job.record.providerUid;
+
+    var subDomain;
     if ('order' === job.dataDomain) {
-        clinicalObject.subDomain = job.record.kind.toLowerCase();
+        subDomain = _.get(job, 'record.kind');
     } else {
-        clinicalObject.subDomain = job.dataDomain.toLowerCase();
+        subDomain = _.get(job, 'dataDomain');
+    }
+    if (_.isString(subDomain)) {
+        clinicalObject.subDomain = subDomain.toLowerCase();
     }
     clinicalObject.domain = 'ehmp-activity';
     clinicalObject.referenceId = job.record.uid;
@@ -151,6 +169,7 @@ function constructPatientUid (pid, log) {
 }
 
 module.exports.isValidRequest = isValidRequest;
+module.exports.setupIdLogger = setupIdLogger;
 module.exports.isVPRObject = isVPRObject;
 module.exports.findClinicalObject = findClinicalObject;
 module.exports.buildClinicalObject = buildClinicalObject;

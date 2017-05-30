@@ -26,6 +26,14 @@ Then(/^user navigates to expanded request applet$/) do
   wait.until { applet_grid_loaded(ehmp.has_fld_empty_row?, ehmp.tbl_request_rows) }
   ehmp.menu.wait_until_fld_screen_name_visible
   expect(ehmp.menu.fld_screen_name.text.upcase).to have_text("Requests".upcase)
+  
+  # remove filters if any applied
+  ehmp.wait_for_btn_applet_remove_filters(1)
+  if ehmp.has_btn_applet_remove_filters?
+    ehmp.btn_applet_remove_filters.click
+    # once we remove filters, the applet will need to reload
+    wait.until { applet_grid_loaded(ehmp.has_fld_empty_row?, ehmp.tbl_request_rows) }
+  end
 end
 
 Then(/^user unchecks the flagged checkbox from request applet$/) do
@@ -38,6 +46,8 @@ Then(/^user unchecks the flagged checkbox from request applet$/) do
 end
 
 When(/^the user takes note of number of existing requests$/) do
+  wait = Selenium::WebDriver::Wait.new(:timeout => 60)
+  wait.until { infinite_scroll_other("#data-grid-requests tbody") }
   @number_existing_requests = PobRequestApplet.new.number_expanded_applet_rows
   p "number existing_requests: #{@number_existing_requests}"
 end
@@ -53,6 +63,7 @@ Then(/^a request is added to the applet$/) do
   ehmp = PobRequestApplet.new
   ehmp.wait_for_tbl_request_rows
   wait = Selenium::WebDriver::Wait.new(:timeout => 60)
+  wait.until { infinite_scroll_other("#data-grid-requests tbody") }
   wait.until { ehmp.number_expanded_applet_rows == @number_existing_requests + 1 }
 end
 
@@ -77,6 +88,9 @@ end
 
 Then(/^user views the details of the request$/) do
   ehmp = PobRequestApplet.new
+  ehmp.wait_until_fld_request_created_on_visible
+  expect(ehmp).to have_fld_request_created_on
+  ehmp.fld_request_created_on.click
   ehmp.wait_until_tbl_request_rows_visible
   rows = ehmp.tbl_request_rows
   expect(rows.length > 0).to eq(true), "There needs to be at least one row present, found only '#{rows.length}'"
@@ -94,6 +108,8 @@ Then(/^the user sorts the Request applet by column Request$/) do
   ehmp.wait_until_fld_request_header_visible
   expect(ehmp).to have_fld_request_header
   ehmp.fld_request_header.click  
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until { infinite_scroll_other("#data-grid-requests tbody") }
 end
 
 Then(/^the Request applet is sorted in alphabetic order based on column Request$/) do
@@ -102,7 +118,7 @@ Then(/^the Request applet is sorted in alphabetic order based on column Request$
     
   column_values = ehmp.fld_request_column_data
   expect(column_values.length).to be >= 2
-  is_ascending = ascending? column_values
+  is_ascending = backgrid_ascend? column_values
   expect(is_ascending).to be(true), "Values are not in Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_ascending == false}"
 end
 
@@ -112,7 +128,7 @@ Then(/^the Request applet is sorted in reverse alphabetic order based on column 
     
   column_values = ehmp.fld_request_column_data
   expect(column_values.length).to be >= 2
-  is_descending = descending? column_values
+  is_descending = backgrid_descend? column_values
   expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_descending == false}"
 end
 
@@ -127,10 +143,18 @@ Then(/^user discontinues the request$/) do
   ehmp.wait_until_btn_submit_accept_visible
   expect(ehmp).to have_btn_submit_accept
   ehmp.btn_submit_accept.click 
-  ehmp.wait_until_btn_reqeust_modal_close_visible
-  expect(ehmp).to have_btn_reqeust_modal_close
-  ehmp.btn_reqeust_modal_close.click 
-  ehmp.wait_until_btn_reqeust_modal_close_invisible    
+  max_attempt = 4
+  begin
+    ehmp.wait_until_btn_request_modal_close_visible
+    expect(ehmp).to have_btn_request_modal_close
+    ehmp.btn_request_modal_close.click 
+    ehmp.wait_until_btn_request_modal_close_invisible 
+  rescue Exception => e
+    p "Exception received: trying again"
+    max_attempt-=1
+    raise e if max_attempt <= 0
+    retry if max_attempt > 0
+  end   
 end
 
 Then(/^Reqeust applet shows only requests that have are in "([^"]*)" state$/) do |input_text|
@@ -145,7 +169,7 @@ Then(/^user selects to show only "([^"]*)" requests$/) do |input|
   ehmp.ddL_display_only.select input
 end
 
-Then(/^Request applet shows both active and completed requests$/) do
+Then(/^Request applet shows either active or completed requests$/) do
   ehmp = PobRequestApplet.new
   ehmp.wait_until_fld_state_column_data_visible
   expect(compare_text_in_list(ehmp.fld_state_column_data, "Active", "Completed")).to eq(true), "Returned rows doesn't include Active and Closed"
@@ -162,6 +186,8 @@ end
 Then(/^user vrifies the requests applet has following patients listed$/) do |table|
   ehmp = PobRequestApplet.new
   ehmp.wait_until_fld_request_patient_column_data_visible
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until { infinite_scroll_other("#data-grid-requests tbody") }
   table.rows.each do |patients|
     expect(object_exists_in_list(ehmp.fld_request_patient_column_data, "#{patients[0]}")).to eq(true), "#{patients[0]} was not found"
   end
@@ -188,5 +214,30 @@ Then(/^user verifies request assignments field does not contain option$/) do |ta
   table.rows.each do |options|
     expect(object_exists_in_list(ehmp.fld_request_assignement_options, "#{options[0]}")).to eq(false), "#{options[0]} was found"
   end
+end
+
+Then(/^user filters the Request applet by text "([^"]*)"$/) do |filter_text|
+  ehmp = PobRequestApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until { infinite_scroll_other("#data-grid-requests tbody") }
+  row_count = ehmp.tbl_request_rows.length
+  ehmp.wait_until_fld_applet_text_filter_visible
+  expect(ehmp).to have_fld_applet_text_filter
+  ehmp.fld_applet_text_filter.set filter_text
+  ehmp.fld_applet_text_filter.native.send_keys(:enter)
+  wait.until { infinite_scroll_other("#data-grid-requests tbody") }
+  wait.until { row_count != ehmp.tbl_request_rows.length }
+end
+
+Then(/^Request applet table only diplays rows including text "([^"]*)"$/) do |input_text|
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_fld_request_column_data_visible
+  expect(only_text_exists_in_list(ehmp.fld_request_column_data, "#{input_text}")).to eq(true), "Not all returned results include #{input_text}"
+end
+
+Then(/^flagged checkbox is unchecked by default in Request Applet$/) do
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_chk_flag_visible
+  expect(ehmp.chk_flag.checked?).to eq(false), "Flagged checkbox is checked, it should be unchecked by default"
 end
 

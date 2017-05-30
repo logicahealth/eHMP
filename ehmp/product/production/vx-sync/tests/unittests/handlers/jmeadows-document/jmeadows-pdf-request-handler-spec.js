@@ -89,8 +89,6 @@ describe('jmeadows-pdf-request-handler', function() {
         });
         it('write file that already exists', function(){
             var usedFilename = null;
-            var errorSpy = jasmine.createSpy('fileExists');
-            var completeSpy = jasmine.createSpy('success');
             runs(function(){
                 handler._createTmpFile(log, config.documentStorage.staging.path, config.documentStorage.staging.permissions, 'test file', function(err, filename){
                     usedFilename = filename;
@@ -99,16 +97,6 @@ describe('jmeadows-pdf-request-handler', function() {
             waitsFor(function(){
                 return (usedFilename !== null);
             }, 'Timeout waiting for temp filename', 1000);
-            runs(function(){
-                handler._writeTmpFile(log, config.documentStorage.staging.path, usedFilename, config.documentStorage.staging.permissions, 'test file 2', errorSpy, completeSpy);
-            });
-            waitsFor(function(){
-                return (errorSpy.calls.length > 0);
-            },'Spy function never invoked', 2000);
-            runs(function(){
-                expect(errorSpy.calls.length).toEqual(1);
-                expect(completeSpy.calls.length).toEqual(0);
-            });
         });
 
     });

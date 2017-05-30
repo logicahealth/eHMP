@@ -1,54 +1,11 @@
-//Used for list/summary views inside of the tray for writeback features
-//----------------------------------------------------------------------
+//Displayed in Actions and Notes summary view
 .multi-select-list {
-    > ul.list-borders {
-        padding: 0;
-        li {
-            border: 1px solid $grey-light;
-            cursor: pointer;
-            list-style: none;
-            margin-top: 5px;
-            a {
-                color: inherit;
-                display: inline-flex;
-                padding: 10px 0;
-                text-decoration: none;
-                width: 100%;
-                &:hover {
-                    text-decoration: none;
-                }
-            }
-            &:hover {
-                background-color: $primary-lightest;
-            }
-            &.list-item-selected {
-                background-color: $primary-light;
-                color: $pure-white;
-                &:hover {
-                    background-color: $primary;
-                    color: $pure-white;
-                }
-                h5 {
-                    color: $pure-white;
-                }
-            }
-        }
-    }
-}
-
-// Multi-select component for Workflow-writebacks
-.accordion-container.panel-group.small .panel .panel-body .multi-select-list,
-.panel-body.multi-select-list {
-    font-size: 11px;
     p {
         margin: 0;
     }
     > ul > li {
         background-color: $pure-white;
         border-top: 1px solid $grey-light;
-        cursor: pointer;
-        list-style: none;
-        margin-right: 0px;
         padding: 0;
         a {
             color: $primary;
@@ -56,28 +13,16 @@
             padding: 10px 0;
             text-decoration: none;
             width: 100%;
-            &:hover {
-                text-decoration: none;
+            &:hover,
+            &:focus {
+                background-color: $primary-lightest;
                 color: $primary-dark;
+                text-decoration: none;
+                
             }
         }
         &:hover {
             background-color: $primary-lightest;
-        }
-        &.list-item-selected {
-            background-color: $primary-light;
-            border-top: 1px solid $primary;
-            color: $pure-white;
-            &:hover {
-                background-color: $primary;
-                color: $pure-white;
-            }
-            h5 {
-                color: $pure-white;
-            }
-            &:first-child {
-                border-top: 1px solid $primary-light;
-            }
         }
     }
 }

@@ -27,11 +27,11 @@ define([
 
     var CommonInputViewPrototype = {
         template: Handlebars.compile([
-            '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
+            '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel)}}',
             '<div class="input-group date calendar-container">',
-            '<span class="input-group-addon{{#if disabled}} disabled{{/if}}" aria-hidden="true"><i class="fa fa-calendar color-primary"></i></span>',
+            '<span class="input-group-addon{{#if disabled}} disabled{{/if}}" aria-hidden="true"><i class="fa fa-calendar"></i></span>',
             '<input type="{{type}}"' +
-            ' id="{{clean-for-id name}}"' +
+            ' id="{{clean-for-id id}}"' +
             ' name="{{name}}"' +
             ' value="{{value}}"' +
             ' class="{{form-class-name "controlClassName"}} datepicker-input"' +
@@ -78,7 +78,7 @@ define([
             };
             Backbone.Marionette.bindEntityEvents(this, this._datepickerInternalModel, this.internalModelEvents);
         },
-        onBeforeShow: function(){
+        onBeforeShow: function() {
             this.initializeDatepicker();
         },
         onAttach: function() {
@@ -183,7 +183,7 @@ define([
                 "</ul>"
             ].join('\n');
             return Handlebars.compile([
-                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
+                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel)}}',
                 '{{#unless srOnlyLabel}}' +
                 '<button type="button" class="btn btn-icon all-padding-no left-margin-xs" data-toggle="tooltip" ' +
                 'title="' + acceptableFormatTooltipHtml + '">' +
@@ -192,10 +192,10 @@ define([
                 '<div class="input-group date calendar-container">',
                 '<span class="input-group-addon{{#if disabled}} disabled{{/if}}" aria-hidden="true"' +
                 '{{#if srOnlyLabel}} data-toggle="tooltip" title="' + acceptableFormatTooltipHtml + '"{{/if}}' +
-                '><i class="fa fa-calendar color-primary"></i></span>',
+                '><i class="fa fa-calendar"></i></span>',
                 '<input' +
                 ' tabindex="-1"' +
-                ' id="{{clean-for-id name}}-hidden"' +
+                ' id="{{clean-for-id id}}-hidden"' +
                 ' class="clone-input datepicker-input"' +
                 ' aria-hidden="true"' +
                 ' name="{{name}}"' +
@@ -205,7 +205,7 @@ define([
                 '/>',
                 '<input' +
                 ' type="{{type}}"' +
-                ' id="{{clean-for-id name}}"' +
+                ' id="{{clean-for-id id}}"' +
                 ' name="{{name}}"' +
                 ' value="{{value}}"' +
                 ' class="{{form-class-name "controlClassName"}} flexible-input"' +
@@ -239,7 +239,7 @@ define([
                 }, this), 250);
                 this._inputTimeoutActive = true;
             },
-            'blur @ui.flexibleInput': function(event){
+            'blur @ui.flexibleInput': function(event) {
                 this.hideTooltip(this.ui.flexibleInput, true);
             },
             'change @ui.flexibleInput': function(event) {
@@ -655,6 +655,10 @@ define([
                 this.onUserInput.apply(this, arguments);
             }
         },
+        onHiddenFieldChange: function(model, options) {
+            var changes = model.changed;
+            if (_.has(changes, 'hidden')) this.$el.trigger('control:hidden', _.get(changes, 'hidden'));
+        },
         initialize: function(options) {
             this.initOptions(options);
             this.setFormatter();
@@ -712,7 +716,10 @@ define([
                 this._flexibleInternalModel = childOptions._flexibleInternalModel = new Backbone.Model(flexibleModelDefaults);
                 childOptions.datepickerExternalModel = this.datepickerExternalModel;
                 this.flexibleDatepicker = new FlexibleDatepicker(childOptions);
-                this.fieldChangeListener = this.flexibleDatepicker.render;
+                this.fieldChangeListener = _.bind(function(model, options) {
+                    this.onHiddenFieldChange.apply(this, arguments);
+                    this.flexibleDatepicker.render.apply(this, arguments);
+                }, this);
                 this.modelChangeListener = _.bind(function(model, change) {
                     if (_.isUndefined(change) || (_.isString(change) && change === "") || _.isNull(change)) {
                         this._flexibleInternalModel.set({
@@ -730,7 +737,11 @@ define([
             } else {
                 this.isOutOfRange = DefaultControlLevelPrototype.isDateOutOfRange;
                 this.defaultDatepicker = new DefaultDatepicker(childOptions);
-                this.modelChangeListener = this.fieldChangeListener = this.defaultDatepicker.render;
+                this.modelChangeListener = this.defaultDatepicker.render;
+                this.fieldChangeListener = _.bind(function(model, options) {
+                    this.onHiddenFieldChange.apply(this, arguments);
+                    this.defaultDatepicker.render.apply(this, arguments);
+                }, this);
                 this.getValueFromDOM = DefaultControlLevelPrototype.getValueFromDOM;
             }
             this.listenToFieldOptions();

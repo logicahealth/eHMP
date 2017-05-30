@@ -693,11 +693,11 @@ end
 When(/^the client sign TIU Note record for patient with DFN "(.*?)" enter$/) do |dfn, table|
   ien = @vista_local_id
   p rpc_name = "HMP WRITEBACK SIGN TIU NOTE"
-  access_code = "vk1234"
-  verify_code = "vk1234!!"
+  access_code = "REDACTED"
+  verify_code = "REDACTED"
 
   # ien = "11597"
-  esig = "vk1234!!"
+  esig = "REDACTED"
   
   vista_rpc = VistaRPC4r::VistaRPC.new(esig)
   p esig = vista_rpc.encrypt(esig)

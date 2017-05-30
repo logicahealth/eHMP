@@ -24,6 +24,7 @@ end
 def verify_and_close_growl_alert_pop_up(message)
   ehmp = PobCommonElements.new
   ehmp.wait_until_fld_growl_alert_visible 60, :text => message
+  expect(ehmp.fld_growl_alert.text.upcase).to have_text(message.upcase)
   expect(ehmp).to have_btn_growl_close
   ehmp.btn_growl_close.click
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time) # seconds # wait until list opens
@@ -51,8 +52,16 @@ end
 
 Then(/^the detail modal is displayed$/) do
   @ehmp = PobCommonElements.new
-  @ehmp.wait_until_fld_modal_body_visible
-  expect(@ehmp).to have_fld_modal_body
+  max_attempt = 2
+  begin
+    @ehmp.wait_until_fld_modal_body_visible
+    expect(@ehmp).to have_fld_modal_body
+  rescue Selenium::WebDriver::Error::StaleElementReferenceError => stale_element
+    max_attempt -= 1
+    raise stale_element if max_attempt < 0
+    p "StaleElementReferenceError, retry"
+    retry
+  end
 end
 
 Then(/^the detail modal title is set$/) do

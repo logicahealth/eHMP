@@ -1,4 +1,6 @@
 define([], function() {
+    'use strict';
+
     var signalResource = ADK.Resources.Writeback.Model.extend({
         resource: 'activities-signal',
         vpr: 'activities',

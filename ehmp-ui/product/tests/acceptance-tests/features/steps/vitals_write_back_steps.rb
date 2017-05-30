@@ -36,13 +36,13 @@ class VitalsWriteBack < AllApplets
     super
     add_action(CucumberLabel.new("Vitals Add Button"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=vitals] .applet-add-button"))
     add_verify(CucumberLabel.new("Add Vitals Modal Title"), VerifyText.new, AccessHtmlElement.new(:css, '[id="main-workflow-label-Enter-Vitals"]'))
-    add_verify(CucumberLabel.new("Date Taken"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='dateTakenInput']"))
-    add_action(CucumberLabel.new("Date Taken Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#dateTakenInput"))
-    add_verify(CucumberLabel.new('Date Taken Input Value'), VerifyValue.new, AccessHtmlElement.new(:css, "#dateTakenInput"))
+    add_verify(CucumberLabel.new("Date Taken"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='dateTakenInput']"))
+    add_action(CucumberLabel.new("Date Taken Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='dateTakenInput']"))
+    add_verify(CucumberLabel.new('Date Taken Input Value'), VerifyValue.new, AccessHtmlElement.new(:css, "[name='dateTakenInput']"))
     add_verify(CucumberLabel.new('Date Taken Error Message'), VerifyText.new, AccessHtmlElement.new(:css, '.dateTakenInput span.error'))
-    add_verify(CucumberLabel.new("Time Taken"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='time-taken']"))
-    add_action(CucumberLabel.new("Time Taken Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#time-taken"))
-    add_verify(CucumberLabel.new('Time Taken Input Value'), VerifyValueFormat.new(Regexp.new("\\d{2}\:\\d{2}")), AccessHtmlElement.new(:css, '#time-taken'))
+    add_verify(CucumberLabel.new("Time Taken"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='time-taken']"))
+    add_action(CucumberLabel.new("Time Taken Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='time-taken']"))
+    add_verify(CucumberLabel.new('Time Taken Input Value'), VerifyValueFormat.new(Regexp.new("\\d{2}\:\\d{2}")), AccessHtmlElement.new(:css, "[name='time-taken']"))
     add_action(CucumberLabel.new("Expand All"), ClickAction.new, AccessHtmlElement.new(:css, "div.expandCollapseAll > button"))
     add_action(CucumberLabel.new("Pass"), ClickAction.new, AccessHtmlElement.new(:css, "div.facility-name-pass-po > button"))
     add_verify(CucumberLabel.new("Modal Loaded"), VerifyText.new, AccessHtmlElement.new(:css, ".modal-content"))
@@ -65,22 +65,22 @@ class BPLabels < VitalsWriteBack
   def initialize
     super 
     #Labels
-    add_verify(CucumberLabel.new("Blood Pressure"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='bpInputValue']"))
-    add_verify(CucumberLabel.new("BP Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='bp-radio-po-Unavailable']"))  
-    add_verify(CucumberLabel.new("BP Refused"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='bp-radio-po-Refused']"))
-    add_verify(CucumberLabel.new("BP Location"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='bp-location-po']"))
-    add_verify(CucumberLabel.new("BP Method"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='bp-method-po']"))
-    add_verify(CucumberLabel.new("BP Cuff Size"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='bp-cuff-size-po']"))
-    add_verify(CucumberLabel.new("BP Position"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='bp-position-po']"))      
+    add_verify(CucumberLabel.new("Blood Pressure"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='bpInputValue']"))
+    add_verify(CucumberLabel.new("BP Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "[name='bp-radio-po'][value='Unavailable']"))  
+    add_verify(CucumberLabel.new("BP Refused"), VerifyText.new, AccessHtmlElement.new(:css, "[name='bp-radio-po'][value='Refused']"))
+    add_verify(CucumberLabel.new("BP Location"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='bp-location-po']"))
+    add_verify(CucumberLabel.new("BP Method"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='bp-method-po']"))
+    add_verify(CucumberLabel.new("BP Cuff Size"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='bp-cuff-size-po']"))
+    add_verify(CucumberLabel.new("BP Position"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='bp-position-po']"))      
     bp_units = "mm[HG]"    
     add_verify(CucumberLabel.new("BP Units"), VerifyText.new, AccessHtmlElement.new(:xpath, "//span[contains(@class, 'input-group-addon') and contains(string(), '#{bp_units}')]"))
-    add_action(CucumberLabel.new("BP Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#bpInputValue"))
-    add_action(CucumberLabel.new("BP Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#bp-radio-po-Unavailable"))
-    add_action(CucumberLabel.new("BP Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#bp-radio-po-Refused"))
-    add_action(CucumberLabel.new("BP Location Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "bp-location-po"))
-    add_action(CucumberLabel.new("BP Method Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "bp-method-po"))
-    add_action(CucumberLabel.new("BP Cuff Size Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "bp-cuff-size-po"))
-    add_action(CucumberLabel.new("BP Position Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "bp-position-po"))
+    add_action(CucumberLabel.new("BP Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='bpInputValue']"))
+    add_action(CucumberLabel.new("BP Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='bp-radio-po'][value='Unavailable']"))
+    add_action(CucumberLabel.new("BP Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='bp-radio-po'][value='Refused']"))
+    add_action(CucumberLabel.new("BP Location Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='bp-location-po']"))
+    add_action(CucumberLabel.new("BP Method Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='bp-method-po']"))
+    add_action(CucumberLabel.new("BP Cuff Size Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='bp-cuff-size-po']"))
+    add_action(CucumberLabel.new("BP Position Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='bp-position-po']"))
   end
 end
 
@@ -89,18 +89,18 @@ class TempLabels < VitalsWriteBack
   def initialize
     super 
     #Labels
-    add_verify(CucumberLabel.new("Temperature"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='temperatureInputValue']"))
-    add_verify(CucumberLabel.new("Temp Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='temperature-radio-po-Unavailable']"))  
-    add_verify(CucumberLabel.new("Temp Refused"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='temperature-radio-po-Refused']"))
-    add_verify(CucumberLabel.new("Temp Units F"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='temperatureInputValue-F-radio-F']"))
-    add_verify(CucumberLabel.new("Temp Units C"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='temperatureInputValue-C-radio-C']"))
-    add_verify(CucumberLabel.new("Temp Location"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='temperature-location-po']"))
-    add_action(CucumberLabel.new("Temp Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#temperatureInputValue"))
-    add_action(CucumberLabel.new("Temp Units F Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#temperatureInputValue-F-radio"))
-    add_action(CucumberLabel.new("Temp Units C Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#temperatureInputValue-C-radio"))
-    add_action(CucumberLabel.new("Temp Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#temperature-radio-po-Unavailable"))
-    add_action(CucumberLabel.new("Temp Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#temperature-radio-po-Refused"))
-    add_action(CucumberLabel.new("Temp Location Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "temperature-location-po"))      
+    add_verify(CucumberLabel.new("Temperature"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='temperatureInputValue']"))
+    add_verify(CucumberLabel.new("Temp Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "[name='temperature-radio-po'][value='Unavailable']"))  
+    add_verify(CucumberLabel.new("Temp Refused"), VerifyText.new, AccessHtmlElement.new(:css, "[name='temperature-radio-po'][value='Refused']"))
+    add_verify(CucumberLabel.new("Temp Units F"), VerifyText.new, AccessHtmlElement.new(:css, "[name='temperatureInputValue-radio-units'][value='F']"))
+    add_verify(CucumberLabel.new("Temp Units C"), VerifyText.new, AccessHtmlElement.new(:css, "[name='temperatureInputValue-radio-units'][value='C']"))
+    add_verify(CucumberLabel.new("Temp Location"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='temperature-location-po']"))
+    add_action(CucumberLabel.new("Temp Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='temperatureInputValue']"))
+    add_action(CucumberLabel.new("Temp Units F Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='temperatureInputValue-radio-units'][value='F']"))
+    add_action(CucumberLabel.new("Temp Units C Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='temperatureInputValue-radio-units'][value='C']"))
+    add_action(CucumberLabel.new("Temp Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='temperature-radio-po'][value='Unavailable']"))
+    add_action(CucumberLabel.new("Temp Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='temperature-radio-po'][value='Refused']"))
+    add_action(CucumberLabel.new("Temp Location Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[name='temperature-location-po']"))      
   end
 end
 
@@ -109,22 +109,22 @@ class PulseLabels < VitalsWriteBack
   def initialize
     super 
     #Labels
-    add_verify(CucumberLabel.new("Pulse"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='pulseInputValue']"))
-    add_verify(CucumberLabel.new("Pulse Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='pulse-radio-po-Unavailable']"))  
-    add_verify(CucumberLabel.new("Pulse Refused"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='pulse-radio-po-Refused']"))
-    add_verify(CucumberLabel.new("Pulse Method"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='pulse-method-po']"))
-    add_verify(CucumberLabel.new("Pulse Position"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='pulse-position-po']"))
-    add_verify(CucumberLabel.new("Pulse Site"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='pulse-site-po']"))
-    add_verify(CucumberLabel.new("Pulse Location"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='pulse-location-po']"))
+    add_verify(CucumberLabel.new("Pulse"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='pulseInputValue']"))
+    add_verify(CucumberLabel.new("Pulse Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "[name='pulse-radio-po'][value='Unavailable']"))  
+    add_verify(CucumberLabel.new("Pulse Refused"), VerifyText.new, AccessHtmlElement.new(:css, "[name='pulse-radio-po'][value='Refused']"))
+    add_verify(CucumberLabel.new("Pulse Method"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='pulse-method-po']"))
+    add_verify(CucumberLabel.new("Pulse Position"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='pulse-position-po']"))
+    add_verify(CucumberLabel.new("Pulse Site"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='pulse-site-po']"))
+    add_verify(CucumberLabel.new("Pulse Location"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='pulse-location-po']"))
     pulse_units = "/min"    
     add_verify(CucumberLabel.new("Pulse Units"), VerifyText.new, AccessHtmlElement.new(:xpath, "//span[contains(@class, 'input-group-addon') and contains(string(), '#{pulse_units}')]"))
-    add_action(CucumberLabel.new("Pulse Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#pulseInputValue"))
-    add_action(CucumberLabel.new("Pulse Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#pulse-radio-po-Unavailable"))
-    add_action(CucumberLabel.new("Pulse Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#pulse-radio-po-Refused"))
-    add_action(CucumberLabel.new("Pulse Method Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "pulse-method-po"))
-    add_action(CucumberLabel.new("Pulse Position Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "pulse-position-po"))
-    add_action(CucumberLabel.new("Pulse Site Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "pulse-site-po"))
-    add_action(CucumberLabel.new("Pulse Location Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "pulse-location-po"))
+    add_action(CucumberLabel.new("Pulse Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='pulseInputValue']"))
+    add_action(CucumberLabel.new("Pulse Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='pulse-radio-po'][value='Unavailable']"))
+    add_action(CucumberLabel.new("Pulse Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='pulse-radio-po'][value='Refused']"))
+    add_action(CucumberLabel.new("Pulse Method Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='pulse-method-po']"))
+    add_action(CucumberLabel.new("Pulse Position Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='pulse-position-po']"))
+    add_action(CucumberLabel.new("Pulse Site Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='pulse-site-po']"))
+    add_action(CucumberLabel.new("Pulse Location Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='pulse-location-po']"))
   end
 end
 
@@ -133,18 +133,18 @@ class RespirationLabels < VitalsWriteBack
   def initialize
     super 
     #Labels
-    add_verify(CucumberLabel.new("Respiration"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='respirationInputValue']"))
-    add_verify(CucumberLabel.new("Respiration Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='respiration-radio-po-Unavailable']"))  
-    add_verify(CucumberLabel.new("Respiration Refused"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='respiration-radio-po-Refused']"))
-    add_verify(CucumberLabel.new("Respiration Method"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='respiration-method-po']"))
-    add_verify(CucumberLabel.new("Respiration Position"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='respiration-position-po']"))
+    add_verify(CucumberLabel.new("Respiration"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='respirationInputValue']"))
+    add_verify(CucumberLabel.new("Respiration Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "[name='respiration-radio-po'][value='Unavailable']"))  
+    add_verify(CucumberLabel.new("Respiration Refused"), VerifyText.new, AccessHtmlElement.new(:css, "[name='respiration-radio-po'][value='Refused']"))
+    add_verify(CucumberLabel.new("Respiration Method"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='respiration-method-po']"))
+    add_verify(CucumberLabel.new("Respiration Position"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='respiration-position-po']"))
     resp_units = "/min"    
     add_verify(CucumberLabel.new("Respiration Units"), VerifyText.new, AccessHtmlElement.new(:xpath, "//span[contains(@class, 'input-group-addon') and contains(string(), '#{resp_units}')]"))
-    add_action(CucumberLabel.new("Respiration Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#respirationInputValue"))
-    add_action(CucumberLabel.new("Respiration Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#respiration-radio-po-Unavailable"))
-    add_action(CucumberLabel.new("Respiration Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#respiration-radio-po-Refused"))
-    add_action(CucumberLabel.new("Respiration Method Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "respiration-method-po"))
-    add_action(CucumberLabel.new("Respiration Position Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "respiration-position-po"))
+    add_action(CucumberLabel.new("Respiration Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='respirationInputValue']"))
+    add_action(CucumberLabel.new("Respiration Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='respiration-radio-po'][value='Unavailable']"))
+    add_action(CucumberLabel.new("Respiration Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='respiration-radio-po'][value='Refused']"))
+    add_action(CucumberLabel.new("Respiration Method Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='respiration-method-po']"))
+    add_action(CucumberLabel.new("Respiration Position Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='respiration-position-po']"))
 
     add_verify(CucumberLabel.new('Respiration has error'), VerifyContainsText.new, AccessHtmlElement.new(:css, 'div.respirationInputValue.has-error'))
     add_verify(CucumberLabel.new('Respiration has error message'), VerifyContainsText.new, AccessHtmlElement.new(:css, 'div.respirationInputValue.has-error span.help-block.error'))
@@ -156,18 +156,18 @@ class POLabels < VitalsWriteBack
   def initialize
     super 
     #Labels
-    add_verify(CucumberLabel.new("Pulse Oximetry"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='O2InputValue']"))
-    add_verify(CucumberLabel.new("PO Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='po-radio-po-Unavailable']"))  
-    add_verify(CucumberLabel.new("PO Refused"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='po-radio-po-Refused']"))
-    add_verify(CucumberLabel.new("PO Supplemental Oxygen Flow Rate"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='suppO2InputValue']"))
-    add_verify(CucumberLabel.new("PO Method"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='po-method-po']"))
+    add_verify(CucumberLabel.new("Pulse Oximetry"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='O2InputValue']"))
+    add_verify(CucumberLabel.new("PO Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "[name='po-radio-po'][value='Unavailable']"))  
+    add_verify(CucumberLabel.new("PO Refused"), VerifyText.new, AccessHtmlElement.new(:css, "[name='po-radio-po'][value='Refused']"))
+    add_verify(CucumberLabel.new("PO Supplemental Oxygen Flow Rate"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='suppO2InputValue']"))
+    add_verify(CucumberLabel.new("PO Method"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='po-method-po']"))
     po_units = "(liters/minute)"    
     add_verify(CucumberLabel.new("PO Units"), VerifyText.new, AccessHtmlElement.new(:xpath, "//span[contains(@class, 'input-group-addon') and contains(string(), '#{po_units}')]"))
-    add_action(CucumberLabel.new("PO Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#O2InputValue"))
-    add_action(CucumberLabel.new("PO Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#po-radio-po-Unavailable"))
-    add_action(CucumberLabel.new("PO Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#po-radio-po-Refused"))
-    add_action(CucumberLabel.new("PO Supplemental Oxygen Flow Rate Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#suppO2InputValue"))
-    add_action(CucumberLabel.new("PO Method Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "po-method-po"))
+    add_action(CucumberLabel.new("PO Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='O2InputValue']"))
+    add_action(CucumberLabel.new("PO Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='po-radio-po'][value='Unavailable']"))
+    add_action(CucumberLabel.new("PO Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='po-radio-po'][value='Refused']"))
+    add_action(CucumberLabel.new("PO Supplemental Oxygen Flow Rate Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='suppO2InputValue']"))
+    add_action(CucumberLabel.new("PO Method Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='po-method-po']"))
 
     add_verify(CucumberLabel.new('PO has error'), VerifyText.new, AccessHtmlElement.new(:css, 'div.O2InputValue.has-error'))
     add_verify(CucumberLabel.new('PO has error message'), VerifyText.new, AccessHtmlElement.new(:css, 'div.O2InputValue.has-error span.help-block.error'))
@@ -181,18 +181,18 @@ class HtLabels < VitalsWriteBack
   def initialize
     super 
     #Labels
-    add_verify(CucumberLabel.new("Height"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='heightInputValue']"))
-    add_verify(CucumberLabel.new("Ht Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='height-radio-po-Unavailable']"))  
-    add_verify(CucumberLabel.new("Ht Refused"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='height-radio-po-Refused']"))
-    add_verify(CucumberLabel.new("Ht Units in"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='heightInputValue-in-radio-in']"))
-    add_verify(CucumberLabel.new("Ht Units cm"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='heightInputValue-cm-radio-cm']"))
-    add_verify(CucumberLabel.new("Ht Quality"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='height-quality-po']"))
-    add_action(CucumberLabel.new("Ht Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#heightInputValue"))
-    add_action(CucumberLabel.new("Ht Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#height-radio-po-Unavailable"))
-    add_action(CucumberLabel.new("Ht Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#height-radio-po-Refused"))
-    add_action(CucumberLabel.new("Ht Units in Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#heightInputValue-in-radio"))
-    add_action(CucumberLabel.new("Ht Units cm Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#heightInputValue-cm-radio"))
-    add_action(CucumberLabel.new("Ht Quality Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "height-quality-po"))
+    add_verify(CucumberLabel.new("Height"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='heightInputValue']"))
+    add_verify(CucumberLabel.new("Ht Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "[name='height-radio-po'][value='Unavailable']"))  
+    add_verify(CucumberLabel.new("Ht Refused"), VerifyText.new, AccessHtmlElement.new(:css, "[name='height-radio-po'][value='Refused']"))
+    add_verify(CucumberLabel.new("Ht Units in"), VerifyText.new, AccessHtmlElement.new(:css, "[name='heightInputValue-radio-units'][value='in']"))
+    add_verify(CucumberLabel.new("Ht Units cm"), VerifyText.new, AccessHtmlElement.new(:css, "[name='heightInputValue-radio-units'][value='cm']"))
+    add_verify(CucumberLabel.new("Ht Quality"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='height-quality-po']"))
+    add_action(CucumberLabel.new("Ht Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='heightInputValue']"))
+    add_action(CucumberLabel.new("Ht Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='height-radio-po'][value='Unavailable']"))
+    add_action(CucumberLabel.new("Ht Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='height-radio-po'][value='Refused']"))
+    add_action(CucumberLabel.new("Ht Units in Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='heightInputValue-radio-units'][value='in']"))
+    add_action(CucumberLabel.new("Ht Units cm Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='heightInputValue-radio-units'][value='cm']"))
+    add_action(CucumberLabel.new("Ht Quality Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='height-quality-po']"))
   end
 end
 
@@ -201,20 +201,20 @@ class WtLabels < VitalsWriteBack
   def initialize
     super 
     #Labels
-    add_verify(CucumberLabel.new("Weight"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='weightInputValue']"))
-    add_verify(CucumberLabel.new("Wt Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='weight-radio-po-Unavailable']"))  
-    add_verify(CucumberLabel.new("Wt Refused"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='weight-radio-po-Refused']"))
-    add_verify(CucumberLabel.new("Wt Units lb"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='weightInputValue-lb-radio-lb']"))
-    add_verify(CucumberLabel.new("Wt Units kg"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='weightInputValue-kg-radio-kg']"))
-    add_verify(CucumberLabel.new("Wt Method"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='weight-method-po']"))
-    add_verify(CucumberLabel.new("Wt Quality"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='weight-quality-po']"))
-    add_action(CucumberLabel.new("Wt Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#weightInputValue"))
-    add_action(CucumberLabel.new("Wt Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#weight-radio-po-Unavailable"))
-    add_action(CucumberLabel.new("Wt Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#weight-radio-po-Refused"))
-    add_action(CucumberLabel.new("Wt Units lb Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#weightInputValue-lb-radio"))
-    add_action(CucumberLabel.new("Wt Units kg Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#weightInputValue-kg-radio"))
-    add_action(CucumberLabel.new("Wt Method Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "weight-method-po"))
-    add_action(CucumberLabel.new("Wt Quality Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "weight-quality-po"))
+    add_verify(CucumberLabel.new("Weight"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='weightInputValue']"))
+    add_verify(CucumberLabel.new("Wt Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "[name='weight-radio-po'][value='Unavailable']"))  
+    add_verify(CucumberLabel.new("Wt Refused"), VerifyText.new, AccessHtmlElement.new(:css, "[name='weight-radio-po'][value='Refused']"))
+    add_verify(CucumberLabel.new("Wt Units lb"), VerifyText.new, AccessHtmlElement.new(:css, "[name='weightInputValue-radio-units'][value='lb']"))
+    add_verify(CucumberLabel.new("Wt Units kg"), VerifyText.new, AccessHtmlElement.new(:css, "[name='weightInputValue-radio-units'][value='kg']"))
+    add_verify(CucumberLabel.new("Wt Method"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='weight-method-po']"))
+    add_verify(CucumberLabel.new("Wt Quality"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='weight-quality-po']"))
+    add_action(CucumberLabel.new("Wt Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='weightInputValue']"))
+    add_action(CucumberLabel.new("Wt Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='weight-radio-po'][value='Unavailable']"))
+    add_action(CucumberLabel.new("Wt Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='weight-radio-po'][value='Refused']"))
+    add_action(CucumberLabel.new("Wt Units lb Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='weightInputValue-radio-units'][value='lb']"))
+    add_action(CucumberLabel.new("Wt Units kg Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='weightInputValue-radio-units'][value='kg']"))
+    add_action(CucumberLabel.new("Wt Method Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='weight-method-po']"))
+    add_action(CucumberLabel.new("Wt Quality Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='weight-quality-po']"))
   end
 end
 
@@ -223,14 +223,14 @@ class PainLabels < VitalsWriteBack
   def initialize
     super 
     #Labels
-    add_verify(CucumberLabel.new("Pain"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='pain-value-po']"))
-    add_verify(CucumberLabel.new("Pain Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='pain-radio-po-Unavailable']"))  
-    add_verify(CucumberLabel.new("Pain Refused"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='pain-radio-po-Refused']"))
-    add_verify(CucumberLabel.new("Pain Unable to Respond"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='pain-checkbox-po']"))
-    add_action(CucumberLabel.new("Pain Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#pain-value-po"))
-    add_action(CucumberLabel.new("Pain Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#pain-radio-po-Unavailable"))
-    add_action(CucumberLabel.new("Pain Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#pain-radio-po-Refused"))
-    add_action(CucumberLabel.new("Pain Unable to Respond Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#pain-checkbox-po"))
+    add_verify(CucumberLabel.new("Pain"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='pain-value-po']"))
+    add_verify(CucumberLabel.new("Pain Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "[name='pain-radio-po'][value='Unavailable']"))  
+    add_verify(CucumberLabel.new("Pain Refused"), VerifyText.new, AccessHtmlElement.new(:css, "[name='pain-radio-po'][value='Refused']"))
+    add_verify(CucumberLabel.new("Pain Unable to Respond"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='pain-checkbox-po']"))
+    add_action(CucumberLabel.new("Pain Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='pain-value-po']"))
+    add_action(CucumberLabel.new("Pain Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='pain-radio-po'][value='Unavailable']"))
+    add_action(CucumberLabel.new("Pain Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='pain-radio-po'][value='Refused']"))
+    add_action(CucumberLabel.new("Pain Unable to Respond Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[id^='pain-checkbox-po']"))
   end
 end
 
@@ -239,20 +239,20 @@ class CGLabels < VitalsWriteBack
   def initialize
     super 
     #Labels
-    add_verify(CucumberLabel.new("Circumference/Girth"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='circumValue']"))
-    add_verify(CucumberLabel.new("CG Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='cg-radio-po-Unavailable']"))  
-    add_verify(CucumberLabel.new("CG Refused"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='cg-radio-po-Refused']"))
-    add_verify(CucumberLabel.new("CG Units in"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='circumValue-in-radio-in']"))
-    add_verify(CucumberLabel.new("CG Units cm"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='circumValue-cm-radio-cm']"))
-    add_verify(CucumberLabel.new("CG Site"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='cg-site-po']"))
-    add_verify(CucumberLabel.new("CG Location"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='cg-location-po']"))
-    add_action(CucumberLabel.new("CG Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#circumValue"))
-    add_action(CucumberLabel.new("CG Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#cg-radio-po-Unavailable"))
-    add_action(CucumberLabel.new("CG Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#cg-radio-po-Refused"))
-    add_action(CucumberLabel.new("CG Units in Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#circumValue-in-radio"))
-    add_action(CucumberLabel.new("CG Units cm Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "#circumValue-cm-radio"))
-    add_action(CucumberLabel.new("CG Site Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "cg-site-po"))
-    add_action(CucumberLabel.new("CG Location Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:id, "cg-location-po"))
+    add_verify(CucumberLabel.new("Circumference/Girth"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='circumValue']"))
+    add_verify(CucumberLabel.new("CG Unavailable"), VerifyText.new, AccessHtmlElement.new(:css, "[name='cg-radio-po'][value='Unavailable']"))  
+    add_verify(CucumberLabel.new("CG Refused"), VerifyText.new, AccessHtmlElement.new(:css, "[name='cg-radio-po'][value='Refused']"))
+    add_verify(CucumberLabel.new("CG Units in"), VerifyText.new, AccessHtmlElement.new(:css, "[name='circumValue-radio-units'][value='in']"))
+    add_verify(CucumberLabel.new("CG Units cm"), VerifyText.new, AccessHtmlElement.new(:css, "[name='circumValue-radio-units'][value='cm']"))
+    add_verify(CucumberLabel.new("CG Site"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='cg-site-po']"))
+    add_verify(CucumberLabel.new("CG Location"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='cg-location-po']"))
+    add_action(CucumberLabel.new("CG Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='circumValue']"))
+    add_action(CucumberLabel.new("CG Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='cg-radio-po'][value='Unavailable']"))
+    add_action(CucumberLabel.new("CG Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='cg-radio-po'][value='Refused']"))
+    add_action(CucumberLabel.new("CG Units in Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='circumValue-radio-units'][value='in']"))
+    add_action(CucumberLabel.new("CG Units cm Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='circumValue-radio-units'][value='cm']"))
+    add_action(CucumberLabel.new("CG Site Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='cg-site-po']"))
+    add_action(CucumberLabel.new("CG Location Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='cg-location-po']"))
   end
 end
 

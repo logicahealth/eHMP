@@ -11,7 +11,7 @@ This integration test runs within Eclipse. To run it:
 	pollJDSResults
 	getRDKurl
 	RDK properties path: ~/Projects/vistacore/rdk/product/production/jbpm/FOBTLabService/target
-	RDK URL: http://10.4.4.105:8888/
+	RDK URL: http://SERVER:PORT
 	FOBT ServiceResponse: {"resourceType":"Bundle","type":"collection","id": ... }}}]}
 	CDSInvocationServiceHandler.executeWorkItem
 	CDSInvocationServiceHandler.invokeCDS

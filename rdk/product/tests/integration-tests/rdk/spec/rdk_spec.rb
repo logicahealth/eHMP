@@ -4,7 +4,7 @@ require 'json'
 require 'pp'
 
 
-url = ENV['BACKEND_BASEURL'] || 'https://10.2.3.5'
+url = ENV['BACKEND_BASEURL'] || 'https://IP      '
 
 describe "Test rdk" do
   
@@ -47,8 +47,8 @@ describe "Test rdk" do
     response = HTTParty.get(
       "#{url}/protected", 
       :basic_auth => {
-          :username =>  'FuzzyB',
-          :password => 'secret'
+          :username =>  'REDACTED',
+          :password => 'REDACTED'
       },
       :query => {}, 
       :headers => {

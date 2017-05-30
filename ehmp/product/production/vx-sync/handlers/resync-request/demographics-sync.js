@@ -2,6 +2,7 @@
 
 var request = require('request');
 var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
+var HttpHeaderUtils = require(global.VX_UTILS + 'http-header-utils');
 
 //Used to sync jobs with icn or dod pid.
 function loadPatient(logger, syncConfig, job, callback) {
@@ -13,6 +14,11 @@ function loadPatient(logger, syncConfig, job, callback) {
         url: syncConfig.protocol + '://' + syncConfig.host + ':' + syncConfig.port + syncConfig.patientSyncDemoPath,
         method: 'POST',
         json: createSyncData(job)};
+
+    if(job.referenceInfo){
+        var httpHeaderUtils = new HttpHeaderUtils(logger);
+        options = httpHeaderUtils.insertReferenceInfo(options, job.referenceInfo);
+    }
 
     request.post(options, function(error, response, body) {
         if (error)  {

@@ -2,7 +2,7 @@
 Feature: Home Page Usability (Staff View) - Implement Recent Patient list tray
 
 Background:
-  # Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "TWO1234" verifycode as  "TWO1234!!"
+  # Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   #Then staff view screen is displayed
   And user searches for and selects "Eight,PATIENT"
   Then Overview is active
@@ -13,7 +13,7 @@ Background:
 Scenario: Verify Recent Patients search display
    Then the staff view screen displays Recent Patients in the sidebar tray
 
-@US17414_2
+@US17414_2 @DE7713
 Scenario: Verify Recent Patients tray display
     When the user opens the Recent Patients tray
     And the Recent Patients tray displays a close x button
@@ -22,9 +22,11 @@ Scenario: Verify Recent Patients tray display
     | header        |
     | Patient Name  |
     | Date of Birth |
+    | Gender        |
     And the Recent Patients Tray contains search results
     And the Recent Patients Tray patient name search results are in format Last Name, First Name + (First Letter in Last Name + Last 4 SSN )
-    And the Recent Patients Tray date of birth search results are in format Date (Agey) - Gender (first letter)
+    And the Recent Patients Tray date of birth search results are in format Date (Agey)
+    And the Recent Patients Tray gender search results are in terms Male, Female or Unknown
 
 @US17414_3
 Scenario: Verify user can load a patient from a Recent Patients Tray

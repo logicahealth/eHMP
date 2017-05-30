@@ -16,10 +16,10 @@
  limitations under the License.
 -->
 
-<!--  
+<!--
  This is the Solr schema file. This file should be named "schema.xml" and
  should be in the conf directory under the solr home
- (i.e. ./solr/conf/schema.xml by default) 
+ (i.e. ./solr/conf/schema.xml by default)
  or located where the classloader for the Solr webapp can find it.
 
  This example schema is the recommended starting point for users.
@@ -615,6 +615,8 @@ any data added to them will be ignored outright.  -->
         <field name="pid" type="string" indexed="true" stored="true" required="true"/>
         <!--Default Query Filter Field, Facet Field-->
         <field name="domain" type="string" indexed="true" stored="true"/>
+        <!-- Clinical Object domain refinement Field -->
+        <field name="sub_domain" type="string" indexed="true" stored="true"/>
         <!--Use kind_match for searching, kind for the value-->
         <!--Default Query Field-->
         <field name="kind" type="string" indexed="true" stored="true"/>
@@ -715,19 +717,19 @@ any data added to them will be ignored outright.  -->
         <!--Lab Query Field-->
         <!--group_name used as criteria for grouped document queries, from UI-->
         <field name="group_name" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="group_uid" type="string" indexed="false" stored="false" multiValued="false"/>
-		<field name="category_code" type="string" indexed="false" stored="false" multiValued="false"/>
-		<field name="category_name" type="string" indexed="false" stored="false" multiValued="false"/>
-		<field name="abnormal" type="string" indexed="false" stored="false" multiValued="false"/>
-		<field name="status_code" type="string" indexed="false" stored="false" multiValued="false"/>
-        <!--used for Orders filter query-->
-		<field name="status_name" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="vuid" type="string" indexed="false" stored="false" multiValued="false"/>
-		<field name="display_order" type="string" indexed="false" stored="false" multiValued="false"/>
-		<field name="type_id" type="string" indexed="false" stored="false" multiValued="false"/>
-        <!--Lab Query Field-->
-		<field name="type_code" type="string" indexed="false" stored="true" multiValued="false"/>
-		<field name="sample" type="string" indexed="false" stored="false" multiValued="false"/>
+    		<field name="group_uid" type="string" indexed="false" stored="false" multiValued="false"/>
+    		<field name="category_code" type="string" indexed="false" stored="false" multiValued="false"/>
+    		<field name="category_name" type="string" indexed="false" stored="false" multiValued="false"/>
+    		<field name="abnormal" type="string" indexed="false" stored="false" multiValued="false"/>
+    		<field name="status_code" type="string" indexed="false" stored="false" multiValued="false"/>
+            <!--used for Orders filter query-->
+    		<field name="status_name" type="string" indexed="true" stored="true" multiValued="false"/>
+    		<field name="vuid" type="string" indexed="false" stored="false" multiValued="false"/>
+    		<field name="display_order" type="string" indexed="false" stored="false" multiValued="false"/>
+    		<field name="type_id" type="string" indexed="false" stored="false" multiValued="false"/>
+            <!--Lab Query Field-->
+    		<field name="type_code" type="string" indexed="false" stored="true" multiValued="false"/>
+    		<field name="sample" type="string" indexed="false" stored="false" multiValued="false"/>
 
 
         <!-- vital signs -->
@@ -872,17 +874,17 @@ any data added to them will be ignored outright.  -->
         <!--<field name="last_modified" type="date" indexed="true" stored="false"/>-->
         <!--<field name="links" type="string" indexed="true" stored="false" multiValued="true"/>-->
 
-		<!-- when searching against kind, use this field instead as its tokenized/analyzed.
-			But for display/enumeration, use kind as its stored and unmodified -->
-		<field name="kind_match" type="stemmedlcase" indexed="true" stored="false" multiValued="true"/>
+    		<!-- when searching against kind, use this field instead as its tokenized/analyzed.
+    			But for display/enumeration, use kind as its stored and unmodified -->
+    		<field name="kind_match" type="stemmedlcase" indexed="true" stored="false" multiValued="true"/>
 
         <!-- catchall field, containing all other searchable text fields (implemented
-via copyField further on in this schema  -->
+        via copyField further on in this schema  -->
         <!--if using this, only queries that specify the field should need separate indexed=true -->
         <field name="all" type="text_clinical" indexed="true" stored="false" multiValued="true"/>
 
         <!-- catchall text field that indexes tokens both normally and in reverse for efficient
-     leading wildcard queries. -->
+        leading wildcard queries. -->
         <field name="all_rev" type="text_general_rev" indexed="true" stored="false" multiValued="true"/>
 
         <!-- catchall text field that converts to lower case but keeps the phrase together,
@@ -895,7 +897,7 @@ via copyField further on in this schema  -->
         <field name="spell" type="text_suggest_shingle" indexed="true" stored="false" multiValued="true"/>
 
         <!-- non-tokenized version of manufacturer to make it easier to sort or group
-results by manufacturer.  copied from "manu" via copyField -->
+        results by manufacturer.  copied from "manu" via copyField -->
         <!--<field name="manu_exact" type="string" indexed="true" stored="false"/>-->
 
         <!--<field name="payloads" type="payloads" indexed="true" stored="false"/>-->
@@ -904,18 +906,39 @@ results by manufacturer.  copied from "manu" via copyField -->
            a default value of "NOW" to indicate when each document was indexed.
         -->
         <!--
-      <field name="timestamp" type="date" indexed="true" stored="false" default="NOW" multiValued="false"/>
+        <field name="timestamp" type="date" indexed="true" stored="false" default="NOW" multiValued="false"/>
         -->
 
         <field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/>
 
+        <!-- Consult Clinical Object -->
+        <field name="consult_name" type="string" indexed="true" stored="true" multiValued="false"/>
+        <field name="consult_orders_override_reason" type="text_clinical" indexed="true" stored="true" multiValued="false"/>
+        <field name="consult_orders_order_result_comment" type="text_clinical" indexed="true" stored="true" multiValued="false"/>
+        <field name="consult_orders_conditions" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
+        <field name="consult_orders_request" type="text_clinical" indexed="true" stored="true" multiValued="false"/>
+        <field name="consult_orders_comment" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
+        <field name="consult_orders_accepting_provider_uid" type="string" indexed="false" stored="true" multiValued="false"/>
+        <field name="consult_orders_accepting_provider_display_name" type="string" indexed="true" stored="true" multiValued="false"/>
+        <field name="consult_orders_order_results_order_name" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
+        <field name="consult_orders_order_results_order_status" type="string" indexed="true" stored="true" multiValued="true"/>
+        <field name="consult_orders_accepted_date" type="string" indexed="true" stored="true" multiValued="false"/>
+        <field name="activity_process_instance_id" type="string" indexed="true" stored="true" multiValued="false"/>
+        <field name="activity_source_facility_id" type="string" indexed="true" stored="true" multiValued="false"/>
+
+        <!-- Request Clinical Object -->
+        <field name="request_title" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
+        <field name="request_text" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
+        <field name="request_response" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
+        <field name="request_accepted_date" type="string" indexed="true" stored="true" multiValued="true"/>
+
         <!-- Dynamic field definitions.  If a field name is not found, dynamicFields
-will be used if the name matches any of the patterns.
-RESTRICTION: the glob-like pattern in the name attribute must have
-a "*" only at the start or the end.
-EXAMPLE:  name="*_i" will match any field ending in _i (like myid_i, z_i)
-Longer patterns will be matched first.  if equal size patterns
-both match, the first appearing in the schema will be used.  -->
+        will be used if the name matches any of the patterns.
+        RESTRICTION: the glob-like pattern in the name attribute must have
+        a "*" only at the start or the end.
+        EXAMPLE:  name="*_i" will match any field ending in _i (like myid_i, z_i)
+        Longer patterns will be matched first.  if equal size patterns
+        both match, the first appearing in the schema will be used.  -->
         <dynamicField name="*_i" type="int" indexed="true" stored="false"/>
         <dynamicField name="*_s" type="string" indexed="true" stored="false"/>
         <dynamicField name="*_l" type="long" indexed="true" stored="false"/>
@@ -946,9 +969,9 @@ both match, the first appearing in the schema will be used.  -->
         <dynamicField name="random_*" type="random"/>
 
         <!-- uncomment the following to ignore any fields that don't already match an existing
- field name or dynamic field, rather than reporting them as an error.
- alternately, change the type="ignored" to some other type e.g. "text_general" if you want
- unknown fields indexed and/or stored by default -->
+        field name or dynamic field, rather than reporting them as an error.
+        alternately, change the type="ignored" to some other type e.g. "text_general" if you want
+        unknown fields indexed and/or stored by default -->
         <dynamicField name="*" type="string" multiValued="true"/>
 
     </fields>
@@ -1121,6 +1144,28 @@ or to add multiple fields to the same field for easier/faster searching.  -->
          <str name="paramkey">param value</str>
        </similarity>
       -->
+      <!-- Clinical Objects -->
+      <copyField source="sub_domain" dest="all"/>
+
+      <!-- Consult Order Clinical Object -->
+      <copyField source="consult_name" dest="all"/>
+      <copyField source="consult_orders_override_reason" dest="all"/>
+      <copyField source="consult_orders_order_result_comment" dest="all"/>
+      <copyField source="consult_orders_conditions" dest="all"/>
+      <copyField source="consult_orders_request" dest="all"/>
+      <copyField source="consult_orders_comment" dest="all"/>
+      <copyField source="consult_orders_accepting_provider_display_name" dest="all"/>
+      <copyField source="consult_orders_order_results_order_name" dest="all"/>
+      <copyField source="consult_orders_order_results_order_status" dest="all"/>
+      <copyField source="consult_orders_accepted_date" dest="all"/>
+      <copyField source="activity_process_instance_id" dest="all"/>
+      <copyField source="activity_source_facility_id" dest="all"/>
+
+      <!-- Request Clinical Object -->
+      <copyField source="request_title" dest="all"/>
+      <copyField source="request_text" dest="all"/>
+      <copyField source="request_response" dest="all"/>
+      <copyField source="request_accepted_date" dest="all"/>
 
 
 </schema>

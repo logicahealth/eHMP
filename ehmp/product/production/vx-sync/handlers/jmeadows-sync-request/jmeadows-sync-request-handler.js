@@ -38,6 +38,9 @@ function handle(log, config, environment, job, handlerCallback) {
             priority: job.priority,
             param: job.param
         };
+        if (job.referenceInfo) {
+            meta.referenceInfo = job.referenceInfo;
+        }
         return jobUtil.createJmeadowsDomainSyncRequest(job.patientIdentifier, domain, requestStampTime, meta);
     });
 

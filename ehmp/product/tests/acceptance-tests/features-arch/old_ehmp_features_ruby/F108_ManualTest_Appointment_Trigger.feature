@@ -11,7 +11,7 @@ Then the patient's data will be synched
 
 # Please follow the steps on the below wiki page to perform the manual test:
 
-# https://wiki.vistacore.us/display/VACORE/VistA+Appointment+Trigger+Testing
+# https://wiki.vistacore.us/display/DNS  E/VistA+Appointment+Trigger+Testing
 
 # 1.	Un-sync a patient.
 # 2.	Insert an appointment as per the instructions for the patient.

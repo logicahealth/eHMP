@@ -7,7 +7,8 @@ var log = require(global.VX_DUMMIES + 'dummy-logger');
 var stubRouter = {
     publish: function(job, options, cb) {
         return cb(null, 'result');
-    }
+    },
+    childInstance: function() { return this; }
 };
 var stubEnvironment = {
     publisherRouter: stubRouter
@@ -16,7 +17,8 @@ var stubEnvironment = {
 var errorRouter = {
     publish: function(job, options, cb) {
         return cb('it broke');
-    }
+    },
+    childInstance: function() { return this; }
 };
 var errorEnvironment = {
     publisherRouter: errorRouter

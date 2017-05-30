@@ -181,7 +181,7 @@ You can manipulate Docker volumes and networks
 ```ruby
 docker_network 'my_network' do
   subnet '10.9.8.0/24'
-  gateway '10.9.8.1'
+  gateway 'IP      '
 end
 
 docker_volume 'my_volume' do
@@ -867,7 +867,7 @@ end
 ```ruby
 docker_container 'cap_add_net_admin' do
   repo 'debian'
-  command 'bash -c "ip addr add 10.9.8.7/24 brd + dev eth0 label eth0:0 ; ip addr list"'
+  command 'bash -c "ip addr add IP      /24 brd + dev eth0 label eth0:0 ; ip addr list"'
   cap_add 'NET_ADMIN'
   action :run_if_missing
 end
@@ -1060,7 +1060,7 @@ Most `docker_container` properties are the `snake_case` version of the `CamelCas
 - `domain_name` - Set's the container's dnsdomainname as returned by the `dnsdomainname` command.
 - `entrypoint` - Set the entry point for the container as a string or an array of strings.
 - `env` - Set environment variables in the container in the form `['FOO=bar', 'BIZ=baz']`
-- `extra_hosts` - An array of hosts to add to the container's `/etc/hosts` in the form `['host_a:10.9.8.7', 'host_b:10.9.8.6']`
+- `extra_hosts` - An array of hosts to add to the container's `/etc/hosts` in the form `['host_a:IP      ', 'host_b:IP      ']`
 - `force` - A boolean to use in container operations that support a `force` option. Defaults to `false`
 - `host` - A string containing the host the API should communicate with. Defaults to ENV['DOCKER_HOST'] if set
 - `host_name` - The hostname for the container.

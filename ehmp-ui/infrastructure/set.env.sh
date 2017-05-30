@@ -10,7 +10,7 @@ set +xe
 
 project_name=ehmp-ui
 
-jdk_version="jdk1.8.0_92"
+jdk_version="jdk1.8.0_121"
 
 export VAGRANT_BIN=/usr/local/bin/vagrant
 

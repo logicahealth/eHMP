@@ -32,11 +32,18 @@ When(/^user opens the first immunization row$/) do
   rows[0].click
 end
 
-When(/^user opens the newly added immunization pill$/) do
+#When(/^user opens the newly added immunization pill$/) do
+#  @ehmp = PobImmunizationsApplet.new
+#  @ehmp.wait_until_btn_new_immunization_pill_visible
+#  expect(@ehmp).to have_btn_new_immunization_pill
+#  @ehmp.btn_new_immunization_pill.click
+#end
+
+When(/^user refreshes the immunization applet$/) do
   @ehmp = PobImmunizationsApplet.new
-  @ehmp.wait_until_btn_new_immunization_pill_visible
-  expect(@ehmp).to have_btn_new_immunization_pill
-  @ehmp.btn_new_immunization_pill.click
+  @ehmp.wait_until_btn_applet_refresh_visible
+  expect(@ehmp).to have_btn_applet_refresh
+  @ehmp.btn_applet_refresh.click
 end
 
 Given(/^POB user adds a new immunization$/) do
@@ -144,13 +151,18 @@ When(/^POB user adds historical immunization "([^"]*)"$/) do |immunization_type|
   expect(cmele).to have_fld_pick_list_input
   cmele.fld_pick_list_input.set immunization_type
   @ehmp.wait_until_fld_immunization_results_visible
-  cmele.fld_pick_list_input.native.send_keys(:return)
+  if !object_exists_in_list(@ehmp.fld_immunization_results, "No results found")
+    cmele.fld_pick_list_input.native.send_keys(:enter)  
+  else
+    expect(false).to eq(true), "Immunization type entered is not in the list of options"
+  end
   
-  @ehmp.wait_until_fld_administered_date_input_visible
+  @ehmp.wait_for_fld_administered_date_input
+  @ehmp.fld_administered_date_input.click
   @ehmp.fld_administered_date_input.set Time.new.strftime("%m/%d/%Y")
   @ehmp.fld_administered_date_input.native.send_keys(:enter)
   
-  TestSupport.driver.find_element(:css, "#comments").location_once_scrolled_into_view
+  TestSupport.driver.find_element(:css, "[name = 'comments']").location_once_scrolled_into_view
   @ehmp.wait_for_fld_comments
   @ehmp.fld_comments.set "Immunization added by automation test"
   @ehmp.fld_comments.native.send_keys(:enter)
@@ -168,20 +180,12 @@ When(/^POB user adds historical immunization "([^"]*)"$/) do |immunization_type|
   PobImmunizationsApplet.new.wait_until_btn_addBtn_invisible(30)
 end
 
-Then(/^POB new immunization "([^"]*)" is added to the immunization applet$/) do | immunization_type |
-  PobOverView.new.wait_for_all_applets_to_load_in_overview
-  @ehmp = PobImmunizationsApplet.new
-  @ehmp.add_immunization_data_info_btn(immunization_type)
-  @ehmp.wait_until_btn_new_immunization_pill_visible
-  expect(@ehmp).to have_btn_new_immunization_pill
-end
-
 Then(/^POB user verifies the immunization detail modal fields$/) do |table|
   @ehmp = PobImmunizationsApplet.new
   @ehmp.wait_for_btn_detail_view
   expect(@ehmp).to have_btn_detail_view
   @ehmp.btn_detail_view.click
-  @ehmp.wait_until_tbl_modal_body_immunization_table_visible
+  @ehmp.wait_for_tbl_modal_body_immunization_table
   @ehmp = PobCommonElements.new
   @ehmp.wait_until_fld_modal_body_visible(30)
   table.rows.each do | field, value|
@@ -197,4 +201,28 @@ Then(/^POB new immunization "([^"]*)" is added to the note objects$/) do |immuni
   @ehmp.wait_until_btn_view_note_object_visible
   p @ehmp.fld_note_objects.text
   expect(@ehmp.fld_note_objects.text.downcase.include? "#{immunization_type}".downcase.strip).to eq(true), "the value '#{immunization_type}' is not present"
+end
+
+Then(/^user navigates to Immunization expanded view$/) do
+  @ehmp = PobImmunizationsApplet.new
+  begin
+    @ehmp.load_and_wait_for_screenname
+    expect(@ehmp.menu.fld_screen_name.text.upcase).to have_text("Immunization".upcase)
+  rescue Exception => e
+    p "Exception waiting for screenname: #{e}, try to continue"
+  end
+  @ehmp.wait_until_applet_loaded
+end
+
+When(/^the user takes note of number of existing immunizations$/) do
+  @number_existing_immunizations = PobImmunizationsApplet.new.number_expanded_applet_rows
+  p "number existing_immunization: #{@number_existing_immunizations}"
+end
+
+Then(/^the immunization "([^"]*)" is added to the applet$/) do |immunization_type|
+  ehmp = PobImmunizationsApplet.new
+  ehmp.wait_until_tbl_immunization_grid_visible
+  rows = ehmp.tbl_immunization_grid
+  expect(rows.length >= 0).to eq(true), "this test needs at least 1 row, found only #{rows.length}"
+  expect(rows[0].text.upcase).to have_text(immunization_type.upcase)
 end

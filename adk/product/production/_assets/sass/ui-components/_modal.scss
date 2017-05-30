@@ -1,24 +1,11 @@
-.modal-backdrop {
-    background-color: $pure-white;
-    &.in {
-        opacity: .9;
-    }
-}
-
 .modal {
     outline: none;
     &.ui-draggable {
         bottom: inherit;
-        box-shadow: 0 5px 15px rgba(0,0,0,.5);
-        border-radius: 6px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
         .draggable-handle {
             cursor: move;
-            background-color: $grey-lightest;
-            border-radius: 6px 6px 0 0;
         }
-    }
-    &.autologoff {
-        z-index: 1112;
     }
     .modal-dialog {
         margin: calc(28px + 58px) auto 0;
@@ -35,27 +22,24 @@
             width: 85%; // phantomjs fallback
             width: calc(100vw - 191px);
         }
-        &.liquid-modal{
-            .modal-content{
+        &.liquid-modal {
+            .modal-content {
+                background-color: $pure-white;
                 display: flex;
                 flex-direction: column;
                 height: 90vh;
             }
-            #modal-footer{
+            .modal-footer {
                 flex-shrink: 0;
             }
         }
         .modal-body {
             height: 100%;
-            max-height: calc(100vh - 160px);
+            max-height: calc(100vh - (3 * (28px + 58px)));
             margin-bottom: 0;
             word-wrap: break-word;
         }
     }
-}
-
-.modal-open .modal {
-    overflow-y: hidden;
 }
 
 //  leave this outside of .modal since some components only have .modal-content
@@ -63,10 +47,7 @@
     background-color: $grey-lightest;
     .modal-header {
         padding: 0px;
-        margin-bottom: 0px;
-        border-radius: 6px 6px 0px 0px;
         .modal-title {
-            color: $grey-darkest;
             font-weight: 600;
             text-transform: capitalize;
             word-wrap: break-word;
@@ -81,63 +62,45 @@
         }
     }
     .modal-body {
-        padding-bottom: 20px;
+        background-color: $pure-white;
+        font-size: 12px;
         overflow-x: hidden;
         overflow-y: auto;
-        font-size: 12px;
-        background-color: $pure-white;
+        padding-bottom: 20px;
         .detail-modal-content {
             word-wrap: break-word;
-            h5 {
-                text-transform: uppercase;
-                padding: 0px 0px 5px;
-                margin: 0px 0px 10px;
-                &.bottom-border-grey-dark {
-                    border-bottom: 1px solid $grey-dark;
-                }
-            }
+            h5,
             h6 {
                 text-transform: uppercase;
                 padding: 0px 0px 5px;
                 margin: 0px 0px 10px;
-                &.bottom-border-grey-dark {
-                    border-bottom: 1px solid $grey-dark;
-                }
-                color: $grey-darkest;
-                font-weight: bold;
             }
             hr {
                 border-color: $grey-dark;
             }
             pre {
-                font-size: 12px;
-                margin: 5px;
-                text-transform: none;
-            }
-            strong {
-                color: $grey-darkest;
-            }
-            .detail-modal-text-transform-none {
+                font-size: 11px;
                 text-transform: none;
             }
             .detail-modal-comment {
-                text-transform: none;
                 margin: 0px 10px;
+                text-transform: none;
             }
         }
     }
     .modal-footer {
-        padding: 7px;
+        padding: 10px 15px;
         border-radius: 0 0 6px 6px;
-        background-color: $grey-lightest;
         .btn {
-            &.btn-primary, &.btn-danger, &.btn-default {
+            &.btn-primary,
+            &.btn-danger,
+            &.btn-default {
                 background: $pure-white;
                 color: $primary;
                 &:hover,
                 &:focus,
                 &:active {
-                    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.5);
+                    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.5);
                     color: $primary-dark;
                 }
                 &[disabled],
@@ -145,23 +108,22 @@
                 &[disabled]:focus,
                 &[disabled]:active {
                     color: $primary;
-                    box-shadow: 0px 1px 7px 0px rgba(0,0,0,0.15),0px 1px 2px 0px rgba(0,0,0,0.15);
+                    box-shadow: 0px 1px 7px 0px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.15);
                 }
             }
         }
-        p {
-            text-align: left;
-            margin: 0px;
-        }
+        //Displayed in write back
         &.footer-extended {
             height: 55px;
         }
     }
 }
 
-/* used for the workspace manager overlay */
+// Displayed in Workspace Manager Overlay
 body.overlay-open {
-    #top-region, #center-region, #bottom-region {
+    #top-region,
+    #center-region,
+    #bottom-region {
         -webkit-filter: blur(2px);
         -moz-filter: blur(2px);
         -o-filter: blur(2px);
@@ -171,32 +133,23 @@ body.overlay-open {
 }
 #modal-region {
     .overlay {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
         background: rgba(0, 0, 0, 0.6);
+        height: 100%;
+        position: fixed;
+        top: 0;
+        width: 100%;
         z-index: 1050;
+        &--light {
+            background: inherit;
+        }
+        #mainOverlayRegion {
+            height: 100%;
+        }
     }
 }
-
-/* Miscellaneous */
-#mainOverlayRegion {
-    height: 100%;
-}
-
-/* modal alerts */
-.alert-modal {
-    .modal-body {
-        h5 {
-            &:first-of-type {
-                margin-top: 0;
-                padding-top: 0;
-            }
-            &::first-letter {
-                text-transform: capitalize;
-            }
-        }
+.modal-backdrop {
+    background-color: $pure-white;
+    &.in {
+        opacity: 0.9;
     }
 }

@@ -3,9 +3,9 @@ class ToolTips < SitePrism::Page
   def clear_all_tool_tips
     zombie_tooltips = fld_tooltips.length
     return true if zombie_tooltips.zero?
-    p "visible tooltips: #{zombie_tooltips}"
+    # p "visible tooltips: #{zombie_tooltips}"
     (0..zombie_tooltips).each do | index |
-      p "clear tooltip #{index}"
+      # p "clear tooltip #{index}"
       TestSupport.driver.execute_script("$('[data-toggle=tooltip], [tooltip-data-key]').tooltip('hide');")
       sleep(1)
     end
@@ -23,8 +23,9 @@ class PobCommonElements < SitePrism::Page
   element :fld_modal_body, ".modal-body"
   element :fld_modal_header, "#modal-header h4"
   element :fld_modal_title, "h5.panel-title-label"
+  element :fld_detail_modal_content, ".detail-modal-content pre"
   elements :fld_clear_udf_tags, ".clear-udaf-tag"
-  element :fld_online_help_status_bar, "footer #patientSyncStatusRegion .help-button-container .help-icon-link"
+  element :fld_online_help_status_bar, "footer .help-icon-button-container .help-icon-link"
   element :fld_new_window, ".MsoNormal>b>span"
   element :fld_pick_list_input, "input[class='select2-search__field']"
   element :fld_action_tray_panel, ".accordion-container"
@@ -64,8 +65,8 @@ class PobUDAF < SitePrism::Page
     self.class.element :btn_remove_udaf_tag, :xpath, "//button[contains(@class, 'clear-udaf-tag') and string() = '#{term}']"
   end
 
-  def filtered_applet(appletid)
-    p "[data-appletid='#{appletid}'] .panel-heading-filtered"
+  def create_filtered_applet_element(appletid)
+    p "creating filtered_applet: [data-appletid='#{appletid}'] .panel-heading-filtered"
     self.class.element :filtered_applet, "[data-appletid='#{appletid}'] .panel-heading-filtered"
     filtered_applet
   end

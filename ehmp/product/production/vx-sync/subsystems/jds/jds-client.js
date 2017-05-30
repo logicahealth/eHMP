@@ -24,6 +24,13 @@ function JdsClient(log, metrics, config) {
     this.config = config;
 }
 
+JdsClient.prototype.childInstance = function(childLog) {
+    var self = this;
+    var newInstance = new JdsClient(childLog, self.metrics, self.config);
+
+    return newInstance;
+};
+
 // JdsClient.prototype.clearJdsData = function(callback) {
 //     this.clearPatientIdentifiers(this.clearSyncStatus(this.clearJobStates(callback)));
 // };
@@ -69,7 +76,36 @@ JdsClient.prototype.saveSyncStatus = function(metastamp, patientIdentifier, call
 };
 
 
-JdsClient.prototype.getSyncStatus = function(patientIdentifier, callback) {
+
+//----------------------------------------------------------------------------
+// Variadic Function
+// getSyncStatus(patientIdentifier, filter, callback)
+// getSyncStatus(patientIdentifier, callback)
+//
+// This method fetches a sync status for a patient with the filter (if any)
+// appended to the url.
+//
+// patientIdentifier: A patient identifier in standard VxSync format. e.g.:
+//          {
+//              type: 'pid',
+//              value: '9E7A;3'
+//          }
+//
+// filter: An object containing a 'filter' property with the string to append
+//          to the url of the sync status endpoint. Note that any escaping, etc.
+//          must be performed prior to passing it to this method as the value in
+//          the 'filter' attribute will be appended as-is. An example value for
+//          this parameter could be:
+//          {
+//              filter: '?detailed=true&filter=lt("stampTime",20170101000000)'
+//          }
+//          Alternatively, the 'filter' parameter can be a string, which will
+//          used as the filter. e.g.:
+//          '?detailed=true&filter=lt("stampTime",20170101000000)'
+//
+// callback: The function to invoke upon error or completion of the fetch.
+//----------------------------------------------------------------------------
+JdsClient.prototype.getSyncStatus = function(patientIdentifier, filter, callback) {
     this.log.debug('Jds-client.getSyncStatus()');
     this.log.debug(inspect(patientIdentifier));
     var metricsObj = {
@@ -83,13 +119,16 @@ JdsClient.prototype.getSyncStatus = function(patientIdentifier, callback) {
 
     var args = _.toArray(arguments);
     callback = args.pop();
-
+    filter = args.length > 1 ? args.pop() : null;
 
     var path = '/status/' + patientIdentifier.value;
 
-
-    if (arguments.length > 2) {
-         path += arguments[1].filter;
+    if (!_.isEmpty(filter)) {
+        if (_.isString(filter)) {
+            path += filter;
+        } else if (!_.isEmpty(filter.filter)) {
+            path += filter.filter;
+        }
     }
 
     this.execute(path, null, 'GET', metricsObj, callback);
@@ -158,11 +197,35 @@ JdsClient.prototype.saveJobState = function(jobState, callback) {
     this.execute(path, jobState, 'POST', metricsObj, callback);
 };
 
-/*
-variadic function:
-getJobStatus(job, callback)
-getJobStatus(job, [param]..., callback)
-*/
+
+//----------------------------------------------------------------------------
+// Variadic Function:
+// getJobStatus(job, callback)
+// getJobStatus(job, filter, callback)
+//
+// job: An object with a "jpid" attribute or a "patientIdentifier" attribute (see below).
+//
+// filter: An object with a "filter" attribute. If this value is empty, null, undefined, or
+//         does not have a "filter" attribute, then it is ignored and the call will be made
+//         without a filter. The filter attribute should be of the form: '?filter=<filter>'
+//         where <filter> is a filter for the JDS store: ?filter=eq(type,"enterprise-sync-request")
+//
+// The "job" parameter can have two formats:
+// {
+//     jpid: 6c2d9589-7554-469a-b480-d71f9d2a5d64
+// }
+//
+// or
+//
+// {
+//     patientIdentifier: {
+//         value: '6c2d9589-7554-469a-b480-d71f9d2a5d64'
+//     }
+// }
+//
+// If the "job" parameter has both the "jpid" AND "patientIdentifier" attributes, the "jpid"
+// attribute will take precedence.
+//----------------------------------------------------------------------------
 JdsClient.prototype.getJobStatus = function(job, callback) {
     this.log.debug('Jds-client.getJobStatus() %j', job);
     this.log.debug(inspect(job));
@@ -187,21 +250,13 @@ JdsClient.prototype.getJobStatus = function(job, callback) {
     // Figure out what identifier we are going to use... jpid or patient identifier.
     //-------------------------------------------------------------------------------
     var params = objUtil.getProperty(arguments[0], 'jpid') || objUtil.getProperty(arguments[0], 'patientIdentifier', 'value');
-    if (arguments.length > 2) {
+    if (arguments.length > 2 && _.has(arguments[1], 'filter')) {
         params += arguments[1].filter;
     }
 
     var path = '/job/' + params;
     this.execute(path, job, 'GET', metricsObj, callback);
 };
-
-// JdsClient.prototype.clearJobStates = function(callback) {
-//     this.log.debug('Jds-client.clearJobStates()');
-
-//     var path = '/job';
-//     var method = 'DELETE';
-//     this.execute(path, null, method, callback);
-// };
 
 JdsClient.prototype.clearJobStatesByPatientIdentifier = function(patientIdentifier, callback) {
     var metricsObj = {
@@ -699,12 +754,12 @@ JdsClient.prototype.getOperationalSyncStatusWithParams = function(siteId, params
         'action': 'getOperationalSyncStatusWithParams',
         'site': siteId,
         'process': uuid.v4(),
-        'params' : params,
+        'params': params,
         'timer': 'start'
     };
     this.metrics.debug('JDS Get OPD Sync Status With Params', metricsObj);
 
-    if(_.isEmpty(params)) {
+    if (_.isEmpty(params)) {
         metricsObj.timer = 'stop';
         this.metrics.debug('JDS Get Operational Sync Status With Params in Error', metricsObj);
         return setTimeout(callback, 0, errorUtil.createFatal('No params passed in'));
@@ -1370,8 +1425,8 @@ JdsClient.prototype.getPatientList = function(lastAccessTime, callback) {
 
     var path = '/vpr/all/patientlist';
 
-    if (lastAccessTime) {
-        path = '/vpr/all/patientlist?filter=lt(lastAccessTime,' + lastAccessTime +')';
+    if (!_.isEmpty(lastAccessTime)) {
+        path = '/vpr/all/patientlist?filter=lt(lastAccessTime,' + lastAccessTime + ')';
     }
     this.execute(path, null, 'GET', metricsObj, callback);
 };
@@ -1390,12 +1445,12 @@ JdsClient.prototype.getPatientListBySite = function(site, callback) {
     var path = '/vpr/all/pid/pid';
 
     if (!_.isEmpty(site)) {
-        path = '/vpr/all/index/pid/pid?filter=eq(site,' + site +')';
+        path = '/vpr/all/index/pid/pid?filter=eq(site,' + site + ')';
     }
     this.execute(path, null, 'GET', metricsObj, callback);
 };
 
-JdsClient.prototype.getJpidFromQuery = function(patientIdentifiers, callback){
+JdsClient.prototype.getJpidFromQuery = function(patientIdentifiers, callback) {
     this.log.debug('jds-client.getJpidFromQuery() %j', patientIdentifiers);
     var metricsObj = {
         'subsystem': 'JDS',

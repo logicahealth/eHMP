@@ -1,14 +1,25 @@
 //Search record input in the workspace navigation
+.cancelTextSearchButtonBorder {
+    border: 25px solid #E6E6E6 !important;   
+}
+.form-control-placeholder-icon {
+    font-family: Source Sans Pro, 'FontAwesome', sans-serif !important;
+}
 .text-search-input-container {
     flex: 1 3 30%;
     max-width: 270px;
     padding-left: 5px;
-    .dropdown-menu, .suggest-list-container {
+    &--full-width {
+        max-width: 100%;
+        padding-left: 0;
+    }
+    .dropdown-menu,
+    .suggest-list-container {
         display: none;
         max-height: 300px;
         min-width: 469px;
         z-index: 4;
-        #suggestList {
+        .suggest-list {
             margin: 0px;
             li {
                 a {
@@ -23,27 +34,18 @@
     }
     .form-group {
         margin-bottom: 0px;
-        input {
-            border-radius: 20px;
-            min-width: 80px;
-            height: 25px;
+        .fa-search {
+            position: absolute;
+            top: 4px;
+            right: 8px;
         }
         .form-control {
-            padding: 0 24px 0 12px;
-            &::-ms-clear {
-                display: none;
-                height: 0;
-                width: 0;
-            }
-        }
-        .form-control-feedback {
-            font-size: 16px;
-            right: -3px;
-            top: -5px !important;
+            border-radius: 20px;
+            height: 25px;
+            min-width: 80px;
         }
     }
 }
-
 //Search record applet
 .search-applet-main {
     background-color: $pure-white;
@@ -52,10 +54,6 @@
     flex-direction: column;
     height: calc(90vh - 78px);
     padding-bottom: 10px;
-    .badge.number-of-results {
-        margin-top: 3px;
-        min-width: 50px;
-    }
     .panel-group {
         .panel {
             border: none;
@@ -76,6 +74,12 @@
                 margin-top: 5px;
                 .search-group {
                     margin-left: 15px;
+                    padding-bottom: 5px;
+                }
+                > div > div:last-of-type {
+                    .search-group {
+                        padding-bottom: 0;
+                    }
                 }
             }
         }
@@ -87,19 +91,21 @@
             max-width: 13%;
         }
     }
+    .synonyms-button.popover-shown {
+        background-color: $primary-dark;
+    }
     .search-results .search-group {
+        padding-bottom: 5px;
         .search-result-item {
             border-bottom: 1px solid $grey-lighter;
             cursor: pointer;
-            &:hover, &:focus {
+            &:hover,
+            &:focus {
                 background-color: $primary-lightest;
             }
             .datetime-highlights {
                 padding-left: 50px;
             }
-        }
-        .badge {
-            min-width: 33px;
         }
     }
 }

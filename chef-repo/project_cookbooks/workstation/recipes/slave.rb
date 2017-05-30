@@ -14,13 +14,6 @@ ENV['GEM_HOME'] = "#{ENV['WORKSPACE']}/.gems"
 ENV['GEM_PATH'] = "#{ENV['GEM_HOME']}:#{ENV['GEM_PATH']}"
 ENV['PATH'] = "#{ENV['GEM_HOME']}/bin:#{ENV['PATH']}"
 
-git = ChefVault::Item.load(
-  "jenkins", "git",
-  node_name: 'jenkins',
-  client_key_path: "/jenkins.pem"
-).to_hash
-git_credentials = git['credentials']
-
 aws = ChefVault::Item.load(
   "jenkins", "aws",
   node_name: 'jenkins',
@@ -60,17 +53,6 @@ jenkins_jnlp_slave node[:stack] do
   group "jenkins"
   action [:create, :connect]
   only_if  { node[:workstation][:slave][:launch_type].eql?('jnlp') }
-end
-
-template '/var/lib/jenkins/.netrc' do
-  source 'netrc.erb'
-  variables(
-    :stash_fqdn => "code.vistacore.us",
-    :git_credentials => git_credentials
-  )
-  owner node[:workstation][:user]
-  group node[:workstation][:user]
-  mode "0755"
 end
 
 directory "#{node[:workstation][:user_home]}/.aws" do

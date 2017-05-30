@@ -11,12 +11,12 @@ require "PatientPickerDomElements.rb"
 class HTTPartyWithAuthorization
   include HTTParty
 
-  # Authorization header is Base64 encoding of "9E7A;500:pu1234;pu1234!!"
+  # Authorization header is Base64 encoding of "9E7A;500:REDACTED;REDACTED"
   #@@header = { 'Authorization' => 'Basic OUU3QTs1MDA6cHUxMjM0O3B1MTIzNCEh' }
   @@time_start = Time.new
   @@time_done = Time.new
   @@default_timeout = 420
-  @@authParam = { :accessCode => "pu1234", :verifyCode => "pu1234!!", :site => "9E7A" }
+  @@authParam = { :accessCode => "REDACTED", :verifyCode => "REDACTED", :site => "9E7A" }
 
   def self.time_elapsed_last_call
     return @@time_done - @@time_start

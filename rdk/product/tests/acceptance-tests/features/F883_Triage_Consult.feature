@@ -6,7 +6,7 @@ Feature: Triage a Consult Order
 Scenario:
   Given a patient with pid "9E7A;100728" has been synced through the RDK API
   And the client has the current deploymentid
-  And the user "9E7A;vk1234" has started a consult with parameters
+  And the user "REDACTED" has started a consult with parameters
       | parameters                   | value                                      |
       | icn                          | 9E7A;100728                                |
       | assignedTo                   | [FC:PANORAMA(500)/TF:Physical Therapy(81)] |
@@ -20,7 +20,7 @@ Scenario:
   And a successful response is returned
   And the successful response contains a processInstanceId 
 
-  When the "9E7A;vk1234" client requests tasks instances for "user" and "teamroles"
+  When the "REDACTED" client requests tasks instances for "user" and "teamroles"
   Then a successful response is returned
   And the task associated with the processInstanceId has
       | parameter          | value                                      |
@@ -30,13 +30,13 @@ Scenario:
       | DEFINITIONID       | Consult.Sign                               |
       | ACTIVITYASSIGNEDTO | [FC:PANORAMA(500)/TF:Physical Therapy(81)] |
 
-  When the "9E7A;vk1234" client requests the sign update start
+  When the "REDACTED" client requests the sign update start
       | parameter                    | value                        |
       | icn                          | 9E7A;100728                  |
       | state                        | start                        |
    Then a successful response is returned
 
-  When the "9E7A;vk1234" client signs the consult order
+  When the "REDACTED" client signs the consult order
       | parameter | value                        |
       | pid       | 9E7A;100728                  |
       | site      | 9E7A                         |
@@ -49,7 +49,7 @@ Scenario:
       | division  | 500 |
   Then a successful response is returned
   And the response reports valid signature
-  When the "9E7A;vk1234" client requests the task is updated to be signed
+  When the "REDACTED" client requests the task is updated to be signed
       | parameter                    | value                        |
       | patient_pid                  | 9E7A;100728                  |
       | icn                          | 9E7A;100728                  |
@@ -61,7 +61,7 @@ Scenario:
       | state                        | complete                     |
   Then a successful response is returned
 
-  When the "9E7A;mx1234" client requests tasks instances for "user" and "teamroles"
+  When the "REDACTED" client requests tasks instances for "user" and "teamroles"
   Then a successful response is returned
   And the task associated with the processInstanceId has
     | parameter  | value |
@@ -71,18 +71,18 @@ Scenario:
 Scenario: 
   Given a patient with pid "9E7A;100728" has been synced through the RDK API
   And the client has the current deploymentid
-  And the user 9E7A;vk1234 has created and signed a consult for patient "9E7A;100728"
-  And the user "9E7A;mx1234" signals to activate order
+  And the user REDACTED has created and signed a consult for patient "9E7A;100728"
+  And the user "REDACTED" signals to activate order
       | parameter | value                        |
       | userId    | urn:va:user:9E7A:10000000272 |
     
-  When the user "9E7A;mx1234" requests to update task to eConsult (start)
+  When the user "REDACTED" requests to update task to eConsult (start)
       | parameter          | value            |
       | icn                | 9E7A;100728      |
       | state              | start            |
 
   Then a successful response is returned
-  When the user "9E7A;mx1234" requests to update task to eConsult
+  When the user "REDACTED" requests to update task to eConsult
       | parameter                    | value                        |
       | icn                          | 9E7A;100728                  |
       | state                        | complete                     |
@@ -95,7 +95,7 @@ Scenario:
       | destination facility name    | PANORAMA                                   |
   Then a successful response is returned
 
-  When the "9E7A;mx1234" client requests tasks instances for "patient" and "teamroles" for patient "9E7A;100728"
+  When the "REDACTED" client requests tasks instances for "patient" and "teamroles" for patient "9E7A;100728"
   Then a successful response is returned
   And the task associated with the processInstanceId has
   | parameter  | value             |
@@ -106,16 +106,16 @@ Scenario:
 Scenario: 
   Given a patient with pid "9E7A;100728" has been synced through the RDK API
   And the client has the current deploymentid
-  And the user 9E7A;vk1234 has created and signed a consult for patient "9E7A;100728"
-  And the user "9E7A;mx1234" signals to activate order
+  And the user REDACTED has created and signed a consult for patient "9E7A;100728"
+  And the user "REDACTED" signals to activate order
       | parameter | value                        |
       | userId    | urn:va:user:9E7A:10000000272 |
-  When the user "9E7A;mx1234" requests to update task to Return for Clarafication (start)
+  When the user "REDACTED" requests to update task to Return for Clarafication (start)
       | parameter          | value            |
       | icn                | 9E7A;100728      |
       | state              | start            |
   Then a successful response is returned
-  When the user "9E7A;mx1234" requests to update task to Return for Clarafication
+  When the user "REDACTED" requests to update task to Return for Clarafication
       | parameter                    | value                        |
       | icn                          | 9E7A;100728                  |
       | state                        | complete                     |
@@ -132,16 +132,16 @@ Scenario:
 Scenario:
   Given a patient with pid "9E7A;100728" has been synced through the RDK API
   And the client has the current deploymentid
-  And the user 9E7A;vk1234 has created and signed a consult for patient "9E7A;100728"
-  And the user "9E7A;mx1234" signals to activate order
+  And the user REDACTED has created and signed a consult for patient "9E7A;100728"
+  And the user "REDACTED" signals to activate order
       | parameter | value                        |
       | userId    | urn:va:user:9E7A:10000000272 |
-  When the user "9E7A;mx1234" requests to update task to Referred to Community Care (start)
+  When the user "REDACTED" requests to update task to Referred to Community Care (start)
       | parameter          | value            |
       | icn                | 9E7A;100728      |
       | state              | start            |
   Then a successful response is returned
-  When the user "9E7A;mx1234" requests to update task to Referred to Community Care
+  When the user "REDACTED" requests to update task to Referred to Community Care
       | parameter                    | value                        |
       | icn                          | 9E7A;100728                  |
       | state                        | complete                     |
@@ -158,14 +158,14 @@ Scenario:
 Scenario: 
   Given a patient with pid "9E7A;100728" has been synced through the RDK API
   And the client has the current deploymentid
-  And the user 9E7A;vk1234 has created and signed a consult for patient "9E7A;100728"
+  And the user REDACTED has created and signed a consult for patient "9E7A;100728"
 
-  When the user "9E7A;mx1234" requests to update task to Assign to triage member (start)
+  When the user "REDACTED" requests to update task to Assign to triage member (start)
       | parameter                    | value                        |
       | icn                          | 9E7A;100728                  |
       | state                        | start                        |
   Then a successful response is returned
-  When the user "9E7A;mx1234" requests to update task to Assign to triage member
+  When the user "REDACTED" requests to update task to Assign to triage member
       | parameter                     | value                        |
       | icn                           | 9E7A;100728                  |
       | state                         | complete                     |
@@ -184,13 +184,13 @@ Scenario:
 Scenario: 
   Given a patient with pid "9E7A;100728" has been synced through the RDK API
   And the client has the current deploymentid
-  And the user 9E7A;vk1234 has created and signed a consult for patient "9E7A;100728"
-  When the user "9E7A;mx1234" requests to update task to Send to Scheduling (start)
+  And the user REDACTED has created and signed a consult for patient "9E7A;100728"
+  When the user "REDACTED" requests to update task to Send to Scheduling (start)
       | parameter                    | value                        |
       | icn                          | 9E7A;100728                  |
       | state                        | start                        |
   Then a successful response is returned
-  When the user "9E7A;mx1234" requests to update task to Send to Scheduling
+  When the user "REDACTED" requests to update task to Send to Scheduling
       | parameter                    | value                        |
       | icn                          | 9E7A;100728                  |
       | state                        | complete                     |

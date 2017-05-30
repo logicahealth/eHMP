@@ -1,5 +1,4 @@
 VPRJCONFIG ;KRM/CJE -- Set up JDS configuration
- ;;1.0;JSON DATA STORE;;Aug 5, 2015
  ;
 SETUP ;
  ; Add default route/url map and default generic data stores
@@ -83,14 +82,17 @@ ADDSTORE(DB,GLOBAL,VER)
  S ^VPRCONFIG("store",DB)=""
  S ^VPRCONFIG("store",DB,"global")=$S($L($G(GLOBAL))>1:GLOBAL,1:"VPRJ"_UDB)
  S ^VPRCONFIG("store",DB,"version")=VER
- ; CRUD Operations
+ ; Add GDS Operations
+ ; order from most specific to least specific for routes to apply as expected
+ D ADDURL("GET",DB_"/index/{indexName}","INDEX^VPRJGDS",DB) ; Retrieve using index
+ D ADDURL("GET",DB_"/index/{indexName}/{template}","INDEX^VPRJGDS",DB) ; Retrieve using index and template
  D ADDURL("GET",DB_"/{uid}","GET^VPRJGDS",DB) ; Return given document
+ D ADDURL("GET",DB_"/{uid}/{template}","GET^VPRJGDS",DB) ; Return given document using template
  D ADDURL("PUT",DB_"/{uid}","SET^VPRJGDS",DB) ; Set given document - UID provided
  D ADDURL("PATCH",DB_"/{uid}","SET^VPRJGDS",DB) ; update a given document - UID provided
  D ADDURL("DELETE",DB_"/{uid}","DEL^VPRJGDS",DB) ; Delete given document
- ; Index Operations
- D ADDURL("GET",DB_"/index/{indexName}","INDEX^VPRJGDS",DB) ; Retrieve using index
  D ADDURL("POST",DB_"/index","CINDEX^VPRJGDS",DB) ; Create Index
+ D ADDURL("POST",DB_"/template","CTEMPLATE^VPRJGDS",DB) ; Create Template
  ; DB Operations
  ;
  ; PUT creates new database - not store specific

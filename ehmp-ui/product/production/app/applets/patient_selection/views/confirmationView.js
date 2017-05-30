@@ -6,8 +6,9 @@ define([
     "moment",
     "hbs!app/applets/patient_selection/templates/confirmation/layout",
     "hbs!app/applets/patient_selection/templates/confirmation/acknowledge",
-    "hbs!app/applets/patient_selection/templates/confirmation/patientFlag"
-], function (
+    "hbs!app/applets/patient_selection/templates/confirmation/patientFlag",
+    "app/applets/patient_selection/views/confirmationErrorView"
+], function(
     Backbone,
     Marionette,
     _,
@@ -15,8 +16,13 @@ define([
     moment,
     confirmationTemplate,
     acknowledgeTemplate,
-    patientFlagTemplate) {
+    patientFlagTemplate,
+    ConfirmationErrorView
+) {
     'use strict';
+
+    // because the "Scroll to bottom" message is shorter than the Confirm button
+    var SCROLL_THRESHOLD = 25;
 
     var ConfirmationView = Backbone.Marionette.ItemView.extend({
         template: false,
@@ -28,6 +34,9 @@ define([
                 buttonOptions: {
                     icon: 'fa-question-circle'
                 }
+            },
+            ErrorContext: {
+                title: 'Patient Selection Confirmation'
             }
         },
         attributes: {
@@ -93,10 +102,16 @@ define([
             },
             'patient-search:error': function(collection, resp) {
                 if (resp.status) {
-                    this.template = Handlebars.compile('<p class="error-message padding" role="alert">' + ADK.ErrorMessaging.getMessage(resp.status) + ' </p>');
-                    this.render();
+                    this.showError(resp);
                 }
             }
+        },
+        showError: function(resp) {
+            this.regionManager = new Marionette.RegionManager();
+            var region = this.regionManager.addRegion("errorRegion", Marionette.Region.extend({
+                el: this.el
+            }));
+            region.show(new ConfirmationErrorView(resp));
         },
         ackEvents: {
             'patient-search:success': function(collection, response) {
@@ -140,14 +155,14 @@ define([
                                 if (!_.isEmpty(_.result(resp, 'data', '')) && _.result(resp, 'syncInProgress', false) === true) {
                                     self.loadPatientRecord(collection, resp, event);
                                 } else {
-                                    self.template = Handlebars.compile('<br /><p class="error-message padding" role="alert" tabindex="0">Error syncing MVI record for patient</p>');
-                                    self.render();
+                                    self.showError({
+                                        message: 'Error syncing MVI record for patient'
+                                    });
                                 }
                             },
                             error: function(model, resp) {
                                 if (resp.status) {
-                                    self.template = Handlebars.compile('<br /><p class="error-message padding" role="alert" tabindex="0">' + ADK.ErrorMessaging.getMessage(resp.status) + ' </p>');
-                                    self.render();
+                                    self.showError(resp);
                                 }
                             }
                         });
@@ -171,27 +186,14 @@ define([
                         }
                     } catch (error) {
                         if (resp.status === 502) {
-                            message = '<h4 class="top-margin-no top-padding-no">Error: Patient Loading Failed</h4><p>' + ADK.ErrorMessaging.getMessage('syncTimeout') + '</p>';
+                            message = 'Error: Patient Loading Failed - ' + ADK.ErrorMessaging.getMessage('syncTimeout');
                         } else {
                             message = ADK.ErrorMessaging.getMessage('default');
                         }
 
                     }
-                } else {
-                    message = ADK.ErrorMessaging.getMessage(resp.status);
                 }
-                var errorMessage = '<div class="error-message all-padding-md">' + message;
-                errorMessage = errorMessage.concat(getSearchErrorMessage(resp), '</div>');
-                this.template = Handlebars.compile(errorMessage);
-                this.render();
-
-                function getSearchErrorMessage(resp, error) {
-                    var errorMessage = error || '';
-                    if (resp.logId) {
-                        errorMessage = errorMessage.concat('<p class="all-padding-md">For defect reporting:<p>' + resp.logId);
-                    }
-                    return errorMessage;
-                }
+                this.showError(_.defaults({ message: message }, resp));
             },
             'patient-record:success': function(collection, resp) {
                 var successMethod = function(collection, resp) {
@@ -325,7 +327,7 @@ define([
                     });
 
                     this.stopListening(this.model, 'last-workspace-synced');
-                    this.listenTo(this.model, 'last-workspace-synced', function () {
+                    this.listenTo(this.model, 'last-workspace-synced', function() {
                         if (this.getOption('skipAckPatientConfirmation')) {
                             this.ackPatient();
                             this.showConfirm(confirmationTemplate);
@@ -338,8 +340,7 @@ define([
                 } else if (resp.status == 403) {
                     this.showUnAuthorized();
                 } else {
-                    this.template = Handlebars.compile('<p class="error-message all-padding-md">' + ADK.ErrorMessaging.getMessage(resp.status) + ' </p>');
-                    this.render();
+                    this.showError(resp);
                 }
             },
             'authorize:success': function(collection, resp, patient) {
@@ -420,8 +421,8 @@ define([
             modelJSON.displayBreakClinicalLink = this.getOption('displayBreakClinicalLink');
             return modelJSON;
         },
-        checkFlagConfirmation: function () {
-            if (typeof (this.flagsWrapper != 'undefined')) {
+        checkFlagConfirmation: function() {
+            if (typeof(this.flagsWrapper != 'undefined')) {
                 this.addFlagsScrollConfirmation();
             }
         },
@@ -434,13 +435,13 @@ define([
                     var viewportHeight = this.flagsWrapper.height();
                     var scrollingHeight = this.flagsWrapper[0].scrollHeight;
                     var confirmButton = wrapper.find('#confirmFlaggedPatinetButton');
-                    if (scrollingHeight > viewportHeight) {
+                    if (scrollingHeight > viewportHeight + SCROLL_THRESHOLD) {
                         confirmButton.before('<div class="confirmation-scroll-to-confirm text-center font-size-14">Scroll to bottom to confirm patient</div>');
                         confirmButton.addClass('hidden');
                         // add event listener for scrolling till all flags are seen
                         this.flagsWrapper.on('scroll.activateConfirmation', function(e) {
                             var elem = $(e.currentTarget);
-                            if (e.currentTarget.scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+                            if (e.currentTarget.scrollHeight - elem.scrollTop() >= elem.outerHeight() - 1) {
                                 confirmButton.removeClass('hidden').focus();
                                 confirmButton.prev().remove();
                             }
@@ -697,7 +698,7 @@ define([
         ccowPatientContextChange: function(patient, callback) {
             // Only push context change if CCOW is active and the change was initiated by a non-CCOW confirmation
             if ("ActiveXObject" in window && !this.getOption('suspendContextOnError') && ADK.CCOWService.getCcowStatus() === 'Connected') {
-                ADK.CCOWService.handleContextChange(patient, _.bind(function (goBack) {
+                ADK.CCOWService.handleContextChange(patient, _.bind(function(goBack) {
                     if (goBack) {
                         ADK.Navigation.navigate(ADK.WorkspaceContextRepository.userDefaultScreen, {
                             route: {
@@ -746,7 +747,7 @@ define([
         confirmPatient: function(event) {
             this.$(event.currentTarget).button('loading');
             var patient = this.model;
-            this.ccowPatientContextChange(patient, _.bind(function () {
+            this.ccowPatientContextChange(patient, _.bind(function() {
                 ADK.UserDefinedScreens.screensConfigNullCheck();
                 ADK.Messaging.trigger("patient:selected", patient);
                 if (!this.navigation) {

@@ -42,7 +42,7 @@ define([
 
     var TrayCollectionView = Backbone.Marionette.CollectionView.extend({
         trayGroupName: 'writeback',
-        className: 'list-inline tray-menu hidden-overflow',
+        className: 'tray-menu hidden-overflow',
         tagName: 'ul',
         getChildView: function(item) {
             var ButtonView = Backbone.Marionette.ItemView.extend({
@@ -61,8 +61,8 @@ define([
             return item.get('view').extend({
                 options: trayViewOptions,
                 tagName: 'li',
-                initialize: function(){
-                    this.listenTo(this,'tray.hidden tray.shown', function() {
+                initialize: function() {
+                    this.listenTo(this, 'tray.hidden tray.shown', function() {
                         ADK.utils.resize.trayToggleResize();
                     });
                 }
@@ -99,7 +99,7 @@ define([
         patientModelEvents: {
             'change:pid': 'render'
         },
-        initialize: function(){
+        initialize: function() {
             Marionette.bindEntityEvents(this, ADK.PatientRecordService.getCurrentPatient(), this.patientModelEvents);
         },
         resortView: function() {} // Turning off the rendering of children on a sort of the collection

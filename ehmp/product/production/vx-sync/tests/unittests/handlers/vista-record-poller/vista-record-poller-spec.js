@@ -30,8 +30,8 @@ var errorPublisher = {
 var config = {
     jds: {
         protocol: 'http',
-        host: '10.2.2.110',
-        port: 9080
+        host: 'IP        ',
+        port: PORT
     },
     'hmp.batch.size': 1000,
     hdr: {

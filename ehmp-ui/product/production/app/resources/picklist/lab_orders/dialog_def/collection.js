@@ -1,4 +1,6 @@
 define([], function() {
+    'use strict';
+
     var OrderDef = ADK.Resources.Picklist.Model.extend({
         idAttribute: 'ien', //primary key--can't have duplicates
         label: 'name',

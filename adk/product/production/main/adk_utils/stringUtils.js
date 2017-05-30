@@ -7,11 +7,11 @@ define(['jquery', 'moment', 'underscore'], function($, Moment, _) {
     var singulars = [],
         uncountables = [];
 
-    var singular = function (rule, replacement) {
+    var singular = function(rule, replacement) {
         singulars.unshift([rule, replacement]);
     };
 
-    var uncountable = function (word) {
+    var uncountable = function(word) {
         uncountables.unshift(word);
     };
 
@@ -51,7 +51,7 @@ define(['jquery', 'moment', 'underscore'], function($, Moment, _) {
     uncountable("sheep");
     uncountable("jeans");
 
-    StringUtils.singularize = function (word) {
+    StringUtils.singularize = function(word) {
         var wlc = word.toLowerCase();
         for (var i = 0; i < uncountables.length; i++) {
             var uncountable = uncountables[i];
@@ -68,16 +68,34 @@ define(['jquery', 'moment', 'underscore'], function($, Moment, _) {
         }
     };
 
-    StringUtils.addSearchResultElementHighlighting = function (textToHighlight, keywords) {
+    StringUtils.addSearchResultElementHighlighting = function(textToHighlight, keywords) {
+        var escapedText = _.escape(textToHighlight);
         var markStart = '<mark class="cpe-search-term-match">';
         var markEnd = '</mark>';
         _.each(keywords, function(key) {
             var regex = new RegExp('\\b' + key.replace(/[-[\]{}()*+?.,\\^$|#\key]/g, "\\$&") + '\\b' + '(?=[^<>]*(<|$))', "gi");
-            textToHighlight = textToHighlight.replace(regex, markStart + '$&' + markEnd);
+            escapedText = escapedText.replace(regex, markStart + '$&' + markEnd);
         });
-        return textToHighlight;
+        return escapedText;
     };
 
+    StringUtils.toTitleCase = function(string) {
+        var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|is|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
 
+        return string.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function(match, index, title) {
+            if (index > 0 && index + match.length !== title.length &&
+                match.search(smallWords) > -1 && title.charAt(index - 2) !== ":" &&
+                (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') &&
+                title.charAt(index - 1).search(/[^\s-]/) < 0) {
+                return match.toLowerCase();
+            }
+
+            if (match.substr(1).search(/[A-Z]|\../) > -1) {
+                return match;
+            }
+
+            return match.charAt(0).toUpperCase() + match.substr(1);
+        });
+    };
     return StringUtils;
 });

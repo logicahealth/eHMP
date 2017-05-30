@@ -71,6 +71,7 @@ default[:jds][:data_store][:entordrbls] = "entordrbls"
 default[:jds][:data_store][:activeusr] = "activeusr"
 default[:jds][:data_store][:osynclinic] = "osynclinic"
 default[:jds][:data_store][:osyncblist] = "osyncblist"
+default[:jds][:data_store][:prefetch] = "prefetch"
 
 default[:jds][:jds_data][:data_bag][:ehmp_users] = nil
 default[:jds][:jds_data][:data_bag][:permission] = nil
@@ -81,6 +82,7 @@ default[:jds][:jds_data][:data_bag][:entordrbls] = nil
 default[:jds][:jds_data][:data_bag][:activeusr] = nil
 default[:jds][:jds_data][:data_bag][:osynclinic] = nil
 default[:jds][:jds_data][:data_bag][:osyncblist] = nil
+default[:jds][:jds_data][:data_bag][:prefetch] = nil
 
 if node[:jds][:jds_data][:dev_pjds]
 	default[:jds][:jds_data][:use_artifact][:entordrbls] = true
@@ -92,6 +94,7 @@ if node[:jds][:jds_data][:dev_pjds]
     default[:jds][:jds_data][:use_artifact][:osynclinic] = false
 	default[:jds][:jds_data][:use_artifact][:osyncblist] = false
 	default[:jds][:jds_data][:use_artifact][:activeusr] = false
+	default[:jds][:jds_data][:use_artifact][:prefetch] = false
 	default[:jds][:jds_data][:delete_stores] = true
 else
 	default[:jds][:jds_data][:use_artifact][:entordrbls] = true
@@ -103,7 +106,9 @@ else
     default[:jds][:jds_data][:use_artifact][:osynclinic] = true
 	default[:jds][:jds_data][:use_artifact][:osyncblist] = true
 	default[:jds][:jds_data][:use_artifact][:activeusr] = false
+	default[:jds][:jds_data][:use_artifact][:prefetch] = true
 	default[:jds][:jds_data][:delete_stores] = false
 end
 
 default[:jds][:clear_jds_journal] = true
+default[:jds][:jds_data][:delete_permsets] = true

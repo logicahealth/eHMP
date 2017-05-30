@@ -4,7 +4,7 @@ Feature: F144-eHMP Viewer GUI - Timeline(NewsFeed) - Modal Tests
 
 # DE6696: Default automated user is unable to see Timeline
 Background:
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "pu1234" verifycode as  "pu1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   Then staff view screen is displayed
 
 @f144_timeline_visit_modal_details @data_specific

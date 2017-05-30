@@ -11,6 +11,7 @@ var inspect = require('util').inspect;
 var RecordRetirementUtil = require(global.VX_UTILS + 'patient-record-retirement/patient-record-retirement-util');
 var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
+var uuid = require('node-uuid');
 
 var argv;
 argv = require('yargs')
@@ -23,11 +24,17 @@ argv = require('yargs')
     .alias('h', 'help')
     .argv;
 
+var referenceInfo = {
+    sessionId: uuid.v4(),
+    utilityType: 'record-retirement'
+};
+
+console.log('patient-record-retirement-util: Utility started. sessionId: %s', referenceInfo.sessionId);
+
 var log = logUtil._createLogger({
     name: 'patient-record-retirement-util',
-    level: argv['log-level'] || config.recordRetirement.utilityLogLevel || 'debug',
-    child: logUtil._createLogger
-});
+    level: argv['log-level'] || config.recordRetirement.utilityLogLevel || 'debug'
+}).child(referenceInfo);
 
 var host = config.beanstalk.repoDefaults.host;
 var port = config.beanstalk.repoDefaults.port;
@@ -53,7 +60,7 @@ if(!_.isUndefined(lastAccessed)) {
 	log.info('run-patient-record-retirement-util: Overriding config lastAccesed value. Retiring records that have not been accessed in the past %s days... (rules will still apply)', lastAccessed);
 }
 
-recordRetirementUtil.runUtility(function(error){
+recordRetirementUtil.runUtility(referenceInfo, function(error){
 	if(error){
 		log.error('run-patient-record-retirement-util: ****** Utility finished with error ******\nerror: %s', inspect(error));
 	} else {

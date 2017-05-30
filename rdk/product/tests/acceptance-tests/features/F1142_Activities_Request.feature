@@ -276,7 +276,7 @@ Scenario:  Staff View, verify createdByMe and intendedForMeAndMyTeams activity r
       | authorName       | TDNURSE,ONE      |
       | urgency          | 4                |
 
-  When the user "9E7A;pu1234" requests open activities for the staff context
+  When the user "REDACTED" requests open activities for the staff context
       | extra parameter         | value |
       | intendedForMeAndMyTeams | true  |
       | domain|Request|

@@ -12627,7 +12627,7 @@ PTF1 ; -- PTF where ID=iens;TYPE
 "RTN","VPRDJ04A",121,0)
  S PTF("icdCode")=$$SETNCS^VPRUTILS("icd",$P(X,U,2)),PTF("icdName")=Y
 "RTN","VPRDJ04A",122,0)
- S DIS=$P(TMP,U,2) S:DIS VAINDT=DIS-.0001
+ S DIS=$P(TMP,U,2) S:DIS DNS  T=DIS-.0001
 "RTN","VPRDJ04A",123,0)
  D INP^VADPT Q:'$G(VAIN(1))  ;admission not found
 "RTN","VPRDJ04A",124,0)

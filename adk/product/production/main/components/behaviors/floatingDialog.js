@@ -20,8 +20,6 @@ define([
                 if (component === "toolbar") {
                     if(this.$el.prop("tagName") === "LI") {
                         this.$('.gist-item').addClass('background-color-primary-lighter');
-                    } else {
-                        this.$el.addClass('background-color-primary-lighter');
                     }
                 }
                 this.trigger('after:show' + component, e, this);
@@ -35,8 +33,6 @@ define([
                 if (component === "toolbar") {
                     if(this.$el.prop("tagName") === "LI") {
                         this.$('.gist-item').removeClass('background-color-primary-lighter');
-                    } else {
-                        this.$el.removeClass('background-color-primary-lighter');
                     }
                 }
                 this.trigger('after:hide' + component, e, this);

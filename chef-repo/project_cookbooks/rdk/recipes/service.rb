@@ -26,12 +26,14 @@ node[:rdk][:services].each do |name, config|
       :working_directory => node[:rdk][:home_dir],
       :deploy_path => config[:deploy_path],
       :config_file => config[:config_destination],
-      :port => config[:port] == 0 ? nil : config[:port],
+      :max_old_space => config[:max_old_space],
+      :port => config[:port],
       :dev_deploy => node[:rdk][:dev_deploy] || false,
       :debug_port => config[:debug_port],
       :processes => config[:processes],
       :log_directory => node[:rdk][:log_dir],
-      :pid_directory => node[:rdk][:pid_dir]
+      :pid_directory => node[:rdk][:pid_dir],
+      :tls_reject_unauthorized => node[:rdk][:tls_reject_unauthorized]
     )
     notifies :stop, "service[#{config[:service]}]", :before
     notifies :restart, "service[#{config[:service]}]"

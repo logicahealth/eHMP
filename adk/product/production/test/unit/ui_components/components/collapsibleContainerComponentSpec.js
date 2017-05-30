@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/components', 'api/UIComponents', 'jasminejquery'],
+define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/UILibrary', 'api/UIComponents', 'jasminejquery'],
        function($, Handlebars, Backbone, Marionette, UI) {
 
          var $collapsibleContainerTestPage,
@@ -66,8 +66,8 @@ define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/co
              });
 
              it('contains the correct regions', function() {
-              expect($collapsibleContainerTestPage.find('.collapsibleContainerHeaderRegion').length).toBe(1);
-              expect($collapsibleContainerTestPage.find('.collapsibleContainerCollapseRegion').length).toBe(1);
+              expect($collapsibleContainerTestPage.find('.collapsible-container-header-region').length).toBe(1);
+              expect($collapsibleContainerTestPage.find('.collapsible-container-collapse-region').length).toBe(1);
              });
              it('contains the correct collapse id', function () {
               expect($collapsibleContainerTestPage.find('#collapsibleContainerCollapseRegion-collapsible-container').length).toBe(1);
@@ -76,22 +76,22 @@ define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/co
               expect($collapsibleContainerTestPage.find('.collapse').length).toBe(1);
              });
              it('collapse region is initially not visible', function() {
-              expect($collapsibleContainerTestPage.find('.collapsibleContainerCollapseRegion')).not.toHaveClass('in');
+              expect($collapsibleContainerTestPage.find('.collapsible-container-collapse-region')).not.toHaveClass('in');
              });
              it('contains a button for toggling the collapse', function() {
               expect($collapsibleContainerTestPage.find('[data-buttonid="collapsibleContainerTrigger"]').length).toBe(1);
               expect($collapsibleContainerTestPage.find('[data-buttonid="collapsibleContainerTrigger"]'));
              });
              it('contains the correct header content', function() {
-              expect($collapsibleContainerTestPage.find('.collapsibleContainerHeaderRegion')).toHaveText('header content');
+              expect($collapsibleContainerTestPage.find('.collapsible-container-header-region')).toHaveText('header content');
              });
              it('contains the correct collapse content', function() {
-              expect($collapsibleContainerTestPage.find('.collapsibleContainerCollapseRegion')).toHaveText('container content');
+              expect($collapsibleContainerTestPage.find('.collapsible-container-collapse-region')).toHaveText('container content');
              });
              it('has a visible collapse region after collapse is toggled', function() {
-              expect($collapsibleContainerTestPage.find('.collapsibleContainerCollapseRegion')).not.toHaveClass('in');
+              expect($collapsibleContainerTestPage.find('.collapsible-container-collapse-region')).not.toHaveClass('in');
               $('button[data-toggle="collapse"]').click();
-              expect($collapsibleContainerTestPage.find('.collapsibleContainerCollapseRegion')).toBeVisible();
+              expect($collapsibleContainerTestPage.find('.collapsible-container-collapse-region')).toBeVisible();
              });
            });
          });

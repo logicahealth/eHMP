@@ -48,7 +48,7 @@ define([
 						if (_.isFunction(this.model.validate)) {
 							this.model.validate = _.compose(func, this.model.validate);
 						} else {
-							this.model.validate = func;
+							this.model.validate = _.compose(func, _.noop);
 						}
 					}
 				}

@@ -43,7 +43,7 @@ describe('oracle-connection-pool-spec.js', function() {
     describe('doQueryWithParams', function() {
         var query = 'SELECT * FROM activitydb.Am_TaskRoute WHERE taskInstanceId IN (test0,test1) OR taskInstanceId IN (test2) order by taskInstanceId,id';
         it('Should have queryParameters pass through user defined data', function() {
-            sinon.stub(oracleConnectionPool, '_getPool', function(req, dbConfig, callback) {
+            sinon.stub(oracleConnectionPool, 'getPool', function(req, dbConfig, callback) {
                 oracledb.createPool({}, function(error, response) {
                     var conn;
                     response.getConnection(function(error, response) {
@@ -67,7 +67,7 @@ describe('oracle-connection-pool-spec.js', function() {
         });
 
         it('Should have queryParameters pass through an empty Array', function() {
-            sinon.stub(oracleConnectionPool, '_getPool', function(req, dbConfig, callback) {
+            sinon.stub(oracleConnectionPool, 'getPool', function(req, dbConfig, callback) {
                 oracledb.createPool({}, function(error, response) {
                     var conn;
                     response.getConnection(function(error, response) {
@@ -90,17 +90,17 @@ describe('oracle-connection-pool-spec.js', function() {
             });
         });
 
-        it('Should get an error from _getPool', function() {
-            sinon.stub(oracleConnectionPool, '_getPool', function(req, dbConfig, callback) {
-                return callback('_getPool error');
+        it('Should get an error from getPool', function() {
+            sinon.stub(oracleConnectionPool, 'getPool', function(req, dbConfig, callback) {
+                return callback('getPool error');
             });
             oracleConnectionPool.doQueryWithParams(req, dbConfig, query, null, function(error, response) {
-                expect(error.message).to.eql('_getPool error');
+                expect(error.message).to.eql('getPool error');
             });
         });
 
         it('Should get an error from pool.getConnection', function() {
-            sinon.stub(oracleConnectionPool, '_getPool', function(req, dbConfig, callback) {
+            sinon.stub(oracleConnectionPool, 'getPool', function(req, dbConfig, callback) {
                 oracledb.createPool({}, function(error, response) {
                     callback('pool.getConnection error');
                 });
@@ -111,7 +111,7 @@ describe('oracle-connection-pool-spec.js', function() {
         });
 
         it('Should have maxRowsParam pass through user defined data', function() {
-            sinon.stub(oracleConnectionPool, '_getPool', function(req, dbConfig, callback) {
+            sinon.stub(oracleConnectionPool, 'getPool', function(req, dbConfig, callback) {
                 oracledb.createPool({}, function(error, response) {
                     var conn;
                     response.getConnection(function(error, response) {
@@ -132,7 +132,7 @@ describe('oracle-connection-pool-spec.js', function() {
         });
 
         it('Should have maxRosParam passed through 100', function() {
-            sinon.stub(oracleConnectionPool, '_getPool', function(req, dbConfig, callback) {
+            sinon.stub(oracleConnectionPool, 'getPool', function(req, dbConfig, callback) {
                 oracledb.createPool({}, function(error, response) {
                     var conn;
                     response.getConnection(function(error, response) {
@@ -152,13 +152,13 @@ describe('oracle-connection-pool-spec.js', function() {
             });
         });
 
-        it('Should have connection.execute call _doClose', function() {
-            sinon.stub(oracleConnectionPool, '_getPool', function(req, dbConfig, callback) {
+        it('Should have connection.execute call doClose', function() {
+            sinon.stub(oracleConnectionPool, 'getPool', function(req, dbConfig, callback) {
                 oracledb.createPool({}, function(error, response) {
                     callback(null, response);
                 });
             });
-            sinon.stub(oracleConnectionPool, '_doClose', function(req, connection) {
+            sinon.stub(oracleConnectionPool, 'doClose', function(req, connection) {
                 expect(req.doClose).to.eql(true);
             });
             var modReq = {
@@ -169,7 +169,7 @@ describe('oracle-connection-pool-spec.js', function() {
         });
 
         it('Should have connection.execute return an error', function() {
-            sinon.stub(oracleConnectionPool, '_getPool', function(req, dbConfig, callback) {
+            sinon.stub(oracleConnectionPool, 'getPool', function(req, dbConfig, callback) {
                 oracledb.createPool({}, function(error, response) {
                     var conn;
                     response.getConnection(function(error, response) {
@@ -190,7 +190,7 @@ describe('oracle-connection-pool-spec.js', function() {
         });
 
         it('Should have connection.execute return success', function() {
-            sinon.stub(oracleConnectionPool, '_getPool', function(req, dbConfig, callback) {
+            sinon.stub(oracleConnectionPool, 'getPool', function(req, dbConfig, callback) {
                 oracledb.createPool({}, function(error, response) {
                     var conn;
                     response.getConnection(function(error, response) {
@@ -211,7 +211,7 @@ describe('oracle-connection-pool-spec.js', function() {
         });
     });
 
-    describe('_getPool', function() {
+    describe('getPool', function() {
         beforeEach(function() {
 
         });
@@ -225,18 +225,18 @@ describe('oracle-connection-pool-spec.js', function() {
             sinon.stub(oracleConnectionPool, '_onShutdown', function() {
                 pool = _.cloneDeep(oracleConnectionPool._cachedPool);
             });
-            oracleConnectionPool._getPool(req, dbConfig, function(error, response) {
+            oracleConnectionPool.getPool(req, dbConfig, function(error, response) {
                 expect(pool).to.eql({});
             });
         });
 
         it('Should create a new pool even though cachedPool is not empty', function() {
-            oracleConnectionPool._getPool(req, dbConfig, function(error, response) {
+            oracleConnectionPool.getPool(req, dbConfig, function(error, response) {
                 oracleConnectionPool._cachedPool.randomkey = _.cloneDeep(oracleConnectionPool._cachedPool[mockKey]);
                 oracleConnectionPool._cachedPool.randomkey.pool = {'connectionPool': 'simulated'};
             });
 
-            oracleConnectionPool._getPool(req, dbConfig, function(error, response) {
+            oracleConnectionPool.getPool(req, dbConfig, function(error, response) {
                 expect(_.has(oracleConnectionPool._cachedPool, mockKey)).to.eql(true);
                 expect(response.poolAttrs.connectString).to.eql(dbConfig.connectString);
             });
@@ -247,7 +247,7 @@ describe('oracle-connection-pool-spec.js', function() {
             var dbConfigUpdate = _.cloneDeep(dbConfig);
             dbConfigUpdate.poolMin = 10;
             dbConfigUpdate.poolMax = 20;
-            oracleConnectionPool._getPool(req, dbConfigUpdate, function(error, response) {
+            oracleConnectionPool.getPool(req, dbConfigUpdate, function(error, response) {
                 expect(response.poolAttrs.poolMin).to.eql(10);
                 expect(response.poolAttrs.poolMax).to.eql(20);
             });
@@ -258,7 +258,7 @@ describe('oracle-connection-pool-spec.js', function() {
             sinon.stub(oracledb, 'createPool', function(options, callback) {
                 return callback(new Error('error from createPool'), null);
             });
-            oracleConnectionPool._getPool(req, dbConfig, function(error, response) {
+            oracleConnectionPool.getPool(req, dbConfig, function(error, response) {
                 expect(_.get(error, 'message')).to.eql('Error: error from createPool');
                 expect(response).to.eql(null);
             });
@@ -266,25 +266,25 @@ describe('oracle-connection-pool-spec.js', function() {
 
         it('Should return the _cachedPool object with our test data', function() {
             oracleConnectionPool._cachedPool = {};
-            oracleConnectionPool._getPool(req, dbConfig, function(error, response) {
+            oracleConnectionPool.getPool(req, dbConfig, function(error, response) {
                 expect(response).to.eql(oracleConnectionPool._cachedPool[mockKey]);
             });
         });
 
         it('Should return the cached pool from our mockKey', function() {
-            oracleConnectionPool._getPool(req, dbConfig, function(error, response) {
+            oracleConnectionPool.getPool(req, dbConfig, function(error, response) {
                 expect(response).to.eql(oracleConnectionPool._cachedPool[mockKey]);
             });
         });
     });
 
-    describe('_doClose', function() {
+    describe('doClose', function() {
         it('Should close the connection and not send back a response', function() {
             var conn;
             oracledb.getConnection(dbConfig, function(error, connection) {
                 conn = connection;
             });
-            oracleConnectionPool._doClose(req, conn);
+            oracleConnectionPool.doClose(req, conn);
         });
 
         it('Should return an error and try to log it', function() {
@@ -296,7 +296,7 @@ describe('oracle-connection-pool-spec.js', function() {
                 return callback(new Error('Close error'));
             };
 
-            oracleConnectionPool._doClose(req, conn);
+            oracleConnectionPool.doClose(req, conn);
             var lastError = logger.error.getCall(logger.error.callCount - 1).args;
             expect(lastError[0]).to.eql('Error: Close error');
         });
@@ -356,7 +356,7 @@ describe('oracle-connection-pool-spec.js', function() {
 
         it('Should close all the connections and cachedPool should be empty', function() {
             oracleConnectionPool._cachedPool = {};
-            oracleConnectionPool._getPool(req, dbConfig, function(error, response) {
+            oracleConnectionPool.getPool(req, dbConfig, function(error, response) {
                 oracleConnectionPool._closePool(function(err, res){});
                 expect(oracleConnectionPool._cachedPool).to.eql({});
             });

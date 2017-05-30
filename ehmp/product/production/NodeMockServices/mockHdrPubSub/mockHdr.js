@@ -76,15 +76,15 @@ app.get('/ping', function(req, res) {
 
 //HDR interface
 //Subscribe
-app.post('/repositories.med.va.gov/fpds/vpr/subscribe', [validateSubscribeParams, handleSubscribe]);
+app.post('/repositories.URL       /fpds/vpr/subscribe', [validateSubscribeParams, handleSubscribe]);
 //Poll
-app.get('/repositories.med.va.gov/fpds/vpr/patientdata/:siteId', [validatePollParams, handlePoll]);
+app.get('/repositories.URL       /fpds/vpr/patientdata/:siteId', [validatePollParams, handlePoll]);
 //Unsubscribe
-app.post('/repositories.med.va.gov/fpds/vpr/cancel', [validateUnsubscribeParams, handleUnsubscribe]);
+app.post('/repositories.URL       /fpds/vpr/cancel', [validateUnsubscribeParams, handleUnsubscribe]);
 
 //Not part of the real HDR interface
 //Clear all subscriptions
-app.post('/repositories.med.va.gov/fpds/vpr/cancel/all', handleUnsubscribeAll);
+app.post('/repositories.URL       /fpds/vpr/cancel/all', handleUnsubscribeAll);
 //Unsolicited update
 app.post('/update', [validateUnsolicitedUpdate, handleUnsolicitedUpdate]);
 

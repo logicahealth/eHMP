@@ -1,4 +1,4 @@
-@F365 @DemographicQuickLooks  @future @DE4560
+@F365 @DemographicQuickLooks @DE4560 @reg2
 Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 # POC: Team Saturn
 
@@ -6,9 +6,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
   Scenario: Patient Work Phone Demographic Quick Looks (Panorama)
     When user searches for and selects "twentythree,patient"
     And Overview is active
-    And the "patient identifying traits" is displayed with information
-	| field			| value 				|
-	| patient name	| Twentythree,Patient   |
+    And "Current Patient:" is displayed as "Twentythree, patient"
     And user selects Patient Demographic drop down
     And the user clicks on the "WPhone" decrepancy button
     Then the "WPhone" decrepant information is displayed
@@ -19,9 +17,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
   Scenario: Patient Address Demographic Quick Looks (Panorama)
     When user searches for and selects "twentythree,patient"
     And Overview is active
-    And the "patient identifying traits" is displayed with information
-	| field			| value 				|
-	| patient name	| Twentythree,Patient   |
+    And "Current Patient:" is displayed as "Twentythree, patient"
     And user selects Patient Demographic drop down
     And the user clicks on the "TAddress" decrepancy button
     Then the "TAddress" decrepant information is displayed
@@ -33,9 +29,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 	# Given user is logged into eHMP-UI
 	When user searches for and selects "twentythree,patient"
 	And Overview is active
-    And the "patient identifying traits" is displayed with information
-	| field			| value 				|
-	| patient name	| Twentythree,Patient   |
+    And "Current Patient:" is displayed as "Twentythree, patient"
     And user selects Patient Demographic drop down
     And the user clicks on the "NextOfKin" decrepancy button
     Then the "NextOfKin" decrepant information is displayed
@@ -44,13 +38,11 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
   @F365-5.2_DemographicQuickLooks4.1 @US5692 @US5461 @DE1309 @DE1545 @non_default_login @DE2154
   Scenario: Patient Home Phone Demographic Quick Looks (Kodak)
-	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
-  Then staff view screen is displayed
-  When user searches for and selects "twentythree,patient"
+	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
+    Then staff view screen is displayed
+    When user searches for and selects "twentythree,patient"
 	And Cover Sheet is active
-	And the "patient identifying traits" is displayed with information
-	| field			| value 				|
-	| patient name	| Twentythree,Patient   |
+    And "Current Patient:" is displayed as "Twentythree, patient"
     And user selects Patient Demographic drop down
     And the user clicks on the "HPhone" decrepancy button
     Then the "HPhone" decrepant information is displayed
@@ -59,14 +51,11 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
   @F365-5.2_DemographicQuickLooks4.1 @US5692 @US5461 @DE1309 @DE1545 @non_default_login @DE2154
   Scenario: Patient Cell Phone Demographic Quick Looks (Kodak)
-    Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+    Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
    Then staff view screen is displayed
     When user searches for and selects "twentythree,patient"
     And Cover Sheet is active
-    And the "patient identifying traits" is displayed with information
-      | field			| value 				|
-      | patient name	| Twentythree,Patient   |
-#    And Cover Sheet is active
+    And "Current Patient:" is displayed as "Twentythree, patient"
     And user selects Patient Demographic drop down
     And the user clicks on the "CPhone" decrepancy button
     Then the "CPhone" decrepant information is displayed
@@ -75,14 +64,11 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
   @F365-5.2_DemographicQuickLooks5 @US5692 @US5461 @DE1309 @DE1545 @non_default_login
   Scenario: Patient Address Demographic Quick Looks (Kodak)
-	  Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+	  Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
     Then staff view screen is displayed
     When user searches for and selects "twentythree,patient"
     And Cover Sheet is active
-    And the "patient identifying traits" is displayed with information
-	| field			| value 				|
-	| patient name	| Twentythree,Patient   |
-#    And Cover Sheet is active
+    And "Current Patient:" is displayed as "Twentythree, patient"
     And user selects Patient Demographic drop down
     And the user clicks on the "HAddress" decrepancy button
     Then the "HAddress" decrepant information is displayed
@@ -91,15 +77,11 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
   @F365-5.2_DemographicQuickLooks6 @US5692 @US5461 @DE1309 @DE1592 @non_default_login @DE2154
   Scenario: Patient Email Demographic Quick Looks (Kodak)
-	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
     And staff view screen is displayed
-    And Navigate to Patient Search Screen
     When user searches for and selects "twentythree,patient"
     And Cover Sheet is active
-    And the "patient identifying traits" is displayed with information
-	| field			| value 				|
-	| patient name	| Twentythree,Patient   |
-#    And Cover Sheet is active
+    And "Current Patient:" is displayed as "Twentythree, patient"
     And user selects Patient Demographic drop down
     And the user clicks on the "Email" decrepancy button
     Then the "Email" decrepant information is displayed
@@ -108,14 +90,11 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
   @F365-5.2_DemographicQuickLooks7 @US5692 @US5461  @DE1309 @DE1601 @non_default_login @DE2154
   Scenario: Patient Emergency Contact Demographic Quick Looks (Kodak)
-	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
   Then staff view screen is displayed
     When user searches for and selects "twentythree,patient"
     And Cover Sheet is active
-    And the "patient identifying traits" is displayed with information
-	| field			| value 				|
-	| patient name	| Twentythree,Patient   |
-#    And Cover Sheet is active
+    And "Current Patient:" is displayed as "Twentythree, patient"
     And user selects Patient Demographic drop down
     And the user clicks on the "EmergencyContact" decrepancy button
     Then the "EmergencyContact" decrepant information is displayed

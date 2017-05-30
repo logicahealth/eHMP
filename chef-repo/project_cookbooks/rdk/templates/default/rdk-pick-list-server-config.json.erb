@@ -65,7 +65,7 @@
             "division": <%= site['vista']['division'].to_json %>,
             "environment": "development",
             "host": "<%= site['ipaddress']%>",
-            "localIP": "10.2.2.1",
+            "localIP": "IP      ",
             "localAddress": "localhost",
             "port": <%= site['vista']['rpc_port']%>,
             "production": <%= site['vista']['production']%>,
@@ -153,7 +153,7 @@
         "activityDatabase": {
             "user": "activitydbuser",
             "password": "<%= @jbpm_activitydbuser_password %>",
-            "connectString": "<%= @jbpm['ipaddress']%>:<%= @jbpm[:jbpm][:oracle_config][:port] %>/<%= @jbpm['ehmp_oracle']['oracle_sid'] %>"
+            "connectString": "<%= @oracle_ip %>:<%= @oracle_port %>/<%= @oracle_sid %>"
         }
     },
     <% end %>

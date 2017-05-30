@@ -13,13 +13,12 @@ var log = require(global.VX_DUMMIES + 'dummy-logger');
 //--------------------------------------------------------------
 // Uncomment the following to see the logging out on the screen.
 //--------------------------------------------------------------
-//var logUtil = require(global.VX_UTILS + 'log');
-// logUtil.initialize([{
-//     name: 'root',
-//     stream: process.stdout,
-//     level: 'debug'
-// }]);
-// log = logUtil.get('test', 'debug');
+// var logUtil = require(global.VX_UTILS + 'log');
+// log = logUtil._createLogger({
+//  name: 'test',
+//  level: 'debug',
+//  child: logUtil._createLogger
+// });
 //------------------------------------------
 // End of logging stuff to comment out....
 //------------------------------------------
@@ -52,6 +51,11 @@ function createConfig() {
         'trackSolrStorage': true,
         'vista': {
             'domainsNoSolrTracking': [ 'patient', 'treatment' ]
+        },
+        'solrStorageRules': {
+            'jds-domains': {},
+            'store-to-solr-attribute': {},
+            'ehmp-activity-data': {}
         }
     };
     return config;
@@ -104,7 +108,7 @@ function createJdsSuccessSetEventStoreStatusResponse() {
         'statusCode': 201,
         'headers': {
             'date': 'Tue, 11 Oct 2016 16:36:18 GMT',
-            'location': 'http://10.2.2.110:9082/vpr/9E7A;33333/urn:va:allergy:9E7A:3:1001',
+            'location': 'http://IP             /vpr/9E7A;33333/urn:va:allergy:9E7A:3:PORT',
             'content-type': 'application/json',
             'access-control-allow-origin': '*',
             'content-length': '0'
@@ -114,15 +118,15 @@ function createJdsSuccessSetEventStoreStatusResponse() {
                 'protocol': 'http:',
                 'slashes': true,
                 'auth': null,
-                'host': '10.2.2.110:9082',
-                'port': '9082',
-                'hostname': '10.2.2.110',
+                'host': 'IP             ',
+                'port': 'PORT',
+                'hostname': 'IP        ',
                 'hash': null,
                 'search': null,
                 'query': null,
                 'pathname': '/status/9E7A;33333/store',
                 'path': '/status/9E7A;33333/store',
-                'href': 'http://10.2.2.110:9082/status/9E7A;33333/store'
+                'href': 'http://IP             /status/9E7A;33333/store'
             },
             'method': 'POST',
             'headers': {
@@ -301,8 +305,8 @@ describe('solr-record-storage-handler.js', function() {
             var dataDomain = 'allergy';
             var solrResponse = 'An error occurred.';    // Success response
             var environment = createEnvironment(config, solrResponse);
-            environment.solrXform = function (record, log) {
-                return null;
+            environment.solrXform = function (record, log, config, callback) {
+                return callback(null);
             };
             var record = createAllergyEvent();
             var jdsResponse = createJdsSuccessSetEventStoreStatusResponse();
@@ -326,7 +330,63 @@ describe('solr-record-storage-handler.js', function() {
             });
         });
 
+        it('Test allergy domain - Simulate situation where Solr Xform returns an error', function() {
+            var config = createConfig();
+            var dataDomain = 'allergy';
+            var solrResponse = 'An error occurred.';    // Success response
+            var environment = createEnvironment(config, solrResponse);
+            environment.solrXform = function (record, log, config, callback) {
+                return callback('error!');
+            };
+            var record = createAllergyEvent();
+            var jdsResponse = createJdsSuccessSetEventStoreStatusResponse();
+            environment.jds._setResponseData([null], [jdsResponse], [undefined]);
+
+            var finished;
+            runs(function() {
+                writebackWrapper(log, config, environment, dataDomain, record, function(error, response) {
+                    expect(error).toBeTruthy();
+                    expect(val(error, 'type')).toBe('transient-exception');
+                    expect(response).toBeUndefined();
+                    expect(environment.jds.setEventStoreStatus).not.toHaveBeenCalled();
+                    expect(environment.solr.add).not.toHaveBeenCalled();
+                    finished = true;
+                });
+
+            });
+
+            waitsFor(function() {
+                return finished;
+            });
+        });
+
+        it('Test ehmp activity that should not be transformed', function() {
+            var config = createConfig();
+            var dataDomain = 'ehmp-activity';
+            var solrResponse = null;
+            var environment = createEnvironment(config, solrResponse);
+            var record = {domain: 'ehmp-activity', subDomain: 'medication'};
+            var jdsResponse = createJdsSuccessSetEventStoreStatusResponse();
+            environment.jds._setResponseData([null], [jdsResponse], [undefined]);
+
+            var finished;
+            runs(function() {
+                writebackWrapper(log, config, environment, dataDomain, record, function(error, response) {
+                    expect(error).toBeNull();
+                    expect(response).toBe('success');
+                    expect(environment.jds.setEventStoreStatus).not.toHaveBeenCalled();
+                    expect(environment.solr.add).not.toHaveBeenCalled();
+                    finished = true;
+                });
+
+            });
+
+            waitsFor(function() {
+                return finished;
+            });
+        });
     });
+
     describe('trackSolrStorage Method', function() {
         it('Test where trackSolrStorage is turned off.', function() {
             var config = createConfig();

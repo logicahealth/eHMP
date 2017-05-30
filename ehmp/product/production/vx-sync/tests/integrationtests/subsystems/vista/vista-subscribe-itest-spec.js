@@ -25,10 +25,10 @@ function setUpEnvironment() {
 		'vistaSites': {
 			'9E7A': _.defaults(wConfig.vistaSites['9E7A'], {
 				'name': 'panorama',
-				'host': '10.2.2.101',
-				'port': 9210,
-				'accessCode': 'pu1234',
-				'verifyCode': 'pu1234!!',
+				'host': 'REDACTED    ',
+				'port': PORT,
+				'accessCode': 'REDACTED',
+				'verifyCode': 'REDACTED',
 				'localIP': '127.0.0.1',
 				'localAddress': 'localhost',
 				'connectTimeout': 3000,
@@ -36,10 +36,10 @@ function setUpEnvironment() {
 			}),
 			'C877': _.defaults(wConfig.vistaSites.C877, {
 				'name': 'kodak',
-				'host': '10.2.2.102',
-				'port': 9210,
-				'accessCode': 'pu1234',
-				'verifyCode': 'pu1234!!',
+				'host': 'REDACTED    ',
+				'port': PORT,
+				'accessCode': 'REDACTED',
+				'verifyCode': 'REDACTED',
 				'localIP': '127.0.0.1',
 				'localAddress': 'localhost',
 				'connectTimeout': 3000,
@@ -71,7 +71,7 @@ describe('vista-subscribe.js', function() {
                     expect(response).toBeTruthy();
                     var ids = response.split('\r\n');
                     expect(_.isArray(ids)).toBe(true);
-                    console.log('ids: %j', ids);
+                    //console.log('ids: %j', ids);
                     expect(ids).toContain('10108V420871^NI^USVHA^200M^A');
                     expect(ids).toContain('3^PI^USVHA^500^A');
                     expect(ids).toContain('3^PI^USVHA^507^A');

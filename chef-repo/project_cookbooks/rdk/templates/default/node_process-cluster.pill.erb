@@ -3,12 +3,13 @@ Bluepill.application("<%= @name %>", :log_file => "/var/log/bluepill-<%= @name %
     app.process("<%= @name %>-<%= index %>") do |process|
       process.working_dir = "<%= @working_directory %>"
       process.environment = { "NODE_ENV" => "<%= node[:development] ? "development" : "production" %>" }
+      process.environment = {"NODE_TLS_REJECT_UNAUTHORIZED" => "<%= @tls_reject_unauthorized%>"}
       process.pid_file = "<%= @pid_directory %>/<%= @name %>-<%= index %>.pid"
       process.daemonize = true
       <% if @dev_deploy %>
-      process.start_command = "/usr/local/bin/node --debug=<%= @debug_port - 1 + index %> <%= @deploy_path %> <%= "--port #{@port - 1 + index}" if @port %> --config <%= @config_file %>-<%= index %>.json"
+      process.start_command = "/usr/local/bin/node --debug=<%= @debug_port - ( index - 1 ) %> <%= @deploy_path %> <%= "--port #{@port - ( index - 1 )}" if @port %> --config <%= @config_file %>-<%= index %>.json"
       <% else %>
-      process.start_command = "/usr/local/bin/node <%= @deploy_path %> <%= "--port #{@port - 1 + index}" if @port %> --config <%= @config_file %>-<%= index %>.json"
+      process.start_command = "/usr/local/bin/node <%= @deploy_path %> <%= "--max-old-space-size=#{@max_old_space}" if @max_old_space %> <%= "--port #{@port - ( index - 1 )}" if @port %> --config <%= @config_file %>-<%= index %>.json"
       <% end %>
       process.stdout = "<%= @log_directory %>/<%= @name %>-<%= index %>_stdout.log"
       process.stderr = "<%= @log_directory %>/<%= @name %>-<%= index %>_stderr.log"

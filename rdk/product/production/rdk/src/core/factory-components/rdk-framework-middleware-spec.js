@@ -280,6 +280,7 @@ describe('addLoggerToRequest', function() {
         };
         app.use = function(middleware) {
             var req = {};
+            _.set(req, 'app.config.rootPath', '/resource');
             req.id = 'abc';
             req.ip = '127.0.0.1';
             req._requestedSessionId = 'foo';
@@ -292,5 +293,249 @@ describe('addLoggerToRequest', function() {
             middleware(req, res, next);
         };
         rdkFrameworkMiddleware._addLoggerToRequest(app);
+    });
+});
+
+describe('enableMethodOverride', function() {
+    var app;
+    beforeEach(function() {
+        app = {};
+        app.handlers = [];
+        app.use = function(handler) {
+            app.handlers.push(handler);
+        };
+        rdkFrameworkMiddleware._enableMethodOverride(app);
+    });
+    it('enables method overriding', function(done) {
+        var req = {};
+        req.method = 'POST';
+        req.headers = {};
+        req.headers['X-HTTP-Method-Override'.toLowerCase()] = 'GET';
+        _.set(req, 'app.config.rootPath', '/resource');
+        var res = {};
+        res.getHeader = function() {
+        };
+        res.setHeader = res.getHeader;
+        app.handlers[0](req, res, function() {
+            expect(req.method).to.equal('GET');
+            expect(req.originalMethod).to.equal('POST');
+            done();
+        });
+    });
+    it('skips method overriding for FHIR resources', function(done) {
+        var req = {};
+        req.path = '/resource/fhir/foo/bar';
+        req.method = 'POST';
+        req.headers = {};
+        req.headers['X-HTTP-Method-Override'.toLowerCase()] = 'GET';
+        _.set(req, 'app.config.rootPath', '/resource');
+        var res = {};
+        res.getHeader = function() {
+        };
+        res.setHeader = res.getHeader;
+        var callback = function() {
+            expect(req.originalMethod).to.equal(req.method);
+            done();
+        };
+        app.handlers[0](req, res, callback);
+    });
+});
+
+describe('ensureQueryMatchesBody', function() {
+    var app;
+    var req;
+    beforeEach(function() {
+        app = {};
+        app.handlers = [];
+        app.use = function(handler) {
+            app.handlers.push(handler);
+        };
+        req = {};
+        _.set(req, 'app.config.rootPath', '/resource');
+
+        rdkFrameworkMiddleware._ensureQueryMatchesBody(app);
+    });
+    it('skips query-body comparison for FHIR resources', function(done) {
+        req.path = '/resource/fhir/foo/bar';
+        req.method = 'POST';
+        _.set(req, 'app.config.rootPath', '/resource');
+        var res = {};
+        app.handlers[0](req, res, done);
+    });
+    it('responds error on conflicting query parameters and body fields', function(done) {
+        req.method = 'GET';
+        req.originalMethod = 'POST';
+        req.query = {
+            abc: 'abc'
+        };
+        req.body = {
+            abc: 'def'
+        };
+        var res = {};
+        res.status = function(status) {
+            expect(status).to.equal(400);
+            return this;
+        };
+        res.rdkSend = function(body) {
+            expect(body).to.be.an.error();
+            expect(body.message).to.match(/Query parameters must not conflict with body/);
+            done();
+        };
+        app.handlers[0](req, res);
+    });
+    it('responds error when query parameter is not present as body field', function(done) {
+        req.method = 'GET';
+        req.originalMethod = 'POST';
+        req.query = {
+            abc: 'abc'
+        };
+        req.body = {
+        };
+        var res = {};
+        res.status = function(status) {
+            expect(status).to.equal(400);
+            return this;
+        };
+        res.rdkSend = function(body) {
+            expect(body).to.be.an.error();
+            expect(body.message).to.match(/All query parameters must be present as body fields/);
+            done();
+        };
+        app.handlers[0](req, res);
+    });
+    it('sets the query equal to the body for overridden GET methods', function(done) {
+        req.method = 'GET';
+        req.originalMethod = 'POST';
+        req.query = {
+        };
+        req.body = {
+            abc: 'abc'
+        };
+        var res = {};
+        var next = function() {
+            expect(req.query).to.equal(req.body);
+            done();
+        };
+        app.handlers[0](req, res, next);
+    });
+    describe('doesQueryMatchBody', function() {
+        beforeEach(function() {
+            req.method = 'GET';
+            req.originalMethod = 'POST';
+        });
+        function getDoesQueryMatchBodyValue(req) {
+            var res = {};
+            res.status = function() {
+                return res;
+            };
+            res.rdkSend = function() {
+                return false;
+            };
+            var next = function() {
+                return true;
+            };
+            return app.handlers[0](req, res, next);
+        }
+        it('returns true for GET requests', function() {
+            req.method = 'POST';
+            req.originalMethod = 'GET';
+            var queryMatchesBody = getDoesQueryMatchBodyValue(req);
+            expect(queryMatchesBody).to.be.true();
+        });
+        it('returns false if a query parameter is missing in the body fields', function() {
+            _.set(req, 'query.name', 'john');
+            _.set(req, 'body', {});
+            var queryMatchesBody = getDoesQueryMatchBodyValue(req);
+            expect(queryMatchesBody).to.be.false();
+        });
+        it('returns false if a query parameter is different from the body field', function() {
+            _.set(req, 'query.name', 'john');
+            _.set(req, 'body.name', 'doe');
+            var queryMatchesBody = getDoesQueryMatchBodyValue(req);
+            expect(queryMatchesBody).to.be.false();
+        });
+        it('returns true if a body field is not in the query parameter', function() {
+            _.set(req, 'body.name', 'doe');
+            var queryMatchesBody = getDoesQueryMatchBodyValue(req);
+            expect(queryMatchesBody).to.be.true();
+        });
+        it('returns true if there are no query parameters or body fields', function() {
+            _.set(req, 'query', {});
+            _.set(req, 'body', {});
+            var queryMatchesBody = getDoesQueryMatchBodyValue(req);
+            expect(queryMatchesBody).to.be.true();
+        });
+        it('returns true if the query parameters match the body fields', function() {
+            _.set(req, 'query.name', 'john');
+            _.set(req, 'body.name', 'john');
+            var queryMatchesBody = getDoesQueryMatchBodyValue(req);
+            expect(queryMatchesBody).to.be.true();
+        });
+        it('returns true if complex query parameters match the body fields', function() {
+            _.set(req, 'query', {
+                items: [
+                    'foo',
+                    'bar',
+                    '2',
+                    '3'
+                ]
+            });
+            _.set(req, 'body', {
+                items: [
+                    'foo',
+                    'bar',
+                    2,
+                    3
+                ]
+            });
+            var queryMatchesBody = getDoesQueryMatchBodyValue(req);
+            expect(queryMatchesBody).to.be.true();
+        });
+        it('returns false if complex query parameters do not match the body fields', function() {
+            _.set(req, 'query', {
+                items: [
+                    'foo',
+                    'bar',
+                    '2',
+                    '3'
+                ]
+            });
+            _.set(req, 'body', {
+                items: [
+                    'foo',
+                    3
+                ]
+            });
+            var queryMatchesBody = getDoesQueryMatchBodyValue(req);
+            expect(queryMatchesBody).to.be.false();
+        });
+        it('returns true if complex query parameters do not match the body fields', function() {
+            _.set(req, 'query', {
+                items: [
+                    'foo',
+                    'bar',
+                    '2',
+                    {
+                        a: '1',
+                        b: '2'
+                    },
+                    '3'
+                ]
+            });
+            _.set(req, 'body', {
+                items: [
+                    'foo',
+                    'bar',
+                    2,
+                    {
+                        b: '2',
+                        a: 1
+                    },
+                    3
+                ]
+            });
+            var queryMatchesBody = getDoesQueryMatchBodyValue(req);
+            expect(queryMatchesBody).to.be.true();
+        });
     });
 });

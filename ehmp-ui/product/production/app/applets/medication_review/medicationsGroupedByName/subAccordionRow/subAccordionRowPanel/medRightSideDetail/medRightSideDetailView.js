@@ -1,11 +1,12 @@
 define([
+    'underscore',
     'backbone',
     'marionette',
     'hbs!app/applets/medication_review/medicationsGroupedByName/subAccordionRow/subAccordionRowPanel/medRightSideDetail/inpatientMedRightSideDetail',
     'hbs!app/applets/medication_review/medicationsGroupedByName/subAccordionRow/subAccordionRowPanel/medRightSideDetail/outpatientMedRightSideDetail',
     'hbs!app/applets/medication_review/medicationsGroupedByName/subAccordionRow/subAccordionRowPanel/medRightSideDetail/ivMedRightSideDetail',
     'hbs!app/applets/medication_review/medicationsGroupedByName/subAccordionRow/subAccordionRowPanel/medRightSideDetail/nonvaMedRightSideDetail'
-], function(Backbone, Marionette, InpatientMedRightSideDetail, OutpatientMedRightSideDetail, IvMedRightSideDetail, NonvaMedRightSideDetail) {
+], function(_, Backbone, Marionette, InpatientMedRightSideDetail, OutpatientMedRightSideDetail, IvMedRightSideDetail, NonvaMedRightSideDetail) {
     'use strict';
     return Backbone.Marionette.ItemView.extend({
         modelEvents: {
@@ -51,7 +52,9 @@ define([
                 showExpiredDate: function() {
                     var vaStatus = _.get(this, 'vaStatus', '').toLowerCase();
                     if(_.isEmpty(vaStatus)) return;
-                    if (!this.getStoppedAsMoment.isAfter(this.getOverallStopAsMoment) && (vaStatus === "discontinued" || vaStatus === "discontinued/edit")) {
+                    if (this.expireText() === "Expires" && _.isUndefined(this.stopped)) {
+                        return false;
+                    } else if (!this.getStoppedAsMoment.isAfter(this.getOverallStopAsMoment) && (vaStatus === "discontinued" || vaStatus === "discontinued/edit")) {
                         return false;
                     } else {
                         return true;

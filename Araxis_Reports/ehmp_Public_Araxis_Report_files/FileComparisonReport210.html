@@ -1,0 +1,798 @@
+<!--?xml version="1.0"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mg="http://www.araxis.com/2002/Merge/Reporting" xmlns="http://www.w3.org/1999/xhtml">
+ <head> 
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  <!--The layout and design of this report is Copyright © 2003-2016 Araxis Ltd. All rights reserved.--> 
+  <!--The copyright of the data content of this report belongs to the relevant copyright holders.--> 
+  <title>210. EPMO Open Source Coordination Office Redaction File Detail Report</title> 
+  <style type="text/css">
+body { background: #fff;  color: #000; margin: 0px 14px 14px 14px; }
+h1, h2, h3, h4, h5 {
+  padding: 0em;
+  margin: 1.5em 0em .25em 0em;
+  text-align: left;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 70%;
+  max-width: 55em;
+}
+body, h4, h5, p, ol, ul, li, td, th { font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; }
+
+h4, h5, p, ol, ul, li { font-size: 70%; }
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120%;
+}
+
+h1 { margin: 14px 0em 1.2em 0em; font-size: 112%; line-height: 130%;}
+h2 { font-size: 125%; line-height: 84%;}
+h3 { margin-top: 1.4em; font-size: 81%; }
+h4 { margin-top: 1em; font-size: 70%; }
+h5 { margin-top: 1em; font-size: 100%; font-style: italic;}
+h1 strong, h2 strong, h3 strong, h4 strong { font-weight: bold; }
+
+p { margin: 6px 0em 6px 0em; max-width: 55em;}
+p.code, code {}
+p { font-size: 70%; line-height: 125%; }
+table { font-size: 70%;}
+
+p.copyright, .small { font-size: 60%; line-height: 120%; }
+p.copyright { margin: 3px 0px 0px 0px; padding: 0px; text-align: left; }
+acronym { font-variant: small-caps; }
+div.pad { padding: 3px; }
+span.lineEndings { color: red; font-size: 70%; }
+
+table.mgRowGroup, table.mgRowGroupFolder { border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px; width: 100%; table-layout: fixed; border-collapse: collapse; }
+table.mgRowGroup td { vertical-align: top; padding: 0; }
+table.mgRowGroupFolder td { vertical-align: top; padding: 1px 0 1px 0; }
+div.IP { width: 2px; height: 1em; float: left; }
+
+img.mgFldrIcon {float: left; text-align: left; margin: -1px 2px 0px 0px;  height: 16px; width: 16px; border: none; vertical-align: top; background-color: transparent;}
+div.mgFldrIcon {float: left; width: auto;}
+span.left {float: left;width: auto;}
+span.right {float: right;width: auto;}
+
+table.bordered { border-collapse: collapse; border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px;}
+table.bordered th, table.bordered td { vertical-align: top; padding: 3px; border: 1px solid #a0a0a0;}
+table.bordered th { background-color: #e5e5e5; }
+table.bordered td.group { background-color: #f5f5f5; }
+span.disabledNavigation { color: #a0a0a0; }
+div.navigation { margin-top: 14px; font-size: 70%; }
+div.comment { font-weight: normal; color: #000; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #fcfed8; padding: 2px 5px 2px 5px; border: 1px solid #E3E5C3; margin: 1px 2px 3px 2px; -moz-border-radius: 7px; border-radius: 7px; }
+
+                span.U1, span.U1 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U1 a {text-decoration: underline;}
+td.U1 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1, span.R1 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1 a {text-decoration: underline;}
+td.R1 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1, span.I1 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1 a {text-decoration: underline;}
+td.I1 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1, span.C1 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1 a {text-decoration: underline;}
+td.C1 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC1 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+span.U2, span.U2 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U2 a {text-decoration: underline;}
+td.U2 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2, span.R2 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2 a {text-decoration: underline;}
+td.R2 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2, span.I2 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2 a {text-decoration: underline;}
+td.I2 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2, span.C2 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2 a {text-decoration: underline;}
+td.C2 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC2 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+
+span.selected {background-color: #3d80df; color: #fff;}
+span.selected a {background-color: #3d80df; color: #fff; text-decoration: underline;}
+span.symbol {cursor: pointer;}
+      </style> 
+ </head> 
+ <body> 
+  <h1><strong>210. EPMO Open Source Coordination Office Redaction File Detail Report</strong></h1> 
+  <p>Produced by <strong>Araxis Merge</strong> on <strong>5/24/2017 4:45:23 PM Central Daylight Time</strong>. See <a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a> for information about Merge. This report uses XHTML and CSS2, and is best viewed with a modern standards-compliant browser. For optimum results when printing this report, use landscape orientation and enable printing of background images and colours in your browser.</p> 
+  <h3><strong>210.1&nbsp;Files compared</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th>#</th> 
+     <th>Location</th> 
+     <th>File</th> 
+     <th>Last Modified</th> 
+    </tr> 
+    <tr> 
+     <td>1</td> 
+     <td>ehmp.zip\ehmp\product\production\soap-handler\lib\nhinadapterdoc-1.0.0.jar\META-INF\wsdl</td> 
+     <td>EntityDocQuery_metadata5.xsd</td> 
+     <td>Mon Jun 16 14:59:00 2014 UTC</td> 
+    </tr> 
+    <tr> 
+     <td>2</td> 
+     <td>ehmp.zip\ehmp\product\production\soap-handler\lib\nhinadapterdoc-1.0.0.jar\META-INF\wsdl</td> 
+     <td>EntityDocQuery_metadata5.xsd</td> 
+     <td>Wed May 24 12:54:14 2017 UTC</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>210.2&nbsp;Comparison summary</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th rowspan="2" style="vertical-align: bottom;">Description</th> 
+     <th colspan="2">Between<br>Files 1 and 2</th> 
+    </tr> 
+    <tr> 
+     <th style="text-align: right;">Text Blocks</th> 
+     <th style="text-align: right;">Lines</th> 
+    </tr> 
+    <tr> 
+     <td>Unchanged</td> 
+     <td style="text-align: right;">1</td> 
+     <td style="text-align: right;">240</td> 
+    </tr> 
+    <tr> 
+     <td>Changed</td> 
+     <td style="text-align: right;">1</td> 
+     <td style="text-align: right;">2</td> 
+    </tr> 
+    <tr> 
+     <td>Inserted</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+    <tr> 
+     <td>Removed</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>210.3&nbsp;Comparison options</strong></h3> 
+  <table class="bordered" style="width: 55em;"> 
+   <tbody>
+    <tr> 
+     <th>Whitespace</th> 
+     <td></td> 
+    </tr> 
+    <tr> 
+     <th>Character case</th> 
+     <td>Differences in character case are significant</td> 
+    </tr> 
+    <tr> 
+     <th>Line endings</th> 
+     <td>Differences in line endings (<code>CR</code> and <code>LF</code> characters) are ignored</td> 
+    </tr> 
+    <tr> 
+     <th>CR/LF characters</th> 
+     <td>Not shown in the comparison detail</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>210.4&nbsp;Active regular expressions</strong></h3> 
+  <p>No regular expressions were active.</p> 
+  <h3><strong>210.5&nbsp;Comparison detail</strong></h3> 
+  <table class="mgRowGroup"> 
+   <colgroup>
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+    <col style="width: 1em;"> 
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+   </colgroup>
+   <tbody>
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">1</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&lt;!--&nbsp;Publi</span> <span class="U2">shed&nbsp;by&nbsp;</span> <span class="C2">DN</span> <span class="U2">S&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">RI&nbsp;at&nbsp;http</span> <span class="U2">://jax-ws.</span> <span class="U2">dev.java.n</span> <span class="U2">et.&nbsp;RI's&nbsp;v</span> <span class="U2">ersion&nbsp;is&nbsp;</span> <span class="U2">Oracle&nbsp;</span> <span class="C2">DN</span> <span class="U2">S&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">2.1.5.&nbsp;--&gt;</span> <span class="U2">&lt;!--&nbsp;&lt;!DOC</span> <span class="U2">TYPE&nbsp;xs:sc</span> <span class="U2">hema&nbsp;PUBLI</span> <span class="U2">C&nbsp;"-//W3C/</span> <span class="U2">/DTD&nbsp;XMLSC</span> <span class="U2">HEMA&nbsp;20010</span> <span class="U2">2//EN"&nbsp;"ht</span> <span class="U2">tp://www.w</span> <span class="U2">3.org/2001</span> <span class="U2">/XMLSchema</span> <span class="U2">.dtd"&gt;&nbsp;--&gt;</span> <span class="U2">&lt;!--</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">2</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;W3C&nbsp;XM</span> <span class="U2">L&nbsp;Schema&nbsp;d</span> <span class="U2">efined&nbsp;in&nbsp;</span> <span class="U2">the&nbsp;Web&nbsp;Se</span> <span class="U2">rvices&nbsp;Add</span> <span class="U2">ressing&nbsp;1.</span> <span class="U2">0&nbsp;specific</span> <span class="U2">ation</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">3</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;http:/</span> <span class="U2">/www.w3.or</span> <span class="U2">g/TR/ws-ad</span> <span class="U2">dr-core</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">4</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">5</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;Copyrig</span> <span class="U2">ht&nbsp;©&nbsp;2005&nbsp;</span> <span class="U2">World&nbsp;Wide</span> <span class="U2">&nbsp;Web&nbsp;Conso</span> <span class="U2">rtium,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">6</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">7</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;(Massac</span> <span class="U2">husetts&nbsp;In</span> <span class="U2">stitute&nbsp;of</span> <span class="U2">&nbsp;Technolog</span> <span class="U2">y,&nbsp;Europea</span> <span class="U2">n&nbsp;Research</span> <span class="U2">&nbsp;Consortiu</span> <span class="U2">m&nbsp;for</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">8</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;Informa</span> <span class="U2">tics&nbsp;and&nbsp;M</span> <span class="U2">athematics</span> <span class="U2">,&nbsp;Keio&nbsp;Uni</span> <span class="U2">versity).&nbsp;</span> <span class="U2">All&nbsp;Rights</span> <span class="U2">&nbsp;Reserved.</span> <span class="U2">&nbsp;This</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">9</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;work&nbsp;is</span> <span class="U2">&nbsp;distribut</span> <span class="U2">ed&nbsp;under&nbsp;t</span> <span class="U2">he&nbsp;W3C®&nbsp;So</span> <span class="U2">ftware&nbsp;Lic</span> <span class="U2">ense&nbsp;[1]&nbsp;i</span> <span class="U2">n&nbsp;the&nbsp;hope</span> <span class="U2">&nbsp;that</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">10</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;it&nbsp;will</span> <span class="U2">&nbsp;be&nbsp;useful</span> <span class="U2">,&nbsp;but&nbsp;WITH</span> <span class="U2">OUT&nbsp;ANY&nbsp;WA</span> <span class="U2">RRANTY;&nbsp;wi</span> <span class="U2">thout&nbsp;even</span> <span class="U2">&nbsp;the&nbsp;impli</span> <span class="U2">ed</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">11</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;warrant</span> <span class="U2">y&nbsp;of&nbsp;MERCH</span> <span class="U2">ANTABILITY</span> <span class="U2">&nbsp;or&nbsp;FITNES</span> <span class="U2">S&nbsp;FOR&nbsp;A&nbsp;PA</span> <span class="U2">RTICULAR&nbsp;P</span> <span class="U2">URPOSE.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">12</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">13</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;[1]&nbsp;htt</span> <span class="U2">p://www.w3</span> <span class="U2">.org/Conso</span> <span class="U2">rtium/Lega</span> <span class="U2">l/2002/cop</span> <span class="U2">yright-sof</span> <span class="U2">tware-2002</span> <span class="U2">1231</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">14</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">15</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;$Id:&nbsp;ws</span> <span class="U2">-addr.xsd,</span> <span class="U2">v&nbsp;1.3&nbsp;2005</span> <span class="U2">/08/09&nbsp;13:</span> <span class="U2">17:35&nbsp;hugo</span> <span class="U2">&nbsp;Exp&nbsp;$</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">16</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">--&gt;&lt;xs:sch</span> <span class="U2">ema&nbsp;xmlns:</span> <span class="U2">tns="http:</span> <span class="U2">//www.w3.o</span> <span class="U2">rg/2005/08</span> <span class="U2">/addressin</span> <span class="U2">g"&nbsp;xmlns:x</span> <span class="U2">s="http://</span> <span class="U2">www.w3.org</span> <span class="U2">/2001/XMLS</span> <span class="U2">chema"&nbsp;att</span> <span class="U2">ributeForm</span> <span class="U2">Default="u</span> <span class="U2">nqualified</span> <span class="U2">"&nbsp;blockDef</span> <span class="U2">ault="#all</span> <span class="U2">"&nbsp;elementF</span> <span class="U2">ormDefault</span> <span class="U2">="qualifie</span> <span class="U2">d"&nbsp;finalDe</span> <span class="U2">fault=""&nbsp;t</span> <span class="U2">argetNames</span> <span class="U2">pace="http</span> <span class="U2">://www.w3.</span> <span class="U2">org/2005/0</span> <span class="U2">8/addressi</span> <span class="U2">ng"&gt;&lt;!--&nbsp;C</span> <span class="U2">onstructs&nbsp;</span> <span class="U2">from&nbsp;the&nbsp;W</span> <span class="U2">S-Addressi</span> <span class="U2">ng&nbsp;Core&nbsp;--</span> <span class="U2">&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">17</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">EndpointRe</span> <span class="U2">ference"&nbsp;t</span> <span class="U2">ype="tns:E</span> <span class="U2">ndpointRef</span> <span class="U2">erenceType</span> <span class="U2">"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">18</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:comp</span> <span class="U2">lexType&nbsp;na</span> <span class="U2">me="Endpoi</span> <span class="U2">ntReferenc</span> <span class="U2">eType"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">19</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:se</span> <span class="U2">quence&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">20</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">element&nbsp;na</span> <span class="U2">me="Addres</span> <span class="U2">s"&nbsp;type="t</span> <span class="U2">ns:Attribu</span> <span class="U2">tedURIType</span> <span class="U2">"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">21</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">element&nbsp;mi</span> <span class="U2">nOccurs="0</span> <span class="U2">"&nbsp;name="Re</span> <span class="U2">ferencePar</span> <span class="U2">ameters"&nbsp;t</span> <span class="U2">ype="tns:R</span> <span class="U2">eferencePa</span> <span class="U2">rametersTy</span> <span class="U2">pe"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">22</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">element&nbsp;mi</span> <span class="U2">nOccurs="0</span> <span class="U2">"&nbsp;ref="tns</span> <span class="U2">:Metadata"</span> <span class="U2">/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">23</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">any&nbsp;maxOcc</span> <span class="U2">urs="unbou</span> <span class="U2">nded"&nbsp;minO</span> <span class="U2">ccurs="0"&nbsp;</span> <span class="U2">namespace=</span> <span class="U2">"##other"&nbsp;</span> <span class="U2">processCon</span> <span class="U2">tents="lax</span> <span class="U2">"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">24</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs:s</span> <span class="U2">equence&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">25</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:an</span> <span class="U2">yAttribute</span> <span class="U2">&nbsp;namespace</span> <span class="U2">="##other"</span> <span class="U2">&nbsp;processCo</span> <span class="U2">ntents="la</span> <span class="U2">x"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">26</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;/xs:com</span> <span class="U2">plexType&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">27</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:comp</span> <span class="U2">lexType&nbsp;mi</span> <span class="U2">xed="false</span> <span class="U2">"&nbsp;name="Re</span> <span class="U2">ferencePar</span> <span class="U2">ametersTyp</span> <span class="U2">e"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">28</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:se</span> <span class="U2">quence&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">29</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">any&nbsp;maxOcc</span> <span class="U2">urs="unbou</span> <span class="U2">nded"&nbsp;minO</span> <span class="U2">ccurs="0"&nbsp;</span> <span class="U2">namespace=</span> <span class="U2">"##any"&nbsp;pr</span> <span class="U2">ocessConte</span> <span class="U2">nts="lax"/</span> <span class="U2">&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">30</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs:s</span> <span class="U2">equence&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">31</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:an</span> <span class="U2">yAttribute</span> <span class="U2">&nbsp;namespace</span> <span class="U2">="##other"</span> <span class="U2">&nbsp;processCo</span> <span class="U2">ntents="la</span> <span class="U2">x"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">32</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;/xs:com</span> <span class="U2">plexType&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">33</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">Metadata"&nbsp;</span> <span class="U2">type="tns:</span> <span class="U2">MetadataTy</span> <span class="U2">pe"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">34</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:comp</span> <span class="U2">lexType&nbsp;mi</span> <span class="U2">xed="false</span> <span class="U2">"&nbsp;name="Me</span> <span class="U2">tadataType</span> <span class="U2">"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">35</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:se</span> <span class="U2">quence&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">36</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">any&nbsp;maxOcc</span> <span class="U2">urs="unbou</span> <span class="U2">nded"&nbsp;minO</span> <span class="U2">ccurs="0"&nbsp;</span> <span class="U2">namespace=</span> <span class="U2">"##any"&nbsp;pr</span> <span class="U2">ocessConte</span> <span class="U2">nts="lax"/</span> <span class="U2">&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">37</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs:s</span> <span class="U2">equence&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">38</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:an</span> <span class="U2">yAttribute</span> <span class="U2">&nbsp;namespace</span> <span class="U2">="##other"</span> <span class="U2">&nbsp;processCo</span> <span class="U2">ntents="la</span> <span class="U2">x"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">39</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;/xs:com</span> <span class="U2">plexType&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">40</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">MessageID"</span> <span class="U2">&nbsp;type="tns</span> <span class="U2">:Attribute</span> <span class="U2">dURIType"/</span> <span class="U2">&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">41</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">RelatesTo"</span> <span class="U2">&nbsp;type="tns</span> <span class="U2">:RelatesTo</span> <span class="U2">Type"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">42</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:comp</span> <span class="U2">lexType&nbsp;mi</span> <span class="U2">xed="false</span> <span class="U2">"&nbsp;name="Re</span> <span class="U2">latesToTyp</span> <span class="U2">e"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">43</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:si</span> <span class="U2">mpleConten</span> <span class="U2">t&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">44</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">extension&nbsp;</span> <span class="U2">base="xs:a</span> <span class="U2">nyURI"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">45</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;x</span> <span class="U2">s:attribut</span> <span class="U2">e&nbsp;default=</span> <span class="U2">"http://ww</span> <span class="U2">w.w3.org/2</span> <span class="U2">005/08/add</span> <span class="U2">ressing/re</span> <span class="U2">ply"&nbsp;name=</span> <span class="U2">"Relations</span> <span class="U2">hipType"&nbsp;t</span> <span class="U2">ype="tns:R</span> <span class="U2">elationshi</span> <span class="U2">pTypeOpenE</span> <span class="U2">num"&nbsp;use="</span> <span class="U2">optional"/</span> <span class="U2">&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">46</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;x</span> <span class="U2">s:anyAttri</span> <span class="U2">bute&nbsp;names</span> <span class="U2">pace="##ot</span> <span class="U2">her"&nbsp;proce</span> <span class="U2">ssContents</span> <span class="U2">="lax"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">47</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs</span> <span class="U2">:extension</span> <span class="U2">&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">48</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs:s</span> <span class="U2">impleConte</span> <span class="U2">nt&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">49</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;/xs:com</span> <span class="U2">plexType&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">50</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:simp</span> <span class="U2">leType&nbsp;nam</span> <span class="U2">e="Relatio</span> <span class="U2">nshipTypeO</span> <span class="U2">penEnum"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">51</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:un</span> <span class="U2">ion&nbsp;member</span> <span class="U2">Types="tns</span> <span class="U2">:Relations</span> <span class="U2">hipType&nbsp;xs</span> <span class="U2">:anyURI"/&gt;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">52</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;/xs:sim</span> <span class="U2">pleType&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">53</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:simp</span> <span class="U2">leType&nbsp;nam</span> <span class="U2">e="Relatio</span> <span class="U2">nshipType"</span> <span class="U2">&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">54</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:re</span> <span class="U2">striction&nbsp;</span> <span class="U2">base="xs:a</span> <span class="U2">nyURI"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">55</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">enumeratio</span> <span class="U2">n&nbsp;value="h</span> <span class="U2">ttp://www.</span> <span class="U2">w3.org/200</span> <span class="U2">5/08/addre</span> <span class="U2">ssing/repl</span> <span class="U2">y"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">56</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs:r</span> <span class="U2">estriction</span> <span class="U2">&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">57</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;/xs:sim</span> <span class="U2">pleType&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">58</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">ReplyTo"&nbsp;t</span> <span class="U2">ype="tns:E</span> <span class="U2">ndpointRef</span> <span class="U2">erenceType</span> <span class="U2">"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">59</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">From"&nbsp;type</span> <span class="U2">="tns:Endp</span> <span class="U2">ointRefere</span> <span class="U2">nceType"/&gt;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">60</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">FaultTo"&nbsp;t</span> <span class="U2">ype="tns:E</span> <span class="U2">ndpointRef</span> <span class="U2">erenceType</span> <span class="U2">"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">61</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">To"&nbsp;type="</span> <span class="U2">tns:Attrib</span> <span class="U2">utedURITyp</span> <span class="U2">e"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">62</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">Action"&nbsp;ty</span> <span class="U2">pe="tns:At</span> <span class="U2">tributedUR</span> <span class="U2">IType"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">63</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:comp</span> <span class="U2">lexType&nbsp;mi</span> <span class="U2">xed="false</span> <span class="U2">"&nbsp;name="At</span> <span class="U2">tributedUR</span> <span class="U2">IType"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">64</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:si</span> <span class="U2">mpleConten</span> <span class="U2">t&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">65</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">extension&nbsp;</span> <span class="U2">base="xs:a</span> <span class="U2">nyURI"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">66</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;x</span> <span class="U2">s:anyAttri</span> <span class="U2">bute&nbsp;names</span> <span class="U2">pace="##ot</span> <span class="U2">her"&nbsp;proce</span> <span class="U2">ssContents</span> <span class="U2">="lax"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">67</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs</span> <span class="U2">:extension</span> <span class="U2">&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">68</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs:s</span> <span class="U2">impleConte</span> <span class="U2">nt&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">69</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;/xs:com</span> <span class="U2">plexType&gt;&lt;</span> <span class="U2">!--&nbsp;Constr</span> <span class="U2">ucts&nbsp;from&nbsp;</span> <span class="U2">the&nbsp;WS-Add</span> <span class="U2">ressing&nbsp;SO</span> <span class="U2">AP&nbsp;binding</span> <span class="U2">&nbsp;--&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">70</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:attr</span> <span class="U2">ibute&nbsp;name</span> <span class="U2">="IsRefere</span> <span class="U2">nceParamet</span> <span class="U2">er"&nbsp;type="</span> <span class="U2">xs:boolean</span> <span class="U2">"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">71</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:simp</span> <span class="U2">leType&nbsp;nam</span> <span class="U2">e="FaultCo</span> <span class="U2">desOpenEnu</span> <span class="U2">mType"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">72</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:un</span> <span class="U2">ion&nbsp;member</span> <span class="U2">Types="tns</span> <span class="U2">:FaultCode</span> <span class="U2">sType&nbsp;xs:Q</span> <span class="U2">Name"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">73</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;/xs:sim</span> <span class="U2">pleType&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">74</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:simp</span> <span class="U2">leType&nbsp;nam</span> <span class="U2">e="FaultCo</span> <span class="U2">desType"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">75</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:re</span> <span class="U2">striction&nbsp;</span> <span class="U2">base="xs:Q</span> <span class="U2">Name"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">76</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">enumeratio</span> <span class="U2">n&nbsp;value="t</span> <span class="U2">ns:Invalid</span> <span class="U2">Addressing</span> <span class="U2">Header"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">77</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">enumeratio</span> <span class="U2">n&nbsp;value="t</span> <span class="U2">ns:Invalid</span> <span class="U2">Address"/&gt;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">78</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">enumeratio</span> <span class="U2">n&nbsp;value="t</span> <span class="U2">ns:Invalid</span> <span class="U2">EPR"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">79</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">enumeratio</span> <span class="U2">n&nbsp;value="t</span> <span class="U2">ns:Invalid</span> <span class="U2">Cardinalit</span> <span class="U2">y"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">80</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">enumeratio</span> <span class="U2">n&nbsp;value="t</span> <span class="U2">ns:Missing</span> <span class="U2">AddressInE</span> <span class="U2">PR"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">81</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">enumeratio</span> <span class="U2">n&nbsp;value="t</span> <span class="U2">ns:Duplica</span> <span class="U2">teMessageI</span> <span class="U2">D"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">82</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">enumeratio</span> <span class="U2">n&nbsp;value="t</span> <span class="U2">ns:ActionM</span> <span class="U2">ismatch"/&gt;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">83</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">enumeratio</span> <span class="U2">n&nbsp;value="t</span> <span class="U2">ns:Message</span> <span class="U2">Addressing</span> <span class="U2">HeaderRequ</span> <span class="U2">ired"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">84</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">enumeratio</span> <span class="U2">n&nbsp;value="t</span> <span class="U2">ns:Destina</span> <span class="U2">tionUnreac</span> <span class="U2">hable"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">85</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">enumeratio</span> <span class="U2">n&nbsp;value="t</span> <span class="U2">ns:ActionN</span> <span class="U2">otSupporte</span> <span class="U2">d"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">86</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">enumeratio</span> <span class="U2">n&nbsp;value="t</span> <span class="U2">ns:Endpoin</span> <span class="U2">tUnavailab</span> <span class="U2">le"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">87</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs:r</span> <span class="U2">estriction</span> <span class="U2">&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">88</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;/xs:sim</span> <span class="U2">pleType&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">89</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">RetryAfter</span> <span class="U2">"&nbsp;type="tn</span> <span class="U2">s:Attribut</span> <span class="U2">edUnsigned</span> <span class="U2">LongType"/</span> <span class="U2">&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">90</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:comp</span> <span class="U2">lexType&nbsp;mi</span> <span class="U2">xed="false</span> <span class="U2">"&nbsp;name="At</span> <span class="U2">tributedUn</span> <span class="U2">signedLong</span> <span class="U2">Type"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">91</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:si</span> <span class="U2">mpleConten</span> <span class="U2">t&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">92</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">extension&nbsp;</span> <span class="U2">base="xs:u</span> <span class="U2">nsignedLon</span> <span class="U2">g"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">93</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;x</span> <span class="U2">s:anyAttri</span> <span class="U2">bute&nbsp;names</span> <span class="U2">pace="##ot</span> <span class="U2">her"&nbsp;proce</span> <span class="U2">ssContents</span> <span class="U2">="lax"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">94</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs</span> <span class="U2">:extension</span> <span class="U2">&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">95</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs:s</span> <span class="U2">impleConte</span> <span class="U2">nt&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">96</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;/xs:com</span> <span class="U2">plexType&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">97</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">ProblemHea</span> <span class="U2">derQName"&nbsp;</span> <span class="U2">type="tns:</span> <span class="U2">Attributed</span> <span class="U2">QNameType"</span> <span class="U2">/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">98</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:comp</span> <span class="U2">lexType&nbsp;mi</span> <span class="U2">xed="false</span> <span class="U2">"&nbsp;name="At</span> <span class="U2">tributedQN</span> <span class="U2">ameType"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">99</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:si</span> <span class="U2">mpleConten</span> <span class="U2">t&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">100</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">extension&nbsp;</span> <span class="U2">base="xs:Q</span> <span class="U2">Name"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">101</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;x</span> <span class="U2">s:anyAttri</span> <span class="U2">bute&nbsp;names</span> <span class="U2">pace="##ot</span> <span class="U2">her"&nbsp;proce</span> <span class="U2">ssContents</span> <span class="U2">="lax"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">102</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs</span> <span class="U2">:extension</span> <span class="U2">&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">103</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs:s</span> <span class="U2">impleConte</span> <span class="U2">nt&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">104</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;/xs:com</span> <span class="U2">plexType&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">105</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">ProblemHea</span> <span class="U2">der"&nbsp;type=</span> <span class="U2">"tns:Attri</span> <span class="U2">butedAnyTy</span> <span class="U2">pe"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">106</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:comp</span> <span class="U2">lexType&nbsp;mi</span> <span class="U2">xed="false</span> <span class="U2">"&nbsp;name="At</span> <span class="U2">tributedAn</span> <span class="U2">yType"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">107</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:se</span> <span class="U2">quence&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">108</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">any&nbsp;maxOcc</span> <span class="U2">urs="1"&nbsp;mi</span> <span class="U2">nOccurs="1</span> <span class="U2">"&nbsp;namespac</span> <span class="U2">e="##any"&nbsp;</span> <span class="U2">processCon</span> <span class="U2">tents="lax</span> <span class="U2">"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">109</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs:s</span> <span class="U2">equence&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">110</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:an</span> <span class="U2">yAttribute</span> <span class="U2">&nbsp;namespace</span> <span class="U2">="##other"</span> <span class="U2">&nbsp;processCo</span> <span class="U2">ntents="la</span> <span class="U2">x"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">111</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;/xs:com</span> <span class="U2">plexType&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">112</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">ProblemIRI</span> <span class="U2">"&nbsp;type="tn</span> <span class="U2">s:Attribut</span> <span class="U2">edURIType"</span> <span class="U2">/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">113</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:elem</span> <span class="U2">ent&nbsp;name="</span> <span class="U2">ProblemAct</span> <span class="U2">ion"&nbsp;type=</span> <span class="U2">"tns:Probl</span> <span class="U2">emActionTy</span> <span class="U2">pe"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">114</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;xs:comp</span> <span class="U2">lexType&nbsp;mi</span> <span class="U2">xed="false</span> <span class="U2">"&nbsp;name="Pr</span> <span class="U2">oblemActio</span> <span class="U2">nType"&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">115</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:se</span> <span class="U2">quence&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">116</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">element&nbsp;mi</span> <span class="U2">nOccurs="0</span> <span class="U2">"&nbsp;ref="tns</span> <span class="U2">:Action"/&gt;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">117</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:</span> <span class="U2">element&nbsp;mi</span> <span class="U2">nOccurs="0</span> <span class="U2">"&nbsp;name="So</span> <span class="U2">apAction"&nbsp;</span> <span class="U2">type="xs:a</span> <span class="U2">nyURI"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">118</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xs:s</span> <span class="U2">equence&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">119</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&lt;xs:an</span> <span class="U2">yAttribute</span> <span class="U2">&nbsp;namespace</span> <span class="U2">="##other"</span> <span class="U2">&nbsp;processCo</span> <span class="U2">ntents="la</span> <span class="U2">x"/&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">120</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&lt;/xs:com</span> <span class="U2">plexType&gt;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">121</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&lt;/xs:schem</span> <span class="U2">a&gt;</span> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <p class="copyright" style="margin-top: 25px; padding-top: 2px; border-top: solid #a0a0a0 1px; max-width: none;">Araxis Merge (but not the data content of this report) is Copyright © 1993-2016 Araxis Ltd (<a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a>). All rights reserved.</p>   
+ </body>
+</html>

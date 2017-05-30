@@ -3,13 +3,13 @@ VPRJRCL ;SLC/KCM -- Control the HTTP listener
  ;
 GO(PORT) ; start up REST listener with defaults
  I $G(PORT) D SPORT(PORT)
- S PORT=$G(^VPRHTTP(0,"port"),9080)
+ S PORT=$G(^VPRHTTP(0,"port"),PORT)
  I '$D(^VPRMETA) D SETUP^VPRJPMD             ; make sure meta data is in place
  J START^VPRJREQ(PORT)       ; start the listener
  ;BL HARD CODING MULTI BROKER FOR PERFORMANCE TESTING
- S PORT=9081
+ S PORT=PORT
  J START^VPRJREQ(PORT)
- S PORT=9082
+ S PORT=PORT
  J START^VPRJREQ(PORT)
  Q
 STOP ; tell the listener to stop running
@@ -18,7 +18,7 @@ STOP ; tell the listener to stop running
 STOPW ; tell the listener to stop running and wait until it stops
  ; this function is interactive
  N I,X
- W !,"Stopping HTTP listener on port "_$G(^VPRHTTP(0,"port"),9080)_"."
+ W !,"Stopping HTTP listener on port "_$G(^VPRHTTP(0,"port"),PORT)_"."
  D STOP
  F I=1:1:12 D  Q:X="stopped"
  . S X=^VPRHTTP(0,"listener")
@@ -31,9 +31,9 @@ SPORT(PORT) ; set the port that should be listened on
  Q:'$G(PORT)
  ;BL; eHMP change to handle multipe brokers
  ;S ^VPRHTTP(0,"port")=PORT
- S ^VPRHTTP(0,"port")=9080
- S ^VPRHTTP(1,"port")=9081
- S ^VPRHTTP(2,"port")=9082
+ S ^VPRHTTP(0,"port")=PORT
+ S ^VPRHTTP(1,"port")=PORT
+ S ^VPRHTTP(2,"port")=PORT
  Q
 SLOG(LEVEL) ; set log level -  0:errors,1:headers&errors,2:raw,3:body&response
  ; ** called from VPRJREQ -- cannot be interactive **
@@ -48,7 +48,7 @@ LOG() ; return the current logging level
  Q $G(^VPRHTTP(0,"logging"),0)
  ;
 PORT() ; return the HTTP port number
- Q $G(^VPRHTTP(0,"port"),9080)
+ Q $G(^VPRHTTP(0,"port"),PORT)
  ;
 STATUS() ; Return status of the HTTP listener
  ;Simple Exchange (happy path)
@@ -65,7 +65,7 @@ STATUS() ; Return status of the HTTP listener
  I $E($G(^VPRHTTP(0,"listener")),1,4)="stop" Q ^VPRHTTP(0,"listener")
  ;
  N HTTPLOG,HTTPREQ,PORT,X
- S HTTPLOG=0,PORT=$G(^VPRHTTP(0,"port"),9080)
+ S HTTPLOG=0,PORT=$G(^VPRHTTP(0,"port"),PORT)
  O "|TCP|2":("127.0.0.1":PORT:"CT"):2 E  Q "not responding"
  U "|TCP|2"
  W "GET /ping HTTP/1.1"_$C(10,13)_"Host: JDSlocalhost"_$C(10,13,10,13),!

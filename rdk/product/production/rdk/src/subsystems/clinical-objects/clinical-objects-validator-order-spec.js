@@ -9,7 +9,7 @@ var buildOrderObject = function(ehmpState, referenceId, domain, subDomain){
         pid: '9E7A;3',
         model: {
             patientUid: 'urn:va:patient:9E7A:3:3',
-            authorUid: 'mx1234',
+            authorUid: 'REDACTED',
             domain: domain,
             subDomain: subDomain,
             ehmpState: ehmpState,
@@ -32,13 +32,15 @@ var buildOrderObject = function(ehmpState, referenceId, domain, subDomain){
     };
 };
 
-//THIS SHOULD CHANGE ONCE WE SET THE CORRECT ENDPOINT!!
-var endpoint = 'clinicobj';
-var testEndpoint = 'http://10.2.2.110:9080';
+var vxSyncEndpoint = 'clinicalObject';
+var testVxsyncEndpoint = 'http://IP           ';
 
 var appConfig = {
     generalPurposeJdsServer: {
-        baseUrl: 'http://10.2.2.110:9080'
+        baseUrl: 'http://IP             '
+    },
+    vxSyncServer: {
+        baseUrl: 'http://IP           '
     }
 };
 
@@ -50,7 +52,7 @@ describe('Clinical object order validation tests', function() {
 
         it('should create a clinical object when called with the correct parameters', function(done) {
 
-            nock(testEndpoint).post('/' + endpoint).reply(200, {});
+            nock(testVxsyncEndpoint).post('/' + vxSyncEndpoint).reply(201, {});
             var orderModel = buildOrderObject('active', 'testReferenceID', 'ehmp-order', 'laboratory');
             clinicalObjects.create(logger, appConfig, orderModel.model, function(err, response) {
                 expect(response).to.be.an.object();
@@ -61,7 +63,7 @@ describe('Clinical object order validation tests', function() {
 
         it('should create an error when an order has the wrong subDomain', function(done) {
 
-            nock(testEndpoint).post('/' + endpoint).reply(200, {});
+            nock(testVxsyncEndpoint).post('/' + vxSyncEndpoint).reply(201, {});
             var orderModel = buildOrderObject('active', 'testReferenceID', 'ehmp-order', 'something');
             clinicalObjects.create(logger, appConfig, orderModel.model, function(err, response) {
                 expect(response).to.be.an.undefined();
@@ -73,7 +75,7 @@ describe('Clinical object order validation tests', function() {
 
         it('should create a clinical object when called with the correct parameters', function(done) {
 
-            nock(testEndpoint).post('/' + endpoint).reply(200, {});
+            nock(testVxsyncEndpoint).post('/' + vxSyncEndpoint).reply(201, {});
             var orderModel = buildOrderObject('active', 'testReferenceID', 'ehmp-order', 'consult');
             clinicalObjects.create(logger, appConfig, orderModel.model, function(err, response) {
                 expect(response).to.be.an.object();
@@ -84,7 +86,7 @@ describe('Clinical object order validation tests', function() {
 
         it('should create an error when active order does not have a reference id', function(done) {
 
-            nock(testEndpoint).post('/' + endpoint).reply(200, {});
+            nock(testVxsyncEndpoint).post('/' + vxSyncEndpoint).reply(201, {});
             var orderModel = buildOrderObject('active', '', 'ehmp-order', 'consult');
             clinicalObjects.create(logger, appConfig, orderModel.model, function(err, response) {
                 expect(response).to.be.an.undefined();
@@ -96,7 +98,7 @@ describe('Clinical object order validation tests', function() {
 
         it('should create an error when draft order has a reference id', function(done) {
 
-            nock(testEndpoint).post('/' + endpoint).reply(200, {});
+            nock(testVxsyncEndpoint).post('/' + vxSyncEndpoint).reply(201, {});
             var orderModel = buildOrderObject('draft', '1234', 'ehmp-order', 'consult');
             clinicalObjects.create(logger, appConfig, orderModel.model, function(err, response) {
                 expect(response).to.be.an.undefined();

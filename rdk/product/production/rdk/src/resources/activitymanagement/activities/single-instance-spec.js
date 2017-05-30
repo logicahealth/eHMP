@@ -26,15 +26,15 @@ describe('single-instance ', function() {
             };
             req.app.config.jbpm = {};
             req.app.config.activityDatabase = {
-                'user': 'activitydbuser',
-                'password': 'activitydb$11',
-                'connectString': '10.4.4.208:1521/xe'
+                'user': 'REDACTED',
+                'password': 'REDACTED',
+                'connectString': 'IP             /xe'
             };
 
             req.query = {};
             req.query.id = 1;
             req.jdsServer = {
-                'baseUrl': 'http://10.2.2.110:9080',
+                'baseUrl': 'http://IP             ',
                 'urlLengthLimit': 120
             };
         });
@@ -85,15 +85,15 @@ describe('single-instance ', function() {
             };
             req.app.config.jbpm = {};
             req.app.config.activityDatabase = {
-                'user': 'activitydbuser',
-                'password': 'activitydb$11',
-                'connectString': '10.4.4.208:1521/xe'
+                'user': 'REDACTED',
+                'password': 'REDACTED',
+                'connectString': 'IP             /xe'
             };
 
             req.query = {};
             req.query.id = 1;
             req.jdsServer = {
-                'baseUrl': 'http://10.2.2.110:9080',
+                'baseUrl': 'http://IP             ',
                 'urlLengthLimit': 120
             };
         });

@@ -4,6 +4,8 @@ require('../../../env-setup');
 
 var util = require('util');
 var _ = require('underscore');
+var async = require('async');
+var request = require('request');
 
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
@@ -27,7 +29,7 @@ for your handler. Note that you should NOT include the beanstalk publisher
 properties, but may include a beanstalkConfig object for the queue-config factory,
 or if none is provided the default will be used.
 
-host: the server where beanstalk is running. This will usually be '10.3.3.6' or '127.0.0.1'.
+host: the server where beanstalk is running. This will usually be 'IP      ' or '127.0.0.1'.
 
 port: the port on which beanstalk is running. This will usually be 5000.
 
@@ -373,6 +375,122 @@ function clearTubes(logger, host, port, tubenames, callback) {
     });
 }
 
+//---------------------------------------------------------------------------------------------------
+// Helper function for syncAndWaitForPatient
+// This function checks the sync status to see if there is nothing in progress and there are no
+// open jobs.  If that is the case, it will set syncIsComplete to true.
+//
+// callback: The function to call when the check is done.
+//---------------------------------------------------------------------------------------------------
+function checkSyncComplete(log, config, pid, sharedSyncStats, callback) {
+    log.debug('handler-test-framework.checkSyncComplete: Entered method.');
+    var syncStatusCallComplete = false;
+    var syncStatusCallError;
+    var syncStatusCallResponse;
+    runs(function() {
+        var options = {
+            url: config.syncRequestApi.protocol + '://' + config.syncRequestApi.host + ':' + config.syncRequestApi.port + config.syncRequestApi.patientStatusPath + '?pid=' + pid,
+            method: 'GET'
+        };
+
+        sharedSyncStats.syncStatusCalledCounter++;
+        log.debug('handler-test-framework.checkSyncComplete: Retrieving status: syncStatusCalledCounter: %s; options: %j', sharedSyncStats.syncStatusCalledCounter, options);
+        request.get(options, function(error, response, body) {
+            log.debug('handler-test-framework.checkSyncComplete: Retrieving status - Call back called: error: %j, response: %j, body: %j', error, response, body);
+            expect(response).toBeTruthy();
+            expect(val(response, 'statusCode')).toBe(200);
+            expect(body).toBeTruthy();
+
+            var syncStatusData;
+            try {
+                syncStatusData = JSON.parse(body);
+            } catch (parseError) {}
+
+            log.debug('handler-test-framework.checkSyncComplete: Retrieving status - Call back called: syncStatusData: %j', syncStatusData);
+            expect(syncStatusData).toBeTruthy();
+            if (syncStatusData && (_.isObject(syncStatusData.syncStatus)) && (_.isEmpty(syncStatusData.syncStatus.inProgress)) &&
+                (_.isArray(syncStatusData.jobStatus)) && (_.isEmpty(syncStatusData.jobStatus))) {
+                sharedSyncStats.syncIsComplete = true;
+            }
+
+            syncStatusCallError = error;
+            syncStatusCallResponse = response;
+            syncStatusCallComplete = true;
+            return callback();
+        });
+    });
+
+    waitsFor(function() {
+        return syncStatusCallComplete;
+    }, 'Timed out waiting for syncRequest.', 10000);
+}
+
+//------------------------------------------------------------------------------------------------------
+// Helper function for syncAndWaitForPatient
+// Returns the value of syncIsComplete.
+//
+// returns TRUE if the sync is complete.  False if it is not.
+//------------------------------------------------------------------------------------------------------
+function isSyncComplete(log, sharedSyncStats) {
+    log.debug('handler-test-framework.isSyncComplete: Entered method.  syncIsComplete: %j', sharedSyncStats.syncIsComplete);
+    return sharedSyncStats.syncIsComplete;
+}
+
+//------------------------------------------------------------------------------------------------------
+// Syncs the provided pid via the sync request endpoint and then
+// waits for it to complete sync.
+//
+// Parameters
+// log: a bunyan logger
+// config: configuration object - should at least have the syncRequestApi attributes populated
+// pid: the pid of the patient to sync
+//------------------------------------------------------------------------------------------------------
+function syncAndWaitForPatient(log, config, pid) {
+    var syncRequestComplete = false;
+    var syncRequestError;
+    var syncRequestResponse;
+
+    var sharedSyncStats = {
+        syncIsComplete: false,
+        syncStatusCalledCounter: 0
+    };
+
+    runs(function() {
+        var options = {
+            url: config.syncRequestApi.protocol + '://' + config.syncRequestApi.host + ':' + config.syncRequestApi.port + config.syncRequestApi.patientSyncPath + '?pid=' + pid,
+            method: 'GET'
+        };
+
+        log.debug('handler-test-framework: Sync Request.  options: %j', options);
+        request.get(options, function(error, response, body) {
+            log.debug('handler-test-framework: Sync Request call back called.  error: %j; response: %j, body: %j', error, response, body);
+            syncRequestError = error;
+            syncRequestResponse = response;
+            expect(val(response, 'statusCode')).toBe(202);
+            syncRequestComplete = true;
+        });
+    });
+
+    waitsFor(function() {
+        return syncRequestComplete;
+    }, 'Timed out waiting for syncRequest.', 10000);
+
+    // Need to wait for the sync to complete.
+    //----------------------------------------
+    runs(function() {
+        log.debug('handler-test-framework: Starting async.doWhilst.');
+        async.doUntil(checkSyncComplete.bind(null, log, config, pid, sharedSyncStats), isSyncComplete.bind(null, log, sharedSyncStats), function(error) {
+            expect(error).toBeFalsy();
+            log.debug('handler-test-framework: async.doWhilst call back called.  error: %j', error);
+        });
+    });
+
+    waitsFor(function() {
+        return sharedSyncStats.syncIsComplete;
+    }, 'Timed out waiting for sync to complete.', 60000);
+}
+
+module.exports.syncAndWaitForPatient = syncAndWaitForPatient;
 module.exports.testHandler = testHandler;
 module.exports.updateTubenames = updateTubenames;
 module.exports.getBeanstalkConfig = getBeanstalkConfig;

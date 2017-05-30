@@ -1,60 +1,49 @@
 <fieldset>
-	<legend class="sr-only" aria-hidden="true">Applet Filter</legend>
-	<label class="sr-only" for="input-filter-search-{{instanceId}}">Applet Filter</label>
-	<div class="row all-padding-no all-margin-no">
-	{{#if onUserWorkspace}}
-		<div class="block-display">
-			<div class="input-filter col-xs-6 all-padding-no">
-				<i class="fa fa-filter"></i>
-				<div class="input-group input-group-sm">
-					<input id="input-filter-search-{{instanceId}}" class="form-control input-sm input-filters pixel-height-20" pattern="[^\*%&\^$#\!]*" maxlength="44" type="search" title="Begin typing to add additional filter and then press enter to add"
-						{{#if placeholder}}
-							placeholder="Add Filter"
-						{{/if}}
-						name="{{name}}"
-						{{#if value}}
-							value="{{value}}"
-						{{/if}}
-					/>
-					<button data-backgrid-action="clear" class="clear-input user-defined btn btn-icon btn-sm color-grey-darkest" type="button" title="Press enter to clear text">
-			            <i class="fa fa-times"></i>
-			        </button>
-						<div class="input-group-btn">
-							<button type="submit" class="filter-add btn btn-primary box-shadow-no" value="ADD" title="Press enter to add."><i class="fa fa-plus"></i></button>
-						</div>
-				</div>
-			</div>
-			<div class="filter-container filter-header left-padding-sm hidden pull-right col-xs-6 right-padding-no">
-				<label for="{{filterId}}" class="sr-only">Filter Name</label>
-				<i class="fa fa-pencil"></i>
-				<input id="{{filterId}}" class="form-control filter-title-input input-sm pixel-height-22" title="Current applet filter name {{filterName}}. Begin typing to enter new applet filter name, then press enter." type="text" val="Filtered" placeholder="Edit Applet Filter Name" maxlength="30" />
-				<span class="hidden filter-title" aria-hidden="true">{{filterName}}</span>
-			</div>
-		</div>
-	{{else}}
-		<i class="fa fa-filter"></i>
-		<input id="input-filter-search-{{instanceId}}" class="form-control defined pixel-height-20" type="search" title="Begin typing to filter the tiles below"
-			{{#if placeholder}}
-				placeholder="Filter"
-			{{/if}}
-			name="{{name}}"
-			{{#if value}}
-				value="{{value}}"
-			{{/if}}
-		/>
-		<button data-backgrid-action="clear" class="clear-input default btn btn-icon btn-sm color-grey-darkest" type="button" title="Press enter to clear text">
-            <i class="fa fa-times"></i>
-        </button>
-	{{/if}}
-	</div>
-	<div class="filter-container hidden">
-		<div class="display-block col-xs-12 top-padding-xs all-padding-no all-margin-no">
-			<div class="udaf col-xs-10 inline-block-display right-padding-sm left-padding-no"></div>
-			{{#if onUserWorkspace}}
-				<div class="udaf-remove-btn col-xs-2">
-					<button class="btn btn-default btn-xs remove-all pull-right font-size-12" title="Press enter to remove all filters.">Remove All</a></button>
-				</div>
-			{{/if}}
-		</div>
-	</div>
+    <legend class="sr-only" aria-hidden="true">Applet Filter</legend>
+    <label class="sr-only" for="input-filter-search-{{instanceId}}">Applet Filter</label>
+    <div class="row all-padding-no all-margin-no">
+        {{#if onUserWorkspace}}
+            <div class="col-xs-6 all-padding-no input-filter form-group form-group-sm form-group--searchbar">
+                <div class="input-group">
+                    <label for="input-filter-search-{{instanceId}}" class="sr-only">
+                        Add Filter
+                    </label>
+                    <div class="input-icon--left" aria-hidden="true"><i class="fa fa-filter"></i></div>
+                    <input type="search" id="input-filter-search-{{instanceId}}" class="form-control" autocomplete="off" pattern="[^\*%&\^$#\!]*" maxlength="44" title="Begin typing to add additional filter and then press enter to add" {{#if placeholder}} placeholder="Add Filter" {{/if}} name="{{name}}" {{#if value}} value="{{value}}" {{/if}} />
+                    <div class="input-group-addon">
+                        <button data-backgrid-action="clear" type="button" class="btn clear-input-btn btn-icon btn-sm color-grey-darkest user-defined hidden" title="Press enter to clear search text"><i class="fa fa fa-times" aria-hidden="true"></i> <span class="sr-only">Clear</span></button>
+                        <button type="submit" class="btn box-shadow-no text-search btn-primary btn-sm filter-add" value="ADD" title="Press enter to filter results."><i class="fa fa-plus" aria-hidden="true"></i> <span class="sr-only">search</span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group form-group-sm col-xs-6 left-padding-sm right-padding-no pull-right filter-container filter-header hidden">
+                <label for="{{filterId}}" class="sr-only">Filter Name</label>
+                <div class="input-icon--left" aria-hidden="true"><i class="fa fa-pencil"></i></div>
+                <input id="{{filterId}}" class="form-control filter-title-input" title="Current applet filter name {{filterName}}. Begin typing to enter new applet filter name, then press enter." type="text" autocomplete="off" val="Filtered" placeholder="Edit Applet Filter Name" maxlength="30" />
+                <span class="hidden filter-title" aria-hidden="true">{{filterName}}</span>
+            </div>
+        {{else}}
+        <div class="col-xs-12 all-padding-no input-filter form-group form-group-sm form-group--searchbar">
+            <div class="input-group submit-hidden">
+                <label for="input-filter-search-{{instanceId}}" class="sr-only">
+                    Add Filter
+                </label>
+                <div class="input-icon--left" aria-hidden="true"><i class="fa fa-filter"></i></div>
+                <input type="search" id="input-filter-search-{{instanceId}}" class="form-control" autocomplete="off" pattern="[^\*%&\^$#\!]*" maxlength="44" title="Begin typing to filter the items below" {{#if placeholder}} placeholder="Add Filter" {{/if}} name="{{name}}" {{#if value}} value="{{value}}" {{/if}} />
+                <button data-backgrid-action="clear" type="button" class="btn clear-input-btn btn-icon btn-sm color-grey-darkest hidden" title="Press enter to clear search text"><i class="fa fa fa-times" aria-hidden="true"></i> <span class="sr-only">Clear</span></button>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    <div class="filter-container hidden">
+        <div class="col-xs-12 block-display top-padding-xs all-padding-no">
+            <div class="col-xs-9 inline-block-display right-padding-no left-padding-no bottom-padding-xs udaf"></div>
+            {{#if onUserWorkspace}}
+            <div class="udaf-remove-btn col-xs-3 all-padding-no">
+                <button type="button" class="btn btn-default btn-xs remove-all pull-right" title="Press enter to remove all filters.">Remove All</a>
+                </button>
+            </div>
+            {{/if}}
+        </div>
+    </div>
 </fieldset>

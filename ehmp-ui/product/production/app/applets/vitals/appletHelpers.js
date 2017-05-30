@@ -5,20 +5,7 @@ define([
 ], function(Backbone, _, moment) {
     'use strict';
 
-    function formatDate(str, year, month, day) {
-        month = ADK.utils.dateUtils.toAbbreviateMonth(month);
-        return [month, day, year].join(' ');
-    }
-
-
     var appletHelpers = {
-
-        getDateForChart: function(date) {
-            var data = date + '';
-            data = data.slice(0, 8);
-            data = data.replace(/(\d{4})(\d{2})(\d{2})/, formatDate);
-            return data;
-        },
         updateChart: function(chart, collection) {
 
             var categories = collection.pluck('observed');

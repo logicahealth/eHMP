@@ -21,7 +21,7 @@ var config = {
     },
     'syncRequestApi': {
         'protocol': 'http',
-        'host': '10.3.3.6',
+        'host': 'IP      ',
         'port': '8080',
         'timeout': 300000
     },

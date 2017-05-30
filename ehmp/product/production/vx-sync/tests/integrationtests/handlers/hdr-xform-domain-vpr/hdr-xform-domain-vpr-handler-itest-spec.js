@@ -23,7 +23,7 @@ var wConfig = require(global.VX_ROOT + 'worker-config');
 var config = {
     jds: _.defaults(wConfig.jds, {
         protocol: 'http',
-        host: '10.2.2.110',
+        host: 'IP        ',
         port: 9080
     })
 };
@@ -31,7 +31,7 @@ var config = {
 var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 
 var host = vx_sync_ip;
-var port = 5000;
+var port = PORT;
 var tubename = 'vx-sync-test';
 
 describe('hdr-xfom-domain-vpr-handler integration test', function() {

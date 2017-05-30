@@ -3,6 +3,7 @@ package gov.va.jbpm.eventlisteners;
 import java.util.Date;
 import java.util.List;
 
+import org.jboss.logging.Logger;
 import org.jbpm.services.task.commands.TaskContext;
 import org.jbpm.workflow.instance.impl.WorkflowProcessInstanceImpl;
 import org.kie.api.runtime.manager.RuntimeManager;
@@ -17,13 +18,12 @@ import gov.va.jbpm.entities.impl.TaskInstanceImpl;
 import gov.va.jbpm.entities.impl.TaskRouteImpl;
 import gov.va.jbpm.entities.util.TaskInstanceImplUtil;
 import gov.va.jbpm.exception.EventListenerException;
-import gov.va.jbpm.utils.Logging;
-
 /*
  * Custom task event listener
  * 
  * */
 public class CustomTaskEventListener implements TaskLifeCycleEventListener {
+	private static final Logger LOGGER = Logger.getLogger(CustomTaskEventListener.class);
 	private RuntimeManager runtimeManager = null;
 	private static final String SIGNAL_TASKCREATED = "TaskCreated"; //this signal name should not be changed because it is referenced in the activity workflows
 // -----------------------------------------------------------------------------
@@ -106,86 +106,86 @@ public class CustomTaskEventListener implements TaskLifeCycleEventListener {
 
 	@Override
 	public void afterTaskActivatedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskActivatedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskActivatedEvent");
 		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskClaimedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskClaimedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskClaimedEvent");
 		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskSkippedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskSkippedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskSkippedEvent");
 		publishTaskStatusChange(event);
 
 	}
 
 	@Override
 	public void afterTaskStartedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskStartedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskStartedEvent");
 		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskStoppedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskStoppedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskStoppedEvent");
 		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskCompletedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskCompletedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskCompletedEvent");
 		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskFailedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskFailedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskFailedEvent");
 		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskExitedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskExitedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskExitedEvent");
 		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskReleasedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskReleasedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskReleasedEvent");
 		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskResumedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskResumedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskResumedEvent");
 		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskSuspendedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskSuspendedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskSuspendedEvent");
 		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskForwardedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskForwardedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskForwardedEvent");
 		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskDelegatedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskDelegatedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskDelegatedEvent");
 		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskNominatedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskNominatedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskNominatedEvent");
 		publishTaskStatusChange(event);
 	}
 
@@ -200,7 +200,7 @@ public class CustomTaskEventListener implements TaskLifeCycleEventListener {
 	 */
 	@Override
 	public void afterTaskAddedEvent(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.afterTaskAddedEvent");
+		LOGGER.debug("Entering CustomTaskEventListener.afterTaskAddedEvent");
 		try {
 			TaskPersistenceContext persistenceContext = getPersistenceContext(event);
 
@@ -222,7 +222,7 @@ public class CustomTaskEventListener implements TaskLifeCycleEventListener {
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		} catch (Exception e) {
-			Logging.error("CustomTaskEventListener.afterTaskAddedEvent: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("CustomTaskEventListener.afterTaskAddedEvent: An unexpected condition has happened: " + e.getMessage(), e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		}
@@ -236,7 +236,7 @@ public class CustomTaskEventListener implements TaskLifeCycleEventListener {
 	 * Publish task status change to database
 	 */
 	private void publishTaskStatusChange(TaskEvent event) {
-		Logging.debug("Entering CustomTaskEventListener.publishTaskStatusChange");
+		LOGGER.debug("Entering CustomTaskEventListener.publishTaskStatusChange");
 		try {
 			TaskPersistenceContext persistenceContext = getPersistenceContext(event);
 
@@ -272,7 +272,7 @@ public class CustomTaskEventListener implements TaskLifeCycleEventListener {
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		} catch (Exception e) {
-			Logging.error("ConsultHelperUtil.buildConsultOrder: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ConsultHelperUtil.buildConsultOrder: An unexpected condition has happened: " + e.getMessage(), e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		}
@@ -282,7 +282,7 @@ public class CustomTaskEventListener implements TaskLifeCycleEventListener {
 	 * Retrieves the persistenceContext and joins the transaction.
 	 */
 	private TaskPersistenceContext getPersistenceContext(TaskEvent event) throws EventListenerException {
-		Logging.debug("Entering CustomTaskEventListener.getPersistenceContext");
+		LOGGER.debug("Entering CustomTaskEventListener.getPersistenceContext");
 		
 		if (runtimeManager == null)
 			throw new EventListenerException("CustomTaskEventListener...runtimeManager was null");

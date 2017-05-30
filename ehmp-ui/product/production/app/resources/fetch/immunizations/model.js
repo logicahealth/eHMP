@@ -7,12 +7,13 @@ define([
 
     var ImmunizationsModel = Backbone.Model.extend({
         parse: function(response) {
-            response = Util.getStandardizedName(response);
-            response = Util.getAdministeredFormatted(response);
+            response.administeredFormatted = Util.formatAdministeredDateTime(_.get(response, 'administeredDateTime', ''));
+            response.standardizedName = Util.createStandardizedName(_.get(response, 'codes', ''));
             return response;
         },
         defaults: {
             "administeredDateTime": "",
+            "administeredFormatted": "",
             "applet_id": "immunizations",
             "codes": null,
             "contraindicatedDisplay": "",
@@ -24,13 +25,18 @@ define([
             "kind": "",
             "name": "",
             "numericDate": "",
+            "observedFormatted": "",
+            "observedTimeFormatted":"",
             "pid": "",
             "performer":"",
             "reactionName": "",
             "reactionCode": "",
+            "resultedFormatted":"",
             "seriesName": "",
             "stampTime": "",
+            "standardizedName": "",
             "summary": "",
+            "timeSinceDate": "",
             "uid": ""
         }
     });

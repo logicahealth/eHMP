@@ -1,7 +1,0 @@
-"chef-server-upload-environments-build-%branch%" {
-	template = 'templates/chef-server-upload-environments-build.tpl'
-	description = "Automatically uploads all environments to chef-server when any environment has changed or been added into the following: environments/"
-	
-   gitUrl = 'https://code.vistacore.us/scm/pi/chef-repo.git'
-   gitBranch = '%branch%'
-}

@@ -1,4 +1,5 @@
-define([], function() {
+define([], function () {
+    'use strict';
 
     var OperationalDatum = ADK.Resources.Picklist.Model.extend({
         idAttribute: 'ien',

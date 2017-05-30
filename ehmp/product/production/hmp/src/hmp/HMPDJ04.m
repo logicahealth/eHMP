@@ -1,10 +1,9 @@
 HMPDJ04 ;SLC/MKB,ASMR/RRB,ASF,PB - Appointments,Visits;May 24, 2016 15:21:17
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2**;Sep 01, 2011;Build 24
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
  ; -------------------          -----
- ; ^AUPNVSIT                     2028
  ; ^DGS(41.1                     3796
  ; ^DIC(42                      10039
  ; ^SC                          10040

@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(["jquery", "backbone", "marionette", "main/ui_components/components", "api/UIComponents", "jasminejquery"],
+define(["jquery", "backbone", "marionette", "main/UILibrary", "api/UIComponents", "jasminejquery"],
     function($, Backbone, Marionette, UI) {
 
         var $form, form;
@@ -218,12 +218,38 @@ define(["jquery", "backbone", "marionette", "main/ui_components/components", "ap
                     expect($form.find('i')).toHaveClass('newIcon');
                     $form.find('.formStatus').trigger("control:icon", '');
                     expect($form.find('button')).not.toHaveClass('newIcon');
+                    expect($form.find('button i').length).toBe(0);
                 });
                 it("label", function() {
                     $form.find('.formStatus').trigger("control:label", 'newLabel');
                     expect($form.find('button')).toHaveText('newLabel');
-                    $form.find('.formStatus').trigger("control:label", '');
+                    $form.find('.formStatus').trigger("control:label", 'oldLabel');
                     expect($form.find('button')).not.toHaveText('newLabel');
+                    expect($form.find('button')).toHaveText('oldLabel');
+                });
+                it("update:config", function() {
+                    $form.find('.formStatus').trigger("control:update:config", {
+                        hidden: true,
+                        disabled: true,
+                        icon: 'newIcon',
+                        label: 'newLabel'
+                    });
+                    expect($form.find('.formStatus')).toHaveClass('hidden');
+                    expect($form.find('button')).toHaveAttr('disabled');
+                    expect($form.find('i')).toHaveClass('newIcon');
+                    expect($form.find('button')).toHaveText('newLabel');
+                    $form.find('.formStatus').trigger("control:update:config", {
+                        hidden: false,
+                        disabled: false,
+                        icon: '',
+                        label: 'oldLabel'
+                    });
+                    expect($form.find('.formStatus')).not.toHaveClass('hidden');
+                    expect($form.find('button')).not.toHaveAttr('disabled');
+                    expect($form.find('button')).not.toHaveClass('newIcon');
+                    expect($form.find('button i').length).toBe(0);
+                    expect($form.find('button')).not.toHaveText('newLabel');
+                    expect($form.find('button')).toHaveText('oldLabel');
                 });
             });
         });

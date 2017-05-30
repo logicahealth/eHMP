@@ -31,7 +31,7 @@ var realConfig = JSON.parse(JSON.stringify(wConfig));            // Make sure we
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
 var host = vx_sync_ip;
-var port = 5000;
+var port = PORT;
 var tubename = 'vx-sync-test';
 
 var config = {
@@ -48,8 +48,8 @@ var config = {
     // }),
     jds: _.defaults(realConfig.jds, {
         protocol: 'http',
-        host: '10.2.2.110',
-        port: 9080
+        host: 'IP        ',
+        port: PORT
     })
 };
 

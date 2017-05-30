@@ -1,11 +1,11 @@
 define([
-    "moment",
-    "app/applets/newsfeed/newsfeedUtils",
-    "hbs!app/applets/newsfeed/summary/formatDateTemplate",
-    "app/applets/newsfeed/summary/activityCell",
-    "app/applets/newsfeed/collectionHandler"
-], function(moment, newsfeedUtils, formatDateTemplate, ActivityCell, CollectionHandler) {
-    "use strict";
+    'moment',
+    'backbone',
+    'app/applets/newsfeed/newsfeedUtils',
+    'hbs!app/applets/newsfeed/summary/formatDateTemplate',
+    'app/applets/newsfeed/summary/activityCell'
+], function(moment, Backbone, newsfeedUtils, formatDateTemplate, ActivityCell) {
+    'use strict';
 
     var summaryColumns = [{
         name: 'activityDateTime',
@@ -18,15 +18,15 @@ define([
         groupable: true,
         groupableOptions: {
             primary: true,
-            innerSort: "activityDateTime",
+            innerSort: 'activityDateTime',
             groupByFunction: function(collectionElement) {
                 if(collectionElement.model.get('activityDateTime')){
-                    return collectionElement.model.get("activityDateTime").toString().substr(0, 6);
+                    return collectionElement.model.get('activityDateTime').toString().substr(0, 6);
                 }
             },
             //this takes the item returned by the groupByFunction
             groupByRowFormatter: function(item) {
-                return moment(item, "YYYYMM").format("MMMM YYYY");
+                return moment(item, 'YYYYMM').format('MMMM YYYY');
             }
         },
         hoverTip: 'encounters_datetime'
@@ -45,13 +45,13 @@ define([
         }),
         groupable: true,
         groupableOptions: {
-            innerSort: "activityDateTime"
+            innerSort: 'activityDateTime'
         },
         hoverTip: 'encounters_type'
     }];
 
     var fullScreenColumns = summaryColumns.concat([{
-        name: "primaryProviderDisplay",
+        name: 'primaryProviderDisplay',
         flexWidth: 'flex-width-0_5',
         cell: Backgrid.StringCell.extend ({
             className: 'string-cell flex-width-0_5'
@@ -59,7 +59,7 @@ define([
         label: 'Entered By',
         groupable: true,
         groupableOptions: {
-            innerSort: "activityDateTime"
+            innerSort: 'activityDateTime'
         },
         hoverTip: 'encounters_enteredby'
     }, {
@@ -71,7 +71,7 @@ define([
         label: 'Facility',
         groupable: true,
         groupableOptions: {
-            innerSort: "activityDateTime"
+            innerSort: 'activityDateTime'
         },
         hoverTip: 'encounters_facility'
     }]);
@@ -82,35 +82,35 @@ define([
 
     var detailAppletChannels = {
         // mapping of domain --> appletId
-        "immunization": "immunizations",
-        "surgery": "documents",
-        "procedure": "documents",
-        "consult": "documents",
-        "lab": "labresults_timeline_detailview"
+        'immunization': 'immunizations',
+        'surgery': 'documents',
+        'procedure': 'documents',
+        'consult': 'documents',
+        'lab': 'labresults_timeline_detailview'
     };
 
-    var getDetailsModal = function(model, collection) {
+    var getDetailsModal = function(model) {
         //ugh, why is this needed?? Is it?? The detailed modals should grab this if need be
         var currentPatient = ADK.PatientRecordService.getCurrentPatient();
         var channelObject = {
             model: model,
-            uid: model.get("uid"),
+            uid: model.get('uid'),
             patient: {
-                icn: currentPatient.attributes.icn,
-                pid: currentPatient.attributes.pid
+                icn: currentPatient.get('icn'),
+                pid: currentPatient.get('pid')
             }
         };
         if(newsfeedUtils.isCptProcedure(model)){
-          if(model.get("visitInfo")){
-            channelObject.channelName = "visitDetail";
-            channelObject.model = new Backbone.Model(model.get("visitInfo")); 
+          if(model.get('visitInfo')){
+            channelObject.channelName = 'visitDetail';
+            channelObject.model = new Backbone.Model(model.get('visitInfo')); 
           }
         }
         if (newsfeedUtils.isVisit(model)) {
-            channelObject.channelName = "visitDetail";
+            channelObject.channelName = 'visitDetail';
         }
 
-        var domain = channelObject.uid.split(":")[2],
+        var domain = channelObject.uid.split(':')[2],
             channelName = detailAppletChannels[domain] || channelObject.channelName;
 
         if (channelName) {
@@ -120,7 +120,7 @@ define([
                 var modal = new ADK.UI.Modal({
                     view: new response.view(),
                     options:  {
-                        size: "large",
+                        size: 'large',
                         title: response.title,
                         'nextPreviousCollection': model.collection,
                         'nextPreviousModel': model
@@ -130,35 +130,15 @@ define([
                 modal.show();
 
         } else {
-
             var modalView = new ADK.UI.Modal({
                 view: new DefaultDetailView(),
                 options:  {
-                    size: "large",
-                    title: "Detail - Placeholder"
+                    size: 'large',
+                    title: 'Detail - Placeholder'
                 }
             });
             modalView.show();
         }
-    };
-
-    var generateDataGridOptions = function(instanceId) {
-        return {
-            appletConfig: {
-                id: 'newsfeed',
-                instanceId: instanceId
-            },
-            filterFields: ['activityDateTimeByIso', 'activityDateTimeByIsoWithSlashes', 'activity', 'summary', 'typeDisplayName', 'stopCodeName', 'locationDisplayName', 'displayType', 'primaryProviderDisplay', 'facilityName', 'displayName', 'ext_filter_field'],
-            summaryColumns: summaryColumns,
-            fullScreenColumns: fullScreenColumns,
-            enableModal: true,
-            collection: undefined,
-            groupable: true,
-            onClickRow: function(model, event) {
-                event.preventDefault();
-                getDetailsModal(model, model.collection);
-            }
-        };
     };
 
     var SummaryLayout = ADK.AppletViews.GridView.extend({
@@ -173,9 +153,27 @@ define([
                 instanceId = 'newsfeed-gdt';
             }
 
-            var appletOptions = generateDataGridOptions(instanceId);
+            var appletOptions = {
+                appletConfig: {
+                    id: 'newsfeed',
+                    instanceId: instanceId
+                },
+                filterFields: ['activityDateTimeByIso', 'activityDateTimeByIsoWithSlashes', 'activity', 'summary', 'typeDisplayName', 'stopCodeName', 'locationDisplayName', 'displayType', 'primaryProviderDisplay', 'facilityName', 'displayName', 'ext_filter_field'],
+                summaryColumns: summaryColumns,
+                fullScreenColumns: fullScreenColumns,
+                enableModal: true,
+                collection: undefined,
+                groupable: true,
+                onClickRow: getDetailsModal
+            };
 
-            appletOptions.collection = CollectionHandler.queryCollection(this, undefined, appletOptions.collection);
+            var criteria = {
+                filter: 'or(' + this.buildJdsDateFilter('dateTime', {}) + ',' + this.buildJdsDateFilter('administeredDateTime', {}) + ',' + this.buildJdsDateFilter('observed', {}) + ')',
+                order: 'activityDateTime DESC'
+            };
+
+            appletOptions.collection = new ADK.UIResources.Fetch.Timeline.PageableCollection({isClientInfinite: true});
+            appletOptions.collection.fetchCollection(criteria);
 
             if (appletType === 'standard') {
                 this.setupGlobalDateListener();
@@ -183,7 +181,6 @@ define([
                 this.setupGDTListener();
                 appletOptions.runInWindow = true;
             }
-
 
             this.appletOptions = appletOptions;
             this._super.initialize.apply(this, arguments);
@@ -200,9 +197,7 @@ define([
                 options.operator = 'or';
 
                 this.dateRangeRefresh('dateTime', options);
-
             });
-
         },
         setupGDTListener: function() {
             this.listenTo(ADK.Messaging, 'globalDate:updateTimelineSummaryViewOnly', function(dateModel) {
@@ -218,9 +213,6 @@ define([
 
                 this.dateRangeRefresh('dateTime', options);
             });
-        },
-        onRender: function() {
-            this._super.onRender.apply(this, arguments);
         }
     });
 

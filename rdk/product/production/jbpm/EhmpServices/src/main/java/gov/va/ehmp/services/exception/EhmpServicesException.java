@@ -1,8 +1,7 @@
 package gov.va.ehmp.services.exception;
 
+import org.jboss.logging.Logger;
 import org.springframework.http.HttpStatus;
-
-import gov.va.ehmp.services.utils.Logging;
 
 /**
  * This exception provides a toJsonString method so you can easily return a formatted json string of the error and status code to the UI.
@@ -11,6 +10,7 @@ public class EhmpServicesException extends Exception {
 	private static final long serialVersionUID = 2719127462276038656L;
 	private HttpStatus httpStatus;
 	private String serverResponse = null;
+	private static final Logger LOGGER = Logger.getLogger(EhmpServicesException.class);
 	
 //-----------------------------------------------------------------------------
 //-------------------------Constructors----------------------------------------
@@ -27,7 +27,7 @@ public class EhmpServicesException extends Exception {
 	public EhmpServicesException(HttpStatus httpStatus, String message) {
 		super(message);
 		this.httpStatus = httpStatus;
-		Logging.error(message);
+		LOGGER.error(message);
 	}
 	
 	/**
@@ -43,7 +43,7 @@ public class EhmpServicesException extends Exception {
 		super(message + ", response from external server: " + serverResponse);
 		this.httpStatus = httpStatus;
 		this.serverResponse = serverResponse;
-		Logging.error(message + ", response from external server: " + serverResponse);
+		LOGGER.error(message + ", response from external server: " + serverResponse);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class EhmpServicesException extends Exception {
 	public EhmpServicesException(HttpStatus httpStatus, String message, Throwable cause) {
 		super(message, cause);
 		this.httpStatus = httpStatus;
-		Logging.error(message);
+		LOGGER.error(message);
 	}
 	
 //-----------------------------------------------------------------------------

@@ -13,6 +13,15 @@ SETUP ;
  D BLDMETA^VPRJCD("template","TLT","VPRJDMT")  ; ODC templates
  D BLDMETA^VPRJCD("link","LINKED","VPRJPMR")   ; VPR and ODC linkages
  ;
+ ; Generic Data Store Templates
+ N STORE,TEMPLATE
+ S STORE=""
+ S TEMPLATE=""
+ F  S STORE=$O(^VPRCONFIG("store",STORE)) Q:STORE=""  D
+ . F  S TEMPLATE=$O(^VPRCONFIG("store",STORE,"template",TEMPLATE)) Q:TEMPLATE=""  D
+ . . M ^VPRMETA("template")=^VPRCONFIG("store",STORE,"template",TEMPLATE)
+ . . S ^VPRMETA("collection",STORE,"template",TEMPLATE)=""
+ ;
  ; "every" index is special index that references all the UID's for a patient
  S ^VPRMETA("index","every")="every"
  S ^VPRMETA("index","every","common","levels")=0

@@ -39,20 +39,20 @@ function filterForActiveUsers(log, config, environment, usersList, now, callback
 
     async.filter(usersList, function(user, filterCallback) {
         if (!user.lastSuccessfulLogin || (now.diff(moment(user.lastSuccessfulLogin.substring(0, 10)), 'days') > active_user_threshold)) {
-            return filterCallback(false);
+            return filterCallback(null, false);
         }
 
         if (user.uid) {
             log.debug('active-users-userscreen-retriever.filterForActiveUsers: checking %j is on blacklist.', user.uid);
 
             return blackListUtil.isBlackListedUser(log, environment, user, function(error, result) {
-                filterCallback(!result);
+                filterCallback(null, !result);
             });
         }
 
-        return filterCallback(false);
-    }, function(results) {
-        callback(null, results);
+        return filterCallback(null, false);
+    }, function(error, results) {
+        callback(error, results);
     });
 }
 

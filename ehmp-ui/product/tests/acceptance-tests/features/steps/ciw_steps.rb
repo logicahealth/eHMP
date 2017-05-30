@@ -1,18 +1,10 @@
 
-After('@workspace_test') do 
-  p 'trying something'
-end
-
 def open_workspace_management_applet
   navigation = Navigation.instance
   workspace_manager = WorkspaceManager.instance
   expect(navigation.perform_action("Workspace Manager")).to be_true, "Error when attempting to click Workspace Manager"
   workspace_manager.wait_until_action_element_visible('Workspace Manager applet')
   expect(workspace_manager.am_i_visible? 'Workspace Manager applet').to eq(true)
-end
-
-When(/^the user opens the workspace management applet$/) do
-  open_workspace_management_applet
 end
 
 When(/^the user creates a user defined workspace named "([^"]*)"$/) do |workspace_name|
@@ -76,4 +68,3 @@ When(/^the user associates user defined workspace "([^"]*)" with "([^"]*)"$/) do
   # close the Association Manager
   expect(workspace_manager.perform_action("Close Association Manager")).to eq(true)
 end
-

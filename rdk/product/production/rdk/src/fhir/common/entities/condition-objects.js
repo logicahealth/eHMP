@@ -6,7 +6,7 @@ var nullchecker = rdk.utils.nullchecker;
 var fhirUtils = require('../utils/fhir-converter');
 //var utils = require('../utils/fhir-converter.js');
 var _ = require('lodash');
-
+var fhirResource = require('./fhir-resource');
 
 function objectFactory(objType, item) {
     var obj = new FactoryObject();
@@ -31,7 +31,7 @@ function BuildConditionItem(item) {
     var siteHash = fhirUtils.getSiteHash(item.uid);
     var ret = {
         resourceType: 'Condition',
-        id: item.uid,
+        id: fhirResource.fixId(item.uid),
         //        status: 'confirmed',
         category: new BuildCategory(item),
         stage: new BuildStage(item),

@@ -2,10 +2,74 @@
 var _ = require('lodash');
 var encryptor = require('../orders/common/orders-sig-code-encryptor');
 var nullchecker = require('../../utils/nullchecker');
+var fmDateUtil = require('../../utils/fileman-date-converter');
 var httpUtil = require('../../core/rdk').utils.http;
+var rpcClientFactory = require('../core/rpc-client-factory');
+var async = require('async');
 var clinicalObjUtil = require('../../subsystems/clinical-objects/clinical-objects-wrapper-note');
 var clinicalObjSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
 var asu = require('../../subsystems/asu/asu-process');
+
+module.exports.checkIfCosignRequired = function(writebackContext, callback) {
+
+    var ERROR_RESPONSE = 'This note title requires that a cosigner be identified and is not currently available in eHMP.';
+    var COSIGNER_REQUIRED_RESPONSE = '1';
+    var rpcName = 'TIU REQUIRES COSIGNATURE';
+    var signItems = _.get(writebackContext, 'model.signItems', _.get(writebackContext, 'model.signedAddendums'));
+    var refIds = [];
+
+    if (!_.isEmpty(signItems)) {
+        _.each(signItems, function(signItem) {
+            refIds.push(_.last(_.get(signItem, 'documentDefUid', '0').split(':')));
+        });
+
+    } else {
+        refIds.push(_.last(_.get(writebackContext, 'model.documentDefUid', '0').split(':')));
+    }
+
+    //call TIU REQUIRES COSIGNATURE for each of the document ref ids found in the writeback model
+    async.each(refIds, function(documentRefId, callback) {
+            rpcClientFactory.getRpcClient(writebackContext, null, function(err, rpcClient) {
+                if (err) {
+                    return callback(err);
+                }
+                var rpcParams = [];
+
+                //not title uid for save requests
+                rpcParams.push(documentRefId);
+
+                //note title uid for sign requests, we always save before signing in our workflow
+                rpcParams.push('');
+
+                //user dfn
+                rpcParams.push(writebackContext.duz[writebackContext.siteHash]);
+
+                //today's date
+                rpcParams.push(fmDateUtil.getFilemanDateTime(new Date()));
+
+                rpcClient.execute(
+                    rpcName,
+                    rpcParams,
+                    function(err, response) {
+                        if (err || response === COSIGNER_REQUIRED_RESPONSE) {
+                            return callback(ERROR_RESPONSE);
+                        } else {
+                            return callback();
+                        }
+                    }
+                );
+
+            });
+        },
+        function(err) {
+            if (err) {
+                return setImmediate(callback, ERROR_RESPONSE);
+            } else {
+                return setImmediate(callback, null);
+            }
+        });
+};
+
 
 module.exports.unsigned = function(writebackContext, callback) {
     var titleId = writebackContext.model.documentDefUid;

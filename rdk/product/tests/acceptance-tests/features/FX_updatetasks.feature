@@ -21,7 +21,7 @@ Scenario:
   And the task associated with the processInstanceId has
   | parameter  | value |
   | ASSIGNEDTO | 9E7A;10000000270,  |
-  When the "9E7A;pu1234" client requests the task is updated to be clarafication
+  When the "REDACTED" client requests the task is updated to be clarafication
       | parameter          | value            |
       | patient_pid        | 9E7A;100728      |
       | initiator          | 10000000016      |
@@ -30,7 +30,7 @@ Scenario:
       | out_formAction     | start            |
       | state              | start            |
   Then a successful response is returned
-  When the "9E7A;pu1234" client requests the task is updated to be clarafication
+  When the "REDACTED" client requests the task is updated to be clarafication
       | parameter          | value            |
       | patient_pid        | 9E7A;100728      |
       | initiator          | 10000000016      |
@@ -72,7 +72,7 @@ Scenario:
   | parameter  | value |
   | ASSIGNEDTO | 9E7A;10000000270,  |
 
-  When the "9E7A;pu1234" client requests the task is updated to be declined
+  When the "REDACTED" client requests the task is updated to be declined
       | parameter          | value            |
       | patient_pid        | 9E7A;100728      |
       | initiator          | 10000000016      |
@@ -81,7 +81,7 @@ Scenario:
       | out_formAction     | start            |
       | state              | start            |
   Then a successful response is returned
-  When the "9E7A;pu1234" client requests the task is updated to be declined
+  When the "REDACTED" client requests the task is updated to be declined
       | parameter          | value            |
       | patient_pid        | 9E7A;100728      |
       | initiator          | 10000000016      |
@@ -91,7 +91,7 @@ Scenario:
       | state              | complete         |
   Then a successful response is returned
 
-  When the "9E7A;pu1234" client requests tasks instances for "user" and "teamroles"
+  When the "REDACTED" client requests tasks instances for "user" and "teamroles"
   Then a successful response is returned
   And the response does not contain the processInstanceId
 

@@ -1,13 +1,15 @@
+/* global ADK */
 define([
-    'app/applets/orders/modalView/modalViewUtils',
-], function(ModalViewUtils) {
+    'underscore',
+    'app/applets/orders/modalView/modalViewUtils'
+], function (_, ModalViewUtils) {
     "use strict";
 
-    var onError = function(message) {
+    var onError = function (message) {
         throw new Error('**ERROR** Show:Lab-Sign Event: ' + message);
     };
 
-    var onOrderDetailsFetchSuccess = function(callback, options, collection) {
+    var onOrderDetailsFetchSuccess = function (callback, options, collection) {
         if (collection.length <= 0) {
             return onError('Order details for requested order do not exist');
         }
@@ -16,13 +18,12 @@ define([
         }
     };
 
-    var onClinicalObjectFetchSuccess = function(params, model, resp, options) {
+    var onClinicalObjectFetchSuccess = function (params, model, resp, options) {
         var data = model.get('data');
         if (_.isUndefined(data) || _.isUndefined(data.localId)) {
             return onError('Clinical Object "data.localId" value was invalid');
         }
         var fetchOptions = {
-            resourceTitle: 'patient-record-order',
             pageable: false,
             cache: false,
             onSuccess: _.partial(onOrderDetailsFetchSuccess, _.get(options, 'callback'), params),
@@ -31,10 +32,11 @@ define([
                 filter: 'eq(localId,"' + data.localId + '")'
             }
         };
-        ADK.PatientRecordService.fetchCollection(fetchOptions);
+        var collection = new ADK.UIResources.Fetch.Orders.Collection();
+        collection.fetchCollection(fetchOptions);
     };
 
-    var fetchOrderDetails = function(params, callback) {
+    var fetchOrderDetails = function (params, callback) {
         if (_.isUndefined(params.clinicalObjectUid)) {
             return onError('Task Navigation "parameters.clinicalObjectUid" value was invalid');
         }
@@ -52,7 +54,7 @@ define([
 
     return {
         fetchOrderDetails: fetchOrderDetails,
-        initialize: function(appletId) {
+        initialize: function (appletId) {
             var channel = ADK.Messaging.getChannel(appletId);
             this.listenTo(channel, 'show:lab-sign', onShowLabSign);
         }

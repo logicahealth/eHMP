@@ -4,9 +4,9 @@ require('../../env-setup');
 
 var _ = require('underscore');
 var async = require('async');
-var request = require('request');
 var yargs = require('yargs');
 var fs = require('fs');
+var errorUtil = require(global.VX_UTILS + 'error');
 
 var config = require(global.VX_ROOT + 'worker-config');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
@@ -27,7 +27,7 @@ var optionConfig = _.clone(config.syncRequestApi);
 
 //Default to using VM sync endpoint
 if (!argv.local && !argv.l) {
-    optionConfig.host = '10.3.3.6';
+    optionConfig.host = 'IP      ';
 }
 log.debug('Using sync endpoint location: ', optionConfig.host);
 
@@ -35,9 +35,9 @@ log.info('check-solr: Starting process...');
 
 // http://ip:port/solr/vpr/select?q=*&fq=pid:(9E7A;100826+OR+C877;100826+OR+HDR;5000000327V828570)&wt=json&fl=uid,pid,domain
 function buildSolrSearchUrl(completedPids) {
-    var pidJoin = completedPids.join("+OR+");
+    var pidJoin = completedPids.join('+OR+');
     //Use very large number for rows, more than could conceivably be returned, so that all data is returned on a single call
-    var url = "q=*&fq=pid:(" + pidJoin + ")&wt=json&fl=uid,pid,domain&rows=1000000000"
+    var url = 'q=*&fq=pid:(' + pidJoin + ')&wt=json&fl=uid,pid,domain&rows=1000000000';
     return url;
 }
 
@@ -57,7 +57,7 @@ getListOfPatients(log, argv, function(err, patients) {
     async.eachSeries(patients, function(patient, uniquePidCallback){
         //query simple status
         var path = '/sync/combinedstat/' + patient;
-        log.info("Processing find patient result " + patient);
+        log.info('Processing find patient result ' + patient);
 
         jdsClient.execute(path, null, 'GET', {}, function (err, response, result) {
             if (err) {
@@ -67,11 +67,11 @@ getListOfPatients(log, argv, function(err, patients) {
             }
 
             var sites = result.sites;
-            log.info("Simple JDS status for pid " + patient);
+            log.info('Simple JDS status for pid ' + patient);
             log.info(sites);
 
-            _.each(sites, function(site, index, list){
-                log.info("Site pid: " + site.pid);
+            _.each(sites, function(site){
+                log.info('Site pid: ' + site.pid);
                 allPids.push(site.pid);
             });
             uniquePidCallback(null);
@@ -92,18 +92,18 @@ getListOfPatients(log, argv, function(err, patients) {
             log.info(uniquePids);
 
             log.info('Unique Pids determined');
-            processPatients(uniquePids);
+            processPatients(log, uniquePids);
 
         }
     });
 
     //query jds detailed status
-    function processPatients(patients) {
+    function processPatients(logger, patients) {
 
 
-        log.debug('processPatients');
-        log.debug('input patients:');
-        log.debug(patients);
+        logger.debug('processPatients');
+        logger.debug('input patients:');
+        logger.debug(patients);
 
         var patientTasksInfo = _.map(patients, function(patient){
             var taskInfo = {pid: patient,
@@ -120,20 +120,20 @@ getListOfPatients(log, argv, function(err, patients) {
 
             jdsClient.execute(path, null, 'GET', {}, function (err, response, result) {
                 if (err) {
-                    log.error('Error querying JDS: ' + path);
-                    log.error(err);
+                    logger.error('Error querying JDS: ' + path);
+                    logger.error(err);
                     return eachPatientCallback(err);
                 }
 
                 if (result.completedStamp === undefined){
                     //No completedStamp, so no solr records expected
-                    log.debug('Patient ' + patient + ' Status missing completedStamp.');
+                    logger.debug('Patient ' + patient + ' Status missing completedStamp.');
                     return eachPatientCallback(null, patient);
                 }
 
-                log.trace('sourceMetaStamp');
+                logger.trace('sourceMetaStamp');
                 var sourceMetaStamp = result.completedStamp.sourceMetaStamp;
-                log.trace(sourceMetaStamp);
+                logger.trace(sourceMetaStamp);
 
                 var completedPids = [];
                 var completedSourceKeys = _.keys(sourceMetaStamp);
@@ -141,43 +141,39 @@ getListOfPatients(log, argv, function(err, patients) {
 
                 //TODO: change references to "facility" with "source" to be in line with vx-sync terminology
                 //gather all the completed Pids
-                completedSourceKeys.forEach(function(completedSource, index, array){
+                completedSourceKeys.forEach(function(completedSource){
                     //get the pid
                     var sourceData = sourceMetaStamp[completedSource];
                     var pid = sourceData.pid;
                     //save the pid
                     completedPids.push(pid);
-                })
+                });
 
                 //for each facility defined in sourceMetaStamp
                 async.eachSeries(completedSourceKeys, function(completedSource, eachFacilityCallback){
 
                     //If the facility isn't for the specific pid we're working under, skip it...
-                    var patientPidSource = patient.split(";")[0];
+                    var patientPidSource = patient.split(';')[0];
                     if (completedSource !== patientPidSource){
-                        log.debug("Skipping Facility " + completedSource + " did not match patient " + patient);
+                        logger.debug('Skipping Facility ' + completedSource + ' did not match patient ' + patient);
                         return eachFacilityCallback(null);
                     }
                    //get the pid
                     var sourceData = sourceMetaStamp[completedSource];
                     var pid = sourceData.pid;
 
-                    log.info('processing pid ' + pid)
+                    logger.info('processing pid ' + pid);
 
                     var domainMetaStamp = sourceData.domainMetaStamp;
                     var facilityDomainKeys = _.keys(domainMetaStamp);
                     var patientSourceEventUids = [];   //hold all found event uids
 
-                    //TODO: This doesn't need to be async
-                    async.eachSeries(facilityDomainKeys, function(facilityDomainKey, eachDomainCallback){
-
-                        // if facilityDomainKey in solrDomains list, else callback
+                    _.each(facilityDomainKeys, function(facilityDomainKey){
                         if (isSolrDomain(facilityDomainKey)){
                             log.debug('checking domain ' + facilityDomainKey);
                             var eventMetaStamp = domainMetaStamp[facilityDomainKey].eventMetaStamp;
 
                             var eventUids = _.keys(eventMetaStamp);
-
 
                             //check stored value for each eventuid before adding it
                             eventUids.forEach(function(eventUid){
@@ -186,111 +182,85 @@ getListOfPatients(log, argv, function(err, patients) {
                                     patientSourceEventUids = patientSourceEventUids.concat(eventUid);
                                 }
                             });
-                            return eachDomainCallback(null);
-                        }
-                        else{
-                            return eachDomainCallback(null);
-                        }
-
-                    },
-                    function(err){
-                        if (err) {
-                            log.error('Error eachSeries on facilityDomainKeys');
-                            log.error(err);
-                            return eachFacilityCallback(err);
-                        }
-                        else{
-                            log.debug('Finished eachSeries on facilityDomainKeys');
-
-                            //all pids and event uids have been saved
-                            //now query solr
-
-                            //search with just the current facility pid
-                            var url = buildSolrSearchUrl([pid]);
-                            log.debug('Querying Solr with query: ' + url);
-                            // "docs": [
-                            //     {
-                            //         "uid": "urn:va:allergy:9E7A:3:751",
-                            //         "pid": "9E7A;3",
-                            //         "domain": "allergy"
-                            //     },
-                            //     {
-                            //         "uid": "urn:va:allergy:9E7A:3:874",
-                            //         "pid": "9E7A;3",
-                            //         "domain": "allergy"
-                            //     },
-                            //
-
-                            solr.search(url, function(err, result){
-                                if (err){
-                                    log.error('Error on solr.search');
-                                    log.error(err);
-
-                                    return eachFacilityCallback(err);
-                                }
-
-                                log.trace('eval solr search result');
-                                log.trace(result);
-
-                                log.debug('execution of solr query: ' + url + ', numFound: ' + result.response.numFound);
-                                patientTask.queryComplete = true;
-
-                                var docs = result.response.docs;
-
-                                //iterate through event uids, check for presence in solr results
-
-                                async.eachSeries(patientSourceEventUids, function(eventUid, solrCompareCallback){
-                                    var matchingDocs = _.findWhere(docs, {"uid": eventUid})
-                                    if (matchingDocs === undefined) {
-                                        //Record not found in Solr
-                                        patientTask.dataMissing = true;
-                                        log.info("Unable to find record " + eventUid + " in Solr");
-                                    }
-                                    return solrCompareCallback(null);
-                                },
-                                function(err){
-                                    if (err){
-                                        log.error('Error on eachSeries patientFacilityEventUids');
-                                        log.error(err);
-
-                                        return eachFacilityCallback(err);
-                                    }
-                                    else{
-                                        //done comparing
-                                        eachFacilityCallback(null);
-                                    }
-                                });
-                            });
                         }
                     });
 
+                    logger.debug('Finished eachSeries on facilityDomainKeys');
+
+                    //all pids and event uids have been saved
+                    //now query solr
+
+                    //search with just the current facility pid
+                    var url = buildSolrSearchUrl([pid]);
+                    logger.debug('Querying Solr with query: ' + url);
+                    // "docs": [
+                    //     {
+                    //         "uid": "urn:va:allergy:9E7A:3:751",
+                    //         "pid": "9E7A;3",
+                    //         "domain": "allergy"
+                    //     },
+                    //     {
+                    //         "uid": "urn:va:allergy:9E7A:3:874",
+                    //         "pid": "9E7A;3",
+                    //         "domain": "allergy"
+                    //     },
+                    //
+
+                    solr.search(url, function(err, result){
+                        if (err){
+                            logger.error('Error on solr.search');
+                            logger.error(err);
+
+                            return eachFacilityCallback(err);
+                        }
+
+                        logger.trace('eval solr search result');
+                        logger.trace(result);
+
+                        logger.debug('execution of solr query: ' + url + ', numFound: ' + result.response.numFound);
+                        patientTask.queryComplete = true;
+
+                        var docs = result.response.docs;
+
+                        patientTask.dataMissing = !(_.every(patientSourceEventUids, function(eventUid) {
+                            var matchingDocs = _.findWhere(docs, {uid: eventUid});
+                            if (matchingDocs === undefined) {
+                                logger.info('Unable to find record ' + eventUid + ' in Solr');
+                                return false;
+                            }
+                            return true;
+                        }));
+
+                        eachFacilityCallback(null);
+                    });
                 },
                 function(err){
                     if (err) {
-                        log.error('Error eachSeries on completedFacilityKeys');
-                        log.error(err);
+                        logger.error('Error eachSeries on completedFacilityKeys');
+                        logger.error(err);
                         return eachPatientCallback(err);
                     }
                     else{
-                        log.debug('Finished eachSeries on completedFacilityKeys');
+                        logger.debug('Finished eachSeries on completedFacilityKeys');
                         return eachPatientCallback(null);
                     }
                 });  //end eachSeries on completedFacilityKeys
+
             });  //end jds execute status
             },
             //series callback patientTasksInfo
             function(err){
                 if (err){
-                    log.error('Error encountered eachSeries within processPatients');
+                    logger.error('Error encountered eachSeries within processPatients');
                     process.exit();
                 }
                 else{
                     log.debug('processPatients complete...');
                     //write results
 
-                    writeOutputFile(patientTasksInfo, function(err){
+                    writeOutputFile(log, patientTasksInfo, function(){
                         process.exit();
-                    })
+                    });
                 }
             }); //end eachSeries patientTasksInfo
     }
@@ -299,25 +269,25 @@ getListOfPatients(log, argv, function(err, patients) {
 });
 
 //takes collection of {pid, dataMissing}
-function writeOutputFile(results, writeOutputFileCallback) {
+function writeOutputFile(logger, results, writeOutputFileCallback) {
     var fileContents = '';
     results.forEach(function (patientInfo) {
         if (patientInfo.dataMissing) {
-            log.debug('adding ' + patientInfo.pid + ' to results');
+            logger.debug('adding ' + patientInfo.pid + ' to results');
             fileContents += patientInfo.pid + '\n';
         }
-    })
+    });
 
     //write results to file
     fs.writeFile('/tmp/check-solr-results.txt', fileContents, function(err){
         if (err) {
-            log.debug('err: ' + err);
+            logger.debug('err: ' + err);
         }
-        log.debug('File written');
+        logger.debug('File written');
 
         writeOutputFileCallback(err);
     });
-};
+}
 
 
 
@@ -370,39 +340,40 @@ function parseOptions(logger) {
 
     return argv;
 }
+
 function getListOfPatients(logger, argv, callback) {
 
     logger.trace('getListOfPatients(): entering method...');
     //query jds by argument dates
-    queryJdsPatientsBySyncDateRange(argv.startdate, argv.enddate, function(err, response, result){
-        logger.debug('queryJdsPatientsBySyncDateRange callback')
+    queryJdsPatientsBySyncDateRange(logger, argv.startdate, argv.enddate, function(err, response, result){
+        logger.debug('queryJdsPatientsBySyncDateRange callback');
         if (err){
             logger.debug('error' + err);
             callback(err, null);
         }
 
         // var body = val(result, 'body');
-        log.info('getListOfPatients (initial JDS query) totalItems: ' + result.data.totalItems);
+        logger.info('getListOfPatients (initial JDS query) totalItems: ' + result.data.totalItems);
 
         var pidArray = _.map(result.data.items, 'pid');
         callback(null, pidArray);
     });
 
-};
+}
 
-function queryJdsPatientsBySyncDateRange(startdate, enddate, callback) {
-    log.debug('solr-check.querySyncsforDateRange() %s %s', startdate, enddate);
+function queryJdsPatientsBySyncDateRange(logger, startdate, enddate, callback) {
+    logger.debug('solr-check.querySyncsforDateRange() %s %s', startdate, enddate);
 
     if (_.isEmpty(startdate)) {
-        this.log.error('solr-check.querySyncsforDateRange() No startdate passed in');
+        logger.error('solr-check.querySyncsforDateRange() No startdate passed in');
         return setTimeout(callback, 0, errorUtil.createFatal('No startdate passed in'));
     }
     if (_.isEmpty(enddate)) {
-        this.log.error('solr-check.querySyncsforDateRange() No enddate passed in');
+        logger.error('solr-check.querySyncsforDateRange() No enddate passed in');
         return setTimeout(callback, 0, errorUtil.createFatal('No enddate passed in'));
     }
 
     // var path = '/vpr/' + pid;
-    var path = '/vpr/all/find/patient?filter=gt(stampTime,' + startdate + '),lt(stampTime,' + enddate + ')';
+    var path = '/vpr/all/find/patient?filter=dgt(stampTime,' + startdate + '),dlt(stampTime,' + enddate + ')';
     jdsClient.execute(path, null, 'GET', {}, callback);
-};
+}

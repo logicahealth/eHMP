@@ -11,7 +11,20 @@ define([
     'hbs!app/applets/documents/detail/complex/resultDocTemplate',
     'app/applets/documents/detail/dodComplexNoteUtil',
     'app/applets/documents/imaging/views/thumbnailCollectionView'
-], function(Backbone, Marionette, _, Handlebars, appConfig, appletHelper, AddendaView, complexDetailWrapperTemplate, resultsTemplate, resultDocTemplate, dodComplexNoteUtil, ThumbnailCollectionView) {
+], function(
+    Backbone,
+    Marionette,
+    _,
+    Handlebars,
+    appConfig,
+    appletHelper,
+    AddendaView,
+    complexDetailWrapperTemplate,
+    resultsTemplate,
+    resultDocTemplate,
+    dodComplexNoteUtil,
+    ThumbnailCollectionView
+) {
     'use strict';
 
     var DEBUG = appConfig.debug;
@@ -139,12 +152,14 @@ define([
             if (collection.isEmpty()) {
                 return false;
             } else {
-                if (collection.length > 1) { return false; }
+                if (collection.length > 1) {
+                    return false;
+                }
                 model = collection.at(0);
-                if (!_.isUndefined(model.get('status'))){
+                if (!_.isUndefined(model.get('status'))) {
                     status = model.get('status');
                     // JDS or RDK error
-                    if (((status.toString().length === 3) && (status !== 200)) || ((status.toString().length === 1) && (status === 0))) { 
+                    if (((status.toString().length === 3) && (status !== 200)) || ((status.toString().length === 1) && (status === 0))) {
                         return true;
                     }
                 }
@@ -203,11 +218,6 @@ define([
                     }));
                 }
             }
-            if (this.model.get('hasImages')) {
-                this.thumbnailRegion.show(new ThumbnailCollectionView({
-                    collection: this.model.get('thumbnails'),
-                }));
-            }
 
             ADK.Messaging.getChannel('search').trigger('documentsLoaded', this.$el);
         },
@@ -240,7 +250,7 @@ define([
 
             // if we're waiting for child documents to be fetched, show a loading view
             if (this.hasChildDocuments()) {
-                if(!this.childDocCollection.xhr) {
+                if (!this.childDocCollection.xhr) {
                     this.onChildDocsReady();
                 } else {
                     this.childrenRegion.show(ADK.Views.Loading.create());
@@ -248,10 +258,9 @@ define([
             }
             // if we're waiting for result documents to be fetched, show a loading view
             if (this.hasResultDocuments()) {
-                if(!this.resultDocCollection.xhr) {
+                if (!this.resultDocCollection.xhr) {
                     this.onChildDocsReady();
-                }
-                else {
+                } else {
                     this.resultsRegion.show(ADK.Views.Loading.create());
                 }
             } else {
@@ -264,28 +273,14 @@ define([
                 dodComplexNoteUtil.showContent.call(this, this.model);
             }
         },
-        getNextModal: function(model, view, resultDocCollection, childDocCollection) {
-            var modals = model.collection.models;
-            var next = _.indexOf(modals, model) + 1;
-            var newModel = modals[next];
-            var appletRows = _.filter($('[data-appletid="documents"] tbody tr'), function(item) { return !($(item).hasClass('group-by-header')); });
-            appletRows[next].click();
-        },
-        getPrevModal: function(model, view, resultDocCollection, childDocCollection) {
-            var modals = model.collection.models;
-            var next = _.indexOf(modals, model) - 1;
-            var newMmodel = modals[next];
-            var appletRows = _.filter($('[data-appletid="documents"] tbody tr'), function(item) { return !($(item).hasClass('group-by-header')); });
-            appletRows[next].click();
-        },
-        onBeforeShow:function(){
+        onBeforeShow: function() {
             if (this.model.get('hasImages')) {
                 this.thumbnailRegion.show(new ThumbnailCollectionView({
-                    collection: this.model.get('thumbnails'),
+                    collection: this.model.get('thumbnailCollection'),
+                    avoidFetch: (_.isString(this.model.get('facilityCode')) && this.model.get('facilityCode').toLowerCase() === 'dod') //in case of DOD images
                 }));
             }
         }
     });
-
     return DocumentDetailView;
 });

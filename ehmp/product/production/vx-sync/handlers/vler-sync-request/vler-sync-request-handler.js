@@ -85,9 +85,23 @@ function handle(log, config, environment, job, handlerCallback) {
                 vprRecord.data.items.push(document);
                 var record = {
                     icn: idUtil.extractIcnFromPid(job.patientIdentifier.value, config),
-                    document: document
+                    document: document,
+                    uid: document.uid,
+                    stampTime: requestStampTime,
+                    pid: document.pid
                 };
-                return jobUtil.createVlerXformVpr(job.patientIdentifier, 'vlerdocument', record, requestStampTime, job, job.priority);
+                // Create meta object for job information for all new VlerXformVpr jobs.
+                // This shouldn't contain a jobId, as the jobUtil will create one for us.
+                var meta = {
+                    jpid: job.jpid,
+                    rootJobId: job.rootJobId,
+                    priority: job.priority
+                };
+
+                if (job.referenceInfo) {
+                    meta.referenceInfo = job.referenceInfo;
+                }
+                return jobUtil.createVlerXformVpr(job.patientIdentifier, 'vlerdocument', record, requestStampTime, meta);
             });
 
             // If we have no data coming back - then there is no need to create a meta-stamp or go any further on this one.

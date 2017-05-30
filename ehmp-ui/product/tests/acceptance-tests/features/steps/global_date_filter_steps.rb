@@ -1,7 +1,7 @@
 def open_gdf
   @ehmp = PobGlobalDateFilter.new unless @ehmp.is_a? PobGlobalDateFilter
   expect(@ehmp).to have_btn_date_region_minimized
-  @ehmp.btn_date_region_minimized.click
+  @ehmp.btn_date_region_minimized.click unless @ehmp.has_btn_2yr_range?
   @ehmp.wait_until_btn_2yr_range_visible
   expect(@ehmp.btn_2yr_range.visible?).to eq(true)
 end

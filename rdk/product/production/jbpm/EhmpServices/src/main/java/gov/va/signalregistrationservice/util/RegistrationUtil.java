@@ -1,6 +1,5 @@
 package gov.va.signalregistrationservice.util;
 
-import gov.va.ehmp.services.utils.Logging;
 import gov.va.signalregistrationservice.entities.EventListener;
 import gov.va.signalregistrationservice.entities.EventMatchAction;
 import gov.va.signalregistrationservice.entities.EventMatchCriteria;
@@ -14,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
+import org.jboss.logging.Logger;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.EnvironmentName;
 import org.kie.api.runtime.KieSession;
@@ -24,6 +24,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class RegistrationUtil {
+	private static final Logger LOGGER = Logger.getLogger(RegistrationUtil.class);
 
 	private static void recurse(JsonElement json, String prefix, Map<String, String> map) {
 		if (json == null) {
@@ -45,7 +46,7 @@ public class RegistrationUtil {
 			}
 		}
 		else {
-			Logging.info("Json was not a primitive, jsonArray, or jsonObject - treating as null");
+			LOGGER.info("Json was not a primitive, jsonArray, or jsonObject - treating as null");
 			return;
 		}
 	}

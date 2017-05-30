@@ -44,6 +44,7 @@ define :ehmp_ui_manifest, :path => "" do
 
     execute "uploading artifact version shell to nexus" do
       command "curl -v -F r=releases -F hasPom=false -F e=sh -F g=us.vistacore -F a=artifact-versions-shell -F v=#{overall_version} -F p=sh -F file=@#{version_host_path} -u #{nexus_creds['username']}:#{nexus_creds['password']} #{node[:common][:nexus_url]}/nexus/service/local/artifact/maven/content"
+      sensitive true
     end
 
   end

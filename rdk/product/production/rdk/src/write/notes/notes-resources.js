@@ -116,6 +116,7 @@ function addNote(req, res) {
 
 function addAddendum(req, res) {
     var tasks = [
+        validateNote.checkIfCosignRequired,
         validateNote.createAddendum,
         writeNoteTask.getDefinitions,
         writeNoteToPjds.createAddendum,
@@ -137,6 +138,7 @@ function updateAddendum(req, res) {
 
 function updateNote(req, res) {
     var tasks = [
+        validateNote.checkIfCosignRequired,
         validateNote.update,
         writeNoteToPjds.update,
         writeNoteAudit.update
@@ -161,6 +163,7 @@ function deleteUnsignedNotes(req, res) { //jshint ignore:line
 }
 function signNotes(req, res) {
     var tasks = [
+        validateNote.checkIfCosignRequired,
         validateNote.sign,
         writeNoteToVista.validateSignature,
         writeNoteToPjds.preSignNotes,
@@ -185,6 +188,7 @@ function signNotes(req, res) {
 
 function signAddendum(req, res) {
     var tasks = [
+        validateNote.checkIfCosignRequired,
         validateNote.signAddendum,
         writeNoteToVista.validateSignature,
         writeNoteTask.getDefinitions,

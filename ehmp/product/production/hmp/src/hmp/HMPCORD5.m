@@ -1,5 +1,5 @@
 HMPCORD5 ;SLC/AGP,ASMR/EJK,RRB - Retrieved Orderable Items;Sep 1, 2016 17:27:27
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**3**;Sep 01, 2011;Build 63
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**3**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; DE2497/RRB - Removed unused variable, HMP777

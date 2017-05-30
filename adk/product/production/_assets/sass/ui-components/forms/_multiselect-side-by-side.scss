@@ -19,10 +19,6 @@
             font-size: 13px;
             font-weight: 600;
             color: $red-dark;
-            text-transform: lowercase;
-            &:first-letter{
-                text-transform: capitalize;
-            }
         }
     }
     .table-cell {

@@ -34,7 +34,7 @@ Scenario: User views vitals coversheet to view data
     | CG    | 
 
 
-@US2800e
+@US2800e @US18204
 Scenario: User views vitals expanded applet
   # Given user is logged into eHMP-UI
   And user searches for and selects "EIGHT,Patient"
@@ -43,10 +43,10 @@ Scenario: User views vitals expanded applet
   Then the expanded vitals applet is displayed
   Then the Vitals expanded headers are
       | Headers       |
-      | Date Observed |
+      | Observed      |
       | Type          |
       | Result        |
-      | Date Entered  |
+      | Entered       |
       | Qualifiers    |
       | Facility      |
 
@@ -75,7 +75,7 @@ Scenario: User uses the vitals expanded view to filter by date
   Then the Expanded Vitals applet only displays rows from the last 24 hours
 
 
-@f144_vitals_modal_details @data_specific @DE4976 @DE6010
+@f144_vitals_modal_details @data_specific @US18204 @DE4976 @DE6010
 Scenario: Users will be able to view modal popup for a particular vital 
   # Given user is logged into eHMP-UI
   And user searches for and selects "Eight,Patient"
@@ -90,10 +90,10 @@ Scenario: Users will be able to view modal popup for a particular vital
       | modal item     |
       | Vital          | 
       | Result         | 
-      | Date Observed  | 
+      | Observed       | 
       | Facility       | 
       | Type		   |
-      | Date Entered   |
+      | Entered        |
         
 @f144_vitals_applet_summary_view_refresh 
 Scenario: Vitals Summary applet displays all of the same details after applet is refreshed

@@ -1,0 +1,14 @@
+{
+    "title": "eHMP's User Interface (eHMP-UI)",
+    "showHomeButton": true,
+    "titleLink": "./#/ui/",
+    "left_nav_items": [],
+    "right_nav_items": [{
+        "name": "Applets",
+        "url": "./#/ui/applets/"
+    }, {
+        "name": "Screens",
+        "url": "./#/ui/screens/"
+    }],
+    "footer_nav_items": []
+}

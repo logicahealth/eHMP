@@ -1,25 +1,25 @@
 <div class="row panel-heading header-content-container"></div>
 <div data-flex-width="1" class="row panel-body auto-overflow-y">
-    <div class="col-xs-12 demographic-group-wrapper">
-        <div class="demographic-group-header">
+    <div class="col-xs-12 group-wrapper">
+        <div class="group-header">
             <h5>Primary Care Provider</h5>
             {{#if primaryProvider.diff}}
             <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapsePrimaryCareProvider" aria-expanded="false" aria-controls="discrepanciesCollapsePrimaryCareProvider" tooltip-data-key="patient_information_deatils_discrepancies">
-                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <i class="fa fa-exclamation-circle subgroup-icon"></i>
                 <span class="sr-only">Press enter to view different data found at other sites</span>
             </button>
             {{/if}}
         </div>
-        <div class="demographic-group-content card-style" data-diff="{{primaryProvider.diff}}">
+        <div class="group-content card-style" data-diff="{{primaryProvider.diff}}">
             <dl class="dl-horizontal">
                 <dt>Name</dt>
-                <dd class="demographic-data">{{toTitleCase primaryProvider.name true 'Unassigned'}}</dd>
+                <dd class="group-data">{{toTitleCase primaryProvider.name true 'Unassigned'}}</dd>
                 <dt>Analog Pager</dt>
-                <dd class="demographic-data">{{formatPhone primaryProvider.analogPager 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone primaryProvider.analogPager 'not specified'}}</dd>
                 <dt>Digital Pager</dt>
-                <dd class="demographic-data">{{formatPhone primaryProvider.digitalPager 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone primaryProvider.digitalPager 'not specified'}}</dd>
                 <dt>Office Phone</dt>
-                <dd class="demographic-data">{{formatPhone primaryProvider.officePhone 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone primaryProvider.officePhone 'not specified'}}</dd>
             </dl>
             <!-- Show the different data from the external sites as their own primary provider card-->
             {{#if primaryProvider.diff}}
@@ -33,13 +33,13 @@
                         <dd>
                             <dl class="dl-horizontal">
                                 <dt>Name</dt>
-                                <dd class="demographic-data">{{toTitleCase primaryProvider.name true 'Unassigned'}}</dd>
+                                <dd class="group-data">{{toTitleCase primaryProvider.name true 'Unassigned'}}</dd>
                                 <dt>Analog Pager</dt>
-                                <dd class="demographic-data">{{formatPhone primaryProvider.analogPager 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone primaryProvider.analogPager 'not specified'}}</dd>
                                 <dt>Digital Pager</dt>
-                                <dd class="demographic-data">{{formatPhone primaryProvider.digitalPager 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone primaryProvider.digitalPager 'not specified'}}</dd>
                                 <dt>Office Phone</dt>
-                                <dd class="demographic-data">{{formatPhone primaryProvider.officePhone 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone primaryProvider.officePhone 'not specified'}}</dd>
                             </dl>
                         </dd>
                     {{/if}}
@@ -50,26 +50,26 @@
             {{/if}}
         </div>
     </div>
-    <div class="col-xs-12 demographic-group-wrapper">
-        <div class="demographic-group-header">
+    <div class="col-xs-12 group-wrapper">
+        <div class="group-header">
             <h5>Primary Care Assoc Provider</h5>
             {{#if associateProvider.diff}}
             <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapsePrimaryCarAssocProvider" aria-expanded="false" aria-controls="discrepanciesCollapsePrimaryCarAssocProvider" tooltip-data-key="patient_information_deatils_discrepancies">
-                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <i class="fa fa-exclamation-circle subgroup-icon"></i>
                 <span class="sr-only">Press enter to view different data found at other sites</span>
             </button>
             {{/if}}
         </div>
-        <div class="demographic-group-content card-style" data-diff="{{associateProvider.diff}}">
+        <div class="group-content card-style" data-diff="{{associateProvider.diff}}">
             <dl class="dl-horizontal">
                 <dt>Name</dt>
-                <dd class="demographic-data">{{toTitleCase associateProvider.name true 'Unassigned'}}</dd>
+                <dd class="group-data">{{toTitleCase associateProvider.name true 'Unassigned'}}</dd>
                 <dt>Analog Pager</dt>
-                <dd class="demographic-data">{{formatPhone associateProvider.analogPager 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone associateProvider.analogPager 'not specified'}}</dd>
                 <dt>Digital Pager</dt>
-                <dd class="demographic-data">{{formatPhone associateProvider.digitalPager 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone associateProvider.digitalPager 'not specified'}}</dd>
                 <dt>Office Phone</dt>
-                <dd class="demographic-data">{{formatPhone associateProvider.officePhone 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone associateProvider.officePhone 'not specified'}}</dd>
             </dl>
             <!-- Show the different data from the external sites as their own primary provider card-->
             {{#if associateProvider.diff}}
@@ -83,13 +83,13 @@
                         <dd>
                             <dl class="dl-horizontal">
                                 <dt>Name</dt>
-                                <dd class="demographic-data">{{toTitleCase associateProvider.name true 'Unassigned'}}</dd>
+                                <dd class="group-data">{{toTitleCase associateProvider.name true 'Unassigned'}}</dd>
                                 <dt>Analog Pager</dt>
-                                <dd class="demographic-data">{{formatPhone associateProvider.analogPager 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone associateProvider.analogPager 'not specified'}}</dd>
                                 <dt>Digital Pager</dt>
-                                <dd class="demographic-data">{{formatPhone associateProvider.digitalPager 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone associateProvider.digitalPager 'not specified'}}</dd>
                                 <dt>Office Phone</dt>
-                                <dd class="demographic-data">{{formatPhone associateProvider.officePhone 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone associateProvider.officePhone 'not specified'}}</dd>
                             </dl>
                         </dd>
                     {{/if}}
@@ -101,26 +101,26 @@
         </div>
     </div>
     {{#if isInpatient}}
-    <div class="col-xs-12 demographic-group-wrapper">
-        <div class="demographic-group-header">
+    <div class="col-xs-12 group-wrapper">
+        <div class="group-header">
             <h5>Inpatient Attending Provider</h5>
             {{#if attendingProvider.diff}}
             <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseInpatientAttendingProvider" aria-expanded="false" aria-controls="discrepanciesCollapseInpatientAttendingProvider" tooltip-data-key="patient_information_deatils_discrepancies">
-                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <i class="fa fa-exclamation-circle subgroup-icon"></i>
                 <span class="sr-only">Press enter to view different data found at other sites</span>
             </button>
             {{/if}}
         </div>
-        <div class="demographic-group-content card-style" data-diff="{{attendingProvider.diff}}">
+        <div class="group-content card-style" data-diff="{{attendingProvider.diff}}">
             <dl class="dl-horizontal">
                 <dt>Name</dt>
-                <dd class="demographic-data">{{toTitleCase attendingProvider.name true 'Unassigned'}}</dd>
+                <dd class="group-data">{{toTitleCase attendingProvider.name true 'Unassigned'}}</dd>
                 <dt>Analog Pager</dt>
-                <dd class="demographic-data">{{formatPhone attendingProvider.analogPager 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone attendingProvider.analogPager 'not specified'}}</dd>
                 <dt>Digital Pager</dt>
-                <dd class="demographic-data">{{formatPhone attendingProvider.digitalPager 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone attendingProvider.digitalPager 'not specified'}}</dd>
                 <dt>Office Phone</dt>
-                <dd class="demographic-data">{{formatPhone attendingProvider.officePhone 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone attendingProvider.officePhone 'not specified'}}</dd>
             </dl>
             <!-- Show the different data from the external sites as their own primary provider card-->
             {{#if attendingProvider.diff}}
@@ -134,13 +134,13 @@
                         <dd>
                             <dl class="dl-horizontal">
                                 <dt>Name</dt>
-                                <dd class="demographic-data">{{toTitleCase attendingProvider.name true 'Unassigned'}}</dd>
+                                <dd class="group-data">{{toTitleCase attendingProvider.name true 'Unassigned'}}</dd>
                                 <dt>Analog Pager</dt>
-                                <dd class="demographic-data">{{formatPhone attendingProvider.analogPager 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone attendingProvider.analogPager 'not specified'}}</dd>
                                 <dt>Digital Pager</dt>
-                                <dd class="demographic-data">{{formatPhone attendingProvider.digitalPager 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone attendingProvider.digitalPager 'not specified'}}</dd>
                                 <dt>Office Phone</dt>
-                                <dd class="demographic-data">{{formatPhone attendingProvider.officePhone 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone attendingProvider.officePhone 'not specified'}}</dd>
                             </dl>
                         </dd>
                     {{/if}}
@@ -151,26 +151,26 @@
             {{/if}}
         </div>
     </div>
-    <div class="col-xs-12 demographic-group-wrapper">
-        <div class="demographic-group-header">
+    <div class="col-xs-12 group-wrapper">
+        <div class="group-header">
             <h5>Inpatient Provider</h5>
             {{#if inpatientProvider.diff}}
             <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseInpatientProvider" aria-expanded="false" aria-controls="discrepanciesCollapseInpatientProvider" tooltip-data-key="patient_information_deatils_discrepancies">
-                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <i class="fa fa-exclamation-circle subgroup-icon"></i>
                 <span class="sr-only">Press enter to view different data found at other sites</span>
             </button>
             {{/if}}
         </div>
-        <div class="demographic-group-content card-style" data-diff="{{inpatientProvider.diff}}">
+        <div class="group-content card-style" data-diff="{{inpatientProvider.diff}}">
             <dl class="dl-horizontal">
                 <dt>Name</dt>
-                <dd class="demographic-data">{{toTitleCase inpatientProvider.name true 'Unassigned'}}</dd>
+                <dd class="group-data">{{toTitleCase inpatientProvider.name true 'Unassigned'}}</dd>
                 <dt>Analog Pager</dt>
-                <dd class="demographic-data">{{formatPhone inpatientProvider.analogPager 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone inpatientProvider.analogPager 'not specified'}}</dd>
                 <dt>Digital Pager</dt>
-                <dd class="demographic-data">{{formatPhone inpatientProvider.digitalPager 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone inpatientProvider.digitalPager 'not specified'}}</dd>
                 <dt>Office Phone</dt>
-                <dd class="demographic-data">{{formatPhone inpatientProvider.officePhone 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone inpatientProvider.officePhone 'not specified'}}</dd>
             </dl>
             <!-- Show the different data from the external sites as their own primary provider card-->
             {{#if inpatientProvider.diff}}
@@ -184,13 +184,13 @@
                         <dd>
                             <dl class="dl-horizontal">
                                 <dt>Name</dt>
-                                <dd class="demographic-data">{{toTitleCase inpatientProvider.name true 'Unassigned'}}</dd>
+                                <dd class="group-data">{{toTitleCase inpatientProvider.name true 'Unassigned'}}</dd>
                                 <dt>Analog Pager</dt>
-                                <dd class="demographic-data">{{formatPhone inpatientProvider.analogPager 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone inpatientProvider.analogPager 'not specified'}}</dd>
                                 <dt>Digital Pager</dt>
-                                <dd class="demographic-data">{{formatPhone inpatientProvider.digitalPager 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone inpatientProvider.digitalPager 'not specified'}}</dd>
                                 <dt>Office Phone</dt>
-                                <dd class="demographic-data">{{formatPhone inpatientProvider.officePhone 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone inpatientProvider.officePhone 'not specified'}}</dd>
                             </dl>
                         </dd>
                     {{/if}}
@@ -202,22 +202,22 @@
         </div>
     </div>
     {{/if}}
-    <div class="col-xs-12 demographic-group-wrapper">
-        <div class="demographic-group-header">
+    <div class="col-xs-12 group-wrapper">
+        <div class="group-header">
             <h5>MH Treatment Team</h5>
             {{#if mhCoordinator.diff}}
             <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseMHTreatmentTeam" aria-expanded="false" aria-controls="discrepanciesCollapseMHTreatmentTeam" tooltip-data-key="patient_information_deatils_discrepancies">
-                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <i class="fa fa-exclamation-circle subgroup-icon"></i>
                 <span class="sr-only">Press enter to view different data found at other sites</span>
             </button>
             {{/if}}
         </div>
-        <div class="demographic-group-content card-style" data-diff="{{mhCoordinator.diff}}">
+        <div class="group-content card-style" data-diff="{{mhCoordinator.diff}}">
             <dl class="dl-horizontal">
                 <dt>Name</dt>
-                <dd class="demographic-data">{{toTitleCase mhCoordinator.mhTeam true 'Unassigned'}}</dd>
+                <dd class="group-data">{{toTitleCase mhCoordinator.mhTeam true 'Unassigned'}}</dd>
                 <dt>Office Phone</dt>
-                <dd class="demographic-data">{{formatPhone mhCoordinator.mhTeamOfficePhone 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone mhCoordinator.mhTeamOfficePhone 'not specified'}}</dd>
             </dl>
             <!-- Show the different data from the external sites as their own primary provider card-->
             {{#if mhCoordinator.diff}}
@@ -231,9 +231,9 @@
                         <dd>
                             <dl class="dl-horizontal">
                                 <dt>Name</dt>
-                                <dd class="demographic-data">{{toTitleCase mhCoordinator.mhTeam true 'Unassigned'}}</dd>
+                                <dd class="group-data">{{toTitleCase mhCoordinator.mhTeam true 'Unassigned'}}</dd>
                                 <dt>Office Phone</dt>
-                                <dd class="demographic-data">{{formatPhone mhCoordinator.mhTeamOfficePhone 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone mhCoordinator.mhTeamOfficePhone 'not specified'}}</dd>
                             </dl>
                         </dd>
                     {{/if}}
@@ -244,26 +244,26 @@
             {{/if}}
         </div>
     </div>
-    <div class="col-xs-12 demographic-group-wrapper">
-        <div class="demographic-group-header">
+    <div class="col-xs-12 group-wrapper">
+        <div class="group-header">
             <h5>MH Treatment Coordinator</h5>
             {{#if mhCoordinator.diff}}
             <button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseMHTreatmentCoordinator" aria-expanded="false" aria-controls="discrepanciesCollapseMHTreatmentCoordinator" tooltip-data-key="patient_information_deatils_discrepancies">
-                <i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+                <i class="fa fa-exclamation-circle subgroup-icon"></i>
                 <span class="sr-only">Press enter to view different data found at other sites</span>
             </button>
             {{/if}}
         </div>
-        <div class="demographic-group-content card-style" data-diff="{{mhCoordinator.diff}}">
+        <div class="group-content card-style" data-diff="{{mhCoordinator.diff}}">
             <dl class="dl-horizontal">
                 <dt>Name</dt>
-                <dd class="demographic-data">{{toTitleCase mhCoordinator.name true 'Unassigned'}}</dd>
+                <dd class="group-data">{{toTitleCase mhCoordinator.name true 'Unassigned'}}</dd>
                 <dt>Analog Pager</dt>
-                <dd class="demographic-data">{{formatPhone mhCoordinator.analogPager 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone mhCoordinator.analogPager 'not specified'}}</dd>
                 <dt>Digital Pager</dt>
-                <dd class="demographic-data">{{formatPhone mhCoordinator.digitalPager 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone mhCoordinator.digitalPager 'not specified'}}</dd>
                 <dt>Office Phone</dt>
-                <dd class="demographic-data">{{formatPhone mhCoordinator.officePhone 'not specified'}}</dd>
+                <dd class="group-data">{{formatPhone mhCoordinator.officePhone 'not specified'}}</dd>
             </dl>
             <!-- Show the different data from the external sites as their own primary provider card-->
             {{#if mhCoordinator.diff}}
@@ -277,13 +277,13 @@
                         <dd>
                             <dl class="dl-horizontal">
                                 <dt>Name</dt>
-                                <dd class="demographic-data">{{toTitleCase mhCoordinator.name true 'Unassigned'}}</dd>
+                                <dd class="group-data">{{toTitleCase mhCoordinator.name true 'Unassigned'}}</dd>
                                 <dt>Analog Pager</dt>
-                                <dd class="demographic-data">{{formatPhone mhCoordinator.analogPager 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone mhCoordinator.analogPager 'not specified'}}</dd>
                                 <dt>Digital Pager</dt>
-                                <dd class="demographic-data">{{formatPhone mhCoordinator.digitalPager 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone mhCoordinator.digitalPager 'not specified'}}</dd>
                                 <dt>Office Phone</dt>
-                                <dd class="demographic-data">{{formatPhone mhCoordinator.officePhone 'not specified'}}</dd>
+                                <dd class="group-data">{{formatPhone mhCoordinator.officePhone 'not specified'}}</dd>
                             </dl>
                         </dd>
                     {{/if}}

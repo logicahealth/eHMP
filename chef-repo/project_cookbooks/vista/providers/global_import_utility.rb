@@ -85,9 +85,11 @@ action :create do
       end
 
       # Delete existing cross-references
-      new_resource.dik_da_pairs.each do | dik_da |
-        shell.wait_for(:output, /#{node[:vista][:prompt]}/) do | process, match |
-          process.write("S DIK=\"#{dik_da[0]}\",DA=\"#{dik_da[1]}\" D IX2^DIK\n")
+      unless new_resource.no_cross_ref
+        new_resource.dik_da_pairs.each do | dik_da |
+          shell.wait_for(:output, /#{node[:vista][:prompt]}/) do | process, match |
+            process.write("S DIK=\"#{dik_da[0]}\",DA=\"#{dik_da[1]}\" D IX2^DIK\n")
+          end
         end
       end
 

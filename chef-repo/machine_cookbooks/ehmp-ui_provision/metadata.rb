@@ -4,9 +4,9 @@ maintainer_email 'team-milkyway@vistacore.us'
 license          'All rights reserved'
 description      'Installs/Configures ehmp-ui_provision'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.14"
+version          "2.1.19"
 
-depends "machine", "2.1.8"
+depends "machine", "2.1.9"
 
 depends "ehmp-ui", "2.1.2"
-depends "ehmp_balancer", "2.1.4"
+depends "ehmp_balancer", "2.1.7"

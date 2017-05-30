@@ -9,6 +9,6 @@
 #     IBM Corporation - initial API and implementation
 ###############################################################################
 
-rdkUrl=http://<%= @rdks[0]['ipaddress'] %>:8888/resource
+rdkUrl=http://<%= @fetch_server_host %>:<%= @fetch_server_port %>/resource
 
 metricsServicePath=cds/metrics

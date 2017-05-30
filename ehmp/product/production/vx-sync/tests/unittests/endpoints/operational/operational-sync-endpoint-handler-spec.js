@@ -79,8 +79,8 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: '10.2.2.110',
-                    port: 9080
+                    host: 'IP        ',
+                    port: PORT
                 }
             };
             var jdsClientDummy = new JdsClientDummy(log, config);
@@ -109,8 +109,8 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: '10.2.2.110',
-                    port: 9080
+                    host: 'IP        ',
+                    port: PORT
                 }
             };
             var jdsClientDummy = new JdsClientDummy(log, config);
@@ -139,8 +139,8 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: '10.2.2.110',
-                    port: 9080
+                    host: 'IP        ',
+                    port: PORT
                 }
             };
             var jdsClientDummy = new JdsClientDummy(log, config);
@@ -171,8 +171,8 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: '10.2.2.110',
-                    port: 9080
+                    host: 'IP        ',
+                    port: PORT
                 }
             };
             var jdsClientDummy = new JdsClientDummy(log, config);
@@ -203,8 +203,8 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: '10.2.2.110',
-                    port: 9080
+                    host: 'IP        ',
+                    port: PORT
                 }
             };
             var jdsClientDummy = new JdsClientDummy(log, config);
@@ -259,8 +259,8 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: '10.2.2.110',
-                    port: 9080
+                    host: 'IP        ',
+                    port: PORT
                 }
             };
             var jdsClientDummy = new JdsClientDummy(log, config);
@@ -305,8 +305,8 @@ describe('operational-sync-endpoint-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: '10.2.2.110',
-                    port: 9080
+                    host: 'IP        ',
+                    port: PORT
                 }
             };
             var jdsClientDummy = new JdsClientDummy(log, config);
@@ -346,6 +346,46 @@ describe('operational-sync-endpoint-handler', function() {
 
             waitsFor(function() {
                 return done;
+            });
+        });
+    });
+
+    describe('doLoad', function() {
+        var environment = {
+            publisherRouter: {
+                childInstance: function() { return this; },
+                publish: function(job, options, callback) {
+                    callback();
+                }
+            }
+        };
+        var req = {
+            param: function() { return ['9E7A']; },
+            headers: {
+                'x-session-id': 'sessionId',
+                'x-request-id': 'requestId'
+            }
+        };
+        var res = {
+            status: function() {
+                return this;
+            },
+            send: jasmine.createSpy()
+        };
+        it('uses referenceInfo', function() {
+            spyOn(log, 'child').andCallThrough();
+            runs(function() {
+                handler.doLoad(log, environment, req, res);
+            });
+            waitsFor(function() {
+                return res.send.calls;
+            });
+            runs(function() {
+                expect(log.child).toHaveBeenCalled();
+                expect(log.child).toHaveBeenCalledWith(jasmine.objectContaining({
+                    'sessionId': 'sessionId',
+                    'requestId': 'requestId'
+                }));
             });
         });
     });

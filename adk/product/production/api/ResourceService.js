@@ -11,7 +11,7 @@ define([
     "main/pageable/pageable",
     "backbone.paginator",
     "backbone.fetch-cache"
-], function(Backbone, $, UrlBuilder, session, utils, SessionStorage, UserService, Nav, Enrichment, ADKPagable) {
+], function (Backbone, $, UrlBuilder, session, utils, SessionStorage, UserService, Nav, Enrichment, ADKPagable) {
     'use strict';
 
     var DEFAULT_CACHE = true;
@@ -32,26 +32,26 @@ define([
         }
     });
 
-    Backbone.Collection.prototype.next = function(model) {
+    Backbone.Collection.prototype.next = function (model) {
         return this.at(this.index(model) + 1) || model;
     };
 
-    Backbone.Collection.prototype.prev = function(model) {
+    Backbone.Collection.prototype.prev = function (model) {
         return this.at(this.index(model) - 1) || model;
     };
 
-    Backbone.Collection.prototype.index = function(model) {
+    Backbone.Collection.prototype.index = function (model) {
         return this.indexOf(model);
     };
 
-    Backbone.Collection.prototype.count = function() {
+    Backbone.Collection.prototype.count = function () {
         return this.length;
     };
 
     //we create cleanup function to clean extraneous properties
     //that we set on the original backbone collection.
     //this cleans up potential closures from calling applets (fetchOptions being main problem).
-    Backbone.Collection.prototype.cleanUp = function() {
+    Backbone.Collection.prototype.cleanUp = function () {
 
         if (this.hasOwnProperty('originalModels')) {
             delete this.originalModels;
@@ -66,31 +66,31 @@ define([
 
     };
 
-    Backbone.PageableCollection.prototype.next = function(model) {
+    Backbone.PageableCollection.prototype.next = function (model) {
         return this.fullCollection.at(this.index(model) + 1) || model;
     };
 
-    Backbone.PageableCollection.prototype.prev = function(model) {
+    Backbone.PageableCollection.prototype.prev = function (model) {
         return this.fullCollection.at(this.index(model) - 1) || model;
     };
 
-    Backbone.PageableCollection.prototype.index = function(model) {
+    Backbone.PageableCollection.prototype.index = function (model) {
         return this.fullCollection.indexOf(model);
     };
 
-    Backbone.PageableCollection.prototype.count = function() {
+    Backbone.PageableCollection.prototype.count = function () {
         return this.fullCollection.length;
     };
 
-    Backbone.Collection.prototype.initialize = function(collection, config) {
+    Backbone.Collection.prototype.initialize = function (collection, config) {
         if (config && config.collectionParse) {
-            this.collectionParse = function(collection) {
+            this.collectionParse = function (collection) {
                 return config.collectionParse(collection);
             };
         }
     };
 
-    Backbone.Collection.prototype.parse = function(response) {
+    Backbone.Collection.prototype.parse = function (response) {
         var parsedResponse;
         if (response.data) {
             if (response.data.items) {
@@ -103,21 +103,21 @@ define([
         }
 
         if (this.collectionParse) {
-            this.reset(parsedResponse, {silent:true});
+            this.reset(parsedResponse, {silent: true});
             parsedResponse = this.collectionParse(this);
         }
         return parsedResponse;
     };
 
-    Backbone.PageableCollection.prototype.initialize = function(collection, config) {
+    Backbone.PageableCollection.prototype.initialize = function (collection, config) {
         if (config && config.collectionParse) {
-            this.collectionParse = function(collection) {
+            this.collectionParse = function (collection) {
                 return config.collectionParse(collection);
             };
         }
     };
 
-    Backbone.PageableCollection.prototype.parse = function(response) {
+    Backbone.PageableCollection.prototype.parse = function (response) {
         var parsedResponse;
         var collectionConfigCollectionParse = _.get(this, 'fetchOptions.collectionConfig.collectionParse');
         if(_.isFunction(collectionConfigCollectionParse)) {
@@ -135,7 +135,7 @@ define([
         }
 
         if (collectionParse) {
-            this.reset(parsedResponse, {silent:true});
+            this.reset(parsedResponse, {silent: true});
             parsedResponse = collectionParse(this);
         }
         return parsedResponse;
@@ -149,7 +149,7 @@ define([
         model: Domain
     });
 
-    var setResponseLogId = function(resp, options) {
+    var setResponseLogId = function (resp, options) {
         if (options.xhr.getResponseHeader('logId')) {
             resp.logId = options.xhr.getResponseHeader('logId').concat(' (', resp.status, ')');
         }
@@ -165,7 +165,7 @@ define([
             fetchOptions.resourceTitle = undefined;
             return this.fetchCollection(fetchOptions);
         },
-        fetchCollection: function(options, existingCollection) {
+        fetchCollection: function (options, existingCollection) {
             var resourceTitle = options.resourceTitle;
             var viewModel = options.viewModel;
             var criteria = options.criteria;
@@ -265,7 +265,7 @@ define([
                     cache: cache,
                     expires: cacheExpiration, //expiration in seconds, default 5 minutes, false never expires
                     type: options.fetchType || 'GET',
-                    success: function(collection, resp) {
+                    success: function (collection, resp) {
                         if (createdCollection instanceof Backbone.PageableCollection) {
                             createdCollection.originalModels = createdCollection.fullCollection.toJSON();
                         } else {
@@ -281,7 +281,7 @@ define([
 
                         delete collection.xhr;
                     },
-                    error: function(collection, resp, options) {
+                    error: function (collection, resp, options) {
                         setResponseLogId(resp, options);
                         collection.trigger('fetch:error', collection, resp);
                         if (typeof onError == "function") {
@@ -299,25 +299,25 @@ define([
 
             return createdCollection;
         },
-        resetCollection: function(originalCollection, options) {
-            this.fetchCollection(options).on('sync', function(fetchedCollection) {
+        resetCollection: function (originalCollection, options) {
+            this.fetchCollection(options).on('sync', function (fetchedCollection) {
                 originalCollection.reset(fetchedCollection.models);
             });
         },
-        filterCollection: function(originalCollection, filterFunction) {
-            originalCollection.reset(_.filter(originalCollection.models, function(model) {
+        filterCollection: function (originalCollection, filterFunction) {
+            originalCollection.reset(_.filter(originalCollection.models, function (model) {
                 return filterFunction(model);
             }));
             return originalCollection.toJSON();
         },
-        fetchModel: function(options) {
+        fetchModel: function (options) {
             var resourceTitle = options.resourceTitle;
             var viewModel = options.viewModel;
             var criteria = options.criteria;
             var createdModel, DomainModel;
 
             DomainModel = Backbone.Model.extend({
-                parse: function(response) {
+                parse: function (response) {
                     var parsedResponse;
                     if (response.data) {
                         if (response.data.items) {
@@ -341,18 +341,18 @@ define([
             createdModel.url = UrlBuilder.buildUrl(resourceTitle, criteria);
             return createdModel;
         },
-        clearCache: function(url) {
+        clearCache: function (url) {
             var clearUrl = url.url || url;
             Backbone.fetchCache.clearItem(clearUrl);
         },
-        clearCacheByResourceTitle: function(resourceTitle) {
+        clearCacheByResourceTitle: function (resourceTitle) {
             var clearUrl = UrlBuilder.buildUrl(resourceTitle);
-            Backbone.fetchCache._cache = _.omit(Backbone.fetchCache._cache, function(value, key) {
+            Backbone.fetchCache._cache = _.omit(Backbone.fetchCache._cache, function (value, key) {
                 return key.indexOf(clearUrl) >= 0;
             });
             Backbone.fetchCache.setLocalStorage();
         },
-        clearAllCache: function(dominString) {
+        clearAllCache: function (dominString) {
             if (dominString) {
                 for (var domain in Backbone.fetchCache._cache) {
                     if (domain.indexOf(dominString) >= 0) {
@@ -366,7 +366,7 @@ define([
             }
             Backbone.fetchCache.setLocalStorage();
         },
-        buildUrl: function(resourceTitle, criteria) {
+        buildUrl: function (resourceTitle, criteria) {
             return UrlBuilder.buildUrl(resourceTitle, criteria);
         },
         /**
@@ -379,10 +379,10 @@ define([
          * @param params {object} Object containing the key/values. Property names are the keys. (e.g. { param1: 'value1', param2: 'value2 })
          * @returns {string} An URL with all params replaced (e.g. http://somedomain/path/value1/some/value2/...).
          */
-        replaceURLRouteParams: function(url, params) {
+        replaceURLRouteParams: function (url, params) {
             return UrlBuilder.replaceURLRouteParams(url, params);
         },
-        fetchResponseStatus: function(options) {
+        fetchResponseStatus: function (options) {
             var resourceTitle = options.resourceTitle;
             var criteria = options.criteria;
             var onSuccess = options.onSuccess;
@@ -406,13 +406,13 @@ define([
                 createdCollection.xhr = createdCollection.fetch({
                     cache: cache,
                     expires: cacheExpiration, //expiration in seconds, default 5 minutes, false never expires
-                    success: function(collection, resp) {
+                    success: function (collection, resp) {
                         if (typeof onSuccess == "function") {
                             onSuccess(collection, resp);
                         }
                         delete collection.xhr;
                     },
-                    error: function(collection, resp, options) {
+                    error: function (collection, resp, options) {
                         setResponseLogId(resp, options);
                         if (resp.status == 200 && (typeof onSuccess == "function")) {
                             onSuccess(collection, resp);
@@ -429,12 +429,12 @@ define([
                 }
             }
         },
-        fetchDateFilteredCollection: function(collection, dateFilterOptions) {
+        fetchDateFilteredCollection: function (collection, dateFilterOptions) {
             // var date = SessionStorage.getModel('globalDate');
             collection.fetchOptions.criteria.filter = this.buildJdsDateFilter(dateFilterOptions);
             this.fetchCollection(collection.fetchOptions, collection);
         },
-        buildJdsDateFilter: function(dateFilterOptions) {
+        buildJdsDateFilter: function (dateFilterOptions) {
             var fromDate, toDate;
 
             if (dateFilterOptions.hasOwnProperty('fromDate') || dateFilterOptions.hasOwnProperty('toDate')) {
@@ -477,7 +477,7 @@ define([
         }
     };
 
-    var setPatientFetchParams = function(inPatient, opts) {
+    var setPatientFetchParams = function (inPatient, opts) {
         var options = _.extend({}, opts);
         var patient = (options.patient || inPatient);
         if (!_.isUndefined(patient)) {

@@ -64,7 +64,7 @@ define([
             "click #cancelBtn": "onCancel"
         },
         ui: {
-            'descriptionArea': '#description'
+            'descriptionArea': '.description textarea'
         },
         onSubmit: function(e) {
             e.preventDefault();
@@ -81,7 +81,7 @@ define([
             ADK.UI.Workflow.hide();
         },
         onRender: function() {
-            this.$el.find("label[for='description']").text(this.model.get('displayName'));
+            this.$(".description label").text(this.model.get('displayName'));
         }
     });
 

@@ -9,7 +9,7 @@ task packHmpRO (type:Exec) {
         include '*.m'
     }
     buildDir.mkdirs()
-    outputs.file new File(buildDir, "hmp.ro")
+    outputs.file file("$buildDir/hmp.ro")
 
     // workingDir projectDir
     executable 'python'

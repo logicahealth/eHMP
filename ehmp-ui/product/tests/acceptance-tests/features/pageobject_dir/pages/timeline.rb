@@ -3,10 +3,11 @@ require_relative 'parent_applet.rb'
 class PobTimeline < PobParentApplet
   set_url '/#news-feed'
   set_url_matcher(/\/#news-feed/)
+
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #
   # *****************  All_Field_Elements  ******************* #
-  element :fld_timeline_heading, "#news-feed .grid-applet-heading"
+  element :fld_timeline_heading, "#news-feed .applet-chrome-header"
   elements :td_date_column, '#data-grid-newsfeed tr.selectable td:nth-of-type(1)'
   elements :td_date_column_screenreader, '#data-grid-newsfeed tr.selectable td:nth-of-type(1) span' 
   elements :tbl_timeline_table_data, "#data-grid-newsfeed tr.selectable"
@@ -25,6 +26,12 @@ class PobTimeline < PobParentApplet
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
     add_toolbar_buttons
+  end
+
+  def applet_loaded?
+    return true if has_fld_empty_row?
+    return true if tbl_timeline_table_data.length > 0
+    false
   end
 
   def date_column_text_only

@@ -4,6 +4,7 @@ define([
     'app/resources/writeback/notes/uncosignedNotes/collection',
     'app/resources/writeback/notes/signednotes/collection'
 ], function(Model, UnsignedNotes, UncosignedNotes, SignedNotes) {
+    'use strict';
 
     var UnsignedNoteTypeModel = Backbone.Model.extend({
         parse: function(data, options) {

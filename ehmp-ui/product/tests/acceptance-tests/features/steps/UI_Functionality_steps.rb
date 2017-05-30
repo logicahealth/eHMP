@@ -7,85 +7,6 @@ $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 
 require 'all_applets.rb'
 
-class CommunityHealthSummariesCoverSheet < AllApplets
-  include Singleton
-  attr_reader :appletid
-  def initialize
-    super
-    @appletid = 'ccd_grid'
-    appletid_css = "[data-appletid=#{@appletid}]"
-
-    #add_verify(CucumberLabel.new("Date"), VerifyText.new, AccessHtmlElement.new(:id, "ccd_grid-referenceDateTime"))
-    add_verify(CucumberLabel.new("Date"), VerifyText.new, AccessHtmlElement.new(:id, "ccd_grid-referenceDateDisplay"))
-    add_verify(CucumberLabel.new("Authoring Institution"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='ccd_grid'] [data-header-instanceid='ccd_grid-authorDisplayName']"))
-
-    add_action(CucumberLabel.new("Header Date"), ClickAction.new, AccessHtmlElement.new(:css, "#ccd_grid-referenceDateDisplay a"))
-    add_action(CucumberLabel.new("Header Authoring Institution"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='ccd_grid'] [data-header-instanceid='ccd_grid-authorDisplayName'] a"))
-    
-    add_applet_buttons appletid_css
-
-    add_verify(CucumberLabel.new("Empty Record"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#{appletid_css} tr.empty"))
-
-    add_verify(CucumberLabel.new("Grid"), VerifyText.new, AccessHtmlElement.new(:id, "data-grid-ccd_grid"))
-    rows = AccessHtmlElement.new(:css, '#data-grid-ccd_grid tbody tr')
-    add_verify(CucumberLabel.new('row count'), VerifyXpathCount.new(rows), rows)
-    add_verify(CucumberLabel.new('Screen Name'), VerifyText.new, AccessHtmlElement.new(:id, 'screenName'))
-    add_verify(CucumberLabel.new('ccdContent'), VerifyText.new, AccessHtmlElement.new(:css, '.ccdContent'))
-    # First Community Health Summary Row
-    add_action(CucumberLabel.new('First ccd Row'), ClickAction.new, AccessHtmlElement.new(:css, "#data-grid-ccd_grid tbody tr.selectable:nth-child(1)"))
-  end
-
-  def applet_loaded?
-    return true if am_i_visible? 'Empty Record'
-    return TestSupport.driver.find_elements(:css, '#data-grid-ccd_grid tbody tr.selectable').length > 0
-  rescue => e 
-    # p e
-    false
-  end
-
-  def community_health_rows
-    TestSupport.driver.find_elements(:css, '#data-grid-ccd_grid tbody tr')
-  end
-end #CommunityHealthSummariesCoverSheet
-
-Then(/^the CommunityHealthSummaries coversheet table contains headers$/) do |table|
-  verify_communityhealthsummary_table_headers(CommunityHealthSummariesCoverSheet.instance, table)
-end
-
-class CommunityHealthSummariesSinglePage < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    add_verify(CucumberLabel.new("Date"), VerifyText.new, AccessHtmlElement.new(:id, "ccd_grid-referenceDateTimeDisplay"))
-    add_verify(CucumberLabel.new("Description"), VerifyText.new, AccessHtmlElement.new(:id, "ccd_grid-summary"))
-    add_verify(CucumberLabel.new("Authoring Institution"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='ccd_grid'] [data-header-instanceid='ccd_grid-authorDisplayName']")) 
-    add_verify(CucumberLabel.new("communityhealthsummariesTable"), VerifyText.new, AccessHtmlElement.new(:id, "data-grid-ccd_grid")) 
-    data_grid_row_count = AccessHtmlElement.new(:xpath, "//table[@id='data-grid-ccd_grid']/descendant::tr")
-    add_verify(CucumberLabel.new("Number of rows"), VerifyXpathCount.new(data_grid_row_count), data_grid_row_count) 
-  end
-end #CommunityHealthSummariesSecondary
-
-Then(/^the CommunityHealthSummaries Single Page table contains headers$/) do |table|
-  verify_communityhealthsummaries_table_headers(CommunityHealthSummariesSinglePage.instance, table)
-end
-
-def verify_communityhealthsummary_table_headers(access_browser_instance, table)  
-  driver = TestSupport.driver
-  con = CommunityHealthSummariesCoverSheet.instance
-  con.wait_until_action_element_visible("Date", 40)
-  expect(con.static_dom_element_exists?("Date")).to be_true
-  #con.perform_verification("Description", "Outpatient Visit")
-  headers = driver.find_elements(:css, "#data-grid-ccd_grid th")
-  expect(headers.length).to_not eq(0)
-  expect(headers.length).to eq(table.rows.length)
-  elements = access_browser_instance
-  table.rows.each do |header_text|
-    does_exist = elements.static_dom_element_exists? header_text[0]
-    p "#{header_text[0]} was not found" unless does_exist
-    expect(does_exist).to be_true
-  end #table
-end #verify_table_headers
-
 Then(/^the Appointments coversheet table contains headers$/) do |table|
   verify_appointment_table_headers(AppointmentsCoverSheet.instance, table)
 end
@@ -342,7 +263,7 @@ def drag_and_drop(_access_browser_instance)
 
   driver = TestSupport.driver
   p driver
-  driver.get("http://10.1.1.150/#Workspace1")
+  driver.get("http://IP        /#Workspace1")
   
   p source_element = driver.find_element(:css, ".panel-heading .done-editing")
   sourceElement.click
@@ -456,7 +377,7 @@ class ActiveProblemsSinglePage < AccessBrowserV2
     add_verify(CucumberLabel.new("Provider"), VerifyText.new, AccessHtmlElement.new(:id, "problems-providerDisplayName"))
     add_verify(CucumberLabel.new("Facility"), VerifyContainsText.new, AccessHtmlElement.new(:id, "problems-facilityMoniker"))
     add_verify(CucumberLabel.new("Comments"), VerifyText.new, AccessHtmlElement.new(:id, "problems-"))  
-    add_action(CucumberLabel.new("Pagination"), SendKeysAction.new, AccessHtmlElement.new(:css, ".grid-footer"))
+    add_action(CucumberLabel.new("Pagination"), SendKeysAction.new, AccessHtmlElement.new(:css, ".applet-chrome-footer"))
     add_verify(CucumberLabel.new("problemsTable"), VerifyText.new, AccessHtmlElement.new(:id, "data-grid-problems"))
     add_verify(CucumberLabel.new("Comments"), VerifyText.new, AccessHtmlElement.new(:id, "problems-"))
     data_grid_row_count = AccessHtmlElement.new(:xpath, "//table[@id='data-grid-problems']/descendant::tr")

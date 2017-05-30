@@ -2697,7 +2697,7 @@
 		</td>
 	</xsl:template>
 
-	<xsl:template match="n1:component/n1:section[n1:templateId/@root='2.16.840.1.113883.10.20.1.8']/n1:text/n1:table/n1:tbody/n1:tr/n1:td[5]">
+	<xsl:template match="n1:component/n1:section[n1:templateId/@root='2.16.840.1.113883.IP       ']/n1:text/n1:table/n1:tbody/n1:tr/n1:td[5]">
 		<td>
 			<xsl:call-template name="formatDateShort">
 				<xsl:with-param name="dateString"
@@ -2706,7 +2706,7 @@
 		</td>
 	</xsl:template>
 
-	<xsl:template match="n1:component/n1:section[n1:templateId/@root='2.16.840.1.113883.10.20.1.16' or n1:templateId/@root='2.16.840.1.113883.10.20.1.14' or n1:templateId/@root='2.16.840.1.113883.10.20.1.6' or n1:templateId/@root='2.16.840.1.113883.10.20.1.3']/n1:text/n1:table/n1:tbody/n1:tr/n1:td[2]">
+	<xsl:template match="n1:component/n1:section[n1:templateId/@root='2.16.840.1.113883.IP        ' or n1:templateId/@root='2.16.840.1.113883.IP        ' or n1:templateId/@root='2.16.840.1.113883.IP       ' or n1:templateId/@root='2.16.840.1.113883.IP       ']/n1:text/n1:table/n1:tbody/n1:tr/n1:td[2]">
 		<td>
 			<xsl:call-template name="formatDateShort">
 				<xsl:with-param name="dateString"

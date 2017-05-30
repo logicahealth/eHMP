@@ -1,7 +1,20 @@
 # Port for the embedded tomcat to use.
 server.port=<%= @server_port %>
+
+# Tomcat Settings - NIO protocol handler is explicitly selected to take advantage of persistent client connections from RDK
+server.tomcat.accept-count=<%= @tomcat[:accept_count] %>
+server.tomcat.max-connections=<%= @tomcat[:max_connections] %>
+server.tomcat.max-threads=<%= @tomcat[:max_threads] %>
+
+# Actuator Settings
+management.port=<%= @management_port %>
+endpoints.enabled=false
+endpoints.health.enabled=true
+endpoints.metrics.enabled=true
+
 # Interval in milliseconds to refresh ASU rules table-- 1mins * 60(seconds) *1000= 60,000 milliseconds
 rule.refresh.interval.ms=<%= @refresh_interval %>
+
 # Refresh immediately when the job is created
 rule.refresh.initial.delay.ms=0
 

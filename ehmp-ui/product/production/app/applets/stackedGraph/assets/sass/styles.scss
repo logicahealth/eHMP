@@ -1,17 +1,48 @@
-.placeholder-tile-sort {
-    height: 50px;
-    padding: 6px;
-    margin: 3px;
-    border: 4px solid rgb(97, 157, 215);
-    border-radius: 3px;
-}
 [data-appletid="stackedGraph"] {
 	.picklist .dropdown-menu {
 		min-width:300px;
 		padding:10px;
+		//the !important tags are needed to override the styles applied inline by the twitter typeahead library
+		span.twitter-typeahead {
+			display: block !important;
+			width: 100%;
+			.tt-dropdown-menu {
+				color: $grey-darker;
+				display: none;
+				min-width: 278px;
+				padding: 5px 3px;
+				margin: 2px 0 0;
+				font-size: 12px;
+				background-color: $pure-white;
+				border: 1px solid $grey-dark;
+				border-radius: 4px;
+				box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+				background-clip: padding-box;
+				max-height: 150px;
+				overflow-y: auto;
+				width: 100%;
+				top: 32px !important;
+				cursor: pointer;
+			}
+			.user-input {
+				font-style: italic;
+				margin-bottom: 0;
+				color: $grey-darkest;
+			}
+			.tt-suggestion {
+				color: $grey-darkest;
+				strong {
+					color: $primary;
+					text-transform: capitalize;
+				}
+				&.tt-cursor {
+					color: $pure-black;
+					background-color: $primary-lightest;
+				}
+			}
+		}
 	}
 	.grid-applet-panel {
-		overflow: hidden;
 		.container-fluid, .container-fluid > .row {
 			height: 100%;
 		}
@@ -21,7 +52,6 @@
 			overflow-y: auto;
 			padding-top: 27px;
 			[role=row] {
-				background-color: $pure-white;
 				.selectable {
 					border: 1px solid $grey-dark;
 					border-bottom: none;
@@ -42,7 +72,7 @@
 				div:not(.selectable) + .selectable {
 					word-wrap: break-word;
 				}
-				&:last-child {
+				&:last-of-type {
 					border-bottom: 1px solid $grey-dark;
 				}
 				.row-graph-data {
@@ -63,6 +93,22 @@
 			    &.toolbar-active {
 			    	background-color: $primary-lightest;
 			    }
+			}
+			.no-graph {
+				padding: 80px 0px;
+				border-style: double;
+				border-color: $grey;
+				box-shadow: inset 0 0 10px $grey-darker;
+				background-color: $grey-light;
+				height: 100%;
+				text-align: center;
+			}
+			.placeholder-tile-sort {
+				height: 50px;
+				padding: 6px;
+				margin: 3px;
+				border: 4px solid rgb(97, 157, 215);
+				border-radius: 3px;
 			}
 		}
 		.pointer-container {
@@ -89,53 +135,5 @@
 				}
 			}
 		}
-	}
-	//the !important tags are needed to override the styles applied inline by the twitter typeahead library
-	span.twitter-typeahead {
-		display: block !important;
-		width: 100%;
-		.tt-dropdown-menu {
-			color: $grey-darker;
-			display: none;
-			min-width: 278px;
-			padding: 5px 3px;
-			margin: 2px 0 0;
-			font-size: 12px;
-			background-color: $pure-white;
-			border: 1px solid $grey-dark;
-			border-radius: 4px;
-			box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-			background-clip: padding-box;
-			max-height: 150px;
-			overflow-y: auto;
-			width: 100%;
-			top: 32px !important;
-			cursor: pointer;
-		}
-		.user-input {
-			font-style: italic;
-			margin-bottom: 0;
-			color: $grey-darkest;
-		}
-		.tt-suggestion {
-			color: $grey-darkest;
-			strong {
-				color: $primary;
-				text-transform: capitalize;
-			}
-			&.tt-cursor {
-				color: $pure-black;
-				background-color: $primary-lightest;
-			}
-		}
-	}
-	.no-graph {
-		padding: 80px 0px;
-		border-style: double;
-		border-color: $grey;
-		box-shadow: inset 0 0 10px $grey-darker;
-		background-color: $grey-light;
-		height: 100%;
-		text-align: center;
 	}
 }

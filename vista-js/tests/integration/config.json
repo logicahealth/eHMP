@@ -1,0 +1,28 @@
+{
+    "vistaSites": {
+        "9E7A": {
+            "name": "panorama",
+            "host": "IP        ",
+            "port": PORT,
+            "accessCode": "REDACTED",
+            "verifyCode": "REDACTED,
+            "localIP": "127.0.0.1",
+            "stationNumber": 500,
+            "localAddress": "localhost",
+            "connectTimeout": 3000,
+            "sendTimeout": 20000
+        },
+        "C877": {
+            "name": "kodak",
+            "host": "IP        ",
+            "port": PORT,
+            "accessCode": "REDACTED",
+            "verifyCode": "REDACTED,
+            "localIP": "127.0.0.1",
+            "stationNumber": 500,
+            "localAddress": "localhost",
+            "connectTimeout": 3000,
+            "sendTimeout": 20000
+        }
+    }
+}

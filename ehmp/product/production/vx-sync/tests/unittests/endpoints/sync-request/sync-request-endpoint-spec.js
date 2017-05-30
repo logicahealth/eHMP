@@ -5,6 +5,7 @@ require('../../../../env-setup');
 var request = require('request');
 var log = require(global.VX_DUMMIES + 'dummy-logger');
 var config = require(global.VX_ROOT + 'worker-config');
+var registerSyncAPI = require(global.VX_ENDPOINTS + 'sync-request/sync-request-endpoint');
 
 var DummyRequest = require(global.VX_ROOT + 'tests/frames/dummy-request');
 var DummyResponse = require(global.VX_ROOT + 'tests/frames/dummy-response');
@@ -33,7 +34,10 @@ var DummyJDS = {
     }),
     'getOperationalDataPtSelectByPid': jasmine.createSpy().andCallFake(function(job, callback) {
         callback(null, { 'statusCode': 201 }, {'data': {'totalItems': 1}});
-    })
+    }),
+    'childInstance': function() {
+        return DummyJDS;
+    }
 };
 var DummyJSU = {
     'writeStatus': function(job, callback) {
@@ -42,6 +46,9 @@ var DummyJSU = {
     'createJobStatus': function(job, callback) {
         job.status ='created';
         DummyJSU.writeStatus(job, callback);
+    },
+    'childInstance': function() {
+        return DummyJSU;
     }
 };
 var env = {
@@ -77,6 +84,30 @@ var mockSyncData = require(global.VX_ROOT + 'mocks/jds/jds-mock-sync-data');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
 
 describe('sync-request-endpoint.js', function() {
+    describe('jobFactory', function() {
+        it('creates a job with the correct referenceInfo', function() {
+            registerSyncAPI(log, config, env, {'get': function(){}, 'post': function(){}});
+            var jobFactory = registerSyncAPI._jobFactory;
+            var req = new DummyRequest({});
+            req.patientIdentifier = {
+                'value': '9E7A;3',
+                'type': 'pid'
+            };
+            req.jpid = 'jpid';
+            req.headers = {
+                'x-session-id': 'sessionId',
+                'x-request-id': 'requestId',
+                'reference_test': 'testReference'
+            };
+            var testJob = jobFactory(req);
+            expect(testJob.referenceInfo).toBeDefined();
+            expect(testJob.referenceInfo.sessionId).toEqual('sessionId');
+            expect(testJob.referenceInfo.requestId).toEqual('requestId');
+            expect(testJob.referenceInfo.test).toEqual('testReference');
+            expect(testJob.referenceInfo.initialSyncId).toEqual('9E7A;3');
+        });
+    });
+
     describe('doLoadMethods', function() {
         var dummyRouter;
         beforeEach(function() {

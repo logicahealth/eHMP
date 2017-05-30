@@ -2,6 +2,7 @@
 
 var format = require('util').format;
 var _ = require('underscore');
+var HttpHeaderUtils = require(global.VX_UTILS + 'http-header-utils');
 
 function registerErrorAPI(logger, config, environment, app) {
     app.get('/error/find', fetchErrors.bind(null, logger, config, environment));
@@ -10,13 +11,16 @@ function registerErrorAPI(logger, config, environment, app) {
 }
 
 function fetchErrors(logger, config, environment, request, response) {
-    logger.debug('error-endpoint.fetchErrors()');
+    var httpHeaderUtil = new HttpHeaderUtils(logger);
+    var referenceInfo = httpHeaderUtil.extractReferenceInfo(request);
+    var childLog = logger.child(referenceInfo);
+    childLog.debug('error-endpoint.fetchErrors()');
 
     var query = request.query;
 
-    var filter = buildJdsFilter(logger, query);
+    var filter = buildJdsFilter(childLog, query);
 
-    environment.jds.findErrorRecordsByFilter(filter, function(error, result) {
+    environment.jds.childInstance(childLog).findErrorRecordsByFilter(filter, function(error, result) {
         if (error) {
             return response.status(500).send(error);
         }
@@ -26,14 +30,18 @@ function fetchErrors(logger, config, environment, request, response) {
 }
 
 function submitById(logger, config, environment, request, response) {
-    logger.debug('error-endpoint.submitById()');
+    var httpHeaderUtil = new HttpHeaderUtils(logger);
+    var referenceInfo = httpHeaderUtil.extractReferenceInfo(request);
+    var childLog = logger.child(referenceInfo);
+    childLog.debug('error-endpoint.submitById()');
 
     var id = request.params.id || '';
-    logger.debug('error-endpoint.submitById(%s)', id);
+    childLog.debug('error-endpoint.submitById(%s)', id);
 
     var deleteRecord = _.has(request.query, 'delete-record') && request.query['delete-record'] !== 'false';
+    var childJds = environment.jds.childInstance(childLog);
 
-    environment.jds.findErrorRecordById(id, function(error, result) {
+    childJds.findErrorRecordById(id, function(error, result) {
         var errorRecord;
 
         if (error) {
@@ -50,21 +58,21 @@ function submitById(logger, config, environment, request, response) {
             return response.status(500).send(format('Error Record does not have a job to resubmit'));
         }
 
-        environment.publisherRouter.publish(errorRecord.job, function(error) {
+        environment.publisherRouter.childInstance(childLog).publish(errorRecord.job, function(error) {
             if (error) {
-                logger.error('error-endpoint.submitById(): publisher error: %s', error);
+                childLog.error('error-endpoint.submitById(): publisher error: %s', error);
                 return response.status(500).send(format('Unable to publish message'));
             }
 
-            logger.debug('error-endpoint.submitById(): job published, complete status. jobId: %s, jobsToPublish: %j', errorRecord.job.jobId, errorRecord.job);
+            childLog.debug('error-endpoint.submitById(): job published, complete status. jobId: %s, jobsToPublish: %j', errorRecord.job.jobId, errorRecord.job);
 
             if (deleteRecord) {
-                environment.jds.deleteErrorRecordById(id, function(error) {
+                childJds.deleteErrorRecordById(id, function(error) {
                     if (error) {
-                        return logger.error('error-endpoint.submitById(): unable to delete job %s after submitting: %s', id, error);
+                        return childLog.error('error-endpoint.submitById(): unable to delete job %s after submitting: %s', id, error);
                     }
 
-                    return logger.debug('error-endpoint.submitById(): deleted job %s after submitting', id);
+                    return childLog.debug('error-endpoint.submitById(): deleted job %s after submitting', id);
                 });
             }
 

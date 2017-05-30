@@ -31,21 +31,13 @@ define('main/components/views/appletViews/observationsGistView/views/observation
             this.disableNoRecordClick();
         },
         initialize: function(options) {
-            var buttonTypes = ['infobutton', 'detailsviewbutton', 'quicklookbutton'];
-            if (options.AppletID === 'lab_results_grid' || options.AppletID === 'applet-5'){
-                buttonTypes = ['infobutton', 'detailsviewbutton', 'quicklookbutton', 'notesobjectbutton'];
-            }
-
-            if (!Messaging.request('get:current:screen').config.predefined) {
-                buttonTypes.unshift('tilesortbutton');
-            }
-
             var toolbarButtonsDisabled = this.model.get('resultUnitsMetricResultUnits') === 'No Records Found';
             this.toolbarOptions = {
-                buttonTypes: buttonTypes,
+                buttonTypes: _.get(options, 'appletOptions.buttonTypes', []),
                 quickLooksDisabled: toolbarButtonsDisabled,
                 detailsViewDisabled: toolbarButtonsDisabled
             };
+
             if (this.model.get('displayName')) {
                 this.$el.attr('data-row-instanceid', this.model.get('displayName'));
             }

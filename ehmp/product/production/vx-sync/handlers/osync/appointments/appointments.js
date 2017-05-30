@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var async = require('async');
 var errorUtil = require(global.VX_UTILS + 'error');
-var rpcUtil = require(global.VX_UTILS + '/rpc-util');
 var nullUtils = require(global.VX_UTILS + 'null-utils');
 var jobUtil = require(global.OSYNC_UTILS + 'osync-job-utils');
 var parseRpcResponseAppointments = require(global.OSYNC_UTILS + 'patient-sync-utils').parseRpcResponseAppointments;
@@ -18,7 +17,7 @@ var moment = require('moment');
  * @returns {string} Error message if error occurred, null otherwise.
  */
 function validate(job) {
-    if (!job.type && job.type !== 'appointments') {
+    if (!job.type || job.type !== 'appointments') {
         return 'appointments.validate: Invalid job type for appointments handler';
     }
 
@@ -45,7 +44,16 @@ function validate(job) {
  * @returns {*}
  */
 function handle(log, osyncConfig, environment, job, handlerCallback) {
-    log.debug('appointment-request.handle : received request to save ' + JSON.stringify(job));
+    log.debug('appointments.handle : received request to save ' + JSON.stringify(job));
+
+    // Set rpcUtil up so that we can override it for unit tests.
+    //----------------------------------------------------------
+    var rpcUtil = null;
+    if (environment.rpcUtil) {
+        rpcUtil = environment.rpcUtil;
+    } else {
+        rpcUtil = require(global.VX_UTILS + '/rpc-util');
+    }
 
     var error = validate(job);
     if (error) {
@@ -90,7 +98,12 @@ function handle(log, osyncConfig, environment, job, handlerCallback) {
                 singlePatientJob.jobId = undefined;
                 singlePatientJob.jpid = undefined;
 
+                if (job.referenceInfo) {
+                    singlePatientJob.referenceInfo = job.referenceInfo;
+                }
+
                 var jobToPublish = jobUtil.createSyncJob(log, singlePatientJob);
+
                 environment.publisherRouter.publish(jobToPublish, function(error) {
                     if (error) {
                         return cb(error);

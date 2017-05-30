@@ -63,7 +63,7 @@ define([
     };
     Gridster.prototype.set_dom_grid_width = function(cols, model) {
         var gridsterWidgetModel = model || ResizeUtils.dimensions.gridsterWidget;
-        var extraMargin = gridsterWidgetModel.get('GRIDSTER_MARGIN_VALUE') || 5;  // = left margin of leftmost widget + right margin of rightmost widget
+        var extraMargin = gridsterWidgetModel.get('GRIDSTER_MARGIN_VALUE') || 5; // = left margin of leftmost widget + right margin of rightmost widget
         var isWorkspaceEditorGridster = Messaging.request('get:adkApp:region', 'modalRegion').currentView;
 
         if (typeof cols === 'undefined') {
@@ -75,7 +75,7 @@ define([
         if (isWorkspaceEditorGridster) {
             this.container_width = this.get_highest_occupied_cell().col * (this.min_widget_width + this.resize_max_size_x) + (extraMargin / 2);
         } else {
-            this.container_width = cols * this.min_widget_width;  // original logic
+            this.container_width = cols * this.min_widget_width; // original logic
         }
         this.$el.css({
             'width': this.container_width,
@@ -89,6 +89,24 @@ define([
         return this;
     };
 
+    var AppletRegion = Marionette.Region.extend({
+        initialize: function(options) {
+            this.$el.on('applet:filter:title:updated', _.bind(this._onFilterTitleChange, this));
+        },
+        _onFilterTitleChange: function(e, newFilterName) {
+            e.stopPropagation();
+            console.log('Title Change: ', arguments);
+            if (!_.isString(newFilterName)) return;
+            this.$el.attr('data-filter-name', newFilterName);
+        }
+    });
+
+    var AppletRegionManager = Marionette.RegionManager.extend({
+        onBeforeRemoveRegion: function(name, region) {
+            region.$el.off('applet:filter:title:updated');
+        }
+    });
+
     var layoutView = Backbone.Marionette.LayoutView.extend({
         template: Handlebars.compile('<div class="gridster"></div>'),
         className: "contentPadding hidden-overflow-y auto-overflow-x percent-height-100",
@@ -97,6 +115,10 @@ define([
                 time: 0,
                 numMoves: 0
             }
+        },
+        regionClass: AppletRegion,
+        getRegionManager: function() {
+            return new AppletRegionManager();
         },
         initialize: function(options) {
             // load configs from app.json
@@ -271,7 +293,7 @@ define([
                     }
                 };
                 draggable = {
-                    handle: "div.panel-heading.grid-applet-heading",
+                    handle: "div.panel-heading.applet-chrome-header",
                     stop: function(e, ui, $widget) {
                         self.$el.data('jsp').reinitialise(null, true);
                         saveGridsterAppletsConfig();

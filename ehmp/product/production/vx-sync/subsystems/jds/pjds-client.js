@@ -3,6 +3,7 @@
 require('../../env-setup');
 
 var _ = require('underscore');
+var _s = require('underscore.string');
 var uuid = require('node-uuid');
 var format = require('util').format;
 var request = require('request');
@@ -10,7 +11,6 @@ var inspect = require(global.VX_UTILS + 'inspect');
 var errorUtil = require(global.VX_UTILS + 'error');
 var objUtil = require(global.VX_UTILS + 'object-utils');
 var pidUtil = require(global.VX_UTILS + 'patient-identifier-utils');
-var uuid = require('node-uuid');
 var VxSyncForeverAgent = require(global.VX_UTILS + 'vxsync-forever-agent');
 
 /**
@@ -29,6 +29,13 @@ function PjdsClient(log, metrics, config) {
     this.metrics = metrics;
     this.config = config;
 }
+
+PjdsClient.prototype.childInstance = function(childLog) {
+    var self = this;
+    var newInstance = new PjdsClient(childLog, self.metrics, self.config);
+
+    return newInstance;
+};
 
 /**
  * Generate a uid from an id and a site hash
@@ -227,6 +234,24 @@ PjdsClient.prototype.getOSyncClinicsByUid = function(uid, callback) {
 };
 
 /**
+ * Retrieves all osync clinics
+ * @param callback - The callback function that should be called when the action is completed
+ **/
+PjdsClient.prototype.getAllOSyncClinics = function(callback) {
+    this.log.debug('pjds-client.getAllOSyncClinics()');
+    var metricsObj = {
+        'subsystem': 'PJDS',
+        'action': 'getAllOSyncClinics',
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+    this.metrics.debug('PJDS Get All OSync Clinics', metricsObj);
+
+    var path = '/osynclinic/';
+    this.execute(path, null, 'GET', metricsObj, callback);
+};
+
+/**
  * Add (Create) an osync clinic
  * @param {string} site - The site of the osync clinic to add
  * @param {string} uid - The UID of the osync clinic to add
@@ -370,6 +395,220 @@ PjdsClient.prototype.getOsyncBlistByUid = function(uid, callback) {
     };
 
     this.execute('/osyncBlist/' + uid, null, 'GET', metricsObj, callback);
+};
+
+/**
+ * Add (Create) a clinical object
+ * @param {object} document - The clinical object document to be stored
+ * @param callback - The callback function that should be called when the action is completed
+ **/
+PjdsClient.prototype.createClinicalObject = function(document, callback) {
+    this.log.debug('pjds-client.createClinicalObject() document: %j', document);
+    var metricsObj = {
+        'subsystem': 'PJDS',
+        'action': 'createClinicalObject',
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+    this.metrics.debug('PJDS Post Create Clinical Object', metricsObj);
+
+    if ((_.isEmpty(document))) {
+        metricsObj.timer = 'stop';
+        this.metrics.debug('PJDS Post Create Clinical Object in Error', metricsObj);
+        return setTimeout(callback, 0, errorUtil.createFatal('No document passed in'));
+    }
+
+    var path = '/clinicobj';
+    this.execute(path, document, 'POST', metricsObj, callback);
+};
+
+/**
+ * Update a clinical object
+ * @param {object} document - The clinical object document to be stored
+ * @param {string} uid - The uid of the clinical object to be stored
+ * @param callback - The callback function that should be called when the action is completed
+ **/
+PjdsClient.prototype.updateClinicalObject = function(uid, document, callback) {
+    this.log.debug('pjds-client.updateClinicalObject() document: %j', document);
+    var metricsObj = {
+        'subsystem': 'PJDS',
+        'action': 'updateClinicalObject',
+        'uid': uid,
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+    this.metrics.debug('PJDS Post Update Clinical Object', metricsObj);
+
+    if ((_.isEmpty(document)) || (_.isEmpty(uid))) {
+        metricsObj.timer = 'stop';
+        this.metrics.debug('PJDS Post Create Clinical Object in Error', metricsObj);
+        return setTimeout(callback, 0, errorUtil.createFatal('No document or uid passed in'));
+    }
+
+    var path = '/clinicobj/' + uid;
+    this.execute(path, document, 'POST', metricsObj, callback);
+};
+
+/**
+ * Delete a clinical object
+ * @param {string} uid - The clinical object UID to be stored
+ * @param callback - The callback function that should be called when the action is completed
+ **/
+PjdsClient.prototype.deleteClinicalObject = function(uid, callback) {
+    this.log.debug('pjds-client.deleteClinicalObject() uid: %s', uid);
+    var metricsObj = {
+        'subsystem': 'PJDS',
+        'action': 'deleteClinicalObject',
+        'uid': uid,
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+    this.metrics.debug('PJDS Delete Clinical Object', metricsObj);
+
+    if ((_.isEmpty(uid))) {
+        metricsObj.timer = 'stop';
+        this.metrics.debug('PJDS Delete Clinical Object in Error', metricsObj);
+        return setTimeout(callback, 0, errorUtil.createFatal('No uid passed in'));
+    }
+
+    var path = '/clinicobj/' + uid;
+    this.execute(path, null, 'DELETE', metricsObj, callback);
+};
+
+/**
+ * Variadic function:
+ * Retrieves clinic objects for a patient by a filter
+ * @param {string} filter - The required filter to use that narrows down search
+ * @param index - An optional index to use on query to improve search performance
+ * @param callback - The callback function that should be called when the action is completed
+ **/
+PjdsClient.prototype.getClinicalObject = function(filter, index, callback) {
+    var args = _.toArray(arguments);
+    if (!(_.last(args) instanceof Function)) {
+        throw new Error('No callback function was passed to getClinicalObject()');
+    }
+
+    var searchCallback = args.pop();
+
+    var metricsObj = {
+        'subsystem': 'PJDS',
+        'action': 'getClinicalObject',
+        'filter' : filter,
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+
+    if (_.isEmpty(filter)) {
+        metricsObj.timer = 'stop';
+        this.metrics.debug('PJDS Get Clinical Objects Error', metricsObj);
+        return setTimeout(searchCallback, 0, errorUtil.createFatal('No filter passed in'));
+    }
+
+    var searchFilter = _s.startsWith(filter, '?') ? filter : '?' + filter;
+
+    var searchIndex = '/';
+    if (args.length === 2 && args[1]) {
+        searchIndex += 'index/' + args[1];
+    }
+
+    this.execute('/clinicobj' + searchIndex + searchFilter , null, 'GET', metricsObj, searchCallback);
+};
+
+/**
+ * Variadic function:
+ * Retrieves prefetch patients by index, filter and/ or template
+ * @param {string} filter - A required filter used to narrows down search
+ * @param index - An optional index to use on query to improve search performance
+ * @param template - An optional template used to limit the fields returned by the query
+ * @param callback - The callback function that should be called when the action is completed
+ **/
+PjdsClient.prototype.getPrefetchPatients = function(filter, index, template, callback) {
+    var args = _.toArray(arguments);
+    if (!(_.last(args) instanceof Function)) {
+        throw new Error('No callback function was passed to getPrefetchPatients()');
+    }
+
+    var searchCallback = args.pop();
+
+    var metricsObj = {
+        'subsystem': 'PJDS',
+        'action': 'getPrefetchPatients',
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+
+    if (_.isEmpty(filter)) {
+        metricsObj.timer = 'stop';
+        this.metrics.debug('PJDS Get Prefetch Patients Error', metricsObj);
+        return setTimeout(searchCallback, 0, errorUtil.createFatal('No filter passed in'));
+    }
+
+    var searchFilter = _s.startsWith(filter, '?') ? filter : '?' + filter;
+
+    var searchIndex = '/';
+    if (args.length === 2 && args[1]) {
+        searchIndex += 'index/' + args[1];
+    }
+
+    var searchTemplate = '';
+    if (args.length === 3 && args[2]) {
+        searchTemplate = '/' + args[2];
+    }
+
+    this.execute('/prefetch' + searchIndex + searchTemplate + searchFilter , null, 'GET', metricsObj, searchCallback);
+};
+
+/**
+ * Update a prefetch patient
+ * @param {object} document - The prefetch patient document to be stored
+ * @param {string} uid - The uid of the prefetch patient to be stored
+ * @param callback - The callback function that should be called when the action is completed
+ **/
+PjdsClient.prototype.updatePrefetchPatient = function(uid, document, callback) {
+    this.log.debug('pjds-client.updatePrefetchPatient() document: %j', document);
+    var metricsObj = {
+        'subsystem': 'PJDS',
+        'action': 'updatePrefetchPatient',
+        'uid': uid,
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+    this.metrics.debug('PJDS Post Update Prefetch Patient', metricsObj);
+
+    if ((_.isEmpty(document)) || (_.isEmpty(uid))) {
+        metricsObj.timer = 'stop';
+        this.metrics.debug('PJDS PUT Update Prefetch Patient in Error', metricsObj);
+        return setTimeout(callback, 0, errorUtil.createFatal('No document or uid passed in'));
+    }
+
+    var path = '/prefetch/' + uid;
+    this.execute(path, document, 'PUT', metricsObj, callback);
+};
+
+/**
+ * Delete a Prefetch Patient
+ * @param {string} uid - The prefetch patient UID to be stored
+ * @param callback - The callback function that should be called when the action is completed
+ **/
+PjdsClient.prototype.removePrefetchPatient = function(uid, callback) {
+    this.log.debug('pjds-client.removePrefetchPatient() uid: %s', uid);
+    var metricsObj = {
+        'subsystem': 'PJDS',
+        'action': 'removePrefetchPatient',
+        'uid': uid,
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+    this.metrics.debug('PJDS Remove Prefetch Patient', metricsObj);
+
+    if ((_.isEmpty(uid))) {
+        metricsObj.timer = 'stop';
+        this.metrics.debug('PJDS Remove Prefetch Patient in Error', metricsObj);
+        return setTimeout(callback, 0, errorUtil.createFatal('No uid passed in'));
+    }
+
+    var path = '/prefetch/' + uid;
+    this.execute(path, null, 'DELETE', metricsObj, callback);
 };
 
 module.exports = PjdsClient;

@@ -44,17 +44,17 @@
   },
   "hdr" :
   {
-    "uri" : "10.4.4.205:8896",
-    "path": "/repositories.med.va.gov/fpds/",
+    "uri" : "IP             ",
+    "path": "/repositories.URL       /fpds/",
     "protocol": "http"
   },
   "pgd" : {
-    "uri" : "10.4.4.205",
+    "uri" : "IP        ",
     "retry" : 3,
     "protocol": "http"
   },
   "vler" : {
-    "host" : "10.4.4.205",
+    "host" : "IP        ",
     "port": 80,
     "protocol": "http",
     "docquerypath": "/VLERMockDocQuery/NHINAdapterGatewayDocQuery/EntityDocQuery",
@@ -68,7 +68,7 @@
   },
   "jmeadows-version": "2.3.3.0.2",
   "jmeadows-v2.3.0" : {
-    "host" : "10.4.4.205",
+    "host" : "IP        ",
     "port": 80,
     "protocol": "http",
     "retry" : 3,
@@ -82,7 +82,7 @@
     "parallelismmin" : 4
   },
   "jmeadows-v2.3.1" : {
-    "host" : "10.4.4.205",
+    "host" : "IP        ",
     "port": 80,
     "protocol": "http",
     "retry" : 3,
@@ -96,7 +96,7 @@
     "parallelismmin" : 4
   },
   "jmeadows-v2.3.3.0.2" : {
-    "host" : "10.4.4.205",
+    "host" : "IP        ",
     "port": 80,
     "protocol": "http",
     "retry" : 3,
@@ -110,7 +110,7 @@
     "parallelismmin" : 4
   },
   "mvi" : {
-    "host" : "10.4.4.205",
+    "host" : "IP        ",
     "path" : "/mvi",
     "port" : 8896,
     "protocol" : "http",

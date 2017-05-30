@@ -1,13 +1,11 @@
 define([
-    "backbone",
-    "marionette",
+    'backbone',
+    'marionette',
     'handlebars'
-], function(Backbone, Marionette, Handlebars) {
+], function (Backbone, Marionette, Handlebars) {
     'use strict';
 
-    var ErrorView = Backbone.Marionette.ItemView.extend({
+    return Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile('{{ error }}')
     });
-
-    return ErrorView;
 });

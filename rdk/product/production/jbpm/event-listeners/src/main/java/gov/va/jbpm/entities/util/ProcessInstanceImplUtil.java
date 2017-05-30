@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.jboss.logging.Logger;
 import org.jbpm.workflow.instance.impl.WorkflowProcessInstanceImpl;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
@@ -15,7 +16,6 @@ import org.kie.api.runtime.manager.RuntimeManager;
 import gov.va.jbpm.entities.impl.ProcessInstanceImpl;
 import gov.va.jbpm.entities.impl.ProcessRouteImpl;
 import gov.va.jbpm.exception.EventListenerException;
-import gov.va.jbpm.utils.Logging;
 
 public class ProcessInstanceImplUtil {
 	public static final String PATIENT_ID = "icn";
@@ -34,9 +34,10 @@ public class ProcessInstanceImplUtil {
 	public static final String TYPE = "type";
 	public static final String SUBDOMAIN = "subDomain";
 	public static final String DESCRIPTION = "description";
+	private static final Logger LOGGER = Logger.getLogger(ProcessInstanceImplUtil.class);
 
 	public static ProcessInstanceImpl create(ProcessEvent event) throws EventListenerException {
-		Logging.debug("Entering ProcessInstanceImplUtil.create");
+		LOGGER.debug("Entering ProcessInstanceImplUtil.create");
 		WorkflowProcessInstanceImpl processInstance = (WorkflowProcessInstanceImpl) event.getProcessInstance();
 		Map<String,Object> processInstanceVariables = processInstance.getVariables();
 		KieSession session = (KieSession) event.getKieRuntime();

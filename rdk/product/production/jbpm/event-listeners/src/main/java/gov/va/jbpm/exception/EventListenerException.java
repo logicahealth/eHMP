@@ -1,6 +1,6 @@
 package gov.va.jbpm.exception;
 
-import gov.va.jbpm.utils.Logging;
+import org.jboss.logging.Logger;
 
 /**
  * This exception can be used to provide a status code to the UI
@@ -12,6 +12,7 @@ public class EventListenerException extends Exception {
 	public static final Integer INTERNAL_SERVER_ERROR = 500;
 	
 	private Integer httpStatus = INTERNAL_SERVER_ERROR;
+	private static final Logger LOGGER = Logger.getLogger(EventListenerException.class);
 	
 //-----------------------------------------------------------------------------
 //-------------------------Constructors----------------------------------------
@@ -27,7 +28,7 @@ public class EventListenerException extends Exception {
 	public EventListenerException(Integer httpStatus, String message) {
 		super(message);
 		this.httpStatus = httpStatus;
-		Logging.error(message);
+		LOGGER.error(message);
 	}
 	
 	/**
@@ -37,7 +38,7 @@ public class EventListenerException extends Exception {
 	 */
 	public EventListenerException(String message) {
 		super(message);
-		Logging.error(message);
+		LOGGER.error(message);
 	}
 
 	/**
@@ -51,7 +52,7 @@ public class EventListenerException extends Exception {
 	public EventListenerException(Integer httpStatus, String message, Throwable cause) {
 		super(message, cause);
 		this.httpStatus = httpStatus;
-		Logging.error(message);
+		LOGGER.error(message);
 	}
 	
 	/**
@@ -62,7 +63,7 @@ public class EventListenerException extends Exception {
 	 */
 	public EventListenerException(String message, Throwable cause) {
 		super(message, cause);
-		Logging.error(message);
+		LOGGER.error(message);
 	}
 	
 //-----------------------------------------------------------------------------

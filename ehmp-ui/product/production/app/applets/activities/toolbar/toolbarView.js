@@ -1,84 +1,34 @@
-define([
-    'backbone',
-    'marionette',
-    'hbs!app/applets/activities/toolbar/activitiesFilterTemplate'
-], function(Backbone, Marionette, activitiesFilterTemplate) {
+define([], function() {
     'use strict';
-    var fetchOptions;
-    var self;
-    var ToolBarView = Backbone.Marionette.ItemView.extend({
-        initialize: function(options) {
-            this.instanceId = options.instanceId;
-            this.viewType = options.viewType;
-            this.parentWorkspace = options.parentWorkspace;
-            this.expandedAppletId = options.expandedAppletId;
-            this.sharedModel = options.sharedModel;
-            this.contextViewType = options.contextViewType;
+    var ToolBarView = ADK.UI.Form.extend({
+        fields: [],
+        modelEvents: {
+            'change:primarySelection': 'onChangePrimarySelection',
+            'change:mode': 'onChangeMode'
         },
-        template: activitiesFilterTemplate,
-        className: 'toolbar-item',
-        events: {
-            'change select': 'filterChange'
+        onInitialize: function(options) {
+            this.expandedAppletId = _.get(options, 'appletConfig.instanceId');
+            var fullScreen = _.get(options, 'appletConfig.fullScreen') || false;
+            this.parentWorkspace = ADK.WorkspaceContextRepository.currentContextId + 'Activities';
+            if (fullScreen) {
+                var expandedModel = ADK.SessionStorage.get.sessionModel('expandedAppletId');
+                if (expandedModel instanceof Backbone.Model && _.isString(expandedModel.get('id'))) {
+                    this.expandedAppletId = expandedModel.get('id');
+                }
+            }
+            this.onChangePrimarySelection();
+            this.onChangeMode();
         },
-        onRender: function() {
-            var primaryMenuItems = new Backbone.Collection();
-            var secondaryMenuItems = new Backbone.Collection();
-
-            if(this.contextViewType === 'patient'){
-                primaryMenuItems.add(new Backbone.Model({name: 'Activities Related to Me', value: 'intendedForAndCreatedByMe'}));
-            } else {
-                primaryMenuItems.add(new Backbone.Model({name: 'All Activities Related to Me', value: 'intendedForAndCreatedByMe'}));
+        setAppletStorageModel: function(modelAttribute) {
+            if (!_.isUndefined(this.expandedAppletId)) {
+                ADK.SessionStorage.setAppletStorageModel(this.expandedAppletId, modelAttribute, this.model.get(modelAttribute), true, this.parentWorkspace);
             }
-            primaryMenuItems.add(new Backbone.Model({name: 'Intended for Me or My Team(s)', value: 'intendedForMe'}));
-            primaryMenuItems.add(new Backbone.Model({name: 'Created by Me', value: 'me'}));
-
-            if(this.contextViewType === 'patient'){
-                primaryMenuItems.add(new Backbone.Model({name: 'All Activities', value: 'none'}));
-            }
-
-            if(this.viewType === 'expanded'){
-                secondaryMenuItems.add(new Backbone.Model({name: 'Open', value: 'open'}));
-                secondaryMenuItems.add(new Backbone.Model({name: 'Open and Closed', value: 'openAndClosed'}));
-                secondaryMenuItems.add(new Backbone.Model({name: 'Closed', value: 'closed'}));
-            }
-
-            var filterSplit = this.sharedModel.get('filter').split(';');
-            var primarySelection = filterSplit[0];
-            var secondarySelection = filterSplit[1];
-
-            var primarySelectedMenuItem = primaryMenuItems.findWhere({value: primarySelection});
-            var secondarySelectedMenuItem = secondaryMenuItems.findWhere({value: secondarySelection});
-
-            if(!_.isUndefined(primarySelectedMenuItem)){
-                primarySelectedMenuItem.set('selected', true);
-            }
-
-            if(!_.isUndefined(secondarySelectedMenuItem)){
-                secondarySelectedMenuItem.set('selected', true);
-            }
-
-            this.$el.html(this.template({
-                instanceId: this.instanceId,
-                contextViewType: this.contextViewType,
-                primaryItem: primaryMenuItems.toJSON(),
-                secondaryItem: secondaryMenuItems.toJSON()
-            }));
         },
-        clearSearchText: function() {
-            this.$el.parent().siblings('#grid-filter-' + this.instanceId).find('#input-filter-search-' + this.instanceId).val('');
-            ADK.SessionStorage.setAppletStorageModel(this.expandedAppletId, 'filterText', '', true, this.parentWorkspace);
+        onChangePrimarySelection: function() {
+            this.setAppletStorageModel('primarySelection');
         },
-        filterChange: function() {
-            this.clearSearchText();
-            var primaryDisplay = this.$('#' + this.instanceId + '-primary-filter-options').val();
-            var secondaryDisplay = this.$('#' + this.instanceId + '-display-only-options').val();
-
-            var display = {};
-            if(!secondaryDisplay){
-                secondaryDisplay = 'open';
-            }
-
-            this.sharedModel.set('filter', primaryDisplay + ';' + secondaryDisplay);
+        onChangeMode: function() {
+            this.setAppletStorageModel('mode');
         }
     });
 

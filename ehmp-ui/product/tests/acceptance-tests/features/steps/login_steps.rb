@@ -5,10 +5,15 @@ def wait_for_facility_or_noresponse(login_page)
   return false
 end
 
+When(/^the user logs out and then logs back in$/) do
+  step 'POB log me out'
+  step 'user is logged into eHMP-UI'
+end
+
 Given(/^user is logged into eHMP\-UI$/) do
   @ehmp = PobLoginPage.new
 
-  @ehmp.load
+  @ehmp.load unless @ehmp.has_ddl_facility?
   
   p 'waiting for facility dropdown'
   wait = Selenium::WebDriver::Wait.new(:timeout => 120)
@@ -45,7 +50,7 @@ Then(/^the facility field's label is "([^"]*)"$/) do |label_text|
   ehmp = PobLoginPage.new
   ehmp.wait_until_fld_facility_label_visible
   expect(@ehmp).to have_fld_facility_label
-  expect(@ehmp.fld_facility_label.text).to eq(label_text)
+  expect(@ehmp.fld_facility_label.text.upcase).to eq(label_text.upcase)
 end
 
 When(/^user searches for a facility with term "([^"]*)"$/) do |facility_term|
@@ -93,8 +98,9 @@ def choose_facility(facility_name)
   ehmp = PobLoginPage.new
   ehmp.wait_until_ddl_facility_visible
   expect(@ehmp).to have_ddl_facility
-  ehmp.ddl_facility.click
   cmele = PobCommonElements.new
+  ehmp.ddl_facility.click unless cmele.wait_for_fld_pick_list_input(1)
+  
   cmele.wait_until_fld_pick_list_input_visible
   cmele.fld_pick_list_input.set facility_name
   ehmp.wait_until_ddl_facility_results_visible
@@ -133,15 +139,11 @@ def wait_for_staff_view_loaded(allow_errors = DefaultLogin.local_testrun)
     @ehmp.load
     retry if max_attempt > 0    
   end
-  p "loading tasks"
   wait.until { tasks.applet_loaded? allow_errors }
-  # p "loading activities"
-  # wait.until { activities.applet_loaded? allow_errors }
-  p "loading consults"
   wait.until { consults.applet_loaded? allow_errors }
-  p "loading requests"
+
   wait.until { requests.applet_loaded? allow_errors }
-  p "on right tab?"
+
   @ehmp.wait_until_fld_active_staff_view_visible
   expect(@ehmp).to have_fld_active_staff_view
 end

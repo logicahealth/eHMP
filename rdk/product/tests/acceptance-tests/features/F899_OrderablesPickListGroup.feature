@@ -1,56 +1,7 @@
 @F899 @orderables
 Feature:F899 - Orderable Pick-list Service
 
-@F899_1_Orderables_alltypes @US12254
-  Scenario: Create Endpoint for 'All' Order type with search string
-  When the client requests picklist with the parameters for "orderables" with the user "9E7A;vk1234"
-  | paramter name | value                 |
-  | subtype       | All                   |
-  | searchString  | URINE                 |
-  Then a successful response is returned
-  And there are 56 orderables in the results
-  And the picklist result contains
-  | field           | value               |
-  | ien             | 1239                |
-  | name            | PROV URINE          |
-  | synonym         | PROV URINE          |
-  | typeOfOrderable | lab                 |
 
-  When the client requests picklist with the parameters for "orderables" with the user "9E7A;vk1234"
-  | paramter name | value                 |
-  | searchString  | URINE                 |
-  Then a successful response is returned
-  And there are 56 orderables in the results
-  And the picklist result contains
-  | field           | value               |
-  | ien             | 1239                |
-  | name            | PROV URINE          |
-  | synonym         | PROV URINE          |
-  | typeOfOrderable | lab                 |
-
-
-@F899_2_Orderables_alltypes @US12254
-  Scenario: searching for orderables without searchString
-  When the client requests picklist with the parameters for "orderables" with the user "9E7A;vk1234"
-  | paramter name | value      |
-  | subtype       | all        |
-  Then a successful response is returned
-
-
-@F899_3_Orderables_labs @US12254
-  Scenario: Create Endpoint for 'Lab' Order type with search string
-  When the client requests picklist with the parameters for "orderables" with the user "C877;vk1234"
-  | paramter name | value                                   |
-  | subtype       | Lab   |
-  | searchString  | Blood |
-  Then a successful response is returned
-  And there are 17 orderables in the results
-  And the picklist result contains
-  | field           | value                   |
-  | ien             | 1048                    |
-  | synonym         | BLOOD CULTURE SET #1    |
-  | name            | BLOOD CULTURE SET #1    |
-  | typeOfOrderable | lab                     |
 
 
 @F899_4_Orderables_alltypes @US12254 @future

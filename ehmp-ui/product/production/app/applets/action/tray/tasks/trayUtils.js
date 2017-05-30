@@ -1,7 +1,9 @@
 define([
+    'backbone',
+    'underscore',
     'moment',
     'app/applets/action/tray/tasks/resource'
-], function(moment, TaskResource) {
+], function(Backbone, _, moment, TaskResource) {
     'use strict';
 
     // ============================== Constants ===============================
@@ -29,11 +31,23 @@ define([
     var getTaskItemLabel = function(item) {
         var taskName = item.taskName || '';
         var instanceName = item.instanceName || '';
-        var itemLabel = _.trim((taskName + ' - ' +  instanceName), ' -');
+        var itemLabel = _.trim((taskName + ' - ' + instanceName), ' -');
         return (!_.isEmpty(itemLabel) ? itemLabel : 'Unknown Task');
     };
 
     var taskHasPermissions = function(task) {
+        var isRequestReview = (_.get(task, 'taskName') === 'Review') || (_.get(task, 'TASKNAME') === 'Review');
+        var hasEditRequestPermission = ADK.UserService.hasPermissions('edit-coordination-request');
+        if (isRequestReview && !hasEditRequestPermission) {
+            return false;
+        }
+
+        var isRequestResponse = (_.get(task, 'taskName') === 'Response') || (_.get(task, 'TASKNAME') === 'Response');
+        var hasRespondRequestPermission = ADK.UserService.hasPermissions('respond-coordination-request');
+        if (isRequestResponse && !hasRespondRequestPermission) {
+            return false;
+        }
+
         if (_.isEmpty(task.permission)) {
             return true;
         }

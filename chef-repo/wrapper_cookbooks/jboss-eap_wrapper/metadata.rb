@@ -4,7 +4,7 @@ maintainer_email 'rachel.cindric@agilex.com'
 license          'All rights reserved'
 description      'Installs/Configures jboss-eap_wrapper'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.1"
+version          "2.1.4"
 
-depends "java_wrapper", "2.1.1"
+depends "java_wrapper", "2.1.2"
 depends 'jboss-eap', "=2.1.1"

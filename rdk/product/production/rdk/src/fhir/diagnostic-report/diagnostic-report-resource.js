@@ -150,34 +150,34 @@ function validateParams(params, onSuccess, onError) {
  *
  * @apiExample {js} Request Examples:
  *      // DiagnosticReport limiting results count
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/diagnosticreport?_count=1
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_count=1
  *
  *      // DiagnosticReport exact date search
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26T13:45:00
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26T13:45:00
  *
  *      // DiagnosticReport on a day
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26
  *
  *      // DiagnosticReport on a month
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01
  *
  *      // DiagnosticReport on a year
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/diagnosticreport?date=2015
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015
  *
  *      // DiagnosticReport outside a date range (e.g. DiagnosticReports not occuring on January 2015)
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/diagnosticreport?date=!=2015-01
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=!=2015-01
  *
  *      // DiagnosticReport Explicit date range
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/diagnosticreport?date=>=2014-06&date=<=2014-09-20
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=>=2014-06&date=<=2014-09-20
  *
  *      // DiagnosticReport sorted by date (sorts by DiagnosticReport.appliesDateTime)
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/diagnosticreport?_sort=date
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_sort=date
  *
  *      // DiagnosticReport sorted by date in descending order
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/diagnosticreport?_sort:desc=date
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_sort:desc=date
  *
  *      // DiagnosticReport sorted by performer (sorts by DiagnosticReport.performer.display)
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/diagnosticreport?_sort=performer
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_sort=performer
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/diagnosticreport.html">DiagnosticReport FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
@@ -653,7 +653,7 @@ function getDiagnosticReportsImpl(pid, req, res, params, serviceCategories) {
 
     async.waterfall(asyncTasks, function(err, accumulator) { //final callback
         if (nullchecker.isNotNullish(err)) {
-            res.status(err.code).send(err.message);
+            res.status(err.code || 500).send(err.message);
         } else {
             var bundle = buildBundle(accumulator.results, req, accumulator.totalItems);
             res.status(200).send(bundle);

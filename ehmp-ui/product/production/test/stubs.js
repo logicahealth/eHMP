@@ -12,6 +12,55 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
     };
 
     window.Handlebars = Handlebars;
+    Handlebars.registerHelper('compare', function(lvalue, rvalue, options) {
+        if (arguments.length < 3)
+            throw new Error("Handlerbars Helper 'compare' needs 2 parameters");
+
+        var operator = options.hash.operator || "==";
+        var operators = {
+            '==': function(l, r) {
+                return l == r;
+            },
+            '===': function(l, r) {
+                return l === r;
+            },
+            '!=': function(l, r) {
+                return l != r;
+            },
+            '<': function(l, r) {
+                return l < r;
+            },
+            '>': function(l, r) {
+                return l > r;
+            },
+            '<=': function(l, r) {
+                return l <= r;
+            },
+            '>=': function(l, r) {
+                return l >= r;
+            },
+            'typeof': function(l, r) {
+                switch (r) {
+                    case 'array':
+                        return _.isArray(l);
+                    default:
+                        return typeof l == r;
+                }
+            }
+        };
+
+        if (!operators[operator])
+            throw new Error("Handlerbars Helper 'compare' doesn't know the operator " + operator);
+
+        var result = operators[operator](lvalue, rvalue);
+
+        if (result) {
+            return options.fn(this);
+        } else {
+            return options.inverse(this);
+        }
+
+    });
     window.Backgrid = {};
     _.set(Backgrid, 'StringCell', Marionette.View);
     _.set(Backgrid, 'HandlebarsCell', Marionette.View);
@@ -25,6 +74,7 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
     var regionManager = new Backbone.Marionette.RegionManager();
 
     var Stubs = {
+        messagingChannelsReplyCallbacks: {}, //holds the callback functions from ADK Messaging Reply
         bootstrapViewTest: function(View) {
             var self = this;
             var createTestRegion = function() {
@@ -58,14 +108,16 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
         messagingResponse: function(channel) {
             return {
                 get: Stubs.spies.messagingGet,
-                reply: Stubs.spies.messagingGet,
+                reply: Stubs.spies.messagingReply,
                 view: Marionette.View,
                 title: 'title',
                 channelName: channel,
                 on: function(name, callback) {},
                 trigger: function() {
                     return;
-                }
+                },
+                request: Stubs.spies.messagingRequest,
+                comply: Stubs.spies.messagingRequest
             };
         },
         authValid: function() {
@@ -84,6 +136,14 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
                 key: 'value'
             });
             return storageModel;
+        },
+        setAppletStorageModel: function(storage, key, value) {
+            var storageModel = new Backbone.Model();
+            storageModel.set(key, value);
+            return storageModel;
+        },
+        clearAppletStorageModelAttribute: function(storage, key, value) {
+            return true;
         },
         getSessionModel: function(channel) {
             return channel + '_value';
@@ -150,8 +210,10 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
             if (!sourceFormat) {
                 sourceFormat = "YYYYMMDDHHmmssSSS";
             }
-
             return moment(date, sourceFormat).format(displayFormat);
+        },
+        hasPermissions: function() {
+            return true;
         },
         setPatientList: function(patients) {
             if (patients instanceof Backbone.Collection) {
@@ -163,6 +225,9 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
         getPatientList: function(collection) {
             collection.set(mockPatientList.toJSON());
             return collection;
+        },
+        addFacilityMoniker: function(response) {
+            response.facilityMoniker = '9E7A';
         },
         formatDate: function(date) {
             return date;
@@ -177,6 +242,11 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
                 isValid: false
             };
         },
+        getDefaultDateOptions: function() {
+            return {
+                placeholder: 'MM/DD/YYYY'
+            };
+        },
         crsUtil: {
             crsAttributes: {
                 CRSDOMAIN: 'kind'
@@ -184,8 +254,14 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
             domain: {
                 PROBLEM: 'Problem'
             }
+        },
+        utilsGetUtcDate: function(time, sourceFormat) {
+            return moment.utc(time, sourceFormat);
+        },
+        utilsGetDate: function(time, sourceFormat) {
+            return moment(time, sourceFormat);
         }
-    }; 
+    };
 
     var Spies = {
         spies: { //dummy methods
@@ -194,27 +270,26 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
             trigger: jasmine.createSpy('trigger'),
             start: jasmine.createSpy('start')
         },
-        spyOns: { //methods that will execute
-            messagingGet: function(input) {
-                return input;
+		spyOns: { //methods that will execute
+			messagingGet: function(input) {
+				return input;
+			},
+            messagingReply: function(name, callback) {
+                Stubs.messagingChannelsReplyCallbacks[this.channelName] = callback;
+                return name;
             },
-            getUrl: function(url) {
-                return url;
-            }
-        },
-        resetSpies: function(spies) {
-            spies = spies || this.spies;
-            _.each(spies, function(spy, spyName) {
-                if (_.isObject(spy)) this.resetSpies(spy);
-                else spy.calls.reset();
-            }, this);
-        }
-    };
-
-    //configure spies
-    _.each(Spies.spyOns, function(method, name) {
-        spyOn(this.spyOns, name).and.callThrough();
-    }, Spies);
+			messagingRequest: function(name, object) {
+				return {
+					view: Marionette.ItemView.extend({
+						template: Handlebars.compile('<div id="messagingRequest"></div>')
+					})
+				};
+			},
+			getUrl: function(url) {
+				return url;
+			}
+		}
+	};
 
 
     //merge objects together
@@ -229,6 +304,7 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
     _.set(ADK, 'ResourceService.createEmptyCollection', Stubs.createEmptyCollection);
     _.set(ADK, 'PatientRecordService.createEmptyCollection', Stubs.createEmptyCollection);
     _.set(ADK, 'utils.helpUtils.getUrl', Stubs.templateHelper);
+    _.set(ADK, 'ResourceService.buildUrl', Stubs.templateHelper);
     _.set(ADK, 'Messaging.request', Stubs.messagingResponse);
     _.set(ADK, 'Messaging.getChannel', Stubs.messagingResponse);
     _.set(ADK, 'Messaging.trigger', Stubs.spies.trigger);
@@ -238,16 +314,21 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
     _.set(ADK, 'WorkspaceContextRepository.userDefaultScreen', 'userDefaultScreen');
     _.set(ADK, 'WorkspaceContextRepository.currentWorkspaceAndContext', Stubs.getCurrentWorkspaceAndContext);
     _.set(ADK, 'WorkspaceContextRepository.currentContextId', Stubs.currentContextId);
+    _.set(ADK, 'SessionStorage.setAppletStorageModel', Stubs.setAppletStorageModel);
     _.set(ADK, 'SessionStorage.getAppletStorageModel', Stubs.getAppletStorageModel);
+    _.set(ADK, 'SessionStorage.clearAppletStorageModelAttribute', Stubs.clearAppletStorageModelAttribute);
     _.set(ADK, 'SessionStorage.get.sessionModel', Stubs.getSessionModel);
     _.set(ADK, 'SessionStorage.getModel', Stubs.getModel);
+    _.set(ADK, 'SessionStorage.getModel_SessionStoragePreference', Stubs.getModel);
     _.set(ADK, 'PatientRecordService.getCurrentPatient', Stubs.getCurrentPatient);
     _.set(ADK, 'PatientRecordService.setCurrentPatient', Stubs.setCurrentPatient);
     _.set(ADK, 'utils.helpUtils.getUrl', Stubs.spies.getUrl);
     _.set(ADK, 'utils.tooltipMappings.patientSync_mySite', 'My Site');
-	_.set(ADK, 'utils.helpUtils.getUrl', Stubs.spies.getUrl);
+    _.set(ADK, 'utils.helpUtils.getUrl', Stubs.spies.getUrl);
+    _.set(ADK, 'UserService.hasPermissions', Stubs.hasPermissions);
     _.set(ADK, 'utils.formatDate', Stubs.formatDate);
     _.set(ADK, 'utils.getTimeSince', Stubs.getTimeSince);
+    _.set(ADK, 'utils.dateUtils.defaultOptions', Stubs.getDefaultDateOptions);
     _.set(ADK, 'utils.crsUtil', Stubs.crsUtil);
     _.set(ADK, 'UserService.getUserSession', Stubs.getUserSession);
     _.set(ADK, 'CCOWService.start', Stubs.spies.start);
@@ -255,17 +336,30 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
     _.set(ADK, 'Applets.BaseGridApplet', Marionette.CollectionView);
     _.set(ADK, 'Applets.BaseGridApplet.DataGrid', Marionette.View);
     _.set(ADK, 'Applets.BaseGridApplet.DataGrid.DataGridRow', Marionette.View);
+    _.set(ADK, 'Enrichment.addFacilityMoniker', Stubs.addFacilityMoniker);
     _.set(ADK, 'AppletViews.PillsGistView', Marionette.View);
     _.set(Backgrid, 'StringCell', Marionette.View);
     _.set(Backgrid, 'HandlebarsCell', Marionette.View);
+    _.set(Backgrid, 'Body', Marionette.View);
     _.set(ADK, 'utils.extract', Stubs.utilsExtract);
     _.set(ADK, 'utils.formatDate', Stubs.utilsFormatDate);
     _.set(ADK, 'Checks.CheckModel', Backbone.Model);
     _.set(ADK, 'Resources.Model', Backbone.Model);
+    _.set(ADK, 'Resources.Writeback.Model', Backbone.Model);
+    _.set(ADK, 'Resources.Writeback.Collection', Backbone.Collection);
     _.set(ADK, 'Resources.Collection', Backbone.Collection);
     _.set(ADK, 'ResourceService.PageableCollection', Backbone.Collection);
     _.set(ADK, 'Views.EventGist', Marionette.View);
     _.set(ADK, 'Views.EventGist.getRowItem', Marionette.View);
+    _.set(ADK, 'UI.Tray', Marionette.View);
+    _.set(ADK, 'Resources.Model', Backbone.Model);
+    _.set(ADK, 'Resources.Collection', Backbone.Collection);
+    _.set(ADK, 'Resources.Aggregate.Model', Backbone.Model);
+    _.set(ADK, 'Resources.Aggregate.Collection', Backbone.Collection.extend({
+        setFullCollection: function(collectionInstance) {
+            this.collection = collectionInstance;
+        }
+    }));
 
     //ADK.UI.Form stubs
     var RecursiveView = Marionette.CompositeView.extend({
@@ -306,7 +400,10 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
             var control = this.model.get('control');
             var extraClasses = this.model.get('extraClasses');
             if (extraClasses) this.$(':first-child').addClass(extraClasses);
-            if (control !== 'container' && control !== 'button') this.$(':first-child').addClass('control ' + this.model.get('control') + '-control form-group');
+            if (control !== 'container' && control !== 'button') {
+                this.$(':first-child').addClass('control ' + this.model.get('control') + '-control form-group');
+                this.$el.addClass(this.model.get('name'));
+            }
         }
     });
 
@@ -377,6 +474,37 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
 
     _.set(ADK, 'UI.AlertDropdown.DropdownListView', MockDropdownListView);
 
+
+    //override bootstrap methods
+    $.fn.button = jasmine.createSpy('bootstrapButton');
+
+    //ADK.UI.Modal
+    _.set(ADK, 'UI.Modal', Marionette.LayoutView.extend({
+        initialize: function(options) {
+            this.view = options.view;
+        },
+        show: function() {
+            Stubs.testRegion.show(this.view);
+        }
+    }));
+
+    var EventGist = Backbone.Marionette.CompositeView.extend({
+
+    });
+
+    var EventGistItem = Backbone.Marionette.LayoutView.extend({
+
+    });
+
+    _.set(ADK, 'Views.EventGist', {
+        getView: function() {
+            return EventGist;
+        },
+        getRowItem: function() {
+            return EventGistItem;
+        }
+    });
+
     //override bootstrap methods
     $.fn.button = jasmine.createSpy('bootstrapButton');
 
@@ -394,7 +522,6 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
             expect($('.testRegion')).toBeEmpty();
         });
     });
-
 
     return Stubs;
 });

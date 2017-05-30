@@ -1,7 +1,7 @@
 define(['jquery',
         'backbone',
         'marionette',
-        'main/ui_components/components',
+        'main/UILibrary',
         'jasminejquery',
         'api/UIComponents',
         'underscore',
@@ -205,7 +205,7 @@ define(['jquery',
                 it('contains correct label', function() {
                     expect($form.find('label').length).toBe(1);
                     expect($form.find('label')).toHaveText('select label');
-                    expect($form.find('label').attr('for')).toBe('select1');
+                    expect($form.find('label').attr('for')).toContain('select1');
                 });
 
                 it('has empty option (selected) by default', function() {
@@ -216,7 +216,7 @@ define(['jquery',
                 it('change a label', function() {
                     expect($form.find('label').length).toBe(1);
                     expect($form.find('label')).toHaveText('select label');
-                    $form.find('#select1').trigger('control:label', 'new label');
+                    $form.find('.select-control.select1 select').trigger('control:label', 'new label');
                     expect($form.find('label')).toHaveText('new label');
                 });
 
@@ -292,11 +292,11 @@ define(['jquery',
                 });
 
                 it('contains correct id', function() {
-                    expect($form.find('#select1')).toHaveId(selectControlDefinition.name);
+                    expect($form.find('.select-control.select1 select').attr('id')).toContain(selectControlDefinition.name);
                 });
 
                 it('contains correct class', function() {
-                    expect($form.find('#select1')).toHaveClass('form-control');
+                    expect($form.find('.select-control.select1 select')).toHaveClass('form-control');
                 });
             });
 
@@ -505,15 +505,15 @@ define(['jquery',
                 });
 
                 it('is replaced with new picklist by triggering an event', function() {
-                    $('#select1').trigger('control:loading:show');
-                    expect($('#select1').val()).toEqual('loading');
-                    expect($('#select1')).toBeDisabled();
+                    $('.select-control.select1 select').trigger('control:loading:show');
+                    expect($('.select-control.select1 select').val()).toEqual('loading');
+                    expect($('.select-control.select1 select')).toBeDisabled();
 
-                    $('#select1').trigger('control:loading:hide');
-                    expect($('#select1')).not.toBeDisabled();
-                    expect($('#select1').val()).toBeNull();
+                    $('.select-control.select1 select').trigger('control:loading:hide');
+                    expect($('.select-control.select1 select')).not.toBeDisabled();
+                    expect($('.select-control.select1 select').val()).toBeNull();
 
-                    $('#select1').trigger('control:picklist:set', [optionsArrayExtended]);
+                    $('.select-control.select1 select').trigger('control:picklist:set', [optionsArrayExtended]);
                     expect($form.find('option').length).toBe(optionsArrayExtended.length + 1);
                 });
             });
@@ -539,7 +539,7 @@ define(['jquery',
                 it('contains correct label', function() {
                     expect($form.find('label').length).toBe(1);
                     expect($form.find('label')).toHaveText('select label');
-                    expect($form.find('label').attr('for')).toBe('select1');
+                    expect($form.find('label').attr('for')).toContain('select1');
                 });
 
                 it('has same number of controls as defined', function() {
@@ -572,7 +572,7 @@ define(['jquery',
                 });
 
                 it('contains correct id', function() {
-                    expect($form.find('select')).toHaveId(selectControlDefinition.name);
+                    expect($form.find('select').attr('id')).toContain(selectControlDefinition.name);
                 });
 
                 it('contains correct class', function() {
@@ -599,7 +599,7 @@ define(['jquery',
                 it('contains correct label', function() {
                     expect($form.find('label').length).toBe(1);
                     expect($form.find('label')).toHaveText('select label');
-                    expect($form.find('label').attr('for')).toBe('select1');
+                    expect($form.find('label').attr('for')).toContain('select1');
                     expect($form.find('label')).toHaveClass('sr-only');
                 });
             });
@@ -698,13 +698,13 @@ define(['jquery',
                 it('contains correct label', function() {
                     expect($form.find('label').length).toBe(1);
                     expect($form.find('label')).toHaveText('select (filter & array & fetch)');
-                    expect($form.find('label').attr('for')).toBe('select1');
+                    expect($form.find('label').attr('for')).toContain('select1');
                 });
 
                 it('changes a label', function() {
                     expect($form.find('label').length).toBe(1);
                     expect($form.find('label')).toHaveText('select (filter & array & fetch)');
-                    $form.find('#select1').trigger('control:label', 'new label');
+                    $form.find('.select-control.select1 select').trigger('control:label', 'new label');
                     expect($form.find('label')).toHaveText('new label');
                 });
 
@@ -802,6 +802,32 @@ define(['jquery',
                     $form.find('.select1').trigger('control:size', 4);
                     expect($form.find('select')).toHaveAttr('size', '4');
                     $form.find('.select1').trigger('control:size', 7);
+                    expect($form.find('select')).toHaveAttr('size', '7');
+                });
+                it("update:config", function() {
+                    $form.find('.select1').trigger("control:update:config", {
+                        hidden: true,
+                        disabled: true,
+                        required: true,
+                        label: 'newLabel',
+                        size: 4
+                    });
+                    expect($form.find('.select1')).toHaveClass('hidden');
+                    expect($form.find('select')).toHaveAttr('disabled');
+                    expect($form.find('select')).toHaveAttr('required');
+                    expect($form.find('label')).toHaveText('newLabel *');
+                    expect($form.find('select')).toHaveAttr('size', '4');
+                    $form.find('.select1').trigger("control:update:config", {
+                        hidden: false,
+                        disabled: false,
+                        required: false,
+                        label: '',
+                        size: 7
+                    });
+                    expect($form.find('.select1')).not.toHaveClass('hidden');
+                    expect($form.find('select')).not.toHaveAttr('disabled');
+                    expect($form.find('select')).not.toHaveAttr('required');
+                    expect($form.find('label')).not.toHaveText('newLabel *');
                     expect($form.find('select')).toHaveAttr('size', '7');
                 });
             });

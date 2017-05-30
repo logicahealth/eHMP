@@ -39,9 +39,9 @@ describe('Metrics data spec', function() {
         expect(metricData.host).to.equal('UNKNOWN');
         expect(metricData.hostName).to.equal('UNKNOWN');
 
-        metricData.addHost('10.10.0.101', 'jds');
+        metricData.addHost('IP         ', 'jds');
 
-        expect(metricData.host.host).to.equal('10.10.0.101');
+        expect(metricData.host.host).to.equal('IP         ');
         expect(metricData.host.name).to.equal('jds');
         expect(metricData.hostName).to.equal('jds');
     });

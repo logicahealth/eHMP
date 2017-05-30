@@ -16,6 +16,7 @@ def artifactsToUpload = [
   tasksservice: [name: 'tasksservice', proj: ':production:jbpm:tasksservice', env_var: 'JBPM_TASKSSERVICE_VERSION'],
   ehmpservices: [name: 'EhmpServices', proj: ':production:jbpm:EhmpServices', env_var: 'JBPM_EHMPSERVICES_VERSION'],
   sql_config: [name: 'sql_config', proj: ':production:jbpm:sql_config', env_var: 'JBPM_SQL_CONFIG_VERSION'],
+  jbpm_utils: [name: 'JbpmUtils', proj:':production:jbpm:JbpmUtils', env_var: 'JBPM_UTILS_VERSION'],
   rdk: [name: 'rdk', proj: ':production:rdk', env_var: 'RDK_VERSION']
 ]
 

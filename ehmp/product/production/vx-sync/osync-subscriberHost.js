@@ -94,10 +94,10 @@ function startSubscriberHost(logger, config, port, profile) {
 function registerHandlers(logger, config, environment) {
     var handlerRegistry = new HandlerRegistry(environment);
 
-    handlerRegistry.register(logger, config, environment, jobUtil.admissionsJobType(), require(global.OSYNC_HANDLERS + 'admissions/admissions'));
-    handlerRegistry.register(logger, config, environment, jobUtil.appointmentsJobType(), require(global.OSYNC_HANDLERS + 'appointments/appointments'));
-    handlerRegistry.register(logger, config, environment, jobUtil.syncJobType(), require(global.OSYNC_HANDLERS + 'sync/sync'));
-    handlerRegistry.register(logger, config, environment, jobUtil.patientListJobType(), require(global.OSYNC_HANDLERS + 'patientlist/patientlist'));
+    handlerRegistry.register(config, jobUtil.admissionsJobType(), require(global.OSYNC_HANDLERS + 'admissions/admissions'));
+    handlerRegistry.register(config, jobUtil.appointmentsJobType(), require(global.OSYNC_HANDLERS + 'appointments/appointments'));
+    handlerRegistry.register(config, jobUtil.syncJobType(), require(global.OSYNC_HANDLERS + 'sync/sync'));
+    handlerRegistry.register(config, jobUtil.patientListJobType(), require(global.OSYNC_HANDLERS + 'patientlist/patientlist'));
 
     return handlerRegistry;
 }
@@ -119,12 +119,12 @@ function startWorkers(osyncConfig, handlerRegistry, environment, profileJobTypes
         logger.debug('osync-subscriberHost.startWorkers: jobType: %j; jobSettings: %j', jobType, jobSettings);
         if(!_.isUndefined(osyncConfig.beanstalk.jobTypes[jobType]) && !_.isUndefined(osyncConfig.beanstalk.jobTypes[jobType].host)) {
             var workerCount;
-            if ((jobSettings) && (jobSettings.workerCount)) {
+            if ((jobSettings) && (jobSettings.workerCount) && (_.isNumber(jobSettings.workerCount)) && (jobSettings.workerCount >= 1)) {
                 workerCount = jobSettings.workerCount;
             } else {
                 workerCount = defaultWorkerCount;
-                logger.info('osync-subscriberHost.startWorkers: Profile: %s and JobType: %s contained no workerCount setting in worker-config.json.  Using the default value of: %d', profile, jobType, defaultWorkerCount);
-                logger.warn('osync-subscriberHost.startWorkers: Profile: %s and JobType: %s contained no workerCount setting in worker-config.json.  Using the default value of: %d', profile, jobType, defaultWorkerCount);
+                logger.info('osync-subscriberHost.startWorkers: Profile: %s and JobType: %s contained no valid workerCount setting in worker-config.json.  Using the default value of: %d', profile, jobType, defaultWorkerCount);
+                logger.warn('osync-subscriberHost.startWorkers: Profile: %s and JobType: %s contained no valid workerCount setting in worker-config.json.  Using the default value of: %d', profile, jobType, defaultWorkerCount);
             }
             var connectInfo = osyncConfig.beanstalk.jobTypes[jobType];
 

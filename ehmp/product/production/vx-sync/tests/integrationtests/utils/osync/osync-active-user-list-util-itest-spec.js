@@ -27,7 +27,7 @@ var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 var OSyncActiveUserListUtil = require(global.OSYNC_UTILS + 'osync-active-user-list-util');
 
 var host = require(global.VX_INTTESTS + 'test-config');
-var port = 5001;
+var port = PORT;
 
 var tubePrefix = 'osync-active-user-list-util-itest';
 var jobType = 'patientlist';
@@ -154,13 +154,13 @@ describe('osync-active-user-list-util-itest-spec.js', function() {
         var config = {
             pjds: _.defaults(wConfig.pjds, {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             }),
             jds: _.defaults(wConfig.jds, {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             }),
             osync: {
                 mixedEnvironmentMode: true
@@ -222,13 +222,13 @@ describe('osync-active-user-list-util-itest-spec.js', function() {
         var config = {
             pjds: _.defaults(wConfig.pjds, {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             }),
             jds: _.defaults(wConfig.jds, {
                 protocol: 'http',
-                host: '10.2.2.110',
-                port: 9080
+                host: 'IP        ',
+                port: PORT
             }),
             osync: {
                 mixedEnvironmentMode: true
@@ -261,6 +261,11 @@ describe('osync-active-user-list-util-itest-spec.js', function() {
             lastlogin: moment().format()
         };
 
+        var referenceInfo = {
+            sessionId: 'TEST',
+            utilityType: 'osync-active-user-list'
+        };
+
         setUpActiveUsers(environment, pjdsUser, userScreenUser);
 
         var beanstalkConfig = getBeanstalkConfig(config, host, port, tubePrefix + '-' + jobType);
@@ -286,7 +291,7 @@ describe('osync-active-user-list-util-itest-spec.js', function() {
         runs(function() {
             var osyncActiveUserListUtil = new OSyncActiveUserListUtil(logger, config, environment);
 
-            osyncActiveUserListUtil.retrieveAndProcessActiveUserList(function(error, userCount) {
+            osyncActiveUserListUtil.retrieveAndProcessActiveUserList(referenceInfo, function(error, userCount) {
                 expect(error).toBeFalsy();
                 expect(userCount).toBeTruthy();
                 expect(userCount).toBeGreaterThan(1);
@@ -305,6 +310,15 @@ describe('osync-active-user-list-util-itest-spec.js', function() {
 
                     expect(val(resultJobTypes, 'length')).toBeGreaterThan(1);
                     expect(resultJobTypes).toContain(jobType);
+
+                    var resultJobReferenceInfo = _.map(val(jobs, ['0','jobs']), function(job){
+                        return job.referenceInfo;
+                    });
+
+                    expect(resultJobReferenceInfo.length).toBeGreaterThan(1);
+                    _.each(resultJobReferenceInfo, function(item){
+                        expect(item).toEqual(jasmine.objectContaining(referenceInfo));
+                    });
 
                     testDone = true;
                 });

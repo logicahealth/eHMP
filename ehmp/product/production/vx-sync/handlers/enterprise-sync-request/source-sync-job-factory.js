@@ -305,11 +305,17 @@ function isSecondarySiteDisabled(config, siteName) {
 //
 //-----------------------------------------------------------------------------------------------
 function _createMetaForJob(job) {
-    return {
+    var meta = {
         jpid: job.jpid,
         priority: job.priority || 1,
         rootJobId: job.rootJobId
     };
+
+    if (job.referenceInfo) {
+        meta.referenceInfo = job.referenceInfo;
+    }
+
+    return meta;
 }
 
 module.exports = SourceSyncJobFactory;

@@ -132,7 +132,7 @@ function clinicRemoveByUid(self, uid, callback) {
         if (response.statusCode !== 200) {
             self.log.debug('osync-clinic-utils.clinicRemoveByUid: Error: Status code: %s, Response: %j', response.statusCode, response.body);
             return callback(util.format('Error removing UID %s from osynclinic store', uid));
-        } 
+        }
 
         self.log.debug('osync-clinic-utils.clinicRemoveByUid: UID %s removed from osynclinic store', uid);
         return callback(null, util.format('UID %s removed from osynclinic store', uid));
@@ -140,12 +140,17 @@ function clinicRemoveByUid(self, uid, callback) {
 }
 
 // osyncClinicRun helper function
-function clinicRunByUid(self, uid, callback) {
+function clinicRunByUid(self, uid, referenceInfo, callback) {
     self.log.debug('osync-clinic-utils.clinicRunByUid: Entering function');
-    var job = jobUtil.createAppointmentsJob(self.log, self.config.osync);
+
+    var job = jobUtil.createAppointmentsJob(self.log, {});
     job.siteId = uidUtils.extractSiteFromUID(uid);
     job.clinic = uidUtils.extractPatientFromUID(uid);
     job.jobId = uuid.v4();
+
+    if(referenceInfo){
+        job.referenceInfo = referenceInfo;
+    }
 
     self.environment.publisherRouter.publish(job, function(error) {
         if (error) {
@@ -286,7 +291,7 @@ OsyncClinicUtils.prototype.osyncClinicGet = function(site, callback) {
  ** @param {string} uid - The clinic UID to process an osync clinic from the pJDS osynclinic data store
  ** @param {function} callback - The callback function that should be called when the action is completed
  **/
-OsyncClinicUtils.prototype.osyncClinicRun = function(site, uid, callback) {
+OsyncClinicUtils.prototype.osyncClinicRun = function(site, uid, referenceInfo, callback) {
     var self = this;
     self.log.debug('osync-clinic-utils.osyncClinicRun: Entering method');
 
@@ -307,7 +312,7 @@ OsyncClinicUtils.prototype.osyncClinicRun = function(site, uid, callback) {
                 return callback(util.format('Error retrieving clinics from osynclinic data store for UID %s', uid));
             }
 
-            return clinicRunByUid(self, uid, callback);
+            return clinicRunByUid(self, uid, referenceInfo, callback);
         });
     } else if (site) {
         self.osyncClinicGet(site, function(error, result, clinicList) {
@@ -320,7 +325,7 @@ OsyncClinicUtils.prototype.osyncClinicRun = function(site, uid, callback) {
 
             count = 0;
             async.eachSeries(clinicList, function(item, cb) {
-                return clinicRunByUid(self, item, function(error) {
+                return clinicRunByUid(self, item, referenceInfo, function(error) {
                     if (error) {
                         return cb(error);
                     }

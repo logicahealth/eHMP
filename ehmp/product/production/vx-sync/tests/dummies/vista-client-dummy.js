@@ -32,7 +32,7 @@ VistaClient.prototype._setFetchResponseData = function (error, response) {
     if (_.isArray(response)) {
 
         this.log.debug('vista-client-dummy._setFetchResponseData: response %j is an array.', response);
-        this.fetchresponse = response;
+        this.fetchResponse = response;
         this.log.debug('response: %j', this.fetchResponse);
     }
     else {
@@ -43,33 +43,33 @@ VistaClient.prototype._setFetchResponseData = function (error, response) {
 };
 
 //callback: err, metastamp
-VistaClient.prototype.subscribe = function (vistaId, patientIdentifier, rootJobId, jobId, priority, subscribeCallback) {
-    subscribeCallback(null, 'success');
+VistaClient.prototype.subscribe = function (vistaId, patientIdentifier, rootJobId, jobId, priority, referenceInfo, subscribeCallback) {
+    setTimeout(subscribeCallback, 0, null, 'success');
 };
 
 VistaClient.prototype.unsubscribe = function (pid, unsubscribeCallback) {
-    unsubscribeCallback(null, 'success');
+    setTimeout(unsubscribeCallback, 0, null, 'success');
 };
 
 VistaClient.prototype.status = function (patientIdentifier, statusCallback) {
-    statusCallback(null, {});
+    setTimeout(statusCallback, 0, null, {});
 };
 
 VistaClient.prototype.fetchNextBatch = function (vistaId, batchCallback) {
     if ((this.fetchError.length >= this.fetchResponseIndex) && (this.fetchResponse.length >= this.fetchResponseIndex)) {
         this.fetchResponseIndex++;
         this.log.debug('vista-client-dummy.fetchNextBatch: (from array) fetchResponseIndex: %s; fetchError: %s, fetchResponse: %j', this.fetchResponseIndex - 1, this.fetchError[this.fetchResponseIndex - 1], this.fetchResponse[this.fetchResponseIndex - 1]);
-        return batchCallback(this.fetchError[this.fetchResponseIndex - 1], this.fetchResponse[this.fetchResponseIndex - 1]);
+        return setTimeout(batchCallback, 0, this.fetchError[this.fetchResponseIndex - 1], this.fetchResponse[this.fetchResponseIndex - 1]);
     }
     else {
         this.fetchResponseIndex++;
         this.log.debug('vista-client-dummy.fetchNextBatch: (from [0]) fetchResponseIndex: %s; fetchError[0]: %s, fetchResponse[0]: %j', this.fetchResponseIndex - 1, this.fetchError[0], this.response[0]);
-        return batchCallback(this.error[0], this.response[0]);
+        return setTimeout(batchCallback, 0, this.error[0], this.response[0]);
     }
 };
 
 VistaClient.prototype.fetchAppointment = function (vistaId, batchCallback) {
-    batchCallback(null, {});
+    setTimeout(batchCallback, 0, null, {});
 };
 
 function _createRpcConfigVprContext(config, vistaId) {
@@ -80,13 +80,17 @@ VistaClient.prototype.fetchAdmissionsForSite = function (vistaId, callback) {
     if ((this.fetchError.length >= this.fetchResponseIndex) && (this.fetchResponse.length >= this.fetchResponseIndex)) {
         this.fetchResponseIndex++;
         this.log.debug('vista-client-dummy.fetchAdmissionsForSite: (from array) fetchResponseIndex: %s; fetchError: %s, fetchResponse: %j', this.fetchResponseIndex - 1, this.fetchError[this.fetchResponseIndex - 1], this.fetchResponse[this.fetchResponseIndex - 1]);
-        return callback(this.fetchError[this.fetchResponseIndex - 1], this.fetchResponse[this.fetchResponseIndex - 1]);
+        return setTimeout(callback, 0, this.fetchError[this.fetchResponseIndex - 1], this.fetchResponse[this.fetchResponseIndex - 1]);
     }
     else {
         this.fetchResponseIndex++;
         this.log.debug('vista-client-dummy.fetchAdmissionsForSite: (from [0]) fetchResponseIndex: %s; fetchError[0]: %s, fetchResponse[0]: %j', this.fetchResponseIndex - 1, this.fetchError[0], this.response[0]);
-        return callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[0], this.response[0]);
     }
+};
+
+VistaClient.prototype.childInstance = function(log) {
+    return this;
 };
 
 module.exports = VistaClient;

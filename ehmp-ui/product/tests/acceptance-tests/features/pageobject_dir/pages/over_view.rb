@@ -15,7 +15,7 @@ class PobOverView < SitePrism::Page
 
   # element :fld_patient_search_button, "//input[@id='patientSearchInput']"
   element :fld_patient_demographic_patient_info, "#patientDemographic-patientInfo"
-  element :fld_demo_patientInfo, "#patientDemographic .patient-info"
+  element :fld_demo_patientInfo, ".patient-demographic-content .patient-info"
   element :fld_bottom_region, "#bottom-region"
   element :fld_app_version, "#appVersion"
   element :fld_immunizations_applet, "div[data-appletid='immunizations']"
@@ -24,7 +24,7 @@ class PobOverView < SitePrism::Page
   element :fld_overview, "a[href='#overview']"
   element :fld_medication_review, "a[href='#medication-review]"
   element :fld_documents_list, "a[href='#documents-list]"
-  element :fld_search_box, "#searchText"
+  element :fld_search_box, "[id^=searchText]"
   element :fld_inactivity_warning_modal, ".modal-dialog #footercontent"
   element :fld_panel_title, "h4.panel-title"
   element :fld_link_help_ehmp_header, "#top-region .help-button-container .help-icon-link"
@@ -34,7 +34,7 @@ class PobOverView < SitePrism::Page
   elements :fld_allergies, "div[id^='pill-gist-popover-urn:va:allergy']"
   elements :fld_immunization_gist_items, "div[id^='pill-gist-popover-urn:va:immunization']"
   elements :fld_lab_results_age_rows, "#grid-panel-lab_results_grid .table-cell.flex-width-0_5.text-center"
-  elements :fld_cwad_details, "div.demographic-group-wrapper"
+  elements :fld_cwad_details, "div.group-wrapper"
   elements :fld_cwad_visible_titles, "div[aria-hidden='false'] .cwad-title"
 
   # *****************  All_Button_Elements  ******************* #

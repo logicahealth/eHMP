@@ -3,7 +3,7 @@ class PobAppointmentsApplet < PobParentApplet
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #
   # *****************  All_Field_Elements  ******************* #
-  element :fld_appointments_applet_heading, "div[data-appletid='appointments'] .grid-applet-heading"
+  element :fld_appointments_applet_heading, "div[data-appletid='appointments'] .applet-chrome-header"
   element :fld_appointment_data_thead, "[data-appletid='appointments'] table thead"
 
   elements :fld_appointment_table_row, "[data-appletid='appointments'] table tbody tr"

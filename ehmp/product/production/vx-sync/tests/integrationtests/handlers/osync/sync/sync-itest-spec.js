@@ -39,6 +39,27 @@ function createEnvironment(jds, pjds) {
 	return environment;
 }
 
+//----------------------------------------------------------------------------------
+// Looks up the most recent enterprise sync job for the given patient
+//
+// patientIdentifier:
+// environment:
+// callback
+//----------------------------------------------------------------------------------
+function retrieveEnterpriseSyncJobHistory(patientIdentifier, environment, callback) {
+	var job = {
+		patientIdentifier: patientIdentifier
+	};
+
+	var filter = {
+		filter: '?filter=eq(\"type\",\"enterprise-sync-request\")'
+	};
+
+	environment.jds.getJobStatus(job, filter, function(error, response, result) {
+		callback(error, response, result);
+	});
+}
+
 /*
 	*** Note ***
 	This test requires a patient to be synced before it can test the utility.
@@ -76,20 +97,37 @@ describe('osync sync handler integration test', function() {
 			var done = false;
 			var environment = createEnvironment(jds, pjds);
 
+			var referenceInfo = {
+				'sessionId': 'sync-itest-spec',
+				'utilityType': 'Osync Sync Handler Integration Test'
+			};
+
 			var job = {
 				type: 'sync',
 				source: 'appointments',
 				siteId: pidUtils.extractSiteFromPid(patientIdentifier.value),
 				patient: {
 					dfn: pidUtils.extractDfnFromPid(patientIdentifier.value)
-				}
+				},
+				referenceInfo: referenceInfo
 			};
 
 			runs(function() {
 				handler(log, config.osync, environment, job, function(error, result) {
 					expect(error).toBeFalsy();
 					expect(result).toBeFalsy();
-					done = true;
+
+					retrieveEnterpriseSyncJobHistory(patientIdentifier, environment, function(error, response, result) {
+						expect(error).toBeFalsy();
+						expect(response).toBeTruthy();
+						expect(response.message).toBeFalsy();
+						expect(val(result, ['items', '0', 'referenceInfo'])).toEqual(jasmine.objectContaining({
+							sessionId: referenceInfo.sessionId,
+							requestId: jasmine.any(String),
+							utilityType: referenceInfo.utilityType
+						}));
+						done = true;
+					});
 				});
 			});
 
@@ -106,7 +144,7 @@ describe('osync sync handler integration test', function() {
 		});
 	});
 
-	describe('patient is on blacklist', function(){
+	describe('patient is on blacklist', function() {
 		var jds = new JdsClient(log, log, config);
 		var pjds = new PjdsClient(log, log, config);
 
@@ -126,7 +164,7 @@ describe('osync sync handler integration test', function() {
 					id: '9E7A;45645654'
 				};
 
-				pjds.addToOsyncBlist('9E7A;45645654', '9E7A', 'patient', function (error, response) {
+				pjds.addToOsyncBlist('9E7A;45645654', '9E7A', 'patient', function(error, response) {
 					if (error) {
 						expect(error).toBeFalsy();
 					}
@@ -169,7 +207,7 @@ describe('osync sync handler integration test', function() {
 			var cleanUp = false;
 
 			runs(function() {
-				pjds.removeFromOsyncBlist('9E7A;45645654', '9E7A', 'patient', function (error, response) {
+				pjds.removeFromOsyncBlist('9E7A;45645654', '9E7A', 'patient', function(error, response) {
 					if (error) {
 						expect(error).toBeFalsy();
 					}

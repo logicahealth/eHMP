@@ -5,7 +5,7 @@ define([
     'main/ui_components/form/classDefinitions',
     'main/ui_components/form/fieldsCollection',
     'main/ui_components/form/fieldModel',
-    'main/ui_components/form/control/behaviors/bahaviors',
+    'main/ui_components/form/control/behaviors/behaviors',
     'main/ui_components/form/control/formatters/default',
     'main/ui_components/form/control/formatters/json',
     'main/ui_components/form/control/prototype',

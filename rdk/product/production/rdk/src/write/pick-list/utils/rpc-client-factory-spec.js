@@ -9,10 +9,10 @@ var logger = sinon.stub(require('bunyan').createLogger({
 describe('Verify RPC Client Factory', function() {
     it('returns the same created client', function() {
         var config = {
-            host: '10.2.2.102',
-            port: 9210,
-            accessCode: 'pu1234',
-            verifyCode: 'pu1234!!',
+            host: 'IP        ',
+            port: PORT,
+            accessCode: 'REDACTED',
+            verifyCode: 'REDACTED',
             context: 'VPR UI CONTEXT',
             localIP: '127.0.0.1',
             localAddress: 'localhost',
@@ -28,10 +28,10 @@ describe('Verify RPC Client Factory', function() {
 
     it('returns the same created client in multidivision environment', function() {
         var config = {
-            host: '10.2.2.102',
-            port: 9210,
-            accessCode: 'pu1234',
-            verifyCode: 'pu1234!!',
+            host: 'IP        ',
+            port: PORT,
+            accessCode: 'REDACTED',
+            verifyCode: 'REDACTED',
             context: 'VPR UI CONTEXT',
             localIP: '127.0.0.1',
             localAddress: 'localhost',
@@ -48,10 +48,10 @@ describe('Verify RPC Client Factory', function() {
 
     it('returns different clients for different configurations', function() {
         var configA = {
-            host: '10.2.2.102',
-            port: 9210,
-            accessCode: 'pu1234',
-            verifyCode: 'pu1234!!',
+            host: 'IP        ',
+            port: PORT,
+            accessCode: 'REDACTED',
+            verifyCode: 'REDACTED',
             context: 'HMP UI CONTEXT',
             localIP: '127.0.0.1',
             localAddress: 'localhost',
@@ -60,10 +60,10 @@ describe('Verify RPC Client Factory', function() {
         };
 
         var configB = {
-            host: '10.2.2.102',
-            port: 9210,
-            accessCode: 'pu1234',
-            verifyCode: 'pu1234!!',
+            host: 'IP        ',
+            port: PORT,
+            accessCode: 'REDACTED',
+            verifyCode: 'REDACTED',
             context: 'OR CPRS GUI CHART',
             localIP: '127.0.0.1',
             localAddress: 'localhost',
@@ -84,10 +84,10 @@ describe('Verify RPC Client Factory', function() {
 
     it('returns different clients for different division-specific configurations', function() {
         var configA = {
-            host: '10.2.2.102',
-            port: 9210,
-            accessCode: 'pu1234',
-            verifyCode: 'pu1234!!',
+            host: 'IP        ',
+            port: PORT,
+            accessCode: 'REDACTED',
+            verifyCode: 'REDACTED',
             context: 'HMP UI CONTEXT',
             localIP: '127.0.0.1',
             localAddress: 'localhost',
@@ -97,10 +97,10 @@ describe('Verify RPC Client Factory', function() {
         };
 
         var configB = {
-            host: '10.2.2.102',
-            port: 9210,
-            accessCode: 'pu1234',
-            verifyCode: 'pu1234!!',
+            host: 'IP        ',
+            port: PORT,
+            accessCode: 'REDACTED',
+            verifyCode: 'REDACTED',
             context: 'HMP UI CONTEXT',
             localIP: '127.0.0.1',
             localAddress: 'localhost',

@@ -3,6 +3,7 @@
 require('../../../../env-setup');
 var VistaSubscribeRequestHandler = require(global.VX_HANDLERS + 'vista-subscribe-request/vista-subscribe-request-handler');
 var VistaClientDummy = require(global.VX_DUMMIES + 'vista-client-dummy');
+var HdrClientDummy = require(global.VX_DUMMIES + 'hdr-client-dummy');
 var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 var jobStatusUpdaterDummy = require(global.VX_DUMMIES + '/JobStatusUpdaterDummy');
 var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
@@ -12,10 +13,10 @@ var config = {
     'vistaSites': {
         '9E7A': {
             'name': 'panorama',
-            'host': '10.2.2.101',
-            'port': 9210,
-            'accessCode': 'pu1234',
-            'verifyCode': 'pu1234!!',
+            'host': 'PORT    ',
+            'port': PORT,
+            'accessCode': 'PORT',
+            'verifyCode': 'PORT',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
@@ -23,53 +24,53 @@ var config = {
         },
         'C877': {
             'name': 'kodak',
-            'host': '10.2.2.102',
-            'port': 9210,
-            'accessCode': 'pu1234',
-            'verifyCode': 'pu1234!!',
+            'host': 'PORT    ',
+            'port': PORT,
+            'accessCode': 'PORT',
+            'verifyCode': 'PORT',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
             'sendTimeout': 10000
         }
     },
-    'vista':{
-        domains:[
-        'allergy',
-        'auxiliary',
-        'appointment',
-        'diagnosis',
-        'document',
-        'immunization',
-        'lab',
-        'med',
-        'obs',
-        'order',
-        'problem',
-        'procedure',
-        'consult',
-        'image',
-        'surgery',
-        'task',
-        'visit',
-        'vital',
-        'ptf',
-        'exam',
-        'cpt',
-        'education',
-        'pov',
-        'skin',
-        'treatment',
-        'roadtrip',
-        'patient'
-      ]
+    'vista': {
+        domains: [
+            'allergy',
+            'auxiliary',
+            'appointment',
+            'diagnosis',
+            'document',
+            'immunization',
+            'lab',
+            'med',
+            'obs',
+            'order',
+            'problem',
+            'procedure',
+            'consult',
+            'image',
+            'surgery',
+            'task',
+            'visit',
+            'vital',
+            'ptf',
+            'exam',
+            'cpt',
+            'education',
+            'pov',
+            'skin',
+            'treatment',
+            'roadtrip',
+            'patient'
+        ]
     }
 };
 
 var environment = {
     vistaClient: new VistaClientDummy(dummyLogger, config, null),
     jobStatusUpdater: jobStatusUpdaterDummy,
-    hdrClient: new VistaClientDummy(dummyLogger, config, null),
+    hdrClient: new HdrClientDummy(dummyLogger, config, null),
 };
 
 var vistaId = '9E7A';
@@ -81,10 +82,14 @@ var rootJobId = '1';
 var pollerJobId = '3';
 var jobPriority = 55;
 var meta = {
-    jobId : jobId,
+    jobId: jobId,
     rootJobId: rootJobId,
     priority: jobPriority,
-    jpid: '21EC2020-3AEA-4069-A2DD-FFFFFFFFFFFF'
+    jpid: '21EC2020-3AEA-4069-A2DD-FFFFFFFFFFFF',
+    referenceInfo: {
+        requestId: 'vista-subscribe-request-requestId',
+        sessionId: 'vista-subscribe-request-sessionId'
+    }
 };
 var job = jobUtil.createVistaSubscribeRequest(vistaId, patientIdentifier, meta);
 var hdrId = '84F0';
@@ -99,8 +104,8 @@ var hdrJob = jobUtil.createVistaHdrSubscribeRequest(hdrId, hdrPatientIdentifier,
 // One final test verifies that the entire set of steps all make the appropriate calls.
 //-------------------------------------------------------------------------------------------------
 
-describe('vista-subscribe-request-handler.js', function() {
-    beforeEach(function() {
+describe('vista-subscribe-request-handler.js', function () {
+    beforeEach(function () {
         // Underlying JDS and RPC calls to monitor and make sure that they are made.
         //---------------------------------------------------------------------------
         spyOn(jobStatusUpdaterDummy, 'startJobStatus').andCallThrough();
@@ -109,166 +114,187 @@ describe('vista-subscribe-request-handler.js', function() {
         spyOn(environment.vistaClient, 'subscribe').andCallThrough();
         spyOn(environment.hdrClient, 'subscribe').andCallThrough();
     });
-    describe('_validateParameters()', function() {
-        it('Happy Path', function() {
+    describe('_validateParameters()', function () {
+        it('Happy Path', function () {
             var actualError;
             var actualResponse;
             var called = false;
-            VistaSubscribeRequestHandler._validateParameters(vistaId, pidSite, pid, dummyLogger, function(error, response) {
+            VistaSubscribeRequestHandler._validateParameters(vistaId, pidSite, pid, dummyLogger, function (error, response) {
                 actualError = error;
                 actualResponse = response;
                 called = true;
             });
 
-            waitsFor(function() {
+            waitsFor(function () {
                 return called;
             }, 'Call to _setJobStatusToStarted failed to return in time.', 500);
 
-            runs(function() {
+            runs(function () {
                 expect(actualError).toBeNull();
                 expect(actualResponse).toBeTruthy();
             });
         });
 
-        it('Error Path', function() {
+        it('Error Path', function () {
             var actualError;
             var actualResponse;
             var called = false;
-            VistaSubscribeRequestHandler._validateParameters('C877', pidSite, pid, dummyLogger, function(error, response) {
+            VistaSubscribeRequestHandler._validateParameters('C877', pidSite, pid, dummyLogger, function (error, response) {
                 actualError = error;
                 actualResponse = response;
                 called = true;
             });
 
-            waitsFor(function() {
+            waitsFor(function () {
                 return called;
             }, 'Call to _setJobStatusToStarted failed to return in time.', 500);
 
-            runs(function() {
+            runs(function () {
                 expect(actualError).toBeTruthy();
                 expect(actualResponse).toBeNull();
             });
         });
     });
 
-    describe('_createNewJobStatus()', function() {
-        it('Happy Path', function() {
+    describe('_createNewJobStatus()', function () {
+        it('Happy Path', function () {
             var actualError;
             var actualResponse;
             var called = false;
-            VistaSubscribeRequestHandler._createNewJobStatus(vistaId, 'allergy', pidSite, pid, job, pollerJobId, environment.jobStatusUpdater, dummyLogger, function(error, response) {
+            VistaSubscribeRequestHandler._createNewJobStatus(vistaId, 'allergy', pidSite, pid, job, pollerJobId, environment.jobStatusUpdater, dummyLogger, function (error, response) {
                 actualError = error;
                 actualResponse = response;
                 called = true;
             });
 
-            waitsFor(function() {
+            waitsFor(function () {
                 return called;
             }, 'Call to _setJobStatusToStarted failed to return in time.', 500);
 
-            runs(function() {
+            runs(function () {
                 expect(actualError).toBeNull();
                 expect(jobStatusUpdaterDummy.createJobStatus.calls.length).toEqual(1);
                 expect(jobStatusUpdaterDummy.createJobStatus).toHaveBeenCalledWith(jasmine.objectContaining({
-                    type : 'vista-9E7A-data-allergy-poller',
-                    patientIdentifier : { type : 'pid', value : pid },
-                    jpid : meta.jpid,
-                    rootJobId : rootJobId,
-                    jobId : jasmine.any(String)
+                    type: 'vista-9E7A-data-allergy-poller',
+                    patientIdentifier: {type: 'pid', value: pid},
+                    jpid: meta.jpid,
+                    rootJobId: rootJobId,
+                    jobId: jasmine.any(String)
                 }), jasmine.any(Function));
+                expect(job.referenceInfo).toBeDefined();
+                expect(job.referenceInfo.requestId).toBe('vista-subscribe-request-requestId');
+                expect(job.referenceInfo.sessionId).toBe('vista-subscribe-request-sessionId');
             });
         });
-        it('Happy Path For VistA HDR', function() {
+        it('Happy Path For VistA HDR', function () {
             var actualError;
             var actualResponse;
             var called = false;
             var hdrId = '84F0';
-            VistaSubscribeRequestHandler._createNewJobStatus(hdrId, 'allergy', hdrPidSite, hdrPid, hdrJob, pollerJobId, environment.jobStatusUpdater, dummyLogger, function(error, response) {
+            VistaSubscribeRequestHandler._createNewJobStatus(hdrId, 'allergy', hdrPidSite, hdrPid, hdrJob, pollerJobId, environment.jobStatusUpdater, dummyLogger, function (error, response) {
                 actualError = error;
                 actualResponse = response;
                 called = true;
             });
 
-            waitsFor(function() {
+            waitsFor(function () {
                 return called;
             }, 'Call to _setJobStatusToStarted failed to return in time.', 500);
 
-            runs(function() {
+            runs(function () {
                 expect(actualError).toBeNull();
                 expect(jobStatusUpdaterDummy.createJobStatus.calls.length).toEqual(1);
                 expect(jobStatusUpdaterDummy.createJobStatus).toHaveBeenCalledWith(jasmine.objectContaining({
-                    type : 'vistahdr-84F0-data-allergy-poller',
-                    patientIdentifier : { type : 'pid', value : hdrPid },
-                    jpid : meta.jpid,
-                    rootJobId : rootJobId,
-                    jobId : jasmine.any(String)
+                    type: 'vistahdr-84F0-data-allergy-poller',
+                    patientIdentifier: {type: 'pid', value: hdrPid},
+                    jpid: meta.jpid,
+                    rootJobId: rootJobId,
+                    jobId: jasmine.any(String)
                 }), jasmine.any(Function));
+                expect(job.referenceInfo).toBeDefined();
+                expect(job.referenceInfo.requestId).toBe('vista-subscribe-request-requestId');
+                expect(job.referenceInfo.sessionId).toBe('vista-subscribe-request-sessionId');
             });
         });
     });
 
-    describe('_subscribePatientToVistA()', function() {
-        it('Happy Path', function() {
+    describe('_subscribePatientToVistA()', function () {
+        it('Happy Path', function () {
             var actualError;
             var actualResponse;
             var called = false;
-            VistaSubscribeRequestHandler._subscribePatientToVistA(vistaId, pidSite, pid, job, pollerJobId, environment.vistaClient, dummyLogger, function(error, response) {
+            VistaSubscribeRequestHandler._subscribePatientToVistA(vistaId, pidSite, pid, job, pollerJobId, environment.vistaClient, dummyLogger, function (error, response) {
                 actualError = error;
                 actualResponse = response;
                 called = true;
             });
 
-            waitsFor(function() {
+            waitsFor(function () {
                 return called;
             }, 'Call to _setJobStatusToStarted failed to return in time.', 500);
 
-            runs(function() {
+            runs(function () {
                 expect(actualError).toBeNull();
                 expect(environment.vistaClient.subscribe.calls.length).toEqual(1);
-                expect(environment.vistaClient.subscribe).toHaveBeenCalledWith(vistaId, { type : 'pid', value : pid }, rootJobId, pollerJobId, jobPriority, jasmine.any(Function));
+                expect(environment.vistaClient.subscribe).toHaveBeenCalledWith(vistaId, {
+                    type: 'pid',
+                    value: pid
+                }, rootJobId, pollerJobId, jobPriority, {
+                    requestId: 'vista-subscribe-request-requestId',
+                    sessionId: 'vista-subscribe-request-sessionId'
+                }, jasmine.any(Function));
+                expect(job.referenceInfo).toBeDefined();
+                expect(job.referenceInfo.requestId).toBe('vista-subscribe-request-requestId');
+                expect(job.referenceInfo.sessionId).toBe('vista-subscribe-request-sessionId');
             });
         });
     });
 
-    describe('_subscribePatientToVistAHdr()', function() {
-        it('Happy Path', function() {
+    describe('_subscribePatientToVistAHdr()', function () {
+        it('Happy Path', function () {
             var actualError;
             var actualResponse;
             var called = false;
-            VistaSubscribeRequestHandler._subscribePatientToVistAHdr(hdrId, hdrPidSite, hdrPid, hdrJob, pollerJobId, environment.hdrClient, dummyLogger, function(error, response) {
+            VistaSubscribeRequestHandler._subscribePatientToVistAHdr(hdrId, hdrPidSite, hdrPid, hdrJob, pollerJobId, environment.hdrClient, dummyLogger, function (error, response) {
                 actualError = error;
                 actualResponse = response;
                 called = true;
             });
 
-            waitsFor(function() {
+            waitsFor(function () {
                 return called;
             }, 'Call to _setJobStatusToStarted failed to return in time.', 500);
 
-            runs(function() {
+            runs(function () {
                 expect(actualError).toBeNull();
                 expect(environment.hdrClient.subscribe.calls.length).toEqual(1);
-                expect(environment.hdrClient.subscribe).toHaveBeenCalledWith(hdrId, { type : 'pid', value : hdrPid }, rootJobId, pollerJobId, jobPriority, jasmine.any(Function));
+                expect(environment.hdrClient.subscribe).toHaveBeenCalledWith(hdrId, {
+                    type: 'pid',
+                    value: hdrPid
+                }, rootJobId, pollerJobId, jobPriority, jasmine.any(Function));
+                expect(job.referenceInfo).toBeDefined();
+                expect(job.referenceInfo.requestId).toBe('vista-subscribe-request-requestId');
+                expect(job.referenceInfo.sessionId).toBe('vista-subscribe-request-sessionId');
             });
         });
     });
 
-    describe('handle()', function() {
-        it('Happy Path', function() {
+    describe('handle()', function () {
+        it('Happy Path', function () {
             var actualError;
             var actualResponse;
             var called = false;
-            VistaSubscribeRequestHandler.handle(vistaId, dummyLogger, config, environment, job, function(error, response) {
+            VistaSubscribeRequestHandler.handle(vistaId, dummyLogger, config, environment, job, function (error, response) {
                 actualError = error;
                 actualResponse = response;
                 called = true;
             });
 
-            waitsFor(function() {
+            waitsFor(function () {
                 return called;
             }, 'Call to handle failed to return in time.', 500);
 
-            runs(function() {
+            runs(function () {
                 expect(actualError).toBeFalsy();
                 expect(actualResponse).toBeTruthy();
 
@@ -277,35 +303,43 @@ describe('vista-subscribe-request-handler.js', function() {
                 //--------------------------------
                 expect(jobStatusUpdaterDummy.createJobStatus.calls.length).toEqual(27);
                 expect(jobStatusUpdaterDummy.createJobStatus).toHaveBeenCalledWith(jasmine.objectContaining({
-                    type : 'vista-9E7A-data-allergy-poller',
-                    patientIdentifier : { type : 'pid', value : pid },
-                    jpid : meta.jpid,
-                    rootJobId : rootJobId,
-                    jobId : jasmine.any(String)
+                    type: 'vista-9E7A-data-allergy-poller',
+                    patientIdentifier: {type: 'pid', value: pid},
+                    jpid: meta.jpid,
+                    rootJobId: rootJobId,
+                    jobId: jasmine.any(String)
                 }), jasmine.any(Function));
 
                 // _subscribePatientToVistA was called
                 //-------------------------------------
                 expect(environment.vistaClient.subscribe.calls.length).toEqual(1);
-                expect(environment.vistaClient.subscribe).toHaveBeenCalledWith(vistaId, { type : 'pid', value : pid }, rootJobId, jasmine.any(Array), jobPriority, jasmine.any(Function));
+                expect(environment.vistaClient.subscribe).toHaveBeenCalledWith(vistaId, {
+                        type: 'pid',
+                        value: pid
+                    }, rootJobId, jasmine.any(Array), jobPriority,
+                    {requestId: 'vista-subscribe-request-requestId', sessionId: 'vista-subscribe-request-sessionId'},
+                    jasmine.any(Function));
+                expect(job.referenceInfo).toBeDefined();
+                expect(job.referenceInfo.requestId).toBe('vista-subscribe-request-requestId');
+                expect(job.referenceInfo.sessionId).toBe('vista-subscribe-request-sessionId');
 
             });
         });
-        it('Happy Path For VistA HDR', function() {
+        it('Happy Path For VistA HDR', function () {
             var actualError;
             var actualResponse;
             var called = false;
-            VistaSubscribeRequestHandler.handle(hdrId, dummyLogger, config, environment, hdrJob, function(error, response) {
+            VistaSubscribeRequestHandler.handle(hdrId, dummyLogger, config, environment, hdrJob, function (error, response) {
                 actualError = error;
                 actualResponse = response;
                 called = true;
             });
 
-            waitsFor(function() {
+            waitsFor(function () {
                 return called;
             }, 'Call to handle failed to return in time.', 500);
 
-            runs(function() {
+            runs(function () {
                 expect(actualError).toBeFalsy();
                 expect(actualResponse).toBeTruthy();
 
@@ -314,21 +348,25 @@ describe('vista-subscribe-request-handler.js', function() {
                 //--------------------------------
                 expect(jobStatusUpdaterDummy.createJobStatus.calls.length).toEqual(27);
                 expect(jobStatusUpdaterDummy.createJobStatus).toHaveBeenCalledWith(jasmine.objectContaining({
-                    type : 'vistahdr-84F0-data-allergy-poller',
-                    patientIdentifier : { type : 'pid', value : hdrPid },
-                    jpid : meta.jpid,
-                    rootJobId : rootJobId,
-                    jobId : jasmine.any(String)
+                    type: 'vistahdr-84F0-data-allergy-poller',
+                    patientIdentifier: {type: 'pid', value: hdrPid},
+                    jpid: meta.jpid,
+                    rootJobId: rootJobId,
+                    jobId: jasmine.any(String)
                 }), jasmine.any(Function));
 
                 // _subscribePatientToVistA was called
                 //-------------------------------------
                 expect(environment.hdrClient.subscribe.calls.length).toEqual(1);
-                expect(environment.hdrClient.subscribe).toHaveBeenCalledWith(hdrId, { type : 'pid', value : hdrPid }, rootJobId, jasmine.any(Array), jobPriority, jasmine.any(Function));
+                expect(environment.hdrClient.subscribe).toHaveBeenCalledWith(hdrId, {
+                    type: 'pid',
+                    value: hdrPid
+                }, rootJobId, jasmine.any(Array), jobPriority, jasmine.any(Function));
+                expect(job.referenceInfo).toBeDefined();
+                expect(job.referenceInfo.requestId).toBe('vista-subscribe-request-requestId');
+                expect(job.referenceInfo.sessionId).toBe('vista-subscribe-request-sessionId');
 
             });
         });
     });
-
-
 });

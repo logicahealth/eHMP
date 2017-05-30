@@ -4,6 +4,7 @@ define([
     'jquery',
     'underscore',
     'api/Messaging',
+    'main/overrides/overrides',
     'api/SessionStorage',
     'main/AppletsManifest',
     'main/ScreensManifest',
@@ -14,7 +15,7 @@ define([
     '_assets/js/browserDetector/browserDetector',
     'main/context/ContextAspectBuilder',
     'moment'
-], function(Backbone, Marionette, $, _, Messaging, SessionStorage, AppletsManifest, ScreensManifest, ResourcesManifest, ContextManifest, NewUserScreen, PreDefinedScreens, BrowserDetector, ContextAspectBuilder, moment) {
+], function(Backbone, Marionette, $, _, Messaging, Overrides, SessionStorage, AppletsManifest, ScreensManifest, ResourcesManifest, ContextManifest, NewUserScreen, PreDefinedScreens, BrowserDetector, ContextAspectBuilder, moment) {
     'use strict';
 
     var SCREENS = 'app/screens/screens.min.js';

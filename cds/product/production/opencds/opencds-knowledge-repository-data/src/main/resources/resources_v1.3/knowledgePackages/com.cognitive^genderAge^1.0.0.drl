@@ -1,0 +1,128 @@
+/*
+ * COPYRIGHT STATUS: © 2015, 2016.  This work, authored by Cognitive Medical Systems
+ * employees, was funded in whole or in part by The Department of Veterans
+ * Affairs under U.S. Government contract VA118-11-D-1011 / VA118-1011-0013.
+ * The copyright holder agrees to post or allow the Government to post all or
+ * part of this work in open-source repositories subject to the Apache License,
+ * Version 2.0, dated January 2004. All other rights are reserved by the
+ * copyright owner.
+ *
+ * For use outside the Government, the following notice applies:
+ *
+ *     Copyright 2015 © Cognitive Medical Systems
+ *
+ *     Licensed under the Apache License, Version 2.0 (the "License"); you may
+ *     not use this file except in compliance with the License. You may obtain
+ *     a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ *
+ */
+package genderAge;
+
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+import java.util.Date;
+import java.text.DecimalFormat;
+
+import ca.uhn.fhir.model.api.IDatatype;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.composite.ContainedDt;
+import ca.uhn.fhir.model.dstu2.resource.CommunicationRequest;
+import ca.uhn.fhir.model.dstu2.resource.CommunicationRequest.Payload;
+import ca.uhn.fhir.model.dstu2.resource.Provenance;
+import ca.uhn.fhir.model.dstu2.resource.Provenance.Agent;
+import ca.uhn.fhir.model.dstu2.resource.Patient;
+import ca.uhn.fhir.model.primitive.StringDt;
+import java.util.ArrayList;
+import java.util.ArrayList;
+import java.util.List;
+import java.lang.String;
+
+import function org.opencds.service.evaluate.FhirUtils.isCodingContains;
+import function org.opencds.service.evaluate.FhirUtils.getValueQuantity;
+import function org.opencds.service.evaluate.FhirUtils.createProvenance;
+import function org.opencds.service.evaluate.FhirUtils.createCommunicationRequest;
+import function org.opencds.service.evaluate.FhirUtils.hasInputFlag;
+import function org.opencds.service.evaluate.FhirUtils.createOutputExtension;
+
+global java.lang.String clientLanguage;
+global java.lang.String clientTimeZoneOffset;
+global java.lang.String focalPersonId;
+global java.util.Date evalTime;
+global java.util.HashSet assertions;
+global java.util.HashMap namedObjects;
+ 
+rule "ageGenderFhirMale"
+			dialect "java"
+			when
+				$patient : Patient($birthtime : birthDate, $gender : gender)
+				$age : Period() from new Period($birthtime.getTime(), new Date().getTime(), PeriodType.years())
+				
+				eval($age.getYears() >= 45 )
+				eval($gender.equals("male"))	
+				
+			then
+			  CommunicationRequest comRequest = createCommunicationRequest("The risk of heart disease increases for men after age 45.");
+		  
+		      CodeableConceptDt category = new CodeableConceptDt("SNOMED", "419772000");
+		      comRequest.setCategory(category);
+		      category.getCodingFirstRep().setDisplay("Family Medicine");
+		      category.setText("Family Medicine");
+		      
+		      CodeableConceptDt reason = new CodeableConceptDt("SNOMED", "419772000");
+		      comRequest.getReason().add(reason);
+		      reason.getCodingFirstRep().setDisplay("NIH Coronary Heart Disease Risk Reminder");
+		      
+		      CodeableConceptDt priority = new CodeableConceptDt("CDS-System", "50");
+		      priority.getCodingFirstRep().setDisplay("Routine");
+		      comRequest.setPriority(priority);
+		      
+		      Provenance prov = createProvenance("http://www.nhlbi.nih.gov/health/health-topics/topics/hd");
+		      ContainedDt contained = new ContainedDt();
+			  contained.getContainedResources().add(prov);
+		      comRequest.setContained(contained);
+		      comRequest.addUndeclaredExtension(createOutputExtension());
+		      prov.addUndeclaredExtension(createOutputExtension());
+		      namedObjects.put("provenance", prov);	
+		      namedObjects.put("communicationRequest", comRequest);			
+end 
+
+rule "ageGenderFhirFemale"
+			dialect "java"
+			when
+				$patient : Patient($birthtime : birthDate, $gender : gender)
+				$age : Period() from new Period($birthtime.getTime(), new Date().getTime(), PeriodType.years())
+				
+				eval($age.getYears() >= 55 )
+				eval($gender.equals("female"))	
+			then
+			  CommunicationRequest comRequest = createCommunicationRequest("The risk of heart disease increases for female after age 55.");
+		  
+		      CodeableConceptDt category = new CodeableConceptDt("SNOMED", "419772000");
+		      comRequest.setCategory(category);
+		      category.getCodingFirstRep().setDisplay("Family Medicine");
+		      category.setText("Family Medicine");
+		      
+		      CodeableConceptDt reason = new CodeableConceptDt("SNOMED", "419772000");
+		      comRequest.getReason().add(reason);
+		      reason.getCodingFirstRep().setDisplay("NIH Coronary Heart Disease Risk Reminder");
+		      
+		      CodeableConceptDt priority = new CodeableConceptDt("CDS-System", "50");
+		      priority.getCodingFirstRep().setDisplay("Routine");
+		      comRequest.setPriority(priority);
+		      
+		      Provenance prov = createProvenance("http://www.nhlbi.nih.gov/health/health-topics/topics/hd");
+		      ContainedDt contained = new ContainedDt();
+			  contained.getContainedResources().add(prov);
+		      comRequest.setContained(contained);
+		      comRequest.addUndeclaredExtension(createOutputExtension());
+		      prov.addUndeclaredExtension(createOutputExtension());
+		      namedObjects.put("provenance", prov);	
+		      namedObjects.put("communicationRequest", comRequest);			
+end 

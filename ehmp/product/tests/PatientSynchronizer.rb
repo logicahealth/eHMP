@@ -12,7 +12,7 @@ class PatientSynchronizer
   # Maximum time to wait before releasing synchronization thread. The sync process will
   # continue to execute in the background even if this timeout is reached, but most likely there
   # was an unexpected error and the logs should be checked.
-  @max_wait_seconds = 2400
+  @max_wait_seconds = 300
 
   # Interval to wait between checking synchronization status for a patient.
   @wait_interval_seconds = 2

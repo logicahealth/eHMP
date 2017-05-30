@@ -40,6 +40,9 @@ public class EntityDocQuery implements EntityDocQueryPortType {
             //FIVEHUNDREDTWENTYSIX,PATIENT to return empty document list
             if (StringUtils.contains(patientIdStr, "5000000089V224123")) {
                 file = new File(classLoader.getResource("mock-no-docs-response.xml").getFile());
+            }//NINE,PATIENT to return empty response
+            else if (StringUtils.contains(patientIdStr, "10109V652700")) {
+                file = new File(classLoader.getResource("mock-empty-response.xml").getFile());
             }
             else {
                 file = new File(classLoader.getResource("mock-response.xml").getFile());

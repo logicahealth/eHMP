@@ -3,9 +3,12 @@
 
 require('../../../../../env-setup');
 var logger = require(global.VX_DUMMIES + 'dummy-logger');
-// logger = require('bunyan').createLogger({
+// NOTE: be sure next lines are commented out before pushing
+// var logUtil = require(global.VX_UTILS + 'log');
+// var logger = logUtil._createLogger({
 //     name: 'osync-admissions',
-//     level: 'debug'
+//     level: 'debug',
+//     child: logUtil._createLogger
 // });
 
 var handler = require(global.VX_HANDLERS + 'osync/admissions/admissions');
@@ -15,22 +18,21 @@ var Updater = require(global.VX_DUMMIES + 'JobStatusUpdaterDummy');
 var VistaClientDummy = require(global.VX_DUMMIES + 'vista-client-dummy');
 
 var mockHandlerCallback = {
-    callback: function (error, response) {
-    }
+    callback: function(error, response) {}
 };
 
-describe('osync-admission-handler.js', function () {
-    describe('admission.handle', function () {
+describe('osync-admission-handler.js', function() {
+    describe('admission.handle', function() {
         // globally used variables
         var job = {};
         var mockConfig = null;
         var mockEnvironment = null;
         var mockRPCConfig = {
             'name': "panorama",
-            'host': '10.2.2.101',
-            'port': 9210,
-            'accessCode': 'ep1234',
-            'verifyCode': 'ep1234!!',
+            'host': 'IP        ',
+            'port': PORT,
+            'accessCode': 'REDACTED',
+            'verifyCode': 'REDACTED',
             'localIP': '127.0.0.1',
             'stationNumber': 500,
             'localAddress': 'localhost',
@@ -38,17 +40,17 @@ describe('osync-admission-handler.js', function () {
             'sendTimeout': 20000
         };
 
-        beforeEach(function () {
+        beforeEach(function() {
             spyOn(mockHandlerCallback, 'callback');
         });
 
-        it('error condition: no job type passed', function () {
+        it('error condition: no job type passed', function() {
             var done = false;
 
-            runs(function () {
+            runs(function() {
 
 
-                handler(logger, mockConfig, mockEnvironment, job, function (err) {
+                handler(logger, mockConfig, mockEnvironment, job, function(err) {
                     expect(err).toEqual({
                         'type': 'fatal-exception',
                         'message': 'admissions.validate: Could not find job type'
@@ -58,22 +60,22 @@ describe('osync-admission-handler.js', function () {
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return done;
             }, 'Callback not called', 100);
 
-            runs(function () {
+            runs(function() {
                 expect(mockHandlerCallback.callback).toHaveBeenCalled();
             });
         });
 
-        it('error condition: empty string for job type passed', function () {
+        it('error condition: empty string for job type passed', function() {
             var done = false;
 
-            runs(function () {
+            runs(function() {
                 job.type = '';
 
-                handler(logger, mockConfig, mockEnvironment, job, function (err) {
+                handler(logger, mockConfig, mockEnvironment, job, function(err) {
                     expect(err).toEqual({
                         'type': 'fatal-exception',
                         'message': 'admissions.validate: Could not find job type'
@@ -83,22 +85,22 @@ describe('osync-admission-handler.js', function () {
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return done;
             }, 'Callback not called', 100);
 
-            runs(function () {
+            runs(function() {
                 expect(mockHandlerCallback.callback).toHaveBeenCalled();
             });
         });
 
-        it('error condition: wrong job type passed', function () {
+        it('error condition: wrong job type passed', function() {
             var done = false;
 
-            runs(function () {
+            runs(function() {
                 job.type = 'cds-xform-vpr';
 
-                handler(logger, mockConfig, mockEnvironment, job, function (err) {
+                handler(logger, mockConfig, mockEnvironment, job, function(err) {
                     expect(err).toEqual({
                         'type': 'fatal-exception',
                         'message': 'admissions.validate: job type was not admissions'
@@ -108,22 +110,22 @@ describe('osync-admission-handler.js', function () {
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return done;
             }, 'Callback not called', 100);
 
-            runs(function () {
+            runs(function() {
                 expect(mockHandlerCallback.callback).toHaveBeenCalled();
             });
         });
 
-        it('error condition: no site passed', function () {
+        it('error condition: no site passed', function() {
             var done = false;
 
-            runs(function () {
+            runs(function() {
                 job.type = 'admissions';
 
-                handler(logger, mockConfig, mockEnvironment, job, function (err) {
+                handler(logger, mockConfig, mockEnvironment, job, function(err) {
                     expect(err).toEqual({
                         'type': 'fatal-exception',
                         'message': 'admissions.validate: Could not find job site'
@@ -133,23 +135,23 @@ describe('osync-admission-handler.js', function () {
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return done;
             }, 'Callback not called', 100);
 
-            runs(function () {
+            runs(function() {
                 expect(mockHandlerCallback.callback).toHaveBeenCalled();
             });
         });
 
-        it('error condition: empty string for site passed', function () {
+        it('error condition: empty string for site passed', function() {
             var done = false;
 
-            runs(function () {
+            runs(function() {
                 job.type = 'admissions';
                 job.siteId = '';
 
-                handler(logger, mockConfig, mockEnvironment, job, function (err) {
+                handler(logger, mockConfig, mockEnvironment, job, function(err) {
                     expect(err).toEqual({
                         'type': 'fatal-exception',
                         'message': 'admissions.validate: Could not find job site'
@@ -159,23 +161,23 @@ describe('osync-admission-handler.js', function () {
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return done;
             }, 'Callback not called', 100);
 
-            runs(function () {
+            runs(function() {
                 expect(mockHandlerCallback.callback).toHaveBeenCalled();
             });
         });
 
-        it('error condition: null configuration passed', function () {
+        it('error condition: null configuration passed', function() {
             var done = false;
 
-            runs(function () {
+            runs(function() {
                 job.type = 'admissions';
                 job.siteId = 'ASDF';
 
-                handler(logger, mockConfig, mockEnvironment, job, function (err) {
+                handler(logger, mockConfig, mockEnvironment, job, function(err) {
                     expect(err).toEqual({
                         'type': 'fatal-exception',
                         'message': 'admissions.handle: Invalid configuration passed'
@@ -185,26 +187,26 @@ describe('osync-admission-handler.js', function () {
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return done;
             }, 'Callback not called', 100);
 
-            runs(function () {
+            runs(function() {
                 expect(mockHandlerCallback.callback).toHaveBeenCalled();
             });
         });
 
-        it('error condition: null vistaSites configuration passed', function () {
+        it('error condition: null vistaSites configuration passed', function() {
             var done = false;
 
-            runs(function () {
+            runs(function() {
                 job.type = 'admissions';
                 job.siteId = 'ASDF';
 
                 mockConfig = {};
                 mockConfig.vistaSites = null;
 
-                handler(logger, mockConfig, mockEnvironment, job, function (err) {
+                handler(logger, mockConfig, mockEnvironment, job, function(err) {
                     expect(err).toEqual({
                         'type': 'fatal-exception',
                         'message': 'admissions.handle: No VistA site configuration found'
@@ -214,19 +216,19 @@ describe('osync-admission-handler.js', function () {
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return done;
             }, 'Callback not called', 100);
 
-            runs(function () {
+            runs(function() {
                 expect(mockHandlerCallback.callback).toHaveBeenCalled();
             });
         });
 
-        it('error condition: VistA site not found in config', function () {
+        it('error condition: VistA site not found in config', function() {
             var done = false;
 
-            runs(function () {
+            runs(function() {
                 job.type = 'admissions';
                 job.siteId = 'ASDF';
 
@@ -234,7 +236,7 @@ describe('osync-admission-handler.js', function () {
                 mockConfig.vistaSites = {};
                 mockConfig.vistaSites['9E7A'] = mockRPCConfig;
 
-                handler(logger, mockConfig, mockEnvironment, job, function (err) {
+                handler(logger, mockConfig, mockEnvironment, job, function(err) {
                     expect(err).toEqual({
                         'type': 'fatal-exception',
                         'message': 'admissions.handle: No RPC configuration for site ASDF'
@@ -244,19 +246,19 @@ describe('osync-admission-handler.js', function () {
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return done;
             }, 'Callback not called', 100);
 
-            runs(function () {
+            runs(function() {
                 expect(mockHandlerCallback.callback).toHaveBeenCalled();
             });
         });
 
-        it('error condition: rpcConfig not found in config', function () {
+        it('error condition: rpcConfig not found in config', function() {
             var done = false;
 
-            runs(function () {
+            runs(function() {
                 job.type = 'admissions';
                 job.siteId = 'ASDF';
 
@@ -264,7 +266,7 @@ describe('osync-admission-handler.js', function () {
                 mockConfig.vistaSites = {};
                 mockConfig.vistaSites['ASDF'] = mockRPCConfig;
 
-                handler(logger, mockConfig, mockEnvironment, job, function (err) {
+                handler(logger, mockConfig, mockEnvironment, job, function(err) {
                     expect(err).toEqual({
                         'type': 'fatal-exception',
                         'message': 'admissions.handle: No RPC context found in configuration'
@@ -274,16 +276,16 @@ describe('osync-admission-handler.js', function () {
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return done;
             }, 'Callback not called', 100);
 
-            runs(function () {
+            runs(function() {
                 expect(mockHandlerCallback.callback).toHaveBeenCalled();
             });
         });
     });
-    describe('admission.handle: Happy paths', function () {
+    describe('admission.handle: Happy paths', function() {
         // globally used variables
         var job = {};
         var mockConfig = {};
@@ -291,10 +293,10 @@ describe('osync-admission-handler.js', function () {
 
         var mockRPCConfig = {
             'name': "panorama",
-            'host': '10.2.2.101',
-            'port': 9210,
-            'accessCode': 'ep1234',
-            'verifyCode': 'ep1234!!',
+            'host': 'IP        ',
+            'port': PORT,
+            'accessCode': 'REDACTED',
+            'verifyCode': 'REDACTED',
             'localIP': '127.0.0.1',
             'stationNumber': 500,
             'localAddress': 'localhost',
@@ -302,19 +304,19 @@ describe('osync-admission-handler.js', function () {
             'sendTimeout': 20000
         };
 
-        beforeEach(function () {
+        beforeEach(function() {
             spyOn(mockHandlerCallback, 'callback');
         });
 
-        it('Happy path: correct job sent to handler (numeric site)', function () {
+        it('Happy path: correct job sent to handler (numeric site)', function() {
             var done = false;
 
-            runs(function () {
+            runs(function() {
                 job.type = 'admissions';
                 job.siteId = '1234';
 
                 mockConfig.vistaSites['1234'] = mockRPCConfig;
-                mockConfig.rpcContext = 'HMP SYNCHRONIZATION CONTEXT'
+                mockConfig.rpcContext = 'HMP SYNCHRONIZATION CONTEXT';
 
                 var mockPublisher = new Publisher(logger, mockConfig, job.type);
                 var environment = {
@@ -322,31 +324,31 @@ describe('osync-admission-handler.js', function () {
                     publisherRouter: new Router(logger, mockConfig, Updater, mockPublisher)
                 };
 
-                handler(logger, mockConfig, environment, job, function (err) {
+                handler(logger, mockConfig, environment, job, function(err) {
                     expect(err).toBeFalsy();
                     done = true;
                     mockHandlerCallback.callback();
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return done;
             }, 'Callback not called', 100);
 
-            runs(function () {
+            runs(function() {
                 expect(mockHandlerCallback.callback).toHaveBeenCalled();
             });
         });
 
-        it('Happy path: correct job sent to handler (mixed site)', function () {
+        it('Happy path: correct job sent to handler (mixed site)', function() {
             var done = false;
 
-            runs(function () {
+            runs(function() {
                 job.type = 'admissions';
                 job.siteId = '9E7A';
 
                 mockConfig.vistaSites['9E7A'] = mockRPCConfig;
-                mockConfig.rpcContext = 'HMP SYNCHRONIZATION CONTEXT'
+                mockConfig.rpcContext = 'HMP SYNCHRONIZATION CONTEXT';
 
                 var mockPublisher = new Publisher(logger, mockConfig, job.type);
                 var environment = {
@@ -354,31 +356,31 @@ describe('osync-admission-handler.js', function () {
                     publisherRouter: new Router(logger, mockConfig, Updater, mockPublisher)
                 };
 
-                handler(logger, mockConfig, environment, job, function (err) {
+                handler(logger, mockConfig, environment, job, function(err) {
                     expect(err).toBeFalsy();
                     done = true;
                     mockHandlerCallback.callback();
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return done;
             }, 'Callback not called', 100);
 
-            runs(function () {
+            runs(function() {
                 expect(mockHandlerCallback.callback).toHaveBeenCalled();
             });
         });
 
-        it('Happy path: correct job sent to handler (leading zero fully numeric site)', function () {
+        it('Happy path: correct job sent to handler (leading zero fully numeric site)', function() {
             var done = false;
 
-            runs(function () {
+            runs(function() {
                 job.type = 'admissions';
                 job.siteId = '0042';
 
                 mockConfig.vistaSites['0042'] = mockRPCConfig;
-                mockConfig.rpcContext = 'HMP SYNCHRONIZATION CONTEXT'
+                mockConfig.rpcContext = 'HMP SYNCHRONIZATION CONTEXT';
 
                 var mockPublisher = new Publisher(logger, mockConfig, job.type);
                 var environment = {
@@ -386,31 +388,31 @@ describe('osync-admission-handler.js', function () {
                     publisherRouter: new Router(logger, mockConfig, Updater, mockPublisher)
                 };
 
-                handler(logger, mockConfig, environment, job, function (err) {
+                handler(logger, mockConfig, environment, job, function(err) {
                     expect(err).toBeFalsy();
                     done = true;
                     mockHandlerCallback.callback();
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return done;
             }, 'Callback not called', 100);
 
-            runs(function () {
+            runs(function() {
                 expect(mockHandlerCallback.callback).toHaveBeenCalled();
             });
         });
 
-        it('Happy path: correct job sent to handler (leading zero mixed site)', function () {
+        it('Happy path: correct job sent to handler (leading zero mixed site)', function() {
             var done = false;
 
-            runs(function () {
+            runs(function() {
                 job.type = 'admissions';
                 job.siteId = '0AF2';
 
                 mockConfig.vistaSites['0AF2'] = mockRPCConfig;
-                mockConfig.rpcContext = 'HMP SYNCHRONIZATION CONTEXT'
+                mockConfig.rpcContext = 'HMP SYNCHRONIZATION CONTEXT';
 
                 var mockPublisher = new Publisher(logger, mockConfig, job.type);
                 var environment = {
@@ -418,19 +420,88 @@ describe('osync-admission-handler.js', function () {
                     publisherRouter: new Router(logger, mockConfig, Updater, mockPublisher)
                 };
 
-                handler(logger, mockConfig, environment, job, function (err) {
+                handler(logger, mockConfig, environment, job, function(err) {
                     expect(err).toBeFalsy();
                     done = true;
                     mockHandlerCallback.callback();
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return done;
             }, 'Callback not called', 100);
 
-            runs(function () {
+            runs(function() {
                 expect(mockHandlerCallback.callback).toHaveBeenCalled();
+            });
+        });
+
+        it('Happy path: correct jobs generated', function(done) {
+            var resultJobs = [];
+
+            runs(function() {
+                job.type = 'admissions';
+                job.siteId = '1234';
+                job.referenceInfo = {
+                    requestId: 'admissions-requestId',
+                    sessionId: 'admissions-sessionId'
+                };
+
+                mockConfig.vistaSites['1234'] = mockRPCConfig;
+                mockConfig.rpcContext = 'HMP SYNCHRONIZATION CONTEXT';
+
+                var mockPublisher = new Publisher(logger, mockConfig, job.type);
+                var environment = {
+                    vistaClient: new VistaClientDummy(logger, mockConfig, null),
+                    publisherRouter: new Router(logger, mockConfig, Updater, mockPublisher)
+                };
+
+                var vistaStr = '12345^20170131120000^TEST^12^123^\r\n54321^20170131120000^TEST2^21^321^\r\n';
+                environment.vistaClient._setFetchResponseData(null, vistaStr);
+
+                spyOn(environment.publisherRouter, 'publish').andCallFake(function(job, callback) {
+                    resultJobs.push(job);
+                    callback();
+                });
+
+                handler(logger, mockConfig, environment, job, function(err) {
+                    expect(err).toBeFalsy();
+                    expect(resultJobs).toContain(jasmine.objectContaining({
+                        type: 'sync',
+                        jpid: jasmine.any(String),
+                        referenceInfo: {
+                            requestId: 'admissions-requestId',
+                            sessionId: 'admissions-sessionId'
+                        },
+                        source: 'admissions',
+                        patient: {
+                            dfn: '12345',
+                            date: '20170131120000',
+                            locationName: 'TEST',
+                            roomBed: '12',
+                            locationIen: '123'
+                        },
+                        siteId: '1234'
+                    }));
+                    expect(resultJobs).toContain(jasmine.objectContaining({
+                        type: 'sync',
+                        jpid: jasmine.any(String),
+                        referenceInfo: {
+                            requestId: 'admissions-requestId',
+                            sessionId: 'admissions-sessionId'
+                        },
+                        source: 'admissions',
+                        patient: {
+                            dfn: '54321',
+                            date: '20170131120000',
+                            locationName: 'TEST2',
+                            roomBed: '21',
+                            locationIen: '321'
+                        },
+                        siteId: '1234'
+                    }));
+                    done();
+                });
             });
         });
     });

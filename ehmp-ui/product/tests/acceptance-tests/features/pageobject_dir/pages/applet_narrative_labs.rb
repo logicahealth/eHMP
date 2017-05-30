@@ -9,7 +9,7 @@ class PobNarrativeLabResultsApplet < PobParentApplet
   # *****************  All_Logo_Elements  ******************* #
 
   # *****************  All_Field_Elements  ******************* #
-  element :fld_col_description, "[data-header-instanceid='narrative_lab_results_grid-description'] a"
+  element :fld_col_description, "[data-header-instanceid='narrative_lab_results_grid-narrativeDescription'] a"
   elements :fld_description_column_values, "#data-grid-narrative_lab_results_grid tbody tr td:nth-of-type(2)"
 
   # *****************  All_Button_Elements  ******************* #

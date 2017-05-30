@@ -15,7 +15,7 @@ class PobStaffView < SitePrism::Page
   element :closed_my_site, ".patient-search-tray-list li.sidebar:nth-of-type(2):not(.open)"
   element :btn_open_my_site, ".patient-search-tray-list li.sidebar:nth-of-type(2) button[id^='tray']"
   element :btn_close_my_site, ".patient-search-tray-list li.sidebar:nth-of-type(2) button.close-tray"
-  element :fld_my_site_input, '#patientSelectionMySiteSearchText'
+  element :fld_my_site_input, '.patientSelectionMySiteSearchText input'
   element :fld_my_site_instructions, ".sidebar-tray.left p:not(.sr-only)"
   element :fld_my_site_search_help, ".patientSelectionMySiteSearchText span.help-block"
   element :btn_my_site_search, ".patient-selection--my-site-search--input button[type='submit']"
@@ -24,14 +24,15 @@ class PobStaffView < SitePrism::Page
   elements :results_name_screenreader, "li.open .search-results tbody td:nth-of-type(1) span.sr-only"
   elements :my_site_search_results_dob, "li.open .search-results tbody td:nth-of-type(2)"
   elements :results_dob_screenreader, "li.open .search-results tbody td:nth-of-type(2) span.sr-only"
+  elements :my_site_search_results_gender, "li.open .search-results tbody td:nth-of-type(3)"
 
   element :open_ward, ".patient-search-tray-list li.sidebar:nth-of-type(5).open"
   element :closed_ward, ".patient-search-tray-list li.sidebar:nth-of-type(5):not(.open)"
   element :btn_open_ward, ".patient-search-tray-list li.sidebar:nth-of-type(5) button[id^='tray']"
   element :btn_close_ward, ".patient-search-tray-list li.sidebar:nth-of-type(5) button.close-tray"
-  element :fld_ward_label, "label[for='wardLocation']"
-  element :fld_ward_select, "#wardLocation"
-  element :ddl_ward_location, "[x-is-labelledby='select2-wardLocation-container']"
+  element :fld_ward_label, "label[for^='wardLocation']"
+  element :fld_ward_select, ".wardLocation select"
+  element :ddl_ward_location, ".wardLocation [x-is-labelledby^='select2-wardLocation']"
   element :fld_ward_search_box, "input[class='select2-search__field']"
   element :fld_ward_filter_no_results, "li.select2-results__option.select2-results__message"
   elements :fld_ward_location_options, ".select2-results__option:not(.empty-option)"
@@ -41,22 +42,28 @@ class PobStaffView < SitePrism::Page
   elements :fld_ward_name_results_screenreader, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(1) span.sr-only"
   elements :fld_ward_dob_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(2)"
   elements :fld_ward_dob_results_screenreader, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(2) span.sr-only"
-  elements :fld_ward_room_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(3)"
-  elements :fld_ward_room_results_screenreader, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(3) span.sr-only"
+  elements :fld_ward_room_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(4)"
+  elements :fld_ward_room_results_screenreader, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(4) span.sr-only"
+  elements :fld_ward_gender_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(3)"
+  element :fld_nationwide_lastname_label, "label[for^='lastName']"
+  element :fld_nationwide_firstname_label, "label[for^='firstName']"
+  element :fld_nationwide_dob_label, "label[for^='dob']"
+  element :fld_nationwide_SSN_label, "label[for^='ssn']"
 
   element :open_nationwide, ".patient-search-tray-list li.sidebar:nth-of-type(6).open"
   element :closed_nationwide, ".patient-search-tray-list li.sidebar:nth-of-type(6):not(.open)"
   element :btn_open_nationwide, ".patient-search-tray-list li.sidebar:nth-of-type(6) button[id^='tray']"
   element :btn_close_nationwide, ".patient-search-tray-list li.sidebar:nth-of-type(6) button.close-tray"
-  element :fld_nationwide_lastname, '#lastName'
-  element :fld_nationwide_firstname, '#firstName'
-  element :fld_nationwide_dob, '#dob'
-  element :fld_nationwide_ssn, '#ssn'
+  element :fld_nationwide_lastname, '.input-control.lastName input'
+  element :fld_nationwide_firstname, '.input-control.firstName input'
+  element :fld_nationwide_dob, '.datepicker-control.dob input'
+  element :fld_nationwide_ssn, '.input-control.ssn input'
   element :btn_nationwide_search, "li.sidebar.open button[type=submit]"
   element :fld_nw_no_patients, "li.sidebar.open tr[data-message-type='no-results']"
   elements :fld_nw_name_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(1)" 
   elements :fld_nw_name_results_screenreader, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(1) span.sr-only"
   elements :fld_nw_dob_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(2)"
+  elements :fld_nw_gender_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(3)"
   elements :fld_nw_dob_results_screenreader, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(2) span.sr-only"
   elements :fld_nw_result_headers, "li.sidebar.open .table-view--patient-selection th"
 
@@ -70,6 +77,7 @@ class PobStaffView < SitePrism::Page
   elements :fld_rp_dob_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(2)"
   elements :fld_rp_dob_results_screenreader, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(2) span.sr-only"
   element :fld_rp_no_patients, "li.sidebar.open tr[data-message-type='no-results']"
+  elements :fld_rp_gender_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(3)"
 
   element :open_cprslist, ".patient-search-tray-list li.sidebar:nth-of-type(1).open"
   element :closed_cprslist, ".patient-search-tray-list li.sidebar:nth-of-type(1):not(.open)"
@@ -295,7 +303,19 @@ class PobStaffView < SitePrism::Page
     visible_text
   end
 
+  def my_site_gender_text
+    my_site_search_results_gender.map { |gender| gender.text.upcase }
+  end
+
   def ward_location_list_text
     fld_ward_location_options.map { |header| header.text.upcase }
+  end
+
+  def nationwide_gender_text
+    fld_nw_gender_results.map { |gender| gender.text.upcase }
+  end
+
+  def allowable_genders
+    %w{ MALE FEMALE UNKNOWN }
   end
 end

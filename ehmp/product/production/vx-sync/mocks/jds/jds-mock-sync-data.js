@@ -10,12 +10,16 @@ var completedStamp = function(jpid, dfn) {
                 'localId': dfn,
                 'stampTime': 20141031094920,
                 'syncCompleted': true,
+                'hasSolrError': false,
+                'hasSyncError': false,
                 'domainMetaStamp': {
                     'allergy': {
                         'domain': 'allergy',
                         'stampTime': 20141031094920,
                         'syncCompleted': true,
                         'solrSyncCompleted': false,
+                        'hasSolrError': false,
+                        'hasSyncError': false,
                         'eventCount': 2,
                         'storedCount': 2,
                         'eventMetaStamp': {
@@ -34,6 +38,8 @@ var completedStamp = function(jpid, dfn) {
                         'stampTime': 20141031094920,
                         'syncCompleted': true,
                         'solrSyncCompleted': false,
+                        'hasSolrError': false,
+                        'hasSyncError': false,
                         'eventCount': 2,
                         'storedCount': 2,
                         'eventMetaStamp': {
@@ -54,12 +60,16 @@ var completedStamp = function(jpid, dfn) {
                 'localId': '00001',
                 'stampTime': 20141031094920,
                 'syncCompleted': true,
+                'hasSolrError': false,
+                'hasSyncError': false,
                 'domainMetaStamp': {
                     'lab': {
                         'domain': 'lab',
                         'stampTime': 20141031094920,
                         'syncCompleted': true,
                         'solrSyncCompleted': false,
+                        'hasSolrError': false,
+                        'hasSyncError': false,
                         'eventCount': 2,
                         'storedCount': 2,
                         'eventMetaStamp': {
@@ -78,6 +88,8 @@ var completedStamp = function(jpid, dfn) {
                         'stampTime': 20141031094920,
                         'syncCompleted': true,
                         'solrSyncCompleted': false,
+                        'hasSolrError': false,
+                        'hasSyncError': false,
                         'eventCount': 1,
                         'storedCount': 1,
                         'eventMetaStamp': {}
@@ -98,12 +110,16 @@ var inProgress = function(jpid, dfn) {
                 'localId': dfn,
                 'stampTime': 20141031094950,
                 'syncCompleted': true,
+                'hasSolrError': false,
+                'hasSyncError': false,
                 'domainMetaStamp': {
                     'allergy': {
                         'domain': 'allergy',
                         'stampTime': 20141031094950,
                         'syncCompleted': true,
                         'solrSyncCompleted': false,
+                        'hasSolrError': false,
+                        'hasSyncError': false,
                         'eventCount': 2,
                         'storedCount': 2,
                         'eventMetaStamp': {
@@ -122,6 +138,8 @@ var inProgress = function(jpid, dfn) {
                         'stampTime': 20141031094950,
                         'syncCompleted': true,
                         'solrSyncCompleted': false,
+                        'hasSolrError': false,
+                        'hasSyncError': false,
                         'eventCount': 2,
                         'storedCount': 2,
                         'eventMetaStamp': {
@@ -142,12 +160,16 @@ var inProgress = function(jpid, dfn) {
                 'localId': '00001',
                 'stampTime': 20141031094950,
                 'syncCompleted': false,
+                'hasSolrError': false,
+                'hasSyncError': false,
                 'domainMetaStamp': {
                     'lab': {
                         'domain': 'lab',
                         'stampTime': 20141031094950,
                         'syncCompleted': true,
                         'solrSyncCompleted': false,
+                        'hasSolrError': false,
+                        'hasSyncError': false,
                         'eventCount': 2,
                         'storedCount': 2,
                         'eventMetaStamp': {
@@ -166,6 +188,8 @@ var inProgress = function(jpid, dfn) {
                         'stampTime': 20141031094920,
                         'syncCompleted': false,
                         'solrSyncCompleted': false,
+                        'hasSolrError': false,
+                        'hasSyncError': false,
                         'eventCount': 1,
                         'storedCount': 0,
                         'eventMetaStamp': {

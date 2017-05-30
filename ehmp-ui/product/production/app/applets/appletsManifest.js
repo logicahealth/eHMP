@@ -10,7 +10,7 @@
         module.exports = factory();
     } else {
         // this follows common pattern, though this is expected to never get hit
-        root.ScreensManifest = factory();
+        root.AppletsManifest = factory();
     }
 }(this, function(ADK) {
     'use strict';
@@ -20,6 +20,20 @@
         crsDomain = ADK.utils.crsUtil.domain;
     }
     var applets = [{
+        id: 'error_reporting',
+        title: 'Error Reporting',
+        requiredByLayout: true,
+        context: ['patient', 'admin', 'staff'],
+        permissions: [],
+        documentation: true
+    }, {
+        id: 'system_communication',
+        title: 'System Communications',
+        permissions: [],
+        showInUDWSelection: false,
+        requiredByLayout: true,
+        documentation: true
+    },{
         id: 'ui_components_demo',
         title: 'UI Components Demo',
         context: ['demo'],
@@ -259,7 +273,8 @@
         title: "Patient Sync Status",
         context: ['patient'],
         permissions: [],
-        requiredByLayout: ['patient']
+        requiredByLayout: ['patient'],
+        documentation: true
     }, {
         id: "ssoLogon",
         title: "Auto Signing In",
@@ -309,7 +324,8 @@
         context: ['patient', 'staff'],
         showInUDWSelection: true,
         maximizeScreen: 'activities-patient-full',
-        permissions: ['read-task']
+        permissions: ['read-task'],
+        dependencies: ['task_forms']
     }, {
         id: "tab_manager",
         title: "Tab Manager",
@@ -322,14 +338,16 @@
         context: ['patient', 'staff'],
         showInUDWSelection: true,
         maximizeScreen: 'consults-patient-full',
-        permissions: ['read-task']
+        permissions: ['read-task'],
+        dependencies: ['task_forms']
     }, {
         id: "requests",
         title: "Requests",
         context: ['patient', 'staff'],
         showInUDWSelection: true,
         maximizeScreen: 'requests-patient-full',
-        permissions: ['read-task']
+        permissions: ['read-task'],
+        dependencies: ['task_forms']
     }];
 
     appletsManifest.applets = applets;

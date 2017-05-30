@@ -166,9 +166,20 @@ define(['backbone', 'jasminejquery', 'app/applets/problems/writeback/parseUtils'
     });
 
     describe('Parse utility function for building the edit problem model', function(){
+        var getExistingBackboneModel = function (attrs) {
+            var model = new Backbone.Model(attrs);
+
+            // Mock implementation - unit tests for this function exist on problems resource model
+            model.getOnsetFormatted = function(response) {
+                response.onsetFormatted = response.onset;
+                return response;
+            };
+            return model;
+        };
+
         it('Test copying properties from detail model to the edit model - bare minimum', function(){
             var formModel = new Backbone.Model();
-            var existingModel = new Backbone.Model();
+            var existingModel = getExistingBackboneModel();
             existingModel.set('updated', '20151230');
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
 
@@ -177,22 +188,22 @@ define(['backbone', 'jasminejquery', 'app/applets/problems/writeback/parseUtils'
 
         it('Test copying onset property', function(){
             var formModel = new Backbone.Model();
-            var existingModel = new Backbone.Model({onset: '2015'});
+            var existingModel = getExistingBackboneModel({onset: '2015'});
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
             expect(formModel.get('onset-date')).toEqual('2015');
 
-            existingModel.set('onset', '201503');
+            existingModel.set('onset', '03/2015');
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
             expect(formModel.get('onset-date')).toEqual('03/2015');
 
-            existingModel.set('onset', '20150201');
+            existingModel.set('onset', '02/01/2015');
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
             expect(formModel.get('onset-date')).toEqual('02/01/2015');
         });
 
         it('Test copying status property', function(){
             var formModel = new Backbone.Model();
-            var existingModel = new Backbone.Model({statusName: 'active'});
+            var existingModel = getExistingBackboneModel({statusName: 'active'});
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
             expect(formModel.get('statusRadioValue')).toEqual('A^ACTIVE');
 
@@ -203,7 +214,7 @@ define(['backbone', 'jasminejquery', 'app/applets/problems/writeback/parseUtils'
 
         it('Test copying acuity property', function(){
             var formModel = new Backbone.Model();
-            var existingModel = new Backbone.Model({acuityName: 'chronic'});
+            var existingModel = getExistingBackboneModel({acuityName: 'chronic'});
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
             expect(formModel.get('immediacyRadioValue')).toEqual('C^CHRONIC');
 
@@ -218,20 +229,20 @@ define(['backbone', 'jasminejquery', 'app/applets/problems/writeback/parseUtils'
 
         it('Test copying provider property', function(){
             var formModel = new Backbone.Model();
-            var existingModel = new Backbone.Model({providerUid: 'urn:va:user:9E7A:1234'});
+            var existingModel = getExistingBackboneModel({providerUid: 'urn:va:user:9E7A:1234'});
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
             expect(formModel.get('existingProviderId')).toEqual('1234');
         });
 
         it('Test copying location property', function(){
             var formModel = new Backbone.Model();
-            var existingModel = new Backbone.Model({locationUid: 'urn:va:location:9E7A:64'});
+            var existingModel = getExistingBackboneModel({locationUid: 'urn:va:location:9E7A:64'});
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
             expect(formModel.get('existingLocationId')).toEqual('64');
             expect(formModel.get('existingLocationName')).toBeUndefined();
 
             var secondFormModel = new Backbone.Model();
-            var secondExistingModel = new Backbone.Model({service: 'AUDIOLOGY'});
+            var secondExistingModel = getExistingBackboneModel({service: 'AUDIOLOGY'});
             ParseUtils.copyModelPropertiesForEdit(secondExistingModel, secondFormModel);
             expect(secondFormModel.get('existingLocationId')).toBeUndefined();
             expect(secondFormModel.get('existingLocationName')).toEqual('AUDIOLOGY');
@@ -239,7 +250,7 @@ define(['backbone', 'jasminejquery', 'app/applets/problems/writeback/parseUtils'
 
         it('Test copying comments property', function(){
             var formModel = new Backbone.Model();
-            var existingModel = new Backbone.Model();
+            var existingModel = getExistingBackboneModel();
 
             var comments = [
                 {
@@ -267,14 +278,14 @@ define(['backbone', 'jasminejquery', 'app/applets/problems/writeback/parseUtils'
 
         it('Test copying ien property', function(){
             var formModel = new Backbone.Model();
-            var existingModel = new Backbone.Model({uid: 'urn:va:problem:9E7A:3:12345'});
+            var existingModel = getExistingBackboneModel({uid: 'urn:va:problem:9E7A:3:12345'});
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
             expect(formModel.get('problemIEN')).toEqual('12345');
         });
 
         it('Test copying problem text', function(){
             var formModel = new Backbone.Model();
-            var existingModel = new Backbone.Model({problemText: 'test problem'});
+            var existingModel = getExistingBackboneModel({problemText: 'test problem'});
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
             expect(formModel.get('problemText')).toEqual('test problem');
         });

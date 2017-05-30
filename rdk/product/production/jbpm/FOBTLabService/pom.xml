@@ -1,84 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>gov.va</groupId>
-  <artifactId>FOBTLabService</artifactId>
-  <version>1.0.0</version>
-  <packaging>jar</packaging>
+	<parent>
+		<groupId>us.vistacore.jbpm</groupId>
+		<artifactId>jbpm</artifactId>
+		<version>0.0.1</version>
+	</parent>
 
-  <name>FOBT :: Custom Work Item Handler</name>
-  <description>A project to handle custom services</description>
+	<groupId>gov.va</groupId>
+	<artifactId>FOBTLabService</artifactId>
+	<version>1.0.0</version>
+	<packaging>jar</packaging>
 
-  <properties>
-    <jbpm.version>6.2.0.Final</jbpm.version>
-	<jdk.version>1.8</jdk.version>
-	<jackson-core-version>2.6.3</jackson-core-version>
-	<springframework-version>4.2.1.RELEASE</springframework-version>
-	<slf4j-version>1.7.12</slf4j-version>
-	<joda-time-version>2.9</joda-time-version>
-	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-  </properties>
+	<name>FOBT :: Custom Work Item Handler</name>
+	<description>A project to handle custom services</description>
 
-  <dependencies>
-	<dependency>
-		<groupId>org.kie</groupId>
-		<artifactId>kie-api</artifactId>
-		<version>${jbpm.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>org.kie</groupId>
-		<artifactId>kie-internal</artifactId>
-		<version>${jbpm.version}</version>
-	</dependency>	
-	<dependency>
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-web</artifactId>
-		<version>${springframework-version}</version>
-	</dependency>
-	<dependency>
-  		<groupId>com.fasterxml.jackson.core</groupId>
-  		<artifactId>jackson-core</artifactId>
-  		<version>${jackson-core-version}</version>
-	</dependency>
-	<dependency>
-		<groupId>com.fasterxml.jackson.core</groupId>
-		<artifactId>jackson-databind</artifactId>
-		<version>${jackson-core-version}</version>
-	</dependency>
-	<dependency>
-		<groupId>joda-time</groupId>
-		<artifactId>joda-time</artifactId>
-		<version>${joda-time-version}</version>
-	</dependency>
+	<properties>
+		<maven.compiler.source>${javaVersion}</maven.compiler.source>
+		<maven.compiler.target>${targetJavaVersion}</maven.compiler.target>
+		<jbpm.version>${kie-version}</jbpm.version>
+		<jackson-core-version>2.6.3</jackson-core-version>
+		<springframework-version>${spring-version}</springframework-version>
+		<slf4j-version>1.7.12</slf4j-version>
+		<joda-time-version>${joda-version}</joda-time-version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
 
-	<dependency>
-      <groupId>org.jbpm</groupId>
-      <artifactId>jbpm-test</artifactId>
-      <version>${jbpm.version}</version>
-      <scope>test</scope>
-    </dependency>
-	<dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>${slf4j-version}</version>
-         <scope>test</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>${slf4j-version}</version>
-         <scope>test</scope>
-    </dependency>
-  </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>org.kie</groupId>
+			<artifactId>kie-api</artifactId>
+			<version>${jbpm.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.kie</groupId>
+			<artifactId>kie-internal</artifactId>
+			<version>${jbpm.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson-core-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson-core-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${joda-time-version}</version>
+		</dependency>
 
-  <build>
-    <plugins>
-		<!-- download source code in Eclipse, best practice -->
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-test</artifactId>
+			<version>${jbpm.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j-version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4j-version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>VistaCore</groupId>
+			<artifactId>jbpm-utils</artifactId>
+			<version>1.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- download source code in Eclipse, best practice -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
@@ -94,34 +105,30 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
-				<configuration>
-					<source>${jdk.version}</source>
-					<target>${jdk.version}</target>
-				</configuration>
-				<executions>              
-				    <execution>
-				      <id>compile</id>
-				      <phase>compile</phase>
-				      <goals>
-				        <goal>compile</goal>
-				      </goals>
-				    </execution>
+				<executions>
+					<execution>
+						<id>compile</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
-			
+
 			<!-- Maven Resource Plugin -->
 			<plugin>
-			  <artifactId>maven-resources-plugin</artifactId>
-			  <version>2.7</version>
-			  <executions>              
-			    <execution>
-			      <id>process-resources</id>
-			      <phase>process-resources</phase>
-			      <goals>
-			        <goal>resources</goal>
-			      </goals>
-			    </execution>
-			  </executions>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<executions>
+					<execution>
+						<id>process-resources</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>resources</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<!-- Maven Assembly Plugin -->
 			<plugin>
@@ -134,21 +141,21 @@
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
 					<finalName>FOBTLabService</finalName>
-        			<appendAssemblyId>false</appendAssemblyId>
+					<appendAssemblyId>false</appendAssemblyId>
 					<attach>false</attach>
 				</configuration>
 				<executions>
-				  <execution>
-					<id>make-assembly</id>
-                    <!-- bind to the packaging phase -->
-					<phase>package</phase>
-					<goals>
-						<goal>single</goal>
-					</goals>
-				  </execution>
+					<execution>
+						<id>make-assembly</id>
+						<!-- bind to the packaging phase -->
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
 				</executions>
 
 			</plugin>
-    </plugins>
-  </build>
+		</plugins>
+	</build>
 </project>

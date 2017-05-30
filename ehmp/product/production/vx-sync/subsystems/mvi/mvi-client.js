@@ -33,6 +33,15 @@ function MviClient(log, metrics, config, jdsClient) {
     this.clientMap = {};
 }
 
+MviClient.prototype.childInstance = function(log) {
+    var self = this;
+    var newInstance = new MviClient(log, self.metrics, self.rootConfig, self.jds.childInstance(log));
+    // clientMap is an object, so this will copy-by-reference and use the same clientMap
+    newInstance.clientMap = self.clientMap;
+
+    return newInstance;
+};
+
 //--------------------------------------------------------------------------------------------------------
 // Perform a lookup either on the MVI or via VistA and pt-select to determine the set of identifiers
 // that should be used for syncing this patient.
@@ -245,7 +254,10 @@ MviClient.prototype.lookup = function(patientIdentifier, callback) {
 };
 
 MviClient.prototype._clearVistaClientCache = function() {
-    this.clientMap = {};
+    // delete each item to preserve the reference across child instances
+    _.each(this.clientMap, function(element, id) {
+        delete this.clientMap[id];
+    });
 };
 
 MviClient.prototype._getVistaClient = function(siteHash) {
@@ -253,7 +265,7 @@ MviClient.prototype._getVistaClient = function(siteHash) {
     var client = this.clientMap[siteHash];
 
     if (!_.isUndefined(client) && !_.isNull(client)) {
-        return client;
+        return client.childInstance(this.log);
     }
 
     var siteConfig = this.rootConfig;
@@ -264,7 +276,7 @@ MviClient.prototype._getVistaClient = function(siteHash) {
     var vistaClient = new VistaClient(this.log, this.metrics, siteConfig);
     this.clientMap[siteHash] = vistaClient;
 
-    return vistaClient;
+    return vistaClient.childInstance(this.log);
 };
 
 MviClient.prototype._parseRealMVIResponse = function(queryPatientIdentifier, rawData, process, callback) {

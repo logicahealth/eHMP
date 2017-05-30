@@ -2,7 +2,7 @@
 Feature: eHMP Release 1.3 Provisioning & Authorization
 
 Background:
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   And staff view screen is displayed
 
 

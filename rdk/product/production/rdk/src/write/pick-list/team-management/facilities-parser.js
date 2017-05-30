@@ -2,30 +2,23 @@
 
 var _ = require('lodash');
 
-module.exports.parse = function(rows, sites, vistaNameToFilterBy) {
-    var abbreviationsBySite = {};
-    _.each(_.keys(sites), function(siteCode) {
-        _.set(abbreviationsBySite, sites[siteCode].name, sites[siteCode].abbreviation);
-    });
-
+module.exports.parse = function(rows, division) {
     var result = _.map(_.filter(rows, function(row) {
-        if (!vistaNameToFilterBy) {
+        if (!division) {
             return true;
         }
-
-        return _.get(row, 'VISTANAME') === vistaNameToFilterBy;
+        return _.get(row, 'STATIONNUMBER') === division;
     }), function(row) {
-        var vistaName = _.get(row, 'VISTANAME');
-        var displayName = vistaName + ' (' + abbreviationsBySite[vistaName] + ')';
+        var displayName = _.get(row, 'VISTANAME');
 
         var city = _.get(row, 'STREETCITY');
         var state = _.get(row, 'POSTALNAME');
         if (city && state) {
-            displayName = displayName + ' ' + city + ', ' + state;
+            displayName = displayName + ', ' + city + ', ' + state;
         } else if (city) {
-            displayName = displayName + ' ' + city;
+            displayName = displayName + ', ' + city;
         } else if (state) {
-            displayName = displayName + ' ' + state;
+            displayName = displayName + ', ' + state;
         }
 
         return {

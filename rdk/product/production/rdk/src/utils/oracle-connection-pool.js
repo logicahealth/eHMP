@@ -44,7 +44,7 @@ module.exports.doQueryWithParams = function(req, dbConfig, query, queryParameter
     }
     queryParameters = queryParameters || [];
     var self = this;
-    self._getPool(req, dbConfig, function(poolError, pool) {
+    self.getPool(req, dbConfig, function(poolError, pool) {
         if (poolError) {
             return callback(new ConnectionError(poolError), null);
         }
@@ -62,7 +62,7 @@ module.exports.doQueryWithParams = function(req, dbConfig, query, queryParameter
                 outFormat: oracledb.OBJECT
             };
             connection.execute(query, queryParameters, options, function(err, result) {
-                self._doClose(req, connection);
+                self.doClose(req, connection);
                 if (err) {
                     return callback(new ExecutionError(err), null);
                 }
@@ -83,7 +83,7 @@ module.exports.doExecuteProcWithParams = function(req, dbConfig, query, paramete
     };
 
     var self = this;
-    this._getPool(req, dbConfig, function(poolError, pool) {
+    this.getPool(req, dbConfig, function(poolError, pool) {
         if (poolError) {
             return callback(new ConnectionError(poolError), null);
         }
@@ -108,7 +108,7 @@ module.exports.doExecuteProcWithParams = function(req, dbConfig, query, paramete
                         req.logger.error(err.message);
                     }
 
-                    self._doClose(req, connection);
+                    self.doClose(req, connection);
                     return callback(err, null);
                 }
 
@@ -145,7 +145,7 @@ module.exports.doExecuteProcMultipleRecordSets = function(req, dbConfig, query, 
     };
 
     var self = this;
-    this._getPool(req, dbConfig, function(poolError, pool) {
+    this.getPool(req, dbConfig, function(poolError, pool) {
         if (poolError) {
             return callback(new ConnectionError(poolError), null);
         }
@@ -170,7 +170,7 @@ module.exports.doExecuteProcMultipleRecordSets = function(req, dbConfig, query, 
                         req.logger.error(err.message);
                     }
 
-                    self._doClose(req, connection);
+                    self.doClose(req, connection);
                     return callback(err, null);
                 }
                 async.parallel([
@@ -212,7 +212,7 @@ module.exports.doExecuteProcMultipleRecordSets = function(req, dbConfig, query, 
                     function(err, results) {
                         if (err) {
                             //close the connection
-                            self._doClose(req, connection);
+                            self.doClose(req, connection);
                             err = new ConnectionError(err);
                             if (req && req.logger) {
                                 req.logger.error(err.message);
@@ -220,7 +220,7 @@ module.exports.doExecuteProcMultipleRecordSets = function(req, dbConfig, query, 
 
                             return callback(err, null);
                         }
-                        self._doClose(req, connection);
+                        self.doClose(req, connection);
                         return callback(null, results);
                     });
             });
@@ -235,7 +235,7 @@ module.exports.doExecuteProcWithInOutParams = function(req, dbConfig, query, par
     parameters = parameters || {};
 
     var self = this;
-    this._getPool(req, dbConfig, function(poolError, pool) {
+    this.getPool(req, dbConfig, function(poolError, pool) {
         if (poolError) {
             return callback(new ConnectionError(poolError), null);
         }
@@ -255,7 +255,7 @@ module.exports.doExecuteProcWithInOutParams = function(req, dbConfig, query, par
             };
 
             connection.execute(query, parameters, options, function(err, result) {
-                self._doClose(req, connection);
+                self.doClose(req, connection);
                 if (err) {
                     err = new ExecutionError(err);
                     if (req && req.logger) {
@@ -270,7 +270,7 @@ module.exports.doExecuteProcWithInOutParams = function(req, dbConfig, query, par
     });
 };
 
-module.exports._getPool = function(req, dbConfig, cb) {
+module.exports.getPool = function(req, dbConfig, cb) {
     if (isClosing) {
         return cb(new Error('Connection pool closing for shutdown - no new connections allowed'));
     }
@@ -301,6 +301,7 @@ module.exports._getPool = function(req, dbConfig, cb) {
         });
 };
 
+
 module.exports._doCloseCursor = function(req, connection, recordSet) {
     var self = this;
     recordSet.close(
@@ -311,7 +312,7 @@ module.exports._doCloseCursor = function(req, connection, recordSet) {
                     req.logger.error(err.message);
                 }
             }
-            self._doClose(req, connection);
+            self.doClose(req, connection);
         });
 };
 
@@ -332,7 +333,7 @@ module.exports._doCloseRecordset = function(req, recordSet, cb) {
         });
 };
 
-module.exports._doClose = function(req, connection) {
+module.exports.doClose = function(req, connection) {
     connection.close(function(err) {
         if (err) {
             err = new ExecutionError(err);

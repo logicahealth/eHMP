@@ -7,7 +7,7 @@ class PatientSearch < AccessBrowserV2
   end
 
   def initialize_action
-    add_action(CucumberLabel.new("patient demographic"), ClickAction.new, AccessHtmlElement.new(:css, "#patientDemographic"))
+    add_action(CucumberLabel.new("patient demographic"), ClickAction.new, AccessHtmlElement.new(:css, ".patient-demographic-content"))
     add_action(CucumberLabel.new("patientSearch"), ClickAction.new, AccessHtmlElement.new(:id, "patientSearchButton"))
     add_action(CucumberLabel.new("patient context tab"), ClickAction.new, AccessHtmlElement.new(:id, "current-patient-nav-header-tab"))
     add_action(CucumberLabel.new("active patient context tab"), ClickAction.new, AccessHtmlElement.new(:css, "[id=current-patient-nav-header-tab].active"))

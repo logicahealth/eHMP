@@ -1,9 +1,9 @@
 class PobViewDetails < SitePrism::Page
 # *****************  All_Button_Elements  ******************* #
-  element :btn_viewdetails_mysite, '#sync-source-sites li:nth-child(1)'
-  element :btn_viewdetails_allva, '#sync-source-sites li:nth-child(2)'
-  element :btn_viewdetails_dod, '#sync-source-sites li:nth-child(3)'
-  element :btn_viewdetails_communities, '#sync-source-sites li:nth-child(4)'
+  element :btn_viewdetails_mysite, '#syncSourceSites li[data-source=mySite]'
+  element :btn_viewdetails_allva, '#syncSourceSites li[data-source=allVa]'
+  element :btn_viewdetails_dod, '#syncSourceSites li[data-source=dod]'
+  element :btn_viewdetails_communities, '#syncSourceSites li[data-source=communities]'
   element :btn_viewdetails_close, '#sync-modal-close'
   element :btn_viewdetails, '#open-sync-modal'
   element :btn_viewdetails_X, "#modal-header [data-dismiss='modal']"
@@ -17,7 +17,7 @@ class PobViewDetails < SitePrism::Page
   elements :tbl_viewdetail_table_row, '#sync-site-detail tbody tr'
 # *****************  All_Heading_Elements  ******************* #
   element :hdr_heading_source, '#sync-site-detail-header'
-  elements :hdr_ehmpdata_source, '#sync-source-sites li'
+  elements :hdr_ehmpdata_source, '#syncSourceSites li'
   element  :hdr_ehmpdatasource,  '#mainModalLabel'
   elements :hdr_viewdetail_table, '#sync-site-detail th.sortable.renderable'
   element :hdr_viewdetail, '#mainModalLabel'

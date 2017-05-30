@@ -1,26 +1,48 @@
 /*jslint node: true, nomen: true, unparam: true */
-/*global jquery, $, _, define, Marionette, jqm, describe, it, expect, beforeEach, spyOn, afterEach */
+/*global jquery, $, _, define, Marionette, jqm, describe, it, expect, beforeEach, afterEach, spyOn, handlebars, ADK, jasmine, document, window */
 
-define(['jquery',
+define([
     'backbone',
     'marionette',
     'jasminejquery',
-    'testUtil',
+    'test/stubs',
     'app/applets/appointments/util'
-], function($, Backbone, Marionette, jasminejquery, testUtil, Util) {
+], function(Backbone, Marionette, jasminejquery, Stubs, Util) {
+
     'use strict';
 
-    describe('Utilities functions suite', function() {
+    describe('Appointments Utilities functions suite', function() {
         var response = null;
 
+        var originalFormatDate = ADK.utils.formatDate;
+
         beforeEach(function(done) {
+            ADK.utils.formatDate = jasmine.createSpy('formatDate').and.callFake(function(date, format) {
+                return '12/08/2006';
+            });
             response = initializeResponse();
             done();
         });
 
         afterEach(function(done) {
+            ADK.utils.formatDate = originalFormatDate;
             response = null;
             done();
+        });
+
+        it('Test getDateTimeFormatted ', function() {
+            response.dateTime = '200612080730';
+            response = Util.getDateTimeFormatted(response);
+
+            expect(ADK.utils.formatDate).toHaveBeenCalled();
+            expect(response.dateTimeFormatted).toEqual('12/08/2006');
+        });
+
+        it('Test getFormattedDisplayTypeName', function() {
+            response.typeDisplayName = 'Event (Historical)';
+            response = Util.getFormattedDisplayTypeName(response);
+
+            expect(response.formattedTypeName).toEqual('Other');
         });
 
         it('Test getFacilityColor sets DOD color ', function() {
@@ -35,13 +57,6 @@ define(['jquery',
             response = Util.getFacilityColor(response);
 
             expect(response.facilityColor).toEqual('nonDOD');
-        });
-
-        it('Test typeName sets Other', function() {
-            response.typeDisplayName = 'Event (Historical)';
-            response = Util.getFormattedDisplayTypeName(response);
-
-            expect(response.formattedTypeName).toEqual('Other');
         });
 
         it('Test getFormattedDescription using kind', function() {

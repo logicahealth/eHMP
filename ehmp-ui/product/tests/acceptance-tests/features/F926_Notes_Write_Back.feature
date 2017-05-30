@@ -1,13 +1,13 @@
-@PO_F926_Notes_Write_Back  @future @DE4560
+@PO_F926_Notes_Write_Back @DE4560 @future @debug @DE7370
 
 Feature: F926 : Enter Plain Text Basic Progress Notes  (TIU), Move Notes Modal to Tray
 
 @f926_notes_applet_form_validation
 Scenario: Validate Notes Applet form fields.
 
-  When user searches for and selects "eighteen,patient"
+  When user searches for and selects "eighteen,inpatient"
   Then Overview is active
-  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
+  #And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   And POB user opens the Notes applet
   And POB Notes applet displays the following headings
   | headings		|
@@ -19,9 +19,9 @@ Scenario: Validate Notes Applet form fields.
 @f926_notes_applet_new_note_form_validation
 Scenario: Validate New Notes form field fields.
 
-  When user searches for and selects "eighteen,patient"
+  When user searches for and selects "eighteen,inpatient"
   Then Overview is active
-  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
+  #And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   When POB user opens the Notes applet
   And POB user opens New Note to create a note
   Then POB New Notes form displays the heading "NEW NOTE"
@@ -43,9 +43,9 @@ Scenario: Validate New Notes form field fields.
 @f926_notes_applet_create_new_note
 Scenario: Create new note.
 
-  When user searches for and selects "eighteen,patient"
+  When user searches for and selects "eighteen,inpatient"
   Then Overview is active
-  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
+  #And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   When POB user opens the Notes applet
   And POB user opens New Note to create a note
   And POB user creates New Note "ADVANCE DIRECTIVE"
@@ -55,23 +55,23 @@ Scenario: Create new note.
 @f926_notes_applet_signs_new_note 
 Scenario: Sign a note.
 
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   Then staff view screen is displayed
-  When user searches for and selects "eighteen,patient"
+  When user searches for and selects "eighteen,inpatient"
   Then Overview is active
-  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
+  #And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   When POB user opens the Notes applet
   And POB user opens New Note to create a note
   And POB user creates New Note "ADHC SOCIAL WORK"
-  And POB user signs the note "ADHC SOCIAL WORK" as "vk1234!!"
+  And POB user signs the note "ADHC SOCIAL WORK" as "REDACTED"
   Then POB user sees the new note "ADHC SOCIAL WORK" under recently signed notes header
   
 @f926_notes_applet_edit_and_preview_note
 Scenario: Edit and preview note.
 
-  When user searches for and selects "eighteen,patient"
+  When user searches for and selects "eighteen,inpatient"
   Then Overview is active
-  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
+  #And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   Then POB user opens the Notes applet
   And POB user opens New Note to create a note
   And POB user creates New Note "ADVANCE DIRECTIVE COMPLETED"
@@ -84,9 +84,9 @@ Scenario: Edit and preview note.
 @f926_notes_applet_delete_note
 Scenario: Delete all notes.
 
-  When user searches for and selects "eighteen,patient"
+  When user searches for and selects "eighteen,inpatient"
   Then Overview is active
-  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
+  #And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   And POB user opens the Notes applet
   And POB user deletes all unsigned notes created
   

@@ -11,6 +11,7 @@ var logger = require(global.VX_DUMMIES + 'dummy-logger');
 
 var config = require(global.VX_ROOT + 'worker-config');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
+var moment = require('moment');
 
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var jdsClient = new JdsClient(logger, logger, config);
@@ -113,14 +114,13 @@ describe('jobStatusUpdater-itest-spec.js', function() {
     });
 
     it('stores a job state', function() {
-        //
-        var done = false;
+       var done = false;
+
         runs(function() {
             jsu.createJobStatus(jobData, function(error, response) {
                 done = true;
                 expect(error).toBeNull();
                 expect(response).not.toBeNull();
-                // deletePatientIdentifiers(function() { done = true; });
             });
         });
 
@@ -129,15 +129,38 @@ describe('jobStatusUpdater-itest-spec.js', function() {
         });
     });
 
-    it('stores an error state', function() {
-        //
+    it('stores an error job state', function() {
         var done = false;
+
         runs(function() {
             jsu.errorJobStatus(jobData, 'error test', function(error, response) {
                 done = true;
                 expect(error).toBeNull();
                 expect(response).not.toBeNull();
-                // deletePatientIdentifiers(function() { done = true; });
+            });
+        });
+
+        waitsFor(function() {
+            return done;
+        });
+    });
+
+    it('stores an error metastamp state', function() {
+        var done = false;
+
+        var job = {
+            type: 'store-record',
+            patientIdentifier: patientIdentifier,
+            rootJobId: '1',
+            jpid: 'X',
+            record: {uid: '234324', stampTime: moment().format('x')}
+        };
+
+        runs(function() {
+            jsu.errorJobStatus(job, 'error test', function(error, response) {
+                done = true;
+                expect(error).toBeNull();
+                expect(response).not.toBeNull();
             });
         });
 

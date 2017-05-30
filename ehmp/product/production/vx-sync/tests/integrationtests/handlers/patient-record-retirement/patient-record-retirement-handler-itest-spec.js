@@ -171,7 +171,7 @@ describe('patient-record-retirement-handler', function() {
 
 		waitsFor(function() {
 			return handlerDone;
-		}, 'waiting for handler', 10000);
+		}, 'waiting for handler', 20000);
 
 		// Double check with JDS that the patient has been unsynced
 		//---------------------------------------------------------

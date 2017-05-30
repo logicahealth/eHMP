@@ -96,6 +96,11 @@ function createAndPublishStoreRecordJob(log, environment, job, record, handlerCa
         priority: job.priority,
         param: job.param
     };
+
+    if (job.referenceInfo) {
+        meta.referenceInfo = job.referenceInfo;
+    }
+
     var jobToPublish = jobUtil.createStoreRecord(job.patientIdentifier, job.dataDomain, record, meta);
 
     log.debug('record-enrichment-request-handler.handle: Publishing jobs %j', jobToPublish);

@@ -195,7 +195,7 @@ OSyncActiveUserListUtil.prototype.getActiveUsers = function(activeUsersCallback)
 // users: An array of users for which jobs will be created.
 // returns: The array of jobs to be published.  One job per user.
 //------------------------------------------------------------------------------------------------
-OSyncActiveUserListUtil.prototype.createJobsForUsers = function(users){
+OSyncActiveUserListUtil.prototype.createJobsForUsers = function(users, referenceInfo){
     var self = this;
     self.log.debug('osync-active-user-list-util.createJobsForUsers: Entered method.  users: %j', users);
 
@@ -207,8 +207,13 @@ OSyncActiveUserListUtil.prototype.createJobsForUsers = function(users){
     _.each(users, function(user) {
         var meta = {
             'source':'active-users',
-            'user': user
+            'user': user,
+            'referenceInfo': referenceInfo
         };
+
+        if(referenceInfo){
+            meta.referenceInfo = referenceInfo;
+        }
 
         var jobToPublish = jobUtil.createPatientListJob(self.log, meta);
         jobsToPublish.push(jobToPublish);
@@ -228,7 +233,7 @@ OSyncActiveUserListUtil.prototype.createJobsForUsers = function(users){
 //                    error: Is any error that has occurred or null if there is no error.
 //                    numUsersProcessed: The number of users that were processed.
 //----------------------------------------------------------------------------------------------
-OSyncActiveUserListUtil.prototype.retrieveAndProcessActiveUserList = function(callback) {
+OSyncActiveUserListUtil.prototype.retrieveAndProcessActiveUserList = function(referenceInfo, callback) {
     var self = this;
 
     self.log.debug('osync-active-user-list-util.retrieveAndProcessActiveUserList: Entered method.');
@@ -243,7 +248,7 @@ OSyncActiveUserListUtil.prototype.retrieveAndProcessActiveUserList = function(ca
             return callback(null, 0);
         }
 
-        var jobsToPublish = self.createJobsForUsers(users);
+        var jobsToPublish = self.createJobsForUsers(users, referenceInfo);
         self.log.debug('osync-active-user-list-util.retrieveAndProcessActiveUserList: Returned from creating jobs.  jobsToPublish: %j', jobsToPublish);
 
         self.environment.publisherRouter.publish(jobsToPublish, function(error) {

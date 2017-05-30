@@ -43,7 +43,7 @@ function prioritize(log, config, environment, job, ruleCallback) {
 	//-------------------------------------------------------
 	if (!_.isObject(job)) {
         log.warn('site-type-rule.prioritize: Function called with no job.  No change in priority for this job.  job: %j', job);
-		return ruleCallback(null, job);
+		return setTimeout(ruleCallback, 0, null, job);
 	}
 
     var jobSite = extractSite(job);
@@ -52,8 +52,31 @@ function prioritize(log, config, environment, job, ruleCallback) {
     //-----------------------------------------------------------------------------------------------------------------------------
     if (_.isEmpty(jobSite)) {
     	log.debug('site-type-rule.prioritize: Failed to extract site from job.patientIdentifier. No change in priority for this job.  job: %j', job);
-    	return ruleCallback(null, job);
+    	return setTimeout(ruleCallback, 0, null, job);
     }
+
+    // Figure out what the initial sync ID was - this helps us learn if this event is from the same site as the
+    // sync that was requested.  (Gets "My Site" data through faster.)
+    //---------------------------------------------------------------------------------------------------------
+    var initialSyncId = objUtil.getProperty(job, 'referenceInfo', 'initialSyncId');
+    var initialSyncSite;
+    if ((!_.isEmpty(initialSyncId)) &&  (idUtil.isPid(initialSyncId))) {
+        initialSyncSite = idUtil.extractSiteFromPid(initialSyncId);
+    }
+
+    // If we received an initial site and job priority - then we have everything we need to calculate the priority change.
+    //--------------------------------------------------------------------------------------------------------------------
+    if ((initialSyncSite) && (job.priority)) {
+        job = adjustJobPriority(log, config, job, initialSyncSite, jobSite);
+
+        log.debug('site-type-rule.prioritize: Successfully exiting rule (without using enterprise-sync-request job history): %j ', job);
+
+        return setTimeout(ruleCallback, 0, null, job);
+    }
+
+    // If we got here - then we do not have what we need - so we are going to have to retrieve the enterprise-sync-request
+    // job status and extract the information from there.
+    //--------------------------------------------------------------------------------------------------------------------
 
     // Priority should already be set - but if it is not - then set it to default now.
     //----------------------------------------------------------------------------------
@@ -91,27 +114,9 @@ function prioritize(log, config, environment, job, ruleCallback) {
         	job.priority = initialPriority;
         	fixPriorityRange(job);
         }
+        job = adjustJobPriority(log, config, job, initialSite, jobSite);
 
-        var siteIsPrimary  = idUtil.isVistaDirectSitePid(job.patientIdentifier, config);
-        var siteIsVistA = siteIsPrimary || idUtil.isHdr(job.patientIdentifier.value, config);
-
-    	log.debug('site-type-rule.prioritize:  Values used to determine priority. initialSite: %s; jobSite: %s; siteIsPrimary: %s; siteIsVistA: %s ', initialSite, jobSite, siteIsPrimary, siteIsVistA);
-
-        if ((!_.isEmpty(initialSite)) && (siteIsPrimary) && (initialSite === jobSite)) {
-        	job.priority += LEVEL_ADJUST_MY_SITE;
-        }
-        else if (siteIsVistA) {
-        	job.priority += LEVEL_ADJUST_OTHER_VISTA_SITE;
-        }
-        else {							// This means we have a secondary site...
-        	job.priority += LEVEL_ADJUST_OTHER_SECONDARY_SITE;
-        }
-
-        // Make sure we have not overflowed our boundaries.
-        //-------------------------------------------------
-        fixPriorityRange(job);
-
-    	log.debug('site-type-rule.prioritize: Successfully exiting rule: %j ', job);
+    	log.debug('site-type-rule.prioritize: Successfully exiting rule (Using enterprise-sync-request job history): %j ', job);
 
 		return ruleCallback(null, job);
     });
@@ -142,15 +147,50 @@ function fixPriorityRange(job) {
 //--------------------------------------------------------------------------------------------------------------
 function extractSite(jobOrJobStatus) {
 	var site = null;
-	if ((_.isObject(jobOrJobStatus)) && (_.isObject(jobOrJobStatus.patientIdentifier)) && (!_.isEmpty(jobOrJobStatus.patientIdentifier.value))) {
+	if ((_.isObject(jobOrJobStatus)) && (_.isObject(jobOrJobStatus.patientIdentifier)) && (jobOrJobStatus.patientIdentifier.type === 'pid') && (!_.isEmpty(jobOrJobStatus.patientIdentifier.value))) {
 		site = idUtil.extractSiteFromPid(jobOrJobStatus.patientIdentifier.value);
 	}
 
 	return site;
 }
 
+//-------------------------------------------------------------------------------------------------------------
+// This method will adjust the job priority according to the settings.
+//
+// log: The logger to use for logging messages.
+// config: The configuration information to be used.
+// job: The job that is being udpated.
+// initialSite: The initialSite that was used to start the sync on this patient.
+// jobSite: The site for the patient that is in the job.
+// returns: The job that was modified.
+//-------------------------------------------------------------------------------------------------------------
+function adjustJobPriority(log, config, job, initialSite, jobSite) {
+    var siteIsPrimary = idUtil.isVistaDirectSitePid(job.patientIdentifier, config);
+    var siteIsVistA = siteIsPrimary || idUtil.isHdr(job.patientIdentifier.value, config);
+
+    log.debug('site-type-rule.adjustJobPriority:  Values used to determine priority. initialSite: %s; jobSite: %s; siteIsPrimary: %s; siteIsVistA: %s ', initialSite, jobSite, siteIsPrimary, siteIsVistA);
+
+    if ((!_.isEmpty(initialSite)) && (siteIsPrimary) && (initialSite === jobSite)) {
+        job.priority += LEVEL_ADJUST_MY_SITE;
+    }
+    else if (siteIsVistA) {
+        job.priority += LEVEL_ADJUST_OTHER_VISTA_SITE;
+    }
+    else {							// This means we have a secondary site...
+        job.priority += LEVEL_ADJUST_OTHER_SECONDARY_SITE;
+    }
+
+    // Make sure we have not overflowed our boundaries.
+    //-------------------------------------------------
+    fixPriorityRange(job);
+
+    return job;
+}
+
+
 module.exports = prioritize;
 prioritize._internalFunctions = {
     '_extractSite': extractSite,
-    '_fixPriorityRange': fixPriorityRange
+    '_fixPriorityRange': fixPriorityRange,
+    '_adjustJobPriority': adjustJobPriority
 };

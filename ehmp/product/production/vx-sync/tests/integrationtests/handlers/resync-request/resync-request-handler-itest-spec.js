@@ -17,7 +17,7 @@ var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 
 var host = require(global.VX_INTTESTS + 'test-config');
-var port = 5000;
+var port = PORT;
 var tubename = 'vx-resync-test';
 
 function clearTestPatient(config, patientIdentifierValue) {
@@ -99,8 +99,8 @@ describe('resync-request-handler', function() {
                 },
                 jds: _.defaults(wConfig.jds, {
                     protocol: 'http',
-                    host: '10.2.2.110',
-                    port: 9080
+                    host: 'IP        ',
+                    port: PORT
                 })
             };
 

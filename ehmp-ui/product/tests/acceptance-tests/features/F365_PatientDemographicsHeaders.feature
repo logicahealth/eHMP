@@ -41,7 +41,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-2.1_DetailDialogInpatient @US5116 @US4456 @DE1309 @DE2154
 Scenario: Patient Information: Demographic drop down "HEADERS" in Kodak for Inpatient
-	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
     Then staff view screen is displayed
   And user searches for and selects "twentythree,inpatient"
     And Cover Sheet is active

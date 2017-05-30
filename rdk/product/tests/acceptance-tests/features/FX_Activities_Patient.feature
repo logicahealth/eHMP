@@ -130,18 +130,18 @@ Scenario: Client can add an activity for my teams
    | assigned roles code | 24 |
    | assigned roles name | NURSE PRACTITIONER |
   And a successful response is returned
-  When the user "9E7A;pu1234" requests open activities for the patient context
+  When the user "REDACTED" requests open activities for the patient context
     | parameter | value |
     | pid|9E7A;3|
   Then a successful response is returned
   Then the activity response does contain the title
-  When the user "9E7A;pu1234" requests open activities for the patient context
+  When the user "REDACTED" requests open activities for the patient context
     | parameter | value |
     | createdByMe|true|
     | pid|9E7A;3|
   Then a successful response is returned
   Then the activity response does not contain the title
-  When the user "9E7A;pu1234" requests open activities for the patient context
+  When the user "REDACTED" requests open activities for the patient context
     | parameter | value |
     | intendedForMeAndMyTeams|true|
     | pid|9E7A;3|
@@ -168,7 +168,7 @@ Scenario: Client can add an activity for any teams
    | assigned roles code | 48 |
    | assigned roles name | RESIDENT (PHYSICIAN) |
   And a successful response is returned
-  When the user "9E7A;pu1234" requests open activities for the patient context
+  When the user "REDACTED" requests open activities for the patient context
     | parameter | value |
     | pid|9E7A;3|
   Then a successful response is returned
@@ -208,13 +208,13 @@ Scenario:  When the client requests activities "Created by me", then client only
    | authorId         | 10000000016 |
    | authorName       | TDNURSE,ONE  |
   And a successful response is returned
-  When the user "9E7A;pu1234" requests open activities for the patient context
+  When the user "REDACTED" requests open activities for the patient context
     | parameter | value |
     | createdByMe|true|
     | pid|9E7A;3|
   Then a successful response is returned
   Then the activity response does not contain the title
-  And the activity response only contains activities started by pu1234
+  And the activity response only contains activities started by REDACTED  
   When the user "9E7A;1tdnurse" requests open activities for the patient context
     | parameter | value |
     | createdByMe|true|
@@ -243,18 +243,18 @@ Scenario: Client can add an activity for Patients teams
    | assigned roles code | 48 |
    | assigned roles name | RESIDENT (PHYSICIAN) |
   And a successful response is returned
- When the user "9E7A;pu1234" requests open activities for the patient context
+ When the user "REDACTED" requests open activities for the patient context
     | parameter | value |
     | pid|9E7A;3|
   Then a successful response is returned
   Then the activity response does contain the title
-  When the user "9E7A;pu1234" requests open activities for the patient context
+  When the user "REDACTED" requests open activities for the patient context
     | parameter | value |
     | createdByMe|true|
     | pid|9E7A;3|
   Then a successful response is returned
   Then the activity response does not contain the title
-  When the user "9E7A;pu1234" requests open activities for the patient context
+  When the user "REDACTED" requests open activities for the patient context
     | parameter | value |
     | intendedForMeAndMyTeams|true|
     | pid|9E7A;3|

@@ -135,7 +135,7 @@ define([
             });
             this.listenTo(this.templateHelperModel, 'change:shouldShow change:isActive', this.render);
             if ("ActiveXObject" in window) {
-                ADK.Messaging.on('ccow:updateHeaderStatus', _.bind(function(){
+                this.listenTo(ADK.Messaging, 'ccow:updateHeaderStatus',  _.bind(function(){
                     this.$('#ccowHeaderBarBtn').tooltip('hide');
                     this.render();
                 }, this));

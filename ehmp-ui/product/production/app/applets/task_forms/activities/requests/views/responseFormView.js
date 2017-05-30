@@ -139,17 +139,20 @@ define([
                 var requestorLocationUid = this.data.requests[0].visit.location;
                 var requestorSiteCode = requestorLocationUid.split(':')[3];
 
-                var facilities = new ADK.UIResources.Picklist.Team_Management.Facilities();
+                var division = _.get(this, 'data.activity.sourceFacilityId', null);
+                if (!_.isNull(division) && !_.isUndefined(division)) {
+                    var facilities = new ADK.UIResources.Picklist.Team_Management.Facilities();
+                    this.listenToOnce(facilities, 'read:success', function(collection, response) {
+                        var facility = collection.findWhere({facilityID: division});
+                        if(!_.isUndefined(facility)) {
+                            this.model.set('requestorLocation', facility.get('vistaName'));
+                        }
+                    });
 
-                this.listenToOnce(facilities, 'read:success', function(collection, response) {
-                    if (response && response.data && _.isArray(response.data) && (response.data.length === 1) && response.data[0] && response.data[0].vistaName) {
-                        this.model.set('requestorLocation', response.data[0].vistaName);
-                    }
-                });
-
-                facilities.fetch({
-                    siteCode: requestorSiteCode
-                });
+                    facilities.fetch({
+                        division: division
+                    });
+                }
             }
         },
         behaviors: {
@@ -244,8 +247,18 @@ define([
             this.workflow.close();
         },
         fireAccept: function(e) {
-            if (RequiredFieldsUtils.validateRequiredFields(this)) {
-                EventHandler.handleResponseAction(e, this.model, 'accepted', this.model.get('action'), this.data);
+            if (ADK.UserService.hasPermissions('respond-coordination-request')) {
+                if (RequiredFieldsUtils.validateRequiredFields(this)) {
+                    EventHandler.handleResponseAction(e, this.model, 'accepted', this.model.get('action'), this.data);
+                }
+            } else {
+                this.$el.trigger('tray.loaderHide');
+                var errorBanner = new ADK.UI.Notification({
+                    type: 'error',
+                    title: 'Error Request - Response',
+                    message: 'The user has no permissions to respond to the request.'
+                });
+                errorBanner.show();
             }
         },
         fireDetail: function(e) {

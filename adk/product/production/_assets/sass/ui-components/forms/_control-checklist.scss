@@ -35,29 +35,4 @@
             }
         }
     }
-    &.split-checklist > .childView-container {
-        //This is used in Vitals EIE
-        label {
-            display: flex;
-            input {
-                width: 23px;
-            }
-            >:not(input) {
-                flex: 1;
-                margin-top: 3px;
-            }
-        }
-    }
-    /* Begining of Drilldown */
-    // &.drilldownChecklist-control {
-    //     > .drilldown-checklist-region,
-    //     > .drilldown-select-region {
-    //         .form-group {
-    //             &.checklist-control,
-    //             &.select-control {
-    //                 margin-bottom: 0px;
-    //             }
-    //         }
-    //     }
-    // }
 }

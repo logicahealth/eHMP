@@ -81,20 +81,20 @@ describe('Service Connected Resource', function(){
                             '9E7A': {
                                 name: 'PANORAMA',
                                 division: '500',
-                                host: '10.2.2.101',
-                                port: 9210,
+                                host: 'IP        ',
+                                port: PORT,
                                 production: false,
-                                accessCode: 'pu1234',
-                                verifyCode: 'pu1234!!'
+                                accessCode: 'REDACTED',
+                                verifyCode: 'REDACTED'
                             },
                             'C877': {
                                 name: 'KODAK',
                                 division: '500',
-                                host: '10.2.2.102',
-                                port: 9210,
+                                host: 'IP        ',
+                                port: PORT,
                                 production: false,
-                                accessCode: 'pu1234',
-                                verifyCode: 'pu1234!!'
+                                accessCode: 'REDACTED',
+                                verifyCode: 'REDACTED'
                             }
                         }
                     }
@@ -155,20 +155,20 @@ describe('Service Connected Resource', function(){
                             '9E7A': {
                                 name: 'PANORAMA',
                                 division: '500',
-                                host: '10.2.2.101',
-                                port: 9210,
+                                host: 'IP        ',
+                                port: PORT,
                                 production: false,
-                                accessCode: 'pu1234',
-                                verifyCode: 'pu1234!!'
+                                accessCode: 'REDACTED',
+                                verifyCode: 'REDACTED'
                             },
                             'C877': {
                                 name: 'KODAK',
                                 division: '500',
-                                host: '10.2.2.102',
-                                port: 9210,
+                                host: 'IP        ',
+                                port: PORT,
                                 production: false,
-                                accessCode: 'pu1234',
-                                verifyCode: 'pu1234!!'
+                                accessCode: 'REDACTED',
+                                verifyCode: 'REDACTED'
                             }
                         }
                     }

@@ -1,4 +1,5 @@
 define(['main/ADK'], function(ADK) {
+    'use strict';
 
     var Allergen = ADK.Resources.Picklist.Model.extend({
         idAttribute: 'name',

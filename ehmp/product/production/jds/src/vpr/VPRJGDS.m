@@ -3,7 +3,7 @@ VPRJGDS ;KRM/CJE -- Generic Data Store
  Q
  ;
 SET(ARGS,BODY)  ; Store error(s) based on the passed in uid
- N OBJECT,ERR,RESULT,GLOBAL,GLOBALJ,UID,INCR,OLDOBJ
+ N OBJECT,ERR,RESULT,GLOBAL,GLOBALJ,UID,INCR,OLDOBJ,TLTARY
  ; Ensure the store is setup and correct
  I $G(HTTPREQ("store"))="" D SETERROR^VPRJRER(253) Q ""
  ; Parsed JSON
@@ -61,19 +61,29 @@ SET(ARGS,BODY)  ; Store error(s) based on the passed in uid
  ; need to do this for updates
  L +@GLOBAL@(UID):$G(^VPRCONFIG("timeout","gds"),5) E  D SETERROR^VPRJRER(502) QUIT ""
  M OLDOBJ=@GLOBAL@(UID)
+ ;
  ; Merge parsed JSON
+ ; Don't kill the object if this is a patch (modify the object in-place)
  K:$G(HTTPREQ("method"))'="PATCH" @GLOBAL@(UID)
  M @GLOBAL@(UID)=OBJECT
  ;
  ; if this is a PATCH we need to re-create the full object to continue
- I $G(HTTPREQ("method"))="PATCH" D  I $D(ERR) D SETERROR^VPRJRER(217) QUIT ""
+ I $G(HTTPREQ("method"))="PATCH" D  I $D(ERR) D SETERROR^VPRJRER(217) L -@GLOBAL@(UID) QUIT ""
  . M OBJECT=@GLOBAL@(UID)
  . D ENCODE^VPRJSON("OBJECT","BODY","ERR")
  ;
  ; Merge Raw JSON
  K @GLOBALJ@("JSON",UID)
  M @GLOBALJ@("JSON",UID)=BODY
+ ;
+ ; Index the object
  D INDEX^VPRJGDSX(UID,.OLDOBJ,.OBJECT)
+ ;
+ ; Create any templates
+ D BLDTLT^VPRJCT1(HTTPREQ("store"),.OBJECT,.TLTARY) I $G(HTTPERR) L -@GLOBAL@(UID) QUIT ""
+ M @GLOBALJ@("TEMPLATE",UID)=TLTARY
+ ;
+ ; All done. Remove the lock and report success.
  L -@GLOBAL@(UID)
  Q "/"_HTTPREQ("store")_"/"_UID
  ;
@@ -99,8 +109,19 @@ CLR(RESULT,ARGS)  ; Clear ALL objects in generic data store!!!
  S INDEXNAME=""
  F  S INDEXNAME=$O(^VPRMETA("collection",$G(HTTPREQ("store")),"index",INDEXNAME)) Q:INDEXNAME=""  D
  . K ^VPRMETA("index",INDEXNAME)
+ ;
+ ; Remove templates
+ N TEMPLATE
+ S TEMPLATE=""
+ F  S TEMPLATE=$O(^VPRCONFIG("store",$G(HTTPREQ("store")),"template",TEMPLATE)) Q:TEMPLATE=""  D
+ . K ^VPRMETA("template",TEMPLATE)
+ S TEMPLATE=""
+ F  S TEMPLATE=$O(^VPRMETA("collection",$G(HTTPREQ("store")),"template",TEMPLATE)) Q:TEMPLATE=""  D
+ . K ^VPRMETA("template",TEMPLATE)
+ ;
+ ; Remove the collection indicator in VPRMETA
  K ^VPRMETA("collection",$G(HTTPREQ("store")))
- ; Remove the indicator that the database exists
+ ; Remove the store indicator in VPRCONFIG
  K ^VPRCONFIG("store",$G(HTTPREQ("store")))
  ; Delete the urlmap using store-index
  S URLMAPNUM=""
@@ -172,8 +193,10 @@ GET(RESULT,ARGS) ; Returns object in generic data store
  N OBJECT,FILTER,CLAUSES,CLAUSE,ERR,BODY,UID,GLOBAL,ITEMCNT,VALUE
  I $G(HTTPREQ("store"))="" D SETERROR^VPRJRER(253) Q
  S GLOBAL="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))
+ S GLOBALJ="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))_"J"
  I $L(GLOBAL)<2 D SETERROR^VPRJRER(253) Q
- I $$UNKARGS^VPRJCU(.ARGS,"uid,filter") Q
+ I $$UNKARGS^VPRJCU(.ARGS,"uid,filter,template") Q
+ S TEMPLATE=$G(ARGS("template"))
  ; Get any filters and parse them into CLAUSES
  S FILTER=$G(ARGS("filter"))
  I $L(FILTER) D PARSE^VPRJCF(FILTER,.CLAUSES) Q:$G(HTTPERR)
@@ -261,7 +284,7 @@ CINDEX(ARGS,BODY)
  Q ""
  ;
 INDEX(RESULT,ARGS) ; GET objects by index
- I $$UNKARGS^VPRJCU(.ARGS,"indexName,range,order,bail,filter,start") Q
+ I $$UNKARGS^VPRJCU(.ARGS,"indexName,range,order,bail,filter,start,template") Q
  ; Ensure the store is setup and correct
  I $G(HTTPREQ("store"))="" D SETERROR^VPRJRER(253) Q ""
  N GLOBAL S GLOBAL="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))
@@ -273,11 +296,70 @@ INDEX(RESULT,ARGS) ; GET objects by index
  S ORDER=$G(ARGS("order"))
  S BAIL=$G(ARGS("bail"))
  S FILTER=$G(ARGS("filter"))
+ S TEMPLATE=$G(ARGS("template"))
  I $G(INDEX)="" D SETERROR^VPRJRER(102,INDEX) Q
  I '$D(^VPRMETA("index",INDEX)) D SETERROR^VPRJRER(102,INDEX) Q
  ;
  ; Do the query
- D QINDEX^VPRJGDSQ(INDEX,RANGE,ORDER,BAIL,"",FILTER)
+ D QINDEX^VPRJGDSQ(INDEX,RANGE,ORDER,BAIL,TEMPLATE,FILTER)
  S RESULT=$NA(^||TMP($J)),RESULT("pageable")=""
  Q
+ ;
+ ; Create a template definition for a generic data store
+ ; @param {array} ARGS - (passed by reference) HTTP query parameters/url parameters
+ ; @param {array} BODY - (passed by reference) HTTP content body in stringified JSON
+CTEMPLATE(ARGS,BODY)
+ N OBJECT,ERR,RESULT,GLOBAL,GLOBALJ,UID,INCR,OLDOBJ,LINES,METATYPE,METADATA,METATYPE
+ ; Ensure the store is setup and correct
+ I $G(HTTPREQ("store"))="" D SETERROR^VPRJRER(253) Q ""
+ S GLOBAL="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))
+ S GLOBALJ="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))_"J"
+ I $L(GLOBAL)<2 D SETERROR^VPRJRER(253) Q ""
+ ;
+ ; If the body is null just return with error
+ I '$D(BODY) D SETERROR^VPRJRER(255) Q ""
+ ;
+ D DECODE^VPRJSON("BODY","OBJECT","ERR") ; From JSON to an array
+ I $D(ERR) D SETERROR^VPRJRER(202) Q ""
+ ;
+ ; Ensure all data fields exist
+ I $G(OBJECT("name"))=""!($G(OBJECT("directives"))="")!($G(OBJECT("fields"))="") D SETERROR^VPRJRER(273,"required field missing") Q ""
+ ;
+ ; If the index already exists stop processing and tell the user
+ I $D(^VPRMETA("template",$G(OBJECT("name")))) D SETERROR^VPRJRER(271,"template name: "_$G(OBJECT("name"))) Q ""
+ I $D(^VPRMETA("collection",HTTPREQ("store"),"template",$G(OBJECT("name")))) D SETERROR^VPRJRER(271,"template name: "_$G(OBJECT("name"))) Q ""
+ ;
+ ; Parse the JSON into format LOADSPEC needs
+ S LINES(1)=$G(OBJECT("name"))
+ S LINES(2)="collections: "_$G(HTTPREQ("store"))
+ S LINES(3)="directives: "_$G(OBJECT("directives"))
+ S LINES(4)="fields: "_$G(OBJECT("fields"))
+ ;
+ ; Build the SPEC
+ S METATYPE="template"
+ D BLDSPEC^VPRJCD(METATYPE,.LINES,.METADATA,.METACLTN)
+ ;
+ ; We no longer need the lines variable
+ K LINES
+ ;
+ ; report any errors from BLDSPEC back to the user and stop processing
+ I $D(METADATA("errors","errors")) D SETERROR^VPRJRER(270) Q ""
+ ;
+ ; Save the METADATA to ^VPRMETA and ^VPRCONFIG (for when ^VPRMETA is blown away)
+ M ^VPRMETA($P(METATYPE,":"))=METADATA
+ M ^VPRCONFIG("store",$G(HTTPREQ("store")),"template",$G(OBJECT("name")))=METADATA
+ ;
+ ; tell the collection it has a template
+ M ^VPRMETA("collection")=METACLTN
+ ;
+ ; Apply the template to existing data
+ S UID=""
+ F  S UID=$O(@GLOBAL@(UID)) Q:UID=""  Q:$D(ERR)  D
+ . N OBJECT,DOCUMENT
+ . M OBJECT=@GLOBAL@(UID)
+ . D BLDTLT^VPRJCT1(HTTPREQ("store"),.OBJECT,.TLTARY)
+ . ; Merge templated object
+ . K @GLOBALJ@("TEMPLATE",UID)
+ . M @GLOBALJ@("TEMPLATE",UID)=TLTARY
+ Q ""
  ;

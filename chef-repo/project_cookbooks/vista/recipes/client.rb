@@ -10,10 +10,10 @@ vista_sites = find_multiple_nodes_by_role("vista-.*", node[:stack])
 if vista_sites.size == 0
   vista_sites.push(
     {
-      "ipaddress" => "10.2.2.101"
+      "ipaddress" => "IP        "
     },
     {
-      "ipaddress" => "10.2.2.102"
+      "ipaddress" => "IP        "
     }
   )
 end

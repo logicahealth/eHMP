@@ -82,10 +82,17 @@ service "cache" do
   action :start
 end
 
+device_entry = {
+  "$I" => ["HFS", "/vagrant/HFS.TXT"]
+}
 
-
-
-
+vista_fileman "update $I for DEVICE file" do
+  action          :update
+  file            "3.5"
+  field_values    device_entry
+  log             node[:vista][:chef_log]
+  not_if { node[:vista][:no_reset] }
+end
 
 # Add the XCODEL ZBLXEC RPC for modifying test data
 # and Add the FILE Z RPC DIE and UPDATE Z RPC DIE RPCs for modifying test data
@@ -96,7 +103,6 @@ vista_install_distribution "cache_patches" do
   run_checksums node[:vista][:run_checksums]
 end
 
-
 if node[:vista].attribute?(:site_id)
   vista_mumps_block "update_hmpsystemname:#{node[:vista][:site_id]}" do
     namespace "VISTA"
@@ -106,15 +112,6 @@ if node[:vista].attribute?(:site_id)
     log node[:vista][:chef_log]
     not_if { node[:vista][:no_reset] }
   end
-end
-
-
-service "cache" do
-  action :stop
-end
-
-service "cache" do
-  action :start
 end
 
 if node[:vista].attribute?(:domain_name)

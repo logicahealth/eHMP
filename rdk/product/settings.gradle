@@ -33,5 +33,6 @@ tasks.each { taskName ->
 		include ':production:jbpm:tasksservice'
 		include ':production:jbpm:EhmpServices'
 		include ':production:jbpm:sql_config'
+		include ':production:jbpm:JbpmUtils'
 	}
 }

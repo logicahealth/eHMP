@@ -14,7 +14,7 @@
             "secret": "uPzhK7CA2f2ZJVgdSN9qQx-i"
         },
         "user": {
-            "accessCode": "mx1234",
+            "accessCode": "REDACTED",
             "consumerType": "user",
             "corsTabs": "true",
             "dgRecordAccess": "false",
@@ -229,7 +229,7 @@
             "firstname": "MARGARET",
             "infoButtonOid": "1.3.6.1.4.1.3768",
             "lastname": "XIU",
-            "password": "mx1234!!",
+            "password": "REDACTED",
             "permissionSets": ["read-access", "psychologist"],
             "permissions": ["access-stack-graph", "add-active-medication", "add-allergy", "add-condition-problem", "add-consult-order", "add-encounter", "add-immunization", "add-lab-order", "add-med-order", "add-non-va-medication", "add-note", "add-note-addendum", "add-patient-history", "add-radiology-order", "add-task", "add-vital", "cancel-task", "cosign-lab-order", "cosign-med-order", "cosign-note", "cosign-radiology-order", "delete-note", "discontinue-active-medication", "discontinue-consult-order", "discontinue-lab-order", "discontinue-med-order", "discontinue-radiology-order", "edit-active-medication", "edit-allergy", "edit-condition-problem", "edit-consult-order", "edit-encounter-form", "edit-lab-order", "edit-med-order", "edit-non-va-medication", "edit-note", "edit-note-addendum", "edit-patient-history", "edit-radiology-order", "edit-task", "eie-allergy", "eie-immunization", "eie-patient-history", "eie-vital", "read-active-medication", "read-allergy", "read-clinical-reminder", "read-community-health-summary", "read-condition-problem", "read-document", "read-encounter", "read-immunization", "read-medication-review", "read-order", "read-patient-history", "read-patient-record", "read-task", "read-vista-health-summary", "read-vital", "release-lab-order", "release-med-order", "release-radiology-order", "remove-condition-problem", "sign-consult-order", "sign-lab-order", "sign-med-order", "sign-note", "sign-note-addendum", "sign-radiology-order", "abort-task", "edit-encounter", "eie-encounter", "edit-immunization", "edit-vital", "read-stack-graph", "read-timeline"],
             "provider": true,
@@ -241,8 +241,8 @@
             "ssn": 666000865,
             "title": "Clinician",
             "uid": "urn:va:user:9E7A:10000000271",
-            "username": "9E7A;mx1234",
-            "verifyCode": "mx1234!!",
+            "username": "REDACTED",
+            "verifyCode": "REDACTED",
             "vistaKeys": ["GMRA-SUPERVISOR", "ORES", "PROVIDER", "PSB CPRS MED BUTTON"],
             "vistaUserClass": [{
                 "role": "USER",

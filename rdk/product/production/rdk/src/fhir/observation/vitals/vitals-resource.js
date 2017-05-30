@@ -89,7 +89,7 @@ function createVital(jdsItem) {
 
     fhirItem.resource = {};
     fhirItem.resource.resourceType = 'Observation';
-    fhirItem.resource.id = jdsItem.uid;
+    fhirItem.resource.id = fhirResource.fixId(jdsItem.uid);
     fhirItem.resource.text = {
         'status': 'generated',
         'div': '<div>' + _.escape(jdsItem.summary) + '</div>'
@@ -372,7 +372,7 @@ function createVitalBP(jdsItem) {
     // SETTING RESOURCETYPE and TEXT
     //------------------------------------------
     fhirItem.resource.resourceType = 'Observation';
-    fhirItem.resource.id = jdsItem.uid;
+    fhirItem.resource.id = fhirResource.fixId(jdsItem.uid);
     fhirItem.resource.text = {
         'status': 'generated',
         'div': '<div>' + _.escape(divDate + jdsItem.codes[0].display + ' ' + jdsItem.result.toString() + ' ' + jdsItem.units) + '</div>'

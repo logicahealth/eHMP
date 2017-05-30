@@ -8,263 +8,279 @@ define([
     'app/applets/documents/detailCommunicator',
     'app/applets/documents/appletHelper',
     'app/applets/documents/docDetailsDisplayer',
-    'app/applets/documents/collectionHandler',
     'app/applets/notes/writeback/formUtil',
     'app/applets/documents/modalFooter',
     'app/applets/documents/modalHeader',
+    'app/applets/documents/modalBody',
     'app/applets/documents/docUtils',
     'app/applets/documents/imaging/views/imageIndicatorView',
-    "app/applets/documents/imaging/helpers/thumbnailHelper"
-], function (Backbone, Marionette, _, moment, Handlebars, appConfig, DetailCommunicator, appletHelper, DocDetailsDisplayer,
-    CollectionHandler, NotesFormUtil, ModalFooter, ModalHeader, DocUtils, ImageIndicator, ThumbnailHelper) {
+], function(
+    Backbone,
+    Marionette,
+    _,
+    Moment,
+    Handlebars,
+    appConfig,
+    DetailCommunicator,
+    appletHelper,
+    DocDetailsDisplayer,
+    NotesFormUtil,
+    ModalFooter,
+    ModalHeader,
+    ModalBody,
+    DocUtils,
+    ImageIndicator
+) {
     "use strict";
 
-    var DEBUG = appConfig.debug;
-    var fetchOptions = {
-        cache: true,
-        pageable: true,
-        resourceTitle: 'patient-record-document-view',
-        allowAbort: true
-    };
-    //var DEBUG = true;
-    //The important changes are in the columns array as well as replacing the dataGridOptions.groupBy logic with this:   dataGridOptions.groupable = this.options.groupView;
-    var fullScreenColumns = [{
+    var FullScreenColumns = [{
         name: 'dateDisplay',
         label: 'Date',
-        flexWidth: 'flex-width-date',
-        cell: Backgrid.StringCell.extend({
-            className: 'string-cell flex-width-date'
-        }),
-        sortValue: function (model, string) { //this is what needs to change to server-side sorting
-            return model.get('referenceDateTime');
-        },
-        groupable: true,
-        groupableOptions: {
-            primary: true,
-            innerSort: 'referenceDateTime',
-            groupByDate: true,
-            groupByFunction: function (collectionElement) {
-                return collectionElement.model.get("referenceDateTime").substr(0, 6);
-            },
-            //this takes the item returned by the groupByFunction
-            groupByRowFormatter: function (item) {
-                return moment(item, "YYYYMM").format("MMMM YYYY");
+        hoverTip: 'documents_date',
+        groupKey: function(item) {
+            // TODO: not doing anything, add backup attribute or remove "if" block
+            if (item.referenceDateTime) {
+                return item.referenceDateTime.substr(0, 6);
             }
+            return item.referenceDateTime.substr(0, 6);
         },
-        hoverTip: 'documents_date'
+        sortKeys: {
+            asc: 'dateTime asc',
+            desc: 'dateTime desc',
+            defaultDirection: 'desc'
+        }
     }, {
         name: 'localTitle',
         label: 'Description',
-        flexWidth: 'flex-width-2',
-        cell: Backgrid.HandlebarsCell.extend ({
-            className: 'handlebars-cell flex-width-2'
-        }),
-        groupable: true,
-        groupableOptions: {
-            innerSort: "referenceDateTime"
-        },
-        template: Handlebars.compile('{{localTitle}} <strong>{{addendumIndicator}}</strong> '),
         hoverTip: 'documents_description'
     }, {
         name: 'kind',
         label: 'Type',
-        cell: 'string',
-        groupable: true,
-        groupableOptions: {
-            innerSort: "referenceDateTime"
-        },
-        hoverTip: 'documents_type'
+        hoverTip: 'documents_type',
+        sortKeys: {
+            asc: 'kind asc, dateTime desc',
+            desc: 'kind desc, dateTime desc'
+        }
     }, {
         name: 'authorDisplayName',
         label: 'Author/Verifier',
-        cell: 'string',
-        groupable: true,
-        groupableOptions: {
-            innerSort: "referenceDateTime"
-        },
         hoverTip: 'documents_enteredby'
     }, {
         name: 'facilityName',
         label: 'Facility',
-        cell: 'handlebars',
-        groupable: true,
-        groupableOptions: {
-            innerSort: "referenceDateTime"
-        },
-        template: Handlebars.compile('{{facilityName}}{{#if dodComplexNoteUri}}*{{/if}}'),
-        hoverTip: 'documents_facility'
+        hoverTip: 'documents_facility',
+        sortKeys: {
+            asc: 'facilityName asc, dateTime desc',
+            desc: 'facilityName desc, dateTime desc'
+        }
     }, {
-        name:'hasImages',
-        label:'Images',
-        editable:false,
-        cell:ImageIndicator,
-        flexWidth:'flex-width-0_5',
-        hoverTip: 'documents_images'
+        name: 'hasImages',
+        label: 'Images',
+        hoverTip: 'documents_images',
+        bodyTemplate: '{{#if hasImages}}<span><i class="fa fa-paperclip" data-toggle="tooltip" title="Image(s) are attached" aria-label="Document contains attached images"></i></span>{{/if}}'
     }];
-    var summaryColumns = [fullScreenColumns[0], fullScreenColumns[2], fullScreenColumns[3]];
+    var SummaryColumns = [FullScreenColumns[0], FullScreenColumns[2], FullScreenColumns[3]];
+    Object.freeze(FullScreenColumns);
+    Object.freeze(SummaryColumns);
 
-    //------------------------------------------------------------
-
-    var filterOptions = {
-        filterFields: ['dateDisplay', 'localTitle', 'kind', 'authorDisplayName', 'facilityName', 'imageLocation', 'dateTimeDisplay', 'orderName', 'reason', 'addendumIndicator']
+    var collectionOptions = {
+        cache: false,
+        patientData: true,
+        resourceTitle: 'patient-record-document-view',
+        allowAbort: true,
+        criteria: {},
+        type: 'POST',
+        limit: 100
     };
-    //------------------------------------------------------------
+    Object.freeze(collectionOptions);
 
-    var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
-        initialize: function (options) {
-            if (DEBUG) console.log("Doc Tab App -----> init start");
-            this._super = ADK.Applets.BaseGridApplet.prototype;
-            var self = this;
-            this.modalCollection = new Backbone.Collection();
-            var dataGridOptions = {
-                filterEnabled: true,
-                onClickRow: function (model, event, gridView) {
-                    var docType = model.get('kind');
-                    var complexDocBool = model.get('complexDoc');
-                    var resultDocCollection = new appletHelper.ResultsDocCollection();
-                    var childDocCollection = new appletHelper.ChildDocCollection();
-                    appletHelper.getChildDocs.call(gridView, model, childDocCollection);
 
-                    if (complexDocBool) {
-                        appletHelper.getResultsFromUid.call(gridView, model, resultDocCollection);
-                    }
-
-                    if (this.parent !== undefined) {
-                        self.modalCollection.reset();
-                        self.changeModelAndView(model, docType, resultDocCollection, childDocCollection);
-                    }
-
-                    //  show visual indicator of active row
-                    var $target = $(event.target);
-                    this.parent.$("#data-grid-documents").find("tr.active").removeClass('active');
-                    if ($target.hasClass('selectable')) {
-                        $target.addClass('active');
-                    } else if ($target.parent().hasClass('selectable')) {
-                        $target.parent().addClass('active');
-                    }
-                }
-            };
-            dataGridOptions.parent = this;
-            dataGridOptions.appletConfig = options.appletConfig;
-            dataGridOptions.groupable = true;
-            if (ADK.UserService.hasPermission('sign-note') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
-                dataGridOptions.onClickAdd = function (event) {
-                    var notesFormOptions = {
-                        model: undefined,
-                        showVisit: true,
-                        isEdit: false,
-                        openTrayOnDestroy: false
-                    };
-                    NotesFormUtil.launchNoteForm(notesFormOptions);
-                };
-            } else {
-                dataGridOptions.onClickAdd = undefined;
+    var GroupCollection = ADK.UIResources.Fetch.Document.DocumentViews.GroupCollection.extend({
+        defaults: {
+            filter: {
+                fields: ['amended', 'dateTime', 'referenceDateTime', 'localTitle', 'typeName', 'summary', 'name', 'kind', 'authorDisplayName', 'signerDisplayName', 'providerDisplayName', 'clinicians[].displayName', 'activity[].responsible', 'facilityName', 'imageLocation', 'orderName', 'reason']
             }
+        }
+    });
 
-            if (this.columnsViewType === "summary") {
-                dataGridOptions.columns = summaryColumns;
-            } else {
-                dataGridOptions.columns = fullScreenColumns;
-            }
-            dataGridOptions.filterFields = filterOptions.filterFields;
-            this.listenTo(ADK.Messaging, 'globalDate:selected', function (date) {
-                this.loading();
-                if (DEBUG) console.log("Doc Tab date filter range----->" + JSON.stringify(date));
-                this.dataGridOptions.collection.fetchOptions.criteria.filter = 'or(' + this.buildJdsDateFilter('referenceDateTime') + ',' + this.buildJdsDateFilter('dateTime') + '),' +
-                        'not(and(in(kind,["Consult","Imaging","Procedure"]),ne(statusName,"COMPLETE")))'; //fill out incomplete consults, images and procedures.;
-                this.dataGridOptions.collection.fetchOptions.criteria.template = 'notext';
-                this.fetchData();
 
-            }, this);
-            this.dataGridOptions = dataGridOptions;
-            fetchOptions.criteria = {
-                    filter: 'or(' + this.buildJdsDateFilter('referenceDateTime') + ',' + this.buildJdsDateFilter('dateTime') + '),' +
-                        'not(and(in(kind,["Consult","Imaging","Procedure"]),ne(statusName,"COMPLETE")))', //fill out incomplete consults, images and procedures.
-                    template: 'notext'
-            };
-           var model = Backbone.Model.extend({
-                parse: function(resp) {
-                    ADK.Enrichment.addFacilityMoniker(resp);
-                    appletHelper.parseDocResponse(resp);
-                    if (resp.complexDoc) {
-                        resp.authorDisplayName = appletHelper.stringNormalization(appletHelper.getAuthorVerifier(resp));
-                    }
-                    return resp;
-                }
-            });
-            //this creates a PageableCollection
-            dataGridOptions.collection = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
-            dataGridOptions.collection.model = model;
-
-            dataGridOptions.collection.fetchOptions = fetchOptions;
-            this.listenTo(this.dataGridOptions.collection, 'sync', this.updateCollection);
-
-            this._super.initialize.apply(this, arguments);
-            this.fetchData();
-
-            this.listenTo(ADK.Messaging.getChannel('notes'), 'addendum:added', function(model) {
-                this.refresh({});
-            });
-
-            this.listenTo(ADK.Messaging.getChannel('notes'), 'addendum:deleted', function(model) {
-                this.refresh({});
-            });
-
-            this.listenTo(ADK.Messaging.getChannel('notes'), 'addendum:signed', function(model) {
-                this.refresh({});
-            });
+    var AppletLayoutView = ADK.UI.ServerPagingApplet.extend({
+        defaultSortColumn: FullScreenColumns[0].name,
+        groupable: true,
+        helpers: {
+            'dateDisplay_groupHeader': function(groupModel) {
+                // groupHeader helpers will only have the value returned from `groupKey` function collection option..
+                // somehow need to call out this in the docs, or readdress
+                return new Moment(groupModel.get('dateDisplay'), 'YYYYMM').format('MMMM YYYY');
+            },
+            // 'dateDisplay_cell': function(model) {
+            //     return new Moment(this.dateDisplay).format('MMMM DD YYYY');
+            // }
         },
+        initialize: function(options) {
+            this.modalCollection = new ADK.UIResources.Fetch.Document.DocumentViews.Collection();
 
+            if (ADK.UserService.hasPermission('sign-note') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
+                this.onClickAdd = this._onClickAdd;
+            }
+
+            this.listenTo(ADK.Messaging, 'globalDate:selected', function() {
+                // This will trigger a new fetch and therefore call the view's beforeFetch method
+                // which updates the criteria's range property
+                this.triggerMethod('refresh');
+            });
+
+            this.listenTo(this.collection, 'sync', this.updateCollection);
+            this.listenTo(ADK.Messaging.getChannel('notes'), 'addendum:added addendum:deleted addendum:signed', function() {
+                this.triggerMethod('refresh');
+            });
+
+            this.collection = new GroupCollection([], collectionOptions);
+        },
+        _onClickAdd: function() {
+            var notesFormOptions = {
+                model: undefined,
+                showVisit: true,
+                isEdit: false,
+                openTrayOnDestroy: false
+            };
+            NotesFormUtil.launchNoteForm(notesFormOptions);
+        },
+        getColumns: function() {
+            if (this.columnsViewType === "summary" || _.isEqual(_.get(this.getOption('appletConfig') || {}, 'viewType', ''), 'summary')) {
+                return SummaryColumns;
+            }
+            return FullScreenColumns;
+        },
+        onClickRow: function(model, gridView) {
+            var docType = model.get('kind');
+            var complexDocBool = model.get('complexDoc');
+            var resultDocCollection = new ADK.UIResources.Fetch.Document.Collections.ResultsByUidCollection();
+            var childDocCollection = new ADK.UIResources.Fetch.Document.Collections.DocumentCollection();
+            appletHelper.getChildDocs.call(this, model, childDocCollection);
+
+            if (complexDocBool) {
+                appletHelper.getResultsFromUid.call(this, model, resultDocCollection);
+            }
+
+            this.modalCollection.reset();
+            this.changeModelAndView(model, docType, resultDocCollection, childDocCollection);
+        },
+        beforeFetch: function() {
+            if (!_.has(this.collection, 'fetchOptions')) {
+                this.collection.fetchOptions = collectionOptions;
+            }
+            this.createFilter();
+        },
+        createFilter: function() {
+            var filter = this.collection.Criteria.Query;
+            if (filter.hasQueries()) {
+                filter.reset();
+            }
+            this.collection.Criteria.Range.createFromGlobalDate();
+            this.collection.Criteria.NoText.enable();
+        },
         updateCollection: function(collection) {
             var fullCollection = collection.fullCollection || collection;
-            fullCollection.each(function(model){
+            fullCollection.each(function(model) {
                 var complexDocBool = model.get('complexDoc');
                 if (complexDocBool && model.get('authorDisplayName').toLowerCase() === 'none') {
-                    appletHelper.getResultsFromUid(model, function(additionalDetailCollection){
+                    appletHelper.getResultsFromUid(model, function(additionalDetailCollection) {
                         model.set('authorDisplayName', additionalDetailCollection.models[0].get('signerDisplayName'));
                     });
                 }
             });
         },
-
-        changeModelAndView: function (newModel, docType, resultDocCollection, childDocCollection) {
+        changeModelAndView: function(newModel, docType, resultDocCollection, childDocCollection) {
             if (newModel.get('documentClass') === "PROGRESS NOTES") {
-                this.changeModelView(newModel, docType, resultDocCollection, childDocCollection);
+                this.showDetailsView(newModel, docType, resultDocCollection, childDocCollection);
                 DocUtils.getDoc.call(this, newModel.get('uid'), this.modalCollection);
             } else {
                 this.modalCollection.reset(newModel);
-                this.changeModelView(newModel, docType, resultDocCollection, childDocCollection);
+                this.showDetailsView(newModel, docType, resultDocCollection, childDocCollection);
             }
         },
+        showDetailsView: function(initialModel, docType) {
+            initialModel = initialModel || this.collection.first().get('rows').first();
 
-        changeModelView: function (newModel, docType, resultDocCollection, childDocCollection, originalModel) {
-            if (DEBUG) console.log("Doc Tab App -----> changeView");
-            var results = DocDetailsDisplayer.getView.call(this, newModel, docType, resultDocCollection, childDocCollection, this.modalCollection);
-            var view = new results.view();
+            var PagingModel = Backbone.Model.extend({
+                defaults: {
+                    hasPrevious: false,
+                    hasNext: false,
+                    currentModel: null,
+                    currentGroup: null,
+                    groupIndex: null,
+                    modelIndex: null
+                }
+            });
+            var pagingModel = new PagingModel({
+                currentModel: initialModel
+            });
+            var HeaderModel = Backbone.Model.extend({
+                updateTitle: function() {
+                    this.set('title', DocDetailsDisplayer.getTitle(this.pagingModel.get('currentModel'), this.get('docType')));
+                },
+                updateHasPrevious: function() {
+                    this.set('hasPrevious', this.pagingModel.get('hasPrevious'));
+                },
+                updateHasNext: function() {
+                    this.set('hasNext', this.pagingModel.get('hasNext'));
+                },
+                updateFetchingNextPage: function() {
+                    this.set('fetchingNextPage', this.pagingModel.get('fetchingNextPage'));
+                },
+                initialize: function(attributes, options) {
+                    this.pagingModel = _.get(options, 'pagingModel');
+                    this._updateAttributes();
+                    this.listenTo(this.pagingModel, 'change', function(model, options) {
+                        if (_.has(model.changed, 'groupIndex') || _.has(model.changed, 'modelIndex')) {
+                            this._updateAttributes();
+                        } else if (_.has(model.changed, 'fetchingNextPage')) {
+                            this.updateFetchingNextPage();
+                        }
+                    });
+                },
+                _updateAttributes: function() {
+                    this.updateTitle();
+                    this.updateHasNext();
+                    this.updateHasPrevious();
+                    this.updateFetchingNextPage();
+                }
+            });
+
+            var headerModel = new HeaderModel({
+                docType: initialModel.get('kind')
+            }, {
+                pagingModel: pagingModel
+            });
+
+            var detailsView = new ModalBody({
+                headerModel: headerModel,
+                model: initialModel,
+                collection: this.collection,
+                modalCollection: this.modalCollection,
+                pagingModel: pagingModel
+            });
 
             var modalOptions = {
-                'title': results.title,
-                'size': 'large',
-                'showLoading': true,
-                'headerView': ModalHeader.extend({
-                    model: newModel,
-                    theView: view,
-                    resultDocCollection: resultDocCollection,
-                    childDocCollection: childDocCollection
+                title: headerModel.get('title'),
+                size: 'large',
+                headerView: ModalHeader.extend({
+                    model: headerModel
+                }),
+                footerView: ModalFooter.extend({
+                    model: initialModel,
+                    pagingModel: pagingModel
                 })
             };
-            if (DocUtils.canAddAddendum(newModel)) {
-                modalOptions.footerView = ModalFooter.extend({
-                    model: newModel
-                });
-            }
 
-            var modal = new ADK.UI.Modal({
-                view: view,
+            var detailsModal = new ADK.UI.Modal({
+                view: detailsView,
                 options: modalOptions
             });
-            modal.show();
-        },
+
+            detailsModal.show();
+        }
     });
 
     var applet = {

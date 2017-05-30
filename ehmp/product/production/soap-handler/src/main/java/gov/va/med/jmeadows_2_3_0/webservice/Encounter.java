@@ -19,21 +19,21 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="encounter">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.med.va.gov/}patientAppointments">
+ *     &lt;extension base="{http://webservice.vds.URL       /}patientAppointments">
  *       &lt;sequence>
- *         &lt;element name="admittingProvider" type="{http://webservice.vds.med.va.gov/}provider" minOccurs="0"/>
+ *         &lt;element name="admittingProvider" type="{http://webservice.vds.URL       /}provider" minOccurs="0"/>
  *         &lt;element name="arrivalDateTime" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="complexDataUrl" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="departureDateTime" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
- *         &lt;element name="diagnosis" type="{http://webservice.vds.med.va.gov/}diagnosis" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="diagnosis" type="{http://webservice.vds.URL       /}diagnosis" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="dischargeDisposition" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="documents" type="{http://webservice.vds.med.va.gov/}encounterDocument" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="documents" type="{http://webservice.vds.URL       /}encounterDocument" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="encounterId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="encounterNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="enteredBy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="enteredByDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="evalManagementCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="procedures" type="{http://webservice.vds.med.va.gov/}procedure" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="procedures" type="{http://webservice.vds.URL       /}procedure" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="reasonCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="reasonNarrative" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="roomBed" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -48,7 +48,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "encounter", namespace = "http://webservice.vds.med.va.gov/", propOrder = {
+@XmlType(name = "encounter", namespace = "http://webservice.vds.URL       /", propOrder = {
     "admittingProvider",
     "arrivalDateTime",
     "complexDataUrl",

@@ -42,7 +42,7 @@ define([
             control: 'container',
             extraClasses: ['row', 'left-margin-xs', 'right-margin-xs', 'all-padding-sm'],
             modelListeners: ['problemText', 'problemTerm', 'isFreeTextProblem'],
-            template: Handlebars.compile('{{#if isFreeTextProblem}}<p class="col-xs-12"><strong>Entered as Freetext</strong><br />{{problemTerm}}</p><button type="button" id="ftDetailsBtn" class="btn btn-link" title="Press enter to view additional details"><i id="ftDetailsCaret" class="fa fa-caret-right color-primary right-margin-xs"></i>Details</button>{{/if}}')
+            template: Handlebars.compile('{{#if isFreeTextProblem}}<p class="col-xs-12 left-padding-no"><strong>Entered as Freetext</strong><br />{{problemTerm}}</p><button type="button" id="ftDetailsBtn" class="btn btn-link left-padding-no" title="Press enter to view additional details"><i id="ftDetailsCaret" class="fa fa-caret-right color-primary right-margin-xs"></i>Details</button>{{/if}}')
         }, {
             control: 'container',
             id: 'detailsContainer',
@@ -71,7 +71,7 @@ define([
         extraClasses: ['row',' bottom-margin-sm'],
         items: [{
             control: "radio",
-            extraClasses: ['col-xs-5'],
+            extraClasses: ['col-xs-5', 'right-padding-no'],
             required: true,
             name: "statusRadioValue",
             label: "Status",
@@ -84,7 +84,7 @@ define([
             }]
         }, {
             control: "radio",
-            extraClasses: ['col-xs-7', 'left-padding-no'],
+            extraClasses: ['col-xs-7', 'right-padding-no'],
             required: true,
             name: "immediacyRadioValue",
             label: "Acuity",
@@ -245,7 +245,7 @@ define([
                     },
                     label: 'Cancel',
                     name: 'problemAddConfirmCancel',
-                    extraClasses: ['btn-default', 'btn-sm','right-margin-xs']
+                    extraClasses: ['btn-default', 'btn-sm','right-margin-sm']
                 },
                 {
                     control: "dropdown",
@@ -312,7 +312,7 @@ define([
             'addCreateBtn': '#addDrpDwnContainer-addCreate',
             'cancelButton': '#cancelBtnProblem',
             'freeTextContainer': '.free-text-container',
-            'annotationsInputBox': '.annotations #inputString',
+            'annotationsInputBox': '.annotations .inputString input',
             'annotationsAddButton': '.add-comment-button',
             'changeProblemBtn': '.change-problem-btn'
         },
@@ -325,11 +325,11 @@ define([
                 this.ui.editableFreeTxtTxtArea.trigger('control:hidden', !showDetails);
                 this.ui.requestTermCheckBox.trigger('control:hidden', !showDetails);
                 if (showDetails) {
-                    this.$el.find('#ftDetailsCaret').addClass('fa-caret-down');
-                    this.$el.find('#ftDetailsCaret').removeClass('fa-caret-right');
+                    this.$('#ftDetailsCaret').addClass('fa-caret-down');
+                    this.$('#ftDetailsCaret').removeClass('fa-caret-right');
                 } else {
-                    this.$el.find('#ftDetailsCaret').removeClass('fa-caret-down');
-                    this.$el.find('#ftDetailsCaret').addClass('fa-caret-right');
+                    this.$('#ftDetailsCaret').removeClass('fa-caret-down');
+                    this.$('#ftDetailsCaret').addClass('fa-caret-right');
                 }
             });
 
@@ -384,12 +384,12 @@ define([
                     this.ui.editableFreeTxtTxtArea.trigger('control:hidden', true);
                     this.ui.requestTermCheckBox.trigger('control:hidden', true);
                     this.model.set('showDetails', false);
-                    this.$el.find('#ftDetailsCaret').removeClass('fa-caret-down');
-                    this.$el.find('#ftDetailsCaret').addClass('fa-caret-right');
+                    this.$('#ftDetailsCaret').removeClass('fa-caret-down');
+                    this.$('#ftDetailsCaret').addClass('fa-caret-right');
                 } else {
                     this.model.set('showDetails', true);
-                    this.$el.find('#ftDetailsCaret').addClass('fa-caret-down');
-                    this.$el.find('#ftDetailsCaret').removeClass('fa-caret-right');
+                    this.$('#ftDetailsCaret').addClass('fa-caret-down');
+                    this.$('#ftDetailsCaret').removeClass('fa-caret-right');
 
                     this.ui.editableFreeTxtTxtArea.trigger('control:hidden', !this.model.get('requestTermCheckBox'));
                     this.ui.requestTermCheckBox.trigger('control:hidden', false);
@@ -539,7 +539,7 @@ define([
             validationFunction(this.model, this.model.get(formField));
 
             if (this.model.errorModel.get(formField)) {
-                this.$el.find(uiElement.selector + ' input').focus();
+                this.$(uiElement.selector + ' input').focus();
             }
         },
         handleDisableAddButton: function(skipCommentCheck) {

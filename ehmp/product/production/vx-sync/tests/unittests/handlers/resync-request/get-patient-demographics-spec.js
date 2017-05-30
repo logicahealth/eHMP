@@ -8,8 +8,8 @@ var log = require(global.VX_DUMMIES + 'dummy-logger');
 var config = {
     jds: {
         protocol: 'http',
-        host: '10.2.2.110',
-        port: 9080
+        host: 'IP        ',
+        port: PORT
     }
 };
 

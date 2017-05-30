@@ -5,7 +5,7 @@ require 'DefaultHmpLogin.rb'
 class QueryHDR
   def initialize(clientname, domain, icn)
     @path = String.new(DefaultLogin.fhir_url)
-    @path.concat("/repositories.med.va.gov/fpds/")
+    @path.concat("/repositories.URL       /fpds/")
     @path.concat(domain)
     @path.concat("/")
     @number_parameters = 0

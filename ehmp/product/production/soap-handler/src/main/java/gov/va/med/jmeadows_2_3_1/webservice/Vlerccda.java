@@ -17,22 +17,22 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="vlerccda">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.med.va.gov/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.URL       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="errorList" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="statusList" type="{http://webservice.bhie.med.va.gov/}siteStatusV4" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="demographics" type="{http://webservice.vds.med.va.gov/}patientDemographics" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="allergies" type="{http://webservice.vds.med.va.gov/}allergy" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="immunizations" type="{http://webservice.vds.med.va.gov/}immunization" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="medications" type="{http://webservice.vds.med.va.gov/}medication" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="results" type="{http://webservice.vds.med.va.gov/}labResult" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="problems" type="{http://webservice.vds.med.va.gov/}problem" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="procedures" type="{http://webservice.vds.med.va.gov/}procedure" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="vitals" type="{http://webservice.vds.med.va.gov/}vitals" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="encounters" type="{http://webservice.vds.med.va.gov/}encounter" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="payers" type="{http://webservice.vds.med.va.gov/}insuranceBean" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="narratives" type="{http://webservice.bhie.med.va.gov/}narrativeV4" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="documentInfo" type="{http://webservice.bhie.med.va.gov/}documentInfoV4" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="statusList" type="{http://webservice.bhie.URL       /}siteStatusV4" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="demographics" type="{http://webservice.vds.URL       /}patientDemographics" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="allergies" type="{http://webservice.vds.URL       /}allergy" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="immunizations" type="{http://webservice.vds.URL       /}immunization" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="medications" type="{http://webservice.vds.URL       /}medication" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="results" type="{http://webservice.vds.URL       /}labResult" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="problems" type="{http://webservice.vds.URL       /}problem" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="procedures" type="{http://webservice.vds.URL       /}procedure" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="vitals" type="{http://webservice.vds.URL       /}vitals" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="encounters" type="{http://webservice.vds.URL       /}encounter" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="payers" type="{http://webservice.vds.URL       /}insuranceBean" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="narratives" type="{http://webservice.bhie.URL       /}narrativeV4" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="documentInfo" type="{http://webservice.bhie.URL       /}documentInfoV4" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="queryComplete" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>

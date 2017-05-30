@@ -1,0 +1,61 @@
+// overwriting bootstrap navbar dropdown
+.navbar-nav > li > .dropdown-menu {
+    border-radius: 4px;
+}
+
+// base dropdown
+.dropdown-menu {
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.3);
+    box-shadow: 0 6px 12px rgba(0,0,0,.3);
+    padding: 3px;
+    li.list-group-item {
+        border: none;
+        border-bottom: 1px solid $grey;
+        padding: 0;
+        a {
+            display: block;
+            font-size: 11px;
+            padding: 5px 10px;
+            text-decoration: none;
+            width: 100%;
+            &:hover,
+            &:focus {
+                background-color: $primary-lighter;
+                color: $primary-dark;
+            }
+        }
+    }
+}
+// base complex dropdown
+.dropdown-complex {
+    padding: 0;
+    .dropdown-header {
+        background-color: $grey-lightest;
+        border-bottom: 2px solid $primary-light;
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+        padding-left: 10px;
+        p {
+            color: $primary-dark;
+            margin: 0px;
+            text-transform: uppercase;
+        }
+    }
+    .dropdown-body {
+        border-bottom-left-radius: inherit;
+        border-bottom-right-radius: inherit;
+        min-height: .5px;
+        max-height: 550px;
+        margin: 0px;
+        overflow-x: auto;
+    }
+    .dropdown-footer {
+        background-color: $primary-lighter;
+        border-bottom-left-radius: inherit;
+        border-bottom-right-radius: inherit;
+        border-top: 2px solid $primary-light;
+        padding: 3px;
+        text-align: center;
+    }
+}

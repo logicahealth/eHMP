@@ -49,7 +49,7 @@ function createPatientlistJson(name) {
             'expression': '{eq: [ {or: [\'A.A\',\'B.B\'], {} ]}',
             'date': '2015-03-10T12:54:56.899Z',
             'scope': 'private',
-            'owner': '9E7A;pu1234'
+            'owner': 'REDACTED'
         }
     };
     //making these optional for required parameter testing...

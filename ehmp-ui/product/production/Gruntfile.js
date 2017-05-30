@@ -123,6 +123,7 @@ module.exports = function(grunt) {
             server: { // could also specify 'client'
                 src: [
                     'app/applets/**/*.js',
+                    'app/resources/**/*.js',
                     'app/screens/**.js',
                     '!**/assets/**'
                 ],

@@ -11,7 +11,7 @@ define([
 
     var AppletChromeNotification = Backbone.Marionette.ItemView.extend({
         className: 'applet-chrome-notification',
-        template: Handlebars.compile('{{#if count}}<strong class="badge">{{count}}</strong>{{/if}}'),
+        template: Handlebars.compile('{{#if count}}<strong class="badge badge--notification">{{count}}</strong>{{/if}}'),
         serializeData: function serializeData() {
             var JSON = (this.model) ? this.model.toJSON() : {},
                 count = this.getNotifications(this.collection);

@@ -24,9 +24,16 @@ default[:zookeeper][:properties] = {
   :tickTime => 2000,
   :initLimit => 10,
   :syncLimit => 5,
-  :maxClientCnxns => 60
+  :maxClientCnxns => 500
 }
 
 default[:zookeeper][:additional_jvm_flags] = "-Djute.maxbuffer=15000000"
 
 default[:zookeeper][:ident] = "zookeeper"
+
+default[:zookeeper][:zookeeper_root_logger] = 'INFO, ROLLINGFILE'
+default[:zookeeper][:zookeeper_console_threshold] = 'INFO'
+default[:zookeeper][:zookeeper_log_dir] = "#{node[:zookeeper][:base_log_dir]}"
+default[:zookeeper][:zookeeper_log_file] = 'zookeeper.log'
+default[:zookeeper][:zookeeper_log_threshold] = 'INFO'
+default[:zookeeper][:zookeeper_tracelog_file] = 'zookeeper_trace.log'

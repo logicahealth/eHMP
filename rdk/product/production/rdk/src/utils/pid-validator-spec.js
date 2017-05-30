@@ -12,25 +12,25 @@ pidValidator.initialize({
             '9E7A': {
                 name: 'PANORAMA',
                 division: '500',
-                host: '10.2.2.101',
-                localIP: '10.2.2.1',
+                host: 'IP        ',
+                localIP: 'IP      ',
                 localAddress: 'localhost',
-                port: 9210,
+                port: PORT,
                 production: false,
-                accessCode: 'ep1234',
-                verifyCode: 'ep1234!!',
+                accessCode: 'REDACTED',
+                verifyCode: 'REDACTED',
                 infoButtonOid: '1.3.6.1.4.1.3768'
             },
             'C877': {
                 name: 'KODAK',
                 division: '500',
-                host: '10.2.2.102',
-                localIP: '10.2.2.1',
+                host: 'IP        ',
+                localIP: 'IP      ',
                 localAddress: 'localhost',
-                port: 9210,
+                port: PORT,
                 production: false,
-                accessCode: 'ep1234',
-                verifyCode: 'ep1234!!',
+                accessCode: 'REDACTED',
+                verifyCode: 'REDACTED',
                 infoButtonOid: '1.3.6.1.4.1.3768'
             }
         }
@@ -111,6 +111,57 @@ describe('patient identifier format checks', function() {
         it('should determine if pid is DOD;edipi', function() {
             expect(pidValidator.isPidEdipi(patientIdentifiers.pidEdipi)).to.be.true();
             expect(pidValidator.isPidEdipi(patientIdentifiers.primarySiteDfn)).to.be.false();
+        });
+    });
+});
+
+describe('pid validator can handle bad PIDs', function() {
+
+    describe('containsSite', function() {
+        it('returns false when pid is empty', function() {
+            expect(pidValidator.containsSite()).to.be.false();
+        });
+    });
+
+    describe('isCurrentSite', function() {
+        it('returns false when pid is empty', function() {
+            expect(pidValidator.isCurrentSite()).to.be.false();
+        });
+    });
+
+    describe('isPrimarySite', function() {
+        it('returns false when pid is empty', function() {
+            expect(pidValidator.isPrimarySite()).to.be.false();
+        });
+    });
+
+    describe('isIcn', function() {
+        it('returns false when pid is empty', function() {
+            expect(pidValidator.isIcn()).to.be.false();
+        });
+    });
+
+    describe('isSiteDfn', function() {
+        it('returns false when pid is empty', function() {
+            expect(pidValidator.isSiteDfn()).to.be.false();
+        });
+    });
+
+    describe('isPidEdipi', function() {
+        it('returns false when pid is empty', function() {
+            expect(pidValidator.isPidEdipi()).to.be.false();
+        });
+    });
+
+    describe('isEdipi', function() {
+        it('returns false when pid is empty', function() {
+            expect(pidValidator.isEdipi()).to.be.false();
+        });
+    });
+
+    describe('isVhic', function() {
+        it('returns false when pid is empty', function() {
+            expect(pidValidator.isVhic()).to.be.false();
         });
     });
 });

@@ -1,0 +1,29 @@
+DECLARE
+    user_count number;
+    user_name VARCHAR2 (50);
+    user_password VARCHAR2(50);
+    user_tablespace VARCHAR2(50);
+BEGIN
+    user_count := 0;
+    user_name := '<%= @communication_username %>';
+    user_password := '<%= @communication_password %>';
+    user_tablespace := 'comm_data';
+
+    SELECT COUNT(1) INTO user_count FROM dba_users WHERE username = UPPER(user_name);
+
+    IF user_count = 0 THEN
+        EXECUTE IMMEDIATE 'CREATE USER '||user_name||' IDENTIFIED BY '||user_password||' DEFAULT TABLESPACE '||user_tablespace||
+                          ' TEMPORARY TABLESPACE TEMP';
+    END IF;
+
+    EXECUTE IMMEDIATE 'GRANT CONNECT TO '||user_name;
+    EXECUTE IMMEDIATE 'GRANT RESOURCE TO '||user_name;
+
+    EXCEPTION
+       WHEN OTHERS
+          THEN
+                 DBMS_OUTPUT.put_line (SQLERRM);
+                 DBMS_OUTPUT.put_line ('   ');
+                 RAISE;
+END;
+/

@@ -22,6 +22,8 @@ r_list << "recipe[ehmp_balancer@#{ehmp_ui_deps["ehmp_balancer"]}]"
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
 r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
 
+mixed_stack_name = ENV["MIX_STACK_NAME"] if ENV.has_key?("MIX_STACK_NAME")
+
 machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} environment" do
   elastic_ip ENV["ELASTIC_IP"]
   machine_name machine_ident
@@ -59,6 +61,10 @@ machine machine_name do
     data_bag_string: node[:common][:data_bag_string],
     beats: {
       logging: node[:machine][:logging]
+    },
+    ehmp_balancer: {
+      mix_stack_name: mixed_stack_name,
+      ssoi_deploy: node[:machine][:driver] == "ssh"
     }
   )
   files lazy { node[:'ehmp-ui_provision'][:'ehmp-balancer'][:copy_files] }

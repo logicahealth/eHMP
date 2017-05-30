@@ -1,6 +1,6 @@
 description "<%= @name %> monitoring process"
 
-start on runlevel [<%= @level %>]
+start on starting <%= @dependency %> or runlevel [<%= @level %>]
 stop on runlevel [!<%= @level %>]
 
 expect daemon

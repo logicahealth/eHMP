@@ -188,7 +188,7 @@ var handleLoginAttempt = function(req, res, params) {
                 err.log(req.logger);
             }
             req.session.destroy(); // todo: find a cleaner way to handle invalid logins destroying the session
-            return res.status(err.status).rdkSend(err);
+            return res.status(err.status || 500).rdkSend(err);
         }
 
         if (!authUtils.hasValidSession(req)) {

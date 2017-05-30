@@ -1,6 +1,6 @@
 EXAMPLE1 =
   (DESCRIPTION =
-    (ADDRESS = (PROTOCOL = TCP)(HOST = fqdn.for.a.db.server)(PORT = 1521))
+    (ADDRESS = (PROTOCOL = TCP)(HOST = fqdn.for.a.db.server)(PORT = PORT))
     (CONNECT_DATA =
       (SERVER = DEDICATED)
       (SERVICE_NAME = EXAMPLE1)

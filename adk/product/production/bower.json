@@ -21,7 +21,7 @@
     "lodash": "3.10.1",
     "jquery": "1.11.3",
     "jasmine-jquery": "2.1.1",
-    "async": "0.2.9",
+    "async": "2.0.1",
     "moment": "~2.11.0",
     "fastclick": "0.6.11",
     "backgrid": "0.3.5",
@@ -78,7 +78,7 @@
       "/(gif|png)$/": "{key}"
     },
     "sources": {
-      "async": "bower_components/async/lib/async.js",
+      "async": "bower_components/async/dist/async.min.js",
       "backbone": "bower_components/backbone/backbone.js",
       "backbone-sessionStorage": "bower_components/backbone-sessionStorage/backbone.sessionStorage.js",
       "backbone.radio": "bower_components/backbone.radio/src/backbone.radio.js",
@@ -88,8 +88,7 @@
         "bower_components/backgrid/lib/backgrid.min.css"
       ],
       "backgrid-filter": [
-        "bower_components/backgrid-filter/backgrid-filter.min.js",
-        "bower_components/backgrid-filter/backgrid-filter.min.css"
+        "bower_components/backgrid-filter/backgrid-filter.min.js"
       ],
       "backgrid-moment-cell": [
         "bower_components/backgrid-moment-cell/backgrid-moment-cell.min.js",

@@ -229,7 +229,7 @@ function createImmunization(jdsItem, fhirItems, req, updated) {
     fhirItem.resource = {};
 
     fhirItem.resource.resourceType = 'Immunization';
-    fhirItem.resource.id = jdsItem.uid;
+    fhirItem.resource.id = fhirResource.fixId(jdsItem.uid);
     fhirItem.resource.text = {
         'status': 'generated',
         'div': '<div>' + _.escape(jdsItem.summary) + '</div>'

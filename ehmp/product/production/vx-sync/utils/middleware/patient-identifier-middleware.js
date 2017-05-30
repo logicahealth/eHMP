@@ -18,7 +18,7 @@ function PatientIdentifierAPI(setLog, setConfig, jdsClient, mviClient) {
     }
     this.jdsClient = jdsClient;
     this.mviClient = mviClient;
-    this.log = logUtil.getAsChild('patient-identifier-util', setLog);
+    this.log = setLog;
     this.config = setConfig;
 
     this.verifyPatientExists = verifyPatientExists.bind(this);

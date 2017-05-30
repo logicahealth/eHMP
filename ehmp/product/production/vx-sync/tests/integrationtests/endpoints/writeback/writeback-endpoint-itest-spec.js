@@ -8,7 +8,7 @@ var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 var logger = require(global.VX_DUMMIES + 'dummy-logger');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var wConfig = require(global.VX_ROOT + 'worker-config');
-var port = 9090;
+var port = PORT;
 var jds = new JdsClient(logger, wConfig);
 var tstPid = '9E7A;3';
 
@@ -69,7 +69,7 @@ xdescribe('writeback-endpoint', function() {
     //             if (!error) {
     //                 if (jdsResponse.statusCode === 404) {
     //                     var syncConfig = _.clone(httpConfig);
-    //                     syncConfig.port = 8080;
+    //                     syncConfig.PORT       ;
     //                     syncConfig.url = 'http://' + vx_sync_ip + ':' + syncConfig.port + '/sync/doLoad';
     //                     syncConfig.path = '/sync/doLoad';
     //                     syncConfig.method = 'GET';

@@ -8,12 +8,14 @@ class PobLabResults < PobParentApplet
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #
   # *****************  All_Field_Elements  ******************* #
-  element :fld_lab_results_applet_heading, "div[data-appletid='lab_results_grid'] .grid-applet-heading"
+  element :fld_lab_results_applet_heading, "div[data-appletid='lab_results_grid'] .applet-chrome-header"
   element :fld_lab_results_data_thead, "table[id='data-grid-lab_results_grid'] thead"
   element :fld_lab_results_modal_data, "div[id='modal-body'] [id='data-grid-lab_results_grid-modalView']"
 
   elements :fld_lab_results_applet_row, "div[id='grid-panel-lab_results_grid'] [class='gist-item table-row-toolbar']"
   elements :fld_lab_results_table_row, "table[id='data-grid-lab_results_grid'] tr"
+
+  elements :fld_non_panel_date_rows, "table[id='data-grid-lab_results_grid'] tbody > tr[dialog-toggle] td.flex-width-date"
 
   # *****************  All_Button_Elements  ******************* #
   element :btn_lab_results_all, "button[id='all-range-lab_results_grid']"
@@ -31,6 +33,7 @@ class PobLabResults < PobParentApplet
       unless i > 0
         sleep(1)
       end
+      break if i > 0
     end
   end
 

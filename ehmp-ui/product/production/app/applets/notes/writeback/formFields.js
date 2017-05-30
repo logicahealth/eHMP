@@ -142,7 +142,7 @@ define([
                             items: [{
                                 control: "textarea",
                                 extraClasses:['percent-height-100', 'flex-display', 'flex-direction-column'],
-                                id: "derivBody",
+                                id: "noteBody",
                                 name: "noteBody",
                                 title: "Enter in note details",
                                 label: "Note",
@@ -169,7 +169,7 @@ define([
                     extraClasses: ["row"],
                     items: [{
                         control: "container",
-                        extraClasses: ['col-xs-12','display-flex','valign-bottom'],
+                        extraClasses: ['col-xs-12','flex-display','valign-bottom'],
                         items: [{
                             control:'container',
                             extraClasses:['flex-grow-loose','text-left'],
@@ -205,7 +205,7 @@ define([
                             control: "button",
                             name: "note-close",
                             id: "close-form-btn",
-                            extraClasses: ["btn-primary", "btn-sm"],
+                            extraClasses: ["btn-primary", "btn-sm", "left-margin-xs"],
                             title: "Press enter to save and close note"
                         }, {
                             label: "Sign",
@@ -214,7 +214,7 @@ define([
                             name: "note-sign",
                             id: "sign-form-btn",
                             title: "Press enter to sign note",
-                            extraClasses: ["btn-primary", "btn-sm"]
+                            extraClasses: ["btn-primary", "btn-sm", "left-margin-xs"]
                         }]
                     }]
                 }]

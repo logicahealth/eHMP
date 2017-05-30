@@ -11,7 +11,7 @@ define([
     'main/components/applets/grid_applet/views/filterDateRangeView',
     'hbs!main/components/applets/grid_applet/templates/containerTemplate',
     'main/adk_utils/crsUtil',
-    '/main/components/behaviors/tooltip.js'
+    'main/components/behaviors/tooltip'
 ], function($, _, utils, DataGrid, CollectionFilter, ResourceService, SessionStorage, LoadingView, ErrorView, FilterDateRangeView, containerTemplate, CrsUtil, Tooltip) {
     'use strict';
 
@@ -222,12 +222,6 @@ define([
             this.loading();
             var self = this;
             if (this.filterView) {
-                $(this.filterView.el).css({
-                    marginLeft: '0px',
-                    marginTop: '0px',
-                    marginBottom: '6px'
-                });
-
                 this.gridFilter.show(this.filterView);
                 var queryInputSelector = 'input[name=\'q-' + this.appletConfig.instanceId + '\']';
                 this.filterView.$el.find('input[type=search]').on('change', function() {
@@ -377,17 +371,10 @@ define([
                 }
             }
 
-            if (this.dataGridView.isRendered) {
-                this.gridContainer.empty({
-                    preventDestroy: true
-                });
-                this.gridContainer.attachView(this.dataGridView);
-                this.gridContainer.attachHtml(this.dataGridView);
-            } else {
-                this.showViewInGridContainer(this.dataGridView, {
-                    preventDestroy: true
-                });
-            }
+            this.showViewInGridContainer(this.dataGridView, {
+                preventDestroy: true
+            });
+
             this.configureDataInfoButton();
 
             if (this.dataGridOptions.collection instanceof Backbone.PageableCollection) {
@@ -463,7 +450,7 @@ define([
                     this.trigger('sort');
                 });
             }
-            collection.comparator = null;  // disable automatic sort on applet refresh
+            collection.comparator = null; // disable automatic sort on applet refresh
             this.fetchData({
                 silent: true
             });
@@ -537,9 +524,7 @@ define([
 
             ResourceService.fetchCollection(collection.fetchOptions, collection);
         },
-        onClickAdd: function(event) {
-            this.onClickAdd(event);
-        },
+
         expandRowDetails: function(routeParam) {
             if (routeParam) {
                 var row = $('#' + routeParam);
@@ -572,7 +557,7 @@ define([
                 this.filterView.$el.find('a[data-backgrid-action=clear]').off('click');
             }
 
-            if(_.get(this, 'dataGridOptions.collection.markInfobutton'))
+            if (_.get(this, 'dataGridOptions.collection.markInfobutton'))
                 delete this.dataGridOptions.collection.markInfobutton;
 
             if (_.get(this, 'dataGridOptions.collection.cleanup'))
@@ -603,29 +588,29 @@ define([
     //DE3878: Applets extending BaseGridApplet not running base destroy methods
     //this piece will insure any methods defined here are run on both the base and extended view.
     var GridAppletView = GridAppletViewBase.extend({
-            constructor: function() {
-                if (!this.options) this.options = {};
-                var args = Array.prototype.slice.call(arguments),
-                    onDestroy = this.onDestroy,
-                    onBeforeDestroy = this.onBeforeDestroy;
+        constructor: function() {
+            if (!this.options) this.options = {};
+            var args = Array.prototype.slice.call(arguments),
+                onDestroy = this.onDestroy,
+                onBeforeDestroy = this.onBeforeDestroy;
 
-                this.onDestroy = function() {
-                    var args = Array.prototype.slice.call(arguments);
-                    GridAppletViewBase.prototype.onDestroy.apply(this, args);
-                    if (GridAppletViewBase.prototype.onDestroy === onDestroy) return;
-                    onDestroy.apply(this, args);
-                };
+            this.onDestroy = function() {
+                var args = Array.prototype.slice.call(arguments);
+                GridAppletViewBase.prototype.onDestroy.apply(this, args);
+                if (GridAppletViewBase.prototype.onDestroy === onDestroy) return;
+                onDestroy.apply(this, args);
+            };
 
-                this.onBeforeDestroy = function() {
-                    var args = Array.prototype.slice.call(arguments);
-                    GridAppletViewBase.prototype.onBeforeDestroy.apply(this, args);
-                    if (GridAppletViewBase.prototype.onBeforeDestroy === onBeforeDestroy) return;
-                    onBeforeDestroy.apply(this, args);
-                };
+            this.onBeforeDestroy = function() {
+                var args = Array.prototype.slice.call(arguments);
+                GridAppletViewBase.prototype.onBeforeDestroy.apply(this, args);
+                if (GridAppletViewBase.prototype.onBeforeDestroy === onBeforeDestroy) return;
+                onBeforeDestroy.apply(this, args);
+            };
 
-                GridAppletViewBase.prototype.constructor.apply(this, args);
-            },
-        });
+            GridAppletViewBase.prototype.constructor.apply(this, args);
+        },
+    });
 
     GridAppletView.DataGrid = GridAppletViewBase.prototype.DataGrid;
 

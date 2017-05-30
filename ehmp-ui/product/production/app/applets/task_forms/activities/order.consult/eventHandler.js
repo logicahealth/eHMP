@@ -275,7 +275,7 @@ define([
             },
             onSuccess: function(collection) {
                 // Find the newest consult deployment
-                var newestConsult = Utils.findLatestConsult(collection, 'Order.Consult');
+                var newestConsult = Utils.findLatest(collection, 'Order.Consult');
                 var processInstanceId = Number(taskModel.get('processInstanceId')) || Number(taskModel.get('activity').processInstanceId);
                 sendSignalPost(e, newestConsult.get('deploymentId'), processInstanceId, parameterObj, signalAction, onSuccess, leaveOpen);
             }

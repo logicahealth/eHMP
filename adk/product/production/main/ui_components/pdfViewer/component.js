@@ -17,11 +17,11 @@ define([
             'change:scale': 'toggleZoomButtons'
         },
         template: Handlebars.compile(
-            '<button class="zoom-out btn btn-default"><i class="fa fa-search-minus"></i></button>' +
-            '<button class="zoom-in btn btn-default"><i class="fa fa-search-plus"></i></button>' +
-            '<span class="pages">{{page}}/{{pages}}</span>' +
-            '<button class="previous-page btn btn-default"><i class="fa fa-chevron-left"></i></button>' +
-            '<button class="next-page btn btn-default"><i class="fa fa-chevron-right"></i></button>'
+            '<button class="zoom-out btn btn-default right-margin-xs"><i class="fa fa-search-minus font-size-16"></i></button>' +
+            '<button class="zoom-in btn btn-default"><i class="fa fa-search-plus font-size-16"></i></button>' +
+            '<span class="pages all-margin-md">{{page}}/{{pages}}</span>' +
+            '<button class="previous-page btn btn-default right-margin-xs"><i class="fa fa-chevron-left font-size-16"></i></button>' +
+            '<button class="next-page btn btn-default"><i class="fa fa-chevron-right font-size-16"></i></button>'
         ),
         toggleZoomButtons: function() {
             var scale = this.model.get('scale');
@@ -37,7 +37,7 @@ define([
     });
 
     var BodyView = Marionette.ItemView.extend({
-        className: 'pdf-content text-center',
+        className: 'pdf-content text-center all-margin-md',
         template: Handlebars.compile('<span class="sr-only pdf-508"></span><canvas class="pdf-body"></canvas>'),
         ui: {
             'canvas': 'canvas'

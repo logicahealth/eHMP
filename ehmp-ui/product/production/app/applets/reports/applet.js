@@ -7,15 +7,9 @@ define([
     'app/applets/documents/appletHelper',
     'app/applets/documents/docDetailsDisplayer',
 
-], function (Backbone, Marionette, _, moment, DetailCommunicator, appletHelper, DocDetailsDisplayer) {
-    "use strict";
-    var DEBUG = false;
-    var fetchOptions = {
-        cache: true,
-        pageable: true,
-        allowAbort: true,
-        resourceTitle: 'patient-record-document-view'
-    };
+], function(Backbone, Marionette, _, moment, DetailCommunicator, appletHelper, DocDetailsDisplayer) {
+    'use strict';
+
     //The important changes are in the columns array as well as replacing the dataGridOptions.groupBy logic with this:   dataGridOptions.groupable = this.options.groupView;
     var fullScreenColumns = [{
         name: 'dateDisplay',
@@ -24,7 +18,7 @@ define([
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-date'
         }),
-        sortValue: function (model, string) { //this is what needs to change to server-side sorting
+        sortValue: function(model, string) { //this is what needs to change to server-side sorting
             return model.get('referenceDateTime');
         },
         groupable: true,
@@ -32,13 +26,13 @@ define([
             primary: true,
             innerSort: 'referenceDateTime',
             groupByDate: true,
-            groupByFunction: function (collectionElement) {
+            groupByFunction: function(collectionElement) {
                 if (collectionElement.model !== undefined)
-                    return collectionElement.model.get("referenceDateTime").toString().substr(0, 6);
+                    return collectionElement.model.get('referenceDateTime').toString().substr(0, 6);
             },
             //this takes the item returned by the groupByFunction
-            groupByRowFormatter: function (item) {
-                return moment(item, "YYYYMM").format("MMMM YYYY");
+            groupByRowFormatter: function(item) {
+                return moment(item, 'YYYYMM').format('MMMM YYYY');
             }
         },
         hoverTip: 'reports_date'
@@ -51,7 +45,7 @@ define([
         }),
         groupable: true,
         groupableOptions: {
-            innerSort: "referenceDateTime"
+            innerSort: 'referenceDateTime'
         },
         hoverTip: 'reports_description'
 
@@ -61,7 +55,7 @@ define([
         cell: 'string',
         groupable: true,
         groupableOptions: {
-            innerSort: "referenceDateTime"
+            innerSort: 'referenceDateTime'
         },
         hoverTip: 'reports_type'
     }, {
@@ -70,7 +64,7 @@ define([
         cell: 'string',
         groupable: true,
         groupableOptions: {
-            innerSort: "referenceDateTime"
+            innerSort: 'referenceDateTime'
         },
         hoverTip: 'reports_enteredby'
     }, {
@@ -79,26 +73,24 @@ define([
         cell: 'string',
         groupable: true,
         groupableOptions: {
-            innerSort: "referenceDateTime"
+            innerSort: 'referenceDateTime'
         },
         hoverTip: 'reports_facility'
     }];
     var summaryColumns = [fullScreenColumns[0], fullScreenColumns[2], fullScreenColumns[3]];
+    var DEFAULT_FILTER = 'not(and(in(kind,["Consult","Imaging","Procedure"]),ne(statusName,"COMPLETE"))),' +
+        'in(kind,["Consult","Imaging","Procedure","Radiology","Laboratory Report","Laboratory Result","Surgery"])';
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
-        initialize: function (options) {
-            if (DEBUG) console.log("Reports App -----> init start");
+        initialize: function(options) {
             this._super = ADK.Applets.BaseGridApplet.prototype;
-            var self = this;
             this.modalCollection = new Backbone.Collection();
             var dataGridOptions = {
                 filterEnabled: true, //make sure the filter is actully on screen
-
-                //row click handler
-                onClickRow: function (model, event) {
+                onClickRow: function(model, event) {
                     if (this.parent !== undefined) {
-                        self.modalCollection.reset(model);
-                        self.getDetailsModal(model);
+                        this.parent.modalCollection.reset(model);
+                        this.parent.getDetailsModal(model);
                     }
                 }
             };
@@ -109,87 +101,71 @@ define([
             dataGridOptions.groupable = true;
             dataGridOptions.filterFields = ['dateDisplay', 'localTitle', 'kind', 'authorDisplayName', 'facilityName'];
 
-            this.listenTo(ADK.Messaging, 'globalDate:selected', function (date) {
+            this.listenTo(ADK.Messaging, 'globalDate:selected', function(date) {
                 this.loading();
-                if (DEBUG) console.log("Reports date filter range----->" + JSON.stringify(date));
-                this.dataGridOptions.collection.fetchOptions.criteria.filter = 'or(' + self.buildJdsDateFilter('referenceDateTime') + ',' + self.buildJdsDateFilter('dateTime') + '),' +
-                        'not(and(in(kind,["Consult","Imaging","Procedure"]),ne(statusName,"COMPLETE"))),' + //fill out incomplete consults, images and procedures.
-                        'in(kind,["Consult","Imaging","Procedure","Radiology","Laboratory Report","Laboratory Result","Surgery"])';
-                this.fetchData();
+                this.dataGridOptions.collection.fetchCollection({
+                    criteria: {
+                        filter: this.getJdsFilter()
+                    }
+                });
             }, this);
             this.dataGridOptions = dataGridOptions;
-            fetchOptions.criteria = {
-                    filter: 'or(' + self.buildJdsDateFilter('referenceDateTime') + ',' + self.buildJdsDateFilter('dateTime') + '),' +
-                        'not(and(in(kind,["Consult","Imaging","Procedure"]),ne(statusName,"COMPLETE"))),' + //fill out incomplete consults, images and procedures.
-                        'in(kind,["Consult","Imaging","Procedure","Radiology","Laboratory Report","Laboratory Result","Surgery"])'
-            };
-            var model = Backbone.Model.extend({
-                parse: function(resp) {
-                    ADK.Enrichment.addFacilityMoniker(resp);
-                    appletHelper.parseDocResponse(resp);
-                    if (resp.complexDoc) {
-                        resp.authorDisplayName = appletHelper.stringNormalization(appletHelper.getAuthorVerifier(resp));
-                    }
-                    return resp;
+            var fetchOptions = {
+                criteria: {
+                    filter: this.getJdsFilter()
                 }
-            });
-            //this creates a PageableCollection
-            dataGridOptions.collection = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
-            dataGridOptions.collection.model = model;
+            };
 
-            dataGridOptions.collection.fetchOptions = fetchOptions;
+            this.dataGridOptions.collection = new ADK.UIResources.Fetch.Document.DocumentViews.PageableCollection({
+                isClientInfinite: true
+            });
             this.listenTo(this.dataGridOptions.collection, 'sync', this.updateCollection);
+            this.dataGridOptions.collection.fetchCollection(fetchOptions);
 
             this._super.initialize.apply(this, arguments);
-            this.fetchData();
         },
-
         updateCollection: function(collection) {
             var fullCollection = collection.fullCollection || collection;
-            fullCollection.each(function(model){
+            fullCollection.each(function(model) {
                 var complexDocBool = model.get('complexDoc');
                 if (complexDocBool && model.get('authorDisplayName').toLowerCase() === 'none') {
-                    appletHelper.getResultsFromUid(model, function(additionalDetailCollection){
+                    appletHelper.getResultsFromUid(model, function(additionalDetailCollection) {
                         model.set('authorDisplayName', additionalDetailCollection.models[0].get('signerDisplayName'));
                     });
                 }
             });
         },
+        getJdsFilter: function() {
+            return 'or(' + this.buildJdsDateFilter('referenceDateTime') + ',' + this.buildJdsDateFilter('dateTime') + '),' + DEFAULT_FILTER;
+        },
         getDetailsModal: function(detailModel) {
-            spawnDetailsModal(detailModel, this);
+            var complexDocBool = detailModel.get('complexDoc');
+            var docType = detailModel.get('kind');
+            var resultDocCollection = new ADK.UIResources.Fetch.Document.Collections.ResultsByUidCollection();
+            var childDocCollection = new ADK.UIResources.Fetch.Document.Collections.DocumentCollection();
+            appletHelper.getChildDocs.call(this, detailModel, childDocCollection);
+            if (complexDocBool) {
+                resultDocCollection = appletHelper.getResultsFromUid.call(this, detailModel, resultDocCollection);
+            }
+
+            var results = DocDetailsDisplayer.getView(detailModel, docType, resultDocCollection, childDocCollection, new Backbone.Collection(detailModel));
+            var View = results.view.extend({
+                model: detailModel
+            });
+            var modalOptions = {
+                'size': 'large',
+                'title': results.title || DocDetailsDisplayer.getTitle(detailModel, docType),
+                'nextPreviousCollection': detailModel.collection
+            };
+
+            var modal = new ADK.UI.Modal({
+                view: new View(),
+                callbackView: this,
+                options: modalOptions
+            });
+            modal.show();
         }
     });
-
-    // Helper
-    function spawnDetailsModal(newModel, view) {
-        var complexDocBool = newModel.get('complexDoc');
-        var docType = newModel.get('kind');
-        var resultDocCollection = new appletHelper.ResultsDocCollection();
-        var childDocCollection = new appletHelper.ChildDocCollection();
-        appletHelper.getChildDocs.call(view, newModel, childDocCollection);
-        if (complexDocBool) {
-            resultDocCollection = appletHelper.getResultsFromUid.call(view, newModel, resultDocCollection);
-        }
-
-        if (DEBUG) console.log("Reports App -----> spawnDetailsModal");
-
-        var results = DocDetailsDisplayer.getView.call(view, newModel, docType, resultDocCollection, childDocCollection, new Backbone.Collection(newModel));
-        var View = results.view.extend({
-            model: newModel
-        });
-        var modalOptions = {
-            'size': 'large',
-            'title': results.title || DocDetailsDisplayer.getTitle(newModel, docType),
-            'nextPreviousCollection': newModel.collection
-        };
-
-        var modal = new ADK.UI.Modal({
-            view: new View(),
-            callbackView: view,
-            options: modalOptions
-        });
-        modal.show();
-    }
 
     var applet = {
         id: 'reports',

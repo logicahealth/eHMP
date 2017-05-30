@@ -1,5 +1,6 @@
 package gov.va.storageservice.notifications;
 
+import org.jboss.logging.Logger;
 import org.kie.api.runtime.process.WorkItem;
 import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.api.runtime.process.WorkItemManager;
@@ -15,18 +16,17 @@ import com.google.gson.JsonParser;
 
 import gov.va.ehmp.services.exception.EhmpServicesException;
 import gov.va.ehmp.services.exception.ErrorResponseUtil;
-import gov.va.ehmp.services.utils.Logging;
 import gov.va.kie.utils.WorkItemUtil;
 import gov.va.storageservice.notifications.util.ResourceUtil;
 
 public class NotificationsWriteHandler implements WorkItemHandler, Closeable, Cacheable {
-	
+	private static final Logger LOGGER = Logger.getLogger(NotificationsWriteHandler.class);
 	public void close() {
 		//Ignored
 	}
 	
 	public void abortWorkItem(WorkItem workItem, WorkItemManager manager) {
-		Logging.debug("NotificationsWriteHandler.abortWorkItem has been called");
+		LOGGER.debug("NotificationsWriteHandler.abortWorkItem has been called");
 	}
 	
 	/**
@@ -37,25 +37,25 @@ public class NotificationsWriteHandler implements WorkItemHandler, Closeable, Ca
 		String response = null;
 		
 		try {
-			Logging.info("Entering NotificationsWriteHandler.executeWorkItem");
+			LOGGER.info("Entering NotificationsWriteHandler.executeWorkItem");
 			
 			String result = null;
 			ResourceUtil resUtil = new ResourceUtil();
 			String notification = WorkItemUtil.extractRequiredStringParam(workItem, "notification");
 			Object notificationId = workItem.getParameter("notificationId");
 			
-			Logging.debug("NotificationsWriteHandler.executeWorkItem with notification = " + notification);
+			LOGGER.debug("NotificationsWriteHandler.executeWorkItem with notification = " + notification);
 			result = resUtil.invokePostResource(notificationId, notification);
 			
-			Logging.debug("NotificationsWriteHandler.executeWorkItem result = " + result);
+			LOGGER.debug("NotificationsWriteHandler.executeWorkItem result = " + result);
 			
 			response = transformResult(result);
 			
-			Logging.debug("NotificationsWriteHandler.executeWorkItem response = " + response);
+			LOGGER.debug("NotificationsWriteHandler.executeWorkItem response = " + response);
 		} catch (EhmpServicesException e) {
 			response = e.toJsonString();
 		} catch (Exception e) {
-			Logging.error("NotificationsWriteHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("NotificationsWriteHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage(), e);
 			response = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "NotificationsWriteHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 		
@@ -76,7 +76,7 @@ public class NotificationsWriteHandler implements WorkItemHandler, Closeable, Ca
 			JsonObject obj = null;
 			try {
 				obj = parser.parse(result).getAsJsonObject();
-				Logging.debug("NotificationsWriteHandler.transformResult json parsed");
+				LOGGER.debug("NotificationsWriteHandler.transformResult json parsed");
 			}
 			catch(Exception e) {
 				throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "JSON parsing exception:" + e.getMessage(), e);
@@ -88,11 +88,11 @@ public class NotificationsWriteHandler implements WorkItemHandler, Closeable, Ca
 			String notificationid = "";
 			JsonElement dataElement = obj.get("data");
 			if (dataElement != null && dataElement.isJsonObject()) {
-				Logging.debug("NotificationsWriteHandler.transformResult Found data element");
+				LOGGER.debug("NotificationsWriteHandler.transformResult Found data element");
 				JsonElement notificationElement = dataElement.getAsJsonObject().get("notificationid");
 				if (notificationElement != null && notificationElement.isJsonPrimitive()) {
 					notificationid = notificationElement.getAsString();
-					Logging.debug("NotificationsWriteHandler.transformResult notificationid = " + notificationid);
+					LOGGER.debug("NotificationsWriteHandler.transformResult notificationid = " + notificationid);
 				}
 			}
 			outputObj.addProperty("notificationid", notificationid);
@@ -100,7 +100,7 @@ public class NotificationsWriteHandler implements WorkItemHandler, Closeable, Ca
 			Gson gson = new GsonBuilder().create();
 			response = gson.toJson(outputObj);
 		}
-		Logging.debug("NotificationsWriteHandler.transformResult response = " + response);
+		LOGGER.debug("NotificationsWriteHandler.transformResult response = " + response);
 		return response;
 	}	
 }

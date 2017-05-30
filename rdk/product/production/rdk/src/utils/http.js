@@ -57,12 +57,12 @@ var _ = require('lodash');
  *      further if desired.
  */
 
-module.exports = wrapRequest(withRequestID, withLogging, withMetrics, withCertificates, withJSON, withForever);
-module.exports.get = wrapRequest(withMethod('GET'), withRequestID, withLogging, withCaching, withMetrics, withCertificates, withForever);
-module.exports.patch = wrapRequest(withMethod('PATCH'), withRequestID, withLogging, withMetrics, withCertificates, withJSON, withForever);
-module.exports.post = wrapRequest(withMethod('POST'), withRequestID, withLogging, withMetrics, withCertificates, withJSON, withForever);
-module.exports.put = wrapRequest(withMethod('PUT'), withRequestID, withLogging, withMetrics, withCertificates, withJSON, withForever);
-module.exports.delete = wrapRequest(withMethod('DELETE'), withRequestID, withLogging, withMetrics, withCertificates, withForever);
+module.exports = wrapRequest(withRequestContext, withLogging, withMetrics, withCertificates, withJSON, withForever);
+module.exports.get = wrapRequest(withMethod('GET'), withRequestContext, withLogging, withCaching, withMetrics, withCertificates, withForever);
+module.exports.patch = wrapRequest(withMethod('PATCH'), withRequestContext, withLogging, withMetrics, withCertificates, withJSON, withForever);
+module.exports.post = wrapRequest(withMethod('POST'), withRequestContext, withLogging, withMetrics, withCertificates, withJSON, withForever);
+module.exports.put = wrapRequest(withMethod('PUT'), withRequestContext, withLogging, withMetrics, withCertificates, withJSON, withForever);
+module.exports.delete = wrapRequest(withMethod('DELETE'), withRequestContext, withLogging, withMetrics, withCertificates, withForever);
 module.exports.initializeTimeout = initializeTimeout;
 module.exports.setMaxSockets = setMaxSockets;
 module.exports._withCertificates = withCertificates;
@@ -91,6 +91,9 @@ function wrapRequest() {
     });
 
     return function(options, callback) {
+        if (!_.isObject(options)) {
+            return reportConfigurationError('options must be an object', callback);
+        }
         options = _.clone(options);
         if (!options.timeout) {
             options.timeout = defaultTimeout;
@@ -140,11 +143,16 @@ function withLogging(next, options, callback) {
     });
 }
 
-function withRequestID(next, options, callback) {
+function withRequestContext(next, options, callback) {
     var requestId = _.get(options, 'logger.fields.requestId');
+    var sessionId = _.get(options, 'logger.fields.sid');
     if (_.isString(requestId)) {
         options.headers = options.headers || {};
         _.defaults(options.headers, { 'X-Request-ID': requestId });
+    }
+    if (_.isString(sessionId)) {
+        options.headers = options.headers || {};
+        _.defaults(options.headers, { 'X-Session-ID': sessionId });
     }
     return next(options, callback);
 }
@@ -202,17 +210,7 @@ function withCertificates(next, options, callback) {
     function readKey(file, property, next) {
         return fs.readFile(file, function(err, data) {
             if (err) {
-                console.error('Error reading file %s from HTTPS configuration, property %s. (assuming property values that start with / are file paths)', file, property, err);
-                options.logger.fatal({
-                    err: err,
-                    file: file,
-                    property: property
-                }, 'Error reading file from HTTPS configuration. (assuming property values that start with / are file paths)');
-                options.logger.fatal(new Error().stack);
-                if (_.isFunction(callback)) {
-                    callback(err);
-                }
-                process.exit(1);
+                return reportConfigurationError(util.format('Error reading file %s from HTTPS configuration, property %s. (assuming property values that start with / are file paths)', file, property, err));
             }
             _.set(options, property, data);
             return next(options, callback);

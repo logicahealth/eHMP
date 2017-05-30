@@ -666,9 +666,14 @@ describe('fetchDomainData', function() {
 
 
     it('uses filterList and filterFields without original filter', function(done) {
-        var expectedFilter = 'or(ilike("status","%complete%"),ilike("status","%active%")),' +
-            'or(ilike("codes","%complete%"),ilike("codes","%active%")),' +
-            'or(ilike("statusDisplayName","%complete%"),ilike("statusDisplayName","%active%"))';
+        var expectedFilter = 'or(' +
+            'ilike("status","%complete%"),' +
+            'ilike("status","%active%"),' +
+            'ilike("codes","%complete%"),' +
+            'ilike("codes","%active%"),' +
+            'ilike("statusDisplayName","%complete%"),' +
+            'ilike("statusDisplayName","%active%")' +
+            ')';
 
         mockJds = sinon.stub(jds, 'getPatientDomainData', function(req, pid, index, jdsQuery, vlerQuery, callback) {
             expect(jdsQuery.filter).to.equal(expectedFilter);
@@ -697,9 +702,14 @@ describe('fetchDomainData', function() {
 
     it('uses filterList and filterFields with original filter', function(done) {
         var expectedFilter = 'eq("foo","bar"),' +
-            'or(ilike("status","%complete%"),ilike("status","%active%")),' +
-            'or(ilike("codes","%complete%"),ilike("codes","%active%")),' +
-            'or(ilike("statusDisplayName","%complete%"),ilike("statusDisplayName","%active%"))';
+            'or(' +
+            'ilike("status","%complete%"),' +
+            'ilike("status","%active%"),' +
+            'ilike("codes","%complete%"),' +
+            'ilike("codes","%active%"),' +
+            'ilike("statusDisplayName","%complete%"),' +
+            'ilike("statusDisplayName","%active%")' +
+            ')';
 
         mockJds = sinon.stub(jds, 'getPatientDomainData', function(req, pid, index, jdsQuery, vlerQuery, callback) {
             expect(jdsQuery.filter).to.equal(expectedFilter);

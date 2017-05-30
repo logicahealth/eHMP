@@ -18,13 +18,13 @@ Scenario: User views active medications on coversheet
     | Medication | Status | Facility |
   And the Active & Recent Medications Applet table finishes loading
 
-@f144_2_activie_medications_deatail @US2954 @DE831 @DE3798 @DE5017
+@f144_2_activie_medications_detail @US2954 @DE831 @DE3798 @DE5017
 Scenario: Viewing modal details for  Active & Recent Medications.
 
   When Cover Sheet is active
-  Then the "Active & Recent Medications" applet is displayed
-  Given the Active & Recent Medications Applet displays at least 1 row
-  When the user views the details for the first Active & Recent Medications
+  And active meds summary view is loaded successfully
+  And user opens the first active medication summary item
+  And user views first active medication details
   Then the modal is displayed
   Then the modal title starts with "Medication"
   And the modal displays Order Hx

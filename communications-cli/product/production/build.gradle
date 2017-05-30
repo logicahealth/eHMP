@@ -1,0 +1,48 @@
+ext.set('repo', uploadRepo)
+ext.set('groupId', 'us.vistacore.communications-cli')
+ext.set('artifactId', 'communications-cli')
+ext.set('commitCountDir', projectDir)
+
+group = 'us.vistacore.communications-cli'
+
+task cleanNPM(type: Delete) {
+  group "Communication CLI Tasks"
+  description "Clean up node_modules"
+  delete "${projectDir}/node_modules"
+}
+
+clean.dependsOn cleanNPM
+
+task installNpm(type: Exec) {
+  group "Communication CLI Tasks"
+  description "installs package(s)"
+  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
+}
+
+task build(dependsOn: [clean, installNpm]) {
+  group "Communication CLI Tasks"
+  description "installs package(s)"
+}
+
+task test(type: Exec, dependsOn: [build]) {
+  group "RDK Communication CLI Tests"
+  description "installs package(s) and runs unit tests"
+  commandLine "npm", "test"
+}
+
+task tarCommunicationsCLI(type: Tar, dependsOn: [build]) {
+  compression = Compression.GZIP
+  baseName = 'communications-cli'
+  version = version
+  destinationDir parent.buildDir
+  from projectDir
+  exclude { details -> details.file.name.endsWith('.gradle') ||
+                       details.file.name.endsWith('.log') ||
+                       details.file.name.startsWith('.') }
+}
+
+uploadArchives.dependsOn  tarCommunicationsCLI
+
+artifacts {
+    archives tarCommunicationsCLI
+}

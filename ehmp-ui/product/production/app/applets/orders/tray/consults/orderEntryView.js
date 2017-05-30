@@ -234,7 +234,7 @@ define([
             if ((previousConsultName) || (!previousConsultName && !this.taskModel && !this.isFromOrdersSearchBar && !this.draftActivity)) {
                 ConsultUtils.retrievePreReqs.call(this);
             }
-            this.$el.find('#select2-consultName-container').closest('.select2-selection').focus();
+            this.$('.select-control.consultName .select2-selection').focus();
         },
         showOrderResultComment: function() {
             var satisfiedPreReqOrders;
@@ -649,8 +649,8 @@ define([
             return false;
         },
         onModelChange: function() {
-            this.$('#earliestDate').trigger('control:endDate', this.model.get('latestDate'));
-            this.$('#latestDate').trigger('control:startDate', this.model.get('earliestDate'));
+            this.$('.datepicker-control.earliestDate').trigger('control:endDate', this.model.get('latestDate'));
+            this.$('.datepicker-control.latestDate').trigger('control:startDate', this.model.get('earliestDate'));
             this.$el.find('#consult-add-begin-workup-button').parent().trigger('control:disabled', true);
             this.$el.find('#consult-add-accept-button').parent().trigger('control:disabled', true);
             this.$el.find('#consult-add-edit-save-button').parent().trigger('control:disabled', true);

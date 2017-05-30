@@ -60,6 +60,20 @@ Then(/^the first record in the list is "(.*?)"$/) do |most_recent_patient|
   expect(rows[0].text.upcase).to have_text(most_recent_patient.upcase), "Expected #{rows[0].text} to have #{most_recent_patient}"
 end
 
+Then(/^the patient names in the Recent Patients list are in format Last Name, First Name \+ \(First Letter in Last Name \+ Last (\d+) SSN \)$/) do |arg1|
+  rp_list = PobHeaderFooter.new
+  names = rp_list.check_pat_name_format
+  expect(names.length).to be > 0
+
+  names.each do | name |
+    result = name.match(/\w+, \w+ \(\w\d{4}\)/)
+    if result.nil?
+      result_sensitive = name.match(/\w+, \w+ \(\*SENSITIVE\*\)/)
+      expect(result_sensitive).to_not be_nil, "#{name} did not match expected format"
+    end
+  end
+end
+
 Then(/^user navigates to the staff view screen$/) do
   @ehmp = PobStaffView.new
   @ehmp.wait_until_fld_staff_view_visible

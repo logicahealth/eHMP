@@ -2,10 +2,6 @@
 # Cookbook Name:: dockerhost
 # Recipe:: default
 #
-# Copyright 2016, Vistacore
-#
-# All rights reserved - Do Not Redistribute
-#
 
 yum_repository 'docker' do
   description 'Docker Repository'
@@ -72,9 +68,6 @@ execute 'login_into_ecr' do
   command 'eval $(aws ecr get-login --region us-east-1)'
 end
 
-execute 'pull_image' do
-  command 'docker pull 241688162785.dkr.ecr.us-east-1.amazonaws.com/jenkins-slave:latest'
-end
 
 # docker_image has a bug and is not working
 # docker_image "jenkins-slave" do

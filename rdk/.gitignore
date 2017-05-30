@@ -38,15 +38,8 @@ Thumbs.db
 /product/production/rdk/build
 /product/production/rdk/coverage
 /product/production/rdk/xunit.xml
-/product/production/rdk/config/config.js
-/product/production/rdk/config/config.json
-/product/production/rdk/write/config/write-health-data-service-config.json
-/product/production/rdk/write/config/write-pick-list-service-config.json
-/product/production/rdk/config/ehmp-config*.json
-/product/production/rdk/config/rdk-fetch-server-config*.json
-/product/production/rdk/config/rdk-write-server-config*.json
-/product/production/rdk/config/rdk-pick-list-server-config*.json
 /product/production/rdk/config/activity_handler*.json
+/product/production/rdk/config/*config*.json
 /product/production/rdk/write/pick-list/logs
 /product/production/build
 /product/production/jbpm/build

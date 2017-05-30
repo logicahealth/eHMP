@@ -5,30 +5,30 @@
 body:not([data-full-screen]) {
     background-color: $pure-white;
     margin: 0;
-    .initial-app-load-indicator {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        justify-content: center;
-        position: relative;
-        h1 {
-            color: $grey-darkest;
-            font: normal 20px/1.1 sans-serif;
-            margin: 10px 0 0 0;
-            padding: 10px;
-            text-align: center;
-            span {
-                animation-name: blink;
-                animation-duration: 1.4s;
-                animation-iteration-count: infinite;
-                animation-fill-mode: both;
-                &:nth-child(2) {
-                    animation-delay: .2s;
-                }
-                &:nth-child(3) {
-                    animation-delay: .4s;
-                }
+}
+.initial-app-load-indicator {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+    position: relative;
+    h1 {
+        color: $grey-darkest;
+        font: normal 20px/1.1 sans-serif;
+        margin: 10px 0 0 0;
+        padding: 10px;
+        text-align: center;
+        span {
+            animation-name: blink;
+            animation-duration: 1.4s;
+            animation-iteration-count: infinite;
+            animation-fill-mode: both;
+            &:nth-child(2) {
+                animation-delay: .2s;
+            }
+            &:nth-child(3) {
+                animation-delay: .4s;
             }
         }
     }

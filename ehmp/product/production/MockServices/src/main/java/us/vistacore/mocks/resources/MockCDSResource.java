@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Path("repositories.med.va.gov")
+@Path("repositories.URL       ")
 public class MockCDSResource {
 
     private static Logger logger = LoggerFactory.getLogger(MockCDSResource.class);

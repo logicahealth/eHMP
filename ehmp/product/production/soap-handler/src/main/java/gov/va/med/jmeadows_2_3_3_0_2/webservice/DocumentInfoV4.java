@@ -19,11 +19,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="documentPatient" type="{http://webservice.bhie.med.va.gov/}patientV4" minOccurs="0"/>
+ *         &lt;element name="documentPatient" type="{http://webservice.bhie.URL       /}patientV4" minOccurs="0"/>
  *         &lt;element name="documentPatientEmergencyContact" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="documentPatientNok" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="documentPerformer" type="{http://webservice.bhie.med.va.gov/}performerV4" minOccurs="0"/>
- *         &lt;element name="documentSource" type="{http://webservice.bhie.med.va.gov/}sourceV4" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="documentPerformer" type="{http://webservice.bhie.URL       /}performerV4" minOccurs="0"/>
+ *         &lt;element name="documentSource" type="{http://webservice.bhie.URL       /}sourceV4" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="documentTitle" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "documentInfoV4", namespace = "http://webservice.bhie.med.va.gov/", propOrder = {
+@XmlType(name = "documentInfoV4", namespace = "http://webservice.bhie.URL       /", propOrder = {
     "documentPatient",
     "documentPatientEmergencyContact",
     "documentPatientNok",

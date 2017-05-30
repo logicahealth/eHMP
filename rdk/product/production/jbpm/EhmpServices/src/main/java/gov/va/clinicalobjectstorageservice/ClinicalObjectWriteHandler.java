@@ -1,5 +1,6 @@
 package gov.va.clinicalobjectstorageservice;
 
+import org.jboss.logging.Logger;
 import org.kie.api.runtime.process.WorkItem;
 import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.api.runtime.process.WorkItemManager;
@@ -16,17 +17,17 @@ import com.google.gson.JsonParser;
 import gov.va.clinicalobjectstorageservice.util.ResourceUtil;
 import gov.va.ehmp.services.exception.EhmpServicesException;
 import gov.va.ehmp.services.exception.ErrorResponseUtil;
-import gov.va.ehmp.services.utils.Logging;
 import gov.va.kie.utils.WorkItemUtil;
 
+
 public class ClinicalObjectWriteHandler implements WorkItemHandler, Closeable, Cacheable {
-	
+	private static final Logger LOGGER = Logger.getLogger(ClinicalObjectWriteHandler.class);
 	public void close() {
 		//Ignored
 	}
 	
 	public void abortWorkItem(WorkItem workItem, WorkItemManager manager) {
-		Logging.info("ClinicalObjectWriteHandler.abortWorkItem has been called");
+		LOGGER.info("ClinicalObjectWriteHandler.abortWorkItem has been called");
 	}
 	
 	/**
@@ -36,13 +37,13 @@ public class ClinicalObjectWriteHandler implements WorkItemHandler, Closeable, C
 	public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
 		String response = null;
 		try {
-			Logging.info("Entering ClinicalObjectWriteHandler.executeWorkItem");
+			LOGGER.info("Entering ClinicalObjectWriteHandler.executeWorkItem");
 			String pId  = WorkItemUtil.extractRequiredStringParam(workItem, "pid");
 			String jsonObject = WorkItemUtil.extractRequiredStringParam(workItem,"clinicalObject");
 			String uId = WorkItemUtil.extractOptionalStringParam(workItem,"uid");
 			
-			Logging.debug("ClinicalObjectWriteHandler.executeWorkItem pId = " + pId + ", uId = " + uId);
-			Logging.debug("ClinicalObjectWriteHandler.executeWorkItem jsonObject = " + jsonObject);
+			LOGGER.debug("ClinicalObjectWriteHandler.executeWorkItem pId = " + pId + ", uId = " + uId);
+			LOGGER.debug("ClinicalObjectWriteHandler.executeWorkItem jsonObject = " + jsonObject);
 			
 			ResourceUtil resUtil = new ResourceUtil();
 			
@@ -55,13 +56,13 @@ public class ClinicalObjectWriteHandler implements WorkItemHandler, Closeable, C
 				result = resUtil.invokePostResource(jsonObject, pId);
 			}
 
-			Logging.debug("ClinicalObjectWriteHandler.executeWorkItem result = " + result);
+			LOGGER.debug("ClinicalObjectWriteHandler.executeWorkItem result = " + result);
 			response = transformResult(result);
-			Logging.debug("ClinicalObjectWriteHandler.executeWorkItem response = " + response);
+			LOGGER.debug("ClinicalObjectWriteHandler.executeWorkItem response = " + response);
 		} catch (EhmpServicesException e) {
 			response = e.toJsonString();
 		} catch (Exception e) {
-			Logging.error("ClinicalObjectWriteHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ClinicalObjectWriteHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage(), e);
 			response = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "ClinicalObjectWriteHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 		

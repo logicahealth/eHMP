@@ -53,7 +53,7 @@ Scenario: Encounters trend view applet Visit type quick look can be viewed
   | Provider		|
   | Facility		|
   
-@pob_f295_visit_right_click_quick_look_view @F295-4.1 @F295-4.2 @F295-4.3 @F295-4.4 @F295-4.5 @F295-4.6 @US4154 @US5126 @DE6517 @debug
+@pob_f295_visit_right_click_quick_look_view @F295-4.1 @F295-4.2 @F295-4.3 @F295-4.4 @F295-4.5 @F295-4.6 @US4154 @US5126 @DE6517
 Scenario: Encounters trend view applet Visit right click quick look can be viewed
   When the user selects the right side of Visit type encounter
   Then the quick look table is displayed

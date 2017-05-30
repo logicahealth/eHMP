@@ -1,7 +1,0 @@
-"chef-server-upload-all-cookbooks-build-%branch%" {
-	template = 'templates/chef-server-upload-all-cookbooks-build.tpl'
-	description = "Automatically uploads all cookbooks to chef-server when any cookbook has changed or been added into any of the following: project_cookbooks/ wrapper_cookbooks/ third_party_cookbooks/"
-	
-   gitUrl = 'https://code.vistacore.us/scm/pi/chef-repo.git'
-   gitBranch = '%branch%'
-}

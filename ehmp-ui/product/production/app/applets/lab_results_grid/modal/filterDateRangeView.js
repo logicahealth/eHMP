@@ -1,3 +1,4 @@
+/* global ADK */
 define([
     'jquery',
     'jquery.inputmask',
@@ -6,39 +7,30 @@ define([
     'backbone',
     'marionette',
     'underscore',
-    'hbs!app/applets/lab_results_grid/modal/dateRangeTemplate',
-    'hbs!app/applets/lab_results_grid/modal/dateRangeHeaderTemplate'
-], function($, InputMask, DatePicker, moment, Backbone, Marionette, _, dateRangeTemplate, dateRangeHeaderTemplate) {
+    'hbs!app/applets/lab_results_grid/modal/templates/dateRangeTemplate',
+    'hbs!app/applets/lab_results_grid/modal/templates/dateRangeHeaderTemplate'
+], function ($, InputMask, DatePicker, Moment, Backbone, Marionette, _, dateRangeTemplate, dateRangeHeaderTemplate) {
     'use strict';
-    var fetchCollection = function(fetchOptions) {
-        ADK.PatientRecordService.fetchCollection(fetchOptions);
-    };
 
     var DateRangeHeaderView = Backbone.Marionette.ItemView.extend({
         template: dateRangeHeaderTemplate,
-        initialize: function() {
+        initialize: function () {
 
             this.listenTo(this.model, 'change', this.render);
             /* If the Text Search Applet is Active use these Options */
-            if (ADK.SessionStorage.getAppletStorageModel('search', 'useTextSearchFilter')) {
-                var modalOptions = ADK.SessionStorage.getAppletStorageModel('search', 'modalOptions');
-                this.model.set('selectedId', modalOptions.selectedId);
-                if (modalOptions.selectedId === 'customRangeApply') {
-                    this.model.set('customFromDate', modalOptions.customFromDate);
-                    this.model.set('customToDate', modalOptions.customToDate);
+            if (ADK.WorkspaceContextRepository.currentWorkspaceAndContext.get('workspace') === 'record-search') {
+                var filterOptions = ADK.SessionStorage.getAppletStorageModel('search', 'filterOptions') || {};
+                this.model.set('selectedId', filterOptions.selectedId);
+                if (filterOptions.selectedId === 'customRangeApply') {
+                    this.model.set('customFromDate', filterOptions.fromDate);
+                    this.model.set('customToDate', filterOptions.toDate);
                 }
             }
         }
     });
 
+    //noinspection UnnecessaryLocalVariableJS
     var FilterDateRangeView = Backbone.Marionette.LayoutView.extend({
-        fetchOptions: {},
-        sharedDateRange: {},
-        hasCustomDateRangeFieldsBeenInitialized: false,
-        template: dateRangeTemplate,
-        initialize: function(options) {
-            this.fullScreen = options.fullScreen;
-        },
         regions: {
             dateRangeHeaderRegion: '#dateRangeHeader'
         },
@@ -49,31 +41,28 @@ define([
             'blur input': 'monitorCustomDateRange',
             'change input': 'monitorCustomDateRange'
         },
-        setSharedDateRange: function(value) {
-            this.sharedDateRange = value;
+        model: ADK.SessionStorage.getModel('globalDate').clone(),
+        hasCustomDateRangeFieldsBeenInitialized: false,
+        template: dateRangeTemplate,
+        initialize: function (options) {
+            this.fullScreen = options.fullScreen;
         },
-        getSharedDateRange: function() {
-            return this.sharedDateRange;
-        },
-        monitorCustomDateRange: function(event) {
+        monitorCustomDateRange: function (event) {
             if (event.currentTarget.id === 'filterFromDate') {
                 var customFromDateStr = this.$el.find('#filterFromDate').val();
-                var customFromDate = moment(customFromDateStr, 'MM/DD/YYYY', true);
+                var customFromDate = new Moment(customFromDateStr, 'MM/DD/YYYY', true);
 
                 if (customFromDate.isValid()) {
                     this.$('.input-group.date#customDateRange1').datepicker('hide');
                 }
-            }
+            } else if (event.currentTarget.id === 'filterToDate') {
+                var customToDateStr = this.$el.find('#filterToDate').val();
+                var customToDate = new Moment(customToDateStr, 'MM/DD/YYYY', true);
 
-            if (event.currentTarget.id === 'filterToDate') {
-                var customtoDateStr = this.$el.find('#filterToDate').val();
-                var customtoDate = moment(customtoDateStr, 'MM/DD/YYYY', true);
-
-                if (customtoDate.isValid()) {
+                if (customToDate.isValid()) {
                     this.$('.input-group.date#customDateRange2').datepicker('hide');
                 }
             }
-
 
             if (this.checkCustomRangeCondition()) {
                 this.$el.find('#customRangeApply').removeAttr('disabled');
@@ -81,9 +70,7 @@ define([
                 this.$el.find('#customRangeApply').prop('disabled', true);
             }
         },
-        setDatePickers: function(fromDate, toDate) {
-            var fromDateEl = this.$('#filterFromDate'),
-                toDateEl = this.$('#filterToDate');
+        setDatePickers: function (fromDate, toDate) {
             this.$('.input-group.date#customDateRange1').datepicker({
                 format: 'mm/dd/yyyy',
                 todayBtn: 'linked',
@@ -105,23 +92,21 @@ define([
             this.$('#filterFromDate').datepicker('remove');
             this.$('#filterToDate').datepicker('remove');
         },
-        applyDateRange: function(event) {
+        applyDateRange: function (event) {
             var fromDate, toDate;
-            var isFetchable = true;
 
-            this.setDateRangeValues = function(timeUnit, timeValue, selectedId) {
-                fromDate = moment().subtract(timeUnit, timeValue).format('MM/DD/YYYY');
-                toDate = moment().format('MM/DD/YYYY');
+            this.setDateRangeValues = function (timeUnit, timeValue, selectedId) {
+                fromDate = new Moment().subtract(timeUnit, timeValue).format('MM/DD/YYYY');
+                toDate = new Moment().format('MM/DD/YYYY');
                 this.model.set('selectedId', selectedId);
             };
 
-            // Do button logic
             switch (event.currentTarget.id) {
                 case 'customRangeApply':
                     event.preventDefault();
                     var filterFromDate = this.$el.find('#filterFromDate').val();
                     var filterToDate = this.$el.find('#filterToDate').val();
-                    if (moment(filterToDate).isAfter(filterFromDate)) {
+                    if (new Moment(filterToDate).isAfter(filterFromDate)) {
                         fromDate = filterFromDate;
                         toDate = filterToDate;
                     } else {
@@ -153,7 +138,7 @@ define([
                     break;
                 case 'allRange':
                     fromDate = null;
-                    toDate = moment().format('MM/DD/YYYY');
+                    toDate = new Moment().format('MM/DD/YYYY');
                     this.model.set('selectedId', 'allRange');
                     break;
                 default:
@@ -163,78 +148,51 @@ define([
             // Fill the UI pickers if the user didn't already do it
             if (event.currentTarget.id !== 'customRangeApply') {
                 var birthdayRaw = ADK.PatientRecordService.getCurrentPatient().get('birthDate') || '19000101';
-                var birthday = birthdayRaw.substring(4,6) + '/' + birthdayRaw.substring(6,8) + '/' + birthdayRaw.substring(0,4);
-                this.setDatePickers((fromDate||birthday), (toDate||moment().format('MM/DD/YYYY'))); // Note that we only use birthday for visual effect
+                var birthday = birthdayRaw.substring(4, 6) + '/' + birthdayRaw.substring(6, 8) + '/' + birthdayRaw.substring(0, 4);
+                this.setDatePickers((fromDate || birthday), (toDate || new Moment().format('MM/DD/YYYY'))); // Note that we only use birthday for visual effect
             }
 
-            // Set "observed" dates
-            if (fromDate !== undefined && fromDate !== null) {
-                this.fetchOptions.criteria.observedFrom = moment(fromDate).format('YYYYMMDD');
-            } else {
-                delete this.fetchOptions.criteria.observedFrom;
-            }
-            if (toDate !== undefined && toDate !== null) {
-                this.fetchOptions.criteria.observedTo = moment(toDate).format('YYYYMMDD');
-            } else {
-                delete this.fetchOptions.criteria.observedTo;
-            }
-
-            // Append a date range to the fetch criteria, if one has been defined, using the JDS date filter builder
-            // function from the ADK BaseGridApplet class.
-            this.fetchOptions.criteria.filter = this.fetchOptions.criteria.filterHold;
+            var dateFilter = null;
             if (!_.isEmpty(fromDate) || !_.isEmpty(toDate)) {
-                var dateFilter = ADK.Applets.BaseGridApplet.prototype.buildJdsDateFilter.call(null, 'observed', {
+                dateFilter = ADK.Applets.BaseGridApplet.prototype.buildJdsDateFilter.call(null, 'observed', {
                     fromDate: fromDate,
                     toDate: toDate,
                     isOverrideGlobalDate: true
                 });
-                this.fetchOptions.criteria.filter += (', ' + dateFilter);
             }
 
-            // Cleanup
             this.model.set('fromDate', fromDate);
             this.model.set('toDate', toDate);
-            this.sharedDateRange.set('fromDate', fromDate);
-            this.sharedDateRange.set('toDate', toDate);
             this.$el.find('button').removeClass('active-range');
             if (event.currentTarget.id !== 'customRangeApply') {
                 this.$el.find('#' + event.currentTarget.id).addClass('active-range');
             }
-            if (isFetchable) {
-                this.triggerMethod('data:collection:fetch');
-            }
+            this.triggerMethod('data:collection:fetch', dateFilter);
         },
-        onBeforeDestroy: function(event) {
-            this.sharedDateRange.set('fromDate', this.model.get('fromDate'));
-            this.sharedDateRange.set('toDate', this.model.get('toDate'));
-            this.sharedDateRange.set('customFromDate', this.model.get('customFromDate'));
-            this.sharedDateRange.set('customToDate', this.model.get('customToDate'));
-            this.sharedDateRange.set('selectedId', this.model.get('selectedId'));
-        },
-        checkCustomRangeCondition: function() {
+        checkCustomRangeCondition: function () {
             var hasCustomRangeValuesBeenSetCorrectly = true;
             var customFromDateStr = this.$el.find('#filterFromDate').val();
             var customToDateStr = this.$el.find('#filterToDate').val();
-            var customFromDate = moment(customFromDateStr, 'MM/DD/YYYY', true);
-            var customToDate = moment(customToDateStr, 'MM/DD/YYYY', true);
+            var customFromDate = new Moment(customFromDateStr, 'MM/DD/YYYY', true);
+            var customToDate = new Moment(customToDateStr, 'MM/DD/YYYY', true);
 
             if (customFromDate.isValid()) {
                 this.model.set('customFromDate', customFromDateStr);
-                this.sharedDateRange.set('fromDate', customFromDateStr);
+                this.model.set('fromDate', customFromDateStr);
             } else {
                 hasCustomRangeValuesBeenSetCorrectly = false;
             }
 
             if (customToDate.isValid()) {
                 this.model.set('customToDate', customToDateStr);
-                this.sharedDateRange.set('toDate', customToDateStr);
+                this.model.set('toDate', customToDateStr);
             } else {
                 hasCustomRangeValuesBeenSetCorrectly = false;
             }
 
             return hasCustomRangeValuesBeenSetCorrectly;
         },
-        handleEnterOrSpaceBar: function(event) {
+        handleEnterOrSpaceBar: function (event) {
             var keyCode = event ? (event.which ? event.which : event.keyCode) : event.keyCode;
 
             if (keyCode == 13 || keyCode == 32) {
@@ -243,7 +201,7 @@ define([
                 targetElement.trigger('click');
             }
         },
-        onRender: function(event) {
+        onRender: function () {
             this.$('#filterFromDate').inputmask('m/d/y', {
                 'placeholder': 'MM/DD/YYYY'
             });
@@ -264,18 +222,10 @@ define([
                 this.$el.find('#' + selectedId).click();
             } else {
                 if (this.fullScreen) {
-                    var sharedSelectedId = this.sharedDateRange.get('selectedId');
-                    var sharedCustomFromDate = this.sharedDateRange.get('customFromDate');
-                    var sharedCustomToDate = this.sharedDateRange.get('customToDate');
-
                     // If custom dates have already been defined by a sibling vital (i.e. a vital accessible
                     // via the next or previous button), use those dates, otherwise inherit the custom dates
                     // from the parent modal
-                    if (sharedSelectedId) {
-                        selectedId = this.sharedDateRange.get('selectedId');
-                        customFromDate = this.sharedDateRange.get('customFromDate');
-                        customToDate = this.sharedDateRange.get('customToDate');
-                    } else {
+                    if (!selectedId) {
                         selectedId = $('[data-appletid=\'vitals\'] .grid-filter-daterange .active-range').attr('id') || 'custom-range-apply-vitals';
                         customFromDate = $('[data-appletid=\'vitals\'] .grid-filter-daterange #filter-from-date-vitals').val();
                         customToDate = $('[data-appletid=\'vitals\'] .grid-filter-daterange #filter-to-date-vitals').val();
@@ -317,9 +267,6 @@ define([
                     }
                 }
             }
-        },
-        setFetchOptions: function(fetchOptions) {
-            this.fetchOptions = fetchOptions;
         }
     });
 

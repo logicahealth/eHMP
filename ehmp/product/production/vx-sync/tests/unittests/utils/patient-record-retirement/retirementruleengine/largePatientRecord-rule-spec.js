@@ -27,7 +27,7 @@ var config = {
     },
     'syncRequestApi': {
         'protocol': 'http',
-        'host': '10.3.3.6',
+        'host': 'IP      ',
         'port': '8080',
         'timeout': 300000
     },
@@ -50,7 +50,7 @@ describe('large-patient-record-rule', function() {
     beforeEach(function() {
         nock.cleanAll();
         nock.disableNetConnect();
-        nock('http://10.3.3.6:8080')
+        nock('http://IP           ')
             .get('/sync/status?pid=9E7A;10&docStatus=true')
             .reply(200, JSON.stringify({
                 'jpid': '215c2ab2-cfe2-4702-9395-949e32f6d3e4',
@@ -73,7 +73,7 @@ describe('large-patient-record-rule', function() {
                     }
                 }
             }));
-        nock('http://10.3.3.6:8080')
+        nock('http://IP           ')
             .get('/sync/status?icn=10108V420871&docStatus=true')
             .reply(200, JSON.stringify({
                 'jpid': '215c2ab2-cfe2-4702-9395-949e32f6d3e4',
@@ -97,7 +97,7 @@ describe('large-patient-record-rule', function() {
                 }
             }));
 
-        nock('http://10.3.3.6:8080')
+        nock('http://IP           ')
             .get('/sync/status?icn=10110V004877&docStatus=true')
             .reply(200, JSON.stringify({
                 'jpid': '215c2ab2-cfe2-4702-9395-949e32f6d3e4',
@@ -121,11 +121,11 @@ describe('large-patient-record-rule', function() {
                 }
             }));
 
-        nock('http://10.3.3.6:8080')
+        nock('http://IP           ')
             .get('/sync/status?pid=AAAA;1&docStatus=true')
             .reply(404);
 
-        nock('http://10.3.3.6:8080')
+        nock('http://IP           ')
             .get('/sync/status?pid=BBBB;1&docStatus=true')
             .reply(200, JSON.stringify({
                 'jpid': '215c2ab2-cfe2-4702-9395-949e32f6d3e4',
@@ -149,7 +149,7 @@ describe('large-patient-record-rule', function() {
                 }
             }));
 
-        nock('http://10.3.3.6:8080')
+        nock('http://IP           ')
             .get('/sync/status?pid=CCCC;1&docStatus=true')
             .reply(200, JSON.stringify({
                 'jpid': '215c2ab2-cfe2-4702-9395-949e32f6d3e4',
@@ -228,7 +228,7 @@ describe('large-patient-record-rule', function() {
             },
             'syncRequestApi': {
                 'protocol': 'http',
-                'host': '10.3.3.6',
+                'host': 'IP      ',
                 'port': '8080',
                 'timeout': 300000
             },

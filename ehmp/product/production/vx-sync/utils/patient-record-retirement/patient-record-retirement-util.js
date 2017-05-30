@@ -8,9 +8,9 @@ var jobUtil = require(global.VX_UTILS + 'job-utils');
 var inspect = require('util').inspect;
 var format = require('util').format;
 var RetirementRulesEngine = require(global.VX_RETIREMENTRULES + 'rules-engine');
-var util = require('util');
 var pidUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 var moment = require('moment');
+var uuid = require('node-uuid');
 
 function PatientRecordRetirementUtil(log, config, environment, lastAccessDays) {
     if (!(this instanceof PatientRecordRetirementUtil)) {
@@ -28,7 +28,7 @@ PatientRecordRetirementUtil.prototype.getPidsToRetire = function(callback) {
     var self = this;
     self.log.debug('patient-record-retirement-util.getPidsToRetire: entering method');
 
-    var lastAccessDays = (_.isNull(self.lastAccessDays) || _.isUndefined(self.lastAccessDays))? self.config.recordRetirement.lastAccessed : self.lastAccessDays;
+    var lastAccessDays = (_.isNull(self.lastAccessDays) || _.isUndefined(self.lastAccessDays)) ? self.config.recordRetirement.lastAccessed : self.lastAccessDays;
     var lastAccessTime = moment().subtract(lastAccessDays, 'days').format('YYYYMMDDHHmmss');
 
     self.log.debug('patient-record-retirement-util.getPidsToRetire: getting patient list from jds with lastAccessDays %s, lastAccessTime %s', lastAccessDays, lastAccessTime);
@@ -65,7 +65,7 @@ PatientRecordRetirementUtil.prototype.runRetirementRules = function(patientList,
     var self = this;
     self.log.debug('patient-record-retirement-util.runRetirementRules: entering method');
 
-    if(_.isEmpty(patientList)){
+    if (_.isEmpty(patientList)) {
         self.log.debug('patient-record-retirement-util.runRetirementRules: no patients in list');
         return callback();
     }
@@ -87,11 +87,11 @@ PatientRecordRetirementUtil.prototype.runRetirementRules = function(patientList,
     });
 };
 
-PatientRecordRetirementUtil.prototype.sendRetirementJobs = function(patientList, callback) {
+PatientRecordRetirementUtil.prototype.sendRetirementJobs = function(patientList, referenceInfo, callback) {
     var self = this;
     self.log.debug('patient-record-retirement-util.sendRetirementJobs: entering method');
 
-    if(_.isEmpty(patientList)){
+    if (_.isEmpty(patientList)) {
         self.log.debug('patient-record-retirement-util.sendRetirementJobs: no patients in list');
         return callback(null, 0);
     }
@@ -110,14 +110,22 @@ PatientRecordRetirementUtil.prototype.sendRetirementJobs = function(patientList,
             value: id
         };
 
-        var job = jobUtil.createPatientRecordRetirement(jobPatientIdentifier, null);
+        var patientReferenceInfo = _.extend({
+            requestId: uuid.v4()
+        }, referenceInfo);
+
+        var childLog = self.log.child(patientReferenceInfo);
+        childLog.debug('patient-record-retirement-util.sendRetirementJobs: Generated requestID %s for patient %s', patientReferenceInfo.requestId, id);
+
+        var job = jobUtil.createPatientRecordRetirement(jobPatientIdentifier, {referenceInfo: patientReferenceInfo});
         job.identifiers = idList;
         job.jpid = patient.jpid;
 
-        self.log.debug('patient-record-retirement-util.sendRetirementJobs: created job %s; preparing to send job to beanstalk', inspect(job));
+        childLog.debug('patient-record-retirement-util.sendRetirementJobs: created job %s; preparing to send job to beanstalk', inspect(job));
 
-        self.environment.publisherRouter.publish(job, function(error){
-            if(!error){
+        var publisherRouter = self.environment.publisherRouter.childInstance(childLog);
+        publisherRouter.publish(job, function(error) {
+            if (!error) {
                 jobsPublishedCount++;
             }
             asyncCallback(error);
@@ -131,7 +139,7 @@ PatientRecordRetirementUtil.prototype.sendRetirementJobs = function(patientList,
     });
 };
 
-PatientRecordRetirementUtil.prototype.runUtility = function(callback) {
+PatientRecordRetirementUtil.prototype.runUtility = function(referenceInfo, callback) {
     var self = this;
     var errorMessage;
 
@@ -149,7 +157,7 @@ PatientRecordRetirementUtil.prototype.runUtility = function(callback) {
                 return callback(errorMessage);
             }
 
-            self.sendRetirementJobs(filteredIdList, function(error, jobCount) {
+            self.sendRetirementJobs(filteredIdList, referenceInfo, function(error, jobCount) {
                 if (error) {
                     errorMessage = format('patient-record-retirement-util: Exiting due to error returned by sendRetirementJobs: %s; %s jobs sent to beanstalk', inspect(error), jobCount);
                     self.log.error(errorMessage);

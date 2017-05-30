@@ -1,4 +1,5 @@
 define([], function() {
+    'use strict';
 
     var generateDisplayName = function() {
         var displayName = '';

@@ -1,8 +1,0 @@
-"solr-smart-client-build-%branch%" {
-  template = 'templates/solr-smart-client-build.tpl'
-  description = "solr-smart-client build for the branch %branch%"
-	
-  gitUrl = 'https://code.vistacore.us/scm/app/solr-smart-client.git'
-  gitBranch = '%branch%'
-
-}

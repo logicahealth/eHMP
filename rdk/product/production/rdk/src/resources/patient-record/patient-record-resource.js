@@ -11,8 +11,7 @@ var querystring = require('querystring');
 var documentSignatures = require('./patient-record-document-view-signatures');
 
 var getResourceConfig = function() {
-
-    var fetchRecordGet = _.map(jdsDomains.domains, function(domain) {
+    var fetchRecordResources = _.map(jdsDomains.domains, function(domain) {
         var perms = getPermissions(domain.name);
 
         return {
@@ -33,29 +32,7 @@ var getResourceConfig = function() {
             subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization']
         };
     });
-    var fetchRecordPost = _.map(jdsDomains.domains, function(domain) {
-        var perms = getPermissions(domain.name);
-
-        return {
-            name: 'patient-record-' + domain.name,
-            index: domain.index,
-            path: '/domain/' + domain.name,
-            interceptors: {
-                convertPid: true,
-                synchronize: true,
-                jdsFilter: false
-            },
-            requiredPermissions: perms,
-            isPatientCentric: true,
-            post: fetchDomainData.bind(null, domain.index, domain.name),
-            description: {
-                get: 'Get record data of one domain for one patient'
-            },
-            subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization']
-        };
-    });
-
-    return fetchRecordGet.concat(fetchRecordPost);
+    return fetchRecordResources;
 };
 
 function getPermissions(name) {
@@ -141,13 +118,16 @@ function createFilter(filterList, fieldsList, originalFilters) {
     var filterArray = _.isString(filterList) ? filterList.split(',') : filterList;
     var fieldArray = _.isString(fieldsList) ? fieldsList.split(',') : fieldsList;
 
+    var innerFilter = ['or'];
     _.each(fieldArray, function(field) {
-        var innerFilter = ['or'];
+
         _.each(filterArray, function(filter) {
             innerFilter.push(['ilike', field, wildCard(filter)]);
         });
-        createdFilter.push(innerFilter);
+
     });
+    createdFilter.push(innerFilter);
+
     return createdFilter;
 }
 
@@ -211,7 +191,7 @@ function fetchDomainData(index, name, req, res) {
 
         response = removeDuplicates(index, req, response);
 
-        if (index === 'document' || index === 'docs-view') {
+        if (index === 'document' || index === 'docs-view' || index === 'ehmp-documents') {
             documentSignatures.processAddenda(req, response, function(error, result) {
                 if (error) {
                     return res.status(500).rdkSend(error);

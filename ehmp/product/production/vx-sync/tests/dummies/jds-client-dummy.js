@@ -23,6 +23,10 @@ function JdsClient(setLog, setConfig) {
     this.responseIndex = 0;
 }
 
+JdsClient.prototype.childInstance = function(log){
+    return this;
+};
+
 //-----------------------------------------------------------------------------------
 // This will set up the data that will be sent to the callback on on completion of a
 // method call.  Allows checking of handler code.

@@ -1,4 +1,4 @@
-@F304   @reg1
+@F304   @reg2
 Feature: Health Summaries (VistA Web Health Exchange)
 
 Background:

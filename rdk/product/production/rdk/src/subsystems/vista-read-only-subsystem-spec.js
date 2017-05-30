@@ -20,12 +20,12 @@ var req = {
                         id: '500',
                         name: 'PANORAMA'
                     }],
-                    host: '10.2.2.101',
-                    port: 9210,
+                    host: 'IP        ',
+                    port: PORT,
                     production: false,
-                    accessCode: 'pu1234',
-                    verifyCode: 'pu1234!!',
-                    localIP: '10.2.2.1',
+                    accessCode: 'REDACTED',
+                    verifyCode: 'REDACTED',
+                    localIP: 'IP      ',
                     localAddress: 'localhost'
                 },
                 'C877': {
@@ -33,11 +33,11 @@ var req = {
                         id: '500',
                         name: 'KODAK'
                     }],
-                    host: '10.2.2.102',
-                    port: 9210,
+                    host: 'IP        ',
+                    port: PORT,
                     production: false,
-                    accessCode: 'pu1234',
-                    verifyCode: 'pu1234!!'
+                    accessCode: 'REDACTED',
+                    verifyCode: 'REDACTED'
                 }
             }
         }

@@ -9,10 +9,10 @@ var logger = sinon.stub(require('bunyan').createLogger({
 
 describe('Verify Write back RPC Client Factory', function() {
     var config = {
-        host: '10.2.2.102',
-        port: 9210,
-        accessCode: 'pu1234',
-        verifyCode: 'pu1234!!',
+        host: 'IP        ',
+        port: PORT,
+        accessCode: 'REDACTED',
+        verifyCode: 'REDACTED',
         context: 'VPR UI CONTEXT',
         localIP: '127.0.0.1',
         localAddress: 'localhost',

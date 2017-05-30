@@ -1,5 +1,5 @@
 HMP14699 ;ASMR/CK - HMP XU EVENTS Protocol an ITEM - HMP*2.0*3;Aug 24, 2016@11:35:01
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**4**;Sep 01, 2011;Build 63
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**3**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; US14699 - CK - Subscribe HMP XU EVENTS protocol to XU USER CHANGE and XU USER TERMINATE

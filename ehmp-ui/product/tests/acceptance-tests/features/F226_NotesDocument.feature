@@ -6,7 +6,7 @@ Scenario: Launch the notes form from the documents applet - applet allows
   # Given user is logged into eHMP-UI
   And user searches for and selects "eight,patient"
   And Overview is active
-  When user navigates to Documents Applet
+  When user navigates to Documents Screen
   And "Documents" is active
   Then the Documents Applet contains buttons
      | buttons  |
@@ -17,7 +17,7 @@ Scenario: Launch the notes form from the documents applet - preset current encou
   # Given user is logged into eHMP-UI
   And user searches for and selects "eight,patient"
   And Overview is active
-  When user navigates to Documents Applet
+  When user navigates to Documents Screen
   Given "Documents" is active
   And user selects and sets new encounter
   When the user chooses to Add Item to Documents
@@ -34,7 +34,7 @@ Scenario: Launch the notes form from the documents applet
         |VerifyCode|ANES123!!|
         |SignIn||
   And user searches for and selects "ten,patient"
-  When user navigates to Documents Applet
+  When user navigates to Documents Screen
   Given "Documents" is active
   When the user chooses to Add Item to Documents
   Then Change Current Encounter Modal is displayed

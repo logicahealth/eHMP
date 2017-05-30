@@ -16,7 +16,7 @@ Scenario: Patient list can be read
     Then the successful response is received
 		And the patient list is displayed in the response
     # For manual testing use below URI in postman
-    # https://10.4.4.105:8888/resource/patientlist with GET
+    # https://IP             /resource/patientlist with GET
 
 @F362-2.1_delete @US5049 @manual
 Scenario: Patient list can be deleted
@@ -39,7 +39,7 @@ Scenario: Patient list definition can be read
     Then the successful response is received
 		And the patient list definition is displayed in the response
     # For manual testing use below URI in postman
-    # https://10.4.4.105:8888/resource/patientlistdefinition with GET
+    # https://IP             /resource/patientlistdefinition with GET
     
 @F362-2.2_delete_def @US5050 @manual
 Scenario: Patient list definition can be deleted

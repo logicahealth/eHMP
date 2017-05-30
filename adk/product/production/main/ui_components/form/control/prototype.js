@@ -1,13 +1,15 @@
 define([
     'backbone',
     'marionette',
+    'underscore',
     'main/ui_components/form/utils',
     'main/ui_components/form/classDefinitions',
     'main/ui_components/form/control/formatters/default',
-    'main/ui_components/form/control/behaviors/bahaviors'
+    'main/ui_components/form/control/behaviors/behaviors'
 ], function(
     Backbone,
     Marionette,
+    _,
     ControlUtils,
     ClassDefinitions,
     DefaultFormatter,
@@ -32,7 +34,17 @@ define([
             },
             ErrorMessages: {
                 behaviorClass: FormControlBehaviors.ErrorMessages
+            },
+            UpdateConfig: {
+                behaviorClass: FormControlBehaviors.UpdateConfig
             }
+        },
+        _fieldDefaults: function() {
+            var id = !_.isEmpty(this.field.get('id')) ? this.field.get('id') : _.result(this._defaults, 'id');
+            id = !_.isEmpty(id) ? id : !_.isEmpty(this.field.get('name')) ? this.field.get('name') : this.field.get('controlName');
+            return {
+                id: id + '-' + this.cid
+            };
         },
         defaults: {}, // Additional field defaults
         requiredFields: ['name', 'label'], // These are the DEFAULT fields that are required
@@ -61,6 +73,15 @@ define([
             this.initOptions(options);
             this.setFormatter();
             this.setAttributeMapping();
+            this._defaults = this.getOption('defaults');
+            Object.defineProperty(this, 'defaults', {
+                get: _.bind(function() {
+                    return _.defaultsDeep({}, _.result(this, '_fieldDefaults'), _.result(this, '_defaults'));
+                }, this),
+                set: _.bind(function(value) {
+                    return value;
+                }, this)
+            });
         },
         initialize: function(options) {
             this.listenToFieldName();

@@ -34,13 +34,6 @@ Scenario: The overview screen should load without issue
   And POB the "Active & Recent Medications" Overview applet is displayed
   And POB the error "An error has occured" is not displayed in any Overview applets
 
-@TC408 @DE1786 @future
-Scenario: The document screen should load without issue
-#  Given POB user is logged into EHMP-UI successfully
-  And POB user searches for "BCMA, EIGHT" and confirms selection
-  When POB user navigates to Documents Applet
-  Then POB the Documents Expanded applet is displayed
-
 @TC410 @future
 Scenario: The timeline screen should load without issue
 #  Given POB user is logged into EHMP-UI successfully

@@ -399,26 +399,30 @@ describe('Document.formatAddendum', function () {
 });
 
 
-describe('Document.setUserClassIds', function () {
+describe('Document.setUserClassUids', function () {
 
     it('checks the ids get set', function () {
-        var users = [
+        var item = {
+            status: 'valid status',
+            documentDefUid: 'urn:va:doc-def:C877:111'
+        };
+        var userClasses = [
             {'uid':'urn:va:user:9E7A:10000000270'},
             {'uid':'urn:va:asu-class:C877:561'},
             {'uid': 'bad:id'}
         ];
-        var sites = ['9E7A','C877'];
-        var userDetails = 'urn:va:user:9E7A:10000000270';
+        var userDetails = {
+            vistaUserClass: [{'uid':'urn:va:user:9E7A:10000000270'}]
+        };
 
-        var document = asu_utils._createDocument({value: 'any'});
+        var document = asu_utils._createDocument(item);
         document.asuRequest.userClassUids = [];
-        document.setUserClass(users, sites, userDetails);
+        document.setUserClassUids(userClasses, userDetails);
 
         var check = document.asuRequest.userClassUids;
 
-        expect(check.length).to.be(2);
-        expect(check[0]).to.equal(users[0].uid);
-        expect(check[1]).to.equal(users[1].uid);
+        expect(check.length).to.be(1);
+        expect(check[0]).to.equal(userClasses[1].uid);
     });
 });
 
@@ -458,7 +462,7 @@ describe('DocumentList.constructors', function () {
         var docList = new asu_utils.DocumentList(items, defaultUser);
 
         expect(docList._jdsDocuments).to.eql(items);
-        expect(docList.user).to.eql(defaultUser);
+        expect(docList.userClasses).to.eql(defaultUser);
         expect(docList.isAccessDocument).to.be.true();
     });
 
@@ -470,7 +474,7 @@ describe('DocumentList.constructors', function () {
         var docList = new asu_utils.DocumentList(items, defaultUser, requiredPermissions, allPermissions);
 
         expect(docList._jdsDocuments).to.eql(items);
-        expect(docList.user).to.eql(defaultUser);
+        expect(docList.userClasses).to.eql(defaultUser);
         expect(docList.isAccessDocument).to.be.false();
     });
 });
@@ -517,7 +521,7 @@ describe('DocumentList.filterPermission', function () {
         ];
         var docList = new asu_utils.DocumentList(documents, defaultUser);
 
-        sinon.stub(asu_utils._Document.prototype, 'setUserClass', _.noop);
+        sinon.stub(asu_utils._Document.prototype, 'setUserClassUids', _.noop);
         docList.filterPermission(sites);
 
         expect(docList._asuRequest).have.length(0);
@@ -540,7 +544,7 @@ describe('DocumentList.filterPermission', function () {
         ];
         var docList = new asu_utils.DocumentList(documents, defaultUser);
 
-        sinon.stub(asu_utils._Document.prototype, 'setUserClass', _.noop);
+        sinon.stub(asu_utils._Document.prototype, 'setUserClassUids', _.noop);
         docList.filterPermission(sites);
 
         expect(docList._asuRequest).have.length(1);

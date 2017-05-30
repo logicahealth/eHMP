@@ -1,0 +1,129 @@
+// data-grid layout styling
+.data-grid {
+    height: 63vh;
+    table, thead, tbody {
+        display: block;
+    }
+}
+.gridster .data-grid {
+    height: 100%;
+}
+.table-responsive {
+    .data-grid {
+        height: auto;
+    }
+}
+// backgrid styling for applets that use backgrid tables
+table.backgrid {
+    background-color: $pure-white;
+    border-radius: 0;
+    height: 100%;
+    tr {
+        display: flex;
+        margin: 0;
+        width: 100%;
+        border-bottom: 1px solid $grey-lighter;
+        padding-right: 15px;
+        td {
+            white-space: normal;
+            border-bottom: none;
+        }
+        td, th {
+            align-items: center;
+            display: block;
+            flex: 1;
+            height: auto;
+            max-width: none;
+            padding: 2px 5px;
+            word-wrap: break-word;
+            // backgrid overwrite needed here
+            &.renderable {
+                display: block;
+            }
+            &.flex-width-date {
+                flex: none;
+                width: 115px;
+            }
+            &.flex-width-date-time {
+                flex: none;
+                width: 115px;
+            }
+            &.flex-width-comment {
+                flex: none;
+                width: 30px;
+                min-width: 20px;
+            }
+        }
+    }
+    thead {
+        background: $pure-white;
+        border-bottom: 2px solid $grey-light;
+        height: 20px;
+        tr {
+            border-bottom: none;
+            &:hover {
+                background: none;
+            }
+        }
+        th {
+            background: none;
+            color: $grey-darkest;
+            border-bottom: none;
+            text-align: left;
+            &.sortable a {
+                color: $grey-darkest;
+                font-weight: bold;
+                .sort-caret {
+                    border: none;
+                    font-family: FontAwesome;
+                    vertical-align: baseline;
+                    &::before {
+                        color: $primary;
+                        font-size: 10px;
+                    }
+                }
+            }
+            &.ascending a .sort-caret::before {
+                content: "\f0d8";
+            }
+            &.descending a .sort-caret::before {
+                content: "\f0d7";
+            }
+        }
+    }
+    tbody {
+        height: calc(100% - 20px);
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+        tr {
+            cursor: pointer;
+            &:hover, &:focus {
+                background-color: $primary-lightest;
+            }
+            // no records found
+            &.empty td {
+                display: block;
+                font-style: normal;
+                line-height: 20px;
+                text-align: left;
+            }
+            &.active > td, &.active:hover > td {
+                background-color: initial; // $primary-lighter
+            }
+        }
+        // accordions or results grouped-by-header
+        tr.group-by-header, td.group-by-header {
+            background: $primary-lightest;
+        }
+        // toolbar shift styling needed for data-grid applets with toolbars        
+        > tr:first-child {
+            padding-top: 0;
+            &.toolbar-active > td {
+                padding-top: 27px;
+            }
+        }
+        td.toolbar-cell {
+            overflow: visible;
+        }
+    }
+}

@@ -98,7 +98,7 @@ Scenario: Verify the vital toolbar
    | Detail View Button|
    | Info Button       |
 
-@f280_vitals_quickview_resultcol @DE3242 @DE6037 @debug @DE6842
+@f280_vitals_quickview_resultcol @DE3242 @DE6037 @DE6842
 Scenario: Verify the vital quick
   # Given user is logged into eHMP-UI
   And user searches for and selects "Ten,Patient"
@@ -108,7 +108,7 @@ Scenario: Verify the vital quick
   When the user clicks "Blood pressure Sistolic" vital result column
   Then a quickview displays a vitals table with expected headers
 
-@f280_vitals_quickview_button @DE3242 @DE6037 @debug @DE6842
+@f280_vitals_quickview_button @DE3242 @DE6037 @DE6842
 Scenario: Verify the vital quick
   # Given user is logged into eHMP-UI
   Given user searches for and selects "Ten,Patient"

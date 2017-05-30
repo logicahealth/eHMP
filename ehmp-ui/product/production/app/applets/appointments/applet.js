@@ -94,11 +94,7 @@ define([
     var PARTIAL_FILTER = FILTER + ',';
     var COMPLETE_FILTER = FILTER + ')';
 
-    //Collection fetchOptions
     var fetchOptions = {
-        pageable: true,
-        resourceTitle: 'patient-record-appointment',
-        cache: true,
         criteria: {
             filter: COMPLETE_FILTER
         },
@@ -190,15 +186,26 @@ define([
             };
 
             this.listenTo(ADK.Messaging, 'globalDate:selected', function() {
-                self.dataGridOptions.collection.fetchOptions.criteria.filter = PARTIAL_FILTER + self.buildJdsDateFilter('dateTime') + ')';
-                self.dataGridOptions.collection.fetchOptions.onSuccess = function(collection) {
-                    if (self.isFullscreen) {
+                var collection = this.dataGridOptions.collection;
+                collection.fetchOptions.criteria.filter = PARTIAL_FILTER + this.buildJdsDateFilter('dateTime') + ')';
+                collection.fetchOptions.onSuccess = _.bind(function(collection) {
+                    if (this.isFullscreen) {
                         toolBarView.filterResultsDefault(collection);
                     }
-                };
+                }, this);
 
-                var collection = self.dataGridOptions.collection;
-                ADK.PatientRecordService.fetchCollection(collection.fetchOptions, collection);
+                if (collection instanceof Backbone.PageableCollection) {
+                    collection.fullCollection.reset(null, {
+                        silent: true
+                    });
+                } else {
+                    collection.reset(null, {
+                        silent: true
+                    });
+                }
+
+                this.loading();
+                collection.fetchCollection(collection.fetchOptions);
             });
 
             //Row click event handler
@@ -225,12 +232,10 @@ define([
                 }
             };
 
-            dataGridOptions.collection = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
-
-            dataGridOptions.collection.fetchOptions = fetchOptions;
+            var patientRecordAppointments = new ADK.UIResources.Fetch.Appointments.PatientRecordAppointments({isClientInfinite: true});
+            dataGridOptions.collection = patientRecordAppointments.fetchCollection(fetchOptions);
             this.dataGridOptions = dataGridOptions;
             this._super.initialize.call(this, options);
-            this.fetchData();
         },
         onBeforeDestroy: function() {
             fetchOptions.onSuccess = null;
@@ -238,7 +243,7 @@ define([
         },
         getDetailsModal: function(model, event) {
             var view = new ModalView({
-                model: model,
+                model: model
             });
 
             var modalOptions = {
@@ -250,7 +255,7 @@ define([
             var modal = new ADK.UI.Modal({
                 view: view,
                 options: modalOptions,
-                callbackView: this,
+                callbackView: this
             });
             modal.show();
         },
@@ -259,7 +264,6 @@ define([
                 serializeModel: function() {
                     var data = this.model.toJSON();
                     data = Util.getFacilityColor(data);
-
                     return data;
                 }
             })

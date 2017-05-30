@@ -1,5 +1,5 @@
                 <datasource jta="true" jndi-name="java:jboss/datasources/<%= node['jbpm']['configure']['datasource'] %>" pool-name="<%= node['jbpm']['configure']['datasource'] %>_Pool" enabled="true" use-java-context="true" use-ccm="true">
-                    <connection-url>jdbc:oracle:thin:@localhost:<%= node['jbpm']['oracle_config']['port'] %>/<%= node[node['ehmp_oracle']['oracle_service']]['oracle_sid'] %></connection-url>
+                    <connection-url>jdbc:oracle:thin:@<%= @oracle_ip %>:<%= @oracle_port %>/<%= @oracle_sid %></connection-url>
                     <driver>oracle</driver>
                     <pool>
                         <min-pool-size>2</min-pool-size>
@@ -17,7 +17,7 @@
                     </validation>
                 </datasource>
                 <datasource jta="true" jndi-name="java:jboss/datasources/<%= node['jbpm']['configure']['activitydb_datasource'] %>" pool-name="<%= node['jbpm']['configure']['activitydb_datasource'] %>_Pool" enabled="true" use-java-context="true" use-ccm="true">
-                    <connection-url>jdbc:oracle:thin:@localhost:<%= node['jbpm']['oracle_config']['port'] %>/<%= node[node['ehmp_oracle']['oracle_service']]['oracle_sid'] %></connection-url>
+                    <connection-url>jdbc:oracle:thin:@<%= @oracle_ip %>:<%= @oracle_port %>/<%= @oracle_sid %></connection-url>
                     <driver>oracle</driver>
                     <pool>
                         <min-pool-size>2</min-pool-size>

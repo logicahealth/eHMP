@@ -8,6 +8,7 @@ var PublisherRouterDummy = require(global.VX_DUMMIES + 'publisherRouterDummy');
 var PublisherDummy = require(global.VX_DUMMIES + 'publisherDummy');
 var OsyncClinicUtils = require(global.VX_UTILS + 'osync/osync-clinic-utils');
 
+var _ = require('underscore');
 var log = require(global.VX_DUMMIES + '/dummy-logger');
 // NOTE: be sure next lines are commented out before pushing
 // var logUtil = require(global.VX_UTILS + 'log');
@@ -823,7 +824,7 @@ describe('osync-clinic-utils', function() {
             var environment = createEnvironment(log, config);
             var osyncClinicUtils = new OsyncClinicUtils(log, config, environment);
 
-            osyncClinicUtils.osyncClinicRun(undefined, undefined, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun(undefined, undefined, null, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
@@ -837,7 +838,7 @@ describe('osync-clinic-utils', function() {
 
             environment.pjds._setResponseData([true], [''], [undefined]);
 
-            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:9E7A:110', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:9E7A:110', null, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
@@ -853,7 +854,7 @@ describe('osync-clinic-utils', function() {
                 statusCode: 404
             }], [undefined]);
 
-            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:9E7A:110', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:9E7A:110', null, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
@@ -872,7 +873,7 @@ describe('osync-clinic-utils', function() {
                 }
             }]);
 
-            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:9E7A:110', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:9E7A:110', null, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
@@ -890,7 +891,7 @@ describe('osync-clinic-utils', function() {
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:9E7A:110', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:9E7A:110', null, function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeUndefined();
@@ -905,7 +906,7 @@ describe('osync-clinic-utils', function() {
 
             environment.pjds._setResponseData([true], [''], [undefined]);
 
-            osyncClinicUtils.osyncClinicRun('9E7A', undefined, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun('9E7A', undefined, null, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
@@ -935,7 +936,7 @@ describe('osync-clinic-utils', function() {
                 callback('Publisher error');
             });
 
-            osyncClinicUtils.osyncClinicRun('9E7A', undefined, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun('9E7A', undefined, null, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
@@ -970,7 +971,7 @@ describe('osync-clinic-utils', function() {
                 callback(job.clinic === '111' ?'Publisher error':null);
             });
 
-            osyncClinicUtils.osyncClinicRun('9E7A', undefined, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun('9E7A', undefined, null, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
@@ -1001,7 +1002,7 @@ describe('osync-clinic-utils', function() {
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicRun('9E7A', undefined, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun('9E7A', undefined, null, function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
@@ -1010,7 +1011,7 @@ describe('osync-clinic-utils', function() {
             });
         });
 
-         it('Normal path: Pass site option, multi-clinic publish job to osync-appointments tube of two clinics (all-numeric site hash)', function() {
+        it('Normal path: Pass site option, multi-clinic publish job to osync-appointments tube of two clinics (all-numeric site hash)', function() {
             var environment = createEnvironment(log, config);
             var osyncClinicUtils = new OsyncClinicUtils(log, config, environment);
 
@@ -1031,12 +1032,54 @@ describe('osync-clinic-utils', function() {
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicRun(1234, undefined, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun(1234, undefined, null, function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
                 expect(result).toEqual('Successfully published 2 osync clinic job(s) to osync-appointments tube');
                 expect(clinicList).toEqual(['urn:va:location:1234:110', 'urn:va:location:1234:111']);
+            });
+        });
+
+        it('Normal path: verify referenceInfo is passed to sync job when present', function(){
+            var environment = createEnvironment(log, config);
+            var osyncClinicUtils = new OsyncClinicUtils(log, config, environment);
+
+            environment.pjds._setResponseData([null, null, null], [{
+                statusCode: 200
+            }, {
+                statusCode: 200
+            }, {
+                statusCode: 200
+            }], [{
+                items: [{
+                    uid: 'urn:va:location:1234:110'
+                }, {
+                    uid: 'urn:va:location:1234:111'
+                }]
+            },
+                undefined,
+                undefined
+            ]);
+
+            var referenceInfo = {sessionId: 'TEST', utilityType: 'osync-clinic'};
+            var resultingReferenceInfo = [];
+            spyOn(environment.publisherRouter, 'publish').andCallFake(function(job, callback){
+                resultingReferenceInfo.push(job.referenceInfo);
+                callback();
+            });
+
+            osyncClinicUtils.osyncClinicRun(1234, undefined, referenceInfo, function(error, result, clinicList) {
+                expect(error).toBeFalsy();
+                expect(result).toBeTruthy();
+                expect(clinicList).toBeDefined();
+                expect(result).toEqual('Successfully published 2 osync clinic job(s) to osync-appointments tube');
+                expect(clinicList).toEqual(['urn:va:location:1234:110', 'urn:va:location:1234:111']);
+                expect(resultingReferenceInfo.length).toEqual(2);
+
+                _.each(resultingReferenceInfo, function(item){
+                    expect(item).toEqual(jasmine.objectContaining(referenceInfo));
+                });
             });
         });
     });

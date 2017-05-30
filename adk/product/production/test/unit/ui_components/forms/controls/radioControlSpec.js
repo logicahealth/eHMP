@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(['jquery', 'backbone', 'marionette', 'main/ui_components/components', 'api/UIComponents', '_assets/templates/helpers/compare', 'jasminejquery'],
+define(['jquery', 'backbone', 'marionette', 'main/UILibrary', 'api/UIComponents', '_assets/templates/helpers/compare', 'jasminejquery'],
     function($, Backbone, Marionette, UI) {
 
         var $form, form;
@@ -64,44 +64,46 @@ define(['jquery', 'backbone', 'marionette', 'main/ui_components/components', 'ap
                 });
 
                 it('each radio button should have id based on provided name and value, and value set to provided value', function() {
-                    expect($form.find('input:radio[id="salutation-Mr"]')).toHaveValue('Mr');
-                    expect($form.find('input:radio[id="salutation-Mrs"]')).toHaveValue('Mrs');
-                    expect($form.find('input:radio[id="salutation-Mme"]')).toHaveValue('Mme');
+                    expect($form.find('.radio-control.salutation input:radio[id$="Mr"]')).toHaveValue('Mr');
+                    expect($form.find('.radio-control.salutation input:radio[id$="Mrs"]')).toHaveValue('Mrs');
+                    expect($form.find('.radio-control.salutation input:radio[id$="Mme"]')).toHaveValue('Mme');
                 });
 
                 it('each radio button should have label with provided label', function() {
-                    expect($form.find('label[for="salutation-Mr"]')).toHaveText('Mr.');
-                    expect($form.find('label[for="salutation-Mrs"]')).toHaveText('Mrs.');
-                    expect($form.find('label[for="salutation-Mme"]')).toHaveText('Mme.');
+                    var mrId = $form.find('.radio-control.salutation input:radio[id$="Mr"]').attr('id');
+                    var mrsId = $form.find('.radio-control.salutation input:radio[id$="Mrs"]').attr('id');
+                    var mmeId = $form.find('.radio-control.salutation input:radio[id$="Mme"]').attr('id');
+                    expect($form.find('label[for="'+ mrId + '"]')).toHaveText('Mr.');
+                    expect($form.find('label[for="'+ mrsId + '"]')).toHaveText('Mrs.');
+                    expect($form.find('label[for="'+ mmeId + '"]')).toHaveText('Mme.');
                 });
 
                 it('radio buttons should be mutually exclusive', function() {
                     //Please refer to GOTCHA in beforeEach for workaround to make exclusive radio buttons work on PhantomJS
-
-                    $form.find('input:radio[id="salutation-Mr"]').click();
+                    $form.find('.radio-control.salutation input:radio[id$="Mr"]').click();
                     $form.find('input:radio').trigger('change)');
                     expect($form.find('input[type=radio]:checked')).toHaveValue('Mr');
 
-                    $form.find('input:radio[id="salutation-Mrs"]').click();
+                    $form.find('.radio-control.salutation input:radio[id$="Mrs"]').click();
                     $form.find('input:radio').trigger('change)');
                     expect($form.find('input[type=radio]:checked')).toHaveValue('Mrs');
 
-                    $form.find('input:radio[id="salutation-Mme"]').click();
+                    $form.find('.radio-control.salutation input:radio[id$="Mme"]').click();
                     $form.find('input:radio').trigger('change)');
                     expect($form.find('input[type=radio]:checked')).toHaveValue('Mme');
                 });
 
                 it('model should have value of selected radio button', function() {
                     //Please refer to GOTCHA in beforeEach for workaround to make exclusive radio buttons work on PhantomJS
-                    $form.find('input:radio[id="salutation-Mr"]').click();
+                    $form.find('.radio-control.salutation input:radio[id$="Mr"]').click();
                     $form.find('input:radio').trigger('change)');
                     expect(form.model.get('salutation')).toBe("Mr");
 
-                    $form.find('input:radio[id="salutation-Mrs"]').click();
+                    $form.find('.radio-control.salutation input:radio[id$="Mrs"]').click();
                     $form.find('input:radio').trigger('change)');
                     expect(form.model.get('salutation')).toBe("Mrs");
 
-                    $form.find('input:radio[id="salutation-Mme"]').click();
+                    $form.find('.radio-control.salutation input:radio[id$="Mme"]').click();
                     $form.find('input:radio').trigger('change)');
                     expect(form.model.get('salutation')).toBe("Mme");
                 });
@@ -316,7 +318,7 @@ define(['jquery', 'backbone', 'marionette', 'main/ui_components/components', 'ap
                 });
                 it("error is removed", function() {
                     expect($form.find('span.error')).toHaveText('Example error');
-                    $form.find('input:radio[id="radioValue-opt2"]').click();
+                    $form.find('input:radio[value="opt2"]').click();
                     expect($form.find('span.error')).not.toExist();
                 });
             });
@@ -360,6 +362,24 @@ define(['jquery', 'backbone', 'marionette', 'main/ui_components/components', 'ap
                     expect($form.find('p.faux-label')).toHaveText('newLabel');
                     $form.find('.radioValue').trigger("control:label", '');
                     expect($form.find('p.faux-label')).not.toHaveAttr('newLabel');
+                });
+                it("update:config", function() {
+                    $form.find('.radioValue').trigger("control:update:config", {
+                        hidden: true,
+                        required: true,
+                        label: 'newLabel'
+                    });
+                    expect($form.find('.radioValue')).toHaveClass('hidden');
+                    expect($form.find('input')).toHaveAttr('required');
+                    expect($form.find('p.faux-label')).toHaveText('newLabel *');
+                    $form.find('.radioValue').trigger("control:update:config", {
+                        hidden: false,
+                        required: false,
+                        label: ''
+                    });
+                    expect($form.find('.radioValue')).not.toHaveClass('hidden');
+                    expect($form.find('input')).not.toHaveAttr('required');
+                    expect($form.find('p.faux-label')).not.toHaveAttr('newLabel *');
                 });
             });
         });

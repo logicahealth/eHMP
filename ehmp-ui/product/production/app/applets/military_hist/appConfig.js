@@ -1,6 +1,7 @@
 define([], function() {
     'use strict';
     var APPLET_ID = 'military_hist';
+    var CHANNEL_NAME = APPLET_ID;
     var DATA_VERSION = '2.0.r01';
 
     var displayNames = {
@@ -13,6 +14,9 @@ define([], function() {
     };
 
     var Config = {
+        APPLET_ID: APPLET_ID,
+        DATA_VERSION: DATA_VERSION,
+        CHANNEL_NAME: CHANNEL_NAME,
         displayNames: displayNames,
         getDefaults: function getDefaults(version) {
             var defaults = [{

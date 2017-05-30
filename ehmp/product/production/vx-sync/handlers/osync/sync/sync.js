@@ -7,6 +7,9 @@ var blackListUtil = require(global.OSYNC_UTILS + 'blacklist-utils');
 var inspect = require('util').inspect;
 var format = require('util').format;
 var patientIdUtils = require(global.VX_UTILS + 'patient-identifier-utils');
+var HttpHeaderUtils = require(global.VX_UTILS + 'http-header-utils');
+var _ = require('underscore');
+var uuid = require('node-uuid');
 
 /**
  * Takes a job and validates all of the fields of that job to make sure it's a valid one.<br/>
@@ -83,12 +86,13 @@ function confirmSyncSuccess(log, response) {
  *
  * @param log The logger.
  * @param osyncConfig Contains the url to append the icn to for syncing this patient.
+ * @param job Contains the job, so that referenceInfo can be passed to the sync job, via the headers in the sync request.
  * @param patientIdentifier The patientIdentifier of the patient about to be synced.
  * @param callback The callback method you want invoked when either an error occurs or processing has finished
  * with syncing this specific patient.  If an error occurs, the first parameter of the callback will be populated with
  * a non-null value.
  */
-function syncPatient(log, osyncConfig, patientIdentifier, callback) {
+function syncPatient(log, osyncConfig, job, patientIdentifier, callback) {
     log.debug('sync.syncPatient(): entering method');
     var options = {
         url: osyncConfig.syncUrl,
@@ -100,61 +104,73 @@ function syncPatient(log, osyncConfig, patientIdentifier, callback) {
     options.qs[patientIdentifier.type] = patientIdentifier.value;
     options.qs.priority = osyncConfig.syncPriority > 100 ? 100 : osyncConfig.syncPriority < 1 ? 1 : osyncConfig.syncPriority || 50;
 
+    var referenceInfo = _.clone(job.referenceInfo) || {};
+    referenceInfo.requestId = uuid.v4();
+
+    var childLog = log.child(referenceInfo);
+    childLog.debug('sync.syncPatient(): Generated requestId %s for this request to sync patient %s', referenceInfo.requestId, patientIdentifier.value);
+
+    var httpHeaderUtils = new HttpHeaderUtils(childLog);
+    httpHeaderUtils.insertReferenceInfo(options, referenceInfo);
+
     var errorMessage;
     request.get(options, function(error, response) {
 
         if (error) {
             errorMessage = format('sync.syncPatient(): received error from sync endpoint: %s', inspect(error));
-            log.error(errorMessage);
+            childLog.error(errorMessage);
             return callback(errorMessage);
         }
 
         if (confirmSyncSuccess(log, response, callback) === false) {
-            errorMessage = format('sync.syncPatient(): unexpected response from sync endpoint: %s', response ? response.statusCode: null);
-            log.error(errorMessage);
+            errorMessage = format('sync.syncPatient(): unexpected response from sync endpoint: %s', response ? response.statusCode : null);
+            childLog.error(errorMessage);
             return callback(errorMessage);
         }
 
         callback(null);
     }).on('error', function(error) {
         errorMessage = format('sync.syncPatient: error event triggered during request: %s', inspect(error));
-        log.error(errorMessage);
+        childLog.error(errorMessage);
         return callback(errorMessage);
     });
 }
 
-function shouldSyncPatient(log, config, environment, job, patientIdentifier, callback){
+function shouldSyncPatient(log, config, environment, job, patientIdentifier, callback) {
     log.debug('sync.shouldSyncPatient(): entering method');
 
     var patient = job.patient;
     var siteId = job.siteId;
 
+    var pjdsClient = environment.pjds.childInstance(log);
+    var jdsClient = environment.jds.childInstance(log);
+
     // Check to see if patient exists in blacklist; if so, skip
-    blackListUtil.isBlackListedPatient(log, environment, patient.dfn, siteId, function(error, result) {
+    blackListUtil.isBlackListedPatient(log, {pjds: pjdsClient}, patient.dfn, siteId, function(error, result) {
         if (result) {
             log.debug('validation.handle: patient ' + (nullUtil.isNullish(patient.icn) ? patient.dfn : patient.icn) + ' exists in blacklist');
             return callback(null, false);
         }
 
-        environment.jds.getSimpleSyncStatus(patientIdentifier, function(error, response, result){
+        jdsClient.getSimpleSyncStatus(patientIdentifier, function(error, response, result) {
             var errorMessage;
-            if (error)  {
+            if (error) {
                 errorMessage = format('sync.shouldSyncPatient: sync handler encountered an error trying to get simple sync status: %s.', inspect(error));
                 log.error(errorMessage);
                 return callback(errorMessage);
             }
-            if(!response || (response.statusCode !== 200 && response.statusCode !== 404)){
-                errorMessage = format('sync.shouldSyncPatient: sync handler encountered an unexpected response trying to get simple sync status: %s.', response ? response.statusCode: null);
+            if (!response || (response.statusCode !== 200 && response.statusCode !== 404)) {
+                errorMessage = format('sync.shouldSyncPatient: sync handler encountered an unexpected response trying to get simple sync status: %s.', response ? response.statusCode : null);
                 log.error(errorMessage);
                 return callback(errorMessage);
             }
 
             var hasError;
-            if(result){
+            if (result) {
                 hasError = result.hasError;
             }
 
-            if(response.statusCode === 404 || hasError){
+            if (response.statusCode === 404 || hasError) {
                 //Sync patient if previous sync has not been started on this patient or the previous sync is in an error state
                 log.debug('sync.shouldSyncPatient: Ready to sync patient id %s. Sync status check result: statusCode: %s, hasError: %s', patientIdentifier.value, response.statusCode, hasError);
                 callback(null, true);
@@ -208,11 +224,11 @@ function handle(log, osyncConfig, environment, job, handlerCallback) {
             return handlerCallback(error);
         }
 
-        if(!readyToSync) {
+        if (!readyToSync) {
             return handlerCallback(null, 'already started');
         }
 
-        syncPatient(log, osyncConfig, patientIdentifier, function(err) {
+        syncPatient(log, osyncConfig, job, patientIdentifier, function(err) {
             if (err) {
                 log.error('sync.handle: Exiting with error returned by syncPatient: %s', inspect(error));
                 return handlerCallback(err);
@@ -238,7 +254,12 @@ function handle(log, osyncConfig, environment, job, handlerCallback) {
 function storePatientInfoToResultsLog(log, environment, job, handlerCallback) {
     log.debug('sync.storePatientInfoToResultsLog: received request to log ' + JSON.stringify(job));
 
-    var saving = {'siteId': job.siteId, 'patient': job.patient, 'source': job.source, 'syncDate': moment().format()};
+    var saving = {
+        'siteId': job.siteId,
+        'patient': job.patient,
+        'source': job.source,
+        'syncDate': moment().format()
+    };
 
     environment.resultsLog.info(JSON.stringify(saving));
 

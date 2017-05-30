@@ -177,17 +177,17 @@ define([
                     },
                     label: 'Cancel',
                     name: 'requestAddConfirmCancel',
-                    extraClasses: ['btn-default', 'btn-sm', 'right-margin-xs']
+                    extraClasses: ['btn-default', 'btn-sm']
                 }, {
                     control: 'button',
-                    extraClasses: ['btn-primary', 'btn-sm'],
+                    extraClasses: ['btn-primary', 'btn-sm', 'left-margin-sm'],
                     id: 'requestDraftButton',
                     label: 'Draft',
                     type: 'button',
                     title: 'Press enter to save as draft and close'
                 }, {
                     control: 'button',
-                    extraClasses: ['btn-primary', 'btn-sm'],
+                    extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
                     id: 'requestAcceptButton',
                     label: 'Accept',
                     type: 'button',

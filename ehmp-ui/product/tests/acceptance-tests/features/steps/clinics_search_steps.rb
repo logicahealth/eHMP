@@ -4,7 +4,14 @@ Then(/^the user opens clinic search tray$/) do
   expect(clinic.wait_for_btn_open_clinics_search).to eq(true), "button to open clinics tray"
   clinic.btn_open_clinics_search.click
   expect(clinic.wait_for_open_clinics_search).to eq(true), "clinics search tray is open"
-  expect(clinic.wait_for_fld_clinics_location).to eq(true), "clinic location dropdown did not display"
+  begin
+    wait = Selenium::WebDriver::Wait.new(:timeout => 10)
+    wait.until { clinic.fld_clinics_location_options.length > 0 }
+  rescue
+    expect(clinic.fld_clinics_location_options.length).to be > 0, "Expected more then 0 clinic location options"
+  end
+  clinic.wait_for_fld_disabled_clinics_location(15) # deliberately not verifying the outcome
+  expect(clinic.wait_for_fld_clinics_location(30)).to eq(true), "enabled clinic location dropdown did not display"
 end  
 
 Then(/^clinics tray heading is clinics$/) do
@@ -204,19 +211,6 @@ Then(/^the clinics tray patient name search results are in format Last Name, Fir
   end
 end
 
-Then(/^the clinics Tray date of birth search results are in format Date \(Agey\) \- Gender \(first letter\)$/) do
-  clinic = PobClinicsSearch.new
-  dobs = clinic.tbl_clinics_resultes_text
-  expect(dobs.length).to be > 0
-  dobs.each do | dob |
-    result = dob.match(/\d{2}\/\d{2}\/\d{4}  \(\d+y\)  - [MFU]/)
-    if result.nil?
-      result_sensitive = dob.match(/\*SENSITIVE\*  - [MFU]/)
-      expect(result_sensitive).to_not be_nil, "#{dob} did not match expected format"
-    end
-  end
-end
-
 Then(/^the Clinic Tray To Date input field is correctly set to current date$/) do
   date_format_template = "%m/%d/%Y"
   clinic = PobClinicsSearch.new
@@ -379,3 +373,37 @@ Then(/^to date error message is displayed currently with dates "([^"]*)" and tod
   expect(clinic.wait_for_hdr_error_to_date).to eq(true)
   expect(clinic.hdr_error_to_date.text.upcase).to eq(error.upcase)
 end
+
+Then(/^clinic tray has "([^"]*)" "([^"]*)" and "([^"]*)"$/) do |arg1, arg2, arg3|
+  clinic = PobClinicsSearch.new
+  expect(clinic.wait_for_fld_clinics_location_label).to eq(true)
+  expect(clinic.fld_clinics_location_label.text.upcase).to eq(arg1.upcase)
+  expect(clinic.wait_for_fld_clinics_fromdate_label).to eq(true)
+  expect(clinic.fld_clinics_fromdate_label.text.upcase).to eq(arg2.upcase)
+  expect(clinic.wait_for_fld_clinics_todate_label).to eq(true)
+  expect(clinic.fld_clinics_todate_label.text.upcase).to eq(arg3.upcase)
+end
+
+Then(/^the clinics Tray date of birth search results are in format Date \(Agey\)$/) do
+  clinic = PobClinicsSearch.new
+  dobs = clinic.tbl_clinics_resultes_text
+  expect(dobs.length).to be > 0
+  dobs.each do | dob |
+    result = dob.match(/\d{2}\/\d{2}\/\d{4}  \(\d+y\)/)
+    if result.nil?
+      result_sensitive = dob.match(/\*SENSITIVE\*/)
+      expect(result_sensitive).to_not be_nil, "#{dob} did not match expected format"
+    end
+  end
+end
+
+Then(/^the clinics Tray gender search results are in terms Male, Female or Unknown$/) do
+  allowable_genders = PobStaffView.new.allowable_genders
+  clinic = PobClinicsSearch.new
+  genders = clinic.tbl_clinics_results_gender_text
+  expect(genders.length).to be > 0
+  genders.each do | temp_gender |
+    expect(allowable_genders).to include temp_gender.upcase
+  end
+end
+

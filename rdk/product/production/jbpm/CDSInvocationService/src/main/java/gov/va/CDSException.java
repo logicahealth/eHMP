@@ -1,5 +1,8 @@
 package gov.va;
 
+import org.jboss.logging.Logger;
+
+
 /**
  * This exception can be used to provide a status code to the UI
  */
@@ -9,6 +12,7 @@ public class CDSException extends Exception {
 	public static final Integer INTERNAL_SERVER_ERROR = 500;
 	
 	private Integer httpStatus = INTERNAL_SERVER_ERROR;
+	private static final Logger LOGGER = Logger.getLogger(CDSException.class);
 	
 //-----------------------------------------------------------------------------
 //-------------------------Constructors----------------------------------------
@@ -24,7 +28,8 @@ public class CDSException extends Exception {
 	public CDSException(Integer httpStatus, String message) {
 		super(message);
 		this.httpStatus = httpStatus;
-		CDSLogging.error(message);
+		LOGGER.error( message);
+		
 	}
 	
 	/**
@@ -34,7 +39,7 @@ public class CDSException extends Exception {
 	 */
 	public CDSException(String message) {
 		super(message);
-		CDSLogging.error(message);
+		LOGGER.error(message);
 	}
 
 	/**
@@ -48,7 +53,7 @@ public class CDSException extends Exception {
 	public CDSException(Integer httpStatus, String message, Throwable cause) {
 		super(message, cause);
 		this.httpStatus = httpStatus;
-		CDSLogging.error(message);
+		LOGGER.error(message);
 	}
 	
 	/**
@@ -59,7 +64,7 @@ public class CDSException extends Exception {
 	 */
 	public CDSException(String message, Throwable cause) {
 		super(message, cause);
-		CDSLogging.error(message);
+		LOGGER.error(message);
 	}
 	
 //-----------------------------------------------------------------------------

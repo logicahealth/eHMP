@@ -12,28 +12,28 @@ function replaceArrayContents(array, newContents) {
 }
 
 describe('in-memory pick-list handler', function() {
-    it('responds with the correct error for a missing required parameter', function(done) {
+    it('responds with the correct error for a missing required parameter when passed null', function(done) {
         var req = {
             param: function(x) {
                 return null;
             }
         };
 
-        handler.inMemoryRpcCall(req, null, 'medication-order-defaults', function(err) {
-            expect(err).to.be('Parameter \'pharmacyType\' cannot be null or empty');
+        handler.inMemoryRpcCall(req, null, 'people-for-facility', function(err) {
+            expect(err).to.be('Parameter \'facilityID\' cannot be null or empty');
             done();
         });
     });
 
-    it('responds with the correct error for an empty required parameter', function(done) {
+    it('responds with the correct error for an empty required parameter when passed emptystring', function(done) {
         var req = {
             param: function(x) {
                 return '';
             }
         };
 
-        handler.inMemoryRpcCall(req, null, 'medication-order-defaults', function(err) {
-            expect(err).to.be('Parameter \'pharmacyType\' cannot be null or empty');
+        handler.inMemoryRpcCall(req, null, 'people-for-facility', function(err) {
+            expect(err).to.be('Parameter \'facilityID\' cannot be null or empty');
             done();
         });
     });

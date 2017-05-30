@@ -40,8 +40,6 @@ var metrics = bunyan.createLogger({
     level: 'warn'
 });
 
-var connectionPool = require('../src/utils/oracle-connection-pool');
-
 var activityRequestType = 'activity-management-event';
 
 // call this utility to fill in the properties on each tube
@@ -51,6 +49,7 @@ config.generalPurposeJdsServer = nconf.get('generalPurposeJdsServer');
 config.jbpm = nconf.get('jbpm');
 config.vistaSites = nconf.get('vistaSites');
 config.activityManagementJobRetryLimit = nconf.get('activityManagementJobRetryLimit');
+config.defaultWorkerCount = nconf.get('defaultWorkerCount');
 
 var app = express();
 app.config = config;
@@ -89,20 +88,80 @@ function buildEnvironment(logger, config) {
 
 function registerHandlers(logger, config, environment) {
     var handlerRegistry = new HandlerRegistry(environment);
-    handlerRegistry.register(logger, config, environment, activityRequestType, handler);
+    handlerRegistry.register(config, activityRequestType, handler);
 
     return handlerRegistry;
 }
 
+function validConnectInfo(connectInfo) {
+    var valid = false;
+    if (!_.isUndefined(connectInfo) && !_.isNull(connectInfo) && !_.isUndefined(connectInfo.host) && !_.isNull(connectInfo.host)
+        && !_.isUndefined(connectInfo.port) && !_.isNull(connectInfo.port) && !_.isUndefined(connectInfo.tubename) && !_.isNull(connectInfo.tubename)) {
+        valid = true;
+    }
+    return valid;
+}
 
 function startWorkers(config, handlerRegistry, environment, profileJobTypes) {
-    var worker = new Worker(logger, config.beanstalk.jobTypes[activityRequestType], metrics, handlerRegistry, environment.jobStatusUpdater, environment.errorPublisher, true);
-    worker.start(function(err) {
-        logger.info('Start worker %s:%s/%s', worker.beanstalkJobTypeConfig.host, worker.beanstalkJobTypeConfig.worker, this.beanstalkJobTypeConfig.tubename);
-        if (err) {
-            logger.error(err);
+
+    var defaultWorkerCount = config.defaultWorkerCount;
+
+    if (!defaultWorkerCount) {
+        logger.warn('Activity handler contained no valid defaultWorkerCount setting in config, setting it to 1');
+        defaultWorkerCount = 1;
+    }
+    var connectionMap = {};
+    _.each(profileJobTypes, function(jobType) {
+        var connectInfo = config.beanstalk.jobTypes[jobType];
+        if (validConnectInfo(connectInfo)) {
+            var workerCount;
+            if (connectInfo.workerCount && _.isNumber(connectInfo.workerCount) && (connectInfo.workerCount >= 1)) {
+                workerCount = connectInfo.workerCount;
+            } else {
+                workerCount = defaultWorkerCount;
+                logger.debug({
+                    defaultWorkerCount: defaultWorkerCount
+                }, 'activityHandler.startWorkers: Not a valid  workerCount setting in config. Using the default value ');
+                logger.warn({
+                    defaultWorkerCount: defaultWorkerCount
+                }, 'activityHandler.startWorkers: Not a valid  workerCount setting in config. Using the default value ');
+            }
+
+            logger.debug({
+                workerCount: workerCount,
+                jobType: jobType
+            }, 'activityHandler.startWorkers: Creating workers for jobType ');
+            _.times(workerCount, function(i) {
+                var beanstalkString = format('%s:%s/%s/%d', connectInfo.host, connectInfo.port, connectInfo.tubename, i);
+                connectionMap[beanstalkString] = connectInfo;
+                logger.debug({
+                    jobType: jobType,
+                    workerId: beanstalkString
+                }, 'activityHandler.startWorkers: Determined worker config');
+            });
+        } else {
+            logger.warn({
+                jobType: jobType
+            }, 'activityHandler.startWorkers no beanstalk config found for job type ');
         }
     });
 
-    return [worker];
+    var workers = _.map(connectionMap, function(beanstalkJobTypeConfig, beanstalkString) {
+        logger.debug({
+            beanstalkString: beanstalkString
+        }, 'activityHandler.startWorkers(): creating worker ');
+        return new Worker(logger, beanstalkJobTypeConfig, metrics, handlerRegistry, environment.jobStatusUpdater, environment.errorPublisher, true);
+    });
+
+    _.each(workers, function(worker) {
+        worker.start(function(err) {
+            logger.info({
+                beanstalkJobTypeConfig: worker.beanstalkJobTypeConfig
+            }, 'activityHandler.startWorkers(): Started worker with config ');
+            if (err) {
+                logger.error(err);
+            }
+        });
+    });
+    return workers;
 }

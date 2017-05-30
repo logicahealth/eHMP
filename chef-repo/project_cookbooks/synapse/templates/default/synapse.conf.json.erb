@@ -1,0 +1,46 @@
+{
+  "services": {
+    <% @services.each_with_index do |(service, config), index| %>
+      "<%= service %>": {
+        "discovery": {
+          "method": "<%= config['discovery_method'] || "zookeeper" %>",
+          "path": "<%= "#{node['synapse']['remote_services_dir']}/#{service}/services" %>",
+          "hosts": <%= @hosts %>
+        },
+        "haproxy": {
+          "port": <%= config['haproxy']['port'] %>,
+          "server_options": "<%= config['haproxy']['server_options'] %>",
+          "listen": <%= config['haproxy']['listen'] %>
+        }
+      }<%= ',' unless index == @services.size - 1 %>
+    <% end %>
+  },
+  "haproxy": {
+    "reload_command": "service haproxy reload",
+    "config_file_path": "/etc/haproxy/haproxy.cfg",
+    "socket_file_path": "/var/run/haproxy.sock",
+    "do_writes": true,
+    "do_reloads": true,
+    "do_socket": true,
+    "global": [
+      "chroot      /var/lib/haproxy",
+      "pidfile     /var/run/haproxy.pid",
+      "maxconn     <%= @haproxy['global']['maxconn'] %>",
+      "nbproc      <%= @haproxy['global']['nbproc'] %>",
+      "user        haproxy",
+      "group       haproxy",
+      "daemon",
+      "stats socket /var/run/haproxy.sock mode 600 level admin"
+    ],
+    "defaults": <%= @haproxy['defaults'] %>,
+    "extra_sections": {
+      "listen stats <%= @haproxy['extra_sections']['stats']['host'] %>:<%= @haproxy['extra_sections']['stats']['port'] %>": [
+        "mode http",
+        "stats enable",
+        "stats auth <%= @haproxy['extra_sections']['stats']['auth'] %>",
+        "stats uri <%= @haproxy['extra_sections']['stats']['uri'] %>",
+        "stats refresh <%= @haproxy['extra_sections']['stats']['refresh'] %>"
+      ]
+    }
+  }
+}

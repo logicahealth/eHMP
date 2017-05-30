@@ -1,4 +1,4 @@
-@f513_encounter_form_data  @future @DE4560
+@f513_encounter_form_data  @DE4560 @reg2
 
 Feature: F513 : Visit Management (Enter an Encounter Context)
 

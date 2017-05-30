@@ -1,7 +1,0 @@
-"chef-server-upload-data-bags-build-%branch%" {
-	template = 'templates/chef-server-upload-data-bags-build.tpl'
-	description = "Automatically uploads all data-bags to chef-server when any bag has changed or been added into the following: data_bags/"
-	
-   gitUrl = 'https://code.vistacore.us/scm/pi/chef-repo.git'
-   gitBranch = '%branch%'
-}

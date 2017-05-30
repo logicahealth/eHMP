@@ -93,5 +93,5 @@ Scenario Outline: An authorized user can access DoD Outpatient Medications and s
       | DOD           | 15518112      | DOD_NCID   | EMPTY       | EMPTY                                       | EMPTY                          |
       | DOD           | 15165601      | DOD_NCID   | EMPTY       | EMPTY                                       | EMPTY 							|    
       
-#  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
+#  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS  E/JLV+Terminology+Handling
    

@@ -1,0 +1,9 @@
+{
+    "oracledb": {
+        "communicationsDatabase": {
+            "user": "communicationuser",
+            "password": "communicationuser",
+            "connectString": "IP             /xe"
+        }
+    }
+}

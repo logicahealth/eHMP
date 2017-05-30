@@ -108,6 +108,29 @@ define([
 
                 var body = options.groupable ? GroupByBody : options.body ? _.has(options.body, 'sort') ? options.body : options.body.extend(DefaultBodySort) : Backgrid.Body.extend(DefaultBodySort);
 
+                if (!options.groupable) {
+                    body = body.extend({
+                        render: function() {
+                            var filter = this.filter || options.filter;
+                            this.$el.empty();
+                            var fragment = document.createDocumentFragment();
+                            for (var i = 0; i < this.rows.length; i++) {
+                                var row = this.rows[i];
+                                if (_.isFunction(filter)) {
+                                    if (!filter(row.model)) continue;
+                                }
+                                if (_.isObject(filter)) {
+                                    if (!_.filter(row.model, filter)) continue;
+                                }
+                                fragment.appendChild(row.render().el);
+                            }
+                            this.el.appendChild(fragment);
+                            this.delegateEvents();
+                            return this;
+                        }
+                    });
+                }
+
                 var row;
 
                 if (options.toolbarOptions) {

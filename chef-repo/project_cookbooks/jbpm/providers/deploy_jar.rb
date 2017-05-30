@@ -4,7 +4,7 @@ action :execute do
 
   auth_string = "#{new_resource.user}:#{new_resource.password}"
   
-  unless jar_deployed?(new_resource.artifact_id, new_resource.version, new_resource.user, new_resource.password)
+  if !jar_deployed?(new_resource.artifact_id, new_resource.version, new_resource.user, new_resource.password)
 
     common_directory "#{node[:jbpm][:m2_home]}/repository/#{new_resource.group_id}/#{new_resource.artifact_id}/#{new_resource.version}" do
       owner new_resource.owner
@@ -38,6 +38,18 @@ action :execute do
     end
 
     new_resource.updated_by_last_action(true)
+
+  else
+
+    http_request "activate_the_#{new_resource.artifact_id}-#{new_resource.version}_jar" do
+      url "http://#{node[:ipaddress]}:8080/business-central/rest/deployment/#{new_resource.group_id}:#{new_resource.artifact_id}:#{new_resource.version}/activate"
+      message {}
+      headers({'AUTHORIZATION' => "Basic #{
+        Base64.encode64(auth_string)}",
+        'Content-Type' => 'application/xml'
+      })
+      action :post
+    end
 
   end
 

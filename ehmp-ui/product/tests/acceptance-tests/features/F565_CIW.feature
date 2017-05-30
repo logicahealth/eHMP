@@ -1,4 +1,4 @@
-@F565  @workspace_test   @DE6249 @debug @DE7016
+@F565  @workspace_test   @DE6249 @DE7016 @DE6950
 Feature: F565 - Include Concept Invoked Workspaces Menu to Additional Views
 
 Background:

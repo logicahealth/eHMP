@@ -1,0 +1,793 @@
+<!--?xml version="1.0"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mg="http://www.araxis.com/2002/Merge/Reporting" xmlns="http://www.w3.org/1999/xhtml">
+ <head> 
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  <!--The layout and design of this report is Copyright © 2003-2016 Araxis Ltd. All rights reserved.--> 
+  <!--The copyright of the data content of this report belongs to the relevant copyright holders.--> 
+  <title>5. EPMO Open Source Coordination Office Redaction File Detail Report</title> 
+  <style type="text/css">
+body { background: #fff;  color: #000; margin: 0px 14px 14px 14px; }
+h1, h2, h3, h4, h5 {
+  padding: 0em;
+  margin: 1.5em 0em .25em 0em;
+  text-align: left;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 70%;
+  max-width: 55em;
+}
+body, h4, h5, p, ol, ul, li, td, th { font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; }
+
+h4, h5, p, ol, ul, li { font-size: 70%; }
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120%;
+}
+
+h1 { margin: 14px 0em 1.2em 0em; font-size: 112%; line-height: 130%;}
+h2 { font-size: 125%; line-height: 84%;}
+h3 { margin-top: 1.4em; font-size: 81%; }
+h4 { margin-top: 1em; font-size: 70%; }
+h5 { margin-top: 1em; font-size: 100%; font-style: italic;}
+h1 strong, h2 strong, h3 strong, h4 strong { font-weight: bold; }
+
+p { margin: 6px 0em 6px 0em; max-width: 55em;}
+p.code, code {}
+p { font-size: 70%; line-height: 125%; }
+table { font-size: 70%;}
+
+p.copyright, .small { font-size: 60%; line-height: 120%; }
+p.copyright { margin: 3px 0px 0px 0px; padding: 0px; text-align: left; }
+acronym { font-variant: small-caps; }
+div.pad { padding: 3px; }
+span.lineEndings { color: red; font-size: 70%; }
+
+table.mgRowGroup, table.mgRowGroupFolder { border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px; width: 100%; table-layout: fixed; border-collapse: collapse; }
+table.mgRowGroup td { vertical-align: top; padding: 0; }
+table.mgRowGroupFolder td { vertical-align: top; padding: 1px 0 1px 0; }
+div.IP { width: 2px; height: 1em; float: left; }
+
+img.mgFldrIcon {float: left; text-align: left; margin: -1px 2px 0px 0px;  height: 16px; width: 16px; border: none; vertical-align: top; background-color: transparent;}
+div.mgFldrIcon {float: left; width: auto;}
+span.left {float: left;width: auto;}
+span.right {float: right;width: auto;}
+
+table.bordered { border-collapse: collapse; border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px;}
+table.bordered th, table.bordered td { vertical-align: top; padding: 3px; border: 1px solid #a0a0a0;}
+table.bordered th { background-color: #e5e5e5; }
+table.bordered td.group { background-color: #f5f5f5; }
+span.disabledNavigation { color: #a0a0a0; }
+div.navigation { margin-top: 14px; font-size: 70%; }
+div.comment { font-weight: normal; color: #000; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #fcfed8; padding: 2px 5px 2px 5px; border: 1px solid #E3E5C3; margin: 1px 2px 3px 2px; -moz-border-radius: 7px; border-radius: 7px; }
+
+                span.U1, span.U1 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U1 a {text-decoration: underline;}
+td.U1 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1, span.R1 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1 a {text-decoration: underline;}
+td.R1 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1, span.I1 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1 a {text-decoration: underline;}
+td.I1 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1, span.C1 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1 a {text-decoration: underline;}
+td.C1 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC1 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+span.U2, span.U2 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U2 a {text-decoration: underline;}
+td.U2 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2, span.R2 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2 a {text-decoration: underline;}
+td.R2 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2, span.I2 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2 a {text-decoration: underline;}
+td.I2 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2, span.C2 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2 a {text-decoration: underline;}
+td.C2 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC2 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+
+span.selected {background-color: #3d80df; color: #fff;}
+span.selected a {background-color: #3d80df; color: #fff; text-decoration: underline;}
+span.symbol {cursor: pointer;}
+      </style> 
+ </head> 
+ <body> 
+  <h1><strong>5. EPMO Open Source Coordination Office Redaction File Detail Report</strong></h1> 
+  <p>Produced by <strong>Araxis Merge</strong> on <strong>5/26/2017 6:09:07 AM Central Daylight Time</strong>. See <a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a> for information about Merge. This report uses XHTML and CSS2, and is best viewed with a modern standards-compliant browser. For optimum results when printing this report, use landscape orientation and enable printing of background images and colours in your browser.</p> 
+  <h3><strong>5.1&nbsp;Files compared</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th>#</th> 
+     <th>Location</th> 
+     <th>File</th> 
+     <th>Last Modified</th> 
+    </tr> 
+    <tr> 
+     <td>1</td> 
+     <td>ehmp-ui.zip\ehmp-ui\product\tests\acceptance-tests\features\pageobject_dir\support</td> 
+     <td>env.rb</td> 
+     <td>Wed Apr 12 17:38:06 2017 UTC</td> 
+    </tr> 
+    <tr> 
+     <td>2</td> 
+     <td>ehmp-ui.zip\ehmp-ui\product\tests\acceptance-tests\features\pageobject_dir\support</td> 
+     <td>env.rb</td> 
+     <td>Thu May 25 19:08:33 2017 UTC</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>5.2&nbsp;Comparison summary</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th rowspan="2" style="vertical-align: bottom;">Description</th> 
+     <th colspan="2">Between<br>Files 1 and 2</th> 
+    </tr> 
+    <tr> 
+     <th style="text-align: right;">Text Blocks</th> 
+     <th style="text-align: right;">Lines</th> 
+    </tr> 
+    <tr> 
+     <td>Unchanged</td> 
+     <td style="text-align: right;">2</td> 
+     <td style="text-align: right;">238</td> 
+    </tr> 
+    <tr> 
+     <td>Changed</td> 
+     <td style="text-align: right;">1</td> 
+     <td style="text-align: right;">2</td> 
+    </tr> 
+    <tr> 
+     <td>Inserted</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+    <tr> 
+     <td>Removed</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>5.3&nbsp;Comparison options</strong></h3> 
+  <table class="bordered" style="width: 55em;"> 
+   <tbody>
+    <tr> 
+     <th>Whitespace</th> 
+     <td></td> 
+    </tr> 
+    <tr> 
+     <th>Character case</th> 
+     <td>Differences in character case are significant</td> 
+    </tr> 
+    <tr> 
+     <th>Line endings</th> 
+     <td>Differences in line endings (<code>CR</code> and <code>LF</code> characters) are ignored</td> 
+    </tr> 
+    <tr> 
+     <th>CR/LF characters</th> 
+     <td>Not shown in the comparison detail</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>5.4&nbsp;Active regular expressions</strong></h3> 
+  <p>No regular expressions were active.</p> 
+  <h3><strong>5.5&nbsp;Comparison detail</strong></h3> 
+  <table class="mgRowGroup"> 
+   <colgroup>
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+    <col style="width: 1em;"> 
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+   </colgroup>
+   <tbody>
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">1</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'r</span> <span class="U2">spec'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">2</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'r</span> <span class="U2">ubocop'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">3</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'c</span> <span class="U2">apybara'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">4</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'s</span> <span class="U2">ite_prism'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">5</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'s</span> <span class="U2">elenium-we</span> <span class="U2">bdriver'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">6</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'c</span> <span class="U2">apybara/rs</span> <span class="U2">pec/matche</span> <span class="U2">rs'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">7</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'s</span> <span class="U2">how_me_the</span> <span class="U2">_cookies'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">8</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require_re</span> <span class="U2">lative&nbsp;'..</span> <span class="U2">/../steps/</span> <span class="U2">helper/Def</span> <span class="U2">aultLogin'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">9</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require_re</span> <span class="U2">lative&nbsp;'si</span> <span class="U2">teprism_mo</span> <span class="U2">nkey_patch</span> <span class="U2">.rb'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">10</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">11</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Capybara.d</span> <span class="U2">efault_wai</span> <span class="U2">t_time&nbsp;=&nbsp;1</span> <span class="U2">5</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">12</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">Capybara.a</span> <span class="U2">pp_host&nbsp;=&nbsp;</span> <span class="U2">ENV.keys.i</span> <span class="U2">nclude?('E</span> <span class="U2">HMPUI_IP')</span> <span class="U2">&nbsp;?&nbsp;ENV['EH</span> <span class="U2">MPUI_IP']&nbsp;</span> <span class="U2">:&nbsp;"https:/</span> <span class="U2">/</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">13</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">14</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">World(Capy</span> <span class="U2">bara::DSL)</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">15</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">World(Capy</span> <span class="U2">bara::RSpe</span> <span class="U2">cMatchers)</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">16</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">World(Show</span> <span class="U2">MeTheCooki</span> <span class="U2">es)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">17</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">18</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">btype&nbsp;=&nbsp;EN</span> <span class="U2">V['BTYPE']</span> <span class="U2">&nbsp;||&nbsp;'phant</span> <span class="U2">omjs'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">19</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">bob&nbsp;=&nbsp;nil</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">20</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">case&nbsp;btype</span> <span class="U2">.downcase</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">21</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">when&nbsp;'chro</span> <span class="U2">me'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">22</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#&nbsp;puts&nbsp;'</span> <span class="U2">----------</span> <span class="U2">-------Chr</span> <span class="U2">ome&nbsp;is&nbsp;Run</span> <span class="U2">ning------</span> <span class="U2">----------</span> <span class="U2">----'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">23</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Capybara</span> <span class="U2">.default_d</span> <span class="U2">river&nbsp;=&nbsp;:s</span> <span class="U2">elenium</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">24</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Capybara</span> <span class="U2">.register_</span> <span class="U2">driver&nbsp;:se</span> <span class="U2">lenium&nbsp;do&nbsp;</span> <span class="U2">|app|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">25</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;bob&nbsp;=&nbsp;</span> <span class="U2">Capybara::</span> <span class="U2">Selenium::</span> <span class="U2">Driver.new</span> <span class="U2">(app,&nbsp;:bro</span> <span class="U2">wser&nbsp;=&gt;&nbsp;:c</span> <span class="U2">hrome)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">26</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">27</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">28</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">when&nbsp;'fire</span> <span class="U2">fox'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">29</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#&nbsp;puts&nbsp;'</span> <span class="U2">----------</span> <span class="U2">-------Fir</span> <span class="U2">efox&nbsp;is&nbsp;Ru</span> <span class="U2">nning-----</span> <span class="U2">----------</span> <span class="U2">-----'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">30</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Capybara</span> <span class="U2">.default_d</span> <span class="U2">river&nbsp;=&nbsp;:s</span> <span class="U2">elenium</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">31</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Capybara</span> <span class="U2">.register_</span> <span class="U2">driver&nbsp;:se</span> <span class="U2">lenium&nbsp;do&nbsp;</span> <span class="U2">|app|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">32</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;custom</span> <span class="U2">_profile&nbsp;=</span> <span class="U2">&nbsp;Selenium:</span> <span class="U2">:WebDriver</span> <span class="U2">::Firefox:</span> <span class="U2">:Profile.n</span> <span class="U2">ew</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">33</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;custom</span> <span class="U2">_profile["</span> <span class="U2">network.ht</span> <span class="U2">tp.prompt-</span> <span class="U2">temp-redir</span> <span class="U2">ect"]&nbsp;=&nbsp;fa</span> <span class="U2">lse</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">34</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Capyba</span> <span class="U2">ra::Seleni</span> <span class="U2">um::Driver</span> <span class="U2">.new(app,&nbsp;</span> <span class="U2">browser:&nbsp;:</span> <span class="U2">firefox,&nbsp;p</span> <span class="U2">rofile:&nbsp;cu</span> <span class="U2">stom_profi</span> <span class="U2">le)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">35</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">36</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">37</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">else</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">38</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Capybara</span> <span class="U2">.default_d</span> <span class="U2">river&nbsp;=&nbsp;:s</span> <span class="U2">elenium</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">39</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Capybara</span> <span class="U2">.register_</span> <span class="U2">driver&nbsp;:se</span> <span class="U2">lenium&nbsp;do&nbsp;</span> <span class="U2">|app|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">40</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;client</span> <span class="U2">&nbsp;=&nbsp;Seleniu</span> <span class="U2">m::WebDriv</span> <span class="U2">er::Remote</span> <span class="U2">::Http::De</span> <span class="U2">fault.new</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">41</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;client</span> <span class="U2">.timeout&nbsp;=</span> <span class="U2">&nbsp;300&nbsp;#&nbsp;ins</span> <span class="U2">tead&nbsp;of&nbsp;th</span> <span class="U2">e&nbsp;default&nbsp;</span> <span class="U2">60</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">42</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;bob&nbsp;=&nbsp;</span> <span class="U2">&nbsp;Capybara:</span> <span class="U2">:Selenium:</span> <span class="U2">:Driver.ne</span> <span class="U2">w(app,&nbsp;:br</span> <span class="U2">owser&nbsp;=&gt;&nbsp;:</span> <span class="U2">phantomjs,</span> <span class="U2">&nbsp;desired_c</span> <span class="U2">apabilitie</span> <span class="U2">s:&nbsp;{&nbsp;'phan</span> <span class="U2">tomjs.cli.</span> <span class="U2">args'&nbsp;=&gt;&nbsp;[</span> <span class="U2">'--ignore-</span> <span class="U2">ssl-errors</span> <span class="U2">=yes']&nbsp;},&nbsp;</span> <span class="U2">:http_clie</span> <span class="U2">nt&nbsp;=&gt;&nbsp;clie</span> <span class="U2">nt)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">43</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">44</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">45</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">46</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Before&nbsp;do&nbsp;</span> <span class="U2">|scenario|</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">47</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;RecordTi</span> <span class="U2">me.record_</span> <span class="U2">start_time</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">48</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;TestSupp</span> <span class="U2">ort.increm</span> <span class="U2">ent_counte</span> <span class="U2">r</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">49</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">50</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Capybara</span> <span class="U2">.page.driv</span> <span class="U2">er.browser</span> <span class="U2">.manage.wi</span> <span class="U2">ndow.resiz</span> <span class="U2">e_to(1280,</span> <span class="U2">&nbsp;4800)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">51</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">52</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Capybara</span> <span class="U2">.use_defau</span> <span class="U2">lt_driver</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">53</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;scenario</span> <span class="U2">.source_ta</span> <span class="U2">g_names.ea</span> <span class="U2">ch&nbsp;do&nbsp;|tag</span> <span class="U2">|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">54</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;driver</span> <span class="U2">_name&nbsp;=&nbsp;ta</span> <span class="U2">g.sub(/^@/</span> <span class="U2">,&nbsp;'').to_s</span> <span class="U2">ym</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">55</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Capyba</span> <span class="U2">ra.current</span> <span class="U2">_driver&nbsp;=&nbsp;</span> <span class="U2">driver_nam</span> <span class="U2">e&nbsp;if&nbsp;Capyb</span> <span class="U2">ara.driver</span> <span class="U2">s.key?(dri</span> <span class="U2">ver_name)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">56</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;p&nbsp;"b</span> <span class="U2">ob&nbsp;TestBro</span> <span class="U2">wser=&nbsp;&nbsp;#{b</span> <span class="U2">ob.browser</span> <span class="U2">}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">57</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Seleni</span> <span class="U2">umCommand.</span> <span class="U2">reuse_driv</span> <span class="U2">er(bob.bro</span> <span class="U2">wser)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">58</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;p&nbsp;"B</span> <span class="U2">efore&nbsp;Scen</span> <span class="U2">ario:&nbsp;#{Ca</span> <span class="U2">pybara.cur</span> <span class="U2">rent_drive</span> <span class="U2">r}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">59</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">60</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">61</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;if&nbsp;scena</span> <span class="U2">rio.test_s</span> <span class="U2">teps.map(&amp;</span> <span class="U2">:name).ind</span> <span class="U2">ex&nbsp;{&nbsp;|s|&nbsp;s</span> <span class="U2">&nbsp;=~&nbsp;Defaul</span> <span class="U2">tLogin.lau</span> <span class="U2">nch_ehmp&nbsp;}</span> <span class="U2">&nbsp;and&nbsp;!Defa</span> <span class="U2">ultLogin.l</span> <span class="U2">ogged_in</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">62</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;"Lau</span> <span class="U2">nching&nbsp;ehm</span> <span class="U2">p-UI&nbsp;login</span> <span class="U2">&nbsp;page"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">63</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;step</span> <span class="U2">&nbsp;'user&nbsp;lau</span> <span class="U2">nches&nbsp;eHMP</span> <span class="U2">-UI'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">64</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">65</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;elsif&nbsp;sc</span> <span class="U2">enario.tes</span> <span class="U2">t_steps.ma</span> <span class="U2">p(&amp;:name).</span> <span class="U2">index&nbsp;{&nbsp;|s</span> <span class="U2">|&nbsp;s&nbsp;=~&nbsp;Def</span> <span class="U2">aultLogin.</span> <span class="U2">login_step</span> <span class="U2">&nbsp;}&nbsp;and&nbsp;!De</span> <span class="U2">faultLogin</span> <span class="U2">.logged_in</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">66</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;'Log</span> <span class="U2">ging&nbsp;in&nbsp;wi</span> <span class="U2">th&nbsp;non-Sta</span> <span class="U2">ndard&nbsp;user</span> <span class="U2">!!!'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">67</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">68</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;elsif&nbsp;!s</span> <span class="U2">cenario.te</span> <span class="U2">st_steps.m</span> <span class="U2">ap(&amp;:name)</span> <span class="U2">.index&nbsp;{&nbsp;|</span> <span class="U2">s|&nbsp;s&nbsp;=~&nbsp;De</span> <span class="U2">faultLogin</span> <span class="U2">.login_ste</span> <span class="U2">p&nbsp;}&nbsp;and&nbsp;!D</span> <span class="U2">efaultLogi</span> <span class="U2">n.logged_i</span> <span class="U2">n</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">69</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;'Log</span> <span class="U2">ging&nbsp;in&nbsp;wi</span> <span class="U2">th&nbsp;Standar</span> <span class="U2">d&nbsp;user!!!'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">70</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;step&nbsp;'</span> <span class="U2">user&nbsp;is&nbsp;lo</span> <span class="U2">gged&nbsp;into&nbsp;</span> <span class="U2">eHMP-UI'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">71</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">72</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;elsif&nbsp;!s</span> <span class="U2">cenario.te</span> <span class="U2">st_steps.m</span> <span class="U2">ap(&amp;:name)</span> <span class="U2">.index&nbsp;{&nbsp;|</span> <span class="U2">s|&nbsp;s&nbsp;=~&nbsp;De</span> <span class="U2">faultLogin</span> <span class="U2">.login_ste</span> <span class="U2">p&nbsp;}&nbsp;and&nbsp;De</span> <span class="U2">faultLogin</span> <span class="U2">.logged_in</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">73</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;'Use</span> <span class="U2">r&nbsp;is&nbsp;alrea</span> <span class="U2">dy&nbsp;Logged&nbsp;</span> <span class="U2">in&nbsp;with&nbsp;St</span> <span class="U2">andard&nbsp;use</span> <span class="U2">r!!!'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">74</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">75</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;elsif&nbsp;sc</span> <span class="U2">enario.tes</span> <span class="U2">t_steps.ma</span> <span class="U2">p(&amp;:name).</span> <span class="U2">index&nbsp;{&nbsp;|s</span> <span class="U2">|&nbsp;s&nbsp;=~&nbsp;Def</span> <span class="U2">aultLogin.</span> <span class="U2">login_step</span> <span class="U2">&nbsp;}&nbsp;and&nbsp;Def</span> <span class="U2">aultLogin.</span> <span class="U2">logged_in</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">76</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;step&nbsp;'</span> <span class="U2">POB&nbsp;log&nbsp;me</span> <span class="U2">&nbsp;out'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">77</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">78</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">79</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">80</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">After&nbsp;do&nbsp;|</span> <span class="U2">scenario|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">81</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;RecordTi</span> <span class="U2">me.record_</span> <span class="U2">end_time</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">82</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;temp_loc</span> <span class="U2">ation&nbsp;=&nbsp;ni</span> <span class="U2">l</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">83</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;begin</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">84</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;temp_l</span> <span class="U2">ocation&nbsp;=&nbsp;</span> <span class="U2">scenario.l</span> <span class="U2">ocation</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">85</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;rescue&nbsp;N</span> <span class="U2">oMethodErr</span> <span class="U2">or</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">86</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;temp_l</span> <span class="U2">ocation&nbsp;=&nbsp;</span> <span class="U2">scenario.s</span> <span class="U2">cenario_ou</span> <span class="U2">tline.loca</span> <span class="U2">tion</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">87</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">88</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">89</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;p&nbsp;"scena</span> <span class="U2">rio&nbsp;tags:&nbsp;</span> <span class="U2">#{scenario</span> <span class="U2">.source_ta</span> <span class="U2">g_names}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">90</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;RecordTi</span> <span class="U2">me.save_te</span> <span class="U2">st_duratio</span> <span class="U2">n(scenario</span> <span class="U2">.source_ta</span> <span class="U2">g_names,&nbsp;s</span> <span class="U2">cenario.fa</span> <span class="U2">iled?,&nbsp;tem</span> <span class="U2">p_location</span> <span class="U2">)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">91</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;refresh_</span> <span class="U2">zombie_too</span> <span class="U2">ltips</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">92</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">93</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;if&nbsp;scena</span> <span class="U2">rio.failed</span> <span class="U2">?</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">94</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Defaul</span> <span class="U2">tLogin.log</span> <span class="U2">ged_in&nbsp;=&nbsp;f</span> <span class="U2">alse</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">95</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">96</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;screen</span> <span class="U2">shot_name&nbsp;</span> <span class="U2">=&nbsp;"#{temp_</span> <span class="U2">location}"</span> <span class="U2">.gsub!&nbsp;':'</span> <span class="U2">,&nbsp;'_'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">97</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;take_s</span> <span class="U2">creenshot&nbsp;</span> <span class="U2">screenshot</span> <span class="U2">_name</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">98</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">99</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;"On&nbsp;</span> <span class="U2">url:&nbsp;#{Tes</span> <span class="U2">tSupport.d</span> <span class="U2">river.curr</span> <span class="U2">ent_url}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">100</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;p&nbsp;"l</span> <span class="U2">ogs&nbsp;throug</span> <span class="U2">h&nbsp;selenium</span> <span class="U2">:&nbsp;#{TestSu</span> <span class="U2">pport.prin</span> <span class="U2">t_logs}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">101</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;consol</span> <span class="U2">e_logs&nbsp;=&nbsp;C</span> <span class="U2">apybara.pa</span> <span class="U2">ge.driver.</span> <span class="U2">browser.ma</span> <span class="U2">nage.logs.</span> <span class="U2">get("brows</span> <span class="U2">er")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">102</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;"Bro</span> <span class="U2">wser&nbsp;JS&nbsp;Co</span> <span class="U2">nsole&nbsp;Logs</span> <span class="U2">:--*******</span> <span class="U2">********--</span> <span class="U2">&nbsp;#{console</span> <span class="U2">_logs.to_s</span> <span class="U2">}--*******</span> <span class="U2">********--</span> <span class="U2">"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">103</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">104</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;TestSu</span> <span class="U2">pport.driv</span> <span class="U2">er.execute</span> <span class="U2">_script("A</span> <span class="U2">DK.Checks.</span> <span class="U2">_checkColl</span> <span class="U2">ection.res</span> <span class="U2">et();")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">105</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;close_</span> <span class="U2">any_open_m</span> <span class="U2">odals&nbsp;#if&nbsp;</span> <span class="U2">scenario.s</span> <span class="U2">ource_tag_</span> <span class="U2">names.incl</span> <span class="U2">ude?&nbsp;'@mod</span> <span class="U2">al_test'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">106</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;step&nbsp;'</span> <span class="U2">POB&nbsp;log&nbsp;me</span> <span class="U2">&nbsp;out'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">107</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;elsif&nbsp;sc</span> <span class="U2">enario.tes</span> <span class="U2">t_steps.ma</span> <span class="U2">p(&amp;:name).</span> <span class="U2">index&nbsp;{&nbsp;|s</span> <span class="U2">|&nbsp;s&nbsp;=~&nbsp;Def</span> <span class="U2">aultLogin.</span> <span class="U2">launch_ehm</span> <span class="U2">p&nbsp;}&nbsp;and&nbsp;!D</span> <span class="U2">efaultLogi</span> <span class="U2">n.logged_i</span> <span class="U2">n</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">108</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;TestSu</span> <span class="U2">pport.driv</span> <span class="U2">er.execute</span> <span class="U2">_script("A</span> <span class="U2">DK.Checks.</span> <span class="U2">_checkColl</span> <span class="U2">ection.res</span> <span class="U2">et();")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">109</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;elsif&nbsp;sc</span> <span class="U2">enario.tes</span> <span class="U2">t_steps.ma</span> <span class="U2">p(&amp;:name).</span> <span class="U2">index&nbsp;{&nbsp;|s</span> <span class="U2">|&nbsp;s&nbsp;=~&nbsp;Def</span> <span class="U2">aultLogin.</span> <span class="U2">login_step</span> <span class="U2">&nbsp;}&nbsp;and&nbsp;Def</span> <span class="U2">aultLogin.</span> <span class="U2">logged_in</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">110</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;TestSu</span> <span class="U2">pport.driv</span> <span class="U2">er.execute</span> <span class="U2">_script("A</span> <span class="U2">DK.Checks.</span> <span class="U2">_checkColl</span> <span class="U2">ection.res</span> <span class="U2">et();")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">111</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;close_</span> <span class="U2">any_open_m</span> <span class="U2">odals&nbsp;#if&nbsp;</span> <span class="U2">scenario.s</span> <span class="U2">ource_tag_</span> <span class="U2">names.incl</span> <span class="U2">ude?&nbsp;'@mod</span> <span class="U2">al_test'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">112</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;step&nbsp;'</span> <span class="U2">POB&nbsp;log&nbsp;me</span> <span class="U2">&nbsp;out'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">113</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;elsif&nbsp;De</span> <span class="U2">faultLogin</span> <span class="U2">.logged_in</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">114</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">115</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;TestSu</span> <span class="U2">pport.driv</span> <span class="U2">er.execute</span> <span class="U2">_script("A</span> <span class="U2">DK.Checks.</span> <span class="U2">_checkColl</span> <span class="U2">ection.res</span> <span class="U2">et();")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">116</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;close_</span> <span class="U2">any_open_m</span> <span class="U2">odals&nbsp;#if&nbsp;</span> <span class="U2">scenario.s</span> <span class="U2">ource_tag_</span> <span class="U2">names.incl</span> <span class="U2">ude?&nbsp;'@mod</span> <span class="U2">al_test'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">117</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;TestSu</span> <span class="U2">pport.driv</span> <span class="U2">er.execute</span> <span class="U2">_script("A</span> <span class="U2">DK.Messagi</span> <span class="U2">ng.getChan</span> <span class="U2">nel('toolb</span> <span class="U2">ar').trigg</span> <span class="U2">er('close:</span> <span class="U2">toolbar');</span> <span class="U2">")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">118</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;step&nbsp;'</span> <span class="U2">Navigate&nbsp;t</span> <span class="U2">o&nbsp;Staff&nbsp;Vi</span> <span class="U2">ew&nbsp;screen&nbsp;</span> <span class="U2">ignore&nbsp;err</span> <span class="U2">ors'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">119</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">120</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <p class="copyright" style="margin-top: 25px; padding-top: 2px; border-top: solid #a0a0a0 1px; max-width: none;">Araxis Merge (but not the data content of this report) is Copyright © 1993-2016 Araxis Ltd (<a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a>). All rights reserved.</p>   
+ </body>
+</html>

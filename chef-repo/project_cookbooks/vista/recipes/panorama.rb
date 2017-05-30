@@ -28,21 +28,21 @@ end
 vista_new_person "create_leipr_proxy_user" do
   log node[:vista][:chef_log]
   action :create
-  access_code "lu1234"
-  verify_code "lu1234!!"
+  access_code "REDACTED"
+  verify_code "REDACTED"
   full_name "User,LEIPR"
   initial "LU"
   keys ["XUPROGMODE", "XUPROG"]
 end
 
-# See https://wiki.vistacore.us/display/VACORE/Agilex+Sample+Personas
+# See https://wiki.vistacore.us/display/DNS  E/Agilex+Sample+Personas
 # These users represent clinicans and other end-users of eHMP.
 persona_users = [
   # example of dynamic user
   # {
   #   # Proxy user, but also used for end-user testing
-  #   :access_code => 'pu1234',
-  #   :verify_code => 'pu1234!!',
+  #   :access_code => 'REDACTED',
+  #   :verify_code => 'REDACTED',
   #   :full_name => 'User,Panorama',
   #   :ssn => '666441233',
   #   :initial => 'PU',
@@ -78,24 +78,4 @@ persona_users.each do | persona |
   end
 end
 
-remote_file "#{Chef::Config[:file_cache_path]}/#{node[:vista][:panorama][:correlated_ids][:artifact_name]}" do
-  owner 'root'
-  group 'root'
-  mode "0755"
-  source node[:vista][:panorama][:correlated_ids][:source]
-  use_conditional_get true
-end
-
-file node[:vista][:panorama][:correlated_ids][:json] do
-  owner 'root'
-  group 'root'
-  mode "0755"
-  content lazy{ File.read("#{Chef::Config[:file_cache_path]}/#{node[:vista][:panorama][:correlated_ids][:artifact_name]}") }
-end
-
-# Correlate Ids on Kodak and panorama
-vista_correlate_ids "correlate patient ids from other stations" do
-  json node[:vista][:panorama][:correlated_ids][:json]
-  namespace node[:vista][:namespace]
-end
-
+include_recipe "vista::patient_ids"

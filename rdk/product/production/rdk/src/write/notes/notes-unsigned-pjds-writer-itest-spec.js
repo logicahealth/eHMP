@@ -9,11 +9,11 @@ var writebackContext = {
     siteHash: '9E7A',
     pid: '9E7A;8',
     vistaConfig: {
-        host: '10.2.2.101',
-        port: 9210,
-        accessCode: 'pu1234',
-        verifyCode: 'pu1234!!',
-        localIP: '10.2.2.1',
+        host: 'IP        ',
+        port: PORT,
+        accessCode: 'REDACTED',
+        verifyCode: 'REDACTED',
+        localIP: 'IP      ',
         localAddress: 'localhost',
         context: 'HMP UI CONTEXT'
     },
@@ -30,9 +30,9 @@ var writebackContext = {
     },
     appConfig: {
         'jdsServer': {
-            'host': '10.2.2.110',
-            'port': 9080,
-            'baseUrl': 'http://10.2.2.110:9080'
+            'host': 'IP        ',
+            'port': PORT,
+            'baseUrl': 'http://IP             '
         }
     }
 };

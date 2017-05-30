@@ -90,7 +90,7 @@ end
 
 def convert_cucumber_date(date_string)
   dm = DateManipulation.new
-  p "converting #{date_string}"
+  # p "converting #{date_string}"
   return dm.string_of_todays_date if date_string.eql?('TODAY')
   return dm.string_of_months_ago(18) if date_string.eql?('18_MONTHS_AGO')
   return dm.string_of_months_hence(6) if date_string.eql?('6_MONTHS_FUTURE')

@@ -1,9 +1,10 @@
-define([], function() {
+define([], function () {
+    'use strict';
 
     var AnatomicLocation = ADK.Resources.Picklist.Model.extend({
         idAttribute: 'ien',
         label: 'name',
-        value: function() {
+        value: function () {
             return this.get('name') + ';' + this.get('hl7Code') + ';' + this.get('ien');
         },
         childParse: 'false',

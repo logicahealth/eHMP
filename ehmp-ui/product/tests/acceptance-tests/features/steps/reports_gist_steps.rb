@@ -36,27 +36,12 @@ class ReportsGistContainer <  AllApplets
   end
 end
 
-class ReportModal < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    add_verify(CucumberLabel.new('Type Label'), VerifyTextNotEmpty.new(''), AccessHtmlElement.new(:xpath, "//div[@id='modal-body']/descendant::span[string()='Type']"))
-    add_verify(CucumberLabel.new('Type'), VerifyTextNotEmpty.new(''), AccessHtmlElement.new(:css, "[data-detail='type']"))
-  end
-end
-
 Then(/^user sees Reports Gist$/) do  
   aa = ReportsGistContainer.instance  
   expect(aa.wait_until_action_element_visible("Reports Title", DefaultLogin.wait_time)).to be_true
   expect(aa.perform_verification("Reports Title", "REPORTS")).to be_true
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { aa.applet_grid_loaded }
-end
-
-Then(/^the user selects the "(.*?)" row in Reports Gist$/) do |kind|
-  aa = ReportsGistContainer.instance 
-  expect(aa.wait_until_action_element_visible("Procedure", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_action(kind, "")).to be_true
 end
 
 When(/^the Reports Gist Applet table contains headers$/) do |table|
@@ -70,24 +55,10 @@ When(/^the Reports Gist Applet table contains headers$/) do |table|
   end
 end
 
-Then(/^the Reports Gist table contains specific rows$/) do |table|
-  verify_table_rows_reports(table)
-end
-
 Then(/^title of the Reports Applet says "(.*?)"$/) do |_arg1|
   aa = ReportsGistContainer.instance  
   expect(aa.wait_until_action_element_visible("Reports Title", DefaultLogin.wait_time)).to be_true
   expect(aa.perform_verification("Reports Title", "REPORTS")).to be_true
-end
-
-Then(/^the reports gist view is filtered to (\d+) items$/) do |num_items|
-  aa = ReportsGistContainer.instance 
-  expect(aa.wait_until_xpath_count_greater_than("Number of Reports Applet Rows", num_items)).to be_true, "Expected #{num_items} but didn't find that in the application"
-end
-
-def verify_table_rows_reports(table)
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { VerifyTableValue.compare_specific_row(table, '#data-grid-reports') }
 end
 
 Then(/^the Reports Gist table contains "([^"]*)" Type\(s\)$/) do |arg1|

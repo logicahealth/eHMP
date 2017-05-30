@@ -1,14 +1,15 @@
+/* global Backgrid */
 define([
     "backbone",
     "marionette",
     'underscore',
     'handlebars',
     "hbs!app/applets/lab_results_grid/list/labTestCoverSheetTemplate",
-    "hbs!app/applets/lab_results_grid/list/flagTemplate",
-], function(Backbone, Marionette, _, Handlebars, labTestCSTemplate, flagTemplate) {
+    "hbs!app/applets/lab_results_grid/list/flagTemplate"
+], function (Backbone, Marionette, _, Handlebars, labTestCSTemplate, flagTemplate) {
     "use strict";
 
-    function customFlagSort(model, sortKey) {
+    function customFlagSort(model) {
         var code = model.attributes.interpretationCode;
         if (code !== undefined) {
             var flag = model.attributes.interpretationCode.split(":").pop();
@@ -31,44 +32,44 @@ define([
 
     return {
         //Data Grid Columns
-        dateCol: function(){
+        dateCol: function () {
             return {
                 name: "observed",
                 label: "Date",
                 template: Handlebars.compile('{{formatDate observed "MM/DD/YYYY - HH:mm"}}'),
                 flexWidth: 'flex-width-date',
-                cell: Backgrid.HandlebarsCell.extend ({
+                cell: Backgrid.HandlebarsCell.extend({
                     className: 'handlebars-cell flex-width-date'
                 }),
                 hoverTip: 'labresults_date'
             };
         },
-        testCol: function(){
-            return{
+        testCol: function () {
+            return {
                 name: "typeName",
                 label: "Lab Test",
                 template: labTestCSTemplate,
                 flexWidth: 'flex-width-3',
-                cell: Backgrid.HandlebarsCell.extend ({
+                cell: Backgrid.HandlebarsCell.extend({
                     className: 'handlebars-cell flex-width-3'
                 }),
                 hoverTip: 'labresults_labtest'
             };
         },
-        flagCol: function(){
+        flagCol: function () {
             return {
                 name: "flag",
                 label: "Flag",
                 template: flagTemplate,
                 flexWidth: 'flex-width-0_5',
-                cell: Backgrid.HandlebarsCell.extend ({
+                cell: Backgrid.HandlebarsCell.extend({
                     className: 'handlebars-cell flex-width-0_5'
                 }),
                 sortValue: customFlagSort,
                 hoverTip: 'labresults_flag'
             };
         },
-        resultAndUnitCol: function(){
+        resultAndUnitCol: function () {
             return {
                 name: "result",
                 label: "Result",
@@ -77,7 +78,7 @@ define([
                 hoverTip: 'labresults_result'
             };
         },
-        resultNoUnitCol: function(){
+        resultNoUnitCol: function () {
             return {
                 name: "result",
                 label: "Result",
@@ -85,7 +86,7 @@ define([
                 hoverTip: 'labresults_result'
             };
         },
-        unitCol: function(){
+        unitCol: function () {
             return {
                 name: "units",
                 label: "Unit",
@@ -93,7 +94,7 @@ define([
                 hoverTip: 'labresults_unit'
             };
         },
-        refCol: function(){
+        refCol: function () {
             return {
                 name: "referenceRange",
                 label: "Ref Range",
@@ -102,7 +103,7 @@ define([
                 hoverTip: 'labresults_refrange'
             };
         },
-        facilityCol: function(){
+        facilityCol: function () {
             return {
                 name: "facilityMoniker",
                 label: "Facility",

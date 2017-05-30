@@ -60,20 +60,6 @@ When(/^the Recent Patients Tray patient name search results are in format Last N
   end
 end
 
-When(/^the Recent Patients Tray date of birth search results are in format Date \(Agey\) \- Gender \(first letter\)$/) do
-  rp_tray = PobStaffView.new
-  dobs = rp_tray.fld_rp_result_dob_text
-  expect(dobs.length).to be > 0
-
-  dobs.each do | dob |
-    result = dob.match(/\d{2}\/\d{2}\/\d{4}  \(\d+y\)  - [MFU]/)
-    if result.nil?
-      result_sensitive = dob.match(/\*SENSITIVE\*  - [MFU]/)
-      expect(result_sensitive).to_not be_nil, "#{dob} did not match expected format"
-    end
-  end
-end
-
 Given(/^the Recent Patients Tray contains search results$/) do
   rp_tray = PobStaffView.new
   wait_until { rp_tray.recentpatient_search_results_loaded? }
@@ -99,3 +85,28 @@ Then(/^the Global Header displays the selected user name$/) do
   # remove spaces so they don't have to be exact and take case out of the equation
   expect(ehmp.global_header.fld_patient_name.text.gsub(' ', '').upcase).to eq(name.gsub(' ', '').upcase)
 end
+
+When(/^the Recent Patients Tray date of birth search results are in format Date \(Agey\)$/) do
+  rp_tray = PobStaffView.new
+  dobs = rp_tray.fld_rp_result_dob_text
+  expect(dobs.length).to be > 0
+
+  dobs.each do | dob |
+    result = dob.match(/\d{2}\/\d{2}\/\d{4}  \(\d+y\)/)
+    if result.nil?
+      result_sensitive = dob.match(/\*SENSITIVE\*/)
+      expect(result_sensitive).to_not be_nil, "#{dob} did not match expected format"
+    end
+  end
+end
+
+When(/^the Recent Patients Tray gender search results are in terms Male, Female or Unknown$/) do
+  view = PobStaffView.new
+  allowable_genders = view.allowable_genders
+  genders = view.fld_rp_gender_results
+  expect(genders.length).to be > 0
+  genders.each do | temp_gender |
+    expect(allowable_genders).to include temp_gender.text.upcase
+  end
+end
+

@@ -12,12 +12,14 @@ def discover_item_id(domain, patient)
 
   @json_object["data"]["items"].each do |item|
     @discovered_item_uid = item["uid"]
+    next if @discovered_item_uid.nil?
     break if @discovered_item_uid.include? "9E7A" 
     break if @discovered_item_uid.include? "C877"
   end 
   #@discovered_item_uid = @json_object["data"]["items"][0]["uid"]
   
   p "discovered uid: #{@discovered_item_uid}"
+  expect(@discovered_item_uid).to_not be_nil, "Could not find a #{domain} with a uid"
 end
 
 Given(/^test discovers allergy for patient "(.*?)"$/) do |patient|

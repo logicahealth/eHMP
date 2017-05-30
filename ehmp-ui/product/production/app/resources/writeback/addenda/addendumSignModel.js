@@ -2,6 +2,8 @@ define([
     'underscore',
     'app/resources/writeback/esignature/model',
 ], function(_, ESignatureModel) {
+    'use strict';
+
     var AddendumSignModel = ESignatureModel.extend({
             resource: 'addendum-sign',
             parse: function(resp) {

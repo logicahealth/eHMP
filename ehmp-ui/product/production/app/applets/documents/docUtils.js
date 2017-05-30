@@ -3,9 +3,8 @@ define([
     "marionette",
     "underscore",
     "app/applets/documents/appConfig",
-    'app/applets/documents/appletHelper',
-    'app/applets/documents/imaging/helpers/thumbnailHelper'
-], function(Backbone, Marionette, _, appConfig, AppletHelper, ThumbnailHelper) {
+    'app/applets/documents/appletHelper'
+], function(Backbone, Marionette, _, appConfig, AppletHelper) {
     "use strict";
     var ERROR_LOG = appConfig.errorLog;
     var docUtils = {
@@ -35,24 +34,18 @@ define([
             return text && text.length && text[0];
         },
 
-        getDoc: function (uid, collection) {
-            var modalCollection = collection instanceof Backbone.Collection ? collection : ADK.PatientRecordService.createEmptyCollection(docFetchOptions);
+        getDoc: function(uid, collection) {
+            var modalCollection = collection instanceof ADK.UIResources.Fetch.Document.DocumentViews.Collection ? collection : new ADK.UIResources.Fetch.Document.DocumentViews.Collection();
 
             var docFetchOptions = {
                 cache: false,
                 pageable: true,
-                resourceTitle: 'patient-record-document-view',
                 allowAbort: true,
-                viewModel: {
-                    parse: function(response) {
-                        return AppletHelper.parseDocResponse(response);
-                    }
-                },
-                criteria:{
-                    filter: 'eq(uid, "' +uid+'")'
+                criteria: {
+                    filter: 'eq(uid, "' + uid + '")'
                 }
             };
-            ADK.PatientRecordService.fetchCollection(docFetchOptions, modalCollection);
+            modalCollection.fetchCollection(docFetchOptions, modalCollection);
         },
         showDocError: function() {
             var message = 'Unable to fetch document. Refresh documents to try again.';

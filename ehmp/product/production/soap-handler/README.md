@@ -60,8 +60,8 @@ Configuration
 Change port
 -----------
 ### Command Line
-main port: `-Ddw.http.port=9090`
-admin port: `-Ddw.http.adminPort=9091`
+main port: `-Ddw.http.port=PORT`
+admin port: `-Ddw.http.adminPort=PORT`
 
 ### Config File
 ```

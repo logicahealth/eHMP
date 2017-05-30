@@ -43,7 +43,7 @@ module.exports = function(req, res, next) {
 
         if (err) {
             //TODO convert pep to use RdkErrors
-            return res.status(err.code).rdkSend(err.message);
+            return res.status(err.code || 500).rdkSend(err.message);
         }
 
         next();

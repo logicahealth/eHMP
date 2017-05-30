@@ -30,7 +30,7 @@ define([
     "use strict";
 
     var GroupView = Backbone.Marionette.ItemView.extend({
-        className: 'demographic-group',
+        className: 'wrapper-grouping',
         tagName: 'div',
         templateHelpers: function(value) {
             return {

@@ -823,10 +823,6 @@ BEGIN
 
 	execute immediate sql_statement;
 
-	sql_statement:='CREATE INDEX IDX_SIMPLE_MATCH ON ACTIVITYDB.SIMPLE_MATCH (MATCHFIELD, MATCHVALUE)';
-
-	execute immediate sql_statement;
-
 	EXCEPTION
 	    WHEN OTHERS THEN
 	      IF SQLCODE = -955 THEN
@@ -844,6 +840,8 @@ END;
 DECLARE sql_statement VARCHAR2(1024);
 T_COUNT NUMBER;
 C_COUNT VARCHAR2(2000);
+U_COUNT NUMBER;
+I_COUNT NUMBER;
 BEGIN
 	SELECT COUNT(*) INTO T_COUNT FROM DBA_TABLES WHERE OWNER = 'ACTIVITYDB' AND TABLE_NAME = 'PROCESSED_EVENT_STATE' ;
 	IF T_COUNT = 0
@@ -856,12 +854,9 @@ BEGIN
 		              			"LISTENER_ID" NUMBER(20, 0),
 		              			CONSTRAINT "PROCESSED_EVENT_STATE_PK" PRIMARY KEY ("ID"),
 		              			CONSTRAINT "LISTNER_PRCESSED_EVNT_STA_0_FK" FOREIGN KEY ("LISTENER_ID")
-			  					REFERENCES "ACTIVITYDB"."AM_EVENTLISTENER" ("LISTENER_ID") ENABLE
+			  					REFERENCES "ACTIVITYDB"."AM_EVENTLISTENER" ("LISTENER_ID") ENABLE,
+		              			CONSTRAINT "PROCESSED_EVENT_STATE_UK" UNIQUE ("DATA_LOCATION", "VALUE", "LISTENER_ID")
 							)';
-
-		execute immediate sql_statement;
-
-		sql_statement:='CREATE INDEX IDX_DATA_LOCATION_VALUE on ACTIVITYDB.PROCESSED_EVENT_STATE (DATA_LOCATION, VALUE)';
 
 		execute immediate sql_statement;
 
@@ -895,6 +890,34 @@ BEGIN
 			execute immediate sql_statement;
 
 			sql_statement:='CREATE INDEX IDX_DATA_LOCATION_VALUE on ACTIVITYDB.PROCESSED_EVENT_STATE (DATA_LOCATION, VALUE)';
+
+			execute immediate sql_statement;
+		END IF;
+
+		SELECT COUNT(*) INTO U_COUNT FROM DBA_CONSTRAINTS WHERE TABLE_NAME='PROCESSED_EVENT_STATE' AND CONSTRAINT_NAME='PROCESSED_EVENT_STATE_UK';
+		IF U_COUNT = 0
+		THEN
+
+			-- Remove duplicate entries in PROCESSED_EVENT_STATE table (keeping the first id that was inserted) before applying unique constraint
+			-- note that this is the same as the content of '@utilities/delete_duplicate_processedeventstate.sql'
+			sql_statement:='DELETE FROM "ACTIVITYDB"."PROCESSED_EVENT_STATE" WHERE ID IN
+							(SELECT ID FROM
+								(SELECT ID, DATA_LOCATION, VALUE, LISTENER_ID, row_number()
+									over (partition BY DATA_LOCATION, VALUE, LISTENER_ID order by ID)
+								AS dup_cnt FROM "ACTIVITYDB"."PROCESSED_EVENT_STATE") WHERE dup_cnt > 1
+							)';
+
+			execute immediate sql_statement;
+
+			sql_statement:='ALTER TABLE "ACTIVITYDB"."PROCESSED_EVENT_STATE" ADD CONSTRAINT "PROCESSED_EVENT_STATE_UK" UNIQUE ("DATA_LOCATION", "VALUE", "LISTENER_ID")';
+
+			execute immediate sql_statement;
+		END IF;
+
+		SELECT COUNT(*) INTO I_COUNT FROM DBA_INDEXES WHERE TABLE_NAME='PROCESSED_EVENT_STATE' AND INDEX_NAME='IDX_DATA_LOCATION_VALUE';
+		IF I_COUNT > 0
+		THEN
+			sql_statement:='DROP INDEX IDX_DATA_LOCATION_VALUE';
 
 			execute immediate sql_statement;
 		END IF;
@@ -1465,7 +1488,7 @@ BEGIN
   	IF R_COUNT = 0 THEN
 		matchCriteriaId := ACTIVITYDB.AM_EVENT_MATCH_CRITERIA_ID_SEQ.NEXTVAL;
 		INSERT INTO ACTIVITYDB.EVENT_MATCH_CRITERIA(ID) VALUES(matchCriteriaId);
-		INSERT INTO ACTIVITYDB.SIMPLE_MATCH(ID, MATCHFIELD, MATCHVALUE, EVENT_MTCH_CRI_ID) VALUES(ACTIVITYDB.AM_SIMPLE_MATCH_ID_SEQ.NEXTVAL,'domain', 'ehmp-activity', matchCriteriaId);
+		INSERT INTO ACTIVITYDB.SIMPLE_MATCH(ID, MATCHFIELD, MATCHVALUE, EVENT_MTCH_CRI_ID) VALUES(ACTIVITYDB.AM_SIMPLE_MATCH_ID_SEQ.NEXTVAL,'domain', 'ehmp-order', matchCriteriaId);
 		INSERT INTO ACTIVITYDB.SIMPLE_MATCH(ID, MATCHFIELD, MATCHVALUE, EVENT_MTCH_CRI_ID) VALUES(ACTIVITYDB.AM_SIMPLE_MATCH_ID_SEQ.NEXTVAL,'subDomain', 'laboratory', matchCriteriaId);
 		INSERT INTO ACTIVITYDB.SIMPLE_MATCH(ID, MATCHFIELD, MATCHVALUE, EVENT_MTCH_CRI_ID) VALUES(ACTIVITYDB.AM_SIMPLE_MATCH_ID_SEQ.NEXTVAL,'data.statusCode', statusCode, matchCriteriaId);
 
@@ -1476,9 +1499,6 @@ BEGIN
   	ELSE
 	    SELECT LISTENER_ID INTO listenerId FROM ACTIVITYDB.AM_EVENTLISTENER WHERE EVENT_ACTION_SCOPE = 'Instantiation' AND NAME = 'Lab Order Initiation';
 	    SELECT EVENT_MTCH_CRITERIA_ID INTO matchCriteriaId FROM ACTIVITYDB.AM_EVENTLISTENER WHERE LISTENER_ID = listenerId;
-	    UPDATE ACTIVITYDB.SIMPLE_MATCH
-	      SET MATCHVALUE = 'ehmp-activity'
-	    WHERE EVENT_MTCH_CRI_ID = matchCriteriaId AND MATCHFIELD = 'domain' AND MATCHVALUE = 'ehmp-order';
 
 	    SELECT EVENT_MTCH_ACTION_ID INTO matchActionId FROM ACTIVITYDB.AM_EVENTLISTENER WHERE LISTENER_ID = listenerId;
 	    UPDATE ACTIVITYDB.EVENT_MATCH_ACTION
@@ -1490,5 +1510,222 @@ BEGIN
 			INSERT INTO ACTIVITYDB.SIMPLE_MATCH(ID, MATCHFIELD, MATCHVALUE, EVENT_MTCH_CRI_ID) VALUES(ACTIVITYDB.AM_SIMPLE_MATCH_ID_SEQ.NEXTVAL,'data.statusCode', statusCode, matchCriteriaId);
 	    END IF;
 	END IF;
+END;
+/
+
+-------------------------------------------------------------------
+-- DDL for Index IDX_TASKINSTANCE_STATUSID
+-------------------------------------------------------------------
+DECLARE
+  sql_statement VARCHAR2(4000);
+BEGIN
+  sql_statement := 'CREATE INDEX ACTIVITYDB.IDX_TASKINSTANCE_STATUSID ON ACTIVITYDB.Am_TaskInstance (STATUSID)';
+  EXECUTE IMMEDIATE sql_statement;
+
+  EXCEPTION
+	WHEN OTHERS THEN
+	  IF SQLCODE = -955 THEN
+	    NULL; -- suppresses ORA-00955 exception
+	  ELSE
+	    RAISE;
+	  END IF;
+END;
+/
+-------------------------------------------------------------------
+-- DDL for Index IDX_TASKINST_PROCESSINSTANCEID
+-------------------------------------------------------------------
+DECLARE
+  sql_statement VARCHAR2(4000);
+BEGIN
+  sql_statement := 'CREATE INDEX ACTIVITYDB.IDX_TASKINST_PROCESSINSTANCEID ON ACTIVITYDB.Am_TaskInstance (PROCESSINSTANCEID)';
+  EXECUTE IMMEDIATE sql_statement;
+
+  EXCEPTION
+	WHEN OTHERS THEN
+	  IF SQLCODE = -955 THEN
+	    NULL; -- suppresses ORA-00955 exception
+	  ELSE
+	    RAISE;
+	  END IF;
+END;
+/
+-------------------------------------------------------------------
+-- DDL for Index IDX_TASKINSTANCE_ICN
+-------------------------------------------------------------------
+DECLARE
+  sql_statement VARCHAR2(4000);
+BEGIN
+  sql_statement := 'CREATE INDEX ACTIVITYDB.IDX_TASKINSTANCE_ICN ON ACTIVITYDB.Am_TaskInstance (ICN)';
+  EXECUTE IMMEDIATE sql_statement;
+
+  EXCEPTION
+	WHEN OTHERS THEN
+	  IF SQLCODE = -955 THEN
+	    NULL; -- suppresses ORA-00955 exception
+	  ELSE
+	    RAISE;
+	  END IF;
+END;
+/
+-------------------------------------------------------------------
+-- DDL for Index IDX_TASKINSTANCE_EARLIESTDATE
+-------------------------------------------------------------------
+DECLARE
+  sql_statement VARCHAR2(4000);
+BEGIN
+  sql_statement := 'CREATE INDEX ACTIVITYDB.IDX_TASKINSTANCE_EARLIESTDATE ON ACTIVITYDB.AM_TASKINSTANCE (EARLIESTDATE)';
+  EXECUTE IMMEDIATE sql_statement;
+
+  EXCEPTION
+	WHEN OTHERS THEN
+	  IF SQLCODE = -955 THEN
+	    NULL; -- suppresses ORA-00955 exception
+	  ELSE
+	    RAISE;
+	  END IF;
+END;
+/
+-------------------------------------------------------------------
+-- DDL for Index IDX_TASKROUTE_TASKINSTANCEID
+-------------------------------------------------------------------
+DECLARE
+  sql_statement VARCHAR2(4000);
+BEGIN
+  sql_statement := 'CREATE INDEX ACTIVITYDB.IDX_TASKROUTE_TASKINSTANCEID ON ACTIVITYDB.Am_TaskRoute (TASKINSTANCEID)';
+  EXECUTE IMMEDIATE sql_statement;
+
+  EXCEPTION
+	WHEN OTHERS THEN
+	  IF SQLCODE = -955 THEN
+	    NULL; -- suppresses ORA-00955 exception
+	  ELSE
+	    RAISE;
+	  END IF;
+END;
+/
+-------------------------------------------------------------------
+-- DDL for Index IDX_TASKROUTE_TEAM
+-------------------------------------------------------------------
+DECLARE
+  sql_statement VARCHAR2(4000);
+BEGIN
+  sql_statement := 'CREATE INDEX ACTIVITYDB.IDX_TASKROUTE_TEAM ON ACTIVITYDB.AM_TASKROUTE (TEAM)';
+  EXECUTE IMMEDIATE sql_statement;
+
+  EXCEPTION
+	WHEN OTHERS THEN
+	  IF SQLCODE = -955 THEN
+	    NULL; -- suppresses ORA-00955 exception
+	  ELSE
+	    RAISE;
+	  END IF;
+END;
+/
+-------------------------------------------------------------------
+-- DDL for Index IDX_TASKROUTE_FACILITY
+-------------------------------------------------------------------
+DECLARE
+  sql_statement VARCHAR2(4000);
+BEGIN
+  sql_statement := 'CREATE INDEX ACTIVITYDB.IDX_TASKROUTE_FACILITY ON ACTIVITYDB.AM_TASKROUTE (FACILITY)';
+  EXECUTE IMMEDIATE sql_statement;
+
+  EXCEPTION
+	WHEN OTHERS THEN
+	  IF SQLCODE = -955 THEN
+	    NULL; -- suppresses ORA-00955 exception
+	  ELSE
+	    RAISE;
+	  END IF;
+END;
+/
+-------------------------------------------------------------------
+-- DDL for Index IDX_EL_EVENT_MTCH_CRITERIA_ID
+-------------------------------------------------------------------
+DECLARE
+  sql_statement VARCHAR2(4000);
+BEGIN
+  sql_statement := 'CREATE INDEX ACTIVITYDB.IDX_EL_EVENT_MTCH_CRITERIA_ID ON ACTIVITYDB.AM_EVENTLISTENER (EVENT_MTCH_CRITERIA_ID)';
+  EXECUTE IMMEDIATE sql_statement;
+
+  EXCEPTION
+	WHEN OTHERS THEN
+	  IF SQLCODE = -955 THEN
+	    NULL; -- suppresses ORA-00955 exception
+	  ELSE
+	    RAISE;
+	  END IF;
+END;
+/
+-------------------------------------------------------------------
+-- DDL for Index IDX_EMA_EVENT_MTCH_INST_ID
+-------------------------------------------------------------------
+DECLARE
+  sql_statement VARCHAR2(4000);
+BEGIN
+  sql_statement := 'CREATE INDEX ACTIVITYDB.IDX_EMA_EVENT_MTCH_INST_ID ON ACTIVITYDB.EVENT_MATCH_ACTION (EVENT_MTCH_INST_ID)';
+  EXECUTE IMMEDIATE sql_statement;
+
+  EXCEPTION
+	WHEN OTHERS THEN
+	  IF SQLCODE = -955 THEN
+	    NULL; -- suppresses ORA-00955 exception
+	  ELSE
+	    RAISE;
+	  END IF;
+END;
+/
+-------------------------------------------------------------------
+-- DDL for Index IDX_SM_EVENT_MTCH_CRI_ID
+-------------------------------------------------------------------
+DECLARE
+  sql_statement VARCHAR2(4000);
+BEGIN
+  sql_statement := 'CREATE INDEX ACTIVITYDB.IDX_SM_EVENT_MTCH_CRI_ID ON ACTIVITYDB.SIMPLE_MATCH (EVENT_MTCH_CRI_ID)';
+  EXECUTE IMMEDIATE sql_statement;
+
+  EXCEPTION
+	WHEN OTHERS THEN
+	  IF SQLCODE = -955 THEN
+	    NULL; -- suppresses ORA-00955 exception
+	  ELSE
+	    RAISE;
+	  END IF;
+END;
+/
+-------------------------------------------------------------------
+-- DDL for Index IDX_SM_LOWER_MATCHFIELD
+-------------------------------------------------------------------
+DECLARE
+  sql_statement VARCHAR2(4000);
+BEGIN
+  sql_statement := 'CREATE INDEX ACTIVITYDB.IDX_SM_LOWER_MATCHFIELD ON ACTIVITYDB.SIMPLE_MATCH (LOWER(MATCHFIELD))';
+  EXECUTE IMMEDIATE sql_statement;
+
+  EXCEPTION
+	WHEN OTHERS THEN
+	  IF SQLCODE = -955 THEN
+	    NULL; -- suppresses ORA-00955 exception
+	  ELSE
+	    RAISE;
+	  END IF;
+END;
+/
+-------------------------------------------------------------------
+-- DDL to drop Index IDX_MATCH_VALUE
+-------------------------------------------------------------------
+BEGIN
+  FOR idx IN (SELECT INDEX_NAME, OWNER FROM ALL_INDEXES WHERE TABLE_OWNER = 'ACTIVITYDB' and INDEX_NAME = 'IDX_SIMPLE_MATCH')
+  LOOP
+    EXECUTE IMMEDIATE 'DROP INDEX ' || idx.OWNER || '.' || idx.INDEX_NAME;
+  END LOOP;
+
+  EXCEPTION
+  	WHEN OTHERS THEN
+    IF SQLCODE = -955 THEN
+      NULL; -- suppresses ORA-00955 exception
+    ELSE
+      RAISE;
+    END IF;
 END;
 /

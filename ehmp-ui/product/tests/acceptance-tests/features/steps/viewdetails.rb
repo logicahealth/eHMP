@@ -7,17 +7,25 @@ end
 
 Then(/^EHMP Data Source model is displayed with following header$/) do |table|
   @ehmp = PobViewDetails.new
-  @ehmp.wait_for_btn_viewdetails_mysite
-  @ehmp.wait_for_btn_viewdetails_allva
-  @ehmp.wait_for_btn_viewdetails_dod
-  @ehmp.wait_for_btn_viewdetails_communities
-  @ehmp.wait_for_btn_viewdetails_communities
-  expect(@ehmp).to have_btn_viewdetails_mysite
-  expect(@ehmp).to have_btn_viewdetails_allva
-  expect(@ehmp).to have_btn_viewdetails_dod
-  expect(@ehmp).to have_btn_viewdetails_communities
-  expect(@ehmp).to have_btn_viewdetails_close
-  @ehmp.wait_for_hdr_heading_source
+  max_attempt = 2
+  begin
+    @ehmp.wait_for_btn_viewdetails_mysite
+    @ehmp.wait_for_btn_viewdetails_allva
+    @ehmp.wait_for_btn_viewdetails_dod
+    @ehmp.wait_for_btn_viewdetails_communities
+    @ehmp.wait_for_btn_viewdetails_communities
+    expect(@ehmp).to have_btn_viewdetails_mysite
+    expect(@ehmp).to have_btn_viewdetails_allva
+    expect(@ehmp).to have_btn_viewdetails_dod
+    expect(@ehmp).to have_btn_viewdetails_communities
+    expect(@ehmp).to have_btn_viewdetails_close
+    @ehmp.wait_for_hdr_heading_source
+  rescue Selenium::WebDriver::Error::StaleElementReferenceError => stale_element
+    max_attempt -= 1
+    raise stale_element if max_attempt <= 0
+    retry
+  end
+
   max_attempt = 4
   begin
     table.rows.each do |headers|

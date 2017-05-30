@@ -34,7 +34,13 @@
         "1004": "Missing name.full parameter",
         "1005": "Missing last5 parameter",
         "1006": "Missing pid parameter",
-        "1007": "Invalid Pid. Please pass either ICN or Primary Site ID."
+        "1007": "Invalid Pid. Please pass either ICN or Primary Site ID.",
+        "1008": "Query parameters must not conflict with body fields. All query parameters must be present as body fields.",
+        "1009": "This resource must be accessed with a POST request and an X-HTTP-Method-Override request header",
+        "1010": "This resource must be accessed with a POST request and the X-HTTP-Method-Override: GET request header",
+        "1011": "This resource must be accessed with a POST request and the X-HTTP-Method-Override: PUT request header",
+        "1012": "This resource must be accessed with a POST request and the X-HTTP-Method-Override: DELETE request header",
+        "1013": "This resource must be accessed with a POST request and the X-HTTP-Method-Override: PATCH request header"
     },
     "401": {
         "1000": "Unauthorized",
@@ -70,7 +76,20 @@
         "1003": "Could not locate session to end",
         "1004": "Could not locate session to refresh",
         "1005": "Could not retrieve the requested configuration",
-        "1006": "Could not save tracker information to external server"
+        "1006": "Could not save tracker information to external server",
+        "1007": "Error saving incident file",
+        "1008": "Error saving incident file. Server misconfiguration. Incident saved in resource server log.",
+        "1009": "Error saving incident file. Internal server directory permission error. Incident saved in resource server log.",
+        "1010": "Error saving incident file. Internal server file permission error. Incident saved in resource server log.",
+        "1011": "Error saving incident file. Internal server execution error. Incident saved in resource server log.",
+        "1012": "Error saving incident file. NFS export not mounted. Incident saved in resource server log.",
+        "1013": "Error gathering sync meta stamp for incident file. Incident file saved anyway.",
+        "1014": "Error gathering sync status for incident file. Incident file saved anyway.",
+        "1015": "Error sending incident notification email. Invalid server email configuration: missing \"to\" and \"from\". Incident file saved anyway.",
+        "1016": "Error sending incident notification email. Recipient rejected email. Incident file saved anyway.",
+        "1017": "Error sending incident notification email. Incident file saved anyway.",
+        "1018": "Error sending incident notification email. Invalid server email configuration: missing \"to\". Incident file saved anyway.",
+        "1019": "Error sending incident notification email. Invalid server email configuration: missing \"from\". Incident file saved anyway."
     },
     "502": {
         "1000": "Bad Gateway"

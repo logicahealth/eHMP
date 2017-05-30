@@ -8,7 +8,7 @@ var validate = require('./../../utils/validation-util');
 var http = rdk.utils.http;
 var locationUtil = rdk.utils.locationUtil;
 
-var ITERATEE_LIMIT = 5;
+var ITERATE_LIMIT = 5;
 var CLINIC_LIST_RPC = 'ORWU CLINLOC';
 var CLINIC_LOCATION_TYPE = '';
 var RPC_ELEMENT_DELIMITER = '\r\n';
@@ -43,16 +43,16 @@ var SEARCH_DIRECTION = 1;
  * would need to be coming back to a pick list before you would ever run into an issue (something that would never happen).
  *
  * @param {object} logger The logger
- * @param {object} configuration This contains the information necessary to connect to the RPC and JDS.
+ * @param {object} rpcClient The rpc client which will be used to fetch the original list of clinics
+ * @param {object} jdsOptions Contains the information necessary to connect to jds
  * @param {array} retValue An array that will be populated by the recursive function - this array will be passed to the callback.
  * @param {string} searchString The location to start returning data from - call with an empty String to retrieve all of the data.
  * @param {function} callback This will be called with the array of data retrieved from multiple calls to the RPC (or if there's an error).
  * @param {object} params Object which can contain optional and/or required parameters.
  */
 
-function callRpcRecursively(logger, configuration, retValue, searchString, callback, params) {
+function callRpcRecursively(logger, rpcClient, jdsOptions, retValue, searchString, callback, params) {
     var site = _.get(params, 'site');
-    var rpcClient = rpcClientFactory.getClient(logger, configuration);
 
     rpcClient.execute(CLINIC_LIST_RPC, searchString, SEARCH_DIRECTION, function(err, rpcData) {
         if (err) {
@@ -63,47 +63,7 @@ function callRpcRecursively(logger, configuration, retValue, searchString, callb
         var clinics = [];
 
         // For each clinic returned by the RPC, call JDS to retrieve the mixed-case location name
-        async.eachLimit(clinicsCollection, ITERATEE_LIMIT, function callJDS(clinic, jdsCallback) {
-            logger.debug({
-                clinic: clinic
-            });
-            var clinicFields = clinic.split(RPC_FIELD_DELIMITER);
-            var clinicIen = clinicFields[0];
-            var clinicUid = locationUtil.getLocationUid(site, CLINIC_LOCATION_TYPE, clinicIen);
-
-            var jdsOptions = _.extend({}, configuration.jdsServer, {
-                url: '/data/' + clinicUid,
-                timeout: 120000,
-                logger: logger,
-                json: true
-            });
-
-            http.get(jdsOptions, function processJDSResponse(jdsError, jdsResponseCode, jdsResponse) {
-                if (jdsError) {
-                    logger.debug({error: jdsError}, 'JDS returned an error');
-                    return jdsCallback(jdsError);
-                }
-
-                if (_.isObject(jdsResponse)) {
-                    if (jdsResponse.error) {
-                        logger.debug({error: jdsResponse.error}, 'The JDS response object contained an error');
-                        return jdsCallback(jdsResponse.error);
-                    }
-
-                    if (jdsResponse.data && jdsResponse.data.items) {
-                        var jdsClinic = jdsResponse.data.items[0];
-                        clinics.push({
-                            displayName: jdsClinic.displayName,
-                            name: jdsClinic.name,
-                            uid: jdsClinic.uid
-                        });
-                        return jdsCallback();
-                    }
-                    return jdsCallback('The JDS response was not formatted as expected.');
-                }
-                return jdsCallback('JDS response was not a JSON object.');
-            });
-        }, function (err) {
+        async.eachLimit(clinicsCollection, ITERATE_LIMIT, module.exports.getClinicFromJds.bind(this, logger, site, clinics, jdsOptions), function(err) {
             if (err) {
                 callback(err);
             }
@@ -114,25 +74,107 @@ function callRpcRecursively(logger, configuration, retValue, searchString, callb
             }
 
             var callAgain = false;
-            if (clinics.length >= MAX_RPC_RESULTS_RETURNED) {
+
+            if (clinicsCollection.length >= MAX_RPC_RESULTS_RETURNED) {
                 callAgain = true;
             }
 
             retValue = retValue.concat(clinics);
 
             if (callAgain) {
-                callRpcRecursively(logger, configuration, retValue, localStartName, callback, params);
+                callRpcRecursively(logger, rpcClient, jdsOptions, retValue, localStartName, callback, params);
                 return;
             }
 
+
             // Ensure list is ordered after asyncronous calls.
             retValue = _.sortBy(retValue, 'displayName');
+
             callback(null, retValue);
         });
     });
 }
+
+/**
+ *  Parses the rpc response and converts it to a jds query.
+ *
+ * @param {object} logger The logger
+ * @param {string} site The site at which the RPC was called to populate the list of clinics
+ * @param {array} clinicList Contains the list of clinics to be sent to the client
+ * @param {object} jdsOptions Contains the information necessary to connect to jds
+ * @param {string} clinic The clinic to fetch from jds
+ * @param {function} callback This will signal t`he successful completion or error of the function
+ */
+
+function getClinicFromJds(logger, site, clinicList, jdsOptions, clinic, jdsCallback) {
+    logger.debug({
+        clinic: clinic
+    });
+    var clinicFields = clinic.split(RPC_FIELD_DELIMITER);
+    var clinicIen = clinicFields[0];
+    var clinicUid = locationUtil.getLocationUid(site, CLINIC_LOCATION_TYPE, clinicIen);
+    jdsOptions.url = '/data/' + clinicUid;
+
+    http.get(jdsOptions, processJDSResponse.bind(null, logger, clinicList, jdsCallback));
+}
+
+/**
+ * Gets the displayName, name, and uid of a clinic from its corresponding JDS object.  If the object is found,
+ * it will be pushed to the list of clinics passed to this function.  If it is not found, nothing will be added to the response.
+ *
+ * @param {object} logger The logger
+ * @param {array} clinicList Contains the list of clinics to be sent to the client
+ * @param {function} callback This will signal the successful completion or error of the function
+ * @param {object} jdsError The error response from jds
+ * @param {object} jdsResponseCode The response code from jds
+ * @param {object} jdsResponse The response from jds
+ */
+
+function processJDSResponse(logger, clinicList, jdsCallback, jdsError, jdsResponseCode, jdsResponse) {
+
+    if (jdsError) {
+        logger.debug({
+            error: jdsError
+        }, 'JDS returned an error');
+        return jdsCallback(jdsError);
+    }
+    if (_.isObject(jdsResponse)) {
+        if (jdsResponse.error) {
+            logger.debug({
+                error: jdsResponse.error
+            }, 'The JDS response object contained an error');
+            return jdsCallback();
+        }
+
+        if (jdsResponse.data && jdsResponse.data.items) {
+            var jdsClinic = jdsResponse.data.items[0];
+
+            clinicList.push({
+                displayName: jdsClinic.displayName,
+                name: jdsClinic.name,
+                uid: jdsClinic.uid
+            });
+
+            return jdsCallback();
+        }
+        return jdsCallback('The JDS response was not formatted as expected.');
+    }
+    return jdsCallback('JDS response was not a JSON object.');
+}
+
 module.exports.fetch = function(logger, configuration, callback, params) {
     var retValue = [];
     var initialSearchString = '';
-    callRpcRecursively(logger, configuration, retValue, initialSearchString, callback, params);
+
+    var jdsOptions = _.extend({}, configuration.jdsServer, {
+        timeout: 120000,
+        logger: logger,
+        json: true
+    });
+
+    var rpcClient = rpcClientFactory.getClient(logger, configuration);
+    callRpcRecursively(logger, rpcClient, jdsOptions, retValue, initialSearchString, callback, params);
 };
+module.exports.callRpcRecursively = callRpcRecursively;
+module.exports.processJDSResponse = processJDSResponse;
+module.exports.getClinicFromJds = getClinicFromJds;

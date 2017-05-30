@@ -71,5 +71,5 @@ Scenario: An authorized user can access DoD Outpatient Medications and see stand
       | codes.display | EMPTY    |
   
 
-#  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
+#  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS  E/JLV+Terminology+Handling
    

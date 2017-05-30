@@ -28,11 +28,11 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="gender" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="ICN" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="patientIens" type="{http://webservice.vds.med.va.gov/}keyValuePair" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="patientIens" type="{http://webservice.vds.URL       /}keyValuePair" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="SSN" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sensitive" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="sponsorSSN" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="vistaSites" type="{http://webservice.vds.med.va.gov/}site" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="vistaSites" type="{http://webservice.vds.URL       /}site" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "patient", namespace = "http://webservice.vds.med.va.gov/", propOrder = {
+@XmlType(name = "patient", namespace = "http://webservice.vds.URL       /", propOrder = {
     "age",
     "ahltaUnitNumber",
     "dob",

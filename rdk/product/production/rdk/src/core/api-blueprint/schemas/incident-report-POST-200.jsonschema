@@ -1,0 +1,18 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Incident report creation response",
+	"description": "",
+	"type": "object",
+	"required": [
+		"incidentReportId",
+		"status"
+	],
+	"properties": {
+		"incidentReportId": {
+			"type": "string"
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

@@ -22195,4 +22195,3 @@ function (esprima, parse, logger, lang) {
          * no weird recursively referenced stuff.
          * @param  {Object} obj        the object to convert
          * @param  {Object} options    options object with the following values:
-        

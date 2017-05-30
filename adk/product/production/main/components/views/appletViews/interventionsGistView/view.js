@@ -22,6 +22,7 @@ define([
     var baseDisplayApplet = BaseDisplayApplet;
 
     var InterventionsGistView = BaseDisplayApplet.extend({
+        AppletView: InterventionsView,
         initialize: function(options) {
             this._base = baseDisplayApplet.prototype;
             if (!this.options.appletConfig) {

@@ -20,7 +20,7 @@ var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
 var config = require(global.VX_ROOT + 'worker-config');
 
 var host = require(global.VX_INTTESTS + 'test-config');
-var port = 5001;
+var port = PORT;
 var tubename = 'sync';
 
 var osyncJobUtils = require(global.OSYNC_UTILS + 'osync-job-utils');
@@ -30,18 +30,18 @@ var config = require(global.VX_ROOT + 'worker-config');
 var mockConfig = {
     pjds: _.defaults(config.pjds, {
         protocol: 'http',
-        host: '10.2.2.110',
-        port: 9080
+        host: 'IP        ',
+        port: PORT
     }),
     delay: 5,
     rpcContext: 'HMP SYNCHRONIZATION CONTEXT',
     vistaSites: _.defaults(config.vistaSites, {
         '9E7A': {
             'name': 'panorama',
-            'host': '10.2.2.101',
-            'port': 9210,
-            'accessCode': 'ep1234',
-            'verifyCode': 'ep1234!!',
+            'host': 'IP        ',
+            'port': PORT,
+            'accessCode': 'REDACTED',
+            'verifyCode': 'REDACTED',
             'localIP': '127.0.0.1',
             'stationNumber': 500,
             'localAddress': 'localhost',
@@ -50,10 +50,10 @@ var mockConfig = {
         },
         'C877': {
             'name': 'kodak',
-            'host': '10.2.2.102',
-            'port': 9210,
-            'accessCode': 'ep1234',
-            'verifyCode': 'ep1234!!',
+            'host': 'IP        ',
+            'port': PORT,
+            'accessCode': 'REDACTED',
+            'verifyCode': 'REDACTED',
             'localIP': '127.0.0.1',
             'stationNumber': 500,
             'localAddress': 'localhost',

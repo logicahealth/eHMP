@@ -1,19 +1,4 @@
-//----------------------------------------
-// Name:        Orders Applet
-// Version:     1.0
-// Date:        2014-10-20
-// Team:        Andromeda
-// Description: Display orders grid on cover sheet, single page, and modal window.
-// Modified:    2014-11-01
-//              1. Change filter buttons to drop-down menu
-//              2. Remove nurse, chart, clerk columns
-//              3. Add order date as first column
-//              4. Default sort by order type, order date descending
-//              5. Use global date view for date filtering
-//              6. Use sessionStorage to persist the search text
-//              2014-11-15
-//              1. Use sessionStorage to persist active menu selection
-//----------------------------------------
+/* global ADK, Backgrid */
 define([
     'main/ADK',
     'underscore',
@@ -30,14 +15,14 @@ define([
     'app/applets/orders/tray/labs/trayUtils',
     'app/applets/orders/tray/labs/trayView',
     'app/applets/ordersearch/tray/trayView'
-], function(ADK, _, Backbone, Marionette, moment, Handlebars, ModalViewUtils,
-    ToolBarView, ordersFilterTemplate, DetailCommunicator, orderUtil,
-    DisplayGroupManifest, LabOrderTrayUtils, trayView, OrderSearchTrayView) {
+], function (ADK, _, Backbone, Marionette, moment, Handlebars, ModalViewUtils,
+             ToolBarView, ordersFilterTemplate, DetailCommunicator, orderUtil,
+             DisplayGroupManifest, LabOrderTrayUtils, trayView, OrderSearchTrayView) {
 
     'use strict';
     var summaryColumns, flagColumn, shortSummaryColumn, fullScreenColumns, resourceTitle, _super, GridApplet,
-        AppletLayoutView, applet, statusColumn, nameColumn, enteredColumn, orderType, facilityCodeColumn, providerNameColumn,
-        summaryColumn, orderTypeColumn, startColumn, stopColumn, nurseColumn, clerkColumn, chartColumn, summaryOrderType;
+        AppletLayoutView, applet, statusColumn, enteredColumn, orderType, facilityCodeColumn, providerNameColumn,
+        summaryColumn, startColumn, stopColumn, summaryOrderType;
 
     var DATE_FORMAT = 'YYYYMMDDHHmmSS';
     var DATE_LENGTH = DATE_FORMAT.length;
@@ -111,12 +96,6 @@ define([
         template: Handlebars.compile('{{facilityMoniker}}'),
         hoverTip: 'orders_facility'
     };
-    nameColumn = {
-        name: 'name',
-        label: 'Order',
-        cell: 'string',
-        hoverTip: 'orders_order'
-    };
     summaryColumn = {
         name: 'summary',
         label: 'Order',
@@ -158,21 +137,6 @@ define([
         sortType: 'cycle',
         template: Handlebars.compile('{{formatDate stop "MM/DD/YYYY"}}'),
         hoverTip: 'orders_stopdate'
-    };
-    nurseColumn = {
-        name: 'nurse',
-        label: 'Nurse',
-        cell: 'string'
-    };
-    clerkColumn = {
-        name: 'clerk',
-        label: 'Clerk',
-        cell: 'string'
-    };
-    chartColumn = {
-        name: 'chart',
-        label: 'Chart',
-        cell: 'string'
     };
 
     //Data Grid Columns - summary for coversheet, fullscreen for single page
@@ -278,42 +242,38 @@ define([
     });
     AppletLayoutView = GridApplet.extend({
         className: 'app-size-2',
-        initialize: function(options) {
-            var toolBarView, onClickRow, sharedModel, sharedModelChanged, filterCollection;
-            var collection, fetchOptions, gridView;
+        fetchDisplayGroups: function (parent, node) {
+            if (node.shortName === parent) {
+                return this.getDisplayGroupChildren(node, []);
+            }
+            var i, children = node.members,
+                child, found;
+            for (i = 0; i < children.length; i++) {
+                child = children[i];
+                found = this.fetchDisplayGroups(parent, child);
+                if (found) {
+                    return found;
+                }
+            }
+        },
+        getDisplayGroupChildren: function (parent, children) {
+            var obj = parent.members,
+                idx = 0;
+            children.push(parent.shortName);
+            while (obj.length > 0 && idx < obj.length) {
+                this.getDisplayGroupChildren(obj[idx], children);
+                idx++;
+            }
+            return children;
+        },
+
+        initialize: function (options) {
+            var toolBarView, onClickRow, sharedModelChanged, filterCollection;
+            var collection, fetchOptions;
             var exclude, displayGroup, displayGroupList;
-            var dataGridOptions = {};
-            var addPermission = 'add-lab-order';
-
-            //fetches all child displayGroups starting from parent
-            var fetchDisplayGroups = function(parent, node) {
-                if (node.shortName === parent) {
-                    return getDisplayGroupChildren(node, []);
-                }
-                var i, children = node.members,
-                    child, found;
-                for (i = 0; i < children.length; i++) {
-                    child = children[i];
-                    found = fetchDisplayGroups(parent, child);
-                    if (found) {
-                        return found;
-                    }
-                }
-            };
-
-            var getDisplayGroupChildren = function(parent, children) {
-                var obj = parent.members,
-                    idx = 0;
-                children.push(parent.shortName);
-                while (obj.length > 0 && idx < obj.length) {
-                    getDisplayGroupChildren(obj[idx], children);
-                    idx++;
-                }
-                return children;
-            };
+            var dataGridOptions;
 
             fetchOptions = {
-                resourceTitle: resourceTitle,
                 cache: true,
                 allowAbort: true,
                 pageable: true
@@ -328,19 +288,17 @@ define([
             }
 
             displayGroup = ADK.SessionStorage.getAppletStorageModel(this.expandedAppletId, 'activeMenuItem', true, this.parentWorkspace) || 'ALL';
-            displayGroupList = fetchDisplayGroups(displayGroup, DisplayGroupManifest);
+            displayGroupList = this.fetchDisplayGroups(displayGroup, DisplayGroupManifest);
             if (this.sharedModel === undefined) {
                 this.sharedModel = new SharedModel({
                     displayGroup: displayGroup
                 });
             }
-            sharedModelChanged = function(model) {
-                var self = this;
+            sharedModelChanged = function (model) {
                 displayGroup = model.get('displayGroup');
-                displayGroupList = fetchDisplayGroups(displayGroup, DisplayGroupManifest);
-                var isOverrideGlobalDate = false;
-                this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
-                    self.dateRangeRefresh(ENTERED);
+                displayGroupList = this.fetchDisplayGroups(displayGroup, DisplayGroupManifest);
+                this.listenTo(ADK.Messaging, 'globalDate:selected', function () {
+                    this.dateRangeRefresh(ENTERED);
                 });
 
                 if (displayGroup !== 'ALL') {
@@ -368,12 +326,11 @@ define([
             } else {
                 exclude = ADK.SessionStorage.getAppletStorageModel(this.options.appletConfig.instanceId, 'excludeMenuItems', true, this.parentWorkspace);
             }
-            var isOverrideGlobalDate = false;
-            this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
+            this.listenTo(ADK.Messaging, 'globalDate:selected', function () {
                 self.dateRangeRefresh(ENTERED);
             });
-            filterCollection = function(collection) {
-                return collection.filter(function(model) {
+            filterCollection = function (collection) {
+                return collection.filter(function (model) {
                     if (model.get('childrenOrderUids')) { //filter parent orders (US14416)
                         return false;
                     }
@@ -394,7 +351,7 @@ define([
             };
             //set comparator based on view type 'summary' or 'expanded'
 
-            var _dateSort = function(order) {
+            var _dateSort = function (order) {
                 var _entered = order.get(ENTERED);
                 // Pad the end of the string with zeros
                 if (_entered !== DATE_LENGTH) {
@@ -412,7 +369,7 @@ define([
             } else if (this.columnsViewType === 'expanded') {
                 fetchOptions.collectionConfig = {
                     //sort the collection by order type ascending, and entered date descending
-                    comparator: function(order) {
+                    comparator: function (order) {
                         var kind = order.attributes.kind;
                         var uid = order.attributes.uid;
                         var dateEntered = moment(order.attributes.entered, 'YYYYMMDDHHmmssSSS');
@@ -423,12 +380,13 @@ define([
                 };
             }
 
-            fetchOptions.onSuccess = function(collection) {
+            fetchOptions.onSuccess = function (collection) {
                 if (displayGroup !== 'ALL') {
                     ADK.utils.filterCollectionByMultipleValues(collection, 'displayGroup', displayGroupList);
                 }
             };
-            collection = ADK.PatientRecordService.fetchCollection(fetchOptions);
+            collection = new ADK.UIResources.Fetch.Orders.AllOrders();
+            collection.fetchCollection(fetchOptions);
             toolBarView = new ToolBarView({
                 instanceId: options.appletConfig.instanceId,
                 collection: this.collection,
@@ -437,10 +395,9 @@ define([
                 expandedAppletId: this.expandedAppletId,
                 parentWorkspace: this.parentWorkspace
             });
-            gridView = this;
 
             //Row click event handler - display the Modal window
-            onClickRow = function(model, event, context) {
+            onClickRow = function (model, event, context) {
                 event.preventDefault();
                 _.defaults(context.options, {
                     hideNavigation: false
@@ -461,7 +418,7 @@ define([
                     format: "YYYYMMDD"
                 },
                 formattedFilterFields: {
-                    'entered': function(model, key) {
+                    'entered': function (model, key) {
                         var val = model.get(key);
                         val = val.replace(/(\d{4})(\d{2})(\d{2})/, '$2/$3/$1');
                         return val;
@@ -469,7 +426,7 @@ define([
                 }
             };
 
-             if (ADK.PatientRecordService.isPatientInPrimaryVista()) {
+            if (ADK.PatientRecordService.isPatientInPrimaryVista()) {
                 dataGridOptions.onClickAdd = LabOrderTrayUtils.launchLabForm;
             }
 
@@ -485,15 +442,15 @@ define([
             this.appletOptions = dataGridOptions;
 
             //add refreshGridView to messaging
-            this.listenTo(ADK.Messaging.getChannel('orders'), 'refreshGridView', function() {
+            this.listenTo(ADK.Messaging.getChannel('orders'), 'refreshGridView', function () {
                 this.refresh({});
             });
             _super.initialize.apply(this, arguments);
         },
-        onRender: function() {
+        onRender: function () {
             _super.onRender.apply(this, arguments);
         },
-        registerEventListeners: function() {
+        registerEventListeners: function () {
             this.listenTo(ADK.Messaging.getChannel('orders'), 'applet:refresh', this.refresh);
         }
     });

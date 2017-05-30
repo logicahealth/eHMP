@@ -1,42 +1,31 @@
+/* global ADK */
 define([
     'backbone',
     'marionette',
     'underscore',
-    'hbs!app/applets/narrative_lab_results_grid/modal/headerTemplate',
-    'app/applets/narrative_lab_results_grid/modal/modalView',
-    'app/applets/narrative_lab_results_grid/appletUiHelpers'
-], function(Backbone, Marionette, _, HeaderTemplate, modalView, AppletUiHelpersUndef) {
+    'hbs!app/applets/narrative_lab_results_grid/modal/headerTemplate'
+], function(Backbone, Marionette, _, HeaderTemplate) {
     'use strict';
 
-    //Modal Navigation Item View
+    //noinspection UnnecessaryLocalVariableJS
     var LabModalHeaderView = Backbone.Marionette.ItemView.extend({
         events: {
-            'click #labssPrevious, #labssNext': 'navigateModal',
-            'click #smClose': 'closeModal'
+            'click #labssNext': 'getNextModal',
+            'click #labssPrevious': 'getPrevModal'
         },
-        closeModal: function(e) {
-            modalView.resetSharedModalDateRangeOptions();
-        },
+        template: HeaderTemplate,
         initialize: function(){
             this.getModals();
         },
-        navigateModal: function(e) {
-            var $target = $(e.currentTarget),
-                id = $target.attr('id');
-            id === 'labssPrevious' ? this.getPrevModal() : this.getNextModal();
-        },
-        template: HeaderTemplate,
         onAttach: function() {
             this.checkIfModalIsEnd();
         },
         checkIfModalIsEnd: function() {
-            var next = _.indexOf(this.modals, this.model) + 1;
-            if (next >= this.modals.length) {
+            var next = _.indexOf(this.modals, this.model);
+            if (next + 1 >= this.modals.length) {
                 this.$el.closest('.modal').find('#labssNext').attr('disabled', true);
             }
-
-            next = _.indexOf(this.modals, this.model) - 1;
-            if (next < 0) {
+            if (next - 1 < 0) {
                 this.$el.closest('.modal').find('#labssPrevious').attr('disabled', true);
             }
         },
@@ -52,50 +41,37 @@ define([
         },
         getModals: function() {
             this.modals = [];
-            _.each(this.dataCollection.models, function(m, key) {
-
-                if (m.get('labs')) {
-                    var outterIndex = this.dataCollection.indexOf(m);
-                    _.each(m.get('labs').models, function(m2, key) {
-                        m2.set({
+            _.each(this.dataCollection.models, function(model) {
+                if (model.get('labs')) {
+                    var outerIndex = this.dataCollection.indexOf(model);
+                    _.each(model.get('labs').models, function(labModel) {
+                        labModel.set({
                             'inAPanel': true,
-                            'parentIndex': outterIndex,
-                            'parentModel': m
+                            'parentIndex': outerIndex,
+                            'parentModel': model
                         });
-                        this.modals.push(m2);
+                        this.modals.push(labModel);
 
-                    });
+                    }, this);
                 } else {
-                    this.modals.push(m);
+                    this.modals.push(model);
                 }
-
             }, this);
         },
         setNextPrevModal: function(model) {
-
-            if (this.showNavHeader) {
-                model.attributes.navHeader = true;
+            if (_.get(this, 'showNavHeader')) {
+                model.set('navHeader', true);
             }
-            if (model.get('inAPanel')) {
-                var tr = $('#data-grid-' + this.appletOptions.instanceID + ' > tbody>tr.selectable').eq(model.get('parentIndex'));
-                if (!tr.data('isOpen')) {
-                    tr.trigger('click');
-                }
-                $('#data-grid-' + this.appletOptions.instanceID + ' > tbody>tr.selectable').not(tr).each(function() {
-                    var $this = $(this);
-                    if ($this.data('isOpen')) {
-                        $this.trigger('click');
-                    }
-
-                });
-
+            var results = model.get('results') || {};
+            var resultUID = _.get(results, '[0].resultUid');
+            var channel = ADK.Messaging.getChannel('narrative_lab_results');
+            if (resultUID) {
+                return channel.trigger('showExternalModalView', resultUID, model, this.dataCollection, ADK.PatientRecordService.getCurrentPatient());
             }
-
-            var AppletUiHelper = require('app/applets/narrative_lab_results_grid/appletUiHelpers');
-            AppletUiHelper.getDetailView(model, null, this.appletOptions, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
+            channel.trigger('showErrorView', model, this.dataCollection);
         }
-
     });
+
     return LabModalHeaderView;
 
 });

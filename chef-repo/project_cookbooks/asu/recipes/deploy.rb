@@ -58,16 +58,25 @@ directory node[:asu][:base_dir] do
   recursive true
 end
 
-jds_node = find_node_by_role("jds", node[:stack])
+if find_optional_nodes_by_criteria(node[:stack], "role:jds_app_server").empty?
+  raise "No JDS App Server has been found, yet you attempted to point to a jds_app_server" unless node[:asu][:jds_app_server_ident].nil?
+  jds = find_node_by_role("jds", node[:stack])
+else
+  raise "JDS App Servers have been found in this environment, but a jds_app_server_ident was not set." if node[:asu][:jds_app_server_ident].nil?
+  jds = find_optional_node_by_criteria(node[:stack], "role:jds_app_server AND jds_app_server_ident:#{node[:asu][:jds_app_server_ident]}")
+  raise "JDS App Server #{node[:asu][:jds_app_server_ident]} not found in stack." if jds.nil?
+end
 
 template "#{node[:asu][:config_dir]}/application.properties" do
   source "asu.application.properties.erb"
   variables(
     :server_port => node[:asu][:server_port],
+    :management_port => node[:asu][:management_port],
     :refresh_interval => node[:asu][:refresh_interval],
-    :jds_ip => jds_node['ipaddress'],
-    :jds_port => jds_node['jds']['cache_listener_ports']['vxsync'],
-    :asu_ip => node['ipaddress']
+    :jds_ip => jds['ipaddress'],
+    :jds_port => jds['jds']['cache_listener_ports']['vxsync'],
+    :asu_ip => node['ipaddress'],
+    :tomcat => node[:asu][:tomcat]
   )
   notifies :restart, "service[#{node[:asu][:service]}]"
 end

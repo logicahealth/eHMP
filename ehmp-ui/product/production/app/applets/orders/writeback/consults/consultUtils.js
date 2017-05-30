@@ -104,18 +104,11 @@ define([
 
             var fetchOptions = {
                 pageable: false,
-                resourceTitle: 'enterprise-orderable-search',
                 cache: false,
-                onSuccess: callback.success,
-                viewModel: {
-                    parse: function(response) {
-                        response.value = response.label = response.name;
-                        return response;
-                    }
-                }
+                onSuccess: callback.success
             };
-
-            ADK.ResourceService.fetchCollection(fetchOptions);
+            var collection = new ADK.UIResources.Fetch.Orders.EnterpriseOrderables();
+            collection.fetchCollection(fetchOptions);
 
             return $deferred;
         },
@@ -185,6 +178,7 @@ define([
             var callback = {
                 success: function(collection, response) {
                     var obj = collection.at(0).toJSON();
+
                     self.model.set({
                         'orderableData': obj
                     }, {
@@ -209,7 +203,6 @@ define([
 
             var fetchOptions = {
                 pageable: false,
-                resourceTitle: 'enterprise-orderable-search',
                 cache: false,
                 criteria: {
                     name: self.model.get('consultName')
@@ -233,7 +226,8 @@ define([
                 }
             };
 
-            ADK.ResourceService.fetchCollection(fetchOptions);
+            var collection = new ADK.UIResources.Fetch.Orders.EnterpriseOrderables();
+            collection.fetchCollection(fetchOptions);
 
             function retrieveOrdersSuccess(collection, response, originalCollection) {
                 this.unBlockUI(); // jshint ignore:line
@@ -354,69 +348,72 @@ define([
             });
 
             var tasks = [];
+            var currentPatient = ADK.PatientRecordService.getCurrentPatient();
 
             var PostModel = Backbone.Model.extend({
-                url: '/resource/write-health-data/patient/' + ADK.PatientRecordService.getCurrentPatient().toJSON().pid + '/orders/save-draft-lab?',
+                url: '/resource/write-health-data/patient/'  + currentPatient.get('pid') + '/orders/save-draft-lab',
                 defaults: {
-                    "authorUid": consultUtils.getAuthorUID(),
-                    "data": {
-                        "availableLabTests": "",
-                        "labTestText": "",
-                        "collectionDate": "",
-                        "collectionType": "",
-                        "collectionSample": "",
-                        "specimen": "",
-                        "urgency": "",
-                        "urgencyText": self.model.get('urgency').toUpperCase(),
-                        "notificationDate": "",
-                        "pastDueDate": "",
-                        "collectionTime": "",
-                        "otherCollectionSample": "",
-                        "immediateCollectionDate": "",
-                        "immediateCollectionTime": "",
-                        "collectionDateTimePicklist": "",
-                        "howOften": "",
-                        "howLong": "",
-                        "otherSpecimen": "",
-                        "forTest": "",
-                        "doseDate": "",
-                        "doseTime": "",
-                        "drawDate": "",
-                        "drawTime": "",
-                        "orderComment": "",
-                        "anticoagulant": "",
-                        "sampleDrawnAt": "",
-                        "urineVolume": "",
-                        "additionalComments": "",
-                        "annotation": "",
-                        "problemRelationship": "",
-                        "activity": "",
-                        "isActivityEnabled": ""
+                    'authorUid': consultUtils.getAuthorUID(),
+                    'data': {
+                        'availableLabTests': '',
+                        'labTestText': '',
+                        'collectionDate': '',
+                        'collectionType': '',
+                        'collectionSample': '',
+                        'specimen': '',
+                        'urgency': '',
+                        'urgencyText': self.model.get('urgency').toUpperCase(),
+                        'notificationDate': '',
+                        'pastDueDate': '',
+                        'collectionTime': '',
+                        'otherCollectionSample': '',
+                        'immediateCollectionDate': '',
+                        'immediateCollectionTime': '',
+                        'collectionDateTimePicklist': '',
+                        'howOften': '',
+                        'howLong': '',
+                        'otherSpecimen': '',
+                        'forTest': '',
+                        'doseDate': '',
+                        'doseTime': '',
+                        'drawDate': '',
+                        'drawTime': '',
+                        'orderComment': '',
+                        'anticoagulant': '',
+                        'sampleDrawnAt': '',
+                        'urineVolume': '',
+                        'additionalComments': '',
+                        'annotation': '',
+                        'problemRelationship': '',
+                        'activity': '',
+                        'isActivityEnabled': ''
                     },
-                    "displayName": "",
-                    "domain": "ehmp-order",
-                    "ehmpState": "draft",
-                    "patientUid": ADK.PatientRecordService.getCurrentPatient().toJSON().uid,
-                    "subDomain": "laboratory",
-                    "visit": consultUtils.getVisitInfo(),
-                    "uid": "",
-                    referenceId: ""
-
+                    'displayName': '',
+                    'patientUid': currentPatient.get('uid'),
+                    'domain': 'ehmp-order',
+                    'ehmpState': 'draft',
+                    'subDomain': 'laboratory',
+                    'visit': consultUtils.getVisitInfo(),
+                    'uid': '',
+                    referenceId: ''
+                },
+                initialize: function() {
+                    if (currentPatient.has('acknowledged')) {
+                        this.set('_ack', 'true');
+                    }
                 }
             });
 
             _.each(orders, function(order) {
                 var updatedDefaultData = $.extend(true, {}, PostModel.prototype.defaults.data, {
-                    "availableLabTests": order.get('ien'),
-                    "labTestText": order.get('label'),
+                    'availableLabTests': order.get('ien'),
+                    'labTestText': order.get('label')
                 });
 
                 var postModel = new PostModel({
-                    "data": updatedDefaultData,
-                    "displayName": order.get('label'),
+                    'data': updatedDefaultData,
+                    'displayName': order.get('label')
                 });
-
-
 
                 var task = function(callback) {
                     postModel.save({}, {

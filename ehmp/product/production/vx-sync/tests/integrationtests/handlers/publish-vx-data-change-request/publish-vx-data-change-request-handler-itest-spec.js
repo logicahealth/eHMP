@@ -42,7 +42,7 @@ var job = {
 };
 
 var host = vx_sync_ip;
-var port = 5000;
+var port = PORT;
 
 describe('publish-vx-data-change-request-handler.js', function() {
 

@@ -100,16 +100,6 @@ deploymentId requires format GroupId:ArtifactId:Version
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### StartActivityEvent [POST {{{path}}}/startactivityevent]
-
-Start a new activity event
-
-+ Request JSON Message (application/json)
-
-+ Response 200 (application/json)
-
-:[Response 400]({{{common}}}/responses/400.md)
-
 ### Signal [POST {{{path}}}/signal]
 
 Send signal to an activity or deployment

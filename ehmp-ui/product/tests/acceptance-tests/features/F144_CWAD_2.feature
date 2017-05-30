@@ -1,5 +1,5 @@
 # Team Mercury
-@F144 @cwad   @reg1
+@F144 @cwad   @reg2
 Feature: F144-eHMP Viewer GUI - Crisis Notes, Warnings, Allergies, Directives (CWAD)
 The user should be able look at CWAD flags in patient header
 

@@ -6,10 +6,11 @@ define([
     'marionette',
     'underscore',
     'jquery',
+    'api/SessionStorage',
     'api/Messaging',
     'api/ResourceService',
     'api/PatientRecordService',
-], function(Backbone, Marionette, _, $, Messaging, ResourceService, PatientRecordService) {
+], function(Backbone, Marionette, _, $, SessionStorage, Messaging, ResourceService, PatientRecordService) {
     'use strict';
 
     var WorkspaceFilters = {};
@@ -25,9 +26,11 @@ define([
 
     var callOnDone = function(collection, appletInstanceId, onDone, context) {
         var applet = getAppletFromUdafJson(collection, appletInstanceId);
+        var filterSavedInSession = SessionStorage.getAppletStorageModel(appletInstanceId, 'filterText', true);
+        var filterCount = _.get(applet, 'filters.length', 0) + (_.isString(filterSavedInSession) ? filterSavedInSession.length : 0);
         var args = {
             applet: applet,
-            anyFilters: applet ? applet.filters.length > 0 : false
+            anyFilters: filterCount > 0
         };
         onDone.call(context || this, args);
     };

@@ -78,6 +78,7 @@ ADHOC(HMPDMINP,HMPFCNT,DFN) ; Add syncStart metastamp and syncStatus to unsolici
  ;
  ;DE4307 - if stamptime still doesn't exist then get from freshness
  I '+HMPDAT("STAMPTIME"),+$G(FILTER("freshnessDateTime")) S HMPDAT("STAMPTIME")=$$JSONDT^HMPUTILS(FILTER("freshnessDateTime"))
+ S @HMPA4JSN@("unsolicitedUpdate")=$S($G(FILTER("freshnessDateTime")):"true",1:"false") ;US18245
  ; build metastamp components
  S SUB="metaStamp"
  S X="" F  S X=$O(HMPID(X)) Q:X=""  S @HMPA4JSN@(SUB,X)=HMPID(X)  ; add pid, systemId, localId, icn
@@ -108,15 +109,19 @@ ADHOC(HMPDMINP,HMPFCNT,DFN) ; Add syncStart metastamp and syncStatus to unsolici
  ;
  ; do the merge
  F  S HMPSUB=$O(^TMP("HMP",$J,HMPSUB)) Q:'HMPSUB  D
- .N HMPX,HMPDATA
+ .N HMPX,HMPDATA,X
  .S LSTLN=LSTLN+1
+ . ;US18245
+ . S X="{""collection"":"""_HMPDOM_$S(DFN'="OPD":""""_$$PIDS^HMPDJFS(DFN),1:"")_",""seq"":1,""total"":1"
+ . S X=X_",""unsolicitedUpdate"":"_$S($G(FILTER("freshnessDateTime")):"true",1:"false")_","
+ . S X=X_"""object"":"
  .; If it is patient data add the wrapper with pid
- .I DFN'="OPD" S @HMPJSON@(LSTLN,.4)="{""collection"":"""_HMPDOM_""""_$$PIDS^HMPDJFS(DFN)_",""seq"":1,""total"":1,""object"":"_$S($G(ACT)="@":DELJSON,1:"")
+ .I DFN'="OPD" S @HMPJSON@(LSTLN,.4)=X_$S($G(ACT)="@":DELJSON,1:"")
  .; If it is operational data add the wrapper without pid
- .I DFN="OPD",$G(ACT)="@" S @HMPJSON@(LSTLN,.4)="{""collection"":"""_HMPDOM_""",""seq"":1,""total"":1,""object"":"_DELJSON ;;US5647
+ .I DFN="OPD",$G(ACT)="@" S @HMPJSON@(LSTLN,.4)=X_DELJSON ;;US5647
  .; If it is operational data and to be deleted
  .I DFN="OPD",$G(ACT)'="@"  D  ;US5859
- ..S @HMPJSON@(LSTLN,.4)="{""collection"":"""_HMPDOM_""",""seq"":1,""total"":1,""object"":"
+ ..S @HMPJSON@(LSTLN,.4)=X
  ..S HMPX="""stampTime"":"_QTE_$S($L($G(HMPDAT("DELDATE"))):HMPDAT("DELDATE"),1:HMPDAT("STAMPTIME"))_QTE_","
  ..S HMPDATA=^TMP("HMP",$J,HMPSUB,1)
  ..S ^TMP("HMP",$J,HMPSUB,1)="{"_HMPX_$P(HMPDATA,"{",2,999)

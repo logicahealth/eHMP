@@ -106,8 +106,8 @@ app.register('/fhir/medicationadministration', ROOT + '/src/fhir/medication-admi
 app.register('/fhir/medicationstatement', ROOT + '/src/fhir/medication-statement/medication-statement-resource');
 app.register('/fhir/patient/:id/medicationprescription', ROOT + '/src/fhir/medication-prescription/medication-prescription-resource');
 
-// FUTURE-TODO: Uncomment when resource is fully supported/tested end-to-end by system.
-// app.register('/fhir/communicationrequest', ROOT + '/src/fhir/communication-request/communication-request-resource');
+app.register('/fhir/communication', ROOT + '/src/fhir/communication/communication-resource');
+
 
 // Orderables
 app.register('/orderables', ROOT + '/src/resources/orderables/orderables-resource');
@@ -138,6 +138,12 @@ app.register('/shortcuts', ROOT + '/src/resources/shortcuts/shortcuts-resource')
 // Configuration endpoints
 app.register('/configuration', ROOT + '/src/resources/configuration/ehmp-configuration-resource');
 app.register('/tracker', ROOT + '/src/resources/tracker/tracker-resource');
+
+// Incident Reporting
+app.register('/incident-report', ROOT + '/src/resources/incident-report/incident-report-resource');
+
+//imaging
+app.register('/vix-image', ROOT + '/src/resources/vix-image/vix-image-resource');
 
 // TEST RESOURCE for Generic RPC Calls
 // DO NOT ENABLE IN PRODUCTION; IT IS A SECURITY RISK!

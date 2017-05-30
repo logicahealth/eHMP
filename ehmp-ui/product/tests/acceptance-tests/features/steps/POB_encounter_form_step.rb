@@ -1,8 +1,63 @@
+class EncounterFormActions
+  extend ::RSpec::Matchers
+  def self.select_encounter_location(encounter_location)
+    encounter_form = PobEncountersApplet.new
+    wait = Selenium::WebDriver::Wait.new(:timeout => 10)
+    encounter_form.wait_for_ddl_encounter_location
+    expect(encounter_form).to have_ddl_encounter_location
+    wait.until { encounter_form.fld_encounter_location_options.length > 0 }
+    rows = encounter_form.ddl_encounter_location
+    expect(rows.length > 0).to eq(true), "Expected to find length more than 0, found only #{rows.length}"
+    max_attempt = 2
+    begin
+      rows[0].click
+      encounter_form.wait_until_fld_encounter_search_box_visible
+      encounter_form.fld_encounter_search_box.set encounter_location
+      encounter_form.fld_encounter_search_box.native.send_keys(:enter)
+
+      expect(encounter_form.wait_for_fld_encounter_selected_location).to eq(true)
+      expect(encounter_form.fld_encounter_selected_location.text.upcase).to eq(encounter_location.upcase)
+    rescue RSpec::Expectations::ExpectationNotMetError => exc
+      p "Encounter Location not set #{exc}"
+      encounter_location2 = encounter_location
+      max_attempt -= 1
+      raise exc if max_attempt < 0
+      rows[0].click
+      encounter_form.wait_until_fld_encounter_search_box_invisible
+      retry
+    end
+  end
+
+  def self.select_encounter_provider(encounter_provider)
+    encounter_form = PobEncountersApplet.new
+    wait = Selenium::WebDriver::Wait.new(:timeout => 10)
+
+    encounter_form.wait_for_ddl_encounter_provider
+    expect(encounter_form).to have_ddl_encounter_provider
+    wait.until { encounter_form.fld_encounter_provider_options.length > 0 }
+    rows = encounter_form.ddl_encounter_provider
+    expect(rows.length > 0).to eq(true), "Expected to find length more than 0, found only #{rows.length}"
+    max_attempt = 2
+    begin
+      rows[0].click
+      encounter_form.wait_until_fld_encounter_search_box_visible
+      encounter_form.fld_encounter_search_box.set encounter_provider
+      encounter_form.fld_encounter_search_box.native.send_keys(:enter)
+
+      expect(encounter_form.fld_selected_provider.text.upcase).to eq(encounter_provider.upcase)
+    rescue RSpec::Expectations::ExpectationNotMetError => exc
+      p "Encounter Provider not set #{exc}"
+      max_attempt -= 1
+      raise exc if max_attempt < 0
+      retry
+    end
+  end
+end
+
 Then(/^POB user selects and sets new encounter with location "(.*?)" and provider "(.*?)"$/) do  |encounter_location, encounter_provider|
   @ehmp = PobEncountersApplet.new
 
-  @ehmp.wait_for_btn_set_encounter
-  @ehmp.wait_for_btn_confirm_encounter_disabled
+  expect(@ehmp.wait_for_btn_set_encounter).to eq(true), "Expected a set encounter btn"
   @ehmp.wait_until_btn_set_encounter_visible(30) 
 
   expect(@ehmp.btn_set_encounter).to have_text("No Visit Set")
@@ -12,34 +67,22 @@ Then(/^POB user selects and sets new encounter with location "(.*?)" and provide
   @ehmp.wait_for_fld_tab_new_visit
   @ehmp.wait_until_fld_tab_new_visit_visible
   expect(@ehmp).to have_fld_tab_new_visit
+  expect(@ehmp.wait_for_btn_confirm_encounter_disabled).to eq(true), "Expected a disabled confirm encounter btn"
   @ehmp.fld_tab_new_visit.click
 
   # set location
-  @ehmp.wait_for_ddl_encounter_location
-  # @ehmp.wait_until_ddl_encounter_location_visible
-  expect(@ehmp).to have_ddl_encounter_location
-  @ehmp.ddl_encounter_location.click
-  @ehmp.wait_until_fld_encounter_search_box_visible
-  @ehmp.fld_encounter_search_box.set encounter_location
-  @ehmp.fld_encounter_search_box.native.send_keys(:enter)
+  EncounterFormActions.select_encounter_location encounter_location
 
   # set provider
-  @ehmp.wait_until_ddl_encounter_provider_visible
-  expect(@ehmp).to have_ddl_encounter_provider
-  @ehmp.ddl_encounter_provider.click
-  @ehmp.wait_until_fld_encounter_search_box_visible
-  @ehmp.fld_encounter_search_box.set encounter_provider
-  @ehmp.fld_encounter_search_box.native.send_keys(:enter)
-  #@ehmp.fld_encounter_search_box.native.send_keys(:tab)
-  #p 'sent enter'
-  #sleep 10
+  EncounterFormActions.select_encounter_provider encounter_provider
+ 
   @ehmp.wait_until_btn_confirm_encounter_disabled_invisible
   @ehmp.wait_until_btn_confirm_encounter_visible
   expect(@ehmp).to have_btn_confirm_encounter
 
   @ehmp.btn_confirm_encounter.click
   
-  # verify_and_close_growl_alert_pop_up("Successfully set with no errors.")
+  verify_and_close_growl_alert_pop_up("Successfully set with no errors.")
   
   @ehmp.wait_until_btn_set_encounter_visible  
   expect(@ehmp.btn_set_encounter.text.upcase).to have_text(encounter_location.upcase), "Expected #{@ehmp.btn_set_encounter.text} to have #{encounter_location}"
@@ -47,9 +90,10 @@ end
 
 When(/^the POB user selects change current encounter$/) do
   @ehmp = PobEncountersApplet.new
+  @ehmp.wait_for_btn_set_encounter
+  expect(@ehmp).to have_btn_set_encounter
   @ehmp.wait_until_btn_set_encounter_visible(30) 
   expect(@ehmp.btn_set_encounter).to have_text("Current Encounter")
-  expect(@ehmp).to have_btn_set_encounter
   @ehmp.btn_set_encounter.click
 
   @ehmp.wait_for_btn_confirm_encounter
@@ -66,40 +110,30 @@ end
 
 Then(/^the POB set visit button is disabled$/) do
   @ehmp = PobEncountersApplet.new
-  expect(@ehmp).to have_btn_confirm_encounter
-  page.should have_xpath("//button[@id='viewEncounters-btn' and @disabled='']")
+  expect(@ehmp.wait_for_btn_confirm_encounter).to eq(true)
+  expect(@ehmp).to have_btn_confirm_encounter_disabled
 end
 
 Then(/^POB user chooses new encounter location$/) do
-  @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_ddl_encounter_location_visible(30)
-  expect(@ehmp).to have_ddl_encounter_location
-  @ehmp.ddl_encounter_location.click
-  @ehmp.wait_until_fld_encounter_search_box_visible
-  @ehmp.fld_encounter_search_box.set "Cardiology"
-  @ehmp.fld_encounter_search_box.native.send_keys(:enter)
+  EncounterFormActions.select_encounter_location "Cardiology"
 end
 
 Then(/^POB user chooses new encounter provider$/) do
-  @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_ddl_encounter_provider_visible(30)
-  expect(@ehmp).to have_ddl_encounter_provider
-  @ehmp.ddl_encounter_provider.click
-  @ehmp.wait_until_fld_encounter_search_box_visible
-  @ehmp.fld_encounter_search_box.set "Audiologist,One"
-  @ehmp.fld_encounter_search_box.native.send_keys(:enter)
+  EncounterFormActions.select_encounter_provider "Audiologist,One"
 end
 
 Then(/^the POB set visit button is enabled$/) do
   @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_btn_confirm_encounter_visible(30)
-  expect(@ehmp).to have_btn_confirm_encounter
+  expect(@ehmp.wait_for_btn_confirm_encounter).to eq(true)
+  expect(@ehmp.wait_for_btn_confirm_encounter_enabled).to eq(true)
 end
 
 Then(/^POB user selects set to apply changes$/) do
   @ehmp = PobEncountersApplet.new
   @ehmp.btn_confirm_encounter.click
   @ehmp.wait_until_btn_confirm_encounter_invisible(30)
+  verify_and_close_growl_alert_pop_up("Successfully set with no errors.")
+  @ehmp.wait_until_btn_set_encounter_visible(30)
 end
 
 Then(/^POB new visit encounter is set$/) do
@@ -115,15 +149,19 @@ When(/^POB user chooses to set a clinic appointments$/) do
 end
 
 When(/^POB user chooses the first clinic appointment$/) do
+
   @ehmp = PobEncountersApplet.new
   @ehmp.wait_until_tbl_clinic_appointment_visible(30)
   expect(@ehmp).to have_tbl_clinic_appointment
   @ehmp.tbl_clinic_appointment.click
+  expect(@ehmp.wait_for_tbl_active_appointment_location).to eq(true)
+  @selected_location = @ehmp.tbl_active_appointment_location.text
+  p "first appointment location: #{@selected_location}"
 end
 
 Then(/^POB new clinic appointment encounter is set$/) do
   @ehmp.wait_until_btn_set_encounter_visible(30)
-  expect(@ehmp.btn_set_encounter.text.upcase).to have_text("Audiology".upcase)
+  expect(@ehmp.btn_set_encounter.text.upcase).to have_text(@selected_location.upcase)
 end
 
 When(/^POB user chooses to set a hospital admissions$/) do

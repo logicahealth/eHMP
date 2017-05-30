@@ -48,6 +48,9 @@ function handle(log, config, environment, job, handlerCallback) {
             priority: resultJob.priority,
             param: resultJob.param
         };
+        if (resultJob.referenceInfo) {
+            meta.referenceInfo = resultJob.referenceInfo;
+        }
         var jobToPublish = jobUtil.createRecordEnrichment(resultJob.patientIdentifier, resultJob.dataDomain, record, meta);
 
         log.debug('event-prioritization-request-handler.handle: Publishing record enrichment job.  job: %j', jobToPublish);

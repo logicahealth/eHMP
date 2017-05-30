@@ -15,8 +15,8 @@ Requires the authentication interceptor to run in order to add the user to the s
     + Body
 
             {
-                "accessCode": "pu1234",
-                "verifyCode": "pu1234!!",
+                "accessCode": "REDACTED",
+                "verifyCode": "REDACTED",
                 "site": "9E7A",
                 "division": "500"
             }

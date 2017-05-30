@@ -28,7 +28,7 @@ define([
             this.apptSite = this.$('.appts-type-menu').val();
             this.filterResults(this.apptSite, this.collection, this.filterValue);
             this.setActiveSite(this.siteMenuItems, this.apptSite);
-            var $target = $(event.currentTarget);
+            var $target = this.$(event.currentTarget);
             $target.closest('.btn-group').find('[data-bind="label"]').text($target.text());
             this.clearSearchText(); //changing order type resets the search text
 
@@ -45,7 +45,6 @@ define([
             }
         },
         filterResults: function(apptSite, collection, filterValue) {
-            var filterFunction;
             switch (apptSite) {
                 case 'LOCAL':
                     ADK.utils.filterCollectionSubstring(collection, 'uid', filterValue);

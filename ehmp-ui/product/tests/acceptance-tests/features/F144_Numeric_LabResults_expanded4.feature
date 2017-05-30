@@ -2,9 +2,8 @@
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 Background:
-  # Given user is logged into eHMP-UI
   Given user searches for and selects "Eight,Patient"
-  Then Cover Sheet is active
+  # Then Cover Sheet is active
   And user navigates to expanded Numeric Lab Results Applet
   And Numeric Lab Results applet loads without issue
   And the user clicks the date control "All" in the "Numeric Lab Results applet"

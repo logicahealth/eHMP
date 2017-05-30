@@ -14,11 +14,9 @@ var log = require(global.VX_DUMMIES + '/dummy-logger');
 // });
 
 var _ = require('underscore');
-var async = require('async');
-var request = require('request');
 
 var host = require(global.VX_INTTESTS + 'test-config');
-var port = 5000;
+var port = PORT;
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
@@ -29,8 +27,8 @@ var HdrClient = require(global.VX_SUBSYSTEMS + 'hdr/hdr-client');
 var VxSyncForeverAgent = require(global.VX_UTILS + 'vxsync-forever-agent');
 
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
-var inspect = require('util').inspect;
 
+var syncAndWaitForPatient = require(global.VX_INTTESTS + 'framework/handler-test-framework').syncAndWaitForPatient;
 var getBeanstalkConfig = require(global.VX_INTTESTS + 'framework/handler-test-framework').getBeanstalkConfig;
 var updateTubenames = require(global.VX_INTTESTS + 'framework/handler-test-framework').updateTubenames;
 var getTubenames = require(global.VX_INTTESTS + 'framework/handler-test-framework').getTubenames;
@@ -67,6 +65,10 @@ var publisherRouter;
 
 describe('patient-record-retirement-util', function() {
 	it('runUtility', function() {
+		var referenceInfo = {
+			sessionId: 'TEST',
+			utilityType: 'Patient Record Retirement Util Integration Test'
+		};
 
 		var pid = '9E7A;21';
 
@@ -87,114 +89,9 @@ describe('patient-record-retirement-util', function() {
 
 		};
 
-		spyOn(environment.beanstalk, 'put').andCallThrough();
+		syncAndWaitForPatient(log, config, pid);
 
 		var recordRetirementUtil;
-
-		var syncRequestError;
-		var syncRequestResponse;
-		var syncRequestComplete = false;
-		var syncIsComplete = false;
-		var syncStatusCalledCounter = 0;
-
-		//---------------------------------------------------------------------------------------------------
-		// This function checks the sync status to see if there is nothing in progress and there are no
-		// open jobs.  If that is the case, it will set syncIsComplete to true.
-		//
-		// callback: The function to call when the check is done.
-		//---------------------------------------------------------------------------------------------------
-		function checkSyncComplete(callback) {
-			log.debug('patient-record-retirement-util-itest-spec.checkSyncComplete: Entered method.');
-			var syncStatusCallComplete = false;
-			var syncStatusCallError;
-			var syncStatusCallResponse;
-			runs(function() {
-				var options = {
-					url: config.syncRequestApi.protocol + '://' + host + ':' + config.syncRequestApi.port + config.syncRequestApi.patientStatusPath + '?pid=' + pid,
-					method: 'GET'
-				};
-
-				syncStatusCalledCounter++;
-				log.debug('patient-record-retirement-util-itest-spec.checkSyncComplete: Retrieving status: syncStatusCalledCounter: %s; options: %j', syncStatusCalledCounter, options);
-				request.get(options, function(error, response, body) {
-					log.debug('patient-record-retirement-util-itest-spec.checkSyncComplete: Retrieving status - Call back called: error: %j, response: %j, body: %j', error, response, body);
-					expect(response).toBeTruthy();
-					expect(val(response, 'statusCode')).toBe(200);
-					expect(body).toBeTruthy();
-
-					var syncStatusData;
-					try {
-						syncStatusData = JSON.parse(body);
-					} catch (parseError) {}
-
-					log.debug('patient-record-retirement-util-itest-spec.checkSyncComplete: Retrieving status - Call back called: syncStatusData: %j', syncStatusData);
-					expect(syncStatusData).toBeTruthy();
-					if (syncStatusData && (_.isObject(syncStatusData.syncStatus)) && (_.isEmpty(syncStatusData.syncStatus.inProgress)) &&
-						(_.isArray(syncStatusData.jobStatus)) && (_.isEmpty(syncStatusData.jobStatus))) {
-						syncIsComplete = true;
-					}
-
-					syncStatusCallError = error;
-					syncStatusCallResponse = response;
-					syncStatusCallComplete = true;
-					return callback();
-				});
-			});
-
-			waitsFor(function() {
-				return syncStatusCallComplete;
-			}, 'Timed out waiting for syncRequest.', 10000);
-		}
-
-		//------------------------------------------------------------------------------------------------------
-		// Returns the value of syncIsComplete.
-		//
-		// returns TRUE if the sync is complete.  False if it is not.
-		//------------------------------------------------------------------------------------------------------
-		function isSyncComplete() {
-			log.debug('patient-record-retirement-util-itest-spec.isSyncComplete: Entered method.  syncIsComplete: %j', syncIsComplete);
-			return syncIsComplete;
-		}
-
-
-		//------------------------------------------------------------------------------------------------------
-		// Test code starts here....
-		//------------------------------------------------------------------------------------------------------
-		runs(function() {
-			var options = {
-				url: config.syncRequestApi.protocol + '://' + host + ':' + config.syncRequestApi.port + config.syncRequestApi.patientSyncPath + '?pid=' + pid,
-				method: 'GET'
-			};
-
-			log.debug('patient-record-retirement-util-itest-spec: Sync Request.  options: %j', options);
-			request.get(options, function(error, response, body) {
-				log.debug('patient-record-retirement-util-itest-spec: Sync Request call back called.  error: %j; response: %j, body: %j', error, response, body);
-				syncRequestError = error;
-				syncRequestResponse = response;
-				expect(val(response, 'statusCode')).toBe(202);
-				syncRequestComplete = true;
-			});
-		});
-
-		waitsFor(function() {
-			return syncRequestComplete;
-		}, 'Timed out waiting for syncRequest.', 10000);
-
-		// Need to wait for the sync to complete.
-		//----------------------------------------
-		runs(function() {
-			log.debug('patient-record-retirement-util-itest-spec: Starting async.doWhilst.');
-			async.doUntil(checkSyncComplete, isSyncComplete, function(error) {
-				expect(error).toBeFalsy();
-				log.debug('patient-record-retirement-util-itest-spec: async.doWhilst call back called.  error: %j', error);
-			});
-		});
-
-		waitsFor(function() {
-			return syncIsComplete;
-		}, 'Timed out waiting for sync to complete.', 60000);
-
-
 
 		var beanstalkConfig = getBeanstalkConfig(config, host, port, tubePrefix + '-' + jobType);
 		updateTubenames(beanstalkConfig);
@@ -212,7 +109,7 @@ describe('patient-record-retirement-util', function() {
 			log.debug('patient-record-retirement-util-itest-spec: now testing handler');
 			recordRetirementUtil = new RecordRetirementUtil(log, config, environment);
 
-			recordRetirementUtil.runUtility(function(error, result) {
+			recordRetirementUtil.runUtility(referenceInfo, function(error, result) {
 				expect(error).toBeFalsy();
 				expect(result).toBeTruthy();
 				expect(result).toEqual('success');
@@ -233,6 +130,15 @@ describe('patient-record-retirement-util', function() {
 
 					expect(val(resultJobTypes, 'length')).toBeGreaterThan(0);
 					expect(resultJobTypes).toContain(jobType);
+
+					//Check every job for referenceInfo
+					_.each(val(jobs, ['0','jobs']), function(job){
+                        expect(job.referenceInfo).toEqual(jasmine.objectContaining({
+                        	sessionId: referenceInfo.sessionId,
+                        	utilityType: referenceInfo.utilityType,
+                        	requestId: jasmine.any(String)
+                        }));
+                    });
 
 					handlerDone = true;
 				});

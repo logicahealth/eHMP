@@ -1,59 +1,12 @@
 define([
-    "jquery",
-    "jquery.inputmask",
-    "backbone",
-    "marionette",
-    "underscore",
-    "highcharts",
-    "moment",
-    'app/applets/vitals/util',
-    "app/applets/vitals/appletHelpers",
-    "hbs!app/applets/vitals/modal/modalTemplate",
-    'hbs!app/applets/vitals/modal/detailsFooterTemplate',
-    "app/applets/vitals/modal/modalHeaderView",
+    'jquery',
+    'underscore',
+    'moment',
+    'app/applets/vitals/appletHelpers',
+    'app/resources/fetch/vitals/utils',
     'hbs!app/applets/vitals/templates/tooltip'
-], function($, InputMask, Backbone, Marionette, _, Highcharts, moment, Util, AppletHelper, modalTemplate, detailsFooterTemplate, modalHeader, tooltip) {
+], function($, _, moment, AppletHelper, Utils, tooltip) {
     'use strict';
-
-    var sharedDateRange,
-        isGraphable;
-
-
-    var DateRangeModel = Backbone.Model.extend({
-        defaults: {
-            fromDate: moment().subtract('years', 2).format(ADK.utils.dateUtils.defaultOptions().placeholder),
-            toDate: moment().format(ADK.utils.dateUtils.defaultOptions().placeholder)
-        }
-    });
-
-    function setisGraphable(e) {
-        if (e.length > 0) {
-            isGraphable = true;
-        } else {
-            isGraphable = false;
-        }
-    }
-
-    function getisGraphable(e) {
-        return isGraphable;
-    }
-
-    function parseModel(response) {
-        response = Util.getObservedFormatted(response);
-        response = Util.getFacilityColor(response);
-        response = Util.getResultedFormatted(response);
-        response = Util.getDisplayName(response);
-        response = Util.getTypeName(response);
-        response = Util.getNumericDate(response);
-        response = Util.getResultUnits(response);
-        response = Util.getMetricResultUnits(response);
-        response = Util.getResultUnitsMetricResultUnits(response);
-        response = Util.getReferenceRange(response);
-        response = Util.getFormattedHeight(response);
-        response = Util.getFormattedWeight(response);
-        ADK.Enrichment.addFacilityMoniker(response);
-        return response;
-    }
 
     function Chart(options) {
         return this.init(options);
@@ -61,7 +14,6 @@ define([
 
     Chart.prototype = {
         init: function(options) {
-            var self = this;
             this.collection = options.collection;
             this.first = this.collection.first();
             this.chartOptions = $.extend(true, {}, options.chartOptions);
@@ -83,8 +35,8 @@ define([
             } else {
                 var bpSplitData;
                 low = _.map(low, function(num) {
-                    if (num !== undefined && num !== null) {
-                        bpSplitData = num.split("/");
+                    if (_.isString(num)) {
+                        bpSplitData = num.split('/');
                         return parseFloat(bpSplitData[1]);
                     } else {
                         return undefined;
@@ -92,8 +44,8 @@ define([
                 });
 
                 high = _.map(high, function(num) {
-                    if (num !== undefined && num !== null) {
-                        bpSplitData = num.split("/");
+                    if (_.isString(num)) {
+                        bpSplitData = num.split('/');
                         return parseFloat(bpSplitData[0]);
                     } else {
                         return undefined;
@@ -161,9 +113,8 @@ define([
 
                     if (options.modalDisplayName == 'BP') {
                         var bpDataNumber = parseFloat(bpDiatolicData[i]);
-                        if (bpDataNumber !== undefined && !isNaN(bpDataNumber) &&
-                            dataNumber !== undefined && !isNaN(dataNumber)) {
-                            if (low[i] !== undefined && high[i] !== undefined && !isNaN(low[i]) && !isNaN(high[i])) {
+                        if (_.isFinite(bpDataNumber) && _.isFinite(dataNumber)) {
+                            if (!isNaN(low[i]) && !isNaN(high[i])) {
                                 highLow.push([low[i], high[i]]);
                             } else {
                                 highLow.push([null, null]);
@@ -171,13 +122,11 @@ define([
                         } else {
                             highLow.push([null, null]);
                         }
-                    } else {
-                        if (dataNumber !== undefined && !isNaN(dataNumber)) {
-                            if (low[i] !== undefined && high[i] !== undefined && !isNaN(low[i]) && !isNaN(high[i])) {
-                                highLow.push([low[i], high[i]]);
-                            } else {
-                                highLow.push([null, null]);
-                            }
+                    } else if (!isNaN(dataNumber)) {
+                        if (!isNaN(low[i]) && !isNaN(high[i])) {
+                            highLow.push([low[i], high[i]]);
+                        } else {
+                            highLow.push([null, null]);
                         }
                     }
                 });
@@ -193,23 +142,17 @@ define([
             //Checks the count of data that is chartable
             _.each(cleanData, function(e, i) {
                 var dataNumber = parseFloat(cleanData[i]);
-                if (dataNumber !== undefined && !isNaN(dataNumber) && dataNumber !== null) {
+                if (_.isFinite(dataNumber)) {
                     onlyNumData.push(dataNumber);
                 }
             });
-            //If there is chartable data show the chart
-            if (options.modalDisplayName !== 'BP') {
-                setisGraphable(onlyNumData);
-            } else {
-                setisGraphable(bpSystolicData);
-            }
 
             this.chartOptions.series[0].data = [];
 
             if (options.modalDisplayName !== 'BP') {
                 _.forEach(data, function(e, i) {
                     var mo = moment(categories[i]);
-                    self.chartOptions.series[0].data.push({
+                    this.chartOptions.series[0].data.push({
                         y: data[i],
                         x: categories[i],
                         dataLabels: {
@@ -220,10 +163,10 @@ define([
                         highLow[i].unshift(categories[i]);
                     }
 
-                });
+                }, this);
             } else {
                 _.forEach(bpSystolicData, function(e, i) {
-                    self.chartOptions.series[0].data.push({
+                    this.chartOptions.series[0].data.push({
                         y: bpSystolicData[i],
                         x: categories[i],
                         dataLabels: {
@@ -233,7 +176,7 @@ define([
                     if (highLow[i]) {
                         highLow[i].unshift(categories[i]);
                     }
-                });
+                }, this);
             }
 
             this.chartOptions.series[0].zIndex = 1;
@@ -243,16 +186,16 @@ define([
                 this.chartOptions.yAxis.title.text = '';
             }
 
-            if (options.modalDisplayName == 'BP') {
+            if (options.modalDisplayName === 'BP') {
                 this.chartOptions.series[0].name = 'SBP';
-            } else if (options.modalDisplayName == 'WT') {
+            } else if (options.modalDisplayName === 'WT') {
                 this.chartOptions.series[0].name = 'Weight';
             } else {
-                this.chartOptions.series[0].name = options.model.attributes.typeName;
+                this.chartOptions.series[0].name = options.model.get('typeName');
             }
 
             var graphUnits = [];
-            if (options.modalDisplayName !== 'BMI' && this.first !== undefined) {
+            if (options.modalDisplayName !== 'BMI' && !_.isUndefined(this.first)) {
                 graphUnits = this.first.get('units');
             }
 
@@ -289,14 +232,14 @@ define([
                 };
 
                 _.forEach(bpDiatolicData, function(e, i) {
-                    self.chartOptions.series[1].data.push({
+                    this.chartOptions.series[1].data.push({
                         y: bpDiatolicData[i],
                         x: categories[i],
                         dataLabels: {
                             enabled: false
                         }
                     });
-                });
+                }, this);
 
                 this.chartOptions.series[2] = {
                     name: 'Ref Range',
@@ -329,111 +272,68 @@ define([
     function VitalsStackedGraph(options) {
         this.options = options;
         this.model = options.model;
-        this.fetchOptions = {};
         this.init(options);
     }
     VitalsStackedGraph.prototype = {
         init: function() {
-            var self = this;
-
-            if (sharedDateRange === undefined || sharedDateRange === null) {
-                this.resetSharedModalDateRangeOptions();
+            var typeName = this.model.get('typeName');
+            if(_.isString(typeName) && typeName.indexOf('Blood') >= 0) {
+                typeName = 'Blood Pressure';
             }
-
-            this.fetchOptions.resourceTitle = "patient-record-vital";
-            var fetchName = this.model.attributes.typeName;
-            if (this.model.attributes.typeName.indexOf("Blood") >= 0) fetchName = 'Blood Pressure';
-            var typeName = fetchName;
+            
+            var criteria;
             if (typeName === 'BMI') {
-                this.fetchOptions.criteria = {
+                criteria = {
                     filter: 'in(typeName,["WEIGHT","HEIGHT"])'
                 };
             } else {
-                this.fetchOptions.criteria = {
-                    filter: 'eq(typeName,"' + this.model.attributes.typeName + '")'
+                criteria = {
+                    filter: 'eq(typeName,"' + this.model.get('typeName') + '")'
                 };
             }
 
-            if (this.model.attributes.displayName.indexOf("BP") >= 0) {
+            if (this.model.get('displayName').indexOf('BP') >= 0) {
                 this.modalDisplayName = 'BP';
             } else {
-                this.modalDisplayName = this.model.attributes.displayName;
+                this.modalDisplayName = this.model.get('displayName');
             }
 
-            this.fetchOptions.collectionConfig = {
-                collectionParse: self.filterCollection,
-                comparator: function(model1, model2) {
-                    if (model1.get('observed') > model2.get('observed')) {
-                        return -1;
-                    } else if (model1.get('observed') < model2.get('observed')) {
-                        return 1;
-                    }
-
-                    return 0;
-                },
-                modalDisplayName: self.modalDisplayName
-            };
-
-            this.fetchOptions.pageable = true;
-            this.fetchOptions.cache = false;
-
-            this.collection = ADK.PatientRecordService.fetchCollection(this.fetchOptions);
-
+            this.collection = new ADK.UIResources.Fetch.Vitals.Collection.PageableCollection({isClientInfinite: true});
+            this.comparator = 'observed';
             this.collection.on('sync', function() {
-                self.collection = this.collection;
-                if (self.collection.length > 0) {
-                    self.collection = Util.buildCollection(self.collection, true);
-                    self.model.set(self.collection.first().toJSON());
+                if (this.collection.length > 0) {
+                    this.model.set(this.collection.first().toJSON());
                 } else {
-                    self.model.set('resultUnits', '--');
+                    this.model.set('resultUnits', '--');
                 }
 
-                $.extend(true, self, self.model.attributes);
+                if (this.model.get('displayName') === 'BP') {
+                    var splitBpVital = Utils.splitBpVital(this.model.attributes);
+                    this.model.set(splitBpVital.bps);
+                }
 
-                self.chart = new Chart({
+                $.extend(true, this, this.model.attributes);
+
+                this.chart = new Chart({
                     chartOptions: $.extend(true, {}, AppletHelper.chartOptions),
-                    model: self.model,
-                    collection: self.collection,
-                    modalDisplayName: self.modalDisplayName
+                    model: this.model,
+                    collection: this.collection,
+                    modalDisplayName: this.modalDisplayName
                 });
 
-                var tooltipModel = self.createTooltipModel(self.collection);
+                var tooltipModel = this.createTooltipModel(this.collection);
                 if (!$.isEmptyObject(tooltipModel)) {
-                    self.tooltip = tooltip(tooltipModel.attributes);
+                    this.tooltip = tooltip(tooltipModel.attributes);
                 }
 
                 ADK.Messaging.getChannel('stackedGraph').trigger('readyToChart', {
-                    response: self,
+                    response: this,
                     time: moment(),
-                    requestParams: self.options.requestParams
+                    requestParams: this.options.requestParams
                 });
             }, this);
-        },
-        filterCollection: function(coll) {
-            coll.models.forEach(function(model) {
-                model.attributes = parseModel(model.attributes);
-            });
 
-            var resultColl = [];
-            var allTypes = $.unique(coll.pluck('displayName'));
-            var knownTypes = ['BP', 'P', 'R', 'T', 'PO2', 'PN', 'WT', 'HT', 'BMI'];
-            var displayTypes = knownTypes.filter(function(el) {
-                return allTypes.indexOf(el) != -1;
-            });
-
-            var newColl = new Backbone.Collection(coll.where({
-                displayName: this.modalDisplayName
-            }));
-
-            newColl.each(function(column) {
-                resultColl.push(column);
-            });
-
-            return resultColl;
-
-        },
-        resetSharedModalDateRangeOptions: function() {
-            sharedDateRange = new DateRangeModel();
+            this.collection.fetchCollection(criteria, false);
         },
         createTooltipModel: function(collectionItems) {
             if (collectionItems.models.length === 0) {
@@ -444,21 +344,19 @@ define([
             for (var i = 0; i < collectionItems.models.length && i < 5; i++) {
 
                 if ($.isEmptyObject(tooltipModel)) {
-                    _.extend(tooltipModel, collectionItems.models[i]);
+                    tooltipModel = collectionItems.models[i];
                 } else {
 
-                    if (tooltipModel.attributes.limitedoldValues === undefined) {
-                        tooltipModel.attributes.limitedoldValues = [];
+                    if (_.isUndefined(tooltipModel.get('limitedoldValues'))) {
+                        tooltipModel.set('limitedoldValues', []);
                     }
-                    tooltipModel.attributes.limitedoldValues.push(collectionItems.models[i]);
+                    tooltipModel.get('limitedoldValues').push(collectionItems.models[i]);
                 }
             }
 
             return tooltipModel;
         }
-
     };
 
     return VitalsStackedGraph;
-
 });

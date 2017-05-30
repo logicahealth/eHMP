@@ -1,14 +1,14 @@
-@f423_vitals_write_back  @US7939_TC991 @US7939_TC992 @US11272 @future @DE4560 @debug @DE7008
+@f423_vitals_write_back  @US7939_TC991 @US7939_TC992 @US11272 @DE4560 @DE7008 @reg3
 Feature: F423 : Enter and Store Vitals
 
 # US7939, TC993: cannot automate
 
 Background:
   # Given user is logged into eHMP-UI
-  And user searches for and selects "twenty,patient"
+  And user searches for and selects "twenty,inpatient"
   Then Cover Sheet is active
   And user navigates to Vitals expanded view 
-  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
+  #And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   Then user adds a new vitals
   And user chooses to "Expand All" on add vitals modal detail screen
 
@@ -154,7 +154,7 @@ Scenario: Validate Circumference/Girth form fields on add vital modal screen.
   | CG Location				|
   And the add vitals detail modal displays form fields for Circumference/Girth
   
-@f423_add_vital @US6338 @US8923 @US7939 @TC955
+@f423_add_vital @US6338 @US8923 @US7939 @TC955 @DE7425
 Scenario: Add a vital record.
 
   And user adds a Vital record for the current visit

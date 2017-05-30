@@ -23,7 +23,7 @@ export NPM_CONFIG_REGISTRY="https://store.vistacore.us/nexus/content/repositorie
 
 export CONFIGURE_ARGS="--with-ldflags='-Wno-error=unused-command-line-argument-hard-error-in-future'"
 
-jdk_version="jdk1.8.0_92"
+jdk_version="jdk1.8.0_121"
 
 INSTALL_FOR_USER=$USER
 if [ ! -z "$SUDO_USER" ]; then

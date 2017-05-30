@@ -102,7 +102,7 @@ public class STSTokenGenerator {
 	private static final String SIGNING_JKS = "mocksts.jks";
 
 	/** The Constant ISSUER. */
-	private static final String ISSUER = "int.services.eauth.va.gov";
+	private static final String ISSUER = "int.services.eauth.DNS   ";
 
 	/** The Constant VALID_SECONDS. */
 	private static final int VALID_SECONDS = 360;

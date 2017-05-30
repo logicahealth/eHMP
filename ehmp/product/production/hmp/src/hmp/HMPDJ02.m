@@ -1,5 +1,5 @@
 HMPDJ02 ;ASMR/MKB/JD,CK,CPC,PB - Problems,Allergies,Vitals ;Aug 23, 2016 09:56:26
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3**;Sep 02, 2016;Build 11
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3**;Sep 02, 2016;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -19,6 +19,8 @@ HMPDJ02 ;ASMR/MKB/JD,CK,CPC,PB - Problems,Allergies,Vitals ;Aug 23, 2016 09:56:2
  ; ICDEX                         5747
  ; XLFSTR                       10104
  ; XUAF4                         2171
+ ; ^AUPNVSIT(                    2028
+ ; ^TIU(8925,DA,0                6154
  ;
  ; All tags expect DFN, ID, [HMPSTART, HMPSTOP, HMPMAX, HMPTEXT]
  ;
@@ -169,18 +171,10 @@ GMPLPOV(DFNN,POVLST,DONTKILL) ; -- JL;All problem of visit related to the patien
  . . N ICDCODE,VIEN
  . . S ICDCODE=$$CODEC^ICDEX(80,ICDIEN) Q:ICDCODE=-1  ;convert to ICD code, quit if not valid Sep 1, 2016 - PB - DE5033
  . . I $D(POVLST(ICDCODE,VISITDT))'=0 D  Q
- . . . S VIEN=$$GETVIEN(DFNN,VISITDT)
+ . . . S VIEN=$$GETVIEN^HMPDJ02A(DFNN,VISITDT)
  . . . ; W:VIEN=-1 "Can not find VISIT IEN for "_VISITDT,!
  . . . S:VIEN'=-1 POVLST(ICDCODE,VISITDT)=VIEN
  Q
- ;
-GETVIEN(DFNN,VISITDT)  ;JL; get the Visit IEN from VISIT file based on patient ID and Datetime
- Q:'+$G(DFNN)!'$L(VISITDT) -1  ;return -1 if bad parameter
- N REVDT,VISITIEN
- S REVDT=9999999-$P(VISITDT,".",1)_$S($P(VISITDT,".",2)'="":"."_$P(VISITDT,".",2),1:"")
- S VISITIEN=$O(^AUPNVSIT("AA",DFNN,REVDT,""))  ; using "AA" cross-reference
- Q:VISITIEN="" -1
- Q VISITIEN
  ;
 DIAGLIST(DIAGS,DFN,ORDATE,ORPRCNT) ;BL,JL; get list diagnosis on past notes
  S:'+$G(ORDATE) ORDATE=DT
@@ -198,8 +192,12 @@ DIAGLIST(DIAGS,DFN,ORDATE,ORPRCNT) ;BL,JL; get list diagnosis on past notes
  ;THIS CALL WILL EXTRACT ALL THE VISIT INFORMATION TO ^TMP(PXKENC,$J,VISIT)
  N VIEN
  F  S LSTNUM=$O(DIAGS(LSTNUM)) Q:LSTNUM=""  D
+ . N HMPV
  . S NOTEINFO=""
  . S IEN=$P(DIAGS(LSTNUM),"^",1)
+ . ;DE6877 - 21 Jan 17 - PB next two lines of code check to see if the Visit/Admit Date&Time and/or Patient Name fields are missing for the visit. if either are missing processing this record stops.
+ . S HMPV=$P($G(^TIU(8925,IEN,0)),U,3)
+ . I $G(HMPV)>0 Q:$$VSTIEN^HMPDJ02A(HMPV)>0
  . D PCE4NOTE^ORWPCE3(.NOTEINFO,IEN,DFN)
  . S CNT=0,DIAGCNT=0
  . F  S CNT=$O(NOTEINFO(CNT)) Q:CNT=""  D
@@ -208,7 +206,7 @@ DIAGLIST(DIAGS,DFN,ORDATE,ORPRCNT) ;BL,JL; get list diagnosis on past notes
  . . S VISITDT=$P($G(NOTEINFO(2)),U,3)  ; get the visit datetime
  . . S ICDCODE=$P(NOTEINFO(CNT),U,2)  ; get the diagnosis code
  . . I $D(ENC(ICDCODE,VISITDT))=0 D
- . . . S VIEN=$$GETVIEN(DFN,VISITDT)
+ . . . S VIEN=$$GETVIEN^HMPDJ02A(DFN,VISITDT)
  . . . ;W:VIEN=-1 "Can not find Visit ID for "_NOTEINFO(CNT),!
  . . . S:VIEN'=-1 ENC(ICDCODE,VISITDT)=VIEN_U_$G(DIAGS(LSTNUM)) ;  add to list only if visit ien is valid
  ; KILL DIAGS BECAUSE IT NOW CONTAINS NOTE INFO

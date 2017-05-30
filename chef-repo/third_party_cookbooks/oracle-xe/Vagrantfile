@@ -78,7 +78,7 @@ Vagrant.configure("2") do |config|
     chef.log_level = :debug
     chef.json = {
       'oracle-xe' => {
-        'url' => 'http://10.0.2.2/~juliandunn/binaries/oracle-xe-11.2.0-1.0.x86_64.rpm'
+        'url' => 'http://IP      /~juliandunn/binaries/oracle-xe-11.2.0-1.0.x86_64.rpm'
       }
     }
 

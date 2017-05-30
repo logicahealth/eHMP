@@ -11,11 +11,11 @@ var writebackContext = {
         }
     },
     vistaConfig: {
-        host: '10.2.2.101',
-        port: 9210,
-        accessCode: 'mx1234',
-        verifyCode: 'mx1234!!',
-        localIP: '10.2.2.1',
+        host: 'IP        ',
+        port: REDACTED,
+        accessCode: 'REDACTED',
+        verifyCode: 'REDACTED',
+        localIP: 'IP      ',
         localAddress: 'localhost',
         noReconnect: true
     },

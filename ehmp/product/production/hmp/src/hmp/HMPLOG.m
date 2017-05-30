@@ -1,5 +1,5 @@
-HMPLOG ; ASMR/hrubovcak - eHMP logging support ;Aug 17, 2016 11:42:39
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,4**;June 13, 2016;Build 11
+HMPLOG ; ASMR/hrubovcak - eHMP logging support ;Aug 29, 2016 20:06:27
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3**;June 13, 2016;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; routine created 13 June 2016 for US15658
@@ -90,3 +90,13 @@ STK2TXT(STKTXT) ; STKTXT passed by reference, no input, 11 August 2016
  F J=$ST-2:-1:0 S C=C+1,STKTXT(C)=" $st("_J_"): "_$ST(J,"PLACE")_">"_$ST(J,"MCODE")  ; save $stack, skip top 2 levelS
  Q
  ;DE5111 end
+ ;DE4496 begin, module created 19 August 2016
+LOGDPT(HMPDFN) ; log missing Patient information in HMP EVENT
+ N C,J,TXT
+ S C=1,TXT(C)=" missing patient DFN: "_$G(HMPDFN)  ; save missing Patient data
+ S C=C+1,TXT(C)="  calling code from $stack: "
+ F J=$ST-1:-1:0 S C=C+1,TXT(C)=" $st("_J_"): "_$ST(J,"PLACE")_">"_$ST(J,"MCODE")  ; save $stack, skip top level
+ S C=C+1,TXT(C)=" "  ; blank line following word-processing text
+ S J=$$NWNTRY($$NOW^XLFDT,"M",.TXT)  ; log event as type "missing"
+ ;DE4496 end
+ ;

@@ -1,0 +1,40 @@
+<table class="table">
+    <caption class="sr-only">Lab result table.</caption>
+    <thead>
+    <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Lab Test</th>
+        <th scope="col">Flag</th>
+        <th scope="col">Result</th>
+        <th scope="col">Unit</th>
+        <th scope="col">Ref Range</th>
+        <th scope="col">Facility</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{formatDate observed}}</td>
+        <td>{{typeName}} - {{specimen}}</td>
+        <td>
+            {{#if flagTooltip}}
+            <span class="label {{labelClass}}" title="{{flagTooltip}}">{{interpretationCode}}</span>
+            {{/if}}
+            {{#if showFlagIcon}}
+            <i class="fa fa-flag"></i>
+            {{/if}}
+        </td>
+        <td>{{result}}</td>
+        <td>{{units}}</td>
+        <td>
+            {{#if referenceRange}}
+            {{referenceRange}}
+            {{else}}
+            {{#if high}}
+            {{low}}-{{high}}
+            {{/if}}
+            {{/if}}
+        </td>
+        <td>{{facilityMoniker}}</td>
+    </tr>
+    </tbody>
+</table>

@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(['api/Messaging', 'jquery', 'handlebars', 'backbone', 'marionette', 'main/ui_components/components', 'api/UIComponents', 'jasminejquery'],
+define(['api/Messaging', 'jquery', 'handlebars', 'backbone', 'marionette', 'main/UILibrary', 'api/UIComponents', 'jasminejquery'],
     function(Messaging, $, Handlebars, Backbone, Marionette, UI) {
         var testLayoutView,
             $testLayoutView,

@@ -17,7 +17,7 @@ define('main/components/applet_chrome/views/filterButtonView', [
             '$tooltip': '[tooltip-data-key], [data-toggle=tooltip]'
         },
         attributes: function() {
-            return{
+            return {
                 'class': 'grid-' + this.model.get('id')
             };
         },
@@ -27,9 +27,7 @@ define('main/components/applet_chrome/views/filterButtonView', [
         onShow: function() {
             var appletInstanceId = this.model.get('instanceId');
             WorkspaceFilters.onAppletFilterCollectionChanged(appletInstanceId, this.setVisibilityIfFilters, this);
-            var filterName = ADK.SessionStorage.getAppletStorageModel(appletInstanceId, 'filterName', true) || '';
 
-            this.model.set('filterName', filterName);
             var filterArea = this.$('#grid-filter-' + appletInstanceId);
             if (filterArea.hasClass('in')) {
                 this.model.set('buttonMsg', 'Press enter to collapse filter.');
@@ -38,26 +36,9 @@ define('main/components/applet_chrome/views/filterButtonView', [
             }
         },
         setVisibilityIfFilters: function(args) {
-            var appletFilterTitle = this.$('.applet-filter-title');
-            this.setVisible(appletFilterTitle, args.anyFilters);
-        },
-        setVisible: function(element, makeVisible) {
-            if (makeVisible) {
-                element.removeClass('hidden');
-
-                var appletInstanceId = this.model.get('instanceId'),
-                    filterName = ADK.SessionStorage.getAppletStorageModel(appletInstanceId, 'filterName', true) || 'filtered';
-                this.model.set('filterName', filterName);
-                this.setTitle(element, filterName);
-
-            } else {
-                element.addClass('hidden');
-                element.text('');
-                this.model.set('filterName', '');
+            if (_.get(args, 'anyFilters', null)) {
+                this.toggleFilterButtonEvent({}, true);
             }
-        },
-        setTitle: function(element, title) {
-            element.text(title);
         },
         events: {
             'click button': 'toggleFilterButtonEvent'
@@ -65,46 +46,61 @@ define('main/components/applet_chrome/views/filterButtonView', [
         modelEvents: {
             'change:buttonMsg': 'render'
         },
-        toggleFilterButtonEvent: function() {
-            this.ui.$tooltip.tooltip('destroy');
+        toggleFilterButtonEvent: function(e, makeVisible) {
+            var filterView = this.getOption('filterView');
+            if (!filterView) {
+                return;
+            }
             var appletInstanceId = this.model.get('instanceId');
-            var filterArea = $('#grid-filter-' + appletInstanceId);
             var filterButton = this.$el;
+            var filterCollapseContainer = $('#grid-filter-' + appletInstanceId);
+            if (_.isEmpty(filterCollapseContainer)) {
+                filterCollapseContainer = filterView.$('.collapse').first();
+                if (_.isEmpty(filterCollapseContainer)) {
+                    filterCollapseContainer = filterView.$el.closest('.collapse');
+                }
+            }
+            var $textFilter = filterView.$('input[type="search"][name="filterText"]');
 
-            if (filterArea.hasClass('in')) {
+            this.ui.$tooltip.tooltip('destroy');
+
+            if ((_.isBoolean(makeVisible) && !makeVisible) || (filterCollapseContainer.hasClass('in') && !_.isBoolean(makeVisible))) {
                 // we chagnged the call from hide.bs.collapse to hidden.bs.collapse to trigger it when it was fully hidden instead of when the hide action started
-                filterArea.one('hidden.bs.collapse', function() {
 
-                    // clear search text field upon collaping filter view
-                    var filterText = SessionStorage.getAppletStorageModel(appletInstanceId, 'filterText');
-                    if (filterText !== undefined && filterText !== null && filterText.trim().length > 0) {
-                        var queryInputSelector = 'input[name=\'q-' + appletInstanceId + '\']';
-                        $(queryInputSelector).change().keydown();
-                    }
-                });
+                if ($textFilter.length > 0) {
+                    filterCollapseContainer.one('hidden.bs.collapse', function() {
+                        // clear search text field upon collaping filter view
+                        var filterText = SessionStorage.getAppletStorageModel(appletInstanceId, 'filterText');
+                        if (_.isString(filterText) && filterText.trim().length > 0) {
+                            var queryInputSelector = 'input[type="search"][name="filterText"]';
+                            $textFilter.change().keydown();
+                        }
+                    });
+                }
 
-                if (appletInstanceId === "newsfeed-gdt"){
+                if (appletInstanceId === "newsfeed-gdt") {
                     this.$el.closest('[data-instanceid="newsfeed-gdt"]').find('table.backgrid').removeClass('filter-expanded');
                 }
 
                 var filterName = ADK.SessionStorage.getAppletStorageModel(appletInstanceId, 'filterName', true) || '';
-                this.model.set({'buttonMsg': 'Press enter to expand filter.', 'filterName': filterName});
-                filterArea.collapse('hide');
+                this.model.set({ 'buttonMsg': 'Press enter to expand filter.', 'filterName': filterName });
+                filterCollapseContainer.collapse('hide');
                 this.$('button').focus();
             } else {
                 // we chagnged the call from show.bs.collapse to shown.bs.collapse to trigger it when it was fully shown instead of when the show action started
-                filterArea.one('shown.bs.collapse', function() {
-                    filterArea.find('input[type=search]').focus();
-                });
+                if ($textFilter.length > 0) {
+                    filterCollapseContainer.one('shown.bs.collapse', function() {
+                        $textFilter.focus();
+                    });
+                }
 
-                if (appletInstanceId === "newsfeed-gdt"){
+                if (appletInstanceId === "newsfeed-gdt") {
                     this.$el.closest('[data-instanceid="newsfeed-gdt"]').find('table.backgrid').addClass('filter-expanded');
                 }
 
                 this.model.set('buttonMsg', 'Press enter to collapse filter.');
-                filterArea.collapse('show');
+                filterCollapseContainer.collapse('show');
             }
-            filterArea.collapse('toggle');
         }
     });
     return FilterButtonView;

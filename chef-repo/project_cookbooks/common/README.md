@@ -52,7 +52,7 @@ Typically, the ipaddress is the target of the node search, so at the very least 
 ```json 
 {
   "id": "machine",
-  "ip_address": "10.1.1.10",
+  "ip_address": "IP       ",
   "stack": "example-stack",
   "roles": [
     "example",

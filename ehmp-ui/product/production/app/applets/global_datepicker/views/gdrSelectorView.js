@@ -48,7 +48,7 @@ define([
             }
         },
         template: gdrSelectorTemplate,
-        className: 'global-grid-filter-daterange',
+        className: 'global-date-picker-popover-subregion',
         regions: {
             trendHistoryChart: '#trendHistoryChart',
             timelineSummary: '#timelineSummary'
@@ -383,8 +383,7 @@ define([
             }
         },
         closeExpandedGDT: function() {
-            $('#navigation-date #hiddenDiv').toggleClass('hidden');
-            $('#navigation-date #date-region-minimized').focus();
+            this.triggerMethod('close:expanded:gdt');
         },
         setCustomDateRange: function(customFromDate, customToDate) {
             this.model.set({

@@ -1,0 +1,12 @@
+{{#if isAdded}}
+	{{#if predefined}}
+	{{else}}
+		<p>
+            {{displayValue}} <i>{{type}}</i> <span class="small pull-right"><i class="fa fa-minus"></i> Delete</span>
+        </p>
+	{{/if}}
+{{else}}
+	<p>
+        {{displayValue}} <i>{{type}}</i> <span class="small pull-right"><i class="fa fa-plus"></i> Add</span>
+    </p>
+{{/if}}

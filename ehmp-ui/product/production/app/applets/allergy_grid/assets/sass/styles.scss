@@ -1,13 +1,12 @@
+//Allergies applet with pill buttons in grid
 [data-appletid="allergy_grid"] {}
 
+//Add Allergies within the sidebar tray form
 .allergies-writeback-add {
     .multiselectSideBySide-control {
         &.has-error {
-            .available-region .faux-table {
-                border-right: 1px solid $red-dark;
-                .msbs-input {
-                    border-right: 2px solid $red-dark;
-                }
+            .available-region .faux-table .msbs-input {
+                border-right: 2px solid $red-dark;
             }
             .selected-region .faux-table {
                 border-left: 2px solid $red-dark;
@@ -18,30 +17,29 @@
                     border: 1px solid $red-dark !important;
                 }
             }
-            .header {
-                border-right: 1px solid $red-dark;
-            }
+            .available-region .faux-table,
+            .header,
             .body {
                 border-right: 1px solid $red-dark;
             }
         }
         .input-group {
-        	.input-group-addon {
-        		padding: 2px;
-        	}
-        	&.calendar-container {
-        		input {
-        			padding: 0px 0px 0px 2px;
-        			width: 64px;
-        		}
-        	}
+            &-addon {
+                padding: 2px;
+            }
+            &.calendar-container {
+                input {
+                    padding: 0px 0px 0px 2px;
+                    width: 64px;
+                }
+            }
             &.bootstrap-timepicker {
-            	left: 3px;
-            	position: relative;
-            	input {
-            		padding: 0px 0px 0px 3px;
-            		width: 44px;
-            	}
+                left: 3px;
+                position: relative;
+                input {
+                    padding: 0px 0px 0px 3px;
+                    width: 44px;
+                }
             }
         }
     }
@@ -69,19 +67,14 @@
             height: 120px;
         }
     }
-    .total-selected-region {
-        border-top: 2px solid $grey;
-    }
     .available-region > .table-row:first-child > :last-child {
         display: none;
+    }
+    .total-selected-region {
+        border-top: 2px solid $grey;
     }
     .help-block .error {
         background-color: $pure-white;
         margin: 0px;
-    }
-    .signs-and-symptoms {
-        legend {
-            text-transform: capitalize !important;
-        }
     }
 }

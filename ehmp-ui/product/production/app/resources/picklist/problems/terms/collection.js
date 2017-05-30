@@ -1,4 +1,5 @@
 define([], function() {
+    'use strict';
 
     var Term = ADK.Resources.Picklist.Model.extend({
         idAttribute: 'lexIen',

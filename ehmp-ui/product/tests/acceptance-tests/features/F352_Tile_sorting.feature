@@ -1,4 +1,4 @@
-@F352   @DE6991 @DE6976 @reg1
+@F352   @DE6991 @DE6976 @reg1 
 Feature: Tile Sorting
 
 Background:

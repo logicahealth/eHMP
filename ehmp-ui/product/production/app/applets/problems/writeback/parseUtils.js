@@ -181,16 +181,8 @@ define([
             var newFormData = {};
             newFormData.editMode = true;
 
-            var onset = existingProblemModel.get('onset');
-            if(onset){
-                if(onset.length === 4){
-                    newFormData['onset-date'] = onset;
-                } else if(onset.length === 6){
-                    newFormData['onset-date'] = moment(onset, 'YYYYMM').format('MM/YYYY');
-                } else if(onset.length === 8){
-                    newFormData['onset-date'] = moment(onset, 'YYYYMMDD').format('MM/DD/YYYY');
-                }
-            }
+            var response = existingProblemModel.getOnsetFormatted({onset: existingProblemModel.get('onset')});
+            newFormData['onset-date'] = response.onsetFormatted;
 
             var status = existingProblemModel.get('statusName');
             if(status){

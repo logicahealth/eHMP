@@ -1,7 +1,7 @@
 <div role="row" class="table-row" {{#if userWorkspace}}draggable="true"{{/if}}>
 {{#if vitalColumns}}
     <div role="presentation" class="selectable">
-        <div role="gridcell" class="table-cell problem-name border-vertical">
+        <div role="gridcell" class="table-cell border-vertical">
             <span class="sr-only toolbar-instructions">Press enter to open the toolbar menu.</span>
             <div role="presentation" class="toolbar-container"></div>
             <span class="sr-only">{{fullName}}</span>
@@ -35,7 +35,7 @@
     </div>
 {{else}}
     <div role="presentation" class="selectable">
-        <div role="gridcell" class="table-cell problem-name border-vertical">
+        <div role="gridcell" class="table-cell border-vertical">
             <span class="sr-only toolbar-instructions">Press enter to open the toolbar menu.</span>
             <div role="presentation" class="toolbar-container"></div>
             <span data-cell-instanceid="problem_name_{{displayName}}" data-cell-tilesort="tilesort">{{typeName}} {{#if specimenForTrend}} - {{/if}} {{specimenForTrend}}</span>

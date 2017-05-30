@@ -16,7 +16,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="flag">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.med.va.gov/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.URL       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="approvedBy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="assigned" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
@@ -39,7 +39,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "flag", namespace = "http://webservice.vds.med.va.gov/", propOrder = {
+@XmlType(name = "flag", namespace = "http://webservice.vds.URL       /", propOrder = {
     "approvedBy",
     "assigned",
     "category",

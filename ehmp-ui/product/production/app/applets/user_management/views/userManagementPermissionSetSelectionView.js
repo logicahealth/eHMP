@@ -78,23 +78,22 @@ define([
                 return new SortedCollection(permissionsModels);
             };
 
-            var fields = [{
+            var fields =  [{
                 control: "container",
-                extraClasses: ["modal-body"],
+                extraClasses: ["container-fluid"],
                 items: [{
-                    control: "alertBanner",
-                    name: "permissionsSetAlertMessage",
-                    dismissible: true,
-                    extraClasses: ["permissionsSetAlert"]
-                }, {
                     control: "container",
-                    extraClasses: ["row", "container-fluid"],
+                    extraClasses: ["modal-body"],
                     items: [{
-                        control: "container",
-                        extraClasses: ["col-xs-12", "mainSelect"],
+                        control: "fieldset",
                         items: [{
+                            control: "alertBanner",
+                            name: "permissionsSetAlertMessage",
+                            dismissible: true,
+                            extraClasses: ["permissionsSetAlert"]
+                        }, {
                             control: "container",
-                            extraClasses: ["col-xs-12"],
+                            extraClasses: ["mainSelect"],
                             items: [{
                                 control: "multiselectSideBySide",
                                 name: "permissionSets",
@@ -118,54 +117,49 @@ define([
                         }]
                     }, {
                         control: "fieldset",
-                        extraClasses: ["col-xs-12", "permissionsSelect"],
-                        legend: "Additional Individual Permissions",
                         items: [{
+                            control: "container",
+                            tagName: "h4",
+                            template: "Additional Individual Permissions"
+                        }, {
                             control: "alertBanner",
                             name: "permissionsAlertMessage",
                             dismissible: true,
                             extraClasses: ["permissionsAlert"]
                         }, {
                             control: "container",
+                            extraClasses: ["permissionsSelect"],
                             items: [{
-                                control: "container",
-                                extraClasses: ["col-xs-12"],
-                                items: [{
-                                    control: "multiselectSideBySide",
-                                    name: "permissions",
-                                    label: "Additional Individual Permissions",
-                                    attributeMapping: {
-                                        value: "selected"
+                                control: "multiselectSideBySide",
+                                name: "permissions",
+                                label: "Additional Individual Permissions",
+                                attributeMapping: {
+                                    value: "selected"
+                                },
+                                detailsPopoverOptions: {
+                                    options: {
+                                        placement: 'auto left'
                                     },
-                                    detailsPopoverOptions: {
-                                        options: {
-                                            placement: 'auto left'
-                                        },
-                                        items: [{
-                                            control: 'container',
-                                            template: appletUtil.getDetailsTemplate([{
-                                                id: "description",
-                                                label: "Description"
-                                            }, {
-                                                id: "example",
-                                                label: "Example"
-                                            }])
-                                        }]
-                                    }
-                                }]
+                                    items: [{
+                                        control: 'container',
+                                        template: appletUtil.getDetailsTemplate([{
+                                            id: "description",
+                                            label: "Description"
+                                        }, {
+                                            id: "example",
+                                            label: "Example"
+                                        }])
+                                    }]
+                                }
                             }]
                         }]
                     }]
-                }]
-            }, {
-                control: "container",
-                extraClasses: ["modal-footer"],
-                items: [{
+                }, {
                     control: "container",
-                    extraClasses: ["row"],
+                    extraClasses: ["modal-footer", "right-padding-no", "left-padding-no"],
                     items: [{
                         control: "container",
-                        extraClasses: ["col-md-12", "text-right"],
+                        extraClasses: ["text-right"],
                         items: [{
                             control: "button",
                             extraClasses: ["btn-default", "btn-sm"],

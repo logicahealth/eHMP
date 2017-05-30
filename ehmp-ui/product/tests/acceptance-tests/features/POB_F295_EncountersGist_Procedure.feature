@@ -43,7 +43,7 @@ Scenario: Encounters trend view applet Procedure type quick look can be viewed
   | Provider		|
   | Facility		|
   
-@pob_f295_procedure_right_click_quick_look_view @F295-27.1 @F295-27.2 @F295-27.3 @F295-27.4 @F295-27.5 @F295-27.6 @F295-27.7 @F295-27.8 @US4154 @US5126 @DE6517 @debug
+@pob_f295_procedure_right_click_quick_look_view @F295-27.1 @F295-27.2 @F295-27.3 @F295-27.4 @F295-27.5 @F295-27.6 @F295-27.7 @F295-27.8 @US4154 @US5126 @DE6517
 Scenario: Encounters trend view applet Procedure right click quick look can be viewed
   When the user selects the right side of Procedure type encounter
   Then the quick look table is displayed

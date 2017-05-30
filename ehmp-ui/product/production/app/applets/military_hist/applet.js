@@ -13,31 +13,12 @@ define([
 
     function getSiteDisplayName(siteCode, siteMap) {
         var site;
-        if (siteCode && siteMap && siteMap.items && siteMap.items.length > 0) {
-            site = _.find(siteMap.items, {
+        if (siteCode && !siteMap.isEmpty()) {
+            site = siteMap.find({
                 siteCode: siteCode
             });
         }
-        return (site) ? (site.name || '') : '';
-    }
-
-    function preProcessData(data, currentVersion) {
-        var ret = _.map(data, function(d) {
-            if (d.version === currentVersion) {
-                d.displayName = Config.displayNames[d.name] || d.displayName;
-                var touchedOnDisplay = moment(d.touchedOn).format('MM/DD/YYYY');
-                d.touchedOnDisplay = (touchedOnDisplay !== 'Invalid date') ? touchedOnDisplay : '';
-                d.applet_id = d.appletId;
-            } else {
-                //this is the old version (only two versions now)
-                d.displayName = Config.displayNames[d.name] || d.displayName;
-                d.siteDisplayName = d.location;
-                d.touchedByName = d.modifiedBy;
-                d.touchedOnDisplay = d.modifiedOn;
-            }
-            return d;
-        });
-        return ret;
+        return (site) ? (site.get('name') || '') : '';
     }
 
     function postProcessData(collection) {
@@ -72,14 +53,12 @@ define([
                         silent: true
                     });
                 });
-                model.set('version', DATA_VERSION);
+                model.set('version', Config.DATA_VERSION);
             }
 
         });
         return collection;
     }
-
-
 
     var columns = {
         summary: [{
@@ -113,104 +92,17 @@ define([
         }]
     };
 
-    var CHANNEL_NAME = 'military_hist';
-    var DATA_VERSION = '2.0.r01';
     var appletView = ADK.AppletViews.GridView.extend({
         _super: ADK.AppletViews.GridView.prototype,
         initialize: function(options) {
-            this.channel = ADK.Messaging.getChannel(CHANNEL_NAME);
-            var sitesFetchOptions = {
-                resourceTitle: 'authentication-list'
-            };
-            var usersFetchOptions = {
-                resourceTitle: 'user-service-userinfo-byUid'
-            };
-            var fetchOptionsGet = {
-                resourceTitle: 'patient-meta-get',
-                cache: true,
-                patient: ADK.PatientRecordService.getCurrentPatient(),
-                fetchType: 'GET',
-                pageable: false,
-                onSuccess: function(meta) {
-                    var uids = _.pluck(meta.models, 'attributes.touchedBy');
-                    _.remove(uids, function(meta) {
-                        return _.isEmpty(meta);
-                    });
-                    var tasks = [];
-                    _.each(uids, function(uid) {
-                        var fetchOptions = _.extend({}, usersFetchOptions, {
-                            criteria: {
-                                uid: uid
-                            },
-                            onSuccess: function(options, result) {
-                                options.fetchOptions.cb(null, result.data);
-                            }
-                        });
-                        tasks.push(function(callback) {
-                            _.extend(fetchOptions, {
-                                cb: callback
-                            });
-                            ADK.ResourceService.fetchCollection(fetchOptions);
-                        });
-                    });
-                    //last function gets the sites
-                    tasks.push(function(callback) {
-                        var fetchOptions = _.extend({}, sitesFetchOptions, {
-                            onSuccess: function(options, result) {
-                                callback(null, result.data);
-                            },
-                            onError: function(options, err) {
-                                callback(err);
-                            }
-                        });
-                        ADK.ResourceService.fetchCollection(fetchOptions);
-                    });
-                    async.parallel(tasks, _.bind(function(err, results) {
-                        var siteMap = results.pop();
+            this.channel = ADK.Messaging.getChannel(Config.CHANNEL_NAME);
+            this.collection = new ADK.UIResources.Fetch.MilitaryHistory.MetaCollection();
+            this.collection.fetchCollection();
 
-                        _.each(this.models, function(model) {
-                            var nameParts;
-                            var user = _.find(results, {
-                                uid: model.get('touchedBy')
-                            });
-                            if (user) {
-                                nameParts = user.name.split(',');
-                                if (nameParts.length > 1) {
-                                    model.set({
-                                        touchedByName: nameParts[1] + ' ' + nameParts[0]
-                                    });
-                                }
-                            }
-                            //only set displayname if data version matches
-                            if (model.get('version') === DATA_VERSION) {
-                                model.set('siteDisplayName', getSiteDisplayName(model.get('siteHash'), siteMap));
-                            }
-                        });
-                    }, meta));
-                },
-                collectionConfig: {
-                    collectionParse: function(col) {
-                        var defaults = Config.getDefaults(DATA_VERSION);
+            this.sites = new ADK.UIResources.Fetch.MilitaryHistory.SiteCollection();
+            this.bindEntityEvents(this.sites, this.siteCollectionEvents);
 
-                        if (col.models[0]) {
-                            if (col.models[0].get('status') === 202) {
-                                //patient data not found, returning defaults
-                                return defaults;
-                            }
-                            var val = col.models[0].get('val');
-
-                            return preProcessData(val, DATA_VERSION);
-                        }
-                    },
-                    model: Backbone.Model.extend({
-                        defaults: {
-                            'applet_id': CHANNEL_NAME
-                        }
-                    })
-                }
-            };
             this.viewType = options.appletConfig.viewType;
-            this.collection = ADK.PatientRecordService.fetchCollection(fetchOptionsGet);
             this.appletOptions = {
                 collection: this.collection,
                 onClickRow: this.onClickRow,
@@ -245,6 +137,54 @@ define([
             this._super.initialize.apply(this, arguments);
             //end of initialize
         },
+        collectionEvents: {
+            'sync': function() {
+                if (this.columnsViewType === 'expanded') {
+                    this.sites.fetchCollection();
+
+                    var uids = _.pluck(this.collection.models, 'attributes.touchedBy');
+
+                    _.remove(uids, function(uid) {
+                        return _.isEmpty(uid);
+                    });
+
+                    uids = _.uniq(uids);
+                    this.numberOfUsers = uids.length;
+
+                    this.userCollection = new ADK.UIResources.Fetch.MilitaryHistory.UserCollection();
+                    this.bindEntityEvents(this.userCollection, this.userCollectionEvents);
+                    this.userCollection.fetchCollection(uids);
+                }
+            }
+        },
+        siteCollectionEvents: {
+            'sync': function() {
+                this.collection.each(function(metaDataModel) {
+                    if (metaDataModel.get('version') === Config.DATA_VERSION) {
+                        metaDataModel.set('siteDisplayName', getSiteDisplayName(metaDataModel.get('siteHash'), this.sites));
+                    }
+                }, this);
+            }
+        },
+        userCollectionEvents: {
+            'sync': function(collection) {
+                this.collection.each(function(metaDataModel) {
+                    var user = collection.find(function(user) {
+                        return user.get('uid') === metaDataModel.get('touchedBy');
+                    });
+
+                    if (user) {
+                        var nameParts = user.get('name').split(',');
+                        if (!_.isEmpty(nameParts)) {
+                            metaDataModel.set('touchedByName', nameParts[1] + ' ' + nameParts[0]);
+                            return;
+                        }
+                    }
+
+                    metaDataModel.set('touchedByName', '');
+                }, this);
+            }
+        },
         onClickRow: function(model) {
             this.getDetailsModal(model);
         },
@@ -272,7 +212,7 @@ define([
                     size: "medium",
                     title: model.get('displayName'),
                     keyboard: true,
-                    nextPreviousCollection: this.collection,
+                    nextPreviousCollection: this.collection
                 },
                 callbackView: this
 
@@ -317,9 +257,6 @@ define([
                 isAcknowledged = true;
             }
 
-            var options = {
-                wait: true
-            };
             // Get the pid param in the same way as ADK.PatientRecordService.fetchCollection does
             collection.url = ADK.ResourceService.buildUrl('patient-meta-edit', {
                 pid: patient.get('pid') || patient.get('icn') || patient.get('id') || "",
@@ -328,7 +265,7 @@ define([
             collection.sync('update', collection, {
                 success: function() {
                     ADK.UI.Workflow.hide();
-                    ADK.Messaging.getChannel(CHANNEL_NAME).trigger('applet:refresh');
+                    ADK.Messaging.getChannel(Config.CHANNEL_NAME).trigger('applet:refresh');
                 },
                 error: function(err) {
                     var errorMessage = '';
@@ -338,18 +275,15 @@ define([
                         errorMessage = err.responseText;
                     }
                     model.set('errorMessage', errorMessage);
-                    ADK.Messaging.getChannel(CHANNEL_NAME).trigger('applet:refresh');
+                    ADK.Messaging.getChannel(Config.CHANNEL_NAME).trigger('applet:refresh');
                 }
             });
+        },
+        onDestroy: function() {
+            this.unbindEntityEvents(this.sites, this.siteCollectionEvents);
+            this.unbindEntityEvents(this.userCollection, this.userCollectionEvents);
         }
     });
-
-    function overridedisplayNames(data) {
-        return _.map(data, function(d) {
-            d.displayName = Config.displayNames[d.name] || d.displayName;
-            return d;
-        });
-    }
 
     var applet = {
         id: 'military_hist',
@@ -366,7 +300,6 @@ define([
             }),
             chromeEnabled: true
         }],
-
         defaultViewType: 'summary'
     };
     return applet;

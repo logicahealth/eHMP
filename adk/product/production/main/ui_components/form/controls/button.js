@@ -11,6 +11,7 @@ define([
 
     var ButtonControl = ControlService.Control.extend({
         defaults: {
+            icon: '',
             type: "submit",
             label: "Submit",
             status: undefined, // error or success

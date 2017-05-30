@@ -21,7 +21,7 @@ define([
 ) {
     "use strict";
     var cwadDetail = Backbone.Marionette.ItemView.extend({
-        className: "col-xs-12 demographic-group-wrapper",
+        className: "col-xs-12 group-wrapper",
         initialize: function(options) {
             this.template = options.template;
         }

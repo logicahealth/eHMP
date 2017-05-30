@@ -54,6 +54,9 @@ function versionCompare(v1, v2) {
     // Convert all values to numbers
     var convert = function(val) {
         val = val.replace(/\D/g, '');
+        if (val.length === 0) {
+            return Number.MAX_VALUE;
+        }
         return Number(val);
     };
     v1parts = v1parts.map(convert);

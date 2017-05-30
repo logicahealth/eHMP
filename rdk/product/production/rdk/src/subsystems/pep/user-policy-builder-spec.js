@@ -407,4 +407,20 @@ describe('When a user policy is updated based on patient information', function(
 
         done();
     });
+
+    it('and this is a sensitive patient and the user policy breakglass flag is true but it is not a local pid then the vista sensitive audit rpc is NOT called', function(done) {
+        userPolicy.breakglass = true;
+        builder._updateUserPolicyWithPatientData(req, userPolicy, {
+            data: {
+                items: [{
+                    pid: '10108V420871',
+                    sensitive: true
+                }]
+            }
+        });
+        expect(userPolicy.sensitive).to.be.true();
+        expect(mockVistaJS.called).to.be.false();
+
+        done();
+    });
 });

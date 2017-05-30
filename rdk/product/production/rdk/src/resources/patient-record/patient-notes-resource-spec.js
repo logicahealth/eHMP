@@ -20,6 +20,7 @@ describe('The patient-notes-resource', function() {
                         '9E7A': '10000000270',
                         'C77A': 'duz2'
                     },
+                    division: '500'
                 }
             },
             interceptorResults: {

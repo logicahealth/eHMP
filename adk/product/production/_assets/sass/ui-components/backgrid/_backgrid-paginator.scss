@@ -1,0 +1,34 @@
+.backgrid-paginator {
+	background: $primary-lightest;
+	height: 24px;
+	 ul {
+	 	margin-bottom: 0;
+		li > span {
+			cursor: default;
+			background: none;
+			float: none;
+		}
+		.active {
+			padding-top: 3px;
+			> span {
+				background-color: transparent;
+			}
+		}
+	}
+}
+
+//table in numeric lab results and vitals details modal
+.details-modal-table {
+    height: 421px;
+    .label-critical {
+    	padding: 1.5px 3px;
+    }
+    .backgrid-paginator {
+        position: absolute;
+        bottom: 0;
+        width: calc(100% - 30px);
+    }
+    .data-grid {
+        height: 397px;
+    }
+}

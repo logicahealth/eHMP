@@ -1,0 +1,413 @@
+{
+    "resourceType": "Bundle",
+    "title": "MedicationDispense with subject.identifier '10107V395912'",
+    "id": "c0dea899-5aef-4a5f-93d0-fbb20c95bbb1",
+    "link": [
+        {
+            "rel": "self",
+            "href": "http://IP             /resource/fhir/medicationdispense?subject.identifier=10107V395912&accessCode=IP    &verifyCode=IP    !!&site=9E7A&division=500"
+        }
+    ],
+    "totalResults": 1,
+    "updated": "2015-02-09T18:57:10.025+04:00",
+    "author": [
+        {
+            "name": "eHMP",
+            "uri": "https://ehmp.vistacore.us"
+        }
+    ],
+    "entry": [
+        {
+            "title": "MedicationDispense for patient [10107V395912]",
+            "id": "Condition/urn:va:med:9E7A:253:27957",
+            "link": [
+                {
+                    "rel": "self",
+                    "href": "http://IP             /fhir/medicationdispense/urn:va:med:9E7A:253:27957"
+                }
+            ],
+            "updated": "2015-02-09T18:57:10.025+04:00",
+            "published": "2015-02-09T18:57:10.025+04:00",
+            "author": [
+                {
+                    "name": "eHMP",
+                    "uri": "https://ehmp.vistacore.us"
+                }
+            ],
+            "content": {
+                "_id": "urn:va:med:9E7A:253:27957",
+                "text": "METOPROLOL TARTRATE 50MG TAB (EXPIRED)\n TAKE ONE TABLET BY MOUTH TWICE A DAY",
+                "resourceType": "MedicationDispense",
+                "identifier": {
+                    "system": "urn:oid:2.16.840.1.113883.6.233",
+                    "value": "urn:va:med:9E7A:253:27957"
+                },
+                "status": "completed",
+                "contained": [
+                    {
+                        "resourceType": "Location",
+                        "_id": "54219485-ca25-4a33-8853-25ecc15cb208",
+                        "name": "CAMP MASTER",
+                        "identifier": {
+                            "value": "500",
+                            "system": "urn:oid:2.16.840.1.113883.6.233"
+                        },
+                        "display": "GENERAL MEDICINE"
+                    },
+                    {
+                        "resourceType": "Encounter",
+                        "_id": "42c85c9d-7df5-4dd1-dc0e-af2d6fd13f49",
+                        "text": {
+                            "status": "generated",
+                            "div": "<div>Encounter with patient 9E7A;253</div>"
+                        },
+                        "extension": [
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#locationUid",
+                                "valueString": "urn:va:location:9E7A:23"
+                            }
+                        ],
+                        "type": "Outpatient",
+                        "location": [
+                            {
+                                "location": {
+                                    "reference": "#54219485-ca25-4a33-8853-25ecc15cb208"
+                                },
+                                "period": {
+                                    "start": "2010-02-27T09:03:00",
+                                    "end": "2010-02-27T09:03:00"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "resourceType": "Substance",
+                        "_id": "802f46f1-ffa6-43d5-ab13-db3a2f8f2736",
+                        "description": "METOPROLOL TARTRATE TAB",
+                        "type": {
+                            "text": "METOPROLOL TARTRATE TAB",
+                            "coding": [
+                                {
+                                    "code": "urn:va:vuid:4019836",
+                                    "display": "METOPROLOL",
+                                    "system": "urn:oid:2.16.840.1.113883.6.233"
+                                },
+                                {
+                                    "code": "urn:sct:410942007",
+                                    "display": "METOPROLOL TARTRATE TAB",
+                                    "system": "SNOMED-CT"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "resourceType": "Practitioner",
+                        "_id": "1990f646-c575-42d5-aad2-0e1ed16aaff2",
+                        "name": {
+                            "text": "PROVIDER,ONE"
+                        },
+                        "identifier": {
+                            "label": "provider-uid",
+                            "value": "urn:va:user:9E7A:983",
+                            "system": "urn:oid:2.16.840.1.113883.6.233"
+                        }
+                    },
+                    {
+                        "resourceType": "Medication",
+                        "_id": "Medication/urn:va:med:9E7A:253:27957",
+                        "name": "METOPROLOL TARTRATE TAB",
+                        "code": {
+                            "coding": [
+                                {
+                                    "code": "urn:vandf:4019836"
+                                },
+                                {
+                                    "code": "urn:ndfrt:N0000010595"
+                                },
+                                {
+                                    "code": "urn:ndfrt:N0000000001"
+                                },
+                                {
+                                    "code": "urn:ndfrt:N0000010582"
+                                },
+                                {
+                                    "code": "urn:rxnorm:6918"
+                                },
+                                {
+                                    "code": "urn:ndfrt:N0000007508"
+                                },
+                                {
+                                    "code": "866514",
+                                    "system": "urn:oid:2.16.840.1.113883.6.88",
+                                    "display": "Metoprolol Tartrate 50 MG Oral Tablet"
+                                }
+                            ],
+                            "text": "METOPROLOL TARTRATE TAB"
+                        },
+                        "product": {
+                            "form": {
+                                "text": "TAB",
+                                "coding": [
+                                    {
+                                        "system": "urn:oid:2.16.840.1.113883.6.233"
+                                    }
+                                ]
+                            },
+                            "ingredient": [
+                                {
+                                    "item": {
+                                        "reference": "#802f46f1-ffa6-43d5-ab13-db3a2f8f2736"
+                                    }
+                                }
+                            ]
+                        },
+                        "extension": [
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#ingredientCode",
+                                "valueString": "urn:va:vuid:4019836"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#ingredientCodeName",
+                                "valueString": "METOPROLOL"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#drugClassCode",
+                                "valueString": "urn:vadc:CV100"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#drugClassName",
+                                "valueString": "BETA BLOCKERS/RELATED"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#suppliedCode",
+                                "valueString": "urn:va:vuid:4004608"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#suppliedName",
+                                "valueString": "METOPROLOL TARTRATE 50MG TAB"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#ingredientRole",
+                                "valueString": "urn:sct:410942007"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#strength",
+                                "valueString": "50 MG"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#ingredientRXNCode",
+                                "valueString": "urn:rxnorm:6918"
+                            }
+                        ]
+                    },
+                    {
+                        "resourceType": "MedicationPrescription",
+                        "_id": "e5147dbd-3d80-4637-9120-44b93915f5fa",
+                        "identifier": [
+                            {
+                                "value": "500729",
+                                "system": "urn:oid:2.16.840.1.113883.6.233",
+                                "use": "prescriptionId"
+                            },
+                            {
+                                "value": "urn:va:med:9E7A:253:27957",
+                                "system": "urn:oid:2.16.840.1.113883.6.233"
+                            }
+                        ],
+                        "dateWritten": "2010-02-27T09:03:00",
+                        "status": {
+                            "code": "completed"
+                        },
+                        "patient": {
+                            "reference": "Patient/9E7A;253"
+                        },
+                        "text": {
+                            "div": "METOPROLOL TARTRATE 50MG TAB (EXPIRED)\n TAKE ONE TABLET BY MOUTH TWICE A DAY"
+                        },
+                        "dispense": {
+                            "numberOfRepeatsAllowed": 3,
+                            "quantity": "180",
+                            "expectedSupplyDuration": 90,
+                            "validityPeriod": {
+                                "extension": [
+                                    {
+                                        "url": "http://vistacore.us/fhir/extensions/med#stopped",
+                                        "valueString": "20110228"
+                                    }
+                                ],
+                                "start": "2010-02-27",
+                                "end": "2011-02-28"
+                            }
+                        },
+                        "encounter": {
+                            "reference": "500"
+                        },
+                        "medication": {
+                            "display": "METOPROLOL TARTRATE TAB",
+                            "reference": "#Medication/urn:va:med:9E7A:253:27957"
+                        },
+                        "extension": [
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#supply",
+                                "valueBoolean": false
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#kind",
+                                "valueString": "Medication, Outpatient"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#localId",
+                                "valueString": "403951;O"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#medStatus",
+                                "valueString": "urn:sct:392521001"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#medStatusName",
+                                "valueString": "historical"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#medType",
+                                "valueString": "urn:sct:73639000"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#orderUid",
+                                "valueString": "urn:va:order:9E7A:253:27957"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#pharmacistUid",
+                                "valueString": "urn:va:user:9E7A:10000000056"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#pharmacistName",
+                                "valueString": "PHARMACIST,ONE"
+                            },
+                            {
+                                "url": "http://vistacore.us/fhir/extensions/med#scheduleFreq",
+                                "valueString": 720
+                            }
+                        ],
+                        "dosageInstruction": [
+                            {
+                                "extension": [
+                                    {
+                                        "url": "http://vistacore.us/fhir/extensions/med#relativeStart",
+                                        "valueString": 0
+                                    },
+                                    {
+                                        "url": "http://vistacore.us/fhir/extensions/med#relativeStop",
+                                        "valueString": 527040
+                                    },
+                                    {
+                                        "url": "http://vistacore.us/fhir/extensions/med#amount",
+                                        "valueString": "1"
+                                    },
+                                    {
+                                        "url": "http://vistacore.us/fhir/extensions/med#noun",
+                                        "valueString": "TABLET"
+                                    },
+                                    {
+                                        "url": "http://vistacore.us/fhir/extensions/med#instructions",
+                                        "valueString": "50MG"
+                                    }
+                                ],
+                                "text": "TAKE ONE TABLET BY MOUTH TWICE A DAY",
+                                "timing": {
+                                    "period": {
+                                        "extension": [
+                                            {
+                                                "url": "http://vistacore.us/fhir/extensions/med#scheduleType",
+                                                "valueString": "CONTINUOUS"
+                                            }
+                                        ],
+                                        "start": "2010-02-27",
+                                        "end": "2011-02-28"
+                                    },
+                                    "schedule": {
+                                        "extension": [
+                                            {
+                                                "url": "http://vistacore.us/fhir/extensions/med#scheduleName",
+                                                "valueString": "BID"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "route": {
+                                    "text": "Oral",
+                                    "coding": {
+                                        "system": "urn:oid:2.16.840.1.113883.6.233",
+                                        "display": "Oral",
+                                        "code": "PO"
+                                    }
+                                },
+                                "doseQuantity": {
+                                    "value": "50",
+                                    "units": "MG"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "dispenser": {
+                    
+                        "reference": "#1990f646-c575-42d5-aad2-0e1ed16aaff2"
+                    
+                },
+                "authorizingPrescription": {
+                    "reference": "#e5147dbd-3d80-4637-9120-44b93915f5fa"
+                },
+                "dispense": {
+                    "extension": [
+                        {
+                            "url": "http://vistacore.us/fhir/extensions/med#administrations"
+                        },
+                        {
+                            "url": "http://vistacore.us/fhir/extensions/med#units",
+                            "valueString": "MG"
+                        },
+                        {
+                            "url": "http://vistacore.us/fhir/extensions/med#IMO",
+                            "valueBoolean": false
+                        },
+                        {
+                            "url": "http://vistacore.us/fhir/extensions/med#fillCost",
+                            "valueString": "2.466"
+                        },
+                        {
+                            "url": "http://vistacore.us/fhir/extensions/med#fillsRemaining",
+                            "valueString": 3
+                        },
+                        {
+                            "url": "http://vistacore.us/fhir/extensions/med#vaRouting",
+                            "valueString": "W"
+                        },
+                        {
+                            "url": "http://vistacore.us/fhir/extensions/med#daysSupplyDispensed",
+                            "valueString": 90
+                        },
+                        {
+                            "url": "http://vistacore.us/fhir/extensions/med#routing",
+                            "valueString": "W"
+                        }
+                    ],
+                    "quantity": "180",
+                    "whenPrepared": "2010-02-27",
+                    "whenHandedOver": "2010-02-27"
+                },
+                "extension": [
+                    {
+                        "url": "http://vistacore.us/fhir/extensions/med#lastFilled",
+                        "valueString": "20100227"
+                    },
+                    {
+                        "url": "http://vistacore.us/fhir/extensions/med#type",
+                        "valueString": "Prescription"
+                    }
+                ]
+            }
+        }
+        
+  
+    ]
+}

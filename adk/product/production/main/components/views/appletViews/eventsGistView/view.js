@@ -22,6 +22,7 @@ define([
     var baseDisplayApplet = BaseDisplayApplet;
 
     var EventsGistView = BaseDisplayApplet.extend({
+        AppletView: EventsView,
         initialize: function(options) {
 
             this._base = baseDisplayApplet.prototype;

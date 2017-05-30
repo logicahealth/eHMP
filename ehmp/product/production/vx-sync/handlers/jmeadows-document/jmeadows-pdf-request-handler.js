@@ -24,10 +24,10 @@ function handle(log, config, environment, job, handlerCallback) {
     request(domainConfig, function(error, response, body) {
         log.debug('jmeadows-pdf-request-handler.handle : received document response');
         if (!error && response.statusCode === 200) {
-            var stagingPermissoins = docUtil.getStagingPermissons(config);
+            var stagingPermissions = docUtil.getStagingPermissons(config);
             var tmpFilePath = docUtil.getTempStagingFilePath(config, job);
-            createTmpFile(log, tmpFilePath, stagingPermissoins, body, function(err, filename) {
-                if (!err) {
+            createTmpFile(log, tmpFilePath, stagingPermissions, body, function(err, filename) {
+                if (!err || !_.isUndefined(err)) {
                     //update record
                     job.record.fileId = filename;
                     job.record.fileJobId = job.jobId;
@@ -51,7 +51,7 @@ function createTmpFile(log, path, permissions, file, callback) {
     log.debug('jmeadows-pdf-request-handler.createTmpFile : permissions ', permissions);
     if (_.isString(permissions)) {
         if (!/^7\d\d$/.test(permissions)) {
-            return callback('jmeadows-pdf-request-handler.createTmpFile() Insufficient privleges set for staging area');
+            return callback('jmeadows-pdf-request-handler.createTmpFile() Insufficient privileges set for staging area');
         }
     }
     mkdirp(path, permissions, function(error) {
@@ -65,18 +65,17 @@ function createTmpFile(log, path, permissions, file, callback) {
             if (!Buffer.isBuffer(file)) {
                 file = new Buffer(file, 'binary');
             }
-            writeTmpFile(log, path, filename, permissions, file, function(err) {
-                //var error = 'jmeadows-pdf-request-handler.createTmpFile() - Unable to write file to disk' + err;
-                log.error('jmeadows-pdf-request-handler.createTmpFile() - Unable to write file to disk: ' + inspect(err));
-                callback(error);
-            }, callback);
+            fsUtil.writeFile(log, path, filename, permissions, file, function(err, filename) {
+                if(err) {
+                    log.error('jmeadows-pdf-request-handler.createTmpFile() - Unable to create file: ' + inspect(err));
+                    return callback(format('jmeadows-pdf-request-handler.createTmpFile() - Unable to create file: %j', err));
+                }
+                else {
+                    return callback(null, filename);
+                }
+            });
         }
     });
-}
-
-
-function writeTmpFile(log, path, filename, permissions, file, tryAgainCallback, callback) {
-    fsUtil.writeFile(log, path, filename, permissions, file, tryAgainCallback, callback);
 }
 
 function getHttpConfig(log, config, job) {
@@ -115,5 +114,4 @@ function getHttpConfig(log, config, job) {
 
 module.exports = handle;
 module.exports._getHttpConfig = getHttpConfig;
-module.exports._writeTmpFile = writeTmpFile;
 module.exports._createTmpFile = createTmpFile;

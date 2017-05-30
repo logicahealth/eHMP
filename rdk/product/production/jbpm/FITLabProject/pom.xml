@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>VistaCore</groupId>
-  <artifactId>FITLabProject</artifactId>
-  <version>1.0</version>
-  <name>FITLabProject</name>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>jboss-ga-plugin-repository</id>
-      <name>JBoss 6 Maven Plugin Repository</name>
-      <url>http://maven.repository.redhat.com/techpreview/all</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.kie</groupId>
-        <artifactId>kie-maven-plugin</artifactId>
-        <version>6.2.0.Final-redhat-4</version>
-        <extensions>true</extensions>
-      </plugin>
-    </plugins>
-  </build>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>us.vistacore.jbpm</groupId>
+		<artifactId>jbpm</artifactId>
+		<version>0.0.1</version>
+	</parent>
+
+	<groupId>VistaCore</groupId>
+	<artifactId>FITLabProject</artifactId>
+	<version>1.0</version>
+	<name>FITLabProject</name>
+
+	<properties>
+		<maven.compiler.source>${javaVersion}</maven.compiler.source>
+		<maven.compiler.target>${targetJavaVersion}</maven.compiler.target>
+	</properties>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>jboss-ga-plugin-repository</id>
+			<name>JBoss 6 Maven Plugin Repository</name>
+			<url>http://maven.repository.redhat.com/techpreview/all</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.kie</groupId>
+				<artifactId>kie-maven-plugin</artifactId>
+				<version>${kie-version}</version>
+				<extensions>true</extensions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

@@ -39,7 +39,7 @@ var patientIdentifier = {
 };
 
 function createEnvironment(log, config) {
-	return {
+	var env = {
 		jds: new JdsClientDummy(log, config),
 		solr: {
 			deleteByQuery: function(pid, callback) {
@@ -57,6 +57,13 @@ function createEnvironment(log, config) {
 			}
 		}
 	};
+
+	env.jds.childInstance = function() { return env.jds; };
+	env.vistaClient.childInstance = function() { return env.vistaClient; };
+	env.hdrClient.childInstance = function() { return env.hdrClient; };
+	env.solr.childInstance = function() { return env.solr; };
+
+	return env;
 }
 
 describe('patient-record-retirement-handler', function() {
@@ -162,6 +169,33 @@ describe('patient-record-retirement-handler', function() {
 				expect(error).toBeFalsy();
 				expect(result).toBeTruthy();
 				expect(result).toEqual('success');
+			});
+		});
+		it('normal path - referenceInfo is passed in job', function() {
+			var environment = createEnvironment(log, config);
+			environment.jds._setResponseData([null, null], [{
+				statusCode: 200
+			}, {
+				statusCode: 200
+			}], [{
+				patientIdentifiers: ['AAAA;1', 'BBBB;1', 'XHDR;1', 'YHDR;1', '12345V12345'],
+				jpid: 'aaaaa-bbbbbb-cccccc'
+			}, null]);
+			var meta = {
+				referenceInfo: {
+					requestId: 'patient-record-retirement-requestId',
+					sessionId: 'patient-record-retirement-sessionId'
+				}
+			};
+
+			var job = jobUtil.createPatientRecordRetirement(patientIdentifier, meta);
+			handler(log, config, environment, job, function(error, result) {
+				expect(error).toBeFalsy();
+				expect(result).toBeTruthy();
+				expect(result).toEqual('success');
+				expect(job.referenceInfo).toBeDefined();
+				expect(job.referenceInfo.requestId).toBe('patient-record-retirement-requestId');
+				expect(job.referenceInfo.sessionId).toBe('patient-record-retirement-sessionId');
 			});
 		});
 		it('error path - getPatientIdentifiersFromJds returns error', function() {

@@ -91,8 +91,10 @@ When(/^the client searches(?: for| where)? text (?:for|where)\
 (?:, and| and|,| with)?\
 (?: types(?: is| of| in| equals to| equals| =)? "(.*?)")?\
 (?:, and| and|,| with)?\
-(?: fields?(?: is| of| in| equals to| equals| =) "(.*?)")?/) \
-do |pid, query, types, whitelist|
+(?: fields?(?: is| of| in| equals to| equals| =) "(.*?)")?\
+(?:, and| and|,| with)?\
+(?: returnSynonyms?(?: is| of| in| equals to| equals| =)? "(.*?)")?/) \
+do |pid, query, types, whitelist, returnsynonyms|
   # puts "pid=[#{pid}]"
   # puts "query=[#{query}]"
   # puts "types=[#{types}]"
@@ -105,10 +107,12 @@ do |pid, query, types, whitelist|
   resource.add_parameter('query', query) unless query.nil?
   resource.add_parameter('types', types) unless types.nil?
   resource.add_parameter('fields', whitelist) unless whitelist.nil?
+  resource.add_parameter('returnSynonyms', returnsynonyms) unless returnsynonyms.nil?
 
   path = resource.path
+  # puts path
   @response = HTTPartyRDK.get(path)
-  # puts @response.body
+  # puts JSON.pretty_generate(JSON.parse(@response.body))
 end
 
 # patient-record-complexnote
@@ -237,7 +241,7 @@ do |field, nbr, unit|
   end
 end
 
-Then(/^the response contains( between| no more than| at least| at most| no less than| only)? (\d+)(?: and (\d+))? (data rows?|items?|data item results?)$/) \
+Then(/^the response contains( between| no more than| at least| at most| no less than| only)? (\d+)(?: and (\d+))? (data rows?|items?|data item results|synonyms?)$/) \
 do |range, num1, num2, row_type|
   range.strip! unless range.nil?
 
@@ -245,6 +249,8 @@ do |range, num1, num2, row_type|
     items = hash_to_array(get_hash_items(@response.body))
   elsif row_type == 'data row' || row_type == 'data rows'
     items = hash_to_array(get_hash_data(@response.body))
+  elsif row_type == 'synonyms'
+    items = key_value(@response.body, 'synonyms')
   else
     items = hash_to_array(get_hash_data_items_results(@response.body))
   end
@@ -263,6 +269,25 @@ do |range, num1, num2, row_type|
   end
 end
 
+Then(/^the response does not contain array "(.*?)"$/) \
+do |field|
+  expect(key_value(@response.body, field)).to be_nil, "Field/Array [#{field}] exists"
+end
+
+Then(/^the response contains array "(.*?)"$/) \
+do |field, table|
+  expect(key_value(@response.body, field)).to_not be_nil, "Array [#{field}] does not exist"
+  expect(key_value(@response.body, field).is_a?(Array)).to eq(true), "Field [#{field}] is not an array"
+
+  response_value = key_value(@response.body, field).sort
+
+  expect(table.rows.size).to eq(response_value.size)
+
+  table.rows.each_with_index do |expected_row, i|
+    expect(response_value[i].dump).to eq(expected_row[0].dump.gsub("\\\\u{e7}", "\\u{e7}"))
+  end
+end
+
 Then(/^the response contains field "(.*?)"(?: which| whose)?(?: value| valued)?(?: is| at)? "(.*?)"$/) \
 do |field, value|
   # puts "field=[#{field}]"
@@ -273,6 +298,24 @@ do |field, value|
     expect(key_value(@response.body, field)).to eq(value.to_i)
   else
     expect(key_value(@response.body, field)).to eq(value)
+  end
+end
+
+Then(/^the returned "(.*?)"(?: list)? is saved$/) \
+do |field|
+  @saved_value = key_value(@response.body, field)
+end
+
+Then(/^the first "(.*?)"(?: list)? matches the second(?: list)?$/) \
+do |field|
+  expect(@saved_value.size).to eq(key_value(@response.body, field).size)
+
+  first_list = @saved_value.sort
+  second_list = key_value(@response.body, field).sort
+
+  second_list.each_with_index do |second_item, i|
+    # puts "<#{i}> <#{first_list[i].dump}> <#{second_item.dump}>"
+    expect(first_list[i].dump).to eq(second_item.dump)
   end
 end
 

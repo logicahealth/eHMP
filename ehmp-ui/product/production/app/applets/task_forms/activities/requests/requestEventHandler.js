@@ -3,9 +3,9 @@ define([
     'moment',
     'app/applets/task_forms/common/utils/eventHandler',
     'app/applets/task_forms/common/utils/taskFetchHelper',
-    'app/applets/orders/writeback/common/assignmentType/assignmentTypeUtils',
-    'app/applets/task_forms/common/utils/requestCommonUtils'
-], function(Async, moment, EventHandler, TaskFetchHelper, AssignmentTypeUtils, Utils) {
+    'app/applets/task_forms/common/utils/requestCommonUtils',
+    'app/applets/task_forms/common/utils/utils'
+], function(Async, moment, EventHandler, TaskFetchHelper, RequestUtils, Utils) {
     'use strict';
 
     var parseAssignment = function(assignment) {
@@ -98,9 +98,9 @@ define([
                 locationDesc: visitInfo.locationDisplayName
             },
             ehmpState: formAction,
-            displayName: Utils.removeWhiteSpace(formModel.get('title')),
+            displayName: RequestUtils.removeWhiteSpace(formModel.get('title')),
             referenceId: '', // For Request Activity this will be empty string since there is not a corresponding Vista/JDS record.
-            instanceName: Utils.removeWhiteSpace(formModel.get('title')),
+            instanceName: RequestUtils.removeWhiteSpace(formModel.get('title')),
             data: {
                 activity: buildActivity(formModel, formAction, userSession),
                 signals: [], // nothing to put here yet
@@ -188,7 +188,7 @@ define([
             timeStamp: '',
             urgency: parseUrgencyId(formModel.get('urgency')),
             assignedTo: routingCode(formModel, formAction),
-            instanceName: Utils.removeWhiteSpace(formModel.get('title')),
+            instanceName: RequestUtils.removeWhiteSpace(formModel.get('title')),
             domain: 'Request',
             sourceFacilityId: ADK.UserService.getUserSession().get('division'),
             destinationFacilityId: formModel.get('facility') ? formModel.get('facility') : ADK.UserService.getUserSession().get('division'),
@@ -205,9 +205,9 @@ define([
             urgency: formModel.get('urgency'), // from form
             earliestDate: moment(formModel.get('earliest')).startOf('day').utc().format('YYYYMMDDHHmmss'), // from form
             latestDate: moment(formModel.get('latest')).endOf('day').utc().format('YYYYMMDDHHmmss'), // from form
-            title: Utils.removeWhiteSpace(formModel.get('title')), // from form
+            title: RequestUtils.removeWhiteSpace(formModel.get('title')), // from form
             assignTo: parseAssignment(formModel.get('assignment')), // from form
-            request: Utils.removeWhiteSpace(formModel.get('requestDetails') || ' '), // from form
+            request: RequestUtils.removeWhiteSpace(formModel.get('requestDetails') || ' '), // from form
             submittedByUid: 'urn:va:user:' + userSession.site + ':' + userSession.duz[userSession.site],
             submittedByName: userSession.lastname + ',' + userSession.firstname,
             submittedTimeStamp: moment().utc(),
@@ -275,14 +275,14 @@ define([
     // Close the modal and refresh the todo list applet to fetch new tasks
     var modalCloseAndRefresh = function(e, taskListView) {
         EventHandler.fireCloseEvent(e);
-        Utils.triggerRefresh();
+        RequestUtils.triggerRefresh();
     };
 
     // handles all the click events on the form, what is clicked is passed
     // through in formAction
     var startRequestPost = function(collection, formModel, formAction, userSession, patientContext, visitInfo, form) {
 
-        var newestActivity = findLatestRequest(collection);
+        var newestActivity = Utils.findLatest(collection, 'Order.Request');
 
         // Add to form model to be stored into pJDS
         formModel.set({
@@ -344,7 +344,7 @@ define([
     var sendSignalPost = function(e, collection, formModel, signalAction, userSession, visitInfo, form) {
         signalAction = signalAction || '';
 
-        var newestActivity = findLatestRequest(collection);
+        var newestActivity = Utils.findLatest(collection, 'Order.Request');
 
         formModel.set({
             deploymentId: newestActivity.get('deploymentId')
@@ -490,64 +490,6 @@ define([
                 return action;
         }
     };
-
-    // Compare two versions numbers and return the highest one
-    function versionCompare(v1, v2) {
-        // Split version numbers to its parts
-        var v1parts = v1.split('.');
-        var v2parts = v2.split('.');
-
-        // Shift 0 to the beginning of the version number that might be shorter
-        //      ie. 1.2.3 and 1.2.3.4 => 0.1.2.3 and 1.2.3.4
-        while (v1parts.length < v2parts.length) v1parts.unshift('0');
-        while (v2parts.length < v1parts.length) v2parts.unshift('0');
-
-        // Convert all values to numbers
-        v1parts = v1parts.map(Number);
-        v2parts = v2parts.map(Number);
-
-        for (var i = 0, l = v1parts.length; i < l; ++i) {
-            if (v1parts[i] === v2parts[i]) {
-                continue;
-            } else if (v1parts[i] > v2parts[i]) {
-                return 0;
-            } else {
-                return 1;
-            }
-        }
-
-        return -1;
-    }
-
-    // Find the latest request deployment
-    function findLatestRequest(collection) {
-        var requests = [];
-
-        // Get only the request deployments
-        collection.each(function(model) {
-            // if (model.get('id') === 'Order.Request') {
-            if (model.get('id') === 'Order.Request') {
-                requests.push(model);
-            }
-        });
-
-
-        // Get the list of just the deployment version numbers
-        var modReqs = requests.map(function(model) {
-            return model.get('deploymentId').split(':').pop();
-        });
-
-        // Find the location, in the array, for the largest value
-        var newestReq = 0;
-        if (modReqs.length > 1) {
-            for (var i = 1, l = modReqs.length; i < l; ++i) {
-                if (versionCompare(modReqs[newestReq], modReqs[i])) {
-                    newestReq = i;
-                }
-            }
-        }
-        return requests[newestReq];
-    }
 
     var eventHandler = {
         handleRequest: function(e, formModel, formAction, form) {

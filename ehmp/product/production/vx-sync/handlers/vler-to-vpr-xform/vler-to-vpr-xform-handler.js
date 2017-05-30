@@ -55,6 +55,9 @@ function handle(log, config, environment, job, handlerCallback) {
                         param: job.param,
                         priority: job.priority
                     };
+                    if (job.referenceInfo) {
+                        meta.referenceInfo = job.referenceInfo;
+                    }
                     var jobsToPublish = jobUtil.createEventPrioritizationRequest(job.patientIdentifier, 'vlerdocument', vprItem, meta);
 
                     log.debug('vler-to-vpr-xform-handler.handle: Jobs prepared.  jobsToPublish: %j', jobsToPublish);
@@ -82,8 +85,10 @@ function handle(log, config, environment, job, handlerCallback) {
             if ((response) && (response.statusCode)) {
                 statusCode = response.statusCode;
             }
-            log.error(format('vler-to-vpr-xform-handler.handle: Unable to retrieve VLER document for %s because %s', inspect(job.patientIdentifier), statusCode));
-            return handlerCallback(errorUtil.createTransient('unable to sync'));
+
+            var errorMessage = format('vler-to-vpr-xform-handler.handle: Unable to retrieve VLER document for %s because %s', inspect(job.patientIdentifier), statusCode);
+            log.error(errorMessage);
+            return handlerCallback(errorUtil.createTransient(errorMessage));
         }
 
     });

@@ -1,5 +1,4 @@
 VPRJPR ;SLC/KCM -- Handle RESTful operations for patient objects
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
 PUTPT(ARGS,BODY) ; PUTs patient demographics into the database
  N DEMOG,ERR,JPID,PID
@@ -538,8 +537,6 @@ DISASSOCIATE(RESULT,ARGS) ;Deassociate a PID/ICN with a JPID
  I '$D(^VPRPTJ("JPID",JPID)) D SETERROR^VPRJRER(224) Q
  ; Let CLEARPT deal with JPID/PID conversion
  D CLEARPT^VPRJPS(JPID)
- ; Remove last time this patient has been accessed
- K ^VPRMETA("JPID",JPID,"lastAccessTime")
  Q
  ;
 JPIDQUERY(ARGS,BODY) ; See if list of PIDS map to the same JPID or aren't known to JDS

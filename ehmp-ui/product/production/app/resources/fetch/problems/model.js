@@ -161,7 +161,11 @@ define([
         },
         getOnsetFormatted: function(response) {
             if (!_.isUndefined(response.onset)) {
-                var onset = response.onset.replace(/0000$/, "").replace(/00$/, "");
+                var onset = response.onset.replace(/0000$/, '');
+
+                if (onset.length > 4) {
+                    onset = onset.replace(/00$/, '');
+                }
 
                 if (onset.length === 4) { //
                     response.onsetFormatted = ADK.utils.formatDate(onset, 'YYYY');
@@ -171,7 +175,7 @@ define([
                     response.onsetFormatted = ADK.utils.formatDate(onset);
                 }
             } else {
-                response.onset = "";
+                response.onset = '';
             }
             return response;
         },

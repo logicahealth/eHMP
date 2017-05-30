@@ -16,6 +16,17 @@ end.run_action(:delete)
 yum_package "mod_nss"
 
 include_recipe "apache2"
+
+edit_resource!(:template, 'apache2.conf') do
+  source 'apache2.conf.erb'
+  cookbook 'ehmp_balancer'
+  variables.update(
+    :web_agent_config_dir => node[:ehmp_balancer][:web_agent][:config_dir],
+    :ssoi_deploy => node[:ehmp_balancer][:ssoi_deploy],
+    :log_level => node[:ehmp_balancer][:apache_log_level]
+  )
+end
+
 include_recipe "apache2::mod_headers"
 include_recipe "apache2::mod_proxy"
 include_recipe "apache2::mod_proxy_http"
@@ -36,6 +47,23 @@ link "#{node[:apache][:dir]}/mods-enabled/nss.conf" do
   action :create
 end
 
+cookbook_file '/var/www/maintenance.html' do
+  owner 'root'
+  group 'root'
+  mode 0755
+end
+
+ehmp_ui = find_multiple_nodes_by_role("ehmp-ui", node[:stack])
+rdk = find_multiple_nodes_by_role("resource_server", node[:stack])
+
+unless node[:ehmp_balancer][:mix_stack_name].nil? then
+  ehmp_ui_r1_2 = find_multiple_nodes_by_role("ehmp-ui", node[:ehmp_balancer][:mix_stack_name])
+  rdk_r1_2 = find_multiple_nodes_by_role("resource_server", node[:ehmp_balancer][:mix_stack_name])
+else
+  ehmp_ui_r1_2 = []
+  rdk_r1_2 = []
+end
+
 # create configuration file that has proxy/balancer in /etc/httpd/sites-available
 template "#{node[:apache][:dir]}/sites-available/proxy_balancer.conf" do
   source "proxy_balancer.conf.erb"
@@ -45,9 +73,18 @@ template "#{node[:apache][:dir]}/sites-available/proxy_balancer.conf" do
   variables(
     lazy {
       {
-        :ehmp_ui_members => find_multiple_nodes_by_role("ehmp-ui", node[:stack]),
-        :rdk_members => find_multiple_nodes_by_role("resource_server", node[:stack]),
-        :ssoi_members => find_optional_node_by_role("ssoi", node[:stack])
+        :mixed_environment => (not node[:ehmp_balancer][:mix_stack_name].nil?),
+        :server_name => node[:ehmp_balancer][:fqdn],
+        :server_port => node[:ehmp_balancer][:incoming_port],
+        :lb_method => node[:ehmp_balancer][:lb_method],
+        :sticky_session => node[:ehmp_balancer][:sticky_session],
+        :rdk_timeout => node[:ehmp_balancer][:rdk_timeout],
+        :nss_protocol => node[:ehmp_balancer][:nss_protocol],
+        :nss_cipher_suite => node[:ehmp_balancer][:nss_cipher_suite],
+        :ehmp_ui_members_r1_2 => ehmp_ui_r1_2,
+        :rdk_members_r1_2 => rdk_r1_2,
+        :ehmp_ui_members => ehmp_ui,
+        :rdk_members => rdk
       }
     }
   )
@@ -187,4 +224,19 @@ end
 execute "set-perms" do
   command "/bin/chmod 600 #{node[:ehmp_balancer][:ssl_dir]}/*"
   command "/bin/chown #{node[:apache][:user]}:#{node[:apache][:group]} #{node[:ehmp_balancer][:ssl_dir]}/*"
+end
+
+template "#{node[:apache][:conf_dir]}/WebAgent.conf" do
+  source 'WebAgent.conf.erb'
+  variables(
+    :enable_web_agent => node[:ehmp_balancer][:web_agent][:enable_web_agent],
+    :web_agent_config_dir => node[:ehmp_balancer][:web_agent][:config_dir],
+    :agent_config_object => node[:ehmp_balancer][:web_agent][:agent_config_object],
+    :server_path => node[:apache][:conf_dir]
+  )
+  owner 'root'
+  group 'root'
+  mode 0644
+  only_if { node[:ehmp_balancer][:ssoi_deploy] }
+  notifies :restart, "service[apache2]", :delayed
 end

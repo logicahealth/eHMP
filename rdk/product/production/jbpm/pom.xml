@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>us.vistacore.jbpm</groupId>
+	<artifactId>jbpm</artifactId>
+	<version>0.0.1</version>
+	<packaging>pom</packaging>
+
+	<properties>
+	  <javaVersion>1.8</javaVersion>
+	  <targetJavaVersion>1.8</targetJavaVersion>
+	  <kie-version>6.3.0.Final</kie-version>
+	  <jboss-logging>3.3.0.Final</jboss-logging>
+	  <servlet-api>3.1.0</servlet-api>
+	  <commons-lang3>3.4</commons-lang3>
+	  <spring-version>4.2.4.RELEASE</spring-version>
+	  <junit-version>4.12</junit-version>
+	  <joda-version>2.9</joda-version>
+	  <json-version>20160810</json-version>
+	  <gson-version>2.6.2</gson-version>
+	</properties>
+
+</project>

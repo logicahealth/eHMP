@@ -14,7 +14,7 @@ Scenario: User views the encounters gist view
       | Last          |
   And POB Encounters trend view has data rows
 
-@pob_f295_encounters_expand_view_from_trend_view @debug @DE6991 @DE6976
+@pob_f295_encounters_expand_view_from_trend_view @DE6991 @DE6976
 Scenario: User can expand Encounters applet from trend view
   When user searches for and selects "Sixhundred,Patient" 
   Then Overview is active

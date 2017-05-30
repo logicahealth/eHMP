@@ -1,17 +1,17 @@
 .tooltip {
-    &.top .tooltip-arrow {
+    &.top &-arrow {
         border-top-color: $primary-dark;
     }
-    &.bottom .tooltip-arrow {
+    &.bottom &-arrow {
         border-bottom-color: $primary-dark;
     }
-    &.right .tooltip-arrow {
+    &.right &-arrow {
         border-right-color: $primary-dark;
     }
-    &.left .tooltip-arrow {
+    &.left &-arrow {
         border-left-color: $primary-dark;
     }
-    .tooltip-inner {
+    & &-inner {
         background-color: $primary-dark;
         color: $pure-white;
         opacity: 1;

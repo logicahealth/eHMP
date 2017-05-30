@@ -1,6 +1,8 @@
 define([
     'underscore'
 ], function(_) {
+    'use strict';
+
     var notes = ADK.Resources.Writeback.Collection.extend({
         comparator: function(left, right) {
             var l = this.getComparatorValue(left);

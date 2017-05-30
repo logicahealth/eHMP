@@ -22,12 +22,16 @@ describe('jmeadows-sync-request-handler.js', function() {
 	var called;
 	var calledError;
 	var calledResult;
+	var referenceInfo = {
+		requestId: 'jmeadows-sync-request-requestId',
+		sessionId: 'jmeadows-sync-request-sessionId'
+	};
 
 	beforeEach(function() {
 		called = false;
 
 		patientIdentifier = patientIdUtil.create('icn', '10110V004877');
-		rootJob = jobUtil.createEnterpriseSyncRequest(patientIdentifier, uuid.v4(), false);
+		rootJob = jobUtil.createEnterpriseSyncRequest(patientIdentifier, uuid.v4(), false, null, null, referenceInfo);
 
 		config = {
 			jmeadows: []
@@ -108,7 +112,27 @@ describe('jmeadows-sync-request-handler.js', function() {
 
 			runs(function() {
 				expect(calledError).toBeNull();
-				expect(environment.publisherRouter.publish).toHaveBeenCalled();
+				expect(environment.publisherRouter.publish).toHaveBeenCalledWith([jasmine.objectContaining({
+					type: 'jmeadows-sync-allergy-request',
+					timestamp: jasmine.any(String),
+					patientIdentifier: patientIdentifier,
+					jpid: jasmine.any(String),
+					priority: null,
+					referenceInfo: referenceInfo,
+					dataDomain: 'allergy',
+					requestStampTime: jasmine.any(String),
+					jobId: jasmine.any(String)
+				}), jasmine.objectContaining({
+					type: 'jmeadows-sync-appointment-request',
+					timestamp: jasmine.any(String),
+					patientIdentifier: patientIdentifier,
+					jpid: jasmine.any(String),
+					priority: null,
+					referenceInfo: referenceInfo,
+					dataDomain: 'appointment',
+					requestStampTime: jasmine.any(String),
+					jobId: jasmine.any(String)
+				})], jasmine.any(Function));
 			});
 		});
 

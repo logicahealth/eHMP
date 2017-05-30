@@ -1,5 +1,4 @@
 VPRJPS ;SLC/KCM -- Save / Retrieve Patient-Related JSON objects
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
 SAVE(JPID,JSON) ; Save a JSON encoded object
  N UID,COLL,KEY,OBJECT,OLDOBJ,VPRJERR,INDEXER,TLTARY,METASTAMP,PID,SOURCESTAMP,OLDSTAMP,STATUS,SOURCE,DOMAIN,LASTTIME
@@ -69,6 +68,7 @@ SAVE(JPID,JSON) ; Save a JSON encoded object
  ; ** Begin Critical Section **
  L +^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,METASTAMP):$G(^VPRCONFIG("timeout","ptstore"),5) E  D SETERROR^VPRJRER(502,"PID,SOURCE,SOURCESTAMP,DOMAIN,UID,METASTAMP "_$G(PID)_","_$G(SOURCE)_","_$G(SOURCESTAMP)_","_$G(DOMAIN)_","_$G(UID)_","_$G(METASTAMP)) Q
  S ^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,METASTAMP,"stored")="1"
+ K ^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,METASTAMP,"syncError")
  L -^VPRSTATUS(JPID,PID,SOURCE,DOMAIN,UID,METASTAMP)
  ; ** End Critical Section **
  ;
@@ -167,6 +167,8 @@ DELSITE(SITE) ; Delete a site's patient data
  . . I ID=1,$$ISICN^VPRJPR(PIDS(ID)) D  ; Down to ICN only
  . . . S ICN=PIDS(ID) ;
  . . . D JPIDDIDX^VPRJPR(JPID,ICN) ; Remove ICN and JPID if no more PIDs exist
+ . ; Remove last time this patient has been accessed if deleting a site removed the last patient info
+ . I $D(^VPRPTJ("JPID",JPID))=0 K ^VPRMETA("JPID",JPID)
  Q
 CLEARPT(PID) ; -- Clear data for patient
  N PIDS,JPID,ID
@@ -201,11 +203,13 @@ CLEARPT(PID) ; -- Clear data for patient
  . D DELSS^VPRJPSTATUS(PID) ; Clear Sync Status for PID
  . D DEL^VPRJOB(JPID) ; Clear Job Status for JPID
  . ;
- . K ^VPRPTI(JPID,PID)           ; kill all indexes for the patient
- . K ^VPRPT(JPID,PID)            ; kill all the data for the patient
- . K ^VPRPTJ("JSON",JPID,PID)    ; kill original JSON objects for the patient
- . K ^VPRPTJ("TEMPLATE",JPID,PID) ; kill the pre-compiled JSON objects for the patient
+ . K ^VPRPTI(JPID,PID)           ; kill all indexes for the patient at a particular site
+ . K ^VPRPT(JPID,PID)            ; kill all the data for the patient at a particular site
+ . K ^VPRPTJ("JSON",JPID,PID)    ; kill original JSON objects for the patient at a particular site
+ . K ^VPRPTJ("TEMPLATE",JPID,PID) ; kill the pre-compiled JSON objects for the patient at a particular site
  . ; Remove JPID indexes
  . D JPIDDIDX^VPRJPR(JPID,PID)
  . L -^VPRPT(JPID,PID)
+ ; Remove last time this patient has been accessed
+ K ^VPRMETA("JPID",JPID,"lastAccessTime")
  Q

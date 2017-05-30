@@ -1,7 +1,7 @@
 Given(/^POB user is logged into EHMP\-UI with facility as  "(.*?)" accesscode as  "(.*?)" verifycode as  "(.*?)"/) \
 do |facility, user, pwd|
   @ehmp = PobLoginPage.new
-  @ehmp.load
+  @ehmp.load unless @ehmp.has_ddl_facility?
   @ehmp.wait_for_ddl_facility(120)
   expect(@ehmp).to have_ddl_facility
   choose_facility(facility)
@@ -69,26 +69,6 @@ Then(/^user logs out$/) do
   p 'user logs out ---'
 end
 
-Given(/^Navigate to Patient Search Screen$/) \
-do
-  begin
-    @ehmp = PobPatientSearch.new
-    @ehmp.load
-    patient_search = PatientSearch2.instance
-    # if patient search button is found, click it to go to patient search
-    patient_search.perform_action("patientSearch") if patient_search.static_dom_element_exists? "patientSearch"
-    refresh_zombie_tooltips(patient_search)
-    need_refresh_de2106(patient_search)
-    DefaultLogin.logged_in = true
-    p "Navigated to the Patient Search Screen"
-  rescue
-    page.execute_script('sessionStorage.clear()')
-    Capybara.reset_session!
-    p "Can't navigate & resetting Capybara Browser session"
-    DefaultLogin.logged_in = false
-  end
-end
-
 Given(/^user attempts logout$/) do
   @ehmp = PobPatientSearch.new
   @ehmp.global_header.wait_for_btn_logout
@@ -116,3 +96,8 @@ Then(/^logout is cancelled$/) do
   @ehmp = ModalElements.new
   expect(@ehmp).to have_no_btn_no
 end
+
+Given(/^browser size is "([^"]*)" by "([^"]*)"$/) do |arg1, arg2|
+  Capybara.page.driver.browser.manage.window.resize_to(1280, 800)
+end
+

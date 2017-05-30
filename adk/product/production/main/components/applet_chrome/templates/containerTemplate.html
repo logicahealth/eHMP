@@ -1,21 +1,21 @@
-<div class="panel panel-primary">
-    <div class="panel-heading grid-applet-heading" title="{{title}}">
+<div class="panel panel-primary applet-chrome">
+    <div class="panel-heading applet-chrome-header" title="{{title}}">
         <div class="pull-left panel-title left-padding-xs">
             <i class="fa icon-crs-header btn-icon hide" tooltip-data-key="toolbar_crs_icon" aria-hidden="true"></i>
             <h5 class="panel-title-label">
                 {{title}}
             </h5>
-            <form>
+            <form class="custom-applet-header-form" aria-hidden="true">
                 <label for="customAppletHeader-{{cid}}" class="sr-only">Workspace Filter</label>
                 <input type="text" id="customAppletHeader-{{cid}}" class="form-control input-sm hidden panel-title-textbox pixel-height-18" value="{{title}}" maxlength="30"/>
             </form>
         </div>
-        <div class="pull-left panel-title-notification"></div>
+        <div class="pull-left applet-chrome-title-notification"></div>
         <div class="pull-right right-button-region"></div>
     </div>
-    <div class="applet-div-chrome-container"></div>
+    <div class="applet-chrome-body"></div>
     <div class="switchboard-container hide"></div>
-    <div class="grid-footer">
+    <div class="applet-chrome-footer">
         <span class="gs-resize-handle gs-resize-handle-both"><i class="fa fa-angle-down"></i></span>
     </div>
 </div>

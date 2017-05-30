@@ -69,11 +69,11 @@ Then(/^the Vitals Summary applet is displayed$/) do
 end
 
 Then(/^the Community Health Summaries applet Summary is displayed$/) do
-  health_summaries = CommunityHealthSummariesCoverSheet.instance
+  health_summaries = PobCommunityHealthApplet.new
   verify_applet_exists(health_summaries.appletid)
   verify_applet_view_type('summary', health_summaries.appletid)
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { health_summaries.applet_loaded? }
+  wait.until { applet_grid_loaded(health_summaries.has_fld_empty_row?, health_summaries.tbl_data_rows) }
 end
 
 def verify_no_error_messages

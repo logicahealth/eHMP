@@ -5,6 +5,8 @@
 
 require 'chef/provisioning/ssh_driver'
 
+include_oracle = find_optional_node_by_criteria(node[:machine][:stack], 'role:ehmp_oracle', 'role:jbpm').nil?
+
 ############################################## Staging Artifacts #############################################
 if ENV.has_key?('DEV_DEPLOY')
   node.default[:rdk_provision][:jbpm][:copy_files].merge!({
@@ -18,7 +20,7 @@ if ENV.has_key?('DEV_DEPLOY')
     "/tmp/#{File.basename(ENV['JBPM_FOBTLABSERVICE_LOCAL_FILE'])}" => ENV['JBPM_FOBTLABSERVICE_LOCAL_FILE'],
     "/tmp/#{File.basename(ENV['JBPM_TASKSSERVICE_LOCAL_FILE'])}" => ENV['JBPM_TASKSSERVICE_LOCAL_FILE'],
     "/tmp/#{File.basename(ENV['JBPM_EHMPSERVICES_LOCAL_FILE'])}" => ENV['JBPM_EHMPSERVICES_LOCAL_FILE'],
-    "/tmp/#{File.basename(ENV['JBPM_SQL_CONFIG_LOCAL_FILE'])}" => ENV['JBPM_SQL_CONFIG_LOCAL_FILE']
+    "/tmp/#{File.basename(ENV['JBPM_UTILS_LOCAL_FILE'])}" => ENV['JBPM_UTILS_LOCAL_FILE']
   })
   jbpm_fit_artifacts_source = "file:///tmp/#{File.basename(ENV['JBPM_PROJECTS_LOCAL_FILE_2'])}"
   jbpm_fit_artifacts_version = "0.0.0"
@@ -40,7 +42,14 @@ if ENV.has_key?('DEV_DEPLOY')
   jbpm_activity_artifacts_version = "0.0.0"
   jbpm_ehmpservices_artifacts_source = "file:///tmp/#{File.basename(ENV['JBPM_EHMPSERVICES_LOCAL_FILE'])}"
   jbpm_ehmpservices_artifacts_version = "0.0.0"
-  jbpm_sql_config_artifacts_source = "file:///tmp/#{File.basename(ENV['JBPM_SQL_CONFIG_LOCAL_FILE'])}"
+  jbpm_utils_artifacts_source = "file:///tmp/#{File.basename(ENV['JBPM_UTILS_LOCAL_FILE'])}"
+  jbpm_utils_artifacts_version = "0.0.0"
+  if include_oracle
+    node.default[:rdk_provision][:jbpm][:copy_files].merge!({
+      "/tmp/#{File.basename(ENV['ORACLE_SQL_CONFIG_LOCAL_FILE'])}" => ENV['ORACLE_SQL_CONFIG_LOCAL_FILE']
+    })
+    oracle_sql_config_artifacts_source = "file:///tmp/#{File.basename(ENV['ORACLE_SQL_CONFIG_LOCAL_FILE'])}"
+  end
 else
   jbpm_fit_artifacts_source = artifact_url(node[:rdk_provision][:artifacts][:jbpm_fitlabproject])
   jbpm_fit_artifacts_version = node[:rdk_provision][:artifacts][:jbpm_fitlabproject][:version]
@@ -62,9 +71,15 @@ else
   jbpm_activity_artifacts_version = node[:rdk_provision][:artifacts][:jbpm_activity][:version]
   jbpm_ehmpservices_artifacts_source = artifact_url(node[:rdk_provision][:artifacts][:jbpm_ehmpservices])
   jbpm_ehmpservices_artifacts_version = node[:rdk_provision][:artifacts][:jbpm_ehmpservices][:version]
-  jbpm_sql_config_artifacts_source = artifact_url(node[:rdk_provision][:artifacts][:jbpm_sql_config])
+  jbpm_utils_artifacts_source = artifact_url(node[:rdk_provision][:artifacts][:jbpm_utils])
+  jbpm_utils_artifacts_version = node[:rdk_provision][:artifacts][:jbpm_utils][:version]
+  if include_oracle
+    oracle_sql_config_artifacts_source = artifact_url(node[:rdk_provision][:artifacts][:oracle_sql_config])
+  end
 end
 ############################################## Staging Artifacts #############################################
+
+node.default[:machine][:image_id] = "ami-80f91396"
 
 machine_ident = "jbpm"
 
@@ -78,16 +93,20 @@ r_list = []
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
 r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh"
 r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
-if node[:machine][:driver] == "vagrant"
-  oracle_cookbook = "oracle-xe_wrapper"
-  oracle_sid = "XE"
-else
-  oracle_cookbook = "oracle_wrapper"
-  oracle_sid = "JBPMDB"
-end
-r_list << "role[ehmp_oracle]"
 r_list << "role[jbpm]"
-r_list << "recipe[ehmp_oracle@#{rdk_deps["ehmp_oracle"]}]"
+if include_oracle
+  if node[:machine][:driver] == "vagrant"
+    oracle_cookbook = "oracle-xe_wrapper"
+    oracle_sid = "XE"
+  else
+    oracle_cookbook = "oracle_wrapper"
+    oracle_sid = "JBPMDB"
+  end
+  r_list << "role[ehmp_oracle]"
+  r_list << "recipe[ehmp_oracle@#{rdk_deps["ehmp_oracle"]}]"
+else
+  r_list << "recipe[ehmp_oracle::client@#{rdk_deps["ehmp_oracle"]}]"
+end
 r_list << "recipe[jbpm@#{rdk_deps["jbpm"]}]"
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
 r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
@@ -170,8 +189,9 @@ machine machine_name do
       source: jbpm_ehmpservices_artifacts_source,
       version: jbpm_ehmpservices_artifacts_version
     },
-    jbpm_sql_config_artifacts: {
-      source: jbpm_sql_config_artifacts_source
+    jbpm_utils_artifacts: {
+      source: jbpm_utils_artifacts_source,
+      version: jbpm_utils_artifacts_version
     },
     oracle_wrapper: {
       dbs: ["jbpmdb"],
@@ -183,6 +203,9 @@ machine machine_name do
     ehmp_oracle: {
       oracle_cookbook: oracle_cookbook,
       oracle_sid: oracle_sid
+    },
+    oracle_sql_config_artifacts: {
+      source: oracle_sql_config_artifacts_source
     }
   )
   files lazy { node[:rdk_provision][:jbpm][:copy_files] }
@@ -195,6 +218,6 @@ end
 chef_node machine_name do
   action :delete
   only_if {
-    node[:machine][:action].eql?("destroy") && node[:machine][:driver].eql?("vagrant")
+    node[:machine][:action].eql?("destroy")
   }
 end

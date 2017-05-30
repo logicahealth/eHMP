@@ -9,8 +9,8 @@ class PobLoginPage < SitePrism::Page
   element :lgo_ehmp, "div[class='logo']"
 
   # *****************  All_Field_Elements  ******************* #
-  element :fld_accesscode, "#accessCode"
-  element :fld_verifycode, "#verifyCode"
+  element :fld_accesscode, ".accessCode input"
+  element :fld_verifycode, ".verifyCode input"
   element :fld_rdk_no_response, "#mainModalLabel"
 
   # *****************  All_Button_Elements  ******************* #

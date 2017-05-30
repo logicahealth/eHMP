@@ -29,26 +29,29 @@ define([
                 this.getModals();
             } else {
                 _.set(this.collection, 'fetchOptions.resourceTitle', 'patient-record-problem');
-                ADK.PatientRecordService.fetchCollection(this.collection.fetchOptions, this.collection);
+                if (_.isUndefined(this.collection.fetchCollection)) {
+                    return ADK.PatientRecordService.fetchCollection(this.collection.fetchOptions, this.collection);
+                }
+                return this.collection.fetchCollection();
             }
         },
         serializeModel: function(model) {
-          var data = model.toJSON();
-          var code = _.get(data, 'codes[0]') || {};
-          var problem = _.get(model, 'probs[0]', new Backbone.Model());
+            var data = model.toJSON();
+            var code = _.get(data, 'codes[0]') || {};
+            var problem = _.get(model, 'probs[0]', new Backbone.Model());
 
-          return _.defaults({
-            icdCode: code.code
-          }, data);
+            return _.defaults({
+                icdCode: code.code
+            }, data);
         },
         templateHelpers: function() {
             return {
                 'icd10': function() {
-                    var code = this.codes[0];
+                    var code = _.get(this, 'codes[0]') || {};
                     return _.isPlainObject(code) && !_.isEmpty(code) && code.system === 'urn:oid:2.16.840.1.113883.6.3';
                 },
                 'icd9': function() {
-                    var code = this.codes[0];
+                    var code = _.get(this, 'codes[0]') || {};
                     return _.isPlainObject(code) && !_.isEmpty(code) && code.system === 'urn:oid:2.16.840.1.113883.6.42';
                 }
             };

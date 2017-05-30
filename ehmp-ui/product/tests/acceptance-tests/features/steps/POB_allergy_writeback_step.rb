@@ -130,16 +130,8 @@ def add_allergy(allergen, type)
   cc.wait_until_fld_pick_list_input_visible
   expect(cc).to have_fld_pick_list_input
   cc.fld_pick_list_input.set allergen
-  #cc.fld_pick_list_input.native.send_keys(:return)
-  max_attempt = 4
-  begin
-    @ehmp.wait_until_fld_select_allergen_visible
-    @ehmp.fld_select_allergen.click
-  rescue Exception => e
-    max_attempt = max_attempt - 1
-    raise e if max_attempt <= 0
-    retry if max_attempt > 0
-  end
+  cc.fld_pick_list_input.native.send_keys(:enter)
+
   expect(@ehmp.fld_allergen_drop_down).to have_text(allergen)
   @ehmp.wait_until_fld_nature_of_reaction_drop_down_visible
   @ehmp.fld_nature_of_reaction_drop_down.select "Allergy"

@@ -1,31 +1,47 @@
 define([
-    "backbone",
-    "marionette",
-    "moment",
-    "hbs!app/applets/search/textSearchInput/template",
-    "hbs!app/applets/search/textSearchInput/searchSuggestTemplate"
-], function(Backbone, Marionette, moment, InputTemplate, SearchSuggestTemplate) {
-    "use strict";
+    'backbone',
+    'marionette',
+    'moment',
+    'underscore',
+    'handlebars',
+    'hbs!app/applets/search/textSearchInput/template',
+    'hbs!app/applets/search/textSearchInput/searchSuggestTemplate',
+    'hbs!app/applets/search/textSearchInput/formInputTemplate'
+], function(Backbone, Marionette, moment, _, Handlebars, InputTemplate, SearchSuggestTemplate, FormInputTemplate) {
+    'use strict';
 
     var PLACEHOLDER_INDEXING = 'Building Search Data';
     var PLACEHOLDER_SEARCH_RECORD = 'Search Record';
+    var PLACEHOLDER_ERROR = 'Search is Unavailable';
+    var FORM_CONFIG_DEFAULTS = {
+        'disabled': true,
+        'placeholder': PLACEHOLDER_INDEXING,
+        'errorIcon': false,
+        'title': 'Enter text to search for records'
+    };
 
     var Form = Backbone.Marionette.ItemView.extend({
-        'template': Handlebars.compile('<label for="searchText" class="sr-only">Search Record</label>' +
-            '<input type="text" id="searchText" class="form-control" placeholder="{{placeholder}}"  ' +
-            'autocomplete="off" focus="true" title="Enter text to search for records" {{#if disabled}}disabled="true"{{/if}} />' +
-            '<i class="fa fa-search form-control-feedback"></i>'),
+        template: FormInputTemplate,
         modelEvents: {
-            'change:disabled': 'render'
+            'change:disabled': 'render',
+            'change:placeholder': 'render'
         },
+        serializeModel: function() {
+            var modelJSON = this.model.toJSON();
+            modelJSON.cid = this.cid;
+            return modelJSON;
+        },
+        behaviors: {
+            Tooltip: {
+                placement: 'bottom',
+                trigger: 'hover'
+            }
+        }
     });
 
     var SuggestList = Backbone.Marionette.CollectionView.extend({
         tagName: 'ul',
-        attributes: {
-            id: 'suggestList'
-        },
-        className: 'list-group',
+        className: 'list-group suggest-list',
         onBeforeRender: function() {
             this.renderedModels = [];
         },
@@ -44,7 +60,9 @@ define([
             });
         },
         filter: function(model, index, collection) {
-            if (this.isAttrDuplicate(model, ['query', 'category'])) return false;
+            if (this.isAttrDuplicate(model, ['query', 'category'])) {
+                return false;
+            }
             this.renderedModels.push(model);
             return true;
         },
@@ -102,7 +120,7 @@ define([
 
     var SuggestView = Backbone.Marionette.LayoutView.extend({
         template: InputTemplate,
-        className: 'btn-group text-search-input-container',
+        className: 'btn-group text-search-input-container text-search-input-container--full-width',
         attributes: {
             'id': 'text-search-input'
         },
@@ -124,7 +142,7 @@ define([
         suggestResultsEvents: {
             'error fetch:error': function() {
                 this.removeSuggestList();
-                this.$('#suggestListDiv').append('<div id="noResults" class="left-padding-sm">No results</div>').show();
+                this.$('#suggestListDiv').append('<div id="noResults" class="left-padding-sm">No Suggestions</div>').show();
                 this.$('#suggestSpinner').remove();
             },
             'sync': 'fillSuggestList',
@@ -152,39 +170,78 @@ define([
             this.delayConfig = parseInt(_.get(settings, 'solrIndexingDelay')) || 3000;
 
             if (this.trackSolrStorage) {
-                this.enableDisablePatientSearch(ADK.PatientRecordService.getCurrentPatient().get('solrSyncCompleted'), 0);
-
-                this.listenTo(ADK.PatientRecordService.getCurrentPatient(), 'change:solrSyncCompleted', function(model) {
-                    this.enableDisablePatientSearch(model.get('solrSyncCompleted'), this.delayConfig);
+                var currentPatient = ADK.PatientRecordService.getCurrentPatient();
+                if (currentPatient.get('solrSyncError') || currentPatient.get('syncError')) {
+                    this.triggerMethod('solr:error');
+                } else {
+                    this.enableDisablePatientSearch(this.getMinumumRequiredStatus(currentPatient), 0);
+                }
+                this.listenTo(currentPatient, 'change:solrSyncCompleted change:mySiteSolrSyncCompleted change:solrSyncError change:syncError', function(model) {
+                    if (model.get('solrSyncError') || model.get('syncError')) {
+                        return this.triggerMethod('solr:error');
+                    }
+                    return this.enableDisablePatientSearch(this.getMinumumRequiredStatus(model), this.delayConfig);
                 });
             } else {
-                this.model = new Backbone.Model({
+                this.model = new Backbone.Model(_.defaults({
                     'disabled': false,
                     'placeholder': PLACEHOLDER_SEARCH_RECORD
-                });
+                }, FORM_CONFIG_DEFAULTS));
+
+            }
+            this.currentWorkspaceModel = ADK.WorkspaceContextRepository.currentWorkspaceAndContext;
+            this.listenTo(this.currentWorkspaceModel, 'change:workspace', this.onChangeWorkspace);
+        },
+        getMinumumRequiredStatus: function(model) {
+            var minumumRequiredStatus = model.get('mySiteSolrSyncCompleted');
+            /*if selected patient is external*/
+            if (_.isUndefined(minumumRequiredStatus)) {
+                minumumRequiredStatus = model.get('solrSyncCompleted');
+            }
+            return minumumRequiredStatus;
+        },
+        onChangeWorkspace: function(model) {
+            if (model.get('workspace') === 'record-search') {
+                this.$el.removeClass('left-padding-xs');
+            } else {
+                this.$el.addClass('left-padding-xs');
+                if (this.searchTerm !== '') {
+                    this.searchTerm = '';
+                    this.$('[id^=searchText]').val(this.searchTerm);
+                }
             }
         },
         events: {
-            'keydown #searchText': 'onSearchTextKey',
-            'keydown #suggestList a': 'onSuggestionKey',
+            'keydown input': 'onSearchTextKey',
+            'keydown .suggest-list a': 'onSuggestionKey',
             'click #submit': 'doSubmitSearch',
-            'blur #searchText': 'leaveSearchBox',
-            'blur #suggestList a': 'leaveSearchBox',
+            'blur input': 'leaveSearchBox',
+            'blur .suggest-list a': 'leaveSearchBox',
         },
         onBeforeShow: function() {
+            this.onChangeWorkspace(ADK.WorkspaceContextRepository.currentWorkspaceAndContext);
             this.getRegion('form').show(new Form({
                 model: this.model
             }));
+        },
+        onSolrError: function() {
+            var formConfig = _.defaults({
+                'disabled': true,
+                'placeholder': PLACEHOLDER_ERROR,
+                'errorIcon': true,
+                'title': 'There was a problem reaching all data sources. Try again later.'
+            }, FORM_CONFIG_DEFAULTS);
+            this.model.set(formConfig);
         },
         enableDisablePatientSearch: function(isSolrSyncCompleted, delay) {
             var formConfig;
             var self = this;
 
             if (isSolrSyncCompleted) {
-                formConfig = {
+                formConfig = _.defaults({
                     'disabled': false,
                     'placeholder': PLACEHOLDER_SEARCH_RECORD
-                };
+                }, FORM_CONFIG_DEFAULTS);
 
                 if (delay === 0) {
                     this.model.set(formConfig);
@@ -194,10 +251,10 @@ define([
                     }, delay);
                 }
             } else {
-                formConfig = {
+                formConfig = _.defaults({
                     'disabled': true,
                     'placeholder': PLACEHOLDER_INDEXING
-                };
+                }, FORM_CONFIG_DEFAULTS);
 
                 this.model.set(formConfig);
             }
@@ -208,7 +265,6 @@ define([
             }
         },
         hideSuggest: function(event) {
-            this.clearSuggestList();
             this.$('#suggestListDiv').hide();
             this.$('#suggestPanel').removeClass('open');
             this.removeSuggestList();
@@ -217,7 +273,7 @@ define([
             this.cancelSuggest(); //cancel timeout previous suggestion
 
             this.isSearching = setTimeout(_.bind(function() {
-                var $searchText = this.$('#searchText');
+                var $searchText = this.$('input');
                 var trimmedSearchText = $searchText.val().trim();
                 if (trimmedSearchText && trimmedSearchText.length > 2) {
                     var fetchOptions = {
@@ -234,10 +290,9 @@ define([
         },
         clearSuggestList: function($list) {
             if (!$list) {
-                $list = this.$('#suggestList');
+                $list = this.$('.suggest-list');
             }
-            $list.find('.list-group-item').off('click');
-            $list.empty();
+            if ($list.length) $list.empty();
         },
         destroyDropdownList: function(childView) {
             var query = childView.model.get('query');
@@ -249,7 +304,7 @@ define([
             if (this.suggestionsLocked) {
                 return;
             }
-            var $suggestList = this.ui.suggestListDiv.append('<ul id="suggestList" class="list-group"></ul>');
+            var $suggestList = this.ui.suggestListDiv.append('<ul class="suggest-list list-group"></ul>');
             this.addRegion('suggestList', Backbone.Marionette.Region.extend({
                 'el': $suggestList
             }));
@@ -260,12 +315,12 @@ define([
             var modelsLength = this.suggestResults.models.length;
             if (modelsLength === 1) {
                 this.removeSuggestList();
-                this.$('#suggestListDiv').append('<div id="noResults" class="left-padding-sm">No results</div>').show();
+                this.$('#suggestListDiv').append('<div id="noResults" class="left-padding-sm">No Suggestions</div>').show();
             } else {
                 this.$('#suggestPanel').addClass('open');
                 var View = SuggestList.extend({
                     collection: this.suggestResults,
-                    searchText: this.$('#searchText').val().toString()
+                    searchText: this.$('input').val().toString()
                 });
                 this.getRegion('suggestList').show(new View());
             }
@@ -273,7 +328,9 @@ define([
         cancelSuggest: function() {
             if (this.isSearching) {
                 var xhrAbort = _.get(this, 'suggestResults.xhr.abort');
-                if (_.isFunction(xhrAbort)) xhrAbort();
+                if (_.isFunction(xhrAbort)) {
+                    xhrAbort();
+                }
                 clearTimeout(this.isSearching);
             }
         },
@@ -281,13 +338,13 @@ define([
             this.unbindEntityEvents(this.suggestResults, this.suggestResultsEvents);
         },
         searchFromSuggest: function(suggestion) {
-            this.$('#searchText').val(suggestion);
+            this.$('input').val(suggestion);
             this.doSubmitSearch();
         },
         doSubmitSearch: function() {
             this.cancelSuggest(); //cancel any pending suggestion call
 
-            var trimmedSearchText = this.$('#searchText').val().trim();
+            var trimmedSearchText = this.$('input').val().trim();
             this.searchTerm = trimmedSearchText;
             if (trimmedSearchText) {
                 this.doReturnResults();
@@ -300,7 +357,7 @@ define([
                 searchTerm: this.searchTerm
             };
             ADK.Navigation.navigate('record-search');
-            this.$('#searchText').val(this.searchTerm);
+            this.$('input').val(this.searchTerm);
             ADK.SessionStorage.setAppletStorageModel('search', 'searchText', completedSearchData);
 
             if (ADK.SessionStorage.getAppletStorageModel('search', 'searchText').searchTerm === completedSearchData.searchTerm) {
@@ -313,13 +370,13 @@ define([
             }
         },
         getFirstSearchSuggestion: function() {
-            return this.$('#suggestList > :first-child a');
+            return this.$('.suggest-list > :first-child a');
         },
         getLastSearchSuggestion: function() {
-            return this.$('#suggestList > :last-child a');
+            return this.$('.suggest-list > :last-child a');
         },
         onSearchTextKey: function(keyEvent) {
-            var $suggestList = this.$('#suggestList');
+            var $suggestList = this.$('.suggest-list');
             switch (keyEvent.keyCode) {
                 case 9: //tab
                     if (keyEvent.shiftKey) {
@@ -352,7 +409,7 @@ define([
                     break;
                 default: // any other key
                     // submit suggestion search (but only if the search text changed)
-                    var currentQuery = this.$('#searchText').val();
+                    var currentQuery = this.$('input').val();
                     if (currentQuery !== this.lastQuery) {
                         this.lastQuery = currentQuery;
                         this.suggestionsLocked = false;
@@ -367,7 +424,7 @@ define([
                 case 38: // up arrow
                     if ($target.is(this.getFirstSearchSuggestion())) {
                         // move focus to search box
-                        this.$('#searchText').focus();
+                        this.$('input').focus();
                     }
                     break;
                 case 8: // backspace
@@ -376,20 +433,21 @@ define([
                 case 9: //tab
                     if (!keyEvent.shiftKey && $target.is(this.getLastSearchSuggestion())) {
                         this.hideSuggest();
-                        this.$('#searchText').focus();
+                        this.$('input').focus();
                     }
                     break;
                 case 40: // down arrow
                     if ($target.is(this.getLastSearchSuggestion())) {
                         // move focus to search box
-                        this.$('#searchText').focus();
+                        this.$('input').focus();
                     }
                     break;
             }
         },
         removeSuggestList: function() {
-            if (this.getRegion('suggestList'))
+            if (this.getRegion('suggestList')) {
                 this.removeRegion('suggestList');
+            }
             this.ui.suggestListDiv.empty();
         }
     });

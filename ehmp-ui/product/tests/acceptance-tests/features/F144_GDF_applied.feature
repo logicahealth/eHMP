@@ -1,4 +1,4 @@
-@F144_Global_Date_Filter  
+@F144_Global_Date_Filter  @reg2
 Feature: F144 - eHMP Viewer GUI - Global Date Filter
 
 # Team: Andromeda
@@ -7,7 +7,7 @@ Background:
   And user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
 
-@f144_global_date_applet_integration_custom @US2626 @TA8070e @DE3588 @future @DE4560
+@f144_global_date_applet_integration_custom @US2626 @TA8070e @DE3588 @DE4560
 Scenario: Global date filtering is applied to applets on the coversheet - Orders applet.
   When the user changes the global date filter to 2YR
   Then the Orders applet displays orders from the last 2 yrs

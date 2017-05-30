@@ -32,15 +32,190 @@ Conventions used by ADK and best practices for applet developers
    eventHandler.js
 ```
 
-### Event Handlers ###
-In general, event handlers should go in their own file. This way, the actual view would be a wrapper for the event handler. This will be useful in both testing and debugging.
+### Event Listeners ###
+There are two basic types of event listeners:  DOM events, and Backbone Events.  Of the two, only objects which have Backbone Events should ever be applied listeners in require scope.  In most cases, eventing should be scoped to a view, but there are some edge cases where an event listener can be applied in require scope, such as an `ADK.Messaging` `reply` to act as an object pool and return an object when a 'request' is issued against the channel.  These should be scoped to a channel within EHMP-UI.
 
-For unit testing, the event handler will be utilized instead of having a reference to the entire view - just the function to be tested. Additionally, the application would not have to be required in order to test a function - reducing dependencies on unrelated functionalities.
+DOM eventing within a view should be applied with the `events` attribute, and in some edge cases, with `delegate`.  Note that events within a view are applied to the root node, so only events which bubble will be processed if fired on a child node.
 
-For debugging purposes, the event handler file would prove to be easier to find and correct than an isolated function in the view.
+Event listeners applied to `ADK.Messaging`, which are not a `request`, should be in a view and applied using `this.listenTo` to ensure the event listener is released when the view is destroyed.
+
+```Javascript
+define([
+    'backbone',
+    'marionette',
+    'jquery',
+    'handlebars',
+], function(Backbone, Marionette, $, Handlebars...) {
+
+  //!! NOT GOOD !!
+
+  //no global jquery selectors
+  //no DOM events in require scope
+  $('.some-element').on('click', function() {doStuff();});
+
+  //don't instantiate complex objects in require scope
+  var view = new Marionette.View();
+  view.on('render', function() {doStuff();});
+
+  //don't instantiate complex objects in require scope
+  var collection = new Backbone.Collection();
+  var View = Marionette.View.extend({
+    initialize: function() {
+      //everytime this view is instantiated, it will add a new listener
+      //to the collection singleton and every detached instance of the view
+      //will still attempt to call doStuff and will never get garbage collected
+      collection.on('add', this.doStuff);
+
+      //same for this global object
+      ADK.Messaging.getChannel('someChannel').on('get:something', this.doStuff);
+    }
+  });
+
+
+  //all of the above infractions scoped properly
+  var View = Marionette.View.extend({
+    events: {
+      'click .some-element': 'doStuff'
+      'blur .some-element': function(event) {
+        this.something();
+      }
+    },
+    collectionEvents: {
+      'add', 'doStuff'
+    },
+    initialize: function() {
+      this.collection = new Backbone.Collection();
+      this.listenTo(ADK.Messaging.getChannel('someChannel'), 'get:something', this.doStuff);
+      this.listenToOnce(this.collection, 'someSingleAction', this.someCollectionHandler);
+    },
+    onRender: function() {
+      this.doStuff();
+    }
+  });
+
+  ADK.Messaging.getChannel('someChannel').reply('get:specialview', function(optionsObj) {
+    //return a definition, not an instance
+    return View;
+  });
+
+});
+```
+::: callout
+**Note:** The above code sample demonstrates both bad and good examples.  Be sure to read the comments.
+:::
+
+
+Event listeners applied to `collection` and `model` should bind the object to the view in initialize, or within the constructor of the view, and should use _modelEvents_ and _collectionEvents_ on the view accordingly.  In some cases, more than one `collection` or `model` might be needed in a given view.  In these cases, each object should be instantiated within `initialize`, and an attribute applied to the view with the events for said object, with a binding in `initialize` and an unbinding in `onDestroy`.  The naming convention can be seen in the following example.
+
+```Javascript
+var View = Marionette.View.extend({
+  initialize: function() {
+    this.model = this.getOption('model') || new Backbone.Model();
+    this.collection = new Backbone.Collection();
+    this.specialCollection = new Backbone.Collection();
+    this.bindEntityEvents(this.specialCollection, this.specialCollectionEvents);
+  },
+  //bound automatically as long as the view has a model by the time initialize fininshes
+  modelEvents: {
+    'change': 'render'
+  },
+  collectionEvents: {
+    'add remove': function() {
+      this.model.set('count', this.collection.length);
+    }
+  },
+  //custom events for a second custom collection
+  specialCollectionEvents: {
+    'change': function(model) {
+      this.collection.add(model.toJSON());
+    }
+  },
+  onDestroy: function() {
+    this.unbindEntityEvents(this.specialCollection, this.specialCollectionEvents);
+  }
+})
+
+```
+
+### Server Communication ###
+All server requests should be processed by events scoped to a view, with the exception of global objects such as patient.  Callbacks should not be used to control flow logic, nor should any data be modified within a callback.  If a `model` or `collection` needs to be permanently modified to generate data used for fetching or saving of any resource, this should happen within the `parse` method on the `model` or `collection`.  Data should not be modified for the purpose of satisfying a data output need.  This modification should occur in `serializeData`, `serializeModel`, or `serializeColletion` as appropriate.
+
+### Accessing Global Date Range ###
+
+The ADK Global Date Range provides a standardized way to apply server side fetching based on selection of global date range options on the navigation bar by a user.
+
+```JavaScript
+initialize: function(options) {
+...
+  this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
+    // This call refreshes the applet filtered by the given date field with
+    // the global date range.
+    this.dateRangeRefresh('observed');
+  });
+
+  // Sets this option to use the initial global date range setting of 1yr for the initial server side fetching when the coversheet is loaded for the first time.
+  fetchOptions.criteria = {
+      filter: this.buildJdsDateFilter('observed')
+  };
+...
+}
+```
+Replace 'observed' with an appropriate field of a model that represent a date.
+
+This feature assumes that a corresponding resource api supports a criteria filter syntax 'between(field, fromValue, toValue)'. E.g. between(observed,'20141025','20141025')
+
+
+### Configuration Options ###
+Each applet view shown on a workspace is instantiated with an Object of options. This Object holds values specific to the current workspace and applet to help the view display properly. The following is a list of options passed to the top level applet view along with a description of each.
+``` JavaScript
+options = {
+  appletConfig: OBJECT,
+  defaultViewType: STRING_VALUE,
+  region: MARIONETTE_REGION,
+  screenModule: MARIONETTE_MODULE,
+  viewTypes: ARRAY_OF_OBJECTS
+}
+```
+#### appletConfig {.method} ####
+An Object that has the following attributes: _(note they are grouped here in the documentation based on their use)_
+##### Attributes related to Gridster configuration ####
+- **dataCol**: x coordinate on map
+- **dataRow**: y coordinate on map
+- **dataSizeX**: number of units wide
+- **dataSizeY**: number of units tall
+- **dataMaxSizeX**: maximum number of units wide that the applet can be
+- **dataMaxSizeY**: maximum number of units tall that the applet can be
+- **dataMinSizeX**: minimum number of units wide that the applet can be
+- **dataMinSizeY**: minimum number of units tall that the applet can be
+- **region**: the id of the Marionette region in which the applet will be shown
+##### Attributes used to configure the applet view ####
+- **filterName**: the persisted filter title
+- **instanceId**: the unique identifier used to differentiate applets
+- **maximizeScreen**: String name of the workspace to navigate to when applet is expanded
+- **fullScreen**: Boolean used to determine if applet is considered to be a predefined screen that has no other applets
+- **title**: visual applet title
+##### Attributes used by ADK to display correct applet view ####
+- **id**: String applet identifier
+- **viewType**: applet viewType that is to be displayed
+- **permissions**: Array of user permission strings needed in order for the applet to be shown
+##### Attributes used by ADK to configure the workspace  ####
+- **showInUDWSelection**: Boolean that determines if workspace shows in global context navigation dropdown
+
+#### defaultViewType {.method} ####
+A String value used to point to the default viewType to display if no viewType is specified in the workspace configuration.
+
+#### region {.method} ####
+An instance of a Marionette region in which the applet's view will be shown.
+
+#### screenModule {.method} ####
+The Marionette Module that holds the build promises and applet configuration for the current workspace being shown.
+
+#### viewTypes {.method} ####
+An array of viewType configuration Objects for the applet being shown.
+
 
 ### Writeback ###
-All writeback code should live in a **writeback** directory under the appropriate applet folder!
+All writeback code should live in a **writeback** directory under the appropriate applet folder with the exception of resources definitions which should live in `app/applets/resources/writeback/[dir]`.
 
 For an example, an orders writeback form would live under: `app/applets/orders/writeback`
 ```
@@ -117,7 +292,7 @@ events: {
 :::
 
 ## Resources ##
-A resource is a model/collection which represents data from the back-end, and includes all available mechanisms used to communicate.  There are currently two types of resources, **writeback** and **picklist**.  All resources should have clearly defined abstracts which extend from **ADK.Resources.Model** and **ADK.Resources.Collection**.
+A resource is a model/collection which represents data from the back-end, and includes all available mechanisms used to communicate.  There are currently three types of resources, **writeback**, **picklist**, and **fetch**.  All resources should have clearly defined abstracts which extend from **ADK.Resources.Model** and **ADK.Resources.Collection** or pageable as appropriate.
 
 Resource abstracts live in the ADK and should not have any instance-specific code.
 ```
@@ -784,6 +959,188 @@ define([
 ### Composites ###
 There will be resources that are more complex than a simple model-collection pattern.  Some might even require multiple fetches to gather all the data necessary to map the resource.  These will be known as **Composites**.  Composites can be a model that contains collections or models.  In a case where a LayoutView is utilized, a model of collections would be good choice for direct accession.
 
+### Aggregates ###
+Aggregate resources depend on a master collection to compile a group of data sets for view consuption.  Aggregates can be nested, or linked, but it's important to keep in mind that the master list shouldn't be shared between multiple views if an aggregate is attached to it.  Aggregate models have a collection which contains a reference to a subset of models from the master collection.  While count and other computations can occur within the aggregate's update mechanism, it is generally better to do these computations within a serialize method on a view to ensure an accurate representation.
+
+```JavaScript
+//Assume we have a request which returns the following response object
+var response = [
+    {
+      'index': 1,
+      'date': '20120202',
+      'name': 'palmetto'
+    },
+    {
+      'index': 2,
+      'date': '20120202',
+      'name': 'palmetto'
+    },
+    {
+      'index': 3,
+      'date': '20150122',
+      'name': 'palmetto'
+    },
+    {
+      'index': 4,
+      'date': '20150122',
+      'name': 'palmetto'
+    },
+    {
+      'index': 5,
+      'date': '20171230',
+      'name': 'oak'
+    },
+    {
+      'index': 6,
+      'date': '20171220',
+      'name': 'oak'
+    },
+];
+
+//mock an actual resource
+var SomeResourceCollection = Backbone.Collection.extend({});
+
+var AggregateModel = ADK.Resources.Aggregate.Model.extend({
+    update: function(model) {
+        var collection = this.getCollection();
+        var result = {
+            'count': collection.length,
+            'maxDate': collection.max('date'),
+            'name': model.get('name'), //must match groupId
+            'date': model.get('date') //used in second example with multiple comparators
+        };
+        this.set(result);
+    }
+});
+
+var Aggregate = ADK.Resources.Aggregate.Collection.extend({
+    initialize: function() {
+        this.setFullCollection(new SomeResourceCollection());
+    },
+    groupId: 'name', //model needs to have this attribute to group
+    comparator: 'maxDate',
+    Model: AggregateModel,
+    fetchCollection: function fetchCollection(options) {
+        this.collection.fetchCollection(options);
+        this.url = this.collection.url; //make the resource service happy
+    }
+});
+
+var aggregateExample = new Aggregate();
+aggregateExample.collection.set(response);
+aggregateExample.toJSON();
+
+```
+
+The collection's `groupId` is the attribute used to lookup the model and group it accordingly.  As such, the aggregate model needs to also have this attribute.  It is also possible to group by more than attribue.  Using the above example, change `groupId` to an array of attributes.
+
+```Javascript
+groupId: ['name', 'date']
+```
+
+Aggregates can be nested to any depth.
+
+```Javascript
+var response = [
+    {
+      'index': 1,
+      'date': '20120202',
+      'name': 'palmetto'
+    },
+    {
+      'index': 2,
+      'date': '20120202',
+      'name': 'palmetto'
+    },
+    {
+      'index': 3,
+      'date': '20150122',
+      'name': 'palmetto'
+    },
+    {
+      'index': 4,
+      'date': '20150122',
+      'name': 'palmetto'
+    },
+    {
+      'index': 5,
+      'date': '20171230',
+      'name': 'oak'
+    },
+    {
+      'index': 6,
+      'date': '20171220',
+      'name': 'oak'
+    },
+];
+
+//mock an actual resource
+var SomeResourceCollection = Backbone.Collection.extend({});
+
+var AggregateModel = ADK.Resources.Aggregate.Model.extend({
+    defaults: function() {
+        var ChildCollection = this.Collection.extend({comparator: 'date'})
+        var SubAggregate = ADK.Resources.Aggregate.Collection.extend({
+            groupId: 'date',
+            initialize: function() {
+                this.setFullCollection(new Backbone.Collection());
+            },
+            Model: AggregateModel.extend({
+                defaults: {
+                    //don't define groupByDate so we can switch against it recursively
+                    'count': 0,
+                    'maxDate': undefined,
+                    'name': undefined,
+                    'date': undefined
+                }
+            })
+        });
+        return {
+            'count': 0,
+            'maxDate': undefined,
+            'name': undefined,
+            'groupByDate': new SubAggregate(),
+            'collection': new ChildCollection()
+        }
+    },
+    update: function(model) {
+        var collection = this.getCollection();
+        var result = {
+            'count': collection.length,
+            'maxDate': collection.max('date'),
+            'name': model.get('name'),
+            'date': model.get('date')
+        };
+        var subCollection = this.get('groupByDate');
+        //since we're using this object definition recursively
+        //we need to switch again this attribute
+        if(subCollection) {
+            subCollection.collection.add(model); //note the nested collection
+        }
+        this.set(result);
+    }
+});
+
+var Aggregate = ADK.Resources.Aggregate.Collection.extend({
+    initialize: function() {
+        this.setFullCollection(new SomeResourceCollection());
+    },
+    groupId: 'name', //model needs to have this attribute to group
+    comparator: 'maxDate',
+    Model: AggregateModel,
+    fetchCollection: function fetchCollection(options) {
+        this.collection.fetchCollection(options);
+        this.url = this.collection.url; //make the resource service happy
+    }
+});
+
+var aggregateExample = new Aggregate();
+aggregateExample.collection.set(response);
+aggregateExample.toJSON();
+```
+::: callout
+**Note:** The above examples can be executed in developer tools and examined to understand how these structures can be built from a single collection of model references.  Filtering on this structure should occur on a view level, and as such, computations that count or get a max or min of some attribute should happen in the appropriate serialize method within the controlling view.  The root `aggregate.collection` is the object that actually communicates with the server, and events are bounced to the aggregate for view flow control.
+:::
 
 ## Technologies ##
 - Use Backbone and Marionette for applet development

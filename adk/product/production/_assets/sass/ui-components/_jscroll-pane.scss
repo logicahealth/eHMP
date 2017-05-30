@@ -1,0 +1,45 @@
+$track-color:   #F0F0F0;
+$drag-color:    #CDCDCD;
+$arrow-color:   #626262;
+// jScrollPane is third party code
+// camelCasing for class definitions ok
+.jspHorizontalBar {
+    background: $track-color;
+    height: 17px;
+    .jspDrag {
+        background: $drag-color;
+    }
+    .jspTrack {
+        background: $track-color;
+    }
+    .jspArrow {
+        background: $track-color;
+        color: $arrow-color;
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        padding: 3px;
+        text-decoration: none; 
+        text-indent: 0;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transform: translate(0, 0);
+        &.jspArrowLeft:before {
+            content: "\f053";
+        }
+        &.jspArrowRight:before {
+            content: "\f054";
+        }
+        &.jspDisabled {
+            color: $drag-color;
+        }
+        &:hover:not(.jspDisabled) {
+            background: $arrow-color;
+            color: $track-color;
+        }
+    }
+}
+#content-region .jspVerticalBar {
+    display: none;
+}

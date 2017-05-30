@@ -104,8 +104,6 @@ define([
                 };
             })();
 
-
-
             /* Detect CSS Animations support to detect element display/re-attach */
             var animation = false,
                 animationstring = 'animation',
@@ -160,10 +158,13 @@ define([
         }
 
         window.addResizeListener = function(element, fn) {
-            if (attachEvent) element.attachEvent('onresize', fn);
-            else {
+            if (attachEvent) {
+                element.attachEvent('onresize', fn);
+            } else {
                 if (!element.__resizeTriggers__) {
-                    if (getComputedStyle(element).position == 'static') element.style.position = 'relative';
+                    if (getComputedStyle(element).position === 'static') {
+                        element.style.position = 'relative';
+                    }
                     createStyles();
                     element.__resizeLast__ = {};
                     element.__resizeListeners__ = [];
@@ -173,20 +174,15 @@ define([
                     element.appendChild(element.__resizeTriggers__);
                     resetTriggers(element);
                     element.addEventListener('scroll', scrollListener, true);
-
-                    // /* Listen for a css animation to detect element display/re-attach */
-                    // animationstartevent && element.__resizeTriggers__.addEventListener(animationstartevent, function(e) {
-                    //     if (e.animationName == animationName)
-                    //         resetTriggers(element);
-                    // });
                 }
                 element.__resizeListeners__.push(fn);
             }
         };
 
         window.removeResizeListener = function(element, fn) {
-            if (attachEvent) element.detachEvent('onresize', fn);
-            else {
+            if (attachEvent) {
+                element.detachEvent('onresize', fn);
+            } else {
                 element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
                 if (!element.__resizeListeners__.length) {
                     element.removeEventListener('scroll', scrollListener);
@@ -197,7 +193,6 @@ define([
     }(jQuery));
 
     /* jshint ignore:end */
-
 
     var RowItemView = RowItemParentView.extend({
         tagName: 'div',
@@ -217,25 +212,31 @@ define([
         },
         events: {
             'click': function(e) {
-                //e.stopPropagation();
                 $('[data-toggle=popover]').popover('hide');
             }
         },
         templateHelpers: function() {
             return {
-                displayName: this.model.get('typeName').toLowerCase(),
+                displayName: function() {
+                    var typeName = this.model.get('typeName');
+                    if (typeName) {
+                        return typeName.toLowerCase();
+                    }
+
+                    return typeName;
+                }
             };
         },
         initialize: function(options) {
-            if (this.model.attributes.observed !== undefined) {
-                this.model.attributes.last = moment().diff(moment(ADK.utils.formatDate(this.model.attributes.observed)), 'days') + ' d';
+            if (!_.isUndefined(this.model.get('observed'))) {
+                this.model.set('last', moment().diff(moment(ADK.utils.formatDate(this.model.get('observed'))), 'days') + ' d');
             } else {
-                this.model.attributes.last = '--';
+                this.model.set('last', '--');
             }
 
             if (this.model.get('graphType') === 'Medications') {
                 // 1.
-                if (this.model.has('subMedsInternalGroupModels') && this.model.get('subMedsInternalGroupModels').models[0] !== undefined) {
+                if (this.model.has('subMedsInternalGroupModels') && !_.isUndefined(this.model.get('subMedsInternalGroupModels').models[0])) {
                     this.model.set('graphInfoText', this.model.get('subMedsInternalGroupModels').models[0].get('graphInfoText'));
                 } else {
                     //If the subgroup has all bad data, the models array will be empty. We recreate this array here
@@ -258,15 +259,17 @@ define([
                             })
                         }));
                     }
-
                 }
 
-                if(!this.model.has('uid')){
-                    this.model.set('uid', this.model.get("medicationGroupType").get("uid"));
+                if (!this.model.has('uid')) {
+                    var medGroupType = this.model.get('medicationGroupType');
+                    if (medGroupType) {
+                        this.model.set('uid', medGroupType.get('uid'));
+                    }
                 }
                 // 2.
-                var numberOfSigs = this.model.get('subMedsInternalGroupModels').length,
-                    height;
+                var numberOfSigs = this.model.get('subMedsInternalGroupModels').length;
+                var height;
                 switch (numberOfSigs) {
                     case 1:
                         height = '100px';
@@ -284,7 +287,6 @@ define([
                 this.model.set('sigHeight', height);
             }
 
-
             this.applet = 'stackedGraph';
             this.options = options;
             this.options.AppletID = 'stackedGraph';
@@ -292,7 +294,6 @@ define([
             this.timeLineCharts = options.timeLineCharts;
             this.pointers = options.pointers;
             this._base = RowItemParentView.prototype;
-
 
             var currentScreen = ADK.Messaging.request('get:current:screen');
             var buttonTypes = ['infoButton', 'detailsviewbutton'];
@@ -307,21 +308,17 @@ define([
                 model: this.model
             };
             this._base.initialize.apply(this, arguments);
-
         },
         onDestroy: function() {
-
             $.each(this.activeCharts, function(i, chart) {
                 $(chart.container).off('.stackedGraph');
             });
             this._base.onDestroy.apply(this, arguments);
-
         },
         onRender: function() {
             var self = this,
                 $renderTo = self.$('.render-to');
 
-            // I did not alter any of the following, just refactored
             window.requestAnimationFrame(function() {
                 var chartInfo = self.model.get('chart');
                 if (chartInfo === undefined) {
@@ -336,23 +333,25 @@ define([
                         crosshairs: false,
                         shared: true,
                         headerFormat: '',
-                        formatter: function () {
+                        formatter: function() {
                             var s = '';
 
-                            $.each(this.points, function (i, point) {
-                                if (this.series.name !== "Ref Range") {
-                                    if (this.series.name === 'DBP' || this.series.name === 'SBP') {
-                                        s += '<strong>' + this.series.name + ' ' + this.y + '</strong>' + this.series.tooltipOptions.valueSuffix + '<br/>';
-                                    } else {
-                                        s += '<strong>' + this.y + '</strong>' + this.series.tooltipOptions.valueSuffix + '<br/>';
+                            $.each(this.points, function(i, point) {
+                                var name = _.get(this, 'series.name');
+                                if (name) {
+                                    if (name !== 'Ref Range') {
+                                        if (name === 'DBP' || name === 'SBP') {
+                                            s += '<strong>' + name + ' ' + this.y + '</strong>' + this.series.tooltipOptions.valueSuffix + '<br/>';
+                                        } else {
+                                            s += '<strong>' + this.y + '</strong>' + this.series.tooltipOptions.valueSuffix + '<br/>';
+                                        }
                                     }
-
                                 }
                             });
 
                             return s;
                         },
-                        positioner: function (labelWidth, labelHeight, point) {
+                        positioner: function(labelWidth, labelHeight, point) {
                             var tooltipX, tooltipY;
                             if (point.plotX + labelWidth > chart.plotWidth) {
                                 tooltipX = point.plotX + chart.plotLeft - labelWidth - 20;
@@ -360,17 +359,15 @@ define([
                                 tooltipX = point.plotX + chart.plotLeft + 20;
                             }
 
-                            tooltipY = 0 /*point.plotY + chart.plotTop - 20*/;
+                            tooltipY = 0 /*point.plotY + chart.plotTop - 20*/ ;
                             return {
                                 x: tooltipX,
                                 y: tooltipY
                             };
-
                         }
                     },
                     chart: {
                         zoomType: '',
-                        // height: 100,
                         panning: false,
                         margin: 0,
                         spacing: 0,
@@ -410,35 +407,34 @@ define([
                     }
                 });
 
-                    chartInfo.xAxis.plotLines.push({
-                        color: '#FF0000',
-                        width: 2,
-                        zIndex: 5,
-                        value: moment({
-                            h: 0,
-                            m: 0,
-                            s: 0,
-                            ms: 0
-                        }).valueOf()
-                    });
-                    _.each(chartInfo.series, function(series) {
-                        if (!series.type || (series.type && series.type !== 'arearange')) {
-                            series.states = {
-                                hover: {
-                                    halo: {
-                                        size: 8,
-                                        attributes: {
-                                            // fill: 'rgba(0,0,0,0.38)',
-                                            'stroke-width': 5,
-                                            stroke: 'rgba(0,0,0,0.38)'
-                                        }
+                chartInfo.xAxis.plotLines.push({
+                    color: '#FF0000',
+                    width: 2,
+                    zIndex: 5,
+                    value: moment({
+                        h: 0,
+                        m: 0,
+                        s: 0,
+                        ms: 0
+                    }).valueOf()
+                });
+                _.each(chartInfo.series, function(series) {
+                    if (!series.type || (series.type && series.type !== 'arearange')) {
+                        series.states = {
+                            hover: {
+                                halo: {
+                                    size: 8,
+                                    attributes: {
+                                        'stroke-width': 5,
+                                        stroke: 'rgba(0,0,0,0.38)'
                                     }
                                 }
-                            };
-                        }
-                    });
+                            }
+                        };
+                    }
+                });
 
-                var chart = $renderTo.highcharts(chartInfo, function (chart) {
+                var chart = $renderTo.highcharts(chartInfo, function(chart) {
                     chart.line = chart.renderer.rect(100, 0, 2, chart.chartHeight)
                         .attr({
                             fill: 'black',
@@ -452,11 +448,11 @@ define([
                 $renderTo.find('svg').attr('focusable', false);
                 $renderTo.find('svg').attr('aria-hidden', true);
 
-                $renderTo.resize(function () {
+                $renderTo.resize(function() {
                     var width = $(this).width();
                     chart.reflow();
 
-                    $.each(self.timeLineCharts, function (i, tlChart) {
+                    $.each(self.timeLineCharts, function(i, tlChart) {
                         tlChart.setSize(width, null);
                         tlChart.reflow();
 
@@ -475,16 +471,14 @@ define([
                     returnedResponse = Utils.findPointsInBetween(chart, fromDate, toDate);
                 }
 
-
                 self.activeCharts.unshift(chart);
 
-
-                _.each(self.timeLineCharts, function (e, i) {
+                _.each(self.timeLineCharts, function(e, i) {
                     e.setSize($renderTo.width(), null);
                 });
 
                 self.$el.model = self.model;
-                self.$el.$ = function (selector) {
+                self.$el.$ = function(selector) {
                     return self.$el.find(selector);
                 };
 
@@ -494,12 +488,10 @@ define([
                 if (self.model.get('graphType') === 'Lab Tests') {
                     self.$el.applet = 'Lab Tests';
                 }
-
-
                 if (self.model.get('graphType') !== 'Medications') {
                     if (returnedResponse !== null && returnedResponse !== 'No Records Found') {
                         var index = self.toolbarOptions.buttonTypes.indexOf('detailsviewbutton');
-                        self.toolbarOptions.buttonTypes.splice(index+1, 0, 'quicklookbutton');
+                        self.toolbarOptions.buttonTypes.splice(index + 1, 0, 'quicklookbutton');
                     } else {
                         var buttons = _.clone(self.toolbarOptions.buttons);
                         self.toolbarOptions.buttonTypes = _.remove(buttons, function(text) {
@@ -509,11 +501,8 @@ define([
                 }
 
                 self._base.onRender.apply(self, arguments);
-
                 if (self.model.get('graphType') !== 'Medications') {
-
-
-                    self.listenTo(ADK.Messaging, 'globalDate:selected', function (dateModel) {
+                    self.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
                         var sessionGlobalDate = ADK.SessionStorage.getModel_SessionStoragePreference('globalDate');
                         var fromDate = moment(sessionGlobalDate.get('fromDate'), 'MM/DD/YYYY');
                         var toDate = moment(sessionGlobalDate.get('toDate'), 'MM/DD/YYYY');
@@ -521,17 +510,16 @@ define([
                     });
                 }
 
-
                 if (self.model.get('graphType') === 'Medications') {
-
-                    self.listenTo(ADK.Messaging, 'globalDate:selected', function (dateModel) {
+                    self.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
                         var medicationGroupType = self.model.get('medicationGroupType');
-                        var buildchart = new self.model.attributes.ChartBuilder(medicationGroupType, true);
-                        var medicationChartConfig = new self.model.attributes.GraphConfig(buildchart);
-                        _.each(chart.series, function (e, i) {
+                        var ChartBuilder = self.model.get('ChartBuilder');
+                        var buildchart = new ChartBuilder(medicationGroupType, true);
+                        var GraphConfig = self.model.get('GraphConfig');
+                        var medicationChartConfig = new GraphConfig(buildchart);
+                        _.each(chart.series, function(e, i) {
                             chart.series[i].setData(medicationChartConfig.series[i].data, true);
                         });
-
                     });
                 }
             });
@@ -541,15 +529,13 @@ define([
             evt.stopPropagation();
             $('[data-toggle=popover]').not(popoverElement).popover('hide');
             popoverElement.popover('toggle');
-            var selectedGistItem = $(this.el);
+            var selectedGistItem = this.$el;
             var widthAdjust = selectedGistItem.width() * 0.85;
-            var leftAdjust = selectedGistItem.offset().left;
             var widthPxDiff = selectedGistItem.width() - widthAdjust;
             var offsetLeftToCenter = selectedGistItem.offset().left + (widthPxDiff * 0.5);
-            $('.gist-popover').css('left', offsetLeftToCenter.toString() + "px");
-            $('.gist-popover').width(widthAdjust);
-
-
+            var $popoverElement = this.$(evt.target).data('bs.popover').$tip;
+            $popoverElement.css('left', offsetLeftToCenter.toString() + "px");
+            $popoverElement.width(widthAdjust);
         },
         createPopover: function() {
             var self = this;
@@ -581,7 +567,6 @@ define([
             $('[data-toggle=popover]').popover('hide');
             $('.mainAppletToolbar').remove();
         }
-
     });
 
     return RowItemView;

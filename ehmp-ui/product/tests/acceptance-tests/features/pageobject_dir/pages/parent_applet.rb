@@ -1,9 +1,8 @@
 require_relative 'workspace_navigation.rb'
 
 class PobParentApplet < SitePrism::Page
-  
   section :menu, MenuSection, ".workspace-selector"
-    
+
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #
   # *****************  All_Field_Elements  ******************* #
@@ -40,13 +39,30 @@ class PobParentApplet < SitePrism::Page
     close_button = TestSupport.driver.find_element(:css, title_css)
     close_button.location_once_scrolled_into_view
   end
+
+  def add_text_filter_elements(appletid_css)
+    add_text_filter appletid_css
+    self.class.element(:btn_clear_filter_text, "#{appletid_css} .clear-input-btn:not(.hidden)")
+    self.class.element(:btn_applet_remove_filters, "#{appletid_css} .remove-all")
+  end
   
   def add_text_filter(appletid_css)
     self.class.element(:fld_applet_text_filter, "#{appletid_css} .form-search input")
   end
 
+  def add_adk_form_text_filter(appletid_css)
+    # p "#{appletid_css} [id$=FilterSearchText]"
+    self.class.element(:fld_applet_text_filter, "#{appletid_css} input[id*=FilterSearchText]")
+    self.class.element(:btn_clear_filter_text, "#{appletid_css} .clear-input-btn:not(.hidden)")
+    self.class.element(:btn_applet_remove_filters, "#{appletid_css} .remove-all")
+  end
+
   def add_empty_table_row(appletid_css)
     self.class.element(:fld_empty_row, "#{appletid_css} tr.empty")
+  end
+
+  def add_empty_infinite_scroll_row(appletid_css)
+    self.class.element(:fld_empty_row, "#{appletid_css} span[data-table-state=empty]")
   end
   
   def add_empty_gist(appletid_css)
@@ -54,7 +70,7 @@ class PobParentApplet < SitePrism::Page
   end
 
   def add_expanded_applet_fields(appletid_css)
-    self.class.element(:fld_expanded_applet_title, "#{appletid_css}  .grid-applet-heading h5")
+    self.class.element(:fld_expanded_applet_title, "#{appletid_css}  .applet-chrome-header h5")
     self.class.elements(:fld_expanded_applet_thead, "#{appletid_css} thead > tr > th")
     self.class.elements(:fld_expanded_applet_table_rows, "#{appletid_css} tr.selectable")
   end

@@ -32,8 +32,8 @@ var params = {
         protocol: 2
       },
       management: {
-        //password: 'keepThisSecret!'
-        password: 'ehmp'
+        //password: 'REDACTED'
+        password: 'REDACTED'
      },
      webservice: { authenticate: false }
 };

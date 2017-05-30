@@ -3,6 +3,8 @@
 var _ = require('lodash');
 var rpcUtil = require('./../utils/rpc-util');
 
+module.exports._createAllergen = createAllergen;
+
 /**
  * The top level data is what gets returned if no matches are found – for example passing in '   '.
  * Top level items always have 6 fields separated by ^'s.<br/>
@@ -47,8 +49,23 @@ function createTopLevelEntry(logger, fields) {
 function createAllergen(logger, fields) {
     var file = '';
 
+    // Strip off everything after the first comma
+    // (the part following the comma indicates the source)
+    // If starts with "PSDRUG(" (from file 50) use only "PSDRUG("
+    //
     if(!_.isEmpty(fields[2])){
-        file = fields[2].split(',')[0];
+        if (_.startsWith(fields[2], 'PSDRUG(')) {
+            file = 'PSDRUG(';
+        } else {
+            var fileParts = fields[2].split(',');
+            if (_.size(fileParts) > 1) {
+                // There was a comma. Add the expected comma
+                file = fileParts[0] + ',';
+            } else {
+                logger.error({file: fields[2]}, 'Expected the file field to start with PSDRUG( or to have a comma');
+                file = fileParts[0];
+            }
+        }
     }
     var allergen = {
         ien: fields[0],

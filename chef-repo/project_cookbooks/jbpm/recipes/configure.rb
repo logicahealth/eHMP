@@ -3,11 +3,10 @@
 # Recipe::configure_deploy
 #
 
-rdknodes = find_multiple_nodes_by_role("resource_server", node[:stack])
+include_recipe "ehmp_synapse"
+
 cdsinvocation = find_optional_node_by_role("cdsinvocation", node[:stack])
 admin_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_admin_password", node[:data_bag_string])["password"]
-
-jbpm_check_war_deployment "business-central"
 
 template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/jboss-web.xml" do
   mode "0644"
@@ -21,7 +20,10 @@ template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/rdk
   mode "0644"
   owner "jboss"
   group "jboss"
-  variables(:rdknodes => rdknodes)
+  variables(
+    :fetch_server_host => "localhost",
+    :fetch_server_port => node[:synapse][:services][:fetch_server][:haproxy][:port]
+  )
   notifies :restart, "service[jboss]"
 end
 
@@ -37,11 +39,12 @@ template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/rdk
   mode "0644"
   owner "jboss"
   group "jboss"
-  variables(:rdknodes => rdknodes)
+  variables(
+    :write_back_host => "localhost",
+    :write_back_port => node[:synapse][:services][:write_back][:haproxy][:port]
+  )
   notifies :restart, "service[jboss]"
 end
-
-jbpm_check_war_deployment "dashbuilder"
 
 template "#{node[:jbpm][:home]}/deployments/dashbuilder.war/WEB-INF/jboss-web.xml" do
   mode "0644"
@@ -58,7 +61,7 @@ template "#{node[:jbpm][:home]}/deployments/dashbuilder.war/WEB-INF/jboss-deploy
   notifies :restart, "service[jboss]"
 end
 
-template "#{Chef::Config[:file_cache_path]}/set_authentication_settings.xml" do
+template "#{node[:jbpm][:workdir]}/set_authentication_settings.xml" do
   mode "0755"
 end
 
@@ -71,28 +74,88 @@ end
 
 # Using sed to insert lines in the configuration file, since the file is modified by the jbpm installation and therefore can't be a template
 execute "Set configuration for authentication in standalone.xml" do
+  cwd "#{node[:jbpm][:workdir]}"
   command "sed -i '/<security-domains>/r set_authentication_settings.xml' #{node[:jbpm][:home]}/configuration/standalone.xml"
-  cwd "#{Chef::Config[:file_cache_path]}"
-  not_if "grep #{node[:jbpm][:configure][:security_domain]} #{node[:jbpm][:home]}/configuration/standalone.xml"
   notifies :stop, "service[jboss]", :immediately
+  not_if "grep #{node[:jbpm][:configure][:security_domain]} #{node[:jbpm][:home]}/configuration/standalone.xml"
 end
 
 # suppress warnings because they are shown every second and fill up the log file
-cookbook_file "#{Chef::Config['file_cache_path']}/suppress_jbpm_warnings.xml"
+cookbook_file "#{node[:jbpm][:workdir]}/suppress_jbpm_warnings.xml"
 execute "Limit jbpm log warning messages in standalone.xml" do
+  cwd "#{node[:jbpm][:workdir]}"
   command "sed -i '/periodic-rotating-file-handler>/r suppress_jbpm_warnings.xml' #{node[:jbpm][:home]}/configuration/standalone.xml"
-  cwd "#{Chef::Config[:file_cache_path]}"
-  not_if "grep org.hibernate.loader #{node[:jbpm][:home]}/configuration/standalone.xml"
   notifies :stop, "service[jboss]", :immediately
+  not_if "grep org.hibernate.loader #{node[:jbpm][:home]}/configuration/standalone.xml"
 end
 
-cookbook_file "#{Chef::Config['file_cache_path']}/system_properties.xml"
+cookbook_file "#{node[:jbpm][:workdir]}/system_properties.xml"
+
 execute "Disable demo repository in standalone.xml" do
+  cwd "#{node[:jbpm][:workdir]}"
   command "sed -i '/<system-properties>/r system_properties.xml' #{node[:jbpm][:home]}/configuration/standalone.xml"
-  cwd "#{Chef::Config[:file_cache_path]}"
-  not_if "grep 'property name=\"org.kie.demo\" value=\"false\"' #{node[:jbpm][:home]}/configuration/standalone.xml"
   notifies :stop, "service[jboss]", :immediately
+  not_if "grep 'property name=\"org.kie.demo\" value=\"false\"' #{node[:jbpm][:home]}/configuration/standalone.xml"
 end
+
+cookbook_file "#{node[:jbpm][:workdir]}/delete_work_dir.xml"
+
+execute "Delete work dir in standalone.xml" do
+  cwd "#{node[:jbpm][:workdir]}"
+  command "sed -i '/<system-properties>/r delete_work_dir.xml' #{node[:jbpm][:home]}/configuration/standalone.xml"
+  notifies :stop, "service[jboss]", :immediately
+  not_if "grep org.jboss.as.web.deployment.DELETE_WORK_DIR_ONCONTEXTDESTROY #{node[:jbpm][:home]}/configuration/standalone.xml"
+end
+
+
+#  configure jboss-logging for requestId and sessionId 
+execute "Configure jboss-logging for requestId and sessionId in standalone.xml" do
+  command "sed -i.orig 's/%d{HH:mm:ss,SSS} %-5p \\[%c\\] (%t)/& hostname:%X{hostname}, requestId:%X{requestId}, sessionId:%X{sid}/' #{node[:jbpm][:home]}/configuration/standalone.xml"
+  not_if "grep 'requestId:%X{requestId}' #{node[:jbpm][:home]}/configuration/standalone.xml"
+  notifies :restart, "service[jboss]", :delayed
+end
+
+#  Set jboss-logging level from the default attribute value for root logger 
+execute "Set jboss-logging level from chef attribute value for root logger in standalone.xml" do
+  command "sed -i.orig '/<root-logger>/{n;s/.*/                <level name=\"#{node[:jbpm][:log_level]}\"\\/>/}' #{node[:jbpm][:home]}/configuration/standalone.xml"
+  not_if "cat #{node[:jbpm][:home]}/configuration/standalone.xml | tr -d '\n' | grep \"<root-logger>\\s*<level name=\\\"#{node[:jbpm][:log_level]}\""
+  notifies :restart, "service[jboss]", :delayed
+end
+
+#Deploy JbpmUtils jar
+remote_file "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/JbpmUtils.jar" do
+   owner 'jboss'
+   mode   '0755'
+   source node[:jbpm_utils_artifacts][:source]
+   use_conditional_get true
+   notifies :restart, "service[jboss]", :immediately
+end
+
+#Configure business-central web.xml
+webxml = "  <!-- LoggingServletRequestListener -->\\
+  <listener>\\
+    <listener-class>\\
+      vistacore.jbpm.utils.logging.listener.LoggingServletRequestListener\\
+    <\\/listener-class>\\
+  <\\/listener>\\
+  <!-- RequestIdFilter -->\\
+  <filter>\\
+    <filter-name>requestIdFilter<\\/filter-name>\\
+    <filter-class>vistacore.jbpm.utils.logging.filter.RequestIdFilter<\\/filter-class>\\
+  <\\/filter>\\
+    <filter-mapping>\\
+    <filter-name>requestIdFilter<\\/filter-name>\\
+    <url-pattern>\\/*<\\/url-pattern>\\
+  <\\/filter-mapping>\\
+"
+execute "insert_request_id_filter" do
+  cwd "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/"
+  user 'jboss'
+  command "sed -i.orig 's/<\\/web-app>/#{webxml}\\n&/' web.xml"
+  not_if "grep 'LoggingServletRequestListener' web.xml"
+  notifies :restart, "service[jboss]", :immediately
+end
+
 
 #Deploy Authentication jar
 remote_file "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/jboss-custom-login-jar-with-dependencies.jar" do
@@ -143,8 +206,6 @@ remote_file "#{node[:jbpm][:home]}/deployments/tasksservice.war" do
    use_conditional_get true
 end
 
-jbpm_check_war_deployment "business-central"
-
 template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/classes/META-INF/persistence.xml" do
   variables(:dialect => "Oracle10gDialect",
             :base_route_entity => node[:jbpm][:configure][:base_route_entity],
@@ -167,6 +228,7 @@ template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/classes
   notifies :restart, "service[jboss]", :immediately
 end
 
+jbpm_check_war_deployment "dashbuilder"
 jbpm_check_war_deployment "business-central"
 
 jbpm_deploy_jar "deploy_fit_lab_jar" do

@@ -8,11 +8,19 @@ include_recipe "rdk::service" # Included due to notify dependency from templates
 jbpm_admin_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_admin_password", node[:data_bag_string])["password"]
 jbpm_nurseuser_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_nurseuser_password", node[:data_bag_string])["password"]
 jbpm_activitydbuser_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_activitydbuser_password", node[:data_bag_string])["password"]
-mongodb_creds = Chef::EncryptedDataBagItem.load("credentials", "mongodb", node[:data_bag_string])["rdk"]
+jbpm_notifdb_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_notifdb_password", node[:data_bag_string])["password"]
+mongodb_creds = Chef::EncryptedDataBagItem.load("credentials", node[:mongodb_creds_db] || "mongodb", node[:data_bag_string])["rdk"]
 rdk_secure_passcode_list = Chef::EncryptedDataBagItem.load("resource_server", "config", node[:data_bag_string])["passcode"]
 
-# Find other machines using find_nodes in common cookbook
-jds = find_node_by_role("jds", node[:stack])
+if find_optional_nodes_by_criteria(node[:stack], "role:jds_app_server").empty?
+  raise "No JDS App Server has been found, yet you attempted to point to a jds_app_server" unless node[:rdk][:jds_app_server_ident].nil?
+  jds = find_node_by_role("jds", node[:stack])
+else
+  raise "JDS App Servers have been found in this environment, but a jds_app_server_ident was not set." if node[:rdk][:jds_app_server_ident].nil?
+  jds = find_optional_node_by_criteria(node[:stack], "role:jds_app_server AND jds_app_server_ident:#{node[:rdk][:jds_app_server_ident]}")
+  raise "JDS App Server #{node[:rdk][:jds_app_server_ident]} not found in stack." if jds.nil?
+end
+
 pjds = find_node_by_role("pjds", node[:stack], "jds")
 solr = find_node_by_role("solr", node[:stack], "mocks")
 vxsync_nodes = find_multiple_nodes_by_role("vxsync", node[:stack])
@@ -23,6 +31,7 @@ mvi = find_node_by_role("mvi", node[:stack], "mocks")
 jbpm = find_optional_node_by_role("jbpm", node[:stack])
 cdsinvocation = find_optional_node_by_role("cdsinvocation", node[:stack])
 cdsdb = find_optional_node_by_role("cdsdb", node[:stack])
+oracle_node = find_optional_node_by_role("ehmp_oracle", node[:stack])
 begin
   crs = find_optional_node_by_role("crs", node[:stack]) || data_bag_item('servers', 'crs').to_hash
 rescue
@@ -36,6 +45,8 @@ rescue
   vix = nil
 end
 vistas = find_multiple_nodes_by_role("vista-.*", node[:stack])
+
+jbpm_communicationuser_password = Chef::EncryptedDataBagItem.load("credentials", oracle_node[:ehmp_oracle][:communication][:user_communicationuser_item], node[:data_bag_string])["password"] if !oracle_node.nil?
 
 # Create config file
 template("#{node[:rdk][:home_dir]}/config/ehmp-config.json") do
@@ -91,12 +102,20 @@ node[:rdk][:services].each do |name, config|
       :jbpm_admin_password => jbpm_admin_password,
       :jbpm_nurseuser_password => jbpm_nurseuser_password,
       :jbpm_activitydbuser_password => jbpm_activitydbuser_password,
+      :jbpm_communicationuser_password => (jbpm_communicationuser_password if !oracle_node.nil?),
+      :jbpm_notifdb_password => jbpm_notifdb_password,
       :port => config[:port],
+      :fetch_host => "localhost:#{node[:synapse][:services][:fetch_server][:haproxy][:port]}",
+      :write_back_host => "localhost:#{node[:synapse][:services][:write_back][:haproxy][:port]}",
+      :pick_list_host => "localhost:#{node[:synapse][:services][:pick_list][:haproxy][:port]}",
       :complex_note_port => node[:rdk][:complex_note_port],
       :index => 0,
       :jds_sync_settings => node[:rdk][:jdsSync][:settings],
       :resync_settings => node[:rdk][:resync],
-      :cookie_prefix => node[:rdk][:cookie_prefix]
+      :cookie_prefix => node[:rdk][:cookie_prefix],
+      :oracle_ip => (oracle_node[:ipaddress] if !oracle_node.nil?),
+      :oracle_sid => (oracle_node[:ehmp_oracle][:oracle_sid] if !oracle_node.nil?),
+      :oracle_port => (oracle_node[:ehmp_oracle][:oracle_config][:port] if !oracle_node.nil?)
     )
     mode '0644'
     notifies :restart, "service[#{config[:service]}]"
@@ -107,10 +126,11 @@ node[:rdk][:services].each do |name, config|
 
     activity_vxsync = nil
     if name == "activity_handler"
+      vxsync_list_index = (index - 1) % node[:rdk][:services][:activity_handler][:vxsync_list].length
       vxsync_nodes.each{ |machine|
-        activity_vxsync = machine if machine[:db_item] == node[:rdk][:services][:activity_handler][:vxsync_list][index-1]
+        activity_vxsync = machine if machine[:db_item] == node[:rdk][:services][:activity_handler][:vxsync_list][vxsync_list_index]
       }
-      raise "Vxsync #{node[:rdk][:services][:activity_handler][:vxsync_list][index-1]} not found in stack." if activity_vxsync.nil?
+      raise "Vxsync #{node[:rdk][:services][:activity_handler][:vxsync_list][vxsync_list_index]} not found in stack." if activity_vxsync.nil?
     end
 
     template("#{config[:config_destination]}-#{index}.json") do
@@ -136,15 +156,20 @@ node[:rdk][:services].each do |name, config|
         :jbpm_admin_password => jbpm_admin_password,
         :jbpm_nurseuser_password => jbpm_nurseuser_password,
         :jbpm_activitydbuser_password => jbpm_activitydbuser_password,
-        :port => config[:port].nil? ? nil : config[:port] - 1 + index,
-        :fetch_host => "localhost:#{node[:rdk][:services][:fetch_server][:port]}",		# Not sure of the best way to do this
-        :write_back_host => "localhost:#{node[:rdk][:services][:write_back][:port]}",	# Not sure of the best way to do this
-        :pick_list_host => "localhost:#{node[:rdk][:services][:pick_list][:port]}",		# Not sure of the best way to do this
+        :jbpm_communicationuser_password => (jbpm_communicationuser_password if !oracle_node.nil?),
+        :jbpm_notifdb_password => jbpm_notifdb_password,
+        :port => config[:port].nil? ? nil : config[:port] - ( index - 1 ),
+        :fetch_host => "localhost:#{node[:synapse][:services][:fetch_server][:haproxy][:port]}",
+        :write_back_host => "localhost:#{node[:synapse][:services][:write_back][:haproxy][:port]}",
+        :pick_list_host => "localhost:#{node[:synapse][:services][:pick_list][:haproxy][:port]}",
         :complex_note_port => node[:rdk][:complex_note_port],
         :index => index,
         :jds_sync_settings => node[:rdk][:jdsSync][:settings],
         :resync_settings => node[:rdk][:resync],
-        :cookie_prefix => node[:rdk][:cookie_prefix]
+        :cookie_prefix => node[:rdk][:cookie_prefix],
+        :oracle_ip => (oracle_node[:ipaddress] if !oracle_node.nil?),
+        :oracle_sid => (oracle_node[:ehmp_oracle][:oracle_sid] if !oracle_node.nil?),
+        :oracle_port => (oracle_node[:ehmp_oracle][:oracle_config][:port] if !oracle_node.nil?)
       )
       mode '0644'
       notifies :restart, "service[#{config[:service]}]"

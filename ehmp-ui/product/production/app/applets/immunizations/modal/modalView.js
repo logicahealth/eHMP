@@ -9,9 +9,10 @@ define([
     'app/resources/fetch/immunizations/utils',
     'app/applets/immunizations/modal/filterDateRangeView',
     'hbs!app/applets/immunizations/modal/modalTemplate'
-  ], function($, Backbone, Marionette, _, Handlebars, moment, Util, ResourcePoolUtils, FilterDateRangeView, modalTemplate) {
+], function($, Backbone, Marionette, _, Handlebars, moment, Util, ResourcePoolUtils, FilterDateRangeView, modalTemplate) {
     'use strict';
-    var gridOptions = {}, columns, TotalTestModel;
+    var gridOptions = {},
+        columns, TotalTestModel;
 
     columns = [{
         name: "administeredFormatted",
@@ -71,13 +72,7 @@ define([
         template: modalTemplate,
         collectionEvents: {
             'fetch:success': function(collection) {
-                if(_.isString(this.getOption('uid'))) {
-                    var matchingModel = collection.findWhere({uid: this.getOption('uid')});
-                    if(!_.isUndefined(matchingModel)) {
-                        _.extend(this.model.attributes, matchingModel.attributes);
-                        this.render();
-                    }
-                }
+                this.updateMatchingModel(collection);
 
                 if (this.showNavHeader) {
                     this.model.set('navHeader', true);
@@ -90,20 +85,20 @@ define([
                     totalTests: length
                 });
 
-                var DataGrid = ADK.Views.DataGrid.returnView();
+                var DataGrid =  ADK.Views.DataGrid.returnView();
                 DataGrid = DataGrid.extend({
                     DataGridRow: DataGrid.DataGridRow.extend({
                         serializeModel: function() {
                             var data = this.model.toJSON();
-                            data = ResourcePoolUtils.getAdministeredFormatted(data);
-                            data = Util.getContraindicated(data);
-                            data = Util.getFacilityColor(data);
-                            data = ResourcePoolUtils.getStandardizedName(data);
-                            data = Util.getObservedFormatted(data);
-                            data = Util.getObservedTimeFormatted(data);
-                            data = Util.getResultedFormatted(data);
-                            data = Util.getResultedTimeFormatted(data);
-                            data = Util.getNumericDate(data);
+                            data.administeredFormatted = ResourcePoolUtils.formatAdministeredDateTime(_.get(data, 'administeredDateTime', ''));
+                            data.contraindicatedDisplay = Util.createContraindicated(_.get(data, 'contraindicated', ''));
+                            data.facilityColor = Util.createFacilityColor(_.get(data, 'facilityCode', ''));
+                            data.standardizedName = ResourcePoolUtils.createStandardizedName(_.get(data, 'codes', ''));
+                            data.observedFormatted = Util.formatDate(_.get(data, 'observed', ''));
+                            data.observedTimeFormatted = Util.formatTime(_.get(data, 'observed', ''));
+                            data.resultedFormatted = Util.formatDate(_.get(data, 'resulted', ''));
+                            data.resultedTimeFormatted = Util.formatTime(_.get(data, 'resulted', ''));
+                            data.numericDate = Util.formatNumericDate(_.get(data, 'administeredDateTime', ''));
                             return data;
                         }
                     })
@@ -143,12 +138,12 @@ define([
                 this.leftColumn.show(ADK.Views.Loading.create());
             }
         },
+        modelEvents: {
+            'change': 'render'
+        },
         initialize: function() {
             this.gridOptions = _.clone(gridOptions, {
                 deep: true
-            });
-            this.collection = this.getOption('collection') || ADK.PatientRecordService.createEmptyCollection({
-                pageable: true
             });
 
             if (this.showNavHeader) {
@@ -201,6 +196,16 @@ define([
 
             this.leftColumn.show(ADK.Views.Loading.create());
         },
+        updateMatchingModel: function(collection) {
+            if (_.isString(this.getOption('uid'))) {
+                var matchingModel = collection.findWhere({
+                    uid: this.getOption('uid')
+                });
+                if (!_.isUndefined(matchingModel)) {
+                    this.model.set(matchingModel.attributes);
+                }
+            }
+        },
         filterCollection: function(coll) {
             coll.models.forEach(function(model) {
                 if (model.get('administeredDateTime')) {
@@ -215,12 +220,12 @@ define([
 
             var momentToDate = moment(this.sharedDateRange.get('toDate')).format("YYYYMMDD"),
                 momentFromDate = moment(this.sharedDateRange.get('fromDate')).format("YYYYMMDD");
-            newColl.each(function(column){
-                if(column.get('numericDate') <= momentToDate && (column.get('numericDate') >= momentFromDate || this.sharedDateRange.get('fromDate') === null)){
+            newColl.each(function(column) {
+                if (column.get('numericDate') <= momentToDate && (column.get('numericDate') >= momentFromDate || this.sharedDateRange.get('fromDate') === null)) {
                     resultColl.push(column);
                 }
             }, this);
-
+            this.updateMatchingModel(coll);
             coll.reset(resultColl);
             return resultColl;
         }

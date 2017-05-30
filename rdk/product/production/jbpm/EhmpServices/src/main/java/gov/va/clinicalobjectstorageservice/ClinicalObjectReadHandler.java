@@ -1,5 +1,6 @@
 package gov.va.clinicalobjectstorageservice;
 
+import org.jboss.logging.Logger;
 import org.kie.api.runtime.process.WorkItem;
 import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.api.runtime.process.WorkItemManager;
@@ -10,17 +11,17 @@ import org.springframework.http.HttpStatus;
 import gov.va.clinicalobjectstorageservice.util.ResourceUtil;
 import gov.va.ehmp.services.exception.EhmpServicesException;
 import gov.va.ehmp.services.exception.ErrorResponseUtil;
-import gov.va.ehmp.services.utils.Logging;
 import gov.va.kie.utils.WorkItemUtil;
 
+
 public class ClinicalObjectReadHandler implements WorkItemHandler, Closeable, Cacheable {
-	
+	private static final Logger LOGGER = Logger.getLogger(ClinicalObjectReadHandler.class);
 	public void close() {
 		//Ignored
 	}
 
 	public void abortWorkItem(WorkItem workItem, WorkItemManager manager) {
-		Logging.info("ClinicalObjectReadHandler.abortWorkItem has been called");
+		LOGGER.info("ClinicalObjectReadHandler.abortWorkItem has been called");
 	}
 
 	/**
@@ -30,20 +31,20 @@ public class ClinicalObjectReadHandler implements WorkItemHandler, Closeable, Ca
 		String response = null;
 		
 		try {
-			Logging.info("Entering ClinicalObjectReadHandler.executeWorkItem");
+			LOGGER.info("Entering ClinicalObjectReadHandler.executeWorkItem");
 			String pId = WorkItemUtil.extractRequiredStringParam(workItem, "pid");
 			String uId = WorkItemUtil.extractRequiredStringParam(workItem, "uid");
 			
-			Logging.debug("ClinicalObjectReadHandler.executeWorkItem pId = " + pId + ", uId = " + uId);
+			LOGGER.debug("ClinicalObjectReadHandler.executeWorkItem pId = " + pId + ", uId = " + uId);
 			
 			ResourceUtil resUtil = new ResourceUtil();
 			// Read clinical object from pJDS
 			response = resUtil.invokeGetResource(pId, uId);
-			Logging.debug("ClinicalObjectReadHandler.executeWorkItem response = " + response);
+			LOGGER.debug("ClinicalObjectReadHandler.executeWorkItem response = " + response);
 		} catch (EhmpServicesException e) {
 			response = e.toJsonString();
 		} catch (Exception e) {
-			Logging.error("ClinicalObjectReadHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("ClinicalObjectReadHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage(), e);
 			response = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "ClinicalObjectReadHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 		

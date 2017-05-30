@@ -560,7 +560,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
                 jds: {}
             });
 
-            jdsClientDummy._setResponseData([null, null, null],[{statusCode: 404}, {statusCode: 201, headers: {location:'http://10.2.2.110:9080/vpr/jpid'+jpid}}, {statusCode: 201}, {statusCode: 200}], [null, null, null, {jpid: jpid, patientIdentifiers: identifiers}]);
+            jdsClientDummy._setResponseData([null, null, null],[{statusCode: 404}, {statusCode: 201, headers: {location:'http://IP             /vpr/jpid'+jpid}}, {statusCode: 201}, {statusCode: 200}], [null, null, null, {jpid: jpid, patientIdentifiers: identifiers}]);
 
             opts.jdsClient = jdsClientDummy;
             var done = false;
@@ -600,7 +600,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
                 jds: {}
             });
 
-            jdsClientDummy._setResponseData([null, null, null, null, null],[{statusCode:404},{statusCode: 201, headers: {location:'http://10.2.2.110:9080/vpr/jpid'+jpid}}, {statusCode: 400}, {statusCode:201}, {statusCode:200}], [null,null, null, null, {jpid: jpid, patientIdentifiers:[request.patientIdentifier.value]}]);
+            jdsClientDummy._setResponseData([null, null, null, null, null],[{statusCode:404},{statusCode: 201, headers: {location:'http://IP             /vpr/jpid'+jpid}}, {statusCode: 400}, {statusCode:201}, {statusCode:200}], [null,null, null, null, {jpid: jpid, patientIdentifiers:[request.patientIdentifier.value]}]);
 
             opts.jdsClient = jdsClientDummy;
             var done = false;

@@ -1,4 +1,6 @@
-@F414 @add_problem_comments  @future @DE4560
+@F414 @add_problem_comments  @DE4560 @reg3 
+
+# same problem can't be added repeatedly.  Tagging as future
 
 Feature: Enter and Store A Problem List - with comments
 
@@ -10,7 +12,6 @@ Background:
   And user opens observation tray
   And user attempts to create a new "Problem" observation
   And user searches and selects new problem "Allergy to peanuts"
-
 
 @F414_comment_1
 Scenario: eHMP user can add new comment after defining problem section within “Add problem” form.

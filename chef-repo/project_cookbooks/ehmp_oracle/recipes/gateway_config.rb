@@ -59,7 +59,7 @@ template "#{node[node['ehmp_oracle']['oracle_service']]['oracle_gateway']['home'
 	variables(
 		:mssql => mssql
 	)
-	action :nothing
+  notifies :run, 'execute[cycle_lsnrctl]', :immediately
 end
 
 # change ownership of /oracle directory to oracle user recursively.
@@ -90,7 +90,7 @@ listener_oracle = "SID_LIST=(SID_DESC=(SID_NAME=#{SID_NAME})(ORACLE_HOME=#{node[
 tnsnames = "\\
 #{SID_NAME}  =\\
   (DESCRIPTION=\\
-    (ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))\\
+    (ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=PORT))\\
     (CONNECT_DATA=(SID=#{SID_NAME}))\\
     (HS=OK)\\
   )"

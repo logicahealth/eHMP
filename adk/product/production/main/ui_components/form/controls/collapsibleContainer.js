@@ -124,7 +124,7 @@ define([
             this.$el.find('[data-buttonid="collapsibleContainerTrigger"]').removeClass('collapsed');
           }
 
-          this.$el.find('.collapsibleContainerCollapseRegion > .collapse-content').collapse(showOrHideString);
+          this.$el.find('.collapsible-container-collapse-region > .collapse-content').collapse(showOrHideString);
         }
       },
       'control:headerItems:add': function(event, model) {
@@ -151,6 +151,6 @@ define([
           this.$el.find("data-buttonid='collapsibleContainerTrigger'").prop('disabled', disableString);
         }
       }
-    }, ControlService.LayoutViewControl.prototype.events)
+    }, _.omit(ControlService.LayoutViewControl.prototype.behaviors, 'UpdateConfig'))
   }, _.pick(ControlService, ['addModel', 'removeModel', 'updateCollection'])));
 });

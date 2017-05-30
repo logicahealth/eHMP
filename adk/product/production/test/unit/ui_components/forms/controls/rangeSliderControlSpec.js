@@ -3,7 +3,7 @@ define([
     'jquery',
     'backbone',
     'marionette',
-    'main/ui_components/components',
+    'main/UILibrary',
     'api/UIComponents',
     'jasminejquery'
 ], function($, Backbone, Marionette, UI) {
@@ -284,6 +284,16 @@ define([
                 $form.find('.rangeValue').trigger("control:hidden", true);
                 expect($form.find('.rangeValue')).toHaveClass('hidden');
                 $form.find('.rangeValue').trigger("control:hidden", false);
+                expect($form.find('.rangeVale')).not.toHaveClass('hidden');
+            });
+            it("update:config", function() {
+                $form.find('.rangeValue').trigger("control:update:config", {
+                    hidden: true
+                });
+                expect($form.find('.rangeValue')).toHaveClass('hidden');
+                $form.find('.rangeValue').trigger("control:update:config", {
+                    hidden: false
+                });
                 expect($form.find('.rangeVale')).not.toHaveClass('hidden');
             });
         });

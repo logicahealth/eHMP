@@ -1,0 +1,28 @@
+// select
+select {
+    background-color: $pure-white;
+    height: 28px;
+    font-size: 11px;
+}
+// todo - make select.form-control use a modifier - select.form-control--large
+.sidebar {
+    select.form-control {
+        margin-left: 0px;
+        height: 28px;
+    }
+}
+// access control tab select
+form .permission-sets-picklist select.form-control {
+    height: 28px;
+}
+
+// container for select controls that require data loading spinnners
+.select-control--loading-spinner {
+	position: relative;
+	.fa-spinner {
+		position: absolute;
+		top: 30px;
+		left: 8px;
+		z-index: 9;
+	}
+}

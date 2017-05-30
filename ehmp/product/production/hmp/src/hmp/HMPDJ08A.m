@@ -1,5 +1,5 @@
-HMPDJ08A ;SLC/MKB,ASMR/RRB,CPC - TIU Documents continued;8/19/2016 12:08:30
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**4**;Sep 01, 2011;Build 63
+HMPDJ08A ;SLC/MKB,ASMR/BL,CPC - TIU Documents continued;11/3/16 3:10:30pm
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**3**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; Called by HMPDJ08
@@ -122,7 +122,7 @@ LR1(DFN,ID) ; -- return report data as TIU string [$$RESOLVE]
  S X=$S(SUB="AU":$P(LR,U,15,16),SUB="MI":$P(LR,U,3,4),1:$P(LR,U,11)_U_$P(LR,U,13)) ;released
  S:X SIGN="//"_+$P(X,U,2)_";"_$P($G(^VA(200,+$P(X,U,2),0)),U)_";"_+X ;ICR 10060 DE2818 ASF 11/10/15
  S Y=ID_U_NAME_U_(9999999-IDT)_U_U_USER_U_LOC_U_$S($P(LR,U,3):"COMPLETED",1:"REPORT INCOMPLETE")_U_$G(VST)_"^^2753^"_SIGN ;DE6322 check complete state
- S:$G(HMPTEXT) TEXT=$$TEXT^HMPDLRA(DFN,SUB,IDT) ;^TMP("HMPTEXT",$J,ID)
+ S:$G(HMPTEXT) TEXT=$$TEXT^HMPDLRA(DFN,SUB,IDT,LRDFN) ;^TMP("HMPTEXT",$J,ID)
  Q Y
  ;
  ; ------------------------------------------------------------------

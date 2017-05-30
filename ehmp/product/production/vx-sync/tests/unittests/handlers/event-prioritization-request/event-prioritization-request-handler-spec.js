@@ -37,16 +37,16 @@ var hmpServer = 'TheHmpServer';
 var config = {
 	jds: {
 		protocol: 'http',
-		host: '10.2.2.110',
-		port: 9080
+		host: 'REDACTED    ',
+		port: PORT
 	},
 	'vistaSites': {
 		'9E7A': {
 			'name': 'panorama',
-			'host': '10.2.2.101',
-			'port': 9210,
-			'accessCode': 'pu1234',
-			'verifyCode': 'pu1234!!',
+			'host': 'REDACTED    ',
+			'port': PORT,
+			'accessCode': 'REDACTED',
+			'verifyCode': 'REDACTED',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -54,10 +54,10 @@ var config = {
 		},
 		'C877': {
 			'name': 'kodak',
-			'host': '10.2.2.102',
-			'port': 9210,
-			'accessCode': 'pu1234',
-			'verifyCode': 'pu1234!!',
+			'host': 'REDACTED    ',
+			'port': PORT,
+			'accessCode': 'REDACTED',
+			'verifyCode': 'REDACTED',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -71,6 +71,11 @@ var config = {
 	'hdr': {
 		'operationMode': 'REQ/RES'
 	}
+};
+
+var referenceInfo = {
+	sessionId: 'test-session-id',
+	requestId: 'test-request-id'
 };
 
 //---------------------------------------------------------------------
@@ -158,7 +163,8 @@ function createJob(priority) {
 		dataDomain: 'appointment',
 		priority: priority,
 		record: {},
-		jobId: '34'
+		jobId: '34',
+		referenceInfo: referenceInfo
 	};
 
 	return job;
@@ -180,7 +186,7 @@ describe('event-priroritization-request-handler.js', function() {
                     expect(environment.eventPriorityRulesEngine.prioritize.calls.length).toEqual(1);
                     expect(environment.publisherRouter.publish.calls.length).toEqual(1);
                     expect(environment.eventPriorityRulesEngine.prioritize).toHaveBeenCalledWith(job, jasmine.any(Function));
-                    expect(environment.publisherRouter.publish).toHaveBeenCalledWith(jasmine.objectContaining({ type: 'record-enrichment', priority: 50}), jasmine.any(Function));
+                    expect(environment.publisherRouter.publish).toHaveBeenCalledWith(jasmine.objectContaining({ type: 'record-enrichment', priority: 50, referenceInfo: referenceInfo}), jasmine.any(Function));
 					finished = true;
 				});
 			});
@@ -202,7 +208,7 @@ describe('event-priroritization-request-handler.js', function() {
                     expect(environment.eventPriorityRulesEngine.prioritize.calls.length).toEqual(1);
                     expect(environment.publisherRouter.publish.calls.length).toEqual(1);
                     expect(environment.eventPriorityRulesEngine.prioritize).toHaveBeenCalledWith(job, jasmine.any(Function));
-                    expect(environment.publisherRouter.publish).toHaveBeenCalledWith(jasmine.objectContaining({ type: 'record-enrichment', priority: 1}), jasmine.any(Function));
+                    expect(environment.publisherRouter.publish).toHaveBeenCalledWith(jasmine.objectContaining({ type: 'record-enrichment', priority: 1, referenceInfo: referenceInfo}), jasmine.any(Function));
 					finished = true;
 				});
 			});
@@ -224,7 +230,7 @@ describe('event-priroritization-request-handler.js', function() {
                     expect(environment.eventPriorityRulesEngine.prioritize.calls.length).toEqual(1);
                     expect(environment.publisherRouter.publish.calls.length).toEqual(1);
                     expect(environment.eventPriorityRulesEngine.prioritize).toHaveBeenCalledWith(job, jasmine.any(Function));
-                    expect(environment.publisherRouter.publish).toHaveBeenCalledWith(jasmine.objectContaining({ type: 'record-enrichment', priority: 1}), jasmine.any(Function));
+                    expect(environment.publisherRouter.publish).toHaveBeenCalledWith(jasmine.objectContaining({ type: 'record-enrichment', priority: 1, referenceInfo: referenceInfo}), jasmine.any(Function));
 					finished = true;
 				});
 			});

@@ -79,7 +79,7 @@ define([
                 placement: 'top',
                 trigger: customOptions.trigger,
                 delay: customOptions.delay,
-                template: '<div class="popover popover-confirmation" role="tooltip" tabindex="-1"><div class="arrow"></div><div class="popover-confirmation-header">' + popoverHeaderTemplate + '</div><div class="popover-content"></div></div>'
+                template: '<div class="popover popover--confirmation" role="tooltip" tabindex="-1"><div class="arrow"></div><div class="popover--confirmation-header">' + popoverHeaderTemplate + '</div><div class="popover-content"></div></div>'
             };
             if (!_.isUndefined(customOptions.container) && !_.isUndefined(customOptions.viewport)) {
                 popoverOptions.container = customOptions.container;
@@ -100,7 +100,7 @@ define([
                     triggerButton.popover('hide').focus();
                 });
                 triggerButton.addClass('popover-shown');
-                popoverParentElement.find('.popover-confirmation').focus();
+                popoverParentElement.find('.popover--confirmation').focus();
                 popoverParentElement.find('.confirm-cancel-button button').on('click.confirm-cancel', function() {
                     triggerButton.popover('hide').focus();
                     _.bind(behavior.triggerEvent, behavior)();

@@ -203,7 +203,7 @@ xdescribe('jmeadows-pdf-document-transform-handler.js', function() {
         }, 'File copy', 2000);
 
         var host = vx_sync_ip;
-        var port = 5000;
+        var port = PORT;
         var tubename = 'vx-sync-test';
 
         var jobTypes = [jobUtils.recordEnrichmentType()];

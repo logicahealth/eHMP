@@ -10,7 +10,6 @@
 
 require('../../env-setup');
 
-var logUtil = require(global.VX_UTILS + 'log');
 //var inspect = require(global.VX_UTILS + 'inspect');
 var _ = require('underscore');
 var async = require('async');
@@ -21,6 +20,8 @@ var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 var format = require('util').format;
 var metaStampUtil = require(global.VX_UTILS + 'metastamp-utils');
 
+var PRIORITY_DEFAULT = 1;
+
 //-------------------------------------------------------------------------------------
 // Constructor for this class.
 //
@@ -28,9 +29,9 @@ var metaStampUtil = require(global.VX_UTILS + 'metastamp-utils');
 // config: The worker-config information to be used by this class.
 // environment: The environment containing handles to shared objects, etc.
 //-------------------------------------------------------------------------------------
-var VistaRecordProcessor = function(log, config, environment) {
+var VistaRecordProcessor = function (log, config, environment) {
     log.debug('VistaRecordProcessor.constructor - class initialized.');
-    this.log = logUtil.getAsChild('VistaRecordProcessor', log);
+    this.log = log;
     this.config = config;
     this.environment = environment;
     this.metrics = environment.metrics;
@@ -43,27 +44,29 @@ var VistaRecordProcessor = function(log, config, environment) {
 // data: The data node of the response that was received from VistA.
 // callback: The function to call when the batch has been processed.
 //-------------------------------------------------------------------------------------------
-VistaRecordProcessor.prototype.processBatch = function(data, callback) {
+VistaRecordProcessor.prototype.processBatch = function (data, callback) {
     var self = this;
     self.log.debug('VistaRecordProcessor.processBatch: processing batch of %s records', data.items.length);
     var processId = uuid.v4();
 
     // Process all the jobs that we have received
     //--------------------------------------------
-    self._logMetrics(processId, 'start', function() {});
+    self._logMetrics(processId, 'start', function () {
+    });
     var taskResults = [];
 
-    async.eachSeries(data.items, function(item, itemCompleteCallback) {
+    async.eachSeries(data.items, function (item, itemCompleteCallback) {
         self.log.trace('VistaRecordProcessor.processBatch: Inside async.eachSeries with item : %j', item);
-        self._processDataItem(item, function(error, response) {
+        self._processDataItem(item, function (error, response) {
             self.log.trace('VistaRecordProcessor.processBatch: (Inside async.eachSeries) finished processing item: %j error: %s response: %s', item, error, response);
             if (!error) {
                 taskResults.push(response);
             }
             itemCompleteCallback(error);
         });
-    }, function(error) {
-        self._logMetrics(processId, 'stop', function() {});
+    }, function (error) {
+        self._logMetrics(processId, 'stop', function () {
+        });
         self.log.debug('VistaRecordProcessor.processBatch: Completed processing all the jobs.  error: %s; all responses: %j', error, taskResults);
         return callback(error, taskResults);
     });
@@ -80,18 +83,18 @@ VistaRecordProcessor.prototype.processBatch = function(data, callback) {
 // item: A single data item from a batch of vista data.
 // callback: The callback to call once processing the data item has been completed.
 //-------------------------------------------------------------------------------------
-VistaRecordProcessor.prototype._processDataItem = function(item, callback) {
+VistaRecordProcessor.prototype._processDataItem = function (item, callback) {
     var self = this;
 
     if (!item || !item.collection) {
         self.log.debug('VistaRecordProcessor.processBatch: Item or item.collection was nullish.');
         callback(null, 'Item or item.collection was nullish.');
     } else if (item.collection === 'syncStart') {
-        self._processSyncStartJob(item, function(error, response) {
+        self._processSyncStartJob(item, function (error, response) {
             callback(error, response);
         });
     } else if (item.collection === 'OPDsyncStart') {
-        self._processOPDSyncStartJob(item, function(error, response) {
+        self._processOPDSyncStartJob(item, function (error, response) {
             callback(error, response);
         });
     } else if ((item.collection !== 'syncStart') && (item.collection !== 'OPDsyncStart') && (item.collection !== 'syncStatus')) {
@@ -99,7 +102,7 @@ VistaRecordProcessor.prototype._processDataItem = function(item, callback) {
             self.log.debug('VistaRecordProcessor.processBatch: Item of collection type %s has no data to process', item.collection);
             return callback(null, format('Item of collection type %s has no data to process', item.collection));
         }
-        self._processVistaDataJob(item, function(error, response) {
+        self._processVistaDataJob(item, function (error, response) {
             callback(error, response);
         });
     } else {
@@ -117,15 +120,20 @@ VistaRecordProcessor.prototype._processDataItem = function(item, callback) {
 // syncStartJob: A sync start job to process.
 // callback: The handler to call when we are done processing the jobs.
 //------------------------------------------------------------------------------------------
-VistaRecordProcessor.prototype._processSyncStartJob = function(syncStartJob, callback) {
+VistaRecordProcessor.prototype._processSyncStartJob = function (syncStartJob, callback) {
     var self = this;
-    self.log.debug('VistaRecordProcessor._processSyncStartJob: Processing syncStartJob [%j].', syncStartJob);
+    var childLog = self.log;
+    if ((syncStartJob) && (!_.isEmpty(syncStartJob.referenceInfo))) {
+        childLog = self.log.child(syncStartJob.referenceInfo);
+    }
+
+    childLog.debug('VistaRecordProcessor._processSyncStartJob: Processing syncStartJob [%j].', syncStartJob);
 
     // Get the PID that we are dealing with.
     //--------------------------------------
     // console.log('syncStartJob: pid: %s syncStartJob: [%j]', syncStartJob.pid, syncStartJob);
     if (!syncStartJob.pid) {
-        self.log.error('VistaRecordProcessor._processSyncStartJob: Failed to process - syncStart did not contain a pid.');
+        childLog.error('VistaRecordProcessor._processSyncStartJob: Failed to process - syncStart did not contain a pid.');
 
         // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
         //--------------------------------------------------------------------------------------------------------------------------
@@ -141,37 +149,37 @@ VistaRecordProcessor.prototype._processSyncStartJob = function(syncStartJob, cal
     // If we received a meta-stamp then we need a task to store it.
     //-------------------------------------------------------------
     if (_.isObject(syncStartJob.metaStamp)) {
-            syncStartDomain = metaStampUtil.getDomainFromMetastamp(syncStartJob.metaStamp, vistaId);
-            if (!_.isEmpty(metaStampUtil.getEventMetastampForDomain(syncStartJob.metaStamp, vistaId, syncStartDomain))) {
-                tasks = tasks.concat(self._storeMetaStamp.bind(self, syncStartJob.metaStamp, patientIdentifier));
-            } else {
-                self.log.debug('VistaRecordProcessor._processSyncStartJob: metaStamp for domain %s has no events associated with it. Means the patient has no data for this domain on this VistA site. metaStamp does not need to be stored. pid: %s.', syncStartDomain, syncStartJob.pid);
-            }
+        syncStartDomain = metaStampUtil.getDomainFromMetastamp(syncStartJob.metaStamp, vistaId);
+        if (!_.isEmpty(metaStampUtil.getEventMetastampForDomain(syncStartJob.metaStamp, vistaId, syncStartDomain))) {
+            tasks = tasks.concat(self._storeMetaStamp.bind(self, childLog, syncStartJob.metaStamp, patientIdentifier));
+        } else {
+            childLog.debug('VistaRecordProcessor._processSyncStartJob: metaStamp for domain %s has no events associated with it. Means the patient has no data for this domain on this VistA site. metaStamp does not need to be stored. pid: %s.', syncStartDomain, syncStartJob.pid);
+        }
     } else {
-        self.log.debug('VistaRecordProcessor._processSyncStartJob: Received a syncStart job that did not contain a metaStamp.  Means the patient has no data on this VistA site. pid: %s.', syncStartJob.pid);
+        childLog.debug('VistaRecordProcessor._processSyncStartJob: Received a syncStart job that did not contain a metaStamp.  Means the patient has no data on this VistA site. pid: %s.', syncStartJob.pid);
     }
 
     //Store completed job only if the job isn't an unsolicted update
     //Unsolicited updates won't include rootJobId or jobId
     //---------------------------------------------------------------------------
     if (syncStartJob.rootJobId && syncStartJob.jobId) {
-        self.log.trace('VistaRecordProcessor._processSyncStartJob: syncStartJob contains rootJobId and jobId; is not an unsolicited update.  pid: %s', syncStartJob.pid);
-        tasks.push(self._storeCompletedJob.bind(self, syncStartJob.rootJobId, syncStartJob.jobId, syncStartDomain, patientIdentifier));
+        childLog.trace('VistaRecordProcessor._processSyncStartJob: syncStartJob contains rootJobId and jobId; is not an unsolicited update.  pid: %s', syncStartJob.pid);
+        tasks.push(self._storeCompletedJob.bind(self, childLog, syncStartJob.rootJobId, syncStartJob.jobId, syncStartDomain, patientIdentifier));
     } else {
-        self.log.trace('VistaRecordProcessor._processSyncStartJob: syncStartJob was received as an unsolicited update. No job status to store. pid: %s', syncStartJob.pid);
+        childLog.trace('VistaRecordProcessor._processSyncStartJob: syncStartJob was received as an unsolicited update. No job status to store. pid: %s', syncStartJob.pid);
     }
 
     // Process all the jobs that we have received
     //--------------------------------------------
     if (!_.isEmpty(tasks)) {
-        async.series(tasks, function(error, response) {
-            self.log.debug('VistaRecordProcessor._processSyncStartJob: Completed processing syncStartJob. pid: %s; error: %s; response: %j', syncStartJob.pid, error, response);
+        async.series(tasks, function (error, response) {
+            childLog.debug('VistaRecordProcessor._processSyncStartJob: Completed processing syncStartJob. pid: %s; error: %s; response: %j', syncStartJob.pid, error, response);
             return callback(error, response);
         });
     } else {
         // We have nothing to do... We are good to go...
         //----------------------------------------------
-        self.log.debug('VistaRecordProcessor._processSyncStartJob: There was no metastamp to store or no job to complete. pid: %s', syncStartJob.pid);
+        childLog.debug('VistaRecordProcessor._processSyncStartJob: There was no metastamp to store or no job to complete. pid: %s', syncStartJob.pid);
         return setTimeout(callback, 0, null, null);
     }
 };
@@ -183,7 +191,7 @@ VistaRecordProcessor.prototype._processSyncStartJob = function(syncStartJob, cal
 // OPDsyncStartJob: A sync start job to process.
 // callback: The handler to call when we are done processing the jobs.
 //------------------------------------------------------------------------------------------
-VistaRecordProcessor.prototype._processOPDSyncStartJob = function(OPDsyncStartJob, callback) {
+VistaRecordProcessor.prototype._processOPDSyncStartJob = function (OPDsyncStartJob, callback) {
     var self = this;
     self.log.debug('VistaRecordProcessor._processOPDSyncStartJob: Processing OPDsyncStartJob [%j].', OPDsyncStartJob);
     if (!OPDsyncStartJob.metaStamp) {
@@ -206,7 +214,7 @@ VistaRecordProcessor.prototype._processOPDSyncStartJob = function(OPDsyncStartJo
 
     // Process all the jobs that we have received
     //--------------------------------------------
-    async.series(tasks, function(error, response) {
+    async.series(tasks, function (error, response) {
         self.log.debug('VistaRecordProcessor._processOPDSyncStartJob: Completed processing OPDsyncStartJob.  error: %s; response: %j', error, response);
         return callback(error, response);
     });
@@ -215,11 +223,12 @@ VistaRecordProcessor.prototype._processOPDSyncStartJob = function(OPDsyncStartJo
 //------------------------------------------------------------------------------------------
 // This method processes a single syncStart job.
 //
+// childLog: The logger to use for any log messages.
 // metaStamp: The meta stamp to be stored.
 // patientIdentifier: The patient identifier associated with this job.
 // callback: The handler to call when we are done processing the jobs.
 //------------------------------------------------------------------------------------------
-VistaRecordProcessor.prototype._storeMetaStamp = function(metaStamp, patientIdentifier, callback) {
+VistaRecordProcessor.prototype._storeMetaStamp = function (childLog, metaStamp, patientIdentifier, callback) {
     var self = this;
     var vistaId = idUtil.extractSiteFromPid(patientIdentifier.value);
     var metricObj = {
@@ -230,14 +239,15 @@ VistaRecordProcessor.prototype._storeMetaStamp = function(metaStamp, patientIden
     };
     self.metrics.trace('vista-record-processor Store Metastamp', metricObj);
     metricObj.timer = 'stop';
-    self.log.debug('VistaRecordProcessor._storeMetaStamp: Storing metaStamp: %s; patientIdentifier: %j', metaStamp, patientIdentifier);
+    childLog.debug('VistaRecordProcessor._storeMetaStamp: Storing metaStamp: %s; patientIdentifier: %j', metaStamp, patientIdentifier);
 
     // Store the metaStamp to JDS
     //----------------------------
-    self.environment.jds.saveSyncStatus(metaStamp, patientIdentifier, function(error, response) {
-        self.log.debug('VistaRecordProcessor._storeMetaStamp: Returned from storing patient metaStamp for pid: %s.  Error: %s;  Response: %j', patientIdentifier.value, error, response);
+    var jdsClient = self.environment.jds.childInstance(childLog);
+    jdsClient.saveSyncStatus(metaStamp, patientIdentifier, function (error, response) {
+        childLog.debug('VistaRecordProcessor._storeMetaStamp: Returned from storing patient metaStamp for pid: %s.  Error: %s;  Response: %j', patientIdentifier.value, error, response);
         if (error) {
-            self.log.error('VistaRecordProcessor._storeMetaStamp:  Received error while attempting to store metaStamp for pid: %s.  Error: %s;  Response: %j; metaStamp:[%j]', patientIdentifier.value, error, response, metaStamp);
+            childLog.error('VistaRecordProcessor._storeMetaStamp:  Received error while attempting to store metaStamp for pid: %s.  Error: %s;  Response: %j; metaStamp:[%j]', patientIdentifier.value, error, response, metaStamp);
 
             // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
@@ -248,7 +258,7 @@ VistaRecordProcessor.prototype._storeMetaStamp = function(metaStamp, patientIden
         }
 
         if (!response) {
-            self.log.error('VistaRecordProcessor._storeMetaStamp:  Failed to store metaStamp for pid: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', patientIdentifier.value, error, response, metaStamp);
+            childLog.error('VistaRecordProcessor._storeMetaStamp:  Failed to store metaStamp for pid: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', patientIdentifier.value, error, response, metaStamp);
 
             // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
@@ -259,7 +269,7 @@ VistaRecordProcessor.prototype._storeMetaStamp = function(metaStamp, patientIden
         }
 
         if (response.statusCode !== 200) {
-            self.log.error('VistaRecordProcessor._storeMetaStamp:  Failed to store metaStamp for pid: %s - incorrect status code returned. Error: %s;  Response: %j; metaStamp:[%j]', patientIdentifier.value, error, response, metaStamp);
+            childLog.error('VistaRecordProcessor._storeMetaStamp:  Failed to store metaStamp for pid: %s - incorrect status code returned. Error: %s;  Response: %j; metaStamp:[%j]', patientIdentifier.value, error, response, metaStamp);
 
             // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
@@ -281,7 +291,7 @@ VistaRecordProcessor.prototype._storeMetaStamp = function(metaStamp, patientIden
 // patientIdentifier: The patient identifier associated with this job.
 // callback: The handler to call when we are done processing the jobs.
 //------------------------------------------------------------------------------------------
-VistaRecordProcessor.prototype._storeOperationalMetaStamp = function(metaStamp, siteId, callback) {
+VistaRecordProcessor.prototype._storeOperationalMetaStamp = function (metaStamp, siteId, callback) {
     var self = this;
     var metricObj = {
         'site': siteId,
@@ -294,7 +304,7 @@ VistaRecordProcessor.prototype._storeOperationalMetaStamp = function(metaStamp, 
 
     // Store the metaStamp to JDS
     //----------------------------
-    self.environment.jds.saveOperationalSyncStatus(metaStamp, siteId, function(error, response) {
+    self.environment.jds.saveOperationalSyncStatus(metaStamp, siteId, function (error, response) {
         self.log.debug('VistaRecordProcessor._storeOperationalMetaStamp: Returned from storing patient metaStamp for pid: %s.  Error: %s;  Response: %j', siteId, error, response);
         if (error) {
             self.log.error('VistaRecordProcessor._storeOpeationalMetaStamp:  Received error while attempting to store metaStamp for site: %s.  Error: %s;  Response: %j; metaStamp:[%j]', siteId, error, response, metaStamp);
@@ -337,12 +347,13 @@ VistaRecordProcessor.prototype._storeOperationalMetaStamp = function(metaStamp, 
 //------------------------------------------------------------------------------------------
 // This method processes a single syncStart job.
 //
+// childLog: The logger to use for any log messages.
 // rootJobId: The Job Id of the job that started the sync for this patient.
 // jobId: The job Id that represents this specific poller job.
 // patientIdentifier: The patient identifier associated with this job.
 // callback: The handler to call when we are done processing the jobs.
 //------------------------------------------------------------------------------------------
-VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, domain, patientIdentifier, callback) {
+VistaRecordProcessor.prototype._storeCompletedJob = function (childLog, rootJobId, jobId, domain, patientIdentifier, callback) {
     var self = this;
     var vistaId = idUtil.extractSiteFromPid(patientIdentifier.value);
     var metricObj = {
@@ -355,14 +366,15 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
     };
     self.metrics.trace('vista-record-processor Store Completed Data jobs', metricObj);
     metricObj.timer = 'stop';
-    self.log.debug('VistaRecordProcessor._storeCompletedJob: Storing completed job.  rootJobId: %s; jobId: %s, patientIdentifier: %j', rootJobId, jobId, patientIdentifier);
+    childLog.debug('VistaRecordProcessor._storeCompletedJob: Storing completed job.  rootJobId: %s; jobId: %s, patientIdentifier: %j', rootJobId, jobId, patientIdentifier);
 
     // First thing we need to do is to retrieve the JPID for this patient.  It is a requirement for the Job.
     //------------------------------------------------------------------------------------------------------
-    self.environment.jds.getPatientIdentifierByPid(patientIdentifier.value, function(error, response, result) {
-        self.log.debug('VistaRecordProcessor._storeCompletedJob: Received response from getPatientIdentifierByPid.  error: %s; response: %j; result: %j', error, response, result);
+    var jdsClient = self.environment.jds.childInstance(childLog);
+    jdsClient.getPatientIdentifierByPid(patientIdentifier.value, function (error, response, result) {
+        childLog.debug('VistaRecordProcessor._storeCompletedJob: Received response from getPatientIdentifierByPid.  error: %s; response: %j; result: %j', error, response, result);
         if (error) {
-            self.log.error('VistaRecordProcessor._storeCompletedJob:  Received error while retrieving patient identifiers for pid: %s; error: %s; response: %j', patientIdentifier.value, error, response);
+            childLog.error('VistaRecordProcessor._storeCompletedJob:  Received error while retrieving patient identifiers for pid: %s; error: %s; response: %j', patientIdentifier.value, error, response);
 
             // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
@@ -373,7 +385,7 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
         }
 
         if (!response) {
-            self.log.error('VistaRecordProcessor._storeCompletedJob:  Failed to retrieve patient identifiers for pid: %s; error: %s; response: %j', patientIdentifier.value, error, response);
+            childLog.error('VistaRecordProcessor._storeCompletedJob:  Failed to retrieve patient identifiers for pid: %s; error: %s; response: %j', patientIdentifier.value, error, response);
 
             // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
@@ -384,7 +396,7 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
         }
 
         if (response.statusCode !== 200) {
-            self.log.error('VistaRecordProcessor._storeCompletedJob:  Failed to retrieve patient identifiers for pid: %s - incorrect status code returned. Error: %s;  Response: %j', patientIdentifier.value, error, response);
+            childLog.error('VistaRecordProcessor._storeCompletedJob:  Failed to retrieve patient identifiers for pid: %s - incorrect status code returned. Error: %s;  Response: %j', patientIdentifier.value, error, response);
 
             // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
@@ -395,7 +407,7 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
         }
 
         if ((!result) || (!result.jpid)) {
-            self.log.error('VistaRecordProcessor._storeCompletedJob:  Result for pid: %s did not contain jpid.  Result: %j', patientIdentifier.value, error, result);
+            childLog.error('VistaRecordProcessor._storeCompletedJob:  Result for pid: %s did not contain jpid.  Result: %j', patientIdentifier.value, error, result);
             self.metrics.trace('vista-record-processor Store Completed Data jobs in Error', metricObj);
             return callback(null, 'FailedNoJpidInResult');
         }
@@ -410,21 +422,23 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
             jobId: jobId
         };
         metricObj.jpid = result.jpid;
-        self.log.debug('VistaRecordProcessor._storeCompletedJob: before creating job.  meta: %j', meta);
+        childLog.debug('VistaRecordProcessor._storeCompletedJob: before creating job.  meta: %j', meta);
         var pollerJob;
         if (idUtil.isVistaHdrSite(vistaId, self.config)) {
             pollerJob = jobUtil.createVistaHdrPollerDomainRequest(vistaId, domain, patientIdentifier, record, eventUid, meta);
         } else {
             pollerJob = jobUtil.createVistaPollerDomainRequest(vistaId, domain, patientIdentifier, record, eventUid, meta);
         }
-        self.log.debug('VistaRecordProcessor._storeCompletedJob: preparing to write job: %j', pollerJob);
-        self.environment.jobStatusUpdater.completeJobStatus(pollerJob, function(error, response, result) {
-            self.log.debug('VistaRecordProcessor._storeCompletedJob:  Response from JobStatusUpdater.completeJobStatus for pid: %s.  error: %s; response: %j; result: %j', patientIdentifier.value, error, response, result);
+        childLog.debug('VistaRecordProcessor._storeCompletedJob: preparing to write job: %j', pollerJob);
+
+        var jobStatusUpdaterClient = self.environment.jobStatusUpdater.childInstance(childLog);
+        jobStatusUpdaterClient.completeJobStatus(pollerJob, function (error, response, result) {
+            childLog.debug('VistaRecordProcessor._storeCompletedJob:  Response from JobStatusUpdater.completeJobStatus for pid: %s.  error: %s; response: %j; result: %j', patientIdentifier.value, error, response, result);
             // Note - right now JDS is returning an error 200 if things worked correctly.   So
             // we need to absorb that error.
             //--------------------------------------------------------------------------------
             if (error) {
-                self.log.error('VistaRecordProcessor._storeCompletedJob:  Received error while storing job: %j pid: %s; error: %s; response: %j; result: %j', pollerJob, patientIdentifier.value, error, response, result);
+                childLog.error('VistaRecordProcessor._storeCompletedJob:  Received error while storing job: %j pid: %s; error: %s; response: %j; result: %j', pollerJob, patientIdentifier.value, error, response, result);
 
                 // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
                 //--------------------------------------------------------------------------------------------------------------------------
@@ -435,7 +449,7 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
             }
 
             if (!response) {
-                self.log.error('VistaRecordProcessor._storeCompletedJob:  Failed to store job: %j pid: %s; error: %s; response: %j; result: %j', pollerJob, patientIdentifier.value, error, response, result);
+                childLog.error('VistaRecordProcessor._storeCompletedJob:  Failed to store job: %j pid: %s; error: %s; response: %j; result: %j', pollerJob, patientIdentifier.value, error, response, result);
 
                 // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
                 //--------------------------------------------------------------------------------------------------------------------------
@@ -446,7 +460,7 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
             }
 
             if (response.statusCode !== 200) {
-                self.log.error('VistaRecordProcessor._storeCompletedJob:  Failed to store job - incorrect status code.  job: %j pid: %s; error: %s; response: %j; result: %j', pollerJob, patientIdentifier.value, error, response, result);
+                childLog.error('VistaRecordProcessor._storeCompletedJob:  Failed to store job - incorrect status code.  job: %j pid: %s; error: %s; response: %j; result: %j', pollerJob, patientIdentifier.value, error, response, result);
 
                 // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
                 //--------------------------------------------------------------------------------------------------------------------------
@@ -470,7 +484,7 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
 // timerValue: What is the timer value  (i.e. start or stop).
 // callback: The callback to call when the metrics has been recorded.
 //-------------------------------------------------------------------------------------------
-VistaRecordProcessor.prototype._logMetrics = function(processId, timerValue, callback) {
+VistaRecordProcessor.prototype._logMetrics = function (processId, timerValue, callback) {
     var self = this;
     self.metrics.debug('VistaRecordProcessor processBatch', {
         'timer': timerValue,
@@ -486,19 +500,25 @@ VistaRecordProcessor.prototype._logMetrics = function(processId, timerValue, cal
 // vistaDataJob: A single patient or vista data job to be processed.
 // callback: The handler to call when we are done processing the job.
 //-------------------------------------------------------------------------------------------
-VistaRecordProcessor.prototype._processVistaDataJob = function(vistaDataJob, callback) {
+VistaRecordProcessor.prototype._processVistaDataJob = function (vistaDataJob, callback) {
     var self = this;
-    self.log.debug('VistaRecordProcessor._processVistaDataJob: Processing vistaDataJob: %j', vistaDataJob);
+    var childLog = self.log;
+    if ((vistaDataJob) && (!_.isEmpty(vistaDataJob.referenceInfo))) {
+        childLog = self.log.child(vistaDataJob.referenceInfo);
+    }
+    childLog.debug('VistaRecordProcessor._processVistaDataJob: Processing vistaDataJob: %j', vistaDataJob);
 
-    var jobToPublish = self._buildVistaDataJob(vistaDataJob);
-    self.log.trace('VistaRecordProcessor._processVistaDataJob: publishing child job %j', jobToPublish);
-    self.environment.publisherRouter.publish(jobToPublish, function(error) {
+    var jobToPublish = self._buildVistaDataJob(childLog, vistaDataJob);
+    childLog.trace('VistaRecordProcessor._processVistaDataJob: publishing child job %j', jobToPublish);
+
+    var publisherRouterClient = self.environment.publisherRouter.childInstance(childLog);
+    publisherRouterClient.publish(jobToPublish, function (error) {
         if (error) {
-            self.log.error('VistaRecordProcessor._processVistaDataJob: An error occurred when publishing.  error: %s', error);
+            childLog.error('VistaRecordProcessor._processVistaDataJob: An error occurred when publishing.  error: %s', error);
             return callback(null, 'success');
         }
 
-        self.log.trace('VistaRecordProcessor._processVistaDataJob: published child jobs for processing: %j', jobToPublish);
+        childLog.trace('VistaRecordProcessor._processVistaDataJob: published child jobs for processing: %j', jobToPublish);
         return callback(null, 'success');
     });
 };
@@ -507,9 +527,10 @@ VistaRecordProcessor.prototype._processVistaDataJob = function(vistaDataJob, cal
 // This method creates a job for one patient or operational data record and places it in the
 // appropriate tube.
 //
+// childLog: The logger to use for any log messages.
 // vistaDataJob: The patient or operational data job to be processed.
 //---------------------------------------------------------------------------------------------
-VistaRecordProcessor.prototype._buildVistaDataJob = function(vistaDataJob) {
+VistaRecordProcessor.prototype._buildVistaDataJob = function (childLog, vistaDataJob) {
     var self = this;
     var vistaId = idUtil.extractSiteFromPid(vistaDataJob.pid);
     var metricObj = {
@@ -520,36 +541,62 @@ VistaRecordProcessor.prototype._buildVistaDataJob = function(vistaDataJob) {
     };
     self.metrics.trace('vista-record-processor: Build Vista Data', metricObj);
     metricObj.timer = 'stop';
-    self.log.debug('VistaRecordProcessor._buildVistaDataJob: Processing vistaDataJob [%j].', vistaDataJob);
+    childLog.debug('VistaRecordProcessor._buildVistaDataJob: Processing vistaDataJob [%j].', vistaDataJob);
 
     if (!vistaDataJob.object) {
-        self.log.debug('VistaRecordProcessor._buildVistaDataJob:  The object node did not exist.');
+        childLog.debug('VistaRecordProcessor._buildVistaDataJob:  The object node did not exist.');
         self.metrics.trace('vista-record-processor build Vista Data in Error', metricObj);
         return null;
     }
 
     if (!self._isOperationalData(vistaDataJob)) {
-        self.log.debug('VistaRecordProcessor._buildVistaDataJob: Job is patient data.');
+        childLog.debug('VistaRecordProcessor._buildVistaDataJob: Job is patient data.');
 
         var patientIdentifier = {
             type: 'pid',
             value: vistaDataJob.pid
         };
 
+        var meta = {};
+        if (vistaDataJob.referenceInfo) {
+            // Extract the job related fields that were passed through.
+            //----------------------------------------------------------
+            meta.rootJobId = vistaDataJob.referenceInfo.rootJobId;
+            if (!isNaN(vistaDataJob.referenceInfo.priority)) {
+                meta.priority = parseInt(vistaDataJob.referenceInfo.priority);
+            }
+
+            // We need to make a deep copy so we can trim out the extra job related fields
+            // that Vista handed us back.
+            //----------------------------------------------------------------------------
+            var referenceInfo = JSON.parse(JSON.stringify(vistaDataJob.referenceInfo));
+            delete referenceInfo.jobId;
+            delete referenceInfo.rootJobId;
+            delete referenceInfo.priority;
+            meta.referenceInfo = referenceInfo;
+        }
+        // If this VistA system is updated - it will tell us if this is an unsolicited update.
+        // Unsolicited updates should be treated as high priority.
+        //-------------------------------------------------------------------------------------
+        else if (vistaDataJob.unsolicitedUpdate === true) {
+            meta.priority = PRIORITY_DEFAULT;
+            meta.referenceInfo = { 'initialSyncId': vistaDataJob.pid };
+        }
+
         var vistaObjectNode = vistaDataJob.object;
         vistaObjectNode.pid = vistaDataJob.pid;
         self.metrics.trace('vista-record-processor: Build Vista Data', metricObj);
-        return jobUtil.createEventPrioritizationRequest(patientIdentifier, vistaDataJob.collection, vistaObjectNode, {});
+        return jobUtil.createEventPrioritizationRequest(patientIdentifier, vistaDataJob.collection, vistaObjectNode, meta);
     }
 
     if (vistaDataJob.error) {
-        self.log.error('VistaRecordProcessor._buildVistaDataJob: Error in VPR update data: ' + vistaDataJob.error);
+        childLog.error('VistaRecordProcessor._buildVistaDataJob: Error in VPR update data: ' + vistaDataJob.error);
         self.metrics.trace('vista-record-processor: Build Vista Data in error', metricObj);
         return null;
     }
 
     if (!vistaDataJob.deletes) {
-        self.log.debug('VistaRecordProcessor._buildVistaDataJob: Job is operational data.');
+        childLog.debug('VistaRecordProcessor._buildVistaDataJob: Job is operational data.');
         self.metrics.trace('vista-record-processor: Build Vista Data', metricObj);
         return jobUtil.createOperationalDataStore(vistaDataJob.object);
     }
@@ -561,7 +608,7 @@ VistaRecordProcessor.prototype._buildVistaDataJob = function(vistaDataJob) {
 //
 // vistaDataJob: The patient or operational data job to be processed.
 //--------------------------------------------------------------------------------
-VistaRecordProcessor.prototype._isOperationalData = function(vistaDataJob) {
+VistaRecordProcessor.prototype._isOperationalData = function (vistaDataJob) {
     if (!vistaDataJob) {
         return false;
     }

@@ -48,16 +48,44 @@ define([
         parse: function(response, options) {
             var results = [];
 
+            var permissions = new ADK.UIResources.Fetch.Permission.Collection();
+            var addConsults = permissions.hasOrderPermissions('add-consult-order');
+            var addLabs = permissions.hasLabPermissions('add-lab-order');
+            var addRequests = permissions.hasRequestPermissions('add-coordination-request');
+
+            if (!addConsults && !addLabs && !addRequests) {
+                return results;
+            }
+
             if (!_.isEmpty(response.data)) {
-                results.push({
-                    name: 'Orders',
-                    items: new Backbone.Collection(response.data, {
-                        model: OrderSearchResultModel,
-                        parse: true
-                    })
+                var data = _.get(response, 'data');
+                var hasPermission = [];
+                _.each(data, function (item) {
+                    var subDomain = item.subDomain;
+                    if (!addConsults && subDomain === 'consult') {
+                        return;
+                    }
+                    if (!addLabs && subDomain === 'laboratory') {
+                        return;
+                    }
+
+                    if (!addRequests && subDomain === 'request') {
+                        return;
+                    }
+
+                    hasPermission.push(item);
                 });
-                // Add new groups here if including results from other groups (e.g. order-sets, quick-orders, etc.).
-                // Groups will be included if there are matching results.
+
+                if (hasPermission.length) {
+                    results.push({
+                        name: 'Orders',
+                        items: new Backbone.Collection(hasPermission, {
+                            model: OrderSearchResultModel,
+                            parse: true
+                        })
+                    });
+                }
+
             }
             return results;
         }
@@ -66,19 +94,29 @@ define([
     var View = GroupView.extend({
         initialize: function(options) {
             this.searchCriteriaModel = options.searchCriteriaModel;
+
+            var permissions = new ADK.UIResources.Fetch.Permission.Collection();
+            var addConsults = permissions.hasOrderPermissions('add-consult-order');
+            var addLabs = permissions.hasLabPermissions('add-lab-order');
+            var addRequests = permissions.hasRequestPermissions('add-coordination-request');
+
+            if (!addConsults && !addLabs && !addRequests) {
+                return;
+            }
+
             this.listenTo(this.searchCriteriaModel, 'change:criteria', function() {
                 this.search(this.searchCriteriaModel.get('criteria'));
             });
 
             this.collection = new OrderSearchCollection();
 
-            this.listenTo(this.collection, 'fetch:success', _.bind(function(collection) {
+            this.listenTo(this.collection, 'fetch:success', function(collection) {
                 this.loading(false);
-            }, this));
+            });
 
-            this.listenTo(this.collection, 'fetch:error', _.bind(function(collection) {
+            this.listenTo(this.collection, 'fetch:error', function(collection) {
                 this.loading(false);
-            }, this));
+            });
 
             //Collection fetchOptions
             this.fetchOptions = {

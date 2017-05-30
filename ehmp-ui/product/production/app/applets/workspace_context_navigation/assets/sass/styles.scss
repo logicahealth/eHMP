@@ -1,4 +1,9 @@
-[data-appletid="workspace-context-navigation"] {}
+// [data-appletid="workspace-context-navigation"] {}
+.current-patient-label--divider {
+    border-left: 1px solid $grey;
+    height: 20px;
+    position: absolute;
+}
 p.current-patient-label {
 	min-width: 127px;
 	text-align: center;
@@ -12,25 +17,24 @@ p.current-patient-label {
 	    z-index: 1;
 	    height: 27px;
     	width: 14px;
-	    background: url(/app/applets/workspace_context_navigation/assets/img/arrow-right.png) no-repeat right top;
+	    background: url('/app/applets/workspace_context_navigation/assets/img/arrow-right.png') no-repeat right top;
 	    background-size: contain;
 	}
 }
-.current-patient-label--divider {
-    border-left: 1px solid $grey;
-    height: 20px;
-    position: absolute;
-}
-#current-patient-nav-header-tab {
-	margin-left: -7px;
-    padding-left: 15px;
-	border-left: none;
-	strong {
-    	font-size: 18px;
-    	line-height: 18px;
+// specificty required because of bootstrap nav overwrites
+.navbar.navbar-default .container-fluid ul.nav.navbar-nav li p.context-navigation-link {
+	&#current-patient-nav-header-tab {
+        border-left: none;
+        margin-left: -7px;
+        padding-left: 15px;
+        padding-top: 4px;
+        strong {
+            font-size: 18px;
+            line-height: 18px;
+        }
     }
 }
-.navbar.navbar-default .container-fluid ul.nav.navbar-nav > li button{
+.navbar.navbar-default .container-fluid ul.nav.navbar-nav > li button {
 	&.vault-unavailable {
 	    cursor: inherit;
 	}

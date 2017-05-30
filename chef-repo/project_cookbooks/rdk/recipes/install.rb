@@ -31,20 +31,17 @@ directory node[:rdk][:pid_dir] do
   action :create
 end
 
+directory node[:rdk][:incidents][:root_directory] do
+  mode "0755"
+  recursive true
+  action :create
+end
+
 # Run npm install only if using shared folders
 execute "install modules" do
   cwd node[:rdk][:home_dir]
   command "npm install"
   action :run
-  only_if ("mountpoint -q #{node[:rdk][:home_dir]}")
-end
-
-execute "install write modules" do
-  cwd node[:rdk][:write_dir]
-  command "npm install"
-  action :run
-  notifies :restart, "service[#{node[:rdk][:services][:write_back][:service]}]"
-  notifies :restart, "service[#{node[:rdk][:services][:pick_list][:service]}]"
   only_if ("mountpoint -q #{node[:rdk][:home_dir]}")
 end
 
@@ -97,3 +94,4 @@ template "#{node[:rdk][:config][:xml_path]}/1309.xml" do
   })
   action :create
 end
+

@@ -148,6 +148,8 @@ function getPatientDataStatusSimple(pid, req, callback) {
 }
 
 function createSimpleStatusResult(logger, vistaSites, syncResult) {
+    logger.debug('jds-sync-subsystem.createSimpleStatusResult()');
+
     var status = {};
     var sites = [];
     if (syncResult.data) {
@@ -159,6 +161,9 @@ function createSimpleStatusResult(logger, vistaSites, syncResult) {
         }
         if (_.has(syncResult.data, 'solrSyncCompleted')) {
             status.isSolrSyncCompleted = syncResult.data.solrSyncCompleted;
+        }
+        if (_.has(syncResult.data, 'hasSolrError')) {
+            status.hasSolrError = syncResult.data.hasSolrError;
         }
     }
 
@@ -349,29 +354,32 @@ function waitForPatientLoad(pid, prioritySite, req, callback) {
 
     // Define this function and then immediately invoke it via IIFE for a recursive loop
     (function checkSimpleStatus() {
-        getPatientStatusSimple(pid, prioritySite, req, function(error, simpleStatus) {
+        // We need to get the "full" simple status in case the patient does not have
+        // data in the prioritySite, as in that case, we will need to interrogate the
+        // sync data for the status of other sites.
+        getPatientStatusSimple(pid, req, function(error, simpleStatus) {
             req.logger.debug('jds-sync-subsystem.waitForPatientLoad() check errors while synching pid: %s, prioritySite: %s', pid, prioritySite);
             req.logger.debug({
                 error: error
             }, {
                 status: simpleStatus
-            }, 'jds-sync-subsystem.waitForPatientLoad() pid: %s, prioritySite: %s', pid, prioritySite);
+            }, 'jds-sync-subsystem.waitForPatientLoad() response pid: ' + pid + ', prioritySite: ' + prioritySite);
+
             // a general error attempting to query JDS (network, etc.)
             if (error || !simpleStatus.data || simpleStatus.status !== 200) {
                 req.logger.error({
                     error: error
-                }, 'jds-sync-subsystem.waitForPatientLoad() pid: %s, prioritySite: %s', pid, prioritySite);
+                }, 'jds-sync-subsystem.waitForPatientLoad() error pid: ' + pid + ', prioritySite: ' + prioritySite);
 
                 return callback(500, createErrorResponse());
             }
-
 
             // JDS returned an error record instead of a simple status
             req.logger.debug('jds-sync-subsystem.waitForPatientLoad() check sync record while synching pid: %s, prioritySite: %s', pid, prioritySite);
             if (simpleStatus.data.error) {
                 req.logger.error({
                     error: simpleStatus.data.error
-                }, 'jds-sync-subsystem.waitForPatientLoad() pid: %s, prioritySite: %s', pid, prioritySite);
+                }, 'jds-sync-subsystem.waitForPatientLoad() error code pid: ' + pid + ', prioritySite: ' + prioritySite);
 
                 if (simpleStatus.data.error.code === 404) {
                     return callback(404, createErrorResponse(404, noSiteMessage));
@@ -380,14 +388,9 @@ function waitForPatientLoad(pid, prioritySite, req, callback) {
                 return callback(500, createErrorResponse());
             }
 
-            // the simple status contains a 'hasError' attribute with a value of 'true'
-            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() sync status for hasError while synching pid: %s, prioritySite: %s', pid, prioritySite);
-            if (isSimpleSyncStatusWithError(simpleStatus.data)) {
-                return callback(500, createErrorResponse(500, 'An error occurred during the synchronization of patient pid: ' + pid));
-            }
-
+            // the sync is complete for the prioritySite or all sites if no value was passed in for prioritySite
             req.logger.debug('jds-sync-subsystem.waitForPatientLoad() sync status for complete while synching pid: %s, prioritySite: %s', pid, prioritySite);
-            if (isSimpleSyncStatusComplete(simpleStatus.data)) {
+            if (isSimpleSyncStatusComplete(simpleStatus.data, prioritySite)) {
                 req.logger.info({
                     pid: pid,
                     totalTime: totalTime
@@ -397,12 +400,18 @@ function waitForPatientLoad(pid, prioritySite, req, callback) {
                 return callback(null, simpleStatus);
             }
 
+            // the simple status contains a 'hasError' attribute with a value of 'true'
+            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() sync status for hasError while synching pid: %s, prioritySite: %s', pid, prioritySite);
+            if (isSimpleSyncStatusWithError(simpleStatus.data, prioritySite)) {
+                return callback(500, createErrorResponse(500, 'An error occurred during the synchronization of patient pid: ' + pid));
+            }
+
             currentTime = process.hrtime(startTime);
             totalTime = (currentTime[0] * 1e9 + currentTime[1]) / 1e6; // calculate how long since load started in milliseconds
             req.logger.debug('jds-sync-subsystem.waitForPatientLoad() pid: %s, prioritySite: %s, sync time taken so far: %s', pid, prioritySite, totalTime);
 
             if (totalTime > settings.timeoutMillis) {
-                req.logger.error(pid + ' is taking too long to sync. Waited (milliseconds): %s before giving up and return error 500', totalTime);
+                req.logger.error('jds-sync-subsystem.waitForPatientLoad() pid: %s is taking too long to sync. Waited (milliseconds): %s before giving up and return error 500', pid, totalTime);
                 return callback(500, createErrorResponse());
             }
 
@@ -411,45 +420,85 @@ function waitForPatientLoad(pid, prioritySite, req, callback) {
     })();
 }
 
-function isSimpleSyncStatusWithError(simpleSyncStatus) {
-    if (_.isEmpty(simpleSyncStatus)) {
+/*
+Variadic Function:
+isSimpleSyncStatusWithError(simpleSyncStatus)
+isSimpleSyncStatusWithError(simpleSyncStatus, prioritySite)
+
+Tests whether or not a sync has errors. If a prioritySite is passed
+in and exists in the status, this function will return true only if
+that site has an erro, regardless of the existence of errors in
+other sites.
+
+If no prioritySite is passed, or the site does not exist in the status,
+then the function will return true only if EVERY site has an error.
+*/
+function isSimpleSyncStatusWithError(simpleSyncStatus, prioritySite) {
+    if (_.isEmpty(simpleSyncStatus) || _.isEmpty(simpleSyncStatus.sites)) {
         return false;
+    }
+
+    // If prioritySite has a non-nullish non-empty value, and it exists
+    // in the status, return its error value.
+    if(!_.isEmpty(prioritySite) && _.has(simpleSyncStatus.sites, prioritySite)) {
+        return !!simpleSyncStatus.sites[prioritySite].hasError;
     }
 
     if (simpleSyncStatus.hasError) {
         return true;
     }
 
-    if (_.isEmpty(simpleSyncStatus.sites)) {
-        return false;
-    }
-
-    return _.some(simpleSyncStatus.sites, function(site) {
-        return site.hasError;
+    return _.every(simpleSyncStatus.sites, function(site) {
+        return !!site.hasError;
     });
 }
 
-function isSimpleSyncStatusComplete(simpleSyncStatus) {
-    if (_.isEmpty(simpleSyncStatus)) {
+/*
+Variadic Function:
+isSimpleSyncStatusComplete(simpleSyncStatus)
+isSimpleSyncStatusComplete(simpleSyncStatus, prioritySite)
+
+Tests whether or not a sync is complete. If a prioritySite is passed
+in and exists in the status, this function will only test the status
+of that site and ignore the status of other sites (including the
+presence of errors).
+
+If no prioritySite is passed, or the site does not exist in the status,
+then the function will return true if any site is complete.
+*/
+function isSimpleSyncStatusComplete(simpleSyncStatus, prioritySite) {
+    if (_.isEmpty(simpleSyncStatus) || _.isEmpty(simpleSyncStatus.sites)) {
         return false;
     }
 
-    if (_.has(simpleSyncStatus, 'syncCompleted') && !simpleSyncStatus.syncCompleted) {
-        return false;
+    // if the top-level syncComplete is true, then sync must be complete
+    if (simpleSyncStatus.syncCompleted) {
+        return true;
     }
 
-    return _.every(simpleSyncStatus.sites, function(site) {
-        return site.syncCompleted;
-    });
+    // No prioritySite value or it does not exist in the status,
+    // so check if at least one site is complete
+    if(_.isEmpty(prioritySite) || !_.has(simpleSyncStatus.sites, prioritySite)) {
+        return _.some(simpleSyncStatus.sites, function(site) {
+            return site.syncCompleted;
+        });
+    }
+
+    // Check if the prioritySite is complete
+    return simpleSyncStatus.sites[prioritySite].syncCompleted;
 }
 
 function syncStatusResultProcessor(pid, callback, req, error, response, data) {
     if (error) {
-        return callback(error, createErrorResponse(500, data));
+        req.logger.info('Sync status result error');
+        req.logger.info(error);
+        return callback(error, createErrorResponse(500, data || 'There was an error processing your request. The error has been logged. The sync status server could not be reached.'));
     }
 
     if (!response) {
-        return callback(error, createErrorResponse(500, data));
+        req.logger.info('Sync status result error');
+        req.logger.info(error);
+        return callback(error, createErrorResponse(500, data || 'There was an error processing your request. The error has been logged. The sync status response was empty.'));
     }
 
     if (response.statusCode === 404) {

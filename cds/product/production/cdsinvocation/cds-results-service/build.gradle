@@ -1,0 +1,52 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'war'
+//apply plugin: 'jetty'
+apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
+
+group = 'com.cognitive.cds'
+description = """Cognitive Medicine CDS Service for Clinical Rules Invocation and Metrics"""
+sourceCompatibility = property('javaVersion')
+targetCompatibility = property('targetJavaVersion')
+
+repositories {
+     maven { url "https://store.vistacore.us/nexus/content/groups/public" }
+}
+dependencies {
+    compile group: 'org.apache.cxf', name: 'cxf-rt-frontend-jaxrs', version: property('cxfVersion')
+    compile group: 'org.apache.cxf', name: 'cxf-rt-rs-client', version: property('cxfVersion')
+    compile group: 'org.apache.cxf', name: 'cxf-rt-frontend-jaxws', version: property('cxfVersion')
+    compile group: 'org.apache.cxf', name: 'cxf-rt-rs-extension-providers', version: property('cxfVersion')
+    compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http', version: property('cxfVersion')
+    compile group: 'org.springframework', name: 'spring-web', version: property('springVersion')
+    compile group: 'org.springframework.security', name: 'spring-security-core', version: property('springSecurityVersion')
+    testCompile group: 'org.springframework', name: 'spring-test', version: property('springVersion')
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.1.0'
+    compile project(':production:cdsinvocation:cds-invocation')
+    testCompile group: 'junit', name: 'junit', version: property('junitVersion')
+}
+
+war {
+    baseName = 'cdsinvocation-results'
+	rootSpec.exclude('**/cds-results-service.properties')
+	rootSpec.exclude('**/cds-results-log4j2.xml')
+	rootSpec.exclude('**/certs/')
+}
+
+
+gretty {
+	httpPort = 8080
+	managedClassReload = true
+}
+
+artifacts {
+  archives war.archivePath
+}
+
+uploadArchives.dependsOn(war)
+
+
+//Leaving Jetty plugin support for now
+//httpPort = 8080
+//stopPort = PORT
+//stopKey = 'JettyStop'

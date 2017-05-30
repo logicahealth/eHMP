@@ -46,17 +46,17 @@ function transformAndEnrichRecord(log, config, environment, record, callback) {
 		return setTimeout(callback, 0, null, null);
 	}
 
-    var metrics = null;
-    if (environment) {
-        metrics = environment.metrics;
-    }
+	var metrics = null;
+	if (environment) {
+		metrics = environment.metrics;
+	}
 
 	var terminologyUtils;
 	if (environment.terminologyUtils) {
 		terminologyUtils = environment.terminologyUtils;
 	} else {
-        var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
-        terminologyUtils = new TerminologyUtil(log, metrics, config);
+		var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
+		terminologyUtils = new TerminologyUtil(log, metrics, config);
 	}
 
 	fixFieldDataTypes(record);
@@ -118,13 +118,17 @@ function addInMissingFields(record, log, terminologyUtils, callback) {
 			recordWithProductUpdates = record;
 		}
 
-		addInMissingAdministrationsFields(recordWithProductUpdates);
-		addInMissingDosagesFields(recordWithProductUpdates);
-		addInMissingFillsFields(recordWithProductUpdates);
-		addInMissingIndicationsFields(recordWithProductUpdates);
-		addInMissingOrdersFields(recordWithProductUpdates);
-		addInMissingRootLevelFields(recordWithProductUpdates);
-		return callback(null, recordWithProductUpdates);
+		try {
+			addInMissingAdministrationsFields(recordWithProductUpdates);
+			addInMissingDosagesFields(recordWithProductUpdates);
+			addInMissingFillsFields(recordWithProductUpdates);
+			addInMissingIndicationsFields(recordWithProductUpdates);
+			addInMissingOrdersFields(recordWithProductUpdates);
+			addInMissingRootLevelFields(log, recordWithProductUpdates);
+			return callback(null, recordWithProductUpdates);
+		} catch (e) {
+			return callback(e);
+		}
 	});
 
 }
@@ -194,7 +198,7 @@ function addInMissingProductFields(product, log, terminologyUtils, callback) {
 				return callback(null);
 			}
 
-			terminologyUtils.getVAConceptMappingTo(concept, 'rxn', function(error, rxnConcept) {		// Do not know why it uses rxn instead of rxnorm - that was in the original VA code.
+			terminologyUtils.getVAConceptMappingTo(concept, 'rxn', function(error, rxnConcept) { // Do not know why it uses rxn instead of rxnorm - that was in the original VA code.
 				log.debug('record-enrichment-med-xformer.addInMissingProductFields: Returning from calling getVAConceptMappingTo. concept: %j; targetSourceSystem: rxn  error: %s rxnConcept: %j', concept, error, rxnConcept);
 
 				if (error) {
@@ -298,7 +302,7 @@ function addInMissingDosagesFields(record) {
 		// stopDateString
 		//----------------
 		if ((_.isString(dosage.start)) && (_.isString(dosage.stop))) {
-			dosage.startDateString = undefined;	
+			dosage.startDateString = undefined;
 		} else if ((dosage.med) && (dosage.med.medType === CONSTANTS.SCT_MED_TYPE_GENERAL)) {
 			dosage.stopDateString = undefined;
 		} else {
@@ -360,7 +364,7 @@ function addInMissingAdministrationsFields(record) {
 //
 // record: The record that is being updated.
 //---------------------------------------------------------------------------------
-function addInMissingRootLevelFields(record) {
+function addInMissingRootLevelFields(log, record) {
 	// Supply
 	//-------
 	if ((record.supply === null) || (record.supply === undefined) || (record.supply === 'false')) {
@@ -387,10 +391,19 @@ function addInMissingRootLevelFields(record) {
 	//------------
 	if ((!record.overallStop) && (record.stopped)) {
 		record.overallStop = record.stopped;
-	} else if ((record.stopped) && (record.overallStop) && ((new PointInTime(record.stopped)).before(record.overallStop))) {
-		record.overallStop = record.stopped;
 	} else if ((!record.overallStop) && (!_.isEmpty(record.orders)) && (_.isString(record.orders[0].ordered))) {
 		record.overallStop = record.orders[0].ordered;
+	} else if ((record.overallStop) && (record.stopped)) {
+		// Attempt the time comparison, but if an error is thrown (because one or both of
+		// the fields are not valid PointInTime values), then leave the values as-is.
+		try {
+			if ((new PointInTime(record.stopped)).before(record.overallStop)) {
+				record.overallStop = record.stopped;
+			}
+		}
+		catch(error) {
+			log.warn('record-enrichment-med-xformer.addInMissingRootLevelFields(): Unable to parse either record.stopped [%s] or record.overallStop [%s] as a valid PointInTime value for record: %j', record.stopped, record.overallStop, record);
+		}
 	}
 
 	// Products
@@ -625,7 +638,7 @@ function addInMedOrderSettingTypeField(record) {
 		record.medOrderSettingType = 'inpatient';
 	} else {
 		record.medOrderSettingType = '';
-        }
+	}
 }
 
 //------------------------------------------------------------------------------------

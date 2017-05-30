@@ -7,84 +7,40 @@ define([
 
     var Util = {};
 
-    Util.getTimeSinceDate = function(response){
-        if(response.administeredDateTime) {
-            var timeSinceDate = response.administeredDateTime;
-            while(timeSinceDate.length > 4 && timeSinceDate.substring(timeSinceDate.length - 2, timeSinceDate.length) === '00'){
-                timeSinceDate = timeSinceDate.substring(0, timeSinceDate.length - 2);
-            }
-            response.timeSinceDate = timeSinceDate;
+    Util.createTimeSinceDate = function(administeredDateTime){
+        var timeSinceDate = administeredDateTime;
+        while(timeSinceDate.length > 4 && timeSinceDate.substring(timeSinceDate.length - 2, timeSinceDate.length) === '00'){
+            timeSinceDate = timeSinceDate.substring(0, timeSinceDate.length - 2);
         }
-        return response;
+        return timeSinceDate;
     };
 
-    Util.getNumericDate = function(response) {
-        if (response.administeredDateTime) {
-            response.numericDate = ADK.utils.formatDate(response.administeredDateTime, 'YYYYMMDD');
-        }
-        return response;
+    Util.formatNumericDate = function(administeredDateTime) {
+        return ADK.utils.formatDate(administeredDateTime, 'YYYYMMDD');
     };
 
-    Util.getModalTitle = function(model) {
+    Util.createModalTitle = function(model) {
         return 'Vaccine - ' + model.get('name');
     };
 
-    Util.getObservedFormatted = function(response) {
-        response.observedFormatted = '';
-        if (response.observed) {
-            response.observedFormatted = ADK.utils.formatDate(response.observed);
-        }
-        return response;
+    Util.formatDate = function(date) {
+        return ADK.utils.formatDate(date);
     };
 
-    Util.getObservedTimeFormatted = function(response) {
-        response.observedTimeFormatted = '';
-        if (response.observed) {
-            response.observedTimeFormatted = ADK.utils.formatDate(response.observed, 'HH:mm');
-        }
-        return response;
+    Util.formatTime = function(time) {
+        return ADK.utils.formatDate(time, 'HH:mm');
     };
 
-    Util.getResultedFormatted = function(response) {
-        response.resultedFormatted = '';
-        if (response.resulted) {
-            response.resultedFormatted = ADK.utils.formatDate(response.resulted);
-        }
-        return response;
+    Util.createContraindicated = function(contraindicated) {
+        return contraindicated ? 'Yes' : 'No';
     };
 
-    Util.getResultedTimeFormatted = function(response) {
-        response.resultedTimeFormatted = '';
-        if (response.resulted) {
-            response.resultedTimeFormatted = ADK.utils.formatDate(response.resulted, 'HH:mm');
-        }
-        return response;
+    Util.createFacilityColor = function(facilityCode) {
+        return facilityCode === 'DOD' ? 'DOD' : 'nonDOD';
     };
 
-    Util.getContraindicated = function(response) {
-        if (response.contraindicated) {
-            response.contraindicatedDisplay = 'Yes';
-
-        } else {
-          response.contraindicatedDisplay = 'No';
-        }
-        return response;
-    };
-
-    Util.getFacilityColor = function(response) {
-        if (_.get(response, 'facilityCode') === 'DOD') {
-            response.facilityColor = 'DOD';
-        } else {
-            response.facilityColor = 'nonDOD';
-        }
-        return response;
-    };
-
-    Util.hasCommentBubble = function(response) {
-        if (_.get(response, 'comment')) {
-            response.commentBubble = true;
-        }
-        return response;
+    Util.hasCommentBubble = function(comment) {
+        return comment ? true : false;
     };
 
     Util.isReaction = function(reaction) {
@@ -96,11 +52,7 @@ define([
     };
 
     Util.seriesNormalization = function(series) {
-        if (series === '0' || _.isEmpty(series)) {
-            return false;
-        } else {
-            return series;
-        }
+        return (series === '0' || _.isEmpty(series)) ? false : series;
     };
 
     return Util;

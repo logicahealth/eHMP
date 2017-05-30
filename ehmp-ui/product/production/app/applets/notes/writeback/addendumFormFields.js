@@ -64,7 +64,7 @@ define([
                             items: [{
                                 control: "textarea",
                                 extraClasses:['percent-height-100', 'flex-display', 'flex-direction-column'],
-                                id: "addendumDerivBody",
+                                id: "addendumBody",
                                 name: "addendumBody",
                                 title: "Enter in addendum details",
                                 label: "Note Addendum",

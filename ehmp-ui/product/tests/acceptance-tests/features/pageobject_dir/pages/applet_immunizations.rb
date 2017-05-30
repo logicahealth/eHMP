@@ -15,9 +15,9 @@ class PobImmunizationsApplet < PobParentApplet
   element :fld_ordering_provider, "#orderedBy"
   element :fld_dosage_input, "#dosage"
   element :fld_vis_date_input, "#visDateOffered"
-  element :fld_comments, "#comments"
-  element :fld_administered_date_input, "#administrationDateHistorical"
-  element :fld_immunization_results, "#select2-immunizationType-results"
+  element :fld_comments, "[name='comments']"
+  element :fld_administered_date_input, "[name='administrationDateHistorical'].form-control.flexible-input"
+  elements :fld_immunization_results, "[class^='select2-results']"
  
   elements :fld_immunization_gist, "[data-appletid=immunizations] .grid-container [data-infobutton-class=info-button-pill]"
   
@@ -29,23 +29,23 @@ class PobImmunizationsApplet < PobParentApplet
   element :btn_previous, '#toPrevious'
 
   # *****************  All_Drop_down_Elements  ******************* #
-  element :ddl_immunization_type, "[x-is-labelledby='select2-immunizationType-container']"
-  element :ddl_ordered_by, "[x-is-labelledby='select2-orderedByAdministered-container']"
+  element :ddl_immunization_type, "[x-is-labelledby^='select2-immunizationType']"
+  element :ddl_ordered_by, "[x-is-labelledby^='select2-orderedByAdministered']"
   element :ddl_lot_number, "#lotNumberAdministered"
   element :ddl_route_of_administration, "#routeOfAdministration"
   element :ddl_anatomic_location, "#anatomicLocation"
   element :ddl_series, "#series"
-  element :ddl_information_source, "#informationSource"
+  element :ddl_information_source, "[name='informationSource']"
   # ***************** All_check_box_elements **************** #
-  element :chk_administered, "#administeredHistorical-administered"
-  element :chk_historical, "#administeredHistorical-historical"
+  element :chk_administered, "[value='administered']"
+  element :chk_historical, "[value='historical']"
   element :chk_information_stmt1, "#informationStatement-61"
   element :chk_information_stmt2, "#informationStatement-62"
   # *****************  All_Table_Elements  ******************* #
   elements :tbl_immunization_grid, "table[id='data-grid-immunizations'] tr.selectable"    
   elements :tbl_immunization_first_row_columns, "table[id='data-grid-immunizations'] tr.selectable:nth-child(1) td"
   elements :tbl_immunization_first_row_columns, "table[id='data-grid-immunizations'] td"
-  element :tbl_modal_body_immunization_table, "#data-grid-immunizations-modalView"
+  element :tbl_modal_body_immunization_table, "#data-grid-immunizations-modalView tr"
   elements :tbl_summary_imm_names, "[data-appletid='immunizations'] table tbody tr.selectable td:first-of-type"
   elements :tbl_summary_imm_screenreader_text, "[data-appletid='immunizations'] table tbody tr.selectable td:first-of-type span"
   elements :tbl_immunization_headers, "table[id='data-grid-immunizations'] th a"
@@ -119,4 +119,9 @@ class PobImmunizationsApplet < PobParentApplet
     end
     header_only
   end
+  
+  def number_expanded_applet_rows
+    return 0 if has_fld_empty_row?
+    tbl_immunization_grid.length
+  end  
 end

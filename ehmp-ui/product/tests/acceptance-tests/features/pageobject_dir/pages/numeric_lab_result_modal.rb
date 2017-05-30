@@ -1,11 +1,9 @@
 class NumericLabResultsModal < SitePrism::Page 
   element :btn_previous_lab, '#labssPrevious'
   element :btn_next_lab, '#labssNext'
-  element :btn_dismiss_lab_modal, '#smClose'
-  element :btn_close_lab_modal, '[id=modal-footer] [id=modalCloseButton]'
 
   element :fld_data_table, '#lrDataTableView'
-  element :fld_data_table_title, '#lrDataTableView h5.panel-title'
+  element :fld_data_table_title, '#lrDataTableView h5'
 
   element :tbl_dta, '#data-grid-lab_results_grid-modalView'
   row_css = '#data-grid-lab_results_grid-modalView tbody tr[data-row-instanceid]'

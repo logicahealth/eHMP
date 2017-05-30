@@ -8,3 +8,10 @@ Scenario: Sign out from eHMP patient search page
   And Navigate to Patient Search Screen
   And the patient search screen is displayed
   And user logs out
+
+@US17388_logout_medsreview_applet 
+Scenario: Sign out from eHMP Meds Review applet
+  Given user searches for and selects "BCMA,Eight"
+  And user navigates to Meds Review Applet
+  Then the Med Review applet is displayed
+  And user logs out

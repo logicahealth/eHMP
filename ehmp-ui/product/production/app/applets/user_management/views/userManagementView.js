@@ -88,8 +88,8 @@ define([
     var userManagementView = GridApplet.extend({
         _super: GridApplet.prototype,
         addFooterRegion: function() {
-            $('<div class="grid-footer"></div>').insertAfter(this.$el.find('.grid-container'));
-            this.addRegion("footerRegion", ".grid-footer");
+            $('<div class="applet-chrome-footer"></div>').insertAfter(this.$el.find('.grid-container'));
+            this.addRegion("footerRegion", ".applet-chrome-footer");
             this.footerRegion.show(new UserManagementFooterView({
                 model: this.formModel,
                 toolbarView: this.dataGridOptions.toolbarView

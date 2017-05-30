@@ -14,6 +14,7 @@ var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
 var blacklistUtils = require(global.OSYNC_UTILS + 'blacklist-utils');
 var _ = require('underscore');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
+var nock = require('nock');
 
 // NOTE: be sure next line is commented out before pushing
 // log = require('bunyan').createLogger({
@@ -28,8 +29,8 @@ var val = require(global.VX_UTILS + 'object-utils').getProperty;
 //---------------------------------------------------------------------------------
 function createoSyncConfig() {
     var osyncConfig = {
-        syncUrl: 'http://10.3.3.6:8080/sync/doLoad',
-        statusUrl: 'http://10.3.3.6:8080/sync/status'
+        syncUrl: 'http://IP           /sync/doLoad',
+        statusUrl: 'http://IP           /sync/status'
     };
 
     return osyncConfig;
@@ -46,6 +47,7 @@ function createEnvironment(osyncConfig) {
         metrics: log,
         resultsLog: resultsLog,
         publisherRouter: new PublisherRouterDummy(log, osyncConfig, PublisherDummy),
+        pjds: {childInstance: function(){}},
         jds: new JdsClientDummy(log, osyncConfig),
         validPatientsLog: {
             info: jasmine.createSpy()
@@ -419,6 +421,58 @@ describe('sync handler unit test', function() {
             }, 'Callback not called', 100);
 
 
+        });
+    });
+
+    describe('sync.handle with referenceInfo', function() {
+        it('verify referenceInfo is passed into http header when calling sync request endpoint', function() {
+            var done = false;
+
+            var referenceInfo = {
+                'sessionId':'test session id',
+                'utilityType':'osync-test'
+            };
+
+            nock('http://IP           ').get('/sync/doLoad?icn=10110V004877&priority=80').reply(200, function() {
+                var headers = val(this, ['req', 'headers']);
+                expect(headers).toEqual(jasmine.objectContaining({
+                    host: jasmine.any(String),
+                    'x-session-id': referenceInfo.sessionId,
+                    'x-request-id': jasmine.any(String),
+                    'x-utility-type': referenceInfo.utilityType
+                }));
+            });
+
+            runs(function() {
+                var job = {
+                    type: 'sync',
+                    source: 'appointments',
+                    patient: {
+                        ien: '10110V004877'
+                    },
+                    referenceInfo: referenceInfo
+                };
+                var osyncConfig = createoSyncConfig();
+                osyncConfig.syncPriority = 80;
+                var environment = createEnvironment(osyncConfig);
+                environment.jds._setResponseData([null], [{
+                    statusCode: 404
+                }], [null]);
+
+                spyOn(blacklistUtils, 'isBlackListedPatient').andCallFake(function(log, config, patientId, siteId, callback) {
+                    callback(null, false);
+                });
+
+                handler(log, osyncConfig, environment, job, function(error, data) {
+                    expect(error).toBeFalsy();
+                    expect(data).toBeFalsy();
+                    done = true;
+                });
+            });
+
+            waitsFor(function() {
+                return done;
+            }, 'Callback not called', 100);
         });
     });
 

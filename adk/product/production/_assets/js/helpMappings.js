@@ -1,7 +1,7 @@
 define([], function() {
 
-    var serverPath = "http://vaww.oed.portal.va.gov/pm/iehr/vista_evolution/eHMP/Help_Wiki/Wiki%20Page%20Library/";
-    var serverLogonPath = "http://vaww.oed.portal.va.gov/pm/iehr/vista_evolution/eHMP/Help_Wiki/Wiki%20Page%20Library/Accessing%20the%20eHMP%20Application.aspx";
+    var serverPath = "http://URL                   /pm/iehr/vista_evolution/eHMP/Help_Wiki/Wiki%20Page%20Library/";
+    var serverLogonPath = "http://URL                   /pm/iehr/vista_evolution/eHMP/Help_Wiki/Wiki%20Page%20Library/Accessing%20the%20eHMP%20Application.aspx";
     var pageNotFoundPath = "help/eHMP_Page Not Found.htm";
     var helpNotAvailablePath = "help/eHMP_Help Content Not Available.htm";
     var pdfVersionPath = "eHMP_User Guide for Release 2 0_v1 2_09132016.pdf";

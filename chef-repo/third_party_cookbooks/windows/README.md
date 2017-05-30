@@ -287,7 +287,7 @@ Create and delete TCP/IPv4 printer ports.
 - :delete: Delete a TCIP/IPv4 printer port
 
 #### Attribute Parameters
-- :ipv4_address: Name attribute. Required. IPv4 address, e.g. '10.0.24.34'
+- :ipv4_address: Name attribute. Required. IPv4 address, e.g. 'IP        '
 - :port_name: Port name. Optional. Defaults to 'IP_' + :ipv4_address
 - :port_number: Port number. Optional. Defaults to 9100.
 - :port_description: Port description. Optional.
@@ -296,22 +296,22 @@ Create and delete TCP/IPv4 printer ports.
 
 #### Examples
 
-Create a TCP/IP printer port named 'IP_10.4.64.37' with all defaults
+Create a TCP/IP printer port named 'IP_IP        ' with all defaults
 ```ruby
-windows_printer_port '10.4.64.37' do
+windows_printer_port 'IP        ' do
 end
 ```
 
 Delete a printer port
 ```ruby
-windows_printer_port '10.4.64.37' do
+windows_printer_port 'IP        ' do
   action :delete
 end
 ```
 
 Delete a port with a custom port_name
 ```ruby
-windows_printer_port '10.4.64.38' do
+windows_printer_port 'IP        ' do
   port_name 'My awesome port'
   action :delete
 end
@@ -319,7 +319,7 @@ end
 
 Create a port with more options
 ```ruby
-windows_printer_port '10.4.64.39' do
+windows_printer_port 'IP        ' do
   port_name 'My awesome port'
   snmp_enabled true
   port_protocol 2
@@ -345,7 +345,7 @@ The Windows Printer LWRP will automatically create a TCP/IP printer port for you
 - :location: Printer location, e.g. 'Fifth floor copy room', or 'US/NYC/Floor42/Room4207'
 - :shared: Boolean. Defaults to false.
 - :share_name: Printer share name.
-- :ipv4_address: Printer IPv4 address, e.g. '10.4.64.23'. You don't have to be able to ping the IP addresss to set it. Required.
+- :ipv4_address: Printer IPv4 address, e.g. 'IP        '. You don't have to be able to ping the IP addresss to set it. Required.
 
 An error of "Set-WmiInstance : Generic failure" is most likely due to the printer driver name not matching or not being installed.
 
@@ -355,7 +355,7 @@ Create a printer
 ```ruby
 windows_printer 'HP LaserJet 5th Floor' do
   driver_name 'HP LaserJet 4100 Series PCL6'
-  ipv4_address '10.4.64.38'
+  ipv4_address 'IP        '
 end
 ```
 

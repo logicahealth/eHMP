@@ -123,14 +123,20 @@ define([
             this.listenTo(Messaging.getChannel('toolbar'), 'close:quicklooks', function(el) {
                 this.$('[data-toggle=popover]').not(el).popup('hide');
             });
+
+            this.listenTo(this.collection, 'fetch:success', function(collection) {
+                if(self.manualOrder){
+                    // Reapply tile sorting
+                    self.applyTileSorting(false);
+                }
+            });
         },
         setUnsorted: function() {
-                this.unsortedModels = this.collection.clone().models;
-                if (!_.isUndefined(this.collection.fullCollection)) {
-                    this.unsortedCollection = this.collection.fullCollection.clone().models;
-                } else {
-                    this.unsortedCollection = this.unsortedModels;
-                }
+            if (!_.isUndefined(this.collection.fullCollection)) {
+                this.unsortedCollection = _.clone(this.collection.fullCollection.models);
+            } else {
+                this.unsortedCollection = _.clone(this.collection.models);
+            }
         },
         render: function() {
             if (!this.appletOptions.enableTileSorting) {
@@ -149,12 +155,7 @@ define([
                 this.addManualOrder();
             }
 
-            this.listenTo(this.collection, 'fetch:success', function(collection) {
-                if(self.manualOrder){
-                    // Reapply tile sorting
-                    self.applyTileSorting(false);
-                }
-            });
+
 
             if (this.appletOptions.enableTileSorting) {
                 this.$('.gist-item-list').append('<div class="placeholder hidden"/>');
@@ -296,11 +297,20 @@ define([
                 }
 
                 if (nextSortOrder === 'none') {
-                    collection.reset(this.unsortedCollection);
+                    collection.reset(this.unsortedCollection, {
+                        'silent': true
+                    });
+                    collection.trigger('sort', collection);
                     this.collection.trigger('baseGistView:sortNone', this.collection);
                     this.sortedSR(headerElement, "none");
+                    if(this.manualOrder) {
+                       this.reorder();
+                    }
                 } else if (nextSortOrder === 'manual') {
-                    collection.reset(this.manualSortModels);
+                    collection.reset(this.manualSortModels, {
+                        'silent': true
+                    });
+                    collection.trigger('sort', collection);
                     this.collection.trigger('baseGistView:sortManual', collection);
                     this.sortedSR(headerElement, "asc");
                 } else {
@@ -360,6 +370,7 @@ define([
             var firstColumnHeader = this.$('.header .table-cell a:first');
             this.sortCollection(firstColumnHeader);
             TileSortManager.removeSort(instanceId);
+            this.reorder();
 
             this.$('[data-toggle="tooltip"]').tooltip('hide');
             firstColumnHeader.focus();

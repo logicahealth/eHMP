@@ -2,16 +2,10 @@
     .toolbar-item {
         padding: 4px 5px 2px;
         border-bottom: 1px solid $grey-light;
-        font-size: 12px;
-        label {
-            color: #777;
-            font-weight: normal;
-        }
     }
 
     .appts-type-menu {
         min-width: 160px;
-        background-color: $pure-white;
         border: 1px solid #ccc;
         border-radius: 4px;
         -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.075);

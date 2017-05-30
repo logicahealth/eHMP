@@ -12,37 +12,37 @@ var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
     generalPurposeJdsServer: {
-        baseUrl: 'http://10.2.2.110:9080'
+        baseUrl: 'http://IP             '
     },
-    accessCode: 'pu1234',
-    verifyCode: 'pu1234!!',
-    localIP: '10.2.2.1',
+    accessCode: 'REDACTED',
+    verifyCode: 'REDACTED',
+    localIP: 'IP      ',
     localAddress: 'localhost',
     vistaSites: {
         '9E7A': {
             'name': 'PANORAMA',
             'environment': 'development',
             'division': '500',
-            'host': '10.2.2.101',
-            'localIP': '10.2.2.1',
+            'host': 'IP        ',
+            'localIP': 'IP      ',
             'localAddress': 'localhost',
             'port': 9210,
             'production': false,
-            'accessCode': 'ep1234',
-            'verifyCode': 'ep1234!!',
+            'accessCode': 'REDACTED',
+            'verifyCode': 'REDACTED',
             'infoButtonOid': '1.3.6.1.4.1.3768'
         },
         'C877': {
             'name': 'KODAK',
             'environment': 'development',
             'division': '507',
-            'host': '10.2.2.102',
-            'localIP': '10.2.2.1',
+            'host': 'IP        ',
+            'localIP': 'IP      ',
             'localAddress': 'localhost',
             'port': 9210,
             'production': false,
-            'accessCode': 'ep1234',
-            'verifyCode': 'ep1234!!',
+            'accessCode': 'REDACTED',
+            'verifyCode': 'REDACTED',
             'infoButtonOid': '1.3.6.1.4.1.3768'
         }
     }

@@ -55,8 +55,8 @@ define([
             charCount: true
         },
         template: Handlebars.compile([
-            '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
-            '<textarea class="{{form-class-name "controlClassName"}}"{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if hasMaxlength}} maxlength="{{maxlength}}"{{/if}}{{#if cols}} cols="{{cols}}"{{/if}}{{#if rows}} rows="{{rows}}"{{/if}} name="{{name}}"{{#if title}} title="{{title}}"{{/if}} id={{clean-for-id name}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}>' +
+            '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel)}}',
+            '<textarea class="{{form-class-name "controlClassName"}}"{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if hasMaxlength}} maxlength="{{maxlength}}"{{/if}}{{#if cols}} cols="{{cols}}"{{/if}}{{#if rows}} rows="{{rows}}"{{/if}} name="{{name}}"{{#if title}} title="{{title}}"{{/if}} id={{clean-for-id id}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}>' +
             '{{value}}' +
             '</textarea>',
             '{{#if charCountShouldShow}}<span class="char-count-region"></span>{{/if}}',

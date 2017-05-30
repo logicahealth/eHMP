@@ -11,10 +11,8 @@ task :upload_all_cookbooks, [:tag_name] do |t, args|
   FileUtils.rm_rf "cookbooks"
   FileUtils.mkdir "cookbooks"
   get_updated_cookbooks(args[:tag_name]).each { |cookbook| FileUtils.cp_r cookbook, "cookbooks" }
-  system "knife upload cookbooks/ --freeze --config upload_knife.rb -V"
+  system "knife upload cookbooks/ --freeze --config upload_knife.rb"
   raise "Uploading failed!" if $?.exitstatus != 0
-  system "git tag #{args[:tag_name]} HEAD -f"
-  system "git push origin #{args[:tag_name]}"
 end
 
 def upload_cookbook(cookbook)

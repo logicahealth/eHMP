@@ -60,10 +60,10 @@ function createConditionConformanceData() {
            interactions, fhirToJDSAttrMap);
 }
 
-//http://10.2.2.110:9080/vpr/all/find/problem?filter=like(%22problemText%22,%22%25%22)
+//http://IP             /vpr/all/find/problem?filter=like(%22problemText%22,%22%25%22)
 //get all problems in the system
 
-//http://10.2.2.110:9080/vpr/9E7A;20/find/problem
+//http://IP             /vpr/9E7A;20/find/problem
 //get all problems for a specific pid
 
 function getResourceConfig() {
@@ -177,37 +177,37 @@ function buildSearchQuery(params) {
  * @apiDescription Converts a vpr \'problem\' resource into a FHIR \'condition\' resource.
  * @apiExample {js} Request Examples:
  *      // Limiting results count
- *      http://10.4.4.1:8888/resource/fhir/patient/10110V004877/condition?_count=1
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?_count=1
  *
  *      // Conditions on a year
- *      http://10.4.4.1:8888/resource/fhir/patient/10110V004877/condition?onset=2000
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=2000
  *
  *      // Conditions in a year and month
- *      http://10.4.4.1:8888/resource/fhir/patient/10110V004877/condition?onset=2005-04
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=2005-04
  *
  *      // Conditions in a year, month, and day
- *      http://10.4.4.1:8888/resource/fhir/patient/10110V004877/condition?onset=2000-02-21
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=2000-02-21
  *
  *      // Conditions outside of a date range
- *      http://10.4.4.1:8888/resource/fhir/patient/10110V004877/condition?onset=!=2000-02
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=!=2000-02
  *
  *      // Conditions within an explicit date range
- *      http://10.4.4.1:8888/resource/fhir/patient/10110V004877/condition?onset=>=2010-06&onset=<=2014-09-20
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=>=2010-06&onset=<=2014-09-20
  *
  *      // Conditions sorted by code
- *      http://10.4.4.1:8888/resource/fhir/patient/10110V004877/condition?_sort=code
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=code
  *
  *      // Conditions sorted by asserter
- *      http://10.4.4.1:8888/resource/fhir/patient/10110V004877/condition?_sort=asserter
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=asserter
  *
  *      // Conditions sorted by date-asserted
- *      http://10.4.4.1:8888/resource/fhir/patient/10110V004877/condition?_sort=date-asserted
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=date-asserted
  *
  *      // Conditions sorted by onset
- *      http://10.4.4.1:8888/resource/fhir/patient/10110V004877/condition?_sort=onset
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=onset
  *
  *      // Conditions sorted by patient (pid)
- *      http://10.4.4.1:8888/resource/fhir/patient/10110V004877/condition?_sort=patient
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=patient
  *
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/condition.html">Condition FHIR DTSU2 specification</a>.
@@ -315,7 +315,7 @@ function getProblems(req, res) {
     validateParams(params, /*onSuccess*/ function() {
         getProblemsData(req.app.config, req.logger, pid, params, function(err, inputJSON) {
             if (nullchecker.isNotNullish(err)) {
-                res.status(err.code).send(err.message);
+                res.status(err.code || 500).send(err.message);
             } else {
                 var fhirBundle = convertToFhir(inputJSON, req);
                 res.status(rdk.httpstatus.ok).send(fhirBundle);

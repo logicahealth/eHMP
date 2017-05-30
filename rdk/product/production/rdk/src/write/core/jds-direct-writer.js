@@ -19,13 +19,17 @@ module.exports = function(writebackContext, vxSyncResponse, callback) {
     var requestConfig = {
         logger: writebackContext.logger,
         baseUrl: appConfig.vxSyncWritebackServer.baseUrl,
-        url: '/writeback'
+        url: '/writeback',
+        json: true
     };
     logger.info('Calling the VX-Sync writeback endpoint');
     async.each(vprModels, function(vprModel, callback) {
         logger.debug({jdsDirectWriterVprModel: vprModel});
         var options = _.extend({}, requestConfig, {body: vprModel});
-        httpUtil.post(options, function(err, response, body) {
+        httpUtil.post(options, function (err, response, body) {
+            if (!err && _.get(response, 'statusCode') >= 300) {
+                err = _.get(body, 'error') || response.statusCode;
+            }
             if (err) {
                 // We don't need to return an error if this fails
                 logger.warn({jdsDirectWriterResponseError: err}, 'Error calling the VX-Sync writeback endpoint');

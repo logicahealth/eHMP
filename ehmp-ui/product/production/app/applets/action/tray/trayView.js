@@ -310,7 +310,8 @@ define([
         orderIndex: 30,
         view: trayView,
         shouldShow: function() {
-            return ADK.PatientRecordService.isPatientInPrimaryVista();
+            var permissions = new ADK.UIResources.Fetch.Permission.Collection();
+            return permissions.hasActions();
         }
     });
 

@@ -19,6 +19,8 @@ function registerInterceptors(app) {
     }, {
         audit: require('../../interceptors/audit/audit')
     }, {
+        ensureMethodOverridden: require('../../interceptors/ensure-method-overridden')
+    }, {
         validatePid: require('../../interceptors/validate-pid')
     }, {
         assignRequestSite: require('../../interceptors/assign-request-site')

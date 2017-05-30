@@ -20,16 +20,16 @@ define([
         },
         getTemplate: function() {
             return Handlebars.compile([
-                '<p class="faux-label bottom-margin-xs {{is-sr-only-label srOnlyLabel}}">{{add-required-indicator label required}}</p>',
-                '<fieldset id="{{clean-for-id name}}" class="all-margin-no {{form-class-name "radioControlsClassName"}}{{#if (has-form-class "controlsClassName")}} {{form-class-name "controlsClassName"}}{{/if}}"{{#if title}} title="{{title}}"{{/if}}>',
+                '<p class="faux-label {{is-sr-only-label srOnlyLabel}}">{{add-required-indicator label required}}</p>',
+                '<fieldset id="{{clean-for-id id}}" class="all-margin-no {{form-class-name "radioControlsClassName"}}{{#if (has-form-class "controlsClassName")}} {{form-class-name "controlsClassName"}}{{/if}}"{{#if title}} title="{{title}}"{{/if}}>',
                 '<legend class="sr-only">{{label}}</legend>',
                 '{{#each options}}',
                 Handlebars.helpers['ui-form-label'].apply(this, ["{{label}}", {
                     hash: {
-                        forID: "{{@root.name}}-{{clean-for-id value}}",
+                        forID: "{{@root.id}}-{{clean-for-id value}}",
                         classes: [ControlService.radioLabelClassName],
                         extraClassLogic: '{{#if disabled}}disabled {{else}}{{#if @root.disabled}}disabled {{/if}}{{/if}}',
-                        content: '<input type="{{@root.type}}" id="{{@root.name}}-{{clean-for-id value}}" name="{{@root.name}}" {{#if title}}title="{{title}}"{{else}}title="Press spacebar to select {{label}} for {{@root.label}}"{{/if}} value="{{formatter-from-raw @root.formatter value}}" {{#compare value @root.rawValue}}checked="checked"{{/compare}}{{#if disabled}} disabled{{else}}{{#if @root.disabled}} disabled{{/if}}{{/if}}{{#if @root.required}} required{{/if}}/>'
+                        content: '<input type="{{@root.type}}" id="{{@root.id}}-{{clean-for-id value}}" name="{{@root.name}}" {{#if title}}title="{{title}}"{{else}}title="Press spacebar to select {{label}} for {{@root.label}}"{{/if}} value="{{formatter-from-raw @root.formatter value}}" {{#compare value @root.rawValue}}checked="checked"{{/compare}}{{#if disabled}} disabled{{else}}{{#if @root.disabled}} disabled{{/if}}{{/if}}{{#if @root.required}} required{{/if}}/>'
                     }
                 }]),
                 '{{/each}}',

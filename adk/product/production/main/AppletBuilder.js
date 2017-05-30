@@ -47,6 +47,16 @@ define([
                 Messaging.trigger('loaded.ehmp.applets');
             });
         },
+        requiredByLayoutPromise: function(marionetteApp, layout){
+            var layoutPromise = $.Deferred();
+            var requiredApplets = _.filter(marionetteApp.Applets, function(appletModule){
+                return _.contains(appletModule.requiredByLayout, layout || '') || _.isEqual(appletModule.requiredByLayout, true);
+            });
+            $.when.call(null, _.pluck(requiredApplets, 'buildPromise')).done(function(){
+                layoutPromise.resolve();
+            });
+            return layoutPromise;
+        },
         Loader: Backbone.Marionette.Object.extend({
             initialize: function() {
                 this.allAppletsLoadedPromise = this.getOption('loadPromise');
@@ -176,7 +186,10 @@ define([
             buildAppletModules: function() {
                 _.each(this.applets, function(applet) {
                     var appletModule = this.marionetteApp.module('Applets.' + applet.id);
-                    appletModule.buildPromise = $.Deferred();
+                    _.extend(appletModule, {
+                        buildPromise: $.Deferred(),
+                        requiredByLayout: _.get(applet, 'requiredByLayout')
+                    });
                 }, this);
             },
             onDestroy: function() {

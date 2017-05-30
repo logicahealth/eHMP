@@ -1,0 +1,99 @@
+.patient-info-bar {
+    .section-content {
+        cursor: pointer;
+        padding: 0px 15px;
+        .info {
+            margin: 10px 0 0 4px;
+            word-wrap: break-word;
+        }
+    }
+    dl {
+        margin-bottom: 0px;
+        dt {
+            color: $grey-darkest;
+        }
+    }
+    hr {
+        margin: 0 15px;
+    }
+    h5 {
+        display: inline;
+        margin: 0px 0px 10px;
+        padding: 0px;
+        text-transform: capitalize;
+    }
+    .sidebar-tray {
+        .panel .panel-body {
+            overflow-y: auto;
+            padding: 0px 5px;
+            [class*="col-"]:not(.group-wrapper) {
+                padding-right: 10px;
+                padding-left: 10px
+            }
+            .group-wrapper {
+                padding: 10px;
+                margin-top: 10px;
+                background: $pure-white;
+                border-radius: 2px;
+                word-wrap: break-word;
+                &:last-child {
+                    margin-bottom: 5px;
+                }
+                .flex-items {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: stretch;
+                    .col-xs-6 {
+                        &:nth-child(odd){
+                            border-right: 1px solid $grey-lighter;
+                        }
+                        &:nth-child(n+3){
+                            padding-top: 15px;
+                        }
+                    }
+                }
+                .wrapper-grouping {
+                    text-transform: capitalize;
+                }
+                .group-content {
+                    .collapse {
+                        overflow: hidden;
+                    }
+                    .well {
+                        background-color: $primary-lightest;
+                        margin: 5px;
+                        padding: 5px;
+                        p {
+                            font-weight: bold;
+                            color: $grey-darkest;
+                            margin-top: 0px;
+                        }
+                        .discrepancy-group {
+                            padding: 5px;
+                            dl {
+                                padding: 0 5px;
+                            }
+                            &:nth-of-type(n+2){
+                                border-top: 1px solid $grey-lighter;
+                            }
+                        }
+                    }
+                    .sub-group-content {
+                        background-color: $primary-lightest;
+                        border-left: 3px solid $grey-lighter;
+                        padding-left: 5px;
+                    }
+                }
+                [data-diff="true"] {
+                    .group-data, &.discrepancy-group dt {
+                        color: $primary;
+                    }
+                }
+            }
+            .row {
+                margin-right: -10px;
+                margin-left: -10px;
+            }
+        }
+    }
+}

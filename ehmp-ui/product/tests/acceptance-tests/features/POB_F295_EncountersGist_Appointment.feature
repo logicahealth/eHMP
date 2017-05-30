@@ -48,7 +48,7 @@ Scenario: Encounters trend view applet Appointment type quick look can be viewed
   | Provider		|
   | Facility		|
   
-@pob_f295_appointment_right_click_quick_look_view @F295-5.6 @US4154 @US5126 @DE1388 @DE6517 @debug
+@pob_f295_appointment_right_click_quick_look_view @F295-5.6 @US4154 @US5126 @DE1388 @DE6517
 Scenario: Encounters trend view applet Appointment right click quick look can be viewed
   When the user selects the right side of Appointment type encounter
   Then the quick look table is displayed

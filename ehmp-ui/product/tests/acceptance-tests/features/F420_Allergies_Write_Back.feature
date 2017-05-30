@@ -1,11 +1,12 @@
-@f420_allergies_write_back  @future @DE4560
+@f420_allergies_write_back  @future @DE4560 @debug @DE7307 @DE7381
 
 Feature: F420 : Enter and Store an Allergy including Entered in Error
 
 @f420_pob_allergies_form_field_title_validation2
 Scenario: Validate add allergy form head fields
   Given user searches for and selects "twenty,inpatient"
-  And Cover Sheet is active and ready for write back tests
+  #And Cover Sheet is active and ready for write back tests
+  Then Cover Sheet is active
   And user navigates to allergies expanded view
   When POB user adds a new allergy
   Then POB add allergy modal detail title says "Allergies"
@@ -17,7 +18,7 @@ Scenario: Create a new allergy and Save it.
 
   # Given user is logged into eHMP-UI
   Given user searches for and selects "twenty,patient"
-  And Cover Sheet is active and ready for write back tests
+  Then Cover Sheet is active
   And patient does not have a "CHOCOLATE LAXATIVE" allergy
   And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   When user adds a new allergy

@@ -34,9 +34,6 @@
     "rpcConfig": {
         "context": "HMP UI CONTEXT"
     },
-    "userResourceConfig": {
-        "limit": 60
-    },
     <% if !@cdsdb.nil? %>
     "cdsMongoServer": {
     "host": "<%= @cdsdb['ipaddress']%>",
@@ -64,7 +61,7 @@
         "<%= site['vista']['site_id']%>": {
             "division": <%= site['vista']['division'].to_json %>,
             "host": "<%= site['ipaddress']%>",
-            "localIP": "10.2.2.1",
+            "localIP": "IP      ",
             "localAddress": "localhost",
             "port": <%= site['vista']['rpc_port']%>,
             "production": <%= site['vista']['production']%>,
@@ -166,12 +163,17 @@
         "activityDatabase": {
             "user": "activitydbuser",
             "password": "<%= @jbpm_activitydbuser_password %>",
-            "connectString": "<%= @jbpm['ipaddress']%>:<%= @jbpm['jbpm']['oracle_config']['port'] %>/<%= @jbpm['ehmp_oracle']['oracle_sid'] %>"
+            "connectString": "<%= @oracle_ip %>:<%= @oracle_port %>/<%= @oracle_sid %>"
         },
         "notifsDatabase": {
             "user": "notifdb",
-            "password": "notifdb",
-            "connectString": "<%= @jbpm['ipaddress']%>:<%= @jbpm['jbpm']['oracle_config']['port'] %>/<%= @jbpm['ehmp_oracle']['oracle_sid'] %>"
+            "password": "<%= @jbpm_notifdb_password %>",
+            "connectString": "<%= @oracle_ip %>:<%= @oracle_port %>/<%= @oracle_sid %>"
+        },
+        "communicationsDatabase" : {
+            "user": "communicationuser",
+            "password": "<%= @jbpm_communicationuser_password %>",
+            "connectString": "<%= @oracle_ip %>:<%= @oracle_port %>/<%= @oracle_sid %>"
         }
     },
     <% end %>
@@ -196,6 +198,11 @@
             "requestCert": true,
             "agent": false
         }
+    },
+    "emailTransport": <%= JSON.pretty_generate(node[:rdk][:email_transport], :indent => ' ' * 4).lines.map.with_index { |line, n| ' ' * (n > 0 ? 4 : 0) + line }.join %>,
+    "incidents": {
+        "rootDirectory": "<%= node[:rdk][:incidents][:root_directory] %>",
+        "notificationEmail": <%= JSON.pretty_generate(node[:rdk][:incidents][:notification_email], :indent => ' ' * 4).lines.map.with_index { |line, n| ' ' * (n > 0 ? 8 : 0) + line }.join %>
     },
     "loggers": [
         {
@@ -235,8 +242,8 @@
         "version": "v20160301"
     },
     "UAtracker": {
-        "baseUrl": <%= @node[:rdk][:xpolog_baseUrl].nil? ? "null" : @node[:rdk][:xpolog_baseUrl] %>,
-        "url": <%= @node[:rdk][:xpolog_url].nil? ? "null" : @node[:rdk][:xpolog_url] %>
+        "baseUrl": <%= @node[:rdk][:xpolog_baseurl].nil? ? "null" : "\"#{@node[:rdk][:xpolog_baseurl]}\"" %>,
+        "url": <%= @node[:rdk][:xpolog_url].nil? ? "null" : "\"#{@node[:rdk][:xpolog_url]}\"" %>
     },
     "externalApiDocumentation": [{
         "baseUrl": "http://<%= @jds['ipaddress']%>:<%= @jds['jds']['cache_listener_ports']['general']%>",

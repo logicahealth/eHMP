@@ -1,5 +1,5 @@
 HMPCORD4 ;SLC/AGP,ASMR/RRB,JD -Retrieved Orderable Items;Aug 12, 2016 10:54:47
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**3**;Sep 01, 2011;Build 63
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**3**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#

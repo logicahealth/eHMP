@@ -11,19 +11,19 @@ require "PatientPickerDomElements.rb"
 class TestClients
   @users = {}
 
-  @users["9E7A;pu1234"] = "pu1234!!"
-  @users["C877;pu1234"] = "pu1234!!"
-  @users["9E7A;pr12345"] = "pr12345!!"
-  @users["UnauthorizedUser"] = "pa55w0rd"
-  @users["AuditLogUser"] = "xx1234!!"
-  @users["9E7A;lu1234"] = "lu1234!!"
-  @users["9E7A;1tdnurse"] = "tdnurse1"
-  @users["9E7A;xx1234"] = "baduser"
-  @users["9E7A;mx1234"] = "mx1234!!"
-  @users["C877;mx1234"] = "mx1234!!"
-  @users["9E7A;nurse18"] = "eigh18!!"
-  @users['9E7A;vk1234'] = 'vk1234!!'
-  @users['C877;TWO1234'] = 'TWO1234!!'
+  @users["REDACTED"] = "REDACTED"
+  @users["REDACTED"] = "REDACTED"
+  @users["REDACTED"] = "REDACTED"
+  @users["REDACTED"] = "REDACTED"
+  @users["REDACTED"] = "REDACTED"
+  @users["REDACTED"] = "REDACTED"
+  @users["REDACTED"] = "REDACTED"
+  @users["REDACTED"] = "REDACTED"
+  @users["REDACTED"] = "REDACTED"
+  @users["REDACTED"] = "REDACTED"
+  @users["REDACTED"] = "REDACTED"
+  @users['REDACTED'] = 'REDACTED'
+  @users['REDACTED'] = 'REDACTED'
 
   def self.password_for(username)
     return @users[username]
@@ -55,7 +55,7 @@ class HTTPartyRDK
   @divisions["C877"] = "507"
 
   def self.default_credentials
-    return { :accessCode => "pu1234", :verifyCode => "pu1234!!", :site => "9E7A", :division => "500" }
+    return { :accessCode => "REDACTED", :verifyCode => "REDACTED", :site => "9E7A", :division => "500" }
   end
 
   def self.time_elapsed_last_call
@@ -126,8 +126,12 @@ class HTTPartyRDK
   end
 
   def self.add_body_header_options(options, json, headers)
-    options[:body] = json unless json.nil?
-    headers['Content-Type'] = 'application/json' if json.is_a?(Hash) && headers['Content-Type'].nil?
+    if json.is_a?(Hash)
+      options[:body] = json.to_json
+      headers['Content-Type'] = 'application/json' if headers['Content-Type'].nil?
+    else
+      options[:body] = json unless json.nil?
+    end
     options[:headers] = headers unless headers.empty?
   end
 

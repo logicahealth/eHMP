@@ -4,8 +4,9 @@ define([
     'app/applets/task_forms/common/utils/eventHandler',
     'app/applets/task_forms/common/utils/taskFetchHelper',
     'app/applets/orders/writeback/common/assignmentType/assignmentTypeUtils',
-    'app/applets/task_forms/common/utils/requestCommonUtils'
-], function(Async, moment, EventHandler, TaskFetchHelper, AssignmentTypeUtils, Utils) {
+    'app/applets/task_forms/common/utils/requestCommonUtils',
+    'app/applets/task_forms/common/utils/utils'
+], function(Async, moment, EventHandler, TaskFetchHelper, AssignmentTypeUtils, RequestUtils, Utils) {
     'use strict';
 
     var REQUEST_CLARIFICATION = 'clarification';
@@ -19,7 +20,7 @@ define([
             objectType: 'request',
             taskInstanceId: formModel.get('data').activity.processInstanceId,
             action: action,
-            request: Utils.removeWhiteSpace(formModel.get('request') ? formModel.get('request') : formModel.get('comment')),
+            request: RequestUtils.removeWhiteSpace(formModel.get('request') ? formModel.get('request') : formModel.get('comment')),
             submittedByUid: 'urn:va:user:' + userSession.site + ":" + userSession.duz[userSession.site],
             submittedByName: userSession.lastname + ',' + userSession.firstname,
             submittedTimeStamp: moment().utc(),
@@ -63,7 +64,7 @@ define([
 
     function startResponsePost(collection, formModel, formAction, action, data) {
 
-        var newestActivity = Utils.findLatestRequest(collection);
+        var newestActivity = Utils.findLatest(collection, 'Order.Request');
         var userSession = ADK.UserService.getUserSession().attributes;
         var patientContext = ADK.PatientRecordService.getCurrentPatient();
 
@@ -262,7 +263,7 @@ define([
     // Close the modal and refresh the todo list applet to fetch new tasks
     var modalCloseAndRefresh = function(e) {
         EventHandler.fireCloseEvent(e);
-        Utils.triggerRefresh();
+        RequestUtils.triggerRefresh();
     };
 
     var eventHandler = {

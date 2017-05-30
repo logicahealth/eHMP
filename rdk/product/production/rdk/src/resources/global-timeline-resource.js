@@ -72,7 +72,7 @@ function getTimeline(req, res) {
 function getData(req, callback) {
     var pid = req.param('pid');
 
-    //encounter: http://10.2.2.110:9080/vpr/10108V420871/index/encounter
+    //encounter: http://IP             /vpr/10108V420871/index/encounter
 
     async.parallel({
             encounters: function(callback) {

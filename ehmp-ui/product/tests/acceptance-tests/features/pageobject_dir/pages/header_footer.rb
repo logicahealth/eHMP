@@ -13,6 +13,7 @@ class PobHeaderFooter < SitePrism::Page
   elements :fld_footer_links, ".fa.fa-check-circle.success"
   elements :fld_recent_patient_list, ".dropdown-body li"
   element :fld_most_recent_patient, ".dropdown-body > li:nth-child(2) > a"
+  element :fld_current_patient, "#current-patient-nav-header-tab strong"
 
   # *****************  All_Button_Elements  ******************* #
   # element :btn_patient_search, "#patientSearchButton"
@@ -22,11 +23,17 @@ class PobHeaderFooter < SitePrism::Page
 
   elements :btn_tray_sidebars, "[aria-label='Tray Sidebar'] button[id^='tray']"
   element :btn_recent_patient, ".fa-chevron-down"
+  elements :fld_rp_list_results, ".dropdown-body li:not(.hidden)"
+  element :btn_incident_report, ".application-footer-items-right div > button"
 
   # *****************  All_Drop_down_Elements  ******************* #
 
   # *****************  All_link_Elements  ******************* #
   element :lnk_ehmp_header_help, "#top-region .help-button-container .help-icon-link"
+
+  def check_pat_name_format
+    fld_rp_list_results.map { | li_element | li_element.text.upcase }
+  end
 
   def wait_until_header_footer_elements_loaded
     wait = Selenium::WebDriver::Wait.new(:timeout => 60)
@@ -34,21 +41,21 @@ class PobHeaderFooter < SitePrism::Page
     begin
       wait_for_fld_staff_view 
       wait_for_fld_user_icons 
-      wait_for_fld_user_id 
       wait_for_fld_ehmp_version 
-      wait_for_btn_patient_search 
+      wait_for_fld_current_patient
       wait_for_btn_notification 
       wait_for_btn_refresh_patient_data 
       wait_for_btn_view_details
       wait_for_btn_tray_sidebars 
       wait_for_btn_recent_patient
-      # wait.until { all_there? }
       wait.until { fld_footer_links.length >= 2 }
     rescue => e
+
       max_attempt -= 1
       retry if max_attempt > 0
       # *****************  reenable raise when DE5488 is fixed  ******************* #
       #raise e if max_attempt <= 0 
+      p "#{e}"
       p 'footer did not show expected successfully data sync.  attempt to continue because of DE5488' if max_attempt <= 0
       # *****************  reenable raise when DE5488 is fixed  ******************* #
     end

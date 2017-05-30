@@ -1,4 +1,4 @@
-@F365 @PatientDemoData 
+@F365 @PatientDemoData @reg2
 
 Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
@@ -71,7 +71,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-3.3_InPatientKodak2 @US5116 @US5587 @DE1309 @DE2103
 	Scenario: Patient Information: Demographic drop down "Data" in Kodak for Inpatient
-	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
     Then staff view screen is displayed
     And user searches for and selects "twentythree,inpatient"
 	And Cover Sheet is active
@@ -90,7 +90,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-3.3_InPatientKodak2 @US5116 @US5587 @DE1309 @DE2103 @future @DE4560
     Scenario: Patient Information: Demographic drop down "Data" in Kodak for Inpatient
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
     Then staff view screen is displayed
     And user searches for and selects "twentythree,inpatient"
     And Cover Sheet is active
@@ -102,7 +102,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-3.4_OutPatientKodak @US5116 @US5587 @DE1309 @DE2103
 	Scenario: Patient Information: Demographic drop down "Data" in Kodak for Outpatient
-	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
     Then staff view screen is displayed
     And user searches for and selects "twentythree,patient"
 	And Cover Sheet is active
@@ -120,7 +120,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-3.4_OutPatientKodak @US5116 @US5587 @DE1309 @DE2103
     Scenario: Patient Information: Demographic drop down "Data" in Kodak for Outpatient
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
     Then staff view screen is displayed
     And user searches for and selects "twentythree,patient"
     And Cover Sheet is active

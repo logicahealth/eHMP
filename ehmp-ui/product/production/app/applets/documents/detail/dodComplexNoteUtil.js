@@ -70,10 +70,6 @@ define([
 
     var dodComplexNoteUtil = {
 
-        parseModel: function(response) {
-            return response;
-        },
-
         massageContent: function() {
             var dodContentContainer = this.$el.find('.dod-content');
 

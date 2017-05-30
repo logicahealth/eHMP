@@ -135,7 +135,7 @@ node[:oracle][:rdbms][:dbs].each_key do |db|
   end
 
   execute "append_#{db}_to_tnsnames.ora" do
-    command "echo '#{db} =\n  (DESCRIPTION =\n    (ADDRESS_LIST =\n      (ADDRESS = (PROTOCOL = TCP)(HOST = #{node[:fqdn]})(PORT = 1521))\n    )\n    (CONNECT_DATA =\n      (SERVICE_NAME = #{db})\n    )\n  )\n\n' >> #{node[:oracle][:rdbms][:ora_home]}/network/admin/tnsnames.ora"
+    command "echo '#{db} =\n  (DESCRIPTION =\n    (ADDRESS_LIST =\n      (ADDRESS = (PROTOCOL = TCP)(HOST = #{node[:fqdn]})(PORT = PORT))\n    )\n    (CONNECT_DATA =\n      (SERVICE_NAME = #{db})\n    )\n  )\n\n' >> #{node[:oracle][:rdbms][:ora_home]}/network/admin/tnsnames.ora"
     not_if "grep #{db} #{node[:oracle][:rdbms][:ora_home]}/network/admin/tnsnames.ora > /dev/null 2>&1"
   end
 

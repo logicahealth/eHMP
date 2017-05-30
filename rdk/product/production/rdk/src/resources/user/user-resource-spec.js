@@ -12,15 +12,6 @@ describe('User resource', function() {
         expect(resources.get).not.to.be.undefined();
     });
 
-    it('tests that getResourceConfig() is setup correctly for user info by uid', function() {
-        var resources = userResource.getResourceConfig()[index++];
-
-        expect(resources.name).to.equal('user-service-userinfo-byUid');
-        expect(resources.path).to.equal('/info/byUid');
-        expect(resources.healthcheck).not.to.be.undefined();
-        expect(resources.get).not.to.be.undefined();
-    });
-
     it('tests that getResourceConfig() is setup correctly for get user list', function() {
         var resources = userResource.getResourceConfig()[index++];
 

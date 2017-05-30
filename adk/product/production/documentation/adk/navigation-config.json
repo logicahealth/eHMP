@@ -3,16 +3,19 @@
     "showHomeButton": true,
     "titleLink": "./#/adk/index",
     "left_nav_items": [{
-        "name": "Getting started",
-        "url": "./#/adk/getting-started"
-    }, {
-        "name": "Using the ADK",
+        "name": "API, Utilities & Services",
         "url": "./#/adk/using-adk"
     }, {
-        "name": "ADK UI Library",
+        "name": "UI Library",
         "subItems": [{
+            "name": "Applet Views",
+            "url": "./#/adk/ui-library/applet-views"
+        }, {
             "name": "Application Component Registration",
             "url": "./#/adk/ui-library/application-component-registration"
+        }, {
+            "name": "Behaviors",
+            "url": "./#/adk/ui-library/behaviors"
         }, {
             "name": "Components",
             "url": "./#/adk/ui-library/components"
@@ -20,8 +23,11 @@
             "name": "Form Controls",
             "url": "./#/adk/ui-library/form-controls"
         }, {
-            "name": "Template Helpers",
-            "url": "./#/adk/ui-library/template-helpers"
+            "name": "Template Helpers & Partials",
+            "url": "./#/adk/ui-library/templates"
+        }, {
+            "name": "Views",
+            "url": "./#/adk/ui-library/views"
         }]
     }, {
         "name": "Styles",
@@ -44,11 +50,5 @@
         "name": "Code review checklist",
         "url": "./#/adk/code-review-checklist"
     }],
-    "footer_nav_items": [{
-        "name": "What's new?",
-        "url": "./#/adk/changelog"
-    }, {
-        "name": "Internal Developers Instructions",
-        "url": "./#/adk/internal-developer-specific"
-    }]
+    "footer_nav_items": []
 }

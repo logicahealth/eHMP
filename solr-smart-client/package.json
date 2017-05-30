@@ -1,0 +1,25 @@
+{
+  "name": "solr-smart-client",
+  "version": "2.0.2",
+  "description": "Solr Client for SolrCloud.  Utilizes Zookeeper information determine Solr configuration and optimize calls.",
+  "main": "solr-smart-client.js",
+  "scripts": {
+    "test": "node_modules/jasmine-node/bin/jasmine-node tests/unit/ --matchall --verbose --color --captureExceptions",
+    "int-test": "node_modules/jasmine-node/bin/jasmine-node --forceexit tests/integration/ --matchall --verbose --color --captureExceptions"
+  },
+  "author": "Ed Clarke <edwin.clarke@accenturefederal.com> and Steven Reich <steven.reich@accenturefederal.com>",
+  "repository": {
+    "type": "git",
+    "url": "https:://code.vistacore.us/scm/app/solr-smart-client.git"
+  },
+  "readme": "README.md",
+  "dependencies": {
+    "node-zookeeper-client": "^0.2.2",
+    "solr-client": "^0.5.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "jasmine-node": "^1.14.5",
+    "bunyan": "^1.8.5"
+  }
+}

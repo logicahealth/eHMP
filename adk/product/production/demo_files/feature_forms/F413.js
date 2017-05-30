@@ -10,7 +10,7 @@ define([
     //=============================================================================================================
     // PLEASE DO NOT COPY AND PASTE THIS FULL FILE. PLEASE JUST USE AS A REFERENCE AND COPY PARTS THAT ARE NEEDED
     // for more information on how to layout this form for your applet please checkout the following link:
-    // http://10.1.1.150/documentation/#/adk/conventions#Writeback
+    // http://IP        /documentation/#/adk/conventions#Writeback
     //=============================================================================================================
 
     var F413 = {
@@ -358,7 +358,7 @@ define([
                         control: "container",
                         extraClasses: ["well", "read-only-well"],
                         template: Handlebars.compile([
-                            '<ul class="list-inline">{{#each selectedModifiersForVist}}<li>{{this}}</li>{{/each}}</ul>'
+                            '<ul>{{#each selectedModifiersForVist}}<li>{{this}}</li>{{/each}}</ul>'
                         ].join("\n")),
                         modelListeners: ["visitModifiersCount"]
                     }]

@@ -10,18 +10,18 @@ var signVistaWriter = require('./orders-common-sign-vista-writer'),
 //    var writebackContext = {
 //        pid: '9E7A;100615',
 //        vistaConfig: {
-//            host: '10.2.2.101',
-//            port: 9210,
-//            accessCode: 'mx1234',
-//            verifyCode: 'mx1234!!',
-//            localIP: '10.2.2.1',
+//            host: 'IP        ',
+//            port: PORT,
+//            accessCode: 'REDACTED',
+//            verifyCode: 'REDACTED',
+//            localIP: 'IP      ',
 //            localAddress: 'localhost'
 //        },
 //        model: {
 //            'dfn': '100615',
 //            'provider': '10000000271',
 //            'location': '285',
-//            'eSig':'mx1234!!',
+//            'eSig':'REDACTED',
 //            'orderList': [{
 //                'orderId': '38999;1'
 //            }],
@@ -70,18 +70,18 @@ describe('Checks the sign order send functionality', function() {
             }
         },
         vistaConfig: {
-            host: '10.2.2.101',
-            port: 9210,
-            accessCode: 'mx1234',
-            verifyCode: 'mx1234!!',
-            localIP: '10.2.2.1',
+            host: 'IP        ',
+            port: PORT,
+            accessCode: 'REDACTED',
+            verifyCode: 'REDACTED',
+            localIP: 'IP      ',
             localAddress: 'localhost',
             noReconnect: true
         },
         model: {
             'provider': '10000000238',
             'location': '285',
-            'eSig': 'mx1234!!',
+            'eSig': 'REDACTED',
             'orderDialog': 'LR OTHER LAB TESTS',
             'displayGroup': '5',
             'quickOrderDialog': '2',
@@ -154,18 +154,18 @@ describe('Checks the validate signature functionality', function() {
     var writebackContext = {
         pid: '9E7A;100615',
         vistaConfig: {
-            host: '10.2.2.101',
-            port: 9210,
-            accessCode: 'mx1234',
-            verifyCode: 'mx1234!!',
-            localIP: '10.2.2.1',
+            host: 'IP        ',
+            port: PORT,
+            accessCode: 'REDACTED',
+            verifyCode: 'REDACTED',
+            localIP: 'IP      ',
             localAddress: 'localhost'
         },
         model: {
             'dfn': '100615',
             'provider': '10000000238',
             'location': '285',
-            'eSig': 'mx1234!!'
+            'eSig': 'REDACTED'
 
         },
         logger: sinon.stub(require('bunyan').createLogger({
@@ -176,18 +176,18 @@ describe('Checks the validate signature functionality', function() {
     var writebackContext2 = {
         pid: '9E7A;100615',
         vistaConfig: {
-            host: '10.2.2.101',
-            port: 9210,
-            accessCode: 'mx1234',
-            verifyCode: 'mx1234!!',
-            localIP: '10.2.2.1',
+            host: 'IP        ',
+            port: PORT,
+            accessCode: 'REDACTED',
+            verifyCode: 'REDACTED',
+            localIP: 'IP      ',
             localAddress: 'localhost'
         },
         model: {
             'dfn': '100615',
             'provider': '10000000238',
             'location': '285',
-            'eSig': 'shouldfail!!'
+            'eSig': 'REDACTED'
 
         },
         logger: sinon.stub(require('bunyan').createLogger({
@@ -222,11 +222,11 @@ describe('Checks the order detail comparison functionality', function() {
     var detailWritebackContext = {
         pid: '9E7A;100615',
         vistaConfig: {
-            host: '10.2.2.101',
-            port: 9210,
-            accessCode: 'mx1234',
-            verifyCode: 'mx1234!!',
-            localIP: '10.2.2.1',
+            host: 'IP        ',
+            port: PORT,
+            accessCode: 'REDACTED',
+            verifyCode: 'REDACTED',
+            localIP: 'IP      ',
             localAddress: 'localhost',
             noReconnect: true
         },
@@ -279,11 +279,11 @@ describe('Checks the order detail comparison functionality', function() {
 //    var writebackContext = {
 //        pid: '9E7A;100615',
 //        vistaConfig: {
-//            host: '10.2.2.101',
-//            port: 9210,
-//            accessCode: 'mx1234',
-//            verifyCode: 'mx1234!!',
-//            localIP: '10.2.2.1',
+//            host: 'IP        ',
+//            port: PORT,
+//            accessCode: 'REDACTED',
+//            verifyCode: 'REDACTED',
+//            localIP: 'IP      ',
 //            localAddress: 'localhost'
 //        },
 //        model: {

@@ -2,6 +2,8 @@ package gov.va.jbpm.tasksservice.bean;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TaskSummary {
 	private long id;
     private String name;
@@ -10,21 +12,44 @@ public class TaskSummary {
     private String status;
     private int priority;
     private boolean skipable;
+    
+    @JsonProperty("actual-owner")
     private String actualOwnerId;
+    
+    @JsonProperty("created-by")
     private String createdById;
+    
+    @JsonProperty("created-on")
     private long createdOn;
+    
+    @JsonProperty("activation-time")
     private long activationTime;
+    
+    @JsonProperty("expiration-time")
     private long expirationTime;
+    
+    @JsonProperty("process-instance-id")
     private long processInstanceId;
-    private String processId;
+    
+    @JsonProperty("process-id")
+	private String processId;
+    
+    @JsonProperty("process-session-id")
     private long processSessionId;
+    
+    @JsonProperty("deployment-id")
     private String deploymentId;
+    
+    @JsonProperty("quick-task-summary")
     private boolean quickTaskSummary;
+    
+    @JsonProperty("parent-id")
     private long parentId;
+    
     private String potentialOwners;
 	private String content;
 	private List<Variable> variables;
-
+	
 	/**
 	 * @return the id
 	 */

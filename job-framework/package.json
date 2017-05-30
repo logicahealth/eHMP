@@ -1,0 +1,25 @@
+{
+  "name": "job-framework",
+  "version": "1.2.9",
+  "description": "Vx-Sync Job-based Beanstalk client framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/jasmine-node/bin/jasmine-node tests/unit/ --matchall --verbose --color --captureExceptions",
+    "int-test": "node_modules/jasmine-node/bin/jasmine-node --forceexit tests/integration/ --matchall --verbose --color --captureExceptions"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://code.vistacore.us/scm/app/job-framework.git"
+  },
+  "author": "Steven Reich <steven.reich@accenturefederal.com>",
+  "dependencies": {
+    "async": "2.0.x",
+    "bunyan": "^1.7.1",
+    "jasmine-node": "^1.14.5",
+    "js-yaml": "^3.5.3",
+    "moment": "^2.12.0",
+    "node-uuid": "^1.4.7",
+    "underscore": "^1.8.3",
+    "yargs": "^4.3.1"
+  }
+}

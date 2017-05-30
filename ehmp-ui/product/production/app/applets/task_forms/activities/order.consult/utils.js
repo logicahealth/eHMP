@@ -313,9 +313,5 @@ define([
             consultOrder.totalMet = totalMet;
         }
     };
-    var channel = ADK.Messaging.getChannel('task_forms');
-    channel.reply('get_consult_utils', function() {
-        return Utils;
-    });
     return Utils;
 });

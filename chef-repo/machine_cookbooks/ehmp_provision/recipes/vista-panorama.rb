@@ -53,6 +53,7 @@ r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machin
 r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
 
 machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} environment" do
+  elastic_ip ENV["PANORAMA_ELASTIC_IP"]
   machine_name machine_ident
   boot_options boot_options
   driver node[:machine][:driver]
@@ -105,8 +106,8 @@ machine machine_name do
         site_id: "9E7A",
         site: "PANORAMA",
         abbreviation: "PAN",
-        access_code: "ep1234",
-        verify_code: "ep1234!!",
+        access_code: "REDACTED",
+        verify_code: "REDACTED",
         division: [{id: "500", name: "PANORAMA"}],
         station_number: "500",
         region: "us-east",

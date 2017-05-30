@@ -7,7 +7,7 @@ chef_gem 'mongo' do
 	version '1.12.5'
 end
 
-mongodb_creds = Chef::EncryptedDataBagItem.load("credentials", "mongodb", node[:data_bag_string])
+mongodb_creds = Chef::EncryptedDataBagItem.load("credentials", node[:mongodb_creds_db] || "mongodb", node[:data_bag_string])
 
 node.normal['mongodb']['admin'] = {
   'username' => mongodb_creds["admin"]["user"],

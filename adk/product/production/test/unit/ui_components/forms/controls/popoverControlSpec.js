@@ -1,7 +1,7 @@
 define(['jquery',
     'backbone',
     'marionette',
-    'main/ui_components/components',
+    'main/UILibrary',
     'api/UIComponents',
     'jasminejquery',
     'bootstrap'
@@ -128,6 +128,16 @@ define(['jquery',
                 $('.popover-content-region > ').trigger('control:items:update', this.model);
                 expect($form.find('.popover-content-region input').length).toBe(0);
                 expect($form.find('.popover-content-region button').length).toBe(1);
+            });
+            it("update:config", function() {
+                $form.find('.popover-button-region .popover-control').trigger("control:update:config", {
+                    hidden: true
+                });
+                expect($form.find('.popover-button-region .popover-control')).toHaveClass('hidden');
+                $form.find('.popover-button-region .popover-control').trigger("control:update:config", {
+                    hidden: false
+                });
+                expect($form.find('.popover-button-region .popover-control')).not.toHaveClass('hidden');
             });
         });
     });

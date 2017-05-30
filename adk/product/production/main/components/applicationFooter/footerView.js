@@ -15,7 +15,7 @@ define([
 
     var RightFooterItemCollectionView = Backbone.Marionette.CollectionView.extend({
         itemGroupName: 'right',
-        className: 'pull-right',
+        className: 'flex-display',
         getChildView: function(item) {
             return item.get('view');
         },
@@ -27,14 +27,22 @@ define([
 
     var FooterView = Backbone.Marionette.LayoutView.extend({
         tagName: 'footer',
+        className: 'flex-display right-padding-xs left-padding-xs application-footer-items',
         template: Handlebars.compile([
-            '<div class="col-xs-3">',
+            '<div class="application-footer-items-left">',
             '<p><strong>eHMP</strong> version <span id="appVersion">{{overall_version}}</span></p>',
             '</div>',
-            '<div class="col-xs-9 application-footer-items-right"></div>'
+            '<div class="application-footer-items-right flex-display flex-width-1 flex-justify-flex-end"></div>'
         ].join("\n")),
+        behaviors: {
+            FlexContainer: {
+                direction: 'row',
+                alignItems: 'center',
+                container: '> .application-footer-items-left'
+            }
+        },
         ui: {
-            'FooterItemsRight':'.application-footer-items-right',
+            'FooterItemsRight':'.application-footer-items-right'
         },
         regions: {
             'RightItemsRegion': '@ui.FooterItemsRight'

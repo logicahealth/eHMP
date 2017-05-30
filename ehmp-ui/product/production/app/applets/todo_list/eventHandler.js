@@ -1,41 +1,24 @@
 define(['backbone',
     'marionette',
     'underscore',
-    'handlebars'
-], function(Backbone, Marionette, _, Handlebars) {
+    'handlebars',
+    'app/applets/todo_list/util'
+], function(Backbone, Marionette, _, Handlebars, Util) {
     "use strict";
 
-    var arrToObj = function(array) {
-        var obj = {};
-        for (var i = 0, l = array.length; i < l; ++i) {
-            obj[array[i].name] = array[i].value;
-        }
-
-        return obj;
-    };
-    var checkIfProviderScreen = function(req) {
-        return req === 'provider-centric-view' || req === 'todo-list-provider-full';
-    };
-
-    var checkForPID = function(session) {
-        return session !== undefined && session.attributes !== undefined && session.attributes.hasOwnProperty('pid');
-    };
-
     var eventHandler = {
-        modalButtonsOnClick: function(ev) {
-            ev.preventDefault();
-        },
-        todoListViewOnClickRow: function(model, event, session) {
+        todoListViewOnClickRow: function(model) {
             //if navigation node is present trigger using it's content
             var navigation = model.get('NAVIGATION');
+            var isStaffView = Util.isStaffView();
 
             if (_.isObject(navigation)) {
                 navigation.parameters.createdBy = {
                     CREATEDBYNAME: model.get('CREATEDBYNAME')
                 };
                 ADK.PatientRecordService.setCurrentPatient(model.get('PATIENTICN'), {
-                    reconfirm: this.isStaffView,
-                    navigation: this.isStaffView,
+                    reconfirm: isStaffView,
+                    navigation: isStaffView,
                     staffnavAction: {
                         channel: navigation.channel,
                         event: navigation.event,

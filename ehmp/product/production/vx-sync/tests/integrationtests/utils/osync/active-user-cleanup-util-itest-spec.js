@@ -117,13 +117,13 @@ describe('osync-active-user-list-util-itest-spec.js', function() {
 		var config = {
 			pjds: _.defaults(wConfig.pjds, {
 				protocol: 'http',
-				host: '10.2.2.110',
-				port: 9080
+				host: 'IP        ',
+				port: PORT
 			}),
 			jds: _.defaults(wConfig.jds, {
 				protocol: 'http',
-				host: '10.2.2.110',
-				port: 9080
+				host: 'IP        ',
+				port: PORT
 			}),
 			osync: {
 				mixedEnvironmentMode: true,

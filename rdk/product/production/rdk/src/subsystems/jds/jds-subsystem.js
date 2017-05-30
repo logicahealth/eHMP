@@ -80,9 +80,13 @@ function getPatientDomainData(req, pid, domain, query, vlerQuery, callback) {
     var vlerCallType = vlerQuery.vlerCallType;
     var vlerUid = vlerQuery.vlerUid;
     var jdsPath = createJDSPath(jdsResource, req);
+
     var options = _.extend({}, req.app.config.jdsServer, {
         url: jdsPath,
-        qs: query,
+        qs: {
+            query: true
+        },
+        body: query,
         logger: req.logger,
         json: true
     });
@@ -97,7 +101,7 @@ function getPatientDomainData(req, pid, domain, query, vlerQuery, callback) {
         return requestMedications(req, pid, options, callback);
     }
 
-    return rdk.utils.http.get(options, function(error, response, responseBody) {
+    return http.post(options, function(error, response, responseBody) {
         var errorCheck = isResponseError(req, error, response, responseBody);
         if (errorCheck) {
             return callback(errorCheck, responseBody, response.statusCode);
@@ -126,13 +130,6 @@ function isResponseError(req, error, response, responseBody) {
 function requestDocuments(req, pid, options, callback) {
     async.parallel([
         function(callback) {
-            var vixSubsystemPresent = _.get(req, 'app.subsystems.vix');
-            if (vixSubsystemPresent) {
-                return vix.fetchBseToken.fetch(req, callback);
-            }
-            return callback(null, null);
-        },
-        function(callback) {
             return fetchJdsAndFillPagination(req, options,
                 function(req, responseBody, callback) {
                     return filterAsuDocuments(req, responseBody, function(err, results) {
@@ -149,14 +146,13 @@ function requestDocuments(req, pid, options, callback) {
             req.logger.error(error);
             return callback(error, null, 500);
         }
-        var vixResponse = response[0];
-        var asuResponse = response[1];
+        var asuResponse = response[0];
         var responseBody = asuResponse[0];
         var statusCode = asuResponse[1];
         var bodyHasItems = _.size(_.get(responseBody, 'data.items')) > 0;
 
-        if (vixResponse && bodyHasItems) {
-            return vix.addImagesToDocument(req, responseBody, vixResponse.token, function(err, responseBody) {
+        if (bodyHasItems) {
+            return vix.addImagesToDocument(req, responseBody, function(err, responseBody) {
                 return callback(null, responseBody, statusCode);
             });
         }
@@ -198,11 +194,12 @@ function requestMedications(req, pid, options, callback) {
  * @param {Function} callback (err, jdsResponse, statusCode)
  */
 function fetchJdsAndFillPagination(req, jdsOptions, responseFilterer, callback) {
-    var requestedItemCount = _.parseInt(_.get(jdsOptions, 'qs.limit'));
+    var requestedItemCount = _.parseInt(_.get(jdsOptions, 'body.limit'));
     var moreItemsAvailable = true;
     var combinedFilteredItems = [];
     var lastPageMetadata;
     var initialPageMetadata;
+    var lastUnfilteredItemIndex;
 
     return async.whilst(
         function test() {
@@ -216,10 +213,10 @@ function fetchJdsAndFillPagination(req, jdsOptions, responseFilterer, callback) 
         },
         function(callback) {
             if (lastPageMetadata) {
-                _.set(jdsOptions, 'qs.start',
-                    _.parseInt(_.get(jdsOptions, 'qs.start', 0)) + lastPageMetadata.itemsPerPage);
+                _.set(jdsOptions, 'body.start',
+                    _.parseInt(_.get(jdsOptions, 'body.start', 0)) + lastPageMetadata.itemsPerPage);
             }
-            rdk.utils.http.get(jdsOptions, function(error, response, responseBody) {
+            http.post(jdsOptions, function(error, response, responseBody) {
                 var errorCheck = isResponseError(req, error, response, responseBody);
                 if (errorCheck) {
                     return callback(errorCheck, null, _.get(response, 'statusCode'));
@@ -236,12 +233,31 @@ function fetchJdsAndFillPagination(req, jdsOptions, responseFilterer, callback) 
                     'itemsPerPage', // limit
                     'totalPages'
                 );
-                moreItemsAvailable = _.parseInt(_.get(jdsOptions, 'qs.start', 0)) + lastPageMetadata.currentItemCount < lastPageMetadata.totalItems;
-                return responseFilterer(req, responseBody, function(err, results) {
+                moreItemsAvailable = _.parseInt(_.get(jdsOptions, 'body.start', 0)) + lastPageMetadata.currentItemCount < lastPageMetadata.totalItems;
+                // Intentional shallow clone for performance
+                var lastPageUnfilteredItems = _.clone(responseBody.data.items);
+                return responseFilterer(req, responseBody, function(err, filteredResults) {
                     if (err) {
                         return callback(err);
                     }
-                    combinedFilteredItems = combinedFilteredItems.concat(results.data.items);
+                    combinedFilteredItems = combinedFilteredItems.concat(filteredResults.data.items);
+                    var excessItemCount = Math.max(0, _.size(combinedFilteredItems) - requestedItemCount);
+                    if (excessItemCount > 0) {
+                        combinedFilteredItems.length = requestedItemCount;
+                    }
+                    var lastFilteredItem = _.last(combinedFilteredItems);
+                    if ((lastPageUnfilteredItems.length === filteredResults.data.items.length && excessItemCount <= 0) ||
+                        (!moreItemsAvailable && excessItemCount <= 0)) {
+                        lastUnfilteredItemIndex = lastPageUnfilteredItems.length - 1;
+                    } else if (_.isEmpty(combinedFilteredItems)) {
+                        lastUnfilteredItemIndex = 0;
+                    } else if (!_.get(lastFilteredItem, 'uid')) {
+                        return callback(new Error('Item in JDS does not have uid'));
+                    } else {
+                        lastUnfilteredItemIndex = _.findLastIndex(lastPageUnfilteredItems, function(item) {
+                            return _.get(item, 'uid') === lastFilteredItem.uid;
+                        });
+                    }
                     return callback();
                 });
             });
@@ -250,10 +266,6 @@ function fetchJdsAndFillPagination(req, jdsOptions, responseFilterer, callback) 
             if (err) {
                 return callback(err, null, 500);
             }
-            var excessItemCount = Math.max(0, _.size(combinedFilteredItems) - requestedItemCount);
-            if (excessItemCount > 0) {
-                combinedFilteredItems.length = requestedItemCount;
-            }
             var fakeJdsResponse = {
                 data: {
                     items: combinedFilteredItems
@@ -261,8 +273,8 @@ function fetchJdsAndFillPagination(req, jdsOptions, responseFilterer, callback) 
             };
             _.assign(fakeJdsResponse.data, initialPageMetadata, lastPageMetadata);
             fakeJdsResponse.data.currentItemCount = _.size(combinedFilteredItems);
-            if (_.parseInt(_.get(jdsOptions, 'qs.limit'))) {
-                fakeJdsResponse.data.nextStartIndex = _.parseInt(_.get(jdsOptions, 'qs.start')) + lastPageMetadata.currentItemCount - excessItemCount;
+            if (_.parseInt(_.get(jdsOptions, 'body.limit'))) {
+                fakeJdsResponse.data.nextStartIndex = _.parseInt(_.get(jdsOptions, 'body.start', 0)) + lastUnfilteredItemIndex + 1;
             }
             return callback(null, fakeJdsResponse, 200);
         }
@@ -337,12 +349,15 @@ function transformCwadf(req, pid, domainData, callback) {
     };
     var options = _.extend({}, req.app.config.jdsServer, {
         url: '/vpr/' + pid + '/index/cwad',
-        qs: queryObject,
+        qs: {
+            query: true
+        },
+        body: queryObject,
         logger: req.logger,
         json: true
     });
 
-    rdk.utils.http.get(options, function(error, response, cwadData) {
+    http.post(options, function(error, response, cwadData) {
         if (error) {
             options.logger.error(error);
             return callback(error, null, 500);

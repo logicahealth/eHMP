@@ -10,9 +10,9 @@ default[:workstation][:install_packages][:npm_packages] = {
 }
 
 default[:workstation][:install_packages][:gem_packages] = {
-  "compass" => ["0.12.6"],
+  "sass" => ["3.4.16"],
+  "compass" => ["1.0.3"],
   "breakpoint" => ["2.0.7"],
-  "sass" => ["3.2.9"],
   "oauth" => ["0.4.7"],
   "bundler" => ["1.10.5"],
   "nokogiri" => ["1.5.11"],

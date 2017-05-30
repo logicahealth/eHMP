@@ -14,3 +14,7 @@ swap_file "local_swap" do
 	size 12288
 	action :create
 end
+
+package "nss" do
+  action :upgrade
+end

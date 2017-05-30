@@ -1,0 +1,103 @@
+<div class="table-row selectable collapsed" data-toggle="collapse">
+    <div class="table-cell border-vertical all-margin-no all-padding-no">
+        <button class="left-side btn btn-accordion all-padding-xs" aria-expanded="false" type="button" title="Press enter to expand {{kind}} accordion.">
+            <i arrowPosition="right" class="fa fa-caret-right right-margin-xs"></i>
+            {{kindPlural}}
+        </button>
+    </div>
+    <div tabindex="0" role="button" class="flex-width-2 right-side has-popover"
+            title="{{#if futureTime}}
+                    Next
+                {{else}}
+                    Recent
+                {{/if}}
+                {{kind}}"
+            data-toggle="popover"
+            data-content="<table id='encountersTooltip{{elKind}}' class='table table-condensed'>
+                <caption class='sr-only'>Quicklook Table. This table represents a brief summary for the selected encounter.</caption>
+                <thead>
+                    <tr>
+                        {{#if visit}}       <th scope='col'>Date</th>
+                                            <th scope='col'>Appt Status</th>
+                                            <th scope='col'>Clinic Name</th>
+                                            <th scope='col'>Provider</th>
+                                            <th scope='col'>Facility</th>
+                        {{/if}}
+                        {{#if admission}}   <th scope='col'>Date</th>
+                                            <th scope='col'>Diagnosis</th>
+                                            <th scope='col'>Facility</th>
+                        {{/if}}
+                        {{#if procedure}}   <th scope='col'>Date</th>
+                                            <th scope='col'>Procedure Name</th>
+                                            <th scope='col'>Service</th>
+                                            <th scope='col'>Facility</th>
+                        {{/if}}
+                        {{#if appointment}} <th scope='col'>Date</th>
+                                            <th scope='col'>Appt Status</th>
+                                            <th scope='col'>Clinic Name</th>
+                                            <th scope='col'>Provider</th>
+                                            <th scope='col'>Facility</th>
+                        {{/if}}
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#if recent}}
+                        {{#if admission}}
+                            {{#each recent}}
+                                <tr>
+                                    <td>{{showDate}}</td>
+                                    <td>{{reasonName}}</td>
+                                    <td>{{facilityMoniker}}</td>
+                                </tr>
+                            {{/each}}
+                        {{/if}}
+                        {{#if visit}}
+                            {{#each recent}}
+                                <tr>
+                                    <td>{{showDate}}</td>
+                                    <td class='word-break-break-word'>{{appointmentStatus}}</td>
+                                    <td>{{stopCodeName}}</td>
+                                    <td class='word-break-break-word'>{{encProvider}}</td>
+                                    <td>{{facilityMoniker}}</td>
+                                </tr>
+                            {{/each}}
+                        {{/if}}
+                        {{#if appointment}}
+                            {{#each recent}}
+                                <tr>
+                                    <td>{{showDate}}</td>
+                                    <td class='word-break-break-word'>{{appointmentStatus}}</td>
+                                    <td>{{stopCodeName}}</td>
+                                    <td class='word-break-break-word'>{{encProvider}}</td>
+                                    <td>{{facilityMoniker}}</td>
+                                </tr>
+                            {{/each}}
+                        {{/if}}
+                        {{#if procedure}}
+                            {{#each recent}}
+                                <tr>
+                                    <td>{{showDate}}</td>
+                                    <td class='word-break-break-word'>{{procName}}</td>
+                                    <td class='word-break-break-word'>{{service}}</td>
+                                    <td>{{facilityMoniker}}</td>
+                                </tr>
+                            {{/each}}
+                        {{/if}}
+                    {{/if}}
+                    </tbody>
+                </table>">
+        <span class="sr-only">Press enter to open or close the quicklook table for {{kind}}</span>
+        <div class="table-cell text-center border-vertical">
+            {{timeSinceLast}}
+        </div>
+        <div class="table-cell text-center flex-width-0_5">
+            {{count}}
+        </div>
+        <div class="table-cell">
+            <span class="sr-only"> Graph.</span>
+            <div class="graph-container" aria-hidden="true"></div>
+        </div>
+    </div>
+</div>
+<div class="panel-collapse collapse" data-toggle="false" role="tabpanel"></div>
+

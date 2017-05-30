@@ -7,6 +7,7 @@ var _ = require('underscore');
 var async = require('async');
 var config = require(global.VX_ROOT + 'worker-config');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
+var HttpHeaderUtils = require(global.VX_UTILS + 'http-header-utils');
 //var util = require('util');
 
 /** Example Input
@@ -22,7 +23,10 @@ or
 **/
 
 function doLoad(log, environment, req, res) {
-    log.debug('operational-sync-endpoint-handler.doLoad() : begin');
+    var httpHeaderUtil = new HttpHeaderUtils(log);
+    var referenceInfo = httpHeaderUtil.extractReferenceInfo(req);
+    var childLog = log.child(referenceInfo);
+    childLog.debug('operational-sync-endpoint-handler.doLoad() : begin');
 
     var publishOptions = config;
 
@@ -43,20 +47,21 @@ function doLoad(log, environment, req, res) {
         return res.status(400).send(format('Unknown VistA site %s', invalidSites.join()));
     }
 
+    var childPublisher = environment.publisherRouter.childInstance(childLog);
     async.every(syncSites, function(site, callback) {
         var job = jobUtil.createOperationalSyncRequest(site);
-        log.debug('operational-sync-endpoint-handler.doLoad() : build operational job');
-        log.debug(job);
+        childLog.debug('operational-sync-endpoint-handler.doLoad() : build operational job');
+        childLog.debug(job);
 
-        environment.publisherRouter.publish(job, publishOptions, function(error) {
+        childPublisher.publish(job, publishOptions, function(error) {
             if (error) {
-                log.error('operational-sync-endpoint-handler.doLoad() : operational-sync-endpoint' + error);
+                childLog.error('operational-sync-endpoint-handler.doLoad() : operational-sync-endpoint' + error);
             } else {
-                log.debug('operational-sync-endpoint-handler.doLoad() : operational sync job accepted');
+                childLog.debug('operational-sync-endpoint-handler.doLoad() : operational sync job accepted');
             }
-            callback(!(!!error));
+            callback(null, !error);
         });
-    }, function(result) {
+    }, function(error, result) {
         if (result) {
             return res.status(201).send();
         } else {
@@ -114,9 +119,9 @@ function initialOPDSync(log, config, environment, handlerCallback) {
                     } else {
                         log.debug('operational-sync-endpoint-handler.initialOPDSync() : operational sync job accepted');
                     }
-                    callback(!(!!error));
+                    callback(null, !error);
                 });
-            }, function(result) {
+            }, function(error, result) {
                 if (result) {
                     log.debug('operational-sync-endpoint-handler.initialOPDSync(): initial operational sync successfully started');
                     return setTimeout(handlerCallback, 0);

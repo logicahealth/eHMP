@@ -5,25 +5,21 @@ footer {
     position: fixed;
     width: 100%;
     z-index: 1030;
-    p {
-        margin: 7px 0px 6px 0px;
+    [class^="application-footer-items-"] {
+        margin: 4px 0px;
     }
-    ul {
-        margin: 5px 0px 0px 0px;
-        float: right;
-        li {
-            display: inline;
-            padding-right: 10px;
-            &.loading-muted {
-                color: rgba(255, 255, 255, 0.5);
-            }
-            .btn {
-                &:hover,
-                &:active,
-                &:focus {
-                    color: $primary-lighter;
-                }
-            }
+    .btn.btn-icon {
+        color: $primary-light;
+        &:hover,
+        &:active,
+        &:focus{
+            color: darken($primary-light, 10%);
         }
+    }
+    .btn.btn-xs {
+        font-size: 11px;
+    }
+    p {
+        margin: 0;
     }
 }

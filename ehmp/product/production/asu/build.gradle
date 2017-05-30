@@ -4,7 +4,6 @@ ext.set('artifactId', 'asu')
 ext.set('repoVersion', getRepoVersion())
 ext.set('commitCountDir', projectDir)
 
-
 buildscript {
     ext {
         springBootVersion = '1.2.3.RELEASE'
@@ -45,9 +44,11 @@ springBoot {
     mainClass = "us.vistacore.asu.Application"
 }
 
+// The BOM version chosen below for Maven will determine the version of spring-boot and Tomcat
+// To change those versions its only necessary to update the BOM version below
 dependencyManagement {
   imports {
-    mavenBom 'io.spring.platform:platform-bom:1.1.2.RELEASE'
+    mavenBom 'io.spring.platform:platform-bom:2.0.4.RELEASE'
   }
 }
 
@@ -57,6 +58,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile 'org.springframework.data:spring-data-commons'
     compile 'org.springframework:spring-tx'
+    compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
     compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.2.0'
@@ -73,7 +75,6 @@ dependencies {
     compile("com.google.guava:guava:14.0.1")
     compile("commons-lang:commons-lang:2.6")
 }
-
 
 eclipse {
     classpath {
@@ -93,7 +94,7 @@ def repoCommitCountClosure = {
   return proc2.text.trim()
 }
 
-repoCommitCount = "${->repoCommitCountClosure()}"
+def repoCommitCount = "${->repoCommitCountClosure()}"
 def asuZipVersion = "${->repoVersion + '.' + repoCommitCount}"
 version = ""
 ext.set('version', asuZipVersion)

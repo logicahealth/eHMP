@@ -44,9 +44,13 @@ describe('middleware/job.js', function() {
                 'type': 'pid',
                 'value': 'ABCD;0'
             };
+            request.referenceInfo = {
+                'requestId': 'job-middleware-requestId',
+                'sessionId': 'job-middleware-sessionId'
+            };
             var response = new DummyResponse();
             var jobFactory = function(r) {
-                return jobUtil.createEnterpriseSyncRequest(r.patientIdentifier, r.jpid, r.force);
+                return jobUtil.createEnterpriseSyncRequest(r.patientIdentifier, r.jpid, r.force, null, null, r.referenceInfo);
             };
             buildJob.call(options, jobFactory, request, response, function() {});
             expect(response.job).toBeDefined();
@@ -54,13 +58,16 @@ describe('middleware/job.js', function() {
             expect(response.job.jpid).toEqual('21EC2020-3AEA-4069-A2DD-08002B30309D');
             expect(response.job.patientIdentifier.type).toEqual('pid');
             expect(response.job.patientIdentifier.value).toEqual('ABCD;0');
+            expect(response.job.referenceInfo).toBeDefined();
+            expect(response.job.referenceInfo.requestId).toBe('job-middleware-requestId');
+            expect(response.job.referenceInfo.sessionId).toBe('job-middleware-sessionId');
         });
     });
 
     describe('getJobHistory()', function() {
         var opts = _.clone(options);
         beforeEach(function() {
-            opts.jdsClient.getJobStatus = jasmine.createSpy().andCallFake(function(job, callback) {
+            opts.jdsClient.getJobStatus = jasmine.createSpy().andCallFake(function(job, filter, callback) {
                 callback(null, {}, { 'items': mockJobData(1)[job.jpid] });
             });
         });

@@ -1,28 +1,20 @@
 [data-appletid="encounters"] {
-    .grid-container {
-        .faux-table {
-            div {
-                &.table-row {
-                    &.header {
-                        background-color: $pure-white;
-                    }
-                    .btn-accordion:focus {
-                        background-color: $primary-lightest;
-                    }
-                }
-            }
+    .enc-gist-list{
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+    }
+    [role=tab] {
+        .right-side {
+            padding-right: 15px;
+        }
+        .btn-accordion:focus {
+            background-color: $primary-lightest;
         }
     }
-    .enc-gist-list .table-row > .flex-width-2, .enc-gist-list .table-row > .flex-width-1 {
-        padding-right: 15px;
-    }
-    [data-group-instanceid] {
-        .panel-collapse {
-            background-color: $grey-lightest;
-            padding: 6px;
-            [gistviewtype] {
-                box-shadow: 0 -0px 3px 0 rgba(0, 0, 0, .4);
-            }
+    [role=tabpanel] {
+        background-color: $grey-lightest;
+        padding: 6px 20px 6px 6px;
+        [gistviewtype] {
+            box-shadow: 0 -0px 3px 0 rgba(0, 0, 0, .4);
         }
     }
 }

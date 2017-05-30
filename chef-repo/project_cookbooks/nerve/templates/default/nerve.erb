@@ -1,0 +1,13 @@
+{
+  "host": "<%= @host %>",
+  "port": <%= @port %>,
+  "reporter_type": "<%= @reporter_type %>",
+  "zk_hosts": <%= @zk_hosts %>,
+  "zk_path": "<%= @zk_path %>",
+  "check_interval": <%= @check_interval %>,
+  "checks": [
+  <% @checks.each_with_index do |check, index| %>
+  	<%= check.to_json %><%= ',' unless index == @checks.size - 1 %>
+  <% end %>
+  ]
+}

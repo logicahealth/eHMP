@@ -92,12 +92,20 @@ default[:rdk_provision][:artifacts] = {
     :version => ENV["JBPM_EHMPSERVICES_VERSION"],
     :release => true
   },
-  :jbpm_sql_config => {
+  :jbpm_utils => {
     :repo => "releases",
     :group => "us.vistacore.jbpm",
+    :artifact => "JbpmUtils",
+    :extension => "jar",
+    :version => ENV["JBPM_UTILS_VERSION"],
+    :release => true
+  },
+  :oracle_sql_config => {
+    :repo => "releases",
+    :group => "us.vistacore.oracle",
     :artifact => "sql_config",
     :extension => "tgz",
-    :version => ENV["JBPM_SQL_CONFIG_VERSION"],
+    :version => ENV["ORACLE_SQL_CONFIG_VERSION"],
     :release => true
   }
 }

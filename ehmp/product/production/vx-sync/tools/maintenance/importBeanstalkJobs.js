@@ -227,15 +227,15 @@ function verifyBasedirParam(baseDir, callback) {
 				fs.stat(fileName, function(error, stats) {
 					if (error) {
 						console.log('Error occurred when calling fs.stat for file: %s.  Error: %s', fileName, error);
-						return everyCallback(false);
+						return everyCallback(null, false);
 					}
 					var isSubDir = stats.isDirectory();
 					if (!isSubDir) {
 						console.log('The base directory: %s should contain only sub-directories.   The following file was not a sub-directory: %s.', baseDir, fileName);
 					}
-					return everyCallback(isSubDir);
+					return everyCallback(null, isSubDir);
 				});
-			}, function (allAreSubDirs) {
+			}, function (error, allAreSubDirs) {
 				if (!allAreSubDirs) {
 					return callback('BASEDIR_HAS_NON_SUBDIRS', 'Basedir contains some files that are not sub-directories.');
 				}

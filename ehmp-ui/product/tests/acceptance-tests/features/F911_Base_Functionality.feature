@@ -37,7 +37,7 @@ Scenario: The overview screen should load without issue
 Scenario: The document screen should load without issue
 #  Given user is logged into eHMP-UI
   And user searches for and selects "BCMA,Eight"
-  When user navigates to Documents Applet
+  When user navigates to Documents Screen
   Then the Documents Expanded applet is displayed
 
 @TC410 
@@ -51,9 +51,9 @@ Scenario: The timeline screen should load without issue
 Scenario: The user should be able to perform a text search
 #  Given user is logged into eHMP-UI
   And user searches for and selects "Eight,Patient"
-  And Overview is active
+  Then Summary View is active
   Then user searches for "pulse"
-  Then Text Search results are displayed
+  Then text search results are grouped
 
 @TC486
 Scenario: The med review screen should load without issue

@@ -197,7 +197,7 @@ define([
             signButton: '.control.note-sign',
             textArea: '.control.noteBody',
             titles: '.control.documentDefUidUnique',
-            selectNotesTitle: '#documentDefUidUnique',
+            selectNotesTitle: '.documentDefUidUnique select',
             saveErrorBanner: '.saveErrorBanner'
         },
         events: {
@@ -358,7 +358,7 @@ define([
                 this.enableButtons();
             }
             // Make sure focus remains on the select component after selecting a note title.
-            this.$el.find('#select2-' + this.ui.selectNotesTitle.prop('id') + '-container').closest('.select2-selection').focus();
+            this.$('#select2-' + this.ui.selectNotesTitle.prop('id') + '-container').closest('.select2-selection').focus();
             this.enableText();
             this.initTitlePermissions();
         },

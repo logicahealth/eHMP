@@ -1,0 +1,6 @@
+{{#if disabled}}<span class="text-search-input-wrapper" data-original-title="{{title}}" data-toggle="tooltip"> {{/if}}
+<label for="searchText-{{cid}}" class="sr-only">Search Record</label>
+<input type="text" id="searchText-{{cid}}" class="form-control{{#compare errorIcon true operator='==='}} form-control-placeholder-icon {{/compare}}" placeholder="{{#compare errorIcon true operator='==='}}&#xf06a; {{/compare}}{{placeholder}}" autocomplete="off" focus="true" {{#if disabled}} disabled="true" /> {{else}} data-original-title="{{title}}" data-toggle="tooltip" />
+<span class="sr-only">{{title}}</span> {{/if}}
+<i class="fa fa-search font-size-15"></i> 
+{{#if disabled}}<span class="sr-only">{{title}}</span></span> {{/if}}

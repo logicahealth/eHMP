@@ -2,6 +2,7 @@ define([
     'underscore',
     'app/resources/fetch/immunizations/model'
 ], function (_, ImmunizationsModel){
+    'use strict';
 
     var RESOURCE = 'patient-record-immunization';
 
@@ -29,17 +30,20 @@ define([
                 cache: true,
                 collectionConfig: {
                     comparator: function(modelOne, modelTwo) {
-                        return -modelOne.get('administeredDateTime').localeCompare(modelTwo.get('administeredDateTime'))
+                        return -modelOne.get('administeredDateTime').localeCompare(modelTwo.get('administeredDateTime'));
                     }
                 },
                 viewType: viewType
             };
-
-            _.set(fetchOptions, 'criteria.observedFrom', observedFrom);
-            _.set(fetchOptions, 'criteria.observedTo', observedTo);
+            if (observedFrom) {
+                _.set(fetchOptions, 'criteria.observedFrom', observedFrom);
+            }
+             if (observedTo) {
+                _.set(fetchOptions, 'criteria.observedTo', observedTo);
+            }
             _.set(fetchOptions, 'patient', currentPatient);
 
-            return ADK.ResourceService.fetchCollection(fetchOptions, this);
+            return ADK.PatientRecordService.fetchCollection(fetchOptions, this);
         }
     });
 

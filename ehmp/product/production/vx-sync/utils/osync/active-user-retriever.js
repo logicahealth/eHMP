@@ -36,10 +36,10 @@ function removeBlackListedUsers(log, environment, usersList, callback) {
         log.debug('active-users-retriever.removeBlackListedUsers: checking %s is on blacklist for site %s.', user.id, user.site);
 
         blackListUtil.isBlackListedUser(log, environment, user, function(error, result) {
-            rejectCallback(result);
+            rejectCallback(null, result);
         });
 
-    }, function(results) {
+    }, function(error, results) {
         return callback(null, results);
     });
 }

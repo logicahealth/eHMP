@@ -1,5 +1,5 @@
 HMPDJ0 ;SLC/MKB,ASMR/JD,PB,CPC -- Serve VistA data as JSON cont ; 07/13/16 04:45pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2**;Sep 01, 2011;Build 11
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#

@@ -90,34 +90,44 @@ function addRecordEntry(logger, records, fields) {
  * @param logger The logger
  * @param rpcData The string to parse
  */
-module.exports.parse = function (logger, rpcData) {
-    logger.info({rpcData: rpcData});
-
-    var records = [];
-    var lines = rpcData.split('\r\n');
-    lines = rpcUtil.removeEmptyValues(lines);
-
-    var FIELD_LENGTH_EXPECTED = 2;
-
-    _.each(lines, function (line) {
-        var fields = line.split('^');
-        if (fields.length !== FIELD_LENGTH_EXPECTED) {
-            logger.error('The RPC "PXVIMM IMM LOT" returned data but we couldn\'t understand it: ' + line);
-        }
-
-        if (fields[0] === 'RECORD') {
-            var record = {
-                record: fields[1]
-            };
-
-            logger.debug({record: record});
-            records.push(record);
-        } else {
-            addRecordEntry(logger, records, fields);
-        }
+module.exports.parse = function(logger, rpcData) {
+    logger.debug({
+        rpcData: rpcData
     });
 
+    var FIELD_LENGTH_EXPECTED = 2;
+    var NO_RECORDS_FOUND_RESPONSE = '0 RECORDS\r\n';
+    var records = [];
+
+    if (rpcData !== NO_RECORDS_FOUND_RESPONSE) {
+
+        var lines = rpcData.split('\r\n');
+        lines = rpcUtil.removeEmptyValues(lines);
+
+        _.each(lines, function(line) {
+            var fields = line.split('^');
+            if (fields.length !== FIELD_LENGTH_EXPECTED) {
+                logger.error('The RPC "PXVIMM IMM LOT" returned data but we couldn\'t understand it: ' + line);
+            } else {
+                if (fields[0] === 'RECORD') {
+                    var record = {
+                        record: fields[1]
+                    };
+
+                    logger.debug({
+                        record: record
+                    });
+                    records.push(record);
+                } else {
+                    addRecordEntry(logger, records, fields);
+                }
+            }
+        });
+    }
+
     //console.log(JSON.stringify(records, null, 2));
-    logger.info({records: records});
+    logger.debug({
+        records: records
+    });
     return records;
 };

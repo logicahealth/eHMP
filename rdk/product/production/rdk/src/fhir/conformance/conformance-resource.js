@@ -65,9 +65,9 @@ function register(name, data) {
  *
  * @apiDescription Returns a FHIR \'Conformance\' report.
  * @apiExample {js} Request Examples: // Full conformance statement
- *             http://10.4.4.1:8888/resource/fhir/metadata // Conformance for a
+ *             http://IP           /resource/fhir/metadata // Conformance for a
  *             resource(s)
- *             http://10.4.4.1:8888/resource/fhir/metadata?resource=observation[,patient]
+ *             http://IP           /resource/fhir/metadata?resource=observation[,patient]
  *
  *
  * @apiSuccess {json} data Json object conforming to the <a

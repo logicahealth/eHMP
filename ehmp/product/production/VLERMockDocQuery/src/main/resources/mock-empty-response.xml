@@ -1,0 +1,5 @@
+<ns4:AdhocQueryRespon
+se xmlns:ns8="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0" xmlns:ns7="urn:gov:va:med:nhin:adapter:prefetch" xmlns:ns6="urn:gov:hhs:
+fha:nhinc:common:nhinccommonentity" xmlns:ns5="urn:gov:hhs:fha:nhinc:common:nhinccommon" xmlns:ns4="urn:oasis:names:tc:ebxml-regrep
+:xsd:query:3.0" xmlns:ns3="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0" xmlns:ns2="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" star
+tIndex="0" status="urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Success" requestId="eHMP_1484857910508"/>

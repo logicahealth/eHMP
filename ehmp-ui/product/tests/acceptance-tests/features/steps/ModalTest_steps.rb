@@ -42,10 +42,9 @@ rescue
 end
 
 def wait_until_modal_is_not_displayed
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time) # seconds # wait until list opens
-  # wait.until { !driver.find_element(:id, 'mainModal').displayed? }
-  wait.until { element_is_not_present?(:id, 'mainModal') }
-  wait.until { element_is_not_present?(:css, 'div.modal-backdrop.fade.in') }
+  modal = ModalElements.new
+  modal.wait_until_fld_main_modal_invisible
+  modal.wait_until_fld_main_modal_fade_in_invisible 
 end
 
 Then(/^the modal is closed$/) do

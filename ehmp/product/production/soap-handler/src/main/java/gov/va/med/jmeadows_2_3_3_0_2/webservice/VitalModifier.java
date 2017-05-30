@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "vitalModifier", namespace = "http://webservice.vds.med.va.gov/", propOrder = {
+@XmlType(name = "vitalModifier", namespace = "http://webservice.vds.URL       /", propOrder = {
     "type",
     "units",
     "value"

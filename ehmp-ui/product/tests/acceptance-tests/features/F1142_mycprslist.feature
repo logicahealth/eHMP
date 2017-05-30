@@ -5,7 +5,7 @@ Feature: Home Page Usability (Staff View) - Implement My CPRS list tray
 Scenario: User has option to view My CPRS list
    Then the staff view screen displays My CPRS list in the sidebar tray
 
-@US17400_2
+@US17400_2 @DE7713
 Scenario:
     When the user opens the My CPRS list tray
     And the My CPRS list tray displays a close x button
@@ -16,3 +16,4 @@ Scenario:
       | Location (Rm-Bd) |
       | Patient Name     |
       | Date of Birth    |
+      | Gender           |

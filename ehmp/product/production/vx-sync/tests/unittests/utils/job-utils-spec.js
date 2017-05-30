@@ -30,6 +30,10 @@ describe('job.js', function() {
 
         var dummyRequest = new DummyRequest();
         dummyRequest.jpid = 'jpid';
+        dummyRequest.referenceInfo = {
+            requestId: 'job-utils-requestId',
+            sessionId: 'job-utils-sessionId'
+        };
 
         it('verify unforced enterprise-type job is correct', function() {
             var job = jobUtil.create(testType, testId, null, null, null, null, dummyRequest);
@@ -38,12 +42,17 @@ describe('job.js', function() {
             expect(job.jpid).toEqual('jpid');
             expect(job.jobId).toBeDefined();
             expect(job.priority).toBeUndefined();
+            expect(job.referenceInfo).toBeDefined();
+            expect(job.referenceInfo.requestId).toEqual('job-utils-requestId');
+            expect(job.referenceInfo.sessionId).toEqual('job-utils-sessionId');
+
         });
 
         it('verify job without domain is correct', function() {
             var job = jobUtil.create(testType, testId);
             expect(job.type).toEqual(testType);
             expect(job.patientIdentifier).toEqual(testId);
+            expect(job.referenceInfo).toBeUndefined();
         });
 
         it('verify job with domain is correct', function() {
@@ -51,6 +60,7 @@ describe('job.js', function() {
             expect(job.type).toEqual(testType);
             expect(job.patientIdentifier).toEqual(testId);
             expect(job.dataDomain).toEqual(testDomain);
+            expect(job.referenceInfo).toBeUndefined();
         });
 
         it('verify job with record is correct', function() {
@@ -59,6 +69,7 @@ describe('job.js', function() {
             expect(job.patientIdentifier).toEqual(testId);
             expect(job.dataDomain).toEqual(testDomain);
             expect(job.record).toEqual(testRecord);
+            expect(job.referenceInfo).toBeUndefined();
         });
 
         it('verify job with event-uid is correct', function() {
@@ -70,6 +81,7 @@ describe('job.js', function() {
             expect(job.patientIdentifier).toEqual(testId);
             expect(job['event-uid']).toEqual(testEventUid);
             expect(job.priority).toEqual(5);
+            expect(job.referenceInfo).toBeUndefined();
         });
     });
 
@@ -267,7 +279,7 @@ describe('job.js', function() {
                 value: '9E7A;8'
             };
             var rootJob = {
-                jpid : uuid.v4(),
+                jpid: uuid.v4(),
                 priority: 38
             };
             var type = jobUtil.vistaSubscribeRequestType(site);
@@ -275,27 +287,82 @@ describe('job.js', function() {
             expect(job_gen.priority).toBe(38);
             expect(jobUtil.isValid(type, job_gen, 'C877')).toBe(false);
             expect(jobUtil.isValid(type, job_gen, site)).toBe(true);
+            expect(job_gen.referenceInfo).toBeUndefined();
+        });
+
+        it('verify vistaPatientSubscribeRequest with referenceInfo', function() {
+            var site = '9E7A';
+            var patientIdentifier = {
+                type: 'pid',
+                value: '9E7A;8'
+            };
+            var rootJob = {
+                jpid: uuid.v4(),
+                priority: 38,
+                referenceInfo: {
+                    requestId: 'vista-patient-subscribe-request-requestId',
+                    sessionId: 'vista-patient-subscribe-request-sessionId'
+                }
+            };
+            var type = jobUtil.vistaSubscribeRequestType(site);
+            var job_gen = jobUtil.createVistaSubscribeRequest(site, patientIdentifier, rootJob);
+            expect(job_gen.priority).toBe(38);
+            expect(jobUtil.isValid(type, job_gen, 'C877')).toBe(false);
+            expect(jobUtil.isValid(type, job_gen, site)).toBe(true);
+            expect(job_gen.referenceInfo).toBeDefined();
+            expect(job_gen.referenceInfo.requestId).toEqual('vista-patient-subscribe-request-requestId');
+            expect(job_gen.referenceInfo.sessionId).toEqual('vista-patient-subscribe-request-sessionId');
         });
     });
 
-    describe('createEnterpriseSyncRequest()', function(){
-        it('create job with demographic record', function(){
-            var job = jobUtil.createEnterpriseSyncRequest({value:'9E7A;3', type:'pid'}, '34812353-3292-3491-5728-184920572381', [], {'givenName':'test'});
+    describe('createEnterpriseSyncRequest()', function() {
+        it('create job with demographic record', function() {
+            var job = jobUtil.createEnterpriseSyncRequest({
+                value: '9E7A;3',
+                type: 'pid'
+            }, '34812353-3292-3491-5728-184920572381', [], {
+                'givenName': 'test'
+            });
             expect(job.demographics).toBeDefined();
+            expect(job.referenceInfo).toBeUndefined();
+        });
+
+        it('create job with referenceInfo', function() {
+            var referenceInfo = {
+                requestId: 'test-requestId',
+                sessionId: 'test-sessionId'
+            };
+            var job = jobUtil.createEnterpriseSyncRequest({type: 'pid', value:'AAAA;1'}, 'aaaa-bbbb-cccc', false, null, null, referenceInfo);
+
+            expect(job.demographics).not.toBeDefined();
+            expect(job.referenceInfo).toBeDefined();
+            expect(job.referenceInfo).toEqual(jasmine.objectContaining(referenceInfo));
         });
     });
 
-    describe('isVistAHdrSubscribeRequestType()', function(){
-        it('Check to see if a job is a valid HDR Subscribe Type', function(){
-            var job = jobUtil.createVistaHdrSubscribeRequest('84F0', {value:'84F0;3', type:'pid'}, '34812353-3292-3491-5728-184920572381');
+    describe('isVistAHdrSubscribeRequestType()', function() {
+        it('Check to see if a job is a valid HDR Subscribe Type', function() {
+            var job = jobUtil.createVistaHdrSubscribeRequest('84F0', {
+                value: '84F0;3',
+                type: 'pid'
+            }, '34812353-3292-3491-5728-184920572381');
             expect(jobUtil.isVistAHdrSubscribeRequestType(job.type)).toBe(true);
-            job = jobUtil.createEnterpriseSyncRequest({value:'9E7A;3', type:'pid'}, '34812353-3292-3491-5728-184920572381', [], {'givenName':'test'});
+            job = jobUtil.createEnterpriseSyncRequest({
+                value: '9E7A;3',
+                type: 'pid'
+            }, '34812353-3292-3491-5728-184920572381', [], {
+                'givenName': 'test'
+            });
             expect(jobUtil.isVistAHdrSubscribeRequestType(job.type)).toBe(false);
             job = {};
             expect(jobUtil.isVistAHdrSubscribeRequestType(job.type)).toBe(false);
-            job = {type: 346};
+            job = {
+                type: 346
+            };
             expect(jobUtil.isVistAHdrSubscribeRequestType(job.type)).toBe(false);
-            job = {type: '0vistahdr-'};
+            job = {
+                type: '0vistahdr-'
+            };
             expect(jobUtil.isVistAHdrSubscribeRequestType(job.type)).toBe(false);
         });
     });

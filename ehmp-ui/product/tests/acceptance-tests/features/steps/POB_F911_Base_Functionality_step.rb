@@ -54,18 +54,12 @@ When(/^POB Overview is active$/) do
   end
 end
 
-When(/^POB user navigates to Documents Applet$/) do
+When(/^POB user navigates to Documents Screen$/) do
   @ehmp = PobOverView.new
   @ehmp.wait_for_fld_demo_patientInfo
   @ehmp = PobDocumentsList.new
   @ehmp.load
   expect(@ehmp).to be_displayed
-end
-
-When(/^POB the Documents Expanded applet is displayed$/) do
-  @ehmp = PobDocumentsList.new
-  @ehmp.wait_for_fld_documents_heading
-  expect(@ehmp).to have_fld_documents_heading
 end
 
 When(/^POB user navigates to Timeline Applet$/) do

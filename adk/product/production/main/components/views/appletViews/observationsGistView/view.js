@@ -19,6 +19,7 @@ define([
     var baseDisplayApplet = BaseDisplayApplet;
 
     var ObservationsGistView = BaseDisplayApplet.extend({
+        AppletView: ObservationsGist,
         initialize: function(options) {
             this._base = baseDisplayApplet.prototype;
             if (!this.options.appletConfig) {

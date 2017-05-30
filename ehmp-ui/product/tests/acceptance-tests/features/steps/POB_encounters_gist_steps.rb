@@ -186,7 +186,7 @@ end
 
 Then(/^POB Encounters trend view applet table only diplays rows including text "([^"]*)"$/) do |input_text|
   @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_encounter_procedure_visible
+  @ehmp.wait_until_encounter_procedure_visible(30)
   expect(@ehmp).to have_encounter_procedure
   @ehmp.encounter_procedure.click
   @ehmp.wait_until_tbl_encounter_cell_data_visible
@@ -493,6 +493,14 @@ Then(/^Encounters trend view applet displays a dynamic arrow in "([^"]*)" positi
   @ehmp = PobEncountersApplet.new
   @ehmp.wait_until_btn_visits_encounter_arrow_visible
   expect(@ehmp.btn_visits_encounter_arrow['arrowposition'].eql? arrow_position).to eq(true), "Dynamic arrow is not in expected position"
+end
+
+When(/^the user views the details for the "([^"]*)" Admission type encounter$/) do |type|
+  @ehmp = PobEncountersApplet.new
+  @ehmp.wait_until_btn_spinal_cord_admission_visible
+  expect(@ehmp).to have_btn_spinal_cord_admission
+  @ehmp.btn_spinal_cord_admission.click
+  view_detail_modal
 end
 
 

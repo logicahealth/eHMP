@@ -1,6 +1,7 @@
 define([
     'backbone',
     'marionette',
+    'underscore',
     'moment',
     'app/applets/orders/writeback/requests/requestFormFields',
     'app/applets/orders/writeback/requests/requestFormUtils',
@@ -10,10 +11,8 @@ define([
     'app/applets/orders/behaviors/draftRequest',
     'app/applets/orders/viewUtils',
     'app/applets/task_forms/activities/requests/requestEventHandler'
-], function(Backbone, Marionette, moment, FormFields, FormUtils, AssignmentTypeUtils, ButtonUtils, RequiredFieldsUtils, DraftBehavior, ViewUtils, EventHandler) {
+], function(Backbone, Marionette, _, moment, FormFields, FormUtils, AssignmentTypeUtils, ButtonUtils, RequiredFieldsUtils, DraftBehavior, ViewUtils, EventHandler) {
     'use strict';
-
-    var requestState = '';
 
     var dateErrorMessages = {
         earliest: {
@@ -170,11 +169,11 @@ define([
             ) {
                 this.model.set('formStatus', 'Active');
 
-                if (requestState == 'Active:PendingResponse') {
+                if (requestState === 'Active:PendingResponse') {
                     this.model.set('formStatusDescription', 'Pending Response');
-                } else if (requestState == 'Active: Clarification Requested') {
+                } else if (requestState === 'Active: Clarification Requested') {
                     this.model.set('formStatusDescription', 'Clarification Requested');
-                } else if (requestState == 'Active: Declined') {
+                } else if (requestState === 'Active: Declined') {
                     this.model.set('formStatusDescription', 'Declined');
                 }
                 this.ui.deleteButton.trigger('control:disabled', true);
@@ -267,7 +266,7 @@ define([
             }, {
                 unset: true
             });
-            this.model.isValid();//This function performs the datepicker's standard validation as a side-effect.
+            this.model.isValid(); //This function performs the datepicker's standard validation as a side-effect.
             var earliest = this.model.get('earliest');
             var latest = this.model.get('latest');
 
@@ -290,8 +289,7 @@ define([
                     this.model.errorModel.set({
                         'earliest': dateErrorMessages.earliest.inPast
                     });
-                }
-                else if (moment(earliest).isAfter(moment().add(100, 'y'))) {
+                } else if (moment(earliest).isAfter(moment().add(100, 'y'))) {
                     this.model.errorModel.set({
                         'earliest': dateErrorMessages.earliest.tooFar
                     });
@@ -313,7 +311,9 @@ define([
                 }
 
                 if (moment(latest).isAfter(moment().add(100, 'y'))) {
-                    this.model.errorModel.set({'latest': 'Date cannot be more than 100 years in the future'});
+                    this.model.errorModel.set({
+                        'latest': 'Date cannot be more than 100 years in the future'
+                    });
                 }
             }
 
@@ -340,15 +340,26 @@ define([
         },
         fireAccept: function(e) {
             this.model.unset('errorMessage');
-            if (this.validateFields) {
+
+            if (this.validateFields(e)) {
                 this.$el.trigger('tray.loaderShow', {
                     loadingString: 'Accepting'
                 });
 
                 var requestState = this.model.get('requestState');
                 if (this.model.get('activity') && this.model.get('activity').processInstanceId && !_.isEmpty(requestState) &&
-                    (requestState == 'Active: Clarification Requested' || requestState == 'Active: Declined')) {
-                    EventHandler.sendUpdate(e, this.model, 'accepted');
+                    (requestState === 'Active: Clarification Requested' || requestState === 'Active: Declined')) {
+                    if (ADK.UserService.hasPermissions('edit-coordination-request')) {
+                        EventHandler.sendUpdate(e, this.model, 'accepted');
+                    } else {
+                        this.$el.trigger('tray.loaderHide');
+                        var errorBanner = new ADK.UI.Notification({
+                            type: 'error',
+                            title: 'Error Request - Review',
+                            message: 'The user has no permissions to edit the request.'
+                        });
+                        errorBanner.show();
+                    }
                 } else if (this.model.get('activity') && this.model.get('activity').processInstanceId) {
                     EventHandler.sendSignal(e, this.model, 'accepted', this);
                 } else {
@@ -363,11 +374,13 @@ define([
         },
         validateFields: function(e) {
             var success = true;
-            _.every(self.requiredFields, function(fieldName) {
-                if (_.isEmpty(self.model.get(fieldName))) {
+            var self = this;
+            _.every(this.requiredFields, function(fieldName) {
+                var field = self.model.get(fieldName);
+                if (_.isEmpty(field)) {
                     success = false;
                     this.model.errorModel.set({
-                        fieldName: "Invalid selection"
+                        fieldName: 'Invalid selection'
                     });
                 }
             });

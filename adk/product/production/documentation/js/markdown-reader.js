@@ -27,6 +27,24 @@ $(function() {
             .use(window.markdownitContainer, 'callout')
             .use(window.markdownitContainer, 'side-note')
             .use(window.markdownitContainer, 'definition')
+            .use(window.markdownitContainer, 'note', {
+                validate: function(params) {
+                    return params.trim().match(/^note\s+(.*)$/);
+                },
+
+                render: function(tokens, idx) {
+                    var m = tokens[idx].info.trim().match(/^note\s+(.*)$/);
+
+                    if (tokens[idx].nesting === 1) {
+                        // opening tag
+                        return '<div class="note-selection ' + md.utils.escapeHtml(m[1]) + '">\n';
+
+                    } else {
+                        // closing tag
+                        return '</div>\n';
+                    }
+                }
+            })
             .use(window.markdownitContainer, 'showcode', {
 
                 validate: function(params) {
@@ -235,7 +253,7 @@ $(function() {
                         if (previousHeadings.length > 0) {
                             $tag.attr('id', previousHeadings[0].id.split('#')[1] + '-' + $tag.attr('id'));
                         } else {
-                            var specialTags = $tag.closest('blockquote, .side-note, .callout, .page-description, .definition');
+                            var specialTags = $tag.closest('blockquote, .side-note, .callout, .page-description, .definition,  .note');
                             if (specialTags.length > 0) {
                                 previousHeadings = $(specialTags[0]).prevUntil(headingLevelToStopAt, previousHeadingLevel);
                                 if (previousHeadings.length > 0) {
@@ -275,14 +293,23 @@ $(function() {
                 var basename = (window.location.pathname.match(/(.*)\/[^\/]*$/) || [])[1] || '';
                 var currentLocation = window.location.protocol + '//' + window.location.host + basename;
                 var isRelativePath = targetLocation.indexOf(currentLocation) !== -1;
+                var containsDotDotSlash = path.indexOf('../') !== -1;
                 var pageBasename = (self.get('page').match(/(.*)\/[^\/]*$/) || [])[1];
-                if ($tag.is('a') && isRelativePath && path.match(/.+\.md/)) {
+                if ($tag.is('a') && (isRelativePath || containsDotDotSlash) && path.match(/.+\.md/)) {
                     var cleanedUrlParts = $tag.attr('href').match(new RegExp('^(.+)\\.md(?:(#|' + d + ')(.*))?'));
                     var cleanedUrl = cleanedUrlParts[1];
                     var delimiter = cleanedUrlParts[2];
                     var section = cleanedUrlParts[3];
                     if (delimiter && section) {
                         cleanedUrl += d + section;
+                    }
+                    var numberOfDirectoriesToStrip = (cleanedUrl.match(/\.\.\//g) || []).length;
+                    if (numberOfDirectoriesToStrip > 0) {
+                        cleanedUrl = cleanedUrl.replace('../', '');
+                        while (numberOfDirectoriesToStrip) {
+                            pageBasename = (pageBasename.match(/(.*)\/[^\/]*$/) || [])[1];
+                            numberOfDirectoriesToStrip--;
+                        }
                     }
                     $tag.attr('href', _.compact(['#', pageBasename, cleanedUrl]).join('/'));
                 }
@@ -319,13 +346,13 @@ $(function() {
             this.clipboard.on('success', function(e) {
                 e.clearSelection();
                 $(e.trigger).attr('data-original-title', 'Copied!').tooltip('show');
-                setTimeout(function(){
+                setTimeout(function() {
                     $(e.trigger).attr('data-original-title', 'Copy to Clipboard');
                 }, 1000);
             });
             this.clipboard.on('error', function(e) {
                 $(e.trigger).attr('data-original-title', 'Error when trying to copy').tooltip('show');
-                setTimeout(function(){
+                setTimeout(function() {
                     $(e.trigger).attr('data-original-title', 'Copy to Clipboard');
                 }, 1000);
             });
@@ -352,7 +379,8 @@ $(function() {
                 '.side-note',
                 '.callout',
                 '.page-description',
-                '.definition'
+                '.definition',
+                '.note'
             ];
             var excludedParentsSelector = excludedParentSelectors.map(function(selector) {
                 return selector + ' *';
@@ -544,7 +572,8 @@ $(function() {
             currentConfig: {},
             rdk: {},
             adk: {},
-            sdk: {}
+            sdk: {},
+            ui: {}
         },
         initialize: function(props) {
             if (_.isObject(props)) {
@@ -562,6 +591,8 @@ $(function() {
             Q.fcall(function() {
                     if (folder === 'adk') {
                         return './adk/';
+                    } else if (folder === 'ui') {
+                        return '/app/';
                     } else if (folder === 'rdk') {
                         return fetchRdkPath();
                     } else {
@@ -569,6 +600,13 @@ $(function() {
                     }
                 })
                 .then(self.getNavConfig)
+                .then(function(data) {
+                    if (folder === 'ui') {
+                        return self.addDocumentedAppletsToHeader(data);
+                    } else {
+                        return data;
+                    }
+                })
                 .then(function(data) {
                     self.set(folder, data);
                     return updateNavigationConfig.bind(self)();
@@ -588,19 +626,189 @@ $(function() {
                     return deferred.reject();
                 });
             return deferred.promise;
+        },
+        getAppletManifest: function() {
+            var deferred = Q.defer();
+            $.ajax({
+                    url: '/app/applets/appletsManifest.js',
+                    dataType: 'script',
+                })
+                .done(function(data) {
+                    deferred.resolve(data);
+                })
+                .fail(function() {
+                    return deferred.reject();
+                });
+            return deferred.promise;
+        },
+        addDocumentedAppletsToHeader: function(navigationConfig) {
+            var deferred = Q.defer();
+            Q.fcall(this.getAppletManifest)
+                .then(function() {
+                    var appletsArray = window.AppletsManifest.applets || [];
+                    var documentedApplets = _.filter(appletsArray, {}); //documentation: true });
+                    if (!_.isEmpty(documentedApplets)) {
+                        documentedApplets = _.map(_.sortBy(documentedApplets, 'title'), function(appletObject) {
+                            return {
+                                name: appletObject.title,
+                                url: './#/ui/applets/' + appletObject.id + '/',
+                                documentation: !!appletObject.documentation
+                            };
+                        });
+                        var rightNavItems = navigationConfig.right_nav_items || [];
+                        var appletNavDropdown = _.findWhere(rightNavItems, { name: 'Applets' });
+                        if (appletNavDropdown) {
+                            rightNavItems = _.without(rightNavItems, appletNavDropdown);
+                            _.extend(appletNavDropdown, {
+                                id: 'search-applets',
+                                subItems: documentedApplets,
+                                type: 'searchable-list'
+                            });
+                        } else {
+                            appletNavDropdown = {
+                                id: 'search-applets',
+                                name: 'Applets',
+                                subItems: documentedApplets,
+                                type: 'searchable-list'
+                            };
+                        }
+
+                        _.extend({}, navigationConfig, {
+                            'right_nav_items': rightNavItems.push(appletNavDropdown)
+                        });
+                    }
+                    deferred.resolve(navigationConfig);
+                });
+            return deferred.promise;
+        }
+    });
+
+    ReadmeApp.FilterModel = Backbone.Model.extend({
+        defaults: {
+            what: '',
+            where: 'all',
+            label: 'Items'
+        },
+        initialize: function(opts) {
+            this.collection = opts.collection;
+            this.filtered = new Backbone.Collection(opts.collection.models);
+            this.on('change:what change:where', this.filter);
+        },
+        filter: function() {
+            var what = this.get('what').trim(),
+                where = this.get('where'),
+                models;
+
+            models = this.collection.filter(function(model) {
+                if (where === 'documented' && !model.get('documentation')) return false;
+                return ~model.get('name').toLowerCase().indexOf(what.toLowerCase());
+            });
+
+            this.filtered.reset(models);
+        }
+    });
+
+    ReadmeApp.SearchItemsCollectionView = Backbone.View.extend({
+        initialize: function(opts) {
+            this.template = opts.template;
+            this.listenTo(this.collection, 'reset', this.render);
+            this.model = opts.model;
+        },
+        html: function() {
+            return this.template({
+                models: this.collection.toJSON(),
+                label: this.model.get('label')
+            });
+        },
+        render: function() {
+            var html, $oldel = this.$el,
+                $newel;
+
+            html = this.html();
+            $newel = $(html);
+
+            this.setElement($newel);
+            $oldel.replaceWith($newel);
+
+            return this;
+        }
+    });
+
+    ReadmeApp.FormView = Backbone.View.extend({
+        template: _.template(
+            '<div class="form-group"><input type="text" name="what" value="<%= what %>" class="form-control" placeholder="Search <%= label %>"/></div>' +
+            '<div class="form-group pull-right">' +
+            '<label class="radio-inline"><input type="radio" name="where" value="all" <% if (_.isEqual(where,"all")) { %> checked <% } %> > All</label>' +
+            '<label class="radio-inline"><input type="radio" name="where" value="documented" <% if (_.isEqual(where,"documented")) { %> checked <% } %> > Documented</label>' +
+            '</div>'
+        ),
+        events: {
+            'input input[name="what"]': function(e) {
+                this.model.set('what', e.currentTarget.value);
+                if (e.keyCode === 13) e.preventDefault();
+            },
+            'click input[name="where"]': function(e) {
+                this.model.set('where', e.currentTarget.value);
+            }
+        },
+        render: function() {
+            this.$el.html(this.template(this.model.attributes));
+            this.delegateEvents(this.events);
+            return this;
+        }
+    });
+
+    ReadmeApp.SearchableListView = Backbone.View.extend({
+        template: _.template('<form class="form-inline modal-header" autocomplete="off"></form><div class="modal-body"><div class="list-of-applets"></div></div>'),
+        initialize: function(opts) {
+            this.model = opts.model;
+            this.model.set('where', 'all');
+            this.formView = new ReadmeApp.FormView({ model: this.model });
+            this.collectionView = new ReadmeApp.SearchItemsCollectionView({
+                template: _.template('<div class="container-fluid"><ul class="list-inline row"><% _(models).each(function(model) { %> <li class="col-xs-12 col-sm-6 col-md-4 col-lg-3">' +
+                    '<% if(!!model.documentation) { %> <a title="Click to view documentation" href="<%= model.url %>"><strong class="text-primary"><%= model.name %></strong></a> <% } else { %> <span class="text-muted" title="Not Documented"><%= model.name %></span> <% } %>' +
+                    '</li> <% }); %>'+
+                    '<% if (_(models).isEmpty()) { %> <li class="text-muted">No <%= label %> found.</li> <% } %>'+
+                    '</ul></div>'),
+                collection: this.model.filtered,
+                model: this.model
+            });
+        },
+        clearSearch: function(){
+            this.model.set('what', '');
+            this.$('input[name="what"]').val('');
+        },
+        render: function() {
+            this.$el.html(this.template());
+            this.formView.$el = this.$el.find('form');
+            this.collectionView.$el = this.$el.find('.list-of-applets');
+            this.formView.render();
+            this.collectionView.render();
+            this.delegateEvents(this.events);
+            return this;
+        },
+        events: {
+            'click :not("strong"):not("a")': function(e){
+                if(e.target.tagName === "STRONG") return;
+                e.stopPropagation();
+            }
         }
     });
 
     ReadmeApp.HeaderView = Backbone.View.extend({
         el: $('#header'),
         initialize: function() {
+            this.searchableLists = {};
             this.model = new ReadmeApp.HeaderModel();
             ReadmeApp.markdownModel.on('change:page', this.updateHeader, this);
             this.model.on('change:currentConfig', this.render, this);
         },
         render: function() {
+            _.each(this.searchableLists, function(view, key) {
+                delete this.searchableLists[key];
+            }, this);
             var className = ReadmeApp.markdownModel.get('page').match(/^[^\/]*/)[0];
-            $('body').removeClass('adk rdk sdk').addClass(className);
+            $('body').removeClass('adk ui rdk sdk').addClass(className);
             var htmlString = "";
             htmlString += (this.model.get('currentConfig').showHomeButton) ? '<a alt="back to SDK Documentation" href="./" class="home-button"><i class="fa fa-home"></i></a>' : '';
             htmlString += '<div class="navbar-header">' +
@@ -627,26 +835,46 @@ $(function() {
             htmlString += '</ul><ul class="nav navbar-nav navbar-right">';
             _.each(this.model.get('currentConfig').right_nav_items, function(navItem) {
                 if (_.isArray(navItem.subItems) && navItem.subItems.length > 0) {
-                    htmlString += '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' + navItem.name + '<span class="caret"></span></a>';
-                    htmlString += '<ul class="dropdown-menu">';
-                    if (_.isString(navItem.url)) {
-                        htmlString += '<li><a href="' + navItem.url + '"' + (navItem.newTab ? ' target="_blank"' : '') + '>' + navItem.name + '</a></li>';
-                        htmlString += '<li role="separator" class="divider"></li>';
+                    if (!_.isUndefined(navItem.type) && _.isEqual(navItem.type, 'searchable-list') && !_.isUndefined(navItem.id)) {
+                        htmlString += '<li class="dropdown dropdown--full-width"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' + navItem.name + '<span class="caret"></span></a>';
+                        htmlString += '<div class="dropdown-menu">';
+                        this.searchableLists[navItem.id] = new ReadmeApp.SearchableListView({ model: new ReadmeApp.FilterModel({ collection: new Backbone.Collection(navItem.subItems), label: navItem.name }) });
+                        htmlString += '<div class="searchable-list-container-' + navItem.id + '"></div>';
+                        if (_.isString(navItem.url)) {
+                            htmlString += '<div class="modal-footer"><a class="btn btn-default pull-right" href="' + navItem.url + '"' + (navItem.newTab ? ' target="_blank"' : '') + '>Read about: ' + navItem.name + '</a></div>';
+                        }
+                        htmlString += '</div></li>';
+                    } else {
+                        htmlString += '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' + navItem.name + '<span class="caret"></span></a>';
+                        htmlString += '<ul class="dropdown-menu">';
+                        if (_.isString(navItem.url)) {
+                            htmlString += '<li><a href="' + navItem.url + '"' + (navItem.newTab ? ' target="_blank"' : '') + '>' + navItem.name + '</a></li>';
+                            htmlString += '<li role="separator" class="divider"></li>';
+                        }
+                        _.each(navItem.subItems, function(subItem) {
+                            htmlString += '<li class="sub-item"><a href="' + subItem.url + '"' + (subItem.newTab ? ' target="_blank"' : '') + '>' + subItem.name + '</a></li>';
+                        });
+                        htmlString += '</ul></li>';
                     }
-                    _.each(navItem.subItems, function(subItem) {
-                        htmlString += '<li class="sub-item"><a href="' + subItem.url + '"' + (subItem.newTab ? ' target="_blank"' : '') + '>' + subItem.name + '</a></li>';
-                    });
-                    htmlString += '</ul></li>';
                 } else {
                     htmlString += '<li><a href="' + navItem.url + '"' + (navItem.newTab ? ' target="_blank"' : '') + '>' + navItem.name + '</a></li>';
                 }
-            });
+            }, this);
             htmlString += '</ul></div></div>';
             this.$el.html(htmlString);
+            _.each(this.searchableLists, function(view, key) {
+                view.$el = this.$el.find('.searchable-list-container-' + key);
+                view.render();
+            }, this);
             this.renderFooterView();
         },
         updateHeader: function() {
             this.model.updateNavigationConfig();
+            _.each(this.searchableLists, function(view, key) {
+                if(_.isFunction(view.clearSearch)) {
+                    view.clearSearch.call(view);
+                }
+            }, this);
         },
         renderFooterView: function() {
             var htmlString = "";
@@ -727,7 +955,7 @@ $(function() {
             return deferred.promise;
         }
         $.ajax({
-                url: '/app.json',
+                url: '../app.json',
                 dataType: 'json',
                 mimeType: 'application/json; charset=utf-8'
             })
@@ -763,6 +991,16 @@ $(function() {
                     .fail(function() {
                         return deferred.reject();
                     });
+            }
+        }, {
+            find: /^ui\/(.*)/,
+            rewriter: function rewriter(page, deferred) {
+                var self = this;
+                var newPath = '/app/' + page.replace(self.find, '$1');
+                if (newPath.endsWith('/')) {
+                    newPath += 'README';
+                }
+                return deferred.resolve(newPath);
             }
         }]
     });

@@ -69,6 +69,7 @@ define(['backbone', ], function(Backbone) {
         var crsDomain = model.has('crsDomain') ? model.get('crsDomain') : '';
 
         if (crsDomain) {
+            if (products instanceof Backbone.Collection) products = products.toJSON();
             if ((products && products.length > 0) && crsDomain === CRS.domain.MEDICATION) {
                 var allIngredients = '';
                 var ingredientRXNCode = '';
@@ -81,17 +82,20 @@ define(['backbone', ], function(Backbone) {
                     }
                 });
                 dataCode = allIngredients.trim();
-            } else if (codes && codes.length > 0) {
-                _.forEach(codes, function(code) {
-                    if (crsDomain === CRS.domain.LABORATORY && CRS.system.LOINCSYSTEM === code.system) {
-                        dataCode += code.code + ' ';
-                    } else if (crsDomain === CRS.domain.VITAL && CRS.system.LOINCSYSTEM === code.system) {
-                        dataCode = code.code;
-                    } else if (crsDomain === CRS.domain.PROBLEM && CRS.system.SNOMEDSYSTEM === code.system) {
-                        dataCode = code.code;
-                    }
-                });
-                dataCode = dataCode.trim();
+            } else {
+                if (codes instanceof Backbone.Collection) codes = codes.toJSON();
+                if (codes && codes.length > 0) {
+                    _.forEach(codes, function(code) {
+                        if (crsDomain === CRS.domain.LABORATORY && CRS.system.LOINCSYSTEM === code.system) {
+                            dataCode += code.code + ' ';
+                        } else if (crsDomain === CRS.domain.VITAL && CRS.system.LOINCSYSTEM === code.system) {
+                            dataCode = code.code;
+                        } else if (crsDomain === CRS.domain.PROBLEM && CRS.system.SNOMEDSYSTEM === code.system) {
+                            dataCode = code.code;
+                        }
+                    });
+                    dataCode = dataCode.trim();
+                }
             }
 
             attr[CRS.crsAttributes.DATACODE] = dataCode;
@@ -121,7 +125,7 @@ define(['backbone', ], function(Backbone) {
             crsStyle.remove();
         }
 
-        view.$el.closest('body').find('.grid-applet-heading ' + CRS_ICON_HEADER_CLASS_NAME).addClass('hide');
+        view.$el.closest('body').find('.applet-chrome-header ' + CRS_ICON_HEADER_CLASS_NAME).addClass('hide');
     };
 
     CRS.getCssTagName = function() {

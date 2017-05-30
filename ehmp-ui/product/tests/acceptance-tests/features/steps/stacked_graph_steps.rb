@@ -12,7 +12,7 @@ class StackedGraph < AllApplets
     first_clickable_row = "//*[@data-appletid='stackedGraph']/descendant::div[contains(@class, 'gist-item')][1]/descendant::div[contains(@class, 'selectable')][1]"
     add_action(CucumberLabel.new("First Row"), ClickAction.new, AccessHtmlElement.new(:xpath, first_clickable_row))
     # add_action(CucumberLabel.new("Quick View Icon"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=stackedGraph] div.toolbarActive [button-type=quick-look-button-toolbar]"))
-    add_verify(CucumberLabel.new('Quick View Popover'), VerifyText.new, AccessHtmlElement.new(:css, 'div.gist-popover'))
+    add_verify(CucumberLabel.new('Quick View Popover'), VerifyText.new, AccessHtmlElement.new(:css, 'div.popover--gist-popover'))
     add_action(CucumberLabel.new("Done"), ClickAction.new, AccessHtmlElement.new(:id, 'exitEditing'))
   end
 

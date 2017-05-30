@@ -3,7 +3,7 @@
   "defaultName": "VX Sync",
   
   "logging": {
-    "level": "INFO",
+    "level": "<%= @soap_handler['log_level']%>",
       "appenders": [
       {
         "type": "file",
@@ -54,7 +54,7 @@
   "hdr" :
   {
     "uri" : "<%= @hdr_sites[0]['ipaddress'] %>:<%= @hdr_sites[0]['hdr']['req_res']['port'] %>",
-    "path": "/repositories.med.va.gov/fpds/",
+    "path": "/repositories.URL       /fpds/",
     "protocol": "<%= @hdr_sites[0]['hdr']['req_res']['protocol'] %>"
   },
   "pgd" : {
@@ -83,7 +83,7 @@
     "retry" : 3,
     "path" : "<%= @jmeadows['jmeadows']['application']['path'] %>",
     "query": "<%= @jmeadows['jmeadows']['application']['path_query'] %>",
-    "timeoutms" : 45000,
+    "timeoutms" : <%= @jmeadows['jmeadows']['application']['timeout'] %>,
     "userien" : "<%= @jmeadows['jmeadows']['application']['user']['ien'] %>",
     "username" : "<%= @jmeadows['jmeadows']['application']['user']['name'] %>",
     "usersitecode" : <%= @jmeadows['jmeadows']['application']['user']['site_code'] %>,
@@ -97,7 +97,7 @@
     "retry" : 3,
     "path" : "<%= @jmeadows['jmeadows']['application']['path'] %>",
     "query": "<%= @jmeadows['jmeadows']['application']['path_query'] %>",
-    "timeoutms" : 45000,
+    "timeoutms" : <%= @jmeadows['jmeadows']['application']['timeout'] %>,
     "userien" : "<%= @jmeadows['jmeadows']['application']['user']['ien'] %>",
     "username" : "<%= @jmeadows['jmeadows']['application']['user']['name'] %>",
     "usersitecode" : <%= @jmeadows['jmeadows']['application']['user']['site_code'] %>,
@@ -111,7 +111,7 @@
     "retry" : 3,
     "path" : "<%= @jmeadows['jmeadows']['application']['path'] %>",
     "query": "<%= @jmeadows['jmeadows']['application']['path_query'] %>",
-    "timeoutms" : 45000,
+    "timeoutms" : <%= @jmeadows['jmeadows']['application']['timeout'] %>,
     "userien" : "<%= @jmeadows['jmeadows']['application']['user']['ien'] %>",
     "username" : "<%= @jmeadows['jmeadows']['application']['user']['name'] %>",
     "usersitecode" : <%= @jmeadows['jmeadows']['application']['user']['site_code'] %>,

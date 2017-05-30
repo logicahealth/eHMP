@@ -1,18 +1,11 @@
-.toolbar-active:not(tr):not(li) {
-    box-shadow: 3px 3px 4px $grey-dark;
-    margin-bottom: 6px;
-}
-.toolbar-container.toolbar-open {
-    position: relative;
-}
-div.applet-toolbar {
+.applet-toolbar {
     display: none;
     position: relative;
     .btn-toolbar {
         box-shadow: 5px 0px 10px -1px $grey-darker;
-        z-index: 2;
         position: absolute;
         top: -25px;
+        z-index: 2;
         > .btn-group {
             background-color: $pure-white;
             display: inline-flex;
@@ -20,10 +13,10 @@ div.applet-toolbar {
                 border: 1px solid $pure-white;
                 border-right-width: 0;
                 border-radius: 0;
-                width: 25px;
                 height: 25px;
-                padding: 3px;
                 margin: auto;
+                padding: 3px;
+                width: 25px;
                 &:last-child {
                     border-right-width: 1px;
                 }

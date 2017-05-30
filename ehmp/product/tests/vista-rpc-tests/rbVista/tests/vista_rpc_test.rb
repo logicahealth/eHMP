@@ -11,10 +11,10 @@ class VistaRpcTest < Test::Unit::TestCase
   end
 
   def test_connection_rpc
-    expected = "[XWB]10304\x0ATCPConnect50013192.168.1.107f00010f0022LAPTOP2.v11.med.va.govf\x04"
+    expected = "[XWB]10304\x0ATCPConnect50013192.168.1.107f00010f0022LAPTOP2.v11.URL       f\x04"
     params = [
-        RpcParameter.new(RpcParameter::LITERAL, '192.168.1.107'),
-        RpcParameter.new(RpcParameter::LITERAL, 'LAPTOP2.v11.med.va.gov')
+        RpcParameter.new(RpcParameter::LITERAL, 'IP'),
+        RpcParameter.new(RpcParameter::LITERAL, 'LAPTOP2.v11.URL       ')
     ]
     actual = VistaRpc.prepare('HELLO', params)
     assert_equal expected, actual

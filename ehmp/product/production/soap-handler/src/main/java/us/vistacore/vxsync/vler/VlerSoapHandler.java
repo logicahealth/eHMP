@@ -68,7 +68,6 @@ public class VlerSoapHandler {
                     respondingGatewayCrossGatewayQuery(requestDocument);
 
             VlerDocQueryResponse vlerDocQueryResponse = toVlerDocResponse(adhocQueryResponse);
-
             LOG.debug("VlerSoapHandler.getDocumentList: results size "+vlerDocQueryResponse.getDocumentList().size());
 
             if (vlerDocQueryResponse.isError()) {
@@ -120,6 +119,7 @@ public class VlerSoapHandler {
 
             if (response == null ||
                 response.getDocumentResponse() == null ||
+                response.getDocumentResponse().size() == 0 ||
                 response.getDocumentResponse().get(0) == null ||
                 response.getDocumentResponse().get(0).getDocument() == null)
             {

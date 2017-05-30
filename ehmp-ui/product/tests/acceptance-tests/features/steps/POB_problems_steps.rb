@@ -75,28 +75,28 @@ Then(/^the Problems trend view applet is sorted in reverse alphabetic order base
   expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{column_values_array}"
 end
 
-Then(/^the user sorts the Problems trend view applet by column Acuity$/) do 
+Then(/^the user sorts the Problems trend view applet by column Onset date$/) do 
   @ehmp = PobProblemsApplet.new
   @ehmp.wait_until_col_acuity_visible
   expect(@ehmp).to have_col_acuity
   @ehmp.col_acuity.click
 end
 
-Then(/^the Problems trend view applet is sorted in alphabetic order based on Acuity$/) do
+Then(/^the Problems trend view applet is sorted in alphabetic order based on Onset date$/) do
   @ehmp = PobProblemsApplet.new
-  @ehmp.wait_for_fld_gist_acuity
+  @ehmp.wait_for_fld_gist_onset
     
-  column_values = @ehmp.fld_gist_acuity
+  column_values = @ehmp.fld_gist_onset
   expect(column_values.length).to be >= 2
   is_ascending = ascending? column_values
   expect(is_ascending).to be(true), "Values are not in Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_ascending == false}"
 end
 
-Then(/^the Problems trend view applet is sorted in reverse alphabetic order based on Acuity$/) do
+Then(/^the Problems trend view applet is sorted in reverse alphabetic order based on Onset date$/) do
   @ehmp = PobProblemsApplet.new
-  @ehmp.wait_for_fld_gist_acuity
+  @ehmp.wait_for_fld_gist_onset
 
-  column_values = @ehmp.fld_gist_acuity
+  column_values = @ehmp.fld_gist_onset
   expect(column_values.length).to be >= 2
   is_descending = descending? column_values
   expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_descending == false}"
@@ -107,26 +107,6 @@ Then(/^the user sorts the Problems trend view applet by column Facility$/) do
   @ehmp.wait_until_col_facility_visible
   expect(@ehmp).to have_col_facility
   @ehmp.col_facility.click
-end
-
-Then(/^the Problems trend view applet is sorted in alphabetic order based on Facility$/) do
-  @ehmp = PobProblemsApplet.new
-  @ehmp.wait_for_fld_gist_facility
-    
-  column_values = @ehmp.fld_gist_facility
-  expect(column_values.length).to be >= 2
-  is_ascending = ascending? column_values
-  expect(is_ascending).to be(true), "Values are not in Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_ascending == false}"
-end
-
-Then(/^the Problems trend view applet is sorted in reverse alphabetic order based on Facility$/) do
-  @ehmp = PobProblemsApplet.new
-  @ehmp.wait_for_fld_gist_facility
-
-  column_values = @ehmp.fld_gist_facility
-  expect(column_values.length).to be >= 2
-  is_descending = descending? column_values
-  expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_descending == false}"
 end
 
 Then(/^user verifies Problems trend view applet is present$/) do
@@ -252,7 +232,7 @@ def view_problems_detail_modal
   @ehmp.btn_detail_view.click
 end
 
-Then(/^hovering over the right side of problem trend view and selecting the facility field$/) do
+Then(/^hovering over the right side of problem trend view and selecting the onset date field$/) do
   @ehmp = PobProblemsApplet.new
   @ehmp.wait_until_fld_quick_view_no_toolbar_visible
   expect(@ehmp).to have_fld_quick_view_no_toolbar
@@ -300,5 +280,62 @@ Then(/^Problems trend view facility column displays valid facility$/) do
     expect(known_monikers).to include temp_facility.upcase
   end
 end
+
+When(/^the user sorts the Problems applet by column Problem$/) do
+  @ehmp = PobProblemsApplet.new
+  @ehmp.wait_for_col_problem_name
+  expect(@ehmp).to have_col_problem_name
+  @ehmp.col_problem_name.click
+end
+
+Then(/^the Problems applet is sorted in alphabetic order based on Problem$/) do
+  @ehmp = PobProblemsApplet.new
+  @ehmp.wait_for_tbl_summary_problem_names
+  column_values = @ehmp.summary_problem_name
+  expect(column_values.size).to be >= 2, "Need atleast 2 problems to verify sorting found only #{column_values.size}"
+  is_ascending = ascending_array? column_values
+  expect(is_ascending).to be(true), "Values are not in Alphabetical Order"
+end
+
+Then(/^the Problems applet is sorted in reverse alphabetic order based on Problem$/) do
+  @ehmp = PobProblemsApplet.new
+  @ehmp.wait_for_tbl_summary_problem_names
+  column_values = @ehmp.summary_problem_name
+  expect(column_values.size).to be >= 2, "Need atleast 2 problems to verify sorting found only #{column_values.size}"
+  is_descending = descending_array? column_values
+  expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order"
+end
+
+Then(/^the user expands the Problems Applet$/) do
+  @ehmp = PobProblemsApplet.new
+  @ehmp.wait_for_btn_applet_expand_view
+  expect(@ehmp).to have_btn_applet_expand_view
+  @ehmp.btn_applet_expand_view.click 
+  @ehmp.menu.wait_until_fld_screen_name_visible
+  expect(@ehmp.menu.fld_screen_name.text.upcase).to have_text("PROBLEMS".upcase)
+  @ehmp.wait_for_btn_applet_minimize
+  expect(@ehmp).to have_btn_applet_minimize  
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { applet_grid_loaded(@ehmp.has_fld_empty_row?, @ehmp.tbl_problems) }
+end
+
+Then(/^problem applet table displays headers$/) do |table|
+  @ehmp = PobProblemsApplet.new
+  @ehmp.wait_until_fld_problems_headers_visible
+  table.rows.each do |headers|
+    expect(object_exists_in_list(@ehmp.fld_problems_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found on Problems Applet display"
+  end
+end
+
+When(/^the user views a problem applet row's details$/) do
+  @ehmp = PobProblemsApplet.new
+  @ehmp.wait_for_tbl_problems
+  expect(@ehmp.tbl_problems.length).to be > 0
+  @ehmp.tbl_problems[0].click
+  view_problems_detail_modal
+  ModalElements.new.wait_for_modal_body
+  ModalElements.new.wait_until_fld_modal_detail_labels_visible
+end
+
 
 

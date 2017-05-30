@@ -2,8 +2,12 @@ define([
     "backbone",
     "underscore",
     'moment'
-], function(Backbone, _, moment) {
+], function (Backbone, _, moment) {
     'use strict';
+
+    // This file is used in several places outside of lab_result_grid
+    // It could use more refactoring but because of its outside uses several other applets would need to be updated
+    // Therefore it was only minimum-ly changed during f1175 us17626
 
     var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var re = /(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/;
@@ -16,29 +20,37 @@ define([
     }
 
     var appletHelpers = {
-        getDateForChart: function(date) {
-            // The following works, but I don't know how to get the unit test to be able to use the ADK.
-            // return new ADK.utils.dateUtils.StringFormatter(data, 'YYYYMMDDHHmm').format('MMM DD YYYY HH:mm');
+
+        /**
+         * Converts the date format for chart.
+         *
+         * @warning This function has no input validation and expects the date variable to be formatted correctly.
+         * @param {string} date Format starts with YYYYMMDDHHmm
+         * @returns {string} MMM DD YYYY HH:mm
+         */
+        getDateForChart: function (date) {
             var data = date + '';
             data = data.slice(0, 12);
             data = data.replace(re, convertDate);
             return data;
         },
-        updateChart: function(chart, collection) {
 
+        /**
+         * Adds information from the collection into high charts chart data.
+         * @warning This function is fragile and bad params will cause issues
+         * @param {*} chart Highcharts chart data
+         * @param {Backbone.Collection} collection
+         */
+        updateChart: function (chart, collection) {
             var categories = collection.pluck('observed');
 
-            categories = _.map(categories, function(num) {
+            categories = _.map(categories, function (num) {
                 return appletHelpers.getDateForChart(num);
             });
             var data = collection.pluck('resultNumber');
             chart.xAxis[0].setCategories(categories);
             chart.series[0].setData(data);
-
-
-        },// DO NOT MAKE CHANGES TO THE  CHARTOPTIONS OBJ BELOW,
-        // IT IS BEING USED IN A COUPLE OF PLACES. USE JQUERY DEEP EXTEND TO EXTEND THE OBJECT WHERE YOU NEED IT.
-
+        },
         chartOptions: {
             chart: {
                 type: 'line',
@@ -46,29 +58,11 @@ define([
                 zoomType: "x",
                 panning: true,
                 panKey: 'shift',
-                // marginRight: 20,
                 events: {
-                    selection: function(e) {
-                        // var originalY = this.xAxis[0].options.labels.y;
-                        // if(event.xAxis){
-                        //     var selection = event.xAxis[0].axis;
-                        //     console.log(this.xAxis[0].options.labels.rotation = 45);
-                        //     this.xAxis[0].options.labels.y = 30;
-                        //     this.redraw();
-
-                        // } else {
-                        //     this.xAxis[0].options.labels.rotation = 0;
-                        //     this.xAxis[0].options.labels.y = originalY;
-                        // }
-
-                        // this.xAxis[0].update({labels:{rotation:90}});
-                    }
+                    selection: _.noop
                 }
             },
-            tooltip: {
-                // crosshairs: true,
-                // shared: true
-            },
+            tooltip: {},
             title: {
                 text: null
             },
@@ -77,14 +71,11 @@ define([
                     dataLabels: {}
                 }
             },
-            /*subtitle: {
-            text: 'Source: WorldClimate.com'
-        },*/
             xAxis: {
                 type: 'datetime',
                 labels: {
                     rotation: -45,
-                    formatter: function() {
+                    formatter: function () {
                         return moment(this.value).format('MMM DD YYYY');
                     }
                 },
@@ -101,13 +92,12 @@ define([
             },
             credits: false,
             series: [{
-                    data: [],
-                    name: 'Lab Result',
-                    showInLegend: false
-                }]
-                //end of chartOptions
+                data: [],
+                name: 'Lab Result',
+                showInLegend: false
+            }]
         },
-        setTimeSince: function(fromDate) {
+        setTimeSince: function (fromDate) {
 
             if (fromDate === undefined || fromDate === "") return undefined;
             var startDate = moment(fromDate, 'YYYYMMDDHHmmssSSS');
@@ -124,8 +114,6 @@ define([
             if (min > 0 && min < 60) {
                 hours = 1;
             }
-            //console.log(hours1);
-
             var lYear = "y";
             var lMonth = "m";
             var lDay = "d";
@@ -143,47 +131,55 @@ define([
 
             return finalResult;
         },
-        getNumericTime: function(response) {
-            if (response === undefined) return response;
-            var str = response;
-            var reg = /(\d+)/ig;
-            var strReg = str.match(reg);
-            str = str.substr(str.length - 1);
-            switch (str) {
-                case 'y':
-                    if (strReg == 1) {
-                        str = 'year';
-                    } else str = 'years';
-                    break;
 
-                case 'm':
-                    if (strReg == 1) {
-                        str = 'month';
-                    } else str = 'months';
-                    break;
-
-                case 'M':
-                    if (strReg == 1) {
-                        str = 'month';
-                    } else str = 'months';
-                    break;
-
-                case 'd':
-                    if (strReg == 1) {
-                        str = 'month';
-                    } else str = 'months';
-                    break;
-
-                case 'h':
-                    if (strReg == 1) {
-                        str = 'day';
-                    } else str = 'days';
-                    break;
-            }
-            response = strReg + ' ' + str;
-            return response;
+        _timeMap: {
+            y: 'year',
+            m: 'month',
+            d: 'day',
+            h: 'hour',
+            M: 'month'
         },
-        parseLabResponse: function(response) {
+
+        /**
+         * <em>Note: Though I said I would not refactor these function because other applets use them,
+         * the original code here was dead wrong. So I fixed it </em>
+         *
+         * Converts a short date time frame string to a long date time frame string
+         * @example: 1d -> 1 day
+         * @example: 5y -> 5 years
+         * @example: invalid string -> invalid string
+         * @param {string} timeFrame
+         * @returns {string|undefined}
+         */
+        getNumericTime: function (timeFrame) {
+            // I do not know why the original function mapped m and M to month, but that is being preserved.
+
+            if (_.isEmpty(timeFrame)) {
+                return;
+            }
+            var key = timeFrame[timeFrame.length - 1];
+            var unit = _.get(this._timeMap, key);
+            var regExp = /(\d+)/ig;
+            var value = timeFrame.match(regExp);
+
+            if (!unit || !value) {
+                return timeFrame;
+            }
+
+            value = value[0];
+            if (value !== '1') {
+                unit += 's';
+            }
+            return value + ' ' + unit;
+        },
+
+        /**
+         * This prepares the Model for rendering.  In the case of Labs this functionality is handled in the
+         * Resources Pool. However, other applets still use this for thier parse.
+         * @param {*} response A response item from the RDK
+         * @returns {*}
+         */
+        parseLabResponse: function (response) {
 
             // Check 'codes' for LOINC codes and Standard test name.
             var low = response.low,
@@ -242,14 +238,153 @@ define([
 
             return response;
         },
-        getModalTitle: function(model) {
-            return model.get('typeName') + ' - ' + model.get('specimen');
+
+        /**
+         * Create the modal title from a lab model
+         * @param {Backbone.Model} model
+         * @returns {String}
+         */
+        getModalTitle: function (model) {
+            var typeName = model.get('typeName');
+            var specimen = model.get('specimen');
+            if (typeName && specimen) {
+                return typeName + ' - ' + specimen;
+            } else if (typeName) {
+                return typeName;
+            } else if (specimen) {
+                return (specimen);
+            }
+            return 'Missing Title Information';
         },
-        getObservedFormatted: function(observed) {
+
+        /**
+         * Converts a date string in the format YYYYMMDDHHmmssSSS to the format 'MM/DD/YYYY - HH:mm
+         * @warning: does not validate inputs beyond existence
+         * @param {String} observed
+         * @returns {String}
+         */
+        getObservedFormatted: function (observed) {
             if (observed) {
                 return moment(observed, 'YYYYMMDDHHmmssSSS').format('MM/DD/YYYY - HH:mm');
             }
             return '';
+        },
+
+        /**
+         * @param {String} categoryCode
+         * @return {Boolean}
+         * @private
+         */
+        _isInViewReport: function isInViewReport(categoryCode) {
+            var codes = ['EM', 'MI', 'SP', 'CY', 'AP'];
+            var suffix = categoryCode.split(':');
+            suffix = suffix.pop();
+
+            return _.contains(codes, suffix);
+        },
+
+        /**
+         * Sets the text and css properties for graphs.
+         * @param rawInterpretationCode
+         * @returns {{interpretationCode, flagTooltip: string, labelClass: string}}
+         * @private
+         */
+        _getFlagClassAndText: function getFlagClassAndText(rawInterpretationCode) {
+            var interpretationCode = rawInterpretationCode.split(':');
+            interpretationCode = interpretationCode.pop();
+
+            var flagTooltip = '';
+            var labelClass = 'applet-badges label-critical';
+
+            if (interpretationCode === 'HH' || interpretationCode === 'H*') {
+                interpretationCode = 'H*';
+                flagTooltip = 'Critical High';
+            } else if (interpretationCode === 'LL' || interpretationCode === 'L*') {
+                interpretationCode = 'L*';
+                flagTooltip = 'Critical Low';
+            } else if (interpretationCode === 'H') {
+                flagTooltip = 'Abnormal High';
+                labelClass = 'label-warning';
+            } else if (interpretationCode === 'L') {
+                flagTooltip = 'Abnormal Low';
+                labelClass = 'label-warning';
+            }
+
+            return {
+                interpretationCode: interpretationCode,
+                flagTooltip: flagTooltip,
+                labelClass: labelClass
+            };
+        },
+
+        /**
+         * Though this looks a lot like parseLabResponse it was originally written assuming that parseLabResponse
+         * has already been ran on the model and works based off that information
+         * @param {Backbone.Model} model
+         */
+        preparePanelForRender: function preparePanel(model) {
+            var data = model.toJSON();
+            var tempCode = '';
+            var tempTooltip = '';
+            var label = '';
+
+            var labs = model.get('labs');
+            if (!labs) {
+                return data;
+            }
+            labs.each(_.bind(function (lab) {
+                var interpretationCode =  '';
+                if(lab.has('interpretationCode')) {
+                    interpretationCode = this._getFlagClassAndText(lab.get('interpretationCode')).interpretationCode;
+                }
+                if (interpretationCode === 'H*') {
+                    tempCode = 'H*';
+                    tempTooltip = 'Critical High';
+                    label = 'applet-badges label-critical';
+                } else if (interpretationCode === 'L*' && (tempCode === 'H' || tempCode === 'L' || tempCode === '')) {
+                    tempCode = 'L*';
+                    tempTooltip = 'Critical Low';
+                    label = 'applet-badges label-critical';
+                } else if (interpretationCode === 'H' && (tempCode === 'L' || tempCode === '')) {
+                    tempCode = 'H';
+                    tempTooltip = 'Abnormal High';
+                    label = 'label-warning';
+                } else if (interpretationCode === 'L' && tempCode === '') {
+                    tempCode = 'L';
+                    tempTooltip = 'Abnormal Low';
+                    label = 'label-warning';
+                }
+            }, this));
+
+            _.set(data, 'interpretationCode', tempCode);
+            _.set(data, 'flagTooltip', tempTooltip);
+            _.set(data, 'labelClass', label);
+
+            return data;
+        },
+
+        /**
+         * @param {Backbone.Model} model
+         */
+        prepareNonPanelForRender: function perpareNonPanel(model) {
+            var data = model.toJSON();
+            if (data.interpretationCode) {
+                var textAndCss = this._getFlagClassAndText(model.get('interpretationCode'));
+
+                _.set(data, 'interpretationCode', textAndCss.interpretationCode);
+                _.set(data, 'flagTooltip', textAndCss.flagTooltip);
+                _.set(data, 'labelClass', textAndCss.labelClass);
+            }
+
+            if (this._isInViewReport(data.categoryCode)) {
+                _.set(data, 'result', 'View Report');
+                if (!model.get('typeName')) {
+                    _.set(data, 'typeName', model.get('categoryName'));
+                }
+                _.set(data, 'pathology', true);
+            }
+
+            return data;
         }
     };
 

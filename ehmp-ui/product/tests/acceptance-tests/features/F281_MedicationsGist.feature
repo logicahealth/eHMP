@@ -26,9 +26,9 @@ Scenario: User is able to view all active outpatient medication in a gist view u
 Scenario: User is able to view all active outpatient medication in a gist view under overview
 
 	Then Overview is active
-	Then the "Active & Recent MEDICATIONS" gist is displayed
-  And the medication gist view displays at least 1 result
-  When user views the details for a medication in Medications Gist
+    And active meds gist is loaded successfully
+    And user opens the first active medication gist item
+    And user views first active medication details
 	Then the modal is displayed
 	
 

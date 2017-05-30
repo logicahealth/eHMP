@@ -357,7 +357,7 @@ Object.defineProperty(procedure, 'PROCEDURE_UID_IDENTIFIER_SYSTEM', {
 });
 Object.defineProperty(procedure, 'EDUCATION_TYPECODE_SYSTEM', {
     get: function() {
-        return 'http://ehmp.va.gov/terminology/1.0';
+        return 'http://ehmp.DNS   /terminology/1.0';
     }
 });
 Object.defineProperty(procedure, 'NONEDUCATION_TYPECODE_SYSTEM', {

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.EntityManager;
 
+import org.jboss.logging.Logger;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.process.WorkItem;
 import org.kie.api.runtime.process.WorkItemHandler;
@@ -16,13 +17,12 @@ import org.springframework.http.HttpStatus;
 import gov.va.activitydb.entities.SignalInstance;
 import gov.va.ehmp.services.exception.EhmpServicesException;
 import gov.va.ehmp.services.exception.ErrorResponseUtil;
-import gov.va.ehmp.services.utils.Logging;
 import gov.va.kie.utils.EntityManagerUtil;
 import gov.va.kie.utils.WorkItemUtil;
 
 public class SignalWriteHandler implements WorkItemHandler, Closeable, Cacheable {
 	private KieSession ksession;
-	
+	private static final Logger LOGGER = Logger.getLogger(SignalWriteHandler.class);
 	public SignalWriteHandler(KieSession ksession){
 		this.ksession = ksession;		
 	}
@@ -32,7 +32,7 @@ public class SignalWriteHandler implements WorkItemHandler, Closeable, Cacheable
 	}
 	
 	public void abortWorkItem(WorkItem workItem, WorkItemManager manager) {
-		Logging.debug("SignalWriteHandler.abortWorkItem has been called");
+		LOGGER.debug("SignalWriteHandler.abortWorkItem has been called");
 	}
 	
 	/**
@@ -43,7 +43,7 @@ public class SignalWriteHandler implements WorkItemHandler, Closeable, Cacheable
 		String response = null;
 		
 		try {
-			Logging.info("Entering SignalWriteHandler.executeWorkItem");
+			LOGGER.info("Entering SignalWriteHandler.executeWorkItem");
 			String name = WorkItemUtil.extractRequiredStringParam(workItem, "name");
 			String action = WorkItemUtil.extractRequiredStringParam(workItem, "action");
 			String owner = WorkItemUtil.extractRequiredStringParam(workItem, "owner");
@@ -51,26 +51,26 @@ public class SignalWriteHandler implements WorkItemHandler, Closeable, Cacheable
 			String history = WorkItemUtil.extractRequiredStringParam(workItem, "history");
 			long processedSignalId = workItem.getProcessInstanceId();
 			
-			Logging.debug("SignalWriteHandler.executeWorkItem name = " + name);
-			Logging.debug("SignalWriteHandler.executeWorkItem action = " + action);
-			Logging.debug("SignalWriteHandler.executeWorkItem owner = " + owner);
-			Logging.debug("SignalWriteHandler.executeWorkItem statusTimeStamp = " + statusTimeStamp);
-			Logging.debug("SignalWriteHandler.executeWorkItem history = " + history);
-			Logging.debug("SignalWriteHandler.executeWorkItem processedSignalId = " + processedSignalId);
+			LOGGER.debug("SignalWriteHandler.executeWorkItem name = " + name);
+			LOGGER.debug("SignalWriteHandler.executeWorkItem action = " + action);
+			LOGGER.debug("SignalWriteHandler.executeWorkItem owner = " + owner);
+			LOGGER.debug("SignalWriteHandler.executeWorkItem statusTimeStamp = " + statusTimeStamp);
+			LOGGER.debug("SignalWriteHandler.executeWorkItem history = " + history);
+			LOGGER.debug("SignalWriteHandler.executeWorkItem processedSignalId = " + processedSignalId);
 			
 			SignalInstance si = new SignalInstance(null, name, action, owner, statusTimeStamp, history, processedSignalId);
 			EntityManager em = EntityManagerUtil.getEntityManager(ksession);
 			em.persist(si);
 			
-			Logging.debug("SignalWriteHandler.executeWorkItem persisted data");
+			LOGGER.debug("SignalWriteHandler.executeWorkItem persisted data");
 			response = WorkItemUtil.buildSuccessResponse("ID: " + si.getId());
-			Logging.debug("SignalWriteHandler.executeWorkItem si.getId() = " + si.getId());
+			LOGGER.debug("SignalWriteHandler.executeWorkItem si.getId() = " + si.getId());
 			
-			Logging.debug("SignalWriteHandler.executeWorkItem response = " + response);
+			LOGGER.debug("SignalWriteHandler.executeWorkItem response = " + response);
 		} catch (EhmpServicesException e) {
 			response = e.toJsonString();
 		} catch (Exception e) {
-			Logging.error("SignalWriteHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("SignalWriteHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage(), e);
 			response = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "SignalWriteHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 		

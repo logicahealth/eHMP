@@ -285,9 +285,8 @@ public class VlerConnectUtil {
                 && aqr.getStatus() != null
                 && aqr.getStatus().indexOf("Success") > 0)
         {
-            vlerDocQueryResponse.setError(true);
-            vlerDocQueryResponse.setErrorMsg("VLER Document Query Error" + " :: " + "The server returned an empty response; most likely no patient correlation.");
-            logger.error("VlerUtil.toVlerDocResponse: " + vlerDocQueryResponse.getErrorMsg());
+            //we want to log this occurrence, but is not an error condition
+            logger.info("VLER Document Query Error" + " :: " + "The server returned an empty response; most likely no patient correlation.");
         }
         else if(aqr.getTotalResultCount() == null)
         {

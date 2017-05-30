@@ -1,8 +1,9 @@
+/* global ADK */
 define([
-    'main/ADK',
     'backbone',
     'marionette',
     'jquery',
+    'underscore',
     'handlebars',
     'moment',
     'app/applets/orders/viewUtils',
@@ -11,7 +12,7 @@ define([
     'app/applets/orders/writeback/labs/formFields',
     'app/applets/orders/writeback/labs/formUtils',
     'app/applets/orders/behaviors/draftOrder'
-], function(ADK, Backbone, Marionette, $, Handlebars, moment, ViewUtils, Utils, LabUtils, FormFields, FormUtils, DraftBehavior) {
+], function(Backbone, Marionette, $, _, Handlebars, moment, ViewUtils, Utils, LabUtils, FormFields, FormUtils, DraftBehavior) {
     "use strict";
 
     var FormModel = Backbone.Model.extend({
@@ -36,6 +37,7 @@ define([
         }
     });
 
+    //noinspection UnnecessaryLocalVariableJS
     var formView = ADK.UI.Form.extend({
         model: FormModel,
         ui: {
@@ -110,10 +112,10 @@ define([
             this.enableCancelButton(true);
             this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
         },
-        onAttach: function(){
-            if (this.ui.availableLabTests.is(':visible')){
-                this.$el.trigger('tray.loaderShow',{
-                    loadingString:'Loading'
+        onAttach: function() {
+            if (this.ui.availableLabTests.is(':visible')) {
+                this.$el.trigger('tray.loaderShow', {
+                    loadingString: 'Loading'
                 });
             }
         },
@@ -126,12 +128,13 @@ define([
                 id: 'lab-order-writeback-in-progress',
                 label: 'Lab Order',
                 failureMessage: 'Lab Order Writeback Workflow In Progress! Any unsaved changes will be lost if you continue.',
-                onContinue: _.bind(function(model) {
+                onContinue: _.bind(function() {
                     this.workflow.close();
                 }, this)
             };
             ADK.Checks.register([new ADK.Navigation.PatientContextCheck(checkOptions),
-                new ADK.Checks.predefined.VisitContextCheck(checkOptions)]);
+                new ADK.Checks.predefined.VisitContextCheck(checkOptions)
+            ]);
         },
         unregisterChecks: function() {
             ADK.Checks.unregister({
@@ -139,19 +142,19 @@ define([
             });
         },
         events: {
-            "click @ui.acceptButton": function(e) {
+            "click @ui.acceptButton": function() {
                 this.ui.acceptDrpDwnContainer.text("Accept").trigger('click');
             },
-            "click @ui.acceptAddAnotherButton": function(e) {
+            "click @ui.acceptAddAnotherButton": function() {
                 this.ui.acceptDrpDwnContainer.text("Accept & Add Another").trigger('click');
             },
-            'lab-test-add-confirm-cancel':function(e){
+            'lab-test-add-confirm-cancel':function(){
                 this.workflow.close();
             },
-            "click @ui.saveButton": function(e) {
+            "click @ui.saveButton": function() {
                 this.saveDraft();
             },
-            'lab-test-add-confirm-delete': function(e){
+            'lab-test-add-confirm-delete': function(){
                 this.deleteDraft();
             },
             "submit": function(e) {
@@ -178,14 +181,14 @@ define([
                 if (this.model.get('collectionType') === 'I') {
                     var validDateTime = new ADK.UIResources.Writeback.Orders.LabSupportData();
 
-                    this.listenTo(validDateTime, 'read:success', function(model, resp) {
+                    this.listenTo(validDateTime, 'read:success', function(model) {
                         if (!model.get('isValid')) {
                             this.model.set('errorMessage', '[Immediate Collection Times] - ' + model.get('validationMessage'));
                         }
                         this.checkServerSideValidations();
                     });
 
-                    this.listenTo(validDateTime, 'read:error', function(model, resp) {
+                    this.listenTo(validDateTime, 'read:error', function() {
                         this.model.set('errorMessage', '[Immediate Collection Times] - Error occurred validating.');
                         this.checkServerSideValidations();
                     });
@@ -195,13 +198,12 @@ define([
                             type: 'lab-valid-immediate-collect-time',
                             timestamp: dateTimeSelected,
                             site: siteCode,
-                            pid: pid,
+                            pid: pid
                         }
                     });
-                }
-                else if (this.model.get('collectionType') === 'LC') {
+                } else if (this.model.get('collectionType') === 'LC') {
                     var validDays = new ADK.UIResources.Writeback.Orders.LabSupportData();
-                    this.listenTo(validDays, 'read:success', function(model, resp) {
+                    this.listenTo(validDays, 'read:success', function(model) {
                         var maxDays = model.get('maxDays');
                         var futureLabCollectDateTime = moment(this.model.get('futureLabCollectDate'));
                         var difference = futureLabCollectDateTime.diff(moment(), 'days');
@@ -211,7 +213,7 @@ define([
                         this.checkServerSideValidations();
                     });
 
-                    this.listenTo(validDays, 'read:error', function(model, resp) {
+                    this.listenTo(validDays, 'read:error', function() {
                         this.model.set('errorMessage', '[Lab Future Collect Days] - Error occurred validating.');
                         this.checkServerSideValidations();
                     });
@@ -223,14 +225,13 @@ define([
                         params: {
                             type: 'lab-future-lab-collects',
                             site: siteCode,
-                            location: location,
+                            location: location
                         }
                     });
-                }
-                else {
+                } else {
                     this.checkServerSideValidations();
                 }
-            }else{
+            } else {
                 this.transferFocusToFirstError();
             }
         },
@@ -291,7 +292,6 @@ define([
                     form.model.set('errorMessage', errorMessage);
                 }
                 model.set('componentList', componentList);
-                console.log('Failed to accept lab order: ' + JSON.stringify(resp));
                 model.set("formStatus", {
                     status: "error",
                     message: "Failed to accept lab order: " + resp.responseText
@@ -304,7 +304,7 @@ define([
                 this.stopListeningSaveCallback();
             });
 
-            this.listenTo(form.model, 'save:success', function(model, resp) {
+            this.listenTo(form.model, 'save:success', function(model) {
                 // create activity service
                 var actList = model.get('activityList');
                 var availAct = model.get('activity');
@@ -312,8 +312,6 @@ define([
                 if (actList && availAct) {
                     var activity = actList.get(availAct).attributes;
                     var fetchOptions = {
-                        resourceTitle: 'activities-start',
-                        fetchType: 'POST',
                         criteria: {
                             deploymentId: activity.deploymentId,
                             processDefId: activity.id,
@@ -323,14 +321,9 @@ define([
                             }
                         }
                     };
-                    fetchOptions.onError = function(collection, resp) {
-                        console.log('Failed to initiate activity service: ' + JSON.stringify(resp));
-                    };
-                    fetchOptions.onSuccess = function(collection, resp) {
-                        // placeholder for successful activity save
-                        // this is where you will us activityCollection
-                    };
-                    var activityCollection = ADK.ResourceService.fetchCollection(fetchOptions);
+
+                    var activityCollection = new ADK.UIResources.Fetch.Activities.StartActivity();
+                    activityCollection.fetchCollection(fetchOptions);
                 }
 
                 model.set('componentList', componentList);
@@ -345,7 +338,7 @@ define([
                         title: 'Order Check Warning',
                         message: [
                             '<h5 class="all-margin-no">Duplicate Order:</h5>',
-                            '<ul class="list-inline">',
+                            '<ul>',
                             '  {{#each orderCheckResponse}}<li>{{this.orderCheck}}</li>{{/each}}',
                             '</ul>'
                         ].join('\n'),
@@ -440,14 +433,14 @@ define([
                 },
                 error: function(model, resp) {
                     form.model.trigger('save:error', model, resp);
-                }.bind(this),
+                }.bind(this)
             };
             order.save(null, callback);
         },
         hideDynamicFields: function() {
             this.ui.dynamicFields.trigger('control:hidden', true);
         },
-        enableCancelButton: function(isEnabled){
+        enableCancelButton: function(isEnabled) {
             this.$(this.ui.cancelButton.selector).trigger('control:disabled', !isEnabled);
         },
         resetDynamicRequiredFields: function() {
@@ -485,19 +478,17 @@ define([
             }
         },
         showInProgress: function(message) {
-            this.$el.trigger('tray.loaderShow',{
-                loadingString:message
+            this.$el.trigger('tray.loaderShow', {
+                loadingString: message
             });
             this.model.set('inProgressMessage', message);
-            //this.ui.inProgressContainer.trigger('control:hidden', false);
         },
         hideInProgress: function() {
             this.$el.trigger('tray.loaderHide');
-            //this.ui.inProgressContainer.trigger('control:hidden', true);
             this.model.unset('inProgressMessage');
         },
         handleCollectionTypeListCache: function() {
-            var immediateCollectionType = _.find(this.model.get('collectionTypeListCache'), {code: 'I'});
+            var immediateCollectionType = _.find(this.model.get('collectionTypeListCache'), { code: 'I' });
             if (!_.isUndefined(immediateCollectionType)) {
                 LabUtils.retrieveImmediateCollection.apply(this);
             }
@@ -509,64 +500,64 @@ define([
             FormUtils.handleEnableActivity.apply(this);
         },
         modelEvents: {
-            'change:sampleDrawnAt': function(model) {
+            'change:sampleDrawnAt': function() {
                 FormUtils.handleSampleDrawnAt(this);
             },
-            'change:anticoagulant': function(model) {
+            'change:anticoagulant': function() {
                 FormUtils.handleAnticoagulant(this);
             },
-            'change:orderComment': function(model) {
+            'change:orderComment': function() {
                 FormUtils.handleOrderComment(this);
             },
-            'change:doseDate': function(model) {
+            'change:doseDate': function() {
                 FormUtils.handleDoseDrawTimes(this);
             },
-            'change:doseTime': function(model) {
+            'change:doseTime': function() {
                 FormUtils.handleDoseDrawTimes(this);
             },
-            'change:drawDate': function(model) {
+            'change:drawDate': function() {
                 FormUtils.handleDoseDrawTimes(this);
             },
-            'change:drawTime': function(model) {
+            'change:drawTime': function() {
                 FormUtils.handleDoseDrawTimes(this);
             },
-            'change:futureLabCollectDate': function(model) {
+            'change:futureLabCollectDate': function() {
                 FormUtils.handleFutureLabCollectDate(this);
             },
-            'change:urgency': function(model) {
+            'change:urgency': function() {
                 FormUtils.handleUrgency(this);
             },
-            'change:activity': function(model) {
+            'change:activity': function() {
                 FormUtils.handleActivity(this);
             },
-            'change:specimen': function(model) {
+            'change:specimen': function() {
                 FormUtils.handleSpecimen(this);
             },
-            'change:otherSpecimen': function(model) {
+            'change:otherSpecimen': function() {
                 FormUtils.handleOtherSpecimen(this);
             },
-            'change:collectionType': function(model) {
+            'change:collectionType': function() {
                 FormUtils.handleCollectionType(this);
             },
             'change:collectionTypeListCache': 'handleCollectionTypeListCache',
             'change:collectionDate': 'handleCollectionDateTime handleEnableActivity',
             'change:collectionTime': 'handleCollectionDateTime',
-            'change:collectionDateTimePicklist': function(model) {
+            'change:collectionDateTimePicklist': function() {
                 FormUtils.handleCollectionDateTimePicklist(this);
             },
-            'change:collectionSample': function(model) {
+            'change:collectionSample': function() {
                 FormUtils.handleCollectionSample(this);
             },
-            'change:otherCollectionSample': function(model) {
+            'change:otherCollectionSample': function() {
                 FormUtils.handleOtherCollectionSample(this);
             },
             'change:isActivityEnabled': 'handleEnableActivity',
-            'change:notificationDate': function(model) {
+            'change:notificationDate': function() {
                 FormUtils.handleNotificationDate.apply(this);
             },
             'change:orderable-items-loaded': function(model) {
                 var contextIen = model.get('contextIen');
-                if (!_.isUndefined(contextIen)){
+                if (!_.isUndefined(contextIen)) {
                     model.set('availableLabTests', contextIen);
                 }
             },
@@ -626,7 +617,7 @@ define([
 
         onBeforeDraftDelete: _.partial(FormUtils.onBeforeDraftEvent, 'Deleting'),
         onDraftDeleteSuccess: FormUtils.onDraftSuccessEvent,
-        onDraftDeleteError: FormUtils.onDraftErrorEvent,
+        onDraftDeleteError: FormUtils.onDraftErrorEvent
     });
 
     return formView;

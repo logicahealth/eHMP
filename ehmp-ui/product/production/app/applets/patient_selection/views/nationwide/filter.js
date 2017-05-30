@@ -135,13 +135,13 @@ define([
         onRenderCollection: function() {
             this.bindUIElements();
             // Backslash is the escape character. Javascript weirdness: you have to escape square brackets with TWO backslashes
-            this.$('#lastName').inputmask("Regex", {
+            this.$('.lastName input').inputmask("Regex", {
                 regex: "[^^\"\\\\`~!@#$%&*()_+=|}{/?:;.<>0-9\\[\\]]+"
             });
-            this.$('#firstName').inputmask("Regex", {
+            this.$('.firstName input').inputmask("Regex", {
                 regex: "[^^\"\\\\`~!@#$%&*()_+=|}{/?:;.<>0-9\\[\\]]+"
             });
-            this.$('#ssn').inputmask("999-99-9999");
+            this.$('.ssn input').inputmask("999-99-9999");
         }
     });
 

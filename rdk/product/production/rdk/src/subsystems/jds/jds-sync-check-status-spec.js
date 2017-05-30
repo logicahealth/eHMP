@@ -98,6 +98,7 @@ describe('JDS Utils Testing', function() {
             expect(retStatus.hasError).to.be.undefined();
             expect(retStatus.completedStamp).to.eql(testSiteStatus.sourceStampTime);
             expect(retStatus.isSolrSyncCompleted).to.eql(testSiteStatus.solrSyncCompleted);
+            expect(retStatus.hasSolrError).to.be.undefined();
         });
         it('Testing with sample Sync Status: hasError', function(){
             var testSiteStatus = {
@@ -113,6 +114,22 @@ describe('JDS Utils Testing', function() {
             expect(retStatus.hasError).to.eql(true);
             expect(retStatus.completedStamp).to.be.undefined();
             expect(retStatus.isSolrSyncCompleted).to.eql(testSiteStatus.solrSyncCompleted);
+            expect(retStatus.hasSolrError).to.be.undefined();
+        });
+        it('Testing with simple Sync Status: hasSolrError', function(){
+            var testSiteStatus = {
+                latestJobTimestamp: 1464293174353,
+                pid: '9E7A;3',
+                sourceStampTime: 20160526160604,
+                syncCompleted: false,
+                solrSyncCompleted: false,
+                hasSolrError: true
+            };
+            var retStatus = jdsUtils.getSiteSyncDataStatusSimple(testSiteStatus);
+            expect(retStatus.isSyncCompleted).to.eql(false);
+            expect(retStatus.hasError).to.eql(false);
+            expect(retStatus.isSolrSyncCompleted).to.eql(testSiteStatus.solrSyncCompleted);
+            expect(retStatus.hasSolrError).to.eql(true);
         });
         it('Testing with sample Sync Status: not completed', function(){
             var testSiteStatus = {
@@ -126,6 +143,7 @@ describe('JDS Utils Testing', function() {
             expect(retStatus.hasError).to.eql(false);
             expect(retStatus.completedStamp).to.be.undefined();
             expect(retStatus.isSolrSyncCompleted).to.be.undefined();
+            expect(retStatus.hasSolrError).to.be.undefined();
         });
     });
 });

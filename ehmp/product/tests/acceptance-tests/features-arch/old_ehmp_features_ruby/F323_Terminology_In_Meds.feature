@@ -89,5 +89,5 @@ Scenario: An authorized user can access VA inpatient medications and see standar
 #      but based on talk with Les, Medications first checks in the VA H2 SQL database first to see if there is a mapping.  If it finds it there, it does not look in the mapping tables at all. 
 #      So most VA results (if not all) will be successfully mapped from the H2 database.  Les took a look at the H2 database for these entries and they are correct.
 #      JSON from H2 database is for this vuid is updated in "JSON from H2 database" worksheet in mapping table 
-#  *** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
+#  *** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS  E/JLV+Terminology+Handling
     

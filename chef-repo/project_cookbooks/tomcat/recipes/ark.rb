@@ -29,6 +29,11 @@ ark tomcat_version do
   owner node['tomcat']['user']
 end
 
+directory "#{node['tomcat']['home']}/webapps/examples" do
+  recursive true
+  action :delete
+end
+
 init_script = template tomcat_version do
   path "/etc/init.d/#{tomcat_version}"
   source "tomcat.init.#{distro}.erb"

@@ -35,7 +35,8 @@ node.default[:vx_solr][:service][:solr_host] = node[:ipaddress]
 template "#{node[:solr][:dir]}-#{node[:solr][:version]}/bin/solr.in.sh" do
   variables(
     :solr_host => node[:vx_solr][:service][:solr_host],
-    :zk_client_timeout => node[:vx_solr][:service][:zk_client_timeout]
+    :zk_client_timeout => node[:vx_solr][:service][:zk_client_timeout],
+    :solr_log_dir => node[:vx_solr][:log_dir]
   )
   notifies :stop, "service[solr]", :before
 end

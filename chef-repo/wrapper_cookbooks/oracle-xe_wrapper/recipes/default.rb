@@ -21,3 +21,5 @@ directory node['oracle-xe']['ora_inventory'] do
   mode '0755'
   action :create
 end
+
+include_recipe "oracle-xe_wrapper::apex"

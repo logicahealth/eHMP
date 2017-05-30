@@ -83,7 +83,7 @@ function getResourceConfig() {
  *
  * @apiExample {js} Request Examples:
  *      // Limiting results count
- *      http://10.4.4.1:8888/resource/fhir/patient/9E7A;253/diagnosticorder?_count=1
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticorder?_count=1
  *
  * @apiSuccess {json} data JSON object conforming to the <a href="http://www.hl7.org/FHIR/2015May/diagnosticorder.html">Diagnostic Order FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
@@ -294,7 +294,7 @@ function getDiagnosticOrder(req, res) {
     validateParams(params, /*onSuccess*/ function() {
         diagnosticOrder.getData(req.app.config, req.logger, pid, params, function(err, inputJSON) {
             if (nullchecker.isNotNullish(err)) {
-                res.status(err.code).send(err.message);
+                res.status(err.code || 500).send(err.message);
             } else {
                 var fhirBundle = diagnosticOrder.convertToFhir(inputJSON, req);
                 limitFHIRResultByCount(fhirBundle, params._count);

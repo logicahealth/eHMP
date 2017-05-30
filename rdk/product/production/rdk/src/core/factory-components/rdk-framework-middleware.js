@@ -9,6 +9,7 @@ var onHeaders = require('on-headers');
 var responseTime = require('response-time');
 var session = require('express-session');
 var uuid = require('node-uuid');
+var methodOverride = require('method-override');
 
 var rdk = require('../rdk');
 var rdkJwt = require('./rdk-jwt');
@@ -25,6 +26,8 @@ module.exports._extractSessionId = extractSessionId;
 module.exports._addLoggerToRequest = addLoggerToRequest;
 module.exports._addRequestedSessionId = addRequestedSessionId;
 module.exports._addRequestId = addRequestId;
+module.exports._enableMethodOverride = enableMethodOverride;
+module.exports._ensureQueryMatchesBody = ensureQueryMatchesBody;
 
 function setupAppMiddleware(app) {
     setupTrustProxy(app);
@@ -35,12 +38,14 @@ function setupAppMiddleware(app) {
     addInterceptorRequestObject(app);
     addRequestId(app);
     addRequestedSessionId(app);
+    enableMethodOverride(app);
     addLoggerToRequest(app);
     setAppTimeout(app);
     enableMorgan(app);
     enableSession(app);
     enableBodyParser(app);
     initializeHttpWrapper(app);
+    ensureQueryMatchesBody(app);
     rdkJwt.enableJwt(app);
     enableResponseTimeHeader(app);
     recordRequestsForContractTests(app);
@@ -48,7 +53,7 @@ function setupAppMiddleware(app) {
 
 function setupTrustProxy(app) {
     app.use(function(req, res, next) {
-        var clientIsBalancer = (req.headers['x-forwarded-host'] === '10.1.1.149');
+        var clientIsBalancer = (req.headers['x-forwarded-host'] === 'IP        ');
         if (app.config.environment === 'development') {
             app[clientIsBalancer ? 'enable' : 'disable']('trust proxy');
         } else {
@@ -140,6 +145,10 @@ function addRdkSendToResponse(app) {
             }
 
             req._rdkSendUsed = true;
+            if (body) {
+                res.data = body.data;
+                res.status = body.status;
+            }
             return this.send(body);
         };
         next();
@@ -192,7 +201,14 @@ function addLoggerToRequest(app) {
             requestId: req.id,
             sid: req._requestedSessionId
         });
-        idLogger.info('New Request: %s %s', req.method, req.originalUrl || req.url);
+        if (req.url === req.app.config.rootPath + '/version') { // Hack. TODO: fix up the version resource and move it to the rdk core
+            idLogger = idLogger.child({versionResource: true});
+        }
+        if (req.method === req.originalMethod) {
+            idLogger.info('New Request: %s %s', req.method, req.originalUrl || req.url);
+        } else {
+            idLogger.info('New Request: (via %s) %s %s', req.originalMethod, req.method, req.originalUrl || req.url);
+        }
         idLogger.debug({
             remote: req.ip || req.connection.remoteAddress
         });
@@ -252,6 +268,7 @@ function morganBunyanLogger(req, res, next) {
                 remoteAddress: getIp(req),
                 remoteUser: _.get(req, 'session.user.accessCode'),
                 method: req.method,
+                originalMethod: req.originalMethod,
                 path: req.originalUrl,
                 httpVersion: req.httpVersion,
                 status: res.statusCode,
@@ -316,7 +333,7 @@ function enableSession(app) {
             },
             resave: true,
             rolling: true, //this allows the session and token to refresh each time
-            saveUninitialized: true
+            saveUninitialized: false
         })(req, res, next);
     });
     app.use(function(req, res, next) {
@@ -339,6 +356,78 @@ function enableBodyParser(app) {
 function initializeHttpWrapper(app) {
     httpUtil.initializeTimeout(app.config.timeoutMillis);
     httpUtil.setMaxSockets(app.config.maxSockets);
+}
+
+function enableMethodOverride(app) {
+    var methodOverrideHeaderMiddleware = methodOverride('X-HTTP-Method-Override');
+    app.use(function(req, res, next) {
+        // FHIR resources already contain their own version of method overriding
+        // Hack away the duplicate method overriding functionality
+        if (isFhirResource(req)) {
+            req.originalMethod = req.method;
+            return next();
+        }
+        return methodOverrideHeaderMiddleware(req, res, next);
+    });
+
+    function isFhirResource(req) {
+        return _.startsWith(req.path, req.app.config.rootPath + '/fhir');
+    }
+}
+
+function ensureQueryMatchesBody(app) {
+    app.use(function(req, res, next) {
+        if (req.method === req.originalMethod) {
+            return next();
+        }
+        var queryIsValid = doesQueryMatchBody(req);
+        if (!queryIsValid) {
+            var rdkError = new RdkError({
+                code: 'rdk.400.1008'
+            });
+            return res.status(400).rdkSend(rdkError);
+        }
+        req.query = req.body;
+        return next();
+    });
+
+    function doesQueryMatchBody(req) {
+        // Ensure that every query parameter is in the body
+        // Ensure that no query parameter conflicts with a body parameter
+        var queryMatchesBody = _.every(req.query, function(queryValue, queryKey) {
+            if (_.isUndefined(req.body[queryKey])) {
+                return false;
+            }
+            try {
+                return _.isEqual(stringifyValues(req.body[queryKey]), queryValue);
+            } catch (ex) {
+                // Maximum call stack size exceeded
+                req.logger.error(ex);
+                req.logger.error('Error stringifying body values');
+                return false;
+            }
+        });
+        return queryMatchesBody;
+    }
+
+    function stringifyValues(object, _recursed) {
+        // query parameter values are always strings
+        if (!_recursed) {
+            object = _.cloneDeep(object);
+        }
+        if (_.isObject(object)) {
+            _.each(object, function(value, key) {
+                if (_.isObject(value)) {
+                    object[key] = stringifyValues(value, true);
+                } else {
+                    object[key] = String(value);
+                }
+            });
+        } else {
+            object = String(object);
+        }
+        return object;
+    }
 }
 
 function enableResponseTimeHeader(app) {

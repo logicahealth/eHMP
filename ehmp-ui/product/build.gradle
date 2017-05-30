@@ -217,10 +217,12 @@ task zipEhmpuiApp(type: Zip) {
       into 'resources'
     }
   from('production/app.json')
+  from('production/app/navigation-config.json')
+  from('production/app/README.md')
 
   includeEmptyDirs true
   baseName = 'ehmp-ui'
-  def version = project(':production').version 
+  def version = project(':production').version
   destinationDir buildDir
 }
 

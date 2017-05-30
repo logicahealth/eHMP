@@ -4,12 +4,7 @@ Feature: F144 - eHMP Viewer GUI - Patient Search (Clinics)
   Background:
       #Given a patient Search using Clinics
 
-  @F144_SearchClinics_1 @vxsync @enrich
-  Scenario: User searches for clinics
-    When the client requests picklist with the parameters for "clinics-fetch-list" with the user "9E7A;vk1234"
-    | paramter name | value                 |
-    Then a successful response is returned
-    And the client receives at least 1 location
+
 
   @F144_SearchClinics_2 @vxsync @enrich
   Scenario: searches for clinics for patient using locationUid ,filter and startDate

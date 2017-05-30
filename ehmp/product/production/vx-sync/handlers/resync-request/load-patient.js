@@ -1,6 +1,7 @@
 'use strict';
 
 var request = require('request');
+var HttpHeaderUtils = require(global.VX_UTILS + 'http-header-utils');
 
 function loadPatient(logger, syncConfig, job, callback) {
     var patientIdentifier = job.patientIdentifier;
@@ -13,6 +14,11 @@ function loadPatient(logger, syncConfig, job, callback) {
         qs: {}};
 
     options.qs[patientIdentifier.type] = patientIdentifier.value;
+
+    if(job.referenceInfo){
+        var httpHeaderUtils = new HttpHeaderUtils(logger);
+        httpHeaderUtils.insertReferenceInfo(options, job.referenceInfo);
+    }
 
     request.get(options, function(error, response, body) {
         if (error)  {

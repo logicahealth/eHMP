@@ -13,6 +13,18 @@ Then(/^POB user adds a new order$/) do
   PobCommonElements.new.wait_until_fld_modal_body_visible
 end
 
+When(/^the user takes note of number of existing orders$/) do
+  @number_existing_orders = PobOrdersApplet.new.number_expanded_applet_rows
+  p "number existing_orders: #{@number_existing_orders}"
+end
+
+Then(/^an order is added to the applet$/) do
+  ehmp = PobOrdersApplet.new
+  ehmp.wait_for_tbl_orders_grid
+  wait = Selenium::WebDriver::Wait.new(:timeout => 60)
+  wait.until { ehmp.number_expanded_applet_rows == @number_existing_orders + 1 }
+end
+
 Then(/^POB add order modal detail title says "(.*?)"$/) do |order_modal_title|
   @ehmp = PobOrdersApplet.new
   @ehmp.wait_until_fld_order_modal_title_visible
@@ -92,7 +104,7 @@ Then(/^POB user orders "(.*?)" lab test$/) do |lab_test|
   @ehmp.wait_until_fld_available_lab_test_input_box_visible
   @ehmp.fld_available_lab_test_input_box.set lab_test
   @ehmp.fld_available_lab_test_input_box.native.send_keys(:enter)
-  wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+  wait = Selenium::WebDriver::Wait.new(:timeout => 15)
   wait.until { @ehmp.ddl_urgency.disabled? != true }  
   expect(@ehmp.ddl_urgency.text.upcase).to have_text("Routine".upcase)
 end
@@ -110,9 +122,11 @@ Then(/^POB user accepts the order$/) do
   PobCommonElements.new.wait_until_fld_tray_loader_message_invisible(30)
   max_attempt = 4
   begin
+    @ehmp.wait_for_btn_accept_duplicate(2)
     if @ehmp.has_btn_accept_duplicate?
       p "*** order is a duplicate order ***"
       @ehmp.btn_accept_duplicate.click
+      @ehmp.wait_until_btn_accept_duplicate_invisible
     end
   rescue Exception => e
     max_attempt-=1
@@ -120,7 +134,7 @@ Then(/^POB user accepts the order$/) do
     retry if max_attempt > 0
   end
   
-  verify_and_close_growl_alert_pop_up("Lab Order Successfully accepted with no errors")
+  verify_and_close_growl_alert_pop_up("SUCCESS LAB ORDER SUBMITTED")
 end
 
 Then(/^POB user navigates to orders expanded view$/) do
@@ -134,38 +148,23 @@ Then(/^POB user navigates to orders expanded view$/) do
   @ehmp.wait_until_applet_loaded
 end
 
-When(/^POB user verifies the above "(.*?)" order is added to patient record$/) do |order_name|
-  @ehmp = PobOrdersApplet.new 
-  page.driver.browser.manage.window.resize_to(1280, 1280)
-  @ehmp.wait_until_tbl_orders_grid_visible 
-  @ehmp.wait_until_btn_order_24hr_range_visible
-  expect(@ehmp).to have_btn_order_24hr_range
-  @ehmp.btn_order_24hr_range.click
-  @ehmp.wait_until_tbl_orders_grid_visible 
-  @ehmp.wait_until_tbl_orders_first_row_status_visible
-  expect(@ehmp.tbl_orders_first_row_status.text.upcase).to have_text("UNRELEASED")
-  @ehmp.wait_until_tbl_orders_first_row_order_visible
-  expect(@ehmp.tbl_orders_first_row_order.text.upcase).to have_text(order_name.upcase)  
-end
-
-When(/^user verifies that the first row contains the order "(.*?)" with status "(.*?)"$/) do |order_name, status|
-  @ehmp = PobOrdersApplet.new
-  #page.driver.browser.manage.window.resize_to(1280, 1280)
-  @ehmp.wait_until_tbl_orders_grid_visible 
-  @ehmp.wait_until_tbl_orders_first_row_status_visible
-  expect(@ehmp.tbl_orders_first_row_status.text.upcase).to have_text(status.upcase)
-  @ehmp.wait_until_tbl_orders_first_row_order_visible
-  expect(@ehmp.tbl_orders_first_row_order.text.upcase).to have_text(order_name.upcase)  
-end
-
-Then(/^POB user opens the detail view of the order "(.*?)"$/) do |order_name|
-  @ehmp = PobOrdersApplet.new 
-  @ehmp.wait_until_tbl_orders_first_row_visible 
-  expect(@ehmp).to have_tbl_orders_first_row
-  @ehmp.tbl_orders_first_row.click
-  @common_elements = PobCommonElements.new
-  @common_elements.wait_until_fld_modal_body_visible
-  @common_elements.wait_until_fld_modal_body_visible 30, :text => "Order:"
+Then(/^POB user opens the detail view of the order "([^"]*)" with status "([^"]*)"$/) do |order_name, order_status|
+  ehmp = PobOrdersApplet.new
+  order_rows = ehmp.tbl_orders_grid
+  attempt_to_open_detail_view = false
+  order_rows.each do |order_row|
+    # p "checking row: #{order_row.text}"
+    if order_row.text.upcase.include?(order_name.upcase && order_status.upcase)
+      # p "row clicked #{order_name.upcase}, #{order_status.upcase}"
+      attempt_to_open_detail_view = true
+      order_row.click
+      break
+    end
+  end
+  expect(attempt_to_open_detail_view).to eq(true), "Did not find order #{order_name.upcase}, #{order_status.upcase}"
+  common_elements = PobCommonElements.new
+  common_elements.wait_until_fld_modal_body_visible
+  common_elements.wait_until_fld_modal_body_visible 30, :text => "Order:"
 end
 
 Then(/^POB user signs the order as "(.*?)"$/) do |signature_code|
@@ -181,8 +180,23 @@ Then(/^POB user signs the order as "(.*?)"$/) do |signature_code|
     @ehmp.fld_override_reason.set "Testing"
     @ehmp.fld_override_reason.native.send_keys(:enter)
   end
-  @ehmp.wait_until_fld_signature_code_visible
-  @ehmp.fld_signature_code.set signature_code
+  expect(@ehmp.wait_for_fld_signature_code(15)).to eq(true)
+  max_attempt = 2
+  begin
+    @ehmp.fld_signature_code.click
+
+    @ehmp.fld_signature_code.set signature_code
+    expect(@ehmp.fld_signature_code.value).to eq(signature_code)
+  rescue Exception => e
+    p "Attempt to enter signature #{max_attempt}: #{e}"
+    max_attempt -= 1
+    raise e if max_attempt < 0
+    @ehmp.fld_signature_code.click
+    @ehmp.fld_signature_code.native.send_keys [:end]
+    @ehmp.fld_signature_code.native.send_keys [:shift, :home], :backspace
+    retry
+  end
+
   @ehmp.fld_signature_code.native.send_keys(:enter)
   @ehmp.wait_until_btn_sign_order_visible
   expect(@ehmp).to have_btn_sign_order
@@ -190,10 +204,15 @@ Then(/^POB user signs the order as "(.*?)"$/) do |signature_code|
   verify_and_close_growl_alert_pop_up("Lab Order Signed")
 end
 
-Then(/^POB user verifies order status changes to "(.*?)"$/) do |order_status|
-  @ehmp = PobOrdersApplet.new 
-  @ehmp.wait_until_tbl_orders_first_row_status_visible
-  expect(@ehmp.tbl_orders_first_row_status.text.upcase).to have_text(order_status.upcase)
+Then(/^POB user verifies order status changes to "([^"]*)" for the order "([^"]*)"$/) do |order_status, order_name|
+  ehmp = PobOrdersApplet.new 
+  order_rows = ehmp.tbl_orders_grid
+  order_rows.each do |order_row|
+    if order_row.text.upcase.include?(order_name.upcase && order_status.upcase)
+      expect(order_row.text.upcase).to have_text(order_status.upcase)
+      break
+    end
+  end
 end
 
 Then(/^POB user discontinues the order$/) do
@@ -201,7 +220,7 @@ Then(/^POB user discontinues the order$/) do
   @ehmp.wait_until_btn_discontinue_order_from_modal_visible
   expect(@ehmp).to have_btn_discontinue_order_from_modal
   @ehmp.btn_discontinue_order_from_modal.click
-  @ehmp.wait_until_fld_discontinue_reason_visible
+  expect(@ehmp.wait_for_fld_discontinue_reason).to eq(true), "Could not find/see fld_discontinue_reason"
   @ehmp.fld_discontinue_reason.select "Entered in error"
   @ehmp.wait_until_btn_discontinue_order_visible
   expect(@ehmp).to have_btn_discontinue_order
@@ -231,13 +250,13 @@ end
 Then(/^POB user verifies the above "([^"]*)" order is saved in the action tray panel$/) do |order_name|
   @ehmp = PobCommonElements.new
   @ehmp.wait_until_fld_action_tray_panel_visible
-  verify_and_close_growl_alert_pop_up("Draft Order Successfully saved") 
+  verify_and_close_growl_alert_pop_up("SUCCESS LABORATORY DRAFT ORDER SUCCESFULLY SAVED") 
   expect(@ehmp.fld_action_tray_panel.text.downcase.include? "#{order_name}".downcase.strip).to eq(true), "the value '#{order_name}' is not present"
 end
 
 Then(/^POB new order "([^"]*)" is added to the note objects$/) do |new_order|
   @ehmp = PobNotes.new
-  @ehmp.btn_view_note_object
+  #@ehmp.btn_view_note_object
   @ehmp.wait_until_fld_note_objects_visible
   @ehmp.wait_until_btn_view_note_object_visible
   expect(@ehmp.fld_note_objects.text.downcase.include? "#{new_order}".downcase.strip).to eq(true), "the value '#{new_order}' is not present"

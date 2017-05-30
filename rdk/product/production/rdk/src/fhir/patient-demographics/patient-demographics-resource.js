@@ -7,6 +7,7 @@ var errors = require('../common/errors');
 var helpers = require('../common/utils/helpers');
 var confUtils = require('../conformance/conformance-utils');
 var conformance = require('../conformance/conformance-resource');
+var fhirResource = require('../common/entities/fhir-resource');
 
 var fhirToJDSAttrMap = [];
 
@@ -163,7 +164,7 @@ function convertToFhir(result) {
 
     var fhirResult = {
         'resourceType': 'Patient',
-        'id': data.uid,
+        'id': fhirResource.fixId(data.uid),
         'extension': [{
             'url': 'http://vistacore.us/fhir/profiles/@main#service-connected',
             'valueCoding': {
@@ -237,7 +238,7 @@ function convertToFhir(result) {
     if (data.homeFacility !== undefined && data.homeFacility.code !== undefined) {
         var fhirContained = {
             'resourceType': 'Organization',
-            'id': managingOrgId,
+            'id': fhirResource.fixId(managingOrgId),
             'identifier': [{
                 //'label': 'facility-code',
                 'system': 'urn:oid:2.16.840.1.113883.6.233',

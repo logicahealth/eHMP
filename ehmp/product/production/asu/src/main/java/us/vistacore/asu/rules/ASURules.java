@@ -12,6 +12,10 @@ import java.util.Map;
 
 public class ASURules {
 
+    private enum MatchResult {
+        FOUND, NO_MATCH, NO_CANDIDATES
+    }
+
     private static final Logger log = LoggerFactory.getLogger(ASURules.class);
 
     // Static instance shared across all threads
@@ -20,7 +24,7 @@ public class ASURules {
     // The instance that has been refreshed from JDS and that will become the new asuRulesInstance
     private static ASURules refreshedAsuRulesInstance;
 
-    private List<AsuRuleDef> asuRules;
+    private Map<String, List<AsuRuleDef>> asuRules;
     private Map<String, String> parentDocDefinitions;
     private Map<String, DocumentDefinition> docDefinitionUidMap;
 
@@ -59,12 +63,13 @@ public class ASURules {
 
     // Constructor is private to prevent instantiation by anything other than the refresh method above
     private ASURules(JdsDao dao) {
-        asuRules = dao.findAll(AsuRuleDef.class);
-        loadDocumentDefinitionHierarchy(dao); 
+        List<AsuRuleDef> asuRules = dao.findAll(AsuRuleDef.class);
+        splitAsuRulesByDocDefUid(asuRules);
+        loadDocumentDefinitionHierarchy(dao);
     }
 
     private ASURules(List<AsuRuleDef> asuRules, Map<String,String> parentDocDefinitions) {
-        this.asuRules = asuRules;
+        splitAsuRulesByDocDefUid(asuRules);
         this.parentDocDefinitions = parentDocDefinitions;
     }
 
@@ -77,39 +82,32 @@ public class ASURules {
      */
 
     public boolean isRulePresent(ASUDocumentDetails documentDetails, String actionName) {
-        String docDefUid=documentDetails.getDocDefUid();
-        String docStatus=documentDetails.getDocStatus();
-
-        ArrayList<String> parentDocDefUids = buildParentDocList(docDefUid);
-        List<String> parentDocDefNames = getParentLoggingDocDefString(parentDocDefUids);
-
-        String documentName = null;
-        if (isThereADocumentElement(docDefUid)) {
-            documentName = getDisplayName(docDefUid);
-        }
-
-        ArrayList<AsuRuleDef> matchedRules = new ArrayList<AsuRuleDef>();
         if (log.isInfoEnabled()) {
             log.info("asu rules.size " + asuRules.size());
         }
 
-        for (AsuRuleDef asuRule : asuRules) {
-            if (doesActionNameMatch(asuRule,actionName)) {
-                if (doesDocumentStatusMatch(docStatus, asuRule)) {
-                    matchedRules.add(asuRule);
-                }
+        String docDefUid = documentDetails.getDocDefUid();
+        String docStatus = documentDetails.getDocStatus();
+        String documentName = getDisplayName(docDefUid);
+
+        MatchResult matchResult = findMatch(documentDetails, docDefUid, actionName);
+        while (matchResult == MatchResult.NO_CANDIDATES) {
+            docDefUid = getParentDoc(docDefUid);
+            if (docDefUid == null) {
+            	break;
+            }
+            matchResult = findMatch(documentDetails, docDefUid, actionName);
+        }
+
+        if (log.isInfoEnabled()) {
+            if (matchResult == MatchResult.NO_CANDIDATES) {
+                logDetails(true, " No matching rule was found for the doc-def of the current or parent documents. ", documentDetails, actionName);
+            } else if (matchResult == MatchResult.NO_MATCH) {
+                logDetails(true, " isAnd condition is NOT satisfied. ", documentDetails, actionName);
             }
         }
 
-        if (NullChecker.isNullish(matchedRules)) {
-            if (log.isInfoEnabled()) {
-                logDetails(true, " NO MATCHING RULE FOUND FOR ACTION NAME AND DOC STATUS. ", documentDetails,actionName, documentName, parentDocDefNames);
-            }
-
-            return false;
-        }
-
-        return isRulePresent(documentDetails,matchedRules,actionName, documentName, parentDocDefNames, parentDocDefUids);
+        return matchResult == MatchResult.FOUND;
     }
 
     public ArrayList<DocPermissionResult> isRulePresentForActionNames(ASUDocumentDetails documentDetails, ArrayList<String> actionNames) {
@@ -122,98 +120,34 @@ public class ASURules {
         return docPermissionResults;
     }
 
-    private boolean isRulePresent(ASUDocumentDetails documentDetails, ArrayList<AsuRuleDef> matchedRules, String actionName, String documentName, List<String> parentDocDefNames, ArrayList<String> parentDocDefUids) {
-
-        if (log.isInfoEnabled()) {
-            log.info("asu matchedRules.size for document " + documentName + " " + documentDetails.getDocDefUid() + " " + matchedRules.size());
+    private MatchResult findMatch(ASUDocumentDetails documentDetails, String docDefUid, String actionName) {
+        List<AsuRuleDef> fromRules = this.asuRules.get(docDefUid);
+        if (NullChecker.isNullish(fromRules)) {
+            return MatchResult.NO_CANDIDATES;
         }
 
-        ArrayList<AsuRuleDef> matchedDocDefRules = getMatchedDocDefRules(matchedRules, documentDetails.getDocDefUid());
-        if(doesRulesExist(matchedDocDefRules))
-        {
-            for (AsuRuleDef asuRule : matchedDocDefRules)
-            {
-                if (isMatchRoleClass(documentDetails, asuRule, actionName, documentName, parentDocDefNames)) {
-                    return true;
+        String docStatus = documentDetails.getDocStatus();
+        boolean hasCandidates = false;
+        for (AsuRuleDef rule : fromRules) {
+            if (doesActionNameMatch(rule, actionName) && doesDocumentStatusMatch(docStatus, rule)) {
+                hasCandidates = true;
+
+                boolean isMatchClassUid = isMatchClassUid(documentDetails.getUserClassUids(), rule);
+                boolean isMatchRoleName = isMatchRoleName(documentDetails.getRoleNames(), rule);
+
+                if (isAnd(rule, true) && isMatchClassUid && isMatchRoleName) {
+                    logSuccessfulMatch(isMatchClassUid, isMatchRoleName, rule, documentDetails,
+                        " isAnd AND OTHER CONDITIONS ARE SATISFIED. ", actionName);
+                    return MatchResult.FOUND;
+                } else if (isAnd(rule, false) && (isMatchClassUid || isMatchRoleName)) {
+                    logSuccessfulMatch(isMatchClassUid, isMatchRoleName, rule, documentDetails,
+                        " isAnd AND OTHER CONDITIONS ARE SATISFIED. ", actionName);
+                    return MatchResult.FOUND;
                 }
             }
-            logDetails(true, " isAnd condition is NOT satisfied. ", documentDetails, actionName, documentName, parentDocDefNames);
-
-            return false;
-        }
-        else
-        {
-            for (String currDocDefUid : parentDocDefUids)
-            {
-                matchedDocDefRules = getMatchedDocDefRules(matchedRules, currDocDefUid);
-
-                if (doesRulesExist(matchedDocDefRules))
-                {
-
-                    for (AsuRuleDef asuRule : matchedDocDefRules)
-                    {
-                        if (isMatchRoleClass(documentDetails, asuRule, actionName, documentName, parentDocDefNames))
-                        {
-                            return true;
-                        }
-                    }
-                    logDetails(true, " isAnd condition is NOT satisfied. ", documentDetails, actionName, documentName, parentDocDefNames);
-                    return false;
-                }
-            }
-            logDetails(true, " No matching rule was found for the doc-def of the current or parent documents. ", documentDetails, actionName, documentName, parentDocDefNames);
-        }
-        return false;
-    }
-
-    private boolean doesRulesExist(ArrayList<AsuRuleDef>  asuRules) {
-        if(asuRules==null){
-            return false;
-        }
-        if(asuRules.size()==0){
-            return false;
-        }
-        return true;
-    }
-
-    private ArrayList<AsuRuleDef> getMatchedDocDefRules(ArrayList<AsuRuleDef> matchedRules, String currDocDefUid) {
-        ArrayList<AsuRuleDef> matchedDocDefRules = new ArrayList<AsuRuleDef>();
-        for (AsuRuleDef asuRule : matchedRules)
-        {
-             if (NullChecker.isNotNullish(asuRule.getDocDefUid()) && NullChecker.isNotNullish(currDocDefUid)
-                    && asuRule.getDocDefUid().equals(currDocDefUid))
-            {
-                matchedDocDefRules.add(asuRule);
-
-            }
-        }
-        return matchedDocDefRules;
-    }
-
-    private boolean isMatchRoleClass(ASUDocumentDetails documentDetails, AsuRuleDef asuRule, String actionName, String documentName, List<String> parentDocDefNames) {
-
-        boolean isMatchClassUid = isMatchClassUid(documentDetails.getUserClassUids(), asuRule);
-        boolean isMatchRoleName = isMatchRoleName(documentDetails.getRoleNames(), asuRule);
-
-        if (isAnd(asuRule, true))
-        {
-            if (isMatchClassUid && isMatchRoleName) {
-                logMatchRoleClassDetails(isMatchClassUid, isMatchRoleName, asuRule, documentDetails,
-                        " isAnd AND OTHER CONDITIONS ARE SATISFIED. ", "true", false, actionName, documentName, parentDocDefNames);
-                return true;
-            }
-            return false;
         }
 
-        if (isAnd(asuRule, false)) {
-            if (isMatchClassUid || isMatchRoleName) {
-                logMatchRoleClassDetails(isMatchClassUid,isMatchRoleName,asuRule,documentDetails,
-                        " isAnd AND OTHER CONDITIONS ARE SATISFIED. ", "false", false, actionName, documentName, parentDocDefNames);
-                return true;
-            }
-            return false;
-        }
-        return false;
+        return hasCandidates ? MatchResult.NO_MATCH : MatchResult.NO_CANDIDATES;
     }
 
     private boolean doesRuleExist(AsuRuleDef asuRule) {
@@ -226,7 +160,7 @@ public class ASURules {
                 && asuRule.isAnd().equalsIgnoreCase(Boolean.toString(value));
     }
 
-    private boolean isMatchClassUid(ArrayList<String> userClassUids, AsuRuleDef asuRule) {
+    private boolean isMatchClassUid(List<String> userClassUids, AsuRuleDef asuRule) {
         if (NullChecker.isNullish(userClassUids))
             return false;
 
@@ -244,7 +178,7 @@ public class ASURules {
                 && asuRule.getUserClassUid().equals(classUid);
     }
 
-    private boolean isMatchRoleName(ArrayList<String> roleNames, AsuRuleDef asuRule) {
+    private boolean isMatchRoleName(List<String> roleNames, AsuRuleDef asuRule) {
         if (NullChecker.isNullish(roleNames))
             return false;
 
@@ -277,92 +211,94 @@ public class ASURules {
 
 
     private String getDisplayName(String docDefUid) {
-        return docDefinitionUidMap.get(docDefUid).getDisplayName();
-    }
-
-
-    private boolean isThereADocumentElement(String docDefUid) {
-        return docDefinitionUidMap != null && docDefinitionUidMap.get(docDefUid) != null;
-    }
-
-
-    private void logDetails(boolean failure, String successFailureReason, ASUDocumentDetails documentDetails, String actionName, String documentName, List<String>parentDocDefNames)
-    {
-        StringBuilder sb=new StringBuilder();
-        sb.append("\n\r \n\r");
-
-        if(failure && NullChecker.isNotNullish(documentName))
-        {
-            sb.append(" Rule evaluation FAILED for document ").append(documentName.toUpperCase()).append(" - Action Name: ").append(actionName);
-        }
-        else
-        {
-            if( NullChecker.isNotNullish(documentName))
-            {
-                sb.append(" Rule evaluation PASSED for document ").append(documentName.toUpperCase()).append(" - Action Name: ").append(actionName);
+        if (docDefinitionUidMap != null) {
+            DocumentDefinition definition = docDefinitionUidMap.get(docDefUid);
+            if (definition != null) {
+                return definition.getDisplayName();
             }
         }
-        sb.append(documentDetails.toString());
-        sb.append(" \n\r PARENT DOCUMENTS: ").append(parentDocDefNames.toString());
-        sb.append(successFailureReason);
-        sb.append("\n\r");
-        if (log.isInfoEnabled()) {
-            log.info(sb.toString());
-        }
+        return null;
     }
 
-    private void logMatchRoleClassDetails(boolean isMatchClassUid, boolean isMatchRoleName, AsuRuleDef asuRule,
-                                          ASUDocumentDetails documentDetails, String reason, String isAnd, boolean failure, String actionName, String documentName, List<String> parentDocDefNames)
+
+    private void logDetails(boolean failure, String successFailureReason, ASUDocumentDetails documentDetails, String actionName)
     {
-        String sb = (" \n\r isAnd: " + isAnd) +
-                " isMatchClassUid: " + isMatchClassUid +
-                " isMatchRoleName: " + isMatchRoleName +
-                " \n\r Rule: " + asuRule.getUid() + " - " + asuRule.getDescription() +
-                " \n\r " + reason;
-
-        logDetails(failure, sb, documentDetails, actionName, documentName, parentDocDefNames);
-    }
-
-    /**
-     * This method returns all the parents for a @docUid. There can be one or more.
-     *
-     * @param docUid - child doc uid
-     * @return The list of patent doc uids.
-     */
-    private ArrayList<String> buildParentDocList(String docUid) {
-        ArrayList<String> parentDocList = new ArrayList<String>();
-
-        String parentDocUid = getParentDoc(docUid);
-
-        if (parentDocUid != null)
-            parentDocList.add(parentDocUid);
-
-        while (parentDocUid != null) {
-            parentDocUid = getParentDoc(parentDocUid);
-
-            if (parentDocUid != null)
-                parentDocList.add(parentDocUid);
+        if (!log.isInfoEnabled()) {
+            return;
         }
 
-        return parentDocList;
+        String docDefUid = documentDetails.getDocDefUid();
+        String documentName = getDisplayName(docDefUid);
+        StringBuilder sb = new StringBuilder();
+        sb.append("\r\n \r\n");
+
+        if (NullChecker.isNotNullish(documentName)) {
+            if (failure) {
+                sb.append(" Rule evaluation FAILED for document ");
+            } else {
+                sb.append(" Rule evaluation PASSED for document ");
+            }
+            sb.append(documentName.toUpperCase());
+            sb.append(" - Action Name: ");
+            sb.append(actionName);
+        }
+        sb.append(documentDetails.toString());
+        sb.append(" \r\n PARENT DOCUMENTS: ");
+        docDefUid = getParentDoc(docDefUid);
+        while (docDefUid != null) {
+            sb.append(" ");
+            sb.append(docDefUid);
+            documentName = getDisplayName(docDefUid);
+            if (documentName != null) {
+                sb.append(" ");
+                sb.append(documentName);
+            }
+            docDefUid = getParentDoc(docDefUid);
+        }
+        sb.append(successFailureReason);
+        sb.append("\r\n");
+
+        log.info(sb.toString());
+    }
+
+    private void logSuccessfulMatch(boolean isMatchClassUid, boolean isMatchRoleName,
+            AsuRuleDef asuRule, ASUDocumentDetails documentDetails, String reason, String actionName)
+    {
+        if (!log.isInfoEnabled()) {
+            return;
+        }
+
+        boolean isAnd = isAnd(asuRule, true);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(" \r\n isAnd: ");
+        sb.append(isAnd);
+        sb.append(" isMatchClassUid: ");
+        sb.append(isMatchClassUid);
+        sb.append(" isMatchRoleName: ");
+        sb.append(isMatchRoleName);
+        sb.append(" \r\n Rule: ");
+        sb.append(asuRule.getUid());
+        sb.append(" - ");
+        sb.append(asuRule.getDescription());
+        sb.append(" \r\n ");
+        sb.append(reason);
+
+        logDetails(false, sb.toString(), documentDetails, actionName);
     }
 
     private String getParentDoc(String childDocUid) {
         return parentDocDefinitions.get(childDocUid);
     }
 
-    private List<String> getParentLoggingDocDefString(ArrayList<String> docDefUids) {
-        String docName = "";
-        List<String> sb = new ArrayList<String>();
-        if (NullChecker.isNotNullish(docDefUids)) {
-            for (String docDefUid : docDefUids) {
-                if (isThereADocumentElement(docDefUid)) {
-                    docName = getDisplayName(docDefUid);
-                }
-                sb.add(" " + docDefUid + " " + docName);
+    private void splitAsuRulesByDocDefUid(List<AsuRuleDef> rules) {
+        this.asuRules = new HashMap<String, List<AsuRuleDef>>();
+        for (AsuRuleDef rule : rules) {
+            if (!this.asuRules.containsKey(rule.getDocDefUid())) {
+                this.asuRules.put(rule.getDocDefUid(), new ArrayList<AsuRuleDef>());
             }
+            this.asuRules.get(rule.getDocDefUid()).add(rule);
         }
-        return sb;
     }
 
     private void loadDocumentDefinitionHierarchy(JdsDao dao) {
@@ -382,7 +318,6 @@ public class ASURules {
                     parentDocDefinitions.put((String) childDocDef.get("uid"), parentDocDef.getUid());
                 }
             }
-
         }
     }
 }

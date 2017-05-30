@@ -79,31 +79,42 @@ define([
             }
         },
         attributes: function() {
-            var rowId = (this.model.has('displayName') ? 'row_' + this.model.get('displayName') : 'row_' + this.model.get('uid'));
+            var modelJSON = this.serializedData || this.serializeData();
+            var rowId = (_.has(modelJSON, 'displayName') ? 'row_' + _.get(modelJSON, 'displayName') : 'row_' + _.get(modelJSON, 'uid'));
             CrsUtil.applyConceptCodeId(this.model);
 
             return {
                 'role': 'presentation',
                 'tabindex': 0,
                 'data-row-instanceid': rowId,
-                'data-code': this.model.get('dataCode')
+                'data-code': _.get(modelJSON, 'dataCode')
             };
         },
-
         serializeData: function () {
-            var serializer = _.get(this.appletOptions, 'serializeData');
-            if(_.isFunction(serializer)) {
-                return serializer.apply(this, arguments);
-            }
-            var modelJSON = this.model.toJSON();
+            if(this.serializedData) return this.serializedData;
+
+            var serializer = _.get(this, 'appletOptions.serializeData');
             var gistModel = _.get(this, 'appletOptions.gistModel');
-            if (gistModel)
-                _.each(gistModel, function (object) {
-                    modelJSON[object.id] = modelJSON[object.field];
-                });
+            var modelJSON;
+
+            if (_.isFunction(serializer)) {
+                modelJSON = serializer.apply(this, arguments);
+            } else {
+                if (_.isArray(gistModel)) {
+                    modelJSON = this.model.toJSON();
+                    _.each(gistModel, function(object) {
+                        modelJSON[object.id] = modelJSON[object.field];
+                    });
+                } else if (_.isFunction(gistModel)) {
+                    modelJSON = gistModel.call(this, this.model);
+                } else {
+                    modelJSON = this.model.toJSON();
+                }
+            }
+
+            this.serializedData = modelJSON;
             return modelJSON;
         },
-
         ui: {
             popoverEl: '[data-toggle=popover]',
             toolbarToggler: '.selectable:not([data-toggle=popover])'
@@ -111,6 +122,7 @@ define([
         chartPointer: null,
         events: {
             'click @ui.popoverEl': function(e) {
+                e.stopPropagation();
                 this.trigger('toggle:quicklook');
             },
             'blur @ui.popoverEl': function(e) {
@@ -126,11 +138,9 @@ define([
                 e.stopPropagation();
             },
             'before:showtoolbar': function() {
-                this.$el.addClass('toolbar-active background-color-primary-lighter');
                 this.trigger('before:showtoolbar');
             },
             'before:hidetoolbar': function() {
-                this.$el.removeClass('toolbar-active background-color-primary-lighter');
                 this.trigger('before:hidetoolbar');
             },
             'after:showtoolbar': function() {
@@ -152,7 +162,7 @@ define([
                 trigger: 'manual',
                 html: 'true',
                 container: 'body',
-                template: popoverTemplate(this.model),
+                template: popoverTemplate(this.serializedData),
                 referenceEl: this.$el,
                 placement: 'bottom',
                 yoffset: function(placement) {
@@ -194,6 +204,9 @@ define([
             this.ui.popoverEl.off('hidden.bs.popover');
             this.ui.popoverEl.popup('destroy');
             $(window).off('resize.popover' + this.cid);
+        },
+        onBeforeRender: function() {
+            delete this.serializedData;
         },
         onRender: function() {
             this.createPopover();

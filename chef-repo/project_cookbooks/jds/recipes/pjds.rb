@@ -22,3 +22,4 @@ end
 include_recipe "jds::jds_data"
 include_recipe "jds::pjds_indexing"
 include_recipe "jds::osync_pjds"
+include_recipe "jds::prefetch_pjds"

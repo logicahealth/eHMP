@@ -12,22 +12,22 @@ function buildRequest() {
                         id: '500',
                         name: 'PANORAMA'
                     }],
-                    host: '10.2.2.101',
-                    port: 9210,
+                    host: 'IP',
+                    port: PORT,
                     production: false,
-                    accessCode: 'pu1234',
-                    verifyCode: 'pu1234!!'
+                    accessCode: 'REDACTED',
+                    verifyCode: 'REDACTED'
                 },
                 'C877': {
                     division: [{
                         id: '507',
                         name: 'KODAK'
                     }],
-                    host: '10.2.2.102',
-                    port: 9210,
+                    host: 'IP',
+                    port: PORT,
                     production: false,
-                    accessCode: 'pu1234',
-                    verifyCode: 'pu1234!!'
+                    accessCode: 'REDACTED',
+                    verifyCode: 'REDACTED'
                 }
             }
         }

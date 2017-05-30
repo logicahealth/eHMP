@@ -1,10 +1,11 @@
 HMPDJFSG ;SLC/KCM,ASMR/RRB,CPC,JD,ASF,CK -- GET for Extract and Freshness Stream;Aug 11, 2016 10:35:07
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3**;May 15, 2016;Build 11
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3,4**;May 15, 2016;Build 11
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; US3907 - Allow for jobId and rootJobId to be retrieved from ^XTMP. JD 1/20/15
  ; DE2818 - SQA findings. Newed ERRCNT in BLDSERR+2. RRB 10/24/2015
  ; DE3869 - Remove the freshness stream entries with undefined DFNs. JD 3/4/16
+ ; US18005 - Add passthrough fields 2017-01-12 AFS/CPC 
  ;
  Q
  ; --- retrieve updates for an HMP server's subscriptions
@@ -283,18 +284,18 @@ FRESHITM(SEQNODE,DELETE,ERROR) ;Get freshness item and stick in ^TMP
  .S HMPPAT7=HMPFIDX_".99",HMPPAT8=^XTMP(HMPFSTRM,HMPFIDX),$P(HMPPAT8,U,2)="patient" ;BL;DE2280
  .S ^XTMP(HMPFSTRM,HMPPAT7)=HMPPAT8
  ;==JD END
+ D  ; DE3691, add date/time with seconds to FILTER parameters, Feb 29 2016 ;moved 2/9/2017 so always available
+ . N DAY,SECS,TM S SECS=$P($G(^XTMP(HMPFSTRM,HMPFIDX)),U,5),DAY=$P(HMPFSTRM,"~",3)
+ . Q:('DAY)!('$L(SECS))  ; must have date and seconds, could be zero seconds (midnight)
+ . S TM=$S(SECS:SECS#60/100+(SECS#3600\60)/100+(SECS\3600)/100,SECS=0:".000001",1:"")  ; if zero (midnight) push to 1 second after
+ . Q:'$L(TM)  ; couldn't compute time
+ . S FILTER("freshnessDateTime")=DAY+TM
  I ACT'="@" D
  . S FILTER("id")=ID
  . S FILTER("domain")=DOMAIN
  . I DFN="OPD" D GET^HMPEF(.RSLT,.FILTER)
  . I +DFN>0 D
  ..  S FILTER("patientId")=DFN
- ..  D  ; DE3691, add date/time with seconds to FILTER parameters, Feb 29 2016
- ...   N DAY,SECS,TM S SECS=$P($G(^XTMP(HMPFSTRM,HMPFIDX)),U,5),DAY=$P(HMPFSTRM,"~",3)
- ...   Q:('DAY)!('$L(SECS))  ; must have date and seconds, could be zero seconds (midnight)
- ...   S TM=$S(SECS:SECS#60/100+(SECS#3600\60)/100+(SECS\3600)/100,SECS=0:".000001",1:"")  ; if zero (midnight) push to 1 second after
- ...   Q:'$L(TM)  ; couldn't compute time
- ...   S FILTER("freshnessDateTime")=DAY+TM
  ..  D GET^HMPDJ(.RSLT,.FILTER)
  I ACT'="@",$L($G(^TMP("HMP",$J,"error")))>0 D BLDSERR(DFN,.ERROR)  Q
  I '$D(^TMP("HMP",$J,1)) S ACT="@"
@@ -338,30 +339,44 @@ BLDSERR(DFN,ERROR) ;Create syncError object in ERRJSON
 WRAPPER(DOMAIN,PIDS,OFFSET,DOMSIZE,FROMXTR) ;return JSON wrapper for each item *S68-JCH*
  ;add object tag if extract total not zero or if total passed as -1
  ;seq and total tags only added if non-zero
- N X,Y,Z,HMPSVERS ;US11019
+ ;DOMAIN = "syncStart"_"#"_METADOM if this is being called from syncMeta
+ N X,Y,FIRST,THISBTCH,HMPSVERS ;US11019
  ;Ensure that X exists
  S X=""
- S Z=$P(SNODE,U,3)
- S HMPSVERS=$G(^XTMP(Z,"HMPSVERS")) ;US11019 If HMPSVERS=0 then running in previous mode
- S HMPSTMP=$G(^XTMP(Z,"HMPSTMP")) ;PJH - THIS USED ONLY FOR OPD COMPILE IN PRIOR VERSION - NEEDS REMOVING US6734
+ S THISBTCH=$P(SNODE,U,3) ;US18005
+ S HMPSVERS=$G(^XTMP(THISBTCH,"HMPSVERS")) ;US11019 If HMPSVERS=0 then running in previous mode
+ ;S HMPSTMP=$G(^XTMP(THISBTCH,"HMPSTMP")) ;PJH - THIS USED ONLY FOR OPD COMPILE IN PRIOR VERSION - NEEDS REMOVING US6734
  ;This was working for operational data, not patient data
  ;DFN will be OPD if this is operational data
  I DFN="OPD" D
  . S:$P($G(DOMAIN),"#")'="syncStart" X="},{""collection"":"""_$P(DOMAIN,"#")_""""_PIDS ;US11019
  E  S X="},{""collection"":"""_$P(DOMAIN,"#")_""""_PIDS  ; If ONLY patient data exists
  I HMPLITEM="FRESH" I $E(X)="}" S X=$E(X,2,$L(X)) ; DE3502 - remove closing when coming from Fresh
- I $P(DOMAIN,"#")="syncStart",$O(^XTMP(Z,0))]"" D  Q X
+ ;
+ I $P(DOMAIN,"#")'="syncStart" S THISBTCH="HMPFX~"_HMPFHMP_"~"_DFN
+ I THISBTCH'="",$O(^XTMP(THISBTCH,"refInfo",""))'="" D  ;US18005
+ . N ZDOMAIN
+ . S ZDOMAIN=$S($P(DOMAIN,"#")="syncStart":$P(DOMAIN,"#",2),1:$P(DOMAIN,"#"))
+ . S FIRST=1
+ . S X=X_",""referenceInfo"":{"
+ . S Y="" F  S Y=$O(^XTMP(THISBTCH,"refInfo",Y)) Q:Y=""  S:'FIRST X=X_"," S FIRST=0 S X=X_""""_Y_""":"""_^(Y)_""""
+ . S Y=$S(ZDOMAIN="":$G(^XTMP(THISBTCH,"JOBID")),1:$G(^XTMP(THISBTCH,"JOBID",ZDOMAIN)))
+ . I Y'="" S:'FIRST X=X_"," S X=X_"""jobId"":"""_Y_""""
+ . S X=X_"}"
+ I '($P(DOMAIN,"#")="syncStart"&(DFN="OPD")) S X=X_",""unsolicitedUpdate"":"_$S($G(FILTER("freshnessDateTime")):"true",1:"false") ;US18245
+ I $P(DOMAIN,"#")="syncStart",$O(^XTMP(THISBTCH,0))]"" D  Q X
  .;--- Start US3907 ---
  .;Pass JobId and RootJobId back in the response if we were given them
  .;This bridges the gap between Job status and Sync Status (since VistA will be giving the syncStatus)
  .;US11019 use domain specific Job id
- .S Y=$S($P(DOMAIN,"#",2)="":$G(^XTMP(Z,"JOBID")),1:$G(^XTMP(Z,"JOBID",$P(DOMAIN,"#",2)))) ;US11019
+ .S Y=$S($P(DOMAIN,"#",2)="":$G(^XTMP(THISBTCH,"JOBID")),1:$G(^XTMP(THISBTCH,"JOBID",$P(DOMAIN,"#",2)))) ;US11019
  .I Y]"" S X=X_",""jobId"":"""_Y_""""
- .S Y=$G(^XTMP(Z,"ROOTJOBID"))
+ .S Y=$G(^XTMP(THISBTCH,"ROOTJOBID"))
  .I Y]"" S X=X_",""rootJobId"":"""_Y_""""
  .;--- End US3907 ---
  .I DFN'="OPD" D METAPT^HMPMETA(SNODE,$S(HMPSVERS:$P(DOMAIN,"#",2),1:"")) Q  ;US11019 extra para ;Collect Patient metastamp data from XTMP - US6734
  .D METAOP^HMPMETA(SNODE) ; Collect OPD metastamp data from XTMP - US6734
+ ;
  S X=X_","
  ;if batched by extract  *S68-JCH*
  I $G(OFFSET)>-1 S X=X_"""seq"":"_OFFSET_","

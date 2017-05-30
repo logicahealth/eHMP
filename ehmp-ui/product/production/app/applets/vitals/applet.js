@@ -4,30 +4,22 @@ define([
     'jquery',
     'handlebars',
     'app/applets/vitals/util',
-    "app/applets/vitals/gistConfig",
-    'app/applets/vitals/vitalsCollectionHandler',
+    'app/resources/fetch/vitals/utils',
+    'app/applets/vitals/gistConfig',
     'app/applets/vitals/modal/modalView',
     'hbs!app/applets/vitals/list/gridTemplate',
     'hbs!app/applets/vitals/modal/detailsFooterTemplate',
-    'app/applets/vitals/modal/modalHeaderView',
     'hbs!app/applets/vitals/templates/tooltip',
     'app/applets/vitals/modal/stackedGraph',
     'app/applets/vitals/writeback/addVitals',
     'app/applets/visit/writeback/addselectVisit',
     'app/applets/vitals/writeback/enteredInErrorView'
-], function(Backbone, Marionette, $, Handlebars, Util, gistConfig, collectionHandler, ModalView, gridTemplate, detailsFooterTemplate, modalHeader, tooltip, StackedGraph, addVitals, addselectEncounter, EnteredInErrorView) {
-
+], function(Backbone, Marionette, $, Handlebars, Util, ResourcePoolUtils, gistConfig, ModalView, gridTemplate, detailsFooterTemplate, tooltip, StackedGraph, AddVitals, AddSelectEncounter, EnteredInErrorView) {
     'use strict';
-    var model;
-    //Data Grid Columns
+    
     var displayNameCol = {
         name: 'displayName',
         label: 'Vital',
-        cell: 'string'
-    };
-    var flagCol = {
-        name: '',
-        label: 'Flag',
         cell: 'string'
     };
     var resultCol = {
@@ -39,7 +31,7 @@ define([
     };
     var observedFormattedCol = {
         name: 'observed',
-        label: 'Date Observed',
+        label: 'Observed',
         flexWidth: 'flex-width-date-time',
         cell: Backgrid.HandlebarsCell.extend({
             className: 'handlebars-cell flex-width-date-time'
@@ -67,14 +59,9 @@ define([
         cell: 'string',
         hoverTip: 'vitals_type'
     };
-    var refRangeCol = {
-        name: 'referenceRange',
-        label: 'Reference Range',
-        cell: 'string'
-    };
     var resultedDateCol = {
         name: 'resulted',
-        label: 'Date Entered',
+        label: 'Entered',
         flexWidth: 'flex-width-date-time',
         cell: Backgrid.HandlebarsCell.extend({
             className: 'handlebars-cell flex-width-date-time'
@@ -83,62 +70,28 @@ define([
         hoverTip: 'vitals_dateentered'
     };
     var qualifierCol = {
-        name: 'qualifiersNames',
+        name: 'qualifierNames',
         label: 'Qualifiers',
         cell: 'string',
         hoverTip: 'vitals_qualifiers'
     };
 
     var summaryColumns = [displayNameCol, resultCol, observedFormattedCoversheetCol];
-
     var fullScreenColumns = [observedFormattedCol, typeNameCol, resultCol, resultedDateCol, qualifierCol, facilityCodeCol];
-
-    var gridCollectionStore;
-    //Collection fetchOptions
-    var _fetchOptions = {
-        resourceTitle: 'patient-record-vital',
-        pageable: false,
-        cache: true,
-        allowAbort: true,
-        criteria: {}
-    };
-
-    _fetchOptions.viewModel = {
-        parse: function(response) {
-            return response;
-        }
-    };
-
-    function parseModel(response) {
-        response = Util.getObservedFormatted(response);
-        response = Util.getFacilityColor(response);
-        response = Util.getObservedFormattedCover(response);
-        response = Util.getResultedFormatted(response);
-        response = Util.getDisplayName(response);
-        response = Util.getTypeName(response);
-        response = Util.noVitalsNoRecord(response);
-        response = Util.getFormattedHeight(response);
-        response = Util.getResultUnits(response);
-        response = Util.getMetricResultUnits(response);
-        response = Util.getResultUnitsMetricResultUnits(response);
-        response = Util.getReferenceRange(response);
-        response = Util.getFormattedWeight(response);
-        return response;
-    }
 
     function onAddVitals() {
         var writebackView = ADK.utils.appletUtils.getAppletView('vitals', 'writeback');
         var formModel = new Backbone.Model();
         var workflowView;
         var workflowOptions = {
-            title: "Enter Vitals",
+            title: 'Enter Vitals',
             showProgress: false,
             keyboard: false,
             steps: [],
             backdrop: 'static'
         };
 
-        ADK.utils.writebackUtils.handleVisitWorkflow(workflowOptions, addselectEncounter.extend({
+        ADK.utils.writebackUtils.handleVisitWorkflow(workflowOptions, AddSelectEncounter.extend({
             inTray: true
         }));
 
@@ -156,187 +109,74 @@ define([
     }
 
     var gistConfiguration = gistConfig;
-    //Collection fetchOption
+    var vitalTypesForView = {
+        expanded: ['BP', 'P', 'R', 'T', 'PO2', 'PN', 'WT', 'HT', 'BMI', 'CG'],
+        summary: ['BP', 'P', 'R', 'T', 'PO2', 'PN', 'WT', 'BMI', 'HT', 'CG'],
+        gist: ['BPS', 'BPD', 'P', 'R', 'T', 'PO2', 'PN', 'WT', 'HT', 'BMI', 'CG']
+    };
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
-
         initialize: function(options) {
-
-            var fetchOptions = _.clone(_fetchOptions);
-
-            var self = this;
             this._super = ADK.Applets.BaseGridApplet.prototype;
-            var dataGridOptions = {};
+            var dataGridOptions = {
+                appletId: 'vitals',
+                toolbarOptions: {
+                    buttonTypes: ['infobutton', 'detailsviewbutton'],
+                }
+            };
 
-            if (this.columnsViewType === "expanded" || options.appletConfig.fullScreen) {
+            if (this.columnsViewType === 'expanded' || options.appletConfig.fullScreen) {
                 dataGridOptions.columns = fullScreenColumns;
-                fetchOptions.pageable = true;
                 dataGridOptions.filterEnabled = true;
                 dataGridOptions.filterRemoved = true;
-                self.isFullscreen = true;
+                this.isFullscreen = true;
                 options.appletConfig.viewType = 'expanded';
-            } else if (this.columnsViewType === "gist") {
+            } else if (this.columnsViewType === 'gist') {
                 dataGridOptions.columns = summaryColumns;
                 dataGridOptions.filterEnabled = false;
-                self.isFullscreen = false;
+                this.isFullscreen = false;
                 dataGridOptions.gistView = true;
                 dataGridOptions.appletConfiguration = gistConfiguration;
-                fetchOptions.pageable = false;
             } else {
                 dataGridOptions.summaryColumns = summaryColumns;
                 dataGridOptions.fullScreenColumns = fullScreenColumns;
                 dataGridOptions.filterEnabled = false;
-                self.isFullscreen = false;
+                this.isFullscreen = false;
                 options.appletConfig.viewType = 'summary';
             }
-            options.appletConfig.tileSortingUniqueId = 'typeName';
             dataGridOptions.enableModal = true;
+            this.splitBP = this.columnsViewType === 'gist';
 
             this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
                 this.loading();
-                if (self.isFullscreen) {
-                    fetchOptions.criteria = {
-                        filter: 'and(ne(removed, true),' + self.buildJdsDateFilter('observed') + ')'
-                    };
-                } else {
-                    fetchOptions.criteria = {
-                        filter: 'and(ne(removed, true),' + self.buildJdsDateFilter('observed') + '), ne(result,Pass)'
-                    };
-                }
-
-                fetchOptions.onSuccess = function(collection) {
-                    if (self.isFullscreen) {
-                        collection.trigger('reset');
-                    } else {
-                        collection.trigger('vitals:globalDateFetch');
-                    }
-
-                    var sortId = self.appletConfig.instanceId + '_' + self.appletConfig.id;
-                    var uniqueId;
-
-                    if (!_.isUndefined(self.dataGridOptions.appletConfiguration)) {
-                        uniqueId = self.dataGridOptions.appletConfiguration.tileSortingUniqueId;
-                    }
-
-                    if (_.isUndefined(uniqueId) && !_.isUndefined(self.dataGridOptions.appletConfig.tileSortingUniqueId)) {
-                        uniqueId = self.dataGridOptions.appletConfig.tileSortingUniqueId;
-                    }
-
-                    if (!_.isUndefined(uniqueId))
-                        ADK.TileSortManager.getSortOptions(self.dataGridOptions.collection, sortId, uniqueId);
-
-                };
-
-                ADK.PatientRecordService.fetchCollection(fetchOptions, self.dataGridOptions.collection);
+                this.fetchCollection();
             });
 
-
-            fetchOptions.collectionConfig = {
-                collectionParse: function () {
-                    return collectionHandler.filterCollection(self.dataGridOptions.collection, self.dataGridOptions.appletId, options.appletConfig.viewType);
-                }
-            };
-
-            if (self.isFullscreen) {
-                fetchOptions.criteria = {
-                    filter: 'and(ne(removed, true),' + self.buildJdsDateFilter('observed') + ')'
-                };
-            } else {
-                fetchOptions.criteria = {
-                    filter: 'and(ne(removed, true),' + self.buildJdsDateFilter('observed') + '), ne(result,Pass)'
-                };
+            if (this.columnsViewType !== 'summary') {
+                dataGridOptions.tblRowSelector = '#data-grid-' + options.appletConfig.instanceId + ' tbody tr';
+                dataGridOptions.tblRowSelectorColumn = 'td:nth-child(2)';
             }
-
-            dataGridOptions.appletId = 'vitals';
             this.dataGridOptions = dataGridOptions;
-
-            this.dataGridOptions.collection = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
-
-            if(this.columnsViewType === 'gist'){
-                this.bindEntityEvents(this.dataGridOptions.collection, this.collectionEvents);
+            if (this.columnsViewType === 'expanded') {
+                this.dataGridOptions.collection = new ADK.UIResources.Fetch.Vitals.Collection.PageableCollection({isClientInfinite: true});
+            } else {
+                this.dataGridOptions.collection = new ADK.UIResources.Fetch.Vitals.Aggregate(null, {vitalTypes: vitalTypesForView[this.columnsViewType], splitBP: this.splitBP});
             }
-
-            ADK.PatientRecordService.fetchCollection(fetchOptions, this.dataGridOptions.collection);
+            this.fetchCollection();
 
             this.listenTo(ADK.Messaging.getChannel('vitals'), 'refreshGridView', function() {
                 this.refresh({});
             });
 
             if (ADK.UserService.hasPermission('add-vital') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
-                dataGridOptions.onClickAdd = function(e) {
+                this.dataGridOptions.onClickAdd = function(e) {
                     e.preventDefault();
                     onAddVitals();
                 };
             }
 
-            var showModal = function(model, event, appletInstanceId) {
-                event.preventDefault();
-                var view = new ModalView({
-                    model: model,
-                    target: event.currentTarget,
-                    gridCollection: dataGridOptions.collection,
-                    fullScreen: self.isFullscreen,
-                    instanceId: appletInstanceId
-                });
-                view.resetSharedModalDateRangeOptions();
-                var modalTitleName;
-                if (model.get('modalTitleName')) {
-                    modalTitleName = model.get('modalTitleName');
-                } else {
-                    modalTitleName = Util.getVitalLongName(model.get('typeName'));
-                }
-
-                var siteCode = ADK.UserService.getUserSession().get('site'),
-                    pidSiteCode = model.get('pid') ? model.get('pid').split(';')[0] : '';
-
-                var modalOptions = {
-                    'title': modalTitleName,
-                    'size': 'xlarge',
-                    'headerView': modalHeader.extend({
-                        model: model,
-                        theView: view
-                    }),
-                    showLoading: true,
-                    footerView: Backbone.Marionette.ItemView.extend({
-                        template: detailsFooterTemplate,
-                        events: {
-                            'click #error': 'enteredInError'
-                        },
-                        templateHelpers: function() {
-                            if (pidSiteCode === siteCode) {
-                                return {
-                                    isLocalSite: true
-                                };
-                            } else {
-                                return {
-                                    isLocalSite: false
-                                };
-                            }
-                        },
-                        enteredInError: function(event) {
-                            ADK.UI.Modal.hide();
-                            var filteredModels = self.dataGridOptions.collection.where({
-                                observedFormatted: model.get('observedFormatted')
-                            });
-                            EnteredInErrorView.createAndShowEieView(filteredModels, model.get('observedFormatted'), model);
-                        }
-                    }),
-                    'regionName': 'vitalsDetailsDialog'
-                };
-
-                var modal = new ADK.UI.Modal({
-                    view: view,
-                    options: modalOptions
-                });
-                modal.show();
-            };
-
-            dataGridOptions.onClickRow = function(model, event, gridView) {
-                showModal(model, event, this.appletConfig.instanceId);
-            };
-
-            dataGridOptions.toolbarOptions = {
-                buttonTypes: ['infobutton', 'detailsviewbutton'],
+            this.dataGridOptions.onClickRow = function(model) {
+                getDetailsModal(model);
             };
 
             var VitalsItemView = Backbone.Marionette.ItemView.extend({
@@ -348,15 +188,15 @@ define([
                 attributes: function() {
                     ADK.utils.crsUtil.applyConceptCodeId(this.model);
 
-                    if (this.model.get('observedDateLatest') !== undefined) {
+                    if (this.model.get('noRecordsFound')) {
                         return {
-                            'tabindex': '0',
-                            'class': this.model.get('observedDateLatest') + ' clickable',
+                            'class': this.model.get('observedDateLatest') + " no-records",
                             'data-code': this.model.get('dataCode')
                         };
                     } else {
                         return {
-                            'class': this.model.get('observedDateLatest') + ' no-records',
+                            'tabindex': '0',
+                            'class': 'latestVital clickable',
                             'data-code': this.model.get('dataCode')
                         };
                     }
@@ -370,7 +210,7 @@ define([
                     '{{/if}}'
                 ].join('\n')),
                 templateHelpers: function() {
-                    if (this.model.get('resultUnitsMetricResultUnits') === "No Records Found") {
+                    if (this.model.get('noRecordsFound')) {
                         return {
                             vitalsRecord: false
                         };
@@ -380,33 +220,36 @@ define([
                         };
                     }
                 },
+                serializeModel: function(model) {
+                    var data = model.toJSON();
+
+                    if (data.observed) {
+                        data.observedFormattedCover = ADK.utils.formatDate(data.observed, ADK.utils.dateUtils.defaultOptions().placeholder + ' - HH:mm');
+                    }
+
+                    return data;
+                },
                 events: {
                     'click td': function(e) {
-                        dataGridOptions.onClickRow(this.model, event, this);
+                        if(!this.$el.hasClass('no-records')) {
+                            getDetailsModal(this.model);
+                        }
                     },
                     'keydown': function(e) {
-                        if (e.keyCode === 13) {
-                            dataGridOptions.onClickRow(this.model, event, this);
+                        if (e.keyCode === 13 && !this.$el.hasClass('no-records')) {
+                            getDetailsModal(this.model);
                         }
                     }
                 }
             });
 
             var VitalsCompositeView = Backbone.Marionette.CompositeView.extend({
-                initialize: function(options) {
-                    this.collection = options.collection;
-                },
                 template: gridTemplate,
                 childView: VitalsItemView,
                 childViewContainer: 'tbody'
             });
 
             var VitalsLayoutView = Backbone.Marionette.LayoutView.extend({
-                initialize: function(options) {
-                    this.collection = options.collection;
-                    this.listenTo(this.collection, 'vitals:globalDateFetch', this.render);
-                    this.listenTo(this.collection, 'fetch:success', this.render);
-                },
                 regions: {
                     leftTable: '.a-table',
                     rightTable: '.b-table'
@@ -414,7 +257,7 @@ define([
                 template: Handlebars.compile([
                     '<div class="a-table"></div>',
                     '<div class="b-table"></div>'
-                ].join("\n")),
+                ].join('\n')),
                 onRender: function() {
                     var count = this.collection.length;
                     var middle = Math.floor(count / 2);
@@ -435,43 +278,100 @@ define([
                 }
             });
 
-            dataGridOptions.filterDateRangeEnabled = true;
-            dataGridOptions.filterDateRangeField = {
-                name: "observed",
-                label: "Date",
-                format: "YYYYMMDD"
-            };
+            if(this.isFullscreen) {
+                this.dataGridOptions.filterDateRangeEnabled = true;
+                this.dataGridOptions.filterDateRangeField = {
+                    name: 'observed',
+                    label: 'Date',
+                    format: 'YYYYMMDD'
+                };
+            } else {
+                this.dataGridOptions.refresh = _.bind(this._refresh, this);
 
-            this.dataGridOptions = dataGridOptions;
-
-            if (!self.isFullscreen) {
                 if (this.dataGridOptions.gistView) {
-                    this.dataGridOptions.GistView = VitalsLayoutView;
+                    var buttonTypes = ['infobutton', 'detailsviewbutton', 'quicklookbutton'];
+                    if (!ADK.Messaging.request('get:current:screen').config.predefined) {
+                        buttonTypes.unshift('tilesortbutton');
+                    }
+
                     this.dataGridOptions.SummaryView = ADK.Views.VitalsGist.getView();
                     this.dataGridOptions.SummaryViewOptions = {
                         gistModel: gistConfiguration.gistModel,
                         gistHeaders: gistConfiguration.gistHeaders,
                         enableTileSorting: true,
-                        tileSortingUniqueId: 'typeName'
+                        tileSortingUniqueId: 'displayName',
+                        buttonTypes: buttonTypes,
+                        serializeData: function() {
+                            var data = this.model.toJSON();
 
-                    };
-                    var originalChildView = this.dataGridOptions.SummaryView.prototype.childView;
-                    this.dataGridOptions.SummaryView = this.dataGridOptions.SummaryView.extend({
-                        childView: originalChildView.extend({
-                            serializeModel: function(model) {
-                                var data = model.toJSON();
-                                var limit = 4;
-                                if (data.oldValues) {
-                                    data.limitedoldValues = data.oldValues.splice(1, limit);
-                                    if ((data.oldValues.length - data.limitedoldValues.length) > 0) {
-                                        data.moreresultsCount = data.oldValues.length - data.limitedoldValues.length;
-                                    }
-                                }
-                                data.tooltip = tooltip(data);
-                                return data;
+                            if (!_.isUndefined(data.result) && (data.displayName === 'BP' || !isNaN(data.result))) {
+                                data.isValid = true;
                             }
-                        })
-                    });
+
+                            var timeSince = ADK.utils.getTimeSince(data.observed, false);
+                            if (!_.isUndefined(timeSince)) {
+                                data.numericTime = timeSince.timeSinceDescription;
+                            }
+
+                            var vitalsCollection = this.model.get('collection');
+
+                            if(!_.isUndefined(vitalsCollection) && !vitalsCollection.isEmpty()) {
+                                if (vitalsCollection.length > 1) {
+                                    var previousDisplayModel = vitalsCollection.at(vitalsCollection.length - 2);
+                                    if (previousDisplayModel.has('result')) {
+                                        data.previousResult = previousDisplayModel.get('result');
+                                    }
+
+                                    data.oldValues = vitalsCollection.models.reverse();
+                                }
+                                switch (data.displayName) {
+                                    case 'WT':
+                                        data.graphOptions = gistConfiguration.graphOptions.WT();
+                                        break;
+                                    case 'BMI':
+                                        data.graphOptions = gistConfiguration.graphOptions.BMI();
+                                        if (data.result <= 18.5) {                    
+                                            data.interpretationField = 'underweight';                
+                                        } else if (data.result > 18.5 && data.result <= 24.9) {                    
+                                            data.interpretationField = 'normal';                
+                                        } else if (data.result > 24.9 && data.result <= 29.9) {                    
+                                            data.interpretationField = 'overweight';                
+                                        } else data.interpretationField = 'obese';
+                                        break;
+                                    case 'PN':
+                                        if (_.isNumber(data.result)) {
+                                            data.result = data.result.toString();
+                                        }
+
+                                        data.graphOptions = gistConfiguration.graphOptions.PN();
+                                        break;
+                                    case 'PO2':
+                                        data.graphOptions = gistConfiguration.graphOptions.PO2();
+                                        break;
+                                    case 'R':
+                                        data.vitalsTypeName = 'Respiratory Rate';
+                                        data.graphOptions = gistConfiguration.graphOptions;
+                                        break;
+                                    case 'HT':
+                                        data.graphOptions = gistConfiguration.graphOptions.HT();
+                                        break;
+                                    default:
+                                        data.graphOptions = gistConfiguration.graphOptions;
+                                }
+                            }
+
+                            var limit = 4;
+                            if (data.oldValues) {
+                                data.limitedoldValues = data.oldValues.splice(1, limit);
+                                if((data.oldValues.length - data.limitedoldValues.length) > 0) {
+                                    data.moreresultsCount = data.oldValues.length = data.limitedoldValues.length;
+                                }
+                            }
+
+                            data.tooltip = tooltip(data);
+                            return data;
+                        }
+                    };
                 } else {
                     this.dataGridOptions.SummaryView = VitalsLayoutView;
                 }
@@ -479,131 +379,106 @@ define([
 
             this._super.initialize.apply(this, arguments);
         },
-        onRender: function() {
-            this._super.onRender.apply(this, arguments);
+        fetchCollection: function() {
+            // The comparator on the aggregate collection gets nuked on refresh for some reason
+            if (this.columnsViewType !== 'expanded' && _.isNull(this.dataGridOptions.collection.comparator)) {
+                this.dataGridOptions.collection.comparator = 'order';
+            }
 
-        },
-        onSync: function() {
-            if (this.columnsViewType === 'summary') {
-                this.dataGridOptions.tblRowSelector = '#grid-panel-vitals tbody tr';
-                this.dataGridOptions.tblRowSelectorColumn = 'td:first';
+            var criteria = {};
+            if (this.isFullscreen) {
+                criteria.filter = 'and(ne(removed, true),' + this.buildJdsDateFilter('observed') + ')';
             } else {
-                this.dataGridOptions.tblRowSelector = '#data-grid-' + this.options.appletConfig.instanceId + ' tbody tr';
-                this.dataGridOptions.tblRowSelectorColumn = 'td:nth-child(2)';
+                criteria.filter = 'and(ne(removed, true),' + this.buildJdsDateFilter('observed') + '), ne(result,Pass)';
             }
-            this._super.onSync.apply(this, arguments);
+
+            this.dataGridOptions.collection.fetchCollection(criteria, this.splitBP, vitalTypesForView[this.columnsViewType]);
         },
-        onDestroy: function(){
-            if(this.columnsViewType === 'gist'){
-                this.unbindEntityEvents(this.collection, this.collectionEvents);
-            }
+        _refresh: function() {
+            this.loading();
+            this.fetchCollection();
         }
     });
 
-    // expose gist detail view through messaging
-    var channel = ADK.Messaging.getChannel('vitals');
-
-    //this should be in the scope of a view
-    channel.on('detailView', function(params) {
-        var vitalsTitle;
-        if (params.model.get('typeName') == 'Blood Pressure Systolic' || params.model.get('typeName') == 'Blood Pressure Diastolic') {
-            vitalsTitle = 'Blood Pressure';
-        } else {
-            vitalsTitle = params.model.get('typeName');
+    var getDetailsModal = function(model, collection) {
+        var modalCollection = collection || model.collection;
+        if (!model.has('vitalLongName')) {
+            model.set('vitalLongName', Util.getVitalLongName(model.get('typeName')));
         }
 
-        var siteCode = ADK.UserService.getUserSession().get('site'),
-            pidSiteCode = params.model.get('pid') ? params.model.get('pid').split(';')[0] : '';
-
         var view = new ModalView({
-            model: params.model,
-            gridCollection: params.collection,
-            navHeader: false,
-            fullScreen: self.isFullscreen
+            model: model
         });
-        // todo need to check that I merge conflicted this properly
+
+        var siteCode = ADK.UserService.getUserSession().get('site'),
+            pidSiteCode = model.get('pid') ? model.get('pid').split(';')[0] : '';
+
+        var modalOptions = {
+            'title': model.get('vitalLongName'),
+            'size': 'xlarge',
+            'nextPreviousCollection': modalCollection,
+            footerView: Backbone.Marionette.ItemView.extend({
+                template: detailsFooterTemplate,
+                events: {
+                    'click #error': 'enteredInError'
+                },
+                templateHelpers: function() {
+                    if (pidSiteCode === siteCode) {
+                        return {
+                            isLocalSite: true
+                        };
+                    } else {
+                        return {
+                            isLocalSite: false
+                        };
+                    }
+                },
+                enteredInError: function(event) {
+                    ADK.UI.Modal.hide();
+                    var filteredModels = modalCollection.where({
+                        observedFormatted: model.get('observedFormatted')
+                    });
+                    EnteredInErrorView.createAndShowEieView(filteredModels, model.get('observedFormatted'), model);
+                }
+            }),
+            'regionName': 'vitalsDetailsDialog'
+        };
+
         var modal = new ADK.UI.Modal({
             view: view,
-            options: {
-                size: "xlarge",
-                title: vitalsTitle,
-                'headerView': modalHeader.extend({
-                    model: params.model,
-                    theView: view
-                }),
-                footerView: Backbone.Marionette.ItemView.extend({
-                    template: detailsFooterTemplate,
-                    events: {
-                        'click #error': 'enteredInError'
-                    },
-                    templateHelpers: function() {
-                        if (pidSiteCode === siteCode) {
-                            return {
-                                isLocalSite: true
-                            };
-                        } else {
-                            return {
-                                isLocalSite: false
-                            };
-                        }
-                    },
-                    enteredInError: function(event) {
-                        ADK.UI.Modal.hide();
-                        var blah = this;
-                        var filteredModels = params.model.collection.where({
-                            observedFormatted: params.model.get('observedFormatted')
-                        });
-
-                        EnteredInErrorView.createAndShowEieView(filteredModels, params.model.get('observedFormatted'), params.model);
-                    }
-                })
-            }
+            options: modalOptions,
+            callbackFunction: getDetailsModal
         });
         modal.show();
+    };
+
+    var channel = ADK.Messaging.getChannel('vitals');
+    channel.on('detailView', function(params) {
+        getDetailsModal(params.model, params.collection);
     });
 
     channel.reply('detailView', function(params) {
-        var fetchOptions = {
-            criteria: {
-                "uid": params.uid
-            },
-            patient: ADK.PatientRecordService.getCurrentPatient(),
-            resourceTitle: 'patient-record-vital'
-        };
-
-
-        var data = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
-
         var detailModel = params.model;
 
-        var vitalsTitle;
-        if (detailModel.get('typeName') == 'Blood Pressure Systolic' || detailModel.get('typeName') == 'Blood Pressure Diastolic') {
-            vitalsTitle = 'Blood Pressure';
-        } else {
-            vitalsTitle = detailModel.get('typeName') || "Loading";
-        }
         return {
             view: ModalView.extend({
                 model: detailModel,
-                navHeader: false,
-                fullScreen: self.isFullscreen
+                navHeader: false
             }),
-            modalSize: "xlarge",
-            title: _.bind(function() {
-                if (this.get('typeName') == 'Blood Pressure Systolic' || this.get('typeName') == 'Blood Pressure Diastolic') {
-                    return 'Blood Pressure';
-                }
-                return this.get('typeName') || 'Loading';
-            }, detailModel)
+            resourceEntity: detailModel,
+            modalSize: 'xlarge',
+            title: function() {
+                return this.resourceEntity.get('vitalLongName') || 'Loading';
+            }
         };
     });
 
     //This is a problem as well--the model should be pulled from the resource pool and the graph handled in the stackedGraph
     //applet's scope.
     channel.reply('chartInfo', function(params) {
-        var displayName = Util.getDisplayName({
+        var displayName = ResourcePoolUtils.getDisplayName({
             typeName: params.typeName
-        }).displayName;
+        });
 
         var VitalModel = Backbone.Model.extend({});
         var vitalModel = new VitalModel({
@@ -630,36 +505,35 @@ define([
     });
 
     var applet = {
-        id: "vitals",
+        id: 'vitals',
         viewTypes: [{
             type: 'summary',
             view: AppletLayoutView.extend({
-                columnsViewType: "summary"
+                columnsViewType: 'summary'
             }),
             chromeEnabled: true
         }, {
             type: 'gist',
             view: AppletLayoutView.extend({
-                columnsViewType: "gist"
+                columnsViewType: 'gist'
             }),
             chromeEnabled: true
         }, {
             type: 'expanded',
             view: AppletLayoutView.extend({
-                columnsViewType: "expanded"
+                columnsViewType: 'expanded'
             }),
             chromeEnabled: true
         }, {
-            //new writeback code added from ADK documentation
             type: 'writeback',
-            view: addVitals,
+            view: AddVitals,
             chromeEnabled: false
         }],
         defaultViewType: 'summary'
     };
 
     ADK.Messaging.trigger('register:component:item', {
-        type: "tray",
+        type: 'tray',
         key: 'observations',
         label: 'Vital',
         onClick: onAddVitals,

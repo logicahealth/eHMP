@@ -1,10 +1,13 @@
+/*jslint node: true, nomen: true, unparam: true */
+/*global jquery, $, _, define, Marionette, describe, it, expect, beforeEach, spyOn */
+
 'use strict';
 define([
     'underscore',
     'jquery',
     'backbone',
     'marionette',
-    'main/ui_components/components',
+    'main/UILibrary',
     'api/UIComponents',
     'jasminejquery'
 ], function(_, $, Backbone, Marionette, UI) {

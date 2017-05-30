@@ -1,12 +1,10 @@
-@f799_discrete_edit_permissions_to_user @future @DE4560
+@f799_discrete_edit_permissions_to_user @DE4560 @reg3
 Feature: F799-Add/Remove additional Discrete Permissions to a User and Bulk Edit user permissions
 
 @f799_discrete_permissions_access_control_applet1
 Scenario: Accessing Access Control Coordinator in eHMP
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   And staff view screen is displayed
-  When Navigate to Patient Search Screen
-  And the patient search screen is displayed
   And POB user views the Access Control Applet
   And POB user expands Access Control Applet
   And POB user enters "UATTHREE" in the first name field
@@ -16,10 +14,8 @@ Scenario: Accessing Access Control Coordinator in eHMP
 
 @f799_discrete_permissions_access_control_applet2
 Scenario: Access Control Coordinator - User Information Detail Window
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   And staff view screen is displayed
-  When Navigate to Patient Search Screen
-  And the patient search screen is displayed
   And POB user views the Access Control Applet
   And POB user expands Access Control Applet
   And POB user enters "UATTHREE" in the first name field
@@ -46,10 +42,8 @@ Scenario: Access Control Coordinator - User Information Detail Window
 
 @f799_discrete_permissions_access_control_applet3
 Scenario: Access Control Coordinator – Available Permission Sets
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   And staff view screen is displayed
-  When Navigate to Patient Search Screen
-  And the patient search screen is displayed
   And POB user views the Access Control Applet
   And POB user expands Access Control Applet
   And POB user enters "UATTHREE" in the first name field
@@ -70,10 +64,8 @@ Scenario: Access Control Coordinator – Available Permission Sets
 
 @f799_discrete_permissions_access_control_applet4
 Scenario: Access Control Coordinator - Additional Individual Permissions
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   And staff view screen is displayed
-  When Navigate to Patient Search Screen
-  And the patient search screen is displayed
   And POB user views the Access Control Applet
   And POB user expands Access Control Applet
   And POB user enters "UATTHREE" in the first name field
@@ -99,10 +91,8 @@ Scenario: Access Control Coordinator - Additional Individual Permissions
 
 @f799_discrete_permissions_access_control_applet5
 Scenario: Access Control Coordinator - Delete Discreet Permissions
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   And staff view screen is displayed
-  When Navigate to Patient Search Screen
-  And the patient search screen is displayed
   And POB user views the Access Control Applet
   And POB user expands Access Control Applet
   And POB user enters "UATTHREE" in the first name field
@@ -119,10 +109,8 @@ Scenario: Access Control Coordinator - Delete Discreet Permissions
 
 @f799_discrete_permissions_access_control_applet6_1
 Scenario: Access Control Coordinator - Edit Own Permissions
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   And staff view screen is displayed
-  When Navigate to Patient Search Screen
-  And the patient search screen is displayed
   And POB user views the Access Control Applet
   And POB user expands Access Control Applet
   And POB user enters "UATTHREE" in the first name field
@@ -141,8 +129,6 @@ Scenario: Access Control Coordinator - Edit Own Permissions
 Scenario: Access Control Coordinator - Edit Own Permissions
   Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "ua1234" verifycode as  "ua1234!!"
   And staff view screen is displayed
-  When Navigate to Patient Search Screen
-  And the patient search screen is displayed
   And POB user views the Access Control Applet
   And POB user expands Access Control Applet
   And POB user enters "UATTHREE" in the first name field

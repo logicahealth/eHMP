@@ -2,24 +2,7 @@
     .js-has-panel {
         cursor: pointer;
     }
-    .table {
-        tbody {
-            tr {
-                &.active {
-                    td {
-                        background-color: $primary-lightest;
-                    }
-                }
-            }
-        }
-    }
-    .grid-container .gist-item-list .gist-item .selectable.flex-width-2 {
-        padding-right: 0px;
-    }
-    .faux-table .table-row .table-cell {
-        padding-right: 0px;
-    }
-    .applet-div-chrome-container .gridContainer .grid-container>div .data-grid > table {
+    .applet-chrome-body .gridContainer .grid-container>div .data-grid > table {
         &.backgrid {
             tr {
                 td.expanded-row {

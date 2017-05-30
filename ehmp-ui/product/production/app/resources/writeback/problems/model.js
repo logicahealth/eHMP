@@ -1,4 +1,6 @@
 define([], function() {
+    'use strict';
+    
     var problem = ADK.Resources.Writeback.Model.extend({
         resource: 'problem-add',
         vpr: 'problems',

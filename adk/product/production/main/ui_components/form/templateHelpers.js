@@ -8,7 +8,7 @@ define([
     _
 ) {
     'use strict';
-    
+
     Handlebars.registerHelper("form-class-name", function(methodString) {
         return ClassDefinitions[methodString];
     });
@@ -124,7 +124,7 @@ define([
             options = options.hash || {};
             var hbEscape = Handlebars.Utils.escapeExpression;
 
-            var title, value, helpMessage, size, id, extraClasses, standAloneForm, required, disabled, errorMessageClass, buttonOptions;
+            var title, value, helpMessage, size, id, extraClasses, standAloneForm, required, disabled, errorMessageClass, buttonOptions, icon;
             placeholderText = hbEscape(placeholderText || "");
             title = hbEscape(options.title || placeholderText);
             value = options.value || "";
@@ -135,21 +135,25 @@ define([
             standAloneForm = options.standAloneForm || false;
             required = (_.isBoolean(options.required) ? options.required : false);
             disabled = (_.isBoolean(options.disabled) ? options.disabled : false);
+            icon = (_.isString(options.icon) ? options.icon : false);
             errorMessageClass = ClassDefinitions.helpMessageClassName ? ' class="'+ClassDefinitions.helpMessageClassName+'"' : '';
             buttonOptions = _.extend({
                 type: 'button',
                 title: 'Press enter to search, then view results below',
                 id: id + 'Btn',
                 srOnlyLabel: true,
-                icon: 'fa fa-search',
+                icon: 'fa-search',
                 extraClasses: "",
-                label: 'search'
+                label: 'search',
+                hidden: false
             },options.buttonOptions, {
                 size: size,
                 disabled: disabled
             });
             buttonOptions.extraClasses = (_.isArray(buttonOptions.extraClasses) ? hbEscape(buttonOptions.extraClasses.toString().replace(/,/g, ' ')) : hbEscape(buttonOptions.extraClasses || ""));
             buttonOptions.classes = buttonOptions.extraClasses + ' box-shadow-no text-search btn btn-primary btn-sm';
+            var showSubmit = _.isBoolean(buttonOptions.hidden) ? !buttonOptions.hidden : true;
+            var showClearButton = _.isString(value) && !_.isEmpty(value);
             buttonOptions = {
                 hash: buttonOptions
             };
@@ -164,23 +168,31 @@ define([
             var htmlString = [
                 (standAloneForm ? '<form action="#" method="post">' : ''),
                 '<div class="row"><div class="col-xs-' + size + ' ' + extraClasses + '">',
-                '<div class="input-group">',
+                '<div class="input-group'+(showSubmit ? '': ' submit-hidden')+'">',
                 Handlebars.helpers['ui-form-label'].apply(this, [(placeholderText.length > 0 ? placeholderText : title.length > 0 ? title : 'Search'), labelOptions]),
+
+                (icon ?
+                '<div class="input-icon--left" aria-hidden="true">' +
+                '<i class="fa '+ icon + '"></i>'+
+                '</div>' : ''),
+
+
                 '<input type="text" class="form-control" autocomplete="off" placeholder="' + placeholderText + '" title="' + title + '" ' +
                 (disabled ? ' disabled' : '') +
                 (required ? ' required' : '') +
                 ' id="' + id + '" value="' + value + '" />',
+                (showSubmit ? '<div class="input-group-addon">': ''),
                 Handlebars.helpers['ui-button'].apply(this, ['Clear', {
                     hash: {
-                        classes: 'clear-input-btn btn-icon btn-sm color-grey-darkest hidden',
-                        'title': 'Press enter to clear search text',
-                        'icon': 'fa fa-times',
-                        'srOnlyLabel': true
+                        classes: 'clear-input-btn btn-icon btn-sm color-grey-darkest' + (showClearButton ? '' : ' hidden'),
+                        title: 'Press enter to clear search text',
+                        icon: 'fa fa-times',
+                        srOnlyLabel: true
                     }
                 }]),
-                '<span class="input-group-btn">',
-                Handlebars.helpers['ui-button'].apply(this, [buttonOptions.hash.label, buttonOptions]),
-                '</span>',
+                (showSubmit ? Handlebars.helpers['ui-button'].apply(this, [buttonOptions.hash.label, buttonOptions]) :
+                    Handlebars.helpers['ui-button'].apply(this, [buttonOptions.hash.label, _.set(buttonOptions, 'hash.classes', buttonOptions.hash.classes + ' sr-only')])),
+                (showSubmit ? '</div>' : ''),
                 '</div>',
                 (_.isEmpty(helpMessage) ? '' : '<span' + errorMessageClass +'>'+ helpMessage + '</span>'),
                 '</div>',

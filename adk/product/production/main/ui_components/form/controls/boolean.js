@@ -25,7 +25,7 @@ define([
           }
         }, BaseInputControl.prototype.behaviors),
         template: Handlebars.compile([
-            '{{ui-form-checkbox label id=(clean-for-id name) name=name title=title checked=value disabled=disabled srOnlyLabel=srOnlyLabel}}'
+            '{{ui-form-checkbox label id=(clean-for-id id) name=name title=title checked=value disabled=disabled srOnlyLabel=srOnlyLabel}}'
         ].join("\n")),
         events: _.defaults({
             //Events to be Triggered By User

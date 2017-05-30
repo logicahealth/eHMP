@@ -23,10 +23,10 @@ var initialConfig = {
     'vistaSites': {
         '9E7A': {
             'name': 'panorama',
-            'host': '10.2.2.101',
-            'port': 9210,
-            'accessCode': 'ep1234',
-            'verifyCode': 'ep1234!!',
+            'host': 'IP        ',
+            'port': PORT,
+            'accessCode': 'REDACTED',
+            'verifyCode': 'REDACTED',
             'localIP': '127.0.0.1',
             'stationNumber': 500,
             'localAddress': 'localhost',
@@ -35,10 +35,10 @@ var initialConfig = {
         },
         'C877': {
             'name': 'kodak',
-            'host': '10.2.2.102',
-            'port': 9210,
-            'accessCode': 'ep1234',
-            'verifyCode': 'ep1234!!',
+            'host': 'IP        ',
+            'port': PORT,
+            'accessCode': 'REDACTED',
+            'verifyCode': 'REDACTED',
             'localIP': '127.0.0.1',
             'stationNumber': 501,
             'localAddress': 'localhost',
@@ -50,10 +50,10 @@ var initialConfig = {
         'hdrSites': {
             '1234': {
                 'name': 'panorama',
-                'host': '10.2.2.101',
-                'port': 9210,
-                'accessCode': 'ep1234',
-                'verifyCode': 'ep1234!!',
+                'host': 'IP        ',
+                'port': PORT,
+                'accessCode': 'REDACTED',
+                'verifyCode': 'REDACTED',
                 'localIP': '127.0.0.1',
                 'stationNumber': 600,
                 'localAddress': 'localhost',
@@ -62,10 +62,10 @@ var initialConfig = {
             },
             'CCCC': {
                 'name': 'kodak',
-                'host': '10.2.2.102',
-                'port': 9210,
-                'accessCode': 'ep1234',
-                'verifyCode': 'ep1234!!',
+                'host': 'IP        ',
+                'port': PORT,
+                'accessCode': 'REDACTED',
+                'verifyCode': 'REDACTED',
                 'localIP': '127.0.0.1',
                 'stationNumber': 601,
                 'localAddress': 'localhost',
@@ -76,13 +76,13 @@ var initialConfig = {
     },
     'jds': {
         'protocol': 'http',
-        'host': '10.2.2.110',
+        'host': 'IP        ',
         'port': '9082',
         'timeout': 300000
     },
     'pjds': {
         'protocol': 'http',
-        'host': '10.2.2.111',
+        'host': 'IP        ',
         'port': '9083',
         'timeout': 300001
     },

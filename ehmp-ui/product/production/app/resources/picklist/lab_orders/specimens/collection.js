@@ -1,4 +1,5 @@
 define([], function() {
+    'use strict';
 
     var Specimen = ADK.Resources.Picklist.Model.extend({
         idAttribute: function() {

@@ -31,6 +31,7 @@ Then(/^client grabs the deploymentId$/) do
     end
   end
   @deployment_id = all_ids.last
+  expect(@deployment_id).to_not be_nil, "Could not find a valid deploymentId.  Test is looking for the deploymentId of Order.Request"
 end
 
 When(/^the client requests a single instance activity for pid "([^"]*)"$/) do |arg1|
@@ -102,7 +103,7 @@ def request_activities_instances_available(user, table)
 end
 
 When(/^the client requests open activities for the staff context$/) do |table|
-  request_activities_instances_available "9E7A;pu1234", table
+  request_activities_instances_available "REDACTED", table
 end
 
 When(/^the clicent requests open activities for the patient context$/) do |table|

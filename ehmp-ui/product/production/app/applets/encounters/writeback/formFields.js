@@ -65,77 +65,72 @@ define([
                         placement: 'left'
                     },
                     extraClasses: ['btn-primary', 'offset-btn-md'],
-                    items: [
-                        {
-                            control:'container',
-                            extraClasses:['flex-display','flex-direction-column','encounters-diagnosis-container'],
-                            items:[
-                                {
+                    items: [{
+                        control: 'container',
+                        extraClasses: ['flex-display', 'flex-direction-column', 'encounters-diagnosis-container'],
+                        items: [{
+                                control: 'container',
+                                extraClasses: ['flex-grow-fixed', 'section-add-other-diagnosis', 'all-padding-sm', 'bottom-border-grey-lightest'],
+                                items: [{
                                     control: 'container',
-                                    extraClasses: ['flex-grow-fixed', 'section-add-other-diagnosis', 'all-padding-sm','bottom-border-grey-lightest'],
+                                    extraClasses: [],
+                                    items: [{
+                                        control: 'searchbar',
+                                        name: 'addOtherDiagnosisSearchString',
+                                        id: 'addOtherDiagnosisSearchString',
+                                        placeholder: 'Search for a diagnosis',
+                                        label: 'Search for a diagnosis',
+                                        srOnlyLabel: true,
+                                        title: 'Enter in text to search for a diagnosis.'
+                                    }]
+                                }]
+                            },
+                            {
+                                control: 'container',
+                                extraClasses: ['auto-overflow-y'],
+                                items: [{
+                                    control: 'container',
+                                    extraClasses: [''],
+                                    items: [{
+                                        control: 'treepicker',
+                                        name: 'selectAddOtherDiagnosis',
+                                        attributeMapping: {
+                                            href: 'childHref'
+                                        },
+                                        itemTemplate: '{{preferredText}} ({{icdCode}})'
+                                    }]
+                                }]
+                            },
+                            {
+                                control: 'container',
+                                extraClasses: ['flex-grow-fixed', 'all-padding-sm', 'top-border-grey-light', 'background-color-grey-lightest'],
+                                items: [{
+                                    control: 'container',
+                                    extraClasses: [],
                                     items: [{
                                         control: 'container',
-                                        extraClasses: [],
+                                        extraClasses: ['text-right'],
                                         items: [{
-                                            control: 'searchbar',
-                                            name: 'addOtherDiagnosisSearchString',
-                                            id: 'addOtherDiagnosisSearchString',
-                                            placeholder: 'Search for a diagnosis',
-                                            label: 'Search for a diagnosis',
-                                            srOnlyLabel: true,
-                                            title: 'Enter in text to search for a diagnosis.'
+                                            control: 'button',
+                                            type: 'button',
+                                            label: 'Cancel',
+                                            extraClasses: ['btn-primary', 'btn-sm'],
+                                            title: 'Press enter to cancel.',
+                                            id: 'add-other-diagnosis-cancel-btn'
+                                        }, {
+                                            control: 'button',
+                                            type: 'button',
+                                            label: 'Add',
+                                            extraClasses: ['btn-primary', 'btn-sm'],
+                                            title: 'Press enter to add.',
+                                            id: 'add-other-diagnosis-add-btn',
+                                            disabled: true
                                         }]
                                     }]
-                                },
-                                {
-                                    control: 'container',
-                                    extraClasses:['auto-overflow-y'],
-                                    items:[
-                                        {
-                                            control: 'container',
-                                            extraClasses: [''],
-                                            items: [{
-                                                control: 'treepicker',
-                                                name: 'selectAddOtherDiagnosis',
-                                                attributeMapping: {
-                                                    href: 'childHref'
-                                                },
-                                                itemTemplate: '{{preferredText}} ({{icdCode}})'
-                                            }]
-                                        }
-                                    ]
-                                },
-                                {
-                                    control: 'container',
-                                    extraClasses:['flex-grow-fixed','all-padding-sm','top-border-grey-light','background-color-grey-lightest'],
-                                    items:[{
-                                        control: 'container',
-                                        extraClasses: [],
-                                        items: [{
-                                            control: 'container',
-                                            extraClasses: ['text-right'],
-                                            items: [{
-                                                control: 'button',
-                                                type: 'button',
-                                                label: 'Cancel',
-                                                extraClasses: ['btn-primary', 'btn-sm'],
-                                                title: 'Press enter to cancel.',
-                                                id: 'add-other-diagnosis-cancel-btn'
-                                            }, {
-                                                control: 'button',
-                                                type: 'button',
-                                                label: 'Add',
-                                                extraClasses: ['btn-primary', 'btn-sm'],
-                                                title: 'Press enter to add.',
-                                                id: 'add-other-diagnosis-add-btn',
-                                                disabled: true
-                                            }]
-                                        }]
-                                    }]
-                                }
-                            ]
-                        }
-                    ]
+                                }]
+                            }
+                        ]
+                    }]
                 }]
             }]
         }]
@@ -414,7 +409,7 @@ define([
             }, {
                 control: 'container',
                 extraClasses: ['well', 'read-only-well'],
-                template: Handlebars.compile(['<ul class="list-inline">{{#each selectedModifiersForVisit}}<li>{{this.name}}</li>{{/each}}</ul>'].join('\n')),
+                template: Handlebars.compile(['<ul>{{#each selectedModifiersForVisit}}<li>{{this.name}}</li>{{/each}}</ul>'].join('\n')),
                 modelListeners: ['visitModifiersCount']
             }]
         }]
@@ -538,7 +533,7 @@ define([
                             }]
                         }, {
                             control: 'container',
-                            extraClasses: ['all-padding-sm','background-color-grey-lightest','top-border-grey-light'],
+                            extraClasses: ['all-padding-sm', 'background-color-grey-lightest', 'top-border-grey-light'],
                             items: [{
                                 control: 'container',
                                 extraClasses: ['text-right'],

@@ -529,7 +529,7 @@ function getProvidersFromIds(creatorOwnerIds, req, cb) {
 }
 
 module.exports.getNamesFromIcns = function(icnToNameMap, req, cb) {
-    //http://10.2.2.110:9080/data/index/pt-select-pid?range=9E7A;3,9E7A;8
+    //http://IP             /data/index/pt-select-pid?range=9E7A;3,9E7A;8
     var jdsUrlStringLimit = _.get(req, 'app.config.jdsServer.urlLengthLimit') || 120;
     var jdsServer = req.app.config.jdsServer;
     var preSegmentUrl = '/data/index/pt-select-pid?range=';
@@ -1145,7 +1145,6 @@ function getTask(req, res) {
     var uri = uriBuilder.fromUri('/tasksservice').path('/task/' + taskId);
 
     config.url = uri.build();
-
     async.parallel({
         jbpmTask: function(callback) {
             httpUtil.get(config, function(err, response, returnedData) {
@@ -1190,12 +1189,46 @@ function getTask(req, res) {
             req.logger.error(err);
             return res.status(rdk.httpstatus.not_found).rdkSend(err);
         }
-        if (_.size(_.get(results, 'jbpmTask.data.items')) > 0 && _.size(_.get(results, 'dbTask')) > 0 &&
-            nullchecker.isNotNullish(results.dbTask[0].STATUSTIMESTAMP)) {
-            results.jbpmTask.data.items[0].statusTimeStamp = results.dbTask[0].STATUSTIMESTAMP.getTime();
-            return res.rdkSend(results.jbpmTask.data);
+        if (_.size(_.get(results, 'jbpmTask.data.items')) < 1 || _.size(_.get(results, 'dbTask')) < 1 ||
+            _.isUndefined(results.dbTask[0].STATUSTIMESTAMP) || _.isNull(results.dbTask[0].STATUSTIMESTAMP)) {
+                return res.status(rdk.httpstatus.not_found).rdkSend(err);
         }
-        return res.status(rdk.httpstatus.not_found).rdkSend(err);
+        results.jbpmTask.data.items[0].statusTimeStamp = results.dbTask[0].STATUSTIMESTAMP.getTime();
+        //the following mappings were added to keep the UI backward compatible
+        if (results.jbpmTask.data.items[0].hasOwnProperty('actual-owner')) {
+            results.jbpmTask.data.items[0].actualOwnerId = results.jbpmTask.data.items[0]['actual-owner'];
+        }
+        if (results.jbpmTask.data.items[0].hasOwnProperty('created-by')) {
+            results.jbpmTask.data.items[0].createdById = results.jbpmTask.data.items[0]['created-by'];
+        }
+        if (results.jbpmTask.data.items[0].hasOwnProperty('created-on')) {
+            results.jbpmTask.data.items[0].createdOn = results.jbpmTask.data.items[0]['created-on'];
+        }
+        if (results.jbpmTask.data.items[0].hasOwnProperty('activation-time')) {
+            results.jbpmTask.data.items[0].activationTime = results.jbpmTask.data.items[0]['activation-time'];
+        }
+        if (results.jbpmTask.data.items[0].hasOwnProperty('expiration-time')) {
+            results.jbpmTask.data.items[0].expirationTime = results.jbpmTask.data.items[0]['expiration-time'];
+        }
+        if (results.jbpmTask.data.items[0].hasOwnProperty('process-instance-id')) {
+            results.jbpmTask.data.items[0].processInstanceId = results.jbpmTask.data.items[0]['process-instance-id'];
+        }
+        if (results.jbpmTask.data.items[0].hasOwnProperty('process-id')) {
+            results.jbpmTask.data.items[0].processId = results.jbpmTask.data.items[0]['process-id'];
+        }
+        if (results.jbpmTask.data.items[0].hasOwnProperty('process-session-id')) {
+            results.jbpmTask.data.items[0].processSessionId = results.jbpmTask.data.items[0]['process-session-id'];
+        }
+        if (results.jbpmTask.data.items[0].hasOwnProperty('deployment-id')) {
+            results.jbpmTask.data.items[0].deploymentId = results.jbpmTask.data.items[0]['deployment-id'];
+        }
+        if (results.jbpmTask.data.items[0].hasOwnProperty('quick-task-summary')) {
+            results.jbpmTask.data.items[0].quickTaskSummary = results.jbpmTask.data.items[0]['quick-task-summary'];
+        }
+        if (results.jbpmTask.data.items[0].hasOwnProperty('parent-id')) {
+            results.jbpmTask.data.items[0].parentId = results.jbpmTask.data.items[0]['parent-id'];
+        }
+        return res.rdkSend(results.jbpmTask.data);
     });
 }
 

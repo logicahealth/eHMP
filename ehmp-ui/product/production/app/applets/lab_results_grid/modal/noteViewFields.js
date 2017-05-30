@@ -1,6 +1,6 @@
 define([
     'handlebars'
-], function(Handlebars) {
+], function (Handlebars) {
     'use strict';
 
     return [{
@@ -69,7 +69,7 @@ define([
                     label: 'Cancel',
                     type: 'button',
                     title: 'Press enter to cancel',
-                    name: 'closeModal',
+                    name: 'closeModal'
                 }, {
                     control: 'button',
                     extraClasses: ['btn-primary', 'btn-sm'],

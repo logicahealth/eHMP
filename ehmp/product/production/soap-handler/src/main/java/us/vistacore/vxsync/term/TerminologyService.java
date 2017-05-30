@@ -3,8 +3,6 @@ package us.vistacore.vxsync.term;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,7 +12,6 @@ import javax.ws.rs.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import us.vistacore.vxsync.BadRequestException;
 import us.vistacore.vxsync.config.H2Configuration;
 import us.vistacore.vxsync.term.hmp.H2TermDataSource;
 import us.vistacore.vxsync.term.hmp.LuceneSearchDataSource;
@@ -32,11 +29,10 @@ public class TerminologyService {
 	private static JLVHddDao dao;
 	private static LuceneSearchDataSource lncdb;
 	private static LuceneSearchDataSource drugdb;
-	private static Pattern genericCode = Pattern.compile("^[A-Za-z0-9\\.:-]{1,100}$");
-	
+
 	public TerminologyService() {
 	}
-	
+
 	public TerminologyService(String template, String defaultName) {
 		// TODO Auto-generated constructor stub
 	}
@@ -47,12 +43,8 @@ public class TerminologyService {
 	@Timed
 	public JLVMappedCode jlvTranslate(@QueryParam("type") MappingType type,
 									  @QueryParam("code") String code) {
-		Matcher match = genericCode.matcher(code);
 		if(type == null || code == null || code.equals("")) {
 			return null;
-		}
-		if(!match.matches()) {
-			throw new BadRequestException("Invalid code format");
 		}
 		LOG.info("Translating JLV type " + type.toString() + " and code " + code);
 		try {
@@ -78,10 +70,6 @@ public class TerminologyService {
 		if(type == null || code == null || code.equals("")) {
 			return null;
 		}
-		Matcher match = genericCode.matcher(code);
-		if(!match.matches()) {
-			throw new BadRequestException("Invalid code format");
-		}
 		LOG.info("Translating JLV list type " + type.toString() + " and code " + code);
 		try {
 			if(dao != null) {
@@ -95,8 +83,8 @@ public class TerminologyService {
 		}
 		return null;
 	}
-	
-	
+
+
 	@Path("lnc")
 	@GET
 	@Produces("application/json")
@@ -104,10 +92,6 @@ public class TerminologyService {
 	public Object lncTranslate(@QueryParam("concept") String conceptId) {
 		if(conceptId == null || conceptId.equals("")) {
 			return null;
-		}
-		Matcher match = genericCode.matcher(conceptId);
-		if(!match.matches()) {
-			throw new BadRequestException("Invalid code format");
 		}
 		LOG.info("Translating lnc concept "+ conceptId);
 		if(lncdb != null) {
@@ -117,7 +101,7 @@ public class TerminologyService {
 			return null;
 		}
 	}
-	
+
 	@Path("drug")
 	@GET
 	@Produces("application/json")
@@ -125,10 +109,6 @@ public class TerminologyService {
 	public Object drugTranslate(@QueryParam("concept") String conceptId) {
 		if(conceptId == null || conceptId.equals("")) {
 			return null;
-		}
-		Matcher match = genericCode.matcher(conceptId);
-		if(!match.matches()) {
-			throw new BadRequestException("Invalid code format");
 		}
 		LOG.info("Translating drug concept "+ conceptId);
 		if(drugdb != null) {
@@ -141,13 +121,12 @@ public class TerminologyService {
 
 	public static void setConfiguration(H2Configuration h2Config) {
 		try {
-			
 			if(h2Config.getJlvJdbc() == null) {
 				LOG.error("JLV Terminology DB is not configured");
 			} else {
 				dao = JLVHddDao.createInstance(h2Config.getJlvJdbc());
 			}
-			
+
 			if(h2Config.getDrugJdbc() == null) {
 				LOG.error("Drug Terminology DB is not configured");
 			} else {
@@ -158,7 +137,7 @@ public class TerminologyService {
 					drugdb = new LuceneSearchDataSource(drugTerm, h2Config.getDrugLucene(), false);
 				}
 			}
-			
+
 			if(h2Config.getLncJdbc() == null) {
 				LOG.error("LNC Terminology DB is not configured");
 			} else {
@@ -169,7 +148,7 @@ public class TerminologyService {
 					lncdb = new LuceneSearchDataSource(lncTerm, h2Config.getLncLucene(), false);
 				}
 			}
-			
+
 //			TermEng te = new TermEng(new ITermDataSource[] {lncdb, drugdb});
 		} catch (TermLoadException | ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();

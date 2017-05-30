@@ -35,8 +35,8 @@ describe('Order Detail', function() {
             },
             session: {
                  user: {
-                    username: '9E7A;pu1234',
-                    password: 'pu1234!!',
+                    username: 'REDACTED',
+                    password: 'REDACTED',
                     site: '9E7A'
                 }
             },
@@ -58,20 +58,20 @@ describe('Order Detail', function() {
                         '9E7A': {
                             name: 'PANORAMA',
                             division: '500',
-                            host: '10.2.2.101',
-                            port: 9210,
+                            host: 'IP        ',
+                            port: PORT,
                             production: false,
-                            accessCode: 'pu1234',
-                            verifyCode: 'pu1234!!'
+                            accessCode: 'REDACTED',
+                            verifyCode: 'REDACTED'
                         },
                         'C877': {
                             name: 'KODAK',
                             division: '500',
-                            host: '10.2.2.102',
-                            port: 9210,
+                            host: 'IP        ',
+                            port: PORT,
                             production: false,
-                            accessCode: 'pu1234',
-                            verifyCode: 'pu1234!!'
+                            accessCode: 'REDACTED',
+                            verifyCode: 'REDACTED'
                         }
                     }
                 }

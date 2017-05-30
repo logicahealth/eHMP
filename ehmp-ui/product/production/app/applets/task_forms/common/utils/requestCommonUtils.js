@@ -6,33 +6,6 @@ define([], function() {
         triggerRefresh: function() {
             ADK.Messaging.getChannel('activities').trigger('create:success');
         },
-        // Compare two versions numbers and return the highest one
-        versionCompare: function(v1, v2) {
-            // Split version numbers to its parts
-            var v1parts = v1.split('.');
-            var v2parts = v2.split('.');
-
-            // Shift 0 to the beginning of the version number that might be shorter
-            //      ie. 1.2.3 and 1.2.3.4 => 0.1.2.3 and 1.2.3.4
-            while (v1parts.length < v2parts.length) v1parts.unshift('0');
-            while (v2parts.length < v1parts.length) v2parts.unshift('0');
-
-            // Convert all values to numbers
-            v1parts = v1parts.map(Number);
-            v2parts = v2parts.map(Number);
-
-            for (var i = 0, l = v1parts.length; i < l; ++i) {
-                if (v1parts[i] === v2parts[i]) {
-                    continue;
-                } else if (v1parts[i] > v2parts[i]) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            }
-
-            return -1;
-        },
         parseAssignment: function(assignment) {
             if (assignment === 'opt_me') {
                 return 'Me';
@@ -56,34 +29,6 @@ define([], function() {
                 urgencyId =  4;
             }
             return urgencyId.toString();
-        },
-        // Find the latest request deployment
-        findLatestRequest: function(collection) {
-            var requests = [];
-
-            // Get only the request deployments
-            collection.each(function(model) {
-                if (model.get('id') === 'Order.Request') {
-                    requests.push(model);
-                }
-            });
-
-            // Get the list of just the deployment version numbers
-            var modReqs = requests.map(function(model) {
-                return model.get('deploymentId').split(':').pop();
-            });
-
-            // Find the location, in the array, for the largest value
-            var newestReq = 0;
-            if (modReqs.length > 1) {
-                for (var i = 1, l = modReqs.length; i < l; ++i) {
-                    if (this.versionCompare(modReqs[newestReq], modReqs[i])) {
-                        newestReq = i;
-                    }
-                }
-            }
-
-            return requests[newestReq];
         },
 
         routingCode: function(formModel, formAction) {

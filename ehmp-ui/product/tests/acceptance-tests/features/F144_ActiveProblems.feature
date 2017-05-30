@@ -1,4 +1,4 @@
-@US2411  @reg2
+@F144_Problems @US2411  @reg2
 Feature: F144 - eHMP viewer GUI - Active Problems
 #Team Neptune 
 
@@ -7,21 +7,11 @@ Background:
   And user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
 
-@detail_next_previous @DE5921 @DE6551
-Scenario: Verify user can step through the problems using the next button / previous button
-  Given the Problems applet displays
-  And the problems applet displays at least 3 problem rows
-  And the user notes the first 3 problems
-  And the user views a problem applet row's details
-  Then the modal is displayed
-  And the user can step through the problems using the next button
-  And the user can step through the problems using the previous button
-
-@US2411a @DE5921
+@US2411a @DE5921 @problem_details_view
 Scenario: User uses the active problems coversheet to view modal
     When the Problems applet displays
     And the user views a problem applet row's details
-    And Problem Detail Modal contains data
+    And problems detail view contain fields
      | Primary ICD-9-CM |
      | SNOMED CT |
      | Onset |
@@ -33,72 +23,53 @@ Scenario: User uses the active problems coversheet to view modal
      | Entered|
      | Updated|
 	 
-@US2411b @DE1056
+@US2411b @DE1056 @problem_filter
 Scenario: User uses the active problems coversheet to filter 
   When the Problems applet displays
 	And the user clicks the "Problems Filter Button"
 	And the user filters the Problems Applet by text "Dia"
 	Then the problems table only diplays rows including text "Dia"
 
-@US2411_b
+@US2411_b @problem_sort_problem_name
 Scenario: User uses the active problems coversheet to sort
-   When the Problems applet displays
-   And the user sorts the Problem grid by "Description" 
-   Then the Problem grid is sorted in alphabetic order based on Description
-   When the user sorts the Problem grid by "Acuity"
-   Then the Problem grid is sorted in alphabetic order based on Acuity
+  When the Problems applet displays 
+  When the user sorts the Problems applet by column Problem
+  Then the Problems applet is sorted in alphabetic order based on Problem
+  When the user sorts the Problems applet by column Problem
+  Then the Problems applet is sorted in reverse alphabetic order based on Problem
 
-@US2411_c
-Scenario: User views the expanded Active Problems
-  When the user clicks the Problems Expand Button
-  Then the Problems expanded headers are
-	 | Headers |
-	 | Description |
-	 | Standardized Description |
-	 | Acuity |
-	 | Status |
-	 | Onset Date | 
-	 | Last Updated| 
-	 | Provider| 
-	 | Facility | 
-	 | Comments | 
-
-@US2411c @DE5921
+@US2411c @DE5921 @problem_expand_view_details
 Scenario: User uses the active problems expanded to view modal
-  When the user clicks the Problems Expand Button
-  When the Problems applet displays
+  When the user expands the Problems Applet
   And the user views a problem applet row's details
-  And Problem Detail Modal contains data
+  And problems detail view contain fields
+     | Fields		|
      | Primary ICD-9-CM |
      | SNOMED CT |
      | Onset |
      | Acuity|
      | Status|
-     | Provider|
+     | Responsible provider|
      | Facility|
      | Location|
-     | Entered|
-     | Updated|
+     | Entered by|
+     | Updated on|
 
-@US2411d @DE1056
+@US2411d @DE1056 @problem_expand_view_filter
 Scenario: User uses the expanded active problems applet to filter 
-  When the user clicks the Problems Expand Button
-  And the Problems applet displays
+  When the user expands the Problems Applet
   And the user clicks the "Problems Filter Button"
   And the user filters the Problems Applet by text "Dia"
   Then the problems table only diplays rows including text "Dia"
 
-@US2411d
+@US2411d @problem_expand_view_sort
 Scenario: User uses the expanded active problems applet to sort
-   When the user clicks the Problems Expand Button
-   When the Problems applet displays
-   And the user sorts the Problem grid by "Description" 
-   Then the expanded Problem grid is sorted in alphabetic order based on Description
-   When the user sorts the Problem grid by "Acuity"
-   Then the expanded Problem grid is sorted in alphabetic order based on Acuity
-   
-
-  
+  When the user expands the Problems Applet
+  When the user sorts the Problems applet by column Problem
+  Then the Problems applet is sorted in alphabetic order based on Problem
+  When the user sorts the Problems applet by column Problem
+  Then the Problems applet is sorted in reverse alphabetic order based on Problem
+    
 @f144_problems_on_coversheet_expand_view_refresh 
 Scenario: Problems Expanded view from coversheet view displays all of the same details after applet is refreshed
   When the Problems applet displays
@@ -122,11 +93,4 @@ Scenario: Verify Problems applet expanded view has info button toolbar
   When user opens the first problems row
   Then problems info button is displayed
   
-@f144_problems_modal_details_expand_view @DE5921 @DE6551
-Scenario: User views the problems gist modal pop-up from expand view
-    When the user clicks the Problems Expand Button
-    Then the expanded Problems Applet is displayed
-    And the user views a problem applet row's details
-    Then the modal is displayed
-    And the modal's title is "Diabetes Mellitus Type II or unspecified"
 	

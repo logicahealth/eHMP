@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(["jquery", "backbone", "marionette", "main/ui_components/components", "api/UIComponents", "jasminejquery"],
+define(["jquery", "backbone", "marionette", "main/UILibrary", "api/UIComponents", "jasminejquery"],
     function($, Backbone, Marionette, UI) {
 
         var $form, form;
@@ -113,6 +113,14 @@ define(["jquery", "backbone", "marionette", "main/ui_components/components", "ap
                     expect($form.find('strong')).toHaveText('newTitle');
                     $form.find('.alertMessage').trigger("control:title", '');
                     expect($form.find('strong')).not.toHaveText('newTitle');
+                });
+                it("update:config", function() {
+                    $form.find('.alertMessage').trigger("control:update:config", { title: 'newTitle', dismissible: true});
+                    expect($form.find('strong')).toHaveText('newTitle');
+                    expect($form.find('.alert')).toHaveClass('alert-dismissible');
+                    $form.find('.alertMessage').trigger("control:update:config", { title: '', dismissible: false});
+                    expect($form.find('strong')).not.toHaveText('newTitle');
+                    expect($form.find('.alert')).not.toHaveClass('alert-dismissible');
                 });
             });
         });

@@ -65,6 +65,29 @@ describe('jds-direct-writer', function() {
             done();
         });
     });
+    it('warns on an error status code when posting the model to the vx-sync writeback wrapper', function(done) {
+        nock.cleanAll();
+        nock('http://localhost:8080').post('/writeback').reply(500, {
+            error: {
+                message: 'That went badly'
+            }
+        });
+        var writebackContext = {
+            logger: logger,
+            vprModel: {},
+            appConfig: {
+                vxSyncWritebackServer: {
+                    baseUrl: 'http://localhost:8080'
+                }
+            }
+        };
+        var vxSyncResponse = {};
+        jdsDirectWriter(writebackContext, vxSyncResponse, function(error) {
+            expect(writebackContext.logger.warn.called).to.be.true();
+            expect(error).to.be.falsy();
+            done();
+        });
+    });
     it('warns on error when posting the model to the vx-sync writeback wrapper', function(done) {
         nock.cleanAll();  // The call is not mocked anymore
         var writebackContext = {

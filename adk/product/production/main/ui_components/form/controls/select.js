@@ -40,20 +40,23 @@ define([
 
             return sortedData;
         },
-        defaults: {
-            label: '',
-            showFilter: false,
-            pickList: [],
-            groupEnabled: false,
-            extraClasses: [],
-            multiple: false,
-            title: 'Use up and down arrows to view options and then press enter to select',
-            fetchDelay: 750,
-            options: {
-                width: '100%',
-                minimumInputLength: 3
-            },
-            emptyDefault: true
+        defaults: function() {
+            return {
+                label: '',
+                showFilter: false,
+                pickList: [],
+                groupEnabled: false,
+                extraClasses: [],
+                multiple: false,
+                title: 'Use up and down arrows to view options and then press enter to select',
+                fetchDelay: 750,
+                options: {
+                    width: '100%',
+                    minimumInputLength: 3
+                },
+                emptyDefault: true,
+                // id: this.field.get('name') + '_blahblah' + this.cid
+            };
         },
         requiredFields: ['name', 'label'],
         attributeMappingDefaults: {
@@ -106,10 +109,18 @@ define([
                 this.showLoading();
             }
         }, ControlService.Control.events),
+        // templateHelpers: function() {
+        //     var self = this;
+        //     return {
+        //         getId: function() {
+        //             return this.name + self.cid;
+        //         }
+        //     };
+        // },
         getTemplate: function() {
             var selectTemplate =
-                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}' +
-                '<select class="{{form-class-name "controlClassName"}}" id="{{clean-for-id name}}" name="{{name}}"' +
+                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel)}}' +
+                '<select class="{{form-class-name "controlClassName"}}" id="{{clean-for-id id}}" name="{{name}}"' +
                 '{{#if title}} title="{{title}}"{{/if}}' +
                 '{{#if disabled}} disabled{{/if}}' +
                 '{{#if required}} required{{/if}}' +
@@ -162,6 +173,7 @@ define([
             }, ControlService.Control.prototype.behaviors);
         },
         initialize: function(options) {
+            // this.defaults = _.result(this, 'defaults');
             this.pickList = new Backbone.Collection();
             this.selectSorter = _.bind(this.selectSorter, this);
             this.field.set('options', _.defaults(this.field.get('options') || {}, this.defaults.options, {

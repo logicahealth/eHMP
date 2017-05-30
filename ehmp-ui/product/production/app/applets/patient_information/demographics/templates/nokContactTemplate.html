@@ -1,28 +1,28 @@
-<div class="demographic-group-header">
+<div class="group-header">
 	<h5>Next of Kin</h5>
 	{{#if groupDiff}}
 	<button class="btn btn-icon" type="button" data-toggle="collapse" data-target="#discrepanciesCollapseNextOfKin" aria-expanded="false" aria-controls="discrepanciesCollapseNextOfKin" tooltip-data-key="patient_information_deatils_discrepancies">
-		<i class="fa fa-exclamation-circle demographic-subgroup-icon"></i>
+		<i class="fa fa-exclamation-circle subgroup-icon"></i>
 		<span class="sr-only">Press enter to view different data found at other sites</span>
 	</button>
 	{{/if}}
 </div>
-<div class="demographic-group-content card-style">
+<div class="group-content card-style">
 	<dl data-diff="{{groupDiff}}">
 	    <dt>Relationship</dt>
-	    <dd class="demographic-data left-padding-xs">{{nameRel.relationship.value}}</dd>
+	    <dd class="group-data left-padding-xs">{{nameRel.relationship.value}}</dd>
 	    <dt>Name</dt>
-	    <dd class="demographic-data left-padding-xs">{{nameRel.name.value}}</dd>
+	    <dd class="group-data left-padding-xs">{{nameRel.name.value}}</dd>
 	    <dt>Home</dt>
-	    <dd class="demographic-data left-padding-xs">{{formatPhone hPhone.phone.value}}</dd>
+	    <dd class="group-data left-padding-xs">{{formatPhone hPhone.phone.value}}</dd>
 	    <dt>Work</dt>
-	    <dd class="demographic-data left-padding-xs">{{formatPhone wPhone.phone.value}}</dd>
+	    <dd class="group-data left-padding-xs">{{formatPhone wPhone.phone.value}}</dd>
 	    <dt>Home</dt>
 	    <dd class="left-padding-xs">
-            <div class="demographic-data"> {{address.line1.value}}</div>
-            {{#if address.line2.value}}<div class="demographic-data">{{address.line2.value}}</div>{{/if}}
-            {{#if address.line3.value}}<div class="demographic-data">{{address.line3.value}}</div>{{/if}}
-            {{#if address.line4.value}}<div class="demographic-data">{{address.line4.value}}</div>{{/if}}
+            <div class="group-data"> {{address.line1.value}}</div>
+            {{#if address.line2.value}}<div class="group-data">{{address.line2.value}}</div>{{/if}}
+            {{#if address.line3.value}}<div class="group-data">{{address.line3.value}}</div>{{/if}}
+            {{#if address.line4.value}}<div class="group-data">{{address.line4.value}}</div>{{/if}}
 	    </dd>
 	</dl>
 	{{#if groupDiff}}
@@ -36,19 +36,19 @@
 					<dd>
 						<dl>
 						    <dt>Relationship</dt>
-						    <dd class="demographic-data left-padding-xs">{{nameRel.relationship.value}}</dd>
+						    <dd class="group-data left-padding-xs">{{nameRel.relationship.value}}</dd>
 						    <dt>Name</dt>
-						    <dd class="demographic-data left-padding-xs">{{nameRel.name.value}}</dd>
+						    <dd class="group-data left-padding-xs">{{nameRel.name.value}}</dd>
 						    <dt>Home</dt>
-						    <dd class="demographic-data left-padding-xs">{{formatPhone hPhone.phone.value}}</dd>
+						    <dd class="group-data left-padding-xs">{{formatPhone hPhone.phone.value}}</dd>
 						    <dt>Work</dt>
-						    <dd class="demographic-data left-padding-xs">{{formatPhone wPhone.phone.value}}</dd>
+						    <dd class="group-data left-padding-xs">{{formatPhone wPhone.phone.value}}</dd>
 						    <dt>Home</dt>
 						    <dd class="left-padding-xs">
-					            <div class="demographic-data"> {{address.line1.value}}</div>
-					            {{#if address.line2.value}}<div class="demographic-data">{{address.line2.value}}</div>{{/if}}
-					            {{#if address.line3.value}}<div class="demographic-data">{{address.line3.value}}</div>{{/if}}
-					            {{#if address.line4.value}}<div class="demographic-data">{{address.line4.value}}</div>{{/if}}
+					            <div class="group-data"> {{address.line1.value}}</div>
+					            {{#if address.line2.value}}<div class="group-data">{{address.line2.value}}</div>{{/if}}
+					            {{#if address.line3.value}}<div class="group-data">{{address.line3.value}}</div>{{/if}}
+					            {{#if address.line4.value}}<div class="group-data">{{address.line4.value}}</div>{{/if}}
 						    </dd>
 						</dl>
 					</dd>

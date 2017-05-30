@@ -43,7 +43,8 @@ define([
                 }));
             if (this.model.get('hasImages')) {
                 this.thumbnailRegion.show(new ThumbnailCollectionView({
-                    collection: this.model.get('thumbnails'),
+                    collection: this.model.get('thumbnailCollection'),
+                    avoidFetch: (_.isString(this.model.get('facilityCode')) && this.model.get('facilityCode').toLowerCase() === 'dod') //in case of DOD images
                 }));
             }
         },
@@ -57,20 +58,6 @@ define([
             if (this.model.get('dodComplexNoteContent')) {
                 dodComplexNoteUtil.showContent.call(this, this.model);
             }
-        },
-        getNextModal: function(model, view, resultDocCollection, childDocCollection) {
-            var modals = model.collection.models;
-            var next = _.indexOf(modals, model) + 1;
-            var newModel = modals[next];
-            var appletRows = _.filter($('[data-appletid="documents"] tbody tr'), function(item) { return !($(item).hasClass('group-by-header')); });
-            appletRows[next].click();
-        },
-        getPrevModal: function(model, view, resultDocCollection, childDocCollection) {
-            var modals = model.collection.models;
-            var next = _.indexOf(modals, model) - 1;
-            var newModel = modals[next];
-            var appletRows = _.filter($('[data-appletid="documents"] tbody tr'), function(item) { return !($(item).hasClass('group-by-header')); });
-            appletRows[next].click();
         }
     });
 });

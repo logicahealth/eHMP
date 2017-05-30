@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/components", "api/UIComponents", "jasminejquery"],
+define(["jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api/UIComponents", "jasminejquery"],
     function($, Handlebars, Backbone, Marionette, UI) {
 
         var $form, form;
@@ -55,7 +55,7 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                 it("contains correct label", function() {
                     expect($form.find('label').length).toBe(1);
                     expect($form.find('label')).toHaveText('checkbox label');
-                    expect($form.find('label')).toHaveAttr('for', 'checkboxValue');
+                    expect($form.find('label').attr('for')).toContain('checkboxValue');
                 });
                 it("contains correct title", function() {
                     expect($form.find('input').length).toBe(1);
@@ -70,10 +70,10 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                     expect(form.model.get('checkboxValue')).toBe(true);
                 });
                 it("contains correct id", function() {
-                    expect($form.find('input')).toHaveId('checkboxValue');
+                    expect($form.find('input').attr('id')).toContain('checkboxValue');
                 });
                 it("contains correct type", function() {
-                    expect($form.find('input')).toHaveProp('type','checkbox');
+                    expect($form.find('input')).toHaveProp('type', 'checkbox');
                 });
             });
             describe("with extra classes", function() {
@@ -162,8 +162,9 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                 it("label", function() {
                     $form.find('.checkboxValue').trigger("control:label", 'newLabel');
                     expect($form.find('label')).toHaveText('newLabel');
-                    $form.find('.checkboxValue').trigger("control:label", '');
+                    $form.find('.checkboxValue').trigger("control:label", 'oldLabel');
                     expect($form.find('label')).not.toHaveText('newLabel');
+                    expect($form.find('label')).toHaveText('oldLabel');
                 });
                 it("value", function() {
                     expect($form.find('input:checkbox')).not.toBeChecked();
@@ -173,6 +174,21 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                     $form.find('.checkboxValue').trigger("control:value", false);
                     expect(form.model.get('checkboxValue')).toBe(false);
                     expect($form.find('input:checkbox')).not.toBeChecked();
+                });
+                it("update:config", function() {
+                    $form.find('.checkboxValue').trigger("control:update:config", {
+                        hidden: true,
+                        label: 'newLabel'
+                    });
+                    expect($form.find('.checkboxValue')).toHaveClass('hidden');
+                    expect($form.find('label')).toHaveText('newLabel');
+                    $form.find('.checkboxValue').trigger("control:update:config", {
+                        hidden: false,
+                        label: 'oldLabel'
+                    });
+                    expect($form.find('.checkboxValue')).not.toHaveClass('hidden');
+                    expect($form.find('label')).not.toHaveText('newLabel');
+                    expect($form.find('label')).toHaveText('oldLabel');
                 });
             });
         });

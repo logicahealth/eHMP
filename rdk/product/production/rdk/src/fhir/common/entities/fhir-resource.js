@@ -157,6 +157,10 @@ function SearchParam(name, type, definition, documentation, target, chain) {
 }
 module.exports.SearchParam = SearchParam;
 
+function fixId(id) {
+    return id.replace(/:|,|;|"|\(/g, '.');
+}
+module.exports.fixId = fixId;
 
 //=================================
 function Bundle(link, entry, totalResults) {
@@ -171,7 +175,7 @@ module.exports.Bundle = Bundle;
 
 function MedicationStatement(id, identifier, status, patient) {
     this.resourceType = 'MedicationStatement';
-    this.id = id;
+    this.id = fixId(id);
     this.status = status || '';
     this.patient = patient || new ReferenceResource();
 }
@@ -179,7 +183,7 @@ module.exports.MedicationStatement = MedicationStatement;
 
 function MedicationDispense(id, identifier, status, patient, dispenser) {
     this.resourceType = 'MedicationDispense';
-    this.id = id;
+    this.id = fixId(id);
     this.status = status || '';
     this.patient = patient || new ReferenceResource();
     this.dispenser = dispenser || new ReferenceResource();
@@ -188,7 +192,7 @@ module.exports.MedicationDispense = MedicationDispense;
 
 function DiagnosticReport(id, name, status, issued, subject, performer) {
     this.resourceType = 'DiagnosticReport';
-    this.id = id;
+    this.id = fixId(id);
     this.name = name || new CodeableConcept();
     this.status = DiagnosticReportStatus[status] || '';
     this.issued = issued || null; //dateTime
@@ -199,19 +203,19 @@ module.exports.DiagnosticReport = DiagnosticReport;
 
 function Encounter(id) {
     this.resourceType = 'Encounter';
-    this.id = id || '';
+    this.id = fixId(id) || '';
 }
 module.exports.Encounter = Encounter;
 
 function Organization(id) {
     this.resourceType = 'Organization';
-    this.id = id || '';
+    this.id = fixId(id) || '';
 }
 module.exports.Organization = Organization;
 
 function Location(id, name, identifier) {
     this.resourceType = 'Location';
-    this.id = id || '';
+    this.id = fixId(id) || '';
     if (nullchecker.isNotNullish(name)) {
         this.name = name;
         this.text = new Narrative('<div>' + _.escape(name) + '</div>');
@@ -224,7 +228,7 @@ module.exports.Location = Location;
 
 function Practitioner(id, name) {
     this.resourceType = 'Practitioner';
-    this.id = id || '';
+    this.id = fixId(id) || '';
     if (nullchecker.isNotNullish(name)) {
         this.name = name;
     }
@@ -263,7 +267,7 @@ module.exports.HumanName = HumanName;
 
 function Specimen(id, subject, type, collectedDateTime, containerType) {
     this.resourceType = 'Specimen';
-    this.id = id || '';
+    this.id = fixId(id) || '';
     this.type = type;
     this.subject = subject || new ReferenceResource();
     if (collectedDateTime) {
@@ -280,7 +284,7 @@ module.exports.Specimen = Specimen;
 
 function Observation(id, code, status, reliability, valueX, x) {
     this.resourceType = 'Observation';
-    this.id = id || '';
+    this.id = fixId(id) || '';
     this.code = code || new CodeableConcept();
     this.status = status;
     if (nullchecker.isNotNullish(reliability)) {
@@ -451,14 +455,14 @@ module.exports.Entry = Entry;
 
 function Order(id, dateTime) {
     this.resourceType = 'Order';
-    this.id = id || '';
+    this.id = fixId(id) || '';
     this.date = dateTime;
 }
 module.exports.Order = Order;
 
 function DiagnosticOrder(id, subject, status, orderer, items) {
     this.resourceType = 'DiagnosticOrder';
-    this.id = id || '';
+    this.id = fixId(id) || '';
     this.subject = subject || null;
     if (nullchecker.isNotNullish(status)) {
         this.status = status;
@@ -479,7 +483,7 @@ module.exports.DiagnosticOrder = DiagnosticOrder;
 
 function MedicationPrescription(id, patient, status, prescriber, medication) {
     this.resourceType = 'MedicationPrescription';
-    this.id = id || '';
+    this.id = fixId(id) || '';
     this.patient = patient || null;
     if (nullchecker.isNotNullish(status)) {
         this.status = status;
@@ -495,7 +499,7 @@ module.exports.MedicationPrescription = MedicationPrescription;
 
 function MedicationAdministration_DSTU2(id, vaStatus) {
     this.resourceType = 'MedicationAdministration';
-    this.id = id || '';
+    this.id = fixId(id) || '';
 
     if (nullchecker.isNotNullish(vaStatus)) {
         this.status = getMedicationAdministrationStatus(vaStatus);
@@ -505,7 +509,7 @@ module.exports.MedicationAdministration_DSTU2 = MedicationAdministration_DSTU2;
 
 function MedicationPrescription_DSTU2(id, vaStatus) {
     this.resourceType = 'MedicationPrescription';
-    this.id = id || '';
+    this.id = fixId(id) || '';
 
     if (nullchecker.isNotNullish(vaStatus)) {
         this.status = getMedicationPrescriptionStatus(vaStatus);
@@ -515,7 +519,7 @@ module.exports.MedicationPrescription_DSTU2 = MedicationPrescription_DSTU2;
 
 function Medication(id, name, code) {
     this.resourceType = 'Medication';
-    this.id = id || '';
+    this.id = fixId(id) || '';
     this.name = name;
     this.code = code;
 }
@@ -523,7 +527,7 @@ module.exports.Medication = Medication;
 
 function Substance(id, type, description) {
     this.resourceType = 'Substance';
-    this.id = id || '';
+    this.id = fixId(id) || '';
     if (nullchecker.isNotNullish(type)) {
         this.type = type;
     }
@@ -544,7 +548,7 @@ module.exports.Period = Period;
 
 function Composition(id, date, type, status, subject, author) {
     this.resourceType = 'Composition';
-    this.id = id;
+    this.id = fixId(id);
     if (nullchecker.isNotNullish(date)) {
         this.date = date;
     }
@@ -565,7 +569,7 @@ module.exports.Composition = Composition;
 
 function List(id, status, mode, text) {
     this.resourceType = 'List';
-    this.id = id;
+    this.id = fixId(id);
     this.status = status;
     this.mode = mode;
     this.text = {
@@ -577,14 +581,14 @@ module.exports.List = List;
 
 function ReferralRequest(id, status) {
     this.resourceType = 'ReferralRequest';
-    this.id = id;
+    this.id = fixId(id);
     this.status = status;
 }
 module.exports.ReferralRequest = ReferralRequest;
 
 function Procedure(id, subject, status, orderer) {
     this.resourceType = 'Procedure';
-    this.id = id || '';
+    this.id = fixId(id) || '';
     //this.subject = subject || null;
     if (nullchecker.isNotNullish(status)) {
         this.status = status;

@@ -3,7 +3,7 @@
     <work:WorkContext xmlns:work="http://oracle.com/weblogic/soap/workarea/">rO0ABXdXAB53ZWJsb2dpYy5hcHAuVklDLUUtQXBwbGljYXRpb24AAADWAAAAI3dlYmxvZ2ljLndvcmthcmVhLlN0cmluZ1dvcmtDb250ZXh0AAg0LjAuMS4xNQAA</work:WorkContext>
   </S:Header>
   <S:Body>
-    <ns2:getVeteranPicturesResponse xmlns:ns2="http://cardpictureservice.vic.va.va.gov/">
+    <ns2:getVeteranPicturesResponse xmlns:ns2="http://cardpictureservice.vic.va.DNS   /">
       <return>
         <errorFlag>false</errorFlag>
         <maxTruncated>false</maxTruncated>

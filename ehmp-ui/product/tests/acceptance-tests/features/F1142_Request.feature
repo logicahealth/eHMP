@@ -2,26 +2,32 @@
 
 Feature: F1142 : Home Page usability  (Staff View)
 
+@US18353_flagged_checkbox_request
+Scenario: Verify that by default the flagged checkbox is unchecked 
+
+  When user searches for and selects "bcma,eight"
+  Then Summary View is active
+  And user navigates to expanded request applet
+  And flagged checkbox is unchecked by default in Request Applet
+  
 @US17397_add_request
 Scenario: Create a request and review it in request applet expanded view - 1
 
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded request applet
-  And user unchecks the flagged checkbox from request applet
   And the user takes note of number of existing requests
   And user adds a new request titled "Call Patient"
   And user enters a request details text "Status of medication"
   And user accepts the request
   Then a request is added to the applet
   
-@US17397_request_view_details
+@US17397_request_view_details @DE7396
 Scenario: View request detail view
 
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded request applet
-  And user unchecks the flagged checkbox from request applet
   And user makes sure there exists at least one request
   And user views the details of the request
   Then the detail modal for request displays 
@@ -32,7 +38,6 @@ Scenario: Create a request and review it in request applet expanded view - 2
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded request applet
-  And user unchecks the flagged checkbox from request applet
   And the user takes note of number of existing requests
   And user adds a new request titled "Write Prescription"
   And user enters a request details text "prescription refill"
@@ -45,19 +50,26 @@ Scenario: Sorts the request applet based on column Request
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded request applet
-  And user unchecks the flagged checkbox from request applet
   And the user sorts the Request applet by column Request 
   Then the Request applet is sorted in alphabetic order based on column Request
   And the user sorts the Request applet by column Request 
   Then the Request applet is sorted in reverse alphabetic order based on column Request
   
-@US17397_discontinue_request
+@US17397_request_applet_filter
+Scenario: User can filter the Request applet
+
+  When user searches for and selects "bcma,eight"
+  Then Summary View is active
+  And user navigates to expanded request applet
+  And user filters the Request applet by text "Prescription"
+  And Request applet table only diplays rows including text "Prescription"
+  
+@US17397_discontinue_request @DE7396
 Scenario: Discontinue a request to created closed request
 
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded request applet
-  And user unchecks the flagged checkbox from request applet
   And user makes sure there exists at least one request
   And user views the details of the request
   Then the detail modal for request displays 
@@ -69,16 +81,14 @@ Scenario: Display only open requests
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded request applet
-  And user unchecks the flagged checkbox from request applet
   Then Reqeust applet shows only requests that have are in "Active" state
   
-@US17397_show_closed
+@US17397_show_closed @DE7396
 Scenario: Display only closed requests
 
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded request applet
-  And user unchecks the flagged checkbox from request applet
   And user selects to show only "Closed" requests
   Then Reqeust applet shows only requests that have are in "Completed" state
   
@@ -88,16 +98,14 @@ Scenario: Display both open and closed requests
   When user searches for and selects "bcma,eight"
   Then Summary View is active
   And user navigates to expanded request applet
-  And user unchecks the flagged checkbox from request applet
   And user selects to show only "Open and Closed" requests
-  Then Request applet shows both active and completed requests
+  Then Request applet shows either active or completed requests
 
 @US17739_add_request_for_another_patient
 Scenario: Create a request for another patient and verify in staff view screen
 
   Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "two1234" verifycode as  "two1234!!"
   And staff view screen is displayed
-  And user unchecks the flagged checkbox from request applet
   And the user takes note of number of existing requests
   Then user searches for and selects "eight,inpatient"
   Then Summary View is active
@@ -118,7 +126,6 @@ Scenario: Verify request applet in staff view screen displays multiple patients 
   | Patient Name |
   | Flag         |
   | Request       |
-  And user unchecks the flagged checkbox from request applet
   Then user vrifies the requests applet has following patients listed
   | Patients            |
   | BCMA,EIGHT (0008)   |

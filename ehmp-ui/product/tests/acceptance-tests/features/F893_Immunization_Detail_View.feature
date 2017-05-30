@@ -1,17 +1,17 @@
-@f893_immunization_enhanced_detail_view  @DE4560 @future
+@f893_immunization_enhanced_detail_view  @DE4560 @reg3 @future 
 
 Feature: F893 : Enhanced Immunization Detail View with VIMM Fields
 
 @893_1_add_administered @UAT_script  @debug @DE7023 @DE6768
 Scenario: Add administered immunization and verify detail view and note object creation
 
-  Given user searches for and selects "twenty,patient"
+  Given user searches for and selects "twentythree,inpatient"
   And Overview is active
-  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
+  And user navigates to Immunization expanded view
   And POB user adds a new immunization
   When POB user adds administered immunization "PNEUMOCOCCAL CONJUGATE"
-  Then POB new immunization "PNEUMOCOCCAL CONJUGATE" is added to the immunization applet
-  And user opens the newly added immunization pill
+  Then the immunization "PNEUMOCOCCAL CONJUGATE" is added to the applet
+  And user opens the first immunization row
   And POB user verifies the immunization detail modal fields
   | field									|	value							|
   | Name									| PNEUMOCOCCAL CONJUGATE VACCINE	|
@@ -31,13 +31,15 @@ Scenario: Add administered immunization and verify detail view and note object c
 @893_2_add_historical @UAT_script
 Scenario: Add administered immunization and verify detail view.
 
-  Given user searches for and selects "thirteen,patient"
+  Given user searches for and selects "twentythree,inpatient"
   And Overview is active
-  And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
+  And user navigates to Immunization expanded view
+  And the user takes note of number of existing immunizations
   And POB user adds a new immunization
   When POB user adds historical immunization "PNEUMOCOCCAL, UNSPECIFIED FORMULATION"
-  Then POB new immunization "PNEUMOCOCCAL, UNSPECIFIED FORMULATION" is added to the immunization applet
-  And user opens the newly added immunization pill
+  And user refreshes the immunization applet
+  Then the immunization "PNEUMOCOCCAL, UNSPECIFIED FORMULATION" is added to the applet
+  And user opens the first immunization row
   And POB user verifies the immunization detail modal fields
   | field									|	value											|
   | Name									| PNEUMOCOCCAL, UNSPECIFIED FORMULATION				|

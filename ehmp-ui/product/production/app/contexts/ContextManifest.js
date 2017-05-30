@@ -10,7 +10,7 @@
         module.exports = factory();
     } else {
         // this follows common pattern, though this is expected to never get hit
-        root.ScreensManifest = factory();
+        root.ContextManifest = factory();
     }
 }(this, function() {
     'use strict';

@@ -139,9 +139,9 @@ define([
         position: 'auto',
         RowView: RowView,
         ButtonTemplate: Handlebars.compile([
-            '<i class="fa {{icon}} fa-2x"></i>',
+            '<i class="fa {{icon}} font-size-18"></i>',
             '{{#if alert_count}}',
-            '<span class="badge font-size-11">{{alert_count}}</span>',
+            '<span class="badge badge--notification">{{alert_count}}</span>',
             '{{/if}}'
         ].join('\n')),
         options: _.extend({}, AppletDropdownView.prototype.options, {

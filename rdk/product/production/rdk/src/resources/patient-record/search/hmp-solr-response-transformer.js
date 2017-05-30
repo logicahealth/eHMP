@@ -10,6 +10,8 @@ module.exports._transformSolrItemsToHmpFormat = transformSolrItemsToHmpFormat;
 module.exports._buildResponseObjectSkeleton = buildResponseObjectSkeleton;
 module.exports._getSearchedDomainFromSolrResponse = getSearchedDomainFromSolrResponse;
 module.exports._isGroupingEnabled = isGroupingEnabled;
+module.exports._addSynonymsToResponse = addSynonymsToResponse;
+module.exports._removeEscapeChars = removeEscapeChars;
 
 function addSpecializedResultsToResponse(specializedSolrResults, reqQuery) {
     var hmpEmulatedResponseObject = buildResponseObjectSkeleton(reqQuery);
@@ -26,6 +28,7 @@ function addSpecializedResultsToResponse(specializedSolrResults, reqQuery) {
 
         hmpEmulatedResponseObject = transformSolrItemsToHmpFormat(specializedSolrResult, hmpEmulatedResponseObject);
         hmpEmulatedResponseObject = updateCumulativeResponseData(specializedSolrResult, hmpEmulatedResponseObject);
+        hmpEmulatedResponseObject = addSynonymsToResponse(specializedSolrResult, hmpEmulatedResponseObject);
     });
     return hmpEmulatedResponseObject;
 }
@@ -78,6 +81,8 @@ function transformSolrItemsToHmpFormat (specializedSolrResult, hmpEmulatedRespon
         result: transformLabSolrItemsToHmp,
         lab: transformLabSolrItemsToHmp,  // should not be needed, but left in for safety
         problem: transformProblemSolrItemsToHmp,
+
+        vlerdocument: transformVlerDocumentSolrItemsToHmp,
 
 //        suggest: buildSuggestQuery,
 //        tasks: buildTasksQuery,
@@ -237,6 +242,88 @@ function transformProblemSolrItemsToHmp(item, domain) {
 
 }
 
+function transformVlerDocumentSolrItemsToHmp(item, domain) {
+    var transformedItem = item;
+    transformedItem.where = transformedItem.facility_name;
+
+    if (domain) {
+        transformedItem.type = domain;
+    } else {
+        transformedItem.type = 'vlerdocument';
+    }
+
+    transformedItem.kind = 'Community Health Summaries';
+    delete transformedItem.facility_name;
+    return transformedItem;
+}
+
+function addSynonymsToResponse(specializedSolrResult, hmpEmulatedResponseObject) {
+    if (_.isArray(_.get(specializedSolrResult, 'debug.expandedSynonyms'))) {
+        var synonyms = _.flatten(_.map(specializedSolrResult.debug.expandedSynonyms, function(row) {
+            return _.map(parseMultipleSynonymsInARow(row), removeEscapeChars);
+        }));
+        hmpEmulatedResponseObject.data.synonyms = _.uniq(synonyms);
+    }
+    return hmpEmulatedResponseObject;
+}
+
+
+function parseMultipleSynonymsInARow(row) {
+    // If performance is an issue in the future, this version is 2x faster (and much less readable)
+    // function parseMultipleSynonymsInARow2(row) {
+    //     var regex = /(""\S*"\s+.*?"|"\S+\s+".*?""|".*?"(?=(?:\s|$))|\S+)/g;
+    //     return row.match(regex);
+    // }
+
+    // This parsing is messy because the string is built messily;
+    // nested quotes are not escaped:
+    // https://github.com/healthonnet/hon-lucene-synonyms/blob/c87fb8ced0abc9e19381a4843c964cf8473e8912/src/main/java/com/github/healthonnet/search/SynonymExpandingExtendedDismaxQParserPlugin.java#L478
+
+    var strings = row.split(' ');
+    var tokens = [];
+    var insideQuotedString = false;
+    var insideNestedString = false;
+    var currentToken = null;
+    _.each(strings, function(line) {
+        if (_.startsWith(line, '"')) {
+            insideQuotedString = true;
+        }
+        if (insideQuotedString) {
+            if (_.startsWith(line, '""')) {
+                insideNestedString = true;
+            }
+            if (_.isNull(currentToken)) {
+                currentToken = line;
+            } else {
+                currentToken += ' ' + line;
+            }
+        } else {
+            tokens.push(line);
+        }
+        if (_.endsWith(line, '"')) {
+            if (insideNestedString) {
+                insideNestedString = false;
+            } else {
+                insideQuotedString = false;
+                tokens.push(currentToken);
+                currentToken = null;
+            }
+        }
+    });
+    return tokens;
+}
+
+function removeEscapeChars(item) {
+    if (_.startsWith(item, '\"')) {
+        item = item.substring(1, item.length);
+    }
+    if (_.endsWith(item, '\"')) {
+        item = item.substring(0, item.length - 1);
+    }
+    return item;
+}
+
+
 function buildResponseObjectSkeleton(reqQuery) {
     var responseObject = {};
 
@@ -250,6 +337,9 @@ function buildResponseObjectSkeleton(reqQuery) {
     data.corrections = [];  // never used in HMP
     data.mode = 'SEARCH';  // see NOTES for more modes
     data.items = [];
+    if (nullchecker.isNotNullish(reqQuery.returnSynonyms) && reqQuery.returnSynonyms === 'true') {
+        data.synonyms = [];
+    }
     data.filters = {};
 
     responseObject.data = data;

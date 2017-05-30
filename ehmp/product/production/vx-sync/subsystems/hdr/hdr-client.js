@@ -39,6 +39,10 @@ function HDRClient(log, metrics, config) {
     log.debug('hdr-client: creating hdr proxy');
 }
 
+HDRClient.prototype.childInstance = function(log) {
+    return new HDRClient(log, this.metrics, this.config);
+};
+
 //-------------------------------------------------------------------------------------
 // This function makes an rest call to HDR to subscribe the patient.
 //

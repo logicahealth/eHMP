@@ -75,7 +75,7 @@ describe('jds-client.js (Error Record)', function() {
             }, 'Should complete without error', 3000);
 
             runs(function() {
-                expect(expectedError).toBeUndefined();
+                expect(expectedError).toBeFalsy();
                 expect(expectedResult.getErrorRecordCount).toBeGreaterThan(0);
             });
         });
@@ -103,7 +103,7 @@ describe('jds-client.js (Error Record)', function() {
             }, 'Should complete without error', 3000);
 
             runs(function() {
-                expect(expectedError).toBeUndefined();
+                expect(expectedError).toBeFalsy();
                 expect(String(expectedResult.getErrorRecordCount)).toBe('0');
             });
         });
@@ -131,7 +131,7 @@ describe('jds-client.js (Error Record)', function() {
             }, 'Should complete without error', 3000);
 
             runs(function() {
-                expect(expectedError).toBeUndefined();
+                expect(expectedError).toBeFalsy();
                 expect(expectedResult.getErrorRecordCount).toBeGreaterThan(0);
             });
         });
@@ -171,7 +171,7 @@ describe('jds-client.js (Error Record)', function() {
             }, 'Should complete without error', 3000);
 
             runs(function() {
-                expect(expectedError).toBeUndefined();
+                expect(expectedError).toBeFalsy();
                 expect(expectedResult.findErrorRecordById).toEqual([storedRecord]);
             });
         });
@@ -212,7 +212,7 @@ describe('jds-client.js (Error Record)', function() {
             }, 'Should complete without error', 3000);
 
             runs(function() {
-                expect(expectedError).toBeUndefined();
+                expect(expectedError).toBeFalsy();
                 expect(String(expectedResult.getErrorRecordCount)).toBe('0');
             });
         });
@@ -255,7 +255,7 @@ describe('jds-client.js (Error Record)', function() {
             }, 'Should complete without error', 3000);
 
             runs(function() {
-                expect(expectedError).toBeUndefined();
+                expect(expectedError).toBeFalsy();
                 expect(expectedResult.findErrorRecordsByFilter.length).toBe(2);
             });
         });
@@ -285,7 +285,7 @@ describe('jds-client.js (Error Record)', function() {
         }, 'Should complete without error', 3000);
 
         runs(function() {
-            expect(expectedError).toBeUndefined();
+            expect(expectedError).toBeFalsy();
             expect(String(expectedResult.getErrorRecordCount)).toBe('0');
         });
     });

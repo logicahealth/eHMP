@@ -1,5 +1,5 @@
-HMPDVSIT ;SLC/MKB,ASMR/RRB - Visit/Encounter extract;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**3**;Sep 02, 2016;Build 63
+HMPDVSIT ;SLC/MKB,ASMR/RRB,BL - Visit/Encounter extract;Aug 29, 2016 20:06:27
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**3**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -27,7 +27,7 @@ HMPDVSIT ;SLC/MKB,ASMR/RRB - Visit/Encounter extract;8/2/11  15:29
  ;
 EN(DFN,BEG,END,MAX,ID) ; -- find patient's visits and appointments
  N HMPCNT,HMPITM,HMPDT,HMPLOC,HMPDA
- S DFN=+$G(DFN) Q:DFN<1
+ S DFN=+$G(DFN) I '(DFN>0) D LOGDPT^HMPLOG(DFN) Q  ;DE4496 19 August 2016
  S BEG=$G(BEG,1410101),END=$G(END,4141015),MAX=$G(MAX,9999)
  ;
  ; get one visit
@@ -48,7 +48,7 @@ ENQ ; end
  ;
 ENAA(DFN,BEG,END,MAX,ID) ; -- find patient's visits and appointments [AA]
  N IDT,DA,HMPCNT,HMPITM
- S DFN=+$G(DFN) Q:DFN<1
+ S DFN=+$G(DFN) I '(DFN>0) D LOGDPT^HMPLOG(DFN) Q  ;DE4496 19 August 2016
  S BEG=$G(BEG,1410101),END=$G(END,4141015),MAX=$G(MAX,9999)
  I $G(ID) D EN1(ID,.HMPITM),XML(.HMPITM) Q  ;one visit
  D IDT S HMPCNT=0

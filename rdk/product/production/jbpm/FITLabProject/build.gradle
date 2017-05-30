@@ -1,4 +1,14 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'VistaCore'
+description = "FITLabProject"
+
+sourceCompatibility = property('javaVersion')
+targetCompatibility = property('targetJavaVersion')
+
 dependencies {
+	compile group: 'org.kie', name: 'kie-api', version: property('kie-version')
 }
 
 jar {

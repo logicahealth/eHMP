@@ -2,7 +2,7 @@
 Feature: Implement My Site search tray
 
 Background:
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "TWO1234" verifycode as  "TWO1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
   Then staff view screen is displayed
 
 @F1142_mysite_1
@@ -42,7 +42,7 @@ Scenario: Verify My Site search reports when search term contains unallowable ch
   When the user searchs My Site with search term Bad$Name
   Then the tray error message "Invalid Search criteria." displays
 
-@F1142_mysite_7
+@F1142_mysite_7 @DE7713
 Scenario: Verify My Site search results are in correct format
     When the user searchs My Site with search term Eight,Patient
     Then the My Site Tray displays
@@ -51,9 +51,11 @@ Scenario: Verify My Site search results are in correct format
     | header        |
     | Patient Name  |
     | Date of Birth |
+    | Gender        |
     
     And the My Site Tray patient name search results are in format Last Name, First Name + (First Letter in Last Name + Last 4 SSN )
-    And the My Site Tray date of birth search results are in format Date (Agey) - Gender (first letter)
+    And the My Site Tray date of birth search results are in format Date (Agey)
+    And the My Site Tray gender search results are in terms Male, Female or Unknown
 
 @F1142_mysite_8
 Scenario: Verify My Site search is triggered by search button

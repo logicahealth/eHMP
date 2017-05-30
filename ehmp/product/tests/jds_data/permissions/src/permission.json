@@ -163,7 +163,7 @@
     "note": "",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": ["edit-encounter-form"]
@@ -176,7 +176,7 @@
     "note": "No replacement",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": []
@@ -236,7 +236,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -272,7 +272,7 @@
     "example": "",
     "note": "For use if the ordering provider is unavailable",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -284,7 +284,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -308,7 +308,43 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "add-coordination-request",
+    "value": "add-coordination-request",
+    "label": "Add Coordination Request",
+    "description": "Ability to create a new request",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "respond-coordination-request",
+    "value": "respond-coordination-request",
+    "label": "Respond to Coordination Request",
+    "description": "Ability to respond to a request that has been tasked to the user",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "edit-coordination-request",
+    "value": "edit-coordination-request",
+    "label": "Edit Coordination Request",
+    "description": "Ability to edit a request that is in a draft state, or that has been returned to the user",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -333,7 +369,7 @@
     "note": "No replacement",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": []
@@ -382,7 +418,7 @@
     "note": "",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": []
@@ -418,7 +454,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -430,7 +466,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active",
@@ -444,7 +480,7 @@
     "note": "",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": []
@@ -469,7 +505,7 @@
     "note": "",
     "version": {
         "introduced": "1.3.2",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": ["follow-up-incomplete-lab-order"]
@@ -494,7 +530,7 @@
     "note": "",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": []
@@ -531,7 +567,7 @@
     "note": "",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": []
@@ -759,7 +795,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -771,7 +807,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -880,7 +916,7 @@
     "note": "",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": []
@@ -917,7 +953,7 @@
     "note": "",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": []
@@ -942,7 +978,7 @@
     "note": "",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": ["access-stack-graph"]
@@ -955,7 +991,7 @@
     "note": "",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": ["access-stack-graph"]
@@ -981,7 +1017,7 @@
     "note": "",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": ["cancel-task"]
@@ -1102,7 +1138,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1114,7 +1150,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1126,7 +1162,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1138,7 +1174,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1163,7 +1199,7 @@
     "note": "No replacement",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": []
@@ -1212,7 +1248,7 @@
     "note": "No replacement",
     "version": {
         "introduced": "1.3.1",
-        "deprecated": "2.0.1"
+        "deprecated": "2.0"
     },
     "status": "deprecated",
     "replacements": []
@@ -1224,7 +1260,7 @@
     "example": "",
     "note": "This is for Activity Management Only",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "activeJBPMOnly"
@@ -1236,7 +1272,7 @@
     "example": "",
     "note": "This is for Activity Management Only",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "activeJBPMOnly"
@@ -1248,7 +1284,7 @@
     "example": "",
     "note": "This is for Activity Management Only",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "activeJBPMOnly"
@@ -1260,7 +1296,7 @@
     "example": "",
     "note": "This is for Activity Management Only",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "activeJBPMOnly"
@@ -1272,7 +1308,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1284,7 +1320,7 @@
     "example": "picklists, jds user info",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1296,7 +1332,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1308,7 +1344,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1320,7 +1356,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1332,7 +1368,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1344,7 +1380,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1356,7 +1392,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1368,7 +1404,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1380,7 +1416,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1392,7 +1428,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1404,7 +1440,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1416,7 +1452,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1428,7 +1464,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1440,7 +1476,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1452,7 +1488,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1464,7 +1500,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1476,7 +1512,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1488,7 +1524,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1500,7 +1536,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1512,7 +1548,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1524,7 +1560,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1536,7 +1572,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1548,7 +1584,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1560,7 +1596,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1572,7 +1608,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1584,7 +1620,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1596,7 +1632,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1608,7 +1644,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1620,7 +1656,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1632,7 +1668,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1644,7 +1680,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1656,7 +1692,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"
@@ -1668,7 +1704,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "future"
@@ -1680,7 +1716,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "future"
@@ -1692,7 +1728,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "future"
@@ -1704,7 +1740,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "future"
@@ -1716,7 +1752,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "future"
@@ -1728,7 +1764,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "future"
@@ -1740,7 +1776,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "future"
@@ -1752,7 +1788,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "future"
@@ -1764,7 +1800,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "future"
@@ -1776,7 +1812,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "future"
@@ -1788,7 +1824,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "future"
@@ -1800,7 +1836,7 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "future"
@@ -1812,11 +1848,11 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "future"
-},{
+}, {
     "uid": "read-vler-toc",
     "value": "read-vler-toc",
     "label": "Read VLER Transition of Care",
@@ -1824,7 +1860,19 @@
     "example": "",
     "note": "",
     "version": {
-        "introduced": "2.0.1",
+        "introduced": "2.0",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-message",
+    "value": "read-message",
+    "label": "Read Messages from Communication System",
+    "description": "Ability to read the messages given by the communications system",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0",
         "deprecated": null
     },
     "status": "active"

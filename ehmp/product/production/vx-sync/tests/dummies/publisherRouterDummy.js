@@ -20,4 +20,8 @@ Router.prototype.getPublisherForJob = function(job) {
     return new PublisherDummy(this.log, this.config, 'dummyJob');
 };
 
+Router.prototype.childInstance = function(log){
+	return this;
+};
+
 module.exports = Router;

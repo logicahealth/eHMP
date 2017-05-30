@@ -18,22 +18,19 @@ define([
     'use strict';
     var VX_SYNC_BASIS_PATIENT_DOMAIN_STAMPTIME = 16051105010000;
 
-    var FooterSuammryView = Backbone.Marionette.ItemView.extend({
+    var FooterSummaryView = Backbone.Marionette.ItemView.extend({
         template: FooterSummaryTemplate,
         templateHelpers: {
-            facility: function () {
+            facility: function() {
                 return ADK.UserService.getUserSession().get('facility');
             }
         },
         behaviors: {
             Tooltip: {},
-            HelpLink: {
-                container: '.help-button-container',
-                mapping: 'status_bar',
-                buttonOptions: {
-                    icon: 'fa-question-circle',
-                    paddingClass: 'all-padding-no'
-                }
+            FlexContainer: {
+                direction: 'row',
+                alignItems: 'center',
+                container: '> ul'
             }
         },
         ui: {
@@ -109,11 +106,17 @@ define([
             this._lock = 0;
             this.currentWorkspaceAndContextModel = ADK.WorkspaceContextRepository.currentWorkspaceAndContext;
             this.listenTo(this.currentWorkspaceAndContextModel, 'change', this.changeInWorkspace);
+            ADK.Messaging.getChannel('patient_sync_status').reply('get:simple:sync:status', _.bind(function() {
+                return this.model.get('rawData');
+            }, this));
         },
         changeInWorkspace: function(model) {
             if (model.get('context') === 'patient' && model.get('workspace') !== 'patient-search-screen') {
                 this.updatePatientSyncStatus(true);
                 this.startAutoPolling();
+            } else {
+                this.model.set({ 'syncStatus': null, 'rawData': null }, { unset: true });
+                this.stopAutoPolling();
             }
         },
         onDomRefresh: function() {
@@ -145,6 +148,7 @@ define([
             if (syncDetailCollectionXhr) {
                 syncDetailCollectionXhr.abort();
             }
+            ADK.Messaging.getChannel('patient_sync_status').stopReplying('get:simple:sync:status');
         },
         startAutoPolling: function() {
             this.resetTimeInterval();
@@ -228,7 +232,7 @@ define([
                 }
                 this.fetchDataStatus(refresh);
             } else {
-                this.model.unset('syncStatus');
+                this.model.set({ 'syncStatus': null, 'rawData': null }, { unset: true });
             }
         },
         refreshStatus: function() {
@@ -248,7 +252,7 @@ define([
             this.syncCompleted = undefined;
         },
         fetchDataStatus: function(refresh) {
-            if(this._lock > 0) {
+            if (this._lock > 0) {
                 // Too many pending requests... let it reply before making more.
                 return;
             }
@@ -299,21 +303,28 @@ define([
                 }];
                 self.$('.tooltip').tooltip('hide');
                 self.model.set('syncStatus', stats);
+                self.model.unset('rawData');
             };
             fetchOptions.onSuccess = function(collection, resp) {
-                self.model.set('latestSourceStampTime', _.get(resp, 'data.latestSourceStampTime', ''));
+                self.model.set({
+                    'rawData': _.get(resp, 'data'),
+                    'latestSourceStampTime': _.get(resp, 'data.latestSourceStampTime', '')
+                });
                 self._lock -= 1;
                 var currentSiteCode = ADK.UserService.getUserSession().get('site');
                 var statusObject = resp.data;
                 var stats = [];
                 if (statusObject.VISTA) {
-                    if (statusObject.VISTA[currentSiteCode]) {
-                        var curSite = statusObject.VISTA[currentSiteCode];
+                    var curSite = statusObject.VISTA[currentSiteCode];
+                    if (curSite) {
                         var completedStatus = curSite.hasError ? 'error' : curSite.isSyncCompleted;
                         var statInfo = {
+                            id: 'MySite',
                             title: 'My Site',
                             screenReaderTitle: 'My Site',
                         };
+                        statInfo.isSolrSyncCompleted = curSite.isSolrSyncCompleted || false;
+                        ADK.PatientRecordService.getCurrentPatient().set('mySiteSolrSyncCompleted', statInfo.isSolrSyncCompleted);
                         statInfo.completed = completedStatus;
                         // if (statInfo.completed === true && curSite.completedStamp) {
                         //     statInfo.timeStamp = ADK.utils.getTimeSince(curSite.completedStamp.toString(), false).timeSince;
@@ -332,6 +343,7 @@ define([
                     }
                     // push All VA
                     var allVA = {
+                        id: 'AllVA',
                         title: 'All VA',
                         screenReaderTitle: 'All V.A.',
                     };
@@ -355,11 +367,13 @@ define([
                     var isComplete = dodStat.hasError ? 'error' : dodStat.isSyncCompleted;
                     var timeStamp = self.setSecondarySiteLastUpdateTimeStamp(dodStat.completedStamp);
                     stats.push({
+                        id: 'DoD',
                         title: 'DoD',
                         screenReaderTitle: 'Department of Defense',
                         completed: isComplete,
                         timeStamp: timeStamp,
-                        hoverTip: ADK.utils.tooltipMappings.patientSync_DoD
+                        hoverTip: ADK.utils.tooltipMappings.patientSync_DoD,
+                        isSolrSyncCompleted: statusObject.DOD.isSolrSyncCompleted || false
                     });
                 }
                 if (statusObject.VLER) {
@@ -367,21 +381,20 @@ define([
                     var isVlerComplete = vlerStat.hasError ? 'error' : vlerStat.isSyncCompleted;
                     var vlerTimeStamp = self.setSecondarySiteLastUpdateTimeStamp(vlerStat.completedStamp);
                     stats.push({
+                        id: 'Communities',
                         title: 'Communities',
                         screenReaderTitle: 'Communities',
                         completed: isVlerComplete,
                         timeStamp: vlerTimeStamp,
-                        hoverTip: ADK.utils.tooltipMappings.patientSync_community
+                        hoverTip: ADK.utils.tooltipMappings.patientSync_community,
+                        isSolrSyncCompleted: statusObject.VLER.isSolrSyncCompleted || false
                     });
                 }
-
-                for (var i = 0; i < stats.length; i++) {
-                    var check = stats[i];
+                _.each(stats, function(check) {
                     if (check.completed === 'error') {
                         Backbone.fetchCache._cache = {};
-                        break;
                     }
-                }
+                });
 
                 var areAllVistasSolrSynced = _.every(statusObject.VISTA, 'isSolrSyncCompleted');
                 if (statusObject.allSites !== self.syncCompleted || areAllVistasSolrSynced !== self.areAllVistasSolrSynced) {
@@ -397,10 +410,30 @@ define([
                 } else {
                     self.updateSyncStats(stats);
                 }
-
+                _.each(stats, function(stat) {
+                    var camelId = _.camelCase('syncStatsFor' + stat.id);
+                    if (stat.id === 'AllVA') {
+                        stat.isSolrSyncCompleted = areAllVistasSolrSynced;
+                    }
+                    ADK.PatientRecordService.getCurrentPatient().set(camelId, stat);
+                });
+                var hasSyncError = _.find(statusObject.VISTA, {
+                    'hasSyncError': true
+                });
+                var hasSolrError = _.find(statusObject.VISTA, {
+                    'hasSolrError': true
+                });
+                self.setSolrErrorFlag(!_.isUndefined(hasSolrError));
+                self.setSyncErrorFlag(!_.isUndefined(hasSyncError));
                 self.setSolrSyncCompletedFlag(areAllVistasSolrSynced);
             };
             this.dataStatusCollection = ADK.PatientRecordService.fetchCollection(fetchOptions);
+        },
+        setSyncErrorFlag: function(hasSyncError) {
+            ADK.PatientRecordService.getCurrentPatient().set('syncError', hasSyncError);
+        },
+        setSolrErrorFlag: function(hasSolrError) {
+            ADK.PatientRecordService.getCurrentPatient().set('solrSyncError', hasSolrError);
         },
         setSolrSyncCompletedFlag: function(areAllVistasSolrSynced) {
             if (areAllVistasSolrSynced) {
@@ -563,12 +596,44 @@ define([
         type: "applicationFooterItem",
         group: "right",
         key: "patientSyncStatus",
-        view: FooterSuammryView,
+        view: FooterSummaryView,
         orderIndex: 1,
         shouldShow: function() {
             return (ADK.UserService.hasPermissions('read-patient-record'));
         }
     });
+    ADK.Messaging.trigger('register:component', {
+        type: 'applicationFooterItem',
+        group: 'right',
+        key: 'patientSyncStatusHelp',
+        view: Backbone.Marionette.ItemView.extend({
+            behaviors: {
+                HelpLink: {
+                    container: '.patient-sync-status-help-icon-link',
+                    mapping: 'status_bar',
+                    buttonOptions: {
+                        icon: 'fa-question-circle',
+                        paddingClass: 'all-padding-no left-margin-xs'
+                    }
+                }
+            },
+            templateHelpers: function() {
+                var patient = ADK.PatientRecordService.getCurrentPatient();
+                return {
+                    shouldShow: patient.get('pid') && this.currentWorkspaceAndContextModel.get('context') === 'patient'
+                };
+            },
+            template: Handlebars.compile('{{#if shouldShow}}<div class="patient-sync-status-help-icon-link"></div>{{/if}}'),
+            initialize: function() {
+                this.currentWorkspaceAndContextModel = ADK.WorkspaceContextRepository.currentWorkspaceAndContext;
+                this.listenTo(this.currentWorkspaceAndContextModel, 'change:context', this.render);
+            }
+        }),
+        orderIndex: 10,
+        shouldShow: function() {
+            return (ADK.UserService.hasPermissions('read-patient-record'));
+        }
+    });
 
-    return FooterSuammryView;
+    return FooterSummaryView;
 });

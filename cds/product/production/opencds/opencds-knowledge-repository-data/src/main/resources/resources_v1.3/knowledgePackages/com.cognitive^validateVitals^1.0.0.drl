@@ -1,0 +1,203 @@
+/*
+ * COPYRIGHT STATUS: © 2015, 2016.  This work, authored by Cognitive Medical Systems
+ * employees, was funded in whole or in part by The Department of Veterans
+ * Affairs under U.S. Government contract VA118-11-D-1011 / VA118-1011-0013.
+ * The copyright holder agrees to post or allow the Government to post all or
+ * part of this work in open-source repositories subject to the Apache License,
+ * Version 2.0, dated January 2004. All other rights are reserved by the
+ * copyright owner.
+ *
+ * For use outside the Government, the following notice applies:
+ *
+ *     Copyright 2015 © Cognitive Medical Systems
+ *
+ *     Licensed under the Apache License, Version 2.0 (the "License"); you may
+ *     not use this file except in compliance with the License. You may obtain
+ *     a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ *
+ */
+package validateVitals;
+
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+import java.util.Date;
+import java.text.DecimalFormat;
+
+import ca.uhn.fhir.model.api.IDatatype;
+import ca.uhn.fhir.model.api.ExtensionDt;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.primitive.CodeDt;
+import ca.uhn.fhir.model.dstu2.composite.QuantityDt;
+import ca.uhn.fhir.model.dstu2.composite.ContainedDt;
+import ca.uhn.fhir.model.dstu2.resource.BaseResource;
+import ca.uhn.fhir.model.dstu2.resource.CommunicationRequest;
+import ca.uhn.fhir.model.dstu2.resource.Provenance;
+import ca.uhn.fhir.model.dstu2.resource.Provenance.Agent;
+import ca.uhn.fhir.model.dstu2.resource.CommunicationRequest.Payload;
+import ca.uhn.fhir.model.dstu2.resource.Observation;
+import ca.uhn.fhir.model.dstu2.resource.Procedure;
+import ca.uhn.fhir.model.dstu2.resource.Patient;
+import ca.uhn.fhir.model.dstu2.valueset.CommunicationRequestStatusEnum;
+import ca.uhn.fhir.model.primitive.StringDt;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
+import org.opencds.service.evaluate.ObservationComparator;
+
+import function org.opencds.service.evaluate.FhirUtils.isCodingContains;
+import function org.opencds.service.evaluate.FhirUtils.getValueQuantity;
+import function org.opencds.service.evaluate.FhirUtils.createProvenance;
+import function org.opencds.service.evaluate.FhirUtils.createCommunicationRequest;
+import function org.opencds.service.evaluate.FhirUtils.hasInputFlag;
+import function org.opencds.service.evaluate.FhirUtils.createOutputExtension;
+
+global java.lang.String clientLanguage
+global java.lang.String clientTimeZoneOffset
+global java.lang.String focalPersonId
+global java.util.Date evalTime
+global java.util.HashSet assertions
+global java.util.HashMap namedObjects
+ 
+declare VITAL
+    @propertyReactive
+	heightList : ArrayList
+	weightList : ArrayList
+	heightMR : Observation // Most recent height from historical Observation 
+	weightMR : Observation // Most recent weight from historical Observation
+	inputHeight : Observation // input height Observation
+	inputWeight : Observation // input weight Observation
+end
+
+rule "Initialize"
+	salience 200, no-loop
+	when
+	then
+		insert(new VITAL(new ArrayList(), new ArrayList(), null, null, null, null));	
+end
+ 
+rule "Collect Height Observations"
+	dialect "java"
+	salience 160
+	when
+	    $vital : VITAL()
+        $obs : Observation( isCodingContains(code, "http://loinc.org", "8302-2"))
+        eval(!hasInputFlag($obs)) // filter out the Input ones
+	then
+        modify($vital) { getHeightList( ).add($obs) };   				
+end
+
+rule "Collect Weight Observations"
+	dialect "java"
+	salience 150
+	when
+	    $vital : VITAL()
+        $obs : Observation( isCodingContains(code, "http://loinc.org", "29463-7"))
+        eval(!hasInputFlag($obs)) // filter out the Input ones
+       
+	then
+        modify($vital) { getWeightList( ).add($obs) };  
+        				
+end
+
+rule "The most recent weight Observation"
+	dialect "java"
+	salience 20
+    when
+	     $vital : VITAL(!weightList.isEmpty())
+	then
+ 
+    Collections.sort($vital.getWeightList(), ObservationComparator.ISSUED_DATE );
+    Observation o = (Observation)$vital.getWeightList().get(0);
+    modify($vital) { setWeightMR( o ) };
+    System.out.println("Weight = " + getValueQuantity(o.getValue()).getValue());
+end  
+
+rule "The most recent Height Observation"
+	dialect "java"
+	salience 20
+    when
+	     $vital : VITAL(!heightList.isEmpty())
+	then
+ 
+    Collections.sort($vital.getHeightList(), ObservationComparator.ISSUED_DATE );
+    Observation o = (Observation)$vital.getHeightList().get(0);
+    modify($vital) { setHeightMR( o ) };
+    System.out.println("Height = " + getValueQuantity(o.getValue()).getValue());
+end    
+
+rule "Input Height Observation"
+	dialect "java"
+	salience 20
+    when
+    	 $vital : VITAL()
+	     $obs : Observation( isCodingContains(code, "http://loinc.org", "8302-2"))
+	     eval(hasInputFlag($obs)) 
+	then
+ 
+    modify($vital) { setInputHeight( $obs ) };
+    System.out.println("Input Height = " + getValueQuantity($obs.getValue()).getValue());
+   
+end    
+
+rule "Input Weight Observation"
+	dialect "java"
+	salience 20
+    when
+    	 $vital : VITAL()
+	     $obs : Observation( isCodingContains(code, "http://loinc.org", "29463-7"))
+	     eval(hasInputFlag($obs)) 
+	then
+ 
+    modify($vital) { setInputWeight( $obs ) };
+    System.out.println("Input Weight = " + getValueQuantity($obs.getValue()).getValue());
+   
+end    
+
+rule "Input Weight greater by 20% Rule"
+      dialect "java"
+      salience 0
+      when
+       $vital : VITAL(weightMR != null, $weightMR:weightMR, inputWeight != null, $inputWeight:inputWeight  )
+      //  if percent difference between inputWeight and weightMR is greater than 20%
+      eval((((getValueQuantity($weightMR.getValue()).getValue().doubleValue() - getValueQuantity($inputWeight.getValue()).getValue().doubleValue()) /
+            getValueQuantity($weightMR.getValue()).getValue().doubleValue()) < -0.20 ) || 
+            (((getValueQuantity($weightMR.getValue()).getValue().doubleValue() - getValueQuantity($inputWeight.getValue()).getValue().doubleValue()) /
+            getValueQuantity($weightMR.getValue()).getValue().doubleValue()) > 0.20 ))
+      then
+      CommunicationRequest comRequest = createCommunicationRequest("The new weight value differs by 20% or more from previous values.");
+      comRequest.setStatus(CommunicationRequestStatusEnum.REJECTED); 
+      comRequest.getReason().add($inputWeight.getCode()); 
+      comRequest.addUndeclaredExtension(createOutputExtension());
+      $weightMR.addUndeclaredExtension(createOutputExtension());
+      namedObjects.put("weightComRequest", comRequest); 
+      System.out.println("Input weight Observation rule fired");
+      
+end 
+
+rule "Input Height less by 10% Rule"
+      dialect "java"
+      salience 0
+      when
+       $vital : VITAL(heightMR != null, $heightMR:heightMR, inputHeight != null, $inputHeight:inputHeight )
+      //  if percent difference between inputHeight and heightMR is greater than 10%
+      eval((((getValueQuantity($heightMR.getValue()).getValue().doubleValue() - getValueQuantity($inputHeight.getValue()).getValue().doubleValue()) /
+            getValueQuantity($heightMR.getValue()).getValue().doubleValue()) < -0.10 ) || 
+            (((getValueQuantity($heightMR.getValue()).getValue().doubleValue() - getValueQuantity($inputHeight.getValue()).getValue().doubleValue()) /
+            getValueQuantity($heightMR.getValue()).getValue().doubleValue()) > 0.10 ))
+      then
+      CommunicationRequest comRequest = createCommunicationRequest("The new height value differs by 10% or more from previous values.");
+      comRequest.setStatus(CommunicationRequestStatusEnum.REJECTED); 
+      comRequest.getReason().add($inputHeight.getCode());
+      comRequest.addUndeclaredExtension(createOutputExtension());
+      $heightMR.addUndeclaredExtension(createOutputExtension());
+      namedObjects.put("heightCommRequest", comRequest); 
+      System.out.println("Input Height Observation rule fired"); 
+      
+end 

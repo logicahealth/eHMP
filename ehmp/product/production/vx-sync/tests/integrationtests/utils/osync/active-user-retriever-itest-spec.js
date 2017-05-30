@@ -14,8 +14,8 @@ var retriever = require(global.OSYNC_UTILS + 'active-user-retriever');
 describe('active-user-retriever.js', function() {
     var config = {pjds: _.defaults(wConfig.pjds, {
         protocol: 'http',
-        host: '10.2.2.110',
-        port: 9080
+        host: 'IP        ',
+        port: PORT
     })};
 
     var pjds = new PjdsClient(logger, logger, config);

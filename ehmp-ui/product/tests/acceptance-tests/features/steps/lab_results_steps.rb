@@ -435,11 +435,11 @@ When(/^the applet displays numeric lab results$/) do
   wait.until { there_is_at_least_one_nonempty_labresult_row }
 end
 
-def infiniate_scroll(table_id)
+def infiniate_scroll(table_id, total_attempts = 7)
   driver = TestSupport.driver
   found_bottom = false
   number_of_attempts = 0
-  until found_bottom && number_of_attempts > 7
+  until found_bottom && number_of_attempts > total_attempts
     count1 = driver.find_elements(:css, "#{table_id} tr").length 
     p "scroll row #{count1} into view"
     element = driver.find_element(:css, "#{table_id} tr:nth-child(#{count1})")
@@ -486,7 +486,7 @@ end
 
 When(/^the user scrolls to the bottom of the Numeric Lab Results Applet$/) do 
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { infiniate_scroll('#data-grid-lab_results_grid tbody') }
+  wait.until { infiniate_scroll('#data-grid-lab_results_grid tbody', 3) }
 end
 
 def verify_lab_test_column(expected_text, column = '2')
@@ -515,14 +515,16 @@ end
 
 Then(/^the Lab History table contains rows with data in correct format$/) do
   @ehmp = NumericLabResultsModal.new
+  common_modal_elements = ModalElements.new
   
-  @ehmp.wait_for_btn_previous_lab
-  @ehmp.wait_for_btn_next_lab
-  @ehmp.wait_for_btn_dismiss_lab_modal
-  @ehmp.wait_for_btn_close_lab_modal
-  @ehmp.wait_for_fld_data_table
-  @ehmp.wait_for_fld_data_table_title
-  @ehmp.wait_for_tbl_date_columns
+  expect(@ehmp.wait_for_btn_previous_lab).to eq(true)
+  expect(@ehmp.wait_for_btn_next_lab).to eq(true)
+  expect(common_modal_elements.wait_for_btn_x_close).to eq(true)
+  expect(common_modal_elements.wait_for_btn_modal_close).to eq(true)
+
+  expect(@ehmp.wait_for_fld_data_table).to eq(true)
+  expect(@ehmp.wait_for_fld_data_table_title).to eq(true)
+  expect(@ehmp.wait_for_tbl_date_columns).to eq(true)
 
   expect(@ehmp.tbl_date_columns.length).to be > 0
   expect(@ehmp.date_column_correct_format?).to eq(true), "All of the values in the date column do not match the acceptable format"
@@ -637,16 +639,17 @@ end
 
 Then(/^the Lab History table contains rows with data$/) do
   @ehmp = NumericLabResultsModal.new
+  common_modal_elements = ModalElements.new
   
-  @ehmp.wait_for_btn_previous_lab
-  @ehmp.wait_for_btn_next_lab
-  @ehmp.wait_for_btn_dismiss_lab_modal
-  @ehmp.wait_for_btn_close_lab_modal
-  @ehmp.wait_for_fld_data_table
-  @ehmp.wait_for_fld_data_table_title
+  expect(@ehmp.wait_for_btn_previous_lab).to eq true
+  expect(@ehmp.wait_for_btn_next_lab).to eq true
+  expect(common_modal_elements.wait_for_btn_x_close).to eq true
+  expect(common_modal_elements.wait_for_btn_modal_close).to eq(true)
+  expect(@ehmp.wait_for_fld_data_table).to eq true
+  expect(@ehmp.wait_for_fld_data_table_title).to eq true
 
-  @ehmp.wait_for_tbl_data_rows
-  @ehmp.wait_for_tbl_facility_columns
+  expect(@ehmp.wait_for_tbl_data_rows).to eq true
+  expect(@ehmp.wait_for_tbl_facility_columns).to eq true
   expect(@ehmp.tbl_facility_columns.length).to be > 0
 end
 

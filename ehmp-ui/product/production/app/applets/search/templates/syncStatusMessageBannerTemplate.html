@@ -1,0 +1,12 @@
+{{#if solrSyncStatusMessage}}
+<div class="control form-group alertBanner-control alertMessage" aria-live="assertive">
+    <div class="alert alert-info alert-dismissible alert-user all-margin-no">
+        <div class="text-center">
+            <div class="alert-content inline-block-display right-padding-xl">
+                <p>{{solrSyncStatusMessage}}</p>
+            </div>
+            <button type="button"class="redo-text-search btn btn-default btn-sm inline-block-display transform-text-capitalize" title="Press enter to resubmit search">Redo Search</button>
+        </div>
+    </div>
+</div>
+{{/if}}

@@ -16,6 +16,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan
 public class Application extends SpringBootServletInitializer {
 
+    private static final String NIO_PROTOCOL = "org.apache.coyote.http11.Http11NioProtocol";
+
     @Value("${server.port}")
     private Integer serverPort;
     
@@ -28,10 +30,13 @@ public class Application extends SpringBootServletInitializer {
         new Application().configure(
                 new SpringApplicationBuilder(Application.class)).run(args);
     }
+
     // Necessary to keep the endpoints in sync between embedded and servlet-container-deployed instances
-     @Bean
-     public EmbeddedServletContainerFactory embeddedServletContainerFactory() {
-     TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory("/asu", serverPort);
-     return factory;
-     }
+    @Bean
+    public EmbeddedServletContainerFactory embeddedServletContainerFactory() {
+        TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory("/asu", serverPort);
+        // Explicitly set the protocol to NIO to take advantage of persistent client connections
+        factory.setProtocol(NIO_PROTOCOL);
+        return factory;
+    }
 }

@@ -230,6 +230,10 @@ function getSiteSyncDataStatusSimple(siteSyncStatus) {
 
     dataStatusRet.isSolrSyncCompleted = siteSyncStatus.solrSyncCompleted;
 
+    if (siteSyncStatus.hasSolrError) {
+        dataStatusRet.hasSolrError = siteSyncStatus.hasSolrError;
+    }
+
     if (siteSyncStatus.hasError) {
         dataStatusRet.hasError = true;
         dataStatusRet.isSyncCompleted = false;

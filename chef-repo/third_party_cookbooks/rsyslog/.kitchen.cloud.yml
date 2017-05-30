@@ -33,7 +33,7 @@ platforms:
 #   driver_plugin: ec2
 #   driver_config:
 #     image_id: ami-3be4bc52
-#     username: ec2-user
+#     username: REDACTED
 #     ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
 
 - name: fedora-19
@@ -86,7 +86,7 @@ suites:
       - recipe[rsyslog::client]
     attributes:
       rsyslog:
-        server_ip: 10.0.0.50
+        server_ip: IP       
   - name: server
     run_list:
       - recipe[rsyslog::server]

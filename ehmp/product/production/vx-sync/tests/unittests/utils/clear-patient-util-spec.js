@@ -57,6 +57,11 @@ describe('clearPatientUtil', function() {
 			}
 		};
 
+		environment.jds.childInstance = function() { return environment.jds; };
+		environment.vistaClient.childInstance = function() { return environment.vistaClient; };
+		environment.hdrClient.childInstance = function() { return environment.hdrClient; };
+		environment.solr.childInstance = function() { return environment.solr; };
+
 		clearPatientUtil.clearPatient(log, config, environment, true, ['AAAA;1', 'BBBB;1', 'XHDR;1', 'YHDR;1', '12345V12345'], 'aaaaaa-bbbbbb-cccccc', function(error) {
 			expect(error).toBeFalsy();
 		});
@@ -87,6 +92,11 @@ describe('clearPatientUtil', function() {
 				}
 			}
 		};
+
+		environment.jds.childInstance = function() { return environment.jds; };
+		environment.vistaClient.childInstance = function() { return environment.vistaClient; };
+		environment.hdrClient.childInstance = function() { return environment.hdrClient; };
+		environment.solr.childInstance = function() { return environment.solr; };
 
 		clearPatientUtil.clearPatient(log, config, environment, true, ['AAAA;1', 'BBBB;1', 'XHDR;1', 'YHDR;1', '12345V12345'], 'aaaaaa-bbbbbb-cccccc', function(error) {
 			expect(error).toBeFalsy();
@@ -144,6 +154,11 @@ describe('clearPatientUtil', function() {
 			}
 		};
 
+		environment.jds.childInstance = function() { return environment.jds; };
+		environment.vistaClient.childInstance = function() { return environment.vistaClient; };
+		environment.hdrClient.childInstance = function() { return environment.hdrClient; };
+		environment.solr.childInstance = function() { return environment.solr; };
+
 		clearPatientUtil.clearPatient(log, config, environment, false, ['AAAA;1', 'BBBB;1', '12345V12345'], 'aaaaaa-bbbbbb-cccccc', function(error) {
 			expect(error).toBeTruthy();
 		});
@@ -174,6 +189,11 @@ describe('clearPatientUtil', function() {
 				}
 			}
 		};
+
+		environment.jds.childInstance = function() { return environment.jds; };
+		environment.vistaClient.childInstance = function() { return environment.vistaClient; };
+		environment.hdrClient.childInstance = function() { return environment.hdrClient; };
+		environment.solr.childInstance = function() { return environment.solr; };
 
 		clearPatientUtil.clearPatient(log, config, environment, false, ['AAAA;1', 'BBBB;1', '12345V12345'], 'aaaaaa-bbbbbb-cccccc', function(error) {
 			expect(error).toBeTruthy();
@@ -206,6 +226,11 @@ describe('clearPatientUtil', function() {
 			}
 		};
 
+		environment.jds.childInstance = function() { return environment.jds; };
+		environment.vistaClient.childInstance = function() { return environment.vistaClient; };
+		environment.hdrClient.childInstance = function() { return environment.hdrClient; };
+		environment.solr.childInstance = function() { return environment.solr; };
+
 		clearPatientUtil.clearPatient(log, config, environment, false, ['XHDR;1', 'YHDR;1', '12345V12345'], 'aaaaaa-bbbbbb-cccccc', function(error) {
 			expect(error).toBeTruthy();
 		});
@@ -237,6 +262,11 @@ describe('clearPatientUtil', function() {
 			}
 		};
 
+		environment.jds.childInstance = function() { return environment.jds; };
+		environment.vistaClient.childInstance = function() { return environment.vistaClient; };
+		environment.hdrClient.childInstance = function() { return environment.hdrClient; };
+		environment.solr.childInstance = function() { return environment.solr; };
+
 		clearPatientUtil.clearPatient(log, config, environment, false, ['XHDR;1', 'YHDR;1', '12345V12345'], 'aaaaaa-bbbbbb-cccccc', function(error) {
 			expect(error).toBeTruthy();
 		});
@@ -267,6 +297,11 @@ describe('clearPatientUtil', function() {
 				}
 			}
 		};
+
+		environment.jds.childInstance = function() { return environment.jds; };
+		environment.vistaClient.childInstance = function() { return environment.vistaClient; };
+		environment.hdrClient.childInstance = function() { return environment.hdrClient; };
+		environment.solr.childInstance = function() { return environment.solr; };
 
 		clearPatientUtil.clearPatient(log, config, environment, false, ['AAAA;1', 'BBBB;1', '12345V12345'], 'aaaaaa-bbbbbb-cccccc', function(error) {
 			expect(error).toBeTruthy();
@@ -301,6 +336,11 @@ describe('clearPatientUtil', function() {
 				}
 			}
 		};
+
+		environment.jds.childInstance = function() { return environment.jds; };
+		environment.vistaClient.childInstance = function() { return environment.vistaClient; };
+		environment.hdrClient.childInstance = function() { return environment.hdrClient; };
+		environment.solr.childInstance = function() { return environment.solr; };
 
 		clearPatientUtil.clearPatient(log, config, environment, false, ['AAAA;1', 'BBBB;1', '12345V12345'], 'aaaaaa-bbbbbb-cccccc', function(error) {
 			expect(error).toBeTruthy();

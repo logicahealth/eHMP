@@ -1,8 +1,8 @@
-@F1142 @US17412 @reg1
+@F1142 @US17412 @reg2
 Feature: Home Page Usability (Staff View) - Implement Ward search tray
 
 # Background:
-#   Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "TWO1234" verifycode as  "TWO1234!!"
+#   Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
 #   Then staff view screen is displayed
 
 @F1142_ward_1
@@ -16,7 +16,7 @@ Scenario: Verify Ward tray display
     And the Ward tray displays a help button
     And the Ward tray displays a Ward Location selection box
 
-@F1142_ward_3
+@F1142_ward_3 @DE7713
 Scenario: Verify the patient display is in specific format
 	When the user opens the Ward tray
 	And the user selects a ward with patients
@@ -25,12 +25,14 @@ Scenario: Verify the patient display is in specific format
     | header        |
     | Patient Name  |
     | Date of Birth |
+    | Gender        |
     | Room-Bed      |
     And the Ward Tray patient name search results are in format Last Name, First Name + (First Letter in Last Name + Last 4 SSN )
-    And the Ward Tray date of birth search results are in format Date (Agey) - Gender (first letter)
+    And the Ward Tray date of birth search results are in format Date (Agey)
     And the Ward Tray Room-Bed contains data
+    And the Ward Tray gender search results are in terms Male, Female or Unknown
 
-@F1142_ward_4
+@F1142_ward_4 @DE7713
 Scenario: Verify the ward tray reports when ward search does not result in a patients
 	When the user opens the Ward tray
 	And the user selects a ward without patients
@@ -38,6 +40,7 @@ Scenario: Verify the ward tray reports when ward search does not result in a pat
     | header        |
     | Patient Name  |
     | Date of Birth |
+    | Gender        |
     | Room-Bed      |
 	Then the Ward Tray no results message displays
     

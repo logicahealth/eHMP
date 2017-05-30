@@ -1,0 +1,1 @@
+        <property name="org.jboss.as.web.deployment.DELETE_WORK_DIR_ONCONTEXTDESTROY" value="true"/>

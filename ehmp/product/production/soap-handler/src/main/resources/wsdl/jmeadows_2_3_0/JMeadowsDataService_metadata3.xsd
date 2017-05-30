@@ -1,6 +1,6 @@
-<!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.3 (tags/2.3-7528; 2013-04-29T19:34:10+0000) JAXWS-RI/2.2.8 JAXWS/2.2 svn-revision#unknown. --><xs:schema xmlns:ns1="http://webservice.vds.med.va.gov/" xmlns:ns2="http://webservice.bhie.med.va.gov/" xmlns:tns="http://webservice.jmeadows.med.va.gov/" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservice.jmeadows.med.va.gov/" version="1.0">
-  <xs:import namespace="http://webservice.vds.med.va.gov/" schemaLocation="JMeadowsDataService_metadata2.xsd"/>
-  <xs:import namespace="http://webservice.bhie.med.va.gov/" schemaLocation="JMeadowsDataService_metadata1.xsd"/>
+<!-- Published by DNS    RI at http://jax-ws.dev.java.net. RI's version is Metro/2.3 (tags/2.3-7528; 2013-04-29T19:34:10+0000) JAXWS-RI/2.2.8 JAXWS/2.2 svn-revision#unknown. --><xs:schema xmlns:ns1="http://webservice.vds.URL       /" xmlns:ns2="http://webservice.bhie.URL       /" xmlns:tns="http://webservice.jmeadows.URL       /" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservice.jmeadows.URL       /" version="1.0">
+  <xs:import namespace="http://webservice.vds.URL       /" schemaLocation="JMeadowsDataService_metadata2.xsd"/>
+  <xs:import namespace="http://webservice.bhie.URL       /" schemaLocation="JMeadowsDataService_metadata1.xsd"/>
   <xs:element name="JMeadowsException" type="tns:JMeadowsException"/>
   <xs:element name="auditVARestrictedAccess" type="tns:auditVARestrictedAccess"/>
   <xs:element name="auditVARestrictedAccessResponse" type="tns:auditVARestrictedAccessResponse"/>

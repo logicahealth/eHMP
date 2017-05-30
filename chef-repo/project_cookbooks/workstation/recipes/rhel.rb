@@ -30,3 +30,5 @@ end
 include_recipe 'oracle_wrapper::client'
 
 include_recipe "workstation::slave_config"
+
+include_recipe "berks-api"

@@ -10,7 +10,7 @@ class PobCoverSheet < SitePrism::Page
   # *****************  All_Logo_Elements  ******************* #
   # *****************  All_Field_Elements  ******************* #
   element :fld_bottom_region, "#bottom-region"
-  element :fld_Community_Health_Summaries_title, "div[data-appletid='ccd_grid'] .grid-applet-heading"
+  element :fld_Community_Health_Summaries_title, "div[data-appletid='ccd_grid'] .applet-chrome-header"
   element :fld_Community_Health_Summaries_thead, "div[data-appletid='ccd_grid'] thead"
   element :fld_appointments_thead, "div[data-appletid='appointments'] thead"
 

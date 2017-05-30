@@ -1,6 +1,6 @@
 {
-    "accessCode": "pu1234",
-    "verifyCode": "pu1234!!",
+    "accessCode": "REDACTED",
+    "verifyCode": "REDACTED",
     "corsTabs": "true",
     "dgRecordAccess": "false",
     "dgSecurityOfficer": "false",
@@ -14,7 +14,7 @@
     "firstname": "PANORAMA",
     "infoButtonOid": "1.3.6.1.4.1.3768",
     "lastname": "USER",
-    "password": "pu1234!!",
+    "password": "REDACTED",
     "pcmm": [{
         "roles": [
             "NURSE (RN)",
@@ -137,8 +137,8 @@
     "ssn": 666441233,
     "title": "Clinician",
     "uid": "urn:va:user:9E7A:10000000270",
-    "username": "9E7A;pu1234",
-    "verifyCode": "pu1234!!",
+    "username": "REDACTED",
+    "verifyCode": "REDACTED",
     "vistaKeys": [
         "PROVIDER",
         "GMRA-SUPERVISOR",

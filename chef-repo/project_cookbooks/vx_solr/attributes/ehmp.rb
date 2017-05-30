@@ -11,6 +11,10 @@ default[:vx_solr][:ehmp][:vpr_data_path] = "#{node[:solr][:dir]}-#{node[:solr][:
 default[:vx_solr][:ehmp][:solr_lib_path] = "#{node[:vx_solr][:server_dir]}/solr-webapp/webapp/WEB-INF/lib"
 
 default[:vx_solr][:ehmp][:solrconfig] = {
+    :log4j => {
+        :max_file_size => "100MB",
+        :zookeeper_log_level => "WARN"
+    },
   :filtercache => {
     :size => "512",
     :initialsize => "512",
@@ -18,9 +22,14 @@ default[:vx_solr][:ehmp][:solrconfig] = {
   }
 }
 
+
 default[:vx_solr][:ehmp][:collection] = {
   :num_shards => 1,
   :replication_factor => 1,
   :max_shards_per_node => 2,
   :allow_recreate => nil # set in solr machine recipe
 }
+
+default[:vx_solr][:ehmp][:cron_schedule] = '0 2 * * * '
+
+default[:vx_solr][:ehmp][:create_cron_job] = true

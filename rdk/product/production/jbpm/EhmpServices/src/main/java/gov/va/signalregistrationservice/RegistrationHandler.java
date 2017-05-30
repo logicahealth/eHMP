@@ -12,7 +12,6 @@ import com.google.gson.JsonParser;
 
 import gov.va.ehmp.services.exception.EhmpServicesException;
 import gov.va.ehmp.services.exception.ErrorResponseUtil;
-import gov.va.ehmp.services.utils.Logging;
 import gov.va.kie.utils.WorkItemUtil;
 import gov.va.signalregistrationservice.util.RegistrationUtil;
 
@@ -20,6 +19,7 @@ import java.math.BigDecimal;
 
 import javax.persistence.EntityManager;
 
+import org.jboss.logging.Logger;
 import org.kie.api.definition.process.Process;
 import org.springframework.http.HttpStatus;
 
@@ -28,12 +28,12 @@ public class RegistrationHandler implements WorkItemHandler, Closeable,
 
 	private static final String EVENT_ACTION_SCOPE = "Signaling";
 	private static final String EVENT_API_VERSION = "1.0";
-
+	private static final Logger LOGGER = Logger.getLogger(RegistrationHandler.class);
 	private KieSession ksession;
 	public RegistrationHandler(KieSession ksession){
 		this.ksession = ksession;		
 	}
-
+   
 	public RegistrationHandler(){
 	}
 	
@@ -46,16 +46,16 @@ public class RegistrationHandler implements WorkItemHandler, Closeable,
 		JsonObject matchJsonObject = null;
 		
 		try {
-			Logging.info("Signal Service RegistrationHandler.executeWorkItem has been called");
+			LOGGER.info("Signal Service RegistrationHandler.executeWorkItem has been called");
 
 			String signalName  = WorkItemUtil.extractRequiredStringParam(workItem, "signalName");	
-			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: signalName=" + signalName);
+			LOGGER.debug("Signal Service RegistrationHandler.executeWorkItem: signalName=" + signalName);
 			
 			String signalContent  = WorkItemUtil.extractRequiredStringParam(workItem, "signalContent");				
-			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: signalContent=" + signalContent);
+			LOGGER.debug("Signal Service RegistrationHandler.executeWorkItem: signalContent=" + signalContent);
 			
 			String matchObject  = WorkItemUtil.extractRequiredStringParam(workItem, "matchObject");
-			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: matchObject=" + matchObject);
+			LOGGER.debug("Signal Service RegistrationHandler.executeWorkItem: matchObject=" + matchObject);
 						
 			try {
 				JsonParser parser = new JsonParser();
@@ -66,13 +66,13 @@ public class RegistrationHandler implements WorkItemHandler, Closeable,
 			}
 			
 			String eventDescription  = WorkItemUtil.extractRequiredStringParam(workItem, "eventDescription");	
-			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: eventDescription=" + eventDescription);
+			LOGGER.debug("Signal Service RegistrationHandler.executeWorkItem: eventDescription=" + eventDescription);
 			
 			String eventName  = WorkItemUtil.extractRequiredStringParam(workItem, "eventName");
-			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: eventName=" + eventName);
+			LOGGER.debug("Signal Service RegistrationHandler.executeWorkItem: eventName=" + eventName);
 
 			long processInstanceId = workItem.getProcessInstanceId();
-			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: processInstanceId=" + processInstanceId);
+			LOGGER.debug("Signal Service RegistrationHandler.executeWorkItem: processInstanceId=" + processInstanceId);
 		
 			insertDataIntoEventMatchingTables(signalName, signalContent,
 					eventDescription, eventName, matchJsonObject,
@@ -85,7 +85,7 @@ public class RegistrationHandler implements WorkItemHandler, Closeable,
 			e.printStackTrace();
 			serviceResponse = e.toJsonString();
 		} catch (Exception e) {
-			Logging.error("RegistrationHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage());
+			LOGGER.error("RegistrationHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage(), e);
 			serviceResponse = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "RegistrationHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 		
@@ -110,21 +110,21 @@ public class RegistrationHandler implements WorkItemHandler, Closeable,
 			
 			// Insert row into EVENT_MATCH_CRITERIA			
 			BigDecimal eventMatchCriteriaId = RegistrationUtil.createMatchCriteria(em);
-			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: EVENT_MATCH_CRITERIA record created. eventMatchCriteriaId = " + eventMatchCriteriaId);
+			LOGGER.debug("Signal Service RegistrationHandler.executeWorkItem: EVENT_MATCH_CRITERIA record created. eventMatchCriteriaId = " + eventMatchCriteriaId);
 	
 			Process process = ksession.getProcessInstance(processInstanceId).getProcess();
 			
 			// Insert row into EVENT_MATCH_ACTION
 			BigDecimal eventMatchActionId = RegistrationUtil.createMatchAction(em, processInstanceId, signalName, signalContent, process.getId(), process.getVersion());
-			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: EVENT_MATCH_ACTION record created. eventMatchActionId = " + eventMatchActionId);
+			LOGGER.debug("Signal Service RegistrationHandler.executeWorkItem: EVENT_MATCH_ACTION record created. eventMatchActionId = " + eventMatchActionId);
 			
 			// Insert row(s) into SIMPLE_MATCH
 			RegistrationUtil.createSimpleMatchRecords(em, matchJsonObject, eventMatchCriteriaId);
-			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: SIMPLE_MATCH record created.");
+			LOGGER.debug("Signal Service RegistrationHandler.executeWorkItem: SIMPLE_MATCH record created.");
 	
 			// Insert row into AM_EVENTLISTENER
 			RegistrationUtil.createEventListener(em, EVENT_ACTION_SCOPE, EVENT_API_VERSION, eventDescription, eventName, eventMatchCriteriaId, eventMatchActionId);
-			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: AM_EVENTLISTENER record created.");
+			LOGGER.debug("Signal Service RegistrationHandler.executeWorkItem: AM_EVENTLISTENER record created.");
 		}
 		catch(Exception e) {
 			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()); 
@@ -133,6 +133,6 @@ public class RegistrationHandler implements WorkItemHandler, Closeable,
 
 
 	public void abortWorkItem(WorkItem workItem, WorkItemManager manager) {
-		Logging.debug("Signal Service RegistrationHandler.abortWorkItem has been called");
+		LOGGER.debug("Signal Service RegistrationHandler.abortWorkItem has been called");
 	}	
 }

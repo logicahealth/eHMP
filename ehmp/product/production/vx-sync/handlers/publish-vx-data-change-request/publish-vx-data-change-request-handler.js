@@ -15,6 +15,9 @@ function handle(log, config, environment, job, handlerCallback) {
         rootJobId: job.rootJobId,
         param: job.param
     };
+    if (job.referenceInfo) {
+        meta.referenceInfo = job.referenceInfo;
+    }
 
     if (_.isUndefined(config.publishTubes) || _.isEmpty(config.publishTubes)){
         log.debug('publish-vx-data-change-request-handler.handle - no tube to publish');

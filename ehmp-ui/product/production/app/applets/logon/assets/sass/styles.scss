@@ -1,10 +1,20 @@
+
+// specificity required because of shared template across mulitlpe views of our application
+.logon-screen > .container-fluid > .row > div > .col-xs-12 > div > div,
+.logon-screen > .container-fluid > .row > div > .col-xs-12 > div > div .row,
+.logon-screen > .container-fluid > .row > div > .col-xs-12 > div > div .row div.col-md-12,
+[data-appletid="logon"] {
+  height: 100%;
+}
+.logon-screen > .container-fluid > .row > div > .col-xs-12 > div > div .row,
+.logon-screen > .container-fluid > .row > div > .col-xs-12 > div > div .row div.col-md-12 {
+  margin: 0;
+  padding: 0;
+}
 .logon-screen {
-    font-family: 'Source Sans Pro';
-    min-height: 550px;
     background-size: cover;
     background-position: center center;
     color: $grey-darker;
-    background-color: $pure-white;
     &.bg1 {
         background-image: url('/_assets/img/login-bg-1.jpg');
     }
@@ -16,39 +26,6 @@
     }
     #center-region {
         background: none;
-    }
-    & > .container-fluid{
-        height: 100%;
-        & > .row {
-            //#center-region
-            height: 100% !important; // i need this one here cause it's getting overridden by a #center-region ID style present in the ADK.
-            & > div {
-                height: 100%;
-                & > .col-xs-12 {
-                    //#content-region-wrapper
-                    height: 100%;
-                    & > div {
-                        //#content-region
-                        height: 100%;
-                        & > div {
-                            height: 100%;
-                            .row {
-                                height: 100%;
-                                margin: 0;
-                                div.col-md-12 {
-                                    //#center
-                                    height: 100%;
-                                    padding: 0;
-                                    [data-appletid="logon"] {
-                                        height: 100%;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
     .logon-section {
         height: 100%;
@@ -73,76 +50,69 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            .login-container {
-                width: 259px;
-                margin: 0 0 0 60%;
-                background-position: center bottom;
-                background-size: cover;
-                background-repeat: no-repeat;
-                .logo {
-                    font-family: 'Merriweather';
-                    font-size: 17px;
-                    text-align: center;
-                    background-repeat: no-repeat;
-                    background-position: top center;
-                    background-size: 60px 60px;
-                    color: $primary-dark;
-                    padding: 20px 20px 15px;
-                    border-radius: 5px 5px 0 0;
-                    background-color: $pure-white;
-                    margin: 0 0 -2px;
-                }
-                .login-container-body {
-                    background: $pure-white;
-                    padding: 0 30px 10px;
-                }
-                .login-container-footer {
-                    background: url('../../_assets/img/login-container-footer.png') no-repeat center bottom;
-                    background-size: 100%;
-                    padding: 4px 0 30px;
-                    width: 259px;
-                    position: relative;
-                    bottom: 0;
-                }
-                label {
-                    font-size: 13px;
-                    font-weight: 400;
-                    color: $grey-darkest;
-                }
-                input,
-                select {
-                    font-family: 'Source Sans Pro';
-                }
-                .btn.btn-primary {
-                    font-size: 13px;
-                    font-weight: 700;
-                    margin-top: 15px;
-                }
-                .help-icon-link {
-                    font-size: 13px;
-                }
-            }
+        }
+    }
+    .login-container {
+        width: 259px;
+        margin: 0 0 0 60%;
+        background-position: center bottom;
+        background-size: cover;
+        background-repeat: no-repeat;
+        .logo {
+            font-family: 'Merriweather';
+            font-size: 17px;
+            text-align: center;
+            background-repeat: no-repeat;
+            background-position: top center;
+            background-size: 60px 60px;
+            color: $primary-dark;
+            padding: 20px 20px 15px;
+            border-radius: 5px 5px 0 0;
+            background-color: $pure-white;
+            margin: 0 0 -2px;
+        }
+        .login-container-body {
+            background: $pure-white;
+            padding: 0 30px 10px;
+        }
+        .login-container-footer {
+            background: url('../../_assets/img/login-container-footer.png') no-repeat center bottom;
+            background-size: 100%;
+            padding: 4px 0 30px;
+            width: 259px;
+            position: relative;
+            bottom: 0;
+        }
+        label {
+            font-size: 13px;
+            font-weight: 400;
+            color: $grey-darkest;
+        }
+        input,
+        select {
+            font-family: 'Source Sans Pro';
+        }
+        .btn-primary {
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: 15px;
+        }
+        .help-icon-link {
+            font-size: 13px;
         }
     }
 }
 
 @media screen and ( min-height: 690px) {
     .logon-screen {
-        .logon-section {
-            .security-statement {
-                height: 175px;
+        .login-container {
+            width: 328px;
+            .logo {
+                font-size: 20px;
+                background-size: 60px 60px;
             }
-            .login-form-container {
-                .login-container {
-                    width: 328px;
-                    .logo {
-                        font-size: 20px;
-                        background-size: 60px 60px;
-                    }
-                    .login-container-footer {
-                         width: 328px;
-                    }
-                }
+            .login-container-footer {
+                 width: 328px;
             }
         }
     }
@@ -150,30 +120,26 @@
 
 @media screen and (max-height: 689px) {
     .logon-screen {
-        .logon-section {
-            .login-form-container {
-                .login-container {
-                    .form-group {
-                        margin-bottom: 10px;
-                        label {
-                            margin-bottom: 2px;
-                        }
-                    }
-                    select,
-                    input {
-                        height: 25px;
-                        font-size: 12px;
-                        padding: 5px 8px;
-                    }
-                    .login-container-body {
-                        padding: 0 20px 11px;
-                    }
-                    .btn.btn-primary {
-                        height: 25px;
-                        line-height: 1em;
-                        margin-top: 10px;
-                    }
+        .login-container {
+            .form-group {
+                margin-bottom: 10px;
+                label {
+                    margin-bottom: 2px;
                 }
+            }
+            select,
+            input {
+                height: 25px;
+                font-size: 12px;
+                padding: 5px 8px;
+            }
+            .login-container-body {
+                padding: 0 20px 11px;
+            }
+            .btn-primary {
+                height: 25px;
+                line-height: 1em;
+                margin-top: 10px;
             }
         }
     }
@@ -181,13 +147,7 @@
 
 /* IE10+ CSS styles go here */
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    .logon-screen {
-        .logon-section {
-            .login-form-container {
-                .login-container {
-                    background-size: 820px;
-                }
-            }
-        }
+    .logon-screen .login-container {
+        background-size: 820px;
     }
 }

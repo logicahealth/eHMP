@@ -68,43 +68,6 @@ Then(/^add allergy modal detail title says "([^"]*)"$/) do | modal_title|
   expect(aa.perform_verification("Allergy Modal Title", modal_title.upcase)).to eq(true)
 end
 
-Then(/^the add allergy detail modal displays labels$/) do |table|
-  verify_allergy_modal_details(table)
-end
-
-Then(/^the add allergy detail modal has "([^"]*)" and "([^"]*)" buttons$/) do |add_btn, cancel_btn|
-  aa = AllergiesWriteBack.instance
-  expect(aa.get_element(add_btn).displayed?).to eq(true)
-  expect(aa.get_element(add_btn).enabled?).to eq(false)
-  expect(aa.am_i_visible?(cancel_btn)).to eq(true)
-end
-
-Then(/^add allergy detail modal displays fields$/) do |table|
-  verify_allergy_modal_details(table)
-end
-
-Then(/^add allergy detail modal has disabled the fields$/) do |table|
-  modal = AllergiesWriteBack.instance
-  #expect(modal.wait_until_action_element_visible("Modal Loaded", DefaultLogin.wait_time)).to be_true
-  @ehmp = PobCommonElements.new
-  @ehmp.wait_until_fld_modal_body_visible
-  table.rows.each do | row |
-    expect(modal.get_element(row[0]).displayed?).to eq(true)
-    expect(modal.get_element(row[0]).enabled?).to eq(false)
-  end
-end
-
-def verify_allergy_modal_details(table)
-  modal = AllergiesWriteBack.instance
-  #expect(modal.wait_until_action_element_visible("Modal Loaded", 30)).to be_true
-  @ehmp = PobCommonElements.new
-  @ehmp.wait_until_fld_modal_body_visible
-  
-  table.rows.each do | row |
-    expect(modal.am_i_visible?(row[0])).to eq(true), "'#{row[0]}' is not visible"
-  end
-end
-
 Then(/^the user adds "([^"]*)" allergy "([^"]*)"$/) do |allergy_type, allergy_name|
   aa = AllergiesWriteBack.instance
   @ehmp = PobCommonElements.new

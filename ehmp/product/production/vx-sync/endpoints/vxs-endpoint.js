@@ -8,7 +8,6 @@ var port = require('yargs')
 
 require('../env-setup');
 var bodyParser = require('body-parser');
-var multer = require('multer');
 
 var config = require(global.VX_ROOT + 'worker-config');
 require('http').globalAgent.maxSockets = config.endpointMaxSockets || 5;
@@ -21,6 +20,7 @@ var registerOPDAPI = require(global.VX_ENDPOINTS + 'operational/operational-sync
 var registerDocAPI = require(global.VX_ENDPOINTS + 'documents/document-retrieval-endpoint');
 var registerErrorAPI = require(global.VX_ENDPOINTS + 'error-handling/error-endpoint');
 var registerAMEAPI = require(global.VX_ENDPOINTS + 'activity-management/activity-management-endpoint');
+var registerClinicalObjectAPI = require(global.VX_ENDPOINTS + 'clinical-object/clinical-object-endpoint');
 
 process.on('uncaughtException', function(err){
     console.log(err);
@@ -29,7 +29,6 @@ process.on('uncaughtException', function(err){
 
 
 var app = require('express')().use(bodyParser.json())
-    .use(multer())
     .use(bodyParser.urlencoded({
         'extended': true
     }));
@@ -39,6 +38,7 @@ registerDocAPI(log,config,environment, app);
 registerOPDAPI(log,config,environment, app);
 registerErrorAPI(log,config,environment, app);
 registerAMEAPI(log, config, environment, app);
+registerClinicalObjectAPI(log, config, environment, app);
 app.get('/ping', function(req, res) {
         res.send('ACK');
     });

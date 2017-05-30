@@ -5,7 +5,7 @@ define([
     'backbone',
     'marionette',
     'handlebars',
-    'main/ui_components/components',
+    'main/UILibrary',
     'api/UIComponents',
     'jasminejquery'
 ], function(Messaging, Moment, $, Backbone, Marionette, Handlebars, UI) {
@@ -457,7 +457,7 @@ define([
 
             it('contains correct label with sr-only class', function() {
                 expect($testPage.find('label')).toContainText('datepicker');
-                expect($testPage.find('label').attr('for')).toBe('datePicker0');
+                expect($testPage.find('label').attr('for')).toContain('datePicker0');
                 expect($testPage.find('label')).toHaveClass('sr-only');
             });
         });
@@ -532,6 +532,28 @@ define([
                 $testPage.find(inputSelector).trigger('control:endDate', new Moment().add(2, 'days').format('MM/DD/YYYY'));
                 $testPage.find('form').trigger('submit');
                 expect($testPage.find('.datepicker-control span.help-block.error')).not.toContainText('Date must be between');
+            });
+            it("update:config", function() {
+                $testPage.find('.control.datePicker0').trigger("control:update:config", {
+                    hidden: true,
+                    disabled: true,
+                    required: true,
+                    title: 'new title'
+                });
+                expect($testPage.find('.control.datePicker0')).toHaveClass('hidden');
+                expect($testPage.find(inputSelector)).toHaveAttr('disabled');
+                expect($testPage.find(inputSelector)).toHaveAttr('required');
+                expect($testPage.find(inputSelector)).toHaveAttr('title', 'new title');
+                $testPage.find('.control.datePicker0').trigger("control:update:config", {
+                    hidden: false,
+                    disabled: false,
+                    required: false,
+                    title: 'old title'
+                });
+                expect($testPage.find('.control.datePicker0')).not.toHaveClass('hidden');
+                expect($testPage.find(inputSelector)).not.toHaveAttr('disabled');
+                expect($testPage.find(inputSelector)).not.toHaveAttr('required');
+                expect($testPage.find(inputSelector)).toHaveAttr('title', 'old title');
             });
         });
         describe("with error", function() {

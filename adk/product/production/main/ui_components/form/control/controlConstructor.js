@@ -7,8 +7,8 @@ define([
 ) {
     "use strict";
 
-    return function(){
-        this.options = this.options || {};
+    return function(options){
+        this.options = _.extend({}, _.result(this, 'options'), options);
         var args = Array.prototype.slice.call(arguments),
             init = this.initialize;
         ControlPrototype._initialize.apply(this, args);

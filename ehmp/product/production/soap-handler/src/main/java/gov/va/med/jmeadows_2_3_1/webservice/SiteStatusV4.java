@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="expectedCount" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="partner" type="{http://webservice.bhie.med.va.gov/}partnerV4" minOccurs="0"/>
+ *         &lt;element name="partner" type="{http://webservice.bhie.URL       /}partnerV4" minOccurs="0"/>
  *         &lt;element name="partnerStatus" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="receivedCount" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *       &lt;/sequence>
@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "siteStatusV4", namespace = "http://webservice.bhie.med.va.gov/", propOrder = {
+@XmlType(name = "siteStatusV4", namespace = "http://webservice.bhie.URL       /", propOrder = {
     "expectedCount",
     "partner",
     "partnerStatus",

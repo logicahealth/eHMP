@@ -21,8 +21,8 @@
 ###############################################################################
 metrics_host=<%= @cdsinvocation['ipaddress'] %>
 metrics_port=<%= @cdsinvocation['tomcat']['http_port'] %>
-patientListServerURL=http://<%= @rdks[0]['ipaddress'] %>:<%= @rdks[0]['rdk']['services']['fetch_server']['port']%>/resource/cds/patient/
-RDK-resource-server=http://<%= @rdks[0]['ipaddress'] %>:<%= @rdks[0]['rdk']['services']['fetch_server']['port']%>/resource
+patientListServerURL=http://<%= @fetch_server_host %>:<%= @fetch_server_port %>/resource/cds/patient/
+RDK-resource-server=http://<%= @fetch_server_host %>:<%= @fetch_server_port %>/resource
 <% if !@crs.nil? %>
 CRSServer=http://<%= @crs['ipaddress'] %>:<%= @crs['crs']['fuseki']['port'] %>/
 <% end %>

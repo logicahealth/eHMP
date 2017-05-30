@@ -107,10 +107,17 @@ function isHeapSizeExceeded(logger) {
     }
 
     var memory = process.memoryUsage();
-    var memoryExceeded = memory.heapUsed > percentTotalHeapBeforeMemoryNotification * 0.01 * memory.heapTotal;
+    var acceptableMemory = percentTotalHeapBeforeMemoryNotification * 0.01 * memory.heapTotal;
+    var memoryExceeded = memory.heapUsed > acceptableMemory;
+
     if (memoryExceeded) {
-        logger.error('pick-list-db.isHeapSizeExceeded error: The acceptable memory allocated on the heap for pick-lists has been exceeded');
+        logger.error('pick-list-db.isHeapSizeExceeded error: The acceptable memory allocated on the heap for pick-lists has been exceeded' +
+            '(Used: ' + memory.heapUsed + '  Threshold:  ' + acceptableMemory + '  Total:' + memory.heapTotal + ')');
     }
+
+    logger.debug('pick-list in-memory footprint:  (Used: ' + memory.heapUsed +
+        '  Threshold:  ' + acceptableMemory + '  Total:' + memory.heapTotal + ')');
+
     return memoryExceeded;
 }
 

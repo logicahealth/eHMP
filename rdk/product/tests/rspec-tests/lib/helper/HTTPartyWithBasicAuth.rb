@@ -10,14 +10,14 @@ require "PatientPickerDomElements.rb"
 class TestClients
   @@users = {}
 
-  @@users["9E7A;pu1234"] = "pu1234!!"
-  @@users["C877;pu1234"] = "pu1234!!"
-  @@users["UnauthorizedUser"] = "pa55w0rd"
-  @@users["AuditLogUser"] = "xx1234!!"
-  @@users["9E7A;lu1234"] = "lu1234!!"
-  @@users["9E7A;1tdnurse"] = "tdnurse1"
-  @@users["9E7A;xx1234"] = "baduser"
-  @@users["9E7A;mx1234"] = "mx1234!!"
+  @@users["REDACTED"] = "REDACTED"
+  @@users["REDACTED"] = "REDACTED"
+  @@users["REDACTED"] = "REDACTED"
+  @@users["REDACTED"] = "REDACTED"
+  @@users["REDACTED"] = "REDACTED"
+  @@users["REDACTED"] = "REDACTED"
+  @@users["REDACTED"] = "REDACTED"
+  @@users["REDACTED"] = "REDACTED"
 
   def self.password_for(username)
     return @@users[username]
@@ -26,8 +26,8 @@ end
 
 class HTTPartyWithBasicAuth
   include HTTParty
-  #@@auth = { :username => "9E7A;pu1234", :password => "pu1234!!" }
-  @@auth = { :accessCode => "pu1234", :verifyCode => "pu1234!!", :site => "9E7A" }
+  #@@auth = { :username => "REDACTED", :password => "REDACTED" }
+  @@auth = { :accessCode => "REDACTED", :verifyCode => "REDACTED", :site => "9E7A" }
   @@time_start = Time.new
   @@time_done = Time.new
   @@time_out_time = 300

@@ -8,7 +8,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(['jquery', 'backbone', 'marionette', 'main/ui_components/components', 'api/UIComponents', 'jasminejquery'],
+define(['jquery', 'backbone', 'marionette', 'main/UILibrary', 'api/UIComponents', 'jasminejquery'],
     function($, Backbone, Marionette, UI) {
         var $form, form;
 
@@ -98,34 +98,48 @@ define(['jquery', 'backbone', 'marionette', 'main/ui_components/components', 'ap
                         expect($('.btn-group:eq(1) > ul > li:eq(1)')).toHaveId(dropdownControlDefinitions[1].id + '-' + testItems[1].id);
                     });
                 });
-                xdescribe("using trigger to dynamically change attributes", function() {
-                    beforeEach(function() {
-                        form = new UI.Form({
-                            model: formModel,
-                            fields: [dropdownControlDefinitions]
-                        });
-                        $form = form.render().$el;
-                        $("body").append($form);
+            });
+            describe("using trigger to dynamically change attributes", function() {
+                beforeEach(function() {
+                    form = new UI.Form({
+                        model: formModel,
+                        fields: dropdownControlDefinitions
                     });
+                    $form = form.render().$el;
+                    $("body").append($form);
+                });
 
-                    it("hidden", function() {
-                        $form.find('.dropdown-control .btn-group').trigger("control:hidden", true);
-                        expect($form.find('dropdown-control button')).toHaveClass('hidden');
-                        $form.find('dropdown-control button').trigger("control:hidden", false);
-                        expect($form.find('dropdown-control button')).not.toHaveClass('hidden');
+                it("hidden", function() {
+                    $form.find('.dropdown-control .btn-group').trigger("control:hidden", true);
+                    expect($form.find('.dropdown-control')).toHaveClass('hidden');
+                    $form.find('.dropdown-control').trigger("control:hidden", false);
+                    expect($form.find('.dropdown-control')).not.toHaveClass('hidden');
+                });
+                it("disabled boolean", function() {
+                    $form.find('.dropdown-control .btn-group').trigger("control:disabled", true);
+                    expect($form.find('button')).toHaveAttr('disabled');
+                    $form.find('.dropdown-control .btn-group').trigger("control:disabled", false);
+                    expect($form.find('button')).not.toHaveAttr('disabled');
+                });
+                it("disabled object", function() {
+                    $form.find('.dropdown-control .btn-group').trigger("control:disabled", { mainButton: true, dropdownToggle: false });
+                    expect($form.find('.dropdown-control button[id^=dropdown-b]')).toHaveAttr('disabled');
+                    $form.find('.dropdown-control .btn-group').trigger("control:disabled", { mainButton: false, dropdownToggle: false });
+                    expect($form.find('.dropdown-control button[id^=dropdown-b]')).not.toHaveAttr('disabled');
+                });
+                it("update:config", function() {
+                    $form.find('.dropdown-control .btn-group').trigger("control:update:config", {
+                        hidden: true,
+                        disabled: { mainButton: true, dropdownToggle: false }
                     });
-                    it("disabled boolean", function() {
-                        $form.find('.dropdown-control .btn-group').trigger("control:disabled", true);
-                        expect($form.find('button')).toHaveClass('disabled');
-                        $form.find('.dropdown-control .btn-group').trigger("control:disabled", false);
-                        expect($form.find('button')).not.toHaveClass('disabled');
+                    expect($form.find('.dropdown-control')).toHaveClass('hidden');
+                    expect($form.find('.dropdown-control button[id^=dropdown-b]')).toHaveAttr('disabled');
+                    $form.find('.dropdown-control .btn-group').trigger("control:update:config", {
+                        hidden: false,
+                        disabled: false
                     });
-                    it("disabled object", function() {
-                        $form.find('.dropdown-control .btn-group').trigger("control:disabled", { mainButton: true, dropdownToggle: false });
-                        expect($form.find('dropdown-control button')).toHaveClass('disabled');
-                        $form.find('.dropdown-control .btn-group').trigger("control:disabled", { mainButton: false, dropdownToggle: false });
-                        expect($form.find('dropdown-control button')).not.toHaveClass('disabled');
-                    });
+                    expect($form.find('.dropdown-control')).not.toHaveClass('hidden');
+                    expect($form.find('.dropdown-control button[id^=dropdown-b]')).not.toHaveAttr('disabled');
                 });
             });
             describe('disabled option', function() {

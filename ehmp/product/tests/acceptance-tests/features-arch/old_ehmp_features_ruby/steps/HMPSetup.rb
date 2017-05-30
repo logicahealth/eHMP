@@ -1,12 +1,12 @@
 class SetupEnv
   def initialize
     # @url = "https://hmpdemo.vainnovations.us/auth/login"
-    # @accesscode = '10VEHU'
-    # @verifycode = 'VEHU10'
+    # @accesscode = 'REDACTED'
+    # @verifycode = 'REDACTED'
     # @facility = 'HMP SANDBOX'
-    @url = "https://10.3.3.4:8443/"
-    @accesscode = 'pu1234'
-    @verifycode = 'pu1234!!'
+    @url = "https://IP           /"
+    @accesscode = 'REDACTED'
+    @verifycode = 'REDACTED'
     @facility = 'CAMP MASTER'
   end
 

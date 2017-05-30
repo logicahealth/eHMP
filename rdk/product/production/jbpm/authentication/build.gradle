@@ -1,3 +1,6 @@
+sourceCompatibility = property('javaVersion')
+targetCompatibility = property('targetJavaVersion')
+
 dependencies {
   compile 'jboss:jbosssx:3.2.3'
   compile 'jboss:jboss-jaas:3.2.3'

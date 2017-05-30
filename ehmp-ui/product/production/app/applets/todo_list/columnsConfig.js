@@ -1,4 +1,5 @@
 define([
+    'backbone',
     'underscore',
     'backgrid',
     'hbs!app/applets/todo_list/templates/dueStatusTemplateSummary',
@@ -8,16 +9,17 @@ define([
     'hbs!app/applets/todo_list/templates/activityTemplateExpanded',
     'hbs!app/applets/todo_list/templates/actionHeaderTemplate',
     'hbs!app/applets/todo_list/templates/notificationHeaderTemplate',
-    'hbs!app/applets/todo_list/templates/notificationTemplate',
-], function(_, Backgrid, dueStatusSummary, dueStatusExpanded, actionTemplate, taskNameSummaryTemplate, activityExpanded, actionHeaderTemplate, notificationHeaderTemplate, notificationTemplate) {
+    'hbs!app/applets/todo_list/templates/notificationTemplate'
+], function(Backbone, _, Backgrid, dueStatusSummary, dueStatusExpanded, actionTemplate, taskNameSummaryTemplate, activityExpanded, actionHeaderTemplate, notificationHeaderTemplate, notificationTemplate) {
     'use strict';
 
-    var customPrioritySort = function(model, sortKey) {
+    var customPrioritySort = function(model) {
         if (model instanceof Backbone.Model) {
             return -model.get("PRIORITY");
-        } else return -model.priority;
+        }
+        return -model.priority;
     };
-    var customDueDateSort = function(model, sortKey) {
+    var customDueDateSort = function(model) {
         if (model instanceof Backbone.Model) {
             if (!model.get('ACTIVE')) {
                 return '';
@@ -27,30 +29,33 @@ define([
         } else if (!model.ACTIVE) {
             return '';
         } else {
-            return parseInt('' + (model.dueTextValue * 1 + 1) + model.earliestDateMilliseconds);
+            return parseInt('' + (model.dueTextValue + 1) + model.earliestDateMilliseconds);
         }
     };
-    var customEarliestDateSort = function(model, sortKey) {
+    var customEarliestDateSort = function(model) {
         if (model instanceof Backbone.Model) {
             return model.get("earliestDateMilliseconds");
-        } else return model.earliestDateMilliseconds;
+        }
+        return model.earliestDateMilliseconds;
     };
-    var customPastDueDateSort = function(model, sortKey) {
+    var customPastDueDateSort = function(model) {
         if (model instanceof Backbone.Model) {
             return model.get("dueDateMilliseconds");
-        } else return model.dueDateMilliseconds;
+        }
+        return model.dueDateMilliseconds;
     };
-    var customArrowSort = function(model, sortKey) {
+    var customArrowSort = function(model) {
         if (model instanceof Backbone.Model) {
             return -(model.get("ACTIVE") && model.get("dueTextValue") !== 1 && model.get("hasPermissions"));
-        } else return -(model.ACTIVE && model.dueTextValue !== 1 && model.get("hasPermissions"));
+        }
+        return -(model.ACTIVE && model.dueTextValue !== 1 && model.get("hasPermissions"));
     };
 
     var actionColumn = {
         name: 'ACTION',
         label: '->',
         headerCellTemplate: actionHeaderTemplate,
-        flexWidth: 'flex-width-comment flex-width-0_5 left-padding-no right-padding-no',
+        flexWidth: 'flex-width-comment flex-width-0_5 left-padding-no right-padding-no text-center',
         cell: Backgrid.HandlebarsCell.extend({
             className: 'handlebars-cell flex-width-comment flex-width-0_5 left-padding-no right-padding-no'
         }),
@@ -104,7 +109,7 @@ define([
                 this.$el.html(this.column.get('template')(this.model.toJSON()));
 
                 var description = this.model.get('DESCRIPTION');
-                if(!_.isUndefined(description) && !_.isEmpty(description.trim())){
+                if(!_.isEmpty(description) && !_.isEmpty(description.trim())){
                     this.$el.tooltip({
                         container: 'body',
                         placement: 'auto top',
@@ -120,6 +125,19 @@ define([
             }
         }),
         template: taskNameSummaryTemplate
+    };
+
+    var createdOn = {
+        name: 'createdOn',
+        label: 'Created On',
+        flexWidth: 'flex-width-2',
+        cell: Backgrid.HandlebarsCell.extend({
+            className: 'handlebars-cell flex-width-2'
+        }),
+        template: '{{createdOnDate}}{{#if createdOnTime}}<br>{{createdOnTime}}{{/if}}',
+        sortValue: function(model) {
+            return model.get('createdOnDate') + model.get('createdOnTime');
+        }
     };
 
     var Config = {
@@ -180,7 +198,7 @@ define([
                         sortValue: customPrioritySort
                     }, {
                         name: 'dueText',
-                        label: 'Due Status',
+                        label: 'Due',
                         flexWidth: 'flex-width-1_5',
                         cell: Backgrid.HandlebarsCell.extend({
                             className: 'handlebars-cell flex-width-1_5'
@@ -216,7 +234,7 @@ define([
                         label: 'Description',
                         flexWidth: 'flex-width-4_5',
                         cell: Backgrid.StringCell.extend({
-                            className: 'string-cell flex-width-4_5',
+                            className: 'string-cell flex-width-4_5'
                         })
                     }, {
                         name: 'INTENDEDFOR',
@@ -233,12 +251,12 @@ define([
                         })
                     }, {
                         name: 'ACTIVITYDOMAIN',
-                        label: 'Activity Domain',
+                        label: 'Activity',
                         flexWidth: 'flex-width-2',
                         cell: Backgrid.StringCell.extend({
                             className: 'string-cell flex-width-2 transform-text-capitalize'
                         })
-                    }, {
+                    }, createdOn, {
                         name: 'ACTIVITYNAME',
                         label: 'Go to',
                         cell: Backgrid.HandlebarsCell.extend({
@@ -264,7 +282,7 @@ define([
                         sortValue: customPrioritySort
                     }, {
                         name: 'dueText',
-                        label: 'Due Status',
+                        label: 'Due',
                         flexWidth: 'flex-width-3',
                         cell: Backgrid.HandlebarsCell.extend({
                             className: 'handlebars-cell flex-width-3'
@@ -311,12 +329,14 @@ define([
                         })
                     }, {
                         name: 'ACTIVITYDOMAIN',
-                        label: 'Activity Domain',
+                        label: 'Activity',
                         flexWidth: 'flex-width-5',
                         cell: Backgrid.StringCell.extend({
                             className: 'string-cell flex-width-5 transform-text-capitalize'
                         })
-                    }, {
+                    },
+                    createdOn,
+                    {
                         name: 'ACTIVITYNAME',
                         label: 'Go to',
                         flexWidth: 'flex-width-3',

@@ -6,14 +6,15 @@ define([
     'moment',
     'hbs!app/applets/stackedGraph/list/stackedGraphViewTemplate',
     'app/applets/stackedGraph/list/chartsCompositeView',
-    'app/applets/medication_review_v2/medicationCollectionHandler',
-    'app/applets/medication_review_v2/medicationResourceHandler',
+    'app/applets/medication_review/medicationCollectionHandler',
+    'app/applets/medication_review/medicationsUngrouped/medicationOrderCollection',
+    'app/applets/medication_review/appletHelper',
     'app/applets/stackedGraph/utils/utils',
     'typeahead',
     'highcharts-more',
-    'app/applets/medication_review_v2/applet',
+    'app/applets/medication_review/applet',
     'app/applets/lab_results_grid/applet'
-], function(Backbone, Marionette, _, Highcharts, moment, StackedGraphViewTemplate, ChartsCompositeView, CollectionHandler, MedsResource, Utils) {
+], function(Backbone, Marionette, _, Highcharts, moment, StackedGraphViewTemplate, ChartsCompositeView, CollectionHandler, MedicationCollection, AppletHelper, MedsResource, Utils) {
     "use strict";
 
     return Backbone.Marionette.LayoutView.extend({
@@ -35,7 +36,7 @@ define([
             this.listenTo(this.chartOptionsCollection, 'remove', function(model, collection, options) {
                 if (!_.isUndefined(options.removeIndex)) {
                     // Remove the reordered chart from the activeCharts array.
-                    self.activeCharts.splice(self.activeCharts.length - (options.removeIndex+1), 1);
+                    self.activeCharts.splice(self.activeCharts.length - (options.removeIndex + 1), 1);
                 }
             });
             this.stackedGraphChannel = ADK.Messaging.getChannel('stackedGraph');
@@ -80,12 +81,12 @@ define([
             });
 
             this.listenTo(this.stackedGraphChannel, 'delete', function(response) {
-                if (response.model.attributes.requesterInstanceId !== self.instanceId || this.predefined === true) {
+                if (response.model.get('requesterInstanceId') !== self.instanceId || this.predefined === true) {
                     return;
                 }
 
                 var bodyView = Backbone.Marionette.ItemView.extend({
-                    template: _.template('<p><strong>Are you sure you want to delete the ' + response.model.attributes.typeName + ' graph?</strong></p>')
+                    template: _.template('<p><strong>Are you sure you want to delete the ' + response.model.get('typeName') + ' graph?</strong></p>')
                 });
 
                 var footerView = Backbone.Marionette.ItemView.extend({
@@ -97,19 +98,28 @@ define([
                     },
                     deleteGraph: function() {
                         var focusEl = this.findFocusEl();
-                        var pickListPersistanceFetchOptions = {
-                            resourceTitle: 'user-defined-stack',
-                            fetchType: 'DELETE',
-                            criteria: {
+                        var getName = function() {
+                            var stackedGraphTypeName = response.model.get('stackedGraphTypeName');
+                            if (stackedGraphTypeName) {
+                                return stackedGraphTypeName.toUpperCase();
+                            }
+
+                            return stackedGraphTypeName;
+                        };
+
+                        var model = new ADK.UIResources.Writeback.StackedGraph.Model();
+                        var deleteOptions = {
+                            params: {
                                 id: ADK.ADKApp.currentScreen.config.id,
                                 instanceId: self.instanceId,
-                                graphType: response.model.attributes.stackedGraphType,
-                                typeName: response.model.attributes.stackedGraphTypeName.toUpperCase()
+                                graphType: response.model.get('stackedGraphType'),
+                                typeName: getName()
                             },
-
-                            onSuccess: function() {
+                            success: function() {
                                 var filter = self.chartOptionsCollection.filter(function(model) {
-                                    return (model.get('stackedGraphTypeName').toUpperCase() + '-' + model.get('stackedGraphType').toUpperCase()) === (response.model.get('stackedGraphTypeName').toUpperCase() + '-' + response.model.get('stackedGraphType').toUpperCase());
+                                    var modelGraphNameType = model.get('stackedGraphTypeName').toUpperCase() + '-' + model.get('stackedGraphType').toUpperCase();
+                                    var responseGraphNameType = response.model.get('stackedGraphTypeName').toUpperCase() + '-' + response.model.get('stackedGraphType').toUpperCase();
+                                    return (modelGraphNameType === responseGraphNameType);
                                 });
                                 self.chartOptionsCollection.remove(filter);
                                 var index = _.indexOf(self.isAdded, (filter[0].get('stackedGraphTypeName').toUpperCase() + '-' + filter[0].get('stackedGraphType').toUpperCase()));
@@ -122,14 +132,14 @@ define([
                                 }
                             }
                         };
-
-                        ADK.ResourceService.fetchCollection(pickListPersistanceFetchOptions);
+                        model.setIsNew(false);
+                        model.destroy(deleteOptions);
 
                         ADK.UserDefinedScreens.removeOneStackedGraphFromSession(
                             ADK.ADKApp.currentScreen.config.id,
                             self.instanceId,
-                            response.model.attributes.stackedGraphType,
-                            response.model.attributes.stackedGraphTypeName
+                            response.model.get('stackedGraphType'),
+                            response.model.get('stackedGraphTypeName')
                         );
                         ADK.UI.Alert.hide();
                         focusEl.focus();
@@ -167,7 +177,6 @@ define([
                     footerView: footerView.extend({
                         model: footerModel
                     })
-
                 });
                 modal.show();
             });
@@ -189,7 +198,6 @@ define([
                 if (persistedPickList) {
                     populateApplet(persistedPickList);
                 }
-
             });
 
             function populateApplet(persistedPickList) {
@@ -207,7 +215,6 @@ define([
                         instanceId: self.instanceId,
                         graphType: persistedPickListItem.graphType,
                         graphPosition: persistedPickList.length - index //last graph on list must be shown first an so on.
-
                     };
 
                     var channel;
@@ -218,8 +225,6 @@ define([
                         $deferred.resolve({
                             collection: null
                         });
-
-
                     } else if (persistedPickListItem.graphType === 'Lab Tests') {
                         channel = ADK.Messaging.getChannel('lab_results_grid');
                         $deferred.resolve({
@@ -227,19 +232,32 @@ define([
                         });
                     } else if (persistedPickListItem.graphType === 'Medications') {
                         channel = ADK.Messaging.getChannel('meds_review');
-                        var medCollection = ADK.ResourceService.createEmptyCollection({
-                            pageable: true
+                        var MedModel = Backbone.Model.extend({
+                            parse: AppletHelper.parseMedResponse
                         });
+                        var GroupedMedCollection = MedicationCollection.extend({
+                            model: MedModel
+                        });
+                        var medCollection = new GroupedMedCollection();
                         self.listenToOnce(medCollection, 'read:success', function(collection) {
                             self.stopListening(medCollection, 'read:error');
+                            var groupedCollection = CollectionHandler.resetCollections(collection, false);
+
                             $deferred.resolve({
-                                collection: collection
+                                collection: groupedCollection
                             });
                         });
                         self.listenToOnce(medCollection, 'read:error', function(collection) {
                             self.stopListening(medCollection, 'read:success');
                         });
-                        CollectionHandler.fetchAllMeds(false, medCollection);
+                        medCollection.performFetch({
+                            onSuccess: function(collection) {
+                                collection.trigger('read:success', collection);
+                            },
+                            onError: function(collection) {
+                                collection.trigger('read:error');
+                            }
+                        });
                     }
 
                     $deferred.done(function(response) {
@@ -248,13 +266,10 @@ define([
                     });
                 };
 
-
                 for (var ind = 0; ind < persistedPickList.length; ind++) {
                     requestGraphInfo(ind);
                 }
-
             }
-
         },
         showDefaultScreen: function(self) {
             self.chartsCompositeView = new ChartsCompositeView({
@@ -276,9 +291,9 @@ define([
             toDate.add(1, 'd');
 
             // The following used to have a setInterval and if statement self.$('.header-placeholder').length > 0) which would clear the
-            // interval.  However, that since that should always evaluate to true (because of the self) than it seems
+            // interval.  However, since that should always evaluate to true (because of the self) then it seems
             // like it would be better to use an animationFrame which is the optimal time to draw to the DOM
-            window.requestAnimationFrame(function() {
+            var animationFrameHeaderStep = function() {
                 var timeLineChart1 = self.$('.header-placeholder').highcharts($.extend(true, {}, self.pChartOptions, {
                     xAxis: {
                         labels: {
@@ -288,22 +303,22 @@ define([
                 })).highcharts();
                 timeLineChart1.xAxis[0].setExtremes(Date.UTC(fromDate.year(), fromDate.month(), fromDate.date()), Date.UTC(toDate.year(), toDate.month(), toDate.date()));
                 self.timeLineCharts.push(timeLineChart1);
-            });
-
-            // Same as above
-            window.requestAnimationFrame(function() {
+            };
+            var animationFrameFooterStep = function() {
                 var timeLineChart2 = self.$('.footer-placeholder').highcharts(self.pChartOptions).highcharts();
                 timeLineChart2.xAxis[0].setExtremes(Date.UTC(fromDate.year(), fromDate.month(), fromDate.date()), Date.UTC(toDate.year(), toDate.month(), toDate.date()));
                 self.timeLineCharts.push(timeLineChart2);
+            };
+
+            this.outstandingAnimationFrames = [];
+            this.outstandingAnimationFrames.push(animationFrameHeaderStep);
+            this.outstandingAnimationFrames.push(animationFrameFooterStep);
+
+            _.each(this.outstandingAnimationFrames, function(frame) {
+                window.requestAnimationFrame(frame);
             });
 
             self.collectionViewRegion.show(self.chartsCompositeView);
-
-            function onMouseLeaveHitArea(evt) {
-                $.each(self.activeCharts, function(i, obj) {
-                    obj.tooltip.hide();
-                });
-            }
 
             var pointers = self.$('.stacked-graph-pointer');
 
@@ -311,7 +326,6 @@ define([
                 pointers.css({
                     visibility: 'hidden'
                 });
-                // hidePointer();
 
                 $.each(self.activeCharts, function(i, chart) {
                     if (chart.tooltip) {
@@ -322,10 +336,8 @@ define([
                         css({
                             visibility: 'hidden'
                         });
-
                     }
                 });
-
             });
 
             self.$('.collection-container').on({
@@ -337,7 +349,6 @@ define([
 
                     $.each(self.activeCharts, function(i, chart) {
                         var ev = chart.pointer.normalize(evt);
-                        var mouseX = evt.pageX;
                         chart.pointer.runPointActions(ev);
                         if (chart.line) {
                             chart.line.attr({
@@ -357,14 +368,12 @@ define([
 
                     $.each(self.activeCharts, function(i, chart) {
                         var ev = chart.pointer.normalize(evt);
-                        var mouseX = evt.pageX;
                         chart.pointer.runPointActions(ev);
                         if (chart.line) {
                             chart.line.attr({
                                 x: ev.chartX
                             });
                         }
-
                     });
 
                     var chartX = self.activeCharts[0].pointer.normalize(evt);
@@ -377,9 +386,7 @@ define([
                         left: mouseX - pointers.eq(0).width(),
                         visibility: 'visible'
                     });
-
                 }
-
             }, '.highcharts-container');
         },
         onShow: function() {
@@ -395,7 +402,7 @@ define([
             chart: {
                 ignoreHiddenSeries: false,
                 type: 'line',
-                height: 40 //20
+                height: 40
             },
             legend: {
                 enabled: false
@@ -458,7 +465,14 @@ define([
             this.timeLineCharts = [];
 
             this.chartOptionsCollection.reset();
-        }
 
+            if (!_.isUndefined(this.outstandingAnimationFrames)) {
+                _.each(this.outstandingAnimationFrames, function(frame) {
+                    if (frame) {
+                        window.cancelAnimationFrame(frame);
+                    }
+                });
+            }
+        }
     });
 });

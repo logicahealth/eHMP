@@ -1,19 +1,19 @@
 require_relative 'DefaultTiming.rb'
 # Valid Login information to be used for most tests
 class DefaultLogin
-  @@adk_url = ENV.keys.include?('ADK_IP') ? 'http://' + ENV['ADK_IP'] : "http://10.1.1.200/"
-  @@ehmpui_url = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://10.1.1.150"
+  @@adk_url = ENV.keys.include?('ADK_IP') ? 'http://' + ENV['ADK_IP'] : "http://IP        /"
+  @@ehmpui_url = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://IP        "
   @@local_testrun = ENV.keys.include?('LOCAL')
 
   @@default_wait_time = DefaultTiming.default_wait_time
   @@facility_name = "PANORAMA"
-  # @@accesscode = "pu1234"
-  # @@verifycode = "pu1234!!"
-  #@@accesscode = "lab1234"
-  #@@verifycode = "lab1234!!"
+  # @@accesscode = "REDACTED"
+  # @@verifycode = "REDACTED"
+  #@@accesscode = "REDACTED"
+  #@@verifycode = "REDACTED"
 
-  @@accesscode = "TWO1234"
-  @@verifycode = "TWO1234!!"
+  @@accesscode = "REDACTED"
+  @@verifycode = "REDACTED"
   @@logged_in = false
   @@login_step=/^POB user is logged into EHMP\-UI with facility as  "(.*?)" accesscode as  "(.*?)" verifycode as  "(.*?)"/
   @@launch_ehmp = /^user launches eHMP\-UI$/

@@ -767,6 +767,7 @@ define([
             '<div class="selected-region{{#if selectedSize}} col-md-{{selectedSize}}{{else}} col-md-6{{/if}}"></div>',
             '<div class="col-xs-12 total-selected-region background-color-pure-white"></div>'
         ].join("\n")),
+        behaviors: _.omit(ControlService.LayoutViewControl.prototype.behaviors, 'UpdateConfig'),
         initialize: function(options) {
             this.initCollection('collection');
             this.selectedCountName = this.field.get('selectedCountName') || null;
@@ -800,7 +801,6 @@ define([
                 this.setBooleanFieldOption("required", booleanValue, event);
             },
             "control:hidden": function(event, booleanValue) {
-                this.hideControl(event, booleanValue);
                 if (booleanValue === true) {
                     var shownPopovers = this.$('.popover-control').find('.popover-shown');
                     shownPopovers.trigger('control:popover:hidden', true);

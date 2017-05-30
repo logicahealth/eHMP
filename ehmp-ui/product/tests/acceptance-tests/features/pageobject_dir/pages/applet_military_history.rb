@@ -36,6 +36,7 @@ class PobAppletMilitaryApplet < SitePrism::Page
 
   def get_military_history_expanded_data_row(tRow, tData)
     self.class.element :tbl_military_hist_column_data, "#data-grid-military_hist tbody tr:nth-of-type(#{tRow}) > td:nth-of-type(#{tData})"
+    wait_until_tbl_military_hist_column_data_visible
     return tbl_military_hist_column_data.text
   end
 

@@ -77,7 +77,7 @@ function fetchNames(req, items, fetchcb) {
         items,
 
         function(item, callback) {
-            //http://10.2.2.110:9080/vpr/9E7A;237
+            //http://IP             /vpr/9E7A;237
 
             var pid = item.pid;
             var jdsResource = '/vpr';

@@ -16,7 +16,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="prescriptionFill">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.med.va.gov/}dataBean">
+ *     &lt;extension base="{http://webservice.vds.URL       /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="dispenseDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="dispensingPharmacy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -30,7 +30,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "prescriptionFill", namespace = "http://webservice.vds.med.va.gov/", propOrder = {
+@XmlType(name = "prescriptionFill", namespace = "http://webservice.vds.URL       /", propOrder = {
     "dispenseDate",
     "dispensingPharmacy",
     "dispensingQuantity"

@@ -27,7 +27,7 @@ function resyncJdsIdConflicts(log, config, environment, job, conflictErrorData, 
             getPatientIdentifiersFromJds(log, environment, conflictingPatientIds[0], function(error, patientIds) {
                 if (error) {
                     log.error('resync-jds-id-conflicts.resyncJdsIdConflicts: Error getting patient identifiers from JDS for patient identifier %s with error %s.', conflictingPatientIds[0], error);
-                    callback('Error getting patient identifiers from JDS.');
+                    loopCallback('Error getting patient identifiers from JDS.');
                 }
 
                 log.debug('resync-jds-id-conflicts.resyncJdsIdConflicts: JDS return the following ids for %s: %s', conflictingPatientIds[0], patientIds);
@@ -50,7 +50,7 @@ function resyncJdsIdConflicts(log, config, environment, job, conflictErrorData, 
 
             async.each(syncIds, function(syncId, eachCallback) {
                 var patientIdentifier = {type: idUtil.isIcn(syncId) ? 'icn' : 'pid', value: syncId};
-                resync(jobUtils.createResyncRequest(patientIdentifier), log, environment, eachCallback)
+                resync(jobUtils.createResyncRequest(patientIdentifier), log, environment, eachCallback);
             }, function(error) {
                 if (error) {
                     log.error('resync-jds-id-conflicts.resyncJdsIdConflicts: Unexpected error %s', error);
@@ -59,7 +59,7 @@ function resyncJdsIdConflicts(log, config, environment, job, conflictErrorData, 
 
                 log.debug('resync-jds-id-conflicts.resyncJdsIdConflicts: Resyncing the original job: %j', job);
                 resync(job, log, environment, callback);
-            })
+            });
         }
     );
 }
@@ -77,7 +77,7 @@ function getConflictingPatientIds(log, conflictErrorData) {
                     return undefined;
                 }
 
-                return item.domain.substring(10, item.domain.indexOf("Associated with")).trim();
+                return item.domain.substring(10, item.domain.indexOf('Associated with')).trim();
             })
             .compact()
             .value();

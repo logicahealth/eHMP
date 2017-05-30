@@ -1,8 +1,8 @@
 def create_a_default_consult(pid)
   expect(@deployment_id).to_not be_nil
   request = RDKQuery.new('activities-start')
-  user = '9E7A;vk1234'
-  default_id = 'urn:va:user:9E7A:10000000272'
+  user = 'REDACTED;REDACTED'
+  default_id = 'REDACTED'
   default_name = 'KHAN, VIHAAN'
   parameter_hash = {}
   parameter_hash['icn'] = pid
@@ -78,7 +78,7 @@ def sign_a_default_consult(pid)
   expect(@deployment_id).to_not be_nil
   expect(@task_to_update).to_not be_nil
 
-  user = '9E7A;vk1234'
+  user = 'REDACTED;REDACTED'
   # start update
   start_update_payload = {}
   start_update_payload['deploymentId'] = @deployment_id

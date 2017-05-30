@@ -31,7 +31,7 @@ machine_opts = {
     'windows.set_work_network' => true,
     'vm.network' => {
       'private_network' => {
-        :ip => "10.2.2.2"
+        :ip => "IP      "
       },
       :forwarded_port =>  {
         guest: 5985,

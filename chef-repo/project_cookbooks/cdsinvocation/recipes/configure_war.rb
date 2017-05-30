@@ -3,6 +3,8 @@
 # Recipe:: configure_war
 #
 
+include_recipe "ehmp_synapse"
+
 common_directory "#{node[:tomcat][:home]}/shared/lib" do
   recursive true
   owner node[:tomcat][:user]
@@ -17,7 +19,7 @@ rescue
   crs = nil
 end
 
-mongodb_creds = Chef::EncryptedDataBagItem.load("credentials", "mongodb", node[:data_bag_string])
+mongodb_creds = Chef::EncryptedDataBagItem.load("credentials", node[:mongodb_creds_db] || "mongodb", node[:data_bag_string])
 cdsdb = find_optional_node_by_role("cdsdb", node[:stack])
 
 
@@ -28,7 +30,8 @@ template("#{node[:tomcat][:home]}/shared/classes/cds-results-service.properties"
       {
         :cdsinvocation => node,
         :cdsdb => cdsdb,
-        :rdks => find_multiple_nodes_by_role("resource_server", node[:stack]),
+        :fetch_server_host => "localhost",
+        :fetch_server_port => node[:synapse][:services][:fetch_server][:haproxy][:port],
         :crs => crs,
         :mongodb_creds => mongodb_creds,
         :dev_cdsi => node[:cdsinvocation][:deploy_intents]

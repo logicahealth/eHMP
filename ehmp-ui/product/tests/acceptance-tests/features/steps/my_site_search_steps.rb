@@ -141,19 +141,20 @@ Then(/^the My Site Tray patient name search results are in format Last Name, Fir
   end
 end
 
-Then(/^the My Site Tray date of birth search results are in format Date \(Agey\) \- Gender \(first letter\)$/) do
+Then(/^the My Site Tray date of birth search results are in format Date \(Agey\)$/) do
   my_site_tray = PobStaffView.new
   wait_until { my_site_tray.my_site_search_results_dob.length > 0 }
   column1_visible_text = my_site_tray.patient_dob_visible_text  
   column1_visible_text.each do | name |
-    result = name.match(/\d{2}\/\d{2}\/\d{4}  \(\d+y\)  - [MF]/)
+    result = name.match(/\d{2}\/\d{2}\/\d{4}  \(\d+y\)/)
     expect(result).to_not be_nil, "#{name} did not match expected format"
   end
 end
 
-Then(/^the My Site Tray results contain patient "([^"]*)" with DOB "([^"]*)"$/) do |patient_name, dob|
+Then(/^the My Site Tray results contain patient "([^"]*)" with DOB "([^"]*)" and gender "([^"]*)"$/) do |patient_name, dob, gender|
 
   my_site_tray = PobStaffView.new
+  allowable_genders = my_site_tray.allowable_genders
   wait_until { my_site_tray.my_site_search_results_dob.length > 0 }
   column1_visible_text = my_site_tray.patient_name_visible_text
   found_patient_index = -1
@@ -167,6 +168,7 @@ Then(/^the My Site Tray results contain patient "([^"]*)" with DOB "([^"]*)"$/) 
   expect(found_patient_index).to be > -1, "Did not find #{patient_name} in the search results"
   expect(my_site_tray.my_site_search_results_dob.length).to be > found_patient_index
   expect(my_site_tray.patient_dob_visible_text[found_patient_index].upcase.gsub(' ', '')).to eq(dob.upcase.gsub(' ', ''))
+  expect(allowable_genders).to include my_site_tray.my_site_gender_text[found_patient_index].upcase
 end
 
 Then(/^the My Site search input box is cleared$/) do
@@ -180,4 +182,14 @@ Then(/^the My Site search input box is populated with term (.*)$/) do |search_te
   my_site_tray = PobStaffView.new
   expect(my_site_tray.wait_for_fld_my_site_input).to eq(true), "My Site search input box is not visible"
   expect(my_site_tray.fld_my_site_input.value.upcase).to eq(search_term.upcase)
+end
+
+Then(/^the My Site Tray gender search results are in terms Male, Female or Unknown$/) do
+  my_site_tray = PobStaffView.new
+  genders = my_site_tray.allowable_genders
+  wait_until { my_site_tray.my_site_search_results_gender.length > 0 }
+  column1_visible_text = my_site_tray.my_site_gender_text  
+  column1_visible_text.each do | temp_gender |
+    expect(genders).to include temp_gender
+  end
 end

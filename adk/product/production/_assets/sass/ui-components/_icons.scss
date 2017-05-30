@@ -130,3 +130,28 @@
     color: $secondary;
     font-size: 18px;
 }
+// applet resize icon, bottom right of user defined screen applet when user resizes the applet
+.gs-resize-handle-both {
+    background: none;
+    bottom: -11px;
+    color: $grey-darkest;
+    height: 15px;
+    right: -13px;
+    width: 15px;
+    i {
+        font-size: 16px;
+        font-weight: 800;
+        -ms-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+}
+// bulk edit user
+.fa-user + .fa-user {
+    font-size: 8px;
+    margin-left: -2px;
+    position: relative;
+    top: -3px;
+}
+.fa-user + .fa-user + .fa-pencil {
+    font-size: 9px;
+}

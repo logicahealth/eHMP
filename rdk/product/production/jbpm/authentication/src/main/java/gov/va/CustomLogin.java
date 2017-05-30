@@ -14,6 +14,7 @@ import org.jboss.security.auth.spi.UsernamePasswordLoginModule;
 public class CustomLogin extends UsernamePasswordLoginModule {
 	
 	private static String EHMP_USER_ROLE = "Administrators";
+	private static String REST_ALL_USER_ROLE = "rest-all";
 
 	@SuppressWarnings("rawtypes")
 	public void initialize(Subject subject, CallbackHandler callbackHandler,
@@ -39,10 +40,6 @@ public class CustomLogin extends UsernamePasswordLoginModule {
 			throw new LoginException(
 					"Unable to retrieve username and/or password");
 		}
-
-//		System.out.format("CustomLogin: Username passed in: %s\n",
-//				usernameAndSite);
-//		System.out.format("CustomLogin: Password passed in: %s\n", password);
 
 		if ("".equalsIgnoreCase(password)) {
 			throw new LoginException("Empty password received");
@@ -88,6 +85,7 @@ public class CustomLogin extends UsernamePasswordLoginModule {
 		SimpleGroup group = new SimpleGroup("Roles");
 		try {
 			group.addMember(new SimplePrincipal(EHMP_USER_ROLE));
+			group.addMember(new SimplePrincipal(REST_ALL_USER_ROLE));			
 		} catch (Exception e) {
 			throw new LoginException("Failed to create group member for "
 					+ group);

@@ -18,13 +18,13 @@ Code review checklist for ADK and eHMP-UI developers
     var foo = 1;
     var bar = 2;
   ```
-+ There should be _'use strict'_ for better [ECMAScript5](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode) semetic checking.
++ There should be _'use strict'_ for better [ECMAScript5](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode) semantic checking.
   ```JavaScript
     // Good practice
     define([
         'backbone',
-        'backbone.radio'
-    ], function(Backbone) {
+        'handlebars'
+    ], function(Backbone, Handlebars) {
         'use strict';
         ...
     }
@@ -35,9 +35,9 @@ Code review checklist for ADK and eHMP-UI developers
     $('a[title="Search"] img').css('background-position','0px 0px');
   ```
 + Each line should not exceed 120 characters.
-+ Newly added or updated lines of code have reasonably good indentation for good readability.
++ All updates should be passed through _jshint_ to ensure formatting meets project specifications.  Ctrl+Option+f will accomplish this in Sublime.
 + There are no code blocks that can be replaced by utility functions of __[lodash](https://lodash.com/docs)__ or __ADK.Utils__.
-+ There are no unnecessary console _loggings_.
++ There are no console _loggings_.  Error reporting should use _console.error_.
 + Each variable should be declared with unique naming within its visibility.
   ```JavaScript
     // Bad practice
@@ -94,6 +94,113 @@ Code review checklist for ADK and eHMP-UI developers
   ```JavaScript
     // Good practice. Instantiate a child view when it is needed
     layoutView.showChildView('menu', new MenuView());
+    //equivalent with different syntax
+    layoutView.getRegion('header').show(new HeaderView());
+  ```
+* Ensure there are no memory leaks or singletons in require scope.  Only primitives should be referenced outside of the scope of a Marionette object.
+  ```Javascript
+      define([
+          'backbone',
+          'handlebars'
+      ], function(Backbone, Handlebars) {
+          'use strict';
+
+          //memory leaks
+          var someView;
+          var someModel = new Backbone.Model();
+
+          var View = Marionette.View.extend({
+              //singleton--all instances will share this reference on the prototype
+              model: new Backbone.Model(),
+              initialize: function() {
+                  //save a reference to the object instance to a variable in the require scope
+                  //leak...
+                  someView = this;
+              }
+          })
+      }
+  ```
+* Ensure there are no memory leaks as a result of event listeners
+  ```Javascript
+  var View = Marionette.View.extend({
+      initialize: function() {
+          this.specialCollection = new Backbone.Collection();
+          this.model = this.getOption('model') || new Backbone.Model();
+          this.collection = new Backbone.Collection();
+
+          //bad
+          var self = this;
+          this.model.on('change', function(model) {
+              self.doStuff();
+          })
+          ADK.getChannel('some_channel').on('some_event', function(obj) {
+              self.doStuff();
+          });
+          this.collection.on('add', function(collection, model) {
+              self.addModel();
+          })
+
+          //good
+          this.listenTo(ADK.getChannel('some_channel'), 'some_event', function(obj) {
+              this.doStuff();
+          })
+          this.bindEntityEvents(this.specialCollection, this.specialCollectionEvents);
+      }
+      //proper
+      modelEvents: {
+          'change': 'doStuff'
+      },
+      collectionEvents: {
+          'add': 'addModel'
+          'remove': function(collection, model) {
+              this.triggerMethod('remove:model', model);
+          }
+      },
+      //some views will need to have more than one collection or model
+      specialCollectionEvents: {
+          'update': 'updateSpecialCollection'
+      },
+      onRemoveModel: function(model) {
+          this.doSomething(model);
+      },
+      onDestroy: function() {
+          //make sure to release these events
+          this.unbindEntityEvents(this.specialCollection, this.specialCollectionEvents);
+      }
+  })
+  ```
+* Ensure there are no leaks due to using throw-away collections
+  ```Javascript
+  //bad
+  var View = Marionette.View.extend({
+    initialize: function() {
+      this.collection = new Backbone.Collection();
+    },
+    collectionEvents: {
+      'sync': 'doStuff'
+    },
+    onBeforeShow: function() {
+      var fetchOptions = {}; //set options
+      //destroys the reference so all events bound are lost
+      this.collection = ADK.PatientRecordService.fetchCollection(fetchOptions);
+      //now the view is looking at a memory leak to see if 'sync' is ever called
+    }
+  });
+
+  //acceptable
+  var View = Marionette.View.extend({
+    initialize: function() {
+      this.collection = new Backbone.Collection();
+    },
+    collectionEvents: {
+      'sync': 'doStuff'
+    },
+    onBeforeShow: function() {
+      var fetchOptions = {}; //set options
+      ADK.PatientRecordService.fetchCollection(fetchOptions, this.collection);
+    }
+  });
+
   ```
 * Ensure destroy() is issued to views when parent is destroyed, ideally through Marionette mechanisms.
 * There is no asynchronous template rendering.
@@ -106,19 +213,20 @@ Code review checklist for ADK and eHMP-UI developers
   ```
 * There are no redundant divs.
 * There is no full DOM tree traversing by jQuery.  Use this.$(selector) for better performance.
-* There are no events to elements outside of the scope of the current view.
+* There are no DOM events to elements outside of the scope of the current view.
 * Every resource is released when a listening view is destroyed.
   ```JavaScript
     // Good practice
     onBeforeDestroy: function() {
-      ADK.Messaging.off('globalDate:selected');
+        ADK.Messaging.getChannel('someChannel').stopReplying('someEvent');
     },
   ```
 * No code relies on obsolete/deprecated ADK features.
+* Messaging `request`/`reply` and `trigger`/`on`/`listenTo` should be used appropriately.  Avoid `command`/`comply`.  If a `request` or `on` is configured within the scope of a view, it should be turned off in `onDestroy` with `off` or `stopReplying`.
 * Parent views should always be of type _CompositeView_, _CollectionView_, or _LayoutView_ instead of _ItemView_.
-* There are no `.html()` calls and there are no `.append()` calls.
+* There are no `.html()` calls and there are no `.append()` calls.  All DOM elements should be managed by a view.
 ### Best Practices ###
-* Utilize [Marionette's **ui** hash](http://marionettejs.com/docs/v2.4.2/marionette.itemview.html#organizing-ui-elements) to keep track of your view's elements. Doing this will help the maintainability of your views and allow selectors to be changed in only one location. This works in all Marionette views (item, collection, composite, and layout).
+* Utilize [Marionette's **ui** hash](http://marionettejs.com/docs/v2.4.2/marionette.itemview.html#organizing-ui-elements) to keep track of your view's elements. Doing this will help the maintainability of your views and allow selectors to be changed in only one location. This works in all Marionette views (item, collection, composite, and layout).  Attributes in the ui hash object should be upper case.
   ``` JavaScript
   var View = Backbone.Marionette.ItemView.extend({
     template: Handlebars.compile([
@@ -136,6 +244,145 @@ Code review checklist for ADK and eHMP-UI developers
       }
     }
   })
+  ```
+#### Displaying Data ####
+* Content display should be event driven.  See [Event Listeners](/documentation/#/adk/conventions#Applet-Level-Conventions-Event-Listeners)
+  ```Javascript
+    var RowView = Marionette.ItemView.extend({
+      tagName: 'li',
+      tempalte: Handlebars.compile('<button>{{name}}</button>')
+      ui: {
+        'Button': 'button'
+      },
+      modelEvents: {
+        'change:name': 'render'
+      },
+      triggers: {
+        'click @ui.Button': 'select:row'
+      }
+    });
+
+    var CollectionView = Marionette.CollectionView.extend({
+      tagName: 'ul',
+      childView: RowView
+    });
+
+    var SelectionView = Marionette.ItemView.extend({
+      tagName: 'span',
+      template: Handlebars.compile('{{chosenSelection}}'),
+      modelEvents: {
+        'change': 'render'
+      }
+    })
+
+    var ListManager = Marionette.LayoutView.extend({
+      template: Handlebars.compile('<div class="selection"></div><div class="list"></div>'),
+      regions: {
+        'SelectionRegion': '.selection'
+        'ListRegion': '.list'
+      },
+      initialize: function() {
+        this.collection = new Backbone.Collection();
+        this.model = new Backbone.Model();
+      },
+      collectionEvents: {
+        'request': 'showLoading',
+        'sync': 'removeLoading',
+        'error': 'showError'
+      },
+      childViewEvents: {
+        'select:row': 'onSelectRow'
+      },
+      onSelectRow: function(rowView) {
+        //the collection view will automatically
+        //bounce the event that the row view fires
+        //in this example we're simply updating a field that shows
+        //which row was clicked
+        this.model.set('chosenSelection', rowView.model.get('name'));
+
+        //update the name on the row from this view
+        rowView.model.set('name', 'no longer selectable');
+      },
+      onBeforeShow: function() {
+        this.getRegion('SelectionRegion').show(new SelectionView({
+          model: this.model
+        }));
+        this.getRegion('ListRegion').show(new CollectionView({
+          collection: this.collection
+        }));
+
+        this.collection.fetch(); //assume the resource is configured
+      }
+    })
+  ```
+* Data manipulation for display purposes should occur in `serializeModel`, `serializeCollection`, or `serializeData` as appropriate.  In most views, `serializeData` calls `serializeModel`, and then `serializeCollection` where the model will get preference and `serializeCollection` will not get called if the view owns a model.  _CollectionView_ and _CompositeView_ do not have `serializeCollection`.  Of the two, only _CompositeView_ calls `serializeModel`.  Data should _never_ be changed in a AJAX callback.  If data for a collection or model needs to be modified for business needs, such as an attribute used as a query parameter for a cascading fetch scenario, it should happen in the parse method for the collection or model.  For most purposes, the data only needs to be modified for display.
+  ```Javascript
+    var ViewAbstract = Marionette.ItemView.extend({
+      maxChars: 20,
+      initialize: function() {
+        var Model = Backbone.Model.extend({
+          defaults: {
+            'description': ''
+          }
+        })
+        this.model = new Model;
+      },
+      modelEvents: {
+        'change': 'render'
+      },
+      onBeforeShow: function() {
+        //assume the model is configured to be able to fetch
+        this.model.fetch();
+      }
+    });
+
+    //unacceptable
+    var View = ViewAbstract.extend({
+      //override initialize from ViewAbstract
+      initialize: functon() {
+        var Model = Backbone.Model.extend({
+          parse: function(resp) {
+            //permanently changes data
+            resp.description = resp.description.substr(0, this.maxChars - 1) + '...';
+
+            //no need to add an attribute just for display
+            resp.shortDescription = resp.description.substr(0, this.maxChars - 1) + '...';
+
+            return resp;
+          }
+        })
+      }
+    });
+
+    //even worse
+    var View = ViewAbstract.extend({
+      //post processing in closure scope
+      onSuccess: function(resp) {
+        resp.description = resp.description.substr(0, this.maxChars - 1) + '...';
+        //what would be even worse, would be something like
+        //this.model.set(resp);
+        //this.model = new Bacbone.Model(resp);
+        return resp;
+      },
+      //override onBeforeShow from ViewAbstract
+      onBeforeShow: function() {
+        var fetchOptions = {
+          'success': this.onSuccess
+        }
+        this.model.fetch(fetchOptions);
+      }
+    });
+
+    //proper
+    var View = ViewAbstract.extend({
+      //override serializeData from ViewAbstract
+      serializeData: function(model) {
+        var JSON = model.toJSON();
+        JSON.description = JSON.description.substr(0, this.maxChars - 1) + '...';
+        return JSON;
+      }
+    });
+
   ```
 
 ## HTML Template ##

@@ -1,64 +1,64 @@
-@documents_summary_and_details  @DE1786 @reg2
+@documents_summary_and_details @regression @DE1786 @documents_applet @F1135 @reg2
 Feature: F144 - eHMP Viewer GUI - Documents
 
 #POC:Team Jupiter
-    
+
 @f144_16_documents_default_display  @US2593 @DE1480 @DE1735
 Scenario: Documents grouping by Date/Time
-  # Given user is logged into eHMP-UI
-  And user searches for and selects "ZZZRETFOUREIGHTY,PATIENT"
-  When user navigates to Documents Applet
-  Then "Documents" is active
-  Then the search results say "No Records Found" in Documents Applet
-  And the user has selected All within the global date picker
-  And the user sees date groups in the Documents Applet
- 
+  Given user searches for and selects "ZZZRETFOUREIGHTY,PATIENT"
+  And user navigates to Documents Screen
+  And the Documents Applet grid is loaded
+  When the user has selected All within the global date picker
+  And the Documents Applet grid is loaded
+  Then the user sees date groups in the Documents Applet
+
 @f144_17_documents_default_display  @US2593 @DE1480 @DE1735
 Scenario: date/time can be clicked and collapsed
-  # Given user is logged into eHMP-UI
-  And user searches for and selects "ZZZRETFOUREIGHTY,PATIENT"
-  When user navigates to Documents Applet
-  Then "Documents" is active
-  Then the search results say "No Records Found" in Documents Applet
+  Given user searches for and selects "ZZZRETFOUREIGHTY,PATIENT"
+  And user navigates to Documents Screen
+  And "Documents" is active
   And the user has selected All within the global date picker
-  And the user clicks on date/time "August 1992" in the Documents Applet
-  Then the date/time collapses and shows "1" result for "August 1992" in the Documents Applet  
+  And the Documents Applet grid is loaded
+  And the user sees date groups in the Documents Applet
+  When the user clicks on the first date group in the Documents Applet
+  Then the date group collapses and displays a row count
 
 @f144_24_documents_date_filter @US2594
 Scenario: Documents applet is able to filter data based date filter search
-  # Given user is logged into eHMP-UI
-  And user searches for and selects "ZZZRETFOUREIGHTY,PATIENT"
-  When user navigates to Documents Applet
+  And user searches for and selects "EIGHT,PATIENT"
+
+  When user navigates to Documents Screen
   Then "Documents" is active
   And the user clicks the control "Date Filter" in the "Documents Applet"
   And the Global Date Filter contains expected buttons
 
-  When the user clicks the Global Date Filter 1yr button
-  And the user clicks the control "Apply" on the "Documents Applet"
-  Then the search results say "No Records Found" in Documents Applet
+  When the user changes the global date filter to 2YR
+  And the Documents Applet grid is loaded
+  Then the Documents Applet displays records within 2YR ( or none )
 
-  When the user clicks the control "Date Filter" in the "Documents Applet"
-  When the user clicks the Global Date Filter 3mo button
-  And the user clicks the control "Apply" on the "Documents Applet"
-  Then the search results say "No Records Found" in Documents Applet
+  When the user changes the global date filter to 1YR
+  And the Documents Applet grid is loaded
+  Then the Documents Applet displays records within 1YR ( or none )
 
-  When the user clicks the control "Date Filter" in the "Documents Applet"
-  When the user clicks the Global Date Filter 1mo button
-  And the user clicks the control "Apply" on the "Documents Applet"
-  Then the search results say "No Records Found" in Documents Applet
 
-  When the user clicks the control "Date Filter" in the "Documents Applet"
-  When the user clicks the Global Date Filter 7d button
-  And the user clicks the control "Apply" on the "Documents Applet"
-  Then the search results say "No Records Found" in Documents Applet
+  When the user changes the global date filter to 3M
+  And the Documents Applet grid is loaded
+  Then the Documents Applet displays records within 3M ( or none )
 
-  When the user clicks the control "Date Filter" in the "Documents Applet"
-  When the user clicks the Global Date Filter 72hr button
-  And the user clicks the control "Apply" on the "Documents Applet"
-  Then the search results say "No Records Found" in Documents Applet
+  When the user changes the global date filter to 1M
+  And the Documents Applet grid is loaded
+  Then the Documents Applet displays records within 1M ( or none )
 
-  When the user clicks the control "Date Filter" in the "Documents Applet"
-  When the user clicks the Global Date Filter 24hr button
-  And the user clicks the control "Apply" on the "Documents Applet"
-  Then the search results say "No Records Found" in Documents Applet
+  When the user changes the global date filter to 7D
+  And the Documents Applet grid is loaded
+  Then the Documents Applet displays records within 7D ( or none )
+
+  When the user changes the global date filter to 72HR
+  And the Documents Applet grid is loaded
+  Then the Documents Applet displays records within 3D ( or none )
+
+  When the user changes the global date filter to 24HR
+  And the Documents Applet grid is loaded
+  Then the Documents Applet displays records within 1D ( or none )
+
 

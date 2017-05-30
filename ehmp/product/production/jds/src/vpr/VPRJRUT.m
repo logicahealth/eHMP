@@ -121,19 +121,21 @@ TLT4DATA ;
  S STAMP=$O(^VPRJDJ("JSON",KEY,""),-1)
  M @ROOT@($J,ITEM)=^VPRJDJ("JSON",KEY,STAMP)
  Q
-TLT4GDS ;
+TLT4GDS ; Apply templates for GDS data stores to returned data
+ ; called from PAGE
+ ;
  N GLOBAL,GLOBALJ
  ; Parsed JSON
  S GLOBAL="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))
  ; Raw JSON
  S GLOBALJ="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))_"J"
  ;
- ; called from PAGE
  I $G(TEMPLATE)="uid" S @ROOT@($J,ITEM,1)="{""uid"":"""_KEY_"""}" Q
  I $E(TEMPLATE,1,4)="rel;" D RELTLTD^VPRJCT1($NA(@ROOT@($J,ITEM)),KEY,.TEMPLATE) Q
  I $E(TEMPLATE,1,4)="rev;" D REVTLTD^VPRJCT1($NA(@ROOT@($J,ITEM)),KEY,.TEMPLATE) Q
  ; query time template
- I $D(TEMPLATE)>1 D APPLYTLT Q
+ ; not supported
+ ;I $D(TEMPLATE)>1 D APPLYTLT Q
  ; other template
  I $L(TEMPLATE),$D(@GLOBALJ@("TEMPLATE",KEY,TEMPLATE)) M @ROOT@($J,ITEM)=^(TEMPLATE) Q
  ; else full object

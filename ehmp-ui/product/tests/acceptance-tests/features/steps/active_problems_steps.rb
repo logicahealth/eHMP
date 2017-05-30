@@ -32,13 +32,6 @@ Then(/^the Problems applet displays$/) do
   wait.until { infiniate_scroll('#data-grid-problems tbody') }
 end
 
-Then(/^Problem Detail Modal contains data$/) do |table|
-  table.rows.each do | label |
-    selector = "#{label[0]} label"
-    expect(@active_problems_modal.perform_verification(selector, label[0])).to eq(true)
-  end
-end
-
 When(/^the user filters the Problems Applet by text "([^"]*)"$/) do |input_text|
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   row_count = TableContainer.instance.get_elements("Rows - Active Problems Applet").size
@@ -60,35 +53,6 @@ end
 When(/^the user sorts the Problem grid by "([^"]*)"$/) do |arg1|
   label = "#{arg1} Header"
   expect(@active_problems.perform_action(label)).to eq(true)
-end
-
-Then(/^the Problem grid is sorted in alphabetic order based on Description$/) do
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { VerifyTableValue.verify_alphabetic_sort_caseinsensitive('data-grid-problems', 1, true) }
-end
-
-Then(/^the Problem grid is sorted in alphabetic order based on Acuity$/) do
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { VerifyTableValue.verify_alphabetic_sort_caseinsensitive('data-grid-problems', 2, true) }
-end
-
-Then(/^the expanded Problem grid is sorted in alphabetic order based on Description$/) do
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { VerifyTableValue.verify_alphabetic_sort_caseinsensitive('data-grid-problems', 1, true) }
-end
-
-Then(/^the expanded Problem grid is sorted in alphabetic order based on Acuity$/) do
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { VerifyTableValue.verify_alphabetic_sort_caseinsensitive('data-grid-problems', 3, true) }
-end
-
-When(/^the user views a problem applet row's details$/) do
-  @ehmp = PobProblemsApplet.new
-  @ehmp.wait_for_tbl_problems
-  expect(@ehmp.tbl_problems.length).to be > 0
-  @ehmp.tbl_problems[0].click
-  expect(@active_problems.perform_action('Detail View Button')).to eq(true)
-  @uc.wait_until_action_element_visible("Modal", 15)
 end
 
 When(/^the user clicks the Problems Expand Button$/) do
@@ -143,8 +107,14 @@ end
 
 Then(/^the user can step through the problems using the next button$/) do
   @ehmp = PobProblemsApplet.new
+  modal_element = ModalElements.new
   @titles.each do |modal_title|
-    expect(@uc.perform_verification("Modal Title", modal_title)).to eq(true), "Expected title to be #{modal_title}"
+    #expect(@uc.perform_verification("Modal Title", modal_title)).to eq(true), "Expected title to be #{modal_title}"
+    p "title from UI = "
+    p modal_element.fld_modal_title.text
+    p "stored titles = "
+    p modal_title
+    expect(modal_element.fld_modal_title.text.upcase).to have_text(modal_title.upcase), "Expected title to be #{modal_title}"
     @ehmp.btn_next.click
   end
 end
@@ -152,9 +122,10 @@ end
 Then(/^the user can step through the problems using the previous button$/) do
   @ehmp = PobProblemsApplet.new
   @ehmp.btn_previous.click
-  @titles.reverse.each { |val| 
-    expect(@uc.perform_verification("Modal Title", val)).to eq(true), "Expected title to be #{val}"
+  @titles.reverse.each  do |modal_title| 
+    #expect(@uc.perform_verification("Modal Title", val)).to eq(true), "Expected title to be #{val}"
+    expect(modal_element.fld_modal_title.text.upcase).to have_text(modal_title.upcase), "Expected title to be #{modal_title}"
     @ehmp.btn_previous.click
-  }
+  end
 end
 

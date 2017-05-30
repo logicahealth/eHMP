@@ -10,20 +10,23 @@ var inspect = require('util').inspect;
 var format = require('util').format;
 
 var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
-var fsUtil = require(global.VX_UTILS + 'fs-utils');
 var nullUtil = require(global.VX_UTILS + 'null-utils');
 var PatientIdentifierAPI = require(global.VX_UTILS + 'middleware/patient-identifier-middleware');
 var JobAPI = require(global.VX_UTILS + 'middleware/job-middleware');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
 var docUtil = require(global.VX_UTILS + 'doc-utils');
 var clearPatientUtil = require(global.VX_UTILS + 'clear-patient-util');
+var HttpHeaderUtility = require(global.VX_UTILS + 'http-header-utils');
 
 var healthcheckUtil = require(global.VX_UTILS + 'healthcheck-utils');
 
 function registerSyncAPI(log, config, environment, app) {
+    var httpHeaderUtility = new HttpHeaderUtility(log);
     var jobFactory = function (req) {
         var forcedSync = [];
         var priority = 1 ; // level one is the hightest priority and it is the default value
+        var referenceInfo = httpHeaderUtility.extractReferenceInfo(req);
+        log = log.child(referenceInfo);
         if (req && _.isFunction(req.param)) {
             if (!_.isUndefined(req.param('forcedSync'))) {
                 var forceSyncParam = req.param('forcedSync');
@@ -39,8 +42,9 @@ function registerSyncAPI(log, config, environment, app) {
                 }
             }
             if (!_.isUndefined(req.param('priority'))){
+                var priParam;
                 try {
-                    var priParam = parseInt(req.param('priority'), 10); // use 10 based.
+                    priParam = parseInt(req.param('priority'), 10); // use 10 based.
                     if (isNaN(priParam)) {
                         log.warn('invalid priority value: %s, not a valid number', priParam);
                     }
@@ -65,54 +69,99 @@ function registerSyncAPI(log, config, environment, app) {
             }
         }
 
-        // validate the prioroty paramenter
-        return jobUtil.createEnterpriseSyncRequest(req.patientIdentifier, req.jpid, forcedSync, req.body.demographics, priority);
-    };
-    var jobMiddleware = new JobAPI(log, config, environment);
-    var idMiddleware = new PatientIdentifierAPI(log, config, environment.jds, environment.mvi);
-    var solrClient = environment.solr;
+        // Put the original ID that was used to sync this patient in referenceInfo so that it can
+        // be used later in rules engine(s).
+        //----------------------------------------------------------------------------------------
+        if ((!_.isEmpty(req.patientIdentifier)) && (req.patientIdentifier.value)) {
+            referenceInfo.initialSyncId = req.patientIdentifier.value;
+        }
 
-    var jdsClient = environment.jds,
-        vistaConnector = environment.vistaClient,
-        hdrClient = environment.hdrClient,
+        // validate the priority parameter
+        return jobUtil.createEnterpriseSyncRequest(req.patientIdentifier, req.jpid, forcedSync,
+                                                    req.body.demographics, priority, referenceInfo);
+    };
+    module.exports._jobFactory = jobFactory;
+
+    var vistaConnector = environment.vistaClient,
         router = environment.publisherRouter;
 
     var doLoadMethods = [
-        idMiddleware.validatePatientIdentifier.bind(idMiddleware),
-        idMiddleware.verifyPatientExists,
-        idMiddleware.resolveJPID,
-        jobMiddleware.buildJob.bind(jobMiddleware, jobFactory),
-        logSyncMetrics,
-        jobMiddleware.getJobHistory,
-        jobMiddleware.jobVerification.bind(jobMiddleware, ['completed', 'error']),
-        jobMiddleware.publishJob.bind(jobMiddleware, router),
         function(req, res, next) {
-            res.status(202).json(res.job);
-            next();
+            var childLog = log.child(httpHeaderUtility.extractReferenceInfo(req));
+            var jobMiddleware = new JobAPI(childLog, config, environment);
+            var idMiddleware = new PatientIdentifierAPI(childLog, config, environment.jds.childInstance(childLog),
+                    environment.mvi.childInstance(childLog));
+
+            async.series([
+                idMiddleware.validatePatientIdentifier.bind(idMiddleware, req, res),  // verify patient identifier exists and is a valid type
+                idMiddleware.verifyPatientExists.bind(idMiddleware, req, res),  // verify patient exists in JDS
+                idMiddleware.resolveJPID.bind(idMiddleware, req, res),  // find JPID or create one if it doesn't exist
+                jobMiddleware.buildJob.bind(jobMiddleware, jobFactory, req, res),  // build an enterprise-sync-request job
+                logSyncMetrics.bind(null, req, res), // log metrics
+                injectEnterpriseSyncRequestFilter.bind(null, req, res), // add a filter attribute to the res to limit job type to enterprise-sync-request
+                jobMiddleware.getJobHistory.bind(jobMiddleware, req, res), // add a filter attribute to the res to limit job type to enterprise-sync-request
+                jobMiddleware.jobVerification.bind(jobMiddleware, ['completed', 'error'], req, res), // get job status and place in res.jobStates
+                jobMiddleware.publishJob.bind(jobMiddleware, router.childInstance(childLog), req, res) // publish the enterprise-sync-request
+            ], function (err) {
+                if (err) {
+                    res.status(500).json(err);
+                } else {
+                    res.status(202).json(res.job);
+                }
+                next();
+            });
         }
     ];
+
     var doDemoLoadMethods = [
-        validateDemoParams,
-        idMiddleware.resolveJPID,
-        jobMiddleware.buildJob.bind(jobMiddleware, jobFactory),
-        logSyncMetrics,
-        jobMiddleware.getJobHistory,
-        jobMiddleware.jobVerification.bind(jobMiddleware, ['completed', 'error']),
-        jobMiddleware.publishJob.bind(jobMiddleware, router),
         function(req, res, next) {
-            res.status(202).json(res.job);
-            next();
+            var childLog = log.child(httpHeaderUtility.extractReferenceInfo(req));
+            var jobMiddleware = new JobAPI(childLog, config, environment);
+            var idMiddleware = new PatientIdentifierAPI(childLog, config, environment.jds.childInstance(childLog),
+                    environment.mvi.childInstance(childLog));
+
+            async.series([
+                validateDemoParams.bind(null, req, res), // validates that the request object contains valid parameters for demographics sync.
+                idMiddleware.resolveJPID.bind(idMiddleware, req, res), // find JPID or create one if it doesn't exist
+                jobMiddleware.buildJob.bind(jobMiddleware, jobFactory, req, res), // build an enterprise-sync-request job
+                logSyncMetrics.bind(null, req, res), // log metrics
+                injectEnterpriseSyncRequestFilter.bind(null, req, res), // add a filter attribute to the res to limit job type to enterprise-sync-request
+                jobMiddleware.getJobHistory.bind(jobMiddleware, req, res), // get job status and place in res.jobStates
+                jobMiddleware.jobVerification.bind(jobMiddleware, ['completed', 'error'], req, res), // verify job not already started
+                jobMiddleware.publishJob.bind(jobMiddleware, router.childInstance(childLog), req, res) // publish the enterprise-sync-request
+            ], function(err) {
+                if (err) {
+                    res.status(500).json(err);
+                } else {
+                    res.status(202).json(res.job);
+                }
+                next();
+            });
         }
     ];
 
     var getStatusMethods = [
-        idMiddleware.validatePatientIdentifier,
-        idMiddleware.getJPID,
-        getStatusJob,
-        jobMiddleware.getJobHistory,
-        jobMiddleware.getSyncStatus,
-        getHealthStatus,
-        returnSyncStatus
+        function(req, res, next) {
+            var childLog = log.child(httpHeaderUtility.extractReferenceInfo(req));
+            var jobMiddleware = new JobAPI(childLog, config, environment);
+            var idMiddleware = new PatientIdentifierAPI(childLog, config, environment.jds.childInstance(childLog),
+                    environment.mvi.childInstance(childLog));
+
+            async.series([
+                idMiddleware.validatePatientIdentifier.bind(idMiddleware, req, res), // verify patient identifier exists and is a valid type
+                idMiddleware.getJPID.bind(idMiddleware, req, res), // retrieve jpid and patient identifiers and place in req.jpid and result.patientIdentifiers
+                getStatusJob.bind(null, req, res), // retrieve the job states
+                jobMiddleware.getJobHistory.bind(jobMiddleware, req, res), // get job status and place in res.jobStates
+                jobMiddleware.getSyncStatus.bind(jobMiddleware, req, res), // get the sync status and place in res.syncStatus
+                getHealthStatus.bind(null, req, res), // check health of system
+                returnSyncStatus.bind(null, req, res) // return job and sync status
+            ], function(err) {
+                if (err) {
+                    childLog.error(err);
+                }
+                next();
+            });
+        }
     ];
 
     app.get('/sync/status', getStatusMethods);
@@ -120,18 +169,37 @@ function registerSyncAPI(log, config, environment, app) {
     app.post('/sync/load', doLoadMethods);
     app.get('/sync/doLoad', doLoadMethods);
 
-    app.post('/sync/clearPatient', [
-        idMiddleware.validatePatientIdentifier,
-        idMiddleware.getJPID,
-        unsyncPatient
-    ]);
-    app.get('/sync/doClearPatient', [
-        idMiddleware.validatePatientIdentifier,
-        idMiddleware.getJPID,
-        unsyncPatient
-    ]);
+    var clearPatientMethods = [
+        function(req, res, next) {
+            var childLog = log.child(httpHeaderUtility.extractReferenceInfo(req));
+            var idMiddleware = new PatientIdentifierAPI(childLog, config, environment.jds.childInstance(childLog),
+                    environment.mvi.childInstance(childLog));
+
+            async.series([
+                idMiddleware.validatePatientIdentifier.bind(idMiddleware, req, res),
+                idMiddleware.getJPID.bind(idMiddleware, req, res),
+                unsyncPatient.bind(null, req, res)
+            ], function(err) {
+                if (err) {
+                    childLog.error(err);
+                }
+                next();
+            });
+        }
+    ];
+
+    app.post('/sync/clearPatient', clearPatientMethods);
+    app.get('/sync/doClearPatient', clearPatientMethods);
     app.post('/sync/demographicSync', doDemoLoadMethods);
     app.get('/sync/doDemographicSync', doDemoLoadMethods);
+
+    function injectEnterpriseSyncRequestFilter(req, res, next) {
+        res.filter = {
+            filter: '?filter=eq(type,"' + jobUtil.enterpriseSyncRequestType() + '")'
+        };
+
+        return next();
+    }
 
     function logSyncMetrics(req, res, next) {
         var metricsObj = {
@@ -171,7 +239,8 @@ function registerSyncAPI(log, config, environment, app) {
                 "dob": ""
             }
         }*/
-        log.debug('sync-request-endpoint.validateDempParams(): Entered method.  req.body: %j', req.body);
+        var childLog = log.child(httpHeaderUtility.extractReferenceInfo(req));
+        childLog.debug('sync-request-endpoint.validateDemoParams(): Entered method.  req.body: %j', req.body);
 
         //validate icn
         if(!nullUtil.isNullish(req.body, 'icn')) {
@@ -191,40 +260,40 @@ function registerSyncAPI(log, config, environment, app) {
         //vaidate demographics
         if(!nullUtil.isNullish(req.body.demographics)) {
             if(nullUtil.isNullish(req.body.demographics,'displayName')) {
-                log.warn('No display name found in demographic record');
+                childLog.warn('No display name found in demographic record');
             }
             if(nullUtil.isNullish(req.body.demographics,'familyName')) {
-                log.warn('No family name found in demographic record');
+                childLog.warn('No family name found in demographic record');
             }
             if(nullUtil.isNullish(req.body.demographics,'fullName')) {
-                log.warn('No full name found in demographic record');
+                childLog.warn('No full name found in demographic record');
             }
             if(nullUtil.isNullish(req.body.demographics,'givenNames')) {
-                log.warn('No given names found in demographic record');
+                childLog.warn('No given names found in demographic record');
             }
             if(nullUtil.isNullish(req.body.demographics,'genderName')) {
-                log.warn('No gender name found in demographic record');
+                childLog.warn('No gender name found in demographic record');
             }
             if(nullUtil.isNullish(req.body.demographics,'genderCode')) {
-                log.warn('No genderCode found in demographic record');
+                childLog.warn('No genderCode found in demographic record');
             }
             if(nullUtil.isNullish(req.body.demographics,'ssn')) {
-                log.warn('No ssn found in demographic record');
+                childLog.warn('No ssn found in demographic record');
             }
             if(nullUtil.isNullish(req.body.demographics,'birthDate')) {
                 if(!nullUtil.isNullish(req.body.demographics,'dob')) {
                     req.body.demographics.birthDate = req.body.demographics.dob;
                 } else {
-                    log.warn('No birthDate found in demographic record');
+                    childLog.warn('No birthDate found in demographic record');
                 }
             }
 
             if (nullUtil.isNullish(req.body.demographics, 'address')) {
-                log.warn('No address found in demographic record');
+                childLog.warn('No address found in demographic record');
             }
 
             if (nullUtil.isNullish(req.body.demographics, 'telecom')) {
-                log.warn('No telecom found in demographic record');
+                childLog.warn('No telecom found in demographic record');
             }
 
             if(!nullUtil.isNullish(req.body, 'icn')) {
@@ -241,8 +310,9 @@ function registerSyncAPI(log, config, environment, app) {
     }
 
     function unsyncPatient(req, res) {
+        var childLog = log.child(httpHeaderUtility.extractReferenceInfo(req));
         if (!_.isUndefined(req.identifiers) && !_.isUndefined(req.identifiers.length)) {
-            clearPatientUtil.clearPatient(log, config, environment, req.param('force'), req.identifiers, req.jpid, function(error){
+            clearPatientUtil.clearPatient(childLog, config, environment, req.param('force'), req.identifiers, req.jpid, function(error){
                 if (error) {
                     res.status(500).json(error);
                 } else {
@@ -260,7 +330,8 @@ function registerSyncAPI(log, config, environment, app) {
      * Configure request to retrieve job states
      */
     function getStatusJob(req, res, next) {
-        log.debug('sync-request-endpoint.getStatus() : Enter');
+        var childLog = log.child(httpHeaderUtility.extractReferenceInfo(req));
+        childLog.debug('sync-request-endpoint.getStatus() : Enter');
         if (req.jpid === false) {
             return res.status(404).send('Patient identifier not found ');
         }
@@ -360,9 +431,10 @@ function registerSyncAPI(log, config, environment, app) {
     }
 
     function getHealthStatus(req, res, next){
-        log.debug('sync-request-endpoint.getHealthStatus()');
+        var childLog = log.child(httpHeaderUtility.extractReferenceInfo(req));
+        childLog.debug('sync-request-endpoint.getHealthStatus()');
         if(!config.healthcheck || !config.healthcheck.heartbeatEnabled){
-            log.debug('sync-request-endpoint.getHealthStatus(): healthcheck is disabled in configiuration. Skipping getHealthStatus...');
+            childLog.debug('sync-request-endpoint.getHealthStatus(): healthcheck is disabled in configiuration. Skipping getHealthStatus...');
             next();
         }
 
@@ -370,11 +442,11 @@ function registerSyncAPI(log, config, environment, app) {
 
         healthcheckUtil.retrieveStaleHeartbeats(log, config, environment, currentTime, function(error, response){
             if(error){
-                log.error('sync-request-endpoint.getHealthStatus(): Received error from healthcheckUtil.retrieveStaleHeartbeats(): %s', error);
+                childLog.error('sync-request-endpoint.getHealthStatus(): Received error from healthcheckUtil.retrieveStaleHeartbeats(): %s', error);
                 var errorTemplate = 'Error received from JDS when retrieving health status messages. Error: %s';
                 res.status(500).send(format(errorTemplate, inspect(error)));
             } else {
-                log.debug('sync-request-endpoint.getHealthStatus(): Adding healthStatus to response: %s', response);
+                childLog.debug('sync-request-endpoint.getHealthStatus(): Adding healthStatus to response: %s', response);
                 res.healthStatus = response;
             }
             next();

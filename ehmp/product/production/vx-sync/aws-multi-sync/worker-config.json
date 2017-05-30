@@ -1,5 +1,5 @@
 {
-  "VXSYNC_IP": "10.3.3.6",
+  "VXSYNC_IP": "IP      ",
   "vxsync": {
     "configRefresh": 0,
     "rules": {
@@ -18,10 +18,10 @@
     "vistaSites": {
         "9E7A": {
           "name": "PANORAMA",
-          "host": "10.139.106.53",
-          "port": 9210,
-          "accessCode": "ep1234",
-          "verifyCode": "ep1234!!",
+          "host": "IP           ",
+          "port": port,
+          "accessCode": "REDACTED",
+          "verifyCode": "REDACTED",
           "localIP": "127.0.0.1",
           "stationNumber": "500",
           "localAddress": "localhost",
@@ -30,10 +30,10 @@
       },
         "C877": {
           "name": "KODAK",
-          "host": "10.237.2.52",
-          "port": 9210,
-          "accessCode": "ep1234",
-          "verifyCode": "ep1234!!",
+          "host": "IP         ",
+          "port": port,
+          "accessCode": "REDACTED",
+          "verifyCode": "REDACTED",
           "localIP": "127.0.0.1",
           "stationNumber": "507",
           "localAddress": "localhost",
@@ -43,7 +43,7 @@
     },
     "syncRequestApi": {
         "protocol": "http",
-        "host": "10.230.66.158",
+        "host": "IP           ",
         "port": 8080,
         "patientSyncPath": "/sync/load",
         "patientUnsyncPath": "/sync/clearPatient",
@@ -73,8 +73,8 @@
             "vital"
         ],
         "defaults": {
-            "host": "10.230.66.158",
-            "port": 5400,
+            "host": "IP           ",
+            "port": PORT,
             "method": "GET",
             "timeout": 60000
         },
@@ -153,8 +153,8 @@
         },
         "operationMode": "REQ/RES",
         "defaults": {
-            "host": "10.230.66.158",
-            "port": 5400,
+            "host": "IP           ",
+            "port": PORT,
             "method": "GET",
             "timeout": 60000
         },
@@ -254,8 +254,8 @@
             "vlerdocument"
         ],
         "defaults": {
-            "host": "10.230.66.158",
-            "port": 5400,
+            "host": "IP           ",
+            "port": PORT,
             "method": "GET",
             "timeout": 60000
         },
@@ -493,12 +493,12 @@
         "ttr": 120,
         "timeout": 10,
         "initMillis": 1000,
-        "maxMillis": 15000,
+        "maxMillis": 1PORT,
         "incMillis": 1000
     },
     "repoDefaults": {
-        "host": "10.139.90.53",
-        "port": 5000,
+        "host": "IP          ",
+        "port": PORT,
         "tubename": "vx-sync",
         "tubePrefix": "vxs-",
         "jobTypeForTube": true
@@ -667,16 +667,16 @@
         "pgd-xform-vpr": {
         },
         "record-enrichment": {
-          "host": "10.33.161.229",
-          "port": 5001
+          "host": "IP           ",
+          "port": port
         },
         "store-record": {
-          "host": "10.158.31.124",
-          "port": 5002
+          "host": "IP           ",
+          "port": port
         },
         "operational-store-record": {
-          "host": "10.158.31.124",
-          "port": 5002
+          "host": "IP           ",
+          "port": port
         },
         "vista-prioritization-request": {
         },
@@ -688,30 +688,30 @@
 
         "jds": {
             "protocol": "http",
-            "host": "10.168.123.132",
-            "port": "9082",
+            "host": "IP            ",
+            "port": "PORT",
             "timeout": 300000
         },
 
         "solrClient": {
-            "host": "10.229.68.85",
-            "port": 8983,
+            "host": "IP          ",
+            "port": PORT,
             "path": "/solr",
             "core": "vpr"
         },
 
         "mvi": {
             "protocol": "http",
-            "host": "10.230.66.158",
-            "port": 5400,
+            "host": "IP           ",
+            "port": PORT,
             "path": "/mvi/correspondingIds",
             "timeout": 60000
         },
 
         "terminology": {
             "protocol": "http",
-            "host": "10.230.66.158",
-            "port": 5400,
+            "host": "IP           ",
+            "port": PORT,
             "timeout": 60000,
             "lncPath": "/term/lnc",
             "drugPath": "/term/drug",
@@ -727,7 +727,7 @@
         "path": "/var/vxsync/documents/published",
         "permissions": "400"
       },
-      "uriRoot": "http://10.230.66.158:8080/documents"
+      "uriRoot": "http://IP                /documents"
     },
 
     "error-handling": {

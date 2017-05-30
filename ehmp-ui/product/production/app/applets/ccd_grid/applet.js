@@ -57,7 +57,7 @@ define([
     var AppletLayoutView = GridApplet.extend({
         initialize: function(options) {
             this._super = ADK.Applets.BaseGridApplet.prototype;
-            var fetchOptionsConfig = { 
+            var fetchOptionsConfig = {
                 criteria: {
                     callType: 'vler_list'
                 }
@@ -153,19 +153,72 @@ define([
         var data = new ADK.UIResources.Fetch.CommunityHealthSummaries.Collection();
         return {
             view: ModalView.extend({
+                initialize: function() {
+                    this.highlights = this.model.get('highlights');
+                    ModalView.prototype.initialize.apply(this, arguments);
+                },
                 collection: data,
                 collectionEvents: {
-                    'sync': function(collection, resp) {
-                        var model = collection.first();
-                        if (model) this.model.set(model.toJSON());
+                    'sync': function(collection) {
+                        var model = collection.first() || this.model;
+                        this.model.set(model.attributes);
+
+                        this.synonyms = ADK.Messaging.getChannel('search').request('synonymsCollection');
+                        this.listenToOnce(this.synonyms, 'fetch:success', this.getSynonyms);
+                        this.getSynonyms();
+                    }
+                },
+                getSynonyms: function(collection, response) {
+                    if (response) {
+                        this.updateView(_.get(response, 'data.synonyms', []));
+                    } else if (!this.synonyms.isEmpty() && this.synonyms.first().has('synonyms')) {
+                        this.updateView(this.synonyms.first().get('synonyms'));
+                    }
+                },
+                updateView: function(synonymArray) {
+                    if (this.model.get('fullHtml')) {
+                        var fullHtml = this.model.get('fullHtml') || '';
+                        var ccdContent = this.$('.ccd-content');
+                        fullHtml = Util.highlightSearchTerm(fullHtml, synonymArray, this.highlights);
+                        if (ccdContent.size() > 0) {
+                            var iframeCcd = ccdContent[0].contentWindow.document;
+                            iframeCcd.open();
+                            iframeCcd.write(fullHtml);
+                            iframeCcd.close();
+                        }
                     }
                 },
                 onBeforeShow: function() {
-                    dataGridOptions.collection.fetchCollection(fetchOptionsConfig);
-                    ADK.PatientRecordService.fetchCollection(fetchOptions, this.collection);
+                    this.collection.fetchCollection(fetchOptionsConfig);
                 },
                 model: params.model
-            })
+            }),
+            headerView: ModalHeader.extend({
+                collection: data,
+                model: params.model,
+                initialize: function() {
+                    this.isSynced = false;
+                },
+                onRender: function() {
+                    this.$('#ccdPrevious').addClass('hidden');
+                    this.$('#ccdNext').addClass('hidden');
+
+                    if (!this.isSynced) {
+                        this.$('#mainModalLabel').text('Loading...');
+                    }
+                },
+                collectionEvents: {
+                    'sync': function(collection, resp) {
+                        this.isSynced = true;
+                        var model = collection.first();
+                        if (model) {
+                            this.model.set(model.attributes);
+                            this.render();
+                        }
+                    }
+                }
+            }),
+            title: 'Loading...'
         };
 
     });

@@ -25,7 +25,6 @@ function getDocumentDetail(req, res) {
     var group_value = req.query['group.value'];
     var group_field = req.query['group.field'];
 
-
     /*
      /solr/select?
      q=pid:+<pid>&

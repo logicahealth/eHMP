@@ -395,10 +395,11 @@ define([
     // *********************************************** FORM VIEW ************************************************
     var formView = ADK.UI.Form.extend({
         inTray: null,
+        _skipVisitCheck: null,
         onClose: null,
         ui: {
-            'selectEncounterProvider': '#selectEncounterProvider',
-            'selectNewEncounterLocation': '#selectNewEncounterLocation',
+            'selectEncounterProvider': '.selectEncounterProvider select',
+            'selectNewEncounterLocation': '.selectNewEncounterLocation select',
             'setCloseButton': '#setClose-btn',
             'encountersButton': '#viewEncounters-btn',
             'newVisitDateTimeWarning': '.newVisitDateTimeWarning',
@@ -442,108 +443,109 @@ define([
             'change:selectNewEncounterLocation': 'setNewEncounterLocation'
         },
         submitForm: function(e) {
-            var self = this;
-            var locationUid = '';
-            var currentPatient = ADK.PatientRecordService.getCurrentPatient();
-            var isInpatient = (currentPatient.patientStatusClass() === 'Inpatient') ? '1' : '0';
             e.preventDefault();
             if (!this.dateValidation()) {
                 this.model.set('formStatus', {
                     status: 'error',
-                    message: self.model.validationError
+                    message: this.model.validationError
                 });
                 this.transferFocusToFirstError();
-            }
-            else {
+            } else if (this._skipVisitCheck) {
+                this.successfulSubmit();
+            } else {
                 this.$el.trigger('tray.loaderShow', {
                     loadingString: 'Setting encounter'
                 });
-                ADK.Checks.run('visit-context', _.bind(function() {
-                    this.model.unset('formStatus');
-                    var PatientModel = ADK.PatientRecordService.getCurrentPatient();
-                    var visit = this.model.get('visit');
-                    var setEncounterAlertView = new ADK.UI.Notification({
-                        title: 'Encounter context',
-                        icon: 'fa-check',
-                        type: 'success',
-                        message: 'Successfully set with no errors.'
-                    });
-                    this.setProvider(this.model);
-                    if (!_.isUndefined(this.model.get('visit').get('locationUid')) && this.model.get('visit').get('locationUid') !== '') {
-                        locationUid = this.model.get('visit').get('locationUid');
-                    }
-                    if (this.currentTab.indexOf('New-Visit-tab-panel') >= 0) {
-                        var datetime = moment(this.model.get('newVisitDate') + ' ' + this.model.get('newVisitTime')).format(DATE_TIME_FORMAT);
-                        var formateddatetime = moment(datetime, DATE_TIME_FORMAT).format(DISPLAY_FORMAT);
-                        if (locationUid) {
-                            visit.set('locationUid', locationUid);
-                        }
-                        visit.set('dateTime', datetime);
-                        visit.set('formattedDateTime', formateddatetime);
-                        visit.set('isHistorical', this.model.get('isHistorical'));
-                    }
-                    this.setMostRecentLocationsAndProviders(this.model);
-                    if (locationUid) {
-                        var isHistorical = false;
-                        var locName = !_.isUndefined(visit) ? visit.get("locationDisplayName") : '';
-                        if (this.model.get('visit').newVisit && this.model.get('visit').newVisit.isHistorical) {
-                            isHistorical = true;
-                        }
-                        var serviceCategory = ADK.utils.contextUtils.getServiceCategory(locName, self.getVisitTabLocationType(this.currentTab), isInpatient);
-                        self.setServiceCategory(serviceCategory, self.model);
-                        self.stopListening(ADK.Messaging.getChannel('visit'), 'context:set');
-                        ADK.Messaging.getChannel('visit').trigger('context:set');
-                        setEncounterAlertView.show();
-                        //check if we're in a workflow
-                        //check if we're the last step in the flow
+                ADK.Checks.run('visit-context', this.successfulSubmit.bind(this));
+            }
+        },
+        successfulSubmit: function () {
+            var locationUid = '';
+            var currentPatient = ADK.PatientRecordService.getCurrentPatient();
+            var isInpatient = (currentPatient.patientStatusClass() === 'Inpatient') ? '1' : '0';
+            this.model.unset('formStatus');
+            var PatientModel = ADK.PatientRecordService.getCurrentPatient();
+            var visit = this.model.get('visit');
+            var setEncounterAlertView = new ADK.UI.Notification({
+                title: 'Encounter context',
+                icon: 'fa-check',
+                type: 'success',
+                message: 'Successfully set with no errors.'
+            });
+            this.setProvider(this.model);
+            if (!_.isUndefined(this.model.get('visit').get('locationUid')) && this.model.get('visit').get('locationUid') !== '') {
+                locationUid = this.model.get('visit').get('locationUid');
+            }
+            if (this.currentTab.indexOf('New-Visit-tab-panel') >= 0) {
+                var datetime = moment(this.model.get('newVisitDate') + ' ' + this.model.get('newVisitTime')).format(DATE_TIME_FORMAT);
+                var formateddatetime = moment(datetime, DATE_TIME_FORMAT).format(DISPLAY_FORMAT);
+                if (locationUid) {
+                    visit.set('locationUid', locationUid);
+                }
+                visit.set('dateTime', datetime);
+                visit.set('formattedDateTime', formateddatetime);
+                visit.set('isHistorical', this.model.get('isHistorical'));
+            }
+            this.setMostRecentLocationsAndProviders(this.model);
+            if (locationUid) {
+                var isHistorical = false;
+                var locName = !_.isUndefined(visit) ? visit.get("locationDisplayName") : '';
+                if (this.model.get('visit').newVisit && this.model.get('visit').newVisit.isHistorical) {
+                    isHistorical = true;
+                }
+                var serviceCategory = ADK.utils.contextUtils.getServiceCategory(locName, this.getVisitTabLocationType(this.currentTab), isInpatient);
+                this.setServiceCategory(serviceCategory, this.model);
+                this.stopListening(ADK.Messaging.getChannel('visit'), 'context:set');
+                ADK.Messaging.getChannel('visit').trigger('context:set');
+                setEncounterAlertView.show();
+                //check if we're in a workflow
+                //check if we're the last step in the flow
 
-                        if (self._inTray) {
-                            self.$el.trigger('tray.loaderHide');
-                            ///Uncomment this line if encounter form is re-enabled 
-                            //self.preloadEncounter();
-                        }
-                        if (!self.isLastStep()) {
-                            // *** Uncomment this block if encounter form is re-enabled
-                            // Reset encounter form done loading indicator.
-                            // ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:fetch');
-                            // Hide the tray.
-                            // ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:variable:get', function(encounterVars) {
-                            //     if (encounterVars.closeOnSet && self._inTray) {
-                            //         // Use the encounter channel to animate the growl alert after the tray is done hidding.
-                            //         ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:context:alert', setEncounterAlertView);
-                            //         self.$el.trigger('tray.hide');
-                            //     }
-                            // });
-                            // Close the encounter workflow only if the context was not set AND it was set from clicking the encounter tray button
-                            // Otherwise, continue with the workflow. This is need to support the other tray buttons too.
-                            // ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:variable:get', function(encounterVars) {
-                            //     if (encounterVars.trayOpen && encounterVars.isEncounterWorkflow || !encounterVars.isEncounterWorkflow) {
-                            //         self.workflow.goToNext();
-                            //         ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:promise:new');
-                            //     } else {
-                            //         self.workflow.close();
-                            //         self.preloadEncounter();
-                            //     }
-                            // });
-                            // Close the encounter workflow after setting so we can resume our external workflow.
-                            self.workflow.goToNext();
-                        } else {
-                            self.$el.trigger('tray.hide');
-                            self.workflow.close();
-                            ADK.UI.Workflow.hide();
-                        }
-                    }
-                }, this));
+                if (this._inTray) {
+                    this.$el.trigger('tray.loaderHide');
+                    ///Uncomment this line if encounter form is re-enabled
+                    //this.preloadEncounter();
+                }
+                if (!this.isLastStep()) {
+                    // *** Uncomment this block if encounter form is re-enabled
+                    // Reset encounter form done loading indicator.
+                    // ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:fetch');
+                    // Hide the tray.
+                    // ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:variable:get', function(encounterVars) {
+                    //     if (encounterVars.closeOnSet && self._inTray) {
+                    //         // Use the encounter channel to animate the growl alert after the tray is done hidding.
+                    //         ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:context:alert', setEncounterAlertView);
+                    //         self.$el.trigger('tray.hide');
+                    //     }
+                    // });
+                    // Close the encounter workflow only if the context was not set AND it was set from clicking the encounter tray button
+                    // Otherwise, continue with the workflow. This is need to support the other tray buttons too.
+                    // ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:variable:get', function(encounterVars) {
+                    //     if (encounterVars.trayOpen && encounterVars.isEncounterWorkflow || !encounterVars.isEncounterWorkflow) {
+                    //         self.workflow.goToNext();
+                    //         ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:promise:new');
+                    //     } else {
+                    //         self.workflow.close();
+                    //         self.preloadEncounter();
+                    //     }
+                    // });
+                    // Close the encounter workflow after setting so we can resume our external workflow.
+                    this.workflow.goToNext();
+                } else {
+                    this.$el.trigger('tray.hide');
+                    this.workflow.close();
+                    ADK.UI.Workflow.hide();
+                }
             }
         },
         dateValidation: function() {
-            
+
             if (!this.model.get('_newVisitDate').get('day')) {
                 this.model.errorModel.set({
                     newVisitDate: 'Date must be in MM/DD/YYYY format'
                 });
                 return false;
-            }            
+            }
             var earliestDate = moment().subtract(100, 'y');
             var latestDate = moment().add(100, 'y');
             var visitDate = moment(this.model.get('newVisitDate'), "MM/DD/YYYY", true);
@@ -991,6 +993,7 @@ define([
         },
         initialize: function(form) {
             this._inTray = _.isBoolean(this.inTray) ? this.inTray : false;
+            this._skipVisitCheck = _.isBoolean(this.skipVisitCheck) ? this.skipVisitCheck : false;
             this.listenTo(ADK.Messaging.getChannel('visit'), 'context:set', function() {
                 this.stopListening(ADK.Messaging.getChannel('visit'), 'context:set');
                 if (this.isLastStep()) {

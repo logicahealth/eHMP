@@ -22,9 +22,22 @@ end
 When(/^user searches and selects new problem "([^"]*)"$/) do |problem_term|
   @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
   @ehmp.wait_until_fld_search_problem_visible
-  @ehmp.fld_search_problem.set problem_term
-  @ehmp.btn_search_problem.click
+  max_attempt = 2
+  begin
+    @ehmp.fld_search_problem.click
 
+    @ehmp.fld_search_problem.set problem_term
+    @ehmp.wait_until_btn_search_problem_visible
+    @ehmp.btn_search_problem.click
+  rescue Exception => e
+    p "Attempt search problem #{max_attempt}: #{e}"
+    max_attempt -= 1
+    raise e if max_attempt < 0
+    @ehmp.fld_search_problem.click
+    @ehmp.fld_search_problem.native.send_keys [:end]
+    @ehmp.fld_search_problem.native.send_keys [:shift, :home], :backspace
+    retry
+  end
   @ehmp.problem_search_result problem_term
   @ehmp.wait_until_fld_results_header_visible
   @ehmp.wait_until_fld_search_result_visible
@@ -54,7 +67,23 @@ Then(/^a problem is added to the applet$/) do
   @ehmp = PobProblemsApplet.new
   @ehmp.wait_for_tbl_problems
   wait = Selenium::WebDriver::Wait.new(:timeout => 60)
-  wait.until { @ehmp.number_expanded_applet_rows == @number_existing_problems + 1 }
+  failed_first_time = false
+  p "Expecting #{@number_existing_problems + 1}"
+  max_attempt = 1
+  begin
+    wait.until { @ehmp.number_expanded_applet_rows == @number_existing_problems + 1 }
+  rescue Exception => e
+    p e
+    p "Expected #{@number_existing_problems + 1} but got #{@ehmp.number_expanded_applet_rows}"
+    failed_first_time = true
+    max_attempt -= 1
+    raise e if max_attempt < 0
+    expect(@ehmp.wait_for_btn_applet_refresh).to eq(true)
+    @ehmp.btn_applet_refresh.click
+    @ehmp.wait_until_applet_loaded
+    retry
+  end
+  expect(failed_first_time).to eq(false), "Problem was not added automatically but it was present in applet after an applet refresh"
 end
 
 When(/^user opens observation tray$/) do
@@ -93,12 +122,20 @@ end
 
 When(/^user searches for a new problem with term "([^"]*)"$/) do |problem_term|
   @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
-  @ehmp.wait_until_fld_search_problem_visible
-  @ehmp.fld_search_problem.set problem_term
-  @ehmp.btn_search_problem.click
+  max_attempt = 4
+  begin
+    @ehmp.wait_until_fld_search_problem_visible
+    @ehmp.fld_search_problem.set problem_term
+    @ehmp.btn_search_problem.click
 
-  @ehmp.problem_search_result problem_term
-  @ehmp.wait_until_fld_results_header_visible
+    @ehmp.problem_search_result problem_term
+    @ehmp.wait_until_fld_results_header_visible
+  rescue Exception => e
+    p "Exception received: trying again"
+    max_attempt-=1
+    raise e if max_attempt <= 0
+    retry if max_attempt > 0
+  end
 end
 
 Then(/^the Add Problem model displays a result for "([^"]*)"$/) do |problem_term|
@@ -303,3 +340,83 @@ Then(/^the default selection for Treatment Factors is No$/) do
   expect(@ehmp.rbn_mst_no.checked?).to eq(true)
   expect(@ehmp.rbn_head_cancer_no.checked?).to eq(true)
 end
+
+Then(/^user refreshes the problems applet$/) do
+  ehmp = PobProblemsApplet.new
+  ehmp.wait_until_btn_applet_refresh_visible
+  expect(ehmp).to have_btn_applet_refresh
+  ehmp.btn_applet_refresh.click
+end
+
+When(/^user searches and selects a unique new problem$/) do
+  min_in_day = 1440
+  total_num_pain_problems = 292
+  problem_term = 'acute'
+
+  current_time = Time.new
+  p current_time.hour
+  p current_time.min
+
+  current_min = (current_time.hour*60) + current_time.min
+  @problem_index = current_min % total_num_pain_problems
+  @provider_index = current_min % 5
+
+  @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
+  @ehmp.wait_until_fld_search_problem_visible
+  max_attempt = 2
+  begin
+    @ehmp.fld_search_problem.click
+
+    @ehmp.fld_search_problem.set problem_term
+    @ehmp.wait_until_btn_search_problem_visible
+    @ehmp.btn_search_problem.click
+  rescue Exception => e
+    p "Attempt search problem #{max_attempt}: #{e}"
+    max_attempt -= 1
+    raise e if max_attempt < 0
+    @ehmp.fld_search_problem.click
+    @ehmp.fld_search_problem.native.send_keys [:end]
+    @ehmp.fld_search_problem.native.send_keys [:shift, :home], :backspace
+    retry
+  end
+  p "what is hanging #{total_num_pain_problems}"
+  selectable_problems = -1
+  #
+  wait = Selenium::WebDriver::Wait.new(:timeout => 60)
+  begin
+    wait.until { @ehmp.fld_selectable_problems.length >= total_num_pain_problems }
+    selectable_problems = @ehmp.fld_selectable_problems.length
+  rescue Exception => e
+    p e
+    p @ehmp.fld_selectable_problems.length
+    raise e
+  end
+  p selectable_problems
+  selectable_problem_text = @ehmp.fld_selectable_problems[@problem_index].text.gsub(' Press enter to select.', '')
+  p "Clicking #{@problem_index}: #{selectable_problem_text}"
+  @ehmp.problem_search_result selectable_problem_text
+
+  @ehmp.fld_search_result.native.location_once_scrolled_into_view
+  @ehmp.fld_search_result.click
+
+  @ehmp.selected_problem selectable_problem_text
+  @ehmp.wait_until_fld_selected_problem_visible
+  expect(@ehmp.fld_selected_problem.text.upcase).to eq(selectable_problem_text.upcase)
+end
+
+When(/^user selects a unique Responsible Provider$/) do
+  @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
+  @ehmp.wait_until_ddl_responsible_provider_visible
+  expect(@ehmp).to have_ddl_responsible_provider
+  @ehmp.ddl_responsible_provider.click
+  @ehmp.wait_until_fld_select2_search_box_visible
+  @ehmp.wait_until_fld_responsible_provider_instruction_visible
+  @ehmp.fld_select2_search_box.set 'ehmp,'
+  @ehmp.wait_until_fld_responsible_provider_instruction_invisible
+  expect(@ehmp.fld_responsible_provider_list.length > @provider_index)
+  provider = @ehmp.fld_responsible_provider_list[@provider_index].text
+  p provider
+
+  @ehmp.fld_select2_search_box.native.send_keys(:enter)
+end
+

@@ -84,6 +84,13 @@ class HelperMethods
     end
   end
 
+  def return_for_printing(objects)
+    text_array = []
+    objects.each do |item|
+      text_array.push  "#{item.text.upcase}"
+    end
+  end
+
   def return_boolean_if_contain_data(objects, header)
     objects.each do |first_group|
       if first_group.text.include? header
@@ -138,6 +145,47 @@ class HelperMethods
       column_values_array << row.text.downcase
     end
     column_values_array == column_values_array.sort.reverse
+  end
+
+  def backgrid_ascend?(objects)
+    column_values_array = []
+    objects.each do |row|
+      column_values_array << row.text.downcase
+    end
+    expected_array = column_values_array.clone.sort! { |a, b| custom_compare_for_backgrid(a, b) }
+    column_values_array == expected_array
+  end
+
+  def backgrid_descend?(objects)
+    column_values_array = []
+    objects.each do |row|
+      column_values_array << row.text.downcase
+    end
+    expected_array = column_values_array.clone.sort! { |a, b| custom_compare_for_backgrid(a, b) }.reverse
+    column_values_array == expected_array
+  end
+
+  def custom_compare_for_backgrid(s1, s2)
+    s1_start_array = s1.split("")
+    s2_start_array = s2.split("")
+    full_length = (s1_start_array.length > s2_start_array.length) ? s1_start_array.length : s2_start_array.length
+
+    s1_array = s1_start_array.fill('-', s1_start_array.length..full_length-1)
+    s2_array = s2_start_array.fill('-', s2_start_array.length..full_length-1)
+    
+    s1_array.each_with_index do |c1, i|
+      c2 = s2_array[i]
+      if c1 != c2     
+        if c1 == "-" && c2 =~ /\d/ || c2 == "-" && c1 =~ /\d/
+          return c1 == "-" ? 1 : -1
+        elsif c1 == "-" && c2 =~ /[a-zA-Z]/ || c2 == "-" && c1 =~ /[a-zA-Z]/
+          return c1 == "-" ? -1 : 1
+        end 
+        result = c1 <=> c2
+        return result
+      end
+    end # end loop
+    return 0
   end
 
   def count_item_from_a_list(objects, word1, word2)

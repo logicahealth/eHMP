@@ -35,7 +35,7 @@ When(/^the client gets a document\-view request with parameters$/) do |table|
   expect(@response.code).to eq(200)
 end
 
-When(/^the client posts a document\-view request with parameters$/) do |table|
+When(/^the client posts a document\-view GET request with parameters$/) do |table|
   request = QueryRDKDomain.new('document-view')
   payload = {}
 
@@ -43,10 +43,10 @@ When(/^the client posts a document\-view request with parameters$/) do |table|
     payload[parameter] = value
   end
   path = request.path
-  @response = HTTPartyRDK.post(path, payload.to_json, TaskHelper.headers)
+  @response = HTTPartyRDK.post(path, payload.to_json, TaskHelper.headers.merge({ 'X-HTTP-Method-Override' => 'GET' }))
 end
 
-When(/^the client posts a document\-view request with a query parameter for patient "([^"]*)" and a body parameter for "([^"]*)"$/) do |queryPid, bodyPid, table|
+When(/^the client posts a document\-view GET request with a query parameter for patient "([^"]*)" and a body parameter for "([^"]*)"$/) do |queryPid, bodyPid, table|
   request = QueryRDKDomain.new('document-view')
   request.add_parameter('pid', queryPid)
   payload = {}
@@ -55,7 +55,7 @@ When(/^the client posts a document\-view request with a query parameter for pati
     payload[parameter] = value
   end
   path = request.path
-  @response = HTTPartyRDK.post(path, payload.to_json, TaskHelper.headers)
+  @response = HTTPartyRDK.post(path, payload.to_json, TaskHelper.headers.merge({ 'X-HTTP-Method-Override' => 'GET' }))
 end
 
 When(/^the client notes documents GET results$/) do
@@ -68,7 +68,7 @@ When(/^the client notes documents GET results$/) do
   p @get_result
 end
 
-Then(/^the documents FETCH results are the same as the GET results$/) do
+Then(/^the documents POST fetch results are the same as the GET results$/) do
   body = JSON.parse(@response.body)
   expect(body['data']['totalItems']).to eq(@get_result.total_items)
   expect(body['data']['currentItemCount']).to eq(@get_result.current_item_count)

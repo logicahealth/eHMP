@@ -4,7 +4,7 @@
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/components", "api/UIComponents", "jasminejquery"],
+define(["jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api/UIComponents", "jasminejquery"],
     function($, Handlebars, Backbone, Marionette, UI) {
 
         var $form, form;
@@ -395,6 +395,16 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/ui_components/co
                 xit('and the control handles checkbox:disable event properly', function() {
                     $('input:checkbox#toc1').trigger('control:checkbox:disable', true);
                     expect($testPage.find('input:checkbox:disabled#toc1').length).toBe(1);
+                });
+                it("update:config", function() {
+                    $('.toc').trigger("control:update:config", {
+                        hidden: true
+                    });
+                    expect($('.toc')).toHaveClass('hidden');
+                    $('.toc').trigger("control:update:config", {
+                        hidden: false
+                    });
+                    expect($('.toc')).not.toHaveClass('hidden');
                 });
             });
         });

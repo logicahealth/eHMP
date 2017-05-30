@@ -9,7 +9,7 @@ require_relative '../../steps/helper/DefaultLogin'
 require_relative 'siteprism_monkey_patch.rb'
 
 Capybara.default_wait_time = 15
-Capybara.app_host = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://10.1.1.150"
+Capybara.app_host = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://IP        "
 
 World(Capybara::DSL)
 World(Capybara::RSpecMatchers)

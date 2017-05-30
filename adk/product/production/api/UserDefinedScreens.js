@@ -128,7 +128,7 @@ define([
 
         // Infer size by viewType iff its sizes are not already set in the applet's configuration
         if (!currentApplet.viewType) {
-            currentApplet.viewType = 'summary'; 
+            currentApplet.viewType = 'summary';
         }
         size = ADK.utils.getViewTypeSize(currentApplet.viewType);
         minSize = ADK.utils.getViewTypeMinSize(currentApplet.viewType);
@@ -410,10 +410,10 @@ define([
     };
 
     UserDefinedScreens.saveScreensConfigToSession = function(screenConfigJson) {
-        var json = Session.get.sessionObject(USER_SCREENS_CONFIG);
-        if (json.userScreensConfig) {
-            json.userScreensConfig.screens = screenConfigJson.screens;
-            if (!json.userDefinedScreens) json.userDefinedScreens = [];
+        var json = Session.get.sessionObject(USER_SCREENS_CONFIG) || {};
+        if (_.get(json, 'userScreensConfig')) {
+            _.set(json, 'userScreensConfig.screens', _.get(screenConfigJson || {}, 'screens'));
+            if (!_.get(json, 'userDefinedScreens')) _.set(json, 'userDefinedScreens', []);
         } else {
             json = {
                 userScreensConfig: {
@@ -511,7 +511,7 @@ define([
             if (isLoggedIn) {
                 user = ADK.UserService.getUserSession();
                 if (!user.get('preferences')) {
-                    user.set('preferences', {defaultScreen: {}});
+                    user.set('preferences', { defaultScreen: {} });
                 }
                 preferences = user.get('preferences');
                 if (!preferences.defaultScreen) {

@@ -70,7 +70,7 @@ define([
         className: function() {
             return this.getOption('classPrefix') + '-title';
         },
-        template: Handlebars.compile('{{title}}')
+        template: Handlebars.compile('{{#if icon}}<i class="fa {{icon}}"></i> {{/if}}{{title}}')
     });
 
     var SubTrayView = Backbone.Marionette.CompositeView.extend({
@@ -251,6 +251,7 @@ define([
                 } else {
                     this.headerModel = new HeaderModel({
                         'title': workflowTitle,
+                        'icon': this.workflowOptions.icon,
                         'actionItems': workflowactionItems,
                         'popOutToggle': workflowpopOutToggle,
                         'closeButtonTitle': workflowCloseButtonOptions.title,
@@ -523,6 +524,11 @@ define([
         changeHeaderTitle: function(newTitleString) {
             if (_.isString(newTitleString)) {
                 this.headerModel.set('title', newTitleString);
+            }
+        },
+        changeHeaderIcon: function(newIconString) {
+            if (_.isString(newIconString)) {
+                this.headerModel.set('icon', newIconString);
             }
         },
         changeHeaderActionItems: function(newActionItemsArray) {

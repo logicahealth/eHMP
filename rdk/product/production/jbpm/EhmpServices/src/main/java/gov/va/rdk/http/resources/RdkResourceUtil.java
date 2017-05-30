@@ -11,6 +11,8 @@ import java.security.ProtectionDomain;
 import java.util.Collection;
 import java.util.Properties;
 
+import org.jboss.logging.Logger;
+import org.jboss.logging.MDC;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -23,7 +25,8 @@ import org.springframework.web.client.RestTemplate;
 
 import gov.va.clinicalobjectstorageservice.ClinicalObjectWriteHandler;
 import gov.va.ehmp.services.exception.EhmpServicesException;
-import gov.va.ehmp.services.utils.Logging;
+import vistacore.jbpm.utils.logging.RequestMessageType;
+
 
 public abstract class RdkResourceUtil {
 	protected static final String RDK_FETCHSERVER_CONFIG = "rdkconfig.properties";
@@ -31,10 +34,13 @@ public abstract class RdkResourceUtil {
 	
 	private static final String AUTHENTICATION_RESOURCE = "resource/authentication/systems/internal";
 	private static final String RDK_SESSION_COOKIE_ID = "rdk.sid";
+	private static final Logger LOGGER = Logger.getLogger(RdkResourceUtil.class);
 	
 	/** JSON Web Token implementation */
 	private static final String RDK_JWT_ID = "X-Set-JWT";
 	private static final String RDK_JWT_PREPEND = "Bearer ";
+	private static final String X_REQUEST_ID  = "X-Request-ID";
+	private static final String X_SESSION_ID  = "X-Session-ID";
 
 	private String rdkSessionCookieId = null;
 	private String sessionId = null;
@@ -49,6 +55,14 @@ public abstract class RdkResourceUtil {
 		//Logging.debug("Populating JBPM Authorization");
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", "JBPM");
+		//Add in X-Request-ID and X-Session-ID headers
+		if(MDC.get("requestId") != null) {
+			headers.add(X_REQUEST_ID, MDC.get("requestId").toString());
+		}
+		if(MDC.get("sid") != null) {
+			headers.add(X_SESSION_ID, MDC.get("sid").toString());
+		}
+
 		return headers;
 	}
 
@@ -60,15 +74,16 @@ public abstract class RdkResourceUtil {
 	 */
 	private boolean establishSession() throws EhmpServicesException {
 		String resourceUrl = getRDKUrl(RDK_FETCHSERVER_CONFIG) + AUTHENTICATION_RESOURCE;
-		Logging.debug("establishSession Establishing Session from: " + resourceUrl);
+		LOGGER.debug("establishSession Establishing Session from: " + resourceUrl);
 		
 		try {
 			HttpEntity<String> request = new HttpEntity<String>(addJbpmAuthenticationHeader());
-			Logging.debug("establishSession Connecting to: " + resourceUrl);
-			
+			LOGGER.debug("establishSession Connecting to: " + resourceUrl);
+						
 			ResponseEntity<String> result = getRestTemplate().exchange(resourceUrl, HttpMethod.POST, request, String.class);
 			HttpStatus resultStatus = result.getStatusCode();
-			Logging.debug("establishSession resultStatus is: " + resultStatus);
+			
+			LOGGER.debug("RdkResourceUtil.establishSession resultStatus is: " + resultStatus);
 			
 			if (resultStatus.is2xxSuccessful()) {
 				Collection<String> cookies = result.getHeaders().get("Set-Cookie");
@@ -85,7 +100,7 @@ public abstract class RdkResourceUtil {
 									if (sessionIdParts.length > 0) {
 										rdkSessionCookieId = sessionIdParts[0];
 										sessionId = sessionIdParts[1];
-										Logging.debug("establishSession Found rdkSessionCookieId: " + rdkSessionCookieId + ", sessionId: " + sessionId);
+										LOGGER.debug("RdkResourceUtil.establishSession Found rdkSessionCookieId: " + rdkSessionCookieId + ", sessionId: " + sessionId);
 										sessionIdFound = true;
 									}
 								}
@@ -93,17 +108,16 @@ public abstract class RdkResourceUtil {
 						}
 					}
 				}
-				
+								
 				Collection<String> jwtHeaders = result.getHeaders().get(RDK_JWT_ID);
 				//detect JWT value
 				for (String jwtHeader : jwtHeaders) {
 					if (jwtHeader.length() > 0) {
 						jwt = jwtHeader;
-						Logging.debug("establishSession Found jwt: " + jwt);
+						LOGGER.debug("establishSession Found jwt: " + jwt);
 						return sessionIdFound;
 					}
 				}
-
 			}
 		} catch (Exception e) {
 			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "Exception: " + e.getMessage(), e);
@@ -120,7 +134,7 @@ public abstract class RdkResourceUtil {
 	 * @return a new restTemplate
 	 */
 	private RestTemplate getRestTemplate() {
-		//Logging.debug("Getting Rest Template");
+		//LOGGER.debug("Getting Rest Template");
 		RestTemplate restTemplate = new RestTemplate(new SimpleClientHttpRequestFactory());
 		return restTemplate;
 	}
@@ -132,7 +146,7 @@ public abstract class RdkResourceUtil {
 	 * @throws EhmpServicesException If the server encounters bad data or any unexpected conditions. 
 	 */
 	protected String getRDKUrl(String configFile) throws EhmpServicesException {
-		Logging.debug("Getting RDK URL from configFile: " + configFile);
+		LOGGER.debug("Getting RDK URL from configFile: " + configFile);
 		String rdkResourceEndpoint = "";
 		Properties prop = new Properties();
 		String propertiesPath = "";
@@ -156,7 +170,7 @@ public abstract class RdkResourceUtil {
 				String warningMsg = "getRDKUrl Couldn't find rdk config file at '" + filename + "'\nTrying to find it at ";
 				filename = propertiesPath + "/" + configFile;
 				warningMsg += "'" + filename + "'";
-				Logging.warn(warningMsg);
+				LOGGER.warn(warningMsg, e);
 				file = new FileInputStream(filename);
 			}
 			
@@ -245,13 +259,16 @@ public abstract class RdkResourceUtil {
 	 * @throws EhmpServicesException If the server encounters bad data or any unexpected conditions. 
 	 */
 	private String invokeResource(String resourceUrl, HttpMethod httpMethod, String jsonBody, boolean isRetry) throws EhmpServicesException {
-		Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Invoking a " + httpMethod + " on the resource: " + resourceUrl);
-//		Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "jsonBody: " + jsonBody);
-//		Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "isRetry: " + isRetry);
+		LOGGER.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Invoking a " + httpMethod + " on the resource: " + resourceUrl);
+
+		//If the thread has a resquestId and a sessionId save those so they can be re-threaded
+		Object requestId = MDC.get("requestId");
+		Object sid = MDC.get("sid");
+
 		String response = "";
 
 		if (sessionId == null || jwt == null) {
-			Logging.debug("invokeResource " + (isRetry ? "(retry)" : "") + "sessionId and jwt were null, re-establishing session");
+			LOGGER.debug("invokeResource " + (isRetry ? "(retry)" : "") + "sessionId and jwt were null, re-establishing session");
 			if (!establishSession()) {
 				// couldn't establish a session..
 				throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to establish a session"); 
@@ -263,35 +280,59 @@ public abstract class RdkResourceUtil {
 
 		try {
 			HttpHeaders headers = new HttpHeaders();
-			if (rdkSessionCookieId == null)
+			if (rdkSessionCookieId == null) {
 				throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "rdkSessionCookieId was null");
+			}
 			
 			headers.set("Cookie", rdkSessionCookieId.concat("=").concat(sessionId));
 			headers.set("Authorization", RDK_JWT_PREPEND.concat(jwt));
 			headers.set("Content-Type", "application/json");
+			if(requestId != null) {
+				headers.set(X_REQUEST_ID,requestId.toString());
+			}
+			if(sid != null) {
+				headers.set(X_SESSION_ID, sid.toString());
+			}
 			HttpEntity<String> request = null;
 			
-//			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Cookie: " + rdkSessionCookieId.concat("=").concat(sessionId));
-//			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Authorization: " + RDK_JWT_PREPEND.concat(jwt));
-//			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Content-Type: " + "application/json");
-			
+			//Log the Outgoing Request
+			LOGGER.info(RequestMessageType.OUTGOING_REQUEST + " " + httpMethod + " " + resourceUrl );
+
 			if ((httpMethod == HttpMethod.POST || httpMethod == HttpMethod.PUT) && jsonBody != null) {
 				request = new HttpEntity<String>(jsonBody, headers);
 			}
 			else {
 				request = new HttpEntity<String>(headers);
 			}
-			
-//			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Submitting to the URL: " + resourceUrl);
-			
+						
 			result = getRestTemplate().exchange(resourceUrl, httpMethod, request, String.class);
+			
+			//Retrieve X-Request-ID and X-Session-ID if they exist
+			if(result.getHeaders().containsKey(X_REQUEST_ID)) {
+				//RDK only has one X-Request-ID entry
+				MDC.put("requestId", result.getHeaders().get(X_REQUEST_ID).get(0));
+			}
+			if(result.getHeaders().containsKey(X_SESSION_ID)) {
+				//RDK only has one X-Session-ID entry
+				MDC.put("sid", result.getHeaders().get(X_SESSION_ID).get(0));
+			}
+
 			resultStatus = result.getStatusCode();
-			
-//			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "resultStatus is: " + resultStatus);
-			
+						
 			if (resultStatus.is2xxSuccessful()) {				
 				response = result.getBody();
+
+				//Log the Incoming Response
+				LOGGER.info(RequestMessageType.INCOMING_RESPONSE + " " + response );
+			} 
+			else {
+				//Log the Incoming Response Error
+				LOGGER.info(RequestMessageType.INCOMING_RESPONSE + " Response code: "+
+						resultStatus.value() + " - " + resultStatus.getReasonPhrase());
 			}
+			
+
+
 		} catch (HttpClientErrorException hce) {
 			resultStatus = hce.getStatusCode();
 
@@ -301,7 +342,6 @@ public abstract class RdkResourceUtil {
 				// do this only once to avoid an infinite loop
 				sessionId = null;
 				jwt = null;
-//				Logging.info("invokeResource received an Unauthorized status, going to establish a new session and invoke again");
 				return invokeResource(resourceUrl, httpMethod, jsonBody, true);
 			} else if (resultStatus.equals(HttpStatus.UNAUTHORIZED)) {
 				throw new EhmpServicesException(resultStatus, "HttpAuthorizationException (Caused by HttpClientErrorException " + HttpStatus.UNAUTHORIZED + "): " + hce.getMessage(), hce);
@@ -315,6 +355,14 @@ public abstract class RdkResourceUtil {
 			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "HttpRuntimeException (Caused by RestClientException): " + rce.getMessage(), rce);
 		} catch (Exception e) {
 			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "HttpRuntimeException (Caused by Exception): " + e.getMessage(), e);
+		}
+		finally {
+			if(requestId != null){
+				MDC.put("requestId", requestId);
+			}
+			if(sid != null){
+				MDC.put("sid", sid);
+			}
 		}
 		return response;
 	}

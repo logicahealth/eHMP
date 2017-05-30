@@ -30,7 +30,7 @@ class CoverSheet < AccessBrowserV2
   include Singleton
   def initialize
     super
-    add_verify(CucumberLabel.new("patient identifying traits"), VerifyText.new, AccessHtmlElement.new(:id, "patientDemographic"))
+    add_verify(CucumberLabel.new("patient identifying traits"), VerifyText.new, AccessHtmlElement.new(:class, "patient-demographic-content"))
     add_verify(CucumberLabel.new("patient name"), VerifyContainsText.new, AccessHtmlElement.new(:class, "patient-info"))
     add_verify(CucumberLabel.new("SSN"), VerifyContainsText.new, AccessHtmlElement.new(:class, "patient-info"))
     dob_age_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4} \\(\\d+\\y")
@@ -146,6 +146,7 @@ class CoverSheetApplets < AccessBrowserV2
   def applets_loaded?(print_checks = false)
     # | Active & Recent MEDICATIONS   |
     # | COMMUNITY HEALTH SUMMARIES|
+    helper = HelperMethods.new
     allergy_gist_applet = AllergiesGist.instance
     order_applet = OrdersContainer.instance
     conditions = ActiveProblems.instance
@@ -154,13 +155,14 @@ class CoverSheetApplets < AccessBrowserV2
     immunizations = ImmunizationsCoverSheet.instance
     appointments = AppointmentsCoverSheet.instance
     active_meds = ActiveMedications.instance
-    health_summaries = CommunityHealthSummariesCoverSheet.instance
+    health_summaries = PobCommunityHealthApplet.new
     return false unless print_applet_loading_outcome("Conditions/Problems", conditions.applet_grid_loaded, print_checks)
     return false unless print_applet_loading_outcome("Vitals", vitals.applet_loaded, print_checks)
     return false unless print_applet_loading_outcome("Allergy Gist", allergy_gist_applet.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Appointments", appointments.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Numeric Lab Results", numeric_lab.applet_loaded?, print_checks)
-    return false unless print_applet_loading_outcome("Community Health Summaries", health_summaries.applet_loaded?, print_checks)
+    health_summary_loaded = helper.applet_grid_loaded(health_summaries.has_fld_empty_row?, health_summaries.tbl_data_rows)
+    return false unless print_applet_loading_outcome("Community Health Summaries", health_summary_loaded, print_checks)
     return false unless print_applet_loading_outcome("Immunizations", immunizations.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Active Meds", active_meds.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Order", order_applet.applet_loaded, print_checks)

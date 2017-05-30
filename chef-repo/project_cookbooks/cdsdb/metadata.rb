@@ -4,7 +4,7 @@ maintainer_email "team-milkyway@vistacore.us"
 license          "All rights reserved"
 description      "Installs/Configures cdsdb"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.2"
+version          "2.1.3"
 
 supports "centos"
 

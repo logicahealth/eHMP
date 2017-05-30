@@ -25,7 +25,7 @@ Scenario: The user views the modal's Lab Details table and verifies the appropri
   And the applet displays numeric lab results
   When the user views the "03/05/2010 - 10:00 HEMOGLOBIN A1C - BLOOD (TST1)" lab result in a modal
   Then the modal is displayed
-  And the "Lab Detail" table contains headers
+  And the Lab Detail table contains headers
     | Date       | Lab Test               | Flag | Result | Unit   | Ref Range | Facility | 
   And the "Lab Detail" row is
     | Date       | Lab Test               | Flag | Result | Unit   | Ref Range | Facility |

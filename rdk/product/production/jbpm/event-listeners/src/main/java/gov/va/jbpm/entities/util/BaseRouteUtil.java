@@ -3,13 +3,15 @@ package gov.va.jbpm.entities.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.logging.Logger;
+
 import gov.va.jbpm.entities.impl.BaseRoute;
 import gov.va.jbpm.exception.EventListenerException;
-import gov.va.jbpm.utils.Logging;
 
 public class BaseRouteUtil {
+	private static final Logger LOGGER = Logger.getLogger(BaseRouteUtil.class);
 	public static List<BaseRoute> create(String routes) throws EventListenerException {
-		Logging.debug("Entering BaseRouteUtil.create");
+		LOGGER.debug("Entering BaseRouteUtil.create");
 		
 		List<BaseRoute> baseRouteList = new ArrayList<BaseRoute>();
 		if (routes == null || routes.isEmpty()) {
@@ -45,7 +47,7 @@ public class BaseRouteUtil {
 					//  anything which is not a left parenthesis followed by a left parenthesis
 					//  any ASCII letters, digits, or underscores followed by a right parenthesis
 					if (!subRoute.matches("\\w\\w:[^(]*\\(\\w+\\)")) {
-						Logging.warn("Unable to match the following subRoute (ignoring it): " + subRoute);
+						LOGGER.warn("Unable to match the following subRoute (ignoring it): " + subRoute);
 						continue;
 					}
 					

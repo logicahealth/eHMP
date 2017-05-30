@@ -2,11 +2,10 @@ define([
     'backbone',
     'marionette',
     'underscore',
-    'hbs!app/applets/ccd_grid/modal/modalSectionsTemplate',
     'hbs!app/applets/ccd_grid/modal/modalFullHtmlTemplate',
     'app/applets/ccd_grid/modal/modalHeaderView',
     'app/applets/ccd_grid/util'
-], function(Backbone, Marionette, _, modalSectionsTemplate, modalFullHtmlTemplate, ModalHeader, Util) {
+], function(Backbone, Marionette, _, modalFullHtmlTemplate, ModalHeader, Util) {
     'use strict';
 
     function writeCcdIframe(fullHtml) {
@@ -48,11 +47,7 @@ define([
 
     var ModalView = Backbone.Marionette.ItemView.extend({
         getTemplate: function() {
-            if (this.model.get('fullHtml')) {
                 return modalFullHtmlTemplate;
-            } else {
-                return modalSectionsTemplate;
-            }
         },
         initialize: function(options) {
             this.getModelUids();
@@ -62,25 +57,9 @@ define([
                 var modelUid = this.model.get('uid');
                 this.getModal(modelUid);
             }
-
-            /*
-            US17620 -- This part of the code appears to be obselete.  This was written to accommodate a different implementation
-            of displaying the community health summaries documents - which is no longer applicable.  The CCD document is no longer
-            being parsed into different sections - the XML document is instead transformed to HTML by applying the partner's 
-            xslt stylesheet and rendered through the iframe.  Since this part of the code is being marked to be removed (awaiting
-            confirmation), it would be moot to refactor.
-            */
-            var sections = {};
             if (!_.isUndefined(this.model)) {
-                sections = this.model.get('sections');
-                _.each(sections, function(section) {
-                    section.text = section.text.replace(/\s+/g, ' ');
-                });
-
                 var currentPatient = ADK.PatientRecordService.getCurrentPatient();
-
                 this.model.set({
-                    'sections': sections,
                     'fullName': currentPatient.get('fullName'),
                     'birthDate': currentPatient.get('birthDate'),
                     'genderName': currentPatient.get('genderName'),

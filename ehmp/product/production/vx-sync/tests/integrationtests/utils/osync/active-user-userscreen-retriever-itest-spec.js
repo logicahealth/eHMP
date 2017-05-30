@@ -47,13 +47,13 @@ var usersList = [user1, user2];
 describe('active-user-userscreen-retriever.js', function() {
     var config = {jds: _.defaults(wConfig.jds, {
         protocol: 'http',
-        host: '10.2.2.110',
-        port: 9080
+        host: 'IP        ',
+        port: PORT
     }),
         pjds: _.defaults(wConfig.pjds, {
             protocol: 'http',
-            host: '10.2.2.110',
-            port: 9080
+            host: 'IP        ',
+            port: PORT
         })
     };
 

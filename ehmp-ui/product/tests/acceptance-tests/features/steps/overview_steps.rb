@@ -77,7 +77,7 @@ def verify_on_overview
   end
 
   applets_screen = sprintf "%.2f", (Time.now - start_verification)
-  timeout = DefaultTiming.default_table_row_load_time
+  timeout = 60 # clinical reminders is taking longer then 30 seconds to load, increase time
   wait = Selenium::WebDriver::Wait.new(:timeout => timeout)
   begin
     wait.until { browser_access.overview_applets_loaded? }
@@ -110,49 +110,4 @@ end
 
 Then(/^Overview is active by default$/) do
   verify_on_overview
-end
-
-class OverviewApplets < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    add_verify(CucumberLabel.new("ENCOUNTERS"), VerifyContainsText.new, applet_panel_title("encounters"))
-    add_verify(CucumberLabel.new("NUMERIC LAB RESULTS"), VerifyContainsText.new, applet_panel_title("lab_results_grid"))
-    add_verify(CucumberLabel.new("VITALS"), VerifyContainsText.new, applet_panel_title("vitals"))
-    add_verify(CucumberLabel.new("REPORTS"), VerifyContainsText.new, applet_panel_title("reports"))
-    add_verify(CucumberLabel.new("IMMUNIZATIONS"), VerifyContainsText.new, applet_panel_title("immunizations"))
-    add_verify(CucumberLabel.new("PROBLEMS"), VerifyContainsText.new, applet_panel_title("problems"))
-    add_verify(CucumberLabel.new("ALLERGIES"), VerifyContainsText.new, applet_panel_title("allergy_grid"))
-    add_verify(CucumberLabel.new("CLINICAL REMINDERS"), VerifyContainsText.new, applet_panel_title("cds_advice"))
-    add_verify(CucumberLabel.new("Active & Recent MEDICATIONS"), VerifyContainsText.new, applet_panel_title("activeMeds"))
-   
-
-    # count the number of applets on the screen
-    @@applet_count = AccessHtmlElement.new(:xpath, "//*[@data-appletid]")
-    add_verify(CucumberLabel.new("Number of Applets"), VerifyXpathCount.new(@@applet_count), @@applet_count)
-
-    # count the number of rows in the allergy_grid table
-    #@@vitals_applet_data_grid_rows = AccessHtmlElement.new(:xpath, ".//*[@id='grid-panel-vitals']/div[3]/div/div/div[1]/div/table/tbody/tr")
-    @@vitals_applet_data_grid_rows = AccessHtmlElement.new(:xpath, "//*[@id='vitals-OBSERVATION-gist-items']/div")
-    add_verify(CucumberLabel.new("Number of Vitals Applet Rows"), VerifyXpathCount.new(@@vitals_applet_data_grid_rows), @@vitals_applet_data_grid_rows)
-  end
-  
-  def applet_panel_title(dataapplet_id)
-    panel_title_accesser = AccessHtmlElement.new(:css, "div[data-appletid='#{dataapplet_id}'] .panel-title")
-    return panel_title_accesser
-  end
-end
-#
-Then(/^the applets are displayed on the overview$/) do |table|
-  access_cover_sheet_applets = OverviewApplets.instance
-  table.rows.each do |field_name|
-    single_cell = field_name[0]
-    access_cover_sheet_applets.wait_until_element_present(single_cell)
-    expect(access_cover_sheet_applets.perform_verification(single_cell, single_cell)).to be_true, "Failed looking for #{field_name}"
-  end
-end
-
-Then(/^the Vitals applet contains data grid rows$/) do 
-  access_cover_sheet_applets = CoverSheetApplets.instance
-  expect(access_cover_sheet_applets.wait_until_xpath_count_greater_than("Number of Vitals Applet Rows", 2)).to be_true
 end

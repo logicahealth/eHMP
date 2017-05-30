@@ -11,6 +11,7 @@ default[:jmeadows][:application][:protocol] = "http"
 default[:jmeadows][:application][:port] = 80
 default[:jmeadows][:application][:path] = "/jMeadows/JMeadowsDataService"
 default[:jmeadows][:application][:path_query] = "wsdl"
+default[:jmeadows][:application][:timeout] = 60000
 default[:jmeadows][:application][:user][:ien] = "20012"
 default[:jmeadows][:application][:user][:name] = "VEHU, TEN"
 default[:jmeadows][:application][:user][:site_code] = 200

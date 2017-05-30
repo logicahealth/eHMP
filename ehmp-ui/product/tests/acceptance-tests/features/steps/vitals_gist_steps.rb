@@ -49,16 +49,16 @@ class VitalsGist <  AllApplets
     add_applet_add_button appletid_css
 
     add_verify(CucumberLabel.new("Vitals Gist Title"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=vitals] .panel-title"))
-    add_verify(CucumberLabel.new("Blood pressure Sistolic"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='BPS'] .problem-name"))
-    add_verify(CucumberLabel.new("Blood pressure Diastolic"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='BPD'] .problem-name"))
-    add_verify(CucumberLabel.new("Pulse"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='Pulse'] .problem-name"))
-    add_verify(CucumberLabel.new("Respiration"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='RR'] .problem-name"))
-    add_verify(CucumberLabel.new("Temperature"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='Temp'] .problem-name"))
-    add_verify(CucumberLabel.new("Pulse oximetry"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='Sp02'] .problem-name"))
-    add_verify(CucumberLabel.new("Pain"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='Pain'] .problem-name"))
-    add_verify(CucumberLabel.new("Weight"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='Wt'] .problem-name"))
+    add_verify(CucumberLabel.new("Blood pressure Sistolic"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-cell-instanceid='problem_name_BPS'] .problem-name"))
+    add_verify(CucumberLabel.new("Blood pressure Diastolic"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-cell-instanceid='problem_name_BPD'] .problem-name"))
+    add_verify(CucumberLabel.new("Pulse"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-cell-instanceid='problem_name_Pulse']"))
+    add_verify(CucumberLabel.new("Respiration"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-cell-instanceid='problem_name_RR']"))
+    add_verify(CucumberLabel.new("Temperature"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-cell-instanceid='problem_name_Temp']"))
+    add_verify(CucumberLabel.new("Pulse oximetry"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-cell-instanceid='problem_name_Sp02']"))
+    add_verify(CucumberLabel.new("Pain"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-cell-instanceid='problem_name_Pain']"))
+    add_verify(CucumberLabel.new("Weight"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-cell-instanceid='problem_name_Wt']"))
 
-    add_action(CucumberLabel.new("Blood pressure Sistolic toolbar"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='BPS'] .problem-name"))
+    add_action(CucumberLabel.new("Blood pressure Sistolic toolbar"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-cell-instanceid='problem_name_BPS']"))
     
     vitals_rows = AccessHtmlElement.new(:css, '[data-appletid=vitals] div.gist-item')
     add_verify(CucumberLabel.new("Vitals Gist Rows"), VerifyXpathCount.new(vitals_rows), vitals_rows)
@@ -75,15 +75,15 @@ class VitalsGist <  AllApplets
     add_toolbar_buttons 
 
     # quickview
-    add_action(CucumberLabel.new("Blood pressure Sistolic results"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='BPS'] [data-cell-instanceid='time_since_BPS']"))
+    add_action(CucumberLabel.new("Blood pressure Sistolic results"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-cell-instanceid='time_since_BPS']"))
     add_action(CucumberLabel.new('Add'), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-add-button"))
    
     # First Vital Gist Row
-    add_action(CucumberLabel.new('First Vitals Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='BPS'] .problem-name"))
+    add_action(CucumberLabel.new('First Vitals Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-cell-instanceid='problem_name_BPS']"))
   end
 
   def add_vitals_verification(type, id)
-    add_verify(CucumberLabel.new("#{type} Label"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='#{id}'] .problem-name"))
+    add_verify(CucumberLabel.new("#{type} Label"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-cell-instanceid='problem_name_#{id}']"))
     add_verify(CucumberLabel.new("#{type} Result"), VerifyNotBlank.new, AccessHtmlElement.new(:css, "[data-appletid=vitals] [data-row-instanceid='#{id}'] [data-cell-instanceid='time_since_#{id}']"))
     add_verify(CucumberLabel.new("#{type} Age"), VerifyAgeFormat.new, AccessHtmlElement.new(:css, "[data-appletid=vitals] [data-row-instanceid='#{id}'] [data-cell-instanceid='encounter_count_#{id}']"))
     # used an xpath for Chart Area because css was not working and I dn't know why

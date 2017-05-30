@@ -10,17 +10,17 @@ define([
         template: Handlebars.compile([
             '<div class="row">',
                 '<div class="well well-collapse">',
-                    '<div class="collapsibleContainerHeader">',
-                        '<div class="col-xs-11 collapsibleContainerHeaderRegion">',
+                    '<div class="collapsible-container-header">',
+                        '<div class="col-xs-11 collapsible-container-header-region">',
                             '<div class="header-content"></div>',
                         '</div>',
                         '<div class="col-xs-1 left-padding-xs">',
                             '{{#if collapse}}',
-                                '<button data-buttonid="collapsibleContainerTrigger" class="btn btn-sm btn-icon collapsed top-margin-lg all-padding-no font-size-18" title="Press enter to expand or collapse additional fields" type="button" data-collapse-button="true"></button>',
+                                '<button data-buttonid="collapsibleContainerTrigger" class="btn btn-sm btn-icon collapsed top-margin-md all-padding-no font-size-18" title="Press enter to expand or collapse additional fields" type="button" data-collapse-button="true"></button>',
                             '{{/if}}',
                         '</div>',
                     '</div>',
-                    '<div class="collapsibleContainerCollapseRegion">',
+                    '<div class="collapsible-container-collapse-region">',
                         '<div class="col-xs-12 collapse-content collapse"></div>',
                     '</div>',
                 '</div>',
@@ -35,8 +35,8 @@ define([
             }
         },
         ui: {
-            'HeaderRegionContainer': '.collapsibleContainerHeaderRegion > .header-content',
-            'CollapseRegionContainer': '.collapsibleContainerCollapseRegion > .collapse-content',
+            'HeaderRegionContainer': '.collapsible-container-header-region > .header-content',
+            'CollapseRegionContainer': '.collapsible-container-collapse-region > .collapse-content',
             'CollapsibleTrigger': '[data-buttonid="collapsibleContainerTrigger"]',
             'ToggleButton': '[data-buttonid="collapsibleContainerTrigger"]'
         },
@@ -68,7 +68,7 @@ define([
             //this.$el.find('[data-buttonid="collapsibleContainerTrigger"]').attr('data-target', '#collapsibleContainerCollapseRegion-' + this.uid);
             this.ui.ToggleButton.attr('data-target', '#collapsibleContainerCollapseRegion-' + this.uid);
 
-            this.$el.find('.collapsibleContainerCollapseRegion').attr('id', 'collapsibleContainerCollapseRegion-' + this.uid);
+            this.$el.find('.collapsible-container-collapse-region').attr('id', 'collapsibleContainerCollapseRegion-' + this.uid);
 
             this.showChildView('HeaderRegion', this.headerView);
             this.showChildView('CollapseRegion', this.collapseView);

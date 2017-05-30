@@ -3,7 +3,7 @@
 var request = require('request');
 var _ = require('underscore');
 
-var mocksVmIp = '10.4.4.205';
+var mocksVmIp = 'IP        ';
 var mockHdrPort = '8999';
 
 var testPatientLocalId = '0';
@@ -17,10 +17,10 @@ var moment = require('moment');
 
 
 var pubsubConfig = {
-  "host": "10.4.4.205",
+  "host": "IP        ",
   "port": 8999,
   "protocol": "http",
-  "path": "repositories.med.va.gov/fpds/vpr/",
+  "path": "repositories.URL       /fpds/vpr/",
   "server": "HMPTest",
   "clientName": "eHMP",
   "_type": "json",

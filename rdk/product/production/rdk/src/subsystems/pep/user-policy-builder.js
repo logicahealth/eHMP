@@ -31,6 +31,10 @@ function buildUserPolicy(req) {
 
 function auditSensitiveDataAccessInVista(req, patient) {
     var localpid = patient.pid.split(';')[1];
+    if (!localpid) {
+        // there's no point in logging by ICN because the call just errors
+        return;
+    }
     var serverConfig = rpcUtil.getVistaRpcConfiguration(req.app.config, req.session.user);
 
     req.logger.debug('PEP: making sensitive rpc call to Vista' + serverConfig.name);

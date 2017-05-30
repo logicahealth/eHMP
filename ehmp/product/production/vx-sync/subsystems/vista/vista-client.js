@@ -36,7 +36,6 @@ function VistaClient(log, metrics, config, rpcClient) {
     this.hmpBatchSize = config['hmp.batch.size'];
     this.extractSchema = config['hmp.extract.schema'];
     log.debug('vista-client.constructor: creating vista subscribe proxy');
-    log.debug('vista-client.constructor: config: %j', config);
     if (rpcClient) {
         this.rpcClient = rpcClient;
     } else {
@@ -54,6 +53,12 @@ function VistaClient(log, metrics, config, rpcClient) {
         }
     });
 }
+
+VistaClient.prototype.childInstance = function (log) {
+    var newInstance = new VistaClient(log, this.metrics, this.config);
+
+    return newInstance;
+};
 
 VistaClient.prototype._getRpcClient = function (vistaId) {
     if (rpcClients[vistaId]) {
@@ -106,9 +111,11 @@ VistaClient.prototype.status = function (patientIdentifier, statusCallback) {
 // rootJobId - This is the job Id of the root job that triggered this subscription
 // jobId - This is the job Id of the job that represents the poller's job when it
 //         receives the data for this patient.
+// priority - The priority of the job.
+// referenceInfo - Reference information that should be passed to Vista.
 // subscribeCallback - The is the function that is called when the RPC call is completed.
 //-------------------------------------------------------------------------------------
-VistaClient.prototype.subscribe = function (vistaId, patientIdentifier, rootJobId, jobId, priority, subscribeCallback) {
+VistaClient.prototype.subscribe = function (vistaId, patientIdentifier, rootJobId, jobId, priority, referenceInfo, subscribeCallback) {
     var self = this;
     var metricsObj = {
         'subsystem': 'Vista',
@@ -144,6 +151,13 @@ VistaClient.prototype.subscribe = function (vistaId, patientIdentifier, rootJobI
         if (priority) {
             params['\"HMPPriority\"'] = priority.toString();
         }
+        if (!_.isEmpty(referenceInfo)) {
+            _.each(referenceInfo, function (value, key) {
+                if ((value) && (key)) {
+                    params['\"refInfo-' + key + '\"'] = value;
+                }
+            });
+        }
         _.each(jobId, function (domainAndJobId) {
             params['\"jobDomainId-' + domainAndJobId.domain + '\"'] = domainAndJobId.jobId;
         });
@@ -152,11 +166,11 @@ VistaClient.prototype.subscribe = function (vistaId, patientIdentifier, rootJobI
             self.log.debug('vista-client.subscribe: Completed calling RPC for pid: %s; error: %s', pid, error);
             var responseWithoutPwd = objUtil.removeProperty(objUtil.removeProperty(response, 'accessCode'), 'verifyCode');
             self.log.debug('vista-client.subscribe: Completed calling RPC for pid: %s; result: %j', pid, responseWithoutPwd);
-            if(!_.isObject(response)) {
+            if (!_.isObject(response)) {
                 try {
                     response = JSON.parse(response);
                 } catch (parseError) {
-                    error = "Could not parse response: " + response + ". Error is: " + parseError;
+                    error = 'Could not parse response: ' + response + '. Error is: ' + parseError;
                 }
             }
             if (response && response.error && response.error.message) {

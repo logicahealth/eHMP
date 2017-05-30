@@ -24,13 +24,13 @@ This cookbook depends only on the common cookbook, but is a dependency of all pr
 ```json
   {
     "machine-1": {
-      "ip_address": "10.1.1.1",
-      "ssh_username": "vagrant",
+      "ip_address": "IP      ",
+      "ssh_username": "REDACTED",
       "ssh_keyname": "~/.vagrant.d/insecure_private_key" 
     },
     "machine-2": {
-      "ip_address": "10.1.1.2",
-      "ssh_username": "vagrant",
+      "ip_address": "IP      ",
+      "ssh_username": "REDACTED",
       "ssh_keyname": "~/.vagrant.d/insecure_private_key" 
     }
   }
@@ -190,7 +190,7 @@ The following options can be set in hash form:
     :box => "vagrant-box-name",
     :network => {
       :private_network => {
-        :ip => "10.1.1.10"
+        :ip => "IP       "
       }
     },
     :provider => {

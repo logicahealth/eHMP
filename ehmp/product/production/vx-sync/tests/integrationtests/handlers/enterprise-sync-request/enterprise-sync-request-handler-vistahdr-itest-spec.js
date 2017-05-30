@@ -34,7 +34,7 @@ xdescribe('enterprise-sync-request-handler.js', function() {
     var jpid;
     var job;
     var host = vx_sync_ip;
-    var port = 5000;
+    var port = PORT;
     var tubename = 'vx-sync-test';
 
     var beanstalkConfig = ({
@@ -120,10 +120,10 @@ xdescribe('enterprise-sync-request-handler.js', function() {
         'vistaSites': {
             '9E7A': _.defaults(wConfig.vistaSites['9E7A'], {
                 'name': 'panorama',
-                'host': '10.2.2.101',
-                'port': 9210,
-                'accessCode': 'pu1234',
-                'verifyCode': 'pu1234!!',
+                'host': 'REDACTED    ',
+                'port': PORT,
+                'accessCode': 'REDACTED',
+                'verifyCode': 'REDACTED',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -132,10 +132,10 @@ xdescribe('enterprise-sync-request-handler.js', function() {
             }),
             'C877': _.defaults(wConfig.vistaSites.C877, {
                 'name': 'kodak',
-                'host': '10.2.2.102',
-                'port': 9210,
-                'accessCode': 'pu1234',
-                'verifyCode': 'pu1234!!',
+                'host': 'REDACTED    ',
+                'port': PORT,
+                'accessCode': 'REDACTED',
+                'verifyCode': 'REDACTED',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -152,8 +152,8 @@ xdescribe('enterprise-sync-request-handler.js', function() {
         },
         jds: _.defaults(wConfig.jds, {
             protocol: 'http',
-            host: '10.2.2.110',
-            port: 9080
+            host: 'REDACTED    ',
+            port: PORT
         }),
         rules: {
             'accept-all': {},
@@ -182,10 +182,10 @@ xdescribe('enterprise-sync-request-handler.js', function() {
         'vistaSitesByStationCombined': {
             '500': _.defaults(wConfig.vistaSites['9E7A'], {
                 'name': 'panorama',
-                'host': '10.2.2.101',
-                'port': 9210,
-                'accessCode': 'pu1234',
-                'verifyCode': 'pu1234!!',
+                'host': 'REDACTED    ',
+                'port': PORT,
+                'accessCode': 'REDACTED',
+                'verifyCode': 'REDACTED',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -195,10 +195,10 @@ xdescribe('enterprise-sync-request-handler.js', function() {
             }),
             '507': _.defaults(wConfig.vistaSites.C877, {
                 'name': 'kodak',
-                'host': '10.2.2.102',
-                'port': 9210,
-                'accessCode': 'pu1234',
-                'verifyCode': 'pu1234!!',
+                'host': 'REDACTED    ',
+                'port': PORT,
+                'accessCode': 'REDACTED',
+                'verifyCode': 'REDACTED',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -208,10 +208,10 @@ xdescribe('enterprise-sync-request-handler.js', function() {
             }),
             '536': _.defaults(wConfig.hdr.hdrSites.FFC7, {
                 'name': 'panorama',
-                'host': '10.2.2.101',
-                'port': 9210,
-                'accessCode': 'pu1234',
-                'verifyCode': 'pu1234!!',
+                'host': 'REDACTED    ',
+                'port': PORT,
+                'accessCode': 'REDACTED',
+                'verifyCode': 'REDACTED',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -221,10 +221,10 @@ xdescribe('enterprise-sync-request-handler.js', function() {
             }),
             '551': _.defaults(wConfig.hdr.hdrSites['2939'], {
                 'name': 'panorama',
-                'host': '10.2.2.101',
-                'port': 9210,
-                'accessCode': 'pu1234',
-                'verifyCode': 'pu1234!!',
+                'host': 'REDACTED    ',
+                'port': PORT,
+                'accessCode': 'REDACTED',
+                'verifyCode': 'REDACTED',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,

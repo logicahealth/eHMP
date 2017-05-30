@@ -144,7 +144,7 @@ define([
             this.collectionParser = options.collectionParser || function(collection) {
                 return collection;
             };
-            this.collection = options.collection;
+
             this.gistModel = options.gistModel;
             //this is the model for the outer part of the composite view
             this.model = new Backbone.Model();

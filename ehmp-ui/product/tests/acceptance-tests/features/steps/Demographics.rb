@@ -1,3 +1,21 @@
+class DemographicsActions
+  extend ::RSpec::Matchers
+  def self.open_patient_info_tray
+    ehmp = PobDemographicsElements.new
+    expect(ehmp.wait_for_btn_demographic).to eq(true), "Expected a button to open patient information tray"
+    ehmp.btn_demographic.click
+    expect(ehmp.wait_for_fld_patient_info_title).to eq(true), "Expected patient information tray to display"
+  end
+
+  def self.open_provider_info_tray
+    ehmp = PobDemographicsElements.new
+    ehmp.wait_for_fld_patient_information_provider
+    expect(ehmp).to have_fld_patient_information_provider, "Expected a button to open provider information tray"
+    ehmp.fld_patient_information_provider.click
+    expect(ehmp.wait_for_fld_provider_info_title).to eq(true), "Expected Provider Information tray to display"
+  end
+end
+
 Then(/^user selects Patient Demographic drop down$/) do
   @ehmp = PobDemographicsElements.new
   max_attempt = 2

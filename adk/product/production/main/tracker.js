@@ -9,11 +9,23 @@ define([
         listenForChangeOnUserTracking: function() {
             UserService.getUserSession().once('change:status', function(model, value) {
                 if (_.isEqual(value, "loggedout")) {
-                    Messaging.once('user:sessionEnd', _.bind(Tracker.listenForChangeOnUserTracking(), Tracker));
+                    Messaging.once('user:sessionEnd', _.bind(Tracker.listenForChangeOnUserTracking, Tracker));
                 } else {
                     Tracker.startTracking();
                 }
             });
+        },
+        saveTrackerInformation: function(screenName) {
+            var AnalyticModel = Backbone.Model.extend({
+                url: ResourceService.buildUrl("tracker")
+            });
+            var model = new AnalyticModel(Tracker.gatherInformation());
+            if (_.isEqual(UserService.getUserSession().get('status'), "loggedin") && !_.isUndefined(UserService.getUserSession().get('status'))) {
+                model.save();
+            } else {
+                Backbone.history.urls = [];
+                Backbone.history.url_times = [];
+            }
         },
         gatherInformation: function(screenName) {
             var obj = {};
@@ -35,24 +47,14 @@ define([
             obj.history = _.takeRight(Backbone.history.urls, 3);
             obj.historyTimes = _.takeRight(Backbone.history.url_times, 3);
             obj.ehmp_app_version = Messaging.request("appManifest").get("overall_version");
-            var json = JSON.stringify(obj);
-            var AnalyticModel = Backbone.Model.extend({
-                url: ResourceService.buildUrl("tracker")
-            });
-            var model = new AnalyticModel(obj);
-            if (_.isEqual(UserService.getUserSession().get('status'), "loggedin") && !_.isUndefined(UserService.getUserSession().get('status'))) {
-                model.save();
-            } else {
-                Backbone.history.urls = [];
-                Backbone.history.url_times = [];
-            }
+            return obj;
         },
         startTracking: function() {
-            Messaging.getChannel('tracking').on("screen:change", this.gatherInformation);
+            Messaging.getChannel('tracking').on("screen:change", this.saveTrackerInformation);
             Messaging.once('user:sessionEnd', _.bind(this.stopTracking, this)); //user:beginSessionEnd
         },
         stopTracking: function() {
-            Messaging.getChannel('tracking').off("screen:change", this.gatherInformation);
+            Messaging.getChannel('tracking').off("screen:change", this.saveTrackerInformation);
             this.listenForChangeOnUserTracking();
         },
         start: function() {

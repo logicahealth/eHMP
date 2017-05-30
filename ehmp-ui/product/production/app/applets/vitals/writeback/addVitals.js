@@ -131,7 +131,7 @@ define([
                 name: "bp-radio-po",
                 label: "Blood Pressure Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-sm"],
+                extraClasses: ["top-margin-lg", "left-padding-xs"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -174,7 +174,7 @@ define([
                 name: "temperature-radio-po",
                 label: "Temperature Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-sm"],
+                extraClasses: ["top-margin-lg", "left-padding-xs"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -206,7 +206,7 @@ define([
                 name: "pulse-radio-po",
                 label: "Pulse Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-sm"],
+                extraClasses: ["top-margin-lg", "left-padding-xs"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -283,7 +283,7 @@ define([
                 name: "respiration-radio-po",
                 label: "Respiration Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-sm"],
+                extraClasses: ["top-margin-lg", "left-padding-xs"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -364,7 +364,7 @@ define([
                 name: "po-radio-po",
                 label: "Pulse Oximetry Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-sm"],
+                extraClasses: ["top-margin-lg", "left-padding-xs"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -433,7 +433,7 @@ define([
                 name: "height-radio-po",
                 label: "Height Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-sm"],
+                extraClasses: ["top-margin-lg", "left-padding-xs"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -494,7 +494,7 @@ define([
                 name: "weight-radio-po",
                 label: "Weight Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-sm"],
+                extraClasses: ["top-margin-lg", "left-padding-xs"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -570,7 +570,7 @@ define([
                     name: "pain-radio-po",
                     label: "Pain Vital",
                     srOnlyLabel: true,
-                    extraClasses: ["top-margin-sm"],
+                    extraClasses: ["top-margin-lg", "left-padding-xs"],
                     options: [{
                         value: "Unavailable",
                         label: "Unavailable"
@@ -618,7 +618,7 @@ define([
                 name: "cg-radio-po",
                 label: "Circumference / Girth Vital",
                 srOnlyLabel: true,
-                extraClasses: ["top-margin-sm"],
+                extraClasses: ["top-margin-lg", "left-padding-xs"],
                 options: [{
                     value: "Unavailable",
                     label: "Unavailable"
@@ -804,7 +804,19 @@ define([
             "ExpandCollapseAllButton": ".expandCollapseAll button",
             "ExpandCollapseAllControl": ".expandCollapseAll",
             "PassButton": ".button-control.facility-name-pass-po",
-            "AllCollapsibleContainers": ".bpSection, .temperatureSection, .pulseSection, .respirationSection, .poSection, .heightSection, .weightSection, .cgSection"
+            "AllCollapsibleContainers": ".bpSection, .temperatureSection, .pulseSection, .respirationSection, .poSection, .heightSection, .weightSection, .cgSection",
+            // used for mapping selectors to model attributes (should be same as `name` attr)
+            'dateTakenInput': '.dateTakenInput input.flexible-input',
+            'bpInputValue': '.bpInputValue input',
+            'temperatureInputValue': '.temperatureInputValue input[type="text"]',
+            'pulseInputValue': '.pulseInputValue input',
+            'respirationInputValue': '.respirationInputValue input',
+            'O2InputValue': '.O2InputValue input',
+            'suppO2InputValue': '.suppO2InputValue input',
+            'heightInputValue': '.heightInputValue input[type="text"]',
+            'weightInputValue': '.weightInputValue input[type="text"]',
+            'circumValue': 'circumValue input[type="text"]',
+            'pain-value-po': '.pain-value-po input'
         },
         fields: F423Fields,
         getNextVitalInput: function(current) {
@@ -855,61 +867,61 @@ define([
             writebackUtils.unregisterChecks();
         },
         events: {
-            'blur #dateTakenInput': function() {
+            'blur @ui.dateTakenInput': function() {
                 this.validateFormField('dateTakenInput', validationUtils.validateMeasuredDateAndTime);
             },
-            'blur #bpInputValue': function() {
+            'blur @ui.bpInputValue': function() {
                 this.validateFormField('bpInputValue', validationUtils.validateBPFields);
             },
-            'blur #temperatureInputValue': function() {
+            'blur @ui.temperatureInputValue': function() {
                 this.validateFormField('temperatureInputValue', validationUtils.validateTemperatureFields);
             },
-            'blur #pulseInputValue': function() {
+            'blur @ui.pulseInputValue': function() {
                 this.validateFormField('pulseInputValue', validationUtils.validatePulseFields);
             },
-            'blur #respirationInputValue': function() {
+            'blur @ui.respirationInputValue': function() {
                 this.validateFormField('respirationInputValue', validationUtils.validateRespirationFields);
             },
-            'blur #O2InputValue': function() {
+            'blur @ui.O2InputValue': function() {
                 this.validateFormField('O2InputValue', validationUtils.validateO2Fields);
             },
-            'blur #suppO2InputValue': function() {
+            'blur @ui.suppO2InputValue': function() {
                 this.validateFormField('suppO2InputValue', validationUtils.validateSuppO2Fields);
             },
-            'blur #heightInputValue': function() {
+            'blur @ui.heightInputValue': function() {
                 this.validateFormField('heightInputValue', validationUtils.validateHeightFields);
             },
-            'blur #weightInputValue': function() {
+            'blur @ui.weightInputValue': function() {
                 this.validateFormField('weightInputValue', validationUtils.validateWeightFields);
             },
-            'blur #circumValue': function() {
+            'blur @ui.circumValue': function() {
                 this.validateFormField('circumValue', validationUtils.validateCircumferenceFields);
             },
-            'blur #pain-value-po': function() {
+            'blur .pain-value-po input': function() { // not using @ui cuz of dash separated name
                 this.validateFormField('pain-value-po', validationUtils.validatePainFields);
             },
-            'input #bpInputValue': function(e) {
+            'input @ui.bpInputValue': function(e) {
                 this.inputDisableHandler(e.target.value, 'bloodPressure');
             },
-            'input #temperatureInputValue': function(e) {
+            'input @ui.temperatureInputValue': function(e) {
                 this.inputDisableHandler(e.target.value, 'temperature');
             },
-            'input #pulseInputValue': function(e) {
+            'input @ui.pulseInputValue': function(e) {
                 this.inputDisableHandler(e.target.value, 'pulse');
             },
-            'input #respirationInputValue': function(e) {
+            'input @ui.respirationInputValue': function(e) {
                 this.inputDisableHandler(e.target.value, 'respiration');
             },
-            'input #O2InputValue': function(e) {
+            'input @ui.O2InputValue': function(e) {
                 this.inputDisableHandler(e.target.value, 'pulseOximetry');
             },
-            'input #heightInputValue': function(e) {
+            'input @ui.heightInputValue': function(e) {
                 this.inputDisableHandler(e.target.value, 'height');
             },
-            'input #weightInputValue': function(e) {
+            'input @ui.weightInputValue': function(e) {
                 this.inputDisableHandler(e.target.value, 'weight');
             },
-            'input #pain-value-po': function(e) {
+            'input .pain-value-po input': function(e) { // not using @ui cuz of dash separated name
                 var val = e.target.value;
 
                 if (val) {
@@ -922,7 +934,7 @@ define([
                     }
                 }
             },
-            'input #circumValue': function(e) {
+            'input @ui.circumValue': function(e) {
                 this.inputDisableHandler(e.target.value, 'circumferenceGirth');
             },
             'click @ui.PassButton': function(e) {
@@ -1184,9 +1196,9 @@ define([
             validationFunction(this.model, this.model.get(formField));
 
             if (this.model.errorModel.get(formField)) {
-                window.requestAnimationFrame(function() {
-                    $('#' + formField).focus();
-                });
+                window.requestAnimationFrame(_.bind(function() {
+                    this.$(this.ui[formField].selector).focus();
+                }, this));
             }
         }
     });

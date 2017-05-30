@@ -36,17 +36,15 @@ define([
         },
         ui: {
             'NavigationBarContainer':'.context-navigation-bar',
-            'Button': '.global-date-picker-button',
+            'Button': '.global-date-picker-open-popover--button',
             'Spikeline': '#gdr-spikeline',
             'Compact': '#globalDatePicker-compact',
-            'GlobalDateContainer': '#globalDate-region',
+            'GlobalDateContainer': '.global-date-picker-popover-region',
             'DateRegionMinimized': '#date-region-minimized',
-            'HiddenDiv': '#hiddenDiv'
-        },
-        attributes: {
-            id : 'navigation-date'
+            'HiddenDiv': '.global-date-picker-popover-container'
         },
         template: LayoutTemplate,
+        className: 'global-date-picker',
         regions: {
             gdrSpikeline: '@ui.Spikeline',
             globalDateRegion: '@ui.GlobalDateContainer',
@@ -54,7 +52,7 @@ define([
         },
         events: {
             'click @ui.Button': 'togglePopover',
-            'click .globalDatePicker-popupRegion:not(".hidden")': 'closePopover',
+            'click .global-date-picker-popover-container:not(".hidden")': 'closePopover',
             'keydown @ui.Compact': 'handleEnterOrSpaceBar',
             'click @ui.Spikeline': 'togglePopover',
             'keydown @ui.Spikeline': 'handleEnterOrSpaceBar'
@@ -76,6 +74,12 @@ define([
 
             this.currentWorkspaceModel = ADK.WorkspaceContextRepository.currentWorkspaceAndContext;
             this.listenTo(this.currentWorkspaceModel, 'change:workspace', this.determineIfGlobalDatePickerIsShown);
+        },
+        childEvents: {
+            'close:expanded:gdt': function() {
+                this.$('.global-date-picker-popover-container').toggleClass('hidden');
+                this.$('#date-region-minimized').focus();
+            }
         },
         determineIfGlobalDatePickerIsShown: function(){
             var currentScreenModel = ADK.WorkspaceContextRepository.currentWorkspace;
@@ -120,7 +124,7 @@ define([
         },
         closePopover: function(e){
             var orinialEventTraget = e.originalEvent.target;
-            if ($(orinialEventTraget).hasClass('globalDatePicker-popupRegion') && !$(orinialEventTraget).hasClass('hidden')){
+            if ($(orinialEventTraget).hasClass('global-date-picker-popover-container') && !$(orinialEventTraget).hasClass('hidden')){
                 this.togglePopover();
             }
         },

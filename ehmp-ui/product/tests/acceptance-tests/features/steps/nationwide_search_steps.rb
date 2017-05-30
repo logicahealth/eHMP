@@ -26,24 +26,28 @@ end
 When(/^the Nationwide tray displays a Last name selection box$/) do
   nationwide_tray = PobStaffView.new
   nationwide_tray.wait_for_fld_nationwide_lastname
+  expect(nationwide_tray.fld_nationwide_lastname_label.text.upcase).to eq("LAST NAME *")
   expect(nationwide_tray).to have_fld_nationwide_lastname
 end
 
 When(/^the Nationwide tray displays a First name selection box$/) do
   nationwide_tray = PobStaffView.new
   nationwide_tray.wait_for_fld_nationwide_firstname
+  expect(nationwide_tray.fld_nationwide_firstname_label.text.upcase).to eq("FIRST NAME *")
   expect(nationwide_tray).to have_fld_nationwide_firstname
 end
 
 When(/^the Nationwide tray displays a DOB selection box$/) do
   nationwide_tray = PobStaffView.new
   nationwide_tray.wait_for_fld_nationwide_dob
+  expect(nationwide_tray.fld_nationwide_dob_label.text.upcase).to eq("DATE OF BIRTH")
   expect(nationwide_tray).to have_fld_nationwide_dob
 end
 
 When(/^the Nationwide tray displays a SSN selection box$/) do
   nationwide_tray = PobStaffView.new
   nationwide_tray.wait_for_fld_nationwide_ssn
+  expect(nationwide_tray.fld_nationwide_SSN_label.text).to eq("SSN *")
   expect(nationwide_tray).to have_fld_nationwide_ssn
 end
 
@@ -123,13 +127,13 @@ When(/^the Nationwide Tray patient name search results are in format Last Name, 
   end
 end
 
-When(/^the Nationwide Tray date of birth search results are in format Date \(Agey\) \- Gender \(first letter\)$/) do
+When(/^the Nationwide Tray date of birth search results are in format Date \(Agey\)$/) do
   nationwide_tray = PobStaffView.new
   dobs = nationwide_tray.fld_nw_result_dob_text
   expect(dobs.length).to be > 0
 
   dobs.each do | dob |
-    result = dob.match(/\d{2}\/\d{2}\/\d{4}  \(\d+y\)  - [MFU]/)
+    result = dob.match(/\d{2}\/\d{2}\/\d{4}  \(\d+y\)/)
     expect(result).to_not be_nil, "#{dob} did not match expected format"
   end
 end
@@ -188,4 +192,14 @@ Then(/^the user selects nationwide search patient "([^"]*)"$/) do |search_value|
   patient_search = PatientSearch2.instance
   expect(patient_search.perform_action("Confirm")).to be_true
   expect(wait_until_dom_has_confirmflag_or_patientsearch).to be_true, "Patient selection did not complete successfully"
+end
+
+Then(/^the Nationwide Tray gender search results are in terms Male, Female or Unknown$/) do
+  nationwide_tray = PobStaffView.new
+  genders = nationwide_tray.allowable_genders
+  wait_until { nationwide_tray.fld_nw_gender_results.length > 0 }
+  gender_text = nationwide_tray.nationwide_gender_text  
+  gender_text.each do | temp_gender |
+    expect(genders).to include temp_gender
+  end
 end

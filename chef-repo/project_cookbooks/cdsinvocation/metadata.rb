@@ -4,7 +4,7 @@ maintainer_email "team-milkway@vistacore.us"
 license          "All rights reserved"
 description      "Installs/Configures cdsinvocation"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.6"
+version          "2.1.11"
 
 supports "centos"
 
@@ -20,10 +20,10 @@ depends "keytool", "=0.7.0"
 #############################
 # wrapper_cookbook
 #############################
-depends "java_wrapper", "2.1.1"
-
+depends "java_wrapper", "2.1.2"
 
 #############################
 # custom_cookbook
 #############################
-depends "tomcat", "2.1.1"
+depends "tomcat", "2.1.3"
+depends "ehmp_synapse", "2.1.1"

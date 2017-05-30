@@ -152,37 +152,6 @@ define([
                 position: 'top'
             };
 
-            dataGridOptions.onClickRow = function(model, event, gridView) {
-                event.preventDefault();
-
-                if (model instanceof PanelModel) {
-                    if (!$(event.currentTarget).data('isOpen')) {
-                        $(event.currentTarget).data('isOpen', true);
-                    } else {
-                        var k = $(event.currentTarget).data('isOpen');
-                        k = !k;
-                        $(event.currentTarget).data('isOpen', k);
-                    }
-
-                    var i = $(event.currentTarget).find('.js-has-panel i');
-                    if (i.length) {
-                        if (i.hasClass('fa-chevron-up')) {
-                            i.removeClass('fa-chevron-up')
-                                .addClass('fa-chevron-down');
-                            $(event.currentTarget).data('isOpen', true);
-                        } else {
-                            i.removeClass('fa-chevron-down')
-                                .addClass('fa-chevron-up');
-                            $(event.currentTarget).data('isOpen', false);
-                        }
-                    }
-                    gridView.expandRow(model, event);
-                } else {
-                    model.set('isNotAPanel', true);
-                    getDetailsModal(model);
-                }
-            };
-
             this.dataGridOptions = dataGridOptions;
             this.dataGridOptions.collection = new ADK.UIResources.Fetch.Immunizations.Collection([], {
                 isClientInfinite: true
@@ -200,10 +169,10 @@ define([
             DataGridRow: ADK.Applets.BaseGridApplet.DataGrid.DataGridRow.extend({
                 serializeModel: function() {
                     var data = this.model.toJSON();
-                    data = Util.getTimeSinceDate(data);
-                    data = Util.getContraindicated(data);
-                    data = Util.getFacilityColor(data);
-                    data = Util.hasCommentBubble(data);
+                    data.timeSinceDate = Util.createTimeSinceDate(_.get(data, 'administeredDateTime', ''));
+                    data.contraindicatedDisplay = Util.createContraindicated(_.get(data, 'contraindicated', ''));
+                    data.facilityColor = Util.createFacilityColor(_.get(data, 'facilityCode', ''));
+                    data.commentBubble = Util.hasCommentBubble(_.get(data, 'comment'));
                     return data;
                 }
             })
@@ -220,7 +189,7 @@ define([
         view.resetSharedModalDateRangeOptions();
 
         var modalOptions = {
-            'title': Util.getModalTitle(model),
+            'title': Util.createModalTitle(model),
             'size': 'xlarge',
             'nextPreviousCollection': collection || model.collection
         };
@@ -256,8 +225,9 @@ define([
                 uid: params.uid
             }),
             title: function() {
-                return Util.getModalTitle(this.model || this.view.prototype.model);
+                return Util.createModalTitle(this.model || this.view.prototype.model);
             },
+            showLoading: false
         };
     });
 
@@ -274,8 +244,8 @@ define([
             var CollectionDef = ADK.UIResources.Fetch.Immunizations.Collection.extend({
                 model: Backbone.Model.extend({
                     parse: function(response) {
-                        ResourcePoolUtils.getAdministeredFormatted(response);
-                        Util.getTimeSinceDate(response);
+                        response.administeredFormatted = ResourcePoolUtils.formatAdministeredDateTime(_.get(response, 'administeredDateTime', ''));
+                        response.timeSinceDate = Util.createTimeSinceDate(_.get(response, 'administeredDateTime', ''));
                         response.isReaction = Util.isReaction(_.get(response, 'reactionName', ''));
                         response.seriesNorm = Util.seriesNormalization(_.get(response, 'seriesName', ''));
                         return response;

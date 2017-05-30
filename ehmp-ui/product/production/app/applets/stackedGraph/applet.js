@@ -4,7 +4,6 @@ define([
 ], function(StackedGraphView, PickListView) {
     "use strict";
 
-    var stackedGraphChannel = ADK.Messaging.getChannel('stackedGraph');
     var applet = {
         id: 'stackedGraph',
         getRootView: function(viewTypeOption) {
@@ -26,8 +25,6 @@ define([
 
         defaultView: StackedGraphView
     };
-
-
 
     return applet;
 });

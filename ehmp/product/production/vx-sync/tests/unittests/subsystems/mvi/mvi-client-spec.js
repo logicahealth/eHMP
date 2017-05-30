@@ -39,6 +39,7 @@ var patientFull = {
     }]
 };
 var jds = {}; //not used in unit tests
+jds.childInstance = function() { return jds; };
 
 var url = format('%s://%s:%s', config.mvi.protocol, config.mvi.host, config.mvi.port);
 
@@ -553,6 +554,7 @@ describe('mvi-client.js', function() {
                     callback(null, '10108V420871^NI^USVHA^200M^A\r\n3^PI^USVHA^500^A\r\n3^PI^USVHA^507^A\r\n32758^PI^USVHA^742V1^A\r\n19^PI^USVHA^536^A\r\n0000000003^NI^USDOD^200DOD^A\r\n38^PI^USVHA^547^A\r\n28^PI^USVHA^551^A');
                 }
             };
+            mockVistaClient.childInstance = function() { return mockVistaClient; };
 
             mviClient.clientMap['9E7A'] = mockVistaClient;
 
@@ -585,6 +587,7 @@ describe('mvi-client.js', function() {
                     callback(null, '3^PI^USVHA^500^A\r\n3^PI^USVHA^507^A\r\n32758^PI^USVHA^742V1^A\r\n19^PI^USVHA^536^A\r\n0000000003^NI^USDOD^200DOD^A\r\n38^PI^USVHA^547^A\r\n28^PI^USVHA^551^A');
                 }
             };
+            mockVistaClient.childInstance = function() { return mockVistaClient; };
 
             var jdsResult = {
                 data: {
@@ -639,6 +642,7 @@ describe('mvi-client.js', function() {
                     });
                 }
             };
+            mockVistaClient.childInstance = function() { return mockVistaClient; };
 
             mviClient.clientMap['9E7A'] = mockVistaClient;
 
@@ -671,6 +675,7 @@ describe('mvi-client.js', function() {
                     callback(null, []);
                 }
             };
+            mockVistaClient.childInstance = function() { return mockVistaClient; };
 
             mviClient.clientMap['9E7A'] = mockVistaClient;
 
@@ -701,6 +706,7 @@ describe('mvi-client.js', function() {
                     callback(null, '3^PI^USVHA^500^A\r\n3^PI^USVHA^507^A\r\n32758^PI^USVHA^742V1^A\r\n19^PI^USVHA^536^A\r\n0000000003^NI^USDOD^200DOD^A\r\n38^PI^USVHA^547^A\r\n28^PI^USVHA^551^A');
                 }
             };
+            mockVistaClient.childInstance = function() { return mockVistaClient; };
 
             var mockJdsClient = {
                 getPtDemographicsByPid: function(pid, callback) {
@@ -709,6 +715,7 @@ describe('mvi-client.js', function() {
                     }, null, null);
                 }
             };
+            mockJdsClient.childInstance = function() { return mockJdsClient; };
 
             var mviClient = new MviClient(log, log, config, mockJdsClient);
 
@@ -741,6 +748,7 @@ describe('mvi-client.js', function() {
                     callback(null, '3^PI^USVHA^500^A\r\n3^PI^USVHA^507^A\r\n32758^PI^USVHA^742V1^A\r\n19^PI^USVHA^536^A\r\n0000000003^NI^USDOD^200DOD^A\r\n38^PI^USVHA^547^A\r\n28^PI^USVHA^551^A');
                 }
             };
+            mockVistaClient.childInstance = function() { return mockVistaClient; };
 
             var mockJdsClient = {
                 getPtDemographicsByPid: function(pid, callback) {
@@ -749,6 +757,7 @@ describe('mvi-client.js', function() {
                     }, null);
                 }
             };
+            mockJdsClient.childInstance = function() { return mockJdsClient; };
 
             var mviClient = new MviClient(log, log, config, mockJdsClient);
 
@@ -795,6 +804,7 @@ describe('mvi-client.js', function() {
                     }, jdsResult);
                 }
             };
+            mockJdsClient.childInstance = function() { return mockJdsClient; };
 
             var mviClient = new MviClient(log, log, config, mockJdsClient);
 
@@ -827,6 +837,7 @@ describe('mvi-client.js', function() {
                     }, null);
                 }
             };
+            mockJdsClient.childInstance = function() { return mockJdsClient; };
 
             var mviClient = new MviClient(log, log, config, mockJdsClient);
 
@@ -858,6 +869,7 @@ describe('mvi-client.js', function() {
                     }, null);
                 }
             };
+            mockJdsClient.childInstance = function() { return mockJdsClient; };
 
             var mviClient = new MviClient(log, log, config, mockJdsClient);
 
@@ -889,6 +901,7 @@ describe('mvi-client.js', function() {
                     }, null);
                 }
             };
+            mockJdsClient.childInstance = function() { return mockJdsClient; };
 
             var mviClient = new MviClient(log, log, config, mockJdsClient);
 
@@ -918,6 +931,7 @@ describe('mvi-client.js', function() {
                     callback(null, null, null);
                 }
             };
+            mockJdsClient.childInstance = function() { return mockJdsClient; };
 
             var mviClient = new MviClient(log, log, config, mockJdsClient);
 

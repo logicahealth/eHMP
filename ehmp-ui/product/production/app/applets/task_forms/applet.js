@@ -5,10 +5,16 @@ define([
     "app/applets/task_forms/activities/sign_note/viewController",
     "app/applets/task_forms/activities/order.consult/viewController",
     "app/applets/task_forms/activities/order.lab/viewController",
-    "app/applets/task_forms/activities/requests/responseViewController"
+    "app/applets/task_forms/activities/requests/responseViewController",
+    "app/applets/task_forms/activities/order.consult/utils",
 ], function(CommonViewController, FITFOBTViewController, SimpleActivityViewController,
-            SignNoteViewController, ConsultsViewController, LabViewController, ResponseViewController) {
+            SignNoteViewController, ConsultsViewController, LabViewController, ResponseViewController, OrderConsultUtils) {
     "use strict";
+
+    var channel = ADK.Messaging.getChannel('task_forms');
+    channel.reply('get_consult_utils', function() {
+        return OrderConsultUtils;
+    });
 
     var appletDefinition = {
         appletId: "task_forms"

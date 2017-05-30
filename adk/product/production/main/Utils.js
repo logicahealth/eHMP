@@ -10,7 +10,6 @@ define([
     'main/adk_utils/stringUtils',
     'main/adk_utils/crsUtil',
     'main/adk_utils/cssCalcUtils',
-    'main/Session',
     'backbone-sorted-collection',
     'moment',
     'underscore',
@@ -28,13 +27,12 @@ define([
     StringUtils,
     CrsUtil,
     CssCalcUtils,
-    Session,
     SortedCollection,
-    moment,
+    Moment,
     _,
     writebackUtils,
     TooltipMappings
-){
+) {
     "use strict";
 
     var Utils = {};
@@ -63,7 +61,7 @@ define([
 
         if (date) {
             if (displayFormat.search(/(DD)/) <= 0) {
-                return moment(date, sourceFormat).format(displayFormat);
+                return new Moment(date, sourceFormat).format(displayFormat);
             }
             return new Utils.dateUtils.StringFormatter(date, sourceFormat).format(displayFormat);
         } else {
@@ -73,23 +71,22 @@ define([
 
     Utils.applyMaskingForSpecialCharacters = function(val) {
         val.inputmask("Regex", {
-                regex: "^[a-zA-Z0-9\\s]*$"
+            regex: "^[a-zA-Z0-9\\s]*$"
         });
     };
 
     Utils.getTimeSince = function(dateString, showMinutes) {
         var future = false;
-        var startDate = moment(dateString, 'YYYYMMDDHHmmssSSS');
+        var startDate = new Moment(dateString, 'YYYYMMDDHHmmssSSS');
         var isDataValid = startDate.isValid();
-        //var endDate = moment(dateString, 'YYYYMMDDHHmmssSSS');
-        //var startDate  = moment();
-          var endDate = moment();
-        if(startDate.isAfter(endDate)){
-            endDate = moment(dateString, 'YYYYMMDDHHmmssSSS');
-            startDate = moment();
-            future = true;  
+
+        var endDate = new Moment();
+        if (startDate.isAfter(endDate)) {
+            endDate = new Moment(dateString, 'YYYYMMDDHHmmssSSS');
+            startDate = new Moment();
+            future = true;
         }
-        var duration = moment.duration(endDate.diff(startDate));
+        var duration = Moment.duration(endDate.diff(startDate));
 
         var years = parseFloat(duration.asYears());
         var days = parseFloat(duration.asDays());
@@ -141,15 +138,15 @@ define([
             finalResultText = finalResultText + 's';
         }
         //if(!future) finalResult = "-"+finalResult;
-        if(future) finalResult = "";
+        if (future) finalResult = "";
 
         //recent check
         var recent = false;
         if (months <= 6) {
             recent = true;
         }
-        if(!isDataValid){
-          finalResult = "None";
+        if (!isDataValid) {
+            finalResult = "None";
         }
         return {
             timeSince: finalResult,
@@ -237,7 +234,7 @@ define([
 
 
     var DATE_FORMAT = "YYYYMMDDHHmmSSsss";
-    var DATE_LENGTH =  DATE_FORMAT.length;
+    var DATE_LENGTH = DATE_FORMAT.length;
     var ZERO_FILL = DATE_FORMAT.replace(/./g, '0');
 
     /*
@@ -319,15 +316,25 @@ define([
                     }, order);
                     break;
             }
-            collection.reset(sortedCollection._collection.models);
+            collection.reset(sortedCollection._collection.models, {
+                silent: true
+            });
+
+            collection.trigger('sort', collection);
+
             /* remove sorting so that the backbone collection callbacks don't point to last setSort Call when clicking the refresh button */
             sortedCollection.removeSort();
         },
         resetSort: function(collection) {
             /* if collection has been sorted reset collection to presorted state */
-            if (collection.unsortedModels !== undefined) {
-                collection.reset(collection.unsortedModels);
-                collection.unsortedModels = undefined;
+            if (collection.unsortedModels) {
+                collection.reset(collection.unsortedModels, {
+                    silent: true
+                });
+
+                collection.trigger('sort', collection);
+
+                delete collection.unsortedModels;
             }
         },
         getSortOrderFromAlias: function(sortOrderAliasString) {
@@ -557,183 +564,219 @@ define([
     };
 
     Utils.getViewTypeSize = function(viewType) {
-        return  viewType === 'summary'  ? {'x':4, 'y':4} : 
-                viewType === 'expanded' ? {'x':8, 'y':6} :
-                viewType === 'gist'     ? {'x':4, 'y':3} : null;
+        return viewType === 'summary' ? {
+                'x': 4,
+                'y': 4
+            } :
+            viewType === 'expanded' ? {
+                'x': 8,
+                'y': 6
+            } :
+            viewType === 'gist' ? {
+                'x': 4,
+                'y': 3
+            } : null;
     };
     Utils.getViewTypeMinSize = function(viewType) {
-        return  viewType === 'summary'  ? {'x':4, 'y':4} : 
-                viewType === 'expanded' ? {'x':8, 'y':4} :
-                viewType === 'gist'     ? {'x':4, 'y':3} : null;
+        return viewType === 'summary' ? {
+                'x': 4,
+                'y': 4
+            } :
+            viewType === 'expanded' ? {
+                'x': 8,
+                'y': 4
+            } :
+            viewType === 'gist' ? {
+                'x': 4,
+                'y': 3
+            } : null;
     };
     Utils.getViewTypeMaxSize = function(viewType) {
-        return  viewType === 'summary'  ? {'x':8, 'y':12}  : 
-                viewType === 'expanded' ? {'x':12,'y':12}  :
-                viewType === 'gist'     ? {'x':8, 'y':12}  : null;
+        return viewType === 'summary' ? {
+                'x': 8,
+                'y': 12
+            } :
+            viewType === 'expanded' ? {
+                'x': 12,
+                'y': 12
+            } :
+            viewType === 'gist' ? {
+                'x': 8,
+                'y': 12
+            } : null;
     };
 
-    Utils.chartDataBinning = function (graphData, config) {
-       // by default no data normalization
-       // but user can define normalization function as config parameter
-       var DEBUG = config.debug || false;
-       //if(diag) DEBUG = true;
-       if (_.isUndefined(graphData)) {
-           console.log("ADK.util.chartDataBinning() - graphData input error");
-           return null;
-       }
-       if (_.isUndefined(config)) {
-           if (DEBUG) console.log("ADK.util.chartDataBinning() - config input error");
-           return null;
-       }
-       var fNormalization;
-       var barWidth = config.barWidth || 5;
-       var barPadding = config.barPadding || 2;
-       var chartWidth = config.chartWidth;
-       if (_.isFunction(config.normal_function)) {
-           fNormalization = config.normal_function;
-       }else{
-           fNormalization = function(val){ return val;};
-       }
-       var data = graphData.series || [];
-       var nColumns = chartWidth / (barWidth + barPadding);
-       var firstEvent = moment(graphData.oldestDate);
-       var lastEvent = moment(graphData.newestDate);
-       var diffDays = lastEvent.diff(firstEvent, "days");
-       var daysPerBin = Math.round(diffDays / nColumns);
-       if(daysPerBin < 1) daysPerBin =1; // not accurate enough at this time (1 day scale)
-       if (DEBUG) {
-           console.log("Chart width: " + chartWidth+ "px");
-           console.log("Number of chart columns: " + Math.round(nColumns));
-           console.log("First event: " + moment(firstEvent).format("YYYY-MM-DD"));
-           console.log("Last event: " + moment(lastEvent).format("YYYY-MM-DD"));
-           console.log("Days range: " + diffDays);
-           console.log("Days per bean: " + daysPerBin);
-       }
-
-     var agrData = [];
-     var arrMatrix = [];
-     var indStart = 0;
-     var indStop = 0;
-     var mxVal = 0;
-     var binEge = daysPerBin;
-     var binVal = 0;
-     var binDate;
-     var iteration = 0;
-     var dataMatrixLength =diffDays;
-    // create empty data matrix
-     if(diffDays <=2 ) dataMatrixLength++;  // for short period of time (24 hours) adds extra empty data set
-     for(var emx = 0; emx < dataMatrixLength; emx++){
-        arrMatrix.push([emx,0]);
-      }
-    if(graphData.isDuration){  // for duration data binning
-        if (DEBUG) console.log("Duration binning");
-        for(var j=0;j<data.length; j++){
-            indStart = Math.round((moment.duration(data[j][0].diff(firstEvent))).asDays());
-            indStop = Math.round((moment.duration(data[j][1].diff(firstEvent))).asDays());
-            if(indStop === indStart){ indStop++;} // for 1 day period
-            if(indStop > arrMatrix.length){ indStart--; indStop--;}
-            if (DEBUG) {
-                console.log("index Start --->>" +indStart );
-                console.log(data[j][0]);
-                console.log("index Stop --->>" +indStop );
-                console.log(data[j][1]);
-            }
-            for(var dmx=indStart;dmx<indStop; dmx++){
-               mxVal = arrMatrix[dmx][1] + 1;
-               arrMatrix[dmx][1] = mxVal;
-            }
+    Utils.chartDataBinning = function(graphData, config) {
+        // by default no data normalization
+        // but user can define normalization function as config parameter
+        var DEBUG = config.debug || false;
+        //if(diag) DEBUG = true;
+        if (_.isUndefined(graphData)) {
+            console.log("ADK.util.chartDataBinning() - graphData input error");
+            return null;
         }
-         //----- Agrigate duration data --------------------
-        for(var f=0;f<arrMatrix.length; f++){
-          if(f<=binEge){
-            binVal = binVal + arrMatrix[f][1];
-          }else{
-            if(binVal !== 0){
-                binDate = moment.utc(moment(firstEvent).add(Math.round((daysPerBin*iteration)+(daysPerBin/2)), "days")).valueOf();
-                agrData.push([binDate,fNormalization(binVal)]);
-                binVal = 0;
-            }
-            binEge = binEge + daysPerBin;
-            iteration++;
-          }
+        if (_.isUndefined(config)) {
+            if (DEBUG) console.log("ADK.util.chartDataBinning() - config input error");
+            return null;
         }
-    }else{
-        if(DEBUG) console.log("Normal binning");
-        var indexDay = 0;
-        var indexNow = Math.round((moment.duration(moment().diff(firstEvent))).asDays());
+        var fNormalization;
+        var barWidth = config.barWidth || 5;
+        var barPadding = config.barPadding || 2;
+        var chartWidth = config.chartWidth;
+        if (_.isFunction(config.normal_function)) {
+            fNormalization = config.normal_function;
+        } else {
+            fNormalization = function(val) {
+                return val;
+            };
+        }
+        var data = graphData.series || [];
+        var nColumns = chartWidth / (barWidth + barPadding);
+        var firstEvent = new Moment(graphData.oldestDate);
+        var lastEvent = new Moment(graphData.newestDate);
+        var diffDays = lastEvent.diff(firstEvent, "days");
+        var daysPerBin = Math.round(diffDays / nColumns);
+        if (daysPerBin < 1) daysPerBin = 1; // not accurate enough at this time (1 day scale)
+        if (DEBUG) {
+            console.log("Chart width: " + chartWidth + "px");
+            console.log("Number of chart columns: " + Math.round(nColumns));
+            console.log("First event: " + new Moment(firstEvent).format("YYYY-MM-DD"));
+            console.log("Last event: " + new Moment(lastEvent).format("YYYY-MM-DD"));
+            console.log("Days range: " + diffDays);
+            console.log("Days per bean: " + daysPerBin);
+        }
 
-      for(var iterData=0; iterData<data.length; iterData++){
-         indexDay = Math.round((moment.duration(moment(data[iterData][0]).diff(firstEvent))).asDays());
-         if((diffDays>=indexDay)&&(indexDay>=0)){ // if day index is in time range
-            mxVal = arrMatrix[indexDay][1] + data[iterData][1];
-            arrMatrix[indexDay][1] = mxVal;
-            if(DEBUG) {
-                console.log("Day index--->>" + arrMatrix[indexDay][0]);
-                console.log("Value--->>" + arrMatrix[indexDay][1]);
-             }
-         }else{
-            if(DEBUG) console.log("Error ---->>event is out of chart's time range");
-         }
-      }
-         //----- Agrigate discrete data --------------------
-        var splBinLeft  = 0;
-        var splBinRight = 0;
-        var lastBin     = 0;
-        var isSplBin    = false;
-        var isLastBin   = false;
-        for(var matxIter=0;matxIter<arrMatrix.length; matxIter++){
-            binVal = binVal + arrMatrix[matxIter][1];
-            if(matxIter<=binEge){
-                  if(matxIter === indexNow){ //check for splited binn
-                      // splitted bin calculation
-                      if(DEBUG) console.log("Splitted Bin----->>!!!");
-                      splBinRight = binEge - matxIter; //length of splitted bin right side
-                      splBinLeft  = daysPerBin - splBinRight; //length of splitted bin left side
-                        if(binVal !== 0){
-                            binDate = moment.utc(moment(firstEvent).add(Math.round((daysPerBin*iteration)+(splBinLeft/2)), "days")).valueOf();
-                            agrData.push([binDate,fNormalization(binVal)]);
-                            if(DEBUG) console.log("Left side of splitted Date->>"+ moment(binDate).format("YYYY-MM-DD") + " value->" +binVal);
+        var agrData = [];
+        var arrMatrix = [];
+        var indStart = 0;
+        var indStop = 0;
+        var mxVal = 0;
+        var binEge = daysPerBin;
+        var binVal = 0;
+        var binDate;
+        var iteration = 0;
+        var dataMatrixLength = diffDays;
+        // create empty data matrix
+        if (diffDays <= 2) dataMatrixLength++; // for short period of time (24 hours) adds extra empty data set
+        for (var emx = 0; emx < dataMatrixLength; emx++) {
+            arrMatrix.push([emx, 0]);
+        }
+        if (graphData.isDuration) { // for duration data binning
+            if (DEBUG) console.log("Duration binning");
+            for (var j = 0; j < data.length; j++) {
+                var beginDate = Moment.isMoment(data[j][0]) ? data[j][0] : new Moment(data[j][0]);
+                var endDate = Moment.isMoment(data[j][1]) ? data[j][1] : new Moment(data[j][1]);
+                indStart = Math.round((Moment.duration(beginDate.diff(firstEvent))).asDays());
+                indStop = Math.round((Moment.duration(endDate.diff(firstEvent))).asDays());
+                if (indStop === indStart) {
+                    indStop++;
+                } // for 1 day period
+                if (indStop > arrMatrix.length) {
+                    indStart--;
+                    indStop--;
+                }
+                if (DEBUG) {
+                    console.log("index Start --->>" + indStart);
+                    console.log(data[j][0]);
+                    console.log("index Stop --->>" + indStop);
+                    console.log(data[j][1]);
+                }
+                for (var dmx = indStart; dmx < indStop; dmx++) {
+                    mxVal = arrMatrix[dmx][1] + 1;
+                    arrMatrix[dmx][1] = mxVal;
+                }
+            }
+            //----- Agrigate duration data --------------------
+            for (var f = 0; f < arrMatrix.length; f++) {
+                if (f <= binEge) {
+                    binVal = binVal + arrMatrix[f][1];
+                } else {
+                    if (binVal !== 0) {
+                        binDate = Moment.utc(new Moment(firstEvent).add(Math.round((daysPerBin * iteration) + (daysPerBin / 2)), "days")).valueOf();
+                        agrData.push([binDate, fNormalization(binVal)]);
+                        binVal = 0;
+                    }
+                    binEge = binEge + daysPerBin;
+                    iteration++;
+                }
+            }
+        } else {
+            if (DEBUG) console.log("Normal binning");
+            var indexDay = 0;
+            var indexNow = Math.round((Moment.duration(new Moment().diff(firstEvent))).asDays());
+
+            for (var iterData = 0; iterData < data.length; iterData++) {
+                indexDay = Math.round((Moment.duration(new Moment(data[iterData][0]).diff(firstEvent))).asDays());
+                if ((diffDays >= indexDay) && (indexDay >= 0)) { // if day index is in time range
+                    mxVal = arrMatrix[indexDay][1] + data[iterData][1];
+                    arrMatrix[indexDay][1] = mxVal;
+                    if (DEBUG) {
+                        console.log("Day index--->>" + arrMatrix[indexDay][0]);
+                        console.log("Value--->>" + arrMatrix[indexDay][1]);
+                    }
+                } else {
+                    if (DEBUG) console.log("Error ---->>event is out of chart's time range");
+                }
+            }
+            //----- Agrigate discrete data --------------------
+            var splBinLeft = 0;
+            var splBinRight = 0;
+            var lastBin = 0;
+            var isSplBin = false;
+            var isLastBin = false;
+            for (var matxIter = 0; matxIter < arrMatrix.length; matxIter++) {
+                binVal = binVal + arrMatrix[matxIter][1];
+                if (matxIter <= binEge) {
+                    if (matxIter === indexNow) { //check for splited binn
+                        // splitted bin calculation
+                        if (DEBUG) console.log("Splitted Bin----->>!!!");
+                        splBinRight = binEge - matxIter; //length of splitted bin right side
+                        splBinLeft = daysPerBin - splBinRight; //length of splitted bin left side
+                        if (binVal !== 0) {
+                            binDate = Moment.utc(new Moment(firstEvent).add(Math.round((daysPerBin * iteration) + (splBinLeft / 2)), "days")).valueOf();
+                            agrData.push([binDate, fNormalization(binVal)]);
+                            if (DEBUG) console.log("Left side of splitted Date->>" + new Moment(binDate).format("YYYY-MM-DD") + " value->" + binVal);
                             binVal = 0;
                         }
                         isSplBin = true;
-                  }
-                if(isLastBin){
-                    if(binVal !== 0){
-                        binDate = moment.utc(moment(firstEvent).add(Math.round((daysPerBin*iteration)+(lastBin/2)), "days")).valueOf();
-                        agrData.push([binDate,fNormalization(binVal)]);
-                        if(DEBUG) console.log("Last bin Date->>"+ moment(binDate).format("YYYY-MM-DD") + " value->" +binVal);
                     }
-                }
-          }else{
-              if(isSplBin){  // right part of splitted bin
-                        if(binVal !== 0){
-                            binDate = moment.utc(moment(firstEvent).add(Math.round((daysPerBin*iteration+splBinLeft)+(splBinRight/2)), "days")).valueOf();
-                            agrData.push([binDate,fNormalization(binVal)]);
-                            if(DEBUG) console.log("Right side of sptitted Date->>"+ moment(binDate).format("YYYY-MM-DD") + " value->" +binVal);
+                    if (isLastBin) {
+                        if (binVal !== 0) {
+                            binDate = Moment.utc(new Moment(firstEvent).add(Math.round((daysPerBin * iteration) + (lastBin / 2)), "days")).valueOf();
+                            agrData.push([binDate, fNormalization(binVal)]);
+                            if (DEBUG) console.log("Last bin Date->>" + new Moment(binDate).format("YYYY-MM-DD") + " value->" + binVal);
+                        }
+                    }
+                } else {
+                    if (isSplBin) { // right part of splitted bin
+                        if (binVal !== 0) {
+                            binDate = Moment.utc(new Moment(firstEvent).add(Math.round((daysPerBin * iteration + splBinLeft) + (splBinRight / 2)), "days")).valueOf();
+                            agrData.push([binDate, fNormalization(binVal)]);
+                            if (DEBUG) console.log("Right side of sptitted Date->>" + new Moment(binDate).format("YYYY-MM-DD") + " value->" + binVal);
                             binVal = 0;
                         }
-                  isSplBin = false;
-              }else{
-                if(binVal !== 0){ // normal binn
-                    binDate = moment.utc(moment(firstEvent).add(Math.round((daysPerBin*iteration)+(daysPerBin/2)), "days")).valueOf();
-                    agrData.push([binDate,fNormalization(binVal)]);
-                    if(DEBUG) console.log("Normal bin Date->>"+ moment(binDate).format("YYYY-MM-DD") + " value->" +binVal);
-                    binVal = 0;
+                        isSplBin = false;
+                    } else {
+                        if (binVal !== 0) { // normal binn
+                            binDate = Moment.utc(new Moment(firstEvent).add(Math.round((daysPerBin * iteration) + (daysPerBin / 2)), "days")).valueOf();
+                            agrData.push([binDate, fNormalization(binVal)]);
+                            if (DEBUG) console.log("Normal bin Date->>" + new Moment(binDate).format("YYYY-MM-DD") + " value->" + binVal);
+                            binVal = 0;
+                        }
+                    }
+                    binEge = binEge + daysPerBin;
+                    if (binEge > arrMatrix.length) {
+                        lastBin = daysPerBin - (binEge - arrMatrix.length);
+                        binEge = arrMatrix.length;
+                        isLastBin = true;
+                    }
+                    iteration++;
                 }
-              }
-            binEge = binEge + daysPerBin;
-            if(binEge>arrMatrix.length){
-                lastBin = daysPerBin - (binEge - arrMatrix.length);
-                binEge =arrMatrix.length;
-                isLastBin = true;
             }
-            iteration++;
-          }
         }
-    }
-       if (DEBUG) console.log(agrData);
-       return agrData;
-   };
+        if (DEBUG) console.log(agrData);
+        return agrData;
+    };
 
 
     Utils.isNotUndefinedAndNotNull = function(object) {

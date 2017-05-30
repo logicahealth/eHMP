@@ -5,7 +5,6 @@
     }
     .panel-primary {
         background-color: $pure-white;
-        border-radius: 0px;
         box-shadow: none;
         height: 85%; //phantomjs fallback
         height: calc(100% - 110px);
@@ -16,26 +15,6 @@
         .panel-heading, .panel-footer {
             background-color: $primary-lighter;
             padding: 10px;
-        }
-        .backgrid-filter {
-            .fa-filter {
-                left: 10px;
-                position: absolute;
-                top: 9px;
-                z-index: 1;
-            }
-            input[type='search'].workspace-filter-input {
-                padding: 5px 25px;
-                width: 90%; //phantomjs fallback
-                width: 30%;
-            }
-            .clear {
-                display: none;
-                left: auto;
-                position: relative;
-                right: 21px;
-                top: 6px;
-            }
         }
         .workspace-table {
             &.faux-table {
@@ -49,10 +28,6 @@
                     .table-row {
                         border-bottom: 1px solid $grey-light;
                         height: 3.3em;
-                        .table-cell,
-                        .table-cell > button {
-                            height: 100%;
-                        }
                         .fa {
                             color: $primary-dark;
                         }
@@ -70,7 +45,6 @@
                             background-color: $pure-white;
                         }
                         .form-group {
-                            margin-bottom: 0;
                             .has-error .form-control,
                             .has-error .form-control:focus {
                                 border: solid 1px #843534;
@@ -96,7 +70,6 @@
                                 border: none;
                                 -webkit-box-shadow: none;
                                 box-shadow: none;
-                                font-size: 11px;
                                 text-overflow: ellipsis;
                             }
                             .editor-title-element {
@@ -125,8 +98,6 @@
                                     .twitter-typeahead {
                                         width: 100%;
                                         input {
-                                            font-size: 12px;
-                                            height: 30px;
                                             padding-right: 20px;
                                         }
                                     }
@@ -137,15 +108,6 @@
                                         top: 13px;
                                     }
                                     .tt-dropdown-menu {
-                                        background-color: $pure-white;
-                                        border-radius: 4px;
-                                        box-shadow: 1px 1px 10px 0px $grey-darker;
-                                        display: none;
-                                        max-height: 135px;
-                                        overflow-x: hidden;
-                                        overflow-y: auto;
-                                        padding: 5px;
-                                        width: 100%;
                                         .tt-suggestion {
                                             &.tt-cursor {
                                                 background-color: $primary-lightest;

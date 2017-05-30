@@ -52,7 +52,7 @@ Feature: F361 FHIR Domain - MedicationPrescription
       And the FHIR results contain "medicationprescription"    
       | field                                 | value                         |
       | resource.resourceType                 | MedicationPrescription        | 
-      | resource.id                           | CONTAINS urn:va:med:9016:10104V248233:5587940 |
+      | resource.id                           | CONTAINS urn.va.med.9016.10104V248233.5587940 |
       | resource.status                       | CONTAINS active                        |
       | resource.contained.resourceType       | CONTAINS Medication                    |
       | resource.contained.name               | CONTAINS METHOCARBAMOL TAB             |
@@ -66,7 +66,7 @@ Feature: F361 FHIR Domain - MedicationPrescription
        And the FHIR results contain "medicationprescription"    
       | field                                 | value                         |
       | resource.resourceType                 | MedicationPrescription        | 
-      | resource.id                           | CONTAINS urn:va:med:9E7A:229:27952     |
+      | resource.id                           | CONTAINS urn.va.med.9E7A.229.27952     |
       | resource.status                       | CONTAINS stopped                       |
       | resource.contained.resourceType       | CONTAINS Medication                    |
       | resource.contained.name               | CONTAINS METOPROLOL TARTRATE TAB                    |
@@ -80,7 +80,7 @@ Feature: F361 FHIR Domain - MedicationPrescription
       And the FHIR results contain "medicationprescription"    
       | field                                 | value                         |
       | resource.resourceType                 | MedicationPrescription        | 
-      | resource.id                           | CONTAINS urn:va:med:9E7A:229:28052     |
+      | resource.id                           | CONTAINS urn.va.med.9E7A.229.28052     |
       | resource.status                       | CONTAINS stopped                       |
       | resource.contained.resourceType       | CONTAINS Medication                    |
       | resource.contained.name               | CONTAINS SIMVASTATIN TAB               |

@@ -1,4 +1,5 @@
-// Applies to both workflows inside and outside the tray
+// workflows inside and outside the tray
+// outside - signature, notes, requests
 .workflow-controller {
     position: static;
     .modal-body {
@@ -8,17 +9,12 @@
             padding: 5px 0px;
             margin: 0px;
         }
-        .col-xs-6 {
-            .col-xs-6 {
-                .control.form-group {
-                    margin-left: -10px;
-                }
-            }
-        }
+    }
+    .modal-footer .form-group {
+        margin-bottom: 0;
     }
 }
-
-// Applies to only workflows outside the tray
+// workflows outside the tray
 .workflow-container {
     .modal-body {
         max-height: 470px;
@@ -26,24 +22,11 @@
     }
     .modal-header {
         border-radius: 6px 6px 0px 0px;
-        .header-btns {
-            .btn.btn-icon {
-                color: inherit;
-                &:hover {
-                    color: $primary;
-                }
+        .header-btns .btn.btn-icon {
+            color: inherit;
+            &:hover {
+                color: $primary;
             }
         }
     }
 }
-
-///////////*These styles are for Mercury specific*///////
-.tray-region {
-    width: 450px;
-    > .workflow-container > .modal-dialog {
-        margin: 0;
-        width: 100%;
-    }
-}
-
-///////////*These styles are for Mercury specific*///////

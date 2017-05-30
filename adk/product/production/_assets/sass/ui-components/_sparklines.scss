@@ -1,84 +1,94 @@
+// I was not able to find these styles being used anywhere. I will remove them entirely before pushing to master
+// Before that, I'd like to wait for another round of testing to doublecheck that they're not being used.
+
+// .graph-container {
+// 	height: 21px;
+// 	.normal-value {
+// 		stroke: $secondary;
+// 		fill: $secondary;
+// 	}
+// 	.abnormal-value {
+// 		stroke: $red;
+// 		fill: $red;
+// 	}
+// 	.previous-value {
+// 		stroke: $pure-white;
+// 		fill: $pure-black;
+// 	}
+// 	.critical-value {
+// 		stroke: $red;
+// 		fill: $red;
+// 	}
+// 	.abnormal-range, .texture-hashed rect {
+// 		stroke: $grey-lighter;
+// 		fill: $grey-lighter;
+// 	}
+// }
+
+$sparkline-red:         #CC0000;
+$sparkline-orange:      #FF9900;
+$sparkline-blue:        #0099FF;
+
 .graph-container {
-	height: 21px;
-	.normalValue {
-		stroke: $secondary;
-		fill: $secondary;
-	}
-	.abnormalValue {
-		stroke: $red;
-		fill: $red;
-	}
-	.previousValue {
-		stroke: $pure-white;
-		fill: $pure-black;
-	}
-	.criticalValue {
-		stroke: $red;
-		fill: $red;
-	}
-	.abnormalRange, .textureHashed rect{
-		stroke: $grey-lighter;
-		fill: $grey-lighter;
-	}
-	.criticalRange.lowRange{
-		stroke: $grey-light;
-		fill: $grey-light;
-	}
+    height: 23px;
+    line-height: 13px;
+    min-height: 23px;
+    min-width: 70px;
+    .highcharts-container {
+        background-color: #f2f2f2;
+        max-height: 23px;
+    }
 }
 
 .gist-trend-graph {
     background-color: transparent;
     overflow: visible;
     display: inline;
-    margin-left: -2px;
     height: 21px;
+    margin-left: -2px;
     min-width: calc(100% - 2px);
-    .outterBorder {
+    .outer-border {
         stroke: $grey-light;
         fill: transparent;
     }
-    .criticalRange {
+    .abnormal-range {
         stroke: $grey-light;
         fill: $grey-light;
     }
-    .abnormalRange {
-        stroke: $grey-light;
-        fill: $grey-light;
+    .normal-range {
+        stroke: $pure-white;
+        fill: $pure-white;
     }
-    .normalRange {
-        stroke: #ffffff;
-        fill: #ffffff;
+    .trend-line {
+        stroke: $pure-black;
     }
-    .trendLine {
-        stroke: #000000;
+    .previous-value {
+        stroke: $pure-black;
+        fill: $pure-black;
     }
-    .previousValue {
-        stroke: #000000;
-        fill: #000000;
+    .critical-value {
+        stroke: $sparkline-red;
+        fill: $sparkline-red;
     }
-    .criticalValue {
-        stroke: #cc0000;
-        fill: #cc0000;
+    .abnormal-value {
+        stroke: $sparkline-orange;
+        fill: $sparkline-orange;
     }
-    .abnormalValue {
-        stroke: #ff9900;
-        fill: #ff9900;
+    .normal-value {
+        stroke: $sparkline-blue;
+        fill: $sparkline-blue;
     }
-    .normalValue {
-        stroke: #0099ff;
-        fill: #0099ff;
-    }
-    .textureHashed {
+    .texture-hashed {
         path {
             stroke: $grey-dark;
             stroke-width: 1;
             fill: none;
         }
         rect {
-            @extend .abnormalRange;
+            @extend .abnormal-range;
         }
     }
-    .valueMarker {
+    .value-marker {
         overflow: visible;
     }
 }

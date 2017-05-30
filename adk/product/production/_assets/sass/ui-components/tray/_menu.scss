@@ -7,12 +7,14 @@ aside.tray-container {
         margin: 0px;
         background: $pure-white;
         border-left: 1px solid $grey;
+        padding-left: 0;
+        list-style-type: none;
         > li {
             padding: 0px;
             min-height: 30px; // default fallback
             width: 30px;
             margin: 2px 0px 0 0;
-            &:first-child{
+            &:first-child {
                 margin: 0;
             }
             > button {
@@ -47,7 +49,8 @@ aside.tray-container {
                     margin-left: -1px;
                     margin-top: -3px;
                 }
-                .fa-stack, i {
+                .fa-stack,
+                i {
                     height: 18px;
                     width: 18px;
                 }

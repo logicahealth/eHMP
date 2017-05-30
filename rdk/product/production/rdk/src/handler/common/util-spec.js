@@ -1,21 +1,25 @@
+'use strict';
+
 var _ = require('lodash');
+var bunyan = require('bunyan');
 var clincialObjectsSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
 var activityEventProcess = require('../../resources/activitymanagement/activities/eventprocessor/activity-event-process-resource');
 var rdk = require('../../core/rdk');
 var pidValidator = rdk.utils.pidValidator;
+var bunyan = require('bunyan');
 
-var logger = {
-    debug: function(data) { 'use strict'; return; },
-    warn: function(data) { 'use strict'; return; },
-    error: function(data) { 'use strict'; return; },
-    trace: function(data) { 'use strict'; return; }
-};
+var logger = sinon.stub(bunyan.createLogger({
+    name: 'util-spec.js'
+}));
 
 var util = require('./util');
 
 var testJob = {
     type: 'activity-management-event',
-    patientIdentifier: { type: 'pid', value: '9E7A;3' },
+    patientIdentifier: {
+        type: 'pid',
+        value: '9E7A;3'
+    },
     jpid: '39b4d293-90dc-442c-aa9c-4c58191340ea',
     rootJobId: '1',
     dataDomain: 'order-lab',
@@ -45,60 +49,60 @@ var testJob = {
 var config = {
     'rdk': {
         protocol: 'http',
-        host: '10.4.4.105',
-        activityPort: 8888,
-        writePort:9999,
+        host: 'REDACTED    ',
+        activityPort: PORT,
+        writePort: PORT,
         timeout: 60000,
-        accessCode: 'pu1234',
-        verifyCode: 'pu1234!!',
+        accessCode: 'REDACTED',
+        verifyCode: 'REDACTED',
         activityURI: '/resource/activities/startactivityevent',
         writeURI: '/resource/write-health-data/patient'
     },
     'jdsServer': {
-        'baseUrl': 'http://10.2.2.110:9080',
+        'baseUrl': 'http://REDACTED         ',
         'timeout': 120000
     },
     'generalPurposeJdsServer': {
-        'baseUrl': 'http://10.2.2.110:9080',
+        'baseUrl': 'http://REDACTED         ',
         'urlLengthLimit': 120
     },
     'jbpm': {
-        'baseUrl': 'http://10.4.4.208:8080',
+        'baseUrl': 'http://REDACTED         ',
         'apiPath': '/business-central/rest',
         'adminUser': {
-            'username': 'bpmsAdmin',
-            'password': 'bpm$@dmin11'
+            'username': 'REDACTED',
+            'password': 'REDACTED'
         },
         'nurseUser': {
-            'username': 'Susan',
-            'password': 'Password1!'
+            'username': 'REDACTED',
+            'password': 'REDACTED'
         },
         'healthcheckEndpoint': '/history/instances',
         'activityDatabase': {
-            'user': 'activitydbuser',
-            'password': 'activitydb$11',
-            'connectString': '10.4.4.208:1521/xe'
+            'user': 'REDACTED',
+            'password': 'REDACTED',
+            'connectString': 'REDACTED         /xe'
         },
         'notifsDatabase': {
-            'user': 'notifdb',
-            'password': 'notifdb',
-            'connectString': '10.4.4.208:1521/xe'
+            'user': 'REDACTED',
+            'password': 'REDACTED',
+            'connectString': 'REDACTED         /xe'
         }
     }
 };
 
 var activityRequestType = 'activity-management-event';
 
-var activityEventProcessResourceRepsonse = {
-    'name':'host-logger',
-    'hostname':'rdk-jrobinson-master',
-    'pid':7919,
-    'level':50,
-    'message':'No matches',
-    'status':200,
-    'msg':'',
-    'time':'2016-05-16T13:44:19.270Z',
-    'v':0
+var activityEventProcessResourceResponse = {
+    'name': 'host-logger',
+    'hostname': 'rdk-jrobinson-master',
+    'pid': 7919,
+    'level': 50,
+    'message': 'No matches',
+    'status': 200,
+    'msg': '',
+    'time': '2016-05-16T13:44:19.270Z',
+    'v': 0
 };
 
 var mockClinicalObject = {
@@ -116,14 +120,13 @@ var mockClinicalObject = {
                 'urgency': 'Urgent',
                 'assignTo': 'My Teams',
                 'routingCode': ''
-             },
-            'signals': [
-            ],
+            },
+            'signals': [],
             'requests': [{
                 'taskInstanceId': '1234',
                 'urgencyId': '10',
                 'urgency': 'Urgent',
-                'earliestDate':'20160329000000',
+                'earliestDate': '20160329000000',
                 'latestDate': '20160420000000',
                 'title': 'Post procedure follow-up',
                 'assignTo': 'My Teams',
@@ -141,17 +144,16 @@ var mockClinicalObject = {
 };
 
 describe('handler-util-spec.js', function() {
-    'use strict';
 
     var mockActivityEventProcess;
     beforeEach(function() {
         logger._level = 50;
-        mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function (req, res) {
-            return null, activityEventProcessResourceRepsonse;
+        mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
+            return null, activityEventProcessResourceResponse;
         });
     });
 
-    afterEach(function(){
+    afterEach(function() {
         mockActivityEventProcess.restore();
         logger._level = 40;
     });
@@ -165,21 +167,27 @@ describe('handler-util-spec.js', function() {
         });
 
         it('throws an error if given incorrect job type', function() {
-            var badTypeJob = {type: 'definitely-not-an-activity-management-event'};
+            var badTypeJob = {
+                type: 'definitely-not-an-activity-management-event'
+            };
             util.isValidRequest(badTypeJob, activityRequestType, logger, function(error, result) {
                 expect(error).to.eql('Incorrect job type');
             });
         });
 
         it('throws an error if job record is undefined', function() {
-            var badRecordJob =  {type : testJob.type};
+            var badRecordJob = {
+                type: testJob.type
+            };
             util.isValidRequest(badRecordJob, activityRequestType, logger, function(error, result) {
                 expect(error).to.eql('post data is undefined!');
             });
         });
 
         it('throws an error if job record is empty', function() {
-            var badRecordJob =  {record : {}};
+            var badRecordJob = {
+                record: {}
+            };
             badRecordJob.type = testJob.type;
             util.isValidRequest(badRecordJob, activityRequestType, logger, function(error, result) {
                 expect(error).to.eql('post data is empty');
@@ -193,6 +201,56 @@ describe('handler-util-spec.js', function() {
         });
     });
 
+    describe('setupIdLogger', function() {
+        it('does not modify the logger when an invalid job is passed', function() {
+            var originalLogger = {
+                child: sinon.spy()
+            };
+            var testLogger = util.setupIdLogger(null, originalLogger);
+            expect(testLogger).to.eql(originalLogger);
+            expect(testLogger.child.called).to.be.false();
+        });
+
+        it('creates a logger with requestId and sid when available', function() {
+            var loggerTestJob = _.cloneDeep(testJob);
+            _.assign(loggerTestJob, {
+                'referenceInfo': {
+                    'requestId': 'abc',
+                    'sessionId': '123'
+                }
+            });
+            var dummyLogger = {
+                child: function() {}
+            };
+            var childStub = sinon.stub(dummyLogger, 'child', function(childObj) {
+                return childObj;
+            });
+            util.setupIdLogger(loggerTestJob, dummyLogger);
+            expect(childStub.calledOnce).to.be.true();
+            expect(childStub.calledWith({
+                'requestId': 'abc',
+                'sid': '123'
+            })).to.be.true();
+        });
+
+        it('creates a logger without requestId and sid when unavailable', function() {
+            var loggerTestJob = _.cloneDeep(testJob);
+
+            var dummyLogger = {
+                child: function() {}
+            };
+            var childStub = sinon.stub(dummyLogger, 'child', function(childObj) {
+                return childObj;
+            });
+            util.setupIdLogger(loggerTestJob, dummyLogger);
+            expect(childStub.calledOnce).to.be.true();
+            expect(childStub.calledWith({
+                'requestId': undefined,
+                'sid': undefined
+            })).to.be.true();
+        });
+    });
+
     describe('isSecondarySitePid', function() {
         it('Should return false because isPrimarySite and isIcn will be true.', function() {
             var mockIsPrimarySite = sinon.stub(pidValidator, 'isPrimarySite', function() {
@@ -201,7 +259,11 @@ describe('handler-util-spec.js', function() {
             var mockIsIcn = sinon.stub(pidValidator, 'isIcn', function() {
                 return true;
             });
-            var response = util.isSecondarySitePid({'patientIdentifier': {'value': '3877;3'}}, logger);
+            var response = util.isSecondarySitePid({
+                'patientIdentifier': {
+                    'value': '3877;3'
+                }
+            }, logger);
             expect(response).to.eql(false);
             mockIsPrimarySite.restore();
             mockIsIcn.restore();
@@ -214,7 +276,11 @@ describe('handler-util-spec.js', function() {
             var mockIsIcn = sinon.stub(pidValidator, 'isIcn', function() {
                 return false;
             });
-            var response = util.isSecondarySitePid({'patientIdentifier': {'value': '3877;3'}}, logger);
+            var response = util.isSecondarySitePid({
+                'patientIdentifier': {
+                    'value': '3877;3'
+                }
+            }, logger);
             expect(response).to.eql(false);
             mockIsPrimarySite.restore();
             mockIsIcn.restore();
@@ -227,7 +293,11 @@ describe('handler-util-spec.js', function() {
             var mockIsIcn = sinon.stub(pidValidator, 'isIcn', function() {
                 return true;
             });
-            var response = util.isSecondarySitePid({'patientIdentifier': {'value': '3877;3'}}, logger);
+            var response = util.isSecondarySitePid({
+                'patientIdentifier': {
+                    'value': '3877;3'
+                }
+            }, logger);
             expect(response).to.eql(false);
             mockIsPrimarySite.restore();
             mockIsIcn.restore();
@@ -240,7 +310,11 @@ describe('handler-util-spec.js', function() {
             var mockIsIcn = sinon.stub(pidValidator, 'isIcn', function() {
                 return false;
             });
-            var response = util.isSecondarySitePid({'patientIdentifier': {'value': '3877;3'}}, logger);
+            var response = util.isSecondarySitePid({
+                'patientIdentifier': {
+                    'value': '3877;3'
+                }
+            }, logger);
             expect(response).to.eql(true);
             mockIsPrimarySite.restore();
             mockIsIcn.restore();
@@ -261,7 +335,7 @@ describe('handler-util-spec.js', function() {
 
     describe('findClinicalObject ', function() {
         it('Should return null, {} because there were no clinical objects found.', function() {
-            var mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function (logger, appConfig, model, loadReference, callback) {
+            var mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
                 return callback(['Clinical Object Not Found']);
             });
             util.findClinicalObject(testJob.record.referenceId, testJob.record.patientUid, config, activityRequestType, logger, true, function(error, result) {
@@ -272,7 +346,7 @@ describe('handler-util-spec.js', function() {
         });
 
         it('Should return error null because there was an error other than clinical object not found.', function() {
-            var mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function (logger, appConfig, model, loadReference, callback) {
+            var mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
                 return callback('Oracle is not responding');
             });
             util.findClinicalObject(testJob.record.referenceId, testJob.record.patientUid, config, activityRequestType, logger, true, function(error, result) {
@@ -283,29 +357,37 @@ describe('handler-util-spec.js', function() {
         });
 
         it('Should return null, {notes:[]} because response.items is null', function() {
-            var mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function (logger, appConfig, model, loadReference, callback) {
-                return callback(null, {'items': null});
+            var mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
+                return callback(null, {
+                    'items': null
+                });
             });
             util.findClinicalObject(testJob.record.referenceId, testJob.record.patientUid, config, activityRequestType, logger, true, function(error, result) {
                 expect(error).to.eql(null);
-                expect(result).to.eql({'notes': []});
+                expect(result).to.eql({
+                    'notes': []
+                });
             });
             mockClincialObjectsSubsystem.restore();
         });
 
         it('Should return null, {notes:[]} because response.items is undefined', function() {
-            var mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function (logger, appConfig, model, loadReference, callback) {
-                return callback(null, {'items': undefined});
+            var mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
+                return callback(null, {
+                    'items': undefined
+                });
             });
             util.findClinicalObject(testJob.record.referenceId, testJob.record.patientUid, config, activityRequestType, logger, true, function(error, result) {
                 expect(error).to.eql(null);
-                expect(result).to.eql({'notes': []});
+                expect(result).to.eql({
+                    'notes': []
+                });
             });
             mockClincialObjectsSubsystem.restore();
         });
 
         it('Should return success', function() {
-            var mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function (logger, appConfig, model, loadReference, callback) {
+            var mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
                 return callback(null, mockClinicalObject);
             });
             util.findClinicalObject(testJob.record.referenceId, testJob.record.patientUid, config, activityRequestType, logger, true, function(error, result) {
@@ -334,6 +416,29 @@ describe('handler-util-spec.js', function() {
             });
             var response = util.buildClinicalObject(testJob, logger);
             expect(response.subDomain).to.eql('order-lab');
+            mockIsPrimarySite.restore();
+        });
+
+        it('Should not set a subDomain when not provided a kind', function() {
+            var mockIsPrimarySite = sinon.stub(pidValidator, 'isPrimarySite', function() {
+                return true;
+            });
+            var clonedJob = _.cloneDeep(testJob);
+            clonedJob.dataDomain = 'order';
+            delete clonedJob.record.kind;
+            var response = util.buildClinicalObject(clonedJob, logger);
+            expect(_.get(response, 'subDomain', 'INVALID')).to.eql('INVALID');
+            mockIsPrimarySite.restore();
+        });
+        it('Should not set a subDomain when provided invalid kind value', function() {
+            var mockIsPrimarySite = sinon.stub(pidValidator, 'isPrimarySite', function() {
+                return true;
+            });
+            var clonedJob = _.cloneDeep(testJob);
+            clonedJob.dataDomain = 'order';
+            clonedJob.record.kind = ['bad', 'data'];
+            var response = util.buildClinicalObject(clonedJob, logger);
+            expect(_.get(response, 'subDomain', 'INVALID')).to.eql('INVALID');
             mockIsPrimarySite.restore();
         });
     });

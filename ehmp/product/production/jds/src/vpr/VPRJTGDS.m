@@ -9,6 +9,8 @@ VPRJTGDS ;KRM/CJE -- Unit Tests for CRUD operations for Generic Data Stores
  ; POST <store> SET^VPRJGDS
  ; POST <store>/index CINDEX^VPRJGDS
  ; GET <store>/index/{indexName} INDEX^VPRJGDS
+ ; POST <store>/template CTEMPLATE^VPRJGDS
+ ; GET <store>/index/{indexName}/{template} INDEX^VPRJGDS
  ; DELETE <store> CLR^VPRJGDS
  Q
 STARTUP  ; Run once before all tests
@@ -41,6 +43,14 @@ SAMPLEINDEX(NAME,FIELDS,SORT,TYPE) ; Setup Index data JSON for Create Index
  Q:$G(SORT)="null" "{""indexName"": """_NAME_""",""fields"": """_FIELDS_""",""type"": """_TYPE_"""}"
  Q:$G(TYPE)="null" "{""indexName"": """_NAME_""",""fields"": """_FIELDS_""",""sort"": """_SORT_"""}"
  Q "{""indexName"": """_NAME_""",""fields"": """_FIELDS_""",""sort"": """_SORT_""",""type"": """_TYPE_"""}"
+ ;
+ ; Setup Template data JSON for Create Template
+SAMPLETEMPLATE(NAME,DIRECTIVES,FIELDS)
+ Q:$G(NAME)="null" "{""fields"": """_FIELDS_""",""directives"": """_DIRECTIVES_"""}"
+ Q:$G(FIELDS)="null" "{""name"": """_NAME_""",""directives"": """_DIRECTIVES_"""}"
+ Q:$G(DIRECTIVES)="null" "{""name"": """_NAME_""",""fields"": """_FIELDS_"""}"
+ Q "{""name"": """_NAME_""",""fields"": """_FIELDS_""",""directives"": """_DIRECTIVES_"""}"
+ ;
  ; Begin Test Suite
  ;
 SETNOSTORE ;; @TEST Error code is set if no store in HTTPREQ
@@ -115,7 +125,7 @@ SETNOUID ;; @TEST POST with no UID
  K ^||TMP("HTTPERR",$J)
  ; Cleanup Vars
  K BODY,RETURN,ARG
- ; Try with a non existant uid field
+ ; Try with a non existent uid field
  ; "null" is a magic string to the SAMPLEDATA generator to prevent the uid field from even being passed
  S BODY(1)=$$SAMPLEDATA("""ehmp-proxy""","null")
  S RETURN=$$SET^VPRJGDS(.ARG,.BODY)
@@ -216,7 +226,7 @@ DELNOGLOBAL ;; @TEST Error code is set if no global is in VPRCONFIG
  ;
 DELIDERR ;; @TEST Error code is set if no uid
  N DATA,OBJECT,ERR,ARGS,HTTPERR
- ; Try with a non existant uid
+ ; Try with a non existent uid
  D DEL^VPRJGDS(.DATA,.ARGS)
  D ASSERT(0,$D(DATA),"No DATA should be returned")
  D ASSERT(400,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP 400 error should have occured")
@@ -348,7 +358,7 @@ GETNOGLOBAL ;; @TEST Error code is set if no global is in VPRCONFIG
  ;
 GETNOID ;; @TEST Data is returned if no uid passed
  N DATA,ARGS,OBJECT,HTTPERR
- ; Try with a non existant uid attribute
+ ; Try with a non existent uid attribute
  D GET^VPRJGDS(.DATA,.ARGS)
  D:$G(DATA)'="" DECODE^VPRJSON(DATA,"OBJECT","ERR")
  D ASSERT(1,$D(DATA),"DATA should be returned")
@@ -373,7 +383,7 @@ GETNOID ;; @TEST Data is returned if no uid passed
  ;
 GETUIDUNK ;; @TEST Error code if uid doesn't exist
  N DATA,ARGS,OBJECT,HTTPERR
- ; Try with a non existant uid attribute
+ ; Try with a non existent uid attribute
  S ARGS("uid")="urn:va:ut:1337"
  D GET^VPRJGDS(.DATA,.ARGS)
  D ASSERT(0,$D(DATA),"No DATA should be returned")
@@ -640,7 +650,7 @@ CINDEXMFIELDS ;; @TEST POST without required fields
  ; Cleanup Vars
  K BODY,RETURN,ARG
  ;
- ; Try with a non existant name
+ ; Try with a non existent name
  ; "null" is a magic string to the SAMPLEINDEX generator to prevent the field from even being passed
  S BODY(1)=$$SAMPLEINDEX("null","roles[]","roles asc","attr")
  S RETURN=$$CINDEX^VPRJGDS(.ARG,.BODY)
@@ -650,7 +660,7 @@ CINDEXMFIELDS ;; @TEST POST without required fields
  ; Cleanup HTTPERR
  K ^||TMP("HTTPERR",$J)
  ;
- ; Try with a non existant fields
+ ; Try with a non existent fields
  ; "null" is a magic string to the SAMPLEINDEX generator to prevent the field from even being passed
  S BODY(1)=$$SAMPLEINDEX("gdsutest","null","roles asc","attr")
  S RETURN=$$CINDEX^VPRJGDS(.ARG,.BODY)
@@ -660,7 +670,7 @@ CINDEXMFIELDS ;; @TEST POST without required fields
  ; Cleanup HTTPERR
  K ^||TMP("HTTPERR",$J)
  ;
- ; Try with a non existant sort
+ ; Try with a non existent sort
  ; "null" is a magic string to the SAMPLEINDEX generator to prevent the field from even being passed
  S BODY(1)=$$SAMPLEINDEX("gdsutest","roles[]","null","attr")
  S RETURN=$$CINDEX^VPRJGDS(.ARG,.BODY)
@@ -670,7 +680,7 @@ CINDEXMFIELDS ;; @TEST POST without required fields
  ; Cleanup HTTPERR
  K ^||TMP("HTTPERR",$J)
  ;
- ; Try with a non existant type
+ ; Try with a non existent type
  ; "null" is a magic string to the SAMPLEINDEX generator to prevent the field from even being passed
  S BODY(1)=$$SAMPLEINDEX("gdsutest","roles[]","roles asc","null")
  S RETURN=$$CINDEX^VPRJGDS(.ARG,.BODY)
@@ -750,7 +760,7 @@ INDEXNOGLOBAL ;; @TEST Error code is set if no global is in VPRCONFIG
  ;
 INDEXNOINDEX ;; @TEST Error code is set if no index specified
  N DATA,OBJECT,ERR,ARGS,HTTPERR,GLOBALSAVE
- ; Try with non-existant indexName
+ ; Try with non-existent indexName
  ; Send it to the URL
  D INDEX^VPRJGDS(.DATA,.ARGS)
  D ASSERT(0,$D(DATA),"DATA returned and there shouldn't be any")
@@ -1124,6 +1134,282 @@ PATCH3 ;; @TEST PATCH new document
  K HTTPREQ("method")
  Q
  ;
+CTEMPLATENOSTORE ;; @TEST Create TEMPLATE - Error code is set if no store in HTTPREQ
+ N RETURN,BODY,ARG,HTTPERR
+ K HTTPREQ
+ ; Create sample JSON
+ S BODY(1)=$$SAMPLETEMPLATE("gdsutest","include, applyOnSave","roles")
+ ; Send it to the URL
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(0,$D(^VPRMETA("template","gdsutest")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^VPRCONFIG("store","ut","template","gdsutest")),"Template Not stored in VPRJCONFIG")
+ D ASSERT(0,$D(^VPRJUTJ("TEMPLATE")),"Templates applied to existing data")
+ D ASSERT(400,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP 400 error should have occured")
+ D ASSERT(253,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 253 reason code should have occurred")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ S HTTPREQ("store")="ut"
+ Q
+ ;
+CTEMPLATENOGLOBAL ;; @TEST Error code is set if no global is in VPRCONFIG
+ N RETURN,BODY,ARG,HTTPERR,GLOBALSAVE
+ ; Create sample JSON
+ S BODY(1)=$$SAMPLETEMPLATE("gdsutest","include, applyOnSave","roles")
+ ; Kill off the global area for the test
+ S GLOBALSAVE=^VPRCONFIG("store","ut","global")
+ K ^VPRCONFIG("store","ut","global")
+ ; Send it to the URL
+ S HTTPREQ("store")="ut"
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(0,$D(^VPRCONFIG("store","ut","global")),"VPRCONFIG global storage area exists and it shouldn't")
+ D ASSERT(0,$D(^VPRMETA("template","gdsutest")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^VPRCONFIG("store","ut","template","gdsutest")),"Template Not stored in VPRJCONFIG")
+ D ASSERT(0,$D(^VPRJUTJ("TEMPLATE")),"Templates applied to existing data")
+ D ASSERT(400,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP 400 error should have occured")
+ D ASSERT(253,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 253 reason code should have occurred")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ ; Restore the global area for the rest of the tests
+ S ^VPRCONFIG("store","ut","global")=GLOBALSAVE
+ Q
+ ;
+CTEMPLATENOJSON ;; @TEST Error code is set if no JSON in body
+ N RETURN,BODY,ARG,HTTPERR,GLOBALSAVE
+ ; Send it to the URL
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(0,$D(^VPRMETA("template","gdsutest")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^VPRCONFIG("store","ut","template","gdsutest")),"Template Not stored in VPRJCONFIG")
+ D ASSERT(0,$D(^VPRJUTJ("TEMPLATE")),"Templates applied to existing data")
+ D ASSERT(400,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP 400 error should have occured")
+ D ASSERT(255,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 255 reason code should have occurred")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ Q
+ ;
+CTEMPLATEJSONERR ;; @TEST Error code is set if JSON is mangled in PUT/POST
+ N RETURN,BODY,ARG,HTTPERR
+ ; Create bad JSON
+ S BODY(1)=$$SAMPLETEMPLATE("gdsutest","include, applyOnSave","roles")
+ S BODY(1)=BODY(1)_":"
+ ; Send it to the URL
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(0,$D(^VPRMETA("template","gdsutest")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^VPRCONFIG("store","ut","template","gdsutest")),"Template Not stored in VPRJCONFIG")
+ D ASSERT(0,$D(^VPRJUTJ("TEMPLATE")),"Templates applied to existing data")
+ D ASSERT(400,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP 400 error should have occured")
+ D ASSERT(202,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 202 reason code should have occurred")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ Q
+ ;
+CTEMPLATEMFIELDS ;; @TEST POST without required fields
+ N RETURN,BODY,ARG,HTTPERR
+ ; Try with an empty string for the name
+ S BODY(1)=$$SAMPLETEMPLATE("","include, applyOnSave","roles")
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(0,$D(^VPRMETA("template","gdsutest")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^VPRCONFIG("store","ut","template","gdsutest")),"Template Not stored in VPRJCONFIG")
+ D ASSERT(0,$D(^VPRJUTJ("TEMPLATE")),"Templates applied to existing data")
+ D ASSERT(400,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should have occured")
+ D ASSERT(273,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 273 reason code should have occurred")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ ; Cleanup Vars
+ K BODY,RETURN,ARG
+ ;
+ ; Try with an empty string for the directives
+ S BODY(1)=$$SAMPLETEMPLATE("gdsutest","","roles")
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(0,$D(^VPRMETA("template","gdsutest")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^VPRCONFIG("store","ut","template","gdsutest")),"Template Not stored in VPRJCONFIG")
+ D ASSERT(0,$D(^VPRJUTJ("TEMPLATE")),"Templates applied to existing data")
+ D ASSERT(400,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should have occured")
+ D ASSERT(273,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 273 reason code should have occurred")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ ; Cleanup Vars
+ K BODY,RETURN,ARG
+ ;
+ ; Try with an empty string for the fields
+ S BODY(1)=$$SAMPLETEMPLATE("gdsutest","include, applyOnSave","")
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(0,$D(^VPRMETA("template","gdsutest")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^VPRCONFIG("store","ut","template","gdsutest")),"Template Not stored in VPRJCONFIG")
+ D ASSERT(0,$D(^VPRJUTJ("TEMPLATE")),"Templates applied to existing data")
+ D ASSERT(400,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should have occured")
+ D ASSERT(273,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 273 reason code should have occurred")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ ; Cleanup Vars
+ K BODY,RETURN,ARG
+ ;
+ ; Try with an empty string for all
+ S BODY(1)=$$SAMPLETEMPLATE("","","")
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(0,$D(^VPRMETA("template","gdsutest")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^VPRCONFIG("store","ut","template","gdsutest")),"Template Not stored in VPRJCONFIG")
+ D ASSERT(0,$D(^VPRJUTJ("TEMPLATE")),"Templates applied to existing data")
+ D ASSERT(400,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should have occured")
+ D ASSERT(273,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 273 reason code should have occurred")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ ; Cleanup Vars
+ K BODY,RETURN,ARG
+ ;
+ ; Try with a non existent name
+ ; "null" is a magic string to the SAMPLETEMPLATE generator to prevent the field from even being passed
+ S BODY(1)=$$SAMPLETEMPLATE("null","include, applyOnSave","roles")
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(0,$D(^VPRMETA("template","gdsutest")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^VPRCONFIG("store","ut","template","gdsutest")),"Template Not stored in VPRJCONFIG")
+ D ASSERT(0,$D(^VPRJUTJ("TEMPLATE")),"Templates applied to existing data")
+ D ASSERT(400,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should have occured")
+ D ASSERT(273,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 273 reason code should have occurred")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ ;
+ ; Try with a non existent directives
+ ; "null" is a magic string to the SAMPLETEMPLATE generator to prevent the field from even being passed
+ S BODY(1)=$$SAMPLETEMPLATE("gdsutest","null","roles")
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(0,$D(^VPRMETA("template","gdsutest")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^VPRCONFIG("store","ut","template","gdsutest")),"Template Not stored in VPRJCONFIG")
+ D ASSERT(0,$D(^VPRJUTJ("TEMPLATE")),"Templates applied to existing data")
+ D ASSERT(400,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should have occured")
+ D ASSERT(273,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 273 reason code should have occurred")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ ;
+ ; Try with a non existent fields
+ ; "null" is a magic string to the SAMPLETEMPLATE generator to prevent the field from even being passed
+ S BODY(1)=$$SAMPLETEMPLATE("gdsutest","include, applyOnSave","null")
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(0,$D(^VPRMETA("template","gdsutest")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^VPRCONFIG("store","ut","template","gdsutest")),"Template Not stored in VPRJCONFIG")
+ D ASSERT(0,$D(^VPRJUTJ("TEMPLATE")),"Templates applied to existing data")
+ D ASSERT(400,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should have occured")
+ D ASSERT(273,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 273 reason code should have occurred")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ Q
+ ;
+CTEMPLATE1 ;; @TEST Create 1 template (happy path)
+ N RETURN,BODY,ARG,HTTPERR
+ S BODY(1)=$$SAMPLETEMPLATE("gdsutest","include, applyOnSave","roles[]")
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(10,$D(^VPRMETA("template","gdsutest")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should NOT have occured")
+ D ASSERT(10,$D(^VPRJUTJ("TEMPLATE","urn:va:ut:1","gdsutest")),"The gdsutest template is not applied as expected")
+ D ASSERT(10,$D(^VPRJUTJ("TEMPLATE","urn:va:ut:5","gdsutest")),"The gdsutest template is not applied as expected")
+ D ASSERT(10,$D(^VPRCONFIG("store","ut","template","gdsutest")),"Template Not stored in VPRJCONFIG")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ Q
+ ;
+CTEMPLATE2 ;; @TEST Creating 2 (additional) templates
+ N RETURN,BODY,ARG,HTTPERR
+ S BODY(1)=$$SAMPLETEMPLATE("gdsutest2","include, applyOnSave","createDate.date")
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(10,$D(^VPRMETA("template","gdsutest2")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should NOT have occured")
+ D ASSERT(10,$D(^VPRJUTJ("TEMPLATE","urn:va:ut:1","gdsutest2")),"The gdsutest2 template is not applied as expected")
+ D ASSERT(10,$D(^VPRJUTJ("TEMPLATE","urn:va:ut:2","gdsutest2")),"The gdsutest2 template is not applied as expected")
+ D ASSERT(10,$D(^VPRCONFIG("store","ut","template","gdsutest2")),"Template Not stored in VPRJCONFIG")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ ; Cleanup Vars
+ K RETURN,BODY,ARG
+ ; Update the record
+ S BODY(1)=$$SAMPLETEMPLATE("gdsutest3","include, applyOnSave","roles[], createDate.date")
+ S RETURN=$$CTEMPLATE^VPRJGDS(.ARG,.BODY)
+ D ASSERT(10,$D(^VPRMETA("template","gdsutest3")),"Template Not stored in VPRMETA")
+ D ASSERT(0,$D(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should NOT have occured")
+ D ASSERT(10,$D(^VPRJUTJ("TEMPLATE","urn:va:ut:1","gdsutest3")),"The gdsutest3 template is not applied as expected")
+ D ASSERT(10,$D(^VPRJUTJ("TEMPLATE","urn:va:ut:2","gdsutest3")),"The gdsutest3 template is not applied as expected")
+ D ASSERT(10,$D(^VPRCONFIG("store","ut","template","gdsutest3")),"Template Not stored in VPRJCONFIG")
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ Q
+GTEMPLATEINDEX ;; @TEST Retrieve data using previously built templates using an index
+ N RETURN,ARG,BODY,DATA,ARGS,OBJECT,ERR,HTTPERR,I,J
+ N START,LIMIT,SIZE,PREAMBLE,RSP
+ ; Setup paging info for PAGE^VPRJRUT
+ S HTTPREQ("paging")=$G(HTTPARGS("start"),0)_":"_$G(HTTPARGS("limit"),999999)
+ S START=$P(HTTPREQ("paging"),":"),LIMIT=$P(HTTPREQ("paging"),":",2)
+ K ^||TMP($J)
+ ;
+ ; Get Index with eq filter for an exact match
+ S ARGS("indexName")="gdsutest"
+ S ARGS("template")="gdsutest"
+ D INDEX^VPRJGDS(.RSP,.ARGS)
+ D PAGE^VPRJRUT(.RSP,START,LIMIT,.SIZE,.PREAMBLE)
+ ; Emulate RESPOND^VPRJRSP to get a real JSON response
+ S DATA(0)=PREAMBLE
+ F I=START:1:(START+LIMIT-1) Q:'$D(@RSP@($J,I))  D
+ . I I>START S DATA(I)="," ; separate items with a comma
+ . S J="" F  S J=$O(@RSP@($J,I,J)) Q:'J  S DATA(I)=$G(DATA(I))_@RSP@($J,I,J)
+ S DATA(I)="]}"
+ D:$D(DATA)'="" DECODE^VPRJSON("DATA","OBJECT","ERR")
+ D ASSERT(0,$D(ERR),"A JSON Decode Error Occured")
+ D ASSERT(0,$D(^||TMP("HTTPERR",$J,1,"error")),"An HTTP error should NOT have occured")
+ D ASSERT("ehmp-proxy",$G(OBJECT("items",1,"roles",1)),"The roles field was not returned correctly")
+ ;
+ ;
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ K ^||TMP($J)
+ ; Cleanup Vars
+ K DATA,ARGS,OBJECT,ERR,I,J,RSP
+ ; Get Index with eq filter a value in an array
+ S ARGS("indexName")="gdsutest"
+ S ARGS("template")="gdsutest2"
+ S ARGS("filter")="eq(""uid"",""urn:va:ut:2"")"
+ D INDEX^VPRJGDS(.RSP,.ARGS)
+ D PAGE^VPRJRUT(.RSP,START,LIMIT,.SIZE,.PREAMBLE)
+ ; Emulate RESPOND^VPRJRSP to get a real JSON response
+ S DATA(0)=PREAMBLE
+ F I=START:1:(START+LIMIT-1) Q:'$D(@RSP@($J,I))  D
+ . I I>START S DATA(I)="," ; separate items with a comma
+ . S J="" F  S J=$O(@RSP@($J,I,J)) Q:'J  S DATA(I)=$G(DATA(I))_@RSP@($J,I,J)
+ S DATA(I)="]}"
+ D:$D(DATA)'="" DECODE^VPRJSON("DATA","OBJECT","ERR")
+ D ASSERT(0,$D(ERR),"A JSON Decode Error Occured")
+ D ASSERT(0,$D(^||TMP("HTTPERR",$J,1,"error")),"An HTTP error should NOT have occured")
+ D ASSERT("20000101120000000",$G(OBJECT("items",1,"createDate","date")),"The createDate.date field was not returned correctly")
+ D ASSERT("",$G(OBJECT("items",1,"roles",1)),"The roles field was returned and it shouldn't")
+ ;
+ ;
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ K ^||TMP($J)
+ ; Cleanup Vars
+ K DATA,ARGS,OBJECT,ERR,I,J,RSP
+ ; Get the data we've stored so far by range
+ S ARGS("indexName")="gdsutest"
+ S ARGS("range")="ehmp-test"
+ S ARGS("template")="gdsutest3"
+ D INDEX^VPRJGDS(.RSP,.ARGS)
+ D PAGE^VPRJRUT(.RSP,START,LIMIT,.SIZE,.PREAMBLE)
+ ; Emulate RESPOND^VPRJRSP to get a real JSON response
+ S DATA(0)=PREAMBLE
+ F I=START:1:(START+LIMIT-1) Q:'$D(@RSP@($J,I))  D
+ . I I>START S DATA(I)="," ; separate items with a comma
+ . S J="" F  S J=$O(@RSP@($J,I,J)) Q:'J  S DATA(I)=$G(DATA(I))_@RSP@($J,I,J)
+ S DATA(I)="]}"
+ D:$D(DATA)'="" DECODE^VPRJSON("DATA","OBJECT","ERR")
+ D ASSERT(10,$D(OBJECT("items")),"Data does not exist and it should")
+ D ASSERT(0,$D(ERR),"A JSON Decode Error Occured")
+ D ASSERT(0,$D(^||TMP("HTTPERR",$J,1,"error")),"An HTTP error should NOT have occured")
+ D ASSERT("20000101120000000",$G(OBJECT("items",1,"createDate","date")),"The createDate.date field was not returned correctly")
+ D ASSERT("ehmp-proxy",$G(OBJECT("items",1,"roles",1)),"The roles field was not returned correctly")
+ D ASSERT("20000101120000000",$G(OBJECT("items",2,"createDate","date")),"The createDate.date field was not returned correctly")
+ D ASSERT("ehmp-test",$G(OBJECT("items",2,"roles",1)),"The roles field was not returned correctly")
+ ;
+ ; Cleanup HTTPERR
+ K ^||TMP("HTTPERR",$J)
+ K ^||TMP($J)
+ Q
+ ;
  ;
 CLR ;; @TEST Clear ALL Generic Data Store data and route map
  N RETURN,BODY,ARG,DATA,ARGS,OBJECT,ERR,HTTPERR,URLMAPNUM
@@ -1155,7 +1441,7 @@ RDKSESSION ;; @TEST Realistic RDK session store test
  ; Add sample session
  N RETURN,BODY,ARG,HTTPREQ,DATA,ERR
  S HTTPREQ("store")="utses"
- S BODY(1)="{""uid"":""ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-"",""expires"":""2016-06-09T19:02:09.395Z"",""session"":{""cookie"":{""expires"":""2016-06-09T19:02:09.395Z"",""httpOnly"":true,""originalMaxAge"":899998,""path"":""/""},""csrf"":{""secret"":""v06210J1hu2MYpqUwg0IeJwZ""},""jwt"":{""secret"":""zTAhkVWhJ4DHC13_0lNSAyW5""},""user"":{""accessCode"":""pu1234"",""consumerType"":""user"",""corsTabs"":""true"",""dgRecordAccess"":""false"",""dgSecurityOfficer"":""false"",""dgSensitiveAccess"":""false"",""disabled"":false,""division"":""500"",""divisionSelect"":false,""duz"":{""9E7A"":""10000000270""},""eHMPUIContext"":[{""lastAccessed"":""20160609103852321"",""patientId"":{""type"":""pid"",""value"":""9E7A;100022""},""patientIdentifier"":""pid:9E7A;100022"",""workspaceContext"":{""contextId"":""patient"",""workspaceId"":""overview""}},{""lastAccessed"":""20160609115349599"",""patientId"":{""type"":""pid"",""value"":""9E7A;3""},""patientIdentifier"":""pid:9E7A;3"",""workspaceContext"":{""contextId"":""patient"",""workspaceId"":""overview""}}],""expires"":""2016-06-09T19:02:09.395Z"",""facility"":""PANORAMA"",""firstname"":""PANORAMA"",""infoButtonOid"":""1.3.6.1.4.1.3768"",""lastname"":""USER"",""password"":""pu1234!!"",""pcmm"":[{""roles"":[""NURSE (RN)"",""NURSE PRACTITIONER"",""OIF OEF CLINICAL CASE MANAGER"",""PHYSICIAN-ATTENDING"",""PHYSICIAN-PRIMARY CARE"",""RN CARE COORDINATOR"",""SOCIAL WORKER""],""service"":[""HOME TELEHEALTH"",""HOSPITAL MEDICINE"",""IMAGING"",""INFECTIOUS DISEASE""],""team"":[""TEAM1"",""TEAM2"",""TEAM3""]}],""permissionSets"":[""read-access"",""standard-doctor""],""permissions"":[""read-active-medication"",""read-allergy"",""read-clinical-reminder"",""read-community-health-summary"",""read-document"",""read-encounter"",""read-immunization"",""read-medication-review"",""read-order"",""read-patient-history"",""read-condition-problem"",""read-patient-record"",""access-stack-graph"",""read-task"",""read-vital"",""read-vista-health-summary"",""read-stack-graph"",""read-timeline"",""add-active-medication"",""add-allergy"",""add-condition-problem"",""add-consult-order"",""add-encounter"",""add-immunization"",""add-lab-order"",""add-med-order"",""add-non-va-medication"",""add-note"",""add-note-addendum"",""add-patient-history"",""add-radiology-order"",""add-task"",""add-vital"",""cancel-task"",""complete-consult-order"",""cosign-lab-order"",""cosign-med-order"",""cosign-note"",""cosign-radiology-order"",""delete-note"",""discontinue-active-medication"",""discontinue-consult-order"",""discontinue-lab-order"",""discontinue-med-order"",""discontinue-radiology-order"",""edit-active-medication"",""edit-allergy"",""edit-condition-problem"",""edit-consult-order"",""edit-encounter-form"",""edit-lab-order"",""edit-med-order"",""edit-non-va-medication"",""edit-note"",""edit-note-addendum"",""edit-patient-history"",""edit-radiology-order"",""edit-task"",""eie-allergy"",""eie-immunization"",""eie-patient-history"",""eie-vital"",""release-lab-order"",""release-med-order"",""release-radiology-order"",""remove-condition-problem"",""schedule-consult-order"",""sign-consult-order"",""sign-lab-order"",""sign-med-order"",""sign-note"",""sign-note-addendum"",""sign-radiology-order"",""triage-consult-order"",""abort-task"",""edit-encounter"",""eie-encounter"",""edit-immunization"",""edit-vital""],""provider"":true,""requiresReset"":false,""rptTabs"":""false"",""section"":""Medicine"",""sessionLength"":900000,""site"":""9E7A"",""ssn"":666441233,""title"":""Clinician"",""uid"":""urn:va:user:9E7A:10000000270"",""username"":""9E7A;pu1234"",""verifyCode"":""pu1234!!"",""vistaKeys"":[""GMRA-SUPERVISOR"",""GMRC101"",""GMV MANAGER"",""ORES"",""PROVIDER"",""PSB CPRS MED BUTTON""],""vistaUserClass"":[{""role"":""USER"",""uid"":""urn:va:asu-class:9E7A:561""}]}}}"
+ S BODY(1)="{""uid"":""ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-"",""expires"":""2016-06-09T19:02:09.395Z"",""session"":{""cookie"":{""expires"":""2016-06-09T19:02:09.395Z"",""httpOnly"":true,""originalMaxAge"":899998,""path"":""/""},""csrf"":{""secret"":""v06210J1hu2MYpqUwg0IeJwZ""},""jwt"":{""secret"":""zTAhkVWhJ4DHC13_0lNSAyW5""},""user"":{""accessCode"":""REDACTED"",""consumerType"":""user"",""corsTabs"":""true"",""dgRecordAccess"":""false"",""dgSecurityOfficer"":""false"",""dgSensitiveAccess"":""false"",""disabled"":false,""division"":""500"",""divisionSelect"":false,""duz"":{""9E7A"":""10000000270""},""eHMPUIContext"":[{""lastAccessed"":""20160609103852321"",""patientId"":{""type"":""pid"",""value"":""9E7A;100022""},""patientIdentifier"":""pid:9E7A;100022"",""workspaceContext"":{""contextId"":""patient"",""workspaceId"":""overview""}},{""lastAccessed"":""20160609115349599"",""patientId"":{""type"":""pid"",""value"":""9E7A;3""},""patientIdentifier"":""pid:9E7A;3"",""workspaceContext"":{""contextId"":""patient"",""workspaceId"":""overview""}}],""expires"":""2016-06-09T19:02:09.395Z"",""facility"":""PANORAMA"",""firstname"":""PANORAMA"",""infoButtonOid"":""1.3.6.1.4.1.3768"",""lastname"":""USER"",""password"":""REDACTED"",""pcmm"":[{""roles"":[""NURSE (RN)"",""NURSE PRACTITIONER"",""OIF OEF CLINICAL CASE MANAGER"",""PHYSICIAN-ATTENDING"",""PHYSICIAN-PRIMARY CARE"",""RN CARE COORDINATOR"",""SOCIAL WORKER""],""service"":[""HOME TELEHEALTH"",""HOSPITAL MEDICINE"",""IMAGING"",""INFECTIOUS DISEASE""],""team"":[""TEAM1"",""TEAM2"",""TEAM3""]}],""permissionSets"":[""read-access"",""standard-doctor""],""permissions"":[""read-active-medication"",""read-allergy"",""read-clinical-reminder"",""read-community-health-summary"",""read-document"",""read-encounter"",""read-immunization"",""read-medication-review"",""read-order"",""read-patient-history"",""read-condition-problem"",""read-patient-record"",""access-stack-graph"",""read-task"",""read-vital"",""read-vista-health-summary"",""read-stack-graph"",""read-timeline"",""add-active-medication"",""add-allergy"",""add-condition-problem"",""add-consult-order"",""add-encounter"",""add-immunization"",""add-lab-order"",""add-med-order"",""add-non-va-medication"",""add-note"",""add-note-addendum"",""add-patient-history"",""add-radiology-order"",""add-task"",""add-vital"",""cancel-task"",""complete-consult-order"",""cosign-lab-order"",""cosign-med-order"",""cosign-note"",""cosign-radiology-order"",""delete-note"",""discontinue-active-medication"",""discontinue-consult-order"",""discontinue-lab-order"",""discontinue-med-order"",""discontinue-radiology-order"",""edit-active-medication"",""edit-allergy"",""edit-condition-problem"",""edit-consult-order"",""edit-encounter-form"",""edit-lab-order"",""edit-med-order"",""edit-non-va-medication"",""edit-note"",""edit-note-addendum"",""edit-patient-history"",""edit-radiology-order"",""edit-task"",""eie-allergy"",""eie-immunization"",""eie-patient-history"",""eie-vital"",""release-lab-order"",""release-med-order"",""release-radiology-order"",""remove-condition-problem"",""schedule-consult-order"",""sign-consult-order"",""sign-lab-order"",""sign-med-order"",""sign-note"",""sign-note-addendum"",""sign-radiology-order"",""triage-consult-order"",""abort-task"",""edit-encounter"",""eie-encounter"",""edit-immunization"",""edit-vital""],""provider"":true,""requiresReset"":false,""rptTabs"":""false"",""section"":""Medicine"",""sessionLength"":900000,""site"":""9E7A"",""ssn"":666441233,""title"":""Clinician"",""uid"":""urn:va:user:9E7A:10000000270"",""username"":""PW         "",""verifyCode"":""REDACTED"",""vistaKeys"":[""GMRA-SUPERVISOR"",""GMRC101"",""GMV MANAGER"",""ORES"",""PROVIDER"",""PSB CPRS MED BUTTON""],""vistaUserClass"":[{""role"":""USER"",""uid"":""urn:va:asu-class:9E7A:561""}]}}}"
  S RETURN=$$SET^VPRJGDS(.ARG,.BODY)
  D ASSERT(10,$D(^VPRJUTSES("ZOUjqD3uh48eOuMrB4meSlCzcFV9IWv-")),"Data NOT stored when it should be")
  ; Patch the expires date/times

@@ -1,19 +1,47 @@
 define([
     'app/resources/fetch/patient_selection/resources',
+    'app/resources/fetch/encounters/resources',
     'app/resources/fetch/allergies/resources',
+	'app/resources/fetch/activities/resources',
 	'app/resources/fetch/problems/resources',
+    'app/resources/fetch/military_history/resources',
     'app/resources/fetch/community_health_summaries/resources',
     'app/resources/fetch/vista_health_summaries/resources',
     'app/resources/fetch/cds_advice/resources',
-    'app/resources/fetch/immunizations/resources'
+    'app/resources/fetch/immunizations/resources',
+    'app/resources/fetch/appointments/resources',
+    'app/resources/fetch/vitals/resources',
+    'app/resources/fetch/labs/resources',
+    'app/resources/fetch/document/resources',
+    'app/resources/fetch/timeline/collection',
+    'app/resources/fetch/tasks/resources',
+    'app/resources/fetch/text_search/resources',
+    'app/resources/fetch/narrative_labs/resources',
+	'app/resources/fetch/orders/resources',
+    'app/resources/fetch/activeMeds/resources',
+    'app/resources/fetch/permission/resources'
 ], function(
     PatientSelection,
+    Encounters,
     Allergies,
+    Activities,
 	Problems,
+    MilitaryHistory,
     CommunityHealthSummaries,
     VistaHealthSummaries,
     CdsAdvice,
-    Immunizations
+    Immunizations,
+    Appointments,
+    Vitals,
+    Labs,
+    Document,
+    Timeline,
+    Tasks,
+    TextSearch,
+    NarrativeLabs,
+	Orders,
+    ActiveMeds,
+    Permission
 ) {
     'use strict';
 
@@ -21,12 +49,26 @@ define([
         id: 'Fetch',
         resources: {
             PatientSelection: PatientSelection,
+            Encounters: Encounters,
             Allergies: Allergies,
+            Activities: Activities,
 			Problems: Problems,
+            MilitaryHistory: MilitaryHistory,
             CommunityHealthSummaries: CommunityHealthSummaries,
             VistaHealthSummaries: VistaHealthSummaries,
             CdsAdvice: CdsAdvice,
-            Immunizations: Immunizations
+            Immunizations: Immunizations,
+            Appointments: Appointments,
+            Vitals: Vitals,
+            Labs: Labs,
+            Document: Document,
+            Timeline: Timeline,
+            Tasks: Tasks,
+            TextSearch: TextSearch,
+            NarrativeLabs: NarrativeLabs,
+			Orders: Orders,
+            ActiveMeds: ActiveMeds,
+            Permission: Permission
         }
     };
 });

@@ -2,11 +2,13 @@
 
 require('../../../../env-setup');
 
+var _ = require('underscore');
 var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
 var RecordRetirementUtil = require(global.VX_UTILS + 'patient-record-retirement/patient-record-retirement-util');
 var nock = require('nock');
 var log = require(global.VX_DUMMIES + '/dummy-logger');
 var moment = require('moment');
+var PublisherRouterDummy = require(global.VX_DUMMIES + '/publisherRouterDummy');
 // NOTE: be sure next line is commented out before pushing
 // log = require('bunyan').createLogger({
 // 	name: 'patient-record-retirement-util-spec',
@@ -26,8 +28,8 @@ var config = {
 	'jds': {},
 	syncRequestApi: {
 		'protocol': 'http',
-		'host': '10.3.3.6',
-		'port': '1234',
+		'host': 'IP      ',
+		'port': 'PORT',
 		'timeout': 300000
 	},
 };
@@ -35,9 +37,7 @@ var config = {
 function createEnvironment(log, config) {
 	return {
 		jds: new JdsClientDummy(log, config),
-		publisherRouter: {
-			publish: function(job, callback){callback();}
-		}
+		publisherRouter: new PublisherRouterDummy()
 	};
 }
 
@@ -263,19 +263,19 @@ describe('patient-record-retirement-util', function() {
 
 			nock.cleanAll();
 			nock.disableNetConnect();
-			nock('http://10.3.3.6:1234')
+			nock('http://IP           ')
 				.get('/sync/status?pid=AAAA;1&docStatus=true')
 				.reply(200, JSON.stringify(syncStatusEndpointResponse1));
-			nock('http://10.3.3.6:1234')
+			nock('http://IP           ')
 				.get('/sync/status?pid=BBBB;1&docStatus=true')
 				.reply(200, JSON.stringify(syncStatusEndpointResponse1));
-			nock('http://10.3.3.6:1234')
+			nock('http://IP           ')
 				.get('/sync/status?pid=CCCC;1&docStatus=true')
 				.reply(200, JSON.stringify(syncStatusEndpointResponse2));
-			nock('http://10.3.3.6:1234')
+			nock('http://IP           ')
 				.get('/sync/status?pid=DDDD;1&docStatus=true')
 				.reply(200, JSON.stringify(syncStatusEndpointResponse2));
-			nock('http://10.3.3.6:1234')
+			nock('http://IP           ')
 				.get('/sync/status?pid=ERROR;1&docStatus=true')
 				.reply(400);
 		});
@@ -339,6 +339,11 @@ describe('patient-record-retirement-util', function() {
 		});
 	});
 	describe('sendRetirementJobs', function() {
+		var referenceInfo = {
+			sessionId: 'TEST',
+			utilityType: 'Patient Record Retirement Utility Unit Test'
+		};
+
 		it('normal path', function() {
 			var environment = createEnvironment(log, config);
 			var recordRetirementUtil = new RecordRetirementUtil(log, config, environment);
@@ -349,10 +354,18 @@ describe('patient-record-retirement-util', function() {
 				return callback(null, 1);
 			});
 
-			recordRetirementUtil.sendRetirementJobs(fullPatientList, function(error, count) {
+			recordRetirementUtil.sendRetirementJobs(fullPatientList, referenceInfo, function(error, count) {
 				expect(error).toBeFalsy();
 				expect(count).toEqual(2);
 				expect(jobsSentToBeanstalk.length).toEqual(2);
+
+				_.each(jobsSentToBeanstalk, function(job){
+					expect(job.referenceInfo).toEqual(jasmine.objectContaining({
+						sessionId: referenceInfo.sessionId,
+						requestId: jasmine.any(String),
+						utilityType: referenceInfo.utilityType
+					}));
+				});
 			});
 		});
 		it('normal path: no patients', function(){
@@ -365,7 +378,7 @@ describe('patient-record-retirement-util', function() {
 				return callback(null, 1);
 			});
 
-			recordRetirementUtil.sendRetirementJobs(null, function(error, count) {
+			recordRetirementUtil.sendRetirementJobs(null, referenceInfo, function(error, count) {
 				expect(error).toBeFalsy();
 				expect(count).toEqual(0);
 				expect(jobsSentToBeanstalk.length).toEqual(0);
@@ -379,7 +392,7 @@ describe('patient-record-retirement-util', function() {
 				return callback('error');
 			});
 
-			recordRetirementUtil.sendRetirementJobs(fullPatientList, function(error, count) {
+			recordRetirementUtil.sendRetirementJobs(fullPatientList, referenceInfo, function(error, count) {
 				expect(error).toBeTruthy();
 				expect(count).toEqual(0);
 			});

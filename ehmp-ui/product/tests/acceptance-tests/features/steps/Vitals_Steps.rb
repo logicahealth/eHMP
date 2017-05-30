@@ -19,10 +19,10 @@ class Vitals < AllApplets
 
     add_verify(CucumberLabel.new("Vital"), VerifyText.new, AccessHtmlElement.new(:id, "vitalsModalDisplayName"))
     add_verify(CucumberLabel.new("Result"), VerifyText.new, AccessHtmlElement.new(:id, "vitalsModalResult"))
-    add_verify(CucumberLabel.new("Date Observed"), VerifyText.new, AccessHtmlElement.new(:id, "vitalsModalObservedFormatted"))
+    add_verify(CucumberLabel.new("Observed"), VerifyText.new, AccessHtmlElement.new(:id, "vitalsModalObservedFormatted"))
     add_verify(CucumberLabel.new("Facility"), VerifyText.new, AccessHtmlElement.new(:id, "vitalsModalFacility"))
     add_verify(CucumberLabel.new("Type"), VerifyText.new, AccessHtmlElement.new(:id, "vitalsModalType"))
-    add_verify(CucumberLabel.new("Date Entered"), VerifyText.new, AccessHtmlElement.new(:id, "vitalsModalDateEntered"))
+    add_verify(CucumberLabel.new("Entered"), VerifyText.new, AccessHtmlElement.new(:id, "vitalsModalDateEntered"))
 
     add_applet_buttons appletid_css
     add_applet_title appletid_css
@@ -293,7 +293,7 @@ end
 
 Then(/^the BMI Vital detail modal is displayed$/) do
   @ehmp = VitalModal.new
-  expected_headers = ["Vital", "Result", "Date Observed", "Facility", "Type", "Date Entered"]
+  expected_headers = ["Vital", "Result", "Observed", "Facility", "Type", "Entered"]
   expected_headers.each do | header_text |
     expect(@ehmp.latest_column_text).to include header_text
   end

@@ -56,7 +56,7 @@ describe('Patient Photo Resource Test', function() {
             app: {
                 config: {
                     vhic: {
-                        baseUrl: 'http://10.2.2.108/vhicSend',
+                        baseUrl: 'http://IP        /vhicSend',
                         search: {
                             path: 'cardi-id'
                         }
@@ -66,8 +66,8 @@ describe('Patient Photo Resource Test', function() {
                     },
                     vistaSites: {
                         '9E7A': {
-                            accessCode: 'pu1234',
-                            verifyCode: 'pu1234!!'
+                            accessCode: 'REDACTED',
+                            verifyCode: 'REDACTED'
                         }
                     }
                 }
@@ -135,7 +135,7 @@ describe('Patient Photo Resource Test', function() {
             app: {
                 config: {
                     vhic: {
-                        baseUrl: 'http://10.2.2.108/vhicSend',
+                        baseUrl: 'http://IP        /vhicSend',
                         search: {
                             path: 'cardi-id'
                         }
@@ -145,8 +145,8 @@ describe('Patient Photo Resource Test', function() {
                     },
                     vistaSites: {
                         '9E7A': {
-                            accessCode: 'pu1234',
-                            verifyCode: 'pu1234!!'
+                            accessCode: 'REDACTED',
+                            verifyCode: 'REDACTED'
                         }
                     }
                 }
@@ -215,7 +215,7 @@ describe('Patient Photo Resource Test', function() {
             app: {
                 config: {
                     vhic: {
-                        baseUrl: 'http://10.2.2.108/vhicSend',
+                        baseUrl: 'http://IP        /vhicSend',
                         search: {
                             path: 'cardi-id'
                         }
@@ -225,8 +225,8 @@ describe('Patient Photo Resource Test', function() {
                     },
                     vistaSites: {
                         '9E7A': {
-                            accessCode: 'pu1234',
-                            verifyCode: 'pu1234!!'
+                            accessCode: 'REDACTED',
+                            verifyCode: 'REDACTED'
                         }
                     }
                 }

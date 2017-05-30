@@ -1,37 +1,8 @@
-[data-appletid="ccd_grid"] {
+// [data-appletid="ccd_grid"] {}
 
+.ccd-modal .ccd-content {
+    border: 1px solid $grey;
+    height: 100%;
+    width: 100%;
+    min-height: 300px;
 }
-
-.ccd-modal {
-    .c32-text {
-        display: inline-block;
-        min-width: 100%;
-        overflow: hidden;
-        white-space: pre-wrap; /* css-3 */
-        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-        width: auto;
-        word-break: normal;
-        word-wrap: normal;
-        table {
-            margin-bottom: 10px;
-            table-layout: auto;
-            width: 100%;
-            td, th {
-                border: 1px solid #D2D4D1;
-                max-width: 300px;
-                min-width: 100px;
-                padding: 3px 3px 3px 6px;
-            }
-            td {
-                word-wrap: break-word;
-            }
-        }
-    }
-    .ccd-content {
-        border: 1px solid $grey;
-        height: 100%;
-        width: 100%;
-        min-height: 300px;
-    }
-}
-
