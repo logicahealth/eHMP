@@ -42,6 +42,14 @@ action :create do
         console.write("\n")
       end
 
+      console.on(:output, /Check out date/i) do |process, match_data|
+        console.write("^\n")
+      end
+
+      console.on(:output, /PRE-APPOINTMENT LETTER/i) do |process, match_data|
+        console.write("\n")
+      end
+
       console.on(:output, /IS THIS CORRECT/i) do |process, match_data|
         console.write("\n")
       end
@@ -74,6 +82,10 @@ action :create do
         console.write("\n")
       end
 
+      console.on(:output, /Review active orders/i) do |process, match_data|
+        console.write("\n")
+      end
+
       console.on(:output, /There is no availability for this date/i) do |process, match_data|
         # no_availability = true
         # console.kill!
@@ -87,8 +99,10 @@ action :create do
       end
 
       # Change namespace
-      console.wait_for(:output, /USER>/) do | process, match |
-        process.write("ZN \"#{new_resource.namespace}\"\n")
+      if node[:vista][:install_cache]
+        console.wait_for(:output, /USER>/) do | process, match |
+          process.write("ZN \"#{node[:vista][:namespace]}\"\n")
+        end
       end
 
       if new_resource.programmer_mode
@@ -141,16 +155,14 @@ action :create do
         console.write("T+#{new_resource.day}@#{new_resource.time}\n")
       end
 
-
       begin
-        console.wait_for(:output, /Review active orders/i)
+        console.wait_for(:output, /select CLINIC:/i)
         console.write("\n")
         console.wait_for(:output, /Select/i)
-        console.write("q\r")
+        console.write("q\n\n\n\n\n\n\n\nh\nexit\n")
       rescue => error
         Chef::Log.warn("making appointments failed with error: #{error}")
       end
     end
   end
 end
-

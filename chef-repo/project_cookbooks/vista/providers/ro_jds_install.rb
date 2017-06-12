@@ -23,8 +23,10 @@ action :execute do
       end
 
       # Change namespace
-      shell.wait_for(:output, /USER>/) do | process, match |
-        process.write("ZN \"#{new_resource.namespace}\"\n")
+      if node[:vista][:install_cache]
+        shell.wait_for(:output, /USER>/) do | process, match |
+          process.write("ZN \"#{node[:vista][:namespace]}\"\n")
+        end
       end
 
       # Set user and setup programmer environment

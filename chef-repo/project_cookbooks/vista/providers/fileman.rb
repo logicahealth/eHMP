@@ -32,9 +32,11 @@ action :create do
         end
 
         # Change namespace
+      if node[:vista][:install_cache]
         shell.wait_for(:output, /USER>/) do | process, match |
           process.write("ZN \"#{node[:vista][:namespace]}\"\n")
         end
+      end
 
         # Set user to administrator and setup programmer environment
         shell.wait_for(:output, /#{node[:vista][:prompt]}/) do | process, match |
@@ -137,9 +139,11 @@ action :update do
         end
 
         # Change namespace
+      if node[:vista][:install_cache]
         shell.wait_for(:output, /USER>/) do | process, match |
           process.write("ZN \"#{node[:vista][:namespace]}\"\n")
         end
+      end
 
         # Set user to administrator and setup programmer environment
         shell.wait_for(:output, /#{node[:vista][:prompt]}/) do | process, match |

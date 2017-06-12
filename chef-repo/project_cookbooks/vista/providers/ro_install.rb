@@ -56,32 +56,52 @@ action :execute do
       end
 
       # Change namespace
-      shell.wait_for(:output, /USER>/) do | process, match |
-        process.write("ZN \"#{new_resource.namespace}\"\n")
+      if node[:vista][:install_cache]
+        shell.wait_for(:output, /USER>/) do | process, match |
+          process.write("ZN \"#{node[:vista][:namespace]}\"\n")
+        end
       end
 
-      # Set user and setup programmer environment
-      shell.wait_for(:output, prompt) do | process, match |
-        process.write("D ^%RI\r")
+      # %RI for Cache then for GT.M
+      if node[:vista][:install_cache]
+        shell.wait_for(:output, prompt) do | process, match |
+          process.write("D ^%RI\r")
+        end
+        shell.wait_for(:output, /Device:/) do | process, match |
+          process.write("#{source_file}\r")
+        end
+        shell.wait_for(:output, /Parameters/) do | process, match |
+          process.write("\r")
+        end
+        shell.wait_for(:output, /Routine Input Option:/) do | process, match |
+          process.write("All Routines\r")
+        end
+        shell.wait_for(:output, /shall it replace the one on file/) do | process, match |
+          process.write("yes\r")
+        end
+        shell.wait_for(:output, /Recompile/) do | process, match |
+          process.write("yes\r")
+        end
+        shell.wait_for(:output, /Display Syntax Errors/) do | process, match |
+          process.write("Yes\r")
+        end
       end
-      shell.wait_for(:output, /Device:/) do | process, match |
-        process.write("#{source_file}\r")
+
+      if !node[:vista][:install_cache]
+        shell.wait_for(:output, prompt) do | process, match |
+          process.write("D ^%RI\r")
+        end
+        shell.wait_for(:output, /Formfeed delimited \<No\>\?/) do | process, match |
+          process.write("\r")
+        end
+        shell.wait_for(:output, /Input device: \<terminal\>:/) do | process, match |
+          process.write("#{source_file}\r")
+        end
+        shell.wait_for(:output, /Output directory :/) do | process, match |
+          process.write("#{node[:vista][:gtm_vista_install_dir]}/r/\r")
+        end
       end
-      shell.wait_for(:output, /Parameters/) do | process, match |
-        process.write("\r")
-      end
-      shell.wait_for(:output, /Routine Input Option:/) do | process, match |
-        process.write("All Routines\r")
-      end
-      shell.wait_for(:output, /shall it replace the one on file/) do | process, match |
-        process.write("yes\r")
-      end
-      shell.wait_for(:output, /Recompile/) do | process, match |
-        process.write("yes\r")
-      end
-      shell.wait_for(:output, /Display Syntax Errors/) do | process, match |
-        process.write("Yes\r")
-      end
+
       shell.wait_for(:output, prompt) do | process, match |
         process.write("h\n")
       end

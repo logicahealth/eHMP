@@ -132,7 +132,8 @@ machine machine_name do
             hour: 11,
             minutes: 38
           }
-        ]
+        ],
+      install_cache: ENV.has_key?("INSTALL_INTERSYSTEMS_CACHE") ? true : false
       },
       beats: {
         logging: node[:machine][:logging]

@@ -15,6 +15,8 @@ action :execute do
     block do
       begin
 
+        #if !node[:vista][:install_cache] return
+
         shell = Greenletters::Process.new("sh", :transcript => new_resource.log, :timeout => node[:vista][:shell_timeout_seconds])
 
         # start the shell, set up cache environment and start cache shell

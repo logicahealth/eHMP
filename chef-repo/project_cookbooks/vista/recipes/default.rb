@@ -41,7 +41,12 @@ gem_package 'greenletters'
 
 # Include vista recipes to install cache and configure the vistas
 include_recipe 'vista::unzip_hmp'
-include_recipe 'vista::cache'
+if node[:vista][:install_cache] == true
+  include_recipe 'vista::cache'
+else
+  include_recipe 'vista::gtm_install'
+  include_recipe 'vista::gtm_vista_config'
+end
 include_recipe "vista::#{node[:vista][:site_recipe]}"
 include_recipe "vista::apache2"
 include_recipe "vista::fmql"

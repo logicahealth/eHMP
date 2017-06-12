@@ -16,7 +16,7 @@ vista_mumps_block "Add DOD test entry ZZUSDOD EDIPI TEST FACILITY to Institution
     's FDA(1,4,"+1,",11)="LOCAL"',
     's FDA(1,4,"+1,",13)="DOD"',
     's FDA(1,4,"+1,",99)="200DOD"',
-    'd UPDATE^DIE("","FDA(1)","ERR")'
+    'd UPDATE^DIE("","FDA(1)",,"ERR")'
   ]
   not_if { node[:vista][:no_reset] }
 end
@@ -59,7 +59,7 @@ patient_edipis.each do |patient, edipi|
       "S edipi=\"#{edipi}^NI^USDOD^200DOD\"",
       "D NEWTF^VAFCTFU2(.DATA,dfn,edipi)",
       'D FILENEW^VAFCTFU(dfn,500,"","","",.ERROR,"",dfn,"A")',
-      "zw DATA"
+      "zwrite DATA"
     ]
     not_if { node[:vista][:no_reset] }
   end
@@ -155,7 +155,7 @@ vista_mumps_block "Reset all subscriptions on deploy" do
     "S ARGS(\"command\")=\"resetAllSubscriptions\"",
     "D API^HMPDJFS(.OUT,.ARGS)",
     # Print the results
-    "ZW @OUT",
+    "ZWRITE @OUT@(*)",
     # Clean up
     "K OUT,ARGS"
   ]

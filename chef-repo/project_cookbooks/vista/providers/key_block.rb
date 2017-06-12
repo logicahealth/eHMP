@@ -13,6 +13,8 @@ action :execute do
 
   cache_key_pw = Chef::EncryptedDataBagItem.load("credentials", "vista_cache_key_password", node[:data_bag_string])["password"]
 
+  #if !node[:vista][:install_cache] return
+  
   ruby_block "key_block:execute:#{new_resource.command.hash}" do
     block do
       begin
