@@ -12,8 +12,7 @@ include_recipe "java_wrapper"
 
 include_recipe "gradle_wrapper"
 
-# Done manually--Google moved URL
-#include_recipe "phantomjs_wrapper"
+include_recipe "phantomjs_wrapper"
 
 # Already installed
 #include_recipe "workstation::git"
