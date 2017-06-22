@@ -5,7 +5,7 @@
 # Author:: Olle Hallin (<olle.hallin@crisp.se>)
 #
 
-include_recipe "java"
+#include_recipe "java"
 include_recipe "ark"
 
 ark "gradle" do
