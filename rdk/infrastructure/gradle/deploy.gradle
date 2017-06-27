@@ -183,7 +183,7 @@ allprojects  {
       doLast {
         if (rootProject."destroy${projectInfo['taskNamePart']}Flag" == false) {
           rootProject."destroy${projectInfo['taskNamePart']}Flag" = true
-          executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], [:], 'destroy', projectInfo['provisioner'])
+          executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], projectInfo['vagrantEnvVarsLocal'], 'destroy', projectInfo['provisioner'])
         }
       }
     }
