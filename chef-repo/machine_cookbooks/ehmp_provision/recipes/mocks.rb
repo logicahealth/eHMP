@@ -6,6 +6,15 @@
 chef_gem "chef-provisioning-ssh"
 require 'chef/provisioning/ssh_driver'
 
+_host_path_private_licenses = "#{ENV['HOME']}/Projects/vistacore/private_licenses"
+node.default[:ehmp_provision][:mocks][:vagrant][:shared_folders].push(
+  {
+    :host_path => _host_path_private_licenses,
+    :guest_path => "/opt/private_licenses",
+    :create => true
+  }
+)
+
 include_solr = find_optional_node_by_criteria(node[:machine][:stack], 'role:solr', 'role:mocks').nil? && node[:machine][:driver] == 'vagrant'
 
 ############################################## Staging Artifacts #############################################
