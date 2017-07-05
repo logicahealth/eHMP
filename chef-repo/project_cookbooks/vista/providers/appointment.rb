@@ -157,9 +157,16 @@ action :create do
 
       begin
         console.wait_for(:output, /select CLINIC:/i)
-        console.write("\n")
-        console.wait_for(:output, /Select/i)
-        console.write("q\n\n\n\n\n\n\n\nh\nexit\n")
+        console.write("^\n")
+        console.wait_for(:output, /to continue/i)
+        console.write("^\n")
+        console.wait_for(:output, /Option:/i)
+        console.write("HALT\n")
+        console.wait_for(:output, /#{node[:vista][:prompt]}/)
+        console.write("HALT\n")
+        console.wait_for(:output, /sh-[0-9\.]+#/)
+        console.write("exit\n")
+        console.wait_for(:exit)
       rescue => error
         Chef::Log.warn("making appointments failed with error: #{error}")
       end
