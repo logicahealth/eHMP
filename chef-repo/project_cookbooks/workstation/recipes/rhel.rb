@@ -3,6 +3,7 @@
 # Recipe:: rhel
 #
 
+
 include_recipe "nokogiri_wrapper"
 
 # Already installed!
@@ -12,7 +13,8 @@ include_recipe "java_wrapper"
 
 include_recipe "gradle_wrapper"
 
-include_recipe "phantomjs_wrapper"
+# Does not need to be installed on workstation
+#include_recipe "phantomjs_wrapper"
 
 # Already installed
 #include_recipe "workstation::git"
@@ -24,6 +26,7 @@ include_recipe "xvfb_wrapper"
 include_recipe "nodejs_wrapper"
 
 include_recipe "workstation::install_packages"
+
 
 execute "correct ownership of gem home" do
 	command "chown -R #{node[:workstation][:user]} #{node[:workstation][:user_home]}/Projects/vistacore/.gems"
