@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "agenda": "^0.8.1",
-    "aglio-theme-olio": "1.6.8",
+    "aglio-theme-olio": "",
     "ajv": "^1.4.10",
     "async": "~1.4.2",
     "body-parser": "^1.12.0",
