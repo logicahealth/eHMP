@@ -61,7 +61,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>npm publish --registry https://store.vistacore.us/nexus/content/repositories/npm-internal/</command>
+      <command>npm publish --registry http://nexus.osehra.org:8081/nexus/content/repositories/npm-internal/</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

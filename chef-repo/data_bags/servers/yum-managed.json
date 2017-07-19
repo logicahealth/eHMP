@@ -1,5 +1,5 @@
 {
   "id": "yum-managed",
-  "fqdn": "https://store.vistacore.us/nexus/content/repositories/yum-managed",
-  "ip": "52.21.133.61"
+  "fqdn": "http://nexus.osehra.org:8081/nexus/content/repositories/yum-managed",
+  "ip": "198.61.149.201"
 }

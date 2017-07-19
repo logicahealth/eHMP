@@ -16,13 +16,13 @@ def version = "${->repoVersion + '.' + repoCommitCount}"
 task installNpm(type: Exec) {
   group "RDK Tasks"
   description "installs package(s)"
-  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
+  commandLine "npm", "install"
 }
 
 task installNpmOracleDB(type: Exec) {
   group "RDK Tasks"
   description "installs the Oracle DB node package"
-  commandLine "npm", "install", "oracledb@1.9.3", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
+  commandLine "npm", "install", "oracledb@1.9.3"
 }
 
 task installFakeOracleDB(type: Exec) {
@@ -35,14 +35,14 @@ task ccowInstallNpm(type: Exec) {
   workingDir './ccow'
   group "RDK Tasks"
   description "installs package(s) for ccow"
-  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
+  commandLine "npm", "install"
 }
 
 task writeInstallNpm(type: Exec) {
   workingDir './src/write'
   group "RDK Tasks"
   description "installs package(s) for write back"
-  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
+  commandLine "npm", "install"
 }
 
 task pruneNpm(type: Exec) {

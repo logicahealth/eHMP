@@ -91,7 +91,7 @@ task :environment_setup do
         ENV['PROVIDER'] = "vbconf"
         ENV['SSH_USER_ID'] = "vagrant"
         ENV['PROVIDER_BOX_NAME'] = "rhel-6.5"
-        ENV['PROVIDER_BOX_URL'] = "https://store.vistacore.us/nexus/content/repositories/filerepo/third-party/program/vagrant/basebox/rhel/6-5-trial/rhel-6-5-trial.box"
+        ENV['PROVIDER_BOX_URL'] = "http://nexus.osehra.org:8081/nexus/content/repositories/filerepo/third-party/program/vagrant/basebox/rhel/6-5-trial/rhel-6-5-trial.box"
         LocalProjectRoot = ENV["WORKSPACE"]
         TargetEnvPath = LocalProjectRoot + "/infrastructure/vagrant/aws/vista-exchange"
         require File.expand_path(TargetEnvPath + '/../../Servers.rb')

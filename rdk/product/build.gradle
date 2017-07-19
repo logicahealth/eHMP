@@ -28,7 +28,7 @@ allprojects {
   ext.set('currentCommitHash', getCurrentCommitHash())
 
   repositories {
-    maven {url "https://store.vistacore.us/nexus/content/groups/public"}
+    maven {url "http://nexus.osehra.org:8081/nexus/content/groups/public"}
   }
 }
 

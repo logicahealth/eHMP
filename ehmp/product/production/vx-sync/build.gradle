@@ -16,7 +16,7 @@ clean.dependsOn pruneNpm
 task installNpm(type: Exec, dependsOn: pruneNpm) {
   group "VX-Sync Tasks"
   description "installs package(s)"
-  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
+  commandLine "npm", "install"
 }
 
 task buildJava(type: Exec, dependsOn: installNpm) {

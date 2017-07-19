@@ -49,7 +49,7 @@ task :inttest do |t, args|
   Dir.chdir("#{File.dirname(__FILE__)}/../production/rdk"){
     # initial npm install to ensure the node_modules are there
     puts "start npm install"
-    sh "npm install --registry https://store.vistacore.us/nexus/content/repositories/npm-all/"
+    sh "npm install --registry http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/"
     puts "completed npm install"
     # fetch server integration tests using the copied fetch-server-config file
     puts "start fetch integration tests using --config #{File.dirname(__FILE__)}/rdk_config_files/rdk-fetch-server-config.json"

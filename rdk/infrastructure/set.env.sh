@@ -19,7 +19,6 @@ export M2_HOME=/usr/local/maven/apache-maven-3.0.4
 export GROOVY_HOME=/usr/local/groovy/groovy-2.0.6
 export MAVEN_OPTS="-Xmx1G -Xms256m -Djava.awt.headless=true"
 export GRADLE_OPTS="-Xmx1G -Xms256m -Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=1"
-export NPM_CONFIG_REGISTRY="https://store.vistacore.us/nexus/content/repositories/npm-all/"
 
 export CONFIGURE_ARGS="--with-ldflags='-Wno-error=unused-command-line-argument-hard-error-in-future'"
 

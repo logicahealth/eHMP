@@ -1,5 +1,5 @@
 {
   "id": "nexus",
-  "fqdn": "https://store.vistacore.us",
-  "ip": "52.21.133.61"
+  "fqdn": "http://nexus.osehra.org:8081",
+  "ip": "198.61.149.201"
 }

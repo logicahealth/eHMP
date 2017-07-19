@@ -37,7 +37,6 @@ export CONFIGURE_ARGS="--with-ldflags='-Wno-error=unused-command-line-argument-h
 export deployVE2All="deployVE2JDS deployMssql deployJmeadows deployKodak deployPanorama deployVE2Solr deployVE2Ehmp deployVE2VeApi"
 export deployVE2AllDev="deployVE2JDS deployMssql deployJmeadows deployKodak deployPanorama deployVE2SolrDev deployVE2EhmpDev deployVE2VeApiDev"
 export destroyVE2All="destroyVE2JDS destroyJmeadows destroyKodak destroyMssql destroyPanorama destroyVE2Solr destroyVE2Ehmp destroyVE2VeApi destroyOpeninfobutton"
-export NPM_CONFIG_REGISTRY="https://store.vistacore.us/nexus/content/repositories/npm-all/"
 
 ###########################################################################################################
 #

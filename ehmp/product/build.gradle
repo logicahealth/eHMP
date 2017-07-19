@@ -131,8 +131,8 @@ allprojects  {
     }
 
     repositories {
-        maven { url "https://store.vistacore.us/nexus/content/groups/public" }
-        maven { url "https://store.vistacore.us/nexus/content/repositories/filerepo/" }
+        maven { url "http://nexus.osehra.org:8081/nexus/content/groups/public" }
+        maven { url "http://nexus.osehra.org:8081/nexus/content/repositories/filerepo/" }
         maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
         maven { url "http://repository.springsource.com/maven/bundles/release" }
         maven { url "http://repository.springsource.com/maven/bundles/external" }
@@ -148,7 +148,7 @@ allprojects  {
         repositories.mavenDeployer {
             pom.groupId = "${->groupId}"
             pom.version = "${->version}"
-            repository(url: 'https://store.vistacore.us/nexus/content/repositories/releases/') {
+            repository(url: 'http://nexus.osehra.org:8081/nexus/content/repositories/releases/') {
                 authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
             }
         }

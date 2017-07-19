@@ -73,7 +73,7 @@ end
 
 task :inttest do
   puts "start npm install"
-  sh "npm install --registry https://store.vistacore.us/nexus/content/repositories/npm-all/"
+  sh "npm install --registry http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/"
   puts "completed npm install"
   puts "start integration tests"
   sh "npm run-script int-test"
@@ -82,7 +82,7 @@ end
 
 task :operational_data do
   puts "start npm install"
-  sh "npm install --registry https://store.vistacore.us/nexus/content/repositories/npm-all/"
+  sh "npm install --registry http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/"
   puts "completed npm install"
   puts "start operational data check against #{ENV['JDS_IP']}"
   sh "npm run-script operational-check"
@@ -91,7 +91,7 @@ end
 
 task :patient_sync do
   puts "start npm install"
-  sh "npm install --registry https://store.vistacore.us/nexus/content/repositories/npm-all/"
+  sh "npm install --registry http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/"
   puts "completed npm install"
   puts "start patient sync against #{ENV['VXSYNC_IP']}"
   sh "npm run-script sync-patient"

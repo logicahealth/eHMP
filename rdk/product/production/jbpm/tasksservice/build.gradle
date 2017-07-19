@@ -13,7 +13,7 @@ targetCompatibility = 1.8
 
 
 repositories {
-     maven { url "https://store.vistacore.us/nexus/content/groups/public" }
+     maven { url "http://nexus.osehra.org:8081/nexus/content/groups/public" }
 }
 dependencies {
     compile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.1.0'
