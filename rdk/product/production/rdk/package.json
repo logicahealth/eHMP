@@ -80,6 +80,9 @@
     "sinon": "~2.0.0-pre.2",
     "solr-client": "^0.5.0"
   },
+  "bundledDependencies": [
+  "job-framework"
+  ],
   "author": "Steven.Reich",
   "contributors": [
     "Steven.Reich <Steven.Reich@agilex.com>",
